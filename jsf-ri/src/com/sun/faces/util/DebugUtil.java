@@ -1,5 +1,5 @@
 /*
- * $Id: DebugUtil.java,v 1.35 2006/03/29 22:38:43 rlubke Exp $
+ * $Id: DebugUtil.java,v 1.36 2006/03/29 23:03:53 rlubke Exp $
  */
 
 /*
@@ -31,22 +31,22 @@ package com.sun.faces.util;
 
 // DebugUtil.java
 
-import javax.faces.component.UIComponent;
-import javax.faces.component.ValueHolder;
-import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
-
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Iterator;
+
+import javax.faces.component.UIComponent;
+import javax.faces.component.ValueHolder;
+import javax.faces.model.SelectItem;
+
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.io.FastStringWriter;
+import java.io.StringWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.sun.faces.io.FastStringWriter;
-import com.sun.faces.renderkit.RenderKitUtils;
+import javax.faces.context.FacesContext;
 
 /**
  * <B>DebugUtil</B> is a class ...
@@ -56,133 +56,115 @@ import com.sun.faces.renderkit.RenderKitUtils;
 
 public class DebugUtil {
 
+//
+// Protected Constants
+//
+
+//
+// Class Variables
+//
+
     private static boolean keepWaiting = true;
+
     private static int curDepth = 0;
 
-    // ------------------------------------------------------------ Constructors
+//
+// Instance Variables
+//
 
+// Attribute Instance Variables
+
+// Relationship Instance Variables
+
+//
+// Constructors and Initializers    
+//
 
     public DebugUtil() {
-
         super();
         // Util.parameterNonNull();
         this.init();
+    }
+
+
+    protected void init() {
+        // super.init();
+    }
+
+//
+// Class methods
+//
+
+    public static void setKeepWaiting(boolean keepWaiting) {
+
+        DebugUtil.keepWaiting = keepWaiting;
 
     }
 
-    // ---------------------------------------------------------- Public Methods
-
-
     /**
-     * Output of printTree() as a String.
-     * Useful when used with a Logger. For example:
-     * logger.log(DebugUtil.printTree(root));
+     * Usage: <P>
+     * <p/>
+     * Place a call to this method in the earliest possible entry point of
+     * your servlet app.  It will cause the app to enter into an infinite
+     * loop, sleeping until the static var keepWaiting is set to false.  The
+     * idea is that you attach your debugger to the servlet, then, set a
+     * breakpont in this method.  When it is hit, you use the debugger to set
+     * the keepWaiting class var to false.
      */
-    public static String printTree(TreeStructure root) {
 
-        Writer writer = new FastStringWriter(1024);
-        printTree(root, writer);
-        return writer.toString();
-
+    public static void waitForDebugger() {
+        while (keepWaiting) {
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                System.out.println("DebugUtil.waitForDebugger(): Exception: " +
+                                   e.getMessage());
+            }
+        }
     }
 
 
+    private static void indentPrintln(Writer out, String str) {
+        int i = 0;
+
+        // handle indentation
+        try {
+            for (i = 0; i < curDepth; i++) {
+                out.write("  ");
+            }
+            out.write(str + "\n");
+        } catch (IOException ex) {}
+    }
+
     /**
-     * Output of printTree() as a String.
+     * Output of printTree() as a String. 
      * Useful when used with a Logger. For example:
-     * logger.log(DebugUtil.printTree(root));
+     *    logger.log(DebugUtil.printTree(root));
      */
     public static String printTree(UIComponent root) {
-
         Writer writer = new FastStringWriter(1024);
         printTree(root, writer);
         return writer.toString();
-
     }
-
-
-    public static void printTree(Object [] root, Writer out) {
-
-        if (null == root) {
-            indentPrintln(out, "null");
-            return;
-        }
-        int i = 0;
-        Object value = null;
-
-/* PENDING
-   indentPrintln(out, "===>Type:" + root.getComponentType());
-*/
-        // drill down to the bottom of the first element in the array
-        boolean foundBottom = false;
-        Object state = null;
-        Object [] myState = root;
-        while (!foundBottom) {
-            state = myState[0];
-            foundBottom = !state.getClass().isArray();
-            if (!foundBottom) {
-                myState = (Object []) state;
-            }
-        }
-
-        indentPrintln(out, "type:" + myState[8]);
-
-        curDepth++;
-        root = (Object []) root[1];
-        for (i = 0; i < root.length; i++) {
-            printTree((Object []) root[i], out);
-        }
-        curDepth--;
-
-    }
-
-
-    public static void printTree(TreeStructure root, Writer out) {
-
-        if (null == root) {
-            return;
-        }
-        int i = 0;
-        Object value = null;
-
-/* PENDING
-   indentPrintln(out, "===>Type:" + root.getComponentType());
-*/
-        indentPrintln(out, "id:" + root.id);
-        indentPrintln(out, "type:" + root.className);
-
-        Iterator items = null;
-        SelectItem curItem = null;
-        int j = 0;
-
-        curDepth++;
-        if (null != root.children) {
-            Iterator<TreeStructure> it = root.children.iterator();
-            while (it.hasNext()) {
-                printTree(it.next(), out);
-            }
-        }
-        curDepth--;
-
-    }
-
 
     /**
-     * Output of printTree() to a PrintStream.
+     * Output of printTree() to a PrintStream. 
      * Usage:
-     * DebugUtil.printTree(root, System.out);
+     *    DebugUtil.printTree(root, System.out);
      */
-    public static void printTree(TreeStructure root, PrintStream out) {
-
+    public static void printTree(UIComponent root, PrintStream out) {
         PrintWriter writer = new PrintWriter(out);
         printTree(root, writer);
         writer.flush();
-
+    }
+    
+    public static void printTree(UIComponent root, Logger logger, Level level) {
+        StringWriter sw = new StringWriter();
+        printTree(root, sw);
+        logger.log(level, sw.toString());
     }
 
-
     public static void printTree(UIComponent root, Writer out) {
-
         if (null == root) {
             return;
         }
@@ -200,24 +182,18 @@ public class DebugUtil {
         int j = 0;
 
         if (root instanceof javax.faces.component.UISelectOne) {
-            items = RenderKitUtils
-                  .getSelectItems(FacesContext.getCurrentInstance(), root);
+            items = RenderKitUtils.getSelectItems(FacesContext.getCurrentInstance(), root);
             indentPrintln(out, " {");
             while (items.hasNext()) {
                 curItem = (SelectItem) items.next();
-                indentPrintln(out, "\t value="
-                                   + curItem.getValue()
-                                   +
-                                   " label="
-                                   + curItem.getLabel()
-                                   + " description="
-                                   +
+                indentPrintln(out, "\t value=" + curItem.getValue() +
+                                   " label=" + curItem.getLabel() + " description=" +
                                    curItem.getDescription());
             }
             indentPrintln(out, " }");
         } else {
             if (root instanceof ValueHolder) {
-                value = ((ValueHolder) root).getValue();
+                value = ((ValueHolder)root).getValue();
             }
             indentPrintln(out, "value= " + value);
 
@@ -259,7 +235,7 @@ public class DebugUtil {
         Iterator<UIComponent> it = root.getChildren().iterator();
         Iterator<UIComponent> facets = root.getFacets().values().iterator();
         // print all the facets of this component
-        while (facets.hasNext()) {
+        while(facets.hasNext()) {
             printTree(facets.next(), out);
         }
         // print all the children of this component
@@ -267,93 +243,93 @@ public class DebugUtil {
             printTree(it.next(), out);
         }
         curDepth--;
-
     }
 
 
     /**
-     * Output of printTree() to a PrintStream.
-     * Usage:
-     * DebugUtil.printTree(root, System.out);
+     * Output of printTree() as a String. 
+     * Useful when used with a Logger. For example:
+     *    logger.log(DebugUtil.printTree(root));
      */
-    public static void printTree(UIComponent root, PrintStream out) {
+    public static String printTree(TreeStructure root) {
+        Writer writer = new FastStringWriter(1024);
+        printTree(root, writer);
+        return writer.toString();
+    }
 
+    /**
+     * Output of printTree() to a PrintStream. 
+     * Usage:
+     *    DebugUtil.printTree(root, System.out);
+     */
+    public static void printTree(TreeStructure root, PrintStream out) {
         PrintWriter writer = new PrintWriter(out);
         printTree(root, writer);
         writer.flush();
-
     }
 
-
-    public static void printTree(UIComponent root, Logger logger, Level level) {
-
-        StringWriter sw = new StringWriter();
-        printTree(root, sw);
-        logger.log(level, sw.toString());
-
-    }
-
-//
-// Class methods
-//
-
-    public static void setKeepWaiting(boolean keepWaiting) {
-
-        DebugUtil.keepWaiting = keepWaiting;
-
-    }
-
-
-    /**
-     * Usage: <P>
-     * <p/>
-     * Place a call to this method in the earliest possible entry point of
-     * your servlet app.  It will cause the app to enter into an infinite
-     * loop, sleeping until the static var keepWaiting is set to false.  The
-     * idea is that you attach your debugger to the servlet, then, set a
-     * breakpont in this method.  When it is hit, you use the debugger to set
-     * the keepWaiting class var to false.
-     */
-
-    public static void waitForDebugger() {
-
-        while (keepWaiting) {
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                System.out.println("DebugUtil.waitForDebugger(): Exception: " +
-                                   e.getMessage());
-            }
+    public static void printTree(TreeStructure root, Writer out) {
+        if (null == root) {
+            return;
         }
-
-    }
-
-    // ------------------------------------------------------- Protected Methods
-
-
-    protected void init() {
-
-        // super.init();
-
-    }
-
-    // --------------------------------------------------------- Private Methods
-
-
-    private static void indentPrintln(Writer out, String str) {
-
         int i = 0;
+        Object value = null;
 
-        // handle indentation
-        try {
-            for (i = 0; i < curDepth; i++) {
-                out.write("  ");
+/* PENDING
+   indentPrintln(out, "===>Type:" + root.getComponentType());
+*/
+        indentPrintln(out, "id:" + root.id);
+        indentPrintln(out, "type:" + root.className);
+
+        Iterator items = null;
+        SelectItem curItem = null;
+        int j = 0;
+
+        curDepth++;
+        if (null != root.children) {
+            Iterator<TreeStructure> it = root.children.iterator();
+            while (it.hasNext()) {
+                printTree(it.next(), out);
             }
-            out.write(str + "\n");
-        } catch (IOException ex) {
+        }
+        curDepth--;
+    }
+
+    public static void printTree(Object [] root, Writer out) {
+        if (null == root) {
+            indentPrintln(out, "null");
+            return;
+        }
+        int i = 0;
+        Object value = null;
+
+/* PENDING
+   indentPrintln(out, "===>Type:" + root.getComponentType());
+*/
+        // drill down to the bottom of the first element in the array
+        boolean foundBottom = false;
+        Object state = null;
+        Object [] myState = root;
+        while (!foundBottom) {
+            state = myState[0];
+            foundBottom = !state.getClass().isArray();
+            if (!foundBottom) {
+                myState = (Object []) state;
+            }
         }
 
+        indentPrintln(out, "type:" + myState[8]);
+
+        curDepth++;
+        root = (Object []) root[1];
+        for (i = 0; i < root.length; i++) {
+            printTree((Object []) root[i], out);
+        }
+        curDepth--;
     }
+//
+// General Methods
+//
 
 
 } // end of class DebugUtil

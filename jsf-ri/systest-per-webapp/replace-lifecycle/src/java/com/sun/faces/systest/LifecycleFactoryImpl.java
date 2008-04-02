@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactoryImpl.java,v 1.4 2006/03/29 22:39:22 rlubke Exp $
+ * $Id: LifecycleFactoryImpl.java,v 1.5 2006/03/29 23:04:32 rlubke Exp $
  */
 
 /*
@@ -29,6 +29,12 @@
 
 package com.sun.faces.systest;
 
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+
+import javax.faces.FactoryFinder;
 import javax.faces.FacesException;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
@@ -37,56 +43,36 @@ import java.util.Iterator;
 
 public class LifecycleFactoryImpl extends LifecycleFactory {
 
+    private LifecycleFactory previous = null;
 
     private Lifecycle newLifecycle = null;
 
-    private LifecycleFactory previous = null;
-
-    // ------------------------------------------------------------ Constructors
-
-
     public LifecycleFactoryImpl(LifecycleFactory previous) {
-
-        this.previous = previous;
-        try {
-            newLifecycle =
-                  new NewLifecycle("com.sun.faces.systest.NewLifecycle");
-            this.previous.addLifecycle("com.sun.faces.systest.NewLifecycle",
-                                       newLifecycle);
-            newLifecycle =
-                  new NewLifecycle("com.sun.faces.systest.AlternateLifecycle");
-            this.previous
-                  .addLifecycle("com.sun.faces.systest.AlternateLifecycle",
-                                newLifecycle);
-        }
-        catch (Throwable e) {
-            throw new FacesException(e);
-        }
-
+	this.previous = previous;
+	try {
+	    newLifecycle = new NewLifecycle("com.sun.faces.systest.NewLifecycle");
+	    this.previous.addLifecycle("com.sun.faces.systest.NewLifecycle",
+				       newLifecycle);
+            newLifecycle = new NewLifecycle("com.sun.faces.systest.AlternateLifecycle");
+            this.previous.addLifecycle("com.sun.faces.systest.AlternateLifecycle",
+				       newLifecycle);
+	}
+	catch (Throwable e) {
+	    throw new FacesException(e);
+	}
     }
-
-    // ---------------------------------------------------------- Public Methods
-
 
     public void addLifecycle(String lifecycleId,
-                             Lifecycle lifecycle) {
-
-        previous.addLifecycle(lifecycleId, lifecycle);
-
+			     Lifecycle lifecycle) {
+	previous.addLifecycle(lifecycleId, lifecycle);
     }
 
-
     public Lifecycle getLifecycle(String lifecycleId) {
-
-        return previous.getLifecycle(lifecycleId);
-
+	return previous.getLifecycle(lifecycleId);
     }
 
 
     public Iterator getLifecycleIds() {
-
-        return previous.getLifecycleIds();
-
+	return previous.getLifecycleIds();
     }
-
 }

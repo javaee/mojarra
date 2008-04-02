@@ -1,5 +1,5 @@
 /*
- * $Id: FacetComponent.java,v 1.9 2006/03/29 22:38:49 rlubke Exp $
+ * $Id: FacetComponent.java,v 1.10 2006/03/29 23:03:58 rlubke Exp $
  */
 
 /*
@@ -37,32 +37,25 @@ import javax.faces.context.ResponseWriter;
 import java.io.IOException;
 
 
-/** <p>Test <code>UIComponent</code> for sys tests.</p> */
+/**
+ * <p>Test <code>UIComponent</code> for sys tests.</p>
+ */
 
 public class FacetComponent extends UIOutput {
 
-    // ------------------------------------------------------------ Constructors
-
 
     public FacetComponent() {
-
         super();
-
     }
 
 
     public FacetComponent(String id) {
-
         super();
         setId(id);
-
     }
-
-    // ---------------------------------------------------------- Public Methods
 
 
     public void encodeEnd(FacesContext context) throws IOException {
-
         ResponseWriter writer = context.getResponseWriter();
         UIOutput facet = (UIOutput) getFacet("header");
         if (facet != null) {
@@ -79,7 +72,7 @@ public class FacetComponent extends UIOutput {
         } else {
             writer.write("[] ");
         }
-
     }
+
 
 }

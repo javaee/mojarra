@@ -1,5 +1,5 @@
 /*
- * $Id: NewStateManager.java,v 1.3 2006/03/29 22:39:21 rlubke Exp $
+ * $Id: NewStateManager.java,v 1.4 2006/03/29 23:04:31 rlubke Exp $
  */
 
 /*
@@ -28,6 +28,7 @@
  */
 
 
+
 package com.sun.faces.systest;
 
 import javax.faces.application.StateManager;
@@ -35,25 +36,13 @@ import javax.faces.application.StateManagerWrapper;
 
 public class NewStateManager extends StateManagerWrapper {
 
-
     private StateManager oldStateManager = null;
 
-    // ------------------------------------------------------------ Constructors
-
-
     public NewStateManager(StateManager oldStateManager) {
-
-        this.oldStateManager = oldStateManager;
-
+	this.oldStateManager = oldStateManager;
     }
-
-    // ---------------------------------------------------------- Public Methods
-
 
     public StateManager getWrapped() {
-
-        return oldStateManager;
-
+	return oldStateManager;
     }
-
 }

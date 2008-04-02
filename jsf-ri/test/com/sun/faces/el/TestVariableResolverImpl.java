@@ -1,5 +1,5 @@
 /*
- * $Id: TestVariableResolverImpl.java,v 1.24 2006/03/29 22:39:43 rlubke Exp $
+ * $Id: TestVariableResolverImpl.java,v 1.25 2006/03/29 23:04:54 rlubke Exp $
  */
 
 /*
@@ -51,34 +51,97 @@ import javax.faces.el.VariableResolver;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestVariableResolverImpl.java,v 1.24 2006/03/29 22:39:43 rlubke Exp $
+ * @version $Id: TestVariableResolverImpl.java,v 1.25 2006/03/29 23:04:54 rlubke Exp $
  */
 
 public class TestVariableResolverImpl extends ServletFacesTestCase {
 
+//
+// Protected Constants
+//
 
-    // ------------------------------------------------------------ Constructors
+//
+// Class Variables
+//
 
+//
+// Instance Variables
+//
+
+// Attribute Instance Variables
+
+// Relationship Instance Variables
+
+//
+// Constructors and Initializers    
+//
 
     public TestVariableResolverImpl() {
-
         super("TestFacesContext");
-
     }
 
 
     public TestVariableResolverImpl(String name) {
-
         super(name);
+    }
+//
+// Class methods
+//
+
+//
+// Methods from TestCase
+//
+
+//
+// General Methods
+//
+
+    public void testScopedLookup() {
+        TestBean testBean = new TestBean();
+        InnerBean newInner, oldInner = new InnerBean();
+        testBean.setInner(oldInner);
+        VariableResolver variableResolver = 
+            getFacesContext().getApplication().getVariableResolver();
+        Object result = null;
+        getFacesContext().getExternalContext().getSessionMap().remove(
+            "TestBean");
+
+        //
+        // Get tests
+        //
+
+        // application
+        getFacesContext().getExternalContext().getApplicationMap().put(
+            "TestBean",
+            testBean);
+        result = variableResolver.resolveVariable(getFacesContext(),
+                                                  "TestBean");
+        assertTrue(result == testBean);
+        getFacesContext().getExternalContext().getApplicationMap().remove(
+            "TestBean");
+        // session
+        getFacesContext().getExternalContext().getSessionMap().put("TestBean",
+                                                                   testBean);
+        result = variableResolver.resolveVariable(getFacesContext(),
+                                                  "TestBean");
+        assertTrue(result == testBean);
+        getFacesContext().getExternalContext().getSessionMap().remove(
+            "TestBean");
+
+        // session
+        getFacesContext().getExternalContext().getRequestMap().put("TestBean",
+                                                                   testBean);
+
+        result = variableResolver.resolveVariable(getFacesContext(),
+                                                  "TestBean");
+        assertTrue(result == testBean);
+        getFacesContext().getExternalContext().getRequestMap().remove(
+            "TestBean");
 
     }
 
 
-    // ---------------------------------------------------------- Public Methods
-
-
     public void testImplicitObjects() {
-
         VariableResolver variableResolver = 
             getFacesContext().getApplication().getVariableResolver();
         Object result = null;
@@ -161,45 +224,12 @@ public class TestVariableResolverImpl extends ServletFacesTestCase {
                                                     "view") ==
                    getFacesContext().getViewRoot());
 
-    }
-
-
-    /**
-     * This test verifies that if the variable resolver does not find a
-     * managed bean it tries to instantiate it if it was added to the
-     * application's managed bean factory list.
-     */
-    public void testManagedBean() throws Exception {
-
-        String beanName = "com.sun.faces.TestBean";
-
-        ManagedBeanBean cmb = new ManagedBeanBean();
-
-        cmb.setManagedBeanClass(beanName);
-        cmb.setManagedBeanScope("session");
-
-        ManagedBeanFactoryImpl mbf = new ManagedBeanFactoryImpl(cmb);
-
-        ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
-            FactoryFinder.APPLICATION_FACTORY);
-        ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
-	ApplicationAssociate associate = ApplicationAssociate.getInstance(getFacesContext().getExternalContext());
-
-        associate.addManagedBeanFactory(beanName, mbf);
-
-        VariableResolver variableResolver = application.getVariableResolver();
-
-        Object result = variableResolver.resolveVariable(getFacesContext(),
-                                                         beanName);
-
-        assertTrue(result instanceof TestBean);
 
     }
 
 
     // Negative tests (should throw exceptions)
     public void testNegative() throws Exception {
-
         VariableResolver variableResolver = 
             getFacesContext().getApplication().getVariableResolver();
 
@@ -231,49 +261,34 @@ public class TestVariableResolverImpl extends ServletFacesTestCase {
     }
 
 
-    public void testScopedLookup() {
+    /**
+     * This test verifies that if the variable resolver does not find a
+     * managed bean it tries to instantiate it if it was added to the
+     * application's managed bean factory list.
+     */
+    public void testManagedBean() throws Exception {
+        String beanName = "com.sun.faces.TestBean";
 
-        TestBean testBean = new TestBean();
-        InnerBean newInner, oldInner = new InnerBean();
-        testBean.setInner(oldInner);
-        VariableResolver variableResolver = 
-            getFacesContext().getApplication().getVariableResolver();
-        Object result = null;
-        getFacesContext().getExternalContext().getSessionMap().remove(
-            "TestBean");
+        ManagedBeanBean cmb = new ManagedBeanBean();
 
-        //
-        // Get tests
-        //
+        cmb.setManagedBeanClass(beanName);
+        cmb.setManagedBeanScope("session");
 
-        // application
-        getFacesContext().getExternalContext().getApplicationMap().put(
-            "TestBean",
-            testBean);
-        result = variableResolver.resolveVariable(getFacesContext(),
-                                                  "TestBean");
-        assertTrue(result == testBean);
-        getFacesContext().getExternalContext().getApplicationMap().remove(
-            "TestBean");
-        // session
-        getFacesContext().getExternalContext().getSessionMap().put("TestBean",
-                                                                   testBean);
-        result = variableResolver.resolveVariable(getFacesContext(),
-                                                  "TestBean");
-        assertTrue(result == testBean);
-        getFacesContext().getExternalContext().getSessionMap().remove(
-            "TestBean");
+        ManagedBeanFactoryImpl mbf = new ManagedBeanFactoryImpl(cmb);
 
-        // session
-        getFacesContext().getExternalContext().getRequestMap().put("TestBean",
-                                                                   testBean);
+        ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
+            FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
+	ApplicationAssociate associate = ApplicationAssociate.getInstance(getFacesContext().getExternalContext());
 
-        result = variableResolver.resolveVariable(getFacesContext(),
-                                                  "TestBean");
-        assertTrue(result == testBean);
-        getFacesContext().getExternalContext().getRequestMap().remove(
-            "TestBean");
+        associate.addManagedBeanFactory(beanName, mbf);
 
+        VariableResolver variableResolver = application.getVariableResolver();
+
+        Object result = variableResolver.resolveVariable(getFacesContext(),
+                                                         beanName);
+
+        assertTrue(result instanceof TestBean);
     }
 
 } // end of class TestVariableResolverImpl

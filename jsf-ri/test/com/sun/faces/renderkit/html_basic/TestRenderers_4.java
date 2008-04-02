@@ -24,7 +24,7 @@
  */
 
 /**
- * $Id: TestRenderers_4.java,v 1.20 2006/03/29 22:39:47 rlubke Exp $
+ * $Id: TestRenderers_4.java,v 1.21 2006/03/29 23:05:01 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -54,59 +54,56 @@ import java.io.IOException;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_4.java,v 1.20 2006/03/29 22:39:47 rlubke Exp $
+ * @version $Id: TestRenderers_4.java,v 1.21 2006/03/29 23:05:01 rlubke Exp $
  */
 
 public class TestRenderers_4 extends JspFacesTestCase {
 
-   
+    //
+    // Protected Constants
+    //
+
+    public boolean sendWriterToFile() {
+        return true;
+    }
+
+
+    public String getExpectedOutputFilename() {
+        return "CorrectRenderersResponse_4";
+    }
+
+    //
+    // Class Variables
+    //
+
+    //
+    // Instance Variables
+    //
     private FacesContextFactory facesContextFactory = null;
 
+    // Attribute Instance Variables
+    // Relationship Instance Variables
+    //
+    // Constructors and Initializers    
+    //
 
-    // ------------------------------------------------------------ Constructors
-
-    
     public TestRenderers_4() {
-
         super("TestRenderers_4");
-
     }
 
 
     public TestRenderers_4(String name) {
-
         super(name);
-
     }
 
+    //
+    // Class methods
+    //
 
-    // ---------------------------------------------- Methods From FacesTestCase
-
-
-    public String getExpectedOutputFilename() {
-
-        return "CorrectRenderersResponse_4";
-
-    }
-    
-
-    public boolean sendWriterToFile() {
-
-        return true;
-
-    }
-
-
-    // ---------------------------------------------------------- Public Methods
-
-
-    public void beginRenderers(WebRequest theRequest) {
-
-    }
-
-
+    //
+    // Methods from TestCase
+    //
     public void setUp() {
-
         super.setUp();
         UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setViewId("viewId");
@@ -115,13 +112,39 @@ public class TestRenderers_4 extends JspFacesTestCase {
 	    Util.getStateManager(getFacesContext()).saveSerializedView(getFacesContext());
 	getFacesContext().getExternalContext().getRequestMap().put(RIConstants.SAVED_STATE, view);
         assertTrue(null != getFacesContext().getResponseWriter());
+    }
 
+
+    public void beginRenderers(WebRequest theRequest) {
+
+    }
+
+
+    public void testRenderers() {
+
+        try {
+            // create a dummy root for the tree.
+            UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+            root.setId("root");
+
+            testGridRenderer(root);
+
+            root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+            root.setId("root");
+            testGridRendererWithNonRenderedChildren(root);
+
+            getFacesContext().getResponseWriter().close();
+            assertTrue(verifyExpectedOutput());
+        } catch (Throwable t) {
+            t.printStackTrace();
+            assertTrue(false);
+            return;
+        }
     }
 
 
     public void testGridRenderer(UIComponent root)
         throws IOException {
-
         System.out.println("Testing GridRenderer");
         GridRenderer gridRenderer = null;
         UIPanel
@@ -181,7 +204,6 @@ public class TestRenderers_4 extends JspFacesTestCase {
 
     public void testGridRendererWithNonRenderedChildren(UIComponent root)
         throws IOException {
-
         System.out.println("Testing GridRenderer");
         GridRenderer gridRenderer = null;
         UIPanel
@@ -242,28 +264,5 @@ public class TestRenderers_4 extends JspFacesTestCase {
 
     }
 
-
-    public void testRenderers() {
-
-        try {
-            // create a dummy root for the tree.
-            UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
-            root.setId("root");
-
-            testGridRenderer(root);
-
-            root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
-            root.setId("root");
-            testGridRendererWithNonRenderedChildren(root);
-
-            getFacesContext().getResponseWriter().close();
-            assertTrue(verifyExpectedOutput());
-        } catch (Throwable t) {
-            t.printStackTrace();
-            assertTrue(false);
-            return;
-        }
-
-    }
 
 } // end of class TestRenderers_4

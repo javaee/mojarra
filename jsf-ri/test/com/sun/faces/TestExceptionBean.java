@@ -1,5 +1,5 @@
 /*
- * $Id: TestExceptionBean.java,v 1.3 2006/03/29 22:39:33 rlubke Exp $
+ * $Id: TestExceptionBean.java,v 1.4 2006/03/29 23:04:37 rlubke Exp $
  */
 
 /*
@@ -35,33 +35,20 @@ package com.sun.faces;
 public class TestExceptionBean implements java.io.Serializable {
 
 
-    private String name = null;
-
-
-    // ------------------------------------------------------------ Constructors
-
-
     public TestExceptionBean() throws InstantiationException{
-
         throw new InstantiationException("TestConstructorException Passed");
-
     }
 
 
-    // ---------------------------------------------------------- Public Methods
+    private String name = null;
+
+    public String getName() {
+        return (this.name);
+    }
 
 
     public void setName(String name) {
-
         this.name = name;
-
-    }
-
-
-    public String getName() {
-
-        return (this.name);
-
     }
 
 }

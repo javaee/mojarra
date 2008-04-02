@@ -1,5 +1,5 @@
 /*
- * $Id: FastStringWriter.java,v 1.2 2006/03/29 22:38:34 rlubke Exp $
+ * $Id: FastStringWriter.java,v 1.3 2006/03/29 23:03:45 rlubke Exp $
  */
 
 /*
@@ -40,22 +40,17 @@ import java.io.Writer;
  */
 public class FastStringWriter extends Writer {
 
-
     private StringBuilder builder;
 
     // ------------------------------------------------------------ Constructors
-
 
     /**
      * <p>Constructs a new <code>FastStringWriter</code> instance
      * using the default capacity of <code>16</code>.</p>
      */
     public FastStringWriter() {
-
         builder = new StringBuilder();
-
     }
-
 
     /**
      * <p>Constructs a new <code>FastStringWriter</code> instance
@@ -66,78 +61,10 @@ public class FastStringWriter extends Writer {
      * @throws IllegalArgumentException if initialCapacity is less than zero
      */
     public FastStringWriter(int initialCapacity) {
-
         if (initialCapacity < 0) {
             throw new IllegalArgumentException();
         }
         builder = new StringBuilder(initialCapacity);
-
-    }
-
-    // ---------------------------------------------------------- Public Methods
-
-
-    /**
-     * <p>This is a no-op.</p>
-     *
-     * @throws IOException
-     */
-    public void close() throws IOException {
-    }
-
-
-    /**
-     * <p>This is a no-op.</p>
-     *
-     * @throws IOException
-     */
-    public void flush() throws IOException {
-    }
-
-
-    /**
-     * Return the <code>StringBuilder</code> itself.
-     *
-     * @return StringBuilder holding the current buffer value.
-     */
-    public StringBuilder getBuffer() {
-
-        return builder;
-
-    }
-
-
-    /** @return the buffer's current value as a string. */
-    public String toString() {
-
-        return builder.toString();
-
-    }
-
-
-    /**
-     * Write a string.
-     *
-     * @param str String to be written
-     */
-    public void write(String str) {
-
-        write(str, 0, str.length());
-
-    }
-
-
-    /**
-     * Write a portion of a string.
-     *
-     * @param str A String
-     * @param off Offset from which to start writing characters
-     * @param len Number of characters to write
-     */
-    public void write(String str, int off, int len) {
-
-        builder.append(str.substring(off, off + len));
-
     }
 
     // ----------------------------------------------------- Methods from Writer
@@ -152,7 +79,6 @@ public class FastStringWriter extends Writer {
      * @throws IOException
      */
     public void write(char cbuf[], int off, int len) throws IOException {
-
         if ((off < 0) || (off > cbuf.length) || (len < 0) ||
             ((off + len) > cbuf.length) || ((off + len) < 0)) {
             throw new IndexOutOfBoundsException();
@@ -160,7 +86,58 @@ public class FastStringWriter extends Writer {
             return;
         }
         builder.append(cbuf, off, len);
+    }
 
+    /**
+     * <p>This is a no-op.</p>
+     *
+     * @throws IOException
+     */
+    public void flush() throws IOException {
+    }
+
+    /**
+     * <p>This is a no-op.</p>
+     *
+     * @throws IOException
+     */
+    public void close() throws IOException {
+    }
+
+    // ---------------------------------------------------------- Public Methods
+
+    /**
+     * Write a string.
+     *
+     * @param str String to be written
+     */
+    public void write(String str) {
+        write(str, 0, str.length());
+    }
+
+    /**
+     * Write a portion of a string.
+     *
+     * @param str A String
+     * @param off Offset from which to start writing characters
+     * @param len Number of characters to write
+     */
+    public void write(String str, int off, int len) {
+        builder.append(str.substring(off, off + len));
+    }
+
+    /**
+     * Return the <code>StringBuilder</code> itself.
+     *
+     * @return StringBuilder holding the current buffer value.
+     */
+    public StringBuilder getBuffer() {
+        return builder;
+    }
+
+    /** @return the buffer's current value as a string. */
+    public String toString() {
+        return builder.toString();
     }
 
 }

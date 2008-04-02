@@ -1,6 +1,6 @@
-/*
-* $Id: FacesContextImpl.java,v 1.79 2006/03/29 22:38:32 rlubke Exp $
-*/
+ /*
+ * $Id: FacesContextImpl.java,v 1.80 2006/03/29 23:03:43 rlubke Exp $
+ */
 
 /*
  * The contents of this file are subject to the terms
@@ -29,6 +29,7 @@
 
 package com.sun.faces.context;
 
+import com.sun.faces.RIConstants;
 import javax.el.ELContext;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
@@ -53,424 +54,368 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sun.faces.RIConstants;
+
 import com.sun.faces.el.ELContextImpl;
-import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
-
-public class FacesContextImpl extends FacesContext {
-
-    //
-    // Protected Constants
-    //
-
-    private static final String FACESCONTEXT_IMPL_ATTR_NAME =
-          RIConstants.FACES_PREFIX +
-          "FacesContextImpl";
-
-    //
-    // Class Variables
-    //
-
-    // Log instance for this class
-    private static Logger logger = Util.getLogger(Util.FACES_LOGGER
-                                                  + Util.CONTEXT_LOGGER);
-    private Application application = null;
-    private ELContext elContext = null;
-    private ExternalContext externalContext = null;
-
-    /**
-     * Store mapping of clientId to ArrayList of FacesMessage
-     * instances.  The null key is used to represent FacesMessage instances
-     * that are not associated with a clientId instance.
-     */
-    private Map componentMessageLists;
-    private RenderKit lastRk;
-    private RenderKitFactory rkFactory;
-
-    // Relationship Instance Variables
-    private ResponseStream responseStream = null;
-    private ResponseWriter responseWriter = null;
-    private String lastRkId;
-    private UIViewRoot viewRoot = null;
-
-    //
-    // Instance Variables
-    //
-    private boolean released;
-
-    // Attribute Instance Variables
-
-    private boolean renderResponse = false;
-    private boolean responseComplete = false;
-
-    // ------------------------------------------------------------ Constructors
-
-
-    //
-    // Constructors and Initializers    
-    // 
-    public FacesContextImpl() {
-    }
-
-
-    public FacesContextImpl(ExternalContext ec, Lifecycle lifecycle) {
-
-        if (null == ec || null == lifecycle) {
-            throw new NullPointerException
-                  (
-                        MessageUtils.getExceptionMessageString(
-                              MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-        this.externalContext = ec;
-        setCurrentInstance(this);
-        // Store this in request scope so jsf-api can access it.
-        this.externalContext.getRequestMap().put(FACESCONTEXT_IMPL_ATTR_NAME,
-                                                 this);
-
-        rkFactory = (RenderKitFactory)
-              FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-
-    }
-
-    // ---------------------------------------------------------- Public Methods
-
-
-    /**
-     * <p>Return the {@link Application} instance associated with this
-     * web application.</p>
-     */
-    public Application getApplication() {
-
-        assertNotReleased();
-        if (null != application) {
-            return application;
-        }
-        ApplicationFactory aFactory =
-              (ApplicationFactory) FactoryFinder.getFactory(
-                    FactoryFinder.APPLICATION_FACTORY);
-        application = aFactory.getApplication();
-        assert (null != application);
-        return application;
-
-    }
-
-    //
-    // Class methods
-    //
-
-    //
-    // General Methods
-
-    //
-    //
-    // Methods from FacesContext
-    //
-
-    public ExternalContext getExternalContext() {
-
-        assertNotReleased();
-        return externalContext;
-
-    }
-
-
-    public boolean getRenderResponse() {
-
-        assertNotReleased();
-        return renderResponse;
-
-    }
-
-
-    public boolean getResponseComplete() {
-
-        assertNotReleased();
-        return responseComplete;
-
-    }
-
-
-    public ResponseStream getResponseStream() {
-
-        assertNotReleased();
-        return responseStream;
-
-    }
-
-
-    public void setResponseStream(ResponseStream newResponseStream) {
-
-        assertNotReleased();
-        if (newResponseStream == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(
-                        MessageUtils.NULL_RESPONSE_STREAM_ERROR_MESSAGE_ID));
-        }
-        responseStream = newResponseStream;
-
-    }
-
-
-    public ResponseWriter getResponseWriter() {
-
-        assertNotReleased();
-        return responseWriter;
-
-    }
-
-
-    public void setResponseWriter(ResponseWriter newResponseWriter) {
-
-        assertNotReleased();
-        if (newResponseWriter == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(
-                        MessageUtils.NULL_RESPONSE_WRITER_ERROR_MESSAGE_ID));
-        }
-        responseWriter = newResponseWriter;
-
-    }
-
-
-    public UIViewRoot getViewRoot() {
-
-        assertNotReleased();
-        return viewRoot;
-
-    }
-
-
-    public void setViewRoot(UIViewRoot root) {
-
-        assertNotReleased();
-
-        if (root == null) {
-            throw new NullPointerException
-                  (MessageUtils.getExceptionMessageString(
-                        MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-
-        viewRoot = root;
-
-    }
-
-
-    public void addMessage(String clientId, FacesMessage message) {
-
-        assertNotReleased();
-        // Validate our preconditions
-        if (null == message) {
-            throw new NullPointerException
-                  (
-                        MessageUtils.getExceptionMessageString(
-                              MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-
-        if (componentMessageLists == null) {
-            componentMessageLists = new LinkedHashMap();
-        }
-
-        // Add this message to our internal queue
-        List list = (List) componentMessageLists.get(clientId);
-        if (list == null) {
-            list = new ArrayList();
-            componentMessageLists.put(clientId, list);
-        }
-        list.add(message);
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("Adding Message[sourceId=" +
-                        (clientId != null ? clientId : "<<NONE>>") +
-                        ",summary=" + message.getSummary() + ")");
-        }
-
-    }
-
-
-    public Iterator getClientIdsWithMessages() {
-
-        assertNotReleased();
-        Iterator result = null;
-        if (null == componentMessageLists) {
-            result = Collections.EMPTY_LIST.iterator();
-        } else {
-            result = componentMessageLists.keySet().iterator();
-
-        }
-        return result;
-
-    }
-
-
-    public ELContext getELContext() {
-
-        assertNotReleased();
-        if (elContext == null) {
-            elContext = new ELContextImpl(getApplication().getELResolver());
-            elContext.putContext(FacesContext.class, this);
-            UIViewRoot root = this.getViewRoot();
-            if (null != root) {
-                elContext.setLocale(root.getLocale());
-            }
-        }
-        return elContext;
-
-    }
-
-
-    public Severity getMaximumSeverity() {
-
-        assertNotReleased();
-        int max = 0;
-        Severity result = null;
-
-        if (null == componentMessageLists) {
-            return null;
-        }
-        // Get an Iterator over the ArrayList instances
-        List messages = getMergedMessageLists();
-        for (int i = 0, size = getMergedMessageLists().size(); i < size; i++) {
-            result = ((FacesMessage) messages.get(i)).getSeverity();
-            if (result.getOrdinal() > max) {
-                max = result.getOrdinal();
-            }
-
-            if (result == FacesMessage.SEVERITY_FATAL) {
-                break;
-            }
-        }
-        return result;
-
-    }
-
-
-    public Iterator getMessages() {
-
-        assertNotReleased();
-        if (null == componentMessageLists) {
-            return (Collections.EMPTY_LIST.iterator());
-        }
-
-        // Get an Iterator over the ArrayList instances
-        List messages = getMergedMessageLists();
-        if (messages.size() > 0) {
-            return messages.iterator();
-        } else {
-            return Collections.EMPTY_LIST.iterator();
-        }
-
-    }
-
-
-    public Iterator getMessages(String clientId) {
-
-        assertNotReleased();
-        // If no messages have been enqueued at all,
-        // return an empty List Iterator
-        if (null == componentMessageLists) {
-            return (Collections.EMPTY_LIST.iterator());
-        }
-
-        List list = (List) componentMessageLists.get(clientId);
-        if (list == null) {
-            return (Collections.EMPTY_LIST.iterator());
-        }
-        return (list.iterator());
-
-    }
-
-
-    public RenderKit getRenderKit() {
-
-        assertNotReleased();
-        UIViewRoot vr = getViewRoot();
-        if (vr == null) {
-            return (null);
-        }
-        String renderKitId = vr.getRenderKitId();
-
-        if (renderKitId.equals(lastRkId)) {
-            return lastRk;
-        } else {
-            lastRk = rkFactory.getRenderKit(this, renderKitId);
-            lastRkId = renderKitId;
-            return lastRk;
-        }
-
-    }
-
-
-    public void release() {
-
-        this.externalContext.getRequestMap()
-              .remove(FACESCONTEXT_IMPL_ATTR_NAME);
-
-        released = true;
-        externalContext = null;
-        responseStream = null;
-        responseWriter = null;
-        componentMessageLists = null;
-        renderResponse = false;
-        responseComplete = false;
-        viewRoot = null;
-
-        // PENDING(edburns): write testcase that verifies that release
-        // actually works.  This will be important to keep working as
-        // ivars are added and removed on this class over time.
-
-        // Make sure to clear our ThreadLocal instance.
-        setCurrentInstance(null);
-
-    }
-
-
-    public void renderResponse() {
-
-        assertNotReleased();
-        renderResponse = true;
-
-    }
-
-
-    public void responseComplete() {
-
-        assertNotReleased();
-        responseComplete = true;
-
-    }
-
-    // --------------------------------------------------------- Private Methods
-
-
-    //
-    // Private methods
-    //
-    private void assertNotReleased() {
-
-        if (released) {
-            throw new IllegalStateException();
-        }
-
-    }
-
-
-    private List getMergedMessageLists() {
-
-        List mergedList = new ArrayList();
-        if (componentMessageLists != null) {
-            for (Iterator i = componentMessageLists.values().iterator();
-                 i.hasNext();) {
-                for (Iterator ii = ((ArrayList) i.next()).iterator();
-                     ii.hasNext();) {
-                    mergedList.add(ii.next());
-                }
-            }
-        }
-        return mergedList;
-
-    }
-
-    // The testcase for this class is TestFacesContextImpl.java 
-    // The testcase for this class is TestFacesContextImpl_Model.java
-
-} // end of class FacesContextImpl
+import com.sun.faces.util.MessageUtils;
+
+ public class FacesContextImpl extends FacesContext {
+
+     //
+     // Protected Constants
+     //
+     
+     private static final String FACESCONTEXT_IMPL_ATTR_NAME = RIConstants.FACES_PREFIX + 
+             "FacesContextImpl";
+
+     //
+     // Class Variables
+     //
+
+     // Log instance for this class
+     private static Logger logger = Util.getLogger(Util.FACES_LOGGER
+                                                   + Util.CONTEXT_LOGGER);
+
+     //
+     // Instance Variables
+     //
+     private boolean released;
+
+     // Relationship Instance Variables
+     private ResponseStream responseStream = null;
+     private ResponseWriter responseWriter = null;
+     private ExternalContext externalContext = null;
+     private Application application = null;
+     private UIViewRoot viewRoot = null;
+     private ELContext elContext = null;
+     private RenderKitFactory rkFactory;
+     private RenderKit lastRk;
+     private String lastRkId;
+
+     /**
+      * Store mapping of clientId to ArrayList of FacesMessage
+      * instances.  The null key is used to represent FacesMessage instances
+      * that are not associated with a clientId instance.
+      */
+     private Map componentMessageLists;
+
+
+
+     // Attribute Instance Variables
+
+     private boolean renderResponse = false;
+     private boolean responseComplete = false;
+
+
+     //
+     // Constructors and Initializers    
+     // 
+     public FacesContextImpl() {
+     }
+
+
+     public FacesContextImpl(ExternalContext ec, Lifecycle lifecycle) {
+         if (null == ec || null == lifecycle) {
+             throw new NullPointerException
+                 (
+                     MessageUtils.getExceptionMessageString(
+                         MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+         }
+         this.externalContext = ec;
+         setCurrentInstance(this);
+         // Store this in request scope so jsf-api can access it.
+         this.externalContext.getRequestMap().put(FACESCONTEXT_IMPL_ATTR_NAME, 
+                 this);
+
+         rkFactory = (RenderKitFactory)
+             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+     }
+
+     //
+     // Class methods
+     //
+
+     //
+     // General Methods
+
+     //
+     //
+     // Methods from FacesContext
+     //
+
+     public ExternalContext getExternalContext() {
+         assertNotReleased();
+         return externalContext;
+     }
+
+
+     /**
+      * <p>Return the {@link Application} instance associated with this
+      * web application.</p>
+      */
+     public Application getApplication() {
+         assertNotReleased();
+         if (null != application) {
+             return application;
+         }
+         ApplicationFactory aFactory =
+             (ApplicationFactory) FactoryFinder.getFactory(
+                 FactoryFinder.APPLICATION_FACTORY);
+         application = aFactory.getApplication();
+         assert (null != application);
+         return application;
+     }
+
+     public ELContext getELContext() {
+         assertNotReleased();
+         if (elContext == null) {
+             elContext = new ELContextImpl(getApplication().getELResolver());
+             elContext.putContext(FacesContext.class, this);
+             UIViewRoot root = this.getViewRoot();
+             if (null != root) {
+                 elContext.setLocale(root.getLocale());
+             }
+         }
+         return elContext;
+     }
+
+     public Iterator getClientIdsWithMessages() {
+         assertNotReleased();
+         Iterator result = null;
+         if (null == componentMessageLists) {
+             result = Collections.EMPTY_LIST.iterator();
+         } else {
+             result = componentMessageLists.keySet().iterator();
+
+         }
+         return result;
+     }
+
+     public Severity getMaximumSeverity() {
+         assertNotReleased();
+         int max = 0;
+         Severity result = null;
+
+         if (null == componentMessageLists) {
+             return null;
+         }
+         // Get an Iterator over the ArrayList instances
+         List messages = getMergedMessageLists();
+         for (int i = 0, size = getMergedMessageLists().size(); i < size; i++) {
+             result = ((FacesMessage) messages.get(i)).getSeverity();
+             if (result.getOrdinal() > max) {
+                 max = result.getOrdinal();
+             }
+
+             if (result == FacesMessage.SEVERITY_FATAL) {
+                 break;
+             }
+         }
+         return result;
+     }
+
+
+     public Iterator getMessages() {
+         assertNotReleased();
+         if (null == componentMessageLists) {
+             return (Collections.EMPTY_LIST.iterator());
+         }
+
+         // Get an Iterator over the ArrayList instances
+         List messages = getMergedMessageLists();
+         if (messages.size() > 0) {
+             return messages.iterator();
+         } else {
+             return Collections.EMPTY_LIST.iterator();
+         }
+     }
+
+
+     public Iterator getMessages(String clientId) {
+         assertNotReleased();
+         // If no messages have been enqueued at all,
+         // return an empty List Iterator
+         if (null == componentMessageLists) {
+             return (Collections.EMPTY_LIST.iterator());
+         }
+
+         List list = (List) componentMessageLists.get(clientId);
+         if (list == null) {
+             return (Collections.EMPTY_LIST.iterator());
+         }
+         return (list.iterator());
+     }
+
+
+     public RenderKit getRenderKit() {
+         assertNotReleased();
+         UIViewRoot vr = getViewRoot();
+         if (vr == null) {
+             return (null);
+         }
+         String renderKitId = vr.getRenderKitId();
+
+         if (renderKitId.equals(lastRkId)) {
+             return lastRk;
+         } else {
+             lastRk = rkFactory.getRenderKit(this, renderKitId);
+             lastRkId = renderKitId;
+             return lastRk;
+         }
+     }
+
+
+     public ResponseStream getResponseStream() {
+         assertNotReleased();
+         return responseStream;
+     }
+
+
+     public void setResponseStream(ResponseStream newResponseStream) {
+         assertNotReleased();
+         if (newResponseStream == null) {
+             throw new NullPointerException(
+                 MessageUtils.getExceptionMessageString(
+                     MessageUtils.NULL_RESPONSE_STREAM_ERROR_MESSAGE_ID));
+         }
+         responseStream = newResponseStream;
+     }
+
+
+     public UIViewRoot getViewRoot() {
+         assertNotReleased();
+         return viewRoot;
+     }
+
+
+     public void setViewRoot(UIViewRoot root) {
+         assertNotReleased();
+
+         if (root == null) {
+             throw new NullPointerException
+                 (MessageUtils.getExceptionMessageString(
+                     MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+         }
+
+         viewRoot = root;
+     }
+
+
+     public ResponseWriter getResponseWriter() {
+         assertNotReleased();
+         return responseWriter;
+     }
+
+
+     public void setResponseWriter(ResponseWriter newResponseWriter) {
+         assertNotReleased();
+         if (newResponseWriter == null) {
+             throw new NullPointerException(
+                 MessageUtils.getExceptionMessageString(
+                     MessageUtils.NULL_RESPONSE_WRITER_ERROR_MESSAGE_ID));
+         }
+         responseWriter = newResponseWriter;
+     }
+
+
+     public void addMessage(String clientId, FacesMessage message) {
+         assertNotReleased();
+         // Validate our preconditions
+         if (null == message) {
+             throw new NullPointerException
+                 (
+                     MessageUtils.getExceptionMessageString(
+                         MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+         }
+
+         if (componentMessageLists == null) {
+             componentMessageLists = new LinkedHashMap();
+         }
+
+         // Add this message to our internal queue
+         List list = (List) componentMessageLists.get(clientId);
+         if (list == null) {
+             list = new ArrayList();
+             componentMessageLists.put(clientId, list);
+         }
+         list.add(message);
+         if (logger.isLoggable(Level.FINE)) {
+             logger.fine("Adding Message[sourceId=" +
+                         (clientId != null ? clientId : "<<NONE>>") +
+                         ",summary=" + message.getSummary() + ")");
+         }
+
+     }
+
+
+     public void release() {
+         
+         this.externalContext.getRequestMap().remove(FACESCONTEXT_IMPL_ATTR_NAME);
+         
+         released = true;
+         externalContext = null;
+         responseStream = null;
+         responseWriter = null;
+         componentMessageLists = null;
+         renderResponse = false;
+         responseComplete = false;
+         viewRoot = null;
+         
+         // PENDING(edburns): write testcase that verifies that release
+         // actually works.  This will be important to keep working as
+         // ivars are added and removed on this class over time.
+
+         // Make sure to clear our ThreadLocal instance.
+         setCurrentInstance(null);
+     }
+
+
+     public void renderResponse() {
+         assertNotReleased();
+         renderResponse = true;
+     }
+
+
+     public void responseComplete() {
+         assertNotReleased();
+         responseComplete = true;
+     }
+
+
+     public boolean getRenderResponse() {
+         assertNotReleased();
+         return renderResponse;
+     }
+
+
+     public boolean getResponseComplete() {
+         assertNotReleased();
+         return responseComplete;
+     }
+
+
+     //
+     // Private methods
+     //
+     private void assertNotReleased() {
+         if (released) {
+             throw new IllegalStateException();
+         }
+     }
+
+
+     private List getMergedMessageLists() {
+         List mergedList = new ArrayList();
+         if (componentMessageLists != null) {
+             for (Iterator i = componentMessageLists.values().iterator(); i.hasNext();) {
+                 for (Iterator ii = ((ArrayList) i.next()).iterator(); ii.hasNext();)
+                     mergedList.add(ii.next());
+             }
+         }
+         return mergedList;
+     }
+
+     // The testcase for this class is TestFacesContextImpl.java 
+     // The testcase for this class is TestFacesContextImpl_Model.java
+
+ } // end of class FacesContextImpl

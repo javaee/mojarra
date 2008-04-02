@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.73 2006/03/29 22:38:39 rlubke Exp $
+ * $Id: TextRenderer.java,v 1.74 2006/03/29 23:03:49 rlubke Exp $
  */
 
 /*
@@ -31,6 +31,9 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.renderkit.RenderKitUtils;
+
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
@@ -39,9 +42,6 @@ import javax.faces.context.ResponseWriter;
 
 import java.io.IOException;
 
-import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.util.MessageUtils;
-
 /**
  * <B>TextRenderer</B> is a class that renders the current value of
  * <code>UIInput<code> or <code>UIOutput<code> component as a input field or
@@ -49,45 +49,65 @@ import com.sun.faces.util.MessageUtils;
  */
 public class TextRenderer extends HtmlBasicInputRenderer {
 
-    // ------------------------------------------------------------ Constructors
+    //
+    // Protected Constants
+    //
 
+    //
+    // Class Variables
+    //
+
+    //
+    // Instance Variables
+    //
+
+    // Attribute Instance Variables
+
+
+    // Relationship Instance Variables
+
+    //
+    // Constructors and Initializers    
+    //
 
     public TextRenderer() {
-
         super();
-
     }
 
-    // ---------------------------------------------------------- Public Methods
+    //
+    // Class methods
+    //
 
+    //
+    // General Methods
+    //
+
+    //
+    // Methods From Renderer
+    //
 
     public void encodeBegin(FacesContext context, UIComponent component)
-          throws IOException {
-
+        throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-
     }
-
-    // ------------------------------------------------------- Protected Methods
 
 
     protected void getEndTextToRender(FacesContext context,
-                                      UIComponent component,
-                                      String currentValue)
-          throws IOException {
+                                      UIComponent component, String currentValue)
+        throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
         assert (writer != null);
         boolean
-              shouldWriteIdAttribute = false,
-              isOutput = false;
+            shouldWriteIdAttribute = false,
+            isOutput = false;
 
         String
-              style = (String) component.getAttributes().get("style"),
-              styleClass = (String) component.getAttributes().get("styleClass");
+            style = (String) component.getAttributes().get("style"),
+            styleClass = (String) component.getAttributes().get("styleClass");
         if (component instanceof UIInput) {
             writer.startElement("input", component);
             writeIdAttributeIfNecessary(context, writer, component);
@@ -96,7 +116,7 @@ public class TextRenderer extends HtmlBasicInputRenderer {
                                   "clientId");
 
             String autoComplete = (String)
-                  component.getAttributes().get("autocomplete");
+                component.getAttributes().get("autocomplete");
             if (autoComplete != null) {
                 // only output the autocomplete attribute if the value
                 // is 'off' since its lack of presence will be interpreted
@@ -132,8 +152,7 @@ public class TextRenderer extends HtmlBasicInputRenderer {
                     writer.writeAttribute("class", styleClass, "styleClass");
                 }
                 // style is rendered as a passthru attribute
-                RenderKitUtils
-                      .renderPassThruAttributes(context, writer, component);
+                RenderKitUtils.renderPassThruAttributes(context, writer, component);              
 
             }
             if (currentValue != null) {
@@ -145,7 +164,7 @@ public class TextRenderer extends HtmlBasicInputRenderer {
                     } else if (val instanceof String) {
                         try {
                             escape =
-                                  Boolean.valueOf((String) val).booleanValue();
+                                Boolean.valueOf((String) val).booleanValue();
                         } catch (Throwable e) {
                         }
                     }
@@ -158,11 +177,10 @@ public class TextRenderer extends HtmlBasicInputRenderer {
             }
         }
         if (isOutput && (null != styleClass || null != style ||
-                         RenderKitUtils.hasPassThruAttributes(component) ||
-                         shouldWriteIdAttribute)) {
+            RenderKitUtils.hasPassThruAttributes(component) ||
+            shouldWriteIdAttribute)) {
             writer.endElement("span");
         }
-
     }
 
     // The testcase for this class is TestRenderers_2.java

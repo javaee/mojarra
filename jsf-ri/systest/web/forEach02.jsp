@@ -4,12 +4,12 @@
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
-<head>
+  <head>
     <title></title>
-</head>
+  </head>
 
-<body>
-<h1></h1>
+  <body>
+    <h1></h1>
 
 <%--
  * Copyright (c) 2004 Sun Microsystems, Inc.  All rights reserved.  U.S.
@@ -40,40 +40,41 @@
 
 <f:view>
 
-    <h:messages/>
-    <br>
+<h:messages/>
+<br>
 
-    <h:form id="form">
+<h:form               id="form">
 
 
-        <table border="1" style="list-background"
-               summary="Add books from the catalog to your shopping cart.">
-            <tr><th>header</th>
-            </tr>
+   <table border="1" style="list-background"
+        summary="Add books from the catalog to your shopping cart.">
+       <tr><th>header</th>
+       </tr>
 
-            <c:forEach items="#{BooksBean.books}" var="book" varStatus="stat">
-                <tr styleClass="${(stat.index % 2) == 0 ? "list-row-event" : "list-row-odd"}">
-                    <td style="list-column-left">
-                        <h:commandLink action="null">
+       <c:forEach items="#{BooksBean.books}" var="book" varStatus="stat" >
+          <tr styleClass="${(stat.index % 2) == 0 ? "list-row-event" : "list-row-odd"}">
+               <td style="list-column-left">
+               <h:commandLink action="null">
+                       
+                          <h:outputText id="bookTitle" value="#{book.title}"/>
+                       
+               </h:commandLink>
+               </td>
+          </tr>
+       </c:forEach>
+  </table>
 
-                            <h:outputText id="bookTitle" value="#{book.title}"/>
-
-                        </h:commandLink>
-                    </td>
-                </tr>
-            </c:forEach>
-        </table>
-
-    </h:form>
+</h:form>
 
 </f:view>
 
 
-<hr>
-<address><a href="mailto:ed.burns@sun.com">Edward Burns</a></address>
+
+    <hr>
+    <address><a href="mailto:ed.burns@sun.com">Edward Burns</a></address>
 <!-- Created: Tue Oct  4 13:39:02 EDT 2005 -->
 <!-- hhmts start -->
-Last modified: Tue Oct 4 14:02:27 EDT 2005
+Last modified: Tue Oct  4 14:02:27 EDT 2005
 <!-- hhmts end -->
-</body>
+  </body>
 </html>

@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverTestImpl.java,v 1.6 2006/03/29 22:39:38 rlubke Exp $
+ * $Id: VariableResolverTestImpl.java,v 1.7 2006/03/29 23:04:41 rlubke Exp $
  */
 
 /*
@@ -34,14 +34,7 @@ import javax.faces.el.VariableResolver;
 
 public class VariableResolverTestImpl extends TestVariableResolver {
 
-
-    // ------------------------------------------------------------ Constructors
-
-
     public VariableResolverTestImpl(VariableResolver root) {
-
-        super(root);
-
+        super(root);   
     }
-
 }

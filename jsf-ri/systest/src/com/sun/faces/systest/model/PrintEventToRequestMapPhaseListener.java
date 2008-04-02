@@ -1,5 +1,5 @@
 /*
- * $Id: PrintEventToRequestMapPhaseListener.java,v 1.3 2006/03/29 22:38:52 rlubke Exp $
+ * $Id: PrintEventToRequestMapPhaseListener.java,v 1.4 2006/03/29 23:04:01 rlubke Exp $
  */
 
 /*
@@ -29,48 +29,36 @@
 
 package com.sun.faces.systest.model;
 
-import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseEvent;
-import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
+import javax.faces.event.PhaseId;
+import javax.faces.event.PhaseEvent;
 
-public class PrintEventToRequestMapPhaseListener extends Object
-      implements PhaseListener {
+import javax.faces.context.FacesContext;
 
+public class PrintEventToRequestMapPhaseListener extends Object implements PhaseListener {
 
-    protected PhaseListener otherListener = null;
+    public void afterPhase(PhaseEvent event) {
+	String attr = (String) event.getFacesContext().getExternalContext().getRequestMap().get("afterPhaseEvent");
+	if (null == attr) {
+	    attr = "";
+	}
+	event.getFacesContext().getExternalContext().getRequestMap().put("afterPhaseEvent", attr + " afterPhase: " + event.getPhaseId());
+    }
+    
+    
+    public void beforePhase(PhaseEvent event) {
+	String attr = (String) event.getFacesContext().getExternalContext().getRequestMap().get("beforePhaseEvent");
+	if (null == attr) {
+	    attr = "";
+	}
+	event.getFacesContext().getExternalContext().getRequestMap().put("beforePhaseEvent", attr + " beforePhase: " + event.getPhaseId());
+    }
 
     private String phaseIdString = null;
 
-    // ---------------------------------------------- Methods From PhaseListener
-
-    public void afterPhase(PhaseEvent event) {
-
-        String attr = (String) event.getFacesContext().getExternalContext()
-              .getRequestMap().get("afterPhaseEvent");
-        if (null == attr) {
-            attr = "";
-        }
-        event.getFacesContext().getExternalContext().getRequestMap().put(
-              "afterPhaseEvent",
-              attr + " afterPhase: " + event.getPhaseId());
-
+    public void setPhaseIdString(String phaseIdString) {
+	this.phaseIdString = phaseIdString;
     }
-
-
-    public void beforePhase(PhaseEvent event) {
-
-        String attr = (String) event.getFacesContext().getExternalContext()
-              .getRequestMap().get("beforePhaseEvent");
-        if (null == attr) {
-            attr = "";
-        }
-        event.getFacesContext().getExternalContext().getRequestMap().put(
-              "beforePhaseEvent",
-              attr + " beforePhase: " + event.getPhaseId());
-
-    }
-
 
     /**
      * <p>Look at our phaseIdString ivar.  If non-null, use this as the
@@ -84,61 +72,43 @@ public class PrintEventToRequestMapPhaseListener extends Object
 
     public PhaseId getPhaseId() {
 
-        String phaseId =
-              (null != phaseIdString) ? phaseIdString : (String)
-                    FacesContext.getCurrentInstance().getExternalContext()
-                          .getRequestMap().get("phaseId");
-        PhaseId result = PhaseId.ANY_PHASE;
-        if (null == phaseId) {
-            return result;
-        }
-        if (-1 != PhaseId.ANY_PHASE.toString().indexOf(phaseId)) {
-            result = PhaseId.ANY_PHASE;
-        } else
-        if (-1 != PhaseId.APPLY_REQUEST_VALUES.toString().indexOf(phaseId)) {
-            result = PhaseId.APPLY_REQUEST_VALUES;
-        } else
-        if (-1 != PhaseId.PROCESS_VALIDATIONS.toString().indexOf(phaseId)) {
-            result = PhaseId.PROCESS_VALIDATIONS;
-        } else
-        if (-1 != PhaseId.UPDATE_MODEL_VALUES.toString().indexOf(phaseId)) {
-            result = PhaseId.UPDATE_MODEL_VALUES;
-        } else
-        if (-1 != PhaseId.INVOKE_APPLICATION.toString().indexOf(phaseId)) {
-            result = PhaseId.INVOKE_APPLICATION;
-        }
-        return result;
-
+	String phaseId = 
+	    (null != phaseIdString) ? phaseIdString : (String)
+	    FacesContext.getCurrentInstance().getExternalContext().getRequestMap().get("phaseId");
+	PhaseId result = PhaseId.ANY_PHASE;
+	if (null == phaseId) {
+	    return result;
+	}
+	if (-1 != PhaseId.ANY_PHASE.toString().indexOf(phaseId)) {
+	    result = PhaseId.ANY_PHASE;
+	}
+	else if(-1 !=PhaseId.APPLY_REQUEST_VALUES.toString().indexOf(phaseId)){
+	    result = PhaseId.APPLY_REQUEST_VALUES;
+	}
+	else if(-1 != PhaseId.PROCESS_VALIDATIONS.toString().indexOf(phaseId)){
+	    result = PhaseId.PROCESS_VALIDATIONS;
+	}
+	else if(-1 != PhaseId.UPDATE_MODEL_VALUES.toString().indexOf(phaseId)){
+	    result = PhaseId.UPDATE_MODEL_VALUES;
+	}
+	else if(-1 != PhaseId.INVOKE_APPLICATION.toString().indexOf(phaseId)){
+	    result = PhaseId.INVOKE_APPLICATION;
+	}
+	return result;
     }
-
-    // ---------------------------------------------------------- Public Methods
-
-
-    public PhaseListener getOtherListener() {
-
-        return otherListener;
-
-    }
-
-
-    public void setOtherListener(PhaseListener newOtherListener) {
-
-        otherListener = newOtherListener;
-
-    }
-
-
-    public void setPhaseIdString(String phaseIdString) {
-
-        this.phaseIdString = phaseIdString;
-
-    }
-
 
     public PhaseListener getInstance() {
-
-        return this;
-
+	return this;
     }
+
+    protected PhaseListener otherListener = null;
+    public PhaseListener getOtherListener() {
+	return otherListener;
+    }
+
+    public void setOtherListener(PhaseListener newOtherListener) {
+	otherListener = newOtherListener;
+    }
+
 
 }

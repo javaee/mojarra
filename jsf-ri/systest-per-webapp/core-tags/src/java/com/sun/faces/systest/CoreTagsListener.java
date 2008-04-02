@@ -1,5 +1,5 @@
 /*
- * $Id: CoreTagsListener.java,v 1.3 2006/03/29 22:39:16 rlubke Exp $
+ * $Id: CoreTagsListener.java,v 1.4 2006/03/29 23:04:25 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -28,6 +28,7 @@
 
 package com.sun.faces.systest;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -37,25 +38,33 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * <p>Right now, just a minimal listener that sets the java.beans.Beans.DesignTime
- * property to "true" to test the bypass of the TLV and allowance of not
- * specifying non required attributes. </p>
+ *    property to "true" to test the bypass of the TLV and allowance of not
+ *    specifying non required attributes. </p> 
  * <p/>
  */
 public class CoreTagsListener implements ServletContextListener {
 
-    // ------------------------------------- Methods From ServletContextListener
+
+    // -------------------------------------------------------- Static Variables
+
+    /**
+     * <p>The <code>Log</code> instance for this class.</p>
+     */
+    private static Log log = LogFactory.getLog(CoreTagsListener.class);
 
 
+    // ------------------------------------------ ServletContextListener Methods
     public void contextInitialized(ServletContextEvent sce) {
-
         java.beans.Beans.setDesignTime(true);
-
     }
 
 
     public void contextDestroyed(ServletContextEvent sce) {
 
     }
+
+
+    // --------------------------------------------------------- Private Methods
 
 } 
 

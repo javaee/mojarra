@@ -1,5 +1,5 @@
 /*
- * $Id: ProcessValidationsPhase.java,v 1.26 2006/03/29 22:38:34 rlubke Exp $
+ * $Id: ProcessValidationsPhase.java,v 1.27 2006/03/29 23:03:46 rlubke Exp $
  */
 
 /*
@@ -34,8 +34,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import com.sun.faces.util.Util;
 
@@ -45,21 +45,51 @@ import com.sun.faces.util.Util;
  */
 public class ProcessValidationsPhase extends Phase {
 
+//
+// Protected Constants
+//
+    
 // Log instance for this class
-    private static Logger logger = Util.getLogger(Util.FACES_LOGGER
-                                                  + Util.LIFECYCLE_LOGGER);
+   private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
+            + Util.LIFECYCLE_LOGGER);
 
-    // ------------------------------------------------------------ Constructors
+//
+// Class Variables
+//
 
+//
+// Instance Variables
+//
+
+// Attribute Instance Variables
+
+// Relationship Instance Variables
+
+//
+// Constructors and Genericializers    
+//
 
     public ProcessValidationsPhase() {
     }
 
-    // ---------------------------------------------------------- Public Methods
+//
+// Class methods
+//
+
+//
+// General Methods
+//
+
+//
+// Methods from Phase
+//
+
+    public PhaseId getId() {
+        return PhaseId.PROCESS_VALIDATIONS;
+    }
 
 
     public void execute(FacesContext facesContext) throws FacesException {
-
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("Entering ProcessValidationsPhase");
         }
@@ -75,21 +105,15 @@ public class ProcessValidationsPhase extends Phase {
                     logger.log(Level.WARNING, exceptionMessage, re);
                 }
             }
-            throw new FacesException(exceptionMessage, re);
+	    throw new FacesException(exceptionMessage, re);
         }
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("Exiting ProcessValidationsPhase");
         }
-
     }
 
-
-    public PhaseId getId() {
-
-        return PhaseId.PROCESS_VALIDATIONS;
-
-    }
 
 // The testcase for this class is TestProcessValidationsPhase.java
+
 
 } // end of class ProcessValidationsPhase

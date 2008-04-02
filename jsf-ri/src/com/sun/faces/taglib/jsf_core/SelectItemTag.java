@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemTag.java,v 1.14 2006/03/29 22:38:41 rlubke Exp $
+ * $Id: SelectItemTag.java,v 1.15 2006/03/29 23:03:52 rlubke Exp $
  */
 
 /*
@@ -33,6 +33,7 @@ import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
 import javax.faces.webapp.UIComponentELTag;
+import javax.servlet.jsp.JspException;
 
 
 /**
@@ -42,105 +43,85 @@ import javax.faces.webapp.UIComponentELTag;
 
 public class SelectItemTag extends UIComponentELTag {
 
+    //
+    // Protected Constants
+    //
 
+    //
+    // Class Variables
+    //
+
+    //
+    // Instance Variables
+    //
+
+    // Attribute Instance Variables
+
+    protected ValueExpression itemValue;
+    protected ValueExpression itemLabel;
     protected ValueExpression itemDescription;
     protected ValueExpression itemDisabled;
-    protected ValueExpression itemLabel;
-    protected ValueExpression itemValue;
     protected ValueExpression value;
 
-    /** Holds value of property escape. */
-    private ValueExpression escape;
+    // Relationship Instance Variables
 
-    // ------------------------------------------------------------ Constructors
-
+    //
+    // Constructors and Initializers    
+    //
 
     public SelectItemTag() {
-
         super();
-
     }
 
-    // ---------------------------------------------------------- Public Methods
+    //
+    // Class methods
+    //
 
+    // 
+    // Accessors
+    //
 
-    /**
-     * Getter for property escape.
-     *
-     * @return Value of property escape.
-     */
-    public ValueExpression getEscape() {
-
-        return this.escape;
-
-    }
-
-
-    /**
-     * Setter for property escape.
-     *
-     * @param escape New value of property escape.
-     */
-    public void setEscape(ValueExpression escape) {
-
-        this.escape = escape;
-
-    }
-
-
-    public void setItemDescription(ValueExpression itemDescription) {
-
-        this.itemDescription = itemDescription;
-
-    }
-
-
-    public void setItemDisabled(ValueExpression itemDisabled) {
-
-        this.itemDisabled = itemDisabled;
-
+    public void setItemValue(ValueExpression value) {
+        this.itemValue = value;
     }
 
 
     public void setItemLabel(ValueExpression label) {
-
         this.itemLabel = label;
-
     }
 
 
-    public void setItemValue(ValueExpression value) {
+    public void setItemDescription(ValueExpression itemDescription) {
+        this.itemDescription = itemDescription;
+    }
 
-        this.itemValue = value;
-
+    public void setItemDisabled(ValueExpression itemDisabled) {
+        this.itemDisabled = itemDisabled;
     }
 
 
     public void setValue(ValueExpression value) {
-
         this.value = value;
+    }
 
+
+    //
+    // General Methods
+    //
+    public String getRendererType() {
+        return null;
     }
 
 
     public String getComponentType() {
-
         return "javax.faces.SelectItem";
-
     }
-
-
-    public String getRendererType() {
-
-        return null;
-
-    }
-
-    // ------------------------------------------------------- Protected Methods
-
+    
+    //
+    // Methods from BaseComponentTag
+    //
 
     protected void setProperties(UIComponent component) {
-
         super.setProperties(component);
         UISelectItem selectItem = (UISelectItem) component;
 
@@ -172,7 +153,7 @@ public class SelectItemTag extends UIComponentELTag {
                                               itemDescription);
             } else {
                 selectItem.setItemDescription(
-                      itemDescription.getExpressionString());
+                    itemDescription.getExpressionString());
             }
         }
         if (null != itemDisabled) {
@@ -180,8 +161,8 @@ public class SelectItemTag extends UIComponentELTag {
                 selectItem.setValueExpression("itemDisabled", itemDisabled);
             } else {
                 selectItem.setItemDisabled(
-                      Boolean.valueOf(itemDisabled.getExpressionString()).
-                            booleanValue());
+                    Boolean.valueOf(itemDisabled.getExpressionString()).
+                        booleanValue());
             }
         }
         if (null != escape) {
@@ -189,11 +170,31 @@ public class SelectItemTag extends UIComponentELTag {
                 selectItem.setValueExpression("escape", escape);
             } else {
                 selectItem.setItemEscaped(
-                      Boolean.valueOf(escape.getExpressionString()).
-                            booleanValue());
-            }
+                    Boolean.valueOf(escape.getExpressionString()).
+                        booleanValue());            }
         }
 
+    }
+
+    /**
+     * Holds value of property escape.
+     */
+    private ValueExpression escape;
+
+    /**
+     * Getter for property escape.
+     * @return Value of property escape.
+     */
+    public ValueExpression getEscape() {
+        return this.escape;
+    }
+
+    /**
+     * Setter for property escape.
+     * @param escape New value of property escape.
+     */
+    public void setEscape(ValueExpression escape) {
+        this.escape = escape;
     }
 
 } // end of class SelectItemTag

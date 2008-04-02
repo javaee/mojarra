@@ -1,5 +1,5 @@
 /*
- * $Id: TestManagedBeanFactory.java,v 1.30 2006/03/29 22:39:40 rlubke Exp $
+ * $Id: TestManagedBeanFactory.java,v 1.31 2006/03/29 23:04:46 rlubke Exp $
  */
 
 /*
@@ -55,25 +55,25 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
 
     public static String beanName = "com.sun.faces.TestBean";
-    ListEntriesBean listEntries;
+
+    // ----------------------------------------------------- Instance Variables
+
     ManagedBeanBean bean;
-    ManagedBeanFactoryImpl mbf;
     ManagedPropertyBean property;
+    ListEntriesBean listEntries;
     MapEntriesBean mapEntries;
     MapEntryBean mapEntry;
+    ManagedBeanFactoryImpl mbf;
     TestBean testBean;
 
-
-    // ------------------------------------------------------------ Constructors
+    // ----------------------------------------------------------- Constructors
 
 
     /**
      * Construct a new instance of this test case.
      */
     public TestManagedBeanFactory() {
-
         super("TestManagedBeanFactory");
-
     }
 
 
@@ -89,239 +89,6 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
     }
 
 
-    // ---------------------------------------------------------- Public Methods
-
- 
-    public void testConstructorException() {
-
-        // constructor of this bean throws ann exception. Make sure the
-        // exception is not swallowed.
-        ValueExpression valueExpression1 = 
-        Util.getValueExpression("#{exceptionBean.one}");
-        boolean exceptionThrown = false;
-        try {
-            valueExpression1.getValue(getFacesContext().getELContext());
-        } catch (FacesException ex) {
-            exceptionThrown = true;
-            assertTrue((ex.getMessage().
-                indexOf("TestConstructorException Passed")) != -1);
-        }   
-        assertTrue(exceptionThrown);
-        
-    }
-
-
-    public void testIndexProperty() throws Exception {
-
-        //Testing indexed properties
-        bean = new ManagedBeanBean();
-        bean.setManagedBeanClass(beanName);
-        bean.setManagedBeanScope("session");
-
-        property = new ManagedPropertyBean();
-        property.setPropertyName("indexProperties");
-        listEntries = new ListEntriesBean();
-        listEntries.addValue("foo");
-        listEntries.addValue("bar");
-        property.setListEntries(listEntries);
-
-        ManagedPropertyBean property2 = new ManagedPropertyBean();
-        property2.setPropertyName("indexPropertiesNull");
-        property2.setListEntries(listEntries);
-
-        bean.addManagedProperty(property);
-        bean.addManagedProperty(property2);
-
-        mbf = new ManagedBeanFactoryImpl(bean);
-
-        //testing with a property set
-        assertNotNull(testBean = (TestBean) mbf.newInstance(getFacesContext()));
-
-        //make sure bean instantiated properly. Get property back from bean.
-        ArrayList properties = (ArrayList) testBean.getIndexProperties();
-        assertTrue(properties.get(5).equals("foo"));
-        assertTrue(properties.get(6).equals("bar"));
-
-        // setter shouldn't be called if bean getter returns List
-        assertTrue(!testBean.getListSetterCalled());
-
-        // setter should be called if bean getter returned null
-        assertTrue(testBean.getListNullSetterCalled());
-
-        //make sure scope is stored properly
-        assertTrue(mbf.getScope() == Scope.SESSION);
-
-    }
-
-
-    public void testIndexTypeProperty() throws Exception {
-
-        //Testing indexed type properties
-        bean = new ManagedBeanBean();
-        property = new ManagedPropertyBean();
-        bean.setManagedBeanClass(beanName);
-        bean.setManagedBeanScope("session");
-        property.setPropertyName("indexIntegerProperties");
-        listEntries = new ListEntriesBean();
-        listEntries.setValueClass("java.lang.Integer");
-        listEntries.addValue("23");
-        property.setListEntries(listEntries);
-
-        bean.addManagedProperty(property);
-
-        mbf = new ManagedBeanFactoryImpl(bean);
-
-        //testing with a property set
-        assertNotNull(testBean = (TestBean) mbf.newInstance(getFacesContext()));
-
-        //make sure bean instantiated properly. Get property back from bean.
-        ArrayList properties = (ArrayList) testBean.getIndexIntegerProperties();
-        assertTrue(properties.get(1) instanceof Integer);
-
-        Integer integer = new Integer("23");
-        assertTrue(properties.get(2).equals(integer));
-
-    }
-
-
-    public void testMapProperty() throws Exception {
-
-        //Testing mapped properties
-        bean = new ManagedBeanBean();
-        bean.setManagedBeanClass(beanName);
-        bean.setManagedBeanScope("session");
-
-        mapEntries = new MapEntriesBean();
-        mapEntry = new MapEntryBean();
-        mapEntry.setKey("name");
-        mapEntry.setValue("Justyna");
-        mapEntries.addMapEntry(mapEntry);
-
-        property = new ManagedPropertyBean();
-        property.setPropertyName("mapProperty");
-        property.setMapEntries(mapEntries);
-
-        ManagedPropertyBean property2 = new ManagedPropertyBean();
-        property2.setPropertyName("mapPropertyNull");
-        property2.setMapEntries(mapEntries);
-
-        bean.addManagedProperty(property);
-        bean.addManagedProperty(property2);
-        mbf = new ManagedBeanFactoryImpl(bean);
-
-        //testing with a property set
-        assertNotNull(testBean = (TestBean) mbf.newInstance(getFacesContext()));
-
-        //make sure bean instantiated properly. Get property back from bean.
-        HashMap mapProperty = (HashMap)
-            testBean.getMapProperty();
-        assertTrue(((String) mapProperty.get("name")).equals("Justyna"));
-
-        // setter shouldn't be called if bean getter returns Map
-        assertTrue(!testBean.getMapPropertySetterCalled());
-
-        // setter should be called if bean getter returned null
-        assertTrue(testBean.getMapPropertyNullSetterCalled());
-
-        //make sure scope is stored properly
-        assertTrue(mbf.getScope() == Scope.SESSION);
-
-    }
-
-
-    public void testMapTypeProperty() throws Exception {
-
-        //Testing mapped properties type
-        bean = new ManagedBeanBean();
-        bean.setManagedBeanClass(beanName);
-        bean.setManagedBeanScope("session");
-
-        mapEntries = new MapEntriesBean();
-        mapEntries.setKeyClass("java.lang.String");
-        mapEntries.setValueClass("java.lang.Integer");
-
-        mapEntry = new MapEntryBean();
-        mapEntry.setKey("name");
-        mapEntry.setValue("23");
-        mapEntries.addMapEntry(mapEntry);
-
-        property = new ManagedPropertyBean();
-        property.setPropertyName("mapProperty");
-        property.setMapEntries(mapEntries);
-
-        bean.addManagedProperty(property);
-        mbf = new ManagedBeanFactoryImpl(bean);
-
-        //testing with a property set
-        assertNotNull(testBean = (TestBean) mbf.newInstance(getFacesContext()));
-
-        //make sure bean instantiated properly. Get property back from bean.
-        HashMap mapProperty = (HashMap)
-            testBean.getMapProperty();
-
-        assertTrue(mapProperty.get("name") instanceof Integer);
-
-        Integer integer = new Integer("23");
-        assertTrue(mapProperty.get("name").equals(integer));
-
-        //make sure scope is stored properly
-        assertTrue(mbf.getScope() == Scope.SESSION);
-
-    }
-
-
-    public void testMixedBean() throws Exception {
-
-        ValueExpression vb =
-            Util.getValueExpression(
-                "#{mixedBean}");
-        TestBean bean = (TestBean) vb.getValue(getFacesContext().getELContext());
-        assertEquals("mixed value Bobby Orr", bean.getProp());
-
-        vb =
-            Util.getValueExpression(
-                "#{mixedBean.prop}");
-        assertEquals(bean.getProp(), (String) vb.getValue(getFacesContext().getELContext()));
-
-    }
-
-
-    public void testMixedBeanNegative() throws Exception {
-
-        ValueExpression vb =
-            Util.getValueExpression(
-                "#{threeBeanSaladNegative}");
-	boolean exceptionThrown = false;
-	try {
-	    TestBean bean = (TestBean) vb.getValue(getFacesContext().getELContext());
-	    assertTrue(false);
-	}
-	catch (FacesException pnfe) {
-	    exceptionThrown = true;
-	}
-
-	assertTrue(exceptionThrown);
-
-    }
-
-
-    public void testMixedBeanPositive() throws Exception {
-
-        ValueExpression vb =
-            Util.getValueExpression(
-                "#{threeBeanSaladPositive}");
-        TestBean bean = (TestBean) vb.getValue(getFacesContext().getELContext());
-        assertEquals("request request session session none none", 
-		     bean.getProp());
-
-        vb =
-            Util.getValueExpression(
-                "#{threeBeanSaladPositive.prop}");
-        assertEquals(bean.getProp(), (String) vb.getValue(getFacesContext().getELContext()));
-
-    }
-
-
     // --------------------------------------------------- Overall Test Methods
 
 
@@ -331,7 +98,6 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
     // Test managed bean 
     public void testNoProperty() throws Exception {
-
         //Testing with no properties set
         bean = new ManagedBeanBean();
         bean.setManagedBeanClass(beanName);
@@ -344,71 +110,35 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 	bean.setManagedBeanScope("request");
 	mbf.setManagedBeanBean(bean);
         assertTrue(mbf.getScope() == Scope.REQUEST);
-
     }
 
 
-    public void testNoneScope() throws Exception {
-
-        //Testing value ref scope
-        TestBean testBean = new TestBean();
-        boolean exceptionThrown = false;
-
-        //  valueref in request scope
-        //  managed bean in none scope
-        // this should fail
-        getFacesContext().getExternalContext().getRequestMap().put(
-            "TestRefBean", testBean);
-
-        ValueExpression valueExpression = Util.getValueExpression("#{TestRefBean.one}");
-        valueExpression.setValue(getFacesContext().getELContext(), "one");
-
+    public void testSimpleProperty() throws Exception {
+        //Testing simple property
         bean = new ManagedBeanBean();
         bean.setManagedBeanClass(beanName);
-        bean.setManagedBeanScope("none");
+        bean.setManagedBeanScope("session");
 
         property = new ManagedPropertyBean();
         property.setPropertyName("one");
-        property.setValue("#{TestRefBean.one}");
+        property.setValue("one");
 
         bean.addManagedProperty(property);
 
         mbf = new ManagedBeanFactoryImpl(bean);
 
-        exceptionThrown = false;
-        try {
-            mbf.newInstance(getFacesContext());
-            fail("Should have thrown FacesException");
-        } catch (FacesException ex) {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
+        //testing with a property set
+        assertNotNull(testBean = (TestBean) mbf.newInstance(getFacesContext()));
+
+        //make sure bean instantiated properly. Get property back from bean.
+        assertTrue(testBean.getOne().equals("one"));
 
         //make sure scope is stored properly
-        assertTrue(mbf.getScope() == Scope.NONE);
-
-        //cleanup
-        getFacesContext().getExternalContext().getRequestMap().remove(
-            "TestRefBean");
-
-        //  valueref in none scope
-        //  managed bean in none scope
-        // this should pass
-        ValueExpression valueExpression1 = 
-        Util.getValueExpression("#{testBean.customerBean.name}");
-        exceptionThrown = false;
-        try {
-            valueExpression1.getValue(getFacesContext().getELContext());
-        } catch (FacesException ex) {
-            exceptionThrown = true;
-        }
-        assertTrue(!exceptionThrown);
-      
+        assertTrue(mbf.getScope() == Scope.SESSION);
     }
 
 
     public void testPrimitiveProperty() throws Exception {
-
         //Testing primitive properties
         bean = new ManagedBeanBean();
         bean.setManagedBeanClass(beanName);
@@ -479,12 +209,9 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
         //make sure scope is stored properly
         assertTrue(mbf.getScope() == Scope.SESSION);
-
     }
-
-
+    
     public void testSimpleNumericProperty() throws Exception {
-
         // If a property value is "" ensure numeric properties
         // are set to 0.
         bean = new ManagedBeanBean();
@@ -538,20 +265,104 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         assertTrue(testBean.getIntProp() == 0);
         assertTrue(testBean.getLongProp() == 0);
         assertTrue(testBean.getShortProp() == 0);
-
     }
 
 
-    public void testSimpleProperty() throws Exception {
-
-        //Testing simple property
+    public void testIndexProperty() throws Exception {
+        //Testing indexed properties
         bean = new ManagedBeanBean();
         bean.setManagedBeanClass(beanName);
         bean.setManagedBeanScope("session");
 
         property = new ManagedPropertyBean();
-        property.setPropertyName("one");
-        property.setValue("one");
+        property.setPropertyName("indexProperties");
+        listEntries = new ListEntriesBean();
+        listEntries.addValue("foo");
+        listEntries.addValue("bar");
+        property.setListEntries(listEntries);
+
+        ManagedPropertyBean property2 = new ManagedPropertyBean();
+        property2.setPropertyName("indexPropertiesNull");
+        property2.setListEntries(listEntries);
+
+        bean.addManagedProperty(property);
+        bean.addManagedProperty(property2);
+
+        mbf = new ManagedBeanFactoryImpl(bean);
+
+        //testing with a property set
+        assertNotNull(testBean = (TestBean) mbf.newInstance(getFacesContext()));
+
+        //make sure bean instantiated properly. Get property back from bean.
+        ArrayList properties = (ArrayList) testBean.getIndexProperties();
+        assertTrue(properties.get(5).equals("foo"));
+        assertTrue(properties.get(6).equals("bar"));
+
+        // setter shouldn't be called if bean getter returns List
+        assertTrue(!testBean.getListSetterCalled());
+
+        // setter should be called if bean getter returned null
+        assertTrue(testBean.getListNullSetterCalled());
+
+        //make sure scope is stored properly
+        assertTrue(mbf.getScope() == Scope.SESSION);
+    }
+
+
+    public void testMapProperty() throws Exception {
+        //Testing mapped properties
+        bean = new ManagedBeanBean();
+        bean.setManagedBeanClass(beanName);
+        bean.setManagedBeanScope("session");
+
+        mapEntries = new MapEntriesBean();
+        mapEntry = new MapEntryBean();
+        mapEntry.setKey("name");
+        mapEntry.setValue("Justyna");
+        mapEntries.addMapEntry(mapEntry);
+
+        property = new ManagedPropertyBean();
+        property.setPropertyName("mapProperty");
+        property.setMapEntries(mapEntries);
+
+        ManagedPropertyBean property2 = new ManagedPropertyBean();
+        property2.setPropertyName("mapPropertyNull");
+        property2.setMapEntries(mapEntries);
+
+        bean.addManagedProperty(property);
+        bean.addManagedProperty(property2);
+        mbf = new ManagedBeanFactoryImpl(bean);
+
+        //testing with a property set
+        assertNotNull(testBean = (TestBean) mbf.newInstance(getFacesContext()));
+
+        //make sure bean instantiated properly. Get property back from bean.
+        HashMap mapProperty = (HashMap)
+            testBean.getMapProperty();
+        assertTrue(((String) mapProperty.get("name")).equals("Justyna"));
+
+        // setter shouldn't be called if bean getter returns Map
+        assertTrue(!testBean.getMapPropertySetterCalled());
+
+        // setter should be called if bean getter returned null
+        assertTrue(testBean.getMapPropertyNullSetterCalled());
+
+        //make sure scope is stored properly
+        assertTrue(mbf.getScope() == Scope.SESSION);
+    }
+
+
+    public void testIndexTypeProperty() throws Exception {
+        //Testing indexed type properties
+        bean = new ManagedBeanBean();
+        property = new ManagedPropertyBean();
+        bean.setManagedBeanClass(beanName);
+        bean.setManagedBeanScope("session");
+        property.setPropertyName("indexIntegerProperties");
+        listEntries = new ListEntriesBean();
+        listEntries.setValueClass("java.lang.Integer");
+        listEntries.addValue("23");
+        property.setListEntries(listEntries);
 
         bean.addManagedProperty(property);
 
@@ -561,16 +372,54 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         assertNotNull(testBean = (TestBean) mbf.newInstance(getFacesContext()));
 
         //make sure bean instantiated properly. Get property back from bean.
-        assertTrue(testBean.getOne().equals("one"));
+        ArrayList properties = (ArrayList) testBean.getIndexIntegerProperties();
+        assertTrue(properties.get(1) instanceof Integer);
+
+        Integer integer = new Integer("23");
+        assertTrue(properties.get(2).equals(integer));
+    }
+
+
+    public void testMapTypeProperty() throws Exception {
+        //Testing mapped properties type
+        bean = new ManagedBeanBean();
+        bean.setManagedBeanClass(beanName);
+        bean.setManagedBeanScope("session");
+
+        mapEntries = new MapEntriesBean();
+        mapEntries.setKeyClass("java.lang.String");
+        mapEntries.setValueClass("java.lang.Integer");
+
+        mapEntry = new MapEntryBean();
+        mapEntry.setKey("name");
+        mapEntry.setValue("23");
+        mapEntries.addMapEntry(mapEntry);
+
+        property = new ManagedPropertyBean();
+        property.setPropertyName("mapProperty");
+        property.setMapEntries(mapEntries);
+
+        bean.addManagedProperty(property);
+        mbf = new ManagedBeanFactoryImpl(bean);
+
+        //testing with a property set
+        assertNotNull(testBean = (TestBean) mbf.newInstance(getFacesContext()));
+
+        //make sure bean instantiated properly. Get property back from bean.
+        HashMap mapProperty = (HashMap)
+            testBean.getMapProperty();
+
+        assertTrue(mapProperty.get("name") instanceof Integer);
+
+        Integer integer = new Integer("23");
+        assertTrue(mapProperty.get("name").equals(integer));
 
         //make sure scope is stored properly
         assertTrue(mbf.getScope() == Scope.SESSION);
-
     }
 
 
     public void testValueRefProperty() throws Exception {
-
         //Testing simple value ref property
 
         TestBean testBean = new TestBean();
@@ -604,7 +453,6 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
 
     public void testValueRefScope() throws Exception {
-
         //Testing value ref scope
 
         TestBean testBean = new TestBean();
@@ -709,10 +557,126 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
         //make sure scope is stored properly
         assertTrue(mbf.getScope() == Scope.NONE);
+    }
+    
+    public void testNoneScope() throws Exception {
+        //Testing value ref scope
+        TestBean testBean = new TestBean();
+        boolean exceptionThrown = false;
 
+        //  valueref in request scope
+        //  managed bean in none scope
+        // this should fail
+        getFacesContext().getExternalContext().getRequestMap().put(
+            "TestRefBean", testBean);
+
+        ValueExpression valueExpression = Util.getValueExpression("#{TestRefBean.one}");
+        valueExpression.setValue(getFacesContext().getELContext(), "one");
+
+        bean = new ManagedBeanBean();
+        bean.setManagedBeanClass(beanName);
+        bean.setManagedBeanScope("none");
+
+        property = new ManagedPropertyBean();
+        property.setPropertyName("one");
+        property.setValue("#{TestRefBean.one}");
+
+        bean.addManagedProperty(property);
+
+        mbf = new ManagedBeanFactoryImpl(bean);
+
+        exceptionThrown = false;
+        try {
+            mbf.newInstance(getFacesContext());
+            fail("Should have thrown FacesException");
+        } catch (FacesException ex) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+
+        //make sure scope is stored properly
+        assertTrue(mbf.getScope() == Scope.NONE);
+
+        //cleanup
+        getFacesContext().getExternalContext().getRequestMap().remove(
+            "TestRefBean");
+
+        //  valueref in none scope
+        //  managed bean in none scope
+        // this should pass
+        ValueExpression valueExpression1 = 
+        Util.getValueExpression("#{testBean.customerBean.name}");
+        exceptionThrown = false;
+        try {
+            valueExpression1.getValue(getFacesContext().getELContext());
+        } catch (FacesException ex) {
+            exceptionThrown = true;
+        }
+        assertTrue(!exceptionThrown);
+      
     }
 
+    public void testMixedBean() throws Exception {
+        ValueExpression vb =
+            Util.getValueExpression(
+                "#{mixedBean}");
+        TestBean bean = (TestBean) vb.getValue(getFacesContext().getELContext());
+        assertEquals("mixed value Bobby Orr", bean.getProp());
 
+        vb =
+            Util.getValueExpression(
+                "#{mixedBean.prop}");
+        assertEquals(bean.getProp(), (String) vb.getValue(getFacesContext().getELContext()));
+    } 
+
+    public void testMixedBeanNegative() throws Exception {
+        ValueExpression vb =
+            Util.getValueExpression(
+                "#{threeBeanSaladNegative}");
+	boolean exceptionThrown = false;
+	try {
+	    TestBean bean = (TestBean) vb.getValue(getFacesContext().getELContext());
+	    assertTrue(false);
+	}
+	catch (FacesException pnfe) {
+	    exceptionThrown = true;
+	}
+
+	assertTrue(exceptionThrown);
+    }
+
+    public void testMixedBeanPositive() throws Exception {
+        ValueExpression vb =
+            Util.getValueExpression(
+                "#{threeBeanSaladPositive}");
+        TestBean bean = (TestBean) vb.getValue(getFacesContext().getELContext());
+        assertEquals("request request session session none none", 
+		     bean.getProp());
+
+        vb =
+            Util.getValueExpression(
+                "#{threeBeanSaladPositive.prop}");
+        assertEquals(bean.getProp(), (String) vb.getValue(getFacesContext().getELContext()));
+    } 
+
+
+    public void testConstructorException() {
+        // constructor of this bean throws ann exception. Make sure the
+        // exception is not swallowed.
+        ValueExpression valueExpression1 = 
+        Util.getValueExpression("#{exceptionBean.one}");
+        boolean exceptionThrown = false;
+        try {
+            valueExpression1.getValue(getFacesContext().getELContext());
+        } catch (FacesException ex) {
+            exceptionThrown = true;
+            assertTrue((ex.getMessage().
+                indexOf("TestConstructorException Passed")) != -1);
+        }   
+        assertTrue(exceptionThrown);
+        
+    }
+	
     /************* PENDING(edburns): rewrite to exercise new edge case
      * detection.
 
@@ -803,5 +767,6 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
      assertTrue(exceptionThrown);
      }
      ***********/
+    
 
 }

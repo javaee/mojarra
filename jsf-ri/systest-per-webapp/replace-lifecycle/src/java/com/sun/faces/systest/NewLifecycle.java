@@ -1,5 +1,5 @@
 /*
- * $Id: NewLifecycle.java,v 1.4 2006/03/29 22:39:23 rlubke Exp $
+ * $Id: NewLifecycle.java,v 1.5 2006/03/29 23:04:32 rlubke Exp $
  */
 
 /*
@@ -32,26 +32,15 @@ package com.sun.faces.systest;
 import com.sun.faces.lifecycle.LifecycleImpl;
 
 public class NewLifecycle extends LifecycleImpl {
-
-
+    
     private String lifecycleId = null;
 
-    // ------------------------------------------------------------ Constructors
-
-
     public NewLifecycle(String lifecycleId) {
-
         this.lifecycleId = lifecycleId;
-
     }
-
-    // ---------------------------------------------------------- Public Methods
-
-
+    
     public String getLifecycleId() {
-
         return lifecycleId;
-
     }
 
 }

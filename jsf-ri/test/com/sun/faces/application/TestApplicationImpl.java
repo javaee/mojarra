@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.30 2006/03/29 22:39:35 rlubke Exp $
+ * $Id: TestApplicationImpl.java,v 1.31 2006/03/29 23:04:39 rlubke Exp $
  */
 
 /*
@@ -64,67 +64,56 @@ import javax.el.ValueExpression;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.30 2006/03/29 22:39:35 rlubke Exp $
+ * @version $Id: TestApplicationImpl.java,v 1.31 2006/03/29 23:04:39 rlubke Exp $
  */
 
 public class TestApplicationImpl extends JspFacesTestCase {
 
-
+//
+// Protected Constants
+//
     public static final String HANDLED_ACTIONEVENT1 = "handledValueEvent1";
     public static final String HANDLED_ACTIONEVENT2 = "handledValueEvent2";
 
+//
+// Class Variables
+//
+
+//
+// Instance Variables
+//
     private ApplicationImpl application = null;
 
+// Attribute Instance Variables
 
-    // ------------------------------------------------------------ Constructors
+// Relationship Instance Variables
 
+//
+// Constructors and Initializers    
+//
 
     public TestApplicationImpl() {
-
         super("TestApplicationImpl");
-
     }
 
 
     public TestApplicationImpl(String name) {
-
         super(name);
-
     }
+//
+// Class methods
+//
 
-
-    // ---------------------------------------------------------- Public Methods
-
-
-    public static void clearResourceBundlesFromAssociate(ApplicationImpl application) {
-
-        ApplicationAssociate associate = (ApplicationAssociate)
-            TestingUtil.invokePrivateMethod("getAssociate",
-                                            RIConstants.EMPTY_CLASS_ARGS,
-                                            RIConstants.EMPTY_METH_ARGS,
-                                            ApplicationImpl.class,
-                                            application);       
-        if (null != associate) {
-            Map resourceBundles = (Map) 
-                TestingUtil.getPrivateField("resourceBundles",
-                                            ApplicationAssociate.class,
-                                            associate);
-            if (null != resourceBundles) {
-                resourceBundles.clear();
-            }
-        }
-
-    }
-
+//
+// General Methods
+//
 
     public void setUp() {
-
         super.setUp();
         ApplicationFactory aFactory =
             (ApplicationFactory) FactoryFinder.getFactory(
                 FactoryFinder.APPLICATION_FACTORY);
         application = (ApplicationImpl) aFactory.getApplication();
-
     }
 
 
@@ -180,31 +169,10 @@ public class TestApplicationImpl extends JspFacesTestCase {
         StateManager stateManager3 = application.getStateManager();
         assertTrue((stateManager1 == stateManager2) &&
                    (stateManager1 == stateManager3));
-
-    }
-
-
-    public void testAddComponentPositive() {
-
-        TestComponent
-            newTestComponent = null,
-            testComponent = new TestComponent();
-
-
-        application.addComponent(testComponent.getComponentType(),
-                                 "com.sun.faces.TestComponent");
-        assertTrue(
-            null !=
-            (newTestComponent =
-             (TestComponent)
-            application.createComponent(testComponent.getComponentType())));
-        assertTrue(newTestComponent != testComponent);
-
     }
 
 
     public void testExceptions() {
-
         boolean thrown;
 
         // 1. Verify NullPointer exception which occurs when attempting
@@ -405,12 +373,66 @@ public class TestApplicationImpl extends JspFacesTestCase {
             thrown = true;
         }
         assertFalse(thrown);
+    }
+
+
+    public class InvalidActionListener implements ActionListener {
+
+        public void processAction(ActionEvent event) {
+            System.setProperty(HANDLED_ACTIONEVENT1, HANDLED_ACTIONEVENT1);
+        }
+    }
+
+    public class ValidActionListener implements ActionListener {
+
+        public void processAction(ActionEvent event) {
+            System.setProperty(HANDLED_ACTIONEVENT2, HANDLED_ACTIONEVENT2);
+        }
+    }
+
+    //
+    // Test Config related methods
+    //
+
+    public void testAddComponentPositive() {
+        TestComponent
+            newTestComponent = null,
+            testComponent = new TestComponent();
+
+
+        application.addComponent(testComponent.getComponentType(),
+                                 "com.sun.faces.TestComponent");
+        assertTrue(
+            null !=
+            (newTestComponent =
+             (TestComponent)
+            application.createComponent(testComponent.getComponentType())));
+        assertTrue(newTestComponent != testComponent);
 
     }
 
 
-    public void testGetComponentExpressionRefNegative() throws ELException{
+    public void testGetComponentWithRefNegative() {
+        ValueBinding valueBinding = null;
+        boolean exceptionThrown = false;
+        UIComponent result = null;
+        getFacesContext().getExternalContext().getSessionMap().put("TAIBean",
+                                                                   this);
+        assertTrue(null != (valueBinding =
+                            application.createValueBinding(
+                                "#{sessionScope.TAIBean}")));
 
+        try {
+            result = application.createComponent(valueBinding, getFacesContext(),
+                                                 "notreached");
+            assertTrue(false);
+        } catch (FacesException e) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+    }
+    
+    public void testGetComponentExpressionRefNegative() throws ELException{
         ValueExpression valueBinding = null;
         boolean exceptionThrown = false;
         UIComponent result = null;
@@ -443,69 +465,54 @@ public class TestApplicationImpl extends JspFacesTestCase {
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
-
     }
 
 
-    public void testGetComponentWithRefNegative() {
+    public void testSetViewHandlerException() throws Exception {
+        ViewHandler handler = new ViewHandlerImpl();
+        UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+        root.setViewId("/view");
+        root.setId("id");
+        getFacesContext().setViewRoot(root);
 
-        ValueBinding valueBinding = null;
         boolean exceptionThrown = false;
-        UIComponent result = null;
-        getFacesContext().getExternalContext().getSessionMap().put("TAIBean",
-                                                                   this);
-        assertTrue(null != (valueBinding =
-                            application.createValueBinding(
-                                "#{sessionScope.TAIBean}")));
-
         try {
-            result = application.createComponent(valueBinding, getFacesContext(),
-                                                 "notreached");
-            assertTrue(false);
-        } catch (FacesException e) {
+            application.setViewHandler(handler);
+        } catch (IllegalStateException ise) {
+            exceptionThrown = true;
+        }
+        assertTrue(!exceptionThrown);
+        
+        try {
+            handler.renderView(getFacesContext(),
+                               getFacesContext().getViewRoot());
+            application.setViewHandler(handler);
+        } catch (IllegalStateException ise) {
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
 
+        // and test setting the StateManager too.
+        exceptionThrown = false;
+        try {
+            application.setStateManager(new StateManagerImpl());
+        } catch (IllegalStateException ise) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
     }
 
-
-    public void testLegacyPropertyResolversWithUnifiedEL() {
-      
-        ValueExpression ve1 = application.getExpressionFactory().
-            createValueExpression(getFacesContext().getELContext(),
-                "#{mixedBean.customPRTest1}", Object.class);
-        Object result = ve1.getValue(getFacesContext().getELContext());     
-        assertTrue(result.equals("TestPropertyResolver"));
-        
-        ValueExpression ve2 = application.getExpressionFactory().
-            createValueExpression(getFacesContext().getELContext(),
-                "#{mixedBean.customPRTest2}", Object.class);
-        result = ve2.getValue(getFacesContext().getELContext());      
-        assertTrue(result.equals("PropertyResolverTestImpl"));
-
+    // Ensure ApplicationImpl.setDefaultLocale(null) throws NPE
+    public void testSetDefaultLocaleNPE() throws Exception {
+        try {
+            application.setDefaultLocale(null);
+            assertTrue(false);
+        } catch (NullPointerException npe) {
+            ; // we're ok
+        }
     }
-
-
-    public void testLegacyVariableResolversWithUnifiedEL() {
-      
-        ValueExpression ve1 = application.getExpressionFactory().
-            createValueExpression(getFacesContext().getELContext(),
-                "#{customVRTest1}", Object.class);
-        Object result = ve1.getValue(getFacesContext().getELContext());        
-        assertTrue(result.equals("TestVariableResolver"));
-        
-        ValueExpression ve2 = application.getExpressionFactory().
-            createValueExpression(getFacesContext().getELContext(),
-                "#{customVRTest2}", Object.class);
-        result = ve2.getValue(getFacesContext().getELContext());      
-        assertTrue(result.equals("TestOldVariableResolver"));
-
-    }
-
-
+    
     public void testResourceBundle() throws Exception {
-
         ResourceBundle rb = null;
         UIViewRoot root = new UIViewRoot();
         root.setLocale(Locale.ENGLISH);
@@ -541,82 +548,54 @@ public class TestApplicationImpl extends JspFacesTestCase {
         assertEquals("Abflug", value);
         
     }
-
-
-    // Ensure ApplicationImpl.setDefaultLocale(null) throws NPE
-    public void testSetDefaultLocaleNPE() throws Exception {
-
-        try {
-            application.setDefaultLocale(null);
-            assertTrue(false);
-        } catch (NullPointerException npe) {
-            ; // we're ok
-        }
-
-    }
-
-
-    public void testSetViewHandlerException() throws Exception {
-
-        ViewHandler handler = new ViewHandlerImpl();
-        UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
-        root.setViewId("/view");
-        root.setId("id");
-        getFacesContext().setViewRoot(root);
-
-        boolean exceptionThrown = false;
-        try {
-            application.setViewHandler(handler);
-        } catch (IllegalStateException ise) {
-            exceptionThrown = true;
-        }
-        assertTrue(!exceptionThrown);
+    
+    public void testLegacyPropertyResolversWithUnifiedEL() {
+      
+        ValueExpression ve1 = application.getExpressionFactory().
+            createValueExpression(getFacesContext().getELContext(),
+                "#{mixedBean.customPRTest1}", Object.class);
+        Object result = ve1.getValue(getFacesContext().getELContext());     
+        assertTrue(result.equals("TestPropertyResolver"));
         
-        try {
-            handler.renderView(getFacesContext(),
-                               getFacesContext().getViewRoot());
-            application.setViewHandler(handler);
-        } catch (IllegalStateException ise) {
-            exceptionThrown = true;
+        ValueExpression ve2 = application.getExpressionFactory().
+            createValueExpression(getFacesContext().getELContext(),
+                "#{mixedBean.customPRTest2}", Object.class);
+        result = ve2.getValue(getFacesContext().getELContext());      
+        assertTrue(result.equals("PropertyResolverTestImpl"));
+    }
+    
+    public void testLegacyVariableResolversWithUnifiedEL() {
+      
+        ValueExpression ve1 = application.getExpressionFactory().
+            createValueExpression(getFacesContext().getELContext(),
+                "#{customVRTest1}", Object.class);
+        Object result = ve1.getValue(getFacesContext().getELContext());        
+        assertTrue(result.equals("TestVariableResolver"));
+        
+        ValueExpression ve2 = application.getExpressionFactory().
+            createValueExpression(getFacesContext().getELContext(),
+                "#{customVRTest2}", Object.class);
+        result = ve2.getValue(getFacesContext().getELContext());      
+        assertTrue(result.equals("TestOldVariableResolver"));
+    }
+    
+    public static void clearResourceBundlesFromAssociate(ApplicationImpl application) {
+        ApplicationAssociate associate = (ApplicationAssociate)
+            TestingUtil.invokePrivateMethod("getAssociate",
+                                            RIConstants.EMPTY_CLASS_ARGS,
+                                            RIConstants.EMPTY_METH_ARGS,
+                                            ApplicationImpl.class,
+                                            application);       
+        if (null != associate) {
+            Map resourceBundles = (Map) 
+                TestingUtil.getPrivateField("resourceBundles",
+                                            ApplicationAssociate.class,
+                                            associate);
+            if (null != resourceBundles) {
+                resourceBundles.clear();
+            }
         }
-        assertTrue(exceptionThrown);
-
-        // and test setting the StateManager too.
-        exceptionThrown = false;
-        try {
-            application.setStateManager(new StateManagerImpl());
-        } catch (IllegalStateException ise) {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-
     }
 
-
-    public class InvalidActionListener implements ActionListener {
-
-
-    // --------------------------------------------- Methods From ActionListener
-
-        public void processAction(ActionEvent event) {
-
-            System.setProperty(HANDLED_ACTIONEVENT1, HANDLED_ACTIONEVENT1);
-
-        }
-
-    }
-
-    public class ValidActionListener implements ActionListener {
-
-
-    // --------------------------------------------- Methods From ActionListener
-
-        public void processAction(ActionEvent event) {
-
-            System.setProperty(HANDLED_ACTIONEVENT2, HANDLED_ACTIONEVENT2);
-
-        }
-
-    }
 
 } // end of class TestApplicationImpl

@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessEvents.java,v 1.22 2006/03/29 22:39:45 rlubke Exp $
+ * $Id: TestProcessEvents.java,v 1.23 2006/03/29 23:04:56 rlubke Exp $
  */
 
 /*
@@ -50,15 +50,26 @@ import java.util.HashMap;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessEvents.java,v 1.22 2006/03/29 22:39:45 rlubke Exp $
+ * @version $Id: TestProcessEvents.java,v 1.23 2006/03/29 23:04:56 rlubke Exp $
  */
 
 public class TestProcessEvents extends ServletFacesTestCase {
 
+//
+// Protected Constants
+//
 
-    public static final String HANDLED_ACTIONEVENT1 = "handledActionEvent1";
     public static final String HANDLED_VALUEEVENT1 = "handledValueEvent1";
     public static final String HANDLED_VALUEEVENT2 = "handledValueEvent2";
+    public static final String HANDLED_ACTIONEVENT1 = "handledActionEvent1";
+
+//
+// Class Variables
+//
+
+//
+// Instance Variables
+//
 
 // keeps track of total number of events processed
 // per event source component
@@ -67,25 +78,99 @@ public class TestProcessEvents extends ServletFacesTestCase {
     public String limit = null;
     public int eventLimit = 100; // some default;
 
+// Attribute Instance Variables
 
-    // ------------------------------------------------------------ Constructors
+// Relationship Instance Variables
 
+//
+// Constructors and Initializers    
+//
 
     public TestProcessEvents() {
-
         super("TestProcessEvents");
-
     }
 
 
     public TestProcessEvents(String name) {
-
         super(name);
+    }
 
+//
+// Class methods
+//
+
+//
+// General Methods
+//
+
+    public void setUp() {
+        super.setUp();
+        UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+        getFacesContext().setViewRoot(root);
     }
 
 
-    // ---------------------------------------------------------- Public Methods
+    public void tearDown() {        
+        super.tearDown();
+    }
+
+// tests one component - one value change listener
+
+    public void testSingleValueChange() {
+        // for keeping track of events processed limit..
+        //
+        eventsProcessed = new HashMap();
+
+        UIInput userName = new UIInput();
+        getFacesContext().getViewRoot().getChildren().add(userName);
+
+        // clear the property
+        System.setProperty(HANDLED_VALUEEVENT1, EMPTY);
+
+        // add valueChangeListener to the component
+
+        ValueChange1 valueChange1 = new ValueChange1();
+        userName.addValueChangeListener(valueChange1);
+
+        // add value change event (containing the component) to the queue
+
+        userName.queueEvent(new ValueChangeEvent(userName, "foo", "bar"));
+
+        getFacesContext().getViewRoot().processValidators(getFacesContext());
+
+        assertTrue(!System.getProperty(HANDLED_VALUEEVENT1).equals(EMPTY));
+    }
+
+// tests one component - multiple value change listeners
+
+    public void testMultipleValueChange() {
+        // for keeping track of events processed limit..
+        //
+        eventsProcessed = new HashMap();
+
+        UIInput userName = new UIInput();
+        getFacesContext().getViewRoot().getChildren().add(userName);
+
+        // clear the property
+        System.setProperty(HANDLED_VALUEEVENT1, EMPTY);
+        System.setProperty(HANDLED_VALUEEVENT2, EMPTY);
+
+        // add valueChangeListener to the component
+
+        ValueChange1 valueChange1 = new ValueChange1();
+        ValueChange2 valueChange2 = new ValueChange2();
+        userName.addValueChangeListener(valueChange1);
+        userName.addValueChangeListener(valueChange2);
+
+        // add value change event (containing the component) to the queue
+
+        userName.queueEvent(new ValueChangeEvent(userName, "foo", "bar"));
+
+        getFacesContext().getViewRoot().processValidators(getFacesContext());
+
+        assertTrue(!System.getProperty(HANDLED_VALUEEVENT1).equals(EMPTY));
+        assertTrue(!System.getProperty(HANDLED_VALUEEVENT2).equals(EMPTY));
+    }
 
 
     /**
@@ -131,64 +216,11 @@ public class TestProcessEvents extends ServletFacesTestCase {
 // tests one component - one action listener
 
     public void beginSignleAction(WebRequest theRequest) {
-
         theRequest.addParameter("button1", "button1");
-
-    }
-
-
-    public void setUp() {
-
-        super.setUp();
-        UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
-        getFacesContext().setViewRoot(root);
-
-    }
-
-
-    public void tearDown() {
-
-        super.tearDown();
-
-    }
-
-
-// tests one component - multiple value change listeners
-
-    public void testMultipleValueChange() {
-
-        // for keeping track of events processed limit..
-        //
-        eventsProcessed = new HashMap();
-
-        UIInput userName = new UIInput();
-        getFacesContext().getViewRoot().getChildren().add(userName);
-
-        // clear the property
-        System.setProperty(HANDLED_VALUEEVENT1, EMPTY);
-        System.setProperty(HANDLED_VALUEEVENT2, EMPTY);
-
-        // add valueChangeListener to the component
-
-        ValueChange1 valueChange1 = new ValueChange1();
-        ValueChange2 valueChange2 = new ValueChange2();
-        userName.addValueChangeListener(valueChange1);
-        userName.addValueChangeListener(valueChange2);
-
-        // add value change event (containing the component) to the queue
-
-        userName.queueEvent(new ValueChangeEvent(userName, "foo", "bar"));
-
-        getFacesContext().getViewRoot().processValidators(getFacesContext());
-
-        assertTrue(!System.getProperty(HANDLED_VALUEEVENT1).equals(EMPTY));
-        assertTrue(!System.getProperty(HANDLED_VALUEEVENT2).equals(EMPTY));
-
     }
 
 
     public void testSingleAction() {
-
         // for keeping track of events processed limit..
         //
         eventsProcessed = new HashMap();
@@ -213,37 +245,6 @@ public class TestProcessEvents extends ServletFacesTestCase {
         getFacesContext().getViewRoot().processDecodes(getFacesContext());
 
         assertTrue(!System.getProperty(HANDLED_ACTIONEVENT1).equals(EMPTY));
-
-    }
-
-
-// tests one component - one value change listener
-
-    public void testSingleValueChange() {
-
-        // for keeping track of events processed limit..
-        //
-        eventsProcessed = new HashMap();
-
-        UIInput userName = new UIInput();
-        getFacesContext().getViewRoot().getChildren().add(userName);
-
-        // clear the property
-        System.setProperty(HANDLED_VALUEEVENT1, EMPTY);
-
-        // add valueChangeListener to the component
-
-        ValueChange1 valueChange1 = new ValueChange1();
-        userName.addValueChangeListener(valueChange1);
-
-        // add value change event (containing the component) to the queue
-
-        userName.queueEvent(new ValueChangeEvent(userName, "foo", "bar"));
-
-        getFacesContext().getViewRoot().processValidators(getFacesContext());
-
-        assertTrue(!System.getProperty(HANDLED_VALUEEVENT1).equals(EMPTY));
-
     }
 
 
@@ -311,29 +312,18 @@ public class TestProcessEvents extends ServletFacesTestCase {
 
     public class ValueChange1 implements ValueChangeListener {
 
-
-    // ---------------------------------------- Methods From ValueChangeListener
-
         public void processValueChange(ValueChangeEvent event) {
-
             System.setProperty(HANDLED_VALUEEVENT1, HANDLED_VALUEEVENT1);
-
         }
-
     }
 
     public class ValueChange2 implements ValueChangeListener {
 
-
-    // ---------------------------------------- Methods From ValueChangeListener
-
         public void processValueChange(ValueChangeEvent event) {
-
             System.setProperty(HANDLED_VALUEEVENT2, HANDLED_VALUEEVENT2);
-
         }
-
     }
+
 
     /**
      * ***********
@@ -352,16 +342,11 @@ public class TestProcessEvents extends ServletFacesTestCase {
 
     public class Action1 implements ActionListener {
 
-
-    // --------------------------------------------- Methods From ActionListener
-
         public void processAction(ActionEvent event) {
-
             System.setProperty(HANDLED_ACTIONEVENT1, HANDLED_ACTIONEVENT1);
-
         }
-
     }
+
 
     /**************
      * PENDING() perhaps reactivate this if the EG wants event loop detection.

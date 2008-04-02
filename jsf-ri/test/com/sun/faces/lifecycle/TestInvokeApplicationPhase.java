@@ -1,5 +1,5 @@
 /*
- * $Id: TestInvokeApplicationPhase.java,v 1.27 2006/03/29 22:39:44 rlubke Exp $
+ * $Id: TestInvokeApplicationPhase.java,v 1.28 2006/03/29 23:04:55 rlubke Exp $
  */
 
 /*
@@ -43,38 +43,56 @@ import javax.faces.component.UIViewRoot;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestInvokeApplicationPhase.java,v 1.27 2006/03/29 22:39:44 rlubke Exp $
+ * @version $Id: TestInvokeApplicationPhase.java,v 1.28 2006/03/29 23:04:55 rlubke Exp $
  */
 
 public class TestInvokeApplicationPhase extends ServletFacesTestCase {
 
+//
+// Protected Constants
+//
 
     public static final String DID_COMMAND = "didCommand";
     public static final String DID_FORM = "didForm";
 
+//
+// Class Variables
+//
 
-    // ------------------------------------------------------------ Constructors
+//
+// Instance Variables
+//
 
+// Attribute Instance Variables
+
+// Relationship Instance Variables
+
+//
+// Constructors and Initializers    
+//
 
     public TestInvokeApplicationPhase() {
-
         super("TestInvokeApplicationPhase");
-
     }
 
 
     public TestInvokeApplicationPhase(String name) {
-
         super(name);
+    }
 
+//
+// Class methods
+//
+
+//
+// General Methods
+//
+
+    public void testInvokeNormal() {
     }
 
 
-    // ---------------------------------------------------------- Public Methods
-
-
     public void testInvokeNoOp() {
-
         UIInput root = new UIInput();
         UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setViewId("default.xul");
@@ -84,11 +102,6 @@ public class TestInvokeApplicationPhase extends ServletFacesTestCase {
         invokeApplicationPhase.execute(getFacesContext());
         assertTrue(!(getFacesContext().getRenderResponse()) &&
                    !(getFacesContext().getResponseComplete()));
-
-    }
-
-
-    public void testInvokeNormal() {
     }
 
 } // end of class TestInvokeApplicationPhase

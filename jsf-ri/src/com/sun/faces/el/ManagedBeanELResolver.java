@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanELResolver.java,v 1.12 2006/03/29 22:38:33 rlubke Exp $
+ * $Id: ManagedBeanELResolver.java,v 1.13 2006/03/29 23:03:44 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -28,6 +28,12 @@
 
 package com.sun.faces.el;
 
+import java.beans.FeatureDescriptor;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Locale;
+
 import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.ELResolver;
@@ -35,39 +41,95 @@ import javax.el.PropertyNotFoundException;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
-import java.beans.FeatureDescriptor;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
-
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.config.ManagedBeanFactoryImpl;
 import com.sun.faces.config.beans.DescriptionBean;
 import com.sun.faces.config.beans.ManagedBeanBean;
-import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
 
 public class ManagedBeanELResolver extends ELResolver {
-
-    // ------------------------------------------------------------ Constructors
-
 
     public ManagedBeanELResolver() {
     }
 
-    // ---------------------------------------------------------- Public Methods
-
-
-    public Class getCommonPropertyType(ELContext context, Object base) {
-
+    public Object getValue(ELContext context, Object base, Object property)
+        throws ELException {
         if (base != null) {
             return null;
         }
-        return Object.class;
+        if (property == null) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message + " base " + base + " property " + property;
+            throw new PropertyNotFoundException(message);
+        }
+
+        Object result = null;
+        FacesContext facesContext = (FacesContext)
+            context.getContext(FacesContext.class);
+        ExternalContext externalContext = facesContext.getExternalContext();
+
+        if (externalContext.getRequestMap().containsKey(property)
+            || externalContext.getSessionMap().containsKey(property)
+            || externalContext.getApplicationMap().containsKey(property)) {
+            return null;
+        }
+
+        // if it's a managed bean, try to create it
+        ApplicationAssociate associate = ApplicationAssociate
+                    .getInstance(facesContext.getExternalContext());
+        if (null != associate) {
+            result = associate.createAndMaybeStoreManagedBeans(facesContext,
+                                                               ((String)property));
+            if ( result != null) {
+                context.setPropertyResolved(true);
+            }
+        }
+        return result;
+    }
+
+
+    public Class getType(ELContext context, Object base, Object property)
+        throws ELException {
+
+        if (base == null && property == null) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message + " base " + base + " property " + property;
+            throw new PropertyNotFoundException(message);
+        }
+
+        return null;
 
     }
 
+    public void  setValue(ELContext context, Object base, Object property,
+                          Object val) throws ELException {
+
+        if (base == null && property == null) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message + " base " + base + " property " + property;
+            throw new PropertyNotFoundException(message);
+        }
+
+    }
+
+    public boolean isReadOnly(ELContext context, Object base, Object property)
+        throws ELException {
+        if (base != null) {
+            return false;
+        }
+        if (property == null) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message + " base " + base + " property " + property;
+            throw new PropertyNotFoundException(message);
+        }
+
+        return false;
+    }
 
     public Iterator getFeatureDescriptors(ELContext context, Object base) {
 
@@ -78,26 +140,23 @@ public class ManagedBeanELResolver extends ELResolver {
         ArrayList<FeatureDescriptor> list = new ArrayList<FeatureDescriptor>();
 
         FacesContext facesContext =
-              (FacesContext) context.getContext(FacesContext.class);
+            (FacesContext) context.getContext(FacesContext.class);
         ApplicationAssociate associate =
-              ApplicationAssociate
-                    .getInstance(facesContext.getExternalContext());
+            ApplicationAssociate.getInstance(facesContext.getExternalContext());
         Map mbMap = associate.getManagedBeanFactoryMap();
         if (mbMap == null) {
             return list.iterator();
         }
         // iterate over the list of managed beans
-        for (Iterator i = mbMap.entrySet().iterator(); i.hasNext();) {
+        for (Iterator i = mbMap.entrySet().iterator(); i.hasNext(); ) {
             Map.Entry entry = (Map.Entry) i.next();
             String managedBeanName = (String) entry.getKey();
             ManagedBeanFactoryImpl managedBeanFactory = (ManagedBeanFactoryImpl)
-                  entry.getValue();
-            ManagedBeanBean managedBean =
-                  managedBeanFactory.getManagedBeanBean();
+                entry.getValue();
+            ManagedBeanBean managedBean = managedBeanFactory.getManagedBeanBean();
 
-            if (managedBean != null) {
-                Locale curLocale =
-                      Util.getLocaleFromContextOrSystem(facesContext);
+            if ( managedBean != null) {
+                Locale curLocale = Util.getLocaleFromContextOrSystem(facesContext);
                 String locale = curLocale.toString();
                 DescriptionBean descBean = managedBean.getDescription(locale);
                 String desc = "";
@@ -109,102 +168,18 @@ public class ManagedBeanELResolver extends ELResolver {
                     desc = descBean.getDescription();
                 }
                 list.add(Util.getFeatureDescriptor(managedBeanName,
-                                                   managedBeanName,
-                                                   desc,
-                                                   false,
-                                                   false,
-                                                   true,
-                                                   managedBeanFactory.getManagedBeanClass(),
-                                                   Boolean.TRUE));
+                                                   managedBeanName, desc, false, false, true,
+                                                   managedBeanFactory.getManagedBeanClass(), Boolean.TRUE));
             }
         }
         return list.iterator();
-
     }
 
-
-    public Class getType(ELContext context, Object base, Object property)
-          throws ELException {
-
-        if (base == null && property == null) {
-            String message = MessageUtils.getExceptionMessageString
-                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " base " + base + " property " + property;
-            throw new PropertyNotFoundException(message);
-        }
-
-        return null;
-
-    }
-
-
-    public Object getValue(ELContext context, Object base, Object property)
-          throws ELException {
-
+    public Class getCommonPropertyType(ELContext context, Object base) {
         if (base != null) {
             return null;
         }
-        if (property == null) {
-            String message = MessageUtils.getExceptionMessageString
-                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " base " + base + " property " + property;
-            throw new PropertyNotFoundException(message);
-        }
-
-        Object result = null;
-        FacesContext facesContext = (FacesContext)
-              context.getContext(FacesContext.class);
-        ExternalContext externalContext = facesContext.getExternalContext();
-
-        if (externalContext.getRequestMap().containsKey(property)
-            || externalContext.getSessionMap().containsKey(property)
-            || externalContext.getApplicationMap().containsKey(property)) {
-            return null;
-        }
-
-        // if it's a managed bean, try to create it
-        ApplicationAssociate associate = ApplicationAssociate
-              .getInstance(facesContext.getExternalContext());
-        if (null != associate) {
-            result = associate.createAndMaybeStoreManagedBeans(facesContext,
-                                                               ((String) property));
-            if (result != null) {
-                context.setPropertyResolved(true);
-            }
-        }
-        return result;
-
-    }
-
-
-    public boolean isReadOnly(ELContext context, Object base, Object property)
-          throws ELException {
-
-        if (base != null) {
-            return false;
-        }
-        if (property == null) {
-            String message = MessageUtils.getExceptionMessageString
-                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " base " + base + " property " + property;
-            throw new PropertyNotFoundException(message);
-        }
-
-        return false;
-
-    }
-
-
-    public void setValue(ELContext context, Object base, Object property,
-                         Object val) throws ELException {
-
-        if (base == null && property == null) {
-            String message = MessageUtils.getExceptionMessageString
-                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " base " + base + " property " + property;
-            throw new PropertyNotFoundException(message);
-        }
-
+        return Object.class;
     }
 
 }

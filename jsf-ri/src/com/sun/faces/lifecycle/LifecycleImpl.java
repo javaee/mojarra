@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.60 2006/03/29 22:38:34 rlubke Exp $
+ * $Id: LifecycleImpl.java,v 1.61 2006/03/29 23:03:45 rlubke Exp $
  */
 
 /*
@@ -29,33 +29,35 @@
 
 package com.sun.faces.lifecycle;
 
-import javax.el.CompositeELResolver;
-import javax.el.ELResolver;
+import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
+
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.render.ResponseStateManager;
 import javax.servlet.http.HttpServletRequest;
+import javax.faces.render.ResponseStateManager;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.el.FacesResourceBundleELResolver;
 import com.sun.faces.el.ImplicitObjectELResolverForJsp;
 import com.sun.faces.el.ManagedBeanELResolver;
 import com.sun.faces.el.PropertyResolverChainWrapper;
 import com.sun.faces.el.VariableResolverChainWrapper;
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.el.FacesResourceBundleELResolver;
 import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
+
+import javax.el.CompositeELResolver;
+import javax.el.ELResolver;
 
 /**
  * <p><b>LifecycleImpl</b> is the stock implementation of the standard
@@ -65,16 +67,13 @@ import com.sun.faces.util.Util;
 public class LifecycleImpl extends Lifecycle {
 
 
-    // used to track if the first request has been serviced.
-    protected static final String FIRST_REQUEST_SERVICED =
-          "com.sun.faces.FIRST_REQUEST_SERVICED";
-
     // -------------------------------------------------------- Static Variables
 
 
     // Log instance for this class
-    private static Logger logger = Util.getLogger(Util.FACES_LOGGER
-                                                  + Util.LIFECYCLE_LOGGER);
+    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
+            + Util.LIFECYCLE_LOGGER);
+
 
     // ------------------------------------------------------ Instance Variables
 
@@ -86,40 +85,22 @@ public class LifecycleImpl extends Lifecycle {
     // The set of Phase instances that are executed by the execute() method
     // in order by the ordinal property of each phase
     private Phase phases[] = {
-          null, // ANY_PHASE placeholder, not a real Phase
-          new RestoreViewPhase(),
-          new ApplyRequestValuesPhase(),
-          new ProcessValidationsPhase(),
-          new UpdateModelValuesPhase(),
-          new InvokeApplicationPhase()
+        null, // ANY_PHASE placeholder, not a real Phase
+        new RestoreViewPhase(),
+        new ApplyRequestValuesPhase(),
+        new ProcessValidationsPhase(),
+        new UpdateModelValuesPhase(),
+        new InvokeApplicationPhase()
     };
 
 
     // The Phase instance for the render() method
     private Phase response = new RenderResponsePhase();
+    
+    // used to track if the first request has been serviced.
+    protected static final String FIRST_REQUEST_SERVICED = 
+            "com.sun.faces.FIRST_REQUEST_SERVICED";
 
-    // ---------------------------------------------------------- Public Methods
-
-
-    // Add a new PhaseListener to the set of registered listeners
-    public void addPhaseListener(PhaseListener listener) {
-
-        if (listener == null) {
-            throw new NullPointerException
-                  (MessageUtils.getExceptionMessageString
-                        (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("addPhaseListener(" + listener.getPhaseId().toString()
-                        + "," + listener);
-        }
-        synchronized (this.listeners) {
-            ArrayList temp = (ArrayList) this.listeners.clone();
-            temp.add(listener);
-            this.listeners = temp;
-        }
-
-    }
 
     // ------------------------------------------------------- Lifecycle Methods
 
@@ -129,18 +110,18 @@ public class LifecycleImpl extends Lifecycle {
 
         if (context == null) {
             throw new NullPointerException
-                  (MessageUtils.getExceptionMessageString
-                        (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                (MessageUtils.getExceptionMessageString
+                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("execute(" + context + ")");
         }
-
+        
         // populate the FacesCompositeELResolver stack if a request is being
         // processed for the very first time.
         populateFacesELResolverForJsp(context);
-
+        
         for (int i = 1; i < phases.length; i++) { // Skip ANY_PHASE placeholder
 
             if (context.getRenderResponse() ||
@@ -156,6 +137,47 @@ public class LifecycleImpl extends Lifecycle {
                 }
                 context.renderResponse();
             }
+        }
+
+    }
+
+
+    // Execute the Render Response phase
+    public void render(FacesContext context) throws FacesException {
+
+        if (context == null) {
+            throw new NullPointerException
+                (MessageUtils.getExceptionMessageString
+                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("render(" + context + ")");
+        }
+
+        if (!context.getResponseComplete()) {
+            phase(PhaseId.RENDER_RESPONSE, response, context);
+        }
+
+    }
+
+
+    // Add a new PhaseListener to the set of registered listeners
+    public void addPhaseListener(PhaseListener listener) {
+
+        if (listener == null) {
+            throw new NullPointerException
+                (MessageUtils.getExceptionMessageString
+                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("addPhaseListener(" + listener.getPhaseId().toString()
+                      + "," + listener);
+        }
+        synchronized (this.listeners) {
+            ArrayList temp = (ArrayList) this.listeners.clone();
+            temp.add(listener);
+            this.listeners = temp;
         }
 
     }
@@ -177,13 +199,13 @@ public class LifecycleImpl extends Lifecycle {
 
         if (listener == null) {
             throw new NullPointerException
-                  (MessageUtils.getExceptionMessageString
-                        (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                (MessageUtils.getExceptionMessageString
+                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("removePhaseListener(" +
-                        listener.getPhaseId().toString()
-                        + "," + listener);
+                      listener.getPhaseId().toString()
+                      + "," + listener);
         }
         synchronized (listeners) {
             listeners.remove(listener);
@@ -192,140 +214,25 @@ public class LifecycleImpl extends Lifecycle {
     }
 
 
-    // Execute the Render Response phase
-    public void render(FacesContext context) throws FacesException {
-
-        if (context == null) {
-            throw new NullPointerException
-                  (MessageUtils.getExceptionMessageString
-                        (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("render(" + context + ")");
-        }
-
-        if (!context.getResponseComplete()) {
-            phase(PhaseId.RENDER_RESPONSE, response, context);
-        }
-
-    }
-
-    // ------------------------------------------------------- Protected Methods
-
-
-    /**
-     * Populate the FacesCompositeELResolver stack registered with JSP
-     * if a request is being processed for the very first time. At the
-     * application initialiazation time, an empty CompositeELResolver is
-     * registered with JSP because ELResolvers can be added until the first
-     * request is serviced.
-     */
-    protected void populateFacesELResolverForJsp(FacesContext context) {
-
-        Map<String, Object> applicationMap =
-              context.getExternalContext().getApplicationMap();
-        String requestServiced = (String)
-              applicationMap.get(this.FIRST_REQUEST_SERVICED);
-        if (requestServiced != null) {
-            // first request has been serviced, so ELResolvers have
-            // been populated already.
-            return;
-        }
-
-        synchronized (applicationMap) {
-            requestServiced = (String)
-                  applicationMap.get(this.FIRST_REQUEST_SERVICED);
-            if (requestServiced == null) {
-                // this needs to be set irrespective whether the FacesResolvers
-                // are added to compositeELResolverForJsp or not.
-                applicationMap.put(this.FIRST_REQUEST_SERVICED, "true");
-
-                ApplicationAssociate appAssociate =
-                      ApplicationAssociate
-                            .getInstance(context.getExternalContext());
-                CompositeELResolver compositeELResolverForJsp =
-                      appAssociate.getFacesELResolverForJsp();
-                if (compositeELResolverForJsp == null) {
-                    if (logger.isLoggable(Level.INFO)) {
-                        logger.info("FacesELResolvers not registered with Jsp.");
-                    }
-                    return;
-                }
-                compositeELResolverForJsp
-                      .add(new ImplicitObjectELResolverForJsp());
-                compositeELResolverForJsp.add(new ManagedBeanELResolver());
-                compositeELResolverForJsp
-                      .add(new FacesResourceBundleELResolver());
-
-                // add ELResolvers from faces-config.xml
-                ArrayList elResolversFromFacesConfig =
-                      appAssociate.geELResolversFromFacesConfig();
-                if (elResolversFromFacesConfig != null) {
-                    Iterator it = elResolversFromFacesConfig.iterator();
-                    while (it.hasNext()) {
-                        compositeELResolverForJsp.add((ELResolver) it.next());
-                    }
-                }
-
-                // register legacy VariableResolver if any.
-                if (appAssociate.getLegacyVariableResolver() != null) {
-                    compositeELResolverForJsp
-                          .add(new VariableResolverChainWrapper(
-                                appAssociate.getLegacyVariableResolver()));
-                } else if (appAssociate.getLegacyVRChainHead() != null) {
-                    compositeELResolverForJsp
-                          .add(new VariableResolverChainWrapper(
-                                appAssociate.getLegacyVRChainHead()));
-                }
-
-                // add legacy PropertyResolvers if any
-                if (appAssociate.getLegacyPropertyResolver() != null) {
-                    compositeELResolverForJsp
-                          .add(new PropertyResolverChainWrapper(
-                                appAssociate.getLegacyPropertyResolver()));
-                } else if (appAssociate.getLegacyPRChainHead() != null) {
-                    compositeELResolverForJsp
-                          .add(new PropertyResolverChainWrapper(
-                                appAssociate.getLegacyPRChainHead()));
-                }
-
-                // add ELResolvers added via Application.addELResolver()
-                ArrayList elResolversFromApplication =
-                      appAssociate.getApplicationELResolvers();
-                if (elResolversFromApplication != null) {
-                    Iterator it = elResolversFromApplication.iterator();
-                    while (it.hasNext()) {
-                        compositeELResolverForJsp.add((ELResolver) it.next());
-                    }
-                }
-
-            }
-        }
-
-    }
-
     // --------------------------------------------------------- Private Methods
 
 
     // Execute the specified phase, calling all listeners as well
     private void phase(PhaseId phaseId, Phase phase, FacesContext context)
-          throws FacesException {
-
+        throws FacesException {
         boolean exceptionThrown = false;
         Throwable ex = null;
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("phase(" + phaseId.toString() + "," + context + ")");
         }
 
-        int
-              i = 0,
-              maxBefore = 0;
-        List<PhaseListener> tempListeners =
-              (ArrayList<PhaseListener>) listeners.clone();
-        try {
+	int 
+	    i = 0,
+	    maxBefore = 0;
+        List<PhaseListener> tempListeners = (ArrayList<PhaseListener>)listeners.clone();
+	try {
             // Notify the "beforePhase" method of interested listeners
-            // (ascending)
+	    // (ascending)
             // Fix for bug 6223295. Get a pointer to 'listeners' so that 
             // we still have reference to the original list for the current 
             // thread. As a result, any listener added would not show up 
@@ -333,7 +240,7 @@ public class LifecycleImpl extends Lifecycle {
             // synchronization block. Due to this, "listeners" should be 
             // modified only via add/remove methods and must never be updated
             // directly.
-            if (tempListeners.size() > 0) {
+	    if (tempListeners.size() > 0) {
                 PhaseEvent event = new PhaseEvent(context, phaseId, this);
                 for (i = 0; i < tempListeners.size(); i++) {
                     PhaseListener listener = tempListeners.get(i);
@@ -344,41 +251,30 @@ public class LifecycleImpl extends Lifecycle {
                     maxBefore = i;
                 }
             }
+	}
+	catch (Exception e) {
+	    if (logger.isLoggable(Level.WARNING)) {
+                logger.warning("phase(" + phaseId.toString() + "," + context + 
+			  ") threw exception: " + e + " " + e.getMessage() +
+			  "\n" + Util.getStackTraceString(e));
+	    }
         }
-        catch (Exception e) {
-            if (logger.isLoggable(Level.WARNING)) {
-                logger.warning("phase("
-                               + phaseId.toString()
-                               + ","
-                               + context
-                               +
-                               ") threw exception: "
-                               + e
-                               + " "
-                               + e.getMessage()
-                               +
-                               "\n"
-                               + Util.getStackTraceString(e));
-            }
-        }
-
-        try {
-            // Execute this phase itself (if still needed)
-            if (!skipping(phaseId, context)) {
-                phase.execute(context);
-            }
-        } catch (Exception e) {
+	    
+	try {   
+	    // Execute this phase itself (if still needed)
+	    if (!skipping(phaseId, context)) {
+		phase.execute(context);
+	    }
+	} catch (Exception e) {
             // Log the problem, but continue
             if (logger.isLoggable(Level.WARNING)) {
-                logger.log(Level.WARNING,
-                           "executePhase(" + phaseId.toString() + ","
-                           + context + ") threw exception",
-                           e);
+                logger.log(Level.WARNING, "executePhase(" + phaseId.toString() + "," 
+                        + context + ") threw exception", e);
             }
             ex = e;
             exceptionThrown = true;
-        }
-        finally {
+        } 
+	finally {
             try {
                 // Notify the "afterPhase" method of interested listeners
                 // (descending)
@@ -395,18 +291,9 @@ public class LifecycleImpl extends Lifecycle {
             }
             catch (Throwable e) {
                 if (logger.isLoggable(Level.WARNING)) {
-                    logger.warning("phase("
-                                   + phaseId.toString()
-                                   + ","
-                                   + context
-                                   +
-                                   ") threw exception: "
-                                   + e
-                                   + " "
-                                   + e.getMessage()
-                                   +
-                                   "\n"
-                                   + Util.getStackTraceString(e));
+                    logger.warning("phase(" + phaseId.toString() + "," + context + 
+                              ") threw exception: " + e + " " + e.getMessage() +
+                              "\n" + Util.getStackTraceString(e));
                 }
             }
         }
@@ -424,7 +311,6 @@ public class LifecycleImpl extends Lifecycle {
 
             throw (FacesException) ex;
         }
-
     }
 
 
@@ -436,22 +322,20 @@ public class LifecycleImpl extends Lifecycle {
             return (false);
         }
         if (!(context.getExternalContext().getRequest() instanceof
-              HttpServletRequest)) {
+            HttpServletRequest)) {
             return (false);
         }
-        String renderkitId =
-              context.getApplication().getViewHandler().
-                    calculateRenderKitId(context);
-        ResponseStateManager rsm =
-              RenderKitUtils.getResponseStateManager(context,
-                                                     renderkitId);
-        boolean postback = rsm.isPostback(context);
+        String renderkitId = 
+                context.getApplication().getViewHandler().
+                calculateRenderKitId(context);
+        ResponseStateManager rsm = RenderKitUtils.getResponseStateManager(context,
+                renderkitId);
+        boolean postback = rsm.isPostback(context); 
         if (postback) {
             return false;
         }
         // assume it is reload.
-        return true;
-
+        return true;        
     }
 
 
@@ -461,12 +345,95 @@ public class LifecycleImpl extends Lifecycle {
         if (context.getResponseComplete()) {
             return (true);
         } else if (context.getRenderResponse() &&
-                   !phaseId.equals(PhaseId.RENDER_RESPONSE)) {
+            !phaseId.equals(PhaseId.RENDER_RESPONSE)) {
             return (true);
         } else {
             return (false);
         }
 
+    }
+    
+    /**
+     * Populate the FacesCompositeELResolver stack registered with JSP 
+     * if a request is being processed for the very first time. At the 
+     * application initialiazation time, an empty CompositeELResolver is
+     * registered with JSP because ELResolvers can be added until the first
+     * request is serviced.
+     */
+    protected void populateFacesELResolverForJsp(FacesContext context) {
+        
+        Map<String,Object> applicationMap =  
+            context.getExternalContext().getApplicationMap();
+        String requestServiced = (String) 
+            applicationMap.get(this.FIRST_REQUEST_SERVICED);
+        if (requestServiced != null) {
+            // first request has been serviced, so ELResolvers have
+            // been populated already.
+            return;
+        }
+        
+        synchronized(applicationMap) { 
+            requestServiced = (String) 
+                applicationMap.get(this.FIRST_REQUEST_SERVICED);
+            if (requestServiced == null) {
+                // this needs to be set irrespective whether the FacesResolvers
+                // are added to compositeELResolverForJsp or not.
+                applicationMap.put(this.FIRST_REQUEST_SERVICED, "true");  
+                
+                ApplicationAssociate appAssociate =  
+                ApplicationAssociate.getInstance(context.getExternalContext());
+                CompositeELResolver compositeELResolverForJsp = 
+                        appAssociate.getFacesELResolverForJsp();
+                if (compositeELResolverForJsp == null) {
+                    if (logger.isLoggable(Level.INFO)) {
+                        logger.info("FacesELResolvers not registered with Jsp.");
+                    }
+                    return;
+                }
+                compositeELResolverForJsp.add(new ImplicitObjectELResolverForJsp());
+                compositeELResolverForJsp.add(new ManagedBeanELResolver());
+                compositeELResolverForJsp.add(new FacesResourceBundleELResolver());
+
+                // add ELResolvers from faces-config.xml
+                ArrayList elResolversFromFacesConfig = 
+                        appAssociate.geELResolversFromFacesConfig();
+                if (elResolversFromFacesConfig != null) {
+                    Iterator it = elResolversFromFacesConfig.iterator();
+                    while (it.hasNext()) {
+                        compositeELResolverForJsp.add((ELResolver) it.next());
+                    }
+                }
+
+                // register legacy VariableResolver if any.
+                if (appAssociate.getLegacyVariableResolver() != null ) {
+                    compositeELResolverForJsp.add(new VariableResolverChainWrapper(
+                            appAssociate.getLegacyVariableResolver()));
+                } else if (appAssociate.getLegacyVRChainHead() != null) {
+                    compositeELResolverForJsp.add(new VariableResolverChainWrapper(
+                            appAssociate.getLegacyVRChainHead()));   
+                }
+
+                // add legacy PropertyResolvers if any
+                if (appAssociate.getLegacyPropertyResolver() != null ) {
+                    compositeELResolverForJsp.add(new PropertyResolverChainWrapper(
+                            appAssociate.getLegacyPropertyResolver()));
+                } else if (appAssociate.getLegacyPRChainHead() != null) {
+                    compositeELResolverForJsp.add(new PropertyResolverChainWrapper(
+                            appAssociate.getLegacyPRChainHead()));   
+                }
+
+                // add ELResolvers added via Application.addELResolver()
+                ArrayList elResolversFromApplication = 
+                    appAssociate.getApplicationELResolvers();
+                if (elResolversFromApplication != null) {
+                    Iterator it = elResolversFromApplication.iterator();
+                    while (it.hasNext()) {
+                        compositeELResolverForJsp.add((ELResolver) it.next());
+                    }
+                }
+                
+            }
+        }
     }
 
 }

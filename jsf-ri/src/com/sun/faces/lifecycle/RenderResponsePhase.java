@@ -1,5 +1,5 @@
 /*
- * $Id: RenderResponsePhase.java,v 1.18 2006/03/29 22:38:34 rlubke Exp $
+ * $Id: RenderResponsePhase.java,v 1.19 2006/03/29 23:03:46 rlubke Exp $
  */
 
 /*
@@ -32,14 +32,14 @@
 package com.sun.faces.lifecycle;
 
 
+import java.io.IOException;
+
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 
-import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-
+import java.util.logging.Level;
 import com.sun.faces.util.Util;
 
 
@@ -47,55 +47,77 @@ import com.sun.faces.util.Util;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RenderResponsePhase.java,v 1.18 2006/03/29 22:38:34 rlubke Exp $
+ * @version $Id: RenderResponsePhase.java,v 1.19 2006/03/29 23:03:46 rlubke Exp $
  */
 
 public class RenderResponsePhase extends Phase {
 
+//
+// Protected Constants
+//
 // Log instance for this class
-    private static Logger logger = Util.getLogger(Util.FACES_LOGGER
-                                                  + Util.LIFECYCLE_LOGGER);
+    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
+            + Util.LIFECYCLE_LOGGER);
 
-    // ------------------------------------------------------------ Constructors
+//
+// Class Variables
+//
 
+//
+// Instance Variables
+//
+
+// Attribute Instance Variables
+
+// Relationship Instance Variables
+
+//
+// Constructors and Genericializers    
+//
 
     public RenderResponsePhase() {
-
         super();
-
     }
 
-    // ---------------------------------------------------------- Public Methods
+//
+// Class methods
+//
+
+//
+// General Methods
+//
+
+//
+// Methods from Phase
+//
+
+    public PhaseId getId() {
+        return PhaseId.RENDER_RESPONSE;
+    }
 
 
     public void execute(FacesContext facesContext) throws FacesException {
-
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("Entering RenderResponsePhase");
         }
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("About to render view " +
-                        facesContext.getViewRoot().getViewId());
+                    facesContext.getViewRoot().getViewId());
         }
         try {
             facesContext.getApplication().getViewHandler().
-                  renderView(facesContext, facesContext.getViewRoot());
+                renderView(facesContext, facesContext.getViewRoot());
         } catch (IOException e) {
             throw new FacesException(e.getMessage(), e);
         }
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("Exiting RenderResponsePhase");
         }
-
     }
 
 
-    public PhaseId getId() {
-
-        return PhaseId.RENDER_RESPONSE;
-
-    }
 
 // The testcase for this class is TestRenderResponsePhase.java
+
 
 } // end of class RenderResponsePhase

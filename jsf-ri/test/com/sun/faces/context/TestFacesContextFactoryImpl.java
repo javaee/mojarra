@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextFactoryImpl.java,v 1.14 2006/03/29 22:39:41 rlubke Exp $
+ * $Id: TestFacesContextFactoryImpl.java,v 1.15 2006/03/29 23:04:48 rlubke Exp $
  */
 
 /*
@@ -44,34 +44,52 @@ import javax.faces.lifecycle.LifecycleFactory;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextFactoryImpl.java,v 1.14 2006/03/29 22:39:41 rlubke Exp $
+ * @version $Id: TestFacesContextFactoryImpl.java,v 1.15 2006/03/29 23:04:48 rlubke Exp $
  */
 
 public class TestFacesContextFactoryImpl extends ServletFacesTestCase {
 
+//
+// Protected Constants
+//
 
-    // ------------------------------------------------------------ Constructors
+//
+// Class Variables
+//
 
+//
+// Instance Variables
+//
+
+// Attribute Instance Variables
+
+// Relationship Instance Variables
+
+//
+// Constructors and Initializers    
+//
 
     public TestFacesContextFactoryImpl() {
-
         super("TestFacesContextFactory");
-
     }
 
 
     public TestFacesContextFactoryImpl(String name) {
-
         super(name);
-
     }
+//
+// Class methods
+//
 
+//
+// Methods from TestCase
+//
 
-    // ---------------------------------------------------------- Public Methods
-
+//
+// General Methods
+//
 
     public void testCreateMethods() {
-
         boolean gotException = false;
         FacesContext facesContext = null;
         FacesContextFactoryImpl facesContextFactory = null;

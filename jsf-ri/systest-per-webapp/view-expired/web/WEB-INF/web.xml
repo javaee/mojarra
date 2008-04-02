@@ -23,36 +23,35 @@
  
  Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 -->
-<web-app version="2.5"
-         xmlns="http://java.sun.com/xml/ns/javaee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<web-app version="2.5" 
+         xmlns="http://java.sun.com/xml/ns/javaee" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee web-app_2_5.xsd">
-    <description>
-        Webapp to validate ViewExpiredException is properly handled.
-    </description>
-    <display-name>View Expired Test</display-name>
-    <!-- Validate the Application Configuration Resources -->
-
-    <!-- Faces Servlet -->
-    <servlet>
-        <servlet-name>Faces Servlet</servlet-name>
-        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>/faces/*</url-pattern>
-    </servlet-mapping>
-
+  <description>
+       Webapp to validate ViewExpiredException is properly handled.
+  </description>
+  <display-name>View Expired Test</display-name>
+  <!-- Validate the Application Configuration Resources -->
+  
+  <!-- Faces Servlet -->
+  <servlet>
+    <servlet-name>Faces Servlet</servlet-name>
+    <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+    <load-on-startup> 1 </load-on-startup>
+  </servlet>
+    
+  <servlet-mapping>
+    <servlet-name>Faces Servlet</servlet-name>
+    <url-pattern>/faces/*</url-pattern>
+  </servlet-mapping>
+    
     <error-page>
-        <exception-type>javax.faces.application.ViewExpiredException
-        </exception-type>
+        <exception-type>javax.faces.application.ViewExpiredException</exception-type>
         <location>/error.jsp</location>
     </error-page>
-
-    <session-config>
-        <session-timeout>1</session-timeout>
-    </session-config>
-
+ 
+  <session-config>
+      <session-timeout>1</session-timeout>
+  </session-config>  
+  
 </web-app>

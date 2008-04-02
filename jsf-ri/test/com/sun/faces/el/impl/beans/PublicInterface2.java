@@ -89,10 +89,5 @@ package com.sun.faces.el.impl.beans;
 
 public interface PublicInterface2 {
 
-
-    // ---------------------------------------------------------- Public Methods
-
-
     public Object getValue();
-
 }

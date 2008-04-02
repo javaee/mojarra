@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerTag.java,v 1.26 2006/03/29 22:38:40 rlubke Exp $
+ * $Id: ActionListenerTag.java,v 1.27 2006/03/29 23:03:51 rlubke Exp $
  */
 
 /*
@@ -29,23 +29,23 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import javax.el.ELException;
 import javax.el.ValueExpression;
+import javax.el.ELException;
 import javax.faces.component.ActionSource;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionListener;
+import javax.faces.webapp.UIComponentTag;
 import javax.faces.webapp.UIComponentClassicTagBase;
 import javax.faces.webapp.UIComponentELTag;
-import javax.faces.webapp.UIComponentTag;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
+
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 
 /**
@@ -76,41 +76,23 @@ import com.sun.faces.util.Util;
 public class ActionListenerTag extends TagSupport {
 
 
-    private static final Logger logger =
-          Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
-
     // ------------------------------------------------------------- Attributes
 
     private static final long serialVersionUID = -5222351612904952740L;
-
-    /**
-     * <p>The value expression used to create a listener instance and it is
-     * also used to wire up this listener to an {@link ActionListener} property
-     * of a JavaBean class.</p>
-     */
-    private ValueExpression binding = null;
+    private static final Logger logger = 
+            Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
     /**
      * <p>The fully qualified class name of the {@link ActionListener}
      * instance to be created.</p>
      */
     private ValueExpression type = null;
 
-    // ---------------------------------------------------------- Public Methods
-
-
-    /*
-     * <p>Set the value binding expression  for this listener.</p>
-     *
-     * @param binding The new value binding expression
-     *
-     * @throws JspException if a JSP error occurs
+    /**
+     * <p>The value expression used to create a listener instance and it is 
+     * also used to wire up this listener to an {@link ActionListener} property 
+     * of a JavaBean class.</p>
      */
-    public void setBinding(ValueExpression binding) {
-
-        this.binding = binding;
-
-    }
-
+    private ValueExpression binding = null;
 
     /**
      * <p>Set the fully qualified class name of the
@@ -123,6 +105,19 @@ public class ActionListenerTag extends TagSupport {
         this.type = type;
 
     }
+
+    /*
+     * <p>Set the value binding expression  for this listener.</p>
+     *
+     * @param binding The new value binding expression
+     *
+     * @throws JspException if a JSP error occurs
+     */
+    public void setBinding(ValueExpression binding) {
+	this.binding = binding;
+    }
+
+    // --------------------------------------------------------- Public Methods
 
 
     /**
@@ -140,15 +135,14 @@ public class ActionListenerTag extends TagSupport {
 
         // Locate our parent UIComponentTag
         UIComponentClassicTagBase tag =
-              UIComponentELTag.getParentUIComponentClassicTagBase(pageContext);
+            UIComponentELTag.getParentUIComponentClassicTagBase(pageContext);
         if (tag == null) {
             Object params [] = {this.getClass().getName()};
             throw new JspException(
-                  MessageUtils.getExceptionMessageString(
-                        MessageUtils.NOT_NESTED_IN_FACES_TAG_ERROR_MESSAGE_ID,
-                        params));
+                MessageUtils.getExceptionMessageString(
+                    MessageUtils.NOT_NESTED_IN_FACES_TAG_ERROR_MESSAGE_ID, params));
         }
-
+        
         // Nothing to do unless this tag created a component
         if (!tag.getCreated()) {
             return (SKIP_BODY);
@@ -158,32 +152,30 @@ public class ActionListenerTag extends TagSupport {
         UIComponent component = tag.getComponentInstance();
         if (component == null) {
             throw new JspException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_COMPONENT_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_COMPONENT_ERROR_MESSAGE_ID));
         }
         if (!(component instanceof ActionSource)) {
             Object params [] = {this.getClass().getName()};
             throw new JspException(
-                  MessageUtils.getExceptionMessageString(
-                        MessageUtils.NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID,
-                        params));
+                MessageUtils.getExceptionMessageString(
+                    MessageUtils.NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID, params));
         }
-
+        
         // If "binding" is set, use it to create a listener instance.
-
+        
         if (null != binding) {
-            try {
-                handler =
-                      (ActionListener) binding.getValue(context.getELContext());
-                if (handler != null) {
-                    // we ignore the type in this case, even though
-                    // it may have been set.
-                    ((ActionSource) component).addActionListener(handler);
-                    return (SKIP_BODY);
-                }
-            } catch (ELException e) {
-                throw new JspException(e);
-            }
-        }
+	    try {
+		handler = (ActionListener)binding.getValue(context.getELContext());
+		if (handler != null) {
+		    // we ignore the type in this case, even though
+		    // it may have been set.
+		    ((ActionSource)component).addActionListener(handler);
+		    return (SKIP_BODY);
+		}
+	    } catch (ELException e) {
+		throw new JspException(e);
+	    }
+	}
         // If "type" is set, use it to create the listener
         // instance.  If "type" and "binding" are both set, store the 
         // listener instance in the value of the property represented by
@@ -191,44 +183,46 @@ public class ActionListenerTag extends TagSupport {
         if (type != null) {
             handler = createActionListener(context);
             if (handler != null && binding != null) {
-                try {
-                    binding.setValue(context.getELContext(), handler);
-                } catch (ELException e) {
-                    throw new JspException(e);
-                }
+		try {
+		    binding.setValue(context.getELContext(), handler);
+		} catch (ELException e) {
+		    throw new JspException(e);
+		}
             }
         }
-
+	
         // We need to cast here because addActionListener
         // method does not apply to all components (it is not a method on
         // UIComponent/UIComponentBase).
         if (handler != null) {
-            ((ActionSource) component).addActionListener(handler);
+            ((ActionSource)component).addActionListener(handler);
         } else {
             if (logger.isLoggable(Level.FINE)) {
                 if (binding == null && type == null) {
-                    logger.fine(
-                          "'handler' was not created because both 'binding' and 'type' were null.");
+                    logger.fine("'handler' was not created because both 'binding' and 'type' were null.");
                 } else {
                     logger.fine("'handler' was not created.");
                 }
             }
         }
 
-
+               
         return (SKIP_BODY);
 
     }
 
 
-    /** <p>Release references to any acquired resources. */
+    /**
+     * <p>Release references to any acquired resources.
+     */
     public void release() {
 
         this.type = null;
 
     }
 
-    // ------------------------------------------------------- Protected Methods
+
+    // ------------------------------------------------------ Protected Methods
 
 
     /**
@@ -238,14 +232,14 @@ public class ActionListenerTag extends TagSupport {
      * @throws JspException if a new instance cannot be created
      */
     protected ActionListener createActionListener(FacesContext context)
-          throws JspException {
+        throws JspException {
 
         try {
-            // PENDING(edburns): log potential NPE with a good error
-            // message.
-            String className =
-                  type.getValue(context.getELContext()).toString();
-
+	    // PENDING(edburns): log potential NPE with a good error
+	    // message.
+	    String className = 
+		type.getValue(context.getELContext()).toString();
+	    
             Class clazz = Util.loadClass(className, this);
             return ((ActionListener) clazz.newInstance());
         } catch (Exception e) {
@@ -253,5 +247,4 @@ public class ActionListenerTag extends TagSupport {
         }
 
     }
-
 }

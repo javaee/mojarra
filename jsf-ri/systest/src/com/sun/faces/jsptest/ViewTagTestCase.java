@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTagTestCase.java,v 1.10 2006/03/29 22:38:47 rlubke Exp $
+ * $Id: ViewTagTestCase.java,v 1.11 2006/03/29 23:03:57 rlubke Exp $
  */
 
 /*
@@ -30,21 +30,31 @@
 package com.sun.faces.jsptest;
 
 
-import javax.faces.component.NamingContainer;
-
+import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlBody;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
+import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import javax.faces.component.NamingContainer;
 
-/** <p>Test Case for JSP Interoperability.</p> */
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+
+/**
+ * <p>Test Case for JSP Interoperability.</p>
+ */
 
 public class ViewTagTestCase extends AbstractTestCase {
+
 
     // ------------------------------------------------------------ Constructors
 
@@ -55,42 +65,44 @@ public class ViewTagTestCase extends AbstractTestCase {
      * @param name Name of the test case
      */
     public ViewTagTestCase(String name) {
-
         super(name);
-
-    }
-
-    // ---------------------------------------------------------- Public Methods
-
-
-    /** Return the tests included in this test suite. */
-    public static Test suite() {
-
-        return (new TestSuite(ViewTagTestCase.class));
-
     }
 
 
-    /** Set up instance variables required by this test case. */
+    // ------------------------------------------------------ Instance Variables
+
+
+    // ---------------------------------------------------- Overall Test Methods
+
+
+    /**
+     * Set up instance variables required by this test case.
+     */
     public void setUp() throws Exception {
-
         super.setUp();
-
     }
 
 
-    /** Tear down instance variables required by this test case. */
+    /**
+     * Return the tests included in this test suite.
+     */
+    public static Test suite() {
+        return (new TestSuite(ViewTagTestCase.class));
+    }
+
+
+    /**
+     * Tear down instance variables required by this test case.
+     */
     public void tearDown() {
-
         super.tearDown();
-
     }
+
 
     // ------------------------------------------------- Individual Test Methods
 
 
     public void testLocaleOnViewTag() throws Exception {
-
         HtmlForm form;
         HtmlSubmitInput submit;
         HtmlAnchor link;
@@ -100,27 +112,23 @@ public class ViewTagTestCase extends AbstractTestCase {
         page = getPage("/faces/viewLocale.jsp");
         form = getFormById(page, "form");
         submit = (HtmlSubmitInput)
-              form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
-                                  "button");
+            form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
+                                "button");
 
         // press the button
-        page = (HtmlPage) submit.click();
+        page = (HtmlPage) submit.click();        
         assertTrue(-1 != page.asText().indexOf("Erreur"));
 
     }
-
-
+    
     public void testReplaceViewRoot() throws Exception {
-
         HtmlPage page;
         HtmlAnchor link;
-
+        
         page = getPage("/faces/replaceViewRoot.jsp");
         link = page.getAnchorByName("examine");
         page = (HtmlPage) link.click();
-        assertTrue(-1 != page.asText().indexOf(
-              "Replaced ViewRoot is com.sun.faces.systest.model.ViewRootExtension"));
-
+        assertTrue(-1 != page.asText().indexOf("Replaced ViewRoot is com.sun.faces.systest.model.ViewRootExtension"));
+        
     }
-
 }

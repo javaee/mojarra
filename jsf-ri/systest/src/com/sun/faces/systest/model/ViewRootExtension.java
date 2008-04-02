@@ -1,5 +1,5 @@
 /*
- * $Id: ViewRootExtension.java,v 1.2 2006/03/29 22:38:53 rlubke Exp $
+ * $Id: ViewRootExtension.java,v 1.3 2006/03/29 23:04:02 rlubke Exp $
  */
 
 /*
@@ -31,14 +31,18 @@ package com.sun.faces.systest.model;
 
 import javax.faces.component.UIViewRoot;
 
-/** @author edburns */
+/**
+ *
+ * @author edburns
+ */
 public class ViewRootExtension extends UIViewRoot {
-
-    // ------------------------------------------------------------ Constructors
-
-
-    /** Creates a new instance of ViewRootExtension */
+    
+    /**
+     * Creates a new instance of ViewRootExtension 
+     */
     public ViewRootExtension() {
     }
-
+    
+ 
+    
 }

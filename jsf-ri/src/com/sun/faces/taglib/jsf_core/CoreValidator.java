@@ -1,5 +1,5 @@
 /*
- * $Id: CoreValidator.java,v 1.18 2006/03/29 22:38:41 rlubke Exp $
+ * $Id: CoreValidator.java,v 1.19 2006/03/29 23:03:51 rlubke Exp $
  */
 
 /*
@@ -29,12 +29,12 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import org.xml.sax.Attributes;
-import org.xml.sax.helpers.DefaultHandler;
-
 import com.sun.faces.taglib.FacesValidator;
 import com.sun.faces.taglib.ValidatorInfo;
 import com.sun.faces.util.Util;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * <p>A TagLibrary Validator class to allow a TLD to mandate that
@@ -45,10 +45,6 @@ import com.sun.faces.util.Util;
  */
 public class CoreValidator extends FacesValidator {
 
-
-    private CoreTagParserImpl coreTagParser;
-    private IdTagParserImpl idTagParser;
-
     //*********************************************************************
     // Constants
 
@@ -56,32 +52,61 @@ public class CoreValidator extends FacesValidator {
     // Validation and configuration state (protected)
 
     private ValidatorInfo validatorInfo;
-
-    // ------------------------------------------------------------ Constructors
+    private IdTagParserImpl idTagParser;
+    private CoreTagParserImpl coreTagParser;
 
     //*********************************************************************
     // Constructor and lifecycle management
 
-    /** <p>CoreValidator constructor</p> */
+    /**
+     * <p>CoreValidator constructor</p>
+     */
     public CoreValidator() {
-
         super();
         init();
-
     }
 
-    // ---------------------------------------------------------- Public Methods
+
+    /**
+     * <p>Initialize state</p>
+     */
+    protected void init() {
+        super.init();
+        failed = false;
+        validatorInfo = new ValidatorInfo();
+
+        idTagParser = new IdTagParserImpl();
+        idTagParser.setValidatorInfo(validatorInfo);        
+  
+        coreTagParser = new CoreTagParserImpl();
+        coreTagParser.setValidatorInfo(validatorInfo);
+        
+    }
 
 
-    /** <p>Release and re-initialize state</p> */
+    /**
+     * <p>Release and re-initialize state</p>
+     */
     public void release() {
-
         super.release();
         init();
-
     }
 
-    // ------------------------------------------------------- Protected Methods
+    //
+    // Superclass overrides.
+    // 
+
+    /**
+     * <p>Get the validator handler</p>
+     */
+    protected DefaultHandler getSAXHandler() {
+        if (java.beans.Beans.isDesignTime() || 
+	    !Util.isCoreTLVActive()) {
+	    return null;
+	}
+        DefaultHandler h = new CoreValidatorHandler();
+        return h;
+    }
 
 
     /**
@@ -91,7 +116,6 @@ public class CoreValidator extends FacesValidator {
      * @param uri    Tag library uri
      */
     protected String getFailureMessage(String prefix, String uri) {
-
         // we should only get called if this Validator failed        
         StringBuffer result = new StringBuffer();
 
@@ -101,85 +125,32 @@ public class CoreValidator extends FacesValidator {
         if (coreTagParser.getMessage() != null) {
             result.append(coreTagParser.getMessage());
         }
-
+        
         return result.toString();
-
     }
 
-    //
-    // Superclass overrides.
-    // 
-
-    /** <p>Get the validator handler</p> */
-    protected DefaultHandler getSAXHandler() {
-
-        if (java.beans.Beans.isDesignTime() ||
-            !Util.isCoreTLVActive()) {
-            return null;
-        }
-        DefaultHandler h = new CoreValidatorHandler();
-        return h;
-
-    }
-
-
-    /** <p>Initialize state</p> */
-    protected void init() {
-
-        super.init();
-        failed = false;
-        validatorInfo = new ValidatorInfo();
-
-        idTagParser = new IdTagParserImpl();
-        idTagParser.setValidatorInfo(validatorInfo);
-
-        coreTagParser = new CoreTagParserImpl();
-        coreTagParser.setValidatorInfo(validatorInfo);
-
-    }
 
     //*********************************************************************
     // SAX handler
 
-    /** <p>The handler that provides the base of the TLV implementation.</p> */
+    /**
+     * <p>The handler that provides the base of the TLV implementation.</p>
+     */
     private class CoreValidatorHandler extends DefaultHandler {
-
-        // ---------------------------------------------------------- Public Methods
-
-
-        /**
-         * <p>Parse the ending element. If it is a specific JSTL tag
-         * make sure that the nested count is decreased.</p>
-         *
-         * @param ns Element name space.
-         * @param ln Element local name.
-         * @param qn Element QName.
-         */
-        public void endElement(String ns, String ln, String qn) {
-
-            validatorInfo.setNameSpace(ns);
-            validatorInfo.setLocalName(ln);
-            validatorInfo.setQName(qn);
-            idTagParser.parseEndElement();
-            coreTagParser.parseEndElement();
-
-        }
-
 
         /**
          * Parse the starting element. If it is a specific JSTL tag
          * make sure that the nested JSF tags have IDs.
          *
-         * @param ns    Element name space.
-         * @param ln    Element local name.
-         * @param qn    Element QName.
-         * @param attrs Element's Attribute list.
+         * @param ns Element name space.
+         * @param ln Element local name.
+         * @param qn Element QName.
+         * @param attrs  Element's Attribute list.
          */
         public void startElement(String ns,
                                  String ln,
                                  String qn,
                                  Attributes attrs) {
-
             maybeSnagTLPrefixes(qn, attrs);
 
             validatorInfo.setNameSpace(ns);
@@ -193,15 +164,30 @@ public class CoreValidator extends FacesValidator {
             if (idTagParser.hasFailed()) {
                 failed = true;
             }
-
+            
             coreTagParser.parseStartElement();
 
             if (coreTagParser.hasFailed()) {
                 failed = true;
             }
-
         }
 
-    }
 
+        /**
+         * <p>Parse the ending element. If it is a specific JSTL tag
+         * make sure that the nested count is decreased.</p>
+         *
+         * @param ns Element name space.
+         * @param ln Element local name.
+         * @param qn Element QName.
+         */
+        public void endElement(String ns, String ln, String qn) {
+            validatorInfo.setNameSpace(ns);
+            validatorInfo.setLocalName(ln);
+            validatorInfo.setQName(qn);
+            idTagParser.parseEndElement();
+            coreTagParser.parseEndElement();
+            
+        }
+    }
 }

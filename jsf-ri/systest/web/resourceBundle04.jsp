@@ -2,9 +2,8 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 
 <f:view>
-    Values from Components: <br/>
+Values from Components: <br />
 
-    exsting resource bundle, but non-existing key: <h:outputText
-      value="#{resourceBundle03.bogusKey}"/> <br/>
+exsting resource bundle, but non-existing key: <h:outputText value="#{resourceBundle03.bogusKey}" /> <br />
 
 </f:view>

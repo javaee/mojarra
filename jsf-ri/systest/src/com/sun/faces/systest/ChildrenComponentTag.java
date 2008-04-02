@@ -1,5 +1,5 @@
 /*
- * $Id: ChildrenComponentTag.java,v 1.8 2006/03/29 22:38:48 rlubke Exp $
+ * $Id: ChildrenComponentTag.java,v 1.9 2006/03/29 23:03:58 rlubke Exp $
  */
 
 /*
@@ -34,42 +34,40 @@ import javax.faces.component.UIComponent;
 import javax.faces.webapp.UIComponentTag;
 
 
-/** <p><code>UIComponentTag</code> for <code>ChildrenComponent</code>.</p> */
+/**
+ * <p><code>UIComponentTag</code> for <code>ChildrenComponent</code>.</p>
+ */
 
 public class ChildrenComponentTag extends UIComponentTag {
 
-    // -------------------------------------------------------- Methods From Tag
 
+    // -------------------------------------------------------------- Attributes
 
-    public void release() {
-
-        super.release();
-
-    }
 
     // ---------------------------------------------------------- Public Methods
 
 
     public String getComponentType() {
-
         return ("ChildrenComponent");
-
     }
 
 
     public String getRendererType() {
-
         return (null);
-
     }
+
+
+    public void release() {
+        super.release();
+    }
+
 
     // ------------------------------------------------------- Protected Methods
 
 
     protected void setProperties(UIComponent component) {
-
         super.setProperties(component);
-
     }
+
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: TestMessageFactoryImpl.java,v 1.11 2006/03/29 22:39:48 rlubke Exp $
+ * $Id: TestMessageFactoryImpl.java,v 1.12 2006/03/29 23:05:02 rlubke Exp $
  */
 
 /*
@@ -45,82 +45,58 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestMessageFactoryImpl.java,v 1.11 2006/03/29 22:39:48 rlubke Exp $
+ * @version $Id: TestMessageFactoryImpl.java,v 1.12 2006/03/29 23:05:02 rlubke Exp $
  */
 
 public class TestMessageFactoryImpl extends ServletFacesTestCase {
 
+    //
+    // Protected Constants
+    //
 
-    // ------------------------------------------------------------ Constructors
-    
+    //
+    // Class Variables
+    //
+
+    //
+    // Instance Variables
+    //
+ 
+    // Attribute Instance Variables
+
+    // Relationship Instance Variables
+
+    //
+    // Constructors and Initializers    
+    //
 
     public TestMessageFactoryImpl() {
-
         super("TestMessageFactoryImpl");
-
     }
 
 
     public TestMessageFactoryImpl(String name) {
-
         super(name);
-
     }
+    //
+    // Class methods
+    //
 
-
-    // ---------------------------------------------------------- Public Methods
-
-   
+    //
+    // Methods from TestCase
+    //
     public void setUp() {
-
         super.setUp();
         UIViewRoot viewRoot = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         viewRoot.setViewId("viewId");
         getFacesContext().setViewRoot(viewRoot);
-
     }
-
-
-    public void testFindCatalog() {
-
-        boolean gotException = false;
-        FacesMessage msg = null;
-
-        // if no locale is set, it should use the fall back,
-        // JSFMessages.xml
-        msg = MessageFactory.getMessage(getFacesContext(), "MSG0003", "userId");
-        assertTrue(msg != null);
-        assertTrue(
-            (msg.getSummary()).equals("'userId' field cannot be empty."));
-
-        // passing an invalid locale should use fall back.
-        Locale en_locale = new Locale("eng", "us");
-        getFacesContext().getViewRoot().setLocale(en_locale);
-        System.out.println("Testing get methods");
-        try {
-            msg =
-                MessageFactory.getMessage(getFacesContext(), "MSG0003",
-                                          "userId");
-        } catch (Exception fe) {
-            gotException = true;
-        }
-        assertTrue(!gotException);
-        gotException = false;
-        msg = null;
-
-        en_locale = new Locale("en", "us");
-        getFacesContext().getViewRoot().setLocale(en_locale);
-        msg = MessageFactory.getMessage(getFacesContext(), "MSG0003", "userId");
-        assertTrue(msg != null);
-        assertTrue(
-            (msg.getSummary()).equals("'userId' field cannot be empty."));
-        msg = null;
-
-    }
-
+    
+    //
+    // General Methods
+    //
     
     public void testGetMethods() {
-
         boolean gotException = false;
         FacesMessage msg = null;
 
@@ -165,6 +141,43 @@ public class TestMessageFactoryImpl extends ServletFacesTestCase {
         assertTrue(
             (msg.getSummary()).equals(
                 "'userId' out of range. Value should be between '1000' and '10000'."));
+    }
+
+
+    public void testFindCatalog() {
+
+        boolean gotException = false;
+        FacesMessage msg = null;
+
+        // if no locale is set, it should use the fall back,
+        // JSFMessages.xml
+        msg = MessageFactory.getMessage(getFacesContext(), "MSG0003", "userId");
+        assertTrue(msg != null);
+        assertTrue(
+            (msg.getSummary()).equals("'userId' field cannot be empty."));
+
+        // passing an invalid locale should use fall back.
+        Locale en_locale = new Locale("eng", "us");
+        getFacesContext().getViewRoot().setLocale(en_locale);
+        System.out.println("Testing get methods");
+        try {
+            msg =
+                MessageFactory.getMessage(getFacesContext(), "MSG0003",
+                                          "userId");
+        } catch (Exception fe) {
+            gotException = true;
+        }
+        assertTrue(!gotException);
+        gotException = false;
+        msg = null;
+
+        en_locale = new Locale("en", "us");
+        getFacesContext().getViewRoot().setLocale(en_locale);
+        msg = MessageFactory.getMessage(getFacesContext(), "MSG0003", "userId");
+        assertTrue(msg != null);
+        assertTrue(
+            (msg.getSummary()).equals("'userId' field cannot be empty."));
+        msg = null;
 
     }
 

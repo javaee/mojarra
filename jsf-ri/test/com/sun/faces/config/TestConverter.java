@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverter.java,v 1.7 2006/03/29 22:39:39 rlubke Exp $
+ * $Id: TestConverter.java,v 1.8 2006/03/29 23:04:45 rlubke Exp $
  */
 
 /*
@@ -36,5 +36,6 @@ import javax.faces.convert.IntegerConverter;
 // Dummy converter that can be instantiated
 
 public class TestConverter extends IntegerConverter {
+
 
 }

@@ -1,6 +1,6 @@
 <!--
-Copyright 2004 Sun Microsystems, Inc. All rights reserved.
-SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
 <%@ page contentType="text/html" language="java" %>
@@ -9,17 +9,16 @@ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
 
 <f:view>
-    <html>
-    <head>
-        <title>jstl-if test without "id"</title>
-    </head>
-
-    <body>
-    <h:outputText value="[First]"/>
-    <c:if test="${param.cond}">
-        <h:outputText value="[Second]"/>
-    </c:if>
-    <h:outputText value="[Third]"/>
-    </body>
-    </html>
+<html>
+<head>
+<title>jstl-if test without "id"</title>
+</head>
+<body>
+<h:outputText value="[First]"/>
+<c:if test="${param.cond}">
+  <h:outputText value="[Second]"/>
+</c:if>
+<h:outputText value="[Third]"/>
+</body>
+</html>
 </f:view>

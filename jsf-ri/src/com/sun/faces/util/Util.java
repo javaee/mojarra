@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.188 2006/03/29 22:38:44 rlubke Exp $
+ * $Id: Util.java,v 1.189 2006/03/29 23:03:53 rlubke Exp $
  */
 
 /*
@@ -55,6 +55,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 
 import java.beans.FeatureDescriptor;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -65,6 +66,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -77,37 +80,33 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.188 2006/03/29 22:38:44 rlubke Exp $
+ * @version $Id: Util.java,v 1.189 2006/03/29 23:03:53 rlubke Exp $
  */
 
 public class Util {
 
-
-    public static final String APPLICATION_LOGGER = ".application";
-    public static final String CONFIG_LOGGER = ".config";
-    public static final String CONTEXT_LOGGER = ".context";
-    public static final String FACES_LOGGER =
-          "javax.enterprise.resource.webcontainer.jsf";
-    public static final String FACES_LOG_STRINGS =
-          "com.sun.faces.LogStrings";
-    public static final String LIFECYCLE_LOGGER = ".lifecycle";
+    //
+    // Private/Protected Constants
+    //
+    public static final String FACES_LOGGER = "javax.enterprise.resource.webcontainer.jsf";
+    
+    public static final String FACES_LOG_STRINGS = 
+            "com.sun.faces.LogStrings";        
+    
+    // Log instance for this class
+    private static final Logger LOGGER = getLogger(FACES_LOGGER);
 
     // README - make sure to add the message identifier constant
     // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution
     // parameters to test/com/sun/faces/util/TestUtil_messages (see comment there).
-
+ 
     // Loggers
     public static final String RENDERKIT_LOGGER = ".renderkit";
     public static final String TAGLIB_LOGGER = ".taglib";
-
-    // Log instance for this class
-    private static final Logger LOGGER = getLogger(FACES_LOGGER);
-
-    /** Flag that enables/disables the core TLV. */
-    private static boolean coreTLVEnabled = true;
-
-    /** Flag that enables/disables the html TLV. */
-    private static boolean htmlTLVEnabled = true;
+    public static final String APPLICATION_LOGGER = ".application";
+    public static final String CONTEXT_LOGGER = ".context";
+    public static final String CONFIG_LOGGER = ".config";
+    public static final String LIFECYCLE_LOGGER = ".lifecycle";        
 
     /**
      * Flag that, when true, enables special behavior in the RI to enable
@@ -115,282 +114,190 @@ public class Util {
      */
     private static boolean unitTestModeEnabled = false;
 
-    // ------------------------------------------------------------ Constructors
-
-
-    private Util() {
-
-        throw new IllegalStateException();
-
-    }
-
-    // ---------------------------------------------------------- Public Methods
-
-
-    public static boolean componentIsDisabled(UIComponent component) {
-
-        Object disabled = null;
-        boolean result = false;
-        if (null !=
-            (disabled = component.getAttributes().get("disabled"))) {
-            if (disabled instanceof String) {
-                result = ((String) disabled).equalsIgnoreCase("true");
-            } else {
-                result = disabled.equals(Boolean.TRUE);
-            }
-        }
-
-        return result;
-
-    }
-
-
-    public static boolean componentIsDisabledOrReadonly(UIComponent component) {
-
-        Object disabledOrReadonly = null;
-        boolean result = false;
-        if (null !=
-            (disabledOrReadonly = component.getAttributes().get("disabled"))) {
-            if (disabledOrReadonly instanceof String) {
-                result = ((String) disabledOrReadonly).equalsIgnoreCase("true");
-            } else {
-                result = disabledOrReadonly.equals(Boolean.TRUE);
-            }
-        }
-        if ((result == false) &&
-            null !=
-            (disabledOrReadonly = component.getAttributes().get("readonly"))) {
-            if (disabledOrReadonly instanceof String) {
-                result = ((String) disabledOrReadonly).equalsIgnoreCase("true");
-            } else {
-                result = disabledOrReadonly.equals(Boolean.TRUE);
-            }
-        }
-
-        return result;
-
-    }
-
-
-    public static Object createInstance(String className) {
-
-        return createInstance(className, null, null);
-
-    }
-
-
-    public static Object createInstance(String className,
-                                        Class rootType,
-                                        Object root) {
-
-        Class clazz = null;
-        Object returnObject = null;
-        if (className != null) {
-            try {
-                clazz = Util.loadClass(className, returnObject);
-                if (clazz != null) {
-                    // Look for an adapter constructor if we've got
-                    // an object to adapt
-                    if ((rootType != null) && (root != null)) {
-                        try {
-                            Class[] parameterTypes = new Class[]{rootType};
-                            Constructor construct =
-                                  clazz.getConstructor(parameterTypes);
-                            Object[] parameters = new Object[]{root};
-                            returnObject = construct.newInstance(parameters);
-                        } catch (NoSuchMethodException nsme) {
-                            if (LOGGER.isLoggable(Level.FINE)) {
-                                LOGGER.log(Level.FINE,
-                                           "jsf.util.no.adapter.ctor.available",
-                                           new Object[]{
-                                                 clazz.getName(),
-                                                 rootType.getName()
-                                           });
-                            }
-                        }
-                    }
-                    if (returnObject == null) {
-                        returnObject = clazz.newInstance();
-                    }
-                }
-            } catch (Exception e) {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    Object[] params = new Object[1];
-                    params[0] = className;
-                    String msg = MessageUtils.getExceptionMessageString(
-                          MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,
-                          params);
-                    LOGGER.log(Level.SEVERE, msg, e);
-                }
-            }
-        }
-        return returnObject;
-
-    }
-
-
-    public static Object evaluateVBExpression(String expression) {
-
-        if (expression == null || (!isVBExpression(expression))) {
-            return expression;
-        }
-        FacesContext context = FacesContext.getCurrentInstance();
-        Object result =
-              getValueExpression(expression).getValue(context.getELContext());
-        return result;
-
-    }
-
-
-    public static Object evaluateValueExpression(ValueExpression expression,
-                                                 ELContext elContext) {
-
-        if (expression.isLiteralText()) {
-            return expression.getExpressionString();
-        } else {
-            return expression.getValue(elContext);
-        }
-
-    }
-
+    /**
+     * Flag that enables/disables the core TLV.
+     */
+    private static boolean coreTLVEnabled = true;
 
     /**
-     * <p>PRECONDITION: argument <code>response</code> is non-null and
-     * has a method called <code>getContentType</code> that takes no
-     * arguments and returns a String, with no side-effects.</p>
-     * <p/>
-     * <p>This method allows us to get the contentType in both the
-     * servlet and portlet cases, without introducing a compile-time
-     * dependency on the portlet api.</p>
+     * Flag that enables/disables the html TLV.
      */
+    private static boolean htmlTLVEnabled = true;
 
-    public static String getContentTypeFromResponse(Object response) {
+//
+// Instance Variables
+//
 
-        String result = null;
-        if (null != response) {
-            Method method = null;
+// Attribute Instance Variables
 
-            try {
-                method = response.getClass().getMethod("getContentType",
-                                                       RIConstants.EMPTY_CLASS_ARGS);
-                if (null != method) {
-                    Object obj =
-                          method.invoke(response, RIConstants.EMPTY_METH_ARGS);
-                    if (null != obj) {
-                        result = obj.toString();
-                    }
-                }
-            }
-            catch (NoSuchMethodException nsme) {
-                throw new FacesException(nsme);
-            }
-            catch (IllegalAccessException iae) {
-                throw new FacesException(iae);
-            }
-            catch (IllegalArgumentException iare) {
-                throw new FacesException(iare);
-            }
-            catch (InvocationTargetException ite) {
-                throw new FacesException(ite);
-            }
-            catch (SecurityException e) {
-                throw new FacesException(e);
-            }
-        }
-        return result;
+// Relationship Instance Variables
 
+//
+// Constructors and Initializers    
+//
+
+    private Util() {
+        throw new IllegalStateException();
+    }
+
+//
+// Class methods
+//
+
+    public static void setUnitTestModeEnabled(boolean enabled) {
+        unitTestModeEnabled = enabled;
+    }
+
+    public static boolean isUnitTestModeEnabled() {
+        return unitTestModeEnabled;
+    }
+
+    public static void setCoreTLVActive(boolean active) {
+        coreTLVEnabled = active;
+    }
+
+    public static boolean isCoreTLVActive() {
+        return coreTLVEnabled;
+    }
+
+    public static void setHtmlTLVActive(boolean active) {
+        htmlTLVEnabled = active;
+    }
+
+    public static boolean isHtmlTLVActive() {
+        return htmlTLVEnabled;
     }
 
 
-    public static Converter getConverterForClass(Class converterClass,
-                                                 FacesContext context) {
-
-        if (converterClass == null) {
-            return null;
-        }
-        try {
-            Application application = context.getApplication();
-            return (application.createConverter(converterClass));
-        } catch (Exception e) {
-            return (null);
-        }
-
-    }
-
-
-    public static Converter getConverterForIdentifer(String converterId,
-                                                     FacesContext context) {
-
-        if (converterId == null) {
-            return null;
-        }
-        try {
-            Application application = context.getApplication();
-            return (application.createConverter(converterId));
-        } catch (Exception e) {
-            return (null);
-        }
-
+    public static Class loadClass(String name,
+                                  Object fallbackClass)
+        throws ClassNotFoundException {
+        ClassLoader loader = Util.getCurrentLoader(fallbackClass);
+        return loader.loadClass(name);
     }
 
 
     public static ClassLoader getCurrentLoader(Object fallbackClass) {
-
         ClassLoader loader =
-              Thread.currentThread().getContextClassLoader();
+            Thread.currentThread().getContextClassLoader();
         if (loader == null) {
             loader = fallbackClass.getClass().getClassLoader();
         }
         return loader;
-
+    }
+    
+    public static Logger getLogger( String loggerName ) {
+        return Logger.getLogger(loggerName, FACES_LOG_STRINGS );
     }
 
 
     /**
-     * @param expressionString the expression string, with delimiters
-     *                         intact.
+     * Verify the existence of all the factories needed by faces.  Create
+     * and install the default RenderKit into the ServletContext. <P>
      *
-     * @return a List of expressions from the expressionString
+     * @see javax.faces.FactoryFinder
      */
 
-    public static List getExpressionsFromString(String expressionString)
-          throws ReferenceSyntaxException {
+    public static void verifyFactoriesAndInitDefaultRenderKit(ServletContext context)
+        throws FacesException {
+        RenderKitFactory renderKitFactory = null;
+        LifecycleFactory lifecycleFactory = null;
+        FacesContextFactory facesContextFactory = null;
+        ApplicationFactory applicationFactory = null;
+        RenderKit defaultRenderKit = null;
 
-        if (null == expressionString) {
-            return Collections.EMPTY_LIST;
-        }
-        List<String> result = new ArrayList<String>();
-        int i, j, len = expressionString.length(), cur = 0;
-        while (cur < len &&
-               -1 != (i = expressionString.indexOf("#{", cur))) {
-            if (-1 == (j = expressionString.indexOf("}", i + 2))) {
-                throw new ReferenceSyntaxException(MessageUtils.getExceptionMessageString(
-                      MessageUtils.INVALID_EXPRESSION_ID,
-                      new Object[]{expressionString}));
-            }
-            cur = j + 1;
-            result.add(expressionString.substring(i, cur));
-        }
-        return result;
+        renderKitFactory = (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        assert (null != renderKitFactory);
 
+        lifecycleFactory = (LifecycleFactory)
+            FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+        assert (null != lifecycleFactory);
+
+        facesContextFactory = (FacesContextFactory)
+            FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
+        assert (null != facesContextFactory);
+
+        applicationFactory = (ApplicationFactory)
+            FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        assert (null != applicationFactory);
+
+        defaultRenderKit =
+            renderKitFactory.getRenderKit(null,
+                                          RenderKitFactory.HTML_BASIC_RENDER_KIT);
+        if (defaultRenderKit == null) {
+            // create default renderkit if doesn't exist
+            //
+            defaultRenderKit = new RenderKitImpl();
+            renderKitFactory.addRenderKit(
+                RenderKitFactory.HTML_BASIC_RENDER_KIT,
+                defaultRenderKit);
+        }
+
+        context.setAttribute(RIConstants.HTML_BASIC_RENDER_KIT,
+                             defaultRenderKit);
+
+        context.setAttribute(RIConstants.ONE_TIME_INITIALIZATION_ATTR,
+                             RIConstants.ONE_TIME_INITIALIZATION_ATTR);
     }
 
 
-    public static FeatureDescriptor getFeatureDescriptor(String name, String
-          displayName, String desc, boolean expert, boolean hidden,
-                       boolean preferred, Object type, Boolean designTime) {
+    /**
+     * <p>Verifies that the required classes are available on either the
+     * ContextClassLoader, or the local ClassLoader.  Currently only
+     * checks for the class
+     * "javax.servlet.jsp.jstl.fmt.LocalizationContext", which is used
+     * for Localization.</p>
+     * <p/>
+     * <p>The result of the check is saved in the ServletContext
+     * attribute RIConstants.HAS_REQUIRED_CLASSES_ATTR.</p>
+     * <p/>
+     * <p>Algorithm:</p>
+     * <p/>
+     * <p>Check the ServletContext for the attribute, if found, and the
+     * value is false, that means we've checked before, and we don't have
+     * the classes, just throw FacesException.  If the value is true,
+     * we've checked before and we have the classes, just return.</p>
+     */
 
-        FeatureDescriptor fd = new FeatureDescriptor();
-        fd.setName(name);
-        fd.setDisplayName(displayName);
-        fd.setShortDescription(desc);
-        fd.setExpert(expert);
-        fd.setHidden(hidden);
-        fd.setPreferred(preferred);
-        fd.setValue(ELResolver.TYPE, type);
-        fd.setValue(ELResolver.RESOLVABLE_AT_DESIGN_TIME, designTime);
-        return fd;
+    public static void verifyRequiredClasses(FacesContext facesContext)
+        throws FacesException {
+        Map<String,Object> applicationMap = facesContext.getExternalContext()
+            .getApplicationMap();
+        Boolean result = null;
+        String className = "javax.servlet.jsp.jstl.fmt.LocalizationContext";
+        Object[] params = {className};
 
+        // Have we checked before?
+        if (null != (result = (Boolean)
+            applicationMap.get(RIConstants.HAS_REQUIRED_CLASSES_ATTR))) {
+            // yes, and the check failed.
+            if (Boolean.FALSE == result) {
+                throw new
+                    FacesException(
+                        MessageUtils.getExceptionMessageString(
+                            MessageUtils.MISSING_CLASS_ERROR_MESSAGE_ID, params));
+            } else {
+                // yes, and the check passed.
+                return;
+            }
+        }
+
+        //
+        // We've not checked before, so do the check now!
+        //
+
+        try {
+            Util.loadClass(className, facesContext);
+        } catch (ClassNotFoundException e) {
+            applicationMap.put(RIConstants.HAS_REQUIRED_CLASSES_ATTR,
+                               Boolean.FALSE);
+            throw new FacesException(
+                MessageUtils.getExceptionMessageString(MessageUtils.MISSING_CLASS_ERROR_MESSAGE_ID,
+                                         params),
+                e);
+        }
+        applicationMap.put(RIConstants.HAS_REQUIRED_CLASSES_ATTR, Boolean.TRUE);
     }
 
 
@@ -425,9 +332,8 @@ public class Util {
      */
 
     public static Locale
-          getLocaleFromContextOrComponent(FacesContext context,
-                                          UIComponent component) {
-
+        getLocaleFromContextOrComponent(FacesContext context,
+                                        UIComponent component) {
         Locale result = null;
         String bundleName = null;
         String bundleAttr = "bundle";
@@ -441,9 +347,9 @@ public class Util {
             // verify there is a Locale for this localizationContext
             LocalizationContext locCtx = null;
             if (null != (locCtx =
-                  (javax.servlet.jsp.jstl.fmt.LocalizationContext)
-                        (Util.getValueExpression(bundleName)).
-                              getValue(context.getELContext()))) {
+                (javax.servlet.jsp.jstl.fmt.LocalizationContext)
+                (Util.getValueExpression(bundleName)).
+                getValue(context.getELContext()))) {
                 result = locCtx.getLocale();
                 assert (null != result);
             }
@@ -453,17 +359,14 @@ public class Util {
         }
 
         return result;
-
     }
-
-
+    
     /**
      * <p>If the FacesContext has a UIViewRoot, and this UIViewRoot has a Locale,
      * return it.  Otherwise return Locale.getDefault().
      */
-
+    
     public static Locale getLocaleFromContextOrSystem(FacesContext context) {
-
         Locale result, temp = Locale.getDefault();
         UIViewRoot root = null;
         result = temp;
@@ -475,472 +378,16 @@ public class Util {
             }
         }
         return result;
-
-    }
-
-    // W3C XML specification refers to IETF RFC 1766 for language code
-    // structure, therefore the value for the xml:lang attribute should
-    // be in the form of language or language-country or
-    // language-country-variant.
-
-    public static Locale getLocaleFromString(String localeStr)
-          throws IllegalArgumentException {
-
-        // length must be at least 2.
-        if (null == localeStr || localeStr.length() < 2) {
-            throw new IllegalArgumentException("Illegal locale String: " +
-                                               localeStr);
-        }
-
-        Locale result = null;
-        String
-              lang = null,
-              country = null,
-              variant = null;
-        char[] seps = {
-              '-',
-              '_'
-        };
-        int
-              i = 0,
-              j = 0;
-
-        // to have a language, the length must be >= 2
-        if ((localeStr.length() >= 2) &&
-            (-1 == (i = indexOfSet(localeStr, seps, 0)))) {
-            // we have only Language, no country or variant
-            if (2 != localeStr.length()) {
-                throw new
-                      IllegalArgumentException("Illegal locale String: " +
-                                               localeStr);
-            }
-            lang = localeStr.toLowerCase();
-        }
-
-        // we have a separator, it must be either '-' or '_'
-        if (-1 != i) {
-            lang = localeStr.substring(0, i);
-            // look for the country sep.
-            // to have a country, the length must be >= 5
-            if ((localeStr.length() >= 5) &&
-                (-1 == (j = indexOfSet(localeStr, seps, i + 1)))) {
-                // no further separators, length must be 5
-                if (5 != localeStr.length()) {
-                    throw new
-                          IllegalArgumentException("Illegal locale String: " +
-                                                   localeStr);
-                }
-                country = localeStr.substring(i + 1);
-            }
-            if (-1 != j) {
-                country = localeStr.substring(i + 1, j);
-                // if we have enough separators for language, locale,
-                // and variant, the length must be >= 8.
-                if (localeStr.length() >= 8) {
-                    variant = localeStr.substring(j + 1);
-                } else {
-                    throw new
-                          IllegalArgumentException("Illegal locale String: " +
-                                                   localeStr);
-                }
-            }
-        }
-        if (null != variant && null != country && null != lang) {
-            result = new Locale(lang, country, variant);
-        } else if (null != lang && null != country) {
-            result = new Locale(lang, country);
-        } else if (null != lang) {
-            result = new Locale(lang, "");
-        }
-        return result;
-
-    }
-
-
-    public static Logger getLogger(String loggerName) {
-
-        return Logger.getLogger(loggerName, FACES_LOG_STRINGS);
-
     }
 
 
     /**
-     * <p>This method is used by the ManagedBeanFactory to ensure that
-     * properties set by an expression point to an object with an
-     * accepted lifespan.</p>
-     * <p/>
-     * <p>get the scope of the expression. Return <code>null</code> if
-     * it isn't scoped</p>
-     * <p/>
-     * <p>For example, the expression:
-     * <code>sessionScope.TestBean.one</code> should return "session"
-     * as the scope.</p>
-     *
-     * @param valueBinding the expression
-     * @param outString    an allocated String Array into which we put the
-     *                     first segment.
-     *
-     * @return the scope of the expression
+     * @return src with all occurrences of "from" replaced with "to".
      */
-    public static Scope getScope(String valueBinding,
-                                 String [] outString)
-          throws ReferenceSyntaxException {
-
-        if (valueBinding == null || 0 == valueBinding.length()) {
-            return null;
-        }
-        valueBinding = stripBracketsIfNecessary(valueBinding);
-
-        int segmentIndex = getFirstSegmentIndex(valueBinding);
-
-        //examine first segment and see if it is a scope
-        String identifier = valueBinding;
-
-        if (segmentIndex > 0) {
-            //get first segment designated by a "." or "["
-            identifier = valueBinding.substring(0, segmentIndex);
-        }
-
-        //check to see if the identifier is a named scope.
-
-        FacesContext context = FacesContext.getCurrentInstance();
-        ExternalContext ec = context.getExternalContext();
-
-        if (null != outString) {
-            outString[0] = identifier;
-        }
-        if (identifier.equalsIgnoreCase(RIConstants.REQUEST_SCOPE)) {
-            return Scope.REQUEST;
-        }
-        if (identifier.equalsIgnoreCase(RIConstants.SESSION_SCOPE)) {
-            return Scope.SESSION;
-        }
-        if (identifier.equalsIgnoreCase(RIConstants.APPLICATION_SCOPE)) {
-            return Scope.APPLICATION;
-        }
-
-        // handle implicit objects
-        if (identifier.equalsIgnoreCase(RIConstants.INIT_PARAM_IMPLICIT_OBJ)) {
-            return Scope.APPLICATION;
-        }
-        if (identifier.equalsIgnoreCase(RIConstants.COOKIE_IMPLICIT_OBJ)) {
-            return Scope.REQUEST;
-        }
-        if (identifier.equalsIgnoreCase(RIConstants.FACES_CONTEXT_IMPLICIT_OBJ))
-        {
-            return Scope.REQUEST;
-        }
-        if (identifier.equalsIgnoreCase(RIConstants.HEADER_IMPLICIT_OBJ)) {
-            return Scope.REQUEST;
-        }
-        if (identifier.equalsIgnoreCase(RIConstants.HEADER_VALUES_IMPLICIT_OBJ))
-        {
-            return Scope.REQUEST;
-        }
-        if (identifier.equalsIgnoreCase(RIConstants.PARAM_IMPLICIT_OBJ)) {
-            return Scope.REQUEST;
-        }
-        if (identifier.equalsIgnoreCase(RIConstants.PARAM_VALUES_IMPLICIT_OBJ))
-        {
-            return Scope.REQUEST;
-        }
-        if (identifier.equalsIgnoreCase(RIConstants.VIEW_IMPLICIT_OBJ)) {
-            return Scope.REQUEST;
-        }
-
-        //No scope was provided in the expression so check for the 
-        //expression in all of the scopes. The expression is the first 
-        //segment.
-
-        if (ec.getRequestMap().get(identifier) != null) {
-            return Scope.REQUEST;
-        }
-        if (Util.getSessionMap(context).get(identifier) != null) {
-            return Scope.SESSION;
-        }
-        if (ec.getApplicationMap().get(identifier) != null) {
-            return Scope.APPLICATION;
-        }
-
-        //not present in any scope
-        return null;
-
-    }
-
-
-    /**
-     * This method will return a <code>SessionMap</code> for the current
-     * <code>FacesContext</code>.  If the <code>FacesContext</code> argument
-     * is null, then one is determined by <code>FacesContext.getCurrentInstance()</code>.
-     * The <code>SessionMap</code> will be created if it is null.
-     *
-     * @param context the FacesContext
-     *
-     * @return Map The <code>SessionMap</code>
-     */
-    public static Map<String, Object> getSessionMap(FacesContext context) {
-
-        if (context == null) {
-            context = FacesContext.getCurrentInstance();
-        }
-        return context.getExternalContext().getSessionMap();
-
-    }
-
-
-    /**
-     * <p>Leverage the Throwable.getStackTrace() method to produce a
-     * String version of the stack trace, with a "\n" before each
-     * line.</p>
-     *
-     * @return the String representation ofthe stack trace obtained by
-     *         calling getStackTrace() on the passed in exception.  If null is
-     *         passed in, we return the empty String.
-     */
-
-    public static String getStackTraceString(Throwable e) {
-
-        if (null == e) {
-            return "";
-        }
-
-        StackTraceElement[] stacks = e.getStackTrace();
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < stacks.length; i++) {
-            sb.append(stacks[i].toString() + "\n");
-        }
-        return sb.toString();
-
-    }
-
-
-    public static StateManager getStateManager(FacesContext context)
-          throws FacesException {
-
-        return (context.getApplication().getStateManager());
-
-    }
-
-
-    public static ValueBinding getValueBinding(String valueRef) {
-
-        ValueBinding vb = null;
-        // Must parse the value to see if it contains more than
-        // one expression
-        FacesContext context = FacesContext.getCurrentInstance();
-        vb = context.getApplication().createValueBinding(valueRef);
-        return vb;
-
-    }
-
-
-    public static ValueExpression getValueExpression(String valueRef) {
-
-        ValueExpression ve = null;
-        // Must parse the value to see if it contains more than
-        // one expression
-        FacesContext context = FacesContext.getCurrentInstance();
-        ve = context.getApplication().getExpressionFactory().
-              createValueExpression(context.getELContext(), valueRef,
-                                    Object.class);
-        return ve;
-
-    }
-
-
-    public static ViewHandler getViewHandler(FacesContext context)
-          throws FacesException {
-
-        // Get Application instance
-        Application application = context.getApplication();
-        assert (application != null);
-
-        // Get the ViewHandler
-        ViewHandler viewHandler = application.getViewHandler();
-        assert (viewHandler != null);
-
-        return viewHandler;
-
-    }
-
-
-    /**
-     * <p>Checks for the existence of a method specified by the "methodName"
-     * argument, on the "instance" argument.</p>
-     */
-    public static boolean hasDeclaredMethod(Object instance,
-                                            String methodName) {
-
-        boolean result = false;
-        // Look for the presence of the method by method name.
-        Class c = instance.getClass();
-        Method[] methods = c.getDeclaredMethods();
-
-        for (int i = 0; i < methods.length; i++) {
-            if (methods[i].getName().equals(methodName)) {
-                result = true;
-                break;
-            }
-        }
-        return result;
-
-    }
-
-
-    /**
-     * @return starting at <code>fromIndex</code>, the index of the
-     *         first occurrence of any substring from <code>set</code> in
-     *         <code>toSearch</code>, or -1 if no such match is found
-     */
-
-    public static int indexOfSet(String str, char[] set,
-                                 int fromIndex) {
-
-        int result = -1;
-        char[] toSearch = str.toCharArray();
-        for (int i = fromIndex, len = toSearch.length; i < len; i++) {
-            for (int j = 0, innerLen = set.length; j < innerLen; j++) {
-                if (toSearch[i] == set[j]) {
-                    result = i;
-                    break;
-                }
-            }
-            if (-1 != result) {
-                break;
-            }
-        }
-        return result;
-
-    }
-
-
-    public static boolean isCoreTLVActive() {
-
-        return coreTLVEnabled;
-
-    }
-
-
-    public static boolean isHtmlTLVActive() {
-
-        return htmlTLVEnabled;
-
-    }
-
-
-    /*
-     * Determine whether String is a mixed value binding expression or not.
-     */
-    public static boolean isMixedVBExpression(String expression) {
-
-        if (null == expression) {
-            return false;
-        }
-        // if it doesn't start and end with delimiters
-        if (!(expression.startsWith("#{") && expression.endsWith("}"))) {
-            // see if it has some inside.
-            return isVBExpression(expression);
-        }
-        return false;
-
-    }
-
-
-    public static boolean isUnitTestModeEnabled() {
-
-        return unitTestModeEnabled;
-
-    }
-
-//
-// Class methods
-//
-
-    public static void setUnitTestModeEnabled(boolean enabled) {
-
-        unitTestModeEnabled = enabled;
-
-    }
-
-
-    /*
-     * Determine whether String is a value binding expression or not.
-     */
-    public static boolean isVBExpression(String expression) {
-
-        if (null == expression) {
-            return false;
-        }
-        int start = 0;
-        //check to see if attribute has an expression
-        if (((start = expression.indexOf("#{")) != -1) &&
-            (start < expression.indexOf('}'))) {
-            return true;
-        }
-        return false;
-
-    }
-
-
-    public static Class loadClass(String name,
-                                  Object fallbackClass)
-          throws ClassNotFoundException {
-
-        ClassLoader loader = Util.getCurrentLoader(fallbackClass);
-        return loader.loadClass(name);
-
-    }
-
-
-    public static void parameterNonEmpty(String param) throws FacesException {
-
-        if (null == param || 0 == param.length()) {
-            throw new FacesException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.EMPTY_PARAMETER_ID));
-        }
-
-    }
-
-    //
-    // General Methods
-    //
-
-
-    public static void parameterNonNull(Object param) throws FacesException {
-
-        if (null == param) {
-            throw new FacesException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-
-    }
-
-
-    public static boolean prefixViewTraversal(FacesContext context,
-                                              UIComponent root,
-                                              TreeTraversalCallback action)
-          throws FacesException {
-
-        boolean keepGoing = false;
-        if (keepGoing = action.takeActionOnNode(context, root)) {
-            Iterator<UIComponent> kids = root.getFacetsAndChildren();
-            while (kids.hasNext() && keepGoing) {
-                keepGoing = prefixViewTraversal(context,
-                                                kids.next(),
-                                                action);
-            }
-        }
-        return keepGoing;
-
-    }
-
-
-    /** @return src with all occurrences of "from" replaced with "to". */
 
     public static String replaceOccurrences(String src,
                                             String from,
                                             String to) {
-
         // a little optimization: don't bother with strings that don't
         // have any occurrences to replace.
         if (-1 == src.indexOf(from)) {
@@ -961,165 +408,504 @@ public class Util {
 
 
         return result.toString();
+    }
+
+    public static Object evaluateValueExpression(ValueExpression expression,
+                                                 ELContext elContext) {
+           if (expression.isLiteralText()) {
+               return expression.getExpressionString();
+           } else {
+               return expression.getValue(elContext);
+           }
+       }
+
+
+    public static Object evaluateVBExpression(String expression) {
+        if (expression == null || (!isVBExpression(expression))) {
+            return expression;
+        }
+        FacesContext context = FacesContext.getCurrentInstance();
+        Object result =
+            getValueExpression(expression).getValue(context.getELContext());
+        return result;
 
     }
 
 
-    public static void setCoreTLVActive(boolean active) {
+    public static ValueBinding getValueBinding(String valueRef) {
+        ValueBinding vb = null;
+        // Must parse the value to see if it contains more than
+        // one expression
+        FacesContext context = FacesContext.getCurrentInstance();
+        vb = context.getApplication().createValueBinding(valueRef);
+        return vb;
+    }
 
-        coreTLVEnabled = active;
+    public static ValueExpression getValueExpression(String valueRef) {
+        ValueExpression ve = null;
+        // Must parse the value to see if it contains more than
+        // one expression
+        FacesContext context = FacesContext.getCurrentInstance();
+        ve = context.getApplication().getExpressionFactory().
+            createValueExpression(context.getELContext(), valueRef, 
+                Object.class);
+        return ve;
+    }    
 
+
+    /**
+     * This method will return a <code>SessionMap</code> for the current
+     * <code>FacesContext</code>.  If the <code>FacesContext</code> argument
+     * is null, then one is determined by <code>FacesContext.getCurrentInstance()</code>.
+     * The <code>SessionMap</code> will be created if it is null.
+     *
+     * @param context the FacesContext
+     * @return Map The <code>SessionMap</code>
+     */
+    public static Map<String,Object> getSessionMap(FacesContext context) {
+        if (context == null) {
+            context = FacesContext.getCurrentInstance();
+        }
+        return context.getExternalContext().getSessionMap();
     }
 
 
-    public static void setHtmlTLVActive(boolean active) {
+    public static Converter getConverterForClass(Class converterClass,
+                                                 FacesContext context) {
+        if (converterClass == null) {
+            return null;
+        }
+        try {            
+            Application application = context.getApplication();
+            return (application.createConverter(converterClass));
+        } catch (Exception e) {
+            return (null);
+        }
+    }
 
-        htmlTLVEnabled = active;
 
+    public static Converter getConverterForIdentifer(String converterId,
+                                                     FacesContext context) {
+        if (converterId == null) {
+            return null;
+        }
+        try {            
+            Application application = context.getApplication();
+            return (application.createConverter(converterId));
+        } catch (Exception e) {
+            return (null);
+        }
+    }
+
+    /*
+     * Determine whether String is a value binding expression or not.
+     */
+    public static boolean isVBExpression(String expression) {
+        if (null == expression) {
+            return false;
+        }
+        int start = 0;
+        //check to see if attribute has an expression
+        if (((start = expression.indexOf("#{")) != -1) &&
+            (start < expression.indexOf('}'))) {
+            return true;
+        }
+        return false;
+    }
+
+
+    /*
+     * Determine whether String is a mixed value binding expression or not.
+     */
+    public static boolean isMixedVBExpression(String expression) {
+        if (null == expression) {
+            return false;
+        }
+        // if it doesn't start and end with delimiters
+        if (!(expression.startsWith("#{") && expression.endsWith("}"))) {
+            // see if it has some inside.
+            return isVBExpression(expression);
+        }
+        return false;
+    }
+
+
+    public static StateManager getStateManager(FacesContext context)
+        throws FacesException {
+        return (context.getApplication().getStateManager());
+    }
+
+
+    public static ViewHandler getViewHandler(FacesContext context)
+        throws FacesException {
+        // Get Application instance
+        Application application = context.getApplication();
+        assert (application != null);
+
+        // Get the ViewHandler
+        ViewHandler viewHandler = application.getViewHandler();
+        assert (viewHandler != null);
+
+        return viewHandler;
+    }
+
+
+    public static boolean componentIsDisabled(UIComponent component) {
+        Object disabled = null;
+        boolean result = false;
+        if (null !=
+            (disabled = component.getAttributes().get("disabled"))) {
+            if (disabled instanceof String) {
+                result = ((String) disabled).equalsIgnoreCase("true");
+            } else {
+                result = disabled.equals(Boolean.TRUE);
+            }
+        }
+
+        return result;
+    }
+
+
+    public static boolean componentIsDisabledOrReadonly(UIComponent component) {
+        Object disabledOrReadonly = null;
+        boolean result = false;
+        if (null !=
+            (disabledOrReadonly = component.getAttributes().get("disabled"))) {
+            if (disabledOrReadonly instanceof String) {
+                result = ((String) disabledOrReadonly).equalsIgnoreCase("true");
+            } else {
+                result = disabledOrReadonly.equals(Boolean.TRUE);
+            }
+        }
+        if ((result == false) &&
+            null !=
+            (disabledOrReadonly = component.getAttributes().get("readonly"))) {
+            if (disabledOrReadonly instanceof String) {
+                result = ((String) disabledOrReadonly).equalsIgnoreCase("true");
+            } else {
+                result = disabledOrReadonly.equals(Boolean.TRUE);
+            }
+        }
+
+        return result;
+    }
+
+
+    public static Object createInstance(String className) {
+        return createInstance(className, null, null);
+    }
+
+
+    public static Object createInstance(String className,
+                                        Class rootType,
+                                        Object root) {
+        Class clazz = null;
+        Object returnObject = null;
+        if (className != null) {
+            try {
+                clazz = Util.loadClass(className, returnObject);
+                if (clazz != null) { 
+                    // Look for an adapter constructor if we've got
+                    // an object to adapt
+                    if ((rootType != null) && (root != null)) {
+                        try {
+                            Class[] parameterTypes = new Class[]{rootType};
+                            Constructor construct =
+                                clazz.getConstructor(parameterTypes);
+                            Object[] parameters = new Object[]{root};
+                            returnObject = construct.newInstance(parameters);
+                        } catch (NoSuchMethodException nsme) {
+                            if (LOGGER.isLoggable(Level.FINE)) {                                
+                                LOGGER.log(Level.FINE,
+                                           "jsf.util.no.adapter.ctor.available",
+                                           new Object[] {
+                                                 clazz.getName(),
+                                                 rootType.getName()
+                                           });
+                            }                           
+                        }
+                    }
+                    if (returnObject == null) {
+                        returnObject = clazz.newInstance();
+                    }
+                }
+            } catch (Exception e) {
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    Object[] params = new Object[1];
+                    params[0] = className;
+                    String msg = MessageUtils.getExceptionMessageString(
+                          MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,
+                          params);
+                    LOGGER.log(Level.SEVERE, msg, e);
+                }
+            }
+        }
+        return returnObject;
+    }
+
+    // W3C XML specification refers to IETF RFC 1766 for language code
+    // structure, therefore the value for the xml:lang attribute should
+    // be in the form of language or language-country or
+    // language-country-variant.
+
+    public static Locale getLocaleFromString(String localeStr)
+        throws IllegalArgumentException {
+        // length must be at least 2.
+        if (null == localeStr || localeStr.length() < 2) {
+            throw new IllegalArgumentException("Illegal locale String: " +
+                                               localeStr);
+        }
+
+        Locale result = null;
+        String
+            lang = null,
+            country = null,
+            variant = null;
+        char[] seps = {
+            '-',
+            '_'
+        };
+        int
+            i = 0,
+            j = 0;
+
+        // to have a language, the length must be >= 2
+        if ((localeStr.length() >= 2) &&
+            (-1 == (i = indexOfSet(localeStr, seps, 0)))) {
+            // we have only Language, no country or variant
+            if (2 != localeStr.length()) {
+                throw new
+                    IllegalArgumentException("Illegal locale String: " +
+                                             localeStr);
+            }
+            lang = localeStr.toLowerCase();
+        }
+
+        // we have a separator, it must be either '-' or '_'
+        if (-1 != i) {
+            lang = localeStr.substring(0, i);
+            // look for the country sep.
+            // to have a country, the length must be >= 5
+            if ((localeStr.length() >= 5) &&
+                (-1 == (j = indexOfSet(localeStr, seps, i + 1)))) {
+                // no further separators, length must be 5
+                if (5 != localeStr.length()) {
+                    throw new
+                        IllegalArgumentException("Illegal locale String: " +
+                                                 localeStr);
+                }
+                country = localeStr.substring(i + 1);
+            }
+            if (-1 != j) {
+                country = localeStr.substring(i + 1, j);
+                // if we have enough separators for language, locale,
+                // and variant, the length must be >= 8.
+                if (localeStr.length() >= 8) {
+                    variant = localeStr.substring(j + 1);
+                } else {
+                    throw new
+                        IllegalArgumentException("Illegal locale String: " +
+                                                 localeStr);
+                }
+            }
+        }
+        if (null != variant && null != country && null != lang) {
+            result = new Locale(lang, country, variant);
+        } else if (null != lang && null != country) {
+            result = new Locale(lang, country);
+        } else if (null != lang) {
+            result = new Locale(lang, "");
+        }
+        return result;
+    }
+
+
+    /**
+     * @return starting at <code>fromIndex</code>, the index of the
+     *         first occurrence of any substring from <code>set</code> in
+     *         <code>toSearch</code>, or -1 if no such match is found
+     */
+
+    public static int indexOfSet(String str, char[] set,
+                                 int fromIndex) {
+        int result = -1;
+        char[] toSearch = str.toCharArray();
+        for (int i = fromIndex, len = toSearch.length; i < len; i++) {
+            for (int j = 0, innerLen = set.length; j < innerLen; j++) {
+                if (toSearch[i] == set[j]) {
+                    result = i;
+                    break;
+                }
+            }
+            if (-1 != result) {
+                break;
+            }
+        }
+        return result;
     }
 
 
     public static String stripBracketsIfNecessary(String expression)
-          throws ReferenceSyntaxException {
-
+        throws ReferenceSyntaxException {
         assert (null != expression);
         int len = 0;
         // look for invalid expressions
         if ('#' == expression.charAt(0)) {
             if ('{' != expression.charAt(1)) {
                 throw new ReferenceSyntaxException(MessageUtils.getExceptionMessageString(
-                      MessageUtils.INVALID_EXPRESSION_ID,
-                      new Object[]{expression}));
+                    MessageUtils.INVALID_EXPRESSION_ID,
+                    new Object[]{expression}));
             }
             if ('}' != expression.charAt((len = expression.length()) - 1)) {
                 throw new ReferenceSyntaxException(MessageUtils.getExceptionMessageString(
-                      MessageUtils.INVALID_EXPRESSION_ID,
-                      new Object[]{expression}));
+                    MessageUtils.INVALID_EXPRESSION_ID,
+                    new Object[]{expression}));
             }
             expression = expression.substring(2, len - 1);
         }
         return expression;
-
     }
+    
+    //
+    // General Methods
+    //
 
 
-    /**
-     * Verify the existence of all the factories needed by faces.  Create
-     * and install the default RenderKit into the ServletContext. <P>
-     *
-     * @see javax.faces.FactoryFinder
-     */
-
-    public static void verifyFactoriesAndInitDefaultRenderKit(
-          ServletContext context)
-          throws FacesException {
-
-        RenderKitFactory renderKitFactory = null;
-        LifecycleFactory lifecycleFactory = null;
-        FacesContextFactory facesContextFactory = null;
-        ApplicationFactory applicationFactory = null;
-        RenderKit defaultRenderKit = null;
-
-        renderKitFactory = (RenderKitFactory)
-              FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        assert (null != renderKitFactory);
-
-        lifecycleFactory = (LifecycleFactory)
-              FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
-        assert (null != lifecycleFactory);
-
-        facesContextFactory = (FacesContextFactory)
-              FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
-        assert (null != facesContextFactory);
-
-        applicationFactory = (ApplicationFactory)
-              FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        assert (null != applicationFactory);
-
-        defaultRenderKit =
-              renderKitFactory.getRenderKit(null,
-                                            RenderKitFactory.HTML_BASIC_RENDER_KIT);
-        if (defaultRenderKit == null) {
-            // create default renderkit if doesn't exist
-            //
-            defaultRenderKit = new RenderKitImpl();
-            renderKitFactory.addRenderKit(
-                  RenderKitFactory.HTML_BASIC_RENDER_KIT,
-                  defaultRenderKit);
-        }
-
-        context.setAttribute(RIConstants.HTML_BASIC_RENDER_KIT,
-                             defaultRenderKit);
-
-        context.setAttribute(RIConstants.ONE_TIME_INITIALIZATION_ATTR,
-                             RIConstants.ONE_TIME_INITIALIZATION_ATTR);
-
-    }
-
-
-    /**
-     * <p>Verifies that the required classes are available on either the
-     * ContextClassLoader, or the local ClassLoader.  Currently only
-     * checks for the class
-     * "javax.servlet.jsp.jstl.fmt.LocalizationContext", which is used
-     * for Localization.</p>
-     * <p/>
-     * <p>The result of the check is saved in the ServletContext
-     * attribute RIConstants.HAS_REQUIRED_CLASSES_ATTR.</p>
-     * <p/>
-     * <p>Algorithm:</p>
-     * <p/>
-     * <p>Check the ServletContext for the attribute, if found, and the
-     * value is false, that means we've checked before, and we don't have
-     * the classes, just throw FacesException.  If the value is true,
-     * we've checked before and we have the classes, just return.</p>
-     */
-
-    public static void verifyRequiredClasses(FacesContext facesContext)
-          throws FacesException {
-
-        Map<String, Object> applicationMap = facesContext.getExternalContext()
-              .getApplicationMap();
-        Boolean result = null;
-        String className = "javax.servlet.jsp.jstl.fmt.LocalizationContext";
-        Object[] params = {className};
-
-        // Have we checked before?
-        if (null != (result = (Boolean)
-              applicationMap.get(RIConstants.HAS_REQUIRED_CLASSES_ATTR))) {
-            // yes, and the check failed.
-            if (Boolean.FALSE == result) {
-                throw new
-                      FacesException(
-                      MessageUtils.getExceptionMessageString(
-                            MessageUtils.MISSING_CLASS_ERROR_MESSAGE_ID,
-                            params));
-            } else {
-                // yes, and the check passed.
-                return;
-            }
-        }
-
-        //
-        // We've not checked before, so do the check now!
-        //
-
-        try {
-            Util.loadClass(className, facesContext);
-        } catch (ClassNotFoundException e) {
-            applicationMap.put(RIConstants.HAS_REQUIRED_CLASSES_ATTR,
-                               Boolean.FALSE);
+    public static void parameterNonNull(Object param) throws FacesException {
+        if (null == param) {
             throw new FacesException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.MISSING_CLASS_ERROR_MESSAGE_ID,
-                                                         params),
-                  e);
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        applicationMap.put(RIConstants.HAS_REQUIRED_CLASSES_ATTR, Boolean.TRUE);
-
     }
 
-    // --------------------------------------------------------- Private Methods
 
+    public static void parameterNonEmpty(String param) throws FacesException {
+        if (null == param || 0 == param.length()) {
+            throw new FacesException(MessageUtils.getExceptionMessageString(MessageUtils.EMPTY_PARAMETER_ID));
+        }
+    }
+
+    /**
+     * <p>This method is used by the ManagedBeanFactory to ensure that
+     * properties set by an expression point to an object with an
+     * accepted lifespan.</p>
+     *
+     * <p>get the scope of the expression. Return <code>null</code> if
+     * it isn't scoped</p> 
+     *
+     * <p>For example, the expression:
+     * <code>sessionScope.TestBean.one</code> should return "session" 
+     * as the scope.</p>
+     *
+     * @param valueBinding the expression
+     *
+     * @param outString an allocated String Array into which we put the
+     * first segment.
+     *
+     * @return the scope of the expression
+     */
+    public static Scope getScope(String valueBinding,
+				  String [] outString) throws ReferenceSyntaxException {
+        if (valueBinding == null || 0 == valueBinding.length()) {
+            return null;
+        }
+	valueBinding = stripBracketsIfNecessary(valueBinding);
+	
+        int segmentIndex = getFirstSegmentIndex(valueBinding);
+
+        //examine first segment and see if it is a scope
+        String identifier = valueBinding;
+
+        if (segmentIndex > 0) {
+            //get first segment designated by a "." or "["
+            identifier = valueBinding.substring(0, segmentIndex);            
+        }
+
+        //check to see if the identifier is a named scope.
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext ec = context.getExternalContext();
+	
+	if (null != outString) {
+	    outString[0] = identifier;
+	}
+        if (identifier.equalsIgnoreCase(RIConstants.REQUEST_SCOPE)) {
+            return Scope.REQUEST;
+        }
+        if (identifier.equalsIgnoreCase(RIConstants.SESSION_SCOPE)) {
+            return Scope.SESSION;
+        }
+        if (identifier.equalsIgnoreCase(RIConstants.APPLICATION_SCOPE)) {
+            return Scope.APPLICATION;
+        }
+
+	// handle implicit objects
+        if (identifier.equalsIgnoreCase(RIConstants.INIT_PARAM_IMPLICIT_OBJ)) {
+	    return Scope.APPLICATION;
+        }	
+        if (identifier.equalsIgnoreCase(RIConstants.COOKIE_IMPLICIT_OBJ)) {
+	    return Scope.REQUEST;
+        }	
+        if (identifier.equalsIgnoreCase(RIConstants.FACES_CONTEXT_IMPLICIT_OBJ)) {
+	    return Scope.REQUEST;
+        }	
+        if (identifier.equalsIgnoreCase(RIConstants.HEADER_IMPLICIT_OBJ)) {
+	    return Scope.REQUEST;
+        }	
+        if (identifier.equalsIgnoreCase(RIConstants.HEADER_VALUES_IMPLICIT_OBJ)) {
+	    return Scope.REQUEST;
+        }
+        if (identifier.equalsIgnoreCase(RIConstants.PARAM_IMPLICIT_OBJ)) {
+	    return Scope.REQUEST;
+        }
+        if (identifier.equalsIgnoreCase(RIConstants.PARAM_VALUES_IMPLICIT_OBJ)) {
+	    return Scope.REQUEST;
+        }
+        if (identifier.equalsIgnoreCase(RIConstants.VIEW_IMPLICIT_OBJ)) {
+	    return Scope.REQUEST;
+        }
+
+        //No scope was provided in the expression so check for the 
+        //expression in all of the scopes. The expression is the first 
+        //segment.
+
+        if (ec.getRequestMap().get(identifier) != null) {
+            return Scope.REQUEST;
+        }
+        if (Util.getSessionMap(context).get(identifier) != null) {
+            return Scope.SESSION;
+        }
+        if (ec.getApplicationMap().get(identifier) != null) {
+            return Scope.APPLICATION;
+        }
+
+        //not present in any scope
+        return null;
+    }
+
+    /**
+     * @param expressionString the expression string, with delimiters
+     * intact.
+     *
+     * @return a List of expressions from the expressionString
+     */
+
+    public static List getExpressionsFromString(String expressionString) throws ReferenceSyntaxException {
+	if (null == expressionString) {
+	    return Collections.EMPTY_LIST;
+	}
+	List<String> result = new ArrayList<String>();
+	int i, j, len = expressionString.length(), cur = 0;
+	while (cur < len &&
+	       -1 != (i = expressionString.indexOf("#{", cur))) {
+	    if (-1 == (j = expressionString.indexOf("}", i + 2))) {
+		throw new ReferenceSyntaxException(MessageUtils.getExceptionMessageString(MessageUtils.INVALID_EXPRESSION_ID, new Object[]{expressionString}));
+	    }
+	    cur = j + 1;
+	    result.add(expressionString.substring(i, cur));
+	}
+	return result;
+    }
 
     /**
      * <p/>
@@ -1128,7 +914,6 @@ public class Util {
      * @return index of the first occurrence of . or [
      */
     private static int getFirstSegmentIndex(String valueBinding) {
-
         int segmentIndex = valueBinding.indexOf('.');
         int bracketIndex = valueBinding.indexOf('[');
 
@@ -1146,19 +931,128 @@ public class Util {
             }
         }
         return segmentIndex;
-
     }
 
+    /**
+     * <p>Leverage the Throwable.getStackTrace() method to produce a
+     * String version of the stack trace, with a "\n" before each
+     * line.</p>
+     *
+     * @return the String representation ofthe stack trace obtained by
+     * calling getStackTrace() on the passed in exception.  If null is
+     * passed in, we return the empty String.
+     */ 
+
+    public static String getStackTraceString(Throwable e) {
+	if (null == e) {
+	    return "";
+	}
+	
+	StackTraceElement[] stacks = e.getStackTrace();
+	StringBuffer sb = new StringBuffer();
+	for (int i = 0; i < stacks.length; i++) {
+	    sb.append(stacks[i].toString() + "\n");
+	}
+	return sb.toString();
+    }
+
+    /**
+     * <p>PRECONDITION: argument <code>response</code> is non-null and
+     * has a method called <code>getContentType</code> that takes no
+     * arguments and returns a String, with no side-effects.</p>
+     *
+     * <p>This method allows us to get the contentType in both the
+     * servlet and portlet cases, without introducing a compile-time
+     * dependency on the portlet api.</p>
+     *
+     */ 
+
+    public static String getContentTypeFromResponse(Object response) {
+	String result = null;
+	if (null != response) {
+	    Method method = null;
+
+	    try {
+		method = response.getClass().getMethod("getContentType", 
+                                               RIConstants.EMPTY_CLASS_ARGS);
+		if (null != method) {
+		    Object obj = method.invoke(response, RIConstants.EMPTY_METH_ARGS);
+		    if (null != obj) {
+			result = obj.toString();
+		    }
+		}
+	    }
+	    catch (NoSuchMethodException nsme) {
+		throw new FacesException(nsme);
+	    }
+	    catch (IllegalAccessException iae) {
+		throw new FacesException(iae);
+	    }
+	    catch (IllegalArgumentException iare) {
+		throw new FacesException(iare);
+	    }
+	    catch (InvocationTargetException ite) {
+		throw new FacesException(ite);
+	    }
+	    catch (SecurityException e) {
+		throw new FacesException(e);
+	    }
+	}
+	return result;
+    }		
+
+    public static boolean prefixViewTraversal(FacesContext context,
+					      UIComponent root,
+					      TreeTraversalCallback action) throws FacesException {
+	boolean keepGoing = false;
+	if (keepGoing = action.takeActionOnNode(context, root)) {
+	    Iterator<UIComponent> kids = root.getFacetsAndChildren();
+	    while (kids.hasNext() && keepGoing) {
+		keepGoing = prefixViewTraversal(context, 
+						kids.next(), 
+						action);
+	    }
+	}
+	return keepGoing;
+    }
 
     public static interface TreeTraversalCallback {
+	public boolean takeActionOnNode(FacesContext context, 
+					UIComponent curNode) throws FacesException;
+    }
+    
+    public static FeatureDescriptor getFeatureDescriptor(String name, String
+        displayName, String desc, boolean expert, boolean hidden, 
+        boolean preferred, Object type, Boolean designTime) {
+            
+        FeatureDescriptor fd = new FeatureDescriptor();
+        fd.setName(name);
+        fd.setDisplayName(displayName);
+        fd.setShortDescription(desc);
+        fd.setExpert(expert);
+        fd.setHidden(hidden);
+        fd.setPreferred(preferred);
+        fd.setValue(ELResolver.TYPE, type);
+        fd.setValue(ELResolver.RESOLVABLE_AT_DESIGN_TIME, designTime);
+        return fd;
+    }
 
-        // ---------------------------------------------------------- Public Methods
-
-
-        public boolean takeActionOnNode(FacesContext context,
-                                        UIComponent curNode)
-              throws FacesException;
-
+    /** <p>Checks for the existence of a method specified by the "methodName"
+     *  argument, on the "instance" argument.</p>
+     */
+    public static boolean hasDeclaredMethod(Object instance, String methodName) {
+        boolean result = false;
+        // Look for the presence of the method by method name.
+        Class c = instance.getClass();
+        Method[] methods = c.getDeclaredMethods();
+        
+        for (int i = 0; i < methods.length; i++) {
+            if (methods[i].getName().equals(methodName)) {
+                result = true;
+                break;
+            }
+        }
+        return result;
     }
 
 } // end of class Util

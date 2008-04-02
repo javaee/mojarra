@@ -1,5 +1,5 @@
 /*
- * $Id: FacesCompositeELResolver.java,v 1.3 2006/03/29 22:38:32 rlubke Exp $
+ * $Id: FacesCompositeELResolver.java,v 1.4 2006/03/29 23:03:44 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -28,86 +28,72 @@
 
 package com.sun.faces.el;
 
-import javax.el.CompositeELResolver;
-import javax.el.ELContext;
-import javax.el.ELException;
-import javax.el.ELResolver;
-import javax.faces.context.FacesContext;
-
+import java.util.ArrayList;
 import java.util.Iterator;
 
-/** Maintains an ordered composite list of child <code>ELResolver for JSF</code>. */
+import javax.el.ELResolver;
+import javax.el.ELContext;
+import javax.el.CompositeELResolver;
+import javax.el.ELException;
+
+import javax.faces.context.FacesContext;
+
+/**
+ * Maintains an ordered composite list of child <code>ELResolver for JSF</code>.
+ *
+ */
 public class FacesCompositeELResolver extends CompositeELResolver {
-
-    // ---------------------------------------------------------- Public Methods
-
-
-    public void add(ELResolver elResolver) {
-
+    
+    public void add(ELResolver elResolver) {                                                                             
         super.add(elResolver);
-
     }
 
-
-    public Class getCommonPropertyType(ELContext context, Object base) {
-
-        return null;
-
+    public Object getValue(ELContext context, Object base, Object property) 
+        throws ELException {
+                               
+        context.setPropertyResolved(false);                      
+        if (FacesContext.getCurrentInstance() == null) {
+            return null;
+        }                       
+        return super.getValue(context, base, property);
     }
 
-
-    public Iterator getFeatureDescriptors(ELContext context, Object base) {
-
-        return super.getFeatureDescriptors(context, base);
-
-    }
-
-
-    public Class getType(ELContext context, Object base, Object property)
-          throws ELException {
-
+    public Class getType(ELContext context, Object base, Object property) 
+        throws ELException {
         context.setPropertyResolved(false);
         if (FacesContext.getCurrentInstance() == null) {
             return null;
         }
         return super.getType(context, base, property);
-
     }
 
-
-    public Object getValue(ELContext context, Object base, Object property)
-          throws ELException {
-
-        context.setPropertyResolved(false);
-        if (FacesContext.getCurrentInstance() == null) {
-            return null;
-        }
-        return super.getValue(context, base, property);
-
-    }
-
-
-    public boolean isReadOnly(ELContext context, Object base, Object property)
-          throws ELException {
-
-        context.setPropertyResolved(false);
-        if (FacesContext.getCurrentInstance() == null) {
-            return false;
-        }
-        return super.isReadOnly(context, base, property);
-
-    }
-
-
+    
     public void setValue(ELContext context, Object base, Object property,
-                         Object val) throws ELException {
-
+        Object val) throws ELException {
         context.setPropertyResolved(false);
         if (FacesContext.getCurrentInstance() == null) {
             return;
         }
         super.setValue(context, base, property, val);
+    }
 
+    
+    public boolean isReadOnly(ELContext context, Object base, Object property) 
+        throws ELException {
+        context.setPropertyResolved(false);
+        if (FacesContext.getCurrentInstance() == null) {
+            return false;
+        }
+        return super.isReadOnly(context, base, property);
+    }
+
+    
+    public Iterator getFeatureDescriptors(ELContext context, Object base) {
+        return super.getFeatureDescriptors(context, base);
+    }
+    
+    public Class getCommonPropertyType(ELContext context, Object base) {
+        return null;
     }
 
 }

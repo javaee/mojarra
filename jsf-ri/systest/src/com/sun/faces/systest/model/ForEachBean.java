@@ -1,5 +1,5 @@
 /*
- * $Id: ForEachBean.java,v 1.6 2006/03/29 22:38:52 rlubke Exp $
+ * $Id: ForEachBean.java,v 1.7 2006/03/29 23:04:01 rlubke Exp $
  */
 
 /*
@@ -34,73 +34,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/** <p>Test JavaBean for <code>&lt;c:forEach&gt;</code> testing.</p> */
+/**
+ * <p>Test JavaBean for <code>&lt;c:forEach&gt;</code> testing.</p>
+ */
 
 public class ForEachBean {
 
 
-    // String List property with pre-initialized values
-    List listProperty = new ArrayList();
-
-
     // String Array property with pre-initialized values
     private String arrayProperty[] = {
-          "First String",
-          "Second String",
-          "Third String",
-          "Fourth String",
-          "Fifth String"
+        "First String",
+        "Second String",
+        "Third String",
+        "Fourth String",
+        "Fifth String"
     };
 
 
-    // Scalar string property
-    private String stringProperty = "This is a String property";
-
-    // ---------------------------------------------------------- Public Methods
+    public String[] getArrayProperty() {
+        return (arrayProperty);
+    }
 
 
     public void setArrayProperty(String arrayProperty[]) {
-
         this.arrayProperty = arrayProperty;
-
     }
 
 
-    public void setListProperty(List listProperty) {
-
-        this.listProperty = listProperty;
-
-    }
-
-
-    public void setStringProperty(String stringProperty) {
-
-        this.stringProperty = stringProperty;
-
-    }
-
-
-    public String[] getArrayProperty() {
-
-        return (arrayProperty);
-
-    }
-
-
-    public List getListProperty() {
-
-        return (listProperty);
-
-    }
-
-
-    public String getStringProperty() {
-
-        return (this.stringProperty);
-
-    }
-
-    // ------------------------------------------------- Package Private Methods
+    // String List property with pre-initialized values
+    List listProperty = new ArrayList();
 
 
     {
@@ -110,5 +72,30 @@ public class ForEachBean {
         listProperty.add("List Fourth");
         listProperty.add("List Fifth");
     }
+
+
+    public List getListProperty() {
+        return (listProperty);
+    }
+
+
+    public void setListProperty(List listProperty) {
+        this.listProperty = listProperty;
+    }
+
+
+    // Scalar string property
+    private String stringProperty = "This is a String property";
+
+
+    public String getStringProperty() {
+        return (this.stringProperty);
+    }
+
+
+    public void setStringProperty(String stringProperty) {
+        this.stringProperty = stringProperty;
+    }
+
 
 }

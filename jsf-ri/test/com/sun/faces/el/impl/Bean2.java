@@ -89,7 +89,6 @@ package com.sun.faces.el.impl;
 
 public class Bean2 {
 
-
     //-------------------------------------
     // Properties
     //-------------------------------------
@@ -98,8 +97,14 @@ public class Bean2 {
     String mValue;
 
 
-    // ------------------------------------------------------------ Constructors
+    public String getValue() {
+        return mValue;
+    }
 
+
+    public void setValue(String pValue) {
+        mValue = pValue;
+    }
 
     //-------------------------------------
     // Member variables
@@ -110,36 +115,14 @@ public class Bean2 {
      * Constructor
      */
     public Bean2(String pValue) {
-
         mValue = pValue;
-
-    }
-
-
-    // ---------------------------------------------------------- Public Methods
-
-
-    public String getValue() {
-
-        return mValue;
-
-    }
-
-
-    public void setValue(String pValue) {
-
-        mValue = pValue;
-
     }
 
 
     //-------------------------------------
     public String toString() {
-
         return ("Bean2[" + mValue + "]");
-
     }
-
 
     //-------------------------------------
 

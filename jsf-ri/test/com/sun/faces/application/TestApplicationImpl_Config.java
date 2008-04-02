@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.39 2006/03/29 22:39:35 rlubke Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.40 2006/03/29 23:04:39 rlubke Exp $
  */
 
 /*
@@ -57,100 +57,14 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.39 2006/03/29 22:39:35 rlubke Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.40 2006/03/29 23:04:39 rlubke Exp $
  */
 
 public class TestApplicationImpl_Config extends ServletFacesTestCase {
 
-
-    public static Class standardComponentClasses[] = {
-        javax.faces.component.UIColumn.class,
-        javax.faces.component.UICommand.class,
-        javax.faces.component.UIData.class,
-        javax.faces.component.UIForm.class,
-        javax.faces.component.UIGraphic.class,
-        javax.faces.component.UIInput.class,
-        javax.faces.component.UIMessage.class,
-        javax.faces.component.UIMessages.class,
-        javax.faces.component.UINamingContainer.class,
-        javax.faces.component.UIOutput.class,
-        javax.faces.component.UIPanel.class,
-        javax.faces.component.UIParameter.class,
-        javax.faces.component.UISelectBoolean.class,
-        javax.faces.component.UISelectItem.class,
-        javax.faces.component.UISelectItems.class,
-        javax.faces.component.UISelectMany.class,
-        javax.faces.component.UISelectOne.class,
-        javax.faces.component.UIViewRoot.class,
-        javax.faces.component.html.HtmlCommandButton.class,
-        javax.faces.component.html.HtmlCommandLink.class,
-        javax.faces.component.html.HtmlDataTable.class,
-        javax.faces.component.html.HtmlForm.class,
-        javax.faces.component.html.HtmlGraphicImage.class,
-        javax.faces.component.html.HtmlInputHidden.class,
-        javax.faces.component.html.HtmlInputSecret.class,
-        javax.faces.component.html.HtmlInputText.class,
-        javax.faces.component.html.HtmlInputTextarea.class,
-        javax.faces.component.html.HtmlMessage.class,
-        javax.faces.component.html.HtmlMessages.class,
-        javax.faces.component.html.HtmlOutputFormat.class,
-        javax.faces.component.html.HtmlOutputLabel.class,
-        javax.faces.component.html.HtmlOutputLink.class,
-        javax.faces.component.html.HtmlOutputText.class,
-        javax.faces.component.html.HtmlPanelGrid.class,
-        javax.faces.component.html.HtmlPanelGroup.class,
-        javax.faces.component.html.HtmlSelectBooleanCheckbox.class,
-        javax.faces.component.html.HtmlSelectManyCheckbox.class,
-        javax.faces.component.html.HtmlSelectManyListbox.class,
-        javax.faces.component.html.HtmlSelectManyMenu.class,
-        javax.faces.component.html.HtmlSelectOneListbox.class,
-        javax.faces.component.html.HtmlSelectOneMenu.class,
-        javax.faces.component.html.HtmlSelectOneRadio.class
-    };
-
-    public static Class standardConverterByIdClasses[] = {
-        java.math.BigDecimal.class,
-        java.math.BigInteger.class,
-        java.lang.Boolean.class,
-        java.lang.Byte.class,
-        java.lang.Character.class,
-        null,
-        java.lang.Double.class,
-        java.lang.Float.class,
-        java.lang.Integer.class,
-        java.lang.Long.class,
-        null,
-        java.lang.Short.class
-    };
-    public static Class standardConverterClasses[] = {
-        javax.faces.convert.BigDecimalConverter.class,
-        javax.faces.convert.BigIntegerConverter.class,
-        javax.faces.convert.BooleanConverter.class,
-        javax.faces.convert.ByteConverter.class,
-        javax.faces.convert.CharacterConverter.class,
-        javax.faces.convert.DateTimeConverter.class,
-        javax.faces.convert.DoubleConverter.class,
-        javax.faces.convert.FloatConverter.class,
-        javax.faces.convert.IntegerConverter.class,
-        javax.faces.convert.LongConverter.class,
-        javax.faces.convert.NumberConverter.class,
-        javax.faces.convert.ShortConverter.class
-    };
-
-    public static Class standardConverterPrimitiveClasses[] = {
-        null,
-        null,
-        java.lang.Boolean.TYPE,
-        java.lang.Byte.TYPE,
-        java.lang.Character.TYPE,
-        null,
-        java.lang.Double.TYPE,
-        java.lang.Float.TYPE,
-        java.lang.Integer.TYPE,
-        java.lang.Long.TYPE,
-        null,
-        java.lang.Short.TYPE
-    };
+//
+// Protected Constants
+//
 
     public static String standardComponentTypes[] = {
         "javax.faces.Column",
@@ -197,6 +111,51 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
         "javax.faces.HtmlSelectOneRadio"
     };
 
+    public static Class standardComponentClasses[] = {
+        javax.faces.component.UIColumn.class,
+        javax.faces.component.UICommand.class,
+        javax.faces.component.UIData.class,
+        javax.faces.component.UIForm.class,
+        javax.faces.component.UIGraphic.class,
+        javax.faces.component.UIInput.class,
+        javax.faces.component.UIMessage.class,
+        javax.faces.component.UIMessages.class,
+        javax.faces.component.UINamingContainer.class,
+        javax.faces.component.UIOutput.class,
+        javax.faces.component.UIPanel.class,
+        javax.faces.component.UIParameter.class,
+        javax.faces.component.UISelectBoolean.class,
+        javax.faces.component.UISelectItem.class,
+        javax.faces.component.UISelectItems.class,
+        javax.faces.component.UISelectMany.class,
+        javax.faces.component.UISelectOne.class,
+        javax.faces.component.UIViewRoot.class,
+        javax.faces.component.html.HtmlCommandButton.class,
+        javax.faces.component.html.HtmlCommandLink.class,
+        javax.faces.component.html.HtmlDataTable.class,
+        javax.faces.component.html.HtmlForm.class,
+        javax.faces.component.html.HtmlGraphicImage.class,
+        javax.faces.component.html.HtmlInputHidden.class,
+        javax.faces.component.html.HtmlInputSecret.class,
+        javax.faces.component.html.HtmlInputText.class,
+        javax.faces.component.html.HtmlInputTextarea.class,
+        javax.faces.component.html.HtmlMessage.class,
+        javax.faces.component.html.HtmlMessages.class,
+        javax.faces.component.html.HtmlOutputFormat.class,
+        javax.faces.component.html.HtmlOutputLabel.class,
+        javax.faces.component.html.HtmlOutputLink.class,
+        javax.faces.component.html.HtmlOutputText.class,
+        javax.faces.component.html.HtmlPanelGrid.class,
+        javax.faces.component.html.HtmlPanelGroup.class,
+        javax.faces.component.html.HtmlSelectBooleanCheckbox.class,
+        javax.faces.component.html.HtmlSelectManyCheckbox.class,
+        javax.faces.component.html.HtmlSelectManyListbox.class,
+        javax.faces.component.html.HtmlSelectManyMenu.class,
+        javax.faces.component.html.HtmlSelectOneListbox.class,
+        javax.faces.component.html.HtmlSelectOneMenu.class,
+        javax.faces.component.html.HtmlSelectOneRadio.class
+    };
+
     public static String standardConverterIds[] = {
         "javax.faces.BigDecimal",
         "javax.faces.BigInteger",
@@ -211,75 +170,103 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
         "javax.faces.Number",
         "javax.faces.Short"
     };
+    public static Class standardConverterClasses[] = {
+        javax.faces.convert.BigDecimalConverter.class,
+        javax.faces.convert.BigIntegerConverter.class,
+        javax.faces.convert.BooleanConverter.class,
+        javax.faces.convert.ByteConverter.class,
+        javax.faces.convert.CharacterConverter.class,
+        javax.faces.convert.DateTimeConverter.class,
+        javax.faces.convert.DoubleConverter.class,
+        javax.faces.convert.FloatConverter.class,
+        javax.faces.convert.IntegerConverter.class,
+        javax.faces.convert.LongConverter.class,
+        javax.faces.convert.NumberConverter.class,
+        javax.faces.convert.ShortConverter.class
+    };
 
+    public static Class standardConverterByIdClasses[] = {
+        java.math.BigDecimal.class,
+        java.math.BigInteger.class,
+        java.lang.Boolean.class,
+        java.lang.Byte.class,
+        java.lang.Character.class,
+        null,
+        java.lang.Double.class,
+        java.lang.Float.class,
+        java.lang.Integer.class,
+        java.lang.Long.class,
+        null,
+        java.lang.Short.class
+    };
+
+    public static Class standardConverterPrimitiveClasses[] = {
+        null,
+        null,
+        java.lang.Boolean.TYPE,
+        java.lang.Byte.TYPE,
+        java.lang.Character.TYPE,
+        null,
+        java.lang.Double.TYPE,
+        java.lang.Float.TYPE,
+        java.lang.Integer.TYPE,
+        java.lang.Long.TYPE,
+        null,
+        java.lang.Short.TYPE
+    };
+
+
+//
+// Class Variables
+//
+
+//
+// Instance Variables
+//
     private ApplicationImpl application = null;
 
+// Attribute Instance Variables
 
-    // ------------------------------------------------------------ Constructors
+// Relationship Instance Variables
 
+//
+// Constructors and Initializers    
+//
 
     public TestApplicationImpl_Config() {
-
         super("TestApplicationImpl_Config");
-
     }
 
 
     public TestApplicationImpl_Config(String name) {
-
         super(name);
-
     }
+//
+// Class methods
+//
 
-
-    // ---------------------------------------------------------- Public Methods
-
+//
+// General Methods
+//
 
     public void setUp() {
-
         super.setUp();
         ApplicationFactory aFactory =
             (ApplicationFactory) FactoryFinder.getFactory(
                 FactoryFinder.APPLICATION_FACTORY);
         application = (ApplicationImpl) aFactory.getApplication();
-
     }
-
-
-    public void testComponentNegative() {
-
-        boolean exceptionThrown = false;
-
-        // componentType/componentClass with non-existent class
-        try {
-            application.addComponent("William",
-                                     "BillyBoy");
-            application.createComponent("William");
-        } catch (FacesException e) {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-
-        // non-existent mapping
-        exceptionThrown = false;
-        try {
-            application.createComponent("Joebob");
-        } catch (FacesException e) {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-
-    }
-
-
+	
     //****
     //**** NOTE: We should add a test for finding a faces-config.xml file under 
     //****       WEB-INF/classes/META-INF.
     //****
 
-  
-    public void testComponentPositive() {
+    //
+    // Test Config related methods
+    //
 
+    public void testComponentPositive() {
         TestComponent
             newTestComponent = null,
             testComponent = new TestComponent();
@@ -304,19 +291,17 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
             assertTrue(
                 standardComponentClasses[i].isAssignableFrom(uic.getClass()));
         }
-
     }
 
 
-    public void testConverterNegative() {
-
+    public void testComponentNegative() {
         boolean exceptionThrown = false;
 
         // componentType/componentClass with non-existent class
         try {
-            application.addConverter("William",
+            application.addComponent("William",
                                      "BillyBoy");
-            application.createConverter("William");
+            application.createComponent("William");
         } catch (FacesException e) {
             exceptionThrown = true;
         }
@@ -325,7 +310,7 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
         // non-existent mapping
         exceptionThrown = false;
         try {
-            application.createConverter("Joebob");
+            application.createComponent("Joebob");
         } catch (FacesException e) {
             exceptionThrown = true;
         }
@@ -334,8 +319,15 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
     }
 
 
-    public void testConverterPositive() {
+    public void testGetComponentTypes() {
+        Iterator iter = application.getComponentTypes();
+        assertTrue(null != iter);
 
+        assertTrue(isSubset(standardComponentTypes, iter));
+    }
+
+
+    public void testConverterPositive() {
         TestConverter
             newTestConverter = null,
             testConverter = new TestConverter();
@@ -394,32 +386,98 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
             assertTrue(
                 standardConverterClasses[i].isAssignableFrom(conv.getClass()));
         }
-
     }
 
 
-    public void testGetComponentTypes() {
+    public void testConverterNegative() {
+        boolean exceptionThrown = false;
 
-        Iterator iter = application.getComponentTypes();
-        assertTrue(null != iter);
+        // componentType/componentClass with non-existent class
+        try {
+            application.addConverter("William",
+                                     "BillyBoy");
+            application.createConverter("William");
+        } catch (FacesException e) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
 
-        assertTrue(isSubset(standardComponentTypes, iter));
+        // non-existent mapping
+        exceptionThrown = false;
+        try {
+            application.createConverter("Joebob");
+        } catch (FacesException e) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
 
     }
 
 
     public void testGetConverterIds() {
-
         Iterator iter = application.getConverterIds();
         assertTrue(null != iter);
 
         assertTrue(isSubset(standardConverterIds, iter));
+    }
+
+
+    public void testValidatorPositive() {
+        Validator
+            newTestValidator = null,
+            testValidator = new LengthValidator();
+        Validator val = null;
+
+        // runtime addition
+
+        application.addValidator("Billybob",
+                                 "javax.faces.validator.LengthValidator");
+        assertTrue(null != (newTestValidator =
+            application.createValidator("Billybob")));
+        assertTrue(newTestValidator != testValidator);
+
+        // test standard components
+        assertTrue(
+            null !=
+            (val = application.createValidator("javax.faces.DoubleRange")));
+        assertTrue(val instanceof Validator);
+        assertTrue(
+            null != (val = application.createValidator("javax.faces.Length")));
+        assertTrue(val instanceof Validator);
+        assertTrue(
+            null !=
+            (val = application.createValidator("javax.faces.LongRange")));
+        assertTrue(val instanceof Validator);
+
+    }
+
+
+    public void testValidatorNegative() {
+        boolean exceptionThrown = false;
+
+        // componentType/componentClass with non-existent class
+        try {
+            application.addValidator("William",
+                                     "BillyBoy");
+            application.createValidator("William");
+        } catch (FacesException e) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+
+        // non-existent mapping
+        exceptionThrown = false;
+        try {
+            application.createValidator("Joebob");
+        } catch (FacesException e) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
 
     }
 
 
     public void testGetValidatorIds() {
-
         Iterator iter = application.getValidatorIds();
         assertTrue(null != iter);
         String standardValidatorIds[] = {
@@ -429,25 +487,57 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
         };
 
         assertTrue(isSubset(standardValidatorIds, iter));
-
     }
 
 
-    public void testLocaleConfigNegative2() {
+    public void testUpdateRuntimeComponents() {
+        loadFromInitParam("/runtime-components.xml");
+        ApplicationFactory aFactory =
+            (ApplicationFactory) FactoryFinder.getFactory(
+                FactoryFinder.APPLICATION_FACTORY);
+        application = (ApplicationImpl) aFactory.getApplication();
 
-        boolean exceptionThrown = false;
-        try {
-            loadFromInitParam("/locale-config2.xml");
-        } catch (FacesException e) {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
+        ActionListener actionListener = null;
+        NavigationHandler navHandler = null;
+        PropertyResolver propResolver = null;
+        VariableResolver varResolver = null;
+        ViewHandler viewHandler = null;
+        StateManager stateManager = null;
 
+        assertTrue(null != (actionListener =
+                            application.getActionListener()));
+        assertTrue(actionListener instanceof com.sun.faces.TestActionListener);
+
+        assertTrue(null != (navHandler =
+                            application.getNavigationHandler()));
+        assertTrue(navHandler instanceof com.sun.faces.TestNavigationHandler);
+
+        // JSF1.2 BI: application.getPropertyResolver() no longer returns the 
+        // head of the PropertyResolver. Instead returns the head of the 
+        // ELResolver stack wrapped in a PropertyResolver.This also applies to
+        // VariableResolver
+        assertTrue(null != (propResolver =
+                            application.getPropertyResolver()));
+        assertTrue(
+            application.getPropertyResolver() instanceof javax.faces.el.PropertyResolver);
+        assertTrue(null != (varResolver =
+                            application.getVariableResolver()));
+        assertTrue(varResolver instanceof javax.faces.el.VariableResolver);
+
+        assertTrue(null != (viewHandler =
+                            application.getViewHandler()));
+        assertTrue(viewHandler instanceof javax.faces.application.ViewHandler);
+
+        assertTrue(null != (stateManager =
+                            application.getStateManager()));
+        assertTrue(
+            stateManager instanceof javax.faces.application.StateManager);
+        System.out.println("DEFAULT:" + application.getDefaultRenderKitId());
+        assertEquals("WackyRenderKit", application.getDefaultRenderKitId());
     }
 
 
     public void testLocaleConfigPositive() {
-
         loadFromInitParam("/locale-config.xml");
         ApplicationFactory aFactory =
             (ApplicationFactory) FactoryFinder.getFactory(
@@ -499,73 +589,10 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
     }
 
 
-    public void testUpdateRuntimeComponents() {
-
-        loadFromInitParam("/runtime-components.xml");
-        ApplicationFactory aFactory =
-            (ApplicationFactory) FactoryFinder.getFactory(
-                FactoryFinder.APPLICATION_FACTORY);
-        application = (ApplicationImpl) aFactory.getApplication();
-
-        ActionListener actionListener = null;
-        NavigationHandler navHandler = null;
-        PropertyResolver propResolver = null;
-        VariableResolver varResolver = null;
-        ViewHandler viewHandler = null;
-        StateManager stateManager = null;
-
-        assertTrue(null != (actionListener =
-                            application.getActionListener()));
-        assertTrue(actionListener instanceof com.sun.faces.TestActionListener);
-
-        assertTrue(null != (navHandler =
-                            application.getNavigationHandler()));
-        assertTrue(navHandler instanceof com.sun.faces.TestNavigationHandler);
-
-        // JSF1.2 BI: application.getPropertyResolver() no longer returns the 
-        // head of the PropertyResolver. Instead returns the head of the 
-        // ELResolver stack wrapped in a PropertyResolver.This also applies to
-        // VariableResolver
-        assertTrue(null != (propResolver =
-                            application.getPropertyResolver()));
-        assertTrue(
-            application.getPropertyResolver() instanceof javax.faces.el.PropertyResolver);
-        assertTrue(null != (varResolver =
-                            application.getVariableResolver()));
-        assertTrue(varResolver instanceof javax.faces.el.VariableResolver);
-
-        assertTrue(null != (viewHandler =
-                            application.getViewHandler()));
-        assertTrue(viewHandler instanceof javax.faces.application.ViewHandler);
-
-        assertTrue(null != (stateManager =
-                            application.getStateManager()));
-        assertTrue(
-            stateManager instanceof javax.faces.application.StateManager);
-        System.out.println("DEFAULT:" + application.getDefaultRenderKitId());
-        assertEquals("WackyRenderKit", application.getDefaultRenderKitId());
-
-    }
-
-
-    public void testValidatorNegative() {
-
+    public void testLocaleConfigNegative2() {
         boolean exceptionThrown = false;
-
-        // componentType/componentClass with non-existent class
         try {
-            application.addValidator("William",
-                                     "BillyBoy");
-            application.createValidator("William");
-        } catch (FacesException e) {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-
-        // non-existent mapping
-        exceptionThrown = false;
-        try {
-            application.createValidator("Joebob");
+            loadFromInitParam("/locale-config2.xml");
         } catch (FacesException e) {
             exceptionThrown = true;
         }
@@ -573,35 +600,5 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 
     }
 
-
-    public void testValidatorPositive() {
-
-        Validator
-            newTestValidator = null,
-            testValidator = new LengthValidator();
-        Validator val = null;
-
-        // runtime addition
-
-        application.addValidator("Billybob",
-                                 "javax.faces.validator.LengthValidator");
-        assertTrue(null != (newTestValidator =
-            application.createValidator("Billybob")));
-        assertTrue(newTestValidator != testValidator);
-
-        // test standard components
-        assertTrue(
-            null !=
-            (val = application.createValidator("javax.faces.DoubleRange")));
-        assertTrue(val instanceof Validator);
-        assertTrue(
-            null != (val = application.createValidator("javax.faces.Length")));
-        assertTrue(val instanceof Validator);
-        assertTrue(
-            null !=
-            (val = application.createValidator("javax.faces.LongRange")));
-        assertTrue(val instanceof Validator);
-
-    }
 
 } // end of class TestApplicationImpl_Config

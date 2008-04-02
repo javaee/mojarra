@@ -1,5 +1,5 @@
 /*
- * $Id: ParameterTag.java,v 1.18 2006/03/29 22:38:41 rlubke Exp $
+ * $Id: ParameterTag.java,v 1.19 2006/03/29 23:03:51 rlubke Exp $
  */
 
 /*
@@ -35,57 +35,68 @@ import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
 import javax.faces.webapp.UIComponentELTag;
+import javax.servlet.jsp.JspException;
 
 public class ParameterTag extends UIComponentELTag {
 
+//
+// Protected Constants
+//
 
+//
+// Class Variables
+//
+
+//
+// Instance Variables
+//
     private ValueExpression name;
     private ValueExpression value;
 
-    // ------------------------------------------------------------ Constructors
+// Attribute Instance Variables
 
+
+// Relationship Instance Variables
+
+//
+// Constructors and Initializers
+//
 
     public ParameterTag() {
-
         super();
-
     }
 
-    // ---------------------------------------------------------- Public Methods
+//
+// Class methods
+//
 
-
+//
+// Accessors
+//
     public void setName(ValueExpression name) {
-
         this.name = name;
-
     }
 
 
     public void setValue(ValueExpression value) {
-
         this.value = value;
+    }
 
+//
+// General Methods
+//
+
+    public String getRendererType() {
+        return null;
     }
 
 
     public String getComponentType() {
-
         return "javax.faces.Parameter";
-
     }
-
-
-    public String getRendererType() {
-
-        return null;
-
-    }
-
-    // ------------------------------------------------------- Protected Methods
 
 
     protected void setProperties(UIComponent component) {
-
         super.setProperties(component);
         UIParameter parameter = (UIParameter) component;
 
@@ -104,7 +115,5 @@ public class ParameterTag extends UIComponentELTag {
                 parameter.setValue(value.getExpressionString());
             }
         }
-
     }
-
 }

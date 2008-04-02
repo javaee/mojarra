@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextFactoryImpl.java,v 1.16 2006/03/29 22:38:32 rlubke Exp $
+ * $Id: FacesContextFactoryImpl.java,v 1.17 2006/03/29 23:03:43 rlubke Exp $
  */
 
 /*
@@ -29,6 +29,10 @@
 
 package com.sun.faces.context;
 
+import com.sun.faces.RIConstants;
+import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
+
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
@@ -37,13 +41,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
-
 public class FacesContextFactoryImpl extends FacesContextFactory {
-
-    // ------------------------------------------------------------ Constructors
 
     //
     // Protected Constants
@@ -66,12 +64,8 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
     //
 
     public FacesContextFactoryImpl() {
-
         super();
-
     }
-
-    // ---------------------------------------------------------- Public Methods
 
     //
     // Class methods
@@ -88,7 +82,7 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
                                                      Object request,
                                                      Object response,
                                                      Lifecycle lifecycle)
-          throws FacesException {
+        throws FacesException {
 
         try {
             Util.parameterNonNull(sc);
@@ -97,8 +91,8 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
             Util.parameterNonNull(lifecycle);
         } catch (Exception e) {
             throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(
-                        MessageUtils.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(
+                    MessageUtils.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
         }
 
         ServletContext ctx = (ServletContext) sc;
@@ -111,12 +105,13 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
             Util.verifyFactoriesAndInitDefaultRenderKit(ctx);
         }
         return (new FacesContextImpl(new ExternalContextImpl(
-              (ServletContext) sc,
-              (ServletRequest) request, (ServletResponse) response),
-                                     lifecycle));
+            (ServletContext) sc,
+            (ServletRequest) request, (ServletResponse) response), lifecycle));
 
     }
 
+
 // The testcase for this class is TestSerlvetFacesContextFactory.java 
+
 
 } // end of class FacesContextFactoryImpl

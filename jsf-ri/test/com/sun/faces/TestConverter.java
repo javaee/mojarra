@@ -29,14 +29,8 @@ import javax.faces.convert.NumberConverter;
 
 public class TestConverter extends NumberConverter {
 
-
-    // ---------------------------------------------------------- Public Methods
-
-
     public String getConverterId() {
-
         return "TestConverter";
-
     }
 
 }

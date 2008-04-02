@@ -1,5 +1,5 @@
 /*
- * $Id: ApplyRequestValuesPhase.java,v 1.22 2006/03/29 22:38:34 rlubke Exp $
+ * $Id: ApplyRequestValuesPhase.java,v 1.23 2006/03/29 23:03:45 rlubke Exp $
  */
 
 /*
@@ -34,8 +34,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import com.sun.faces.util.Util;
 
@@ -47,17 +47,45 @@ import com.sun.faces.util.Util;
  */
 public class ApplyRequestValuesPhase extends Phase {
 
+    //
+    // Protected Constants
+    //
+
+    //
+    // Class Variables
+    //
+
+    //
+    // Instance Variables
+    //
     // Log instance for this class
-    private static Logger logger = Util.getLogger(Util.FACES_LOGGER
-                                                  + Util.LIFECYCLE_LOGGER);
+    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
+            + Util.LIFECYCLE_LOGGER);
 
-    // ------------------------------------------------------------ Constructors
+    // Relationship Instance Variables
 
+    //
+    // Constructors and Genericializers    
+    //
 
     public ApplyRequestValuesPhase() {
     }
 
-    // ---------------------------------------------------------- Public Methods
+    //
+    // Class methods
+    //
+
+    //
+    // General Methods
+    //
+
+    //
+    // Methods from Phase
+    //
+
+    public PhaseId getId() {
+        return PhaseId.APPLY_REQUEST_VALUES;
+    }
 
 
     public void execute(FacesContext facesContext) throws FacesException {
@@ -75,7 +103,7 @@ public class ApplyRequestValuesPhase extends Phase {
             String exceptionMessage = re.getMessage();
             if (null != exceptionMessage) {
                 if (logger.isLoggable(Level.WARNING)) {
-                    logger.log(Level.WARNING, exceptionMessage, re);
+                    logger.log(Level.WARNING,exceptionMessage, re);
                 }
             }
             throw new FacesException(exceptionMessage, re);
@@ -83,13 +111,6 @@ public class ApplyRequestValuesPhase extends Phase {
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("Exiting ApplyRequestValuesPhase");
         }
-
-    }
-
-    public PhaseId getId() {
-
-        return PhaseId.APPLY_REQUEST_VALUES;
-
     }
 
     // The testcase for this class is TestApplyRequestValuesPhase.java

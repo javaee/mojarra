@@ -1,5 +1,5 @@
 /*
- * $Id: CoreTagParserImpl.java,v 1.3 2006/03/29 22:38:41 rlubke Exp $
+ * $Id: CoreTagParserImpl.java,v 1.4 2006/03/29 23:03:51 rlubke Exp $
  */
 
 /*
@@ -29,14 +29,13 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
-
-import org.xml.sax.Attributes;
-
 import com.sun.faces.RIConstants;
 import com.sun.faces.taglib.TagParser;
 import com.sun.faces.taglib.ValidatorInfo;
+import org.xml.sax.Attributes;
+
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
 
 /**
  * <p> Parses the command tag attributes and verifies that the required
@@ -48,79 +47,19 @@ public class CoreTagParserImpl implements TagParser {
     // Validation and configuration state (protected)
 
     // PENDING(edburns): Make this localizable
-    private StringBuffer failureMessages;    // failureMessages
-    private ValidatorInfo validatorInfo;
+    private StringBuffer failureMessages;	// failureMessages
     private boolean failed;
-
-    // ------------------------------------------------------------ Constructors
+    private ValidatorInfo validatorInfo;
 
     //*********************************************************************
     // Constructor and lifecycle management
 
-    /** <p>CoreTagParserImpl constructor</p> */
+    /**
+     * <p>CoreTagParserImpl constructor</p>
+     */
     public CoreTagParserImpl() {
-
         failed = false;
         failureMessages = new StringBuffer();
-
-    }
-
-    // -------------------------------------------------- Methods From TagParser
-
-
-    /**
-     * <p>Get the failure message</p>
-     *
-     * @return String Failure message
-     */
-    public String getMessage() {
-
-        return failureMessages.toString();
-
-    }
-
-
-    /**
-     * <p>Return false if validator conditions have not been met</p>
-     *
-     * @return boolean false if validation conditions have not been met
-     */
-    public boolean hasFailed() {
-
-        return failed;
-
-    }
-
-
-    /** <p>Parse the end element</p> */
-    public void parseEndElement() {
-
-        //no parsing required
-
-    }
-
-
-    /**
-     * <p>Parse the starting element.  Parcel out to appropriate
-     * handler method.</p>
-     */
-    public void parseStartElement() {
-
-        String ns = validatorInfo.getNameSpace();
-        String ln = validatorInfo.getLocalName();
-
-        if (ns.equals(RIConstants.CORE_NAMESPACE)) {
-            if (ln.equals("valueChangeListener")) {
-                handleListener();
-            } else if (ln.equals("actionListener")) {
-                handleListener();
-            } else if (ln.equals("converter")) {
-                handleConverter();
-            } else if (ln.equals("validator")) {
-                handleValidator();
-            }
-        }
-
     }
 
 
@@ -131,46 +70,60 @@ public class CoreTagParserImpl implements TagParser {
      * @param ValidatorInfo object with current tag info
      */
     public void setValidatorInfo(ValidatorInfo validatorInfo) {
-
         this.validatorInfo = validatorInfo;
-
     }
-
-    // --------------------------------------------------------- Private Methods
 
 
     /**
-     * <p>Converter tag must have a "converterId" and/or "binding" attribute.</p>
-     * <p/>
-     * <p>PRECONDITION: qn is a converter</p>
+     * <p>Get the failure message</p>
+     *
+     * @return String Failure message
      */
-    private void handleConverter() {
-
-        Attributes attrs = validatorInfo.getAttributes();
-        String ln = validatorInfo.getLocalName();
-        boolean hasConverterId = false;
-        boolean hasBinding = false;
-
-        for (int i = 0; i < attrs.getLength(); i++) {
-            if (attrs.getLocalName(i).equals("converterId")) {
-                hasConverterId = true;
-            }
-            if (attrs.getLocalName(i).equals("binding")) {
-                hasBinding = true;
-            }
-        }
-        if (failed = (!hasBinding && !hasConverterId)) {
-            Object[] obj = new Object[1];
-            obj[0] = ln;
-            ResourceBundle rb = ResourceBundle.getBundle(
-                  RIConstants.TLV_RESOURCE_LOCATION);
-            failureMessages.append(
-                  MessageFormat.format(rb.getString("TLV_CONVERTER_ERROR"),
-                                       obj));
-            failureMessages.append("\n");
-        }
-
+    public String getMessage() {
+        return failureMessages.toString();
     }
+
+
+    /**
+     * <p>Return false if validator conditions have not been met</p>
+     *
+     * @return boolean false if validation conditions have not been met
+     */
+    public boolean hasFailed() {
+        return failed;
+    }
+
+
+    /**
+     * <p>Parse the starting element.  Parcel out to appropriate
+     * handler method.</p>
+     */
+    public void parseStartElement() {
+       
+        String ns = validatorInfo.getNameSpace();
+        String ln = validatorInfo.getLocalName();
+
+        if (ns.equals(RIConstants.CORE_NAMESPACE)) {
+            if(ln.equals("valueChangeListener")) {
+                handleListener();
+            } else if (ln.equals("actionListener")) {
+                handleListener();
+            } else if (ln.equals("converter")) {
+                handleConverter();
+            } else if (ln.equals("validator")) {
+                handleValidator();
+            }
+        }
+    }
+
+
+    /**
+     * <p>Parse the end element</p>
+     */
+    public void parseEndElement() {
+        //no parsing required
+    }
+
 
     //*********************************************************************
     // Private methods
@@ -181,11 +134,10 @@ public class CoreTagParserImpl implements TagParser {
      * <p>PRECONDITION: qn is an actionListener or valueChangeListener </p>
      */
     private void handleListener() {
-
         Attributes attrs = validatorInfo.getAttributes();
         String ln = validatorInfo.getLocalName();
-        boolean hasType = false;
-        boolean hasBinding = false;
+	boolean hasType = false;
+	boolean hasBinding = false;
 
         for (int i = 0; i < attrs.getLength(); i++) {
             if (attrs.getLocalName(i).equals("type")) {
@@ -199,15 +151,12 @@ public class CoreTagParserImpl implements TagParser {
             Object[] obj = new Object[1];
             obj[0] = ln;
             ResourceBundle rb = ResourceBundle.getBundle(
-                  RIConstants.TLV_RESOURCE_LOCATION);
+                RIConstants.TLV_RESOURCE_LOCATION);
             failureMessages.append(
-                  MessageFormat.format(rb.getString("TLV_LISTENER_ERROR"),
-                                       obj));
+                MessageFormat.format(rb.getString("TLV_LISTENER_ERROR"), obj));
             failureMessages.append("\n");
         }
-
     }
-
 
     /**
      * <p>Validator tag must have a "validatorId" and/or "binding" attribute.</p>
@@ -215,12 +164,11 @@ public class CoreTagParserImpl implements TagParser {
      * <p>PRECONDITION: qn is a validator</p>
      */
     private void handleValidator() {
-
         Attributes attrs = validatorInfo.getAttributes();
         String ln = validatorInfo.getLocalName();
         boolean hasValidatorId = false;
         boolean hasBinding = false;
-
+                                                                                     
         for (int i = 0; i < attrs.getLength(); i++) {
             if (attrs.getLocalName(i).equals("validatorId")) {
                 hasValidatorId = true;
@@ -233,13 +181,40 @@ public class CoreTagParserImpl implements TagParser {
             Object[] obj = new Object[1];
             obj[0] = ln;
             ResourceBundle rb = ResourceBundle.getBundle(
-                  RIConstants.TLV_RESOURCE_LOCATION);
+                RIConstants.TLV_RESOURCE_LOCATION);
             failureMessages.append(
-                  MessageFormat.format(rb.getString("TLV_VALIDATOR_ERROR"),
-                                       obj));
+                MessageFormat.format(rb.getString("TLV_VALIDATOR_ERROR"), obj));
             failureMessages.append("\n");
         }
-
     }
 
+    /**
+     * <p>Converter tag must have a "converterId" and/or "binding" attribute.</p>
+     * <p/>
+     * <p>PRECONDITION: qn is a converter</p>
+     */
+    private void handleConverter() {
+        Attributes attrs = validatorInfo.getAttributes();
+        String ln = validatorInfo.getLocalName();
+        boolean hasConverterId = false;
+        boolean hasBinding = false;
+                                                                                     
+        for (int i = 0; i < attrs.getLength(); i++) {
+            if (attrs.getLocalName(i).equals("converterId")) {
+                hasConverterId = true;
+            }
+            if (attrs.getLocalName(i).equals("binding")) {
+                hasBinding = true;
+            }
+        }
+        if (failed = (!hasBinding && !hasConverterId)) {
+            Object[] obj = new Object[1];
+            obj[0] = ln;
+            ResourceBundle rb = ResourceBundle.getBundle(
+                RIConstants.TLV_RESOURCE_LOCATION);
+            failureMessages.append(
+                MessageFormat.format(rb.getString("TLV_CONVERTER_ERROR"), obj));
+            failureMessages.append("\n");
+        }
+    }
 }

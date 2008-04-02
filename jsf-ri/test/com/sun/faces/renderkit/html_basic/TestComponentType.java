@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponentType.java,v 1.11 2006/03/29 22:39:46 rlubke Exp $
+ * $Id: TestComponentType.java,v 1.12 2006/03/29 23:05:00 rlubke Exp $
  */
 
 /*
@@ -42,32 +42,47 @@ import javax.faces.component.UISelectMany;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestComponentType.java,v 1.11 2006/03/29 22:39:46 rlubke Exp $
+ * @version $Id: TestComponentType.java,v 1.12 2006/03/29 23:05:00 rlubke Exp $
  */
 
 public class TestComponentType extends TestCase // ServletTestCase
 {
 
+//
+// Protected Constants
+//
 
-    // ------------------------------------------------------------ Constructors
+// Class Variables
+//
 
+//
+// Instance Variables
+//
+
+// Attribute Instance Variables
+
+// Relationship Instance Variables
+
+//
+// Constructors and Initializers    
+//
 
     public TestComponentType() {
-
         super("TestComponentType.java");
-
     }
 
 
     public TestComponentType(String name) {
-
         super(name);
-
     }
 
+//
+// Class methods
+//
 
-    // ---------------------------------------------------------- Public Methods
-    
+//
+// General Methods
+//
 
     public void testComponentTypeCheck() {
 
@@ -91,12 +106,12 @@ public class TestComponentType extends TestCase // ServletTestCase
         multipleText = mr.getMultipleText(output);
         assertTrue(!multipleText.equals(" multiple "));
         assertTrue(multipleText.equals(""));
-
     }
 
 
     public class MyComponent extends UISelectMany {
 
     }
+
 
 } // end of class TestComponentType

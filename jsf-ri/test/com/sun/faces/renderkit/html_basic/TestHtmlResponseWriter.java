@@ -1,5 +1,5 @@
 /*
- * $Id: TestHtmlResponseWriter.java,v 1.19 2006/03/29 22:39:46 rlubke Exp $
+ * $Id: TestHtmlResponseWriter.java,v 1.20 2006/03/29 23:05:01 rlubke Exp $
  */
 
 /*
@@ -49,40 +49,51 @@ import java.io.StringWriter;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHtmlResponseWriter.java,v 1.19 2006/03/29 22:39:46 rlubke Exp $
+ * @version $Id: TestHtmlResponseWriter.java,v 1.20 2006/03/29 23:05:01 rlubke Exp $
  */
 
 public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestCase
 {
 
+//
+// Protected Constants
+//
 
-    private RenderKit renderKit = null;
+// Class Variables
+//
+
+//
+// Instance Variables
+//
     private ResponseWriter writer = null;
+    private RenderKit renderKit = null;
     private StringWriter sw = null;
 
+// Attribute Instance Variables
 
-    // ------------------------------------------------------------ Constructors
+// Relationship Instance Variables
 
+//
+// Constructors and Initializers    
+//
 
     public TestHtmlResponseWriter() {
-
         super("TestHtmlResponseWriter.java");
-
     }
 
 
     public TestHtmlResponseWriter(String name) {
-
         super(name);
-
     }
 
+//
+// Class methods
+//
 
-    // ---------------------------------------------------------- Public Methods
-
-
+//
+// General Methods
+//
     public void setUp() {
-
         super.setUp();
         RenderKitFactory renderKitFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
@@ -90,12 +101,10 @@ public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestC
                                                   RenderKitFactory.HTML_BASIC_RENDER_KIT);
         sw = new StringWriter();
         writer = renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
-
     }
 
 
     public void testContentType() {
-
         assertTrue(writer.getContentType().equals("text/html"));
 
         // Test Invalid Encoding
@@ -105,12 +114,10 @@ public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestC
             fail("IllegalArgumentException Should Have been Thrown!");
         } catch (IllegalArgumentException e) {
         }
-
     }
 
 
     public void testEncoding() {
-
         assertTrue(writer.getCharacterEncoding().equals("ISO-8859-1"));
 
         // Test Invalid Encoding
@@ -119,14 +126,27 @@ public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestC
             fail("IllegalArgumentException Should Have been Thrown!");
         } catch (IllegalArgumentException e) {
         }
+    }
 
+
+    // Test "startElement method including the automatic closure of a
+    // previous "start element"
+    //
+    public void testStartElement() {
+        try {
+            writer.startElement("input", new UIInput());
+            assertTrue(sw.toString().equals("<input"));
+            writer.startElement("select", new UIInput());
+            assertTrue(sw.toString().equals("<input><select"));
+        } catch (IOException e) {
+            assertTrue(false);
+        }
     }
 
 
     // Test "endElement" method
     // 
     public void testEndElement() {
-
         try {
             writer.endElement("input");
             assertTrue(sw.toString().equals("</input>"));
@@ -145,7 +165,144 @@ public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestC
         } catch (IOException e) {
             assertTrue(false);
         }
+    }
 
+
+    // Test "writeAttribute" method
+    //
+    public void testWriteAttribute() {
+        try {
+            writer.startElement("input", new UIInput());
+            writer.writeAttribute("type", "text", "type");
+            assertTrue(sw.toString().equals("<input type=" + "\"text\""));
+            Boolean bool = new Boolean("true");
+            writer.writeAttribute("readonly", bool, "readonly");
+            assertTrue(
+                sw.toString().equals("<input type=" + "\"text\"" + " readonly=\"readonly\""));
+            //
+            //Assert that boolean "false" values don't get written out
+            //
+            bool = new Boolean("false");
+            writer.writeAttribute("disabled", bool, "disabled");
+            assertTrue(
+                sw.toString().equals("<input type=" + "\"text\"" + " readonly=\"readonly\""));
+            //
+            //Assert correct escape char
+            //
+            writer.writeAttribute("greaterthan", ">", "greaterthan");
+            assertTrue(sw.toString().equals("<input type=" + "\"text\"" +
+                                            " readonly=\"readonly\"" +
+                                            " greaterthan=" + "\"&gt;\""));
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+
+    //
+    // Test "writeURIAttribute" method
+    //
+    public void testWriteURIAttribute() {
+        try {
+            writer.startElement("input", new UIInput());
+            writer.writeAttribute("type", "image", "type");
+            writer.writeURIAttribute("src", "/mygif/foo.gif", "src");
+            writer.endElement("input");
+            assertTrue(sw.toString().equals("<input type=" + "\"image\"" +
+                                            " src=" + "\"/mygif/foo.gif\"" + " />"));
+            //
+            // test URL encoding
+            //
+            sw = new StringWriter();
+            writer =
+                renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
+            writer.startElement("foo", new UIInput());
+            writer.writeURIAttribute("player", "Bobby Orr", "player");
+            assertTrue(sw.toString().equals("<foo player=" + "\"Bobby+Orr\""));
+            //
+            // test no URL encoding (javascript)
+            //
+            sw = new StringWriter();
+            writer =
+                renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
+            writer.startElement("foo", new UIInput());
+            writer.writeURIAttribute("player", "javascript:Bobby Orr", null);
+            assertTrue(
+                sw.toString().equals("<foo player=" +
+                                     "\"javascript:Bobby Orr\""));
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+
+    public void testWriteComment() {
+        try {
+            writer.writeComment("This is a comment");
+            assertTrue(sw.toString().equals("<!--This is a comment-->"));
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+
+    //
+    // Test variations of the writeText method..
+    //
+    public void testWriteText() {
+        try {
+            //----------------------------
+            // test Object param flavor...
+            //----------------------------
+            StringBuffer sb = new StringBuffer("Some & Text");
+            writer.writeText(sb, null);
+            assertTrue(sw.toString().equals("Some &amp; Text"));
+            //-----------------------------------------
+            // test char[], offset, len param flavor...
+            //-----------------------------------------
+            sw = new StringWriter();
+            writer =
+                renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
+            char[] carr1 = {'a', 'b', 'c', 'd', 'e'};
+            writer.writeText(carr1, 0, 2);
+            assertTrue(sw.toString().equals("ab"));
+            sw = new StringWriter();
+            writer =
+                renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
+            writer.writeText(carr1, 0, 0);
+            assertTrue(sw.toString().equals(""));
+
+            boolean exceptionThrown = false;
+            try {
+                writer.writeText(carr1, -1, 3);
+            } catch (IndexOutOfBoundsException iob) {
+                exceptionThrown = true;
+            }
+            assertTrue(exceptionThrown);
+            exceptionThrown = false;
+            try {
+                writer.writeText(carr1, 10, 3);
+            } catch (IndexOutOfBoundsException iob) {
+                exceptionThrown = true;
+            }
+            assertTrue(exceptionThrown);
+            exceptionThrown = false;
+            try {
+                writer.writeText(carr1, 2, -1);
+            } catch (IndexOutOfBoundsException iob) {
+                exceptionThrown = true;
+            }
+            assertTrue(exceptionThrown);
+            exceptionThrown = false;
+            try {
+                writer.writeText(carr1, 2, 10);
+            } catch (IndexOutOfBoundsException iob) {
+                exceptionThrown = true;
+            }
+            assertTrue(exceptionThrown);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
     }
 
 
@@ -153,7 +310,6 @@ public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestC
     // Test Null Argument Exceptions
     //
     public void testNullArgExceptions() {
-
         boolean exceptionThrown = false;
         try {
             writer.startElement(null, null);
@@ -226,170 +382,5 @@ public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestC
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
-
     }
-
-
-    // Test "startElement method including the automatic closure of a
-    // previous "start element"
-    //
-    public void testStartElement() {
-
-        try {
-            writer.startElement("input", new UIInput());
-            assertTrue(sw.toString().equals("<input"));
-            writer.startElement("select", new UIInput());
-            assertTrue(sw.toString().equals("<input><select"));
-        } catch (IOException e) {
-            assertTrue(false);
-        }
-
-    }
-
-
-    // Test "writeAttribute" method
-    //
-    public void testWriteAttribute() {
-
-        try {
-            writer.startElement("input", new UIInput());
-            writer.writeAttribute("type", "text", "type");
-            assertTrue(sw.toString().equals("<input type=" + "\"text\""));
-            Boolean bool = new Boolean("true");
-            writer.writeAttribute("readonly", bool, "readonly");
-            assertTrue(
-                sw.toString().equals("<input type=" + "\"text\"" + " readonly=\"readonly\""));
-            //
-            //Assert that boolean "false" values don't get written out
-            //
-            bool = new Boolean("false");
-            writer.writeAttribute("disabled", bool, "disabled");
-            assertTrue(
-                sw.toString().equals("<input type=" + "\"text\"" + " readonly=\"readonly\""));
-            //
-            //Assert correct escape char
-            //
-            writer.writeAttribute("greaterthan", ">", "greaterthan");
-            assertTrue(sw.toString().equals("<input type=" + "\"text\"" +
-                                            " readonly=\"readonly\"" +
-                                            " greaterthan=" + "\"&gt;\""));
-        } catch (IOException e) {
-            assertTrue(false);
-        }
-
-    }
-
-
-    public void testWriteComment() {
-
-        try {
-            writer.writeComment("This is a comment");
-            assertTrue(sw.toString().equals("<!--This is a comment-->"));
-        } catch (IOException e) {
-            assertTrue(false);
-        }
-
-    }
-
-
-    //
-    // Test variations of the writeText method..
-    //
-    public void testWriteText() {
-
-        try {
-            //----------------------------
-            // test Object param flavor...
-            //----------------------------
-            StringBuffer sb = new StringBuffer("Some & Text");
-            writer.writeText(sb, null);
-            assertTrue(sw.toString().equals("Some &amp; Text"));
-            //-----------------------------------------
-            // test char[], offset, len param flavor...
-            //-----------------------------------------
-            sw = new StringWriter();
-            writer =
-                renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
-            char[] carr1 = {'a', 'b', 'c', 'd', 'e'};
-            writer.writeText(carr1, 0, 2);
-            assertTrue(sw.toString().equals("ab"));
-            sw = new StringWriter();
-            writer =
-                renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
-            writer.writeText(carr1, 0, 0);
-            assertTrue(sw.toString().equals(""));
-
-            boolean exceptionThrown = false;
-            try {
-                writer.writeText(carr1, -1, 3);
-            } catch (IndexOutOfBoundsException iob) {
-                exceptionThrown = true;
-            }
-            assertTrue(exceptionThrown);
-            exceptionThrown = false;
-            try {
-                writer.writeText(carr1, 10, 3);
-            } catch (IndexOutOfBoundsException iob) {
-                exceptionThrown = true;
-            }
-            assertTrue(exceptionThrown);
-            exceptionThrown = false;
-            try {
-                writer.writeText(carr1, 2, -1);
-            } catch (IndexOutOfBoundsException iob) {
-                exceptionThrown = true;
-            }
-            assertTrue(exceptionThrown);
-            exceptionThrown = false;
-            try {
-                writer.writeText(carr1, 2, 10);
-            } catch (IndexOutOfBoundsException iob) {
-                exceptionThrown = true;
-            }
-            assertTrue(exceptionThrown);
-        } catch (IOException e) {
-            assertTrue(false);
-        }
-
-    }
-
-
-    //
-    // Test "writeURIAttribute" method
-    //
-    public void testWriteURIAttribute() {
-
-        try {
-            writer.startElement("input", new UIInput());
-            writer.writeAttribute("type", "image", "type");
-            writer.writeURIAttribute("src", "/mygif/foo.gif", "src");
-            writer.endElement("input");
-            assertTrue(sw.toString().equals("<input type=" + "\"image\"" +
-                                            " src=" + "\"/mygif/foo.gif\"" + " />"));
-            //
-            // test URL encoding
-            //
-            sw = new StringWriter();
-            writer =
-                renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
-            writer.startElement("foo", new UIInput());
-            writer.writeURIAttribute("player", "Bobby Orr", "player");
-            assertTrue(sw.toString().equals("<foo player=" + "\"Bobby+Orr\""));
-            //
-            // test no URL encoding (javascript)
-            //
-            sw = new StringWriter();
-            writer =
-                renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
-            writer.startElement("foo", new UIInput());
-            writer.writeURIAttribute("player", "javascript:Bobby Orr", null);
-            assertTrue(
-                sw.toString().equals("<foo player=" +
-                                     "\"javascript:Bobby Orr\""));
-        } catch (IOException e) {
-            assertTrue(false);
-        }
-
-    }
-
 } // end of class TestHtmlResponseWriter

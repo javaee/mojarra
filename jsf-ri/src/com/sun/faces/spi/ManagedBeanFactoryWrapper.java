@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactoryWrapper.java,v 1.3 2006/03/29 22:38:39 rlubke Exp $
+ * $Id: ManagedBeanFactoryWrapper.java,v 1.4 2006/03/29 23:03:49 rlubke Exp $
  */
 
 /*
@@ -29,97 +29,88 @@
 
 package com.sun.faces.spi;
 
+import com.sun.faces.config.beans.ManagedBeanBean;
+import java.util.Map;
+import java.lang.reflect.Method;
+
 import javax.faces.context.FacesContext;
 
-import java.lang.reflect.Method;
-import java.util.Map;
-
-import com.sun.faces.config.beans.ManagedBeanBean;
-
 /**
+ *
  * <p>This is intended to be the main access point to the pluggable
  * {@link ManagedBeanFactory} mechanism.  Subclasses must provide a
  * public constructor that takes a single
  * <code>ManagedBeanFactory</code> argument and stores it as an ivar,
  * returning it from the {@link #getWrapped} method.</p>
- *
+ * 
  * @author edburns, rlubke
  */
 public abstract class ManagedBeanFactoryWrapper extends ManagedBeanFactory {
-
-    // ---------------------------------------------------------- Public Methods
-
-
-    /** @see ManagedBeanFactory#getManagedBeanBean */
-
-    public ManagedBeanBean getManagedBeanBean() {
-
-        return getWrapped().getManagedBeanBean();
-
-    }
-
-
-    /** @see ManagedBeanFactory#getManagedBeanFactoryMap() */
-
-    public Map<String, ManagedBeanFactory> getManagedBeanFactoryMap() {
-
-        return getWrapped().getManagedBeanFactoryMap();
-
-    }
-
-
-    /** @see ManagedBeanFactory#getPostConstructMethods() */
-    public Method[] getPostConstructMethods() {
-
-        return getWrapped().getPostConstructMethods();
-
-    }
-
-
-    /** @see ManagedBeanFactory#getPreDestroyMethods() */
-    public Method[] getPreDestroyMethods() {
-
-        return getWrapped().getPreDestroyMethods();
-
-    }
-
-
-    /** @see ManagedBeanFactory#getScope */
-
-    public Scope getScope() {
-
-        return getWrapped().getScope();
-
-    }
-
-
+    
     public abstract ManagedBeanFactory getWrapped();
 
-    /** @see ManagedBeanFactory#newInstance */
-
+    /**
+     * @see ManagedBeanFactory#getScope
+     */
+    
+    public Scope getScope() {
+        return getWrapped().getScope();
+    }
+    
+    /**
+     * @see ManagedBeanFactory#newInstance
+     */
+    
     public Object newInstance(FacesContext context) {
-
         return getWrapped().newInstance(context);
-
     }
-
-
-    /** @see ManagedBeanFactory#setManagedBeanBean */
-
+    
+    
+    /**
+     * @see ManagedBeanFactory#setManagedBeanBean
+     */
+    
     public void setManagedBeanBean(ManagedBeanBean bean) {
-
         getWrapped().setManagedBeanBean(bean);
-
     }
-
-
-    /** @see ManagedBeanFactory#setManagedBeanFactoryMap(java.util.Map<String,ManagedBeanFactory>) */
-
-    public void setManagedBeanFactoryMap(
-          Map<String, ManagedBeanFactory> others) {
-
+    
+    /**
+     * @see ManagedBeanFactory#getManagedBeanBean
+     */
+    
+    public ManagedBeanBean getManagedBeanBean() {
+        return getWrapped().getManagedBeanBean();
+    }
+    
+    /**
+     * @see ManagedBeanFactory#setManagedBeanFactoryMap(java.util.Map<java.lang.String,com.sun.faces.spi.ManagedBeanFactory>) 
+     */
+    
+    public void setManagedBeanFactoryMap(Map<String, ManagedBeanFactory> others) {
         getWrapped().setManagedBeanFactoryMap(others);
-
     }
+    
+    /**
+     * @see ManagedBeanFactory#getManagedBeanFactoryMap() 
+     */
+    
+    public Map<String, ManagedBeanFactory> getManagedBeanFactoryMap() {
+        return getWrapped().getManagedBeanFactoryMap();
+    }
+
+    /**
+     * @see com.sun.faces.spi.ManagedBeanFactory#getPostConstructMethods()      
+     */
+    public Method[] getPostConstructMethods() {
+        return getWrapped().getPostConstructMethods();
+    }
+
+    /**
+     * @see com.sun.faces.spi.ManagedBeanFactory#getPreDestroyMethods()       
+     */
+    public Method[] getPreDestroyMethods() {
+        return getWrapped().getPreDestroyMethods();
+    }
+
 
 }

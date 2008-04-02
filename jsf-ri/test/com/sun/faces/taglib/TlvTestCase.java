@@ -1,5 +1,5 @@
 /*
- * $Id: TlvTestCase.java,v 1.3 2006/03/29 22:39:47 rlubke Exp $
+ * $Id: TlvTestCase.java,v 1.4 2006/03/29 23:05:01 rlubke Exp $
  */
 
 /*
@@ -38,17 +38,20 @@ import junit.framework.TestSuite;
 public class TlvTestCase extends TestCase {
 
 
-    // ------------------------------------------------------------ Constructors   
+    // ------------------------------------------------------ Instance Variables
 
 
     public TlvTestCase(String name) {
-
         super(name);
-
     }
 
 
-    // ---------------------------------------------------------- Public Methods
+    // ---------------------------------------------------- Overall Test Methods
+
+
+    // Set up instance variables required by this test case.
+    public void setUp() { }
+
 
 
     // Return the tests included in this test case.
@@ -56,11 +59,7 @@ public class TlvTestCase extends TestCase {
 
         return (new TestSuite(TlvTestCase.class));
 
-    }    
-
-
-    // Set up instance variables required by this test case.
-    public void setUp() { }
+    }
 
 
     // Tear down instance variables required by this test case.
@@ -91,7 +90,6 @@ public class TlvTestCase extends TestCase {
         java.beans.Beans.setDesignTime(false);
         handler  =  cv.getSAXHandler();
         assertTrue(null != handler);
-
     }
 
 }

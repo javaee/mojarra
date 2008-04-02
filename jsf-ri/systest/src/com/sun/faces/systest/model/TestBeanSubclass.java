@@ -1,5 +1,5 @@
 /*
- * $Id: TestBeanSubclass.java,v 1.6 2006/03/29 22:38:53 rlubke Exp $
+ * $Id: TestBeanSubclass.java,v 1.7 2006/03/29 23:04:01 rlubke Exp $
  */
 
 /*
@@ -30,27 +30,22 @@
 package com.sun.faces.systest.model;
 
 
-/** <p>Test JavaBean for managed object creation facility.</p> */
+/**
+ * <p>Test JavaBean for managed object creation facility.</p>
+ */
 
 public class TestBeanSubclass extends AbstractTestBean {
 
-
     private String extraProperty = "Extra Property";
-
-    // ---------------------------------------------------------- Public Methods
 
 
     public String getExtraProperty() {
-
         return this.extraProperty;
-
     }
 
 
     public void setExtraProperty(String extraProperty) {
-
         this.extraProperty = extraProperty;
-
     }
 
 }

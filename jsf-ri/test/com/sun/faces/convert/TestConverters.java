@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.37 2006/03/29 22:39:42 rlubke Exp $
+ * $Id: TestConverters.java,v 1.38 2006/03/29 23:04:50 rlubke Exp $
  */
 
 /*
@@ -59,38 +59,244 @@ import java.util.TimeZone;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.37 2006/03/29 22:39:42 rlubke Exp $
+ * @version $Id: TestConverters.java,v 1.38 2006/03/29 23:04:50 rlubke Exp $
  */
 
 public class TestConverters extends JspFacesTestCase {
 
+    //
+    // Protected Constants
+    //
 
-    protected Application application;
-    
+    //
+    // Class Variables
+    //
+
+    //
+    // Instance Variables
+    //
     private FacesContextFactory facesContextFactory = null;
 
+    // Attribute Instance Variables
+    // Relationship Instance Variables
 
-    // ------------------------------------------------------------ Constructors
+    protected Application application;
+    //
+    // Constructors and Initializers    
+    //
 
-    
     public TestConverters() {
-
         super("TestConverters");
-
     }
 
 
     public TestConverters(String name) {
-
         super(name);
+    }
+
+    //
+    // Class methods
+    //
+
+    //
+    // Methods from TestCase
+    //
+    public void setUp() {
+        super.setUp();
+        ApplicationFactory aFactory =
+            (ApplicationFactory) FactoryFinder.getFactory(
+                FactoryFinder.APPLICATION_FACTORY);
+        application = aFactory.getApplication();
+        UIViewRoot viewRoot = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+        viewRoot.setViewId("viewId");
+        getFacesContext().setViewRoot(viewRoot);
+    }
+
+
+    public void beginConverters(WebRequest theRequest) {
 
     }
 
 
-    // ---------------------------------------------------------- Public Methods
+    public void testConverters() {
+
+        try {
+            // create a dummy root for the tree.
+            UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+            root.setId("root");
+
+            testDateConverter(root);
+            testNumberConverter(root);
+            testBooleanConverter(root);
+            testConverterInheritance(root);
+            //assertTrue(verifyExpectedOutput());
+        } catch (Throwable t) {
+            t.printStackTrace();
+            assertTrue(false);
+            return;
+        }
+    }
 
 
-    public void beginConverters(WebRequest theRequest) {
+    public static class TestBean extends Object {
+
+        boolean[] booleans = null;
+
+        public TestBean() {
+            super();
+        }
+
+        public boolean[] getBooleans() {
+            return booleans;
+        }
+
+
+        public void setBooleans(boolean[] newBooleans) {
+            booleans = newBooleans;
+        }
+
+
+        byte[] bytes = null;
+
+
+        public byte[] getBytes() {
+            return bytes;
+        }
+
+
+        public void setBytes(byte[] newBytes) {
+            bytes = newBytes;
+        }
+
+
+        char[] chars = null;
+
+
+        public char[] getChars() {
+            return chars;
+        }
+
+
+        public void setChars(char[] newChars) {
+            chars = newChars;
+        }
+
+
+        short[] shorts = null;
+
+
+        public short[] getShorts() {
+            return shorts;
+        }
+
+
+        public void setShorts(short[] newShorts) {
+            shorts = newShorts;
+        }
+
+
+        int[] ints = null;
+
+
+        public int[] getInts() {
+            return ints;
+        }
+
+
+        public void setInts(int[] newInts) {
+            ints = newInts;
+        }
+
+
+        long[] longs = null;
+
+
+        public long[] getLongs() {
+            return longs;
+        }
+
+
+        public void setLongs(long[] newLongs) {
+            longs = newLongs;
+        }
+
+
+        float[] floats = null;
+
+
+        public float[] getFloats() {
+            return floats;
+        }
+
+
+        public void setFloats(float[] newFloats) {
+            floats = newFloats;
+        }
+
+
+        double[] doubles = null;
+
+
+        public double[] getDoubles() {
+            return doubles;
+        }
+
+
+        public void setDoubles(double[] newDoubles) {
+            doubles = newDoubles;
+        }
+
+
+        String[] strings = null;
+
+
+        public String[] getStrings() {
+            return strings;
+        }
+
+
+        public void setStrings(String[] newStrings) {
+            strings = newStrings;
+        }
+
+
+        Date[] dates = null;
+
+
+        public Date[] getDates() {
+            return dates;
+        }
+
+
+        public void setDates(Date[] newDates) {
+            dates = newDates;
+        }
+
+
+        Number[] numbers = null;
+
+
+        public Number[] getNumbers() {
+            return numbers;
+        }
+
+
+        public void setNumbers(Number[] newNumbers) {
+            numbers = newNumbers;
+        }
+
+
+        List stringList = null;
+
+
+        public List getStringList() {
+            return stringList;
+        }
+
+
+        public void setStringList(List newStringList) {
+            stringList = newStringList;
+        }
 
     }
 
@@ -158,257 +364,7 @@ public class TestConverters extends JspFacesTestCase {
     }
 
 
-    public void setUp() {
-
-        super.setUp();
-        ApplicationFactory aFactory =
-            (ApplicationFactory) FactoryFinder.getFactory(
-                FactoryFinder.APPLICATION_FACTORY);
-        application = aFactory.getApplication();
-        UIViewRoot viewRoot = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
-        viewRoot.setViewId("viewId");
-        getFacesContext().setViewRoot(viewRoot);
-
-    }
-
-
-    public void testBooleanConverter(UIViewRoot root)
-        throws ConverterException,
-        InstantiationException, IllegalAccessException, ClassNotFoundException {
-
-        System.out.println("Tesing BooleanConverter");
-        UIInput text = new UIInput();
-        text.setId("my_input_boolean");
-        root.getChildren().add(text);
-
-        Converter converter = application.createConverter(
-            java.lang.Boolean.class);
-
-        String stringToConvert = "true";
-        Object obj = converter.getAsObject(getFacesContext(), text,
-                                           stringToConvert);
-        assertTrue(obj instanceof java.lang.Boolean);
-
-        String str = converter.getAsString(getFacesContext(), text, obj);
-
-        assertTrue(str.equals(stringToConvert));
-
-    }
-
-
-    /**
-     * Test to verify that a class that registers itself is properly found
-     * using the search mechanism. The J2SE classes are used for their
-     * inheritance hierarchy to test that converters registered to
-     * interfaces and superclasses are properly found.
-     * <p/>
-     * This test is meant for inheritance lookup only.
-     */
-    public void testConverterInheritance(UIViewRoot root)
-        throws ConverterException,
-        InstantiationException, IllegalAccessException, ClassNotFoundException {
-
-        System.out.println("Testing ConverterInheritance");
-
-        Converter converter;
-        UIInput text = new UIInput();
-        text.setId("my_date_converter");
-        root.getChildren().add(text);
-
-        //java.lang.Integer extends java.lang.Number. 
-        //Test to show that the standard converter registered to 
-        //java.lang.Integer should chosen over the inherited 
-        //java.lang.Number converter
-        application.addConverter(java.lang.Number.class,
-                                 "javax.faces.convert.NumberConverter");
-        converter = application.createConverter(java.lang.Integer.class);
-        assertTrue(converter != null);
-        assertTrue(converter instanceof javax.faces.convert.IntegerConverter);
-
-
-        //java.sql.Date extends java.util.Date
-        //Test to find converter registered to java.util.Date
-        application.addConverter(java.util.Date.class,
-                                 "javax.faces.convert.DateTimeConverter");
-        converter = null;
-        converter = application.createConverter(java.sql.Date.class);
-        assertTrue(converter != null);
-
-        //java.util.HashSet is a subclass of java.util.AbstractSet which is
-        //a subclass of java.util.AbstractCollection 
-        //Test to find the converter registered to java.util.AbstractCollection
-        application.addConverter(java.util.AbstractCollection.class,
-                                 "javax.faces.convert.DateTimeConverter");
-        converter = null;
-        try {
-            converter = application.createConverter(java.util.HashSet.class);
-        } catch (javax.faces.FacesException fe) {
-            
-        }
-        assertTrue(converter != null);
-
-
-        //java.lang.String implements java.lang.CharSequence
-        //Test to find the converter registered to java.lang.CharSequence
-        application.addConverter(java.text.CharacterIterator.class,
-                                 "javax.faces.convert.CharacterConverter");
-        converter = null;
-        converter =
-            application.createConverter(
-                java.text.StringCharacterIterator.class);
-        assertTrue(converter != null);
-
-        //java.text.StringCharacterIterator implements 
-        //java.text.CharacterIterator which has a super-interface
-        //java.lang.Cloneable
-        //Test to find the converter registered to java.lang.Cloneable
-        application.addConverter(java.lang.Cloneable.class,
-                                 "javax.faces.convert.CharacterConverter");
-        converter = null;
-        converter =
-            application.createConverter(
-                java.text.StringCharacterIterator.class);
-        assertTrue(converter != null);
-
-    }
-
-
-    public void testConverters() {
-
-        try {
-            // create a dummy root for the tree.
-            UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
-            root.setId("root");
-
-            testDateConverter(root);
-            testNumberConverter(root);
-            testBooleanConverter(root);
-            testConverterInheritance(root);
-            //assertTrue(verifyExpectedOutput());
-        } catch (Throwable t) {
-            t.printStackTrace();
-            assertTrue(false);
-            return;
-        }
-
-    }
-
-
-    //
-    // General Methods
-    //
-
-    public void testDateConverter(UIViewRoot root) throws ConverterException,
-        InstantiationException, IllegalAccessException, ClassNotFoundException {
-
-        System.out.println("Testing DateConverter");
-        UIInput text = new UIInput();
-        text.setId("my_input_date");
-        root.getChildren().add(text);
-
-        Converter converter = null;
-        converter = application.createConverter("javax.faces.DateTime");
-
-        // date
-        String stringToConvert = "Jan 1, 1967";
-        Object obj = converter.getAsObject(getFacesContext(), text,
-                                           stringToConvert);
-        assertTrue(obj instanceof java.util.Date);
-        String str = converter.getAsString(getFacesContext(), text, obj);
-        // make sure we end up with the same string we started with..
-        assertTrue(str.equals(stringToConvert));
-
-        // time
-        converter = application.createConverter("javax.faces.DateTime");
-        ((DateTimeConverter) converter).setType("time");
-        text = new UIInput();
-        text.setId("my_input_time");
-        stringToConvert = "10:10:10 AM";
-        obj = converter.getAsObject(getFacesContext(), text, stringToConvert);
-        assertTrue(obj instanceof java.util.Date);
-        str = converter.getAsString(getFacesContext(), text, obj);
-        // make sure we end up with the same string we started with..
-        assertTrue(str.equals(stringToConvert));
-
-        // datetime
-        converter = application.createConverter("javax.faces.DateTime");
-        ((DateTimeConverter) converter).setType("both");
-        text = new UIInput();
-        text.setId("my_input_datetime");
-        stringToConvert = "Jan 1, 1967 10:10:10 AM";
-        obj = converter.getAsObject(getFacesContext(), text, stringToConvert);
-        assertTrue(obj instanceof java.util.Date);
-        str = converter.getAsString(getFacesContext(), text, obj);
-        // make sure we end up with the same string we started with..
-        assertTrue(str.equals(stringToConvert));
-
-        // test bogus type....
-        boolean exceptionThrown = false;
-        try {
-            ((DateTimeConverter)converter).setType("foobar");
-            obj = converter.getAsObject(getFacesContext(), text, stringToConvert);
-        } catch (Exception e) {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-        
-        // test NullPointerException (if either context or component arg is null)
-        exceptionThrown = false;
-        try {
-            obj = converter.getAsObject(null, text, stringToConvert);
-        } catch (NullPointerException npe) {
-            exceptionThrown= true;
-        }
-        assertTrue(exceptionThrown);
-        exceptionThrown = false;
-        try {
-            obj = converter.getAsObject(getFacesContext(), null, stringToConvert);
-        } catch (NullPointerException npe) {
-            exceptionThrown= true;
-        }
-        assertTrue(exceptionThrown);
-       
-        exceptionThrown = false;
-        try {
-            str = converter.getAsString(null, text, obj);
-        } catch (NullPointerException npe) {
-            exceptionThrown= true;
-        }
-        assertTrue(exceptionThrown);
-
-        exceptionThrown = false;
-        try {
-            str = converter.getAsString(getFacesContext(), null, obj);
-        } catch (NullPointerException npe) {
-            exceptionThrown= true;
-        }
-        assertTrue(exceptionThrown);
-
-    }
-
-
-    public void testNumberConverter(UIViewRoot root) throws ConverterException,
-        InstantiationException, IllegalAccessException, ClassNotFoundException {
-
-        System.out.println("Tesing NumberConverter");
-        UIInput text = new UIInput();
-        text.setId("my_input_number");
-        root.getChildren().add(text);
-
-        Converter converter = application.createConverter("javax.faces.Number");
-
-        String stringToConvert = "99.9";
-        Object obj = converter.getAsObject(getFacesContext(), text,
-                                           stringToConvert);
-        assertTrue(obj instanceof java.lang.Number);
-        String str = converter.getAsString(getFacesContext(), text, obj);
-        assertTrue(str.equals(stringToConvert));
-
-    }
-
-
     public void testUISelectMany() throws Exception {
-
         // create the test bean
         TestBean bean = new TestBean();
         getFacesContext().getExternalContext().getRequestMap().put("bean",
@@ -706,239 +662,221 @@ public class TestConverters extends JspFacesTestCase {
         assertTrue(bean.getStringList().get(2).equals("value3"));
 
     }
+    
+    //
+    // General Methods
+    //
+
+    public void testDateConverter(UIViewRoot root) throws ConverterException,
+        InstantiationException, IllegalAccessException, ClassNotFoundException {
+        System.out.println("Testing DateConverter");
+        UIInput text = new UIInput();
+        text.setId("my_input_date");
+        root.getChildren().add(text);
+
+        Converter converter = null;
+        converter = application.createConverter("javax.faces.DateTime");
+
+        // date
+        String stringToConvert = "Jan 1, 1967";
+        Object obj = converter.getAsObject(getFacesContext(), text,
+                                           stringToConvert);
+        assertTrue(obj instanceof java.util.Date);
+        String str = converter.getAsString(getFacesContext(), text, obj);
+        // make sure we end up with the same string we started with..
+        assertTrue(str.equals(stringToConvert));
+
+        // time
+        converter = application.createConverter("javax.faces.DateTime");
+        ((DateTimeConverter) converter).setType("time");
+        text = new UIInput();
+        text.setId("my_input_time");
+        stringToConvert = "10:10:10 AM";
+        obj = converter.getAsObject(getFacesContext(), text, stringToConvert);
+        assertTrue(obj instanceof java.util.Date);
+        str = converter.getAsString(getFacesContext(), text, obj);
+        // make sure we end up with the same string we started with..
+        assertTrue(str.equals(stringToConvert));
+
+        // datetime
+        converter = application.createConverter("javax.faces.DateTime");
+        ((DateTimeConverter) converter).setType("both");
+        text = new UIInput();
+        text.setId("my_input_datetime");
+        stringToConvert = "Jan 1, 1967 10:10:10 AM";
+        obj = converter.getAsObject(getFacesContext(), text, stringToConvert);
+        assertTrue(obj instanceof java.util.Date);
+        str = converter.getAsString(getFacesContext(), text, obj);
+        // make sure we end up with the same string we started with..
+        assertTrue(str.equals(stringToConvert));
+
+        // test bogus type....
+        boolean exceptionThrown = false;
+        try {
+            ((DateTimeConverter)converter).setType("foobar");
+            obj = converter.getAsObject(getFacesContext(), text, stringToConvert);
+        } catch (Exception e) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+        
+        // test NullPointerException (if either context or component arg is null)
+        exceptionThrown = false;
+        try {
+            obj = converter.getAsObject(null, text, stringToConvert);
+        } catch (NullPointerException npe) {
+            exceptionThrown= true;
+        }
+        assertTrue(exceptionThrown);
+        exceptionThrown = false;
+        try {
+            obj = converter.getAsObject(getFacesContext(), null, stringToConvert);
+        } catch (NullPointerException npe) {
+            exceptionThrown= true;
+        }
+        assertTrue(exceptionThrown);
+       
+        exceptionThrown = false;
+        try {
+            str = converter.getAsString(null, text, obj);
+        } catch (NullPointerException npe) {
+            exceptionThrown= true;
+        }
+        assertTrue(exceptionThrown);
+
+        exceptionThrown = false;
+        try {
+            str = converter.getAsString(getFacesContext(), null, obj);
+        } catch (NullPointerException npe) {
+            exceptionThrown= true;
+        }
+        assertTrue(exceptionThrown);
+    }
 
 
-    // --------------------------------------------------------- Private Methods
 
+    public void testNumberConverter(UIViewRoot root) throws ConverterException,
+        InstantiationException, IllegalAccessException, ClassNotFoundException {
+        System.out.println("Tesing NumberConverter");
+        UIInput text = new UIInput();
+        text.setId("my_input_number");
+        root.getChildren().add(text);
 
-    static private UISelectItem newUISelectItem(Object value) {
+        Converter converter = application.createConverter("javax.faces.Number");
 
-        UISelectItem item = new UISelectItem();
-        item.setItemValue(value);
-        item.setItemLabel(value.toString());
-        return item;
+        String stringToConvert = "99.9";
+        Object obj = converter.getAsObject(getFacesContext(), text,
+                                           stringToConvert);
+        assertTrue(obj instanceof java.lang.Number);
+        String str = converter.getAsString(getFacesContext(), text, obj);
+        assertTrue(str.equals(stringToConvert));
 
     }
 
 
-    public static class TestBean extends Object {
+    public void testBooleanConverter(UIViewRoot root)
+        throws ConverterException,
+        InstantiationException, IllegalAccessException, ClassNotFoundException {
+        System.out.println("Tesing BooleanConverter");
+        UIInput text = new UIInput();
+        text.setId("my_input_boolean");
+        root.getChildren().add(text);
+
+        Converter converter = application.createConverter(
+            java.lang.Boolean.class);
+
+        String stringToConvert = "true";
+        Object obj = converter.getAsObject(getFacesContext(), text,
+                                           stringToConvert);
+        assertTrue(obj instanceof java.lang.Boolean);
+
+        String str = converter.getAsString(getFacesContext(), text, obj);
+
+        assertTrue(str.equals(stringToConvert));
+
+    }
 
 
-        Date[] dates = null;
+    /**
+     * Test to verify that a class that registers itself is properly found
+     * using the search mechanism. The J2SE classes are used for their
+     * inheritance hierarchy to test that converters registered to
+     * interfaces and superclasses are properly found.
+     * <p/>
+     * This test is meant for inheritance lookup only.
+     */
+    public void testConverterInheritance(UIViewRoot root)
+        throws ConverterException,
+        InstantiationException, IllegalAccessException, ClassNotFoundException {
+        System.out.println("Testing ConverterInheritance");
+
+        Converter converter;
+        UIInput text = new UIInput();
+        text.setId("my_date_converter");
+        root.getChildren().add(text);
+
+        //java.lang.Integer extends java.lang.Number. 
+        //Test to show that the standard converter registered to 
+        //java.lang.Integer should chosen over the inherited 
+        //java.lang.Number converter
+        application.addConverter(java.lang.Number.class,
+                                 "javax.faces.convert.NumberConverter");
+        converter = application.createConverter(java.lang.Integer.class);
+        assertTrue(converter != null);
+        assertTrue(converter instanceof javax.faces.convert.IntegerConverter);
 
 
-        List stringList = null;
+        //java.sql.Date extends java.util.Date
+        //Test to find converter registered to java.util.Date
+        application.addConverter(java.util.Date.class,
+                                 "javax.faces.convert.DateTimeConverter");
+        converter = null;
+        converter = application.createConverter(java.sql.Date.class);
+        assertTrue(converter != null);
 
-
-        Number[] numbers = null;
-
-
-        String[] strings = null;
-
-        boolean[] booleans = null;
-
-
-        byte[] bytes = null;
-
-
-        char[] chars = null;
-
-
-        double[] doubles = null;
-
-
-        float[] floats = null;
-
-
-        int[] ints = null;
-
-
-        long[] longs = null;
-
-
-        short[] shorts = null;
-
-
-    // ------------------------------------------------------------ Constructors
-
-
-        public TestBean() {
-
-            super();
-
+        //java.util.HashSet is a subclass of java.util.AbstractSet which is
+        //a subclass of java.util.AbstractCollection 
+        //Test to find the converter registered to java.util.AbstractCollection
+        application.addConverter(java.util.AbstractCollection.class,
+                                 "javax.faces.convert.DateTimeConverter");
+        converter = null;
+        try {
+            converter = application.createConverter(java.util.HashSet.class);
+        } catch (javax.faces.FacesException fe) {
+            
         }
-
-
-    // ---------------------------------------------------------- Public Methods
-
-
-        public boolean[] getBooleans() {
-
-            return booleans;
-
-        }
-
-
-        public void setBooleans(boolean[] newBooleans) {
-
-            booleans = newBooleans;
-
-        }
-
-
-        public byte[] getBytes() {
-
-            return bytes;
-
-        }
-
-
-        public void setBytes(byte[] newBytes) {
-
-            bytes = newBytes;
-
-        }
-
-
-        public char[] getChars() {
-
-            return chars;
-
-        }
-
-
-        public void setChars(char[] newChars) {
-
-            chars = newChars;
-
-        }
-
-
-        public Date[] getDates() {
-
-            return dates;
-
-        }
-
-
-        public void setDates(Date[] newDates) {
-
-            dates = newDates;
-
-        }
-
-
-        public double[] getDoubles() {
-
-            return doubles;
-
-        }
-
-
-        public void setDoubles(double[] newDoubles) {
-
-            doubles = newDoubles;
-
-        }
-
-
-        public float[] getFloats() {
-
-            return floats;
-
-        }
-
-
-        public void setFloats(float[] newFloats) {
-
-            floats = newFloats;
-
-        }
-
-
-        public int[] getInts() {
-
-            return ints;
-
-        }
-
-
-        public void setInts(int[] newInts) {
-
-            ints = newInts;
-
-        }
-
-
-        public long[] getLongs() {
-
-            return longs;
-
-        }
-
-
-        public void setLongs(long[] newLongs) {
-
-            longs = newLongs;
-
-        }
-
-
-        public Number[] getNumbers() {
-
-            return numbers;
-
-        }
-
-
-        public void setNumbers(Number[] newNumbers) {
-
-            numbers = newNumbers;
-
-        }
-
-
-        public short[] getShorts() {
-
-            return shorts;
-
-        }
-
-
-        public void setShorts(short[] newShorts) {
-
-            shorts = newShorts;
-
-        }
-
-
-        public List getStringList() {
-
-            return stringList;
-
-        }
-
-
-        public void setStringList(List newStringList) {
-
-            stringList = newStringList;
-
-        }
-
-
-        public String[] getStrings() {
-
-            return strings;
-
-        }
-
-
-        public void setStrings(String[] newStrings) {
-
-            strings = newStrings;
-
-        }
-
+        assertTrue(converter != null);
+
+
+        //java.lang.String implements java.lang.CharSequence
+        //Test to find the converter registered to java.lang.CharSequence
+        application.addConverter(java.text.CharacterIterator.class,
+                                 "javax.faces.convert.CharacterConverter");
+        converter = null;
+        converter =
+            application.createConverter(
+                java.text.StringCharacterIterator.class);
+        assertTrue(converter != null);
+
+        //java.text.StringCharacterIterator implements 
+        //java.text.CharacterIterator which has a super-interface
+        //java.lang.Cloneable
+        //Test to find the converter registered to java.lang.Cloneable
+        application.addConverter(java.lang.Cloneable.class,
+                                 "javax.faces.convert.CharacterConverter");
+        converter = null;
+        converter =
+            application.createConverter(
+                java.text.StringCharacterIterator.class);
+        assertTrue(converter != null);
+    }
+
+
+    static private UISelectItem newUISelectItem(Object value) {
+        UISelectItem item = new UISelectItem();
+        item.setItemValue(value);
+        item.setItemLabel(value.toString());
+        return item;
     }
 
 } // end of class TestConverters

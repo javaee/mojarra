@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderer.java,v 1.7 2006/03/29 22:39:40 rlubke Exp $
+ * $Id: TestRenderer.java,v 1.8 2006/03/29 23:04:47 rlubke Exp $
  */
 
 /*
@@ -36,5 +36,6 @@ import javax.faces.render.Renderer;
 // Dummy renderer that can be instantiated
 
 public class TestRenderer extends Renderer {
+
 
 }

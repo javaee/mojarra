@@ -1,46 +1,35 @@
 package com.sun.faces.component;
 
+import com.sun.faces.htmlunit.AbstractTestCase;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 public class ComponentTestCase extends AbstractTestCase {
 
-    // ------------------------------------------------------------ Constructors
-
-
     public ComponentTestCase(String name) {
-
         super(name);
-
     }
 
-    // ---------------------------------------------------------- Public Methods
+
+    /**
+     * Set up instance variables required by this test case.
+     */
+    public void setUp() throws Exception {
+        super.setUp();
+    }
 
 
     /** Return the tests included in this test suite. */
     public static Test suite() {
-
         return (new TestSuite(ComponentTestCase.class));
-
-    }
-
-
-    /** Set up instance variables required by this test case. */
-    public void setUp() throws Exception {
-
-        super.setUp();
-
     }
 
 
     /** Tear down instance variables required by this test case. */
     public void tearDown() {
-
         super.tearDown();
-
     }
 
 
@@ -64,5 +53,6 @@ public class ComponentTestCase extends AbstractTestCase {
         }
 
     }
+
 
 } // end of class PathTestCase

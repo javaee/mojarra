@@ -1,6 +1,6 @@
 <!--
-Copyright 2004 Sun Microsystems, Inc. All rights reserved.
-SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
 <html>
@@ -10,7 +10,6 @@ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 </head>
-
 <body>
 
 <h1>TLV c:if with JSF id</h1>
@@ -22,9 +21,9 @@ This page should succeed.
 
 <f:view>
 
-    <c:if test="${one == 'one'}">
-        <h:outputText id="has_id" value="HAS ID"/>
-    </c:if>
+  <c:if test="${one == 'one'}">
+    <h:outputText id="has_id" value="HAS ID"/>
+  </c:if>
 
 </f:view>
 

@@ -1,5 +1,5 @@
 /*
- * $Id: CustomRenderKitImpl.java,v 1.4 2006/03/29 22:38:53 rlubke Exp $
+ * $Id: CustomRenderKitImpl.java,v 1.5 2006/03/29 23:04:02 rlubke Exp $
  */
 
 /*
@@ -31,6 +31,8 @@
 
 package com.sun.faces.systest.render;
 
+import com.sun.faces.util.MessageUtils;
+
 import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
@@ -42,23 +44,35 @@ import java.io.OutputStream;
 import java.io.Writer;
 import java.util.HashMap;
 
-import com.sun.faces.util.MessageUtils;
-
 /**
  * <B>CustomRenderKitImpl</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CustomRenderKitImpl.java,v 1.4 2006/03/29 22:38:53 rlubke Exp $
+ * @version $Id: CustomRenderKitImpl.java,v 1.5 2006/03/29 23:04:02 rlubke Exp $
  */
 
 public class CustomRenderKitImpl extends RenderKit {
 
+//
+// Protected Constants
+//
 
-    private static String CHAR_ENCODING = "ISO-8859-1";
+//
+// Class Variables
+//
 
+//
+// Instance Variables
+//
     // used for ResponseWriter creation;
     private static String HTML_CONTENT_TYPE = "text/html";
+    private static String CHAR_ENCODING = "ISO-8859-1";
+//
+// Ivars used during actual client lifetime
+//
+
+// Relationship Instance Variables
 
     /**
      * Keys are String renderer family.  Values are HashMaps.  Nested
@@ -69,101 +83,83 @@ public class CustomRenderKitImpl extends RenderKit {
     private HashMap rendererFamilies;
 
     private ResponseStateManager responseStateManager = null;
-
-    // ------------------------------------------------------------ Constructors
+//
+// Constructors and Initializers    
+//
 
     public CustomRenderKitImpl() {
-
         super();
-        rendererFamilies = new HashMap();
-
+	rendererFamilies = new HashMap();
     }
 
-    // ---------------------------------------------------------- Public Methods
+
+    //
+    // Class methods
+    //
+
+    //
+    // General Methods
+    //
+
+    //
+    // Methods From RenderKit
+    //
+
+    public void addRenderer(String family, String rendererType,
+                            Renderer renderer) {
+        if (family == null || rendererType == null || renderer == null) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message + " family " + family + " rendererType " +
+                rendererType + " renderer " + renderer;
+            throw new NullPointerException(message);
+                
+        }
+	HashMap renderers = null;
+
+        synchronized (rendererFamilies) {
+	    // PENDING(edburns): generics would be nice here.
+	    if (null == (renderers = (HashMap) rendererFamilies.get(family))) {
+		rendererFamilies.put(family, renderers = new HashMap());
+	    }
+            renderers.put(rendererType, renderer);
+        }
+    }
+
+
+    public Renderer getRenderer(String family, String rendererType) {
+
+        if (rendererType == null || family == null) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message + " family " + family + " rendererType " +
+                rendererType;
+            throw new NullPointerException(message);
+        }
+
+        assert (rendererFamilies != null);
+
+	HashMap renderers = null;
+        Renderer renderer = null;
+
+	if (null != (renderers = (HashMap) rendererFamilies.get(family))) {
+	    renderer = (Renderer) renderers.get(rendererType);
+	}
+	
+        return renderer;
+    }
 
 
     public synchronized ResponseStateManager getResponseStateManager() {
-
         if (responseStateManager == null) {
             responseStateManager = new CustomResponseStateManagerImpl();
         }
         return responseStateManager;
-
-    }
-
-    public void addRenderer(String family, String rendererType,
-                            Renderer renderer) {
-
-        if (family == null || rendererType == null || renderer == null) {
-            String message = MessageUtils.getExceptionMessageString
-                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " family " + family + " rendererType " +
-                      rendererType + " renderer " + renderer;
-            throw new NullPointerException(message);
-
-        }
-        HashMap renderers = null;
-
-        synchronized (rendererFamilies) {
-            // PENDING(edburns): generics would be nice here.
-            if (null == (renderers = (HashMap) rendererFamilies.get(family))) {
-                rendererFamilies.put(family, renderers = new HashMap());
-            }
-            renderers.put(rendererType, renderer);
-        }
-
     }
 
 
-    public ResponseStream createResponseStream(OutputStream out) {
-
-        final OutputStream output = out;
-        return new ResponseStream() {
-
-
-            public void write(int b) throws IOException {
-
-                output.write(b);
-
-            }
-
-
-            public void write(byte b[]) throws IOException {
-
-                output.write(b);
-
-            }
-
-
-            public void write(byte b[], int off, int len) throws IOException {
-
-                output.write(b, off, len);
-
-            }
-
-
-            public void flush() throws IOException {
-
-                output.flush();
-
-            }
-
-
-            public void close() throws IOException {
-
-                output.close();
-
-            }
-
-        };
-
-    }
-
-
-    public ResponseWriter createResponseWriter(Writer writer,
-                                               String contentTypeList,
+    public ResponseWriter createResponseWriter(Writer writer, String contentTypeList,
                                                String characterEncoding) {
-
         if (writer == null) {
             return null;
         }
@@ -178,7 +174,7 @@ public class CustomRenderKitImpl extends RenderKit {
         if (contentTypeList != null) {
             if (contentTypeList.indexOf(contentType) < 0) {
                 throw new IllegalArgumentException(MessageUtils.getExceptionMessageString(
-                      MessageUtils.CONTENT_TYPE_ERROR_MESSAGE_ID));
+                    MessageUtils.CONTENT_TYPE_ERROR_MESSAGE_ID));
             }
         }
         if (characterEncoding == null) {
@@ -186,33 +182,37 @@ public class CustomRenderKitImpl extends RenderKit {
         }
 
         return new CustomResponseWriter(writer, contentType, characterEncoding);
-
     }
 
 
-    public Renderer getRenderer(String family, String rendererType) {
+    public ResponseStream createResponseStream(OutputStream out) {
+        final OutputStream output = out;
+        return new ResponseStream() {
+            public void write(int b) throws IOException {
+                output.write(b);
+            }
 
-        if (rendererType == null || family == null) {
-            String message = MessageUtils.getExceptionMessageString
-                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " family " + family + " rendererType " +
-                      rendererType;
-            throw new NullPointerException(message);
-        }
 
-        assert (rendererFamilies != null);
+            public void write(byte b[]) throws IOException {
+                output.write(b);
+            }
 
-        HashMap renderers = null;
-        Renderer renderer = null;
 
-        if (null != (renderers = (HashMap) rendererFamilies.get(family))) {
-            renderer = (Renderer) renderers.get(rendererType);
-        }
+            public void write(byte b[], int off, int len) throws IOException {
+                output.write(b, off, len);
+            }
 
-        return renderer;
 
-    }
+            public void flush() throws IOException {
+                output.flush();
+            }
 
+
+            public void close() throws IOException {
+                output.close();
+            }
+        };
+    }       
     // The test for this class is in TestRenderKit.java
 
 } // end of class CustomRenderKitImpl

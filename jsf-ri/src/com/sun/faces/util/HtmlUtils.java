@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlUtils.java,v 1.8 2006/03/29 22:38:44 rlubke Exp $
+ * $Id: HtmlUtils.java,v 1.9 2006/03/29 23:03:53 rlubke Exp $
  */
 
 /*
@@ -42,236 +42,34 @@ import java.util.BitSet;
  */
 public class HtmlUtils {
 
+    //-------------------------------------------------
+    // The following methods include the handling of
+    // escape characters....
+    //-------------------------------------------------
 
-    static private final BitSet DONT_ENCODE_SET = new BitSet(256);
-
-    // Private array used simply to verify character encodings
-    static private final byte[] encodingTestBytes = new byte[]{(byte) 65};
-    static private final int MAX_BYTES_PER_CHAR = 10;
-
-    static private String[] aNames = new String[]{
-          "area",
-    };
-
-    static private String[] bNames = new String[]{
-          "br",
-          "base",
-          "basefont",
-    };
-
-    static private String[] cNames = new String[]{
-          "col",
-    };
-
-    static private String[] fNames = new String[]{
-          "frame",
-    };
-
-    static private String[] hNames = new String[]{
-          "hr",
-    };
-
-    static private String[] iNames = new String[]{
-          "img",
-          "input",
-          "isindex",
-    };
-
-    static private String[] lNames = new String[]{
-          "link",
-    };
-
-    static private String[] mNames = new String[]{
-          "meta",
-    };
-
-    static private String[] pNames = new String[]{
-          "param",
-    };
-
-
-    //
-    // Entities from HTML 4.0, section 24.2.1; character codes 0xA0 to 0xFF
-    //
-    static private String[] sISO8859_1_Entities = new String[]{
-          "nbsp",
-          "iexcl",
-          "cent",
-          "pound",
-          "curren",
-          "yen",
-          "brvbar",
-          "sect",
-          "uml",
-          "copy",
-          "ordf",
-          "laquo",
-          "not",
-          "shy",
-          "reg",
-          "macr",
-          "deg",
-          "plusmn",
-          "sup2",
-          "sup3",
-          "acute",
-          "micro",
-          "para",
-          "middot",
-          "cedil",
-          "sup1",
-          "ordm",
-          "raquo",
-          "frac14",
-          "frac12",
-          "frac34",
-          "iquest",
-          "Agrave",
-          "Aacute",
-          "Acirc",
-          "Atilde",
-          "Auml",
-          "Aring",
-          "AElig",
-          "Ccedil",
-          "Egrave",
-          "Eacute",
-          "Ecirc",
-          "Euml",
-          "Igrave",
-          "Iacute",
-          "Icirc",
-          "Iuml",
-          "ETH",
-          "Ntilde",
-          "Ograve",
-          "Oacute",
-          "Ocirc",
-          "Otilde",
-          "Ouml",
-          "times",
-          "Oslash",
-          "Ugrave",
-          "Uacute",
-          "Ucirc",
-          "Uuml",
-          "Yacute",
-          "THORN",
-          "szlig",
-          "agrave",
-          "aacute",
-          "acirc",
-          "atilde",
-          "auml",
-          "aring",
-          "aelig",
-          "ccedil",
-          "egrave",
-          "eacute",
-          "ecirc",
-          "euml",
-          "igrave",
-          "iacute",
-          "icirc",
-          "iuml",
-          "eth",
-          "ntilde",
-          "ograve",
-          "oacute",
-          "ocirc",
-          "otilde",
-          "ouml",
-          "divide",
-          "oslash",
-          "ugrave",
-          "uacute",
-          "ucirc",
-          "uuml",
-          "yacute",
-          "thorn",
-          "yuml"
-    };
-
-    static private char _LAST_EMPTY_ELEMENT_START = 'p';
-    static private String[][] emptyElementArr =
-          new String[((int) _LAST_EMPTY_ELEMENT_START) + 1][];
-
-    // ------------------------------------------------------------ Constructors
-
-
-    private HtmlUtils() {
-    }
-
-    // ---------------------------------------------------------- Public Methods
-
-    //----------------------------------------------------------
-    // The following is used to verify "empty" Html elements.
-    // "Empty" Html elements are those that do not require an
-    // ending tag.  For example, <br>  or <hr>...
-    //----------------------------------------------------------
-
-    static public boolean isEmptyElement(String name) {
-
-        char firstChar = name.charAt(0);
-        if (firstChar > _LAST_EMPTY_ELEMENT_START) {
-            return false;
-        }
-
-        // Can we improve performance here?  It's certainly slower to use
-        // a HashMap, at least if we can't assume the input name is lowercased.
-        String[] array = emptyElementArr[name.charAt(0)];
-        if (array != null) {
-            for (int i = array.length - 1; i >= 0; i--) {
-                if (name.equalsIgnoreCase(array[i])) {
-                    return true;
-                }
-            }
-        }
-        return false;
-
-    }
-
-
-    //----------------------------------------------------------
-    // The following is used to verify encodings
-    //----------------------------------------------------------
-    //
-    static public void validateEncoding(String encoding)
-          throws UnsupportedEncodingException {
-
-        if (encoding != null) {
-            // Try creating a string off of the default encoding
-            new String(encodingTestBytes, encoding);
-        }
-
-    }
-
-
-    static public void writeAttribute(Writer out,
-                                      char[] buffer,
-                                      char[] text) throws IOException {
-
-        writeAttribute(out, buffer, text, 0, text.length);
-
+    static public void writeText(Writer out,
+                                 char[] buffer,
+                                 char[] text) throws IOException {
+        writeText(out, buffer, text, 0, text.length);
     }
 
 
     /**
-     * Write a string attribute.  Note that this code
-     * is duplicated below for character arrays - change both
-     * places if you make any changes!!!
+     * Write char array text.  Note that this code is duplicated below
+     * for Strings - change both places if you make any changes!!!
      */
-    static public void writeAttribute(Writer out,
-                                      char[] buff,
-                                      String text) throws IOException {
-
+    static public void writeText(Writer out,
+                                 char[] buff,
+                                 char[] text,
+                                 int start,
+                                 int length) throws IOException {
         int buffLength = buff.length;
         int buffIndex = 0;
 
-        int length = text.length();
-        for (int i = 0; i < length; i++) {
-            char ch = text.charAt(i);
-
+        int end = start + length;
+        for (int i = start; i < end; i++) {
+            char ch = text[i];
+            
             // Tilde or less...
             if (ch < 0xA0) {
                 // If "?" or over, no escaping is needed (this covers
@@ -284,8 +82,10 @@ public class HtmlUtils {
                     if (ch < 0x3c) {
                         buffIndex = addToBuffer(out, buff, buffIndex,
                                                 buffLength, ch);
-                        // Note - "<" isn't escaped in attributes, as per
-                        // HTML spec
+                    } else if (ch == '<') {
+                        buffIndex = flushBuffer(out, buff, buffIndex);
+
+                        out.write("&lt;");
                     } else if (ch == '>') {
                         buffIndex = flushBuffer(out, buff, buffIndex);
 
@@ -298,17 +98,7 @@ public class HtmlUtils {
                     if (ch == '&') {
                         buffIndex = flushBuffer(out, buff, buffIndex);
 
-                        // HTML 4.0, section B.7.1: ampersands followed by
-                        // an open brace don't get escaped
-                        if ((i + 1 < length) && (text.charAt(i + 1) == '{')) {
-                            out.write(ch);
-                        } else {
-                            out.write("&amp;");
-                        }
-                    } else if (ch == '"') {
-                        buffIndex = flushBuffer(out, buff, buffIndex);
-
-                        out.write("&quot;");
+                        out.write("&amp;");
                     } else {
                         buffIndex = addToBuffer(out, buff, buffIndex,
                                                 buffLength, ch);
@@ -322,100 +112,16 @@ public class HtmlUtils {
                 out.write(sISO8859_1_Entities[ch - 0xA0]);
                 out.write(';');
             } else {
-                buffIndex = flushBuffer(out, buff, buffIndex);
-
                 // Double-byte characters to encode.
                 // PENDING: when outputting to an encoding that
                 // supports double-byte characters (UTF-8, for example),
                 // we should not be encoding
+                buffIndex = flushBuffer(out, buff, buffIndex);
                 _writeDecRef(out, ch);
             }
         }
 
         flushBuffer(out, buff, buffIndex);
-
-    }
-
-
-    /**
-     * Write a character array attribute.  Note that this code
-     * is duplicated above for string - change both places if you make
-     * any changes!!!
-     */
-    static public void writeAttribute(Writer out,
-                                      char[] buff,
-                                      char[] text,
-                                      int start,
-                                      int length) throws IOException {
-
-        int buffLength = buff.length;
-        int buffIndex = 0;
-
-        int end = start + length;
-        for (int i = start; i < end; i++) {
-            char ch = text[i];
-
-            // Tilde or less...
-            if (ch < 0xA0) {
-                // If "?" or over, no escaping is needed (this covers
-                // most of the Latin alphabet)
-                if (ch >= 0x3f) {
-                    buffIndex = addToBuffer(out, buff, buffIndex,
-                                            buffLength, ch);
-                } else if (ch >= 0x27) { // If above "'"...
-                    if (ch < 0x3c) {
-                        // If between "'" and ";", no escaping is needed
-                        buffIndex = addToBuffer(out, buff, buffIndex,
-                                                buffLength, ch);
-                        // Note - "<" isn't escaped in attributes, as per HTML spec
-                    } else if (ch == '>') {
-                        buffIndex = flushBuffer(out, buff, buffIndex);
-
-                        out.write("&gt;");
-                    } else {
-                        buffIndex = addToBuffer(out, buff, buffIndex,
-                                                buffLength, ch);
-                    }
-                } else {
-                    if (ch == '&') {
-                        buffIndex = flushBuffer(out, buff, buffIndex);
-
-                        // HTML 4.0, section B.7.1: ampersands followed by
-                        // an open brace don't get escaped
-                        if ((i + 1 < end) && (text[i + 1] == '{')) {
-                            out.write(ch);
-                        } else {
-                            out.write("&amp;");
-                        }
-                    } else if (ch == '"') {
-                        buffIndex = flushBuffer(out, buff, buffIndex);
-
-                        out.write("&quot;");
-                    } else {
-                        buffIndex = addToBuffer(out, buff, buffIndex,
-                                                buffLength, ch);
-                    }
-                }
-            } else if (ch <= 0xff) {
-                // ISO-8859-1 entities: encode as needed
-                buffIndex = flushBuffer(out, buff, buffIndex);
-
-                out.write('&');
-                out.write(sISO8859_1_Entities[ch - 0xA0]);
-                out.write(';');
-            } else {
-                buffIndex = flushBuffer(out, buff, buffIndex);
-
-                // Double-byte characters to encode.
-                // PENDING: when outputting to an encoding that
-                // supports double-byte characters (UTF-8, for example),
-                // we should not be encoding
-                _writeDecRef(out, ch);
-            }
-        }
-
-        flushBuffer(out, buff, buffIndex);
-
     }
 
 
@@ -426,7 +132,6 @@ public class HtmlUtils {
     static public void writeText(Writer out,
                                  char[] buff,
                                  String text) throws IOException {
-
         int buffLength = buff.length;
         int buffIndex = 0;
 
@@ -434,7 +139,7 @@ public class HtmlUtils {
 
         for (int i = 0; i < length; i++) {
             char ch = text.charAt(i);
-
+            
             // Tilde or less...
             if (ch < 0xA0) {
                 // If "?" or over, no escaping is needed (this covers
@@ -485,33 +190,104 @@ public class HtmlUtils {
         }
 
         flushBuffer(out, buff, buffIndex);
-
-    }
-
-    //-------------------------------------------------
-    // The following methods include the handling of
-    // escape characters....
-    //-------------------------------------------------
-
-    static public void writeText(Writer out,
-                                 char[] buffer,
-                                 char[] text) throws IOException {
-
-        writeText(out, buffer, text, 0, text.length);
-
     }
 
 
     /**
-     * Write char array text.  Note that this code is duplicated below
-     * for Strings - change both places if you make any changes!!!
+     * Write a string attribute.  Note that this code
+     * is duplicated below for character arrays - change both
+     * places if you make any changes!!!
      */
-    static public void writeText(Writer out,
-                                 char[] buff,
-                                 char[] text,
-                                 int start,
-                                 int length) throws IOException {
+    static public void writeAttribute(Writer out,
+                                      char[] buff,
+                                      String text) throws IOException {
+        int buffLength = buff.length;
+        int buffIndex = 0;
 
+        int length = text.length();
+        for (int i = 0; i < length; i++) {
+            char ch = text.charAt(i);
+            
+            // Tilde or less...
+            if (ch < 0xA0) {
+                // If "?" or over, no escaping is needed (this covers
+                // most of the Latin alphabet)
+                if (ch >= 0x3f) {
+                    buffIndex = addToBuffer(out, buff, buffIndex,
+                                            buffLength, ch);
+                } else if (ch >= 0x27) { // If above "'"...
+                    // If between "'" and ";", no escaping is needed
+                    if (ch < 0x3c) {
+                        buffIndex = addToBuffer(out, buff, buffIndex,
+                                                buffLength, ch);
+                        // Note - "<" isn't escaped in attributes, as per
+                        // HTML spec
+                    } else if (ch == '>') {
+                        buffIndex = flushBuffer(out, buff, buffIndex);
+
+                        out.write("&gt;");
+                    } else {
+                        buffIndex = addToBuffer(out, buff, buffIndex,
+                                                buffLength, ch);
+                    }
+                } else {
+                    if (ch == '&') {
+                        buffIndex = flushBuffer(out, buff, buffIndex);
+                        
+                        // HTML 4.0, section B.7.1: ampersands followed by
+                        // an open brace don't get escaped
+                        if ((i + 1 < length) && (text.charAt(i + 1) == '{'))
+                            out.write(ch);
+                        else
+                            out.write("&amp;");
+                    } else if (ch == '"') {
+                        buffIndex = flushBuffer(out, buff, buffIndex);
+
+                        out.write("&quot;");
+                    } else {
+                        buffIndex = addToBuffer(out, buff, buffIndex,
+                                                buffLength, ch);
+                    }
+                }
+            } else if (ch <= 0xff) {
+                // ISO-8859-1 entities: encode as needed
+                buffIndex = flushBuffer(out, buff, buffIndex);
+
+                out.write('&');
+                out.write(sISO8859_1_Entities[ch - 0xA0]);
+                out.write(';');
+            } else {
+                buffIndex = flushBuffer(out, buff, buffIndex);
+                
+                // Double-byte characters to encode.
+                // PENDING: when outputting to an encoding that
+                // supports double-byte characters (UTF-8, for example),
+                // we should not be encoding
+                _writeDecRef(out, ch);
+            }
+        }
+
+        flushBuffer(out, buff, buffIndex);
+    }
+
+
+    static public void writeAttribute(Writer out,
+                                      char[] buffer,
+                                      char[] text) throws IOException {
+        writeAttribute(out, buffer, text, 0, text.length);
+    }
+
+
+    /**
+     * Write a character array attribute.  Note that this code
+     * is duplicated above for string - change both places if you make
+     * any changes!!!
+     */
+    static public void writeAttribute(Writer out,
+                                      char[] buff,
+                                      char[] text,
+                                      int start,
+                                      int length) throws IOException {
         int buffLength = buff.length;
         int buffIndex = 0;
 
@@ -527,14 +303,11 @@ public class HtmlUtils {
                     buffIndex = addToBuffer(out, buff, buffIndex,
                                             buffLength, ch);
                 } else if (ch >= 0x27) { // If above "'"...
-                    // If between "'" and ";", no escaping is needed
                     if (ch < 0x3c) {
+                        // If between "'" and ";", no escaping is needed
                         buffIndex = addToBuffer(out, buff, buffIndex,
                                                 buffLength, ch);
-                    } else if (ch == '<') {
-                        buffIndex = flushBuffer(out, buff, buffIndex);
-
-                        out.write("&lt;");
+                        // Note - "<" isn't escaped in attributes, as per HTML spec
                     } else if (ch == '>') {
                         buffIndex = flushBuffer(out, buff, buffIndex);
 
@@ -547,7 +320,16 @@ public class HtmlUtils {
                     if (ch == '&') {
                         buffIndex = flushBuffer(out, buff, buffIndex);
 
-                        out.write("&amp;");
+                        // HTML 4.0, section B.7.1: ampersands followed by
+                        // an open brace don't get escaped
+                        if ((i + 1 < end) && (text[i + 1] == '{'))
+                            out.write(ch);
+                        else
+                            out.write("&amp;");
+                    } else if (ch == '"') {
+                        buffIndex = flushBuffer(out, buff, buffIndex);
+
+                        out.write("&quot;");
                     } else {
                         buffIndex = addToBuffer(out, buff, buffIndex,
                                                 buffLength, ch);
@@ -561,17 +343,110 @@ public class HtmlUtils {
                 out.write(sISO8859_1_Entities[ch - 0xA0]);
                 out.write(';');
             } else {
+                buffIndex = flushBuffer(out, buff, buffIndex);
+                
                 // Double-byte characters to encode.
                 // PENDING: when outputting to an encoding that
                 // supports double-byte characters (UTF-8, for example),
                 // we should not be encoding
-                buffIndex = flushBuffer(out, buff, buffIndex);
                 _writeDecRef(out, ch);
             }
         }
 
         flushBuffer(out, buff, buffIndex);
+    }
 
+
+    /**
+     * Writes a character as a decimal escape.  Hex escapes are smaller than
+     * the decimal version, but Netscape didn't support hex escapes until
+     * 4.7.4.
+     */
+    static private void _writeDecRef(Writer out, char ch) throws IOException {
+        if (ch == '\u20ac') {
+            out.write("&euro;");
+            return;
+        }
+        out.write("&#");
+        // Formerly used String.valueOf().  This version tests out
+        // about 40% faster in a microbenchmark (and on systems where GC is
+        // going gonzo, it should be even better)
+        int i = (int) ch;
+        if (i > 10000) {
+            out.write('0' + (i / 10000));
+            i = i % 10000;
+            out.write('0' + (i / 1000));
+            i = i % 1000;
+            out.write('0' + (i / 100));
+            i = i % 100;
+            out.write('0' + (i / 10));
+            i = i % 10;
+            out.write('0' + i);
+        } else if (i > 1000) {
+            out.write('0' + (i / 1000));
+            i = i % 1000;
+            out.write('0' + (i / 100));
+            i = i % 100;
+            out.write('0' + (i / 10));
+            i = i % 10;
+            out.write('0' + i);
+        } else {
+            out.write('0' + (i / 100));
+            i = i % 100;
+            out.write('0' + (i / 10));
+            i = i % 10;
+            out.write('0' + i);
+        }
+
+        out.write(';');
+    }
+
+    // 
+    // Buffering scheme: we use a tremendously simple buffering
+    // scheme that greatly reduces the number of calls into the
+    // Writer/PrintWriter.  In practice this has produced significant
+    // measured performance gains (at least in JDK 1.3.1).  We only
+    // support adding single characters to the buffer, so anytime
+    // multiple characters need to be written out, the entire buffer
+    // gets flushed.  In practice, this is good enough, and keeps
+    // the core simple.
+    //
+
+    /**
+     * Add a character to the buffer, flushing the buffer if the buffer is
+     * full, and returning the new buffer index
+     */
+    private static int addToBuffer(Writer out,
+                                   char[] buffer,
+                                   int bufferIndex,
+                                   int bufferLength,
+                                   char ch) throws IOException {
+        if (bufferIndex >= bufferLength) {
+            out.write(buffer, 0, bufferIndex);
+            bufferIndex = 0;
+        }
+
+        buffer[bufferIndex] = ch;
+
+        return bufferIndex + 1;
+    }
+
+
+    /**
+     * Flush the contents of the buffer to the output stream
+     * and return the reset buffer index
+     */
+    private static int flushBuffer(Writer out,
+                                   char[] buffer,
+                                   int bufferIndex) throws IOException {
+        if (bufferIndex > 0)
+            out.write(buffer, 0, bufferIndex);
+
+        return 0;
+    }
+
+
+    private HtmlUtils() {
     }
 
 
@@ -606,8 +481,7 @@ public class HtmlUtils {
     static public void writeURL(Writer out,
                                 String text,
                                 String queryEncoding)
-          throws IOException, UnsupportedEncodingException {
-
+        throws IOException, UnsupportedEncodingException {
         int length = text.length();
 
         for (int i = 0; i < length; i++) {
@@ -646,149 +520,6 @@ public class HtmlUtils {
                 out.write(ch);
             }
         }
-
-    }
-
-    // ------------------------------------------------- Package Private Methods
-
-
-    // See: http://www.ietf.org/rfc/rfc2396.txt
-    // We're not fully along for that ride either, but we do encode
-    // ' ' as '%20', and don't bother encoding '~' or '/'
-    static {
-        for (int i = 'a'; i <= 'z'; i++) {
-            DONT_ENCODE_SET.set(i);
-        }
-
-        for (int i = 'A'; i <= 'Z'; i++) {
-            DONT_ENCODE_SET.set(i);
-        }
-
-        for (int i = '0'; i <= '9'; i++) {
-            DONT_ENCODE_SET.set(i);
-        }
-
-        // Don't encode '%' - we don't want to double encode anything.
-        DONT_ENCODE_SET.set('%');
-        // Ditto for '+', which is an encoded space
-        DONT_ENCODE_SET.set('+');
-
-        DONT_ENCODE_SET.set('#');
-        DONT_ENCODE_SET.set('&');
-        DONT_ENCODE_SET.set('=');
-        DONT_ENCODE_SET.set('-');
-        DONT_ENCODE_SET.set('_');
-        DONT_ENCODE_SET.set('.');
-        DONT_ENCODE_SET.set('*');
-        DONT_ENCODE_SET.set('~');
-        DONT_ENCODE_SET.set('/');
-        DONT_ENCODE_SET.set('\'');
-        DONT_ENCODE_SET.set('!');
-        DONT_ENCODE_SET.set('(');
-        DONT_ENCODE_SET.set(')');
-    }
-
-
-    static {
-        emptyElementArr['a'] = aNames;
-        emptyElementArr['A'] = aNames;
-        emptyElementArr['b'] = bNames;
-        emptyElementArr['B'] = bNames;
-        emptyElementArr['c'] = cNames;
-        emptyElementArr['C'] = cNames;
-        emptyElementArr['f'] = fNames;
-        emptyElementArr['F'] = fNames;
-        emptyElementArr['h'] = hNames;
-        emptyElementArr['H'] = hNames;
-        emptyElementArr['i'] = iNames;
-        emptyElementArr['I'] = iNames;
-        emptyElementArr['l'] = lNames;
-        emptyElementArr['L'] = lNames;
-        emptyElementArr['m'] = mNames;
-        emptyElementArr['M'] = mNames;
-        emptyElementArr['p'] = pNames;
-        emptyElementArr['P'] = pNames;
-    }
-
-    // --------------------------------------------------------- Private Methods
-
-
-    /**
-     * Writes a character as a decimal escape.  Hex escapes are smaller than
-     * the decimal version, but Netscape didn't support hex escapes until
-     * 4.7.4.
-     */
-    static private void _writeDecRef(Writer out, char ch) throws IOException {
-
-        if (ch == '\u20ac') {
-            out.write("&euro;");
-            return;
-        }
-        out.write("&#");
-        // Formerly used String.valueOf().  This version tests out
-        // about 40% faster in a microbenchmark (and on systems where GC is
-        // going gonzo, it should be even better)
-        int i = (int) ch;
-        if (i > 10000) {
-            out.write('0' + (i / 10000));
-            i = i % 10000;
-            out.write('0' + (i / 1000));
-            i = i % 1000;
-            out.write('0' + (i / 100));
-            i = i % 100;
-            out.write('0' + (i / 10));
-            i = i % 10;
-            out.write('0' + i);
-        } else if (i > 1000) {
-            out.write('0' + (i / 1000));
-            i = i % 1000;
-            out.write('0' + (i / 100));
-            i = i % 100;
-            out.write('0' + (i / 10));
-            i = i % 10;
-            out.write('0' + i);
-        } else {
-            out.write('0' + (i / 100));
-            i = i % 100;
-            out.write('0' + (i / 10));
-            i = i % 10;
-            out.write('0' + i);
-        }
-
-        out.write(';');
-
-    }
-
-    // 
-    // Buffering scheme: we use a tremendously simple buffering
-    // scheme that greatly reduces the number of calls into the
-    // Writer/PrintWriter.  In practice this has produced significant
-    // measured performance gains (at least in JDK 1.3.1).  We only
-    // support adding single characters to the buffer, so anytime
-    // multiple characters need to be written out, the entire buffer
-    // gets flushed.  In practice, this is good enough, and keeps
-    // the core simple.
-    //
-
-    /**
-     * Add a character to the buffer, flushing the buffer if the buffer is
-     * full, and returning the new buffer index
-     */
-    private static int addToBuffer(Writer out,
-                                   char[] buffer,
-                                   int bufferIndex,
-                                   int bufferLength,
-                                   char ch) throws IOException {
-
-        if (bufferIndex >= bufferLength) {
-            out.write(buffer, 0, bufferIndex);
-            bufferIndex = 0;
-        }
-
-        buffer[bufferIndex] = ch;
-
-        return bufferIndex + 1;
-
     }
 
 
@@ -798,8 +529,7 @@ public class HtmlUtils {
                                         String text,
                                         String encoding,
                                         int start)
-          throws IOException, UnsupportedEncodingException {
-
+        throws IOException, UnsupportedEncodingException {
         ByteArrayOutputStream buf = null;
         OutputStreamWriter writer = null;
         char[] charArray = null;
@@ -841,45 +571,272 @@ public class HtmlUtils {
                 buf.reset();
             }
         }
-
-    }
-
-
-    /**
-     * Flush the contents of the buffer to the output stream
-     * and return the reset buffer index
-     */
-    private static int flushBuffer(Writer out,
-                                   char[] buffer,
-                                   int bufferIndex) throws IOException {
-
-        if (bufferIndex > 0) {
-            out.write(buffer, 0, bufferIndex);
-        }
-
-        return 0;
-
-    }
-
-
-    static private char intToHex(int i) {
-
-        if (i < 10) {
-            return ((char) ('0' + i));
-        } else {
-            return ((char) ('A' + (i - 10)));
-        }
-
     }
 
 
     static private void writeURIDoubleHex(Writer out,
                                           int i) throws IOException {
-
         out.write('%');
         out.write(intToHex((i >> 4) % 0x10));
         out.write(intToHex(i % 0x10));
-
     }
 
+
+    static private char intToHex(int i) {
+        if (i < 10)
+            return ((char) ('0' + i));
+        else
+            return ((char) ('A' + (i - 10)));
+    }
+
+
+    static private final int MAX_BYTES_PER_CHAR = 10;
+    static private final BitSet DONT_ENCODE_SET = new BitSet(256);
+
+
+    // See: http://www.ietf.org/rfc/rfc2396.txt
+    // We're not fully along for that ride either, but we do encode
+    // ' ' as '%20', and don't bother encoding '~' or '/'
+    static {
+        for (int i = 'a'; i <= 'z'; i++) {
+            DONT_ENCODE_SET.set(i);
+        }
+
+        for (int i = 'A'; i <= 'Z'; i++) {
+            DONT_ENCODE_SET.set(i);
+        }
+
+        for (int i = '0'; i <= '9'; i++) {
+            DONT_ENCODE_SET.set(i);
+        }
+        
+        // Don't encode '%' - we don't want to double encode anything.
+        DONT_ENCODE_SET.set('%');
+        // Ditto for '+', which is an encoded space
+        DONT_ENCODE_SET.set('+');
+
+        DONT_ENCODE_SET.set('#');
+        DONT_ENCODE_SET.set('&');
+        DONT_ENCODE_SET.set('=');
+        DONT_ENCODE_SET.set('-');
+        DONT_ENCODE_SET.set('_');
+        DONT_ENCODE_SET.set('.');
+        DONT_ENCODE_SET.set('*');
+        DONT_ENCODE_SET.set('~');
+        DONT_ENCODE_SET.set('/');
+        DONT_ENCODE_SET.set('\'');
+        DONT_ENCODE_SET.set('!');
+        DONT_ENCODE_SET.set('(');
+        DONT_ENCODE_SET.set(')');
+    }
+
+
+    //
+    // Entities from HTML 4.0, section 24.2.1; character codes 0xA0 to 0xFF
+    //
+    static private String[] sISO8859_1_Entities = new String[]{
+        "nbsp",
+        "iexcl",
+        "cent",
+        "pound",
+        "curren",
+        "yen",
+        "brvbar",
+        "sect",
+        "uml",
+        "copy",
+        "ordf",
+        "laquo",
+        "not",
+        "shy",
+        "reg",
+        "macr",
+        "deg",
+        "plusmn",
+        "sup2",
+        "sup3",
+        "acute",
+        "micro",
+        "para",
+        "middot",
+        "cedil",
+        "sup1",
+        "ordm",
+        "raquo",
+        "frac14",
+        "frac12",
+        "frac34",
+        "iquest",
+        "Agrave",
+        "Aacute",
+        "Acirc",
+        "Atilde",
+        "Auml",
+        "Aring",
+        "AElig",
+        "Ccedil",
+        "Egrave",
+        "Eacute",
+        "Ecirc",
+        "Euml",
+        "Igrave",
+        "Iacute",
+        "Icirc",
+        "Iuml",
+        "ETH",
+        "Ntilde",
+        "Ograve",
+        "Oacute",
+        "Ocirc",
+        "Otilde",
+        "Ouml",
+        "times",
+        "Oslash",
+        "Ugrave",
+        "Uacute",
+        "Ucirc",
+        "Uuml",
+        "Yacute",
+        "THORN",
+        "szlig",
+        "agrave",
+        "aacute",
+        "acirc",
+        "atilde",
+        "auml",
+        "aring",
+        "aelig",
+        "ccedil",
+        "egrave",
+        "eacute",
+        "ecirc",
+        "euml",
+        "igrave",
+        "iacute",
+        "icirc",
+        "iuml",
+        "eth",
+        "ntilde",
+        "ograve",
+        "oacute",
+        "ocirc",
+        "otilde",
+        "ouml",
+        "divide",
+        "oslash",
+        "ugrave",
+        "uacute",
+        "ucirc",
+        "uuml",
+        "yacute",
+        "thorn",
+        "yuml"
+    };
+
+
+    //----------------------------------------------------------
+    // The following is used to verify encodings
+    //----------------------------------------------------------
+    //
+    static public void validateEncoding(String encoding)
+        throws UnsupportedEncodingException {
+        if (encoding != null) {
+            // Try creating a string off of the default encoding
+            new String(encodingTestBytes, encoding);
+        }
+    }
+
+
+    // Private array used simply to verify character encodings
+    static private final byte[] encodingTestBytes = new byte[]{(byte) 65};
+
+    //----------------------------------------------------------
+    // The following is used to verify "empty" Html elements.
+    // "Empty" Html elements are those that do not require an
+    // ending tag.  For example, <br>  or <hr>...
+    //----------------------------------------------------------
+
+    static public boolean isEmptyElement(String name) {
+        char firstChar = name.charAt(0);
+        if (firstChar > _LAST_EMPTY_ELEMENT_START)
+            return false;
+
+        // Can we improve performance here?  It's certainly slower to use
+        // a HashMap, at least if we can't assume the input name is lowercased.
+        String[] array = emptyElementArr[name.charAt(0)];
+        if (array != null) {
+            for (int i = array.length - 1; i >= 0; i--) {
+                if (name.equalsIgnoreCase(array[i]))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+
+    static private char _LAST_EMPTY_ELEMENT_START = 'p';
+    static private String[][] emptyElementArr =
+        new String[((int) _LAST_EMPTY_ELEMENT_START) + 1][];
+
+    static private String[] aNames = new String[]{
+        "area",
+    };
+
+    static private String[] bNames = new String[]{
+        "br",
+        "base",
+        "basefont",
+    };
+
+    static private String[] cNames = new String[]{
+        "col",
+    };
+
+    static private String[] fNames = new String[]{
+        "frame",
+    };
+
+    static private String[] hNames = new String[]{
+        "hr",
+    };
+
+    static private String[] iNames = new String[]{
+        "img",
+        "input",
+        "isindex",
+    };
+
+    static private String[] lNames = new String[]{
+        "link",
+    };
+
+    static private String[] mNames = new String[]{
+        "meta",
+    };
+
+    static private String[] pNames = new String[]{
+        "param",
+    };
+
+
+    static {
+        emptyElementArr['a'] = aNames;
+        emptyElementArr['A'] = aNames;
+        emptyElementArr['b'] = bNames;
+        emptyElementArr['B'] = bNames;
+        emptyElementArr['c'] = cNames;
+        emptyElementArr['C'] = cNames;
+        emptyElementArr['f'] = fNames;
+        emptyElementArr['F'] = fNames;
+        emptyElementArr['h'] = hNames;
+        emptyElementArr['H'] = hNames;
+        emptyElementArr['i'] = iNames;
+        emptyElementArr['I'] = iNames;
+        emptyElementArr['l'] = lNames;
+        emptyElementArr['L'] = lNames;
+        emptyElementArr['m'] = mNames;
+        emptyElementArr['M'] = mNames;
+        emptyElementArr['p'] = pNames;
+        emptyElementArr['P'] = pNames;
+    }
 }

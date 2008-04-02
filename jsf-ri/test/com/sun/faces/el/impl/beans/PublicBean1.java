@@ -89,14 +89,7 @@ package com.sun.faces.el.impl.beans;
 
 public class PublicBean1 {
 
-
-    // ---------------------------------------------------------- Public Methods
-
-
     public Object getValue() {
-
         return "got the value";
-
     }
-
 }

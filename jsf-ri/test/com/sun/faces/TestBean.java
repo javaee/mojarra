@@ -36,31 +36,16 @@ import javax.el.ELException;
 public class TestBean extends 
         com.sun.faces.cactus.TestBean {
 
-
-    protected CustomerBean customerBean;
-
-
-    // ------------------------------------------------------------ Constructors
-
-
     public TestBean() {
     }
 
-
-    // ---------------------------------------------------------- Public Methods
-
-
+    protected CustomerBean customerBean;
     public CustomerBean getCustomerBean() {
-
 	return customerBean;
-
     }
 
-
     public void setCustomerBean(CustomerBean newCustomerBean) {
-
 	customerBean = newCustomerBean;
-
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicInputRenderer.java,v 1.33 2006/03/29 22:38:36 rlubke Exp $
+ * $Id: HtmlBasicInputRenderer.java,v 1.34 2006/03/29 23:03:48 rlubke Exp $
  */
 
 /*
@@ -40,10 +40,10 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 
-import java.util.logging.Level;
-
 import com.sun.faces.util.MessageFactory;
 import com.sun.faces.util.MessageUtils;
+
+import java.util.logging.Level;
 
 /**
  * <B>HtmlBasicInputRenderer</B> is a base class for implementing renderers
@@ -52,26 +52,65 @@ import com.sun.faces.util.MessageUtils;
 
 public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
 
+    //
+    // Protected Constants
+    //
+   
+    //
+    // Class Variables
+    //
 
-    private boolean hasStringConverter = false;
+    //
+    // Instance Variables
+    //
 
-    private boolean hasStringConverterSet = false;
+    // Attribute Instance Variables
 
-    // ------------------------------------------------------------ Constructors
+    // Relationship Instance Variables
 
+    //
+    // Constructors and Initializers    
+    //
 
     public HtmlBasicInputRenderer() {
-
         super();
+    }
+
+    //
+    // Class methods
+    //
+
+    //
+    // General Methods
+    //
+
+    public void setSubmittedValue(UIComponent component, Object value) {
+        if (component instanceof UIInput) {
+            ((UIInput) component).setSubmittedValue(value);
+            if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("Set submitted value " + value + " on component ");
+            }
+        }
 
     }
 
-    // ---------------------------------------------------------- Public Methods
+
+    protected Object getValue(UIComponent component) {
+        if (component instanceof ValueHolder) {
+            Object value = ((ValueHolder) component).getValue();
+            if (logger.isLoggable(Level.FINE)) {
+                 logger.fine("component.getValue() returned " + value);
+            }
+            return value;
+        }
+
+        return null;
+    }
 
 
     public Object getConvertedValue(FacesContext context, UIComponent component,
                                     Object submittedValue)
-          throws ConverterException {
+        throws ConverterException {
 
         String newValue = (String) submittedValue;
         // if we have no local value, try to get the valueExpression.
@@ -81,22 +120,20 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
         Object result = null;
         // If there is a converter attribute, use it to to ask application
         // instance for a converter with this identifer.
-
+        
         if (component instanceof ValueHolder) {
             converter = ((ValueHolder) component).getConverter();
         }
 
         if (null == converter && null != valueExpression) {
-            Class converterType =
-                  valueExpression.getType(context.getELContext());
-            // if converterType is null, assume the modelType is "String".
+            Class converterType = valueExpression.getType(context.getELContext());
+           // if converterType is null, assume the modelType is "String".
             if (converterType == null ||
                 converterType == Object.class) {
                 if (logger.isLoggable(Level.FINE)) {
                     logger.fine("No conversion necessary for " + submittedValue
-                                + "and converterType " + converterType +
-                                " while decoding component " + component
-                          .getId());
+                              + "and converterType " + converterType +
+                              " while decoding component " + component.getId());
                 }
                 return newValue;
             }
@@ -106,9 +143,8 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
             if (converterType == String.class && !hasStringConverter(context)) {
                 if (logger.isLoggable(Level.FINE)) {
                     logger.fine("No conversion necessary for " + submittedValue
-                                + "and converterType " + converterType +
-                                " while decoding component " + component
-                          .getId());
+                              + "and converterType " + converterType +
+                              " while decoding component " + component.getId());
                 }
                 return newValue;
             }
@@ -120,35 +156,30 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
                 converter = application.createConverter(converterType);
                 if (logger.isLoggable(Level.FINE)) {
                     logger.fine(
-                          "Created converter " + converter + "of type " +
-                          converterType +
-                          " while decoding component " +
-                          component.getId());
+                        "Created converter " + converter + "of type " +
+                        converterType +
+                        " while decoding component " +
+                        component.getId());
                 }
             } catch (Exception e) {
                 if (logger.isLoggable(Level.FINE)) {
                     logger.fine("Converter could not be instantiated for " +
-                                converterType + " while " +
-                                "decoding component " + component.getId());
+                              converterType + " while " +
+                              "decoding component " + component.getId());
                 }
                 return (null);
             }
         } else if (converter == null && valueExpression == null) {
-            // if there is no valueExpression and converter attribute set,
-            // assume the modelType as "String" since we have no way of
-            // figuring out the type. So for the selectOne and
-            // selectMany, converter has to be set if there is no
-            // valueExpression attribute set on the component.
+        // if there is no valueExpression and converter attribute set,
+        // assume the modelType as "String" since we have no way of
+        // figuring out the type. So for the selectOne and
+        // selectMany, converter has to be set if there is no
+        // valueExpression attribute set on the component.
             if (logger.isLoggable(Level.FINE)) {
-                logger.fine("No conversion necessary for "
-                            + submittedValue
-                            +
-                            " while decoding component "
-                            + component.getId()
-                            +
-                            "since there is no explicitly registered converter and "
-                            +
-                            "component value is not bound to a model property ");
+                 logger.fine("No conversion necessary for " + submittedValue +
+                          " while decoding component " + component.getId() +
+                          "since there is no explicitly registered converter and " +
+                          "component value is not bound to a model property ");
             }
             return newValue;
         }
@@ -158,63 +189,28 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
             return result;
         } else {
             if (logger.isLoggable(Level.FINE)) {
-                logger.fine("Unexpected Converter exception " +
-                            " while decoding component " + component.getId());
+                 logger.fine("Unexpected Converter exception " +
+                          " while decoding component " + component.getId());
             }
             // throw converter exception.
-            Object [] params = {
-                  newValue,
-                  "null Converter"
-            };
+	    Object [] params = {
+		newValue,
+		"null Converter"
+	    };
 
             throw new ConverterException(MessageFactory.getMessage(
-                  context, MessageUtils.CONVERSION_ERROR_MESSAGE_ID, params));
+                context, MessageUtils.CONVERSION_ERROR_MESSAGE_ID, params));
         }
-
     }
-
-
-    public void setSubmittedValue(UIComponent component, Object value) {
-
-        if (component instanceof UIInput) {
-            ((UIInput) component).setSubmittedValue(value);
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("Set submitted value " + value + " on component ");
-            }
-        }
-
-    }
-
-    // ------------------------------------------------------- Protected Methods
-
-
-    protected Object getValue(UIComponent component) {
-
-        if (component instanceof ValueHolder) {
-            Object value = ((ValueHolder) component).getValue();
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("component.getValue() returned " + value);
-            }
-            return value;
-        }
-
-        return null;
-
-    }
-
-    // --------------------------------------------------------- Private Methods
-
-
+    
+    private boolean hasStringConverterSet = false;
+    private boolean hasStringConverter = false;
     private boolean hasStringConverter(FacesContext context) {
-
         if (!hasStringConverterSet) {
-            hasStringConverter = (null !=
-                                  context.getApplication()
-                                        .createConverter(String.class));
+            hasStringConverter = (null != 
+                    context.getApplication().createConverter(String.class));
             hasStringConverterSet = true;
         }
         return hasStringConverter;
-
     }
-
 } // end of class HtmlBasicInputRenderer

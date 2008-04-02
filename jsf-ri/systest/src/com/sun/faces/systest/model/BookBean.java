@@ -33,96 +33,59 @@ import javax.faces.validator.ValidatorException;
 
 public class BookBean {
 
-
+    private String title;
     private String author;
     private String isbn;
-
-    private String title;
     private double price;
     private int quantity;
 
-    // ------------------------------------------------------------ Constructors
-
-
     public BookBean(String title, String author, String isbn, double price) {
-
         this.title = title;
         this.author = author;
         this.isbn = isbn;
         this.price = price;
-
     }
-
-    // ---------------------------------------------------------- Public Methods
-
-
-    public String getAuthor() {
-
-        return author;
-
-    }
-
-
-    public String getIsbn() {
-
-        return isbn;
-
-    }
-
-
-    public double getPrice() {
-
-        return price;
-
-    }
-
-
-    public int getQuantity() {
-
-        return quantity;
-
-    }
-
-
-    public void setQuantity(int quantity) {
-
-        this.quantity = quantity;
-
-    }
-
 
     public String getTitle() {
-
         return title;
-
     }
 
+    public String getAuthor() {
+        return author;
+    }
 
     public String getFirstName() {
-
         return author;
-
     }
-
 
     public String getSurname() {
-
         return author;
-
     }
 
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 
     public void validateQuantity(FacesContext context,
                                  UIComponent component,
-                                 Object value) {
-
+                                 Object value) {        
         int q = (Integer) value;
         if (q < 0) {
             throw new ValidatorException(
-                  new FacesMessage("Quantity must be zero or greater."));
+                new FacesMessage("Quantity must be zero or greater."));                   
         }
-
     }
-
 }
 

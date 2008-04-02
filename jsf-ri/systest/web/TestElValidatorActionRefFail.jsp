@@ -1,7 +1,6 @@
-<%@ page import="javax.servlet.jsp.PageContext"%>
 <!--
-Copyright 2004 Sun Microsystems, Inc. All rights reserved.
-SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
 <html>
@@ -10,13 +9,10 @@ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 </head>
-
 <body>
 
 <%
-    pageContext.setAttribute("ford",
-                             new String("harrison"),
-                             PageContext.REQUEST_SCOPE);
+  pageContext.setAttribute("ford", new String("harrison"), PageContext.REQUEST_SCOPE);
 %>
 
 <h1>TLV commandButton, invalid 'action' expression</h1>
@@ -26,8 +22,8 @@ This page should Fail.
 
 <f:view>
 
-    <p>This command button has an invalid action expression</p>
-    <h:commandButton value="hello" action="#{ford < 1}"/>
+  <p>This command button has an invalid action expression</p>
+  <h:commandButton value="hello" action="#{ford < 1}"/>
 
 </f:view>
 

@@ -1,5 +1,5 @@
 /*
- * $Id: BackingBean.java,v 1.4 2006/03/29 22:39:14 rlubke Exp $
+ * $Id: BackingBean.java,v 1.5 2006/03/29 23:04:23 rlubke Exp $
  */
 
 /*
@@ -32,32 +32,20 @@ package com.sun.faces.systest.model;
 
 public class BackingBean extends Object {
 
+    public String linkPressed() {
+	result.append("linkPressed");
+	return "linkPressed";
+    }
+
+    public String buttonPressed() {
+	result.append("buttonPressed");
+	return "buttonPressed";
+    }
 
     StringBuffer result = new StringBuffer();
 
-    // ---------------------------------------------------------- Public Methods
-
-
-    public String buttonPressed() {
-
-        result.append("buttonPressed");
-        return "buttonPressed";
-
-    }
-
-
     public String getResult() {
-
-        return result.toString();
-
-    }
-
-
-    public String linkPressed() {
-
-        result.append("linkPressed");
-        return "linkPressed";
-
+	return result.toString();
     }
 
 }

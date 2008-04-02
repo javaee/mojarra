@@ -1,5 +1,5 @@
 /*
- * $Id: DummyPropertyResolverImpl.java,v 1.4 2006/03/29 22:38:32 rlubke Exp $
+ * $Id: DummyPropertyResolverImpl.java,v 1.5 2006/03/29 23:03:44 rlubke Exp $
  */
 
 /*
@@ -29,98 +29,76 @@
 
 package com.sun.faces.el;
 
-import javax.faces.context.FacesContext;
 import javax.faces.el.EvaluationException;
 import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.PropertyResolver;
 
+import javax.faces.context.FacesContext;
+
 /**
- * Default propertyResolver implementation that gets the ELContext from the
+ * Default propertyResolver implementation that gets the ELContext from the 
  * argument FacesContext and calls setPropertyResolved(false) on it. This is
  * provided to ensure that the legacy property resolvers continue to work with
  * unfied EL API
  */
 
 public class DummyPropertyResolverImpl extends PropertyResolver {
-
-    // ---------------------------------------------------------- Public Methods
-
-
-    public Class getType(Object base, int index)
-          throws EvaluationException, PropertyNotFoundException {
-
+    
+    public Object getValue(Object base, Object property)
+        throws EvaluationException, PropertyNotFoundException {
         FacesContext context = FacesContext.getCurrentInstance();
         context.getELContext().setPropertyResolved(false);
         return null;
-
-    }
-
-
-    public Class getType(Object base, Object property)
-          throws EvaluationException, PropertyNotFoundException {
-
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.getELContext().setPropertyResolved(false);
-        return null;
-
     }
 
 
     public Object getValue(Object base, int index)
-          throws EvaluationException, PropertyNotFoundException {
-
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.getELContext().setPropertyResolved(false);
-        return null;
-
-    }
-
-
-    public Object getValue(Object base, Object property)
-          throws EvaluationException, PropertyNotFoundException {
-
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.getELContext().setPropertyResolved(false);
-        return null;
-
-    }
-
-
-    public boolean isReadOnly(Object base, int index)
-          throws EvaluationException, PropertyNotFoundException {
-
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.getELContext().setPropertyResolved(false);
-        return false;
-
-    }
-
-
-    public boolean isReadOnly(Object base, Object property)
-          throws EvaluationException, PropertyNotFoundException {
-
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.getELContext().setPropertyResolved(false);
-        return false;
-
-    }
-
-
-    public void setValue(Object base, int index, Object value)
-          throws EvaluationException, PropertyNotFoundException {
-
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.getELContext().setPropertyResolved(false);
-
+        throws EvaluationException, PropertyNotFoundException {
+       FacesContext context = FacesContext.getCurrentInstance();
+       context.getELContext().setPropertyResolved(false);
+       return null;         
     }
 
 
     public void setValue(Object base, Object property, Object value)
-          throws EvaluationException, PropertyNotFoundException {
-
+        throws EvaluationException, PropertyNotFoundException {
         FacesContext context = FacesContext.getCurrentInstance();
         context.getELContext().setPropertyResolved(false);
-
     }
 
+    public void setValue(Object base, int index, Object value)
+        throws EvaluationException, PropertyNotFoundException {
+       FacesContext context = FacesContext.getCurrentInstance();
+       context.getELContext().setPropertyResolved(false);
+    }
+
+    public boolean isReadOnly(Object base, Object property)
+        throws EvaluationException, PropertyNotFoundException {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getELContext().setPropertyResolved(false);        
+        return false;
+    }
+
+    public boolean isReadOnly(Object base, int index)
+        throws EvaluationException, PropertyNotFoundException {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getELContext().setPropertyResolved(false);        
+        return false;        
+    }
+
+
+    public Class getType(Object base, Object property)
+        throws EvaluationException, PropertyNotFoundException {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getELContext().setPropertyResolved(false);        
+        return null;         
+    }
+
+    public Class getType(Object base, int index)
+        throws EvaluationException, PropertyNotFoundException {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getELContext().setPropertyResolved(false);        
+        return null;
+    }
+    
 }

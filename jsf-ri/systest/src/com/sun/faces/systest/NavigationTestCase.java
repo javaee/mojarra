@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationTestCase.java,v 1.9 2006/03/29 22:38:50 rlubke Exp $
+ * $Id: NavigationTestCase.java,v 1.10 2006/03/29 23:03:58 rlubke Exp $
  */
 
 /*
@@ -29,19 +29,26 @@
 
 package com.sun.faces.systest;
 
-import javax.faces.component.NamingContainer;
-
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlBody;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
+import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-/** <p>Test Case for JSP Interoperability.</p> */
+import javax.faces.component.NamingContainer;
+
+/**
+ * <p>Test Case for JSP Interoperability.</p>
+ */
 
 public class NavigationTestCase extends AbstractTestCase {
+
 
     // ------------------------------------------------------------ Constructors
 
@@ -52,180 +59,54 @@ public class NavigationTestCase extends AbstractTestCase {
      * @param name Name of the test case
      */
     public NavigationTestCase(String name) {
-
         super(name);
-
-    }
-
-    // ---------------------------------------------------------- Public Methods
-
-
-    /** Return the tests included in this test suite. */
-    public static Test suite() {
-
-        return (new TestSuite(NavigationTestCase.class));
-
     }
 
 
-    /** Set up instance variables required by this test case. */
+    // ------------------------------------------------------ Instance Variables
+
+
+    // ---------------------------------------------------- Overall Test Methods
+
+
+    /**
+     * Set up instance variables required by this test case.
+     */
     public void setUp() throws Exception {
-
         super.setUp();
-
     }
 
 
-    /** Tear down instance variables required by this test case. */
+    /**
+     * Return the tests included in this test suite.
+     */
+    public static Test suite() {
+        return (new TestSuite(NavigationTestCase.class));
+    }
+
+
+    /**
+     * Tear down instance variables required by this test case.
+     */
     public void tearDown() {
-
         super.tearDown();
-
     }
 
-
-    public void testNavigateWithEnum() throws Exception {
-
-        HtmlForm form;
-        HtmlSubmitInput submit;
-        HtmlPage page, page1;
-
-
-        page = getPage("/faces/enum01.jsp");
-        form = getFormById(page, "form");
-        assertNotNull("form exists", form);
-        submit = (HtmlSubmitInput)
-              form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
-                                  "go");
-
-        // submit the form, go to next page, check that the text exists
-
-        try {
-            page1 = (HtmlPage) submit.click();
-            assertTrue(-1 != page1.asText().indexOf("/hello.jsp PASSED"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            assertTrue(false);
-        }
-
-        page = getPage("/faces/enum01.jsp");
-        form = getFormById(page, "form");
-        assertNotNull("form exists", form);
-        submit = (HtmlSubmitInput)
-              form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
-                                  "stay");
-
-        // submit the form, stay on same page, check that the text does not exist
-
-        try {
-            page1 = (HtmlPage) submit.click();
-            assertTrue(-1 == page1.asText().indexOf("/hello.jsp PASSED"));
-            assertTrue(-1 != page1.asText().indexOf("stay here"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            assertTrue(false);
-        }
-
-    }
-
-
-    public void testNavigateWithVerbatim() throws Exception {
-
-        HtmlForm form;
-        HtmlSubmitInput submit;
-        HtmlPage page, page1;
-
-        page = getPage("/faces/jsp/verbatim-test.jsp");
-        form = getFormById(page, "form1");
-        assertNotNull("form exists", form);
-        submit = (HtmlSubmitInput)
-              form.getInputByName("form1" + NamingContainer.SEPARATOR_CHAR +
-                                  "submit");
-
-        // press the button
-        try {
-            page1 = (HtmlPage) submit.click();
-            assertTrue(-1 != page1.asText().indexOf("Thank you"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            assertTrue(false);
-        }
-
-    }
-
-
-    public void testNavigateWithVerbatim_One() throws Exception {
-
-        HtmlForm form;
-        HtmlSubmitInput submit;
-        HtmlPage page, page1;
-
-        page = getPage("/faces/jsp/verbatim-one-test.jsp");
-        form = getFormById(page, "form");
-        assertNotNull("form exists", form);
-        submit = (HtmlSubmitInput)
-              form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
-                                  "submit");
-
-        // press the link, return to the same page, and check that
-        // output text (header) is still present...
-
-        try {
-            page1 = (HtmlPage) submit.click();
-            assertTrue(-1 != page1.asText().indexOf("this is the header"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            assertTrue(false);
-        }
-
-    }
-
-
-    public void testNavigateWithVerbatim_Two() throws Exception {
-
-        HtmlForm form;
-        HtmlSubmitInput submit;
-        HtmlPage page, page1;
-
-
-        page = getPage("/faces/jsp/verbatim-two-test.jsp");
-        form = getFormById(page, "form");
-        assertNotNull("form exists", form);
-        submit = (HtmlSubmitInput)
-              form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
-                                  "submit");
-
-        // submit the form, return to the same page, and check that
-        // output text (header) is still present...
-        // and verbatim text is still present...
-
-        try {
-            page1 = (HtmlPage) submit.click();
-            assertTrue(-1 != page1.asText().indexOf("verbatim one text here"));
-            assertTrue(-1 != page1.asText().indexOf("this is the header"));
-            assertTrue(-1 != page1.asText().indexOf("verbatim two text here"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            assertTrue(false);
-        }
-
-    }
 
     // ------------------------------------------------- Individual Test Methods
 
 
     // Test dynamically adding and removing components
     public void testRedirect() throws Exception {
-
         client.setRedirectEnabled(false);
         // the navigation-case for this url is set up to cause a redirect
         HtmlPage page = getPage("/faces/redirect.jsp");
         HtmlForm form = getFormById(page, "redirect");
         assertNotNull("form exists", form);
         HtmlSubmitInput submit = (HtmlSubmitInput)
-              form.getInputByName("redirect" +
-                                  NamingContainer.SEPARATOR_CHAR +
-                                  "submit");
+            form.getInputByName("redirect" +
+                                NamingContainer.SEPARATOR_CHAR +
+                                "submit");
         boolean exceptionThrown = false;
         try {
             page = (HtmlPage) submit.click();
@@ -235,7 +116,125 @@ public class NavigationTestCase extends AbstractTestCase {
             exceptionThrown = true;
         }
         assertTrue("Didn't get expected redirect", exceptionThrown);
+    }
 
+
+    public void testNavigateWithVerbatim() throws Exception {
+        HtmlForm form;
+        HtmlSubmitInput submit;
+        HtmlPage page, page1;
+
+        page = getPage("/faces/jsp/verbatim-test.jsp");
+        form = getFormById(page, "form1");
+        assertNotNull("form exists", form);
+        submit = (HtmlSubmitInput)
+            form.getInputByName("form1" + NamingContainer.SEPARATOR_CHAR +
+                                "submit");
+
+        // press the button
+	try {
+            page1 = (HtmlPage) submit.click();
+            assertTrue(-1 != page1.asText().indexOf("Thank you"));
+	} catch (Exception e) {
+	    e.printStackTrace();
+	    assertTrue(false);
+	}
+    }
+
+    public void testNavigateWithVerbatim_One() throws Exception {
+        HtmlForm form;
+        HtmlSubmitInput submit;
+        HtmlPage page, page1;
+                                                                                
+        page = getPage("/faces/jsp/verbatim-one-test.jsp");
+        form = getFormById(page, "form");
+        assertNotNull("form exists", form);
+        submit = (HtmlSubmitInput)
+            form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
+                                "submit");
+                                                                                
+        // press the link, return to the same page, and check that
+        // output text (header) is still present...
+ 
+        try {
+            page1 = (HtmlPage) submit.click();
+            assertTrue(-1 != page1.asText().indexOf("this is the header"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTrue(false);
+        }
+    }
+
+    public void testNavigateWithVerbatim_Two() throws Exception {
+        HtmlForm form;
+        HtmlSubmitInput submit;
+        HtmlPage page, page1;
+                                                                               
+                                                                               
+        page = getPage("/faces/jsp/verbatim-two-test.jsp");
+        form = getFormById(page, "form");
+        assertNotNull("form exists", form);
+        submit = (HtmlSubmitInput)
+            form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
+                                "submit");
+                                                                               
+                                                                               
+        // submit the form, return to the same page, and check that
+        // output text (header) is still present...
+        // and verbatim text is still present...
+                                                                               
+        try {
+            page1 = (HtmlPage) submit.click();
+            assertTrue(-1 != page1.asText().indexOf("verbatim one text here"));
+            assertTrue(-1 != page1.asText().indexOf("this is the header"));
+            assertTrue(-1 != page1.asText().indexOf("verbatim two text here"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTrue(false);
+        }
+    }
+    
+    public void testNavigateWithEnum() throws Exception {
+        HtmlForm form;
+        HtmlSubmitInput submit;
+        HtmlPage page, page1;
+                                                                               
+                                                                               
+        page = getPage("/faces/enum01.jsp");
+        form = getFormById(page, "form");
+        assertNotNull("form exists", form);
+        submit = (HtmlSubmitInput)
+            form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
+                                "go");
+                                                                               
+        // submit the form, go to next page, check that the text exists
+                                                                               
+        try {
+            page1 = (HtmlPage) submit.click();
+            assertTrue(-1 != page1.asText().indexOf("/hello.jsp PASSED"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTrue(false);
+        }
+        
+        page = getPage("/faces/enum01.jsp");
+        form = getFormById(page, "form");
+        assertNotNull("form exists", form);
+        submit = (HtmlSubmitInput)
+            form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
+                                "stay");
+                                                                               
+        // submit the form, stay on same page, check that the text does not exist
+                                                                               
+        try {
+            page1 = (HtmlPage) submit.click();
+            assertTrue(-1 == page1.asText().indexOf("/hello.jsp PASSED"));
+            assertTrue(-1 != page1.asText().indexOf("stay here"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTrue(false);
+        }
+        
     }
 
 }

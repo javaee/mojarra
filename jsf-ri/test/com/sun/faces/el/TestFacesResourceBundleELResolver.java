@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesResourceBundleELResolver.java,v 1.4 2006/03/29 22:39:42 rlubke Exp $
+ * $Id: TestFacesResourceBundleELResolver.java,v 1.5 2006/03/29 23:04:52 rlubke Exp $
  */
 
 /*
@@ -43,46 +43,135 @@ import javax.faces.component.UIViewRoot;
 
 
 public class TestFacesResourceBundleELResolver extends ServletFacesTestCase {
-
-
-    private FacesResourceBundleELResolver resolver = null;
-
-
-    // ------------------------------------------------------------ Constructors
-
-
+    
      public TestFacesResourceBundleELResolver()
     {
-
         super("TestFacesResourceBundleELResolver");
-
     }
-
 
     public TestFacesResourceBundleELResolver(String name)
     {
-
         super(name);
-
     }
-
-
-    // ---------------------------------------------------------- Public Methods
-
-
+    
+    private FacesResourceBundleELResolver resolver = null;
+    
     public void setUp() {
-
         super.setUp();
         UIViewRoot root = new UIViewRoot();
         root.setLocale(Locale.ENGLISH);
         getFacesContext().setViewRoot(root);
         resolver = new FacesResourceBundleELResolver();
+    }
+    
+    public void testGetValuePositive() throws Exception {        
+        ResourceBundle bundle1 = (ResourceBundle)
+            resolver.getValue(getFacesContext().getELContext(), null,
+                "testResourceBundle");
+        assertNotNull(bundle1);
+        String value = bundle1.getString("value2");
+        assertNotNull(value);
+        assertEquals("Bob", value);
+        
+        
+    }
+    
+    public void testGetValueNegative() throws Exception {
+        ResourceBundle bundle1 = (ResourceBundle)
+            resolver.getValue(getFacesContext().getELContext(), "hello",
+                "testResourceBundle");
+        assertNull(bundle1);
+        boolean exceptionThrown = false;
+        try {
+            bundle1 = (ResourceBundle)
+                resolver.getValue(getFacesContext().getELContext(), null, null);
+        }
+        catch (PropertyNotFoundException e) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+        
+        bundle1 = (ResourceBundle)
+            resolver.getValue(getFacesContext().getELContext(), null,
+                "nonExistent");
+        
+        assertNull(bundle1);
+    }
+    
+    public void testGetTypePositive() throws Exception {
+        getFacesContext().getELContext().setPropertyResolved(false);
+        Class type = resolver.getType(getFacesContext().getELContext(), null, "testResourceBundle");
+        assertTrue(getFacesContext().getELContext().isPropertyResolved());
+        assertEquals(ResourceBundle.class, type);
+        
+    }
+    
+    public void testGetTypeNegative() throws Exception {
+        Class result = resolver.getType(getFacesContext().getELContext(), 
+                "non-null", "testResourceBundle");
+        assertTrue(null == result);
+        boolean exceptionThrown = false;
+        try {
+            resolver.getType(getFacesContext().getELContext(), null, null);
+        }
+        catch (PropertyNotFoundException e) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
 
     }
+    
+    public void testSetValeNegative() throws Exception {
+        boolean exceptionThrown = false;
+        try {
+            resolver.setValue(getFacesContext().getELContext(), null, null, null);
+        }
+        catch (PropertyNotFoundException e) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
 
-
+        exceptionThrown = false;
+        try {
+            resolver.setValue(getFacesContext().getELContext(), null, "testResourceBundle",
+                    "Value");
+        }
+        catch (PropertyNotWritableException e) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+            
+    }
+ 
+    public void testIsReadOnlyPositive() throws Exception {
+        getFacesContext().getELContext().setPropertyResolved(false);
+        boolean result = resolver.isReadOnly(getFacesContext().getELContext(),
+                null, "testResourceBundle");
+        assertTrue(result);
+        assertTrue(getFacesContext().getELContext().isPropertyResolved());
+        
+    }
+    
+    public void testIsReadOnlyNegative() throws Exception {
+        boolean result = resolver.isReadOnly(getFacesContext().getELContext(), 
+                "non-null Base", null);
+        assertTrue(!result);
+        
+        getFacesContext().getELContext().setPropertyResolved(false);
+        boolean exceptionThrown = false;
+        try {
+            resolver.isReadOnly(getFacesContext().getELContext(), null, null);
+        }
+        catch (PropertyNotFoundException e) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+        assertFalse(getFacesContext().getELContext().isPropertyResolved());
+        
+        
+    }
+    
     public void testGetFeatureDescriptorsPositive() throws Exception {
-
         Iterator iter = resolver.getFeatureDescriptors(getFacesContext().getELContext(), null);
         
         assertNotNull(iter);
@@ -109,127 +198,6 @@ public class TestFacesResourceBundleELResolver extends ServletFacesTestCase {
             test = cur.getName().equals(var1) || cur.getName().equals(var2);
             assertTrue(test);
         }
-
-    }
-
-
-    public void testGetTypeNegative() throws Exception {
-
-        Class result = resolver.getType(getFacesContext().getELContext(), 
-                "non-null", "testResourceBundle");
-        assertTrue(null == result);
-        boolean exceptionThrown = false;
-        try {
-            resolver.getType(getFacesContext().getELContext(), null, null);
-        }
-        catch (PropertyNotFoundException e) {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-
-    }
-
-
-    public void testGetTypePositive() throws Exception {
-
-        getFacesContext().getELContext().setPropertyResolved(false);
-        Class type = resolver.getType(getFacesContext().getELContext(), null, "testResourceBundle");
-        assertTrue(getFacesContext().getELContext().isPropertyResolved());
-        assertEquals(ResourceBundle.class, type);
-        
-    }
-
-
-    public void testGetValueNegative() throws Exception {
-
-        ResourceBundle bundle1 = (ResourceBundle)
-            resolver.getValue(getFacesContext().getELContext(), "hello",
-                "testResourceBundle");
-        assertNull(bundle1);
-        boolean exceptionThrown = false;
-        try {
-            bundle1 = (ResourceBundle)
-                resolver.getValue(getFacesContext().getELContext(), null, null);
-        }
-        catch (PropertyNotFoundException e) {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-        
-        bundle1 = (ResourceBundle)
-            resolver.getValue(getFacesContext().getELContext(), null,
-                "nonExistent");
-        
-        assertNull(bundle1);
-
-    }
-
-
-    public void testGetValuePositive() throws Exception {
-
-        ResourceBundle bundle1 = (ResourceBundle)
-            resolver.getValue(getFacesContext().getELContext(), null,
-                "testResourceBundle");
-        assertNotNull(bundle1);
-        String value = bundle1.getString("value2");
-        assertNotNull(value);
-        assertEquals("Bob", value);
-
-    }
-
-
-    public void testIsReadOnlyNegative() throws Exception {
-
-        boolean result = resolver.isReadOnly(getFacesContext().getELContext(), 
-                "non-null Base", null);
-        assertTrue(!result);
-        
-        getFacesContext().getELContext().setPropertyResolved(false);
-        boolean exceptionThrown = false;
-        try {
-            resolver.isReadOnly(getFacesContext().getELContext(), null, null);
-        }
-        catch (PropertyNotFoundException e) {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-        assertFalse(getFacesContext().getELContext().isPropertyResolved());
-
-    }
-
-
-    public void testIsReadOnlyPositive() throws Exception {
-
-        getFacesContext().getELContext().setPropertyResolved(false);
-        boolean result = resolver.isReadOnly(getFacesContext().getELContext(),
-                null, "testResourceBundle");
-        assertTrue(result);
-        assertTrue(getFacesContext().getELContext().isPropertyResolved());
-        
-    }
-
-
-    public void testSetValeNegative() throws Exception {
-
-        boolean exceptionThrown = false;
-        try {
-            resolver.setValue(getFacesContext().getELContext(), null, null, null);
-        }
-        catch (PropertyNotFoundException e) {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-
-        exceptionThrown = false;
-        try {
-            resolver.setValue(getFacesContext().getELContext(), null, "testResourceBundle",
-                    "Value");
-        }
-        catch (PropertyNotWritableException e) {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-            
     }
 
 }

@@ -29,21 +29,13 @@ import javax.faces.component.UIComponentBase;
 
 public class TestComponent extends UIComponentBase {
 
-
-    // ---------------------------------------------------------- Public Methods
-
-
-    public String getComponentType() {
-
-        return "TestComponent";
-
+    public String getFamily() {
+        return "TestFamily";
     }
 
 
-    public String getFamily() {
-
-        return "TestFamily";
-
+    public String getComponentType() {
+        return "TestComponent";
     }
 
 }

@@ -32,44 +32,30 @@ import javax.faces.event.PhaseListener;
 
 public class SimplePhaseListener implements PhaseListener {
 
-
     private static final String HANDLED_BEFORE_AFTER = "Handled Before After";
-    private boolean handledAfter = false;
 
     private boolean handledBefore = false;
-
-
-    // ------------------------------------------------------------ Constructors
+    private boolean handledAfter = false;
 
 
     public SimplePhaseListener() {
     }
 
 
-    // ---------------------------------------------- Methods From PhaseListener
-
-
     public void afterPhase(PhaseEvent event) {
-
         handledAfter = true;
         if (handledBefore && handledAfter) {
             System.setProperty(HANDLED_BEFORE_AFTER, HANDLED_BEFORE_AFTER);
         }
-
     }
 
 
     public void beforePhase(PhaseEvent event) {
-
         handledBefore = true;
-
     }
 
 
     public PhaseId getPhaseId() {
-
         return PhaseId.APPLY_REQUEST_VALUES;
-
     }
-
 }

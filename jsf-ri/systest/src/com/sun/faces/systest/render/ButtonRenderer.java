@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.6 2006/03/29 22:38:53 rlubke Exp $
+ * $Id: ButtonRenderer.java,v 1.7 2006/03/29 23:04:02 rlubke Exp $
  */
 
 /*
@@ -31,6 +31,13 @@
 
 package com.sun.faces.systest.render;
 
+import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.renderkit.RenderKitUtils;
+
+import com.sun.org.apache.commons.logging.Log;
+import com.sun.org.apache.commons.logging.LogFactory;
+
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
@@ -43,12 +50,6 @@ import javax.faces.render.Renderer;
 import java.io.IOException;
 import java.util.Map;
 
-import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
-import com.sun.org.apache.commons.logging.Log;
-import com.sun.org.apache.commons.logging.LogFactory;
-
 /**
  * <B>ButtonRenderer</B> is a class that renders the current value of
  * <code>UICommand<code> as a Button.
@@ -56,27 +57,55 @@ import com.sun.org.apache.commons.logging.LogFactory;
 
 public class ButtonRenderer extends Renderer {
 
+    public static final String CLEAR_HIDDEN_FIELD_FN_NAME = 
+         "clearFormHiddenParams";
+    public static final String FORM_CLIENT_ID_ATTR = 
+         "com.sun.faces.FORM_CLIENT_ID_ATTR";
 
-    public static final String CLEAR_HIDDEN_FIELD_FN_NAME =
-          "clearFormHiddenParams";
-    public static final String FORM_CLIENT_ID_ATTR =
-          "com.sun.faces.FORM_CLIENT_ID_ATTR";
+    //
+    // Protected Constants
+    //
     // Log instance for this class
     protected static Log log = LogFactory.getLog(ButtonRenderer.class);
 
-    // ---------------------------------------------------------- Public Methods
+    //
+    // Class Variables
+    //
 
+    //
+    // Instance Variables
+    //
+
+    // Attribute Instance Variables
+
+
+    // Relationship Instance Variables
+
+    //
+    // Constructors and Initializers    
+    //
+
+    //
+    // Class methods
+    //
+
+    //
+    // General Methods
+    //
+    
+    //
+    // Methods From Renderer
+    //
 
     public void decode(FacesContext context, UIComponent component) {
-
         if (context == null || component == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (log.isTraceEnabled()) {
             log.trace("Begin decoding component " + component.getId());
         }
-
+        
         // If the component is disabled, do not change the value of the
         // component, since its state cannot be changed.
         if (Util.componentIsDisabledOrReadonly(component)) {
@@ -85,7 +114,8 @@ public class ButtonRenderer extends Renderer {
                           component.getId() + " is disabled");
             }
             return;
-        }
+        } 
+
 
         // Was our command the one that caused this submission?
         // we don' have to worry about getting the value from request parameter
@@ -94,7 +124,7 @@ public class ButtonRenderer extends Renderer {
         // get around the IE bug.
         String clientId = component.getClientId(context);
         Map requestParameterMap = context.getExternalContext()
-              .getRequestParameterMap();
+            .getRequestParameterMap();
         String value = (String) requestParameterMap.get(clientId);
         if (value == null) {
             if (requestParameterMap.get(clientId + ".x") == null &&
@@ -118,16 +148,14 @@ public class ButtonRenderer extends Renderer {
             log.trace("End decoding component " + component.getId());
         }
         return;
-
     }
 
 
     public void encodeBegin(FacesContext context, UIComponent component)
-          throws IOException {
-
+        throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (log.isTraceEnabled()) {
             log.trace("Begin encoding component " + component.getId());
@@ -141,7 +169,7 @@ public class ButtonRenderer extends Renderer {
             }
             return;
         }
-
+        
         // Which button type (SUBMIT, RESET, or BUTTON) should we generate?
         String type = (String) component.getAttributes().get("type");
         String styleClass = null;
@@ -162,7 +190,7 @@ public class ButtonRenderer extends Renderer {
         String imageSrc = (String) component.getAttributes().get("image");
         writer.startElement("input", component);
         writeIdAttributeIfNecessary(context, writer, component);
-        String clientId = component.getClientId(context);
+	String clientId = component.getClientId(context);
         if (imageSrc != null) {
             writer.writeAttribute("type", "image", "type");
             writer.writeURIAttribute("src", src(context, imageSrc), "image");
@@ -172,28 +200,27 @@ public class ButtonRenderer extends Renderer {
             writer.writeAttribute("name", clientId, "clientId");
             writer.writeAttribute("value", label, "value");
         }
-
+        
         // look up the clientId of the form in request scope to arrive the name of
         // the javascript function to invoke from the onclick event handler.
         // PENDING (visvan) we need to fix this dependency between the renderers.
         // This solution is only temporary.
         Map requestMap = context.getExternalContext().getRequestMap();
-        String formClientId = (String) requestMap.get(FORM_CLIENT_ID_ATTR);
-
+        String formClientId = (String)requestMap.get(FORM_CLIENT_ID_ATTR);
+        
         StringBuffer sb = new StringBuffer();
         // call the javascript function that clears the all the hidden field
         // parameters in the form.
         sb.append(CLEAR_HIDDEN_FIELD_FN_NAME);
         if (formClientId != null) {
-            sb.append("_" + formClientId
-                  .replace(NamingContainer.SEPARATOR_CHAR, '_'));
+            sb.append("_" + formClientId.replace(NamingContainer.SEPARATOR_CHAR, '_'));
         }
         sb.append("(this.form.id);");
         // append user specified script for onclick if any.
-        String onclickAttr = (String) component.getAttributes().get("onclick");
+        String onclickAttr = (String)component.getAttributes().get("onclick");
         if (onclickAttr != null && onclickAttr.length() != 0) {
             sb.append(onclickAttr);
-
+            
         }
         writer.writeAttribute("onclick", sb.toString(), null);
 
@@ -202,55 +229,45 @@ public class ButtonRenderer extends Renderer {
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
         if (null != (styleClass = (String)
-              component.getAttributes().get("styleClass"))) {
+            component.getAttributes().get("styleClass"))) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
         writer.endElement("input");
         if (log.isTraceEnabled()) {
             log.trace("End encoding component " + component.getId());
         }
-
     }
-
 
     public void encodeEnd(FacesContext context, UIComponent component)
-          throws IOException {
-
+        throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-
     }
 
-    // --------------------------------------------------------- Private Methods
-
-
-    private boolean shouldWriteIdAttribute(UIComponent component) {
-
-        String id;
-        return (null != (id = component.getId()) &&
-                !id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX));
-
-    }
-
-
+    //
+    // General Methods
+    //
+       
     private String src(FacesContext context, String value) {
-
         if (value == null) {
             return "";
         }
         value = context.getApplication().getViewHandler().
-              getResourceURL(context, value);
+            getResourceURL(context, value);
         return (context.getExternalContext().encodeResourceURL(value));
-
+    }
+                                                                                                          
+    private boolean shouldWriteIdAttribute(UIComponent component) {
+        String id;
+        return (null != (id = component.getId()) &&
+            !id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX));
     }
 
-
     private void writeIdAttributeIfNecessary(FacesContext context,
-                                             ResponseWriter writer,
-                                             UIComponent component) {
-
+                                               ResponseWriter writer,
+                                               UIComponent component) {
         String id;
         if (shouldWriteIdAttribute(component)) {
             try {
@@ -263,7 +280,7 @@ public class ButtonRenderer extends Renderer {
                 }
             }
         }
-
     }
+
 
 } // end of class ButtonRenderer

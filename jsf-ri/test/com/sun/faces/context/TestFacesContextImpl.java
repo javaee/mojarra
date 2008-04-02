@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.51 2006/03/29 22:39:41 rlubke Exp $
+ * $Id: TestFacesContextImpl.java,v 1.52 2006/03/29 23:04:49 rlubke Exp $
  */
 
 /*
@@ -57,44 +57,90 @@ import java.util.ArrayList;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.51 2006/03/29 22:39:41 rlubke Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.52 2006/03/29 23:04:49 rlubke Exp $
  */
 
 public class TestFacesContextImpl extends ServletFacesTestCase {
 
+//
+// Protected Constants
+//
 
-    // ------------------------------------------------------------ Constructors
+//
+// Class Variables
+//
 
+//
+// Instance Variables
+//
+
+// Attribute Instance Variables
+
+// Relationship Instance Variables
+
+//
+// Constructors and Initializers    
+//
 
     public TestFacesContextImpl() {
-
         super("TestFacesContext");
-
     }
 
 
     public TestFacesContextImpl(String name) {
-
         super(name);
-
     }
+//
+// Class methods
+//
 
-
-    // ---------------------------------------------------------- Public Methods
-
-
+//
+// Methods from TestCase
+//
     public void setUp() {
-
         super.setUp();
         UIViewRoot viewRoot = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         viewRoot.setViewId("viewId");
         getFacesContext().setViewRoot(viewRoot);
+    }
 
+//
+// General Methods
+//
+
+    public void testConstructor() {
+        ExternalContextImpl ecImpl =
+            new ExternalContextImpl(getConfig().getServletContext(),
+                                    getRequest(), getResponse());
+        LifecycleImpl lifeImpl = new LifecycleImpl();
+        try {
+            FacesContextImpl fImpl = new FacesContextImpl(null, null);
+            assertTrue(false);
+        } catch (NullPointerException npe) {
+            assertTrue(true);
+        }
+        try {
+            FacesContextImpl fImpl = new FacesContextImpl(ecImpl, null);
+            assertTrue(false);
+        } catch (NullPointerException npe) {
+            assertTrue(true);
+        }
+        try {
+            FacesContextImpl fImpl = new FacesContextImpl(null, lifeImpl);
+            assertTrue(false);
+        } catch (NullPointerException npe) {
+            assertTrue(true);
+        }
+        try {
+            FacesContextImpl fImpl = new FacesContextImpl(ecImpl, lifeImpl);
+            assertTrue(true);
+        } catch (Exception e) {
+            assertTrue(false);
+        }
     }
 
 
     public void testAccessors() {
-
         boolean result = false;
         boolean exceptionThrown = false;
         ServletRequest req = null;
@@ -110,11 +156,8 @@ public class TestFacesContextImpl extends ServletFacesTestCase {
         assertTrue(result);
 
         ResponseStream responseStream = new ResponseStream() {
-
-
             public void write(int b) {
             }
-
         };
         getFacesContext().setResponseStream(responseStream);
         result = responseStream == getFacesContext().getResponseStream();
@@ -123,8 +166,6 @@ public class TestFacesContextImpl extends ServletFacesTestCase {
 
 //PENDING(rogerk) JSF_API_20030718 - implement (ResponseWriter related mods..
         ResponseWriter responseWriter = new ResponseWriter() {
-
-
             public void close() {
             }
 
@@ -138,9 +179,7 @@ public class TestFacesContextImpl extends ServletFacesTestCase {
 
 
             public ResponseWriter cloneWithWriter(Writer writer) {
-
                 return null;
-
             }
 
 
@@ -193,16 +232,12 @@ public class TestFacesContextImpl extends ServletFacesTestCase {
 
 
             public String getCharacterEncoding() {
-
                 return null;
-
             }
 
 
             public String getContentType() {
-
                 return null;
-
             }
 
 
@@ -224,7 +259,6 @@ public class TestFacesContextImpl extends ServletFacesTestCase {
             public void writeText(Object text, String componentPropertyName)
                 throws IOException {
             }
-
         };
 /*    ResponseWriter responseWriter = null;
     try {
@@ -246,65 +280,52 @@ public class TestFacesContextImpl extends ServletFacesTestCase {
                 assertTrue(false);
             }
         }
-
     }
 
 
-    public void testConstructor() {
-
-        ExternalContextImpl ecImpl =
-            new ExternalContextImpl(getConfig().getServletContext(),
-                                    getRequest(), getResponse());
-        LifecycleImpl lifeImpl = new LifecycleImpl();
-        try {
-            FacesContextImpl fImpl = new FacesContextImpl(null, null);
-            assertTrue(false);
-        } catch (NullPointerException npe) {
-            assertTrue(true);
-        }
-        try {
-            FacesContextImpl fImpl = new FacesContextImpl(ecImpl, null);
-            assertTrue(false);
-        } catch (NullPointerException npe) {
-            assertTrue(true);
-        }
-        try {
-            FacesContextImpl fImpl = new FacesContextImpl(null, lifeImpl);
-            assertTrue(false);
-        } catch (NullPointerException npe) {
-            assertTrue(true);
-        }
-        try {
-            FacesContextImpl fImpl = new FacesContextImpl(ecImpl, lifeImpl);
-            assertTrue(true);
-        } catch (Exception e) {
-            assertTrue(false);
-        }
-
+    public void testRenderingControls() {
+        System.out.println("Testing renderResponse()");
+        getFacesContext().renderResponse();
+        assertTrue(getFacesContext().getRenderResponse());
+        System.out.println("Testing responseComplete()");
+        getFacesContext().responseComplete();
+        assertTrue(getFacesContext().getResponseComplete());
     }
 
 
     public void testCurrentInstance() {
-
         System.out.println("Testing getCurrentInstance()");
         FacesContext context = getFacesContext();
         assertTrue(context == FacesContext.getCurrentInstance());
-
     }
 
 
-    public void testGetApplication() {
+    public void testMessageMethodsNull() {
+        boolean gotException = false;
 
         FacesContext fc = getFacesContext();
         assertTrue(fc != null);
 
-        assertTrue(null != fc.getApplication());
+        try {
+            fc.addMessage(null, null);
+        } catch (NullPointerException fe) {
+            gotException = true;
+        }
+        assertTrue(gotException);
+        gotException = false;
+
+        try {
+            fc.addMessage(null, null);
+        } catch (NullPointerException fe) {
+            gotException = true;
+        }
+        assertTrue(gotException);
+        gotException = false;
 
     }
 
 
     public void testMessageMethods() {
-
         FacesContext fc = getFacesContext();
         assertTrue(fc != null);
 
@@ -358,34 +379,15 @@ public class TestFacesContextImpl extends ServletFacesTestCase {
     }
 
 
-    public void testMessageMethodsNull() {
-
-        boolean gotException = false;
-
+    public void testGetApplication() {
         FacesContext fc = getFacesContext();
         assertTrue(fc != null);
 
-        try {
-            fc.addMessage(null, null);
-        } catch (NullPointerException fe) {
-            gotException = true;
-        }
-        assertTrue(gotException);
-        gotException = false;
-
-        try {
-            fc.addMessage(null, null);
-        } catch (NullPointerException fe) {
-            gotException = true;
-        }
-        assertTrue(gotException);
-        gotException = false;
-
+        assertTrue(null != fc.getApplication());
     }
 
 
     public void testRelease() {
-
         System.out.println("Testing release method");
         FacesContext context = getFacesContext();
         context.release();
@@ -413,23 +415,9 @@ public class TestFacesContextImpl extends ServletFacesTestCase {
         assertTrue(exceptionThrown);
 
         // remainder of FacesContext methods are tested in TCK
-
-    }
-
-
-    public void testRenderingControls() {
-
-        System.out.println("Testing renderResponse()");
-        getFacesContext().renderResponse();
-        assertTrue(getFacesContext().getRenderResponse());
-        System.out.println("Testing responseComplete()");
-        getFacesContext().responseComplete();
-        assertTrue(getFacesContext().getResponseComplete());
-
     }
 
 
 // Unit tests to update and retrieve values from model objects
 // are in TestFacesContextImpl_Model.java
-
 } // end of class TestFacesContextImpl

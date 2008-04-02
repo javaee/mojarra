@@ -1,5 +1,5 @@
 /*
- * $Id: TestActionListener01.java,v 1.3 2006/03/29 22:38:50 rlubke Exp $
+ * $Id: TestActionListener01.java,v 1.4 2006/03/29 23:03:59 rlubke Exp $
  */
 
 /*
@@ -30,30 +30,25 @@
 package com.sun.faces.systest;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
+import javax.faces.event.ActionEvent;
+import javax.faces.component.StateHolder;
+import javax.faces.event.AbortProcessingException;
 
 public class TestActionListener01 implements ActionListener {
-
-    // ------------------------------------------------------------ Constructors
-
-
-    public TestActionListener01() {
-    }
-
-    // --------------------------------------------- Methods From ActionListener
+    
+    public TestActionListener01() {}
 
     public void processAction(ActionEvent ae)
-          throws AbortProcessingException {
-
+        throws AbortProcessingException {
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(ae.getComponent().getClientId(context),
-                           new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                            ae.getComponent().getId()
-                                            + " was pressed", null));
-
-    }
-
+            new FacesMessage(FacesMessage.SEVERITY_ERROR,
+            	ae.getComponent().getId() + " was pressed", null));
+    } 
+    
+    
 }

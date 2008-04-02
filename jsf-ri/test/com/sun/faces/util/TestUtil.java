@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil.java,v 1.30 2006/03/29 22:39:48 rlubke Exp $
+ * $Id: TestUtil.java,v 1.31 2006/03/29 23:05:02 rlubke Exp $
  */
 
 /*
@@ -59,139 +59,49 @@ import com.sun.faces.renderkit.RenderKitUtils;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil.java,v 1.30 2006/03/29 22:39:48 rlubke Exp $
+ * @version $Id: TestUtil.java,v 1.31 2006/03/29 23:05:02 rlubke Exp $
  */
 
 public class TestUtil extends ServletFacesTestCase {
 
+//
+// Protected Constants
+//
 
-    // ------------------------------------------------------------ Constructors
+//
+// Class Variables
+//
 
+//
+// Instance Variables
+//
+
+// Attribute Instance Variables
+
+// Relationship Instance Variables
+
+//
+// Constructors and Initializers    
+//
 
     public TestUtil() {
-
         super("TestUtil");
-
     }
 
 
     public TestUtil(String name) {
-
         super(name);
-
     }
 
+//
+// Class methods
+//
 
-    // ---------------------------------------------------------- Public Methods
-
-
-    public void testGetSelectItems() {
-
-        SelectItem item1 = new SelectItem("value", "label");
-        SelectItem item2 = new SelectItem("value2", "label2");
-        SelectItem[] itemsArray = {
-              item1, item2
-        };
-        Collection<SelectItem> itemsCollection = new ArrayList<SelectItem>(2);
-        itemsCollection.add(item1);
-        itemsCollection.add(item2);
-        Map<String,String> selectItemMap = new LinkedHashMap<String,String>(2);
-        selectItemMap.put("label", "value");
-        selectItemMap.put("label2", "value2");
-
-        // test arrays
-        UISelectItems items = new UISelectItems();
-        items.setValue(itemsArray);
-        UISelectOne selectOne = new UISelectOne();
-        selectOne.getChildren().add(items);
-        Iterator iterator = RenderKitUtils.getSelectItems(getFacesContext(),
-                                                          selectOne);
-        assertTrue(item1.equals(iterator.next()));
-        assertTrue(item2.equals(iterator.next()));
-
-        items.setValue(itemsCollection);
-        iterator = RenderKitUtils.getSelectItems(getFacesContext(),
-                                                 selectOne);
-        assertTrue(item1.equals(iterator.next()));
-        assertTrue(item2.equals(iterator.next()));
-
-        items.setValue(selectItemMap);
-        iterator = RenderKitUtils.getSelectItems(getFacesContext(),
-                                                 selectOne);
-        SelectItem i = (SelectItem) iterator.next();
-        assertTrue(item1.getLabel().equals(i.getLabel()) 
-                    && item1.getValue().equals(i.getValue()));
-        i = (SelectItem) iterator.next();
-        assertTrue(item2.getLabel().equals(i.getLabel()) 
-                    && item2.getValue().equals(i.getValue()));
-
-    }
-
-
-    /**
-     * This method tests the <code>Util.getSessionMap</code> method.
-     */
-    public void testGetSessionMap() {
-
-        // Test with null FacesContext
-        //
-        Map sessionMap = Util.getSessionMap(null);
-        assertTrue(sessionMap != null);
-
-        // Test with FacesContext
-        //
-        sessionMap = Util.getSessionMap(getFacesContext());
-        assertTrue(sessionMap != null);
-
-        // Test with no session
-        //
-        session.invalidate();
-        sessionMap = Util.getSessionMap(getFacesContext());
-        assertTrue(sessionMap != null);
-
-    }
-
-
-    public void testRenderBooleanPassthruAttributes() {
-
-        try {
-            RenderKitFactory renderKitFactory = (RenderKitFactory)
-                FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-            RenderKit renderKit =
-                renderKitFactory.getRenderKit(getFacesContext(),
-                                              RenderKitFactory.HTML_BASIC_RENDER_KIT);
-            StringWriter sw = new StringWriter();
-            ResponseWriter writer = renderKit.createResponseWriter(sw,
-                                                                   "text/html",
-                                                                   "ISO-8859-1");
-            getFacesContext().setResponseWriter(writer);
-
-            UIInput input = new UIInput();
-            input.setId("testBooleanRenderPassthruAttributes");
-            input.getAttributes().put("disabled", "true");
-            input.getAttributes().put("readonly", "false");
-            RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, input);
-            String expectedResult = " disabled=\"disabled\"";
-            assertEquals(expectedResult, sw.toString());
-
-            // verify no passthru attributes returns empty string
-            sw = new StringWriter();
-            writer =
-                renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
-            getFacesContext().setResponseWriter(writer);
-            input.getAttributes().remove("disabled");
-            input.getAttributes().remove("readonly");
-            RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, input);
-            assertTrue(0 == sw.toString().length());
-        } catch (IOException e) {
-            assertTrue(false);
-        }
-
-    }
-
+//
+// General Methods
+//
 
     public void testRenderPassthruAttributes() {
-
         try {
             RenderKitFactory renderKitFactory = (RenderKitFactory)
                 FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
@@ -225,12 +135,10 @@ public class TestUtil extends ServletFacesTestCase {
         } catch (IOException e) {
             assertTrue(false);
         }
-
     }
 
 
     public void testRenderPassthruAttributesFromConcreteHtmlComponent() {
-
         try {
             RenderKitFactory renderKitFactory = (RenderKitFactory)
                 FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
@@ -274,12 +182,86 @@ public class TestUtil extends ServletFacesTestCase {
         } catch (IOException e) {
             assertTrue(false);
         }
+    }
 
+
+    public void testRenderBooleanPassthruAttributes() {
+        try {
+            RenderKitFactory renderKitFactory = (RenderKitFactory)
+                FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+            RenderKit renderKit =
+                renderKitFactory.getRenderKit(getFacesContext(),
+                                              RenderKitFactory.HTML_BASIC_RENDER_KIT);
+            StringWriter sw = new StringWriter();
+            ResponseWriter writer = renderKit.createResponseWriter(sw,
+                                                                   "text/html",
+                                                                   "ISO-8859-1");
+            getFacesContext().setResponseWriter(writer);
+
+            UIInput input = new UIInput();
+            input.setId("testBooleanRenderPassthruAttributes");
+            input.getAttributes().put("disabled", "true");
+            input.getAttributes().put("readonly", "false");
+            RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, input);
+            String expectedResult = " disabled=\"disabled\"";
+            assertEquals(expectedResult, sw.toString());
+
+            // verify no passthru attributes returns empty string
+            sw = new StringWriter();
+            writer =
+                renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
+            getFacesContext().setResponseWriter(writer);
+            input.getAttributes().remove("disabled");
+            input.getAttributes().remove("readonly");
+            RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, input);
+            assertTrue(0 == sw.toString().length());
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    public void testGetSelectItems() {
+        SelectItem item1 = new SelectItem("value", "label");
+        SelectItem item2 = new SelectItem("value2", "label2");
+        SelectItem[] itemsArray = {
+              item1, item2
+        };
+        Collection<SelectItem> itemsCollection = new ArrayList<SelectItem>(2);
+        itemsCollection.add(item1);
+        itemsCollection.add(item2);
+        Map<String,String> selectItemMap = new LinkedHashMap<String,String>(2);
+        selectItemMap.put("label", "value");
+        selectItemMap.put("label2", "value2");
+
+        // test arrays
+        UISelectItems items = new UISelectItems();
+        items.setValue(itemsArray);
+        UISelectOne selectOne = new UISelectOne();
+        selectOne.getChildren().add(items);
+        Iterator iterator = RenderKitUtils.getSelectItems(getFacesContext(),
+                                                          selectOne);
+        assertTrue(item1.equals(iterator.next()));
+        assertTrue(item2.equals(iterator.next()));
+
+        items.setValue(itemsCollection);
+        iterator = RenderKitUtils.getSelectItems(getFacesContext(),
+                                                 selectOne);
+        assertTrue(item1.equals(iterator.next()));
+        assertTrue(item2.equals(iterator.next()));
+
+        items.setValue(selectItemMap);
+        iterator = RenderKitUtils.getSelectItems(getFacesContext(),
+                                                 selectOne);
+        SelectItem i = (SelectItem) iterator.next();
+        assertTrue(item1.getLabel().equals(i.getLabel()) 
+                    && item1.getValue().equals(i.getValue()));
+        i = (SelectItem) iterator.next();
+        assertTrue(item2.getLabel().equals(i.getLabel()) 
+                    && item2.getValue().equals(i.getValue()));
     }
 
 
     public void testVerifyRequiredClasses() {
-
         ServletContext servletContext = (ServletContext) getFacesContext()
             .getExternalContext()
             .getContext();
@@ -295,7 +277,29 @@ public class TestUtil extends ServletFacesTestCase {
         } catch (Throwable e) {
             assertTrue(false);
         }
-
     }
+
+
+    /**
+     * This method tests the <code>Util.getSessionMap</code> method.
+     */
+    public void testGetSessionMap() {
+        // Test with null FacesContext
+        //
+        Map sessionMap = Util.getSessionMap(null);
+        assertTrue(sessionMap != null);
+
+        // Test with FacesContext
+        //
+        sessionMap = Util.getSessionMap(getFacesContext());
+        assertTrue(sessionMap != null);
+
+        // Test with no session
+        //
+        session.invalidate();
+        sessionMap = Util.getSessionMap(getFacesContext());
+        assertTrue(sessionMap != null);
+    }
+
 
 } // end of class TestUtil

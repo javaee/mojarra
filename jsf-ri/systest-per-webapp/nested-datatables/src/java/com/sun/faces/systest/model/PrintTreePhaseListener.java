@@ -1,5 +1,5 @@
 /*
- * $Id: PrintTreePhaseListener.java,v 1.3 2006/03/29 22:39:19 rlubke Exp $
+ * $Id: PrintTreePhaseListener.java,v 1.4 2006/03/29 23:04:28 rlubke Exp $
  */
 
 /*
@@ -29,34 +29,27 @@
 
 package com.sun.faces.systest.model;
 
-import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseEvent;
-import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
+import javax.faces.event.PhaseId;
+import javax.faces.event.PhaseEvent;
 
 import com.sun.faces.util.DebugUtil;
+import javax.faces.context.FacesContext;
 
 public class PrintTreePhaseListener extends Object implements PhaseListener {
-
-    // ---------------------------------------------- Methods From PhaseListener
-
+    
     public void afterPhase(PhaseEvent event) {
-
-        DebugUtil.printTree(FacesContext.getCurrentInstance().getViewRoot(),
-                            System.out);
-
+	DebugUtil.printTree(FacesContext.getCurrentInstance().getViewRoot(),
+			    System.out);
     }
 
 
     public void beforePhase(PhaseEvent event) {
-
+	
     }
 
-
     public PhaseId getPhaseId() {
-
-        return PhaseId.ANY_PHASE;
-
+	return PhaseId.ANY_PHASE;
     }
 
 }

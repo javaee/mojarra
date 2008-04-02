@@ -28,53 +28,32 @@ package com.tavve.webapps.nested;
 import java.io.Serializable;
 
 public class Port implements Serializable {
-
-
+    
     String _portNumber = "0";
-
-    // ------------------------------------------------------------ Constructors
-
-
+    
     public Port() {
     }
-
-
+    
     public Port(String portNumber) {
-
         _portNumber = portNumber;
-
+    }
+    
+    public void setPortNumber(String portNumber) {
+        _portNumber = portNumber;
+    }
+    
+    public String getPortNumber() {
+        return _portNumber;
     }
 
-    // ---------------------------------------------------------- Public Methods
-
-
     public boolean equals(Object o) {
-
         if (!(o instanceof Port)) {
             return false;
         }
-
-        String otherPortNumber = ((Port) o).getPortNumber();
-
-        return _portNumber == null
-               ? (otherPortNumber == null)
-               : _portNumber.equals(otherPortNumber);
-
+        
+        String otherPortNumber = ((Port)o).getPortNumber();
+        
+        return _portNumber == null ? (otherPortNumber == null) : _portNumber.equals(otherPortNumber);
     }
-
-
-    public String getPortNumber() {
-
-        return _portNumber;
-
-    }
-
-
-    public void setPortNumber(String portNumber) {
-
-        _portNumber = portNumber;
-
-    }
-
 }
 

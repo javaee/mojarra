@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverImpl.java,v 1.27 2006/03/29 22:38:33 rlubke Exp $
+ * $Id: VariableResolverImpl.java,v 1.28 2006/03/29 23:03:45 rlubke Exp $
  */
 
 /*
@@ -29,35 +29,28 @@
 
 package com.sun.faces.el;
 
-import javax.el.ELException;
-import javax.el.ELResolver;
 import javax.faces.context.FacesContext;
 import javax.faces.el.EvaluationException;
 import javax.faces.el.VariableResolver;
 
+import javax.el.ELResolver;
+import javax.el.ELException;
+
 import com.sun.faces.util.MessageUtils;
 
 /**
- * <p/>
+ * <p>
  * Concrete implementation of <code>VariableResolver</code>.
  * </p>
  */
 
 public class VariableResolverImpl extends VariableResolver {
 
-
     private ELResolver elResolver = null;
 
-    // ------------------------------------------------------------ Constructors
-
-
-    public VariableResolverImpl(ELResolver resolver) {
-
+    public VariableResolverImpl(ELResolver resolver ) {
         this.elResolver = resolver;
-
     }
-
-    // ---------------------------------------------------------- Public Methods
 
     //
     // Relationship Instance Variables
@@ -65,12 +58,11 @@ public class VariableResolverImpl extends VariableResolver {
 
     // Specified by javax.faces.el.VariableResolver.resolveVariable()
     public Object resolveVariable(FacesContext context, String name)
-          throws EvaluationException {
-
+            throws EvaluationException {
         Object result = null;
         if (context == null || name == null) {
             String message = MessageUtils.getExceptionMessageString
-                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " context " + context + " name " + name;
             throw new NullPointerException(message);
         }
@@ -81,7 +73,5 @@ public class VariableResolverImpl extends VariableResolver {
             throw new EvaluationException(elex);
         }
         return result;
-
     }
-
 }

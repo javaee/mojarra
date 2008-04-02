@@ -1,5 +1,5 @@
 /*
- * $Id: TestContentTypes.java,v 1.2 2006/03/29 22:39:46 rlubke Exp $
+ * $Id: TestContentTypes.java,v 1.3 2006/03/29 23:04:59 rlubke Exp $
  */
                                                                                                                    
 /*
@@ -35,108 +35,72 @@ import org.apache.cactus.WebRequest;
 
 public class TestContentTypes extends ServletFacesTestCase {
 
-
-    // ------------------------------------------------------------ Constructors
-
-                                                                                                             
+//
+// Constructors and Initializers
+//
+                                                                                                                   
     public TestContentTypes() {
-
         super("TestContentTypes");
-
     }
-
-
+                                                                                                                   
     public TestContentTypes(String name) {
-
         super(name);
-
     }
-
-
-    // ---------------------------------------------------------- Public Methods
-
 
     /**
      * quality test - "text/html" wins
      */
     public void beginAccept1(WebRequest theRequest) {
-
         theRequest.addHeader("Accept", "text/plain; q=0.5, text/html, text/x-dvi; q=0.8, text/x-c");
-
     }
-
-
-    /**
-     * quality test - "text/x-dvi" wins
-     */
-    public void beginAccept2(WebRequest theRequest) {
-
-        theRequest.addHeader("Accept", "text/plain; q=0.5, text/html, text/x-dvi; q=0.8, text/x-c");
-
-    }
-
-
-    /**
-     * "level" precedence test - "text/html;level=1" is higher than "text/html" 
-     */
-    public void beginAccept3(WebRequest theRequest) {
-
-        theRequest.addHeader("Accept", "text/plain; q=0.5, text/html, text/html;level=1");
-
-    }
-
-
-    /**
-     * "level" precedence test - "text/html;level=2" is higher than "text/html;level=1"" 
-     */
-    public void beginAccept4(WebRequest theRequest) {
-
-        theRequest.addHeader("Accept", "text/plain; q=0.5, text/html, text/html;level=1, text/html;level=2");
-
-    }
-
-
     public void testAccept1() throws Exception {
-
         String clientContentType = getFacesContext().getExternalContext().getRequestHeaderMap().get("Accept");
         String serverSupportedContentTypes = "text/html, text/plain";
         String contentType = RenderKitUtils.determineContentType(
             clientContentType, serverSupportedContentTypes);
         assertEquals(contentType, "text/html");
-
     }
 
-
+    /**
+     * quality test - "text/x-dvi" wins
+     */
+    public void beginAccept2(WebRequest theRequest) {
+        theRequest.addHeader("Accept", "text/plain; q=0.5, text/html, text/x-dvi; q=0.8, text/x-c");
+    }
     public void testAccept2() throws Exception {
-
         String clientContentType = getFacesContext().getExternalContext().getRequestHeaderMap().get("Accept");
         String serverSupportedContentTypes = "text/x-dvi, text/plain";
         String contentType = RenderKitUtils.determineContentType(
             clientContentType, serverSupportedContentTypes);
         assertEquals(contentType, "text/x-dvi");
-
     }
 
-
+    /**
+     * "level" precedence test - "text/html;level=1" is higher than "text/html" 
+     */
+    public void beginAccept3(WebRequest theRequest) {
+        theRequest.addHeader("Accept", "text/plain; q=0.5, text/html, text/html;level=1");
+    }
     public void testAccept3() throws Exception {
-
         String clientContentType = getFacesContext().getExternalContext().getRequestHeaderMap().get("Accept");
         String serverSupportedContentTypes = "text/html, text/html;level=1";
         String contentType = RenderKitUtils.determineContentType(
             clientContentType, serverSupportedContentTypes);
         assertEquals(contentType, "text/html;level=1");
-
     }
-
-
+ 
+    /**
+     * "level" precedence test - "text/html;level=2" is higher than "text/html;level=1"" 
+     */
+    public void beginAccept4(WebRequest theRequest) {
+        theRequest.addHeader("Accept", "text/plain; q=0.5, text/html, text/html;level=1, text/html;level=2");
+    }
+                                                                                                                           
     public void testAccept4() throws Exception {
-
         String clientContentType = getFacesContext().getExternalContext().getRequestHeaderMap().get("Accept");
         String serverSupportedContentTypes = "text/html, text/html;level=1, text/html;level=2";
         String contentType = RenderKitUtils.determineContentType(
             clientContentType, serverSupportedContentTypes);
         assertEquals(contentType, "text/html;level=2");
-
     }
-
 }

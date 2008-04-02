@@ -1,5 +1,5 @@
 /*
- * $Id: TestVariableResolver.java,v 1.8 2006/03/29 22:39:34 rlubke Exp $
+ * $Id: TestVariableResolver.java,v 1.9 2006/03/29 23:04:37 rlubke Exp $
  */
 
 /*
@@ -36,33 +36,23 @@ import javax.faces.el.EvaluationException;
 import javax.faces.context.FacesContext;
 
 public class TestVariableResolver extends VariableResolver {
-
-
+   
     VariableResolver resolver = null;
-
-
-    // ------------------------------------------------------------ Constructors
-
-
     public TestVariableResolver(VariableResolver variableResolver) {
-
        this.resolver = variableResolver;
-
     }
-
-
-    // ---------------------------------------------------------- Public Methods
     
+    //
+    // Relationship Instance Variables
+    // 
 
     // Specified by javax.faces.el.VariableResolver.resolveVariable()
     public Object resolveVariable(FacesContext context, String name)
             throws EvaluationException {
-
         if (name.equals("customVRTest1")) {
             return "TestVariableResolver";
         }
         return resolver.resolveVariable(context, name);
-
     }
 
 }

@@ -1,8 +1,8 @@
 /*
 <<<<<<< TestValueBindingImpl.java
- * $Id: TestValueBindingImpl.java,v 1.41 2006/03/29 22:39:42 rlubke Exp $
+ * $Id: TestValueBindingImpl.java,v 1.42 2006/03/29 23:04:53 rlubke Exp $
 =======
- * $Id: TestValueBindingImpl.java,v 1.41 2006/03/29 22:39:42 rlubke Exp $
+ * $Id: TestValueBindingImpl.java,v 1.42 2006/03/29 23:04:53 rlubke Exp $
 >>>>>>> 1.32.18.5
  */
 
@@ -68,59 +68,58 @@ import java.util.Map;
 public class TestValueBindingImpl extends ServletFacesTestCase
 {
 
+    //
+    // Protected Constants
+    //
 
+    //
+    // Class Variables
+    //
+
+    //
+    // Instance Variables
+    //
     protected ValueBinding valueBinding;
 
+ //   protected ValueBindingFactory factory = new ValueBindingFactory();
 
-    // ------------------------------------------------------------ Constructors
+    // Attribute Instance Variables
 
+    // Relationship Instance Variables
+
+    //
+    // Constructors and Initializers
+    //
 
     public TestValueBindingImpl()
     {
-
         super("TestValueBindingImpl");
-
     }
-
 
     public TestValueBindingImpl(String name)
     {
-
         super(name);
-
     }
 
+    //
+    // Class methods
+    //
 
-    // ---------------------------------------------------------- Public Methods
+    //
+    // Methods from TestCase
+    //
 
+    //
+    // General Methods
+    //
 
-    public void beginELGet(WebRequest theRequest)
+    protected ValueBinding create(String ref) throws Exception
     {
-
-        populateRequest(theRequest);
-
+        return (getFacesContext().getApplication().createValueBinding("#{" + ref + "}"));
     }
-
-
-    public void beginELSet(WebRequest theRequest)
-    {
-
-        populateRequest(theRequest);
-
-    }
-
-
-    public void beginGetType_multipleCase(WebRequest theRequest)
-    {
-
-        populateRequest(theRequest);
-
-    }
-
 
     public void populateRequest(WebRequest theRequest)
     {
-
         theRequest.addHeader("ELHeader", "ELHeader");
         theRequest.addHeader("multiheader", "1");
         theRequest.addHeader("multiheader", "2");
@@ -128,13 +127,15 @@ public class TestValueBindingImpl extends ServletFacesTestCase
         theRequest.addParameter("multiparam", "one");
         theRequest.addParameter("multiparam", "two");
         theRequest.addCookie("cookie", "monster");
-
     }
 
+    public void beginELGet(WebRequest theRequest)
+    {
+        populateRequest(theRequest);
+    }
 
     public void testELGet() throws Exception
     {
-
         TestBean testBean = new TestBean();
         InnerBean newInner, oldInner = new InnerBean();
         testBean.setInner(oldInner);
@@ -227,10 +228,13 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 
     }
 
+    public void beginELSet(WebRequest theRequest)
+    {
+        populateRequest(theRequest);
+    }
 
     public void testELSet() throws Exception
     {
-
         TestBean testBean = new TestBean();
         InnerBean newInner, oldInner = new InnerBean();
         testBean.setInner(oldInner);
@@ -368,130 +372,152 @@ public class TestValueBindingImpl extends ServletFacesTestCase
                 .create("TestBean[\"inner\"].customers[2].nicknames.foo");
         valueBinding.setValue(getFacesContext(), "bar");
         assertTrue(((String) inner2.getNicknames().get("foo")).equals("bar"));
-
+    }
+    
+    public void testNullReference() throws Exception
+    {
+        try
+        {
+            getFacesContext().getApplication().createValueBinding(null);
+            fail();
+        }
+        catch (NullPointerException npe) {}
+        catch (Exception e) { fail("Should have thrown an NPE"); };
     }
 
-
-    public void testGetExpressionString() throws Exception
+    public void testLiterals() throws Exception
     {
-
-        ApplicationImpl app = (ApplicationImpl) getFacesContext()
-                .getApplication();
-        String ref = null;
         ValueBinding vb = null;
-
-        ref = "#{NewCustomerFormHandler.minimumAge}";
-        vb = app.createValueBinding(ref);
-        assertEquals(ref, vb.getExpressionString());
-
-        ref = "minimum age is #{NewCustomerFormHandler.minimumAge}";
-        vb = app.createValueBinding(ref);
-        assertEquals(ref, vb.getExpressionString());
-
+        Object result = null;
+        ExternalContext extContext = getFacesContext().getExternalContext();
+        
+        vb = getFacesContext().getApplication().createValueBinding("test");
+        assertEquals("test", vb.getValue(getFacesContext()));
+        
+        assertEquals(String.class, vb.getType(getFacesContext()));
+        try
+        {
+            vb.setValue(getFacesContext(), "other");
+            fail("Literal's setValue(..) should have thrown a EvaluationException");
+        }
+        catch (javax.faces.el.EvaluationException ee) {}
     }
 
-
-    public void testGetScopeNegative() throws Exception {
-
-        ValueBinding valueBinding = null;
-        String property = null;
-        /*
-        property = "[]";
-        valueBinding = this.factory.createValueBinding(property);
-        assertNull(Util.getScope(property, null));
-        property = "][";
-        assertNull(Util.getScope(property, null));
-        property = "";
-        assertNull(Util.getScope(property, null));
-        property = null;
-        assertNull(Util.getScope(property, null));
-        property = "foo.sessionScope";
-        assertNull(Util.getScope(property, null));        
-        */
-
-    }
-
-
-    public void testGetScopePositive() throws Exception
+    public void testReadOnly_singleCase() throws Exception
     {
 
-        TestBean testBean = new TestBean();
-        getFacesContext().getExternalContext().getApplicationMap().put(
-                "TestApplicationBean", testBean);
+        // these are mutable Maps
+        /*
+         * properties on these maps are mutable, but not the object itself....
+         * see
+         */
+        valueBinding = this.create("applicationScope");
+        assertTrue(valueBinding.isReadOnly(getFacesContext()));
+        valueBinding = this.create("sessionScope");
+        assertTrue(valueBinding.isReadOnly(getFacesContext()));
+        valueBinding = this.create("requestScope");
+        assertTrue(valueBinding.isReadOnly(getFacesContext()));
 
-        valueBinding = this.create("TestApplicationBean");
-        assertEquals(Scope.APPLICATION, Util.getScope("TestApplicationBean", null));
+        // these are immutable Maps
+        valueBinding = this.create("param");
+        assertTrue(valueBinding.isReadOnly(getFacesContext()));
+        valueBinding = this.create("paramValues");
+        assertTrue(valueBinding.isReadOnly(getFacesContext()));
+        valueBinding = this.create("header");
+        assertTrue(valueBinding.isReadOnly(getFacesContext()));
+        valueBinding = this.create("headerValues");
+        assertTrue(valueBinding.isReadOnly(getFacesContext()));
+        valueBinding = this.create("cookie");
+        assertTrue(valueBinding.isReadOnly(getFacesContext()));
+        valueBinding = this.create("initParam");
+        assertTrue(valueBinding.isReadOnly(getFacesContext()));
+    }
 
-        valueBinding = this.create("TestApplicationBean.one");
-        assertEquals(Scope.APPLICATION, Util.getScope("TestApplicationBean.one",
-                null));
+    public void testReadOnly_multipleCase() throws Exception
+    {
 
-        valueBinding = this.create("TestApplicationBean.inner.two");
-        assertEquals(Scope.APPLICATION, Util.getScope(
-                "TestApplicationBean.inner.two", null));
+        // these are mutable Maps
+        valueBinding = this.create("applicationScope.value");
+        valueBinding.setValue(getFacesContext(), "value");
+        String value = (String) valueBinding.getValue(getFacesContext());
+        assertTrue(!valueBinding.isReadOnly(getFacesContext()));
+        valueBinding = this.create("sessionScope.value");
+        assertTrue(!valueBinding.isReadOnly(getFacesContext()));
+        valueBinding = this.create("requestScope.value");
+        assertTrue(!valueBinding.isReadOnly(getFacesContext()));
 
-        valueBinding = this.create("applicationScope.TestApplicationBean");
-        assertEquals(Scope.APPLICATION, Util.getScope(
-                "applicationScope.TestApplicationBean", null));
-        valueBinding = this
-                .create("applicationScope.TestApplicationBean.inner.two");
-        assertEquals(Scope.APPLICATION, Util.getScope(
-                "applicationScope.TestApplicationBean.inner.two", null));
+        // these are immutable Maps
+        valueBinding = this.create("param.value");
+        assertTrue(valueBinding.isReadOnly(getFacesContext()));
+        valueBinding = this.create("paramValues.value");
+        assertTrue(valueBinding.isReadOnly(getFacesContext()));
+        valueBinding = this.create("header.value");
+        assertTrue(valueBinding.isReadOnly(getFacesContext()));
+        valueBinding = this.create("headerValues.value");
+        assertTrue(valueBinding.isReadOnly(getFacesContext()));
+        valueBinding = this.create("cookie.value");
+        assertTrue(valueBinding.isReadOnly(getFacesContext()));
+        valueBinding = this.create("initParam.value");
+        assertTrue(valueBinding.isReadOnly(getFacesContext())); 
 
-        getFacesContext().getExternalContext().getSessionMap().put(
-                "TestSessionBean", testBean);
-        valueBinding = this.create("TestSessionBean");
-        assertEquals(Scope.SESSION, Util.getScope("TestSessionBean", null));
+        // tree
+        // create a dummy root for the tree.
+        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(
+                getFacesContext(), null);
+        page.setId("root");
+        page.setViewId("newTree");
+        getFacesContext().setViewRoot(page);
+        valueBinding = this.create("view.childCount");
+        assertTrue(valueBinding.isReadOnly(getFacesContext()));
 
-        valueBinding = this.create("TestSessionBean.one");
-        assertEquals(Scope.SESSION, Util.getScope("TestSessionBean.one", null));
+        com.sun.faces.cactus.TestBean testBean = (com.sun.faces.cactus.TestBean) getFacesContext().getExternalContext()
+                .getSessionMap().get("TestBean");
+        assertTrue(null != testBean);
+        valueBinding = this.create("TestBean.readOnly");
+        assertTrue(valueBinding.isReadOnly(getFacesContext()));
+        valueBinding = this.create("TestBean.one");
+        assertTrue(!valueBinding.isReadOnly(getFacesContext()));
 
-        valueBinding = this.create("TestSessionBean.inner.two");
-        assertEquals(Scope.SESSION, Util
-                .getScope("TestSessionBean.inner.two", null));
-
-        valueBinding = this.create("sessionScope.TestSessionBean");
-        assertEquals(Scope.SESSION, Util.getScope("sessionScope.TestSessionBean",
-                null));
-
-        valueBinding = this.create("sessionScope.TestSessionBean.inner.two");
-        assertEquals(Scope.SESSION, Util.getScope(
-                "sessionScope.TestSessionBean.inner.two", null));
-
-        getFacesContext().getExternalContext().getRequestMap().put(
-                "TestRequestBean", testBean);
-        valueBinding = this.create("TestRequestBean");
-        assertEquals(Scope.REQUEST, Util.getScope("TestRequestBean", null));
-
-        valueBinding = this.create("TestRequestBean.one");
-        assertEquals(Scope.REQUEST, Util.getScope("TestRequestBean.one", null));
-
-        valueBinding = this.create("TestRequestBean.inner.two");
-        assertEquals(Scope.REQUEST, Util
-                .getScope("TestRequestBean.inner.two", null));
-
-        valueBinding = this.create("requestScope.TestRequestBean");
-        assertEquals(Scope.REQUEST, Util.getScope("requestScope.TestRequestBean",
-                null));
-
-        valueBinding = this.create("requestScope.TestRequestBean.inner.two");
-        assertEquals(Scope.REQUEST, Util.getScope(
-                "requestScope.TestRequestBean.inner.two", null));
-
-        valueBinding = this.create("TestNoneBean");
-        assertEquals(null, Util.getScope("TestNoneBean", null));
-
-        valueBinding = this.create("TestNoneBean.one");
-        assertEquals(null, Util.getScope("TestNoneBean.one", null));
-        valueBinding = this.create("TestNoneBean.inner.two");
-        assertEquals(null, Util.getScope("TestNoneBean.inner.two", null));
+        InnerBean inner = new InnerBean();
+        testBean.setInner(inner);
+        valueBinding = this.create("TestBean[\"inner\"].customers[1]");
+        assertTrue(!valueBinding.isReadOnly(getFacesContext()));
 
     }
 
+    public void testGetType_singleCase() throws Exception
+    {
+
+        // these are mutable Maps
+        valueBinding = this.create("applicationScope");
+        assertTrue(valueBinding.getType(getFacesContext()) == null);
+        valueBinding = this.create("sessionScope");
+        assertTrue(valueBinding.getType(getFacesContext()) == null);
+        valueBinding = this.create("requestScope");
+        assertTrue(valueBinding.getType(getFacesContext()) == null);
+
+        // these are immutable Maps
+        valueBinding = this.create("param");
+        assertTrue(valueBinding.getType(getFacesContext()) == null);
+        valueBinding = this.create("paramValues");
+        assertTrue(valueBinding.getType(getFacesContext()) == null);
+        valueBinding = this.create("header");
+        assertTrue(valueBinding.getType(getFacesContext()) == null);
+        valueBinding = this.create("headerValues");
+        assertTrue(valueBinding.getType(getFacesContext()) == null);
+        valueBinding = this.create("cookie");
+        assertTrue(valueBinding.getType(getFacesContext()) == null);
+        valueBinding = this.create("initParam");
+        assertTrue(valueBinding.getType(getFacesContext()) == null);
+    }
+
+    public void beginGetType_multipleCase(WebRequest theRequest)
+    {
+        populateRequest(theRequest);
+    }
 
     public void testGetType_multipleCase() throws Exception
     {
-
         String property = "testvalueBindingImpl_property";
         getFacesContext().getExternalContext().getApplicationMap().put(
                 property, property);
@@ -581,37 +607,239 @@ public class TestValueBindingImpl extends ServletFacesTestCase
                 "java.lang.Object"));
        // assertTrue(valueBinding.getType(getFacesContext()).getName().equals(
        //         "[I"));
-
     }
 
-
-    public void testGetType_singleCase() throws Exception
+    public void testGetScopePositive() throws Exception
     {
+        TestBean testBean = new TestBean();
+        getFacesContext().getExternalContext().getApplicationMap().put(
+                "TestApplicationBean", testBean);
 
-        // these are mutable Maps
-        valueBinding = this.create("applicationScope");
-        assertTrue(valueBinding.getType(getFacesContext()) == null);
-        valueBinding = this.create("sessionScope");
-        assertTrue(valueBinding.getType(getFacesContext()) == null);
-        valueBinding = this.create("requestScope");
-        assertTrue(valueBinding.getType(getFacesContext()) == null);
+        valueBinding = this.create("TestApplicationBean");
+        assertEquals(Scope.APPLICATION, Util.getScope("TestApplicationBean", null));
 
-        // these are immutable Maps
-        valueBinding = this.create("param");
-        assertTrue(valueBinding.getType(getFacesContext()) == null);
-        valueBinding = this.create("paramValues");
-        assertTrue(valueBinding.getType(getFacesContext()) == null);
-        valueBinding = this.create("header");
-        assertTrue(valueBinding.getType(getFacesContext()) == null);
-        valueBinding = this.create("headerValues");
-        assertTrue(valueBinding.getType(getFacesContext()) == null);
-        valueBinding = this.create("cookie");
-        assertTrue(valueBinding.getType(getFacesContext()) == null);
-        valueBinding = this.create("initParam");
-        assertTrue(valueBinding.getType(getFacesContext()) == null);
+        valueBinding = this.create("TestApplicationBean.one");
+        assertEquals(Scope.APPLICATION, Util.getScope("TestApplicationBean.one",
+                null));
+
+        valueBinding = this.create("TestApplicationBean.inner.two");
+        assertEquals(Scope.APPLICATION, Util.getScope(
+                "TestApplicationBean.inner.two", null));
+
+        valueBinding = this.create("applicationScope.TestApplicationBean");
+        assertEquals(Scope.APPLICATION, Util.getScope(
+                "applicationScope.TestApplicationBean", null));
+        valueBinding = this
+                .create("applicationScope.TestApplicationBean.inner.two");
+        assertEquals(Scope.APPLICATION, Util.getScope(
+                "applicationScope.TestApplicationBean.inner.two", null));
+
+        getFacesContext().getExternalContext().getSessionMap().put(
+                "TestSessionBean", testBean);
+        valueBinding = this.create("TestSessionBean");
+        assertEquals(Scope.SESSION, Util.getScope("TestSessionBean", null));
+
+        valueBinding = this.create("TestSessionBean.one");
+        assertEquals(Scope.SESSION, Util.getScope("TestSessionBean.one", null));
+
+        valueBinding = this.create("TestSessionBean.inner.two");
+        assertEquals(Scope.SESSION, Util
+                .getScope("TestSessionBean.inner.two", null));
+
+        valueBinding = this.create("sessionScope.TestSessionBean");
+        assertEquals(Scope.SESSION, Util.getScope("sessionScope.TestSessionBean",
+                null));
+
+        valueBinding = this.create("sessionScope.TestSessionBean.inner.two");
+        assertEquals(Scope.SESSION, Util.getScope(
+                "sessionScope.TestSessionBean.inner.two", null));
+
+        getFacesContext().getExternalContext().getRequestMap().put(
+                "TestRequestBean", testBean);
+        valueBinding = this.create("TestRequestBean");
+        assertEquals(Scope.REQUEST, Util.getScope("TestRequestBean", null));
+
+        valueBinding = this.create("TestRequestBean.one");
+        assertEquals(Scope.REQUEST, Util.getScope("TestRequestBean.one", null));
+
+        valueBinding = this.create("TestRequestBean.inner.two");
+        assertEquals(Scope.REQUEST, Util
+                .getScope("TestRequestBean.inner.two", null));
+
+        valueBinding = this.create("requestScope.TestRequestBean");
+        assertEquals(Scope.REQUEST, Util.getScope("requestScope.TestRequestBean",
+                null));
+
+        valueBinding = this.create("requestScope.TestRequestBean.inner.two");
+        assertEquals(Scope.REQUEST, Util.getScope(
+                "requestScope.TestRequestBean.inner.two", null));
+
+        valueBinding = this.create("TestNoneBean");
+        assertEquals(null, Util.getScope("TestNoneBean", null));
+
+        valueBinding = this.create("TestNoneBean.one");
+        assertEquals(null, Util.getScope("TestNoneBean.one", null));
+        valueBinding = this.create("TestNoneBean.inner.two");
+        assertEquals(null, Util.getScope("TestNoneBean.inner.two", null));
 
     }
 
+    public void testGetScopeNegative() throws Exception {
+        ValueBinding valueBinding = null;
+        String property = null;
+        /*
+        property = "[]";
+        valueBinding = this.factory.createValueBinding(property);
+        assertNull(Util.getScope(property, null));
+        property = "][";
+        assertNull(Util.getScope(property, null));
+        property = "";
+        assertNull(Util.getScope(property, null));
+        property = null;
+        assertNull(Util.getScope(property, null));
+        property = "foo.sessionScope";
+        assertNull(Util.getScope(property, null));        
+        */
+
+    }
+
+    // negative test for case when valueRef is merely
+    // one of the reserved scope names.
+    public void testReservedScopeIdentifiers() throws Exception
+    {
+        boolean exceptionThrown = false;
+
+        try
+        {
+            valueBinding = this.create("applicationScope");
+            valueBinding.setValue(getFacesContext(), "value");
+        }
+        catch (EvaluationException ee)
+        {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+
+        exceptionThrown = false;
+        try
+        {
+            valueBinding = this.create("sessionScope");
+            valueBinding.setValue(getFacesContext(), "value");
+        }
+        catch (EvaluationException ee)
+        {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+
+        exceptionThrown = false;
+        try
+        {
+            valueBinding = this.create("requestScope");
+            valueBinding.setValue(getFacesContext(), "value");
+        }
+        catch (EvaluationException ee)
+        {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+
+        exceptionThrown = false;
+        try
+        {
+            valueBinding = this.create("facesContext");
+            valueBinding.setValue(getFacesContext(), "value");
+        }
+        catch (EvaluationException ee)
+        {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+
+        exceptionThrown = false;
+        try
+        {
+            valueBinding = this.create("cookie");
+            valueBinding.setValue(getFacesContext(), "value");
+        }
+        catch (EvaluationException ee)
+        {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+
+        exceptionThrown = false;
+        try
+        {
+            valueBinding = this.create("header");
+            valueBinding.setValue(getFacesContext(), "value");
+        }
+        catch (EvaluationException ee)
+        {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+
+        exceptionThrown = false;
+        try
+        {
+            valueBinding = this.create("headerValues");
+            valueBinding.setValue(getFacesContext(), "value");
+        }
+        catch (EvaluationException ee)
+        {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+
+        exceptionThrown = false;
+        try
+        {
+            valueBinding = this.create("initParam");
+            valueBinding.setValue(getFacesContext(), "value");
+        }
+        catch (EvaluationException ee)
+        {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+
+        exceptionThrown = false;
+        try
+        {
+            valueBinding = this.create("param");
+            valueBinding.setValue(getFacesContext(), "value");
+        }
+        catch (EvaluationException ee)
+        {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+
+        exceptionThrown = false;
+        try
+        {
+            valueBinding = this.create("paramValues");
+            valueBinding.setValue(getFacesContext(), "value");
+        }
+        catch (EvaluationException ee)
+        {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+
+        exceptionThrown = false;
+        try
+        {
+            valueBinding = this.create("view");
+            valueBinding.setValue(getFacesContext(), "value");
+        }
+        catch (EvaluationException ee)
+        {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+    }
 
     public void testInvalidExpression() throws Exception
     {
@@ -758,271 +986,23 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 
     }
 
-
-    public void testLiterals() throws Exception
+    public void testStateHolderSmall() throws Exception
     {
+        StateHolderSaver saver = null;
+        ValueBinding binding = getFacesContext().getApplication()
+                .createValueBinding("#{TestBean.indexProperties[0]}");
 
-        ValueBinding vb = null;
-        Object result = null;
-        ExternalContext extContext = getFacesContext().getExternalContext();
-        
-        vb = getFacesContext().getApplication().createValueBinding("test");
-        assertEquals("test", vb.getValue(getFacesContext()));
-        
-        assertEquals(String.class, vb.getType(getFacesContext()));
-        try
-        {
-            vb.setValue(getFacesContext(), "other");
-            fail("Literal's setValue(..) should have thrown a EvaluationException");
-        }
-        catch (javax.faces.el.EvaluationException ee) {}
-
+        assertEquals("ValueBinding not expected value", "Justyna",
+                (String) binding.getValue(getFacesContext()));
+        saver = new StateHolderSaver(getFacesContext(), binding);
+        binding = null;
+        binding = (ValueBinding) saver.restore(getFacesContext());
+        assertEquals("ValueBinding not expected value", "Justyna",
+                (String) binding.getValue(getFacesContext()));
     }
-
-
-    public void testNullReference() throws Exception
-    {
-
-        try
-        {
-            getFacesContext().getApplication().createValueBinding(null);
-            fail();
-        }
-        catch (NullPointerException npe) {}
-        catch (Exception e) { fail("Should have thrown an NPE"); };
-
-    }
-
-
-    public void testReadOnly_multipleCase() throws Exception
-    {
-
-        // these are mutable Maps
-        valueBinding = this.create("applicationScope.value");
-        valueBinding.setValue(getFacesContext(), "value");
-        String value = (String) valueBinding.getValue(getFacesContext());
-        assertTrue(!valueBinding.isReadOnly(getFacesContext()));
-        valueBinding = this.create("sessionScope.value");
-        assertTrue(!valueBinding.isReadOnly(getFacesContext()));
-        valueBinding = this.create("requestScope.value");
-        assertTrue(!valueBinding.isReadOnly(getFacesContext()));
-
-        // these are immutable Maps
-        valueBinding = this.create("param.value");
-        assertTrue(valueBinding.isReadOnly(getFacesContext()));
-        valueBinding = this.create("paramValues.value");
-        assertTrue(valueBinding.isReadOnly(getFacesContext()));
-        valueBinding = this.create("header.value");
-        assertTrue(valueBinding.isReadOnly(getFacesContext()));
-        valueBinding = this.create("headerValues.value");
-        assertTrue(valueBinding.isReadOnly(getFacesContext()));
-        valueBinding = this.create("cookie.value");
-        assertTrue(valueBinding.isReadOnly(getFacesContext()));
-        valueBinding = this.create("initParam.value");
-        assertTrue(valueBinding.isReadOnly(getFacesContext())); 
-
-        // tree
-        // create a dummy root for the tree.
-        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(
-                getFacesContext(), null);
-        page.setId("root");
-        page.setViewId("newTree");
-        getFacesContext().setViewRoot(page);
-        valueBinding = this.create("view.childCount");
-        assertTrue(valueBinding.isReadOnly(getFacesContext()));
-
-        com.sun.faces.cactus.TestBean testBean = (com.sun.faces.cactus.TestBean) getFacesContext().getExternalContext()
-                .getSessionMap().get("TestBean");
-        assertTrue(null != testBean);
-        valueBinding = this.create("TestBean.readOnly");
-        assertTrue(valueBinding.isReadOnly(getFacesContext()));
-        valueBinding = this.create("TestBean.one");
-        assertTrue(!valueBinding.isReadOnly(getFacesContext()));
-
-        InnerBean inner = new InnerBean();
-        testBean.setInner(inner);
-        valueBinding = this.create("TestBean[\"inner\"].customers[1]");
-        assertTrue(!valueBinding.isReadOnly(getFacesContext()));
-
-    }
-
-
-    public void testReadOnly_singleCase() throws Exception
-    {
-
-        // these are mutable Maps
-        /*
-         * properties on these maps are mutable, but not the object itself....
-         * see
-         */
-        valueBinding = this.create("applicationScope");
-        assertTrue(valueBinding.isReadOnly(getFacesContext()));
-        valueBinding = this.create("sessionScope");
-        assertTrue(valueBinding.isReadOnly(getFacesContext()));
-        valueBinding = this.create("requestScope");
-        assertTrue(valueBinding.isReadOnly(getFacesContext()));
-
-        // these are immutable Maps
-        valueBinding = this.create("param");
-        assertTrue(valueBinding.isReadOnly(getFacesContext()));
-        valueBinding = this.create("paramValues");
-        assertTrue(valueBinding.isReadOnly(getFacesContext()));
-        valueBinding = this.create("header");
-        assertTrue(valueBinding.isReadOnly(getFacesContext()));
-        valueBinding = this.create("headerValues");
-        assertTrue(valueBinding.isReadOnly(getFacesContext()));
-        valueBinding = this.create("cookie");
-        assertTrue(valueBinding.isReadOnly(getFacesContext()));
-        valueBinding = this.create("initParam");
-        assertTrue(valueBinding.isReadOnly(getFacesContext()));
-
-    }
-
-
-    // negative test for case when valueRef is merely
-    // one of the reserved scope names.
-    public void testReservedScopeIdentifiers() throws Exception
-    {
-
-        boolean exceptionThrown = false;
-
-        try
-        {
-            valueBinding = this.create("applicationScope");
-            valueBinding.setValue(getFacesContext(), "value");
-        }
-        catch (EvaluationException ee)
-        {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-
-        exceptionThrown = false;
-        try
-        {
-            valueBinding = this.create("sessionScope");
-            valueBinding.setValue(getFacesContext(), "value");
-        }
-        catch (EvaluationException ee)
-        {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-
-        exceptionThrown = false;
-        try
-        {
-            valueBinding = this.create("requestScope");
-            valueBinding.setValue(getFacesContext(), "value");
-        }
-        catch (EvaluationException ee)
-        {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-
-        exceptionThrown = false;
-        try
-        {
-            valueBinding = this.create("facesContext");
-            valueBinding.setValue(getFacesContext(), "value");
-        }
-        catch (EvaluationException ee)
-        {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-
-        exceptionThrown = false;
-        try
-        {
-            valueBinding = this.create("cookie");
-            valueBinding.setValue(getFacesContext(), "value");
-        }
-        catch (EvaluationException ee)
-        {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-
-        exceptionThrown = false;
-        try
-        {
-            valueBinding = this.create("header");
-            valueBinding.setValue(getFacesContext(), "value");
-        }
-        catch (EvaluationException ee)
-        {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-
-        exceptionThrown = false;
-        try
-        {
-            valueBinding = this.create("headerValues");
-            valueBinding.setValue(getFacesContext(), "value");
-        }
-        catch (EvaluationException ee)
-        {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-
-        exceptionThrown = false;
-        try
-        {
-            valueBinding = this.create("initParam");
-            valueBinding.setValue(getFacesContext(), "value");
-        }
-        catch (EvaluationException ee)
-        {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-
-        exceptionThrown = false;
-        try
-        {
-            valueBinding = this.create("param");
-            valueBinding.setValue(getFacesContext(), "value");
-        }
-        catch (EvaluationException ee)
-        {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-
-        exceptionThrown = false;
-        try
-        {
-            valueBinding = this.create("paramValues");
-            valueBinding.setValue(getFacesContext(), "value");
-        }
-        catch (EvaluationException ee)
-        {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-
-        exceptionThrown = false;
-        try
-        {
-            valueBinding = this.create("view");
-            valueBinding.setValue(getFacesContext(), "value");
-        }
-        catch (EvaluationException ee)
-        {
-            exceptionThrown = true;
-        }
-        assertTrue(exceptionThrown);
-
-    }
-
 
     public void testStateHolderMedium() throws Exception
     {
-
         UIViewRoot root = null;
         UIForm form = null;
         UIInput input = null;
@@ -1050,63 +1030,31 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 
     }
 
-
-    public void testStateHolderSmall() throws Exception
+    public void testGetExpressionString() throws Exception
     {
+        ApplicationImpl app = (ApplicationImpl) getFacesContext()
+                .getApplication();
+        String ref = null;
+        ValueBinding vb = null;
 
-        StateHolderSaver saver = null;
-        ValueBinding binding = getFacesContext().getApplication()
-                .createValueBinding("#{TestBean.indexProperties[0]}");
+        ref = "#{NewCustomerFormHandler.minimumAge}";
+        vb = app.createValueBinding(ref);
+        assertEquals(ref, vb.getExpressionString());
 
-        assertEquals("ValueBinding not expected value", "Justyna",
-                (String) binding.getValue(getFacesContext()));
-        saver = new StateHolderSaver(getFacesContext(), binding);
-        binding = null;
-        binding = (ValueBinding) saver.restore(getFacesContext());
-        assertEquals("ValueBinding not expected value", "Justyna",
-                (String) binding.getValue(getFacesContext()));
-
+        ref = "minimum age is #{NewCustomerFormHandler.minimumAge}";
+        vb = app.createValueBinding(ref);
+        assertEquals(ref, vb.getExpressionString());
     }
-
-
-    // ------------------------------------------------------- Protected Methods
-
-
-    //
-    // Class methods
-    //
-
-    //
-    // Methods from TestCase
-    //
-
-    //
-    // General Methods
-    //
-
-    protected ValueBinding create(String ref) throws Exception
-    {
-
-        return (getFacesContext().getApplication().createValueBinding("#{" + ref + "}"));
-
-    }
-
 
     class StateHolderSaver extends Object implements Serializable
     {
 
+        protected String className = null;
 
         protected Object savedState = null;
 
-        protected String className = null;
-
-
-    // ------------------------------------------------------------ Constructors
-
-
         public StateHolderSaver(FacesContext context, Object toSave)
         {
-
             className = toSave.getClass().getName();
 
             if (toSave instanceof StateHolder)
@@ -1121,12 +1069,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
                     className = null;
                 }
             }
-
         }
-
-
-    // ---------------------------------------------------------- Public Methods
-
 
         /**
          * @return the restored {@link StateHolder}instance.
@@ -1135,7 +1078,6 @@ public class TestValueBindingImpl extends ServletFacesTestCase
         public Object restore(FacesContext context)
                 throws IllegalStateException
         {
-
             Object result = null;
             Class toRestoreClass = null;
             if (className == null)
@@ -1176,26 +1118,18 @@ public class TestValueBindingImpl extends ServletFacesTestCase
                 ((StateHolder) result).restoreState(context, savedState);
             }
             return result;
-
         }
-
-
-    // --------------------------------------------------------- Private Methods
-
 
         private Class loadClass(String name, Object fallbackClass)
                 throws ClassNotFoundException
         {
-
             ClassLoader loader = Thread.currentThread().getContextClassLoader();
             if (loader == null)
             {
                 loader = fallbackClass.getClass().getClassLoader();
             }
             return loader.loadClass(name);
-
         }
-
     }
 
 } // end of class TestValueBindingImpl

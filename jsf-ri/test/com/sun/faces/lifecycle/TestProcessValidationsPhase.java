@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessValidationsPhase.java,v 1.36 2006/03/29 22:39:45 rlubke Exp $
+ * $Id: TestProcessValidationsPhase.java,v 1.37 2006/03/29 23:04:56 rlubke Exp $
  */
 
 /*
@@ -49,49 +49,62 @@ import java.util.Iterator;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessValidationsPhase.java,v 1.36 2006/03/29 22:39:45 rlubke Exp $
+ * @version $Id: TestProcessValidationsPhase.java,v 1.37 2006/03/29 23:04:56 rlubke Exp $
  */
 
 public class TestProcessValidationsPhase extends ServletFacesTestCase {
 
+//
+// Protected Constants
+//
+
+    public static final String TEST_URI = "/components.jsp";
 
     public static final String DID_VALIDATE = "didValidate";
-    public static final String TEST_URI = "/components.jsp";
     public static UIInput userName = null;
 
+//
+// Class Variables
+//
 
-    // ------------------------------------------------------------ Constructors
+//
+// Instance Variables
+//
 
+// Attribute Instance Variables
+
+// Relationship Instance Variables
+
+//
+// Constructors and Initializers    
+//
 
     public TestProcessValidationsPhase() {
-
         super("TestProcessValidationsPhase");
-
     }
 
 
     public TestProcessValidationsPhase(String name) {
-
         super(name);
-
     }
 
+//
+// Class methods
+//
 
-    // ---------------------------------------------------------- Public Methods
-
+//
+// General Methods
+//
 
     public void beginCallback(WebRequest theRequest) {
-
         theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
         theRequest.addParameter(
             "basicForm" + NamingContainer.SEPARATOR_CHAR + "userName", "jerry");
         theRequest.addParameter("basicForm", "basicForm");
-
     }
 
 
     public void testCallback() {
-
         UIComponent root = null;
         userName = null;
         String value = null;
@@ -129,23 +142,16 @@ public class TestProcessValidationsPhase extends ServletFacesTestCase {
 
         // add the validator
         Validator validator = new Validator() {
-
-
             public Iterator getAttributeNames() {
-
                 return null;
-
             }
 
 
             public void validate(FacesContext context, UIComponent component, Object value) {
-
                 assertTrue(component == userName);
                 System.setProperty(DID_VALIDATE, DID_VALIDATE);
                 return;
-
             }
-
         };
         userName.addValidator(validator);
 
@@ -161,7 +167,6 @@ public class TestProcessValidationsPhase extends ServletFacesTestCase {
         assertTrue(null == userName.getSubmittedValue());
         assertTrue("jerry".equals(userName.getValue()));
         System.setProperty(DID_VALIDATE, EMPTY);
-
     }
 
 } // end of class TestProcessValidationsPhase

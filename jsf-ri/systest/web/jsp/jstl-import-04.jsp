@@ -1,6 +1,6 @@
 <!--
-Copyright 2004 Sun Microsystems, Inc. All rights reserved.
-SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
 <%@ page contentType="text/html" language="java" %>
@@ -16,25 +16,24 @@ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
 
 <f:view>
-    <html>
-    <head>
-        <title>jstl-import-04</title>
-    </head>
-
-    <body>
-    <h:outputText value="[1]"/>
-    <c:choose>
-        <c:when test="${param.choose == 'a'}">
-            <c:import url="jstl-import-04a.jsp"/>
-        </c:when>
-        <c:when test="${param.choose == 'b'}">
-            <c:import url="jstl-import-04b.jsp"/>
-        </c:when>
-        <c:otherwise>
-            <c:import url="jstl-import-04c.jsp"/>
-        </c:otherwise>
-    </c:choose>
-    <h:outputText value="[3]"/>
-    </body>
-    </html>
+<html>
+<head>
+<title>jstl-import-04</title>
+</head>
+<body>
+<h:outputText value="[1]"/>
+<c:choose>
+  <c:when test="${param.choose == 'a'}">
+    <c:import url="jstl-import-04a.jsp"/>
+  </c:when>
+  <c:when test="${param.choose == 'b'}">
+    <c:import url="jstl-import-04b.jsp"/>
+  </c:when>
+  <c:otherwise>
+    <c:import url="jstl-import-04c.jsp"/>
+  </c:otherwise>
+</c:choose>
+<h:outputText value="[3]"/>
+</body>
+</html>
 </f:view>

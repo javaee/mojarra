@@ -1,6 +1,6 @@
 <!--
-Copyright 2004 Sun Microsystems, Inc. All rights reserved.
-SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
 <%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
@@ -8,7 +8,7 @@ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
 <%-- <f:view> --%>
 <f:subview id="naming2b">
-    <h:outputText value="[2b]"/>
-    <h:outputText value="[2y]"/>
+ <h:outputText value="[2b]"/>
+ <h:outputText value="[2y]"/>
 </f:subview>
 <%-- </f:view> --%>

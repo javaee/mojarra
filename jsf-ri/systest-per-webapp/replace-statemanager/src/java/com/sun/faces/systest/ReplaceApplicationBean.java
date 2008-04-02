@@ -1,5 +1,5 @@
 /*
- * $Id: ReplaceApplicationBean.java,v 1.3 2006/03/29 22:39:25 rlubke Exp $
+ * $Id: ReplaceApplicationBean.java,v 1.4 2006/03/29 23:04:34 rlubke Exp $
  */
 
 /*
@@ -28,36 +28,26 @@
  */
 
 
+
 package com.sun.faces.systest;
 
 import javax.faces.context.FacesContext;
 
 public class ReplaceApplicationBean {
 
-    // ---------------------------------------------------------- Public Methods
-
-
-    public String getApplicationClass() {
-
-        FacesContext context = FacesContext.getCurrentInstance();
-        return context.getApplication().toString();
-
-    }
-
-
     public String getStateManagerClass() {
-
-        FacesContext context = FacesContext.getCurrentInstance();
-        return context.getApplication().getStateManager().toString();
-
+	FacesContext context = FacesContext.getCurrentInstance();
+	return context.getApplication().getStateManager().toString();
     }
-
 
     public String getViewHandlerClass() {
+	FacesContext context = FacesContext.getCurrentInstance();
+	return context.getApplication().getViewHandler().toString();
+    }
 
-        FacesContext context = FacesContext.getCurrentInstance();
-        return context.getApplication().getViewHandler().toString();
-
+    public String getApplicationClass() {
+	FacesContext context = FacesContext.getCurrentInstance();
+	return context.getApplication().toString();
     }
 
 }

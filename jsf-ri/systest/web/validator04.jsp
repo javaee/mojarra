@@ -1,70 +1,67 @@
+
 <!--
-Copyright 2004 Sun Microsystems, Inc. All rights reserved.
-SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-<head>
+  <head>
     <title>Validators</title>
-    <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-    <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
-</head>
+    <%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
+    <%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>
+  </head>
 
-<body>
-<h1>Validators</h1>
+  <body>
+    <h1>Validators</h1>
 
 <f:view>
 
-    <h:form>
+  <h:form>
 
-        literal required: <h:inputText id="textField" required="true"
-                                       requiredMessage="Literal Message"/>
+    literal required: <h:inputText id="textField" required="true" 
+                 requiredMessage="Literal Message" />
 
-        <p/>
+    <p/>
 
-        expression required <h:inputText id="textField2" required="true"
-                                         requiredMessage="#{test2.stringProperty}"/>
+    expression required <h:inputText id="textField2" required="true" 
+                 requiredMessage="#{test2.stringProperty}" />
 
-        <p/>
+    <p/>
+    
+    literal converter <h:inputText id="textField3" value="#{test2.intProperty}" 
+                         converterMessage="Converter Literal" />
 
-        literal converter <h:inputText id="textField3"
-                                       value="#{test2.intProperty}"
-                                       converterMessage="Converter Literal"/>
+    <p/>
 
-        <p/>
+    expression converter <h:inputText id="textField4" value="#{test2.intProperty}" 
+                         converterMessage="#{test2.converterMessage}" />
 
-        expression converter <h:inputText id="textField4"
-                                          value="#{test2.intProperty}"
-                                          converterMessage="#{test2.converterMessage}"/>
+    <p/>
+    
+    literal validator <h:inputText id="textField5" value="#{test2.intProperty}" 
+                         validatorMessage="Validator Literal">
+                         <f:validateLongRange minimum="1" maximum="10" />
+                      </h:inputText>
 
-        <p/>
+    <p/>
 
-        literal validator <h:inputText id="textField5"
-                                       value="#{test2.intProperty}"
-                                       validatorMessage="Validator Literal">
-        <f:validateLongRange minimum="1" maximum="10"/>
-    </h:inputText>
+    expression validator <h:inputText id="textField6" value="#{test2.intProperty}" 
+                         validatorMessage="#{test2.validatorMessage}">
+                         <f:validateLongRange minimum="1" maximum="10" />
+                      </h:inputText>
 
-        <p/>
+    <p/>
+    
 
-        expression validator <h:inputText id="textField6"
-                                          value="#{test2.intProperty}"
-                                          validatorMessage="#{test2.validatorMessage}">
-        <f:validateLongRange minimum="1" maximum="10"/>
-    </h:inputText>
+    <h:messages />
 
-        <p/>
+    <h:commandButton value="submit" />
 
-
-        <h:messages/>
-
-        <h:commandButton value="submit"/>
-
-    </h:form>
+  </h:form>
 
 </f:view>
 
-<hr>
-</body>
+    <hr>
+  </body>
 </html>

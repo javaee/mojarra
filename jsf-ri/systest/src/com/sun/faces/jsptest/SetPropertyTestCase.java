@@ -1,5 +1,5 @@
 /*
- * $Id: SetPropertyTestCase.java,v 1.3 2006/03/29 22:38:47 rlubke Exp $
+ * $Id: SetPropertyTestCase.java,v 1.4 2006/03/29 23:03:56 rlubke Exp $
  */
 
 /*
@@ -28,20 +28,21 @@
  */
 
 package com.sun.faces.jsptest;
-
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.sun.faces.htmlunit.AbstractTestCase;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 
-/** <p>Test Case for f:setProperty.</p> */
+/**
+ * <p>Test Case for f:setProperty.</p>
+ */
 
 public class SetPropertyTestCase extends AbstractTestCase {
+
 
     // ------------------------------------------------------------ Constructors
 
@@ -52,67 +53,70 @@ public class SetPropertyTestCase extends AbstractTestCase {
      * @param name Name of the test case
      */
     public SetPropertyTestCase(String name) {
-
         super(name);
-
-    }
-
-    // ---------------------------------------------------------- Public Methods
-
-
-    /** Return the tests included in this test suite. */
-    public static Test suite() {
-
-        return (new TestSuite(SetPropertyTestCase.class));
-
     }
 
 
-    /** Set up instance variables required by this test case. */
+    // ------------------------------------------------------ Instance Variables
+
+
+    // ---------------------------------------------------- Overall Test Methods
+
+
+    /**
+     * Set up instance variables required by this test case.
+     */
     public void setUp() throws Exception {
-
         super.setUp();
-
     }
 
 
-    /** Tear down instance variables required by this test case. */
+    /**
+     * Return the tests included in this test suite.
+     */
+    public static Test suite() {
+        return (new TestSuite(SetPropertyTestCase.class));
+    }
+
+
+    /**
+     * Tear down instance variables required by this test case.
+     */
     public void tearDown() {
-
         super.tearDown();
-
     }
+
 
     // ------------------------------------------------- Individual Test Methods
 
     public void testSetPropertyPositive() throws Exception {
-
         HtmlPage page = getPage("/faces/jsp/jsp-setProperty-01.jsp");
         assertTrue(-1 != page.asText().indexOf("default value"));
         // press the button to submit the literal value
-        List buttons = getAllElementsOfGivenClass(page, new ArrayList(),
-                                                  HtmlSubmitInput.class);
-        page = (HtmlPage) ((HtmlSubmitInput) buttons.get(0)).click();
+        List buttons = getAllElementsOfGivenClass(page, new ArrayList(), 
+                HtmlSubmitInput.class);
+        page = (HtmlPage) ((HtmlSubmitInput)buttons.get(0)).click();
         assertTrue(-1 != page.asText().indexOf("literal value"));
-
+        
         // press the button to submit the expression value
-        buttons = getAllElementsOfGivenClass(page, new ArrayList(),
-                                             HtmlSubmitInput.class);
-        page = (HtmlPage) ((HtmlSubmitInput) buttons.get(1)).click();
+        buttons = getAllElementsOfGivenClass(page, new ArrayList(), 
+                HtmlSubmitInput.class);
+        page = (HtmlPage) ((HtmlSubmitInput)buttons.get(1)).click();
         assertTrue(-1 != page.asText().indexOf("This is a String property"));
-
+        
         // press the button to increment the property
-        buttons = getAllElementsOfGivenClass(page, new ArrayList(),
-                                             HtmlSubmitInput.class);
-        page = (HtmlPage) ((HtmlSubmitInput) buttons.get(2)).click();
+        buttons = getAllElementsOfGivenClass(page, new ArrayList(), 
+                HtmlSubmitInput.class);
+        page = (HtmlPage) ((HtmlSubmitInput)buttons.get(2)).click();
         assertTrue(-1 != page.asText().indexOf("0"));
-
+        
         // press the button to increment the property
-        buttons = getAllElementsOfGivenClass(page, new ArrayList(),
-                                             HtmlSubmitInput.class);
-        page = (HtmlPage) ((HtmlSubmitInput) buttons.get(2)).click();
+        buttons = getAllElementsOfGivenClass(page, new ArrayList(), 
+                HtmlSubmitInput.class);
+        page = (HtmlPage) ((HtmlSubmitInput)buttons.get(2)).click();
         assertTrue(-1 != page.asText().indexOf("1"));
 
     }
+
 
 }

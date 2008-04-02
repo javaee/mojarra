@@ -92,23 +92,15 @@ import java.beans.PropertyEditorSupport;
 public class Bean2Editor
     extends PropertyEditorSupport {
 
-
-    // ---------------------------------------------------------- Public Methods
-
-
     //-------------------------------------
     public void setAsText(String pText)
         throws IllegalArgumentException {
-
         if ("badvalue".equals(pText)) {
             throw new IllegalArgumentException("Bad value " + pText);
         } else {
             setValue(new Bean2(pText));
         }
-
     }
 
-
     //-------------------------------------
-
 }

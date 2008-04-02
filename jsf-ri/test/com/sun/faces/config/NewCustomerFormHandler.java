@@ -32,19 +32,65 @@ import java.util.List;
 public class NewCustomerFormHandler {
 
 
-    private HashMap claimAmounts;
+    public NewCustomerFormHandler() {
+    }
 
 
-    private List allowableValues;
-
-
-    private String maximumAge;
+    public String loginRequired() {
+        return "loginRequired";
+    }
 
 
     private String minimumAge;
 
 
+    public String getMinimumAge() {
+        return minimumAge;
+    }
+
+
+    public void setMinimumAge(String minimumAge) {
+        this.minimumAge = minimumAge;
+    }
+
+
+    private String maximumAge;
+
+
+    public String getMaximumAge() {
+        return maximumAge;
+    }
+
+
+    public void setMaximumAge(String maximumAge) {
+        this.maximumAge = maximumAge;
+    }
+
+
     private String nationality;
+
+
+    public String getNationality() {
+        return nationality;
+    }
+
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
+
+    private List allowableValues;
+
+
+    public List getAllowableValues() {
+        return allowableValues;
+    }
+
+
+    public void setAllowableValues(List allowableValues) {
+        this.allowableValues = allowableValues;
+    }
 
 
     private String[] firstNames = {
@@ -53,104 +99,27 @@ public class NewCustomerFormHandler {
     };
 
 
-    // ------------------------------------------------------------ Constructors
-
-
-    public NewCustomerFormHandler() {
-    }
-
-
-    // ---------------------------------------------------------- Public Methods
-
-
-    public List getAllowableValues() {
-
-        return allowableValues;
-
-    }
-
-
-    public void setAllowableValues(List allowableValues) {
-
-        this.allowableValues = allowableValues;
-
-    }
-
-
-    public HashMap getClaimAmounts() {
-
-        return claimAmounts;
-
-    }
-
-
-    public void setClaimAmounts(HashMap claimAmounts) {
-
-        this.claimAmounts = claimAmounts;
-
-    }
-
-
     public String[] getFirstNames() {
-
         return firstNames;
-
     }
 
 
     public void setFirstNames(String[] newNames) {
-
         firstNames = newNames;
-
     }
 
 
-    public String getMaximumAge() {
+    private HashMap claimAmounts;
 
-        return maximumAge;
 
+    public HashMap getClaimAmounts() {
+        return claimAmounts;
     }
 
 
-    public void setMaximumAge(String maximumAge) {
-
-        this.maximumAge = maximumAge;
-
+    public void setClaimAmounts(HashMap claimAmounts) {
+        this.claimAmounts = claimAmounts;
     }
 
-
-    public String getMinimumAge() {
-
-        return minimumAge;
-
-    }
-
-
-    public void setMinimumAge(String minimumAge) {
-
-        this.minimumAge = minimumAge;
-
-    }
-
-
-    public String getNationality() {
-
-        return nationality;
-
-    }
-
-
-    public void setNationality(String nationality) {
-
-        this.nationality = nationality;
-
-    }
-
-
-    public String loginRequired() {
-
-        return "loginRequired";
-
-    }
 
 }

@@ -90,13 +90,7 @@ package com.sun.faces.el.impl.beans;
 class PrivateBean2b
     implements PublicInterface2 {
 
-
-    // ------------------------------------------- Methods From PublicInterface2
-
     public Object getValue() {
-
         return "got the value";
-
     }
-
 }

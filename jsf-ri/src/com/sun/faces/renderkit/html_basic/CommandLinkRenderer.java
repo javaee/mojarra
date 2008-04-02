@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.47 2006/03/29 22:38:36 rlubke Exp $
+ * $Id: CommandLinkRenderer.java,v 1.48 2006/03/29 23:03:47 rlubke Exp $
  */
 
 /*
@@ -31,6 +31,10 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import java.io.IOException;
+import java.util.Map;
+import java.util.ArrayList;
+
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
@@ -40,15 +44,12 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.logging.Level;
-
 import com.sun.faces.RIConstants;
 import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
+
+import java.util.logging.Level;
 
 /**
  * <B>CommandLinkRenderer</B> is a class that renders the current value of
@@ -57,19 +58,51 @@ import com.sun.faces.util.Util;
 
 public class CommandLinkRenderer extends LinkRenderer {
 
-    // ---------------------------------------------------------- Public Methods
+    //
+    // Protected Constants
+    //
+     
+    // Separator character
 
+    //
+    // Class Variables
+    //
+
+    //
+    // Instance Variables
+    //
+
+    // Attribute Instance Variables
+
+
+    // Relationship Instance Variables
+
+    //
+    // Constructors and Initializers
+    //
+
+    //
+    // Class methods
+    //
+
+    //
+    // General Methods
+    //
+
+    //
+    // Methods From Renderer
+    //
 
     public void decode(FacesContext context, UIComponent component) {
 
         if (context == null || component == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "Begin decoding component " + component.getId());
+            logger.log(Level.FINER, 
+                    "Begin decoding component " + component.getId());
         }
 
         UICommand command = (UICommand) component;
@@ -78,20 +111,20 @@ public class CommandLinkRenderer extends LinkRenderer {
         // component, since its state cannot be changed.
         if (Util.componentIsDisabledOrReadonly(component)) {
             if (logger.isLoggable(Level.FINE)) {
-                logger.fine("No decoding necessary since the component " +
-                            component.getId() + " is disabled");
+                 logger.fine("No decoding necessary since the component " +
+                          component.getId() + " is disabled");
             }
             return;
-        }
-
-        String
-              clientId = command.getClientId(context),
-              paramName = getHiddenFieldName(context, command);
-        if (null == paramName) {
-            return;
-        }
-        Map<String, String> requestParameterMap = context.getExternalContext()
-              .getRequestParameterMap();
+        } 
+	
+        String 
+	    clientId = command.getClientId(context),
+	    paramName = getHiddenFieldName(context, command);
+	if (null == paramName) {
+	    return;
+	}
+        Map<String,String> requestParameterMap = context.getExternalContext()
+            .getRequestParameterMap();
         String value = requestParameterMap.get(paramName);
         if (value == null || value.equals("") || !clientId.equals(value)) {
             return;
@@ -100,56 +133,57 @@ public class CommandLinkRenderer extends LinkRenderer {
         component.queueEvent(actionEvent);
 
         if (logger.isLoggable(Level.FINE)) {
-            logger.fine("This command resulted in form submission " +
-                        " ActionEvent queued " + actionEvent);
+                 logger.fine("This command resulted in form submission " +
+                      " ActionEvent queued " + actionEvent);
         }
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "End decoding component " + component.getId());
-        }
-
+            logger.log(Level.FINER, 
+                    "End decoding component " + component.getId());
+        }        
     }
 
+    public boolean getRendersChildren() {
+        return true;
+    }
 
     public void encodeBegin(FacesContext context, UIComponent component)
-          throws IOException {
+        throws IOException {
 
         if (context == null || component == null) {
             throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER,
-                       "Begin encoding component " + component.getId());
+                    "Begin encoding component " + component.getId());
         }
 
-        UICommand command = (UICommand) component;
+        UICommand command = (UICommand)component;
 
         // suppress rendering if "rendered" property on the command is
         // false.
         if (!command.isRendered()) {
             if (logger.isLoggable(Level.FINE)) {
-                logger.fine("End encoding component " + component.getId() +
-                            " since " +
-                            "rendered attribute is set to false ");
+                 logger.fine("End encoding component " + component.getId() +
+                          " since " +
+                          "rendered attribute is set to false ");
             }
             return;
         }
 
         boolean componentDisabled = false;
         if (command.getAttributes().get("disabled") != null) {
-            if ((command.getAttributes().get("disabled")).equals(Boolean.TRUE))
-            {
+            if ((command.getAttributes().get("disabled")).equals(Boolean.TRUE)) {
                 componentDisabled = true;
             }
         }
-
+        
         Object form = getMyForm(component);
         if (form == null) {
             if (logger.isLoggable(Level.WARNING)) {
                 logger.warning("component '" + component.getId() +
                                "' must be enclosed inside a form ");
-            }
+            }            
         }
 
         if (componentDisabled || getMyForm(component) == null) {
@@ -160,25 +194,24 @@ public class CommandLinkRenderer extends LinkRenderer {
 
     }
 
-
     public void encodeChildren(FacesContext context, UIComponent component)
-          throws IOException {
-
+        throws IOException {
+                                                                                                                        
         if (context == null || component == null) {
             throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER,
-                       "Begin encoding children " + component.getId());
+                    "Begin encoding children " + component.getId());
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
             if (logger.isLoggable(Level.FINE)) {
-                logger.fine("End encoding component " + component.getId() +
-                            " since " +
-                            "rendered attribute is set to false ");
+                 logger.fine("End encoding component " + component.getId() +
+                          " since " +
+                          "rendered attribute is set to false ");
             }
             return;
         }
@@ -191,87 +224,69 @@ public class CommandLinkRenderer extends LinkRenderer {
         }
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER,
-                       "End encoding children " + component.getId());
+                    "End encoding children " + component.getId());
         }
-
     }
 
-
     public void encodeEnd(FacesContext context, UIComponent component)
-          throws IOException {
-
+        throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         UICommand command = (UICommand) component;
-
+                                                                                                                        
         // suppress rendering if "rendered" property on the command is
         // false.
         if (!command.isRendered()) {
             if (logger.isLoggable(Level.FINE)) {
-                logger.fine("End encoding component " + component.getId() +
-                            " since " +
-                            "rendered attribute is set to false ");
+                 logger.fine("End encoding component " + component.getId() +
+                          " since " +
+                          "rendered attribute is set to false ");
             }
             return;
         }
         ResponseWriter writer = context.getResponseWriter();
         assert (writer != null);
-
+        
         String fieldName = getHiddenFieldName(context, component);
         if (fieldName == null) {
             writer.write(MessageUtils.getExceptionMessageString(
-                  MessageUtils.COMMAND_LINK_NO_FORM_MESSAGE_ID));
+                  MessageUtils.COMMAND_LINK_NO_FORM_MESSAGE_ID));   
             writer.endElement("span");
             return;
         }
-
+        
         //Write Anchor inline elements
-
+                                                                                                                                                                                                                                                       
         boolean componentDisabled = false;
         if (component.getAttributes().get("disabled") != null) {
-            if ((component.getAttributes().get("disabled"))
-                  .equals(Boolean.TRUE)) {
+            if ((component.getAttributes().get("disabled")).equals(Boolean.TRUE)) {
                 componentDisabled = true;
             }
         }
-
+                                                                                                                         
         if (componentDisabled) {
-
-            writer.endElement("span");
-
+            
+                writer.endElement("span");
+           
             return;
         }
 
         //Done writing Anchor element
         writer.endElement("a");
-
-        renderHiddenFieldsAndScriptIfNecessary(context,
-                                               writer,
-                                               component,
-                                               fieldName);
-
-
+                                                                                                                        
+        renderHiddenFieldsAndScriptIfNecessary(context, writer, component, fieldName);
+                                                                                                                                       
+        
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER,
-                       "End encoding component " + component.getId());
-        }
-
+                    "End encoding component " + component.getId());
+        }        
     }
 
-
-    public boolean getRendersChildren() {
-
-        return true;
-
-    }
-
-    // ------------------------------------------------------- Protected Methods
-
-
-    protected void renderAsActive(FacesContext context, UIComponent command)
-          throws IOException {
+    protected void renderAsActive(FacesContext context, UIComponent command) 
+    throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
         assert (writer != null);
@@ -279,10 +294,10 @@ public class CommandLinkRenderer extends LinkRenderer {
         String clientId = command.getClientId(context);
 
         UIForm uiform = getMyForm(command);
-        if (uiform == null) {
+        if ( uiform == null ) {
             if (logger.isLoggable(Level.WARNING)) {
-                logger.warning("component " + command.getId() +
-                               " must be enclosed inside a form ");
+                 logger.warning("component " + command.getId() +
+                          " must be enclosed inside a form ");
             }
             return;
         }
@@ -295,18 +310,17 @@ public class CommandLinkRenderer extends LinkRenderer {
         writer.startElement("a", command);
         writeIdAttributeIfNecessary(context, writer, command);
         writer.writeAttribute("href", "#", "href");
-        RenderKitUtils.renderPassThruAttributes(context,
-                                                writer,
-                                                command,
-                                                new String[]{"target"});
+        RenderKitUtils.renderPassThruAttributes(context, 
+                                      writer, 
+                                      command,
+                                      new String[] { "target" });
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, command);
 
         // render onclick
-        String userOnclick = (String) command.getAttributes().get("onclick");
+        String userOnclick = (String)command.getAttributes().get("onclick");
         StringBuffer sb = new StringBuffer(128);
-        boolean userSpecifiedOnclick =
-              (userOnclick != null && !"".equals(userOnclick));
-
+        boolean userSpecifiedOnclick = (userOnclick != null && !"".equals(userOnclick));
+        
         // if user specified their own onclick value, we are going to
         // wrap their js and the injected js each in a function and
         // execute them in a choose statement, if the user didn't specify
@@ -315,20 +329,17 @@ public class CommandLinkRenderer extends LinkRenderer {
             sb.append("var a=function(){");
             userOnclick = userOnclick.trim();
             sb.append(userOnclick);
-            if (userOnclick.charAt(userOnclick.length() - 1) != ';') {
-                sb.append(';');
-            }
+            if (userOnclick.charAt(userOnclick.length()-1) != ';') sb.append(';');
             sb.append("};var b=function(){");
         }
-
+        
         // call the javascript function that clears the all the hidden field
         // parameters in the form.
         String functionName =
-              RenderKitUtils
-                    .createValidECMAIdentifier(CLEAR_HIDDEN_FIELD_FN_NAME
-                                               + '_'
-                                               + formClientId
-                          .replace(NamingContainer.SEPARATOR_CHAR, '_'));
+              RenderKitUtils.createValidECMAIdentifier(CLEAR_HIDDEN_FIELD_FN_NAME
+                                             + '_'
+                                             + formClientId
+                    .replace(NamingContainer.SEPARATOR_CHAR, '_')); 
         sb.append(functionName);
         sb.append("('");
         sb.append(formClientId);
@@ -383,50 +394,74 @@ public class CommandLinkRenderer extends LinkRenderer {
         writer.writeAttribute("onclick", sb.toString(), "onclick");
 
         writeCommonLinkAttributes(writer, command);
-
+        
         // render the current value as link text.
         writeValue(command, writer);
         writer.flush();
 
-    }
+    }      
 
-    // --------------------------------------------------------- Private Methods
+    private void writeScriptContent(FacesContext context, 
+				   ResponseWriter writer,
+				   UIComponent component) throws IOException {
+	Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
+	UIForm myForm = getMyForm(component);
+	boolean isXHTML = 
+	    requestMap.containsKey(RIConstants.CONTENT_TYPE_IS_XHTML);
 
-
-    private String getHiddenFieldName(FacesContext context,
-                                      UIComponent component) {
-
-        UIForm uiform = getMyForm(component);
-        if (null == uiform) {
-            return null;
+	if (null == myForm) {
+            return;
+	}
+	// if the script content has already been rendered for this form
+	if (null != myForm.getAttributes().get(DID_RENDER_SCRIPT)){
+	    return;
+	}
+	String formName = myForm.getClientId(context);
+	writer.startElement("script", component);
+	writer.writeAttribute("type", "text/javascript", "type");
+	writer.writeAttribute("language", "Javascript", "language");	
+	if (isXHTML) {
+	    writer.write("//<![CDATA[\n");
+	} else {
+            writer.write("<!--\n");
         }
-        String formClientId = uiform.getClientId(context);
-        return (formClientId + NamingContainer.SEPARATOR_CHAR +
-                UIViewRoot.UNIQUE_ID_PREFIX + "cl");
-
-    }
-
-
-    private UIForm getMyForm(UIComponent component) {
-
-        UIComponent parent = component.getParent();
-        while (parent != null) {
-            if (parent instanceof UIForm) {
-                break;
-            }
-            parent = parent.getParent();
+	writer.write("\nfunction ");
+        String functionName =
+              RenderKitUtils.createValidECMAIdentifier(CLEAR_HIDDEN_FIELD_FN_NAME
+                                             + "_"
+                                             + formName
+                    .replace(NamingContainer.SEPARATOR_CHAR, '_')); 
+	writer.write(functionName);
+	writer.write("(curFormName) {");
+	writer.write("\n  var curForm = document.forms[curFormName];"); 
+	writer.write("\n curForm.elements['"); 
+	writer.write(getHiddenFieldName(context, component));
+	writer.write("'].value = null;");
+        Param paramList[] = getParamList(context, component);
+        for (int i = 0; i < paramList.length; i++) {
+	    writer.write("\n curForm.elements['"); 
+	    writer.write(paramList[i].getName());
+	    writer.write("'].value = null;");
         }
-        if (null == parent) {
-            if (logger.isLoggable(Level.WARNING)) {
-                logger.warning("component " + component.getId() +
-                               " must be enclosed inside a form ");
-            }
+        String formTarget = (String) myForm.getAttributes().get("target");
+	if (formTarget != null && formTarget.length() > 0) {
+	    writer.write("\n  curForm.target=");
+	    writer.write("'");
+	    writer.write(formTarget);
+	    writer.write("';");
+	}
+	writer.write("\n}\n");
+
+	if (isXHTML) {
+	    writer.write("//]]>\n");
+	} else {
+	    writer.write("//-->\n");
         }
+	writer.endElement("script");
 
-        return (UIForm) parent;
-
+	// say that we've already rendered the script for this form
+	myForm.getAttributes().put(DID_RENDER_SCRIPT, DID_RENDER_SCRIPT);
     }
-
 
     /**
      * <p>Render the hidden fields necessary to the execution of this
@@ -436,43 +471,40 @@ public class CommandLinkRenderer extends LinkRenderer {
      * with that name, or there is one, but it's a different name then
      * "our" hidden field name, render the hidden field.</p>
      */
-
+    
     private void renderHiddenFieldsAndScriptIfNecessary(FacesContext context,
-                                                        ResponseWriter writer,
-                                                        UIComponent component,
-                                                        String fieldName)
-          throws IOException {
-
+					       ResponseWriter writer,
+					       UIComponent component,
+					       String fieldName) throws IOException {
         //Handle hidden fields
-        Map<String, Object> requestMap =
-              context.getExternalContext().getRequestMap();
-
-        if (null == fieldName) {
-            return;
-        }
-        String keyName = RIConstants.FACES_PREFIX + fieldName;
-        Object keyVal;
-        // if the hidden field for this form hasn't yet been rendered
-        if ((null == (keyVal = requestMap.get(keyName)))
-            || (!keyVal.equals(keyName))) {
-
-            writer.startElement("input", component);
-            writer.writeAttribute("type", "hidden", null);
-            writer.writeAttribute("name", fieldName, null);
-            writer.endElement("input");
-            // declare that we have rendered it
-            requestMap.put(keyName, keyName);
+	Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
+	
+	if (null == fieldName) {
+	    return;
+	}
+	String keyName = RIConstants.FACES_PREFIX + fieldName;
+	Object keyVal;
+	// if the hidden field for this form hasn't yet been rendered
+	if ((null == (keyVal = requestMap.get(keyName))) 
+	    || (!keyVal.equals(keyName))) {
+            
+	    writer.startElement("input", component);
+	    writer.writeAttribute("type", "hidden", null);
+	    writer.writeAttribute("name", fieldName, null);
+	    writer.endElement("input");
+	    // declare that we have rendered it
+	    requestMap.put(keyName, keyName);
         }
         // PENDING(edburns): not sure if the JSFA59 back button problem
         // manifests itself with param children as well...      
         // get UIParameter children...
         Param paramList[] = getParamList(context, component);
-        if (paramList != null && paramList.length > 0) {
-            ArrayList<String> renderedFields =
-                  (ArrayList<String>) requestMap.get(RENDERED_HIDDEN_FIELDS);
+        if (paramList != null && paramList.length > 0) {            
+            ArrayList<String> renderedFields = 
+                  (ArrayList<String>)requestMap.get(RENDERED_HIDDEN_FIELDS);           
             if (renderedFields == null) {
                 renderedFields = new ArrayList<String>();
-                requestMap.put(RENDERED_HIDDEN_FIELDS, renderedFields);
+                requestMap.put(RENDERED_HIDDEN_FIELDS, renderedFields);                
             }
 
             // render any hidden fields that haven't been already for this form.
@@ -489,78 +521,40 @@ public class CommandLinkRenderer extends LinkRenderer {
                     writer.endElement("input");
                     renderedFields.add(keyName);
                 }
-            }
+            }            
         }
-
+                
         writeScriptContent(context, writer, component);
-
     }
 
-
-    private void writeScriptContent(FacesContext context,
-                                    ResponseWriter writer,
-                                    UIComponent component) throws IOException {
-
-        Map<String, Object> requestMap =
-              context.getExternalContext().getRequestMap();
-        UIForm myForm = getMyForm(component);
-        boolean isXHTML =
-              requestMap.containsKey(RIConstants.CONTENT_TYPE_IS_XHTML);
-
-        if (null == myForm) {
-            return;
+    
+    private String getHiddenFieldName(FacesContext context, 
+					UIComponent component) {
+	UIForm uiform = getMyForm(component);
+	if (null == uiform) {
+	    return null;
+	}
+	String formClientId = uiform.getClientId(context);
+	return (formClientId + NamingContainer.SEPARATOR_CHAR + 
+		UIViewRoot.UNIQUE_ID_PREFIX + "cl");
+    }
+    
+    private UIForm getMyForm(UIComponent component) {
+        UIComponent parent = component.getParent();
+        while (parent != null) {
+            if (parent instanceof UIForm) {
+                break;
+            }
+            parent = parent.getParent();
         }
-        // if the script content has already been rendered for this form
-        if (null != myForm.getAttributes().get(DID_RENDER_SCRIPT)) {
-            return;
-        }
-        String formName = myForm.getClientId(context);
-        writer.startElement("script", component);
-        writer.writeAttribute("type", "text/javascript", "type");
-        writer.writeAttribute("language", "Javascript", "language");
-        if (isXHTML) {
-            writer.write("//<![CDATA[\n");
-        } else {
-            writer.write("<!--\n");
-        }
-        writer.write("\nfunction ");
-        String functionName =
-              RenderKitUtils
-                    .createValidECMAIdentifier(CLEAR_HIDDEN_FIELD_FN_NAME
-                                               + "_"
-                                               + formName
-                          .replace(NamingContainer.SEPARATOR_CHAR, '_'));
-        writer.write(functionName);
-        writer.write("(curFormName) {");
-        writer.write("\n  var curForm = document.forms[curFormName];");
-        writer.write("\n curForm.elements['");
-        writer.write(getHiddenFieldName(context, component));
-        writer.write("'].value = null;");
-        Param paramList[] = getParamList(context, component);
-        for (int i = 0; i < paramList.length; i++) {
-            writer.write("\n curForm.elements['");
-            writer.write(paramList[i].getName());
-            writer.write("'].value = null;");
-        }
-        String formTarget = (String) myForm.getAttributes().get("target");
-        if (formTarget != null && formTarget.length() > 0) {
-            writer.write("\n  curForm.target=");
-            writer.write("'");
-            writer.write(formTarget);
-            writer.write("';");
-        }
-        writer.write("\n}\n");
+	if (null == parent) {
+            if (logger.isLoggable(Level.WARNING)) {
+                 logger.warning("component " + component.getId() +
+                          " must be enclosed inside a form ");
+            }
+	}
 
-        if (isXHTML) {
-            writer.write("//]]>\n");
-        } else {
-            writer.write("//-->\n");
-        }
-        writer.endElement("script");
-
-        // say that we've already rendered the script for this form
-        myForm.getAttributes().put(DID_RENDER_SCRIPT, DID_RENDER_SCRIPT);
-
+        return (UIForm) parent;
     }
 
 } // end of class CommandLinkRenderer

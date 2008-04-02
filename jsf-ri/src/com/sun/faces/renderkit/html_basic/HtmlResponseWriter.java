@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.25 2006/03/29 22:38:36 rlubke Exp $
+ * $Id: HtmlResponseWriter.java,v 1.26 2006/03/29 23:03:48 rlubke Exp $
  */
 
 /*
@@ -29,6 +29,9 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import com.sun.faces.util.HtmlUtils;
+import com.sun.faces.util.MessageUtils;
+
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ResponseWriter;
@@ -37,17 +40,13 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
-import com.sun.faces.util.HtmlUtils;
-import com.sun.faces.util.MessageUtils;
-
 
 /**
  * <p><strong>HtmlResponseWriter</strong> is an Html specific implementation
  * of the <code>ResponseWriter</code> abstract class.
  * Kudos to Adam Winer (Oracle) for much of this code.
  */
-public class HtmlResponseWriter extends ResponseWriter {
-
+public class HtmlResponseWriter extends ResponseWriter {    
 
     // Content Type for this Writer.
     //
@@ -69,15 +68,13 @@ public class HtmlResponseWriter extends ResponseWriter {
     // True when we shouldn't be escaping output (basically,
     // inside of <script> and <style> elements).
     //
-    private boolean dontEscape;
+    private boolean dontEscape;        
 
     // Internal buffer used when outputting properly escaped information
     // using HtmlUtils class.
     //
     private char[] buffer = new char[1028];
     private char[] charHolder = new char[1];
-
-    // ------------------------------------------------------------ Constructors
 
 
     /**
@@ -87,77 +84,114 @@ public class HtmlResponseWriter extends ResponseWriter {
      * @param writer      the <code>ResponseWriter</code>
      * @param contentType the content type.
      * @param encoding    the character encoding.
-     *
      * @throws FacesException the encoding is not recognized.
      */
-    public HtmlResponseWriter(Writer writer, String contentType,
-                              String encoding)
-          throws FacesException {
-
+    public HtmlResponseWriter(Writer writer, String contentType, String encoding)
+        throws FacesException {
         this.writer = writer;
 
         if (null != contentType) {
             this.contentType = contentType;
-        }
-
-        this.encoding = encoding;
+        }        
+        
+        this.encoding = encoding;               
 
         // Check the character encoding
         try {
             HtmlUtils.validateEncoding(encoding);
         } catch (UnsupportedEncodingException e) {
             throw new IllegalArgumentException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.ENCODING_ERROR_MESSAGE_ID));
+                MessageUtils.ENCODING_ERROR_MESSAGE_ID));
         }
-
-    }
-
-    // ---------------------------------------------------------- Public Methods
-
-
-    /** @return the content type such as "text/html" for this ResponseWriter. */
-    public String getContentType() {
-
-        return contentType;
-
     }
 
 
     /**
-     * <p>Create a new instance of this <code>ResponseWriter</code> using
-     * a different <code>Writer</code>.
-     *
-     * @param writer The <code>Writer</code> that will be used to create
-     *               another <code>ResponseWriter</code>.
+     * @return the content type such as "text/html" for this ResponseWriter.
      */
-    public ResponseWriter cloneWithWriter(Writer writer) {
-
-        try {
-            return new HtmlResponseWriter(writer, getContentType(),
-                                          getCharacterEncoding());
-        } catch (FacesException e) {
-            // This should never happen
-            throw new IllegalStateException();
-        }
-
+    public String getContentType() {
+        return contentType;
     }
 
 
-    /** Methods From <code>java.io.Writer</code> */
-
-    public void close() throws IOException {
-
-        closeStartIfNecessary();
-        writer.close();
-
+    /**
+     * @return the character encoding, such as "ISO-8859-1" for this
+     *         ResponseWriter.  Refer to:
+     *         <a href="http://www.iana.org/assignments/character-sets">theIANA</a>
+     *         for a list of character encodings.
+     */
+    public String getCharacterEncoding() {
+        return encoding;
     }
 
 
-    /** Output the text for the end of a document. */
+    /**
+     * <p>Write the text that should begin a response.</p>
+     *
+     * @throws IOException if an input/output error occurs
+     */
+    public void startDocument() throws IOException {
+        // do nothing;
+    }
+
+
+    /**
+     * Output the text for the end of a document.
+     */
     public void endDocument() throws IOException {
-
         writer.flush();
+    }
 
+
+    /**
+     * Flush any buffered output to the contained writer.
+     *
+     * @throws IOException if an input/output error occurs.
+     */
+    public void flush() throws IOException {
+        // NOTE: Internal buffer's contents (the ivar "buffer") is
+        // written to the contained writer in the HtmlUtils class - see
+        // HtmlUtils.flushBuffer method; Buffering is done during
+        // writeAttribute/writeText - otherwise, output is written
+        // directly to the writer (ex: writer.write(....)..
+        //
+        // close any previously started element, if necessary
+        closeStartIfNecessary();
+    }
+
+
+    /**
+     * <p>Write the start of an element, up to and including the
+     * element name.  Clients call <code>writeAttribute()</code> or
+     * <code>writeURIAttribute()</code> methods to add attributes after
+     * calling this method.
+     *
+     * @param name                Name of the starting element
+     * @param componentForElement The UIComponent instance that applies to this
+     *                            element.  This argument may be <code>null</code>.
+     * @throws IOException          if an input/output error occurs
+     * @throws NullPointerException if <code>name</code>
+     *                              is <code>null</code>
+     */
+    public void startElement(String name, UIComponent componentForElement)
+        throws IOException {
+        if (name == null) {
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        closeStartIfNecessary();
+        char firstChar = name.charAt(0);
+        if ((firstChar == 's') ||
+            (firstChar == 'S')) {
+            if ("script".equalsIgnoreCase(name) ||
+                "style".equalsIgnoreCase(name)) {
+                dontEscape = true;
+            }
+        }
+                        
+        writer.write('<');
+        writer.write(name);
+        closeStart = true;
     }
 
 
@@ -167,16 +201,14 @@ public class HtmlResponseWriter extends ResponseWriter {
      * <code>startElement()</code>.
      *
      * @param name Name of the element to be ended
-     *
      * @throws IOException          if an input/output error occurs
      * @throws NullPointerException if <code>name</code>
      *                              is <code>null</code>
      */
     public void endElement(String name) throws IOException {
-
         if (name == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         // always turn escaping back on once an element ends
@@ -196,131 +228,8 @@ public class HtmlResponseWriter extends ResponseWriter {
         }
 
         writer.write("</");
-        writer.write(name);
+        writer.write(name);       
         writer.write('>');
-
-    }
-
-
-    /**
-     * Flush any buffered output to the contained writer.
-     *
-     * @throws IOException if an input/output error occurs.
-     */
-    public void flush() throws IOException {
-
-        // NOTE: Internal buffer's contents (the ivar "buffer") is
-        // written to the contained writer in the HtmlUtils class - see
-        // HtmlUtils.flushBuffer method; Buffering is done during
-        // writeAttribute/writeText - otherwise, output is written
-        // directly to the writer (ex: writer.write(....)..
-        //
-        // close any previously started element, if necessary
-        closeStartIfNecessary();
-
-    }
-
-
-    /**
-     * @return the character encoding, such as "ISO-8859-1" for this
-     *         ResponseWriter.  Refer to:
-     *         <a href="http://www.iana.org/assignments/character-sets">theIANA</a>
-     *         for a list of character encodings.
-     */
-    public String getCharacterEncoding() {
-
-        return encoding;
-
-    }
-
-
-    /**
-     * <p>Write the text that should begin a response.</p>
-     *
-     * @throws IOException if an input/output error occurs
-     */
-    public void startDocument() throws IOException {
-
-        // do nothing;
-
-    }
-
-
-    /**
-     * <p>Write the start of an element, up to and including the
-     * element name.  Clients call <code>writeAttribute()</code> or
-     * <code>writeURIAttribute()</code> methods to add attributes after
-     * calling this method.
-     *
-     * @param name                Name of the starting element
-     * @param componentForElement The UIComponent instance that applies to this
-     *                            element.  This argument may be <code>null</code>.
-     *
-     * @throws IOException          if an input/output error occurs
-     * @throws NullPointerException if <code>name</code>
-     *                              is <code>null</code>
-     */
-    public void startElement(String name, UIComponent componentForElement)
-          throws IOException {
-
-        if (name == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-        closeStartIfNecessary();
-        char firstChar = name.charAt(0);
-        if ((firstChar == 's') ||
-            (firstChar == 'S')) {
-            if ("script".equalsIgnoreCase(name) ||
-                "style".equalsIgnoreCase(name)) {
-                dontEscape = true;
-            }
-        }
-
-        writer.write('<');
-        writer.write(name);
-        closeStart = true;
-
-    }
-
-
-    public void write(String str) throws IOException {
-
-        closeStartIfNecessary();
-        writer.write(str);
-
-    }
-
-
-    public void write(int c) throws IOException {
-
-        closeStartIfNecessary();
-        writer.write(c);
-
-    }
-
-
-    public void write(char cbuf) throws IOException {
-
-        closeStartIfNecessary();
-        writer.write(cbuf);
-
-    }
-
-
-    public void write(String str, int off, int len) throws IOException {
-
-        closeStartIfNecessary();
-        writer.write(str, off, len);
-
-    }
-
-
-    public void write(char[] cbuf, int off, int len) throws IOException {
-
-        closeStartIfNecessary();
-        writer.write(cbuf, off, len);
-
     }
 
 
@@ -336,21 +245,18 @@ public class HtmlResponseWriter extends ResponseWriter {
      * @param componentPropertyName The name of the component property to
      *                              which this attribute argument applies.  This argument may be
      *                              <code>null</code>.
-     *
      * @throws IllegalStateException if this method is called when there
      *                               is no currently open element
      * @throws IOException           if an input/output error occurs
      * @throws NullPointerException  if <code>name</code> is <code>null</code>
      */
-    public void writeAttribute(String name, Object value,
-                               String componentPropertyName)
-          throws IOException {
-
+    public void writeAttribute(String name, Object value, String componentPropertyName)
+        throws IOException {
         if (name == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        if (value == null) {
+        if ( value == null ) {
             return;
         }
 
@@ -374,170 +280,11 @@ public class HtmlResponseWriter extends ResponseWriter {
             writer.write(' ');
             writer.write(name);
             writer.write("=\"");
-
+            
             // write the attribute value
-            HtmlUtils.writeAttribute(writer, buffer, value.toString());
+            HtmlUtils.writeAttribute(writer, buffer, value.toString());            
             writer.write('"');
         }
-
-    }
-
-
-    /**
-     * <p>Write a comment string containing the specified text.
-     * The text will be converted to a String if necessary.
-     * If there is an open element that has been created by a call
-     * to <code>startElement()</code>, that element will be closed
-     * first.</p>
-     *
-     * @param comment Text content of the comment
-     *
-     * @throws IOException          if an input/output error occurs
-     * @throws NullPointerException if <code>comment</code>
-     *                              is <code>null</code>
-     */
-    public void writeComment(Object comment) throws IOException {
-
-        if (comment == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-        closeStartIfNecessary();
-        // Don't include a trailing space after the '<!--'
-        // or a leading space before the '-->' to support
-        // IE conditional commentsoth
-        writer.write("<!--");
-        writer.write(comment.toString());
-        writer.write("-->");
-
-    }
-
-
-    /**
-     * <p>Write properly escaped text from a character array.
-     * The output from this command is identical to the invocation:
-     * <code>writeText(c, 0, c.length)</code>.
-     * If there is an open element that has been created by a call to
-     * <code>startElement()</code>, that element will be closed first.</p>
-     * </p>
-     * <p/>
-     * <p>All angle bracket occurrences in the argument must be escaped
-     * using the &amp;gt; &amp;lt; syntax.</p>
-     *
-     * @param text Text to be written
-     *
-     * @throws IOException          if an input/output error occurs
-     * @throws NullPointerException if <code>text</code>
-     *                              is <code>null</code>
-     */
-    public void writeText(char text[]) throws IOException {
-
-        if (text == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-        closeStartIfNecessary();
-        if (dontEscape) {
-            writer.write(text);
-        } else {
-            HtmlUtils.writeText(writer, buffer, text);
-        }
-
-    }
-
-
-    /**
-     * <p>Write a properly escaped single character, If there
-     * is an open element that has been created by a call to
-     * <code>startElement()</code>, that element will be closed first.</p>
-     * <p/>
-     * <p>All angle bracket occurrences in the argument must be escaped
-     * using the &amp;gt; &amp;lt; syntax.</p>
-     *
-     * @param text Text to be written
-     *
-     * @throws IOException if an input/output error occurs
-     */
-    public void writeText(char text) throws IOException {
-
-        closeStartIfNecessary();
-        if (dontEscape) {
-            writer.write(text);
-        } else {
-            charHolder[0] = text;
-            HtmlUtils.writeText(writer, buffer, charHolder);
-        }
-
-    }
-
-
-    /**
-     * <p>Write a properly escaped object. The object will be converted
-     * to a String if necessary.  If there is an open element
-     * that has been created by a call to <code>startElement()</code>,
-     * that element will be closed first.</p>
-     *
-     * @param text                  Text to be written
-     * @param componentPropertyName The name of the component property to
-     *                              which this text argument applies.  This argument may be <code>null</code>.
-     *
-     * @throws IOException          if an input/output error occurs
-     * @throws NullPointerException if <code>text</code>
-     *                              is <code>null</code>
-     */
-    public void writeText(Object text, String componentPropertyName)
-          throws IOException {
-
-        if (text == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-        closeStartIfNecessary();
-        if (dontEscape) {
-            writer.write(text.toString());
-        } else {
-            HtmlUtils.writeText(writer, buffer, text.toString());
-        }
-
-    }
-
-
-    /**
-     * <p>Write properly escaped text from a character array.
-     * If there is an open element that has been created by a call
-     * to <code>startElement()</code>, that element will be closed
-     * first.</p>
-     * <p/>
-     * <p>All angle bracket occurrences in the argument must be escaped
-     * using the &amp;gt; &amp;lt; syntax.</p>
-     *
-     * @param text Text to be written
-     * @param off  Starting offset (zero-relative)
-     * @param len  Number of characters to be written
-     *
-     * @throws IndexOutOfBoundsException if the calculated starting or
-     *                                   ending position is outside the bounds of the character array
-     * @throws IOException               if an input/output error occurs
-     * @throws NullPointerException      if <code>text</code>
-     *                                   is <code>null</code>
-     */
-    public void writeText(char text[], int off, int len)
-          throws IOException {
-
-        if (text == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-        if (off < 0 || off > text.length || len < 0 || len > text.length) {
-            throw new IndexOutOfBoundsException();
-        }
-        closeStartIfNecessary();
-        if (dontEscape) {
-            writer.write(text, off, len);
-        } else {
-            HtmlUtils.writeText(writer, buffer, text, off, len);
-        }
-
     }
 
 
@@ -553,7 +300,6 @@ public class HtmlResponseWriter extends ResponseWriter {
      * @param componentPropertyName The name of the component property to
      *                              which this attribute argument applies.  This argument may be
      *                              <code>null</code>.
-     *
      * @throws IllegalStateException if this method is called when there
      *                               is no currently open element
      * @throws IOException           if an input/output error occurs
@@ -562,31 +308,188 @@ public class HtmlResponseWriter extends ResponseWriter {
      */
     public void writeURIAttribute(String name, Object value,
                                   String componentPropertyName)
-          throws IOException {
-
+        throws IOException {
         if (name == null || value == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-
+        
         writer.write(' ');
         writer.write(name);
         writer.write("=\"");
 
         String stringValue = value.toString();
-
+        
         // Javascript URLs should not be URL-encoded
         if (stringValue.startsWith("javascript:")) {
             HtmlUtils.writeAttribute(writer, buffer, stringValue);
         } else {
             HtmlUtils.writeURL(writer, stringValue, encoding);
         }
-
+                
         writer.write('"');
-
     }
 
-    // --------------------------------------------------------- Private Methods
+
+    /**
+     * <p>Write a comment string containing the specified text.
+     * The text will be converted to a String if necessary.
+     * If there is an open element that has been created by a call
+     * to <code>startElement()</code>, that element will be closed
+     * first.</p>
+     *
+     * @param comment Text content of the comment
+     * @throws IOException          if an input/output error occurs
+     * @throws NullPointerException if <code>comment</code>
+     *                              is <code>null</code>
+     */
+    public void writeComment(Object comment) throws IOException {
+        if (comment == null) {
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        closeStartIfNecessary();
+        // Don't include a trailing space after the '<!--'
+        // or a leading space before the '-->' to support
+        // IE conditional commentsoth
+        writer.write("<!--");
+        writer.write(comment.toString());
+        writer.write("-->");
+    }
+
+
+    /**
+     * <p>Write a properly escaped object. The object will be converted
+     * to a String if necessary.  If there is an open element
+     * that has been created by a call to <code>startElement()</code>,
+     * that element will be closed first.</p>
+     *
+     * @param text                  Text to be written
+     * @param componentPropertyName The name of the component property to
+     *                              which this text argument applies.  This argument may be <code>null</code>.
+     * @throws IOException          if an input/output error occurs
+     * @throws NullPointerException if <code>text</code>
+     *                              is <code>null</code>
+     */
+    public void writeText(Object text, String componentPropertyName)
+        throws IOException {
+        if (text == null) {
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        closeStartIfNecessary();
+        if (dontEscape) {
+            writer.write(text.toString());
+        } else {
+            HtmlUtils.writeText(writer, buffer, text.toString());
+        }
+    }
+
+
+    /**
+     * <p>Write a properly escaped single character, If there
+     * is an open element that has been created by a call to
+     * <code>startElement()</code>, that element will be closed first.</p>
+     * <p/>
+     * <p>All angle bracket occurrences in the argument must be escaped
+     * using the &amp;gt; &amp;lt; syntax.</p>
+     *
+     * @param text Text to be written
+     * @throws IOException if an input/output error occurs
+     */
+    public void writeText(char text) throws IOException {
+        closeStartIfNecessary();
+        if (dontEscape) {
+            writer.write(text);
+        } else {
+            charHolder[0] = text;
+            HtmlUtils.writeText(writer, buffer, charHolder);
+        }
+    }
+
+
+    /**
+     * <p>Write properly escaped text from a character array.
+     * The output from this command is identical to the invocation:
+     * <code>writeText(c, 0, c.length)</code>.
+     * If there is an open element that has been created by a call to
+     * <code>startElement()</code>, that element will be closed first.</p>
+     * </p>
+     * <p/>
+     * <p>All angle bracket occurrences in the argument must be escaped
+     * using the &amp;gt; &amp;lt; syntax.</p>
+     *
+     * @param text Text to be written
+     * @throws IOException          if an input/output error occurs
+     * @throws NullPointerException if <code>text</code>
+     *                              is <code>null</code>
+     */
+    public void writeText(char text[]) throws IOException {
+        if (text == null) {
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        closeStartIfNecessary();
+        if (dontEscape) {
+            writer.write(text);
+        } else {
+            HtmlUtils.writeText(writer, buffer, text);
+        }
+    }
+
+
+    /**
+     * <p>Write properly escaped text from a character array.
+     * If there is an open element that has been created by a call
+     * to <code>startElement()</code>, that element will be closed
+     * first.</p>
+     * <p/>
+     * <p>All angle bracket occurrences in the argument must be escaped
+     * using the &amp;gt; &amp;lt; syntax.</p>
+     *
+     * @param text Text to be written
+     * @param off  Starting offset (zero-relative)
+     * @param len  Number of characters to be written
+     * @throws IndexOutOfBoundsException if the calculated starting or
+     *                                   ending position is outside the bounds of the character array
+     * @throws IOException               if an input/output error occurs
+     * @throws NullPointerException      if <code>text</code>
+     *                                   is <code>null</code>
+     */
+    public void writeText(char text[], int off, int len)
+        throws IOException {
+        if (text == null) {
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        if (off < 0 || off > text.length || len < 0 || len > text.length) {
+            throw new IndexOutOfBoundsException();
+        }
+        closeStartIfNecessary();
+        if (dontEscape) {
+            writer.write(text, off, len);
+        } else {
+            HtmlUtils.writeText(writer, buffer, text, off, len);
+        }
+    }
+
+
+    /**
+     * <p>Create a new instance of this <code>ResponseWriter</code> using
+     * a different <code>Writer</code>.
+     *
+     * @param writer The <code>Writer</code> that will be used to create
+     *               another <code>ResponseWriter</code>.
+     */
+    public ResponseWriter cloneWithWriter(Writer writer) {
+        try {
+            return new HtmlResponseWriter(writer, getContentType(),
+                                          getCharacterEncoding());
+        } catch (FacesException e) {
+            // This should never happen
+            throw new IllegalStateException();
+        }
+    }
 
 
     /**
@@ -594,12 +497,49 @@ public class HtmlResponseWriter extends ResponseWriter {
      * already closed).
      */
     private void closeStartIfNecessary() throws IOException {
-
-        if (closeStart) {
+        if (closeStart) {            
             writer.write('>');
             closeStart = false;
         }
-
     }
 
+
+    /**
+     * Methods From <code>java.io.Writer</code>
+     */
+
+    public void close() throws IOException {
+        closeStartIfNecessary();
+        writer.close();
+    }
+
+
+    public void write(char cbuf) throws IOException {
+        closeStartIfNecessary();
+        writer.write(cbuf);
+    }
+
+
+    public void write(char[] cbuf, int off, int len) throws IOException {
+        closeStartIfNecessary();
+        writer.write(cbuf, off, len);
+    }
+
+
+    public void write(int c) throws IOException {
+        closeStartIfNecessary();
+        writer.write(c);
+    }
+
+
+    public void write(String str) throws IOException {
+        closeStartIfNecessary();
+        writer.write(str);
+    }
+
+
+    public void write(String str, int off, int len) throws IOException {
+        closeStartIfNecessary();
+        writer.write(str, off, len);
+    }
 }

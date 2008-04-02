@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverter01.java,v 1.3 2006/03/29 22:38:50 rlubke Exp $
+ * $Id: TestConverter01.java,v 1.4 2006/03/29 23:03:59 rlubke Exp $
  */
 
 /*
@@ -35,36 +35,27 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 
-/** <p>Test implementation of {@link Converter}.</p> */
+/**
+ * <p>Test implementation of {@link Converter}.</p>
+ */
 public class TestConverter01 implements Converter {
-
-    // -------------------------------------------------- Methods From Converter
 
     public Object getAsObject(FacesContext context, UIComponent component,
                               String newValue) throws ConverterException {
-
         context.addMessage(component.getClientId(context),
-                           new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                            component.getId()
-                                            + " was converted to Object",
-                                            null));
+            new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                component.getId() + " was converted to Object", null));
 
         return newValue;
-
     }
 
 
     public String getAsString(FacesContext context, UIComponent component,
                               Object value) throws ConverterException {
-
         context.addMessage(component.getClientId(context),
-                           new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                            component.getId()
-                                            + " was converted to String",
-                                            null));
+            new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                component.getId() + " was converted to String", null));
 
         return (value.toString());
-
     }
-
 }

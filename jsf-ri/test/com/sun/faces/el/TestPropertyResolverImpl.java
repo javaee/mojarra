@@ -1,5 +1,5 @@
 /*
- * $Id: TestPropertyResolverImpl.java,v 1.18 2006/03/29 22:39:42 rlubke Exp $
+ * $Id: TestPropertyResolverImpl.java,v 1.19 2006/03/29 23:04:53 rlubke Exp $
  */
 
 /*
@@ -52,161 +52,139 @@ import java.util.List;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestPropertyResolverImpl.java,v 1.18 2006/03/29 22:39:42 rlubke Exp $
+ * @version $Id: TestPropertyResolverImpl.java,v 1.19 2006/03/29 23:04:53 rlubke Exp $
  */
 
 public class TestPropertyResolverImpl extends ServletFacesTestCase {
 
+//
+// Protected Constants
+//
+
+//
+// Class Variables
+//
+
+//
+// Instance Variables
+//
+
+// Attribute Instance Variables
+
+// Relationship Instance Variables
+
     private ElBean bean = null;
     private PropertyResolver resolver = null;
 
-
-    // ------------------------------------------------------------ Constructors
-
+//
+// Constructors and Initializers    
+//
 
     public TestPropertyResolverImpl() {
-
         super("TestFacesContext");
-
     }
 
 
     public TestPropertyResolverImpl(String name) {
-
         super(name);
-
     }
+//
+// Class methods
+//
 
-
-    // ---------------------------------------------------------- Public Methods
-
+//
+// Methods from TestCase
+//
 
     public void setUp() {
-
         super.setUp();
         bean = new ElBean();
         resolver = getFacesContext().getApplication().getPropertyResolver();
-
     }
 
 
     public void tearDown() {
-
         resolver = null;
         bean = null;
         super.tearDown();
+    }
+
+//
+// General Methods
+//
+
+    // Negative getValue() tests on a JavaBean base object
+    public void testNegative() throws Exception {
+
+        Object value = null;
+
+
+        // ---------- Should Return Null ----------
+        value = resolver.getValue(bean, null);
+        assertNull(value);
+
+        value = resolver.getValue(null, "booleanProperty");
+        assertNull(value);
+
+        boolean exceptionThrown = false;
+        try {
+            value = resolver.getValue(null, null);
+        } catch (javax.faces.el.EvaluationException ee) {
+            exceptionThrown = true;  
+        }
+        exceptionThrown = false;
+        
+        try {
+            value = resolver.getValue(bean.getIntArray(), -1);
+        } catch (javax.faces.el.EvaluationException ee) {
+            exceptionThrown = true;  
+        }
+        exceptionThrown = false;
+        
+        try {
+            value = resolver.getValue(bean.getIntArray(), 3);
+        } catch (javax.faces.el.EvaluationException ee) {
+            exceptionThrown = true;  
+        }
+        exceptionThrown = false;
+        
+        try {
+            value = resolver.getValue(bean.getIntList(), -1);
+        } catch (javax.faces.el.EvaluationException ee) {
+            exceptionThrown = true;  
+        }
+        exceptionThrown = false;
+        
+        try {
+           value = resolver.getValue(bean.getIntList(), 5);
+        } catch (javax.faces.el.EvaluationException ee) {
+            exceptionThrown = true;  
+        }
+        exceptionThrown = false;
+            
+        // ---------- Should throw EvaluationException
+
+        try {
+            value = resolver.getValue(bean, "nullStringProperty");
+            fail("Should have thrown EvaluationException");
+        } catch (EvaluationException e) {
+            ; // Expected result
+        }
+
+        // ---------- Should Throw PropertyNotFoundException
+
+        try {
+            value = resolver.getValue(bean, "dontExist");
+            fail("Should have thrown EvaluationException");
+        } catch (EvaluationException e) {
+            ; // Expected result
+        }
 
     }
 
+    public void testPristine() {
 
-    public void testConversion() throws Exception
-    {
-
-         ElBean bean = new ElBean(); 
-       
-        this.conversionTest(bean, "booleanProperty", null, false);
-        this.conversionTest(bean, "booleanProperty", "5", false);
-        this.conversionTest(bean, "booleanProperty", new Character('c'), false);
-        this.conversionTest(bean, "booleanProperty", Boolean.TRUE, true);
-        this.conversionTest(bean, "booleanProperty", new BigInteger("5"), false);
-        this.conversionTest(bean, "booleanProperty", new BigDecimal("5"), false);
-        this.conversionTest(bean, "booleanProperty", new Byte((byte) 5), false);
-        this.conversionTest(bean, "booleanProperty", new Short((short) 5), false);
-        this.conversionTest(bean, "booleanProperty", new Integer(5), false);
-        this.conversionTest(bean, "booleanProperty", new Long(5), false);
-        this.conversionTest(bean, "booleanProperty", new Float(5), false);
-        this.conversionTest(bean, "booleanProperty", new Double(5), false);
-        
-        this.conversionTest(bean, "byteProperty", null, false);       
-        this.conversionTest(bean, "byteProperty", "5", false);        
-        this.conversionTest(bean, "byteProperty", new Character('c'), false);
-        this.conversionTest(bean, "byteProperty", Boolean.TRUE, false);
-        this.conversionTest(bean, "byteProperty", new BigInteger("5"), false);
-        this.conversionTest(bean, "byteProperty", new BigDecimal("5"), false);
-        this.conversionTest(bean, "byteProperty", new Byte((byte) 5), true);
-        this.conversionTest(bean, "byteProperty", new Short((short) 5), false);
-        this.conversionTest(bean, "byteProperty", new Integer(5), false);
-        this.conversionTest(bean, "byteProperty", new Long(5), false);
-        this.conversionTest(bean, "byteProperty", new Float(5), false);
-        this.conversionTest(bean, "byteProperty", new Double(5), false);
-        
-        this.conversionTest(bean, "characterProperty", null, false);
-        this.conversionTest(bean, "characterProperty", "5", false);
-        this.conversionTest(bean, "characterProperty", new Character('c'), true);
-        this.conversionTest(bean, "characterProperty", Boolean.TRUE, false);
-        this.conversionTest(bean, "characterProperty", new BigInteger("5"), false);
-        this.conversionTest(bean, "characterProperty", new BigDecimal("5"), false);
-        this.conversionTest(bean, "characterProperty", new Byte((byte) 5), false);
-        this.conversionTest(bean, "characterProperty", new Short((short) 5), false);
-        this.conversionTest(bean, "characterProperty", new Integer(5), false);
-        this.conversionTest(bean, "characterProperty", new Long(5), false);
-        this.conversionTest(bean, "characterProperty", new Float(5), false);
-        this.conversionTest(bean, "characterProperty", new Double(5), false);
-        
-        this.conversionTest(bean, "doubleProperty", null, false);
-        this.conversionTest(bean, "doubleProperty", "5", false);        
-        this.conversionTest(bean, "doubleProperty", new Character('c'), true);
-        this.conversionTest(bean, "doubleProperty", Boolean.TRUE, false);
-        this.conversionTest(bean, "doubleProperty", new BigInteger("5"), false);
-        this.conversionTest(bean, "doubleProperty", new BigDecimal("5"), false);
-        this.conversionTest(bean, "doubleProperty", new Byte((byte) 5), true);
-        this.conversionTest(bean, "doubleProperty", new Short((short) 5), true);
-        this.conversionTest(bean, "doubleProperty", new Integer(5), true);
-        this.conversionTest(bean, "doubleProperty", new Long(5), true);
-        this.conversionTest(bean, "doubleProperty", new Float(5), true);
-        this.conversionTest(bean, "doubleProperty", new Double(5), true);
-        
-        this.conversionTest(bean, "floatProperty", null, false);
-        this.conversionTest(bean, "floatProperty", "5", false);
-        this.conversionTest(bean, "floatProperty", new Character('c'), true);
-        this.conversionTest(bean, "floatProperty", Boolean.TRUE, false);
-        this.conversionTest(bean, "floatProperty", new BigInteger("5"), false);
-        this.conversionTest(bean, "floatProperty", new BigDecimal("5"), false);
-        this.conversionTest(bean, "floatProperty", new Byte((byte) 5), true);
-        this.conversionTest(bean, "floatProperty", new Short((short) 5), true);
-        this.conversionTest(bean, "floatProperty", new Integer(5), true);
-        this.conversionTest(bean, "floatProperty", new Long(5), true);
-        this.conversionTest(bean, "floatProperty", new Float(5), true);
-        this.conversionTest(bean, "floatProperty", new Double(5), false);
-        
-        this.conversionTest(bean, "longProperty", null, false);
-        this.conversionTest(bean, "longProperty", "5", false);
-        this.conversionTest(bean, "longProperty", new Character('c'), true);
-        this.conversionTest(bean, "longProperty", Boolean.TRUE, false);
-        this.conversionTest(bean, "longProperty", new BigInteger("5"), false);
-        this.conversionTest(bean, "longProperty", new BigDecimal("5"), false);
-        this.conversionTest(bean, "longProperty", new Byte((byte) 5), true);
-        this.conversionTest(bean, "longProperty", new Short((short) 5), true);
-        this.conversionTest(bean, "longProperty", new Integer(5), true);
-        this.conversionTest(bean, "longProperty", new Long(5), true);
-        this.conversionTest(bean, "longProperty", new Float(5), false);
-        this.conversionTest(bean, "longProperty", new Double(5), false);
-        
-        this.conversionTest(bean, "shortProperty", null, false);
-        this.conversionTest(bean, "shortProperty", "5", false);
-        this.conversionTest(bean, "shortProperty", new Character('c'), false);
-        this.conversionTest(bean, "shortProperty", Boolean.TRUE, false);
-        this.conversionTest(bean, "shortProperty", new BigInteger("5"), false);
-        this.conversionTest(bean, "shortProperty", new BigDecimal("5"), false);
-        this.conversionTest(bean, "shortProperty", new Byte((byte) 5), true);
-        this.conversionTest(bean, "shortProperty", new Short((short) 5), true);
-        this.conversionTest(bean, "shortProperty", new Integer(5), false);
-        this.conversionTest(bean, "shortProperty", new Long(5), false);
-        this.conversionTest(bean, "shortProperty", new Float(5), false);
-        this.conversionTest(bean, "shortProperty", new Double(5), false);
-        
-        this.conversionTest(bean, "stringProperty", null, true);
-        this.conversionTest(bean, "stringProperty", "5", true);
-        this.conversionTest(bean, "stringProperty", new Character('c'), false);
-        this.conversionTest(bean, "stringProperty", Boolean.TRUE, false);
-        this.conversionTest(bean, "stringProperty", new BigInteger("5"), false);
-        this.conversionTest(bean, "stringProperty", new BigDecimal("5"), false);
-        this.conversionTest(bean, "stringProperty", new Byte((byte) 5), false);
-        this.conversionTest(bean, "stringProperty", new Short((short) 5), false);
-        this.conversionTest(bean, "stringProperty", new Integer(5), false);
-        this.conversionTest(bean, "stringProperty", new Long(5), false);
-        this.conversionTest(bean, "stringProperty", new Float(5), false);
-        this.conversionTest(bean, "stringProperty", new Double(5), false);
+        // PENDING - test pristine condition of a new instance
 
     }
 
@@ -241,7 +219,6 @@ public class TestPropertyResolverImpl extends ServletFacesTestCase {
         assertNotNull(value);
         assertTrue(value instanceof Integer);
         assertEquals(3, ((Integer) value).intValue());
-
     }
 
 
@@ -320,7 +297,6 @@ public class TestPropertyResolverImpl extends ServletFacesTestCase {
             fail();
         }
         catch (PropertyNotFoundException pnfe) {}
-
     }
 
 
@@ -392,7 +368,6 @@ public class TestPropertyResolverImpl extends ServletFacesTestCase {
             //fail();
         }
         catch (PropertyNotFoundException pnfe) {}
-
     }
 
 
@@ -426,125 +401,6 @@ public class TestPropertyResolverImpl extends ServletFacesTestCase {
             fail();
         }
         catch (PropertyNotFoundException pnfe) {}
-
-    }
-
-
-//
-// General Methods
-//
-
-    // Negative getValue() tests on a JavaBean base object
-    public void testNegative() throws Exception {
-
-        Object value = null;
-
-
-        // ---------- Should Return Null ----------
-        value = resolver.getValue(bean, null);
-        assertNull(value);
-
-        value = resolver.getValue(null, "booleanProperty");
-        assertNull(value);
-
-        boolean exceptionThrown = false;
-        try {
-            value = resolver.getValue(null, null);
-        } catch (javax.faces.el.EvaluationException ee) {
-            exceptionThrown = true;  
-        }
-        exceptionThrown = false;
-        
-        try {
-            value = resolver.getValue(bean.getIntArray(), -1);
-        } catch (javax.faces.el.EvaluationException ee) {
-            exceptionThrown = true;  
-        }
-        exceptionThrown = false;
-        
-        try {
-            value = resolver.getValue(bean.getIntArray(), 3);
-        } catch (javax.faces.el.EvaluationException ee) {
-            exceptionThrown = true;  
-        }
-        exceptionThrown = false;
-        
-        try {
-            value = resolver.getValue(bean.getIntList(), -1);
-        } catch (javax.faces.el.EvaluationException ee) {
-            exceptionThrown = true;  
-        }
-        exceptionThrown = false;
-        
-        try {
-           value = resolver.getValue(bean.getIntList(), 5);
-        } catch (javax.faces.el.EvaluationException ee) {
-            exceptionThrown = true;  
-        }
-        exceptionThrown = false;
-            
-        // ---------- Should throw EvaluationException
-
-        try {
-            value = resolver.getValue(bean, "nullStringProperty");
-            fail("Should have thrown EvaluationException");
-        } catch (EvaluationException e) {
-            ; // Expected result
-        }
-
-        // ---------- Should Throw PropertyNotFoundException
-
-        try {
-            value = resolver.getValue(bean, "dontExist");
-            fail("Should have thrown EvaluationException");
-        } catch (EvaluationException e) {
-            ; // Expected result
-        }
-
-    }
-
-
-    public void testPristine() {
-
-        // PENDING - test pristine condition of a new instance
-
-    }
-
-
-    public void testReadOnlyIndex() {
-
-        // PENDING(edburns): implement readonly index tests.
-
-    }
-
-
-    public void testReadOnlyObject() {
-
-        ExternalContext ec = getFacesContext().getExternalContext();
-
-        // these are mutable Maps
-       
-        assertTrue(!resolver.isReadOnly(ec.getApplicationMap(), "hello"));
-        assertTrue(!resolver.isReadOnly(ec.getSessionMap(), "hello"));
-        assertTrue(!resolver.isReadOnly(ec.getRequestMap(), "hello")); 
-
-        // these are immutable Maps
-        assertTrue(resolver.isReadOnly(ec.getRequestParameterMap(), "hello"));
-        assertTrue(resolver.isReadOnly(ec.getRequestParameterValuesMap(),
-                                       "hello"));
-        assertTrue(resolver.isReadOnly(ec.getRequestHeaderMap(), "hello"));
-        assertTrue(resolver.isReadOnly(ec.getRequestHeaderValuesMap(),
-                                       "hello"));
-        assertTrue(resolver.isReadOnly(ec.getRequestCookieMap(), "hello"));
-        assertTrue(resolver.isReadOnly(ec.getInitParameterMap(), "hello")); 
-
-        UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
-        assertTrue(resolver.isReadOnly(root, "childCount"));
-
-        com.sun.faces.cactus.TestBean testBean = (com.sun.faces.cactus.TestBean) ec.getSessionMap().get("TestBean");
-        assertTrue(resolver.isReadOnly(testBean, "readOnly"));
-        assertTrue(!resolver.isReadOnly(testBean, "one"));
-
     }
 
 
@@ -738,19 +594,154 @@ public class TestPropertyResolverImpl extends ServletFacesTestCase {
     }
 
 
-    public void testType() {
+    public void testReadOnlyObject() {
+        ExternalContext ec = getFacesContext().getExternalContext();
 
-        // PENDING(edburns): implement type tests
+        // these are mutable Maps
+       
+        assertTrue(!resolver.isReadOnly(ec.getApplicationMap(), "hello"));
+        assertTrue(!resolver.isReadOnly(ec.getSessionMap(), "hello"));
+        assertTrue(!resolver.isReadOnly(ec.getRequestMap(), "hello")); 
 
+        // these are immutable Maps
+        assertTrue(resolver.isReadOnly(ec.getRequestParameterMap(), "hello"));
+        assertTrue(resolver.isReadOnly(ec.getRequestParameterValuesMap(),
+                                       "hello"));
+        assertTrue(resolver.isReadOnly(ec.getRequestHeaderMap(), "hello"));
+        assertTrue(resolver.isReadOnly(ec.getRequestHeaderValuesMap(),
+                                       "hello"));
+        assertTrue(resolver.isReadOnly(ec.getRequestCookieMap(), "hello"));
+        assertTrue(resolver.isReadOnly(ec.getInitParameterMap(), "hello")); 
+
+        UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+        assertTrue(resolver.isReadOnly(root, "childCount"));
+
+        com.sun.faces.cactus.TestBean testBean = (com.sun.faces.cactus.TestBean) ec.getSessionMap().get("TestBean");
+        assertTrue(resolver.isReadOnly(testBean, "readOnly"));
+        assertTrue(!resolver.isReadOnly(testBean, "one"));
     }
 
 
-    // ------------------------------------------------------- Protected Methods
+    public void testReadOnlyIndex() {
+        // PENDING(edburns): implement readonly index tests.
+    }
 
- 
+
+    public void testType() {
+        // PENDING(edburns): implement type tests
+    }
+    
+    public void testConversion() throws Exception
+    {
+         ElBean bean = new ElBean(); 
+       
+        this.conversionTest(bean, "booleanProperty", null, false);
+        this.conversionTest(bean, "booleanProperty", "5", false);
+        this.conversionTest(bean, "booleanProperty", new Character('c'), false);
+        this.conversionTest(bean, "booleanProperty", Boolean.TRUE, true);
+        this.conversionTest(bean, "booleanProperty", new BigInteger("5"), false);
+        this.conversionTest(bean, "booleanProperty", new BigDecimal("5"), false);
+        this.conversionTest(bean, "booleanProperty", new Byte((byte) 5), false);
+        this.conversionTest(bean, "booleanProperty", new Short((short) 5), false);
+        this.conversionTest(bean, "booleanProperty", new Integer(5), false);
+        this.conversionTest(bean, "booleanProperty", new Long(5), false);
+        this.conversionTest(bean, "booleanProperty", new Float(5), false);
+        this.conversionTest(bean, "booleanProperty", new Double(5), false);
+        
+        this.conversionTest(bean, "byteProperty", null, false);       
+        this.conversionTest(bean, "byteProperty", "5", false);        
+        this.conversionTest(bean, "byteProperty", new Character('c'), false);
+        this.conversionTest(bean, "byteProperty", Boolean.TRUE, false);
+        this.conversionTest(bean, "byteProperty", new BigInteger("5"), false);
+        this.conversionTest(bean, "byteProperty", new BigDecimal("5"), false);
+        this.conversionTest(bean, "byteProperty", new Byte((byte) 5), true);
+        this.conversionTest(bean, "byteProperty", new Short((short) 5), false);
+        this.conversionTest(bean, "byteProperty", new Integer(5), false);
+        this.conversionTest(bean, "byteProperty", new Long(5), false);
+        this.conversionTest(bean, "byteProperty", new Float(5), false);
+        this.conversionTest(bean, "byteProperty", new Double(5), false);
+        
+        this.conversionTest(bean, "characterProperty", null, false);
+        this.conversionTest(bean, "characterProperty", "5", false);
+        this.conversionTest(bean, "characterProperty", new Character('c'), true);
+        this.conversionTest(bean, "characterProperty", Boolean.TRUE, false);
+        this.conversionTest(bean, "characterProperty", new BigInteger("5"), false);
+        this.conversionTest(bean, "characterProperty", new BigDecimal("5"), false);
+        this.conversionTest(bean, "characterProperty", new Byte((byte) 5), false);
+        this.conversionTest(bean, "characterProperty", new Short((short) 5), false);
+        this.conversionTest(bean, "characterProperty", new Integer(5), false);
+        this.conversionTest(bean, "characterProperty", new Long(5), false);
+        this.conversionTest(bean, "characterProperty", new Float(5), false);
+        this.conversionTest(bean, "characterProperty", new Double(5), false);
+        
+        this.conversionTest(bean, "doubleProperty", null, false);
+        this.conversionTest(bean, "doubleProperty", "5", false);        
+        this.conversionTest(bean, "doubleProperty", new Character('c'), true);
+        this.conversionTest(bean, "doubleProperty", Boolean.TRUE, false);
+        this.conversionTest(bean, "doubleProperty", new BigInteger("5"), false);
+        this.conversionTest(bean, "doubleProperty", new BigDecimal("5"), false);
+        this.conversionTest(bean, "doubleProperty", new Byte((byte) 5), true);
+        this.conversionTest(bean, "doubleProperty", new Short((short) 5), true);
+        this.conversionTest(bean, "doubleProperty", new Integer(5), true);
+        this.conversionTest(bean, "doubleProperty", new Long(5), true);
+        this.conversionTest(bean, "doubleProperty", new Float(5), true);
+        this.conversionTest(bean, "doubleProperty", new Double(5), true);
+        
+        this.conversionTest(bean, "floatProperty", null, false);
+        this.conversionTest(bean, "floatProperty", "5", false);
+        this.conversionTest(bean, "floatProperty", new Character('c'), true);
+        this.conversionTest(bean, "floatProperty", Boolean.TRUE, false);
+        this.conversionTest(bean, "floatProperty", new BigInteger("5"), false);
+        this.conversionTest(bean, "floatProperty", new BigDecimal("5"), false);
+        this.conversionTest(bean, "floatProperty", new Byte((byte) 5), true);
+        this.conversionTest(bean, "floatProperty", new Short((short) 5), true);
+        this.conversionTest(bean, "floatProperty", new Integer(5), true);
+        this.conversionTest(bean, "floatProperty", new Long(5), true);
+        this.conversionTest(bean, "floatProperty", new Float(5), true);
+        this.conversionTest(bean, "floatProperty", new Double(5), false);
+        
+        this.conversionTest(bean, "longProperty", null, false);
+        this.conversionTest(bean, "longProperty", "5", false);
+        this.conversionTest(bean, "longProperty", new Character('c'), true);
+        this.conversionTest(bean, "longProperty", Boolean.TRUE, false);
+        this.conversionTest(bean, "longProperty", new BigInteger("5"), false);
+        this.conversionTest(bean, "longProperty", new BigDecimal("5"), false);
+        this.conversionTest(bean, "longProperty", new Byte((byte) 5), true);
+        this.conversionTest(bean, "longProperty", new Short((short) 5), true);
+        this.conversionTest(bean, "longProperty", new Integer(5), true);
+        this.conversionTest(bean, "longProperty", new Long(5), true);
+        this.conversionTest(bean, "longProperty", new Float(5), false);
+        this.conversionTest(bean, "longProperty", new Double(5), false);
+        
+        this.conversionTest(bean, "shortProperty", null, false);
+        this.conversionTest(bean, "shortProperty", "5", false);
+        this.conversionTest(bean, "shortProperty", new Character('c'), false);
+        this.conversionTest(bean, "shortProperty", Boolean.TRUE, false);
+        this.conversionTest(bean, "shortProperty", new BigInteger("5"), false);
+        this.conversionTest(bean, "shortProperty", new BigDecimal("5"), false);
+        this.conversionTest(bean, "shortProperty", new Byte((byte) 5), true);
+        this.conversionTest(bean, "shortProperty", new Short((short) 5), true);
+        this.conversionTest(bean, "shortProperty", new Integer(5), false);
+        this.conversionTest(bean, "shortProperty", new Long(5), false);
+        this.conversionTest(bean, "shortProperty", new Float(5), false);
+        this.conversionTest(bean, "shortProperty", new Double(5), false);
+        
+        this.conversionTest(bean, "stringProperty", null, true);
+        this.conversionTest(bean, "stringProperty", "5", true);
+        this.conversionTest(bean, "stringProperty", new Character('c'), false);
+        this.conversionTest(bean, "stringProperty", Boolean.TRUE, false);
+        this.conversionTest(bean, "stringProperty", new BigInteger("5"), false);
+        this.conversionTest(bean, "stringProperty", new BigDecimal("5"), false);
+        this.conversionTest(bean, "stringProperty", new Byte((byte) 5), false);
+        this.conversionTest(bean, "stringProperty", new Short((short) 5), false);
+        this.conversionTest(bean, "stringProperty", new Integer(5), false);
+        this.conversionTest(bean, "stringProperty", new Long(5), false);
+        this.conversionTest(bean, "stringProperty", new Float(5), false);
+        this.conversionTest(bean, "stringProperty", new Double(5), false); 
+    } 
+    
     protected void conversionTest(Object bean, String property, Object value, boolean valid) throws Exception
     {
-
         if (valid)
         {
             try
@@ -777,7 +768,6 @@ public class TestPropertyResolverImpl extends ServletFacesTestCase {
                 // good, should have ended up here
             }
         }
-
     }
 
 } // end of class TestPropertyResolverImpl

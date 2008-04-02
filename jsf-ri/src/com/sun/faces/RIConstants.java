@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.80 2006/03/29 22:38:28 rlubke Exp $
+ * $Id: RIConstants.java,v 1.81 2006/03/29 23:03:41 rlubke Exp $
  */
 
 /*
@@ -31,18 +31,20 @@ package com.sun.faces;
 
 import javax.faces.render.RenderKitFactory;
 
-/** This class contains literal strings used throughout the Faces RI. */
+/**
+ * This class contains literal strings used throughout the Faces RI.
+ */
 public class RIConstants {
 
     public static final String URL_PREFIX = "/faces";
 
-    /** Used to add uniqueness to the names. */
+    /**
+     * Used to add uniqueness to the names.
+     */
     public final static String FACES_PREFIX = "com.sun.faces.";
 
-    public final static String HTML_BASIC_RENDER_KIT = FACES_PREFIX
-                                                       +
-                                                       RenderKitFactory
-                                                             .HTML_BASIC_RENDER_KIT;
+    public final static String HTML_BASIC_RENDER_KIT = FACES_PREFIX +
+        RenderKitFactory.HTML_BASIC_RENDER_KIT;
 
     /**
      * If the following name=value pair appears in the request query
@@ -60,30 +62,34 @@ public class RIConstants {
      */
 
     public final static String SELECTITEMS_CONFIGURED = FACES_PREFIX +
-                                                        "SELECTITEMS_CONFIGURED";
+        "SELECTITEMS_CONFIGURED";
 
     public final static String IMPL_MESSAGES = FACES_PREFIX + "IMPL_MESSAGES";
 
     public static final String SAVESTATE_FIELD_MARKER = FACES_PREFIX +
-                                                        "saveStateFieldMarker";
+        "saveStateFieldMarker";
 
     public static final String LOGICAL_VIEW_MAP = FACES_PREFIX +
-                                                  "logicalViewMap";
+        "logicalViewMap";
 
     public static final String ACTUAL_VIEW_MAP = FACES_PREFIX +
-                                                 "actualViewMap";
+        "actualViewMap";
 
     public static final String SAVED_STATE = FACES_PREFIX + "savedState";
-
-    public static final String CLIENT_STATE_ENC_PASSWORD_ENTRY_NAME =
+    
+    public static final String CLIENT_STATE_ENC_PASSWORD_ENTRY_NAME = 
           "java:comp/env/" + FACES_PREFIX + "ClientStateSavingPassword";
 
 
-    /** <p>Parser implementation for processing JSF reference expressions.</p> */
+    /**
+     * <p>Parser implementation for processing JSF reference expressions.</p>
+     */
     public static final String FACES_RE_PARSER =
-          FACES_PREFIX + "el.impl.parser.ELParserImpl";
+        FACES_PREFIX + "el.impl.parser.ELParserImpl";
 
-    /** <p>String identifer for <em>bundle attribute.</em>.</p> */
+    /**
+     * <p>String identifer for <em>bundle attribute.</em>.</p>
+     */
     public static final String BUNDLE_ATTR = FACES_PREFIX + "bundle";
 
     /**
@@ -92,24 +98,26 @@ public class RIConstants {
      * required classes for the Faces RI.</p>
      */
     public static final String HAS_REQUIRED_CLASSES_ATTR = FACES_PREFIX +
-                                                           "HasRequiredClasses";
+        "HasRequiredClasses";
 
-    /** <p>Used in resolveVariable to mark immutable maps.</p> */
+    /**
+     * <p>Used in resolveVariable to mark immutable maps.</p>
+     */
 
     public static final String IMMUTABLE_MARKER =
-          FACES_PREFIX + "IMMUTABLE";
+        FACES_PREFIX + "IMMUTABLE";
 
     public static final String ONE_TIME_INITIALIZATION_ATTR =
-          FACES_PREFIX + "OneTimeInitialization";
+        FACES_PREFIX + "OneTimeInitialization";
 
-    public static final String PREFER_XHTML =
-          FACES_PREFIX + "PreferXHTML";
+    public static final String PREFER_XHTML = 
+	FACES_PREFIX + "PreferXHTML";
 
-    public static final String CONTENT_TYPE_IS_XHTML =
-          FACES_PREFIX + "ContentTypeIsXHTML";
+    public static final String CONTENT_TYPE_IS_XHTML = 
+	FACES_PREFIX + "ContentTypeIsXHTML";
 
-    public static final String CONTENT_TYPE_IS_HTML =
-          FACES_PREFIX + "ContentTypeIsHTML";
+    public static final String CONTENT_TYPE_IS_HTML = 
+	FACES_PREFIX + "ContentTypeIsHTML";
 
     public static final String APPLICATION = "application";
     public static final String APPLICATION_SCOPE = "applicationScope";
@@ -131,27 +139,28 @@ public class RIConstants {
      * <p>TLV Resource Bundle Location </p>
      */
     public static final String TLV_RESOURCE_LOCATION =
-          FACES_PREFIX + "resources.Resources";
+        FACES_PREFIX + "resources.Resources";
 
     public static final Object NO_VALUE = "";
-
-    public static final String CORE_NAMESPACE =
-          "http://java.sun.com/jsf/core";
-    public static final String HTML_NAMESPACE =
-          "http://java.sun.com/jsf/html";
-    public static final String JSTL_NAMESPACE =
-          "http://java.sun.com/jsp/jstl/core";
-
+      
+    public static final String CORE_NAMESPACE = 
+        "http://java.sun.com/jsf/core";
+    public static final String HTML_NAMESPACE = 
+        "http://java.sun.com/jsf/html";
+    public static final String JSTL_NAMESPACE = 
+        "http://java.sun.com/jsp/jstl/core";
+    
     public static final Class[] EMPTY_CLASS_ARGS = new Class[0];
     public static final Object[] EMPTY_METH_ARGS = new Object[0];
 
-    // ------------------------------------------------------------ Constructors
-
+    //
+    // Constructors and Initializers
+    //
 
     private RIConstants() {
 
         throw new IllegalStateException();
-
+        
     }
 
 

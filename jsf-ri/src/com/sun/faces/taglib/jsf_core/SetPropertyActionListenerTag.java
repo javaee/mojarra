@@ -1,5 +1,5 @@
 /*
- * $Id: SetPropertyActionListenerTag.java,v 1.4 2006/03/29 22:38:41 rlubke Exp $
+ * $Id: SetPropertyActionListenerTag.java,v 1.5 2006/03/29 23:03:52 rlubke Exp $
  */
 
 /*
@@ -28,9 +28,7 @@
  */
 
 package com.sun.faces.taglib.jsf_core;
-
 import javax.el.ValueExpression;
-import javax.faces.component.ActionSource;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionListener;
 import javax.faces.webapp.UIComponentClassicTagBase;
@@ -38,10 +36,12 @@ import javax.faces.webapp.UIComponentELTag;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
-import java.util.logging.Logger;
-
-import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
+
+import java.util.logging.Logger;
+import javax.faces.component.ActionSource;
+
 
 
 /**
@@ -51,24 +51,24 @@ import com.sun.faces.util.Util;
  * is a subclass of {@link UIComponentTag}.  This tag creates no output to
  * the page currently being created.</p>
  * <p/>
- * <p>The ActionListener instance created and installed by this tag has the
+ * <p>The ActionListener instance created and installed by this tag has the 
  * following behavior and contract.</p>
- * <p/>
+ *
  * <ul>
- * <p/>
+ *
  * <li>Only create and register the <code>ActionListener</code> instance
  * the first time the component for this tag is created</li>
- * <p/>
+ *
  * <li>The "target" and "value" tag attributes are ValueExpression
  * instances and are stored unevaluated as instance variables of the
  * listener.</li>
- * <p/>
+ *
  * <li>When the listener executes, call getValue() on the "value"
  * ValueExpression.  Pass the result to a call to setValue() on the
  * "target" ValueExpression</li>
- * <p/>
+ *
  * </ul>
- * <p/>
+ *
  * <p>This tag creates no output to the page currently being created.  It
  * is used solely for the side effect of {@link ActionListener}
  * creation.</p>
@@ -76,19 +76,21 @@ import com.sun.faces.util.Util;
 
 public class SetPropertyActionListenerTag extends TagSupport {
 
+
     // ------------------------------------------------------------- Attributes
 
     static final long serialVersionUID = 7966883942522780374L;
-    private static final Logger logger =
-          Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
-    /** <p>The target of the value attribute.</p> */
+    private static final Logger logger = 
+            Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
+    /**
+     * <p>The target of the value attribute.</p>
+     */
     private ValueExpression target = null;
 
-    /** <p>The value that is set into the target attribute.</p> */
+    /**
+     * <p>The value that is set into the target attribute.</p>
+     */
     private ValueExpression value = null;
-
-    // ---------------------------------------------------------- Public Methods
-
 
     /**
      * <p>Setter for the target attribute</p>
@@ -101,7 +103,6 @@ public class SetPropertyActionListenerTag extends TagSupport {
 
     }
 
-
     /*
      * <p>Setter for the value attribute</p>
      *
@@ -110,17 +111,17 @@ public class SetPropertyActionListenerTag extends TagSupport {
      * @throws JspException if a JSP error occurs
      */
     public void setValue(ValueExpression value) {
-
-        this.value = value;
-
+	this.value = value;
     }
+
+    // --------------------------------------------------------- Public Methods
 
 
     /**
      * <p>Create a new instance of the {@link ActionListener}
      * class, and register it with the {@link UIComponent} instance associated
      * with our most immediately surrounding {@link UIComponentTagBase}
-     * instance.  The behavior of the {@link ActionListener} must conform
+     * instance.  The behavior of the {@link ActionListener} must conform 
      * to the class description.</p>
      *
      * @throws JspException if a JSP error occurs
@@ -131,49 +132,51 @@ public class SetPropertyActionListenerTag extends TagSupport {
 
         // Locate our parent UIComponentTag
         UIComponentClassicTagBase tag =
-              UIComponentELTag.getParentUIComponentClassicTagBase(pageContext);
+            UIComponentELTag.getParentUIComponentClassicTagBase(pageContext);
         if (tag == null) {
             Object params [] = {this.getClass().getName()};
             throw new JspException(
-                  MessageUtils.getExceptionMessageString(
-                        MessageUtils.NOT_NESTED_IN_FACES_TAG_ERROR_MESSAGE_ID,
-                        params));
+                MessageUtils.getExceptionMessageString(
+                    MessageUtils.NOT_NESTED_IN_FACES_TAG_ERROR_MESSAGE_ID, params));
         }
-
+        
         // Nothing to do unless this tag created a component
         if (!tag.getCreated()) {
             return (SKIP_BODY);
         }
-
+                
         FacesContext context = FacesContext.getCurrentInstance();
 
-        ActionSource component = (ActionSource) tag.getComponentInstance();
+        ActionSource component = (ActionSource)tag.getComponentInstance();
         if (component == null) {
             throw new JspException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_COMPONENT_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_COMPONENT_ERROR_MESSAGE_ID));
         }
         if (!(component instanceof ActionSource)) {
             Object params [] = {this.getClass().getName()};
             throw new JspException(
-                  MessageUtils.getExceptionMessageString(
-                        MessageUtils.NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID,
-                        params));
+                MessageUtils.getExceptionMessageString(
+                    MessageUtils.NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID, params));
         }
-
+        
         handler = new SetPropertyActionListenerImpl(target, value);
         component.addActionListener(handler);
-
+                       
         return (SKIP_BODY);
 
     }
 
 
-    /** <p>Release references to any acquired resources. */
+    /**
+     * <p>Release references to any acquired resources.
+     */
     public void release() {
 
         this.value = null;
         this.target = null;
 
     }
+    
+
 
 }

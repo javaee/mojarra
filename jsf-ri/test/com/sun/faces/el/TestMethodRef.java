@@ -1,5 +1,5 @@
 /*
- * $Id: TestMethodRef.java,v 1.12 2006/03/29 22:39:42 rlubke Exp $
+ * $Id: TestMethodRef.java,v 1.13 2006/03/29 23:04:53 rlubke Exp $
  */
 
 /*
@@ -41,38 +41,67 @@ import javax.faces.el.ReferenceSyntaxException;
  * <B>TestMethodRef </B> is a class ... <p/><B>Lifetime And Scope </B>
  * <P>
  * 
- * @version $Id: TestMethodRef.java,v 1.12 2006/03/29 22:39:42 rlubke Exp $
+ * @version $Id: TestMethodRef.java,v 1.13 2006/03/29 23:04:53 rlubke Exp $
  */
 
 public class TestMethodRef extends ServletFacesTestCase
 {
 
+    //
+    // Protected Constants
+    //
 
-    // ------------------------------------------------------------ Constructors
+    //
+    // Class Variables
+    //
 
+    //
+    // Instance Variables
+    //
+
+    // Attribute Instance Variables
+
+    // Relationship Instance Variables
+
+    //
+    // Constructors and Initializers
+    //
 
     public TestMethodRef()
     {
-
         super("TestMethodRef");
-
     }
-
 
     public TestMethodRef(String name)
     {
-
         super(name);
-
     }
 
+    //
+    // Class methods
+    //
 
-    // ---------------------------------------------------------- Public Methods
-
-
+    //
+    // General Methods
+    //
+    protected MethodBinding create(String ref, Class[] params) throws Exception
+    {
+        return (getFacesContext().getApplication().createMethodBinding(ref, params));
+    }
+    
+    public void testNullReference() throws Exception
+    {
+        try
+        {
+            create(null, null);
+            fail();
+        }
+        catch (NullPointerException npe) {}
+        catch (Exception e) { fail("Should have thrown an NPE"); };
+    }
+    
     public void testInvalidMethod() throws Exception
     {
-
         try
         {
             create("#{foo > 1}", null);
@@ -80,13 +109,21 @@ public class TestMethodRef extends ServletFacesTestCase
         }
         catch (ReferenceSyntaxException rse) {}
         catch (Exception e) { fail("Should have thrown a ReferenceSyntaxException"); }
-
     }
-
+    
+    public void testLiteralReference() throws Exception
+    {
+        try
+        {
+            create("some.method", null);
+            fail();
+        }
+        catch (ReferenceSyntaxException rse) {}
+        catch (Exception e) { fail("Should have thrown a ReferenceSyntaxException"); }
+    }
 
     public void testInvalidTrailing() throws Exception
     {
-
         MethodBinding mb = this.create(
                 "#{NewCustomerFormHandler.redLectroidsMmmm}", new Class[0]);
 
@@ -120,46 +157,6 @@ public class TestMethodRef extends ServletFacesTestCase
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
-
-    }
-
-
-    public void testLiteralReference() throws Exception
-    {
-
-        try
-        {
-            create("some.method", null);
-            fail();
-        }
-        catch (ReferenceSyntaxException rse) {}
-        catch (Exception e) { fail("Should have thrown a ReferenceSyntaxException"); }
-
-    }
-
-
-    public void testNullReference() throws Exception
-    {
-
-        try
-        {
-            create(null, null);
-            fail();
-        }
-        catch (NullPointerException npe) {}
-        catch (Exception e) { fail("Should have thrown an NPE"); };
-
-    }
-
-
-    // ------------------------------------------------------- Protected Methods
-
-
-    protected MethodBinding create(String ref, Class[] params) throws Exception
-    {
-
-        return (getFacesContext().getApplication().createMethodBinding(ref, params));
-
     }
 
 } // end of class TestMethodRef

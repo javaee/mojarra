@@ -1,5 +1,5 @@
 /*
- * $Id: ActionBean.java,v 1.3 2006/03/29 22:39:18 rlubke Exp $
+ * $Id: ActionBean.java,v 1.4 2006/03/29 23:04:28 rlubke Exp $
  */
 
 /*
@@ -32,60 +32,39 @@ package com.sun.faces.systest.model;
 public class ActionBean extends Object {
 
 
-    protected int innerActionCallCount = 0;
-
-    protected int outerActionCallCount = 0;
-
-    // ------------------------------------------------------------ Constructors
-
-
     public ActionBean() {
     }
 
-    // ---------------------------------------------------------- Public Methods
-
-
-    public int getInnerActionCallCount() {
-
-        return innerActionCallCount;
-
+    public String outerAction() {
+	outerActionCallCount++;
+	return null;
     }
-
-
-    public void setInnerActionCallCount(int newInnerActionCallCount) {
-
-        innerActionCallCount = newInnerActionCallCount;
-
-    }
-
-
-    public int getOuterActionCallCount() {
-
-        return outerActionCallCount;
-
-    }
-
-
-    public void setOuterActionCallCount(int newOuterActionCallCount) {
-
-        outerActionCallCount = newOuterActionCallCount;
-
-    }
-
 
     public String innerAction() {
+	innerActionCallCount++;
+	return null;
+    }
 
-        innerActionCallCount++;
-        return null;
+    protected int outerActionCallCount = 0;
+    public int getOuterActionCallCount() {
+	return outerActionCallCount;
+    }
 
+    public void setOuterActionCallCount(int newOuterActionCallCount) {
+	outerActionCallCount = newOuterActionCallCount;
+    }
+
+    protected int innerActionCallCount = 0;
+    public int getInnerActionCallCount() {
+	return innerActionCallCount;
+    }
+
+    public void setInnerActionCallCount(int newInnerActionCallCount) {
+	innerActionCallCount = newInnerActionCallCount;
     }
 
 
-    public String outerAction() {
 
-        outerActionCallCount++;
-        return null;
 
-    }
 
 }

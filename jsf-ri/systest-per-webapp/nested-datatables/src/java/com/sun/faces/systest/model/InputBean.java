@@ -1,5 +1,5 @@
 /*
- * $Id: InputBean.java,v 1.4 2006/03/29 22:39:19 rlubke Exp $
+ * $Id: InputBean.java,v 1.5 2006/03/29 23:04:28 rlubke Exp $
  */
 
 /*
@@ -33,114 +33,95 @@ import javax.faces.component.UIData;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
 public class InputBean extends Object {
 
-
-    protected BeanList list;
-
-    protected String stringProperty;
-
-    /** so we know when to reset our counters */
+    /**
+     *so we know when to reset our counters
+     */
 
     protected int max;
 
-    // ------------------------------------------------------------ Constructors
-
+    protected BeanList list;
 
     public InputBean(BeanList list, int max, String stringProperty) {
-
-        this.list = list;
-        this.max = max;
-        this.stringProperty = stringProperty;
-
+	this.list = list;
+	this.max = max;
+	this.stringProperty = stringProperty;
     }
 
-    // ---------------------------------------------------------- Public Methods
-
-
+    protected String stringProperty;
     public String getStringProperty() {
+	String result = null;
+	if (null != stringProperty) {
+	    result = stringProperty;
+	    return result;
+	}
 
-        String result = null;
-        if (null != stringProperty) {
-            result = stringProperty;
-            return result;
-        }
+	FacesContext context = FacesContext.getCurrentInstance();
+	int 
+	    index = getFlatIndex();
+	List inputValues = null;	
+	
+	if (null == (inputValues = list.getInputValues())) {
+	    result = null;
+	}
+	else {
+	    result = (String) inputValues.get(index);
+	}
 
-        FacesContext context = FacesContext.getCurrentInstance();
-        int
-              index = getFlatIndex();
-        List inputValues = null;
-
-        if (null == (inputValues = list.getInputValues())) {
-            result = null;
-        } else {
-            result = (String) inputValues.get(index);
-        }
-
-        return result;
-
+	return result;
     }
-
 
     public void setStringProperty(String newStringProperty) {
+	FacesContext context = FacesContext.getCurrentInstance();
+	int 
+	    size = getFlatSize(),
+	    index = getFlatIndex();
+	List inputValues = null;	
 
-        FacesContext context = FacesContext.getCurrentInstance();
-        int
-              size = getFlatSize(),
-              index = getFlatIndex();
-        List inputValues = null;
-
-        if (null == (inputValues = list.getInputValues())) {
-            list.setInputValues(inputValues = new ArrayList(size));
-            for (int i = 0; i < size; i++) {
-                inputValues.add(new Object());
-            }
-        }
-
-        inputValues.set(index, newStringProperty);
-        this.stringProperty = null;
-
+	if (null == (inputValues = list.getInputValues())) {
+	    list.setInputValues(inputValues = new ArrayList(size));
+	    for (int i = 0; i < size; i++) {
+		inputValues.add(new Object());
+	    }
+	}
+	
+	inputValues.set(index, newStringProperty);
+	this.stringProperty = null;
     }
-
-    // --------------------------------------------------------- Private Methods
-
 
     private int getFlatIndex() {
+	FacesContext context = FacesContext.getCurrentInstance();
+	UIViewRoot root = context.getViewRoot();
+	
+	UIData 
+	    outerData = (UIData) root.findComponent(list.getOuterDataName()),
+	    innerData = (UIData) root.findComponent(list.getInnerDataName());
+	
+	int 
+	    outerIndex = outerData.getRowIndex(),
+	    innerIndex = innerData.getRowIndex(),
+	    innerRowCount = innerData.getRowCount(),
+	    index = innerRowCount * outerIndex + innerIndex;
 
-        FacesContext context = FacesContext.getCurrentInstance();
-        UIViewRoot root = context.getViewRoot();
-
-        UIData
-              outerData = (UIData) root.findComponent(list.getOuterDataName()),
-              innerData = (UIData) root.findComponent(list.getInnerDataName());
-
-        int
-              outerIndex = outerData.getRowIndex(),
-              innerIndex = innerData.getRowIndex(),
-              innerRowCount = innerData.getRowCount(),
-              index = innerRowCount * outerIndex + innerIndex;
-
-        return index;
-
+	return index;
     }
-
 
     private int getFlatSize() {
-
-        FacesContext context = FacesContext.getCurrentInstance();
-        UIViewRoot root = context.getViewRoot();
-
-        UIData
-              outerData = (UIData) root.findComponent(list.getOuterDataName()),
-              innerData = (UIData) root.findComponent(list.getInnerDataName());
-
-        int
-              size = outerData.getRowCount() * innerData.getRowCount();
-        return size;
-
+	FacesContext context = FacesContext.getCurrentInstance();
+	UIViewRoot root = context.getViewRoot();
+	
+	UIData 
+	    outerData = (UIData) root.findComponent(list.getOuterDataName()),
+	    innerData = (UIData) root.findComponent(list.getInnerDataName());
+	
+	int 
+	    size = outerData.getRowCount() * innerData.getRowCount();
+	return size;
     }
+
 
 }

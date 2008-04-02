@@ -25,43 +25,28 @@
 
 package com.sun.faces.systest.lifecycle;
 
-import javax.faces.FacesException;
-import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
+import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.Lifecycle;
+import javax.faces.FacesException;
 
 public class FacesContextFactoryWrapper extends FacesContextFactory {
-
-
+    
     private FacesContextFactory oldFactory = null;
-
-    // ------------------------------------------------------------ Constructors
-
-
+    
     public FacesContextFactoryWrapper(FacesContextFactory yourOldFactory) {
-
-        oldFactory = yourOldFactory;
-
+	oldFactory = yourOldFactory;
     }
-
-    // ---------------------------------------------------------- Public Methods
-
-
+    
     public FacesContext getFacesContext(Object context, Object request,
-                                        Object response,
-                                        Lifecycle lifecycle)
-          throws FacesException {
-
-        return oldFactory.getFacesContext(context, request, response,
-                                          lifecycle);
-
+					Object response, 
+					Lifecycle lifecycle) throws FacesException {
+	return oldFactory.getFacesContext(context, request, response, 
+					  lifecycle);
     }
-
 
     public String toString() {
-
-        return "FacesContextFactoryWrapper";
-
+	return "FacesContextFactoryWrapper";
     }
 
 }

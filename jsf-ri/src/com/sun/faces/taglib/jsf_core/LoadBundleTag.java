@@ -1,5 +1,5 @@
 /*
- * $Id: LoadBundleTag.java,v 1.13 2006/03/29 22:38:41 rlubke Exp $
+ * $Id: LoadBundleTag.java,v 1.14 2006/03/29 23:03:51 rlubke Exp $
  */
 
 /*
@@ -29,11 +29,6 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import javax.el.ValueExpression;
-import javax.faces.context.FacesContext;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.TagSupport;
-
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -42,6 +37,11 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
+
+import javax.el.ValueExpression;
+import javax.faces.context.FacesContext;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.TagSupport;
 
 import com.sun.faces.util.Util;
 
@@ -61,13 +61,21 @@ import com.sun.faces.util.Util;
 public class LoadBundleTag extends TagSupport {
 
 
-    private String var;
-
     // ------------------------------------------------------------- Attributes
 
     private ValueExpression basenameExpression;
 
-    // ---------------------------------------------------------- Public Methods
+
+    /**
+     * <p>Set the base name of the <code>ResourceBundle</code> to be
+     * loaded.</p>
+     */
+    public void setBasename(ValueExpression basename) {
+        this.basenameExpression = basename;
+    }
+
+
+    private String var;
 
 
     /**
@@ -76,10 +84,12 @@ public class LoadBundleTag extends TagSupport {
      */
 
     public void setVar(String newVar) {
-
         var = newVar;
-
     }
+
+
+
+    // --------------------------------------------------------- Public Methods
 
 
     /**
@@ -99,186 +109,156 @@ public class LoadBundleTag extends TagSupport {
         String basename;
 
         basename = (String)
-              Util.evaluateValueExpression(basenameExpression,
-                                           context.getELContext());
+            Util.evaluateValueExpression(basenameExpression,
+                                         context.getELContext());
 
 
         if (null == basename || null == var) { // PENDING - i18n
             throw new JspException("The 'basename' or 'var' attributes" +
-                                   " evaluated to null.");
+                " evaluated to null.");
         }
 
         final ResourceBundle bundle =
-              ResourceBundle.getBundle(basename,
-                                       context.getViewRoot().getLocale(),
-                                       Util.getCurrentLoader(this));
+            ResourceBundle.getBundle(basename,
+                                     context.getViewRoot().getLocale(),
+                                     Util.getCurrentLoader(this));
         if (null == bundle) {
             throw new JspException("null ResourceBundle for " + basename);
         }
 
         Map toStore =
-              new Map() {
+            new Map() {
+                // this is an immutable Map
 
-                  // this is an immutable Map
-
-                  // Do not need to implement for immutable Map
-                  public void clear() {
-
-                      throw new UnsupportedOperationException();
-
-                  }
+                // Do not need to implement for immutable Map
+                public void clear() {
+                    throw new UnsupportedOperationException();
+                }
 
 
-                  public boolean containsKey(Object key) {
-
-                      boolean result = false;
-                      if (null != key) {
-                          result = (null != bundle.getObject(key.toString()));
-                      }
-                      return result;
-
-                  }
+                public boolean containsKey(Object key) {
+                    boolean result = false;
+                    if (null != key) {
+                        result = (null != bundle.getObject(key.toString()));
+                    }
+                    return result;
+                }
 
 
-                  public boolean containsValue(Object value) {
-
-                      Enumeration<String> keys = bundle.getKeys();
-                      Object curObj = null;
-                      boolean result = false;
-                      while (keys.hasMoreElements()) {
-                          curObj = bundle.getObject(keys.nextElement());
-                          if ((curObj == value) ||
-                              ((null != curObj) && curObj.equals(value))) {
-                              result = true;
-                              break;
-                          }
-                      }
-                      return result;
-
-                  }
+                public boolean containsValue(Object value) {
+                    Enumeration<String> keys = bundle.getKeys();
+                    Object curObj = null;
+                    boolean result = false;
+                    while (keys.hasMoreElements()) {
+                        curObj = bundle.getObject(keys.nextElement());
+                        if ((curObj == value) ||
+                            ((null != curObj) && curObj.equals(value))) {
+                            result = true;
+                            break;
+                        }
+                    }
+                    return result;
+                }
 
 
-                  public Set entrySet() {
-
-                      HashMap<String, Object> mappings =
-                            new HashMap<String, Object>();
-                      Enumeration<String> keys = bundle.getKeys();
-                      while (keys.hasMoreElements()) {
-                          String key = keys.nextElement();
-                          Object value = bundle.getObject(key);
-                          mappings.put(key, value);
-                      }
-                      return mappings.entrySet();
-
-                  }
+                public Set entrySet() {
+                    HashMap<String,Object> mappings = new HashMap<String, Object>();
+                    Enumeration<String> keys = bundle.getKeys();
+                    while (keys.hasMoreElements()) {
+                        String key = keys.nextElement();
+                        Object value = bundle.getObject(key);
+                        mappings.put(key, value);
+                    }
+                    return mappings.entrySet();
+                }
 
 
-                  public boolean equals(Object obj) {
+                public boolean equals(Object obj) {
+                    if ((obj == null) || !(obj instanceof Map)) {
+                        return false;
+                    }
 
-                      if ((obj == null) || !(obj instanceof Map)) {
-                          return false;
-                      }
+                    return entrySet().equals(((Map) obj).entrySet());
 
-                      return entrySet().equals(((Map) obj).entrySet());
-
-                  }
-
-
-                  public Object get(Object key) {
-
-                      if (null == key) {
-                          return null;
-                      }
-                      Object result = null;
-                      try {
-                          result = bundle.getObject(key.toString());
-                      } catch (MissingResourceException e) {
-                          result = "???" + key + "???";
-                      }
-                      return result;
-
-                  }
+                }
 
 
-                  public int hashCode() {
-
-                      return bundle.hashCode();
-
-                  }
-
-
-                  public boolean isEmpty() {
-
-                      boolean result = true;
-                      Enumeration<String> keys = bundle.getKeys();
-                      result = !keys.hasMoreElements();
-                      return result;
-
-                  }
+                public Object get(Object key) {
+                    if (null == key) {
+                        return null;
+                    }
+                    Object result = null;
+                    try {
+                        result = bundle.getObject(key.toString());
+                    } catch (MissingResourceException e) {
+                        result = "???" + key + "???";
+                    }
+                    return result;
+                }
 
 
-                  public Set keySet() {
-
-                      Set<String> keySet = new HashSet<String>();
-                      Enumeration<String> keys = bundle.getKeys();
-                      while (keys.hasMoreElements()) {
-                          keySet.add(keys.nextElement());
-                      }
-                      return keySet;
-
-                  }
+                public int hashCode() {
+                    return bundle.hashCode();
+                }
 
 
-                  // Do not need to implement for immutable Map
-                  public Object put(Object k, Object v) {
-
-                      throw new UnsupportedOperationException();
-
-                  }
-
-
-                  // Do not need to implement for immutable Map
-                  public void putAll(Map t) {
-
-                      throw new UnsupportedOperationException();
-
-                  }
+                public boolean isEmpty() {
+                    boolean result = true;
+                    Enumeration<String> keys = bundle.getKeys();
+                    result = !keys.hasMoreElements();
+                    return result;
+                }
 
 
-                  // Do not need to implement for immutable Map
-                  public Object remove(Object k) {
-
-                      throw new UnsupportedOperationException();
-
-                  }
-
-
-                  public int size() {
-
-                      int result = 0;
-                      Enumeration<String> keys = bundle.getKeys();
-                      while (keys.hasMoreElements()) {
-                          keys.nextElement();
-                          result++;
-                      }
-                      return result;
-
-                  }
+                public Set keySet() {
+                    Set<String> keySet = new HashSet<String>();
+                    Enumeration<String> keys = bundle.getKeys();
+                    while (keys.hasMoreElements()) {
+                        keySet.add(keys.nextElement());
+                    }
+                    return keySet;
+                }
 
 
-                  public java.util.Collection values() {
+                // Do not need to implement for immutable Map
+                public Object put(Object k, Object v) {
+                    throw new UnsupportedOperationException();
+                }
 
-                      ArrayList<Object> result = new ArrayList<Object>();
-                      Enumeration<String> keys = bundle.getKeys();
-                      while (keys.hasMoreElements()) {
-                          result.add(
-                                bundle.getObject(keys.nextElement()));
-                      }
-                      return result;
 
-                  }
+                // Do not need to implement for immutable Map
+                public void putAll(Map t) {
+                    throw new UnsupportedOperationException();
+                }
 
-              };
+
+                // Do not need to implement for immutable Map
+                public Object remove(Object k) {
+                    throw new UnsupportedOperationException();
+                }
+
+
+                public int size() {
+                    int result = 0;
+                    Enumeration<String> keys = bundle.getKeys();
+                    while (keys.hasMoreElements()) {
+                        keys.nextElement();
+                        result++;
+                    }
+                    return result;
+                }
+
+
+                public java.util.Collection values() {
+                    ArrayList<Object> result = new ArrayList<Object>();
+                    Enumeration<String> keys = bundle.getKeys();
+                    while (keys.hasMoreElements()) {
+                        result.add(
+                            bundle.getObject(keys.nextElement()));
+                    }
+                    return result;
+                }
+            };
 
         context.getExternalContext().getRequestMap().put(var, toStore);
 
@@ -287,7 +267,9 @@ public class LoadBundleTag extends TagSupport {
     }
 
 
-    /** <p>Release references to any acquired resources. */
+    /**
+     * <p>Release references to any acquired resources.
+     */
     public void release() {
 
         this.basenameExpression = null;
@@ -295,15 +277,5 @@ public class LoadBundleTag extends TagSupport {
 
     }
 
-
-    /**
-     * <p>Set the base name of the <code>ResourceBundle</code> to be
-     * loaded.</p>
-     */
-    public void setBasename(ValueExpression basename) {
-
-        this.basenameExpression = basename;
-
-    }
 
 }

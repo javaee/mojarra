@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractTestBean.java,v 1.6 2006/03/29 22:38:52 rlubke Exp $
+ * $Id: AbstractTestBean.java,v 1.7 2006/03/29 23:04:00 rlubke Exp $
  */
 
 /*
@@ -30,27 +30,22 @@
 package com.sun.faces.systest.model;
 
 
-/** <p>Test JavaBean for managed object creation facility.</p> */
+/**
+ * <p>Test JavaBean for managed object creation facility.</p>
+ */
 
 public abstract class AbstractTestBean {
 
-
     private String stringProperty = "String Property";
-
-    // ---------------------------------------------------------- Public Methods
 
 
     public String getStringProperty() {
-
         return this.stringProperty;
-
     }
 
 
     public void setStringProperty(String stringProperty) {
-
         this.stringProperty = stringProperty;
-
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemsTag.java,v 1.10 2006/03/29 22:38:41 rlubke Exp $
+ * $Id: SelectItemsTag.java,v 1.11 2006/03/29 23:03:52 rlubke Exp $
  */
 
 /*
@@ -33,6 +33,7 @@ import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItems;
 import javax.faces.webapp.UIComponentELTag;
+import javax.servlet.jsp.JspException;
 
 /**
  * This class is the tag handler that evaluates the
@@ -41,57 +42,71 @@ import javax.faces.webapp.UIComponentELTag;
 
 public class SelectItemsTag extends UIComponentELTag {
 
+    //
+    // Protected Constants
+    //
 
+    //
+    // Class Variables
+    //
+
+    //
+    // Instance Variables
+    //
     private ValueExpression value;
 
-    // ------------------------------------------------------------ Constructors
+    // Attribute Instance Variables
 
+    // Relationship Instance Variables
+
+    //
+    // Constructors and Initializers    
+    //
 
     public SelectItemsTag() {
-
         super();
-
     }
 
-    // ---------------------------------------------------------- Public Methods
+    //
+    // Class methods
+    //
 
+    // 
+    // Accessors
+    //
 
     public void setValue(ValueExpression value) {
-
         this.value = value;
+    }
 
+
+    //
+    // General Methods
+    //
+    public String getRendererType() {
+        return null;
     }
 
 
     public String getComponentType() {
-
         return "javax.faces.SelectItems";
-
     }
 
 
-    public String getRendererType() {
-
-        return null;
-
-    }
-
-    // ------------------------------------------------------- Protected Methods
-
-
+    //
+    // Methods from BaseComponentTag
+    //
     protected void setProperties(UIComponent component) {
-
         super.setProperties(component);
-
+        
         if (null != value) {
             if (!value.isLiteralText()) {
                 component.setValueExpression("value", value);
             } else {
                 ((UISelectItems) component).setValue(
-                      value.getExpressionString());
+                    value.getExpressionString());
             }
         }
-
     }
 
 } // end of class SelectItemsTag

@@ -1,5 +1,5 @@
 /*
- * $Id: ReplaceLifecycleTestCase.java,v 1.4 2006/03/29 22:39:23 rlubke Exp $
+ * $Id: ReplaceLifecycleTestCase.java,v 1.5 2006/03/29 23:04:32 rlubke Exp $
  */
 
 /*
@@ -30,10 +30,25 @@
 package com.sun.faces.systest;
 
 
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlBody;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
+import com.gargoylesoftware.htmlunit.html.HtmlSelect;
+import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
+import junit.framework.TestCase;
 import junit.framework.TestSuite;
+
+import java.util.List;
+import java.util.Random;
+import java.util.ResourceBundle;
+
+import javax.faces.component.NamingContainer;
 
 
 /**
@@ -45,6 +60,7 @@ import junit.framework.TestSuite;
 
 public class ReplaceLifecycleTestCase extends AbstractTestCase {
 
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -54,64 +70,64 @@ public class ReplaceLifecycleTestCase extends AbstractTestCase {
      * @param name Name of the test case
      */
     public ReplaceLifecycleTestCase(String name) {
-
         super(name);
-
     }
 
-    // ---------------------------------------------------------- Public Methods
-
-
-    /** Return the tests included in this test suite. */
-    public static Test suite() {
-
-        return (new TestSuite(ReplaceLifecycleTestCase.class));
-
-    }
 
     // ------------------------------------------------------ Instance Variables
+
 
     // ---------------------------------------------------- Overall Test Methods
 
 
-    /** Set up instance variables required by this test case. */
+    /**
+     * Set up instance variables required by this test case.
+     */
     public void setUp() throws Exception {
-
         super.setUp();
-
     }
 
 
-    /** Tear down instance variables required by this test case. */
+    /**
+     * Return the tests included in this test suite.
+     */
+    public static Test suite() {
+        return (new TestSuite(ReplaceLifecycleTestCase.class));
+    }
+
+
+    /**
+     * Tear down instance variables required by this test case.
+     */
     public void tearDown() {
-
         super.tearDown();
-
     }
 
-
-    public void testAlternateLifecycle() throws Exception {
-
-        HtmlPage page = getPage("/alternate/test2.jsp");
-        assertTrue(-1 != page.asText().indexOf("beforePhase"));
-        assertTrue(-1 != page.asText().indexOf("AlternateLifecycle"));
-        page = getPage("/faces/test2.jsp");
-        assertTrue(-1 != page.asText().indexOf("beforePhase"));
-        assertTrue(-1 != page.asText().indexOf("NewLifecycle"));
-
-    }
 
     // ------------------------------------------------------ Instance Variables
 
+
+
     // ------------------------------------------------- Individual Test Methods
 
-    /** <p>Verify that the bean is successfully resolved</p> */
+    /**
+     *
+     * <p>Verify that the bean is successfully resolved</p>
+     */
 
     public void testReplaceLifecycle() throws Exception {
+	HtmlPage page = getPage("/faces/test.jsp");
+	assertTrue(-1 != page.asText().indexOf("beforePhase"));
+	
+    }
 
-        HtmlPage page = getPage("/faces/test.jsp");
-        assertTrue(-1 != page.asText().indexOf("beforePhase"));
-
+    public void testAlternateLifecycle() throws Exception {
+	HtmlPage page = getPage("/alternate/test2.jsp");
+	assertTrue(-1 != page.asText().indexOf("beforePhase"));
+	assertTrue(-1 != page.asText().indexOf("AlternateLifecycle"));	
+	page = getPage("/faces/test2.jsp");
+	assertTrue(-1 != page.asText().indexOf("beforePhase"));
+	assertTrue(-1 != page.asText().indexOf("NewLifecycle"));	
     }
 
 }

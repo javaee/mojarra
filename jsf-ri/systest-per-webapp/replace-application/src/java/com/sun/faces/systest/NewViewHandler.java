@@ -1,5 +1,5 @@
 /*
- * $Id: NewViewHandler.java,v 1.3 2006/03/29 22:39:22 rlubke Exp $
+ * $Id: NewViewHandler.java,v 1.4 2006/03/29 23:04:31 rlubke Exp $
  */
 
 /*
@@ -28,6 +28,7 @@
  */
 
 
+
 package com.sun.faces.systest;
 
 import javax.faces.application.ViewHandler;
@@ -35,25 +36,13 @@ import javax.faces.application.ViewHandlerWrapper;
 
 public class NewViewHandler extends ViewHandlerWrapper {
 
-
     private ViewHandler oldViewHandler = null;
 
-    // ------------------------------------------------------------ Constructors
-
-
     public NewViewHandler(ViewHandler oldViewHandler) {
-
-        this.oldViewHandler = oldViewHandler;
-
+	this.oldViewHandler = oldViewHandler;
     }
-
-    // ---------------------------------------------------------- Public Methods
-
 
     public ViewHandler getWrapped() {
-
-        return oldViewHandler;
-
+	return oldViewHandler;
     }
-
 }

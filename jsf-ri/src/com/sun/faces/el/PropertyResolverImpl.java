@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverImpl.java,v 1.22 2006/03/29 22:38:33 rlubke Exp $
+ * $Id: PropertyResolverImpl.java,v 1.23 2006/03/29 23:03:44 rlubke Exp $
  */
 
 /*
@@ -29,6 +29,9 @@
 
 package com.sun.faces.el;
 
+import java.lang.reflect.Array;
+import java.util.List;
+
 import javax.el.ELException;
 import javax.el.ELResolver;
 import javax.faces.context.FacesContext;
@@ -36,56 +39,26 @@ import javax.faces.el.EvaluationException;
 import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.PropertyResolver;
 
-import java.lang.reflect.Array;
-import java.util.List;
-
 import com.sun.faces.util.MessageUtils;
 
 /**
- * <p/>
+ * <p>
  * Concrete implementation of <code>PropertyResolver</code>.
  * </p>
  */
 
 public class PropertyResolverImpl extends PropertyResolver {
 
-
     private ELResolver elResolver = null;
 
-    // ------------------------------------------------------------ Constructors
-
-
-    public PropertyResolverImpl(ELResolver resolver) {
-
+    public PropertyResolverImpl(ELResolver resolver ) {
         this.elResolver = resolver;
-
-    }
-
-    // ---------------------------------------------------------- Public Methods
-
-
-    // Specified by javax.faces.el.PropertyResolver.getType(Object,String)
-    public Class getType(Object base, Object property) {
-
-        assertInput(base, property);
-        Class result = null;
-        try {
-            FacesContext context = FacesContext.getCurrentInstance();
-            result = elResolver.getType(context.getELContext(), base, property);
-        } catch (javax.el.PropertyNotFoundException pnfe) {
-            throw new PropertyNotFoundException(pnfe);
-        } catch (ELException elex) {
-            throw new EvaluationException(elex);
-        }
-        return result;
-
     }
 
 
     // Specified by javax.faces.el.PropertyResolver.getType(Object,int)
     public Class getType(Object base, int index)
-          throws EvaluationException, PropertyNotFoundException {
-
+        throws EvaluationException, PropertyNotFoundException{
         // validates base != null and index >= 0
         assertInput(base, index);
 
@@ -99,45 +72,39 @@ public class PropertyResolverImpl extends PropertyResolver {
                 return (value != null) ? value.getClass() : null;
             } else {
                 throw new PropertyNotFoundException(MessageUtils.getExceptionMessageString(
-                      MessageUtils.EL_PROPERTY_TYPE_ERROR_ID,
-                      new Object[]{base}));
+                        MessageUtils.EL_PROPERTY_TYPE_ERROR_ID,
+                        new Object[]{base}));
             }
         } catch (ArrayIndexOutOfBoundsException aioobe) {
             throw new PropertyNotFoundException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.EL_SIZE_OUT_OF_BOUNDS_ERROR_ID,
-                  new Object[]{base, new Integer(index),
-                               new Integer(Array.getLength(base))}));
+                        MessageUtils.EL_SIZE_OUT_OF_BOUNDS_ERROR_ID,
+                        new Object[]{base,new Integer(index),
+                                     new Integer(Array.getLength(base))}));
         } catch (IndexOutOfBoundsException ioobe) {
-            throw new PropertyNotFoundException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.EL_SIZE_OUT_OF_BOUNDS_ERROR_ID,
-                  new Object[]{base, new Integer(index),
-                               new Integer(((List) base).size())}));
+           throw new PropertyNotFoundException(MessageUtils.getExceptionMessageString(
+                        MessageUtils.EL_SIZE_OUT_OF_BOUNDS_ERROR_ID,
+                        new Object[]{base,new Integer(index),
+                                     new Integer(((List)base).size())}));
         }
-
     }
 
-
-    // Specified by javax.faces.el.PropertyResolver.getValue(Object,String)
-    public Object getValue(Object base, Object property) {
-
-        Object result = null;
+    // Specified by javax.faces.el.PropertyResolver.getType(Object,String)
+    public Class getType(Object base, Object property) {
+        assertInput(base, property);
+        Class result = null;
         try {
             FacesContext context = FacesContext.getCurrentInstance();
-            result =
-                  elResolver.getValue(context.getELContext(), base, property);
+            result = elResolver.getType(context.getELContext(), base,property);
         } catch (javax.el.PropertyNotFoundException pnfe) {
             throw new PropertyNotFoundException(pnfe);
         } catch (ELException elex) {
             throw new EvaluationException(elex);
         }
         return result;
-
     }
-
 
     // Specified by javax.faces.el.PropertyResolver.getValue(Object,int)
     public Object getValue(Object base, int index) {
-
         // validates base and index
         if (base == null) {
             return null;
@@ -157,32 +124,28 @@ public class PropertyResolverImpl extends PropertyResolver {
             }
         } else {
             throw new PropertyNotFoundException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.EL_PROPERTY_TYPE_ERROR_ID,
-                  new Object[]{base}));
+                        MessageUtils.EL_PROPERTY_TYPE_ERROR_ID,
+                        new Object[]{base}));
         }
 
     }
 
-
-    // Specified by javax.faces.el.PropertyResolver.isReadOnly(Object,String)
-    public boolean isReadOnly(Object base, Object property) {
-
-        boolean result = false;
+    // Specified by javax.faces.el.PropertyResolver.getValue(Object,String)
+    public Object getValue(Object base, Object property) {
+        Object result = null;
         try {
             FacesContext context = FacesContext.getCurrentInstance();
-            result =
-                  elResolver.isReadOnly(context.getELContext(), base, property);
+            result = elResolver.getValue(context.getELContext(), base,property);
+        } catch (javax.el.PropertyNotFoundException pnfe) {
+            throw new PropertyNotFoundException(pnfe);
         } catch (ELException elex) {
             throw new EvaluationException(elex);
         }
         return result;
-
     }
-
 
     // Specified by javax.faces.el.PropertyResolver.isReadOnly(Object,int)
     public boolean isReadOnly(Object base, int index) {
-
         // validate input
         assertInput(base, index);
 
@@ -190,31 +153,22 @@ public class PropertyResolverImpl extends PropertyResolver {
             return false;
         } else {
             throw new PropertyNotFoundException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.EL_PROPERTY_TYPE_ERROR_ID,
-                  new Object[]{base}));
+                        MessageUtils.EL_PROPERTY_TYPE_ERROR_ID,
+                        new Object[]{base}));
         }
-
     }
 
-
-    // Specified by
-    // javax.faces.el.PropertyResolver.setValue(Object,String,Object)
-    public void setValue(Object base, Object property, Object value) {
-
+    // Specified by javax.faces.el.PropertyResolver.isReadOnly(Object,String)
+    public boolean isReadOnly(Object base, Object property) {
+        boolean result = false;
         try {
             FacesContext context = FacesContext.getCurrentInstance();
-            elResolver.setValue(context.getELContext(), base, property, value);
-        } catch (javax.el.PropertyNotFoundException pnfe) {
-            throw new PropertyNotFoundException(pnfe);
-        } catch (javax.el.PropertyNotWritableException pnwe) {
-            throw new PropertyNotFoundException(pnwe);
-        }
-        catch (ELException elex) {
+            result = elResolver.isReadOnly(context.getELContext(), base,property);
+        } catch (ELException elex) {
             throw new EvaluationException(elex);
         }
-
+        return result;
     }
-
 
     // Specified by javax.faces.el.PropertyResolver.setValue(Object,int,Object)
     public void setValue(Object base, int index, Object value) {
@@ -226,63 +180,69 @@ public class PropertyResolverImpl extends PropertyResolver {
         if (type.isArray()) {
             try {
                 Array.set(base, index, (context.getApplication().
-                      getExpressionFactory()).coerceToType(value, type
-                      .getComponentType()));
+                    getExpressionFactory()).coerceToType(value, type
+                        .getComponentType()));
             }
             catch (ArrayIndexOutOfBoundsException aioobe) {
                 throw new PropertyNotFoundException(MessageUtils.getExceptionMessageString(
-                      MessageUtils.EL_SIZE_OUT_OF_BOUNDS_ERROR_ID,
-                      new Object[]{base, new Integer(index),
-                                   new Integer(Array.getLength(base))}));
+                        MessageUtils.EL_SIZE_OUT_OF_BOUNDS_ERROR_ID,
+                        new Object[]{base,new Integer(index),
+                                     new Integer(Array.getLength(base))}));
             }
         } else if (base instanceof List) {
             try {
                 ((List) base).set(index, value);
             } catch (IndexOutOfBoundsException ioobe) {
                 throw new PropertyNotFoundException(MessageUtils.getExceptionMessageString(
-                      MessageUtils.EL_SIZE_OUT_OF_BOUNDS_ERROR_ID,
-                      new Object[]{base, new Integer(index),
-                                   new Integer(((List) base).size())}));
+                        MessageUtils.EL_SIZE_OUT_OF_BOUNDS_ERROR_ID,
+                        new Object[]{base,new Integer(index),
+                                     new Integer(((List)base).size())}));
             }
         } else {
-            throw new PropertyNotFoundException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.EL_PROPERTY_TYPE_ERROR_ID,
-                  new Object[]{base}));
+           throw new PropertyNotFoundException(MessageUtils.getExceptionMessageString(
+                        MessageUtils.EL_PROPERTY_TYPE_ERROR_ID,
+                        new Object[]{base}));
         }
-
     }
 
-    // ------------------------------------------------------- Protected Methods
+    // Specified by
+    // javax.faces.el.PropertyResolver.setValue(Object,String,Object)
+    public void setValue(Object base, Object property, Object value) {
+        try {
+            FacesContext context = FacesContext.getCurrentInstance();
+            elResolver.setValue(context.getELContext(), base,property, value);
+        } catch (javax.el.PropertyNotFoundException pnfe) {
+            throw new PropertyNotFoundException(pnfe);
+        } catch (javax.el.PropertyNotWritableException pnwe) {
+            throw new PropertyNotFoundException(pnwe);
+        }
+        catch (ELException elex) {
+            throw new EvaluationException(elex);
+        }
+    }
 
+    protected static void assertInput(Object base, Object property)
+            throws PropertyNotFoundException {
+        if (base == null || property == null) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message + " base " + base + " property " + property;
+            throw new PropertyNotFoundException(message);
+        }
+    }
 
     protected static void assertInput(Object base, int index)
-          throws PropertyNotFoundException {
-
+            throws PropertyNotFoundException {
         if (base == null) {
             String message = MessageUtils.getExceptionMessageString
-                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base;
             throw new PropertyNotFoundException(message);
         }
         if (index < 0) {
             throw new PropertyNotFoundException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.EL_OUT_OF_BOUNDS_ERROR_ID,
-                  new Object[]{base, new Integer(index)}));
+                        MessageUtils.EL_OUT_OF_BOUNDS_ERROR_ID,
+                        new Object[]{base, new Integer(index)}));
         }
-
     }
-
-
-    protected static void assertInput(Object base, Object property)
-          throws PropertyNotFoundException {
-
-        if (base == null || property == null) {
-            String message = MessageUtils.getExceptionMessageString
-                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " base " + base + " property " + property;
-            throw new PropertyNotFoundException(message);
-        }
-
-    }
-
 }

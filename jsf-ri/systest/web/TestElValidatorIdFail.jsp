@@ -1,6 +1,6 @@
 <!--
-Copyright 2004 Sun Microsystems, Inc. All rights reserved.
-SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
 <html>
@@ -9,11 +9,10 @@ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 </head>
-
 <body>
 
 <%
-    pageContext.setAttribute("ford", new String("harrison"));
+  pageContext.setAttribute("ford", new String("harrison"));
 %>
 
 <h1>TLV commandButton, invalid 'id' expression</h1>
@@ -23,8 +22,8 @@ This page should Fail.
 
 <f:view>
 
-    <p>This command button has an invalid id expression</p>
-    <h:commandButton id="#{#{ford}}" value="hello"/>
+  <p>This command button has an invalid id expression</p>
+  <h:commandButton id="#{#{ford}}" value="hello" />
 
 </f:view>
 

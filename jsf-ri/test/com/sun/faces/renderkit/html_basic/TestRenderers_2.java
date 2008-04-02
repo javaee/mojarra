@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.93 2006/03/29 22:39:47 rlubke Exp $
+ * $Id: TestRenderers_2.java,v 1.94 2006/03/29 23:05:01 rlubke Exp $
  */
 
 /*
@@ -66,65 +66,89 @@ import java.io.StringWriter;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.93 2006/03/29 22:39:47 rlubke Exp $
+ * @version $Id: TestRenderers_2.java,v 1.94 2006/03/29 23:05:01 rlubke Exp $
  */
 
 public class TestRenderers_2 extends JspFacesTestCase {
 
+    //
+    // Instance Variables
+    //
+    private Application application;
 
-     public static final String ignore[] = {
-     };
+    //
+    // Protected Constants
+    //
 
     public static String DATE_STR = "Jan 12, 1952";
     public static String DATE_STR_LONG = "Sat, Jan 12, 1952 AD at 12:31:31 PM";
+
+    public static String TIME_STR = "12:31:31 PM";
     public static String NUMBER_STR = "47%";
     public static String NUMBER_STR_PATTERN = "1999.8765432";
 
-    public static String TIME_STR = "12:31:31 PM";
 
-    private Application application;  
+    public boolean sendWriterToFile() {
+        return true;
+    }
+
+
+    public String getExpectedOutputFilename() {
+        return "CorrectRenderersResponse_2";
+    }
+
+
+     public static final String ignore[] = {
+     };  
+ 
+    //
+    // Class Variables
+    //
+
+    //
+    // Instance Variables
+    //
     private FacesContextFactory facesContextFactory = null;
 
-
-    // ------------------------------------------------------------ Constructors
-    
+    // Attribute Instance Variables
+    // Relationship Instance Variables
+    //
+    // Constructors and Initializers    
+    //
 
     public TestRenderers_2() {
-
         super("TestRenderers_2");
-
     }
 
 
     public TestRenderers_2(String name) {
-
         super(name);
-
     }
 
+    //
+    // Class methods
+    //
 
-    // ---------------------------------------------- Methods From FacesTestCase
-
-
-    public String getExpectedOutputFilename() {
-
-        return "CorrectRenderersResponse_2";
-
+    //
+    // Methods from TestCase
+    //
+    public void setUp() {
+        super.setUp();
+        ApplicationFactory aFactory =
+            (ApplicationFactory) FactoryFinder.getFactory(
+                FactoryFinder.APPLICATION_FACTORY);
+        application = aFactory.getApplication();
+        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+        page.setViewId("viewId");
+        getFacesContext().setViewRoot(page);
+        Object view = 
+	    Util.getStateManager(getFacesContext()).saveSerializedView(getFacesContext());
+	getFacesContext().getExternalContext().getRequestMap().put(RIConstants.SAVED_STATE, view);
+        assertTrue(null != getFacesContext().getResponseWriter());
     }
-
-
-    public boolean sendWriterToFile() {
-
-        return true;
-
-    }
-
-
-    // ---------------------------------------------------------- Public Methods
 
 
     public void beginRenderers(WebRequest theRequest) {
-
         // for CheckboxRenderer
         theRequest.addParameter("myCheckboxOn", "on");
         theRequest.addParameter("myCheckboxYes", "yes");
@@ -147,30 +171,39 @@ public class TestRenderers_2 extends JspFacesTestCase {
         theRequest.addParameter("myGraphicImage", "graphicimage");
 
         theRequest.addParameter("myOutputMessage", "outputmessage");
+    }
+
+
+    public void testRenderers() throws Exception {
+
+        // create a dummy root for the tree.
+        UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+        root.setId("root");
+
+        testCheckboxRenderer(root);
+        // PENDING (visvan) revisit this test case once HyperLinkRenderer
+        // is fixed.
+        // testLinkRenderer(root);
+        getFacesContext().getResponseWriter().startDocument();
+        testListboxRenderer(root);
+        testSecretRenderer(root);
+        testInputTextRenderer(root);
+        testOutputTextRenderer(root);
+        testTextareaRenderer(root);
+        testGraphicImageRenderer(root);
+        testOutputMessageRenderer(root);
+        testMessageRenderer(root);
+        testMessagesRenderer(root);
+        getFacesContext().getResponseWriter().endDocument();
+        assertTrue(verifyExpectedOutput());
 
     }
 
 
-    public void setUp() {
-
-        super.setUp();
-        ApplicationFactory aFactory =
-            (ApplicationFactory) FactoryFinder.getFactory(
-                FactoryFinder.APPLICATION_FACTORY);
-        application = aFactory.getApplication();
-        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
-        page.setViewId("viewId");
-        getFacesContext().setViewRoot(page);
-        Object view = 
-	    Util.getStateManager(getFacesContext()).saveSerializedView(getFacesContext());
-	getFacesContext().getExternalContext().getRequestMap().put(RIConstants.SAVED_STATE, view);
-        assertTrue(null != getFacesContext().getResponseWriter());
-
-    }
-
-    
+    //
+    // General Methods
+    //
     public void testCheckboxRenderer(UIComponent root) throws IOException {
-
         System.out.println("Testing CheckboxRenderer");
         UISelectBoolean selectBoolean = new UISelectBoolean();
         selectBoolean.setValue(null);
@@ -279,85 +312,10 @@ public class TestRenderers_2 extends JspFacesTestCase {
         checkboxRenderer.encodeBegin(getFacesContext(), selectBoolean);
         checkboxRenderer.encodeEnd(getFacesContext(), selectBoolean);
         getFacesContext().getResponseWriter().writeText("\n", null);
-
-    }
-
-
-    public void testGraphicImageRenderer(UIComponent root) throws IOException {
-
-        System.out.println("Testing GraphicImageRenderer");
-        UIGraphic img = new UIGraphic();
-        img.setUrl("/nonModelReferenceImage.gif");
-        img.setId("myGraphicImage");
-        img.getAttributes().put("ismap", new Boolean(true));
-        img.getAttributes().put("usemap", "usemap");
-        root.getChildren().add(img);
-
-        ImageRenderer imageRenderer = new ImageRenderer();
-
-        // test decode method
-
-        System.out.println("    Testing decode method...");
-        imageRenderer.decode(getFacesContext(), img);
-
-        // test encode method
-
-        System.out.println("    Testing encode method...");
-        imageRenderer.encodeBegin(getFacesContext(), img);
-        imageRenderer.encodeEnd(getFacesContext(), img);
-
-        System.out.println("    Testing graphic support of modelReference...");
-        root.getChildren().remove(img);
-        img = new UIGraphic();
-        img.getAttributes().put("ismap", new Boolean(true));
-        img.getAttributes().put("usemap", "usemap");
-        root.getChildren().add(img);
-        com.sun.faces.cactus.TestBean testBean = (com.sun.faces.cactus.TestBean)
-            (Util.getValueExpression("#{TestBean}")).getValue(getFacesContext().getELContext());
-        assertTrue(null != testBean); // set in FacesTestCaseService
-        testBean.setImagePath("/foo/modelReferenceImage.gif");
-        img.setValueExpression("value",
-                            Util.getValueExpression("#{TestBean.imagePath}"));
-
-        imageRenderer.encodeBegin(getFacesContext(), img);
-        imageRenderer.encodeEnd(getFacesContext(), img);
-
-    }
-
-
-    public void testInputTextRenderer(UIComponent root) throws IOException {
-
-        System.out.println("Testing InputTextRenderer");
-        UIInput text = new UIInput();
-        text.setValue(null);
-        text.setId("myInputText");
-        root.getChildren().add(text);
-
-        TextRenderer textRenderer = new TextRenderer();
-
-        // test decode method
-
-        System.out.println("    Testing decode method...");
-        textRenderer.decode(getFacesContext(), text);
-        assertTrue("text".equals(text.getSubmittedValue()));
-
-        // test convert method
-        Object value = textRenderer.getConvertedValue(getFacesContext(),
-                                                      text,
-                                                      text.getSubmittedValue());
-        assertTrue("text".equals(value));
-
-        // test encode method
-
-        System.out.println("    Testing encode method...");
-        textRenderer.encodeBegin(getFacesContext(), text);
-        textRenderer.encodeEnd(getFacesContext(), text);
-
     }
 
 
     public void testLinkRenderer(UIComponent root) throws IOException {
-
         System.out.println("Testing LinkRenderer");
         UICommand command = new UICommand();
         command.setId("myCommand");
@@ -382,12 +340,10 @@ public class TestRenderers_2 extends JspFacesTestCase {
         hyperlinkRenderer.encodeBegin(getFacesContext(), command);
         hyperlinkRenderer.encodeEnd(getFacesContext(), command);
         getFacesContext().getResponseWriter().writeText("\n", null);
-
     }
 
 
     public void testListboxRenderer(UIComponent root) throws IOException {
-
         System.out.println("Testing ListboxRenderer");
         UISelectOne selectOne = new UISelectOne();
         UISelectItems uiSelectItems = new UISelectItems();
@@ -424,12 +380,157 @@ public class TestRenderers_2 extends JspFacesTestCase {
         listboxRenderer.encodeBegin(getFacesContext(), selectOne);
         listboxRenderer.encodeEnd(getFacesContext(), selectOne);
         getFacesContext().getResponseWriter().writeText("\n", null);
+    }
 
+
+    public void testSecretRenderer(UIComponent root) throws IOException {
+        System.out.println("Testing SecretRenderer");
+        UIInput textEntry = new UIInput();
+        textEntry.setValue(null);
+        textEntry.setId("mySecret");
+        root.getChildren().add(textEntry);
+
+        SecretRenderer secretRenderer = new SecretRenderer();
+
+        // test decode method
+
+        System.out.println("    Testing decode method...");
+        secretRenderer.decode(getFacesContext(), textEntry);
+        assertTrue("secret".equals(textEntry.getSubmittedValue()));
+
+        // test convert method
+        Object value = secretRenderer.getConvertedValue(getFacesContext(),
+                                                        textEntry,
+                                                        textEntry.getSubmittedValue());
+        assertTrue("secret".equals(value));
+
+        // test encode method
+
+        System.out.println("    Testing encode method...");
+        secretRenderer.encodeBegin(getFacesContext(), textEntry);
+        secretRenderer.encodeEnd(getFacesContext(), textEntry);
+        getFacesContext().getResponseWriter().writeText("\n", null);
+    }
+
+
+    public void testInputTextRenderer(UIComponent root) throws IOException {
+        System.out.println("Testing InputTextRenderer");
+        UIInput text = new UIInput();
+        text.setValue(null);
+        text.setId("myInputText");
+        root.getChildren().add(text);
+
+        TextRenderer textRenderer = new TextRenderer();
+
+        // test decode method
+
+        System.out.println("    Testing decode method...");
+        textRenderer.decode(getFacesContext(), text);
+        assertTrue("text".equals(text.getSubmittedValue()));
+
+        // test convert method
+        Object value = textRenderer.getConvertedValue(getFacesContext(),
+                                                      text,
+                                                      text.getSubmittedValue());
+        assertTrue("text".equals(value));
+
+        // test encode method
+
+        System.out.println("    Testing encode method...");
+        textRenderer.encodeBegin(getFacesContext(), text);
+        textRenderer.encodeEnd(getFacesContext(), text);
+    }
+
+
+    public void testOutputTextRenderer(UIComponent root) throws IOException {
+        System.out.println("Testing OutputTextRenderer");
+        UIOutput text = new UIOutput();
+        text.setValue(null);
+        text.setId("myOutputText");
+        root.getChildren().add(text);
+
+        TextRenderer textRenderer = new TextRenderer();
+
+        // test decode method
+
+        System.out.println("    Testing decode method...");
+        textRenderer.decode(getFacesContext(), text);
+
+        // test encode method
+
+        System.out.println("    Testing encode method...");
+        textRenderer.encodeBegin(getFacesContext(), text);
+        textRenderer.encodeEnd(getFacesContext(), text);
+    }
+
+
+    public void testGraphicImageRenderer(UIComponent root) throws IOException {
+        System.out.println("Testing GraphicImageRenderer");
+        UIGraphic img = new UIGraphic();
+        img.setUrl("/nonModelReferenceImage.gif");
+        img.setId("myGraphicImage");
+        img.getAttributes().put("ismap", new Boolean(true));
+        img.getAttributes().put("usemap", "usemap");
+        root.getChildren().add(img);
+
+        ImageRenderer imageRenderer = new ImageRenderer();
+
+        // test decode method
+
+        System.out.println("    Testing decode method...");
+        imageRenderer.decode(getFacesContext(), img);
+
+        // test encode method
+
+        System.out.println("    Testing encode method...");
+        imageRenderer.encodeBegin(getFacesContext(), img);
+        imageRenderer.encodeEnd(getFacesContext(), img);
+
+        System.out.println("    Testing graphic support of modelReference...");
+        root.getChildren().remove(img);
+        img = new UIGraphic();
+        img.getAttributes().put("ismap", new Boolean(true));
+        img.getAttributes().put("usemap", "usemap");
+        root.getChildren().add(img);
+        com.sun.faces.cactus.TestBean testBean = (com.sun.faces.cactus.TestBean)
+            (Util.getValueExpression("#{TestBean}")).getValue(getFacesContext().getELContext());
+        assertTrue(null != testBean); // set in FacesTestCaseService
+        testBean.setImagePath("/foo/modelReferenceImage.gif");
+        img.setValueExpression("value",
+                            Util.getValueExpression("#{TestBean.imagePath}"));
+
+        imageRenderer.encodeBegin(getFacesContext(), img);
+        imageRenderer.encodeEnd(getFacesContext(), img);
+    }
+
+
+    public void testOutputMessageRenderer(UIComponent root) throws IOException {
+        System.out.println("Testing OutputMessageRenderer");
+        UIOutput output = new UIOutput();
+        output.setId("myOutputMessage");
+        output.setValue("My name is {0} {1}");
+        UIParameter param1, param2 = null;
+        param1 = new UIParameter();
+        param1.setId("p1");
+        param2 = new UIParameter();
+        param2.setId("p2");
+        param1.setValue("Bobby");
+        param2.setValue("Orr");
+        output.getChildren().add(param1);
+        output.getChildren().add(param2);
+        root.getChildren().add(output);
+
+        OutputMessageRenderer outputMessageRenderer = new OutputMessageRenderer();
+        // test encode method
+
+        System.out.println("	Testing encode method...");
+
+        outputMessageRenderer.encodeBegin(getFacesContext(), output);
+        outputMessageRenderer.encodeEnd(getFacesContext(), output);
     }
 
 
     public void testMessageRenderer(UIComponent root) throws IOException {
-
         System.out.println("Testing MessageRenderer");
         UIMessage message = new UIMessage();
         message.setId("myMessage_0");
@@ -858,12 +959,10 @@ public class TestRenderers_2 extends JspFacesTestCase {
         // restore the original ResponseWriter
         getFacesContext().setResponseWriter(originalWriter);
         getFacesContext().setViewRoot(originalRoot);
-
     }
 
 
     public void testMessagesRenderer(UIComponent root) throws IOException {
-
         System.out.println("Testing MessagesRenderer");
         UIMessages messages = new UIMessages();
         messages.setId("myMessage_0");
@@ -1276,122 +1375,10 @@ public class TestRenderers_2 extends JspFacesTestCase {
         // restore the original ResponseWriter
         getFacesContext().setResponseWriter(originalWriter);
         getFacesContext().setViewRoot(originalRoot);
-
-    }
-
-
-    public void testOutputMessageRenderer(UIComponent root) throws IOException {
-
-        System.out.println("Testing OutputMessageRenderer");
-        UIOutput output = new UIOutput();
-        output.setId("myOutputMessage");
-        output.setValue("My name is {0} {1}");
-        UIParameter param1, param2 = null;
-        param1 = new UIParameter();
-        param1.setId("p1");
-        param2 = new UIParameter();
-        param2.setId("p2");
-        param1.setValue("Bobby");
-        param2.setValue("Orr");
-        output.getChildren().add(param1);
-        output.getChildren().add(param2);
-        root.getChildren().add(output);
-
-        OutputMessageRenderer outputMessageRenderer = new OutputMessageRenderer();
-        // test encode method
-
-        System.out.println("	Testing encode method...");
-
-        outputMessageRenderer.encodeBegin(getFacesContext(), output);
-        outputMessageRenderer.encodeEnd(getFacesContext(), output);
-
-    }
-
-
-    public void testOutputTextRenderer(UIComponent root) throws IOException {
-
-        System.out.println("Testing OutputTextRenderer");
-        UIOutput text = new UIOutput();
-        text.setValue(null);
-        text.setId("myOutputText");
-        root.getChildren().add(text);
-
-        TextRenderer textRenderer = new TextRenderer();
-
-        // test decode method
-
-        System.out.println("    Testing decode method...");
-        textRenderer.decode(getFacesContext(), text);
-
-        // test encode method
-
-        System.out.println("    Testing encode method...");
-        textRenderer.encodeBegin(getFacesContext(), text);
-        textRenderer.encodeEnd(getFacesContext(), text);
-
-    }
-
-
-    public void testRenderers() throws Exception {
-
-        // create a dummy root for the tree.
-        UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
-        root.setId("root");
-
-        testCheckboxRenderer(root);
-        // PENDING (visvan) revisit this test case once HyperLinkRenderer
-        // is fixed.
-        // testLinkRenderer(root);
-        getFacesContext().getResponseWriter().startDocument();
-        testListboxRenderer(root);
-        testSecretRenderer(root);
-        testInputTextRenderer(root);
-        testOutputTextRenderer(root);
-        testTextareaRenderer(root);
-        testGraphicImageRenderer(root);
-        testOutputMessageRenderer(root);
-        testMessageRenderer(root);
-        testMessagesRenderer(root);
-        getFacesContext().getResponseWriter().endDocument();
-        assertTrue(verifyExpectedOutput());
-
-    }
-
-
-    public void testSecretRenderer(UIComponent root) throws IOException {
-
-        System.out.println("Testing SecretRenderer");
-        UIInput textEntry = new UIInput();
-        textEntry.setValue(null);
-        textEntry.setId("mySecret");
-        root.getChildren().add(textEntry);
-
-        SecretRenderer secretRenderer = new SecretRenderer();
-
-        // test decode method
-
-        System.out.println("    Testing decode method...");
-        secretRenderer.decode(getFacesContext(), textEntry);
-        assertTrue("secret".equals(textEntry.getSubmittedValue()));
-
-        // test convert method
-        Object value = secretRenderer.getConvertedValue(getFacesContext(),
-                                                        textEntry,
-                                                        textEntry.getSubmittedValue());
-        assertTrue("secret".equals(value));
-
-        // test encode method
-
-        System.out.println("    Testing encode method...");
-        secretRenderer.encodeBegin(getFacesContext(), textEntry);
-        secretRenderer.encodeEnd(getFacesContext(), textEntry);
-        getFacesContext().getResponseWriter().writeText("\n", null);
-
     }
 
 
     public void testTextareaRenderer(UIComponent root) throws IOException {
-
         System.out.println("Testing TextareaRenderer");
         UIInput textEntry = new UIInput();
         textEntry.setValue(null);
@@ -1420,7 +1407,6 @@ public class TestRenderers_2 extends JspFacesTestCase {
         textAreaRenderer.encodeBegin(getFacesContext(), textEntry);
         textAreaRenderer.encodeEnd(getFacesContext(), textEntry);
         getFacesContext().getResponseWriter().writeText("\n", null);
-
     }
 
 } // end of class TestRenderers_2

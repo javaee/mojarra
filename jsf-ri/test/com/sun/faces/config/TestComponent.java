@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponent.java,v 1.7 2006/03/29 22:39:39 rlubke Exp $
+ * $Id: TestComponent.java,v 1.8 2006/03/29 23:04:45 rlubke Exp $
  */
 
 /*
@@ -38,13 +38,8 @@ import javax.faces.component.UIOutput;
 public class TestComponent extends UIOutput {
 
 
-    // ---------------------------------------------------------- Public Methods
-
-
     public String getFamily() {
-
         return "Test";
-
     }
 
 }

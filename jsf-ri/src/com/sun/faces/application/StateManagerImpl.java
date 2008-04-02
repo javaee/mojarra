@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.44 2006/03/29 22:38:30 rlubke Exp $ 
+ * $Id: StateManagerImpl.java,v 1.45 2006/03/29 23:03:42 rlubke Exp $ 
  */
 
 /*
@@ -59,19 +59,19 @@ import com.sun.faces.util.Util;
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
  *
- * @version $Id: StateManagerImpl.java,v 1.44 2006/03/29 22:38:30 rlubke Exp $
+ * @version $Id: StateManagerImpl.java,v 1.45 2006/03/29 23:03:42 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class StateManagerImpl extends StateManager {
 
 
     // Log instance for this class
-    private static final Logger LOGGER =
+    private static final Logger LOGGER = 
           Util.getLogger(Util.FACES_LOGGER + Util.APPLICATION_LOGGER);
 
     private static final String NUMBER_OF_VIEWS_IN_LOGICAL_VIEW_IN_SESSION =
           RIConstants.FACES_PREFIX
-          + "NUMBER_OF_VIEWS_IN_LOGICAL_VIEW_IN_SESSION";
+            + "NUMBER_OF_VIEWS_IN_LOGICAL_VIEW_IN_SESSION";
 
     private static final String NUMBER_OF_VIEWS_IN_SESSION =
           RIConstants.FACES_PREFIX + "NUMBER_OF_VIEWS_IN_SESSION";
@@ -92,6 +92,7 @@ public class StateManagerImpl extends StateManager {
     /** Number of views in logical view to be saved in session. */
     private int noOfViews = 0;
     private int noOfViewsInLogicalView = 0;
+
 
     // ---------------------------------------------------------- Public Methods
 
@@ -130,7 +131,7 @@ public class StateManagerImpl extends StateManager {
                 }
                 throw new IllegalStateException(
                       MessageUtils.getExceptionMessageString(
-                            MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID, id));
+                        MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID, id));
             }
 
             // if a component is marked transient do not persist its state as
@@ -158,7 +159,7 @@ public class StateManagerImpl extends StateManager {
                 }
                 throw new IllegalStateException(
                       MessageUtils.getExceptionMessageString(
-                            MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID, id));
+                        MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID, id));
             }
 
             // if a facet is marked transient do not persist its state as well as
@@ -426,14 +427,6 @@ public class StateManagerImpl extends StateManager {
     }
 
 
-    public void writeState(FacesContext context, Object state)
-          throws IOException {
-
-        super.writeState(context, state);
-
-    }
-
-
     @SuppressWarnings("deprecation")
     public void writeState(FacesContext context, SerializedView state)
           throws IOException {
@@ -454,6 +447,15 @@ public class StateManagerImpl extends StateManager {
         }
 
     }
+
+
+    public void writeState(FacesContext context, Object state)
+          throws IOException {
+
+        super.writeState(context, state);
+
+    }
+
 
     // ------------------------------------------------------- Protected Methods
 
@@ -668,6 +670,7 @@ public class StateManagerImpl extends StateManager {
 
     }
 
+
     // --------------------------------------------------------- Private Methods
 
 
@@ -682,18 +685,18 @@ public class StateManagerImpl extends StateManager {
 
 
     /**
-     * Looks for the presence of a declared method (by name) in the specified
-     * class and returns a <code>boolean</code> outcome (true, if the method
+     * Looks for the presence of a declared method (by name) in the specified 
+     * class and returns a <code>boolean</code> outcome (true, if the method 
      * exists).
      *
-     * @param resultMap  A <code>Map</code> possibly containing the specified
-     *                   "key" argument, and the corresponding <code>boolean</code> value
-     *                   indicating the outcome of the search.
-     * @param key        The object that will be used for the lookup.  This key
-     *                   will also be stored in the <code>Map</code> with a corresponding
-     *                   <code>Boolean</code> value indicating the result of the search.
-     * @param instance   The instance of the class that will be used as
-     *                   the search domain.
+     * @param resultMap  A <code>Map</code> possibly containing the specified 
+     *  "key" argument, and the corresponding <code>boolean</code> value 
+     *  indicating the outcome of the search.
+     * @param key  The object that will be used for the lookup.  This key 
+     *  will also be stored in the <code>Map</code> with a corresponding 
+     *  <code>Boolean</code> value indicating the result of the search.
+     * @param instance The instance of the class that will be used as 
+     *  the search domain.
      * @param methodName The name of the method we are looking for.
      */
     private boolean hasDeclaredMethod(Map<String, Boolean> resultMap,

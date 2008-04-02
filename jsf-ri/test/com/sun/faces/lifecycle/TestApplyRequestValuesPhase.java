@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplyRequestValuesPhase.java,v 1.31 2006/03/29 22:39:44 rlubke Exp $
+ * $Id: TestApplyRequestValuesPhase.java,v 1.32 2006/03/29 23:04:55 rlubke Exp $
  */
 
 /*
@@ -46,36 +46,51 @@ import javax.faces.component.UICommand;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplyRequestValuesPhase.java,v 1.31 2006/03/29 22:39:44 rlubke Exp $
+ * @version $Id: TestApplyRequestValuesPhase.java,v 1.32 2006/03/29 23:04:55 rlubke Exp $
  */
 
 public class TestApplyRequestValuesPhase extends ServletFacesTestCase {
 
+//
+// Protected Constants
+//
+
     public static final String TEST_URI = "/components.jsp";
 
+//
+// Class Variables
+//
 
-    // ------------------------------------------------------------ Constructors
+//
+// Instance Variables
+//
 
+// Attribute Instance Variables
+
+// Relationship Instance Variables
+
+//
+// Constructors and Initializers    
+//
 
     public TestApplyRequestValuesPhase() {
-
         super("TestApplyRequestValuesPhase");
-
     }
 
 
     public TestApplyRequestValuesPhase(String name) {
-
         super(name);
-
     }
 
+//
+// Class methods
+//
 
-    // ---------------------------------------------------------- Public Methods
-
+//
+// General Methods
+//
 
     public void beginCallback(WebRequest theRequest) {
-
         theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
         theRequest.addParameter(
             "basicForm" + NamingContainer.SEPARATOR_CHAR + "userName", "jerry");
@@ -89,7 +104,6 @@ public class TestApplyRequestValuesPhase extends ServletFacesTestCase {
 
 
     public void testCallback() {
-
         UIComponent root = null;
         String value = null;
         Phase
@@ -134,10 +148,8 @@ public class TestApplyRequestValuesPhase extends ServletFacesTestCase {
         assertTrue(value.equals("jerry"));
         
         testImmediate(basicForm);
-
     }
-
-
+    
     public void testImmediate(UIForm basicForm) {
         
         Phase
@@ -225,7 +237,7 @@ public class TestApplyRequestValuesPhase extends ServletFacesTestCase {
         assertTrue(null != testInt);
         assertTrue(null == testInt.getValue());
         assertTrue(testInt.isValid());
-
     }
+
 
 } // end of class TestApplyRequestValuesPhase

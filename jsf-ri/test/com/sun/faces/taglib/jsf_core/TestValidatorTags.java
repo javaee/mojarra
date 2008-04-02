@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidatorTags.java,v 1.31 2006/03/29 22:39:48 rlubke Exp $
+ * $Id: TestValidatorTags.java,v 1.32 2006/03/29 23:05:02 rlubke Exp $
  */
 
 /*
@@ -51,36 +51,40 @@ import org.apache.cactus.WebRequest;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValidatorTags.java,v 1.31 2006/03/29 22:39:48 rlubke Exp $
+ * @version $Id: TestValidatorTags.java,v 1.32 2006/03/29 23:05:02 rlubke Exp $
  */
 
 public class TestValidatorTags extends JspFacesTestCase {
 
+//
+// Protected Constants
+//
 
-    public static final String INBOUNDS1_ID = "validatorForm" +
-        NamingContainer.SEPARATOR_CHAR +
-        "inBounds1";
-    public static final String INBOUNDS1_VALUE = "10.25";
-    public static final String INBOUNDS2_ID = "validatorForm" +
-        NamingContainer.SEPARATOR_CHAR +
-        "inBounds2";
-    public static final String INBOUNDS2_VALUE = "alligator22";
-    public static final String INBOUNDS3_ID = "validatorForm" +
-        NamingContainer.SEPARATOR_CHAR +
-        "inBounds3";
-    public static final String INBOUNDS3_VALUE = "1100";
+    public static final String TEST_URI = "/TestValidatorTags.jsp";
     public static final String OUTOFBOUNDS1_ID = "validatorForm" +
         NamingContainer.SEPARATOR_CHAR +
         "outOfBounds1";
     public static final String OUTOFBOUNDS1_VALUE = "3.1415";
+    public static final String INBOUNDS1_ID = "validatorForm" +
+        NamingContainer.SEPARATOR_CHAR +
+        "inBounds1";
+    public static final String INBOUNDS1_VALUE = "10.25";
     public static final String OUTOFBOUNDS2_ID = "validatorForm" +
         NamingContainer.SEPARATOR_CHAR +
         "outOfBounds2";
     public static final String OUTOFBOUNDS2_VALUE = "fox";
+    public static final String INBOUNDS2_ID = "validatorForm" +
+        NamingContainer.SEPARATOR_CHAR +
+        "inBounds2";
+    public static final String INBOUNDS2_VALUE = "alligator22";
     public static final String OUTOFBOUNDS3_ID = "validatorForm" +
         NamingContainer.SEPARATOR_CHAR +
         "outOfBounds3";
     public static final String OUTOFBOUNDS3_VALUE = "30000";
+    public static final String INBOUNDS3_ID = "validatorForm" +
+        NamingContainer.SEPARATOR_CHAR +
+        "inBounds3";
+    public static final String INBOUNDS3_VALUE = "1100";
     public static final String REQUIRED1_ID = "validatorForm" +
         NamingContainer.SEPARATOR_CHAR +
         "required1";
@@ -89,41 +93,47 @@ public class TestValidatorTags extends JspFacesTestCase {
         NamingContainer.SEPARATOR_CHAR +
         "required2";
     public static final String REQUIRED2_VALUE = "required";
-    public static final String TEST_URI = "/TestValidatorTags.jsp";
 
 
-    // ------------------------------------------------------------ Constructors
+    public boolean sendResponseToFile() {
+        return false;
+    }
 
+//
+// Class Variables
+//
+
+//
+// Instance Variables
+//
+
+// Attribute Instance Variables
+
+// Relationship Instance Variables
+
+//
+// Constructors and Initializers    
+//
 
     public TestValidatorTags() {
-
         super("TestValidatorTags");
-
     }
 
 
     public TestValidatorTags(String name) {
-
         super(name);
-
     }
 
+//
+// Class methods
+//
 
-    // ---------------------------------------------- Methods From FacesTestCase
-
-
-    public boolean sendResponseToFile() {
-
-        return false;
-
-    }
-
-
-    // ---------------------------------------------------------- Public Methods
+//
+// General Methods
+//
 
 
     public void beginValidators(WebRequest theRequest) {
-
         theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
         theRequest.addParameter(OUTOFBOUNDS1_ID, OUTOFBOUNDS1_VALUE);
         theRequest.addParameter(INBOUNDS1_ID, INBOUNDS1_VALUE);
@@ -139,15 +149,12 @@ public class TestValidatorTags extends JspFacesTestCase {
 
 
     public void setUp() {
-
         Util.setUnitTestModeEnabled(true);
         super.setUp();
-
     }
 
 
     public void testValidators() {
-
         // Verify the parmeters are as expected
         String paramVal = (String) (getFacesContext().getExternalContext()
             .getRequestParameterMap()).get(OUTOFBOUNDS1_ID);
@@ -264,7 +271,7 @@ public class TestValidatorTags extends JspFacesTestCase {
         assertTrue(messages.hasNext());
 
         Util.setUnitTestModeEnabled(false);
-
     }
+
 
 } // end of class TestValidatorTags

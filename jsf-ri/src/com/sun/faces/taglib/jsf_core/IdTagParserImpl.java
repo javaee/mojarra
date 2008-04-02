@@ -1,5 +1,5 @@
 /*
- * $Id: IdTagParserImpl.java,v 1.13 2006/03/29 22:38:41 rlubke Exp $
+ * $Id: IdTagParserImpl.java,v 1.14 2006/03/29 23:03:51 rlubke Exp $
  */
 
 /*
@@ -29,15 +29,14 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
-
-import org.xml.sax.Attributes;
-
 import com.sun.faces.RIConstants;
 import com.sun.faces.taglib.FacesValidator;
 import com.sun.faces.taglib.TagParser;
 import com.sun.faces.taglib.ValidatorInfo;
+import org.xml.sax.Attributes;
+
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
 
 
 /**
@@ -46,37 +45,43 @@ import com.sun.faces.taglib.ValidatorInfo;
  */
 public class IdTagParserImpl implements TagParser {
 
-
-    private StringBuffer requiresIdList;    // list of failing tags
-    private ValidatorInfo validatorInfo;
-    private boolean failed;
-    private boolean nestedInNamingContainer;
-
     //*********************************************************************
     // Constants
 
     //*********************************************************************
     // Validation and configuration state (protected)
 
-    private boolean siblingSatisfied;        // is there a JSF sibling?
-    private int requiresIdCount;        // nested count
+    private boolean siblingSatisfied;		// is there a JSF sibling?
+    private int requiresIdCount;		// nested count
+    private StringBuffer requiresIdList;	// list of failing tags
+    private boolean failed;
+    private ValidatorInfo validatorInfo;
+    private boolean nestedInNamingContainer;
 
-    // ------------------------------------------------------------ Constructors
 
     //*********************************************************************
     // Constructor and lifecycle management
 
-    /** <p>CommandTagParser constructor</p> */
+    /**
+     * <p>CommandTagParser constructor</p>
+     */
     public IdTagParserImpl() {
-
         failed = false;
         siblingSatisfied = true;
         requiresIdCount = 0;
         requiresIdList = new StringBuffer();
-
     }
 
-    // -------------------------------------------------- Methods From TagParser
+
+    /**
+     * <p>Set the validator info object that has the current tag
+     * information</p>
+     *
+     * @param ValidatorInfo object with current tag info
+     */
+    public void setValidatorInfo(ValidatorInfo validatorInfo) {
+        this.validatorInfo = validatorInfo;
+    }
 
 
     /**
@@ -85,13 +90,11 @@ public class IdTagParserImpl implements TagParser {
      * @return String Failure message
      */
     public String getMessage() {
-
         Object[] obj = new Object[1];
         obj[0] = requiresIdList;
         ResourceBundle rb = ResourceBundle.getBundle(
-              RIConstants.TLV_RESOURCE_LOCATION);
+            RIConstants.TLV_RESOURCE_LOCATION);
         return MessageFormat.format(rb.getString("TLV_ID_ERROR"), obj);
-
     }
 
 
@@ -101,25 +104,7 @@ public class IdTagParserImpl implements TagParser {
      * @return boolean false if validation conditions have not been met
      */
     public boolean hasFailed() {
-
         return failed;
-
-    }
-
-
-    /**
-     * <p>Parse the ending element. If it is a specific JSTL tag
-     * make sure that the appropriate flags are set.</p>
-     */
-    public void parseEndElement() {
-
-        String ns = validatorInfo.getNameSpace();
-        String ln = validatorInfo.getLocalName();
-        FacesValidator validator = validatorInfo.getValidator();
-        if (isNamingContainerTag(validator, ns, ln)) {
-            nestedInNamingContainer = false;
-        }
-
     }
 
 
@@ -128,7 +113,6 @@ public class IdTagParserImpl implements TagParser {
      * make sure that the nested JSF tags have IDs. </p>
      */
     public void parseStartElement() {
-
         String ns = validatorInfo.getNameSpace();
         String ln = validatorInfo.getLocalName();
 
@@ -139,7 +123,7 @@ public class IdTagParserImpl implements TagParser {
         if (isNamingContainerTag(validator, ns, ln)) {
             nestedInNamingContainer = true;
         } else if ((ns.equals(RIConstants.HTML_NAMESPACE)) &&
-                   (requiresIdCount > 0)) {
+            (requiresIdCount > 0)) {
             //make sure that id is present in attributes
             if ((!(nestedInNamingContainer)) && (!hasIdAttribute(a))) {
                 //add to list of jsf tags for error report
@@ -147,13 +131,11 @@ public class IdTagParserImpl implements TagParser {
                 requiresIdList.append(qn).append(' ');
             }
         } else if ((requiresIdCount == 0) &&
-                   (!siblingSatisfied)) {
+            (!siblingSatisfied)) {
             //make sure jsf sibling has an id
             if (((ns.equals(RIConstants.HTML_NAMESPACE)) ||
-                 (ns.equals(RIConstants.CORE_NAMESPACE)))
-                &&
-                (!hasIdAttribute(a))
-                && (!(nestedInNamingContainer))) {
+                (ns.equals(RIConstants.CORE_NAMESPACE))) &&
+                (!hasIdAttribute(a)) && (!(nestedInNamingContainer))) {
 
                 //add to list of jsf tags for error report
                 failed = true;
@@ -170,18 +152,17 @@ public class IdTagParserImpl implements TagParser {
 
 
     /**
-     * <p>Set the validator info object that has the current tag
-     * information</p>
-     *
-     * @param ValidatorInfo object with current tag info
+     * <p>Parse the ending element. If it is a specific JSTL tag
+     * make sure that the appropriate flags are set.</p>
      */
-    public void setValidatorInfo(ValidatorInfo validatorInfo) {
-
-        this.validatorInfo = validatorInfo;
-
+    public void parseEndElement() {
+        String ns = validatorInfo.getNameSpace();
+        String ln = validatorInfo.getLocalName();
+        FacesValidator validator = validatorInfo.getValidator();
+        if (isNamingContainerTag(validator, ns, ln)) {
+            nestedInNamingContainer = false;
+        }
     }
-
-    // --------------------------------------------------------- Private Methods
 
     //*********************************************************************
     // Private methods
@@ -191,20 +172,16 @@ public class IdTagParserImpl implements TagParser {
      * present.</p>
      *
      * @param a Attribute list
-     *
      * @return boolean True if id attribute found."id"
      */
     private boolean hasIdAttribute(Attributes a) {
-
         for (int i = 0; i < a.getLength(); i++) {
             if (a.getQName(i).equals("id")) {
                 return true;
             }
         }
         return false;
-
     }
-
 
     /**
      * Check to make sure that the element is either a
@@ -213,11 +190,9 @@ public class IdTagParserImpl implements TagParser {
      * @param validator Parent validator
      * @param ns        The Namespace.
      * @param ln        The Local Name.
-     *
      * @return boolean True if JSF tag is form or subview
      */
-    private boolean isNamingContainerTag(FacesValidator validator, String ns,
-                                         String ln) {
+    private boolean isNamingContainerTag(FacesValidator validator, String ns, String ln) {
 
         // PENDING (visvan) Handle custom implementations of NamingContainer.
         // This requires the compiler to look up a fake Faces environment
@@ -226,16 +201,14 @@ public class IdTagParserImpl implements TagParser {
         // components.
         if (ns.equals(RIConstants.HTML_NAMESPACE)) {
             if (ln.equals(validator.getJSF_FORM_LN())) {
-                return true;
+                return true; 
             }
-        }
+        } 
         if (ns.equals(RIConstants.CORE_NAMESPACE)) {
             if (ln.equals(validator.getJSF_SUBVIEW_LN())) {
                 return true;
             }
         }
         return false;
-
     }
-
 }

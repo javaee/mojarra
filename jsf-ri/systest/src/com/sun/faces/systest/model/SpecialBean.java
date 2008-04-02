@@ -1,5 +1,5 @@
 /*
- * $Id: SpecialBean.java,v 1.2 2006/03/29 22:38:53 rlubke Exp $
+ * $Id: SpecialBean.java,v 1.3 2006/03/29 23:04:01 rlubke Exp $
  */
 
 /*
@@ -28,40 +28,24 @@
  */
 
 package com.sun.faces.systest.model;
-
 public class SpecialBean {
 
+        private final String special;
 
-    private final String special;
-
-    // ------------------------------------------------------------ Constructors
-
-
-    public SpecialBean(String specialValue) {
-
-        special = specialValue;
-
-    }
-
-    // ---------------------------------------------------------- Public Methods
-
-
-    public boolean equals(Object target) {
-
-        if (!(target instanceof SpecialBean)) {
-            return false;
-        } else {
-            return (special.equals(((SpecialBean) target).getString()));
+        public SpecialBean(String specialValue) {
+            special = specialValue;
         }
 
+        public String getString() {
+            return special;
+        }
+
+        public boolean equals(Object target) {
+           if (!(target instanceof SpecialBean)) {
+              return false;
+           } else {
+           return (special.equals(((SpecialBean) target).getString()));
+           }
+        }
     }
-
-
-    public String getString() {
-
-        return special;
-
-    }
-
-}
 

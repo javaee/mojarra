@@ -1,5 +1,5 @@
 /*
- * $Id: TestConfigListener.java,v 1.9 2006/03/29 22:39:39 rlubke Exp $
+ * $Id: TestConfigListener.java,v 1.10 2006/03/29 23:04:45 rlubke Exp $
  */
 
 /*
@@ -41,7 +41,10 @@ import javax.servlet.ServletContextEvent;
 public class TestConfigListener extends ServletFacesTestCase {
 
 
-    // ------------------------------------------------------------ Constructors
+    // ----------------------------------------------------- Instance Variables
+
+
+    // ----------------------------------------------------------- Constructors
 
 
     /**
@@ -56,9 +59,6 @@ public class TestConfigListener extends ServletFacesTestCase {
     }
 
 
-    // ---------------------------------------------------------- Public Methods
-
-
     // --------------------------------------------------- Overall Test Methods
 
 
@@ -71,13 +71,10 @@ public class TestConfigListener extends ServletFacesTestCase {
     // (for the same webapp).
     //
     public void testContextInitialized() {
-
         ConfigureListener cl = new ConfigureListener();
         ServletContextEvent e = new ServletContextEvent(
             getConfig().getServletContext());
         cl.contextInitialized(e);
         cl.contextInitialized(e);
-
     }
-
 }

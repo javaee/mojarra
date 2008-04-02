@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: ListboxRenderer.java,v 1.22 2006/03/29 22:38:38 rlubke Exp $
+ * $Id: ListboxRenderer.java,v 1.23 2006/03/29 23:03:48 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -47,24 +47,44 @@ import java.io.IOException;
 
 public class ListboxRenderer extends MenuRenderer {
 
-    // ------------------------------------------------------------ Constructors
+    //
+    // Protected Constants
+    //
 
+    //
+    // Class Variables
+    //
+
+    //
+    // Instance Variables
+    //
+
+    // Attribute Instance Variables
+
+    // Relationship Instance Variables
+
+    //
+    // Constructors and Initializers    
+    //
 
     public ListboxRenderer() {
-
         super();
-
     }
 
-    // ------------------------------------------------------- Protected Methods
+    //
+    // Class methods
+    //
 
+    //
+    // General Methods
+    //
 
+    //
+    // Methods From Renderer
+    //
     protected void writeDefaultSize(ResponseWriter writer, int itemCount)
-          throws IOException {
-
+        throws IOException {
         // If size not specified, default to number of items
         writer.writeAttribute("size", new Integer(itemCount), "size");
-
     }
-
 } // end of class ListboxRenderer

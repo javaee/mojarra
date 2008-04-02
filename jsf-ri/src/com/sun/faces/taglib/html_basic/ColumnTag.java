@@ -1,5 +1,5 @@
 /*
- * $Id: ColumnTag.java,v 1.15 2006/03/29 22:38:40 rlubke Exp $
+ * $Id: ColumnTag.java,v 1.16 2006/03/29 23:03:50 rlubke Exp $
  */
 
 /*
@@ -30,34 +30,86 @@
 
 package com.sun.faces.taglib.html_basic;
 
+import javax.el.ValueExpression;
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.webapp.UIComponentELTag;
 import javax.servlet.jsp.JspException;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.sun.faces.util.Util;
+
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 public class ColumnTag extends UIComponentELTag {
 
-
     // Log instance for this class
-    private static final Logger logger =
-          Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
+    private static final Logger logger = 
+            Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
 
+    //
+    // Instance Variables
+    //
+
+
+    //
+    // Setter Methods
+    //
     // PROPERTY: footerClass
     private javax.el.ValueExpression footerClass;
+    public void setFooterClass(javax.el.ValueExpression footerClass) {
+        this.footerClass = footerClass;
+    }
 
     // PROPERTY: headerClass
     private javax.el.ValueExpression headerClass;
+    public void setHeaderClass(javax.el.ValueExpression headerClass) {
+        this.headerClass = headerClass;
+    }
 
-    // -------------------------------------------------------- Methods From Tag
+    //
+    // General Methods
+    //
+    public String getRendererType() {
+        return null;
+    }
 
+
+    public String getComponentType() {
+        return "javax.faces.Column";
+    }
+
+
+    protected void setProperties(UIComponent component) {
+        super.setProperties(component);
+        UIColumn column = null;
+
+        try {
+            column = (UIColumn) component;
+        } catch (ClassCastException cce) {
+            throw new IllegalStateException("Component " + component.toString() + " not expected type.  Expected: UIColumn.  Perhaps you're missing a tag?");
+        }
+        if (footerClass != null) {
+            if (!footerClass.isLiteralText()) {
+                column.setValueExpression("footerClass", footerClass);
+            } else {
+                column.getAttributes().put("footerClass", footerClass.getExpressionString());
+            }
+        }
+        if (headerClass != null) {
+            if (!headerClass.isLiteralText()) {
+                column.setValueExpression("headerClass", headerClass);
+            } else {
+                column.getAttributes().put("headerClass", headerClass.getExpressionString());
+            }
+        }
+    }
+
+    //
+    // Methods From TagSupport
+    //
 
     public int doStartTag() throws JspException {
-
         int rc = 0;
         try {
             rc = super.doStartTag();
@@ -73,12 +125,10 @@ public class ColumnTag extends UIComponentELTag {
             throw new JspException(t);
         }
         return rc;
-
     }
 
 
     public int doEndTag() throws JspException {
-
         int rc = 0;
         try {
             rc = super.doEndTag();
@@ -94,93 +144,19 @@ public class ColumnTag extends UIComponentELTag {
             throw new JspException(t);
         }
         return rc;
-
     }
-
 
     // RELEASE
     public void release() {
-
         super.release();
         this.headerClass = null;
         this.footerClass = null;
-
     }
-
-    // ---------------------------------------------------------- Public Methods
-
-
-    public void setFooterClass(javax.el.ValueExpression footerClass) {
-
-        this.footerClass = footerClass;
-
-    }
-
-
-    public void setHeaderClass(javax.el.ValueExpression headerClass) {
-
-        this.headerClass = headerClass;
-
-    }
-
-
-    public String getComponentType() {
-
-        return "javax.faces.Column";
-
-    }
-
 
     public String getDebugString() {
-
         String result = "id: " + this.getId() + " class: " +
-                        this.getClass().getName();
+            this.getClass().getName();
         return result;
-
-    }
-
-
-    //
-    // General Methods
-    //
-    public String getRendererType() {
-
-        return null;
-
-    }
-
-    // ------------------------------------------------------- Protected Methods
-
-
-    protected void setProperties(UIComponent component) {
-
-        super.setProperties(component);
-        UIColumn column = null;
-
-        try {
-            column = (UIColumn) component;
-        } catch (ClassCastException cce) {
-            throw new IllegalStateException("Component "
-                                            + component.toString()
-                                            + " not expected type.  Expected: UIColumn.  Perhaps you're missing a tag?");
-        }
-        if (footerClass != null) {
-            if (!footerClass.isLiteralText()) {
-                column.setValueExpression("footerClass", footerClass);
-            } else {
-                column.getAttributes()
-                      .put("footerClass", footerClass.getExpressionString());
-            }
-        }
-        if (headerClass != null) {
-            if (!headerClass.isLiteralText()) {
-                column.setValueExpression("headerClass", headerClass);
-            } else {
-                column.getAttributes()
-                      .put("headerClass", headerClass.getExpressionString());
-            }
-        }
-
     }
 
 }

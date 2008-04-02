@@ -1,29 +1,25 @@
 <%@ page contentType="text/html"
-      %>
-<%@ page import="javax.faces.FactoryFinder"
-      %>
-<%@ page import="javax.faces.application.Application"
-      %>
-<%@ page import="javax.faces.application.ApplicationFactory"
-      %>
-<%@ page import="javax.faces.validator.Validator"
-      %>
-<%
+%><%@ page import="javax.faces.FactoryFinder"
+%><%@ page import="javax.faces.application.Application"
+%><%@ page import="javax.faces.application.ApplicationFactory"
+%><%@ page import="javax.faces.validator.Validator"
+%><%@ page import="com.sun.faces.systest.TestValidator"
+%><%
 
-    // Acquire our Application instance
-    ApplicationFactory afactory = (ApplicationFactory)
-          FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-    Application appl = afactory.getApplication();
+  // Acquire our Application instance
+  ApplicationFactory afactory = (ApplicationFactory)
+   FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+  Application appl = afactory.getApplication();
 
-    // try to retrieve our validator from Application
-    Validator result = appl.createValidator("TestValidator");
-    // report the result
-    if (result == null ||
-        !(result instanceof com.sun.faces.systest.TestValidator)) {
-        out.println("/validator.jsp FAILED");
-        return;
-    } else {
-        out.println("/validator.jsp PASSED");
-    }
-
+  // try to retrieve our validator from Application
+  Validator result = appl.createValidator("TestValidator");
+  // report the result
+  if (result == null || 
+      !(result instanceof com.sun.faces.systest.TestValidator)) {
+    out.println("/validator.jsp FAILED");
+    return;
+  } else {
+      out.println("/validator.jsp PASSED");
+  }
+  
 %>

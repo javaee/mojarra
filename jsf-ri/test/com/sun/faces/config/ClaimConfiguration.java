@@ -27,30 +27,16 @@ package com.sun.faces.config;
 
 public class ClaimConfiguration extends Object {
 
-
-    protected Double waterDamageAmount = new Double(100.0);
-
-
-    // ------------------------------------------------------------ Constructors
-
-
     public ClaimConfiguration() {}
 
-
-    // ---------------------------------------------------------- Public Methods
-
-
+    protected Double waterDamageAmount = new Double(100.0);
     public Double getWaterDamageAmount() {
-
 	return waterDamageAmount;
-
     }
-
 
     public void setWaterDamageAmount(Double newWaterDamageAmount) {
-
 	waterDamageAmount = newWaterDamageAmount;
-
     }
+
 
 }

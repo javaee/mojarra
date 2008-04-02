@@ -1,5 +1,5 @@
 /*
- * $Id: TestHAStateManagerImpl.java,v 1.4 2006/03/29 22:39:36 rlubke Exp $
+ * $Id: TestHAStateManagerImpl.java,v 1.5 2006/03/29 23:04:40 rlubke Exp $
  */
 
 /*
@@ -60,34 +60,22 @@ import java.util.ArrayList;
  */
 public class TestHAStateManagerImpl extends ServletFacesTestCase {
 
-
      public static final String TEST_URI = "/test.jsp";
-    
-    private Application application = null;
-
-
-    // ------------------------------------------------------------ Constructors
-
-
+    //
+    // Constructors/Initializers
+    //
     public TestHAStateManagerImpl() {
-
         super("TestStateManagerImpl");
-
     }
 
 
     public TestHAStateManagerImpl(String name) {
-
         super(name);
-
     }
-
-
-    // ---------------------------------------------------------- Public Methods
-
-
+    
+    private Application application = null;
+    
     public void setUp() {
-
         super.setUp();
         ApplicationFactory aFactory =
             (ApplicationFactory) FactoryFinder.getFactory(
@@ -95,9 +83,12 @@ public class TestHAStateManagerImpl extends ServletFacesTestCase {
         application = (ApplicationImpl) aFactory.getApplication();
         application.setViewHandler(new ViewHandlerImpl());
         application.setStateManager(new StateManagerImpl());
-
     }
-
+    
+    //
+    // Test Methods
+    //
+    
     
     public void testHighAvailabilityStateSaving1() {
        
@@ -149,7 +140,6 @@ public class TestHAStateManagerImpl extends ServletFacesTestCase {
 
         userName1 = (UIInput) panel1.findComponent("userName1");
         assertTrue(userName1 != null);
-
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: JspIntegrationTestCase.java,v 1.16 2006/03/29 22:38:46 rlubke Exp $
+ * $Id: JspIntegrationTestCase.java,v 1.17 2006/03/29 23:03:55 rlubke Exp $
  */
 
 /*
@@ -31,15 +31,21 @@ package com.sun.faces.jsptest;
 
 
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlBody;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
+import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 
-/** <p>Test Case for JSP Interoperability.</p> */
+/**
+ * <p>Test Case for JSP Interoperability.</p>
+ */
 
 public class JspIntegrationTestCase extends AbstractTestCase {
+
 
     // ------------------------------------------------------------ Constructors
 
@@ -50,36 +56,39 @@ public class JspIntegrationTestCase extends AbstractTestCase {
      * @param name Name of the test case
      */
     public JspIntegrationTestCase(String name) {
-
         super(name);
-
-    }
-
-    // ---------------------------------------------------------- Public Methods
-
-
-    /** Return the tests included in this test suite. */
-    public static Test suite() {
-
-        return (new TestSuite(JspIntegrationTestCase.class));
-
     }
 
 
-    /** Set up instance variables required by this test case. */
+    // ------------------------------------------------------ Instance Variables
+
+
+    // ---------------------------------------------------- Overall Test Methods
+
+
+    /**
+     * Set up instance variables required by this test case.
+     */
     public void setUp() throws Exception {
-
         super.setUp();
-
     }
 
 
-    /** Tear down instance variables required by this test case. */
+    /**
+     * Return the tests included in this test suite.
+     */
+    public static Test suite() {
+        return (new TestSuite(JspIntegrationTestCase.class));
+    }
+
+
+    /**
+     * Tear down instance variables required by this test case.
+     */
     public void tearDown() {
-
         super.tearDown();
-
     }
+
 
     // ------------------------------------------------- Individual Test Methods
 
@@ -91,15 +100,12 @@ public class JspIntegrationTestCase extends AbstractTestCase {
         checkJspDynamic00();
         checkJspDynamic01("",
                           "[A]{ } [Z]");
-        checkJspDynamic01(
-              "?mode=create&id=C1&value=[1]&javax.faces.ViewState=j_id2:j_id3",
-              "[A]{ [1] } [Z]");
-        checkJspDynamic01(
-              "?mode=create&id=C2&value=[2]&javax.faces.ViewState=j_id2:j_id4",
-              "[A]{ [1] [2] } [Z]");
-        checkJspDynamic01(
-              "?mode=create&id=C3&value=[3]&javax.faces.ViewState=j_id2:j_id5",
-              "[A]{ [1] [2] [3] } [Z]");
+        checkJspDynamic01("?mode=create&id=C1&value=[1]&javax.faces.ViewState=j_id2:j_id3",
+                          "[A]{ [1] } [Z]");
+        checkJspDynamic01("?mode=create&id=C2&value=[2]&javax.faces.ViewState=j_id2:j_id4",
+                          "[A]{ [1] [2] } [Z]");
+        checkJspDynamic01("?mode=create&id=C3&value=[3]&javax.faces.ViewState=j_id2:j_id5",
+                          "[A]{ [1] [2] [3] } [Z]");
         checkJspDynamic01("?mode=delete&id=C2&javax.faces.ViewState=j_id2:j_id6",
                           "[A]{ [1] [3] } [Z]");
 
@@ -109,23 +115,23 @@ public class JspIntegrationTestCase extends AbstractTestCase {
                           "[A]{ } [Z]");
 
         // Check with children that do not have ids
-        /********** PENDING(edburns): pending resolution of 5040235
-         checkJspDynamic00();
-         checkJspDynamic01("",
-         "[A] { } [Z]");
-         checkJspDynamic01("?mode=create&value=[1]",
-         "[A] { [1] } [Z]");
-         checkJspDynamic01("?mode=create&value=[2]",
-         "[A] { [1] [2] } [Z]");
-         checkJspDynamic01("?mode=create&value=[3]",
-         "[A] { [1] [2] [3] } [Z]");
-         **************/
+	/********** PENDING(edburns): pending resolution of 5040235
+        checkJspDynamic00();
+        checkJspDynamic01("",
+                          "[A] { } [Z]");
+        checkJspDynamic01("?mode=create&value=[1]",
+                          "[A] { [1] } [Z]");
+        checkJspDynamic01("?mode=create&value=[2]",
+                          "[A] { [1] [2] } [Z]");
+        checkJspDynamic01("?mode=create&value=[3]",
+                          "[A] { [1] [2] [3] } [Z]");
+	**************/
         checkJspDynamic00();
         client = new WebClient();
         checkJspDynamic01("",
                           "[A]{ } [Z]");
-
     }
+
 
     // NOTE:  testJspIncludeXX tests are analogous to testJstlImportXX
     // tests, but exercise <jsp:include> instead of <c:import>.
@@ -246,6 +252,7 @@ public class JspIntegrationTestCase extends AbstractTestCase {
 
     }
 
+
     // --------------------------------------------------------- Private Methods
 
 
@@ -261,14 +268,14 @@ public class JspIntegrationTestCase extends AbstractTestCase {
 
     // Check the result of requesting the specified page
     private void checkJspDynamic01(String query, String result)
-          throws Exception {
+        throws Exception {
 
         HtmlPage page = getPage("/faces/jsp/jsp-dynamic-01.jsp" + query);
         assertEquals("Correct page title",
                      "jsp-dynamic-01", page.getTitleText());
-        String bodyText = getBodyText(page);
+	String bodyText = getBodyText(page);
         assertTrue("Correct body element",
-                   -1 != bodyText.indexOf(result));
+                     -1 != bodyText.indexOf(result));
 
     }
 
@@ -306,7 +313,6 @@ public class JspIntegrationTestCase extends AbstractTestCase {
 
     }
 
-
     private void checkJspInclude03() throws Exception {
 
         HtmlPage page = getPage("/faces/jsp/jsp-include-03.jsp");
@@ -318,11 +324,11 @@ public class JspIntegrationTestCase extends AbstractTestCase {
     }
 
 
+
     // Check selective imports with simple components (explicit ids)
     private void checkJspInclude03a() throws Exception {
 
-        HtmlPage page = getPage(
-              "/faces/jsp/jsp-include-03.jsp?choose=a&javax.faces.ViewState=j_id2:j_id3");
+        HtmlPage page = getPage("/faces/jsp/jsp-include-03.jsp?choose=a&javax.faces.ViewState=j_id2:j_id3");
         assertEquals("Correct page title",
                      "jsp-include-03", page.getTitleText());
         assertEquals("Correct body element",
@@ -334,8 +340,7 @@ public class JspIntegrationTestCase extends AbstractTestCase {
     // Check selective imports with simple components (explicit ids)
     private void checkJspInclude03b() throws Exception {
 
-        HtmlPage page = getPage(
-              "/faces/jsp/jsp-include-03.jsp?choose=b&javax.faces.ViewState=j_id2:j_id3");
+        HtmlPage page = getPage("/faces/jsp/jsp-include-03.jsp?choose=b&javax.faces.ViewState=j_id2:j_id3");
         assertEquals("Correct page title",
                      "jsp-include-03", page.getTitleText());
         assertEquals("Correct body element",
@@ -347,15 +352,13 @@ public class JspIntegrationTestCase extends AbstractTestCase {
     // Check selective imports with simple components (explicit ids)
     private void checkJspInclude03c() throws Exception {
 
-        HtmlPage page = getPage(
-              "/faces/jsp/jsp-include-03.jsp?choose=c&javax.faces.ViewState=j_id2:j_id3");
+        HtmlPage page = getPage("/faces/jsp/jsp-include-03.jsp?choose=c&javax.faces.ViewState=j_id2:j_id3");
         assertEquals("Correct page title",
                      "jsp-include-03", page.getTitleText());
         assertEquals("Correct body element",
                      "[1][2c][2x][3]", getBodyText(page));
 
     }
-
 
     private void checkJspInclude04() throws Exception {
 
@@ -368,11 +371,11 @@ public class JspIntegrationTestCase extends AbstractTestCase {
     }
 
 
+
     // Check selective imports with simple components (naming container)
     private void checkJspInclude04a() throws Exception {
 
-        HtmlPage page = getPage(
-              "/faces/jsp/jsp-include-04.jsp?choose=a&javax.faces.ViewState=j_id2:j_id3");
+        HtmlPage page = getPage("/faces/jsp/jsp-include-04.jsp?choose=a&javax.faces.ViewState=j_id2:j_id3");
         assertEquals("Correct page title",
                      "jsp-include-04", page.getTitleText());
         assertEquals("Correct body element",
@@ -384,8 +387,7 @@ public class JspIntegrationTestCase extends AbstractTestCase {
     // Check selective imports with simple components (naming container)
     private void checkJspInclude04b() throws Exception {
 
-        HtmlPage page = getPage(
-              "/faces/jsp/jsp-include-04.jsp?choose=b&javax.faces.ViewState=j_id2:j_id3");
+        HtmlPage page = getPage("/faces/jsp/jsp-include-04.jsp?choose=b&javax.faces.ViewState=j_id2:j_id3");
         assertEquals("Correct page title",
                      "jsp-include-04", page.getTitleText());
         assertEquals("Correct body element",
@@ -397,13 +399,13 @@ public class JspIntegrationTestCase extends AbstractTestCase {
     // Check selective imports with simple components (naming container)
     private void checkJspInclude04c() throws Exception {
 
-        HtmlPage page = getPage(
-              "/faces/jsp/jsp-include-04.jsp?choose=c&javax.faces.ViewState=j_id2:j_id3");
+        HtmlPage page = getPage("/faces/jsp/jsp-include-04.jsp?choose=c&javax.faces.ViewState=j_id2:j_id3");
         assertEquals("Correct page title",
                      "jsp-include-04", page.getTitleText());
         assertEquals("Correct body element",
                      "[1][2c][2x][3]", getBodyText(page));
 
     }
+
 
 }

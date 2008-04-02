@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidator01.java,v 1.3 2006/03/29 22:38:50 rlubke Exp $
+ * $Id: TestValidator01.java,v 1.4 2006/03/29 23:03:59 rlubke Exp $
  */
 
 /*
@@ -36,21 +36,18 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
 
 
-/** <p>Test implementation of {@link Validator}.</p> */
+/**
+ * <p>Test implementation of {@link Validator}.</p>
+ */
 
 public class TestValidator01 implements Validator {
 
-    // -------------------------------------------------- Methods From Validator
 
-
-    public void validate(FacesContext context, UIComponent component,
-                         Object value) {
-
+    public void validate(FacesContext context, UIComponent component, Object value) {
         context.addMessage(component.getClientId(context),
-                           new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                            component.getId()
-                                            + " was validated", null));
-
+            new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                component.getId() + " was validated", null));
     }
+
 
 }

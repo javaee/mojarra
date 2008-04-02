@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterBean.java,v 1.3 2006/03/29 22:38:52 rlubke Exp $
+ * $Id: ConverterBean.java,v 1.4 2006/03/29 23:04:01 rlubke Exp $
  */
 
 /*
@@ -29,96 +29,58 @@
 
 package com.sun.faces.systest.model;
 
-import javax.faces.convert.Converter;
-
 import com.sun.faces.systest.TestConverter01;
+
+import javax.faces.event.AbortProcessingException;
+import javax.faces.convert.Converter;
 
 
 public class ConverterBean extends Object {
 
-
-    private Converter converter = null;
-
-    private Converter dateTimeConverter = null;
-
-    private Converter doubleConverter = null;
-
-    private Converter numberConverter = null;
-
-    // ------------------------------------------------------------ Constructors
-
-
     public ConverterBean() {
     }
 
-    // ---------------------------------------------------------- Public Methods
-
-
+    private Converter converter = null;
     public Converter getConverter() {
-
         if (converter == null) {
             return new TestConverter01();
         }
         return converter;
-
     }
-
-
     public void setConverter(Converter converter) {
-
         this.converter = converter;
-
     }
 
-
+    private Converter dateTimeConverter = null;
     public Converter getDateTimeConverter() {
-
         if (dateTimeConverter == null) {
             return new javax.faces.convert.DateTimeConverter();
         }
         return dateTimeConverter;
-
     }
-
-
     public void setDateTimeConverter(Converter dateTimeConverter) {
-
         this.dateTimeConverter = dateTimeConverter;
-
     }
 
-
+    private Converter doubleConverter = null;
     public Converter getDoubleConverter() {
-
         if (doubleConverter == null) {
             return new javax.faces.convert.DoubleConverter();
         }
         return doubleConverter;
-
     }
-
-
     public void setDoubleConverter(Converter doubleConverter) {
-
         this.doubleConverter = doubleConverter;
-
     }
 
-
+    private Converter numberConverter = null;
     public Converter getNumberConverter() {
-
         if (numberConverter == null) {
             return new javax.faces.convert.NumberConverter();
         }
         return numberConverter;
-
     }
-
-
     public void setNumberConverter(Converter numberConverter) {
-
         this.numberConverter = numberConverter;
-
     }
-
 }

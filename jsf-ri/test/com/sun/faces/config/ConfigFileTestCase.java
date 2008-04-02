@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.73 2006/03/29 22:39:38 rlubke Exp $
+ * $Id: ConfigFileTestCase.java,v 1.74 2006/03/29 23:04:42 rlubke Exp $
  */
 
 /*
@@ -64,11 +64,30 @@ import java.util.Map;
 public class ConfigFileTestCase extends ServletFacesTestCase {
 
 
-    ConfigParser parser = new ConfigParser();
+    // ----------------------------------------------------- Instance Variables
     List mappings;
+    ConfigParser parser = new ConfigParser();
 
+    public static class ConfigParser extends ConfigureListener {
+        public void parseFromStr(ServletContext context, String str) throws Exception {
+            Digester digester = null;
+            URL url = null;
+            FacesConfigBean fcb =
+                  (FacesConfigBean) context.getAttribute(FACES_CONFIG_BEAN_KEY);
+            fcb.getApplication().clearResourceBundles();
 
-    // ------------------------------------------------------------ Constructors
+            // Step 1, configure a Digester instance we can use
+            digester = digester(isFeatureEnabled(context, VALIDATE_XML));
+
+            url = context.getResource(str);
+            //url = new URL(url, str);
+            parse(digester, url, fcb);
+            configure(context, fcb);
+        }
+    }
+    
+
+    // ----------------------------------------------------------- Constructors
 
 
     /**
@@ -85,78 +104,33 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     }
 
 
-    // ---------------------------------------------------------- Public Methods
-
-
     public void beginLifecyclePhaseListener(WebRequest theRequest) {
-
         theRequest.setURL("localhost:8080", "/test", "/faces", null, null);
-
     }
 
 
-    // Assert that create and stored managed bean is the same as specified in the 
-    // config file.
- 
-    public void testConfigManagedBeanFactory() throws Exception {
+    // --------------------------------------------------- Overall Test Methods
 
+
+
+
+    // ------------------------------------------------ Individual Test Methods
+
+
+    protected void parseConfig(String resource,
+                               ServletContext context)
+        throws Exception {
+        
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
         com.sun.faces.application.TestApplicationImpl.clearResourceBundlesFromAssociate(application);
-
-        parseConfig("/WEB-INF/faces-config.xml",
-                    config.getServletContext());
-
-	ApplicationAssociate associate = ApplicationAssociate.getInstance(getFacesContext().getExternalContext());
-        Object bean = 
-	    associate.createAndMaybeStoreManagedBeans(getFacesContext(),
-						      "SimpleBean");
-
-        // Assert the correct methods have been created in the bean
-        // Also assert the value returned from the "get" method matches
-        // the one specified in the config file.
-        //
-        try {
-            Class c = bean.getClass();
-            Method m[] = c.getDeclaredMethods();
-            for (int i = 0; i < m.length; i++) {
-                assert (m[i].getName().equals("setSimpleProperty") ||
-                              m[i].getName().equals("getSimpleProperty") ||
-                              m[i].getName().equals("setIntProperty") ||
-                              m[i].getName().equals("getIntProperty") ||
-                              m[i].getName().equals("getTrueValue") ||
-                              m[i].getName().equals("getFalseValue") ||
-                              m[i].getName().equals("setNonManagedBean") ||
-                              m[i].getName().equals("getNonManagedBean"));
-                if (m[i].getName().equals("getSimpleProperty")) {
-                    Object args[] = null;
-                    Object value = m[i].invoke(bean, args);
-                    assert (((String) value).equals("Bobby Orr"));
-                }
-            }
-        } catch (Throwable t) {
-            assertTrue(false);
-        }
-
-    }
-
-
-    public void testEmpty() throws Exception {
-
-        ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
-            FactoryFinder.APPLICATION_FACTORY);
-        ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
-        com.sun.faces.application.TestApplicationImpl.clearResourceBundlesFromAssociate(application);
-        parseConfig("/WEB-INF/faces-config-empty.xml",
-                    config.getServletContext());
-
+	parser.parseFromStr(context, resource);
     }
 
 
     // Test parsing a full configuration file
     public void testFull() throws Exception {
-
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
@@ -235,9 +209,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 
     }
 
-
     public void testFull_1_0() throws Exception {
-
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
@@ -318,6 +290,60 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         val = application.createValidator("fooId");
         assertNotNull(val);
 
+    }
+
+
+    public void testEmpty() throws Exception {
+        ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
+            FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
+        com.sun.faces.application.TestApplicationImpl.clearResourceBundlesFromAssociate(application);
+        parseConfig("/WEB-INF/faces-config-empty.xml",
+                    config.getServletContext());
+    }
+
+    // Assert that create and stored managed bean is the same as specified in the 
+    // config file.
+ 
+    public void testConfigManagedBeanFactory() throws Exception {
+        ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
+            FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
+        com.sun.faces.application.TestApplicationImpl.clearResourceBundlesFromAssociate(application);
+
+        parseConfig("/WEB-INF/faces-config.xml",
+                    config.getServletContext());
+
+	ApplicationAssociate associate = ApplicationAssociate.getInstance(getFacesContext().getExternalContext());
+        Object bean = 
+	    associate.createAndMaybeStoreManagedBeans(getFacesContext(),
+						      "SimpleBean");
+
+        // Assert the correct methods have been created in the bean
+        // Also assert the value returned from the "get" method matches
+        // the one specified in the config file.
+        //
+        try {
+            Class c = bean.getClass();
+            Method m[] = c.getDeclaredMethods();
+            for (int i = 0; i < m.length; i++) {
+                assert (m[i].getName().equals("setSimpleProperty") ||
+                              m[i].getName().equals("getSimpleProperty") ||
+                              m[i].getName().equals("setIntProperty") ||
+                              m[i].getName().equals("getIntProperty") ||
+                              m[i].getName().equals("getTrueValue") ||
+                              m[i].getName().equals("getFalseValue") ||
+                              m[i].getName().equals("setNonManagedBean") ||
+                              m[i].getName().equals("getNonManagedBean"));
+                if (m[i].getName().equals("getSimpleProperty")) {
+                    Object args[] = null;
+                    Object value = m[i].invoke(bean, args);
+                    assert (((String) value).equals("Bobby Orr"));
+                }
+            }
+        } catch (Throwable t) {
+            assertTrue(false);
+        }
     }
 
 
@@ -484,7 +510,6 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 
 
     public void testNavigationCase() throws Exception {
-
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
@@ -499,42 +524,51 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
                                     "success");
         String newViewId = getFacesContext().getViewRoot().getViewId();
         assertTrue(newViewId.equals("/home.jsp"));
-
     }
 
 
-    public void testNonManagedBeans() throws Exception {
-
+    public void testRenderKit() {
+        // test the default renderkit
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
-        com.sun.faces.application.TestApplicationImpl.clearResourceBundlesFromAssociate(application);
-        parseConfig("/WEB-INF/faces-config.xml",
-                    config.getServletContext());
-                                                                                        
-        ApplicationAssociate associate = ApplicationAssociate.getInstance(getFacesContext().getExternalContext());
-        Object bean =
-            associate.createAndMaybeStoreManagedBeans(getFacesContext(),
-                                                      "SimpleBean");
+        RenderKitFactory renderKitFactory = (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        Map
+            renderKitsMap = null,
+            renderersMap = null;
+        String defaultRenderers [] = {
+            "Button",
+            "Checkbox",
+            "Form",
+            "Grid",
+            "Group",
+            "Hidden",
+            "Link",
+            "Image",
+            "Label",
+            "Listbox",
+            "Menu",
+            "Message",
+            "Radio",
+            "Secret",
+            "CheckboxList",
+            "Textarea",
+            "Text"
+        };
+        Iterator rendererIter = null;
 
-        // Assert the methods exist on the created bean..
-        try {
-            Class c = bean.getClass();
-            Method m[] = c.getDeclaredMethods();
-            int methodCnt = 0;
-            for (int i = 0; i < m.length; i++) {
-                if (m[i].getName().equals("setNonManagedBean")) {
-                    methodCnt++;
-                }
-                if (m[i].getName().equals("getNonManagedBean")) {
-                    methodCnt++;
-                }
-            }
-            assertEquals("non managed bean methods not found", methodCnt, 2);
-        } catch (Throwable t) {
-            assertTrue(false);
+        Iterator iter = renderKitFactory.getRenderKitIds();
+        assertTrue(iter.hasNext());
+        RenderKit renderKit = renderKitFactory.getRenderKit(getFacesContext(),
+                                                            renderKitFactory.HTML_BASIC_RENDER_KIT);
+        assertTrue(renderKit != null);
+        for (int i = 0; i < defaultRenderers.length; i++) {
+// FIXME - following will fail for two reasons
+// (1) no actual component family arguments
+// (2) JSFA130 means all the identifiers are "javax.faces." prefixed
+            // assertTrue(null != (renderKit.getRenderer(null, defaultRenderers[i])));
         }
-
     }
 
 
@@ -628,7 +662,6 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     ********************/
 
     public void testNoneScopedBeans() throws Exception {
-
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
@@ -644,100 +677,35 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	
     }
 
-
-    public void testRenderKit() {
-
-        // test the default renderkit
-        ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
-            FactoryFinder.APPLICATION_FACTORY);
-        ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
-        RenderKitFactory renderKitFactory = (RenderKitFactory)
-            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        Map
-            renderKitsMap = null,
-            renderersMap = null;
-        String defaultRenderers [] = {
-            "Button",
-            "Checkbox",
-            "Form",
-            "Grid",
-            "Group",
-            "Hidden",
-            "Link",
-            "Image",
-            "Label",
-            "Listbox",
-            "Menu",
-            "Message",
-            "Radio",
-            "Secret",
-            "CheckboxList",
-            "Textarea",
-            "Text"
-        };
-        Iterator rendererIter = null;
-
-        Iterator iter = renderKitFactory.getRenderKitIds();
-        assertTrue(iter.hasNext());
-        RenderKit renderKit = renderKitFactory.getRenderKit(getFacesContext(),
-                                                            renderKitFactory.HTML_BASIC_RENDER_KIT);
-        assertTrue(renderKit != null);
-        for (int i = 0; i < defaultRenderers.length; i++) {
-// FIXME - following will fail for two reasons
-// (1) no actual component family arguments
-// (2) JSFA130 means all the identifiers are "javax.faces." prefixed
-            // assertTrue(null != (renderKit.getRenderer(null, defaultRenderers[i])));
-        }
-
-    }
-
-
-    // ------------------------------------------------------- Protected Methods
-
-
-    // --------------------------------------------------- Overall Test Methods
-
-
-
-
-    // ------------------------------------------------ Individual Test Methods
-
-
-    protected void parseConfig(String resource,
-                               ServletContext context)
-        throws Exception {
-        
+    public void testNonManagedBeans() throws Exception {
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
         com.sun.faces.application.TestApplicationImpl.clearResourceBundlesFromAssociate(application);
-	parser.parseFromStr(context, resource);
+        parseConfig("/WEB-INF/faces-config.xml",
+                    config.getServletContext());
+                                                                                        
+        ApplicationAssociate associate = ApplicationAssociate.getInstance(getFacesContext().getExternalContext());
+        Object bean =
+            associate.createAndMaybeStoreManagedBeans(getFacesContext(),
+                                                      "SimpleBean");
 
-    }
-
-
-    public static class ConfigParser extends ConfigureListener {
-
-
-    // ---------------------------------------------------------- Public Methods
-
-
-        public void parseFromStr(ServletContext context, String str) throws Exception {
-
-            Digester digester = null;
-            URL url = null;
-            FacesConfigBean fcb =
-                  (FacesConfigBean) context.getAttribute(FACES_CONFIG_BEAN_KEY);
-            fcb.getApplication().clearResourceBundles();
-
-            // Step 1, configure a Digester instance we can use
-            digester = digester(isFeatureEnabled(context, VALIDATE_XML));
-
-            url = context.getResource(str);
-            //url = new URL(url, str);
-            parse(digester, url, fcb);
-            configure(context, fcb);
-
+        // Assert the methods exist on the created bean..
+        try {
+            Class c = bean.getClass();
+            Method m[] = c.getDeclaredMethods();
+            int methodCnt = 0;
+            for (int i = 0; i < m.length; i++) {
+                if (m[i].getName().equals("setNonManagedBean")) {
+                    methodCnt++;
+                }
+                if (m[i].getName().equals("getNonManagedBean")) {
+                    methodCnt++;
+                }
+            }
+            assertEquals("non managed bean methods not found", methodCnt, 2);
+        } catch (Throwable t) {
+            assertTrue(false);
         }
 
     }

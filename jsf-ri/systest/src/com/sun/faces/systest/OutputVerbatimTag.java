@@ -1,5 +1,5 @@
 /*
- * $Id: OutputVerbatimTag.java,v 1.8 2006/03/29 22:38:50 rlubke Exp $
+ * $Id: OutputVerbatimTag.java,v 1.9 2006/03/29 23:03:58 rlubke Exp $
  */
 
 /*
@@ -43,7 +43,21 @@ import javax.servlet.jsp.JspException;
 
 public class OutputVerbatimTag extends UIComponentBodyTag {
 
-    // ----------------------------------------------- Methods From IterationTag
+
+    // -------------------------------------------------------------- Attributes
+
+
+    // ---------------------------------------------------------- Public Methods
+
+
+    public String getComponentType() {
+        return ("Output");
+    }
+
+
+    public String getRendererType() {
+        return ("Text");
+    }
 
 
     // Assign the trimmed body content of this tag as the value of the
@@ -63,20 +77,8 @@ public class OutputVerbatimTag extends UIComponentBodyTag {
 
     }
 
-    // ---------------------------------------------------------- Public Methods
 
+    // ------------------------------------------------------- Protected Methods
 
-    public String getComponentType() {
-
-        return ("Output");
-
-    }
-
-
-    public String getRendererType() {
-
-        return ("Text");
-
-    }
 
 }

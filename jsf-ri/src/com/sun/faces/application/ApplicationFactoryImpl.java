@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationFactoryImpl.java,v 1.12 2006/03/29 22:38:30 rlubke Exp $
+ * $Id: ApplicationFactoryImpl.java,v 1.13 2006/03/29 23:03:42 rlubke Exp $
  */
 
 /*
@@ -29,14 +29,14 @@
 
 package com.sun.faces.application;
 
+import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
+
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
 
 /**
  * <p><strong>ApplicationFactory</strong> is a factory object that creates
@@ -52,30 +52,38 @@ import com.sun.faces.util.Util;
  */
 public class ApplicationFactoryImpl extends ApplicationFactory {
 
+   // Log instance for this class
+    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
+            + Util.APPLICATION_LOGGER);
+    //
+    // Protected Constants
+    //
 
-    // Log instance for this class
-    private static Logger logger = Util.getLogger(Util.FACES_LOGGER
-                                                  + Util.APPLICATION_LOGGER);
+    //
+    // Class Variables
+    //
+
+    // Attribute Instance Variables
 
     private Application application;
 
-    // ------------------------------------------------------------ Constructors
+    // Relationship Instance Variables
+
+    //
+    // Constructors and Initializers
+    //
 
 
     /*
-    * Constructor
-    */
+     * Constructor
+     */
     public ApplicationFactoryImpl() {
-
         super();
         application = null;
         if (logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE, "Created ApplicationFactory ");
         }
-
     }
-
-    // ---------------------------------------------------------- Public Methods
 
 
     /**
@@ -91,7 +99,6 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
             }
         }
         return application;
-
     }
 
 
@@ -102,10 +109,9 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
      * @param application The replacement {@link Application} instance
      */
     public void setApplication(Application application) {
-
         if (application == null) {
             String message = MessageUtils.getExceptionMessageString
-                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " Application " + application;
             throw new NullPointerException(message);
         }
@@ -114,7 +120,5 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("set Application Instance to " + application);
         }
-
     }
-
 }

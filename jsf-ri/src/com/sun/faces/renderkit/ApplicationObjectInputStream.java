@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationObjectInputStream.java,v 1.3 2006/03/29 22:38:35 rlubke Exp $
+ * $Id: ApplicationObjectInputStream.java,v 1.4 2006/03/29 23:03:46 rlubke Exp $
  */
 
 /*
@@ -29,53 +29,42 @@
 
 package com.sun.faces.renderkit;
 
+import com.sun.faces.RIConstants;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectStreamClass;
+import java.util.Map;
+import javax.faces.context.FacesContext;
 
 
 /**
  * An ObjectInputStream that can deserialize objects relative to the current
- * application's class loader.  In particular, this class works around
- * deserialization problems when the JSF JARs are shared (i.e. the
+ * application's class loader.  In particular, this class works around 
+ * deserialization problems when the JSF JARs are shared (i.e. the 
  * classloader has no access to application objects).
  */
 public class ApplicationObjectInputStream extends ObjectInputStream {
-
-    // ------------------------------------------------------------ Constructors
-
-
-    public ApplicationObjectInputStream() throws IOException,
-          SecurityException {
-
+   
+    public ApplicationObjectInputStream() throws IOException, 
+            SecurityException {
         super();
-
     }
-
-
+    
     public ApplicationObjectInputStream(InputStream in) throws IOException {
-
         super(in);
+    } 
 
-    }
-
-    // ------------------------------------------------------- Protected Methods
-
-
-    protected Class resolveClass(ObjectStreamClass desc) throws IOException,
-          ClassNotFoundException {
-
+    protected Class resolveClass(ObjectStreamClass desc) throws IOException, 
+            ClassNotFoundException {
         // When the container is about to call code associated with a 
         // particular web application, it sets the context classloader to the 
         // web app class loader. We make use of that here to locate any classes 
         // that the UIComponent may hold references to.  This won't cause a 
         // problem to locate classes in the system class loader because 
         // class loaders can look up the chain and not down the chain. 
-        return Class.forName(desc.getName(), true,
-                             Thread.currentThread().getContextClassLoader());
-
+        return Class.forName(desc.getName(),true, 
+                Thread.currentThread().getContextClassLoader());
     }
-
 } 
     

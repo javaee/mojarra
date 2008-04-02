@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigNavigationCase.java,v 1.7 2006/03/29 22:38:30 rlubke Exp $
+ * $Id: ConfigNavigationCase.java,v 1.8 2006/03/29 23:03:42 rlubke Exp $
  */
 
 /*
@@ -30,19 +30,69 @@
 package com.sun.faces.application;
 
 
-/** <p>Config Bean for a Navigation Rule .</p> */
+/**
+ * <p>Config Bean for a Navigation Rule .</p>
+ */
 public class ConfigNavigationCase {
+
+    private String fromViewId = null;
+    private String fromAction = null;
+    private String fromOutcome = null;
+    private String toViewId = null;
+    private String key = null;
+
+
+    public String getFromViewId() {
+        return (this.fromViewId);
+    }
+
+
+    public void setFromViewId(String fromViewId) {
+        this.fromViewId = fromViewId;
+    }
+
+
+    public String getFromAction() {
+        return (this.fromAction);
+    }
+
+
+    public void setFromAction(String fromAction) {
+        this.fromAction = fromAction;
+    }
+
+
+    public String getFromOutcome() {
+        return (this.fromOutcome);
+    }
+
+
+    public void setFromOutcome(String fromOutcome) {
+        this.fromOutcome = fromOutcome;
+    }
+
+
+    public String getToViewId() {
+        return (this.toViewId);
+    }
+
+
+    public void setToViewId(String toViewId) {
+        this.toViewId = toViewId;
+    }
 
 
     protected String redirect = null;
-    private String fromAction = null;
-    private String fromOutcome = null;
 
-    private String fromViewId = null;
-    private String key = null;
-    private String toViewId = null;
 
-    // ---------------------------------------------------------- Public Methods
+    public boolean hasRedirect() {
+        return null != redirect;
+    }
+
+
+    public void setRedirect(String redirect) {
+        this.redirect = redirect;
+    }
 
 
     /**
@@ -51,91 +101,16 @@ public class ConfigNavigationCase {
      * <code>from-outcome</code>.
      */
     public String getKey() {
-
         return key;
-
     }
 
 
     public void setKey(String key) {
-
         this.key = key;
-
-    }
-
-
-    public void setFromAction(String fromAction) {
-
-        this.fromAction = fromAction;
-
-    }
-
-
-    public void setFromOutcome(String fromOutcome) {
-
-        this.fromOutcome = fromOutcome;
-
-    }
-
-
-    public void setFromViewId(String fromViewId) {
-
-        this.fromViewId = fromViewId;
-
-    }
-
-
-    public void setRedirect(String redirect) {
-
-        this.redirect = redirect;
-
-    }
-
-
-    public void setToViewId(String toViewId) {
-
-        this.toViewId = toViewId;
-
-    }
-
-
-    public String getFromAction() {
-
-        return (this.fromAction);
-
-    }
-
-
-    public String getFromOutcome() {
-
-        return (this.fromOutcome);
-
-    }
-
-
-    public String getFromViewId() {
-
-        return (this.fromViewId);
-
-    }
-
-
-    public String getToViewId() {
-
-        return (this.toViewId);
-
-    }
-
-
-    public boolean hasRedirect() {
-
-        return null != redirect;
-
     }
 
 
     public String toString() {
-
         StringBuffer sb = new StringBuffer();
         sb.append("FROM VIEW ID:" + getFromViewId());
         sb.append("\nFROM ACTION:" + getFromAction());
@@ -143,7 +118,5 @@ public class ConfigNavigationCase {
         sb.append("\nTO VIEW ID:" + getToViewId());
         sb.append("\nREDIRECT:" + hasRedirect());
         return sb.toString();
-
     }
-
 }

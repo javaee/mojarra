@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyOrderBean.java,v 1.3 2006/03/29 22:38:52 rlubke Exp $
+ * $Id: PropertyOrderBean.java,v 1.4 2006/03/29 23:04:01 rlubke Exp $
  */
 
 /*
@@ -33,95 +33,62 @@ import java.util.ArrayList;
 
 public class PropertyOrderBean extends Object {
 
-
-    protected ArrayList listProperty = new ArrayList();
-    protected String four;
     protected String one;
-    protected String order = "";
-    protected String three;
-    protected String two;
-
-    // ---------------------------------------------------------- Public Methods
-
-
-    public String getFour() {
-
-        return four;
-
-    }
-
-
-    public ArrayList getListProperty() {
-
-        return listProperty;
-
-    }
-
-
-    public void setListProperty(ArrayList newListProperty) {
-
-        listProperty = newListProperty;
-
-    }
-
-
     public String getOne() {
-
-        return one;
-
+	return one;
     }
-
-
-    public String getOrder() {
-
-        return order;
-
-    }
-
-
-    public String getThree() {
-
-        return three;
-
-    }
-
-
-    public String getTwo() {
-
-        return two;
-
-    }
-
-
-    public void setFour(String newFour) {
-
-        four = newFour;
-        order = order + " " + four;
-
-    }
-
 
     public void setOne(String newOne) {
-
-        one = newOne;
-        order = order + " " + one;
-
+	one = newOne;
+	order = order + " " + one;
     }
 
-
-    public void setThree(String newThree) {
-
-        three = newThree;
-        order = order + " " + three;
-
+    protected String two;
+    public String getTwo() {
+	return two;
     }
-
 
     public void setTwo(String newTwo) {
-
-        two = newTwo;
-        order = order + " " + two;
-
+	two = newTwo;
+	order = order + " " + two;
     }
+
+    protected String three;
+    public String getThree() {
+	return three;
+    }
+
+    public void setThree(String newThree) {
+	three = newThree;
+	order = order + " " + three;
+    }
+
+    protected String four;
+    public String getFour() {
+	return four;
+    }
+
+    public void setFour(String newFour) {
+	four = newFour;
+	order = order + " " + four;
+    }
+
+    
+    protected String order = "";
+    public String getOrder() {
+	return order;
+    }
+
+    protected ArrayList listProperty = new ArrayList();
+
+    public ArrayList getListProperty() {
+	return listProperty;
+    }
+
+    public void setListProperty(ArrayList newListProperty) {
+	listProperty = newListProperty;
+    }
+
+
 
 }

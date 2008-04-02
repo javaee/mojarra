@@ -1,5 +1,5 @@
 /*
- * $Id: CoreTagsTestCase.java,v 1.3 2006/03/29 22:39:16 rlubke Exp $
+ * $Id: CoreTagsTestCase.java,v 1.4 2006/03/29 23:04:25 rlubke Exp $
  */
 
 /*
@@ -30,10 +30,27 @@
 package com.sun.faces.systest;
 
 
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlBody;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlHiddenInput;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
+import com.gargoylesoftware.htmlunit.html.HtmlSelect;
+import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
+import junit.framework.TestCase;
 import junit.framework.TestSuite;
+
+import java.util.List;
+import java.util.Random;
+import java.util.ResourceBundle;
+
+import javax.faces.component.NamingContainer;
 
 
 /**
@@ -42,6 +59,7 @@ import junit.framework.TestSuite;
  */
 
 public class CoreTagsTestCase extends AbstractTestCase {
+
 
     // ------------------------------------------------------------ Constructors
 
@@ -52,67 +70,65 @@ public class CoreTagsTestCase extends AbstractTestCase {
      * @param name Name of the test case
      */
     public CoreTagsTestCase(String name) {
-
         super(name);
-
     }
 
-    // ---------------------------------------------------------- Public Methods
-
-
-    /** Return the tests included in this test suite. */
-    public static Test suite() {
-
-        return (new TestSuite(CoreTagsTestCase.class));
-
-    }
-
-
-    /** Set up instance variables required by this test case. */
-    public void setUp() throws Exception {
-
-        super.setUp();
-
-    }
-
-
-    /** Tear down instance variables required by this test case. */
-    public void tearDown() {
-
-        super.tearDown();
-
-    }
-
-
-    public void testConverterPage() throws Exception {
-
-        HtmlPage page = getPage("/faces/converter_noval.jsp");
-
-        assertTrue(-1 != page.asText().indexOf("submit converter page"));
-
-    }
 
     // ------------------------------------------------------ Instance Variables
+
+
+    // ---------------------------------------------------- Overall Test Methods
+
+
+    /**
+     * Set up instance variables required by this test case.
+     */
+    public void setUp() throws Exception {
+        super.setUp();
+    }
+
+
+    /**
+     * Return the tests included in this test suite.
+     */
+    public static Test suite() {
+        return (new TestSuite(CoreTagsTestCase.class));
+    }
+
+
+    /**
+     * Tear down instance variables required by this test case.
+     */
+    public void tearDown() {
+        super.tearDown();
+    }
+
+
+    // ------------------------------------------------------ Instance Variables
+
+
 
     // ------------------------------------------------- Individual Test Methods
 
     public void testListenerPage() throws Exception {
+	HtmlPage page = getPage("/faces/listener_noval.jsp");
 
-        HtmlPage page = getPage("/faces/listener_noval.jsp");
-
-        assertTrue(-1 != page.asText()
-              .indexOf("submit with listener no typebinding"));
+	assertTrue(-1 != page.asText().indexOf("submit with listener no typebinding"));
 
     }
+    
+    public void testConverterPage() throws Exception {
+	HtmlPage page = getPage("/faces/converter_noval.jsp");
 
+	assertTrue(-1 != page.asText().indexOf("submit converter page"));
+
+    }
 
     public void testValidatorPage() throws Exception {
+	HtmlPage page = getPage("/faces/validator_noval.jsp");
 
-        HtmlPage page = getPage("/faces/validator_noval.jsp");
-
-        assertTrue(-1 != page.asText().indexOf("submit validator page"));
+	assertTrue(-1 != page.asText().indexOf("submit validator page"));
 
     }
-
 }
 

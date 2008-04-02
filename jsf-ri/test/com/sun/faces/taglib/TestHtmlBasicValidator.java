@@ -31,14 +31,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class TestHtmlBasicValidator extends HtmlBasicValidator {
 
-
-    // ---------------------------------------------------------- Public Methods
-
-
     public  DefaultHandler getSAXHandler() {
-
         return super.getSAXHandler();
-
     }
-
 }

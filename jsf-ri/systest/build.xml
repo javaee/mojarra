@@ -28,28 +28,28 @@
 
 <!-- ************ JSF build file ******************************************* -->
 
-<project name="JSF-RI-Systest" default="main" basedir=".">
+<project name="JSF-RI-Systest" default="main" basedir=".">    
 
-    <property name="Name" value="JavaServer Faces RI System Test"/>
+    <property name="Name" value="JavaServer Faces RI System Test"/>   
 
     <!-- ************ Per user local properties **************************** -->
-    <property file="${user.home}/build.properties"/>
+    <property file="${user.home}/build.properties"/>    
     <property file="../../build.properties"/>
-
-    <!-- Deployment handling import -->
+    
+    <!-- Deployment handling import -->  
     <import file="${jsf.build.home}/common/ant/common.xml"/>
 
 
     <!-- ************ Where are we building into? ************************** -->
 
-    <property name="test.suite.name" value="jsf-systest"/>
+    <property name="test.suite.name" value="jsf-systest"/>  
 
     <!-- The base directory for compilation targets -->
     <property name="build.dir" value="${basedir}/build"/>
     <property name="dist.dir" value="${basedir}/dist"/>
 
     <!-- The base directory for system test sources -->
-    <property name="source.dir" value="${basedir}/src"/>
+    <property name="source.dir" value="${basedir}/src"/>   
 
     <!-- The base directory for static web files -->
     <property name="web.dir" value="${basedir}/web"/>
@@ -63,9 +63,9 @@
         <pathelement path="${jsf-impl.jar}"/>
         <path refid="jsf.test.jar.classpath"/>
         <path refid="compile.classpath"/>
-        <path refid="htmlunit.compile.classpath"/>
+        <path refid="htmlunit.compile.classpath"/> 
     </path>
-
+           
     <!-- ************ Executable Targets ************************************** -->
 
 
@@ -73,8 +73,8 @@
             description="Initialize and evaluate conditionals">
         <echo message="-------- ${test.suite.name} ${impl.version} --------"/>
     </target>
-
-
+    
+    
     <target name="build.war" depends="compile">
         <jsf.war basedir="${build.dir}"
                  archive-name="jsf-systest"
@@ -90,19 +90,19 @@
         </jsf.war>
     </target>
 
-    <!-- PENDING(edburns): convert this to a re-usable macro -->
+   <!-- PENDING(edburns): convert this to a re-usable macro -->
 
     <target name="build.exploded.war" depends="compile">
 
-        <mkdir dir="${build.dir}/dist/jsf-systest"/>
-        <copy todir="${build.dir}/dist/jsf-systest/WEB-INF/classes">
-            <fileset dir="${source.dir}"
-                     includes="**/*.properties,**/*.xml"/>
-            <fileset dir="${build.dir}/classes"/>
-        </copy>
-        <copy todir="${build.dir}/dist/jsf-systest">
-            <fileset dir="${web.dir}"/>
-        </copy>
+      <mkdir dir="${build.dir}/dist/jsf-systest" />
+      <copy todir="${build.dir}/dist/jsf-systest/WEB-INF/classes">
+        <fileset dir="${source.dir}"
+                    includes="**/*.properties,**/*.xml"/>
+        <fileset dir="${build.dir}/classes"/>
+      </copy>
+      <copy todir="${build.dir}/dist/jsf-systest">
+        <fileset dir="${web.dir}"/>
+      </copy>
 
     </target>
 
@@ -115,15 +115,15 @@
                    destdir="${build.dir}/classes"
                    includes="**/TestingUtil**">
             <classpath>
-                <path refid="systest.compile.classpath"/>
-            </classpath>
+                <path refid="systest.compile.classpath"/>                   
+            </classpath>              
         </jsf.javac>
         <jsf.javac srcdir="${source.dir}"
                    destdir="${build.dir}/classes">
             <classpath>
-                <path refid="systest.compile.classpath"/>
+                <path refid="systest.compile.classpath"/>                   
             </classpath>
-        </jsf.javac>
+        </jsf.javac>                         
     </target>
 
 
@@ -142,29 +142,29 @@
 
     <target name="test" depends="init,build.war"
             description="Execute all tests against installed /jsf-systest application">
-
+       
         <antcall target="undeploy"/>
         <antcall target="deploy"/>
         <ant antfile="build-tests.xml" target="test"/>
         <antcall target="undeploy"/>
-
-    </target>
-
+        
+    </target>  
+    
     <target name="test.with.nodeploy"
             description="The same as 'test', but with no deployment">
-        <ant antfile="build-tests.xml" target="test"/>
+        <ant antfile="build-tests.xml" target="test"/>    
     </target>
 
-    <target name="deploy"
+    <target name="deploy" 
             description="Deploy the jsf-systest application">
         <deploy.artifact artifact="${build.dir}/jsf-systest.war"
-                         appName="jsf-systest"/>
+                appName="jsf-systest"/>
     </target>
-
-    <target name="undeploy"
+    
+    <target name="undeploy" 
             description="Undeploy the jsf-systest application">
         <undeploy.artifact artifact="${build.dir}/jsf-systest.war"
-                           appName="jsf-systest"/>
+                  appName="jsf-systest"/>
     </target>
-
+        
 </project>

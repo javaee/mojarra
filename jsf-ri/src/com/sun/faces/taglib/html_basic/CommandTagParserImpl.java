@@ -1,5 +1,5 @@
 /*
- * $Id: CommandTagParserImpl.java,v 1.14 2006/03/29 22:38:40 rlubke Exp $
+ * $Id: CommandTagParserImpl.java,v 1.15 2006/03/29 23:03:50 rlubke Exp $
  */
 
 /*
@@ -29,14 +29,13 @@
 
 package com.sun.faces.taglib.html_basic;
 
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
-
-import org.xml.sax.Attributes;
-
 import com.sun.faces.RIConstants;
 import com.sun.faces.taglib.TagParser;
 import com.sun.faces.taglib.ValidatorInfo;
+import org.xml.sax.Attributes;
+
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
 
 /**
  * <p> Parses the command tag attributes and verifies that the required
@@ -48,47 +47,19 @@ public class CommandTagParserImpl implements TagParser {
     // Validation and configuration state (protected)
 
     // PENDING(edburns): Make this localizable
-    private StringBuffer failureMessages;    // failureMessages
-    private ValidatorInfo validatorInfo;
+    private StringBuffer failureMessages;	// failureMessages
     private boolean failed;
-
-    // ------------------------------------------------------------ Constructors
+    private ValidatorInfo validatorInfo;
 
     //*********************************************************************
     // Constructor and lifecycle management
 
-    /** <p>CommandTagParserImpl constructor</p> */
+    /**
+     * <p>CommandTagParserImpl constructor</p>
+     */
     public CommandTagParserImpl() {
-
         failed = false;
         failureMessages = new StringBuffer();
-
-    }
-
-    // -------------------------------------------------- Methods From TagParser
-
-
-    /**
-     * <p>Get the failure message</p>
-     *
-     * @return String Failure message
-     */
-    public String getMessage() {
-
-        return failureMessages.toString();
-
-    }
-
-
-    /**
-     * <p>Return false if validator conditions have not been met</p>
-     *
-     * @return boolean false if validation conditions have not been met
-     */
-    public boolean hasFailed() {
-
-        return failed;
-
     }
 
 
@@ -99,9 +70,27 @@ public class CommandTagParserImpl implements TagParser {
      * @param ValidatorInfo object with current tag info
      */
     public void setValidatorInfo(ValidatorInfo validatorInfo) {
-
         this.validatorInfo = validatorInfo;
+    }
 
+
+    /**
+     * <p>Get the failure message</p>
+     *
+     * @return String Failure message
+     */
+    public String getMessage() {
+        return failureMessages.toString();
+    }
+
+
+    /**
+     * <p>Return false if validator conditions have not been met</p>
+     *
+     * @return boolean false if validation conditions have not been met
+     */
+    public boolean hasFailed() {
+        return failed;
     }
 
 
@@ -110,7 +99,6 @@ public class CommandTagParserImpl implements TagParser {
      * handler method.</p>
      */
     public void parseStartElement() {
-
         String ns = validatorInfo.getNameSpace();
         String ln = validatorInfo.getLocalName();
 
@@ -118,20 +106,18 @@ public class CommandTagParserImpl implements TagParser {
             if (ln.equals("commandButton")) {
                 handleCommandButton();
             }
-
+        
         }
-
     }
 
 
-    /** <p>Parse the end element</p> */
+    /**
+     * <p>Parse the end element</p>
+     */
     public void parseEndElement() {
-
         //no parsing required
-
     }
 
-    // --------------------------------------------------------- Private Methods
 
     //*********************************************************************
     // Private methods
@@ -142,12 +128,11 @@ public class CommandTagParserImpl implements TagParser {
      * <p>PRECONDITION: qn is a commandButton</p>
      */
     private void handleCommandButton() {
-
         Attributes attrs = validatorInfo.getAttributes();
         String ln = validatorInfo.getLocalName();
         boolean hasValue = false;
         boolean hasImage = false;
-        boolean hasBinding = false;
+	boolean hasBinding = false;
 
         for (int i = 0; i < attrs.getLength(); i++) {
             if (attrs.getLocalName(i).equals("value")) {
@@ -164,9 +149,9 @@ public class CommandTagParserImpl implements TagParser {
             Object[] obj = new Object[1];
             obj[0] = ln;
             ResourceBundle rb = ResourceBundle.getBundle(
-                  RIConstants.TLV_RESOURCE_LOCATION);
+                RIConstants.TLV_RESOURCE_LOCATION);
             failureMessages.append(
-                  MessageFormat.format(rb.getString("TLV_COMMAND_ERROR"), obj));
+                MessageFormat.format(rb.getString("TLV_COMMAND_ERROR"), obj));
             failureMessages.append("\n");
         }
 

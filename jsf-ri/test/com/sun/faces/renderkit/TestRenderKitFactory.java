@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKitFactory.java,v 1.17 2006/03/29 22:39:46 rlubke Exp $
+ * $Id: TestRenderKitFactory.java,v 1.18 2006/03/29 23:05:00 rlubke Exp $
  */
 
 /*
@@ -44,37 +44,84 @@ import java.util.Iterator;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKitFactory.java,v 1.17 2006/03/29 22:39:46 rlubke Exp $
+ * @version $Id: TestRenderKitFactory.java,v 1.18 2006/03/29 23:05:00 rlubke Exp $
  */
 
 public class TestRenderKitFactory extends ServletFacesTestCase {
 
+//
+// Protected Constants
+//
 
+//
+// Class Variables
+//
+
+//
+// Instance Variables
+//
     private RenderKitFactoryImpl renderKitFactory = null;
 
+// Attribute Instance Variables
 
-    // ------------------------------------------------------------ Constructors
+// Relationship Instance Variables
 
+//
+// Constructors and Initializers    
+//
 
     public TestRenderKitFactory() {
-
         super("TestRenderKitFactory");
-
     }
 
 
     public TestRenderKitFactory(String name) {
-
         super(name);
+    }
+//
+// Class methods
+//
 
+//
+// General Methods
+//
+
+    public void testFactory() {
+        RenderKitFactory renderKitFactory = (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+
+        // 1. Verify "getRenderKit" returns the same RenderKit instance
+        //    if called multiple times with the same identifier.
+        //  
+        RenderKit renderKit1 = renderKitFactory.getRenderKit(getFacesContext(),
+                                                             RenderKitFactory.HTML_BASIC_RENDER_KIT);
+        RenderKit renderKit2 = renderKitFactory.getRenderKit(getFacesContext(),
+                                                             RenderKitFactory.HTML_BASIC_RENDER_KIT);
+        assertTrue(renderKit1 == renderKit2);
+
+        // 2. Verify "addRenderKit" adds instances.. /
+        //
+        renderKitFactory.addRenderKit("Foo", renderKit1);
+        renderKitFactory.addRenderKit("Bar", renderKit2);
+
+        // Verify renderkit instance replaced with last identifier..
+        //
+        renderKitFactory.addRenderKit("BarBar", renderKit2);
+        RenderKit rkit = renderKitFactory.getRenderKit(getFacesContext(),
+                                                       "BarBar");
+        assertTrue(rkit != null);
+        assertTrue(rkit == renderKit2);
+
+        // 3. Verify "getRenderKit" returns null if
+        //    RenderKit not found for renderkitid...
+        //
+        RenderKit renderKit4 = renderKitFactory.getRenderKit(getFacesContext(),
+                                                             "Gamma");
+        assertTrue(renderKit4 == null);
     }
 
 
-    // ---------------------------------------------------------- Public Methods
-
-
     public void testDefaultExists() {
-
         RenderKitFactory renderKitFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
     
@@ -92,12 +139,10 @@ public class TestRenderKitFactory extends ServletFacesTestCase {
             }
         }
         assertTrue(exists);
-
     }
 
 
     public void testExceptions() {
-
         renderKitFactory = new RenderKitFactoryImpl();
         RenderKit rKit = null;
 
@@ -140,44 +185,7 @@ public class TestRenderKitFactory extends ServletFacesTestCase {
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
-
     }
 
-
-    public void testFactory() {
-
-        RenderKitFactory renderKitFactory = (RenderKitFactory)
-            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-
-        // 1. Verify "getRenderKit" returns the same RenderKit instance
-        //    if called multiple times with the same identifier.
-        //  
-        RenderKit renderKit1 = renderKitFactory.getRenderKit(getFacesContext(),
-                                                             RenderKitFactory.HTML_BASIC_RENDER_KIT);
-        RenderKit renderKit2 = renderKitFactory.getRenderKit(getFacesContext(),
-                                                             RenderKitFactory.HTML_BASIC_RENDER_KIT);
-        assertTrue(renderKit1 == renderKit2);
-
-        // 2. Verify "addRenderKit" adds instances.. /
-        //
-        renderKitFactory.addRenderKit("Foo", renderKit1);
-        renderKitFactory.addRenderKit("Bar", renderKit2);
-
-        // Verify renderkit instance replaced with last identifier..
-        //
-        renderKitFactory.addRenderKit("BarBar", renderKit2);
-        RenderKit rkit = renderKitFactory.getRenderKit(getFacesContext(),
-                                                       "BarBar");
-        assertTrue(rkit != null);
-        assertTrue(rkit == renderKit2);
-
-        // 3. Verify "getRenderKit" returns null if
-        //    RenderKit not found for renderkitid...
-        //
-        RenderKit renderKit4 = renderKitFactory.getRenderKit(getFacesContext(),
-                                                             "Gamma");
-        assertTrue(renderKit4 == null);
-
-    }
 
 } // end of class TestRenderKitFactory

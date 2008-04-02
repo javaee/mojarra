@@ -1,4 +1,3 @@
-<%@ page contentType="text/html" %>
-<%
-    out.println("/hello.jsp PASSED");
+<%@ page contentType="text/html" %><%
+  out.println("/hello.jsp PASSED");
 %>

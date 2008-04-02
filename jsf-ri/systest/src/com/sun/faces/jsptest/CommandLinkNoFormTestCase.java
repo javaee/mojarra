@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkNoFormTestCase.java,v 1.3 2006/03/29 22:38:45 rlubke Exp $
+ * $Id: CommandLinkNoFormTestCase.java,v 1.4 2006/03/29 23:03:55 rlubke Exp $
  */
 
 /*
@@ -37,9 +37,12 @@ import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-/** <p>Verify expected behavior when command link is not enclosed by a form</p> */
+/**
+ * <p>Verify expected behavior when command link is not enclosed by a form</p>
+ */
 
 public class CommandLinkNoFormTestCase extends AbstractTestCase {
+
 
     // ------------------------------------------------------------ Constructors
 
@@ -50,59 +53,61 @@ public class CommandLinkNoFormTestCase extends AbstractTestCase {
      * @param name Name of the test case
      */
     public CommandLinkNoFormTestCase(String name) {
-
         super(name);
-
     }
 
-    // ---------------------------------------------------------- Public Methods
-
-
-    /** Return the tests included in this test suite. */
-    public static Test suite() {
-
-        return (new TestSuite(CommandLinkNoFormTestCase.class));
-
-    }
 
     // ------------------------------------------------------ Instance Variables
+
 
     // ---------------------------------------------------- Overall Test Methods
 
 
-    /** Set up instance variables required by this test case. */
+    /**
+     * Set up instance variables required by this test case.
+     */
     public void setUp() throws Exception {
-
         super.setUp();
-
     }
 
 
-    /** Tear down instance variables required by this test case. */
+    /**
+     * Return the tests included in this test suite.
+     */
+    public static Test suite() {
+        return (new TestSuite(CommandLinkNoFormTestCase.class));
+    }
+
+
+    /**
+     * Tear down instance variables required by this test case.
+     */
     public void tearDown() {
-
         super.tearDown();
-
     }
+
+
+    // ------------------------------------------------------ Instance Variables
+
+
 
     // ------------------------------------------------- Individual Test Methods    
 
     public void testRenderedClinkWithNoForm() throws Exception {
-
         String noFormString =
               ": This link is disabled as it is not nested within a JSF form.";
         HtmlPage page = getPage("/faces/standard/clinknoform.jsp");
         List list = getAllElementsOfGivenClass(page, null,
                                                HtmlSpan.class);
-
+        
         HtmlSpan p = (HtmlSpan) list.get(0);
         assertEquals("Link1" + noFormString, p.asText());
         p = (HtmlSpan) list.get(1);
         assertEquals("Link2" + noFormString, p.asText());
         p = (HtmlSpan) list.get(2);
-        assertEquals("Click me once and click me twice" +
-                     noFormString, p.asText());
-
+        assertEquals("Click me once and click me twice" + 
+                     noFormString, p.asText());        
     }
+
 
 }

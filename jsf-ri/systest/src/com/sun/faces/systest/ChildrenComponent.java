@@ -1,5 +1,5 @@
 /*
- * $Id: ChildrenComponent.java,v 1.8 2006/03/29 22:38:48 rlubke Exp $
+ * $Id: ChildrenComponent.java,v 1.9 2006/03/29 23:03:57 rlubke Exp $
  */
 
 /*
@@ -39,69 +39,53 @@ import java.io.IOException;
 import java.util.Iterator;
 
 
-/** <p>Test <code>UIComponent</code> for sys tests.</p> */
+/**
+ * <p>Test <code>UIComponent</code> for sys tests.</p>
+ */
 
 public class ChildrenComponent extends UIOutput {
 
-    // ------------------------------------------------------------ Constructors
-
 
     public ChildrenComponent() {
-
         super();
-
     }
 
 
     public ChildrenComponent(String id) {
-
         super();
         setId(id);
-
     }
 
-    // ---------------------------------------------------------- Public Methods
+
+    public boolean getRendersChildren() {
+        return (true);
+    }
 
 
     public void encodeBegin(FacesContext context) throws IOException {
-
         ResponseWriter writer = context.getResponseWriter();
         writer.write("{ ");
-
     }
 
 
     public void encodeChildren(FacesContext context) throws IOException {
-
         ResponseWriter writer = context.getResponseWriter();
         Iterator kids = getChildren().iterator();
         while (kids.hasNext()) {
             encodeRecursive(context, (UIComponent) kids.next());
             writer.write(" ");
         }
-
     }
 
 
     public void encodeEnd(FacesContext context) throws IOException {
-
         ResponseWriter writer = context.getResponseWriter();
         writer.write("}\n");
-
     }
-
-
-    public boolean getRendersChildren() {
-
-        return (true);
-
-    }
-
-    // --------------------------------------------------------- Private Methods
 
 
     private void encodeRecursive(FacesContext context, UIComponent component)
-          throws IOException {
+        throws IOException {
 
         component.encodeBegin(context);
         if (component.getRendersChildren()) {
@@ -114,7 +98,7 @@ public class ChildrenComponent extends UIOutput {
             }
         }
         component.encodeEnd(context);
-
     }
+
 
 }

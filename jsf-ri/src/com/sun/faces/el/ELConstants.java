@@ -1,5 +1,5 @@
 /*
- * $Id: ELConstants.java,v 1.4 2006/03/29 22:38:32 rlubke Exp $
+ * $Id: ELConstants.java,v 1.5 2006/03/29 23:03:44 rlubke Exp $
  */
 
 /*
@@ -30,13 +30,11 @@ package com.sun.faces.el;
 
 /**
  * @author jhook
- *         <p/>
- *         TODO To change the template for this generated type comment go to
- *         Window - Preferences - Java - Code Style - Code Templates
+ *
+ * TODO To change the template for this generated type comment go to
+ * Window - Preferences - Java - Code Style - Code Templates
  */
 public interface ELConstants {
-
-
     public static final int APPLICATION = 0;
 
     public static final int APPLICATION_SCOPE = 1;
@@ -64,5 +62,5 @@ public interface ELConstants {
     public static final int SESSION_SCOPE = 12;
 
     public static final int VIEW = 13;
-
+    
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterTag.java,v 1.3 2006/03/29 22:38:41 rlubke Exp $
+ * $Id: ConverterTag.java,v 1.4 2006/03/29 23:03:51 rlubke Exp $
  */
 
 /*
@@ -29,15 +29,38 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import javax.el.ELContext;
 import javax.el.ValueExpression;
+import javax.el.ELContext;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.webapp.ConverterELTag;
 import javax.servlet.jsp.JspException;
 
-/** Basic implementation of <code>ConverterELTag</code>. */
+/**
+ * Basic implementation of <code>ConverterELTag</code>.
+ */
 public class ConverterTag extends ConverterELTag {
+
+
+    // -------------------------------------------------------------- Attributes
+
+
+    /**
+     * <p>The identifier of the {@link Converter} instance to be created.</p>
+     */
+    private ValueExpression converterId = null;
+
+    /**
+     * <p>Set the identifer of the {@link Converter} instance to be created.
+     *
+     * @param converterId The identifier of the converter instance to be
+     * created.
+     */
+    public void setConverterId(ValueExpression converterId) {
+
+        this.converterId = converterId;
+
+    } // END setConverterId
 
 
     /**
@@ -45,15 +68,6 @@ public class ConverterTag extends ConverterELTag {
      * implements {@link Converter}.</p>
      */
     private ValueExpression binding = null;
-
-    // -------------------------------------------------------------- Attributes
-
-
-    /** <p>The identifier of the {@link Converter} instance to be created.</p> */
-    private ValueExpression converterId = null;
-
-    // ---------------------------------------------------------- Public Methods
-
 
     /**
      * <p>Set the expression that will be used to create a {@link ValueExpression}
@@ -69,25 +83,11 @@ public class ConverterTag extends ConverterELTag {
     } // END setBinding
 
 
-    /**
-     * <p>Set the identifer of the {@link Converter} instance to be created.
-     *
-     * @param converterId The identifier of the converter instance to be
-     *                    created.
-     */
-    public void setConverterId(ValueExpression converterId) {
-
-        this.converterId = converterId;
-
-    } // END setConverterId
-
-    // ------------------------------------------------------- Protected Methods
-
     // -------------------------------------------- Methods from ConverterELTag
 
 
     protected Converter createConverter()
-          throws JspException {
+    throws JspException {
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ELContext elContext = facesContext.getELContext();
@@ -112,9 +112,9 @@ public class ConverterTag extends ConverterELTag {
         if (converterId != null) {
             try {
                 String converterIdVal = (String)
-                      converterId.getValue(elContext);
+                    converterId.getValue(elContext);
                 converter = facesContext.getApplication()
-                      .createConverter(converterIdVal);
+                                .createConverter(converterIdVal);
                 if (converter != null && binding != null) {
                     binding.setValue(elContext, converter);
                 }
@@ -126,5 +126,6 @@ public class ConverterTag extends ConverterELTag {
         return converter;
 
     } // END createConverter
+
 
 }

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.24 2006/03/29 22:39:13 rlubke Exp $
+ $Id: build-tests.xml,v 1.25 2006/03/29 23:04:23 rlubke Exp $
 -->
 
 <!--
@@ -37,14 +37,14 @@
 
     <!-- =========================== Configuration ============================ -->
 
-
-    <property file="${user.home}/build.properties"/>
-    <property file="../../build.properties"/>
-    <import file="${jsf.build.home}/common/ant/common.xml"/>
+    
+    <property file="${user.home}/build.properties"/>   
+    <property file="../../build.properties"/>    
+    <import file="${jsf.build.home}/common/ant/common.xml"/>    
 
     <!-- Property containing all of the currenly running systests.  
-  This property list *must* match the one defined in the
-  systest-per-webapp build.xml. -->
+         This property list *must* match the one defined in the
+         systest-per-webapp build.xml. -->
     <property name="applications"
               value="replace-application,
                    replace-statemanager,                                    
@@ -62,9 +62,9 @@
           el-performance
           command-link-redirect
     -->
-
+    
     <!-- Property definitions to map the application to a JUnit test case -->
-    <property name="replace-application"
+    <property name="replace-application" 
               value="com/sun/faces/systest/ReplaceApplicationTestCase.class"/>
     <property name="replace-statemanager"
               value="com/sun/faces/systest/ReplaceStateManagerTestCase.class"/>
@@ -78,9 +78,9 @@
               value="com/sun/faces/systest/JarOrderingTestCase.class"/>
     <property name="replace-lifecycle"
               value="com/sun/faces/systest/ReplaceLifecycleTestCase.class"/>
-    <property name="string-converter"
+    <property name="string-converter" 
               value="com/sun/faces/systest/StringConverterTestCase.class"/>
-
+    
     <!--
         EXCLUDED APPLICATIONS:
          
@@ -99,15 +99,15 @@
 
         <for list="${applications}" param="app" trim="true">
             <sequential>
-                <propertycopy name="test.name"
-                              from="@{app}"
-                              override="true"/>
+                <propertycopy name="test.name" 
+                              from="@{app}" 
+                              override="true"/>               
                 <test-webapp app-name="@{app}"
                              app-base-dir="${basedir}/@{app}"
                              test-case="${test.name}"/>
             </sequential>
-        </for>
-
+        </for>       
+        
     </target>
 
     <macrodef name="test-webapp">
@@ -118,7 +118,7 @@
             <path id="test.classpath">
                 <pathelement location="@{app-base-dir}/build/classes"/>
                 <pathelement location="${basedir}/build/classes"/>
-                <path refid="htmlunit.runtime.classpath"/>
+                <path refid="htmlunit.runtime.classpath"/>        
             </path>
             <jsf.junit classpath-refid="test.classpath"
                        context-path="/jsf-@{app-name}"
@@ -126,9 +126,9 @@
                 <tests>
                     <fileset dir="@{app-base-dir}/build/classes"
                              includes="@{test-case}"/>
-                </tests>
+                </tests>    
             </jsf.junit>
-        </sequential>
+        </sequential>        
     </macrodef>
 
 </project>
