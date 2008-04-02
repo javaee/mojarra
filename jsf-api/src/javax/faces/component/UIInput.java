@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.27 2003/07/27 00:48:22 craigmcc Exp $
+ * $Id: UIInput.java,v 1.28 2003/08/15 17:23:42 craigmcc Exp $
  */
 
 /*
@@ -11,6 +11,7 @@ package javax.faces.component;
 
 
 import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
@@ -28,6 +29,48 @@ import javax.faces.validator.Validator;
  * value reference expression (if any); however, individual
  * {@link javax.faces.render.Renderer}s will generally impose restrictions
  * on the type of data they know how to display.</p>
+ *
+ * <p>During the <em>Apply Request Values</em> phase of the request
+ * processing lifecycle, the decoded String value of this component must be
+ * converted to the appropriate data type, if necessary, according to the
+ * following rules:</p>
+ * <ul>
+ * <li>Decode the incoming request parameters as appropriate, and
+ *     store the results, by calling <code>setValue()</code> with
+ *     an appropriate parameter, as follows:\
+ *     <ul>
+ *     <li>A String if there was one value.</li>
+ *     <li>A String[] array if there was more than one value.</li>
+ *     <li>A <code>null</code> if there was no value.</li>
+ *     </ul></li>
+ * <li>If there is no <code>valueRef</code> AND there is no non-null
+ *     <code>Converter</code>, exit (no conversion is required).</li>
+ * <li>Locate a {@link Converter} (if any) to se for the conversion,
+ *     as follows:
+ *     <ul>
+ *     <li>If <code>getConverter()</code> returns a non-null {@link Converter},
+ *         use that one; otherwise</li>
+ *     <li>If <code>getValueRef()</code> returns a non-null value reference
+ *         expression, use it to construct a <code>ValueBinding</code>, and
+ *         call <code>getType()</code> on it.  Based on the results:
+ *         <ul>
+ *         <li>If this call returns <code>null</code>, assume the output type
+ *             is <code>String</code> and perform no conversion.</li>
+ *         <li>Otherwise, call <code>Application.createConverter(Class)</code>
+ *             to locate any registered {@link Converter} capable of converting
+ *             data values of the specified type.</li>
+ *         </ul></li>
+ *     </ul></li>
+ * <li>If a {@link Converter} instance was located, call its
+ *     <code>getAsObject()</code> method to perform the conversion.  If
+ *     conversion was successful, store the converted result by calling
+ *     <code>setValue()</code>.  Otherwise, enqueue a conversion failure
+ *     message, set the <code>valid</code> property to <code>false</code>,
+ *     and leave the original <code>String</code> value.</li>
+ * </ul>
+ *
+ * <p>During the <em>Render Response</em> phase of the request processing
+ * lifecycle, conversion for output occurs as for {@link UIOutput}.</p>
  *
  * <p>When the <code>validate()</code> method of this {@link UIInput}
  * detects that a value change has actually occurred, and that all validations

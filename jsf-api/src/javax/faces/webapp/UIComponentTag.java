@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.11 2003/08/07 18:03:21 eburns Exp $
+ * $Id: UIComponentTag.java,v 1.12 2003/08/15 17:23:49 craigmcc Exp $
  */
 
 /*
@@ -155,7 +155,7 @@ public abstract class UIComponentTag implements Tag {
     /**
      * <p>Return the component type for the component that is or will be
      * bound to this tag.  This value can be passed to
-     * {@link javax.faces.application.Application#getComponent} to create
+     * {@link javax.faces.application.Application#createComponent} to create
      * the {@link UIComponent} instance for this tag.  Subclasses must
      * override this method to return the appropriate value.</p>
      */
@@ -428,11 +428,11 @@ public abstract class UIComponentTag implements Tag {
      * to create one that can be returned:</p>
      * <ul>
      * <li>If this tag has no <code>componentRef</code> attribute value,
-     *     call <code>Application.getComponent(String)</code>,
+     *     call <code>Application.createComponent(String)</code>,
      *     passing the result of calling <code>getComponentType()</code> on
      *     this tag instance.</li>
      * <li>If this tag has a <code>componentRef</code> attribute value,
-     *     call <code>Application.getComponent(String, FacesContext,
+     *     call <code>Application.createComponent(String, FacesContext,
      *     String)</code>, passing a {@link ValueBinding} based on the
      *     <code>componentRef</code> attribute value, the {@link FacesContext}
      *     for the current request, and the result of calling
@@ -479,13 +479,13 @@ public abstract class UIComponentTag implements Tag {
 		    ValueBinding binding = null;
 		    if (this.componentRef != null) {
 			binding = application.getValueBinding(componentRef);
-			component = application.getComponent
+			component = application.createComponent
 			    (binding, context, getComponentType());
 			overrideProperties(component);
 			binding.setValue(context, component);
 		    } else {
 			component =
-			    application.getComponent(getComponentType());
+			    application.createComponent(getComponentType());
 			overrideProperties(component);
 		    }
 		}

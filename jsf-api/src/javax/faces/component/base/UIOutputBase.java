@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutputBase.java,v 1.3 2003/07/28 22:18:46 eburns Exp $
+ * $Id: UIOutputBase.java,v 1.4 2003/08/15 17:23:44 craigmcc Exp $
  */
 
 /*
@@ -48,20 +48,20 @@ public class UIOutputBase extends UIComponentBase implements UIOutput {
 
 
     /**
-     * <p>The converter id of the {@link Converter} (if any)
+     * <p>The converter {@link Converter} (if any)
      * that is registered for this component.</p>
      */
-    private String converter = null;
+    private Converter converter = null;
 
 
-    public String getConverter() {
+    public Converter getConverter() {
 
         return (this.converter);
 
     }
 
 
-    public void setConverter(String converter) {
+    public void setConverter(Converter converter) {
 
         this.converter = converter;
 
@@ -137,34 +137,29 @@ public class UIOutputBase extends UIComponentBase implements UIOutput {
 			     Object stateObj) throws IOException {
 	Object [] state = (Object []) stateObj;
 	Object [] myState = (Object []) state[THIS_INDEX];
-	String stateStr = (String) myState[ATTRS_INDEX];
-	int i = stateStr.indexOf(STATE_SEP);
-	valueRef = stateStr.substring(0, i);
-	if ("null".equals(valueRef)) {
-	    valueRef = null;
-	}
-	converter = stateStr.substring(i + STATE_SEP_LEN);
-	if ("null".equals(converter)) {
-	    converter = null;
-	}
-	
+        valueRef = (String) myState[ATTRS_INDEX];
 	value = myState[VALUE_INDEX];
-
+	converter = (Converter) myState[CONVERTER_INDEX];
 	super.restoreState(context, state[SUPER_INDEX]);
     }
+
+
     private static final int ATTRS_INDEX = 0;
     private static final int VALUE_INDEX = 1;
+    private static final int CONVERTER_INDEX = 2;
+
 
     public Object getState(FacesContext context) {
 	Object superState = super.getState(context);
 	Object [] result = new Object[2];
-	Object [] myState = new Object[2];
-	myState[ATTRS_INDEX] = valueRef + STATE_SEP + converter;
+	Object [] myState = new Object[3];
+	myState[ATTRS_INDEX] = valueRef;
 	// PENDING(edburns): is it correct to "just skip it" if value is
 	// not Serializable?
 	if (value instanceof Serializable) {
 	    myState[VALUE_INDEX] = value;
 	}
+        myState[CONVERTER_INDEX] = converter;
 	result[THIS_INDEX] = myState;
 	result[SUPER_INDEX] = superState;
 	return result;

@@ -1,5 +1,5 @@
 /*
- * $Id: Converter.java,v 1.5 2003/02/20 22:46:25 ofung Exp $
+ * $Id: Converter.java,v 1.6 2003/08/15 17:23:45 craigmcc Exp $
  */
 
 /*
@@ -12,6 +12,7 @@ package javax.faces.convert;
 
 import java.io.Serializable;
 import javax.faces.FacesException;
+import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
@@ -25,6 +26,11 @@ import javax.faces.context.FacesContext;
  * because {@link Converter}s are part of the saved and restored state of a
  * component tree, classes that implement this interface must also
  * be serializable.</p>
+ *
+ * <p>{@link Converter} implementations must have a zero-arguments public
+ * constructor.  In addition, if the {@link Converter} class wishes to have
+ * configuration property values saved and restored with the component tree,
+ * the implementation must also implement {@link StateHolder}.</p>
  */
 
 public interface Converter extends Serializable {

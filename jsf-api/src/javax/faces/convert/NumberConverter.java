@@ -1,5 +1,5 @@
 /*
- * $Id: NumberConverter.java,v 1.1 2003/08/13 18:38:57 craigmcc Exp $
+ * $Id: NumberConverter.java,v 1.2 2003/08/15 17:23:46 craigmcc Exp $
  */
 
 /*
@@ -23,8 +23,82 @@ import javax.faces.context.FacesContext;
 
 /**
  * <p>{@link Converter} implementation for <code>java.lang.Number</code>
- * values.  If <code>pattern</code> is specified, it will be utilized.
- * Otherwise, the conversion specified by <code>type</code> is performed.</p>
+ * values.</p>
+ *
+ * <p>The <code>getAsObject()</code> method parses a String into an
+ * <code>java.lang.Double</code> or <code>java.lang.Long</code>, according
+ * to the following algorithm:</p>
+ * <ul>
+ * <li>If the specified String is null or zero length, return
+ *     a <code>null</code>.  Otherwise, trim leading and trailing
+ *     whitespace before proceedng.</li>
+ * <li>If the <code>parseLocale</code> property is not null,
+ *     use that <code>Locale</code> for managing parsing.  Otherwise, use the
+ *     <code>Locale</code> from the <code>FacesContext</code>.</li>
+ * <li>If a <code>pattern</code> has been specified, its syntax must conform
+ *     the rules specified by <code>java.text.DecimalFormat</code>.  Such
+ *     a pattern will be used to parse, and the <code>type</code> property
+ *     will be ignored.</li>
+ * <li>If a <code>pattern</code> has not been specified, parsing will be based
+ *     on the <code>type</code> property, which expects a currency, a number,
+ *     or a percent.  The parse pattern for currencies, numbers, and
+ *     percentages is determined by calling the
+ *     <code>getCurrencyInstance()</code>, <code>getNumberInstance()</code>,
+ *     or <code>getPercentInstance()</code> method of the
+ *     <code>java.text.NumberFormat</code> class, passing in the selected
+ *     <code>Locale</code>.</li>
+ * <li>If the <code>integerOnly</code> property has been set, only the integer
+ *     portion of the String will be parsed.  See the JavaDocs for the
+ *     <code>setParseIntegerOnly()</code> method of the
+ *     <code>java.text.NumberFormat</code> class for more information.</li>
+ * </ul>
+ *
+ * <p>The <code>getAsString()</code> method expects a value of type
+ * <code>java.util.Date</code> (or a subclass), and creates a formatted
+ * String according to the following algorithm:</p>
+ * <ul>
+ * <li>If the specified value is null or a zero-length String, return
+ *     a <code>null</code> String.</li>
+ * <li>If the specified value is a already a String, it is first parsed into
+ *     a number with <code>java.lang.Long.parseLong()</code> (if the value
+ *     does not have a decimal point) or
+ *     <code>java.lang.Double.parseDouble()</code> (if the value does
+ *     have a decimal point).</li>
+ * <li>If the <code>parseLocale</code> property is not null,
+ *     use that <code>Locale</code> for managing formatting.  Otherwise, use the
+ *     <code>Locale</code> from the <code>FacesContext</code>.</li>
+ * <li>If a <code>pattern</code> has been specified, its syntax must conform
+ *     the rules specified by <code>java.text.DecimalFormat</code>.  Such
+ *     a pattern will be used to format, and the <code>type</code> property
+ *     (along with related formatting options described in the next paragraph)
+ *     will be ignored.</li>
+ * <li>If a <code>pattern</code> has not been specified, formatting will be
+ *     based on the <code>type</code> property, which formats the value as a
+ *     currency, a number, or a percent.  The format pattern for currencies,
+ *     numbers, and percentages is determined by calling the
+ *     percentages is determined by calling the
+ *     <code>getCurrencyInstance()</code>, <code>getNumberInstance()</code>,
+ *     or <code>getPercentInstance()</code> method of the
+ *     <code>java.text.NumberFormat</code> class, passing in the selected
+ *     <code>Locale</code>.  In addition, the following properties will be
+ *     applied to the format pattern, if specified:
+ *     <ul>
+ *     <li>If the <code>groupingUsed</code> property is <code>true</code>, the
+ *         <code>setGroupingUsed(true)</code> method on the corresponding
+ *         <code>NumberFormat</code> instance will be called.</li>
+ *     <li>The minimum and maximum number of digits in the integer and
+ *         fractional portions of the result will be configured based on
+ *         any values set for the <code>maxFractionDigits</code>,
+ *         <code>maxIntegerDigits</code>, <code>minFractionDigits</code>,
+ *         and <code>minIntegerDigits</code> properties.</li>
+ *     <li>If the type is set to <code>currency</code>, it is also possible
+ *         to configure the currency symbol to be used, using either the
+ *         <code>currencyCode</code> or <code>currencySymbol</code> properties.
+ *         If both are set, the value for <code>currencyCode</code> takes
+ *         precedence on a JDK 1.4 (or later) JVM; otherwise, the value
+ *         for <code>currencySymbol</code> takes precedence.</li>
+ *     </ul></li>
+ * </ul>
  */
 
 public class NumberConverter implements Converter, StateHolder {

@@ -1,5 +1,5 @@
 /*
- * $Id: Validator.java,v 1.10 2003/06/20 23:58:57 craigmcc Exp $
+ * $Id: Validator.java,v 1.11 2003/08/15 17:23:48 craigmcc Exp $
  */
 
 /*
@@ -12,6 +12,7 @@ package javax.faces.validator;
 
 import java.io.Serializable;
 import java.util.Iterator;
+import javax.faces.component.StateHolder;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.application.Message;
@@ -40,6 +41,11 @@ import javax.faces.application.Message;
  * addition, because {@link Validator}s are part of the saved and restored
  * state of a component tree, classes that implement this interface must also
  * be serializable.</p>
+ *
+ * <p>{@link Validator} implementations must have a zero-arguments public
+ * constructor.  In addition, if the {@link Validator} class wishes to have
+ * configuration property values saved and restored with the component tree,
+ * the implementation must also implement {@link StateHolder}.</p>
  */
 
 public interface Validator extends Serializable {

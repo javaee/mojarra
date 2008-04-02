@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.27 2003/07/26 17:54:37 craigmcc Exp $
+ * $Id: UIOutput.java,v 1.28 2003/08/15 17:23:43 craigmcc Exp $
  */
 
 /*
@@ -23,23 +23,27 @@ import javax.faces.render.Renderer;
  * expression, that is displayed to the user.  The user cannot directly modify
  * the rendered value; it is for display purposes only.</p>
  *
- * <p>During encoding, the value associated with this component may be
+ * <p>During the <em>Render Response</em> phase of the request processing
+ * lifecycle, the current value of this component must be
  * converted to a String (if it is not already), according to the following
  * rules:</p>
  * <ul>
- * <li>A <code>null</code> value will be converted to a String in a manner
- *     that is dependent upon the {@link Renderer} in
- *     use; typically, however, it will be rendered as a zero-length
- *     String.</li>
- * <li>If the <code>converter</code> property is set to a non-null value,
- *     it will be passed to <code>Application.getConverter()</code> in order
- *     to retrieve a {@link Converter} instance to be
- *     utilized.  The <code>getAsString()</code> method will be called.</li>
- * <li>If the <code>converter</code> property is null, but the type of the
- *     value is one for which the JavaServer Faces implementation provides
- *     default conversion, that default conversion will be performed.</li>
- * <li>Otherwise, the <code>toString()</code> method will be called
- *     on the value.</li>
+ * <li>If the current value is not <code>null</code>, and is not already
+ *     a <code>String</code>, locate a {@link Converter} (if any) to use
+ *     for the conversion, as follows:
+ *     <ul>
+ *     <li>If <code>getConverter()</code> returns a non-null {@link Converter},
+ *         use that one, otherwise</li>
+ *     <li>If <code>Application.createConverter(Class)</code>, passing the
+ *         current value's class, returns a non-null {@link Converter},
+ *         use that one.</li>
+ *     </ul></li>
+ * <li>If the current value is not <code>null</code> and a {@link Converter}
+ *     was located, call its <code>getAsString()</code> method to perform
+ *     the conversion.</li>
+ * <li>If the current value is not <code>null</code> but no {@link Converter}
+ *     was located, call <code>toString()</code> on the current value to perform
+ *     the conversion.</li>
  * </ul>
  *
  * <p>By default, the <code>rendererType</code> property must be set to
@@ -54,19 +58,19 @@ public interface UIOutput extends UIComponent {
 
 
     /**
-     * <p>Return the converter id of the {@link Converter} (if any)
+     * <p>Return the {@link Converter} (if any)
      * that is registered for this component.</p>
      */
-    public String getConverter();
+    public Converter getConverter();
 
 
     /**
-     * <p>Set the converter id of the {@link Converter} (if any)
+     * <p>Set the {@link Converter} (if any)
      * that is registered for this component.</p>
      *
-     * @param converter New converter identifier (or <code>null</code>)
+     * @param converter New {@link Converter} (or <code>null</code>)
      */
-    public void setConverter(String converter);
+    public void setConverter(Converter converter);
 
 
     /**

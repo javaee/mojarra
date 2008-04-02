@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorTag.java,v 1.10 2003/08/15 17:23:50 craigmcc Exp $
+ * $Id: ConverterTag.java,v 1.1 2003/08/15 17:23:49 craigmcc Exp $
  */
 
 /*
@@ -11,8 +11,8 @@ package javax.faces.webapp;
 
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
-import javax.faces.validator.Validator;
+import javax.faces.component.UIOutput;
+import javax.faces.convert.Converter;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
@@ -24,46 +24,47 @@ import javax.faces.FactoryFinder;
 
 
 /**
- * <p><strong>ValidatorTag</strong> is a base class for all JSP custom actions
- * that create and register a <code>Validator</code> instance on the
- * {@link UIInput} associated with our most immediate surrounding instance
+ * <p><strong>ConverterTag</strong> is a base class for all JSP custom actions
+ * that create and register a <code>Converter</code> instance on the
+ * {@link UIOutput} associated with our most immediate surrounding instance
  * of a tag whose implementation class is a subclass of {@link UIComponentTag}.
  * To avoid creating duplicate instances when a page is redisplayed,
- * creation and registration of a {@link Validator} occurs
+ * creation and registration of a {@link Converter} occurs
  * <strong>only</strong> if the corresponding {@link UIComponent} was
  * created (by the owning {@link UIComponentTag}) during the execution of the
  * current page.</p>
  *
- * <p>This class may be used directly to implement a generic validator
+ * <p>This class may be used directly to implement a generic converter
  * registration tag (based on the fully qualified Java class name specified
  * by the <code>type</code> attribute), or as a base class for tag instances
- * that support specific {@link Validator} subclasses.</p>
+ * that support specific {@link Converter} subclasses.</p>
  *
  * <p>Subclasses of this class must implement the
- * <code>createValidator()</code> method, which creates and returns a
- * {@link Validator} instance.  Any configuration properties that specify
- * the limits to be enforced by this {@link Validator} must have been
- * set by the <code>createValidator()</code> method.  Generally, this occurs
+ * <code>createConverter()</code> method, which creates and returns a
+ * {@link Converter} instance.  Any configuration properties that specify
+ * behavior of this {@link Converter} must have been set by the
+ * <code>createConverter()</code> method.  Generally, this occurs
  * by copying corresponding attribute values on the tag instance.</p>
  *
  * <p>This tag creates no output to the page currently being created.  It
- * is used solely for the side effect of {@link Validator} creation.</p>
+ * is used solely for the side effect of {@link Converter} creation.</p>
  */
 
-public class ValidatorTag extends TagSupport {
+public class ConverterTag extends TagSupport {
 
 
-    // ------------------------------------------------------------- Attributes
+    // -------------------------------------------------------------- Attributes
 
     /**
-     * <p>The identifier of the {@link Validator} instance to be created.</p>
+     * <p>The identifier of the {@link Converter} instance to be created.</p>
      */
     private String id = null;
     
+
     /**
-     * <p>Set the identifer of the {@link Validator} instance to be created.
+     * <p>Set the identifer of the {@link Converter} instance to be created.
      *
-     * @param id The new identifier of the validator instance to be
+     * @param id The new identifier of the converter instance to be
      *                    created.
      */
     public void setId(String id) {
@@ -73,11 +74,11 @@ public class ValidatorTag extends TagSupport {
     }
 
 
-    // --------------------------------------------------------- Public Methods
+    // ---------------------------------------------------------- Public Methods
 
 
     /**
-     * <p>Create a new instance of the specified {@link Validator}
+     * <p>Create a new instance of the specified {@link Converter}
      * class, and register it with the {@link UIComponent} instance associated
      * with our most immediately surrounding {@link UIComponentTag} instance, if
      * the {@link UIComponent} instance was created by this execution of the
@@ -103,8 +104,8 @@ public class ValidatorTag extends TagSupport {
         }
 
         // Create and register an instance with the appropriate component
-        Validator validator = createValidator();
-        ((UIInput) facesTag.getComponent()).addValidator(validator);
+        Converter converter = createConverter();
+        ((UIOutput) facesTag.getComponent()).setConverter(converter);
         return (SKIP_BODY);
 
     }
@@ -120,23 +121,23 @@ public class ValidatorTag extends TagSupport {
     }
 
 
-    // ------------------------------------------------------ Protected Methods
+    // ------------------------------------------------------- Protected Methods
 
 
     /**
-     * <p>Create and return a new {@link Validator} to be registered
+     * <p>Create and return a new {@link Converter} to be registered
      * on our surrounding {@link UIComponent}.</p>
      *
      * @exception JspException if a new instance cannot be created
      */
-    protected Validator createValidator()
+    protected Converter createConverter()
         throws JspException {
 
         try {
             ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.
                 getFactory(FactoryFinder.APPLICATION_FACTORY);
 	    Application application = aFactory.getApplication();
-            return (application.createValidator(id));
+            return (application.createConverter(id));
         } catch (Exception e) {
             throw new JspException(e);
         }

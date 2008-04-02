@@ -115,6 +115,24 @@
     </property>
   </converter>
 
+  <!-- Third converter (by-type) -->
+  <converter>
+    <description>Third Converter Description</description>
+    <display-name>Third Converter Display Name</display-name>
+    <icon>
+      <small-icon>thirdConverter.jpg</small-icon>
+      <large-icon>thirdConverter.gif</large-icon>
+    </icon>
+    <converter-for-class>java.util.Date</converter-for-class>
+    <converter-class>com.mycompany.MyThirdConverter</converter-class>
+    <property>
+      <description>Third Converter Property 1 Description</description>
+      <display-name>Third Converter Property 1 Display Name</display-name>
+      <property-name>prop1</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+  </converter>
+
 
   <!-- First navigation rule (global) -->
   <navigation-rule>

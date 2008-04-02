@@ -1,5 +1,5 @@
 /*
- * $Id: DateTimeConverter.java,v 1.1 2003/08/13 18:38:56 craigmcc Exp $
+ * $Id: DateTimeConverter.java,v 1.2 2003/08/15 17:23:46 craigmcc Exp $
  */
 
 /*
@@ -23,8 +23,51 @@ import javax.faces.context.FacesContext;
 
 /**
  * <p>{@link Converter} implementation for <code>java.util.Date</code>
- * values.  If <code>pattern</code> is specified, it will be utilized.
- * Otherwise, the conversion specified by <code>type</code> is performed.</p>
+ * values.</p>
+ *
+ * <p>The <code>getAsObject()</code> method parses a String into a
+ * <code>java.util.Date</code>, according to the following algorithm:</p>
+ * <ul>
+ * <li>If the specified String is null or zero length, return
+ *     a <code>null</code>.  Otherwise, trim leading and trailing
+ *     whitespace before proceeding.</li>
+ * <li>If the <code>parseLocale</code> property is not null,
+ *     use that <code>Locale</code> for managing parsing.  Otherwise, use the
+ *     <code>Locale</code> from the <code>FacesContext</code>.</li>
+ * <li>If a <code>pattern</code> has been specified, its syntax must conform
+ *     the rules specified by <code>java.text.SimpleDateFormat</code>.  Such
+ *     a pattern will be used to parse, and the <code>type</code>,
+ *     <code>dateStyle</code>, and <code>timeStyle</code> properties
+ *     will be ignored.</li>
+ * <li>If a <code>pattern</code> has not been specified, parsing will be based
+ *     on the <code>type</code> property, which expects a date value, a time
+ *     value, or both.  Any date and time values included will be parsed in
+ *     accordance to the styles specified by <code>dateStyle</code> and
+ *     <code>timeStyle</code>, respectively.</li>
+ * <li>In all cases, parsing must be non-lenient; the given string must
+ *     strictly adhere to the parsing format.</li>
+ * </ul>
+ *
+ * <p>The <code>getAsString()</code> method expects a value of type
+ * <code>java.util.Date</code> (or a subclass), and creates a formatted
+ * String according to the following algorithm:</p>
+ * <ul>
+ * <li>If the specified value is null or a zero-length String, return
+ *     a <code>null</code> String.</li>
+ * <li>If the <code>parseLocale</code> property is not null,
+ *     use that <code>Locale</code> for managing formatting.  Otherwise, use the
+ *     <code>Locale</code> from the <code>FacesContext</code>.</li>
+ * <li>If a <code>pattern</code> has been specified, its syntax must conform
+ *     the rules specified by <code>java.text.SimpleDateFormat</code>.  Such
+ *     a pattern will be used to format, and the <code>type</code>,
+ *     <code>dateStyle</code>, and <code>timeStyle</code> properties
+ *     will be ignored.</li>
+ * <li>If a <code>pattern</code> has not been specified, formatting will be
+ *     based on the <code>type</code> property, which includes a date value,
+ *     a time value, or both into the formatted String.  Any date and time
+ *     values included will be formatted in accordance to the styles specified
+ *     by <code>dateStyle</code> and <code>timeStyle</code>, respectively.</li>
+ * </ul>
  */
 
 public class DateTimeConverter implements Converter, StateHolder {

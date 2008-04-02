@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutputBaseTestCase.java,v 1.4 2003/07/31 12:22:28 eburns Exp $
+ * $Id: UIOutputBaseTestCase.java,v 1.5 2003/08/15 17:23:51 craigmcc Exp $
  */
 
 /*
@@ -15,6 +15,9 @@ import java.util.Iterator;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
+import javax.faces.convert.Converter;
+import javax.faces.convert.LongConverter;
+import javax.faces.convert.ShortConverter;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -75,12 +78,14 @@ public class UIOutputBaseTestCase extends UIComponentBaseTestCase {
 
         assertEquals(output.getConverter(),
                      (String) output.getAttribute("converter"));
-        output.setConverter("foo");
-        assertEquals("foo", (String) output.getAttribute("converter"));
+        output.setConverter(new LongConverter());
+        assertNotNull((Converter) output.getAttribute("converter"));
+        assertTrue(output.getAttribute("converter") instanceof LongConverter);
         output.setConverter(null);
-        assertNull((String) output.getAttribute("converter"));
-        output.setAttribute("converter", "bar");
-        assertEquals("bar", output.getConverter());
+        assertNull(output.getAttribute("converter"));
+        output.setAttribute("converter", new ShortConverter());
+        assertNotNull(output.getConverter());
+        assertTrue(output.getConverter() instanceof ShortConverter);
         output.setAttribute("converter", null);
         assertNull(output.getConverter());
 
@@ -193,9 +198,9 @@ public class UIOutputBaseTestCase extends UIComponentBaseTestCase {
         UIOutput output = (UIOutput) component;
 
         // converter
-        output.setConverter("Double");
-        assertEquals("expected converter",
-                     "Double", output.getConverter());
+        output.setConverter(new LongConverter());
+        assertTrue("expected converter",
+                   output.getConverter() instanceof LongConverter);
         output.setConverter(null);
         assertNull("erased converter", output.getConverter());
 
@@ -269,7 +274,7 @@ public class UIOutputBaseTestCase extends UIComponentBaseTestCase {
 	preSave.setId("output");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	preSave.setValueRef("valueRefString");
-	preSave.setConverter("buckaroo");
+	preSave.setConverter(new ShortConverter());
 	testParent.getChildren().add(preSave);
 	state = preSave.getState(facesContext);
 	assertTrue(null != state);

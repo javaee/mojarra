@@ -1,5 +1,5 @@
 /*
- * $Id: MockApplication.java,v 1.6 2003/08/03 22:54:56 eburns Exp $
+ * $Id: MockApplication.java,v 1.7 2003/08/15 17:23:53 craigmcc Exp $
  */
 
 /*
@@ -124,7 +124,7 @@ public class MockApplication extends Application {
     public void addComponent(String componentType, String componentClass) {
         components.put(componentType, componentClass);
     }
-    public UIComponent getComponent(String componentType) {
+    public UIComponent createComponent(String componentType) {
         String componentClass = (String) components.get(componentType);
         try {
             Class clazz = Class.forName(componentClass);
@@ -133,10 +133,10 @@ public class MockApplication extends Application {
             throw new FacesException(e);
         }
     }
-    public UIComponent getComponent(ValueBinding componentRef,
-                                    FacesContext context,
-                                    String componentType)
-                                    throws FacesException {
+    public UIComponent createComponent(ValueBinding componentRef,
+                                       FacesContext context,
+                                       String componentType)
+        throws FacesException {
 	throw new FacesException(new UnsupportedOperationException());
     }
     public Iterator getComponentTypes() {
@@ -148,7 +148,10 @@ public class MockApplication extends Application {
     public void addConverter(String converterId, String converterClass) {
         converters.put(converterId, converterClass);
     }
-    public Converter getConverter(String converterId) {
+    public void addConverter(Class targetClass, String converterClass) {
+        throw new UnsupportedOperationException();
+    }
+    public Converter createConverter(String converterId) {
         String converterClass = (String) converters.get(converterId);
         try {
             Class clazz = Class.forName(converterClass);
@@ -157,8 +160,14 @@ public class MockApplication extends Application {
             throw new FacesException(e);
         }
     }
+    public Converter createConverter(Class targetClass) {
+        throw new UnsupportedOperationException();
+    }
     public Iterator getConverterIds() {
         return (converters.keySet().iterator());
+    }
+    public Iterator getConverterTypes() {
+        throw new UnsupportedOperationException();
     }
 
 
@@ -184,7 +193,7 @@ public class MockApplication extends Application {
     public void addValidator(String validatorId, String validatorClass) {
         validators.put(validatorId, validatorClass);
     }
-    public Validator getValidator(String validatorId) {
+    public Validator createValidator(String validatorId) {
         String validatorClass = (String) validators.get(validatorId);
         try {
             Class clazz = Class.forName(validatorClass);
