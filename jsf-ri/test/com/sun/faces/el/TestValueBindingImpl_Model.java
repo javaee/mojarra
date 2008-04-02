@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl_Model.java,v 1.2 2003/03/31 21:16:29 rkitain Exp $
+ * $Id: TestValueBindingImpl_Model.java,v 1.3 2003/04/18 16:21:01 rkitain Exp $
  */
 
 /*
@@ -28,13 +28,15 @@ import java.util.Enumeration;
 import javax.faces.context.FacesContext;
 import javax.faces.el.PropertyNotFoundException;
 
+import com.sun.faces.application.ApplicationImpl;
+
 /**
  *
  *  <B>TestValueBindingImpl_Model</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValueBindingImpl_Model.java,v 1.2 2003/03/31 21:16:29 rkitain Exp $
+ * @version $Id: TestValueBindingImpl_Model.java,v 1.3 2003/04/18 16:21:01 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -80,8 +82,7 @@ public class TestValueBindingImpl_Model extends ServletFacesTestCase
 
     public void setUp() {
 	super.setUp();
-	valueBinding = new ValueBindingImpl(new VariableResolverImpl(),
-							     new PropertyResolverImpl());
+	valueBinding = new ValueBindingImpl(new ApplicationImpl());
     }
 
     public void tearDown() {

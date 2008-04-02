@@ -59,9 +59,11 @@ import java.text.MessageFormat;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
-import com.sun.faces.el.impl.support.ExpressionEvaluator;
 
-import com.sun.faces.el.VariableResolverImpl;
+import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
+import com.sun.faces.el.impl.support.ExpressionEvaluator;
 
 /**
  *
@@ -73,7 +75,7 @@ import com.sun.faces.el.VariableResolverImpl;
  * name and value causing the error.
  * 
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: eburns $
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rkitain $
  **/
 
 public class Evaluator
@@ -89,8 +91,8 @@ public class Evaluator
 
   /** The singleton instance of the evaluator **/
   static ELEvaluator sEvaluator =
-    new ELEvaluator
-    (new VariableResolverImpl ());
+    new ELEvaluator(((ApplicationFactory)FactoryFinder.getFactory(
+        FactoryFinder.APPLICATION_FACTORY)).getApplication());
 
   //-------------------------------------
   // ExpressionEvaluator methods

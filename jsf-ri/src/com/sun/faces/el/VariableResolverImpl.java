@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverImpl.java,v 1.5 2003/04/03 21:51:41 eburns Exp $
+ * $Id: VariableResolverImpl.java,v 1.6 2003/04/18 16:20:56 rkitain Exp $
  */
 
 /*
@@ -13,7 +13,6 @@ package com.sun.faces.el;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
 import javax.faces.el.VariableResolver;
-import javax.faces.el.PropertyResolver;
 import javax.servlet.http.HttpSession;
 import com.sun.faces.context.FacesContextImpl;
 
@@ -27,9 +26,6 @@ public class VariableResolverImpl extends VariableResolver {
     //
     // Relationship Instance Variables
     // 
-
-    protected PropertyResolver propertyResolver = null;
-
 
     // Specified by javax.faces.el.VariableResolver.resolveVariable()
     public Object resolveVariable(FacesContext context, String name) {
@@ -71,18 +67,4 @@ public class VariableResolverImpl extends VariableResolver {
         }
 
     }
-
-    //
-    // Helper Methods
-    // 
-
-    public void setPropertyResolver(PropertyResolver pResolver) {
-	propertyResolver = pResolver;
-    }
-
-    public PropertyResolver getPropertyResolver() {
-	return propertyResolver;
-    }
-
-
 }

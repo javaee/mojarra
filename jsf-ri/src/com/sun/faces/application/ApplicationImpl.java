@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.5 2003/04/04 22:47:23 eburns Exp $
+ * $Id: ApplicationImpl.java,v 1.6 2003/04/18 16:20:55 rkitain Exp $
  */
 
 /*
@@ -206,8 +206,7 @@ public class ApplicationImpl extends Application {
         ValueBinding valueBinding;
         if (null == (valueBinding = (ValueBinding) valueBindingMap.get(ref))) {
 
-            valueBinding = new ValueBindingImpl ((VariableResolverImpl)getVariableResolver(), 
-                (PropertyResolverImpl)getPropertyResolver());
+            valueBinding = new ValueBindingImpl (this);
             ((ValueBindingImpl)valueBinding).setRef(ref);
             valueBindingMap.put(ref, valueBinding);
         }

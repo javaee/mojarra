@@ -66,6 +66,8 @@ import com.sun.faces.el.impl.jstl.parser.ParseException;
 import com.sun.faces.el.impl.jstl.parser.Token;
 import com.sun.faces.el.impl.jstl.parser.TokenMgrError;
 
+import javax.faces.application.Application;
+import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
 
 /**
@@ -93,8 +95,9 @@ import javax.faces.el.VariableResolver;
  * cache.  The cache may be bypassed by setting a flag on the
  * evaluator's constructor.
  *
- * <p>The evaluator must be passed a VariableResolver in its
- * constructor.  The VariableResolver is used to resolve variable
+ * <p>The evaluator must be passed an Application in its
+ * constructor.  The Application contains a VariableResolver instance.
+ * The VariableResolver is used to resolve variable
  * names encountered in expressions, and can also be used to implement
  * "implicit objects" that are always present in the namespace.
  * Different applications will have different policies for variable
@@ -115,7 +118,7 @@ import javax.faces.el.VariableResolver;
  * singleton.
  * 
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: eburns $
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rkitain $
  **/
 
 public class ELEvaluator
@@ -140,8 +143,8 @@ public class ELEvaluator
   /** The static Logger **/
   static Logger sLogger = new Logger (System.out);
 
-  /** The VariableResolver **/
-  VariableResolver mResolver;
+  /** The Application **/
+  Application application;
 
   /** Flag if the cache should be bypassed **/
   boolean mBypassCache;
@@ -151,13 +154,13 @@ public class ELEvaluator
    *
    * Constructor
    *
-   * @param pResolver the object that should be used to resolve
+   * @param pApplication the object that contains should be used to resolve
    * variable names encountered in expressions.  If null, all variable
    * references will resolve to null.
    **/
-  public ELEvaluator (VariableResolver pResolver)
+  public ELEvaluator (Application pApplication)
   {
-    mResolver = pResolver;
+    application = pApplication;
   }
 
   //-------------------------------------
@@ -165,17 +168,17 @@ public class ELEvaluator
    *
    * Constructor
    *
-   * @param pResolver the object that should be used to resolve
-   * variable names encountered in expressions.  If null, all variable
-   * references will resolve to null.
+   * @param pApplication the object that contains the object instance
+   * that should be used to resolve variable names encountered in 
+   * expressions.  If null, all variable references will resolve to null.
    *
    * @param pBypassCache flag indicating if the cache should be
    * bypassed
    **/
-  public ELEvaluator (VariableResolver pResolver,
+  public ELEvaluator (Application pApplication,
 		      boolean pBypassCache)
   {
-    mResolver = pResolver;
+    application = pApplication;
     mBypassCache = pBypassCache;
   }
 
@@ -261,15 +264,19 @@ public class ELEvaluator
     else if (parsedValue instanceof Expression) {
       // Evaluate the expression and convert
 	Object value = null;
+        VariableResolver mResolver = application.getVariableResolver();
+        PropertyResolver prResolver = application.getPropertyResolver();
 	if (null != rValue) {
 	    value = ((Expression) parsedValue).evaluate (pContext,
 							 rValue,
 							 mResolver,
+                                                         prResolver,
 							 pLogger);
 	}
 	else {
 	    value = ((Expression) parsedValue).evaluate (pContext,
 							 mResolver,
+                                                         prResolver,
 							 pLogger);
 	}
 	    
@@ -279,6 +286,7 @@ public class ELEvaluator
     }
 
     else if (parsedValue instanceof ExpressionString) {
+        VariableResolver mResolver = application.getVariableResolver();
       // Evaluate the expression/string list and convert
       String strValue = 
 	((ExpressionString) parsedValue).evaluate (pContext, 

@@ -58,6 +58,8 @@ package com.sun.faces.el.impl.jstl;
 import java.util.List;
 
 import javax.faces.el.VariableResolver;
+import javax.faces.el.PropertyResolver;
+
 import com.sun.faces.el.VariableResolverImpl;
 
 /**
@@ -68,7 +70,7 @@ import com.sun.faces.el.VariableResolverImpl;
  * "indexed element of" operator.
  * 
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: eburns $
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rkitain $
  **/
 
 public class ComplexValue
@@ -133,6 +135,7 @@ public class ComplexValue
    **/
   public Object evaluate (Object pContext,
 			  VariableResolver vResolver,
+                          PropertyResolver pResolver,
 			  Logger pLogger)
     throws ELException
   {
@@ -141,9 +144,7 @@ public class ComplexValue
     // Apply the suffixes
     for (int i = 0; mSuffixes != null && i < mSuffixes.size (); i++) {
       ValueSuffix suffix = (ValueSuffix) mSuffixes.get (i);
-      ret = suffix.evaluate (ret, pContext, vResolver, 
-			     ((VariableResolverImpl)vResolver).getPropertyResolver(),
-			     pLogger);
+      ret = suffix.evaluate (ret, pContext, vResolver, pResolver, pLogger);
     }
 
     return ret;
@@ -152,6 +153,7 @@ public class ComplexValue
   public Object evaluate (Object pContext,
                           Object rValue,
 			  VariableResolver vResolver,
+                          PropertyResolver pResolver,
 			  Logger pLogger)
     throws ELException
   {
@@ -165,18 +167,22 @@ public class ComplexValue
       if ((suffixSize-1) == i) {
 	  // use the rValue evaluate, this prevents pre-maturely setting the
 	  // value 
-	  ret = suffix.evaluate (ret, rValue, pContext, vResolver, 
-				 ((VariableResolverImpl)vResolver).getPropertyResolver(),
-				 pLogger);
+	  ret = suffix.evaluate (ret, rValue, pContext, vResolver, pResolver, pLogger);
       }
       else {
-	  ret = suffix.evaluate (ret, pContext, vResolver, 
-				 ((VariableResolverImpl)vResolver).getPropertyResolver(),
-				 pLogger);
+	  ret = suffix.evaluate (ret, pContext, vResolver, pResolver, pLogger);
       }
     }
 
     return ret;
+  }
+
+  // Added to honor the corresponding abstract method in Expression superclass;
+
+  public Object evaluate (Object pContext,
+                          VariableResolver vResolver,
+                          Logger pLogger) {
+     throw new UnsupportedOperationException();
   }
 
 

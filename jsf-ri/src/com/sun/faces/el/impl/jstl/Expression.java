@@ -55,6 +55,7 @@
 
 package com.sun.faces.el.impl.jstl;
 
+import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
 
 /**
@@ -63,7 +64,7 @@ import javax.faces.el.VariableResolver;
  * derive.
  * 
  * @author Nathan Abramson - Art Technology Group
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: eburns $
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rkitain $
  **/
 
 public abstract class Expression
@@ -88,6 +89,23 @@ public abstract class Expression
 				   VariableResolver pResolver,
 				   Logger pLogger)
     throws ELException;
+
+  public Object evaluate (Object pContext,
+                          VariableResolver pResolver,
+                          PropertyResolver prResolver,
+                          Logger pLogger)
+    throws ELException {
+      throw new UnsupportedOperationException();
+  }
+
+  public Object evaluate (Object pContext,
+			  Object rValue,
+			  VariableResolver pResolver,
+                          PropertyResolver prResolver,
+			  Logger pLogger)
+    throws ELException {
+      throw new UnsupportedOperationException();
+    }
 
   public Object evaluate (Object pContext,
 			  Object rValue,

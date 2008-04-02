@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl.java,v 1.5 2003/04/01 21:59:57 eburns Exp $
+ * $Id: TestValueBindingImpl.java,v 1.6 2003/04/18 16:21:01 rkitain Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
 import org.mozilla.util.ParameterCheck;
 
+import com.sun.faces.application.ApplicationImpl;
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.TestBean;
 import com.sun.faces.TestBean.InnerBean;
@@ -36,7 +37,7 @@ import java.util.Map;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValueBindingImpl.java,v 1.5 2003/04/01 21:59:57 eburns Exp $
+ * @version $Id: TestValueBindingImpl.java,v 1.6 2003/04/18 16:21:01 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -97,8 +98,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 	TestBean testBean = new TestBean();
 	InnerBean newInner, oldInner = new InnerBean();
 	testBean.setInner(oldInner);
-	ValueBindingImpl valueBinding = new ValueBindingImpl(new VariableResolverImpl(),
-							     new PropertyResolverImpl());
+	ValueBindingImpl valueBinding = new ValueBindingImpl(new ApplicationImpl());
 	Object result = null;
 
 	//
@@ -182,8 +182,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 	TestBean testBean = new TestBean();
 	InnerBean newInner, oldInner = new InnerBean();
 	testBean.setInner(oldInner);
-	ValueBindingImpl valueBinding = new ValueBindingImpl(new VariableResolverImpl(),
-							     new PropertyResolverImpl());
+	ValueBindingImpl valueBinding = new ValueBindingImpl(new ApplicationImpl());
 	Object result = null;
 
 	//
@@ -250,8 +249,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
     }
     
     public void testGetLastSegment() {
-	ValueBindingImpl valueBinding = new ValueBindingImpl(new VariableResolverImpl(),
-							     new PropertyResolverImpl());
+	ValueBindingImpl valueBinding = new ValueBindingImpl(new ApplicationImpl());
 	valueBinding.setRef("a.b.c");
 	assertTrue(valueBinding.getLastSegment().equals("c"));
 
@@ -306,8 +304,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
     }
 
     public void testHasMultipleSegments() {
-	ValueBindingImpl valueBinding = new ValueBindingImpl(new VariableResolverImpl(),
-							     new PropertyResolverImpl());
+	ValueBindingImpl valueBinding = new ValueBindingImpl(new ApplicationImpl());
 	valueBinding.setRef("cookie.cookie");
 	assertTrue(valueBinding.hasMultipleSegments());
 	valueBinding.setRef("cookie.monster");
@@ -321,8 +318,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
     }
 
     public void testStripQuotesIfNecessary() {
-	ValueBindingImpl valueBinding = new ValueBindingImpl(new VariableResolverImpl(),
-							     new PropertyResolverImpl());
+	ValueBindingImpl valueBinding = new ValueBindingImpl(new ApplicationImpl());
 	assertTrue(valueBinding.stripQuotesIfNecessary("\"hasQuotes\"").equals("hasQuotes"));
 	assertTrue(valueBinding.stripQuotesIfNecessary("\"openQuote").equals("\"openQuote"));
 	assertTrue(valueBinding.stripQuotesIfNecessary("\'singleQuotes\'").equals("singleQuotes"));
@@ -330,8 +326,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
     }
 
     public void testReadOnly_singleCase() {
-	ValueBindingImpl valueBinding = new ValueBindingImpl(new VariableResolverImpl(),
-							     new PropertyResolverImpl());
+	ValueBindingImpl valueBinding = new ValueBindingImpl(new ApplicationImpl());
 
 	// these are mutable Maps
 	valueBinding.setRef("applicationScope");
@@ -357,8 +352,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
     }
 
     public void testReadOnly_multipleCase() {
-	ValueBindingImpl valueBinding = new ValueBindingImpl(new VariableResolverImpl(),
-							     new PropertyResolverImpl());
+	ValueBindingImpl valueBinding = new ValueBindingImpl(new ApplicationImpl());
 
 	// these are mutable Maps
 	valueBinding.setRef("applicationScope.value");
@@ -408,10 +402,8 @@ public class TestValueBindingImpl extends ServletFacesTestCase
     }
 
     public void testGetType_singleCase() {
-	ValueBindingImpl valueBinding = new ValueBindingImpl(new VariableResolverImpl(),
-							     new PropertyResolverImpl());
+	ValueBindingImpl valueBinding = new ValueBindingImpl(new ApplicationImpl());
 	
-
 	// these are mutable Maps
 	valueBinding.setRef("applicationScope");
 	assertTrue(Map.class.isAssignableFrom(valueBinding.getType(getFacesContext())));
@@ -441,8 +433,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 
 
     public void testGetType_multipleCase() {
-	ValueBindingImpl valueBinding = new ValueBindingImpl(new VariableResolverImpl(),
-							     new PropertyResolverImpl());
+	ValueBindingImpl valueBinding = new ValueBindingImpl(new ApplicationImpl());
 	String property = "testValueBindingImpl_property";
 	getFacesContext().getExternalContext().getApplicationMap().put(property,
 								       property);

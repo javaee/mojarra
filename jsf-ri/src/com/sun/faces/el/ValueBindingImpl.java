@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.5 2003/04/01 21:59:56 eburns Exp $
+ * $Id: ValueBindingImpl.java,v 1.6 2003/04/18 16:20:56 rkitain Exp $
  */
 
 /*
@@ -12,9 +12,8 @@ package com.sun.faces.el;
 import java.util.Map;
 import java.util.List;
 
+import javax.faces.application.Application;
 import javax.faces.el.ValueBinding;
-import javax.faces.el.VariableResolver;
-import javax.faces.el.PropertyResolver;
 import javax.faces.el.PropertyNotFoundException;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
@@ -46,21 +45,16 @@ public class ValueBindingImpl extends ValueBinding
 
     protected String ref = null;
 
-    protected VariableResolver variableResolver = null;
-    protected PropertyResolver propertyResolver = null;
+    protected Application application = null;
     protected static Map applicationMap = null;
 
 //
 // Constructors and Initializers    
 //
 
-    public ValueBindingImpl(VariableResolverImpl newVar, 
-			    PropertyResolver newProp) {
-	ParameterCheck.nonNull(newVar);
-	ParameterCheck.nonNull(newProp);
-	variableResolver = newVar;
-	propertyResolver = newProp;
-	newVar.setPropertyResolver(propertyResolver);
+    public ValueBindingImpl(Application application) { 
+	ParameterCheck.nonNull(application);
+	this.application = application;
 	
 	if (null == applicationMap) {
 //PENDING(rogerk)getCurrentinstance() performance considerations.
@@ -83,7 +77,7 @@ public class ValueBindingImpl extends ValueBinding
 	    applicationMap.get(RIConstants.ELEVALUATOR);
 	if (null == elEvaluator) {
             applicationMap.put(RIConstants.ELEVALUATOR, 
-			       elEvaluator= new ELEvaluator(variableResolver));
+			       elEvaluator= new ELEvaluator(application));
 	}
 	Assert.assert_it(null != elEvaluator);
 	return elEvaluator;
@@ -308,15 +302,15 @@ public class ValueBindingImpl extends ValueBinding
 
 		try {
 		    i = Integer.valueOf(last).intValue();
-		    result = propertyResolver.isReadOnly(toTest, i);
+		    result = application.getPropertyResolver().isReadOnly(toTest, i);
 		}
 		catch (NumberFormatException e) {
 		    // unable to coerce to number, try the string version.
-		    result = propertyResolver.isReadOnly(toTest, last);
+		    result = application.getPropertyResolver().isReadOnly(toTest, last);
 		}
 	    }
 	    else {
-		result = propertyResolver.isReadOnly(toTest, last);
+		result = application.getPropertyResolver().isReadOnly(toTest, last);
 	    }
 	}
 
@@ -368,11 +362,11 @@ public class ValueBindingImpl extends ValueBinding
 
 		try {
 		    i = Integer.valueOf(last).intValue();
-		    result = propertyResolver.getType(toTest, i);
+		    result = application.getPropertyResolver().getType(toTest, i);
 		}
 		catch (NumberFormatException e) {
 		    // unable to coerce to number, try the string version.
-		    result = propertyResolver.getType(toTest, last);
+		    result = application.getPropertyResolver().getType(toTest, last);
 		}
 	    }
 	    else {
@@ -380,7 +374,7 @@ public class ValueBindingImpl extends ValueBinding
 		    result = toTest.getClass();
 		}
 		else {
-		    result = propertyResolver.getType(toTest, last);
+		    result = application.getPropertyResolver().getType(toTest, last);
 		}
 	    }
 	}
