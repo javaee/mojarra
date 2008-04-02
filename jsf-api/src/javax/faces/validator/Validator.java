@@ -1,5 +1,5 @@
 /*
- * $Id: Validator.java,v 1.18 2003/12/24 17:23:40 eburns Exp $
+ * $Id: Validator.java,v 1.19 2003/12/24 21:42:40 craigmcc Exp $
  */
 
 /*
@@ -47,7 +47,7 @@ public interface Validator extends EventListener {
     /**
      * <p>The message identifier of the {@link FacesMessage} to be created if
      * the maximum or minimum value check fails, and both the maximum
-     * and minim values for this validator have been set.  The message
+     * and minimum values for this validator have been set.  The message
      * format string for this message may optionally include a
      * <code>{0}</code> placeholder, which will be replaced by the
      * configured minimum value, and a <code>{1}</code> placeholder,
