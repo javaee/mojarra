@@ -235,6 +235,18 @@
     
   </target>
 
+  <target name="api.javadocs" unless="build.wspack">
+
+    <echo> Build the API Javadocs </echo>
+    <ant dir="${jsf.api.home}" 
+         antfile="${jsf.api.home}/build.xml" target="javadocs"/>
+    <echo> Copy the API Javadocs to the dist </echo>
+    <copy todir="${dist.home}/javadocs">
+      <fileset dir="${jsf.api.home}/build/javadocs"/>
+    </copy>
+
+  </target>
+
   <target name="prepare.dist" depends="jars">
     <mkdir dir="${dist.home}"/>
     <mkdir dir="${dist.home}/samples"/>
@@ -246,14 +258,7 @@
     <copy file="LICENSE-MOZILLA.txt" todir="${dist.home}"/>
     <copy file="${jsf.api.dtd}" todir="${dist.home}/lib"/>
 
-    <echo> Build the API Javadocs </echo>
-    <ant dir="${jsf.api.home}" 
-         antfile="${jsf.api.home}/build.xml" target="javadocs"/>
-    <echo> Copy the API Javadocs to the dist </echo>
-    <copy todir="${dist.home}/javadocs">
-      <fileset dir="${jsf.api.home}/build/javadocs"/>
-    </copy>
-
+    <antcall target="api.javadocs"/>
     <antcall target="copydocs"/>
    </target>
 
