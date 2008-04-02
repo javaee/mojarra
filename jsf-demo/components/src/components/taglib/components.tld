@@ -170,38 +170,6 @@
 
   <tag>
 
-    <name>area_selected</name>
-    <tag-class>components.taglib.AreaSelectedTag</tag-class>
-    <body-content>empty</body-content>
-    <description>
-      Register an AreaSelectedListener, of the class specified by the
-      type attribute, with the parent MapComponent in which we are nested.
-    </description>
-
-    <attribute>
-      <name>binding</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Value binding expression to bind this component to a backing bean.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>type</name>
-      <required>true</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Fully qualified name of a JavaBean class (which must implement
-        components.components.AreaSelectedListener) to be registered.
-      </description>
-    </attribute>
-
-  </tag>
-
-
-  <tag>
-
     <name>calendar</name>
     <tag-class>components.taglib.CalendarTag</tag-class>
     <body-content>JSP</body-content>
