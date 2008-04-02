@@ -5,9 +5,12 @@
 # javaserverfaces-sources for your local environment.  It defines the location
 # of all external modules that the javaserverfaces-source project relies on.
 #
-# $Id: build.properties.sample,v 1.1 2004/09/08 17:55:54 rlubke Exp $
+# $Id: build.properties.sample,v 1.2 2004/09/13 22:49:14 jayashri Exp $
 # -----------------------------------------------------------------------------
 
+# --------------------------------------------------
+#    BUILD REQUIRES ANT 1.6 OR ABOVE
+# --------------------------------------------------
 
 # ----- Compile Control Flags -----
 
@@ -15,13 +18,37 @@ compile.deprecation = true
 compile.optimized = true
 compile.debug = false
 
+# --------------------------------------------------
+#    Path to JWSDP installation
+# --------------------------------------------------
+tomcat.home=
+
+# --------------------------------------------------
+#    Required libraries to build API and RI
+# --------------------------------------------------
+
+# ----- Commons Library JARs
+commons-logging.jar=${tomcat.home}/jwsdp-shared/lib/commons-logging.jar
+commons-digester.jar=${tomcat.home}/jwsdp-shared/lib/commons-digester.jar
+commons-beanutils.jar=${tomcat.home}/jwsdp-shared/lib/commons-beanutils.jar
+commons-collections.jar=${tomcat.home}/jwsdp-shared/lib/commons-collections.jar
+
+# ----- JSTL 1.0 or 1.1 Library JARs
+jstl.jar=${tomcat.home}/jstl/lib/jstl.jar
+standard.jar=${tomcat.home}/jstl/lib/standard.jar
+
+# ----- JAXP implementation JAR
+xerces.jar=${tomcat.home}/jaxp/lib/endorsed/xercesImpl.jar
 
 # ----- Build Control Flags -----
 
-# determines whether dependent library JARs
-# are included with the generated WAR
+# determines whether dependent library JARs are included with the generated WAR.
+# By default all depedent jars are bundled with the application. If you don't 
+# want to do so, comment the following property and uncomment build.wspack 
+# property.
 
 build.standalone = true
+#build.wspack = true
 
 
 # ----- Run Control Flags -----
@@ -45,6 +72,7 @@ build.standalone = true
 #  MIF Doclet (http://developer.java.sun.com/developer/earlyAccess/mifdoclet)
 #  Portlet API 1.0
 #  Jakarta Cactus version 13-1.4.1 or later.
+#  These libraries are required only if you would like to run tests suites.
 # ------------------------------------------------------------------------------
 base.library.path=/home/user
 
@@ -56,9 +84,6 @@ junit.jar=${junit.home}/junit.jar
 
 htmlunit.home=${base.library.path}/htmlunit-1.2.3
 
-portlet-api.home=${base.library.path}/portlet1_0
-portlet-api.jar=${portlet-api.home}/lib/portlet.jar
-
 cactus.home=${base.library.path}/jakarta-cactus-13-1.4.1
 cactus.lib=${cactus.home}/lib
 cactus.jar=${cactus.lib}/cactus-1.4.1.jar
@@ -66,32 +91,18 @@ cactus.ant.jar=${cactus.lib}/cactus-ant-1.4.1.jar
 httpclient.jar=${cactus.lib}/commons-httpclient-2.0alpha1-20020606.jar
 aspectjrt.jar=${cactus.lib}/aspectjrt-1.0.5.jar
 
-
 # --------------------------------------------------
-#    PATH TO TOMCAT/JWSDP INSTALLATION
-# --------------------------------------------------
-tomcat.home=
-
-
-# --------------------------------------------------
-#    PATH TO PLUTO INSTALLATION
+#    PATH TO PORTLET API and PLUTO INSTALLATION
 #    (OPTIONAL unless working with portlets)
 # --------------------------------------------------
+portlet-api.home=${base.library.path}/portlet1_0
+portlet-api.jar=${portlet-api.home}/lib/portlet.jar
+
 pluto.home=
 
 # --------------------------------------------------
-#    REQUIRED LIBRARIES
+# Properties to access the JWSDP Manager application
 # --------------------------------------------------
+username=tomcat
+password=tomcat
 
-# ----- Commons Library JARs
-commons-logging.jar=${tomcat.home}/jwsdp-shared/lib/commons-logging.jar
-commons-digester.jar=${tomcat.home}/jwsdp-shared/lib/commons-digester.jar
-commons-beanutils.jar=${tomcat.home}/jwsdp-shared/lib/commons-beanutils.jar
-commons-collections.jar=${tomcat.home}/common/lib/commons-collections.jar
-
-# ----- JSTL 1.0 or 1.1 Library JARs
-jstl.jar=${tomcat.home}/jstl/lib/jstl.jar
-standard.jar=${tomcat.home}/jstl/lib/standard.jar
-
-# ----- JAXP implementation JAR
-xerces.jar=${tomcat.home}/jaxp/lib/endorsed/xercesImpl.jar

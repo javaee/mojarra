@@ -8,7 +8,7 @@
 
 <!-- ************ JSF build file ************************************** -->
 
-<project name="publish.java.net" default="publish.java.net" basedir=".">
+<project name="javaserverfaces" default="main" basedir=".">
 
 <!-- ************ Per user local properties ******************************* -->
 
@@ -43,14 +43,7 @@
 
 <!-- ************ Executable Targets ************************************** -->
 
-  
- <taskdef name="installerBuilder" classname="com.sun.tools.xjc.installer.builder.BuilderTask">
-     <classpath>
-         <fileset dir="${installer.home}" includes="*.jar"/>
-     </classpath>
-  </taskdef>
-  
-  <target name="clean" 
+ <target name="clean" 
    description="Clean build and distribution directories">
     <delete file="${basedir}/javaserverfaces_binary.zip" />
     <delete file="${basedir}/javaserverfaces_binary.class" />
@@ -58,6 +51,8 @@
     <delete file="${basedir}/javaserverfaces_source.class" />
     <delete file="jsf-portlet.zip" />
     <delete dir="{jsf-portlet.home}/dist" />
+    <ant dir="${jsf-api.home}" target="clean" inheritAll="false" />
+    <ant dir="${jsf-ri.home}" target="clean" inheritAll="false" />
   </target>
 
   <!-- Create the source distribution -->
@@ -88,7 +83,13 @@
   </target>
 
 
-  <target name="publish.java.net" description="Build distribution files">
+  <target name="build.java.net" description="Build distribution files">
+  <taskdef name="installerBuilder" classname="com.sun.tools.xjc.installer.builder.BuilderTask">
+     <classpath>
+         <fileset dir="${installer.home}" includes="*.jar"/>
+     </classpath>
+  </taskdef>
+  
   <ant dir="${jsf-demo.home}" target="dist" inheritAll="false" />
  
   <copy file="${jsf-demo.home}/jsf-${version}.zip"
@@ -148,7 +149,7 @@
       
   </target>
   
-  <target name="nightly" depends="publish.java.net" 
+  <target name="nightly" depends="build.java.net" 
       description="update nightly build" >
   <taskdef resource="org/kohsuke/javanettasks.properties">
     <classpath>
@@ -166,7 +167,7 @@
       fileDescription="Nightly source snapshot." overwrite="yes" /> 
   </target>
   
-  <target name="weekly" depends="publish.java.net" 
+  <target name="weekly" depends="build.java.net" 
       description="update weekly build" >
   <taskdef resource="org/kohsuke/javanettasks.properties">
     <classpath>
@@ -182,5 +183,15 @@
   <javaNetUpload projectName="javaserverfaces" 
       toFile="/weekly/javaserverfaces_source.class" fromFile="${basedir}/javaserverfaces_source.class" 
       fileDescription="Weekly source snapshot." overwrite="yes" /> 
+  </target>
+  
+  <target name="main" description="Build API and RI" >
+      <ant dir="${jsf-api.home}" target="main" inheritAll="false" />
+      <ant dir="${jsf-ri.home}" target="main" inheritAll="false" />
+  </target>
+  
+  <target name="test" description="Run API, RI, Demo automated tests" >
+      <ant dir="${jsf-api.home}" target="test" inheritAll="false" />
+      <ant dir="${jsf-ri.home}" target="test" inheritAll="false" />
   </target>
 </project>
