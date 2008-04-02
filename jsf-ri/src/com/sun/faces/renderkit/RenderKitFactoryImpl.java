@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactoryImpl.java,v 1.5 2002/08/01 23:45:41 rkitain Exp $
+ * $Id: RenderKitFactoryImpl.java,v 1.6 2002/11/14 20:49:54 rkitain Exp $
  */
 
 /*
@@ -160,13 +160,12 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
 
     public RenderKit getRenderKit(String renderKitId, FacesContext context) {
 
-	Assert.assert_it(false, "PENDING(): fixme");
-
         if (renderKitId == null || context == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-
-	return null;
+        //PENDING (rogerk) do something with FacesContext ...
+        //
+        return getRenderKit(renderKitId);
     }
 
     /** 

@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKitFactory.java,v 1.2 2002/06/26 19:59:27 eburns Exp $
+ * $Id: TestRenderKitFactory.java,v 1.3 2002/11/14 20:50:21 rkitain Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import com.sun.faces.renderkit.RenderKitFactoryImpl;
 
 import java.util.Iterator;
 
+import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.FacesException;
@@ -30,7 +31,7 @@ import org.apache.cactus.ServletTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKitFactory.java,v 1.2 2002/06/26 19:59:27 eburns Exp $
+ * @version $Id: TestRenderKitFactory.java,v 1.3 2002/11/14 20:50:21 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -72,7 +73,7 @@ public class TestRenderKitFactory extends ServletTestCase {
     public void testFactory() {
         renderKitFactory = new RenderKitFactoryImpl();
 
-        // 1. Verify "createRenderKit" returns the same RenderKit instance
+        // 1. Verify "getRenderKit" returns the same RenderKit instance
         //    if called multiple times with the same identifier.
         //  
         RenderKit renderKit1 = renderKitFactory.getRenderKit("DEFAULT");
@@ -93,7 +94,17 @@ public class TestRenderKitFactory extends ServletTestCase {
             i++;
         }
         assertTrue(i == 3);
-        
+
+        // 3. Verify null parameter exception for "getRenderKit"
+        FacesContext context = null;
+        boolean except = false;
+        try {
+            RenderKit renderKit3 = renderKitFactory.getRenderKit("DEFAULT",
+                context);
+        } catch(NullPointerException npe) {
+            except = true;
+        }
+        assertTrue(except);
     }
 
     public void testDefaultExists() {
