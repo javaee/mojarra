@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.205 2007/01/26 04:02:36 rlubke Exp $
+ * $Id: Util.java,v 1.206 2007/01/31 22:44:19 jdlee Exp $
  */
 
 /*
@@ -77,7 +77,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.205 2007/01/26 04:02:36 rlubke Exp $
+ * @version $Id: Util.java,v 1.206 2007/01/31 22:44:19 jdlee Exp $
  */
 
 public class Util {
@@ -519,16 +519,7 @@ public class Util {
 
 
     public static boolean componentIsDisabledOrReadonly(UIComponent component) {
-
-        boolean disabledOrReadonly =
-             Boolean.valueOf(String.valueOf(component.getAttributes().get("disabled")));
-        if (disabledOrReadonly) {
-            return true;
-        }
-        disabledOrReadonly =
-            Boolean.valueOf(String.valueOf(component.getAttributes().get("disabled")));
-        return disabledOrReadonly;
-
+        return Boolean.valueOf(String.valueOf(component.getAttributes().get("disabled"))) || Boolean.valueOf(String.valueOf(component.getAttributes().get("readonly")));
     }
 
 
