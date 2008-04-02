@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.10 2003/01/22 04:59:23 craigmcc Exp $
+ * $Id: FacesServlet.java,v 1.11 2003/01/30 21:29:19 craigmcc Exp $
  */
 
 /*
@@ -175,13 +175,13 @@ public final class FacesServlet implements Servlet {
             if (t == null) {
                 throw new ServletException(e.getMessage(), e);
             } else {
-                while (t instanceof ServletException) {
-                    Throwable u = ((ServletException) t).getRootCause();
-                    if (u != null) {
-                        t = u;
-                    }
+                if (t instanceof ServletException) {
+                    throw ((ServletException) t);
+                } else if (t instanceof IOException) {
+                    throw ((IOException) t);
+                } else {
+                    throw new ServletException(t.getMessage(), t);
                 }
-                throw new ServletException(t.getMessage(), t);
             }
         }
 
