@@ -58,10 +58,22 @@
   <tag>
     <name>format_validator</name>
     <tag-class>cardemo.FormatValidatorTag</tag-class>
+      <description>Defines the format-validator tag, with the 
+        tag-handler class, cardemo.FormatValidatorTag.  This tag
+	must be nested inside a UI component tag.  The value of the 
+	UI component whose tag encloses the format_validator tag
+	is validated against the format patterns defined by the
+	formatPatterns attribute.
+      </description>
       <attribute>
         <name>formatPatterns</name>
 	<required>true</required>
 	<rtexprvalue>false</rtexprvalue>
+	<description>
+	  Defines the format patterns to use to validate the data of
+	  the UI component, whose tag encloses the format_validator
+	  tag.
+	</description> 
       </attribute>
   </tag>
 </taglib>
