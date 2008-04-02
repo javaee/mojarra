@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphic.java,v 1.18 2003/07/26 17:54:36 craigmcc Exp $
+ * $Id: UIGraphic.java,v 1.19 2003/08/30 00:31:31 craigmcc Exp $
  */
 
 /*
@@ -20,7 +20,7 @@ package javax.faces.component;
  * <code>setRendererType()</code> method.</p>
  */
 
-public interface UIGraphic extends UIOutput {
+public interface UIGraphic extends UIComponent, ValueHolder {
 
 
     // -------------------------------------------------------------- Properties

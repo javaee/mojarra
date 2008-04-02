@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItems.java,v 1.11 2003/07/26 17:54:38 craigmcc Exp $
+ * $Id: UISelectItems.java,v 1.12 2003/08/30 00:31:32 craigmcc Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import javax.faces.model.SelectItem;
  * </ul>
  */
 
-public interface UISelectItems extends UIOutput {
+public interface UISelectItems extends UIComponent, ValueHolder {
 
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.9 2003/08/27 21:16:31 craigmcc Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.10 2003/08/30 00:31:41 craigmcc Exp $
  */
 
 /*
@@ -304,7 +304,8 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         assertTrue(!kidItr.hasNext());
     }
 
-    public void testStateHolder() {
+    public void testStateHolder() throws Exception {
+
         UIComponent testParent = new TestComponentNamingContainer("root");
 	UIComponent
 	    preSave = null,
@@ -320,12 +321,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 	
 	postSave = new TestComponent("componentId");
 	testParent.getChildren().add(postSave);
-	try {
-	    postSave.restoreState(facesContext, state);
-	}
-	catch (Throwable e) {
-	    assertTrue(false);
-	}
+        postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
 	// test component with componentId, clientId and componentRef
@@ -339,12 +335,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 	
 	postSave = new TestComponent("componentId");
 	testParent.getChildren().add(postSave);
-	try {
-	    postSave.restoreState(facesContext, state);
-	}
-	catch (Throwable e) {
-	    assertTrue(false);
-	}
+        postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
 	// test component with componentId, clientId and componentRef
@@ -362,12 +353,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 	
 	postSave = new TestComponent("componentId");
 	testParent.getChildren().add(postSave);
-	try {
-	    postSave.restoreState(facesContext, state);
-	}
-	catch (Throwable e) {
-	    assertTrue(false);
-	}
+        postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
     }

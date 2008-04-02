@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutputBase.java,v 1.6 2003/08/27 00:56:51 craigmcc Exp $
+ * $Id: UIOutputBase.java,v 1.7 2003/08/30 00:31:36 craigmcc Exp $
  */
 
 /*
@@ -12,6 +12,7 @@ package javax.faces.component.base;
 
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -52,7 +53,7 @@ public class UIOutputBase extends UIComponentBase implements UIOutput {
 
     /**
      * <p>The converter {@link Converter} (if any)
-     * that is registered for this component.</p>
+     * that is registered for this {@link UIComponent}.</p>
      */
     private Converter converter = null;
 
@@ -112,7 +113,7 @@ public class UIOutputBase extends UIComponentBase implements UIOutput {
     }
 
 
-    // ---------------------------------------------------------- Public Methods
+    // ----------------------------------------------------- ValueHolder Methods
 
 
     public Object currentValue(FacesContext context) {

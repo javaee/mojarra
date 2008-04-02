@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphicBaseTestCase.java,v 1.2 2003/07/26 17:55:22 craigmcc Exp $
+ * $Id: UIGraphicBaseTestCase.java,v 1.3 2003/08/30 00:31:41 craigmcc Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import junit.framework.TestSuite;
  * <p>Unit tests for {@link UIGraphicBase}.</p>
  */
 
-public class UIGraphicBaseTestCase extends UIOutputBaseTestCase {
+public class UIGraphicBaseTestCase extends ValueHolderTestCaseBase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -123,6 +123,65 @@ public class UIGraphicBaseTestCase extends UIOutputBaseTestCase {
 
     }
 
+
+    // Test saving and restoring state
+    public void testStateHolder() throws Exception {
+
+        UIComponent testParent = new TestComponentNamingContainer("root");
+	UIGraphic
+	    preSave = null,
+	    postSave = null;
+	Object state = null;
+
+	// test component with no properties
+	testParent.getChildren().clear();
+	preSave = new UIGraphicBase();
+	preSave.setId("graphic");
+	preSave.setRendererType(null); // necessary: we have no renderkit
+	testParent.getChildren().add(preSave);
+	state = preSave.getState(facesContext);
+	assertTrue(null != state);
+	testParent.getChildren().clear();
+	
+	postSave = new UIGraphicBase();
+	testParent.getChildren().add(postSave);
+        postSave.restoreState(facesContext, state);
+	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+
+	// test component with valueRef
+	testParent.getChildren().clear();
+	preSave = new UIGraphicBase();
+	preSave.setId("graphic");
+	preSave.setRendererType(null); // necessary: we have no renderkit
+	preSave.setValueRef("valueRefString");
+	testParent.getChildren().add(preSave);
+	state = preSave.getState(facesContext);
+	assertTrue(null != state);
+	testParent.getChildren().clear();
+	
+	postSave = new UIGraphicBase();
+	testParent.getChildren().add(postSave);
+        postSave.restoreState(facesContext, state);
+	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+
+	// test component with valueRef and converter
+	testParent.getChildren().clear();
+	preSave = new UIGraphicBase();
+	preSave.setId("graphic");
+	preSave.setRendererType(null); // necessary: we have no renderkit
+	preSave.setValueRef("valueRefString");
+	preSave.setConverter(new StateSavingConverter("testCase State"));
+	testParent.getChildren().add(preSave);
+	state = preSave.getState(facesContext);
+	assertTrue(null != state);
+	testParent.getChildren().clear();
+	
+	postSave = new UIGraphicBase();
+	testParent.getChildren().add(postSave);
+        postSave.restoreState(facesContext, state);
+	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+
+    }
 
 
 }

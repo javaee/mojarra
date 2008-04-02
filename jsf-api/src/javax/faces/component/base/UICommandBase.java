@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandBase.java,v 1.8 2003/08/27 22:34:01 craigmcc Exp $
+ * $Id: UICommandBase.java,v 1.9 2003/08/30 00:31:35 craigmcc Exp $
  */
 
 /*
@@ -10,14 +10,20 @@
 package javax.faces.component.base;
 
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.faces.application.Action;
+import javax.faces.application.Application;
 import javax.faces.component.UICommand;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.el.ValueBinding;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 import javax.faces.event.PhaseId;
-import java.io.IOException;
 
 
 /**
@@ -26,7 +32,7 @@ import java.io.IOException;
  * {@link UICommand}.</p>
  */
 
-public class UICommandBase extends UIOutputBase implements UICommand {
+public class UICommandBase extends UIComponentBase implements UICommand {
 
 
     // ------------------------------------------------------------ Constructors
@@ -88,10 +94,29 @@ public class UICommandBase extends UIOutputBase implements UICommand {
 
 
     /**
+     * <p>The {@link Converter} (if any)
+     * that is registered for this {@link UIComponent}.</p>
+     */
+    private Converter converter = null;
+
+
+    public Converter getConverter() {
+
+        return (this.converter);
+
+    }
+
+
+    public void setConverter(Converter converter) {
+
+        this.converter = converter;
+
+    }
+
+
+    /**
      * <p>The immediate flag.</p>
      */
-    // PENDING(craigmcc) - not saved as part of the state yet,
-    // will be picked up when that mechanism is remodelled
     private boolean immediate = false;
 
 
@@ -109,7 +134,48 @@ public class UICommandBase extends UIOutputBase implements UICommand {
     }
 
 
-    // -------------------------------------------------- Event Listener Methods
+    /**
+     * <p>The local value of this {@link UIComponent} (if any).</p>
+     */
+    private Object value = null;
+
+
+    public Object getValue() {
+
+        return (this.value);
+
+    }
+
+
+    public void setValue(Object value) {
+
+        this.value = value;
+
+    }
+
+
+    /**
+     * <p>The value reference expression for this {@link UIComponent}
+     * (if any).</p>
+     */
+    private String valueRef = null;
+
+
+    public String getValueRef() {
+
+        return (this.valueRef);
+
+    }
+
+
+    public void setValueRef(String valueRef) {
+
+        this.valueRef = valueRef;
+
+    }
+
+
+    // ---------------------------------------------------- ActionSource Methods
 
 
     public void addActionListener(ActionListener listener) {
@@ -126,6 +192,29 @@ public class UICommandBase extends UIOutputBase implements UICommand {
     }
 
 
+    // ----------------------------------------------------- ValueHolder Methods
+
+
+    public Object currentValue(FacesContext context) {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        Object value = getValue();
+        if (value != null) {
+            return (value);
+        }
+        String valueRef = getValueRef();
+        if (valueRef != null) {
+            Application application = context.getApplication();
+            ValueBinding binding = application.getValueBinding(valueRef);
+            return (binding.getValue(context));
+        }
+        return (null);
+
+    }
+
+
     // ----------------------------------------------------- StateHolder Methods
 
 
@@ -133,11 +222,20 @@ public class UICommandBase extends UIOutputBase implements UICommand {
 
         removeDefaultActionListener(context);
 
-        Object values[] = new Object[4];
+        Object values[] = new Object[7];
         values[0] = super.getState(context);
         values[1] = action;
         values[2] = actionRef;
-        values[3] = immediate ? Boolean.TRUE : Boolean.FALSE;
+        List[] converterList = new List[1];
+        List theConverter = new ArrayList(1);
+        theConverter.add(converter);
+        converterList[0] = theConverter;
+        values[3] =
+            context.getApplication().getViewHandler().getStateManager().
+            getAttachedObjectState(context, this, "converter", converterList);
+        values[4] = immediate ? Boolean.TRUE : Boolean.FALSE;
+        values[5] = value;
+        values[6] = valueRef;
 
         addDefaultActionListener(context);
         return (values);
@@ -152,7 +250,19 @@ public class UICommandBase extends UIOutputBase implements UICommand {
         super.restoreState(context, values[0]);
         action = (String) values[1];
         actionRef = (String) values[2];
-        immediate = ((Boolean) values[3]).booleanValue();
+        List[] converterList = (List[])
+            context.getApplication().getViewHandler().getStateManager().
+            restoreAttachedObjectState(context, values[3]);
+        // PENDING(craigmcc) - it shouldn't be this hard to restore converters
+	if (converterList != null) {
+            List theConverter = converterList[0];
+            if ((theConverter != null) && (theConverter.size() > 0)) {
+                converter = (Converter) theConverter.get(0);
+            }
+	}
+        immediate = ((Boolean) values[4]).booleanValue();
+        value = (String) values[5];
+        valueRef = (String) values[6];
 
         addDefaultActionListener(context);
 

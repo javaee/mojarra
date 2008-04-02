@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.28 2003/08/15 17:23:43 craigmcc Exp $
+ * $Id: UIOutput.java,v 1.29 2003/08/30 00:31:31 craigmcc Exp $
  */
 
 /*
@@ -51,92 +51,7 @@ import javax.faces.render.Renderer;
  * <code>setRendererType()</code> method.</p>
  */
 
-public interface UIOutput extends UIComponent {
-
-
-    // -------------------------------------------------------------- Properties
-
-
-    /**
-     * <p>Return the {@link Converter} (if any)
-     * that is registered for this component.</p>
-     */
-    public Converter getConverter();
-
-
-    /**
-     * <p>Set the {@link Converter} (if any)
-     * that is registered for this component.</p>
-     *
-     * @param converter New {@link Converter} (or <code>null</code>)
-     */
-    public void setConverter(Converter converter);
-
-
-    /**
-     * <p>Return the local value of this {@link UIOutput} component
-     * (if any).</p>
-     */
-    public Object getValue();
-
-
-    /**
-     * <p>Set the local value of this {@link UIOutput} component (if any).</p>
-     *
-     * @param value The new local value
-     */
-    public void setValue(Object value);
-
-
-    /**
-     * <p>Return the value reference expression for this {@link UIOutput}
-     * component (if any), pointing at the model tier property that will
-     * be rendered.</p>
-     */
-    public String getValueRef();
-
-
-    /**
-     * <p>Set the value reference expression for this {@link UIOutput}
-     * component (if any), pointing at the model tier property that will
-     * be rendered.</p>
-     *
-     * @param valueRef The new value reference expression
-     */
-    public void setValueRef(String valueRef);
-
-
-    // ---------------------------------------------------------- Public Methods
-
-
-    /**
-     * <p>Evaluate and return the current value of this component, according
-     * to the following algorithm.</p>
-     * <ul>
-     * <li>If the <code>value</code> property has a non-null value,
-     *     return that; else</li>
-     * <li>If the <code>valueRef</code> property has a non-null value,
-     *     <ul>
-     *     <li>Retrieve the {@link Application} instance for this web
-     *         application.</li>
-     *     <li>Ask it for a {@link ValueBinding} for the <code>valueRef</code>
-     *         expression.</li>
-     *     <li>Use the <code>getValue()</code> method of the
-     *         {@link ValueBinding} to retrieve the value that the
-     *         value reference expression points at.</li>
-     *     </ul>
-     * <li>Otherwise, return <code>null</code>.</li>
-     * </ul>
-     *
-     * @param context {@link FacesContext} within which to evaluate the value
-     *  reference expression, if necessary
-     *
-     * @exception EvaluationException if a problem occurs evaluating
-     *  the value reference expression
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-    public Object currentValue(FacesContext context);
+public interface UIOutput extends UIComponent, ValueHolder {
 
 
 }

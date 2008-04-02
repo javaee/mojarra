@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameterBaseTestCase.java,v 1.2 2003/07/26 17:55:24 craigmcc Exp $
+ * $Id: UIParameterBaseTestCase.java,v 1.3 2003/08/30 00:31:42 craigmcc Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
+import javax.faces.context.FacesContext;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -23,7 +24,7 @@ import junit.framework.TestSuite;
  * <p>Unit tests for {@link UIParameterBase}.</p>
  */
 
-public class UIParameterBaseTestCase extends UIOutputBaseTestCase {
+public class UIParameterBaseTestCase extends ValueHolderTestCaseBase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -119,6 +120,85 @@ public class UIParameterBaseTestCase extends UIOutputBaseTestCase {
 
     }
 
+
+    // Test saving and restoring state
+    public void testStateHolder() throws Exception {
+
+        UIComponent testParent = new TestComponentNamingContainer("root");
+	UIParameter
+	    preSave = null,
+	    postSave = null;
+	Object state = null;
+
+	// test component with no properties
+	testParent.getChildren().clear();
+	preSave = new UIParameterBase();
+	preSave.setId("parameter");
+	preSave.setRendererType(null); // necessary: we have no renderkit
+	testParent.getChildren().add(preSave);
+	state = preSave.getState(facesContext);
+	assertTrue(null != state);
+	testParent.getChildren().clear();
+	
+	postSave = new UIParameterBase();
+	testParent.getChildren().add(postSave);
+        postSave.restoreState(facesContext, state);
+	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+
+	// test component with valueRef
+	testParent.getChildren().clear();
+	preSave = new UIParameterBase();
+	preSave.setId("parameter");
+	preSave.setRendererType(null); // necessary: we have no renderkit
+	preSave.setValueRef("valueRefString");
+	testParent.getChildren().add(preSave);
+	state = preSave.getState(facesContext);
+	assertTrue(null != state);
+	testParent.getChildren().clear();
+	
+	postSave = new UIParameterBase();
+	testParent.getChildren().add(postSave);
+        postSave.restoreState(facesContext, state);
+	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+
+	// test component with valueRef and converter
+	testParent.getChildren().clear();
+	preSave = new UIParameterBase();
+	preSave.setId("parameter");
+	preSave.setRendererType(null); // necessary: we have no renderkit
+	preSave.setValueRef("valueRefString");
+	preSave.setConverter(new StateSavingConverter("testCase State"));
+	testParent.getChildren().add(preSave);
+	state = preSave.getState(facesContext);
+	assertTrue(null != state);
+	testParent.getChildren().clear();
+	
+	postSave = new UIParameterBase();
+	testParent.getChildren().add(postSave);
+        postSave.restoreState(facesContext, state);
+	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+
+    }
+
+
+    boolean propertiesAreEqual(FacesContext context,
+			       UIComponent comp1,
+			       UIComponent comp2) {
+
+	UIParameterBase
+	    param1 = (UIParameterBase) comp1,
+	    param2 = (UIParameterBase) comp2;
+	if (super.propertiesAreEqual(context, comp1, comp2)) {
+	    // if their not both null, or not the same string
+	    if (!((null == param1.getName() && 
+		   null == param2.getName()) ||
+		(param1.getName().equals(param2.getName())))) {
+		return false;
+	    }
+	}
+	return true;
+
+    }
 
 
 }

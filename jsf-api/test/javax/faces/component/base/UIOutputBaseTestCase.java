@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutputBaseTestCase.java,v 1.6 2003/08/21 15:26:07 eburns Exp $
+ * $Id: UIOutputBaseTestCase.java,v 1.7 2003/08/30 00:31:42 craigmcc Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import junit.framework.TestSuite;
  * <p>Unit tests for {@link UIOutputBase}.</p>
  */
 
-public class UIOutputBaseTestCase extends UIComponentBaseTestCase {
+public class UIOutputBaseTestCase extends ValueHolderTestCaseBase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -78,90 +78,6 @@ public class UIOutputBaseTestCase extends UIComponentBaseTestCase {
         super.testAttributesTransparency();
         UIOutput output = (UIOutput) component;
 
-        assertEquals(output.getConverter(),
-                     (String) output.getAttribute("converter"));
-        output.setConverter(new LongConverter());
-        assertNotNull((Converter) output.getAttribute("converter"));
-        assertTrue(output.getAttribute("converter") instanceof LongConverter);
-        output.setConverter(null);
-        assertNull(output.getAttribute("converter"));
-        output.setAttribute("converter", new ShortConverter());
-        assertNotNull(output.getConverter());
-        assertTrue(output.getConverter() instanceof ShortConverter);
-        output.setAttribute("converter", null);
-        assertNull(output.getConverter());
-
-        assertEquals(output.getValue(),
-                     (String) output.getAttribute("value"));
-        output.setValue("foo");
-        assertEquals("foo", (String) output.getAttribute("value"));
-        output.setValue(null);
-        assertNull((String) output.getAttribute("value"));
-        output.setAttribute("value", "bar");
-        assertEquals("bar", output.getValue());
-        output.setAttribute("value", null);
-        assertNull(output.getValue());
-
-        assertEquals(output.getValueRef(),
-                     (String) output.getAttribute("valueRef"));
-        output.setValueRef("foo");
-        assertEquals("foo", (String) output.getAttribute("valueRef"));
-        output.setValueRef(null);
-        assertNull((String) output.getAttribute("valueRef"));
-        output.setAttribute("valueRef", "bar");
-        assertEquals("bar", output.getValueRef());
-        output.setAttribute("valueRef", null);
-        assertNull(output.getValueRef());
-
-    }
-
-
-    // Test currentValue method
-    public void testCurrentValue() {
-
-        // Validate initial conditions
-        UIOutput output = (UIOutput) component;
-        assertNull(output.getConverter());
-        assertNull(output.getValue());
-        assertNull(output.getValueRef());
-
-        // Retrieve a local value
-        output.setValue("localValue");
-        assertEquals("localValue", output.currentValue(facesContext));
-        output.setValue(null);
-
-        // Retrieve an application initialization parameter
-        /* PENDING(craigmcc) - MockExternalContext support
-        output.setValueRef("initParam.appParamName");
-        assertEquals("appParamValue", output.currentValue(facesContext));
-        assertNull(output.getValue());
-        output.setValueRef(null);
-        */
-
-        // Retrieve an application scope attribute
-        /* PENDING(craigmcc) - MockExternalContext support
-        output.setValueRef("applicationScope.appScopeName");
-        assertEquals("appScopeValue", output.currentValue(facesContext));
-        assertNull(output.getValue());
-        output.setValueRef(null);
-        */
-
-        // Retrieve a request scope attribute
-        /* PENDING(craigmcc) - MockExternalContext support
-        output.setValueRef("requestScope.reqScopeName");
-        assertEquals("reqScopeValue", output.currentValue(facesContext));
-        assertNull(output.getValue());
-        output.setValueRef(null);
-        */
-
-        // Retrieve a session scope attribute
-        /* PENDING(craigmcc) - MockExternalContext support
-        output.setValueRef("sessionScope.sesScopeName");
-        assertEquals("sesScopeValue", output.currentValue(facesContext));
-        assertNull(output.getValue());
-        output.setValueRef(null);
-        */
-
     }
 
 
@@ -175,11 +91,6 @@ public class UIOutputBaseTestCase extends UIComponentBaseTestCase {
 
         super.testPristine();
         UIOutput output = (UIOutput) component;
-
-        // Validate properties
-        assertNull("no converter", output.getConverter());
-        assertNull("no value", output.getValue());
-        assertNull("no valueRef", output.getValueRef());
 
     }
 
@@ -199,37 +110,19 @@ public class UIOutputBaseTestCase extends UIComponentBaseTestCase {
         super.testPropertiesValid();
         UIOutput output = (UIOutput) component;
 
-        // converter
-        output.setConverter(new LongConverter());
-        assertTrue("expected converter",
-                   output.getConverter() instanceof LongConverter);
-        output.setConverter(null);
-        assertNull("erased converter", output.getConverter());
-
-        // value
-        output.setValue("foo.bar");
-        assertEquals("expected value",
-                     "foo.bar", output.getValue());
-        output.setValue(null);
-        assertNull("erased value", output.getValue());
-
-        // valueRef
-        output.setValueRef("customer.name");
-        assertEquals("expected valueRef",
-                     "customer.name", output.getValueRef());
-        output.setValueRef(null);
-        assertNull("erased valueRef", output.getValueRef());
-
     }
 
-    public void testStateHolder() {
+
+    // Test saving and restoring state
+    public void testStateHolder() throws Exception {
+
         UIComponent testParent = new TestComponentNamingContainer("root");
 	UIOutput
 	    preSave = null,
 	    postSave = null;
 	Object state = null;
 
-	// test output with no properties
+	// test component with no properties
 	testParent.getChildren().clear();
 	preSave = new UIOutputBase();
 	preSave.setId("output");
@@ -241,15 +134,10 @@ public class UIOutputBaseTestCase extends UIComponentBaseTestCase {
 	
 	postSave = new UIOutputBase();
 	testParent.getChildren().add(postSave);
-	try {
-	    postSave.restoreState(facesContext, state);
-	}
-	catch (Throwable e) {
-	    assertTrue(false);
-	}
+        postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
-	// test output with valueRef
+	// test component with valueRef
 	testParent.getChildren().clear();
 	preSave = new UIOutputBase();
 	preSave.setId("output");
@@ -262,15 +150,10 @@ public class UIOutputBaseTestCase extends UIComponentBaseTestCase {
 	
 	postSave = new UIOutputBase();
 	testParent.getChildren().add(postSave);
-	try {
-	    postSave.restoreState(facesContext, state);
-	}
-	catch (Throwable e) {
-	    assertTrue(false);
-	}
+        postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
-	// test output with valueRef and converter
+	// test component with valueRef and converter
 	testParent.getChildren().clear();
 	preSave = new UIOutputBase();
 	preSave.setId("output");
@@ -284,14 +167,8 @@ public class UIOutputBaseTestCase extends UIComponentBaseTestCase {
 	
 	postSave = new UIOutputBase();
 	testParent.getChildren().add(postSave);
-	try {
-	    postSave.restoreState(facesContext, state);
-	}
-	catch (Throwable e) {
-	    assertTrue(false);
-	}
+        postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
-
 
     }
 

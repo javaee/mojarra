@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanel.java,v 1.14 2003/07/26 17:54:37 craigmcc Exp $
+ * $Id: UIPanel.java,v 1.15 2003/08/30 00:31:31 craigmcc Exp $
  */
 
 /*
@@ -15,7 +15,7 @@ package javax.faces.component;
  * layout of its child components.</p>
  */
 
-public interface UIPanel extends UIOutput {
+public interface UIPanel extends UIComponent, ValueHolder {
 
 
     // ------------------------------------------------------------- Properties

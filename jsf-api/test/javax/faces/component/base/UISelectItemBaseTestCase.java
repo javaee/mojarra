@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItemBaseTestCase.java,v 1.3 2003/07/28 22:22:29 eburns Exp $
+ * $Id: UISelectItemBaseTestCase.java,v 1.4 2003/08/30 00:31:42 craigmcc Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import junit.framework.TestSuite;
  * <p>Unit tests for {@link UISelectItemBase}.</p>
  */
 
-public class UISelectItemBaseTestCase extends UIOutputBaseTestCase {
+public class UISelectItemBaseTestCase extends ValueHolderTestCaseBase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -155,6 +155,7 @@ public class UISelectItemBaseTestCase extends UIOutputBaseTestCase {
     }
 
     public void testStateHolder() {
+
         UIComponent testParent = new TestComponentNamingContainer("root");
 	UISelectItem
 	    preSave = null,

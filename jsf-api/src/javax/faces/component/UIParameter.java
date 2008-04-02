@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameter.java,v 1.7 2003/07/26 17:54:37 craigmcc Exp $
+ * $Id: UIParameter.java,v 1.8 2003/08/30 00:31:31 craigmcc Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ package javax.faces.component;
  * their use of this property.</p>
  */
 
-public interface UIParameter extends UIOutput {
+public interface UIParameter extends UIComponent, ValueHolder {
 
 
     // -------------------------------------------------------------- Properties

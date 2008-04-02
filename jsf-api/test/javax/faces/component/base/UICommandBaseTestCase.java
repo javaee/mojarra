@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandBaseTestCase.java,v 1.10 2003/08/27 22:34:02 craigmcc Exp $
+ * $Id: UICommandBaseTestCase.java,v 1.11 2003/08/30 00:31:40 craigmcc Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import junit.framework.TestSuite;
  * <p>Unit tests for {@link UICommandBase}.</p>
  */
 
-public class UICommandBaseTestCase extends UIOutputBaseTestCase {
+public class UICommandBaseTestCase extends ValueHolderTestCaseBase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -289,7 +289,8 @@ public class UICommandBaseTestCase extends UIOutputBaseTestCase {
 
     }
 
-    public void testStateHolder() {
+    public void testStateHolder() throws Exception {
+
         UIComponent testParent = new TestComponentNamingContainer("root");
 	UICommandSub
 	    preSave = null,
@@ -309,12 +310,7 @@ public class UICommandBaseTestCase extends UIOutputBaseTestCase {
 	postSave = new UICommandSub();
 	postSave.setId("command");
 	testParent.getChildren().add(postSave);
-	try {
-	    postSave.restoreState(facesContext, state);
-	}
-	catch (Throwable e) {
-	    assertTrue(false);
-	}
+        postSave.restoreState(facesContext, state);
 	assertTrue(null != postSave.getListeners());
 	// make sure the default action listener has been added on restore
 	List [] lister = (List []) postSave.getListeners();
@@ -337,12 +333,7 @@ public class UICommandBaseTestCase extends UIOutputBaseTestCase {
 	postSave = new UICommandSub();
 	postSave.setId("command");
 	testParent.getChildren().add(postSave);
-	try {
-	    postSave.restoreState(facesContext, state);
-	}
-	catch (Throwable e) {
-	    assertTrue(false);
-	}
+        postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
 	// test page with action and actionRef, and listeners
@@ -372,13 +363,27 @@ public class UICommandBaseTestCase extends UIOutputBaseTestCase {
 	postSave = new UICommandSub();
 	postSave.setId("command");
 	testParent.getChildren().add(postSave);
-	try {
-	    postSave.restoreState(facesContext, state);
-	}
-	catch (Throwable e) {
-	    assertTrue(false);
-	}
+        postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+
+	// test page with converter, value, and valueRef
+	testParent.getChildren().clear();
+	preSave = new UICommandSub();
+	preSave.setId("valueHolder");
+	preSave.setRendererType(null); // necessary: we have no renderkit
+        preSave.setValue("valueString");
+	preSave.setValueRef("valueRefString");
+	preSave.setConverter(new StateSavingConverter("testCase State"));
+	testParent.getChildren().add(preSave);
+	state = preSave.getState(facesContext);
+	assertTrue(null != state);
+	testParent.getChildren().clear();
+	
+	postSave = new UICommandSub();
+	testParent.getChildren().add(postSave);
+        postSave.restoreState(facesContext, state);
+	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+
 
     }
 
@@ -391,6 +396,9 @@ public class UICommandBaseTestCase extends UIOutputBaseTestCase {
 	    command1 = (UICommandSub) comp1,
 	    command2 = (UICommandSub) comp2;
 	if (super.propertiesAreEqual(context, comp1, comp2)) {
+            if (command1.isImmediate() != command2.isImmediate()) {
+                return false;
+            }
 	    // if their not both null, or not the same string
 	    if (!((null == command1.getAction() && 
 		   null == command2.getAction()) ||

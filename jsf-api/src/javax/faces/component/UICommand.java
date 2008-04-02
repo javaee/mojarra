@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.40 2003/08/26 21:50:03 craigmcc Exp $
+ * $Id: UICommand.java,v 1.41 2003/08/30 00:31:30 craigmcc Exp $
  */
 
 /*
@@ -36,97 +36,7 @@ import javax.faces.render.Renderer;
  * <code>setRendererType()</code> method.</p>
  */
 
-public interface UICommand extends UIOutput {
-
-
-    // -------------------------------------------------------------- Properties
-
-
-    /**
-     * <p>Return the literal action outcome value to be returned to the
-     * {@link ActionListener} processing application level events for this
-     * application.</p>
-     */
-    public String getAction();
-
-
-    /**
-     * <p>Set the literal action outcome value for this component.</p>
-     *
-     * @param action The new outcome value
-     */
-    public void setAction(String action);
-
-
-    /**
-     * <p>Return the <em>action reference expression</em> pointing at the
-     * {@link javax.faces.application.Action} to be invoked, if this component
-     * is activated by the user, during the <em>Apply Request Values</em>
-     * or <em>Invoke Application</em> phase of the request processing
-     * lifecycle, depending on the value of the <code>immediate</code>
-     * property.</p>
-     */
-    public String getActionRef();
-
-
-    /**
-     * <p>Set the <em>action reference expression</em> pointing at the
-     * {@link javax.faces.application.Action} to be invoked, if this component
-     * is activated by the user, during the <em>Apply Request Values</em>
-     * or <em>Invoke Application</em> phase of the request processing
-     * lifecycle, depending on the value of the <code>immediate</code>
-     * property.</p>
-     *
-     * @param actionRef The new action reference
-     */
-    public void setActionRef(String actionRef);
-
-
-    /**
-     * <p>Return a flag indicating that the default {@link ActionListener}
-     * provided by the JavaServer Faces implementation should be executed
-     * immediately (that is, during <em>Apply Request Values</em> phase
-     * of the request processing lifecycle), rather than waiting until the
-     * <em>Invoke Application</em> phase.  The default value for this
-     * property must be <code>false</code>.</p>
-     */
-    public boolean isImmediate();
-
-
-    /**
-     * <p>Set the "immediate execution" flag for this {@link UICommand}.</p>
-     *
-     * @param immediate The new immediate execution flag
-     */
-    public void setImmediate(boolean immediate);
-
-
-    // ------------------------------------------------ Event Processing Methods
-
-
-    /**
-     * <p>Add a new {@link ActionListener} to the set of listeners interested
-     * in being notified when {@link ActionEvent}s occur.</p>
-     *
-     * @param listener The {@link ActionListener} to be added
-     *
-     * @exception NullPointerException if <code>listener</code>
-     *  is <code>null</code>
-     */
-    public void addActionListener(ActionListener listener);
-
-
-    /**
-     * <p>Remove an existing {@link ActionListener} (if any) from the set of
-     * listeners interested in being notified when {@link ActionEvent}s
-     * occur.</p>
-     *
-     * @param listener The {@link ActionListener} to be removed
-     *
-     * @exception NullPointerException if <code>listener</code>
-     *  is <code>null</code>
-     */
-    public void removeActionListener(ActionListener listener);
+public interface UICommand extends ActionSource, UIComponent, ValueHolder {
 
 
 }
