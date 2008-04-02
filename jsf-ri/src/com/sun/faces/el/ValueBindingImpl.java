@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.14 2003/08/25 22:20:02 rlubke Exp $
+ * $Id: ValueBindingImpl.java,v 1.15 2003/08/26 00:10:41 rlubke Exp $
  */
 
 /*
@@ -386,8 +386,16 @@ public class ValueBindingImpl extends ValueBinding
 	// the expression.  Last is the last segment in the expression.
 	// If there is only one segment in the expression, last is
 	// RIConstants.IMMUTABLE_MARKER.
-	
-	if (null != (toTest = application.getVariableResolver().resolveVariable(context, first))) {
+	if (first.indexOf('.') != -1 || first.indexOf('[') != -1) {
+        // if first segment is complex run segment through
+        // EL machinery
+        toTest = getValue(context, first);
+    } else {
+        // first segment is simple, use VariableResolve implemenation
+        // to obtain instance
+        toTest = application.getVariableResolver().resolveVariable(context, first);
+    }
+	if (toTest != null) {
 	    if (isBracketedExpression) {
 		// Get the contents of the bracketed expression
 		last = last.substring(1, last.length() - 1);
