@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.66 2003/12/24 19:11:19 jvisvanathan Exp $
+ * $Id: FormRenderer.java,v 1.67 2004/01/15 07:34:04 eburns Exp $
  */
 
 /*
@@ -15,6 +15,8 @@ import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.faces.component.UIComponent;
@@ -30,7 +32,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.66 2003/12/24 19:11:19 jvisvanathan Exp $ 
+ * @version $Id: FormRenderer.java,v 1.67 2004/01/15 07:34:04 eburns Exp $ 
  */
 
 public class FormRenderer extends HtmlBasicRenderer {
@@ -189,7 +191,74 @@ public class FormRenderer extends HtmlBasicRenderer {
         writer.writeAttribute("value", component.getClientId(context), "value");
 	writer.endElement("input");
 
+        renderNeededHiddenFields(context, component);
+
         writer.endElement("form");
     }
+
+
+    /**
+     * <p>Render any need hidden fields.</p>
+     */
+    private static void renderNeededHiddenFields(FacesContext context,
+                                                 UIComponent component) 
+        throws IOException {
+      
+        ResponseWriter writer = context.getResponseWriter();
+        Map map = getHiddenFieldMap(context, false);
+        if (map != null) {
+            Iterator entries = map.entrySet().iterator();
+            while (entries.hasNext()) {
+                Map.Entry entry = (Map.Entry) entries.next();
+                if (Boolean.TRUE.equals(entry.getValue())) {
+                    writer.startElement("input", component);
+                    writer.writeAttribute("type", "hidden", null);
+                    writer.writeAttribute("name", entry.getKey(), null);
+                    writer.endElement("input");
+                }
+            }
+                
+            // Clear the hidden field map
+            Map requestMap = context.getExternalContext().getRequestMap();
+            requestMap.put(HIDDEN_FIELD_KEY, null);
+        }
+    }
+
+    /**
+     * <p>Remember that we will need a new hidden field.</p>
+     */
+    public static void addNeededHiddenField(FacesContext context,
+                                            String clientId) {
+        Map map = getHiddenFieldMap(context, true);
+        if (!map.containsKey(clientId)) {
+            map.put(clientId, Boolean.TRUE);
+        }
+    }
+
+    /**
+     * <p>Note that a hidden field has already been rendered.</p>
+     */
+    public static void addRenderedHiddenField(FacesContext context,
+                                              String clientId) {
+        Map map = getHiddenFieldMap(context, true);
+        map.put(clientId, Boolean.FALSE);
+    }
+
+    private static Map getHiddenFieldMap(FacesContext context,
+                                         boolean createIfNew) {
+        Map requestMap = context.getExternalContext().getRequestMap();
+        Map map = (Map) requestMap.get(HIDDEN_FIELD_KEY);
+        if (map == null) {
+            if (createIfNew) {
+                map = new HashMap();
+                requestMap.put(HIDDEN_FIELD_KEY, map);
+            }
+        }
+
+        return map;
+    }
+
+    private static final String HIDDEN_FIELD_KEY =
+      RIConstants.FACES_PREFIX + "FormHiddenFieldMap";
 
 } // end of class FormRenderer

@@ -1,5 +1,5 @@
 /*
- * $Id: EditableValueHolder.java,v 1.3 2004/01/15 06:03:18 eburns Exp $
+ * $Id: EditableValueHolder.java,v 1.4 2004/01/15 07:34:00 eburns Exp $
  */
 
 /*
@@ -86,18 +86,39 @@ public interface EditableValueHolder extends ValueHolder {
     public void setRequired(boolean required);
 
     /**
+     * <p>Return the "immediate" state for this component.</p>
+     */
+    public boolean isImmediate();
+
+    /**
+     * <p>Set the "immediate" state for this component.  When
+     * set to true, the component's value will be converted
+     * and validated immediately in the <em>Apply Request Values</em>
+     * phase, and {@link ValueChangeEvent}s will be delivered
+     * in that phase as well.  The default value for this
+     * property must be <code>false</code>.</p>
+     *
+     * @param immediate The new "immediate" state
+     */
+    public void setImmediate(boolean immediate);
+
+    /**
      * <p>Return a <code>MethodBinding</code> pointing at a
-     * method that will be called during <em>Process Validations</em>
-     * phase of the request processing lifecycle, to validate the current
-     * value of this component.</p>
+     * method that will be used to validate the current
+     * value of this component.   This method will be called during
+     * the <em>Process Validations</em>
+     * or <em>Apply Request Values</em> phases (depending on the
+     * value of the <code>immediate</code> property). </p>
      */
     public MethodBinding getValidator();
 
     /**
      * <p>Set a <code>MethodBinding</code> pointing at a
-     * method that will be called during <em>Process Validations</em>
-     * phase of the request processing lifecycle, to validate the current
-     * value of this component.</p>
+     * method that will be used to validate the current
+     * value of this component.
+     * This method will be called during the <em>Process Validations</em>
+     * or <em>Apply Request Values</em> phases (depending on the
+     * value of the <code>immediate</code> property). </p>
      *
      * <p>Any method referenced by such an expression must be public, with
      * a return type of <code>void</code>, and accept parameters of type
@@ -108,19 +129,24 @@ public interface EditableValueHolder extends ValueHolder {
     public void setValidator(MethodBinding validatorBinding);
 
     /**
-     * <p>Return a <code>MethodBinding </code> instance 
-     * method that will be called during <em>Process Validations</em>
-     * phase of he request processing lifecycle, after any registered
-     * {@link ValueChangeListener}s have been notified of a value change.</p>
+     * <p>Return a <code>MethodBinding</code> instance 
+     * method that will be called after any registered
+     * {@link ValueChangeListener}s have been notified of a value change.
+     * This method will be called during
+     * the <em>Process Validations</em>
+     * or <em>Apply Request Values</em> phases (depending on the
+     * value of the <code>immediate</code> property). </p>
      */
     public MethodBinding getValueChangeListener();
 
     /**
-     * <p>Set a <code>MethodBinding</code> instance  a
-     * that will be called during <em>Process Validations</em>
-     * phase of he request processing lifecycle, after any registered
-     * {@link ValueChangeListener}s have been notified of a value change.</p>
-     *
+     * <p>Set a <code>MethodBinding</code> instance 
+     * method that will be called after any registered
+     * {@link ValueChangeListener}s have been notified of a value change.
+     * This method will be called during the <em>Process Validations</em>
+     * or <em>Apply Request Values</em> phases (depending on the
+     * value of the <code>immediate</code> property). </p>
+
      * @param valueChangeMethod The new method binding instance 
      */
     public void setValueChangeListener(MethodBinding valueChangeMethod);

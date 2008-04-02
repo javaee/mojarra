@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.61 2004/01/15 06:03:21 eburns Exp $
+ * $Id: UIInput.java,v 1.62 2004/01/15 07:34:00 eburns Exp $
  */
 
 /*
@@ -50,11 +50,14 @@ import java.util.List;
  * using <code>setSubmittedValue()</code>.  If the component wishes
  * to indicate that no particular value was submitted, it can either
  * do nothing, or set the submitted value to <code>null</code>.</p>
- * <p>
- * <p>During the <em>Process Validators</em> phase of the request processing
- * lifecycle, the submitted value will be converted to a typesafe object,
- * and, if validation succeeds, stored as a local value using
- * <code>setValue()</code>.
+ * <p></p>
+ * <p>By default, during the <em>Process Validators</em> phase of the
+ * request processing lifecycle, the submitted value will be converted
+ * to a typesafe object, and, if validation succeeds, stored as a
+ * local value using <code>setValue()</code>.  However, if the
+ * <code>immediate</code> property is set to <code>true</code>, this
+ * processing will occur instead at the end of the
+ * <em>Apply Request Values</em> phase.
  * </p> 
  * <p>During the <em>Render Response</em> phase of the request processing
  * lifecycle, conversion for output occurs as for {@link UIOutput}.</p>
@@ -64,7 +67,10 @@ import java.util.List;
  * have been successfully passed, it will queue a
  * {@link ValueChangeEvent}.  Later on, the <code>broadcast()</code>
  * method will ensure that this event is broadcast to all interested
- * listeners.</p>
+ * listeners.  This event will be delivered by default in the
+ * <em>Process Validators</em> phase, but can be delivered instead
+ * during <em>Apply Request Values</em> if the <code>immediate</code>
+ * property is set to <code>true</code>.</p>
  *
  * <p>By default, the <code>rendererType</code> property must be set to
  * "<code>Text</code>".  This value can be changed by calling the
@@ -229,6 +235,40 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     }
 
 
+    /**
+     * <p>The immediate flag.</p>
+     */
+    private boolean immediate = false;
+    private boolean immediateSet = false;
+
+
+    public boolean isImmediate() {
+
+	if (this.immediateSet) {
+	    return (this.immediate);
+	}
+	ValueBinding vb = getValueBinding("immediate");
+	if (vb != null) {
+	    return (Boolean.TRUE.equals(vb.getValue(getFacesContext())));
+	} else {
+	    return (this.immediate);
+	}
+
+    }
+
+
+    public void setImmediate(boolean immediate) {
+
+	// if the immediate value is changing.
+	if (immediate != this.immediate) {
+	    this.immediate = immediate;
+	}
+	this.immediateSet = true;
+
+    }
+
+
+
     private MethodBinding validatorBinding = null;
 
 
@@ -296,10 +336,40 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
 
     // ----------------------------------------------------- UIComponent Methods
+
+    /**
+     * <p>In addition to the standard <code>processDecodes</code> behavior
+     * inherited from {@link UIComponentBase}, calls
+     * <code>validate()</code> if the the <code>immediate</code>
+     * property is true;  if the component is invalid afterwards or
+     * a <code>RuntimeException</code> is thrown, calls
+     * {@link FacesContext#renderResponse}
+     * </p>
+     * @exception NullPointerException {@inheritDoc}     
+     */ 
+    public void processDecodes(FacesContext context) {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
+
+        // Skip processing if our rendered flag is false
+        if (!isRendered()) {
+            return;
+        }
+
+        super.processDecodes(context);
+        
+        if (isImmediate()) {
+            executeValidate(context);
+        }
+    }
+
     /**
      * <p>In addition to the standard <code>processValidators</code> behavior
-     * inherited from {@link UIComponentBase}, calls <code>validate()</code>.
-     * If the component is invalid afterwards, calls
+     * inherited from {@link UIComponentBase}, calls <code>validate()</code>
+     * if the <code>immediate</code> property is false (which is the 
+     * default);  if the component is invalid afterwards, calls
      * {@link FacesContext#renderResponse}.
      * If a <code>RuntimeException</code> is thrown during
      * validation processing, calls {@link FacesContext#renderResponse}
@@ -319,16 +389,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         }
 
         super.processValidators(context);
-        try {
-            validate(context);
-        } catch (RuntimeException e) {
-            context.renderResponse();
-            throw e;
-        }
-
-        // Advance to Render Response if this component is not valid
-        if (!isValid()) {
-            context.renderResponse();
+        if (!isImmediate()) {
+            executeValidate(context);
         }
     }
 
@@ -401,18 +463,15 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     public void broadcast(FacesEvent event)
         throws AbortProcessingException {
 
-        if (!(event instanceof ValueChangeEvent)) {
-            throw new IllegalArgumentException();
-        }
         // Perform standard superclass processing
         super.broadcast(event);
 
-        // Notify the specified value change listener method (if any)
-        MethodBinding valueChangeMethod = getValueChangeListener();
-        if ((valueChangeMethod != null) &&
-            event.getPhaseId().equals(PhaseId.PROCESS_VALIDATIONS)) {
-            FacesContext context = getFacesContext();
-            valueChangeMethod.invoke(context, new Object[] { event });
+        if (event instanceof ValueChangeEvent) {
+            MethodBinding method = getValueChangeListener();
+            if (method != null) {
+                FacesContext context = getFacesContext();
+                method.invoke(context, new Object[] { event });
+            }
         }
 
     }
@@ -709,6 +768,23 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
     }
 
+  
+    /**
+     * Executes validation logic.
+     */
+    private void executeValidate(FacesContext context) {
+        try {
+            validate(context);
+        } catch (RuntimeException e) {
+            context.renderResponse();
+            throw e;
+        }
+
+        if (!isValid()) {
+            context.renderResponse();
+        }
+    }
+
     private boolean isEmpty(Object value) {
 
 	if (value == null) {
@@ -840,15 +916,17 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[8];
+        Object values[] = new Object[10];
         values[0] = super.saveState(context);
         values[1] = localValueSet ? Boolean.TRUE : Boolean.FALSE;
         values[2] = required ? Boolean.TRUE : Boolean.FALSE;
 	values[3] = requiredSet ? Boolean.TRUE : Boolean.FALSE;
         values[4] = this.valid ? Boolean.TRUE : Boolean.FALSE;
-        values[5] = saveAttachedState(context, validators);
-        values[6] = saveAttachedState(context, validatorBinding);
-        values[7] = saveAttachedState(context, valueChangeMethod);
+        values[5] = immediate ? Boolean.TRUE : Boolean.FALSE;
+        values[6] = immediateSet ? Boolean.TRUE : Boolean.FALSE;
+        values[7] = saveAttachedState(context, validators);
+        values[8] = saveAttachedState(context, validatorBinding);
+        values[9] = saveAttachedState(context, valueChangeMethod);
         return (values);
 
     }
@@ -862,11 +940,13 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         required = ((Boolean) values[2]).booleanValue();
         requiredSet = ((Boolean) values[3]).booleanValue();
         valid = ((Boolean) values[4]).booleanValue();
+        immediate = ((Boolean) values[5]).booleanValue();
+        immediateSet = ((Boolean) values[6]).booleanValue();
 	List restoredValidators = null;
 	Iterator iter = null;
 
 	if (null != (restoredValidators = (List) 
-		     restoreAttachedState(context, values[5]))) {
+		     restoreAttachedState(context, values[7]))) {
 	    // if there were some validators registered prior to this
 	    // method being invoked, merge them with the list to be
 	    // restored.
@@ -882,9 +962,9 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 	}
 
         validatorBinding = (MethodBinding) restoreAttachedState(context,
-								values[6]);
+								values[8]);
         valueChangeMethod = (MethodBinding) restoreAttachedState(context,
-								 values[7]);
+								 values[9]);
 
 
     }

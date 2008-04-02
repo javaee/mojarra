@@ -3,7 +3,7 @@
    SUN PROPRIETARY/CONFIDENTIAL.  Use is subject license terms.
 --%>
 
-<%-- $Id: command_link_test.jsp,v 1.6 2003/12/17 15:14:56 rkitain Exp $ --%>
+<%-- $Id: command_link_test.jsp,v 1.7 2004/01/15 07:34:08 eburns Exp $ --%>
 
 <html>
 <head>
@@ -15,6 +15,7 @@
     <f:loadBundle basename="com.sun.faces.systest.resources.Resources" 
          var="messageResources"/>
     <f:view>
+      <h:form id="form01">
         <h:command_link id="hyperlink01"><f:verbatim>My Link</f:verbatim></h:command_link>
         <h:command_link id="hyperlink02"><h:output_text value="#{test1.stringProperty}"/></h:command_link>
         <h:command_link id="hyperlink03"><h:output_text value="#{messageResources.hyperlink_key}"/></h:command_link>
@@ -23,6 +24,7 @@
         <h:command_link id="hyperlink06"><f:verbatim>Paramter Link</f:verbatim>
             <f:parameter name="param1" value="value1"/>
         </h:command_link>
+      </h:form>
     </f:view>
 </body>
 </html>

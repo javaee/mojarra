@@ -96,7 +96,7 @@
 	      
                  
                 
-              <a id="basicForm:link" href="#" onmousedown="document.forms[0]['basicForm:link'].value='basicForm:link'; document.forms[0].submit()" class="hyperlinkClass">link text with localized outputMessage with &euro;</a><input type="hidden" name="basicForm:link" />
+              <a id="basicForm:link" href="#" onmousedown="document.forms[0]['basicForm:link'].value='basicForm:link'; document.forms[0].submit()" class="hyperlinkClass">link text with localized outputMessage with &euro;</a>
 
 	</TD>
 
@@ -108,7 +108,7 @@
 
 	      
                 
-              <a id="basicForm:imageLink" href="#" onmousedown="document.forms[0]['basicForm:imageLink'].value='basicForm:imageLink'; document.forms[0].submit()"><img id="basicForm:_id2" src="duke.gif" alt="" /></a><input type="hidden" name="basicForm:imageLink" />
+              <a id="basicForm:imageLink" href="#" onmousedown="document.forms[0]['basicForm:imageLink'].value='basicForm:imageLink'; document.forms[0].submit()"><img id="basicForm:_id2" src="duke.gif" alt="" /></a>
 
 	</TD>
 
@@ -121,7 +121,7 @@
       <TR>
         <TD>
             
-            <a id="basicForm:commandLink" href="#" onmousedown="document.forms[0]['basicForm:commandLink'].value='basicForm:commandLink'; document.forms[0].submit()" class="hyperlinkClass">link text</a><input type="hidden" name="basicForm:commandLink" />
+            <a id="basicForm:commandLink" href="#" onmousedown="document.forms[0]['basicForm:commandLink'].value='basicForm:commandLink'; document.forms[0].submit()" class="hyperlinkClass">link text</a>
        </TD>
       </TR>
 
@@ -131,13 +131,13 @@
               
               
               
-            <a id="basicForm:commandParamLink" href="#" onmousedown="document.forms[0]['basicForm:commandParamLink'].value='basicForm:commandParamLink';document.forms[0]['name'].value='horwat';document.forms[0]['value'].value='password'; document.forms[0].submit()" class="hyperlinkClass">link text</a><input type="hidden" name="basicForm:commandParamLink" /><input type="hidden" name="name" value="horwat" /><input type="hidden" name="value" value="password" />
+            <a id="basicForm:commandParamLink" href="#" onmousedown="document.forms[0]['basicForm:commandParamLink'].value='basicForm:commandParamLink';document.forms[0]['name'].value='horwat';document.forms[0]['value'].value='password'; document.forms[0].submit()" class="hyperlinkClass">link text</a>
         </TD>
       </TR>
 
       <TR>
         <TD>
-            <a id="basicForm:hrefLink" href="#" onmousedown="document.forms[0]['basicForm:hrefLink'].value='basicForm:hrefLink'; document.forms[0].submit()"><img src="duke.gif"></a><input type="hidden" name="basicForm:hrefLink" />
+            <a id="basicForm:hrefLink" href="#" onmousedown="document.forms[0]['basicForm:hrefLink'].value='basicForm:hrefLink'; document.forms[0].submit()"><img src="duke.gif"></a>
         </TD>
       </TR>
 
@@ -147,7 +147,7 @@
               
               
               
-            <a id="basicForm:hrefParamLink" href="#" onmousedown="document.forms[0]['basicForm:hrefParamLink'].value='basicForm:hrefParamLink';document.forms[0]['name'].value='horwat';document.forms[0]['value'].value='password'; document.forms[0].submit()"><img id="basicForm:_id6" src="duke.gif" alt="" /></a><input type="hidden" name="basicForm:hrefParamLink" /><input type="hidden" name="name" value="horwat" /><input type="hidden" name="value" value="password" />
+            <a id="basicForm:hrefParamLink" href="#" onmousedown="document.forms[0]['basicForm:hrefParamLink'].value='basicForm:hrefParamLink';document.forms[0]['name'].value='horwat';document.forms[0]['value'].value='password'; document.forms[0].submit()"><img id="basicForm:_id6" src="duke.gif" alt="" /></a>
         </TD>
       </TR>
 
@@ -708,7 +708,7 @@ see the <i>angle brackets</i> on this text
 
   <TABLE>
 
-<input type="hidden" name="basicForm" value="basicForm" /></form>
+<input type="hidden" name="basicForm" value="basicForm" /><input type="hidden" name="basicForm:hrefLink" /><input type="hidden" name="basicForm:imageLink" /><input type="hidden" name="value" /><input type="hidden" name="basicForm:commandParamLink" /><input type="hidden" name="basicForm:link" /><input type="hidden" name="basicForm:hrefParamLink" /><input type="hidden" name="name" /><input type="hidden" name="basicForm:commandLink" /></form>
 
 
     </BODY>

@@ -665,6 +665,15 @@
         <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>immediate</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <tag-attribute>yes</tag-attribute>
+      </property-extension>
+    </property>
   </component>
 
   <component>
@@ -844,6 +853,15 @@
         <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>immediate</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <tag-attribute>yes</tag-attribute>
+      </property-extension>
+    </property>
   </component>
 
   <component>
@@ -991,6 +1009,15 @@
       <display-name></display-name>
       <icon></icon>
       <property-name>required</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <tag-attribute>yes</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>immediate</property-name>
       <property-class>boolean</property-class>
       <property-extension>
         <tag-attribute>yes</tag-attribute>
@@ -1179,6 +1206,15 @@
       <display-name></display-name>
       <icon></icon>
       <property-name>required</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <tag-attribute>yes</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>immediate</property-name>
       <property-class>boolean</property-class>
       <property-extension>
         <tag-attribute>yes</tag-attribute>
@@ -1817,6 +1853,15 @@
     <property>
       <display-name></display-name>
       <icon></icon>
+      <property-name>immediate</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <tag-attribute>yes</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
       <property-name>valueChangeListener</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
@@ -1951,6 +1996,15 @@
     <property>
       <display-name></display-name>
       <icon></icon>
+      <property-name>immediate</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <tag-attribute>yes</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
       <property-name>valueChangeListener</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
@@ -2077,6 +2131,15 @@
       <display-name></display-name>
       <icon></icon>
       <property-name>required</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <tag-attribute>yes</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>immediate</property-name>
       <property-class>boolean</property-class>
       <property-extension>
         <tag-attribute>yes</tag-attribute>
@@ -2220,6 +2283,15 @@
     <property>
       <display-name></display-name>
       <icon></icon>
+      <property-name>immediate</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <tag-attribute>yes</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
       <property-name>valueChangeListener</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
@@ -2247,6 +2319,15 @@
       <display-name></display-name>
       <icon></icon>
       <property-name>required</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <tag-attribute>yes</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>immediate</property-name>
       <property-class>boolean</property-class>
       <property-extension>
         <tag-attribute>yes</tag-attribute>
@@ -2382,6 +2463,15 @@
       <display-name></display-name>
       <icon></icon>
       <property-name>required</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <tag-attribute>yes</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>immediate</property-name>
       <property-class>boolean</property-class>
       <property-extension>
         <tag-attribute>yes</tag-attribute>
@@ -2555,6 +2645,15 @@
       <display-name></display-name>
       <icon></icon>
       <property-name>required</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <tag-attribute>yes</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>immediate</property-name>
       <property-class>boolean</property-class>
       <property-extension>
         <tag-attribute>yes</tag-attribute>

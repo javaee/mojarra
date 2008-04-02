@@ -224,6 +224,15 @@
      <tag-attribute>yes</tag-attribute>
       </property-extension>
    </property>
+   <property>
+     <display-name></display-name>
+     <icon></icon>
+     <property-name>immediate</property-name>
+     <property-class>boolean</property-class>
+     <property-extension>
+     <tag-attribute>yes</tag-attribute>
+     </property-extension>
+   </property>
   </component>
 
   <component>

@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.6 2004/01/14 21:05:10 eburns Exp $
+ * $Id: CommandLinkRenderer.java,v 1.7 2004/01/15 07:34:04 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CommandLinkRenderer.java,v 1.6 2004/01/14 21:05:10 eburns Exp $
+ * @version $Id: CommandLinkRenderer.java,v 1.7 2004/01/15 07:34:04 eburns Exp $
  */
 
 public class CommandLinkRenderer extends HtmlBasicRenderer {
@@ -252,19 +252,11 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         //Handle hidden fields
 
         //hidden clientId field
-	writer.startElement("input", component);
-	writer.writeAttribute("type", "hidden", "type");
-	writer.writeAttribute("name", clientId, "clientId");
-	writer.endElement("input");
-
+        FormRenderer.addNeededHiddenField(context, clientId);
 	// get UIParameter children...
         Param paramList[] = getParamList(context, command);
         for (int i = 0; i < paramList.length; i++) {
-            writer.startElement("input", component);
-	    writer.writeAttribute("type", "hidden", "type");
-	    writer.writeURIAttribute("name", (paramList[i]).getName(), null);
-	    writer.writeURIAttribute("value", (paramList[i]).getValue(), null);
-	    writer.endElement("input");
+            FormRenderer.addNeededHiddenField(context, paramList[i].getName());
         }
 
 

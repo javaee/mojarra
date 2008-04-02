@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputTestCase.java,v 1.28 2004/01/15 06:03:40 eburns Exp $
+ * $Id: UIInputTestCase.java,v 1.29 2004/01/15 07:34:03 eburns Exp $
  */
 
 /*
@@ -239,6 +239,7 @@ public class UIInputTestCase extends UIOutputTestCase {
         assertNull("no submittedValue", input.getSubmittedValue());
         assertTrue("not required", !input.isRequired());
         assertTrue("is valid", input.isValid());
+        assertTrue("is not immediate", !input.isImmediate());
         assertNull("no validatorBinding", input.getValidator());
         assertNull("no valueChangeListener", input.getValueChangeListener());
 
@@ -446,6 +447,19 @@ public class UIInputTestCase extends UIOutputTestCase {
 	assertNull(test.getValueBinding("value"));
 	assertNull(test.getValue());
 
+	// "immediate" property
+	request.setAttribute("foo", Boolean.FALSE);
+	boolean initialImmediate = test.isImmediate();
+	if (initialImmediate) {
+	    request.setAttribute("foo", Boolean.FALSE);
+	} else {
+	    request.setAttribute("foo", Boolean.TRUE);
+	}
+	test.setValueBinding("immediate", application.createValueBinding("#{foo}"));
+	assertEquals(!initialImmediate, test.isImmediate());
+	test.setImmediate(initialImmediate);
+	assertEquals(initialImmediate, test.isImmediate());
+	assertNotNull(test.getValueBinding("immediate"));
     }
 
 
@@ -467,6 +481,32 @@ public class UIInputTestCase extends UIOutputTestCase {
         setupNewValue(input);
         root.processValidators(facesContext);
         assertEquals("/l1/l2/l3", TestInputValueChangeListener.trace());
+
+    }
+
+
+    // Test order of value change calls with valueChangeListener also
+    public void testImmediate() throws Exception {
+
+        Class signature[] = { ValueChangeEvent.class };
+	Application app = facesContext.getApplication();
+	MethodBinding methodBinding = null;
+
+        UIViewRoot root = new UIViewRoot();
+        root.getChildren().add(component);
+        UIInput input = (UIInput) component;
+        input.setImmediate(true);
+        input.addValueChangeListener(new TestInputValueChangeListener("l1"));
+        input.addValueChangeListener(new TestInputValueChangeListener("l2"));
+        input.setValueChangeListener(app.createMethodBinding("l3.processValueChange", signature));
+        request.setAttribute("l3", new TestInputValueChangeListener("l3"));
+        TestInputValueChangeListener.trace(null);
+        setupNewValue(input);
+        root.processValidators(facesContext);
+        // No ValueChangeEvent should get delivered, because
+        // "immediate" processing fires during processDecodes(), not
+        // processValidators()
+        assertEquals("", TestInputValueChangeListener.trace());
 
     }
 

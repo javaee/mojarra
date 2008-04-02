@@ -11,11 +11,14 @@
     
     
     
-        <input id="button01" type="submit" name="button01" value="My Label" />
-        <input id="button02" type="reset" name="button02" value="This is a String property" />
-        <input id="button03" type="submit" name="button03" value="RES-BUNDLE KEY" />
-        <input id="button04" type="image" src="duke.gif" name="button04" />
-        <input id="button05" type="image" src="resbundle_image.gif" name="button05" />
+      <form id="form01" method="post" action="/jsf-systest/faces/taglib/command_button_test.jsp">
+
+        <input id="form01:button01" type="submit" name="form01:button01" value="My Label" />
+        <input id="form01:button02" type="reset" name="form01:button02" value="This is a String property" />
+        <input id="form01:button03" type="submit" name="form01:button03" value="RES-BUNDLE KEY" />
+        <input id="form01:button04" type="image" src="duke.gif" name="form01:button04" />
+        <input id="form01:button05" type="image" src="resbundle_image.gif" name="form01:button05" />
+      <input type="hidden" name="form01" value="form01" /></form>
     
 </body>
 </html>
