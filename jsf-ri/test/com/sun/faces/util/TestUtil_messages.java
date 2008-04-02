@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.5 2003/05/01 02:05:03 rkitain Exp $
+ * $Id: TestUtil_messages.java,v 1.6 2003/05/04 21:39:46 horwat Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import java.util.Properties;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.5 2003/05/01 02:05:03 rkitain Exp $
+ * @version $Id: TestUtil_messages.java,v 1.6 2003/05/04 21:39:46 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -89,8 +89,13 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {Util.NO_ACTION_FROM_ACTIONREF_ERROR_MESSAGE_ID, "1"},
         {Util.NULL_CONFIGURATION_ERROR_MESSAGE_ID, "0"},
         {Util.ERROR_OPENING_FILE_ERROR_MESSAGE_ID, "1"},
+        {Util.ERROR_REGISTERING_DTD_ERROR_MESSAGE_ID, "1"},
         {Util.INVALID_INIT_PARAM_ERROR_MESSAGE_ID, "0"},
-        {Util.ERROR_REGISTERING_DTD_ERROR_MESSAGE_ID, "1"}
+        {Util.ERROR_SETTING_BEAN_PROPERTY_ERROR_MESSAGE_ID, "1"},
+        {Util.ERROR_GETTING_VALUE_BINDING_ERROR_MESSAGE_ID, "1"},
+        {Util.ERROR_GETTING_VALUEREF_VALUE_ERROR_MESSAGE_ID, "1"},
+        {Util.CANT_INTROSPECT_CLASS_ERROR_MESSAGE_ID, "1"},
+        {Util.CANT_CONVERT_VALUE_ERROR_MESSAGE_ID, "2"}
         
     };
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.2 2003/04/29 20:51:35 eburns Exp $
+ * $Id: ManagedBeanFactory.java,v 1.3 2003/05/04 21:39:38 horwat Exp $
  */
 
 /*
@@ -15,6 +15,10 @@ import java.util.Iterator;
 
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
+import javax.faces.el.ValueBinding;
+import javax.faces.el.PropertyNotFoundException;
+
+import com.sun.faces.util.Util;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
@@ -67,8 +71,15 @@ public class ManagedBeanFactory extends Object {
      * Attempt to instantiate the JavaBean and set its properties.
      */
     public Object newInstance() throws FacesException {
-	//need to instantiate bean
         Object bean = null;
+
+        if (managedBean.getManagedBeanCreate() != null) {
+            if (managedBean.getManagedBeanCreate().equalsIgnoreCase("FALSE")) {
+                return bean;
+            }
+        }
+
+        //need to instantiate bean
 
         try {
             ClassLoader loader = Thread.currentThread().getContextClassLoader();
@@ -76,32 +87,76 @@ public class ManagedBeanFactory extends Object {
                 loader = FacesContext.getCurrentInstance().
                     getClass().getClassLoader();
             }
-	    bean = java.beans.Beans.instantiate(
+            bean = java.beans.Beans.instantiate(
                 loader, managedBean.getManagedBeanClass());
         } catch (Exception ex) {
-            //FIX_ME: add a better exception message
-            throw new FacesException(ex.getMessage(), ex);
+            Object[] obj = new Object[1];
+            obj[0] = managedBean.getManagedBeanClass();
+            throw new FacesException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), ex);
         }
 
-	Map props = managedBean.getProperties();
-	Iterator iter = props.keySet().iterator();
-	ConfigManagedBeanProperty cmp = null;
-	ConfigManagedBeanPropertyValue cmpv = null;
-	while (iter.hasNext()) {
+        Map props = managedBean.getProperties();
+        Iterator iter = props.keySet().iterator();
+        ConfigManagedBeanProperty cmp = null;
+        ConfigManagedBeanPropertyValue cmpv = null;
+        Object value;
+        
+        while (iter.hasNext()) {
+            value = null;
             cmp = (ConfigManagedBeanProperty)props.get((String)iter.next());
             if (cmp.hasValuesArray()) {
-		List list = cmp.getValues();
-		for (int i=0; i < list.size(); i++) {
+            List list = cmp.getValues();
+            for (int i=0; i < list.size(); i++) {
                     cmpv = (ConfigManagedBeanPropertyValue)list.get(i);
 
-                    //FIX_ME: To do: set Mapped properties once they're available from the ConfigManagedBean
                     //set the indexed property on the bean
                     try {
-	                PropertyUtils.setIndexedProperty(bean, 
-                            cmp.getPropertyName(), i, cmpv.getValue());
+                        if (cmpv.getValueCategory() == 
+                            ConfigManagedBeanPropertyValue.VALUE_REF) {
+                            value = getValueRef((String)cmpv.getValue());
+                        } else {
+                            value = cmpv.getValue();
+                        }
+
+                        // if it's a class type do not set it
+                        if (cmpv.getValueCategory() != 
+                            ConfigManagedBeanPropertyValue.VALUE_CLASS) {
+                            PropertyUtils.setIndexedProperty(
+                                bean, 
+                                cmp.getPropertyName(), 
+                                i, 
+                                value);
+                        }
                     } catch (Exception ex) {
-                        //FIX_ME: add a better exception message
-                        throw new FacesException(ex.getMessage(), ex);
+                        Object[] obj = new Object[1];
+                        obj[0] = cmp.getPropertyName();
+                        throw new FacesException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), ex);
+                    }
+                }
+            } else if (cmp.hasMapEntries()) {
+                ConfigManagedPropertyMap cmpm = null;
+                List list = cmp.getMapEntries();
+                for (int i=0; i < list.size(); i++) {
+                    cmpm = (ConfigManagedPropertyMap)list.get(i);
+
+                    //set the mapped property on the bean
+                    try {
+                        if (cmpm.getValueCategory() == 
+                            ConfigManagedPropertyMap.VALUE_REF) {
+                            value = getValueRef((String)cmpm.getValue());
+                        } else {
+                            value = cmpm.getValue();
+                        }
+
+                        PropertyUtils.setMappedProperty(
+                            bean, 
+                             cmp.getPropertyName(), 
+                            (String)cmpm.getKey(), 
+                            value);
+                    } catch (Exception ex) {
+                        Object[] obj = new Object[1];
+                        obj[0] = cmp.getPropertyName();
+                        throw new FacesException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), ex);
                     }
                 }
             } else {
@@ -109,15 +164,29 @@ public class ManagedBeanFactory extends Object {
 
                 //find properties and set them on the bean
                 try {
-	            PropertyUtils.setSimpleProperty(bean, 
-                        cmp.getPropertyName(), cmpv.getValue());
+                    if (cmpv.getValueCategory() == 
+                        ConfigManagedBeanPropertyValue.VALUE_REF) {
+                        value = getValueRef((String)cmpv.getValue());
+                    } else {
+                        value = cmpv.getValue();
+                    }
+
+                    // if it's a class type do not set it
+                    if (cmpv.getValueCategory() != 
+                        ConfigManagedBeanPropertyValue.VALUE_CLASS) {
+                         PropertyUtils.setSimpleProperty(
+                            bean, 
+                            cmp.getPropertyName(), 
+                            value);
+                    }
                 } catch (Exception ex) {
-                    //FIX_ME: add a better exception message
-                    throw new FacesException(ex.getMessage(), ex);
+                    Object[] obj = new Object[1];
+                    obj[0] = cmp.getPropertyName();
+                    throw new FacesException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), ex);
                 }
             }
 
-	}
+        }
 
         //set the scope
         scope = managedBean.getManagedBeanScope();
@@ -127,6 +196,26 @@ public class ManagedBeanFactory extends Object {
 
     public String getScope() {
         return scope;
+    }
+
+    private Object getValueRef(String value) throws FacesException {
+        Object valueRef = null;
+
+        ValueBinding binding = Util.getValueBinding(value);
+        if (binding != null) {
+            try {
+                valueRef = binding.getValue(FacesContext.getCurrentInstance());
+            } catch (PropertyNotFoundException ex) {  
+                Object[] obj = new Object[1];
+                obj[0] = value;
+                throw new FacesException(Util.getExceptionMessage(Util.ERROR_GETTING_VALUEREF_VALUE_ERROR_MESSAGE_ID, obj));
+            }
+        } else {
+            Object[] obj = new Object[1];
+            obj[0] = value;
+            throw new FacesException(Util.getExceptionMessage(Util.ERROR_GETTING_VALUE_BINDING_ERROR_MESSAGE_ID, obj));
+        }
+        return valueRef;
     }
 
 }

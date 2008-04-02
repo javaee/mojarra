@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManagedBean.java,v 1.3 2003/05/01 02:03:41 rkitain Exp $
+ * $Id: ConfigManagedBean.java,v 1.4 2003/05/04 21:39:37 horwat Exp $
  */
 
 /*
@@ -16,6 +16,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.sun.faces.util.Util;
+
+import javax.faces.FacesException;
+
+import java.beans.BeanInfo;
+import java.beans.PropertyDescriptor;
+import java.beans.IndexedPropertyDescriptor;
+import java.beans.Introspector;
+import java.beans.IntrospectionException;
 
 /**
  * <p>Config Bean for a Managed Bean .</p>
@@ -57,9 +66,13 @@ public class ConfigManagedBean extends ConfigFeature implements Cloneable {
         this.managedBeanCreate = managedBeanCreate;
     }
     
-    public void addProperty(ConfigManagedBeanProperty property) {
+    public void addProperty(ConfigManagedBeanProperty property) throws FacesException {
         if (properties == null) {
             properties = new HashMap();
+        }
+        Class propertyType = getPropertyType(property);
+        if (propertyType != null) {
+            property.convertValue(propertyType.getName());
         }
         properties.put(property.getPropertyName(), property);
     }
@@ -127,4 +140,55 @@ public class ConfigManagedBean extends ConfigFeature implements Cloneable {
         }
         return sb.toString();
     }
+
+    private Class getPropertyType(ConfigManagedBeanProperty property) 
+        throws FacesException {
+
+        Class propertyType = null;
+
+        // indexed and mapped properties have explicit types
+        if (!property.hasValuesArray() && !property.hasMapEntries()) {
+            PropertyDescriptor descs[] = null;
+            try {
+                Class clazz = Util.loadClass
+                    (managedBeanClass, this);
+                BeanInfo beanInfo = Introspector.getBeanInfo(clazz);
+                descs = beanInfo.getPropertyDescriptors();
+            } catch (ClassNotFoundException ex) {
+                Object[] obj = new Object[1];
+                obj[0] = managedBeanClass;
+                throw new FacesException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), ex);
+            } catch (IntrospectionException ex) {
+                Object[] obj = new Object[1];
+                obj[0] = managedBeanClass;
+                throw new FacesException(Util.getExceptionMessage(Util.CANT_INTROSPECT_CLASS_ERROR_MESSAGE_ID, obj), ex);
+            }
+            PropertyDescriptor desc = null;
+
+            for (int i = 0; i < descs.length; i++) {
+               if (property.getPropertyName().equals(descs[i].getName())) {
+                   desc = descs[i];
+                   break;
+               }
+            }
+            if (desc == null) {
+                Object[] obj = new Object[1];
+                obj[0] = managedBeanClass;
+                throw new FacesException(Util.getExceptionMessage(Util.CANT_INTROSPECT_CLASS_ERROR_MESSAGE_ID, obj));
+            }
+
+            boolean isIndexed;
+            if (desc instanceof IndexedPropertyDescriptor) {
+               isIndexed = true;
+               propertyType = 
+                   ((IndexedPropertyDescriptor) desc).getIndexedPropertyType();
+            } else {
+               isIndexed = false;
+               propertyType = desc.getPropertyType();
+            }
+        }
+
+        return propertyType;
+    }
+
 }

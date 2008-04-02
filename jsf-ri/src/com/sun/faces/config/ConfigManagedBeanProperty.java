@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManagedBeanProperty.java,v 1.2 2003/04/29 20:51:33 eburns Exp $
+ * $Id: ConfigManagedBeanProperty.java,v 1.3 2003/05/04 21:39:37 horwat Exp $
  */
 
 /*
@@ -18,10 +18,15 @@ public class ConfigManagedBeanProperty implements Cloneable {
     private String propertyName = null;
     private ConfigManagedBeanPropertyValue value = null;
     private ArrayList values;
+    private String arrayValueType = null;
     private ConfigManagedPropertyMap mapEntry = null;
     private ArrayList mapEntries;
     private String mapKeyClass = null;
     private String mapValueClass = null;
+
+    public void convertValue(String valueClass) {
+        value.convertValue(valueClass);
+    }
 
     public String getPropertyName() {
         return propertyName;
@@ -43,8 +48,12 @@ public class ConfigManagedBeanProperty implements Cloneable {
         if (values == null) {
             values = new ArrayList();
         }
+        if (getArrayType() != null ) {
+            value.convertValue(arrayValueType);
+        }
         values.add(value);
     }
+
     public List getValues() {
         if (values == null) {
             return (Collections.EMPTY_LIST);
@@ -72,6 +81,14 @@ public class ConfigManagedBeanProperty implements Cloneable {
         if (mapEntries == null) {
             mapEntries = new ArrayList();
         }
+
+        if (mapKeyClass != null) {
+            mapEntry.convertKey(mapKeyClass);
+        }
+        if (mapValueClass != null) {
+            mapEntry.convertValue(mapValueClass);
+        }
+
         mapEntries.add(mapEntry);
     }
     public List getMapEntries() {
@@ -93,17 +110,18 @@ public class ConfigManagedBeanProperty implements Cloneable {
     }
 
     public String getArrayType() {
-        String valueType = null;
-        List list = getValues();
-        for (int i=0; i<list.size(); i++) {
-            ConfigManagedBeanPropertyValue cmpv = 
-                (ConfigManagedBeanPropertyValue)list.get(i);
-            if (cmpv.getValueCategory() == ConfigManagedBeanPropertyValue.VALUE_CLASS) {
-                valueType = cmpv.getValue();
-                break;
+        if (arrayValueType == null) {
+            List list = getValues();
+            for (int i=0; i<list.size(); i++) {
+                ConfigManagedBeanPropertyValue cmpv = 
+                    (ConfigManagedBeanPropertyValue)list.get(i);
+                if (cmpv.getValueCategory() == ConfigManagedBeanPropertyValue.VALUE_CLASS) {
+                    arrayValueType = (String) cmpv.getValue();
+                    break;
+                }
             }
         }
-        return valueType;
+        return arrayValueType;
     }
 
     public boolean hasMapEntries() {

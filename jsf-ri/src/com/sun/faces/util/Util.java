@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.58 2003/05/01 22:05:40 eburns Exp $
+ * $Id: Util.java,v 1.59 2003/05/04 21:39:44 horwat Exp $
  */
 
 /*
@@ -57,7 +57,7 @@ import java.util.StringTokenizer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.58 2003/05/01 22:05:40 eburns Exp $
+ * @version $Id: Util.java,v 1.59 2003/05/04 21:39:44 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -202,6 +202,21 @@ public class Util extends Object
 
    public static final String INVALID_INIT_PARAM_ERROR_MESSAGE_ID =  
         "com.sun.faces.INVALID_INIT_PARAM";
+
+   public static final String ERROR_SETTING_BEAN_PROPERTY_ERROR_MESSAGE_ID = 
+        "com.sun.faces.ERROR_SETTING_BEAN_PROPERTY";
+
+   public static final String ERROR_GETTING_VALUE_BINDING_ERROR_MESSAGE_ID = 
+        "com.sun.faces.ERROR_GETTING_VALUE_BINDING";
+
+   public static final String ERROR_GETTING_VALUEREF_VALUE_ERROR_MESSAGE_ID = 
+        "com.sun.faces.ERROR_GETTING_VALUEREF_VALUE";
+
+   public static final String CANT_INTROSPECT_CLASS_ERROR_MESSAGE_ID = 
+        "com.sun.faces.CANT_INTROSPECT_CLASS";
+
+   public static final String CANT_CONVERT_VALUE_ERROR_MESSAGE_ID = 
+        "com.sun.faces.CANT_CONVERT_VALUE";
 
 // README - make sure to add the message identifier constant
 // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution
