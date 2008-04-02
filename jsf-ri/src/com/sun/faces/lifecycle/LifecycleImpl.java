@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.26 2003/06/26 19:08:42 horwat Exp $
+ * $Id: LifecycleImpl.java,v 1.27 2003/07/07 20:52:56 eburns Exp $
  */
 
 /*
@@ -25,6 +25,7 @@ import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
+import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseListener;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ import java.util.HashMap;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.26 2003/06/26 19:08:42 horwat Exp $
+ * @version $Id: LifecycleImpl.java,v 1.27 2003/07/07 20:52:56 eburns Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -48,6 +49,9 @@ public class LifecycleImpl extends Lifecycle
 //
 // Protected Constants
 //
+
+    protected static final int BEFORE = 0;
+    protected static final int AFTER = 1;
     
 //
 // Class Variables
@@ -69,6 +73,8 @@ public class LifecycleImpl extends Lifecycle
 */
 
     protected ArrayList phaseWrappers;
+
+    protected ArrayList phaseListeners;
 
 
     protected Object lock = null;
@@ -121,8 +127,7 @@ public class LifecycleImpl extends Lifecycle
             Assert.assert_it(wrapper != null);
             renderPhase = wrapper.instance;
             Assert.assert_it(renderPhase != null);
-            if ( (((Phase)renderPhase).getId()) == 
-                    Phase.RENDER_RESPONSE) {
+            if (((Phase)renderPhase).getId() == PhaseId.RENDER_RESPONSE) {
                 break;
             }
         }
@@ -176,20 +181,20 @@ public class LifecycleImpl extends Lifecycle
 	    wrapper = (PhaseWrapper)phaseIter.next();
 	    curPhase = wrapper.instance;
 
+	    maybeCallListeners(curPhase, BEFORE);
+
             // Execute the current phase
             curPhase.execute(context);
 
             // Process Events 
 
-            int phaseNumber = ((Phase)curPhase).getId();
-
-            if (phaseNumber == Phase.APPLY_REQUEST_VALUES) {
+            if (curPhase.getId() == PhaseId.APPLY_REQUEST_VALUES) {
                 processEvents(context, PhaseId.APPLY_REQUEST_VALUES);
-            } else if (phaseNumber == Phase.PROCESS_VALIDATIONS) {
+            } else if (curPhase.getId() == PhaseId.PROCESS_VALIDATIONS) {
                 processEvents(context, PhaseId.PROCESS_VALIDATIONS);
-            } else if (phaseNumber == Phase.UPDATE_MODEL_VALUES) {
+            } else if (curPhase.getId() == PhaseId.UPDATE_MODEL_VALUES) {
                 processEvents(context, PhaseId.UPDATE_MODEL_VALUES);
-            } else if (phaseNumber == Phase.INVOKE_APPLICATION) {
+            } else if (curPhase.getId() == PhaseId.INVOKE_APPLICATION) {
                 processEvents(context, PhaseId.INVOKE_APPLICATION);
             }
 
@@ -199,6 +204,8 @@ public class LifecycleImpl extends Lifecycle
                 executeRender(context);
                 return;
             }
+
+	    maybeCallListeners(curPhase, AFTER);
 
             curPhaseId++;
         }
@@ -244,32 +251,72 @@ public class LifecycleImpl extends Lifecycle
         return false;
     }
 
-    /**
-     * <p>Register a new {@link PhaseListener} instance that is interested in
-     * being notified before and after the processing for standard phases of
-     * the request processing lifecycle.</p>
-     *
-     * @param listener The {@link PhaseListener} to be registered
-     *
-     * @exception NullPointerException if <code>listener</code>
-     *	is <code>null</code>
-     */
     public void addPhaseListener(PhaseListener listener) {
-        //PENDING I am just a placeholder. Implement me.
+	if (null == listener) {
+	    throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+	}
+	
+	synchronized (lock) {
+	    if (null == phaseListeners) {
+		phaseListeners = new ArrayList();
+	    }
+	    phaseListeners.add(listener);
+	}
     }
+
+    public void removePhaseListener(PhaseListener listener) {
+	if (null == listener) {
+	    throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+	}
+	
+	synchronized (lock) {
+	    if (null != phaseListeners) {
+		phaseListeners.remove(listener);
+	    }
+	}
+    }
+
+    //
+    // Helper methods
+    //
 
     /**
-     * <p>Deregister an existing {@link PhaseListener} instance that is no
-     * longer interested in being notified before and after the processing
-     * for standard phases of the request processing lifecycle.	 If no such
-     * listener instance has been registered, no action is taken.</p>
-     *
-     * @param listener The {@link PhaseListener} to be deregistered
+     * <p>If we have no listeners, just return.</p>
+     * <p>For each listener in our listener list.</p>
      */
-    public void removePhaseListener(PhaseListener listener) {
-        //PENDING I am just a placeholder. Implement me.
-    }
 
+    protected void maybeCallListeners(Phase curPhase, int listenerMethod) {
+	if (null == phaseListeners) {
+	    return;
+	}
+	Assert.assert_it(null != curPhase);
+	Assert.assert_it(listenerMethod == BEFORE || listenerMethod == AFTER);
+	PhaseEvent event = new PhaseEvent(FacesContext.getCurrentInstance(),
+					  curPhase.getId());
+	
+	synchronized(lock) {
+	    Iterator listenerIter = phaseListeners.iterator();
+	    PhaseListener curListener = null;
+	    while (listenerIter.hasNext()) {
+		curListener = (PhaseListener) listenerIter.next();
+		if (curPhase.getId() == curListener.getPhaseId() ||
+		    PhaseId.ANY_PHASE == curListener.getPhaseId()) {
+		    switch (listenerMethod) {
+		    case BEFORE:
+			curListener.beforePhase(event);
+			break;
+		    case AFTER:
+			curListener.afterPhase(event);
+			break;
+		    default:
+			Assert.assert_it(false);
+			break;
+		    }
+		}
+	    }
+	}
+    }
+    
 
     //
     // Helper classes

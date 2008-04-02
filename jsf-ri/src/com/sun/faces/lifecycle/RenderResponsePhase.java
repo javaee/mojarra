@@ -1,5 +1,5 @@
 /*
- * $Id: RenderResponsePhase.java,v 1.6 2003/03/24 19:45:31 eburns Exp $
+ * $Id: RenderResponsePhase.java,v 1.7 2003/07/07 20:52:57 eburns Exp $
  */
 
 /*
@@ -18,6 +18,7 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.faces.FacesException;
 import javax.faces.lifecycle.Lifecycle;
+import javax.faces.event.PhaseId;
 import javax.faces.tree.Tree;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
@@ -36,7 +37,7 @@ import com.sun.faces.context.FacesContextImpl;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RenderResponsePhase.java,v 1.6 2003/03/24 19:45:31 eburns Exp $
+ * @version $Id: RenderResponsePhase.java,v 1.7 2003/07/07 20:52:57 eburns Exp $
  *
  */
 
@@ -78,8 +79,8 @@ public RenderResponsePhase(Lifecycle newDriver) {
 // Methods from Phase
 //
 
-public int getId() {
-    return Phase.RENDER_RESPONSE;
+public PhaseId getId() {
+    return PhaseId.RENDER_RESPONSE;
 }
 
 public void execute(FacesContext facesContext) throws FacesException

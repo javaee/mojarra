@@ -1,5 +1,5 @@
 /*
- * $Id: Input_TextAreaTag.java,v 1.5 2003/05/02 16:13:17 eburns Exp $
+ * $Id: Input_TextAreaTag.java,v 1.6 2003/07/07 20:53:03 eburns Exp $
  */
 
 /*
@@ -17,7 +17,7 @@ import javax.faces.component.UIInput;
 
 /**
  *
- * @version $Id: Input_TextAreaTag.java,v 1.5 2003/05/02 16:13:17 eburns Exp $
+ * @version $Id: Input_TextAreaTag.java,v 1.6 2003/07/07 20:53:03 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -73,10 +73,10 @@ public Input_TextAreaTag()
 	super.overrideProperties(component);
 	UIInput inputTextArea = (UIInput) component;
 	
-	if (null == inputTextArea.getAttribute("rows")) {
+	if (null != getRows()) {
 	    inputTextArea.setAttribute("rows", getRows());
 	}
-	if (null == inputTextArea.getAttribute("cols")) {
+	if (null != getCols()) {
 	    inputTextArea.setAttribute("cols", getCols());
 	}
     }

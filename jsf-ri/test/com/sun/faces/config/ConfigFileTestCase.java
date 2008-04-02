@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.17 2003/06/25 06:29:57 rkitain Exp $
+ * $Id: ConfigFileTestCase.java,v 1.18 2003/07/07 20:53:18 eburns Exp $
  */
 
 /*
@@ -91,7 +91,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	    "javax.faces.validator.LengthValidator.LIMIT",
 	    "javax.faces.validator.LengthValidator.MAXIMUM",
 	    "javax.faces.validator.LengthValidator.MINIMUM",
-	    "javax.faces.validator.RequiredValidator.FAILED",
+	    "javax.faces.component.UIInput.REQUIRED",
 	    "javax.faces.validator.LongRangeValidator.LIMIT",
 	    "javax.faces.validator.LongRangeValidator.MAXIMUM",
 	    "javax.faces.validator.LongRangeValidator.MINIMUM",
@@ -99,8 +99,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	    "javax.faces.validator.StringRangeValidator.LIMIT",
 	    "javax.faces.validator.StringRangeValidator.MAXIMUM",
 	    "javax.faces.validator.StringRangeValidator.MINIMUM",
-	    "javax.faces.validator.StringRangeValidator.TYPE",
-	    "javax.faces.validator.RequiredValidator.FAILED"	    
+	    "javax.faces.validator.StringRangeValidator.TYPE"
 	};
 	Iterator messageIter = null;
 

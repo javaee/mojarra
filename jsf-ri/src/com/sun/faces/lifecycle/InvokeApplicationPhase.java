@@ -1,5 +1,5 @@
 /*
- * $Id: InvokeApplicationPhase.java,v 1.8 2003/03/24 19:45:31 eburns Exp $
+ * $Id: InvokeApplicationPhase.java,v 1.9 2003/07/07 20:52:55 eburns Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.faces.FacesException;
 import javax.faces.lifecycle.Lifecycle;
+import javax.faces.event.PhaseId;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.event.FacesEvent;
@@ -28,7 +29,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: InvokeApplicationPhase.java,v 1.8 2003/03/24 19:45:31 eburns Exp $
+ * @version $Id: InvokeApplicationPhase.java,v 1.9 2003/07/07 20:52:55 eburns Exp $
  * 
  */
 
@@ -58,8 +59,8 @@ public InvokeApplicationPhase(Lifecycle newDriver) {
     lifecycleDriver = newDriver;
 }
 
-public int getId() {
-    return Phase.INVOKE_APPLICATION;
+public PhaseId getId() {
+    return PhaseId.INVOKE_APPLICATION;
 }
 
 public void execute(FacesContext facesContext) throws FacesException

@@ -1,5 +1,5 @@
 /*
- * $Id: Phase.java,v 1.1 2003/03/12 19:51:06 rkitain Exp $
+ * $Id: Phase.java,v 1.2 2003/07/07 20:52:56 eburns Exp $
  */
 
 /*
@@ -23,42 +23,6 @@ import javax.faces.event.PhaseId;
 
 public abstract class Phase {
 
-    /**
-     * <p>Phase identifier for <em>Reconstitute Request Tree</em>.</p>
-     */
-    public static final int RECONSTITUTE_COMPONENT_TREE = 0;
-
-
-    /**
-     * <p>Phase identifier for <em>Apply Request Values</em>.</p>
-     */
-    public static final int APPLY_REQUEST_VALUES = 10;
-
-
-    /**
-     * <p>Phase identifier for <em>Process Validations</em>.</p>
-     */
-    public static final int PROCESS_VALIDATIONS = 20;
-
-
-    /**
-     * <p>Phase identifier for <em>Update Model Values</em>.</p>
-     */
-    public static final int UPDATE_MODEL_VALUES = 30;
-
-
-    /**
-     * <p>Phase identifier for <em>Invoke Application</em>.</p>
-     */
-    public static final int INVOKE_APPLICATION = 40;
-
-
-    /**
-     * <p>Phase identifier for <em>Render Response</em>.</p>
-     */
-    public static final int RENDER_RESPONSE = 50;
-
-
     // --------------------------------------------------------- Public Methods
 
 
@@ -79,6 +43,6 @@ public abstract class Phase {
     /**
      * <p>Returns the current {@link Lifecycle} <strong>Phase</strong> identifier.
      */
-    public abstract int getId();
+    public abstract PhaseId getId();
 
 }

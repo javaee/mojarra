@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_GridTag.java,v 1.6 2003/05/02 07:55:27 eburns Exp $
+ * $Id: Panel_GridTag.java,v 1.7 2003/07/07 20:53:05 eburns Exp $
  */
 
 /*
@@ -16,7 +16,7 @@ import javax.servlet.jsp.JspException;
 
 /**
  *
- * @version $Id: Panel_GridTag.java,v 1.6 2003/05/02 07:55:27 eburns Exp $
+ * @version $Id: Panel_GridTag.java,v 1.7 2003/07/07 20:53:05 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -133,61 +133,46 @@ public class Panel_GridTag extends FacesTag {
 
     protected void overrideProperties(UIComponent component) {
         super.overrideProperties(component);
-        if ((columnClasses != null) &&
-            (component.getAttribute("columnClasses") == null)) {
+        if (columnClasses != null) {
             component.setAttribute("columnClasses", getColumnClasses());
         }
-        if (component.getAttribute("columns") == null) {
-            component.setAttribute("columns", new Integer(getColumns()));
-        }
-        if ((footerClass != null) &&
-            (component.getAttribute("footerClass") == null)) {
+	component.setAttribute("columns", new Integer(getColumns()));
+        if (footerClass != null) {
             component.setAttribute("footerClass", getFooterClass());
         }
-        if ((headerClass != null) &&
-            (component.getAttribute("headerClass") == null)) {
+        if (headerClass != null) {
             component.setAttribute("headerClass", getHeaderClass());
         }
-        if ((panelClass != null) &&
-            (component.getAttribute("panelClass") == null)) {
+        if (panelClass != null) {
             component.setAttribute("panelClass", getPanelClass());
         }
-        if ((rowClasses != null) &&
-            (component.getAttribute("rowClasses") == null)) {
+        if (rowClasses != null) {
             component.setAttribute("rowClasses", getRowClasses());
         }
         
         // set HTML 4.0 attributes if any
-        if ((summary != null) &&
-            (component.getAttribute("summary") == null)) {
+        if (summary != null) {
             component.setAttribute("summary", getSummary());
         }
-        if ((width != null) &&
-            (component.getAttribute("width") == null)) {
+        if (width != null) {
             component.setAttribute("width", getWidth());
         }
-        if ((bgcolor != null) &&
-            (component.getAttribute("bgcolor") == null)) {
+        if (bgcolor != null) {
             component.setAttribute("bgcolor", getBgcolor());
         }
-        if ((frame != null) &&
-            (component.getAttribute("frame") == null)) {
+        if (frame != null) {
             component.setAttribute("frame", getFrame());
         }
-        if ((rules != null) &&
-            (component.getAttribute("rules") == null)) {
+        if (rules != null) {
             component.setAttribute("rules", getRules());
         }
-        if ((border != null) &&
-            (component.getAttribute("border") == null)) {
+        if (border != null) {
             component.setAttribute("border", getBorder());
         }
-        if ((cellspacing != null) &&
-            (component.getAttribute("cellspacing") == null)) {
+        if (cellspacing != null) {
             component.setAttribute("cellspacing", getCellspacing());
         }
-        if ((cellpadding != null) &&
-            (component.getAttribute("cellpadding") == null)) {
+        if (cellpadding != null) {
             component.setAttribute("cellpadding", getCellpadding());
         }
     }

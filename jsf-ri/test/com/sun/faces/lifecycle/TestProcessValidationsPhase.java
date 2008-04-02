@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessValidationsPhase.java,v 1.16 2003/06/27 01:09:57 jvisvanathan Exp $
+ * $Id: TestProcessValidationsPhase.java,v 1.17 2003/07/07 20:53:20 eburns Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessValidationsPhase.java,v 1.16 2003/06/27 01:09:57 jvisvanathan Exp $
+ * @version $Id: TestProcessValidationsPhase.java,v 1.17 2003/07/07 20:53:20 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -148,7 +148,7 @@ public void testCallback()
     };
     userName.addValidator(validator);
 
-    assertTrue(!userName.isValid());
+    assertTrue(userName.isValid());
 
     applyValues.execute(getFacesContext());
     assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&

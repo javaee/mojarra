@@ -38,6 +38,11 @@
     <tag-class>com.sun.faces.taglib.html_basic.FormTag</tag-class>
     <body-content>JSP</body-content>
       <attribute>
+        <name>required</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+      </attribute>
+      <attribute>
         <name>id</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
@@ -172,6 +177,11 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+    <attribute>
+      <name>componentRef</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
   </tag>
 
   <tag>
@@ -179,6 +189,11 @@
     <tag-class>com.sun.faces.taglib.html_basic.Command_ButtonTag</tag-class>
       <attribute>
         <name>id</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+      </attribute>
+      <attribute>
+        <name>required</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
       </attribute>
@@ -323,6 +338,11 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+    <attribute>
+      <name>componentRef</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
   </tag>
 
   <tag>
@@ -379,6 +399,16 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+    <attribute>
+      <name>componentRef</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+      <attribute>
+        <name>required</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+      </attribute>
   </tag>
 
   <tag>
@@ -547,6 +577,16 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+    <attribute>
+      <name>componentRef</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>required</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
   </tag>
   
   <tag>
@@ -580,6 +620,16 @@
     </attribute>
     <attribute>
       <name>selectoneClass</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>componentRef</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>required</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -714,6 +764,11 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+    <attribute>
+      <name>componentRef</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
   </tag>
 
   <tag>
@@ -833,6 +888,16 @@
     </attribute>
     <attribute>
       <name>style</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>required</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>componentRef</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -964,6 +1029,21 @@
     </attribute>
     <attribute>
       <name>style</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>componentRef</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>required</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>required</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -1100,6 +1180,21 @@
     </attribute>
     <attribute>
       <name>style</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>componentRef</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>required</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>required</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -1259,6 +1354,11 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+    <attribute>
+      <name>componentRef</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
   </tag>
 
   <tag>
@@ -1297,6 +1397,11 @@
     </attribute>
     <attribute>
       <name>outputClass</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>componentRef</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -1411,6 +1516,11 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+    <attribute>
+      <name>componentRef</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
   </tag>
 
 
@@ -1455,6 +1565,11 @@
     </attribute>
     <attribute>
       <name>outputClass</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>componentRef</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -1618,6 +1733,16 @@
     </attribute>
     <attribute>
       <name>style</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>componentRef</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>required</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -1789,6 +1914,16 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+    <attribute>
+      <name>componentRef</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>required</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
  </tag>
 
  <tag>
@@ -1944,6 +2079,16 @@
     </attribute>
     <attribute>
       <name>style</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>componentRef</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>required</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -2114,6 +2259,16 @@
     </attribute>
     <attribute>
       <name>style</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>componentRef</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>required</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -2297,6 +2452,16 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+    <attribute>
+      <name>componentRef</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>required</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
  </tag>
 
   <tag>
@@ -2467,6 +2632,16 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+    <attribute>
+      <name>componentRef</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>required</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
  </tag>
 
 
@@ -2508,6 +2683,11 @@
     </attribute>
     <attribute>
       <name>outputClass</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>componentRef</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -2564,6 +2744,11 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+    <attribute>
+      <name>componentRef</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
  </tag>
 
   <tag>
@@ -2607,6 +2792,11 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+    <attribute>
+      <name>componentRef</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
  </tag>
 
  <tag>
@@ -2630,6 +2820,11 @@
    </attribute>
     <attribute>
       <name>outputClass</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>componentRef</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -2803,6 +2998,16 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+    <attribute>
+      <name>componentRef</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>required</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
   </tag>
 
   <tag>
@@ -2846,6 +3051,11 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+    <attribute>
+      <name>componentRef</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
   </tag>
 
 
@@ -2856,6 +3066,11 @@
 
     <attribute>
       <name>id</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>componentRef</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -2880,6 +3095,11 @@
 
     <attribute>
       <name>var</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>componentRef</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -3048,6 +3268,11 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+    <attribute>
+      <name>componentRef</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
   </tag>
 
   <tag>
@@ -3184,6 +3409,16 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+    <attribute>
+      <name>componentRef</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>required</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
  </tag>
 
  <tag>
@@ -3310,6 +3545,16 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+    <attribute>
+      <name>componentRef</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>required</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
  </tag>
 
  <tag>
@@ -3433,6 +3678,16 @@
     </attribute>
     <attribute>
       <name>title</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>componentRef</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>required</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -3595,6 +3850,11 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+    <attribute>
+      <name>componentRef</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
   </tag>
 
   <tag>
@@ -3623,6 +3883,11 @@
       </attribute>
       <attribute>
         <name>converter</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+      </attribute>
+      <attribute>
+        <name>required</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
       </attribute>

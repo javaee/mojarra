@@ -1,5 +1,5 @@
 /*
- * $Id: Input_NumberTag.java,v 1.4 2003/02/20 22:49:17 ofung Exp $
+ * $Id: Input_NumberTag.java,v 1.5 2003/07/07 20:53:03 eburns Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import com.sun.faces.util.Util;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: Input_NumberTag.java,v 1.4 2003/02/20 22:49:17 ofung Exp $
+ * @version $Id: Input_NumberTag.java,v 1.5 2003/07/07 20:53:03 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -92,7 +92,7 @@ public class Input_NumberTag extends InputTag
     protected void overrideProperties(UIComponent component) {
     super.overrideProperties(component);
     
-    if (null == component.getAttribute("numberStyle")) {
+    if (null != getNumberStyle()) {
 	component.setAttribute("numberStyle", getNumberStyle());
     }
 }

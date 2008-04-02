@@ -18,9 +18,9 @@ This page should Succeed.
 
 <f:use_faces>
 
-  <h:command_button label="hello" commandName="required"/>
+  <h:command_button label="hello"/>
 
-  <h:command_button key="hello" commandName="required"/>
+  <h:command_button key="hello"/>
 
 </f:use_faces>
 

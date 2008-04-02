@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemTag.java,v 1.14 2003/05/02 07:55:27 eburns Exp $
+ * $Id: SelectItemTag.java,v 1.15 2003/07/07 20:53:05 eburns Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectItemTag.java,v 1.14 2003/05/02 07:55:27 eburns Exp $
+ * @version $Id: SelectItemTag.java,v 1.15 2003/07/07 20:53:05 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -133,15 +133,19 @@ public SelectItemTag()
 	UIComponent parent = selectItem.getParent();
 	Assert.assert_it(null != parent);
 	
-	if (null == selectItem.getItemValue()) {
+	if (null != getItemValue()) {
 	    selectItem.setItemValue(getItemValue());
 	}
-	if (null == selectItem.getItemLabel()) {
+	if (null != getItemLabel()) {
 	    selectItem.setItemLabel(getItemLabel());
 	}
-	if (null == selectItem.getItemDescription()) {
+	if (null != getDescription()) {
 	    selectItem.setItemDescription(getDescription());
 	}
+
+	// PENDING(edburns): not sure how the 20030620 UIComponentTag
+	// changes impact the following if-else clause.  Leaving it
+	// alone.
 
         if (parent instanceof UISelectOne) {
 	    UISelectOne selectOne = (UISelectOne) parent;

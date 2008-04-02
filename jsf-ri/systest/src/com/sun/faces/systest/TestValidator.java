@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidator.java,v 1.1 2003/05/20 17:00:01 jvisvanathan Exp $
+ * $Id: TestValidator.java,v 1.2 2003/07/07 20:53:13 eburns Exp $
  */
 
 /*
@@ -12,7 +12,7 @@ package com.sun.faces.systest;
 
 import java.util.Collections;
 import java.util.Iterator;
-import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
 
@@ -24,7 +24,7 @@ import javax.faces.validator.Validator;
 public class TestValidator implements Validator {
 
 
-    public void validate(FacesContext context, UIComponent component) {
+    public void validate(FacesContext context, UIInput component) {
         ;  // No action taken
     }
 

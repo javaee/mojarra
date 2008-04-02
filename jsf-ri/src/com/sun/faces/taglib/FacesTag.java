@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.34 2003/05/03 05:53:02 eburns Exp $
+ * $Id: FacesTag.java,v 1.35 2003/07/07 20:53:00 eburns Exp $
  */
 
 /*
@@ -21,6 +21,7 @@ import javax.servlet.ServletRequest;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
+import javax.faces.component.UIInput;
 import javax.faces.component.UIGraphic;
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKit;
@@ -39,7 +40,7 @@ import org.apache.commons.logging.LogFactory;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.34 2003/05/03 05:53:02 eburns Exp $
+ * @version $Id: FacesTag.java,v 1.35 2003/07/07 20:53:00 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -65,6 +66,7 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
 
     // Attribute Instance Variables
 
+    protected boolean required = false;
     protected String key = null;
     protected String imageKey = null;
     protected String bundle = null;
@@ -171,6 +173,10 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     // 
     // Accessors
     //
+    public void setRequired(boolean newVal) {
+	required = newVal;
+    }
+
     public String getValueRef()
     {
 	return valueRef;
@@ -1173,8 +1179,6 @@ public final String getRendererType()
     return getLocalRendererType();
 }
 
-public abstract UIComponent createComponent();
-
 protected void overrideProperties(UIComponent component) 
 {
     super.overrideProperties(component);
@@ -1186,121 +1190,129 @@ protected void overrideProperties(UIComponent component)
             output.setValueRef(valueRef);
         }    
     }    
-    if (null == component.getAttribute("key")) {
+
+    // PENDING(edburns): move this into a class that is the superclass
+    // of *all* tags that have components that are UIInput.
+
+    if (component instanceof UIInput) {
+	((UIInput)component).setRequired(required);
+    }
+
+    if (null != getKey()) {
 	component.setAttribute("key", getKey());
     }
-    if (null == component.getAttribute("imageKey")) {
+    if (null != getImageKey()) {
 	component.setAttribute("imageKey", getImageKey());
     }
-    if (null == component.getAttribute(RIConstants.BUNDLE_ATTR)) {
+    if (null != getBundle()) {
 	component.setAttribute(RIConstants.BUNDLE_ATTR, getBundle());
     }
-    if (null == component.getAttribute("formatPattern")) {
+    if (null != getFormatPattern()) {
 	component.setAttribute("formatPattern", getFormatPattern());
     }
-    if (null == component.getAttribute("dateStyle")) {
+    if (null != getDateStyle()) {
 	component.setAttribute("dateStyle", getDateStyle());
     }
-    if (null == component.getAttribute("timeStyle")) {
+    if (null != getTimeStyle()) {
 	component.setAttribute("timeStyle", getTimeStyle());
     }
-    if (null == component.getAttribute("timezone")) {
+    if (null != getTimezone()) {
 	component.setAttribute("timezone", getTimezone());
     }
 
     // HTML 4.0 event handlers common to most BODY-content elements.
-    if (null == component.getAttribute("onclick")) {
+    if (null != getOnclick()) {
 	component.setAttribute("onclick", getOnclick());
     }
-    if (null == component.getAttribute("ondblclick")) {
+    if (null != getOndblclick()) {
 	component.setAttribute("ondblclick", getOndblclick());
     }
 
-    if (null == component.getAttribute("onkeydown")) {
+    if (null != getOnkeydown()) {
 	component.setAttribute("onkeydown", getOnkeydown());
     }
-    if (null == component.getAttribute("onkeypress")) {
+    if (null != getOnkeypress()) {
 	component.setAttribute("onkeypress", getOnkeypress());
     }
-    if (null == component.getAttribute("onkeyup")) {
+    if (null != getOnkeyup()) {
 	component.setAttribute("onkeyup", getOnkeyup());
     }
-    if (null == component.getAttribute("onmousedown")) {
+    if (null != getOnmousedown()) {
 	component.setAttribute("onmousedown", getOnmousedown());
     }
-    if (null == component.getAttribute("onmousemove")) {
+    if (null != getOnmousemove()) {
 	component.setAttribute("onmousemove", getOnmousemove());
     }
-    if (null == component.getAttribute("onmouseout")) {
+    if (null != getOnmouseout()) {
 	component.setAttribute("onmouseout", getOnmouseout());
     }
-    if (null == component.getAttribute("onmouseover")) {
+    if (null != getOnmouseover()) {
 	component.setAttribute("onmouseover", getOnmouseover());
     }
-    if (null == component.getAttribute("onmouseup")) {
+    if (null != getOnmouseup()) {
 	component.setAttribute("onmouseup", getOnmouseup());
     }
-    if (null == component.getAttribute("onfocus")) {
+    if (null != getOnfocus()) {
         component.setAttribute("onfocus", getOnfocus()); 
     }
-    if (null == component.getAttribute("onblur")) {
+    if (null != getOnblur()) {
         component.setAttribute("onblur", getOnblur());
     }
     
     // common HTML 4.0 attributes.
     // PENDING (visvan) id attribute clashes with faces id attribute
-    if (null == component.getAttribute("title")) {
+    if (null != getTitle()) {
         component.setAttribute("title", getTitle());
     }
-    if (null == component.getAttribute("disabled")) {
+    if (null != getDisabled()) {
 	component.setAttribute("disabled", getDisabled());
     }
-    if (null == component.getAttribute("tabindex")) {
+    if (null != getTabindex()) {
 	component.setAttribute("tabindex", getTabindex());
     }
-    if (null == component.getAttribute("accesskey")) {
+    if (null != getAccesskey()) {
 	component.setAttribute("accesskey", getAccesskey());
     }
-    if (null == component.getAttribute("lang")) {
+    if (null != getLang()) {
 	component.setAttribute("lang", getLang());
     }
-    if (null == component.getAttribute("dir")) {
+    if (null != getDir()) {
 	component.setAttribute("dir", getDir());
     }
-    if (null == component.getAttribute("commandClass")) {
+    if (null != getCommandClass()) {
 	component.setAttribute("commandClass", getCommandClass());
     }
-    if (null == component.getAttribute("graphicClass")) {
+    if (null != getGraphicClass()) {
 	component.setAttribute("graphicClass", getGraphicClass());
     }
-    if (null == component.getAttribute("inputClass")) {
+    if (null != getInputClass()) {
 	component.setAttribute("inputClass", getInputClass());
     }
-    if (null == component.getAttribute("outputClass")) {
+    if (null != getOutputClass()) {
 	component.setAttribute("outputClass", getOutputClass());
     }
-    if (null == component.getAttribute("selectbooleanClass")) {
+    if (null != getSelectbooleanClass()) {
 	component.setAttribute("selectbooleanClass", getSelectbooleanClass());
     }
-    if (null == component.getAttribute("selectmanyClass")) {
+    if (null != getSelectmanyClass()) {
 	component.setAttribute("selectmanyClass", getSelectmanyClass());
     }
-    if (null == component.getAttribute("selectoneClass")) {
+    if (null != getSelectoneClass()) {
 	component.setAttribute("selectoneClass", getSelectoneClass());
     }
-    if (null == component.getAttribute("selectitemClass")) {
+    if (null != getSelectitemClass()) {
 	component.setAttribute("selectitemClass", getSelectitemClass());
     }
-    if (null == component.getAttribute("selectitemsClass")) {
+    if (null != getSelectitemsClass()) {
 	component.setAttribute("selectitemsClass", getSelectitemsClass());
     }
-    if (null == component.getAttribute("style")) {
+    if (null != getStyle()) {
 	component.setAttribute("style", getStyle());
     }
-    if (null == component.getAttribute("dateStyle")) {
+    if (null != getDateStyle()) {
 	component.setAttribute("dateStyle", getDateStyle());
     }
-    if (null == component.getAttribute("timeStyle")) {
+    if (null != getTimeStyle()) {
 	component.setAttribute("timeStyle", getTimeStyle());
     }
   

@@ -21,7 +21,7 @@
     "javax.faces.validator.LongRangeValidator.MAXIMUM",
     "javax.faces.validator.LongRangeValidator.MINIMUM",
     "javax.faces.validator.LongRangeValidator.TYPE",
-    "javax.faces.validator.RequiredValidator.FAILED",
+    "javax.faces.component.UIInput.REQUIRED",
     "javax.faces.validator.StringRangeValidator.LIMIT",
     "javax.faces.validator.StringRangeValidator.MAXIMUM",
     "javax.faces.validator.StringRangeValidator.MINIMUM",

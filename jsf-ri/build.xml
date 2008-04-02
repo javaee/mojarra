@@ -76,7 +76,6 @@
             value="${tomcat.home}/jstl/lib/standard.jar"/>
   <property name="jsf.api.jar" value="${jsf.api.home}/build/lib/jsf-api.jar"/>
   <property name="jsf.api.dtd" value="${jsf.api.home}/build/lib/web-facesconfig_1_0.dtd"/>
-  <property name="jsp.jar" value="" />
 
 <!-- ************ Compiler Defaults *************************************** -->
 

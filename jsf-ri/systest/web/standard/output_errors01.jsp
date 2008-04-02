@@ -33,7 +33,7 @@
 
   // get a message
   Message message = messageResources.getMessage(facesContext, 
-        "javax.faces.validator.RequiredValidator.FAILED");
+        "javax.faces.component.UIInput.REQUIRED");
   if (message == null) {
     out.println("/output_errors01.jsp FAILED - No message returned");
     return;

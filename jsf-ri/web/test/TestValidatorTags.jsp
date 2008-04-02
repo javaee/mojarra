@@ -104,9 +104,8 @@
 
     <td>
 
-                   <h:input_text id="required1" value="required">
-                     <f:validate_required/>
-                   </h:input_text>
+                   <h:input_text id="required1" value="required" 
+                                 required="true"/>
 
     </td>
 
@@ -143,10 +142,8 @@
 
     <td>
 
-                   <h:input_text id="required2" value="required">
-                     <f:validator id="Required"/>
-                   </h:input_text>
-
+                   <h:input_text id="required2" value="required" 
+                                 required="true"/>
     </td>
 
 

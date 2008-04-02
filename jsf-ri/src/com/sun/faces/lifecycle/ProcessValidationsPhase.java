@@ -1,5 +1,5 @@
 /*
- * $Id: ProcessValidationsPhase.java,v 1.12 2003/03/12 19:51:06 rkitain Exp $
+ * $Id: ProcessValidationsPhase.java,v 1.13 2003/07/07 20:52:56 eburns Exp $
  */
 
 /*
@@ -18,6 +18,7 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.faces.FacesException;
 import javax.faces.lifecycle.Lifecycle;
+import javax.faces.event.PhaseId;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.validator.Validator;
@@ -30,7 +31,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ProcessValidationsPhase.java,v 1.12 2003/03/12 19:51:06 rkitain Exp $
+ * @version $Id: ProcessValidationsPhase.java,v 1.13 2003/07/07 20:52:56 eburns Exp $
  * 
  */
 
@@ -70,8 +71,8 @@ public ProcessValidationsPhase() {
 // Methods from Phase
 //
 
-public int getId() {
-    return Phase.PROCESS_VALIDATIONS;
+public PhaseId getId() {
+    return PhaseId.PROCESS_VALIDATIONS;
 }
 
 public void execute(FacesContext facesContext) throws FacesException

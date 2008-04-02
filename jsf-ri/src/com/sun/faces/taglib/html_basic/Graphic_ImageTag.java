@@ -1,5 +1,5 @@
 /*
- * $Id: Graphic_ImageTag.java,v 1.5 2003/04/29 20:52:06 eburns Exp $
+ * $Id: Graphic_ImageTag.java,v 1.6 2003/07/07 20:53:02 eburns Exp $
  */
 
 /*
@@ -19,7 +19,7 @@ import javax.faces.component.UIGraphic;
 
 /**
  *
- * @version $Id: Graphic_ImageTag.java,v 1.5 2003/04/29 20:52:06 eburns Exp $
+ * @version $Id: Graphic_ImageTag.java,v 1.6 2003/07/07 20:53:02 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -90,13 +90,11 @@ public Graphic_ImageTag()
 	if (null == graphic.getURL()) {
 	    graphic.setURL(getUrl());
 	}
-        if ((usemap != null) &&
-            (component.getAttribute("usemap") == null)) {
-            component.setAttribute("usemap", getUsemap());
+        if (usemap != null) {
+            component.setAttribute("usemap", usemap);
         }
-        if ((ismap != null) &&
-            (component.getAttribute("ismap") == null)) {
-            component.setAttribute("ismap", getIsmap());
+        if (ismap != null) {
+            component.setAttribute("ismap", ismap);
         }
     }
 //

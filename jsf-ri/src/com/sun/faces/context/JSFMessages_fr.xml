@@ -33,7 +33,7 @@
            severity="1" 
            summary="Erreur de validation: La valeur sp&#233;cifi&#233;e est inf&#233;rieure &#224; la valeur minimale permise ''{0}''." />
 
-  <message messageId="javax.faces.validator.RequiredValidator.FAILED" 
+  <message messageId="javax.faces.component.UIInput.REQUIRED" 
            severity="1" 
            summary="Erreur de validation: Valeur requise." />
 
@@ -69,8 +69,5 @@
            severity="1" 
            summary="Erreur de validation: La valeur sp&#233;cifi&#233;e n'est pas du bon type." />
 
-  <message messageId="javax.faces.validator.RequiredValidator.FAILED" 
-           severity="1" 
-           summary="Erreur de validation: Valeur requise." />
 </messages>
 

@@ -137,12 +137,6 @@
   </tag>
 
   <tag>
-    <name>validate_required</name>
-    <tag-class>com.sun.faces.taglib.jsf_core.ValidateRequiredTag</tag-class>
-    <body-content>JSP</body-content>
-  </tag>
-
-  <tag>
     <name>validate_stringrange</name>
     <tag-class>com.sun.faces.taglib.jsf_core.ValidateStringRangeTag</tag-class>
     <body-content>JSP</body-content>

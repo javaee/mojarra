@@ -1,5 +1,5 @@
 /*
- * $Id: Input_SecretTag.java,v 1.6 2003/02/20 22:49:17 ofung Exp $
+ * $Id: Input_SecretTag.java,v 1.7 2003/07/07 20:53:03 eburns Exp $
  */
 
 /*
@@ -16,7 +16,7 @@ import javax.faces.component.UIInput;
 
 /**
  *
- * @version $Id: Input_SecretTag.java,v 1.6 2003/02/20 22:49:17 ofung Exp $
+ * @version $Id: Input_SecretTag.java,v 1.7 2003/07/07 20:53:03 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -80,7 +80,7 @@ public Input_SecretTag()
         super.overrideProperties(component);
         UIInput input = (UIInput) component;
 
-        if (null == input.getAttribute("redisplay")) {
+        if (null != getRedisplay()) {
             input.setAttribute("redisplay", getRedisplay());
         }
     }

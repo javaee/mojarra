@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.14 2003/06/26 19:08:40 horwat Exp $
+ * $Id: ApplicationImpl.java,v 1.15 2003/07/07 20:52:50 eburns Exp $
  */
 
 /*
@@ -315,29 +315,33 @@ public class ApplicationImpl extends Application {
 	return returnVal;
     }
 
-    /**
-     * <p>Call the <code>getValue()</code> method on the specified
-     * {@link ValueBinding}.  If it returns a {@link UIComponent} instance,
-     * return it as the value of this method.  If it does not, instantiate
-     * and return a new {@link UIComponent} instance of the specified
-     * component type.</p>
-     *
-     * @param componentRef {@link ValueBinding} representing a component
-     *	reference (typically specified by the <code>componentRef</code>
-     *	attribute of a custom tag)
-     * @param FacesContext {@link FacesContext} for the current request
-     * @param componentType Component type to create if the {@link ValueBinding}
-     *	does not return a component instance
-     *
-     * @exception FacesException if a {@link UIComponent} cannot be created
-     * @exception NullPointerExcepton if any parameter is <code>null</code>
-     */
     public UIComponent getComponent(ValueBinding componentRef,
                                     FacesContext context,
                                     String componentType)
                                     throws FacesException {
-        //PENDING - I am just a placeholder. Implement me.
-        return (UIComponent)componentRef.getValue(context);
+	if (null == componentRef || null == context || null == componentType) {
+	    throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+	}
+	
+	Object result = null;
+	boolean createOne = false;
+
+	if (null != (result = componentRef.getValue(context))) {
+	    // if the result is not an instance of UIComponent
+	    createOne = (!(result instanceof UIComponent));
+	    // we have to create one.
+	}
+	if (null == result || createOne) {
+	    result = this.getComponent(componentType);
+	}
+
+	if (null == result) {
+            Object[] params = {componentType};
+	    throw new FacesException(Util.getExceptionMessage(
+		      Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID,params));
+	}
+
+	return (UIComponent) result;
     }
 
     /**

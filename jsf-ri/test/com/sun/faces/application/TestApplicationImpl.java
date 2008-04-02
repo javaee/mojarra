@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.3 2003/05/01 06:20:44 eburns Exp $
+ * $Id: TestApplicationImpl.java,v 1.4 2003/07/07 20:53:17 eburns Exp $
  */
 
 /*
@@ -17,16 +17,19 @@ import com.sun.faces.application.NavigationHandlerImpl;
 import com.sun.faces.el.PropertyResolverImpl;
 import com.sun.faces.el.VariableResolverImpl;
 
+import javax.faces.component.UIComponent;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.el.VariableResolver;
+import javax.faces.el.ValueBinding;
 import javax.faces.event.ActionListener;
 import javax.faces.event.PhaseId;
 import javax.faces.event.ActionEvent;
 import javax.faces.FactoryFinder;
+import javax.faces.FacesException;
 
 import org.mozilla.util.Assert;
 import com.sun.faces.JspFacesTestCase;
@@ -38,7 +41,7 @@ import com.sun.faces.TestComponent;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.3 2003/05/01 06:20:44 eburns Exp $
+ * @version $Id: TestApplicationImpl.java,v 1.4 2003/07/07 20:53:17 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -258,6 +261,26 @@ public class TestApplicationImpl extends JspFacesTestCase {
 			    application.getComponent(testComponent.getComponentType())));
 	assertTrue(newTestComponent != testComponent);
 	
+    }
+
+    public void testGetComponentWithRefNegative() {
+	ValueBinding valueBinding = null;
+	boolean exceptionThrown = false;
+	UIComponent result = null;
+	getFacesContext().getExternalContext().getSessionMap().put("TAIBean",
+								   this);
+	assertTrue(null != (valueBinding = 
+		    application.getValueBinding("sessionScope.TAIBean")));
+
+	try {
+	    result = application.getComponent(valueBinding, getFacesContext(),
+					      "notreached");
+	    assertTrue(false);
+	}
+	catch (FacesException e) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
     }
 	
 

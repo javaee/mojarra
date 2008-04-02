@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.37 2003/04/29 20:52:06 eburns Exp $
+ * $Id: FormTag.java,v 1.38 2003/07/07 20:53:02 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FormTag.java,v 1.37 2003/04/29 20:52:06 eburns Exp $
+ * @version $Id: FormTag.java,v 1.38 2003/07/07 20:53:02 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -88,10 +88,6 @@ public FormTag()
     public String getLocalRendererType() { return "Form"; }
     public String getComponentType() { return "Form"; }
 
-    public UIComponent createComponent() {
-        return (new UIForm());
-    }
-
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
 	UIForm form = (UIForm) component;
@@ -114,33 +110,31 @@ public FormTag()
             }
 	}
         // action, method, enctype, acceptcharset, accept, target, onsubmit, onreset
-        if (null == component.getAttribute("onsubmit") && getOnsubmit() != null ) {
+        if (getOnsubmit() != null ) {
             component.setAttribute("onsubmit", getOnsubmit()); 
         }
-        if (null == component.getAttribute("onreset") && getOnreset() != null ) {
+        if (getOnreset() != null ) {
             component.setAttribute("onreset", getOnreset()); 
         }
-        if (null == component.getAttribute("action") && getAction() != null ) {
+        if (getAction() != null ) {
             component.setAttribute("action", getAction()); 
         }
-        if (null == component.getAttribute("method") && getMethod() != null ) {
+        if (getMethod() != null ) {
             component.setAttribute("method", getMethod()); 
         }
-        if (null == component.getAttribute("enctype") && getEnctype() != null ) {
+        if (getEnctype() != null ) {
             component.setAttribute("enctype", getEnctype()); 
         }
-        if (null == component.getAttribute("accept") && getAccept() != null ) {
+        if (getAccept() != null ) {
             component.setAttribute("accept", getAccept()); 
         }
-        if (null == component.getAttribute("target") && getTarget() != null ) {
+        if (getTarget() != null ) {
             component.setAttribute("target", getTarget()); 
         }
-        if (null == component.getAttribute("acceptcharset") && 
-                getAcceptcharset() != null ) {
+        if (getAcceptcharset() != null ) {
             component.setAttribute("acceptcharset", getAcceptcharset()); 
         }
-        if (null == component.getAttribute("form") && 
-                getFormClass() != null ) {
+        if (getFormClass() != null ) {
             component.setAttribute("formClass", getFormClass()); 
         }
 

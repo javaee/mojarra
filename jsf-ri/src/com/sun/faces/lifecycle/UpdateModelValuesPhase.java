@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.20 2003/04/29 20:51:47 eburns Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.21 2003/07/07 20:52:57 eburns Exp $
  */
 
 /*
@@ -22,6 +22,7 @@ import com.sun.faces.util.Util;
 
 import javax.faces.FacesException;
 import javax.faces.lifecycle.Lifecycle;
+import javax.faces.event.PhaseId;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
@@ -34,7 +35,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: UpdateModelValuesPhase.java,v 1.20 2003/04/29 20:51:47 eburns Exp $
+ * @version $Id: UpdateModelValuesPhase.java,v 1.21 2003/07/07 20:52:57 eburns Exp $
  * 
  */
 
@@ -75,8 +76,8 @@ public UpdateModelValuesPhase() {
 // Methods from Phase
 //
 
-public int getId() {
-    return Phase.UPDATE_MODEL_VALUES;
+public PhaseId getId() {
+    return PhaseId.UPDATE_MODEL_VALUES;
 }
 
 public void execute(FacesContext facesContext) throws FacesException

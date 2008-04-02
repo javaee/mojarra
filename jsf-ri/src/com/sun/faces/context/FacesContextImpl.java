@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.39 2003/06/26 19:08:41 horwat Exp $
+ * $Id: FacesContextImpl.java,v 1.40 2003/07/07 20:52:51 eburns Exp $
  */
 
 /*
@@ -20,6 +20,8 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.faces.FacesException;     
 import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
+import javax.faces.FactoryFinder;
 import javax.faces.application.Message;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -46,6 +48,8 @@ import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
 import com.sun.faces.renderkit.FormatPool;
 
+import org.mozilla.util.Assert;
+
 public class FacesContextImpl extends FacesContext
 {
     
@@ -60,6 +64,8 @@ public class FacesContextImpl extends FacesContext
     //
     // Instance Variables
     //
+
+    // Relationship Instance Variables
     private Locale locale = null;
     private Tree tree = null;
     private Tree responseTree = null;
@@ -67,6 +73,7 @@ public class FacesContextImpl extends FacesContext
     private ResponseWriter responseWriter = null;
     private CursorableLinkedList facesEvents = null;
     private ExternalContext externalContext = null;
+    private Application application = null; 
 
     /**
 
@@ -78,13 +85,15 @@ public class FacesContextImpl extends FacesContext
 
     private HashMap messageLists = null;
     private ViewHandler viewHandler = null;
+
     
+    
+    // Attribute Instance Variables
+
     private boolean renderResponse = false;
     private boolean responseComplete = false;
 
-    // Attribute Instance Variables
 
-    // Relationship Instance Variables
 
     //
     // Constructors and Initializers    
@@ -143,19 +152,27 @@ public class FacesContextImpl extends FacesContext
      * web application.</p>
      */
     public Application getApplication() {
-        //PENDING - I'm a placeholder. Implement me.
-        return FacesContext.getCurrentInstance().getApplication();
+	if (null != application) {
+	    return application;
+	}
+        ApplicationFactory aFactory = 
+	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        application = aFactory.getApplication();
+	Assert.assert_it(null != application);
+	return application;
     }
 
-
-    /**
-     * <p>Return an <code>Iterator</code> over the {@link UIComponent}s for
-     * which at least one {@link Message} has been queued.  If there are no
-     * such components, an empty <code>Iterator</code> is returned.</p>
-     */
     public Iterator getComponentsWithMessages() {
-        //PENDING - I'm a placeholder. Implement me.
-        return Collections.EMPTY_LIST.iterator();
+	Iterator result = null;
+
+	if (null == messageLists) {
+	    result = Collections.EMPTY_LIST.iterator();
+	}
+	else {
+	    result = messageLists.keySet().iterator();
+	}
+
+        return result;
     }
 
 

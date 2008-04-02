@@ -1,5 +1,5 @@
 /*
- * $Id: ReconstituteComponentTreePhase.java,v 1.9 2003/05/21 18:46:00 rkitain Exp $
+ * $Id: ReconstituteComponentTreePhase.java,v 1.10 2003/07/07 20:52:57 eburns Exp $
  */
 
 /*
@@ -16,12 +16,15 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.faces.FacesException;
 import javax.faces.lifecycle.Lifecycle;
+import javax.faces.event.PhaseId;
 import javax.faces.context.FacesContext;
 import javax.faces.tree.Tree;
 import javax.faces.tree.TreeFactory;
+import javax.faces.el.ValueBinding;
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UICommand;
+import javax.faces.component.UIInput;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.event.ActionListener;
 import java.util.Iterator;
@@ -48,7 +51,7 @@ import org.apache.commons.logging.LogFactory;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ReconstituteComponentTreePhase.java,v 1.9 2003/05/21 18:46:00 rkitain Exp $
+ * @version $Id: ReconstituteComponentTreePhase.java,v 1.10 2003/07/07 20:52:57 eburns Exp $
  * 
  */
 
@@ -102,8 +105,8 @@ public ReconstituteComponentTreePhase() {
 //
 
 
-public int getId() {
-    return Phase.RECONSTITUTE_COMPONENT_TREE;
+public PhaseId getId() {
+    return PhaseId.RECONSTITUTE_REQUEST;
 }
 
 /**
@@ -262,17 +265,19 @@ protected void processTree(FacesContext facesContext) {
     } catch (java.io.IOException iox) {
         log.error(iox.getMessage(), iox);
     }
-    if (actionListener != null) {
-        registerActionListeners(root);
-    }
+    doPerComponentActions(facesContext, root);
 }
 
-protected void registerActionListeners(UIComponent uic) {
+/**
+  * <p>Do any per-component actions necessary during reconstitute</p>
+  */
+protected void doPerComponentActions(FacesContext context, UIComponent uic) {
     Iterator kids = uic.getFacetsAndChildren();
+    String componentRef = null;
     while (kids.hasNext()) {
-        registerActionListeners((UIComponent) kids.next());
+        doPerComponentActions(context, (UIComponent) kids.next());
     }
-    if (uic instanceof UICommand) {
+    if (uic instanceof UICommand && null != actionListener) {
       
         // register actionlistener if it has not been registered already
         // PENDING (visvan) This could cause a problem because the components
@@ -282,6 +287,16 @@ protected void registerActionListeners(UIComponent uic) {
             ((UICommand)uic).addActionListener(actionListener);
             uic.setAttribute("com.sun.faces.ActionListener", Boolean.TRUE);
         }     
+    }
+    if (uic instanceof UIInput) {
+	((UIInput)uic).setValid(true);
+    }
+    // if this component has a componentRef, make sure to populate the
+    // ValueBinding for it.
+    if (null != (componentRef = uic.getComponentRef())) {
+	ValueBinding valueBinding = 
+	    context.getApplication().getValueBinding(componentRef);
+	valueBinding.setValue(context, uic);
     }
 }
 

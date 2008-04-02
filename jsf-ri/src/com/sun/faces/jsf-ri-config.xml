@@ -152,7 +152,7 @@
       <message-class>javax.faces.application.MessageImpl</message-class>
     </message>
     <message>
-      <message-id>javax.faces.validator.RequiredValidator.FAILED</message-id>
+      <message-id>javax.faces.component.UIInput.REQUIRED</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
     </message>
     <message>
@@ -434,10 +434,6 @@
   <validator>
     <validator-id>LongRange</validator-id>
     <validator-class>javax.faces.validator.LongRangeValidator</validator-class>
-  </validator>
-  <validator>
-    <validator-id>Required</validator-id>
-    <validator-class>javax.faces.validator.RequiredValidator</validator-class>
   </validator>
   <validator>
     <validator-id>StringRange</validator-id>

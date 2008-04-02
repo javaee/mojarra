@@ -1,5 +1,5 @@
 /*
- * $Id: InputTag.java,v 1.6 2003/04/29 20:52:06 eburns Exp $
+ * $Id: InputTag.java,v 1.7 2003/07/07 20:53:03 eburns Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import com.sun.faces.taglib.FacesTag;
 
 /**
  *
- * @version $Id: InputTag.java,v 1.6 2003/04/29 20:52:06 eburns Exp $
+ * @version $Id: InputTag.java,v 1.7 2003/07/07 20:53:03 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -62,8 +62,8 @@ public abstract class InputTag extends FacesTag
         super();
     }
 
-    //
-    // Class methods
+    // 
+    // Accessors
     //
 
     public String getLabel()
@@ -76,11 +76,6 @@ public abstract class InputTag extends FacesTag
         label = newLabel;
     }
 
-    // 
-    // Accessors
-    //
-
-
     //
     // General Methods
     //
@@ -88,25 +83,26 @@ public abstract class InputTag extends FacesTag
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
 	UIInput input = (UIInput) component;
-        if (null == input.getValue() && null != getValue()) {
+
+        if (null != getValue()) {
 	    input.setValue(getValue());
 	}
-        if (null == input.getAttribute("readonly")) {
+        if (null != getReadonly()) {
 	    input.setAttribute("readonly", getReadonly());
 	}
-	if (null == input.getAttribute("size")) {
+	if (null != getSize()) {
 	    input.setAttribute("size", getSize());
 	}
-	if (null == input.getAttribute("maxlength")) {
+	if (null != getMaxlength()) {
 	    input.setAttribute("maxlength", getMaxlength());
 	}
-	if (null == input.getAttribute("alt")) {
+	if (null != getAlt()) {
 	    input.setAttribute("alt", getAlt());
 	}
-        if (null == input.getAttribute("onselect")) {
+        if (null != getOnselect()) {
 	    input.setAttribute("onselect", getOnselect());
 	}
-	if (null == input.getAttribute("onchange")) {
+	if (null != getOnchange()) {
 	    input.setAttribute("onchange", getOnchange());
 	}
     }

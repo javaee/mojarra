@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_DataTag.java,v 1.5 2003/05/02 07:55:27 eburns Exp $
+ * $Id: Panel_DataTag.java,v 1.6 2003/07/07 20:53:05 eburns Exp $
  */
 
 /*
@@ -17,7 +17,7 @@ import javax.servlet.jsp.JspException;
 
 /**
  *
- * @version $Id: Panel_DataTag.java,v 1.5 2003/05/02 07:55:27 eburns Exp $
+ * @version $Id: Panel_DataTag.java,v 1.6 2003/07/07 20:53:05 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -82,8 +82,7 @@ public class Panel_DataTag extends FacesTag {
     
     protected void overrideProperties(UIComponent component) {
         super.overrideProperties(component);
-        if ((var != null) &&
-            (component.getAttribute("var") == null)) {
+        if (getVar() != null) {
             component.setAttribute("var", getVar());
         }
     }

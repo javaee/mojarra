@@ -34,7 +34,7 @@
            severity="1" 
            summary="Validation Error: Value is less than allowable minimum of ''{0}''." />
 
-  <message messageId="javax.faces.validator.RequiredValidator.FAILED" 
+  <message messageId="javax.faces.component.UIInput.REQUIRED" 
            severity="1" 
            summary="Validation Error: Value is required." />
 
@@ -69,10 +69,6 @@
   <message messageId="javax.faces.validator.StringRangeValidator.TYPE" 
            severity="1" 
            summary="Validation Error: Value is not of the correct type." />
-
-  <message messageId="javax.faces.validator.RequiredValidator.FAILED" 
-           severity="1" 
-           summary="Validation Error: Value is required." />
 
 </messages>
 

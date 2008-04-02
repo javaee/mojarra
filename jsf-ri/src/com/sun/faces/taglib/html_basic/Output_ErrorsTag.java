@@ -1,5 +1,5 @@
 /*
- * $Id: Output_ErrorsTag.java,v 1.8 2003/04/29 20:52:06 eburns Exp $
+ * $Id: Output_ErrorsTag.java,v 1.9 2003/07/07 20:53:04 eburns Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import javax.faces.component.UIOutput;
 
  *
 
- * @version $Id: Output_ErrorsTag.java,v 1.8 2003/04/29 20:52:06 eburns Exp $
+ * @version $Id: Output_ErrorsTag.java,v 1.9 2003/07/07 20:53:04 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -105,10 +105,10 @@ public class Output_ErrorsTag extends FacesTag {
     protected void overrideProperties(UIComponent component) {
         super.overrideProperties(component);
         UIOutput output = (UIOutput) component;
-        if (null == component.getAttribute("for") && null != forValue) {
+        if (null != forValue) {
             component.setAttribute("for", forValue);
         }
-        if (null == component.getAttribute("color")) {
+        if (null != getColor()) {
             component.setAttribute("color", getColor());
         }
     }

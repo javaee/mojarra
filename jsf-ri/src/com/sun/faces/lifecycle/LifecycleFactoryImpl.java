@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactoryImpl.java,v 1.12 2003/03/13 01:06:27 eburns Exp $
+ * $Id: LifecycleFactoryImpl.java,v 1.13 2003/07/07 20:52:56 eburns Exp $
  */
 
 /*
@@ -19,6 +19,7 @@ import org.mozilla.util.ParameterCheck;
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.FacesException;
+import javax.faces.event.PhaseId;
 
 import java.util.Iterator;
 import java.util.HashMap;
@@ -29,7 +30,7 @@ import java.util.HashMap;
  *  in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleFactoryImpl.java,v 1.12 2003/03/13 01:06:27 eburns Exp $
+ * @version $Id: LifecycleFactoryImpl.java,v 1.13 2003/07/07 20:52:56 eburns Exp $
  * 
  * @see	javax.faces.lifecycle.LifecycleFactory
  *
@@ -40,8 +41,8 @@ public class LifecycleFactoryImpl extends LifecycleFactory
 //
 // Protected Constants
 //
-static final int FIRST_PHASE = Phase.RECONSTITUTE_COMPONENT_TREE;
-static final int LAST_PHASE = Phase.RENDER_RESPONSE;
+static final int FIRST_PHASE = PhaseId.RECONSTITUTE_REQUEST.getOrdinal();
+static final int LAST_PHASE = PhaseId.RENDER_RESPONSE.getOrdinal();
 
 
 

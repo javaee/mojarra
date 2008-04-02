@@ -1,5 +1,5 @@
 /*
- * $Id: Command_ButtonTag.java,v 1.36 2003/06/27 22:29:33 rkitain Exp $
+ * $Id: Command_ButtonTag.java,v 1.37 2003/07/07 20:53:01 eburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: Command_ButtonTag.java,v 1.36 2003/06/27 22:29:33 rkitain Exp $
+ * @version $Id: Command_ButtonTag.java,v 1.37 2003/07/07 20:53:01 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -54,7 +54,6 @@ public class Command_ButtonTag extends FacesTag
 
     // Attribute Instance Variables
 
-    protected String commandname = null;
     protected String label = null;
     protected String image = null;
     protected String actionRef = null;
@@ -78,12 +77,6 @@ public class Command_ButtonTag extends FacesTag
     // 
     // Accessors
     //
-
-    public String getCommandName() { return commandname; }
-    public void setCommandName(String newCommandname) { 
-	ParameterCheck.nonNull(newCommandname);
-	commandname = newCommandname;
-    }
 
     public void setActionRef(String newActionRef) {
         actionRef = newActionRef;
