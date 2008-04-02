@@ -1,5 +1,5 @@
 /*
- * $Id: UIMessage.java,v 1.7 2004/01/19 06:26:53 craigmcc Exp $
+ * $Id: UIMessage.java,v 1.8 2004/01/19 18:37:44 craigmcc Exp $
  */
 
 /*
@@ -43,9 +43,9 @@ public class UIMessage extends UIComponentBase {
 
 
     private String forVal = null;
-    private boolean showDetail = true;
+    private boolean showDetail = false;
     private boolean showDetailSet = false;
-    private boolean showSummary = false;
+    private boolean showSummary = true;
     private boolean showSummarySet = false;
 
 
