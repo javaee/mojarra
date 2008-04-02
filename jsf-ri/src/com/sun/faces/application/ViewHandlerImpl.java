@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.78 2006/08/15 16:50:36 rlubke Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.79 2006/08/31 21:58:00 rlubke Exp $ 
  */ 
 
 
@@ -69,7 +69,7 @@ import com.sun.faces.util.Util;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.78 2006/08/15 16:50:36 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.79 2006/08/31 21:58:00 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -958,15 +958,28 @@ public class ViewHandlerImpl extends ViewHandler {
         }
 
         /**
-         * <p> Write directly from our StringBuilder to the provided
+         * <p> Write directly from our FastStringWriter to the provided
          * writer.</p>
          * @param writer where to write
          * @throws IOException if an error occurs
          */
         public void flushToWriter(Writer writer) throws IOException {
-            StateManager stateManager = Util.getStateManager(context);
-            Object stateToWrite = stateManager.saveView(context);
+            // Save the state to a new instance of StringWriter to
+            // avoid multiple serialization steps if the view contains
+            // multiple forms.
+            StateManager stateManager = Util.getStateManager(context);            
+            ResponseWriter origWriter = context.getResponseWriter();
+            FastStringWriter state =
+                  new FastStringWriter((stateManager.isSavingStateInClient(
+                        context)) ? bufSize : 128);
+            context.setResponseWriter(origWriter.cloneWithWriter(state));
+            stateManager.writeState(context, stateManager.saveView(context));
+            context.setResponseWriter(origWriter);
+            
+            // begin writing...
             int totalLen = builder.length();
+            StringBuilder stateBuilder = state.getBuffer();
+            int stateLen = stateBuilder.length();
             int pos = 0;
             int tildeIdx = getNextDelimiterIndex(pos);
             while (pos < totalLen) {
@@ -988,7 +1001,28 @@ public class ViewHandlerImpl extends ViewHandler {
                         if (builder.indexOf(
                               RIConstants.SAVESTATE_FIELD_MARKER, 
                               pos) == tildeIdx) {
-                            stateManager.writeState(context, stateToWrite);
+                            // buf is effectively zero'd out at this point
+                            int statePos = 0;
+                            while (statePos < stateLen) {
+                                if ((stateLen - statePos) > bufSize) {
+                                    // enough state to fill the buffer
+                                    stateBuilder.getChars(statePos,
+                                                          (statePos + bufSize),
+                                                          buf,
+                                                          0);
+                                    writer.write(buf);
+                                    statePos += bufSize;
+                                } else {
+                                    int slen = (stateLen - statePos);
+                                    stateBuilder.getChars(statePos,
+                                                          stateLen,
+                                                          buf,
+                                                          0); 
+                                    writer.write(buf, 0, slen);
+                                    statePos += slen;
+                                }
+                                
+                            }                            
                         }
                         
                         // push us past the last '~' at the end of the marker
