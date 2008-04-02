@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.12 2003/03/27 07:34:32 rkitain Exp $
+ * $Id: FacesTestCaseService.java,v 1.13 2003/05/01 06:31:59 eburns Exp $
  */
 
 /*
@@ -14,6 +14,8 @@ package com.sun.faces;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContext;
 
 import javax.faces.FactoryFinder;
 import javax.faces.lifecycle.Lifecycle;
@@ -27,6 +29,7 @@ import javax.servlet.jsp.PageContext;
 
 import com.sun.faces.util.Util;
 import com.sun.faces.RIConstants;
+import com.sun.faces.config.ConfigListener;
 
 import org.mozilla.util.Assert;
 
@@ -46,7 +49,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.12 2003/03/27 07:34:32 rkitain Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.13 2003/05/01 06:31:59 eburns Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -162,10 +165,22 @@ public void setUp()
 			   getFacesContext().getExternalContext().
 			   getRequestParameterMap().get(curName));
     }
+
+    // make sure this gets called!
+    ConfigListener configListener = new ConfigListener();
+    ServletContextEvent e = 
+	new ServletContextEvent(facesTestCase.getConfig().getServletContext());
+    configListener.contextInitialized(e);
 }
 
 public void tearDown()
 {
+    // make sure this gets called!
+    ConfigListener configListener = new ConfigListener();
+    ServletContextEvent e = 
+	new ServletContextEvent(facesTestCase.getConfig().getServletContext());
+    configListener.contextDestroyed(e);
+    
     Util.releaseFactoriesAndDefaultRenderKit(facesTestCase.getConfig().getServletContext());
     // make sure session is not null. It will null in case release
     // was invoked.

@@ -1,5 +1,5 @@
 /*
- * $Id: TestAppConfig.java,v 1.1 2003/05/01 06:20:44 eburns Exp $
+ * $Id: TestAppConfig.java,v 1.2 2003/05/01 06:32:00 eburns Exp $
  */
 
 /*
@@ -22,7 +22,7 @@ import javax.faces.application.ApplicationFactory;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestAppConfig.java,v 1.1 2003/05/01 06:20:44 eburns Exp $
+ * @version $Id: TestAppConfig.java,v 1.2 2003/05/01 06:32:00 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -76,7 +76,7 @@ public TestAppConfig(String name)
 	assertTrue(null != application);
 	AppConfig appConfig = application.getAppConfig();
 	assertTrue(null != appConfig);
-	//assertTrue(null != appConfig.getConfigBase());
+	assertTrue(null != appConfig.getConfigBase());
     }
 	
 	
