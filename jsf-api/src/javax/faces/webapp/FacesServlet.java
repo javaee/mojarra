@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.21 2004/01/27 20:29:58 craigmcc Exp $
+ * $Id: FacesServlet.java,v 1.22 2004/01/27 21:48:21 craigmcc Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ public final class FacesServlet implements Servlet {
      * <p>Context initialization parameter name for the lifecycle identifier
      * of the {@link Lifecycle} instance to be utilized.</p>
      */
-    private static final String LIFECYCLE_ID_ATTR =
+    public static final String LIFECYCLE_ID_ATTR =
         "javax.faces.LIFECYCLE_ID";
 
 
