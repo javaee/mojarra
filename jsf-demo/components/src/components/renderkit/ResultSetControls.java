@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetControls.java,v 1.6 2003/04/15 19:36:11 eburns Exp $
+ * $Id: ResultSetControls.java,v 1.7 2003/08/12 18:22:12 eburns Exp $
  */
 
 /*
@@ -64,7 +64,7 @@ import java.util.MissingResourceException;
  *
  * 
  *
- * @version $Id: ResultSetControls.java,v 1.6 2003/04/15 19:36:11 eburns Exp $
+ * @version $Id: ResultSetControls.java,v 1.7 2003/08/12 18:22:12 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -333,7 +333,8 @@ public ResultSetControls(UIComponent newPanel, UIComponent newData,
 	    // The difference between NORTH and EAST is that NORTH
 	    // requires a <br>.
 	    if (facetOrientation == ResultSetRenderer.NORTH) {
-		writer.write("<br>");
+		writer.startElement("br");
+		writer.endElement("br");
 	    }
 	}
 	
@@ -363,7 +364,8 @@ public ResultSetControls(UIComponent newPanel, UIComponent newData,
 	// output the facet in the EAST and SOUTH cases
 	if (null != facet) {
 	    if (facetOrientation == ResultSetRenderer.SOUTH) {
-		writer.write("<br>");
+		writer.startElement("br");
+		writer.endElement("br");
 	    }
 	    // The difference between SOUTH and WEST is that SOUTH
 	    // requires a <br>.
