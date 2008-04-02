@@ -1,0 +1,46 @@
+<navigation>
+
+    <!-- Rules StandardRenderKit Demo -->
+
+    <rule>
+        <page>/UICommand.jsp</page>
+        <outcome>success</outcome>
+        <select>/StandardRenderKit.html</select>
+    </rule>
+    <rule>
+        <page>/UIGraphic.jsp</page>
+        <outcome>success</outcome>
+        <select>/StandardRenderKit.html</select>
+    </rule>
+    <rule>
+        <page>/UIInput.jsp</page>
+        <outcome>success</outcome>
+        <select>/StandardRenderKit.html</select>
+    </rule>
+    <rule>
+        <page>/UIOutput.jsp</page>
+        <outcome>success</outcome>
+        <select>/StandardRenderKit.html</select>
+    </rule>
+    <rule>
+        <page>/UIPanel.jsp</page>
+        <outcome>success</outcome>
+        <select>/StandardRenderKit.html</select>
+    </rule>
+    <rule>
+        <page>/UISelectBoolean.jsp</page>
+        <outcome>success</outcome>
+        <select>/StandardRenderKit.html</select>
+    </rule>
+    <rule>
+        <page>/UISelectMany.jsp</page>
+        <outcome>success</outcome>
+        <select>/StandardRenderKit.html</select>
+    </rule>
+    <rule>
+        <page>/UISelectOne.jsp</page>
+        <outcome>success</outcome>
+        <select>/StandardRenderKit.html</select>
+    </rule>
+
+</navigation>

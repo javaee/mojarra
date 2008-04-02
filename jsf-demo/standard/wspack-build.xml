@@ -1,0 +1,192 @@
+<!--
+ Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+
+ Redistribution and use in source and binary forms, with or
+ without modification, are permitted provided that the following
+ conditions are met:
+
+ - Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+
+ - Redistribution in binary form must reproduce the above
+   copyright notice, this list of conditions and the following
+   disclaimer in the documentation and/or other materials
+   provided with the distribution.
+
+ Neither the name of Sun Microsystems, Inc. or the names of
+ contributors may be used to endorse or promote products derived
+ from this software without specific prior written permission.
+
+ This software is provided "AS IS," without a warranty of any
+ kind. ALL EXPRESS OR IMPLIED CONDITIONS, REPRESENTATIONS AND
+ WARRANTIES, INCLUDING ANY IMPLIED WARRANTY OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT, ARE HEREBY
+ EXCLUDED. SUN AND ITS LICENSORS SHALL NOT BE LIABLE FOR ANY
+ DAMAGES OR LIABILITIES SUFFERED BY LICENSEE AS A RESULT OF OR
+ RELATING TO USE, MODIFICATION OR DISTRIBUTION OF THIS SOFTWARE OR
+ ITS DERIVATIVES. IN NO EVENT WILL SUN OR ITS LICENSORS BE LIABLE
+ FOR ANY LOST REVENUE, PROFIT OR DATA, OR FOR DIRECT, INDIRECT,
+ SPECIAL, CONSEQUENTIAL, INCIDENTAL OR PUNITIVE DAMAGES, HOWEVER
+ CAUSED AND REGARDLESS OF THE THEORY OF LIABILITY, ARISING OUT OF
+ THE USE OF OR INABILITY TO USE THIS SOFTWARE, EVEN IF SUN HAS
+ BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+ You acknowledge that this software is not designed, licensed or
+ intended for use in the design, construction, operation or
+ maintenance of any nuclear facility.
+-->
+
+<!-- StandardRenderKit Demo -->
+
+<project name="standard" default="build" basedir=".">
+    <target name="init" depends="verifyPreconditions">
+        <tstamp/>
+    </target>
+
+    <property file="build.properties"/>               <!-- this demo local   -->
+    <property file="../build.properties"/>            <!-- demos local       -->
+    <property file="${user.home}/build.properties"/>  <!-- User local        -->
+
+    <!-- Configure the context path for this application -->
+    <property name="context.path" value="/jsf-standard"/>
+    <property name="example" value="jsf-standard"/>
+    <property name="build" value="${basedir}/build"/>
+
+    <!-- Required jobs for making this self-contained -->
+    <property name="servlet.jar"
+        value="${tomcat.home}/common/lib/servlet-api.jar"/>
+    <property name="jsp.jar" value="${tomcat.home}/common/lib/jsp-api.jar"/>
+    <property name="commons-beanutils.jar"
+        value="${tomcat.home}/jwsdp-shared/lib/commons-beanutils.jar"/>
+    <property name="commons-digester.jar"
+        value="${tomcat.home}/jwsdp-shared/lib/commons-digester.jar"/>
+    <property name="commons-logging.jar"
+        value="${tomcat.home}/jwsdp-shared/lib/commons-logging.jar"/>
+    <property name="commons-collections.jar"
+        value="${tomcat.home}/jwsdp-shared/lib/commons-collections.jar"/>
+    <property name="jsf-api.jar"
+        value="${tomcat.home}/jsf/lib/jsf-api.jar"/>
+    <property name="jsf-ri.jar"
+        value="${tomcat.home}/jsf/lib/jsf-ri.jar"/>
+    <property name="jstl.jar" value="${tomcat.home}/jstl/lib/jstl.jar"/>
+    <property name="standard.jar" value="${tomcat.home}/jstl/lib/standard.jar"/>
+
+    <path id="classpath">
+        <pathelement location="${commons-beanutils.jar}"/>
+        <pathelement location="${commons-collections.jar}"/>
+        <pathelement location="${commons-digester.jar}"/>
+        <pathelement location="${commons-logging.jar}"/>
+        <pathelement location="${jsf-api.jar}"/>
+        <pathelement location="${jsf-ri.jar}"/>
+        <pathelement location="${jstl.jar}"/>
+        <pathelement location="${build}/${example}/WEB-INF/classes"/>
+        <pathelement location="${servlet.jar}"/>
+    </path>
+
+    <target name="clean">
+        <delete dir="${build}"/>
+        <delete dir="${context.path}"/>
+    </target>
+
+    <target name="verifyPreconditions">
+
+        <antcall target="checkRequiredFile">
+            <param name="file" value="${servlet.jar}"/>
+            <param name="fail.message" value="A JAR file containing the Servlet 2.3 and JSP1.2 classes is required to compile basic.  Please define the property servlet.jar in your build.properties file and ensure that the file exists."/>
+        </antcall>
+
+        <antcall target="checkRequiredFile">
+            <param name="file" value="${commons-beanutils.jar}"/>
+            <param name="fail.message" value="${commons-beanutils.jar} must exist."/>
+        </antcall>
+
+        <antcall target="checkRequiredFile">
+            <param name="file" value="${commons-digester.jar}"/>
+            <param name="fail.message" value="${commons-digester.jar} must exist."/>
+        </antcall>
+
+        <antcall target="checkRequiredFile">
+            <param name="file" value="${commons-logging.jar}"/>
+            <param name="fail.message" value="${commons-logging.jar} must exist."/>
+        </antcall>
+
+        <antcall target="checkRequiredFile">
+            <param name="file" value="${commons-collections.jar}"/>
+            <param name="fail.message" value="${commons-collections.jar} must exist."/>
+        </antcall>
+
+        <antcall target="checkRequiredFile">
+            <param name="file" value="${jsf-api.jar}"/>
+            <param name="fail.message" value="${jsf-api.jar} must exist."/>
+        </antcall>
+
+        <antcall target="checkRequiredFile">
+            <param name="file" value="${jsf-ri.jar}"/>
+            <param name="fail.message" value="${jsf-ri.jar} must exist."/>
+        </antcall>
+
+        <antcall target="checkRequiredFile">
+            <param name="file" value="${standard.jar}"/>
+            <param name="fail.message" value="${standard.jar} must exist."/>
+        </antcall>
+
+        <antcall target="checkRequiredFile">
+            <param name="file" value="${jstl.jar}"/>
+            <param name="fail.message" value="${jstl.jar} must exist."/>
+        </antcall>
+
+    </target>
+
+    <target name="prepare" depends="init"
+        description="Create build directories.">
+        <mkdir dir="${build}/${example}"/>
+        <mkdir dir="${build}/${example}/WEB-INF"/>
+        <mkdir dir="${build}/${example}/WEB-INF/classes"/>
+        <mkdir dir="${build}/${example}/WEB-INF/lib"/>
+    </target>
+
+    <!-- Executable Targets -->
+
+    <target name="build"
+        description="Compile Java files and copy static files.">
+        <javac srcdir="src" destdir="${build}/${example}/WEB-INF/classes">
+            <include name="**/*.java"/>
+            <classpath refid="classpath"/>
+        </javac>
+        <copy todir="${build}/${example}/WEB-INF">
+            <fileset dir="web/WEB-INF">
+                <include name="*.xml"/>
+            </fileset>
+        </copy>
+
+        <copy todir="${build}/${example}/">
+            <fileset dir="web">
+                <include name="*.html"/>
+                <include name="*.gif"/>
+                <include name="*.jpg"/>
+                <include name="*.jsp"/>
+                <include name="*.xml"/>
+            </fileset>
+        </copy>
+        <copy todir="${build}/${example}/WEB-INF/classes/${example}">
+            <fileset dir="web">
+                <include name="*properties"/>
+            </fileset>
+        </copy>
+
+        <jar jarfile="${example}.war" basedir="${build}/${example}"/>
+        <copy todir=".." file="${example}.war"/>
+        <delete file="${example}.war"/>
+    </target>
+
+    <target name="checkRequiredFile">
+        <available file="${file}" property="requirement.satisfied"/>
+        <antcall target="checkRequired.fail"/>
+    </target>
+
+    <target name="checkRequired.fail" unless="requirement.satisfied">
+        <fail message="${fail.message}"/>
+    </target>
+
+</project>
+

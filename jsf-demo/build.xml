@@ -99,15 +99,12 @@
     <delete    dir="${dist.home}"/>
 
     <ant target="clean" dir="templateDemo"/>
-
     <ant target="clean" dir="guessNumber"/>
     <ant target="clean" dir="helloDuke"/>
-
     <ant target="clean" dir="components"/>
-
     <ant target="clean" dir="cardemo"/>
-
     <ant target="clean" dir="nonjsp"/>
+    <ant target="clean" dir="standard"/>
 
   </target>
 
@@ -240,6 +237,7 @@ Before running this target you must:
         <include name="*helloDuke*"/>
         <include name="*guessNumber*"/>
         <include name="*nonJsp*"/>
+        <include name="*standard*"/>
     
       </fileset>
     </delete>
@@ -278,6 +276,8 @@ Before running this target you must:
           file="${basedir}/guessNumber/build/jsf-guessNumber.war"/>
     <copy todir="${dist.home}/samples" 
           file="${basedir}/nonjsp/dist/jsf-nonjsp.war"/> 
+    <copy todir="${dist.home}/samples" 
+          file="${basedir}/standard/dist/jsf-standard.war"/>
     <echo> copy the demo-components.jar </echo>
     <copy todir="${dist.home}/samples" 
      file="${basedir}/components/build/demo/WEB-INF/lib/demo-components.jar"/>
@@ -304,6 +304,12 @@ Before running this target you must:
     </copy>
     <copy file="${basedir}/nonjsp/wspack-build.xml"
           tofile="${dist.home}/samples/nonjsp/build.xml" />
+
+    <copy todir="${dist.home}/samples/standard" includeEmptyDirs="false">
+      <fileset dir="${basedir}/standard" excludes="build.xml,wspack-build.xml"/>
+    </copy>
+    <copy file="${basedir}/standard/wspack-build.xml"
+          tofile="${dist.home}/samples/standard/build.xml" />
 
     <copy todir="${dist.home}/samples/components" includeEmptyDirs="false">
       <fileset dir="${basedir}/components" excludes="build.xml,wspack-build.xml"/>
@@ -422,6 +428,12 @@ Before running this target you must:
                 value="../../jsf-ri/build/lib/jsf-ri.jar"/>
     </ant>
     <ant dir="${basedir}/nonjsp">
+      <property name="jsf-api.jar" 
+                value="../../jsf-api/build/lib/jsf-api.jar"/>
+      <property name="jsf-ri.jar" 
+                value="../../jsf-ri/build/lib/jsf-ri.jar"/>
+    </ant>  
+    <ant dir="${basedir}/standard">
       <property name="jsf-api.jar" 
                 value="../../jsf-api/build/lib/jsf-api.jar"/>
       <property name="jsf-ri.jar" 
