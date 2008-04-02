@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.65 2005/02/08 19:23:48 rlubke Exp $
+ $Id: build-tests.xml,v 1.66 2005/02/24 15:22:34 rogerk Exp $
 -->
 
 <!--
@@ -87,9 +87,11 @@
                 test.converter01,
                 test.converter02,
                 test.converter03,
+                test.converter04,
                 test.validator,
                 test.validator01,
                 test.validator02,
+                test.validator03,
                 test.component,
                 test.component01,
                 test.navigation,
@@ -550,6 +552,14 @@
          status="200" failonerror="${failonerror}"/>
   </target>
 
+  <target name="test.converter04"
+   description="Test converter">
+                                                                                     
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+        request="${context.path}/faces/converter04.jsp"
+         status="200" failonerror="${failonerror}"/>
+  </target>
+
   <target name="test.validator"
    description="Test Validator creation facility">
 
@@ -575,6 +585,15 @@
          status="200" failonerror="${failonerror}"/>
   </target>
   
+  <target name="test.validator03"
+   description="Test validator">
+                                                                                
+                                                                                
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+        request="${context.path}/faces/validator03.jsp"
+         status="200" failonerror="${failonerror}"/>
+  </target>
+
   <target name="test.component"
    description="Test Component creation facility">
 

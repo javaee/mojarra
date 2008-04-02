@@ -58,7 +58,7 @@
 
 <%-- DateTime Converter with "binding" attribute --%>
 
-      <h:inputText id="text5" value="10:00:01 PM" size="10" maxlength="20">
+      <h:inputText id="text5" label="text5" value="10:00:01 PM" size="10" maxlength="20">
          <f:convertDateTime binding="#{converterBean.dateTimeConverter}"
             type="time" timeStyle="medium"/>
       </h:inputText>

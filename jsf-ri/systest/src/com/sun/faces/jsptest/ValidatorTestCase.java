@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorTestCase.java,v 1.1 2004/12/02 18:42:25 rogerk Exp $
+ * $Id: ValidatorTestCase.java,v 1.2 2005/02/24 15:22:35 rogerk Exp $
  */
 
 /*
@@ -89,4 +89,28 @@ public class ValidatorTestCase extends AbstractTestCase {
 	assertTrue(-1 != page.asText().indexOf("allowable maximum of '4'"));
 
     }
+
+    public void testValidatorMessages() throws Exception {
+        HtmlPage page = getPage("/faces/validator03.jsp");
+        List list;
+        list = getAllElementsOfGivenClass(page, null,
+                                          HtmlTextInput.class);
+                                                                                         
+        // set the initial value to be "1" for all input fields
+        for (int i=0; i< list.size(); i++) {
+            ((HtmlTextInput)list.get(i)).setValueAttribute("1");
+        }
+                                                                                         
+        list = getAllElementsOfGivenClass(page, null,
+                                          HtmlSubmitInput.class);
+        HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
+        page = (HtmlPage) button.click();
+                                                                                         
+        assertTrue(-1 != page.asText().indexOf("Validation Error: Specified attribute is not between the expected values of 2 and 5."));
+        assertTrue(-1 != page.asText().indexOf("DoubleRange2: Validation Error: Specified attribute is not between the expected values of 2 and 5."));
+        assertTrue(-1 != page.asText().indexOf("Validation Error: Value is less than allowable minimum of '2'"));
+        assertTrue(-1 != page.asText().indexOf("Length2: Validation Error: Value is less than allowable minimum of '2'"));
+        assertTrue(-1 != page.asText().indexOf("LongRange2: Validation Error: Specified attribute is not between the expected values of 2 and 5."));
+    }
+
 }
