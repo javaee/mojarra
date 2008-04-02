@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.16 2003/10/10 14:31:53 eburns Exp $
+ * $Id: FacesServlet.java,v 1.17 2004/01/10 23:07:26 eburns Exp $
  */
 
 /*
@@ -208,9 +208,10 @@ public final class FacesServlet implements Servlet {
                 }
             }
         }
-
-        // Release the FacesContext instance for this request
-        context.release();
+	finally {
+	    // Release the FacesContext instance for this request
+	    context.release();
+	}
         
     }
 
