@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterTag.java,v 1.12 2004/11/11 20:33:35 rogerk Exp $
+ * $Id: ConverterTag.java,v 1.13 2004/12/20 21:25:13 rogerk Exp $
  */
 
 /*
@@ -144,24 +144,9 @@ public class ConverterTag extends TagSupport {
         converter = createConverter();
         
         if (converter == null) {
-            String converterError = null;
-            if (binding != null) {
-                converterError = binding;
-            }
-            if (converterId != null) {
-                if (converterError != null) {
-                    converterError += " or " + converterId;
-                } else {
-                    converterError = converterId;
-                }
-            }
-            
-            Object params [] = {"javax.faces.convert.Converter",converterError};
-            // PENDING i18n
-            throw new JspException("Can't create class of type:"+
-                    "javax.faces.convert.Converter for:"+converterError);
+	    return (SKIP_BODY);
         }
-        
+
         ValueHolder vh = (ValueHolder)component;
         FacesContext context = FacesContext.getCurrentInstance();
         
@@ -249,6 +234,10 @@ public class ConverterTag extends TagSupport {
                 throw new JspException(e);
             }
         }
+
+        // PENDING - should log an error if neither "binding" or "converterId"
+        // was set.
+
         return converter;
     }
 }

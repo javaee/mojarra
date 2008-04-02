@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorTag.java,v 1.18 2004/11/11 20:33:35 rogerk Exp $
+ * $Id: ValidatorTag.java,v 1.19 2004/12/20 21:25:13 rogerk Exp $
  */
 
 /*
@@ -143,26 +143,10 @@ public class ValidatorTag extends TagSupport {
 
         validator = createValidator();
         
-        if (validator == null) {
-            String validateError = null;
-            if (binding != null) {
-                validateError = binding;
-            }
-            if (validatorId != null) {
-                if (validateError != null) {
-                    validateError += " or " + validatorId;
-                } else {
-                    validateError = validatorId;
-                }
-            }
-                
-            // PENDING i18n
-            throw new JspException("Can't create class of type:"+
-                "javax.faces.validator.Validator from:"+validateError);
+        if (validator != null) {
+            // Register an instance with the appropriate component
+            ((EditableValueHolder)component).addValidator(validator);
         }
-
-        // Register an instance with the appropriate component
-        ((EditableValueHolder)component).addValidator(validator);
         
         return (SKIP_BODY);
 
@@ -230,6 +214,10 @@ public class ValidatorTag extends TagSupport {
                 throw new JspException(e);
             }
         }
+
+        // PENDING - Should log an error if neither "binding" or "validatorId"
+        // was set.
+
         return validator;
     }
 
