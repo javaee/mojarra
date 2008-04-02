@@ -258,17 +258,20 @@
   <target name="test.appserver" depends="compile, undeploy, deploy,test"
    description="Execute all tests against installed /jsf-systest application" />
    
-  <target description="Deploy web applications"  name="deploy.autodeploy"> 
+  <target name="build.war"> 
 
       <jar jarfile="${dist.home}/jsf-systest.war" basedir="${build.home}"/>
+  </target>
+   
+  <target description="Deploy web applications"  name="deploy.autodeploy" depends="build.war"> 
+
        <copy file="${dist.home}/jsf-systest.war" 
            todir="${tomcat.home}/domains/domain1/autodeploy}"/>        
 	<sleep seconds="30"/>
         <ant antfile="build-tests.xml" target="test"/>
   </target>
   
-   <target name="deploy" depends="-check-os" >
-        <jar jarfile="${dist.home}/jsf-systest.war" basedir="${build.home}"/>
+   <target name="deploy" depends="-check-os,build.war" >
         <exec executable="${exec.name}" failonerror="true">
             <arg line="${exec.arg.1}"/>
             <arg line="deploy"/>

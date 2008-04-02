@@ -1,5 +1,5 @@
 /*
- * $Id: TestBean.java,v 1.14 2005/05/06 22:01:58 edburns Exp $
+ * $Id: TestBean.java,v 1.15 2005/07/25 18:40:27 edburns Exp $
  */
 
 /*
@@ -397,6 +397,44 @@ public class TestBean {
 		FactoryFinder.getFactory(factoryNames[i]).toString() + " ";
 	}
 	return result;
+    }
+
+    /**
+     * Holds value of property setPropertyTarget.
+     */
+    private String setPropertyTarget = "default value";
+
+    /**
+     * Getter for property setPropertyTarget.
+     * @return Value of property setPropertyTarget.
+     */
+    public String getSetPropertyTarget() {
+
+        return this.setPropertyTarget;
+    }
+
+    /**
+     * Setter for property setPropertyTarget.
+     * @param setPropertyTarget New value of property setPropertyTarget.
+     */
+    public void setSetPropertyTarget(String setPropertyTarget) {
+
+        this.setPropertyTarget = setPropertyTarget;
+    }
+
+    /**
+     * Holds value of property counter.
+     */
+    private String counter = "0";
+    private int counterInt = 0;
+
+    /**
+     * Getter for property counter.
+     * @return Value of property counter.
+     */
+    public String getCounter() {
+        counter = Integer.valueOf(counterInt++).toString();
+        return counter;
     }
 
 	

@@ -720,6 +720,41 @@
 
     </tag>
 
+    <tag>
+        <description>
+        Register an ActionListener instance on the UIComponent
+        associated with the closest parent UIComponent custom action.
+        This actionListener will cause the value given by the "value"
+        attribute to be set into the ValueExpression given by the "target"
+        attribute.
+        </description>
+        <name>setPropertyActionListener</name>
+        <tag-class>com.sun.faces.taglib.jsf_core.SetPropertyActionListenerTag</tag-class>
+        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+              ValueExpression to be stored as the value of the target
+              attribute.
+            </description>
+            <name>value</name>
+            <required>true</required>
+            <deferred-value/>
+        </attribute>
+
+        <attribute>
+            <description>
+              ValueExpression that is the destination of the value
+              attribute.
+            </description>
+            <name>target</name>
+            <required>true</required>
+            <deferred-value/>
+        </attribute>
+
+    </tag>
+
 
     <tag>
         <description>
