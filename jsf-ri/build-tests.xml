@@ -346,9 +346,7 @@
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_4"/>
             <test name="com.sun.faces.renderkit.TestRenderKit"/>
             <test name="com.sun.faces.renderkit.TestRenderKitFactory"/>
-<!--
             <test name="com.sun.faces.taglib.jsf_core.TestValidatorTags"/>
--->
             <test name="com.sun.faces.util.TestUtil"/>
             <test name="com.sun.faces.util.TestUtil_messages"/>
 <!--
