@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.29 2005/04/21 18:55:34 edburns Exp $ 
+ * $Id: StateManagerImpl.java,v 1.30 2005/06/02 16:06:32 edburns Exp $ 
  */ 
 
 
@@ -36,7 +36,7 @@ import java.util.logging.Level;
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
  *
- * @version $Id: StateManagerImpl.java,v 1.29 2005/04/21 18:55:34 edburns Exp $
+ * @version $Id: StateManagerImpl.java,v 1.30 2005/06/02 16:06:32 edburns Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class StateManagerImpl extends StateManager {
@@ -216,6 +216,15 @@ public class StateManagerImpl extends StateManager {
 		}
 		
 		Map lruMap, sessionMap = Util.getSessionMap(context);
+                
+                if (null == sessionMap) {
+                    if (logger.isLoggable(Level.FINE)) {
+                        logger.fine( "Can't get session map.  Perhaps the session expired? viewId: "
+                                + viewId);
+                    }
+                    return null;
+                }
+                
 		TreeStructure structRoot = null;
 		Object [] stateArray = null;
 		synchronized (this) {
