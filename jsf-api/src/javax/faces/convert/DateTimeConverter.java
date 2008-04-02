@@ -1,5 +1,5 @@
 /*
- * $Id: DateTimeConverter.java,v 1.24 2004/02/26 20:30:48 eburns Exp $
+ * $Id: DateTimeConverter.java,v 1.25 2004/06/11 20:47:28 rogerk Exp $
  */
 
 /*
@@ -386,7 +386,7 @@ public class DateTimeConverter implements Converter, StateHolder {
             df = DateFormat.getTimeInstance(getStyle(timeStyle), locale);
         } else {
             // PENDING(craigmcc) - i18n
-            new IllegalArgumentException("Invalid type: " + type);
+            throw new IllegalArgumentException("Invalid type: " + type);
         }
         df.setLenient(false);
         return (df);

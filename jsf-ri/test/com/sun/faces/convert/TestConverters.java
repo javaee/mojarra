@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.29 2004/04/07 17:52:49 rkitain Exp $
+ * $Id: TestConverters.java,v 1.30 2004/06/11 20:48:01 rogerk Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import java.util.TimeZone;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.29 2004/04/07 17:52:49 rkitain Exp $
+ * @version $Id: TestConverters.java,v 1.30 2004/06/11 20:48:01 rogerk Exp $
  */
 
 public class TestConverters extends JspFacesTestCase {
@@ -665,7 +665,19 @@ public class TestConverters extends JspFacesTestCase {
         str = converter.getAsString(getFacesContext(), text, obj);
         // make sure we end up with the same string we started with..
         assertTrue(str.equals(stringToConvert));
+
+        // test bogus type....
+        boolean exceptionThrown = false;
+        try {
+            ((DateTimeConverter)converter).setType("foobar");
+            obj = converter.getAsObject(getFacesContext(), text, stringToConvert);
+        } catch (Exception e) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+        
     }
+
 
 
     public void testNumberConverter(UIViewRoot root) throws ConverterException,
