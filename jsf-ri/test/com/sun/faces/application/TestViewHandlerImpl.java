@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.20 2004/07/14 22:05:21 rlubke Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.21 2004/07/20 21:54:50 rlubke Exp $ 
  */ 
 
 
@@ -49,7 +49,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestViewHandlerImpl.java,v 1.20 2004/07/14 22:05:21 rlubke Exp $
+ * @version $Id: TestViewHandlerImpl.java,v 1.21 2004/07/20 21:54:50 rlubke Exp $
  */
 
 
@@ -187,16 +187,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
         FacesContext facesContext = new FacesContextImpl(extContext, lifecycle);
         String contextPath = request.getContextPath();
 
-        // Spoof the mappings so we can properly test the different possible
-        // values
-        List mappings = new ArrayList();
-        // create the same "massaged" mappings that WebXMLParser creates.
-        mappings.add("/faces");
-        mappings.add(".jsf");
-        mappings.add("/*");
         ViewHandlerImpl handler = new ViewHandlerImpl();
-        handler.setFacesMapping(mappings);
-
 
         // if getServletPath() returns "" then the viewId path returned should
         // be the same as what was passed, prefixed by the context path.

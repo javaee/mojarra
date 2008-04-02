@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.61 2004/07/17 01:37:14 jayashri Exp $
+ * $Id: ConfigFileTestCase.java,v 1.62 2004/07/20 21:54:50 rlubke Exp $
  */
 
 /*
@@ -10,15 +10,12 @@
 package com.sun.faces.config;
 
 import com.sun.faces.ServletFacesTestCase;
-import com.sun.faces.config.beans.FacesConfigBean;
-
-import org.apache.commons.digester.Digester;
-
-import com.sun.faces.application.ApplicationImpl;
 import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.application.ApplicationImpl;
+import com.sun.faces.config.beans.FacesConfigBean;
 import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
-import org.xml.sax.InputSource;
+import org.apache.commons.digester.Digester;
 
 import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
@@ -26,24 +23,18 @@ import javax.faces.application.NavigationHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.convert.Converter;
-import javax.faces.el.ValueBinding;
-import javax.faces.lifecycle.Lifecycle;
-import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.validator.Validator;
 import javax.servlet.ServletContext;
 
-import java.io.FileNotFoundException;
 import java.io.File;
-import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import java.net.URL;
 
 
 /**
@@ -71,7 +62,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	    url = (new File(System.getProperty("testRootDir"))).toURL();
 	    url = new URL(url, str);
 	    parse(digester, url, fcb);
-	    configure(context, fcb, java.util.Collections.EMPTY_LIST);
+	    configure(context, fcb);
 	}
     }
     
@@ -104,16 +95,6 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 
 
     // ------------------------------------------------ Individual Test Methods
-    
-    // Verify the url-patterns for all javax.faces.webapp.FacesServlet
-    // entries are found and massaged.
-    public void testWebXmlParser() throws Exception {
-        WebXmlParser parser = new WebXmlParser(config.getServletContext());
-        List mappings = parser.getFacesServletMappings();
-
-        assertTrue(mappings.contains("/faces"));
-        assertTrue(mappings.contains(".jsf"));
-    }
 
 
     protected void parseConfig(String resource,

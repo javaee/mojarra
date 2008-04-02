@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.43 2004/07/17 01:37:12 jayashri Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.44 2004/07/20 21:54:48 rlubke Exp $ 
  */ 
 
 
@@ -19,7 +19,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import javax.faces.FacesException;
-import javax.faces.application.Application;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
@@ -27,21 +26,17 @@ import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKitFactory;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.jstl.core.Config;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.43 2004/07/17 01:37:12 jayashri Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.44 2004/07/20 21:54:48 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -61,19 +56,7 @@ public class ViewHandlerImpl extends ViewHandler {
 
     //
     // Relationship Instance Variables
-    // 
-
-    /**
-     * <p>List of url-patterns defined for the FacesServlet.</p>
-     */
-    protected List facesServletMappings;
-
-    /**
-     * <p>If there are multiple extension mappings, then the
-     * mapping returned will be arbitrary.  Return this value
-     * in that case.</p>
-     */
-    private String defaultMappingExtension;
+    //
 
     /**
      * <p>Store the value of <code>DEFAULT_SUFFIX_PARAM_NAME</code>
@@ -164,7 +147,7 @@ public class ViewHandlerImpl extends ViewHandler {
 
         // set the request character encoding. NOTE! This MUST be done
         // before any request praameter is accessed.
-        HttpSession session = null;
+
         /*
         HttpServletRequest request =
             (HttpServletRequest) extContext.getRequest();
@@ -228,7 +211,6 @@ public class ViewHandlerImpl extends ViewHandler {
             // this was probably an initial request
             // send them off to the root of the web application
             try {
-                Object response = extContext.getResponse();
                 context.responseComplete();
                 if (log.isDebugEnabled()) {
                     log.debug("Response Complete for" + viewId);
@@ -505,45 +487,6 @@ public class ViewHandlerImpl extends ViewHandler {
 
 
     /**
-     * <p>Specifies a <code>List</code> of one or more URL patterns
-     * mapped to one or more {@link javax.faces.webapp.FacesServlet}
-     * instances.</p>
-     *
-     * @param mappings the URL patterns of the
-     *                 defined {@link javax.faces.webapp.FacesServlet}
-     * @throws NullPointerException if <code>mappings</code> is null
-     */
-    public void setFacesMapping(List mappings) {
-
-        if (mappings == null) {
-            String message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message +"mappings " + mappings;
-            throw new NullPointerException(message);
-        }
-
-        if (log.isTraceEnabled()) {
-            log.debug("Setting a list of URL patterns mappings");
-        }
-        synchronized (this) {
-            facesServletMappings =
-                Collections.unmodifiableList(new ArrayList(mappings));
-
-            int size = facesServletMappings.size();
-            if (facesServletMappings.size() > 1) {
-                for (int i = 0; i < size; i++) {
-                    String mapping = (String) facesServletMappings.get(i);
-                    if (mapping.charAt(0) == '.') {
-                        defaultMappingExtension = mapping;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-
-    /**
      * <p>Returns the URL pattern of the
      * {@link javax.faces.webapp.FacesServlet} that
      * is executing the current request.  If there are multiple
@@ -566,7 +509,7 @@ public class ViewHandlerImpl extends ViewHandler {
         if (context == null) {
             String message = Util.getExceptionMessageString
                 (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message +"context " + context;
+            message = message +" context " + context;
             throw new NullPointerException(message);
         }                
         
@@ -632,69 +575,28 @@ public class ViewHandlerImpl extends ViewHandler {
             log.trace("servletPath " + servletPath);
             log.trace("pathInfo " + pathInfo);
         }
-        String mapping = null;
-        
+
         // If the path returned by HttpServletRequest.getServletPath()
         // returns a zero-length String, then the FacesServlet has
         // been mapped to '/*'.
         if (servletPath.length() == 0) {
-            int idx = facesServletMappings.indexOf("/*");
-            if (idx != -1) {
                 return "/*";
-            } else {
-                // Shouldn't happen...
-                if (log.isWarnEnabled()) {
-                    log.warn(
-                        "Error: FacesServlet mapping does not contain \"/*\" ");
-                }
-                return null;
-            }
         }
         
         // presence of path info means we were invoked
         // using a prefix path mapping
         if (pathInfo != null) {
-            for (int i = 0, size = facesServletMappings.size();
-                 i < size; i++) {
-
-                String temp = (String) facesServletMappings.get(i);
-
-                if (servletPath.equals(temp)) {
-                    mapping = temp;
-                    break;
-                }
-            }
+            return servletPath;
+        } else if (pathInfo == null && servletPath.indexOf('.') < 0) {
+            // if pathInfo is null and no '.' is present, assume the
+            // FacesServlet was invoked using prefix path but without
+            // any pathInfo - i.e. GET /contextroot/faces or
+            // GET /contextroot/faces/
+            return servletPath;
         } else {
-            // Servlet could have been invoked using extension mapping. 
-            // Check the mappings in our List for a matching
-            // extension mapping.       
-            for (int i = 0, size = facesServletMappings.size();
-                 i < size; i++) {
-                String temp = (String) facesServletMappings.get(i);
-                if (servletPath.endsWith(temp)) {
-                    mapping = temp;
-                    break;
-                } else if (servletPath.equals(temp)) {
-                    // The request that came in was in fact
-                    // prefix path matched, but was sent to the
-                    // servlet with no path info, i.e.
-                    // /<context_root>/faces or /<context_root>/faces/
-                    mapping = temp;
-                    break;
-                }
-            }
-
-            // no exact extension mapping found, return the
-            // default mapping extension.
-            if (mapping == null) {
-                mapping = defaultMappingExtension;
-                if (log.isDebugEnabled()) {
-                    log.debug("Using default mapping extension " + mapping);
-                }
-            }
+           // Servlet invoked using extension mapping
+            return servletPath.substring(servletPath.lastIndexOf('.'));
         }
-
-        return mapping;
     }
 
 

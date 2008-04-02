@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.60 2004/04/07 17:52:59 rkitain Exp $
+ * $Id: TestRenderers_1.java,v 1.61 2004/07/20 21:54:50 rlubke Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import java.util.ResourceBundle;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.60 2004/04/07 17:52:59 rkitain Exp $
+ * @version $Id: TestRenderers_1.java,v 1.61 2004/07/20 21:54:50 rlubke Exp $
  */
 
 public class TestRenderers_1 extends JspFacesTestCase {
@@ -157,9 +157,7 @@ public class TestRenderers_1 extends JspFacesTestCase {
         root.setId("root");
         root.setViewId("/root");
         ViewHandlerImpl viewHandler = new ViewHandlerImpl();
-        List mappings = new ArrayList();
-        mappings.add("/faces");
-        viewHandler.setFacesMapping(mappings);
+        
         getFacesContext().getApplication().setViewHandler(viewHandler);
         getFacesContext().setViewRoot(root);
         // Call this twice to test the multiple forms in a page logic.

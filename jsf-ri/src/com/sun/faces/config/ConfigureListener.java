@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.22 2004/07/17 01:37:12 jayashri Exp $
+ * $Id: ConfigureListener.java,v 1.23 2004/07/20 21:54:48 rlubke Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -176,12 +176,6 @@ public class ConfigureListener implements ServletContextListener {
             return;
         }
 
-        // Step 0, parse the url-pattern information for the
-        // FacesServlet.  This information is passed onto the
-        // ConfigParser for later use.
-        WebXmlParser webXmlParser = new WebXmlParser(context);
-        List mappings = webXmlParser.getFacesServletMappings();
-
         // Step 1, configure a Digester instance we can use
         try {
             boolean validateXml = validateTheXml(context);
@@ -332,7 +326,7 @@ public class ConfigureListener implements ServletContextListener {
 
         // Step 7, use the accumulated configuration beans to configure the RI
         try {
-            configure(context, fcb, mappings);
+            configure(context, fcb);
         } catch (FacesException e) {
             e.printStackTrace();
             throw e;
@@ -399,12 +393,12 @@ public class ConfigureListener implements ServletContextListener {
      * @param config  <code>FacesConfigBean</code> that is the root of the
      *                tree of configuration information
      */
-    protected void configure(ServletContext context, FacesConfigBean config,
-                           List mappings) throws Exception {
+    protected void configure(ServletContext context, FacesConfigBean config)
+    throws Exception {
         configure(config.getFactory());
         configure(config.getLifecycle());
 
-        configure(config.getApplication(), mappings);
+        configure(config.getApplication());
         configure(config.getComponents());
         configure(config.getConvertersByClass());
         configure(config.getConvertersById());
@@ -421,9 +415,8 @@ public class ConfigureListener implements ServletContextListener {
      *
      * @param config   <code>ApplicationBean</code> that contains our
      *                 configuration information
-     * @param mappings List of mappings for <code>FacesServlet</code>
      */
-    private void configure(ApplicationBean config, List mappings)
+    private void configure(ApplicationBean config)
         throws Exception {
 
         if (config == null) {
@@ -543,10 +536,7 @@ public class ConfigureListener implements ServletContextListener {
                 }
                 instance = Util.createInstance
                     (values[i], ViewHandler.class,
-                     application.getViewHandler());
-                if (instance instanceof ViewHandlerImpl) {
-                    ((ViewHandlerImpl) instance).setFacesMapping(mappings);
-                }
+                     application.getViewHandler());               
                 if (instance != null) {
                     application.setViewHandler
                         ((ViewHandler) instance);

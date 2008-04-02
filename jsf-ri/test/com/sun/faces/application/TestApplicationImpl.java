@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.20 2004/07/15 18:08:32 rlubke Exp $
+ * $Id: TestApplicationImpl.java,v 1.21 2004/07/20 21:54:50 rlubke Exp $
  */
 
 /*
@@ -23,7 +23,6 @@ import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
-import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.el.PropertyResolver;
@@ -33,15 +32,12 @@ import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * <B>TestApplicationImpl</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.20 2004/07/15 18:08:32 rlubke Exp $
+ * @version $Id: TestApplicationImpl.java,v 1.21 2004/07/20 21:54:50 rlubke Exp $
  */
 
 public class TestApplicationImpl extends JspFacesTestCase {
@@ -424,9 +420,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
             exceptionThrown = true;
         }
         assertTrue(!exceptionThrown);
-        List mappings = new ArrayList();
-        mappings.add("/faces");
-        ((ViewHandlerImpl) handler).setFacesMapping(mappings);
+        
         try {
             handler.renderView(getFacesContext(),
                                getFacesContext().getViewRoot());
