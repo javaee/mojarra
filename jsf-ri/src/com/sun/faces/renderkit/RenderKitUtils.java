@@ -197,7 +197,7 @@ public class RenderKitUtils {
      * <p>JavaScript to be rendered when a commandLink is used.
      * This may be expaned to include other uses.</p>
      */
-    private static volatile String SUN_JSF_JS = null;        
+    private static final String SUN_JSF_JS = RIConstants.FACES_PREFIX + "sunJsfJs";        
                           
     
     protected static final Logger LOGGER = 
@@ -968,7 +968,7 @@ public class RenderKitUtils {
      * @param JSString the string to compress
      * @return the compressed string
      */
-    public static String compressJS(String JSString) {
+    public static char[] compressJS(String JSString) {
 
         BufferedReader reader = new BufferedReader(new StringReader(JSString));
         StringWriter writer = new StringWriter(1024);   
@@ -981,7 +981,7 @@ public class RenderKitUtils {
                 line = line.trim();
                 writer.write(line);
             }
-            return writer.toString();
+            return writer.toString().toCharArray();
         } catch (IOException ioe) {
             // won't happen
         }
@@ -1002,7 +1002,8 @@ public class RenderKitUtils {
     public static void writeSunJS(FacesContext context, Writer writer) 
     throws IOException {
         loadSunJsfJs(context);
-        writer.write(SUN_JSF_JS);
+        writer.write((char[]) context.getExternalContext().getApplicationMap()
+              .get(SUN_JSF_JS));
     }
     
     
@@ -1016,13 +1017,16 @@ public class RenderKitUtils {
      * @return the JavaScript sans comments and blank lines
      */
     private static void loadSunJsfJs(FacesContext context) {
-
-        if (SUN_JSF_JS == null) {
+        Map<String,Object> appMap = 
+              context.getExternalContext().getApplicationMap();
+        char[] sunJsfJs = (char[]) appMap.get(SUN_JSF_JS);
+        if (sunJsfJs == null) {
             synchronized (XHTML_ATTR_PREFIX) {
-                if (SUN_JSF_JS == null) {
+                sunJsfJs = (char[]) appMap.get(SUN_JSF_JS);
+                if (sunJsfJs == null) {
                     BufferedReader reader = null;
                     try {
-                        URL url = Util.getCurrentLoader(null)
+                        URL url = Util.getCurrentLoader(appMap)
                               .getResource("com/sun/faces/sunjsf.js");
                         if (url == null) {
                             LOGGER.severe(
@@ -1055,13 +1059,14 @@ public class RenderKitUtils {
                               .getInstance(context.getExternalContext())
                               .getBooleanContextInitParameter(
                                     BooleanWebContextInitParameter.CompressJavaScript)) {
-                            SUN_JSF_JS = compressJS(builder.toString());
+                            sunJsfJs = compressJS(builder.toString());
                         } else {
-                            SUN_JSF_JS = builder.toString();
+                            sunJsfJs = builder.toString().toCharArray();
                         }
+                        appMap.put(SUN_JSF_JS, sunJsfJs);
                     } catch (IOException ioe) {
                         LOGGER.log(Level.SEVERE,
-                                   "jsf.renderkit.resstatemgr.clientbuf_not_integer",
+                                   "jsf.renderkit.util.cannot_load_js",
                                    ioe);
                     } finally {
                         if (reader != null) {
