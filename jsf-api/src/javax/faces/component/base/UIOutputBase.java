@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutputBase.java,v 1.13 2003/09/19 00:57:09 craigmcc Exp $
+ * $Id: UIOutputBase.java,v 1.14 2003/09/24 22:24:52 eburns Exp $
  */
 
 /*
@@ -148,6 +148,7 @@ public class UIOutputBase extends UIComponentBase implements UIOutput {
             List theSupport = supportList[0];
             if ((theSupport != null) && (theSupport.size() > 0)) {
                 support = (ValueHolderSupport) theSupport.get(0);
+		support.setComponent(this);
             }
 	}
 

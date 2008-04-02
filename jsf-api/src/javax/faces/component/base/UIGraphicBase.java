@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphicBase.java,v 1.9 2003/09/19 00:57:08 craigmcc Exp $
+ * $Id: UIGraphicBase.java,v 1.10 2003/09/24 22:24:52 eburns Exp $
  */
 
 /*
@@ -159,6 +159,7 @@ public class UIGraphicBase extends UIComponentBase implements UIGraphic {
             List theSupport = supportList[0];
             if ((theSupport != null) && (theSupport.size() > 0)) {
                 support = (ValueHolderSupport) theSupport.get(0);
+		support.setComponent(this);
             }
 	}
 

@@ -1,5 +1,5 @@
 /*
- * $Id: StateHolderSaver.java,v 1.8 2003/09/23 21:33:41 jvisvanathan Exp $
+ * $Id: StateHolderSaver.java,v 1.9 2003/09/24 22:24:48 eburns Exp $
  */
 
 /*
@@ -79,7 +79,6 @@ public class StateHolderSaver extends Object implements Serializable {
 	    result instanceof StateHolder) {
 	    // don't need to check transient, since that was done on
 	    // the saving side.
-            ((StateHolder)result).setComponent(toAttachTo);
 	    ((StateHolder)result).restoreState(context, savedState);
         }
         return result;

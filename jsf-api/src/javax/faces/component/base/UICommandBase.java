@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandBase.java,v 1.16 2003/09/19 00:57:07 craigmcc Exp $
+ * $Id: UICommandBase.java,v 1.17 2003/09/24 22:24:51 eburns Exp $
  */
 
 /*
@@ -242,6 +242,7 @@ public class UICommandBase extends UIComponentBase implements UICommand {
             List theSupport = supportList[0];
             if ((theSupport != null) && (theSupport.size() > 0)) {
                 support = (ValueHolderSupport) theSupport.get(0);
+		support.setComponent(this);
             }
 	}
         action = (String) values[2];

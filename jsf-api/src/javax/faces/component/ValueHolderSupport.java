@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolderSupport.java,v 1.4 2003/09/23 21:33:42 jvisvanathan Exp $
+ * $Id: ValueHolderSupport.java,v 1.5 2003/09/24 22:24:49 eburns Exp $
  */
 
 /*
@@ -228,6 +228,15 @@ public class ValueHolderSupport
 
     }
 
+    /**
+     * <p>This ivar is used to allow the actual restoring of state to
+     * happen in {@link #restoreState} and {@link #setComponent}.  This
+     * is necessary because we need to know the component to which we
+     * are attached to fully have our state restored, and we don't know
+     * the component until {@link #setComponent} is called.</p>
+     *
+     */
+    private Object valueFromState = null;
 
     public void restoreState(FacesContext context, Object state)
         throws IOException {
@@ -243,10 +252,34 @@ public class ValueHolderSupport
                 converter = (Converter) theConverter.get(0);
             }
 	}
+
+	valueFromState = values[1];
     
+        valueRef = (String) values[2];
+
+    }
+
+    /**
+     * <p>Allows attached objects to maintain a reference to the {@link
+     * UIComponent} to which they are attached.  This method is called
+     * after {@link #restoreState}.</p>
+     *
+     * @param yourComponent the <code>UIComponent</code> to which this
+     * instance is attached, or <code>null</code> if there is no
+     * <code>UIComponent</code> for this instance.
+     */
+    
+    public void setComponent(UIComponent yourComponent) {
+        // Restore component reference from parameter
+        this.component = yourComponent;
+
+	if (null == this.component) {
+	    return;
+	}
+
         Repeater repeater = RepeaterSupport.findParentRepeater(component);
         if (repeater != null && repeater.getRowIndex() > 0) {
-            Object[] currentValues = (Object[])values[1];
+            Object[] currentValues = (Object[])valueFromState;
             if ( currentValues != null ) {
                 for (int i = 0; i < currentValues.length; ++i ) {
                     repeater.setRowIndex(i+1);
@@ -254,15 +287,9 @@ public class ValueHolderSupport
                 }
             }
         } else {
-            value = values[1];
+            value = valueFromState;
         }
-        valueRef = (String) values[2];
-
-    }
-
-    public void setComponent(UIComponent yourComponent) {
-        // Restore component reference from parameter
-        this.component = yourComponent;
+	valueFromState = null;
     }
 
 

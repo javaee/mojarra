@@ -464,6 +464,7 @@ public class UIData extends UIComponentBase
             List theSupport = supportList[0];
             if ((theSupport != null) && (theSupport.size() > 0)) {
                 support = (ValueHolderSupport) theSupport.get(0);
+		support.setComponent(this);
             }
 	}
         first = ((Integer) values[2]).intValue();
