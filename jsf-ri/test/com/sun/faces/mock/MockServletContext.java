@@ -1,5 +1,5 @@
 /*
- * $Id: MockServletContext.java,v 1.6 2005/08/22 22:11:22 ofung Exp $
+ * $Id: MockServletContext.java,v 1.7 2006/02/15 22:33:27 rlubke Exp $
  */
 
 /*
@@ -126,6 +126,10 @@ public class MockServletContext implements ServletContext {
     public ServletContext getContext(String uripath) {
         throw new UnsupportedOperationException();
     }
+
+    public String getContextPath() {
+       return ('/' + name);
+    } 
 
 
     public String getInitParameter(String name) {
