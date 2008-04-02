@@ -12,7 +12,7 @@
 
   <property name="Name" value="JSF RI"/>
   <property name="name" value="jsf-ri"/>
-  <property name="version" value="20020909"/>
+  <property name="version" value="20020910"/>
 
 <!-- ************ Per user local properties ******************************* -->
 
@@ -182,6 +182,7 @@
       <fileset dir="." includes="**/.nbattrs" defaultexcludes="no"/>
     </delete>
     <delete file="jsf-${version}.zip"/>
+    <delete file="jsf-${version}_src.zip"/>
   </target>
 
   <target name="clean.tomcat"
