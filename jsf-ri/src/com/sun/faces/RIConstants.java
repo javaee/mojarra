@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.88 2006/06/19 19:38:50 youngm Exp $
+ * $Id: RIConstants.java,v 1.89 2006/08/30 18:23:52 rlubke Exp $
  */
 
 /*
@@ -115,12 +115,13 @@ public class RIConstants {
     /**
      *<p>ResponseWriter Content Types and Encoding</p>
      */
-    public final static String HTML_CONTENT_TYPE = "text/html";
-    public final static String XHTML_CONTENT_TYPE = "application/xhtml+xml";
-    public final static String APPLICATION_XML_CONTENT_TYPE = "application/xml";
-    public final static String TEXT_XML_CONTENT_TYPE = "text/xml";
-    public final static String ALL_MEDIA = "*/*";
-    public final static String CHAR_ENCODING = "ISO-8859-1";
+    public static final String HTML_CONTENT_TYPE = "text/html";
+    public static final String XHTML_CONTENT_TYPE = "application/xhtml+xml";
+    public static final String APPLICATION_XML_CONTENT_TYPE = "application/xml";
+    public static final String TEXT_XML_CONTENT_TYPE = "text/xml";
+    public static final String ALL_MEDIA = "*/*";
+    public static final String CHAR_ENCODING = "ISO-8859-1";
+    public static final String SUN_JSF_JS_URI = "com_sun_faces_sunjsf.js";
 
 
     private RIConstants() {
