@@ -465,7 +465,9 @@ public class ConverterPropertyEditorFactory {
                 Class editorClass = defineClass(className, classBytes, 0,
                     classBytes.length, ConverterPropertyEditorFactory.class
                         .getProtectionDomain());
-                logger.info("Defined editorClass " + editorClass);
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.fine("Defined editorClass " + editorClass);
+                }
                 return editorClass;
             }
             // This will just cause ClassNotFoundException to be thrown.
