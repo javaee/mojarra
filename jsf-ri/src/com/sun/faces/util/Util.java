@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.66 2003/07/24 23:24:20 rkitain Exp $
+ * $Id: Util.java,v 1.67 2003/07/25 05:52:24 horwat Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import javax.faces.component.UISelectItems;
 import javax.faces.component.SelectItem;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.context.MessageResourcesImpl;
+import com.sun.faces.application.MessageResourcesImpl;
 import javax.faces.context.FacesContext;
 
 import java.util.ArrayList;
@@ -56,7 +56,7 @@ import java.util.StringTokenizer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.66 2003/07/24 23:24:20 rkitain Exp $
+ * @version $Id: Util.java,v 1.67 2003/07/25 05:52:24 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo

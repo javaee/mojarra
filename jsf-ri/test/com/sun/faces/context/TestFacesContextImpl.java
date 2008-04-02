@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.27 2003/07/24 23:53:31 rkitain Exp $
+ * $Id: TestFacesContextImpl.java,v 1.28 2003/07/25 05:52:31 horwat Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.27 2003/07/24 23:53:31 rkitain Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.28 2003/07/25 05:52:31 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -147,9 +147,7 @@ public void testAccessors()
 	};
 /*    ResponseWriter responseWriter = null;
     try {
-        responseWriter = new 
-        ServletResponseWriter(((ServletResponse)getFacesContext().getExternalContext().
-            getResponse()).getWriter());
+        responseWriter = getFacesContext().getResponseWriter();
     } catch ( Exception e ) {
         assertTrue(false);
     }    

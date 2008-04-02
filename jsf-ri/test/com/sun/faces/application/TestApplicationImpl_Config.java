@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.11 2003/07/24 23:24:21 rkitain Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.12 2003/07/25 05:52:18 horwat Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import org.mozilla.util.Assert;
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.TestComponent;
 import com.sun.faces.TestConverter;
-import com.sun.faces.context.MessageResourcesImpl;
+import com.sun.faces.application.MessageResourcesImpl;
 import com.sun.faces.config.*;
 import javax.faces.application.MessageResources;
 import javax.faces.FacesException;
@@ -52,7 +52,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.11 2003/07/24 23:24:21 rkitain Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.12 2003/07/25 05:52:18 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -296,7 +296,7 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	// runtime addition
 	
 	application.addMessageResources("FreshResources",
-				 "com.sun.faces.context.MessageResourcesImpl");
+				 "com.sun.faces.application.MessageResourcesImpl");
 	assertTrue(null != (newMessageResourcesImpl = (MessageResourcesImpl)
 			    application.getMessageResources("FreshResources")));
 	assertTrue(newMessageResourcesImpl != testMessageResoruces);

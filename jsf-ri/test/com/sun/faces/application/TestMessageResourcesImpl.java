@@ -1,5 +1,5 @@
 /*
- * $Id: TestMessageResourcesImpl.java,v 1.8 2003/07/24 23:53:32 rkitain Exp $
+ * $Id: TestMessageResourcesImpl.java,v 1.1 2003/07/25 05:52:17 horwat Exp $
  */
 
 /*
@@ -9,7 +9,7 @@
 
 // TestMessageResourcesImpl.java
 
-package com.sun.faces.context;
+package com.sun.faces.application;
 
 import com.sun.faces.ServletFacesTestCase;
 
@@ -19,7 +19,7 @@ import org.mozilla.util.ParameterCheck;
 import javax.faces.application.Message;
 import javax.faces.application.MessageResources;
 import javax.faces.context.FacesContext;
-import com.sun.faces.context.MessageResourcesImpl;
+import com.sun.faces.application.MessageResourcesImpl;
 import com.sun.faces.util.Util;
 import java.util.Iterator;
 import javax.faces.FacesException;
@@ -31,7 +31,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestMessageResourcesImpl.java,v 1.8 2003/07/24 23:53:32 rkitain Exp $
+ * @version $Id: TestMessageResourcesImpl.java,v 1.1 2003/07/25 05:52:17 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo

@@ -1,5 +1,5 @@
 /*
- * $Id: MessageCatalog.java,v 1.4 2003/04/29 20:51:41 eburns Exp $
+ * $Id: MessageCatalog.java,v 1.1 2003/07/25 05:52:14 horwat Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package com.sun.faces.context;
+package com.sun.faces.application;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -21,9 +21,9 @@ import org.mozilla.util.ParameterCheck;
  *
  *  <B>MessageCatalog</B> maintains a list of messages for a particular locale.
  *
- * @version $Id: MessageCatalog.java,v 1.4 2003/04/29 20:51:41 eburns Exp $
+ * @version $Id: MessageCatalog.java,v 1.1 2003/07/25 05:52:14 horwat Exp $
  * 
- * @see com.sun.faces.context.MessageTemplate
+ * @see com.sun.faces.application.MessageTemplate
  *
  */
 

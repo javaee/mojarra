@@ -7,7 +7,7 @@
 %><%@ page import="javax.faces.application.Application"
 %><%@ page import="javax.faces.application.Message"
 %><%@ page import="javax.faces.application.ApplicationFactory"
-%><%@ page import="javax.faces.context.MessageResources"
+%><%@ page import="javax.faces.application.MessageResources"
 %><%@ page import="javax.faces.context.FacesContext"
 %><%
 

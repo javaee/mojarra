@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.21 2003/07/24 23:24:22 rkitain Exp $
+ * $Id: ConfigFileTestCase.java,v 1.22 2003/07/25 05:52:30 horwat Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
 package com.sun.faces.config;
 
 import com.sun.faces.application.ApplicationImpl;
-import com.sun.faces.context.MessageResourcesImpl;
+import com.sun.faces.application.MessageResourcesImpl;
 import com.sun.faces.tree.SimpleTreeImpl;
 import com.sun.faces.el.ValueBindingImpl;
 import com.sun.faces.RIConstants;

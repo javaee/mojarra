@@ -1,5 +1,5 @@
 /*
- * $Id: MessageTemplate.java,v 1.3 2003/04/29 20:51:42 eburns Exp $
+ * $Id: MessageTemplate.java,v 1.1 2003/07/25 05:52:15 horwat Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package com.sun.faces.context;
+package com.sun.faces.application;
 
 import java.util.Locale;
 import javax.faces.application.Message;

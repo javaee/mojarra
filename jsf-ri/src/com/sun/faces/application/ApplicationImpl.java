@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.18 2003/07/24 23:24:13 rkitain Exp $
+ * $Id: ApplicationImpl.java,v 1.19 2003/07/25 05:52:15 horwat Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import javax.faces.validator.Validator;
 import javax.faces.FacesException;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.context.MessageResourcesImpl;
+import com.sun.faces.application.MessageResourcesImpl;
 import com.sun.faces.config.ManagedBeanFactory;
 import com.sun.faces.el.ValueBindingImpl;
 import com.sun.faces.el.PropertyResolverImpl;
@@ -560,7 +560,7 @@ public class ApplicationImpl extends Application {
 	
 	String className = null;
 	if (value == null) {
-	    className = "com.sun.faces.context.MessageResourcesImpl";
+	    className = "com.sun.faces.application.MessageResourcesImpl";
 	} else if (value instanceof String) {
 	    className = (String)value;
 	}

@@ -1,5 +1,5 @@
 /*
- * $Id: MessageResourcesImpl.java,v 1.14 2003/07/24 23:24:15 rkitain Exp $
+ * $Id: MessageResourcesImpl.java,v 1.1 2003/07/25 05:52:13 horwat Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package com.sun.faces.context;
+package com.sun.faces.application;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;

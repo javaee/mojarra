@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.22 2003/07/24 23:24:14 rkitain Exp $
+ * $Id: ConfigParser.java,v 1.23 2003/07/25 05:52:23 horwat Exp $
  */
 
 /*
@@ -12,9 +12,9 @@ package com.sun.faces.config;
 import com.sun.faces.RIConstants;
 import com.sun.faces.application.ApplicationImpl;
 import com.sun.faces.application.NavigationHandlerImpl;
-import com.sun.faces.context.MessageCatalog;
-import com.sun.faces.context.MessageResourcesImpl;
-import com.sun.faces.context.MessageTemplate;
+import com.sun.faces.application.MessageCatalog;
+import com.sun.faces.application.MessageResourcesImpl;
+import com.sun.faces.application.MessageTemplate;
 import com.sun.faces.util.Util;
 
 import java.io.File;

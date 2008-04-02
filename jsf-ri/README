@@ -79,7 +79,7 @@ Major changes/features in this release:
   Application serves as an abstract factory for several other faces
   classes.  It has subsumed the responsibilities of the former
   javax.faces.convert.ConverterFactory and
-  javax.faces.context.MessageResourcesFactory classes; thus Application
+  javax.faces.application.MessageResourcesFactory classes; thus Application
   currently vends instances of
 
   ValueBinding
