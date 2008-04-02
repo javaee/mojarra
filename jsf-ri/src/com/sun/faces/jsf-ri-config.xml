@@ -40,7 +40,17 @@
 
   <component>
     <component-type>Command</component-type>
+    <component-class>javax.faces.component.UICommand</component-class>
+  </component>
+
+  <component>
+    <component-type>CommandButton</component-type>
     <component-class>javax.faces.component.html.HtmlCommandButton</component-class>
+  </component>
+
+  <component>
+    <component-type>CommandHyperlink</component-type>
+    <component-class>javax.faces.component.html.HtmlCommandHyperlink</component-class>
   </component>
 
   <component>
@@ -49,18 +59,48 @@
   </component>
 
   <component>
+    <component-type>DataTable</component-type>
+    <component-class>javax.faces.component.html.HtmlDataTable</component-class>
+  </component>
+
+  <component>
     <component-type>Form</component-type>
-    <component-class>javax.faces.component.UIForm</component-class>
+    <component-class>javax.faces.component.html.HtmlForm</component-class>
   </component>
 
   <component>
     <component-type>Graphic</component-type>
+    <component-class>javax.faces.component.UIGraphic</component-class>
+  </component>
+
+  <component>
+    <component-type>GraphicImage</component-type>
     <component-class>javax.faces.component.html.HtmlGraphicImage</component-class>
   </component>
 
   <component>
     <component-type>Input</component-type>
+    <component-class>javax.faces.component.UIInput</component-class>
+  </component>
+
+  <component>
+    <component-type>InputHidden</component-type>
+    <component-class>javax.faces.component.html.HtmlInputHidden</component-class>
+  </component>
+
+  <component>
+    <component-type>InputSecret</component-type>
+    <component-class>javax.faces.component.html.HtmlInputSecret</component-class>
+  </component>
+
+  <component>
+    <component-type>InputText</component-type>
     <component-class>javax.faces.component.html.HtmlInputText</component-class>
+  </component>
+
+  <component>
+    <component-type>InputTextarea</component-type>
+    <component-class>javax.faces.component.html.HtmlInputTextarea</component-class>
   </component>
 
   <component>
@@ -69,8 +109,43 @@
   </component>
 
   <component>
+    <component-type>OutputLabel</component-type>
+    <component-class>javax.faces.component.html.HtmlOutputLabel</component-class>
+  </component>
+
+  <component>
+    <component-type>OutputMessage</component-type>
+    <component-class>javax.faces.component.html.HtmlOutputMessage</component-class>
+  </component>
+
+  <component>
+    <component-type>OutputText</component-type>
+    <component-class>javax.faces.component.html.HtmlOutputText</component-class>
+  </component>
+
+  <component>
     <component-type>Panel</component-type>
     <component-class>javax.faces.component.UIPanel</component-class>
+  </component>
+
+  <component>
+    <component-type>PanelData</component-type>
+    <component-class>javax.faces.component.html.HtmlPanelData</component-class>
+  </component>
+
+  <component>
+    <component-type>PanelGrid</component-type>
+    <component-class>javax.faces.component.html.HtmlPanelGrid</component-class>
+  </component>
+
+  <component>
+    <component-type>PanelGroup</component-type>
+    <component-class>javax.faces.component.html.HtmlPanelGroup</component-class>
+  </component>
+
+  <component>
+    <component-type>PanelList</component-type>
+    <component-class>javax.faces.component.html.HtmlPanelList</component-class>
   </component>
 
   <component>
@@ -80,7 +155,42 @@
 
   <component>
     <component-type>SelectBoolean</component-type>
+    <component-class>javax.faces.component.UISelectBoolean</component-class>
+  </component>
+
+  <component>
+    <component-type>SelectBooleanCheckbox</component-type>
     <component-class>javax.faces.component.html.HtmlSelectBooleanCheckbox</component-class>
+  </component>
+
+  <component>
+    <component-type>SelectManyCheckboxList</component-type>
+    <component-class>javax.faces.component.html.HtmlSelectManyCheckboxList</component-class>
+  </component>
+
+  <component>
+    <component-type>SelectManyListbox</component-type>
+    <component-class>javax.faces.component.html.HtmlSelectManyListbox</component-class>
+  </component>
+
+  <component>
+    <component-type>SelectManyMenu</component-type>
+    <component-class>javax.faces.component.html.HtmlSelectManyMenu</component-class>
+  </component>
+
+  <component>
+    <component-type>SelectOneListbox</component-type>
+    <component-class>javax.faces.component.html.HtmlSelectOneListbox</component-class>
+  </component>
+
+  <component>
+    <component-type>SelectOneMenu</component-type>
+    <component-class>javax.faces.component.html.HtmlSelectOneMenu</component-class>
+  </component>
+
+  <component>
+    <component-type>SelectOneRadioButtonList</component-type>
+    <component-class>javax.faces.component.html.HtmlSelectOneRadioButtonList</component-class>
   </component>
 
   <component>
@@ -95,12 +205,12 @@
 
   <component>
     <component-type>SelectMany</component-type>
-    <component-class>javax.faces.component.html.HtmlSelectManyListbox</component-class>
+    <component-class>javax.faces.component.UISelectMany</component-class>
   </component>
 
   <component>
     <component-type>SelectOne</component-type>
-    <component-class>javax.faces.component.html.HtmlSelectOneListbox</component-class>
+    <component-class>javax.faces.component.UISelectOne</component-class>
   </component>
     
   <component>

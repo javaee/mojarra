@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.19 2003/10/03 17:43:40 rlubke Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.20 2003/10/06 15:31:33 eburns Exp $
  */
 
 /*
@@ -58,7 +58,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.19 2003/10/03 17:43:40 rlubke Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.20 2003/10/06 15:31:33 eburns Exp $
  */
 
 public class TestApplicationImpl_Config extends ServletFacesTestCase {
@@ -119,16 +119,16 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	assertTrue(newTestComponent != testComponent);
 
 	// built-in components
-	assertTrue(null != (uic = application.createComponent("Command")));
+	assertTrue(null != (uic = application.createComponent("CommandButton")));
 	assertTrue(uic instanceof HtmlCommandButton);
 	
 	assertTrue(null != (uic = application.createComponent("Form")));
 	assertTrue(uic instanceof UIForm);
 	
-	assertTrue(null != (uic = application.createComponent("Graphic")));
+	assertTrue(null != (uic = application.createComponent("GraphicImage")));
 	assertTrue(uic instanceof HtmlGraphicImage);
 	
-	assertTrue(null != (uic = application.createComponent("Input")));
+	assertTrue(null != (uic = application.createComponent("InputText")));
 	assertTrue(uic instanceof HtmlInputText);	
 	
 	assertTrue(null != (uic = application.createComponent("Output")));
@@ -141,7 +141,7 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	assertTrue(uic instanceof UIParameter);
 	
 
-	assertTrue(null != (uic = application.createComponent("SelectBoolean")));
+	assertTrue(null != (uic = application.createComponent("SelectBooleanCheckbox")));
 	assertTrue(uic instanceof HtmlSelectBooleanCheckbox);
 	
 	assertTrue(null != (uic = application.createComponent("SelectItem")));
@@ -150,10 +150,10 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	assertTrue(null != (uic = application.createComponent("SelectItems")));
 	assertTrue(uic instanceof UISelectItems);
 	
-	assertTrue(null != (uic = application.createComponent("SelectMany")));
+	assertTrue(null != (uic = application.createComponent("SelectManyListbox")));
 	assertTrue(uic instanceof HtmlSelectManyListbox);
 	
-	assertTrue(null != (uic = application.createComponent("SelectOne")));
+	assertTrue(null != (uic = application.createComponent("SelectOneListbox")));
 	assertTrue(uic instanceof HtmlSelectOneListbox);
         
     assertTrue(null != (uic = application.createComponent("ViewRoot")));
@@ -191,19 +191,43 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	Iterator iter = application.getComponentTypes();
 	assertTrue(null != iter);
 	String standardComponentTypes[] = {
+	    "Column",
 	    "Command",
+	    "CommandButton",
+	    "CommandHyperlink",
+	    "Data",
+	    "DataTable",
 	    "Form",
 	    "Graphic",
+	    "GraphicImage",
 	    "Input",
-	    "NamingContainer",
+	    "InputHidden",
+	    "InputSecret",
+	    "InputText",
+	    "InputTextarea",
 	    "Output",
+	    "OutputLabel",
+	    "OutputMessage",
+	    "OutputText",
 	    "Panel",
+	    "PanelData",
+	    "PanelGrid",
+	    "PanelGroup",
+	    "PanelList",
 	    "Parameter",
 	    "SelectBoolean",
+	    "SelectBooleanCheckbox",
+	    "SelectManyCheckboxList",
+	    "SelectManyListbox",
+	    "SelectManyMenu",
+	    "SelectOneListbox",
+	    "SelectOneMenu",
+	    "SelectOneRadioButtonList",
 	    "SelectItem",
 	    "SelectItems",
 	    "SelectMany",
-	    "SelectOne"
+	    "SelectOne",
+	    "ViewRoot"	
 	};
 	
 	assertTrue(isSubset(standardComponentTypes, iter));
