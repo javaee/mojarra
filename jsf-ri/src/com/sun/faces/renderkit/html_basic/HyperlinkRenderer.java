@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.42 2003/03/19 21:16:34 jvisvanathan Exp $
+ * $Id: HyperlinkRenderer.java,v 1.43 2003/03/21 23:24:01 rkitain Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
 
 import java.util.Iterator;
+import java.util.Map;
 import java.util.ArrayList;
 import java.io.IOException;
 
@@ -49,7 +50,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.42 2003/03/19 21:16:34 jvisvanathan Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.43 2003/03/21 23:24:01 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -117,7 +118,8 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
         // submission. We can get the command name by calling
         // currentValue. This way we can get around the IE bug.
         String clientId = command.getClientId(context);
-        String value = context.getServletRequest().getParameter(clientId);
+        Map requestParameterMap = context.getExternalContext().getRequestParameterMap();
+        String value = (String)requestParameterMap.get(clientId);
         if (value == null || value.equals("")) {
 	    component.setValid(true);
 	    return;
@@ -419,15 +421,11 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
 	// PENDING(edburns): this method needs optimization.  For
 	// exaple, the local variable contextPath isn't used.
 
-        HttpServletRequest request =
-            (HttpServletRequest) context.getServletRequest();
-        HttpServletResponse response =
-            (HttpServletResponse) context.getServletResponse();
-        String contextPath = request.getContextPath();
+        String contextPath = context.getExternalContext().getRequestContextPath();
         if ( contextPath.indexOf("/") == -1 ) {
             contextPath = contextPath + "/";
         }
-        StringBuffer sb = new StringBuffer(request.getContextPath());
+        StringBuffer sb = new StringBuffer(contextPath);
         sb.append(RIConstants.URL_PREFIX);
         // need to make sure the rendered string contains where we
         // want to go next (href).
@@ -441,12 +439,10 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
             sb.append(context.getTree().getTreeId());
         }
 
-        return (response.encodeURL(sb.toString()));
+        return (context.getExternalContext().encodeURL(sb.toString()));
     }
 
     protected String getHrefParams(FacesContext context, UIComponent component) {
-	HttpServletRequest request =
-            (HttpServletRequest) context.getServletRequest();
 
         // get UIParameter children and add them to the URL
 	Object paramList[] = getParamList(context, component);

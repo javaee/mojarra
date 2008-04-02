@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.42 2003/02/20 22:48:58 ofung Exp $
+ * $Id: FormRenderer.java,v 1.43 2003/03/21 23:24:00 rkitain Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import com.sun.faces.util.Util;
 import com.sun.faces.context.FacesContextImpl;
 
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.faces.component.AttributeDescriptor;
 import javax.faces.context.FacesContext;
@@ -41,7 +42,7 @@ import javax.servlet.ServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.42 2003/02/20 22:48:58 ofung Exp $
+ * @version $Id: FormRenderer.java,v 1.43 2003/03/21 23:24:00 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -134,19 +135,18 @@ public class FormRenderer extends HtmlBasicRenderer {
 
     protected int updateFormNumber(FacesContext context, 
 				   UIComponent component) {
-	HttpServletRequest request = (HttpServletRequest) 
-	    context.getServletRequest();
+        Map requestMap = context.getExternalContext().getRequestMap();
 	int numForms = 0;
 	Integer formsInt = null;
 	// find out the current number of forms in the page.
 	if (null != (formsInt = (Integer) 
-		     request.getAttribute(RIConstants.FORM_NUMBER_ATTR))) {
+		     requestMap.get(RIConstants.FORM_NUMBER_ATTR))) {
 	    numForms = formsInt.intValue();
 	}
 	component.setAttribute(RIConstants.FORM_NUMBER_ATTR, 
-			       formsInt = new Integer(numForms));
-	request.setAttribute(RIConstants.FORM_NUMBER_ATTR, 
-			     formsInt = new Integer(++numForms));
+	    formsInt = new Integer(numForms));
+	requestMap.put(RIConstants.FORM_NUMBER_ATTR, 
+            formsInt = new Integer(++numForms));
 	return numForms;
     }
     
@@ -158,19 +158,14 @@ public class FormRenderer extends HtmlBasicRenderer {
      * @param form UIComponent representing form that's being processed.
      */
     private String getActionStr(FacesContext context, UIComponent form) {
-
-        HttpServletRequest request =
-            (HttpServletRequest) context.getServletRequest();
-        HttpServletResponse response =
-            (HttpServletResponse) context.getServletResponse();
-        String contextPath = request.getContextPath();
+        String contextPath = context.getExternalContext().getRequestContextPath();
         if ( contextPath.indexOf("/") == -1 ) {
             contextPath = contextPath + "/";
         }    
         StringBuffer sb = new StringBuffer(contextPath);
         sb.append(RIConstants.URL_PREFIX);
 	sb.append(context.getTree().getTreeId());
-        return (response.encodeURL(sb.toString()));
+        return (context.getExternalContext().encodeURL(sb.toString()));
     }     
 
     public void encodeChildren(FacesContext context, UIComponent component) {
@@ -196,8 +191,8 @@ public class FormRenderer extends HtmlBasicRenderer {
         Assert.assert_it(writer != null);
         // if we are saving state in page, insert a marker into buffer so that 
         // UseFaces tag can replace it state information.
-        String saveStateParam = (context.getServletContext()).
-                getInitParameter(RIConstants.SAVESTATE_INITPARAM);
+        String saveStateParam = context.getExternalContext().
+            getInitParameter(RIConstants.SAVESTATE_INITPARAM);
         if ( saveStateParam != null && saveStateParam.equalsIgnoreCase("true")){
             writer.write(RIConstants.SAVESTATE_MARKER);
         }    

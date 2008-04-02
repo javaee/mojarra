@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.10 2003/03/19 21:16:34 jvisvanathan Exp $
+ * $Id: ImageRenderer.java,v 1.11 2003/03/21 23:24:01 rkitain Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ImageRenderer.java,v 1.10 2003/03/19 21:16:34 jvisvanathan Exp $
+ * @version $Id: ImageRenderer.java,v 1.11 2003/03/21 23:24:01 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -150,16 +150,12 @@ public class ImageRenderer extends HtmlBasicRenderer {
             }
         }
                               
-        HttpServletRequest request =
-            (HttpServletRequest) context.getServletRequest();
-        HttpServletResponse response =
-            (HttpServletResponse) context.getServletResponse();
         StringBuffer sb = new StringBuffer();
         if (value.startsWith("/")) {
-            sb.append(request.getContextPath());
+            sb.append(context.getExternalContext().getRequestContextPath());
         }
         sb.append(value);
-        return (response.encodeURL(sb.toString()));
+        return (context.getExternalContext().encodeURL(sb.toString()));
     }
     
     // The testcase for this class is TestRenderers_2.java 

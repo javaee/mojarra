@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.44 2003/03/19 21:16:32 jvisvanathan Exp $
+ * $Id: CheckboxRenderer.java,v 1.45 2003/03/21 23:24:00 rkitain Exp $
  *
  */
 
@@ -17,6 +17,7 @@ import com.sun.faces.util.Util;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
@@ -41,7 +42,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.44 2003/03/19 21:16:32 jvisvanathan Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.45 2003/03/21 23:24:00 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -118,7 +119,8 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
 
         // Convert the new value
 
-        String newValue = context.getServletRequest().getParameter(clientId);
+        Map requestParameterMap = context.getExternalContext().getRequestParameterMap();
+        String newValue = (String)requestParameterMap.get(clientId);
         try {
             convertedValue = getConvertedValue(context, component, newValue);
         } catch (ConverterException ce) {

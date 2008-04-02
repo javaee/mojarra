@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.48 2003/03/19 21:16:44 jvisvanathan Exp $
+ * $Id: Util.java,v 1.49 2003/03/21 23:25:47 rkitain Exp $
  */
 
 /*
@@ -56,7 +56,7 @@ import java.util.StringTokenizer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.48 2003/03/19 21:16:44 jvisvanathan Exp $
+ * @version $Id: Util.java,v 1.49 2003/03/21 23:25:47 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -425,14 +425,14 @@ private Util()
     */
 
     public static void verifyRequiredClasses(FacesContext facesContext) throws FacesException {
-	ServletContext context = facesContext.getServletContext();
+        Map applicationMap = facesContext.getExternalContext().getApplicationMap();
 	Boolean result = null;
 	String className = "javax.servlet.jsp.jstl.fmt.LocalizationContext";
 	Object [] params = {className};
 
 	// Have we checked before?
 	if (null != (result = (Boolean)
-		     context.getAttribute(RIConstants.HAS_REQUIRED_CLASSES_ATTR))) {
+            applicationMap.get(RIConstants.HAS_REQUIRED_CLASSES_ATTR))) {
 	    // yes, and the check failed.
 	    if (Boolean.FALSE == result) {
 		throw new 
@@ -452,12 +452,10 @@ private Util()
 	    Util.loadClass(className, facesContext);
 	}
 	catch (ClassNotFoundException e) {
-	    context.setAttribute(RIConstants.HAS_REQUIRED_CLASSES_ATTR,
-				 Boolean.FALSE);
+	    applicationMap.put(RIConstants.HAS_REQUIRED_CLASSES_ATTR, Boolean.FALSE);
 	    throw new FacesException(Util.getExceptionMessage(Util.MISSING_CLASS_ERROR_MESSAGE_ID, params), e);
 	}
-	context.setAttribute(RIConstants.HAS_REQUIRED_CLASSES_ATTR,
-			     Boolean.TRUE);
+	applicationMap.put(RIConstants.HAS_REQUIRED_CLASSES_ATTR, Boolean.TRUE);
     }
 
     /** 

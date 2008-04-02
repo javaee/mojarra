@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.33 2003/03/19 21:16:33 jvisvanathan Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.34 2003/03/21 23:24:01 rkitain Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import com.sun.faces.util.Util;
 
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import javax.faces.FactoryFinder;
@@ -323,7 +324,8 @@ public abstract class HtmlBasicRenderer extends Renderer {
         }
         setPreviousValue(component, curValue);
 
-        String newValue = context.getServletRequest().getParameter(clientId);
+        Map requestMap = context.getExternalContext().getRequestMap();
+        String newValue = (String)requestMap.get(clientId);
         try {
             convertedValue = getConvertedValue(context, component, newValue);   
         } catch (ConverterException ce) {

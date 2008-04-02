@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.45 2003/03/19 21:16:31 jvisvanathan Exp $
+ * $Id: ButtonRenderer.java,v 1.46 2003/03/21 23:24:00 rkitain Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ package com.sun.faces.renderkit.html_basic;
 import com.sun.faces.util.Util;
 
 import java.util.Iterator;
+import java.util.Map;
 import java.util.MissingResourceException;
 
 import javax.faces.component.AttributeDescriptor;
@@ -52,7 +53,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.45 2003/03/19 21:16:31 jvisvanathan Exp $
+ * @version $Id: ButtonRenderer.java,v 1.46 2003/03/21 23:24:00 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -130,16 +131,12 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             return result;
         }
 
-        HttpServletRequest request =
-            (HttpServletRequest) context.getServletRequest();
-        HttpServletResponse response =
-            (HttpServletResponse) context.getServletResponse();
         StringBuffer sb = new StringBuffer();
         if (result.startsWith("/")) {
-            sb.append(request.getContextPath());
+            sb.append(context.getExternalContext().getRequestContextPath());
         }
         sb.append(result);
-        return (response.encodeURL(sb.toString()));
+        return (context.getExternalContext().encodeURL(sb.toString()));
     }
 
     protected String getLabel(FacesContext context,
@@ -185,10 +182,11 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         // can get the command name by calling currentValue. This way we can 
         // get around the IE bug.
         String clientId = component.getClientId(context);
-        String value = context.getServletRequest().getParameter(clientId);
+        Map requestParameterMap = context.getExternalContext().getRequestParameterMap();
+        String value = (String)requestParameterMap.get(clientId);
         if (value == null) {
-            if (context.getServletRequest().getParameter(clientId+".x") == null &&
-                context.getServletRequest().getParameter(clientId+".y") == null) {
+            if (requestParameterMap.get(clientId+".x") == null &&
+                requestParameterMap.get(clientId+".y") == null) {
                 component.setValid(true);
                 return;
             }

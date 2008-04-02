@@ -1,5 +1,5 @@
 /*
- * $Id: ListRenderer.java,v 1.7 2003/03/19 21:16:34 jvisvanathan Exp $
+ * $Id: ListRenderer.java,v 1.8 2003/03/21 23:24:02 rkitain Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ package com.sun.faces.renderkit.html_basic;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
 import javax.faces.FacesException;
 
 
@@ -36,7 +37,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ListRenderer.java,v 1.7 2003/03/19 21:16:34 jvisvanathan Exp $
+ * @version $Id: ListRenderer.java,v 1.8 2003/03/21 23:24:02 rkitain Exp $
  *  
  */
 
@@ -181,6 +182,7 @@ public class ListRenderer extends HtmlBasicRenderer {
 
 	if (null != (kids = component.getChildren())) {
 	    // Process each grouping of data items to be processed
+            Map requestMap = context.getExternalContext().getRequestMap();
 	    while (kids.hasNext()) {
 		UIComponent group = (UIComponent) kids.next();
 		String var = (String) group.getAttribute("var");
@@ -193,7 +195,7 @@ public class ListRenderer extends HtmlBasicRenderer {
 		    if (var != null) {
 			// set model bean in request scope. nested components
 			// will use this to get their values.
-			context.getServletRequest().setAttribute(var, row);
+			requestMap.put(var, row);
 		    }
 		    writer.write("<tr");
 		    if (rowStyles > 0) {
@@ -231,7 +233,7 @@ public class ListRenderer extends HtmlBasicRenderer {
 		    // Finish the row that was just rendered
 		    writer.write("</tr>\n");
 		    if (var != null) {
-			context.getServletRequest().removeAttribute(var);
+			requestMap.remove(var);
 		    }
 		}
             }

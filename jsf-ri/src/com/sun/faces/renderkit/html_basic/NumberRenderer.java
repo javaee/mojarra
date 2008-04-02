@@ -1,5 +1,5 @@
 /*
- * $Id: NumberRenderer.java,v 1.19 2003/03/19 21:16:35 jvisvanathan Exp $
+ * $Id: NumberRenderer.java,v 1.20 2003/03/21 23:24:02 rkitain Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import com.sun.faces.renderkit.FormatPool;
 import com.sun.faces.RIConstants;
 
 import java.util.Iterator;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.Date;
 
@@ -48,7 +49,7 @@ import java.text.ParseException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: NumberRenderer.java,v 1.19 2003/03/19 21:16:35 jvisvanathan Exp $
+ * @version $Id: NumberRenderer.java,v 1.20 2003/03/21 23:24:02 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -113,8 +114,8 @@ public class NumberRenderer extends HtmlBasicInputRenderer {
         
         newValue = newValue.trim();
         // get FormatPool Instance from ServletContext
-        FormatPool formatPool = (FormatPool)
-	    context.getServletContext().getAttribute(RIConstants.FORMAT_POOL);
+        Map applicationMap = context.getExternalContext().getApplicationMap();
+        FormatPool formatPool = (FormatPool)applicationMap.get(RIConstants.FORMAT_POOL);
 	Assert.assert_it(null != formatPool);
         
         try {
@@ -238,8 +239,8 @@ public class NumberRenderer extends HtmlBasicInputRenderer {
             Object currentObj ) {
         String currentValue = null;
         // if we hit this method, then value is not string type.
-        FormatPool formatPool = (FormatPool)
-	    context.getServletContext().getAttribute(RIConstants.FORMAT_POOL);
+        Map applicationMap = context.getExternalContext().getApplicationMap();
+        FormatPool formatPool = (FormatPool)applicationMap.get(RIConstants.FORMAT_POOL);
 	Assert.assert_it(null != formatPool);      
         
         if ( currentObj instanceof Number) {

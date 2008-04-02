@@ -1,5 +1,5 @@
 /*
- * $Id: UseFacesTag.java,v 1.7 2003/03/19 21:16:42 jvisvanathan Exp $
+ * $Id: UseFacesTag.java,v 1.8 2003/03/21 23:25:08 rkitain Exp $
  */
 
 /*
@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.ObjectOutput;
+import java.util.Map;
 import javax.servlet.ServletConfig;
 import javax.faces.webapp.JspResponseWriter;
 import javax.servlet.jsp.JspWriter;
@@ -43,7 +44,7 @@ import javax.servlet.jsp.tagext.BodyTag;
  * does not have any renderers or attributes. It exists mainly to
  * save the state of the response tree once all tags have been rendered.
  *
- * @version $Id: UseFacesTag.java,v 1.7 2003/03/19 21:16:42 jvisvanathan Exp $
+ * @version $Id: UseFacesTag.java,v 1.8 2003/03/21 23:25:08 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -109,7 +110,7 @@ public class UseFacesTag extends FacesBodyTag
         
         // look up saveStateInClient parameter to check whether to save
         // state of tree in client or server. Default is server.
-        String saveState = facesContext.getServletContext().getInitParameter
+        String saveState = facesContext.getExternalContext().getInitParameter
                 (RIConstants.SAVESTATE_INITPARAM);
         if ( saveState != null ) {
             Assert.assert_it (saveState.equalsIgnoreCase("true") || 
@@ -125,9 +126,9 @@ public class UseFacesTag extends FacesBodyTag
     
     protected void saveStateInSession(FacesContext facesContext) 
             throws JspException {
-        HttpSession session = facesContext.getHttpSession();
-        session.setAttribute(RIConstants.REQUEST_LOCALE, facesContext.getLocale());
-        session.setAttribute(RIConstants.FACES_TREE, facesContext.getTree() ); 
+        Map sessionMap = facesContext.getExternalContext().getSessionMap();
+        sessionMap.put(RIConstants.REQUEST_LOCALE, facesContext.getLocale());
+        sessionMap.put(RIConstants.FACES_TREE, facesContext.getTree() ); 
         // write buffered response to output. Since we are saving tree in session
         // no manipulation is necessary.
         try {

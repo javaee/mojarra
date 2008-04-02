@@ -1,5 +1,5 @@
 /*
- * $Id: TimeRenderer.java,v 1.2 2003/02/20 22:49:02 ofung Exp $
+ * $Id: TimeRenderer.java,v 1.3 2003/03/21 23:24:02 rkitain Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ package com.sun.faces.renderkit.html_basic;
 import com.sun.faces.util.Util;
 
 import java.util.Iterator;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.Date;
 import java.util.Calendar;
@@ -51,7 +52,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TimeRenderer.java,v 1.2 2003/02/20 22:49:02 ofung Exp $
+ * @version $Id: TimeRenderer.java,v 1.3 2003/03/21 23:24:02 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -99,8 +100,8 @@ public class TimeRenderer extends DateRenderer {
     protected Date parseDate(FacesContext context, 
 			     UIComponent component, String newValue) throws ParseException {
 	FormatPool formatPool = null;
-	formatPool = (FormatPool)
-	    context.getServletContext().getAttribute(RIConstants.FORMAT_POOL);
+        Map applicationMap = context.getExternalContext().getApplicationMap();
+	formatPool = (FormatPool)applicationMap.get(RIConstants.FORMAT_POOL);
 	Assert.assert_it(null != formatPool);
 	return formatPool.timeFormat_parse(context, component, newValue);
     }
@@ -108,8 +109,8 @@ public class TimeRenderer extends DateRenderer {
     protected String formatDate(FacesContext context, 
 				UIComponent component, Date dateValue) {
 	FormatPool formatPool = null;
-	formatPool = (FormatPool)
-	    context.getServletContext().getAttribute(RIConstants.FORMAT_POOL);
+        Map applicationMap = context.getExternalContext().getApplicationMap();
+	formatPool = (FormatPool)applicationMap.get(RIConstants.FORMAT_POOL);
 	Assert.assert_it(null != formatPool);
 	return formatPool.timeFormat_format(context, component, dateValue);
     }    

@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.11 2003/03/19 21:16:34 jvisvanathan Exp $
+ * $Id: MenuRenderer.java,v 1.12 2003/03/21 23:24:02 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -18,6 +18,7 @@ package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.faces.component.SelectItem;
 import javax.faces.component.UIComponent;
@@ -38,7 +39,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MenuRenderer.java,v 1.11 2003/03/19 21:16:34 jvisvanathan Exp $
+ * @version $Id: MenuRenderer.java,v 1.12 2003/03/21 23:24:02 rkitain Exp $
  * 
  * @see Blah
  * @see Bloo
@@ -108,12 +109,15 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         // convertible to string and localised by the application.
         if ((UISelectMany.TYPE.equals(component.getComponentType())) ||
             (component instanceof UISelectMany)) {
-            String newValues[] =
-                context.getServletRequest().getParameterValues(clientId);
+            Map requestParameterValuesMap = context.getExternalContext().
+                getRequestParameterValuesMap();
+            String newValues[] = (String[])requestParameterValuesMap.
+                get(clientId);
             ((UISelectMany)component).setValue(newValues);
         } else {
-            String newValue =
-                context.getServletRequest().getParameter(clientId);
+            Map requestParameterMap = context.getExternalContext().
+                getRequestParameterMap();
+            String newValue = (String)requestParameterMap.get(clientId);
             ((UISelectOne)component).setValue(newValue);
         }    
         component.setValid(true);
