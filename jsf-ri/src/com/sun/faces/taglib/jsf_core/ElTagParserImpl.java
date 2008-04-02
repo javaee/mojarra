@@ -1,5 +1,5 @@
 /*
- * $Id: ElTagParserImpl.java,v 1.2 2003/10/08 04:23:23 horwat Exp $
+ * $Id: ElTagParserImpl.java,v 1.3 2003/10/08 06:24:08 horwat Exp $
  */
 
 /*
@@ -99,6 +99,7 @@ public class ElTagParserImpl implements TagParser {
 
         for (int i = 0; i < attrs.getLength(); i++) {
             String value = attrs.getValue(i);
+            String qname = attrs.getQName(i);
 
             //check to see if attribute has an expression
             if ((value.indexOf("${") != -1) &&
@@ -106,23 +107,23 @@ public class ElTagParserImpl implements TagParser {
                 ExpressionEvaluator evaluator = 
                     Util.getExpressionEvaluator(RIConstants.JSP_EL_PARSER);
                 ExpressionInfo exprInfo = new ExpressionInfo();
-                exprInfo.setExpressionString(attrs.getValue(i));
+                exprInfo.setExpressionString(value);
                 try {
                     evaluator.parseExpression(exprInfo);
                 } catch (ElException ex) {
                     failed = true;
-                    buildErrorMessage(qn, attrs.getQName(i), attrs.getValue(i));
+                    buildErrorMessage(qn, qname, value);
                 }
             }
-            else if (attrs.getQName(i).equals(JSF_COMPONENTREF_QN) ||
-                     attrs.getQName(i).equals(JSF_VALUEREF_QN) ||
-                     attrs.getQName(i).equals(JSF_ACTIONREF_QN)) {
+            else if (qname.equals(JSF_COMPONENTREF_QN) ||
+                     qname.equals(JSF_VALUEREF_QN) ||
+                     qname.equals(JSF_ACTIONREF_QN)) {
                 try {
                     Application.getCurrentInstance().
-                        getValueBinding(attrs.getValue(i));
+                        getValueBinding(value);
                 } catch (Throwable ex) {
                     failed = true;
-                    buildErrorMessage(qn, attrs.getQName(i), attrs.getValue(i));
+                    buildErrorMessage(qn, qname, value);
                 }
             }
         }
