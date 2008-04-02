@@ -1,5 +1,5 @@
 /*
- * $Id: TestNavigationHandler.java,v 1.14 2004/01/27 21:05:50 eburns Exp $
+ * $Id: TestNavigationHandler.java,v 1.15 2004/01/30 18:19:31 eburns Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ import com.sun.faces.util.DebugUtil;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestNavigationHandler.java,v 1.14 2004/01/27 21:05:50 eburns Exp $
+ * @version $Id: TestNavigationHandler.java,v 1.15 2004/01/30 18:19:31 eburns Exp $
  * 
  */
 
@@ -91,6 +91,11 @@ public class TestNavigationHandler extends ServletFacesTestCase
 //
 // Methods from TestCase
 //
+
+    public void setUp() {
+	super.setUp();
+	loadConfigFile();
+    }
 
 //
 // General Methods
