@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.19 2004/04/27 17:25:05 eburns Exp $
+ * $Id: ManagedBeanFactory.java,v 1.20 2004/05/03 19:30:30 jvisvanathan Exp $
  */
 
 /*
@@ -86,6 +86,9 @@ public class ManagedBeanFactory extends Object {
      * This managed-property is a simple property
      */
     private final static int TYPE_IS_SIMPLE = 3;
+    
+    private static final String MANAGED_BEAN_CREATED_STACK = 
+        RIConstants.FACES_PREFIX + "managedBeanStack";
 
     //
     // Class Variables
@@ -162,12 +165,33 @@ public class ManagedBeanFactory extends Object {
     /**
      * Attempt to instantiate the JavaBean and set its properties.
      */
-    public Object newInstance() throws FacesException {
+    public Object newInstance(FacesContext context) throws FacesException {
         Object
             bean = null;
         int
             beanType = -1;
 
+        // before instantiating the bean, make sure there is no cyclic 
+        // references.
+        Map requestMap = context.getExternalContext().getRequestMap();
+        List beanList = (List)requestMap.get(MANAGED_BEAN_CREATED_STACK);
+        if (beanList == null) {
+            beanList = new ArrayList();
+            requestMap.put(MANAGED_BEAN_CREATED_STACK, beanList);
+        }
+        
+        if ( beanList.contains(managedBean.getManagedBeanName())) {
+            if ( log.isErrorEnabled()) {
+                log.error("Possible cyclic reference to managedBean " + 
+                   managedBean.getManagedBeanName() + " ");
+            }
+            Object[] obj = new Object[1];
+            obj[0] = managedBean.getManagedBeanName();
+            throw new FacesException(
+                Util.getExceptionMessageString(
+                    Util.CYCLIC_REFERENCE_ERROR_ID, obj)); 
+        }
+        
         //
         // instantiate the bean
         //
@@ -187,6 +211,8 @@ public class ManagedBeanFactory extends Object {
                     Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj),
                 ex);
         }
+        // add the bean to the managed bean stack.
+        beanList.add(managedBean.getManagedBeanName());
 
         // populate the bean with its contents
         try {
@@ -221,7 +247,7 @@ public class ManagedBeanFactory extends Object {
                     Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj),
                 cnfe);
         }
-
+        beanList.remove(managedBean.getManagedBeanName());
         return bean;
     }
 

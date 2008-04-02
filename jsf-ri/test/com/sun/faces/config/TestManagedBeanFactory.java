@@ -1,5 +1,5 @@
 /*
- * $Id: TestManagedBeanFactory.java,v 1.18 2004/04/27 17:25:11 eburns Exp $
+ * $Id: TestManagedBeanFactory.java,v 1.19 2004/05/03 19:30:41 jvisvanathan Exp $
  */
 
 /*
@@ -85,7 +85,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
         mbf = new ManagedBeanFactory(bean);
 
-        assertNotNull(mbf.newInstance());
+        assertNotNull(mbf.newInstance(getFacesContext()));
     }
 
 
@@ -104,7 +104,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         mbf = new ManagedBeanFactory(bean);
 
         //testing with a property set
-        assertNotNull(testBean = (TestBean) mbf.newInstance());
+        assertNotNull(testBean = (TestBean) mbf.newInstance(getFacesContext()));
 
         //make sure bean instantiated properly. Get property back from bean.
         assertTrue(testBean.getOne().equals("one"));
@@ -171,7 +171,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         mbf = new ManagedBeanFactory(bean);
 
         //testing with a property set
-        assertNotNull(testBean = (TestBean) mbf.newInstance());
+        assertNotNull(testBean = (TestBean) mbf.newInstance(getFacesContext()));
 
         //make sure bean instantiated properly. Get property back from bean.
         assertTrue(testBean.getBoolProp() == testBoolean);
@@ -206,7 +206,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         mbf = new ManagedBeanFactory(bean);
 
         //testing with a property set
-        assertNotNull(testBean = (TestBean) mbf.newInstance());
+        assertNotNull(testBean = (TestBean) mbf.newInstance(getFacesContext()));
 
         //make sure bean instantiated properly. Get property back from bean.
         ArrayList properties = (ArrayList) testBean.getIndexProperties();
@@ -238,7 +238,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         mbf = new ManagedBeanFactory(bean);
 
         //testing with a property set
-        assertNotNull(testBean = (TestBean) mbf.newInstance());
+        assertNotNull(testBean = (TestBean) mbf.newInstance(getFacesContext()));
 
         //make sure bean instantiated properly. Get property back from bean.
         HashMap mapProperty = (HashMap)
@@ -267,7 +267,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         mbf = new ManagedBeanFactory(bean);
 
         //testing with a property set
-        assertNotNull(testBean = (TestBean) mbf.newInstance());
+        assertNotNull(testBean = (TestBean) mbf.newInstance(getFacesContext()));
 
         //make sure bean instantiated properly. Get property back from bean.
         ArrayList properties = (ArrayList) testBean.getIndexIntegerProperties();
@@ -301,7 +301,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         mbf = new ManagedBeanFactory(bean);
 
         //testing with a property set
-        assertNotNull(testBean = (TestBean) mbf.newInstance());
+        assertNotNull(testBean = (TestBean) mbf.newInstance(getFacesContext()));
 
         //make sure bean instantiated properly. Get property back from bean.
         HashMap mapProperty = (HashMap)
@@ -342,7 +342,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         mbf = new ManagedBeanFactory(bean);
 
         //testing with a property set
-        assertNotNull(testBean = (TestBean) mbf.newInstance());
+        assertNotNull(testBean = (TestBean) mbf.newInstance(getFacesContext()));
 
         //make sure bean instantiated properly. Get property back from bean.
         assertTrue(testBean.getOne().equals("one"));
@@ -383,7 +383,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         mbf = new ManagedBeanFactory(bean);
 
         //testing with an application scope property set in a session scope bean
-        assertNotNull(testBean = (TestBean) mbf.newInstance());
+        assertNotNull(testBean = (TestBean) mbf.newInstance(getFacesContext()));
 
         //make sure bean instantiated properly. Get property back from bean.
         assertTrue(testBean.getOne().equals("one"));
@@ -417,7 +417,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
         exceptionThrown = false;
         try {
-            mbf.newInstance();
+            mbf.newInstance(getFacesContext());
             fail("Should have thrown FacesException");
         } catch (FacesException ex) {
             exceptionThrown = true;
@@ -455,7 +455,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
         exceptionThrown = false;
         try {
-            mbf.newInstance();
+            mbf.newInstance(getFacesContext());
             fail("Should have thrown FacesException");
         } catch (FacesException ex) {
             exceptionThrown = true;
@@ -497,7 +497,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
         exceptionThrown = false;
         try {
-            mbf.newInstance();
+            mbf.newInstance(getFacesContext());
             fail("Should have thrown FacesException");
         } catch (FacesException ex) {
             exceptionThrown = true;
@@ -549,7 +549,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 	    TestBean bean = (TestBean) vb.getValue(getFacesContext());
 	    assertTrue(false);
 	}
-	catch (PropertyNotFoundException pnfe) {
+	catch (FacesException pnfe) {
 	    exceptionThrown = true;
 	}
 

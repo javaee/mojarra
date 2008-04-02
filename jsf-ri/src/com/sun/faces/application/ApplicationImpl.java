@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.47 2004/04/27 23:04:54 jvisvanathan Exp $
+ * $Id: ApplicationImpl.java,v 1.48 2004/05/03 19:30:29 jvisvanathan Exp $
  */
 
 /*
@@ -844,12 +844,12 @@ public class ApplicationImpl extends Application {
      * @param context         The Faces context.
      * @param managedBeanName The name identifying the managed bean.
      * @return The managed bean.
-     * @throws PropertyNotFoundException if the managed bean
+     * @throws FacesException if the managed bean
      *                                   could not be created.
      */
     synchronized public Object createAndMaybeStoreManagedBeans(FacesContext context,
                                                                String managedBeanName)
-        throws PropertyNotFoundException {
+        throws FacesException {
         ManagedBeanFactory managedBean = (ManagedBeanFactory)
             managedBeanFactoriesMap.get(managedBeanName);
         if (managedBean == null) {
@@ -858,20 +858,20 @@ public class ApplicationImpl extends Application {
             }
             return null;
         }
-
-        Object bean;
+        
+        Object bean = null;
         try {
-            bean = managedBean.newInstance();
+            bean = managedBean.newInstance(context);
             if (log.isDebugEnabled()) {
-                log.debug("Created bean" + managedBeanName + " successfully ");
+                log.debug("Created bean " + managedBeanName + " successfully ");
             }
         } catch (Exception ex) {
             Object[] params = {ex.getMessage()};
             if (log.isErrorEnabled()) {
-                log.error(ex.getMessage(), ex);
-            }
-            throw new PropertyNotFoundException(Util.getExceptionMessageString(
-                Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params));
+                log.error("Managedbean " + managedBeanName + 
+                    " could not be created " + ex.getMessage(), ex);
+            } 
+            throw new FacesException(ex);
         }
         //add bean to appropriate scope
         String scope = managedBean.getScope();

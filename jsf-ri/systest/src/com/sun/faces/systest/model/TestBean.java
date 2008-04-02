@@ -1,5 +1,5 @@
 /*
- * $Id: TestBean.java,v 1.11 2004/04/30 14:31:59 eburns Exp $
+ * $Id: TestBean.java,v 1.12 2004/05/03 19:30:38 jvisvanathan Exp $
  */
 
 /*
@@ -166,6 +166,18 @@ public class TestBean {
 
     public void setUserName(UIInput userName) {
         this.userName = userName;
+    }
+    
+    private Object bean = null;
+
+
+    public Object getBean() {
+        return (this.bean);
+    }
+
+
+    public void setBean(Object bean) {
+        this.bean = bean;
     }
 
     public List selectList = null;

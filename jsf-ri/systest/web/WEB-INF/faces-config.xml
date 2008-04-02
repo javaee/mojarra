@@ -172,6 +172,58 @@
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
+  <!-- Test Managed bean cyclic references -->
+  <managed-bean>
+    <managed-bean-name>
+        cyclic1
+    </managed-bean-name>
+    <managed-bean-class>
+        com.sun.faces.systest.model.TestBean
+    </managed-bean-class>
+    <managed-bean-scope>
+        request
+    </managed-bean-scope>
+   
+    <managed-property>
+        <property-name>bean</property-name>
+        <value>#{cyclic2}</value>
+    </managed-property>
+  </managed-bean>
+   
+  <managed-bean>
+    <managed-bean-name>
+        cyclic2
+    </managed-bean-name>
+    <managed-bean-class>
+        com.sun.faces.systest.model.TestBean
+    </managed-bean-class>
+    <managed-bean-scope>
+        request
+    </managed-bean-scope>
+   
+    <managed-property>
+        <property-name>bean</property-name>
+        <value>#{cyclic3}</value>
+    </managed-property> 
+  </managed-bean>
+  
+  <managed-bean>
+    <managed-bean-name>
+        cyclic3
+    </managed-bean-name>
+    <managed-bean-class>
+        com.sun.faces.systest.model.TestBean
+    </managed-bean-class>
+    <managed-bean-scope>
+        request
+    </managed-bean-scope>
+   
+    <managed-property>
+        <property-name>bean</property-name>
+        <value>#{cyclic1}</value>
+    </managed-property> 
+  </managed-bean>
+  
   <!-- for the methodref tests -->
   <managed-bean>
     <managed-bean-name>methodRef</managed-bean-name>

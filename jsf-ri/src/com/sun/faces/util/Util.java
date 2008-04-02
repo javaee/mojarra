@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.136 2004/04/28 20:59:42 jvisvanathan Exp $
+ * $Id: Util.java,v 1.137 2004/05/03 19:30:33 jvisvanathan Exp $
  */
 
 /*
@@ -59,7 +59,7 @@ import java.util.StringTokenizer;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.136 2004/04/28 20:59:42 jvisvanathan Exp $
+ * @version $Id: Util.java,v 1.137 2004/05/03 19:30:33 jvisvanathan Exp $
  */
 
 public class Util extends Object {
@@ -282,6 +282,9 @@ public class Util extends Object {
         "com.sun.faces.ASSERTION_FAILED";
     public static final String OBJECT_CREATION_ERROR_ID =
         "com.sun.faces.OBJECT_CREATION_ERROR";
+    
+    public static final String CYCLIC_REFERENCE_ERROR_ID =
+        "com.sun.faces.CYCLIC_REFERENCE_ERROR";
     
 
 // README - make sure to add the message identifier constant
