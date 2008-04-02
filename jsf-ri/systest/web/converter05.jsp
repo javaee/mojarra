@@ -15,7 +15,7 @@
                 java.util.Locale localeObject = new java.util.Locale("en_US");
                 java.util.TimeZone tzObject =
                     java.util.TimeZone.getTimeZone("America/New_York");
-                String localeString = "en_US";
+                String localeString = "en";
                 String timeZoneString = "America/New_York";
 
                 request.setAttribute("localeObject", localeObject);
@@ -37,7 +37,7 @@
                               value="7/10/96 12:31:31 PM PDT">
                     <f:convertDateTime type="both" timeStyle="full"
                                        dateStyle="short"
-                                       locale="en_US"
+                                       locale="en"
                                        timeZone="America/New_York"/>
                 </h:outputText>
 
