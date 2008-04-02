@@ -1,5 +1,5 @@
 /*
- * $Id: TestLoadBundleTag.java,v 1.3 2004/01/21 06:55:27 horwat Exp $
+ * $Id: TestLoadBundleTag.java,v 1.4 2004/01/21 07:23:02 eburns Exp $
  */
 
 /*
@@ -20,7 +20,7 @@ import javax.faces.component.UIViewRoot;
 
 /**
  *
- * @version $Id: TestLoadBundleTag.java,v 1.3 2004/01/21 06:55:27 horwat Exp $
+ * @version $Id: TestLoadBundleTag.java,v 1.4 2004/01/21 07:23:02 eburns Exp $
  * 
  *
  */
@@ -69,6 +69,8 @@ public class TestLoadBundleTag extends ServletFacesTestCase
 	assertEquals("Didn't get expected value", 
 		     ((Map)getFacesContext().getExternalContext().getRequestMap().get("messages")).get("john"),
 		     "bigboote");
+	assertEquals("???notpresent???",
+		     ((Map)getFacesContext().getExternalContext().getRequestMap().get("messages")).get("notpresent"));
 
     }
 

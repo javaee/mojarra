@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.20 2004/01/21 01:11:33 craigmcc Exp $
+ * $Id: UIViewRoot.java,v 1.21 2004/01/21 07:23:00 eburns Exp $
  */
 
 /*
@@ -352,9 +352,20 @@ public class UIViewRoot extends UIComponentBase {
      * <p>Return the <code>Locale</code> to be used in localizing the
      * response being created for this view.</p>
      *
-     * @return The current <code>Locale</code> or if no <code>Locale</code>
-     *  has been explicitly set, return the default <code>Locale</code> of the
-     *  VM.
+     * <p>Algorithm:</p>
+     *
+     * <p>If we have a <code>locale</code> ivar, return it.  If we have
+     * a value binding for "locale", get its value.  If the value is
+     * <code>null</code>, return the result of calling {@link
+     * javax.faces.application.ViewHandler#calculateLocale}.  If the
+     * value is an instance of <code>java.util.Locale</code> return it.
+     * If the value is a String, convert it to a
+     * <code>java.util.Locale</code> and return it.  If there is no
+     * value binding for "locale", return the result of calling {@link
+     * javax.faces.application.ViewHandler#calculateLocale}.</p>
+     *
+     * @return The current <code>Locale</code> obtained by executing the
+     * above algorithm.
      */
     public Locale getLocale() {
 	Locale result = null;
@@ -363,17 +374,22 @@ public class UIViewRoot extends UIComponentBase {
 	}
 	else {
 	    ValueBinding vb = getValueBinding("locale");
+	    FacesContext context = FacesContext.getCurrentInstance();
 	    if (vb != null) {
-                Object resultLocale = 
-		        vb.getValue(FacesContext.getCurrentInstance());
-                if ( resultLocale instanceof Locale) {
+                Object resultLocale = vb.getValue(context);
+		if (null == resultLocale) {
+		    result = 
+			context.getApplication().getViewHandler().calculateLocale(context);
+		}
+		else if ( resultLocale instanceof Locale) {
                     result = (Locale)resultLocale;
                 } else if ( resultLocale instanceof String) {
                     result = getLocaleFromString((String)resultLocale);
                 }
 	    } 
 	    else {
-		result = Locale.getDefault();
+		result = 
+		    context.getApplication().getViewHandler().calculateLocale(context);
 	    }
 	}
 	return result;

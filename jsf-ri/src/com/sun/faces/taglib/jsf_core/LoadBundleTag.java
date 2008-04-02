@@ -1,5 +1,5 @@
 /*
- * $Id: LoadBundleTag.java,v 1.3 2004/01/21 06:55:26 horwat Exp $
+ * $Id: LoadBundleTag.java,v 1.4 2004/01/21 07:23:01 eburns Exp $
  */
 
 /*
@@ -152,7 +152,14 @@ public class LoadBundleTag extends TagSupport {
 		    if (null == key) {
 			return null;
 		    }
-		    return bundle.getObject(key.toString());
+		    Object result = null;
+		    try {
+			result = bundle.getObject(key.toString());
+		    }
+		    catch (MissingResourceException e) {
+			result = "???" + key + "???";
+		    }
+		    return result;
 		}
 		
 		public int hashCode() {
