@@ -1,5 +1,5 @@
 /*
- * $Id: XmlXulRuleSet.java,v 1.5 2003/08/27 23:49:46 horwat Exp $
+ * $Id: XmlXulRuleSet.java,v 1.1 2003/09/08 19:31:20 horwat Exp $
  */
 
 /*
@@ -42,17 +42,13 @@
 
 // XmlXulRuleSet.java
 
-package nonjsp.tree;
+package nonjsp.application;
 
 import nonjsp.util.Util;
 
-import javax.faces.FacesException;
-import javax.faces.event.ActionListener;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UICommand;
+import javax.faces.component.UIForm;
 import javax.faces.component.UIOutput;
-import javax.faces.component.UISelectOne;
-
 
 import org.apache.commons.digester.AbstractObjectCreationFactory;
 import org.apache.commons.digester.Digester;
@@ -60,16 +56,9 @@ import org.apache.commons.digester.Rule;
 import org.apache.commons.digester.RuleSetBase;
 
 import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
-
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.ServletContext;
-
-import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -118,6 +107,11 @@ public class XmlXulRuleSet extends RuleSetBase {
 
         digester.addObjectCreate("*/link", "javax.faces.component.base.UICommandBase");
 
+        /* 
+         * Button no longer needs an ActionRule that creates a default
+         * ActionListener because the API's UICommandBase now installs
+         * a default ActionListener
+         */
         digester.addObjectCreate("*/button", "javax.faces.component.base.UICommandBase");
 
         digester.addObjectCreate("*/image", "javax.faces.component.base.UIGraphicBase");
@@ -140,9 +134,6 @@ public class XmlXulRuleSet extends RuleSetBase {
         cnRule.setBuildComponent(buildComponent);
         digester.addRule("*/radio", cnRule);
         digester.addRule("*/menuitem", cnRule);
-
-        ActionRule aRule = new ActionRule();
-        digester.addRule("*/button", aRule);
     }
 
 }
@@ -188,9 +179,11 @@ final class ComponentRule extends Rule {
     protected static Log log = LogFactory.getLog(ComponentRule.class);
 
     private BuildComponentFromTag bc;
+    private UIComponent root;
 
     public ComponentRule() {
         super();
+        root = null;
     }
 
     /**
@@ -214,6 +207,17 @@ final class ComponentRule extends Rule {
             }
         }
         bc.applyAttributesToComponentInstance(uic, attrs);
+
+        if (root == null) {
+            root = (UIComponent)digester.peek(digester.getCount() - 1);
+        }
+        root.getChildren().add(uic);
+
+        //If component is a form, make it the root so that children will be
+        //added to it
+        if (uic instanceof UIForm) {
+            root = uic;
+        }
     }
 
     /**
@@ -223,14 +227,13 @@ final class ComponentRule extends Rule {
      * @param attributes The element's attribute list
      */
     public void end(String namespace, String name) {
-        //Get root element
-        UIComponent root = (UIComponent)digester.peek(digester.getCount() - 1);
-        UIComponent uic = (UIComponent)digester.peek();
-
-        root.getChildren().add(uic);
+       //Reset the root
+       UIComponent uic = (UIComponent)digester.peek();
+       if (uic instanceof UIForm) {
+           root = (UIComponent)digester.peek(digester.getCount() - 1);
+        }
     }
 
-    
     public void setBuildComponent(BuildComponentFromTag bc) {
         this.bc = bc;
     }
@@ -270,75 +273,3 @@ final class ComponentNestedRule extends Rule {
         this.bc = bc;
     }
 }
-
-final class ActionRule extends Rule {
-
-    // Log instance for this class
-    protected static Log log = LogFactory.getLog(ActionRule.class);
-
-    public final static String LISTENER = "listener";
-
-    public ActionRule() {
-	super();
-    }
-
-    /**
-     * This method is invoked when the beginning of the matched
-     * Xml element is encountered ;
-     *
-     * @param attributes The element's attribute list
-     */
-    public void begin(Attributes attributes) throws Exception {
-        UIComponent uic = (UIComponent)digester.peek();
-        if (log.isTraceEnabled()) {
-            log.trace("component: " + uic.getId());
-        }
-	AttributesImpl attrs = new AttributesImpl(attributes);
-
-	for (int i=0; i<attrs.getLength(); i++) {
-            String qName = attributes.getQName(i);
-            if (qName.equals(LISTENER)) {
-                log.trace("createActionListener");
-                ActionListener handler =
-                    createActionListener(attributes.getValue(qName));
-                    if (log.isTraceEnabled()) {
-                        log.trace("component: " + uic.toString());
-                    }
-	        if (uic instanceof UICommand) {
-                    if (log.isTraceEnabled()) {
-                        log.trace("addingActionListener: " + handler);
-                    }
-                    ((UICommand)uic).addActionListener(handler);
-	        }
-            }
-	}
-    }
-
-    /**
-     * <p>Create and return a new {@link ActionListener} to be registered
-     * on our surrounding {@link UIComponent}.</p>
-     *
-     * @exception FacesException if a new instance cannot be created
-     */
-    protected ActionListener createActionListener(String className)
-        throws FacesException {
-
-        try {
-            ClassLoader classLoader =
-            Thread.currentThread().getContextClassLoader();
-            if (classLoader == null) {
-                classLoader = this.getClass().getClassLoader();
-            }
-            Class clazz = classLoader.loadClass(className);
-            if (log.isTraceEnabled()) {
-                log.trace("CreateActionListener: Class.toString(): " + clazz.toString());
-            }
-
-            return ((ActionListener) clazz.newInstance());
-        } catch (Exception e) {
-            throw new FacesException("Can't create ActionListener: " + e);
-        }
-    }
-
-}
-

@@ -1,5 +1,5 @@
 /* 
- * $Id: XulViewHandlerImpl.java,v 1.1 2003/08/27 23:49:51 horwat Exp $ 
+ * $Id: XulViewHandlerImpl.java,v 1.2 2003/09/08 19:31:22 horwat Exp $ 
  */ 
 
 
@@ -53,8 +53,6 @@ import java.util.List;
 import java.util.Map;
 import java.net.URL;
 
-import nonjsp.tree.XulDialectProvider;
-import nonjsp.tree.XmlDialectProvider;
 import nonjsp.util.RIConstants;
 import nonjsp.util.Util;
 
@@ -91,7 +89,7 @@ import org.mozilla.util.Assert;
 /** 
  * <B>XulViewHandlerImpl</B> is the Xul non-JSP ViewHandler implementation
  *
- * @version $Id: XulViewHandlerImpl.java,v 1.1 2003/08/27 23:49:51 horwat Exp $ 
+ * @version $Id: XulViewHandlerImpl.java,v 1.2 2003/09/08 19:31:22 horwat Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -142,13 +140,8 @@ public class XulViewHandlerImpl implements ViewHandler {
 
         RequestDispatcher requestDispatcher = null; 
 
-	log.trace("Determine Tree Identifier And Build Tree...");
+	log.trace("Determine View Identifier And Build View...");
         String viewId = context.getViewRoot().getViewId();
-
-        //PENDING (horwat) for navigation will want to implement
-        //createView mechanism
-        UIViewRoot newRoot = restoreView(context, viewId);
-        context.setViewRoot(newRoot);
 
         HttpServletResponse response = (HttpServletResponse)
         (context.getExternalContext().getResponse());
@@ -168,7 +161,7 @@ public class XulViewHandlerImpl implements ViewHandler {
         renderResponse(context);
         createFooter(context);
 
-        log.trace("Save the tree and locale in the session");
+        log.trace("Save the view and locale in the session");
         Map sessionMap = getSessionMap(context);
         sessionMap.put(RIConstants.REQUEST_LOCALE, context.getLocale());
         sessionMap.put(RIConstants.FACES_VIEW, context.getViewRoot());
@@ -176,6 +169,10 @@ public class XulViewHandlerImpl implements ViewHandler {
     } 
 
     public UIViewRoot restoreView(FacesContext context, String viewId) {
+        if (context == null) {
+            throw new NullPointerException("RestoreView: FacesContext is null");
+        }
+
         if (log.isTraceEnabled()) {
             log.trace("viewId: " + viewId);
         }
@@ -186,7 +183,7 @@ public class XulViewHandlerImpl implements ViewHandler {
         root = new UIViewRootBase();
 
         if (null == viewId) {
-            // PENDING(edburns): need name for default tree
+            // PENDING(edburns): need name for default view
             // PENDING(rogerk) : what to specify for page url
             // (last parameter)????
             root.setViewId("default");
@@ -245,9 +242,9 @@ public class XulViewHandlerImpl implements ViewHandler {
             throw new FacesException("Can't parse stream for " + viewId, e);
         }
 
-        //Print tree for debugging
+        //Print view for debugging
         if (log.isDebugEnabled()) {
-            printTree(root);
+            printView(root);
         }
 
         root.setViewId(viewId);
@@ -256,9 +253,12 @@ public class XulViewHandlerImpl implements ViewHandler {
         return root;
     }
 
-    //PENDING (horwat) implement createView in order to enable navigation
     public UIViewRoot createView(FacesContext context, String viewId) {
-        return null;
+        if (context == null) {
+            throw new NullPointerException("CreateView: FacesContext is null");
+        }
+
+        return restoreView(context, viewId);
     }
 
     //PENDING (horwat) Do we need state management for non-jsp example?
@@ -350,11 +350,11 @@ public class XulViewHandlerImpl implements ViewHandler {
         return sessionMap;
     }
 
-    private void printTree(UIComponent uic) {
+    private void printView(UIComponent uic) {
         Iterator kids = uic.getChildren().iterator();
         while (kids.hasNext()) {
-            printTree((UIComponent) kids.next());
+            printView((UIComponent) kids.next());
         }
-        log.debug("tree: " + uic.getId());
+        log.debug("VIEW: " + uic.getId());
     }
 } 

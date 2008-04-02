@@ -1,5 +1,5 @@
 /*
- * $Id: BuildComponentFromTag.java,v 1.2 2003/02/21 23:45:57 ofung Exp $
+ * $Id: BuildComponentFromTag.java,v 1.1 2003/09/08 19:31:18 horwat Exp $
  */
 
 /*
@@ -42,7 +42,7 @@
 
 // BuildComponentFromTag.java
 
-package nonjsp.tree;
+package nonjsp.application;
 
 import javax.faces.component.UIComponent;
 import org.xml.sax.Attributes;
@@ -60,30 +60,26 @@ import org.xml.sax.Attributes;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * Has the same scope as the TreeEngine instance.  The TreeEngine has a
+ * Has the same scope as the ViewEngine instance.  The ViewEngine has a
  * BuildComponentFromTag instance. <P>
  *
- * @version $Id: BuildComponentFromTag.java,v 1.2 2003/02/21 23:45:57 ofung Exp $
- * 
- * @see	com.sun.faces.tree.BuildComponentFromTag
- * @see	com.sun.faces.treebuilder.TreeEngine#getTreeForURI
+ * @version $Id: BuildComponentFromTag.java,v 1.1 2003/09/08 19:31:18 horwat Exp $
  *
  */
 
-public interface BuildComponentFromTag
-{
+public interface BuildComponentFromTag {
 
-public UIComponent createComponentForTag(String shortTagName);
+    public UIComponent createComponentForTag(String shortTagName);
 
-public boolean tagHasComponent(String shortTagName);
+    public boolean tagHasComponent(String shortTagName);
 
-public boolean isNestedComponentTag(String shortTagName);
+    public boolean isNestedComponentTag(String shortTagName);
 
-public void handleNestedComponentTag(UIComponent parent, 
-				     String shortTagName, Attributes attrs);
+    public void handleNestedComponentTag(UIComponent parent, 
+				         String shortTagName, Attributes attrs);
     
-public void applyAttributesToComponentInstance(UIComponent child, 
-					       Attributes attrs);
+    public void applyAttributesToComponentInstance(UIComponent child, 
+					           Attributes attrs);
 
 } // end of interface BuildComponentFromTag
 

@@ -1,5 +1,5 @@
 /*
- * $Id: XmlDialectProvider.java,v 1.2 2003/02/21 23:45:58 ofung Exp $
+ * $Id: XulDialectProvider.java,v 1.1 2003/09/08 19:31:21 horwat Exp $
  */
 
 /*
@@ -40,49 +40,69 @@
  * maintenance of any nuclear facility.
  */
 
-// XmlDialectProvider.java
+// XulDialectProvider.java
 
-package nonjsp.tree;
+package nonjsp.application;
+
+import org.mozilla.util.Assert;
+import org.mozilla.util.ParameterCheck;
 
 import org.apache.commons.digester.RuleSetBase;
 
 /**
- *  <B>XmlDialectProvider</B> encapsulates the Xml Dialect specific
- *  logic required for creating a tree of UIComponent instances from an
- *  Xml file. <P>
  *
- * Copy of com.sun.faces.tree.XmlDialectProvider in order to remove
- * demo dependancy on RI.
+ * <B>XulDialectProvider</B> is a class that encapsulates the Xul Dialect 
+ *  specific logic required for creating a tree of UIComponent instances 
+ *  from an Xml file. <P>
  *
- *
- * <B>Lifetime And Scope</B> <P>
- * Same as XmlTreeFactoryImpl.
- *
- * @version $Id: XmlDialectProvider.java,v 1.2 2003/02/21 23:45:58 ofung Exp $
+ * @version $Id: XulDialectProvider.java,v 1.1 2003/09/08 19:31:21 horwat Exp $
  * 
- * @see	com.sun.faces.tree.XmlDialectProvider
- * @see	com.sun.faces.tree.XmlTreeFactoryImpl
- *
  */
+public class XulDialectProvider extends Object implements XmlDialectProvider {
+    //
+    // Protected Constants
+    //
 
-public interface XmlDialectProvider
-{
+    //
+    // Class Variables
+    //
 
-/**
+    //
+    // Instance Variables
+    //
 
-* @return the Digester rule set for use in this implementation
+    // Attribute Instance Variables
 
-*/
+    // Relationship Instance Variables
 
-public RuleSetBase getRuleSet();
+    //
+    // Constructors and Initializers    
+    //
 
-/**
+    public XulDialectProvider() {
+        super();
+    }
 
-* @return the file suffix for files of this Xml type.  For example
-* ".xul" or ".uiml".
+    //
+    // Class methods
+    //
 
-*/
+    //
+    // General Methods
+    //
 
-public String getSuffix();
+    //
+    // Methods from XmlDialectProvider
+    //
 
-} // end of interface XmlDialectProvider
+    public RuleSetBase getRuleSet() {
+        RuleSetBase result = null;
+
+        result = new XmlXulRuleSet(new BuildComponentFromTagImpl());
+
+        return result;
+    }
+
+    public String getSuffix() { return ".xul"; }
+
+} // end of class XulDialectProvider

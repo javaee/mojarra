@@ -1,5 +1,5 @@
 /*
- * $Id: XulDialectProvider.java,v 1.2 2003/02/21 23:45:59 ofung Exp $
+ * $Id: XmlDialectProvider.java,v 1.1 2003/09/08 19:31:19 horwat Exp $
  */
 
 /*
@@ -40,79 +40,34 @@
  * maintenance of any nuclear facility.
  */
 
-// XulDialectProvider.java
+// XmlDialectProvider.java
 
-package nonjsp.tree;
-
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
+package nonjsp.application;
 
 import org.apache.commons.digester.RuleSetBase;
 
 /**
+ *  <B>XmlDialectProvider</B> encapsulates the Xml Dialect specific
+ *  logic required for creating a tree of UIComponent instances from an
+ *  Xml file. <P>
  *
- * <B>XulDialectProvider</B> is a class ...
- *
- * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: XulDialectProvider.java,v 1.2 2003/02/21 23:45:59 ofung Exp $
+ * @version $Id: XmlDialectProvider.java,v 1.1 2003/09/08 19:31:19 horwat Exp $
  * 
- * @see	Blah
- * @see	Bloo
- *
  */
-
-public class XulDialectProvider extends Object implements XmlDialectProvider
+public interface XmlDialectProvider
 {
-//
-// Protected Constants
-//
 
-//
-// Class Variables
-//
+    /**
+     * @return the Digester rule set for use in this implementation
+     */
 
-//
-// Instance Variables
-//
+    public RuleSetBase getRuleSet();
 
-// Attribute Instance Variables
+    /**
+     * @return the file suffix for files of this Xml type.  For example
+     * ".xul" or ".uiml".
+     */
 
-// Relationship Instance Variables
+    public String getSuffix();
 
-//
-// Constructors and Initializers    
-//
-
-public XulDialectProvider()
-{
-    super();
-}
-
-//
-// Class methods
-//
-
-//
-// General Methods
-//
-
-//
-// Methods from XmlDialectProvider
-//
-
-public RuleSetBase getRuleSet()
-{
-    RuleSetBase result = null;
-
-    result = new XmlXulRuleSet(new BuildComponentFromTagImpl());
-
-    return result;
-}
-
-public String getSuffix() { return ".xul"; }
-
-// The testcase for this class is TestXmlTreeFactoryImpl.java 
-
-
-} // end of class XulDialectProvider
+} // end of interface XmlDialectProvider

@@ -1,5 +1,5 @@
 /*
- * $Id: BuildComponentFromTagImpl.java,v 1.6 2003/08/27 23:49:46 horwat Exp $
+ * $Id: BuildComponentFromTagImpl.java,v 1.1 2003/09/08 19:31:19 horwat Exp $
  */
 
 /*
@@ -42,7 +42,7 @@
 
 // BuildComponentFromTagImpl.java
 
-package nonjsp.tree;
+package nonjsp.application;
 
 import java.util.Hashtable;
 
@@ -74,12 +74,8 @@ import org.apache.commons.logging.LogFactory;
  * Copy of com.sun.faces.tree.BuildComponentFromTagImpl in order to remove
  * demo dependancy on RI.
  *
- * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: BuildComponentFromTagImpl.java,v 1.6 2003/08/27 23:49:46 horwat Exp $
+ * @version $Id: BuildComponentFromTagImpl.java,v 1.1 2003/09/08 19:31:19 horwat Exp $
  * 
- * @see	com.sun.faces.tree.BuildComponentFromTagImpl
- *
  */
 
 public class BuildComponentFromTagImpl extends Object 
@@ -174,10 +170,6 @@ public class BuildComponentFromTagImpl extends Object
     	    return attrName;
         }
 
-        if (attrName.equals("id")) {
-            attrName = "componentId";
-        }
-
         if (attrName.equals("converter")) {
             attrName = "converterReference";
         }
@@ -202,6 +194,8 @@ public class BuildComponentFromTagImpl extends Object
 
         if (attrName.equals("valueChangeListener") ||
 	    attrName.equals("actionListener") ||
+	    attrName.equals("action") ||
+	    attrName.equals("actionRef") ||
             attrName.equals("required") || 
             attrName.equals("format") ||
             attrName.equals("rangeMaximum") ||
@@ -476,7 +470,5 @@ public class BuildComponentFromTagImpl extends Object
         }
 
     }
-
-// The testcase for this class is TestTreebuilder.java
 
 } // end of class BuildComponentFromTagImpl
