@@ -98,6 +98,8 @@
 
         <!-- For non graphical browsers  -->
 
+        <p>Example of <code>commandLink</code></p>
+
         <h:panelGrid id="links" columns="4" 
                       summary="#{bundle.chooseLocale}" 
                       title="#{bundle.chooseLocale}" >
@@ -131,6 +133,39 @@
           </h:commandLink>
 
         </h:panelGrid>
+
+    </h:form>
+
+    <h:form>
+
+        <p>Example of <code>commandButton</code></p>
+
+        <h:panelGrid id="buttons" columns="4" 
+                      summary="#{bundle.chooseLocale}" 
+                      title="#{bundle.chooseLocale}" >
+
+          <h:commandButton id="NAmerica" action="storeFront" value="#{bundle.english}" 
+                          actionListener="#{carstore.chooseLocaleFromLink}">
+  
+          </h:commandButton>
+
+          <h:commandButton id="Germany" action="storeFront" value="#{bundle.german}" 
+                          actionListener="#{carstore.chooseLocaleFromLink}">
+
+          </h:commandButton>
+
+          <h:commandButton id="France" action="storeFront" value="#{bundle.french}" 
+                          actionListener="#{carstore.chooseLocaleFromLink}">
+
+          </h:commandButton>
+
+          <h:commandButton id="SAmerica" action="storeFront" value="#{bundle.spanish}" 
+                          actionListener="#{carstore.chooseLocaleFromLink}">
+
+          </h:commandButton>
+
+        </h:panelGrid>
+
     
     </h:form>
 

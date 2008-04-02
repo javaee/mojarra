@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlUnitTestCase.java,v 1.4 2004/01/28 21:45:35 eburns Exp $
+ * $Id: HtmlUnitTestCase.java,v 1.5 2004/01/29 15:51:22 eburns Exp $
  */
 
 /*
@@ -148,7 +148,8 @@ public class HtmlUnitTestCase extends TestCase {
      * instances of HtmlInput.  Add them to the list.
      *
      */ 
-    protected List getAllHtmlInputElements(HtmlElement root, List list) {
+    protected List getAllElementsOfGivenClass(HtmlElement root, List list,
+					      Class matchClass) {
 	Iterator iter = null;
 	if (null == root) {
 	    return list;
@@ -158,9 +159,10 @@ public class HtmlUnitTestCase extends TestCase {
 	}
 	iter = root.getAllHtmlChildElements();
 	while (iter.hasNext()) {
-	    getAllHtmlInputElements((HtmlElement) iter.next(), list);
+	    getAllElementsOfGivenClass((HtmlElement) iter.next(), list,
+				       matchClass);
 	}
-	if (root instanceof HtmlInput) {
+	if (matchClass.isInstance(root)) {
 	    if (!list.contains(root)) {
 		list.add(root);
 	    }
