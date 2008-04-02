@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.48 2004/05/06 16:12:24 rlubke Exp $
+ * $Id: UIComponentTag.java,v 1.49 2004/08/13 20:05:19 rlubke Exp $
  */
 
 /*
@@ -143,8 +143,14 @@ public abstract class UIComponentTag implements Tag {
      * <p>The JSP <code>Tag</code> that is the parent of this tag.</p>
      */
     private Tag parent = null;
-    
-    
+
+
+    /**
+     * <p>Flag indicating whether or not rendering should occur.</p>
+     */
+    private boolean suppressed = false;
+
+
     // ------------------------------------------------------------- Attributes
 
 
@@ -466,6 +472,7 @@ public abstract class UIComponentTag implements Tag {
         }
 
         // Render the beginning of the component associated with this tag
+        suppressed = shouldBeSuppressed(parentTag);
         try {
             if (!isSuppressed() && !component.getRendersChildren()) {
                 encodeBegin();
@@ -832,23 +839,7 @@ public abstract class UIComponentTag implements Tag {
      */
     protected boolean isSuppressed() {
 
-        if (getFacetName() != null) {
-            return (true);
-        }
-        if (!component.isRendered()) {
-            return (true);
-        }
-        UIComponent component = this.component.getParent();
-        while (component != null) {
-            if (!component.isRendered()) {
-                return (true);
-            }
-            if (component.getRendersChildren()) {
-                return (true);
-            }
-            component = component.getParent();
-        }
-        return (false);
+        return (suppressed);
 
     }
 
@@ -1274,4 +1265,29 @@ public abstract class UIComponentTag implements Tag {
     }
 
 
+    /**
+     * @see #isSuppressed()
+     */
+    private boolean shouldBeSuppressed(UIComponentTag parentTag) {
+
+        if (getFacetName() != null) {
+            return (true);
+        }
+
+        if (parentTag.isSuppressed()) {
+            return (true);
+        }
+
+        if (!component.isRendered()) {
+            return (true);
+        }
+
+        UIComponent parent = this.component.getParent();
+        if (parent != null && parent.getRendersChildren()) {
+            return (true);
+        }
+
+        return (false);
+
+    }
 }
