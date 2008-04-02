@@ -87,7 +87,6 @@ public class ImageMapEventHandler implements ActionListener {
 
 	UIMap map = (UIMap)event.getSource();
 	String value = (String) map.getAttribute("currentArea");
-	UIOutput welcome = (UIOutput) map.findComponent("welcomeLabel");
 	Locale curLocale = (Locale) localeTable.get(value);
         if ( curLocale != null) { 
             FacesContext context = FacesContext.getCurrentInstance();

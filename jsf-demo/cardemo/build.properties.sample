@@ -43,6 +43,7 @@
 jsf.home = <your_JSF_workspace_directory>
 tomcat.home = <your_directory>/<your_deployment_environment>
 standard.jar=<location of your JSTL standard.jar>
+servlet.jar=<location of your servlet23.jar>
 jstl.jar=<location of your JSTL jstl.jar>
 username=<your management tool username>
 password=<your management tool password>
