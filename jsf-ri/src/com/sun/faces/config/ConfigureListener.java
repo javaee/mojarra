@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.38 2005/06/23 20:29:32 jayashri Exp $
+ * $Id: ConfigureListener.java,v 1.39 2005/07/03 07:33:13 jhook Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -246,7 +246,7 @@ public class ConfigureListener implements ServletContextListener {
     }
 
     public void contextInitialized(ServletContextEvent sce) {
-
+        
         ServletContext context = sce.getServletContext();
 
         // Check to see if the FacesServlet is present in the
@@ -1355,21 +1355,27 @@ public class ConfigureListener implements ServletContextListener {
         CompositeELResolver compositeELResolverForJsp = 
             new FacesCompositeELResolver();    
         appAssociate.setFacesELResolverForJsp(compositeELResolverForJsp);
-                
-        // get JspApplicationContext.
-        JspApplicationContext jspAppContext = JspFactory.getDefaultFactory().
-            getJspApplicationContext(context);
         
-        // register compositeELResolver with JSP
-        jspAppContext.addELResolver(compositeELResolverForJsp);
-        
-        //register JSF ELContextListenerImpl with Jsp
-        ELContextListenerImpl elContextListener = new ELContextListenerImpl();
-        jspAppContext.addELContextListener(elContextListener);
+        try {
                 
-        // cache the ExpressionFactory instance in ApplicationAssociate
-        appAssociate.
-            setExpressionFactory(jspAppContext.getExpressionFactory());
+            // get JspApplicationContext.
+            JspApplicationContext jspAppContext = JspFactory.getDefaultFactory().
+                getJspApplicationContext(context);
+            
+            // cache the ExpressionFactory instance in ApplicationAssociate
+            appAssociate.
+                setExpressionFactory(jspAppContext.getExpressionFactory());
+            
+            // register compositeELResolver with JSP
+            jspAppContext.addELResolver(compositeELResolverForJsp);
+            
+            //register JSF ELContextListenerImpl with Jsp
+            ELContextListenerImpl elContextListener = new ELContextListenerImpl();
+            jspAppContext.addELContextListener(elContextListener);
+
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Cannot Register ELResolvers", e);
+        }
     }
 
     /**
