@@ -28,6 +28,10 @@
         <param-name>testInitParam</param-name>
         <param-value>testInitParam</param-value>
     </context-param>
+    <context-param>
+        <param-name>com.sun.faces.validateXml</param-name>
+        <param-value>true</param-value>
+    </context-param>
 
     <servlet>
         <servlet-name>ServletRedirector</servlet-name>

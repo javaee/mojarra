@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.2 2004/01/27 21:04:08 eburns Exp $
+ * $Id: ConfigureListener.java,v 1.3 2004/01/31 02:44:32 rkitain Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -164,7 +164,8 @@ public final class ConfigureListener implements ServletContextListener {
 
         // Step 1, configure a Digester instance we can use
         try {
-            digester = digester();
+	    boolean validateXml = validateTheXml(context);
+            digester = digester(validateXml);
         } catch (MalformedURLException e) {
             throw new FacesException(e); // PENDING - add message
         }
@@ -175,9 +176,15 @@ public final class ConfigureListener implements ServletContextListener {
                 (RIConstants.JSF_RI_CONFIG);
             parse(digester, url, fcb);
         } catch (Exception e) {
-            String message = Util.getExceptionMessage
-                (Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID,
-                 new Object[] { url.toExternalForm() });
+	    String message = null;
+	    try {
+                message = Util.getExceptionMessage
+                    (Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID,
+                     new Object[] { url.toExternalForm() });
+	    } catch (Exception ee) {
+                message = "Can't parse configuration file:"+
+		    url.toExternalForm();
+	    }
             log.warn(message, e);
             throw new FacesException(message, e);
         }
@@ -188,9 +195,15 @@ public final class ConfigureListener implements ServletContextListener {
                 (RIConstants.JSF_RI_STANDARD);
             parse(digester, url, fcb);
         } catch (Exception e) {
-            String message = Util.getExceptionMessage
-                (Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID,
-                 new Object[] { url.toExternalForm() });
+	    String message = null;
+	    try {
+                message = Util.getExceptionMessage
+                    (Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID,
+                     new Object[] { url.toExternalForm() });
+	    } catch (Exception ee) {
+                message = "Can't parse configuration file:"+
+		    url.toExternalForm();
+	    }
             log.warn(message, e);
             throw new FacesException(message, e);
         }
@@ -201,9 +214,15 @@ public final class ConfigureListener implements ServletContextListener {
 	    resources = Util.getCurrentLoader(this).getResources
 		("META-INF/faces-config.xml");
 	} catch (IOException e) {
-            String message = Util.getExceptionMessage
-                (Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID,
-                 new Object[] { "/META-INF/faces-config.xml" });
+	    String message = null;
+	    try {
+                message = Util.getExceptionMessage
+                    (Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID,
+                     new Object[] { "/META-INF/faces-config.xml" });
+	    } catch (Exception ee) {
+                message = "Can't parse configuration file:"+
+		    "/META-INF/faces-config.xml";
+	    }
             log.warn(message, e);
             throw new FacesException(message, e);
 	}
@@ -212,9 +231,15 @@ public final class ConfigureListener implements ServletContextListener {
 	    try {
 		parse(digester, url, fcb);
 	    } catch (Exception e) {
-		String message = Util.getExceptionMessage
-		    (Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID,
-		     new Object[] { url.toExternalForm() });
+	        String message = null;
+	        try {
+                    message = Util.getExceptionMessage
+                        (Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID,
+                         new Object[] { url.toExternalForm() });
+	        } catch (Exception ee) {
+                    message = "Can't parse configuration file:"+
+		        url.toExternalForm();
+	        }
 		log.warn(message, e);
 		throw new FacesException(message, e);
 	    }
@@ -246,9 +271,14 @@ public final class ConfigureListener implements ServletContextListener {
 		    url = context.getResource(path);
 		    parse(digester, url, fcb);
 		} catch (Exception e) {
-		    String message = Util.getExceptionMessage
-			(Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID,
-			 new Object[] { path });
+	            String message = null;
+	            try {
+		        message = Util.getExceptionMessage
+			    (Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID,
+			     new Object[] { path });
+	            } catch (Exception ee) {
+                        message = "Can't parse configuration file:"+path;
+		    }
 		    log.warn(message, e);
 		    throw new FacesException(message, e);
 		}
@@ -262,9 +292,15 @@ public final class ConfigureListener implements ServletContextListener {
 		parse(digester, url, fcb);
 	    }
 	} catch (Exception e) {
-            String message = Util.getExceptionMessage
-                (Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID,
-                 new Object[] { url.toExternalForm() });
+	    String message = null;
+	    try {
+                message = Util.getExceptionMessage
+                    (Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID,
+                     new Object[] { url.toExternalForm() });
+	    } catch (Exception ee) {
+                message = "Can't parse configuration file:"+
+	            url.toExternalForm();
+	    }
             log.warn(message, e);
             throw new FacesException(message, e);
 	}
@@ -903,16 +939,17 @@ public final class ConfigureListener implements ServletContextListener {
      * <p>Configure and return a <code>Digester</code> instance suitable for
      * parsing the runtime configuration information we need.</p>
      *
+     * @param validateXml if true, validation is turned on during parsing.
+     *
      * @exception MalformedURLException if a URL cannot be formed correctly
      */
-    private Digester digester() throws MalformedURLException {
-
+    private Digester digester(boolean validateXml) throws MalformedURLException {
         Digester digester = new Digester();
 
         // Configure basic properties
         digester.setNamespaceAware(false);
         digester.setUseContextClassLoader(true);
-        digester.setValidating(true);
+        digester.setValidating(validateXml);
 
         // Configure parsing rules
         digester.addRuleSet(new FacesConfigRuleSet(false, false, true));
@@ -1007,6 +1044,25 @@ public final class ConfigureListener implements ServletContextListener {
 
     }
 
+    /**
+     * <p>Determine if we will turn on validation during parsing.
+     *
+     * @param sc the servlet context
+     */
+    private boolean validateTheXml(ServletContext sc) {
+        String validateXml = sc.getInitParameter(RIConstants.VALIDATE_XML);
+        if (validateXml != null) {
+            if (!(validateXml.equals("true")) && !(validateXml.equals("false"))) {
+                Object[] obj = new Object[1];
+                obj[0] = "validateXml";
+                throw new FacesException(Util.getExceptionMessage(
+                    Util.INVALID_INIT_PARAM_ERROR_MESSAGE_ID, obj));
+            }
+        } else {
+            validateXml = "false";
+        }
+        return new Boolean(validateXml).booleanValue();
+    }
 
     /**
      * <p>Release the mark that this web application has been initialized.</p>
