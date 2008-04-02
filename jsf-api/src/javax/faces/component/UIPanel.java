@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanel.java,v 1.16 2003/09/25 07:50:04 craigmcc Exp $
+ * $Id: UIPanel.java,v 1.17 2003/09/30 14:35:01 rlubke Exp $
  */
 
 /*
@@ -144,7 +144,7 @@ public class UIPanel extends UIComponentBase implements ValueHolder {
 
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
-        List[] supportList = (List[])
+        List[] supportList = 
             context.getApplication().getViewHandler().getStateManager().
             restoreAttachedObjectState(context, values[1], null, this);
 	if (supportList != null) {

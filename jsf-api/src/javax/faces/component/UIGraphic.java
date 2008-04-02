@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphic.java,v 1.20 2003/09/25 07:50:03 craigmcc Exp $
+ * $Id: UIGraphic.java,v 1.21 2003/09/30 14:35:00 rlubke Exp $
  */
 
 /*
@@ -129,7 +129,10 @@ public class UIGraphic extends UIComponentBase implements ValueHolder {
 
     // ----------------------------------------------------- ValueHolder Methods
 
-
+    /**
+     * @throws EvaluationException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
+     */ 
     public Object currentValue(FacesContext context) {
 
         return (support.currentValue(context));
@@ -161,7 +164,7 @@ public class UIGraphic extends UIComponentBase implements ValueHolder {
 
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
-        List[] supportList = (List[])
+        List[] supportList = 
             context.getApplication().getViewHandler().getStateManager().
             restoreAttachedObjectState(context, values[1], null, this);
 	if (supportList != null) {

@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.32 2003/09/25 07:56:13 craigmcc Exp $
+ * $Id: UIForm.java,v 1.33 2003/09/30 14:35:00 rlubke Exp $
  */
 
 /*
@@ -109,6 +109,7 @@ public class UIForm extends UIComponentBase implements NamingContainer {
      * necessary to allow the <code>submitted</code> property to be
      * correctly set.</p>
      *
+     * @throws NullPointerException {@inheritDoc}
      */
     public void processDecodes(FacesContext context) {
 
@@ -133,6 +134,8 @@ public class UIForm extends UIComponentBase implements NamingContainer {
      * <p>Override {@link UIComponent#processValidators} to ensure that
      * the children of this <code>UIForm</code> instance are only
      * processed if {@link #isSubmitted} returns <code>true</code>.</p>
+     * 
+     * @throws NullPointerException {@inheritDoc}
      */
     public void processValidators(FacesContext context) {
 
@@ -157,6 +160,8 @@ public class UIForm extends UIComponentBase implements NamingContainer {
      * <p>Override {@link UIComponent#processUpdates} to ensure that the
      * children of this <code>UIForm</code> instance are only processed
      * if {@link #isSubmitted} returns <code>true</code>.</p>
+     * 
+     * @throws NullPointerException {@inheritDoc}
      */
     public void processUpdates(FacesContext context) {
 
@@ -179,14 +184,21 @@ public class UIForm extends UIComponentBase implements NamingContainer {
 
     // ------------------------------------------------- NamingContainer Methods
 
-
+    /**
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws IllegalStateException {@inheritDoc}
+     * @exception NullPointerException {@inheritDoc}     
+     */ 
     public void addComponentToNamespace(UIComponent namedComponent) {
 
 	namespace.addComponentToNamespace(namedComponent);
 
     }
 
-
+    /**
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @exception NullPointerException {@inheritDoc}    
+     */ 
     public UIComponent findComponentInNamespace(String name) {
 
 	return namespace.findComponentInNamespace(name);
@@ -200,7 +212,10 @@ public class UIForm extends UIComponentBase implements NamingContainer {
 
     }
 
-
+    /**
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @exception NullPointerException {@inheritDoc}
+     */ 
     public void removeComponentFromNamespace(UIComponent namedComponent) {
 
 	namespace.removeComponentFromNamespace(namedComponent);

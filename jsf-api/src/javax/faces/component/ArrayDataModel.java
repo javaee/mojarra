@@ -1,5 +1,5 @@
 /*
- * $Id: ArrayDataModel.java,v 1.2 2003/09/11 15:25:58 craigmcc Exp $
+ * $Id: ArrayDataModel.java,v 1.3 2003/09/30 14:34:58 rlubke Exp $
  */
 
 /*
@@ -102,7 +102,10 @@ class ArrayDataModel implements DataModel {
 
     // ------------------------------------------------------- Lifecycle Methods
 
-
+    /**
+     * @throws FacesException {@inheritDoc}
+     * @throws IllegalStateException {@inheritDoc}
+     */ 
     public void close() {
 
         if (!open) {
@@ -120,7 +123,10 @@ class ArrayDataModel implements DataModel {
 
     }
 
-
+    /**
+     * @throws FacesException {@inheritDoc}
+     * @throws IllegalStateException {@inheritDoc}
+     */ 
     public void open() throws FacesException {
 
         if (open) {
@@ -148,7 +154,9 @@ class ArrayDataModel implements DataModel {
 
     }
 
-
+    /**
+     * @throws IllegalStateException {@inheritDoc}     
+     */ 
     public int getRowCount() {
 
         if (!open) {
@@ -158,7 +166,10 @@ class ArrayDataModel implements DataModel {
 
     }
 
-
+    /**
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws IllegalStateException {@inheritDoc}     
+     */ 
     public Object getRowData() {
 
         if (!open) {
@@ -175,7 +186,9 @@ class ArrayDataModel implements DataModel {
 
     }
 
-
+    /**
+     * @throws IllegalStateException {@inheritDoc}     
+     */ 
     public int getRowIndex() {
 
         if (!open) {
@@ -185,7 +198,11 @@ class ArrayDataModel implements DataModel {
 
     }
 
-
+    /**
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws IllegalStateException {@inheritDoc}
+     * @throws FacesException {@inheritDoc}     
+     */ 
     public void setRowIndex(int rowIndex) {
 
         if (!open) {
@@ -198,7 +215,7 @@ class ArrayDataModel implements DataModel {
         index = rowIndex;
         if ((old != index) && (listeners != null)) {
             DataModelEvent event =
-                event = new DataModelEvent(this, index, getRowData());
+                new DataModelEvent(this, index, getRowData());
             int n = listeners.size();
             for (int i = 0; i < n; i++) {
                 ((DataModelListener) listeners.get(i)).modelSelected(event);
@@ -210,7 +227,9 @@ class ArrayDataModel implements DataModel {
 
     // --------------------------------------------- Event Listener Registration
 
-
+    /**
+     * @throws NullPointerException {@inheritDoc}     
+     */ 
     public void addDataModelListener(DataModelListener listener) {
 
         if (listener == null) {
@@ -223,7 +242,9 @@ class ArrayDataModel implements DataModel {
 
     }
 
-
+    /**
+     * @throws NullPointerException {@inheritDoc}     
+     */ 
     public void removeDataModelListener(DataModelListener listener) {
 
         if (listener == null) {

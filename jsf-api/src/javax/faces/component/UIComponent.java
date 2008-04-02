@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.102 2003/09/29 22:20:56 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.103 2003/09/30 14:34:59 rlubke Exp $
  */
 
 /*
@@ -19,7 +19,6 @@ import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
 import javax.faces.event.PhaseId;
-import javax.faces.event.RepeaterEvent;
 import javax.faces.render.Renderer;
 
 
@@ -507,7 +506,7 @@ public abstract class UIComponent implements StateHolder {
      *
      * @param listener The {@link FacesListener} to be registered
      *
-     * @exception NullPointerExcepton if <code>listener</code>
+     * @exception NullPointerException if <code>listener</code>
      *  is <code>null</code>
      */
     protected abstract void addFacesListener(FacesListener listener);

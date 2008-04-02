@@ -39,26 +39,20 @@
 package javax.faces.component;
 
 
-import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.RepeaterEvent;
-import javax.faces.event.ValueChangedEvent;
 import javax.faces.model.DataModel;
-import javax.faces.validator.Validator;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -335,7 +329,9 @@ public class UIData extends UIComponentBase
 
     // -------------------------------------------------------- Repeater Methods
 
-
+    /**
+     * @throws NullPointerException {@inheritDoc}  
+     */ 
     public String getChildClientId(FacesContext context,
 				   String childClientId) {
 
@@ -343,14 +339,18 @@ public class UIData extends UIComponentBase
 
     }
 
-
+    /**
+     * @throws NullPointerException {@inheritDoc}
+     */ 
     public Object getChildPrevious(UIComponent component) {
 
 	return (repeater.getChildPrevious(component));
 
     }
 
-
+    /**
+     * @throws NullPointerException {@inheritDoc}     
+     */ 
     public void setChildPrevious(UIComponent component, Object value) {
 
 	repeater.setChildPrevious(component, value);
@@ -371,14 +371,18 @@ public class UIData extends UIComponentBase
 
     }
 
-
+    /**
+     * @throws NullPointerException {@inheritDoc}     
+     */ 
     public Object getChildValue(UIComponent component) {
 
 	return (repeater.getChildValue(component));
 
     }
 
-
+    /**
+     * @throws NullPointerException {@inheritDoc}    
+     */ 
     public void setChildValue(UIComponent component, Object value) {
 
 	repeater.setChildValue(component, value);
@@ -456,7 +460,7 @@ public class UIData extends UIComponentBase
 
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
-        List[] supportList = (List[])
+        List[] supportList = 
             context.getApplication().getViewHandler().getStateManager().
             restoreAttachedObjectState(context, values[1], null, this);
 	if (supportList != null) {
@@ -467,7 +471,7 @@ public class UIData extends UIComponentBase
             }
 	}
         first = ((Integer) values[2]).intValue();
-        List[] repeaterList = (List[])
+        List[] repeaterList = 
             context.getApplication().getViewHandler().getStateManager().
             restoreAttachedObjectState(context, values[3], null, this);
 	if (repeaterList != null) {
@@ -484,7 +488,10 @@ public class UIData extends UIComponentBase
 
     // ----------------------------------------------------- ValueHolder Methods
 
-
+    /**
+     * @throws EvaluationException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}     
+     */ 
     public Object currentValue(FacesContext context) {
 
         return (support.currentValue(context));
@@ -573,7 +580,9 @@ public class UIData extends UIComponentBase
 
     }
 
-
+    /**
+     * @throws NullPointerException {@inheritDoc}     
+     */ 
     public void processDecodes(FacesContext context) {
 
 	if (context == null) {
@@ -584,7 +593,9 @@ public class UIData extends UIComponentBase
 
     }
 
-
+    /**
+     * @throws NullPointerException {@inheritDoc}     
+     */ 
     public void processValidators(FacesContext context) {
 
 	if (context == null) {
@@ -598,7 +609,9 @@ public class UIData extends UIComponentBase
 
     }
 
-
+    /**
+     * @throws NullPointerException {@inheritDoc}     
+     */ 
     public void processUpdates(FacesContext context) {
 
 	if (context == null) {
@@ -678,9 +691,7 @@ public class UIData extends UIComponentBase
      * facets once, and iterate only over the children.</p>
      *
      * @param context {@link FacesContext} for the current request
-     * @param phaseId {@link PhaseId} of the phase we are currently running
-     *
-     * @exception IOException if an input/output error occurs
+     * @param phaseId {@link PhaseId} of the phase we are currently running     
      */
     private void iterate(FacesContext context, PhaseId phaseId) {
 
@@ -689,7 +700,7 @@ public class UIData extends UIComponentBase
 	Iterator facets = getFacets().keySet().iterator();
 	while (facets.hasNext()) {
 	    UIComponent facet = (UIComponent)
-                getFacets().get((String) facets.next());
+                getFacets().get(facets.next());
 	    if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
 		facet.processDecodes(context);
 	    } else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {

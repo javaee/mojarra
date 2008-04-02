@@ -1,5 +1,5 @@
 /*
- * $Id: LongRangeValidator.java,v 1.18 2003/09/24 22:41:08 eburns Exp $
+ * $Id: LongRangeValidator.java,v 1.19 2003/09/30 14:35:12 rlubke Exp $
  */
 
 /*
@@ -13,7 +13,6 @@ package javax.faces.validator;
 import javax.faces.application.Message;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIInput;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 
@@ -192,13 +191,15 @@ public class LongRangeValidator implements Validator, StateHolder {
 
     // ------------------------------------------------------- Validator Methods
 
-
+    /**
+     * @throws NullPointerException {@inheritDoc}     
+     */ 
     public void validate(FacesContext context, UIInput component) {
 
         if ((context == null) || (component == null)) {
             throw new NullPointerException();
         }
-        Object value = ((UIInput) component).getValue();
+        Object value = component.getValue();
         if (value != null) {
             try {
                 long converted = longValue(value);

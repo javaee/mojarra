@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolderSupport.java,v 1.5 2003/09/24 22:24:49 eburns Exp $
+ * $Id: ValueHolderSupport.java,v 1.6 2003/09/30 14:35:02 rlubke Exp $
  */
 
 /*
@@ -154,7 +154,10 @@ public class ValueHolderSupport
 
     // ----------------------------------------------------- ValueHolder Methods
 
-
+    /**
+     * @throws EvaluationException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}  
+     */
     public Object currentValue(FacesContext context) {
 
         if (context == null) {
@@ -242,7 +245,7 @@ public class ValueHolderSupport
         throws IOException {
         // Restore other state information from saved state
         Object values[] = (Object[]) state;
-        List[] converterList = (List[])
+        List[] converterList = 
             context.getApplication().getViewHandler().getStateManager().
             restoreAttachedObjectState(context, values[0], null, component);
         // PENDING(craigmcc) - it shouldn't be this hard to restore converters

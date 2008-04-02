@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.31 2003/09/25 23:21:34 craigmcc Exp $
+ * $Id: UIInput.java,v 1.32 2003/09/30 14:35:00 rlubke Exp $
  */
 
 /*
@@ -10,10 +10,6 @@
 package javax.faces.component;
 
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.Message;
@@ -21,12 +17,15 @@ import javax.faces.application.MessageResources;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.el.ValueBinding;
-import javax.faces.event.FacesEvent;
-import javax.faces.event.PhaseId;
 import javax.faces.event.ValueChangedEvent;
 import javax.faces.event.ValueChangedListener;
 import javax.faces.render.Renderer;
 import javax.faces.validator.Validator;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 
 /**
@@ -589,12 +588,12 @@ public class UIInput extends UIOutput {
         // invoked, merge them with the list to be restored.
         List validatorsList[] = new List[1];
         validatorsList[0] = validators;
-        validatorsList = (List[])
+        validatorsList = 
             context.getApplication().getViewHandler().getStateManager().
             restoreAttachedObjectState(context, values[4], validatorsList,
 				       this);
         if (validatorsList != null) {
-            validators = (List) validatorsList[0];
+            validators = validatorsList[0];
         }
 
     }

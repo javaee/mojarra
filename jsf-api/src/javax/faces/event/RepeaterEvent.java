@@ -123,7 +123,9 @@ public class RepeaterEvent extends FacesEvent {
 
     }
 
-
+    /**
+     * @throws AbortProcessingException {@inheritDoc}
+     */ 
     public void processListener(FacesListener listener) {
 
         getFacesEvent().processListener(listener);

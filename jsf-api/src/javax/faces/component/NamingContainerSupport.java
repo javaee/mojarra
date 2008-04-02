@@ -1,5 +1,5 @@
 /*
- * $Id: NamingContainerSupport.java,v 1.5 2003/09/25 07:49:59 craigmcc Exp $
+ * $Id: NamingContainerSupport.java,v 1.6 2003/09/30 14:34:58 rlubke Exp $
  */
 
 /*
@@ -9,13 +9,7 @@
 
 package javax.faces.component;
 
-import javax.faces.context.FacesContext;
-
 import java.util.HashMap;
-import java.util.Map;
-import javax.faces.component.NamingContainer;
-import javax.faces.component.UIComponent;
-import java.io.IOException;
 import java.util.Iterator;
 
 
@@ -83,7 +77,11 @@ public class NamingContainerSupport implements NamingContainer {
 
     // ------------------------------------------------- NamingContainer Methods
 
-
+    /**
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws IllegalStateException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}     
+     */ 
     public void addComponentToNamespace(UIComponent component) {
 
         // Validate our parameter
@@ -108,7 +106,10 @@ public class NamingContainerSupport implements NamingContainer {
 
     }
 
-
+    /**
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @exception NullPointerException {@inheritDoc}
+     */ 
     public UIComponent findComponentInNamespace(String name) {
 
         if ((name == null) || (name.length() < 1)) {
@@ -195,7 +196,10 @@ public class NamingContainerSupport implements NamingContainer {
 	return true;
     }
 
-
+    /**
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}     
+     */ 
     public void removeComponentFromNamespace(UIComponent component) {
 
         // Validate our parameter

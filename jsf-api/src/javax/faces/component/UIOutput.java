@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.30 2003/09/25 07:50:04 craigmcc Exp $
+ * $Id: UIOutput.java,v 1.31 2003/09/30 14:35:01 rlubke Exp $
  */
 
 /*
@@ -13,7 +13,7 @@ package javax.faces.component;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.faces.FactoryFinder;
+
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
@@ -128,7 +128,10 @@ public class UIOutput extends UIComponentBase implements ValueHolder {
 
     // ----------------------------------------------------- ValueHolder Methods
 
-
+    /**
+     * @throws EvaluationException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}  
+     */ 
     public Object currentValue(FacesContext context) {
 
         return (support.currentValue(context));
@@ -160,7 +163,7 @@ public class UIOutput extends UIComponentBase implements ValueHolder {
 
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
-        List[] supportList = (List[])
+        List[] supportList = 
             context.getApplication().getViewHandler().getStateManager().
             restoreAttachedObjectState(context, values[1], null, this);
 	if (supportList != null) {

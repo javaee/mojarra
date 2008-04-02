@@ -1,5 +1,5 @@
 /*
- * $Id: UINamingContainer.java,v 1.7 2003/09/25 07:50:04 craigmcc Exp $
+ * $Id: UINamingContainer.java,v 1.8 2003/09/30 14:35:01 rlubke Exp $
  */
 
 /*
@@ -8,9 +8,6 @@
  */
 
 package javax.faces.component;
-
-
-import javax.faces.context.FacesContext;
 
 
 /**
@@ -48,14 +45,21 @@ public class UINamingContainer extends UIComponentBase
 
     // ------------------------------------------------- NamingContainer Methods
 
-
+    /**
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws IllegalStateException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}     
+     */ 
     public void addComponentToNamespace(UIComponent namedComponent) {
 
 	namespace.addComponentToNamespace(namedComponent);
 
     }
 
-
+    /**
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @exception NullPointerException {@inheritDoc}
+     */ 
     public UIComponent findComponentInNamespace(String name) {
 
 	return namespace.findComponentInNamespace(name);
@@ -69,7 +73,10 @@ public class UINamingContainer extends UIComponentBase
 
     }
 
-
+    /**
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}     
+     */ 
     public void removeComponentFromNamespace(UIComponent namedComponent) {
 
 	namespace.removeComponentFromNamespace(namedComponent);

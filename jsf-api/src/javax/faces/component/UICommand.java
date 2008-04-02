@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.42 2003/09/25 07:50:01 craigmcc Exp $
+ * $Id: UICommand.java,v 1.43 2003/09/30 14:34:58 rlubke Exp $
  */
 
 /*
@@ -10,19 +10,17 @@
 package javax.faces.component;
 
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import javax.faces.application.Action;
-import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.el.ValueBinding;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 import javax.faces.event.PhaseId;
 import javax.faces.render.Renderer;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 
 /**
@@ -189,14 +187,18 @@ public class UICommand extends UIComponentBase
 
     // ---------------------------------------------------- ActionSource Methods
 
-
+    /** 
+     * @throws NullPointerException {@inheritDoc}
+     */ 
     public void addActionListener(ActionListener listener) {
 
         addFacesListener(listener);
 
     }
 
-
+    /**
+     * @throws NullPointerException {@inheritDoc}
+     */ 
     public void removeActionListener(ActionListener listener) {
 
         removeFacesListener(listener);
@@ -206,7 +208,10 @@ public class UICommand extends UIComponentBase
 
     // ----------------------------------------------------- ValueHolder Methods
 
-
+    /**
+     * @throws EvaluationException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
+     */ 
     public Object currentValue(FacesContext context) {
 
         return (support.currentValue(context));

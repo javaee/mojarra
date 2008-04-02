@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameter.java,v 1.9 2003/09/25 07:50:05 craigmcc Exp $
+ * $Id: UIParameter.java,v 1.10 2003/09/30 14:35:01 rlubke Exp $
  */
 
 /*
@@ -142,7 +142,10 @@ public class UIParameter extends UIComponentBase implements ValueHolder {
 
     // ----------------------------------------------------- ValueHolder Methods
 
-
+    /**
+     * @throws EvaluationException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}  
+     */
     public Object currentValue(FacesContext context) {
 
         return (support.currentValue(context));
@@ -175,7 +178,7 @@ public class UIParameter extends UIComponentBase implements ValueHolder {
 
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
-        List[] supportList = (List[])
+        List[] supportList = 
             context.getApplication().getViewHandler().getStateManager().
             restoreAttachedObjectState(context, values[1], null, this);
 	if (supportList != null) {

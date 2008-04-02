@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.63 2003/09/29 22:50:37 jvisvanathan Exp $
+ * $Id: UIComponentBase.java,v 1.64 2003/09/30 14:34:59 rlubke Exp $
  */
 
 /*
@@ -37,8 +37,6 @@ import javax.faces.event.RepeaterEvent;
 import javax.faces.render.Renderer;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
-import javax.faces.validator.Validator;
-import javax.faces.application.StateHolderSaver;
 
 
 /**
@@ -256,7 +254,10 @@ public abstract class UIComponentBase extends UIComponent {
      */
     private String clientId = null;
 
-
+    
+    /**
+     * @throws NullPointerException {@inheritDoc}
+     */ 
     public String getClientId(FacesContext context) {
 
         // Locate our parent Repeater (if any)
@@ -386,7 +387,10 @@ public abstract class UIComponentBase extends UIComponent {
         return (this.id);
     }
 
-
+    /**
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws IllegalStateException {@inheritDoc}    
+     */ 
     public void setId(String id) {
 
 	validateId(id);
@@ -797,7 +801,9 @@ public abstract class UIComponentBase extends UIComponent {
 
     }
 
-
+    /**
+     * @throws NullPointerException {@inheritDoc}
+     */ 
     public UIComponent findComponent(String expr) {
 
         if (expr == null) {
@@ -941,7 +947,6 @@ public abstract class UIComponentBase extends UIComponent {
 
     // -------------------------------------------- Lifecycle Processing Methods
 
-
     /**
      * The list of events that have already been broadcast to ANY_PHASE
      * listeners for this component.  This data structure is lazily
@@ -951,6 +956,11 @@ public abstract class UIComponentBase extends UIComponent {
     private transient List anyPhaseEvents = null;
 
 
+    /**
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws IllegalStateException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}  
+     */ 
     public boolean broadcast(FacesEvent event, PhaseId phaseId)
         throws AbortProcessingException {
 
@@ -1044,7 +1054,9 @@ public abstract class UIComponentBase extends UIComponent {
 
     }
 
-
+    /**
+     * @throws NullPointerException {@inheritDoc}     
+     */ 
     public void decode(FacesContext context) {
 
         if (context == null) {
@@ -1060,6 +1072,9 @@ public abstract class UIComponentBase extends UIComponent {
 
     }
 
+    /**
+     * @throws NullPointerException {@inheritDoc}   
+     */ 
     public void encodeBegin(FacesContext context) throws IOException {
 
         if (context == null) {
@@ -1072,6 +1087,9 @@ public abstract class UIComponentBase extends UIComponent {
 
     }
 
+    /**
+     * @throws NullPointerException {@inheritDoc}     
+     */ 
     public void encodeChildren(FacesContext context) throws IOException {
 
         if (context == null) {
@@ -1084,6 +1102,9 @@ public abstract class UIComponentBase extends UIComponent {
 
     }
 
+    /**
+     * @throws NullPointerException {@inheritDoc}   
+     */ 
     public void encodeEnd(FacesContext context) throws IOException {
 
         if (context == null) {
@@ -1145,7 +1166,7 @@ public abstract class UIComponentBase extends UIComponent {
      *
      * @param listener The {@link FacesListener} to be registered
      *
-     * @exception NullPointerExcepton if <code>listener</code>
+     * @exception NullPointerException if <code>listener</code>
      *  is <code>null</code>
      */
     protected void addFacesListener(FacesListener listener) {
@@ -1189,7 +1210,10 @@ public abstract class UIComponentBase extends UIComponent {
 
     }
 
-
+    /**
+     * @throws IllegalStateException {@inheritDoc}
+     * @exception NullPointerException {@inheritDoc}  
+     */ 
     public void queueEvent(FacesEvent event) {
 
         if (event == null) {
@@ -1207,7 +1231,9 @@ public abstract class UIComponentBase extends UIComponent {
 
     // ------------------------------------------------ Lifecycle Phase Handlers
 
-
+    /**
+     * @throws NullPointerException {@inheritDoc}     
+     */ 
     public void processDecodes(FacesContext context) {
 
         if (context == null) {
@@ -1232,7 +1258,9 @@ public abstract class UIComponentBase extends UIComponent {
 
     }
 
-
+    /**
+     * @throws NullPointerException {@inheritDoc}    
+     */ 
     public void processValidators(FacesContext context) {
 
         if (context == null) {
@@ -1268,6 +1296,9 @@ public abstract class UIComponentBase extends UIComponent {
     }
 
 
+    /**
+     * @throws NullPointerException {@inheritDoc}     
+     */ 
     public void processUpdates(FacesContext context) {
 
         if (context == null) {
@@ -1302,6 +1333,9 @@ public abstract class UIComponentBase extends UIComponent {
     private static final int MY_STATE = 0;
     private static final int CHILD_STATE = 1;
 
+    /**
+     * @throws NullPointerException {@inheritDoc}         
+     */ 
     public Object processSaveState(FacesContext context) {
 	
         if (context == null) {
@@ -1351,6 +1385,9 @@ public abstract class UIComponentBase extends UIComponent {
     }
     
 
+    /**
+     * @throws NullPointerException {@inheritDoc}     
+     */ 
     public void processRestoreState(FacesContext context,
 				    Object state) {
 	
@@ -1471,7 +1508,7 @@ public abstract class UIComponentBase extends UIComponent {
         rendererType = (String) values[5];
         // if there were some listeners registered prior to this method being 
         // invoked, merge them with the list to be restored.
-        listeners = (List[])
+        listeners =
             context.getApplication().getViewHandler().getStateManager().
             restoreAttachedObjectState(context, values[6], listeners, this);
     }
