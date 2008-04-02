@@ -222,11 +222,16 @@
     </target>
 
     <target name="tools.javac">
+	<path id="ant.classpath">
+	    <pathelement location="${myenv.ANT_HOME}/lib/ant.jar"/>
+	</path>
+
         <mkdir dir="${tools.dir}/build/classes"/>
         <jsf.javac srcdir="${tools.dir}/src"
                    destdir="${tools.dir}/build/classes">
             <classpath>
                 <path refid="compile.classpath"/>
+                <path refid="ant.classpath"/>
             </classpath>
         </jsf.javac>
         <copy todir="${tools.dir}/build/classes">

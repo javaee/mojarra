@@ -86,6 +86,9 @@
     <property name="build.number" value="b12"/>
     <property name="impl.version" value="1.2-${build.number}"/>
 
+    <!-- Environment -->
+    <property environment="myenv" />
+
     <!-- Debug args (OVERRIDE IN BUILD.PROPERTIES) -->
     <property name="debug.jvm.args" value=""/>
 
