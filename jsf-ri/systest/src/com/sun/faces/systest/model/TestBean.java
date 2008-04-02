@@ -1,5 +1,5 @@
 /*
- * $Id: TestBean.java,v 1.7 2004/04/02 21:35:57 eburns Exp $
+ * $Id: TestBean.java,v 1.8 2004/04/07 20:08:01 eburns Exp $
  */
 
 /*
@@ -10,8 +10,13 @@
 package com.sun.faces.systest.model;
 
 import javax.faces.component.UIInput;
+import javax.faces.component.UIComponent;
+import javax.faces.component.NamingContainer;
+import javax.faces.component.html.HtmlOutputText;
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.event.ValueChangeEvent;
+import javax.faces.event.ActionEvent;
 import javax.faces.event.AbortProcessingException;
 
 import java.util.List;
@@ -219,6 +224,14 @@ public class TestBean {
     public void setNondeterministicSelectList(List newNondeterministicSelectList) {
     }
 
-
+    public void addComponentToTree(ActionEvent action) {
+	HtmlOutputText output = new HtmlOutputText();
+	output.setValue("<p>==new output==</p>");
+	output.setEscape(false);
+	
+	UIComponent group = FacesContext.getCurrentInstance().getViewRoot().findComponent("form" + NamingContainer.SEPARATOR_CHAR +  "addHere");
+	group.getChildren().add(output);
+	
+    }
 	
 }
