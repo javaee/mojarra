@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItemsTestCase.java,v 1.3 2003/10/09 19:18:29 craigmcc Exp $
+ * $Id: UISelectItemsTestCase.java,v 1.4 2003/10/09 22:58:14 craigmcc Exp $
  */
 
 /*
@@ -95,77 +95,15 @@ public class UISelectItemsTestCase extends ValueHolderTestCaseBase {
     }
 
 
-    // Test saving and restoring state
-    public void testStateHolder() throws Exception {
-
-        UIComponent testParent = new TestComponent("root");
-	UISelectItems
-	    preSave = null,
-	    postSave = null;
-	Object state = null;
-
-	// test component with no properties
-	testParent.getChildren().clear();
-	preSave = new UISelectItems();
-	preSave.setId("selectItems");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-	testParent.getChildren().add(preSave);
-        preSave.getClientId(facesContext);
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new UISelectItems();
-	testParent.getChildren().add(postSave);
-        postSave.restoreState(facesContext, state);
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
-
-	// test component with valueRef
-	testParent.getChildren().clear();
-	preSave = new UISelectItems();
-	preSave.setId("selectItems");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-	preSave.setValueRef("valueRefString");
-	testParent.getChildren().add(preSave);
-        preSave.getClientId(facesContext);
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new UISelectItems();
-	testParent.getChildren().add(postSave);
-        postSave.restoreState(facesContext, state);
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
-
-	// test component with valueRef
-	testParent.getChildren().clear();
-	preSave = new UISelectItems();
-	preSave.setId("selectItems");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-	preSave.setValueRef("valueRefString");
-	testParent.getChildren().add(preSave);
-        preSave.getClientId(facesContext);
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new UISelectItems();
-	testParent.getChildren().add(postSave);
-        postSave.restoreState(facesContext, state);
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
-
-    }
+    // --------------------------------------------------------- Support Methods
 
 
-    protected ValueHolder createValueHolder() {
-
+    // Create a pristine component of the type to be used in state holder tests
+    protected UIComponent createComponent() {
         UIComponent component = new UISelectItems();
         component.setRendererType(null);
-        return ((ValueHolder) component);
-
+        return (component);
     }
-
-
 
 
 }

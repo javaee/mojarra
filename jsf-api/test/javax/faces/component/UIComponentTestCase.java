@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.38 2003/09/30 22:04:46 eburns Exp $
+ * $Id: UIComponentTestCase.java,v 1.39 2003/10/09 22:58:12 craigmcc Exp $
  */
 
 /*
@@ -70,29 +70,35 @@ public class UIComponentTestCase extends TestCase {
 
     // Set up instance variables required by this test case.
     public void setUp() {
+
         expectedAttributes = new String[0];
         expectedId = "test";
         expectedRendered = true;
         expectedRendererType = null;
         expectedRendersChildren = false;
         component = new TestComponent(expectedId);
+
     }
 
 
     // Return the tests included in this test case.
     public static Test suite() {
+
         return (new TestSuite(UIComponentTestCase.class));
+
     }
 
 
     // Tear down instance variables required by this test case.
     public void tearDown() {
+
         component = null;
         expectedAttributes = null;
         expectedId = null;
         expectedRendered = true;
         expectedRendererType = null;
         expectedRendersChildren = false;
+
     }
 
 
@@ -160,7 +166,8 @@ public class UIComponentTestCase extends TestCase {
         assertEquals(component.getComponentRef(),
                      (String) component.getAttributes().get("componentRef"));
         component.setComponentRef("foo");
-        assertEquals("foo", (String) component.getAttributes().get("componentRef"));
+        assertEquals("foo",
+                     (String) component.getAttributes().get("componentRef"));
         component.setComponentRef(null);
         assertNull((String) component.getAttributes().get("componentRef"));
         component.getAttributes().put("componentRef", "bar");
@@ -178,7 +185,8 @@ public class UIComponentTestCase extends TestCase {
                      (UIComponent) component.getAttributes().get("parent"));
 
         assertEquals(component.isRendered(),
-                     ((Boolean) component.getAttributes().get("rendered")).booleanValue());
+                     ((Boolean) component.getAttributes().get("rendered")).
+                     booleanValue());
         component.setRendered(false);
         assertEquals(Boolean.FALSE,
                      (Boolean) component.getAttributes().get("rendered"));
@@ -191,7 +199,8 @@ public class UIComponentTestCase extends TestCase {
         assertTrue(component.isRendered());
 
         component.setRendererType("foo");
-        assertEquals("foo", (String) component.getAttributes().get("rendererType"));
+        assertEquals("foo",
+                     (String) component.getAttributes().get("rendererType"));
         component.setRendererType(null);
         assertNull((String) component.getAttributes().get("rendererType"));
         component.getAttributes().put("rendererType", "bar");
@@ -200,8 +209,8 @@ public class UIComponentTestCase extends TestCase {
         assertNull(component.getRendererType());
 
         assertEquals(component.getRendersChildren(),
-                     ((Boolean) component.getAttributes().get("rendersChildren")).booleanValue());
-
+                     ((Boolean) component.getAttributes().
+                      get("rendersChildren")).booleanValue());
 
     }
 
@@ -854,140 +863,6 @@ public class UIComponentTestCase extends TestCase {
                      "foo", component.getRendererType());
 
     }
-
-
-
-    /**
-     * [3.1.3] Component Tree Navigation with invalid findComponent arguments.
-     */
-    /*
-    public void testComponentTreeNavigationInvalid() {
-
-        UIComponent test1 = new TestComponent("test1");
-        UIComponent test2 = new TestComponent("test2");
-        UIComponent test3 = new TestComponent("test3");
-        component.getChildren().add(test1);
-        component.getChildren().add(test2);
-        test2.getChildren().add(test3);
-
-	assertTrue(null == component.findComponent("test4"));
-
-	assertTrue(null == test2.findComponent("test3//"));
-
-        try {
-            component.findComponent(null);
-            fail("findComponent should throw NPE");
-        } catch (NullPointerException e) {
-            ; // Expected result
-        }
-
-
-    }
-    */
-
-
-    /**
-     * [3.1.3] Component Tree Navigation with valid findComponent() arguments.
-     */
-    /*
-    public void testComponentTreeNavigationValid() {
-
-        UIComponent test1 = new TestComponent("test1");
-        UIComponent test2 = new TestComponent("test2");
-        UIComponent test3 = new TestComponent("test3");
-        component.getChildren().add(test1);
-        component.getChildren().add(test2);
-        test2.getChildren().add(test3);
-
-        // Can a component find itself?
-        assertEquals("component find self", component,
-                     component.findComponent(component.getId()));
-        assertEquals("test1 find self", test1,
-                     test1.findComponent(test1.getId()));
-        assertEquals("test2 find self", test2,
-                     test2.findComponent(test2.getId()));
-        assertEquals("test3 find self", test3,
-                     test3.findComponent(test3.getId()));
-
-        // Can a component find its parent?
-        assertEquals("test1 find parent", component,
-                     test1.findComponent(test1.getParent().getId()));
-        assertEquals("test2 find parent", component,
-                     test2.findComponent(test2.getParent().getId()));
-        assertEquals("test3 find parent", test2,
-                     test3.findComponent(test3.getParent().getId()));
-
-        // Can a component find its child by name?
-        assertEquals("component find test1", test1,
-                     component.findComponent("test1"));
-        assertEquals("component find test2", test2,
-                     component.findComponent("test2"));
-        assertEquals("test2 find test3", test3,
-                     test2.findComponent("test3"));
-        assertEquals("component find test3", test3,
-                     component.findComponent("test3"));
-
-    }
-    */
-
-
-    /**
-     * Test <code>getFacetsAndChildren()</code> method. Make sure the 
-     * facets are returned first followed by children in the order 
-     * they are stored in the child list.
-     */
-    /*
-    public void testGetFacetsAndChildren() {
-
-        UIComponent testComponent = new TestComponent();
-        UIComponent facet1 = new TestComponent("facet1");
-        UIComponent facet2 = new TestComponent("facet2");
-        UIComponent facet3 = new TestComponent("facet3");
-
-        UIComponent child1 = new TestComponent("child1");
-        UIComponent child2 = new TestComponent("child2");
-        UIComponent child3 = new TestComponent("child3");
-        UIComponent child = null;
-
-        // Review initial conditions.
-        // make sure the itertaor is empty before any children or facet is
-        // added.
-        Iterator kidItr = null;
-        kidItr = testComponent.getFacetsAndChildren();
-        assertTrue((kidItr.hasNext()) == false);
-
-        // Add facets and children one at a time.
-        testComponent.getFacets().put("facet1", facet1);
-        testComponent.getChildren().add(child1);
-        testComponent.getFacets().put("facet2", facet2);
-        testComponent.getChildren().add(child2);
-        testComponent.getFacets().put("facet3", facet3);
-        testComponent.getChildren().add(child3);
-
-        // make sure the facets and children are returned in the correct order.
-        kidItr = testComponent.getFacetsAndChildren();
-        child = (UIComponent) kidItr.next();
-        assertTrue(child.equals(facet3) || child.equals(facet2) ||
-                child.equals(facet1));
-
-        child = (UIComponent) kidItr.next();
-        assertTrue(child.equals(facet3) || child.equals(facet2) ||
-                child.equals(facet1));
-
-        child = (UIComponent) kidItr.next();
-        assertTrue(child.equals(facet3) || child.equals(facet2) ||
-                child.equals(facet1));
-
-        child = (UIComponent) kidItr.next();
-        assertTrue(child.equals(child1));
-
-        child = (UIComponent) kidItr.next();
-        assertTrue(child.equals(child2));
-
-        child = (UIComponent) kidItr.next();
-        assertTrue(child.equals(child3));
-    }
-    */
 
 
     // --------------------------------------------------------- Support Methods

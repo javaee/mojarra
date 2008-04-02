@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.11 2003/10/09 19:18:27 craigmcc Exp $
+ * $Id: UIDataTestCase.java,v 1.12 2003/10/09 22:58:12 craigmcc Exp $
  */
 
 /*
@@ -161,197 +161,37 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
     }
 
 
-    // Test saving and restoring state
-    public void testStateHolder() throws Exception {
+    // --------------------------------------------------------- Support Methods
 
-        UIComponent testParent = new TestComponent("root");
-	UIData
-	    preSave = null,
-	    postSave = null;
-	Object state = null;
 
-	// test component with no properties
-	testParent.getChildren().clear();
-	preSave = new UIData();
-	preSave.setId("data");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-	testParent.getChildren().add(preSave);
-        preSave.getClientId(facesContext);
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new UIData();
-	testParent.getChildren().add(postSave);
-        postSave.restoreState(facesContext, state);
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+    // Check that the properties on the specified components are equal
+    protected void checkProperties(UIComponent comp1, UIComponent comp2) {
 
-	// test component with valueRef
-	testParent.getChildren().clear();
-	preSave = new UIData();
-	preSave.setId("data");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-	preSave.setValueRef("valueRefString");
-	testParent.getChildren().add(preSave);
-        preSave.getClientId(facesContext);
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new UIData();
-	testParent.getChildren().add(postSave);
-        postSave.restoreState(facesContext, state);
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
-
-	// test component with valueRef
-	testParent.getChildren().clear();
-	preSave = new UIData();
-	preSave.setId("data");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-	preSave.setValueRef("valueRefString");
-	testParent.getChildren().add(preSave);
-        preSave.getClientId(facesContext);
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new UIData();
-	testParent.getChildren().add(postSave);
-        postSave.restoreState(facesContext, state);
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
-
-	// test component with UIData specific properties
-	testParent.getChildren().clear();
-	preSave = new UIData();
-	preSave.setId("data");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-        preSave.setFirst(11);
-        preSave.setRows(20);
-        preSave.setVar("foo");
-	testParent.getChildren().add(preSave);
-        preSave.getClientId(facesContext);
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new UIData();
-	testParent.getChildren().add(postSave);
-        postSave.restoreState(facesContext, state);
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+        super.checkProperties(comp1, comp2);
+        UIData d1 = (UIData) comp1;
+        UIData d2 = (UIData) comp2;
+        assertEquals(d1.getFirst(), d2.getFirst());
+        assertEquals(d1.getRows(), d2.getRows());
+        assertEquals(d1.getVar(), d2.getVar());
 
     }
 
 
-    protected ValueHolder createValueHolder() {
-
+    // Create a pristine component of the type to be used in state holder tests
+    protected UIComponent createComponent() {
         UIComponent component = new UIData();
         component.setRendererType(null);
-        return ((ValueHolder) component);
-
+        return (component);
     }
 
 
-    boolean propertiesAreEqual(FacesContext context,
-                               UIComponent comp1,
-                               UIComponent comp2) {
-
-        if (superPropertiesAreEqual(context, comp1, comp2)) {
-	    UIData 
-		data1 = (UIData) comp1,
-		data2 = (UIData) comp2;
-	    // if their not both null, or not the same string
-	    if (!((null == data1.getValueRef() && 
-		   null == data2.getValueRef()) ||
-		(data1.getValueRef().equals(data2.getValueRef())))) {
-		return false;
-	    }
-	    // if their not both null, or not the same string
-	    if (!((null == data1.getValue() && 
-		   null == data2.getValue()) ||
-		(data1.getValue().equals(data2.getValue())))) {
-		return false;
-	    }
-	    // if their not both null, or not the same string
-	    if (!((null == data1.getVar() && 
-		   null == data2.getVar()) ||
-		(data1.getVar().equals(data2.getVar())))) {
-		return false;
-	    }
-            if (!(data1.getFirst() == data2.getFirst()) ||
-                !(data1.getRows() == data2.getRows())) {
-                return false;
-            }
-        }
-        return (true);
-
-    }
-
-
-    // PENDING(craigmcc) - copied from ValueHolderTestCaseBase
-    // until it is moved back into the javax.faces.component package
-    boolean superPropertiesAreEqual(FacesContext context,
-			       UIComponent comp1,
-			       UIComponent comp2) {
-	if (superSuperPropertiesAreEqual(context, comp1, comp2)) {
-	    ValueHolder 
-		valueHolder1 = (ValueHolder) comp1,
-		valueHolder2 = (ValueHolder) comp2;
-	    // if their not both null, or not the same string
-	    if (!((null == valueHolder1.getValueRef() && 
-		   null == valueHolder2.getValueRef()) ||
-		(valueHolder1.getValueRef().equals(valueHolder2.getValueRef())))) {
-		return false;
-	    }
-	    // if their not both null, or not the same string
-	    if (!((null == valueHolder1.getValue() && 
-		   null == valueHolder2.getValue()) ||
-		(valueHolder1.getValue().equals(valueHolder2.getValue())))) {
-		return false;
-	    }
-	}
-	return true;
-    }
-
-
-    // PENDING(craigmcc) - copied from UIComponentBaseTestCase
-    // until it is moved back into the javax.faces.component package
-    boolean superSuperPropertiesAreEqual(FacesContext context,
-                                         UIComponent comp1,
-                                         UIComponent comp2) {
-	// if they're not both null, or not the same string
-	if (!((null == comp1.getClientId(context) && 
-	     null == comp2.getClientId(context)) ||
-	    (comp1.getClientId(context).equals(comp2.getClientId(context))))) {
-	    return false;
-	}
-	// if they're not both null, or not the same string
-	if (!((null == comp1.getId() && 
-	     null == comp2.getId()) ||
-	    (comp1.getId().equals(comp2.getId())))) {
-	    return false;
-	}
-	// if they're not both null, or not the same string
-	if (!((null == comp1.getComponentRef() && 
-	     null == comp2.getComponentRef()) ||
-	    (comp1.getComponentRef().equals(comp2.getComponentRef())))) {
-	    return false;
-	}
-	if (comp1.isRendered() != comp2.isRendered()) {
-	    return false;
-	}
-	// if they're not both null, or not the same string
-	if (!((null == comp1.getRendererType() && 
-	     null == comp2.getRendererType()) ||
-	    (comp1.getRendererType().equals(comp2.getRendererType())))) {
-	    return false;
-	}
-	if (comp1.isTransient() != comp2.isTransient()) {
-	    return false;
-	}
-	if (!attributesAreEqual(comp1, comp2)) {
-	    return false;
-	}
-	return true;
+    // Populate a pristine component to be used in state holder tests
+    protected void populateComponent(UIComponent component) {
+        super.populateComponent(component);
+        UIData d = (UIData) component;
+        d.setFirst(5);
+        d.setRows(10);
+        d.setVar("foo");
     }
 
 

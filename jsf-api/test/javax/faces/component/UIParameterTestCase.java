@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameterTestCase.java,v 1.9 2003/10/09 19:18:29 craigmcc Exp $
+ * $Id: UIParameterTestCase.java,v 1.10 2003/10/09 22:58:13 craigmcc Exp $
  */
 
 /*
@@ -120,93 +120,33 @@ public class UIParameterTestCase extends ValueHolderTestCaseBase {
     }
 
 
-    // Test saving and restoring state
-    public void testStateHolder() throws Exception {
+    // --------------------------------------------------------- Support Methods
 
-        UIComponent testParent = new TestComponent("root");
-	UIParameter
-	    preSave = null,
-	    postSave = null;
-	Object state = null;
 
-	// test component with no properties
-	testParent.getChildren().clear();
-	preSave = new UIParameter();
-	preSave.setId("parameter");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-	testParent.getChildren().add(preSave);
-        preSave.getClientId(facesContext);
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new UIParameter();
-	testParent.getChildren().add(postSave);
-        postSave.restoreState(facesContext, state);
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+    // Check that the properties on the specified components are equal
+    protected void checkProperties(UIComponent comp1, UIComponent comp2) {
 
-	// test component with valueRef
-	testParent.getChildren().clear();
-	preSave = new UIParameter();
-	preSave.setId("parameter");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-	preSave.setValueRef("valueRefString");
-	testParent.getChildren().add(preSave);
-        preSave.getClientId(facesContext);
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new UIParameter();
-	testParent.getChildren().add(postSave);
-        postSave.restoreState(facesContext, state);
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
-
-	// test component with valueRef
-	testParent.getChildren().clear();
-	preSave = new UIParameter();
-	preSave.setId("parameter");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-	preSave.setValueRef("valueRefString");
-	testParent.getChildren().add(preSave);
-        preSave.getClientId(facesContext);
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new UIParameter();
-	testParent.getChildren().add(postSave);
-        postSave.restoreState(facesContext, state);
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+        super.checkProperties(comp1, comp2);
+        UIParameter p1 = (UIParameter) comp1;
+        UIParameter p2 = (UIParameter) comp2;
+        assertEquals(p1.getName(), p2.getName());
 
     }
 
 
-    protected ValueHolder createValueHolder() {
-
+    // Create a pristine component of the type to be used in state holder tests
+    protected UIComponent createComponent() {
         UIComponent component = new UIParameter();
         component.setRendererType(null);
-        return ((ValueHolder) component);
-
+        return (component);
     }
 
 
-    boolean propertiesAreEqual(FacesContext context,
-			       UIComponent comp1,
-			       UIComponent comp2) {
-
-	UIParameter
-	    param1 = (UIParameter) comp1,
-	    param2 = (UIParameter) comp2;
-	if (super.propertiesAreEqual(context, comp1, comp2)) {
-	    // if their not both null, or not the same string
-	    if (!TestUtil.equalsWithNulls(param1.getName(),
-					  param2.getName())) {
-		return false;
-	    }
-	}
-	return true;
-
+    // Populate a pristine component to be used in state holder tests
+    protected void populateComponent(UIComponent component) {
+        super.populateComponent(component);
+        UIParameter p = (UIParameter) component;
+        p.setName("foo");
     }
 
 

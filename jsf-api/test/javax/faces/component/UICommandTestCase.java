@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandTestCase.java,v 1.13 2003/10/09 19:18:23 craigmcc Exp $
+ * $Id: UICommandTestCase.java,v 1.14 2003/10/09 22:58:11 craigmcc Exp $
  */
 
 /*
@@ -291,106 +291,6 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
 
     }
 
-    public void testStateHolder() throws Exception {
-
-        UIComponent testParent = new TestComponent("root");
-	UICommandSub
-	    preSave = null,
-	    postSave = null;
-	Object state = null;
-
-	// test page with no attributes
-	testParent.getChildren().clear();
-	preSave = new UICommandSub();
-	preSave.setId("command");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-	testParent.getChildren().add(preSave);
-        preSave.getClientId(facesContext);
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new UICommandSub();
-	postSave.setId("command");
-	testParent.getChildren().add(postSave);
-        postSave.restoreState(facesContext, state);
-	assertTrue(null != postSave.getListeners());
-	// make sure the default action listener has been added on restore
-	List [] lister = (List []) postSave.getListeners();
-	assertTrue(lister[PhaseId.INVOKE_APPLICATION.getOrdinal()].get(0) == 
-		   facesContext.getApplication().getActionListener());
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
-
-	// test page with action and actionRef
-	testParent.getChildren().clear();
-	preSave = new UICommandSub();
-	preSave.setId("command");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-	preSave.setAction("action");
-	preSave.setActionRef("actionRef");
-	testParent.getChildren().add(preSave);
-        preSave.getClientId(facesContext);
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new UICommandSub();
-	postSave.setId("command");
-	testParent.getChildren().add(postSave);
-        postSave.restoreState(facesContext, state);
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
-
-	// test page with action and actionRef, and listeners
-	testParent.getChildren().clear();
-	preSave = new UICommandSub();
-	preSave.setId("command");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-	preSave.setAction("action");
-	preSave.setActionRef("actionRef");
-	testParent.getChildren().add(preSave);
-        preSave.getClientId(facesContext);
-	preSave.addActionListener(new TestActionListener("ANY",
-							 PhaseId.ANY_PHASE));
-	preSave.addActionListener(new TestActionListener("APR0",
-							 PhaseId.APPLY_REQUEST_VALUES));
-	preSave.addActionListener(new TestActionListener("APR1",
-							 PhaseId.APPLY_REQUEST_VALUES));
-	preSave.addActionListener(new TestActionListener("UMV0",
-							 PhaseId.UPDATE_MODEL_VALUES));
-	preSave.addActionListener(new TestActionListener("UMV1",
-							 PhaseId.UPDATE_MODEL_VALUES));
-	preSave.addActionListener(new TestActionListener("UMV2",
-							 PhaseId.UPDATE_MODEL_VALUES));
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new UICommandSub();
-	postSave.setId("command");
-	testParent.getChildren().add(postSave);
-        postSave.restoreState(facesContext, state);
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
-
-	// test page with value and valueRef
-	testParent.getChildren().clear();
-	preSave = new UICommandSub();
-	preSave.setId("valueHolder");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-        preSave.setValue("valueString");
-	preSave.setValueRef("valueRefString");
-	testParent.getChildren().add(preSave);
-        preSave.getClientId(facesContext);
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new UICommandSub();
-	testParent.getChildren().add(postSave);
-        postSave.restoreState(facesContext, state);
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
-
-
-    }
 
     public void testImmediate() throws Exception {
 	List [] listeners = null;
@@ -425,41 +325,35 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
     }
 
 
-    // -------------------------------------------------------- Support Methods
+    // --------------------------------------------------------- Support Methods
 
-    protected ValueHolder createValueHolder() {
 
-        UIComponent component = new UICommandSub();
+    // Check that the properties on the specified components are equal
+    protected void checkProperties(UIComponent comp1, UIComponent comp2) {
+        super.checkProperties(comp1, comp2);
+        UICommand c1 = (UICommand) comp1;
+        UICommand c2 = (UICommand) comp2;
+        assertEquals(c1.getAction(), c2.getAction());
+        assertEquals(c1.getActionRef(), c2.getActionRef());
+    }
+
+
+    // Create a pristine component of the type to be used in state holder tests
+    protected UIComponent createComponent() {
+        UIComponent component = new UICommand();
         component.setRendererType(null);
-        return ((ValueHolder) component);
-
+        return (component);
     }
 
 
-    boolean propertiesAreEqual(FacesContext context,
-			       UIComponent comp1,
-			       UIComponent comp2) {
-	UICommandSub 
-	    command1 = (UICommandSub) comp1,
-	    command2 = (UICommandSub) comp2;
-	if (super.propertiesAreEqual(context, comp1, comp2)) {
-            if (command1.isImmediate() != command2.isImmediate()) {
-                return false;
-            }
-	    // if their not both null, or not the same string
-	    if (!TestUtil.equalsWithNulls(command1.getAction(),
-					  command2.getAction())) {
-		return false;
-	    }
-	    // if their not both null, or not the same string
-	    if (!TestUtil.equalsWithNulls(command1.getActionRef(),
-					  command2.getActionRef())) {
-		return false;
-	    }
-	    
-	}
-	return listenersAreEqual(context, command1, command2);
+    // Populate a pristine component to be used in state holder tests
+    protected void populateComponent(UIComponent component) {
+        super.populateComponent(component);
+        UICommand c = (UICommand) component;
+        c.setAction("foo");
+        c.setActionRef("bar");
     }
+
 
     protected boolean listenersAreEqual(FacesContext context,
 					UICommandSub comp1,

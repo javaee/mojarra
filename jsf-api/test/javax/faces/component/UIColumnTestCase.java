@@ -1,5 +1,5 @@
 /*
- * $Id: UIColumnTestCase.java,v 1.6 2003/09/30 22:04:46 eburns Exp $
+ * $Id: UIColumnTestCase.java,v 1.7 2003/10/09 22:58:11 craigmcc Exp $
  */
 
 /*
@@ -106,73 +106,14 @@ public class UIColumnTestCase extends UIComponentBaseTestCase {
     }
 
 
-    // Test saving and restoring state
-    public void testStateHolder() throws Exception {
-
-        UIComponent testParent = new TestComponent("root");
-	UIColumn
-	    preSave = null,
-	    postSave = null;
-	Object state = null;
-
-	// test component with no properties
-	testParent.getChildren().clear();
-	preSave = new UIColumn();
-	preSave.setId("column");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-	testParent.getChildren().add(preSave);
-        preSave.getClientId(facesContext);
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new UIColumn();
-	testParent.getChildren().add(postSave);
-        postSave.restoreState(facesContext, state);
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
-
-    }
+    // --------------------------------------------------------- Support Methods
 
 
-    // PENDING(craigmcc) - copied from UIComponentBaseTestCase
-    // until it is moved back into the javax.faces.component package
-    boolean propertiesAreEqual(FacesContext context,
-			       UIComponent comp1,
-			       UIComponent comp2) {
-	// if they're not both null, or not the same string
-	if (!((null == comp1.getClientId(context) && 
-	     null == comp2.getClientId(context)) ||
-	    (comp1.getClientId(context).equals(comp2.getClientId(context))))) {
-	    return false;
-	}
-	// if they're not both null, or not the same string
-	if (!((null == comp1.getId() && 
-	     null == comp2.getId()) ||
-	    (comp1.getId().equals(comp2.getId())))) {
-	    return false;
-	}
-	// if they're not both null, or not the same string
-	if (!((null == comp1.getComponentRef() && 
-	     null == comp2.getComponentRef()) ||
-	    (comp1.getComponentRef().equals(comp2.getComponentRef())))) {
-	    return false;
-	}
-	if (comp1.isRendered() != comp2.isRendered()) {
-	    return false;
-	}
-	// if they're not both null, or not the same string
-	if (!((null == comp1.getRendererType() && 
-	     null == comp2.getRendererType()) ||
-	    (comp1.getRendererType().equals(comp2.getRendererType())))) {
-	    return false;
-	}
-	if (comp1.isTransient() != comp2.isTransient()) {
-	    return false;
-	}
-	if (!attributesAreEqual(comp1, comp2)) {
-	    return false;
-	}
-	return true;
+    // Create a pristine component of the type to be used in state holder tests
+    protected UIComponent createComponent() {
+        UIComponent component = new UIColumn();
+        component.setRendererType(null);
+        return (component);
     }
 
 

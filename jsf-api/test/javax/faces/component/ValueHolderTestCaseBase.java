@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolderTestCaseBase.java,v 1.3 2003/10/09 19:18:30 craigmcc Exp $
+ * $Id: ValueHolderTestCaseBase.java,v 1.4 2003/10/09 22:58:15 craigmcc Exp $
  */
 
 /*
@@ -71,29 +71,29 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
     public void testAttributesTransparency() {
 
         super.testAttributesTransparency();
-        ValueHolder valueHolder = (ValueHolder) component;
+        ValueHolder vh = (ValueHolder) component;
 
-        assertEquals(valueHolder.getValue(),
+        assertEquals(vh.getValue(),
                      (String) component.getAttributes().get("value"));
-        valueHolder.setValue("foo");
+        vh.setValue("foo");
         assertEquals("foo", (String) component.getAttributes().get("value"));
-        valueHolder.setValue(null);
+        vh.setValue(null);
         assertNull((String) component.getAttributes().get("value"));
         component.getAttributes().put("value", "bar");
-        assertEquals("bar", valueHolder.getValue());
+        assertEquals("bar", vh.getValue());
         component.getAttributes().put("value", null);
-        assertNull(valueHolder.getValue());
+        assertNull(vh.getValue());
 
-        assertEquals(valueHolder.getValueRef(),
+        assertEquals(vh.getValueRef(),
                      (String) component.getAttributes().get("valueRef"));
-        valueHolder.setValueRef("foo");
+        vh.setValueRef("foo");
         assertEquals("foo", (String) component.getAttributes().get("valueRef"));
-        valueHolder.setValueRef(null);
+        vh.setValueRef(null);
         assertNull((String) component.getAttributes().get("valueRef"));
         component.getAttributes().put("valueRef", "bar");
-        assertEquals("bar", valueHolder.getValueRef());
+        assertEquals("bar", vh.getValueRef());
         component.getAttributes().put("valueRef", null);
-        assertNull(valueHolder.getValueRef());
+        assertNull(vh.getValueRef());
 
     }
 
@@ -102,45 +102,45 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
     public void testCurrentValue() {
 
         // Validate initial conditions
-        ValueHolder valueHolder = (ValueHolder) component;
-        assertNull(valueHolder.getValue());
-        assertNull(valueHolder.getValueRef());
+        ValueHolder vh = (ValueHolder) component;
+        assertNull(vh.getValue());
+        assertNull(vh.getValueRef());
 
         // Retrieve a local value
-        valueHolder.setValue("localValue");
-        assertEquals("localValue", valueHolder.currentValue(facesContext));
-        valueHolder.setValue(null);
+        vh.setValue("localValue");
+        assertEquals("localValue", vh.currentValue(facesContext));
+        vh.setValue(null);
 
         // Retrieve an application initialization parameter
         /* PENDING(craigmcc) - MockExternalContext support
-        valueHolder.setValueRef("initParam.appParamName");
-        assertEquals("appParamValue", valueHolder.currentValue(facesContext));
-        assertNull(valueHolder.getValue());
-        valueHolder.setValueRef(null);
+        vh.setValueRef("initParam.appParamName");
+        assertEquals("appParamValue", vh.currentValue(facesContext));
+        assertNull(vh.getValue());
+        vh.setValueRef(null);
         */
 
         // Retrieve an application scope attribute
         /* PENDING(craigmcc) - MockExternalContext support
-        valueHolder.setValueRef("applicationScope.appScopeName");
-        assertEquals("appScopeValue", valueHolder.currentValue(facesContext));
-        assertNull(valueHolder.getValue());
-        valueHolder.setValueRef(null);
+        vh.setValueRef("applicationScope.appScopeName");
+        assertEquals("appScopeValue", vh.currentValue(facesContext));
+        assertNull(vh.getValue());
+        vh.setValueRef(null);
         */
 
         // Retrieve a request scope attribute
         /* PENDING(craigmcc) - MockExternalContext support
-        valueHolder.setValueRef("requestScope.reqScopeName");
-        assertEquals("reqScopeValue", valueHolder.currentValue(facesContext));
-        assertNull(valueHolder.getValue());
-        valueHolder.setValueRef(null);
+        vh.setValueRef("requestScope.reqScopeName");
+        assertEquals("reqScopeValue", vh.currentValue(facesContext));
+        assertNull(vh.getValue());
+        vh.setValueRef(null);
         */
 
         // Retrieve a session scope attribute
         /* PENDING(craigmcc) - MockExternalContext support
-        valueHolder.setValueRef("sessionScope.sesScopeName");
-        assertEquals("sesScopeValue", valueHolder.currentValue(facesContext));
-        assertNull(valueHolder.getValue());
-        valueHolder.setValueRef(null);
+        vh.setValueRef("sessionScope.sesScopeName");
+        assertEquals("sesScopeValue", vh.currentValue(facesContext));
+        assertNull(vh.getValue());
+        vh.setValueRef(null);
         */
 
     }
@@ -155,11 +155,11 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
     public void testPristine() {
 
         super.testPristine();
-        ValueHolder valueHolder = (ValueHolder) component;
+        ValueHolder vh = (ValueHolder) component;
 
         // Validate properties
-        assertNull("no value", valueHolder.getValue());
-        assertNull("no valueRef", valueHolder.getValueRef());
+        assertNull("no value", vh.getValue());
+        assertNull("no valueRef", vh.getValueRef());
 
     }
 
@@ -168,7 +168,7 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
     public void testPropertiesInvalid() throws Exception {
 
         super.testPropertiesInvalid();
-        ValueHolder valueHolder = (ValueHolder) component;
+        ValueHolder vh = (ValueHolder) component;
 
     }
 
@@ -177,137 +177,48 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
     public void testPropertiesValid() throws Exception {
 
         super.testPropertiesValid();
-        ValueHolder valueHolder = (ValueHolder) component;
+        ValueHolder vh = (ValueHolder) component;
 
         // value
-        valueHolder.setValue("foo.bar");
+        vh.setValue("foo.bar");
         assertEquals("expected value",
-                     "foo.bar", valueHolder.getValue());
-        valueHolder.setValue(null);
-        assertNull("erased value", valueHolder.getValue());
+                     "foo.bar", vh.getValue());
+        vh.setValue(null);
+        assertNull("erased value", vh.getValue());
 
         // valueRef
-        valueHolder.setValueRef("customer.name");
+        vh.setValueRef("customer.name");
         assertEquals("expected valueRef",
-                     "customer.name", valueHolder.getValueRef());
-        valueHolder.setValueRef(null);
-        assertNull("erased valueRef", valueHolder.getValueRef());
-
-    }
-
-    public void testStateHolder() throws Exception {
-
-        UIComponent testParent = new TestComponent("root");
-	UIOutput
-	    preSave = null,
-	    postSave = null;
-	Object state = null;
-
-	// test component with no properties
-	testParent.getChildren().clear();
-	preSave = new UIOutput();
-	preSave.setId("valueHolder");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-	testParent.getChildren().add(preSave);
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new UIOutput();
-	testParent.getChildren().add(postSave);
-        postSave.restoreState(facesContext, state);
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
-
-	// test component with valueRef
-	testParent.getChildren().clear();
-	preSave = new UIOutput();
-	preSave.setId("valueHolder");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-	preSave.setValueRef("valueRefString");
-	testParent.getChildren().add(preSave);
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new UIOutput();
-	testParent.getChildren().add(postSave);
-        postSave.restoreState(facesContext, state);
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+                     "customer.name", vh.getValueRef());
+        vh.setValueRef(null);
+        assertNull("erased valueRef", vh.getValueRef());
 
     }
 
 
-    // Special save/restore test for components implementing ValueHolder
-    public void testValueHolder() throws Exception {
-
-        UIComponent testParent = new TestComponent("root");
-        ValueHolder
-            preSave = null,
-            postSave = null;
-        Object state = null;
-
-        // Create and populate test component
-        preSave = createValueHolder();
-        preSave.setValue("foo");
-        preSave.setValueRef("bar.baz");
-
-        // Save and restore state
-        testParent.getChildren().clear();
-        testParent.getChildren().add(preSave);
-        state = ((StateHolder) preSave).saveState(facesContext);
-        testParent.getChildren().clear();
-        postSave = createValueHolder();
-        testParent.getChildren().add(postSave);
-        ((StateHolder) postSave).restoreState(facesContext, state);
-
-        // Validate the results
-        checkValueHolders(preSave, postSave);
-
-    }
+    // --------------------------------------------------------- Support Methods
 
 
-    // Create and return a new component of the type being tested
-    // (must implement ValueHolder and StateHolder, and return
-    // null for rendererType)
-    protected ValueHolder createValueHolder() {
+    // Check that the properties on the specified components are equal
+    protected void checkProperties(UIComponent comp1, UIComponent comp2) {
 
-        UIComponent component = new UIOutput();
-        component.setRendererType(null);
-        return ((ValueHolder) component);
-
-    }
-
-
-    protected void checkValueHolders(ValueHolder vh1,
-                                     ValueHolder vh2) {
-
-        assertNotNull(vh1);
-        assertNotNull(vh2);
+        super.checkProperties(comp1, comp2);
+        ValueHolder vh1 = (ValueHolder) comp1;
+        ValueHolder vh2 = (ValueHolder) comp2;
         assertEquals(vh1.getValue(), vh2.getValue());
         assertEquals(vh1.getValueRef(), vh2.getValueRef());
 
     }
 
 
-    boolean propertiesAreEqual(FacesContext context,
-			       UIComponent comp1,
-			       UIComponent comp2) {
-	if (super.propertiesAreEqual(context, comp1, comp2)) {
-	    ValueHolder 
-		valueHolder1 = (ValueHolder) comp1,
-		valueHolder2 = (ValueHolder) comp2;
-	    // if their not both null, or not the same string
-	    if (!TestUtil.equalsWithNulls(valueHolder1.getValueRef(),
-					  valueHolder2.getValueRef())) {
-		return false;
-	    }
-	    // if their not both null, or not the same string
-	    if (!TestUtil.equalsWithNulls(valueHolder1.getValue(),
-					  valueHolder2.getValue())) {
-		return false;
-	    }
-	}
-	return true;
+    // Populate a pristine component to be used in state holder tests
+    protected void populateComponent(UIComponent component) {
+
+        super.populateComponent(component);
+        ValueHolder vh = (ValueHolder) component;
+        vh.setValue("component value");
+        vh.setValueRef("component.value.ref");
+
     }
 
 

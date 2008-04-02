@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputTestCase.java,v 1.15 2003/09/30 22:04:47 eburns Exp $
+ * $Id: UIInputTestCase.java,v 1.16 2003/10/09 22:58:13 craigmcc Exp $
  */
 
 /*
@@ -101,17 +101,6 @@ public class UIInputTestCase extends UIOutputTestCase {
         assertTrue(input.isRequired());
         input.getAttributes().put("required", Boolean.FALSE);
         assertTrue(!input.isRequired());
-
-        input.setValid(false);
-        assertEquals(Boolean.FALSE,
-                     (Boolean) input.getAttributes().get("valid"));
-        input.setValid(true);
-        assertEquals(Boolean.TRUE,
-                     (Boolean) input.getAttributes().get("valid"));
-        input.getAttributes().put("valid", Boolean.FALSE);
-        assertTrue(!input.isValid());
-        input.getAttributes().put("valid", Boolean.TRUE);
-        assertTrue(input.isValid());
 
     }
 
@@ -296,8 +285,6 @@ public class UIInputTestCase extends UIOutputTestCase {
 
         assertNull("no previous", input.getPrevious());
         assertTrue("not required", !input.isRequired());
-        assertTrue("is valid", input.isValid());
-
 
     }
 
@@ -327,194 +314,38 @@ public class UIInputTestCase extends UIOutputTestCase {
         input.setRequired(false);
         assertTrue(!input.isRequired());
 
-        input.setValid(false);
-        assertTrue(!input.isValid());
-        input.setValid(true);
-        assertTrue(input.isValid());
-
     }
 
-    public void testStateHolder() {
-        UIComponent testParent = new TestComponent("root");
-	UIInputSub
-	    preSave = null,
-	    postSave = null;
-	Object state = null;
 
-	// test input with no attributes
-	testParent.getChildren().clear();
-	preSave = new UIInputSub();
-	preSave.setId("input");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-	testParent.getChildren().add(preSave);
-        preSave.getClientId(facesContext);
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new UIInputSub();
-	postSave.setId("input");
-	testParent.getChildren().add(postSave);
-	try {
-	    postSave.restoreState(facesContext, state);
-	}
-	catch (Throwable e) {
-	    assertTrue(false);
-	}
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+    // --------------------------------------------------------- Support Methods
 
-	// test input with previous and valid
-	testParent.getChildren().clear();
-	preSave = new UIInputSub();
-	preSave.setId("input");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-	preSave.setPrevious("previous");
-	preSave.setValid(false);
-	testParent.getChildren().add(preSave);
-        preSave.getClientId(facesContext);
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new UIInputSub();
-	postSave.setId("input");
-	testParent.getChildren().add(postSave);
-	try {
-	    postSave.restoreState(facesContext, state);
-	}
-	catch (Throwable e) {
-	    assertTrue(false);
-	}
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
-	// test input with previous, valid, required and listeners
-	testParent.getChildren().clear();
-	preSave = new UIInputSub();
-	preSave.setId("input");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-	preSave.setPrevious("previous");
-	preSave.setValid(false);
-	preSave.setRequired(true);
-	testParent.getChildren().add(preSave);
-	preSave.addValueChangedListener(new TestValueChangedListener("ANY",
-								     PhaseId.ANY_PHASE));
-	preSave.addValueChangedListener(new TestValueChangedListener("APR0",
-								     PhaseId.APPLY_REQUEST_VALUES));
-	preSave.addValueChangedListener(new TestValueChangedListener("APR1",
-								     PhaseId.APPLY_REQUEST_VALUES));
-	preSave.addValueChangedListener(new TestValueChangedListener("UMV0",
-								     PhaseId.UPDATE_MODEL_VALUES));
-	preSave.addValueChangedListener(new TestValueChangedListener("UMV1",
-								     PhaseId.UPDATE_MODEL_VALUES));
-	preSave.addValueChangedListener(new TestValueChangedListener("UMV2",
-								     PhaseId.UPDATE_MODEL_VALUES));
-        preSave.getClientId(facesContext);
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new UIInputSub();
-	postSave.setId("input");
-	testParent.getChildren().add(postSave);
-	try {
-	    postSave.restoreState(facesContext, state);
-	}
-	catch (Throwable e) {
-	    assertTrue(false);
-	}
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
-	assertTrue(listenersAreEqual(facesContext, preSave, postSave));
+    // Check that the properties on the specified components are equal
+    protected void checkProperties(UIComponent comp1, UIComponent comp2) {
+        super.checkProperties(comp1, comp2);
+        UIInput i1 = (UIInput) comp1;
+        UIInput i2 = (UIInput) comp2;
+        assertEquals(i1.getPrevious(), i2.getPrevious());
+        assertEquals(i1.isRequired(), i2.isRequired());
+    }
 
-	// test input with previous, valid, required, listeners and validators
-	testParent.getChildren().clear();
-	preSave = new UIInputSub();
-	preSave.setId("input");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-	preSave.setPrevious("previous");
-	preSave.setValid(false);
-	preSave.setRequired(true);
-	testParent.getChildren().add(preSave);
-	preSave.addValueChangedListener(new TestValueChangedListener("ANY",
-								     PhaseId.ANY_PHASE));
-	preSave.addValueChangedListener(new TestValueChangedListener("APR0",
-								     PhaseId.APPLY_REQUEST_VALUES));
-	preSave.addValueChangedListener(new TestValueChangedListener("APR1",
-								     PhaseId.APPLY_REQUEST_VALUES));
-	preSave.addValueChangedListener(new TestValueChangedListener("UMV0",
-								     PhaseId.UPDATE_MODEL_VALUES));
-	preSave.addValueChangedListener(new TestValueChangedListener("UMV1",
-								     PhaseId.UPDATE_MODEL_VALUES));
-	preSave.addValueChangedListener(new TestValueChangedListener("UMV2",
-								     PhaseId.UPDATE_MODEL_VALUES));
-	preSave.addValidator(new TestValidator("buckaroo"));
-	DoubleRangeValidator doubleVal = new DoubleRangeValidator();
-	doubleVal.setMinimum(3.14);
-	doubleVal.setMaximum(6.02);
-	preSave.addValidator(doubleVal);
-	LengthValidator lengthVal = new LengthValidator();
-	lengthVal.setMinimum(3);
-	lengthVal.setMaximum(6);
-	preSave.addValidator(lengthVal);
-	LongRangeValidator longVal = new LongRangeValidator();
-	longVal.setMinimum(3);
-	longVal.setMaximum(6);
-	preSave.addValidator(longVal);
-	StringRangeValidator stringVal = new StringRangeValidator();
-	stringVal.setMinimum("a");
-	stringVal.setMaximum("z");
-	preSave.addValidator(stringVal);
- 
-        preSave.getClientId(facesContext);
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new UIInputSub();
-	postSave.setId("input");
-	testParent.getChildren().add(postSave);
-	try {
-	    postSave.restoreState(facesContext, state);
-	}
-	catch (Throwable e) {
-	    assertTrue(false);
-	}
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
-	assertTrue(listenersAreEqual(facesContext, preSave, postSave));
-	assertTrue(validatorsAreEqual(facesContext, preSave, postSave));
-    }    
- 
 
-    protected ValueHolder createValueHolder() {
-
+    // Create a pristine component of the type to be used in state holder tests
+    protected UIComponent createComponent() {
         UIComponent component = new UIInput();
         component.setRendererType(null);
-        return ((ValueHolder) component);
-
+        return (component);
     }
 
 
-    boolean propertiesAreEqual(FacesContext context,
-			       UIComponent comp1,
-			       UIComponent comp2) {
-	UIInputSub 
-	    input1 = (UIInputSub) comp1,
-	    input2 = (UIInputSub) comp2;
-	if (super.propertiesAreEqual(context, comp1, comp2)) {
-	    // if their not both null, or not the same string
-	    if (!TestUtil.equalsWithNulls(input1.getPrevious(),
-					  input2.getPrevious())) {
-		return false;
-	    }	 
-	    if (input1.isRequired() != input2.isRequired()) {
-		return false;
-	    }
-	    if (input1.isValid() != input2.isValid()) {
-		return false;
-	    }
-	    
-	}
-	return true;
+    // Populate a pristine component to be used in state holder tests
+    protected void populateComponent(UIComponent component) {
+        super.populateComponent(component);
+        UIInput i = (UIInput) component;
+        i.setPrevious("previous");
+        i.setRequired(true);
     }
+
 
     protected boolean listenersAreEqual(FacesContext context,
 					UIInputSub comp1,

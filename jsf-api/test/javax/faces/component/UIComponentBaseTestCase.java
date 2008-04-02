@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.12 2003/09/30 22:04:46 eburns Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.13 2003/10/09 22:58:12 craigmcc Exp $
  */
 
 /*
@@ -12,6 +12,7 @@ package javax.faces.component;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.Map;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
@@ -364,64 +365,75 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
     public void testStateHolder() throws Exception {
 
-        UIComponent testParent = new TestComponent("root");
-	UIComponent
-	    preSave = null,
-	    postSave = null;
-	Object state;
+        // Set up the components we will need
+        UIComponent parent = new TestComponent("root");
+	UIComponent preSave = createComponent();
+        UIComponent facet1 = createComponent();
+        facet1.setId("facet1");
+        preSave.getFacets().put("facet1 key", facet1);
+        UIComponent facet2 = createComponent();
+        facet2.setId("facet2");
+        preSave.getFacets().put("facet2 key", facet2);
+        populateComponent(preSave);
+        parent.getChildren().add(preSave);
+        UIComponent postSave = createComponent();
 
-	// test component with componentId and clientId
-	preSave = new TestComponent("componentId");
-        testParent.getChildren().add(preSave);
-        preSave.getClientId(facesContext);
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new TestComponent("componentId");
-	testParent.getChildren().add(postSave);
+        // Save and restore state and compare the results
+        Object state = preSave.saveState(facesContext);
+        assertNotNull(state);
         postSave.restoreState(facesContext, state);
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
-
-	// test component with componentId, clientId and componentRef
-	testParent.getChildren().clear();
-	preSave = new TestComponent("componentId");
-        preSave.setComponentRef("blah");
-	testParent.getChildren().add(preSave);
-        preSave.getClientId(facesContext);
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new TestComponent("componentId");
-	testParent.getChildren().add(postSave);
-        postSave.restoreState(facesContext, state);
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
-
-	// test component with componentId, clientId and componentRef
-	testParent.getChildren().clear();
-	preSave = new TestComponent("componentId");
-	preSave.setComponentRef("blah");
-	preSave.setRendered(false);
-	preSave.setTransient(true);
-
-	preSave.getAttributes().put("buckaroo", "perfectTommy");
-	preSave.getAttributes().put("reno", "nevada");
-	testParent.getChildren().add(preSave);
-        preSave.getClientId(facesContext);
-
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new TestComponent("componentId");
-	testParent.getChildren().add(postSave);
-        postSave.restoreState(facesContext, state);
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+        checkComponents(preSave, postSave);
 
     }
 
+
     // --------------------------------------------------------- Support Methods
+
+
+    // Check that the attributes on the specified components are equal
+    protected void checkAttributes(UIComponent comp1, UIComponent comp2) {
+        assertEquals(comp1.getAttributes(), comp2.getAttributes());
+    }
+
+
+    // Check that the specified components are equal
+    protected void checkComponents(UIComponent comp1, UIComponent comp2) {
+        checkAttributes(comp1, comp2);
+        // checkFacets(comp1, comp2); // Not saved and restored by component
+        checkProperties(comp1, comp2);
+    }
+
+
+    // Check that the properties on the specified components are equal
+    protected void checkProperties(UIComponent comp1, UIComponent comp2) {
+        assertEquals(comp1.getComponentRef(), comp2.getComponentRef());
+        assertEquals(comp1.getClientId(facesContext),
+                     comp2.getClientId(facesContext));
+        assertEquals(comp1.getId(), comp2.getId());
+        assertEquals(comp1.isRendered(), comp2.isRendered());
+        assertEquals(comp1.getRendererType(), comp2.getRendererType());
+        assertEquals(comp1.getRendersChildren(), comp2.getRendersChildren());
+    }
+
+
+    // Create a pristine component of the type to be used in state holder tests
+    protected UIComponent createComponent() {
+        return (new TestComponent());
+    }
+
+
+    // Populate a pristine component to be used in state holder tests
+    protected void populateComponent(UIComponent component) {
+
+        component.getAttributes().put("foo", "foo value");
+        component.getAttributes().put("bar", "bar value");
+        component.setComponentRef("foo.bar");
+        component.getClientId(facesContext); // Forces evaluation
+        component.setId("componentId");
+        component.setRendered(false);
+        component.setRendererType(null); // Since we have no renderers
+
+    }
 
 
     /**
@@ -465,94 +477,6 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 	if (cmethod != null) {
 	    sb.append("/" + cmethod + "-" + id);
 	}
-
-    }
-
-    boolean propertiesAreEqual(FacesContext context,
-			       UIComponent comp1,
-			       UIComponent comp2) {
-	// if they're not both null, or not the same string
-	if (!TestUtil.equalsWithNulls(comp1.getClientId(context),
-				      comp2.getClientId(context))) {
-	    return false;
-	}
-	// if they're not both null, or not the same string
-	if (!TestUtil.equalsWithNulls(comp1.getId(), comp2.getId())) {
-	    return false;
-	}
-	// if they're not both null, or not the same string
-	if (!TestUtil.equalsWithNulls(comp1.getComponentRef(),
-				      comp2.getComponentRef())) {
-	    return false;
-	}
-	if (comp1.isRendered() != comp2.isRendered()) {
-	    return false;
-	}
-	// if they're not both null, or not the same string
-	if (!TestUtil.equalsWithNulls(comp1.getRendererType(), 
-				      comp2.getRendererType())) {
-	    return false;
-	}
-	if (!attributesAreEqual(comp1, comp2)) {
-	    return false;
-	}
-
-	// test facets are equal
-	Iterator iter = comp1.getFacets().keySet().iterator();
-	UIComponent 
-	    facet1 = null,
-	    facet2 = null;
-	String curFacetName = null;
-	UIComponentBaseTestCase testFacets = new UIComponentBaseTestCase("t");
-	while (iter.hasNext()) {
-	    facet1 = (UIComponent) 
-		comp1.getFacets().get(curFacetName = (String) iter.next());
-	    facet2 = (UIComponent) comp2.getFacets().get(curFacetName);
-	    assertNotNull(facet2);
-	    assertTrue(testFacets.propertiesAreEqual(context, facet1, facet2));
-	}
-
-	iter = comp2.getFacets().keySet().iterator();
-	while (iter.hasNext()) {
-	    facet1 = (UIComponent) 
-		comp2.getFacets().get(curFacetName = (String) iter.next());
-	    facet2 = (UIComponent) comp1.getFacets().get(curFacetName);
-	    assertNotNull(facet2);
-	    assertTrue(testFacets.propertiesAreEqual(context, facet1, facet2));
-	}
-
-
-	return true;
-    }
-
-    protected boolean attributesAreEqual(UIComponent comp1,
-					 UIComponent comp2) {
-	Iterator attrNames = comp1.getAttributes().keySet().iterator();
-	Object val1, val2;
-	String attrName = null;
-
-	// make sure every attribute in comp1 is the same in comp2
-	while (attrNames.hasNext()) {
-	    attrName = (String) attrNames.next();
-	    val1 = comp1.getAttributes().get(attrName);
-	    val2 = comp2.getAttributes().get(attrName);
-	    // if they're not both null, or not the same string
-	    if (!TestUtil.equalsWithNulls(val1, val2)) {
-		return false;
-	    }
-	}
-
-	attrNames = comp2.getAttributes().keySet().iterator();
-	// make sure every attribute in comp2 is the same in comp1
-	while (attrNames.hasNext()) {
-	    attrName = (String) attrNames.next();
-	    val1 = comp1.getAttributes().get(attrName);
-	    val2 = comp2.getAttributes().get(attrName);
-	    if (!TestUtil.equalsWithNulls(val1, val2)) {
-		return false;
-	    }
-	}
-	return true;
 
     }
 

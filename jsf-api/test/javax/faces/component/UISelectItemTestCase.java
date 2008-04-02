@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItemTestCase.java,v 1.3 2003/09/30 22:04:48 eburns Exp $
+ * $Id: UISelectItemTestCase.java,v 1.4 2003/10/09 22:58:14 craigmcc Exp $
  */
 
 /*
@@ -156,123 +156,39 @@ public class UISelectItemTestCase extends ValueHolderTestCaseBase {
 
     }
 
-    public void testStateHolder() {
 
-        UIComponent testParent = new TestComponent("root");
-	UISelectItem
-	    preSave = null,
-	    postSave = null;
-	Object state = null;
+    // --------------------------------------------------------- Support Methods
 
-	// test selectItem with nothing
-	testParent.getChildren().clear();
-	preSave = new UISelectItem();
-	preSave.setId("selectItem");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-	testParent.getChildren().add(preSave);
-        preSave.getClientId(facesContext);
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new UISelectItem();
-	postSave.setId("selectItem");
-	testParent.getChildren().add(postSave);
-        try {
-	    postSave.restoreState(facesContext, state);
-	}
-	catch (Throwable e) {
-	    assertTrue(false);
-	}
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
-	// test selectItem with value only
-	testParent.getChildren().clear();
-	preSave = new UISelectItem();
-	preSave.setId("selectItem");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-	preSave.setItemValue("value");
-	testParent.getChildren().add(preSave);
-        preSave.getClientId(facesContext);
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new UISelectItem();
-	postSave.setId("selectItem");
-	testParent.getChildren().add(postSave);
-	try {
-	    postSave.restoreState(facesContext, state);
-	}
-	catch (Throwable e) {
-	    assertTrue(false);
-	}
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+    // Check that the properties on the specified components are equal
+    protected void checkProperties(UIComponent comp1, UIComponent comp2) {
 
-	// test selectItem with the works
-	testParent.getChildren().clear();
-	preSave = new UISelectItem();
-	preSave.setId("selectItem");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-	preSave.setItemDescription("description");
-	preSave.setItemLabel("label");
-	preSave.setItemValue("value");
-	testParent.getChildren().add(preSave);
-        preSave.getClientId(facesContext);
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new UISelectItem();
-	postSave.setId("selectItem");
-	testParent.getChildren().add(postSave);
-	try {
-	    postSave.restoreState(facesContext, state);
-	}
-	catch (Throwable e) {
-	    assertTrue(false);
-	}
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+        super.checkProperties(comp1, comp2);
+        UISelectItem si1 = (UISelectItem) comp1;
+        UISelectItem si2 = (UISelectItem) comp2;
+        assertEquals(si1.getItemDescription(), si2.getItemDescription());
+        assertEquals(si1.getItemLabel(), si2.getItemLabel());
+        assertEquals(si1.getItemValue(), si2.getItemValue());
+
     }
-     
-    // -------------------------------------------------------- Support Methods
 
 
-    protected ValueHolder createValueHolder() {
-
+    // Create a pristine component of the type to be used in state holder tests
+    protected UIComponent createComponent() {
         UIComponent component = new UISelectItem();
         component.setRendererType(null);
-        return ((ValueHolder) component);
-
+        return (component);
     }
 
 
-    protected boolean propertiesAreEqual(FacesContext context,
-					 UIComponent comp1,
-					 UIComponent comp2) {
-	if (super.propertiesAreEqual(context, comp1, comp2)) {
-	    UISelectItem 
-		selectItem1 = (UISelectItem) comp1,
-		selectItem2 = (UISelectItem) comp2;
-	    // if their not both null, or not the same string
-	    if (!TestUtil.equalsWithNulls(selectItem1.getItemLabel(),
-					  selectItem2.getItemLabel())) {
-		return false;
-	    }
-	    // if their not both null, or not the same string
-	    if (!TestUtil.equalsWithNulls(selectItem1.getItemDescription(),
-					  selectItem2.getItemDescription())) {
-		return false;
-	    }
-	    // if their not both null, or not the same string
-	    if (!TestUtil.equalsWithNulls(selectItem1.getItemValue(),
-					  selectItem2.getItemValue())) {
-		return false;
-	    }
-	}
-	return true;
+    // Populate a pristine component to be used in state holder tests
+    protected void populateComponent(UIComponent component) {
+        super.populateComponent(component);
+        UISelectItem si = (UISelectItem) component;
+        si.setItemDescription("item description");
+        si.setItemLabel("item label");
+        si.setItemValue("item value");
     }
-
 
 
 }

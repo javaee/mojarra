@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectManyTestCase.java,v 1.12 2003/09/25 23:21:50 craigmcc Exp $
+ * $Id: UISelectManyTestCase.java,v 1.13 2003/10/09 22:58:14 craigmcc Exp $
  */
 
 /*
@@ -172,12 +172,14 @@ public class UISelectManyTestCase extends UIInputTestCase {
     }
 
 
-    protected ValueHolder createValueHolder() {
+    // --------------------------------------------------------- Support Methods
 
+
+    // Create a pristine component of the type to be used in state holder tests
+    protected UIComponent createComponent() {
         UIComponent component = new UISelectMany();
         component.setRendererType(null);
-        return ((ValueHolder) component);
-
+        return (component);
     }
 
 

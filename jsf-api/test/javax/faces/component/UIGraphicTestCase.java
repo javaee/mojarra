@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphicTestCase.java,v 1.10 2003/10/09 19:18:27 craigmcc Exp $
+ * $Id: UIGraphicTestCase.java,v 1.11 2003/10/09 22:58:13 craigmcc Exp $
  */
 
 /*
@@ -122,74 +122,14 @@ public class UIGraphicTestCase extends ValueHolderTestCaseBase {
     }
 
 
-    // Test saving and restoring state
-    public void testStateHolder() throws Exception {
-
-        UIComponent testParent = new TestComponent("root");
-	UIGraphic
-	    preSave = null,
-	    postSave = null;
-	Object state = null;
-
-	// test component with no properties
-	testParent.getChildren().clear();
-	preSave = new UIGraphic();
-	preSave.setId("graphic");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-	testParent.getChildren().add(preSave);
-        preSave.getClientId(facesContext);
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new UIGraphic();
-	testParent.getChildren().add(postSave);
-        postSave.restoreState(facesContext, state);
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
-
-	// test component with valueRef
-	testParent.getChildren().clear();
-	preSave = new UIGraphic();
-	preSave.setId("graphic");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-	preSave.setValueRef("valueRefString");
-	testParent.getChildren().add(preSave);
-        preSave.getClientId(facesContext);
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new UIGraphic();
-	testParent.getChildren().add(postSave);
-        postSave.restoreState(facesContext, state);
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
-
-	// test component with valueRef
-	testParent.getChildren().clear();
-	preSave = new UIGraphic();
-	preSave.setId("graphic");
-	preSave.setRendererType(null); // necessary: we have no renderkit
-	preSave.setValueRef("valueRefString");
-	testParent.getChildren().add(preSave);
-        preSave.getClientId(facesContext);
-	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
-	testParent.getChildren().clear();
-	
-	postSave = new UIGraphic();
-	testParent.getChildren().add(postSave);
-        postSave.restoreState(facesContext, state);
-	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
-
-    }
+    // --------------------------------------------------------- Support Methods
 
 
-    protected ValueHolder createValueHolder() {
-
+    // Create a pristine component of the type to be used in state holder tests
+    protected UIComponent createComponent() {
         UIComponent component = new UIGraphic();
         component.setRendererType(null);
-        return ((ValueHolder) component);
-
+        return (component);
     }
 
 

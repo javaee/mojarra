@@ -276,10 +276,6 @@ jsf-api.jar.
                 test.UIComponentTag">
   </target>
 
-<!-- non-running tests
-                test.UIComponentBaseState,
--->
-
   <target name="test.FactoryFinder" depends="build.test">
     <echo message="Running FactoryFinder tests ..."/>
     <mkdir dir="${build.classes}/META-INF/services"/>
@@ -339,16 +335,6 @@ jsf-api.jar.
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
       <arg value="javax.faces.component.UIComponentBaseTestCase"/>
-      <classpath refid="test.classpath"/>
-    </java>
-  </target>
-
-  <target name="test.UIComponentBaseState" depends="build.test">
-    <echo message="Running UIComponentBaseState tests ..."/>
-    <java classname="${test.runner}" fork="yes"
-        failonerror="${test.failonerror}">
-      <jvmarg line="${debug.jvm.args}"/>
-      <arg value="javax.faces.component.UIComponentBaseStateTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
   </target>

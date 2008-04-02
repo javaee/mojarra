@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOneTestCase.java,v 1.10 2003/09/25 23:21:50 craigmcc Exp $
+ * $Id: UISelectOneTestCase.java,v 1.11 2003/10/09 22:58:14 craigmcc Exp $
  */
 
 /*
@@ -122,14 +122,15 @@ public class UISelectOneTestCase extends UIInputTestCase {
     }
 
 
-    protected ValueHolder createValueHolder() {
+    // --------------------------------------------------------- Support Methods
 
+
+    // Create a pristine component of the type to be used in state holder tests
+    protected UIComponent createComponent() {
         UIComponent component = new UISelectOne();
         component.setRendererType(null);
-        return ((ValueHolder) component);
-
+        return (component);
     }
-
 
 
 }
