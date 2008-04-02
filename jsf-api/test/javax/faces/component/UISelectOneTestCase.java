@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOneTestCase.java,v 1.2 2002/08/04 23:27:28 craigmcc Exp $
+ * $Id: UISelectOneTestCase.java,v 1.3 2002/12/17 23:31:00 eburns Exp $
  */
 
 /*
@@ -16,6 +16,8 @@ import javax.faces.validator.Validator;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import javax.faces.mock.MockFacesContext;
+import javax.faces.context.FacesContext;
 
 
 /**
@@ -23,14 +25,18 @@ import junit.framework.TestSuite;
  * concrete class.</p>
  */
 
-public class UISelectOneTestCase extends UIInputTestCase {
+public class UISelectOneTestCase extends UISelectBaseTestCase {
 
 
     // ----------------------------------------------------- Instance Variables
 
+    // ----------------------------------------------------- Class Variables
 
     // ---------------------------------------------------------- Constructors
 
+    public UISelectBase newUISelectBaseSubclass() {
+	return new UISelectOne();
+    }
 
     /**
      * Construct a new instance of this test case.
@@ -43,7 +49,6 @@ public class UISelectOneTestCase extends UIInputTestCase {
 
 
     // -------------------------------------------------- Overall Test Methods
-
 
     /**
      * Set up instance variables required by this test case.
@@ -115,5 +120,45 @@ public class UISelectOneTestCase extends UIInputTestCase {
 
     }
 
+
+    public void testSelectItemNoIds() {
+	doSelectItemNoIds();
+    }
+
+    public void testSelectItemNoIdsCrazyOrder() {
+	doSelectItemNoIdsCrazyOrder();
+    }
+
+    public void testSelectItemNoIdsExtraNonNamingContainerRootChild() {
+	doSelectItemNoIdsExtraNonNamingContainerRootChild();
+    }
+
+    public void testSelectItemNoIdsExtraNamingContainerRootChild() {
+	doSelectItemNoIdsExtraNamingContainerRootChild();
+    }
+
+    public void testSelectItemWithNamedRoot() {
+	doSelectItemWithNamedRoot();
+    }
+
+    public void testSelectItemWithNamedSelectBase() {
+	doSelectItemWithNamedSelectBase();
+    }
+
+    public void testSelectItemWithNamedSelectBaseExtraNamingContainerRootChild() {
+	doSelectItemWithNamedSelectBaseExtraNamingContainerRootChild();
+    }
+
+    public void testDuplicateSelectItemIdsInNamedParent() {
+	doDuplicateSelectItemIdsInNamedParent();
+    }
+
+    public void testDuplicateSelectItemIdsInUnnamedParent() {
+	doDuplicateSelectItemIdsInUnnamedParent();
+    }
+
+    public void testDuplicateSelectBaseIds() {
+	doDuplicateSelectBaseIds();
+    }
 
 }

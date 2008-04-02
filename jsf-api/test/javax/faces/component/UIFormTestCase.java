@@ -1,5 +1,5 @@
 /*
- * $Id: UIFormTestCase.java,v 1.1 2002/06/04 02:31:07 craigmcc Exp $
+ * $Id: UIFormTestCase.java,v 1.2 2002/12/17 23:30:59 eburns Exp $
  */
 
 /*
@@ -44,13 +44,37 @@ public class UIFormTestCase extends UIComponentTestCase {
 
     // -------------------------------------------------- Overall Test Methods
 
+// This class is necessary since UIForm isn't a naming container by
+// default.
+private class UIFormNamingContainer extends UIForm implements NamingContainer {
+    private UINamingContainer namingContainer = null;
+
+    UIFormNamingContainer() {
+	namingContainer = new UINamingContainer();
+    }
+
+    public void addComponentToNamespace(UIComponent namedComponent) {
+	namingContainer.addComponentToNamespace(namedComponent);
+    }
+    public void removeComponentFromNamespace(UIComponent namedComponent) {
+	namingContainer.removeComponentFromNamespace(namedComponent);
+    } 
+    public UIComponent findComponentInNamespace(String name) {
+	return namingContainer.findComponentInNamespace(name);
+    }
+    public String generateClientId() {
+	return namingContainer.generateClientId();
+    }
+}
+
+
 
     /**
      * Set up instance variables required by this test case.
      */
     public void setUp() {
 
-        component = new UIForm();
+        component = new UIFormNamingContainer();
         component.setComponentId("test");
         attributes = new String[]
             { "componentId", "rendersChildren" };

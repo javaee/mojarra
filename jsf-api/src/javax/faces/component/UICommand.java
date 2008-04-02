@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.25 2002/12/04 22:36:10 jvisvanathan Exp $
+ * $Id: UICommand.java,v 1.26 2002/12/17 23:30:51 eburns Exp $
  */
 
 /*
@@ -101,7 +101,7 @@ public class UICommand extends UIComponentBase {
         // Was our command the one that caused this submission?
         setValid(true);
         String value = context.getServletRequest().
-            getParameter(getCompoundId());
+            getParameter(getClientId(context));
         if (value == null) {
             return (true);
         }
@@ -160,7 +160,7 @@ public class UICommand extends UIComponentBase {
         Object currentValue = currentValue(context);
         if (currentValue != null) {
             writer.write(" name=\"");
-            writer.write(getCompoundId());
+            writer.write(getClientId(context));
             writer.write("\"");
             writer.write(" value=\"");
             writer.write(currentValue.toString());

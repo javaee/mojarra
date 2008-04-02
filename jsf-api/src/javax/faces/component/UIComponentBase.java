@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.29 2002/12/03 23:02:01 jvisvanathan Exp $
+ * $Id: UIComponentBase.java,v 1.30 2002/12/17 23:30:52 eburns Exp $
  */
 
 /*
@@ -107,8 +107,6 @@ public abstract class UIComponentBase implements UIComponent {
         // Special cases for read-only and special case attributes
         if ("componentType".equals(name)) {
             return (getComponentType());
-        } else if ("compoundId".equals(name)) {
-            return (getCompoundId());
         } else if ("rendersChildren".equals(name)) {
             if (getRendersChildren()) {
                 return (Boolean.TRUE);
@@ -167,11 +165,12 @@ public abstract class UIComponentBase implements UIComponent {
         if (name == null) {
             throw new NullPointerException("setAttribute");
         }
-        // FIXME - validate length and contents for componentId
+        if ("componentId".equals(name)) {
+	    validateComponentId(name);
+	}
 
         // Special cases for read-only pseudo-attributes
         if ("componentType".equals(name) ||
-            "compoundId".equals(name) ||
             "rendersChildren".equals(name) ||
             "rendersSelf".equals(name)) {
             throw new IllegalArgumentException(name);
@@ -201,36 +200,108 @@ public abstract class UIComponentBase implements UIComponent {
 
     }
 
+    public String getClientId(FacesContext context) {
+	String result = null;
+
+	if (null != (result = (String) getAttribute("clientId"))) {
+	    return result;
+	}
+
+        String rendererType = getRendererType();
+
+	// if there is a Renderer for this component
+        if (rendererType != null) {
+	    // let the Renderer define the client id
+            RenderKitFactory rkFactory = (RenderKitFactory)
+                FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+            RenderKit renderKit = rkFactory.getRenderKit
+                (context.getRequestTree().getRenderKitId());
+            Renderer renderer = renderKit.getRenderer(rendererType);
+            result = renderer.getClientId(context, this);
+        } else {
+	    // we have to define the client id ourselves
+	    NamingContainer closestContainer = null;
+	    UIComponent containerComponent = this;
+
+	    // Search for an ancestor that is a naming container
+	    while (null != (containerComponent = 
+			    containerComponent.getParent())) {
+		if (containerComponent instanceof NamingContainer) {
+		    closestContainer = (NamingContainer) containerComponent;
+		    break;
+		}
+	    }
+
+	    // If none is found, see if this is a naming container
+	    if (null == closestContainer && this instanceof NamingContainer) {
+		closestContainer = (NamingContainer) this;
+	    }
+	    
+	    if (null != closestContainer) {
+		// If there is no componentId, generate one and store it
+		if (null == (result = getComponentId())) {
+		    // Don't call setComponentId() because it checks for
+		    // uniqueness.  No need.
+		    setAttribute("componentId",
+				 result = closestContainer.generateClientId());
+		}
+		//
+		// build the client side id
+		//
+
+		containerComponent = (UIComponent) closestContainer;
+		// If this is the root naming container, break
+		if (null != containerComponent.getParent()) {
+		    result = containerComponent.getClientId(context) +
+			SEPARATOR_CHAR + result;
+		}
+	    }
+        }
+	if (null == result) {
+	    throw new NullPointerException();
+	}
+	setAttribute("clientId", result);
+	return result;
+    }
+
+
 
     /**
      * <p>Set the identifier of this <code>UIComponent</code>.
      *
      * @param componentId The new identifier
      *
-     * @exception IllegalArgumentException if <code>componentId</code>
-     *  is zero length or contains invalid characters
-     * @exception NullPointerException if <code>componentId</code>
-     *  is <code>null</code>
+     * @exception IllegalArgumentException is non-null and contains
+     * invalid characters
+     * @exception IllegalArgumentException if this
+     * <code>UIComponent</code> instance is already in the tree, but
+     * can't be added to the namespace of the closest ancestor that is a
+     * naming container.
      */
     public void setComponentId(String componentId) {
 
-        if (componentId == null) {
-            throw new NullPointerException("setComponentId");
-        }
-        if (componentId.length() <= 0) {
-            throw new IllegalArgumentException("'" + componentId + "'");
-        }
-        if (!Character.isLetter(componentId.charAt(0))) {
-            throw new IllegalArgumentException("'" + componentId + "'");
-        }
-        for (int i = 1; i < componentId.length(); i++) {
-            char ch = componentId.charAt(i);
-            if (!Character.isLetterOrDigit(ch) &&
-                (ch != '-') && (ch != '_')) {
-                throw new IllegalArgumentException("'" + componentId + "'");
-            }
-        }
+	validateComponentId(componentId);
+
+	String currentId = null;
+	// Handle the case where we're re-naming a component
+	if (null != (currentId = getComponentId())) {
+	    maybeRemoveFromNearestNamingContainer(this);
+	    setAttribute("clientId", null);
+	}
+
         setAttribute("componentId", componentId);
+
+	try {
+	    // If we are already in the tree, make sure to add ourselves to
+	    // the namespace.
+	    maybeAddToNearestNamingContainer(this);
+	}
+	catch (IllegalArgumentException e) {
+	    // If we can't be added to the namespace, roll-back our
+	    // component-id
+	    setAttribute("componentId", null);
+	    throw e;
+	}
 
     }
 
@@ -239,42 +310,6 @@ public abstract class UIComponentBase implements UIComponent {
      * <p>Return the component type of this <code>UIComponent</code>.</p>
      */
     public abstract String getComponentType();
-
-
-    /**
-     * <p>Return the <em>compound identifier</em> of this component.</p>
-     */
-    public String getCompoundId() {
-
-        // Special handling for root node
-        UIComponent parent = getParent();
-        if (parent == null) {
-            return ("/");
-        }
-
-        // Accumulate the component identifiers of our ancestors
-        ArrayList list = new ArrayList();
-        list.add(getComponentId());
-        while (parent != null) {
-            list.add(0, parent.getComponentId());
-            parent = parent.getParent();
-        }
-
-        // Render the compound identifier from the top down
-        StringBuffer sb = new StringBuffer();
-        int n = list.size();
-        for (int i = 0; i < n; i++) {
-            if (i != 1) {
-                sb.append(EXPR_SEPARATOR);
-            }
-            if (i > 0) {
-                sb.append((String) list.get(i));
-            }
-        }
-        return (sb.toString());
-
-    }
-
 
     /**
      * <p>Return the model reference expression of this
@@ -536,34 +571,138 @@ public abstract class UIComponentBase implements UIComponent {
 
 
     /**
-     * <p>If the specified <code>componentId</code> is already present
-     * in one of our children, throw an exception.</p>
-     *
-     * @param componentId The component identifier to check
-     *
-     * @exception IllegalArgumentException if this component identifier
-     *  is <code>null</code>
-     * @exception IllegalArgumentException if this component identifier is
-     *  already in use by one of our children
-     */
-    private void checkComponentId(String componentId) {
 
-        if (componentId == null) {
-            throw new IllegalArgumentException("Component Id is null");
-        }
-        if (isChildrenAllocated()) {
-            Iterator kids = children.iterator();
-            while (kids.hasNext()) {
-                UIComponent kid = (UIComponent) kids.next();
-                if (componentId.equals(kid.getComponentId())) {
-                    throw new IllegalArgumentException(componentId);
-                }
-            }
-        }
+    * <p>Verify that the argument UIComponent is safe to add to the tree.
+    * This is true if and only if:</p>
+
+    * 	<ul>
+
+	  <li><p>toAdd is non-null</p>
+	  </li>
+
+	  <li><p>toAdd has a null component id, or, if non-null, the
+	  component contains nothing but valid characters.</p></li>
+
+	</ul>
+
+     * @throws IllegalArgumentException if the argument UIComponent is
+     * null
+
+     * @throws IllegalArgumentException if the componentId of this
+     * component is non-null and contains invalid characters.
+
+
+    */
+   
+    private void validateComponentId(String componentId) {
+	if (null == componentId) {
+	    return;
+	}
+
+	// PENDING(edburns): here is where we check that the componentId
+	// contains nothing but valid chars.
 
     }
             
+    /**
 
+
+    */
+
+    private static NamingContainer findClosestNamingContainer(UIComponent start){
+	UIComponent cur = start;
+	NamingContainer closestContainer = null;
+
+	// see if start is a naming container
+	if (null == closestContainer && start instanceof NamingContainer) {
+	    // If so, return it.
+	    return (NamingContainer) start;
+	}
+	
+	// Search for an ancestor that is a naming container
+	while (null != (cur = cur.getParent())) {
+	    if (cur instanceof NamingContainer) {
+		closestContainer = (NamingContainer) cur;
+		break;
+	    }
+	}
+
+	return closestContainer;
+    }
+
+    /**
+
+     * <p>If the component identifier of this UIComponent instance is
+     * non-null, and contains all valid characters, find the closest
+     * ancestor that is a naming container and try to add this component
+     * identifier to the namespace. <p>
+
+     * @return the closest ancestor to this UIComponent that is a naming
+     * container, if this UIComponent was successfully added to the
+     * namespace of that naming container, or null if no naming
+     * container is necessary.
+
+     * @param component the UIComponent instance to add
+
+     * @exception IllegalArgumentException if the component identifier
+     * of the new component is non-null, and is not unique in the
+     * namespace of the closest ancestor that is a naming container.
+
+     * @exception IllegalArgumentException if the component identifier
+     * of the new component is non-null, and contains non-valid chars.
+
+     */
+    private NamingContainer maybeAddToNearestNamingContainer(UIComponent component) {
+	String componentId = component.getComponentId();
+
+	if (null == componentId) {
+	    return null;
+	}
+
+	// PENDING(edburns): when we have a more robust naming container
+	// proposal, we'll do something more intelligent here than just
+	// "find the root and hope it is a naming container".
+
+	NamingContainer closestContainer = null;
+
+	if (null != (closestContainer = findClosestNamingContainer(this))) {
+	    closestContainer.addComponentToNamespace(component);
+	}
+	return closestContainer;
+    }
+
+    /**
+
+    * <p>If the componentId for this component is non-null, and is in the
+    * namespace of the nearest naming container, it is removed from that
+    * namespace.</p>
+
+    * @return the naming container from which this UIComponent instance
+    * was removed, or null if no naming container is found.
+
+    * @param component the UIComponent instance to remove from the
+    * nearest naming container.
+
+    */
+
+    private NamingContainer maybeRemoveFromNearestNamingContainer(UIComponent component) {
+	String componentId = component.getComponentId();
+
+	if (null == componentId) {
+	    return null;
+	}
+
+	// PENDING(edburns): when we have a more robust naming container
+	// proposal, we'll do something more intelligent here than just
+	// "find the root and hope it is a naming container".
+
+	NamingContainer closestContainer = null;
+
+	if (null != (closestContainer = findClosestNamingContainer(this))) {
+	    closestContainer.removeComponentFromNamespace(component);
+	}
+	return closestContainer;
+    }
 
     /**
      * <p>Create (if necessary) and return an iterator over the child
@@ -589,22 +728,12 @@ public abstract class UIComponentBase implements UIComponent {
     }
 
 
-    /**
-     * <p>Append the specified <code>UIComponent</code> to the end of the
-     * child list for this component.</p>
-     *
-     * @param component {@link UIComponent} to be added
-     *
-     * @exception IllegalArgumentException if the component identifier
-     *  of the new component has not been set
-     * @exception IllegalArgumentException if the component identifier
-     *  of the new component is not unique within the children of
-     *  this component
-     * @exception NullPointerException if <code>component</code> is null
-     */
     public void addChild(UIComponent component) {
-
-        checkComponentId(component.getComponentId());
+	if (this == component) {
+	    throw new IllegalArgumentException();
+	}
+	validateComponentId(component.getComponentId());
+        maybeAddToNearestNamingContainer(component);
         getChildList().add(component);
         if (component instanceof UIComponentBase) { // FIXME - Hmmmm
             ((UIComponentBase) component).setParent(this);
@@ -612,27 +741,18 @@ public abstract class UIComponentBase implements UIComponent {
 
     }
 
-
-    /**
-     * <p>Insert the specified <code>UIComponent</code> at the specified
-     * position in the child list for this component.</p>
-     *
-     * @param index Zero-relative index at which to add this
-     *  <code>UIComponent</code>
-     * @param component Component to be added
-     *
-     * @exception IllegalArgumentException if the component identifier
-     *  of the new component has not been set
-     * @exception IllegalArgumentException if the component identifier
-     *  of the new component is not unique within the children of
-     *  this component
-     * @exception IndexOutOfBoundsException if the index is out of range
-     *  ((index < 0) || (index &gt;= size()))
-     * @exception NullPointerException if <code>component</code> is null
-     */
     public void addChild(int index, UIComponent component) {
+	if (this == component) {
+	    throw new IllegalArgumentException();
+	}
+	validateComponentId(component.getComponentId());
 
-        checkComponentId(component.getComponentId());
+	// Need to check bounds first because we don't want to add it to
+	// the namespace if the index is out of bounds.
+	if ((index < 0) || (getChildList().size() < index)) {
+	    throw new IndexOutOfBoundsException();
+	}
+        maybeAddToNearestNamingContainer(component);
         getChildList().add(index, component);
         if (component instanceof UIComponentBase) { // FIXME - Hmmmm
             ((UIComponentBase) component).setParent(this);
@@ -669,107 +789,17 @@ public abstract class UIComponentBase implements UIComponent {
 
     }
 
-
-    /**
-     * Segment separator in navigation expressions.
-     */
-    private static final String EXPR_SEPARATOR = "/";
-
-
-    /**
-     * "This element" selector in navigation expressions.
-     */
-    private static final String EXPR_CURRENT = ".";
-
-
-    /**
-     * "Parent element" selector in navigation expressions.
-     */
-    private static final String EXPR_PARENT = "..";
-
-
-    /**
-     * <p>Find a related component in the current component tree by evaluating
-     * the specified navigation expression (which may be absolute or relative)
-     * to locate the requested component, which is then returned.
-     * Valid expression values are:</p>
-     * <ul>
-     * <li><em>Absolute Path</em> (<code>/a/b/c</code>) - Expressions that
-     *     start with a slash begin at the root component of the current tree,
-     *     and match exactly against the <code>compoundId</code> of the
-     *     selected component.</li>
-     * <li><em>Root Component</em> - (<code>/</code>) - An expression with
-     *     only a slash selects the root component of the current tree.</li>
-     * <li><em>Relative Path</em> - (<code>a/b</code>) - Start at the current
-     *     component (rather than the root), and navigate downward.</li>
-     * <li><em>Special Path Elements</em> - A path element with a single
-     *     period (".") selects the current component, while a path with two
-     *     periods ("..") selects the parent of the current node.</li>
-     * </ul>
-     *
-     * @param expr Navigation expression to interpret
-     *
-     * @exception IllegalArgumentException if the syntax of <code>expr</code>
-     *  is invalid
-     * @exception IllegalArgumentException if <code>expr</code> attempts to
-     *  cause navigation to a component that does not exist
-     * @exception NullPointerException if <code>expr</code>
-     *  is <code>null</code>
-     */
     public UIComponent findComponent(String expr) {
 
         if (expr == null) {
             throw new NullPointerException("findChildren");
         }
+	UIComponent node = this;
+	NamingContainer namingContainer = null;
 
-        // If this is an absolute expression, start at the root node
-        // Otherwise, start at the current node
-        UIComponent node = this;
-        if (expr.startsWith(EXPR_SEPARATOR)) {
-            while (node.getParent() != null) {
-                node = node.getParent();
-            }
-            expr = expr.substring(1);
-        }
-
-        // Parse and process each segment of the path
-        while (expr.length() > 0) {
-
-            // Identify the next segment
-            String segment = null;
-            int separator = expr.indexOf(EXPR_SEPARATOR);
-            if (separator < 0) {
-                segment = expr;
-                expr = "";
-            } else {
-                segment = expr.substring(0, separator);
-                expr = expr.substring(separator + 1);
-            }
-
-            // Process the identified segment
-            if (segment.equals(EXPR_CURRENT)) {
-                ; // node already points here
-            } else if (segment.equals(EXPR_PARENT)) {
-                node = node.getParent();
-                if (node == null) {
-                    throw new IllegalArgumentException(segment);
-                }
-            } else {
-                boolean found = false;
-                Iterator kids = node.getChildren();
-                while (kids.hasNext()) {
-                    node = (UIComponent) kids.next();
-                    if (segment.equals(node.getComponentId())) {
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) {
-                    throw new IllegalArgumentException(segment);
-                }
-            }
-
-        }
+	if (null != (namingContainer = findClosestNamingContainer(this))) {
+	    node = namingContainer.findComponentInNamespace(expr);
+	}
 
         // Return the selected node
         return (node);

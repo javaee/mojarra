@@ -37,6 +37,10 @@
   <property name="build.test"       value="${build.dir}/test"/>
   <property name="build.javadocs"   value="${build.dir}/javadocs"/>
 
+  <!-- Default value for debugging arguments is no.  Override in
+       build.properties -->
+  <property name="debug.jvm.args" value=""/>
+
   <path id="compile.classpath">
     <pathelement location="${build.classes}"/>
     <pathelement location="${servlet.jar}"/>
@@ -148,6 +152,7 @@
     <echo message="Running UIComponent tests ..."/>
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
+      <jvmarg line="${debug.jvm.args}"/>
       <arg value="javax.faces.component.UIComponentTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -157,6 +162,7 @@
     <echo message="Running UIComponentBase tests ..."/>
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
+      <jvmarg line="${debug.jvm.args}"/>
       <arg value="javax.faces.component.UIComponentBaseTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -166,6 +172,7 @@
     <echo message="Running UICommand tests ..."/>
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
+      <jvmarg line="${debug.jvm.args}"/>
       <arg value="javax.faces.component.UICommandTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -175,6 +182,7 @@
     <echo message="Running UIForm tests ..."/>
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
+      <jvmarg line="${debug.jvm.args}"/>
       <arg value="javax.faces.component.UIFormTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -184,6 +192,7 @@
     <echo message="Running UIGraphic tests ..."/>
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
+      <jvmarg line="${debug.jvm.args}"/>
       <arg value="javax.faces.component.UIGraphicTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -193,6 +202,7 @@
     <echo message="Running UIInput tests ..."/>
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
+      <jvmarg line="${debug.jvm.args}"/>
       <arg value="javax.faces.component.UIInputTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -202,6 +212,7 @@
     <echo message="Running UIOutput tests ..."/>
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
+      <jvmarg line="${debug.jvm.args}"/>
       <arg value="javax.faces.component.UIOutputTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -211,6 +222,7 @@
     <echo message="Running UIPanel tests ..."/>
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
+      <jvmarg line="${debug.jvm.args}"/>
       <arg value="javax.faces.component.UIPanelTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -220,6 +232,7 @@
     <echo message="Running UIParameter tests ..."/>
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
+      <jvmarg line="${debug.jvm.args}"/>
       <arg value="javax.faces.component.UIParameterTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -229,6 +242,7 @@
     <echo message="Running UISelectBoolean tests ..."/>
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
+      <jvmarg line="${debug.jvm.args}"/>
       <arg value="javax.faces.component.UISelectBooleanTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -238,6 +252,7 @@
     <echo message="Running UISelectMany tests ..."/>
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
+      <jvmarg line="${debug.jvm.args}"/>
       <arg value="javax.faces.component.UISelectManyTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
@@ -247,6 +262,7 @@
     <echo message="Running UISelectOne tests ..."/>
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
+      <jvmarg line="${debug.jvm.args}"/>
       <arg value="javax.faces.component.UISelectOneTestCase"/>
       <classpath refid="test.classpath"/>
     </java>

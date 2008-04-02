@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.15 2002/12/03 23:02:02 jvisvanathan Exp $
+ * $Id: UISelectMany.java,v 1.16 2002/12/17 23:30:53 eburns Exp $
  */
 
 /*
@@ -97,7 +97,7 @@ public class UISelectMany extends UISelectBase {
 
         // Perform the default decoding
         String values[] =
-            context.getServletRequest().getParameterValues(getCompoundId());
+            context.getServletRequest().getParameterValues(getClientId(context));
         setValue(values);
         setValid(true);
         return (true);
@@ -138,7 +138,7 @@ public class UISelectMany extends UISelectBase {
 
         ResponseWriter writer = context.getResponseWriter();
         writer.write("<select name=\"");
-        writer.write(getCompoundId());
+        writer.write(getClientId(context));
         writer.write("\" multiple=\"multiple\">");
         while (items.hasNext()) {
             SelectItem item = (SelectItem) items.next();

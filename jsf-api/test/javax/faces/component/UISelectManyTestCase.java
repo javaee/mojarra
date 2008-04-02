@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectManyTestCase.java,v 1.3 2002/08/04 23:27:27 craigmcc Exp $
+ * $Id: UISelectManyTestCase.java,v 1.4 2002/12/17 23:31:00 eburns Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import junit.framework.TestSuite;
  * concrete class.</p>
  */
 
-public class UISelectManyTestCase extends UIInputTestCase {
+public class UISelectManyTestCase extends UISelectBaseTestCase {
 
 
     // ----------------------------------------------------- Instance Variables
@@ -43,6 +43,10 @@ public class UISelectManyTestCase extends UIInputTestCase {
 
 
     // -------------------------------------------------- Overall Test Methods
+
+    public UISelectBase newUISelectBaseSubclass() {
+	return new UISelectMany();
+    }
 
 
     /**
@@ -126,6 +130,46 @@ public class UISelectManyTestCase extends UIInputTestCase {
         assertNull("selectedValues7", selectMany.getSelectedValues());
         assertNull("selectedValues8", selectMany.getAttribute("value"));
 
+    }
+
+    public void testSelectItemNoIds() {
+	doSelectItemNoIds();
+    }
+
+    public void testSelectItemNoIdsCrazyOrder() {
+	doSelectItemNoIdsCrazyOrder();
+    }
+
+    public void testSelectItemNoIdsExtraNonNamingContainerRootChild() {
+	doSelectItemNoIdsExtraNonNamingContainerRootChild();
+    }
+
+    public void testSelectItemNoIdsExtraNamingContainerRootChild() {
+	doSelectItemNoIdsExtraNamingContainerRootChild();
+    }
+
+    public void testSelectItemWithNamedRoot() {
+	doSelectItemWithNamedRoot();
+    }
+
+    public void testSelectItemWithNamedSelectBase() {
+	doSelectItemWithNamedSelectBase();
+    }
+
+    public void testSelectItemWithNamedSelectBaseExtraNamingContainerRootChild() {
+	doSelectItemWithNamedSelectBaseExtraNamingContainerRootChild();
+    }
+
+    public void testDuplicateSelectItemIdsInNamedParent() {
+	doDuplicateSelectItemIdsInNamedParent();
+    }
+
+    public void testDuplicateSelectItemIdsInUnnamedParent() {
+	doDuplicateSelectItemIdsInUnnamedParent();
+    }
+
+    public void testDuplicateSelectBaseIds() {
+	doDuplicateSelectBaseIds();
     }
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.57 2002/12/03 23:02:01 jvisvanathan Exp $
+ * $Id: UIComponent.java,v 1.58 2002/12/17 23:30:51 eburns Exp $
  */
 
 /*
@@ -34,6 +34,8 @@ import javax.faces.validator.Validator;
  */
 
 public interface UIComponent extends Serializable {
+
+    public static char SEPARATOR_CHAR = '.';
 
 
     // ------------------------------------------------------------- Attributes
@@ -83,6 +85,29 @@ public interface UIComponent extends Serializable {
      */
     public String getComponentId();
 
+    /**
+
+    * <p>Get the client side identifier for this <code>UIComponent</code> 
+    * instance.</p>
+
+    * <p>Look up this component's "clientId" attribute.  If non-null,
+    * return it.  If null, see if we have a {@link Renderer} and if so,
+    * delegate to it.  If we don't have a Renderer, get the component id
+    * for this <code>UIComponent</code>.  If null, generate one using
+    * the closest naming container that is an ancestor of this
+    * UIComponent, then set the generated id as the componentId of this
+    * UIComponent.  Prepend to the component id the component ids of
+    * each naming container up to, but not including, the root,
+    * separated by the SEPARATOR_CHAR.  In all cases, save the result as
+    * the value of the "clientId" attribute.</p>
+
+    * @throws NullPointerException if for any reason the clientSideId
+    * can not be obtained.
+
+    */
+
+    public String getClientId(FacesContext context);
+
 
     /**
      * <p>Set the identifier of this <code>UIComponent</code>.
@@ -93,6 +118,11 @@ public interface UIComponent extends Serializable {
      *  is zero length or contains invalid characters
      * @exception NullPointerException if <code>componentId</code>
      *  is <code>null</code>
+     * @exception IllegalArgumentException if this
+     * <code>UIComponent</code> instance is already in the tree and and
+     * is not unique within the namespace of the closest ancestor that
+     * is a naming container.
+
      */
     public void setComponentId(String componentId);
 
@@ -101,12 +131,6 @@ public interface UIComponent extends Serializable {
      * <p>Return the component type of this <code>UIComponent</code>.</p>
      */
     public String getComponentType();
-
-
-    /**
-     * <p>Return the <em>compound identifier</em> of this component.</p>
-     */
-    public String getCompoundId();
 
 
     /**
@@ -249,14 +273,17 @@ public interface UIComponent extends Serializable {
     /**
      * <p>Append the specified <code>UIComponent</code> to the end of the
      * child list for this component.</p>
+
+     * <p>If the child to be added has a non-null and valid component
+     * identifier, the identifier is added to the namespace of the
+     * closest ancestor that is a naming container.</p>
+
      *
      * @param component {@link UIComponent} to be added
      *
      * @exception IllegalArgumentException if the component identifier
-     *  of the new component has not been set
-     * @exception IllegalArgumentException if the component identifier
-     *  of the new component is not unique within the children of
-     *  this component
+     * of the new component is non-null, and is not unique in the
+     * namespace of the closest ancestor that is a naming container.
      * @exception NullPointerException if <code>component</code> is null
      */
     public void addChild(UIComponent component);
@@ -265,18 +292,20 @@ public interface UIComponent extends Serializable {
     /**
      * <p>Insert the specified <code>UIComponent</code> at the specified
      * position in the child list for this component.</p>
-     *
+
+     * <p>If the child to be added has a non-null and valid component
+     * identifier, the identifier is added to the namespace of the
+     * closest ancestor that is a naming container.</p>
+
      * @param index Zero-relative index at which to add this
      *  <code>UIComponent</code>
      * @param component Component to be added
      *
      * @exception IllegalArgumentException if the component identifier
-     *  of the new component has not been set
-     * @exception IllegalArgumentException if the component identifier
-     *  of the new component is not unique within the children of
-     *  this component
+     * of the new component is non-null, and is not unique in the
+     * namespace of the closest ancestor that is a naming container.
      * @exception IndexOutOfBoundsException if the index is out of range
-     *  ((index < 0) || (index &gt;= size()))
+     *  ((index < 0) || (index &gt; size()))
      * @exception NullPointerException if <code>component</code> is null
      */
     public void addChild(int index, UIComponent component);
@@ -301,30 +330,16 @@ public interface UIComponent extends Serializable {
 
 
     /**
-     * <p>Find a related component in the current component tree by evaluating
-     * the specified navigation expression (which may be absolute or relative)
-     * to locate the requested component, which is then returned.
-     * Valid expression values are:</p>
-     * <ul>
-     * <li><em>Absolute Path</em> (<code>/a/b/c</code>) - Expressions that
-     *     start with a slash begin at the root component of the current tree,
-     *     and match exactly against the <code>compoundId</code> of the
-     *     selected component.</li>
-     * <li><em>Root Component</em> - (<code>/</code>) - An expression with
-     *     only a slash selects the root component of the current tree.</li>
-     * <li><em>Relative Path</em> - (<code>a/b</code>) - Start at the current
-     *     component (rather than the root), and navigate downward.</li>
-     * <li><em>Special Path Elements</em> - A path element with a single
-     *     period (".") selects the current component, while a path with two
-     *     periods ("..") selects the parent of the current node.</li>
-     * </ul>
-     *
-     * @param expr Navigation expression to interpret
-     *
-     * @exception IllegalArgumentException if the syntax of <code>expr</code>
-     *  is invalid
-     * @exception IllegalArgumentException if <code>expr</code> attempts to
-     *  cause navigation to a component that does not exist
+
+     * <p>Find a component in the current component tree by asking 
+     * each naming container in the tree from this component to the root 
+     * for the named component.</p>
+
+     * @return the found component, or null if the component was not
+     * found.
+
+     * @param expr The component id of the component to find
+
      * @exception NullPointerException if <code>expr</code>
      *  is <code>null</code>
      */

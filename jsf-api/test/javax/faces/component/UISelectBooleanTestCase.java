@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBooleanTestCase.java,v 1.3 2002/08/14 22:46:51 craigmcc Exp $
+ * $Id: UISelectBooleanTestCase.java,v 1.4 2002/12/17 23:31:00 eburns Exp $
  */
 
 /*
@@ -43,6 +43,30 @@ public class UISelectBooleanTestCase extends UIInputTestCase {
 
 
     // -------------------------------------------------- Overall Test Methods
+// This class is necessary since UISelectBoolean isn't a naming container by
+// default.
+private class UISelectBooleanNamingContainer extends UISelectBoolean implements NamingContainer {
+    private UINamingContainer namingContainer = null;
+
+    UISelectBooleanNamingContainer() {
+	namingContainer = new UINamingContainer();
+    }
+
+    public void addComponentToNamespace(UIComponent namedComponent) {
+	namingContainer.addComponentToNamespace(namedComponent);
+    }
+    public void removeComponentFromNamespace(UIComponent namedComponent) {
+	namingContainer.removeComponentFromNamespace(namedComponent);
+    } 
+    public UIComponent findComponentInNamespace(String name) {
+	return namingContainer.findComponentInNamespace(name);
+    }
+
+    public String generateClientId() {
+	return namingContainer.generateClientId();
+    }
+}
+
 
 
     /**
@@ -50,7 +74,7 @@ public class UISelectBooleanTestCase extends UIInputTestCase {
      */
     public void setUp() {
 
-        component = new UISelectBoolean();
+        component = new UISelectBooleanNamingContainer();
         component.setComponentId("test");
         attributes = new String[]
             { "componentId", "rendersChildren", "value" };

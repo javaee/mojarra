@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.13 2002/09/01 03:16:00 craigmcc Exp $
+ * $Id: Renderer.java,v 1.14 2002/12/17 23:30:56 eburns Exp $
  */
 
 /*
@@ -237,6 +237,32 @@ public abstract class Renderer {
     public abstract void encodeEnd(FacesContext context,
                                    UIComponent component)
         throws IOException;
+
+    /**
+
+    * <p>Return the client-side id for the argument component.</p>
+
+    * <p>The purpose of this method is to give Renderers a chance to
+    * define, in a rendering specific way, the client side id for this
+    * component.  The client side id should be derived from the
+    * component id, if present.  </p>
+
+    * <p>Look up this component's "clientId" attribute.  If non-null,
+    * return it.  Get the component id for the argument
+    * <code>UIComponent</code>.  If null, generate one using the closest
+    * naming container that is an ancestor of this UIComponent, then set
+    * the generated id as the componentId of this UIComponent.  Prepend
+    * to the component id the component ids of each naming container up
+    * to, but not including, the root, separated by the
+    * UIComponent.SEPARATOR_CHAR.  In all cases, save the result as the
+    * value of the "clientId" attribute.</p>
+
+     * <p>This method must not return null.</p>
+
+    */ 
+
+    public abstract String getClientId(FacesContext context,
+                                           UIComponent component);
 
 
 }

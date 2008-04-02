@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.14 2002/12/03 01:04:59 craigmcc Exp $
+ * $Id: UIComponentTestCase.java,v 1.15 2002/12/17 23:30:58 eburns Exp $
  */
 
 /*
@@ -69,7 +69,7 @@ public class UIComponentTestCase extends TestCase {
      */
     public void setUp() {
 
-        component = new TestComponent();
+        component = new TestComponentNamingContainer();
         attributes = new String[]
             { "componentId" };
 
@@ -102,7 +102,6 @@ public class UIComponentTestCase extends TestCase {
      * [3.1.3] Negative tests for <code>addChild()</code>.
      */
     public void testAddChildNegative() {
-
         // Child components we will need
         UIForm form1 = new UIForm();
         form1.setComponentId("form1");
@@ -127,22 +126,6 @@ public class UIComponentTestCase extends TestCase {
             component.addChild(0, null);
             fail("Should have thrown NullPointerException");
         } catch (NullPointerException e) {
-            ; // Expected result
-        }
-
-        // No component id - simple
-        try {
-            component.addChild(new UIForm());
-            fail("Should have thrown IllegalArgumentException");
-        } catch (IllegalArgumentException e) {
-            ; // Expected result
-        }
-
-        // No component id - indexed
-        try {
-            component.addChild(0, new UIForm());
-            fail("Should have thrown IllegalArgumentException");
-        } catch (IllegalArgumentException e) {
             ; // Expected result
         }
 
@@ -178,6 +161,46 @@ public class UIComponentTestCase extends TestCase {
             ; // Expected result
         }
 
+    }
+
+    public void testAddChildPositive() {
+
+        // Child components we will need
+        UIForm form1 = new UIForm();
+        form1.setComponentId("form1");
+        UIForm form1a = new UIForm();
+        form1a.setComponentId("form1"); // Duplicate id
+        UIForm form2 = new UIForm();
+        form2.setComponentId("form2");
+
+        // Add first child explicitly
+        component.addChild(form1);
+	boolean exceptionThrown = false; // expected result
+
+        // No component id - simple
+        try {
+            component.addChild(new UIForm());
+        } catch (IllegalArgumentException e) {
+	    exceptionThrown = true;
+        }
+	assertTrue(!exceptionThrown);
+
+	exceptionThrown = false; // expected result
+        // No component id - indexed
+        try {
+            component.addChild(0, new UIForm());
+        } catch (IllegalArgumentException e) {
+            ; // Expected result
+        }
+	assertTrue(!exceptionThrown);
+
+	// Make sure we can rename the component, and the clientId
+	// changes.
+	FacesContext context = new MockFacesContext();
+	String form1ClientId = form1.getClientId(context);
+	form1.setComponentId("form30");
+	assertTrue(!form1ClientId.equals(form1.getClientId(context)));
+	    
     }
 
 
@@ -273,6 +296,8 @@ public class UIComponentTestCase extends TestCase {
      */
     public void testComponentTreeManipulation() {
 
+	FacesContext context = new MockFacesContext();
+
         UIComponent test1 = new TestComponent("test1");
         UIComponent test2 = new TestComponent("test2");
         UIComponent test3 = new TestComponent("test3");
@@ -293,7 +318,8 @@ public class UIComponentTestCase extends TestCase {
         assertTrue("test1 not a child", !component.containsChild(test1));
         assertTrue("test2 is a child", component.containsChild(test2));
         assertTrue("test3 not a child", !component.containsChild(test3));
-        assertEquals("test2 compoundId", "/test2", test2.getCompoundId());
+        assertEquals("test2 clientSideId", "test2", 
+		     test2.getClientId(context));
 
         // Insert "test1" component in front of "test2" component
         component.addChild(0, test1);
@@ -301,7 +327,8 @@ public class UIComponentTestCase extends TestCase {
         assertTrue("test1 is a child", component.containsChild(test1));
         assertTrue("test2 is a child", component.containsChild(test2));
         assertTrue("test3 not a child", !component.containsChild(test3));
-        assertEquals("test1 compoundId", "/test1", test1.getCompoundId());
+        assertEquals("test1 clientSideId", "test1", 
+		     test1.getClientId(context));
 
         // Add "test3" component as child of "test2" component
         test2.addChild(test3);
@@ -313,8 +340,8 @@ public class UIComponentTestCase extends TestCase {
         assertTrue("test2 is a child", component.containsChild(test2));
         assertTrue("test3 not a child", !component.containsChild(test3));
         assertTrue("test3 is a child", test2.containsChild(test3));
-        assertEquals("test3 compoundId", "/test2/test3",
-                     test3.getCompoundId());
+        assertEquals("test3 clientSideId", "test3",
+		     test3.getClientId(context));
 
         // Verify the correct children are present in the correct order
         Iterator kids = component.getChildren();
@@ -357,19 +384,9 @@ public class UIComponentTestCase extends TestCase {
         component.addChild(test2);
         test2.addChild(test3);
 
-        try {
-            component.findComponent("test4");
-            fail("findComponent should throw IAE1");
-        } catch (IllegalArgumentException e) {
-            ; // Expected result
-        }
+	assertTrue(null == component.findComponent("test4"));
 
-        try {
-            test2.findComponent("test3//");
-            fail("findComponent should throw IAE2");
-        } catch (IllegalArgumentException e) {
-            ; // Expected result
-        }
+	assertTrue(null == test2.findComponent("test3//"));
 
         try {
             component.findComponent(null);
@@ -396,29 +413,21 @@ public class UIComponentTestCase extends TestCase {
 
         // Can a component find itself?
         assertEquals("component find self", component,
-                     component.findComponent("."));
+                     component.findComponent(component.getComponentId()));
         assertEquals("test1 find self", test1,
-                     test1.findComponent("."));
+                     test1.findComponent(test1.getComponentId()));
         assertEquals("test2 find self", test2,
-                     test2.findComponent("."));
+                     test2.findComponent(test2.getComponentId()));
         assertEquals("test3 find self", test3,
-                     test3.findComponent("."));
+                     test3.findComponent(test3.getComponentId()));
 
         // Can a component find its parent?
         assertEquals("test1 find parent", component,
-                     test1.findComponent(".."));
+                     test1.findComponent(test1.getParent().getComponentId()));
         assertEquals("test2 find parent", component,
-                     test2.findComponent(".."));
+                     test2.findComponent(test2.getParent().getComponentId()));
         assertEquals("test3 find parent", test2,
-                     test3.findComponent(".."));
-
-        // Can a component find the root node?
-        assertEquals("test1 find root", component,
-                     test1.findComponent("/"));
-        assertEquals("test2 find root", component,
-                     test2.findComponent("/"));
-        assertEquals("test3 find root", component,
-                     test3.findComponent("/"));
+                     test3.findComponent(test3.getParent().getComponentId()));
 
         // Can a component find its child by name?
         assertEquals("component find test1", test1,
@@ -427,42 +436,8 @@ public class UIComponentTestCase extends TestCase {
                      component.findComponent("test2"));
         assertEquals("test2 find test3", test3,
                      test2.findComponent("test3"));
-
-        // Can a component find its siblings and relatives?
-        assertEquals("test1 find test2", test2,
-                     test1.findComponent("../test2"));
-        assertEquals("test1 find test3", test3,
-                     test1.findComponent("../test2/test3"));
-        assertEquals("test2 find test1", test1,
-                     test2.findComponent("../test1"));
-        assertEquals("test3 find test1", test1,
-                     test3.findComponent("../../test1"));
-
-        // Can we go up or down two levels?
         assertEquals("component find test3", test3,
-                     component.findComponent("test2/test3"));
-        assertEquals("test3 find component", component,
-                     test3.findComponent("../.."));
-
-        // Can all components use absolute paths?
-        assertEquals("component find test1", test1,
-                     component.findComponent("/test1"));
-        assertEquals("component find test2", test2,
-                     component.findComponent("/test2"));
-        assertEquals("component find test3", test3,
-                     component.findComponent("/test2/test3"));
-        assertEquals("test1 find test2", test2,
-                     test1.findComponent("/test2"));
-        assertEquals("test1 find test3", test3,
-                     test1.findComponent("/test2/test3"));
-        assertEquals("test2 find test1", test1,
-                     test2.findComponent("/test1"));
-        assertEquals("test2 find test3", test3,
-                     test2.findComponent("/test2/test3"));
-        assertEquals("test3 find test1", test1,
-                     test3.findComponent("/test1"));
-        assertEquals("test3 find test2", test2,
-                     test3.findComponent("/test2"));
+                     component.findComponent("test3"));
 
     }
 
@@ -548,39 +523,21 @@ public class UIComponentTestCase extends TestCase {
 
 
         // [3.1.2] setComponentId()
+	boolean exceptionThrown = false;
         try {
             component.setComponentId(null);
-            fail("setComponentId did not throw NPE");
         } catch (NullPointerException e) {
-            ; // Expected result
+	    exceptionThrown = true;
         }
-        try {
-            component.setComponentId("");
-            fail("setComponentId did not throw IAE 1");
-        } catch (IllegalArgumentException e) {
-            ; // Expected result
-        }
-
+	assertTrue(!exceptionThrown);
+        /** FIXME - checking valid characters not yet implemented
         try {
             component.setComponentId("*");
-            fail("setComponentId did not throw IAE 2");
+            fail("setComponentId did not throw IAE");
         } catch (IllegalArgumentException e) {
             ; // Expected result
         }
-
-        try {
-            component.setComponentId("3a");
-            fail("setComponentId did not throw IAE 3");
-        } catch (IllegalArgumentException e) {
-            ; // Expected result
-        }
-
-        try {
-            component.setComponentId("a3#");
-            fail("setComponentId did not throw IAE 4");
-        } catch (IllegalArgumentException e) {
-            ; // Expected result
-        }
+        */
 
         // [3.1.7] setAttribute()
         try {
@@ -591,12 +548,6 @@ public class UIComponentTestCase extends TestCase {
         }
         try {
             component.setAttribute("componentType", "foo"); // Read-only prop
-            fail("setAttribute did not throw IAE");
-        } catch (IllegalArgumentException e) {
-            ; // Expected result
-        }
-        try {
-            component.setAttribute("compoundId", "/foo/bar"); // Read-only prop
             fail("setAttribute did not throw IAE");
         } catch (IllegalArgumentException e) {
             ; // Expected result
@@ -671,8 +622,6 @@ public class UIComponentTestCase extends TestCase {
         // [3.1.2] Component Identifiers
         String componentId = component.getComponentId();
         assertEquals("componentId", "test", componentId);
-        String compoundId = component.getCompoundId();
-        assertEquals("compoundId", "/", compoundId);
 
         // [3.1.3] Component Tree Manipulation
         assertNull("parent", component.getParent());
@@ -680,7 +629,7 @@ public class UIComponentTestCase extends TestCase {
 
         // [3.1.4] Component Tree Navigation
         UIComponent result = null;
-        result = component.findComponent(".");
+        result = component.findComponent(component.getComponentId());
         assertTrue("Can find self", result == component);
 
         // [3.1.5] Model Object References

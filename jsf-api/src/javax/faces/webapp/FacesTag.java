@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.24 2002/12/05 18:05:05 rkitain Exp $
+ * $Id: FacesTag.java,v 1.25 2002/12/17 23:30:57 eburns Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.Stack;
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
+import javax.faces.component.NamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.tree.Tree;
@@ -32,12 +33,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <p>The <strong>id</strong> attribute of a <code>FacesTag</code> is used
  * to identify the corresponding component in the response component tree.
- * It may contain either the absolute <em>compound identifier</em> (starting
- * with a '/' character) of the corresponding component, or a relative
- * expression that is resolved from the closest surrounding
- * <code>FacesTag</code> instance as if by a call to the
- * <code>findComponent()</code> method, passing
- * the specified <code>id</code> value as a parameter.</p>
+ * </p>
  */
 
 public abstract class FacesTag extends TagSupport {
@@ -378,33 +374,41 @@ public abstract class FacesTag extends TagSupport {
 
 
     /**
-     * <p>Find and return the component, from the response component tree,
-     * that corresponds to the relative identifier defined by the
-     * <code>id</code> attribute of this tag.  If no such component can
-     * be found, create an appropriate instance.  Set the <code>created</code>
-     * property to reflect whether or now we created an instance.</p>
+     * <p>Find and return the component, from the response component
+     * tree, that corresponds to the relative identifier defined by the
+     * <code>id</code> attribute of this tag.  If the value of the
+     * <code>id</code> attribute is null, assume that this component
+     * needs to be created.  If the value of the <code>id</code>
+     * attribute is non null, see if there is a component with this
+     * <code>id</code> in the namespace of the nearest ancestor to the
+     * top of the stack that is a naming container.  If so, return that
+     * component.</p>
      *
      * @exception JspException if the specified component cannot be located
+
+     * @exception JspException if the id is non-null, and no
+     * NamingContainer can be found.
+
      */
     protected UIComponent findComponent() throws JspException {
 
         // Validate the requested identifier
         String id = getId();
-        if (id == null) { // FIXME - i18n
-            throw new JspException("No id attribute specified");
-        } else if (id.length() < 1) { // FIXME - i18n
-            throw new JspException("Zero-length id attribute specified");
-        } else if (id.startsWith("/") || id.startsWith(".")) { // FIXME - i18n
-            throw new JspException("Only simple id values allowed");
-        }
-
-        // Ask the top component on the stack if it has a child of this id
         UIComponent parent = (UIComponent) componentStack.peek();
-        UIComponent child = null;
-        Iterator children = parent.getChildren();
-        while (children.hasNext()) {
-            child = (UIComponent) children.next();
-            if (id.equals(child.getComponentId())) {
+	UIComponent child = parent;
+        if (id != null) { // FIXME - i18n
+	    // find the nearest ancestor that is a naming container
+	    NamingContainer closestContainer = null;
+	    
+	    while (!(child instanceof NamingContainer)) {
+		child = child.getParent();
+	    }
+	    if (null == child) {
+		throw new JspException("Can't find NamingContainer");
+	    } 
+	    closestContainer = (NamingContainer) child;
+	    if (null != (child = 
+			 closestContainer.findComponentInNamespace(id))) {
                 created = false;
                 return (child);
             }
@@ -412,7 +416,9 @@ public abstract class FacesTag extends TagSupport {
 
         // Create and return a new child component of the appropriate type
         child = createComponent();
-        child.setComponentId(id);
+	if (null != id) {
+	    child.setComponentId(id);
+	}
         parent.addChild(child);
         created = true;
         return (child);

@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.3 2002/12/03 23:02:01 jvisvanathan Exp $
+ * $Id: UIInput.java,v 1.4 2002/12/17 23:30:52 eburns Exp $
  */
 
 /*
@@ -76,7 +76,7 @@ public class UIInput extends UIComponentBase {
 
         // Perform the default decoding
         String newValue =
-            context.getServletRequest().getParameter(getCompoundId());
+            context.getServletRequest().getParameter(getClientId(context));
         setValue(newValue);
         setValid(true);
         return (true);
@@ -115,7 +115,7 @@ public class UIInput extends UIComponentBase {
         Object value = currentValue(context);
         ResponseWriter writer = context.getResponseWriter();
         writer.write("<input type=\"text\" name=\"");
-        writer.write(getCompoundId());
+        writer.write(getClientId(context));
         writer.write("\" value=\"");
         if (value != null) {
             writer.write(value.toString());

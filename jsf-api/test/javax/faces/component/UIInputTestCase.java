@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputTestCase.java,v 1.1 2002/08/04 23:19:09 craigmcc Exp $
+ * $Id: UIInputTestCase.java,v 1.2 2002/12/17 23:30:59 eburns Exp $
  */
 
 /*
@@ -43,6 +43,30 @@ public class UIInputTestCase extends UIComponentTestCase {
 
 
     // -------------------------------------------------- Overall Test Methods
+// This class is necessary since UIInput isn't a naming container by
+// default.
+private class UIInputNamingContainer extends UIInput implements NamingContainer {
+    private UINamingContainer namingContainer = null;
+
+    UIInputNamingContainer() {
+	namingContainer = new UINamingContainer();
+    }
+
+    public void addComponentToNamespace(UIComponent namedComponent) {
+	namingContainer.addComponentToNamespace(namedComponent);
+    }
+    public void removeComponentFromNamespace(UIComponent namedComponent) {
+	namingContainer.removeComponentFromNamespace(namedComponent);
+    } 
+    public UIComponent findComponentInNamespace(String name) {
+	return namingContainer.findComponentInNamespace(name);
+    }
+
+    public String generateClientId() {
+	return namingContainer.generateClientId();
+    }
+}
+
 
 
     /**
@@ -50,7 +74,7 @@ public class UIInputTestCase extends UIComponentTestCase {
      */
     public void setUp() {
 
-        component = new UIInput();
+        component = new UIInputNamingContainer();
         component.setComponentId("test");
         attributes = new String[]
             { "componentId", "rendersChildren" };

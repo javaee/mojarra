@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.17 2002/12/03 23:02:02 jvisvanathan Exp $
+ * $Id: UISelectOne.java,v 1.18 2002/12/17 23:30:53 eburns Exp $
  */
 
 /*
@@ -97,7 +97,7 @@ public class UISelectOne extends UISelectBase {
 
         // Perform the default decoding
         String value =
-            context.getServletRequest().getParameter(getCompoundId());
+            context.getServletRequest().getParameter(getClientId(context));
         setValue(value);
         setValid(true);
         return (true);
@@ -142,7 +142,7 @@ public class UISelectOne extends UISelectBase {
 
         ResponseWriter writer = context.getResponseWriter();
         writer.write("<select name=\"");
-        writer.write(getCompoundId());
+        writer.write(getClientId(context));
         writer.write("\">");
         while (items.hasNext()) {
             SelectItem item = (SelectItem) items.next();

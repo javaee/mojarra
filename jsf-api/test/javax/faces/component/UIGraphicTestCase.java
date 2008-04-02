@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphicTestCase.java,v 1.2 2002/07/28 22:25:45 craigmcc Exp $
+ * $Id: UIGraphicTestCase.java,v 1.3 2002/12/17 23:30:59 eburns Exp $
  */
 
 /*
@@ -43,6 +43,30 @@ public class UIGraphicTestCase extends UIComponentTestCase {
 
 
     // -------------------------------------------------- Overall Test Methods
+// This class is necessary since UIGraphic isn't a naming container by
+// default.
+private class UIGraphicNamingContainer extends UIGraphic implements NamingContainer {
+    private UINamingContainer namingContainer = null;
+
+    UIGraphicNamingContainer() {
+	namingContainer = new UINamingContainer();
+    }
+
+    public void addComponentToNamespace(UIComponent namedComponent) {
+	namingContainer.addComponentToNamespace(namedComponent);
+    }
+    public void removeComponentFromNamespace(UIComponent namedComponent) {
+	namingContainer.removeComponentFromNamespace(namedComponent);
+    } 
+    public UIComponent findComponentInNamespace(String name) {
+	return namingContainer.findComponentInNamespace(name);
+    }
+
+    public String generateClientId() {
+	return namingContainer.generateClientId();
+    }
+}
+
 
 
     /**
@@ -50,7 +74,7 @@ public class UIGraphicTestCase extends UIComponentTestCase {
      */
     public void setUp() {
 
-        component = new UIGraphic();
+        component = new UIGraphicNamingContainer();
         component.setComponentId("test");
         attributes = new String[]
             { "componentId", "rendersChildren" };

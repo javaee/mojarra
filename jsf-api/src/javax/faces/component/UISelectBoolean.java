@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.18 2002/12/04 22:36:10 jvisvanathan Exp $
+ * $Id: UISelectBoolean.java,v 1.19 2002/12/17 23:30:53 eburns Exp $
  */
 
 /*
@@ -116,8 +116,8 @@ public class UISelectBoolean extends UIInput {
 
         // Perform the default decoding
         Boolean newValue = Boolean.FALSE;
-        String compoundId = getCompoundId();
-        if (context.getServletRequest().getParameter(compoundId) != null) {
+        String clientId = getClientId(context);
+        if (context.getServletRequest().getParameter(clientId) != null) {
             newValue = Boolean.TRUE;
         }
         setValue(newValue);
@@ -161,7 +161,7 @@ public class UISelectBoolean extends UIInput {
         }
         ResponseWriter writer = context.getResponseWriter();
         writer.write("<input type=\"checkbox\" name=\"");
-        writer.write(getCompoundId());
+        writer.write(getClientId(context));
         writer.write("\"");
         if (value.booleanValue()) {
             writer.write(" checked=\"checked\"");
