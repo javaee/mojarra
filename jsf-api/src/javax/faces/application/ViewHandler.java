@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.13 2003/10/02 16:28:36 eburns Exp $
+ * $Id: ViewHandler.java,v 1.14 2003/10/03 15:31:05 eburns Exp $
  */
 
 /*
@@ -86,11 +86,12 @@ public interface ViewHandler {
      * javax.faces.context.ExternalContext#dispatchMessage} passing the
      * <code>viewId</code> of the argument <code>viewToRender</code>.
      * If suffix mapping is used, the default implementation must check
-     * the the servlet context init parameter named by the value of the
+     * the servlet context init parameter named by the value of the
      * constant {@link #DEFAULT_SUFFIX_PARAM_NAME}.  If this parameter
-     * is not defined, use {@link #DEFAULT_SUFFIX} as the suffix.
-     * Append the suffix to the <code>viewId</code> of the argument
-     * <code>viewToRender</code>, and call {@link
+     * is not defined, use {@link #DEFAULT_SUFFIX} as the suffix.  If
+     * the <code>viewId</code> of the argument <code>viewToRender</code>
+     * has a suffix, replace it with the new suffix.  Otherwise append
+     * the new suffix.  Then call {@link
      * javax.faces.context.ExternalContext#dispatchMessage} on the
      * result.</p>
      * 
@@ -176,7 +177,7 @@ public interface ViewHandler {
     /**
      * <p>Returns the context relative path of the argument
      * <code>viewId</code>, including any <code>url-pattern</code>
-     * prefix mapping defined by the application.</p>
+     * prefix or extension mapping defined by the application.</p>
      *
      * <p>The default implementation must examine the deployment
      * descriptor for the current webapp and determine the
@@ -184,11 +185,13 @@ public interface ViewHandler {
      * javax.faces.webapp.FacesServlet}.  If the mapping is a prefix
      * mapping, prepend the prefix mapping to the viewId, making sure to
      * take any wildcards into account.  If the mapping is an extension
-     * mapping, take no action and just return the argument
-     * <code>viewId</code>.  The default implementation expects the
-     * argument <code>viewId</code> to be a context relative path,
-     * starting with '<code>/</code>'.  If this is not the case, the
-     * default implementation thows
+     * mapping, replace the extension in the <code>viewId</code> with
+     * the extension discovered by examining the deployment descriptor.
+     * If the <code>viewId</code> has no extension, append the extension
+     * discovered by examining the deployment descriptor.  The default
+     * implementation expects the argument <code>viewId</code> to be a
+     * context relative path, starting with '<code>/</code>'.  If this
+     * is not the case, the default implementation thows
      * <code>IllegalArgumentException</code>.</p>
      *
      * @param context the {@link FacesContext} for this request.
