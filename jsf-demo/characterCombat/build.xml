@@ -161,7 +161,7 @@
   <target name="build" unless="skip.build" depends="copyJars" 
      description="Compile Java files and copy static files." >
       <touch file="${build}/last-build"/>
-    <javac srcdir="src" destdir="${build}/${example}/WEB-INF/classes">
+    <javac debug="on" srcdir="src" destdir="${build}/${example}/WEB-INF/classes">
     	<include name="**/*.java" />
      <classpath refid="classpath"/>
     </javac>
