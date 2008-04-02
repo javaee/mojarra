@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.54 2003/10/07 19:53:13 rlubke Exp $
+ * $Id: FacesContextImpl.java,v 1.55 2003/10/15 16:59:08 jvisvanathan Exp $
  */
 
 /*
@@ -16,7 +16,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
      
 import javax.faces.FactoryFinder;
@@ -35,7 +34,6 @@ import javax.faces.context.ResponseStream;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.RepeaterEvent;
 import javax.faces.lifecycle.Lifecycle;
-import javax.servlet.jsp.jstl.core.Config;
 import javax.servlet.ServletRequest;
 
 import org.apache.commons.collections.CursorableLinkedList;
@@ -62,7 +60,6 @@ public class FacesContextImpl extends FacesContext
     private boolean released;
 
     // Relationship Instance Variables
-    private Locale locale = null;    
     private ResponseStream responseStream = null;
     private ResponseWriter responseWriter = null;
     private CursorableLinkedList facesEvents = null;
@@ -100,9 +97,7 @@ public class FacesContextImpl extends FacesContext
             throw new NullPointerException
                 (Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
 	}
-        this.externalContext = ec;
-        this.locale = externalContext.getRequestLocale();
-                 
+        this.externalContext = ec;     
         setCurrentInstance(this);
     }
 
@@ -156,21 +151,6 @@ public class FacesContextImpl extends FacesContext
         } else {
             return (Collections.EMPTY_LIST.iterator());
         }
-    }
-
-    public Locale getLocale() {
-        assertNotReleased();
-        return (this.locale);
-    }
-
-
-    public void setLocale(Locale locale) {
-        assertNotReleased();
-        this.locale = locale;
-        // update the JSTL configuration parameter with the new locale instance,
-        // so that the new LocalizationContext that gets created when the setBundle
-        // tag is processed is based on the modified locale.
-        Config.set((ServletRequest) externalContext.getRequest(), Config.FMT_LOCALE, locale);
     }
 
     public int getMaximumSeverity() {
@@ -396,7 +376,6 @@ public class FacesContextImpl extends FacesContext
     public void release() {
         released = true;
         externalContext = null;
-        locale = null;        
         responseStream = null;
         responseWriter = null;
         facesEvents = null;
@@ -404,7 +383,7 @@ public class FacesContextImpl extends FacesContext
         globalMessages = null;        
         renderResponse = false;
         responseComplete = false;
-	    viewRoot = null;
+	viewRoot = null;
 
 	// PENDING(edburns): write testcase that verifies that release
 	// actually works.  This will be important to keep working as

@@ -6,6 +6,7 @@
 %><%@ page import="javax.faces.application.Message"
 %><%@ page import="javax.faces.context.FacesContext"
 %><%@ page import="javax.faces.application.MessageResources"
+%><%@ page import="javax.faces.component.UIViewRoot"
 %><%
 
   // Initialize list of message ids
@@ -34,7 +35,7 @@
     out.println("/message01.jsp FAILED - No FacesContext returned");
     return;
   }
-
+  facesContext.setViewRoot(new UIViewRoot());
   // Acquire our Application instance
   ApplicationFactory afactory = (ApplicationFactory)
    FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
@@ -53,7 +54,7 @@
   }
 
   // Test for replacing a Standard Validator Message
-  facesContext.setLocale(new Locale("en", "US"));
+  facesContext.getViewRoot().setLocale(new Locale("en", "US"));
   Message msg = mr.getMessage(facesContext, "javax.faces.validator.DoubleRangeValidator.LIMIT");
   if (!msg.getSummary().equals("Validation Error:This summary replaces the RI summary")) {
       out.println("/message01.jsp FAILED - Missing replacement message");

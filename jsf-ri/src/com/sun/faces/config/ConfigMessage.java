@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigMessage.java,v 1.4 2003/09/03 18:53:38 rlubke Exp $
+ * $Id: ConfigMessage.java,v 1.5 2003/10/15 16:59:08 jvisvanathan Exp $
  */
 
 /*
@@ -80,8 +80,9 @@ public class ConfigMessage extends ConfigFeature {
 	if (language == null) {
 	    Locale locale = null;
 	    FacesContext context = FacesContext.getCurrentInstance();
-	    if (context != null) {
-                locale = context.getLocale();
+            // viewRoot may not have been initialized at this point.
+	    if (context != null && context.getViewRoot() != null) {
+                locale = context.getViewRoot().getLocale();
 	    } else {
 		locale = Locale.getDefault();
             }

@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.6 2003/10/03 17:43:32 rlubke Exp $
+ * $Id: ViewTag.java,v 1.7 2003/10/15 16:59:11 jvisvanathan Exp $
  */
 
 /*
@@ -11,15 +11,21 @@ package com.sun.faces.taglib.jsf_core;
 
 import com.sun.faces.RIConstants;
 
+import javax.servlet.ServletRequest;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.application.StateManager;
 import javax.faces.webapp.UIComponentBodyTag;
 import javax.faces.application.StateManager.SerializedView;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.ExternalContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyTag;
 import javax.servlet.jsp.tagext.BodyContent;
 import java.io.IOException;
+import java.util.Locale;
+
+import javax.servlet.jsp.jstl.core.Config;
 
 import com.sun.faces.util.Util;
 import org.mozilla.util.Assert;
@@ -31,7 +37,7 @@ import org.mozilla.util.Assert;
  *  any renderers or attributes. It exists mainly to save the state of
  *  the response tree once all tags have been rendered.
  *
- * @version $Id: ViewTag.java,v 1.6 2003/10/03 17:43:32 rlubke Exp $
+ * @version $Id: ViewTag.java,v 1.7 2003/10/15 16:59:11 jvisvanathan Exp $
  * 
  *
  */
@@ -90,6 +96,13 @@ public class ViewTag extends UIComponentBodyTag
         Assert.assert_it(facesContext != null);
 	ResponseWriter writer = facesContext.getResponseWriter();
         Assert.assert_it(writer != null);
+        
+        // update the JSTL locale attribute in request scope so that JSTL
+        // picks up the locale from viewRoot.
+        // PENDING (visvan) what if the JSTL setBundle gets executed before
+        // viewTag ? Then JSTL is going not see the modified locale.
+        Config.set((ServletRequest) facesContext.getExternalContext().getRequest(), 
+                Config.FMT_LOCALE, facesContext.getViewRoot().getLocale());
 	try {
             writer.startDocument();
         } catch (IOException e) {

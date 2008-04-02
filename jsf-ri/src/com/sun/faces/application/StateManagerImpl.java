@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.5 2003/10/03 17:43:30 rlubke Exp $ 
+ * $Id: StateManagerImpl.java,v 1.6 2003/10/15 16:59:06 jvisvanathan Exp $ 
  */ 
 
 
@@ -32,7 +32,7 @@ import java.util.Set;
 /** 
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
- * @version $Id: StateManagerImpl.java,v 1.5 2003/10/03 17:43:30 rlubke Exp $ 
+ * @version $Id: StateManagerImpl.java,v 1.6 2003/10/15 16:59:06 jvisvanathan Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -56,7 +56,7 @@ public class StateManagerImpl extends StateManager  {
             Map sessionMap = Util.getSessionMap(context);
             String localeKey = RIConstants.REQUEST_LOCALE + "." + 
                     context.getViewRoot().getViewId();
-            sessionMap.put(localeKey, context.getLocale());
+            sessionMap.put(localeKey, context.getViewRoot().getLocale());
             sessionMap.put(viewRoot.getViewId(), viewRoot); 
         } else {
 	    result = new SerializedView(getTreeStructureToSave(context),
@@ -147,7 +147,7 @@ public class StateManagerImpl extends StateManager  {
                 String localeKey = RIConstants.REQUEST_LOCALE + "." + viewId;
                 Locale locale = (Locale) sessionMap.get(localeKey);
                 if (locale != null) {
-                    context.setLocale(locale);
+                    viewRoot.setLocale(locale);
                 }
             }
         }

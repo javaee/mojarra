@@ -1,5 +1,5 @@
 /*
- * $Id: MessageResourcesImpl.java,v 1.2 2003/09/08 22:03:12 rlubke Exp $
+ * $Id: MessageResourcesImpl.java,v 1.3 2003/10/15 16:59:06 jvisvanathan Exp $
  */
 
 /*
@@ -174,8 +174,9 @@ public class MessageResourcesImpl extends MessageResources
     public Message getMessage(String messageId, Object params[]) {
         Locale locale = null;
         FacesContext context = FacesContext.getCurrentInstance();
-        if (context != null) {
-            locale = FacesContext.getCurrentInstance().getLocale();
+        // context.getViewRoot() may not have been initialized at this point.
+        if (context != null && context.getViewRoot() != null) {
+            locale = context.getViewRoot().getLocale();
             if (locale == null) {
                 locale = Locale.getDefault();
             }
@@ -216,10 +217,14 @@ public class MessageResourcesImpl extends MessageResources
         if (context == null || messageId == null ) {
             throw new NullPointerException("One or more parameters could be null");
         }
-        
-        Locale locale = context.getLocale();
+        Locale locale = null;
+        // viewRoot may not have been initialized at this point.
+        if (context != null && context.getViewRoot() != null) {
+            locale = context.getViewRoot().getLocale();
+        } else {
+            locale = Locale.getDefault();
+        }
         Assert.assert_it(locale != null);
-//        return getMessage(locale, messageId, params);
         Message message = getMessage(locale, messageId, params);
         if (message != null) {
             return message;

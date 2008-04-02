@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreViewFromPage.java,v 1.4 2003/09/04 21:15:12 jvisvanathan Exp $
+ * $Id: TestRestoreViewFromPage.java,v 1.5 2003/10/15 16:59:19 jvisvanathan Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import com.sun.faces.lifecycle.Phase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreViewFromPage.java,v 1.4 2003/09/04 21:15:12 jvisvanathan Exp $
+ * @version $Id: TestRestoreViewFromPage.java,v 1.5 2003/10/15 16:59:19 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -118,7 +118,7 @@ public void testRestoreViewFromPage()
     assertTrue(null != getFacesContext().getViewRoot());    
     assertTrue(RenderKitFactory.DEFAULT_RENDER_KIT.equals(
            getFacesContext().getViewRoot().getRenderKitId()));
-    assertTrue(getFacesContext().getLocale().equals(Locale.US));
+    assertTrue(getFacesContext().getViewRoot().getLocale().equals(Locale.US));
     CompareFiles cf = new CompareFiles();
     try {
         FileOutputStream os = new FileOutputStream(RESTORE_VIEW_OUTPUT_FILE);

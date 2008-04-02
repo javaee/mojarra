@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.4 2003/09/13 12:58:48 eburns Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.5 2003/10/15 16:59:10 jvisvanathan Exp $
  */
 
 /*
@@ -127,7 +127,8 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
             requestMap.put(FACES_VIEW_STATE, state);
             Locale locale = (Locale) ois.readObject();
             if ( locale != null) {
-                context.setLocale(locale);
+                requestMap.put(RIConstants.FACES_VIEW_LOCALE, locale);
+                // context.getViewRoot().setLocale(locale);
             }
             ois.close();
         } catch (java.io.OptionalDataException ode) {
@@ -144,13 +145,13 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
         ByteArrayOutputStream bos = null;
         String hiddenField = null; 
         
-        Assert.assert_it(context.getLocale() != null);
+        Assert.assert_it(context.getViewRoot().getLocale() != null);
  
 	bos = new ByteArrayOutputStream();
 	ObjectOutput output = new ObjectOutputStream(bos);
 	output.writeObject(view.getStructure());
 	output.writeObject(view.getState());
-	output.writeObject(context.getLocale());
+	output.writeObject(context.getViewRoot().getLocale());
 	
 	hiddenField = " <input type=\"hidden\" name=\"" 
 	    + RIConstants.FACES_VIEW +  "\"" + " value=\"" +

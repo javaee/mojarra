@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.19 2003/10/03 16:17:44 eburns Exp $
+ * $Id: TestConverters.java,v 1.20 2003/10/15 16:59:18 jvisvanathan Exp $
  */
 
 /*
@@ -44,7 +44,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.19 2003/10/03 16:17:44 eburns Exp $
+ * @version $Id: TestConverters.java,v 1.20 2003/10/15 16:59:18 jvisvanathan Exp $
  * 
  *
  */
@@ -87,6 +87,9 @@ public class TestConverters extends JspFacesTestCase
         ApplicationFactory aFactory = 
 	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         application = aFactory.getApplication();
+        UIViewRoot viewRoot = new UIViewRoot();
+	viewRoot.setViewId("viewId");
+	getFacesContext().setViewRoot(viewRoot);
     }     
 
     public void beginConverters(WebRequest theRequest) {

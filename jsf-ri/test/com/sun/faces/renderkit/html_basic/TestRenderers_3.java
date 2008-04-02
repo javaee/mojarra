@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_3.java,v 1.25 2003/10/02 06:50:21 jvisvanathan Exp $
+ * $Id: TestRenderers_3.java,v 1.26 2003/10/15 16:59:20 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -48,7 +48,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.25 2003/10/02 06:50:21 jvisvanathan Exp $
+ * @version $Id: TestRenderers_3.java,v 1.26 2003/10/15 16:59:20 jvisvanathan Exp $
  * 
  *
  */
@@ -310,9 +310,9 @@ public class TestRenderers_3 extends JspFacesTestCase {
         root.getChildren().add(input1);
         HiddenRenderer hiddenRenderer = new HiddenRenderer();
         
-        DateFormat dateformatter = 
+        DateFormat dateformatter =
 	    DateFormat.getDateInstance(DateFormat.MEDIUM,
-				       getFacesContext().getLocale());
+	    getFacesContext().getViewRoot().getLocale());
         
         // test hidden renderer with converter set to date
         // test decode method
@@ -338,7 +338,8 @@ public class TestRenderers_3 extends JspFacesTestCase {
         root.getChildren().add(input2);
 
 	NumberFormat numberformatter = 
-	    NumberFormat.getPercentInstance(getFacesContext().getLocale());
+	    NumberFormat.getPercentInstance(getFacesContext().
+            getViewRoot().getLocale());
         // test decode method
         System.out.println("    Testing decode method...");
         hiddenRenderer.decode(getFacesContext(), input2);

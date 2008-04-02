@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreViewPhase.java,v 1.7 2003/10/02 06:50:16 jvisvanathan Exp $
+ * $Id: TestRestoreViewPhase.java,v 1.8 2003/10/15 16:59:19 jvisvanathan Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreViewPhase.java,v 1.7 2003/10/02 06:50:16 jvisvanathan Exp $
+ * @version $Id: TestRestoreViewPhase.java,v 1.8 2003/10/15 16:59:19 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -122,7 +122,7 @@ public void testReconstituteRequestInitial()
     assertTrue(RenderKitFactory.DEFAULT_RENDER_KIT == 
             getFacesContext().getViewRoot().getRenderKitId());
 
-    assertTrue(null != getFacesContext().getLocale());
+    assertTrue(null != getFacesContext().getViewRoot().getLocale());
    
     UIViewRoot root = null;
 
@@ -172,7 +172,7 @@ public void testReconstituteRequestSubmit()
     assertTrue(RenderKitFactory.DEFAULT_RENDER_KIT == 
             getFacesContext().getViewRoot().getRenderKitId());
 
-    assertTrue(locale == getFacesContext().getLocale());
+    assertTrue(locale == getFacesContext().getViewRoot().getLocale());
     
     assertTrue(getFacesContext().getViewRoot().getViewId().equals(TEST_URI));
     root = getFacesContext().getViewRoot();

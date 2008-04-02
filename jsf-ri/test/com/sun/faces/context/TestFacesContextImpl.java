@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.37 2003/10/07 19:53:17 rlubke Exp $
+ * $Id: TestFacesContextImpl.java,v 1.38 2003/10/15 16:59:17 jvisvanathan Exp $
  */
 
 /*
@@ -29,15 +29,13 @@ import javax.servlet.ServletResponse;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
-import java.util.Locale;
-
 /**
  *
  *  <B>TestFacesContextImpl</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.37 2003/10/07 19:53:17 rlubke Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.38 2003/10/15 16:59:17 jvisvanathan Exp $
  */
 
 public class TestFacesContextImpl extends ServletFacesTestCase
@@ -115,11 +113,6 @@ public void testAccessors()
     ServletResponse resp = null;
     ServletContext sc = null;
         
-    
-    Locale locale = getFacesContext().getLocale();
-    result = null != locale;
-    System.out.println("Testing getLocale: " + result);
-    assertTrue(result);
     UIViewRoot page = new UIViewRoot();
     page.setViewId("viewId");
     getFacesContext().setViewRoot(page);
@@ -280,14 +273,6 @@ public void testRelease() {
     FacesContext context = getFacesContext();
     context.release();
     boolean exceptionThrown = false;
-    try {
-        context.getLocale();
-    } catch (IllegalStateException ise) {
-        exceptionThrown = true;
-    }
-    assertTrue(exceptionThrown);
-    
-    exceptionThrown = false;
     try {
         context.getViewRoot();
     } catch (IllegalStateException ise) {

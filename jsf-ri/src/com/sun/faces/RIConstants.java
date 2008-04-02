@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.46 2003/10/06 18:11:31 eburns Exp $
+ * $Id: RIConstants.java,v 1.47 2003/10/15 16:59:05 jvisvanathan Exp $
  */
 
 /*
@@ -40,6 +40,8 @@ public class RIConstants {
     public final static String REQUEST_LOCALE = FACES_PREFIX + "LOCALE";
 
     public final static String FACES_VIEW = FACES_PREFIX + "VIEW";
+    public static final String FACES_VIEW_LOCALE = 
+            "com.sun.faces.FACES_VIEW_LOCALE";
    
     /**
 

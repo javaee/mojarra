@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.22 2003/10/07 19:53:22 rlubke Exp $
+ * $Id: TestUtil_messages.java,v 1.23 2003/10/15 16:59:21 jvisvanathan Exp $
  */
 
 /*
@@ -11,7 +11,7 @@
 
 package com.sun.faces.util;
 
-
+import javax.faces.component.UIViewRoot;
 import com.sun.faces.ServletFacesTestCase;
 
 import java.util.Locale;
@@ -24,7 +24,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.22 2003/10/07 19:53:22 rlubke Exp $
+ * @version $Id: TestUtil_messages.java,v 1.23 2003/10/15 16:59:21 jvisvanathan Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {
@@ -120,6 +120,17 @@ public class TestUtil_messages extends ServletFacesTestCase {
     public TestUtil_messages() {super("TestUtil_messages.java");}
     public TestUtil_messages(String name) {super(name);}
 
+    //
+    // Methods from TestCase
+    
+    public void setUp() {
+        super.setUp();
+        UIViewRoot viewRoot = new UIViewRoot();
+	viewRoot.setViewId("viewId");
+	getFacesContext().setViewRoot(viewRoot);
+        
+     }
+    
 //
 // Class methods
 //
@@ -134,25 +145,25 @@ public class TestUtil_messages extends ServletFacesTestCase {
         // English Language
         System.out.println("Verifying English Messages...");
         Locale locale = new Locale("en", "US");
-        getFacesContext().setLocale(locale);
+        getFacesContext().getViewRoot().setLocale(locale);
         verifyParamsInMessages(messageInfo);
 
         // French Language
         System.out.println("Verifying French Messages...");
         locale = new Locale("fr", "");
-        getFacesContext().setLocale(locale);
+        getFacesContext().getViewRoot().setLocale(locale);
         verifyParamsInMessages(messageInfo);
 
         // German Language
         System.out.println("Verifying German Messages...");
         locale = new Locale("de", "");
-        getFacesContext().setLocale(locale);
+        getFacesContext().getViewRoot().setLocale(locale);
         verifyParamsInMessages(messageInfo);
 
         // Spanish Language
         System.out.println("Verifying Spanish Messages...");
         locale = new Locale("es", "");
-        getFacesContext().setLocale(locale);
+        getFacesContext().getViewRoot().setLocale(locale);
         verifyParamsInMessages(messageInfo);
     }
 

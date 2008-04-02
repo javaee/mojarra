@@ -1,5 +1,5 @@
 /*
- * $Id: TestMessageResourcesImpl.java,v 1.1 2003/07/25 05:52:17 horwat Exp $
+ * $Id: TestMessageResourcesImpl.java,v 1.2 2003/10/15 16:59:16 jvisvanathan Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import com.sun.faces.ServletFacesTestCase;
 import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
 
+import javax.faces.component.UIViewRoot;
 import javax.faces.application.Message;
 import javax.faces.application.MessageResources;
 import javax.faces.context.FacesContext;
@@ -31,7 +32,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestMessageResourcesImpl.java,v 1.1 2003/07/25 05:52:17 horwat Exp $
+ * @version $Id: TestMessageResourcesImpl.java,v 1.2 2003/10/15 16:59:16 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -69,7 +70,13 @@ public class TestMessageResourcesImpl extends ServletFacesTestCase
     //
     // Methods from TestCase
     //
-
+    public void setUp() {
+        super.setUp();
+        UIViewRoot viewRoot = new UIViewRoot();
+	viewRoot.setViewId("viewId");
+	getFacesContext().setViewRoot(viewRoot);
+     }   
+    
     //
     // General Methods
     //
@@ -133,8 +140,7 @@ public class TestMessageResourcesImpl extends ServletFacesTestCase
 
         // passing an invalid locale should use fall back.
         Locale en_locale = new Locale("eng", "us");
-        getFacesContext().setLocale(en_locale);
-
+        getFacesContext().getViewRoot().setLocale(en_locale);
         System.out.println("Testing get methods");
         try {
             msg = resources.getMessage(getFacesContext(),"MSG0003", "userId");
@@ -146,7 +152,7 @@ public class TestMessageResourcesImpl extends ServletFacesTestCase
         msg = null;
       
         en_locale = new Locale("en", "us"); 
-        getFacesContext().setLocale(en_locale);
+        getFacesContext().getViewRoot().setLocale(en_locale);
         msg = resources.getMessage(getFacesContext(),"MSG0003", "userId");
         assertTrue ( msg != null );
         assertTrue((msg.getSummary()).equals("'userId' field cannot be empty."));
