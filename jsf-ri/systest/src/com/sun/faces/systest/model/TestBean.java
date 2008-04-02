@@ -1,5 +1,5 @@
 /*
- * $Id: TestBean.java,v 1.18 2005/08/22 22:10:43 ofung Exp $
+ * $Id: TestBean.java,v 1.19 2005/09/26 14:11:48 rogerk Exp $
  */
 
 /*
@@ -510,6 +510,36 @@ public class TestBean {
         }
         newList2.add(newValue);
    }
+
+    private Integer selectedValue = new Integer(2);
+                                                                                                                         
+    public Integer getSelectedValue() {
+        return selectedValue;
+    }
+                                                                                                                         
+    public void setSelectedValue(Integer selectedValue) {
+        this.selectedValue = selectedValue;
+    }
+                                                                                                                         
+    public SelectItem[] getMySelectItems(){
+        return new SelectItem[]{
+            new SelectItem(new Integer(1),"1"),
+            new SelectItem(new Integer(2),"2"),
+            new SelectItem(new Integer(3),"3")
+        };
+    }
+
+    private int intVal = 3;
+    public int getInt() {
+        return intVal;
+    }
+                                                                                                                         
+                                                                                                                         
+    public void setInt(int newIntVal) {
+        intVal = newIntVal;
+    }
+
+
 
 	
 }

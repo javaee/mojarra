@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.61 2005/08/26 15:27:16 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.62 2005/09/26 14:11:46 rogerk Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -562,14 +562,26 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
         Object submittedValues[] = getSubmittedSelectedValues(context,
                                                               component);
+        Class type = String.class;
+        Object valuesArray = null;
+        Object itemValue = null;
+        
         boolean isSelected;
         if (submittedValues != null) {
-            isSelected = isSelected(valueString, submittedValues);
+            valuesArray = submittedValues;
+            itemValue = valueString;
         } else {
-            Object selectedValues = getCurrentSelectedValues(context,
-                                                             component);
-            isSelected = isSelected(curItem.getValue(), selectedValues);
-        }
+            valuesArray = getCurrentSelectedValues(context, component);
+            itemValue = curItem.getValue();
+        }        
+        if (valuesArray != null) {
+            type = valuesArray.getClass().getComponentType();
+        } 
+        
+        Object newValue = context.getApplication().getExpressionFactory().
+            coerceToType(itemValue, type);
+
+        isSelected = isSelected(newValue, valuesArray);
 
         if (isSelected) {
             writer.writeAttribute("selected", "selected", "selected");

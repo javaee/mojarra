@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.72 2005/08/22 22:10:21 ofung Exp $
+ * $Id: RadioRenderer.java,v 1.73 2005/09/26 14:11:47 rogerk Exp $
  */
 
 /*
@@ -105,6 +105,14 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
             writer.writeText("\n", null);
         }
         
+        Class type = String.class;
+        if (curValue != null) {
+            type = curValue.getClass();
+        } 
+        Object itemValue = curItem.getValue();
+        Object newValue = context.getApplication().getExpressionFactory().
+            coerceToType(itemValue, type);
+        
         // disable the radio button if the attribute is set.
         String labelClass = null;
 	boolean componentDisabled = false;
@@ -125,8 +133,8 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
 
         writer.startElement("input", component);
         writer.writeAttribute("type", "radio", "type");
-        if (null != curItem.getValue() &&
-            curItem.getValue().equals(curValue)) {
+
+        if (newValue.equals(curValue)) {
             writer.writeAttribute("checked", Boolean.TRUE, null);
         }
         writer.writeAttribute("name", component.getClientId(context),
