@@ -326,6 +326,7 @@
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/> 
             <test name="com.sun.faces.convert.TestConverterFactory"/>
             <test name="com.sun.faces.convert.TestConverters"/>
+            <test name="javax.faces.validator.RequiredValidatorTestCase"/>
 
             <!-- To run the following tests, comment last 3 tests, uncomment
                  following tests and set saveStateInClient property in 
