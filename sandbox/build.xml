@@ -1,0 +1,201 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+ The contents of this file are subject to the terms
+ of the Common Development and Distribution License
+ (the License). You may not use this file except in
+ compliance with the License.
+
+ You can obtain a copy of the License at
+ https://javaserverfaces.dev.java.net/CDDL.html or
+ legal/CDDLv1.0.txt.
+ See the License for the specific language governing
+ permission and limitations under the License.
+
+ When distributing Covered Code, include this CDDL
+ Header Notice in each file and include the License file
+ at legal/CDDLv1.0.txt.
+ If applicable, add the following below the CDDL Header,
+ with the fields enclosed by brackets [] replaced by
+ your own identifying information:
+ "Portions Copyrighted [year] [name of copyright owner]"
+
+ [Name of File] [ver.__] [Date]
+
+ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
+-->
+
+
+<!-- ************ JSF build file ************************************** -->
+
+<project name="JSF-RI-SANDBOX" default="main" basedir=".">
+
+
+    <!-- ************ Per user local properties ******************************* -->
+
+    <property file="${user.home}/build.properties"/>
+    <property file="../build.properties"/>
+    <import file="${jsf.build.home}/common/ant/common.xml"/>
+
+
+    <!-- ******************* Structural ************************** -->
+
+    <!-- The base directory for compilation targets -->
+    <property name="build.dir" value="build"/>
+    <property name="build.classes.dir" value="${build.dir}/classes"/>
+
+    <!-- The base directory for distribution targets -->
+    <property name="dist.dir" value="${basedir}/dist"/>
+
+    <!-- The base directory for component sources -->
+    <property name="source.dir" value="${basedir}/src/java"/>
+
+    <!-- The base resource directory -->
+    <property name="resource.dir" value="${basedir}/src/resources"/>
+
+    <property name="name" value="jsf-ri-sandbox"/>
+
+    <property name="impl.version" value="0.1"/>
+    <property name="impl.name" value="JSF RI Sandbox"/>
+
+    <path id="impl.compile.classpath">
+        <pathelement location="${jsf-api.jar}"/>
+        <pathelement location="${jsf-impl.jar}"/>
+        <path refid="sun.commons.classpath"/>
+        <path refid="compile.classpath"/>
+        <pathelement location="${tools.dir}/build/classes"/>
+    </path>
+
+
+    <!-- ************ Executable Targets ************************************** -->
+
+
+    <target name="init"
+            description="Initialize and evaluate conditionals">
+        <echo message="-------- ${impl.name} ${impl.version} --------"/>
+    </target>
+
+    <target name="prepare" depends="init"
+            description="Prepare build directory">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.classes.dir}"/>
+        <mkdir dir="${build.classes.dir}/META-INF"/>
+        <mkdir dir="${build.dir}/javadocs"/>
+        <mkdir dir="${build.dir}/tlddocs"/>
+        <mkdir dir="${build.dir}/lib"/>       
+    </target>
+
+    <target name="compile" depends="prepare"
+            description="Just compile the classes">
+        <if>
+            <equals arg1="${container.name}" arg2="glassfish"/>
+            <then>
+                <property name="exclude.path" value=""/>
+            </then>
+            <else>
+                <property name="exclude.path" value="com/sun/faces/vendor/**"/>
+            </else>
+        </if>
+
+        <!-- Run javac through everything -->
+        <jsf.javac srcdir="${source.dir}"
+                   destdir="${build.classes.dir}"
+                   excludes="${exclude.path}">
+            <classpath>
+                <path refid="impl.compile.classpath"/>
+            </classpath>
+        </jsf.javac>
+
+        <copy file="${resource.dir}/META-INF/sandbox.tld"
+              toDir="${build.classes.dir}/META-INF"/>
+        <copy file="${resource.dir}/META-INF/faces-config.xml"
+              toDir="${build.classes.dir}/META-INF"/>
+
+    </target>
+
+    <target name="clean"
+            description="Clean build and distribution directories">
+
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+
+        <delete>
+            <fileset dir="." includes="**/*~" defaultexcludes="no"/>
+            <fileset dir="." includes="**/.nbattrs" defaultexcludes="no"/>
+        </delete>
+    </target>
+
+    <target name="all" depends="clean,prepare,compile"
+            description="Clean and compile all components"/>
+
+    <!-- Create the source distribution -->
+    <target name="sandbox.source">
+        <zip destfile="${dist.dir}/jsf-ri-sandbox-src-${impl.version}.zip">
+            <zipfileset dir="${basedir}"
+                        includes="build.xml"
+                        prefix="jsf-ri-sandox-src-${impl.version}"/>
+            <zipfileset dir="${source.dir}"
+                        excludes="**/CVS/**"
+                        prefix="jsf-ri-sandbox-src-${impl.version}/src"/>
+            <zipfileset dir="${basedir}"
+                        includes="conf/** web/**"
+                        prefix="jsf-ri-sandbox-src-${impl.version}"/>
+        </zip>
+    </target>
+
+
+    <target name="dist" depends="jars" description="Build distribution files">
+
+        <mkdir dir="${dist.dir}"/>
+
+        <antcall target="tlddocs"/>
+
+        <!-- Create the binary distribution -->
+        <zip destfile="${dist.dir}/jsf-ri-sandbox-${impl.version}.zip">
+            <zipfileset dir="${build.dir}"
+                        includes="lib/**,tlddocs/**"
+                        prefix="jsf-ri-sandbox-${impl.version}"/>
+        </zip>
+
+        <!-- Create a buildable source distribution -->
+        <zip destfile="${dist.dir}/jsf-ri-sandbox-src-${impl.version}.zip">
+            <zipfileset dir="${basedir}"
+                        includes="build.xml build-tests.xml README COPYRIGHT LICENSE*.*"
+                        prefix="jsf-ri-sandbox-src-${impl.version}"/>
+            <zipfileset dir="${source.dir}"
+                        excludes="**/CVS/**"
+                        prefix="jsf-ri-sandbox-src-${impl.version}/src"/>
+
+        </zip>
+        <antcall target="sandbox.source"/>
+
+    </target>
+
+    <target name="tlddocs">
+        <java fork="true" jar="${tlddoc.jar}">
+            <arg line="-d ${build.dir}/tlddocs"/>
+            <arg line="-windowtitle jsf-ri-sandbox-${impl.version}"/>
+            <arg value="${resource.dir}/META-INF/sandbox.tld"/>
+        </java>
+    </target>
+
+
+
+    <!--
+         ===================================================================
+           Create the jars
+         ===================================================================
+    -->
+
+    <target name="jars" depends="compile">
+        <jsf.manifested.jar jarfile="${build.dir}/lib/${name}.jar"
+                            basedir="${build.classes.dir}"
+                            extension-name="com.sun.faces"/>       
+    </target>
+
+    <target name="main" depends="jars"/>
+
+
+
+
+</project>

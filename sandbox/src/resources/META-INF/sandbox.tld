@@ -1,0 +1,939 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!--
+ The contents of this file are subject to the terms
+ of the Common Development and Distribution License
+ (the License). You may not use this file except in
+ compliance with the License.
+
+ You can obtain a copy of the License at
+ https://javaserverfaces.dev.java.net/CDDL.html or
+ legal/CDDLv1.0.txt.
+ See the License for the specific language governing
+ permission and limitations under the License.
+
+ When distributing Covered Code, include this CDDL
+ Header Notice in each file and include the License file
+ at legal/CDDLv1.0.txt.
+ If applicable, add the following below the CDDL Header,
+ with the fields enclosed by brackets [] replaced by
+ your own identifying information:
+ "Portions Copyrighted [year] [name of copyright owner]"
+
+ [Name of File] [ver.__] [Date]
+
+ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
+-->
+
+
+<taglib xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+    version="2.1">
+    <description>
+        This taglib is for components being developed within the
+        JSF RI sandbox.
+    </description>
+    <tlib-version>1.0</tlib-version>
+    <short-name>risb</short-name>
+    <uri>http://java.sun.com/jsf/ri/sandbox</uri>
+
+    <!-- ==================== Tag Definitions ============================= -->
+
+    <tag>
+        <description>
+            <![CDATA[<p>Renders an HTML "table" element compliant with the HTML 401
+            specification.  Render the "caption" facet, if present, inside a
+            "caption" element immediately below the "table" element.  If the
+            "captionClass" attribute is specified, render its value as the
+            value of the "class" attribute on the "caption" element.  If the
+            "captionStyle" attribute is specified, render its value as the
+            value of the "style" attribute on the "caption" element.</p>
+            <p>Please consult the javadoc for <code>UIData</code> to
+            supplement this specification.  If the "styleClass" attribute is
+            specified, render its value as the value of the "class" attribute
+            on the "table" element.  Any pass-through attributes are also
+            rendered on the "table" element.  </p>
+
+            <p>Column Groups</p>
+
+            <ul>
+
+            <p>If the <code>UIData</code> component has a "colgroups" facet,
+            render its contents.  Consistent with the rules of facets in
+            general, this facet must have only one child.  In general, this
+            will be a <code>panel group</code> component that will contain
+            <code>colgroup</code> and <code>col</code> elements per the HTML
+            Table specification.  Use of column grouping can improve
+            accessibility.  This facet must be rendered before the table
+            header and footer.</p>
+
+            </ul>
+
+            <p>Rendering the header</p>
+
+            <ul>
+
+            <p>If the <code>UIData</code> component has a "header" facet, or
+            any of the child <code>UIColumn</code> components has a "header"
+            facet, render a "thead" element.  If the <code>UIData</code>
+            component has a "header" facet, encode its contents inside of "tr"
+            and "th" elements, respectively.  Output the value of the
+            "headerClass" attribute of the <code>UIData</code> component, if
+            present, as the value of the "class" attribute on the "th".
+            Output the number of child <code>UIColumn</code> components of the
+            <code>UIData</code> component as the value of the "colspan"
+            attribute on the "th".  Output "colgroup" as the value of the
+            "scope" attribute on the "th" element. </p>
+
+            <p>If any of the child <code>UIColumn</code> components has a
+            "header" facet render a "tr" element.  For each
+            <code>UIColumn</code> that actually has a "header" facet, render
+            it inside of a "th" element.  Columns that don't have a "header"
+            facet cause an empty "th" element to be rendered.  Output the
+            value of the "headerClass" attribute of the <code>UIColumn</code>
+            component, if present, as the value of the "class" attribute on
+            the "th".  If the "headerClass" attribute of the
+            <code>UIColumn</code> component is not present, output the value
+            of the "headerClass" attribute of the <code>UIData</code>
+            component, if present, as the value of the "class" attribute on
+            the "th".  Output "col" as the value of the "scope" attribute on
+            the "th" element.
+            </p>
+
+            <p>Close out the "thead" element.</p>
+
+            </ul>
+
+            <p>Rendering the footer</p>
+
+            <ul>
+
+            <p>Follow the same process as for the header, except replace
+            "header" with "footer", "th" with "td", "thead" with "tfoot", and
+            "headerClass" with "footerClass".  Do not render any "scope"
+            attribute for the footer.</p>
+
+            </ul>
+
+            <p>Rendering the table body</p>
+
+            <ul>
+
+            <p>Look at the value of the "bodyrows" attribute.  If present,
+            this must be a comma separated list of integers.  Each entry in
+            this list is the row index of the row before which a "tbody"
+            element should be rendered.</p>
+
+            <p>If there was no "bodyrows" attribute, or it was empty, render a
+            "tbody" element.  Keep track of the result of the "rows" property
+            on the <code>UIData</code> component.  Keep track of the number of
+            rows we have rendered so far.  Iterate through the rows.  Set the
+            "rowIndex" property of the <code>UIData</code> component to be
+            correct as we iterate through the rows.  Stop rendering children
+            and close out the "tbody" element if the "rowAvailable" property
+            of the <code>UIData</code> returned false.  If the current row
+            index is contained in the "bodyrows" attribute, check if a "tbody"
+            start element was rendered that needs to be closed, and if so,
+            close the "tbody" element.  Then render a "tbody" element start.
+            Otherwise, do not render a "tbody" element.</p>
+
+            <p>Output a "tr" element.  Output the value of the "rowClasses"
+            per the attribute description below.  For each
+            <code>UIColumn</code> child, if the column component has a
+            "rowHeader" attribute with a value of "true", output a "th"
+            element with a "scope" attribute with the value of "row".
+            Otherwise, if the column component has no "rowHeader" attribute,
+            or its value is false, output a "td" element.  In either case
+            attach the value of the "columnClasses" attribute of the
+            <code>UIData</code> component per the attribute description below.
+            Recursively encode each child of each <code>UIColumn</code> child.
+            Close out the "td" or "th" element.  When done with the row, close
+            out the "tr" element.  When done with all the rows, close out the
+            "tbody" element.</p>
+            </ul>
+
+            <p>When done rendering all the rows, set the "rowIndex" property of
+            the <code>UIData</code> to -1, and close out the "table"
+            element.</p>]]>
+        </description>
+        <name>
+            dataTable
+        </name>
+        <tag-class>
+            com.sun.faces.taglib.html_basic.DataTableTag
+        </tag-class>
+        <tei-class>
+            com.sun.faces.taglib.FacesTagExtraInfo
+        </tei-class>
+        <body-content>
+            JSP
+        </body-content>
+        <attribute>
+            <description>
+                <![CDATA[Zero-relative row number of the first row to be displayed.  If this
+                property is set to zero, rendering will begin with the first row of
+                the underlying data.]]>
+            </description>
+            <name>
+                first
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    int
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[The component identifier for this component.  This value must be
+                unique within the closest parent component that is a naming
+                container.]]>
+            </description>
+            <name>
+                id
+            </name>
+            <required>
+                false
+            </required>
+            <rtexprvalue>
+                true
+            </rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Flag indicating whether or not this component should be rendered
+                (during Render Response Phase), or processed on any subsequent
+                form submit.  The default value for this property is true.]]>
+            </description>
+            <name>
+                rendered
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    boolean
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[The number of rows to display, starting with the one identified by the
+                "first" property.  If this value is set to zero, all available rows in
+                the underlying data model will be displayed.]]>
+            </description>
+            <name>
+                rows
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    int
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[The current value of this component.]]>
+            </description>
+            <name>
+                value
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.Object
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Name of a request-scope attribute under which the model data for the
+                row selected by the current value of the "rowIndex" property (i.e.
+                also the current value of the "rowData" property) will be exposed.]]>
+            </description>
+            <name>
+                var
+            </name>
+            <required>
+                false
+            </required>           
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Name or code of the background color for this table.]]>
+            </description>
+            <name>
+                bgcolor
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Width (in pixels) of the border to be drawn
+                around this table.]]>
+            </description>
+            <name>
+                border
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    int
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Space-separated list of CSS style class(es) that will be
+                applied to any caption generated for this table.]]>
+            </description>
+            <name>
+                captionClass
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[CSS style(s) to be applied when this caption is rendered.]]>
+            </description>
+            <name>
+                captionStyle
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Definition of how much space the user agent should
+                leave between the border of each cell and its contents.]]>
+            </description>
+            <name>
+                cellpadding
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Definition of how much space the user agent should
+                leave between the left side of the table and the
+                leftmost column, the top of the table and the top of
+                the top side of the topmost row, and so on for the
+                right and bottom of the table.  It also specifies
+                the amount of space to leave between cells.]]>
+            </description>
+            <name>
+                cellspacing
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Comma-delimited list of CSS style classes that will be applied
+                to the columns of this table.  A space separated list of
+                classes may also be specified for any individual column.  If
+                the number of elements in this list is less than the number of
+                columns specified in the "columns" attribute, no "class"
+                attribute is output for each column greater than the number of
+                elements in the list.  If the number of elements in the list
+                is greater than the number of columns specified in the
+                "columns" attribute, the elements at the posisiton in the list
+                after the value of the "columns" attribute are ignored.]]>
+            </description>
+            <name>
+                columnClasses
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Direction indication for text that does not inherit directionality.
+                Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).]]>
+            </description>
+            <name>
+                dir
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Space-separated list of CSS style class(es) that will be
+                applied to any footer generated for this table.]]>
+            </description>
+            <name>
+                footerClass
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Code specifying which sides of the frame surrounding
+                this table will be visible.  Valid values are:
+                none (no sides, default value); above (top side only);
+                below (bottom side only); hsides (top and bottom sides
+                only); vsides (right and left sides only); lhs (left
+                hand side only); rhs (right hand side only); box
+                (all four sides); and border (all four sides).]]>
+            </description>
+            <name>
+                frame
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Space-separated list of CSS style class(es) that will be
+                applied to any header generated for this table.]]>
+            </description>
+            <name>
+                headerClass
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Code describing the language used in the generated markup
+                for this component.]]>
+            </description>
+            <name>
+                lang
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Javascript code executed when a pointer button is
+                clicked over this element.]]>
+            </description>
+            <name>
+                onclick
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Javascript code executed when a pointer button is
+                double clicked over this element.]]>
+            </description>
+            <name>
+                ondblclick
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Javascript code executed when a key is
+                pressed down over this element.]]>
+            </description>
+            <name>
+                onkeydown
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Javascript code executed when a key is
+                pressed and released over this element.]]>
+            </description>
+            <name>
+                onkeypress
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Javascript code executed when a key is
+                released over this element.]]>
+            </description>
+            <name>
+                onkeyup
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Javascript code executed when a pointer button is
+                pressed down over this element.]]>
+            </description>
+            <name>
+                onmousedown
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Javascript code executed when a pointer button is
+                moved within this element.]]>
+            </description>
+            <name>
+                onmousemove
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Javascript code executed when a pointer button is
+                moved away from this element.]]>
+            </description>
+            <name>
+                onmouseout
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Javascript code executed when a pointer button is
+                moved onto this element.]]>
+            </description>
+            <name>
+                onmouseover
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Javascript code executed when a pointer button is
+                released over this element.]]>
+            </description>
+            <name>
+                onmouseup
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Comma-delimited list of CSS style classes that will be applied
+                to the rows of this table.  A space separated list of classes
+                may also be specified for any individual row.  Thes styles are
+                applied, in turn, to each row in the table.  For example, if
+                the list has two elements, the first style class in the list
+                is applied to the first row, the second to the second row, the
+                first to the third row, the second to the fourth row, etc.  In
+                other words, we keep iterating through the list until we reach
+                the end, and then we start at the beginning again.]]>
+            </description>
+            <name>
+                rowClasses
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Code specifying which rules will appear between cells
+                within this table.  Valid values are:  none (no rules,
+                default value); groups (between row groups); rows
+                (between rows only); cols (between columns only); and
+                all (between all rows and columns).]]>
+            </description>
+            <name>
+                rules
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[CSS style(s) to be applied when this component is rendered.]]>
+            </description>
+            <name>
+                style
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Space-separated list of CSS style class(es) to be applied when
+                this element is rendered.  This value must be passed through
+                as the "class" attribute on generated markup.]]>
+            </description>
+            <name>
+                styleClass
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Summary of this table's purpose and structure, for
+                user agents rendering to non-visual media such as
+                speech and Braille.]]>
+            </description>
+            <name>
+                summary
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Advisory title information about markup elements generated
+                for this component.]]>
+            </description>
+            <name>
+                title
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Width of the entire table, for visual user agents.]]>
+            </description>
+            <name>
+                width
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                The ValueExpression linking this component to a property in a backing bean
+            </description>
+            <name>
+                binding
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    javax.faces.component.UIComponent
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                Comma separated list of row indices for which a new
+                "tbody" element should be started (and any
+                previously opened one should be ended).
+            </description>
+            <name>
+                bodyrows
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description>
+            <![CDATA[<p>Renders a UIComponent that represents a single column of data within a parent <code>UIData</code> component.</p>]]>
+        </description>
+        <name>
+            column
+        </name>
+        <tag-class>
+            com.sun.faces.taglib.html_basic.ColumnTag
+        </tag-class>
+        <tei-class>
+            com.sun.faces.taglib.FacesTagExtraInfo
+        </tei-class>
+        <body-content>
+            JSP
+        </body-content>
+        <attribute>
+            <description>
+                Flag indicating whether or not this component should be rendered
+                (during Render Response Phase), or processed on any subsequent
+                form submit.
+            </description>
+            <name>
+                rendered
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>java.lang.Boolean</type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                The value binding expression linking this component to a property in a backing bean
+            </description>
+            <name>
+                binding
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>javax.faces.component.UIComponent</type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                The component identifier for the associated component
+            </description>
+            <name>
+                id
+            </name>
+            <required>
+                false
+            </required>
+            <rtexprvalue>
+                false
+            </rtexprvalue>
+            <type>
+                java.lang.String
+            </type>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Space-separated list of CSS style class(es) that will be
+                applied to any column footer generated for this table.]]>
+            </description>
+            <name>
+                footerClass
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+                <![CDATA[Space-separated list of CSS style class(es) that will be
+                applied to any column header generated for this table.]]>
+            </description>
+            <name>
+                headerClass
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+         <attribute>
+            <description>
+                <![CDATA[Flag indicating that this column is a row header column and therefore cells in this column should be rendered with "th" instead of "td" and must have the 'scope="row"' attribute.]]>
+            </description>
+            <name>
+                rowHeader
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    boolean
+                </type>
+            </deferred-value>
+        </attribute>
+    </tag>
+</taglib>
