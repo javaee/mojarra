@@ -148,7 +148,7 @@ public class ELResolverInitPhaseListener implements PhaseListener {
 
         // add ELResolvers from faces-config.xml
         List<ELResolver> elResolversFromFacesConfig =
-              appAssociate.geELResolversFromFacesConfig();
+              appAssociate.getELResolversFromFacesConfig();
         if (elResolversFromFacesConfig != null) {
             for (ELResolver resolver : elResolversFromFacesConfig) {
                 compositeELResolverForJsp.add(resolver);
