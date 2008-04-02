@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.119 2005/11/28 21:45:04 rlubke Exp $
+ * $Id: UIComponentBase.java,v 1.120 2005/11/29 16:20:12 rlubke Exp $
  */
 
 /*
@@ -1260,28 +1260,25 @@ public abstract class UIComponentBase extends UIComponent {
     protected Renderer getRenderer(FacesContext context) {
 
         String rendererType = getRendererType();
-	Renderer result = null;
+        Renderer result = null;
         if (rendererType != null) {
-            RenderKitFactory rkFactory = (RenderKitFactory)
-                FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-            RenderKit renderKit = rkFactory.getRenderKit
-                (context, context.getViewRoot().getRenderKitId());
-	    result = (renderKit.getRenderer(getFamily(), rendererType));
-	    if (null == result) {
-		if (log.isLoggable(Level.FINE)) {
-		    // PENDING(edburns): I18N
-		    log.fine("Can't get Renderer for type " + rendererType);
-		}
-	    }
+            result = context.getRenderKit().getRenderer(getFamily(),
+                                                        rendererType);
+            if (null == result) {
+                if (log.isLoggable(Level.FINE)) {
+                    // PENDING(edburns): I18N
+                    log.fine("Can't get Renderer for type " + rendererType);
+                }
+            }
         } else {
-	    if (log.isLoggable(Level.FINE)) {
-		String id = this.getId();
-		id = (null != id) ? id : this.getClass().getName();
-		// PENDING(edburns): I18N
-		log.fine("No renderer-type for component " + id);
-	    }
-	}
-	return result;
+            if (log.isLoggable(Level.FINE)) {
+                String id = this.getId();
+                id = (null != id) ? id : this.getClass().getName();
+                // PENDING(edburns): I18N
+                log.fine("No renderer-type for component " + id);
+            }
+        }
+        return result;
     }
 
 

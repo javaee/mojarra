@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.178 2005/11/22 18:48:34 rlubke Exp $
+ * $Id: Util.java,v 1.179 2005/11/29 16:20:15 rlubke Exp $
  */
 
 /*
@@ -75,6 +75,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.HashMap;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.text.MessageFormat;
@@ -88,7 +89,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.178 2005/11/22 18:48:34 rlubke Exp $
+ * @version $Id: Util.java,v 1.179 2005/11/29 16:20:15 rlubke Exp $
  */
 
 public class Util {
@@ -100,6 +101,9 @@ public class Util {
     
     public static final String FACES_LOG_STRINGS = 
             "com.sun.faces.LogStrings";
+    
+    private static Map<String,RenderKit> renderKitMap = 
+          new HashMap<String,RenderKit>(4);
     
     // Log instance for this class
     private static Logger logger = getLogger(FACES_LOGGER);
@@ -1153,23 +1157,7 @@ public class Util {
             createValueExpression(context.getELContext(), valueRef, 
                 Object.class);
         return ve;
-    }
-
-
-    public static MethodBinding createMethodBinding(String methodRef,
-                                                    Class[] params) {
-        ApplicationFactory factory = (ApplicationFactory)
-            FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        Application application = factory.getApplication();
-        MethodBinding binding = application.createMethodBinding(methodRef,
-                                                                params);
-        return binding;
-    }
-
-
-    public static MethodBinding createConstantMethodBinding(String outcome) {
-        return new ConstantMethodBinding(outcome);
-    }
+    }    
 
 
     /**
@@ -1189,15 +1177,13 @@ public class Util {
     }
 
 
-    public static Converter getConverterForClass(Class converterClass) {
+    public static Converter getConverterForClass(Class converterClass,
+                                                 FacesContext context) {
         if (converterClass == null) {
             return null;
         }
-        try {
-            ApplicationFactory aFactory =
-                (ApplicationFactory) FactoryFinder.getFactory(
-                    FactoryFinder.APPLICATION_FACTORY);
-            Application application = aFactory.getApplication();
+        try {            
+            Application application = context.getApplication();
             return (application.createConverter(converterClass));
         } catch (Exception e) {
             return (null);
@@ -1205,15 +1191,13 @@ public class Util {
     }
 
 
-    public static Converter getConverterForIdentifer(String converterId) {
+    public static Converter getConverterForIdentifer(String converterId,
+                                                     FacesContext context) {
         if (converterId == null) {
             return null;
         }
-        try {
-            ApplicationFactory aFactory =
-                (ApplicationFactory) FactoryFinder.getFactory(
-                    FactoryFinder.APPLICATION_FACTORY);
-            Application application = aFactory.getApplication();
+        try {            
+            Application application = context.getApplication();
             return (application.createConverter(converterId));
         } catch (Exception e) {
             return (null);
@@ -1277,25 +1261,39 @@ public class Util {
         throws FacesException {
 
         assert (null != renderKitId);
-        assert (null != context);
+        assert (null != context);        
 
-        RenderKitFactory renderKitFactory = (RenderKitFactory)
-            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        assert (null != renderKitFactory);
-
-        RenderKit renderKit = renderKitFactory.getRenderKit(context, renderKitId);
-        if ( renderKit == null) {
-            if (logger.isLoggable(Level.WARNING)) {
-                logger.warning("Renderkit could not loaded for renderKitId " 
-                        + renderKitId);
+        RenderKit renderKit = context.getRenderKit();        
+        if (renderKit == null) {
+            // check our map
+            renderKit = renderKitMap.get(renderKitId);
+            if (renderKit != null) {
+                return renderKit.getResponseStateManager();
+            } else {
+                RenderKitFactory factory = (RenderKitFactory)
+                      FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+                assert (factory != null);
+                renderKit = factory.getRenderKit(context, renderKitId);
+                if (renderKit == null) {
+                    if (logger.isLoggable(Level.WARNING)) {
+                        logger.warning(
+                              "Renderkit could not loaded for renderKitId "
+                              + renderKitId);
+                    }
+                    throw new FacesException(
+                          "Renderkit could not loaded for renderKitId "
+                          + renderKitId);
+                } else {
+                    renderKitMap.put(renderKitId, renderKit);
+                    return renderKit.getResponseStateManager();
+                }
             }
-            throw new FacesException("Renderkit could not loaded for renderKitId " 
-                        + renderKitId);
-        }
-        assert (null != renderKit);
-
-        return renderKit.getResponseStateManager();
-
+        } else {
+            if (!renderKitMap.containsKey(renderKitId)) {
+                renderKitMap.put(renderKitId, renderKit);
+            }
+            return renderKit.getResponseStateManager();
+        }        
     }
 
     public static RenderKit getCurrentRenderKit(FacesContext context) {

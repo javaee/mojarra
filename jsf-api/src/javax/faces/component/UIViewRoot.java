@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.39 2005/08/22 22:07:58 ofung Exp $
+ * $Id: UIViewRoot.java,v 1.40 2005/11/29 16:20:12 rlubke Exp $
  */
 
 /*
@@ -145,6 +145,8 @@ public class UIViewRoot extends UIComponentBase {
      * by the <code>createUniqueId()</code> method.
      */
     static public final String UNIQUE_ID_PREFIX = "_id";
+    
+    private static Lifecycle lifecycle;
     
 
     // ------------------------------------------------------------ Constructors
@@ -626,22 +628,25 @@ public class UIViewRoot extends UIComponentBase {
 	}
     }
 
-    private PhaseEvent createPhaseEvent(FacesContext context, 
-					PhaseId phaseId) throws FacesException {
-	Lifecycle lifecycle = null;
-	LifecycleFactory lifecycleFactory = (LifecycleFactory)
-	    FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
-	String lifecycleId =
-	    context.getExternalContext().getInitParameter(FacesServlet.LIFECYCLE_ID_ATTR);
-	if (lifecycleId == null) {
-	    lifecycleId = LifecycleFactory.DEFAULT_LIFECYCLE;
-	}
-	lifecycle = lifecycleFactory.getLifecycle(lifecycleId);
-	    
-	PhaseEvent result = new PhaseEvent(context, phaseId, lifecycle);
-	return result;
+    private PhaseEvent createPhaseEvent(FacesContext context,
+                                        PhaseId phaseId) throws FacesException {
+
+        if (lifecycle == null) {
+            LifecycleFactory lifecycleFactory = (LifecycleFactory)
+                  FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+            String lifecycleId =
+                  context.getExternalContext()
+                        .getInitParameter(FacesServlet.LIFECYCLE_ID_ATTR);
+            if (lifecycleId == null) {
+                lifecycleId = LifecycleFactory.DEFAULT_LIFECYCLE;
+            }
+            lifecycle = lifecycleFactory.getLifecycle(lifecycleId);
+        }
+        
+        return (new PhaseEvent(context, phaseId, lifecycle));
+        
     }
-	
+
 
     /**
      * <p>Override the default {@link UIComponentBase#processValidators}
@@ -858,8 +863,8 @@ public class UIViewRoot extends UIComponentBase {
      *                    two-letter (lower-case) language code (as defined by 
      *                    ISO-639), and may contain a two-letter (upper-case)
      *                    country code (as defined by ISO-3166). Language and 
-     *                    country codes must be separated by hyphen (�-�) or 
-     *                    underscore (�_�)."
+     *                    country codes must be separated by hyphen (???-???) or 
+     *                    underscore (???_???)."
      * @return Locale instance cosntructed from the expression.
      */
     private Locale getLocaleFromString(String localeExpr) {

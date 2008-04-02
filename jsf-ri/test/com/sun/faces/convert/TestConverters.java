@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.35 2005/10/19 19:51:31 edburns Exp $
+ * $Id: TestConverters.java,v 1.36 2005/11/29 16:20:17 rlubke Exp $
  */
 
 /*
@@ -59,7 +59,7 @@ import java.util.TimeZone;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.35 2005/10/19 19:51:31 edburns Exp $
+ * @version $Id: TestConverters.java,v 1.36 2005/11/29 16:20:17 rlubke Exp $
  */
 
 public class TestConverters extends JspFacesTestCase {
@@ -577,7 +577,7 @@ public class TestConverters extends JspFacesTestCase {
         // test model type of Date []
         UISelectMany date = new UISelectMany();
         Converter dateConv = Util.getConverterForIdentifer(
-            "javax.faces.DateTime");
+            "javax.faces.DateTime", getFacesContext());
         assertNotNull(dateConv);
         date.setConverter(dateConv);
         date.setId("date");
@@ -616,7 +616,7 @@ public class TestConverters extends JspFacesTestCase {
         // test model type of Number []
         UISelectMany number = new UISelectMany();
         Converter numberConv = Util.getConverterForIdentifer(
-            "javax.faces.Number");
+            "javax.faces.Number", getFacesContext());
         assertNotNull(numberConv);
         number.setConverter(numberConv);
         number.setId("num");

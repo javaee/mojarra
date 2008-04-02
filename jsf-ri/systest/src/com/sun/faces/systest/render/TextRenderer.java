@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.12 2005/08/22 22:10:45 ofung Exp $
+ * $Id: TextRenderer.java,v 1.13 2005/11/29 16:20:16 rlubke Exp $
  */
 
 /*
@@ -287,7 +287,7 @@ public class TextRenderer extends Renderer {
             // using its class type.
 
             Class converterType = currentValue.getClass();
-            converter = Util.getConverterForClass(converterType);
+            converter = Util.getConverterForClass(converterType, context);
 
             // if there is no default converter available for this identifier,
             // assume the model type to be String.

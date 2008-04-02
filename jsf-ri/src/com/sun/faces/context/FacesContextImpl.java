@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.74 2005/09/13 17:15:58 rlubke Exp $
+ * $Id: FacesContextImpl.java,v 1.75 2005/11/29 16:20:13 rlubke Exp $
  */
 
 /*
@@ -89,6 +89,9 @@ public class FacesContextImpl extends FacesContext {
     private Application application = null;
     private UIViewRoot viewRoot = null;
     private ELContext elContext = null;
+    private RenderKitFactory rkFactory;
+    private RenderKit lastRk;
+    private String lastRkId;
 
     /**
      * Store mapping of clientId to ArrayList of FacesMessage
@@ -121,6 +124,9 @@ public class FacesContextImpl extends FacesContext {
         }
         this.externalContext = ec;
         setCurrentInstance(this);
+        
+        rkFactory = (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);              
     }
 
     //
@@ -257,12 +263,14 @@ public class FacesContextImpl extends FacesContext {
             return (null);
         }
         String renderKitId = vr.getRenderKitId();
-        if (renderKitId == null) {
-            return (null);
+        
+        if (renderKitId.equals(lastRkId)) {
+            return lastRk;
+        } else {
+            lastRk = rkFactory.getRenderKit(this, renderKitId);
+            lastRkId = renderKitId;
+            return lastRk;
         }
-        RenderKitFactory rkFactory = (RenderKitFactory)
-            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        return (rkFactory.getRenderKit(this, renderKitId));
     }
 
 

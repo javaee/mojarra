@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.64 2005/10/27 16:44:50 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.65 2005/11/29 16:20:15 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -310,7 +310,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         // attached converter takes priority
         if (null == (converter = uiSelectMany.getConverter())) {
             // Otherwise, look for a by-type converter
-            if (null == (converter = Util.getConverterForClass(elementType))) {
+            if (null == (converter = Util.getConverterForClass(elementType,
+                                                               context))) {
                // if that fails, and the attached values are of Object type,
                // we don't need conversion.
                 if (elementType.equals(Object.class)) {

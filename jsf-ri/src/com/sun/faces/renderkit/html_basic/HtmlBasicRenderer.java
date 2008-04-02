@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.101 2005/10/18 00:27:05 rlubke Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.102 2005/11/29 16:20:14 rlubke Exp $
  */
 
 /*
@@ -352,7 +352,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
             // using its class type.
 
             Class converterType = currentValue.getClass();
-            converter = Util.getConverterForClass(converterType);
+            converter = Util.getConverterForClass(converterType, context);
 
             // if there is no default converter available for this identifier,
             // assume the model type to be String.
