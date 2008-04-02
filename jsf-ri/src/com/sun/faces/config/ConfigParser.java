@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.23 2003/07/25 05:52:23 horwat Exp $
+ * $Id: ConfigParser.java,v 1.24 2003/08/08 23:16:59 rlubke Exp $
  */
 
 /*
@@ -853,14 +853,14 @@ final class MessageResourceRule extends Rule {
 		    // file, attempt to get it from FacesContext;
 		    //
 		    while (langIter.hasNext()) {
-			String language = (String)langIter.next();
-			Assert.assert_it(null != language);
-			locale = new Locale(language);
+			String xmlLocale = (String)langIter.next();
+			Assert.assert_it(null != xmlLocale);
+			locale = getLocale(xmlLocale);
 		        messageTemplate = new MessageTemplate();
 			messageTemplate.setMessageId(configMessage.getMessageId());
 			messageTemplate.setLocale(locale);
-			messageTemplate.setSummary((String)summaries.get(language));
-			messageTemplate.setDetail((String)details.get(language));
+			messageTemplate.setSummary((String)summaries.get(xmlLocale));
+			messageTemplate.setDetail((String)details.get(xmlLocale));
 			//
 			// Default to ERROR if not in config file..
 			//
@@ -887,5 +887,32 @@ final class MessageResourceRule extends Rule {
 		}
             }
 	}
+    }
+    
+    // W3C XML specification refers to IETF RFC 1766 for language code structure,
+    // therefore the value for the xml:lang attribute should be in the form of
+    // language or language-country or language-country-variant.
+    private static Locale getLocale(String locale) {       
+        String language = null;
+        String country = null;
+        String variant = null;
+        int dash = locale.indexOf('-');
+        if (dash < 0) {
+            language = locale;
+            country = "";
+            variant = "";
+        } else {
+            language = locale.substring(0, dash);
+            country = locale.substring(dash + 1);
+            int vDash = country.indexOf('-');
+            if (vDash > 0) {
+                String cTemp = country.substring(0, vDash);
+                variant = country.substring(vDash + 1);
+                country = cTemp;
+            } else {
+                variant = "";
+            }
+        }
+        return new Locale(language, country, variant);
     }
 }

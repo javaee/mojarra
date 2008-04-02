@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.32 2003/08/08 16:20:38 rkitain Exp $
+ * $Id: TestRenderers_1.java,v 1.33 2003/08/08 23:17:01 rlubke Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.32 2003/08/08 16:20:38 rkitain Exp $
+ * @version $Id: TestRenderers_1.java,v 1.33 2003/08/08 23:17:01 rlubke Exp $
  * 
  *
  */
@@ -133,7 +133,7 @@ public class TestRenderers_1 extends JspFacesTestCase
     public void testRenderers() {
         Map sessionMap = getFacesContext().getExternalContext().getSessionMap();
         // Spoof a setBundle action...
-        LocalizationContext locContext = new LocalizationContext(new Messages_en(), new Locale("en"));
+        LocalizationContext locContext = new LocalizationContext(new Messages_en(), Locale.ENGLISH);
         sessionMap.put("Messages", locContext);
 
 
