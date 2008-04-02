@@ -36,6 +36,7 @@
   <tag>
     <name>form</name>
     <tag-class>com.sun.faces.taglib.html_basic.FormTag</tag-class>
+    <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
       <attribute>
         <name>required</name>
@@ -187,6 +188,7 @@
   <tag>
     <name>command_button</name>
     <tag-class>com.sun.faces.taglib.html_basic.Command_ButtonTag</tag-class>
+    <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
       <attribute>
         <name>id</name>
         <required>false</required>
@@ -353,6 +355,7 @@
   <tag>
     <name>command_hyperlink</name>
     <tag-class>com.sun.faces.taglib.html_basic.Command_HyperlinkTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
       <attribute>
         <name>id</name>
@@ -424,6 +427,7 @@
   <tag>
     <name>selectboolean_checkbox</name>
     <tag-class>com.sun.faces.taglib.html_basic.SelectBoolean_CheckboxTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
       <attribute>
         <name>id</name>
@@ -602,6 +606,7 @@
   <tag>
     <name>selectone_radio</name>
     <tag-class>com.sun.faces.taglib.html_basic.SelectOne_RadioTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
     <attribute>
       <name>id</name>
@@ -658,6 +663,7 @@
   <tag>
     <name>selectitem</name>
     <tag-class>com.sun.faces.taglib.html_basic.SelectItemTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
     <attribute>
       <name>valueRef</name>
@@ -789,6 +795,7 @@
   <tag>
     <name>selectitems</name>
     <tag-class>com.sun.faces.taglib.html_basic.SelectItemsTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
     <attribute>
       <name>id</name>
@@ -921,6 +928,7 @@
   <tag>
     <name>selectone_listbox</name>
     <tag-class>com.sun.faces.taglib.html_basic.SelectOne_ListboxTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
     <attribute>
       <name>id</name>
@@ -1077,6 +1085,7 @@
   <tag>
     <name>selectone_menu</name>
     <tag-class>com.sun.faces.taglib.html_basic.SelectOne_MenuTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
     <attribute>
       <name>id</name>
@@ -1238,6 +1247,7 @@
   <tag>
       <name>graphic_image</name>
       <tag-class>com.sun.faces.taglib.html_basic.Graphic_ImageTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
       <body-content>JSP</body-content>
       <attribute>
         <name>id</name>
@@ -1399,6 +1409,7 @@
   <tag>
       <name>output_message</name>
       <tag-class>com.sun.faces.taglib.html_basic.Output_MessageTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
       <body-content>JSP</body-content>
       <attribute>
         <name>id</name>
@@ -1445,6 +1456,7 @@
   <tag>
       <name>output_label</name>
       <tag-class>com.sun.faces.taglib.html_basic.Output_LabelTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
       <body-content>JSP</body-content>
       <attribute>
         <name>id</name>
@@ -1562,6 +1574,7 @@
   <tag>
       <name>output_text</name>
       <tag-class>com.sun.faces.taglib.html_basic.Output_TextTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
       <body-content>JSP</body-content>
       <attribute>
         <name>id</name>
@@ -1613,6 +1626,7 @@
   <tag>
       <name>input_text</name>
       <tag-class>com.sun.faces.taglib.html_basic.Input_TextTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
       <body-content>JSP</body-content>
       <attribute>
       <name>id</name>
@@ -1786,6 +1800,7 @@
  <tag>
       <name>input_secret</name>
       <tag-class>com.sun.faces.taglib.html_basic.Input_SecretTag</tag-class>
+     <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
       <body-content>JSP</body-content>
       <attribute>
         <name>id</name>
@@ -1964,6 +1979,7 @@
  <tag>
       <name>input_textarea</name>
       <tag-class>com.sun.faces.taglib.html_basic.Input_TextAreaTag</tag-class>
+     <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
       <body-content>JSP</body-content>
       <attribute>
         <name>id</name>
@@ -2132,6 +2148,7 @@
  <tag>
    <name>output_errors</name>
    <tag-class>com.sun.faces.taglib.html_basic.Output_ErrorsTag</tag-class>
+     <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
    <body-content>JSP</body-content>
    <attribute>
      <name>id</name>
@@ -2163,6 +2180,7 @@
   <tag>
     <name>panel_group</name>
     <tag-class>com.sun.faces.taglib.html_basic.Panel_GroupTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
 
     <attribute>
@@ -2180,6 +2198,7 @@
   <tag>
     <name>panel_data</name>
     <tag-class>com.sun.faces.taglib.html_basic.Panel_DataTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
 
     <attribute>
@@ -2209,6 +2228,7 @@
   <tag>
     <name>panel_grid</name>
     <tag-class>com.sun.faces.taglib.html_basic.Panel_GridTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
 
     <attribute>
@@ -2379,6 +2399,7 @@
   <tag>
     <name>selectmany_menu</name>
     <tag-class>com.sun.faces.taglib.html_basic.SelectMany_MenuTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
     <attribute>
       <name>border</name>
@@ -2535,6 +2556,7 @@
  <tag>
     <name>selectmany_listbox</name>
     <tag-class>com.sun.faces.taglib.html_basic.SelectMany_ListboxTag</tag-class>
+     <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
     <attribute>
       <name>selectmanyClass</name>
@@ -2681,6 +2703,7 @@
  <tag>
     <name>selectmany_checkboxlist</name>
     <tag-class>com.sun.faces.taglib.html_basic.SelectMany_CheckboxListTag</tag-class>
+     <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
     <attribute>
       <name>selectmanyClass</name>
@@ -2827,6 +2850,7 @@
   <tag>
     <name>panel_list</name>
     <tag-class>com.sun.faces.taglib.html_basic.Panel_ListTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
 
     <attribute>
@@ -2991,6 +3015,7 @@
   <tag>
     <name>input_hidden</name>
     <tag-class>com.sun.faces.taglib.html_basic.Input_HiddenTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
       <attribute>
         <name>id</name>

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.43 2003/08/21 22:33:43 rlubke Exp $
+ * $Id: FacesTag.java,v 1.44 2003/08/26 19:14:53 rlubke Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import javax.servlet.jsp.JspException;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.43 2003/08/21 22:33:43 rlubke Exp $
+ * @version $Id: FacesTag.java,v 1.44 2003/08/26 19:14:53 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -1155,29 +1155,14 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
 //
 // General Methods
 //
-    
-    /**
-     * <p>Determine if the provided string meets the minimum requirements
-     * for being considered an JSP/JSTL EL expression.</p>
-     * @param candidate the String to check for 'EL-isity'
-     * @return true if the candidate meets the requirements, otherwise false
-     */
-    private static boolean isELExpression(String candidate) {
-        if (candidate.startsWith("${") &&
-            candidate.charAt(candidate.length() - 1) == '}') {
-            return true;
-        }
-        return false;
-    }
 
     /**
      * <p>Evaluate the ID attribute as an EL expression if
      * the value is surrounded by the standard EL delimiters.</p>
      * @throws JspException if an error occurs during evaluation.
      */
-    private void evaluateId() throws JspException {
-        // PENDING (horwat/rlubke) Change attribute once JSP ID issue is resolved
-        if (id != null && isELExpression(id)) {
+    private void evaluateId() throws JspException {        
+        if (id != null) {
             String expression = id;
             ExpressionInfo exprInfo = new ExpressionInfo();
             exprInfo.setExpressionString(expression);
@@ -1361,9 +1346,8 @@ protected String getDebugString() {
 
 public int doStartTag() throws JspException {
     int rc = 0;
-    try {
-        // PENDING (horwat,rlubke) reevaluate once JSP 'id' issue is sorted out
-        // evaluateId();
+    try {        
+        evaluateId();
 	rc = super.doStartTag();
     }
     catch (JspException e) {

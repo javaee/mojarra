@@ -23,7 +23,7 @@ This page should Succeed.
 
 <f:view>
 
-  <h:command_button id="${\"pageScope.first\" + \"pageScope.last\"}" label="indiana" />
+  <h:command_button id="${pageScope.first}${pageScope.last}" label="indiana" />
 
 </f:view>
 

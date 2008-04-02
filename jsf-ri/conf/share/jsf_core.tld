@@ -43,6 +43,7 @@
    <tag>
       <name>attribute</name>
       <tag-class>javax.faces.webapp.AttributeTag</tag-class>
+       <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
       <body-content>JSP</body-content>
       <attribute>
 	<name>name</name>
@@ -59,6 +60,7 @@
   <tag>
       <name>parameter</name>
       <tag-class>com.sun.faces.taglib.jsf_core.ParameterTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
       <body-content>JSP</body-content>
     <attribute>
       <name>id</name>
@@ -85,12 +87,14 @@
   <tag>
     <name>view</name>
     <tag-class>com.sun.faces.taglib.jsf_core.ViewTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
   </tag>
 
   <tag>
     <name>validate_doublerange</name>
     <tag-class>com.sun.faces.taglib.jsf_core.ValidateDoubleRangeTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
     <attribute>
       <name>maximum</name>
@@ -107,6 +111,7 @@
   <tag>
     <name>validate_length</name>
     <tag-class>com.sun.faces.taglib.jsf_core.ValidateLengthTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
     <attribute>
       <name>maximum</name>
@@ -123,6 +128,7 @@
   <tag>
     <name>validate_longrange</name>
     <tag-class>com.sun.faces.taglib.jsf_core.ValidateLongRangeTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
     <attribute>
       <name>maximum</name>
@@ -139,6 +145,7 @@
   <tag>
     <name>validate_stringrange</name>
     <tag-class>com.sun.faces.taglib.jsf_core.ValidateStringRangeTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
     <attribute>
       <name>maximum</name>
@@ -155,6 +162,7 @@
   <tag>
     <name>validator</name>
     <tag-class>javax.faces.webapp.ValidatorTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
     <attribute>
       <name>id</name>
@@ -166,6 +174,7 @@
   <tag>
     <name>facet</name>
     <tag-class>javax.faces.webapp.FacetTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
     <attribute>
       <name>name</name>
@@ -177,6 +186,7 @@
   <tag>
       <name>valuechanged_listener</name>
       <tag-class>com.sun.faces.taglib.jsf_core.ValueChangedListenerTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
       <body-content>JSP</body-content>
       <attribute>
           <name>type</name>
@@ -188,6 +198,7 @@
   <tag>
       <name>action_listener</name>
       <tag-class>com.sun.faces.taglib.jsf_core.ActionListenerTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
       <body-content>JSP</body-content>
       <attribute>
           <name>type</name>
@@ -199,6 +210,7 @@
   <tag>
       <name>convert_datetime</name>
       <tag-class>com.sun.faces.taglib.jsf_core.ConvertDateTimeTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
       <body-content>JSP</body-content>
       <attribute>
           <name>dateStyle</name>
@@ -235,6 +247,7 @@
   <tag>
       <name>convert_number</name>
       <tag-class>com.sun.faces.taglib.jsf_core.ConvertNumberTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
       <body-content>JSP</body-content>
       <attribute>
           <name>currencyCode</name>

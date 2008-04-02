@@ -4,7 +4,7 @@
  Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.18 2003/08/22 16:50:30 eburns Exp $
+ $Id: build-tests.xml,v 1.19 2003/08/26 19:14:56 rlubke Exp $
 -->
 
 
@@ -189,10 +189,9 @@
          request="${context.path}/faces/TestCoreValidatorIteratorFail.jsp"
       status="500"/>
 
-    <!-- PENDING (horwat,rlubke) Disabled until JSP 'id' issue is resolved. 
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/TestCoreValidatorIteratorSucceed.jsp"
-      status="200"/> -->
+      status="200"/>
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/TestElValidatorActionRefFail.jsp"
@@ -214,10 +213,9 @@
     	 request="${context.path}/faces/TestElValidatorIdFail.jsp"
       status="500"/>
 
-    <!-- PENDING (horwat,rlubke) Disabled until JSP 'id' issue is resolved. 
     <tester host="${host}" port="${port}" protocol="${protocol}"
     	 request="${context.path}/faces/TestElValidatorIdSucceed.jsp"
-      status="200"/>-->
+      status="200"/>
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
     	 request="${context.path}/faces/TestElValidatorValueRefFail.jsp"
