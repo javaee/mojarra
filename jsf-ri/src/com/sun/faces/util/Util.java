@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.153 2005/04/05 20:25:14 jayashri Exp $
+ * $Id: Util.java,v 1.154 2005/04/11 18:03:57 jayashri Exp $
  */
 
 /*
@@ -60,7 +60,7 @@ import java.util.logging.Level;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.153 2005/04/05 20:25:14 jayashri Exp $
+ * @version $Id: Util.java,v 1.154 2005/04/11 18:03:57 jayashri Exp $
  */
 
 public class Util extends Object {
@@ -1115,6 +1115,13 @@ public class Util extends Object {
         assert (null != renderKitFactory);
 
         RenderKit renderKit = renderKitFactory.getRenderKit(context, renderKitId);
+        if ( renderKit == null) {
+            if ( logger.isLoggable(Level.SEVERE)) {
+                logger.log(Level.SEVERE, 
+                        "Renderkit could not loaded for renderKitId " 
+                        + renderKitId);
+            }
+        }
         assert (null != renderKit);
 
         return renderKit.getResponseStateManager();

@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.20 2005/04/06 02:39:46 edburns Exp $
+ * $Id: RestoreViewPhase.java,v 1.21 2005/04/11 18:03:57 jayashri Exp $
  */
 
 /*
@@ -24,6 +24,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.ActionListener;
 import javax.faces.event.PhaseId;
+import javax.faces.render.ResponseStateManager;
 import javax.servlet.http.HttpServletRequest;
 
 import java.util.Iterator;
@@ -35,7 +36,7 @@ import java.util.Map;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.20 2005/04/06 02:39:46 edburns Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.21 2005/04/11 18:03:57 jayashri Exp $
  */
 
 public class RestoreViewPhase extends Phase {
@@ -152,16 +153,6 @@ public class RestoreViewPhase extends Phase {
                 Util.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
         }
 
-	// PENDING(): replace this with the following
-
-	// Get the renderKitId by calling
-	// viewHandler.calculateRenderKitId().
-
-	// get that renderkit, and get its ResponseStateManager.
-
-	// call its isPostback() method, instead of the one defined
-	// here.
-
 	if (isPostback(facesContext)) {
 	    // try to restore the view
 	    if (null == (viewRoot = (Util.getViewHandler(facesContext)).
@@ -200,33 +191,13 @@ public class RestoreViewPhase extends Phase {
      */
 
     private boolean isPostback(FacesContext context) {
-        HttpServletRequest request = null;
-        String method = null;
-	boolean result = false;
-	Object requestObj = context.getExternalContext().getRequest();
-	
-	if (!(requestObj instanceof HttpServletRequest)) {
-	    return true;
-	}
-
-        request = (HttpServletRequest) requestObj;
-        method = request.getMethod();
-
-        // Is this a GET request with query parameters?
-        if ("GET".equals(method)) {
-            Iterator names = context.getExternalContext().
-                getRequestParameterNames();
-            if (names.hasNext()) {
-                result = true;
-            }
-        }
-	
-        // Is this a POST or PUT request?
-        if ("POST".equals(method) || "PUT".equals(method)) {
-            result = true;
-        }
-
-	return result;
+        // Get the renderKitId by calling viewHandler.calculateRenderKitId().
+        String renderkitId = 
+                context.getApplication().getViewHandler().
+                calculateRenderKitId(context);
+        ResponseStateManager rsm = Util.getResponseStateManager(context,
+                renderkitId);
+        return rsm.isPostback(context);
     }
 
 

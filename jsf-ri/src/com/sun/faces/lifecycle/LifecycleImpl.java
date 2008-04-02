@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.47 2005/02/03 22:51:57 jayashri Exp $
+ * $Id: LifecycleImpl.java,v 1.48 2005/04/11 18:03:57 jayashri Exp $
  */
 
 /*
@@ -20,6 +20,7 @@ import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
 import javax.servlet.http.HttpServletRequest;
+import javax.faces.render.ResponseStateManager;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -260,27 +261,17 @@ public class LifecycleImpl extends Lifecycle {
             HttpServletRequest)) {
             return (false);
         }
-        HttpServletRequest request = (HttpServletRequest)
-            context.getExternalContext().getRequest();
-        String method = request.getMethod();
-
-        // Is this a GET request with query parameters?
-        if ("GET".equals(method)) {
-            Iterator names = context.getExternalContext().
-                getRequestParameterNames();
-            if (names.hasNext()) {
-                return (false);
-            }
+        String renderkitId = 
+                context.getApplication().getViewHandler().
+                calculateRenderKitId(context);
+        ResponseStateManager rsm = Util.getResponseStateManager(context,
+                renderkitId);
+        boolean postback = rsm.isPostback(context); 
+        if (postback) {
+            return false;
         }
-
-        // Is this a POST or PUT request?
-        if ("POST".equals(method) || "PUT".equals(method)) {
-            return (false);
-        }
-
-        // Assume this is a reload
-        return (true);
-
+        // assume it is reload.
+        return true;        
     }
 
 
