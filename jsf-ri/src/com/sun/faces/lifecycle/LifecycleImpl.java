@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.52 2005/07/12 01:37:25 jayashri Exp $
+ * $Id: LifecycleImpl.java,v 1.53 2005/07/15 20:55:26 jayashri Exp $
  */
 
 /*
@@ -198,7 +198,8 @@ public class LifecycleImpl extends Lifecycle {
     // Execute the specified phase, calling all listeners as well
     private void phase(PhaseId phaseId, Phase phase, FacesContext context)
         throws FacesException {
-
+        boolean exceptionThrown = false;
+        Throwable ex = null;
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("phase(" + phaseId.toString() + "," + context + ")");
         }
@@ -235,7 +236,7 @@ public class LifecycleImpl extends Lifecycle {
 			  ") threw exception: " + e + " " + e.getMessage() +
 			  "\n" + Util.getStackTraceString(e));
 	    }
-	}
+        }
 	    
 	try {   
 	    // Execute this phase itself (if still needed)
@@ -248,31 +249,38 @@ public class LifecycleImpl extends Lifecycle {
                 logger.log(Level.WARNING, "executePhase(" + phaseId.toString() + "," 
                         + context + ") threw exception", e);
             }
-            throw new FacesException(e);
+            ex = e;
+            exceptionThrown = true;
         } 
-	
-        try {
-            // Notify the "afterPhase" method of interested listeners
-            // (descending)
-            if (tempListeners.size() > 0) {
-                PhaseEvent event = new PhaseEvent(context, phaseId, this);
-                for (i = maxBefore; i >= 0; i--) {
-                    PhaseListener listener = (PhaseListener) 
-                        tempListeners.get(i);
-                    if (phaseId.equals(listener.getPhaseId()) ||
-                        PhaseId.ANY_PHASE.equals(listener.getPhaseId())) {
-                        listener.afterPhase(event);
+	finally {
+            try {
+                // Notify the "afterPhase" method of interested listeners
+                // (descending)
+                if (tempListeners.size() > 0) {
+                    PhaseEvent event = new PhaseEvent(context, phaseId, this);
+                    for (i = maxBefore; i >= 0; i--) {
+                        PhaseListener listener = (PhaseListener) 
+                            tempListeners.get(i);
+                        if (phaseId.equals(listener.getPhaseId()) ||
+                            PhaseId.ANY_PHASE.equals(listener.getPhaseId())) {
+                            listener.afterPhase(event);
+                        }
                     }
                 }
             }
-        }
-        catch (Throwable e) {
-            if (logger.isLoggable(Level.WARNING)) {
-                logger.warning("phase(" + phaseId.toString() + "," + context + 
-                          ") threw exception: " + e + " " + e.getMessage() +
-                          "\n" + Util.getStackTraceString(e));
+            catch (Throwable e) {
+                if (logger.isLoggable(Level.WARNING)) {
+                    logger.warning("phase(" + phaseId.toString() + "," + context + 
+                              ") threw exception: " + e + " " + e.getMessage() +
+                              "\n" + Util.getStackTraceString(e));
+                }
             }
         }
+        // Allow all afterPhase listeners to execute before throwing the
+        // exception caught during the phase execution.
+        if (exceptionThrown) {
+            throw new FacesException(ex.getCause());
+        } 
     }
 
 
