@@ -22,11 +22,7 @@
     "javax.faces.validator.LongRangeValidator.MAXIMUM",
     "javax.faces.validator.LongRangeValidator.MINIMUM",
     "javax.faces.validator.LongRangeValidator.TYPE",
-    "javax.faces.component.UIInput.REQUIRED",
-    "javax.faces.validator.StringRangeValidator.LIMIT",
-    "javax.faces.validator.StringRangeValidator.MAXIMUM",
-    "javax.faces.validator.StringRangeValidator.MINIMUM",
-    "javax.faces.validator.StringRangeValidator.TYPE",
+    "javax.faces.component.UIInput.REQUIRED"
   };
 
   // Acquire the FacesContext instance for this request

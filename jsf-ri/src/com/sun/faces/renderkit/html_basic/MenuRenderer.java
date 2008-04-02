@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.29 2003/10/07 13:05:29 eburns Exp $
+ * $Id: MenuRenderer.java,v 1.30 2003/10/21 16:41:51 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -39,6 +39,9 @@ import com.sun.faces.util.SelectItemWrapper;
 import com.sun.faces.util.Util;
 import java.lang.reflect.Array;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * <B>MenuRenderer</B> is a class that renders the current value of 
  * <code>UISelectOne<code> or <code>UISelectMany<code> component as a list of 
@@ -53,6 +56,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     //
     // Class Variables
     //
+
+    private static final Log log = LogFactory.getLog(MenuRenderer.class);
 
     //
     // Instance Variables
@@ -286,6 +291,13 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 	}
 	else {
 	    for (i = 0; i < len; i++) {
+		if (log.isDebugEnabled()) {
+		    Object converted = converter.getAsObject(context,
+							     uiSelectMany,
+							     newValues[i]);
+		    log.debug("String value: " + newValues[i] + 
+			      " converts to : " + converted.toString());
+		}
 		Array.set(result, i, converter.getAsObject(context,
 							   uiSelectMany,
 							   newValues[i]));

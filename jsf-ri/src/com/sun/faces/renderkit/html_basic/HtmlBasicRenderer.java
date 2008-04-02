@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.59 2003/10/17 03:47:12 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.60 2003/10/21 16:41:50 eburns Exp $
  */
 
 /*
@@ -125,7 +125,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
         Assert.assert_it( resources != null );
         Message msg = resources.getMessage(facesContext, 
                 Util.CONVERSION_ERROR_MESSAGE_ID,params);
-        facesContext.addMessage(comp, msg);
+        facesContext.addMessage(comp.getClientId(facesContext), msg);
     }
 
     public void addGenericErrorMessage(FacesContext facesContext,
@@ -136,7 +136,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
 	Object[] params = new Object[3];
 	params[0] = param;
         Message msg = resources.getMessage(facesContext, messageId, params);
-        facesContext.addMessage(component, msg);
+        facesContext.addMessage(component.getClientId(facesContext), msg);
     }
 
     /**

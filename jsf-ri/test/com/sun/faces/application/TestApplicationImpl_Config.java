@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.21 2003/10/14 23:44:52 eburns Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.22 2003/10/21 16:42:00 eburns Exp $
  */
 
 /*
@@ -59,7 +59,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.21 2003/10/14 23:44:52 eburns Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.22 2003/10/21 16:42:00 eburns Exp $
  */
 
 public class TestApplicationImpl_Config extends ServletFacesTestCase {
@@ -211,10 +211,8 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	    "OutputMessage",
 	    "OutputText",
 	    "Panel",
-	    "PanelData",
 	    "PanelGrid",
 	    "PanelGroup",
-	    "PanelList",
 	    "Parameter",
 	    "SelectBoolean",
 	    "SelectBooleanCheckbox",
@@ -434,8 +432,7 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	String standardValidatorIds[] = {
 	    "DoubleRange",
 	    "Length",
-	    "LongRange",
-	    "StringRange"	
+	    "LongRange"
 	};
 	
 	assertTrue(isSubset(standardValidatorIds, iter));

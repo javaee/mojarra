@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.63 2003/10/13 22:56:28 jvisvanathan Exp $
+ * $Id: TestRenderers_2.java,v 1.64 2003/10/21 16:42:04 eburns Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.63 2003/10/13 22:56:28 jvisvanathan Exp $
+ * @version $Id: TestRenderers_2.java,v 1.64 2003/10/21 16:42:04 eburns Exp $
  * 
  *
  */
@@ -466,7 +466,8 @@ public class TestRenderers_2 extends JspFacesTestCase
 
         getFacesContext().addMessage(null,new MessageImpl(1,
             "global message summary", "global message detail"));
-        getFacesContext().addMessage(output, new MessageImpl(1,
+        getFacesContext().addMessage(output.getClientId(getFacesContext()), 
+				     new MessageImpl(1,
             "component message summary", "component message detail"));
 
         // test encode method
@@ -516,7 +517,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         root.getChildren().add(input);
         root.getChildren().remove(output);
         input.getChildren().add(output);
-        getFacesContext().addMessage(input, 
+        getFacesContext().addMessage(input.getClientId(getFacesContext()), 
             new MessageImpl(1, "error message summary_1", "error message detail_1"));
                 
         output.getAttributes().put("for", "errorInput");
@@ -549,7 +550,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         anon1.getChildren().add(anon2);        
         anon2.getChildren().add(input1);
         
-        getFacesContext().addMessage(input1,
+        getFacesContext().addMessage(input1.getClientId(getFacesContext()),
             new MessageImpl(1, "error message summary_2", "error message detail_2"));
                 
         output.getAttributes().put("for", "errorInput1");
@@ -592,7 +593,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         anon2.getChildren().add(input2);
         input2.getChildren().add(anon5);
                                     
-        getFacesContext().addMessage(input2,
+        getFacesContext().addMessage(input2.getClientId(getFacesContext()),
                 new MessageImpl(1, "error message summary_3", "error message detail_3"));
 
         output.getAttributes().put("for", "errorInput2");
@@ -630,7 +631,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         output.getChildren().add(anon1);
         anon1.getChildren().add(form);
         form.getChildren().add(input3);
-        getFacesContext().addMessage(input3,
+        getFacesContext().addMessage(input3.getClientId(getFacesContext()),
             new MessageImpl(1, "error message summary_4", "error message detail_4"));
         
         output.getAttributes().put("for", "errorInput3");
@@ -668,7 +669,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         form1.getChildren().add(anonout1);
         anonout1.getChildren().add(form2);
         form2.getChildren().add(input4);
-        getFacesContext().addMessage(input4,
+        getFacesContext().addMessage(input4.getClientId(getFacesContext()),
             new MessageImpl(1, "error message summary_5", "error message detail_5"));
         
         output.getAttributes().put("for", "errorInput4");

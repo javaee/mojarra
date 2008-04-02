@@ -5,7 +5,6 @@
 
 <!ENTITY button-renderer-class 'com.sun.faces.renderkit.html_basic.ButtonRenderer'>
 <!ENTITY checkbox-renderer-class 'com.sun.faces.renderkit.html_basic.CheckboxRenderer'>
-<!ENTITY data-renderer-class 'com.sun.faces.renderkit.html_basic.DataRenderer'>
 <!ENTITY errors-renderer-class 'com.sun.faces.renderkit.html_basic.ErrorsRenderer'>
 <!ENTITY form-renderer-class 'com.sun.faces.renderkit.html_basic.FormRenderer'>
 <!ENTITY grid-renderer-class 'com.sun.faces.renderkit.html_basic.GridRenderer'>
@@ -14,7 +13,6 @@
 <!ENTITY hyperlink-renderer-class 'com.sun.faces.renderkit.html_basic.HyperlinkRenderer'>
 <!ENTITY image-renderer-class 'com.sun.faces.renderkit.html_basic.ImageRenderer'>
 <!ENTITY label-renderer-class 'com.sun.faces.renderkit.html_basic.LabelRenderer'>
-<!ENTITY list-renderer-class 'com.sun.faces.renderkit.html_basic.ListRenderer'>
 <!ENTITY listbox-renderer-class 'com.sun.faces.renderkit.html_basic.ListboxRenderer'>
 <!ENTITY menu-renderer-class 'com.sun.faces.renderkit.html_basic.MenuRenderer'>
 <!ENTITY message-renderer-class 'com.sun.faces.renderkit.html_basic.MessageRenderer'>

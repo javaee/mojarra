@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.42 2003/10/13 21:50:48 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.43 2003/10/21 16:42:01 eburns Exp $
  */
 
 /*
@@ -107,11 +107,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	    "javax.faces.validator.LongRangeValidator.LIMIT",
 	    "javax.faces.validator.LongRangeValidator.MAXIMUM",
 	    "javax.faces.validator.LongRangeValidator.MINIMUM",
-	    "javax.faces.validator.LongRangeValidator.TYPE",
-	    "javax.faces.validator.StringRangeValidator.LIMIT",
-	    "javax.faces.validator.StringRangeValidator.MAXIMUM",
-	    "javax.faces.validator.StringRangeValidator.MINIMUM",
-	    "javax.faces.validator.StringRangeValidator.TYPE",
+	    "javax.faces.validator.LongRangeValidator.TYPE"
 	};
 	Iterator messageIter = null;
 
@@ -447,7 +443,6 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	String defaultRenderers [] = {
 	    "Button",
 	    "Checkbox",
-	    "Data",
 	    "Errors",
 	    "Form",
 	    "Grid",
@@ -456,7 +451,6 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	    "Hyperlink",
 	    "Image",
 	    "Label",
-	    "List",
 	    "Listbox",
 	    "Menu",
 	    "Message",

@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.38 2003/10/15 16:59:17 jvisvanathan Exp $
+ * $Id: TestFacesContextImpl.java,v 1.39 2003/10/21 16:42:02 eburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.38 2003/10/15 16:59:17 jvisvanathan Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.39 2003/10/21 16:42:02 eburns Exp $
  */
 
 public class TestFacesContextImpl extends ServletFacesTestCase
@@ -230,10 +230,10 @@ public void testMessageMethods() {
     
     UICommand command = new UICommand();
     Message msg3 = new MessageImpl (4, "summary3", "detail3");
-    fc.addMessage(command, msg3);
+    fc.addMessage(command.getClientId(fc), msg3);
     
     Message msg4 = new MessageImpl (1, "summary4", "detail4");
-    fc.addMessage(command, msg4);
+    fc.addMessage(command.getClientId(fc), msg4);
     
     System.out.println("Testing get methods");
     assertTrue ( fc.getMaximumSeverity() == 4 );
@@ -246,7 +246,7 @@ public void testMessageMethods() {
     }   
     
     it = null;
-    it = fc.getMessages(command);
+    it = fc.getMessages(command.getClientId(fc));
     while ( it.hasNext() ) {
        Message result = (Message) it.next();
        assertTrue (result.equals(msg3) || result.equals(msg4));

@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidatorTags.java,v 1.20 2003/10/07 19:53:21 rlubke Exp $
+ * $Id: TestValidatorTags.java,v 1.21 2003/10/21 16:42:06 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValidatorTags.java,v 1.20 2003/10/07 19:53:21 rlubke Exp $ 
+ * @version $Id: TestValidatorTags.java,v 1.21 2003/10/21 16:42:06 eburns Exp $ 
  */
 
 public class TestValidatorTags extends JspFacesTestCase
@@ -167,61 +167,61 @@ public void testValidators()
     assertTrue(null != 
 	       (comp = 
 		getFacesContext().getViewRoot().findComponent(OUTOFBOUNDS1_ID)));
-    assertTrue(null != (messages = getFacesContext().getMessages(comp)));
+    assertTrue(null != (messages = getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
     assertTrue(messages.hasNext());
 
     assertTrue(null != 
 	       (comp = 
 		getFacesContext().getViewRoot().findComponent(INBOUNDS1_ID)));
-    assertTrue(null != (messages = getFacesContext().getMessages(comp)));
+    assertTrue(null != (messages = getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
     assertTrue(!messages.hasNext());
 
     assertTrue(null != 
 	       (comp = 
 		getFacesContext().getViewRoot().findComponent(OUTOFBOUNDS2_ID)));
-    assertTrue(null != (messages = getFacesContext().getMessages(comp)));
+    assertTrue(null != (messages = getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
     assertTrue(messages.hasNext());
 
     assertTrue(null != 
 	       (comp = 
 		getFacesContext().getViewRoot().findComponent(INBOUNDS2_ID)));
-    assertTrue(null != (messages = getFacesContext().getMessages(comp)));
+    assertTrue(null != (messages = getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
     assertTrue(!messages.hasNext());
 
     assertTrue(null != 
 	       (comp = 
 		getFacesContext().getViewRoot().findComponent(OUTOFBOUNDS3_ID)));
-    assertTrue(null != (messages = getFacesContext().getMessages(comp)));
+    assertTrue(null != (messages = getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
     assertTrue(messages.hasNext());
 
     assertTrue(null != 
 	       (comp = 
 		getFacesContext().getViewRoot().findComponent(INBOUNDS3_ID)));
-    assertTrue(null != (messages = getFacesContext().getMessages(comp)));
+    assertTrue(null != (messages = getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
     assertTrue(!messages.hasNext());
 
     assertTrue(null != 
 	       (comp = 
 		getFacesContext().getViewRoot().findComponent(REQUIRED1_ID)));
-    assertTrue(null != (messages = getFacesContext().getMessages(comp)));
+    assertTrue(null != (messages = getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
     assertTrue(messages.hasNext());
 
     assertTrue(null != 
 	       (comp = 
 		getFacesContext().getViewRoot().findComponent(OUTOFBOUNDS4_ID)));
-    assertTrue(null != (messages = getFacesContext().getMessages(comp)));
+    assertTrue(null != (messages = getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
     assertTrue(messages.hasNext());
 
     assertTrue(null != 
 	       (comp = 
 		getFacesContext().getViewRoot().findComponent(INBOUNDS4_ID)));
-    assertTrue(null != (messages = getFacesContext().getMessages(comp)));
+    assertTrue(null != (messages = getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
     assertTrue(!messages.hasNext());
 
     assertTrue(null != 
 	       (comp = 
 		getFacesContext().getViewRoot().findComponent(REQUIRED2_ID)));
-    assertTrue(null != (messages = getFacesContext().getMessages(comp)));
+    assertTrue(null != (messages = getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
     assertTrue(messages.hasNext());
 
     RIConstants.IS_UNIT_TEST_MODE = false;

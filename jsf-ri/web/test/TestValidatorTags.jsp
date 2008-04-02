@@ -118,32 +118,6 @@
 
     <td>
 
-                   <h:input_text id="outOfBounds4" value="aaa">
-                     <f:validate_stringrange minimum="ggg" maximum="zzz"/>
-                   </h:input_text>
-
-    </td>
-
-
-  </tr>
-
-  <tr>
-
-    <td>
-
-                   <h:input_text id="inBounds4" value="ccc">
-                     <f:validate_stringrange minimum="aaa"  maximum="zzz"/>
-                   </h:input_text>
-
-    </td>
-
-
-  </tr>
-
-  <tr>
-
-    <td>
-
                    <h:input_text id="required2" value="required" 
                                  required="true"/>
     </td>

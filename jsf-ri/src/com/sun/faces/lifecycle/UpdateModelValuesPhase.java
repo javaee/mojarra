@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.26 2003/09/25 21:02:58 jvisvanathan Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.27 2003/10/21 16:41:48 eburns Exp $
  */
 
 /*
@@ -103,7 +103,7 @@ public void execute(FacesContext facesContext)
         Assert.assert_it( resources != null );
         Message msg = resources.getMessage(facesContext,
             Util.MODEL_UPDATE_ERROR_MESSAGE_ID,params);
-        facesContext.addMessage(component, msg);
+        facesContext.addMessage(component.getClientId(facesContext), msg);
         if (log.isErrorEnabled()) {
 	    log.error(exceptionMessage);
 	}

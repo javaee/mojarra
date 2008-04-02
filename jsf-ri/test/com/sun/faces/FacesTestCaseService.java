@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.29 2003/09/16 18:12:00 rkitain Exp $
+ * $Id: FacesTestCaseService.java,v 1.30 2003/10/21 16:41:59 eburns Exp $
  */
 
 /*
@@ -26,6 +26,7 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.component.UICommand;
+import javax.faces.component.UIViewRoot;
 import javax.servlet.jsp.PageContext;
 
 import com.sun.faces.util.Util;
@@ -54,7 +55,7 @@ import org.apache.cactus.server.ServletContextWrapper;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.29 2003/09/16 18:12:00 rkitain Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.30 2003/10/21 16:41:59 eburns Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -172,6 +173,7 @@ public void setUp()
 					    getServletContext(),
 					    facesTestCase.getRequest(), 
 					    response, lifecycle);
+    facesContext.setViewRoot(new UIViewRoot());
     Assert.assert_it(null != facesContext);
         
     if (facesTestCase.sendWriterToFile()){

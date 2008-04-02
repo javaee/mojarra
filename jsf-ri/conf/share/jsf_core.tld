@@ -159,23 +159,6 @@
   </tag>
 
   <tag>
-    <name>validate_stringrange</name>
-    <tag-class>com.sun.faces.taglib.jsf_core.ValidateStringRangeTag</tag-class>
-      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
-    <body-content>JSP</body-content>
-    <attribute>
-      <name>maximum</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>minimum</name>
-      <required>false</required>
-      <rtexprvalue>true</rtexprvalue>
-    </attribute>
-  </tag>
-
-  <tag>
     <name>validator</name>
     <tag-class>javax.faces.webapp.ValidatorTag</tag-class>
       <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>

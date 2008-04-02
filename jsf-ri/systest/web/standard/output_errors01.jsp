@@ -50,15 +50,6 @@
 
   facesContext.addMessage(null, message);
 
-  message = messageResources.getMessage(facesContext,
-         "javax.faces.validator.StringRangeValidator.TYPE");
-  if (message == null) {
-    out.println("/output_errors01.jsp FAILED - No message returned");
-    return;
-  }
-
-  facesContext.addMessage(null, message);
-
 %>
 
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>

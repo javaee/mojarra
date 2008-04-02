@@ -144,11 +144,6 @@
   </component>
 
   <component>
-    <component-type>PanelList</component-type>
-    <component-class>javax.faces.component.html.HtmlPanelList</component-class>
-  </component>
-
-  <component>
     <component-type>Parameter</component-type>
     <component-class>javax.faces.component.UIParameter</component-class>
   </component>
@@ -405,38 +400,6 @@
     </message>
     <message>
       <message-id>javax.faces.validator.LongRangeValidator.TYPE</message-id>
-      <message-class>javax.faces.application.MessageImpl</message-class>
-      <summary xml:lang="en">Validation Error: Value is not of the correct type.</summary>
-      <summary xml:lang="de">Validierungs-Fehler: Wert ist nicht vom richtigen Datentyp.</summary>
-      <summary xml:lang="es">Error de Validaci&#243;n: Valor no es correcto tipo.</summary>
-      <summary xml:lang="fr">Erreur de validation: La valeur sp&#233;cifi&#233;e n'est pas du bon type.</summary>
-    </message>
-    <message>
-      <message-id>javax.faces.validator.StringRangeValidator.LIMIT</message-id>
-      <message-class>javax.faces.application.MessageImpl</message-class>
-      <summary xml:lang="en">Validation Error: Specified attribute cannot be converted to proper type.</summary>
-      <summary xml:lang="de">Validierungs-Fehler: Spezifiziertes Attribut kann nicht in korrekten Typ umgewandelt werden.</summary>
-      <summary xml:lang="es">Error de Validaci&#243;n: No puede ser convertido specificado atributo al proprio tipo.</summary>
-      <summary xml:lang="fr">Erreur de validation: Attribut sp&#233;cifi&#233; ne peut etre converti &#224; un type appropri&#233;.</summary>
-    </message>
-    <message>
-      <message-id>javax.faces.validator.StringRangeValidator.MAXIMUM</message-id>
-      <message-class>javax.faces.application.MessageImpl</message-class>
-      <summary xml:lang="en">Validation Error: Value is greater than allowable maximum of ''{0}''.</summary>
-      <summary xml:lang="de">Validierungs-Fehler: Wert ist gr&#xF6;&#xDF;er als zul&#xE4;ssiges Maximum ''{0}''.</summary>
-      <summary xml:lang="es">Error de Validaci&#243;n: Valor es m&#225;s grande de valor de m&#225;ximo permitido: ''{0}''.</summary>
-      <summary xml:lang="fr">Erreur de validation: La valeur sp&#233;cifi&#233;e est sup&#233;rieure &#224; la valeur maximale permise ''{0}''.</summary>
-    </message>
-    <message>
-      <message-id>javax.faces.validator.StringRangeValidator.MINIMUM</message-id>
-      <message-class>javax.faces.application.MessageImpl</message-class>
-      <summary xml:lang="en">Validation Error: Value is less than allowable minimum of ''{0}''.</summary>
-      <summary xml:lang="de">Validierungs-Fehler: Wert ist kleiner als zul&#xE4;ssiges Minimum ''{0}''.</summary>
-      <summary xml:lang="es">Error de Validaci&#243;n: Valor is menos de valor de m&#237;nimo permitido: ''{0}''.</summary>
-      <summary xml:lang="fr">Erreur de validation: La valeur sp&#233;cifi&#233;e est inf&#233;rieure &#224; la valeur minimale permise ''{0}''.</summary>
-    </message>
-    <message>
-      <message-id>javax.faces.validator.StringRangeValidator.TYPE</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
       <summary xml:lang="en">Validation Error: Value is not of the correct type.</summary>
       <summary xml:lang="de">Validierungs-Fehler: Wert ist nicht vom richtigen Datentyp.</summary>
@@ -1069,10 +1032,6 @@
     <validator-id>LongRange</validator-id>
     <validator-class>javax.faces.validator.LongRangeValidator</validator-class>
   </validator>
-  <validator>
-    <validator-id>StringRange</validator-id>
-    <validator-class>javax.faces.validator.StringRangeValidator</validator-class>
-  </validator>
 
   <!-- standard renderkit -->
   <render-kit>
@@ -1250,14 +1209,6 @@
 
       <supported-component-class>
         <component-class>javax.faces.component.UISelectBoolean</component-class>
-      </supported-component-class>
-    </renderer>
-
-    <renderer>
-      <renderer-type>Data</renderer-type>
-      <renderer-class>com.sun.faces.renderkit.html_basic.DataRenderer</renderer-class>
-      <supported-component-class>
-        <component-class>javax.faces.component.UIPanel</component-class>
       </supported-component-class>
     </renderer>
 
@@ -1512,13 +1463,6 @@
       </supported-component-class>
     </renderer>
 
-    <renderer>
-      <renderer-type>List</renderer-type>
-      <renderer-class>com.sun.faces.renderkit.html_basic.ListRenderer</renderer-class>
-      <supported-component-class>
-        <component-class>javax.faces.component.UIPanel</component-class>
-      </supported-component-class>
-    </renderer>
     <renderer>
       <renderer-type>Listbox</renderer-type>
       <renderer-class>com.sun.faces.renderkit.html_basic.ListboxRenderer</renderer-class>

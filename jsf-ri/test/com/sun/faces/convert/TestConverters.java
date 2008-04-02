@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.20 2003/10/15 16:59:18 jvisvanathan Exp $
+ * $Id: TestConverters.java,v 1.21 2003/10/21 16:42:03 eburns Exp $
  */
 
 /*
@@ -44,7 +44,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.20 2003/10/15 16:59:18 jvisvanathan Exp $
+ * @version $Id: TestConverters.java,v 1.21 2003/10/21 16:42:03 eburns Exp $
  * 
  *
  */
@@ -435,7 +435,8 @@ public class TestConverters extends JspFacesTestCase
 	catch (ParseException e) {
 	    assertTrue(e.getMessage(), false);
 	}
-	assertTrue(expected.equals(bean.getDates()[2]));
+	assertEquals("bean.getDates()[2] not as expected: ", 
+		     expected, bean.getDates()[2]);
 
 	// test model type of Number []
 	UISelectMany number = new UISelectMany();

@@ -51,8 +51,6 @@
                         <h:output_text id="B2" value="Form"/>
                      </h:panel_group>
 
-                     <!-- Panel data elements -->
-
                     <h:output_text id="text1" value="Username:"/>
 
                     <h:input_text id="username1" styleClass="inputClass" value="JavaServerFaces" />
@@ -73,31 +71,6 @@
                 </h:panel_grid>
              </td>
            </tr>
-
-             <tr><td>
-                 <h:panel_list id="list2"
-                  border="1" cellpadding="3" cellspacing="3"
-                     summary="List with HTML attributes."
-                     title="List with no stylesheets" >
-
-                  <!-- List Data -->
-
-                  <h:panel_data    id="listData2" var="customer"
-                       valueRef="ListBean">
-                    <h:output_text id="accountId2"
-                       valueRef="customer.accountId"/>
-                    <h:output_text id="name2"
-                       valueRef="customer.name"/>
-                    <h:output_text id="symbol2"
-                       valueRef="customer.symbol"/>
-                    <h:output_text id="totalSales2"
-                       valueRef="customer.totalSales"/>
-                  </h:panel_data>
-
-                 </h:panel_list> 
-             </td>
-
-            </tr>
 
       <TR>
 

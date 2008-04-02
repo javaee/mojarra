@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_4.java,v 1.9 2003/10/02 06:50:22 jvisvanathan Exp $
+ * $Id: TestRenderers_4.java,v 1.10 2003/10/21 16:42:05 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -38,7 +38,7 @@ import java.util.ArrayList;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_4.java,v 1.9 2003/10/02 06:50:22 jvisvanathan Exp $
+ * @version $Id: TestRenderers_4.java,v 1.10 2003/10/21 16:42:05 eburns Exp $
  * 
  *
  */
@@ -104,7 +104,6 @@ public class TestRenderers_4 extends JspFacesTestCase {
             UIViewRoot root = new UIViewRoot();
             root.setId("root");
 
-            testListRenderer(root);
             testGridRenderer(root);
 	    getFacesContext().getResponseWriter().close();
             assertTrue(verifyExpectedOutput());
@@ -114,71 +113,6 @@ public class TestRenderers_4 extends JspFacesTestCase {
             assertTrue(false);
             return;
         }
-    }
-
-    public void testListRenderer(UIComponent root)
-        throws IOException {
-        System.out.println("Testing ListRenderer");
-	ListRenderer listRenderer = null;
-	UIPanel 
-	    panel = null,
-	    headerGroup = null,
-	    bodyGroup = null,
-	    footerGroup = null;
-	UIOutput 
-	    header1 = null,
-	    header2 = null,
-	    footer1 = null,
-	    footer2 = null,
-	    body1 = null,
-	    body2 = null;
-	ArrayList bodyList = new ArrayList();
-	bodyList.add("row1");
-	bodyList.add("row2");
-	bodyList.add("row3");
-
-	panel = new UIPanel();
-	root.getChildren().add(panel);
-	
-	headerGroup = new UIPanel();
-	headerGroup.setId("header");
-	header1 = new UIOutput();
-	header1.setValue("header1");
-	headerGroup.getChildren().add(header1);
-	header2 = new UIOutput();
-	header2.setValue("header2");
-	headerGroup.getChildren().add(header2);
-	panel.getFacets().put("header", headerGroup);
-	
-	footerGroup = new UIPanel();
-	footerGroup.setId("footer");
-	footer1 = new UIOutput();
-	footer1.setValue("footer1");
-	footerGroup.getChildren().add(footer1);
-	footer2 = new UIOutput();
-	footer2.setValue("footer2");
-	footerGroup.getChildren().add(footer2);
-	panel.getFacets().put("footer", footerGroup);
-
-	bodyGroup = new UIPanel();
-	bodyGroup.setValue(bodyList);
-	panel.getChildren().add(bodyGroup);
-
-	body1 = new UIOutput();
-	body1.setValue("body1");
-	bodyGroup.getChildren().add(body1);
-
-	body2 = new UIOutput();
-	body2.setValue("body2");
-	bodyGroup.getChildren().add(body2);
-
-	listRenderer = new ListRenderer();
-
-        System.out.println("    Testing encodeBegin method... ");
-	listRenderer.encodeBegin(getFacesContext(), panel);
-	listRenderer.encodeChildren(getFacesContext(), panel);
-        listRenderer.encodeEnd(getFacesContext(), panel);
-
     }
 
     public void testGridRenderer(UIComponent root)
