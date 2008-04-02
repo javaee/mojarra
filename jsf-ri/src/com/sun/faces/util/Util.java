@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.142 2004/07/26 21:12:44 rlubke Exp $
+ * $Id: Util.java,v 1.143 2004/08/10 13:38:25 rlubke Exp $
  */
 
 /*
@@ -60,7 +60,7 @@ import java.util.StringTokenizer;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.142 2004/07/26 21:12:44 rlubke Exp $
+ * @version $Id: Util.java,v 1.143 2004/08/10 13:38:25 rlubke Exp $
  */
 
 public class Util extends Object {
@@ -1348,24 +1348,13 @@ public class Util extends Object {
 
         //examine first segment and see if it is a scope
         String identifier = valueBinding;
-        String expression = null;
 
         if (segmentIndex > 0) {
             //get first segment designated by a "." or "["
-            identifier = valueBinding.substring(0, segmentIndex);
-
-            //get second segment designated by a "." or "["
-            expression = valueBinding.substring(segmentIndex + 1);
-            segmentIndex = getFirstSegmentIndex(expression);
-
-            if (segmentIndex > 0) {
-                expression = expression.substring(0, segmentIndex);
-            }
+            identifier = valueBinding.substring(0, segmentIndex);            
         }
 
-        //check to see if the identifier is a named scope. If it is check
-        //for the expression in that scope. The expression is the
-        //second segment.
+        //check to see if the identifier is a named scope.
 
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext ec = context.getExternalContext();
@@ -1374,28 +1363,13 @@ public class Util extends Object {
 	    outString[0] = identifier;
 	}
         if (identifier.equalsIgnoreCase(RIConstants.REQUEST_SCOPE)) {
-            if ((expression != null) &&
-                (ec.getRequestMap().get(expression) != null)) {
-                return RIConstants.REQUEST;
-            } else {
-                return null;
-            }
+            return RIConstants.REQUEST;
         }
         if (identifier.equalsIgnoreCase(RIConstants.SESSION_SCOPE)) {
-            if ((expression != null) &&
-                (Util.getSessionMap(context).get(expression) != null)) {
-                return RIConstants.SESSION;
-            } else {
-                return null;
-            }
+            return RIConstants.SESSION;
         }
         if (identifier.equalsIgnoreCase(RIConstants.APPLICATION_SCOPE)) {
-            if ((expression != null) &&
-                (ec.getApplicationMap().get(expression) != null)) {
-                return RIConstants.APPLICATION;
-            } else {
-                return null;
-            }
+            return RIConstants.APPLICATION;
         }
 
 	// handle implicit objects

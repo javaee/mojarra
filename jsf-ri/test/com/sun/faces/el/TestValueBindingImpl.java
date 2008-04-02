@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl.java,v 1.32 2004/05/07 13:53:25 eburns Exp $
+ * $Id: TestValueBindingImpl.java,v 1.33 2004/08/10 13:38:26 rlubke Exp $
  */
 
 /*
@@ -682,11 +682,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase {
         property = null;
         assertNull(Util.getScope(property, null));
         property = "foo.sessionScope";
-        assertNull(Util.getScope(property, null));
-        property = "sessionScope";
-        assertNull(Util.getScope(property, null));
-        property = "sessionScope[";
-        assertNull(Util.getScope(property, null));
+        assertNull(Util.getScope(property, null));            
 
     }
 
