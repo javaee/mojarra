@@ -300,6 +300,14 @@
     <message-resources-id>javax.faces.context.FACES_API_MESSAGES</message-resources-id>
     <message-resources-class>com.sun.faces.application.MessageResourcesImpl</message-resources-class>
     <message>
+      <message-id>javax.faces.validator.NOT_IN_RANGE_MESSAGE_ID</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Validation Error: Specified attribute is not between the expected values of {0} and {1}.</summary>
+      <summary xml:lang="de">Validierungs-Fehler: Spezifiziertes liegt nicht zwischen {0} und {1}.</summary>
+      <summary xml:lang="es">Error de Validaci&#243;n: PENDING(localize): {0} - {1}.</summary>
+      <summary xml:lang="fr">Erreur de validation: PENDING(localize): {0} - {1}.</summary>
+    </message>
+    <message>
       <message-id>javax.faces.validator.DoubleRangeValidator.LIMIT</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
       <summary xml:lang="en">Validation Error: Specified attribute cannot be converted to proper type.</summary>
