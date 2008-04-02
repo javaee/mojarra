@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.54 2003/10/30 20:30:16 eburns Exp $
+ * $Id: FacesContext.java,v 1.55 2003/10/30 23:18:47 eburns Exp $
  */
 
 /*
@@ -82,7 +82,7 @@ public abstract class FacesContext {
      * <p>Return the maximum severity level recorded on any {@link FacesMessage}s
      * that has been queued, whether or not they are associated with any
      * specific {@link UIComponent}.  If no such messages have been queued,
-     * return a value less than <code>FacesMessage.SEVERITY_INFO</code>.</p>
+     * return <code>null</code>.</p>
      *
      * @exception IllegalStateException if this method is called after
      *  this instance has been released
