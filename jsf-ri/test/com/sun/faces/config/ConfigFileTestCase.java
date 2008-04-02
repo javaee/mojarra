@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.10 2003/05/01 20:39:52 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.11 2003/05/02 07:05:53 eburns Exp $
  */
 
 /*
@@ -28,6 +28,7 @@ import javax.servlet.ServletContext;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.context.MessageResources;
+import javax.faces.render.RenderKitFactory;
 
 import org.apache.cactus.ServletTestCase;
 import org.apache.cactus.WebRequest;
@@ -109,9 +110,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 			    messageResourcesMap.get(MessageResources.FACES_API_MESSAGES)));
 	assertTrue(null != (messagesMap = messageResources.getMessages()));
 	assertTrue(null != (messageIter = messagesMap.keySet().iterator()));
-	while (messageIter.hasNext()) {
-	    assertTrue(isMember((String) messageIter.next(), apiMessages));
-	}
+	assertTrue(isSubset(apiMessages, messageIter));
 	assertTrue(null != (messageResources = (ConfigMessageResources)
 			    messageResourcesMap.get(MessageResources.FACES_IMPL_MESSAGES)));
 	
@@ -370,4 +369,52 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
              System.out.println(cnc.toString());
          }
      }
+
+    public void testRenderKit() {
+	// test the default renderkit
+        ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.getFactory(
+										   FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application = (ApplicationImpl)aFactory.getApplication();
+	ConfigBase yourBase = application.getAppConfig().getConfigBase();
+	ConfigRenderKit renderKit = null;
+	ConfigRenderer renderer = null;
+	Map 
+	    renderKitsMap = null,
+	    renderersMap = null;
+	String defaultRenderers [] = {
+	    "Button",
+	    "Checkbox",
+	    "Data",
+	    "Date",
+	    "DateTime",
+	    "Errors",
+	    "Form",
+	    "Grid",
+	    "Group",
+	    "Hidden",
+	    "Hyperlink",
+	    "Image",
+	    "Label",
+	    "List",
+	    "Listbox",
+	    "Menu",
+	    "Message",
+	    "Number",
+	    "Radio",
+	    "Secret",
+	    "SelectManyCheckbox",
+	    "TextArea",
+	    "Text",
+	    "Time"
+	};
+	Iterator rendererIter = null;
+
+	assertTrue(null != (renderKitsMap = yourBase.getRenderKits()));
+	assertTrue(null != (renderKit = (ConfigRenderKit)
+			    renderKitsMap.get(RenderKitFactory.DEFAULT_RENDER_KIT)));
+	assertTrue(null != (renderersMap = renderKit.getRenderers()));
+	assertTrue(null != (rendererIter = renderersMap.keySet().iterator()));
+	assertTrue(isSubset(defaultRenderers, rendererIter));
+	
+    }
 }

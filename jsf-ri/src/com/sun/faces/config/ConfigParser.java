@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.11 2003/05/01 21:13:06 eburns Exp $
+ * $Id: ConfigParser.java,v 1.12 2003/05/02 07:05:49 eburns Exp $
  */
 
 /*
@@ -199,6 +199,7 @@ public class ConfigParser {
         configureRulesValidator(digester);
         configureRulesManagedBean(digester);
         configureRulesNavigationCase(digester);
+        configureRulesRenderKit(digester);
 
     }
 
@@ -442,6 +443,30 @@ public class ConfigParser {
         digester.addCallMethod(prefix + "/from-outcome", "setFromOutcome", 0);
         digester.addCallMethod(prefix + "/to-tree-id", "setToTreeId", 0);
     }
+
+    protected void configureRulesRenderKit(Digester digester) {
+        String prefix = "faces-config/render-kit";
+
+        digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigRenderKit");
+        digester.addSetNext(prefix, "addRenderKit", "com.sun.faces.config.ConfigRenderKit");
+        digester.addCallMethod(prefix + "/render-kit-id",
+                               "setRenderKitId", 0);
+        digester.addCallMethod(prefix + "/render-kit-class",
+                               "setRenderKitClass", 0);
+	configureRulesRenderer(digester);
+    }
+
+    protected void configureRulesRenderer(Digester digester) {
+        String prefix = "faces-config/render-kit/renderer";
+
+        digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigRenderer");
+        digester.addSetNext(prefix, "addRenderer", "com.sun.faces.config.ConfigRenderer");
+        digester.addCallMethod(prefix + "/renderer-type",
+                               "setRendererType", 0);
+        digester.addCallMethod(prefix + "/renderer-class",
+                               "setRendererClass", 0);
+    }
+
 
     // Return the URL of the specified path, relative to our base directory
     protected URL relativeURL(String relativePath) throws Exception {

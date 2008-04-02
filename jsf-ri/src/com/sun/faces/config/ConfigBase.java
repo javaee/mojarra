@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigBase.java,v 1.5 2003/05/01 18:04:01 eburns Exp $
+ * $Id: ConfigBase.java,v 1.6 2003/05/02 07:05:49 eburns Exp $
  */
 
 /*
@@ -186,4 +186,23 @@ public class ConfigBase {
             return (this.navigationCases);
         }
     }
+
+    // ------------------------------------------------------------ <render-kit>
+
+
+    private Map renderKits = null;
+    public void addRenderKit(ConfigRenderKit renderKit) {
+        if (renderKits == null) {
+            renderKits = new HashMap();
+        }
+        renderKits.put(renderKit.getRenderKitId(), renderKit);
+    }
+    public Map getRenderKits() {
+        if (renderKits == null) {
+            return (Collections.EMPTY_MAP);
+        } else {
+            return (this.renderKits);
+        }
+    }
+
 }
