@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.60 2003/05/05 15:20:42 rkitain Exp $
+ * $Id: Util.java,v 1.61 2003/05/06 03:24:11 eburns Exp $
  */
 
 /*
@@ -56,7 +56,7 @@ import java.util.StringTokenizer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.60 2003/05/05 15:20:42 rkitain Exp $
+ * @version $Id: Util.java,v 1.61 2003/05/06 03:24:11 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -508,6 +508,7 @@ private Util()
 	Assert.assert_it(null != 
 		 context.getAttribute(RIConstants.DEFAULT_RENDER_KIT));
 	context.removeAttribute(RIConstants.DEFAULT_RENDER_KIT);
+	context.removeAttribute(RIConstants.CONFIG_ATTR);
     }
 			 
     /**

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.15 2003/05/02 03:11:31 eburns Exp $
+ * $Id: FacesTestCaseService.java,v 1.16 2003/05/06 03:24:12 eburns Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.15 2003/05/02 03:11:31 eburns Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.16 2003/05/06 03:24:12 eburns Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -166,11 +166,16 @@ public void setUp()
 			   getRequestParameterMap().get(curName));
     }
 
-    // make sure this gets called!
-    ConfigListener configListener = new ConfigListener();
-    ServletContextEvent e = 
-	new ServletContextEvent(facesTestCase.getConfig().getServletContext());
-    configListener.contextInitialized(e);
+    // make sure this gets called once per ServletContext instance.
+    if (null == 
+	(facesTestCase.getConfig().getServletContext().
+	 getAttribute(RIConstants.CONFIG_ATTR))) {
+	
+	ConfigListener configListener = new ConfigListener();
+	ServletContextEvent e = 
+	    new ServletContextEvent(facesTestCase.getConfig().getServletContext());
+	configListener.contextInitialized(e);
+    }
 }
 
 public void tearDown()
