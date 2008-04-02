@@ -44,7 +44,13 @@
         <portlet-name>guessNumber</portlet-name>
         <display-name>JSF GuessNumber Portlet</display-name>
         <portlet-class>com.sun.faces.portlet.FacesPortlet</portlet-class>
-
+        
+        <init-param> 
+	<description>Portlet init page</description>
+        <name>com.sun.faces.portlet.INIT_VIEW</name>
+	<value>/greeting.jsp</value>
+        </init-param>
+    
         <supports>
             <mime-type>text/html</mime-type>
             <portlet-mode>VIEW</portlet-mode>

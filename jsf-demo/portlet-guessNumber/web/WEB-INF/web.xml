@@ -60,11 +60,6 @@
     </context-param>
 
     <context-param>
-        <param-name>com.sun.faces.portlet.INIT_VIEW</param-name>
-        <param-value>/greeting.jsp</param-value>
-    </context-param>
-
-    <context-param>
         <param-name>com.sun.faces.validateXml</param-name>
         <param-value>true</param-value>
     </context-param>
