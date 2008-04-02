@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.102 2004/10/18 21:20:47 edburns Exp $
+ * $Id: UIComponentBase.java,v 1.103 2005/01/21 16:57:28 edburns Exp $
  */
 
 /*
@@ -39,6 +39,9 @@ import javax.faces.render.Renderer;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 
 /**
  * <p><strong>UIComponentBase</strong> is a convenience base class that
@@ -57,6 +60,8 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     // -------------------------------------------------------------- Attributes
+
+    private static Logger log = Logger.getLogger("javax.faces.component");
 
 
     /**
@@ -1064,16 +1069,28 @@ public abstract class UIComponentBase extends UIComponent {
     protected Renderer getRenderer(FacesContext context) {
 
         String rendererType = getRendererType();
+	Renderer result = null;
         if (rendererType != null) {
             RenderKitFactory rkFactory = (RenderKitFactory)
                 FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
             RenderKit renderKit = rkFactory.getRenderKit
                 (context, context.getViewRoot().getRenderKitId());
-            return (renderKit.getRenderer(getFamily(), rendererType));
+	    result = (renderKit.getRenderer(getFamily(), rendererType));
+	    if (null == result) {
+		if (log.isLoggable(Level.FINE)) {
+		    // PENDING(edburns): I18N
+		    log.fine("Can't get Renderer for type " + rendererType);
+		}
+	    }
         } else {
-            return (null);
-        }
-
+	    if (log.isLoggable(Level.FINE)) {
+		String id = this.getId();
+		id = (null != id) ? id : this.getClass().getName();
+		// PENDING(edburns): I18N
+		log.fine("No renderer-type for component " + id);
+	    }
+	}
+	return result;
     }
 
 
