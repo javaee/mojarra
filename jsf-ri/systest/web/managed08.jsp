@@ -26,11 +26,29 @@
   
   <p>previous request status: <pre><h:outputText value="#{applicationScope.previousRequestStatus}" /></pre></p>
   
-  <p><h:commandButton id="removenoneBean" value="remove request bean" action="#{noneBean.removeRequestBean}" /></p>
+  <p><h:commandButton id="removeRequestBean" value="remove request bean" action="#{noneBean.removeRequestBean}" /></p>
+
+  <p><h:commandButton id="removeRequestBean2" value="remove request bean2" action="#{noneBean.removeRequestBean2}" /></p>
+
+  <p><h:commandButton id="replaceRequestBean" value="replace request bean" action="#{noneBean.replaceRequestBean}" /></p>
+
+  <p><h:commandButton id="replaceRequestBean2" value="replace request bean2" action="#{noneBean.replaceRequestBean2}" /></p>
        
   <p><h:commandButton id="removeSessionBean" value="remove session bean" action="#{noneBean.removeSessionBean}" /></p>
 
+  <p><h:commandButton id="removeSessionBean2" value="remove session bean2" action="#{noneBean.removeSessionBean2}" /></p>
+
+  <p><h:commandButton id="replaceSessionBean" value="replace session bean" action="#{noneBean.replaceSessionBean}" /></p>
+
+  <p><h:commandButton id="replaceSessionBean2" value="replace session bean2" action="#{noneBean.replaceSessionBean2}" /></p>
+
   <p><h:commandButton id="removeApplicationBean" value="remove application bean" action="#{noneBean.removeApplicationBean}" /></p>
+
+  <p><h:commandButton id="removeApplicationBean2" value="remove application bean2" action="#{noneBean.removeApplicationBean2}" /></p>
+
+  <p><h:commandButton id="replaceApplicationBean" value="replace application bean" action="#{noneBean.replaceApplicationBean}" /></p>
+
+  <p><h:commandButton id="replaceApplicationBean2" value="replace application bean2" action="#{noneBean.replaceApplicationBean2}" /></p>
        
   <p><h:commandButton id="invalidateSession" value="invalidate session" action="#{noneBean.invalidateSession}" /></p>
 

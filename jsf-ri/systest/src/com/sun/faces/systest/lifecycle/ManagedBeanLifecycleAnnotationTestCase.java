@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanLifecycleAnnotationTestCase.java,v 1.2 2005/09/30 03:57:22 edburns Exp $
+ * $Id: ManagedBeanLifecycleAnnotationTestCase.java,v 1.3 2005/10/25 20:39:57 rlubke Exp $
  */
 
 /*
@@ -124,12 +124,32 @@ public class ManagedBeanLifecycleAnnotationTestCase extends AbstractTestCase {
         text = page.asText();
         assertTrue(Pattern.matches("(?s).*-----------------.*bean: requestBean postConstructCalled: true.*bean: requestBean preDestroyCalled: true.*bean: sessionBean preDestroyCalled: true.*-----------------.*bean: requestBean postConstructCalled: true.*bean: sessionBean postConstructCalled: true.*",
                 text));
+
+        button = (HtmlSubmitInput)
+            page.getHtmlElementById("form:clearStatusMessage");
+        page = (HtmlPage) button.click();
+        button = (HtmlSubmitInput)
+            page.getHtmlElementById("form:removeSessionBean2");
+        page = (HtmlPage) button.click();
+        text = page.asText();
+        assertTrue(Pattern.matches("(?s).*-----------------.*bean: requestBean postConstructCalled: true.*bean: requestBean preDestroyCalled: true.*bean: sessionBean preDestroyCalled: true.*-----------------.*bean: requestBean postConstructCalled: true.*bean: sessionBean postConstructCalled: true.*",
+                text));
         
         button = (HtmlSubmitInput) 
             page.getHtmlElementById("form:clearStatusMessage");
         page = (HtmlPage) button.click();
         button = (HtmlSubmitInput) 
             page.getHtmlElementById("form:removeApplicationBean");
+        page = (HtmlPage) button.click();
+        text = page.asText();
+        assertTrue(Pattern.matches("(?s).*-----------------.*bean: requestBean postConstructCalled: true.*bean: requestBean preDestroyCalled: true.*bean: applicationBean preDestroyCalled: true.*-----------------.*bean: requestBean postConstructCalled: true.*bean: applicationBean postConstructCalled: true.*",
+                text));
+
+        button = (HtmlSubmitInput)
+            page.getHtmlElementById("form:clearStatusMessage");
+        page = (HtmlPage) button.click();
+        button = (HtmlSubmitInput)
+            page.getHtmlElementById("form:removeApplicationBean2");
         page = (HtmlPage) button.click();
         text = page.asText();
         assertTrue(Pattern.matches("(?s).*-----------------.*bean: requestBean postConstructCalled: true.*bean: requestBean preDestroyCalled: true.*bean: applicationBean preDestroyCalled: true.*-----------------.*bean: requestBean postConstructCalled: true.*bean: applicationBean postConstructCalled: true.*",
@@ -153,6 +173,79 @@ public class ManagedBeanLifecycleAnnotationTestCase extends AbstractTestCase {
         page = (HtmlPage) button.click();
         text = page.asText();
         assertTrue(Pattern.matches("(?s).*-----------------.*bean: requestBean postConstructCalled: true.*bean: requestBean preDestroyCalled: true.*bean: sessionBean preDestroyCalled: true.*-----------------.*bean: requestBean postConstructCalled: true.*bean: sessionBean postConstructCalled: true.*",
+                text));
+
+        button = (HtmlSubmitInput)
+            page.getHtmlElementById("form:clearStatusMessage");
+        page = (HtmlPage) button.click();
+        button = (HtmlSubmitInput)
+            page.getHtmlElementById("form:replaceRequestBean");
+        page = (HtmlPage) button.click();
+        text = page.asText();
+        assertTrue(Pattern.matches("(?s).*-----------------.*bean: requestBean postConstructCalled: true.*bean: requestBean preDestroyCalled: true.*-----------------.*",
+                text));
+
+        button = (HtmlSubmitInput)
+            page.getHtmlElementById("form:clearStatusMessage");
+        page = (HtmlPage) button.click();
+        button = (HtmlSubmitInput)
+            page.getHtmlElementById("form:replaceRequestBean2");
+        button.click();
+        page = (HtmlPage) button.click();
+        text = page.asText();
+        assertTrue(Pattern.matches("(?s).*-----------------.*bean: requestBean postConstructCalled: true.*bean: requestBean preDestroyCalled: true.*-----------------.*bean: requestBean postConstructCalled: true.*bean: requestBean preDestroyCalled: true.*-----------------.*bean: requestBean postConstructCalled: true.*",
+                text));
+
+        button = (HtmlSubmitInput)
+            page.getHtmlElementById("form:removeSessionBean");
+        page = (HtmlPage) button.click();
+         button = (HtmlSubmitInput)
+            page.getHtmlElementById("form:clearStatusMessage");
+        page = (HtmlPage) button.click();
+        button = (HtmlSubmitInput)
+            page.getHtmlElementById("form:replaceSessionBean");
+        page = (HtmlPage) button.click();
+        text = page.asText();
+        assertTrue(Pattern.matches("(?s).*-----------------.*bean: requestBean postConstructCalled: true.*bean: requestBean preDestroyCalled: true.*bean: sessionBean preDestroyCalled: true.*-----------------.*bean: requestBean postConstructCalled: true.*",
+                text));
+
+        button = (HtmlSubmitInput)
+            page.getHtmlElementById("form:removeSessionBean");
+        page = (HtmlPage) button.click();
+         button = (HtmlSubmitInput)
+            page.getHtmlElementById("form:clearStatusMessage");
+        page = (HtmlPage) button.click();
+        button = (HtmlSubmitInput)
+            page.getHtmlElementById("form:replaceSessionBean2");
+        page = (HtmlPage) button.click();
+        text = page.asText();
+        assertTrue(Pattern.matches("(?s).*-----------------.*bean: requestBean postConstructCalled: true.*bean: requestBean preDestroyCalled: true.*-----------------.*bean: requestBean postConstructCalled: true.*",
+                text));
+
+        button = (HtmlSubmitInput)
+            page.getHtmlElementById("form:removeApplicationBean");
+        page = (HtmlPage) button.click();
+         button = (HtmlSubmitInput)
+            page.getHtmlElementById("form:clearStatusMessage");
+        page = (HtmlPage) button.click();
+        button = (HtmlSubmitInput)
+            page.getHtmlElementById("form:replaceApplicationBean");
+        page = (HtmlPage) button.click();
+        text = page.asText();
+        assertTrue(Pattern.matches("(?s).*-----------------.*bean: requestBean postConstructCalled: true.*bean: requestBean preDestroyCalled: true.*bean: applicationBean preDestroyCalled: true.*-----------------.*bean: requestBean postConstructCalled: true.*",
+                text));
+
+        button = (HtmlSubmitInput)
+            page.getHtmlElementById("form:removeApplicationBean");
+        page = (HtmlPage) button.click();
+         button = (HtmlSubmitInput)
+            page.getHtmlElementById("form:clearStatusMessage");
+        page = (HtmlPage) button.click();
+        button = (HtmlSubmitInput)
+            page.getHtmlElementById("form:replaceApplicationBean2");
+        page = (HtmlPage) button.click();
+        text = page.asText();
+        assertTrue(Pattern.matches("(?s).*-----------------.*bean: requestBean postConstructCalled: true.*bean: requestBean preDestroyCalled: true.*-----------------.*bean: requestBean postConstructCalled: true.*",
                 text));
         
     }

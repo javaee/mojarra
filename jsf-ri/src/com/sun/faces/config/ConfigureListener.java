@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.53 2005/09/30 03:57:19 edburns Exp $
+ * $Id: ConfigureListener.java,v 1.54 2005/10/25 20:39:55 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -99,7 +99,6 @@ import com.sun.faces.el.FacesCompositeELResolver;
 
 import com.sun.faces.el.DummyPropertyResolverImpl;
 import com.sun.faces.el.DummyVariableResolverImpl;
-import com.sun.faces.spi.ManagedBeanFactory.Scope;
 import com.sun.faces.util.Util;
 
 import org.apache.commons.digester.Digester;
@@ -110,10 +109,19 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.lang.reflect.InvocationTargetException;
+
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
+import javax.servlet.ServletContextAttributeListener;
+import javax.servlet.ServletRequestAttributeListener;
+import javax.servlet.ServletRequestAttributeEvent;
+import javax.servlet.ServletContextAttributeEvent;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
+import javax.servlet.http.HttpSessionAttributeListener;
+import javax.servlet.http.HttpSessionBindingEvent;
+import javax.servlet.http.HttpSession;
 
 
 /**
@@ -121,7 +129,12 @@ import javax.servlet.http.HttpSessionListener;
  * configure the Reference Implementation runtime environment.</p>
  * <p/>
  */
-public class ConfigureListener implements ServletRequestListener, HttpSessionListener, ServletContextListener {
+public class ConfigureListener implements ServletRequestListener,
+                                          HttpSessionListener,
+                                          ServletContextListener,
+                                          ServletRequestAttributeListener,
+                                          HttpSessionAttributeListener,
+                                          ServletContextAttributeListener {
 
 
     // -------------------------------------------------------- Static Variables
@@ -498,7 +511,6 @@ public class ConfigureListener implements ServletRequestListener, HttpSessionLis
                 logger.info(e.getMessage());
             }
         }
-        
 
         // Release any allocated application resources
 	FactoryFinder.releaseFactories();
@@ -512,8 +524,115 @@ public class ConfigureListener implements ServletRequestListener, HttpSessionLis
     }
 
 
+    // ----------------------------------- Methods from RequestAttributeListener
+
+    public void attributeAdded(ServletRequestAttributeEvent event) {
+        // we're not interested in this event
+    }
+
+    public void attributeRemoved(ServletRequestAttributeEvent event) {
+
+        handleAttributeEvent(event.getName(),
+                             event.getServletContext(),
+                             Scope.REQUEST);
+
+    }
+
+    public void attributeReplaced(ServletRequestAttributeEvent event) {
+
+        String attrName = event.getName();
+        Object newValue = event.getServletRequest().getAttribute(attrName);
+
+        // perhaps a bit paranoid, but since the javadocs are a bit vague,
+        // only handle the event if oldValue and newValue are not the
+        // exact same object
+        if (event.getValue() != newValue) {
+            handleAttributeEvent(attrName,
+                                 event.getServletContext(),
+                                 Scope.REQUEST);
+        }
+    }
+
+    // ------------------------------- Methods from HttpSessionAttributeListener
+
+    public void attributeAdded(HttpSessionBindingEvent event) {
+        // we're not interested in this event
+    }
+
+    public void attributeRemoved(HttpSessionBindingEvent event) {
+
+        handleAttributeEvent(event.getName(),
+                             event.getSession().getServletContext(),
+                             Scope.SESSION);
+
+    }
+
+    public void attributeReplaced(HttpSessionBindingEvent event) {
+
+        HttpSession session = event.getSession();
+        String attrName = event.getName();
+        Object newValue = session.getAttribute(attrName);
+
+        // perhaps a bit paranoid, but since the javadocs are a bit vague,
+        // only handle the event if oldValue and newValue are not the
+        // exact same object
+        if (event.getValue() != newValue) {
+            handleAttributeEvent(attrName,
+                                 session.getServletContext(),
+                                 Scope.SESSION);
+        }
+
+    }
+
+    // ---------------------------- Methods from ServletContextAttributeListener
+
+    public void attributeAdded(ServletContextAttributeEvent event) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public void attributeRemoved(ServletContextAttributeEvent event) {
+
+        handleAttributeEvent(event.getName(),
+                             event.getServletContext(),
+                             Scope.APPLICATION);
+
+    }
+
+    public void attributeReplaced(ServletContextAttributeEvent event) {
+
+        ServletContext context = event.getServletContext();
+        String attrName = event.getName();
+        Object newValue = context.getAttribute(attrName);
+
+        // perhaps a bit paranoid, but since the javadocs are a bit vague,
+        // only handle the event if oldValue and newValue are not the
+        // exact same object
+        if (event.getValue() != newValue) {
+            handleAttributeEvent(attrName,
+                                 context,
+                                 Scope.APPLICATION);
+        }
+
+    }
+
     // --------------------------------------------------------- Private Methods
 
+    private static void handleAttributeEvent(String beanName,
+                                             ServletContext servletContext,
+                                             Scope scope) {
+
+        ApplicationAssociate associate =
+              ApplicationAssociate.getInstance(servletContext);
+        try {
+            associate.handlePreDestroy(beanName, scope);
+        } catch (InvocationTargetException ite) {
+            Throwable root = ite.getTargetException();
+            logger.info(root.getMessage());
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+        }
+
+    } // END handleAttributeEvent
 
     /**
      * <p>Return the implementation-specific <code>Application</code>

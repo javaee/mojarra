@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.38 2005/09/30 03:57:20 edburns Exp $
+ * $Id: ExternalContextImpl.java,v 1.39 2005/10/25 20:39:56 rlubke Exp $
  */
 
 /*
@@ -63,11 +63,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.context.BaseContextMap.EntryIterator;
-import com.sun.faces.context.BaseContextMap.KeyIterator;
-import com.sun.faces.context.BaseContextMap.ValueIterator;
-import com.sun.faces.spi.ManagedBeanFactory.Scope;
 import com.sun.faces.util.Util;
 import java.util.logging.Logger;
 
@@ -76,7 +71,7 @@ import java.util.logging.Logger;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.38 2005/09/30 03:57:20 edburns Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.39 2005/10/25 20:39:56 rlubke Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -760,13 +755,6 @@ class ApplicationMap extends BaseContextMap {
         for (Enumeration e = servletContext.getAttributeNames();
              e.hasMoreElements(); ) {
             name = (String) e.nextElement();
-            try {
-                ApplicationAssociate.getInstance(servletContext).
-                        handlePreDestroy(name, Scope.APPLICATION);
-            }
-            catch (Throwable t) {
-                ExternalContextImpl.logger.info(t.getMessage());
-            }
             servletContext.removeAttribute(name);
         }
     }
@@ -805,13 +793,6 @@ class ApplicationMap extends BaseContextMap {
         }
         String keyString = key.toString();
         Object result = servletContext.getAttribute(keyString);
-        try {
-            ApplicationAssociate.getInstance(servletContext).
-                    handlePreDestroy(keyString, Scope.APPLICATION);
-        } catch (Throwable t) {
-            ExternalContextImpl.logger.info(t.getMessage());
-        }
-        
         servletContext.removeAttribute(keyString);
         return (result);
     }
@@ -865,13 +846,6 @@ class SessionMap extends BaseContextMap {
         for (Enumeration e = getSession().getAttributeNames();
              e.hasMoreElements(); ) {
             name = (String) e.nextElement();
-            try {
-                ApplicationAssociate.getInstance(session.getServletContext()).
-                        handlePreDestroy(name, Scope.SESSION);
-            }
-            catch (Throwable t) {
-                ExternalContextImpl.logger.info(t.getMessage());
-            }
             session.removeAttribute(name);
         }
     }
@@ -913,12 +887,6 @@ class SessionMap extends BaseContextMap {
         String keyString = key.toString();
         HttpSession session = getSession();
         Object result = session.getAttribute(keyString);
-        try {
-            ApplicationAssociate.getInstance(session.getServletContext()).
-                    handlePreDestroy(keyString, Scope.SESSION);
-        } catch (Throwable t) {
-            ExternalContextImpl.logger.info(t.getMessage());
-        }
         session.removeAttribute(keyString);
         return (result);
     }
@@ -975,13 +943,6 @@ class RequestMap extends BaseContextMap {
         for (Enumeration e = request.getAttributeNames();
              e.hasMoreElements(); ) {
             name = (String) e.nextElement();
-            try {
-                ApplicationAssociate.getInstance(extContext).
-                        handlePreDestroy(name, Scope.REQUEST);
-            }
-            catch (Throwable t) {
-                ExternalContextImpl.logger.info(t.getMessage());
-            }
             request.removeAttribute(name);
         }
     }
@@ -1020,12 +981,6 @@ class RequestMap extends BaseContextMap {
         }
         String keyString = key.toString();
         Object result = request.getAttribute(keyString);
-        try {
-            ApplicationAssociate.getInstance(extContext).
-                    handlePreDestroy(keyString, Scope.REQUEST);
-        } catch (Throwable t) {
-            ExternalContextImpl.logger.info(t.getMessage());
-        }
         request.removeAttribute(keyString);
         return (result);
     }
