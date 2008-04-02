@@ -141,4 +141,20 @@
             <pass-through>true</pass-through>
         </property-extension>
     </property>
+
+    <property>
+        <description>
+          Flag indicating that this element must never
+          receive focus or be included in a subsequent
+          submit.
+        </description>
+        <display-name>Disabled Flag</display-name>
+        <icon></icon>
+        <property-name>disabled</property-name>
+        <property-class>boolean</property-class>
+        <property-extension>
+            <pass-through>true</pass-through>
+        </property-extension>
+    </property>
+
 </root>

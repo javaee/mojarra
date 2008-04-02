@@ -5171,6 +5171,20 @@
         <pass-through>true</pass-through>
       </property-extension>
     </property>
+    <property>
+      <description>
+          Flag indicating that this element must never
+          receive focus or be included in a subsequent
+          submit.
+        </description>
+      <display-name>Disabled Flag</display-name>
+      <icon/>
+      <property-name>disabled</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
 
     <component-extension>
       <base-component-type>javax.faces.Command</base-component-type>
@@ -11165,6 +11179,20 @@
       <icon/>
       <property-name>type</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Flag indicating that this element must never
+          receive focus or be included in a subsequent
+          submit.
+        </description>
+      <display-name>Disabled Flag</display-name>
+      <icon/>
+      <property-name>disabled</property-name>
+      <property-class>boolean</property-class>
       <property-extension>
         <pass-through>true</pass-through>
       </property-extension>
@@ -17964,6 +17992,20 @@
           <pass-through>true</pass-through>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description>
+          Flag indicating that this element must never
+          receive focus or be included in a subsequent
+          submit.
+        </description>
+        <display-name>Disabled Flag</display-name>
+        <icon/>
+        <attribute-name>disabled</attribute-name>
+        <attribute-class>boolean</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
 
       <renderer-extension>
         <renders-children>true</renders-children>
@@ -21170,7 +21212,12 @@
       its value as the value of the "class" attribute.  If the "id" attribute
       is specified, follow the same steps as mentioned in the 
       "<a href="renderkit-summary.html">General
-      Notes on Encoding</a>" regarding the "id" attribute for UIInput components.]]></description>
+      Notes on Encoding</a>" regarding the "id" attribute for UIInput components.
+      If the "disabled" attribute is specified, do not render the HTML "a"
+      anchor element or the "href" element.  Instead, render a "span" element. 
+      If the "styleClass" attribute is specified, render its value as the value 
+      of the "class" attribute on the "span".  Render any pass-through attributes
+      on the "span".]]></description>
       <component-family>javax.faces.Output</component-family>
       <renderer-type>javax.faces.Link</renderer-type>
       <renderer-class>
@@ -21539,6 +21586,20 @@
         <icon/>
         <attribute-name>type</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Flag indicating that this element must never
+          receive focus or be included in a subsequent
+          submit.
+        </description>
+        <display-name>Disabled Flag</display-name>
+        <icon/>
+        <attribute-name>disabled</attribute-name>
+        <attribute-class>boolean</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
         </attribute-extension>
