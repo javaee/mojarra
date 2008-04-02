@@ -76,5 +76,4 @@ public interface TaglibGenerator {
      */
     public String generateGlobalAttributes();
 
-    public void setParser(ConfigParser parser);
 }

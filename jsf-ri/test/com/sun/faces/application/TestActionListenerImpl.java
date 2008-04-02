@@ -1,5 +1,5 @@
 /*
- * $Id: TestActionListenerImpl.java,v 1.17 2004/01/27 21:05:49 eburns Exp $
+ * $Id: TestActionListenerImpl.java,v 1.18 2004/01/27 23:26:28 eburns Exp $
  */
 
 /*
@@ -13,7 +13,6 @@ package com.sun.faces.application;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.ServletFacesTestCase;
-import com.sun.faces.config.ConfigNavigationCase;
 import com.sun.faces.context.FacesContextImpl;
 
 import com.sun.faces.util.DebugUtil;
@@ -44,7 +43,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestActionListenerImpl.java,v 1.17 2004/01/27 21:05:49 eburns Exp $
+ * @version $Id: TestActionListenerImpl.java,v 1.18 2004/01/27 23:26:28 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo

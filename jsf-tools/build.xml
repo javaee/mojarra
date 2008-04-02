@@ -151,27 +151,7 @@ necessary to generate required classes.
          Build the Code Generating code
        ===================================================================
   -->
-  <target name="build" depends="generate, generate.taglib">
-  </target>
-
-  <target name="generate" depends="tools,check.generation.necessity" 
-          if="standard-html-renderkit-impl" unless="skip.generation">
-
-    <copy todir="${build.classes}" 
-          file="${jsf-api.dir}/doc/web-facesconfig_1_0.dtd"/>
-
-    <java fork="yes" 
-	  classname="com.sun.faces.generate.GenerateConcreteClasses">
-      <!-- <jvmarg line="${debug.jvm.args}"/> -->
-      <classpath refid="compile.classpath" />
-      <classpath refid="run.classpath" />
-      <arg value="-f"/> <arg path="${standard-html-renderkit}"/>
-      <arg value="-e"/> <arg path="${standard-html-renderkit-impl}"/>
-      <arg value="-d"/> <arg path="${build.generate}"/>
-      <arg value="-c"/> <arg path="${basedir}/COPYRIGHT"/>
-    </java>
-
-    <touch file="${build.generate}/last-generation"/>
+  <target name="build" depends="generate.taglib">
   </target>
 
   <target         name="props"
@@ -365,7 +345,7 @@ necessary to generate required classes.
     </uptodate>
   </target>
 
-  <target name="javadocs" depends="javadoc_check, generate"
+  <target name="javadocs" depends="javadoc_check"
           unless="javadoc.notrequired"
           description="Create the JavaDoc documentation">
     <mkdir dir="${build.javadocs}"/>
