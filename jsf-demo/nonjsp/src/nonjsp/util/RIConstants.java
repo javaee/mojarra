@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.2 2003/02/21 23:46:01 ofung Exp $
+ * $Id: RIConstants.java,v 1.3 2003/08/25 18:46:37 jvisvanathan Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import javax.faces.render.RenderKitFactory;
  * Copy of com.sun.faces.RIConstants in order to remove
  * demo dependancy on RI.
  *
- * @version $Id: RIConstants.java,v 1.2 2003/02/21 23:46:01 ofung Exp $
+ * @version $Id: RIConstants.java,v 1.3 2003/08/25 18:46:37 jvisvanathan Exp $
  *
  * @see com.sun.faces.RIConstants
  *
@@ -97,8 +97,7 @@ public class RIConstants {
     public final static String IMPL_MESSAGES = "com.sun.faces.IMPL_MESSAGES";
 
     public static final String SAVESTATE_MARKER = FACES_PREFIX + "saveStateMarker";
-    public static final String SAVESTATE_INITPARAM = "saveStateInClient";
-
+    
     // PENDING(rogerk) this needs to be mentioned in the spec, 
     // under [ConfigFiles-26]
     // EVENT_LIMIT is configured as servlet init param;

@@ -44,14 +44,13 @@
 
 
 <web-app>
+    <display-name>JavaServer Faces Template Demo Sample Application</display-name>
     <description>
         JavaServer Faces Template Demo Sample Application
     </description>
-    <display-name>JavaServer Faces Template Demo Sample Application</display-name>
-
     <context-param>
-        <param-name>saveStateInClient</param-name>
-        <param-value>false</param-value>
+        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+        <param-value>server</param-value>
     </context-param>
     
     <listener>

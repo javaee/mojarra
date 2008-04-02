@@ -12,8 +12,8 @@
 
 <web-app>
     <context-param>
-        <param-name>saveStateInClient</param-name>
-        <param-value>false</param-value>
+        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+        <param-value>server</param-value>
     </context-param>
 
     <!-- Faces Servlet -->
