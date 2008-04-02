@@ -325,6 +325,7 @@
             <test name="com.sun.faces.util.TestUtil"/>
             <test name="com.sun.faces.util.TestUtil_messages"/>
             <test name="com.sun.faces.lifecycle.TestRenderResponsePhase"/> 
+            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_3"/>
 
             <!-- To run the following tests, uncomment
                  following tests and set javax.faces.STATE_SAVING_METHOD 
@@ -333,9 +334,6 @@
                  well 
             <test name="com.sun.faces.lifecycle.TestSaveStateInPage"/>
             <test name="com.sun.faces.lifecycle.TestRestoreViewFromPage"/> -->
-            <!-- non-running tests
-            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_3"/>
-            -->
 
         </junit>
 

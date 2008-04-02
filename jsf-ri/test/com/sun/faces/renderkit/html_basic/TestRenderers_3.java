@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_3.java,v 1.22 2003/09/05 18:57:21 eburns Exp $
+ * $Id: TestRenderers_3.java,v 1.23 2003/09/09 19:04:00 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -30,7 +30,7 @@ import javax.faces.component.NamingContainer;
 import javax.faces.component.base.UICommandBase;
 import javax.faces.component.base.UISelectManyBase;
 import javax.faces.component.base.UISelectItemsBase;
-import javax.faces.component.base.UINamingContainerBase;
+import javax.faces.component.UIViewRoot;
 import javax.faces.component.base.UISelectOneBase;
 import javax.faces.component.base.UIInputBase;
 import javax.faces.component.base.UIViewRootBase;
@@ -54,7 +54,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.22 2003/09/05 18:57:21 eburns Exp $
+ * @version $Id: TestRenderers_3.java,v 1.23 2003/09/09 19:04:00 jvisvanathan Exp $
  * 
  *
  */
@@ -136,11 +136,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
 
         try {
             // create a dummy root for the tree.
-            UINamingContainerBase root = new UINamingContainerBase() {
-                public String getComponentType() {
-                    return "root";
-                }
-            };
+            UIViewRoot root = getFacesContext().getViewRoot();
             root.setId("root");
 
             testSelectManyMenuRenderer(root);
@@ -171,7 +167,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
         SelectItem[] selectItems = { item1, item2, item3, item4 };
 	Object selectedValues[] = null;
         uiSelectItems.setValue(selectItems);
-        uiSelectItems.setId("manyitems");
+        uiSelectItems.setId("manyListitems");
         selectMany.getChildren().add(uiSelectItems);
         root.getChildren().add(selectMany);
 
@@ -250,7 +246,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
         SelectItem[] selectItems = { item1, item2, item3, item4 };
 	Object selectedValues[] = null;
         uiSelectItems.setValue(selectItems);
-        uiSelectItems.setId("manyitems");
+        uiSelectItems.setId("manyMenuitems");
         selectMany.getChildren().add(uiSelectItems);
         root.getChildren().add(selectMany);
 
@@ -287,7 +283,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
         SelectItem[] selectItems = { item1, item2, item3, item4 };
         String selectedValue = null;
         uiSelectItems.setValue(selectItems);
-        uiSelectItems.setId("manyitems");
+        uiSelectItems.setId("manySelectOneitems");
         selectOne.getChildren().add(uiSelectItems);
         root.getChildren().add(selectOne);
 
