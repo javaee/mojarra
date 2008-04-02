@@ -1,0 +1,22 @@
+<toc name="Sun theme example">
+  <!-- this portion is executed as the banner -->
+  <banner>
+      JavaServer Faces Release Notes 
+  </banner>
+  <!-- this portion is excuted as the footer -->
+  <footer>
+    (C) Copyright Sun Microsystems
+  </footer>
+  <chapter name="JavaServer Faces(TM) 1.2">
+    <document name="Overview"
+              url="index.html"/>
+    <document name="Release Notes"
+              url="release.html"/>
+    <document name="Change Log"
+              url="changelog.html"/>
+  </chapter>
+  <chapter name="Community">
+    <document name="Think of Stuff"
+              url="stuff.html"/>
+  </chapter>
+</toc>

@@ -1,0 +1,21 @@
+<project basedir="." default="gendoc">
+    <target name="gendoc">
+        <taskdef name="docgen" classname="com.sun.wts.tools.htmlmacro.HtmlMacroTask"/>
+        <mkdir dir="${basedir}/build"/>
+        <docgen destdir="${basedir}/build">
+            <documents dir="${basedir}" includes="*.html"/>
+            <tags dir="${basedir}/tags" includes="**/*.tag"/>
+            <property key="javaNetProjectName" value="javaserverfaces"/>
+            <property key="IMPL_VERSION" value="1.2_01"/>
+            <property key="SPEC_VERSION" value="1.2"/>
+            <property key="IMPL_VERSION_SUFFIX" value="FCS"/>
+        </docgen>
+        <copy todir="${basedir}/build">
+            <fileset dir="${basedir}/tags/sun" includes="style/*" />
+        </copy>
+    </target>
+
+    <target name="clean">
+        <delete dir="${basedir}/build"/>
+    </target>
+</project>
