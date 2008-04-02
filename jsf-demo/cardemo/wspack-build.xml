@@ -164,24 +164,13 @@
     <mkdir dir="${build}/${example}/WEB-INF/lib" />
   </target>
 
-  <target name="copyJars" depends="prepare" if="build.standalone">
-    <copy todir="${build}/${example}/WEB-INF/lib" file="${demo-components.jar}"/>
-    <copy todir="${build}/${example}/WEB-INF/lib" file="${commons-beanutils.jar}" />
-    <copy todir="${build}/${example}/WEB-INF/lib" file="${commons-logging.jar}" />
-    <copy todir="${build}/${example}/WEB-INF/lib" file="${commons-digester.jar}" />
-    <copy todir="${build}/${example}/WEB-INF/lib" file="${jsf-api.jar}" />
-    <copy todir="${build}/${example}/WEB-INF/lib" file="${jsf-ri.jar}" />
-    <copy todir="${build}/${example}/WEB-INF/lib" file="${jstl.jar}" />
-    <copy todir="${build}/${example}/WEB-INF/lib" file="${standard.jar}" />
-  </target>
-
-  <target name="wspack.copyJars" depends="prepare" if="build.wspack">
+  <target name="copyJars" depends="prepare">
     <copy todir="${build}/${example}/WEB-INF/lib" file="${demo-components.jar}"/>
   </target>
 
   <!-- Executable Targets -->
 
-  <target name="build" depends="copyJars, wspack.copyJars"
+  <target name="build" depends="copyJars"
      description="Compile Java files and copy static files." >
     <javac srcdir="src" destdir="${build}/${example}/WEB-INF/classes">
     	<include name="**/*.java" />

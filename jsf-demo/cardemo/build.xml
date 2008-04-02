@@ -59,7 +59,6 @@
 
   <!-- The base directory for demo apps -->
   <property name="jsf-demo.lib" value="../lib"/>
-  <property name="build.standalone" value="true"/>
 
   <property name="demo-components.jar" 
             value="${jsf-demo.lib}/demo-components.jar"/>

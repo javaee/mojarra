@@ -62,7 +62,6 @@
   <!-- Location dependent jars --> 
   <property name="jsf-demo.lib" value="../lib"/>
 
-  <property name="build.standalone" value="true"/>
 
   <path id="classpath">
     <pathelement location="${commons-beanutils.jar}"/>

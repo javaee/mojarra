@@ -61,8 +61,6 @@
   <!-- Configure properties to access the Manager application -->
   <property name="url"      value="http://localhost:8080/manager"/>
 
-  <property name="build.standalone" value="true"/>
-
   <path id="catalina-ant.classpath">
     <pathelement location="${catalina-ant.jar}"/>
   </path>
