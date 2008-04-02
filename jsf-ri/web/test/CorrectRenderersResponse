@@ -1,12 +1,12 @@
-<FORM METHOD="post" ACTION="/test/faces/form/FormRenderer;jsessionid=C5366598A51328E62948F964F9447243">
+<FORM METHOD="post" ACTION="/test/facestreeId;jsessionid=7B0D3B1D274C56B08A504EC211965B4C">
 </FORM>
-<INPUT TYPE="text" NAME="/input_renderer" VALUE="InputRenderer">
-<TEXTAREA  NAME="/textarea_renderer"> TextAreaRenderer</TEXTAREA>
-<TABLE BORDER="0">
-	<TR>
-<TD><INPUT TYPE="RADIO" NAME="/radio_renderer" VALUE="One"> One</TD>
-<TD><INPUT TYPE="RADIO" CHECKED NAME="/radio_renderer" VALUE="Two"> Two</TD>
-<TD><INPUT TYPE="RADIO" NAME="/radio_renderer" VALUE="Three"> Three</TD>
-	</TR>
-</TABLE>
-<INPUT TYPE="SUBMIT" NAME="ButtonRenderer" VALUE="Login">
+<table border="0">
+	<tr>
+<td><input type="radio" name="/radio_renderer" value="One"> One</td>
+<td><input type="radio" checked name="/radio_renderer" value="Two"> Two</td>
+<td><input type="radio" name="/radio_renderer" value="Three"> Three</td>
+	</tr>
+</table>
+<input type="submit" name="/buttonRenderer" value="Login">
+<button id="/myButton" name="/myButton" type="submit" value="submit"></button>
+
