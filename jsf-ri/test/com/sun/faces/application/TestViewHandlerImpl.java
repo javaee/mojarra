@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.28 2003/09/15 22:11:49 eburns Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.1 2003/09/18 20:13:29 jvisvanathan Exp $ 
  */ 
 
 
@@ -12,7 +12,7 @@
 // TestViewHandlerImpl.java 
 
 
-package com.sun.faces.lifecycle; 
+package com.sun.faces.application; 
 
 
 import org.apache.cactus.WebRequest; 
@@ -63,7 +63,7 @@ import javax.servlet.jsp.PageContext;
  * 
  * <B>Lifetime And Scope</B> <P> 
  * 
- * @version $Id: TestViewHandlerImpl.java,v 1.28 2003/09/15 22:11:49 eburns Exp $ 
+ * @version $Id: TestViewHandlerImpl.java,v 1.1 2003/09/18 20:13:29 jvisvanathan Exp $ 
  * 
  * @see Blah 
  * @see Bloo 
@@ -225,7 +225,7 @@ public void testTransient()
     assertTrue(basicForm != null);
     
     userName = (UIInputBase)basicForm.findComponent("userName");
-//    assertTrue(userName == null);
+    assertTrue(userName == null);
     
     panel1 = (UIPanelBase)basicForm.findComponent("panel1");
     assertTrue(panel1 != null);
