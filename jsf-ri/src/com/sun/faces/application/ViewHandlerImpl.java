@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.88 2006/10/05 20:56:36 rlubke Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.89 2006/10/18 16:29:10 edburns Exp $ 
  */ 
 
 
@@ -68,7 +68,7 @@ import com.sun.faces.util.Util;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.88 2006/10/05 20:56:36 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.89 2006/10/18 16:29:10 edburns Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -198,9 +198,10 @@ public class ViewHandlerImpl extends ViewHandler {
         // side effect: AFTER_VIEW_CONTENT removed
         ViewHandlerResponseWrapper wrapper = (ViewHandlerResponseWrapper)
               extContext.getRequestMap().remove(AFTER_VIEW_CONTENT);
-        assert(null != wrapper);
-        wrapper.flushToWriter(response.getWriter(),
-                              response.getCharacterEncoding());
+        if (null != wrapper) {
+            wrapper.flushToWriter(response.getWriter(),
+                    response.getCharacterEncoding());
+        }
         
         response.flushBuffer();                
                
