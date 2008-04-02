@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.30 2003/09/12 13:21:19 eburns Exp $
+ * $Id: UISelectMany.java,v 1.31 2003/09/23 18:02:45 eburns Exp $
  */
 
 /*
@@ -44,11 +44,13 @@ import javax.faces.context.FacesContext;
  * <p>If not, look at the <code>valueRef</code>.  If there is a
  * <code>valueRef</code>, look at it's type.  <strong>The
  * <code>valueRef</code> for a <code>UISelectMany</code> component must
- * point to something that is an array.</strong> If the type is an array
- * type, use {@link
+ * point to something that is an array or a <code>java.util.List</code>
+ * of <code>String</code>s.</strong> If the type is an array type, use
+ * {@link
  * javax.faces.application.Application#createConverter(java.lang.Class)}
  * passing the <code>Class</code> instance for the element type of the
- * array.</p>
+ * array.  If the type is <code>java.util.List</code>, assume the
+ * element type is <code>String</code>.</p>
  *
  * <p>If for any reason a <code>Converter</code> cannot be found, add a
  * conversion error message to the {@link
