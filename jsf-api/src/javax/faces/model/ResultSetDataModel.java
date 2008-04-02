@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetDataModel.java,v 1.10 2003/10/15 22:32:37 craigmcc Exp $
+ * $Id: ResultSetDataModel.java,v 1.11 2003/10/15 23:05:10 craigmcc Exp $
  */
 
 /*
@@ -125,6 +125,9 @@ public class ResultSetDataModel extends DataModel {
     private ResultSet resultSet = null;
 
 
+    // Has the row at the current index been updated?
+    private boolean updated = false;
+
     // The number of rows in this ResultSet, or Integer.MIN_VALUE if unknown yet
     private int size = Integer.MIN_VALUE;
 
@@ -137,16 +140,17 @@ public class ResultSetDataModel extends DataModel {
      */ 
     public int getRowCount() {
 
-        if (size == Integer.MIN_VALUE) {
-            try {
-                if (resultSet.last()) {
-                    size = resultSet.getRow();
-                } else {
-                    size = 0;
-                }
-            } catch (SQLException e) {
-                throw new FacesException(e);
+        // PENDING(craigmcc) - Count every time, because the underlying
+        // ResultSet might allow rows to be inserted or removed.  Ultimately,
+        // this will probably return an "I don't know" answer
+        try {
+            if (resultSet.last()) {
+                size = resultSet.getRow();
+            } else {
+                size = 0;
             }
+        } catch (SQLException e) {
+            throw new FacesException(e);
         }
         return (size);
 
@@ -199,6 +203,12 @@ public class ResultSetDataModel extends DataModel {
             throw new IllegalArgumentException();
         }
         try {
+            // Tell the ResultSet that the previous row was updated if necessary
+            if (updated) {
+                resultSet.updateRow();
+                updated = false;
+            }
+            // Position to the new row
             if ((rowIndex >= 0) && (!resultSet.absolute(rowIndex + 1))) {
                 throw new IllegalArgumentException();
             }
@@ -215,6 +225,66 @@ public class ResultSetDataModel extends DataModel {
                 ((DataModelListener) listeners.get(i)).rowSelected(event);
             }
         }
+
+    }
+
+
+    /**
+     * <p>Return the wrapped data for this {@link ResultSetDataModel}
+     * instance.</p>
+     */
+    public ResultSet getWrappedData() {
+
+        return (this.resultSet);
+
+    }
+
+
+    /**
+     * <p>Set the wrapped data for this {@link ResultDataModel} instance.</p>
+     *
+     * @param data The data to be wrapped
+     *
+     * @exception FacesException if the specified result set cannot be
+     *  initialized
+     * @exception IllegalArgumentException if <code>resultSet</code> is of
+     *  type <code>ResultSet.TYPE_FORWARD_ONLY</code>
+     * @exception NullPointerException if <code>data</code>
+     *  is <code>null</code>
+     */
+    public void setWrappedData(ResultSet data) {
+
+        if (data == null) {
+            throw new NullPointerException();
+        }
+        try {
+            if (ResultSet.TYPE_FORWARD_ONLY == data.getType()) {
+                throw new IllegalArgumentException();
+            }
+        } catch (SQLException e) {
+            throw new IllegalArgumentException();
+        }
+        this.resultSet = data;
+        try {
+            this.metadata = data.getMetaData();
+        } catch (SQLException e) {
+            throw new FacesException(e);
+        }
+        this.updated = false;
+
+    }
+
+
+    // --------------------------------------------------------- Package Methods
+
+
+    /**
+     * <p>Mark the current row as having been updated, so that we will call
+     * <code>updateRow()</code> before moving elsewhere.</p>
+     */
+    void updated() {
+
+        this.updated = true;
 
     }
 
@@ -296,7 +366,14 @@ public class ResultSetDataModel extends DataModel {
             try {
                 resultSet.absolute(index + 1);
                 Object previous = resultSet.getObject((String) key);
+                if ((previous == null) && (value == null)) {
+                    return (previous);
+                } else if ((previous != null) && (value != null) &&
+                           !previous.equals(value)) {
+                    return (previous);
+                }
                 resultSet.updateObject((String) key, value);
+                ResultSetDataModel.this.updated();
                 return (previous);
             } catch (SQLException e) {
                 throw new FacesException(e);
@@ -537,51 +614,6 @@ public class ResultSetDataModel extends DataModel {
 
         public void remove() {
             throw new UnsupportedOperationException();
-        }
-
-    }
-
-
-    /**
-     * <p>Return the wrapped data for this {@link ResultSetDataModel}
-     * instance.</p>
-     */
-    public ResultSet getWrappedData() {
-
-        return (this.resultSet);
-
-    }
-
-
-    /**
-     * <p>Set the wrapped data for this {@link ResultDataModel} instance.</p>
-     *
-     * @param data The data to be wrapped
-     *
-     * @exception FacesException if the specified result set cannot be
-     *  initialized
-     * @exception IllegalArgumentException if <code>resultSet</code> is of
-     *  type <code>ResultSet.TYPE_FORWARD_ONLY</code>
-     * @exception NullPointerException if <code>data</code>
-     *  is <code>null</code>
-     */
-    public void setWrappedData(ResultSet data) {
-
-        if (data == null) {
-            throw new NullPointerException();
-        }
-        try {
-            if (ResultSet.TYPE_FORWARD_ONLY == data.getType()) {
-                throw new IllegalArgumentException();
-            }
-        } catch (SQLException e) {
-            throw new IllegalArgumentException();
-        }
-        this.resultSet = data;
-        try {
-            this.metadata = data.getMetaData();
-        } catch (SQLException e) {
-            throw new FacesException(e);
         }
 
     }
