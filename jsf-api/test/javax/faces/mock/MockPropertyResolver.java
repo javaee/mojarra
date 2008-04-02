@@ -1,5 +1,5 @@
 /*
- * $Id: MockPropertyResolver.java,v 1.1 2003/10/21 23:58:22 craigmcc Exp $
+ * $Id: MockPropertyResolver.java,v 1.2 2003/10/25 22:08:51 craigmcc Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package javax.faces.mock;
 
 
+import java.util.Map;
 import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.PropertyResolver;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -43,7 +44,16 @@ public class MockPropertyResolver extends PropertyResolver {
             throw new NullPointerException();
         }
         try {
-            return (PropertyUtils.getSimpleProperty(base, name));
+            if (base instanceof Map) {
+                Map map = (Map) base;
+                if (map.containsKey(name)) {
+                    return (map.get(name));
+                } else {
+                    throw new PropertyNotFoundException(name);
+                }
+            } else {
+                return (PropertyUtils.getSimpleProperty(base, name));
+            }
         } catch (Exception e) {
             throw new PropertyNotFoundException(e);
         }
@@ -66,7 +76,11 @@ public class MockPropertyResolver extends PropertyResolver {
             throw new NullPointerException();
         }
         try {
-            PropertyUtils.setSimpleProperty(base, name, value);
+            if (base instanceof Map) {
+                ((Map) base).put(name, value);
+            } else {
+                PropertyUtils.setSimpleProperty(base, name, value);
+            }
         } catch (Exception e) {
             throw new PropertyNotFoundException(e);
         }

@@ -1,5 +1,5 @@
 /*
- * $Id: MockMethodBinding.java,v 1.1 2003/10/25 06:32:13 craigmcc Exp $
+ * $Id: MockMethodBinding.java,v 1.2 2003/10/25 22:08:49 craigmcc Exp $
  */
 
 /*
@@ -82,7 +82,7 @@ public class MockMethodBinding extends MethodBinding {
     public Object invoke(FacesContext context, Object params[])
         throws InvocationTargetException {
 
-        if ((context == null) || (params == null)) {
+        if (context == null) {
             throw new NullPointerException();
         }
         Object base = vb.getValue(context);
@@ -101,7 +101,7 @@ public class MockMethodBinding extends MethodBinding {
         Object base = vb.getValue(context);
         Method method = method(base);
         Class returnType = method.getReturnType();
-        if (Void.class.equals(returnType)) {
+        if ("void".equals(returnType.getName())) {
             return (null);
         } else {
             return (returnType);
@@ -113,7 +113,8 @@ public class MockMethodBinding extends MethodBinding {
     // --------------------------------------------------------- Private Methods
 
 
-    private Method method(Object base) {
+    // Package private so that unit tests can call this
+    Method method(Object base) {
 
         Class clazz = base.getClass();
         try {

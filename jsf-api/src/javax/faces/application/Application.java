@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.16 2003/10/25 06:32:10 craigmcc Exp $
+ * $Id: Application.java,v 1.17 2003/10/25 22:08:47 craigmcc Exp $
  */
 
 /*
@@ -431,7 +431,8 @@ public abstract class Application {
      * @param ref Reference expression for which to return a
      *  {@link MethodBinding} instance
      * @param params Parameter signatures that must match exactly on the
-     *  method to be invoked
+     *  method to be invoked, or <code>null</code> for a method that takes
+     *  no parameters
      *
      * @exception NullPointerException if <code>ref</code>
      *  is <code>null</code>

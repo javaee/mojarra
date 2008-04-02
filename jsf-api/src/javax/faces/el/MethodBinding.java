@@ -1,5 +1,5 @@
 /*
- * $Id: MethodBinding.java,v 1.1 2003/10/25 06:32:11 craigmcc Exp $
+ * $Id: MethodBinding.java,v 1.2 2003/10/25 22:08:49 craigmcc Exp $
  */
 
 /*
@@ -38,14 +38,14 @@ public abstract class MethodBinding {
      * </p>
      *
      * @param context {@link FacesContext} for the current request
-     * @param params Array of parameters to be passed to the called method
-     *  (if no arguments are required, a zero-length array should be passed)
+     * @param params Array of parameters to be passed to the called method,
+     *  or <code>null</code> for no parameters
      *
      * @exception InvocationTargetException if an exception is thrown
      *  by the called method
      * @exception MethodNotFoundException if no suitable method can be found
      * @exception NullPointerException if <code>context</code>
-     *  or <code>params</code> is <code>null</code>
+     *  is <code>null</code>
      */
     public abstract Object invoke(FacesContext context, Object params[])
         throws InvocationTargetException;
