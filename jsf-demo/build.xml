@@ -65,7 +65,7 @@
 
   <property name="Name" value="JSF Demos"/>
   <property name="name" value="jsf-demo"/>
-  <property name="version" value="20030611"/>
+  <property name="version" value="20030825"/>
 
   <property name="depth" value=""/>
 
@@ -266,19 +266,25 @@
           depends="verifyPreconditions,copyDemoSource,main">
     <echo> Build the demos from the jsf-demo repository </echo>
     <echo> copy the sample war files to the zip area </echo>
+<!--
     <copy todir="${dist.home}/samples" 
           file="${basedir}/components/build/jsf-components.war"/>
     <copy todir="${dist.home}/samples"
           file="${basedir}/cardemo/build/jsf-cardemo.war"/>
+-->
     <copy todir="${dist.home}/samples" 
           file="${basedir}/guessNumber/build/jsf-guessNumber.war"/>
+<!--
     <copy todir="${dist.home}/samples" 
           file="${basedir}/nonjsp/dist/jsf-nonjsp.war"/> 
+-->
     <copy todir="${dist.home}/samples" 
-          file="${basedir}/standard/dist/jsf-standard.war"/>
+          file="${basedir}/standard/build/jsf-standard.war"/>
+<!--
     <echo> copy the demo-components.jar </echo>
     <copy todir="${dist.home}/samples" 
      file="${basedir}/components/build/demo/WEB-INF/lib/demo-components.jar"/>
+-->
   </target>
 
   <target name="copyDemoSource" depends="copyJars,wspack.copyJars"> 
@@ -396,6 +402,7 @@
 
 
   <target name="main" depends="verifyPreconditions,prepare.build">
+<!--
 
     <ant dir="${basedir}/components">
       <property name="jsf-api.jar" 
@@ -405,7 +412,6 @@
     </ant>
     <copy todir="${basedir}/lib"
           file="components/build/${webapp}/WEB-INF/lib/demo-components.jar"/>
-<!--
     <ant dir="${basedir}/cardemo">
       <property name="jsf-api.jar" 
                 value="../../jsf-api/build/lib/jsf-api.jar"/>
@@ -425,12 +431,14 @@
       <property name="jsf-ri.jar" 
                 value="../../jsf-ri/build/lib/jsf-ri.jar"/>
     </ant>
+<!--
     <ant dir="${basedir}/nonjsp">
       <property name="jsf-api.jar" 
                 value="../../jsf-api/build/lib/jsf-api.jar"/>
       <property name="jsf-ri.jar" 
                 value="../../jsf-ri/build/lib/jsf-ri.jar"/>
     </ant>  
+-->
     <ant dir="${basedir}/standard">
       <property name="jsf-api.jar" 
                 value="../../jsf-api/build/lib/jsf-api.jar"/>

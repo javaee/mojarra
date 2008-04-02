@@ -1,5 +1,5 @@
 /*
- * $Id: LoginBean.java,v 1.2 2003/07/30 16:49:27 jvisvanathan Exp $
+ * $Id: LoginBean.java,v 1.3 2003/08/25 21:25:17 eburns Exp $
  */
 
 /*
@@ -9,7 +9,7 @@
 
 package standard;
 
-import javax.faces.component.SelectItem;
+import javax.faces.model.SelectItem;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;

@@ -1,5 +1,5 @@
 /*
- * $Id: ModelBean.java,v 1.2 2003/08/11 23:26:39 eburns Exp $
+ * $Id: ModelBean.java,v 1.3 2003/08/25 21:25:17 eburns Exp $
  */
 
 /*
@@ -17,7 +17,7 @@ import java.util.Date;
 /**
  * Simple bean for Model value demonstration. 
  *
- * @version $Id: ModelBean.java,v 1.2 2003/08/11 23:26:39 eburns Exp $
+ * @version $Id: ModelBean.java,v 1.3 2003/08/25 21:25:17 eburns Exp $
  */
 
 public class ModelBean {
@@ -91,7 +91,22 @@ public class ModelBean {
         dateTime = newDateTime;
     }
 
+    protected String hasComponent = null;
+    public String getHasComponent() {
+	return hasComponent;
+    }
 
+    public void setHasComponent(String newHasComponent) {
+	hasComponent = newHasComponent;
+    }
+
+    protected String whichComponent = null;
+    public String getWhichComponent() {
+	return whichComponent;
+    }
+    public void setWhichComponent(String newWhich) {
+	whichComponent = newWhich;
+    }
 
 
     //
@@ -115,4 +130,5 @@ public class ModelBean {
 		}
 	    };
     }
+
 }

@@ -18,11 +18,11 @@
  
             <table> 
 
-           <c:if test="${requestScope.standard_chosen != null}">
+           <c:if test="${model.hasComponent == 'true'}">
 
             <tr> 
               <td>The actuated component 
-                  was <h:output_text valueRef="requestScope.standard_chosen"/>. </td>
+                  was <h:output_text valueRef="model.whichComponent"/>. </td>
             </tr>
 
         </c:if>

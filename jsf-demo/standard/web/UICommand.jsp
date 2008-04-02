@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UICommand.jsp,v 1.3 2003/08/25 16:37:15 jvisvanathan Exp $ --%>
+<%-- $Id: UICommand.jsp,v 1.4 2003/08/25 21:25:20 eburns Exp $ --%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -39,8 +39,6 @@
 <!-- Each included page should have table rows for the appropriate widget. -->
 
            <%@ include file="table_header.jsp" %>
-
-           <%@ include file="command_button_row.jsp" %>
 
            <%@ include file="command_hyperlink_row.jsp" %>
 

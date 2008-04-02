@@ -11,7 +11,7 @@
   <managed-bean>
     <managed-bean-name>model</managed-bean-name>
     <managed-bean-class>standard.ModelBean</managed-bean-class>
-    <managed-bean-scope>request</managed-bean-scope>
+    <managed-bean-scope>session</managed-bean-scope>
   </managed-bean>
 
   <managed-bean>
