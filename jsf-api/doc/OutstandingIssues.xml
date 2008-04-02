@@ -75,6 +75,8 @@
     <li>Directing events to a particular component (versus a global
         "this thing happened" approach).</li>
     </ul>
+
+    <p>See Also:  [StandardComponentEvents-38], [EventProcessingPhases-39].</p>
   </description>
   <resolution>
     <p><em>04 Sep 2002</em> - Craig to present writeup to EG.</p>
@@ -95,6 +97,7 @@
   </description>
   <resolution>
     <p><em>04 Sep 2002</em> - Adam to present writeup to EG.</p>
+    <p><em>11 Sep 2002</em> - Adam submitted a proposal on this.</p>
   </resolution>
   <status>OPEN</status>
   <status-date>04 Sep 2002</status-date>
@@ -381,6 +384,19 @@
     in a non-JSP environment as well.  How much of this should show up in
     the RI?  Or in ancillary distributions (along with enhanced renderkits)?
     </p>
+
+    <p>Added Notes from Hans:  I reported that in my proof of concept
+    implementation with a DOM-based rendering model, I needed to implement
+    a custom ViewHandler, a RenderKit (with Renderers, of course), and a
+    TreeFactory.  It seems to me that the need for a custom TreeFactory
+    indicates a flaw in our abstractions, since it should be enough with a
+    ViewHandler and a RenderKit.</p>
+
+    <p>Added Notes from Hans:  Ana added that she feels that none of these
+    custom classes should be needed, arguing (I assume) that JSF should
+    provide all that's needed for DOM-based rendering in addition to JSP-based
+    rendering.  I'm not sure yet if I agree or not, so let's see how it plays
+    out when we look at the impact.</p>
   </description>
   <resolution>
     
@@ -550,6 +566,422 @@
   </resolution>
   <status>OPEN</status>
   <status-date>06 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>ConfigFiles-26</id>
+  <originator>Kris &amp; Bart</originator>
+  <summary>Specify standard app configuration file format(s)</summary>
+  <description>
+    <p>There are several cases where we expect page authors, component
+    writers, and application develop to register custom classes with a
+    JSF implementation, typically at startup time (application handler,
+    UIComponents, converters, renderers, and so on).  We should probably
+    define a standard configuration file format (probably in XML) so that
+    applications do not need to include programmatic logic to perform the
+    necessary registrations.  Section 9.3 of the spec is already reserved
+    for documenting such formats.</p>
+
+    <p>NOTE:  We'll probably want to specify a standard servlet init parameter
+    that specifies the resource path to such config files.  For maximum
+    flexibility, more than one config file should be allowed.</p>
+  </description>
+  <resolution>
+    
+  </resolution>
+  <status>OPEN</status>
+  <status-date>09 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>ComponentIdentifiers-27</id>
+  <originator>Joe</originator>
+  <summary>Define a mechanism for knowing rendered component ids</summary>
+  <description>
+    <p>There are several scenarios in which it is important for the logic
+    performing component rendering to be able to predict what the rendered
+    "id" for another component will be, whether or not that component has
+    actually been rendered yet.  Sample use cases:</p>
+    <ul>
+    <li>Generating client-side JavaScript that references more than
+        one component.</li>
+    <li>Generating client-side JavaScript for validation.</li>
+    <li>Master-detail UI, so that you can generate hyperlinks for the
+        items that cross reference between the master and the items.</li>
+    </ul>
+  </description>
+  <resolution>
+    <p><em>11 Sep 2002</em> - Joe submitted a proposal message titled
+    "form handling design pattern for viewing/editing entities".</p>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>11 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>VisibleProperty-28</id>
+  <originator>Jeff</originator>
+  <summary>Define a "visible" property on UIComponent</summary>
+  <description>
+    <p>It's legal for a component to be removed from the response tree at
+    many stages of the request processing lifecycle.  However, in the current
+    JSP scenario, the component will get recreated again when its tag is
+    executed.  Other frameworks deal with this by adding a "visible" property
+    on the component, where a <code>false</code> setting disables rendering.
+    </p>
+  </description>
+  <resolution>
+    <p><em>11 Sep 2002</em> - Jeff submitted an analysis and proposal message
+    titled "Adding a 'visible' property to UIComponent".</p>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>11 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>Converters-29</id>
+  <originator>EG</originator>
+  <summary>Add by-Class registration and lookup of Converters</summary>
+  <description>
+    <p>Per EG discussion, we added <code>javax.faces.convert.Converter</code>
+    APIs in 20020902.  Based on subsequent discussion, we also need to add
+    by-Class registrtation and lookup of Converters, including search order
+    definition on the by-Class lookup (based on closest inheritance).</p>
+  </description>
+  <resolution>
+    <p><em>11 Sep 2002</em> - Craig to add these APIs and spec changes.</p>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>11 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>OnLoad-30</id>
+  <originator>Hans</originator>
+  <summary>How to add "onLoad" JavaScript handlers to a response</summary>
+  <description>
+    <p>This is an issue I have hinted at in my arguments for a
+    DOM based rendering model, and I also saw it mentioned as an issue
+    in the public discussion about the released draft.</p>
+
+    <p>Craig:  There is probably some overlap with [StateSaving-5], at least
+    for the timing issues.</p>
+  </description>
+  <resolution>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>12 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>JavaScript-31</id>
+  <originator>Hans</originator>
+  <summary>How to add JavaScript event handlers to a response</summary>
+  <description>
+    <p>It's been mentioned a number of times that we want to do so,
+    but it's not in the spec yet.</p>
+
+    <p>Craig:  Some overlap with [ComponentIdentifiers-27], which is a
+    key enabler.</p>
+  </description>
+  <resolution>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>12 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>InitialTree-32</id>
+  <originator>Hans</originator>
+  <summary>How to wire up initial tree in a rendering-neutral way</summary>
+  <description>
+    <p>This question pops up from time to time.  I, for instance,
+    suggested a while back that we need to define another lifecycle that
+    deals with this case.  The 0902 draft only says that an empty tree is
+    created, but it needs to be populated as well, and there's still no
+    arrow from the Reconstitute Request Tree phase to the Render
+    Response phase.</p>
+  </description>
+  <resolution>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>12 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>HandlersModifyTree-33</id>
+  <originator>Hans</originator>
+  <summary>Should request event handlers be allowed to modify the
+           component tree</summary>
+  <description>
+    <p>I have argued that this will cause confusion, and that
+    event handlers and other code should instead just set component
+    properties and leave it up to the component to respond to this by
+    adding/removing child components, remove itself (or make itself
+    invisible/not rendered as Jeff and Adam suggest), and that only the
+    application should be allowed to switch to a new response tree.</p>
+  </description>
+  <resolution>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>12 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>HandlersSelectTree-34</id>
+  <originator>Hans</originator>
+  <summary>Should request event handlers be allowed to select a new
+           response tree identifier?</summary>
+  <description>
+    <p>I have argued that this will cause confusion, and that
+    event handlers and other code should instead just set component
+    properties and leave it up to the component to respond to this by
+    adding/removing child components, remove itself (or make itself
+    invisible/not rendered as Jeff and Adam suggest), and that only the
+    application should be allowed to switch to a new response tree.</p>
+  </description>
+  <resolution>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>12 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>InitialRequestURLs-35</id>
+  <originator>Hans</originator>
+  <summary>URL contents for first view request, UIForm, UICommand</summary>
+  <description>
+    <p>We have discussed on different threads how to encode the
+    tree id and other information in URLs.  This needs to be defined in
+    the spec.  The most recent suggestion (my proposal modified with
+    Craig's response) is:</p>
+    <ul>
+    <li>First request:  /{context.path}/{tree.id}</li>
+    <li>UIForm:  /{context.path}/{tree.id} (form name can be deduced
+        from the submit button that was used (<em>CRM</em>:  but only if
+        we can use <code>UIComponent.getParent()</code> -- see
+        [ComponentTreeParent-36])</li>
+    <li>UICommand:  /{context.path}/faces/command/{command.name}/{tree.id}.
+        </li>
+    </ul>
+  </description>
+  <resolution>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>12 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>ComponentTreeParent-36</id>
+  <originator>Adam</originator>
+  <summary>Should component trees have parent links?</summary>
+  <description>
+    <p>The current implementation of UIComponent maintains links from a
+    component to its parent, which implies that you can't recycle parts of
+    a tree in more than one place, and other interesting things like that.
+    This feature is quite important in most use cases of collaboration between
+    components in a hierarchy (analogous to the issues of JSP custom tags
+    collaborating with each other).</p>
+  </description>
+  <resolution>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>12 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>RequiredValidator-37</id>
+  <originator>Hans</originator>
+  <summary>Semantics of RequiredValidator needs refinement</summary>
+  <description>
+    <p>The RequiredValidator accepts an empty string as valid,
+    but this means the validator is useless for a required text field,
+    since HTML always generates an empty request parameter for an empty
+    text field.  Combining it with LengthValidator, as was being suggested
+    when I raised the issue, doesn't help; sure, the LengthValidator will
+    catch it but the RequiredValidator is still useless and never generates
+    an appropriate error message for an empty field.</p>
+
+    <p>Adam added that we also have a reverse problem; an optional text
+    field that must accept an empty string, but if it has a value, it
+    must be possible to let a validator validate the value.  This is not
+    possible today, but he suggested that a solution to both problems is
+    to add a "required" property on UIInput (and others, I'm sure) instead
+    and only validate when the component has a value.  This would replace
+    the RequiredValidator.</p>
+  </description>
+  <resolution>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>12 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>StandardComponentEvents-38</id>
+  <originator>Hans</originator>
+  <summary>Should standard UI components generate events?</summary>
+  <description>
+    <p>It's been suggested that some of them should at least generate
+    "value changed" when a new value is detected in decode() or setValue().
+    I've also suggested that "invalid value" events are posted during
+    validation, to make it possible to handle this case in an event
+    handler (implying that error messages are displayed, and making it
+    more flexible at the same time.</p>
+
+    <p>See Also:  [Listeners-3], [EventProcessingPhases-39].</p>
+  </description>
+  <resolution>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>12 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>EventProcessingPhases-39</id>
+  <originator>Hans</originator>
+  <summary>Do we need more than one event processing phase?</summary>
+  <description>
+    <p>If we implement [StandardComponentEvents-38], the answer is
+    yes.  We probably need to process events in the Handle Events phase
+    until the queue is empty (as opposed to the one pass approach), since
+    new events may be triggered in this phase.  We may also need new event
+    processing phases after other phases, such as Validation, Update Model
+    Values, and Invoke Application.</p>
+
+    <p>See Also:  [Listeners-3], [StandardComponentEvents-38].</p>
+  </description>
+  <resolution>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>12 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>UntypedStrings-40</id>
+  <originator>Hans</originator>
+  <summary>Should we replace untyped Strings with typesafe enums?</summary>
+  <description>
+    <p>I made a proposal (with an example) for the component type
+    attribute used by the renderers, but the same applies to all cases
+    where we use Strings that need to be unique.</p>
+  </description>
+  <resolution>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>12 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>DecodeEncode-41</id>
+  <originator>EG</originator>
+  <summary>Names for decode and encode methods</summary>
+  <description>
+    <p>Many of us are uncomfortable with the names of the decode and
+    encode methods.  Craig feels that the names should be "paired" in
+    some fashion because the logic they implement must be complementary.
+    Consider:  decode/renderXxx.  parse/renderXxx.  applyRequest/renderXxx.</p>
+
+    <p>Adam:  Additional naming to think about:</p>
+    <ul>
+    <li>"Handle Request Events" to "Process Request Events".</li>
+    <li>UIComponent.processEvents() to processRequestEvents().</li>
+    <li>UIComponent.processValidators() to processValidation().</li>
+    </ul>
+  </description>
+  <resolution>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>12 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>ValidatorsAPI-42</id>
+  <originator>Adam</originator>
+  <summary>Add value parameter to Validator.validate()?</summary>
+  <description>
+    <p>Currently, validators receive a FacesContext and UIComponent.
+    They are expected to turn around and immediately call
+    <code>UIComponent.getValue()</code>.  However, this means:</p>
+    <ul>
+    <li>No Validator can ever be used to validate anything other than
+        the primary value of its component.  A component that needs two
+        values will be forced to roll its own new Validators.</li>
+    <li>A component that wishes to validate the client side representation
+        (the String value) differently from the type-converted value cannot.
+        </li>
+    <li>getValue() is called once for each Validator.  Shouldn't be
+        expensive performance-wise, but ...</li>
+    </ul>
+    <p>This can all be fixed by simply adding the Object value to
+    Validator.validate().  We can (and should) still send the UIComponent
+    instance.</p>
+  </description>
+  <resolution>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>12 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>TraversalOrder-43</id>
+  <originator>Adam</originator>
+  <summary>Specify component tree traversal order</summary>
+  <description>
+    <p>For each phase, we need to answer the following questions:</p>
+    <ul>
+    <li>What order should components be traversed?</li>
+    <li>In particular, are parents traversed before or after their
+        children?</li>
+    <li>Would a parent need to execute code both before <strong>and</strong>
+        after its children?</li>
+    <li>Do parents ever need to control the traversal of their children
+        (e.g. skip child traversal, run traversal multiple times?)</li>
+    </ul>
+  </description>
+  <resolution>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>12 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>ValidatorParams-44</id>
+  <originator>Hans</originator>
+  <summary>Should we set validation properties on the validator instance
+           instead of on the component</summary>
+  <description>
+    <p>I suggested a while ago that the validation arguments should be
+    properties of the validator instead of being handled as untyped
+    attributes on the component, and got a lot of support from Adam,
+    Jeff, and Craig.  It greatly simplifies both the JSP and the
+    non-JSP cases.</p>
+
+  </description>
+  <resolution>
+    <p><em>12 Sep 2002</em> - Partially implemented in 0902 draft, but
+    spec needs updating (esp. 3.5.2.x and 3.1.7 example).</p>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>12 Sep 2002</status-date>
 </issue>
 
 
