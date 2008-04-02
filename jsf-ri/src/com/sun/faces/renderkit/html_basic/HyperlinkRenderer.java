@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.39 2003/02/20 22:49:00 ofung Exp $
+ * $Id: HyperlinkRenderer.java,v 1.40 2003/02/23 00:37:15 horwat Exp $
  */
 
 /*
@@ -14,13 +14,16 @@ package com.sun.faces.renderkit.html_basic;
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
 
+import java.util.Iterator;
+import java.util.ArrayList;
 import java.io.IOException;
 
 import javax.faces.component.AttributeDescriptor;
-import javax.faces.component.UICommand;
 import javax.faces.component.UIForm;
-import javax.faces.event.FormEvent;
+import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIParameter;
+import javax.faces.event.FormEvent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.FacesException;
@@ -46,7 +49,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.39 2003/02/20 22:49:00 ofung Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.40 2003/02/23 00:37:15 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -57,6 +60,9 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
     //
     // Protected Constants
     //
+    // Separator character
+    private final char QUOTE = '\"';
+
 
     //
     // Class Variables
@@ -192,10 +198,7 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
             return;
         }
         ResponseWriter writer = context.getResponseWriter();
-	String commandClass = null;
         Assert.assert_it( writer != null );
-
-        writer.write("<a href=\"");
 
         //PENDING(rogerk) don't call this if "href" (destination) is
         // a non-faces page.  For non-faces pages, we would simply 
@@ -207,37 +210,18 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
         //
         String href = (String)command.getAttribute("href");
         String commandName = command.getCommandName();
+
+        //Write Anchor
+        writer.write("<a href=");
+        writer.write(QUOTE);
+
         if (href != null) {
-            if (href.startsWith(RIConstants.URL_PREFIX)) {
-                writer.write(href(context, command));
-            } else {
-                writer.write(href);
-            }
+            handleHref(context, command);
         }
 	else if (null != commandName) {
 	    handleCommandName(context, command, commandName);
-	    return;
 	}
-	writer.write("\"");
-	if (null != (commandClass = (String) 
-		     command.getAttribute("commandClass"))) {
-	    writer.write(" class=\"" + commandClass + "\"");
-	}
-
-        writer.write(">");
-        String image = (String)command.getAttribute("image");
-        if (image != null) {
-            writer.write("<image src=\"");
-            writer.write(image);
-            writer.write("\">");
-        }
-        String text = getLinkText(context, command);
-
-        if (text != null) {
-            writer.write(text);
-        }
-        writer.write("</A>");        
-
+	return;
     }
 
     protected String getLinkText(FacesContext context, UIComponent component) {
@@ -256,28 +240,178 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
 	return text;
     }
 
+    protected String getCommandClass(UICommand command) {
+
+	String commandClass = (String)
+            command.getAttribute("commandClass");
+	if (commandClass != null) {
+            StringBuffer buffer = new StringBuffer();
+            buffer.append(" class=");
+            buffer.append(QUOTE);
+            buffer.append(commandClass);
+            buffer.append(QUOTE);
+            return buffer.toString();
+	}
+        return null;
+    }
+
+    protected String getImage(UICommand command) {
+
+	String image = (String)command.getAttribute("image");
+	if (image != null) {
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("<img src=");
+            buffer.append(QUOTE);
+            buffer.append(image);
+            buffer.append(QUOTE);
+            buffer.append(">");
+            return buffer.toString();
+	}
+        return null;
+    }
+
+    protected Object[] getParamList(FacesContext context, UIComponent command) {
+        ArrayList parameterList = new ArrayList();
+
+	Iterator kids = command.getChildren();
+	while (kids.hasNext()) {
+            UIComponent kid = (UIComponent) kids.next();
+
+            if (kid instanceof UIParameter) {
+                Param param = new Param(((UIParameter)kid).getName(),
+                    ((String)kid.currentValue(context)));
+                parameterList.add(param);
+            }
+	}
+        
+        if (!parameterList.isEmpty()) {
+            return parameterList.toArray();
+        }
+        return null;
+    }
+
     protected void handleCommandName(FacesContext context, 
 				     UICommand command, String commandName)
         throws IOException {
         ResponseWriter writer = context.getResponseWriter();
-	String 
-	    linkText = null,
-	    clientId = command.getClientId(context);
+	String clientId = command.getClientId(context);
 
 	int formNumber = getMyFormNumber(context, 
 					 getMyForm(context, command));
-	writer.write("#\" onmousedown=\"document.forms[" + formNumber + "]." + 
-		     clientId + ".value='" + commandName + 
-		     "'; document.forms[" + formNumber + "].submit()\">");
-	if (null != (linkText = getLinkText(context, command))) {
-	    writer.write(linkText);
+
+	//Write Anchor attributes
+
+        //make link act as if it's a button using javascript
+	writer.write("#\" onmousedown=\"document.forms[");
+        //need to have a String
+        writer.write("" + formNumber + "");
+        writer.write("].");
+        writer.write(clientId);
+        writer.write(".value='");
+        writer.write(commandName);
+        writer.write("'; document.forms[");
+        //need to have a String
+        writer.write("" + formNumber + "");
+        writer.write("].submit()");
+        writer.write(QUOTE);
+
+        //handle css style class
+        String commandClass = getCommandClass(command);
+        if (commandClass != null) {
+            writer.write(commandClass);
+        }
+
+        //Done writing Anchor attributes.
+        writer.write(">");
+
+	//Write Anchor inline elements
+
+        //label text
+        String linkText = getLinkText(context, command);
+	if (linkText != null) {
+            writer.write(linkText);
 	}
+
+        //Done writing Anchor element
 	writer.write("</a>");
-	writer.write("<input type=\"hidden\" name=\"" + clientId + "\"/>");
+
+        //Handle hidden fields
+
+        //hidden clientId field
+	writer.write("<input type=\"hidden\" name=");
+        writer.write(QUOTE);
+        writer.write(clientId);
+        writer.write(QUOTE);
+        writer.write("/>");
+
+	// get UIParameter children...
+        Object paramList[] = getParamList(context, command);
+        if (paramList != null) {
+            for (int i=0; i<paramList.length; i++) {
+                writer.write("<input type=\"hidden\" name=");
+                writer.write(QUOTE);
+                writer.write(((Param)paramList[i]).getName());
+                writer.write(QUOTE);
+                writer.write(" value=");
+                writer.write(QUOTE);
+                writer.write(((Param)paramList[i]).getValue());
+                writer.write(QUOTE);
+                writer.write("/>");
+            }
+        }
+
     }
 
 
-    private String href(FacesContext context, UIComponent component) {
+    protected void handleHref(FacesContext context, UICommand command)
+        throws IOException {
+
+	ResponseWriter writer = context.getResponseWriter();
+        String href = (String)command.getAttribute("href");
+
+        //Write Anchor attributes
+        if (href.startsWith(RIConstants.URL_PREFIX)) {
+	    writer.write(getHref(context, command));
+        } else {
+	    writer.write(href);
+        }
+
+        String params = getHrefParams(context, command);
+        if (params != null) {
+            writer.write("?");
+            writer.write(params);
+        }
+
+	writer.write(QUOTE);
+
+        //handle css style class
+	String commandClass = getCommandClass(command);
+	if (commandClass != null) {
+            writer.write(commandClass);
+	}
+
+        //Done writing Anchor attributes.
+        writer.write(">");
+
+        //Write Anchor inline elements
+
+        //handle image
+        String image = getImage(command);
+        if (image != null ) {
+            writer.write(image);
+        }
+
+        //label text
+	String text = getLinkText(context, command);
+	if (text != null) {
+            writer.write(text);
+	}
+
+        //Done writing Anchor element
+	writer.write("</a>");
+    }
+
+    private String getHref(FacesContext context, UIComponent component) {
 	// PENDING(edburns): this method needs optimization.  For
 	// exaple, the local variable contextPath isn't used.
 
@@ -302,7 +436,53 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
         } else {
             sb.append(context.getTree().getTreeId());
         }
+
         return (response.encodeURL(sb.toString()));
+    }
+
+    protected String getHrefParams(FacesContext context, UIComponent component) {
+	HttpServletRequest request =
+            (HttpServletRequest) context.getServletRequest();
+
+        // get UIParameter children and add them to the URL
+	Object paramList[] = getParamList(context, component);
+        if (paramList != null) {
+	    StringBuffer paramBuff = new StringBuffer();
+	    for (int i=0; i<paramList.length; i++) {
+                if (i > 0) {
+		    paramBuff.append("&");
+                }
+                paramBuff.append(((Param)paramList[i]).getName());
+                paramBuff.append("=");
+                paramBuff.append(((Param)paramList[i]).getValue());
+	    }
+            return(paramBuff.toString());
+        }
+        return null;
+    }
+
+    //inner class to store parameter name and value pairs
+    protected class Param {
+
+        public Param(String name, String value) {
+            set(name, value);
+        }
+
+        private String name;
+        private String value;
+
+        public void set(String name, String value) {
+            this.name = name;
+            this.value = value;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getValue() {
+            return value;
+        }
     }
 
 } // end of class HyperlinkRenderer

@@ -1,5 +1,5 @@
 <!--
- Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
@@ -147,6 +147,42 @@
             <h:graphic_image id="graphicImage" url="/duke.gif" ismap="true" usemap="#map1" /> 
         </TD>
 
+      </TR>
+
+      <TR>
+        <TD>
+            <h:command_hyperlink id="commandLink" commandName="login"
+              commandClass="hyperlinkClass"
+              label="link text"/>
+       </TD>
+      </TR>
+
+      <TR>
+        <TD>
+            <h:command_hyperlink id="commandParamLink" commandName="login"
+              commandClass="hyperlinkClass"
+              label="link text">
+              <f:parameter id="hlParam1" name="name" value="horwat"/>
+              <f:parameter id="hlParam2" name="value" value="password"/>
+            </h:command_hyperlink>
+        </TD>
+      </TR>
+
+      <TR>
+        <TD>
+            <h:command_hyperlink id="hrefLink" href="hello.html"
+              image="duke.gif"/>
+        </TD>
+      </TR>
+
+      <TR>
+        <TD>
+            <h:command_hyperlink id="hrefParamLink" href="hello.html"
+              image="duke.gif">
+              <f:parameter id="hlParam3" name="name" value="horwat"/>
+              <f:parameter id="hlParam4" name="value" value="password"/>
+            </h:command_hyperlink>
+        </TD>
       </TR>
 
       <TR>

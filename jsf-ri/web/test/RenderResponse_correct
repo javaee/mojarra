@@ -1,5 +1,5 @@
 <!--
- Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
@@ -137,7 +137,7 @@
 
 	<TD>
 
-	      <a href="hello.html" class="hyperlinkClass">link text</A>
+	      <a href="hello.html" class="hyperlinkClass">link text</a>
 
 	</TD>
 
@@ -147,7 +147,7 @@
 
 	<TD>
 
-	      <a href="hello.html"><image src="duke.gif"></A>
+	      <a href="hello.html"><img src="duke.gif"></a>
 
 	</TD>
 
@@ -155,6 +155,36 @@
             <img id="graphicImage" src="/test/duke.gif;jsessionid=E75A204842EAC19A648141B049333B08" usemap="#map1"  ismap > 
         </TD>
 
+      </TR>
+
+      <TR>
+        <TD>
+            <a href="#" onmousedown="document.forms[0].commandLink.value='login'; document.forms[0].submit()" class="hyperlinkClass">link text</a><input type="hidden" name="commandLink"/>
+       </TD>
+      </TR>
+
+      <TR>
+        <TD>
+            
+              
+              
+            <a href="#" onmousedown="document.forms[0].commandParamLink.value='login'; document.forms[0].submit()" class="hyperlinkClass">link text</a><input type="hidden" name="commandParamLink"/><input type="hidden" name="name" value="horwat"/><input type="hidden" name="value" value="password"/>
+        </TD>
+      </TR>
+
+      <TR>
+        <TD>
+            <a href="hello.html"><img src="duke.gif"></a>
+        </TD>
+      </TR>
+
+      <TR>
+        <TD>
+            
+              
+              
+            <a href="hello.html?name=horwat&value=password"><img src="duke.gif"></a>
+        </TD>
       </TR>
 
       <TR>
