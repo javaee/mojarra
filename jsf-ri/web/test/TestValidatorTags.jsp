@@ -3,7 +3,7 @@
   <head>
     <title>Test Validator Tags</title>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-    <%@ taglib uri="http://java.sun.com/jsf/html_basic" prefix="h" %>
+    <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
   </head>
 
   <body>

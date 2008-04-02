@@ -6,7 +6,7 @@
 <HTML>
     <HEAD> <TITLE> JSF Basic Components Test Page </TITLE> </HEAD>
     <%@ page extends="com.sun.faces.Page" %>
-    <%@ taglib uri="http://java.sun.com/jsf/html_basic" prefix="h" %>
+    <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
     <H3> JSF Basic Components Test Page </H3>
     <hr>

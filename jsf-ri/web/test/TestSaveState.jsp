@@ -7,7 +7,7 @@
     <HEAD> <TITLE> JSF Basic Components Test Page </TITLE> </HEAD>
 
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-    <%@ taglib uri="http://java.sun.com/jsf/html_basic" prefix="h" %>
+    <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 
     <BODY>
         <H3> JSF Basic Components Test Page </H3>

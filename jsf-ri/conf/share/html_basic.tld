@@ -17,7 +17,7 @@
   <tlib-version>1.0</tlib-version>
   <jsp-version>1.2</jsp-version>
   <short-name>JavaServerFaces Framework Tag Library</short-name>
-  <uri>http://java.sun.com/jsf/html_basic</uri>
+  <uri>http://java.sun.com/jsf/html</uri>
   <description>
     This tag library contains useful general-purpose tags supporting the
     development of JSP/servlet applications based on the "Model 2" (MVC

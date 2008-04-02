@@ -8,11 +8,11 @@
 
     <h1>UIOutput</h1>
 
-    <h3>$Id: UIOutput.jsp,v 1.6 2002/11/12 22:51:41 jhorwat Exp $</h3>
+    <h3>$Id: UIOutput.jsp,v 1.7 2003/01/11 00:26:57 eburns Exp $</h3>
 
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
     <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
-    <%@ taglib uri="http://java.sun.com/jsf/html_basic" prefix="h" %>
+    <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 
      <fmt:setBundle basename="basic.Resources" scope="session" 
                     var="basicBundle"/>

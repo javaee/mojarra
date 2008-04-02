@@ -10,7 +10,7 @@
 </head>
     <%@ page extends="com.sun.faces.Page" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-    <%@ taglib uri="http://java.sun.com/jsf/html_basic" prefix="faces" %>
+    <%@ taglib uri="http://java.sun.com/jsf/html" prefix="faces" %>
 <h2><font color="#0000FF"> FruitStand.com </font></h2>
 <hr>
 <font size="4" color="#0000FF">Here are the items you selected.</font>

@@ -11,7 +11,7 @@
    <title>CarDemo</title>
 </head>
 
-<%@ taglib uri="http://java.sun.com/jsf/html_basic" prefix="h" %>
+<%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 
 <body bgcolor="#FFFFFF">
