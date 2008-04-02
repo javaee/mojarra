@@ -6,7 +6,7 @@
 # modules that the jsf-ri depends on.  Copy this file to "build.properties"
 # in the top-level source directory, and customize it as needed.
 #
-# $Id: build.properties.sample,v 1.21 2003/06/19 15:35:56 eburns Exp $
+# $Id: build.properties.sample,v 1.22 2003/06/25 18:41:52 jvisvanathan Exp $
 # -----------------------------------------------------------------------------
 
 # The build.xml file in this directory assumes JWSDP 1.2 directory
@@ -97,12 +97,6 @@ tomcat.loc=http://jakarta.apache.org/builds/jakarta-tomcat-4.0/release/v4.1.12/b
 
 username=tomcat
 password=tomcat
-
-# By default, all the dependent libraries are bundled with every sample app.
-# To bundle only the libraries that are not in the JWSDP1.2,
-# comment build.standalone property and uncomment build.wspack property
-#build.standalone=true
-build.wspack=true
 
 # --------------------------------------------------
 #   PROPERTIES FOR RUNNING UNIT TESTS
