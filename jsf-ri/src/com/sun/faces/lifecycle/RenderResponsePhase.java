@@ -1,5 +1,5 @@
 /*
- * $Id: RenderResponsePhase.java,v 1.22 2006/09/05 22:52:32 rlubke Exp $
+ * $Id: RenderResponsePhase.java,v 1.23 2006/11/14 21:01:35 rlubke Exp $
  */
 
 /*
@@ -54,49 +54,21 @@ import com.sun.faces.util.Util;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RenderResponsePhase.java,v 1.22 2006/09/05 22:52:32 rlubke Exp $
+ * @version $Id: RenderResponsePhase.java,v 1.23 2006/11/14 21:01:35 rlubke Exp $
  */
 
 public class RenderResponsePhase extends Phase {
 
-//
-// Protected Constants
-//
-// Log instance for this class
-    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
-            + Util.LIFECYCLE_LOGGER);
 
-//
-// Class Variables
-//
+    // Log instance for this class
+    private static Logger logger = Util.getLogger(Util.FACES_LOGGER
+         + Util.LIFECYCLE_LOGGER);
 
-//
-// Instance Variables
-//
-
-// Attribute Instance Variables
-
-// Relationship Instance Variables
-
-//
-// Constructors and Genericializers    
-//
 
     public RenderResponsePhase() {
         super();
     }
 
-//
-// Class methods
-//
-
-//
-// General Methods
-//
-
-//
-// Methods from Phase
-//
 
     public PhaseId getId() {
         return PhaseId.RENDER_RESPONSE;
@@ -109,55 +81,55 @@ public class RenderResponsePhase extends Phase {
         }
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("About to render view " +
-                    facesContext.getViewRoot().getViewId());
+                 facesContext.getViewRoot().getViewId());
         }
         try {
-        	Map<String, Object> requestMap = facesContext.getExternalContext().getRequestMap();
-        	
-        	//Setup message display logger.
+            Map<String, Object> requestMap = facesContext.getExternalContext().getRequestMap();
+
+            //Setup message display logger.
             if (logger.isLoggable(Level.INFO)) {
-            	Iterator<String> clientIdIter = facesContext.getClientIdsWithMessages();
+                Iterator<String> clientIdIter = facesContext.getClientIdsWithMessages();
 
-            	//If Messages are queued
-            	if (clientIdIter.hasNext()) {
-                	Set<String> clientIds = new HashSet<String>();
+                //If Messages are queued
+                if (clientIdIter.hasNext()) {
+                    Set<String> clientIds = new HashSet<String>();
 
-                	//Copy client ids to set of clientIds pending display.
-                	while (clientIdIter.hasNext()) {
-	            		clientIds.add(clientIdIter.next());
-	            	}
-                	requestMap.put(RIConstants.CLIENT_ID_MESSAGES_NOT_DISPLAYED, clientIds);
-            	}
+                    //Copy client ids to set of clientIds pending display.
+                    while (clientIdIter.hasNext()) {
+                        clientIds.add(clientIdIter.next());
+                    }
+                    requestMap.put(RIConstants.CLIENT_ID_MESSAGES_NOT_DISPLAYED, clientIds);
+                }
             }
-        	
-        	//render the view
+
+            //render the view
             facesContext.getApplication().getViewHandler().
-                renderView(facesContext, facesContext.getViewRoot());
-            
+                 renderView(facesContext, facesContext.getViewRoot());
+
             //display results of message display logger
             if (logger.isLoggable(Level.INFO) &&
-            		requestMap.containsKey(RIConstants.CLIENT_ID_MESSAGES_NOT_DISPLAYED)) {
-            	
-            	//remove so Set does not get modified when displaying messages.
-            	Set<String> clientIds = TypedCollections.dynamicallyCastSet( 
-            		(Set) requestMap.remove(RIConstants.CLIENT_ID_MESSAGES_NOT_DISPLAYED), String.class);
-            	if (!clientIds.isEmpty()) {
-            		
-            		//Display each message possibly not displayed.
-    				StringBuilder builder = new StringBuilder();
-            		for (String clientId : clientIds) {
-            			Iterator<FacesMessage> messages = facesContext.getMessages(clientId);
-            			while (messages.hasNext()) {
-            				FacesMessage message = messages.next();
-            				builder.append("\n");
-            				builder.append("sourceId=").append(clientId);
-            				builder.append("[severity=(").append(message.getSeverity());
-            				builder.append("), summary=(").append(message.getSummary());
-            				builder.append("), detail=(").append(message.getDetail()).append(")]");
-            			}
-            		}
-            		logger.log(Level.INFO, "jsf.non_displayed_message", builder.toString());
-            	}
+                 requestMap.containsKey(RIConstants.CLIENT_ID_MESSAGES_NOT_DISPLAYED)) {
+
+                //remove so Set does not get modified when displaying messages.
+                Set<String> clientIds = TypedCollections.dynamicallyCastSet(
+                     (Set) requestMap.remove(RIConstants.CLIENT_ID_MESSAGES_NOT_DISPLAYED), String.class);
+                if (!clientIds.isEmpty()) {
+
+                    //Display each message possibly not displayed.
+                    StringBuilder builder = new StringBuilder();
+                    for (String clientId : clientIds) {
+                        Iterator<FacesMessage> messages = facesContext.getMessages(clientId);
+                        while (messages.hasNext()) {
+                            FacesMessage message = messages.next();
+                            builder.append("\n");
+                            builder.append("sourceId=").append(clientId);
+                            builder.append("[severity=(").append(message.getSeverity());
+                            builder.append("), summary=(").append(message.getSummary());
+                            builder.append("), detail=(").append(message.getDetail()).append(")]");
+                        }
+                    }
+                    logger.log(Level.INFO, "jsf.non_displayed_message", builder.toString());
+                }
             }
         } catch (IOException e) {
             throw new FacesException(e.getMessage(), e);
@@ -166,8 +138,6 @@ public class RenderResponsePhase extends Phase {
             logger.fine("Exiting RenderResponsePhase");
         }
     }
-
-
 
 // The testcase for this class is TestRenderResponsePhase.java
 
