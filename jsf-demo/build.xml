@@ -69,9 +69,10 @@
 
 <!-- ************ Per user local properties ******************************* -->
 
-  <property file="build.properties"/>                <!-- Component local   -->
-  <property file="../build.properties"/>             <!-- Commons local     -->
-  <property file="${user.home}/build.properties"/>   <!-- User local        -->
+  <property file="build.properties"/>                <!-- demo local    -->
+  <property file="../build.properties"/>             <!-- jsf local     -->
+  <property file="${user.home}/build.properties"/>   <!-- user local    -->
+  <property file="default.properties"/>              <!-- last resort   -->
 
 
 <!-- ************ Where are we building into? ***************************** -->
@@ -80,52 +81,13 @@
   <property name="build.home" value="${basedir}/build"/>
 
   <property name="jsf.build.home" value="../jsf-ri/build" />
-  <!-- The base directory for the JSF API and RI -->
-  <property name="jsf.api.home" value ="../jsf-api"/>
-  <property name="jsf.ri.home" value ="../jsf-ri"/>
 
   <!-- The base directory for distribution targets -->
   <property name="dist.home" value="${basedir}/dist"/>
 
-  <!-- dependent jars -->
-  <property name="servlet.jar" 
-            value="${tomcat.home}/common/lib/servlet-api.jar"/>
-  <property name="jsf.api.jar"
-            value="${jsf.api.home}/build/lib/jsf-api.jar" />
-  <property name="jsf.ri.jar"
-            value="${jsf.ri.home}/build/lib/jsf-ri.jar" />
-  <property name="commons-logging.jar" 
-            value="${tomcat.home}/jwsdp-shared/lib/commons-logging.jar"/>
-  <property name="commons-digester.jar" 
-            value="${tomcat.home}/jwsdp-shared/lib/commons-digester.jar"/>
-  <property name="commons-beanutils.jar" 
-            value="${tomcat.home}/jwsdp-shared/lib/commons-beanutils.jar"/>
-  <property name="servlet.jar" value="${tomcat.home}/common/lib/servlet-api.jar"/>
-  <property name="commons-collections.jar" 
-            value="${tomcat.home}/jwsdp-shared/lib/commons-collections.jar"/>
-  <property name="commons-el.jar" 
-            value="${tomcat.home}/common/lib/commons-el.jar"/>
-  <property name="naming-resources.jar" 
-            value="${tomcat.home}/common/lib/naming-resources.jar"/>
-  <property name="naming-common.jar" 
-            value="${tomcat.home}/common/lib/naming-common.jar"/>
-  <property name="jasper-compiler.jar" 
-            value="${tomcat.home}/common/lib/jasper-compiler.jar"/>
-  <property name="jasper-runtime.jar" 
-            value="${tomcat.home}/common/lib/jasper-runtime.jar"/>
-  <property name="commons-modeler.jar" 
-            value="${tomcat.home}/server/lib/commons-modeler.jar"/>
-  <property name="jmx.jar" value="${tomcat.home}/common/lib/jmx.jar"/>
-  <property name="jstl.jar" value="${tomcat.home}/jstl/lib/jstl.jar"/>
-  <property name="standard.jar" value="${tomcat.home}/jstl/lib/standard.jar"/>
-  <property name="jsp.jar" value="${tomcat.home}/common/lib/jsp-api.jar"/>
-  <property name="jsf.api.dtd" value="${jsf.api.home}/build/lib/web-facesconfig_1_0.dtd"/>
   <property name="wspack.home" value="${tomcat.home}"/>
 
   <property name="webapp" value="demo" />
-
-  <property name="username" value="tomcat" />
-  <property name="password" value="tomcat" />
 
   <target name="clean">
   

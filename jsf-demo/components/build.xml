@@ -41,10 +41,15 @@
       <tstamp/>
   </target>
 
+  <property name="depth" value=".."/>
+
+  <property file="build.properties"/>                <!-- this demo local -->
+  <property file="../build.properties"/>             <!-- demos local     -->
+  <property file="../../build.properties"/>          <!-- jsf local       -->
+  <property file="${user.home}/build.properties"/>   <!-- user local      -->
+  <property file="../default.properties"/>           <!-- last resort     -->
+
   <!-- Configure the context path for this application -->
-  <property file="${user.home}/build.properties"/>  <!-- User local        -->
-  <property file="build.properties"/>               <!-- Component local   -->
-  <property file="../build.properties"/>            <!-- Commons local     -->
   <property name="context.path" value="/jsf-components"/>
   <property name="example" value="jsf-components" />
   <property name="webapp" value="demo" />
@@ -56,27 +61,7 @@
   <!-- Configure properties to access the Manager application -->
   <property name="url"      value="http://localhost:8080/manager"/>
 
-  <!-- Required jars for making this self-contained -->
-  <property name="servlet.jar" value="${tomcat.home}/common/lib/servlet.jar"/>
-  <property name="catalina-ant.jar" 
-      value="${tomcat.home}/server/lib/catalina-ant.jar"/>
-  <property name="jsp.jar" value="" />
-  <property name="commons-beanutils.jar"
-            value="${jsf-demo.lib}/commons-beanutils.jar"/>
-  <property name="commoncollections.jar"
-            value="${jsf-demo.lib}/commons-collections.jar"/>
-  <property name="commons-logging.jar"
-            value="${jsf-demo.lib}/commons-logging.jar"/>
-  <property name="commons-digester.jar"
-            value="${jsf-demo.lib}/commons-digester.jar"/>
-  <property name="jstl.jar"
-            value="${jsf-demo.lib}/jstl.jar"/>
-  <property name="standard.jar"
-            value="${jsf-demo.lib}/standard.jar"/>
-  <property name="jsf-api.jar"
-            value="${jsf-demo.lib}/jsf-api.jar" />
-  <property name="jsf-ri.jar"
-            value="${jsf-demo.lib}/jsf-ri.jar" />
+  <property name="build.standalone" value="true"/>
 
   <path id="catalina-ant.classpath">
     <pathelement location="${catalina-ant.jar}"/>

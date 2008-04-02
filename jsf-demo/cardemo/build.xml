@@ -41,10 +41,15 @@
       <tstamp/>
   </target>
 
+  <property name="depth" value=".."/>
+
+  <property file="build.properties"/>                <!-- this demo local -->
+  <property file="../build.properties"/>             <!-- demos local     -->
+  <property file="../../build.properties"/>          <!-- jsf local       -->
+  <property file="${user.home}/build.properties"/>   <!-- user local      -->
+  <property file="../default.properties"/>           <!-- last resort     -->
+
   <!-- Configure the context path for this application -->
-  <property file="${user.home}/build.properties"/>  <!-- User local        -->
-  <property file="build.properties"/>               <!-- Component local   -->
-  <property file="../build.properties"/>            <!-- Commons local     -->
   <property name="context.path" value="/jsf-cardemo"/>
   <property name="example" value="jsf-cardemo" />
   <property name="build"   value="${basedir}/build" />
@@ -54,31 +59,10 @@
 
   <!-- The base directory for demo apps -->
   <property name="jsf-demo.lib" value="../lib"/>
+  <property name="build.standalone" value="true"/>
 
-  <!-- Required jobs for making this self-contained -->
-  <property name="jsp.jar" value="" />
-  <property name="servlet.jar" value="${tomcat.home}/common/lib/servlet.jar"/>
-
-  <property name="catalina-ant.jar" 
-           value="${tomcat.home}/server/lib/catalina-ant.jar"/>
-  <property name="commons-beanutils.jar" 
-            value="${jsf-demo.lib}/commons-beanutils.jar"/>
-  <property name="commons-collections.jar"
-  	    value="${jsf-demo.lib}/commons-collections.jar"/>
-  <property name="commons-logging.jar" 
-            value="${jsf-demo.lib}/commons-logging.jar"/>
-  <property name="commons-digester.jar" 
-            value="${jsf-demo.lib}/commons-digester.jar"/>
-  <property name="jstl.jar" 
-            value="${jsf-demo.lib}/jstl.jar"/>
-  <property name="standard.jar" 
-            value="${jsf-demo.lib}/standard.jar"/>
   <property name="demo-components.jar" 
             value="${jsf-demo.lib}/demo-components.jar"/>
-  <property name="jsf-api.jar"
-            value="${jsf-demo.lib}/jsf-api.jar" />
-  <property name="jsf-ri.jar"
-            value="${jsf-demo.lib}/jsf-ri.jar" />
 
   <path id="catalina-ant.classpath">
     <pathelement location="${catalina-ant.jar}"/>
@@ -160,6 +144,7 @@
   </target>
 
   <target name="checkRequiredFile">
+    <echo message="${jsf-api.jar}"/>
     <available file="${file}" property="requirement.satisfied"/>
     <antcall target="checkRequired.fail"/>
   </target>

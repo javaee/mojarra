@@ -41,10 +41,11 @@
       <tstamp/>
   </target>
 
-  <!-- Configure the context path for this application -->
+  <property file="build.properties"/>               <!-- this demo local   -->
+  <property file="../build.properties"/>            <!-- demos local       -->
   <property file="${user.home}/build.properties"/>  <!-- User local        -->
-  <property file="build.properties"/>               <!-- Component local   -->
-  <property file="../build.properties"/>            <!-- Commons local     -->
+
+  <!-- Configure the context path for this application -->
   <property name="context.path" value="/jsf-guessNumber"/>
   <property name="example" value="jsf-guessNumber" />
   <property name="build"   value="${basedir}/build" />
