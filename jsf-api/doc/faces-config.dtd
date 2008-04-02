@@ -92,7 +92,7 @@
     that are not specified, the JSF implementation must provide a suitable
     default.
 -->
-<!ELEMENT application     ((action-listener|navigation-handler|property-resolver|variable-resolver)*>
+<!ELEMENT application     ((action-listener|navigation-handler|property-resolver|variable-resolver)*)>
 
 
 <!--
