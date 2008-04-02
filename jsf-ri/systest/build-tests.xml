@@ -4,7 +4,7 @@
  Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.7 2003/05/20 21:09:37 craigmcc Exp $
+ $Id: build-tests.xml,v 1.8 2003/06/16 22:52:22 eburns Exp $
 -->
 
 
@@ -54,7 +54,8 @@
                 test.converter,
                 test.validator,
                 test.component,
-                test.navigation
+                test.navigation,
+                test.tlvalidator
                "/>
 
 
@@ -155,6 +156,35 @@
 
   <target name="test.navigation"
    description="Test navigation handler rule processing">
+
+  </target>
+
+  <target name="test.tlvalidator"
+   description="Test the RI Tag Library Validator">
+
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/TestHtmlBasicValidatorFail.jsp"
+      status="500"/>
+
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/TestHtmlBasicValidatorSucceed.jsp"
+      status="200"/>
+
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/TestCoreValidatorIfFail.jsp"
+      status="500"/>
+
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/TestCoreValidatorIfSucceed.jsp"
+      status="200"/>
+
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/TestCoreValidatorIteratorFail.jsp"
+      status="500"/>
+
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/TestCoreValidatorIteratorSucceed.jsp"
+      status="200"/>
 
   </target>
   

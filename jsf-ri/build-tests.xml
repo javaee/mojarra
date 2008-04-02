@@ -288,8 +288,6 @@
             <test name="com.sun.faces.renderkit.html_basic.TestRendererAttributes"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_2"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderKit"/>
-            <test name="com.sun.faces.taglib.html_basic.TestHtmlBasicValidator"/>
-            <test name="com.sun.faces.taglib.jsf_core.TestCoreValidator"/>
             <test name="com.sun.faces.taglib.jsf_core.TestValidatorTags"/>
             <test name="com.sun.faces.tree.TestXmlTreeFactoryImpl"/>
 -->
