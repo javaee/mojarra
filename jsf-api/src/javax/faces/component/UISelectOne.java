@@ -1,9 +1,9 @@
 /*
- * $Id: UISelectOne.java,v 1.20 2003/01/16 20:47:57 craigmcc Exp $
+ * $Id: UISelectOne.java,v 1.21 2003/01/17 00:26:48 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -84,7 +84,7 @@ public class UISelectOne extends UISelectBase {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public boolean decode(FacesContext context) throws IOException {
+    public void decode(FacesContext context) throws IOException {
 
         if (context == null) {
             throw new NullPointerException();
@@ -93,7 +93,8 @@ public class UISelectOne extends UISelectBase {
         // Delegate to our associated Renderer if needed
         previous = getValue();
         if (getRendererType() != null) {
-            return (super.decode(context));
+            super.decode(context);
+            return;
         }
 
         // Perform the default decoding
@@ -101,7 +102,6 @@ public class UISelectOne extends UISelectBase {
             context.getServletRequest().getParameter(getClientId(context));
         setValue(value);
         setValid(true);
-        return (true);
 
     }
 

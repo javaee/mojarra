@@ -1,9 +1,9 @@
 /*
- * $Id: UISelectItems.java,v 1.4 2002/09/20 01:32:43 craigmcc Exp $
+ * $Id: UISelectItems.java,v 1.5 2003/01/17 00:26:47 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -79,7 +79,7 @@ public class UISelectItems extends UIComponentBase {
 
 
     /**
-     * <p>Override the default behavior and take no action.</p>
+     * <p>Set the <code>valid</code> property to <code>true</code>.</p>
      *
      * @param context FacesContext for the request we are processing
      *
@@ -87,14 +87,13 @@ public class UISelectItems extends UIComponentBase {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public boolean decode(FacesContext context) throws IOException {
+    public void decode(FacesContext context) throws IOException {
 
         if (context == null) {
             throw new NullPointerException();
         }
 
         setValid(true);
-        return (true);
 
     }
 

@@ -1,9 +1,9 @@
 /*
- * $Id: Renderer.java,v 1.14 2002/12/17 23:30:56 eburns Exp $
+ * $Id: Renderer.java,v 1.15 2003/01/17 00:26:50 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -151,31 +151,38 @@ public abstract class Renderer {
      * <p>Decode the current state of the specified {@link UIComponent}
      * from the request contained in the specified {@link FacesContext},
      * and attempt to convert this state information into an object of
-     * the type required for this component.  If conversion is successful,
-     * save the resulting object via a call to <code>setValue()</code>,
-     * and return <code>true</code> to indicate a successful conversion.
-     * If conversion is not successful:</p>
+     * the type required for this component.  If conversion is successful:
+     * </p>
+     * <ul>
+     * <li>Save the new local value of this component by calling
+     *     <code>setValue()</code> and passing the new value.</li>
+     * <li>Set the <code>value</code> property of this component
+     *     to <code>true</code>.</li>
+     *
+     * <p>If conversion is not successful:</p>
      * <ul>
      * <li>Save the state inforamtion (inside the component) in such a way
      *     that encoding can reproduce the previous input
      *     (even though it was syntactically or semantically incorrect).</li>
      * <li>Add an appropriate conversion failure error message by calling
      *     <code>context.addMessage()</code>.</li>
-     * <li>Return <code>false</code> to indicate unsuccessful conversion.</li>
+     * <li>Set the <code>valid</code> property of this component
+     *     to <code>false</code>.</li>
      * </ul>
      *
-     * @param context FacesContext for the request we are processing
-     * @param component UIComponent to be decoded.
+     * <p>During decoding, events may be enqueued for later processing
+     * (by event listeners that have registered an interest), by calling
+     * <code>addFacesEvent()</code> on the associated {@link FacesContext}.
+     * </p>
      *
-     * @return <code>true</code> if conversion was successful (or if no
-     *  decode processing was required), or
-     *  <code>false</code> if conversion was not successful
+     * @param context {@link FacesContext} for the request we are processing
+     * @param component {@link UIComponent} to be decoded.
      *
      * @exception IOException if an input/output error occurs while decoding
      * @exception NullPointerException if <code>context</code>
      *  or <code>component</code> is null
      */
-    public abstract boolean decode(FacesContext context, UIComponent component)
+    public abstract void decode(FacesContext context, UIComponent component)
         throws IOException;
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.29 2003/01/16 23:27:34 craigmcc Exp $
+ * $Id: UICommand.java,v 1.30 2003/01/17 00:26:46 craigmcc Exp $
  */
 
 /*
@@ -101,7 +101,7 @@ public class UICommand extends UIComponentBase {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public boolean decode(FacesContext context) throws IOException {
+    public void decode(FacesContext context) throws IOException {
 
         if (context == null) {
             throw new NullPointerException();
@@ -109,7 +109,8 @@ public class UICommand extends UIComponentBase {
 
         // Delegate to our associated Renderer if needed
         if (getRendererType() != null) {
-            return (super.decode(context));
+            super.decode(context);
+            return;
         }
 
         // Was our command the one that caused this submission?
@@ -117,7 +118,7 @@ public class UICommand extends UIComponentBase {
         String value = context.getServletRequest().
             getParameter(getClientId(context));
         if (value == null) {
-            return (true);
+            return;
         }
 
         // Fire an ActionEvent for broadcast to interested listeners
@@ -135,11 +136,10 @@ public class UICommand extends UIComponentBase {
             parent = parent.getParent();
         }
         if (formName == null) {
-            return (true); // Not nested in a form
+            return; // Not nested in a form
         }
         context.addApplicationEvent
             (new FormEvent(this, formName, commandName));
-        return (true);
 
     }
 

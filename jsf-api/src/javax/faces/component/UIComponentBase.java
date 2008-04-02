@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.35 2003/01/16 23:27:35 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.36 2003/01/17 00:26:47 craigmcc Exp $
  */
 
 /*
@@ -1201,24 +1201,23 @@ public abstract class UIComponentBase implements UIComponent {
      * </ul>
      *
      * <p>During decoding, events may be enqueued for later processing
-     * (by this component or some other component),  by calling
+     * (by event listeners who have registered an interest),  by calling
      * <code>addFacesEvent()</code> on the associated {@link FacesContext}.
      * </p>
      *
-     * <p>The default behavior of this method is to delegate to the
-     * associated {@link Renderer} if there is one; otherwise this method
-     * simply returns <code>true</code>.</p>
+     * <p>The default behavior of this method is to check the parameter
+     * for validity, and delegate to the associated {@link Renderer}
+     * if there is one.  If there is no associated {@link Renderer}, the
+     * <code>valid</code> property of this component is set to
+     * <code>true</code>, and no further action is taken.</p>
      *
-     * @param context FacesContext for the request we are processing
-     *
-     * @return <code>true</code> if conversion was successful, or
-     *  <code>false</code> if conversion failed
+     * @param context {@link FacesContext} for the request we are processing
      *
      * @exception IOException if an input/output error occurs during decoding
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public boolean decode(FacesContext context) throws IOException {
+    public void decode(FacesContext context) throws IOException {
 
         if (context == null) {
             throw new NullPointerException();
@@ -1230,12 +1229,9 @@ public abstract class UIComponentBase implements UIComponent {
             RenderKit renderKit = rkFactory.getRenderKit
                 (context.getTree().getRenderKitId());
             Renderer renderer = renderKit.getRenderer(rendererType);
-            boolean result = renderer.decode(context, this);
-            setValid(result);
-            return(result);
+            renderer.decode(context, this);
         } else {
             setValid(true);
-            return (true);
         }
 
     }
@@ -1468,14 +1464,13 @@ public abstract class UIComponentBase implements UIComponent {
      * component, and this component itself, as follows.</p>
      * <ul>
      * <li>Call the <code>processDecodes()</code> method of all facets
-     *     and children of this component, in the order determined by
-     *     a call to <code>getFacetsAndChildren()</code>.</li>
+     *     of this component, in the order their names would be
+     *     returned by a call to <code>getFacetNames()</code>.</li>
+     * <li>Call the <code>processDecodes() method of all children
+     *     of this component, in the order they would be returned
+     *     by a call to <code>getChildren()</code>.</li>
      * <li>Call the <code>decode()</code> method of this component.</li>
      * </ul>
-     *
-     * <p>Return <code>false</code> if any <code>processDecodes()</code> or
-     * <code>decode()</code> method call returned <code>false</code>.
-     * Otherwise, return <code>true</code>.</p>
      *
      * @param context {@link FacesContext} for the request we are processing
      *
@@ -1483,29 +1478,21 @@ public abstract class UIComponentBase implements UIComponent {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public boolean processDecodes(FacesContext context) throws IOException {
+    public void processDecodes(FacesContext context) throws IOException {
 
         if (context == null) {
             throw new NullPointerException();
         }
-        boolean result = true;
 
         // process all facets and children of this component
         Iterator kids = getFacetsAndChildren();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
-            if (!kid.processDecodes(context)) {
-                result = false;
-            }
+            kid.processDecodes(context);
         }
 
         // Process this component itself
-        if (!decode(context)) {
-            result = false;
-        }
-
-        // Return the final result
-        return (result);
+        decode(context);
 
     }
 

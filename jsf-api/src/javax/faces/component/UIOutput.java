@@ -1,9 +1,9 @@
 /*
- * $Id: UIOutput.java,v 1.19 2002/12/03 23:02:01 jvisvanathan Exp $
+ * $Id: UIOutput.java,v 1.20 2003/01/17 00:26:47 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -54,9 +54,8 @@ public class UIOutput extends UIComponentBase {
 
 
     /**
-     * <p>This component is output only, so do not perform any decode
-     * processing during the <em>Apply Request Values</em> phase of
-     * the request processing lifecycle.</p>
+     * <p>This component is output only, so just set the <code>valid</code>
+     * property to <code>true</code> and return.</p>
      *
      * @param context FacesContext for the request we are processing
      *
@@ -64,13 +63,12 @@ public class UIOutput extends UIComponentBase {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public boolean decode(FacesContext context) throws IOException {
+    public void decode(FacesContext context) throws IOException {
 
         if (context == null) {
             throw new NullPointerException();
         }
         setValid(true);
-        return (true);
 
     }
 

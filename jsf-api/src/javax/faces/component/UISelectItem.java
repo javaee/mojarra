@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItem.java,v 1.8 2002/09/21 18:43:22 craigmcc Exp $
+ * $Id: UISelectItem.java,v 1.9 2003/01/17 00:26:47 craigmcc Exp $
  */
 
 /*
@@ -138,7 +138,7 @@ public class UISelectItem extends UIComponentBase {
 
 
     /**
-     * <p>Override the default behavior and take no action.</p>
+     * <p>Set the <code>valid</code> property to <code>true</code>.</p>
      *
      * @param context FacesContext for the request we are processing
      *
@@ -146,13 +146,12 @@ public class UISelectItem extends UIComponentBase {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public boolean decode(FacesContext context) throws IOException {
+    public void decode(FacesContext context) throws IOException {
 
         if (context == null) {
             throw new NullPointerException();
         }
         setValid(true);
-        return (true);
 
     }
 

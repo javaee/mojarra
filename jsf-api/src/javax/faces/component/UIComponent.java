@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.64 2003/01/16 23:27:35 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.65 2003/01/17 00:26:46 craigmcc Exp $
  */
 
 /*
@@ -22,10 +22,10 @@ import javax.faces.validator.Validator;
 
 
 /**
- * <p><strong>UIComponent</strong> is the interface for all user interface
+ * <p><strong>UIComponent</strong> is the base interface for all user interface
  * components in JavaServer Faces.  The set of <code>UIComponent</code>
  * instances associated with a particular request or response are typically
- * organized into trees under a root <code>UIComponent</code> that represents
+ * organized into a tree under a root <code>UIComponent</code> that represents
  * the entire request or response.</p>
  *
  * <p>For the convenience of component developers, {@link UIComponentBase}
@@ -566,20 +566,17 @@ public interface UIComponent extends Serializable {
      * </ul>
      *
      * <p>During decoding, events may be enqueued for later processing
-     * (by this component or some other component),  by calling
+     * (by event listeners who have registered an interest),  by calling
      * <code>addFacesEvent()</code> on the associated {@link FacesContext}.
      * </p>
      *
-     * @param context FacesContext for the request we are processing
-     *
-     * @return <code>true</code> if conversion was successful, or
-     *  <code>false</code> if conversion failed
+     * @param context {@link FacesContext} for the request we are processing
      *
      * @exception IOException if an input/output error occurs during decoding
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public boolean decode(FacesContext context) throws IOException;
+    public void decode(FacesContext context) throws IOException;
 
 
     /**
@@ -723,17 +720,13 @@ public interface UIComponent extends Serializable {
      * <li>Call the <code>decode()</code> method of this component.</li>
      * </ul>
      *
-     * <p>Return <code>false</code> if any <code>processDecodes()</code> or
-     * <code>decode()</code> method call returned <code>false</code>.
-     * Otherwise, return <code>true</code>.</p>
-     *
      * @param context {@link FacesContext} for the request we are processing
      *
      * @exception IOException if an input/output error occurs during decoding
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public boolean processDecodes(FacesContext context) throws IOException;
+    public void processDecodes(FacesContext context) throws IOException;
 
 
     /**
