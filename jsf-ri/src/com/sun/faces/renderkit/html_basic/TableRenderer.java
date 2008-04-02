@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.6 2003/10/19 06:06:48 craigmcc Exp $
+ * $Id: TableRenderer.java,v 1.7 2003/10/20 20:30:31 craigmcc Exp $
  */
 
 /*
@@ -85,8 +85,7 @@ public class TableRenderer extends HtmlBasicRenderer {
 	if (styleClass != null) {
             writer.writeAttribute("class", styleClass, "styleClass");
 	}
-        // PENDING(craigmcc) - This method has issues with non-String attrs
-        //	Util.renderPassThruAttributes(writer, component);
+        Util.renderPassThruAttributes(writer, component);
 	writer.writeText("\n", null);
 
 	// Render the header facet (if any)
