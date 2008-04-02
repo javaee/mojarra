@@ -48,9 +48,9 @@
     <description>
         Registers the concrete Converter implementation,
         carstore.CreditCardConverter using the ID, 
-        creditcard.
+        creditCardConverter.
     </description>
-    <converter-id>creditcard</converter-id>
+    <converter-id>creditCardConverter</converter-id>
     <converter-class>carstore.CreditCardConverter</converter-class>
   </converter>
 

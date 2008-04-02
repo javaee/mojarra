@@ -208,8 +208,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	    result.append("                "+componentType.toLowerCase()+".setValueBinding(");
 	    result.append("\""+"converter\", vb);\n"); 
 	    result.append("          } else {\n"); 
-	    result.append("              Converter _converter = (Converter)Util.createInstance("+
-	        "converter);\n");
+            result.append("              Converter _converter = FacesContext.getCurrentInstance().getApplication().createConverter(converter);\n");
 	    result.append("              " + componentType.toLowerCase() + ".setConverter(_converter);\n");
 	    result.append("          }\n");
 	    result.append("      }\n\n");
@@ -264,8 +263,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	    result.append("                "+componentType.toLowerCase()+".setValueBinding(");
 	    result.append("\""+"converter\", vb);\n"); 
 	    result.append("            } else {\n"); 
-	    result.append("                Converter _converter = (Converter)Util.createInstance("+
-	        "converter);\n");
+            result.append("                Converter _converter = FacesContext.getCurrentInstance().getApplication().createConverter(converter);\n");
 	    result.append("                "+componentType.toLowerCase()+".setConverter(_converter);\n");
 	    result.append("            }\n");
 	    result.append("        }\n\n");

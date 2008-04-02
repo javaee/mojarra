@@ -164,7 +164,7 @@
 
     <h:output_text  value="#{bundle.ccNumberLabel}" />
     <h:input_text id="ccno" size="16"
-           converter="#{creditCardConverter}" required="true">
+           converter="creditCardConverter" required="true">
           <cs:format_validator 
           formatPatterns="9999999999999999|9999 9999 9999 9999|9999-9999-9999-9999"/>
      </h:input_text>
