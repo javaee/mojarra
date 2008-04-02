@@ -1,5 +1,5 @@
 /*
- * $Id: TestManagedBeanFactory.java,v 1.22 2004/05/10 19:56:15 jvisvanathan Exp $
+ * $Id: TestManagedBeanFactory.java,v 1.23 2004/08/02 19:25:10 rlubke Exp $
  */
 
 /*
@@ -207,7 +207,12 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         listEntries.addValue("bar");
         property.setListEntries(listEntries);
 
+        ManagedPropertyBean property2 = new ManagedPropertyBean();
+        property2.setPropertyName("indexPropertiesNull");
+        property2.setListEntries(listEntries);
+
         bean.addManagedProperty(property);
+        bean.addManagedProperty(property2);
 
         mbf = new ManagedBeanFactory(bean);
 
@@ -218,6 +223,12 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         ArrayList properties = (ArrayList) testBean.getIndexProperties();
         assertTrue(properties.get(5).equals("foo"));
         assertTrue(properties.get(6).equals("bar"));
+
+        // setter shouldn't be called if bean getter returns List
+        assertTrue(!testBean.getListSetterCalled());
+
+        // setter should be called if bean getter returned null
+        assertTrue(testBean.getListNullSetterCalled());
 
         //make sure scope is stored properly
         assertTrue(mbf.getScope().equals("session"));
@@ -240,7 +251,12 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         property.setPropertyName("mapProperty");
         property.setMapEntries(mapEntries);
 
+        ManagedPropertyBean property2 = new ManagedPropertyBean();
+        property2.setPropertyName("mapPropertyNull");
+        property2.setMapEntries(mapEntries);
+
         bean.addManagedProperty(property);
+        bean.addManagedProperty(property2);
         mbf = new ManagedBeanFactory(bean);
 
         //testing with a property set
@@ -250,6 +266,12 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         HashMap mapProperty = (HashMap)
             testBean.getMapProperty();
         assertTrue(((String) mapProperty.get("name")).equals("Justyna"));
+
+        // setter shouldn't be called if bean getter returns Map
+        assertTrue(!testBean.getMapPropertySetterCalled());
+
+        // setter should be called if bean getter returned null
+        assertTrue(testBean.getMapPropertyNullSetterCalled());
 
         //make sure scope is stored properly
         assertTrue(mbf.getScope().equals("session"));

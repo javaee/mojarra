@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.23 2004/05/10 19:56:04 jvisvanathan Exp $
+ * $Id: ManagedBeanFactory.java,v 1.24 2004/08/02 19:25:09 rlubke Exp $
  */
 
 /*
@@ -15,7 +15,6 @@ import com.sun.faces.config.beans.ManagedBeanBean;
 import com.sun.faces.config.beans.ManagedPropertyBean;
 import com.sun.faces.config.beans.MapEntriesBean;
 import com.sun.faces.config.beans.MapEntryBean;
-import com.sun.faces.el.ValueBindingImpl;
 import com.sun.faces.util.Util;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.logging.Log;
@@ -24,17 +23,17 @@ import org.apache.commons.logging.LogFactory;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.EvaluationException;
+import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.el.ValueBinding;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class clreates a managed bean instance. It has a contract with
@@ -514,15 +513,10 @@ public class ManagedBeanFactory extends Object {
                 // and tries to set it into the bean.
                 switch (propertyType = getPropertyType(properties[i])) {
                     case TYPE_IS_LIST:
-                        value =
-                            getArrayOrListToSetIntoBean(bean, properties[i]);
-                        PropertyUtils.setProperty(bean, propertyName,
-                                                  value);
+                        setArrayOrListPropertiesIntoBean(bean, properties[i]);
                         break;
                     case TYPE_IS_MAP:
-                        value = getMapToSetIntoBean(bean, properties[i]);
-                        PropertyUtils.setProperty(bean, propertyName,
-                                                  value);
+                        setMapPropertiesIntoBean(bean, properties[i]);                        
                         break;
                     case TYPE_IS_SIMPLE:
                         // if the config bean has no managed-property-class
@@ -619,24 +613,21 @@ public class ManagedBeanFactory extends Object {
      * the * List to array of the same type as the property and set the
      * property by * calling the setter method, or log an error if there
      * is no setter * method.</p></li>
-     *
-     * @return the array or list to store into the bean.
      */
 
-    private Object getArrayOrListToSetIntoBean(Object bean,
-                                               ManagedPropertyBean property)
+    private void setArrayOrListPropertiesIntoBean(Object bean,
+                                                  ManagedPropertyBean property)
         throws Exception {
         Object result = null;
         boolean
             getterIsNull = true,
             getterIsArray = false;
         List
-            valuesForBean = null,
-            valuesFromConfig = null;
+            valuesForBean = null;
         Class
             valueType = java.lang.String.class,
             propertyType = null;
-        Object value = null;
+
         String propertyName = property.getPropertyName();
 
         try {
@@ -741,7 +732,10 @@ public class ManagedBeanFactory extends Object {
             result = valuesForBean;
         }
 
-        return result;
+        if (getterIsNull || getterIsArray) {
+            PropertyUtils.setProperty(bean, propertyName, result);
+        }
+
     }
 
 
@@ -766,14 +760,12 @@ public class ManagedBeanFactory extends Object {
      * property by calling the setter method, or log an error if there
      * is no setter method.</p></li>
      */
-    private Map getMapToSetIntoBean(Object bean,
-                                    ManagedPropertyBean property)
+    private void setMapPropertiesIntoBean(Object bean,
+                                          ManagedPropertyBean property)
         throws Exception {
         Map result = null;
         boolean getterIsNull = true;
         Class propertyType = null;
-        List valuesFromConfig = null;
-        Object value = null;
         String propertyName = property.getPropertyName();
 
         try {
@@ -806,7 +798,10 @@ public class ManagedBeanFactory extends Object {
 
         copyMapEntriesFromConfigToMap(property.getMapEntries(), result);
 
-        return result;
+        if (getterIsNull) {
+            PropertyUtils.setProperty(bean, propertyName, result);
+        }
+
     }
 
 

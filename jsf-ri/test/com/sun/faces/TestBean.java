@@ -206,9 +206,10 @@ public class TestBean extends Object {
         imagePath = newImagePath;
     }
 
+    // -------------------------------------------------------------------------
 
-    protected ArrayList indexProperties = null;
-
+    protected ArrayList indexProperties = new ArrayList();
+    boolean listSetterCalled;
 
     public ArrayList getIndexProperties() {
         return indexProperties;
@@ -216,8 +217,34 @@ public class TestBean extends Object {
 
 
     public void setIndexProperties(ArrayList newIndexProperties) {
+        listSetterCalled = true;
         indexProperties = newIndexProperties;
     }
+
+    public boolean getListSetterCalled() {
+        return listSetterCalled;
+    }
+
+    // -------------------------------------------------------------------------
+
+    protected ArrayList indexPropertiesNull;
+    boolean listNullSetterCalled;
+
+    public ArrayList getIndexPropertiesNull() {
+        return indexPropertiesNull;
+    }
+
+
+    public void setIndexPropertiesNull(ArrayList newIndexPropertiesNull) {
+        listNullSetterCalled = true;
+        this.indexPropertiesNull = newIndexPropertiesNull;
+    }
+
+    public boolean getListNullSetterCalled() {
+        return listNullSetterCalled;
+    }
+
+    // -------------------------------------------------------------------------
 
 
     protected ArrayList indexIntegerProperties = null;
@@ -233,9 +260,10 @@ public class TestBean extends Object {
 
     }
 
+    // -------------------------------------------------------------------------
 
     protected Map mapProperty = new HashMap();
-
+    private boolean mapPropertySetterCalled = false;
 
     public Map getMapProperty() {
         return mapProperty;
@@ -243,8 +271,33 @@ public class TestBean extends Object {
 
 
     public void setMapProperty(Map mapProperty) {
+        mapPropertySetterCalled = true;
         this.mapProperty = mapProperty;
     }
+
+    public boolean getMapPropertySetterCalled() {
+        return mapPropertySetterCalled;
+    }
+
+    // -------------------------------------------------------------------------
+
+    protected Map mapPropertyNull;
+    private boolean mapPropertyNullSetterCalled = false;
+
+    public Map getMapPropertyNull() {
+        return mapPropertyNull;
+    }
+
+    public void setMapPropertyNull(Map mapPropertyNull) {
+        mapPropertyNullSetterCalled = true;
+        this.mapPropertyNull = mapPropertyNull;
+    }
+
+    public boolean getMapPropertyNullSetterCalled() {
+        return mapPropertyNullSetterCalled;
+    }
+
+    // -------------------------------------------------------------------------
 
 
     protected String modelLabel = "model label";
