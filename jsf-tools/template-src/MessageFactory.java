@@ -1,5 +1,5 @@
 /*
- * $Id: MessageFactory.java,v 1.11 2006/01/13 19:19:32 rlubke Exp $
+ * $Id: MessageFactory.java,v 1.12 2006/05/10 22:04:04 rlubke Exp $
  */
 
 /*
@@ -29,18 +29,7 @@
 
 package @package@;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.IOException;
-
-import java.util.Locale;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Properties;
-import java.util.ResourceBundle;
-import java.util.MissingResourceException;
 import javax.el.ValueExpression;
-import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
@@ -48,9 +37,11 @@ import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
-import javax.faces.FacesException;
+
 import java.text.MessageFormat;
-import java.io.IOException;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 /**
  * 
@@ -64,8 +55,13 @@ import java.io.IOException;
     }
    
     /**
-     * This version of getMessage() is used for localizing implementation
-     * specific messages.
+     * <p>This version of getMessage() is used for localizing implementation
+     * specific messages.</p>
+     *
+     * @param messageId - the key of the message in the resource bundle
+     * @param params    - substittion parameters
+     *
+     * @return a localized <code>FacesMessage</code>
      */
      @protection@ static FacesMessage getMessage(String messageId, 
                                                  Object... params) {
@@ -84,14 +80,22 @@ import java.io.IOException;
         return getMessage(locale, messageId, params);
     }
 
+     /**
+      * <p>Creates and returns a FacesMessage for the specified Locale.</p>
+      *
+      * @param locale    - the target <code>Locale</code>
+      * @param messageId - the key of the message in the resource bundle
+      * @param params    - substittion parameters
+      *
+      * @return a localized <code>FacesMessage</code>
+      */
      @protection@ static FacesMessage getMessage(Locale locale, 
                                                  String messageId, 
-                                                 Object... params) {
-        FacesMessage result = null;
+                                                 Object... params) {       
         String summary = null;
-        String detail = null;
-        String bundleName = null;
-        ResourceBundle bundle = null;        
+        String detail = null;       
+        ResourceBundle bundle;
+        String bundleName;
 
         // see if we have a user-provided bundle
         if (null != (bundleName = getApplication().getMessageBundle())) {
@@ -105,6 +109,7 @@ import java.io.IOException;
                     detail = bundle.getString(messageId + "_detail");
                 }
                 catch (MissingResourceException e) {
+                    // ignore
                 }
             }
         }
@@ -121,31 +126,30 @@ import java.io.IOException;
             // see if we have a hit
             try {
                 summary = bundle.getString(messageId);
+                // we couldn't find a summary anywhere!  Return null
+                if (null == summary) {
+                    return null;
+                }
                 detail = bundle.getString(messageId + "_detail");
             } catch (MissingResourceException e) {
+                // ignore
             }
         }
-    
-        // we couldn't find a summary anywhere!  Return null
-        if (null == summary) {
-            return null;
-        }
-
-        if (null == summary || null == bundle) {
-            throw new NullPointerException(" summary " 
-                + summary 
-                + " bundle " 
-                + bundle);
-        }
+                           
         // At this point, we have a summary and a bundle.        
         return (new BindingFacesMessage(locale, summary, detail, params));
     }
 
 
-    //
-    // Methods from MessageFactory
-    //      
-    
+    /**
+     * <p>Creates and returns a FacesMessage for the specified Locale.</p>
+     *
+     * @param context   - the <code>FacesContext</code> for the current request
+     * @param messageId - the key of the message in the resource bundle
+     * @param params    - substittion parameters
+     *
+     * @return a localized <code>FacesMessage</code>
+     */
     @protection@ static FacesMessage getMessage(FacesContext context, 
                                                 String messageId,
                                                 Object... params) {
@@ -156,9 +160,9 @@ import java.io.IOException;
                 + " messageId " 
                 + messageId);
         }
-        Locale locale = null;
+        Locale locale;
         // viewRoot may not have been initialized at this point.
-        if (context != null && context.getViewRoot() != null) {
+        if (context.getViewRoot() != null) {
             locale = context.getViewRoot().getLocale();
         } else {
             locale = Locale.getDefault();
@@ -177,13 +181,21 @@ import java.io.IOException;
     }  
                        
 
-    // Gets the "label" property from the component.
+    /**
+     * <p>Returns the <code>label</code> property from the specified
+     * component.</p>
+     *
+     * @param context   - the <code>FacesContext</code> for the current request
+     * @param component - the component of interest
+     *
+     * @return the label, if any, of the component
+     */
     @protection@ static Object getLabel(FacesContext context, 
                                         UIComponent component) {
                                         
         Object o = component.getAttributes().get("label");
         if (o == null || (o instanceof String && ((String) o).length() == 0)) {
-            o = component.getValueBinding("label");
+            o = component.getValueExpression("label");
         }
         // Use the "clientId" if there was no label specified.
         if (o == null) {
