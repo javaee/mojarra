@@ -16,7 +16,7 @@
              <td>
 
 	       <h:command_hyperlink id="commandHyperlink1" action="success"
-                  label="Submit Form">
+                  value="Submit Form">
                  <f:action_listener type="standard.DefaultListener"/>
                </h:command_hyperlink>
 

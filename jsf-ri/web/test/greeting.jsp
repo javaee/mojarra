@@ -47,7 +47,7 @@
     <h:form id="helloForm" formName="helloForm" >
   	<h:input_text id="userNo"  value="NUMBER" /> <BR>
 
-	 <h:command_button id="submit" label="Submit" />
+	 <h:command_button id="submit" value="Submit" />
     </h:form>
     </f:view>
 </HTML>  

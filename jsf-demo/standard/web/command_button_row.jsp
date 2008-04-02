@@ -15,7 +15,7 @@
              <td>
 
                <h:command_button id="commandButton1" action="success"
-                   label="command_button with hard coded label">
+                   value="command_button with hard coded label">
                  <f:action_listener type="standard.DefaultListener"/>
                </h:command_button>
 
@@ -55,7 +55,7 @@
              <td>
                   <h:command_button id="commandButton2" 
                       tabindex="50" accesskey="B"
-                      label="click to submit form"
+                      value="click to submit form"
                       action="success"
                       imageKey="imageurl" bundle="standardBundle">
                  <f:action_listener type="standard.DefaultListener"/>
@@ -75,7 +75,7 @@
              </td>
 
              <td>
-                 <h:command_button id="resetButton"  label="Click to reset form"                    action="success"
+                 <h:command_button id="resetButton"  value="Click to reset form"                    action="success"
                      type="reset" key="resetButton" bundle="standardBundle">
                  <f:action_listener type="standard.DefaultListener"/>
                </h:command_button>
@@ -97,7 +97,7 @@
                  <h:command_button id="pushButton"
                      title="button is disabled" type="button" 
                      disabled = "true" action="success"
-                     label="This is a disabled push button">
+                     value="This is a disabled push button">
                  <f:action_listener type="standard.DefaultListener"/>
                </h:command_button>
 

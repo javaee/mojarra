@@ -97,7 +97,7 @@ Powered by Faces components:
       <h:output_text value="Hi folks!  My name is 'Duke'.  Here's a sample of some of the components you can build:"/>
     </h:panel_group>
     <h:panel_group>
-      <h:command_button label="button"/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+      <h:command_button value="button"/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
       <h:selectboolean_checkbox checked="true" alt="checkbox"/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
       <h:selectone_radio layout="PAGE_DIRECTION" border="1" value="nextMonth">
         <h:selectitem itemValue="nextDay" itemLabel="Next Day"/>

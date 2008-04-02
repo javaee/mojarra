@@ -50,7 +50,7 @@
   	<h:input_text id="userNo" valueRef="UserNumberBean.userNumber">                
 	        <f:validate_longrange minimum="0" maximum="10" />
          </h:input_text> 
-	 <h:command_button id="submit" action="success" label="Submit" />
+	 <h:command_button id="submit" action="success" value="Submit" />
          <p>
 	 <h:output_errors id="errors1" for="userNo"/>
     </h:form>

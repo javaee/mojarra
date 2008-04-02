@@ -23,7 +23,7 @@ This page should Fail.
 <f:view>
 
   <p>This command button has an invalid componentRef expression</p>
-  <h:command_button label="hello" componentRef=".ford"/>
+  <h:command_button value="hello" componentRef=".ford"/>
 
 </f:view>
 

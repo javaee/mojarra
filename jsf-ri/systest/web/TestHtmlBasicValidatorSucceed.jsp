@@ -18,7 +18,7 @@ This page should Succeed.
 
 <f:view>
 
-  <h:command_button label="hello"/>
+  <h:command_button value="hello"/>
 
   <h:command_button key="hello"/>
 

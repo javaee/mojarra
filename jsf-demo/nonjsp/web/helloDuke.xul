@@ -6,7 +6,7 @@
 
 <image id="duke" URL="/images/wave.med.gif" />
 
-<button id="hello" action="success" label="Submit"/>
+<button id="hello" action="success" value="Submit"/>
 
 </window>
 

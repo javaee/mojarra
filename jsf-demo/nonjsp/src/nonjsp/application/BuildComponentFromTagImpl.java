@@ -1,5 +1,5 @@
 /*
- * $Id: BuildComponentFromTagImpl.java,v 1.1 2003/09/08 19:31:19 horwat Exp $
+ * $Id: BuildComponentFromTagImpl.java,v 1.2 2003/09/09 01:03:53 horwat Exp $
  */
 
 /*
@@ -74,7 +74,7 @@ import org.apache.commons.logging.LogFactory;
  * Copy of com.sun.faces.tree.BuildComponentFromTagImpl in order to remove
  * demo dependancy on RI.
  *
- * @version $Id: BuildComponentFromTagImpl.java,v 1.1 2003/09/08 19:31:19 horwat Exp $
+ * @version $Id: BuildComponentFromTagImpl.java,v 1.2 2003/09/09 01:03:53 horwat Exp $
  * 
  */
 
@@ -200,7 +200,7 @@ public class BuildComponentFromTagImpl extends Object
             attrName.equals("format") ||
             attrName.equals("rangeMaximum") ||
             attrName.equals("lengthMaximum") ||
-            attrName.equals("label")) {
+            attrName.equals("value")) {
 	    result = true;
         }
         return result;
@@ -247,7 +247,7 @@ public class BuildComponentFromTagImpl extends Object
             } catch (SecurityException e) {
                 log.trace("handleSpecialAttr: " + e);
             }
-        } else if ((child instanceof UICommand) && attrName.equals("label")) {
+        } else if ((child instanceof UICommand) && attrName.equals("value")) {
             ((UICommand)child).setValue(attrValue);
             return;
         }

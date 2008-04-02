@@ -824,10 +824,10 @@
     <message>
       <message-id>com.sun.faces.VALIDATION_COMMAND_ERROR</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
-      <summary xml:lang="en">Validation error. ''{0}'' must have either key, label, image, imageKey, or valueRef attributes.</summary>
-      <summary xml:lang="de">Validation error. ''{0}'' must have either key, label, image, imageKey, or valueRef attributes.</summary>
-      <summary xml:lang="es">Validation error. ''{0}'' must have either key, label, image, imageKey, or valueRef attributes.</summary>
-      <summary xml:lang="fr">Validation error. ''{0}'' must have either key, label, image, imageKey, or valueRef attributes.</summary>
+      <summary xml:lang="en">Validation error. ''{0}'' must have either key, value, image, imageKey, or valueRef attributes.</summary>
+      <summary xml:lang="de">Validation error. ''{0}'' must have either key, value, image, imageKey, or valueRef attributes.</summary>
+      <summary xml:lang="es">Validation error. ''{0}'' must have either key, value, image, imageKey, or valueRef attributes.</summary>
+      <summary xml:lang="fr">Validation error. ''{0}'' must have either key, value, image, imageKey, or valueRef attributes.</summary>
     </message>
 
     <message>

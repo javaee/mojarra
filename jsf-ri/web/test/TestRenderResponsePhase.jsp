@@ -63,11 +63,11 @@
 
                     <h:command_button id="submit1" type="SUBMIT"
                         styleClass="commandClass" 
-                        label="Login" >
+                        value="Login" >
                     </h:command_button>
 
                     <h:command_button id="reset1" type="RESET" 
-                        label="Reset">
+                        value="Reset">
                     </h:command_button>
 
                 </h:panel_grid>
@@ -128,7 +128,7 @@
 
 	      <h:command_hyperlink id="link" 
                            styleClass="hyperlinkClass"
-				       label="link text"/>
+				       value="link text"/>
 
 	</TD>
 
@@ -153,7 +153,7 @@
         <TD>
             <h:command_hyperlink id="commandLink" 
               styleClass="hyperlinkClass"
-              label="link text"/>
+              value="link text"/>
        </TD>
       </TR>
 
@@ -161,7 +161,7 @@
         <TD>
             <h:command_hyperlink id="commandParamLink" 
               styleClass="hyperlinkClass"
-              label="link text">
+              value="link text">
               <f:parameter id="hlParam1" name="name" value="horwat"/>
               <f:parameter id="hlParam2" name="value" value="password"/>
             </h:command_hyperlink>

@@ -19,7 +19,7 @@ This page should Fail.
 <f:view>
 
   <p>This command button has an invalid valueRef expression</p>
-  <h:command_button label="hello" valueRef="-3"/>
+  <h:command_button value="hello" valueRef="-3"/>
 
 </f:view>
 

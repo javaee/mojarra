@@ -48,7 +48,7 @@
         <h:graphic_image id="waveImg" url="/wave.med.gif" />
   	<h:input_text id="username"
 			valueRef="UserNameBean.userName"/>
-  	<h:command_button id="submit" action="success" label="Submit" 
+  	<h:command_button id="submit" action="success" value="Submit" 
 		          type="submit" />
     </h:form>
     </f:view>

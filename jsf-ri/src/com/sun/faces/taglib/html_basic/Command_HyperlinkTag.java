@@ -1,5 +1,5 @@
 /*
- * $Id: Command_HyperlinkTag.java,v 1.35 2003/09/05 18:57:00 eburns Exp $
+ * $Id: Command_HyperlinkTag.java,v 1.36 2003/09/09 01:01:07 horwat Exp $
  */
 
 /*
@@ -97,8 +97,8 @@ public class Command_HyperlinkTag extends FacesTag
         if (action != null ) {
 	    link.setAction(action);
 	}
-        if (null != label) {
-            link.setValue(label);
+        if (null != value) {
+            link.setValue(value);
         }
         if (null != image) {
             link.setAttribute("image", image);

@@ -32,7 +32,7 @@
 
 	      <h:command_hyperlink id="link" href="hello.html"
                            styleClass="hyperlinkClass"
-				       label="link text"/>
+				       value="link text"/>
 
 	</TD>
 

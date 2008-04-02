@@ -45,7 +45,7 @@
     <h:graphic_image id="waveImg" url="/wave.med.gif" />
     <h2>Hi, <h:output_text id="userLabel"
 			   valueRef="UserNameBean.userName" /> </h2>
-	 <h:command_button id="back" label="Back" action="success" 
+	 <h:command_button id="back" value="Back" action="success" 
                            />
          <p>
     </h:form>

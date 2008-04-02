@@ -3,7 +3,7 @@
    SUN PROPRIETARY/CONFIDENTIAL.  Use is subject license terms.
 --%>
 
-<%-- $Id: command_hyperlink_test.jsp,v 1.2 2003/08/25 16:33:09 jvisvanathan Exp $ --%>
+<%-- $Id: command_hyperlink_test.jsp,v 1.3 2003/09/09 01:01:50 horwat Exp $ --%>
 
 <html>
 <head>
@@ -15,12 +15,12 @@
 <body>
     <fmt:setBundle basename="com.sun.faces.systest.resources.Resources" scope="request" var="messageResources"/>
     <f:view>
-        <h:command_hyperlink id="hyperlink01" label="My Link"/>
+        <h:command_hyperlink id="hyperlink01" value="My Link"/>
         <h:command_hyperlink id="hyperlink02" valueRef="test1.stringProperty"/>
         <h:command_hyperlink id="hyperlink03" key="hyperlink_key" bundle="messageResources"/>
-        <h:command_hyperlink id="hyperlink04" image="duke.gif" label="FAIL"/>
+        <h:command_hyperlink id="hyperlink04" image="duke.gif" value="FAIL"/>
         <h:command_hyperlink id="hyperlink05" imageKey="image_key" bundle="messageResources"/>
-        <h:command_hyperlink id="hyperlink06" label="Paramter Link">
+        <h:command_hyperlink id="hyperlink06" value="Paramter Link">
             <f:parameter name="param1" value="value1"/>
         </h:command_hyperlink>
     </f:view>

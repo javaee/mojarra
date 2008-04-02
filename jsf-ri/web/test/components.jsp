@@ -42,7 +42,7 @@
 
 	<TD>
 
-	      <h:command_button id="login" label="Login" 
+	      <h:command_button id="login" value="Login" 
 				    commandName="login"/>
 
 	</TD>
@@ -66,7 +66,7 @@
 	<TD>
 
 	      <h:command_hyperlink id="link" href="hello.html"
-				       label="link text"/>
+				       value="link text"/>
 
 	</TD>
 

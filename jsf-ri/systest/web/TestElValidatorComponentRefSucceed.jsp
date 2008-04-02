@@ -22,7 +22,7 @@ This page should Succeed.
 
 <f:view>
 
-  <h:command_button label="hello" componentRef="requestScope.ford" />
+  <h:command_button value="hello" componentRef="requestScope.ford" />
 
 </f:view>
 

@@ -29,10 +29,10 @@
 
                     <h:input_secret id="password1" />
 
-                    <h:command_button id="submit1" type="SUBMIT" label="Login">
+                    <h:command_button id="submit1" type="SUBMIT" value="Login">
                     </h:command_button>
 
-                    <h:command_button id="reset1" type="RESET" label="Reset">
+                    <h:command_button id="reset1" type="RESET" value="Reset">
                     </h:command_button>
 
                 </h:panel_grid>
@@ -78,10 +78,10 @@
             <h:input_secret id="password2"
                 valueRef="LoginBean.password"/>
 
-            <h:command_button id="submit2" type="SUBMIT" label="Login">
+            <h:command_button id="submit2" type="SUBMIT" value="Login">
             </h:command_button>
 
-            <h:command_button id="reset2" type="RESET" label="Reset">
+            <h:command_button id="reset2" type="RESET" value="Reset">
             </h:command_button>
 
             <!-- Panel footer element -->
