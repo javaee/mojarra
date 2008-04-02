@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.5 2003/04/01 17:39:08 rkitain Exp $
+ * $Id: ExternalContextImpl.java,v 1.6 2003/05/14 18:36:18 craigmcc Exp $
  */
 
 /*
@@ -28,9 +28,11 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
+import javax.servlet.ServletRequestWrapper;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -76,7 +78,18 @@ public class ExternalContextImpl extends ExternalContext {
         }
         
         this.servletContext = sc;
-        this.request = request;
+        // PENDING(craigmcc) - Work around a Tomcat 4.1 and 5.0 bug where
+        // the request wrapper used on a RequestDispatcher.forward() call
+        // delegates removeAttribute() and setAttribute() to the wrapped
+        // request, but not getAttribute().  This causes attributes set via
+        // the RequestMap returned in this class to not be visible via calls
+        // to getAttribute() on the underlying request.
+        if (request instanceof HttpServletRequest) {
+            this.request = new MyHttpServletRequestWrapper
+                ((HttpServletRequest) request);
+        } else {
+            this.request = new MyServletRequestWrapper(request);
+        }                
         this.response = response;
         if (this.request instanceof HttpServletRequest) {
             // If saveStateInPage is false, we need to create the
@@ -94,7 +107,7 @@ public class ExternalContextImpl extends ExternalContext {
 
         applicationMap = new ApplicationMap(servletContext);
         sessionMap = new SessionMap(session);
-        requestMap = new RequestMap(request);
+        requestMap = new RequestMap(this.request);
     }
 
 
@@ -938,5 +951,53 @@ class InitParameterMap implements Map {
         throw new UnsupportedOperationException();
     }
 
+
+}
+
+
+class MyServletRequestWrapper extends ServletRequestWrapper {
+
+    public MyServletRequestWrapper(ServletRequest request) {
+        super(request);
+    }
+
+    public Object getAttribute(String key) {
+        Object result = super.getAttribute(key);
+        if (result == null) {
+            ServletRequest wrapped = getRequest();
+            if ((wrapped != null) &&
+                (wrapped instanceof ServletRequestWrapper)) {
+                wrapped = ((ServletRequestWrapper) wrapped).getRequest();
+            }
+            if (wrapped != null) {
+                result = wrapped.getAttribute(key);
+            }
+        }
+        return (result);
+    }
+
+}
+
+
+class MyHttpServletRequestWrapper extends HttpServletRequestWrapper {
+
+    public MyHttpServletRequestWrapper(HttpServletRequest request) {
+        super(request);
+    }
+
+    public Object getAttribute(String key) {
+        Object result = super.getAttribute(key);
+        if (result == null) {
+            ServletRequest wrapped = getRequest();
+            if ((wrapped != null) &&
+                (wrapped instanceof ServletRequestWrapper)) {
+                wrapped = ((ServletRequestWrapper) wrapped).getRequest();
+            }
+            if (wrapped != null) {
+                result = wrapped.getAttribute(key);
+            }
+        }
+        return (result);
+    }
 
 }
