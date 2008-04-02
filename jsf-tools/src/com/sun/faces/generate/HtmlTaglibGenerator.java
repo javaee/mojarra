@@ -493,8 +493,8 @@ public class HtmlTaglibGenerator extends AbstractGenerator {
         writer.write("\n\n");
 
         // Generate the imports
-	writer.write("import com.sun.faces.taglib.BaseComponentBodyTag;\n");
         writer.write("import com.sun.faces.util.Util;\n");
+        writer.write("import java.io.IOException;\n");
         writer.write("import javax.faces.component.UIComponent;\n");
 	writer.write("import javax.faces.component.UI" +
 		     strip(component.getComponentType())+";\n");
@@ -505,6 +505,7 @@ public class HtmlTaglibGenerator extends AbstractGenerator {
         writer.write("import javax.faces.el.ValueBinding;\n");
         writer.write("import javax.faces.el.MethodBinding;\n");
         writer.write("import javax.faces.webapp.UIComponentTag;\n");
+        writer.write("import javax.faces.webapp.UIComponentBodyTag;\n");
         writer.write("import javax.servlet.jsp.JspException;\n");
         writer.write("import org.apache.commons.logging.Log;\n");
         writer.write("import org.apache.commons.logging.LogFactory;\n");
@@ -530,7 +531,7 @@ public class HtmlTaglibGenerator extends AbstractGenerator {
         writer.write(tagClassName);
         writer.write(" extends ");
 	if (isBodyTag()) {
-	    writer.write("BaseComponentBodyTag");
+	    writer.write("UIComponentBodyTag");
 	} else {
 	    writer.write("UIComponentTag");
 	}
@@ -918,6 +919,49 @@ public class HtmlTaglibGenerator extends AbstractGenerator {
     }
 
     /**
+     * Generate Body Tag Handler support methods
+     */
+    private static void tagHandlerBodySupportMethods() throws Exception {
+        writer.write("    //\n    // Methods From TagSupport\n    //\n\n");
+        writer.write("    public int doStartTag() throws JspException {\n");
+        writer.write("        int rc = 0;\n");
+        writer.write("        try {\n");
+        writer.write("            rc = super.doStartTag();\n");
+        writer.write("        } catch (JspException e) {\n");
+        writer.write("            if (log.isDebugEnabled()) {\n");
+        writer.write("                log.debug(getDebugString(), e);\n");
+        writer.write("            }\n");
+        writer.write("            throw e;\n");
+        writer.write("        } catch (Throwable t) {\n");
+        writer.write("            if (log.isDebugEnabled()) {\n");
+        writer.write("                log.debug(getDebugString(), t);\n");
+        writer.write("            }\n");
+        writer.write("            throw new JspException(t);\n");
+        writer.write("        }\n");
+        writer.write("        return rc;\n");
+        writer.write("    }\n\n");
+        writer.write("    public int doEndTag() throws JspException {\n");
+        writer.write("        String content = null;\n");
+        writer.write("        try {\n");
+        writer.write("            if (null == (bodyContent = getBodyContent())) {\n");
+        writer.write("                Object params [] = { this.getClass().getName() };\n");
+        writer.write("                throw new JspException(Util.getExceptionMessage(\n");
+        writer.write("                Util.NULL_BODY_CONTENT_ERROR_MESSAGE_ID, params));\n");
+        writer.write("            }\n");
+        writer.write("            content = bodyContent.getString();\n");
+        writer.write("            getPreviousOut().write(content);\n");
+        writer.write("        } catch (IOException iox) {\n");
+        writer.write("            Object [] params = { \"session\", iox.getMessage() };\n");
+        writer.write("            throw new JspException(Util.getExceptionMessage(\n");
+        writer.write("                Util.SAVING_STATE_ERROR_MESSAGE_ID, params));\n");
+        writer.write("        }\n"); 
+        writer.write("        int rc = super.doEndTag();\n"); 
+        writer.write("        return rc;\n"); 
+        writer.write("    }\n\n"); 
+    }
+ 
+
+    /**
      * Generate remaining Tag Handler methods 
      */
     private static void tagHandlerSuffix() throws Exception {
@@ -1076,7 +1120,11 @@ public class HtmlTaglibGenerator extends AbstractGenerator {
 		tagHandlerIvars();
 		tagHandlerSetterMethods();
 		tagHandlerGeneralMethods();
-		tagHandlerSupportMethods();
+                if (isBodyTag()) {
+                    tagHandlerBodySupportMethods();
+                } else {
+		    tagHandlerSupportMethods();
+                }
 		tagHandlerSuffix();
 	    
                 // Flush and close the Writer 
