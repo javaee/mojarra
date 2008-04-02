@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.15 2003/10/17 20:47:21 rlubke Exp $
+ * $Id: Application.java,v 1.16 2003/10/25 06:32:10 craigmcc Exp $
  */
 
 /*
@@ -19,6 +19,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UICommand;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.el.MethodBinding;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.el.ValueBinding;
@@ -108,6 +109,22 @@ public abstract class Application {
 
 
     /**
+     * <p>Return the default <code>Locale</code> that was given in the
+     * application configuration resources.</p>
+     *
+     */ 
+    public abstract Locale getDefaultLocale();
+
+
+    /**
+     *
+     * <p>Make it so the argument <code>newLocale</code> is returned the
+     * next time {@link #getDefaultLocale} is called.</p>     
+     */
+    public abstract void setDefaultLocale(Locale newLocale);
+
+
+    /**
      * <p>Return the {@link NavigationHandler} instance that will be passed
      * the outcome returned by any invoked {@link Action} for this
      * web application.  The default implementation must provide the behavior
@@ -151,32 +168,6 @@ public abstract class Application {
 
 
     /**
-     * <p>Return a {@link ValueBinding} for the specified action or value
-     * reference expression, which may be used to manipulate the corresponding
-     * property value later.  The returned {@link ValueBinding} instance must
-     * utilize the {@link PropertyResolver} and {@link VariableResolver}
-     * instances registered with this {@link Application} instance at the
-     * time that the {@link ValueBinding} instance was initially created.</p>
-     *
-     * <p>For maximum performance, implementations of {@link Application}
-     * may, but are not required to, cache {@link ValueBinding} instances
-     * in order to avoid repeated parsing of the reference expression.
-     * However, under no circumstances may a particular {@link ValueBinding}
-     * instance be shared across multiple web applications.</p>
-     *
-     * @param ref Reference expression for which to return a
-     *  {@link ValueBinding} instance
-     *
-     * @exception NullPointerException if <code>ref</code>
-     *  is <code>null</code>
-     * @exception ReferenceSyntaxException if the specified <code>ref</code>
-     *  has invalid syntax
-     */
-    public abstract ValueBinding getValueBinding(String ref)
-        throws ReferenceSyntaxException;
-
-
-    /**
      * <p>Return the {@link VariableResolver} instance that will be utilized
      * to resolve action and value references.  The default implementation
      * must provide the behavior described in the
@@ -195,6 +186,7 @@ public abstract class Application {
      *  is <code>null</code>
      */
     public abstract void setVariableResolver(VariableResolver resolver);
+
 
     /**
      * <p>Return the {@link ViewHandler} instance that will be utilized
@@ -218,9 +210,6 @@ public abstract class Application {
      *  is <code>null</code>
      */
     public abstract void setViewHandler(ViewHandler handler);
-
-
-
 
 
     // ------------------------------------------------------- Object Factories
@@ -382,41 +371,6 @@ public abstract class Application {
      */
     public abstract Iterator getConverterTypes();
 
-    /**
-     * <p>Return an <code>Iterator</code> over the supported
-     * <code>Locale</code> instances specified in the application
-     * configuration resources.</p>
-     *
-     */ 
-
-    public abstract Iterator getSupportedLocales();
-
-    /**
-     * <p>Make it so the <code>Locale</code> instances in the argument
-     * <code>newLocales</code> are returned the next time {@link
-     * #getSupportedLocales} is called.</p>
-     *
-     * @exception NullPointerException if the argument
-     * <code>newLocales</code> is <code>null</code>.
-     *
-     */ 
-    public abstract void setSupportedLocales(Collection newLocales);
-
-    /**
-     * <p>Return the default <code>Locale</code> that was given in the
-     * application configuration resources.</p>
-     *
-     */ 
-
-    public abstract Locale getDefaultLocale();
-
-    /**
-     *
-     * <p>Make it so the argument <code>newLocale</code> is returned the
-     * next time {@link #getDefaultLocale} is called.</p>     
-     */
-
-    public abstract void setDefaultLocale(Locale newLocale);
 
     /**
      * <p>Register a new mapping of message resources id to the name of the
@@ -461,6 +415,55 @@ public abstract class Application {
 
 
     /**
+     * <p>Return a {@link MethodBinding} for the specified method
+     * reference expression, which may be used to call the corresponding
+     * method later.  The returned {@link MethodBinding} instance must
+     * utilize the {@link PropertyResolver} and {@link VariableResolver}
+     * instances registered with this {@link Application} instance at the
+     * time that the {@link MethodBinding} instance was initially created.</p>
+     *
+     * <p>For maximum performance, implementations of {@link Application}
+     * may, but are not required to, cache {@link MethodBinding} instances
+     * in order to avoid repeated parsing of the reference expression.
+     * However, under no circumstances may a particular {@link MethodBinding}
+     * instance be shared across multiple web applications.</p>
+     *
+     * @param ref Reference expression for which to return a
+     *  {@link MethodBinding} instance
+     * @param params Parameter signatures that must match exactly on the
+     *  method to be invoked
+     *
+     * @exception NullPointerException if <code>ref</code>
+     *  is <code>null</code>
+     * @exception ReferenceSyntaxException if the specified <code>ref</code>
+     *  has invalid syntax
+     */
+    public abstract MethodBinding getMethodBinding(String ref, Class params[])
+        throws ReferenceSyntaxException;
+
+
+    /**
+     * <p>Return an <code>Iterator</code> over the supported
+     * <code>Locale</code> instances specified in the application
+     * configuration resources.</p>
+     *
+     */ 
+    public abstract Iterator getSupportedLocales();
+
+
+    /**
+     * <p>Make it so the <code>Locale</code> instances in the argument
+     * <code>newLocales</code> are returned the next time {@link
+     * #getSupportedLocales} is called.</p>
+     *
+     * @exception NullPointerException if the argument
+     * <code>newLocales</code> is <code>null</code>.
+     *
+     */ 
+    public abstract void setSupportedLocales(Collection newLocales);
+
+
+    /**
      * <p>Register a new mapping of validator id to the name of the
      * corresponding {@link Validator} class.  This allows subsequent calls
      * to <code>createValidator()</code> to serve as a factory for
@@ -475,6 +478,7 @@ public abstract class Application {
      */
     public abstract void addValidator(String validatorId, 
 				      String validatorClass);
+
 
     /**
      * <p>Instantiate and return a new {@link Validator} instance of the
@@ -498,6 +502,32 @@ public abstract class Application {
      * validator ids for this <code>Application</code>.</p>
      */
     public abstract Iterator getValidatorIds();
+
+
+    /**
+     * <p>Return a {@link ValueBinding} for the specified action or value
+     * reference expression, which may be used to manipulate the corresponding
+     * property value later.  The returned {@link ValueBinding} instance must
+     * utilize the {@link PropertyResolver} and {@link VariableResolver}
+     * instances registered with this {@link Application} instance at the
+     * time that the {@link ValueBinding} instance was initially created.</p>
+     *
+     * <p>For maximum performance, implementations of {@link Application}
+     * may, but are not required to, cache {@link ValueBinding} instances
+     * in order to avoid repeated parsing of the reference expression.
+     * However, under no circumstances may a particular {@link ValueBinding}
+     * instance be shared across multiple web applications.</p>
+     *
+     * @param ref Reference expression for which to return a
+     *  {@link ValueBinding} instance
+     *
+     * @exception NullPointerException if <code>ref</code>
+     *  is <code>null</code>
+     * @exception ReferenceSyntaxException if the specified <code>ref</code>
+     *  has invalid syntax
+     */
+    public abstract ValueBinding getValueBinding(String ref)
+        throws ReferenceSyntaxException;
 
 
     // ---------------------------------------------------------- Static Methods

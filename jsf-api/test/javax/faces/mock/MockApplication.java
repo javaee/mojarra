@@ -1,5 +1,5 @@
 /*
- * $Id: MockApplication.java,v 1.13 2003/10/21 23:58:22 craigmcc Exp $
+ * $Id: MockApplication.java,v 1.14 2003/10/25 06:32:13 craigmcc Exp $
  */
 
 /*
@@ -27,6 +27,7 @@ import javax.faces.component.UISelectOne;
 import javax.faces.convert.Converter;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.el.MethodBinding;
 import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.ValueBinding;
@@ -109,6 +110,15 @@ public class MockApplication extends Application {
     }
     public void setPropertyResolver(PropertyResolver propertyResolver) {
         this.propertyResolver = propertyResolver;
+    }
+
+
+    public MethodBinding getMethodBinding(String ref, Class params[]) {
+        if (ref == null) {
+            throw new NullPointerException();
+        } else {
+            return (new MockMethodBinding(this, ref, params));
+        }
     }
 
 
