@@ -18,13 +18,13 @@ import java.util.Iterator;
  * return true or false depending on the current page in the
  * application.</p>
  */
-
 public class WizardButtons {
 
     /** 
+     * <p>Check to see whether the current page should have a back button</p>
+     *
      * @return true if the current page has a "back" page.
      */
-
     public boolean isHasBack() {
 	FacesContext 
 	    realContext = FacesContext.getCurrentInstance(),
@@ -37,9 +37,10 @@ public class WizardButtons {
     }
 
     /** 
+     * <p>Check to see whether the current page should have a next button</p>
+     *
      * @return true if the current page has a "next" page.
      */
-
     public boolean isHasNext() {
 	FacesContext 
 	    realContext = FacesContext.getCurrentInstance(),
@@ -52,10 +53,11 @@ public class WizardButtons {
     }
 
     /**
+     * <p>Check to see whether the current page should have a finish button</p>
+     *
      * @return true if the current page should have a "finish" button
      * instead of a "next" button
      */
-
     public boolean isFinishPage() {
 	FacesContext 
 	    realContext = FacesContext.getCurrentInstance(),
@@ -71,6 +73,11 @@ public class WizardButtons {
 				  nextCopyContext.getViewRoot());
     }
 
+    /**
+     * <p>Get the label for the "next" button.</p>
+     *
+     * @return String next button label
+     */
     public String getNextLabel() {
 	String result = "Next >";
 	if (isFinishPage()) {
@@ -79,6 +86,13 @@ public class WizardButtons {
 	return result;
     }
 
+    /**
+     * <p>Take two View roots and compare them.</p>
+     *
+     * @param UIViewRoot the first ViewRoot
+     * @param UIViewRoot the second ViewRoot
+     * @return boolean the result of the comparison.
+     */
     public boolean compareUIViewRoots(UIViewRoot one, UIViewRoot two) {
 	if (null == one && null == two) {
 	    return true;
@@ -98,13 +112,14 @@ public class WizardButtons {
     }
 
     /**
+     * <p>createShadowFacesContext creates a shallow copy of the 
+     * argument FacesContext, but with a deep copy of the viewRoot 
+     * property.  This allows us to call the NavigationHandler.handleNavigaton 
+     * method without modifying the real FacesContext.</p>
      *
-     * @return a shallow copy of the argument FacesContext, but with a
-     * deep copy of the viewRoot property.  This allows us to call the
-     * NavigationHandler.handleNavigaton method without modifying the
-     * real FacesContext.
+     * @param FacesContext the FacesContext to be copied
+     * @return FacesContext shallow copy of FacesContext
      */
-
     public FacesContext createShadowFacesContext(FacesContext context) {
 	final FacesContext oldContext = context;
 

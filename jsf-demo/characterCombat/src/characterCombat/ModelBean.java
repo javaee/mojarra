@@ -246,7 +246,6 @@ public class ModelBean {
      *
      * @return List of all SelectItem characters
      */
-
     public List getAllCharactersToSelect() {
         List selectItemList = new ArrayList();
         Iterator iter = dataList.iterator();
@@ -300,6 +299,7 @@ public class ModelBean {
      * <p>Add the new name to character list if name is not empty or does
      * not already exist in the list<p>
      *
+     * @param event the ActionEvent that triggered the action
      */
     public void addCustomName(ActionEvent event) throws AbortProcessingException {
         if ((customName != null) && (!customName.trim().equals(""))) {
