@@ -64,4 +64,16 @@
         <property-class>java.lang.String</property-class>
     </property>
 
+    <property>
+        <description>
+          Flag indicating that this column is a row header column and
+          therefore cells in this column should be rendered with "th"
+          instead of "td" and must have the 'scope="row"' attribute.
+        </description>
+        <display-name>Column is Row Header</display-name>
+        <icon></icon>
+        <property-name>rowHeader</property-name>
+        <property-class>boolean</property-class>
+    </property>
+
 </root>

@@ -244,4 +244,15 @@
             <pass-through>true</pass-through>
         </property-extension>
     </property>
+    <property>
+        <description>
+          Comma separated list of row indices for which a new
+          "tbody" element should be started (and any
+          previously opened one should be ended).
+        </description>
+        <display-name>Body Rows</display-name>
+        <icon></icon>
+        <property-name>bodyrows</property-name>
+        <property-class>java.lang.String</property-class>
+    </property>
 </root>

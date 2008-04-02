@@ -1127,18 +1127,34 @@
 
             <description>
                 <![CDATA[
+
       <p>Renders an HTML "table" element compliant with the HTML 401
-      specification.  Render the "caption" facet, if present, inside a "caption" 
-      element immediately below the "table" element.  If the "captionClass" 
-      attribute is specified, render its value as the value of the "class" 
-      attribute on the "caption" element.  If the "captionStyle" attribute
-      is specified, render its value as the value of the "style" attribute
-      on the "caption" element.</p> 
-      <p>Please consult the javadoc for <code>UIData</code>
-      to supplement this specification.  If the "styleClass" attribute
-      is specified, render its value as the value of the "class"
-      attribute on the "table" element.  Any pass-through attributes are
-      also rendered on the "table" element.  </p>
+      specification.  Render the "caption" facet, if present, inside a
+      "caption" element immediately below the "table" element.  If the
+      "captionClass" attribute is specified, render its value as the
+      value of the "class" attribute on the "caption" element.  If the
+      "captionStyle" attribute is specified, render its value as the
+      value of the "style" attribute on the "caption" element.</p>
+      <p>Please consult the javadoc for <code>UIData</code> to
+      supplement this specification.  If the "styleClass" attribute is
+      specified, render its value as the value of the "class" attribute
+      on the "table" element.  Any pass-through attributes are also
+      rendered on the "table" element.  </p>
+
+     <p>Column Groups</p>
+
+     <ul>
+
+       <p>If the <code>UIData</code> component has a "colgroups" facet,
+       render its contents.  Consistent with the rules of facets in
+       general, this facet must have only one child.  In general, this
+       will be a <code>panel group</code> component that will contain
+       <code>colgroup</code> and <code>col</code> elements per the HTML
+       Table specification.  Use of column grouping can improve
+       accessibility.  This facet must be rendered before the table
+       header and footer.</p>
+
+     </ul>
 
      <p>Rendering the header</p>
 
@@ -1160,14 +1176,15 @@
       "header" facet render a "tr" element.  For each
       <code>UIColumn</code> that actually has a "header" facet, render
       it inside of a "th" element.  Columns that don't have a "header"
-      facet cause an empty "th" element to be rendered.  Output the 
+      facet cause an empty "th" element to be rendered.  Output the
       value of the "headerClass" attribute of the <code>UIColumn</code>
       component, if present, as the value of the "class" attribute on
-      the "th".  If the "headerClass" attribute of the <code>UIColumn</code>
-      component is not present, output the value of the "headerClass" 
-      attribute of the <code>UIData</code> component, if present, as 
-      the value of the "class" attribute on the "th".  Output "col" as 
-      the value of the "scope" attribute on the "th" element.
+      the "th".  If the "headerClass" attribute of the
+      <code>UIColumn</code> component is not present, output the value
+      of the "headerClass" attribute of the <code>UIData</code>
+      component, if present, as the value of the "class" attribute on
+      the "th".  Output "col" as the value of the "scope" attribute on
+      the "th" element.
       </p>
 
       <p>Close out the "thead" element.</p>
@@ -1189,21 +1206,37 @@
 
       <ul>
 
-      <p>Render a "tbody" element.  Keep track of the result of the
-      "rows" property on the <code>UIData</code> component.  Keep track
-      of the number of rows we have rendered so far.  Iterate through
-      the rows.  Set the "rowIndex" property of the <code>UIData</code>
-      component to be correct as we iterate through the rows.  Stop
-      rendering children and close out the "tbody" element if the
-      "rowAvailable" property of the <code>UIData</code> returned false.
-      Output a "tr" element.  Output the value of the "rowClasses" per
-      the attribute description below.  For each <code>UIColumn</code>
-      child, output a "td" element, attaching the value of the
-      "columnClasses" attribute of the <code>UIData</code> component per
-      the attribute description below.  Recursively encode each child of
-      each <code>UIColumn</code> child.  Close out the "td" element.
-      When done with the row, close out the "tr" element.  When done
-      with all the rows, close out the "tbody" element.</p>
+      <p>Look at the value of the "bodyrows" attribute.  If present,
+      this must be a comma separated list of integers.  Each entry in
+      this list is the row index of the row before which a "tbody"
+      element should be rendered.</p>
+
+      <p>If there was no "bodyrows" attribute, or it was empty, render a
+      "tbody" element.  Keep track of the result of the "rows" property
+      on the <code>UIData</code> component.  Keep track of the number of
+      rows we have rendered so far.  Iterate through the rows.  Set the
+      "rowIndex" property of the <code>UIData</code> component to be
+      correct as we iterate through the rows.  Stop rendering children
+      and close out the "tbody" element if the "rowAvailable" property
+      of the <code>UIData</code> returned false.  If the current row
+      index is contained in the "bodyrows" attribute, check if a "tbody"
+      start element was rendered that needs to be closed, and if so,
+      close the "tbody" element.  Then render a "tbody" element start.
+      Otherwise, do not render a "tbody" element.</p>
+
+      <p>Output a "tr" element.  Output the value of the "rowClasses"
+      per the attribute description below.  For each
+      <code>UIColumn</code> child, if the column component has a
+      "rowHeader" attribute with a value of "true", output a "th"
+      element with a "scope" attribute with the value of "row".
+      Otherwise, if the column component has no "rowHeader" attribute,
+      or its value is false, output a "td" element.  In either case
+      attach the value of the "columnClasses" attribute of the
+      <code>UIData</code> component per the attribute description below.
+      Recursively encode each child of each <code>UIColumn</code> child.
+      Close out the "td" or "th" element.  When done with the row, close
+      out the "tr" element.  When done with all the rows, close out the
+      "tbody" element.</p>
 
       </ul>
 
@@ -1226,6 +1259,9 @@
             </facet>
             <facet>
                 <facet-name>footer</facet-name>
+            </facet>
+            <facet>
+                <facet-name>colgroups</facet-name>
             </facet>
 
             <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>

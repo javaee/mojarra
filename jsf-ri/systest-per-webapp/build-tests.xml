@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.30 2006/08/11 20:15:49 edburns Exp $
+ $Id: build-tests.xml,v 1.31 2006/09/15 21:48:14 edburns Exp $
 -->
 
 <!--
@@ -54,7 +54,8 @@
                    replace-lifecycle,
                    string-converter,
                    replace-variableresolver,
-                   converter-property-editor"/>
+                   converter-property-editor,
+                   wcag-datatable"/>
 
     <!-- 
        EXCLUDED APPLICATIONS:
@@ -83,6 +84,8 @@
               value="com/sun/faces/systest/ReplaceVariableResolverTestCase.class"/>
     <property name="converter-property-editor" 
               value="com/sun/faces/systest/ConverterPropertyEditorTestCase.class"/>
+    <property name="wcag-datatable" 
+              value="com/sun/faces/systest/WcagDataTableTestCase.class"/>
     
     <!--
         EXCLUDED APPLICATIONS:

@@ -63,7 +63,8 @@
                    replace-lifecycle,
                    string-converter,
                    replace-variableresolver,
-                   converter-property-editor"/>
+                   converter-property-editor,
+                   wcag-datatable"/>
 
     <!-- 
        EXCLUDED APPLICATIONS:
@@ -200,6 +201,16 @@
 
 
     <!-- ********** Test Execution Targets ************************************ -->
+
+    <target name="test.no.install" 
+            description="Execute all tests against installed /jsf-* applications">
+
+        <ant antfile="build-tests.xml" target="test">
+          <property name="applications" value="${applications}" />
+        </ant>
+
+    </target>    
+
 
 
     <target name="test" depends="install"
