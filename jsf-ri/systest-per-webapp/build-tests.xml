@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.19 2005/11/15 15:54:24 rlubke Exp $
+ $Id: build-tests.xml,v 1.20 2005/12/03 20:30:21 edburns Exp $
 -->
 
 <!--
@@ -127,7 +127,19 @@
       <param name="testcase" value="com/sun/faces/systest/NestedDatatablesTestCase.class"/>
 
     </antcall>
-    
+
+    <antcall target="test.webapp">
+      <param name="webapp.build.home" 
+             value="${basedir}/jar-ordering/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/jar-ordering/web" />
+      <param name="source.home" 
+             value="${basedir}/jar-ordering/src/java" />
+      <param name="context.path" value="/jsf-jar-ordering"/>
+      <param name="testcase" value="com/sun/faces/systest/JarOrderingTestCase.class"/>
+
+    </antcall>
+
     <antcall target="test.webapp">
       <param name="webapp.build.home" 
              value="${basedir}/replace-lifecycle/build" />
@@ -139,6 +151,7 @@
       <param name="testcase" value="com/sun/faces/systest/ReplaceLifecycleTestCase.class"/>
 
     </antcall>
+
      <!-- Comment out until connection reset can be consistently
           eliminated 
     <antcall target="test.webapp">

@@ -282,6 +282,10 @@
     </antcall>
 
     <antcall target="safe.remove.one">
+      <param name="context.path" value="/jar-ordering"/>
+    </antcall>
+
+    <antcall target="safe.remove.one">
       <param name="context.path" value="/jsf-core-tags"/>
     </antcall>
 
@@ -339,6 +343,17 @@
     
     <antcall target="install.one">
       <param name="webapp.build.home" 
+             value="${basedir}/jar-ordering/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/jar-ordering/web" />
+      <param name="source.home" 
+             value="${basedir}/jar-ordering/src/java" />
+      <param name="context.path" value="/jsf-jar-ordering"/>
+
+    </antcall>
+    
+    <antcall target="install.one">
+      <param name="webapp.build.home" 
              value="${basedir}/replace-lifecycle/build" />
       <param name="webapp.web.home" 
              value="${basedir}/replace-lifecycle/web" />
@@ -359,7 +374,7 @@
 
     </antcall>
 
-    <!--
+    <!-- PENDING: return to running
     <antcall target="install.one">
       <param name="webapp.build.home" 
              value="${basedir}/core-tags/build" />
@@ -466,6 +481,17 @@
 
     <antcall target="reload.one">
       <param name="webapp.build.home" 
+             value="${basedir}/jar-ordering/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/jar-ordering/web" />
+      <param name="source.home" 
+             value="${basedir}/jar-ordering/src/java" />
+      <param name="context.path" value="/jsf-jar-ordering"/>
+
+    </antcall>
+
+    <antcall target="reload.one">
+      <param name="webapp.build.home" 
              value="${basedir}/core-tags/build" />
       <param name="webapp.web.home" 
              value="${basedir}/core-tags/web" />
@@ -518,6 +544,9 @@
       <param name="context.path" value="/jsf-nested-datatables"/>
     </antcall>
     <antcall target="safe.remove.one">
+      <param name="context.path" value="/jsf-jar-ordering"/>
+    </antcall>
+    <antcall target="safe.remove.one">
       <param name="context.path" value="/jsf-core-tags"/>
     </antcall>
     <antcall target="safe.remove.one">
@@ -556,6 +585,7 @@
     <delete    dir="${basedir}/command-link-redirect/build"/>
     <delete    dir="${basedir}/command-link-back-button/build"/>
     <delete    dir="${basedir}/nested-datatables/build"/>
+    <delete    dir="${basedir}/jar-ordering/build"/>
     <delete    dir="${basedir}/core-tags/build"/>
     <delete    dir="${basedir}/replace-lifecycle/build"/>
     <delete    dir="${basedir}/view-expired/build"/>
@@ -590,6 +620,17 @@
   </target>
   
   <target name="install.appserver" depends="compile.base.sources"> 
+
+    <antcall target="install.one.appserver">
+      <param name="webapp.build.home" 
+             value="${basedir}/jar-ordering/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/jar-ordering/web" />
+      <param name="source.home" 
+             value="${basedir}/jar-ordering/src/java" />
+      <param name="context.path" value="/jsf-jar-ordering"/>
+
+    </antcall>
 
     <antcall target="install.one.appserver">
       <param name="webapp.build.home" 
@@ -656,8 +697,8 @@
       <param name="context.path" value="/jsf-view-expired"/>
 
     </antcall>
-    
-    <!--
+
+    <!-- PENDING return to running
     <antcall target="install.one.appserver">
       <param name="webapp.build.home" 
              value="${basedir}/core-tags/build" />

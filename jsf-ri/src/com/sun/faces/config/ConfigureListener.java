@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.55 2005/11/15 15:54:22 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.56 2005/12/03 20:30:21 edburns Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -39,7 +39,6 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -111,6 +110,8 @@ import org.xml.sax.helpers.DefaultHandler;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.lang.reflect.InvocationTargetException;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
@@ -420,14 +421,40 @@ public class ConfigureListener implements ServletRequestListener,
 
         // Step 3, parse any "/META-INF/faces-config.xml" resources
         Iterator<URL> resources;
+        SortedMap<String,URL> sortedJarMap = new TreeMap<String,URL>();
+        List<URL> unsortedResourceList = new ArrayList<URL>();
+        String jarName = null, jarUrl = null;
+        URL nextElement = null;
+        int sepIndex, resourceIndex = 0;
+        char sep = ' ';
         try {
-            List<URL> list = new LinkedList<URL>();
             Enumeration<URL> items = Util.getCurrentLoader(this).
                 getResources(META_INF_RESOURCES);
             while (items.hasMoreElements()) {
-                list.add(0, items.nextElement());
+                nextElement = items.nextElement();
+                jarUrl = nextElement.toString();
+                jarName = null;
+                // If this resource has a faces-config file inside of it
+                if (-1 != (resourceIndex = jarUrl.indexOf(META_INF_RESOURCES))) {
+                    // Search backwards for the previous occurrence of File.SEPARATOR
+                    sepIndex = resourceIndex - 2;
+                    while (0 < sepIndex) {
+                        sep = jarUrl.charAt(sepIndex);
+                        if ('/' == sep) {
+                            break;
+                        }
+                        sepIndex--;
+                    }
+                    if ('/' == sep) {
+                        jarName = jarUrl.substring(sepIndex + 1, resourceIndex);
+                    }
+                }
+                if (null != jarName) {
+                    sortedJarMap.put(jarName, nextElement);
+                } else {
+                    unsortedResourceList.add(0, nextElement);
+                }
             }
-            resources = list.iterator();
         } catch (IOException e) {
             String message = null;
             try {
@@ -443,6 +470,15 @@ public class ConfigureListener implements ServletRequestListener,
             }
             throw new FacesException(message, e);
         }
+        // Load the sorted resources first:
+	Iterator<Map.Entry<String,URL>> sortedResources = 
+	    sortedJarMap.entrySet().iterator();
+        while (sortedResources.hasNext()) {
+            url = sortedResources.next().getValue();
+            parse(digester, url, fcb);
+        }
+        // Then load the unsorted resources
+        resources = unsortedResourceList.iterator();
         while (resources.hasNext()) {
             url = resources.next();
             parse(digester, url, fcb);
