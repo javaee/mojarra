@@ -251,7 +251,7 @@
       <display-name></display-name>
       <icon></icon>
       <property-name>tabindex</property-name>
-      <property-class>java.lang.String</property-class>
+      <property-class>int</property-class>
       <tag-attribute>yes</tag-attribute>
     </property>
     <property>
@@ -670,7 +670,7 @@
       <display-name></display-name>
       <icon></icon>
       <property-name>readonly</property-name>
-      <property-class>java.lang.String</property-class>
+      <property-class>boolean</property-class>
       <tag-attribute>yes</tag-attribute>
     </property>
     <property>
@@ -691,7 +691,7 @@
       <display-name></display-name>
       <icon></icon>
       <property-name>redisplay</property-name>
-      <property-class>java.lang.String</property-class>
+      <property-class>boolean</property-class>
       <tag-attribute>yes</tag-attribute>
     </property>
     <property>
@@ -1000,6 +1000,49 @@
       <icon></icon>
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+  </component>
+
+  <component>
+    <component-type>OutputErrors</component-type>
+    <component-class>javax.faces.component.html.HtmlOutputErrors</component-class>
+    <property>
+      <description>The component identifier for the associated component</description>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>id</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description>The component reference used to wire up this component to a component property of a JavaBean c
+lass</description>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>componentRef</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description></description>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>for</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description>The color of the text that will be displayed.</description>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>color</property-name>
+      <property-class>java.lang.String</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <description></description>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>styleClass</property-name>
+      <property-class>java.lang.String</property-class>
       <tag-attribute>yes</tag-attribute>
     </property>
   </component>
