@@ -905,11 +905,7 @@ public class RenderKitUtils {
             writer.startElement("script", null);
             writer.writeAttribute("type", "text/javascript", null);
             writer.writeAttribute("language", "Javascript", null);
-            if (isXhtml) {
-                writer.write("\n//<![CDATA[");
-            } else {
-                writer.write("\n<!--");
-            }
+            writer.writeText(' ', null);
 
             writeSunJS(context, writer);
 

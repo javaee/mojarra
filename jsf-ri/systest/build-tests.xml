@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.124 2006/10/03 23:32:13 rlubke Exp $
+ $Id: build-tests.xml,v 1.125 2006/10/06 19:09:23 rogerk Exp $
 -->
 
 <!--
@@ -1016,6 +1016,7 @@
         <jsf.tester
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
               request="${context.path}/faces/interweaving11.jsp"              
+              recordGolden="${local.golden.path}/interweaving11.txt"
               golden="${golden.path}/interweaving11.txt"/>
         
         
@@ -1039,7 +1040,8 @@
         <jsf.tester
             ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
             request="${context.path}/faces/regression/InjectUserDefJS.jsp"
-            golden="${golden.path}/regression/InjectUserDefJS.txt"/>
+            golden="${golden.path}/regression/InjectUserDefJS.txt"
+            recordGolden="${local.golden.path}/regression/InjectUserDefJS.txt"/>
     </target>
 
 </project>

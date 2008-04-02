@@ -1,12 +1,12 @@
 
-<form id="formRenderer0" name="formRenderer0" method="post" action="/test/JspRedirector/root;jsessionid=aed68efa0ee3f0f4a0c4615a8866">
+<form id="formRenderer0" name="formRenderer0" method="post" action="/test/JspRedirector/root;jsessionid=7f37d01e00ed0ffffffffd5e3e559209a782">
 <input type="hidden" name="formRenderer0" value="formRenderer0" />
 ~com.sun.faces.saveStateFieldMarker~
 
 
 </form>
 
-<form id="formRenderer1" name="formRenderer1" method="post" action="/test/JspRedirector/root;jsessionid=aed68efa0ee3f0f4a0c4615a8866">
+<form id="formRenderer1" name="formRenderer1" method="post" action="/test/JspRedirector/root;jsessionid=7f37d01e00ed0ffffffffd5e3e559209a782">
 <input type="hidden" name="formRenderer1" value="formRenderer1" />
 ~com.sun.faces.saveStateFieldMarker~
 
@@ -30,29 +30,29 @@
 	</tr>
 </table></td>	</tr>
 </table>
-<input id="imageButton" type="image" src="duke.gif;jsessionid=aed68efa0ee3f0f4a0c4615a8866" name="imageButton" />
-<input id="imageButton2" type="image" src="resduke.gif;jsessionid=aed68efa0ee3f0f4a0c4615a8866" name="imageButton2" />
+<input id="imageButton" type="image" src="duke.gif;jsessionid=7f37d01e00ed0ffffffffd5e3e559209a782" name="imageButton" />
+<input id="imageButton2" type="image" src="resduke.gif;jsessionid=7f37d01e00ed0ffffffffd5e3e559209a782" name="imageButton2" />
 <input id="labelButton1" type="submit" name="labelButton1" value="PASSED" />
 <input id="labelButton2" type="reset" name="labelButton2" value="model label" />
 <input id="labelButton3" type="submit" name="labelButton3" value="RES-BUNDLE PASSED" />
 <input id="labelButton4" type="reset" name="labelButton4" value="" />
-<a id="labelLink1" name="labelLink1" href="hrefValue;jsessionid=aed68efa0ee3f0f4a0c4615a8866">PASSED</a>
-<a id="labelLink2" name="labelLink2" href="hrefValue;jsessionid=aed68efa0ee3f0f4a0c4615a8866">model label</a>
-<a id="labelLink3" name="labelLink3" href="hrefValue;jsessionid=aed68efa0ee3f0f4a0c4615a8866">RES-BUNDLE PASSED</a>
-<a id="labelLink4" name="labelLink4" href="hrefValue;jsessionid=aed68efa0ee3f0f4a0c4615a8866" coords="coords" hreflang="hreflang" rel="rel" rev="rev" shape="shape"></a>
-<a id="linkImage" name="linkImage" href="hrefValue;jsessionid=aed68efa0ee3f0f4a0c4615a8866"><img src="duke.gif;jsessionid=aed68efa0ee3f0f4a0c4615a8866" /></a>
-<a id="linkImage2" name="linkImage2" href="hrefValue;jsessionid=aed68efa0ee3f0f4a0c4615a8866"><img src="resduke.gif;jsessionid=aed68efa0ee3f0f4a0c4615a8866" /></a>
-<a id="paramLink" name="paramLink" href="hrefValue;jsessionid=aed68efa0ee3f0f4a0c4615a8866?parameter1=param_value1&parameter2=param_value2"><img src="resduke.gif;jsessionid=aed68efa0ee3f0f4a0c4615a8866" /></a>
+<a id="labelLink1" name="labelLink1" href="hrefValue;jsessionid=7f37d01e00ed0ffffffffd5e3e559209a782">PASSED</a>
+<a id="labelLink2" name="labelLink2" href="hrefValue;jsessionid=7f37d01e00ed0ffffffffd5e3e559209a782">model label</a>
+<a id="labelLink3" name="labelLink3" href="hrefValue;jsessionid=7f37d01e00ed0ffffffffd5e3e559209a782">RES-BUNDLE PASSED</a>
+<a id="labelLink4" name="labelLink4" href="hrefValue;jsessionid=7f37d01e00ed0ffffffffd5e3e559209a782" coords="coords" hreflang="hreflang" rel="rel" rev="rev" shape="shape"></a>
+<a id="linkImage" name="linkImage" href="hrefValue;jsessionid=7f37d01e00ed0ffffffffd5e3e559209a782"><img src="duke.gif;jsessionid=7f37d01e00ed0ffffffffd5e3e559209a782" /></a>
+<a id="linkImage2" name="linkImage2" href="hrefValue;jsessionid=7f37d01e00ed0ffffffffd5e3e559209a782"><img src="resduke.gif;jsessionid=7f37d01e00ed0ffffffffd5e3e559209a782" /></a>
+<a id="paramLink" name="paramLink" href="hrefValue;jsessionid=7f37d01e00ed0ffffffffd5e3e559209a782?parameter1=param_value1&parameter2=param_value2"><img src="resduke.gif;jsessionid=7f37d01e00ed0ffffffffd5e3e559209a782" /></a>
 
-<script type="text/javascript" language="Javascript"
-<!--
+<script type="text/javascript" language="Javascript">
+<!-- 
 function dpf(f) {var adp = f.adp;if (adp != null) {for (var i = 0;i < adp.length;i++) {f.removeChild(adp[i]);}}};function apf(f, pvp) {var adp = new Array();f.adp = adp;var ps = pvp.split(',');for (var i = 0,ii = 0;i < ps.length;i++,ii++) {var p = document.createElement("input");p.type = "hidden";p.name = ps[i];p.value = ps[i + 1];f.appendChild(p);adp[ii] = p;i += 1;}};function jsfcljs(f, pvp, t) {apf(f, pvp);if (t) {f.target = t;}f.submit();dpf(f);};
 //-->
-></script>
+</script>
 <a id="j_id0:labelLink1" href="#" onclick="if(typeof jsfcljs == 'function'){jsfcljs(document.forms['j_id0'],'j_id0:labelLink1,j_id0:labelLink1','');}return false">PASSED</a>
 <a id="j_id0:labelLink2" href="#" onclick="if(typeof jsfcljs == 'function'){jsfcljs(document.forms['j_id0'],'j_id0:labelLink2,j_id0:labelLink2','');}return false">model label</a>
 <a id="j_id0:labelLink3" href="#" onclick="if(typeof jsfcljs == 'function'){jsfcljs(document.forms['j_id0'],'j_id0:labelLink3,j_id0:labelLink3','');}return false">RES-BUNDLE PASSED</a>
 <a id="j_id0:labelLink4" href="#" coords="coords" hreflang="hreflang" rel="rel" rev="rev" shape="shape" onclick="if(typeof jsfcljs == 'function'){jsfcljs(document.forms['j_id0'],'j_id0:labelLink4,j_id0:labelLink4','');}return false"></a>
-<a id="j_id0:linkImage" href="#" onclick="if(typeof jsfcljs == 'function'){jsfcljs(document.forms['j_id0'],'j_id0:linkImage,j_id0:linkImage','');}return false"><img src="duke.gif;jsessionid=aed68efa0ee3f0f4a0c4615a8866" /></a>
-<a id="j_id0:linkImage2" href="#" onclick="if(typeof jsfcljs == 'function'){jsfcljs(document.forms['j_id0'],'j_id0:linkImage2,j_id0:linkImage2','');}return false"><img src="resduke.gif;jsessionid=aed68efa0ee3f0f4a0c4615a8866" /></a>
+<a id="j_id0:linkImage" href="#" onclick="if(typeof jsfcljs == 'function'){jsfcljs(document.forms['j_id0'],'j_id0:linkImage,j_id0:linkImage','');}return false"><img src="duke.gif;jsessionid=7f37d01e00ed0ffffffffd5e3e559209a782" /></a>
+<a id="j_id0:linkImage2" href="#" onclick="if(typeof jsfcljs == 'function'){jsfcljs(document.forms['j_id0'],'j_id0:linkImage2,j_id0:linkImage2','');}return false"><img src="resduke.gif;jsessionid=7f37d01e00ed0ffffffffd5e3e559209a782" /></a>
 <a id="j_id0:paramLink" href="#" onclick="if(typeof jsfcljs == 'function'){jsfcljs(document.forms['j_id0'],'j_id0:paramLink,j_id0:paramLink,parameter1,param_value1,parameter2,param_value2','');}return false"link with parameters></a>

@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.31 2006/09/01 17:30:54 rlubke Exp $
+ * $Id: HtmlResponseWriter.java,v 1.32 2006/10/06 19:09:23 rogerk Exp $
  */
 
 /*
@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.util.HtmlUtils;
 import com.sun.faces.util.MessageUtils;
 
@@ -73,6 +74,12 @@ public class HtmlResponseWriter extends ResponseWriter {
 
     // flag to indicate we're writing a CDATA section
     private boolean writingCdata;
+
+    // flag to indicate that we're writing a 'script' or 'style' element
+    private boolean scriptOrStyle;
+
+    // flag to indicate if the content type is Xhtml
+    private boolean isXhtml;
 
     // Internal buffer used when outputting properly escaped information
     // using HtmlUtils class.
@@ -207,14 +214,19 @@ public class HtmlResponseWriter extends ResponseWriter {
 
         // always turn escaping back on once an element ends
         dontEscape = false;
-        char firstChar = name.charAt(0);
-        if ((firstChar == 'c')
-            || (firstChar == 'C')) {
-            if ("cdata".equalsIgnoreCase(name)) {
-                writer.write("]]>");
-                writingCdata = false;
-                return;
+        isXhtml = getContentType().equals(
+            RIConstants.XHTML_CONTENT_TYPE);
+        if (scriptOrStyle) {
+            if (isXhtml) {
+                writer.write("\n//]]>\n");
+            } else {
+                writer.write("\n//-->\n");
             }
+        } 
+        if ("cdata".equalsIgnoreCase(name)) {
+            writer.write("]]>");
+            writingCdata = false;
+            return;
         }
         // See if we need to close the start of the last element
         if (closeStart) {
@@ -284,22 +296,17 @@ public class HtmlResponseWriter extends ResponseWriter {
                   MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "name"));
         }
         closeStartIfNecessary();
-        char firstChar = name.charAt(0);
-        if ((firstChar == 's') ||
-            (firstChar == 'S')) {
-            if ("script".equalsIgnoreCase(name) ||
-                "style".equalsIgnoreCase(name)) {
-                dontEscape = true;
-            }
-        } else if ((firstChar == 'c')
-                   || (firstChar == 'C')) {
-            if ("cdata".equalsIgnoreCase(name)) {
-                writingCdata = true;
-                dontEscape = true;
-                writer.write("<![CDATA[");
-                closeStart = false;
-                return;
-            }
+        scriptOrStyle = false;
+        if ("script".equalsIgnoreCase(name) ||
+            "style".equalsIgnoreCase(name)) {
+            scriptOrStyle = true;
+            dontEscape = true;
+        } else if ("cdata".equalsIgnoreCase(name)) {
+            writingCdata = true;
+            dontEscape = true;
+            writer.write("<![CDATA[");
+            closeStart = false;
+            return;
         }
 
         writer.write('<');
@@ -641,7 +648,16 @@ public class HtmlResponseWriter extends ResponseWriter {
             writer.write('>');
             closeStart = false;
         }
-
+        if (scriptOrStyle) {
+            scriptOrStyle = false;
+            isXhtml = getContentType().equals(
+                RIConstants.XHTML_CONTENT_TYPE);
+            if (isXhtml) {
+                writer.write("\n//<![CDATA[");
+            } else {
+                writer.write("\n<!--");
+            }
+        }
     }
 
 }
