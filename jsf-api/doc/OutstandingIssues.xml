@@ -17,26 +17,19 @@
 
 <issue>
   <id>ObjectManager-1</id>
-  <originator>Craig</originator>
-  <summary>Re-introduce Object Manager Functionality</summary>
+  <originator></originator>
+  <summary>JSFA14 in Scarab</summary>
   <description>
-    <p>Currently, it is inconvenient to use request scope beans in
-    model reference expressions, because the corresponding object
-    is not created automatically.  This was one of the features provided
-    in the <em>Object Manager</em> functionality that was present in
-    version .03 of the JSF Spec, but has been absent since.</p>
 
-    <p>Per Jeff's comments - might want to pass the component instance,
-    instead of the value, to the <code>setModelValue()</code> method to
-    enable a "model handler".  Jeff - can you expand on this?</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA14">JSFA14</a> in Scarab.
+
   </description>
   <resolution>
-    <p><em>04 Sep 2002</em> - Craig to present writeup to EG.</p>
   </resolution>
-  <status>OPEN</status>
-  <status-date>04 Sep 2002</status-date>
-  <priority>1</priority>
-  <effort>Large</effort>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
+  <effort></effort>
 </issue>
 
 
@@ -1658,44 +1651,30 @@ moved to
 
 <issue>
   <id>Tools Support-69</id>
-  <originator>EG, Commerce One</originator>
-  <summary> JSF should provide adequate support for Tools. </summary>
+  <originator></originator>
+  <summary> JSFA13 in Scarab.</summary>
   <description>
-    <ul>
-       <li> modelReference can't be evaluated at design-time because it probably has not been implemented yet. However, the IDE should be able to render the control in design-time so that the user knows what the result will look like. (This is why JSF components should provide some sort of flag indicating if the control is being rendered at design-time (inside an IDE) or run-time). </li>
-
-      <li> Another important concept that is not covered is the support of common "Type" in an IDE. For example, a component could expose a "Font" or "Color" property. Every IDE (JSF compliant) should provide a "color picker" or "font chooser" dialog box. In order to do that, the JSF specification must define the types that must be supported by tool vendors. </li>
-
-      <li> The ability to support "custom designer" is also key to provide a rich user experience when designing a JSF app. For example, a Grid control has columns (collection of column), and it would be nice if the developer of the Grid component could define the designer that should be displayed in an IDE whenever the user needs to add/remove column to the collection, or edit each column property.This could be beyond the scope of JSF. </li>
-    </ul>
+<a href="http://tokyo.betaversion.org:8080/issues/id/JSFA13">JSFA13</a> in Scarab
   </description>
   <resolution>
   </resolution>
   <status>OPEN</status>
-  <status-date>12 Dec 2002</status-date>
-  <priority>1</priority>
-  <effort>Large</effort>
+  <status-date></status-date>
+  <priority></priority>
+  <effort></effort>
 </issue>
 
 <issue>
   <id>Ease_of_Use-70</id>
   <originator>Jennifer</originator>
-  <summary>Catch-all for ease of use.</summary>
+  <summary>Move to JSFA15 in Scarab</summary>
   <description>
-
-    <p>In implementing Jennifer's custom component, she found it
-    convenient to subclass HtmlBasicRenderer in the RI, and use the RI
-    Util class.  We need the ease of use afforded by such techniques,
-    but can't endorse depending on RI classes.</p>
-
-<p>Another thing Jennifer did was extend com.sun.faces.taglib.FacesTag
-because it added support for the standard HTML attributes.</p>
-
+<a href="http://tokyo.betaversion.org:8080/issues/id/JSFA15">JSFA15</a> in Scarab.
   </description>
-  <status>OPEN</status>
-  <status-date>7 January 2003</status-date>
+  <status></status>
+  <status-date></status-date>
   <priority>1</priority>
-  <effort>Large</effort>
+  <effort></effort>
 </issue>
 
 <issue>
