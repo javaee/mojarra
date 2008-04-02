@@ -1,5 +1,5 @@
 /*
- * $Id: CarDemoServletContextListener.java,v 1.1 2002/11/02 01:34:58 jball Exp $
+ * $Id: CarDemoServletContextListener.java,v 1.2 2003/01/29 18:46:19 jvisvanathan Exp $
  */
 
 /*
@@ -19,13 +19,19 @@ import javax.faces.FactoryFinder;
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.ApplicationHandler;
+import javax.faces.convert.ConverterFactory;
+
+import com.sun.faces.context.MessageResourcesImpl;
+import javax.faces.context.MessageResourcesFactory;
+import javax.faces.context.MessageResources;
+
 /**
  *
  *  <B>CarDemoServletContextListener</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CarDemoServletContextListener.java,v 1.1 2002/11/02 01:34:58 jball Exp $
+ * @version $Id: CarDemoServletContextListener.java,v 1.2 2003/01/29 18:46:19 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -72,7 +78,7 @@ public class CarDemoServletContextListener implements ServletContextListener
 
     public void contextInitialized(ServletContextEvent e) 
     {
-        System.out.println("CarDemoServletContextListener reached");
+        // System.out.println("CarDemoServletContextListener reached");
 
         ApplicationHandler handler = new CarDemoApplicationHandler();
         LifecycleFactory factory = (LifecycleFactory)
@@ -80,6 +86,23 @@ public class CarDemoServletContextListener implements ServletContextListener
         Lifecycle lifecycle =
             factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
         lifecycle.setApplicationHandler(handler); 
+
+        // register CreditCardConverter
+        ConverterFactory convertFactory =
+                (ConverterFactory) FactoryFinder.getFactory(
+                FactoryFinder.CONVERTER_FACTORY);
+        convertFactory.addConverter("creditcard", new CreditCardConverter());
+        // System.out.println("Registered CreditCardConverter");
+
+        // register CarDemo MessageResources.
+        MessageResourcesFactory mrFactory =
+                (MessageResourcesFactory) FactoryFinder.getFactory(
+                FactoryFinder.MESSAGE_RESOURCES_FACTORY);
+        MessageResourcesImpl carResource = 
+                new MessageResourcesImpl("carResources", 
+                "cardemo/CarDemoResources");
+        mrFactory.addMessageResources("carResources", carResource);
+        // System.out.println("Registered CarDemoResources");
     }
 
     public void contextDestroyed(ServletContextEvent e)

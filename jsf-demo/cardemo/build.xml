@@ -191,6 +191,7 @@
     <copy todir="${build}/WEB-INF">
       <fileset dir="web/WEB-INF"    >
         <include name="web.xml" />
+        <include name="*.tld" />
       </fileset>
     </copy>
 
@@ -206,6 +207,9 @@
     <copy todir="${build}/WEB-INF/classes/${example}" >
       <fileset dir="web" >
          <include name="*properties"/>
+      </fileset>
+      <fileset dir="src/${example}" >
+         <include name="*.xml"/>
       </fileset>
     </copy>
   </target>	 

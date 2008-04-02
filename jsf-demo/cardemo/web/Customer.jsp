@@ -13,6 +13,7 @@
     <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
+    <%@ taglib uri="/WEB-INF/cardemo.tld" prefix="cd" %>
 </head>
 <body>
 <fmt:setBundle
@@ -194,13 +195,19 @@ align=BOTTOM></td>
     <tr>
     <tr>
       <td valign="top" align="right">
-      <h:output_text 	id="ccNumber" 	
+      <h:output_text 	id="ccNumber"
                                 value="Credit Card Number"
-       				key="ccNumberLabel" /><br>
+       				key="ccNumberLabel" /> <br>
       </td>
       <td valign="top">
-      <h:input_text id="ccno" modelReference="CustomerBean.month" size="16">
-      </h:input_text><br>
+      <h:input_text id="ccno" modelReference="CustomerBean.month" size="16"
+           converter="creditcard" >
+          <f:validate_required/>
+          <f:validate_length minimum="16" maximum="16"/>
+          <cd:creditcard_validator maximumChar="9" minimumChar="0" />
+          
+      </h:input_text>
+      <h:output_errors id="ccError" clientId="ccno"/> <br>
       </td>
     </tr>
     <tr>
