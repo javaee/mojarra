@@ -33,9 +33,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Enumeration;
+import java.io.InputStream;
 import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
 import java.util.jar.JarOutputStream;
 import java.util.regex.Matcher;
@@ -123,7 +122,27 @@ public class GlassfishUpdater {
     }
     
     public static void unpackJsfJarsToLib(File libDir) throws IOException {
-        
+        InputStream is = Thread.currentThread().getContextClassLoader().
+                getResourceAsStream("jsf-api.jar");
+        File jsfApi = new File(libDir, "jsf-api.jar"),
+             jsfImpl = new File(libDir, "jsf-impl.jar");
+        jsfApi.delete();
+        jsfImpl.delete();
+        FileOutputStream fos = new FileOutputStream(jsfApi);
+        int n = 0;
+        while (-1 != (n = is.read())) {
+            fos.write(n);
+        }
+        is.close();
+        fos.close();
+        is = Thread.currentThread().getContextClassLoader().
+               getResourceAsStream("jsf-impl.jar");
+        fos = new FileOutputStream(jsfImpl);
+        while (-1 != (n = is.read())) {
+            fos.write(n);
+        }
+        is.close();
+        fos.close();
     }
     
 }
