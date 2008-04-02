@@ -343,151 +343,125 @@
                 bundle="basicBundle" /></TD>
       </TR>
 
+      <TR><TD><HR></HR></TD></TR>
+      <TR><TD><faces:output_text id="buttontitle" 
+          value="B U T T O N------S T Y L E S "/> </TD></TR>
+      <TR><TD><HR></HR></TD></TR>
       <TR>
-
-        <TD><faces:output_text id="buttonlabel1" value="Button renderered as
- '<input type=..> :" /></TD>
-        <TD>
+        <TD><faces:output_text id="buttonlabel1" value="Button rendered with 'input type=..':" />
             <faces:command_button id="mybutton" label="Login"
                 commandName="login">
             </faces:command_button>
         </TD>
+      </TR>
+      <TR>
+        <TD><faces:output_text id="buttonlabel2" value="Buttons rendered with 'button' element:" /> </TD></TR>
 
-        <TD>
-
-             <faces:command_button id="pushButton" type="button" 
+      <TR>
+        <TD>   <faces:command_button id="pushButton" type="button" 
                      commandName="push" disabled = "true" >
                  <faces:output_text id="buttonLabel" value="This is a push button " />       
                  <faces:graphic_image id="buttonImage" url="/duke.gif" />
              </faces:command_button>
-        </TD>
-
-        <TD>
-
              <faces:command_button id="resetButton"  title="Click to reset form"
                                    commandName="reset" type="reset" >
                 <faces:output_text id="resetLabel" key="resetButton" 
                                 bundle="basicBundle" />
              </faces:command_button>
-
-        </TD>
-
-      </TR>
-      
-      <TR>
-
-	<TD>
-
             <faces:command_button id="login" type="submit" 
                      commandName="login" >
                  <faces:output_text id="submitLabel" key="loginButton" bundle="basicBundle" />       
              </faces:command_button>
-
-	</TD>
-
-      </TR>
-
-
-      <TR>
-
-	<TD>
            <faces:command_button id="imageOnlyButton" type="submit" 
                      commandName="login"  >
                  <faces:graphic_image id="buttonImage1" url="/duke.gif" />
              </faces:command_button>
-
-               Image button that does the same thing
-
-	</TD>
-
+        </TD>
       </TR>
-				<TR>
-					<TD>Multi-select menu:</TD>
-					<TD><faces:selectmany_menu id="ManyApples" size="3">
-						<faces:selectitem itemValue="0" itemLabel="zero" />
-						<faces:selectitem itemValue="1" itemLabel="one" />
-						<faces:selectitem itemValue="2" itemLabel="two" />
-						<faces:selectitem itemValue="3" itemLabel="three" />
-						<faces:selectitem itemValue="4" itemLabel="four" selected="true" />
-						<faces:selectitem itemValue="5" itemLabel="five" />
-						<faces:selectitem itemValue="6" itemLabel="six" />
-						<faces:selectitem itemValue="7" itemLabel="seven" selected="true" />
-						<faces:selectitem itemValue="8" itemLabel="eight" />
-						<faces:selectitem itemValue="9" itemLabel="nine" />
-					</faces:selectmany_menu></TD>
-				</TR>
-				<TR>
-					<TD>Multi-select menu with model:</TD>
-					<TD><faces:selectmany_menu id="menumodel" size="3">
-						<faces:selectitems id="menumodelitems"
-							modelReference="LoginBean.options" />
-					</faces:selectmany_menu></TD>
-				</TR>
-				<TR>
-					<TD>Multi-select listbox:</TD>
-					<TD><faces:selectmany_listbox id="ManyApples2">
-						<faces:selectitem itemValue="0" itemLabel="zero" />
-						<faces:selectitem itemValue="1" itemLabel="one" />
-						<faces:selectitem itemValue="2" itemLabel="two" />
-						<faces:selectitem itemValue="3" itemLabel="three" />
-						<faces:selectitem itemValue="4" itemLabel="four" selected="true" />
-						<faces:selectitem itemValue="5" itemLabel="five" />
-						<faces:selectitem itemValue="6" itemLabel="six" />
-						<faces:selectitem itemValue="7" itemLabel="seven" selected="true" />
-						<faces:selectitem itemValue="8" itemLabel="eight" />
-						<faces:selectitem itemValue="9" itemLabel="nine" />
-					</faces:selectmany_listbox></TD>
-				</TR>
-				<TR>
-					<TD>Multi-select listbox with model:</TD>
-					<TD><faces:selectmany_listbox id="listmodel"
-						modelReference="LoginBean.currentOptions">
-						<faces:selectitems id="listmodelitems"
-							modelReference="LoginBean.options" />
-					</faces:selectmany_listbox></TD>
-				</TR>
-				<TR>
-					<TD>Multi-select checkbox:</TD>
-					<TD><faces:selectmany_checkboxlist id="ManyApples3">
-						<faces:selectitem itemValue="0" itemLabel="zero" />
-						<faces:selectitem itemValue="1" itemLabel="one" />
-						<faces:selectitem itemValue="2" itemLabel="two" />
-						<faces:selectitem itemValue="3" itemLabel="three" />
-						<faces:selectitem itemValue="4" itemLabel="four" selected="true" />
-						<faces:selectitem itemValue="5" itemLabel="five" />
-						<faces:selectitem itemValue="6" itemLabel="six" />
-						<faces:selectitem itemValue="7" itemLabel="seven" selected="true" />
-						<faces:selectitem itemValue="8" itemLabel="eight" />
-						<faces:selectitem itemValue="9" itemLabel="nine" />
-					</faces:selectmany_checkboxlist></TD>
-				</TR>
-				<TR>
-					<TD>Multi-select checkbox with model:</TD>
-					<TD><faces:selectmany_checkboxlist id="checklistmodel"
-						modelReference="LoginBean.currentOptions">
-						<faces:selectitems id="checklistmodelitems"
-							modelReference="LoginBean.options" />
-					</faces:selectmany_checkboxlist></TD>
-				</TR>
-                                <TR>
-                                    <TD>Single-select menu: </TD>
-                                    <TD><faces:selectone_menu id="players" size="3">
-                                            <faces:selectitem itemValue="99"
-                                                itemLabel="Wayne Gretzky" /> 
-                                            <faces:selectitem itemValue="4"
-                                                itemLabel="Bobby Orr" /> 
-                                            <faces:selectitem itemValue="9"
-                                                itemLabel="Gordie Howe" /> 
-                                            <faces:selectitem itemValue="2"
-                                                itemLabel="Brad Park" /> 
-                                        </faces:selectone_menu> </TD>
-                                </TR>
-                                   
+      <TR><TD><HR></HR></TD></TR>
+      <TR><TD><faces:output_text id="selecttitle" 
+          value="S E L E C T------S T Y L E S "/> </TD></TR>
+      <TR><TD><HR></HR></TD></TR>
+      <TR>
+        <TD>Multi-select menu:</TD>
+        <TD><faces:selectmany_menu id="ManyApples" size="3">
+            <faces:selectitem itemValue="0" itemLabel="zero" />
+                <faces:selectitem itemValue="1" itemLabel="one" />
+                    <faces:selectitem itemValue="2" itemLabel="two" />
+                    <faces:selectitem itemValue="3" itemLabel="three" />
+                    <faces:selectitem itemValue="4" itemLabel="four" selected="true" />
+                    <faces:selectitem itemValue="5" itemLabel="five" />
+                    <faces:selectitem itemValue="6" itemLabel="six" />
+                    <faces:selectitem itemValue="7" itemLabel="seven" selected="true" />
+                    <faces:selectitem itemValue="8" itemLabel="eight" />
+                    <faces:selectitem itemValue="9" itemLabel="nine" />
+                </faces:selectmany_menu></TD>
+      </TR>
+      <TR>
+        <TD>Multi-select menu with model:</TD>
+        <TD><faces:selectmany_menu id="menumodel" size="3">
+                <faces:selectitems id="menumodelitems"
+                    modelReference="LoginBean.options" />
+            </faces:selectmany_menu></TD>
+      </TR>
+      <TR>
+        <TD>Multi-select listbox:</TD>
+        <TD><faces:selectmany_listbox id="ManyApples2">
+                <faces:selectitem itemValue="0" itemLabel="zero" />
+                <faces:selectitem itemValue="1" itemLabel="one" />
+                <faces:selectitem itemValue="2" itemLabel="two" />
+                <faces:selectitem itemValue="3" itemLabel="three" />
+                <faces:selectitem itemValue="4" itemLabel="four" selected="true" />
+                <faces:selectitem itemValue="5" itemLabel="five" />
+                <faces:selectitem itemValue="6" itemLabel="six" />
+                <faces:selectitem itemValue="7" itemLabel="seven" selected="true" />
+                <faces:selectitem itemValue="8" itemLabel="eight" />
+                <faces:selectitem itemValue="9" itemLabel="nine" />
+           </faces:selectmany_listbox></TD>
+      </TR>
+      <TR>
+        <TD>Multi-select listbox with model:</TD>
+        <TD><faces:selectmany_listbox id="listmodel"
+                modelReference="LoginBean.currentOptions">
+                <faces:selectitems id="listmodelitems"
+                    modelReference="LoginBean.options" />
+            </faces:selectmany_listbox></TD>
+      </TR>
+      <TR>
+        <TD>Multi-select checkbox:</TD>
+        <TD><faces:selectmany_checkboxlist id="ManyApples3">
+                <faces:selectitem itemValue="0" itemLabel="zero" />
+                <faces:selectitem itemValue="1" itemLabel="one" />
+                <faces:selectitem itemValue="2" itemLabel="two" />
+                <faces:selectitem itemValue="3" itemLabel="three" />
+                <faces:selectitem itemValue="4" itemLabel="four" selected="true" />
+                <faces:selectitem itemValue="5" itemLabel="five" />
+                <faces:selectitem itemValue="6" itemLabel="six" />
+                <faces:selectitem itemValue="7" itemLabel="seven" selected="true" />
+                <faces:selectitem itemValue="8" itemLabel="eight" />
+                <faces:selectitem itemValue="9" itemLabel="nine" />
+           </faces:selectmany_checkboxlist></TD>
+      </TR>
+      <TR>
+        <TD>Multi-select checkbox with model:</TD>
+        <TD><faces:selectmany_checkboxlist id="checklistmodel"
+                modelReference="LoginBean.currentOptions">
+                <faces:selectitems id="checklistmodelitems"
+                    modelReference="LoginBean.options" />
+            </faces:selectmany_checkboxlist></TD>
+      </TR>
+      <TR>
+        <TD>Single-select menu: </TD>
+        <TD><faces:selectone_menu id="players" size="3">
+                <faces:selectitem itemValue="99" itemLabel="Wayne Gretzky" /> 
+                <faces:selectitem itemValue="4" itemLabel="Bobby Orr" /> 
+                <faces:selectitem itemValue="9" itemLabel="Gordie Howe" /> 
+                <faces:selectitem itemValue="2" itemLabel="Brad Park" /> 
+            </faces:selectone_menu> </TD>
+      </TR>
 
+    </TABLE>
 
-
-	  </TABLE>
-
-        </faces:form>
-       </faces:usefaces>
+    </faces:form>
+   </faces:usefaces>
 </HTML>
