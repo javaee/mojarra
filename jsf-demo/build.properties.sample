@@ -36,6 +36,22 @@
 # maintenance of any nuclear facility.
 #
 
+# The build.xml files in this directory and sub-directories assume that
+# you have JWSDP 1.2 installed.  If you do, the only property you need
+# to set is:
+
+tomcat.home=/your/jwsdp-1.2
+
+# If you want to build the jwsdp 1.2 bundle, you need to set three
+# additional properties:
+
+build.wspack=true
+build.home=/place/for/wspack/build
+dist.home=/place/for/wspack/dist
+
+# If you're not running JWSDP 1.2, you'll need to tweak the below
+# settings.
+
 # Make these values be correct on your system, then rename to
 # build.properties.  On win32, make sure to preserve the \\ syntax
 # for escaping backslashes.  

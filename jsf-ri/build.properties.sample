@@ -6,9 +6,18 @@
 # modules that the jsf-ri depends on.  Copy this file to "build.properties"
 # in the top-level source directory, and customize it as needed.
 #
-# $Id: build.properties.sample,v 1.20 2003/05/15 21:33:07 jvisvanathan Exp $
+# $Id: build.properties.sample,v 1.21 2003/06/19 15:35:56 eburns Exp $
 # -----------------------------------------------------------------------------
 
+# The build.xml file in this directory assumes JWSDP 1.2 directory
+# layout for finding all required jars.  If you're running JWSDP 1.2,
+# and you have cactus and junit installed as peers to the jwsdp-1.2
+# directory, you only need to set one property:
+
+tomcat.home=/your/jwsdp-1.2
+
+# otherwise, you'll need to tweak the below settings to your
+# environment.
 
 # ----- Compile Control Flags -----
 
@@ -112,13 +121,3 @@ sax.jar=${tomcat.home}/jaxp/lib/endorsed/sax.jar
 
 #Set this if you are running unit tests with JWSDP 1.1 or Tomcat 4.1.x
 #crimson.jar=D:\\Files_2k\\jwsdp-1_0_01\\tools\\deploytool\\endorsed\\crimson.jar
-
-# --------------------------------------------------
-#   PROPERTIES FOR JWSDP 1.2 NIGHTLY BUILDS      
-# --------------------------------------------------
-
-# Set the following only for distribution with JWSDP 1.2.
-#build.home=/home/visvan/testwspack/build
-#dist.home=/home/visvan/testwspack/dist
-#wspack.home=/home/visvan/testwspack/wspack
-

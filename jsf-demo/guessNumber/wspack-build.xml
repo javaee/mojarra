@@ -50,9 +50,23 @@
   <property name="build"   value="${basedir}/build" />
 
   <!-- Required jobs for making this self-contained -->
-  <property name="servlet.jar"
-            value="${tomcat.home}/common/lib/servlet.jar"/>
-  <property name="jsp.jar" value="" />
+  <property name="servlet.jar" 
+            value="${tomcat.home}/common/lib/servlet-api.jar"/>
+  <property name="jsp.jar" value="${tomcat.home}/common/lib/jsp-api.jar"/>
+  <property name="commons-beanutils.jar" 
+            value="${tomcat.home}/jwsdp-shared/lib/commons-beanutils.jar"/>
+  <property name="commons-digester.jar" 
+            value="${tomcat.home}/jwsdp-shared/lib/commons-digester.jar"/>
+  <property name="commons-logging.jar" 
+            value="${tomcat.home}/jwsdp-shared/lib/commons-logging.jar"/>
+  <property name="commons-collections.jar" 
+            value="${tomcat.home}/jwsdp-shared/lib/commons-collections.jar"/>
+  <property name="jsf-api.jar"
+            value="${tomcat.home}/jsf/lib/jsf-api.jar" />
+  <property name="jsf-ri.jar"
+            value="${tomcat.home}/jsf/lib/jsf-ri.jar" />
+  <property name="jstl.jar" value="${tomcat.home}/jstl/lib/jstl.jar"/>
+  <property name="standard.jar" value="${tomcat.home}/jstl/lib/standard.jar"/>
 
   <path id="classpath">
     <pathelement location="${commons-beanutils.jar}"/>

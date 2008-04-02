@@ -58,17 +58,22 @@
 
   <!-- The locations of necessary jar files -->
   <property name="mozutil.jar" value="${lib.home}/mozutil.jar"/>
-  <property name="servlet.jar" value="${tomcat.home}/common/lib/servlet.jar"/>
+  <property name="servlet.jar" value="${tomcat.home}/common/lib/servlet-api.jar"/>
+  <property name="jsp.jar" value="${tomcat.home}/common/lib/jsp-api.jar"/>
   <property name="catalina-ant.jar" value="${tomcat.home}/server/lib/catalina-ant.jar"/>
   <property name="xerces.jar" value="${tomcat.home}/jaxp-1.2.2/lib/endorsed/xercesImpl.jar"/>
-  <property name="commons-beanutils.jar"
-            value="${tomcat.home}/server/lib/commons-beanutils.jar"/>
-  <property name="commons-collections.jar" 
-            value="${tomcat.home}/common/lib/commons-collections.jar"/>
   <property name="commons-logging.jar" 
             value="${tomcat.home}/jwsdp-shared/lib/commons-logging.jar"/>
   <property name="commons-digester.jar" 
-            value="{tomcat.home}/server/lib/commons-digester.jar"/>
+            value="${tomcat.home}/jwsdp-shared/lib/commons-digester.jar"/>
+  <property name="commons-beanutils.jar" 
+            value="${tomcat.home}/jwsdp-shared/lib/commons-beanutils.jar"/>
+  <property name="commons-collections.jar" 
+            value="${tomcat.home}/jwsdp-shared/lib/commons-collections.jar"/>
+  <property name="jstl.jar" 
+            value="${tomcat.home}/jstl/lib/jstl.jar"/>
+  <property name="standard.jar" 
+            value="${tomcat.home}/jstl/lib/standard.jar"/>
   <property name="jsf.api.jar" value="${jsf.api.home}/build/lib/jsf-api.jar"/>
   <property name="jsf.api.dtd" value="${jsf.api.home}/build/lib/web-facesconfig_1_0.dtd"/>
   <property name="jsp.jar" value="" />
@@ -348,9 +353,11 @@
 
   <target name="install" depends="build.basic.war"
    description="Install webapp on Tomcat">
+    <echo message="${dist.home}"/>
+    <echo message="${basic.name}"/>
     <install url="${url}" username="${username}" password="${password}"
             path="${context.path}"
-             war="file://${dist.home}/${basic.name}"/>
+             war="file://${dist.home}/basic.war"/>
   </target>
 
   <target name="list"

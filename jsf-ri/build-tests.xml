@@ -74,7 +74,27 @@
     <!-- Output directory for tests -->
     <property name="out.test.dir" value="${build.home}/test"/>
 
+    <!-- all of these properties must have valid values -->
     <property name="catalina-ant.jar" value="${tomcat.home}/server/lib/catalina-ant.jar"/>
+    <property name="cactus.home" 
+              value="${tomcat.home}/../jakarta-cactus-13-1.4.1"/>
+    <property name="cactus.ant.jar" 
+              value="${cactus.home}/lib/cactus-ant-1.4.1.jar"/>
+    <property name="cactus.jar" 
+              value="${cactus.home}/lib/cactus-1.4.1.jar"/>
+    <property name="aspectjrt.jar" 
+              value="${cactus.home}/lib/aspectjrt-1.0.5.jar"/>
+    <property name="httpclient.jar" 
+              value="${cactus.home}/lib/commons-httpclient-2.0alpha1-20020606.jar"/>
+
+    <property name="junit.jar" 
+              value="${tomcat.home}/../junit3.8.1/junit.jar"/>
+
+    <property name="standard.jar" 
+              value="${tomcat.home}/jstl/lib/standard.jar"/>
+    
+    <property name="username" value="tomcat"/>
+    <property name="password" value="tomcat"/>
 
     <property name="url"      value="http://localhost:8080/manager"/>
 

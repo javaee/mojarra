@@ -88,14 +88,44 @@
   <property name="dist.home" value="${basedir}/dist"/>
 
   <!-- dependent jars -->
-  <property name="servlet.jar" value="${tomcat.home}/common/lib/servlet.jar"/>
-
+  <property name="servlet.jar" 
+            value="${tomcat.home}/common/lib/servlet-api.jar"/>
   <property name="jsf.api.jar"
             value="${jsf.api.home}/build/lib/jsf-api.jar" />
   <property name="jsf.ri.jar"
             value="${jsf.ri.home}/build/lib/jsf-ri.jar" />
+  <property name="commons-logging.jar" 
+            value="${tomcat.home}/jwsdp-shared/lib/commons-logging.jar"/>
+  <property name="commons-digester.jar" 
+            value="${tomcat.home}/jwsdp-shared/lib/commons-digester.jar"/>
+  <property name="commons-beanutils.jar" 
+            value="${tomcat.home}/jwsdp-shared/lib/commons-beanutils.jar"/>
+  <property name="servlet.jar" value="${tomcat.home}/common/lib/servlet-api.jar"/>
+  <property name="commons-collections.jar" 
+            value="${tomcat.home}/jwsdp-shared/lib/commons-collections.jar"/>
+  <property name="commons-el.jar" 
+            value="${tomcat.home}/common/lib/commons-el.jar"/>
+  <property name="naming-resources.jar" 
+            value="${tomcat.home}/common/lib/naming-resources.jar"/>
+  <property name="naming-common.jar" 
+            value="${tomcat.home}/common/lib/naming-common.jar"/>
+  <property name="jasper-compiler.jar" 
+            value="${tomcat.home}/common/lib/jasper-compiler.jar"/>
+  <property name="jasper-runtime.jar" 
+            value="${tomcat.home}/common/lib/jasper-runtime.jar"/>
+  <property name="commons-modeler.jar" 
+            value="${tomcat.home}/server/lib/commons-modeler.jar"/>
+  <property name="jmx.jar" value="${tomcat.home}/common/lib/jmx.jar"/>
+  <property name="jstl.jar" value="${tomcat.home}/jstl/lib/jstl.jar"/>
+  <property name="standard.jar" value="${tomcat.home}/jstl/lib/standard.jar"/>
+  <property name="jsp.jar" value="${tomcat.home}/common/lib/jsp-api.jar"/>
+  <property name="jsf.api.dtd" value="${jsf.api.home}/build/lib/web-facesconfig_1_0.dtd"/>
+  <property name="wspack.home" value="${tomcat.home}"/>
 
   <property name="webapp" value="demo" />
+
+  <property name="username" value="tomcat" />
+  <property name="password" value="tomcat" />
 
   <target name="clean">
   
@@ -148,10 +178,6 @@
     <antcall target="checkRequiredFile">
        <param name="file" value="${commons-collections.jar}"/>
        <param name="fail.message" value="commons-collections.jar must be set"/>
-    </antcall>
-    <antcall target="checkRequiredFile">
-       <param name="file" value="${xerces.jar}"/>
-       <param name="fail.message" value="xerces.jar must be set"/>
     </antcall>
     <antcall target="checkRequiredFile">
        <param name="file" value="${jstl.jar}"/>
@@ -319,9 +345,6 @@ Before running this target you must:
     <copy file="${basedir}/components/wspack-build.xml"
           tofile="${dist.home}/samples/components/build.xml" />
 
-    <copy file="${basedir}/build.properties.sample"
-          todir="${dist.home}/samples" />
-
   </target>
 
 
@@ -334,7 +357,7 @@ Before running this target you must:
   </target>
 
   <target name="wspack" depends="dist.binary" >
-    <copy todir="${wspack.home}">
+    <copy todir="${wspack.home}/jsf">
       <fileset dir="${dist.home}"/>
     </copy>
   </target>
@@ -387,13 +410,38 @@ Before running this target you must:
 
   <target name="main" depends="verifyPreconditions,prepare.build,copyJars">
 
-    <ant dir="${basedir}/components"/>
+    <ant dir="${basedir}/components">
+      <property name="jsf-api.jar" 
+                value="../../jsf-api/build/lib/jsf-api.jar"/>
+      <property name="jsf-ri.jar" 
+                value="../../jsf-ri/build/lib/jsf-ri.jar"/>
+    </ant>
     <copy todir="${basedir}/lib"
           file="components/build/${webapp}/WEB-INF/lib/demo-components.jar"/>
-    <ant dir="${basedir}/cardemo"/>
-    <ant dir="${basedir}/helloDuke"/>
-    <ant dir="${basedir}/guessNumber"/>
-    <ant dir="${basedir}/nonjsp"/>
+    <ant dir="${basedir}/cardemo">
+      <property name="jsf-api.jar" 
+                value="../../jsf-api/build/lib/jsf-api.jar"/>
+      <property name="jsf-ri.jar" 
+                value="../../jsf-ri/build/lib/jsf-ri.jar"/>
+    </ant>
+    <ant dir="${basedir}/helloDuke">
+      <property name="jsf-api.jar" 
+                value="../../jsf-api/build/lib/jsf-api.jar"/>
+      <property name="jsf-ri.jar" 
+                value="../../jsf-ri/build/lib/jsf-ri.jar"/>
+    </ant>
+    <ant dir="${basedir}/guessNumber">
+      <property name="jsf-api.jar" 
+                value="../../jsf-api/build/lib/jsf-api.jar"/>
+      <property name="jsf-ri.jar" 
+                value="../../jsf-ri/build/lib/jsf-ri.jar"/>
+    </ant>
+    <ant dir="${basedir}/nonjsp">
+      <property name="jsf-api.jar" 
+                value="../../jsf-api/build/lib/jsf-api.jar"/>
+      <property name="jsf-ri.jar" 
+                value="../../jsf-ri/build/lib/jsf-ri.jar"/>
+    </ant>  
 
   </target>
 
