@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.23 2005/05/06 22:02:04 edburns Exp $
+ * $Id: TestApplicationImpl.java,v 1.24 2005/06/09 22:38:34 jayashri Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import javax.el.ValueExpression;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.23 2005/05/06 22:02:04 edburns Exp $
+ * @version $Id: TestApplicationImpl.java,v 1.24 2005/06/09 22:38:34 jayashri Exp $
  */
 
 public class TestApplicationImpl extends JspFacesTestCase {
@@ -122,7 +122,6 @@ public class TestApplicationImpl extends JspFacesTestCase {
         //    instance if called multiple times.
         //
         PropertyResolver propertyResolver1 = application.getPropertyResolver();
-        application.setPropertyResolver(propertyResolver1);
         PropertyResolver propertyResolver2 = application.getPropertyResolver();
         PropertyResolver propertyResolver3 = application.getPropertyResolver();
         assertTrue((propertyResolver1 == propertyResolver2) &&
@@ -132,7 +131,6 @@ public class TestApplicationImpl extends JspFacesTestCase {
         //    instance if called multiple times.
         //
         VariableResolver variableResolver1 = application.getVariableResolver();
-        application.setVariableResolver(variableResolver1);
         VariableResolver variableResolver2 = application.getVariableResolver();
         VariableResolver variableResolver3 = application.getVariableResolver();
         assertTrue((variableResolver1 == variableResolver2) &&
@@ -175,13 +173,12 @@ public class TestApplicationImpl extends JspFacesTestCase {
         }
         assertTrue(thrown);
 
-        // 4. Verify NullPointer exception which occurs when attempting
-        //    to set a null PropertyResolver
-        //
+        // 4. Verify ISE occurs when attempting to set PropertyResolver
+        // after application init time
         thrown = false;
         try {
             application.setPropertyResolver(null);
-        } catch (NullPointerException e) {
+        } catch (IllegalStateException e) {
             thrown = true;
         }
         assertTrue(thrown);
@@ -197,13 +194,13 @@ public class TestApplicationImpl extends JspFacesTestCase {
         }
         assertTrue(thrown);
 
-        // 6. Verify NullPointer exception which occurs when attempting
-        //    to set a null VariableResolver
+        // 6.Verify ISE occurs when attempting to set VariableResolver
+        // after application init time
         //
         thrown = false;
         try {
             application.setVariableResolver(null);
-        } catch (NullPointerException e) {
+        } catch (IllegalStateException e) {
             thrown = true;
         }
         assertTrue(thrown);
