@@ -76,9 +76,9 @@
 
   <!-- The base directory for compilation targets -->
   
-  <property name="Name" value="JSF Demos"/>
+  <property name="Name" value="JavaServer Faces"/>
   <property name="name" value="jsf-demo"/>
-  <property name="version" value="20040203"/>
+  <property name="version" value="1.0"/>
   
   <property name="build.home" value="${basedir}/build"/>
 
