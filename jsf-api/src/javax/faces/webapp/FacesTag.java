@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.22 2002/08/23 22:02:06 craigmcc Exp $
+ * $Id: FacesTag.java,v 1.23 2002/12/03 23:23:41 jvisvanathan Exp $
  */
 
 /*
@@ -136,6 +136,28 @@ public abstract class FacesTag extends TagSupport {
 
         this.modelReference = modelReference;
 
+    }
+
+    /**
+     * <p>An override for the rendered attribute associated with our
+     * {@link UIComponent}, if not <code>true</code>.</p>
+     */
+    protected boolean rendered = true;
+    
+    /**
+     * <p>Return the override for the rendered attribute.</p>
+     */
+    public boolean getRendered() {
+        return this.rendered;
+    }    
+    
+    /**
+     * <p>Set an override for the rendered attribute</p>
+     *
+     * @param rendered The new value for rendered attribute
+     */
+    public void setRendered(boolean rendered) {
+        this.rendered = rendered;
     }
 
 
@@ -514,6 +536,10 @@ public abstract class FacesTag extends TagSupport {
         if ((modelReference != null) &&
             (component.getModelReference() == null)) {
             component.setModelReference(modelReference);
+        }
+
+        if (component.getAttribute("rendered") == null) {
+             component.setRendered(rendered);
         }
 
     }
