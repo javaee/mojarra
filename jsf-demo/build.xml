@@ -106,7 +106,6 @@
     <copy todir="${jsf-demo.home}/lib" file="${commons-logging.jar}" />
     <copy todir="${jsf-demo.home}/lib" file="${commons-digester.jar}" />
     <copy todir="${jsf-demo.home}/lib" file="${commons-collections.jar}" />
-    <copy todir="${jsf-demo.home}/lib" file="${jstl.el.jar}" />
     <copy todir="${jsf-demo.home}/lib" file="${jsf.api.jar}" />
     <copy todir="${jsf-demo.home}/lib" file="${jsf.ri.jar}" />
     <copy todir="${jsf-demo.home}/lib" file="${standard.jar}" />
