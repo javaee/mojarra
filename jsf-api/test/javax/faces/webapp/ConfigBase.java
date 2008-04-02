@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigBase.java,v 1.1 2003/04/07 21:45:34 craigmcc Exp $
+ * $Id: ConfigBase.java,v 1.2 2003/04/07 23:37:48 craigmcc Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package javax.faces.webapp;
 
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,15 +57,60 @@ public class ConfigBase {
     }
 
 
+    // ------------------------------------------------------------ <component>
+
+
+    private Map components = null;
+    public void addComponent(ConfigComponent component) {
+        if (components == null) {
+            components = new HashMap();
+        }
+        components.put(component.getComponentType(), component);
+    }
+    public Map getComponents() {
+        if (components == null) {
+            return (Collections.EMPTY_MAP);
+        } else {
+            return (this.components);
+        }
+    }
+
+
     // ------------------------------------------------------------ <converter>
 
 
-    private Map converters = new HashMap();
+    private Map converters = null;
     public void addConverter(ConfigConverter converter) {
+        if (converters == null) {
+            converters = new HashMap();
+        }
         converters.put(converter.getConverterId(), converter);
     }
     public Map getConverters() {
-        return (this.converters);
+        if (converters == null) {
+            return (Collections.EMPTY_MAP);
+        } else {
+            return (this.converters);
+        }
+    }
+
+
+    // ------------------------------------------------------------ <validator>
+
+
+    private Map validators = null;
+    public void addValidator(ConfigValidator validator) {
+        if (validators == null) {
+            validators = new HashMap();
+        }
+        validators.put(validator.getValidatorId(), validator);
+    }
+    public Map getValidators() {
+        if (validators == null) {
+            return (Collections.EMPTY_MAP);
+        } else {
+            return (this.validators);
+        }
     }
 
 

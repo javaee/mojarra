@@ -181,7 +181,7 @@
     property names that will be recognized when performing introspection
     against that class via java.beans.Introspector.
 -->
-<!ELEMENT property        (description*, display-name*, icon*, property-name, property-type)>
+<!ELEMENT property        (description*, display-name*, icon*, property-name, property-class)>
 
 
 <!--
@@ -401,6 +401,13 @@
 
 
 <!--
+    The "property-class" element represents the Java type of the value
+    associated with this property name.  It must be of type "JavaType".
+-->
+<!ELEMENT property-class  EMPTY>
+
+
+<!--
     The "property-name" element represents the JavaBeans property name
     under which the corresponding value may be stored.
 -->
@@ -414,13 +421,6 @@
     It must be of type "ClassName".
 -->
 <!ELEMENT property-resolver EMPTY>
-
-
-<!--
-    The "property-type" element represents the Java type of the value
-    associated with this property name.  It must be of type "JavaType".
--->
-<!ELEMENT property-type   EMPTY>
 
 
 <!--

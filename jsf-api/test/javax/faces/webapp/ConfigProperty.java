@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigProperty.java,v 1.1 2003/04/07 21:45:35 craigmcc Exp $
+ * $Id: ConfigProperty.java,v 1.2 2003/04/07 23:37:50 craigmcc Exp $
  */
 
 /*
@@ -15,20 +15,20 @@ package javax.faces.webapp;
  */
 public class ConfigProperty extends ConfigFeature {
 
+    private String propertyClass;
+    public String getPropertyClass() {
+        return (this.propertyClass);
+    }
+    public void setPropertyClass(String propertyClass) {
+        this.propertyClass = propertyClass;
+    }
+
     private String propertyName;
     public String getPropertyName() {
         return (this.propertyName);
     }
     public void setPropertyName(String propertyName) {
         this.propertyName = propertyName;
-    }
-
-    private String propertyType;
-    public String getPropertyType() {
-        return (this.propertyType);
-    }
-    public void setPropertyType(String propertyType) {
-        this.propertyType = propertyType;
     }
 
 }

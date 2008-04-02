@@ -20,6 +20,50 @@
     <variable-resolver>com.mycompany.OldVariableResolver</variable-resolver>
   </application>
 
+  <!-- Second validator -->
+  <validator>
+    <description>Second Validator Description</description>
+    <display-name>Second Validator Display Name</display-name>
+    <icon>
+      <large-icon>secondValidator.gif</large-icon>
+      <small-icon>secondValidator.jpg</small-icon>
+    </icon>
+    <validator-id>Second</validator-id>
+    <validator-class>com.mycompany.MySecondValidator</validator-class>
+    <property>
+      <description>Second Validator Property 1 Description</description>
+      <display-name>Second Validator Property 1 Display Name</display-name>
+      <property-name>prop1</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+  </validator>
+
+  <!-- First validator -->
+  <validator>
+    <description>First Validator Description</description>
+    <display-name>First Validator Display Name</display-name>
+    <icon>
+      <large-icon>firstValidator.gif</large-icon>
+      <small-icon>firstValidator.jpg</small-icon>
+    </icon>
+    <validator-id>First</validator-id>
+    <validator-class>com.mycompany.MyFirstValidator</validator-class>
+    <attribute>
+      <description>First Validator Attribute 1 Description</description>
+      <display-name>First Validator Attribute 1 Display Name</display-name>
+      <attribute-name>attr1</attribute-name>
+      <attribute-type>java.lang.String</attribute-type>
+    </attribute>
+  </validator>
+
+  <!-- First component -->
+  <component>
+    <description>User Interface Command Component</description>
+    <display-name>User Interface Command</display-name>
+    <component-type>Command</component-type>
+    <component-class>javax.faces.component.UICommand</component-class>
+  </component>
+
   <!-- First converter -->
   <converter>
     <description>First Converter Description</description>
@@ -30,6 +74,12 @@
     </icon>
     <converter-id>First</converter-id>
     <converter-class>com.mycompany.MyFirstConverter</converter-class>
+    <attribute>
+      <description>First Converter Attribute 1 Description</description>
+      <display-name>First Converter Attribute 1 Display Name</display-name>
+      <attribute-name>attr1</attribute-name>
+      <attribute-type>java.lang.String</attribute-type>
+    </attribute>
   </converter>
 
   <!-- Second application element with overapping values -->
@@ -51,6 +101,12 @@
     </icon>
     <converter-id>Second</converter-id>
     <converter-class>com.mycompany.MySecondConverter</converter-class>
+    <property>
+      <description>Second Converter Property 1 Description</description>
+      <display-name>Second Converter Property 1 Display Name</display-name>
+      <property-name>prop1</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
   </converter>
 
 </faces-config>

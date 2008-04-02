@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFeature.java,v 1.1 2003/04/07 21:45:34 craigmcc Exp $
+ * $Id: ConfigFeature.java,v 1.2 2003/04/07 23:37:49 craigmcc Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package javax.faces.webapp;
 
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +21,20 @@ import java.util.Map;
 public abstract class ConfigFeature {
 
 
+    private Map attributes = null;
+    public void addAttribute(ConfigAttribute attribute) {
+        if (attributes == null) {
+            attributes = new HashMap();
+        }
+        attributes.put(attribute.getAttributeName(), attribute);
+    }
+    public Map getAttributes() {
+        if (attributes == null) {
+            return (Collections.EMPTY_MAP);
+        } else {
+            return (attributes);
+        }
+    }
 
 
     private String description;
@@ -30,6 +45,7 @@ public abstract class ConfigFeature {
         this.description = description;
     }
 
+
     private String displayName;
     public String getDisplayName() {
         return (this.displayName);
@@ -38,6 +54,7 @@ public abstract class ConfigFeature {
         this.displayName = displayName;
     }
 
+
     private String largeIcon;
     public String getLargeIcon() {
         return (this.largeIcon);
@@ -45,6 +62,23 @@ public abstract class ConfigFeature {
     public void setLargeIcon(String largeIcon) {
         this.largeIcon = largeIcon;
     }
+
+
+    private Map properties = null;
+    public void addProperty(ConfigProperty property) {
+        if (properties == null) {
+            properties = new HashMap();
+        }
+        properties.put(property.getPropertyName(), property);
+    }
+    public Map getProperties() {
+        if (properties == null) {
+            return (Collections.EMPTY_MAP);
+        } else {
+            return (properties);
+        }
+    }
+
 
     private String smallIcon;
     public String getSmallIcon() {

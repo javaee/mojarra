@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigConverter.java,v 1.1 2003/04/07 21:45:34 craigmcc Exp $
+ * $Id: ConfigConverter.java,v 1.2 2003/04/07 23:37:49 craigmcc Exp $
  */
 
 /*
@@ -29,15 +29,6 @@ public class ConfigConverter extends ConfigFeature {
     }
     public void setConverterClass(String converterClass) {
         this.converterClass = converterClass;
-    }
-
-    public String toString() {
-        StringBuffer sb = new StringBuffer("ConfigConverter[converterId=");
-        sb.append(converterId);
-        sb.append(",converterClass=");
-        sb.append(converterClass);
-        sb.append("]");
-        return (sb.toString());
     }
 
 }

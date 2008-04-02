@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.1 2003/04/07 21:45:35 craigmcc Exp $
+ * $Id: ConfigFileTestCase.java,v 1.2 2003/04/07 23:37:50 craigmcc Exp $
  */
 
 /*
@@ -63,7 +63,7 @@ public class ConfigFileTestCase extends TestCase {
     }
 
 
-    // -------------------------------------------------- Overall Test Methods
+    // --------------------------------------------------- Overall Test Methods
 
 
     /**
@@ -127,6 +127,24 @@ public class ConfigFileTestCase extends TestCase {
         assertEquals("com.mycompany.MyVariableResolver",
                      base.getVariableResolver());
 
+        // <component>
+        Map components = base.getComponents();
+        assertNotNull(components);
+        ConfigComponent ccomp1 = (ConfigComponent) components.get("Command");
+        assertNotNull(ccomp1);
+        assertEquals("User Interface Command Component",
+                     ccomp1.getDescription());
+        assertEquals("User Interface Command",
+                     ccomp1.getDisplayName());
+        assertEquals("Command",
+                     ccomp1.getComponentType());
+        assertEquals("javax.faces.component.UICommand",
+                     ccomp1.getComponentClass());
+        assertNull(ccomp1.getLargeIcon());
+        assertNull(ccomp1.getSmallIcon());
+        assertEquals(0, ccomp1.getAttributes().size());
+        assertEquals(0, ccomp1.getProperties().size());
+
         // <converter>
         Map converters = base.getConverters();
         assertNotNull(converters);
@@ -144,6 +162,21 @@ public class ConfigFileTestCase extends TestCase {
                      cc1.getConverterId());
         assertEquals("com.mycompany.MyFirstConverter",
                      cc1.getConverterClass());
+        assertEquals(1, cc1.getAttributes().size());
+        ConfigAttribute cc1a1 =
+            (ConfigAttribute) cc1.getAttributes().get("attr1");
+        assertNotNull(cc1a1);
+        assertEquals("First Converter Attribute 1 Description",
+                     cc1a1.getDescription());
+        assertEquals("First Converter Attribute 1 Display Name",
+                     cc1a1.getDisplayName());
+        assertNull(cc1a1.getLargeIcon());
+        assertNull(cc1a1.getSmallIcon());
+        assertEquals("attr1",
+                     cc1a1.getAttributeName());
+        assertEquals("java.lang.String",
+                     cc1a1.getAttributeType());
+        assertEquals(0, cc1.getProperties().size());
         ConfigConverter cc2 = (ConfigConverter) converters.get("Second");
         assertNotNull(cc2);
         assertEquals("Second Converter Description",
@@ -158,6 +191,83 @@ public class ConfigFileTestCase extends TestCase {
                      cc2.getConverterId());
         assertEquals("com.mycompany.MySecondConverter",
                      cc2.getConverterClass());
+        assertEquals(0, cc2.getAttributes().size());
+        assertEquals(1, cc2.getProperties().size());
+        ConfigProperty cc2p1 =
+            (ConfigProperty) cc2.getProperties().get("prop1");
+        assertNotNull(cc2p1);
+        assertEquals("Second Converter Property 1 Description",
+                     cc2p1.getDescription());
+        assertEquals("Second Converter Property 1 Display Name",
+                     cc2p1.getDisplayName());
+        assertNull(cc2p1.getLargeIcon());
+        assertNull(cc2p1.getSmallIcon());
+        assertEquals("prop1",
+                     cc2p1.getPropertyName());
+        assertEquals("java.lang.String",
+                     cc2p1.getPropertyClass());
+
+        // <validator>
+        Map validators = base.getValidators();
+        assertNotNull(validators);
+        ConfigValidator cv1 = (ConfigValidator) validators.get("First");
+        assertNotNull(cv1);
+        assertEquals("First Validator Description",
+                     cv1.getDescription());
+        assertEquals("First Validator Display Name",
+                     cv1.getDisplayName());
+        assertEquals("firstValidator.gif",
+                     cv1.getLargeIcon());
+        assertEquals("firstValidator.jpg",
+                     cv1.getSmallIcon());
+        assertEquals("First",
+                     cv1.getValidatorId());
+        assertEquals("com.mycompany.MyFirstValidator",
+                     cv1.getValidatorClass());
+        assertEquals(1, cv1.getAttributes().size());
+        ConfigAttribute cv1a1 =
+            (ConfigAttribute) cv1.getAttributes().get("attr1");
+        assertNotNull(cv1a1);
+        assertEquals("First Validator Attribute 1 Description",
+                     cv1a1.getDescription());
+        assertEquals("First Validator Attribute 1 Display Name",
+                     cv1a1.getDisplayName());
+        assertNull(cv1a1.getLargeIcon());
+        assertNull(cv1a1.getSmallIcon());
+        assertEquals("attr1",
+                     cv1a1.getAttributeName());
+        assertEquals("java.lang.String",
+                     cv1a1.getAttributeType());
+        assertEquals(0, cv1.getProperties().size());
+        ConfigValidator cv2 = (ConfigValidator) validators.get("Second");
+        assertNotNull(cv2);
+        assertEquals("Second Validator Description",
+                     cv2.getDescription());
+        assertEquals("Second Validator Display Name",
+                     cv2.getDisplayName());
+        assertEquals("secondValidator.gif",
+                     cv2.getLargeIcon());
+        assertEquals("secondValidator.jpg",
+                     cv2.getSmallIcon());
+        assertEquals("Second",
+                     cv2.getValidatorId());
+        assertEquals("com.mycompany.MySecondValidator",
+                     cv2.getValidatorClass());
+        assertEquals(0, cv2.getAttributes().size());
+        assertEquals(1, cv2.getProperties().size());
+        ConfigProperty cv2p1 =
+            (ConfigProperty) cv2.getProperties().get("prop1");
+        assertNotNull(cv2p1);
+        assertEquals("Second Validator Property 1 Description",
+                     cv2p1.getDescription());
+        assertEquals("Second Validator Property 1 Display Name",
+                     cv2p1.getDisplayName());
+        assertNull(cv2p1.getLargeIcon());
+        assertNull(cv2p1.getSmallIcon());
+        assertEquals("prop1",
+                     cv2p1.getPropertyName());
+        assertEquals("java.lang.String",
+                     cv2p1.getPropertyClass());
 
     }
 
@@ -187,6 +297,8 @@ public class ConfigFileTestCase extends TestCase {
 
         configureRulesApplication(digester);
         configureRulesConverter(digester);
+        configureRulesComponent(digester);
+        configureRulesValidator(digester);
 
     }
 
@@ -206,6 +318,44 @@ public class ConfigFileTestCase extends TestCase {
     }
 
 
+    // Configure the rules for a <attribute> element
+    protected void configureRulesAttribute(Digester digester, String prefix) {
+
+        digester.addObjectCreate(prefix,
+                                 "javax.faces.webapp.ConfigAttribute");
+        digester.addSetNext(prefix,
+                            "addAttribute",
+                            "javax.faces.webapp.ConfigAttribute");
+        configureRulesFeature(digester, prefix);
+        digester.addCallMethod(prefix + "/attribute-name",
+                               "setAttributeName", 0);
+        digester.addCallMethod(prefix + "/attribute-type",
+                               "setAttributeType", 0);
+
+    }
+
+
+    // Configure the rules for a <component> element
+    protected void configureRulesComponent(Digester digester) {
+
+        String prefix = "faces-config/component";
+
+        digester.addObjectCreate(prefix,
+                                 "javax.faces.webapp.ConfigComponent");
+        digester.addSetNext(prefix,
+                            "addComponent",
+                            "javax.faces.webapp.ConfigComponent");
+        configureRulesFeature(digester, prefix);
+        digester.addCallMethod(prefix + "/component-type",
+                               "setComponentType", 0);
+        digester.addCallMethod(prefix + "/component-class",
+                               "setComponentClass", 0);
+        configureRulesAttribute(digester, prefix + "/attribute");
+        configureRulesProperty(digester, prefix + "/property");
+
+    }
+
+
     // Configure the rules for a <converter> element
     protected void configureRulesConverter(Digester digester) {
 
@@ -221,6 +371,8 @@ public class ConfigFileTestCase extends TestCase {
                                "setConverterId", 0);
         digester.addCallMethod(prefix + "/converter-class",
                                "setConverterClass", 0);
+        configureRulesAttribute(digester, prefix + "/attribute");
+        configureRulesProperty(digester, prefix + "/property");
 
     }
 
@@ -236,6 +388,44 @@ public class ConfigFileTestCase extends TestCase {
                                "setLargeIcon", 0);
         digester.addCallMethod(prefix + "/icon/small-icon",
                                "setSmallIcon", 0);
+
+    }
+
+
+    // Configure the rules for a <property> element
+    protected void configureRulesProperty(Digester digester, String prefix) {
+
+        digester.addObjectCreate(prefix,
+                                 "javax.faces.webapp.ConfigProperty");
+        digester.addSetNext(prefix,
+                            "addProperty",
+                            "javax.faces.webapp.ConfigProperty");
+        configureRulesFeature(digester, prefix);
+        digester.addCallMethod(prefix + "/property-name",
+                               "setPropertyName", 0);
+        digester.addCallMethod(prefix + "/property-class",
+                               "setPropertyClass", 0);
+
+    }
+
+
+    // Configure the rules for a <validator> element
+    protected void configureRulesValidator(Digester digester) {
+
+        String prefix = "faces-config/validator";
+
+        digester.addObjectCreate(prefix,
+                                 "javax.faces.webapp.ConfigValidator");
+        digester.addSetNext(prefix,
+                            "addValidator",
+                            "javax.faces.webapp.ConfigValidator");
+        configureRulesFeature(digester, prefix);
+        digester.addCallMethod(prefix + "/validator-id",
+                               "setValidatorId", 0);
+        digester.addCallMethod(prefix + "/validator-class",
+                               "setValidatorClass", 0);
+        configureRulesAttribute(digester, prefix + "/attribute");
+        configureRulesProperty(digester, prefix + "/property");
 
     }
 
