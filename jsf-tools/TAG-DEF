@@ -4,7 +4,7 @@
     <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
     <description>
-      <p>Renders a UIComponent that represents a single column of data within a parent <code>UIData</code> component.</p>
+      <![CDATA[<p>Renders a UIComponent that represents a single column of data within a parent <code>UIData</code> component.</p>]]>
     </description>
     <attribute>
       <name>rendered</name>
