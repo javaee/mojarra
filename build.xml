@@ -45,6 +45,20 @@
 
 
     <!-- ************ Executable Targets ************************************** -->
+    
+    <macrodef name="call.modules">
+        <attribute name="target"/>
+        <sequential>
+            <subant target="@{target}" inheritAll="false">
+                <filelist dir="${api.dir}">
+                    <file name="build.xml"/>
+                </filelist>    
+                <filelist dir="${impl.dir}">
+                    <file name="build.xml"/>
+                </filelist>
+            </subant>
+        </sequential>
+    </macrodef>
 
     <target name="clean"
             description="Clean build and distribution directories">
@@ -60,15 +74,17 @@
         <delete file="jsf-samples.zip"/>
         <delete file="${basedir}/javaserverfaces_samples.class"/>
         <delete dir="${basedir}/build"/>
-        <ant dir="${api.dir}" 
-             antfile="build.xml" 
-             target="clean" 
-             inheritAll="false"/>
-        <ant dir="${impl.dir}"
-             antfile="build.xml"
-             target="clean" 
-             inheritAll="false"/>
-    </target>    
+        <call.modules target="clean"/>        
+    </target>  
+    
+    <target name="main" description="Build API and RI">
+        <call.modules target="main"/>
+    </target>
+
+    <target name="test" description="Run API, RI, Demo automated tests">
+        <call.modules target="test"/>
+    </target>
+    
 
     <!-- Create the source distribution -->
     <target name="jsf.source">
@@ -243,28 +259,7 @@
                 <fail message="Javanettasks version 1.0.5 is not available at the location referred by TASKS_HOME (${tasks.home}).  Ensure that the TASKS_HOME environment variable is properly set."/>
             </else>
         </if>
-    </target>
-
-    <target name="main" description="Build API and RI">
-        <ant dir="${api.dir}" 
-             antfile="build.xml"
-             target="main" 
-             inheritAll="false"/>
-        <ant dir="${impl.dir}" 
-             antfile="build.xml"
-             target="main" inheritAll="false"/>
-    </target>
-
-    <target name="test" description="Run API, RI, Demo automated tests">
-        <ant dir="${api.dir}" 
-             antfile="build.xml"
-             target="test" 
-             inheritAll="false"/>
-        <ant antfile="build.xml"
-             dir="${impl.dir}" 
-             target="test" 
-             inheritAll="false"/>
-    </target>
+    </target>    
 
     <target name="build.samples.zip" depends="main">       
 
