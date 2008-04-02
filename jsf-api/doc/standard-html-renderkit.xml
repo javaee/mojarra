@@ -1034,6 +1034,15 @@
     <property>
       <display-name></display-name>
       <icon></icon>
+      <property-name>converter</property-name>
+      <property-class>javax.faces.convert.Converter</property-class>
+      <property-extension>
+        <tag-attribute>yes</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
       <property-name>validator</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>

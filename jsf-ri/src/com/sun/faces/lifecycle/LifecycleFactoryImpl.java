@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactoryImpl.java,v 1.16 2003/12/17 15:13:43 rkitain Exp $
+ * $Id: LifecycleFactoryImpl.java,v 1.17 2003/12/23 19:18:53 jvisvanathan Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import java.util.HashMap;
  *  in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleFactoryImpl.java,v 1.16 2003/12/17 15:13:43 rkitain Exp $
+ * @version $Id: LifecycleFactoryImpl.java,v 1.17 2003/12/23 19:18:53 jvisvanathan Exp $
  * 
  * @see	javax.faces.lifecycle.LifecycleFactory
  *
@@ -185,23 +185,23 @@ public Lifecycle getLifecycle(String lifecycleId) throws FacesException
         throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
     }
     
-    try {
-	wrapper = (LifecycleWrapper) lifecycleMap.get(lifecycleId);
-	result = wrapper.instance;
-	wrapper.created = true;
-    }
-    catch (Throwable e) {
+    if (null == lifecycleMap.get(lifecycleId)) {
 	Object [] params = { lifecycleId };
         String message = 
         Util.getExceptionMessage(Util.CANT_CREATE_LIFECYCLE_ERROR_MESSAGE_ID,
                 params);
         if (log.isErrorEnabled()) {
-            log.error("getLifecycle: " + message);
+            log.error("LifecycleId " + lifecycleId + " does not exist");
         }
-	throw new FacesException(message);
+	throw new IllegalArgumentException(message);
     }
-    if (log.isDebugEnabled()) {
-        log.debug("getLifecycle: " + lifecycleId + " " + result);
+    
+    wrapper = (LifecycleWrapper) lifecycleMap.get(lifecycleId);
+    result = wrapper.instance;
+    wrapper.created = true;
+  
+    if (log.isTraceEnabled()) {
+        log.trace("getLifecycle: " + lifecycleId + " " + result);
     }
     return result;
 }

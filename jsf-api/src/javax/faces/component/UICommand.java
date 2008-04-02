@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.57 2003/12/17 23:25:50 eburns Exp $
+ * $Id: UICommand.java,v 1.58 2003/12/23 19:18:39 jvisvanathan Exp $
  */
 
 /*
@@ -267,6 +267,10 @@ public class UICommand extends UIComponentBase
      */
     public void broadcast(FacesEvent event) throws AbortProcessingException {
 
+        if (!(event instanceof ActionEvent)) {
+            throw new IllegalArgumentException();
+        }
+        
         // Perform standard superclass processing
         super.broadcast(event);
 

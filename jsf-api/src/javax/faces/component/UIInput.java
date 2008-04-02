@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.52 2003/12/22 19:29:23 eburns Exp $
+ * $Id: UIInput.java,v 1.53 2003/12/23 19:18:40 jvisvanathan Exp $
  */
 
 /*
@@ -296,6 +296,9 @@ public class UIInput extends UIOutput {
     public void broadcast(FacesEvent event)
         throws AbortProcessingException {
 
+        if (!(event instanceof ValueChangeEvent)) {
+            throw new IllegalArgumentException();
+        }
         // Perform standard superclass processing
         super.broadcast(event);
 
