@@ -107,9 +107,71 @@ Render graph as a tree control (graph specified via JSP):<br>
 </d:graph_menutree>
 
 <hr>
+</h:form>
 <a href='<%= request.getContextPath() + "/index.jsp" %>'>Back</a> to home page.
 
-</h:form>
+<h1>How to Use this Component</h1>
+
+<p>This component renders a <code>Graph</code> as either a menu bar or a tree control.  The <code>Graph</code> can be specified as model data, or it can be specified in <code>JSP</code>.</p>
+
+<h2>JSP Attributes</h2>
+
+<p>This component allows the user to define CSS classes via JSP attributes that are output in the rendered markup.  This makes it possible to produce highly customizable output.  You can compare the rendered source of this page, using the "View Source" feature of your browser, with <a href="ShowSource.jsp?filename=/menu.jsp">the JSP source</A> for this page.</p>
+
+<table border="1">
+
+<tr>
+<th>JSP Attribute Name</th>
+<th>What it Does</th>
+</tr>
+
+<tr>
+
+<td><code>selectedClass</code></td>
+
+<td>A style sheet class which controls the display attributes of the selected menu bar or tree element.  This is used to distinguish the selected portion from the other unselected portions.</td>
+
+</tr>
+
+<tr>
+
+<td><code>unselectedClass</code></td>
+
+<td>A style sheet class which controls the display attributes of an unselected menu bar or tree element.  This is used to distinguish an unselected portion from a selected portion.</
+td>
+
+</tr>
+
+</table>
+
+<h2>Menu Bar</h2>
+
+<p>The menu bar can be described from a <code>Graph</code> specified in the model or it can be described from <code>JSP</code> tags.</p>
+
+<h3>Described From JSP</h3>
+
+<p>The <code>graph_menubar</code> tag consists of multiple <code>graph_menunode</code> tags.  Each <code>graph_menunode</code> tag corresponds to an item on the menu bar, and you can nest <code>graph_menunode</code> tags within each other.  The <code>graph_menunode</code> tag has attributes that control the visual aspects of the node, and it has an <code>action</code> attribute that can be used to specify a context-relative URL for when the node is selected.  Refer to the tag library descriptor <code>tld</code> file for a complete list of attributes.</p>
+
+<h3>Described From Model</h3>
+
+<p>The <code>graph_menubar</code> tag refers to a <code>Graph</code> model component through the <code>modelReference</code> attribute.  The <code>Graph</code> model component consists of multiple <code>Node</code> components.  Each <code>Node</code> component describes an item on the menu bar.</p>
+
+<h2>Tree Control</h2>
+
+<p>The tree control can be described from a <code>Graph</code> specified in the model or it can be described from <code>JSP</code> tags.</p>
+
+<h3>Described From JSP</h3>
+
+<p>The <code>graph_menutree</code> tag consists of multiple <code>graph_treenode</code> tags.  Each <code>graph_treenode</code> tag corresponds to a node in the tree, and you can nest <code>graph_treenode</code> tags within each other.  The <code>graph_treenode</code> tag has attributes that control the visual aspects of the node, and it has an <code>action</code> attribute that can be used to specify a context-relative URL for when the node is selected.  Refer to the tag library descriptor <code>tld</code> file for a complete list of attributes.</p>
+
+<h3>Described From Model</h3>
+
+<p>The <code>graph_menutree</code> tag refers to a <code>Graph</code> model component through the <code>modelReference</code> attribute.  The <code>Graph</code> model component consists of multiple <code>Node</code> components.  Each <code>Node</code> component describes an item in the tree.</p>
+
+ 
+<hr>
+
+<a href='<%= request.getContextPath() + "/index.jsp" %>'>Back</a> to home page.
 
 </body>
 </html>
