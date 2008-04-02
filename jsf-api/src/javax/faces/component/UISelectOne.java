@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.16 2002/08/30 20:11:21 craigmcc Exp $
+ * $Id: UISelectOne.java,v 1.17 2002/12/03 23:02:02 jvisvanathan Exp $
  */
 
 /*
@@ -106,7 +106,8 @@ public class UISelectOne extends UISelectBase {
 
 
     /**
-     * <p>Render the current value of this component.</p>
+     * <p>Render the current value of this component if the value of the 
+     * rendered attribute is <code>true</code>. </p>
      *
      * @param context FacesContext for the response we are creating
      *
@@ -123,6 +124,11 @@ public class UISelectOne extends UISelectBase {
         // Delegate to our associated Renderer if needed
         if (getRendererType() != null) {
             super.encodeEnd(context);
+            return;
+        }
+
+        // if rendered is false, do not perform default encoding.
+        if (!isRendered()) {
             return;
         }
 

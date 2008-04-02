@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphic.java,v 1.12 2002/07/29 00:47:05 craigmcc Exp $
+ * $Id: UIGraphic.java,v 1.13 2002/12/03 23:02:01 jvisvanathan Exp $
  */
 
 /*
@@ -74,7 +74,8 @@ public class UIGraphic extends UIOutput {
 
 
     /**
-     * <p>Render the current value of this component.</p>
+     * <p>Render the current value of this component if the value 
+     * of the rendered attribute is <code>true</code>. </p>
      *
      * @param context FacesContext for the response we are creating
      *
@@ -91,6 +92,11 @@ public class UIGraphic extends UIOutput {
         // Delegate to our associated Renderer if needed
         if (getRendererType() != null) {
             super.encodeEnd(context);
+            return;
+        }
+
+        // if rendered is false, do not perform default encoding.
+        if (!isRendered()) {
             return;
         }
 

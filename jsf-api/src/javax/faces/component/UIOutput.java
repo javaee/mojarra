@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.18 2002/09/20 01:32:43 craigmcc Exp $
+ * $Id: UIOutput.java,v 1.19 2002/12/03 23:02:01 jvisvanathan Exp $
  */
 
 /*
@@ -76,7 +76,8 @@ public class UIOutput extends UIComponentBase {
 
 
     /**
-     * <p>Render the current value of this component.</p>
+     * <p>Render the current value of this component if the value of 
+     * the rendered attribute is <code>true</code>. </p>
      *
      * @param context FacesContext for the response we are creating
      *
@@ -93,6 +94,11 @@ public class UIOutput extends UIComponentBase {
         // Delegate to our associated Renderer if needed
         if (getRendererType() != null) {
             super.encodeEnd(context);
+            return;
+        }
+
+        // if rendered is false, do not perform default encoding.
+        if (!isRendered()) {
             return;
         }
 

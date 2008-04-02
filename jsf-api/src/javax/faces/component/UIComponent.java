@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.56 2002/12/03 01:04:57 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.57 2002/12/03 23:02:01 jvisvanathan Exp $
  */
 
 /*
@@ -124,6 +124,23 @@ public interface UIComponent extends Serializable {
      *  <code>null</code> to disconnect this component from any model data
      */
     public void setModelReference(String modelReference);
+
+
+    /**
+     * <p>Set the rendered attribute of this <code>UIComponent</code>.</p>
+     * 
+     * @param rendered If <code>true</code> render this component.
+     * Otherwise, do not render this component.
+     */
+    public void setRendered(boolean rendered);
+
+    
+    /**
+     * <p>Return <code>true</code> if the value of the 'rendered' attribute 
+     * is a Boolean representing <code>true</code> or <code>null</code>, 
+     * otherwise return <code>false</code>.</p>
+     */
+    public boolean isRendered();
 
 
     /**

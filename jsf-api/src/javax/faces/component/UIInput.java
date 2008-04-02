@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.2 2002/08/30 20:11:20 craigmcc Exp $
+ * $Id: UIInput.java,v 1.3 2002/12/03 23:02:01 jvisvanathan Exp $
  */
 
 /*
@@ -85,7 +85,8 @@ public class UIInput extends UIComponentBase {
 
 
     /**
-     * <p>Render the current value of this component.</p>
+     * <p>Render the current value of this component if the value 
+     * of the rendered attribute is <code>true</code>. </p>
      *
      * @param context FacesContext for the response we are creating
      *
@@ -102,6 +103,11 @@ public class UIInput extends UIComponentBase {
         // Delegate to our associated Renderer if needed
         if (getRendererType() != null) {
             super.encodeEnd(context);
+            return;
+        }
+
+        // if rendered is false, do not perform default encoding.
+        if (!isRendered()) {
             return;
         }
 

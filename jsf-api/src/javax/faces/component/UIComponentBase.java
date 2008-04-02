@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.28 2002/12/03 01:04:57 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.29 2002/12/03 23:02:01 jvisvanathan Exp $
  */
 
 /*
@@ -298,6 +298,35 @@ public abstract class UIComponentBase implements UIComponent {
 
         setAttribute("modelReference", modelReference);
 
+    }
+
+    /**
+     * <p>Return <code>true</code> if the value of the 'rendered' attribute 
+     * is a Boolean representing <code>true</code> or <code>null</code>, 
+     * otherwise return <code>false</code>.</p>
+     */
+    public boolean isRendered() {
+
+        Boolean rendered = (Boolean) getAttribute("rendered");
+        if (rendered != null) {
+            return (rendered.booleanValue());
+        } else {
+            return (true);
+        }
+    }
+    
+    /**
+     * <p>Set the rendered attribute of this <code>UIComponent</code>.</p>
+     * 
+     * @param rendered If <code>true</code> render this component.
+     * Otherwise, do not render this component.
+     */
+    public void setRendered(boolean rendered) {
+        if ( rendered ) {
+            setAttribute("rendered", Boolean.TRUE);
+        } else {
+            setAttribute("rendered", Boolean.FALSE);  
+        }
     }
 
 
