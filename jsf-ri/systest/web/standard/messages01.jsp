@@ -33,15 +33,6 @@
 
   facesContext.addMessage(null, message);
 
-  message = MessageFactory.getMessage(facesContext,
-         "javax.faces.validator.LongRangeValidator.LIMIT");
-  if (message == null) {
-    out.println("/messages01.jsp FAILED - No message returned");
-    return;
-  }
-
-  facesContext.addMessage(null, message);
-
 %>
 
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>

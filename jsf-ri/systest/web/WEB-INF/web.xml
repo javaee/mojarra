@@ -18,7 +18,7 @@
     </context-param>
 
     <context-param>
-        <param-name>javax.faces.application.CONFIG_FILES</param-name>
+        <param-name>javax.faces.CONFIG_FILES</param-name>
         <param-value>WEB-INF/init-faces-config.xml</param-value>
     </context-param>
 

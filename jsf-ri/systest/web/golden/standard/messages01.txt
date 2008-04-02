@@ -27,7 +27,7 @@
 
 
 
-<span class="errors">	Validation Error: Value is required. </span><span class="errors">	Validation Error: Specified attribute cannot be converted to proper type. </span> 
+<span class="errors">	Validation Error: Value is required. </span> 
 
 
 

@@ -11,14 +11,12 @@
 
   // Initialize list of message ids
   String list[] = {
-    "javax.faces.validator.DoubleRangeValidator.LIMIT",
+    "javax.faces.validator.NOT_IN_RANGE",
     "javax.faces.validator.DoubleRangeValidator.MAXIMUM",
     "javax.faces.validator.DoubleRangeValidator.MINIMUM",
     "javax.faces.validator.DoubleRangeValidator.TYPE",
-    "javax.faces.validator.LengthValidator.LIMIT",
     "javax.faces.validator.LengthValidator.MAXIMUM",
     "javax.faces.validator.LengthValidator.MINIMUM",
-    "javax.faces.validator.LongRangeValidator.LIMIT",
     "javax.faces.validator.LongRangeValidator.MAXIMUM",
     "javax.faces.validator.LongRangeValidator.MINIMUM",
     "javax.faces.validator.LongRangeValidator.TYPE",
