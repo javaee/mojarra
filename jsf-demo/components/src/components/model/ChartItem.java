@@ -1,5 +1,5 @@
 /*
- * $Id: ChartItem.java,v 1.1 2004/03/06 01:58:06 jvisvanathan Exp $
+ * $Id: ChartItem.java,v 1.2 2004/03/26 21:39:07 jvisvanathan Exp $
  */
 
 /*
@@ -45,6 +45,10 @@ package components.model;
 
 public class ChartItem {
 
+    public ChartItem() {
+       super();
+    }
+    
     public ChartItem(String label, int value, String color) {
         setLabel(label);
 	setValue(value);

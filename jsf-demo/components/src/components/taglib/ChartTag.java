@@ -109,6 +109,10 @@ public class ChartTag extends UIComponentTag {
         width = null;
         height = null;
         orientation = null;
+        title = null;
+        xlabel = null;
+        ylabel = null;
+        type = null;
     }
 
 

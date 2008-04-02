@@ -53,8 +53,8 @@ import components.model.ChartItem;
 
 
 /**
- * <p>{@link ChartComponent} is a JavaServer Faces component that can render 
- * given set of data as a bar or pie chart.</p>
+ * <p>{@link ChartComponent} is a JavaServer Faces component that renders
+ * a given set of data as a bar or pie chart.</p>
  */
 
 public class ChartComponent extends UIOutput {
@@ -282,11 +282,15 @@ public class ChartComponent extends UIOutput {
      * @param context <code>FacesContext</code> for the current request
      */
     public Object saveState(FacesContext context) {
-        Object values[] = new Object[4];
+        Object values[] = new Object[8];
         values[0] = super.saveState(context);
         values[1] = width;
         values[2] = height;
         values[3] = orientation;
+        values[4] = type;
+        values[5] = title;
+        values[6] = xlabel;
+        values[7] = ylabel;
         return (values);
     }
 
@@ -305,11 +309,15 @@ public class ChartComponent extends UIOutput {
         width = (String) values[1];
         height = (String) values[2];
         orientation = (String) values[3];
+        type = (String) values[4];
+        title = (String) values[5];
+        xlabel = (String) values[6];
+        ylabel = (String) values[7];
     }
     
     public void encodeEnd(FacesContext context) throws IOException {
         placeChartDataInScope();
-        // render an image that would initiate a separate to a URL pointing 
+        // render an image that would initiate a request to a URL pointing 
         // back into the webapp passing in whatever parameters are needed to 
         // create the dynamic image.
         ResponseWriter writer = context.getResponseWriter();

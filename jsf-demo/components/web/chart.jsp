@@ -36,7 +36,7 @@
  maintenance of any nuclear facility.
 -->
 
-<%-- $Id: chart.jsp,v 1.3 2004/03/08 23:19:38 rkitain Exp $ --%>
+<%-- $Id: chart.jsp,v 1.4 2004/03/26 21:39:10 jvisvanathan Exp $ --%>
 
 
 
@@ -53,16 +53,34 @@
 <body bgcolor="white">
 
 <h:form>
-     <h:outputText value="Bar Chart with data specifed via JSP" />  
+       
      <hr>
-     <d:chart width="300" height="300" type="Bar" orientation="vertical" 
+     <table> 
+      <tr>
+         <th><h:outputText value="Bar Chart with data specifed via JSP" /></th>
+         <th><h:outputText value="Pie Chart with data specifed via JSP" /></th>
+      </tr> 
+     <tr> 
+     <td>
+     <d:chart width="300" height="300" type="bar" orientation="vertical" 
          title="Employee Number By Department" xlabel="Departments" ylabel="Employees">
          <d:chartItem itemLabel="Eng" itemValue="200" itemColor="red" />
          <d:chartItem itemLabel="Mktg" itemValue="400" itemColor="green" />
          <d:chartItem itemLabel="Sales" itemValue="600" itemColor="blue" />
          <d:chartItem itemLabel="R&D" itemValue="700" itemColor="orange" />
          <d:chartItem itemLabel="HR" itemValue="800" itemColor="cyan" />
-     </d:chart>
+     </d:chart> </td>
+
+     <td>
+     <d:chart width="400" height="200" type="pie" 
+         title="Employee Number By Department">
+         <d:chartItem itemLabel="Eng" itemValue="200" itemColor="red" />
+         <d:chartItem itemLabel="Mktg" itemValue="400" itemColor="green" />
+         <d:chartItem itemLabel="Sales" itemValue="600" itemColor="blue" />
+         <d:chartItem itemLabel="R&D" itemValue="700" itemColor="orange" />
+         <d:chartItem itemLabel="HR" itemValue="800" itemColor="cyan" />
+     </d:chart> </td>
+     </tr> </table>
 </h:form>
 
 

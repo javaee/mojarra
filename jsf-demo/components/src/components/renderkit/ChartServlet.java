@@ -1,5 +1,5 @@
 /*
- * $Id: ChartServlet.java,v 1.3 2004/03/08 23:19:35 rkitain Exp $
+ * $Id: ChartServlet.java,v 1.4 2004/03/26 21:39:08 jvisvanathan Exp $
  */
 
 /*
@@ -54,6 +54,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.awt.geom.Ellipse2D;
+import java.awt.RenderingHints;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
@@ -134,9 +136,7 @@ public final class ChartServlet extends HttpServlet {
 	    (!type.equals("bar")) && (!type.equals("pie"))) {
 	    type = "bar";
 	}
-
-        generatePieChart(request, response);
-
+        System.out.println("Type of chart " + type);
 	if (type.equals("bar")) {
 	    generateBarChart(request, response);
 	} else {
@@ -323,37 +323,7 @@ public final class ChartServlet extends HttpServlet {
 	    value = chartItem.getValue();
 	    String colorStr = chartItem.getColor();
 
-	    Object color = null;
-	    if (colorStr != null) {
-		if (colorStr.equals("red")) {
-		    color = Color.red;
-		} else if (colorStr.equals("green")) {
-		    color = Color.green;
-		} else if (colorStr.equals("blue")) {
-		    color = Color.blue;
-		} else if (colorStr.equals("pink")) {
-		    color = Color.pink;
-		} else if (colorStr.equals("orange")) {
-		    color = Color.orange;
-		} else if (colorStr.equals("magenta")) {
-		    color = Color.magenta;
-		} else if (colorStr.equals("cyan")) {
-		    color = Color.cyan;
-		} else if (colorStr.equals("white")) {
-		    color = Color.white;
-		} else if (colorStr.equals("yellow")) {
-		    color = Color.yellow;
-		} else if (colorStr.equals("gray")) {
-		    color = Color.gray;
-		} else if (colorStr.equals("darkGray")) {
-		    color = Color.darkGray;
-		} else {
-		    color = Color.gray;
-		}
-	    } else {
-		color = Color.gray;
-	    }   
-
+	    Object color = getColor(colorStr);
 	    switch (orientation) {
 	      case VERTICAL:
 	      default: 
@@ -419,6 +389,7 @@ public final class ChartServlet extends HttpServlet {
         JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(output);
         encoder.encode(bi);
         output.close();
+       
     }
 
     /**
@@ -433,6 +404,208 @@ public final class ChartServlet extends HttpServlet {
     private void generatePieChart(HttpServletRequest request,
 		                  HttpServletResponse response)
         throws IOException, ServletException {
+        response.setContentType("image/jpeg");
+	
+	// get chart parameters
+	String title = request.getParameter("title");
+	if (title == null) {
+	    title = "Chart";
+	}
+	
+	// label for x/y axis
+	String xLabel = request.getParameter("xlabel");
+	String yLabel = request.getParameter("ylabel");
 
+	// default image size
+	int width = 400;
+	int height = 200;
+	String widthStr = request.getParameter("width");
+	String heightStr = request.getParameter("height");
+	if (widthStr != null) {
+	    width = Integer.parseInt(widthStr);
+	}
+	if (heightStr != null) {
+	    height = Integer.parseInt(heightStr);
+	}
+	
+	// get an array of chart items containing our data..
+        HttpSession session = request.getSession(true);
+	ChartItem[] chartItems = (ChartItem[])session.getAttribute("chart");
+	if (chartItems == null) {
+	    throw new ServletException("No data items specified...");
+	}
+        
+        // begin pie chart
+        Color dropShadow = new Color(240,240,240);
+        //inner padding to make sure bars never touch the outer border
+        int innerOffset = 20;
+ 
+        int pieHeight = height - (innerOffset * 2);
+        int pieWidth =  pieHeight;              
+        int halfWidth = width/2;
+
+        //Width of the inner graphable area
+        int innerWidth = width - (innerOffset * 2);
+        
+        //graph dimension
+        Dimension graphDim = new Dimension(width, height);
+        Rectangle graphRect = new Rectangle(graphDim);
+
+        //border dimensions
+        Dimension borderDim = new Dimension(halfWidth-2,height-2);
+        Rectangle borderRect = new Rectangle(borderDim);
+        
+        //Set content type
+        response.setContentType("image/jpeg");
+
+        //Create BufferedImage & Graphics2D
+        BufferedImage bi = new BufferedImage(width, height, 
+                BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = bi.createGraphics();
+
+        // Set Antialiasing
+        RenderingHints renderHints = 
+            new RenderingHints(RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHints(renderHints);
+
+        //Set graph background color to white:
+        g2d.setColor(Color.white);
+        g2d.fill(graphRect);
+
+        //Draw black border
+        g2d.setColor(Color.black);
+        borderRect.setLocation(1,1);
+        g2d.draw(borderRect);
+
+        //Now draw border for legend
+        borderRect.setLocation((width/2) + 1,1);
+        g2d.draw(borderRect);
+
+        //Draw data onto the graph:
+        int x_pie = innerOffset;
+        int y_pie = innerOffset;
+        int border = 20;
+
+        //Main chart Ellipse
+        Ellipse2D.Double elb = new Ellipse2D.Double(x_pie - border/2, 
+            y_pie - border/2, pieWidth + border, pieHeight + border);
+        //Shadow
+        g2d.setColor(dropShadow);
+        g2d.fill(elb);
+
+        //Border
+        g2d.setColor(Color.black);
+        g2d.draw(elb);
+
+        // Calculate the total value so that the pies can be calculated.
+        float yTotal = 0.0f;
+        int lastElement = 0;
+        for(int i=0; i<chartItems.length; i++) {
+           int ycoord = chartItems[i].getValue();
+           if(ycoord > 0.0f) {
+               yTotal += ycoord;
+               lastElement = i;
+          }
+        }
+
+        // Draw the pie chart
+        int startAngle = 0;
+
+        //Legend variables
+        int legendWidth = 20;
+        int x_legendText = halfWidth + innerOffset/2 + legendWidth + 5;
+        int x_legendBar = halfWidth + innerOffset/2;
+        int textHeight = 20;
+        int curElement = 0;
+        int y_legend = 0;
+
+        //Dimensions of the legend bar
+        Dimension legendDim = new Dimension(legendWidth , textHeight/2);
+        Rectangle legendRect = new Rectangle(legendDim);
+        for(int i=0; i< chartItems.length; i++) {
+            int ycoord = chartItems[i].getValue();
+            if(ycoord > 0.0f) {
+                //Calculate percentage sales
+                float perc = (ycoord/yTotal);
+                //Calculate new angle
+                int sweepAngle = (int)(perc * 360);
+                //Check that the last element goes back to 0 position
+                if (i == lastElement) {sweepAngle = 360-startAngle;}
+                // Draw Arc
+                g2d.setColor(getColor(chartItems[i].getColor()));
+                g2d.fillArc(x_pie, y_pie, pieWidth, pieHeight, startAngle, 
+                        sweepAngle);
+                //Increment startAngle with the sweepAngle
+                startAngle += sweepAngle;
+
+                //Draw Legend
+                //Set y position for bar
+                y_legend = curElement * textHeight + innerOffset;
+                //Display the current column
+                String display = chartItems[i].getLabel();
+                g2d.setColor(Color.black);
+                g2d.drawString(display, x_legendText, y_legend);
+                //Display the total sales
+                display = "" + ycoord;
+                g2d.setColor(Color.black);
+                g2d.drawString(display, x_legendText + 80, y_legend);
+                //Display the sales percentage
+                display = "  (" + (int)(perc*100) + "%)";
+                g2d.setColor(Color.red);
+                g2d.drawString(display, x_legendText + 110, y_legend);
+                //Draw the bar
+                g2d.setColor(getColor(chartItems[i].getColor()));
+                legendRect.setLocation(x_legendBar,y_legend - textHeight/2);
+                g2d.fill(legendRect);
+                //Increment
+                curElement++;
+            }
+        }
+        // Encode the graph
+        OutputStream output = response.getOutputStream();
+        JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(output);
+        encoder.encode(bi);
+        output.close();
+
+    }
+    
+    /**
+     * Returns the Color instance corresponding the color passed in.
+     *
+     * @param color a string representing a color instance.
+     * @ return Color instance corresponding to the input color.
+     */
+    protected Color getColor(String colorStr) {
+        Color color = null;
+	if (colorStr == null) {
+            color = Color.gray;
+        }
+        if (colorStr.equals("red")) {
+            color = Color.red;
+        } else if (colorStr.equals("green")) {
+            color = Color.green;
+        } else if (colorStr.equals("blue")) {
+            color = Color.blue;
+        } else if (colorStr.equals("pink")) {
+            color = Color.pink;
+        } else if (colorStr.equals("orange")) {
+            color = Color.orange;
+        } else if (colorStr.equals("magenta")) {
+            color = Color.magenta;
+        } else if (colorStr.equals("cyan")) {
+            color = Color.cyan;
+        } else if (colorStr.equals("white")) {
+            color = Color.white;
+        } else if (colorStr.equals("yellow")) {
+            color = Color.yellow;
+        } else if (colorStr.equals("gray")) {
+            color = Color.gray;
+        } else if (colorStr.equals("darkGray")) {
+            color = Color.darkGray;
+        } else {
+            color = Color.gray;
+        }
+        return color;
     }
 }
