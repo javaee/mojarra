@@ -1,5 +1,5 @@
 /*
- * $Id: IdTagParserImpl.java,v 1.11 2005/08/22 22:10:25 ofung Exp $
+ * $Id: IdTagParserImpl.java,v 1.12 2006/01/11 20:29:28 rlubke Exp $
  */
 
 /*
@@ -120,9 +120,7 @@ public class IdTagParserImpl implements TagParser {
         Attributes a = validatorInfo.getAttributes();
         FacesValidator validator = validatorInfo.getValidator();
 
-        if (isJstlTag(validator, ns, ln)) {
-            requiresIdCount++;
-        } else if (isNamingContainerTag(validator, ns, ln)) {
+        if (isNamingContainerTag(validator, ns, ln)) {
             nestedInNamingContainer = true;
         } else if ((ns.equals(RIConstants.HTML_NAMESPACE)) &&
             (requiresIdCount > 0)) {
@@ -161,10 +159,7 @@ public class IdTagParserImpl implements TagParser {
         String ns = validatorInfo.getNameSpace();
         String ln = validatorInfo.getLocalName();
         FacesValidator validator = validatorInfo.getValidator();
-        if (isJstlTag(validator, ns, ln)) {
-            requiresIdCount--;
-            siblingSatisfied = false;
-        } else if (isNamingContainerTag(validator, ns, ln)) {
+        if (isNamingContainerTag(validator, ns, ln)) {
             nestedInNamingContainer = false;
         }
     }
@@ -187,27 +182,6 @@ public class IdTagParserImpl implements TagParser {
         }
         return false;
     }
-
-
-    /**
-     * Check to make sure that the element is either a
-     * conditional or iterator JSTL tag.
-     *
-     * @param validator Parent validator
-     * @param ns        The Namespace.
-     * @param ln        The Local Name.
-     * @return boolean True if JSTL tag is iterator or conditional
-     */
-    private boolean isJstlTag(FacesValidator validator, String ns, String ln) {
-        if (ns.equals(RIConstants.JSTL_NAMESPACE)) {
-                if( ln.equals(validator.getJSTL_FOREACH_LN()) ||
-                ln.equals(validator.getJSTL_FORTOKENS_LN())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
 
     /**
      * Check to make sure that the element is either a
