@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.43 2006/01/13 20:31:46 rogerk Exp $
+ * $Id: ExternalContextImpl.java,v 1.44 2006/01/20 17:32:42 rlubke Exp $
  */
 
 /*
@@ -76,7 +76,7 @@ import java.util.logging.Logger;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.43 2006/01/13 20:31:46 rogerk Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.44 2006/01/20 17:32:42 rlubke Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -747,6 +747,71 @@ abstract class BaseContextMap extends AbstractMap {
     }
 }
 
+abstract class StringArrayValuesMap extends BaseContextMap {
+    
+    public boolean equals(Object obj) {
+        
+        if (obj == null || 
+            !(obj.getClass() == ExternalContextImpl.theUnmodifiableMapClass)) {
+            return false;
+        }
+        Map objMap = (Map) obj;
+        
+        if (this.size() != objMap.size()) {
+            return false;
+        }
+        String[] thisKeys = keySet().toArray(new String[this.size()]);
+        String[] objKeys = 
+              (String[]) objMap.keySet().toArray(new String[objMap.size()]);
+        
+        Arrays.sort(thisKeys);
+        Arrays.sort(objKeys);
+        
+        if (!(Arrays.equals(thisKeys, objKeys))) {
+            return false;
+        } else {
+            for (Object key : thisKeys) {
+                Object[] thisVal = (Object[]) this.get(key);
+                Object[] objVal = (Object[]) objMap.get(key);
+                if (!(Arrays.equals(thisVal, objVal))) {
+                    return false;
+                }
+            }
+        }
+        
+        return true;        
+        
+    }
+    
+    protected int hashCode(Object someObject) {        
+        int hashCode = 7 * someObject.hashCode();
+         for (Object o : entrySet()) {             
+             Map.Entry entry = (Map.Entry) o;             
+             hashCode += entry.getKey().hashCode();
+             hashCode +=
+                   (Arrays.hashCode((Object[]) entry.getValue()));
+         }
+        return hashCode;
+    }
+
+    public boolean containsValue(Object value) {
+                
+        if (value == null || !value.getClass().isArray()) {
+            return false;
+        }
+        
+        Set entrySet = entrySet();
+        for (Object anEntrySet : entrySet) {
+            Map.Entry entry = (Map.Entry) anEntrySet;
+            // values will be arrays
+            if (Arrays.equals((Object[]) value, (Object[]) entry.getValue())) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
 class ApplicationMap extends BaseContextMap {
 
     private final ServletContext servletContext;
@@ -1083,7 +1148,7 @@ class RequestParameterMap extends BaseContextMap {
 
 } // END RequestParameterMap
 
-class RequestParameterValuesMap extends BaseContextMap {
+class RequestParameterValuesMap extends StringArrayValuesMap {
 
     private final ServletRequest request;
 
@@ -1115,59 +1180,10 @@ class RequestParameterValuesMap extends BaseContextMap {
         return Collections.unmodifiableCollection(super.values());
     }
 
-    public boolean equals(Object obj) {
-        
-        if (obj == null || 
-            !(obj.getClass() == ExternalContextImpl.theUnmodifiableMapClass)) {
-            return false;
-        }
-        Map objMap = (Map) obj;
-        Set thisKeySet = keySet();
-        Set objKeySet = keySet();
-        
-        if (!thisKeySet.equals(objKeySet)) {
-            return false;
-        } else {
-            for (Object key : thisKeySet) {
-                Object[] thisVal = (Object[]) this.get(key);
-                Object[] objVal = (Object[]) objMap.get(key);
-                if (!(Arrays.equals(thisVal, objVal))) {
-                    return false;
-                }
-            }
-        }
-        
-        return true;        
-        
+    public int hashCode() {        
+        return hashCode(request);
     }
 
-     public int hashCode() {        
-        int hashCode = 7 * request.hashCode();
-         for (Object o : entrySet()) {             
-             Map.Entry entry = (Map.Entry) o;             
-             hashCode += entry.getKey().hashCode();
-             hashCode +=
-                   (Arrays.hashCode((Object[]) entry.getValue()));
-         }
-        return hashCode;
-    }
-
-    public boolean containsValue(Object value) {
-                
-        if (value == null || !value.getClass().isArray()) {
-            return false;
-        }
-        
-        Set entrySet = entrySet();
-        for (Object anEntrySet : entrySet) {
-            Map.Entry entry = (Map.Entry) anEntrySet;
-            // values will be arrays
-            if (Arrays.equals((Object[]) value, (Object[]) entry.getValue())) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     // --------------------------------------------- Methods from BaseContextMap
 
@@ -1250,7 +1266,7 @@ class RequestHeaderMap extends BaseContextMap {
 
 } // END RequestHeaderMap
 
-class RequestHeaderValuesMap extends BaseContextMap {
+class RequestHeaderValuesMap extends StringArrayValuesMap {
 
     private final HttpServletRequest request;
 
@@ -1287,58 +1303,10 @@ class RequestHeaderValuesMap extends BaseContextMap {
 
     public Collection values() {
         return Collections.unmodifiableCollection(super.values());
-    }
+    }        
 
-    public boolean equals(Object obj) {
-        if (obj == null || 
-            !(obj.getClass() == ExternalContextImpl.theUnmodifiableMapClass)) {
-            return false;
-        }
-        Map objMap = (Map) obj;
-        Set thisKeySet = keySet();
-        Set objKeySet = keySet();
-                                                                                                                            
-        if (!thisKeySet.equals(objKeySet)) {
-            return false;
-        } else {
-            for (Object key : thisKeySet) {
-                Object[] thisVal = (Object[]) this.get(key);
-                Object[] objVal = (Object[]) objMap.get(key);
-                if (!(Arrays.equals(thisVal, objVal))) {
-                    return false;
-                }
-            }
-        }
-                                                                                                                            
-        return true;
-    }
-
-
-    public boolean containsValue(Object value) {
-        if (value == null || !value.getClass().isArray()) {
-            return false;
-        }
-                                                                                                                            
-        Set entrySet = entrySet();
-        for (Object anEntrySet : entrySet) {
-            Map.Entry entry = (Map.Entry) anEntrySet;
-            // values will be arrays
-            if (Arrays.equals((Object[]) value, (Object[]) entry.getValue())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public int hashCode() {
-        int hashCode = 0;
-        for (Object o : entrySet()) {
-            Map.Entry entry = (Map.Entry) o;
-            hashCode += entry.getKey().hashCode();
-            hashCode += 
-                (Arrays.hashCode((Object[]) entry.getValue()));
-        }
-        return hashCode;
+    public int hashCode() {        
+        return hashCode(request);
     }
 
     // --------------------------------------------- Methods from BaseContextMap
