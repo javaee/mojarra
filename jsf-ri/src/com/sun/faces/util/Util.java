@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.80 2003/08/25 20:40:13 rlubke Exp $
+ * $Id: Util.java,v 1.81 2003/08/28 15:52:34 rlubke Exp $
  */
 
 /*
@@ -60,7 +60,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.80 2003/08/25 20:40:13 rlubke Exp $
+ * @version $Id: Util.java,v 1.81 2003/08/28 15:52:34 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -248,7 +248,7 @@ public class Util extends Object
    public static final String ENCODING_ERROR_MESSAGE_ID =
          "com.sun.faces.ENCODING_ERROR";
     
-    public static final String ILLEGAL_IDENTIFIER_LVALUE_MODE =
+    public static final String ILLEGAL_IDENTIFIER_LVALUE_MODE_ID =
         "com.sun.faces.ILLEGAL_IDENTIFIER_LVALUE_MODE";
 
     public static final String VALIDATION_ID_ERROR_ID =
@@ -263,8 +263,11 @@ public class Util extends Object
    public static final String CONTENT_TYPE_ERROR_MESSAGE_ID =
          "com.sun.faces.CONTENT_TYPE_ERROR";
     
-   public static final String COMPONENT_NOT_FOUND_IN_VIEW_WARNING =
+   public static final String COMPONENT_NOT_FOUND_IN_VIEW_WARNING_ID =
          "com.sun.faces.COMPONENT_NOT_FOUND_IN_VIEW_WARNING";
+    
+   public static final String ILLEGAL_ATTEMPT_SETTING_VIEWHANDLER_ID = 
+         "com.sun.faces.ILLEGAL_ATTEMPT_SETTING_VIEWHANDLER";
 
 // README - make sure to add the message identifier constant
 // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution

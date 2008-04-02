@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.6 2003/08/27 19:33:15 jvisvanathan Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.7 2003/08/28 15:52:26 rlubke Exp $ 
  */ 
 
 
@@ -28,13 +28,14 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIComponent;
 import javax.faces.application.ViewHandler;
 import javax.faces.application.StateManager;
+import javax.faces.application.Application;
 import javax.faces.context.FacesContext;  
 import javax.faces.application.StateManager.SerializedView;
 
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.6 2003/08/27 19:33:15 jvisvanathan Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.7 2003/08/28 15:52:26 rlubke Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -49,6 +50,10 @@ public class ViewHandlerImpl extends StateManager
             throw new NullPointerException(Util.getExceptionMessage(
                 Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
         } 
+        Application application = context.getApplication();
+        if (application instanceof ApplicationImpl) {
+            ((ApplicationImpl) application).responseRendered();
+        }
         String requestURI = context.getViewRoot().getViewId();
         context.getExternalContext().dispatchMessage(requestURI);
 

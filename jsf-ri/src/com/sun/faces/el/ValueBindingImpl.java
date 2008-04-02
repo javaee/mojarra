@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.15 2003/08/26 00:10:41 rlubke Exp $
+ * $Id: ValueBindingImpl.java,v 1.16 2003/08/28 15:52:29 rlubke Exp $
  */
 
 /*
@@ -17,6 +17,7 @@ import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
+import javax.faces.application.Application;
 
 import org.mozilla.util.ParameterCheck;
 import org.mozilla.util.Assert;
@@ -25,7 +26,6 @@ import com.sun.faces.el.ext.FacesExpressionInfo;
 import com.sun.faces.el.impl.ElException;
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
-import com.sun.faces.application.ApplicationImpl;
 
 public class ValueBindingImpl extends ValueBinding
 {
@@ -66,14 +66,14 @@ public class ValueBindingImpl extends ValueBinding
 
     protected String ref = null;
 
-    protected ApplicationImpl application = null;
+    protected Application application = null;
     protected static Map applicationMap = null;
 
 //
 // Constructors and Initializers    
 //
 
-    public ValueBindingImpl(ApplicationImpl application) { 
+    public ValueBindingImpl(Application application) { 
 	ParameterCheck.nonNull(application);
 	this.application = application;
 	
@@ -246,7 +246,7 @@ public class ValueBindingImpl extends ValueBinding
 
         if (isReservedIdentifier(ref)) {
             throw new ReferenceSyntaxException(
-                Util.getExceptionMessage(Util.ILLEGAL_IDENTIFIER_LVALUE_MODE, new Object[]{ref}));
+                Util.getExceptionMessage(Util.ILLEGAL_IDENTIFIER_LVALUE_MODE_ID, new Object[]{ref}));
         }
         // PENDING(edburns): check for readOnly-ness        
         try {

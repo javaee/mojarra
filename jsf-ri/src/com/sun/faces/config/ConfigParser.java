@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.30 2003/08/25 14:06:25 rlubke Exp $
+ * $Id: ConfigParser.java,v 1.31 2003/08/28 15:52:28 rlubke Exp $
  */
 
 /*
@@ -31,6 +31,7 @@ import javax.faces.application.MessageImpl;
 import javax.faces.application.MessageResources;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.ViewHandler;
+import javax.faces.application.Application;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionListener;
@@ -668,8 +669,7 @@ final class ComponentsRule extends Rule {
         ConfigComponent cc = (ConfigComponent)digester.peek();
         ApplicationFactory aFactory =
            (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        ApplicationImpl application =
-           (ApplicationImpl)aFactory.getApplication();
+        Application application = aFactory.getApplication();
         application.addComponent(cc.getComponentType(), cc.getComponentClass());
     }
 }
@@ -689,8 +689,7 @@ final class ConvertersRule extends Rule {
         ConfigConverter cc = (ConfigConverter)digester.peek();
         ApplicationFactory aFactory =
            (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        ApplicationImpl application =
-           (ApplicationImpl)aFactory.getApplication();
+        Application application = aFactory.getApplication();
 	String idOrClassName = null;
 	// the DTD states that converter-id and converter-for-class are
 	// mutually exclusive, so we're safe here.
@@ -742,8 +741,7 @@ final class ValidatorsRule extends Rule {
         ConfigValidator cc = (ConfigValidator)digester.peek();
         ApplicationFactory aFactory =
            (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        ApplicationImpl application =
-           (ApplicationImpl)aFactory.getApplication();
+        Application application = aFactory.getApplication();
        application.addValidator(cc.getValidatorId(), cc.getValidatorClass());
     }
 }
@@ -760,10 +758,11 @@ final class ManagedBeansRule extends Rule {
         ConfigManagedBean cmb = (ConfigManagedBean)digester.peek();
         ApplicationFactory aFactory =
             (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        ApplicationImpl application =
-            (ApplicationImpl)aFactory.getApplication();
+        Application application = aFactory.getApplication();
         ManagedBeanFactory mbf = new ManagedBeanFactory(cmb);
-        application.addManagedBeanFactory(cmb.getManagedBeanId(), mbf);
+        if (application instanceof ApplicationImpl) {
+            ((ApplicationImpl) application).addManagedBeanFactory(cmb.getManagedBeanId(), mbf);
+        }
     }
 }
 
@@ -782,8 +781,7 @@ final class ApplicationRule extends Rule {
         ConfigApplication ca = (ConfigApplication)digester.peek();
         ApplicationFactory aFactory =
             (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        ApplicationImpl application =
-            (ApplicationImpl)aFactory.getApplication();
+        Application application = aFactory.getApplication();
 	Assert.assert_it(null != application);
 	
 	Object returnObject = createInstance(ca.getActionListener());
@@ -854,8 +852,7 @@ final class NavigationCaseRule extends Rule {
         digester.push(cnc);
         ApplicationFactory aFactory =
             (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        ApplicationImpl application =
-            (ApplicationImpl)aFactory.getApplication();
+        Application application = aFactory.getApplication();
         Assert.assert_it(null != application);
         NavigationHandlerImpl navHandler = (NavigationHandlerImpl)application.
             getNavigationHandler();
@@ -935,8 +932,7 @@ final class MessageResourceRule extends Rule {
     public void end(String namespace, String name) throws Exception {
         ApplicationFactory aFactory =
             (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        ApplicationImpl application =
-            (ApplicationImpl)aFactory.getApplication();
+        Application application = aFactory.getApplication();
 	ConfigMessageResources mr = (ConfigMessageResources)digester.peek();
 	String messageResourcesId = mr.getMessageResourcesId();
 	Assert.assert_it(null != messageResourcesId);

@@ -110,7 +110,7 @@ public class NamedValue
      **/
     public Object evaluate(ExpressionInfo exprInfo)
         throws ElException {
-        //PENDING (rlubke) will most likely override here
+       
         VariableResolver resolver = exprInfo.getVariableResolver();
         if (resolver == null) {
             return null;

@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverImpl.java,v 1.11 2003/08/22 20:01:04 rlubke Exp $
+ * $Id: VariableResolverImpl.java,v 1.12 2003/08/28 15:52:30 rlubke Exp $
  */
 
 /*
@@ -11,14 +11,12 @@ package com.sun.faces.el;
 
 
 import javax.faces.application.ApplicationFactory;
+import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
 import javax.faces.el.VariableResolver;
 import javax.faces.FactoryFinder;
 
-import javax.servlet.http.HttpSession;
-
-import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.application.ApplicationImpl;
 import com.sun.faces.util.Util;
 
@@ -67,17 +65,18 @@ public class VariableResolverImpl extends VariableResolver {
             Object value = null;
 
 	    if (null == (value = ec.getRequestMap().get(name))) {
-		if (null == (value = Util.getSessionMap(context).get(name))) {
-		    if (null == (value = ec.getApplicationMap().get(name))) {
-                         // if it's a managed bean try and create it
-                         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-                         ApplicationImpl application = (ApplicationImpl)aFactory.getApplication();
-			 if (application instanceof ApplicationImpl) {
-                             value = application.createAndMaybeStoreManagedBeans(context, name);
-			 } 
+            if (null == (value = Util.getSessionMap(context).get(name))) {
+                if (null == (value = ec.getApplicationMap().get(name))) {
+                    // if it's a managed bean try and create it
+                    ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
+                            FactoryFinder.APPLICATION_FACTORY);
+                    Application application = aFactory.getApplication();
+                    if (application instanceof ApplicationImpl) {
+                        value = ((ApplicationImpl) application).createAndMaybeStoreManagedBeans(context, name);
                     }
-		}
-	    }
+                }
+            }
+        }
             return (value);
         }
 

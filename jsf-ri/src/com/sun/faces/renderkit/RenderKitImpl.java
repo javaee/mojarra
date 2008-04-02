@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.9 2003/08/23 00:39:07 jvisvanathan Exp $
+ * $Id: RenderKitImpl.java,v 1.10 2003/08/28 15:52:32 rlubke Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import javax.faces.render.ResponseStateManager;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.9 2003/08/23 00:39:07 jvisvanathan Exp $
+ * @version $Id: RenderKitImpl.java,v 1.10 2003/08/28 15:52:32 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -207,11 +207,30 @@ public class RenderKitImpl extends RenderKit {
         return new HtmlResponseWriter(writer, contentType, characterEncoding);
     }
 
-    // PENDING (rlubke) PROVIDE IMPLEMENTATION
+    
     public ResponseStream getResponseStream(OutputStream out) {
-        return null;  //To change body of implemented methods use Options | File Templates.
-    }
+        final OutputStream output = out;
+        return new ResponseStream() {
+            public void write(int b) throws IOException {
+                output.write(b);
+            }
+            public void write(byte b[]) throws IOException {
+                output.write(b);
+            }
 
+            public void write(byte b[], int off, int len) throws IOException {
+                output.write(b, off, len);
+            }
+
+            public void flush() throws IOException {
+                output.flush();
+            }
+
+            public void close() throws IOException {
+                output.close();
+            }
+        };
+    }       
     // The test for this class is in TestRenderKit.java
 
 } // end of class RenderKitImpl

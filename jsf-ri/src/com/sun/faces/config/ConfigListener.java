@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigListener.java,v 1.15 2003/07/22 19:44:39 rkitain Exp $
+ * $Id: ConfigListener.java,v 1.16 2003/08/28 15:52:27 rlubke Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -43,7 +43,6 @@ package com.sun.faces.config;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
-import com.sun.faces.application.ApplicationImpl;
 
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletContextEvent;
@@ -54,7 +53,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -63,8 +61,6 @@ import org.apache.commons.logging.LogFactory;
 import org.xml.sax.InputSource;
 
 import javax.faces.FacesException;
-import javax.faces.FactoryFinder;
-import javax.faces.application.ApplicationFactory;
 
 public class ConfigListener implements ServletContextListener
 {
@@ -178,14 +174,7 @@ public class ConfigListener implements ServletContextListener
 	    catch (Exception toIgnore) {
 		// do nothing, apps are not required to have a faces-config file
 	    }
-	}	
-
-
-        ApplicationFactory aFactory = 
-	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        ApplicationImpl application = 
-	    (ApplicationImpl)aFactory.getApplication();
-
+	}	      
         servletContext.setAttribute(RIConstants.CONFIG_ATTR, new Boolean(true)); 
     }
 

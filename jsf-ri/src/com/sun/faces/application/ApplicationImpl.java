@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.26 2003/08/25 22:35:47 horwat Exp $
+ * $Id: ApplicationImpl.java,v 1.27 2003/08/28 15:52:26 rlubke Exp $
  */
 
 /*
@@ -87,6 +87,9 @@ public class ApplicationImpl extends Application {
     //
     private Map messageResourcesMap = null;        
 
+    // Flag indicating that a response has been rendered.
+    private boolean responseRendered = false;
+   
 //
 // Constructors and Initializers
 //
@@ -102,7 +105,7 @@ public class ApplicationImpl extends Application {
 	converterTypeMap = new HashMap();
 	validatorMap = new HashMap();
 	managedBeanFactoriesMap = new HashMap();
-	messageResourcesMap = new HashMap();
+	messageResourcesMap = new HashMap();   
     }
 
     /**
@@ -129,8 +132,12 @@ public class ApplicationImpl extends Application {
                     Util.getExceptionMessage(
                             Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        // PENDING (rlubke) Make sure IllegalStateException is thrown if
-        // at least one response has been rendered.
+        if (responseRendered) {
+            // at least one response has been rendered.
+            throw new IllegalStateException(
+                    Util.getExceptionMessage(
+                            Util.ILLEGAL_ATTEMPT_SETTING_VIEWHANDLER_ID));            
+        }        
         viewHandler = handler;    
     }   
 
@@ -681,14 +688,7 @@ public class ApplicationImpl extends Application {
 
         Object result = null;
         Class clazz = null;
-        Object value = null;
-
-        if (key instanceof String) {
-            value = map.get((String)key);
-        }
-        else if (key instanceof Class) {
-            value = map.get((Class)key);
-        }
+        Object value = map.get(key);
 
         if (value == null) {
 	    return null;
@@ -768,7 +768,7 @@ public class ApplicationImpl extends Application {
 
         return bean;
     }
-    
+        
     private void checkSyntax(String ref) throws ReferenceSyntaxException {            
         try {                       
             ExpressionInfo exprInfo = new ExpressionInfo();
@@ -787,6 +787,11 @@ public class ApplicationImpl extends Application {
             throw new ReferenceSyntaxException(elex.getMessage(), elex);
         }
     }
+   
+    // This is called by FacesContextImpl.responseRendered().
+   void responseRendered() {
+       responseRendered = true;
+   }
    
     // The testcase for this class is com.sun.faces.application.TestApplicationImpl.java 
     // The testcase for this class is com.sun.faces.application.TestApplicationImpl_Config.java 
