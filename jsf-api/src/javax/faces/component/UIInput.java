@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.34 2003/10/09 19:18:09 craigmcc Exp $
+ * $Id: UIInput.java,v 1.35 2003/10/16 18:43:28 craigmcc Exp $
  */
 
 /*
@@ -140,7 +140,7 @@ public class UIInput extends UIOutput {
 
         Repeater repeater = RepeaterSupport.findParentRepeater(this);
         if (repeater != null) {
-            if (repeater.getRowIndex() > 0) {
+            if (repeater.getRowIndex() >= 0) {
                 return (repeater.getChildPrevious(this));
             } else {
                 return (this.previous);
@@ -164,7 +164,7 @@ public class UIInput extends UIOutput {
         this.previous = previous;
         Repeater repeater = RepeaterSupport.findParentRepeater(this);
         if (repeater != null) {
-            if (repeater.getRowIndex() > 0) {
+            if (repeater.getRowIndex() >= 0) {
                 repeater.setChildPrevious(this, previous);
             } else {
                 this.previous = previous;
@@ -486,11 +486,11 @@ public class UIInput extends UIOutput {
        
         int rowCount = 0;
         Repeater repeater = RepeaterSupport.findParentRepeater(this);
-        if (repeater != null && repeater.getRowIndex() > 0) {
+        if (repeater != null && repeater.getRowIndex() >= 0) {
             rowCount = repeater.getRowCount();
             Object[] previousValues = new Object[rowCount];
             for (int i = 0; i < rowCount; ++i ) {
-                repeater.setRowIndex(i+1);
+                repeater.setRowIndex(i);
                 previousValues[i] = repeater.getChildPrevious(this);
             }
             values[2] = previousValues;
@@ -512,11 +512,11 @@ public class UIInput extends UIOutput {
         required = ((Boolean) values[1]).booleanValue();
         
         Repeater repeater = RepeaterSupport.findParentRepeater(this);
-        if (repeater != null && repeater.getRowIndex() > 0) {
+        if (repeater != null && repeater.getRowIndex() >= 0) {
             Object[] previousValues = (Object[])values[2];
             if ( previousValues != null ) {
                 for (int i = 0; i < previousValues.length; ++i ) {
-                    repeater.setRowIndex(i+1);
+                    repeater.setRowIndex(i);
                     repeater.setChildPrevious(this, previousValues[i]);
                 }
             }

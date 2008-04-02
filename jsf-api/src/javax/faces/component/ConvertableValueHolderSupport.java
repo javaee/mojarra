@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertableValueHolderSupport.java,v 1.2 2003/10/09 21:58:28 craigmcc Exp $
+ * $Id: ConvertableValueHolderSupport.java,v 1.3 2003/10/16 18:43:28 craigmcc Exp $
  */
 
 /*
@@ -110,7 +110,7 @@ public class ConvertableValueHolderSupport extends ValueHolderSupport {
 
         Repeater repeater = RepeaterSupport.findParentRepeater(this.component);
         if (repeater != null) {
-            if (repeater.getRowIndex() > 0) {
+            if (repeater.getRowIndex() >= 0) {
                 return (repeater.isChildValid(this.component));
             } else {
                 return (this.valid);
@@ -126,7 +126,7 @@ public class ConvertableValueHolderSupport extends ValueHolderSupport {
 
         Repeater repeater = RepeaterSupport.findParentRepeater(this.component);
         if (repeater != null) {
-            if (repeater.getRowIndex() > 0) {
+            if (repeater.getRowIndex() >= 0) {
                 repeater.setChildValid(this.component, valid);
             } else {
                 this.valid = valid;
@@ -149,11 +149,11 @@ public class ConvertableValueHolderSupport extends ValueHolderSupport {
 
         int rowCount = 0;
         Repeater repeater = RepeaterSupport.findParentRepeater(this.component);
-        if ((repeater != null) && (repeater.getRowIndex() > 0)) {
+        if ((repeater != null) && (repeater.getRowIndex() >= 0)) {
             rowCount = repeater.getRowCount();
             Object validValues[] = new Object[rowCount];
             for (int i = 0; i < rowCount; i++) {
-                repeater.setRowIndex(i + 1);
+                repeater.setRowIndex(i);
                 validValues[i] =
                     repeater.isChildValid(this.component) ?
                     Boolean.TRUE : Boolean.FALSE;
@@ -190,11 +190,11 @@ public class ConvertableValueHolderSupport extends ValueHolderSupport {
         converter = (Converter) UIComponentBase.restoreAttachedState
             (FacesContext.getCurrentInstance(), values[1]);
         Repeater repeater = RepeaterSupport.findParentRepeater(component);
-        if ((repeater != null) && (repeater.getRowIndex() > 0)) {
+        if ((repeater != null) && (repeater.getRowIndex() >= 0)) {
             int rowCount = repeater.getRowCount();
             Object validValues[] = (Object[]) values[2];
             for (int i = 0; i < rowCount; i++) {
-                repeater.setRowIndex(i + 1);
+                repeater.setRowIndex(i);
                 repeater.setChildValid(component,
                                        (((Boolean) validValues[i]).booleanValue()));
             }

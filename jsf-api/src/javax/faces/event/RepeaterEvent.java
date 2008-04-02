@@ -61,10 +61,9 @@ public class RepeaterEvent extends FacesEvent {
      *
      * @param component Source {@link UIComponent} for this event
      * @param event {@link FacesEvent} being wrapped
-     * @param rowIndex One-relative row index of the current row for this event
+     * @param rowIndex Zero-relative row index of the current row for this event
      *
-     * @exception IllegalArgumentException if <code>row</code> is zero
-     *  or negative
+     * @exception IllegalArgumentException if <code>row</code> is negative
      * @exception NullPointerException if <code>component</code> or
      *  <code>event</code> is <code>null</code>
      */
@@ -75,7 +74,7 @@ public class RepeaterEvent extends FacesEvent {
 	if (event == null) {
 	    throw new NullPointerException();
 	}
-	if (rowIndex <= 0) {
+	if (rowIndex < 0) {
 	    throw new IllegalArgumentException();
 	}
 	this.event = event;
@@ -105,7 +104,7 @@ public class RepeaterEvent extends FacesEvent {
 
 
     /**
-     * <p>Return the one-relative row index for this {@link RepeaterEvent}.</p>
+     * <p>Return the zero-relative row index for this {@link RepeaterEvent}.</p>
      */
     public int getRowIndex() {
 
