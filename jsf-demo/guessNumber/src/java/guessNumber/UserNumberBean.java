@@ -56,7 +56,9 @@ public class UserNumberBean {
 
     public UserNumberBean() {
         Random randomGR = new Random();
-        randomInt = new Integer(randomGR.nextInt(10));
+        do {
+            randomInt = new Integer(randomGR.nextInt(10));
+        } while (randomInt.intValue() == 0);
         System.out.println("Duke's number: " + randomInt);
     }
 
