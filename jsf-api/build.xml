@@ -672,6 +672,7 @@ jsf-api.jar.
           haltonfailure="yes" haltonerror="yes">
       <jvmarg line="${debug.jvm.args}"/>
       <jvmarg line="${jcov.jvm.args}"/>
+      <sysproperty key="base.dir" value="${basedir}"/>
       <classpath  refid="test.classpath"/>
       <formatter   type="plain"      usefile="false"/>
       <batchtest>
