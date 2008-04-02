@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.58 2004/06/08 13:49:17 rogerk Exp $
+ $Id: build-tests.xml,v 1.59 2004/06/11 20:14:53 jvisvanathan Exp $
 -->
 
 <!--
@@ -17,7 +17,6 @@
 
 <!-- =========================== Configuration ============================ -->
 
-<echo      message="junit.jar =               ${junit.jar}"/>
 
   <!-- Load properties in case this script executed directly -->
   <property file="build.properties"/>

@@ -15,7 +15,7 @@
 
 
   
-<form id="basicForm" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=E1F9E58967091DA82C87E62B743AA5DB" class="formClass" accept-charset="some-charset" accept="html,wml" enctype="application/x-www-form-urlencoded" title="basicForm">
+<form id="basicForm" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=D89943C1230B2E4CF4CF06F45B16624B" class="formClass" accept-charset="some-charset" accept="html,wml" enctype="application/x-www-form-urlencoded" title="basicForm">
 
 
   <TABLE BORDER="1">
@@ -130,12 +130,12 @@
 
 	      
                 
-              <a id="basicForm:imageLink" href="#" style="someStyle" onclick="document.forms['basicForm']['basicForm:_idcl'].value='basicForm:imageLink'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=E1F9E58967091DA82C87E62B743AA5DB" alt="" /></a>
+              <a id="basicForm:imageLink" href="#" style="someStyle" onclick="document.forms['basicForm']['basicForm:_idcl'].value='basicForm:imageLink'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=D89943C1230B2E4CF4CF06F45B16624B" alt="" /></a>
 
 	</TD>
 
         <TD> 
-            <img id="basicForm:graphicImage" src="/test/duke.gif;jsessionid=E1F9E58967091DA82C87E62B743AA5DB" style="someStyle" usemap="#map1" ismap="ismap" alt="" /> 
+            <img id="basicForm:graphicImage" src="/test/duke.gif;jsessionid=D89943C1230B2E4CF4CF06F45B16624B" style="someStyle" usemap="#map1" ismap="ismap" alt="" /> 
         </TD>
 
       </TR>
@@ -169,7 +169,7 @@
               
               
               
-            <a id="basicForm:hrefParamLink" href="#" onclick="document.forms['basicForm']['basicForm:_idcl'].value='basicForm:hrefParamLink';document.forms['basicForm']['name'].value='horwat';document.forms['basicForm']['value'].value='password'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=E1F9E58967091DA82C87E62B743AA5DB" alt="" /></a>
+            <a id="basicForm:hrefParamLink" href="#" onclick="document.forms['basicForm']['basicForm:_idcl'].value='basicForm:hrefParamLink';document.forms['basicForm']['name'].value='horwat';document.forms['basicForm']['value'].value='password'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=D89943C1230B2E4CF4CF06F45B16624B" alt="" /></a>
         </TD>
       </TR>
 
@@ -177,7 +177,7 @@
 
 	<TD>
 
-	      <a id="basicForm:outputLink" href="test.html;jsessionid=E1F9E58967091DA82C87E62B743AA5DB" class="hyperlinkClass">output link text</a>
+	      <a id="basicForm:outputLink" href="test.html;jsessionid=D89943C1230B2E4CF4CF06F45B16624B" class="hyperlinkClass">output link text</a>
 
 	</TD>
 
@@ -189,12 +189,12 @@
 
 	      
                 
-              <a id="basicForm:output_imageLink" href="test.html;jsessionid=E1F9E58967091DA82C87E62B743AA5DB" style="position: absolute; left: 96px; top: 168px"><img src="duke.gif;jsessionid=E1F9E58967091DA82C87E62B743AA5DB" alt="" /></a>
+              <a id="basicForm:output_imageLink" href="test.html;jsessionid=D89943C1230B2E4CF4CF06F45B16624B" style="position: absolute; left: 96px; top: 168px"><img src="duke.gif;jsessionid=D89943C1230B2E4CF4CF06F45B16624B" alt="" /></a>
 
 	</TD>
 
         <TD> 
-            <img id="basicForm:output_graphicImage" src="/test/duke.gif;jsessionid=E1F9E58967091DA82C87E62B743AA5DB" usemap="#map1" ismap="ismap" alt="" /> 
+            <img id="basicForm:output_graphicImage" src="/test/duke.gif;jsessionid=D89943C1230B2E4CF4CF06F45B16624B" usemap="#map1" ismap="ismap" alt="" /> 
         </TD>
 
       </TR>
@@ -202,7 +202,7 @@
       <TR>
         <TD>
             
-            <a id="basicForm:output_commandLink" href="test.html;jsessionid=E1F9E58967091DA82C87E62B743AA5DB" style="position: absolute; left: 96px; top: 168px" class="hyperlinkClass">link text</a>
+            <a id="basicForm:output_commandLink" href="test.html;jsessionid=D89943C1230B2E4CF4CF06F45B16624B" style="position: absolute; left: 96px; top: 168px" class="hyperlinkClass">link text</a>
        </TD>
       </TR>
 
@@ -212,13 +212,13 @@
               
               
               
-            <a id="basicForm:output_commandParamLink" href="test.html;jsessionid=E1F9E58967091DA82C87E62B743AA5DB?name=horwat&value=password" class="hyperlinkClass">link text</a>
+            <a id="basicForm:output_commandParamLink" href="test.html;jsessionid=D89943C1230B2E4CF4CF06F45B16624B?name=horwat&value=password" class="hyperlinkClass">link text</a>
         </TD>
       </TR>
 
       <TR>
         <TD>
-            <a id="basicForm:output_hrefLink" href="test.html;jsessionid=E1F9E58967091DA82C87E62B743AA5DB"><img src="duke.gif"></a>
+            <a id="basicForm:output_hrefLink" href="test.html;jsessionid=D89943C1230B2E4CF4CF06F45B16624B"><img src="duke.gif"></a>
         </TD>
       </TR>
 
@@ -228,7 +228,7 @@
               
               
               
-            <a id="basicForm:output_hrefParamLink" href="test.html;jsessionid=E1F9E58967091DA82C87E62B743AA5DB?name=horwat&value=password"><img src="duke.gif;jsessionid=E1F9E58967091DA82C87E62B743AA5DB" alt="" /></a>
+            <a id="basicForm:output_hrefParamLink" href="test.html;jsessionid=D89943C1230B2E4CF4CF06F45B16624B?name=horwat&value=password"><img src="duke.gif;jsessionid=D89943C1230B2E4CF4CF06F45B16624B" alt="" /></a>
         </TD>
       </TR>
 
@@ -612,7 +612,7 @@ LabelWithValue
 						
 						
 						
-					<select id="basicForm:ManyApples" name="basicForm:ManyApples" class="selectmanyClass" multiple size="1" style="someStyle">	<option value="0" class="eclass">zero</option>
+					<select id="basicForm:ManyApples" name="basicForm:ManyApples" class="selectmanyClass" multiple="multiple" size="1" style="someStyle">	<option value="0" class="eclass">zero</option>
 	<option value="1" class="eclass">one</option>
 	<option value="2" class="eclass">two</option>
 	<option value="3" class="eclass">three</option>
@@ -639,7 +639,7 @@ LabelWithValue
 						
 						
 						
-					<select name="basicForm:_id54" multiple size="10" style="someStyle">	<option value="0" class="eclass">zero</option>
+					<select name="basicForm:_id54" multiple="multiple" size="10" style="someStyle">	<option value="0" class="eclass">zero</option>
 	<option value="1" class="eclass">one</option>
 	<option value="2" class="eclass">two</option>
 	<option value="3" disabled="disabled" class="dclass">three</option>

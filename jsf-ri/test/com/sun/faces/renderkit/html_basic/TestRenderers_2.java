@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.83 2004/04/20 16:39:00 rkitain Exp $
+ * $Id: TestRenderers_2.java,v 1.84 2004/06/11 20:14:54 jvisvanathan Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import java.io.StringWriter;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.83 2004/04/20 16:39:00 rkitain Exp $
+ * @version $Id: TestRenderers_2.java,v 1.84 2004/06/11 20:14:54 jvisvanathan Exp $
  */
 
 public class TestRenderers_2 extends JspFacesTestCase {
@@ -77,13 +77,8 @@ public class TestRenderers_2 extends JspFacesTestCase {
     }
 
 
-    public String[] getLinesToIgnore() {
-        String[] lines = {
-            "<img id=\"myGraphicImage\" src=\"/test/nonModelReferenceImage.gif\" usemap=\"usemap\" ismap=\"ismap\" alt=\"\" /><img src=\"/test/foo/modelReferenceImage.gif\" usemap=\"usemap\" ismap=\"ismap\" alt=\"\" /><span>My name is Bobby Orr</span>",
-"<img id=\"myGraphicImage\" src=\"/test/nonModelReferenceImage.gif;jsessionid=0896447ADBE479FF3C818D1CA00F731A\" usemap=\"usemap\" ismap=\"ismap\" alt=\"\" /><img src=\"/test/foo/modelReferenceImage.gif;jsessionid=0896447ADBE479FF3C818D1CA00F731A\" usemap=\"usemap\" ismap=\"ismap\" alt=\"\" /><span>My name is Bobby Orr</span>"
-        };
-        return lines;
-    }   
+     public static final String ignore[] = {
+     };  
  
     //
     // Class Variables

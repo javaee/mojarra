@@ -1,11 +1,11 @@
 <input id="myCheckbox" type="checkbox" name="myCheckbox" checked />
 <input id="myCheckbox" type="checkbox" name="myCheckbox" />
 <input id="myCheckbox" type="checkbox" name="myCheckbox" />
-<select id="myListbox" name="myListbox" size="4">	<option value="100"  selected>Long1</option>
+<select id="myListbox" name="myListbox" size="4">	<option value="100" selected="selected">Long1</option>
 	<option value="101">Long2</option>
 	<option value="102">Long3</option>
 	<option value="103">Long4</option>
 </select>
 <input id="mySecret" type="password" name="mySecret" value="" />
 <input id="myInputText" type="text" name="myInputText" value="text" /><span id="myOutputText"></span><textarea id="myTextarea" name="myTextarea" class="bar" style="foo">TextareaRenderer</textarea>
-<img id="myGraphicImage" src="/test/nonModelReferenceImage.gif;jsessionid=0896447ADBE479FF3C818D1CA00F731A" usemap="usemap" ismap="ismap" alt="" /><img src="/test/foo/modelReferenceImage.gif;jsessionid=0896447ADBE479FF3C818D1CA00F731A" usemap="usemap" ismap="ismap" alt="" /><span>My name is Bobby Orr</span>
+<img id="myGraphicImage" src="/test/nonModelReferenceImage.gif;jsessionid=6F464B3D8C1EA6D3913CF768D6179A6E" usemap="usemap" ismap="ismap" alt="" /><img src="/test/foo/modelReferenceImage.gif;jsessionid=6F464B3D8C1EA6D3913CF768D6179A6E" usemap="usemap" ismap="ismap" alt="" /><span>My name is Bobby Orr</span>

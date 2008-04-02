@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.50 2004/04/09 17:11:05 rkitain Exp $
+ * $Id: MenuRenderer.java,v 1.51 2004/06/11 20:14:51 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -456,7 +456,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
         if (!getMultipleText(component).equals("")) {
-            writer.writeAttribute("multiple", Boolean.TRUE, null);
+            writer.writeAttribute("multiple", "multiple", "multiple");
         }
 
         // Determine how many option(s) we need to render, and update
@@ -552,7 +552,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         }
 
         if (isSelected) {
-            writer.writeAttribute(getSelectedTextString(), Boolean.TRUE, null);
+            writer.writeAttribute("selected", "selected", "selected");
         }
         if (curItem.isDisabled()) {
             writer.writeAttribute("disabled", "disabled", "disabled");
@@ -621,12 +621,6 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         // if size is not specified default to 1.
         writer.writeAttribute("size", "1", "size");
     }
-
-
-    String getSelectedTextString() {
-        return " selected";
-    }
-
 
     // To derive a selectOne type component from this, override
     // these methods.
