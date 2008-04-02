@@ -2,7 +2,7 @@
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  *
- * $Id: StateManagerWrapper.java,v 1.3 2004/10/18 22:46:01 edburns Exp $
+ * $Id: StateManagerWrapper.java,v 1.4 2004/11/05 22:37:11 rlubke Exp $
  */
 
 package javax.faces.application;
@@ -147,4 +147,18 @@ public abstract class StateManagerWrapper extends StateManager {
 
     }
 
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link StateManager#isSavingStateInClient(javax.faces.context.FacesContext)}
+     * on the wrapped {@link StateManager} object.</p>
+     *
+     * @see StateManager#isSavingStateInClient(javax.faces.context.FacesContext) 
+     * @since 1.2
+     */
+    public boolean isSavingStateInClient(FacesContext context) {
+
+        return getWrapped().isSavingStateInClient(context);
+
+    }
 }
