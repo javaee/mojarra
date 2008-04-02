@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.8 2003/08/22 21:02:56 rkitain Exp $
+ * $Id: RenderKitImpl.java,v 1.9 2003/08/23 00:39:07 jvisvanathan Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import javax.faces.render.ResponseStateManager;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.8 2003/08/22 21:02:56 rkitain Exp $
+ * @version $Id: RenderKitImpl.java,v 1.9 2003/08/23 00:39:07 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -84,7 +84,7 @@ public class RenderKitImpl extends RenderKit {
     */
 
     private Hashtable renderersByRendererType;
-
+    private ResponseStateManager responseStateManager = null;
 //
 // Constructors and Initializers    
 //
@@ -95,17 +95,17 @@ public class RenderKitImpl extends RenderKit {
     }
 
 
-//
-// Class methods
-//
+    //
+    // Class methods
+    //
 
-//
-// General Methods
-//
+    //
+    // General Methods
+    //
 
-//
-// Methods From RenderKit
-//
+    //
+    // Methods From RenderKit
+    //
 
     /**
      * This method adds a <code>Renderer</code> with its associated 
@@ -157,9 +157,11 @@ public class RenderKitImpl extends RenderKit {
         return renderer;
     }
 
-    // PENDING (rlubke) PROVIDE IMPLEMENTATION
     public ResponseStateManager getResponseStateManager() {
-        return null;  //To change body of implemented methods use Options | File Templates.
+        if (responseStateManager == null) {
+            responseStateManager = new ResponseStateManagerImpl();
+        }
+        return responseStateManager;
     }
 
     /**

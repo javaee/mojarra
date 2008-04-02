@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.77 2003/08/22 21:04:28 rkitain Exp $
+ * $Id: Util.java,v 1.78 2003/08/23 00:39:14 jvisvanathan Exp $
  */
 
 /*
@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.io.StringReader;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -39,8 +40,14 @@ import javax.faces.context.FacesContextFactory;
 import javax.faces.context.ResponseWriter;
 import javax.faces.el.ValueBinding;
 import javax.faces.lifecycle.LifecycleFactory;
+import javax.faces.lifecycle.Lifecycle;
+import javax.faces.application.ViewHandler;
+import javax.faces.webapp.FacesServlet;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.RenderKit;
+
+import javax.faces.render.ResponseStateManager;
+import javax.faces.application.StateManager;
 
 import javax.servlet.ServletContext;
 
@@ -53,7 +60,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.77 2003/08/22 21:04:28 rkitain Exp $
+ * @version $Id: Util.java,v 1.78 2003/08/23 00:39:14 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -837,10 +844,79 @@ private Util()
         else 
             return null;                      
     }
+    
+    public static StateManager getStateManager(FacesContext context) 
+            throws FacesException {
+        return(getViewHandler(context).getStateManager());
+    }
+    
+    public static ViewHandler getViewHandler(FacesContext context) 
+            throws FacesException {
+	// Get Application instance
+	ApplicationFactory factory = (ApplicationFactory)
+                FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        Application application = factory.getApplication();
+	Assert.assert_it(application != null);
+        
+	// Get the ViewHandler
+        ViewHandler viewHandler = application.getViewHandler();
+        Assert.assert_it(viewHandler != null);
+        
+        return viewHandler;
+    }
+
+    public static ResponseStateManager getResponseStateManager(
+            FacesContext context) throws FacesException {
+	RenderKit renderKit = null;
+	RenderKitFactory renderKitFactory = null;
+	String renderKitId = null;
+	ResponseStateManager result = null;
+
+	renderKitFactory = (RenderKitFactory)
+	    FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+	Assert.assert_it(null != renderKitFactory);
+
+        // PENDING (visvan) can root be null on postback ? If not, then we don't
+        // need this check.
+	if (context.getViewRoot() == null || 
+                context.getViewRoot().getRenderKitId() == null ) {
+            renderKitId = RIConstants.DEFAULT_RENDER_KIT;
+	}
+	Assert.assert_it(null != renderKitId);
+
+	renderKit = renderKitFactory.getRenderKit(renderKitId);
+	Assert.assert_it(null != renderKit);
+
+	result = renderKit.getResponseStateManager();
+        return result;
+    }
+
+    public static boolean isSaveStateInPage(FacesContext context) {
+        // by default, state will be saved in session.
+        String saveStateParam = context.getExternalContext().
+            getInitParameter(StateManager.STATE_SAVING_METHOD_PARAM_NAME);
+        if ( saveStateParam != null && 
+        saveStateParam.equalsIgnoreCase(StateManager.STATE_SAVING_METHOD_CLIENT)){
+	    return true;
+        }
+        return false;
+    }
+    
+    public static String parseStringFromReader(StringReader reader) 
+            throws IOException {
+        int ch=0;
+        String content = null;
+        StringBuffer sb = new StringBuffer("");
+        while((ch = reader.read()) != -1) {
+            sb.append((char) ch);
+        }
+        content = sb.toString();
+        return content;
+    }
 
 
-//
-// General Methods
-//
+    //
+    // General Methods
+    //
 
 } // end of class Util

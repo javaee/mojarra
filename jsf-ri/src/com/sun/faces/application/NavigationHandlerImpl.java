@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.13 2003/08/22 20:01:03 rlubke Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.14 2003/08/23 00:39:03 jvisvanathan Exp $
  */
 
 /*
@@ -24,6 +24,8 @@ import javax.faces.FactoryFinder;
 import javax.faces.component.UIViewRoot;
 import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
+import javax.faces.component.base.UIViewRootBase;
+import javax.faces.component.UIViewRoot;
 
 import org.mozilla.util.Assert;
 
@@ -100,19 +102,22 @@ public class NavigationHandlerImpl extends NavigationHandler {
      * @param outcome The outcome string
      */
 
-    public void handleNavigation(FacesContext context, String actionRef, String outcome) {
+    public void handleNavigation(FacesContext context, String actionRef, 
+        String outcome) {
         if (context == null || outcome == null) {
             throw new NullPointerException(
                     Util.getExceptionMessage(
                             Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        
-        String newViewId = getViewId(context, actionRef, outcome);
-        if (newViewId != null) {
-            context.getViewRoot().setViewId(newViewId);           
+        String newTreeId = getViewId(context, actionRef, outcome);
+        if (newTreeId != null) {
+            // PENDING (visvan) This needs to be fixed per discussion with Ed.
+             UIViewRoot newRoot = new UIViewRootBase();
+             newRoot.setViewId(newTreeId);
+             context.setViewRoot(newRoot);
         }
     }
-    
+   
     /**
      * This method uses helper methods to determine the new <code>view</code> identifier.
      * Refer to section 7.4.2 of the specification for more details.

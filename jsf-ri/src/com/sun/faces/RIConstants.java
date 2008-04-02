@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.41 2003/08/22 16:49:37 eburns Exp $
+ * $Id: RIConstants.java,v 1.42 2003/08/23 00:39:02 jvisvanathan Exp $
  */
 
 /*
@@ -53,10 +53,9 @@ public class RIConstants {
 
     public final static String IMPL_MESSAGES = FACES_PREFIX + "IMPL_MESSAGES";
 
-    public static final String SAVESTATE_MARKER = FACES_PREFIX + "saveStateMarker";
-    public static final String SAVESTATE_INITPARAM = 
-	FACES_PREFIX + "saveStateInClient";
-
+    public static final String SAVESTATE_FIELD_MARKER = FACES_PREFIX + 
+            "saveStateFieldMarker";
+   
     public static final String CONFIG_FILES_INITPARAM = 
         "javax.faces.application.CONFIG_FILES";
 

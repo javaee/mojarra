@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.54 2003/08/22 21:02:58 rkitain Exp $
+ * $Id: FormRenderer.java,v 1.55 2003/08/23 00:39:09 jvisvanathan Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.54 2003/08/22 21:02:58 rkitain Exp $
+ * @version $Id: FormRenderer.java,v 1.55 2003/08/23 00:39:09 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -168,15 +168,7 @@ public class FormRenderer extends HtmlBasicRenderer {
         // Render the end tag for form
         ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it(writer != null);
-        // if we are saving state in page, insert a marker into buffer so that 
-        // UseFaces tag can replace it state information.
-        String saveStateParam = context.getExternalContext().
-            getInitParameter(RIConstants.SAVESTATE_INITPARAM);
-        if ( saveStateParam != null && saveStateParam.equalsIgnoreCase("true")){
-	    //PENDING(rogerk)null 2nd arg?
-	    writer.writeText(RIConstants.SAVESTATE_MARKER, null);
-        }    
-	writer.endElement("form");
+        writer.endElement("form");
     }
 
 } // end of class FormRenderer

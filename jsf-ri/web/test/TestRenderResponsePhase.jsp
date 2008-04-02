@@ -33,7 +33,7 @@
     <BODY>
         <H3> JSF Basic Components Test Page </H3>
 
-<f:use_faces>
+<f:view>
 <h:form formName="basicForm" id="basicForm" title="basicForm" formClass="formClass"
       accept="html,wml" >
 
@@ -489,7 +489,7 @@
   <TABLE>
 
 </h:form>
-</f:use_faces>
+</f:view>
 
     </BODY>
 </HTML>

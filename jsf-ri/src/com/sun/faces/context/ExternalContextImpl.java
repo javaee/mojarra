@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.12 2003/08/22 16:49:43 eburns Exp $
+ * $Id: ExternalContextImpl.java,v 1.13 2003/08/23 00:39:05 jvisvanathan Exp $
  */
 
 /*
@@ -24,6 +24,7 @@ import java.util.AbstractMap;
 
 import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
+import javax.faces.application.StateManager;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -46,7 +47,7 @@ import com.sun.faces.util.Util;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.12 2003/08/22 16:49:43 eburns Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.13 2003/08/23 00:39:05 jvisvanathan Exp $
  *
  */
 public class ExternalContextImpl extends ExternalContext {
@@ -108,8 +109,9 @@ public class ExternalContextImpl extends ExternalContext {
             boolean createSession = true;
             String paramValue = null;
             if (null != (paramValue =
-                sc.getInitParameter(RIConstants.SAVESTATE_INITPARAM))){
-                createSession = !paramValue.equalsIgnoreCase("true");
+            sc.getInitParameter(StateManager.STATE_SAVING_METHOD_PARAM_NAME))){
+                createSession = !paramValue.
+                    equalsIgnoreCase(StateManager.STATE_SAVING_METHOD_CLIENT);
             }
             ((HttpServletRequest) request).getSession(createSession);
         }
