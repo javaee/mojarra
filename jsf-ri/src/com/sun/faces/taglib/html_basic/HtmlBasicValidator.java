@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicValidator.java,v 1.9 2004/04/20 18:27:25 eburns Exp $
+ * $Id: HtmlBasicValidator.java,v 1.10 2004/07/26 21:12:44 rlubke Exp $
  */
 
 /*
@@ -62,7 +62,7 @@ public class HtmlBasicValidator extends FacesValidator {
 	// says not to.
 	
 	if (java.beans.Beans.isDesignTime() || 
-	    !RIConstants.isHtmlTagLibValidatorActive()) {
+	    !RIConstants.HTML_TLV_ACTIVE) {
 	    return null;
 	}
 	

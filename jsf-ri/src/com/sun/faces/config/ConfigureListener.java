@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.23 2004/07/20 21:54:48 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.24 2004/07/26 21:12:44 rlubke Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -11,7 +11,6 @@ package com.sun.faces.config;
 import com.sun.faces.RIConstants;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.application.ConfigNavigationCase;
-import com.sun.faces.application.ViewHandlerImpl;
 import com.sun.faces.config.beans.ApplicationBean;
 import com.sun.faces.config.beans.ComponentBean;
 import com.sun.faces.config.beans.ConverterBean;
@@ -31,7 +30,6 @@ import org.apache.commons.digester.Digester;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -40,6 +38,7 @@ import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
+import javax.faces.context.ExternalContext;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionListener;
@@ -53,10 +52,7 @@ import javax.faces.webapp.FacesServlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import javax.faces.context.ExternalContext;
 
-import java.util.Locale;
-import java.util.Map;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -68,7 +64,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 
 /**
@@ -81,8 +80,110 @@ public class ConfigureListener implements ServletContextListener {
 
     // -------------------------------------------------------- Static Variables
 
-    protected static String FACES_CONFIG_BEAN_KEY = RIConstants.FACES_PREFIX +
-	"FACES_CONFIG_BEAN";
+    /**
+     * <p><code>ServletContext</code> attribute key.</p>
+     */
+    protected static String FACES_CONFIG_BEAN_KEY =
+        RIConstants.FACES_PREFIX + "FACES_CONFIG_BEAN";
+
+    /**
+     * <p>The path to the RI main configuration file.</p>
+     */
+    protected static final String JSF_RI_CONFIG =
+            "com/sun/faces/jsf-ri-config.xml";
+
+
+    /**
+     * <p>The path to the RI standard HTML renderkit configuration file.</p>
+     */
+    protected static final String JSF_RI_STANDARD =
+            "com/sun/faces/standard-html-renderkit.xml";
+
+    /**
+     * <p>The resource path for faces-config files included in the
+     * <code>META-INF</code> directory of JAR files.</p>
+     */
+    protected static final String META_INF_RESOURCES =
+            "META-INF/faces-config.xml";
+
+    /**
+     * <p>The resource path for the faces configuration in the
+     * <code>WEB-INF</code> directory of an application.</p>
+     */
+    protected static final String WEB_INF_RESOURCE =
+            "/WEB-INF/faces-config.xml";
+
+    /**
+     * <p>The context initialization parameter that determines whether
+     * or not the config files will be validated against their respective
+     * DTD.</p>
+     */
+    protected static final String VALIDATE_XML =
+        RIConstants.FACES_PREFIX + "validateXml";
+
+    /**
+     * <p>The context initialization parameter that determines whether
+     * or not the RI will attempt to validate that all defined objects
+     * can be created.</p>
+     */
+    protected static final String VERIFY_OBJECTS =
+        RIConstants.FACES_PREFIX + "verifyObjects";
+
+
+    /**
+     * <p>The context initialization parameter that determines whether
+     * or not the RI will enable HTML TLV processing.</p>
+     */
+    protected static final String ENABLE_HTML_TLV =
+        RIConstants.FACES_PREFIX + "enableHtmlTagLibValidator";
+
+    /*
+     * The first element is the path, the second is the public ID.
+     */
+    private static String[][] DTD_INFO = {
+        { "/com/sun/faces/web-facesconfig_1_0.dtd",
+          "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN" },
+        { "/com/sun/faces/web-facesconfig_1_1.dtd",
+          "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN" }
+    };
+
+    /**
+     * <p>All known factory names.</p>
+     */
+    private static final String[] FACTORY_NAMES = {
+        FactoryFinder.APPLICATION_FACTORY,
+        FactoryFinder.FACES_CONTEXT_FACTORY,
+        FactoryFinder.LIFECYCLE_FACTORY,
+        FactoryFinder.RENDER_KIT_FACTORY
+    };
+
+    /**
+     * <p>Array of known primitive types.</p>
+     */
+    private static final Class PRIM_CLASSES_TO_CONVERT[] = {
+        java.lang.Boolean.TYPE,
+        java.lang.Byte.TYPE,
+        java.lang.Character.TYPE,
+        java.lang.Double.TYPE,
+        java.lang.Float.TYPE,
+        java.lang.Integer.TYPE,
+        java.lang.Long.TYPE,
+        java.lang.Short.TYPE
+    };
+
+    /**
+     * <p>Array of known converters for primitive types.</p>
+     */
+    private static final String CONVERTERS_FOR_PRIMS[] = {
+        "javax.faces.convert.BooleanConverter",
+        "javax.faces.convert.ByteConverter",
+        "javax.faces.convert.CharacterConverter",
+        "javax.faces.convert.DoubleConverter",
+        "javax.faces.convert.FloatConverter",
+        "javax.faces.convert.IntegerConverter",
+        "javax.faces.convert.LongConverter",
+        "javax.faces.convert.ShortConverter"
+    };
 
 
     /**
@@ -157,14 +258,10 @@ public class ConfigureListener implements ServletContextListener {
 	    }
 	}
 
-	// see if we need to disable our TLValidator
-	String enableHtmlTLValidator = null;
-	if (null != (enableHtmlTLValidator = 
-		     context.getInitParameter(RIConstants.ENABLE_HTML_TLV))) {
-	    if (enableHtmlTLValidator.toString().equals("true")) {
-		RIConstants.setHtmlTagLibValidatorActive(true);
-	    }
-	}
+	    // see if we need to disable our TLValidator
+        RIConstants.HTML_TLV_ACTIVE =
+            isFeatureEnabled(context, ENABLE_HTML_TLV);
+
         URL url = null;
         if (log.isDebugEnabled()) {
             log.debug("contextInitialized(" + context.getServletContextName()
@@ -172,62 +269,27 @@ public class ConfigureListener implements ServletContextListener {
         }
 
         // Ensure that we initialize a particular application ony once
-        if (initialized(context)) {
+        if (initialized()) {
             return;
         }
 
         // Step 1, configure a Digester instance we can use
-        try {
-            boolean validateXml = validateTheXml(context);
-            digester = digester(validateXml);
-        } catch (MalformedURLException e) {
-            throw new FacesException(e); // PENDING - add message
-        }
+        digester = digester(isFeatureEnabled(context, VALIDATE_XML));
 
         // Step 2, parse the RI configuration resource
-        try {
-            url = Util.getCurrentLoader(this).getResource
-                (RIConstants.JSF_RI_CONFIG);
-            parse(digester, url, fcb);
-        } catch (Exception e) {
-            String message = null;
-            try {
-                message = Util.getExceptionMessageString
-                    (Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID,
-                     new Object[]{url.toExternalForm()});
-            } catch (Exception ee) {
-                message = "Can't parse configuration file:" +
-                    url.toExternalForm();
-            }
-            log.warn(message, e);
-            throw new FacesException(message, e);
-        }
+        url = Util.getCurrentLoader(this).getResource(JSF_RI_CONFIG);
+        parse(digester, url, fcb);
 
         // Step 3, parse the Standard HTML RenderKit
-        try {
-            url = Util.getCurrentLoader(this).getResource
-                (RIConstants.JSF_RI_STANDARD);
-            parse(digester, url, fcb);
-        } catch (Exception e) {
-            String message = null;
-            try {
-                message = Util.getExceptionMessageString
-                    (Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID,
-                     new Object[]{url.toExternalForm()});
-            } catch (Exception ee) {
-                message = "Can't parse configuration file:" +
-                    url.toExternalForm();
-            }
-            log.warn(message, e);
-            throw new FacesException(message, e);
-        }
+        url = Util.getCurrentLoader(this).getResource(JSF_RI_STANDARD);
+        parse(digester, url, fcb);
 
         // Step 4, parse any "/META-INF/faces-config.xml" resources
         Iterator resources;
         try {
             List list = new LinkedList();
-            Enumeration items = Util.getCurrentLoader(this).getResources
-                ("META-INF/faces-config.xml");
+            Enumeration items = Util.getCurrentLoader(this).
+                getResources(META_INF_RESOURCES);
             while (items.hasMoreElements()) {
                 list.add(0, items.nextElement());
             }
@@ -237,31 +299,17 @@ public class ConfigureListener implements ServletContextListener {
             try {
                 message = Util.getExceptionMessageString
                     (Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID,
-                     new Object[]{"/META-INF/faces-config.xml"});
+                     new Object[]{ META_INF_RESOURCES });
             } catch (Exception ee) {
                 message = "Can't parse configuration file:" +
-                    "/META-INF/faces-config.xml";
+                    META_INF_RESOURCES;
             }
             log.warn(message, e);
             throw new FacesException(message, e);
         }
         while (resources.hasNext()) {
             url = (URL) resources.next();
-            try {
-                parse(digester, url, fcb);
-            } catch (Exception e) {
-                String message = null;
-                try {
-                    message = Util.getExceptionMessageString
-                        (Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID,
-                         new Object[]{url.toExternalForm()});
-                } catch (Exception ee) {
-                    message = "Can't parse configuration file:" +
-                        url.toExternalForm();
-                }
-                log.warn(message, e);
-                throw new FacesException(message, e);
-            }
+            parse(digester, url, fcb);
         }
 
         // Step 5, parse any context-relative resources specified in
@@ -269,59 +317,21 @@ public class ConfigureListener implements ServletContextListener {
         String paths =
             context.getInitParameter(FacesServlet.CONFIG_FILES_ATTR);
         if (paths != null) {
-            paths = paths.trim();
-            String path;
-            while (paths.length() > 0) {
+            for (StringTokenizer t = new StringTokenizer(paths.trim(), ",");
+                 t.hasMoreTokens(); ) {
 
-                // Identify the next resource path to load
-                int comma = paths.indexOf(",");
-                if (comma >= 0) {
-                    path = paths.substring(0, comma).trim();
-                    paths = paths.substring(comma + 1).trim();
-                } else {
-                    path = paths.trim();
-                    paths = "";
-                }
-                if (path.length() < 1) {
-                    break;
-                }
-
-                try {
-                    url = context.getResource(path);
+                url = getContextURLForPath(context, t.nextToken().trim());
+                if (url != null) {
                     parse(digester, url, fcb);
-                } catch (Exception e) {
-                    String message = null;
-                    try {
-                        message = Util.getExceptionMessageString
-                            (Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID,
-                             new Object[]{path});
-                    } catch (Exception ee) {
-                        message = "Can't parse configuration file:" + path;
-                    }
-                    log.warn(message, e);
-                    throw new FacesException(message, e);
                 }
+
             }
         }
 
         // Step 6, parse "/WEB-INF/faces-config.xml" if it exists
-        try {
-            url = context.getResource("/WEB-INF/faces-config.xml");
-            if (url != null) {
-                parse(digester, url, fcb);
-            }
-        } catch (Exception e) {
-            String message = null;
-            try {
-                message = Util.getExceptionMessageString
-                    (Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID,
-                     new Object[]{url.toExternalForm()});
-            } catch (Exception ee) {
-                message = "Can't parse configuration file:" +
-                    url.toExternalForm();
-            }
-            log.warn(message, e);
-            throw new FacesException(message, e);
+        url = getContextURLForPath(context, WEB_INF_RESOURCE);
+        if (url != null) {
+            parse(digester, url, fcb);
         }
 
         // Step 7, use the accumulated configuration beans to configure the RI
@@ -339,7 +349,7 @@ public class ConfigureListener implements ServletContextListener {
         // Step 8, verify that all the configured factories are available
         // and optionall that configured objects can be created
         verifyFactories();
-        if (shouldVerifyObjects(context)) {
+        if (isFeatureEnabled(context, VERIFY_OBJECTS)) {
             verifyObjects(context, fcb);
         }
 
@@ -352,7 +362,7 @@ public class ConfigureListener implements ServletContextListener {
         ServletContext context = sce.getServletContext();
         if (log.isDebugEnabled()) {
             log.debug("contextDestroyed(" + context.getServletContextName()
-                      + ")");
+                      + ')');
         }
 
         // Release any allocated application resources
@@ -362,7 +372,7 @@ public class ConfigureListener implements ServletContextListener {
 	tlsExternalContext.set(null);
 
         // Release the initialization mark on this web application
-        release(context);
+        release();
 
     }
 
@@ -434,7 +444,7 @@ public class ConfigureListener implements ServletContextListener {
         value = config.getMessageBundle();
         if (value != null) {
             if (log.isTraceEnabled()) {
-                log.trace("setMessageBundle(" + value + ")");
+                log.trace("setMessageBundle(" + value + ')');
             }
             application.setMessageBundle(value);
         }
@@ -442,7 +452,7 @@ public class ConfigureListener implements ServletContextListener {
         value = config.getDefaultRenderKitId();
         if (value != null) {
             if (log.isTraceEnabled()) {
-                log.trace("setDefaultRenderKitId(" + value + ")");
+                log.trace("setDefaultRenderKitId(" + value + ')');
             }
             application.setDefaultRenderKitId(value);
         }
@@ -453,7 +463,7 @@ public class ConfigureListener implements ServletContextListener {
         if ((values != null) && (values.length > 0)) {
             for (int i = 0; i < values.length; i++) {
                 if (log.isTraceEnabled()) {
-                    log.trace("setActionListener(" + values[i] + ")");
+                    log.trace("setActionListener(" + values[i] + ')');
                 }
                 instance = Util.createInstance
                     (values[i], ActionListener.class,
@@ -468,7 +478,7 @@ public class ConfigureListener implements ServletContextListener {
         if ((values != null) && (values.length > 0)) {
             for (int i = 0; i < values.length; i++) {
                 if (log.isTraceEnabled()) {
-                    log.trace("setNavigationHandler(" + values[i] + ")");
+                    log.trace("setNavigationHandler(" + values[i] + ')');
                 }
                 instance = Util.createInstance
                     (values[i], NavigationHandler.class,
@@ -484,7 +494,7 @@ public class ConfigureListener implements ServletContextListener {
         if ((values != null) && (values.length > 0)) {
             for (int i = 0; i < values.length; i++) {
                 if (log.isTraceEnabled()) {
-                    log.trace("setPropertyResolver(" + values[i] + ")");
+                    log.trace("setPropertyResolver(" + values[i] + ')');
                 }
                 instance = Util.createInstance
                     (values[i], PropertyResolver.class,
@@ -500,7 +510,7 @@ public class ConfigureListener implements ServletContextListener {
         if ((values != null) && (values.length > 0)) {
             for (int i = 0; i < values.length; i++) {
                 if (log.isTraceEnabled()) {
-                    log.trace("setStateManager(" + values[i] + ")");
+                    log.trace("setStateManager(" + values[i] + ')');
                 }
                 instance = Util.createInstance
                     (values[i], StateManager.class,
@@ -516,7 +526,7 @@ public class ConfigureListener implements ServletContextListener {
         if ((values != null) && (values.length > 0)) {
             for (int i = 0; i < values.length; i++) {
                 if (log.isTraceEnabled()) {
-                    log.trace("setVariableResolver(" + values[i] + ")");
+                    log.trace("setVariableResolver(" + values[i] + ')');
                 }
                 instance = Util.createInstance
                     (values[i], VariableResolver.class,
@@ -532,7 +542,7 @@ public class ConfigureListener implements ServletContextListener {
         if ((values != null) && (values.length > 0)) {
             for (int i = 0; i < values.length; i++) {
                 if (log.isTraceEnabled()) {
-                    log.trace("setViewHandler(" + values[i] + ")");
+                    log.trace("setViewHandler(" + values[i] + ')');
                 }
                 instance = Util.createInstance
                     (values[i], ViewHandler.class,
@@ -563,37 +573,14 @@ public class ConfigureListener implements ServletContextListener {
         for (int i = 0; i < config.length; i++) {
             if (log.isTraceEnabled()) {
                 log.trace("addComponent(" +
-                          config[i].getComponentType() + "," +
-                          config[i].getComponentClass() + ")");
+                          config[i].getComponentType() + ',' +
+                          config[i].getComponentClass() + ')');
             }
             application.addComponent(config[i].getComponentType(),
                                      config[i].getComponentClass());
         }
 
     }
-
-
-    private static Class primitiveClassesToConvert[] = {
-        java.lang.Boolean.TYPE,
-        java.lang.Byte.TYPE,
-        java.lang.Character.TYPE,
-        java.lang.Double.TYPE,
-        java.lang.Float.TYPE,
-        java.lang.Integer.TYPE,
-        java.lang.Long.TYPE,
-        java.lang.Short.TYPE
-    };
-
-    private static String convertersForPrimitives[] = {
-        "javax.faces.convert.BooleanConverter",
-        "javax.faces.convert.ByteConverter",
-        "javax.faces.convert.CharacterConverter",
-        "javax.faces.convert.DoubleConverter",
-        "javax.faces.convert.FloatConverter",
-        "javax.faces.convert.IntegerConverter",
-        "javax.faces.convert.LongConverter",
-        "javax.faces.convert.ShortConverter"
-    };
 
 
     /**
@@ -607,14 +594,14 @@ public class ConfigureListener implements ServletContextListener {
         Application application = application();
 
         // at a minimum, configure the primitive converters
-        for (i = 0, len = primitiveClassesToConvert.length; i < len; i++) {
+        for (i = 0, len = PRIM_CLASSES_TO_CONVERT.length; i < len; i++) {
             if (log.isTraceEnabled()) {
                 log.trace("addConverterByClass(" +
-                          primitiveClassesToConvert[i].toString() + "," +
-                          convertersForPrimitives[i].toString() + ")");
+                          PRIM_CLASSES_TO_CONVERT[i] + ',' +
+                          CONVERTERS_FOR_PRIMS[i] + ')');
             }
-            application.addConverter(primitiveClassesToConvert[i],
-                                     convertersForPrimitives[i]);
+            application.addConverter(PRIM_CLASSES_TO_CONVERT[i],
+                                     CONVERTERS_FOR_PRIMS[i]);
         }
 
         if (config == null) {
@@ -625,16 +612,16 @@ public class ConfigureListener implements ServletContextListener {
             if (config[i].getConverterId() != null) {
                 if (log.isTraceEnabled()) {
                     log.trace("addConverterById(" +
-                              config[i].getConverterId() + "," +
-                              config[i].getConverterClass() + ")");
+                              config[i].getConverterId() + ',' +
+                              config[i].getConverterClass() + ')');
                 }
                 application.addConverter(config[i].getConverterId(),
                                          config[i].getConverterClass());
             } else {
                 if (log.isTraceEnabled()) {
                     log.trace("addConverterByClass(" +
-                              config[i].getConverterForClass() + "," +
-                              config[i].getConverterClass() + ")");
+                              config[i].getConverterForClass() + ',' +
+                              config[i].getConverterClass() + ')');
                 }
                 Class clazz = Util.getCurrentLoader(this).loadClass
                     (config[i].getConverterForClass());
@@ -665,7 +652,7 @@ public class ConfigureListener implements ServletContextListener {
 	    value = (String) iter.next();
 	    if (value != null) {
 		if (log.isTraceEnabled()) {
-		    log.trace("setApplicationFactory(" + value + ")");
+		    log.trace("setApplicationFactory(" + value + ')');
 		}
 		FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY,
 					 value);
@@ -677,7 +664,7 @@ public class ConfigureListener implements ServletContextListener {
 	    value = (String) iter.next();
 	    if (value != null) {
 		if (log.isTraceEnabled()) {
-		    log.trace("setFacesContextFactory(" + value + ")");
+		    log.trace("setFacesContextFactory(" + value + ')');
 		}
 		FactoryFinder.setFactory(FactoryFinder.FACES_CONTEXT_FACTORY,
 					 value);
@@ -689,7 +676,7 @@ public class ConfigureListener implements ServletContextListener {
 	    value = (String) iter.next();
 	    if (value != null) {
 		if (log.isTraceEnabled()) {
-		    log.trace("setLifecycleFactory(" + value + ")");
+		    log.trace("setLifecycleFactory(" + value + ')');
 		}
 		FactoryFinder.setFactory(FactoryFinder.LIFECYCLE_FACTORY,
 					 value);
@@ -701,7 +688,7 @@ public class ConfigureListener implements ServletContextListener {
 	    value = (String) iter.next();
 	    if (value != null) {
 		if (log.isTraceEnabled()) {
-		    log.trace("setRenderKitFactory(" + value + ")");
+		    log.trace("setRenderKitFactory(" + value + ')');
 		}
 		FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
 					 value);
@@ -729,10 +716,9 @@ public class ConfigureListener implements ServletContextListener {
             factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
         for (int i = 0; i < listeners.length; i++) {
             if (log.isTraceEnabled()) {
-                log.trace("addPhaseListener(" + listeners[i] + ")");
+                log.trace("addPhaseListener(" + listeners[i] + ')');
             }
-            ClassLoader cl = Util.getCurrentLoader(this);
-            Class clazz = cl.loadClass(listeners[i]);
+            Class clazz = Util.loadClass(listeners[i], this);
             lifecycle.addPhaseListener((PhaseListener) clazz.newInstance());
         }
 
@@ -757,7 +743,7 @@ public class ConfigureListener implements ServletContextListener {
         value = config.getDefaultLocale();
         if (value != null) {
             if (log.isTraceEnabled()) {
-                log.trace("setDefaultLocale(" + value + ")");
+                log.trace("setDefaultLocale(" + value + ')');
             }
             application.setDefaultLocale
                 (Util.getLocaleFromString(value));
@@ -768,7 +754,7 @@ public class ConfigureListener implements ServletContextListener {
             List locales = new ArrayList();
             for (int i = 0; i < values.length; i++) {
                 if (log.isTraceEnabled()) {
-                    log.trace("addSupportedLocale(" + values[i] + ")");
+                    log.trace("addSupportedLocale(" + values[i] + ')');
                 }
                 locales.add(Util.getLocaleFromString(values[i]));
             }
@@ -791,7 +777,6 @@ public class ConfigureListener implements ServletContextListener {
         if (config == null) {
             return;
         }
-        Application application = application();
 	ApplicationAssociate associate = 
 	    ApplicationAssociate.getInstance(getExternalContextDuringInitialize());
 
@@ -802,8 +787,8 @@ public class ConfigureListener implements ServletContextListener {
         for (int i = 0; i < config.length; i++) {
             if (log.isTraceEnabled()) {
                 log.trace("addManagedBean(" +
-                          config[i].getManagedBeanName() + "," +
-                          config[i].getManagedBeanClass() + ")");
+                          config[i].getManagedBeanName() + ',' +
+                          config[i].getManagedBeanClass() + ')');
             }
             ManagedBeanFactory mbf = new ManagedBeanFactory(config[i]);
 	    associate.addManagedBeanFactory(config[i].getManagedBeanName(),
@@ -818,12 +803,11 @@ public class ConfigureListener implements ServletContextListener {
      * @param config Array of <code>NavigationRuleBean</code> that contains
      *               our configuration information
      */
-    private void configure(NavigationRuleBean config[]) throws Exception {
+    private void configure(NavigationRuleBean config[]) {
 
         if (config == null) {
             return;
         }
-        Application application = application();
 	ApplicationAssociate associate = 
 	    ApplicationAssociate.getInstance(getExternalContextDuringInitialize());
 	
@@ -834,16 +818,16 @@ public class ConfigureListener implements ServletContextListener {
         for (int i = 0; i < config.length; i++) {
             if (log.isTraceEnabled()) {
                 log.trace("addNavigationRule(" +
-                          config[i].getFromViewId() + ")");
+                          config[i].getFromViewId() + ')');
             }
             NavigationCaseBean ncb[] = config[i].getNavigationCases();
             for (int j = 0; j < ncb.length; j++) {
                 if (log.isTraceEnabled()) {
                     log.trace("addNavigationCase(" +
-                              ncb[j].getFromAction() + "," +
-                              ncb[j].getFromOutcome() + "," +
-                              ncb[j].isRedirect() + "," +
-                              ncb[j].getToViewId() + ")");
+                              ncb[j].getFromAction() + ',' +
+                              ncb[j].getFromOutcome() + ',' +
+                              ncb[j].isRedirect() + ',' +
+                              ncb[j].getToViewId() + ')');
                 }
                 ConfigNavigationCase cnc = new ConfigNavigationCase();
                 if (config[i].getFromViewId() == null) {
@@ -896,14 +880,13 @@ public class ConfigureListener implements ServletContextListener {
         for (int i = 0; i < config.length; i++) {
             if (log.isTraceEnabled()) {
                 log.trace("addRenderer(" +
-                          config[i].getComponentFamily() + "," +
-                          config[i].getRendererType() + "," +
-                          config[i].getRendererClass() + ")");
+                          config[i].getComponentFamily() + ',' +
+                          config[i].getRendererType() + ',' +
+                          config[i].getRendererClass() + ')');
             }
             Renderer r = (Renderer)
-                Util.getCurrentLoader(this).
-                loadClass(config[i].getRendererClass()).
-                newInstance();
+                Util.loadClass(
+                    config[i].getRendererClass(), this).newInstance();
             rk.addRenderer(config[i].getComponentFamily(),
                            config[i].getRendererType(),
                            r);
@@ -932,8 +915,8 @@ public class ConfigureListener implements ServletContextListener {
             if (rk == null) {
                 if (log.isTraceEnabled()) {
                     log.trace("createRenderKit(" +
-                              config[i].getRenderKitId() + "," +
-                              config[i].getRenderKitClass() + ")");
+                              config[i].getRenderKitId() + ',' +
+                              config[i].getRenderKitClass() + ')');
                 }
                 if (config[i].getRenderKitClass() == null) {
                     throw new IllegalArgumentException// PENDING - i18n
@@ -941,14 +924,13 @@ public class ConfigureListener implements ServletContextListener {
                          config[i].getRenderKitId());
                 }
                 rk = (RenderKit)
-                    Util.getCurrentLoader(this).
-                    loadClass(config[i].getRenderKitClass()).
-                    newInstance();
+                    Util.loadClass(
+                        config[i].getRenderKitClass(), this).newInstance();
                 rkFactory.addRenderKit(config[i].getRenderKitId(), rk);
             } else {
                 if (log.isTraceEnabled()) {
                     log.trace("getRenderKit(" +
-                              config[i].getRenderKitId() + ")");
+                              config[i].getRenderKitId() + ')');
                 }
             }
             configure(config[i].getRenderers(), rk);
@@ -973,8 +955,8 @@ public class ConfigureListener implements ServletContextListener {
         for (int i = 0; i < config.length; i++) {
             if (log.isTraceEnabled()) {
                 log.trace("addValidator(" +
-                          config[i].getValidatorId() + "," +
-                          config[i].getValidatorClass() + ")");
+                          config[i].getValidatorId() + ',' +
+                          config[i].getValidatorClass() + ')');
             }
             application.addValidator(config[i].getValidatorId(),
                                      config[i].getValidatorClass());
@@ -988,10 +970,8 @@ public class ConfigureListener implements ServletContextListener {
      * parsing the runtime configuration information we need.</p>
      *
      * @param validateXml if true, validation is turned on during parsing.
-     * @throws MalformedURLException if a URL cannot be formed correctly
      */
-    protected Digester digester(boolean validateXml)
-        throws MalformedURLException {
+    protected Digester digester(boolean validateXml) {
         Digester digester = new Digester();
 
         // Configure basic properties
@@ -1003,17 +983,17 @@ public class ConfigureListener implements ServletContextListener {
         // PENDING - Read from file?
         digester.addRuleSet(new FacesConfigRuleSet(false, false, true));
 
-        // Configure preregistered entities
-        URL url = this.getClass().getResource
-            ("/com/sun/faces/web-facesconfig_1_1.dtd");
-        digester.register
-            ("-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN",
-             url.toString());
-        url = this.getClass().getResource
-            ("/com/sun/faces/web-facesconfig_1_0.dtd");
-        digester.register
-            ("-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN",
-             url.toString());
+        // Register known entities
+        for (int i = 0; i < DTD_INFO.length; i++) {
+            URL url = this.getClass().getResource(DTD_INFO[i][0]);
+            if (url != null) {
+                digester.register(DTD_INFO[i][1], url.toString());
+            } else {
+                throw new FacesException(
+                    Util.getExceptionMessageString(Util.NO_DTD_FOUND_ERROR_ID,
+                        new Object[]{ DTD_INFO[i][1], DTD_INFO[i][0] }));
+            }
+        }
 
         // Push an initial FacesConfigBean onto the stack
         digester.push(new FacesConfigBean());
@@ -1022,16 +1002,6 @@ public class ConfigureListener implements ServletContextListener {
 
     }
 
-
-    private String factoryNames[] =
-        {
-            FactoryFinder.APPLICATION_FACTORY,
-            FactoryFinder.FACES_CONTEXT_FACTORY,
-            FactoryFinder.LIFECYCLE_FACTORY,
-            FactoryFinder.RENDER_KIT_FACTORY
-        };
-
-
     /**
      * <p>Verify that all of the required factory objects are available.</p>
      *
@@ -1039,9 +1009,9 @@ public class ConfigureListener implements ServletContextListener {
      */
     private void verifyFactories() throws FacesException {
 
-        for (int i = 0, len = factoryNames.length; i < len; i++) {
+        for (int i = 0, len = FACTORY_NAMES.length; i < len; i++) {
             try {
-                Object factory = FactoryFinder.getFactory(factoryNames[i]);
+                FactoryFinder.getFactory(FACTORY_NAMES[i]);
             } catch (Exception e) {
                 throw new FacesException(e);
             }
@@ -1055,10 +1025,8 @@ public class ConfigureListener implements ServletContextListener {
      * been initialized.  If it has not been initialized, also record
      * the initialization of this application until removed by a call to
      * <code>release()</code>.</p>
-     *
-     * @param context <code>ServletContext</code> for this web application
      */
-    private boolean initialized(ServletContext context) {
+    private boolean initialized() {
 
         // Initialize at most once per web application class loader
         ClassLoader cl = Util.getCurrentLoader(this);
@@ -1189,7 +1157,9 @@ public class ConfigureListener implements ServletContextListener {
                     "cannot be created.  See your web application logs " +
                     "for details.";
             }
-            log.warn(message);
+            if (log.isErrorEnabled()) {
+                log.error(message);
+            }
             throw new FacesException(message);
         } else {
             if (log.isInfoEnabled()) {
@@ -1208,14 +1178,11 @@ public class ConfigureListener implements ServletContextListener {
      * @param digester Digester to use for parsing
      * @param url      URL of the configuration resource to be parsed
      * @param fcb      FacesConfigBean to accumulate results
-     * @throws IOException  if an input/output error occurs
-     * @throws SAXException if an XML parsing error occurs
      */
-    protected void parse(Digester digester, URL url, FacesConfigBean fcb)
-        throws IOException, SAXException {
+    protected void parse(Digester digester, URL url, FacesConfigBean fcb) {
 
         if (log.isDebugEnabled()) {
-            log.debug("parse(" + url.toExternalForm() + ")");
+            log.debug("parse(" + url.toExternalForm() + ')');
         }
 
         URLConnection conn = null;
@@ -1232,6 +1199,20 @@ public class ConfigureListener implements ServletContextListener {
             digester.parse(source);
             stream.close();
             stream = null;
+        } catch (Exception e) {
+            String message = null;
+            try {
+                message = Util.getExceptionMessageString
+                    (Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID,
+                        new Object[]{url.toExternalForm()});
+            } catch (Exception ee) {
+                message = "Can't parse configuration file:" +
+                    url.toExternalForm();
+            }
+            if (log.isErrorEnabled()) {
+                log.error(message, e);
+            }
+            throw new FacesException(message, e);
         } finally {
             if (stream != null) {
                 try {
@@ -1245,57 +1226,54 @@ public class ConfigureListener implements ServletContextListener {
 
     }
 
-
     /**
-     * <p>Determine if we will turn on validation during parsing.
+     * <p>Determines if a particular feature, configured via the web
+     * deployment descriptor as a <code>true/false</code> value, is
+     * enabled or not.</p>
+     * @param context the <code>ServletContext</code> of the application
+     * @param paramName the name of the context init paramName to check
      *
-     * @param sc the servlet context
+     * @return <code>true</code> if the feature in question is enabled, otherwise
+     *  <code>false</code>
      */
-    protected boolean validateTheXml(ServletContext sc) {
-        String validateXml = sc.getInitParameter(RIConstants.VALIDATE_XML);
-        if (validateXml != null) {
-            if (!(validateXml.equals("true")) &&
-                !(validateXml.equals("false"))) {
-                Object[] obj = new Object[1];
-                obj[0] = "validateXml";
-                throw new FacesException(Util.getExceptionMessageString(
-                    Util.INVALID_INIT_PARAM_ERROR_MESSAGE_ID, obj));
+    protected boolean isFeatureEnabled(ServletContext context, String paramName) {
+        String paramValue = context.getInitParameter(paramName);
+        if (paramValue != null) {
+            paramValue = paramValue.trim();
+            if (!(paramValue.equals("true")) &&
+                !(paramValue.equals("false"))) {
+
+                if (log.isWarnEnabled()) {
+                    log.warn(Util.getExceptionMessageString(
+                        Util.INVALID_INIT_PARAM_ERROR_MESSAGE_ID,
+                        new Object[] { paramValue, "validateXml" }));
+                }
             }
-        } else {
-            validateXml = "false";
         }
-        return new Boolean(validateXml).booleanValue();
+
+        return Boolean.valueOf(paramValue).booleanValue();
     }
 
 
     /**
-     * <p>Determine if we will verify objects after configuration.
-     *
-     * @param sc the servlet context
+     * <p>Return the URL for the given path.</p>
+     * @param context the <code>ServletContext</code> of the current application
+     * @param path the resource path
+     * @return the URL for the given resource or <code>null</code>
      */
-    private boolean shouldVerifyObjects(ServletContext sc) {
-        String validateXml = sc.getInitParameter(RIConstants.VERIFY_OBJECTS);
-        if (validateXml != null) {
-            if (!(validateXml.equals("true")) &&
-                !(validateXml.equals("false"))) {
-                Object[] obj = new Object[1];
-                obj[0] = "validateXml";
-                throw new FacesException(Util.getExceptionMessageString(
-                    Util.INVALID_INIT_PARAM_ERROR_MESSAGE_ID, obj));
-            }
-        } else {
-            validateXml = "false";
+    private URL getContextURLForPath(ServletContext context, String path) {
+        try {
+            return context.getResource(path);
+        } catch (MalformedURLException mue) {
+            throw new FacesException(mue);
         }
-        return new Boolean(validateXml).booleanValue();
     }
 
 
     /**
      * <p>Release the mark that this web application has been initialized.</p>
-     *
-     * @param context <code>ServletContext</code> for this web application
      */
-    private void release(ServletContext context) {
+    private void release() {
 
         ClassLoader cl = Util.getCurrentLoader(this);
         synchronized (loaders) {
@@ -1303,7 +1281,8 @@ public class ConfigureListener implements ServletContextListener {
         }
 
     }
-    
+
+
     public class ServletContextAdapter extends ExternalContext {
         
         private ServletContext servletContext = null;

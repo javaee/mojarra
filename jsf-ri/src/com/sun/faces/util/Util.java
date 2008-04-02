@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.141 2004/07/17 01:37:13 jayashri Exp $
+ * $Id: Util.java,v 1.142 2004/07/26 21:12:44 rlubke Exp $
  */
 
 /*
@@ -60,7 +60,7 @@ import java.util.StringTokenizer;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.141 2004/07/17 01:37:13 jayashri Exp $
+ * @version $Id: Util.java,v 1.142 2004/07/26 21:12:44 rlubke Exp $
  */
 
 public class Util extends Object {
@@ -287,6 +287,9 @@ public class Util extends Object {
     public static final String CYCLIC_REFERENCE_ERROR_ID =
         "com.sun.faces.CYCLIC_REFERENCE_ERROR";
     
+    public static final String NO_DTD_FOUND_ERROR_ID =
+        "com.sun.faces.NO_DTD_FOUND_ERROR";
+
 
 // README - make sure to add the message identifier constant
 // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution

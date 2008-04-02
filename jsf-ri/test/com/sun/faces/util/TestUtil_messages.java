@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.34 2004/05/03 19:30:41 jvisvanathan Exp $
+ * $Id: TestUtil_messages.java,v 1.35 2004/07/26 21:12:46 rlubke Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.34 2004/05/03 19:30:41 jvisvanathan Exp $
+ * @version $Id: TestUtil_messages.java,v 1.35 2004/07/26 21:12:46 rlubke Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {
@@ -111,6 +111,7 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {Util.ASSERTION_FAILED_ID, "0"},
         {Util.OBJECT_CREATION_ERROR_ID, "0"},
         {Util.CYCLIC_REFERENCE_ERROR_ID, "1"},
+        {Util.NO_DTD_FOUND_ERROR_ID, "2"}
     };
 
 // Attribute Instance Variables

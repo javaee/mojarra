@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.62 2004/07/20 21:54:50 rlubke Exp $
+ * $Id: ConfigFileTestCase.java,v 1.63 2004/07/26 21:12:45 rlubke Exp $
  */
 
 /*
@@ -56,8 +56,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 		(FacesConfigBean) context.getAttribute(FACES_CONFIG_BEAN_KEY);
 	    
 	    // Step 1, configure a Digester instance we can use
-	    boolean validateXml = validateTheXml(context);
-	    digester = digester(validateXml);
+	    digester = digester(isFeatureEnabled(context, VALIDATE_XML));
 	    
 	    url = (new File(System.getProperty("testRootDir"))).toURL();
 	    url = new URL(url, str);

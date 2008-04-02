@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.66 2004/06/08 13:47:27 rogerk Exp $
+ * $Id: RIConstants.java,v 1.67 2004/07/26 21:12:43 rlubke Exp $
  */
 
 /*
@@ -51,15 +51,6 @@ public class RIConstants {
     public static final String SAVESTATE_FIELD_MARKER = FACES_PREFIX +
         "saveStateFieldMarker";
 
-    public static final String JSF_RI_CONFIG =
-        "com/sun/faces/jsf-ri-config.xml";
-
-    public static final String JSF_RI_STANDARD =
-        "com/sun/faces/standard-html-renderkit.xml";
-
-    public final static String FORM_NUMBER_ATTR = FACES_PREFIX +
-        "FormNumber";
-
     /**
      * <p>Parser implementation for processing JSF reference expressions.</p>
      */
@@ -85,10 +76,6 @@ public class RIConstants {
 
     public static final String IMMUTABLE_MARKER =
         FACES_PREFIX + "IMMUTABLE";
-
-    public static final String VALIDATE_XML = FACES_PREFIX + "validateXml";
-
-    public static final String VERIFY_OBJECTS = FACES_PREFIX + "verifyObjects";
 
     public static final String ONE_TIME_INITIALIZATION_ATTR =
         FACES_PREFIX + "OneTimeInitialization";
@@ -119,18 +106,7 @@ public class RIConstants {
 
     public static final Object NO_VALUE = new String();
 
-    private static boolean htmlTLVActive = false;
-
-    public static final String ENABLE_HTML_TLV = FACES_PREFIX + 
-	"enableHtmlTagLibValidator";
-    
-    public static boolean isHtmlTagLibValidatorActive() {
-	return htmlTLVActive;
-    }
-
-    public static void setHtmlTagLibValidatorActive(boolean state) {
-	htmlTLVActive = state;
-    }
+    public static boolean HTML_TLV_ACTIVE = false;
 
     //
     // Constructors and Initializers
