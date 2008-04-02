@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.12 2003/05/03 04:08:47 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.13 2003/05/06 02:37:37 craigmcc Exp $
  */
 
 /*
@@ -118,13 +118,24 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     }
 
 
+    protected ConfigBase parseConfig(ConfigParser cp,
+                                     String resource,
+                                     ServletContext context)
+        throws Exception {
+
+        InputStream stream = context.getResourceAsStream(resource);
+        assertTrue(null != stream);
+        return (cp.parseConfig(stream));
+
+    }
+
+
 
     // Test parsing a full configuration file
     public void testFull() throws Exception {
         ConfigParser cp = new ConfigParser(config.getServletContext());
-        base = cp.parseConfig("/WEB-INF/faces-config.xml", 
-			      config.getServletContext());
-	assertTrue(null != base);
+        base = parseConfig(cp, "/WEB-INF/faces-config.xml",
+                           config.getServletContext());
 
         // <application>
         assertEquals("com.mycompany.MyActionListener",
@@ -286,19 +297,19 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 
     public void testEmpty() throws Exception {
         ConfigParser cp = new ConfigParser(config.getServletContext());
-        base = cp.parseConfig("/WEB-INF/faces-config-empty.xml",
-			      config.getServletContext());
+        base = parseConfig(cp, "/WEB-INF/faces-config-empty.xml",
+                           config.getServletContext());
 	assertTrue(null != base);
     }
 
     // Assert that create and stored managed bean is the same as specified in the 
     // config file.
  
-    public void testConfigManagedBeanFactory() {
+    public void testConfigManagedBeanFactory() throws Exception {
 
         ConfigParser cp = new ConfigParser(config.getServletContext());
-        base = cp.parseConfig("/WEB-INF/faces-config.xml", 
-			      config.getServletContext());
+        base = parseConfig(cp, "/WEB-INF/faces-config.xml",
+                           config.getServletContext());
 
         ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.getFactory(
         FactoryFinder.APPLICATION_FACTORY);
@@ -357,10 +368,10 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	assertTrue(null != configBase.getManagedBeans().get("TestBean2"));
     }
 
-     public void testNavigationCase() {
+     public void testNavigationCase() throws Exception {
          ConfigParser cp = new ConfigParser(config.getServletContext());
-         base = cp.parseConfig("/WEB-INF/faces-config.xml",
-                               config.getServletContext());
+         base = parseConfig(cp, "/WEB-INF/faces-config.xml",
+                            config.getServletContext());
          List navCases = base.getNavigationCases();
          assertTrue(!(navCases == Collections.EMPTY_LIST));
          for (int i=0; i< navCases.size(); i++) {
