@@ -61,6 +61,10 @@
         generally should NOT be overridden by command line settings
 -->
 
+   <property file="build.properties"/>              <!-- Component local   -->
+   <property file="../build.properties"/>           <!-- Commons local     -->
+   <property file="${user.home}/build.properties"/> <!-- User local        -->
+
     <!-- Default value for debugging arguments is no.  Override in
          build.properties -->
     <property name="debug.jvm.args" value=""/>
@@ -224,7 +228,7 @@
     </target>
 
     <target name="remove"
-            description="Remove cactus unit test webapp">
+            description="Remove cactus unit test webapp"> 
       <remove url="${url}" username="${username}" password="${password}"
             path="/test"/>
     </target>
@@ -235,7 +239,7 @@
         <arg line="-f build-tests.xml -Dusername=${username} -Dpassword=${password} remove"/>
       </exec>
       <exec executable="ant" os="SunOS,Linux" failonerror="false">
-        <arg line="-f build-tests.xml remove"/>
+        <arg line="-f build-tests.xml -Dusername=${username} -Dpassword=${password} remove"/>
       </exec>
     </target>
 
@@ -336,10 +340,14 @@
 
     <!-- Custom Tomcat Integration -->
     <taskdef  name="install"  classname="org.apache.catalina.ant.InstallTask">
-        <classpath refid="catalina-ant.classpath" />
+        <classpath>
+          <pathelement location="${catalina-ant.jar}" />
+        </classpath>
     </taskdef>
     <taskdef  name="remove"   classname="org.apache.catalina.ant.RemoveTask">
-      <classpath refid="catalina-ant.classpath" />
+        <classpath>
+          <pathelement location="${catalina-ant.jar}" />
+        </classpath>
     </taskdef>
 
 </project>

@@ -108,16 +108,24 @@
 
   <!-- Custom Tomcat Integration -->
   <taskdef  name="install"  classname="org.apache.catalina.ant.InstallTask">
-      <classpath refid="catalina-ant.classpath" />
+        <classpath>
+          <pathelement location="${catalina-ant.jar}" />
+        </classpath>
   </taskdef>
   <taskdef  name="list"     classname="org.apache.catalina.ant.ListTask">
-      <classpath refid="catalina-ant.classpath" />
+        <classpath>
+          <pathelement location="${catalina-ant.jar}" />
+        </classpath>
   </taskdef>    
   <taskdef  name="reload"   classname="org.apache.catalina.ant.ReloadTask">
-      <classpath refid="catalina-ant.classpath" />
+        <classpath>
+          <pathelement location="${catalina-ant.jar}" />
+        </classpath>
   </taskdef>
   <taskdef  name="remove"   classname="org.apache.catalina.ant.RemoveTask">
-      <classpath refid="catalina-ant.classpath" />
+        <classpath>
+          <pathelement location="${catalina-ant.jar}" />
+        </classpath>
   </taskdef>
   <property name="context.path" value="/basic"/>
   <property name="url"      value="http://localhost:8080/manager"/>
@@ -267,6 +275,10 @@
     <target name="run.cactus.test" depends="compile.test,jars"
      description="Run unit tests requiring cactus">
         <ant antfile="build-tests.xml" target="execute.cactus.tests"/>
+    </target>
+
+    <target name="passthru">
+        <ant antfile="build-tests.xml" target="safe.remove"/>
     </target>
 
 
