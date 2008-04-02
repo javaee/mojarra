@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOneTestCase.java,v 1.25 2005/08/22 22:08:21 ofung Exp $
+ * $Id: UISelectOneTestCase.java,v 1.26 2006/01/30 17:16:28 rogerk Exp $
  */
 
 /*
@@ -282,6 +282,37 @@ public class UISelectOneTestCase extends UIInputTestCase {
 	assertNull(test.getValueBinding("value"));
 	assertNull(test.getValue());
 
+    }
+
+    public void testSelectItemsIterator() {
+        // sub test 1 : non-selectItem at end
+        UISelectOne selectOne = (UISelectOne) component;
+        selectOne.getChildren().add(new UISelectItemSub("orr", null, null));
+        selectOne.getChildren().add(new UISelectItemSub("esposito", null, null));
+        UIParameter param = new UIParameter();
+        param.setName("param");
+        param.setValue("paramValue");
+        selectOne.getChildren().add(param);
+        Iterator iter = new SelectItemsIterator(selectOne);
+        while (iter.hasNext()) {
+            Object object = iter.next();
+            assertTrue(object instanceof javax.faces.model.SelectItem);
+            assertTrue((((SelectItem)object).getValue().equals("orr")) || 
+                (((SelectItem)object).getValue().equals("esposito")));
+        }
+
+        // sub test 2: non-selectitem in middle
+        selectOne = new UISelectOne();
+        selectOne.getChildren().add(new UISelectItemSub("gretsky", null, null));
+        selectOne.getChildren().add(param);
+        selectOne.getChildren().add(new UISelectItemSub("howe", null, null));
+        iter = new SelectItemsIterator(selectOne);
+        while (iter.hasNext()) {
+            Object object = iter.next();
+            assertTrue(object instanceof javax.faces.model.SelectItem);
+            assertTrue((((SelectItem)object).getValue().equals("gretsky")) || 
+                (((SelectItem)object).getValue().equals("howe")));
+        }
     }
 
 

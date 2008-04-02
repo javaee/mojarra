@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemsIterator.java,v 1.11 2006/01/18 15:52:52 rlubke Exp $
+ * $Id: SelectItemsIterator.java,v 1.12 2006/01/30 17:16:27 rogerk Exp $
  */
 
 /*
@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Map;
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 import javax.faces.model.SelectItem;
 
@@ -59,7 +60,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
      */
     public SelectItemsIterator(UIComponent parent) {
 
-        this.kids = parent.getChildren().iterator();
+        kids = parent.getChildren().listIterator();
 
     }
 
@@ -77,7 +78,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
     /**
      * <p>Iterator over the children of the parent component.</p>
      */
-    private Iterator<UIComponent> kids = null;
+    private ListIterator<UIComponent> kids = null;
 
 
     // -------------------------------------------------------- Iterator Methods
@@ -95,7 +96,12 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
                 items = null;
             }
         }
-        return (kids.hasNext());
+        Object next = findNextValidChild();
+        if (next != null) {
+            kids.previous();
+            return true;
+        }
+        return false;
 
     }
 
@@ -113,7 +119,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
         if (items != null) {
             return (items.next());
         }
-        UIComponent kid = kids.next();
+        UIComponent kid = (UIComponent) findNextValidChild();
         if (kid instanceof UISelectItem) {
             UISelectItem ui = (UISelectItem) kid;
             SelectItem item = (SelectItem) ui.getValue();
@@ -159,7 +165,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
                 throw new IllegalArgumentException();
             }
         } else {
-            throw new IllegalArgumentException();
+            throw new NoSuchElementException();
         }
 
     }
@@ -174,5 +180,16 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
 
     }
 
-
+    private Object findNextValidChild() {
+        if (kids.hasNext()) {
+            Object next = kids.next();
+            while (kids.hasNext() && !(next instanceof UISelectItem || next instanceof UISelectItems)) {
+                next = kids.next();
+            }
+            if (next instanceof UISelectItem || next instanceof UISelectItems) {
+                return next;
+            }
+        }
+        return null;
+    }
 }

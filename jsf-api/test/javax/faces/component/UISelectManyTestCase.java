@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectManyTestCase.java,v 1.29 2005/08/22 22:08:21 ofung Exp $
+ * $Id: UISelectManyTestCase.java,v 1.30 2006/01/30 17:16:28 rogerk Exp $
  */
 
 /*
@@ -365,6 +365,38 @@ public class UISelectManyTestCase extends UIInputTestCase {
 	test.setValueBinding("value", null);
 	assertNull(test.getValueBinding("value"));
 	assertNull(test.getValue());
+
+    }
+
+    public void testSelectItemsIterator() {
+        // sub test 1: non-selectitem at end 
+        UISelectMany selectMany = (UISelectMany) component;
+        selectMany.getChildren().add(new UISelectItemSub("orr", null, null));
+        UIParameter param = new UIParameter();
+        param.setName("param");
+        param.setValue("paramValue");
+        selectMany.getChildren().add(param);
+        selectMany.getChildren().add(new UISelectItemSub("esposito", null, null));
+        Iterator iter = new SelectItemsIterator(selectMany);
+        while (iter.hasNext()) {
+            Object object = iter.next();
+            assertTrue(object instanceof javax.faces.model.SelectItem);
+            assertTrue((((SelectItem)object).getValue().equals("orr")) ||
+                (((SelectItem)object).getValue().equals("esposito")));
+        }
+
+        // sub test 2: non-selectitem in middle
+        selectMany = new UISelectMany();
+        selectMany.getChildren().add(new UISelectItemSub("gretsky", null, null));
+        selectMany.getChildren().add(param);
+        selectMany.getChildren().add(new UISelectItemSub("howe", null, null));
+        iter = new SelectItemsIterator(selectMany);
+        while (iter.hasNext()) {
+            Object object = iter.next();
+            assertTrue(object instanceof javax.faces.model.SelectItem);
+            assertTrue((((SelectItem)object).getValue().equals("gretsky")) ||
+                (((SelectItem)object).getValue().equals("howe")));
+        }
 
     }
 
