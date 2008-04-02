@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.18 2003/10/22 22:17:38 eburns Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.19 2003/10/23 03:44:47 eburns Exp $
  */
 
 /*
@@ -116,14 +116,8 @@ public class NavigationHandlerImpl extends NavigationHandler {
         if (newViewId != null) {
 	    ViewHandler viewHandler = Util.getViewHandler(context);
 	    Assert.assert_it(null != viewHandler);
-	    UIViewRoot viewRoot = null;
-	    
-	    // if we don't have an existing view for this viewId
-	    if (null==(viewRoot=viewHandler.restoreView(context, newViewId))){
-		viewRoot = viewHandler.createView(context, newViewId);
-	    }
-	    Assert.assert_it(null != viewRoot);
-	    context.setViewRoot(viewRoot);
+	    UIViewRoot newRoot = viewHandler.createView(context, newViewId);
+	    context.setViewRoot(newRoot);
         }
     }
    
