@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.53 2003/10/19 21:13:05 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.54 2003/10/30 20:30:16 eburns Exp $
  */
 
 /*
@@ -14,9 +14,10 @@ import java.util.Iterator;
 import java.util.Locale;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
+import javax.faces.application.FacesMessage;
+import javax.faces.application.FacesMessage.Severity;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
-import javax.faces.application.Message;
 
 
 /**
@@ -55,7 +56,7 @@ public abstract class FacesContext {
 
     /**
      * <p>Return an <code>Iterator</code> over the client identifiers for
-     * which at least one {@link Message} has been queued.  If there are no
+     * which at least one {@link FacesMessage} has been queued.  If there are no
      * such client identifiers, an empty <code>Iterator</code> is returned.
      * If any messages have been queued that were not associated with any
      * specific client identifier, a <code>null</code> value will be included
@@ -78,19 +79,19 @@ public abstract class FacesContext {
 
 
     /**
-     * <p>Return the maximum severity level recorded on any {@link Message}s
+     * <p>Return the maximum severity level recorded on any {@link FacesMessage}s
      * that has been queued, whether or not they are associated with any
      * specific {@link UIComponent}.  If no such messages have been queued,
-     * return a value less than <code>Message.SEVERITY_INFO</code>.</p>
+     * return a value less than <code>FacesMessage.SEVERITY_INFO</code>.</p>
      *
      * @exception IllegalStateException if this method is called after
      *  this instance has been released
      */
-    public abstract int getMaximumSeverity();
+    public abstract Severity getMaximumSeverity();
 
 
     /**
-     * <p>Return an <code>Iterator</code> over the {@link Message}s that have
+     * <p>Return an <code>Iterator</code> over the {@link FacesMessage}s that have
      * been queued, whether or not they are associated with any specific
      * client identifier.  If no such messages have been queued, return an
      * empty <code>Iterator</code>.</p>
@@ -102,10 +103,10 @@ public abstract class FacesContext {
 
 
     /**
-     * <p>Return an <code>Iterator</code> over the {@link Message}s that have
+     * <p>Return an <code>Iterator</code> over the {@link FacesMessage}s that have
      * been queued that are associated with the specified client identifier
      * (if <code>clientId</code> is not <code>null</code>), or over the
-     * {@link Message}s that have been queued that are not associated with any
+     * {@link FacesMessage}s that have been queued that are not associated with any
      * specific client identifier (if <code>clientId</code> is
      * <code>null</code>).  If no such messages have been queued, return an
      * empty <code>Iterator</code>.</p>
@@ -223,10 +224,10 @@ public abstract class FacesContext {
 
 
     /**
-     * <p>Append a {@link Message} to the set of messages associated with
+     * <p>Append a {@link FacesMessage} to the set of messages associated with
      * the specified client identifier, if <code>clientId</code> is
      * not <code>null</code>.  If <code>clientId</code> is <code>null</code>,
-     * this {@link Message} is assumed to not be associated with any
+     * this {@link FacesMessage} is assumed to not be associated with any
      * specific component instance.</p>
      *
      * @param clientId The client identifier with which this message is
@@ -238,7 +239,7 @@ public abstract class FacesContext {
      * @exception NullPointerException if <code>message</code>
      *  is <code>null</code>
      */
-    public abstract void addMessage(String clientId, Message message);
+    public abstract void addMessage(String clientId, FacesMessage message);
 
 
     /**

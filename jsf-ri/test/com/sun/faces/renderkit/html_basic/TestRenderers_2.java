@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.65 2003/10/23 05:17:55 eburns Exp $
+ * $Id: TestRenderers_2.java,v 1.66 2003/10/30 20:30:40 eburns Exp $
  */
 
 /*
@@ -20,7 +20,7 @@ import java.util.Iterator;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
-import javax.faces.application.MessageImpl;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UISelectItems;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
@@ -48,7 +48,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.65 2003/10/23 05:17:55 eburns Exp $
+ * @version $Id: TestRenderers_2.java,v 1.66 2003/10/30 20:30:40 eburns Exp $
  * 
  *
  */
@@ -464,10 +464,10 @@ public class TestRenderers_2 extends JspFacesTestCase
         // specifically, add a "global" message and
         // "component" message. 
 
-        getFacesContext().addMessage(null,new MessageImpl(1,
+        getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN,
             "global message summary", "global message detail"));
         getFacesContext().addMessage(output.getClientId(getFacesContext()), 
-				     new MessageImpl(1,
+				     new FacesMessage(FacesMessage.SEVERITY_WARN,
             "component message summary", "component message detail"));
 
         // test encode method
@@ -518,7 +518,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         root.getChildren().remove(output);
         input.getChildren().add(output);
         getFacesContext().addMessage(input.getClientId(getFacesContext()), 
-            new MessageImpl(1, "error message summary_1", "error message detail_1"));
+            new FacesMessage(FacesMessage.SEVERITY_WARN, "error message summary_1", "error message detail_1"));
                 
         output.getAttributes().put("for", "errorInput");
         errorsRenderer.encodeBegin(getFacesContext(), output);
@@ -551,7 +551,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         anon2.getChildren().add(input1);
         
         getFacesContext().addMessage(input1.getClientId(getFacesContext()),
-            new MessageImpl(1, "error message summary_2", "error message detail_2"));
+            new FacesMessage(FacesMessage.SEVERITY_WARN, "error message summary_2", "error message detail_2"));
                 
         output.getAttributes().put("for", "errorInput1");
         errorsRenderer.encodeBegin(getFacesContext(), output);
@@ -594,7 +594,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         input2.getChildren().add(anon5);
                                     
         getFacesContext().addMessage(input2.getClientId(getFacesContext()),
-                new MessageImpl(1, "error message summary_3", "error message detail_3"));
+                new FacesMessage(FacesMessage.SEVERITY_WARN, "error message summary_3", "error message detail_3"));
 
         output.getAttributes().put("for", "errorInput2");
         errorsRenderer.encodeBegin(getFacesContext(), output);
@@ -632,7 +632,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         anon1.getChildren().add(form);
         form.getChildren().add(input3);
         getFacesContext().addMessage(input3.getClientId(getFacesContext()),
-            new MessageImpl(1, "error message summary_4", "error message detail_4"));
+            new FacesMessage(FacesMessage.SEVERITY_WARN, "error message summary_4", "error message detail_4"));
         
         output.getAttributes().put("for", "errorInput3");
         errorsRenderer.encodeBegin(getFacesContext(), output);
@@ -670,7 +670,9 @@ public class TestRenderers_2 extends JspFacesTestCase
         anonout1.getChildren().add(form2);
         form2.getChildren().add(input4);
         getFacesContext().addMessage(input4.getClientId(getFacesContext()),
-            new MessageImpl(1, "error message summary_5", "error message detail_5"));
+            new FacesMessage(FacesMessage.SEVERITY_WARN, 
+			     "error message summary_5", 
+			     "error message detail_5"));
         
         output.getAttributes().put("for", "errorInput4");
         errorsRenderer.encodeBegin(getFacesContext(), output);

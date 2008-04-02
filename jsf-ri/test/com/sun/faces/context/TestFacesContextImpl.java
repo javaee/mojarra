@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.41 2003/10/28 04:30:03 eburns Exp $
+ * $Id: TestFacesContextImpl.java,v 1.42 2003/10/30 20:30:40 eburns Exp $
  */
 
 /*
@@ -14,8 +14,7 @@ package com.sun.faces.context;
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.lifecycle.LifecycleImpl;
 
-import javax.faces.application.Message;
-import javax.faces.application.MessageImpl;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
@@ -35,7 +34,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.41 2003/10/28 04:30:03 eburns Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.42 2003/10/30 20:30:40 eburns Exp $
  */
 
 public class TestFacesContextImpl extends ServletFacesTestCase
@@ -229,25 +228,29 @@ public void testMessageMethods() {
     assertTrue( fc != null);
     
     System.out.println("Testing add methods");
-    Message msg1 = new MessageImpl (2, "summary1", "detail1");
+    FacesMessage msg1 = new FacesMessage (FacesMessage.SEVERITY_ERROR, 
+					  "summary1", "detail1");
     fc.addMessage(null, msg1);
     
-    Message msg2 = new MessageImpl (3, "summary2", "detail2");
+    FacesMessage msg2 = new FacesMessage (FacesMessage.SEVERITY_FATAL, 
+					  "summary2", "detail2");
     fc.addMessage(null, msg2);
     
     UICommand command = new UICommand();
-    Message msg3 = new MessageImpl (4, "summary3", "detail3");
+    FacesMessage msg3 = new FacesMessage (FacesMessage.SEVERITY_FATAL, 
+					  "summary3", "detail3");
     fc.addMessage(command.getClientId(fc), msg3);
     
-    Message msg4 = new MessageImpl (1, "summary4", "detail4");
+    FacesMessage msg4 = new FacesMessage (FacesMessage.SEVERITY_WARN, 
+					  "summary4", "detail4");
     fc.addMessage(command.getClientId(fc), msg4);
     
     System.out.println("Testing get methods");
-    assertTrue ( fc.getMaximumSeverity() == 4 );
+    assertTrue ( fc.getMaximumSeverity() == FacesMessage.SEVERITY_FATAL );
     
     Iterator it = fc.getMessages();
     while ( it.hasNext() ) {
-       Message result = (Message) it.next();
+       FacesMessage result = (FacesMessage) it.next();
        assertTrue ( result.equals(msg1) || result.equals(msg2) || 
            result.equals(msg3) || result.equals(msg4));
     }   
@@ -255,14 +258,14 @@ public void testMessageMethods() {
     it = null;
     it = fc.getMessages(command.getClientId(fc));
     while ( it.hasNext() ) {
-       Message result = (Message) it.next();
+       FacesMessage result = (FacesMessage) it.next();
        assertTrue (result.equals(msg3) || result.equals(msg4));
     }
     
     it = null;
     it = fc.getMessages(null);
     while ( it.hasNext() ) {
-       Message result = (Message) it.next();
+       FacesMessage result = (FacesMessage) it.next();
        //System.out.println("summary " + result.getSummary());
        assertTrue ( result.equals(msg1) || result.equals(msg2));
     }

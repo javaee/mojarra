@@ -3,7 +3,7 @@
 %><%@ page import="javax.faces.FactoryFinder"
 %><%@ page import="javax.faces.application.Application"
 %><%@ page import="javax.faces.application.ApplicationFactory"
-%><%@ page import="javax.faces.application.Message"
+%><%@ page import="javax.faces.application.FacesMessage"
 %><%@ page import="javax.faces.context.FacesContext"
 %><%@ page import="com.sun.faces.util.MessageFactory"
 %><%@ page import="javax.faces.component.UIViewRoot"
@@ -32,7 +32,7 @@
     return;
   }
 
-  Message message = null;
+  FacesMessage message = null;
 
   // Check message identifiers that should be present (en_US)
   facesContext.getViewRoot().setLocale(new Locale("en", "US"));

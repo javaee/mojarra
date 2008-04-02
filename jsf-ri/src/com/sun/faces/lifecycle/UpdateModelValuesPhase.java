@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.28 2003/10/30 16:14:15 eburns Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.29 2003/10/30 20:30:31 eburns Exp $
  */
 
 /*
@@ -13,7 +13,6 @@ import com.sun.faces.context.FacesContextImpl;
 
 import org.mozilla.util.Assert;
 
-import javax.faces.application.Message;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageFactory;
 
@@ -99,9 +98,9 @@ public void execute(FacesContext facesContext)
             params[1] = valueHolder.getValueRef();
         }  
         params[2] = exceptionMessage;
-        Message msg = MessageFactory.getMessage(facesContext,
-            Util.MODEL_UPDATE_ERROR_MESSAGE_ID,params);
-        facesContext.addMessage(component.getClientId(facesContext), msg);
+        facesContext.addMessage(component.getClientId(facesContext), 
+				MessageFactory.getMessage(facesContext,
+							  Util.MODEL_UPDATE_ERROR_MESSAGE_ID,params));
         if (log.isErrorEnabled()) {
 	    log.error(exceptionMessage);
 	}

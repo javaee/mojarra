@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.63 2003/10/30 16:14:17 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.64 2003/10/30 20:30:32 eburns Exp $
  */
 
 /*
@@ -33,7 +33,6 @@ import javax.faces.application.ApplicationFactory;
 import javax.faces.application.Application;
 
 import javax.faces.render.Renderer;
-import javax.faces.application.Message;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
@@ -123,9 +122,9 @@ public abstract class HtmlBasicRenderer extends Renderer {
             params[1] = valueHolder.getValueRef();
         }
         params[2] = errorMessage; 
-        Message msg = MessageFactory.getMessage(facesContext, 
-                Util.CONVERSION_ERROR_MESSAGE_ID,params);
-        facesContext.addMessage(comp.getClientId(facesContext), msg);
+        facesContext.addMessage(comp.getClientId(facesContext), 
+				MessageFactory.getMessage(facesContext, 
+							  Util.CONVERSION_ERROR_MESSAGE_ID,params));
     }
 
     public void addGenericErrorMessage(FacesContext facesContext,
@@ -133,8 +132,9 @@ public abstract class HtmlBasicRenderer extends Renderer {
 				       String messageId, String param) {
 	Object[] params = new Object[3];
 	params[0] = param;
-        Message msg = MessageFactory.getMessage(facesContext, messageId, params);
-        facesContext.addMessage(component.getClientId(facesContext), msg);
+        facesContext.addMessage(component.getClientId(facesContext), 
+				MessageFactory.getMessage(facesContext, 
+							  messageId, params));
     }
 
     /**

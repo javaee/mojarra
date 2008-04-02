@@ -1,5 +1,5 @@
 /*
- * $Id: ErrorsRenderer.java,v 1.29 2003/10/23 19:46:26 eburns Exp $
+ * $Id: ErrorsRenderer.java,v 1.30 2003/10/30 20:30:32 eburns Exp $
  */
 
 /*
@@ -16,11 +16,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.mozilla.util.Assert;
 
-import javax.faces.application.Message;
 import javax.faces.component.UIComponent;
 import javax.faces.component.NamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.application.FacesMessage;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
@@ -29,7 +29,7 @@ import java.util.List;
  *
  * <p><B>ErrorsRenderer</B> handles rendering for the Output_ErrorsTag<p>. 
  *
- * @version $Id: ErrorsRenderer.java,v 1.29 2003/10/23 19:46:26 eburns Exp $*
+ * @version $Id: ErrorsRenderer.java,v 1.30 2003/10/30 20:30:32 eburns Exp $*
  */
 
 public class ErrorsRenderer extends HtmlBasicRenderer {
@@ -91,7 +91,7 @@ public class ErrorsRenderer extends HtmlBasicRenderer {
     public void encodeEnd(FacesContext context, UIComponent component) 
             throws IOException {
         Iterator messageIter = null;        
-        Message curMessage = null;
+        FacesMessage curMessage = null;
         ResponseWriter writer = null;
         
         if (context == null || component == null) {
@@ -190,7 +190,7 @@ public class ErrorsRenderer extends HtmlBasicRenderer {
 	    }
         } 
         while (messageIter.hasNext()) {
-            curMessage = (Message) messageIter.next();
+            curMessage = (FacesMessage) messageIter.next();
 	    writer.writeText("\t", null);
 	    writer.writeText(curMessage.getSummary(), null);
         }

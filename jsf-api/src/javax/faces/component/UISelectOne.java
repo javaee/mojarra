@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.32 2003/10/30 16:13:51 eburns Exp $
+ * $Id: UISelectOne.java,v 1.33 2003/10/30 20:30:14 eburns Exp $
  */
 
 /*
@@ -11,7 +11,6 @@ package javax.faces.component;
 
 
 import java.util.Iterator;
-import javax.faces.application.Message;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
@@ -98,9 +97,9 @@ public class UISelectOne extends UIInput {
 
         // Enqueue an error message if an invalid value was specified
         if (!found) {
-            Message message =
-                MessageFactory.getMessage(context, INVALID_MESSAGE_ID);
-            context.addMessage(getClientId(context), message);
+            context.addMessage(getClientId(context), 
+			       MessageFactory.getMessage(context, 
+							 INVALID_MESSAGE_ID));
             setValid(false);
         }
         super.validate(context);

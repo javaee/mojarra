@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.58 2003/10/27 19:09:56 craigmcc Exp $
+ * $Id: FacesContextImpl.java,v 1.59 2003/10/30 20:30:30 eburns Exp $
  */
 
 /*
@@ -21,7 +21,8 @@ import java.util.Map;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
-import javax.faces.application.Message;
+import javax.faces.application.FacesMessage;
+import javax.faces.application.FacesMessage.Severity;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
@@ -65,8 +66,8 @@ public class FacesContextImpl extends FacesContext
 
     /**
 
-    * Store mapping of clientId to ArrayList of Message
-    * instances.  The null key is used to represent Message instances
+    * Store mapping of clientId to ArrayList of FacesMessage
+    * instances.  The null key is used to represent FacesMessage instances
     * that are not associated with a clientId instance.
 
     */
@@ -151,26 +152,27 @@ public class FacesContextImpl extends FacesContext
         }
     }
 
-    public int getMaximumSeverity() {
+    public Severity getMaximumSeverity() {
         assertNotReleased();        
         int max = 0;       
+	Severity result = null;
         
         if (null == componentMessageLists) {
-             return max;
+             return FacesMessage.SEVERITY_INFO;
         }
 	    // Get an Iterator over the ArrayList instances
         List messages = getMergedMessageLists();
         for (int i = 0, size = getMergedMessageLists().size(); i < size; i++) {            
-            int severity = ((Message) messages.get(i)).getSeverity();
-            if (severity > max) {
-                max = severity;
+            result = ((FacesMessage) messages.get(i)).getSeverity();
+            if (result.getOrdinal() > max) {
+                max = result.getOrdinal();
             }
 
-            if (severity == Message.SEVERITY_FATAL) {
+            if (result == FacesMessage.SEVERITY_FATAL) {
                 break;
             }
         }	   
-        return max;
+        return result;
     }    
 
     public Iterator getMessages() {
@@ -267,7 +269,7 @@ public class FacesContextImpl extends FacesContext
 
     }
 
-    public void addMessage(String clientId, Message message) {
+    public void addMessage(String clientId, FacesMessage message) {
         assertNotReleased();
         // Validate our preconditions
         if ( null == message ) {

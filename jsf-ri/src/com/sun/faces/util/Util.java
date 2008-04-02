@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.107 2003/10/30 16:14:18 eburns Exp $
+ * $Id: Util.java,v 1.108 2003/10/30 20:30:34 eburns Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
-import javax.faces.application.Message;
+import javax.faces.application.FacesMessage;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
@@ -65,7 +65,7 @@ import com.sun.faces.el.impl.JspVariableResolver;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.107 2003/10/30 16:14:18 eburns Exp $ 
+ * @version $Id: Util.java,v 1.108 2003/10/30 20:30:34 eburns Exp $ 
  */
 
 public class Util extends Object
@@ -423,7 +423,7 @@ private Util()
 							  Object params[]) {
 	String result = null;
 
-	Message message = MessageFactory.getMessage(messageId, params);
+	FacesMessage message = MessageFactory.getMessage(messageId, params);
 	if (null != message) {
 	    result = message.getSummary();
 	}

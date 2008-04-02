@@ -5,7 +5,6 @@
 
 <%@ page import="javax.faces.FactoryFinder"
 %><%@ page import="javax.faces.application.Application"
-%><%@ page import="javax.faces.application.Message"
 %><%@ page import="javax.faces.application.ApplicationFactory"
 %><%@ page import="javax.faces.context.FacesContext"
 %><%@ page import="javax.faces.component.UIInput"

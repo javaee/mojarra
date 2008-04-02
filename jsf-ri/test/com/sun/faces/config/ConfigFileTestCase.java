@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.45 2003/10/30 16:14:37 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.46 2003/10/30 20:30:39 eburns Exp $
  */
 
 /*
@@ -16,7 +16,6 @@ import org.mozilla.util.Assert;
 
 import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
-import javax.faces.application.Message;
 import javax.faces.application.NavigationHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;

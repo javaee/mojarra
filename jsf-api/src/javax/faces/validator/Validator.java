@@ -1,5 +1,5 @@
 /*
- * $Id: Validator.java,v 1.14 2003/10/30 16:13:57 eburns Exp $
+ * $Id: Validator.java,v 1.15 2003/10/30 20:30:18 eburns Exp $
  */
 
 /*
@@ -14,7 +14,7 @@ import java.util.Iterator;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
-import javax.faces.application.Message;
+import javax.faces.application.FacesMessage;
 
 
 /**
@@ -25,7 +25,7 @@ import javax.faces.application.Message;
  * Validations</em> phase of the request processing lifecycle.</p>
  *
  * <p>Individual {@link Validator}s should examine the component that
- * they are passed, and add {@link Message} instances to the
+ * they are passed, and add {@link FacesMessage} instances to the
  * {@link FacesContext} for the current request, documenting
  * any failures to conform to the required rules.  In general, such
  * messages should be associated with the {@link UIInput} on which
@@ -48,7 +48,7 @@ import javax.faces.application.Message;
 public interface Validator {
 
     /**
-     * <p>The message identifier of the {@link Message} to be created if
+     * <p>The message identifier of the {@link FacesMessage} to be created if
      * the maximum or minimum value check fails, and both the maximum
      * and minim values for this validator have been set.  The message
      * format string for this message may optionally include a
@@ -64,7 +64,7 @@ public interface Validator {
      * {@link Validator} against the specified {@link UIInput}.
      * If any violations are found:</p>
      * <ul>
-     * <li>Add zero or more {@link Message}s to the specified
+     * <li>Add zero or more {@link FacesMessage}s to the specified
      *     {@link FacesContext}, specifying this {@link UIInput} as
      *     associated with the message, describing the nature of the
      *     violation(s) encountered.</li>

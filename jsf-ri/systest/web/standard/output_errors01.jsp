@@ -5,7 +5,7 @@
 
 <%@ page import="javax.faces.FactoryFinder"
 %><%@ page import="javax.faces.application.Application"
-%><%@ page import="javax.faces.application.Message"
+%><%@ page import="javax.faces.application.FacesMessage"
 %><%@ page import="com.sun.faces.util.MessageFactory"
 %><%@ page import="javax.faces.application.ApplicationFactory"
 %><%@ page import="javax.faces.context.FacesContext"
@@ -24,7 +24,7 @@
   Application appl = afactory.getApplication();
 
   // get a message
-  Message message = MessageFactory.getMessage(facesContext, 
+  FacesMessage message = MessageFactory.getMessage(facesContext, 
         "javax.faces.component.UIInput.REQUIRED");
   if (message == null) {
     out.println("/output_errors01.jsp FAILED - No message returned");

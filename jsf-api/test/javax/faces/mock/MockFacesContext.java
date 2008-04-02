@@ -1,5 +1,5 @@
 /*
- * $Id: MockFacesContext.java,v 1.14 2003/10/19 21:13:11 craigmcc Exp $
+ * $Id: MockFacesContext.java,v 1.15 2003/10/30 20:30:22 eburns Exp $
  */
 
 /*
@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import javax.faces.application.Application;
-import javax.faces.application.Message;
+import javax.faces.application.FacesMessage;
+import javax.faces.application.FacesMessage.Severity;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
@@ -91,7 +92,7 @@ public class MockFacesContext extends FacesContext {
 
 
     // maximumSeverity
-    public int getMaximumSeverity() {
+    public Severity getMaximumSeverity() {
         throw new UnsupportedOperationException();
     }
 
@@ -163,7 +164,7 @@ public class MockFacesContext extends FacesContext {
     // ---------------------------------------------------------- Public Methods
 
 
-    public void addMessage(String clientId, Message message){ 
+    public void addMessage(String clientId, FacesMessage message){ 
         List list = (List) messages.get(clientId);
         if (list == null) {
             list = new ArrayList();

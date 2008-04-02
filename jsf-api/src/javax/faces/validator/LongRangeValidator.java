@@ -1,5 +1,5 @@
 /*
- * $Id: LongRangeValidator.java,v 1.24 2003/10/30 16:13:54 eburns Exp $
+ * $Id: LongRangeValidator.java,v 1.25 2003/10/30 20:30:18 eburns Exp $
  */
 
 /*
@@ -10,7 +10,6 @@
 package javax.faces.validator;
 
 
-import javax.faces.application.Message;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;

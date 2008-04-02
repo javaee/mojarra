@@ -1,5 +1,5 @@
 /*
- * $Id: TestMessageFactoryImpl.java,v 1.1 2003/10/30 16:14:38 eburns Exp $
+ * $Id: TestMessageFactoryImpl.java,v 1.2 2003/10/30 20:30:41 eburns Exp $
  */
 
 /*
@@ -17,7 +17,7 @@ import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
 
 import javax.faces.component.UIViewRoot;
-import javax.faces.application.Message;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import com.sun.faces.util.Util;
 import java.util.Iterator;
@@ -30,7 +30,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestMessageFactoryImpl.java,v 1.1 2003/10/30 16:14:38 eburns Exp $
+ * @version $Id: TestMessageFactoryImpl.java,v 1.2 2003/10/30 20:30:41 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -81,7 +81,7 @@ public class TestMessageFactoryImpl extends ServletFacesTestCase
     
     public void testGetMethods() {
         boolean gotException = false;
-        Message msg = null;
+        FacesMessage msg = null;
         
         FacesContext facesContext = getFacesContext();
         Assert.assert_it(facesContext != null );
@@ -122,7 +122,7 @@ public class TestMessageFactoryImpl extends ServletFacesTestCase
     public void testFindCatalog() {
 
         boolean gotException = false;
-        Message msg = null;
+        FacesMessage msg = null;
 
         // if no locale is set, it should use the fall back,
         // JSFMessages.xml

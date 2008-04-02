@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.40 2003/10/30 16:13:50 eburns Exp $
+ * $Id: UIInput.java,v 1.41 2003/10/30 20:30:13 eburns Exp $
  */
 
 /*
@@ -13,7 +13,7 @@ package javax.faces.component;
 import java.lang.reflect.InvocationTargetException;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
-import javax.faces.application.Message;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.el.MethodBinding;
@@ -103,7 +103,7 @@ public class UIInput extends UIOutput {
 
     /**
      * <p>The message identifier of the
-     * {@link javax.faces.application.Message} to be created if
+     * {@link javax.faces.application.FacesMessage} to be created if
      * a required check fails.</p>
      */
     public static final String REQUIRED_MESSAGE_ID =
@@ -440,7 +440,7 @@ public class UIInput extends UIOutput {
 
 	// If our value is valid, enforce the required property if present
 	if (isValid() && isRequired() && isEmpty()) {
-	    Message message =
+	    FacesMessage message =
 		MessageFactory.getMessage(context, REQUIRED_MESSAGE_ID);
 	    context.addMessage(getClientId(context), message);
 	    setValid(false);

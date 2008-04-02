@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.16 2003/10/27 04:10:09 craigmcc Exp $
+ * $Id: UIDataTestCase.java,v 1.17 2003/10/30 20:30:20 eburns Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.faces.FactoryFinder;
-import javax.faces.application.Message;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
@@ -577,7 +577,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
         int n = 0;
         Iterator messages = facesContext.getMessages();
         while (messages.hasNext()) {
-            Message message = (Message) messages.next();
+            FacesMessage message = (FacesMessage) messages.next();
             n++;
             // System.err.println(message.getSummary());
         }
