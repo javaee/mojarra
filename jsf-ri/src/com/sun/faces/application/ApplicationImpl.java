@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.9 2003/05/01 07:42:09 eburns Exp $
+ * $Id: ApplicationImpl.java,v 1.10 2003/05/01 19:47:44 eburns Exp $
  */
 
 /*
@@ -279,15 +279,18 @@ public class ApplicationImpl extends Application {
     }
 
     public void addMessageResources(String messageResourcesId, String messageResourcesClass) {
+	appConfig.addMessageResources(messageResourcesId, 
+				      messageResourcesClass);
     }
 
     public MessageResources getMessageResources(String messageResourcesId) 
         throws FacesException {
-        return null;
+	return 	appConfig.getMessageResources(messageResourcesId);
+
     }
 
     public Iterator getMessageResourcesIds() { 
-	return null;
+	return appConfig.getMessageResourcesIds();
     }
 
     public void addValidator(String validatorId, String validatorClass) {

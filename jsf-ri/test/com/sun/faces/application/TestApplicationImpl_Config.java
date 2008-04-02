@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.3 2003/05/01 18:04:07 eburns Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.4 2003/05/01 19:47:47 eburns Exp $
  */
 
 /*
@@ -29,12 +29,16 @@ import javax.faces.event.ActionEvent;
 import javax.faces.FactoryFinder;
 import javax.faces.component.*;
 import javax.faces.convert.Converter;
+import javax.faces.application.Message;
 import com.sun.faces.convert.*;
 
 import org.mozilla.util.Assert;
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.TestComponent;
 import com.sun.faces.TestConverter;
+import com.sun.faces.context.MessageResourcesImpl;
+import com.sun.faces.config.*;
+import javax.faces.context.MessageResources;
 import javax.faces.FacesException;
 
 import java.util.HashMap;
@@ -46,7 +50,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.3 2003/05/01 18:04:07 eburns Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.4 2003/05/01 19:47:47 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -286,5 +290,91 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 					 standardConverterIds));
 	}
     }
+
+    public void testMessageResorucesPositive() {
+	MessageResourcesImpl 
+	    newMessageResourcesImpl = null,
+	    testMessageResoruces = new MessageResourcesImpl();
+	MessageResources rsrc = null;
+	
+	// runtime addition
+	
+	application.addMessageResources("FreshResources",
+				 "com.sun.faces.context.MessageResourcesImpl");
+	assertTrue(null != (newMessageResourcesImpl = (MessageResourcesImpl)
+			    application.getMessageResources("FreshResources")));
+	assertTrue(newMessageResourcesImpl != testMessageResoruces);
+
+	// built-in MessageResources
+	assertTrue(null != (rsrc = application.getMessageResources(MessageResources.FACES_API_MESSAGES)));
+	assertTrue(rsrc instanceof MessageResources);
+	validateMessages(rsrc, MessageResources.FACES_API_MESSAGES);
+	assertTrue(null != (rsrc = application.getMessageResources(MessageResources.FACES_IMPL_MESSAGES)));
+	assertTrue(rsrc instanceof MessageResources);
+	validateMessages(rsrc, MessageResources.FACES_IMPL_MESSAGES);
+    }
+
+    protected void validateMessages(MessageResources rsrc, String id) {
+	// get the list of messages from the ConfigMessageResources
+	ConfigBase yourBase = application.getAppConfig().getConfigBase();
+	ConfigMessageResources rsrcBean = (ConfigMessageResources)
+	    yourBase.getMessageResources().get(id);
+	Iterator messageIter = rsrcBean.getMessages().keySet().iterator();
+	Message curMessage = null;
+	String curMessageId = null;
+	assertTrue(null != messageIter);
+	int i = 0;
+	while (messageIter.hasNext() && i < 5) {
+	    curMessageId = (String) messageIter.next();
+	    System.out.println("Getting message: " + curMessageId + " ");
+	    System.out.flush();
+	    assertTrue(null != (curMessage = 
+				rsrc.getMessage(getFacesContext(),curMessageId)));
+	    System.out.println("ok.");
+	    System.out.flush();
+	    i++;
+	}
+    }
+
+    public void testMessageResourcesNegative() {
+	boolean exceptionThrown = false;
+	
+	// componentType/componentClass with non-existent class
+	try {
+	    application.addMessageResources("William",
+				     "BillyBoy");
+	    application.getMessageResources("William");
+	}
+	catch (FacesException e) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
+
+	// non-existent mapping
+	exceptionThrown = false;
+	try {
+	    application.getMessageResources("Joebob");
+	}
+	catch (FacesException e) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
+	
+    }
+
+    public void testGetMessageResourcesIds() {
+	Iterator iter = application.getMessageResourcesIds();
+	assertTrue(null != iter);
+	String standardMessageResourcesIds[] = {
+	    MessageResources.FACES_API_MESSAGES,
+	    MessageResources.FACES_IMPL_MESSAGES
+	};
+
+	while (iter.hasNext()) {
+	    assertTrue(isMember((String) iter.next(), 
+					 standardMessageResourcesIds));
+	}
+    }
+
 
 } // end of class TestApplicationImpl_Config

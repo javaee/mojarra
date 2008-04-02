@@ -1,5 +1,5 @@
 /*
- * $Id: MessageResourcesImpl.java,v 1.10 2003/04/29 20:51:42 eburns Exp $
+ * $Id: MessageResourcesImpl.java,v 1.11 2003/05/01 19:47:46 eburns Exp $
  */
 
 /*
@@ -65,9 +65,11 @@ public class MessageResourcesImpl extends MessageResources
     // Constructors and Initializers    
     //
 
-    public MessageResourcesImpl(String newMessageResourceId, 
-				String newResourceFile) throws FacesException {
-        super();
+    public MessageResourcesImpl() {
+    }
+    
+    public void init(String newMessageResourceId, 
+		     String newResourceFile) throws FacesException {
 	ParameterCheck.nonNull(newMessageResourceId);
 	ParameterCheck.nonNull(newResourceFile);
 

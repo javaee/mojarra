@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.8 2003/05/01 18:04:08 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.9 2003/05/01 19:47:48 eburns Exp $
  */
 
 /*
@@ -112,6 +112,10 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	while (messageIter.hasNext()) {
 	    assertTrue(isMember((String) messageIter.next(), apiMessages));
 	}
+	assertTrue(null != (messageResources = (ConfigMessageResources)
+			    messageResourcesMap.get(MessageResources.FACES_IMPL_MESSAGES)));
+	
+	
     }
 
 

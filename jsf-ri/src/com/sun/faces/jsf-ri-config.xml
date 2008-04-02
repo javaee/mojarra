@@ -230,6 +230,232 @@
     </message>
   </message-resources>
 
+  <!-- RI messages -->
+  <message-resources>
+    <message-resources-id>javax.faces.context.FACES_IMPL_MESSAGES</message-resources-id>
+    <message-resources-class>com.sun.faces.context.MessageResourcesImpl</message-resources-class>
+    <message>
+      <message-id>MSG0001</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+    <message>
+      <message-id>MSG0002</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+    <message>
+      <message-id>MSG0003</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+    <message>
+      <message-id>MSG0005</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+    <message>
+      <message-id>com.sun.faces.TYPECONVERSION_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.MODELUPDATE_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.FACES_CONTEXT_CONSTRUCTION_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.NULL_COMPONENT_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.NULL_REQUEST_TREE_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.NULL_RESPONSE_TREE_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.REQUEST_TREE_ALREADY_SET_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.NULL_MESSAGE_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.NULL_PARAMETERS_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.NAMED_OBJECT_NOT_FOUND_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.NULL_RESPONSE_STREAM_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.NULL_RESPONSE_WRITER_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.NULL_EVENT_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.NULL_HANDLER_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.NULL_CONTEXT_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.NULL_LOCALE_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.SUPPORTS_COMPONENT_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+     <message>
+      <message-id>com.sun.faces.MISSING_RESOURCE_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.MISSING_CLASS_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.COMPONENT_NOT_FOUND_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.LIFECYCLE_ID_ALREADY_ADDED</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.LIFECYCLE_ID_NOT_FOUND</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.PHASE_ID_OUT_OF_BOUNDS</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.CANT_CREATE_LIFECYCLE</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.ILLEGAL_MODEL_REFERENCE</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.ATTRIBUTE_NOT_SUPORTED</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.FILE_NOT_FOUND</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.CANT_PARSE_FILE</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.CANT_INSTANTIATE_CLASS</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.ILLEGAL_CHARACTERS_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.NOT_NESTED_IN_FACES_TAG_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.NULL_BODY_CONTENT_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.SAVING_STATE_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.RENDERER_ALREADY_EXISTS</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.RENDERER_NOT_FOUND</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.MAXIMUM_EVENTS_REACHED</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.NO_ACTION_FROM_ACTIONREF</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.NULL_CONFIGURATION</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.ERROR_OPENING_FILE</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.ERROR_REGISTERING_DTD</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.INVALID_INIT_PARAM</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+    </message>
+  </message-resources>
+
   <!-- Second application element with overapping values -->
   <application>
     <navigation-handler>

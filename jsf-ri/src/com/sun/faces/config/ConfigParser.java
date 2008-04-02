@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.9 2003/05/01 18:04:03 eburns Exp $
+ * $Id: ConfigParser.java,v 1.10 2003/05/01 19:47:46 eburns Exp $
  */
 
 /*
@@ -91,7 +91,7 @@ public class ConfigParser {
 	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = 
 	    (ApplicationImpl)aFactory.getApplication();
-        application.getAppConfig().clearManagedBeanFactories();
+        application.getAppConfig().reset();
 	
 	base = this.parseConfig(configPath, servletContext, base);
 	return base;
@@ -109,7 +109,7 @@ public class ConfigParser {
 	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = 
 	    (ApplicationImpl)aFactory.getApplication();
-        application.getAppConfig().clearManagedBeanFactories();
+        application.getAppConfig().reset();
 	
 	base = this.parseConfig(input, base);
 	return base;

@@ -1,5 +1,5 @@
 /*
- * $Id: AppConfig.java,v 1.2 2003/05/01 07:42:08 eburns Exp $
+ * $Id: AppConfig.java,v 1.3 2003/05/01 19:47:44 eburns Exp $
  */
 
 /*
@@ -20,19 +20,22 @@ import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.convert.Converter;
+import javax.faces.context.MessageResources;
 import javax.faces.el.PropertyNotFoundException;
 import com.sun.faces.config.ManagedBeanFactory;
 import com.sun.faces.config.ConfigBase;
 import com.sun.faces.config.ConfigComponent;
 import com.sun.faces.config.ConfigConverter;
+import com.sun.faces.config.ConfigMessageResources;
 import com.sun.faces.util.Util;
+import com.sun.faces.context.MessageResourcesImpl;
 
 /**
  *
  *  <p>AppConfig is a helper class to the ApplicationImpl that serves as
  *  a shim between it and the config system.</p>
  *
- * @version $Id: AppConfig.java,v 1.2 2003/05/01 07:42:08 eburns Exp $
+ * @version $Id: AppConfig.java,v 1.3 2003/05/01 19:47:44 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -47,6 +50,9 @@ public class AppConfig extends Object
     private static final String APPLICATION = "application";
     private static final String SESSION = "session";
     private static final String REQUEST = "request";
+    private static final String JSF_API_RESOURCE_FILENAME = "com/sun/faces/context/JSFMessages";
+
+    private static final String JSF_RI_RESOURCE_FILENAME = "com/sun/faces/context/JSFImplMessages";
 
 //
 // Class Variables
@@ -61,7 +67,8 @@ public class AppConfig extends Object
 // Relationship Instance Variables
 
     protected ConfigBase yourBase; // are belong to us
-    protected HashMap managedBeanFactories;
+    protected HashMap managedBeanFactories = null;
+    protected HashMap messageResourcesList = null;
 
 //
 // Constructors and Initializers    
@@ -70,6 +77,7 @@ public class AppConfig extends Object
 public AppConfig()
 {
     super();
+    reset();
 }
 
 //
@@ -144,10 +152,11 @@ public AppConfig()
     }
 
     /**
-     * Clear Hashmap when ConfigFile is reparsed.
+     * Reset all stored state.
      */
-    public void clearManagedBeanFactories() {
+    public void reset() {
         managedBeanFactories = new HashMap();
+        messageResourcesList = new HashMap();
     }
 
     //
@@ -225,16 +234,73 @@ public AppConfig()
 	return result;
     }
 
-    public Iterator getComponentTypes() {
+    Iterator getComponentTypes() {
 	Assert.assert_it(null != yourBase);
 	return yourBase.getComponents().keySet().iterator();
     }
 
-    public Iterator getConverterIds() {
+    Iterator getConverterIds() {
 	Assert.assert_it(null != yourBase);
 	return yourBase.getConverters().keySet().iterator();
     }
 
+    void addMessageResources(String messageResourcesId, String messageResourcesClass) {
+	ParameterCheck.nonNull(messageResourcesId);
+	ParameterCheck.nonNull(messageResourcesClass);
+	Assert.assert_it(null != yourBase);
+
+	ConfigMessageResources configMessageResources = new ConfigMessageResources();
+	configMessageResources.setMessageResourcesId(messageResourcesId);
+	configMessageResources.setMessageResourcesClass(messageResourcesClass);
+	yourBase.addMessageResources(configMessageResources);
+    }
+
+    MessageResources getMessageResources(String messageResourcesId) 
+        throws FacesException {
+	ParameterCheck.nonNull(messageResourcesId);
+	Assert.assert_it(null != yourBase);
+
+	// check our local store first.
+        if ( messageResourcesList.containsKey(messageResourcesId)) {
+            return ((MessageResources)
+                    messageResourcesList.get(messageResourcesId));
+        } 
+
+	// if not found, we have to create one.
+        MessageResourcesImpl result = null;
+	ConfigMessageResources configMessageResources = null;
+	
+	if (null == (configMessageResources = (ConfigMessageResources)
+		     yourBase.getMessageResources().get(messageResourcesId))) {
+	    //PENDING(edburns): i18n
+	    throw new FacesException();
+	}
+	result = (MessageResourcesImpl) 
+	    this.newThing(configMessageResources.getMessageResourcesClass());
+
+	if (messageResourcesId.equals(MessageResources.FACES_API_MESSAGES)) {
+	    result.init(messageResourcesId, JSF_API_RESOURCE_FILENAME);
+	}
+	else if (messageResourcesId.equals(MessageResources.FACES_IMPL_MESSAGES)) {
+	    result.init(messageResourcesId, JSF_RI_RESOURCE_FILENAME);
+	}
+	else {
+	    // we don't initialize it, just return it un-initialized.
+	}
+	
+        synchronized ( messageResourcesList ) { 
+            messageResourcesList.put(messageResourcesId, result);
+        }    
+	
+	return result;
+    }
+
+    Iterator getMessageResourcesIds() { 
+	Assert.assert_it(null != yourBase);
+	return yourBase.getMessageResources().keySet().iterator();
+    }
+    
+    
 
 // The testcase for this class is com.sun.faces.application.TestAppConfig.java 
 // The testcase for this class is com.sun.faces.application.TestApplicationImpl_Config.java 
