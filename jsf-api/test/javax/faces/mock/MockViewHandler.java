@@ -1,5 +1,5 @@
 /*
- * $Id: MockViewHandler.java,v 1.12 2003/09/15 20:17:46 eburns Exp $
+ * $Id: MockViewHandler.java,v 1.13 2003/09/15 22:09:40 eburns Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ public class MockViewHandler extends Object implements ViewHandler {
 
     protected StateManager stateManager = null;
 
-    public void renderView(FacesContext context)
+    public void renderView(FacesContext context, UIViewRoot viewToRender)
         throws IOException, FacesException {}
 
     public UIViewRoot restoreView(FacesContext context, String viewId) {

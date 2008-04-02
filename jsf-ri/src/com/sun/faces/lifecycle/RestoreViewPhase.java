@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.3 2003/09/04 21:15:05 jvisvanathan Exp $
+ * $Id: RestoreViewPhase.java,v 1.4 2003/09/15 22:11:46 eburns Exp $
  */
 
 /*
@@ -55,7 +55,7 @@ import org.apache.commons.logging.LogFactory;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.3 2003/09/04 21:15:05 jvisvanathan Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.4 2003/09/15 22:11:46 eburns Exp $
  * 
  */
 
@@ -151,6 +151,7 @@ public class RestoreViewPhase extends Phase {
         viewRoot = (Util.getViewHandler(facesContext)).
                 restoreView(facesContext, viewId);
         Assert.assert_it(viewRoot != null);
+        facesContext.setViewRoot(viewRoot);
         doPerComponentActions(facesContext, viewRoot);
     }    
 

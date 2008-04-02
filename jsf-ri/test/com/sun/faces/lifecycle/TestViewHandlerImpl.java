@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.27 2003/09/15 20:23:10 eburns Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.28 2003/09/15 22:11:49 eburns Exp $ 
  */ 
 
 
@@ -63,7 +63,7 @@ import javax.servlet.jsp.PageContext;
  * 
  * <B>Lifetime And Scope</B> <P> 
  * 
- * @version $Id: TestViewHandlerImpl.java,v 1.27 2003/09/15 20:23:10 eburns Exp $ 
+ * @version $Id: TestViewHandlerImpl.java,v 1.28 2003/09/15 22:11:49 eburns Exp $ 
  * 
  * @see Blah 
  * @see Bloo 
@@ -159,7 +159,8 @@ public void testRender()
 
     try { 
         ViewHandlerImpl viewHandler = new ViewHandlerImpl(); 
-        viewHandler.renderView(getFacesContext()); 
+        viewHandler.renderView(getFacesContext(), 
+			       getFacesContext().getViewRoot()); 
     } catch (IOException e) { 
         System.out.println("ViewHandler IOException:"+e); 
     } catch (FacesException fe) { 

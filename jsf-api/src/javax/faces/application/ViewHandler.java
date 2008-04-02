@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.9 2003/09/13 12:57:43 eburns Exp $
+ * $Id: ViewHandler.java,v 1.10 2003/09/15 22:09:38 eburns Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ public interface ViewHandler {
     /**
      * <p>Perform whatever actions are required to render the response
      * view to the <code>ServletResponse</code> associated
-     * with the specified {@link FacesContext}.  Also perform required
+     * with the specified {@link UIViewRoot}.  Also perform required
      * actions to save the state of the response between requests, using
      * the {@link StateManager}.  This method is responsible for
      * ensuring that the {@link FacesContext} has been provided with
@@ -62,34 +62,33 @@ public interface ViewHandler {
      *
      * @param context {@link FacesContext} for the current request
      *
+     * @param viewToRender the view to render
+     *
      * @exception IOException if an input/output error occurs
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
+     * @exception NullPointerException if <code>context</code> or
+     * <code>viewToRender</code> is <code>null</code>
      * @exception FacesException if a servlet error occurs
      */
-    public void renderView(FacesContext context)
+    public void renderView(FacesContext context, UIViewRoot viewToRender)
         throws IOException, FacesException;
 
     /**
      * <p>Perform whatever actions are required to restore the view
      * associated with the specified {@link FacesContext} and viewId.
-     * This method may call through to {@link StateManager#getView}.</p>
+     * This method may call through to {@link StateManager#restoreView}.</p>
      *
      * <p>This method must be called from the <em>Restore View</em>
      * phase of the request processing lifecycle.</p>
      *
-     * <p>This method must cause the new <code>UIViewRoot</code> to be
-     * stored in the <code>FacesContext</code> as the new root.</p>
+     * <p>It is the caller's responsibility to make sure the returned
+     * <code>UIViewRoot</code> is stored in the
+     * <code>FacesContext</code> as the new root.</p>
      *
      * <p>If this is an initial request - usually marked by a lack of
      * available state for this view - <code>restoreView()</code> must
      * call <code>FacesContext.renderResponse()</code> to cause the
      * intervening phases between <em>Restore View</em> and <em>Render
      * Response</em> to be skipped.<p>
-     *
-     * <p>The implementation must ensure that the argument {@link
-     * FacesContext} has been populated with an appropriate {@link
-     * UIViewRoot} for the argument <code>viewId</code>.</p>
      *
      * @param context {@link FacesContext} for the current request
      * @param viewId the view identifier for the current request

@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.11 2003/09/15 20:23:08 eburns Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.12 2003/09/15 22:11:45 eburns Exp $ 
  */ 
 
 
@@ -38,7 +38,7 @@ import javax.faces.render.ResponseStateManager;
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.11 2003/09/15 20:23:08 eburns Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.12 2003/09/15 22:11:45 eburns Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -56,10 +56,11 @@ public class ViewHandlerImpl extends Object
 	stateManagerImpl = new StateManagerImpl();
     }
 
-    public void renderView(FacesContext context) throws IOException, 
+    public void renderView(FacesContext context, 
+			   UIViewRoot viewToRender) throws IOException, 
              FacesException { 
 
-        if (context == null) { 
+        if (null == context || null == viewToRender) { 
             throw new NullPointerException(Util.getExceptionMessage(
                 Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
         } 
@@ -67,7 +68,7 @@ public class ViewHandlerImpl extends Object
         if (application instanceof ApplicationImpl) {
             ((ApplicationImpl) application).responseRendered();
         }
-        String requestURI = context.getViewRoot().getViewId();
+        String requestURI = viewToRender.getViewId();
         context.getExternalContext().dispatchMessage(requestURI);
 
     }
@@ -89,7 +90,6 @@ public class ViewHandlerImpl extends Object
             viewRoot = new UIViewRootBase();
             context.renderResponse();
         }
-        context.setViewRoot(viewRoot);
         viewRoot.setViewId(viewId);
         return viewRoot;
     }

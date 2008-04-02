@@ -1,5 +1,5 @@
 /*
- * $Id: RenderResponsePhase.java,v 1.8 2003/08/19 19:31:10 rlubke Exp $
+ * $Id: RenderResponsePhase.java,v 1.9 2003/09/15 22:11:46 eburns Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RenderResponsePhase.java,v 1.8 2003/08/19 19:31:10 rlubke Exp $
+ * @version $Id: RenderResponsePhase.java,v 1.9 2003/09/15 22:11:46 eburns Exp $
  *
  */
 
@@ -77,7 +77,8 @@ public void execute(FacesContext facesContext) throws FacesException
 {
     Assert.assert_it(null != lifecycleDriver.getViewHandler());
     try { 
-	lifecycleDriver.getViewHandler().renderView(facesContext); 
+	lifecycleDriver.getViewHandler().renderView(facesContext, 
+						    facesContext.getViewRoot()); 
     } catch (IOException e) { 
 	throw new FacesException(e.getMessage(), e);
     }

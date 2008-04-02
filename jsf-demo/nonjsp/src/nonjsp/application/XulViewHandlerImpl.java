@@ -1,5 +1,5 @@
 /* 
- * $Id: XulViewHandlerImpl.java,v 1.3 2003/09/15 20:26:07 eburns Exp $ 
+ * $Id: XulViewHandlerImpl.java,v 1.4 2003/09/15 22:12:38 eburns Exp $ 
  */ 
 
 
@@ -89,7 +89,7 @@ import org.mozilla.util.Assert;
 /** 
  * <B>XulViewHandlerImpl</B> is the Xul non-JSP ViewHandler implementation
  *
- * @version $Id: XulViewHandlerImpl.java,v 1.3 2003/09/15 20:26:07 eburns Exp $ 
+ * @version $Id: XulViewHandlerImpl.java,v 1.4 2003/09/15 22:12:38 eburns Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -131,17 +131,18 @@ public class XulViewHandlerImpl implements ViewHandler {
 
 
     // Render the components
-    public void renderView(FacesContext context) throws IOException, 
+    public void renderView(FacesContext context, 
+			   UIViewRoot viewToRender) throws IOException, 
              FacesException { 
 
-        if (context == null) { 
+        if (context == null || viewToRender == null) { 
             throw new NullPointerException("RenderView: FacesContext is null");
         } 
 
         RequestDispatcher requestDispatcher = null; 
 
 	log.trace("Determine View Identifier And Build View...");
-        String viewId = context.getViewRoot().getViewId();
+        String viewId = viewToRender.getViewId();
 
         HttpServletResponse response = (HttpServletResponse)
         (context.getExternalContext().getResponse());

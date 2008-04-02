@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.8 2003/08/28 15:53:47 rlubke Exp $
+ * $Id: TestApplicationImpl.java,v 1.9 2003/09/15 22:11:48 eburns Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import com.sun.faces.TestComponent;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.8 2003/08/28 15:53:47 rlubke Exp $
+ * @version $Id: TestApplicationImpl.java,v 1.9 2003/09/15 22:11:48 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -364,7 +364,8 @@ public class TestApplicationImpl extends JspFacesTestCase {
         assertTrue(!exceptionThrown);
         
         try {
-            handler.renderView(getFacesContext());
+            handler.renderView(getFacesContext(), 
+			       getFacesContext().getViewRoot());
             application.setViewHandler(handler);
         } catch (IllegalStateException ise)  {
             exceptionThrown = true;

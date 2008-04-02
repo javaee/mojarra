@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.15 2003/09/15 20:17:18 eburns Exp $
+ * $Id: StateManager.java,v 1.16 2003/09/15 22:09:38 eburns Exp $
  */
 
 /*
@@ -170,7 +170,7 @@ public abstract class StateManager {
 
     * <p>The implementation must get the state of the component tree as
     * a <code>Serializable</code> Object.  This may be done by calling {@link
-    * UIComponent#processGetState} on the root of
+    * UIComponent#processRestoreState} on the root of
     * the component tree.  This state includes the following kinds of
     * information.</p>
     *
