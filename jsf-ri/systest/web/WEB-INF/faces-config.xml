@@ -59,5 +59,78 @@
   </managed-bean>
 
 
+  <!-- Message Resources Custom Bundle #1 - Single Element -->
+  <message-resources>
+    <message-resources-id>Custom1</message-resources-id>
+    <message>
+      <message-id>Custom1A</message-id>
+      <summary>This Is Custom1A Summary</summary>
+      <detail>This Is Custom1A Detail</summary>
+    </message>
+    <message>
+      <message-id>Custom1B</message-id>
+      <summary>This Is Custom1B Summary</summary>
+      <detail>This Is Custom1B Detail</summary>
+    </message>
+    <message>
+      <message-id>Custom1B</message-id>
+      <summary>This Is Custom1B Summary</summary>
+      <detail>This Is Custom1B Detail</summary>
+    </message>
+    <message xml:lang="en">
+      <message-id>Custom1B</message-id>
+      <summary>This Is Custom1B Summary (en)</summary>
+      <detail>This Is Custom1B Detail (en)</summary>
+    </message>
+    <message xml:lang="fr">
+      <message-id>Custom1B</message-id>
+      <summary>This Is Custom1B Summary (fr)</summary>
+      <detail>This Is Custom1B Detail (fr)</summary>
+    </message>
+    <message>
+      <message-id>Custom1C</message-id>
+      <summary>This Is Custom1C Summary</summary>
+      <detail>This Is Custom1C Detail</summary>
+    </message>
+  </message-resources>
+
+  <!-- Message Resources Custom Bundle #2 - Double Element -->
+  <message-resources>
+    <message-resources-id>Custom2</message-resources-id>
+    <message>
+      <message-id>Custom2A</message-id>
+      <summary>This Is Custom2A Summary</summary>
+      <detail>This Is Custom2A Detail</summary>
+    </message>
+    <message>
+      <message-id>Custom2B</message-id>
+      <summary>This Is Custom2B Summary</summary>
+      <detail>This Is Custom2B Detail</summary>
+    </message>
+  <message-resources>
+
+  <message-resources>
+    <message-resources-id>Custom2</message-resources-id>
+    <message>
+      <message-id>Custom2B</message-id>
+      <summary>This Is Custom2B Summary</summary>
+      <detail>This Is Custom2B Detail</summary>
+    </message>
+    <message xml:lang="en">
+      <message-id>Custom2B</message-id>
+      <summary>This Is Custom2B Summary (en)</summary>
+      <detail>This Is Custom2B Detail (en)</summary>
+    </message>
+    <message xml:lang="fr">
+      <message-id>Custom2B</message-id>
+      <summary>This Is Custom2B Summary (fr)</summary>
+      <detail>This Is Custom2B Detail (fr)</summary>
+    </message>
+    <message>
+      <message-id>Custom2C</message-id>
+      <summary>This Is Custom2C Summary</summary>
+      <detail>This Is Custom2C Detail</summary>
+    </message>
+  </message-resources>
 
 </faces-config>

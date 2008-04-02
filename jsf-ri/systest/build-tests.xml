@@ -4,7 +4,7 @@
  Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.4 2003/05/13 00:26:52 craigmcc Exp $
+ $Id: build-tests.xml,v 1.5 2003/05/16 19:09:27 craigmcc Exp $
 -->
 
 
@@ -50,6 +50,7 @@
        depends="test.hello,
                 test.external,
                 test.managed,
+                test.message,
                 test.navigation
                "/>
 
@@ -119,6 +120,33 @@
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/managed02.jsp"
       outContent="/managed02.jsp PASSED"/>
+
+  </target>
+
+
+
+  <target name="test.message"
+   description="Test message resources processing">
+
+    <!-- Standard API Message Resources -->
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/message01.jsp"
+      outContent="/message01.jsp PASSED"/>
+
+    <!-- Standard IMPL Message Resources -->
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/message02.jsp"
+      outContent="/message02.jsp PASSED"/>
+
+    <!-- Single Message Resources Element -->
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/message03.jsp"
+      outContent="/message03.jsp PASSED"/>
+
+    <!-- Double Message Resources Element -->
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/message04.jsp"
+      outContent="/message04.jsp PASSED"/>
 
   </target>
 
