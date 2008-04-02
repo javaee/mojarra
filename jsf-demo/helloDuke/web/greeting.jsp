@@ -41,14 +41,15 @@
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
     <body bgcolor="white">
-    <h:graphic_image id="wave_img" url="/wave.med.gif" />
     <h2>My name is Duke.  What is yours?</h2>
     <jsp:useBean id="UserNameBean" class="helloDuke.UserNameBean" scope="session" />
     <f:use_faces>
     <h:form id="helloForm" formName="helloForm" >
+        <h:graphic_image id="wave_img" url="/wave.med.gif" />
   	<h:input_text id="username"
 			valueRef="UserNameBean.userName"/>
-  	<h:command_button id="submit" label="Submit" commandName="submit" />
+  	<h:command_button id="submit" action="success" label="Submit" 
+		          commandName="submit" />
     </h:form>
     </f:use_faces>
 </HTML>  

@@ -207,7 +207,7 @@
     </javac> 
     <copy todir="${build}/WEB-INF"> 
       <fileset dir="web/WEB-INF"    > 
-        <include name="web.xml" /> 
+        <include name="*.xml" /> 
       </fileset> 
     </copy> 
 
