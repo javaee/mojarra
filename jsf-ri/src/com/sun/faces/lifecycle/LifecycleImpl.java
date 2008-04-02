@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.56 2005/08/26 15:27:08 rlubke Exp $
+ * $Id: LifecycleImpl.java,v 1.57 2005/11/09 17:03:10 rlubke Exp $
  */
 
 /*
@@ -34,6 +34,7 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 import javax.faces.FacesException;
+import javax.faces.application.ViewExpiredException;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
@@ -247,7 +248,7 @@ public class LifecycleImpl extends Lifecycle {
                 }
             }
 	}
-	catch (Throwable e) {
+	catch (Exception e) {
 	    if (logger.isLoggable(Level.WARNING)) {
                 logger.warning("phase(" + phaseId.toString() + "," + context + 
 			  ") threw exception: " + e + " " + e.getMessage() +
@@ -295,8 +296,17 @@ public class LifecycleImpl extends Lifecycle {
         // Allow all afterPhase listeners to execute before throwing the
         // exception caught during the phase execution.
         if (exceptionThrown) {
-            throw new FacesException(ex.getCause());
-        } 
+            // unwind exceptions to root cause
+            while (ex.getCause() != null) {
+                ex = ex.getCause();
+            }
+
+            if (!(ex instanceof FacesException)) {
+                ex = new FacesException(ex);
+            }
+
+            throw (FacesException) ex;
+        }
     }
 
 
