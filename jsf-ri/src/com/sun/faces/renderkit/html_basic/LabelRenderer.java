@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.17 2003/09/24 23:16:40 horwat Exp $
+ * $Id: LabelRenderer.java,v 1.18 2003/10/23 19:46:26 eburns Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import javax.servlet.ServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: LabelRenderer.java,v 1.17 2003/09/24 23:16:40 horwat Exp $
+ * @version $Id: LabelRenderer.java,v 1.18 2003/10/23 19:46:26 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -85,8 +85,10 @@ public class LabelRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 	ResponseWriter writer = null;
-	String forValue = null;
-	String styleClass = null;
+	String 
+	    forValue = null,
+	    style = null,
+	    styleClass = null;
 
         // suppress rendering if "rendered" property on the component is
         // false.
@@ -104,9 +106,17 @@ public class LabelRenderer extends HtmlBasicRenderer {
 
         Util.renderPassThruAttributes(writer, component);
 
-	if (null != (styleClass = (String) 
-		     component.getAttributes().get("styleClass"))) {
-	    writer.writeAttribute("class", styleClass, "styleClass");
+	if ((null != (styleClass = (String) 
+		      component.getAttributes().get("styleClass"))) || 
+	    (null != (style = (String) 
+		      component.getAttributes().get("style"))))	{
+	    writer.startElement("span", component);
+	    if (null != styleClass) {
+		writer.writeAttribute("class", styleClass, "styleClass");
+	    }
+	    if (null != style) {
+		writer.writeAttribute("style", style, "style");
+	    }
 	}
         writer.writeText("\n", null);
     }
@@ -126,7 +136,10 @@ public class LabelRenderer extends HtmlBasicRenderer {
 
         ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
-
+	if ((null != component.getAttributes().get("styleClass")) || 
+	    (null != component.getAttributes().get("style")))	{
+	    writer.endElement("span");
+	}
 	writer.endElement("label");
     }
 

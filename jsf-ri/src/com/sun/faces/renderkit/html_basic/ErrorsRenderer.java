@@ -1,5 +1,5 @@
 /*
- * $Id: ErrorsRenderer.java,v 1.28 2003/10/21 16:41:49 eburns Exp $
+ * $Id: ErrorsRenderer.java,v 1.29 2003/10/23 19:46:26 eburns Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import java.util.List;
  *
  * <p><B>ErrorsRenderer</B> handles rendering for the Output_ErrorsTag<p>. 
  *
- * @version $Id: ErrorsRenderer.java,v 1.28 2003/10/21 16:41:49 eburns Exp $*
+ * @version $Id: ErrorsRenderer.java,v 1.29 2003/10/23 19:46:26 eburns Exp $*
  */
 
 public class ErrorsRenderer extends HtmlBasicRenderer {
@@ -167,7 +167,9 @@ public class ErrorsRenderer extends HtmlBasicRenderer {
         if (null == color) {
             color = "RED";
         }
-	String styleClass = null;
+	String 
+	    style = null,
+	    styleClass = null;
         boolean wroteIt = false;
         if (messageIter.hasNext()) {
 	    writer.writeText("\n", null);
@@ -175,17 +177,24 @@ public class ErrorsRenderer extends HtmlBasicRenderer {
 	    writer.writeAttribute("color", color, "color");
             wroteIt = true;
         }
-	if (null != (styleClass = (String) 
-		     component.getAttributes().get("styleClass"))) {
+	if ((null != (styleClass = (String) 
+		      component.getAttributes().get("styleClass"))) || 
+	    (null != (style = (String) 
+		      component.getAttributes().get("style"))))	{
             writer.startElement("span", component);
-	    writer.writeAttribute("class", styleClass, "styleClass");
-	}
+	    if (null != styleClass) {
+		writer.writeAttribute("class", styleClass, "styleClass");
+	    }
+	    if (null != style) {
+		writer.writeAttribute("style", style, "style");
+	    }
+        } 
         while (messageIter.hasNext()) {
             curMessage = (Message) messageIter.next();
 	    writer.writeText("\t", null);
 	    writer.writeText(curMessage.getSummary(), null);
         }
-	if (null != styleClass) {
+	if (null != styleClass || null != style) {
             writer.endElement("span");
 	}
         if (wroteIt) {

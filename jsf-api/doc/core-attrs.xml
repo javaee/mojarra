@@ -25,6 +25,14 @@
       </attribute>
 
       <attribute>
+	<description>CSS style</description>
+	<display-name></display-name>
+	<icon></icon>
+	<attribute-name>style</attribute-name>
+	<attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
         <description>advisory title</description>
         <display-name></display-name>
         <icon></icon>
