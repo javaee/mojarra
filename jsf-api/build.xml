@@ -131,7 +131,8 @@ jsf-api.jar.
          Build the API code
        ===================================================================
   -->
-  <target name="build" depends="prepare,generate,detect.tck">
+  <target name="build" 
+          depends="prepare,generate,detect.tck,copy.template.sources">
 
     <javac destdir="${build.classes}"
            debug="${debug}"
@@ -188,6 +189,24 @@ jsf-api.jar.
 
   </target>
 
+  <target name="copy.template.sources" depends="prepare.generate"
+     description="Copy template sources from ${jsf-tools.dir}/template-source">
+
+    <mkdir dir="${build.generate}/javax/faces/component"/>
+    <filter token="protection" value=""/>
+
+    <filter token="package" value="javax.faces.component"/>
+    <copy file="${jsf-tools.dir}/template-src/MessageFactory.java" 
+          todir="${build.generate}/javax/faces/component"
+          filtering="true"/>
+
+    <filter token="package" value="javax.faces.validator"/>
+    <copy file="${jsf-tools.dir}/template-src/MessageFactory.java" 
+          todir="${build.generate}/javax/faces/validator"
+          filtering="true"/>
+
+  </target>
+
 
 
   <!--
@@ -236,6 +255,10 @@ jsf-api.jar.
       <classpath refid="test.classpath" />
     </javac>
 
+    <copy todir="${build.test}">
+        <fileset dir="${test.dir}" includes="**/*.properties"/>
+    </copy>
+
     <delete file="${basedir}/test/javax/faces/mock/MockPageContext.java"/>
 
     <copy todir="${build.test}">
@@ -257,6 +280,7 @@ jsf-api.jar.
   <target name="test"
    description="Run all JUnit test cases"
        depends="build.test,
+                copy.template.sources,
                 test.FactoryFinder,
                 test.FactoryFinder2,
                 test.UIComponent,

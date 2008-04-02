@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.39 2003/10/27 20:08:25 craigmcc Exp $
+ * $Id: UIInput.java,v 1.40 2003/10/30 16:13:50 eburns Exp $
  */
 
 /*
@@ -14,7 +14,6 @@ import java.lang.reflect.InvocationTargetException;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.Message;
-import javax.faces.application.MessageResources;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.el.MethodBinding;
@@ -31,7 +30,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 
 /**
  * <p><strong>UIInput</strong> is a {@link UIComponent} that represents
@@ -443,9 +441,7 @@ public class UIInput extends UIOutput {
 	// If our value is valid, enforce the required property if present
 	if (isValid() && isRequired() && isEmpty()) {
 	    Message message =
-		context.getApplication().
-		getMessageResources(MessageResources.FACES_API_MESSAGES).
-		getMessage(context, REQUIRED_MESSAGE_ID);
+		MessageFactory.getMessage(context, REQUIRED_MESSAGE_ID);
 	    context.addMessage(getClientId(context), message);
 	    setValid(false);
 	}

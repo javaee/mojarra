@@ -1,5 +1,5 @@
 /*
- * $Id: LongRangeValidator.java,v 1.23 2003/10/23 20:16:46 eburns Exp $
+ * $Id: LongRangeValidator.java,v 1.24 2003/10/30 16:13:54 eburns Exp $
  */
 
 /*
@@ -207,9 +207,9 @@ public class LongRangeValidator implements Validator, StateHolder {
                     (converted > maximum)) {
 		    if (minimumSet) {
 			context.addMessage(component.getClientId(context),
-					   ValidatorMessages.getMessage
+					   MessageFactory.getMessage
 					   (context,
-					    ValidatorMessages.NOT_IN_RANGE_MESSAGE_ID,
+					    Validator.NOT_IN_RANGE_MESSAGE_ID,
 					    new Object[] {
 						new Long(minimum),
 						new Long(maximum) }));
@@ -217,7 +217,7 @@ public class LongRangeValidator implements Validator, StateHolder {
 		    }
 		    else {
 			context.addMessage(component.getClientId(context),
-					   ValidatorMessages.getMessage
+					   MessageFactory.getMessage
 					   (context,
 					    MAXIMUM_MESSAGE_ID,
 					    new Object[] {
@@ -229,9 +229,9 @@ public class LongRangeValidator implements Validator, StateHolder {
                     (converted < minimum)) {
 		    if (maximumSet) {
 			context.addMessage(component.getClientId(context),
-					   ValidatorMessages.getMessage
+					   MessageFactory.getMessage
 					   (context,
-					    ValidatorMessages.NOT_IN_RANGE_MESSAGE_ID,
+					    Validator.NOT_IN_RANGE_MESSAGE_ID,
 					    new Object[] {
 						new Double(minimum),
 						new Double(maximum) }));
@@ -239,7 +239,7 @@ public class LongRangeValidator implements Validator, StateHolder {
 		    }
 		    else {
 			context.addMessage(component.getClientId(context),
-					   ValidatorMessages.getMessage
+					   MessageFactory.getMessage
 					   (context,
 					    MINIMUM_MESSAGE_ID,
 					    new Object[] {
@@ -249,7 +249,7 @@ public class LongRangeValidator implements Validator, StateHolder {
                 }
             } catch (NumberFormatException e) {
                 context.addMessage(component.getClientId(context),
-                                   ValidatorMessages.getMessage
+                                   MessageFactory.getMessage
                                    (context, TYPE_MESSAGE_ID));
                 component.setValid(false);
             }

@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.62 2003/10/28 21:00:29 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.63 2003/10/30 16:14:17 eburns Exp $
  */
 
 /*
@@ -12,6 +12,7 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageFactory;
 
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -33,7 +34,6 @@ import javax.faces.application.Application;
 
 import javax.faces.render.Renderer;
 import javax.faces.application.Message;
-import javax.faces.application.MessageResources;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
@@ -123,9 +123,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
             params[1] = valueHolder.getValueRef();
         }
         params[2] = errorMessage; 
-        MessageResources resources = Util.getMessageResources();
-        Assert.assert_it( resources != null );
-        Message msg = resources.getMessage(facesContext, 
+        Message msg = MessageFactory.getMessage(facesContext, 
                 Util.CONVERSION_ERROR_MESSAGE_ID,params);
         facesContext.addMessage(comp.getClientId(facesContext), msg);
     }
@@ -133,11 +131,9 @@ public abstract class HtmlBasicRenderer extends Renderer {
     public void addGenericErrorMessage(FacesContext facesContext,
 				       UIComponent component,
 				       String messageId, String param) {
-        MessageResources resources = Util.getMessageResources();
-        Assert.assert_it( resources != null );
 	Object[] params = new Object[3];
 	params[0] = param;
-        Message msg = resources.getMessage(facesContext, messageId, params);
+        Message msg = MessageFactory.getMessage(facesContext, messageId, params);
         facesContext.addMessage(component.getClientId(facesContext), msg);
     }
 

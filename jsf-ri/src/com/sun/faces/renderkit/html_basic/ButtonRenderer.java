@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.63 2003/10/28 04:29:54 eburns Exp $
+ * $Id: ButtonRenderer.java,v 1.64 2003/10/30 16:14:16 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.63 2003/10/28 04:29:54 eburns Exp $
+ * @version $Id: ButtonRenderer.java,v 1.64 2003/10/30 16:14:16 eburns Exp $
  *
  */
 
@@ -232,7 +232,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
      * <li>If a ResourceBundle is defined (i.e. the <code>key</code> and
      * <code>bundle</code> attributes are available, use the value associated
      * with the specified key</li>
-     * <li>Obtain the value from available MessageResources</li>
+     * <li>Obtain the value from available MessageFactory</li>
      * <li>If the all of the above lookups fail, a zero-length String will
      * returned</li>
      * </ul>
@@ -260,7 +260,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             }
         }
 
-        //PENDING (rlubke) MessageResources lookup
+        //PENDING (rlubke) MessageFactory lookup
         if (result == null) {
             // all lookups have failed
             result = "";

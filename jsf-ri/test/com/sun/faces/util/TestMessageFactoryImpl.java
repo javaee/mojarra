@@ -1,5 +1,5 @@
 /*
- * $Id: TestMessageResourcesImpl.java,v 1.2 2003/10/15 16:59:16 jvisvanathan Exp $
+ * $Id: TestMessageFactoryImpl.java,v 1.1 2003/10/30 16:14:38 eburns Exp $
  */
 
 /*
@@ -7,9 +7,9 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// TestMessageResourcesImpl.java
+// TestMessageFactoryImpl.java
 
-package com.sun.faces.application;
+package com.sun.faces.util;
 
 import com.sun.faces.ServletFacesTestCase;
 
@@ -18,9 +18,7 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.faces.component.UIViewRoot;
 import javax.faces.application.Message;
-import javax.faces.application.MessageResources;
 import javax.faces.context.FacesContext;
-import com.sun.faces.application.MessageResourcesImpl;
 import com.sun.faces.util.Util;
 import java.util.Iterator;
 import javax.faces.FacesException;
@@ -28,18 +26,18 @@ import java.util.Locale;
 
 /**
  *
- *  <B>TestMessageResourcesImpl</B> is a class ...
+ *  <B>TestMessageFactoryImpl</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestMessageResourcesImpl.java,v 1.2 2003/10/15 16:59:16 jvisvanathan Exp $
+ * @version $Id: TestMessageFactoryImpl.java,v 1.1 2003/10/30 16:14:38 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestMessageResourcesImpl extends ServletFacesTestCase
+public class TestMessageFactoryImpl extends ServletFacesTestCase
 {
     //
     // Protected Constants
@@ -61,8 +59,8 @@ public class TestMessageResourcesImpl extends ServletFacesTestCase
     // Constructors and Initializers    
     //
 
-    public TestMessageResourcesImpl() {super("TestMessageListImpl");}
-    public TestMessageResourcesImpl(String name) {super(name);}
+    public TestMessageFactoryImpl() {super("TestMessageFactoryImpl");}
+    public TestMessageFactoryImpl(String name) {super(name);}
     //
     // Class methods
     //
@@ -88,12 +86,9 @@ public class TestMessageResourcesImpl extends ServletFacesTestCase
         FacesContext facesContext = getFacesContext();
         Assert.assert_it(facesContext != null );
 
-        MessageResources resources = Util.getMessageResources();
-        assertTrue( resources != null );
-        
         System.out.println("Testing get methods");
         try {
-            msg = resources.getMessage(null, null);
+            msg = MessageFactory.getMessage((FacesContext) null, (String)null);
         } catch ( NullPointerException fe) {
             gotException = true;
         }
@@ -103,7 +98,7 @@ public class TestMessageResourcesImpl extends ServletFacesTestCase
         
         // if msgId doesn't exist in the resource, null must be returned
         try {
-            msg = resources.getMessage(facesContext,"MSG01", "param1");
+            msg = MessageFactory.getMessage(facesContext,"MSG01", "param1");
 	    assertTrue(null == msg);
         } catch ( FacesException fe ) {
 	    assertTrue(false);
@@ -111,15 +106,15 @@ public class TestMessageResourcesImpl extends ServletFacesTestCase
 
         
         Object[] params1 = {"JavaServerFaces"};
-        msg = resources.getMessage(facesContext, "MSG0001", params1);
+        msg = MessageFactory.getMessage(facesContext, "MSG0001", params1);
         assertTrue ( msg != null );
         assertTrue((msg.getSummary()).equals("'JavaServerFaces' is not a valid number."));
         
-        msg = resources.getMessage( facesContext,"MSG0003", "userId");
+        msg = MessageFactory.getMessage( facesContext,"MSG0003", "userId");
         assertTrue ( msg != null );
         assertTrue((msg.getSummary()).equals("'userId' field cannot be empty."));
         
-        msg = resources.getMessage( facesContext, "MSG0004", "userId", "1000","10000");
+        msg = MessageFactory.getMessage( facesContext, "MSG0004", "userId", "1000","10000");
         assertTrue ( msg != null );
         assertTrue((msg.getSummary()).equals("'userId' out of range. Value should be between '1000' and '10000'.")); 
     }
@@ -129,12 +124,9 @@ public class TestMessageResourcesImpl extends ServletFacesTestCase
         boolean gotException = false;
         Message msg = null;
 
-        MessageResources resources = Util.getMessageResources();
-        assertTrue( resources != null );
-
         // if no locale is set, it should use the fall back,
         // JSFMessages.xml
-        msg = resources.getMessage(getFacesContext(),"MSG0003", "userId");
+        msg = MessageFactory.getMessage(getFacesContext(),"MSG0003", "userId");
         assertTrue ( msg != null );
         assertTrue((msg.getSummary()).equals("'userId' field cannot be empty."));
 
@@ -143,7 +135,7 @@ public class TestMessageResourcesImpl extends ServletFacesTestCase
         getFacesContext().getViewRoot().setLocale(en_locale);
         System.out.println("Testing get methods");
         try {
-            msg = resources.getMessage(getFacesContext(),"MSG0003", "userId");
+            msg = MessageFactory.getMessage(getFacesContext(),"MSG0003", "userId");
         } catch ( Exception fe) {
             gotException = true;
         }
@@ -153,7 +145,7 @@ public class TestMessageResourcesImpl extends ServletFacesTestCase
       
         en_locale = new Locale("en", "us"); 
         getFacesContext().getViewRoot().setLocale(en_locale);
-        msg = resources.getMessage(getFacesContext(),"MSG0003", "userId");
+        msg = MessageFactory.getMessage(getFacesContext(),"MSG0003", "userId");
         assertTrue ( msg != null );
         assertTrue((msg.getSummary()).equals("'userId' field cannot be empty."));
         msg = null;

@@ -13,7 +13,7 @@
      "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
      "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 
-    $Id: web-facesconfig_1_0.dtd,v 1.21 2003/10/18 00:27:54 craigmcc Exp $
+    $Id: web-facesconfig_1_0.dtd,v 1.22 2003/10/30 16:13:47 eburns Exp $
 
 -->
 
@@ -85,13 +85,6 @@
 
 
 <!--
-    A "Severity" is the message severity level associated with a parent
-    "message" element.
--->
-<!ENTITY % Severity "(fatal|error|warn|info)">
-
-
-<!--
     A "ViewIdPattern" is a pattern for matching view identifiers in
     order to determine whether a particular navigation rule should be
     fired.  It must contain one of the following values:
@@ -126,7 +119,7 @@
     hierarchy, and contains nested elements for all of the other configuration
     settings.
 -->
-<!ELEMENT faces-config    ((application|factory|component|converter|managed-bean|message-resources|navigation-rule|referenced-bean|render-kit|lifecycle|validator)*)>
+<!ELEMENT faces-config    ((application|factory|component|converter|managed-bean|navigation-rule|referenced-bean|render-kit|lifecycle|validator)*)>
 
 
 <!-- ==================== Definition Elements ============================= -->
@@ -139,7 +132,7 @@
     that are not specified, the JSF implementation must provide a suitable
     default.
 -->
-<!ELEMENT application     ((action-listener|navigation-handler|view-handler|property-resolver|variable-resolver|locale-config)*)>
+<!ELEMENT application     ((action-listener|message-bundle|navigation-handler|view-handler|property-resolver|variable-resolver|locale-config)*)>
 
 
 <!--
@@ -247,31 +240,18 @@
 -->
 <!ELEMENT map-entries (key-class?, value-class?, map-entry*)>
 
-
 <!--
-    The "message" element represents an individual localizable message,
-    identified by a message identifier.  Message identifiers must be unique
-    within the scope of the parent message resources instance.
-
-    If no nested "message-class" element is specified, the JSF implementation
-    must provide a suitable default.
-
-    If no "severity" element is provided, "error" is assumed.
+    If present, this can either designate a ResourceBundle class, in
+    which case the value of the faces-message-bundle element is a
+    regular fully qualified classname.  Alternatively, it can designate
+    a properties file in which case the name of the properties file
+    should be specified as the basename without the .properties
+    extension relative to the package and using "." as the
+    separator. That is, "foo/bar/messages.properties" should be
+    specified as "foo.bar.messages".
 -->
-<!ELEMENT message         (message-id, message-class?, summary*, detail*, severity?)>
 
-
-<!--
-    The "message-resources" element represents a set of "message" elements
-    for localizable messages related to a particular message resources id.
-    Message resources identifiers must be unique within the entire web
-    application.
-
-    If no nested "message-resources-class" element is specified, the
-    JSF implementation must provide a suitable default.
--->
-<!ELEMENT message-resources (description*, display-name*, icon*, message-resources-id, message-resources-class?, message*)>
-
+<!ELEMENT message-bundle (#PCDATA)>
 
 <!--
     The "navigation-case" element describes a particular combination of
@@ -475,17 +455,6 @@
 
 
 <!--
-    The "detail" element contains the detail error message text
-    for the parent "message" element, optionally flagged with a language
-    code using the "xml:lang" attribute.  If no "xml:lang" attribute is
-    present, this text should be assumed to be in the language
-    specified by the default Locale for the underlying JVM.
--->
-<!ELEMENT detail          (#PCDATA)>
-<!ATTLIST detail          xml:lang        %Language;      #IMPLIED>
-
-
-<!--
     The "display-name" element is a short descriptive name describing the
     entity associated with the element it is nested in, intended to be
     displayed by tools, and optionally flagged with a language code using
@@ -607,37 +576,6 @@
     the value is "none").  It must be of type "ScopeOrNone".
 -->
 <!ELEMENT managed-bean-scope (#PCDATA)>
-
-
-<!--
-    The "message-class" element represents the fully qualified class name
-    of a concrete Message implementation class.  It must be of
-    type "ClassName".
--->
-<!ELEMENT message-class   (#PCDATA)>
-
-
-<!--
-    The "message-id" element represents the identifier under which the
-    corresponding "message" should be registered.
--->
-<!ELEMENT message-id      (#PCDATA)>
-
-
-<!--
-    The "message-resources-class" element represents the fully qualified class
-    name of a concrete MessageResources implementation class.  It must be of
-    type "ClassName".
--->
-<!ELEMENT message-resources-class (#PCDATA)>
-
-
-<!--
-    The "message-resources-id" element represents the identifier under which
-    the corresponding MessageResources class should be registered.
--->
-<!ELEMENT message-resources-id    (#PCDATA)>
-
 
 <!--
     The "navigation-handler" element contains the fully qualified class name
@@ -766,30 +704,11 @@ registered on the Lifecycle. It must be of type "ClassName".
 -->
 <!ELEMENT renderer-type   (#PCDATA)>
 
-
-<!--
-    The "severity" element contains the severity level of the parent
-    "message" element.  It must be of type "Severity".
--->
-<!ELEMENT severity        (#PCDATA)>
-
-
 <!--
     The "small-icon" element contains the resource path to a large (16x16)
     icon image.  The image may be in either GIF or JPG format.
 -->
 <!ELEMENT small-icon      (#PCDATA)>
-
-
-<!--
-    The "summary" element contains the summary error message text
-    for the parent "message" element, optionally flagged with a language
-    code using the "xml:lang" attribute.  If no "xml:lang" attribute is
-    present, this text should be assumed to be in the language
-    specified by the default Locale for the underlying JVM.
--->
-<!ELEMENT summary         (#PCDATA)>
-<!ATTLIST summary         xml:lang        %Language;      #IMPLIED>
 
 <!--
      The "supported-locales" element allows authors to declare which

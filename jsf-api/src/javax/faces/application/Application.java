@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.18 2003/10/27 04:09:56 craigmcc Exp $
+ * $Id: Application.java,v 1.19 2003/10/30 16:13:48 eburns Exp $
  */
 
 /*
@@ -46,8 +46,7 @@ import javax.faces.validator.Validator;
  * <p>The application also acts as a factory for several types of
  * Objects specified in the Faces Configuration file.  Please see {@link
  * Application#createComponent}, {@link Application#createConverter},
- * {@link Application#getMessageResources}, and {@link
- * Application#createValidator}. </p>
+ * and {@link Application#createValidator}. </p>
  */
 
 public abstract class Application {
@@ -123,6 +122,24 @@ public abstract class Application {
      */
     public abstract void setDefaultLocale(Locale newLocale);
 
+    /**
+     * <p>Set the name of the <code>ResourceBundle</code> to be used for
+     * faces messages.  The argument can either designate a
+     * <code>ResourceBundle</code> class, in which case the value of the
+     * argument is a regular fully qualified classname. Alternatively,
+     * it can designate a properties file in which case the name of the
+     * properties file should be specified as the basename without the
+     * .properties extension relative to the package and using "." as
+     * the separator. That is, "foo/bar/messages.properties" should be
+     * specified as "foo.bar.messages".</p>
+     */ 
+    public abstract void setMessageBundle(String messageBundle);
+
+    /**
+     * <p>Return the value set by the previous call to {@link
+     * #setMessageBundle}.</p>
+     */
+    public abstract String getMessageBundle();
 
     /**
      * <p>Return the {@link NavigationHandler} instance that will be passed
@@ -370,49 +387,6 @@ public abstract class Application {
      * registered.</p>
      */
     public abstract Iterator getConverterTypes();
-
-
-    /**
-     * <p>Register a new mapping of message resources id to the name of the
-     * corresponding {@link MessageResources} class.  This allows subsequent
-     * calls to <code>getMessageResources()</code> to serve as a factory for
-     * {@link MessageResources} instances.</p>
-     *
-     * @param messageResourcesId The message resources id to be registered
-     * @param messageResourcesClass The fully qualified class name of the
-     *  corresponding {@link MessageResources} implementation
-     *
-     * @exception NullPointerException if <code>messageResourcesId</code>
-     *  or <code>messageResourcesClass</code> is <code>null</code>
-     */
-    public abstract void addMessageResources(String messageResourcesId,
-					     String messageResourcesClass);
-
-
-    /**
-     * <p>Instantiate (if necessary) and return a {@link MessageResources}
-     * instance of the class specified by a previous call to
-     * <code>addMessageResources</code>.</p>
-     *
-     * @param messageResourcesId The message resources id for which to
-     *  create (if necessary) and return a {@link MessageResources}
-     *  instance
-     *
-     * @exception FacesException if a {@link MessageResources} instance
-     *  of the specified id cannot be created
-     * @exception NullPointerException if <code>messageResourcesId</code>
-     *  is <code>null</code>
-     */ 
-    public abstract MessageResources getMessageResources
-        (String messageResourcesId) throws FacesException;
-
-
-    /**
-     * <p>Return an <code>Iterator</code> over the set of currently registered
-     * message resources ids for this <code>Application</code>.</p>
-     */
-    public abstract Iterator getMessageResourcesIds();
-
 
     /**
      * <p>Return a {@link MethodBinding} for the specified method

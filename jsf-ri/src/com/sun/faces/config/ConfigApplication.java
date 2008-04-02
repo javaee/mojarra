@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigApplication.java,v 1.4 2003/10/14 23:44:49 eburns Exp $
+ * $Id: ConfigApplication.java,v 1.5 2003/10/30 16:14:13 eburns Exp $
  */
 
 /*
@@ -23,6 +23,7 @@ import java.util.Map;
 public class ConfigApplication {
 
     private String actionListener = null;
+    private String messageBundle = null;
     private String navigationHandler = null;
     private String propertyResolver = null;
     private String variableResolver = null;
@@ -33,6 +34,13 @@ public class ConfigApplication {
     }
     public void setActionListener(String actionListener) {
         this.actionListener = actionListener;
+    }
+
+    public String getMessageBundle() {
+        return (this.messageBundle);
+    }
+    public void setMessageBundle(String messageBundle) {
+        this.messageBundle = messageBundle;
     }
 
     public String getNavigationHandler() {
@@ -94,6 +102,7 @@ public class ConfigApplication {
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append("Action Listener:"+getActionListener());
+        sb.append("\nMessage Bundle:"+getMessageBundle());
         sb.append("\nNavigation Handler:"+getNavigationHandler());
         sb.append("\nProperty Resolver:"+getPropertyResolver());
         sb.append("\nVariable Resolver:"+getVariableResolver());

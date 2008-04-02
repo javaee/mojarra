@@ -4,8 +4,8 @@
 %><%@ page import="javax.faces.application.Application"
 %><%@ page import="javax.faces.application.ApplicationFactory"
 %><%@ page import="javax.faces.application.Message"
+%><%@ page import="com.sun.faces.util.MessageFactory"
 %><%@ page import="javax.faces.context.FacesContext"
-%><%@ page import="javax.faces.application.MessageResources"
 %><%@ page import="javax.faces.component.UIViewRoot"
 %><%
 
@@ -32,19 +32,12 @@
     return;
   }
 
-  // Acquire the MessageResources bundle
-  MessageResources mr =
-    appl.getMessageResources("Custom2");
-  if (mr == null) {
-    out.println("/message04.jsp FAILED - No MessageResources returned");
-    return;
-  }
   Message message = null;
 
   // Check message identifiers that should be present (en_US)
   facesContext.getViewRoot().setLocale(new Locale("en", "US"));
   for (int i = 0; i < list.length; i++) {
-    message = mr.getMessage(facesContext, list[i]);
+    message = MessageFactory.getMessage(facesContext, list[i]);
     if (message == null) {
       out.println("/message04.jsp FAILED - Missing en_US message '" +
                   list[i] + "'");
@@ -53,7 +46,7 @@
   }
 
   // Check specific message characteristics (en_US)
-  message = mr.getMessage(facesContext, "Custom2B");
+  message = MessageFactory.getMessage(facesContext, "Custom2B");
   if (!"This Is Custom2B Detail (en)".equals(message.getDetail())) {
     out.println("/message04.jsp FAILED - Bad en_US detail '" +
                 message.getDetail() + "'");
@@ -68,7 +61,7 @@
   // Check message identifiers that should be present (fr_FR)
   facesContext.getViewRoot().setLocale(new Locale("fr", "FR"));
   for (int i = 0; i < list.length; i++) {
-    message = mr.getMessage(facesContext, list[i]);
+    message = MessageFactory.getMessage(facesContext, list[i]);
     if (message == null) {
       out.println("/message04.jsp FAILED - Missing fr_FR message '" +
                   list[i] + "'");
@@ -77,7 +70,7 @@
   }
 
   // Check specific message characteristics (fr_FR)
-  message = mr.getMessage(facesContext, "Custom2B");
+  message = MessageFactory.getMessage(facesContext, "Custom2B");
   if (!"This Is Custom2B Detail (fr)".equals(message.getDetail())) {
     out.println("/message04.jsp FAILED - Bad fr_FR detail '" +
                 message.getDetail() + "'");

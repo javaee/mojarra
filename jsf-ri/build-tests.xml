@@ -308,7 +308,6 @@
             <test name="com.sun.faces.application.TestApplicationFactoryImpl"/>
             <test name="com.sun.faces.application.TestApplicationImpl"/>
             <test name="com.sun.faces.application.TestApplicationImpl_Config"/>
-            <test name="com.sun.faces.application.TestMessageResourcesImpl"/>
             <test name="com.sun.faces.application.TestNavigationHandler"/>
             <test name="com.sun.faces.application.TestStateManagerImpl"/>
             <test name="com.sun.faces.application.TestViewHandlerImpl"/>

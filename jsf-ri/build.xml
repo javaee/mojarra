@@ -29,8 +29,12 @@
   <!-- The base directory for compilation targets -->
   <property name="build.home" value="${basedir}/build"/>
 
+  <property name="build.generate"   value="${build.home}/generate"/>
+
   <!-- The base directory for the JSF APIs -->
   <property name="jsf-api.home" value ="../jsf-api"/>
+
+  <property name="jsf-tools.dir"    value="${basedir}/../jsf-tools"/>
 
   <!-- The base directory for distribution targets -->
   <property name="dist.home" value="${basedir}/dist"/>
@@ -143,9 +147,11 @@
     <echo message="-------- ${Name} ${version} --------"/>
   </target>
 
-  <target name="prepare" depends="init,detect.tck"
+  <target name="prepare" 
+          depends="init,detect.tck,set.tools.property,verify.tools.property"
    description="Prepare build directory">
     <mkdir dir="${build.home}"/>
+    <mkdir dir="${build.home}/generate"/>
     <mkdir dir="${build.home}/bin"/>
     <mkdir dir="${build.home}/classes"/>
     <mkdir dir="${build.home}/classes/META-INF"/>
@@ -160,14 +166,42 @@
     <unjar src="${mozutil.jar}" dest="${build.home}/classes"/>
   </target>
 
-  <target name="compile" depends="prepare"
+  <target name="set.tools.property" unless="jsf-tools">
+    <available property="jsf-tools" value="${jsf-tools.dir}"
+               file="${jsf-tools.dir}/build.xml"/>
+  </target>
+
+  <target name="verify.tools.property" unless="jsf-tools">
+
+<fail>
+You must have the property jsf-tools defined, or the path ../jsf-tools
+must exist.  This is necessary for the MessageFactory class.
+</fail>
+  </target>
+
+  <target name="copy.template.sources" depends="prepare"
+     description="Copy template sources from ${jsf-tools.dir}/template-source">
+
+    <mkdir dir="${build.generate}/com/sun/faces/util"/>
+    <filter token="protection" value="public"/>
+
+    <filter token="package" value="com.sun.faces.util"/>
+    <copy file="${jsf-tools.dir}/template-src/MessageFactory.java" 
+          todir="${build.generate}/com/sun/faces/util"
+          filtering="true"/>
+
+  </target>
+
+  <target name="compile" depends="prepare,copy.template.sources"
    description="Just compile the classes">
     <!-- Run javac through everything -->
-    <javac  srcdir="${source.home}"
+    <javac
            destdir="${build.home}/classes"
              debug="${compile.debug}"
        deprecation="${compile.deprecation}"
           optimize="${compile.optimize}">
+      <src path="${source.home}"/>
+      <src path="${build.generate}"/>
       <classpath refid="compile.classpath"/>
     </javac>
     <copy todir="${build.home}/classes">

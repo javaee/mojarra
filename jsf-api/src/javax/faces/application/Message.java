@@ -1,5 +1,5 @@
 /*
- * $Id: Message.java,v 1.3 2003/08/22 14:03:07 eburns Exp $
+ * $Id: Message.java,v 1.4 2003/10/30 16:13:48 eburns Exp $
  */
 
 /*
@@ -14,6 +14,37 @@ package javax.faces.application;
  * <p><strong>Message</strong> represents a single validation (or other)
  * message, which is typically associated with a particular component in
  * the view.</p>
+ *
+ * <ul>
+ *
+ * <p>How to create a message</p>
+ *
+ * <p>Call {@link Application.getMessageBundle}.  If
+ * non-<code>null</code>, locate the named <code>ResourceBundle</code>,
+ * using the <code>Locale</code> from the current {@link
+ * javax.faces.component.UIViewRoot} and see if it has a value for the
+ * argument <code>messageId</code>.  If it does, treat the value as the
+ * <code>summary</code> of the <code>Message</code>.  If it does not, or
+ * if {@link Application.getMessageBundle} returned null, look in the
+ * <code>ResourceBundle</code> named by the value of the constant {@link
+ * FACES_MESSAGES} and see if it has a value for the argument
+ * <code>messageId</code>.  If it does, treat the value as the
+ * <code>summary</code> of the <code>Message</code>.  If it does not,
+ * return <code>null</code>.</p>
+ *
+ * <p>In all cases, if a <code>ResourceBundle</code> hit is found for
+ * the argument <code>messageId</code>, look for further hits under the
+ * keys <code>messageId_detail</code> and <code>messageId_detail</code>,
+ * where <code>messageId</code> is the argument to
+ * <code>getMessage()</code>.  Use these values, if present, as the
+ * <code>detail</code> and <code>severity</code> for the returned
+ * <code>Message</code>.</p>
+ *
+ * <p>Make sure to perform any parameter substitution required.</p>
+ *
+ * </ul>
+ *
+
  */
 
 public interface Message {
@@ -21,6 +52,12 @@ public interface Message {
 
     // ------------------------------------------------ Message Severity Levels
 
+    /**
+     * <p><code>ResourceBundle</code> identifier for messages whose
+     * message identifiers are defined in the JavaServer Faces
+     * specification.</p>
+     */
+    public static final String FACES_MESSAGES = "javax.faces.Messages";
 
     /**
      * <p>Message severity level indicating that a serious error has

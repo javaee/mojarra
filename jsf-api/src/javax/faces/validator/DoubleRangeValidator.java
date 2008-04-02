@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidator.java,v 1.28 2003/10/20 15:02:40 eburns Exp $
+ * $Id: DoubleRangeValidator.java,v 1.29 2003/10/30 16:13:53 eburns Exp $
  */
 
 /*
@@ -210,9 +210,9 @@ public class DoubleRangeValidator implements Validator, StateHolder {
                     (converted > maximum)) {
 		    if (minimumSet) {
 			context.addMessage(component.getClientId(context),
-					   ValidatorMessages.getMessage
+					   MessageFactory.getMessage
 					   (context,
-					    ValidatorMessages.NOT_IN_RANGE_MESSAGE_ID,
+					    Validator.NOT_IN_RANGE_MESSAGE_ID,
 					    new Object[] {
 						new Double(minimum),
 						new Double(maximum) }));
@@ -220,7 +220,7 @@ public class DoubleRangeValidator implements Validator, StateHolder {
 		    }
 		    else {
 			context.addMessage(component.getClientId(context),
-					   ValidatorMessages.getMessage
+					   MessageFactory.getMessage
 					   (context,
 					    MAXIMUM_MESSAGE_ID,
 					    new Object[] {
@@ -232,9 +232,9 @@ public class DoubleRangeValidator implements Validator, StateHolder {
                     (converted < minimum)) {
 		    if (maximumSet) {
 			context.addMessage(component.getClientId(context),
-					   ValidatorMessages.getMessage
+					   MessageFactory.getMessage
 					   (context,
-					    ValidatorMessages.NOT_IN_RANGE_MESSAGE_ID,
+					    Validator.NOT_IN_RANGE_MESSAGE_ID,
 					    new Object[] {
 						new Double(minimum),
 						new Double(maximum) }));
@@ -242,7 +242,7 @@ public class DoubleRangeValidator implements Validator, StateHolder {
 		    }
 		    else {
 			context.addMessage(component.getClientId(context),
-					   ValidatorMessages.getMessage
+					   MessageFactory.getMessage
 					   (context,
 					    MINIMUM_MESSAGE_ID,
 					    new Object[] {
@@ -252,7 +252,7 @@ public class DoubleRangeValidator implements Validator, StateHolder {
                 }
             } catch (NumberFormatException e) {
                 context.addMessage(component.getClientId(context),
-                                   ValidatorMessages.getMessage
+                                   MessageFactory.getMessage
                                    (context, TYPE_MESSAGE_ID));
                 component.setValid(false);
             }

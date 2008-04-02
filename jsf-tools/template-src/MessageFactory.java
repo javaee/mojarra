@@ -1,5 +1,5 @@
 /*
- * $Id: MessageResourcesImpl.java,v 1.3 2003/10/15 16:59:06 jvisvanathan Exp $
+ * $Id: MessageFactory.java,v 1.1 2003/10/30 16:14:41 eburns Exp $
  */
 
 /*
@@ -7,10 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package com.sun.faces.application;
-
-import com.sun.faces.RIConstants;
-import com.sun.faces.util.Util;
+package @package@;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -20,21 +17,24 @@ import java.util.Locale;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.ResourceBundle;
+import java.util.MissingResourceException;
 import javax.faces.FacesException;
+import javax.faces.application.Application;
 import javax.faces.application.MessageImpl;
 import javax.faces.application.Message;
-import javax.faces.application.MessageResources;
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
 import java.text.MessageFormat;
 import java.io.IOException;
 
-import org.apache.commons.logging.impl.SimpleLog;
+/**
+ * 
+ * <p>supported filters: <code>package</code> and
+ * <code>protection</code>.</p>
+ */
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
-
-public class MessageResourcesImpl extends MessageResources
+@protection@ class MessageFactory extends Object
 {
     //
     // Protected Constants
@@ -47,31 +47,21 @@ public class MessageResourcesImpl extends MessageResources
     //
     // Instance Variables
     //
-    private String messageResourceId = null;
-    private String resourceFile = null;
-    
-    // The key is a String and formed from resource + language + country + varient.  
-    // The value is a MessageCatalog.
-    private HashMap catalogList = null;
-     
+
     // Attribute Instance Variables
 
     // Relationship Instance Variables
+
+    private static Application application = null;
+     
 
     //
     // Constructors and Initializers    
     //
 
-    public MessageResourcesImpl() {
-        catalogList = new HashMap();
+    private MessageFactory() {
     }
 
-    public MessageResourcesImpl(String messageResourceId) {
-	ParameterCheck.nonNull(messageResourceId);
-	this.messageResourceId = messageResourceId;
-        catalogList = new HashMap();
-    }
-    
     //
     // Class methods
     //
@@ -80,75 +70,7 @@ public class MessageResourcesImpl extends MessageResources
     // General Methods
     //
     
-    public MessageCatalog findCatalog(Locale locale) {
-       
-        MessageCatalog cat = null;
- 
-        ParameterCheck.nonNull(locale);
-        String[] name = new String[3];
-        int i = 2;
-        StringBuffer b = new StringBuffer(100);
-        String lang = locale.getLanguage();
-        String country = locale.getCountry();
-        String variant = locale.getVariant();
-        
-        if (lang.length() > 0) {
-            b.append(lang);
-            name[i--] = b.toString();
-        }    
-      
-        if(country.length() > 0) {
-            b.append('_');
-            b.append(country);
-            name[i--] = b.toString();
-        }    
-
-        if (variant.length() > 0) {
-            b.append('_');
-            b.append(variant);
-            name[i--] = b.toString();
-        }
-
-        for (int j = (i + 1); j < name.length; j++) {
-            // start with variant and iterate
-            // until a catalog is found to match locale.
-            synchronized( catalogList ) {
-                cat = (MessageCatalog)catalogList.get(name[j]);
-                if (cat == null) {
-                    continue;
-                } else {  
-                    break;
-                }
-            }    
-        }    
-        return cat;
-    }
-    
-    public MessageCatalog findCatalogForSpecificLocale(Locale locale) {        
-        MessageCatalog cat = null;
-        synchronized (catalogList) {
-            cat = (MessageCatalog) catalogList.get(locale.toString());            
-        }
-        return cat;
-    }
-        
-    public void addCatalog(Locale locale, MessageCatalog catalog) {
-        ParameterCheck.nonNull(locale);
-        ParameterCheck.nonNull(catalog);
-
-        if (catalogList == null) {
-            catalogList = new HashMap();
-        }
-
-        if (findCatalogForSpecificLocale(locale) != null) {
-            return;
-        }
-
-        catalogList.put(locale.toString(), catalog);
-
-    }
-
-    public String substituteParams(Locale locale, String msgtext, Object params[]) {
+    @protection@ static String substituteParams(Locale locale, String msgtext, Object params[]) {
         String localizedStr = null;
         
         if (params == null || msgtext == null ) {
@@ -171,7 +93,7 @@ public class MessageResourcesImpl extends MessageResources
 
     */
 
-    public Message getMessage(String messageId, Object params[]) {
+    @protection@ static Message getMessage(String messageId, Object params[]) {
         Locale locale = null;
         FacesContext context = FacesContext.getCurrentInstance();
         // context.getViewRoot() may not have been initialized at this point.
@@ -187,8 +109,78 @@ public class MessageResourcesImpl extends MessageResources
 	return getMessage(locale, messageId, params);
     }
 
-    protected Message getMessage(Locale locale, String messageId, 
-				 Object params[]) {
+    @protection@ static Message getMessage(Locale locale, String messageId, 
+					   Object params[]) {
+	Message result = null;
+	String 
+	    summary = null,
+	    detail = null,
+	    bundleName = null;
+	int severity = Message.SEVERITY_INFO;
+	ResourceBundle bundle = null;
+
+	// see if we have a user-provided bundle
+	if (null != (bundleName = getApplication().getMessageBundle())) {
+	    if (null != 
+		(bundle = 
+		 ResourceBundle.getBundle(bundleName, locale,
+					  getCurrentLoader(bundleName)))) {
+		// see if we have a hit
+		try {
+		    summary = bundle.getString(messageId);
+		}
+		catch (MissingResourceException e) {
+		}
+	    }
+	}
+	
+	// we couldn't find a summary in the user-provided bundle
+	if (null == summary) {
+	    // see if we have a summary in the app provided bundle
+	    bundle = ResourceBundle.getBundle(Message.FACES_MESSAGES, 
+					      locale,
+					      getCurrentLoader(bundleName));
+	    if (null == bundle) {
+		throw new NullPointerException();
+	    }
+	    // see if we have a hit
+	    try {
+		summary = bundle.getString(messageId);
+	    }
+	    catch (MissingResourceException e) {
+	    }
+	}
+	
+	// we couldn't find a summary anywhere!  Return null
+	if (null == summary) {
+	    return null;
+	}
+
+	// At this point, we have a summary and a bundle.
+	if (null == summary || null == bundle) {
+	    throw new NullPointerException();
+	}
+	summary = substituteParams(locale, summary, params);
+
+	try {
+	    detail = substituteParams(locale,
+				      bundle.getString(messageId + "_detail"), 
+				      params);
+	}
+	catch (MissingResourceException e) {
+	}
+
+	try {
+	    severity = Integer.valueOf(bundle.getString(messageId + "_severity")).intValue();
+	}
+	catch (Exception e) {
+	    // stick with the default severity.
+	}
+	
+        return (new MessageImpl(severity, summary, detail));
+
+	
+	/**************	
         MessageCatalog catalog = findCatalog(locale);
         if (catalog == null) {
 	    return null;
@@ -198,22 +190,20 @@ public class MessageResourcesImpl extends MessageResources
 	    return null;
         }
         
-        // substitute parameters
-        String summary = substituteParams(locale, template.getSummary(), params);
-        String detail = substituteParams(locale, template.getDetail(),params);
-        return (new MessageImpl(template.getSeverity(), summary, detail));
+	*******************/
+
     }
 
 
     //
-    // Methods from MessageResources
+    // Methods from MessageFactory
     // 
-    public Message getMessage(FacesContext context, String messageId) {
+    @protection@ static Message getMessage(FacesContext context, String messageId) {
         return getMessage(context, messageId, null);
     }    
-
-    public Message getMessage(FacesContext context, String messageId,
-			      Object params[]) {
+    
+    @protection@ static Message getMessage(FacesContext context, String messageId,
+					   Object params[]) {
         if (context == null || messageId == null ) {
             throw new NullPointerException("One or more parameters could be null");
         }
@@ -224,7 +214,9 @@ public class MessageResourcesImpl extends MessageResources
         } else {
             locale = Locale.getDefault();
         }
-        Assert.assert_it(locale != null);
+	if (null == locale) {
+	    throw new NullPointerException();
+	}
         Message message = getMessage(locale, messageId, params);
         if (message != null) {
             return message;
@@ -233,30 +225,45 @@ public class MessageResourcesImpl extends MessageResources
         return (getMessage(locale, messageId, params));
     }  
     
-    public Message getMessage(FacesContext context, String messageId,
+    @protection@ static Message getMessage(FacesContext context, String messageId,
                                        Object param0) {
         return getMessage(context, messageId, new Object[]{param0});                                       
     }                                       
     
-    public Message getMessage(FacesContext context, String messageId,
+    @protection@ static Message getMessage(FacesContext context, String messageId,
                                        Object param0, Object param1) {
          return getMessage(context, messageId, new Object[]{param0, param1});                                        
     }                                       
 
-    public Message getMessage(FacesContext context, String messageId,
+    @protection@ static Message getMessage(FacesContext context, String messageId,
                                        Object param0, Object param1,
                                        Object param2) {
          return getMessage(context, messageId, 
              new Object[]{param0, param1, param2});                                        
     }                                       
 
-    public Message getMessage(FacesContext context, String messageId,
+    @protection@ static Message getMessage(FacesContext context, String messageId,
                                        Object param0, Object param1,
                                        Object param2, Object param3) {
          return getMessage(context, messageId, 
                  new Object[]{param0, param1, param2, param3});                                        
     }                                       
 
-    // The testcase for this class is TestclassName.java 
+    protected static Application getApplication() {
+	if (null == application) {
+	    application = Application.getCurrentInstance();
+	}
+	return application;
+    }
 
-} // end of class MessageResourcesImpl
+    protected static ClassLoader getCurrentLoader(Object fallbackClass) {
+        ClassLoader loader =
+	    Thread.currentThread().getContextClassLoader();
+	if (loader == null) {
+	    loader = fallbackClass.getClass().getClassLoader();
+	}
+	return loader;
+    }
+
+
+} // end of class MessageFactory

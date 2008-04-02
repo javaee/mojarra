@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.106 2003/10/17 15:59:03 eburns Exp $
+ * $Id: Util.java,v 1.107 2003/10/30 16:14:18 eburns Exp $
  */
 
 /*
@@ -12,7 +12,6 @@
 package com.sun.faces.util;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.application.MessageResourcesImpl;
 import com.sun.faces.el.impl.ExpressionEvaluator;
 import com.sun.faces.el.impl.ExpressionEvaluatorImpl;
 import com.sun.faces.renderkit.RenderKitImpl;
@@ -30,7 +29,6 @@ import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.Message;
-import javax.faces.application.MessageResources;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
@@ -67,7 +65,7 @@ import com.sun.faces.el.impl.JspVariableResolver;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.106 2003/10/17 15:59:03 eburns Exp $ 
+ * @version $Id: Util.java,v 1.107 2003/10/30 16:14:18 eburns Exp $ 
  */
 
 public class Util extends Object
@@ -415,24 +413,8 @@ private Util()
     }
 
     /**
-     * This method will be called before calling facesContext.addMessage, so 
-     * message can be localized.
-     * <p>Return the {@link MessageResources} instance for the message
-     * resources defined by the JavaServer Faces Specification.
-     */
-    public static synchronized MessageResources getMessageResources() {
-        MessageResources resources = null;
-        ApplicationFactory aFactory = 
-	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        Application application = aFactory.getApplication();
-	resources = application.getMessageResources(MessageResources.FACES_IMPL_MESSAGES);
-	
-        return (resources);
-    }
 
-    /**
-
-    * Called by the RI to get the IMPL_MESSAGES MessageResources
+    * Called by the RI to get the IMPL_MESSAGES MessageFactory
     * instance and get a message on it.  
 
     */
@@ -440,22 +422,15 @@ private Util()
     public static synchronized String getExceptionMessage(String messageId,
 							  Object params[]) {
 	String result = null;
-	MessageResourcesImpl resources = (MessageResourcesImpl)
-	    Util.getMessageResources();
 
-	// As an optimization, we could store the MessageResources
-	// instance in the System Properties for subsequent calls to
-	// getExceptionMessage().
-
-	if (null != resources) {
-	    Message message = resources.getMessage(messageId, params);
-	    if (null != message) {
-		result = message.getSummary();
-	    }
+	Message message = MessageFactory.getMessage(messageId, params);
+	if (null != message) {
+	    result = message.getSummary();
 	}
 
+	
 	if (null == result) {
-	    result = "null MessageResources";
+	    result = "null MessageFactory";
 	}
 	return result;
     }

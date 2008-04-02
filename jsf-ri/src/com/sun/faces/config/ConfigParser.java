@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.44 2003/10/24 17:34:20 eburns Exp $
+ * $Id: ConfigParser.java,v 1.45 2003/10/30 16:14:14 eburns Exp $
  */
 
 /*
@@ -11,9 +11,6 @@ package com.sun.faces.config;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.application.ApplicationImpl;
-import com.sun.faces.application.MessageCatalog;
-import com.sun.faces.application.MessageResourcesImpl;
-import com.sun.faces.application.MessageTemplate;
 import com.sun.faces.application.ViewHandlerImpl;
 import com.sun.faces.application.NavigationHandlerImpl;
 import com.sun.faces.util.Util;
@@ -40,9 +37,6 @@ import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
-import javax.faces.application.Message;
-import javax.faces.application.MessageImpl;
-import javax.faces.application.MessageResources;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.ViewHandler;
 import javax.faces.el.PropertyResolver;
@@ -301,7 +295,6 @@ public class ConfigParser {
         configureRulesApplication(digester);
         configureRulesFactory(digester);
         configureRulesConverter(digester);
-        configureRulesMessageResources(digester);
         configureRulesComponent(digester);
         configureRulesValidator(digester);
         configureRulesManagedBean(digester);
@@ -322,6 +315,8 @@ public class ConfigParser {
                                "setActionListener", 0);
         digester.addCallMethod(prefix+"/navigation-handler",
                                "setNavigationHandler", 0);
+        digester.addCallMethod(prefix+"/message-bundle",
+                               "setMessageBundle", 0);
         digester.addCallMethod(prefix+"/view-handler",
                                "setViewHandler", 0);
         digester.addCallMethod(prefix+"/property-resolver",
@@ -416,43 +411,6 @@ public class ConfigParser {
         //
         ValidatorsRule vRule = new ValidatorsRule();
         digester.addRule(prefix, vRule);
-    }
-
-    // Configure the rules for a <message-resources> element
-    protected void configureRulesMessageResources(Digester digester) {
-        String prefix = "faces-config/message-resources";
-
-        digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigMessageResources");
-        digester.addCallMethod(prefix + "/message-resources-id",
-                               "setMessageResourcesId", 0);
-        digester.addCallMethod(prefix + "/message-resources-class",
-                               "setMessageResourcesClass", 0);
-	configureRulesMessage(digester);
-
-        // This custom rule will add message resource info to the Application instance;
-        //
-        MessageResourceRule mrRule = new MessageResourceRule();
-        digester.addRule(prefix, mrRule);
-    }
-
-    protected void configureRulesMessage(Digester digester) {
-        String prefix = "faces-config/message-resources/message";
-
-        digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigMessage");
-        digester.addSetNext(prefix, "addMessage", "com.sun.faces.config.ConfigMessage");
-        digester.addCallMethod(prefix + "/message-id", "setMessageId", 0);
-        digester.addCallMethod(prefix + "/message-class","setMessageClass", 0);
-	digester.addCallMethod(prefix + "/summary", "addSummary", 2);
-	// From this attribute
-	digester.addCallParam(prefix + "/summary", 0, "xml:lang"); 
-	// From this element body
-	digester.addCallParam(prefix + "/summary", 1); 
-	digester.addCallMethod(prefix + "/detail", "addDetail", 2);
-	// From this attribute
-	digester.addCallParam(prefix + "/detail", 0, "xml:lang"); 
-	// From this element body
-	digester.addCallParam(prefix + "/detail", 1); 
-       digester.addCallMethod(prefix + "/severity", "setSeverity", 0);
     }
 
     // Configure the rules for a <managed-bean> element
@@ -989,6 +947,10 @@ final class ApplicationRule extends Rule {
 	if (returnObject != null) {
 	    application.setActionListener((ActionListener)returnObject);
 	}
+
+	if (null != ca.getMessageBundle()) {
+	    application.setMessageBundle(ca.getMessageBundle());
+	}
 	
 	returnObject = Util.createInstance(ca.getNavigationHandler());
 	if (returnObject != null) {
@@ -1156,99 +1118,6 @@ final class RenderKitRule extends Rule {
                 throw new FacesException(e);
             }
         }
-    }
-}
-
-/**
- * This rule performs the following functionality for 
- * <code>MessageResource</code> handling:
- *     1. gets the <code>ConfigMessageResources</code> instance from the
- *        Digester stack.
- *     2. Uses the <code>messageResourcesId</code> to get a 
- *        <code>MessageResources</code> instance from the <code>Application</code>
- *        implementation.
- *     3. Iterates through each of the <code>ConfigMessage</code> instances
- *        (contained in <code>ConfigMessageResources</code>, and creates a 
- *        <code>MessageTemplate</code> instance.
- *     4. Each <code>MessageTemplate</code> is added to a <code>MessageCatalog</code>
- *        based on <code>Locale</code>.
- *  This rule executes when the ending <code></message-resources></faces-config></code>
- *  XML element is encountered.
- */
-final class MessageResourceRule extends Rule {
-
-    protected static Log log = LogFactory.getLog(ConfigParser.class);
-
-    public MessageResourceRule() {
-        super();
-    }
-    public void end(String namespace, String name) throws Exception {
-        ApplicationFactory aFactory =
-            (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        Application application = aFactory.getApplication();
-	ConfigMessageResources mr = (ConfigMessageResources)digester.peek();
-	String messageResourcesId = mr.getMessageResourcesId();
-	Assert.assert_it(null != messageResourcesId);
-        MessageResources messageResources = application.getMessageResources(messageResourcesId);
-	if (messageResources instanceof MessageResourcesImpl) {
-	    //
-	    // Iterate through each ConfigMessage and create a MessageTemplate;
-	    // For each ConfigMessage, determine the language for summary and detail,
-	    // and catalog the message by language.
-	    //
-	    Map messages = mr.getMessages();
-	    Iterator iter = messages.keySet().iterator();
-	    while (iter.hasNext()) {
-                ConfigMessage configMessage = (ConfigMessage)messages.get(iter.next());
-		String messageClazz = configMessage.getMessageClass();
-		if (messageClazz ==null) {
-		    messageClazz = MessageImpl.class.getName();
-		}
-		MessageTemplate messageTemplate = null;
-		if (messageClazz.equals(MessageImpl.class.getName())) {
-		    Map summaries = configMessage.getSummaries();
-		    Map details = configMessage.getDetails();
-	            Iterator langIter = summaries.keySet().iterator();
-		    Locale locale = null;
-		    //
-		    // Determine the Locale..  If no langage is specified in the config
-		    // file, attempt to get it from FacesContext;
-		    //
-		    while (langIter.hasNext()) {
-			String xmlLocale = (String)langIter.next();
-			Assert.assert_it(null != xmlLocale);
-			locale = Util.getLocaleFromString(xmlLocale);
-		        messageTemplate = new MessageTemplate();
-			messageTemplate.setMessageId(configMessage.getMessageId());
-			messageTemplate.setLocale(locale);
-			messageTemplate.setSummary((String)summaries.get(xmlLocale));
-			messageTemplate.setDetail((String)details.get(xmlLocale));
-			//
-			// Default to ERROR if not in config file..
-			//
-			if (configMessage.getSeverity() > 0) { 
-			    messageTemplate.setSeverity(configMessage.getSeverity());
-			} else {
-			    messageTemplate.setSeverity(Message.SEVERITY_ERROR);
-			}
-			//
-			// See if a catalog exists for the locale, and if it does,
-			// use it to add the message - otherwise, create the catalog 
-			// first.
-			//
-                        MessageCatalog catalog = 
-			    ((MessageResourcesImpl)messageResources).findCatalogForSpecificLocale(locale);
-			if (catalog == null) {
-			    catalog = new MessageCatalog(locale);
-			    catalog.addMessage(messageTemplate);
-			    ((MessageResourcesImpl)messageResources).addCatalog(locale, catalog);
-			} else {
-			    catalog.addMessage(messageTemplate);
-			}
-		    }
-		}
-            }
-	}
     }
 }
 

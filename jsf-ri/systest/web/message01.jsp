@@ -5,7 +5,7 @@
 %><%@ page import="javax.faces.application.ApplicationFactory"
 %><%@ page import="javax.faces.application.Message"
 %><%@ page import="javax.faces.context.FacesContext"
-%><%@ page import="javax.faces.application.MessageResources"
+%><%@ page import="com.sun.faces.util.MessageFactory"
 %><%@ page import="javax.faces.component.UIViewRoot"
 %><%
 
@@ -41,17 +41,9 @@
     return;
   }
 
-  // Acquire the MessageResources bundle
-  MessageResources mr =
-    appl.getMessageResources(MessageResources.FACES_API_MESSAGES);
-  if (mr == null) {
-    out.println("/message01.jsp FAILED - No MessageResources returned");
-    return;
-  }
-
   // Test for replacing a Standard Validator Message
   facesContext.getViewRoot().setLocale(new Locale("en", "US"));
-  Message msg = mr.getMessage(facesContext, "javax.faces.validator.DoubleRangeValidator.LIMIT");
+  Message msg = MessageFactory.getMessage(facesContext, "javax.faces.validator.DoubleRangeValidator.LIMIT");
   if (!msg.getSummary().equals("Validation Error:This summary replaces the RI summary")) {
       out.println("/message01.jsp FAILED - Missing replacement message");
       return;
@@ -60,7 +52,7 @@
   // Check message identifiers that should be present (en_US)
   facesContext.getViewRoot().setLocale(new Locale("en", "US"));
   for (int i = 0; i < list.length; i++) {
-    Message message = mr.getMessage(facesContext, list[i]);
+    Message message = MessageFactory.getMessage(facesContext, list[i]);
     if (message == null) {
       out.println("/message01.jsp FAILED - Missing en_US message '" +
                   list[i] + "'");
@@ -71,7 +63,7 @@
   // Check message identifiers that should be present (fr_FR)
   facesContext.getViewRoot().setLocale(new Locale("fr", "FR"));
   for (int i = 0; i < list.length; i++) {
-    Message message = mr.getMessage(facesContext, list[i]);
+    Message message = MessageFactory.getMessage(facesContext, list[i]);
     if (message == null) {
       out.println("/message01.jsp FAILED - Missing fr_FR message '" +
                   list[i] + "'");

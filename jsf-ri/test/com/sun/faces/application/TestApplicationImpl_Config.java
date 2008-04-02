@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.23 2003/10/23 05:17:51 eburns Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.24 2003/10/30 16:14:35 eburns Exp $
  */
 
 /*
@@ -38,15 +38,12 @@ import javax.faces.component.html.HtmlCommandButton;
 import javax.faces.convert.*;
 import javax.faces.validator.Validator;
 import javax.faces.validator.LengthValidator;
-import javax.faces.application.Message;
 
 import org.mozilla.util.Assert;
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.TestComponent;
 import com.sun.faces.TestConverter;
-import com.sun.faces.application.MessageResourcesImpl;
 import com.sun.faces.config.*;
-import javax.faces.application.MessageResources;
 import javax.faces.FacesException;
 
 import java.util.HashMap;
@@ -59,7 +56,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.23 2003/10/23 05:17:51 eburns Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.24 2003/10/30 16:14:35 eburns Exp $
  */
 
 public class TestApplicationImpl_Config extends ServletFacesTestCase {
@@ -314,66 +311,6 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	};
 
 	assertTrue(isSubset(standardConverterIds, iter));
-    }
-
-    public void testMessageResorucesPositive() {
-	MessageResourcesImpl 
-	    newMessageResourcesImpl = null,
-	    testMessageResoruces = new MessageResourcesImpl("Foo");
-	MessageResources rsrc = null;
-	
-	// runtime addition
-	
-	application.addMessageResources("FreshResources",
-				 "com.sun.faces.application.MessageResourcesImpl");
-	assertTrue(null != (newMessageResourcesImpl = (MessageResourcesImpl)
-			    application.getMessageResources("FreshResources")));
-	assertTrue(newMessageResourcesImpl != testMessageResoruces);
-
-	// built-in MessageResources
-	assertTrue(null != (rsrc = application.getMessageResources(MessageResources.FACES_API_MESSAGES)));
-	assertTrue(rsrc instanceof MessageResources);
-	Object params[] = new Object[1];
-        assertTrue(null != ((MessageResourcesImpl)rsrc).getMessage("javax.faces.validator.DoubleRangeValidator.LIMIT",params));
-	assertTrue(null != (rsrc = application.getMessageResources(MessageResources.FACES_IMPL_MESSAGES)));
-	assertTrue(rsrc instanceof MessageResources);
-        assertTrue(null != ((MessageResourcesImpl)rsrc).getMessage("com.sun.faces.NULL_PARAMETERS_ERROR",params));
-    }
-
-    public void testMessageResourcesNegative() {
-	boolean exceptionThrown = false;
-	
-	// componentType/componentClass with non-existent class
-	try {
-	    application.addMessageResources("William",
-				     "BillyBoy");
-	    application.getMessageResources("William");
-	}
-	catch (FacesException e) {
-	    exceptionThrown = true;
-	}
-	assertTrue(exceptionThrown);
-
-	// non-existent mapping
-	// make sure an instance got created..
-	try {
-	    application.getMessageResources("Joebob");
-	}
-	catch (FacesException e) {
-	    assertTrue(false);
-	}
-        assertTrue(null != application.getMessageResources("Joebob"));	
-    }
-
-    public void testGetMessageResourcesIds() {
-	Iterator iter = application.getMessageResourcesIds();
-	assertTrue(null != iter);
-	String standardMessageResourcesIds[] = {
-	    MessageResources.FACES_API_MESSAGES,
-	    MessageResources.FACES_IMPL_MESSAGES
-	};
-
-	assertTrue(isSubset(standardMessageResourcesIds, iter));
     }
 
     public void testValidatorPositive() {

@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.44 2003/10/23 05:17:52 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.45 2003/10/30 16:14:37 eburns Exp $
  */
 
 /*
@@ -11,14 +11,12 @@ package com.sun.faces.config;
 
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.application.ApplicationImpl;
-import com.sun.faces.application.MessageResourcesImpl;
 import org.apache.cactus.WebRequest;
 import org.mozilla.util.Assert;
 
 import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.Message;
-import javax.faces.application.MessageResources;
 import javax.faces.application.NavigationHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
@@ -86,41 +84,6 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         assertTrue(mappings.contains("/faces"));
         assertTrue(mappings.contains(".jsf"));
     }
-
-    public void testMessageResources() {
-	// test the default messages
-        ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.getFactory(
-        FactoryFinder.APPLICATION_FACTORY);
-        ApplicationImpl application = (ApplicationImpl)aFactory.getApplication();
-	Map 
-	    messageResourcesMap = null,
-	    messagesMap = null;
-	String apiMessages [] = {
-	    "javax.faces.validator.DoubleRangeValidator.LIMIT",
-	    "javax.faces.validator.DoubleRangeValidator.MAXIMUM",
-	    "javax.faces.validator.DoubleRangeValidator.MINIMUM",
-	    "javax.faces.validator.DoubleRangeValidator.TYPE",
-	    "javax.faces.validator.LengthValidator.LIMIT",
-	    "javax.faces.validator.LengthValidator.MAXIMUM",
-	    "javax.faces.validator.LengthValidator.MINIMUM",
-	    "javax.faces.component.UIInput.REQUIRED",
-	    "javax.faces.validator.LongRangeValidator.LIMIT",
-	    "javax.faces.validator.LongRangeValidator.MAXIMUM",
-	    "javax.faces.validator.LongRangeValidator.MINIMUM",
-	    "javax.faces.validator.LongRangeValidator.TYPE"
-	};
-	Iterator messageIter = null;
-
-	assertTrue(null != (application.getMessageResources(MessageResources.FACES_API_MESSAGES))); 
-	assertTrue(null != (application.getMessageResources(MessageResources.FACES_IMPL_MESSAGES))); 
-
-	MessageResourcesImpl mr = (MessageResourcesImpl)application.getMessageResources(MessageResources.FACES_API_MESSAGES);
-	for (int i=0; i<apiMessages.length; i++) {
-            Object[] params = new Object[1];
-	    assertTrue(null != mr.getMessage(apiMessages[i], params));
-	}
-    }
-
 
     protected void parseConfig(ConfigParser cp,
                                      String resource,
@@ -202,13 +165,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         application.addValidator("fooId", "javax.faces.validator.DoubleRangeValidator");
         val = application.createValidator("fooId");
         assertNotNull(val);
-        
-        MessageResources resources = application.getMessageResources("TestMessages");
-        assertNotNull(resources);
-        
-        Message message = resources.getMessage(getFacesContext(), "testMessage");
-        assertNotNull(message);
-        assertTrue(message.getSeverity() == Message.SEVERITY_INFO);
+
     }
 
     public void testEmpty() throws Exception {
@@ -506,21 +463,6 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	}
 	assertTrue(exceptionThrown);
 	
-    }
-
-    public void testInvalidMessageSeverityDuringParse() throws Exception {
-        ConfigParser cp = new ConfigParser(config.getServletContext(), mappings);
-        ApplicationFactory factory = 
-            (ApplicationFactory) FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        boolean exceptionThrown = false;
-        try {
-            parseConfig(cp, "config-with-invalid-message-severity.xml", config.getServletContext());
-        } catch (RuntimeException re) {
-            exceptionThrown = true;
-            assertTrue(re.getMessage().indexOf("Invalid Message severity") != -1);
-            assertTrue(re.getMessage().indexOf("infoo") != -1);
-        }
-        assertTrue(exceptionThrown);
     }
 
     public void testLifecyclePhaseListener() throws Exception {

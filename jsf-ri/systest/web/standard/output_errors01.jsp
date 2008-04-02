@@ -6,8 +6,8 @@
 <%@ page import="javax.faces.FactoryFinder"
 %><%@ page import="javax.faces.application.Application"
 %><%@ page import="javax.faces.application.Message"
+%><%@ page import="com.sun.faces.util.MessageFactory"
 %><%@ page import="javax.faces.application.ApplicationFactory"
-%><%@ page import="javax.faces.application.MessageResources"
 %><%@ page import="javax.faces.context.FacesContext"
 %><%
 
@@ -23,16 +23,8 @@
     FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
   Application appl = afactory.getApplication();
 
-  // get the API MessageResources
-  MessageResources messageResources = 
-               appl.getMessageResources(MessageResources.FACES_API_MESSAGES);
-  if (messageResources == null) {
-    out.println("/output_errors01.jsp FAILED - No MessageResources returned");
-    return;
-  }
-
   // get a message
-  Message message = messageResources.getMessage(facesContext, 
+  Message message = MessageFactory.getMessage(facesContext, 
         "javax.faces.component.UIInput.REQUIRED");
   if (message == null) {
     out.println("/output_errors01.jsp FAILED - No message returned");
@@ -41,7 +33,7 @@
 
   facesContext.addMessage(null, message);
 
-  message = messageResources.getMessage(facesContext,
+  message = MessageFactory.getMessage(facesContext,
          "javax.faces.validator.LongRangeValidator.LIMIT");
   if (message == null) {
     out.println("/output_errors01.jsp FAILED - No message returned");

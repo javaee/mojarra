@@ -1,5 +1,5 @@
 /*
- * $Id: MockApplication.java,v 1.14 2003/10/25 06:32:13 craigmcc Exp $
+ * $Id: MockApplication.java,v 1.15 2003/10/30 16:14:01 eburns Exp $
  */
 
 /*
@@ -18,7 +18,6 @@ import java.util.Locale;
 
 import javax.faces.FacesException;
 import javax.faces.application.Application;
-import javax.faces.application.MessageResources;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
@@ -45,12 +44,6 @@ public class MockApplication extends Application {
         addComponent("TestNamingContainer",
                      "javax.faces.webapp.TestNamingContainer");
         addComponent("TestComponent", "javax.faces.webapp.TestComponent");
-        MockMessageResources api = new MockMessageResources();
-        api.addMessage(UISelectMany.INVALID_MESSAGE_ID,
-                       "Invalid value(s) not in the option list");
-        api.addMessage(UISelectOne.INVALID_MESSAGE_ID,
-                       "Invalid value not in the option list");
-        messageResourcess.put(MessageResources.FACES_API_MESSAGES, api);
     }
 
 
@@ -202,24 +195,15 @@ public class MockApplication extends Application {
     public Iterator getConverterTypes() {
         throw new UnsupportedOperationException();
     }
-
-
-    private Map messageResourcess = new HashMap();
-    public void addMessageResources(String messageResourcesId, String messageResourcesClass) {
-        try {
-            Class clazz = Class.forName(messageResourcesClass);
-            messageResourcess.put(messageResourcesId, clazz.newInstance());
-        } catch (Exception e) {
-            throw new FacesException(e);
-        }
-    }
-    public MessageResources getMessageResources(String messageResourcesId) {
-        return ((MessageResources) messageResourcess.get(messageResourcesId));
-    }
-    public Iterator getMessageResourcesIds() {
-        return (messageResourcess.keySet().iterator());
+    
+    private String messageBundle = null;
+    public void setMessageBundle(String messageBundle) {
+	this.messageBundle = messageBundle;
     }
 
+    public String getMessageBundle() {
+	return messageBundle;
+    }
 
     private Map validators = new HashMap();
     public void addValidator(String validatorId, String validatorClass) {

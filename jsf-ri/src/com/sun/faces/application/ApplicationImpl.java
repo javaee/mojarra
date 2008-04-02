@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.31 2003/10/26 04:44:56 craigmcc Exp $
+ * $Id: ApplicationImpl.java,v 1.32 2003/10/30 16:14:11 eburns Exp $
  */
 
 /*
@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.application.MessageResources;
 import javax.faces.convert.Converter;
 import javax.faces.event.ActionListener;
 import javax.faces.el.MethodBinding;
@@ -85,14 +84,8 @@ public class ApplicationImpl extends Application {
     // mappings.
     //
     private Map managedBeanFactoriesMap = null;
-    //
-    // This map stores "message resource identifier" | "class name"
-    // mappings.  As information is requested using the 
-    // "getMessageResources" method, the class name is used to create
-    // the MessageRewources instance, and the class name in the map is replaced
-    // with the instance.
-    //
-    private Map messageResourcesMap = null;        
+
+    private String messageBundle = null;        
 
     // Flag indicating that a response has been rendered.
     private boolean responseRendered = false;
@@ -112,7 +105,6 @@ public class ApplicationImpl extends Application {
 	converterTypeMap = new HashMap();
 	validatorMap = new HashMap();
 	managedBeanFactoriesMap = new HashMap();
-	messageResourcesMap = new HashMap();   
     }
 
     /**
@@ -637,85 +629,12 @@ public class ApplicationImpl extends Application {
         return validatorMap.keySet().iterator();
     }
 
-
-    /**
-     * This method adds a <code>messageResourcesId</code>, <code>messageResourcesClass</code>
-     * mapping to the message resources map.
-     *
-     * @param messageResourcesId The message resources identifier.
-     * @param messageResourcesClass The message resources class name.
-     * @exception NullPointerException if either argument supplied to this
-     *   method is null.
-     */
-    public void addMessageResources(String messageResourcesId, String messageResourcesClass) {
-        if (messageResourcesId == null || messageResourcesClass == null) {
-	    throw new NullPointerException(Util.getExceptionMessage(
-	        Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-	}
-	messageResourcesMap.put(messageResourcesId, messageResourcesClass);
+    public void setMessageBundle(String messageBundle) {
+	this.messageBundle = messageBundle;
     }
-
-    /**
-     * <p>This method returns a <code>MessageResources</code> instance given a 
-     * <code>messageResourcesId</code>.  The value in the map must be either
-     * a {@link MessageResources} instance, or a "class name" string.</p>
-     *
-     * @param messageResourcesId The identifier for the messages resource.
-     * @return MessageResources The messages resource instance.
-     * @exception FacesException
-     * @exception NullPointerException if the identofier argument to this
-     *    method is null.
-     */
-    public synchronized MessageResources getMessageResources(String messageResourcesId) 
-        throws FacesException {
-	if (messageResourcesId == null) {
-	    throw new NullPointerException(Util.getExceptionMessage(
-		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-	}
-
-	Object value = messageResourcesMap.get(messageResourcesId);
-
-	//
-	// If an instance already exists, return it..
-	//
-	if (value instanceof MessageResourcesImpl) { 
-	    return ((MessageResourcesImpl)value);
-	}
-	
-	String className = null;
-	if (value == null) {
-	    className = "com.sun.faces.application.MessageResourcesImpl";
-	} else if (value instanceof String) {
-	    className = (String)value;
-	}
-	    
-	if (className != null) {
-            Class clazz = null;
-            Object result = null;
-            try {
-                clazz = Util.loadClass(className, className);
-                Assert.assert_it(clazz != null);
-	        result = clazz.newInstance();
-            } catch (Throwable t) {
-                Object[] params = {className};
-                throw new FacesException(Util.getExceptionMessage(
-		    Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params));
-            }
-	    messageResourcesMap.put(messageResourcesId, result);
-	    return (MessageResources)result;
-	}
-
-	return null;
-    }
-
-    /**
-     *<p>This method returns an iteration of message resource identifiers
-     * contained in the message resources map.</p>
-     *
-     * @return Iterator the iteration of identifiers.
-     */
-    public Iterator getMessageResourcesIds() { 
-        return messageResourcesMap.keySet().iterator();
+    
+    public String getMessageBundle() {
+	return messageBundle;
     }
 
     // 
