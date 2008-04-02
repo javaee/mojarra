@@ -47,6 +47,10 @@
     <property name="build" value="${basedir}/test/build"/>
     <property name="url" value="http://${host}:${port}/manager"/>
     <property name="guessNumber.context.path" value="/jsf-guessNumber"/>
+    <property name="components.context.path" value="/jsf-components"/>
+    <!-- Default value for debugging arguments is no.  Override in
+         build.properties -->
+    <property name="debug.jvm.args" value=""/>
 
     <path id="classpath">
         <pathelement location="${htmlunit.jar}"/>
@@ -156,6 +160,7 @@
         <junit printsummary="yes" haltonfailure="yes" haltonerror="yes">
             <classpath refid="classpath"/>
             <formatter type="plain" usefile="false"/>
+            <jvmarg line="${debug.jvm.args}"/>
             <jvmarg value="-Dhost=${host}"/>
             <jvmarg value="-Dport=${port}"/> 
             <jvmarg value="-Dcontext.path=${context.path}"/>
@@ -189,6 +194,8 @@
 
     <!-- base target of sorts to avoid duplication --> 
     <target name="test.invoker">
+        <!-- PENDING(): would be nice to only remove and re-install if necessary -->
+
         <!-- remove the application if it already exists -->
         <antcall target="safe.remove">
             <param name="context.path" value="${context.path}"/>
@@ -216,6 +223,7 @@
     <target name="test" depends="build" 
             description="Runs all of available demo unit tests">
         <antcall target="run.guessNumber.tests"/>    
+        <antcall target="run.components.tests"/>    
     </target>
 
     <!-- Unit test configuration for guessNumber -->
@@ -226,6 +234,15 @@
             <param name="demo.name" value="guessNumber"/>
         </antcall>
     </target>
+
+    <target name="run.components.tests" depends="build">
+        <antcall target="test.invoker">
+            <param name="context.path" value="${components.context.path}"/>
+            <param name="demo.path" value="${basedir}/components/build/demo"/>
+            <param name="demo.name" value="components"/>
+        </antcall>
+    </target>
+
 
 </project>
 
