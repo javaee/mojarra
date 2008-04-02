@@ -1,5 +1,5 @@
 /*
- * $Id: NumberRenderer.java,v 1.15 2003/02/18 23:05:12 eburns Exp $
+ * $Id: NumberRenderer.java,v 1.16 2003/02/19 00:31:52 rkitain Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.text.ParseException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: NumberRenderer.java,v 1.15 2003/02/18 23:05:12 eburns Exp $
+ * @version $Id: NumberRenderer.java,v 1.16 2003/02/19 00:31:52 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -190,7 +190,11 @@ public class NumberRenderer extends HtmlBasicInputRenderer {
     protected void getEndTextToRender(FacesContext context, UIComponent component,
             String currentValue, StringBuffer buffer ) {
                 
-        boolean isInput = UIInput.TYPE == component.getComponentType();
+        boolean isInput = false;
+        if ((UIInput.TYPE.equals(component.getComponentType())) ||
+            (component instanceof UIInput)) {
+            isInput = true;
+        }
         String styleClass = null;
         
         if ((null != (styleClass = (String) 

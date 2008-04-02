@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.41 2003/02/18 23:05:13 eburns Exp $
+ * $Id: TextRenderer.java,v 1.42 2003/02/19 00:31:52 rkitain Exp $
  */
 
 /*
@@ -44,7 +44,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.41 2003/02/18 23:05:13 eburns Exp $
+ * @version $Id: TextRenderer.java,v 1.42 2003/02/19 00:31:52 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -122,7 +122,8 @@ public class TextRenderer extends HtmlBasicInputRenderer {
 		      component.getAttribute("outputClass")))) {
 	    buffer.append("<span class=\"" + styleClass + "\">");
 	}
-        if (UIInput.TYPE == component.getComponentType()) {
+        if ((UIInput.TYPE.equals(component.getComponentType())) ||
+            (component instanceof UIInput)) {
             buffer.append("<input type=\"text\"");
             buffer.append(" name=\"");
             buffer.append(component.getClientId(context));
@@ -138,7 +139,8 @@ public class TextRenderer extends HtmlBasicInputRenderer {
             buffer.append(Util.renderBooleanPassthruAttributes(context, 
                 component));
             buffer.append(">");            
-        } else if (UIOutput.TYPE == component.getComponentType()) {
+        } else if ((UIOutput.TYPE.equals(component.getComponentType())) ||
+            (component instanceof UIOutput)) {
             if (currentValue == null || currentValue == "") {
                 try {
                     currentValue = getKeyAndLookupInBundle(context, component,

@@ -1,5 +1,5 @@
 /*
- * $Id: DateRenderer.java,v 1.16 2003/02/18 23:05:11 eburns Exp $
+ * $Id: DateRenderer.java,v 1.17 2003/02/19 00:31:50 rkitain Exp $
  */
 
 /*
@@ -47,7 +47,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DateRenderer.java,v 1.16 2003/02/18 23:05:11 eburns Exp $
+ * @version $Id: DateRenderer.java,v 1.17 2003/02/19 00:31:50 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -184,7 +184,11 @@ public class DateRenderer extends HtmlBasicInputRenderer {
      protected void getEndTextToRender(FacesContext context, UIComponent component,
             String currentValue, StringBuffer buffer ) {
                 
-	boolean isInput = UIInput.TYPE == component.getComponentType();
+        boolean isInput = false;
+        if ((UIInput.TYPE.equals(component.getComponentType())) ||
+            (component instanceof UIInput)) {
+            isInput = true;
+        }
         String styleClass = null;
  
 	if ((null != (styleClass = (String) 

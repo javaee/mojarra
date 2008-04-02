@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.26 2003/02/18 20:18:34 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.27 2003/02/19 00:31:51 rkitain Exp $
  */
 
 /*
@@ -27,6 +27,7 @@ import javax.faces.component.UIOutput;
 import javax.faces.component.NamingContainer;
 
 import javax.faces.render.Renderer;
+import javax.faces.component.UIInput;
 import javax.faces.context.Message;
 import javax.faces.context.MessageResources;
 import javax.faces.context.FacesContext;
@@ -284,7 +285,8 @@ public abstract class HtmlBasicRenderer extends Renderer {
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         
-        if (component.getComponentType() == UIOutput.TYPE) {
+        if ((UIOutput.TYPE.equals(component.getComponentType())) ||
+            (component instanceof UIOutput)) {
             // do nothing in output case
             return;
         }

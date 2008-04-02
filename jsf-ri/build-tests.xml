@@ -320,6 +320,7 @@
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_3"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_4"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRendererConversions"/>
+            <test name="com.sun.faces.renderkit.html_basic.TestComponentType"/>
             <test name="com.sun.faces.context.TestMessageResourcesImpl"/>
             <test name="com.sun.faces.renderkit.TestFormatPoolImpl"/>
             <test name="com.sun.faces.context.TestMessageResourcesFactoryImpl"/>

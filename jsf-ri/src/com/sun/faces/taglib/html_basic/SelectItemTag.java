@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemTag.java,v 1.10 2003/01/24 18:23:44 rkitain Exp $
+ * $Id: SelectItemTag.java,v 1.11 2003/02/19 00:31:55 rkitain Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectItemTag.java,v 1.10 2003/01/24 18:23:44 rkitain Exp $
+ * @version $Id: SelectItemTag.java,v 1.11 2003/02/19 00:31:55 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -142,7 +142,8 @@ public SelectItemTag()
 	    selectItem.setItemDescription(getDescription());
 	}
 
-	if (parent.getComponentType().equals(UISelectOne.TYPE)) {
+        if ((UISelectOne.TYPE.equals(parent.getComponentType())) ||
+            (parent instanceof UISelectOne)) {
 	    UISelectOne selectOne = (UISelectOne) parent;
 	    // If this SelectItemTag instance is selected and
 	    // there is no selected item in our UISelectOne...
@@ -150,7 +151,8 @@ public SelectItemTag()
 		selectOne.setSelectedValue(selectItem.getItemValue());
 	    }
 	}
-	else if (parent.getComponentType().equals(UISelectMany.TYPE)) {
+        else if ((UISelectMany.TYPE.equals(parent.getComponentType())) ||
+            (parent instanceof UISelectMany)) {
 	    UISelectMany selectMany = (UISelectMany) parent;
 	    Object newSelectItems[] = null, selectItems[] = null;
 	    int len, i = 0;
