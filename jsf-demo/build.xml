@@ -70,8 +70,6 @@
   <!-- dependent jars -->
   <property name="servlet.jar" value="${tomcat.home}/common/lib/servlet.jar"/>
 
-  <property name="jstl-el.jar"
-            value="${jsf.ri.home}/lib/jstl-el.jar" />
   <property name="jsf.api.jar"
             value="${jsf.api.home}/build/lib/jsf-api.jar" />
   <property name="jsf.ri.jar"

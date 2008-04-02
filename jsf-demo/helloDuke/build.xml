@@ -65,8 +65,6 @@
             value="${jsf-demo.lib}/commons-beanutils.jar"/>
   <property name="commons-collections.jar"
             value="${jsf-demo.lib}/commons-collections.jar"/>
-  <property name="jstl_el.jar"
-            value="${jsf-demo.lib}/jstl_el.jar"/>
   <property name="commons-logging.jar"
             value="${jsf-demo.lib}/commons-logging.jar"/>
   <property name="commons-digester.jar"
@@ -88,7 +86,6 @@
     <pathelement location="${jsf-api.jar}"/>
     <pathelement location="${jsf-ri.jar}"/>
     <pathelement location="${jstl.jar}"/>
-    <pathelement location="${jstl_el.jar}"/>
     <pathelement location="${build}/WEB-INF/classes"/>
     <pathelement location="${servlet.jar}"/>
     <pathelement location="${jsp.jar}" />
@@ -131,11 +128,6 @@
     </antcall>
 
     <antcall target="checkRequiredFile">
-       <param name="file" value="${jstl_el.jar}"/>
-       <param name="fail.message" value="${jstl_el.jar} must exist."/>
-    </antcall>
-
-    <antcall target="checkRequiredFile">
        <param name="file" value="${jsf-api.jar}"/>
        <param name="fail.message" value="${jsf-api.jar} must exist."/>
     </antcall>
@@ -172,7 +164,6 @@
     <copy todir="${build}/WEB-INF/lib" file="${commons-digester.jar}" />
     <copy todir="${build}/WEB-INF/lib" file="${jsf-api.jar}" />
     <copy todir="${build}/WEB-INF/lib" file="${jsf-ri.jar}" />
-    <copy todir="${build}/WEB-INF/lib" file="${jstl_el.jar}" />
     <copy todir="${build}/WEB-INF/lib" file="${jstl.jar}" />
     <copy todir="${build}/WEB-INF/lib" file="${standard.jar}" />
   </target> 

@@ -46,7 +46,7 @@
     <hr>
 
        <f:use_faces>
-        <h:form id="demo-testForm" formName="demo-testForm" >
+        <h:form id="demotestForm" formName="demotestForm" >
 
             <table> 
             <tr> 
@@ -54,7 +54,7 @@
             </tr>
 
           </TR>
-           <td> <a href='<%= request.getContextPath() + "/faces/menu.jsp" %>'>Back</a> </td>
+           <td> <a href='<%= request.getContextPath() + "/menu.jsp" %>'>Back</a> </td>
           </TR>
 
           </table>

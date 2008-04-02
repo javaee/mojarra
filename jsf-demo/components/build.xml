@@ -77,8 +77,6 @@
             value="${jsf-demo.lib}/jsf-api.jar" />
   <property name="jsf-ri.jar"
             value="${jsf-demo.lib}/jsf-ri.jar" />
-  <property name="jstl_el.jar"
-            value="${jsf-demo.lib}/jstl_el.jar"/>
 
   <path id="catalina-ant.classpath">
     <pathelement location="${catalina-ant.jar}"/>
@@ -92,7 +90,6 @@
     <pathelement location="${jsf-api.jar}"/>
     <pathelement location="${jstl.jar}"/>
     <pathelement location="${standard.jar}"/>
-    <pathelement location="${jstl_el.jar}"/>
     <pathelement location="${build}/WEB-INF/classes"/>
     <pathelement location="${servlet.jar}"/>
     <pathelement location="${jsp.jar}"/> 
@@ -129,11 +126,6 @@
     <antcall target="checkRequiredFile">
        <param name="file" value="${commons-collections.jar}"/>
        <param name="fail.message" value="${commons-collections.jar} must exist."/>
-    </antcall>
-
-    <antcall target="checkRequiredFile">
-       <param name="file" value="${jstl_el.jar}"/>
-       <param name="fail.message" value="${jstl_el.jar} must exist."/>
     </antcall>
 
     <antcall target="checkRequiredFile">
@@ -177,7 +169,6 @@
     <copy todir="${build}/${webapp}/WEB-INF/lib" file="${commons-logging.jar}" />
     <copy todir="${build}/${webapp}/WEB-INF/lib" file="${commons-digester.jar}" />
     <copy todir="${build}/${webapp}/WEB-INF/lib" file="${jsf-api.jar}" />
-    <copy todir="${build}/${webapp}/WEB-INF/lib" file="${jstl_el.jar}" />
     <copy todir="${build}/${webapp}/WEB-INF/lib" file="${jstl.jar}" />
     <copy todir="${build}/${webapp}/WEB-INF/lib" file="${standard.jar}" />
     <copy todir="${build}/${webapp}/WEB-INF/lib" file="${jsf-ri.jar}" />
