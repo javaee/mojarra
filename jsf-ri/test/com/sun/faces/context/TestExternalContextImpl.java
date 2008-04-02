@@ -1,5 +1,5 @@
 /*
- * $Id: TestExternalContextImpl.java,v 1.20 2006/01/13 19:07:23 rogerk Exp $
+ * $Id: TestExternalContextImpl.java,v 1.21 2006/01/13 20:32:47 rogerk Exp $
  */
 
 /*
@@ -57,7 +57,7 @@ import java.util.Collection;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestExternalContextImpl.java,v 1.20 2006/01/13 19:07:23 rogerk Exp $
+ * @version $Id: TestExternalContextImpl.java,v 1.21 2006/01/13 20:32:47 rogerk Exp $
  */
 
 public class TestExternalContextImpl extends ServletFacesTestCase {
@@ -1237,18 +1237,19 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
         String value = "one,two,three";
         assertTrue(returnValues.equals(value));
         assertTrue(requestHeaderValuesMap.containsKey("foo"));
+        Enumeration headerEnum = request.getHeaders("foo");
+        List headerList = new ArrayList();
+        while (headerEnum.hasMoreElements()) {
+            headerList.add((String)headerEnum.nextElement());
+        }
         assertTrue(
-            requestHeaderValuesMap.containsValue(request.getHeaders("foo")));
+            requestHeaderValuesMap.containsValue(headerList.toArray(new String[headerList.size()])));
         assertTrue(!requestHeaderValuesMap.containsValue(null));
         assertTrue(!requestHeaderValuesMap.containsValue(new Integer(1)));
-        assertTrue(!requestHeaderValuesMap.containsValue(
-            new TestEnumeration(new String[]{"one", "two", "three"})));
-        assertTrue(requestHeaderValuesMap.containsValue(
-            new TestEnumeration(new String[]{"one,two,three"})));
-        assertTrue(!requestHeaderValuesMap.containsValue(
-            new TestEnumeration(new String[]{"one,three,two"})));
-        assertTrue(!requestHeaderValuesMap.containsValue(
-            new TestEnumeration(new String[]{"one,two,three", "four"})));
+        assertTrue(!requestHeaderValuesMap.containsValue(new String[]{"one", "two", "three"}));
+        assertTrue(requestHeaderValuesMap.containsValue(new String[]{"one,two,three"}));
+        assertTrue(!requestHeaderValuesMap.containsValue(new String[]{"one,three,two"}));
+        assertTrue(!requestHeaderValuesMap.containsValue(new String[]{"one,two,three", "four"}));
         assertTrue(!requestHeaderValuesMap.entrySet().isEmpty());
         assertTrue(!requestHeaderValuesMap.values().isEmpty());
         assertTrue(!requestHeaderValuesMap.keySet().isEmpty());
@@ -1638,31 +1639,5 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
             assertTrue(exceptionThrown);
         }
     }
-
-
-    static class TestEnumeration implements Enumeration {
-
-        List myList = new ArrayList();
-        Iterator i = null;
-
-
-        TestEnumeration(String[] values) {
-            for (int i = 0; i < values.length; i++) {
-                myList.add(values[i]);
-            }
-            i = myList.iterator();
-        }
-
-
-        public boolean hasMoreElements() {
-            return i.hasNext();
-        }
-
-
-        public Object nextElement() {
-            return i.next();
-        }
-    }
-
 
 } // end of class TestExternalContextImpl
