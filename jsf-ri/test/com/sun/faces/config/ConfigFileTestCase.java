@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.23 2003/08/05 16:06:45 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.24 2003/08/06 19:42:13 eburns Exp $
  */
 
 /*
@@ -313,6 +313,28 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl)aFactory.getApplication();
         parseConfig(cp, "config1.xml", config.getServletContext());
+    }
+
+    /**
+     *
+     * <p>Parse a config file that has a managed-bean entry that has an
+     * error.  Make sure the expected behavior occurrs.</p>
+     *
+     */ 
+
+    public void testConversionErrorDuringParse() throws Exception {
+        ConfigParser cp = new ConfigParser(config.getServletContext());
+        ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.getFactory(
+        FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application = (ApplicationImpl)aFactory.getApplication();
+	boolean exceptionThrown = false;
+	try {
+	    parseConfig(cp, "config-with-failing-property-conversion.xml", config.getServletContext());
+	}
+	catch (RuntimeException re) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
     }
 
 

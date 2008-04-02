@@ -13,4 +13,12 @@ public class SimpleBean {
     public void setSimpleProperty(String simpleProperty) {
         this.simpleProperty = simpleProperty;
     }
+
+    Integer intProp = null;
+    public void setIntProperty(Integer newVal) {
+	intProp = newVal;
+    }
+    public Integer getIntProperty() {
+	return intProp;
+    }
 }
