@@ -100,17 +100,17 @@ Powered by Faces components:
       <h:command_button value="button"/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
       <h:selectboolean_checkbox checked="true" alt="checkbox"/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
       <h:selectone_radio layout="PAGE_DIRECTION" border="1" value="nextMonth">
-        <h:selectitem itemValue="nextDay" itemLabel="Next Day"/>
-        <h:selectitem itemValue="nextWeek" itemLabel="Next Week"  />
-        <h:selectitem itemValue="nextMonth" itemLabel="Next Month" />
+        <f:selectitem itemValue="nextDay" itemLabel="Next Day"/>
+        <f:selectitem itemValue="nextWeek" itemLabel="Next Week"  />
+        <f:selectitem itemValue="nextMonth" itemLabel="Next Month" />
       </h:selectone_radio>
       <h:selectone_listbox id="appleQuantity" title="Select Quantity"
         tabindex="20" value="4" >
-        <h:selectitem  disabled="true" itemValue="0" itemLabel="0"/>
-        <h:selectitem  itemValue="1" itemLabel="1" title="One" />
-        <h:selectitem  itemValue="2" itemLabel="2" title="Two" />
-        <h:selectitem  itemValue="3" itemLabel="3" title="Three" />
-        <h:selectitem  itemValue="4" itemLabel="4" title="Four" />
+        <f:selectitem  disabled="true" itemValue="0" itemLabel="0"/>
+        <f:selectitem  itemValue="1" itemLabel="One" />
+        <f:selectitem  itemValue="2" itemLabel="Two" />
+        <f:selectitem  itemValue="3" itemLabel="Three" />
+        <f:selectitem  itemValue="4" itemLabel="Four" />
       </h:selectone_listbox>
     </h:panel_group>
 
