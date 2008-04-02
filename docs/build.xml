@@ -1,13 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+ The contents of this file are subject to the terms
+ of the Common Development and Distribution License
+ (the License). You may not use this file except in
+ compliance with the License.
+ 
+ You can obtain a copy of the License at
+ https://javaserverfaces.dev.java.net/CDDL.html or
+ legal/CDDLv1.0.txt. 
+ See the License for the specific language governing
+ permission and limitations under the License.
+ 
+ When distributing Covered Code, include this CDDL
+ Header Notice in each file and include the License file
+ at legal/CDDLv1.0.txt.    
+ If applicable, add the following below the CDDL Header,
+ with the fields enclosed by brackets [] replaced by
+ your own identifying information:
+ "Portions Copyrighted [year] [name of copyright owner]"
+ 
+ [build.xml] [$Revision: 1.2 $] [Date]
+ 
+ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
+-->
+
 <project basedir="." default="gendoc">
-    <target name="gendoc">
+    
+    <property name="build.dir" value="${basedir}/build"/>
+    <property name="dist.dir" value="${basedir}/dist"/>
+    <property file="../build.properties"/>
+    <import file="${jsf.build.home}/common/ant/common.xml"/>
+    
+    <target name="gendoc" 
+            description="Generate the Release Notes for the current version">
         <taskdef name="docgen" classname="com.sun.wts.tools.htmlmacro.HtmlMacroTask"/>
-        <mkdir dir="${basedir}/build"/>
-        <docgen destdir="${basedir}/build">
+        <mkdir dir="${build.dir}"/>
+        <docgen destdir="${build.dir}">
             <documents dir="${basedir}" includes="*.html"/>
             <tags dir="${basedir}/tags" includes="**/*.tag"/>
             <property key="javaNetProjectName" value="javaserverfaces"/>
-            <property key="IMPL_VERSION" value="1.2_01"/>
-            <property key="SPEC_VERSION" value="1.2"/>
+            <property key="IMPL_VERSION" value="${impl.version}"/>
+            <property key="SPEC_VERSION" value="${spec.version}"/>
             <property key="IMPL_VERSION_SUFFIX" value="FCS"/>
         </docgen>
         <copy todir="${basedir}/build">
@@ -15,7 +49,16 @@
         </copy>
     </target>
 
-    <target name="clean">
-        <delete dir="${basedir}/build"/>
+    <target name="clean"
+            description="Clean up the generated artifacts">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+    
+    <target name="dist" depends="gendoc"
+            description="Zip the contents of the build directory">
+        <mkdir dir="${dist.dir}"/>
+        <zip destfile="${dist.dir}/ReleaseNotes-${impl.version}.zip" 
+             basedir="${build.dir}"/>    
     </target>
 </project>
