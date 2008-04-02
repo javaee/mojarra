@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandler.java,v 1.3 2003/03/28 22:39:07 craigmcc Exp $
+ * $Id: NavigationHandler.java,v 1.4 2003/06/24 16:52:13 craigmcc Exp $
  */
 
 /*
@@ -44,6 +44,20 @@ public abstract class NavigationHandler {
     public abstract void handleNavigation(FacesContext context,
                                           String actionRef,
                                           String outcome);
+
+
+    // ---------------------------------------------------------- Static Methods
+
+
+    /**
+     * <p>Return the {@link NavigationHandler} instance for the
+     * current application.</p>
+     */
+    public static NavigationHandler getCurrentInstance() {
+
+	return (Application.getCurrentInstance().getNavigationHandler());
+
+    }
 
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.4 2003/06/21 04:49:16 craigmcc Exp $
+ * $Id: Application.java,v 1.5 2003/06/24 16:52:13 craigmcc Exp $
  */
 
 /*
@@ -10,21 +10,20 @@
 package javax.faces.application;
 
 
-import javax.faces.el.PropertyResolver;
-import javax.faces.el.VariableResolver;
-import javax.faces.el.ReferenceSyntaxException;
-import javax.faces.el.ValueBinding;
-import javax.faces.event.ActionEvent;
-import javax.faces.event.ActionListener;
-
+import java.util.Iterator;
+import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
 import javax.faces.context.MessageResources;
+import javax.faces.convert.Converter;
+import javax.faces.el.PropertyResolver;
+import javax.faces.el.ReferenceSyntaxException;
+import javax.faces.el.ValueBinding;
+import javax.faces.el.VariableResolver;
+import javax.faces.event.ActionListener;
 import javax.faces.validator.Validator;
-import javax.faces.FacesException;
 
-import java.util.Iterator;
 
 
 /**
@@ -81,7 +80,7 @@ public abstract class Application {
     /**
      * <p>Replace the default {@link ActionListener} that will be registered
      * with relevant components during the <em>Reconstitute Component Tree</em>
-     * phase of the requset processing lifecycle.  This
+     * phase of the request processing lifecycle.  This
      * listener must return <code>PhaseId.INVOKE_APPLICATION</code> from its
      * <code>getPhaseId()</code> method.</p>
      *
@@ -375,6 +374,22 @@ public abstract class Application {
      * validator ids for this <code>Application</code>.</p>
      */
     public abstract Iterator getValidatorIds();
+
+
+    // ---------------------------------------------------------- Static Methods
+
+
+    /**
+     * <p>Return the {@link Application} instance for the
+     * current application.</p>
+     */
+    public static Application getCurrentInstance() {
+
+	ApplicationFactory factory = (ApplicationFactory)
+	    FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+	return (factory.getApplication());
+
+    }
 
 
 }
