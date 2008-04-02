@@ -61,19 +61,27 @@ Rendered via Faces components:
                   </f:facet>
 
 	          <f:facet name="next">
-                      <h:output_text value="Go<br>Next"/>
+                    <h:panel_group>
+                      <h:output_text value="Next<br>"/>
+                      <h:graphic_image url="/images/arrow-right.gif" />
+                    </h:panel_group>
                   </f:facet>
 
 	          <f:facet name="previous">
-                      <h:output_text value="Go<br>Previous"/>
+                    <h:panel_group>
+                      <h:output_text value="Previous<br>"/>
+                      <h:graphic_image url="/images/arrow-left.gif" />
+                    </h:panel_group>
                   </f:facet>
 
 	          <f:facet name="number">
-                      <h:output_text value="X"/>
+                     <!-- You can put a panel here if you like -->
                   </f:facet>
 
 	          <f:facet name="current">
-                      <h:output_text value="_"/>
+                    <h:panel_group>
+                      <h:graphic_image url="/images/duke.gif" />
+                    </h:panel_group>
                   </f:facet>
 
 

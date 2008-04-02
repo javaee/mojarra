@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetControls.java,v 1.2 2003/02/15 01:20:46 rkitain Exp $
+ * $Id: ResultSetControls.java,v 1.3 2003/02/18 22:58:11 eburns Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import java.util.MissingResourceException;
  *
  * 
  *
- * @version $Id: ResultSetControls.java,v 1.2 2003/02/15 01:20:46 rkitain Exp $
+ * @version $Id: ResultSetControls.java,v 1.3 2003/02/18 22:58:11 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -255,7 +255,7 @@ public ResultSetControls(UIComponent newPanel, UIComponent newData,
 	    isPageNumber = true;
 	    // heuristic: if navActionType is number, and we are not
 	    // enabled, this must be the current page.
-	    if (enabled) {
+	    if (!enabled) {
 		facetName = "current";
 		isCurrentPage = true;
 	    }
