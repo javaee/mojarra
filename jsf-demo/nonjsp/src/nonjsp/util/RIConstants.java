@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.3 2003/08/25 18:46:37 jvisvanathan Exp $
+ * $Id: RIConstants.java,v 1.4 2003/08/26 18:35:01 horwat Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import javax.faces.render.RenderKitFactory;
  * Copy of com.sun.faces.RIConstants in order to remove
  * demo dependancy on RI.
  *
- * @version $Id: RIConstants.java,v 1.3 2003/08/25 18:46:37 jvisvanathan Exp $
+ * @version $Id: RIConstants.java,v 1.4 2003/08/26 18:35:01 horwat Exp $
  *
  * @see com.sun.faces.RIConstants
  *
@@ -104,7 +104,6 @@ public class RIConstants {
     public static final String EVENT_LIMIT = "maxevents";
     public static final int MAX_EVENTS = 100;
 
-    public static final String FORMAT_POOL = "com.sun.faces.renderkit.FormatPool";
     public static final String FACES_LOCALE = "FacesLocale";
 
     public final static String FORM_NUMBER_ATTR = FACES_PREFIX +

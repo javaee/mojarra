@@ -1,5 +1,5 @@
 /*
- * $Id: CreditCardConverter.java,v 1.2 2003/02/21 23:44:26 ofung Exp $
+ * $Id: CreditCardConverter.java,v 1.3 2003/08/26 18:35:00 horwat Exp $
  */
 
 /*
@@ -44,7 +44,6 @@ package cardemo;
 
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.renderkit.FormatPool;
 import com.sun.faces.util.Util;
 
 import javax.faces.FacesException;

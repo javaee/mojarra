@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.42 2003/08/23 00:39:02 jvisvanathan Exp $
+ * $Id: RIConstants.java,v 1.43 2003/08/26 18:37:00 horwat Exp $
  */
 
 /*
@@ -68,7 +68,6 @@ public class RIConstants {
     public static final String EVENT_LIMIT = "maxevents";
     public static final int MAX_EVENTS = 100;
 
-    public static final String FORMAT_POOL = FACES_PREFIX + "renderkit.FormatPool";
     public static final String FACES_LOCALE = "FacesLocale";
 
     public final static String FORM_NUMBER_ATTR = FACES_PREFIX +

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.44 2003/08/22 22:30:02 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.45 2003/08/26 18:37:01 horwat Exp $
  */
 
 /*
@@ -37,7 +37,6 @@ import org.mozilla.util.ParameterCheck;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
-import com.sun.faces.renderkit.FormatPool;
 
 import org.mozilla.util.Assert;
 
@@ -105,18 +104,6 @@ public class FacesContextImpl extends FacesContext
         this.locale = externalContext.getRequestLocale();
          
         this.viewHandler = this.getApplication().getViewHandler();
-
-	// Verify the FormatPool is in the ApplicationMap
-
-	// PENDING(edburns): when we have a startup/shutdown hook,
-	// remove this from the ApplicationMap.
-	FormatPool formatPool = null;
-	if (null == (formatPool = (FormatPool)
-            getExternalContext().getApplicationMap().get(RIConstants.FORMAT_POOL))) {
-            getExternalContext().getApplicationMap().put(RIConstants.FORMAT_POOL,
-            new com.sun.faces.renderkit.FormatPoolImpl());
-	}
-
         setCurrentInstance(this);
         
     }
