@@ -1,5 +1,5 @@
 /*
- * $Id: NamingContainerTestCase.java,v 1.2 2003/11/01 00:46:07 craigmcc Exp $
+ * $Id: NamingContainerTestCase.java,v 1.3 2003/11/04 01:22:38 craigmcc Exp $
  */
 
 /*
@@ -204,8 +204,8 @@ public class NamingContainerTestCase extends TestCase {
 
         // Positive relative searches from "d"
         assertTrue(d == d.findComponent("d"));
-        assertTrue(e == e.findComponent("e"));
-        assertTrue(f == f.findComponent("f"));
+        assertTrue(e == d.findComponent("e"));
+        assertTrue(f == d.findComponent("f"));
 
         // Negative relative searches from "d"
         assertNull(d.findComponent("a"));
