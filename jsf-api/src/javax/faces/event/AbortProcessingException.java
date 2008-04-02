@@ -1,5 +1,5 @@
 /*
- * $Id: AbortProcessingException.java,v 1.2 2003/02/20 22:46:27 ofung Exp $
+ * $Id: AbortProcessingException.java,v 1.3 2003/07/21 17:07:07 rlubke Exp $
  */
 
 /*
@@ -21,5 +21,44 @@ import javax.faces.FacesException;
 
 public class AbortProcessingException extends FacesException {
 
+    /**
+     * <p>Construct a new exception with no detail message or root cause.</p>
+     */
+    public AbortProcessingException() {
+        super();
+    }
+
+
+    /**
+     * <p>Construct a new exception with the specified detail message and
+     * no root cause.</p>
+     *
+     * @param message The detail message for this exception
+     */
+    public AbortProcessingException(String message) {
+        super(message);
+    }
+
+
+    /**
+     * <p>Construct a new exception with the specified root cause.</p>
+     *
+     * @param cause The root cause for this exception
+     */
+    public AbortProcessingException(Throwable cause) {
+        super(cause);
+    }
+
+
+    /**
+     * <p>Construct a new exception with the specified detail message and
+     * root cause.</p>
+     *
+     * @param message The detail message for this exception
+     * @param cause The root cause for this exception
+     */
+    public AbortProcessingException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
 }
