@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.6 2003/10/15 16:59:06 jvisvanathan Exp $ 
+ * $Id: StateManagerImpl.java,v 1.7 2003/10/16 22:11:30 jvisvanathan Exp $ 
  */ 
 
 
@@ -22,6 +22,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
+import com.sun.faces.RIConstants;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -32,7 +33,7 @@ import java.util.Set;
 /** 
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
- * @version $Id: StateManagerImpl.java,v 1.6 2003/10/15 16:59:06 jvisvanathan Exp $ 
+ * @version $Id: StateManagerImpl.java,v 1.7 2003/10/16 22:11:30 jvisvanathan Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -116,7 +117,7 @@ public class StateManagerImpl extends StateManager  {
   
     protected Object getComponentStateToSave(FacesContext context){        
         UIViewRoot viewRoot =  context.getViewRoot();
-	    return viewRoot.processSaveState(context);       
+	return viewRoot.processSaveState(context);       
     }
     
     
@@ -171,6 +172,13 @@ public class StateManagerImpl extends StateManager  {
             return null;
         }
         viewRoot = structRoot.createComponent();
+        // restore the locale.
+        Map requestMap = context.getExternalContext().getRequestMap();
+        Locale locale = (Locale)requestMap.get(RIConstants.FACES_VIEW_LOCALE);
+        if (locale != null ){
+            ((UIViewRoot)viewRoot).setLocale(locale);
+            requestMap.put(RIConstants.FACES_VIEW_LOCALE, null);
+        }
         restoreComponentTreeStructure(structRoot, viewRoot);
         return ((UIViewRoot) viewRoot);
     }

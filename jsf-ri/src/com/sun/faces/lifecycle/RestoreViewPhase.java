@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.7 2003/10/15 16:59:09 jvisvanathan Exp $
+ * $Id: RestoreViewPhase.java,v 1.8 2003/10/16 22:11:31 jvisvanathan Exp $
  */
 
 /*
@@ -32,14 +32,14 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
-import com.sun.faces.RIConstants;
+
 
 /**
 
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.7 2003/10/15 16:59:09 jvisvanathan Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.8 2003/10/16 22:11:31 jvisvanathan Exp $
  * 
  */
 
@@ -151,10 +151,6 @@ public class RestoreViewPhase extends Phase {
         viewRoot = (Util.getViewHandler(facesContext)).
                 restoreView(facesContext, viewId);
         Assert.assert_it(viewRoot != null);
-        locale = (Locale)requestMap.get(RIConstants.FACES_VIEW_LOCALE);
-        if (locale != null ){
-            requestMap.put(RIConstants.FACES_VIEW_LOCALE, null);
-        }
         facesContext.setViewRoot(viewRoot);
         doPerComponentActions(facesContext, viewRoot);
     }    

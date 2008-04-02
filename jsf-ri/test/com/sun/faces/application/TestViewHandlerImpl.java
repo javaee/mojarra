@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.5 2003/10/13 18:08:51 rlubke Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.6 2003/10/16 22:11:32 jvisvanathan Exp $ 
  */ 
 
 
@@ -39,6 +39,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map; 
+import java.util.Enumeration;
+import java.util.Vector;
+import java.util.Locale;
 
 
 /** 
@@ -47,7 +50,7 @@ import java.util.Map;
  * 
  * <B>Lifetime And Scope</B> <P> 
  * 
- * @version $Id: TestViewHandlerImpl.java,v 1.5 2003/10/13 18:08:51 rlubke Exp $  
+ * @version $Id: TestViewHandlerImpl.java,v 1.6 2003/10/16 22:11:32 jvisvanathan Exp $  
  */ 
 
 
@@ -111,27 +114,49 @@ public boolean sendResponseToFile()
     } 
 
 
-// 
-// Class methods 
-// 
+    // 
+    // Class methods 
+    // 
 
 
-// 
-// General Methods 
-// 
+    // 
+    // General Methods 
+    // 
 
 
 
-public void beginRender(WebRequest theRequest) 
-{ 
-    theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null); 
-}
+    public void beginRender(WebRequest theRequest) 
+    { 
+        theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null); 
+    }
     
     public void beginRender2(WebRequest theRequest) {
         theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf", null, null);
     }
     
-   public void testGetViewIdPath() {
+    public void beginCalculateLocaleLang(WebRequest theRequest) {
+        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf", null, null);
+        theRequest.addHeader("Accept-Language", "es-ES,tg-AF,tk-IQ,en-US");
+    }
+    
+    public void beginCalculateLocaleExact(WebRequest theRequest) {
+        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf", null, null);
+        theRequest.addHeader("Accept-Language", "tg-AF,tk-IQ,ps-PS,en-US");
+    }
+    
+    public void beginCalculateLocaleLowerCase(WebRequest theRequest) {
+        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf", null, null);
+        theRequest.addHeader("Accept-Language", "tg-af,tk-iq,ps-ps");
+    }
+    
+    public void beginCalculateLocaleNoMatch(WebRequest theRequest) {
+        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf", null, null);
+        theRequest.addHeader("Accept-Language", "es-ES,tg-AF,tk-IQ");
+    }
+    
+    
+    
+    public void testGetViewIdPath() {
        
        LifecycleFactory factory = (LifecycleFactory) 
            FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
@@ -237,28 +262,28 @@ public void beginRender(WebRequest theRequest)
 
 
     
-public void testRender() 
-{     
-    UIViewRoot newView = new UIViewRoot();
-    newView.setViewId(TEST_URI);
-    getFacesContext().setViewRoot(newView);
+    public void testRender() 
+    {     
+        UIViewRoot newView = new UIViewRoot();
+        newView.setViewId(TEST_URI);
+        getFacesContext().setViewRoot(newView);
 
-    try { 
-        ViewHandler viewHandler = 
-            getFacesContext().getApplication().getViewHandler(); 
-        viewHandler.renderView(getFacesContext(), 
-			       getFacesContext().getViewRoot()); 
-    } catch (IOException e) { 
-        System.out.println("ViewHandler IOException:"+e); 
-    } catch (FacesException fe) { 
-        System.out.println("ViewHandler FacesException: "+fe); 
-    }
+        try { 
+            ViewHandler viewHandler = 
+                getFacesContext().getApplication().getViewHandler(); 
+            viewHandler.renderView(getFacesContext(), 
+                                   getFacesContext().getViewRoot()); 
+        } catch (IOException e) { 
+            System.out.println("ViewHandler IOException:"+e); 
+        } catch (FacesException fe) { 
+            System.out.println("ViewHandler FacesException: "+fe); 
+        }
 
-    assertTrue(!(getFacesContext().getRenderResponse()) &&
-        !(getFacesContext().getResponseComplete()));
+        assertTrue(!(getFacesContext().getRenderResponse()) &&
+            !(getFacesContext().getResponseComplete()));
 
-    assertTrue(verifyExpectedOutput());        
-} 
+        assertTrue(verifyExpectedOutput());        
+    } 
     
     public void testRender2() {
         // Change the viewID to end with .jsf and make sure that
@@ -285,77 +310,105 @@ public void testRender()
                    !(getFacesContext().getResponseComplete()));
 
         assertTrue(verifyExpectedOutput()); 
+    } 
+    
+    public void testCalculateLocaleLang() {
+        System.out.println("Testing calculateLocale - Language Match case");
+        ViewHandler handler = new ViewHandlerImpl();
+        Locale locale = handler.calculateLocale(getFacesContext());
+        assertTrue(locale.equals(Locale.ENGLISH));
+    }
+    
+    public void testCalculateLocaleExact() {
+        System.out.println("Testing calculateLocale - Exact Match case ");
+        ViewHandler handler = new ViewHandlerImpl();
+        Locale locale = handler.calculateLocale(getFacesContext());
+        assertTrue(locale.equals(new Locale("ps", "PS")));
+    }
+    
+    public void testCalculateLocaleNoMatch() {
+        System.out.println("Testing calculateLocale - No Match case");
+        ViewHandler handler = new ViewHandlerImpl();
+        Locale locale = handler.calculateLocale(getFacesContext());
+        assertTrue(locale.equals(new Locale("en", "US")));
+    }
+    
+    public void testCalculateLocaleLowerCase() {
+        System.out.println("Testing calculateLocale - case sensitivity");
+        ViewHandler handler = new ViewHandlerImpl();
+        Locale locale = handler.calculateLocale(getFacesContext());
+        assertTrue(locale.equals(new Locale("ps", "PS")));
     }
    
-public void testTransient()
-{
-    
-    // precreate tree and set it in session and make sure the tree is
-    // restored from session.
-    getFacesContext().setViewRoot(null);
-    UIViewRoot root = new UIViewRoot();
-    root.setViewId(TEST_URI);
-    
-    UIForm basicForm = new UIForm();
-    basicForm.setId("basicForm");
-    UIInput userName = new UIInput();
-    
-    userName.setId("userName");
-    userName.setTransient(true);
-    root.getChildren().add(basicForm);
-    basicForm.getChildren().add(userName);
-    
-    UIPanel panel1 = new UIPanel();
-    panel1.setId("panel1");
-    basicForm.getChildren().add(panel1);
-    
-    UIInput userName1 = new UIInput();
-    userName1.setId("userName1");
-    userName1.setTransient(true);
-    panel1.getChildren().add(userName1);
-    
-    UIInput userName2 = new UIInput();
-    userName2.setId("userName2");
-    panel1.getChildren().add(userName2);
-    
-    UIInput userName3 = new UIInput();
-    userName3.setTransient(true);
-    panel1.getFacets().put("userName3", userName3);
-    
-    UIInput userName4 = new UIInput();
-    panel1.getFacets().put("userName4",userName4);
-    
-    HttpSession session = (HttpSession) 
-        getFacesContext().getExternalContext().getSession(false);
-    session.setAttribute(TEST_URI, root);
-    
-    getFacesContext().setViewRoot(root);
+    public void testTransient()
+    {
 
-    ViewHandler viewHandler = 
-        getFacesContext().getApplication().getViewHandler(); 
-    viewHandler.getStateManager().saveSerializedView(getFacesContext());
-   
-    // make sure that the transient property is not persisted.
-    basicForm = (UIForm)(getFacesContext().getViewRoot()).findComponent("basicForm");
-    assertTrue(basicForm != null);
-    
-    userName = (UIInput)basicForm.findComponent("userName");
-    assertTrue(userName == null);
-    
-    panel1 = (UIPanel)basicForm.findComponent("panel1");
-    assertTrue(panel1 != null);
-    
-    userName1 = (UIInput)panel1.findComponent("userName1");
-    assertTrue(userName1 == null);
-    
-    userName2 = (UIInput)panel1.findComponent("userName2");
-    assertTrue(userName2 != null);
-    
-    // make sure facets work correctly when marked transient.
-    Map facetList = panel1.getFacets();
-    assertTrue(!(facetList.containsKey("userName3")));
-    assertTrue(facetList.containsKey("userName4"));
-}        
+        // precreate tree and set it in session and make sure the tree is
+        // restored from session.
+        getFacesContext().setViewRoot(null);
+        UIViewRoot root = new UIViewRoot();
+        root.setViewId(TEST_URI);
+
+        UIForm basicForm = new UIForm();
+        basicForm.setId("basicForm");
+        UIInput userName = new UIInput();
+
+        userName.setId("userName");
+        userName.setTransient(true);
+        root.getChildren().add(basicForm);
+        basicForm.getChildren().add(userName);
+
+        UIPanel panel1 = new UIPanel();
+        panel1.setId("panel1");
+        basicForm.getChildren().add(panel1);
+
+        UIInput userName1 = new UIInput();
+        userName1.setId("userName1");
+        userName1.setTransient(true);
+        panel1.getChildren().add(userName1);
+
+        UIInput userName2 = new UIInput();
+        userName2.setId("userName2");
+        panel1.getChildren().add(userName2);
+
+        UIInput userName3 = new UIInput();
+        userName3.setTransient(true);
+        panel1.getFacets().put("userName3", userName3);
+
+        UIInput userName4 = new UIInput();
+        panel1.getFacets().put("userName4",userName4);
+
+        HttpSession session = (HttpSession) 
+            getFacesContext().getExternalContext().getSession(false);
+        session.setAttribute(TEST_URI, root);
+
+        getFacesContext().setViewRoot(root);
+
+        ViewHandler viewHandler = 
+            getFacesContext().getApplication().getViewHandler(); 
+        viewHandler.getStateManager().saveSerializedView(getFacesContext());
+
+        // make sure that the transient property is not persisted.
+        basicForm = (UIForm)(getFacesContext().getViewRoot()).findComponent("basicForm");
+        assertTrue(basicForm != null);
+
+        userName = (UIInput)basicForm.findComponent("userName");
+        assertTrue(userName == null);
+
+        panel1 = (UIPanel)basicForm.findComponent("panel1");
+        assertTrue(panel1 != null);
+
+        userName1 = (UIInput)panel1.findComponent("userName1");
+        assertTrue(userName1 == null);
+
+        userName2 = (UIInput)panel1.findComponent("userName2");
+        assertTrue(userName2 != null);
+
+        // make sure facets work correctly when marked transient.
+        Map facetList = panel1.getFacets();
+        assertTrue(!(facetList.containsKey("userName3")));
+        assertTrue(facetList.containsKey("userName4"));
+    }        
 
     private class TestRequest extends HttpServletRequestWrapper {
         

@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.16 2003/10/13 18:08:46 rlubke Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.17 2003/10/16 22:11:30 jvisvanathan Exp $ 
  */ 
 
 
@@ -26,16 +26,20 @@ import javax.faces.application.ViewHandler;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Locale;
+import java.util.Iterator;
+import java.util.Enumeration;
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.16 2003/10/13 18:08:46 rlubke Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.17 2003/10/16 22:11:30 jvisvanathan Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -203,9 +207,67 @@ public class ViewHandlerImpl extends Object
 	// PENDING(): not sure if we should set the RenderKitId here.
 	// The UIViewRootBase ctor sets the renderKitId to the default
 	// one.
+        // calculate the locale for this view.
+        Locale locale = calculateLocale(context);
+        result.setLocale(locale);
 	return result;
     }
+    
+    public Locale calculateLocale(FacesContext context) {
+        Locale result = null;
+        // determine the locales that are acceptable to the client based on the 
+        // Accept-Language header and the find the best match among the 
+        // supported locales specified by the client.
+        Enumeration enum = ((ServletRequest)
+                context.getExternalContext().getRequest()).getLocales();
+        while (enum.hasMoreElements()) {
+            Locale perf = (Locale) enum.nextElement();
+            result = findMatch(context, perf);
+            if (result != null) {
+                break;
+            }
+        }
+        // no match is found.
+        if ( result == null ) {
+            if (context.getApplication().getDefaultLocale() == null ) {
+                result = Locale.getDefault();
+            } else {
+                result = context.getApplication().getDefaultLocale();
+            }
+        }
+        return result;
+    }
 
+    /**
+     * Attempts to find a matching locale based on <code>perf></code> and 
+     * list of supported locales, using the matching algorithm
+     * as described in JSTL 8.3.2.
+     */
+    protected Locale findMatch(FacesContext context, Locale perf) {
+        Locale result = null;
+        Iterator it = context.getApplication().getSupportedLocales();
+        while (it.hasNext()) {
+            Locale supportedLocale = (Locale)it.next();
+            
+            if ( perf.equals(supportedLocale)) {
+                // exact match
+                result = supportedLocale;
+                break;
+            } else {
+                // Make sure the preferred locale doesn't have  country set, when 
+                // doing a language match, For ex., if the preferred locale is
+                // "en-US", if one of supported locales is "en-UK", even though 
+                // its language matches that of the preferred locale, we must 
+                // ignore it.
+                if (perf.getLanguage().equals(supportedLocale.getLanguage()) &&
+                    supportedLocale.getCountry().equals("")) {
+                    result = supportedLocale;
+                }
+            }
+        }
+        return result;
+    }
+    
     public void writeState(FacesContext context) throws IOException {
         if (context == null) {
             throw new NullPointerException(Util.getExceptionMessage(

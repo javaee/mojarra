@@ -94,6 +94,16 @@
     </navigation-handler>
     <property-resolver>com.sun.faces.TestPropertyResolver</property-resolver>
     <variable-resolver>com.sun.faces.TestVariableResolver</variable-resolver>
+    
+    <locale-config>
+        <default-locale>en_US</default-locale>
+        <supported-locale>
+            <locale>ps_PS</locale> <!-- Palestinians -->
+            <locale>fr_FR</locale> <!-- French -->
+            <locale>de_DE</locale> <!-- German -->
+            <locale>en</locale> <!-- English -->
+        </supported-locale>
+    </locale-config>
   </application>
 
 
