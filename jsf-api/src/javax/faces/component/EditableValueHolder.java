@@ -1,5 +1,5 @@
 /*
- * $Id: EditableValueHolder.java,v 1.1 2004/01/08 21:21:08 eburns Exp $
+ * $Id: EditableValueHolder.java,v 1.2 2004/01/09 01:50:24 craigmcc Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package javax.faces.component;
 
 
+import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.event.ValueChangeListener;
 import javax.faces.validator.Validator;
