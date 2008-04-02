@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.18 2003/01/21 23:23:19 rkitain Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.19 2003/01/24 18:23:41 rkitain Exp $
  */
 
 /*
@@ -272,6 +272,23 @@ public abstract class HtmlBasicRenderer extends Renderer {
         String clientId = component.getClientId(context);
         Assert.assert_it(clientId != null );
         
+        // set previous value = current value (converted if necessary)
+        // we should convert because we want to compare the converted
+        // previous (current) value with the converted new value;
+        // ex: we don't want to compare "48%" with 0.48;
+
+        Object curValue = component.currentValue(context);
+        if (curValue instanceof String) {
+            try {
+                Object convertedCurrentValue = 
+                    getConvertedValue(context, component,
+                    (String)curValue);
+                curValue = convertedCurrentValue;
+            } catch (IOException ioe) {
+            }
+        }
+        setPreviousValue(component, curValue);
+
         String newValue = context.getServletRequest().getParameter(clientId);
         
         //PENDING(rogerk) FIXME this will most likely be changed in the 
@@ -441,6 +458,13 @@ public abstract class HtmlBasicRenderer extends Renderer {
 	}
 	component.setAttribute("clientId", result);
 	return result;
+    }
+
+    /**
+     * Renderers override this method to store the previous value
+     * of the associated component.
+     */
+    protected void setPreviousValue(UIComponent component, Object value) {
     }
 
 } // end of class HtmlBasicRenderer

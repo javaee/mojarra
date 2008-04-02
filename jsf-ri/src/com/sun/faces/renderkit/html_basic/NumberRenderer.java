@@ -1,5 +1,5 @@
 /*
- * $Id: NumberRenderer.java,v 1.12 2002/12/18 20:55:00 eburns Exp $
+ * $Id: NumberRenderer.java,v 1.13 2003/01/24 18:23:41 rkitain Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.text.ParseException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: NumberRenderer.java,v 1.12 2002/12/18 20:55:00 eburns Exp $
+ * @version $Id: NumberRenderer.java,v 1.13 2003/01/24 18:23:41 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -184,6 +184,13 @@ public class NumberRenderer extends HtmlBasicRenderer {
     public void encodeChildren(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+    }
+
+    public void setPreviousValue(UIComponent component, Object value) {
+        // component could be UIInput *or* UIOutput..
+        if (component.getComponentType().equals(UIInput.TYPE)) {
+            component.setAttribute(UIInput.PREVIOUS_VALUE, value);
         }
     }
 

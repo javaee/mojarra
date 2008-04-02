@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.35 2003/01/21 23:23:28 rkitain Exp $
+ * $Id: TestRenderers_2.java,v 1.36 2003/01/24 18:23:45 rkitain Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.35 2003/01/21 23:23:28 rkitain Exp $
+ * @version $Id: TestRenderers_2.java,v 1.36 2003/01/24 18:23:45 rkitain Exp $
  * 
  *
  */
@@ -85,7 +85,7 @@ public class TestRenderers_2 extends JspFacesTestCase
 	    "<img src=\"\">",
 	    "<img src=\";jsessionid=614035E9A2D45743F4E803A0B536E386\">",
 	    "<img src=\";jsessionid=614035E9A2D45743F4E803A0B536E386\">",
-	    "<img id=\"my_graphic_image\" src=\"/test/nonModelReferenceImage.gif;jsessionid=6732BD8EC0A27A54DB35011F2B5F3C5F\"><img id=\"0\" src=\"/test/foo/modelReferenceImage.gif;jsessionid=6732BD8EC0A27A54DB35011F2B5F3C5F\">"
+	    "<img id=\"my_graphic_image\" src=\"/test/nonModelReferenceImage.gif;jsessionid=9204B23BBE1038AA96ECCFADB275784D\"><img id=\"id0\" src=\"/test/foo/modelReferenceImage.gif;jsessionid=9204B23BBE1038AA96ECCFADB275784D\">"
 };
         return lines;
     }   

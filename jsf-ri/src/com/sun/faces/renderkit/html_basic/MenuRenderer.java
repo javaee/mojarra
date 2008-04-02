@@ -1,5 +1,5 @@
 /*
- * $Id: MenuRenderer.java,v 1.6 2003/01/17 18:07:20 rkitain Exp $
+ * $Id: MenuRenderer.java,v 1.7 2003/01/24 18:23:41 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -16,6 +16,7 @@ import java.util.Iterator;
 
 import javax.faces.component.SelectItem;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.component.UISelectMany;
 import javax.faces.component.UISelectOne;
 import javax.faces.context.FacesContext;
@@ -32,7 +33,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MenuRenderer.java,v 1.6 2003/01/17 18:07:20 rkitain Exp $
+ * @version $Id: MenuRenderer.java,v 1.7 2003/01/24 18:23:41 rkitain Exp $
  * 
  * @see Blah
  * @see Bloo
@@ -94,6 +95,8 @@ public class MenuRenderer extends HtmlBasicRenderer {
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
+        setPreviousValue(component, component.currentValue(context));
+
         String clientId = component.getClientId(context);
         Assert.assert_it(clientId != null);
         // currently we assume the model type to be of type string or 
@@ -126,6 +129,14 @@ public class MenuRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(
                 Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+    }
+
+    public void setPreviousValue(UIComponent component, Object value) {
+        // component could be UISelectOne *or* UISelectMany
+        if (component.getComponentType().equals(UISelectOne.TYPE) ||
+            component.getComponentType().equals(UISelectMany.TYPE)) {
+           component.setAttribute(UIInput.PREVIOUS_VALUE, value);
         }
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.38 2002/12/18 20:55:01 eburns Exp $
+ * $Id: TextRenderer.java,v 1.39 2003/01/24 18:23:42 rkitain Exp $
  */
 
 /*
@@ -44,7 +44,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.38 2002/12/18 20:55:01 eburns Exp $
+ * @version $Id: TextRenderer.java,v 1.39 2003/01/24 18:23:42 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -125,6 +125,13 @@ public class TextRenderer extends HtmlBasicRenderer {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+    }
+
+    public void setPreviousValue(UIComponent component, Object value) {
+        // component could be UIInput *or* UIOutput..
+        if (component.getComponentType().equals(UIInput.TYPE)) {
+            component.setAttribute(UIInput.PREVIOUS_VALUE, value);
         }
     }
 

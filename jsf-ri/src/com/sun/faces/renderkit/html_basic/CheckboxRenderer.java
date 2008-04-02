@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.39 2002/12/18 20:54:59 eburns Exp $
+ * $Id: CheckboxRenderer.java,v 1.40 2003/01/24 18:23:40 rkitain Exp $
  *
  */
 
@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.component.UISelectBoolean;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
@@ -39,7 +40,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.39 2002/12/18 20:54:59 eburns Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.40 2003/01/24 18:23:40 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -84,6 +85,51 @@ public class CheckboxRenderer extends HtmlBasicRenderer {
     // Methods From Renderer
     //
 
+    public void decode(FacesContext context, UIComponent component)
+            throws IOException {
+
+        Object convertedValue = null;
+
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(
+                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+
+        String clientId = component.getClientId(context);
+        Assert.assert_it(clientId != null );
+
+        Object curValue = component.currentValue(context);
+        if (curValue == null) {
+            setPreviousValue(component, Boolean.FALSE);
+        }
+
+        // Convert the old (current value)
+
+        if (curValue instanceof String) {
+            try {
+                Object convertedCurrentValue = 
+                    getConvertedValue(context, component, (String)curValue);
+                setPreviousValue(component, convertedCurrentValue);
+            } catch (IOException e) {
+                setPreviousValue(component, Boolean.FALSE);
+            }
+        }
+
+        // Convert the new value
+
+        String newValue = context.getServletRequest().getParameter(clientId);
+        try {
+            convertedValue = getConvertedValue(context, component, newValue);
+        } catch (IOException ioe) {
+            component.setValue(newValue);
+            addConversionErrorMessage(context, component, ioe.getMessage());
+            component.setValid(false);
+            return;
+        }
+        component.setValue(convertedValue);
+        component.setValid(true);
+    }
+
     public boolean supportsComponentType(String componentType) {
         if (componentType == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -121,6 +167,13 @@ public class CheckboxRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
+    }
+
+    public void setPreviousValue(UIComponent component, Object value) {
+        // UISelectBoolean is inherited from UIInput;
+        if (component.getComponentType().equals(UISelectBoolean.TYPE)) {
+            component.setAttribute(UIInput.PREVIOUS_VALUE, value);
+        }
     }
     
     protected void getEndTextToRender(FacesContext context, UIComponent component,
