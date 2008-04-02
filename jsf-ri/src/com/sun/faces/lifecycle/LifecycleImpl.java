@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.65 2006/05/26 17:05:04 rlubke Exp $
+ * $Id: LifecycleImpl.java,v 1.66 2006/06/05 17:44:35 rlubke Exp $
  */
 
 /*
@@ -212,10 +212,9 @@ public class LifecycleImpl extends Lifecycle {
                 for (PhaseListener listener : listeners) {
                     if (phaseId.equals(listener.getPhaseId()) ||
                         PhaseId.ANY_PHASE.equals(listener.getPhaseId())) {
-                        listener.beforePhase(event);
-                        revStartIndex++;
+                        listener.beforePhase(event);                        
                     }
-
+                    revStartIndex++;
                 }
             }
         }
