@@ -1,5 +1,5 @@
 /*
- * $Id: UIFormBase.java,v 1.5 2003/09/22 16:08:43 eburns Exp $
+ * $Id: UIFormBase.java,v 1.6 2003/09/23 20:35:51 eburns Exp $
  */
 
 /*
@@ -59,7 +59,7 @@ public class UIFormBase extends UINamingContainerBase implements UIForm {
 
     // ------------------------------------------------ UIComponent overrides
 
-    public void processDecodes(FacesContext context) throws IOException {
+    public void processDecodes(FacesContext context) {
 
         if (context == null) {
             throw new NullPointerException();

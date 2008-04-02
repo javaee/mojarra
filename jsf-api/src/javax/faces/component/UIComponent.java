@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.96 2003/09/20 00:48:10 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.97 2003/09/23 20:35:48 eburns Exp $
  */
 
 /*
@@ -425,11 +425,10 @@ public interface UIComponent extends StateHolder {
      *
      * @param context {@link FacesContext} for the request we are processing
      *
-     * @exception IOException if an input/output error occurs during decoding
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void decode(FacesContext context) throws IOException;
+    public void decode(FacesContext context);
 
 
     /**
@@ -552,11 +551,10 @@ public interface UIComponent extends StateHolder {
      *
      * @param context {@link FacesContext} for the request we are processing
      *
-     * @exception IOException if an input/output error occurs during decoding
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void processDecodes(FacesContext context) throws IOException;
+    public void processDecodes(FacesContext context);
 
 
     /**

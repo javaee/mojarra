@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.22 2003/09/22 19:03:35 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.23 2003/09/23 20:35:50 eburns Exp $
  */
 
 /*
@@ -1030,7 +1030,7 @@ public abstract class UIComponentBase implements UIComponent {
     }
 
 
-    public void decode(FacesContext context) throws IOException {
+    public void decode(FacesContext context) {
 
         if (context == null) {
             throw new NullPointerException();
@@ -1177,7 +1177,7 @@ public abstract class UIComponentBase implements UIComponent {
 
     // ----------------------------------------------- Lifecycle Phase Handlers
 
-    public void processDecodes(FacesContext context) throws IOException {
+    public void processDecodes(FacesContext context) {
 
         if (context == null) {
             throw new NullPointerException();

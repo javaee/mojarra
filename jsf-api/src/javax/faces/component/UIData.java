@@ -531,7 +531,7 @@ public class UIData extends UIComponentBase
     }
 
 
-    public void processDecodes(FacesContext context) throws IOException {
+    public void processDecodes(FacesContext context) {
 
 	if (context == null) {
 	    throw new NullPointerException();
@@ -549,11 +549,7 @@ public class UIData extends UIComponentBase
 	}
 
 	// Process all facets and children of this component
-	try {
-	    iterate(context, PhaseId.PROCESS_VALIDATIONS);
-	} catch (IOException e) {
-	    ; // Cannot happen
-	}
+	iterate(context, PhaseId.PROCESS_VALIDATIONS);
 
         // This is not a UIInput, so no further processing is required
 
@@ -567,11 +563,7 @@ public class UIData extends UIComponentBase
 	}
 
 	// Process all facets and children of this component
-	try {
-	    iterate(context, PhaseId.UPDATE_MODEL_VALUES);
-	} catch (IOException e) {
-	    ; // Cannot happen
-	}
+	iterate(context, PhaseId.UPDATE_MODEL_VALUES);
 
         // This is not a UIInput, so no further processing is required
 
@@ -647,8 +639,7 @@ public class UIData extends UIComponentBase
      *
      * @exception IOException if an input/output error occurs
      */
-    private void iterate(FacesContext context, PhaseId phaseId)
-	throws IOException {
+    private void iterate(FacesContext context, PhaseId phaseId) {
 
 	// Process each facet exactly once
 	setRowIndex(0);

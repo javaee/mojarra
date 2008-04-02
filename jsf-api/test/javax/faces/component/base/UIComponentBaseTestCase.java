@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.16 2003/09/20 00:48:17 craigmcc Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.17 2003/09/23 20:35:55 eburns Exp $
  */
 
 /*
@@ -190,11 +190,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
         // Test processDecodes()
         TestComponent.trace(null);
-        try {
-            component.processDecodes(facesContext);
-        } catch (IOException e) {
-            fail("Threw exception: " + e);
-        }
+	component.processDecodes(facesContext);
         assertEquals("processDecodes",
                      lifecycleTrace("pD", "d"),
                      TestComponent.trace());

@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponentNamingContainer.java,v 1.2 2003/07/26 17:55:20 craigmcc Exp $
+ * $Id: TestComponentNamingContainer.java,v 1.3 2003/09/23 20:35:54 eburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ public class TestComponentNamingContainer extends UINamingContainerBase {
     // -------------------------------------------------- Trace-Enabled Methods
 
 
-    public void decode(FacesContext context) throws IOException {
+    public void decode(FacesContext context) {
         TestComponent.trace("d-" + getId());
         super.decode(context);
     }
@@ -59,7 +59,7 @@ public class TestComponentNamingContainer extends UINamingContainerBase {
     }
 
 
-    public void processDecodes(FacesContext context) throws IOException {
+    public void processDecodes(FacesContext context) {
         TestComponent.trace("pD-" + getId());
         super.processDecodes(context);
     }

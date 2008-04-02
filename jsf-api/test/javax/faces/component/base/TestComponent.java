@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponent.java,v 1.2 2003/07/26 17:55:19 craigmcc Exp $
+ * $Id: TestComponent.java,v 1.3 2003/09/23 20:35:53 eburns Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ public class TestComponent extends UIComponentBase {
     // -------------------------------------------------- Trace-Enabled Methods
 
 
-    public void decode(FacesContext context) throws IOException {
+    public void decode(FacesContext context) {
         trace("d-" + getId());
         super.decode(context);
     }
@@ -69,7 +69,7 @@ public class TestComponent extends UIComponentBase {
     }
 
 
-    public void processDecodes(FacesContext context) throws IOException {
+    public void processDecodes(FacesContext context) {
         trace("pD-" + getId());
         super.processDecodes(context);
     }

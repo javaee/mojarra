@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.29 2003/09/22 16:08:42 eburns Exp $
+ * $Id: UIForm.java,v 1.30 2003/09/23 20:35:49 eburns Exp $
  */
 
 /*
@@ -10,7 +10,6 @@
 package javax.faces.component;
 
 import javax.faces.context.FacesContext;
-import java.io.IOException;
 
 /**
  * <p><strong>UIForm</strong> is a {@link UIComponent} that represents an
@@ -64,7 +63,7 @@ public interface UIForm extends UIComponent, NamingContainer {
      *
      */
 
-    public void processDecodes(FacesContext context) throws IOException;
+    public void processDecodes(FacesContext context);
 
     /**
      * <p>Override {@link UIComponent#processValidators} to ensure that
