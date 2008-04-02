@@ -1,5 +1,5 @@
 /*
- * $Id: GroupRenderer.java,v 1.22 2004/03/31 18:48:35 eburns Exp $
+ * $Id: GroupRenderer.java,v 1.23 2005/01/12 21:37:35 rogerk Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import java.util.Iterator;
  * Arbitrary grouping "renderer" that simply renders its children
  * recursively in the <code>encodeEnd()</code> method.
  *
- * @version $Id: GroupRenderer.java,v 1.22 2004/03/31 18:48:35 eburns Exp $
+ * @version $Id: GroupRenderer.java,v 1.23 2005/01/12 21:37:35 rogerk Exp $
  */
 public class GroupRenderer extends HtmlBasicRenderer {
 
@@ -91,11 +91,16 @@ public class GroupRenderer extends HtmlBasicRenderer {
         // Render a span around this group if necessary
         String
             style = (String) component.getAttributes().get("style"),
-            styleClass = (String) component.getAttributes().get("styleClass");
+            styleClass = (String) component.getAttributes().get("styleClass"),
+            layout = (String) component.getAttributes().get("layout");
         ResponseWriter writer = context.getResponseWriter();
 
-        if (spanned(component)) {
-            writer.startElement("span", component);
+        if (divOrSpan(component)) {
+            if ((layout != null) && (layout.equals("block"))) {
+                writer.startElement("div", component);
+            } else {
+                writer.startElement("span", component);
+            }
             writeIdAttributeIfNecessary(context, writer, component);
             if (styleClass != null) {
                 writer.writeAttribute("class", styleClass, "styleClass");
@@ -155,8 +160,13 @@ public class GroupRenderer extends HtmlBasicRenderer {
 
         // Close our span element if necessary
         ResponseWriter writer = context.getResponseWriter();
-        if (spanned(component)) {
-            writer.endElement("span");
+        String layout = (String)component.getAttributes().get("layout");
+        if (divOrSpan(component)) {
+            if ((layout != null) && (layout.equals("block"))) {
+                writer.endElement("div");
+            } else {
+                writer.endElement("span");
+            }
         }
         if (log.isTraceEnabled()) {
             log.trace("End encoding component " +
@@ -167,11 +177,11 @@ public class GroupRenderer extends HtmlBasicRenderer {
 
 
     /**
-     * <p>Return true if we need to render a span element around this group.
+     * <p>Return true if we need to render a div or span element around this group.
      *
      * @param component <code>UIComponent</code> for this group
      */
-    private boolean spanned(UIComponent component) {
+    private boolean divOrSpan(UIComponent component) {
         if (shouldWriteIdAttribute(component) ||
             (component.getAttributes().get("style") != null) ||
             (component.getAttributes().get("styleClass") != null)) {

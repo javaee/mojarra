@@ -15,7 +15,7 @@
 
 
   
-<form id="basicForm" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=E8C22D1F61AAFB3BEB4875553F897B85" class="formClass" accept-charset="some-charset" accept="html,wml" enctype="application/x-www-form-urlencoded" target="_self" title="basicForm">
+<form id="basicForm" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=676E0FBF879741B55500B45B856C6622" class="formClass" accept-charset="some-charset" accept="html,wml" enctype="application/x-www-form-urlencoded" target="_self" title="basicForm">
 
 
   <TABLE BORDER="1">
@@ -130,12 +130,12 @@
 
 	      
                 
-              <a id="basicForm:imageLink" href="#" style="someStyle" onclick="clearFormHiddenParams_basicForm('basicForm');document.forms['basicForm']['basicForm:_idcl'].value='basicForm:imageLink'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=E8C22D1F61AAFB3BEB4875553F897B85" /></a>
+              <a id="basicForm:imageLink" href="#" style="someStyle" onclick="clearFormHiddenParams_basicForm('basicForm');document.forms['basicForm']['basicForm:_idcl'].value='basicForm:imageLink'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=676E0FBF879741B55500B45B856C6622" /></a>
 
 	</TD>
 
         <TD> 
-            <img id="basicForm:graphicImage" src="/test/duke.gif;jsessionid=E8C22D1F61AAFB3BEB4875553F897B85" style="someStyle" usemap="#map1" ismap="ismap" /> 
+            <img id="basicForm:graphicImage" src="/test/duke.gif;jsessionid=676E0FBF879741B55500B45B856C6622" style="someStyle" usemap="#map1" ismap="ismap" /> 
         </TD>
 
       </TR>
@@ -169,7 +169,7 @@
               
               
               
-            <a id="basicForm:hrefParamLink" href="#" onclick="clearFormHiddenParams_basicForm('basicForm');document.forms['basicForm']['basicForm:_idcl'].value='basicForm:hrefParamLink';document.forms['basicForm']['name'].value='horwat';document.forms['basicForm']['value'].value='password'; document.forms['basicForm'].target='_top'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=E8C22D1F61AAFB3BEB4875553F897B85" /></a>
+            <a id="basicForm:hrefParamLink" href="#" onclick="clearFormHiddenParams_basicForm('basicForm');document.forms['basicForm']['basicForm:_idcl'].value='basicForm:hrefParamLink';document.forms['basicForm']['name'].value='horwat';document.forms['basicForm']['value'].value='password'; document.forms['basicForm'].target='_top'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=676E0FBF879741B55500B45B856C6622" /></a>
         </TD>
       </TR>
 
@@ -177,7 +177,7 @@
 
 	<TD>
 
-	      <a id="basicForm:outputLink" href="test.html;jsessionid=E8C22D1F61AAFB3BEB4875553F897B85" class="hyperlinkClass">output link text</a>
+	      <a id="basicForm:outputLink" href="test.html;jsessionid=676E0FBF879741B55500B45B856C6622" class="hyperlinkClass">output link text</a>
 
 	</TD>
 
@@ -189,12 +189,12 @@
 
 	      
                 
-              <a id="basicForm:output_imageLink" href="test.html;jsessionid=E8C22D1F61AAFB3BEB4875553F897B85" style="position: absolute; left: 96px; top: 168px"><img src="duke.gif;jsessionid=E8C22D1F61AAFB3BEB4875553F897B85" /></a>
+              <a id="basicForm:output_imageLink" href="test.html;jsessionid=676E0FBF879741B55500B45B856C6622" style="position: absolute; left: 96px; top: 168px"><img src="duke.gif;jsessionid=676E0FBF879741B55500B45B856C6622" /></a>
 
 	</TD>
 
         <TD> 
-            <img id="basicForm:output_graphicImage" src="/test/duke.gif;jsessionid=E8C22D1F61AAFB3BEB4875553F897B85" usemap="#map1" ismap="ismap" /> 
+            <img id="basicForm:output_graphicImage" src="/test/duke.gif;jsessionid=676E0FBF879741B55500B45B856C6622" usemap="#map1" ismap="ismap" /> 
         </TD>
 
       </TR>
@@ -202,7 +202,7 @@
       <TR>
         <TD>
             
-            <a id="basicForm:output_commandLink" href="test.html;jsessionid=E8C22D1F61AAFB3BEB4875553F897B85" style="position: absolute; left: 96px; top: 168px" class="hyperlinkClass">link text</a>
+            <a id="basicForm:output_commandLink" href="test.html;jsessionid=676E0FBF879741B55500B45B856C6622" style="position: absolute; left: 96px; top: 168px" class="hyperlinkClass">link text</a>
        </TD>
       </TR>
 
@@ -212,13 +212,13 @@
               
               
               
-            <a id="basicForm:output_commandParamLink" href="test.html;jsessionid=E8C22D1F61AAFB3BEB4875553F897B85?name=horwat&value=password" class="hyperlinkClass">link text</a>
+            <a id="basicForm:output_commandParamLink" href="test.html;jsessionid=676E0FBF879741B55500B45B856C6622?name=horwat&value=password" class="hyperlinkClass">link text</a>
         </TD>
       </TR>
 
       <TR>
         <TD>
-            <a id="basicForm:output_hrefLink" href="test.html;jsessionid=E8C22D1F61AAFB3BEB4875553F897B85"><img src="duke.gif"></a>
+            <a id="basicForm:output_hrefLink" href="test.html;jsessionid=676E0FBF879741B55500B45B856C6622"><img src="duke.gif"></a>
         </TD>
       </TR>
 
@@ -228,7 +228,7 @@
               
               
               
-            <a id="basicForm:output_hrefParamLink" href="test.html;jsessionid=E8C22D1F61AAFB3BEB4875553F897B85?name=horwat&value=password"><img src="duke.gif;jsessionid=E8C22D1F61AAFB3BEB4875553F897B85" /></a>
+            <a id="basicForm:output_hrefParamLink" href="test.html;jsessionid=676E0FBF879741B55500B45B856C6622?name=horwat&value=password"><img src="duke.gif;jsessionid=676E0FBF879741B55500B45B856C6622" /></a>
         </TD>
       </TR>
 
@@ -715,9 +715,17 @@ LabelWithValue
 </td>
 </tr>
 
+<tr>
+<td>
+
+  
+<div class="walleye" style="color:red">style this text like a red walleye</div>
+</td>
+</tr>
+
 
     
-<input type="hidden" name="basicForm:_id80" value="48%" />
+<input type="hidden" name="basicForm:_id82" value="48%" />
 
 <tr><td>
 
@@ -851,9 +859,9 @@ see the <i>angle brackets</i> on this text
 <!--
 function clearFormHiddenParams_basicForm(curFormName) {
   var curForm = document.forms[curFormName];
+ curForm.elements['basicForm:_id82'].value = null;
  curForm.elements['value'].value = null;
  curForm.elements['basicForm:_idcl'].value = null;
- curForm.elements['basicForm:_id80'].value = null;
  curForm.elements['name'].value = null;
   curForm.target='_self';
 }

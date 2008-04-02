@@ -658,6 +658,14 @@
 </td>
 </tr>
 
+<tr>
+<td>
+<h:panelGroup layout="block" style="color:red" styleClass="walleye">
+  <f:verbatim>style this text like a red walleye</f:verbatim>
+</h:panelGroup>
+</td>
+</tr>
+
 <h:inputHidden value="48%" >
     <f:convertNumber type="number" pattern="#%"/>
 </h:inputHidden>
