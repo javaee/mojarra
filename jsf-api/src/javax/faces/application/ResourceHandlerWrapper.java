@@ -41,20 +41,19 @@ import java.io.IOException;
 import javax.faces.context.FacesContext;
 
 /**
-
  * <p class="changed_added_2_0">Provides a simple implementation of
  * {@link ResourceHandler} that can be subclassed by developers wishing
  * to provide specialized behavior to an existing {@link
  * ResourceHandler} instance.  The default implementation of all methods
  * is to call through to the wrapped {@link ResourceHandler}.</p>
-
+ *
  * <div class="changed_added_2_0">
-
+ *
  * <p>Usage: extend this class and override {@link #getWrapped} to
  * return the instance we are wrapping.</p>
-
+ *
  * </div>
-
+ *
  * @since 2.0
  */
 public abstract class ResourceHandlerWrapper extends ResourceHandler {
@@ -69,13 +68,10 @@ public abstract class ResourceHandlerWrapper extends ResourceHandler {
 
 
     /**
-
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link ResourceHandler#createResource(String)} on the
      * wrapped {@link ResourceHandler} object.</p>
-
      */
-
     public Resource createResource(String resourceName) {
 
         return getWrapped().createResource(resourceName);
@@ -84,13 +80,10 @@ public abstract class ResourceHandlerWrapper extends ResourceHandler {
 
 
     /**
-
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link ResourceHandler#createResource(String, String)} on the wrapped
      * {@link ResourceHandler} object.</p>
-
      */
-
     public Resource createResource(String resourceName, String libraryName) {
 
         return getWrapped().createResource(resourceName, libraryName);
@@ -99,13 +92,10 @@ public abstract class ResourceHandlerWrapper extends ResourceHandler {
 
 
     /**
-
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link ResourceHandler#createResource(String, String,
      * String)} on the wrapped {@link ResourceHandler} object.</p>
-
      */
-
     public Resource createResource(String resourceName,
                                    String libraryName,
                                    String contentType) {
@@ -118,14 +108,11 @@ public abstract class ResourceHandlerWrapper extends ResourceHandler {
 
 
     /**
-
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link
      * ResourceHandler#handleResourceRequest(javax.faces.context.FacesContext)}
      * on the wrapped {@link ResourceHandler} object.</p>
-
      */
-
     public void handleResourceRequest(FacesContext context) throws IOException {
 
         getWrapped().handleResourceRequest(context);
@@ -134,14 +121,10 @@ public abstract class ResourceHandlerWrapper extends ResourceHandler {
 
 
     /**
-
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link ResourceHandler#isResourceRequest(javax.faces.context.FacesContext)} on the
      * wrapped {@link ResourceHandler} object.</p>
-
-     * 
      */
-
     public boolean isResourceRequest(FacesContext context) {
 
         return getWrapped().isResourceRequest(context);

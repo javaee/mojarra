@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.54 2008/01/23 23:05:40 edburns Exp $
+ * $Id: Application.java,v 1.55 2008/01/24 00:14:03 rlubke Exp $
  */
 
 /*
@@ -198,7 +198,7 @@ public abstract class Application {
      * a future release.</p>
      */
     public abstract void setDefaultRenderKitId(String renderKitId);
-	
+
 
 
     /**
@@ -254,26 +254,19 @@ public abstract class Application {
      * must support the following techniques for declaring an alternate
      * implementation of <code>ResourceHandler</code>.</p>
      * <div class="changed_added_2_0">
-
      * <ul>
-
      *    <li><p>The <code>ResourceHandler</code> implementation is
      *    declared in the application configuration resources by giving
      *    the fully qualified class name as the value of the
      *    <code>&lt;resource-handler&gt;</code> element within the
      *    <code>&lt;application&gt;</code> element.  </p></li>
-
      *    <li><p>RELEASE_PENDING(edburns) It can also be declared via an
      *    annotation as specified in [287-ConfigAnnotations].</p></li>
-
      * </ul>
-
      * <p>In all of the above cases, the runtime must employ the
      * decorator pattern as for every other pluggable artifact in
      * JSF.</p>
-
      * </div>
-
      * @since 2.0
      */
     public ResourceHandler getResourceHandler() {
@@ -288,11 +281,10 @@ public abstract class Application {
     }
 
     /**
-
      * <p class="changed_added_2_0">Set the {@link ResourceHandler} instance that will be utilized
      * for rendering the markup for resources, and for satisfying client
      * requests to serve up resources.</p>
-    * <div class="changed_added_2_0">
+     * <div class="changed_added_2_0">
      *
      * @param resourceHandler The new <code>ResourceHandler</code> instance
      *
@@ -302,7 +294,6 @@ public abstract class Application {
      * @throws NullPointerException if <code>resourceHandler</code>
      *  is <code>null</code>
      * </div>
-
      * @since 2.0
      */
     public void setResourceHandler(ResourceHandler resourceHandler) {

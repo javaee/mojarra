@@ -147,9 +147,9 @@ public abstract class Resource {
      */
     public void setResourceName(String resourceName) {
 
-	if (null == resourceName) {
-	    throw new NullPointerException("PENDING_I18N: All resources must have a non-null resourceName.");
-	}
+        if (null == resourceName) {
+            throw new NullPointerException("PENDING_I18N: All resources must have a non-null resourceName.");
+        }
 
         this.resourceName = resourceName;
 
@@ -157,7 +157,6 @@ public abstract class Resource {
 
 
     /**
-
      * <p class="changed_added_2_0">If the current request is a resource
      * request, (that is, {@link ResourceHandler#isResourceRequest}
      * returns <code>true</code>), return an <code>InputStream</code>
@@ -165,116 +164,109 @@ public abstract class Resource {
      * <code>IOException</code>.</p>
      * @return an <code>InputStream</code> containing the bytes of the
      * resource.</p>
-
+     *
      * @throws IOException if the current request is not a resource request.
      */
     public abstract InputStream getInputStream() throws IOException;
 
 
     /**
-
      * RELEASE_PENDING (eburns,rogerk) - review docs
-
+     *
      * <p class="changed_added_2_0">Returns a <code>Map&lt;String,
      * String&gt;</code> of response headers to be sent with this
      * resource, or an empty <code>Map</code> if no response headers are
      * to be sent.  This <code>Map</code> must be mutable so the headers
      * that are actually sent with the resource are a proper super set
      * of the ones in this map.</p>
-
+     *
      * @return a mutable <code>Map&lt;String, String&gt;</code> of
      * headers that will be included with the response.
-
      */
     public abstract Map<String, String> getResponseHeaders();
 
 
     /**
-
      * <p class="changed_added_2_0">Return a path to this resource such
      * that, when the browser resolves it against the base URI for the
      * view that includes the resource, and issues a GET request to the
      * resultant fully qualified URL, the bytes of the resource are
      * returned in response.</p>
-
+     *
      * <div class="changed_added_2_0">
-
+     *
      * <p>The default implementation must
      * implement the following algorithm.  For discussion, the return
      * result from this method will be called <em>result</em>.</p>
-
+     *
      * <ul>
-
+     *
      * <li><p>Get the context-root for this web application, not ending
      * in slash.  For discussion this will be caled
      * <em>contextRoot</em>.</p></li>
-
+     *
      * <li><p>Discover if the <code>FacesServlet</code> is prefix or
      * extension mapped, and the value of the mapping (including the
      * leading '.'  in the case of extension mapping).  For discussion,
      * this will be <em>facesServletMapping</em>.</p>
-
+     *
      * <p>If prefix mapped, <em>result</em> must be</p>
-
+     *
      * <ul><p><code>result = <em>contextRoot</em> + '/' +
      * <em>facesServletMapping</em> + {@link
      * ResourceHandler#RESOURCE_IDENTIFIER} + '/' + {@link
      * #getResourceName}</code></p></ul>
-
+     *
      * <p>If extension mapped, <em>result</em> must be</p>
-
+     *
      * <ul><p><code>result = <em>contextRoot</em> + {@link
      * ResourceHandler#RESOURCE_IDENTIFIER} + {@link #getResourceName} +
      * <em>facesServletMapping</em></code></p></ul>
-
+     *
      * </li>
-
+     *
      * <li><p>If {@link #getLibraryName} returns non-<code>null</code>,
      * build up a string, called <em>resourceMetaData</em> for
      * discussion, as follows:</p>
-
+     *
      * <ul>
-
+     *
      * <p><code>resourceMetaData = "?ln=" + {@link
      * #getLibraryName}</code></p>
-
-
+     *
      * </ul>
-
+     *
      * <p>Append <em>resourceMetaData</em> to <em>result</em>.</p>
-
+     *
      * </li>
-
+     *
      * <li><p>Make it portlet safe by passing the result through {@link
      * ViewHandler#getResourceURL}.</p></li>
-
+     *
      * </ul>
-
+     *
      * </div>
-
+     *
      * @return the path to this resource, intended to be included in the
      * encoded view that is sent to the browser during a view request.
      */
     public abstract String getRequestPath();
 
-    /**
 
+    /**
      * <p class="changed_added_2_0">Return an actual <code>URL</code>
      * instance that refers to this resource instance.</p>
-
+     *
      * @return Return an actual <code>URL</code> instance that refers to
      * this resource instance.
-
-
      */
-
     public abstract URL getURL();
 
 
     /**
      * <p class="changed_added_2_0">Call through to {@link
      * #getRequestPath} and return the result.</p>
-
+     *
      * @return Call through to {@link #getRequestPath} and return the
      * result.
      */
@@ -288,10 +280,9 @@ public abstract class Resource {
      * user-agent requesting this resource needs an update.  Returns
      * <code>false</code> otherwise.  If <code>false</code>, the caller
      * should send a 304 not modified to the client.
-
+     *
      * @return <code>true</code> or <code>false</code> depending on
      * whether or not the user-agent needs an update of this resource.
-
      */
     public abstract boolean userAgentNeedsUpdate(FacesContext context);
 

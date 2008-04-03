@@ -49,13 +49,13 @@ import javax.faces.context.FacesContext;
  * provide specialized behavior to an existing {@link Resource}
  * instance.  The default implementation of all methods is to call
  * through to the wrapped {@link Resource}.</p>
-
+ *
  * <div class="changed_added_2_0">
-
+ *
  * <p>Usage: extend
  * this class and override {@link #getWrapped} to return the instance we
  * are wrapping.</p>
-
+ *
  * </div>
  *
  * @since 2.0
@@ -65,7 +65,6 @@ public abstract class ResourceWrapper extends Resource {
     /**
      * @return the instance that we are wrapping.
      */ 
-
     protected abstract Resource getWrapped();
 
 
@@ -76,9 +75,7 @@ public abstract class ResourceWrapper extends Resource {
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Resource#getInputStream} on the wrapped {@link
      * ResourceHandler} object.</p>
-     * 
      */
-
     public InputStream getInputStream() throws IOException {
 
         return getWrapped().getInputStream();
@@ -90,9 +87,7 @@ public abstract class ResourceWrapper extends Resource {
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Resource#getURL} on the wrapped {@link
      * ResourceHandler} object.</p>
-     * 
      */
-
     public URL getURL() {
 
         return getWrapped().getURL();
@@ -104,9 +99,7 @@ public abstract class ResourceWrapper extends Resource {
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Resource#getResponseHeaders} on the wrapped {@link
      * ResourceHandler} object.</p>
-     * 
      */
-
     public Map<String, String> getResponseHeaders() {
 
         return getWrapped().getResponseHeaders();
@@ -118,9 +111,7 @@ public abstract class ResourceWrapper extends Resource {
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Resource#getRequestPath} on the wrapped {@link
      * ResourceHandler} object.</p>
-     * 
      */
-
     public String getRequestPath() {
 
         return getWrapped().getRequestPath();
@@ -132,9 +123,7 @@ public abstract class ResourceWrapper extends Resource {
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link Resource#userAgentNeedsUpdate} on the wrapped {@link
      * ResourceHandler} object.</p>
-     * 
      */
-
     public boolean userAgentNeedsUpdate(FacesContext context) {
 
         return getWrapped().userAgentNeedsUpdate(context);
