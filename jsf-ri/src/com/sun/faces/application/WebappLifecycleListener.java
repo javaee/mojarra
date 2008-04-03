@@ -224,7 +224,7 @@ public class WebappLifecycleListener {
         try {
             if (associate != null) {
                 BeanManager beanManager = associate.getBeanManager();
-                if (beanManager.isManaged(beanName)) {
+                if (beanManager != null && beanManager.isManaged(beanName)) {
                     beanManager.destroy(beanName, bean);
                 }              
             }
@@ -297,7 +297,6 @@ public class WebappLifecycleListener {
         return applicationAssociate;
     }
 
-
     /**
      * This method ensures that session scoped managed beans will be
      * synchronized properly in a clustered environment.
@@ -314,10 +313,14 @@ public class WebappLifecycleListener {
                     return;
                 }
                 BeanManager manager = associate.getBeanManager();
-                for (Enumeration e = session.getAttributeNames(); e.hasMoreElements(); ) {
-                    String name = (String) e.nextElement();
-                    if (manager.isManaged(name)) {
-                        session.setAttribute(name, session.getAttribute(name));
+                if (manager != null) {
+                    for (Enumeration e = session.getAttributeNames();
+                         e.hasMoreElements();) {
+                        String name = (String) e.nextElement();
+                        if (manager.isManaged(name)) {
+                            session
+                                  .setAttribute(name, session.getAttribute(name));
+                        }
                     }
                 }
             }
@@ -325,4 +328,4 @@ public class WebappLifecycleListener {
 
     }
 
-} // END WebappLifecycleListener
+} // END WebappLifecycleListener>>>>>>> 1.11.4.3
