@@ -1,5 +1,5 @@
 /*
- * $Id: ApplyRequestValuesPhase.java,v 1.25 2007/04/27 22:00:58 ofung Exp $
+ * $Id: ApplyRequestValuesPhase.java,v 1.26 2007/07/19 15:01:56 rlubke Exp $
  */
 
 /*
@@ -58,44 +58,11 @@ import com.sun.faces.util.FacesLogger;
  */
 public class ApplyRequestValuesPhase extends Phase {
 
-    //
-    // Protected Constants
-    //
-
-    //
-    // Class Variables
-    //
-
-    //
-    // Instance Variables
-    //
     // Log instance for this class
     private static Logger LOGGER = FacesLogger.LIFECYCLE.getLogger();
 
-    // Relationship Instance Variables
 
-    //
-    // Constructors and Genericializers    
-    //
-
-    public ApplyRequestValuesPhase() {
-    }
-
-    //
-    // Class methods
-    //
-
-    //
-    // General Methods
-    //
-
-    //
-    // Methods from Phase
-    //
-
-    public PhaseId getId() {
-        return PhaseId.APPLY_REQUEST_VALUES;
-    }
+    // ---------------------------------------------------------- Public Methods
 
 
     public void execute(FacesContext facesContext) throws FacesException {
@@ -121,7 +88,16 @@ public class ApplyRequestValuesPhase extends Phase {
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Exiting ApplyRequestValuesPhase");
         }
+
     }
+
+
+    public PhaseId getId() {
+
+        return PhaseId.APPLY_REQUEST_VALUES;
+
+    }
+
 
     // The testcase for this class is TestApplyRequestValuesPhase.java
 

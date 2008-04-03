@@ -1,5 +1,5 @@
 /*
- * $Id: ProcessValidationsPhase.java,v 1.29 2007/04/27 22:00:59 ofung Exp $
+ * $Id: ProcessValidationsPhase.java,v 1.30 2007/07/19 15:01:56 rlubke Exp $
  */
 
 /*
@@ -56,50 +56,16 @@ import com.sun.faces.util.FacesLogger;
  */
 public class ProcessValidationsPhase extends Phase {
 
-//
-// Protected Constants
-//
-    
-// Log instance for this class
-   private static Logger LOGGER = FacesLogger.LIFECYCLE.getLogger();
 
-//
-// Class Variables
-//
+    // Log instance for this class
+    private static Logger LOGGER = FacesLogger.LIFECYCLE.getLogger();
 
-//
-// Instance Variables
-//
 
-// Attribute Instance Variables
-
-// Relationship Instance Variables
-
-//
-// Constructors and Genericializers    
-//
-
-    public ProcessValidationsPhase() {
-    }
-
-//
-// Class methods
-//
-
-//
-// General Methods
-//
-
-//
-// Methods from Phase
-//
-
-    public PhaseId getId() {
-        return PhaseId.PROCESS_VALIDATIONS;
-    }
+    // ---------------------------------------------------------- Public Methods
 
 
     public void execute(FacesContext facesContext) throws FacesException {
+
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Entering ProcessValidationsPhase");
         }
@@ -115,15 +81,22 @@ public class ProcessValidationsPhase extends Phase {
                     LOGGER.log(Level.WARNING, exceptionMessage, re);
                 }
             }
-	    throw new FacesException(exceptionMessage, re);
+            throw new FacesException(exceptionMessage, re);
         }
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Exiting ProcessValidationsPhase");
         }
+
+    }
+
+
+    public PhaseId getId() {
+
+        return PhaseId.PROCESS_VALIDATIONS;
+
     }
 
 
 // The testcase for this class is TestProcessValidationsPhase.java
-
 
 } // end of class ProcessValidationsPhase

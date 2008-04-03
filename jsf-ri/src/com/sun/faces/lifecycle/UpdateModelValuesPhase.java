@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.46 2007/04/27 22:00:59 ofung Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.47 2007/07/19 15:01:56 rlubke Exp $
  */
 
 /*
@@ -57,50 +57,16 @@ import javax.faces.event.PhaseId;
  */
 public class UpdateModelValuesPhase extends Phase {
 
-    //
-    // Protected Constants
-    //
 
-    //
-    // Class Variables
-    //
-
-    //
-    // Instance Variables
-    //
     // Log instance for this class
     private static Logger LOGGER = FacesLogger.LIFECYCLE.getLogger();
 
-    // Attribute Instance Variables
 
-    // Relationship Instance Variables
-
-
-    //
-    // Constructors and Genericializers    
-    //
-
-    public UpdateModelValuesPhase() {
-    }
-
-//
-// Class methods
-//
-
-//
-// General Methods
-//
-
-//
-// Methods from Phase
-//
-
-    public PhaseId getId() {
-        return PhaseId.UPDATE_MODEL_VALUES;
-    }
+    // ---------------------------------------------------------- Public Methods
 
 
     public void execute(FacesContext facesContext) {
+
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Entering UpdateModelValuesPhase");
         }
@@ -116,7 +82,7 @@ public class UpdateModelValuesPhase extends Phase {
             exceptionMessage = fe.getMessage();
         }
 
-        // Just log the exception.  Any exception occurring from 
+        // Just log the exception.  Any exception occurring from
         // processUpdates should have been stored as a message
         // on FacesContext.
         if (exceptionMessage != null) {
@@ -127,11 +93,17 @@ public class UpdateModelValuesPhase extends Phase {
                 LOGGER.fine("Exiting UpdateModelValuesPhase");
             }
         }
+
     }
 
 
+    public PhaseId getId() {
+
+        return PhaseId.UPDATE_MODEL_VALUES;
+
+    }
+
 
 // The testcase for this class is TestUpdateModelValuesPhase.java
-
 
 } // end of class UpdateModelValuesPhase

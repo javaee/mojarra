@@ -1,5 +1,5 @@
 /*
- * $Id: InvokeApplicationPhase.java,v 1.23 2007/04/27 22:00:59 ofung Exp $
+ * $Id: InvokeApplicationPhase.java,v 1.24 2007/07/19 15:01:56 rlubke Exp $
  */
 
 /*
@@ -56,42 +56,17 @@ import com.sun.faces.util.FacesLogger;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: InvokeApplicationPhase.java,v 1.23 2007/04/27 22:00:59 ofung Exp $
+ * @version $Id: InvokeApplicationPhase.java,v 1.24 2007/07/19 15:01:56 rlubke Exp $
  */
 
 public class InvokeApplicationPhase extends Phase {
 
-    //
-    // Protected Constants
-    //
-
-    //
-    // Class Variables
-    //
 
     // Log instance for this class
     private static Logger LOGGER = FacesLogger.LIFECYCLE.getLogger();
 
-    //
-    // Instance Variables
-    //
 
-    // Attribute Instance Variables
-
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Genericializers    
-    //
-
-    public InvokeApplicationPhase() {
-        super();
-    }
-
-
-    public PhaseId getId() {
-        return PhaseId.INVOKE_APPLICATION;
-    }
+    // ---------------------------------------------------------- Public Methods
 
 
     public void execute(FacesContext facesContext) throws FacesException {
@@ -118,22 +93,17 @@ public class InvokeApplicationPhase extends Phase {
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Exiting InvokeApplicationsPhase");
         }
+
     }
 
-//
-// Class methods
-//
 
-//
-// General Methods
-//
+    public PhaseId getId() {
 
-//
-// Methods from Phase
-//
+        return PhaseId.INVOKE_APPLICATION;
+
+    }
 
 
 // The testcase for this class is TestInvokeApplicationPhase.java
-
 
 } // end of class InvokeApplicationPhase

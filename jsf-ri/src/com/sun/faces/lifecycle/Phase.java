@@ -1,5 +1,5 @@
 /*
- * $Id: Phase.java,v 1.9 2007/04/27 22:00:59 ofung Exp $
+ * $Id: Phase.java,v 1.10 2007/07/19 15:01:56 rlubke Exp $
  */
 
 /*
@@ -47,8 +47,8 @@ import javax.faces.event.PhaseId;
 
 /**
  * <p>A <strong>Phase</strong> is a single step in the processing of a
- * JavaServer Faces request throughout its entire {@link Lifecycle}.  Each
- * <code>Phase</code> performs the required transitions on the state
+ * JavaServer Faces request throughout its entire {@link javax.faces.lifecycle.Lifecycle}.
+ * Each <code>Phase</code> performs the required transitions on the state
  * information in the {@link FacesContext} associated with this request.
  */
 
@@ -59,10 +59,8 @@ public abstract class Phase {
 
     /**
      * <p>Perform all state transitions required by the current phase of the
-     * request processing {@link Lifecycle} for a particular request.
-     * Return one of the standard state change values (<code>GOTO_EXIT</code>,
-     * <code>GOTO_NEXT</code>, or <code>GOTO_RENDER</code>) to indicate what
-     * the request processing lifecycle should do next.<?p>
+     * request processing {@link javax.faces.lifecycle.Lifecycle} for a
+     * particular request. </p>
      *
      * @param context FacesContext for the current request being processed
      * @throws FacesException if a processing error occurred while
@@ -72,7 +70,8 @@ public abstract class Phase {
 
 
     /**
-     * <p>Returns the current {@link Lifecycle} <strong>Phase</strong> identifier.
+     * @return the current {@link javax.faces.lifecycle.Lifecycle}
+     * <strong>Phase</strong> identifier.
      */
     public abstract PhaseId getId();
 

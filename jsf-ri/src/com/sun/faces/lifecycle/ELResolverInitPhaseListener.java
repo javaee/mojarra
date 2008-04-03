@@ -37,7 +37,6 @@
 package com.sun.faces.lifecycle;
 
 import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.el.ELUtils;
 
@@ -68,20 +67,25 @@ import java.util.logging.Logger;
  */
 public class ELResolverInitPhaseListener implements PhaseListener {
 
+
     private static Logger LOGGER = FacesLogger.LIFECYCLE.getLogger();
+    private boolean postInitCompleted;
 
     private boolean preInitCompleted;
-    private boolean postInitCompleted;
+
+
+    // ---------------------------------------------- Methods From PhaseListener
 
     /**
      * <p>Handle a notification that the processing for a particular
      * phase has just been completed.</p>
-     * 
+     *
      * <p>When invoked, this phase listener will remove itself
      * as a registered <code>PhaseListener</code> with all
      * <code>Lifecycle</code> instances.
      */
     public synchronized void afterPhase(PhaseEvent event) {
+
         if (!postInitCompleted) {
             LifecycleFactory factory = (LifecycleFactory)
                   FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
@@ -93,17 +97,20 @@ public class ELResolverInitPhaseListener implements PhaseListener {
             }
             postInitCompleted = true;
         }
+
     }
+
 
     /**
      * <p>Handle a notification that the processing for a particular
      * phase of the request processing lifecycle is about to begin.</p>
-     * 
+     *
      * <p>The implementation of this method currently calls through to
      * {@link #populateFacesELResolverForJsp(javax.faces.context.FacesContext)}.<p/>
      */
 
     public synchronized void beforePhase(PhaseEvent event) {
+
         if (!preInitCompleted) {
             ApplicationAssociate associate =
                  ApplicationAssociate.getInstance(
@@ -113,7 +120,9 @@ public class ELResolverInitPhaseListener implements PhaseListener {
             preInitCompleted = true;
 
         }
+
     }
+
 
     /**
      * <p>Return the identifier of the request processing phase during
@@ -121,12 +130,15 @@ public class ELResolverInitPhaseListener implements PhaseListener {
      * events.  Legal values are the singleton instances defined by the
      * {@link javax.faces.event.PhaseId} class, including <code>PhaseId.ANY_PHASE</code>
      * to indicate an interest in being notified for all standard phases.</p>
-     * 
+     *
      * <p>We return <code>PhaseId.ANY_PHASE</code>.
      */
     public PhaseId getPhaseId() {
+
         return PhaseId.ANY_PHASE;
+
     }
+
 
     // ------------------------------------------------------- Protected Methods
 
@@ -167,6 +179,7 @@ public class ELResolverInitPhaseListener implements PhaseListener {
                        "jsf.lifecycle.initphaselistener.resolvers_registered",
                        new Object[] { appAssociate.getContextName() });
         }
+
     }
 
 } // END InitializingPhaseListener

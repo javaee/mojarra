@@ -1,5 +1,5 @@
 /*
- * $Id: RenderResponsePhase.java,v 1.25 2007/04/27 22:00:59 ofung Exp $
+ * $Id: RenderResponsePhase.java,v 1.26 2007/07/19 15:01:56 rlubke Exp $
  */
 
 /*
@@ -65,7 +65,7 @@ import com.sun.faces.util.FacesLogger;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RenderResponsePhase.java,v 1.25 2007/04/27 22:00:59 ofung Exp $
+ * @version $Id: RenderResponsePhase.java,v 1.26 2007/07/19 15:01:56 rlubke Exp $
  */
 
 public class RenderResponsePhase extends Phase {
@@ -75,17 +75,11 @@ public class RenderResponsePhase extends Phase {
     private static Logger LOGGER = FacesLogger.LIFECYCLE.getLogger();
 
 
-    public RenderResponsePhase() {
-        super();
-    }
-
-
-    public PhaseId getId() {
-        return PhaseId.RENDER_RESPONSE;
-    }
+    // ---------------------------------------------------------- Public Methods
 
 
     public void execute(FacesContext facesContext) throws FacesException {
+
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Entering RenderResponsePhase");
         }
@@ -147,9 +141,17 @@ public class RenderResponsePhase extends Phase {
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Exiting RenderResponsePhase");
         }
+
     }
 
-// The testcase for this class is TestRenderResponsePhase.java
 
+    public PhaseId getId() {
+
+        return PhaseId.RENDER_RESPONSE;
+
+    }
+
+
+// The testcase for this class is TestRenderResponsePhase.java
 
 } // end of class RenderResponsePhase
