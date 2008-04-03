@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.109 2007/05/23 21:31:34 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.110 2007/06/25 20:10:47 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -167,6 +167,7 @@ public class ConfigureListener implements ServletRequestListener,
                     LOGGER.log(Level.FINE,
                                "No FacesServlet found in deployment descriptor - bypassing configuration");
                 }
+                return;
             } else {
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.log(Level.FINE,
