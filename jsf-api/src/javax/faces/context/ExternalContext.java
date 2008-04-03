@@ -35,7 +35,7 @@
  */
 
 /*
- * $Id: ExternalContext.java,v 1.33 2007/12/17 21:46:07 rlubke Exp $
+ * $Id: ExternalContext.java,v 1.34 2008/01/25 20:06:13 rlubke Exp $
  */
  
 /*
@@ -122,7 +122,7 @@ public abstract class ExternalContext {
      * @param path Context relative path to the specified resource,
      *  which must start with a slash ("/") character
      *
-     * @throws FacesException thrown if a <code>ServletException</code>
+     * @throws javax.faces.FacesException thrown if a <code>ServletException</code>
      *  or <code>PortletException</code> occurs
      * @throws IllegalArgumentException if no request dispatcher
      *  can be created for the specified path
@@ -258,6 +258,13 @@ public abstract class ExternalContext {
      * <code>getAuthType()</code>.</p>
      */
     public abstract String getAuthType();
+
+
+    /**
+     * RELEASE_PENDING (edburs,rogerk) javadocs
+     * @return
+     */
+    public abstract String getMimeType(String file);
 
 
     /**

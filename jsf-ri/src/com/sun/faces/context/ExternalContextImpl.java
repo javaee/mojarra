@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.66 2007/12/17 21:46:09 rlubke Exp $
+ * $Id: ExternalContextImpl.java,v 1.67 2008/01/25 20:06:16 rlubke Exp $
  */
 
 /*
@@ -86,7 +86,7 @@ import com.sun.faces.util.RequestStateManager;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.66 2007/12/17 21:46:09 rlubke Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.67 2008/01/25 20:06:16 rlubke Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -440,6 +440,12 @@ public class ExternalContextImpl extends ExternalContext {
         return ((HttpServletRequest) request).getAuthType();
     }
 
+    /**
+     * @see ExternalContext#getMimeType(String)
+     */
+    public String getMimeType(String file) {
+        return servletContext.getMimeType(file);
+    }
 
     public String getRemoteUser() {
         return ((HttpServletRequest) request).getRemoteUser();
