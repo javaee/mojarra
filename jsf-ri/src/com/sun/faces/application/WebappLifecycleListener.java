@@ -25,6 +25,10 @@
 
 package com.sun.faces.application;
 
+import com.sun.faces.io.FastStringWriter;
+import com.sun.faces.spi.ManagedBeanFactory.Scope;
+import com.sun.faces.util.Util;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextAttributeEvent;
 import javax.servlet.ServletContextAttributeListener;
@@ -46,10 +50,6 @@ import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sun.faces.io.FastStringWriter;
-import com.sun.faces.spi.ManagedBeanFactory.Scope;
-import com.sun.faces.util.Util;
-
 /**
  * <p>Central location for web application lifecycle events.<p>  
  * <p>The main purpose of this class is detect when we
@@ -68,6 +68,7 @@ public class WebappLifecycleListener implements ServletRequestListener,
           Util.getLogger(Util.FACES_LOGGER + Util.APPLICATION_LOGGER);
     
     private ServletContext servletContext;
+    private ApplicationAssociate applicationAssociate;
 
     /** The request is about to go out of scope of the web application. */
     public void requestDestroyed(ServletRequestEvent event) {       
@@ -221,8 +222,7 @@ public class WebappLifecycleListener implements ServletRequestListener,
                                       Object bean,
                                       Scope scope) {
 
-        ApplicationAssociate associate =
-              ApplicationAssociate.getInstance(servletContext);
+        ApplicationAssociate associate = getAssociate();
         try {
             if (associate != null) {
                 associate.handlePreDestroy(beanName, bean, scope);
@@ -278,4 +278,18 @@ public class WebappLifecycleListener implements ServletRequestListener,
         }
         
     }
+
+
+    // --------------------------------------------------------- Private Methods
+
+
+    private ApplicationAssociate getAssociate() {
+
+        if (applicationAssociate == null) {
+            applicationAssociate = ApplicationAssociate.getInstance(servletContext);
+        }
+
+        return applicationAssociate;
+    }
+
 } // END WebappLifecycleListener
