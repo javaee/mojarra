@@ -1,5 +1,5 @@
 /*
- * $Id: TestNavigationHandler.java,v 1.28 2007/04/27 22:02:03 ofung Exp $
+ * $Id: TestNavigationHandler.java,v 1.29 2008/01/31 18:36:00 rlubke Exp $
  */
 
 /*
@@ -51,6 +51,7 @@ import com.sun.org.apache.commons.digester.Digester;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
+import javax.faces.application.NavigationHandler;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
@@ -67,7 +68,7 @@ import java.util.*;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestNavigationHandler.java,v 1.28 2007/04/27 22:02:03 ofung Exp $
+ * @version $Id: TestNavigationHandler.java,v 1.29 2008/01/31 18:36:00 rlubke Exp $
  */
 
 public class TestNavigationHandler extends ServletFacesTestCase {
@@ -225,6 +226,27 @@ public class TestNavigationHandler extends ServletFacesTestCase {
                 }
             }
         }
+    }
+
+     public void testSimilarFromViewId() {
+        ApplicationFactory aFactory =
+            (ApplicationFactory) FactoryFinder.getFactory(
+                FactoryFinder.APPLICATION_FACTORY);
+        Application application = aFactory.getApplication();
+        NavigationHandler navHandler = application.getNavigationHandler();
+
+        UIViewRoot root = application.getViewHandler().createView(getFacesContext(), "/dir1/dir2/dir3/test.jsp");
+        root.setLocale(Locale.US);
+        getFacesContext().setViewRoot(root);
+
+        try {
+            navHandler.handleNavigation(getFacesContext(), null, "home");
+        } catch (Exception e) {
+            e.printStackTrace();
+            assert(false);
+        }
+        String newViewId = getFacesContext().getViewRoot().getViewId();
+        assertTrue("newViewId is: " + newViewId, "/dir1/dir2/dir3/home.jsp".equals(newViewId));
     }
 
     // This tests that the same <from-view-id> element value existing in a seperate

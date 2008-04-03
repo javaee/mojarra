@@ -148,6 +148,24 @@
   </navigation-case>
 </navigation-rule>
 
+
+<navigation-rule>
+  <from-view-id>/dir3/*</from-view-id>
+  <navigation-case>
+    <from-outcome>home</from-outcome>
+    <to-view-id>/dir3/home.jsp</to-view-id>
+  </navigation-case>
+</navigation-rule>
+
+<navigation-rule>
+  <from-view-id>/dir1/dir2/dir3/*</from-view-id>
+  <navigation-case>
+    <from-outcome>home</from-outcome>
+    <to-view-id>/dir1/dir2/dir3/home.jsp</to-view-id>
+  </navigation-case>
+</navigation-rule>
+
+
   <managed-bean>
     <!-- Basic information about this bean -->
     <description>

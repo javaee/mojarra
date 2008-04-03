@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.57 2007/07/17 21:18:12 rlubke Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.58 2008/01/31 18:36:00 rlubke Exp $
  */
 
 /*
@@ -318,7 +318,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
             // If so, then we have found our largest pattern match..
             // If not, then continue on to the next case;
 
-            if (viewId.indexOf(fromViewId, 0) == -1) {
+            if (!viewId.startsWith(fromViewId)) {
                 continue;
             }
 
