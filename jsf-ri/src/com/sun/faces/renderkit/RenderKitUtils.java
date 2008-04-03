@@ -67,8 +67,6 @@ import javax.faces.model.SelectItem;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.ResponseStateManager;
-import javax.faces.application.Resource;
-import javax.faces.application.ResourceHandler;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
@@ -225,9 +223,7 @@ public class RenderKitUtils {
 
         RenderKit renderKit = context.getRenderKit();
         if (renderKit == null) {
-            // check request scope for a RenderKitFactory implementation
-            Map<String, Object> requestMap =
-                  context.getExternalContext().getRequestMap();
+            // check request scope for a RenderKitFactory implementation            
             RenderKitFactory factory = (RenderKitFactory)
                   RequestStateManager.get(context, RequestStateManager.RENDER_KIT_IMPL_REQ);
             if (factory != null) {

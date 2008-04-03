@@ -106,10 +106,8 @@ public class StateManagerImpl extends StateManager {
 
     public StateManagerImpl() {
         FacesContext fContext = FacesContext.getCurrentInstance();
-        if (serialProvider == null) {
-            serialProvider = SerializationProviderFactory
-                  .createInstance(fContext.getExternalContext());
-        }
+        serialProvider = SerializationProviderFactory
+                             .createInstance(fContext.getExternalContext());
         webConfig = WebConfiguration.getInstance(fContext.getExternalContext());
     }
 

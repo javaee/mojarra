@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterTag.java,v 1.10 2007/09/07 12:02:30 rlubke Exp $
+ * $Id: ConverterTag.java,v 1.11 2007/12/19 18:17:30 rlubke Exp $
  */
 
 /*
@@ -77,8 +77,7 @@ public class ConverterTag extends AbstractConverterTag {
     public static class BindingConverter implements Converter, StateHolder {
 
         ValueExpression converterId;
-        ValueExpression binding;
-        Converter instance;
+        ValueExpression binding;       
 
         // -------------------------------------------------------- Constructors
 

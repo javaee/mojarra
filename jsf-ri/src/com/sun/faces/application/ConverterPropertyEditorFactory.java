@@ -66,6 +66,9 @@ import com.sun.faces.util.FacesLogger;
  * </p>
  */
 public class ConverterPropertyEditorFactory {
+
+    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
+
     /**
      * <p>
      * Capture information extracted from a "template" PropertyEditor class, and
@@ -187,7 +190,11 @@ public class ConverterPropertyEditorFactory {
                      new StringBuilder(64).append('L').append(getVMClassName(templateClass)).append(';').toString());
                 targetClassConstant = findConstant(getVMClassName(templateTargetClass));
             } catch (Exception e) {
-                // ignore
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.log(Level.FINE,
+                               "Unexected exception ClassTemplateInfo",
+                               e);
+                }
             }
         }
 
