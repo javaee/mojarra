@@ -71,20 +71,20 @@
                action="storeFront"
                actionListener="#{carstore.chooseLocaleFromMap}">
             <d:area id="NAmerica" value="#{NA}"
-                    onmouseover="/images/world_namer.jpg"
-                    onmouseout="/images/world.jpg"
+                    onmouseover="/resources/images/world_namer.jpg"
+                    onmouseout="/resources/images/world.jpg"
                     targetImage="mapImage"/>
             <d:area id="SAmerica" value="#{SA}"
-                    onmouseover="/images/world_samer.jpg"
-                    onmouseout="/images/world.jpg"
+                    onmouseover="/resources/images/world_samer.jpg"
+                    onmouseout="/resources/images/world.jpg"
                     targetImage="mapImage"/>
             <d:area id="Germany" value="#{gerA}"
-                    onmouseover="/images/world_germany.jpg"
-                    onmouseout="/images/world.jpg"
+                    onmouseover="/resources/images/world_germany.jpg"
+                    onmouseout="/resources/images/world.jpg"
                     targetImage="mapImage"/>
             <d:area id="France" value="#{fraA}"
-                    onmouseover="/images/world_france.jpg"
-                    onmouseout="/images/world.jpg"
+                    onmouseover="/resources/images/world_france.jpg"
+                    onmouseout="/resources/images/world.jpg"
                     targetImage="mapImage"/>
         </d:map>
 

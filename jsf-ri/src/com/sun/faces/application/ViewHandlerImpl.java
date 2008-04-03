@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.112 2007/11/15 22:14:24 rlubke Exp $
+ * $Id: ViewHandlerImpl.java,v 1.113 2007/11/16 01:33:44 rlubke Exp $
  */
 
 
@@ -81,7 +81,7 @@ import java.util.logging.Logger;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.112 2007/11/15 22:14:24 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.113 2007/11/16 01:33:44 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -696,7 +696,7 @@ public class ViewHandlerImpl extends ViewHandler {
 
     public String getResourceURL(FacesContext context, String path) {
         ExternalContext extContext = context.getExternalContext();
-        if (path.charAt(0) == '/') {
+        if (path.charAt(0) == '/' && !path.startsWith(extContext.getRequestContextPath())) {
             return (extContext.getRequestContextPath() + path);
         } else {
             return path;

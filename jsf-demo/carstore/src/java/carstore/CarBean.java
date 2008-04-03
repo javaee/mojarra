@@ -37,8 +37,21 @@
 
 package carstore;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
+import javax.faces.application.Resource;
+import javax.faces.application.ResourceHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UISelectItems;
@@ -46,17 +59,6 @@ import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.model.SelectItem;
-
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-import java.util.List;
-import java.util.Collection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * <p>This bean encapsulates a car model, including pricing and package
@@ -445,6 +447,11 @@ public class CarBean {
             items.setValue(parseStringIntoArrayList(value, converter));
             // add it to the component
             component.getChildren().add(items);
+        } else if (isGraphic(componentType)) {
+            ResourceHandler handler = context.getApplication().getResourceHandler();
+            Resource resource = handler.createResource(value);
+            component.getAttributes().put("value",
+                                          resource.getURI());
         } else {
             // we have a single value
             if (null != converter) {
@@ -469,6 +476,11 @@ public class CarBean {
         }
         return (componentType.startsWith("javax.faces.SelectMany") ||
                 componentType.startsWith("javax.faces.SelectOne"));
+    }
+
+    private boolean isGraphic(String componentType) {
+        return componentType != null
+               && (componentType.startsWith("javax.faces.Graphic"));
     }
 
 
