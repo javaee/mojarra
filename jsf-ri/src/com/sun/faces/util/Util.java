@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.208 2007/02/27 23:10:19 rlubke Exp $
+ * $Id: Util.java,v 1.209 2007/04/02 17:16:11 rogerk Exp $
  */
 
 /*
@@ -53,7 +53,6 @@ import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 
 import java.beans.FeatureDescriptor;
 import java.lang.reflect.Constructor;
@@ -77,7 +76,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.208 2007/02/27 23:10:19 rlubke Exp $
+ * @version $Id: Util.java,v 1.209 2007/04/02 17:16:11 rogerk Exp $
  */
 
 public class Util {
@@ -757,11 +756,8 @@ public class Util {
             // values.  if either is non-null, use this
             // information to generate determine the mapping.
 
-            if (request instanceof HttpServletRequest) {
-                servletPath = extContext.getRequestServletPath();
-                pathInfo = extContext.getRequestPathInfo();
-            }
-
+            servletPath = extContext.getRequestServletPath();
+            pathInfo = extContext.getRequestPathInfo();
 
             mapping = getMappingForRequest(servletPath, pathInfo);
             if (mapping == null) {
