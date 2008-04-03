@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.108 2007/05/23 21:25:59 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.109 2007/05/23 21:31:34 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -321,8 +321,10 @@ public class ConfigureListener implements ServletRequestListener,
         webAppListener.attributeReplaced(event);
     }
 
+
     // ---------------------------- Methods from ServletContextAttributeListener
 
+    
     public void attributeAdded(ServletContextAttributeEvent event) {
         // ignored
     }
