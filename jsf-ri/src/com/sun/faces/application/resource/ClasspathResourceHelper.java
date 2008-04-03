@@ -266,45 +266,59 @@ public class ClasspathResourceHelper extends ResourceHelper {
         List<String> paths = null;
         String urlString = url.toString();
         String pathElement = urlString.substring(urlString.indexOf("!/") + 2);
-        URLConnection conn = url.openConnection();
-        conn.setUseCaches(false);
-        JarURLConnection jconn = (JarURLConnection) conn;
-        JarFile jar = jconn.getJarFile();
+        InputStream in = null;
+        try {
+            URLConnection conn = url.openConnection();
+            conn.setUseCaches(false);
+            conn.connect();
+            JarURLConnection jconn = (JarURLConnection) conn;
+            JarFile jar = jconn.getJarFile();
 
-        // First, check if pathElement represents a directory.  If it doesn't
-        // we don't have to do anything further.
-        String baseDir = pathElement + '/';
-        JarEntry entry = jar.getJarEntry(baseDir);
-        if (entry != null && !entry.isDirectory()) {
-            return Collections.emptyList();
-        }
-
-        // Next, search for all JarEntries that start with pathElement
-        // that aren't the pathElement itself and find all of it's direct
-        // children (either directories or files) and store them in a list.
-        for (Enumeration<JarEntry> e = jar.entries(); e.hasMoreElements();) {
-            JarEntry je = e.nextElement();
-            String name = je.getName();
-            if (name.equals(pathElement) || name.equals(baseDir)) {
-                // we're not interested in pathElement itself
-                continue;
+            // First, check if pathElement represents a directory.  If it doesn't
+            // we don't have to do anything further.
+            String baseDir = pathElement + '/';
+            JarEntry entry = jar.getJarEntry(baseDir);
+            if (entry != null && !entry.isDirectory()) {
+                return Collections.emptyList();
             }
-            if (name.startsWith(pathElement)) {
-                String path = name.substring(pathElement.length() + 1);
-                if (path.charAt(path.length() - 1) == '/') {
-                    path = path.substring(0, path.length() - 1);
-                }
-                if (path.contains("/")) {
-                    // we're dealing with multiple directories - we're not
-                    // interested in those
+
+            // Next, search for all JarEntries that start with pathElement
+            // that aren't the pathElement itself and find all of it's direct
+            // children (either directories or files) and store them in a list.
+            for (Enumeration<JarEntry> e = jar.entries(); e.hasMoreElements();)
+            {
+                JarEntry je = e.nextElement();
+                String name = je.getName();
+                if (name.equals(pathElement) || name.equals(baseDir)) {
+                    // we're not interested in pathElement itself
                     continue;
                 }
+                if (name.startsWith(pathElement)) {
+                    String path = name.substring(pathElement.length() + 1);
+                    if (path.charAt(path.length() - 1) == '/') {
+                        path = path.substring(0, path.length() - 1);
+                    }
+                    if (path.contains("/")) {
+                        // we're dealing with multiple directories - we're not
+                        // interested in those
+                        continue;
+                    }
 
-                if (paths == null) {
-                    paths = new ArrayList<String>(4);
+                    if (paths == null) {
+                        paths = new ArrayList<String>(4);
+                    }
+                    paths.add(path);
+
                 }
-                paths.add(path);
-
+            }
+        } catch (IOException ioe) {
+            throw ioe;
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException ignored) {
+                }
             }
         }
 

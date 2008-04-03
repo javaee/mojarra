@@ -153,8 +153,12 @@ public class ResourceImpl extends Resource {
             responseHeaders.put("Expires", format.format(new Date(expiresTime)));
 
             URL url = getURL();
+            InputStream in = null;
             try {
                 URLConnection conn = url.openConnection();
+                conn.setUseCaches(false);
+                conn.connect();
+                in = conn.getInputStream();
                 long lastModified = conn.getLastModified();
                 long contentLength = conn.getContentLength();
                 if (lastModified == 0) {
@@ -169,6 +173,12 @@ public class ResourceImpl extends Resource {
                                     + '"');
                 }
             } catch (IOException ignored) {
+            } finally {
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (IOException ignored) { }
+                }
             }
             return responseHeaders;
         } else {

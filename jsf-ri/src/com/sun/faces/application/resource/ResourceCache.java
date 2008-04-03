@@ -37,6 +37,7 @@
 package com.sun.faces.application.resource;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
@@ -432,14 +433,24 @@ public class ResourceCache {
                 throw new IllegalArgumentException("URL protocol must be 'jar' -> "
                                                    + url.toExternalForm());
             }
+            InputStream in = null;
             try {
                 URLConnection conn = url.openConnection();
+                conn.setUseCaches(false);
+                conn.connect();
+                in = conn.getInputStream();
                 jarFileURL = ((JarURLConnection) conn).getJarFileURL();
                 if (jarFileURL == null) {
                     throw new IllegalStateException("Unable to obtain URL to Jar");
                 }
             } catch (IOException ioe) {
                 throw new FacesException("Unable to connect to URL: " + url.toString(), ioe);
+            } finally {
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (IOException ignored) { }
+                }
             }
             currentTimeStamp = getLastModified();
             
@@ -484,12 +495,21 @@ public class ResourceCache {
 
         private long getLastModified() {
 
+            InputStream in = null;
             try {
                 URLConnection conn = jarFileURL.openConnection();
+                conn.connect();
+                in = conn.getInputStream();
                 return conn.getLastModified();
             } catch (IOException ioe) {
                 throw new FacesException("Unable to connect to URL: "
                                          + jarFileURL.toString(), ioe);
+            } finally {
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (IOException ignored) { }
+                }
             }
 
         }

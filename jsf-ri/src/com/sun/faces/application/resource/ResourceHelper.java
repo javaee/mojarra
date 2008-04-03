@@ -157,11 +157,21 @@ public abstract class ResourceHelper {
             return 0;
         }
         long ret;
+        InputStream input = null;
         try {
             URLConnection con = url.openConnection();
+            con.setUseCaches(false);
+            con.connect();
+            input = con.getInputStream();
             ret = con.getLastModified();
         } catch (IOException ioe) {
             ret = 0;
+        } finally {
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException ignored) { }
+            }
         }
 
         return ((ret >= 0) ? ret : 0);
