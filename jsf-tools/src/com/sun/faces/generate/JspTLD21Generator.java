@@ -1,5 +1,5 @@
 /*
- * $Id: JspTLD21Generator.java,v 1.14 2007/07/19 17:27:16 rlubke Exp $
+ * $Id: JspTLD21Generator.java,v 1.15 2007/10/23 13:57:33 rlubke Exp $
  */
 
 /*
@@ -271,9 +271,9 @@ public class JspTLD21Generator extends JspTLDGenerator {
                             writer.writeText(type);
                             writer.closeElement(2);
                         } else {
-                            writer.startElement("type");
-                            writer.writeText(property.getPropertyClass());
-                            writer.closeElement();                       
+                            writer.startElement("rtexprvalue");
+                            writer.writeText(getRtexprvalue(tagName, propertyName));
+                            writer.closeElement();
                         }
                     } else {
                         writer.startElement("rtexprvalue");
