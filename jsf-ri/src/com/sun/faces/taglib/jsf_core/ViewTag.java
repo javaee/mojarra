@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.49 2007/07/19 15:50:55 rlubke Exp $
+ * $Id: ViewTag.java,v 1.50 2008/01/08 18:26:07 rlubke Exp $
  */
 
 /*
@@ -77,7 +77,7 @@ import com.sun.faces.util.FacesLogger;
  * Renderer. It exists mainly to provide a guarantee that all faces
  * components reside inside of this tag.
  *
- * @version $Id: ViewTag.java,v 1.49 2007/07/19 15:50:55 rlubke Exp $
+ * @version $Id: ViewTag.java,v 1.50 2008/01/08 18:26:07 rlubke Exp $
  */
 
 public class ViewTag extends UIComponentELTag {
@@ -281,11 +281,8 @@ public class ViewTag extends UIComponentELTag {
     }
 
 
-    /**
-     * This should never get called for PageTag.
-     */
     public String getComponentType() {
-        throw new IllegalStateException();
+        return UIViewRoot.COMPONENT_TYPE;
     }
 
     public String getRendererType() {

@@ -1,5 +1,5 @@
 /*
- * $Id: BeanManager.java,v 1.7 2007/12/03 22:54:58 rlubke Exp $
+ * $Id: BeanManager.java,v 1.8 2008/01/08 18:26:06 rlubke Exp $
  */
 
 /*
@@ -293,9 +293,8 @@ public class BeanManager {
                         // a target for cyclic detection.  
                         if (b.getReferences() != null) {
                             references.add(ref);
-                            validateReferences(getBuilder(ref),
-                                               references,
-                                               messages);
+                            validateReferences(b, references, messages);
+                            references.remove(ref);
                         }
                     }
                 }
