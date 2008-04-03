@@ -1,5 +1,5 @@
 /*
- * $Id: RIConfigResourceProvider.java,v 1.3 2007/06/07 23:10:35 rlubke Exp $
+ * $Id: RIConfigResourceProvider.java,v 1.4 2007/07/17 21:23:01 rlubke Exp $
  */
 
 /*
@@ -64,7 +64,7 @@ public class RIConfigResourceProvider implements ConfigurationResourceProvider {
      */
     public List<URL> getResources(ServletContext context) {
 
-        List<URL> list = new ArrayList(1);
+        List<URL> list = new ArrayList<URL>(1);
         list.add(Util.getCurrentLoader(this).getResource(JSF_RI_CONFIG));
         return list;
 

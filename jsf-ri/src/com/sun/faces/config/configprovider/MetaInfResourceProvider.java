@@ -1,5 +1,5 @@
 /*
- * $Id: MetaInfResourceProvider.java,v 1.3 2007/06/07 23:10:35 rlubke Exp $
+ * $Id: MetaInfResourceProvider.java,v 1.4 2007/07/17 21:23:01 rlubke Exp $
  */
 
 /*
@@ -116,7 +116,7 @@ public class MetaInfResourceProvider implements ConfigurationResourceProvider {
             }
             // Load the sorted resources first:
             List<URL> result =
-                 new ArrayList(sortedJarMap.size() + unsortedResourceList.size());
+                 new ArrayList<URL>(sortedJarMap.size() + unsortedResourceList.size());
             for (Map.Entry<String, URL> entry : sortedJarMap.entrySet()) {
                 result.add(entry.getValue());
             }
