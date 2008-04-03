@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.43 2007/06/06 16:54:47 rlubke Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.44 2007/06/26 17:55:52 rlubke Exp $
  */
 
 /*
@@ -372,9 +372,9 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
         if (pass != null) {
             guard = new ByteArrayGuard(pass);
         }
-        compressState = webConfig.getBooleanContextInitParameter(
+        compressState = webConfig.isOptionEnabled(
                             BooleanWebContextInitParameter.CompressViewState);
-        String size = webConfig.getContextInitParameter(
+        String size = webConfig.getOptionValue(
                          WebContextInitParameter.ClientStateWriteBufferSize);
         String defaultSize = 
               WebContextInitParameter.ClientStateWriteBufferSize.getDefaultValue();
