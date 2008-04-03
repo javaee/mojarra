@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractConfigProcessor.java,v 1.2 2007/04/27 22:00:56 ofung Exp $
+ * $Id: AbstractConfigProcessor.java,v 1.3 2007/06/28 17:02:46 rlubke Exp $
  */
 
 /*
@@ -133,7 +133,7 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
     /**
      * @return a <code>Map</code> of of textual values keyed off the values
      * of any lang or xml:lang attributes specified on an attribute.  If no
-     * such attribute exists, then the key {@link ApplicationResourceBundle.DEFAULT_KEY}
+     * such attribute exists, then the key {@link ApplicationResourceBundle#DEFAULT_KEY}
      * will be used (i.e. this represents the default Locale).
      * @param list a list of nodes representing textual elements such as
      *  description or display-name     
