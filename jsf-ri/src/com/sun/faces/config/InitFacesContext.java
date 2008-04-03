@@ -66,9 +66,11 @@ class InitFacesContext extends FacesContext {
 
     private ExternalContext ec;
     private UIViewRoot viewRoot;
+    private FacesContext orig;
 
     public InitFacesContext(ServletContext sc) {
         ec = new ServletContextAdapter(sc);
+        orig = FacesContext.getCurrentInstance();
         setCurrentInstance(this);
     }
 
@@ -137,7 +139,7 @@ class InitFacesContext extends FacesContext {
     public void addMessage(String clientId, FacesMessage message) { }
 
     public void release() {
-        setCurrentInstance(null);
+        setCurrentInstance(orig);
     }
 
     public void renderResponse() { }
