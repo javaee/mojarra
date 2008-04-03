@@ -39,6 +39,7 @@
  */
 package com.sun.faces.sandbox.model;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,6 +58,16 @@ public class FileHolderImpl implements FileHolder {
     }
 
     public void clearFiles() {
+        for (InputStream is : files.values()) {
+            if (is != null) {
+                try {
+                    is.close();
+                    is = null;
+                } catch (IOException ioe) {
+                    //
+                }
+            }
+        }
         files.clear();
     }
 
