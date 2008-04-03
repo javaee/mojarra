@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.55 2008/01/25 21:40:50 rlubke Exp $
+ * $Id: ImageRenderer.java,v 1.56 2008/02/14 00:32:12 rlubke Exp $
  */
 
 /*
@@ -60,7 +60,7 @@ import com.sun.faces.renderkit.RenderKitUtils;
  * <B>ImageRenderer</B> is a class that handles the rendering of the graphic
  * ImageTag
  *
- * @version $Id: ImageRenderer.java,v 1.55 2008/01/25 21:40:50 rlubke Exp $
+ * @version $Id: ImageRenderer.java,v 1.56 2008/02/14 00:32:12 rlubke Exp $
  */
 
 public class ImageRenderer extends HtmlBasicRenderer {
@@ -135,7 +135,7 @@ public class ImageRenderer extends HtmlBasicRenderer {
             return res.getRequestPath();
         } else {
             String value = (String) ((UIGraphic) component).getValue();
-            if (value == null) {
+            if (value == null || value.length() == 0) {
                 return "";
             }
             if (value.contains(ResourceHandler.RESOURCE_IDENTIFIER)) {

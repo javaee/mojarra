@@ -152,6 +152,10 @@ public abstract class ResourceHelper {
     public long getLastModified(ResourceInfo resource, FacesContext ctx) {
         
         URL url = getURL(resource, ctx);
+        // resource may have been deleted.
+        if (url == null) {
+            return 0;
+        }
         long ret;
         try {
             URLConnection con = url.openConnection();

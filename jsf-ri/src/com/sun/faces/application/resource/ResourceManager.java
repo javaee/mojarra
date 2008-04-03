@@ -40,6 +40,8 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import javax.faces.application.Application;
+import javax.faces.application.ProjectStage;
 import javax.faces.application.ResourceHandler;
 import javax.faces.context.FacesContext;
 
@@ -53,8 +55,6 @@ import com.sun.faces.util.Util;
  * @since 2.0
  *
  * RELEASE_PENDING (rlubke)
- *                 - implement the ability to add additional ResourceHelpers
- *                 - implement library/resource caching
  *                 - add logging where appropriate
  */
 public class ResourceManager {
@@ -62,6 +62,20 @@ public class ResourceManager {
 
     private ResourceHelper webappHelper = WebappResourceHelper.getInstance();
     private ResourceHelper classpathHelper = ClasspathResourceHelper.getInstance();
+    private ResourceCache cache;
+
+
+    // ------------------------------------------------------------ Constructors
+
+
+    public ResourceManager() {
+
+        Application app = FacesContext.getCurrentInstance().getApplication();
+        if (app.getProjectStage() == ProjectStage.Production) {
+            cache = new ResourceCache(); 
+        }
+
+    }
 
 
     // ------------------------------------------------------ Public Methods
@@ -82,36 +96,71 @@ public class ResourceManager {
                                      String resourceName,
                                      FacesContext ctx) {
 
-        LibraryInfo library = null;
         String localePrefix = getLocalePrefix(ctx);
-        if (libraryName != null) {
-            library = findLibrary(libraryName, localePrefix, ctx);
-            if (library == null && localePrefix != null) {
-                // no localized library found.  Try to find
-                // a library that isn't localized.
-                library = findLibrary(libraryName, null, ctx);
-            }
-            if (library == null) {
-                return null;
-            }
-        }
+        ResourceInfo info = getFromCache(resourceName, libraryName, localePrefix);
+        if (info == null) {
+            LibraryInfo library = null;
 
-        String resName = trimLeadingSlash(resourceName);
-        ResourceInfo info = findResource(library,
-                                         resName,
-                                         localePrefix,
-                                         ctx);
-        if (info == null && localePrefix != null) {
-            // no localized resource found, try to find a
-            // resource that isn't localized
-            info = findResource(library, resName, null, ctx);
+            if (libraryName != null) {
+                library = findLibrary(libraryName, localePrefix, ctx);
+                if (library == null && localePrefix != null) {
+                    // no localized library found.  Try to find
+                    // a library that isn't localized.
+                    library = findLibrary(libraryName, null, ctx);
+                }
+                if (library == null) {
+                    return null;
+                }
+            }
+
+            String resName = trimLeadingSlash(resourceName);
+            info = findResource(library, resName, localePrefix, ctx);
+            if (info == null && localePrefix != null) {
+                // no localized resource found, try to find a
+                // resource that isn't localized
+                info = findResource(library, resName, null, ctx);
+            }
+            if (info != null) {
+                addToCache(info);
+            }
         }
+        
         return info;
 
     }
 
 
     // ----------------------------------------------------- Private Methods
+
+
+    private ResourceInfo getFromCache(String name,
+                                      String library,
+                                      String localePrefix) {
+
+        if (cache == null) {
+            return null;
+        }
+        ResourceCache.CompositeKey key =
+              new ResourceCache.CompositeKey(name, library, localePrefix);
+        return cache.get(key);
+
+    }
+
+
+    private void addToCache(ResourceInfo info) {
+
+        if (cache == null) {
+            return;
+        }
+        ResourceCache.CompositeKey key =
+              new ResourceCache.CompositeKey(info.getName(),
+                                             ((info.getLibraryInfo() != null)
+                                              ? info.getLibraryInfo().getName()
+                                              : null),
+                                             info.getLocalePrefix());
+        cache.add(key, info);
+
+    }
 
 
     /**
@@ -235,6 +284,11 @@ public class ResourceManager {
 
     }
 
+
+    /**
+     * @param s input String
+     * @return the String without a leading slash if it has one.
+     */
     private String trimLeadingSlash(String s) {
         if (s.charAt(0) == '/') {
             return s.substring(1);
@@ -242,5 +296,9 @@ public class ResourceManager {
             return s;
         }
     }
+
+
+    // ----------------------------------------------------------- Inner Classes
+
 
 }

@@ -38,6 +38,7 @@
 package com.sun.faces.application.resource;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
@@ -51,6 +52,7 @@ import java.util.regex.Pattern;
 
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
+import javax.faces.application.ProjectStage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
@@ -188,9 +190,12 @@ public class ResourceHandlerImpl extends ResourceHandler {
         assert (resourceId.startsWith(ResourceHandler.RESOURCE_IDENTIFIER));
 
         Resource resource = null;
+        String resourceName = null;
+        String libraryName = null;
         if (ResourceHandler.RESOURCE_IDENTIFIER.length() < resourceId.length()) {
-            String resourceName = resourceId.substring(RESOURCE_IDENTIFIER.length() + 1);
-            String libraryName = context.getExternalContext().getRequestParameterMap()
+            resourceName = resourceId.substring(RESOURCE_IDENTIFIER.length() + 1);
+            assert(resourceName != null);
+            libraryName = context.getExternalContext().getRequestParameterMap()
                   .get("ln");
             resource = createResource(resourceName, libraryName);
         }
@@ -201,6 +206,11 @@ public class ResourceHandlerImpl extends ResourceHandler {
                 WritableByteChannel out = null;
                 ByteBuffer buf = allocateByteBuffer();
                 try {
+                    InputStream in = resource.getInputStream();
+                    if (in == null) {
+                        send404(context, response, resourceName, libraryName);
+                        return;
+                    }
                     resourceChannel =
                           Channels.newChannel(resource.getInputStream());
                     out = Channels.newChannel(response.getOutputStream());
@@ -229,23 +239,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
                     response.setContentLength(size);
 
                 } catch (IOException ioe) {
-                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                    if (resource.getLibraryName() != null) {
-                        if (LOGGER.isLoggable(Level.WARNING)) {
-                            LOGGER.log(Level.WARNING,
-                                       "jsf.application.resource.unable_to_serve_from_library",
-                                       new Object[]{resource.getResourceName(),
-                                                    resource.getLibraryName()});
-                            LOGGER.log(Level.WARNING, "", ioe);
-                        }
-                    } else {
-                        if (LOGGER.isLoggable(Level.WARNING)) {
-                            LOGGER.log(Level.WARNING,
-                                       "jsf.application.resource.unable_to_serve",
-                                       new Object[]{resource.getResourceName()});
-                            LOGGER.log(Level.WARNING, "", ioe);
-                        }
-                    }
+                    send404(context, response, resourceName, libraryName, ioe);
                 } finally {
                     if (out != null) {
                         out.close();
@@ -259,11 +253,56 @@ public class ResourceHandlerImpl extends ResourceHandler {
             }
 
         } else {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            send404(context, response, resourceName, libraryName);
         }
 
     }
 
+    private void send404(FacesContext ctx,
+                         HttpServletResponse response,
+                         String resourceName,
+                         String libraryName) {
+
+        send404(ctx, response, resourceName, libraryName, null);
+
+    }
+
+    private void send404(FacesContext ctx,
+                         HttpServletResponse response,
+                         String resourceName,
+                         String libraryName,
+                         Throwable t) {
+
+        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        Level level;
+        
+        if (ctx.getApplication().getProjectStage() != ProjectStage.Production) {
+            level = Level.WARNING;
+        } else {
+            level = ((t != null) ? Level.WARNING : Level.FINE);
+        }
+
+        if (libraryName != null) {
+            if (LOGGER.isLoggable(level)) {
+                LOGGER.log(level,
+                           "jsf.application.resource.unable_to_serve_from_library",
+                           new Object[]{resourceName, libraryName});
+                if (t != null) {
+                    LOGGER.log(level, "", t);
+                }
+            }
+        } else {
+            if (LOGGER.isLoggable(level)) {
+                LOGGER.log(level,
+                           "jsf.application.resource.unable_to_serve",
+                           new Object[]{resourceName});
+                if (t != null) {
+                    LOGGER.log(level, "", t);
+                }
+            }
+        }
+
+    }
 
     // ------------------------------------------------- Package Private Methods
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListenerTestCase.java,v 1.16 2007/06/25 20:57:22 rlubke Exp $
+ * $Id: ConfigureListenerTestCase.java,v 1.17 2008/02/14 00:32:11 rlubke Exp $
  */
 
 /*
@@ -164,6 +164,7 @@ public class ConfigureListenerTestCase extends TestCase {
         Thread.currentThread().setContextClassLoader
             (this.getClass().getClassLoader());
         context = new MockServletContext();
+        context.addInitParameter("javax.faces.PROJECT_STAGE", "UnitTest");
         listener = new ConfigureListener();
 
     }

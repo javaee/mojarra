@@ -58,14 +58,14 @@ public class TestResourceManager extends ServletFacesTestCase {
 
 
     @Override public void setUp() {
-        manager = new ResourceManager();
         super.setUp();
+        manager = new ResourceManager();
     }
 
 
     @Override public void tearDown() {
-        manager = null;
         super.tearDown();
+        manager = null;
     }
 
     // ------------------------------------------------------------ Test Methods

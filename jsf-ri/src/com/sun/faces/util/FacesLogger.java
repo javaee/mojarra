@@ -1,5 +1,5 @@
 /*
- * $Id: FacesLogger.java,v 1.4 2008/02/08 18:41:10 rlubke Exp $
+ * $Id: FacesLogger.java,v 1.5 2008/02/14 00:32:11 rlubke Exp $
  */
 
 /*
@@ -50,6 +50,7 @@ import java.util.logging.Logger;
 public enum FacesLogger {
 
     APPLICATION("application"),
+    RESOURCE("resource"),
     CONFIG("config"),
     CONTEXT("context"),
     LIFECYCLE("lifecycle"),

@@ -1,5 +1,5 @@
 /*
- * $Id: WebConfiguration.java,v 1.38 2008/02/07 08:55:59 edburns Exp $
+ * $Id: WebConfiguration.java,v 1.39 2008/02/14 00:30:34 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -666,6 +666,10 @@ public class WebConfiguration {
         DefaultResourceMaxAge(
               "com.sun.faces.defaultResourceMaxAge",
               "604800"
+        ),
+        ResourceUpdateCheckPeriod(
+              "com.sun.faces.resourceUpdateCheckPeriod",
+              "5" // in minutes
         );
 
 
