@@ -36,7 +36,7 @@
 -->
 <!-- =========== FULL CONFIGURATION FILE ================================== -->
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xi="http://www.w3.org/2001/XInclude" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd" version="1.2">
-  <!-- Generic User Interface Components -->
+<!-- Generic User Interface Components -->
   <component>
     <component-type>javax.faces.Column</component-type>
     <component-class>javax.faces.component.UIColumn</component-class>
@@ -3937,7 +3937,7 @@
       <component-family>javax.faces.ViewRoot</component-family>
     </component-extension>
   </component>
-  <!-- Concrete HTML Components -->
+<!-- Concrete HTML Components -->
   <component>
     <description><![CDATA[<p>Represents a column that will be rendered 
       in an HTML <code>table</code> element.</p>]]></description>
@@ -17427,7 +17427,7 @@
       <renderer-type>javax.faces.Radio</renderer-type>
     </component-extension>
   </component>
-  <!-- Standard HTML Renderkit -->
+<!-- Standard HTML Renderkit -->
   <render-kit>
     <description><![CDATA[
      The standard HTML RenderKit.  Please see the spec for additional
@@ -25887,19 +25887,18 @@ attribute.</p>
           encoding.</p>
 
 	  <li><p>Look in the component attribute <code>Map</code> for a
-	  value under the key <em>name</em>.</p></li>
+	  value under the key <em>name</em>.  A value is required for
+	  this attribute.</p></li>
 
 	  <li><p>Look in the component attribute <code>Map</code> for a
-	  value under the key <em>library</em>.</p></li>
+	  value under the key <em>library</em>.  This attribute is
+	  optional, therefore, <em>library</em> may be
+	  <code>null</code>.</p></li>
 
-	  <li><p>If values were found for both <em>name</em> and
-	  <em>library</em>, create the resource by calling
+	  <li><p>Create the resource by calling
 	  <code>Application.getResourceHandler.createResource(<em>name</em>,
-	  <em>library</em>);</code> </p></li>
+	  <em>library</em>);</code>.</p></li>
 
-	  <li><p>If a value was found for only <em>name</em>, create the
-	  resource by calling
-	  <code>Application.getResourceHandler.createResource(<em>name</em>);</code>
 	  </p></li>
 
 	  <li><p>Otherwise throw an <code>IOException</code> with a
