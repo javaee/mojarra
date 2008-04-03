@@ -1,5 +1,5 @@
 /*
- * $Id: CustomResponseWriter.java,v 1.10 2007/04/27 22:01:16 ofung Exp $
+ * $Id: CustomResponseWriter.java,v 1.11 2008/01/07 22:07:25 rlubke Exp $
  */
 
 /*
@@ -84,6 +84,13 @@ public class CustomResponseWriter extends ResponseWriter {
     // using HtmlUtils class.
     //
     private char[] buffer = new char[1028];
+
+    // Internal buffer for to store the result of String.getChars() for
+    // values passed to the writer as String to reduce the overhead
+    // of String.charAt().  This buffer will be grown, if necessary, to
+    // accomodate larger values.
+    private char[] textBuffer = new char[128];
+
     private char[] charHolder = new char[1];
 
 
@@ -292,7 +299,8 @@ public class CustomResponseWriter extends ResponseWriter {
             writer.write("=\"");
             
             // write the attribute value
-            HtmlUtils.writeAttribute(writer, buffer, value.toString());
+            ensureTextBufferCapacity(value.toString());
+            HtmlUtils.writeAttribute(writer, buffer, value.toString(), textBuffer);
             //PENDING (horwat) using String as a result of Tomcat char 
             //        writer ArrayIndexOutOfBoundsException (3584)
             writer.write("\"");
@@ -337,12 +345,12 @@ public class CustomResponseWriter extends ResponseWriter {
         writer.write("=\"");
 
         String stringValue = value.toString();
-        
+        ensureTextBufferCapacity(stringValue);
         // Javascript URLs should not be URL-encoded
         if (stringValue.startsWith("javascript:")) {
-            HtmlUtils.writeAttribute(writer, buffer, stringValue);
+            HtmlUtils.writeAttribute(writer, buffer, stringValue, textBuffer);
         } else {
-            HtmlUtils.writeURL(writer, stringValue, encoding, getContentType());
+            HtmlUtils.writeURL(writer, stringValue, textBuffer, encoding, getContentType());
         }
         
         //PENDING (horwat) using String as a result of Tomcat char writer
@@ -398,7 +406,8 @@ public class CustomResponseWriter extends ResponseWriter {
         if (dontEscape) {
             writer.write(text.toString());
         } else {
-            HtmlUtils.writeText(writer, buffer, text.toString());
+            ensureTextBufferCapacity(text.toString());
+            HtmlUtils.writeText(writer, buffer, text.toString(), textBuffer);
         }
     }
 
@@ -560,5 +569,12 @@ public class CustomResponseWriter extends ResponseWriter {
     public void write(String str, int off, int len) throws IOException {
         closeStartIfNecessary();
         writer.write(str, off, len);
+    }
+
+    private void ensureTextBufferCapacity(String source) {
+        int len = source.length();
+        if (textBuffer.length < len) {
+            textBuffer = new char[len * 2];
+        }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.50 2007/12/19 17:43:47 rlubke Exp $
+ * $Id: HtmlResponseWriter.java,v 1.51 2008/01/07 22:07:25 rlubke Exp $
  */
 
 /*
@@ -124,6 +124,13 @@ public class HtmlResponseWriter extends ResponseWriter {
     // using HtmlUtils class.
     //
     private char[] buffer = new char[1028];
+
+    // Internal buffer for to store the result of String.getChars() for
+    // values passed to the writer as String to reduce the overhead
+    // of String.charAt().  This buffer will be grown, if necessary, to
+    // accomodate larger values.
+    private char[] textBuffer = new char[128];
+
     private char[] charHolder = new char[1];
 
     static final Pattern CDATA_START_SLASH_SLASH;
@@ -607,7 +614,12 @@ public class HtmlResponseWriter extends ResponseWriter {
             attributesBuffer.write(name);
             attributesBuffer.write("=\"");
             // write the attribute value
-            HtmlUtils.writeAttribute(attributesBuffer, buffer, value.toString());
+            String val = value.toString();
+            ensureTextBufferCapacity(val);
+            HtmlUtils.writeAttribute(attributesBuffer,
+                                     buffer,
+                                     val,
+                                     textBuffer);
             attributesBuffer.write('"');
         }
 
@@ -732,7 +744,12 @@ public class HtmlResponseWriter extends ResponseWriter {
         if (dontEscape) {
             writer.write(text.toString());
         } else {
-            HtmlUtils.writeText(writer, buffer, text.toString());
+            String val = text.toString();
+            ensureTextBufferCapacity(val);
+            HtmlUtils.writeText(writer,
+                                buffer,
+                                val,
+                                textBuffer);
         }
 
     }
@@ -822,12 +839,19 @@ public class HtmlResponseWriter extends ResponseWriter {
         attributesBuffer.write("=\"");
 
         String stringValue = value.toString();
-
+        ensureTextBufferCapacity(stringValue);
         // Javascript URLs should not be URL-encoded
         if (stringValue.startsWith("javascript:")) {
-            HtmlUtils.writeAttribute(attributesBuffer, buffer, stringValue);
+            HtmlUtils.writeAttribute(attributesBuffer,
+                                     buffer,
+                                     stringValue,
+                                     textBuffer);
         } else {
-            HtmlUtils.writeURL(attributesBuffer, stringValue, encoding, getContentType());
+            HtmlUtils.writeURL(attributesBuffer,
+                               stringValue,
+                               textBuffer,
+                               encoding,
+                               getContentType());
         }
 
         attributesBuffer.write('"');
@@ -836,6 +860,12 @@ public class HtmlResponseWriter extends ResponseWriter {
 
     // --------------------------------------------------------- Private Methods
 
+    private void ensureTextBufferCapacity(String source) {
+        int len = source.length();
+        if (textBuffer.length < len) {
+            textBuffer = new char[len * 2];
+        }
+    }
 
     /**
      * This method automatically closes a previous element (if not
