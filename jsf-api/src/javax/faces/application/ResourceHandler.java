@@ -344,19 +344,18 @@ public abstract class ResourceHandler {
     
 
     /**
-
      * <p class="changed_added_2_0">Create an instance of
      * <code>Resource</code> given the argument
      * <code>resourceName</code>.  The content-type of the resource is
      * derived by passing the file extension of
      * <code>resourceName</code> to {@link
      * javax.activation.MimetypesFileTypeMap#getContentType}.</p>
-
+     *
      * @param resourceName the name of the resource.
-
+     *
      * @thows NullPointerException if <code>resourceName</code> is
-     * <code>null</code>.
-
+     *  <code>null</code>.
+     *
      * @return a newly created <code>Resource</code> instance, suitable
      * for use in encoding or decoding the named resource.
      */
@@ -375,10 +374,10 @@ public abstract class ResourceHandler {
      * @param resourceName the name of the resource.
      *
      * @param libraryName the name of the library in which this resource
-     * resides.
+     * resides (if any).
      *
-     * @thows NullPointerException if <code>resourceName</code>, or
-     * <code>libraryName</code> are <code>null</code>.
+     * @thows NullPointerException if <code>resourceName</code> is
+     *  <code>null</code>
      *
      * @return a newly created <code>Resource</code> instance, suitable
      * for use in encoding or decoding the named resource.
@@ -398,15 +397,17 @@ public abstract class ResourceHandler {
      * @param resourceName the name of the resource.
      *
      * @param libraryName the name of the library in which this resource
-     * resides.
+     * resides (if any).
      *
      * @param contentType the mime content that this
      * <code>Resource</code> instance will return from {@link
-     * Resource#getContentType}.  Aside from assuring the value is
-     * non-null, no validation is performed on this argument.
+     * Resource#getContentType}.  If the value is null, The
+     * content-type of the resource is derived by passing the file
+     * extension of <code>resourceName</code> to {@link
+     * javax.activation.MimetypesFileTypeMap#getContentType}.</p>
      *
-     * @thows NullPointerException if any of the arguments are
-     * <code>null</code>.
+     * @thows NullPointerException if <code>resourceName</code> is
+     *  <code>null</code>.
      *
      * @return a newly created <code>Resource</code> instance, suitable
      * for use in encoding or decoding the named resource.
@@ -424,8 +425,8 @@ public abstract class ResourceHandler {
      * {@link #isResourceRequest}.  Thus, <code>createResource</code>
      * may assume that the current request is a resource request.</p>
      *
-     * @param context
-     * @return
+     * @param context the {@link javax.faces.context.FacesContext} for this
+     * request
      */
     public abstract void handleResourceRequest(FacesContext context)
     throws IOException;
