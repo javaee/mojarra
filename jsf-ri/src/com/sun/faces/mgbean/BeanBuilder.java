@@ -1,5 +1,5 @@
 /*
- * $Id: BeanBuilder.java,v 1.6 2008/02/28 23:52:14 rlubke Exp $
+ * $Id: BeanBuilder.java,v 1.7 2008/03/10 22:46:57 rlubke Exp $
  */
 
 /*
@@ -533,7 +533,11 @@ public abstract class BeanBuilder {
                     validateLifespanRuntime = true;
                 }
             } else {
-                this.expressionString = "#{\"" + this.expressionString + "\"}";
+                this.expressionString =
+                      "#{\""
+                      + this.expressionString.replaceAll("[\\\\\"]",
+                                                         "\\\\$0")
+                      + "\"}";
             }
         }
 

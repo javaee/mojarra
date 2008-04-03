@@ -376,7 +376,7 @@
     <managed-bean-scope>session</managed-bean-scope>
     <managed-property>
       <property-name>simpleProperty</property-name>
-      <value>Bobby Orr</value>
+      <value>Bobby " \  \" Orr</value>
     </managed-property>
     <managed-property>
       <property-name>nonManagedBean</property-name>

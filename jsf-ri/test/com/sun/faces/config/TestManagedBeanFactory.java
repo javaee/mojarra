@@ -1,5 +1,5 @@
 /*
- * $Id: TestManagedBeanFactory.java,v 1.35 2007/04/27 22:02:04 ofung Exp $
+ * $Id: TestManagedBeanFactory.java,v 1.36 2008/03/10 22:46:57 rlubke Exp $
  */
 
 /*
@@ -752,7 +752,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
             ELUtils.createValueExpression(
                 "#{mixedBean}");
         TestBean bean = (TestBean) vb.getValue(getFacesContext().getELContext());
-        assertEquals("mixed value Bobby Orr", bean.getProp());
+        assertEquals("mixed value Bobby \" \\  \\\" Orr", bean.getProp());
 
         vb =
             ELUtils.createValueExpression(
