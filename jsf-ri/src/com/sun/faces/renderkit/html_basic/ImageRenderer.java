@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.54 2007/11/29 00:51:15 rlubke Exp $
+ * $Id: ImageRenderer.java,v 1.55 2008/01/25 21:40:50 rlubke Exp $
  */
 
 /*
@@ -46,6 +46,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 import javax.faces.application.ResourceHandler;
+import javax.faces.application.Resource;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIGraphic;
 import javax.faces.context.FacesContext;
@@ -59,7 +60,7 @@ import com.sun.faces.renderkit.RenderKitUtils;
  * <B>ImageRenderer</B> is a class that handles the rendering of the graphic
  * ImageTag
  *
- * @version $Id: ImageRenderer.java,v 1.54 2007/11/29 00:51:15 rlubke Exp $
+ * @version $Id: ImageRenderer.java,v 1.55 2008/01/25 21:40:50 rlubke Exp $
  */
 
 public class ImageRenderer extends HtmlBasicRenderer {
@@ -126,17 +127,26 @@ public class ImageRenderer extends HtmlBasicRenderer {
 
     private static String src(FacesContext context, UIComponent component) {
 
-        String value = (String) ((UIGraphic) component).getValue();
-        if (value == null) {
-            return "";
-        }
-        if (value.contains(ResourceHandler.RESOURCE_IDENTIFIER)) {
-            return value;
+        String resName = (String) component.getAttributes().get("name");
+        if (resName != null) {
+            String libName = (String) component.getAttributes().get("library");
+            ResourceHandler handler = context.getApplication().getResourceHandler();
+            Resource res = handler.createResource(resName, libName);
+            return res.getRequestPath();
         } else {
-            value = context.getApplication().getViewHandler().
-                  getResourceURL(context, value);
-            return (context.getExternalContext().encodeResourceURL(value));
+            String value = (String) ((UIGraphic) component).getValue();
+            if (value == null) {
+                return "";
+            }
+            if (value.contains(ResourceHandler.RESOURCE_IDENTIFIER)) {
+                return value;
+            } else {
+                value = context.getApplication().getViewHandler().
+                      getResourceURL(context, value);
+                return (context.getExternalContext().encodeResourceURL(value));
+            }
         }
+
     }
 
     // The testcase for this class is TestRenderers_2.java
