@@ -35,7 +35,6 @@
  */
 package com.sun.faces.sandbox.util;
 
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -43,9 +42,10 @@ import java.util.Iterator;
 import java.util.Map;
 
 import javax.el.ExpressionFactory;
+import javax.el.ValueExpression;
+import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
@@ -80,26 +80,32 @@ public class PrettyUrlPhaseListener implements PhaseListener {
             uri = uri.substring(contextPath.length());
             if (uri != null) {
                 for (Map.Entry<String, String> entry : urlPatterns.entrySet()) {
-                    UrlMatcher um = new UrlMatcher(entry.getValue().trim());
+                    String urlPattern = entry.getKey().trim();
+                    String viewId = entry.getValue().trim();
+                    UrlMatcher um = new UrlMatcher(urlPattern);
                     Map<String, String> injections = um.getInjections(uri);
 
                     if (injections != null) {
                         // Set properties
                         for (Map.Entry<String, String> injection : injections.entrySet()) {
-                            ValueBinding vb = Util.getValueBinding(injection.getKey());
-                            if (vb != null) {
-                                try {
-                                    vb.setValue(context, //URLDecoder.decode(injection.getValue(), "UTF-8"));
-                                            ef.coerceToType(URLDecoder.decode(injection.getValue(), "UTF-8"), vb.getType(context)));
-                                } catch (UnsupportedEncodingException e) {
-                                    // TODO Auto-generated catch block
-                                    e.printStackTrace();
+                            try {
+                                String elExpression = injection.getKey();
+                                String uriValue = injection.getValue();
+
+                                ValueExpression ve = ef.createValueExpression(context.getELContext(), 
+                                        elExpression, Object.class);
+                                if (ve != null) {
+                                    ve.setValue(context.getELContext(), 
+                                            ef.coerceToType(URLDecoder.decode(uriValue, "UTF-8"), 
+                                                    ve.getType(context.getELContext())));
                                 }
+                            } catch (UnsupportedEncodingException e) {
+                                throw new FacesException(e);
                             }
                         }
 
                         PrettyUrlRequestWrapper wrapper = new PrettyUrlRequestWrapper(request);
-                        wrapper.setTemplateName(entry.getKey().trim());
+                        wrapper.setViewId(viewId);
                         context.getExternalContext().setRequest(wrapper);
                         break;
                     }
@@ -119,7 +125,7 @@ public class PrettyUrlPhaseListener implements PhaseListener {
                     if (index > -1) {
                         String templateName = entry.substring(0, index);
                         String pattern = entry.substring(index+1);
-                        urlPatterns.put(templateName, pattern);
+                        urlPatterns.put(pattern.trim(), templateName.trim());
                     }
                 }
             }
@@ -145,23 +151,30 @@ public class PrettyUrlPhaseListener implements PhaseListener {
 }
 
 class PrettyUrlRequestWrapper extends HttpServletRequestWrapper {   
-    private String template;   
+    private String viewId;   
 
     @Override  
     public String getPathInfo() {   
-        return "/" + template;   
+        return viewId;   
     }
 
     @Override
     public String getServletPath() {
-        return "/";
+        String servletPath = super.getServletPath();
+        if (servletPath.contains(viewId)) { 
+            servletPath = servletPath.substring(0, servletPath.indexOf(viewId));
+        }
+        
+        return servletPath; //"/";
     }
+    
+    
 
     public PrettyUrlRequestWrapper(HttpServletRequest request) {   
         super(request);   
     }   
 
-    public void setTemplateName(String template) {   
-        this.template = template;   
+    public void setViewId(String viewId) {   
+        this.viewId = "/" + viewId;   
     }   
 }  

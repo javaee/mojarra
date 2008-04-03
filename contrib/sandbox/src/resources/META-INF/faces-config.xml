@@ -52,6 +52,7 @@
         <phase-listener>com.sun.faces.sandbox.util.MultiFileUploadPhaseListener</phase-listener>
         <phase-listener>com.sun.faces.sandbox.util.DownloadPhaseListener</phase-listener>
     </lifecycle>
+
     <component>
         <component-type>com.sun.faces.sandbox.SelectItems</component-type>
         <component-class>com.sun.faces.sandbox.component.UISelectItems</component-class>
