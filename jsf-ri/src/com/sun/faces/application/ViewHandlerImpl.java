@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.106 2007/06/25 20:57:21 rlubke Exp $
+ * $Id: ViewHandlerImpl.java,v 1.107 2007/06/29 18:43:25 rlubke Exp $
  */
 
 
@@ -81,7 +81,7 @@ import java.util.logging.Logger;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.106 2007/06/25 20:57:21 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.107 2007/06/29 18:43:25 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -421,20 +421,24 @@ public class ViewHandlerImpl extends ViewHandler {
             throw new NullPointerException(message);
         }
 
+        ExternalContext extContext = context.getExternalContext();
+
+        if ("/*".equals(extContext.getRequestMap().get(RIConstants.INVOCATION_PATH))) {
+            throw new FacesException(MessageUtils.getExceptionMessageString(
+                  MessageUtils.FACES_SERVLET_MAPPING_INCORRECT_ID));
+        }
+
         String requestURI = viewToExecute.getViewId();             
 
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("About to execute view " + requestURI);
         }
-                
-        ExternalContext extContext = context.getExternalContext();
 
         // update the JSTL locale attribute in request scope so that JSTL
         // picks up the locale from viewRoot. This attribute must be updated
         // before the JSTL setBundle tag is called because that is when the
         // new LocalizationContext object is created based on the locale.       
-        if (extContext.getRequest()
-        instanceof ServletRequest) {
+        if (extContext.getRequest() instanceof ServletRequest) {
             Config.set((ServletRequest)
             extContext.getRequest(),
                        Config.FMT_LOCALE, context.getViewRoot().getLocale());

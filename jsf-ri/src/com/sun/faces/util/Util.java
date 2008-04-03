@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.214 2007/06/28 20:12:44 rlubke Exp $
+ * $Id: Util.java,v 1.215 2007/06/29 18:43:26 rlubke Exp $
  */
 
 /*
@@ -65,7 +65,6 @@ import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.servlet.ServletContext;
 import java.beans.FeatureDescriptor;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Locale;
@@ -79,7 +78,7 @@ import java.util.regex.Pattern;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.214 2007/06/28 20:12:44 rlubke Exp $
+ * @version $Id: Util.java,v 1.215 2007/06/29 18:43:26 rlubke Exp $
  */
 
 public class Util {
@@ -119,14 +118,6 @@ public class Util {
     
     private static final Map<String,Pattern> patternCache = 
           new LRUMap<String,Pattern>(15);
-    
-     /**
-     * <p>The <code>request</code> scoped attribute to store the
-     * {@link javax.faces.webapp.FacesServlet} path of the original
-     * request.</p>
-     */
-    private static final String INVOCATION_PATH =
-        RIConstants.FACES_PREFIX + "INVOCATION_PATH";
 
 //
 // Instance Variables
@@ -685,7 +676,7 @@ public class Util {
         // Check for a previously stored mapping   
         ExternalContext extContext = context.getExternalContext();
         String mapping =
-              (String) extContext.getRequestMap().get(INVOCATION_PATH);
+              (String) extContext.getRequestMap().get(RIConstants.INVOCATION_PATH);
 
         if (mapping == null) {
          
@@ -713,13 +704,13 @@ public class Util {
         // if the FacesServlet is mapped to /* throw an 
         // Exception in order to prevent an endless 
         // RequestDispatcher loop
-        if ("/*".equals(mapping)) {
-            throw new FacesException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.FACES_SERVLET_MAPPING_INCORRECT_ID));
-        }
+        //if ("/*".equals(mapping)) {
+        //    throw new FacesException(MessageUtils.getExceptionMessageString(
+        //          MessageUtils.FACES_SERVLET_MAPPING_INCORRECT_ID));
+        //}
 
         if (mapping != null) {
-            extContext.getRequestMap().put(INVOCATION_PATH, mapping);
+            extContext.getRequestMap().put(RIConstants.INVOCATION_PATH, mapping);
         }
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.log(Level.FINE,

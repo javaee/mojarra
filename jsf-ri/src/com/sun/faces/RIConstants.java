@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.92 2007/04/27 22:00:53 ofung Exp $
+ * $Id: RIConstants.java,v 1.93 2007/06/29 18:43:26 rlubke Exp $
  */
 
 /*
@@ -121,6 +121,14 @@ public class RIConstants {
           FACES_PREFIX + "DefaultLifecycle";
     public static final String DEFAULT_STATEMANAGER =
           FACES_PREFIX + "DefaultStateManager";
+
+   /**
+    * <p>The <code>request</code> scoped attribute to store the
+    * {@link javax.faces.webapp.FacesServlet} path of the original
+    * request.</p>
+    */
+   public static final String INVOCATION_PATH =
+       FACES_PREFIX + "INVOCATION_PATH";
 
 
     private RIConstants() {
