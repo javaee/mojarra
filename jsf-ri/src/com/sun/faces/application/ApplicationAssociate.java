@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.40 2007/03/13 02:39:00 rlubke Exp $
+ * $Id: ApplicationAssociate.java,v 1.41 2007/03/20 20:27:16 rlubke Exp $
  */
 
 /*
@@ -29,9 +29,19 @@
 
 package com.sun.faces.application;
 
+import com.sun.faces.RIConstants;
+import com.sun.faces.config.beans.ResourceBundleBean;
+import com.sun.faces.spi.InjectionProvider;
+import com.sun.faces.spi.InjectionProviderException;
+import com.sun.faces.spi.InjectionProviderFactory;
+import com.sun.faces.spi.ManagedBeanFactory;
+import com.sun.faces.spi.ManagedBeanFactory.Scope;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
+
 import javax.el.CompositeELResolver;
-import javax.el.ExpressionFactory;
 import javax.el.ELResolver;
+import javax.el.ExpressionFactory;
 import javax.faces.FacesException;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
@@ -40,6 +50,7 @@ import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
 import javax.servlet.ServletContext;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -51,18 +62,6 @@ import java.util.ResourceBundle;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.text.MessageFormat;
-
-import com.sun.faces.RIConstants;
-import com.sun.faces.config.ConfigureListener;
-import com.sun.faces.config.beans.ResourceBundleBean;
-import com.sun.faces.spi.ManagedBeanFactory;
-import com.sun.faces.spi.InjectionProviderFactory;
-import com.sun.faces.spi.InjectionProvider;
-import com.sun.faces.spi.InjectionProviderException;
-import com.sun.faces.spi.ManagedBeanFactory.Scope;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
 
 /**
  * <p>Break out the things that are associated with the Application, but
@@ -501,12 +500,12 @@ public class ApplicationAssociate {
         boolean scopeIsApplication;
         boolean scopeIsRequest;
 
+        ExternalContext extContext = context.getExternalContext();
         if ((scopeIsApplication = (scope == Scope.APPLICATION)) ||
             ((scope == Scope.SESSION))) {
             if (scopeIsApplication) {
-                Map<String,Object> applicationMap = context.getExternalContext().
-                        getApplicationMap();
-                synchronized (applicationMap) {
+                Map<String,Object> applicationMap = extContext.getApplicationMap();
+                synchronized (extContext.getContext()) {
                     try {
                         bean = managedBean.newInstance(context);
                         if (LOGGER.isLoggable(Level.FINE)) {
@@ -524,9 +523,8 @@ public class ApplicationAssociate {
                     applicationMap.put(managedBeanName, bean);
                 }
             } else {
-                Map<String,Object> sessionMap =
-                     context.getExternalContext().getSessionMap();
-                synchronized (sessionMap) {
+                Map<String,Object> sessionMap = extContext.getSessionMap();
+                synchronized (extContext.getSession(true)) {
                     try {
                         bean = managedBean.newInstance(context);
                         if (LOGGER.isLoggable(Level.FINE)) {
@@ -561,8 +559,7 @@ public class ApplicationAssociate {
             }
 
             if (scopeIsRequest) {
-                context.getExternalContext().
-                    getRequestMap().put(managedBeanName, bean);
+                extContext.getRequestMap().put(managedBeanName, bean);
             }
         }
         return bean;
