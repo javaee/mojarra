@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.78 2007/04/27 22:00:03 ofung Exp $
+ * $Id: UICommand.java,v 1.79 2007/08/24 19:03:07 rlubke Exp $
  */
 
 /*
@@ -405,14 +405,14 @@ public class UICommand extends UIComponentBase
      */
 
     public void queueEvent(FacesEvent e) {
-	if (e instanceof ActionEvent) {
-	    if (isImmediate()) {
-		e.setPhaseId(PhaseId.APPLY_REQUEST_VALUES);
-	    }
-	    else {
-		e.setPhaseId(PhaseId.INVOKE_APPLICATION);
-	    }
-	}
-	super.queueEvent(e);
+        UIComponent c = e.getComponent();
+        if (e instanceof ActionEvent && c instanceof UICommand) {
+            if (((UICommand) c).isImmediate()) {
+                e.setPhaseId(PhaseId.APPLY_REQUEST_VALUES);
+            } else {
+                e.setPhaseId(PhaseId.INVOKE_APPLICATION);
+            }
+        }
+        super.queueEvent(e);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandTestCase.java,v 1.33 2007/04/27 22:00:14 ofung Exp $
+ * $Id: UICommandTestCase.java,v 1.34 2007/08/24 19:03:07 rlubke Exp $
  */
 
 /*
@@ -392,6 +392,29 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
         command.setActionListener(null);
         assertNull(command.getActionListener());
 
+    }
+
+    public void testNestedCommands() {
+        UIViewRoot root = new UIViewRoot();
+        UICommand c1 = new UICommand();
+        UICommand c2 = new UICommand();
+        root.getChildren().add(c1);
+        c2.setImmediate(true);
+        c1.getChildren().add(c2);
+        ActionEvent ae = new ActionEvent(c2);
+        c2.queueEvent(ae);
+        assertTrue(ae.getPhaseId().equals(PhaseId.APPLY_REQUEST_VALUES));
+
+        root = new UIViewRoot();
+        c1 = new UICommand();
+        c2 = new UICommand();
+        root.getChildren().add(c1);
+        c1.setImmediate(true);
+        c2.setImmediate(false);
+        c1.getChildren().add(c2);
+         ae = new ActionEvent(c2);
+        c2.queueEvent(ae);
+        assertTrue(ae.getPhaseId().equals(PhaseId.INVOKE_APPLICATION));
     }
 
     public void testValueBindings() {
