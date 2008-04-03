@@ -49,7 +49,10 @@ import javax.faces.context.FacesContext;
 import com.sun.faces.util.Util;
 
 /**
- * RELEASE_PENDING (rlubke)
+ * <p>
+ * Implementations of this class contain the knowledge for finding and serving
+ * web application resources.
+ * <p>
  *
  * @since 2.0
  */
@@ -71,36 +74,38 @@ public abstract class ResourceHelper {
 
 
     /**
-     * RELEASE_PENDING (rlubke) document
-     * @return
+     * @return the base path in which resources will be stored
      */
     public abstract String getBaseResourcePath();
 
 
     /**
-     * RELEASE_PENDING (rlubke) document
-     * @param ctx
-     * @param path
-     * @return
+     * @param ctx the {@link FacesContext} for the current request
+     * @param path the path to the resource
+     * @return an <code>InputStream</code> to the resource, or
+     *  <code>null</code> if no resource is found
      */
     public abstract InputStream getInputStream(String path, FacesContext ctx);
 
 
     /**
-     * RELEASE_PENDING (rlubke) document
-     * @param ctx
-     * @param path
-     * @return
+     * @param ctx the {@link FacesContext} for the current request
+     * @param path the path to the resource
+     * @return a URL to the specified resource, otherwise <code>null</code>
+     *  if no resource is found
      */
     public abstract URL getURL(String path, FacesContext ctx);
 
 
     /**
-     * RELEASE_PENDING (rlubke) document
-     * @param libraryName
-     * @param localePrefix
-     * @param ctx
-     * @return
+     * Search for the specified library/localPrefix combination in an
+     * implementation dependent manner.
+     * @param libraryName the name of the library
+     * @param localePrefix the logicial identifier for a locale specific library.
+     *  if no localePrefix is configured, pass <code>null</code>
+     * @param ctx the {@link FacesContext} for the current request
+     * @return a {@link LibraryInfo} if a matching library based off the inputs
+     *  can be found, otherwise returns <code>null</code>
      */
     public abstract LibraryInfo findLibrary(String libraryName,
                                             String localePrefix,
@@ -108,12 +113,17 @@ public abstract class ResourceHelper {
 
 
     /**
-     * RELEASE_PENDING (rlubke) document
-     * @param library
-     * @param resourceName
-     * @param localePrefix
-     * @param ctx
-     * @return
+     * Search for the specified resource based in the library/localePrefix/resourceName
+     * combination in an implementation dependent manner.
+     * @param library the library this resource should be a part of.  If the
+     *  the resource that is being searched for isn't part of a library, then
+     *  pass <code>null</code>
+     * @param resourceName the name of the resource that is being searched for
+     * @param localePrefix the logicial identifier for a locale specific library.
+     *  if no localePrefix is configured, pass <code>null</code>
+     * @param ctx the {@link FacesContext} for the current request
+     * @return a {@link ResourceInfo} if a matching resource based off the inputs
+     *  can be found, otherwise returns <code>null</code>
      */
     public abstract ResourceInfo findResource(LibraryInfo library,
                                               String resourceName,
@@ -125,16 +135,27 @@ public abstract class ResourceHelper {
 
 
     /**
-     * RELEASE_PENDING (rlubke) document
-     * @param resourcePaths
-     * @return
+     * <p>
+     * Given a collection of path names:
+     * </p>
+     * <pre>
+     *   1.1, scripts, images, 1.2
+     * </pre>
+     * <p>
+     * this method will pick out the directories that represent a library or
+     * resource version and return the latest version found, if any.
+     * </p>
+     *
+     * @param resourcePaths a collection of paths (consisting of single path
+     *  elements)
+     * @return the latest version or if no version can be detected, otherwise
+     *  this method returns <code>null</code>
      */
     protected String getVersion(Collection<String> resourcePaths) {
         List<String> versionedPaths = new ArrayList<String>(resourcePaths.size());
         for (String p : resourcePaths) {
-            String ver = getDirectoryVersion(p);
-            if (ver != null) {
-                versionedPaths.add(ver);
+            if (isVersioned(p)) {
+                versionedPaths.add(p);
             }
         }
         String version = null;
@@ -146,18 +167,17 @@ public abstract class ResourceHelper {
     }
 
 
-     /**
-     * RELEASE_PENDING (rlubke) document
-     *
-     * @param pathElement
-     *
-     * @return
+    /**
+     * @param pathElement the path element to verify
+     * @return <code>true</code> if this path element represents a version
+     *  (i.e. matches {@link #VERSION_PATTERN}), otherwise
+     *  returns <code>false</code>
      */
-    private String getDirectoryVersion(String pathElement) {
+    private boolean isVersioned(String pathElement) {
 
         String[] pathElements = Util.split(pathElement, "/");
         String path = pathElements[pathElements.length - 1];
-        return (VERSION_PATTERN.matcher(path).matches() ? path : null);
+        return (VERSION_PATTERN.matcher(path).matches());
 
     }
 
