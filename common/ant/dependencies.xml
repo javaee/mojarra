@@ -307,12 +307,13 @@
     <property name="glassfish.home"
               value="${dependency.base.dir}/glassfish"/>
     <property name="tomcat6.home"
-              value="${dependency.base.dir}/apache-tomcat-6.0.10"/>
+              value="${dependency.base.dir}/apache-tomcat-6.0.13"/>
     <property name="glassfish.jar"
               value="${glassfish.home}/lib/appserv-rt.jar"/>
     <property name="tomcat6.jar"
               value="${tomcat6.home}/lib/catalina.jar"/>
-    <property name="jetty.version" value="6.1.2rc0"/>
+    <property name="jetty.version.dir" value="6.1.4"/>
+    <property name="jetty.version" value="6.1.4rc0"/>
     <property name="jetty.home"
               value="${dependency.base.dir}/jetty-${jetty.version}"/>
     <property name="jetty.annotations.jar"
@@ -365,15 +366,15 @@ java -Xmx256m -jar ${dependency.base.dir}/${glassfish.installer.jar} -console < 
 
         <if>
             <not>
-                <available file="${dependency.base.dir}/apache-tomcat-6.0.10.zip"
+                <available file="${dependency.base.dir}/apache-tomcat-6.0.13.zip"
                            property="ignored"/>
             </not>
             <then>
-                <get src="http://www.devlib.org/apache/tomcat/tomcat-6/v6.0.10/bin/apache-tomcat-6.0.10.zip"
-                     dest="${dependency.base.dir}/apache-tomcat-6.0.10.zip"
+                <get src="http://www.devlib.org/apache/tomcat/tomcat-6/v6.0.13/bin/apache-tomcat-6.0.13.zip"
+                     dest="${dependency.base.dir}/apache-tomcat-6.0.13.zip"
                      usetimestamp="true"/>
                 <unzip
-                      src="${dependency.base.dir}/apache-tomcat-6.0.10.zip"
+                      src="${dependency.base.dir}/apache-tomcat-6.0.13.zip"
                       dest="${dependency.base.dir}"/>
             </then>
         </if>
@@ -382,7 +383,7 @@ java -Xmx256m -jar ${dependency.base.dir}/${glassfish.installer.jar} -console < 
                 <available file="${dependency.base.dir}/jetty-${jetty.version}.zip" property="ignored"/>
             </not>
             <then>
-                <get src="http://dist.codehaus.org/jetty/jetty-${jetty.version}.zip"
+                <get src="http://dist.codehaus.org/jetty/jetty-${jetty.version.dir}/jetty-${jetty.version}.zip"
                      dest="${dependency.base.dir}/jetty-${jetty.version}.zip"
                      usetimestamp="true"/>
                 <unzip
