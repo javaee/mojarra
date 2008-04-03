@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.43 2007/03/21 17:57:39 rlubke Exp $
+ * $Id: ApplicationAssociate.java,v 1.44 2007/03/21 18:04:07 rlubke Exp $
  */
 
 /*
@@ -217,9 +217,7 @@ public class ApplicationAssociate {
                 me.resourceBundles.clear();
             }
         }
-        applicationMap.remove(ASSOCIATE_KEY);
-        // clear out the threadlocal
-        instance.set(null);
+        applicationMap.remove(ASSOCIATE_KEY);        
     }
 
     /**
