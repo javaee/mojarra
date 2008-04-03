@@ -451,7 +451,7 @@ public class CarBean {
             ResourceHandler handler = context.getApplication().getResourceHandler();
             Resource resource = handler.createResource(value);
             component.getAttributes().put("value",
-                                          resource.getURI());
+                                          resource.getRequestPath());
         } else {
             // we have a single value
             if (null != converter) {
