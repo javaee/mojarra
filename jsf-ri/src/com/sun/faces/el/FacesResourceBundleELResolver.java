@@ -1,5 +1,5 @@
 /*
- * $Id: FacesResourceBundleELResolver.java,v 1.9 2006/09/01 01:22:42 tony_robertson Exp $
+ * $Id: FacesResourceBundleELResolver.java,v 1.10 2007/03/21 17:57:40 rlubke Exp $
  */
 
 /*
@@ -173,7 +173,7 @@ public class FacesResourceBundleELResolver extends ELResolver {
         FacesContext facesContext = 
             (FacesContext) context.getContext(FacesContext.class);
         ApplicationAssociate associate = 
-            ApplicationAssociate.getInstance(facesContext.getExternalContext());
+            ApplicationAssociate.getCurrentInstance();
         Map<String,ResourceBundleBean> rbMap = associate.getResourceBundleBeanMap();
         if (rbMap == null) {
             return list.iterator();

@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanELResolver.java,v 1.15 2006/09/01 01:22:46 tony_robertson Exp $
+ * $Id: ManagedBeanELResolver.java,v 1.16 2007/03/21 17:57:40 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -28,11 +28,12 @@
 
 package com.sun.faces.el;
 
-import java.beans.FeatureDescriptor;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Locale;
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.config.ManagedBeanFactoryImpl;
+import com.sun.faces.config.beans.DescriptionBean;
+import com.sun.faces.config.beans.ManagedBeanBean;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
 
 import javax.el.ELContext;
 import javax.el.ELException;
@@ -41,12 +42,11 @@ import javax.el.PropertyNotFoundException;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.config.ManagedBeanFactoryImpl;
-import com.sun.faces.config.beans.DescriptionBean;
-import com.sun.faces.config.beans.ManagedBeanBean;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.MessageUtils;
+import java.beans.FeatureDescriptor;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
 
 public class ManagedBeanELResolver extends ELResolver {
 
@@ -76,8 +76,8 @@ public class ManagedBeanELResolver extends ELResolver {
         }
 
         // if it's a managed bean, try to create it
-        ApplicationAssociate associate = ApplicationAssociate
-                    .getInstance(facesContext.getExternalContext());
+        ApplicationAssociate associate = 
+             ApplicationAssociate.getCurrentInstance();
         if (null != associate) {
             result = associate.createAndMaybeStoreManagedBeans(facesContext,
                                                                ((String)property));
@@ -138,7 +138,7 @@ public class ManagedBeanELResolver extends ELResolver {
         FacesContext facesContext =
             (FacesContext) context.getContext(FacesContext.class);
         ApplicationAssociate associate =
-            ApplicationAssociate.getInstance(facesContext.getExternalContext());
+            ApplicationAssociate.getCurrentInstance();
         Map mbMap = associate.getManagedBeanFactoryMap();
         if (mbMap == null) {
             return list.iterator();

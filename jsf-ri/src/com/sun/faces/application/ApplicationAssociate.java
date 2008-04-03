@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.42 2007/03/20 20:32:41 rlubke Exp $
+ * $Id: ApplicationAssociate.java,v 1.43 2007/03/21 17:57:39 rlubke Exp $
  */
 
 /*
@@ -115,6 +115,13 @@ public class ApplicationAssociate {
     private static final String ASSOCIATE_KEY = RIConstants.FACES_PREFIX +
          "ApplicationAssociate";
 
+    private static ThreadLocal<ApplicationAssociate> instance =
+        new ThreadLocal<ApplicationAssociate>() {
+            protected ApplicationAssociate initialValue() {
+                return (null);
+            }
+        };
+
     private List<ELResolver> elResolversFromFacesConfig = null;
 
     @SuppressWarnings("deprecation")
@@ -179,6 +186,28 @@ public class ApplicationAssociate {
         return (ApplicationAssociate) context.getAttribute(ASSOCIATE_KEY);
     }
 
+    public static void setCurrentInstance(ApplicationAssociate associate) {
+        instance.set(associate);
+    }
+
+    public static ApplicationAssociate getCurrentInstance() {
+
+        ApplicationAssociate associate = instance.get();
+        if (associate == null) {
+            // Fallback to ExternalContext lookup
+            FacesContext fc = FacesContext.getCurrentInstance();
+            if (fc != null) {
+                ExternalContext extContext = fc.getExternalContext();
+                if (extContext != null) {
+                    return ApplicationAssociate.getInstance(extContext);
+                }
+            }
+        }
+
+        return associate;
+        
+    }
+
     public static void clearInstance(ExternalContext
          externalContext) {
         Map applicationMap = externalContext.getApplicationMap();
@@ -189,6 +218,8 @@ public class ApplicationAssociate {
             }
         }
         applicationMap.remove(ASSOCIATE_KEY);
+        // clear out the threadlocal
+        instance.set(null);
     }
 
     /**

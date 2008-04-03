@@ -79,11 +79,12 @@ public class WebappLifecycleListener implements ServletRequestListener,
                                  request.getAttribute(beanName), 
                                  Scope.REQUEST);
         }
+        ApplicationAssociate.setCurrentInstance(null);
     }
 
     /** The request is about to come into scope of the web application. */
     public void requestInitialized(ServletRequestEvent sre) {
-        // not interested in this event
+        ApplicationAssociate.setCurrentInstance(getAssociate());
     }
 
     /**
@@ -276,7 +277,7 @@ public class WebappLifecycleListener implements ServletRequestListener,
                                  servletContext.getAttribute(beanName), 
                                  Scope.APPLICATION);
         }
-        
+        this.applicationAssociate = null;
     }
 
 
