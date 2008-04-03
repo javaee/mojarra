@@ -51,9 +51,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
 import com.sun.faces.cactus.ServletFacesTestCase;
+import com.sun.faces.config.WebConfiguration;
 import org.apache.cactus.WebRequest;
 import org.apache.cactus.WebResponse;
-import org.apache.cactus.server.ServletContextWrapper;
 
 /**
  * Tests com.sun.faces.application.resource.ResourceHandlerImpl
@@ -260,8 +260,8 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
         // 'begin' methods are invoked.  So instead, leverage the knowledge that
         // the init parameters are checked when the ResourceHandlerImpl is constructed
         // and set the init parameters in the context before constructing.
-        ServletContextWrapper wrapper = (ServletContextWrapper) getFacesContext().getExternalContext().getContext();
-        wrapper.setInitParameter("javax.faces.resource.EXCLUDES", ".gif");
+        WebConfiguration webconfig = WebConfiguration.getInstance(getFacesContext().getExternalContext());
+        webconfig.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.ResourceExcludes, ".gif");
         ResourceHandler handler = new ResourceHandlerImpl();
 
         assertTrue(!handler.isResourceRequest(getFacesContext()));
@@ -273,8 +273,8 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     }
 
     public void testUserSpecifiedResourceExclude2() throws Exception {
-        ServletContextWrapper wrapper = (ServletContextWrapper) getFacesContext().getExternalContext().getContext();
-        wrapper.setInitParameter("javax.faces.resource.EXCLUDES", ".gif");
+        WebConfiguration webconfig = WebConfiguration.getInstance(getFacesContext().getExternalContext());
+        webconfig.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.ResourceExcludes, ".gif");
         ResourceHandler handler = new ResourceHandlerImpl();
 
         assertTrue(handler.isResourceRequest(getFacesContext()));
@@ -286,8 +286,8 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     }
 
     public void testUserSpecifiedResourceExclude3() throws Exception {
-        ServletContextWrapper wrapper = (ServletContextWrapper) getFacesContext().getExternalContext().getContext();
-        wrapper.setInitParameter("javax.faces.resource.EXCLUDES", ".gif");
+        WebConfiguration webconfig = WebConfiguration.getInstance(getFacesContext().getExternalContext());
+        webconfig.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.ResourceExcludes, ".gif");
         ResourceHandler handler = new ResourceHandlerImpl();
 
         assertTrue(handler.isResourceRequest(getFacesContext()));
@@ -299,8 +299,8 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     }
 
     public void testUserSpecifiedResourceExclude4() throws Exception {
-        ServletContextWrapper wrapper = (ServletContextWrapper) getFacesContext().getExternalContext().getContext();
-        wrapper.setInitParameter("javax.faces.resource.EXCLUDES", ".gif");
+        WebConfiguration webconfig = WebConfiguration.getInstance(getFacesContext().getExternalContext());
+        webconfig.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.ResourceExcludes, ".gif");
         ResourceHandler handler = new ResourceHandlerImpl();
 
         assertTrue(handler.isResourceRequest(getFacesContext()));
@@ -312,8 +312,8 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     }
 
     public void testUserSpecifiedResourceExclude5() throws Exception {
-        ServletContextWrapper wrapper = (ServletContextWrapper) getFacesContext().getExternalContext().getContext();
-        wrapper.setInitParameter("javax.faces.resource.EXCLUDES", ".gif");
+        WebConfiguration webconfig = WebConfiguration.getInstance(getFacesContext().getExternalContext());
+        webconfig.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.ResourceExcludes, ".gif");
         ResourceHandler handler = new ResourceHandlerImpl();
 
         assertTrue(handler.isResourceRequest(getFacesContext()));
@@ -343,6 +343,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
         assertTrue(response.containsHeader("expires"));
         assertTrue(response.containsHeader("etag"));
         assertTrue(response.containsHeader("content-type"));
+        
     }
 
 

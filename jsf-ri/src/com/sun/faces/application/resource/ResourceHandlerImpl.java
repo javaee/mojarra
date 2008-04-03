@@ -57,6 +57,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
 
 import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 
@@ -67,6 +68,9 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
     // Log instance for this class
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
+    private static final String RESOURCE_MARKER = "/javax.faces.resource/";
+    private static final String NORMALIZED_ID_KEY =
+          ResourceHandlerImpl.class.getName() + "NORMALIZED_ID";
 
     ResourceManager manager = new ResourceManager();
     List<Pattern> excludePatterns;
@@ -86,25 +90,10 @@ public class ResourceHandlerImpl extends ResourceHandler {
         webconfig = WebConfiguration.getInstance();
         mimeTypeMap = new MimetypesFileTypeMap();
         mimeTypeMap.addMimeTypes("text/javascript js JS");
-        ExternalContext extContext =
-              FacesContext.getCurrentInstance().getExternalContext();
-        String excludesParam =
-              extContext.getInitParameter("javax.faces.resource.EXCLUDES");
-        excludePatterns = new ArrayList<Pattern>();
-        if (null != excludesParam) {
-            String[] patterns = Util.split(excludesParam, " ");
-            for (String pattern : patterns) {
-                excludePatterns.add(Pattern.compile(".*\\" + pattern));
-            }
-        } else {
-            excludePatterns.add(Pattern.compile(".*\\.class"));
-            excludePatterns.add(Pattern.compile(".*\\.properties"));
-            excludePatterns.add(Pattern.compile(".*\\.xhtml"));
-            excludePatterns.add(Pattern.compile(".*\\.jsp"));
-        }
-
+        initExclusions();
 
     }
+
 
     // ------------------------------------------- Methods from Resource Handler
 
@@ -154,22 +143,8 @@ public class ResourceHandlerImpl extends ResourceHandler {
      */
     public boolean isResourceRequest(FacesContext context) {
 
-        // RELEASE_PENDING (rlubke) revisit        
         String viewId = normalizeViewId(context);
-        boolean result = false;
-        boolean matchesExcludeEntry = false;
-        // Step 1, see if the viewId matches an exclude
-        for (Pattern cur : excludePatterns) {
-            if (matchesExcludeEntry = cur.matcher(viewId).matches()) {
-                break;
-            }
-        }
-        // Step 2, if the viewId does not match an exclude,
-        // see if it starts with javax.faces.resource
-        if (!matchesExcludeEntry) {
-            result = viewId.startsWith("/javax.faces.resource");
-        }
-        return result;
+        return (viewId.startsWith(RESOURCE_MARKER) && !isExcluded(viewId));
 
     }
 
@@ -179,49 +154,43 @@ public class ResourceHandlerImpl extends ResourceHandler {
      */
     public void handleResourceRequest(FacesContext context) throws IOException {
 
-        // RELEASE_PENDING (rlubke) revisit
         String viewId = normalizeViewId(context);
-        String resourceName;
-        String libraryName;
-        //String localePrefix;
         Resource resource = null;
-        assert (null != viewId);
-        assert (viewId.startsWith("/javax.faces.resource/"));
-        if ("/javax.faces.resource/".length() < viewId.length()) {
 
-            resourceName = viewId.substring("/javax.faces.resource/".length());
-            libraryName = context.getExternalContext().getRequestParameterMap()
+        assert (null != viewId);
+        assert (viewId.startsWith(RESOURCE_MARKER));
+
+        if (RESOURCE_MARKER.length() < viewId.length()) {
+            String resourceName = viewId.substring(RESOURCE_MARKER.length());
+            String libraryName = context.getExternalContext().getRequestParameterMap()
                   .get("ln");
             resource = createResource(resourceName, libraryName);
         }
 
         ExternalContext extContext = context.getExternalContext();
+        // this case should be safe in both the standard Servlet
+        // and portlet environments
         HttpServletResponse response =
                   (HttpServletResponse) extContext.getResponse();
 
         if (resource != null) {
             if (resource.userAgentNeedsUpdate(context)) {
-                ReadableByteChannel resourceChannel;
-                WritableByteChannel out;
-                ByteBuffer buf = ByteBuffer.allocate(4096);
+                ReadableByteChannel resourceChannel = null;
+                WritableByteChannel out = null;
+                ByteBuffer buf = allocateByteBuffer();
                 try {
                     resourceChannel =
                           Channels.newChannel(resource.getInputStream());
                     out = Channels.newChannel(response.getOutputStream());
-                    int thisRead, totalWritten = 0, size = 0;
-                    response.setContentType(resource.getContentType());
 
-                    for (Map.Entry<String, String> cur :
-                         resource.getResponseHeaders().entrySet()) {
-                        if ("last-modified".equalsIgnoreCase(cur.getKey())
-                              || "expires".equalsIgnoreCase(cur.getKey())) {
-                            response.setDateHeader(cur.getKey(),
-                                                   Long.parseLong(cur.getValue()));
-                        } else {
-                            response.setHeader(cur.getKey(), cur.getValue());
-                        }
-                    }
-                    while (-1 != (thisRead = resourceChannel.read(buf))) {
+                    response.setContentType(resource.getContentType());
+                    handleHeaders(resource, response);
+
+                    int size = 0;
+                    for (int thisRead = resourceChannel.read(buf), totalWritten = 0;
+                         thisRead != -1;
+                         thisRead = resourceChannel.read(buf)) {
+
                         buf.rewind();
                         buf.limit(thisRead);
                         do {
@@ -229,25 +198,36 @@ public class ResourceHandlerImpl extends ResourceHandler {
                         } while (totalWritten < size);
                         buf.clear();
                         size += thisRead;
+
                     }
+
                     response.setContentLength(size);
-                    resourceChannel.close();
-                    out.close();
 
                 } catch (IOException ioe) {
-                    response.setStatus(404);
-                    String message;
-                    if (null != resource.getLibraryName()) {
-                        message = "Unable to serve resource "
-                                  + resource.getResourceName()
-                                  +
-                                  " in library "
-                                  + resource.getLibraryName();
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                    if (resource.getLibraryName() != null) {
+                        if (LOGGER.isLoggable(Level.WARNING)) {
+                            LOGGER.log(Level.WARNING,
+                                       "jsf.application.resource.unable_to_serve_from_library",
+                                       new Object[]{resource.getResourceName(),
+                                                    resource.getLibraryName()});
+                            LOGGER.log(Level.WARNING, "", ioe);
+                        }
                     } else {
-                        message = "Unable to serve resource " + resource
-                              .getResourceName();
+                        if (LOGGER.isLoggable(Level.WARNING)) {
+                            LOGGER.log(Level.WARNING,
+                                       "jsf.application.resource.unable_to_serve",
+                                       new Object[]{resource.getResourceName()});
+                            LOGGER.log(Level.WARNING, "", ioe);
+                        }
                     }
-                    LOGGER.log(Level.WARNING, message, ioe);
+                } finally {
+                    if (out != null) {
+                        out.close();
+                    }
+                    if (resourceChannel != null) {
+                        resourceChannel.close();
+                    }
                 }
             } else {
                 response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
@@ -260,15 +240,28 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
     }
 
+
     // ------------------------------------------------- Package Private Methods
 
 
+    /**
+     * This method is leveraged by {@link ResourceImpl} to detemine if a resource
+     * has been upated.  In short, a resource has been updated if the timestamp
+     * is newer than the timestamp of the ResourceHandler creation time.
+     * @return the time when the ResourceHandler was instantiated (in milliseconds)
+     */
     long getCreationTime() {
 
         return creationTime;
 
     }
 
+
+    /**
+     * This method is here soley for the purpose of unit testing and will
+     * not be invoked during normal runtime.
+     * @param creationTime the time in milliseconds
+     */
     void setCreationTime(long creationTime) {
 
         this.creationTime = creationTime;
@@ -276,15 +269,27 @@ public class ResourceHandlerImpl extends ResourceHandler {
     }
 
 
+    /**
+     * Utility method leveraged by ResourceImpl to reduce the cost of
+     * looking up the WebConfiguration per-instance.
+     * @return the {@link WebConfiguration} for this application
+     */
     WebConfiguration getWebConfig() {
 
         return webconfig;
         
     }
 
+    
     // --------------------------------------------------------- Private Methods
 
 
+    /**
+     * @param resourceName the resource of interest.  The resourceName in question
+     *  may consist of zero or more path elements such that resourceName could
+     *  be something like path1/path2/resource.jpg or resource.jpg
+     * @return the content type for this resource
+     */
     private String getContentTypeFromResourceName(String resourceName) {
 
         String res = resourceName;
@@ -296,23 +301,108 @@ public class ResourceHandlerImpl extends ResourceHandler {
     }
 
 
+    /**
+     * Normalize the request path to exclude JSF invocation information.
+     * If the FacesServlet servicing this request was prefix mapped, then
+     * the path to the FacesServlet will be removed.
+     * If the FacesServlet servicing this request was extension mapped, then
+     * the extension will be trimmed off.
+     * @param context the <code>FacesContext</code> for the current request
+     * @return the request path without JSF invocation information
+     */
     private String normalizeViewId(FacesContext context) {
 
-        String path;
-        String facesServletMapping = Util.getFacesMapping(context);
-        // If it is extension mapped
-        if (!Util.isPrefixMapped(facesServletMapping)) {
-            path = context.getExternalContext().getRequestServletPath();
-            // strip off the extension
-            int i = path.lastIndexOf(".");
-            if (0 < i) {
-                path = path.substring(0, i);
+        ExternalContext extCtx = context.getExternalContext();
+        String path = (String) extCtx.getRequestMap().get(NORMALIZED_ID_KEY);
+        if (path == null) {
+            String facesServletMapping = Util.getFacesMapping(context);
+            // If it is extension mapped
+            if (!Util.isPrefixMapped(facesServletMapping)) {
+                path = context.getExternalContext().getRequestServletPath();
+                // strip off the extension
+                int i = path.lastIndexOf(".");
+                if (0 < i) {
+                    path = path.substring(0, i);
+                }
+            } else {
+                path = context.getExternalContext().getRequestPathInfo();
             }
-        } else {
-            path = context.getExternalContext().getRequestPathInfo();
+            extCtx.getRequestMap().put(NORMALIZED_ID_KEY, path);
         }
         return path;
 
     }
 
+
+    /**
+     * @param viewId the normalized request path as returned by
+     *  {@link #normalizeViewId(javax.faces.context.FacesContext)}
+     * @return <code>true</code> if the request matces an excluded resource,
+     *  otherwise <code>false</code>
+     */
+    private boolean isExcluded(String viewId) {
+        for (Pattern pattern : excludePatterns) {
+            if (pattern.matcher(viewId).matches()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * Initialize the exclusions for this application.
+     * If no explicit exclusions are configured, the defaults of
+     * <ul>
+     * <li>.class</li>
+     * <li>.properties</li>
+     * <li>.xhtml</li>
+     * <li>.jsp</li>
+     * <li>.jspx</li>
+     * <ul>
+     * will be used.
+     */
+    private void initExclusions() {
+
+        String excludesParam = webconfig
+              .getOptionValue(WebContextInitParameter.ResourceExcludes);
+        String[] patterns = Util.split(excludesParam, " ");
+        excludePatterns = new ArrayList<Pattern>(patterns.length);
+        for (String pattern : patterns) {
+            excludePatterns.add(Pattern.compile(".*\\" + pattern));
+        }
+        
+    }
+
+
+    private void handleHeaders(Resource resource,
+                               HttpServletResponse response) {
+
+        for (Map.Entry<String, String> cur :
+             resource.getResponseHeaders().entrySet()) {
+                response.setHeader(cur.getKey(), cur.getValue());
+        }
+
+    }
+
+    private ByteBuffer allocateByteBuffer() {
+
+        int size;
+        try {
+            size = Integer.parseInt(webconfig.getOptionValue(WebContextInitParameter.ResourceBufferSize));
+        } catch (NumberFormatException nfe) {
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.log(Level.WARNING,
+                           "jsf.application.resource.invalid_resource_buffer_size",
+                           new Object[] {
+                               webconfig.getOptionValue(WebContextInitParameter.ResourceBufferSize),
+                               WebContextInitParameter.ResourceBufferSize.getQualifiedName(),
+                               WebContextInitParameter.ResourceBufferSize.getDefaultValue()
+                           });
+            }
+            size = Integer.parseInt(WebContextInitParameter.ResourceBufferSize.getDefaultValue());
+        }
+        return ByteBuffer.allocate(size);
+
+    }
 }

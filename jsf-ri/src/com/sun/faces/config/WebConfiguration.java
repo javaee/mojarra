@@ -1,5 +1,5 @@
 /*
- * $Id: WebConfiguration.java,v 1.33 2007/11/02 00:30:11 rlubke Exp $
+ * $Id: WebConfiguration.java,v 1.34 2007/11/09 20:58:16 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -260,9 +260,15 @@ public class WebConfiguration {
     }
 
 
-    public void overrideContextInitParameter(WebContextInitParameter param) {
+    public void overrideContextInitParameter(WebContextInitParameter param, String value) {
 
-        // no-op for now
+        if (param != null) {
+            if (value == null) {
+                contextParameters.remove(param);
+            } else {
+                contextParameters.put(param, value);
+            }
+        }
 
     }
 
@@ -600,6 +606,10 @@ public class WebConfiguration {
               "javax.faces.LIFECYCLE_ID",
               ""
         ),
+        ResourceExcludes(
+            "javax.faces.resource.EXCLUDES",
+            ".class .jsp .jspx .properties .xhtml"
+        ),
         NumberOfViews(
               "com.sun.faces.numberOfViewsInSession",
               "15"
@@ -635,6 +645,10 @@ public class WebConfiguration {
         ClientStateWriteBufferSize(
               "com.sun.faces.clientStateWriteBufferSize",
               "8192"
+        ),
+        ResourceBufferSize(
+            "com.sun.faces.resourceBufferSize",
+            "2048"
         ),
         ExpressionFactory(
               "com.sun.faces.expressionFactory",

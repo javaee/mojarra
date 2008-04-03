@@ -40,9 +40,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.faces.application.Resource;
 import javax.faces.context.FacesContext;
@@ -54,6 +57,12 @@ import com.sun.faces.util.Util;
  * Default implementation of {@link javax.faces.application.Resource}.
  */
 public class ResourceImpl extends Resource {
+
+    /* HTTP Date format required by the HTTP/1.1 RFC */
+    private static final String RFC1123_DATE_PATTERN =
+          "EEE, dd MMM yyyy HH:mm:ss zzz";
+
+    private static final TimeZone GMT = TimeZone.getTimeZone("GMT");
 
     /* The ResourceHandler implementation */
     private ResourceHandlerImpl owner;
@@ -116,7 +125,9 @@ public class ResourceImpl extends Resource {
         long expiresTime = new Date().getTime() +
                   Long.parseLong(owner.getWebConfig().getOptionValue(
                         WebConfiguration.WebContextInitParameter.DefaultResourceMaxAge));
-        map.put("Expires", Long.toString(expiresTime));
+        SimpleDateFormat format = new SimpleDateFormat(RFC1123_DATE_PATTERN, Locale.US);
+        format.setTimeZone(GMT);
+        map.put("Expires", format.format(new Date(expiresTime)));
 
         URL url = resourceInfo.getHelper().getURL(resourceInfo, FacesContext.getCurrentInstance());
         try {
@@ -126,7 +137,7 @@ public class ResourceImpl extends Resource {
             if (lastModified == 0) {
                 lastModified = owner.getCreationTime();
             }
-            map.put("Last-Modified", Long.toString(lastModified));
+            map.put("Last-Modified", format.format(new Date(lastModified)));
             if (lastModified != 0 && contentLength != -1) {
                 map.put("ETag", "W/\"" + contentLength + '-' + lastModified + '"');
             }
