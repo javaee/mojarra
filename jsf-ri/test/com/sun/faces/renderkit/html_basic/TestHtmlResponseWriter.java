@@ -1,5 +1,5 @@
 /*
- * $Id: TestHtmlResponseWriter.java,v 1.29 2008/02/26 06:53:08 rlubke Exp $
+ * $Id: TestHtmlResponseWriter.java,v 1.30 2008/02/27 17:09:05 rlubke Exp $
  */
 
 /*
@@ -51,6 +51,7 @@ import javax.faces.render.RenderKitFactory;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.Arrays;
 
 import com.sun.faces.cactus.ServletFacesTestCase;
 
@@ -59,7 +60,7 @@ import com.sun.faces.cactus.ServletFacesTestCase;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHtmlResponseWriter.java,v 1.29 2008/02/26 06:53:08 rlubke Exp $
+ * @version $Id: TestHtmlResponseWriter.java,v 1.30 2008/02/27 17:09:05 rlubke Exp $
  */
 
 public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestCase
@@ -491,6 +492,9 @@ public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestC
         }
     }
 
+    /**
+     * Added for issue 704.
+     */
     public void testWriteDecRefRegressionTest() throws Exception {
         Character c = '\u4300';
         String test = c.toString();
@@ -500,6 +504,25 @@ public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestC
         assertTrue("&#17152;", "&#17152;".equals(sw.toString()));
     }
 
+
+    /**
+     * Added for issue 705.
+     */
+    public void testAttributesSumGreaterThan1024RegresssionTest() throws Exception {
+        StringBuilder value = new StringBuilder();
+        for (int i = 0; i < 2046; i++) {
+            value.append('a');
+        }
+        sw = new StringWriter();
+        writer = renderKit.createResponseWriter(sw, "text/html", "UTF-8");
+        writer.startElement("input", null);
+        writer.writeAttribute("onclick", value.toString(), "onclick");
+        writer.endElement("input");
+        StringBuilder control = new StringBuilder();
+        control.append("<input onclick=\"").append(value.toString()).append("\" />");
+        assertTrue(sw.toString(), control.toString().trim().equals(sw.toString().trim()));
+
+    }
 
     //
     // Test Null Argument Exceptions

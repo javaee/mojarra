@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.52 2008/02/07 08:56:00 edburns Exp $
+ * $Id: HtmlResponseWriter.java,v 1.53 2008/02/27 17:09:05 rlubke Exp $
  */
 
 /*
@@ -121,7 +121,7 @@ public class HtmlResponseWriter extends ResponseWriter {
     // of all attributes for a particular element to reducr the number
     // of writes
     private FastStringWriter attributesBuffer;
-
+    
     // Enables hiding of inlined script and style
     // elements from old browsers
     private Boolean isScriptHidingEnabled;
@@ -977,10 +977,10 @@ public class HtmlResponseWriter extends ResponseWriter {
             int curIdx = 0;
             while (curIdx < totalLength) {
                 if ((totalLength - curIdx) > buffer.length) {
-                    int len = buffer.length;
-                    b.getChars(curIdx, len - 1, buffer, 0);
+                    int end = curIdx + buffer.length - 1;
+                    b.getChars(curIdx, end, buffer, 0);
                     writer.write(buffer);
-                    curIdx += len;
+                    curIdx += buffer.length;
                 } else {
                     int len = totalLength - curIdx;
                     b.getChars(curIdx, curIdx + len, buffer, 0);
