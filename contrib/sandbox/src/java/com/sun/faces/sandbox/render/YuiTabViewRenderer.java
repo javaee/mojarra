@@ -66,7 +66,8 @@ public class YuiTabViewRenderer extends Renderer {
     };
 
     private static final String cssIds[] = { 
-        YuiConstants.CSS_TABVIEW
+        YuiConstants.CSS_TABVIEW,
+        YuiConstants.CSS_SANDBOX
     };
 
     public void encodeBegin(FacesContext context, UIComponent component)
@@ -95,7 +96,7 @@ public class YuiTabViewRenderer extends Renderer {
             Util.linkStyleSheet(writer, cssIds[i]);
         }
 
-        YuiRendererHelper.renderSandboxStylesheet(context, writer, tabView);
+//        YuiRendererHelper.renderSandboxStylesheet(context, writer, tabView);
 
         if (YuiTabView.TABSTYLE_BORDER.equalsIgnoreCase(tabView.getTabStyle())) {
             Util.linkStyleSheet(writer, YuiConstants.CSS_TABVIEW_BORDER_TABS);

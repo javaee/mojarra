@@ -85,7 +85,7 @@
     <property name="logging.version" value="1.1" />
     <property name="shale.version" value="1.1.0-SNAPSHOT" />
     <property name="tinymce.version" value="2_1_1_1" />
-    <property name="yui.version" value="2.3.0rc1" />
+    <property name="yui.version" value="2.3.0" />
     
     <property name="codec.jar" value="${sandbox.dependency.base.dir}/commons-codec-${codec.version}.jar"/>
     <property name="facelets.jar" value="${sandbox.dependency.base.dir}/jsf-facelets-${facelets.version}.jar"/>
@@ -313,6 +313,7 @@
                 <get src="http://easynews.dl.sourceforge.net/sourceforge/yui/yui${yui.version}.zip"
                      dest="${yui.archive}"
                      usetimestamp="true"/>
+                <delete dir="${yui.dir}"/>
                 <mkdir dir="${yui.dir}"/>
                 <mkdir dir="yui.work"/>
                 <unzip src="${yui.archive}" dest="yui.work"/>

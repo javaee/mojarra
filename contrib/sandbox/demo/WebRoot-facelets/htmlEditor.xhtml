@@ -9,6 +9,18 @@
         <h:form>
             <h3>HtmlEditor Mode '${param.mode}'</h3>
             <risb:htmlEditor rows="10" cols="85" value="#{testBean.editorValue}" themeStyle="#{param.mode}"/>
+            
+            <textarea name="msgpost" id="msgpost" cols="50" rows="10">
+<strong>Your</strong> HTML <em>code</em> goes here.<br/>
+This text will be pre-loaded in the editor when it is rendered.
+</textarea>
+<script type="text/javascript">
+var myEditor = new YAHOO.widget.Editor('msgpost', {
+height: '300px',
+width: '500px'
+});
+myEditor.render();
+</script>
         </h:form>
     </ui:define>
 </ui:composition>

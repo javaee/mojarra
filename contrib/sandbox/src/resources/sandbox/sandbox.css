@@ -38,23 +38,73 @@
  * This stylesheet is for overriding YUI defaults, specifically, to point images
  * to those bundled in the package.
  */
-.ygtvtn {background: url(%%%BASE_URL%%%/yui/assets/tn.gif) 0 0 no-repeat;}
-.ygtvtm {background: url(%%%BASE_URL%%%/yui/assets/tm.gif) 0 0 no-repeat;}
-.ygtvtmh {background: url(%%%BASE_URL%%%/yui/assets/tmh.gif) 0 0 no-repeat;}
-.ygtvtp {background: url(%%%BASE_URL%%%/yui/assets/tp.gif) 0 0 no-repeat;}
-.ygtvtph {background: url(%%%BASE_URL%%%/yui/assets/tph.gif) 0 0 no-repeat;}
-.ygtvln {background: url(%%%BASE_URL%%%/yui/assets/ln.gif) 0 0 no-repeat;}
-.ygtvlm {background: url(%%%BASE_URL%%%/yui/assets/lm.gif) 0 0 no-repeat;}
-.ygtvlmh {background: url(%%%BASE_URL%%%/yui/assets/lmh.gif) 0 0 no-repeat;}
-.ygtvlp {background: url(%%%BASE_URL%%%/yui/assets/lp.gif) 0 0 no-repeat;}
-.ygtvlph {background: url(%%%BASE_URL%%%/yui/assets/lph.gif) 0 0 no-repeat;}
-.ygtvloading {background: url(%%%BASE_URL%%%/yui/assets/loading.gif) 0 0 no-repeat;}
-.ygtvdepthcell {background: url(%%%BASE_URL%%%/yui/assets/vline.gif) 0 0 no-repeat;}
 
-div.yuimenu { background-color:#efefef; border:solid 1px #527B97; }
-div.yuimenu ul { border-color: #527B97; }
-div.yuimenu li.yuimenuitem { padding:2px 24px; }
-div.yuimenubar h6 { border-color:#527B97; }
-div.yuimenubar li.selected { background-color: #527B97; }
-div.yuimenubar li.yuimenubaritem { border-color:#527B97; }
-div.yuimenu li.selected, div.yuimenubar li.selected { background-color: #527B97; }
+/* TreeView */
+.ygtvtn { background: url('%%%BASE_URL%%%/yui/treeview/assets/sprite-orig.gif') 0 -5600px no-repeat; }
+.ygtvtm { background: url('%%%BASE_URL%%%/yui/treeview/assets/sprite-orig.gif') 0 -4000px no-repeat; }
+.ygtvtmh { background: url('%%%BASE_URL%%%/yui/treeview/assets/sprite-orig.gif') 0 -4800px no-repeat; }
+.ygtvtp { background: url('%%%BASE_URL%%%/yui/treeview/assets/sprite-orig.gif') 0 -6400px no-repeat; }
+.ygtvtph { background: url('%%%BASE_URL%%%/yui/treeview/assets/sprite-orig.gif') 0 -7200px no-repeat; }
+.ygtvln { background: url('%%%BASE_URL%%%/yui/treeview/assets/sprite-orig.gif') 0 -1600px no-repeat; }
+.ygtvlm { background: url('%%%BASE_URL%%%/yui/treeview/assets/sprite-orig.gif') 0 0px no-repeat; }
+.ygtvlmh { background: url('%%%BASE_URL%%%/yui/treeview/assets/sprite-orig.gif') 0 -800px no-repeat; }
+.ygtvlp { background: url('%%%BASE_URL%%%/yui/treeview/assets/sprite-orig.gif') 0 -2400px no-repeat; }
+.ygtvlph { background: url('%%%BASE_URL%%%/yui/treeview/assets/sprite-orig.gif') 0 -3200px no-repeat; }
+.ygtvloading { background: url('%%%BASE_URL%%%/yui/treeview/assets/treeview-loading.gif') 0 0 no-repeat; }
+.ygtvdepthcell { background: url('%%%BASE_URL%%%/yui/treeview/assets/sprite-orig.gif') 0 -8000px no-repeat; }
+
+.yui-button  { background:#ecece3 url('%%%BASE_URL%%%/yui/button/assets/background.png') left center;}
+.yui-menu-button button {background-image:url('%%%BASE_URL%%%/yui/button/assets/menuarrow.gif'); }
+.yui-split-button button { background-image:url('%%%BASE_URL%%%/yui/button/assets/splitarrow.gif');}
+.yui-split-button-activeoption button { background-image:url('%%%BASE_URL%%%/yui/button/assets/splitarrow_active.gif'); }
+.yui-button.ie6 {filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='%%%BASE_URL%%%/yui/button/assets/background.png', sizingMethod = 'scale');}
+        
+.yui-skin-sam .yui-button  { background: url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png') repeat-x 0 0;}
+.yui-skin-sam .yui-menu-button button { background-image: url('%%%BASE_URL%%%/yui/button/assets/skins/sam/menu-button-arrow.png'); }
+.yui-skin-sam .yui-split-button button { background-image: url('%%%BASE_URL%%%/yui/button/assets/skins/sam/split-button-arrow.png'); }
+.yui-skin-sam .yui-split-button-focus button { background-image: url('%%%BASE_URL%%%/yui/button/assets/skins/sam/split-button-arrow-focus.png'); }
+.yui-skin-sam .yui-split-button-hover button { background-image: url('%%%BASE_URL%%%/yui/button/assets/skins/sam/split-button-arrow-hover.png');}
+.yui-skin-sam .yui-split-button-activeoption button { background-image: url('%%%BASE_URL%%%/yui/button/assets/skins/sam/split-button-arrow-active.png');}
+.yui-skin-sam .yui-menu-button-disabled button { background-image: url('%%%BASE_URL%%%/yui/button/assets/skins/sam/menu-button-arrow-disabled.png');}
+.yui-skin-sam .yui-split-button-disabled button { background-image: url('%%%BASE_URL%%%/yui/button/assets/skins/sam/split-button-arrow-disabled.png'); }
+/* Calendar */
+.yui-calendar .calnavleft { background: url('%%%BASE_URL%%%/yui/calendar/assets/callt.gif') no-repeat; }
+.yui-calendar .calnavright { background: url('%%%BASE_URL%%%/yui/calendar/assets/calrt.gif') no-repeat; }
+.yui-calcontainer .calclose { background: url('%%%BASE_URL%%%/yui/calendar/assets/calx.gif') no-repeat; }
+
+/* Menu */
+.yui-skin-sam .yuimenubar { background: url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png') repeat-x 0 0; }
+.yui-skin-sam .yuimenubaritem a.selected { background: url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png') repeat-x 0 -1700px;}
+.yui-skin-sam .yuimenubarnav a.selected .submenuindicator { background: url('%%%BASE_URL%%%/yui/menu/assets/map.gif') repeat-x -16px -856px;}
+.yui-skin-sam .yuimenu .topscrollbar, .yui-skin-sam .yuimenu .bottomscrollbar { background: #fff url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png') no-repeat 0 0;}
+.yui-skin-sam .yuimenuitemlabel .submenuindicator,.yui-skin-sam .yuimenuitemlabel .checkedindicator, .yui-skin-sam .yuimenubaritemlabel .submenuindicator { background: url('%%%BASE_URL%%%/yui/menu/assets/map.gif') no-repeat;}
+.yui-skin-sam .yuimenubar .yuimenuitem a.selected .submenuindicator {background: url('%%%BASE_URL%%%/yui/menu/assets/map.gif') no-repeat 0 -906px; }
+.yuimenu .topscrollbar, .yuimenu .bottomscrollbar { background-image:url('%%%BASE_URL%%%/yui/menu/assets/map.gif'); }
+.yuimenu .topscrollbar { background-image:url('%%%BASE_URL%%%/yui/menu/assets/map.gif'); }
+.yuimenu .topscrollbar_disabled { background-image:url('%%%BASE_URL%%%/yui/menu/assets/map.gif'); }
+.yuimenu .bottomscrollbar { background-image:url('%%%BASE_URL%%%/yui/menu/assets/map.gif'); }
+.yuimenu .bottomscrollbar_disabled { background-image:url('%%%BASE_URL%%%/yui/menu/assets/map.gif'); }
+.yuimenuitemlabel .submenuindicator, .yuimenuitemlabel .checkedindicator,  .yuimenubaritemlabel .submenuindicator { background-image:url('%%%BASE_URL%%%/yui/menu/assets/map.gif'); }
+
+.yuimenu { background-color: #efefef; border:solid 1px #527B97; }
+.yuimenubar { background-color: #efefef; }
+.yuimenuitem a.selected, .yuimenubaritem a.selected { background-color:#527B97; }
+
+
+
+/* Editor */
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-titlebar { background: url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png') repeat-x 0 -200px;}
+.yui-skin-sam .yui-toolbar-container .collapse { background: url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png') no-repeat 0 -400px; }
+.yui-skin-sam .yui-toolbar-container .yui-button { background:url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png') repeat-x 0 0; }
+.yui-skin-sam .yui-toolbar-container .yui-button-hover{ background:url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png') repeat-x 0 -1300px; }
+.yui-skin-sam .yui-toolbar-container .yui-button-selected { background:url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png') no-repeat 0 -1700px; }
+.yui-skin-sam .yui-toolbar-container .yui-button-selected span.yui-toolbar-icon, .yui-skin-sam .yui-toolbar-container .yui-button-hover span.yui-toolbar-icon {background-image: url('%%%BASE_URL%%%/yui/editor/editor-sprite-active.gif'); }
+.yui-skin-sam .yui-toolbar-insertorderedlist-menu li { background-image: url('%%%BASE_URL%%%/yui/editor/editor-sprite.gif'); }
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton.yui-button a.up { background-image: url('%%%BASE_URL%%%/yui/editor/editor-sprite.gif'); }
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton.yui-button a.down { background-image: url('%%%BASE_URL%%%/yui/editor/editor-sprite.gif'); }
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-select span.yui-toolbar-icon { background-image: url('%%%BASE_URL%%%/yui/editor/editor-sprite.gif'); }
+.yui-skin-sam .yui-editor-panel .hd h3 { background: url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png) repeat-x 0 -200px; }
+.yui-skin-sam .yui-editor-panel .hd span.close { background:url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png) no-repeat 0 -300px; }
+.yui-skin-sam .yui-editor-panel .ft span.tip span.icon { background-image: url('%%%BASE_URL%%%/yui/editor/editor-sprite.gif'); }
+.yui-skin-sam .yui-editor-panel .hd span.knob { background-image: url('%%%BASE_URL%%%/yui/editor/editor-knob.gif');}
+

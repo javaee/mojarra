@@ -47,7 +47,6 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 
 import com.sun.faces.sandbox.component.YuiMenuBase;
-import com.sun.faces.sandbox.component.YuiMenuItem;
 import com.sun.faces.sandbox.util.Util;
 import com.sun.faces.sandbox.util.YuiConstants;
 
@@ -72,36 +71,27 @@ public class YuiMenuRenderer extends Renderer {
         ,YuiConstants.JS_YUI_MENU_HELPER
     };
     protected String cssClass = "yuimenu";
-    
+
     int idCount = 0;
 
     /**
      * This String array lists all of the CSS files needed by this component.
      */
     protected static final String cssIds[] = { 
-        YuiConstants.CSS_MENU 
+        YuiConstants.CSS_MENU,
+        YuiConstants.CSS_SANDBOX
     };
 
-    public boolean getRendersChildren() {
-        return true;
-    }
-
-    public void encodeChildren(FacesContext context,
-            UIComponent component) throws java.io.IOException {
-        //
-    }
-
+//    public boolean getRendersChildren() {
+//        return true;
+//    }
 
     protected String getCssClass() {
         return "yuimenu";
     }
 
-    /**
-     * This method will output the necessary JavaScript and CSS references to enable the 
-     * JavaScript object creation.
-     */
-    @Override
-    public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
+    public void encodeBegin(FacesContext context, UIComponent component)
+    throws IOException {
         if (context == null) {
             throw new NullPointerException("param 'context' is null");
         }
@@ -115,7 +105,7 @@ public class YuiMenuRenderer extends Renderer {
         }
 
         ResponseWriter writer = context.getResponseWriter();
-        
+
         for (int i = 0; i < scriptIds.length; i++) {
             Util.linkJavascript(writer, scriptIds[i], true);
         }
@@ -123,15 +113,110 @@ public class YuiMenuRenderer extends Renderer {
             Util.linkStyleSheet(writer, cssIds[i]);
         }
         
+        writer.startElement("script",component);
+        writer.writeAttribute("type", "text/javascript", "type");
+        writer.write("YAHOO.widget.MenuItem.prototype.IMG_ROOT = \"" + 
+                Util.generateStaticUri("/yui/menu/assets/") +"\";");
+        writer.endElement("script");
+
+//        YuiRendererHelper.renderSandboxMenuJavaScript(context, context.getResponseWriter(), component);
+//        YuiRendererHelper.renderSandboxStylesheet(context, context.getResponseWriter(), component);
+
+//        writer.startElement("span", component);
+//        writer.writeAttribute("class", "yui-skin-sam1", "class");
+        
+        writer.startElement("div", component);
+        writer.writeAttribute("id", component.getClientId(context), "id");
+        writer.writeAttribute("class", getCssClass(), "class");
+        writer.startElement("div", component);
+        writer.writeAttribute("class", "bd", "class");
+
+        writer.startElement("ul", component);
+        writer.writeAttribute("class", "first-of-type", "class");
+
+//        encodeChildren(context, component);
+    }
+    
+    
+
+//    public void encodeChildren(FacesContext context, UIComponent component) throws IOException {
+//        for (UIComponent child : component.getChildren()) {
+//            if (child instanceof YuiMenuItem) {
+//                ((YuiMenuItem)child).setCssClass(getCssClass());
+//            }
+//            child.encodeAll(context);
+//        }
+//    }
+
+    @Override
+    public void encodeEnd(FacesContext context, UIComponent component)
+            throws IOException {
+        ResponseWriter writer = context.getResponseWriter();
+        writer.endElement("ul");
+        writer.endElement("div");
+        writer.endElement("div");
+//        writer.endElement("span");
+        renderJavaScript(context, writer, (YuiMenuBase)component);
+    }
+
+    /**
+     * This will render the JavaScript needed to instantiate the YUI menu object
+     */
+    // TODO:  this will likely have XHTML issues
+    protected void renderJavaScript(FacesContext context, ResponseWriter writer, YuiMenuBase component) throws IOException {
+        writer.startElement("script", component);
+        writer.writeAttribute("type", "text/javascript", "type");
+
+        String ctorArgs = buildConstructorArgs(component);
+        String javaScript =
+            "YAHOO.util.Event.onDOMReady(function() {" +
+            "var oMenu_%%%JS_VAR%%% = new YAHOO.widget.Menu(\"%%%ID%%%\", {" + ctorArgs + "}); oMenu_%%%JS_VAR%%%.render(); oMenu_%%%JS_VAR%%%.show();});";
+        javaScript = javaScript
+            .replaceAll("%%%ID%%%",     component.getClientId(context))
+            .replaceAll("%%%JS_VAR%%%", YuiRendererHelper.getJavascriptVar(component));
+        writer.writeText(javaScript , null);
+        writer.endElement("script");
+    }
+
+    /**
+     * A helper method to create the constructor arguments for the JavaScript 
+     * object instantiation.
+     * @return the JavaScript associative array text (minus the curly braces) representing the desired arguments
+     */
+    protected String buildConstructorArgs(YuiMenuBase component) {
+        return "width: \"" + component.getWidth() + 
+        "\", autosubmenudisplay: " + component.getAutoShow() + 
+        ", clicktohide: false, visible: true";
+    }
+
+/*
+    public void encodeBegin1(FacesContext context, UIComponent component) throws IOException {
+        if (context == null) {
+            throw new NullPointerException("param 'context' is null");
+        }
+        if (component == null) {
+            throw new NullPointerException("param 'component' is null");
+        }
+
+        // suppress rendering if "rendered" property on the component is false.
+        if (!component.isRendered()) {
+            return;
+        }
+
+        ResponseWriter writer = context.getResponseWriter();
+
+        for (int i = 0; i < scriptIds.length; i++) {
+            Util.linkJavascript(writer, scriptIds[i], true);
+        }
+        for (int i = 0; i < cssIds.length; i++) {
+            Util.linkStyleSheet(writer, cssIds[i]);
+        }
+
         YuiRendererHelper.renderSandboxMenuJavaScript(context, context.getResponseWriter(), component);
         YuiRendererHelper.renderSandboxStylesheet(context, context.getResponseWriter(), component);
     }
 
-    /**
-     * All component rendering will be done in this method.
-     */
-    @Override
-    public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
+    public void encodeEnd2(FacesContext context, UIComponent component) throws IOException {
         if (context == null) {
             throw new NullPointerException("param 'context' is null");
         }
@@ -150,14 +235,14 @@ public class YuiMenuRenderer extends Renderer {
         idCount = 0;
         renderMenu(writer, (YuiMenuBase)component);
         writer.endElement("div");
-        renderJavaScript(writer, (YuiMenuBase)component);
+        renderJavaScript(context, writer, (YuiMenuBase)component);
     }
+//  public void encodeEnd(FacesContext context, UIComponent component)
+//  throws IOException {
+//  ResponseWriter writer = context.getResponseWriter();
+////writer.endElement("div");
+//  }
 
-    /**
-     * This will render the menu and its subitems.
-     * @throws IOException
-     * @see com.sun.faces.sandbox.model.Menu
-     */
     protected void renderMenu (ResponseWriter writer, UIComponent component) throws IOException {
         idCount++;
         writer.startElement("div", component);
@@ -185,13 +270,6 @@ public class YuiMenuRenderer extends Renderer {
         writer.endElement("div");
     }
 
-    /**
-     * This will render the given <code>MenuItem</code>.  If the <code>MenuItem</code>
-     * has a nested <code>Menu</code>, <code>renderMenu</code> is called to handle it.  
-     * @throws IOException
-     * @see com.sun.faces.sandbox.model.Menu
-     * @see com.sun.faces.sandbox.model.MenuItem
-     */
     protected void renderMenuItem (ResponseWriter writer, YuiMenuItem menuItem) throws IOException {
         idCount++;
         writer.startElement("li", menuItem);
@@ -213,7 +291,7 @@ public class YuiMenuRenderer extends Renderer {
         if (menuItem.getChildCount() > 0) {
             for (UIComponent child: menuItem.getChildren()) {
                 if (child instanceof YuiMenuItem) {
-                    renderMenu(writer, menuItem);
+                    renderMenu(writer, child);
                 } else {
                     // 1.1 doesn't support encodeAll()
                     child.encodeBegin(FacesContext.getCurrentInstance());
@@ -225,31 +303,5 @@ public class YuiMenuRenderer extends Renderer {
 
         writer.endElement("li");
     }
-
-    /**
-     * This will render the JavaScript needed to instantiate the YUI menu object
-     */
-    // TODO:  this will likely have XHTML issues
-    protected void renderJavaScript(ResponseWriter writer, YuiMenuBase component) throws IOException {
-        writer.startElement("script", component);
-        writer.writeAttribute("type", "text/javascript", "type");
-
-        String ctorArgs = buildConstructorArgs(component);
-        String javaScript = "var oMenu_%%%JS_VAR%%% = new SANDBOX.Menu(\"%%%ID%%%\", {" + ctorArgs + "});";
-        javaScript = javaScript.replaceAll("%%%ID%%%", component.getClientId(FacesContext.getCurrentInstance()) + "_1")
-            .replaceAll("%%%JS_VAR%%%", 
-                    YuiRendererHelper.getJavascriptVar(component) + "_1");
-        writer.writeText(javaScript , null);
-        writer.endElement("script");
-    }
-    
-    /**
-     * A helper method to create the constructor arguments for the JavaScript 
-     * object instantiation.
-     * @return the JavaScript associative array text (minus the curly braces) representing the desired arguments
-     */
-    protected String buildConstructorArgs(YuiMenuBase component) {
-        return "width: \"" + component.getWidth() + "\", autosubmenudisplay: " +
-            component.getAutoShow() + ", clicktohide: false, visible: true";
-    }
+*/
 }

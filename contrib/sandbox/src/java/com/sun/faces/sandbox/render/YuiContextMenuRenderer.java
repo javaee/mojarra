@@ -59,16 +59,17 @@ public class YuiContextMenuRenderer extends YuiMenuRenderer {
     /**
      * This will render the JavaScript needed to instantiate the YUI context menu object
      */
-    protected void renderJavaScript(ResponseWriter writer, YuiMenuBase component) throws IOException {
+    @Override
+    protected void renderJavaScript(FacesContext context, ResponseWriter writer, YuiMenuBase component) throws IOException {
         YuiContextMenu contextMenu = (YuiContextMenu) component;
         writer.startElement("script", component);
         writer.writeAttribute("type", "text/javascript", "type");
         String javaScript = 
                 "var oMenu_%%%JS_VAR%%% = new YAHOO.widget.ContextMenu(\"%%%ID%%%\", {" + buildConstructorArgs(contextMenu) + "});" +
                 "YAHOO.util.Event.onDOMReady(function() { oMenu_%%%JS_VAR%%%.render(document.getElementById(\"%%%TRIGGER%%%\"));});";
-        javaScript = javaScript.replaceAll("%%%ID%%%", component.getClientId(FacesContext.getCurrentInstance()) + "_1")
+        javaScript = javaScript.replaceAll("%%%ID%%%", component.getClientId(FacesContext.getCurrentInstance()))
                 .replaceAll("%%%JS_VAR%%%", 
-                        YuiRendererHelper.getJavascriptVar(component) + "_1")
+                        YuiRendererHelper.getJavascriptVar(component))
                 .replaceAll("%%%TRIGGER%%%", component.getParent().getClientId(FacesContext.getCurrentInstance())); 
                         //getFullyQualifiedId(contextMenu.getTrigger()));
         
@@ -77,7 +78,7 @@ public class YuiContextMenuRenderer extends YuiMenuRenderer {
     }
     
     private String buildConstructorArgs(YuiContextMenu component) {
-        return ("trigger: \"%%%TRIGGER%%%\", width: \"" + component.getWidth() + "\", autosubmenudisplay: " +
+        return ("trigger: \"%%%TRIGGER%%%\", width: \"" + component.getWidth() + "\", clicktohide: false, autosubmenudisplay: " +
         component.getAutoShow());
     }
 }

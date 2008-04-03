@@ -49,6 +49,7 @@ import javax.faces.render.Renderer;
 
 import com.sun.faces.sandbox.component.HtmlEditor;
 import com.sun.faces.sandbox.util.Util;
+import com.sun.faces.sandbox.util.YuiConstants;
 
 /**
  * @author Jason Lee
@@ -58,6 +59,19 @@ public class HtmlEditorRenderer extends Renderer {
     private static final String TINY_MCE = "/html_editor/tiny_mce.js";
     protected static final String scriptIds[] = { 
         //YuiConstants.JS_YAHOO_DOM_EVENT
+        YuiConstants.JS_UTILITIES,
+        YuiConstants.JS_CONTAINER,
+        YuiConstants.JS_MENU,
+        YuiConstants.JS_BUTTON,
+        YuiConstants.JS_EDITOR
+    };
+    
+    protected static final String cssIds[] = {
+        YuiConstants.CSS_CONTAINER,
+        YuiConstants.CSS_MENU,
+        YuiConstants.CSS_BUTTON,
+        YuiConstants.CSS_EDITOR,
+        YuiConstants.CSS_SANDBOX
     };
 
     @Override
@@ -83,27 +97,38 @@ public class HtmlEditorRenderer extends Renderer {
         String id = editor.getClientId(context);
         ResponseWriter writer = context.getResponseWriter();
         
-        // Load the TinyMCE script
         for (int i = 0; i < scriptIds.length; i++) {
             Util.linkJavascript(writer, scriptIds[i], true);
         }
         
-        Util.linkJavascript(writer, context.getExternalContext().getRequestContextPath() + TINY_MCE, false); 
+        for (int i = 0; i < cssIds.length; i++) {
+            Util.linkStyleSheet(writer, cssIds[i]);
+        }
+
+//        Util.linkJavascript(writer, context.getExternalContext().getRequestContextPath() + TINY_MCE, false);
+//        YuiRendererHelper.renderSandboxStylesheet(context, context.getResponseWriter(), component);
         
         // Create the textarea to use as the WYSIWYG editor
+        writer.startElement("span", editor);
+        writer.writeAttribute("class", "yui-skin-sam1", "class");
+        
         writer.startElement("textarea", editor);
-        writer.writeAttribute("id", id, "id");
-        writer.writeAttribute("name", id, "name");
+        writer.writeAttribute("id", editor.getClientId(context), "id");
+        writer.writeAttribute("name", editor.getClientId(context), "name");
         writer.writeAttribute("rows", editor.getRows(), "rows");
         writer.writeAttribute("cols", editor.getCols(), "cols");
         if (editor.getValue() != null) {
             writer.write((String)editor.getValue());
         }
         writer.endElement("textarea");
+        writer.endElement("span");
+        
         writer.startElement("script", editor);
         writer.writeAttribute("language", "javascript", "language");
         writer.writeAttribute("type", "text/javascript", "type");
-        writer.write("  tinyMCE.init({" + buildConfig(context, editor) + "});");
+//        writer.write("  tinyMCE.init({" + buildConfig(context, editor) + "});");
+        writer.write("YAHOO.util.Event.onDOMReady(function() {\nalert('hi');\nvar foo = new YAHOO.widget.Editor('"+editor.getClientId(context)+
+                "', {height: '300px',width: '450px'});\nfoo.render();});");
         writer.endElement("script");
     }
     

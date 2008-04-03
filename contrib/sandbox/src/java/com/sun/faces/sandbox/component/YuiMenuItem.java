@@ -49,14 +49,17 @@ import javax.faces.component.UIOutput;
  */
 public class YuiMenuItem extends UIOutput {
     public static final String COMPONENT_TYPE = "com.sun.faces.sandbox.YuiMenuItem";
-//    public static final String RENDERER_TYPE = "com.sun.faces.sandbox.YuiMenuRenderer";
+    public static final String RENDERER_TYPE = "com.sun.faces.sandbox.YuiMenuItemRenderer";
     
     protected String url;
 
-    public YuiMenuItem()           { /* This will be rendered by the enclosing YuiMenuBase */ }
+    public YuiMenuItem()           { setRendererType(RENDERER_TYPE); }
     public String getFamily()      { return COMPONENT_TYPE; }
 
     public String getUrl()         { return ComponentHelper.getValue(this, "url", url); }
     public void setUrl(String url) { this.url = url; }
-
+    
+    public String toString() {
+        return "YuiMenuItem: [value = '" + getValue() + "' url = '" + url + "']";
+    }
 }

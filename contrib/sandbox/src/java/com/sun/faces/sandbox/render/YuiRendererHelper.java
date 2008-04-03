@@ -65,18 +65,49 @@ public class YuiRendererHelper {
     protected static String YUI_HELPER_MENU_JS_RENDERED = "YUI_HELPER_MENU_JS";
     protected static String YUI_HELPER_CSS_RENDERED = "YUI_HELPER_CSS";
     protected static String[] cssRules = new String[] {
+        /*
+        // Button
+        ".yui-button  { background:#ecece3 url('%%%BASE_URL%%%/yui/button/assets/background.png') left center;}",
+        ".yui-menu-button button {background-image:url('%%%BASE_URL%%%/yui/button/assets/menuarrow.gif'); }",
+        ".yui-split-button button { background-image:url('%%%BASE_URL%%%/yui/button/assets/splitarrow.gif');}",
+        ".yui-split-button-activeoption button { background-image:url('%%%BASE_URL%%%/yui/button/assets/splitarrow_active.gif'); }",
+        ".yui-button.ie6 {filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='%%%BASE_URL%%%/yui/button/assets/background.png', sizingMethod = 'scale');}",
+        
+        ".yui-skin-sam .yui-button  { background: url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png') repeat-x 0 0;}",
+        ".yui-skin-sam .yui-menu-button button { background-image: url('%%%BASE_URL%%%/yui/button/assets/skins/sam/menu-button-arrow.png'); }",
+        ".yui-skin-sam .yui-split-button button { background-image: url('%%%BASE_URL%%%/yui/button/assets/skins/sam/split-button-arrow.png'); }",
+        ".yui-skin-sam .yui-split-button-focus button { background-image: url('%%%BASE_URL%%%/yui/button/assets/skins/sam/split-button-arrow-focus.png'); }",
+        ".yui-skin-sam .yui-split-button-hover button { background-image: url('%%%BASE_URL%%%/yui/button/assets/skins/sam/split-button-arrow-hover.png');}",
+        ".yui-skin-sam .yui-split-button-activeoption button { background-image: url('%%%BASE_URL%%%/yui/button/assets/skins/sam/split-button-arrow-active.png');}",
+        ".yui-skin-sam .yui-menu-button-disabled button { background-image: url('%%%BASE_URL%%%/yui/button/assets/skins/sam/menu-button-arrow-disabled.png');}",
+        ".yui-skin-sam .yui-split-button-disabled button { background-image: url('%%%BASE_URL%%%/yui/button/assets/skins/sam/split-button-arrow-disabled.png'); }",
         // Calendar
         ".yui-calendar .calnavleft { background: url('%%%BASE_URL%%%/yui/calendar/assets/callt.gif') no-repeat; }",
         ".yui-calendar .calnavright { background: url('%%%BASE_URL%%%/yui/calendar/assets/calrt.gif') no-repeat; }",
         ".yui-calcontainer .calclose { background: url('%%%BASE_URL%%%/yui/calendar/assets/calx.gif') no-repeat; }",
+        // Editor
+        ".yui-skin-sam .yui-toolbar-container .yui-toolbar-titlebar { background: url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png') repeat-x 0 -200px;}",
+        ".yui-skin-sam .yui-toolbar-container .collapse { background: url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png') no-repeat 0 -400px; }",
+        ".yui-skin-sam .yui-toolbar-container .yui-button { background:url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png') repeat-x 0 0; }",
+        ".yui-skin-sam .yui-toolbar-container .yui-button-hover{ background:url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png') repeat-x 0 -1300px; }",
+        ".yui-skin-sam .yui-toolbar-container .yui-button-selected { background:url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png') no-repeat 0 -1700px; }",
+        ".yui-skin-sam .yui-toolbar-container .yui-button-selected span.yui-toolbar-icon, .yui-skin-sam .yui-toolbar-container .yui-button-hover span.yui-toolbar-icon {background-image: url('%%%BASE_URL%%%/yui/editor/editor-sprite-active.gif'); }",
+        ".yui-skin-sam .yui-toolbar-insertorderedlist-menu li { background-image: url('%%%BASE_URL%%%/yui/editor/editor-sprite.gif'); }",
+        ".yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton.yui-button a.up { background-image: url('%%%BASE_URL%%%/yui/editor/editor-sprite.gif'); }",
+        ".yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton.yui-button a.down { background-image: url('%%%BASE_URL%%%/yui/editor/editor-sprite.gif'); }",
+        ".yui-skin-sam .yui-toolbar-container .yui-toolbar-select span.yui-toolbar-icon { background-image: url('%%%BASE_URL%%%/yui/editor/editor-sprite.gif'); }",
+        ".yui-skin-sam .yui-editor-panel .hd h3 { background: url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png) repeat-x 0 -200px; }",
+        ".yui-skin-sam .yui-editor-panel .hd span.close { background:url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png) no-repeat 0 -300px; }",
+        ".yui-skin-sam .yui-editor-panel .ft span.tip span.icon { background-image: url('%%%BASE_URL%%%/yui/editor/editor-sprite.gif'); }",
+        ".yui-skin-sam .yui-editor-panel .hd span.knob { background-image: url('%%%BASE_URL%%%/yui/editor/editor-knob.gif');}",
+
         // Menu
         ".yui-skin-sam .yuimenubar { background: url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png') repeat-x 0 0; }",
         ".yui-skin-sam .yuimenubaritem a.selected { background: url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png') repeat-x 0 -1700px;}",
-        ".yui-skin-sam .yuimenubarnav a.selected .submenuindicator { background: url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png') repeat-x -16px -856px;}",
+        ".yui-skin-sam .yuimenubarnav a.selected .submenuindicator { background: url('%%%BASE_URL%%%/yui/menu/assets/map.gif') repeat-x -16px -856px;}",
         ".yui-skin-sam .yuimenu .topscrollbar, .yui-skin-sam .yuimenu .bottomscrollbar { background: #fff url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png') no-repeat 0 0;}",
-        ".yui-skin-sam .yuimenuitemlabel .submenuindicator,.yui-skin-sam .yuimenuitemlabel .checkedindicator, .yui-skin-sam .yuimenubaritemlabel .submenuindicator { background: url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png') no-repeat;}",
-        ".yui-skin-sam .yuimenubar .yuimenuitem a.selected .submenuindicator {background: url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png') no-repeat 0 -906px; }",
-
+        ".yui-skin-sam .yuimenuitemlabel .submenuindicator,.yui-skin-sam .yuimenuitemlabel .checkedindicator, .yui-skin-sam .yuimenubaritemlabel .submenuindicator { background: url('%%%BASE_URL%%%/yui/menu/assets/map.gif') no-repeat;}",
+        ".yui-skin-sam .yuimenubar .yuimenuitem a.selected .submenuindicator {background: url('%%%BASE_URL%%%/yui/menu/assets/map.gif') no-repeat 0 -906px; }",
         ".yuimenu .topscrollbar, .yuimenu .bottomscrollbar { background-image:url('%%%BASE_URL%%%/yui/menu/assets/map.gif'); }",
         ".yuimenu .topscrollbar { background-image:url('%%%BASE_URL%%%/yui/menu/assets/map.gif'); }",
         ".yuimenu .topscrollbar_disabled { background-image:url('%%%BASE_URL%%%/yui/menu/assets/map.gif'); }",
@@ -88,6 +119,7 @@ public class YuiRendererHelper {
         ".yuimenubar { background-color: #efefef; }",
         ".yuimenuitem a.selected, .yuimenubaritem a.selected { background-color:#527B97; }",
 
+
         /*
         "div.yuimenu { background-color: #efefef; border:solid 1px #527B97; }",
         "div.yuimenubar { background-color: #efefef; }",
@@ -97,7 +129,7 @@ public class YuiRendererHelper {
         "div.yuimenubar li.selected { background-color:#527B97; }",
         "div.yuimenubar li.yuimenubaritem { border-color:#527B97; }",
         "div.yuimenu li.selected, div.yuimenubar li.selected { background-color: #527B97; }",
-        */
+        * /
 
         // TreeView
         ".ygtvtn { background: url('%%%BASE_URL%%%/yui/treeview/assets/sprite-orig.gif') 0 -5600px no-repeat; }",
@@ -112,22 +144,25 @@ public class YuiRendererHelper {
         ".ygtvlph { background: url('%%%BASE_URL%%%/yui/treeview/assets/sprite-orig.gif') 0 -3200px no-repeat; }",
         ".ygtvloading { background: url('%%%BASE_URL%%%/yui/treeview/assets/treeview-loading.gif') 0 0 no-repeat; }",
         ".ygtvdepthcell { background: url('%%%BASE_URL%%%/yui/treeview/assets/sprite-orig.gif') 0 -8000px no-repeat; }"
+        */
     };
 
 
     // TODO:  This needs to be improved
-    public static void renderSandboxStylesheet(FacesContext context, ResponseWriter writer, UIComponent comp) throws IOException{
+    /*
+    private static void renderSandboxStylesheet(FacesContext context, ResponseWriter writer, UIComponent comp) throws IOException{
         if (!Util.hasResourceBeenRendered(context, YUI_HELPER_CSS_RENDERED)) {
             writer.startElement("style", comp);
             writer.writeAttribute("type", "text/css", "type");
             for (String rule : cssRules) {
-                writer.write(rule.replaceAll("%%%BASE_URL%%%", Util.generateStaticUri("") + "?file=")+"\n");
+                writer.write(rule.replaceAll("%%%BASE_URL%%%", Util.generateStaticUri(""))+"\n");
             }
             
             writer.endElement("style");
             Util.setResourceAsRendered(context, YUI_HELPER_CSS_RENDERED);
         }
     }
+    */
     
     public static void renderSandboxMenuJavaScript(FacesContext context, ResponseWriter writer, UIComponent comp) throws IOException{
         Map<String, String> imageVars = new HashMap<String, String>();

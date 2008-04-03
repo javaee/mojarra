@@ -165,7 +165,7 @@ public class StaticResourcePhaseListener implements PhaseListener {
                  */
                 if ("text/css".equals(mimeType) || "text/javascript".equals(mimeType)) {
                     String text = Util.readInString(is);
-                    text = text.replaceAll("%%%BASE_URL%%%", Util.generateStaticUri("") + "?file=");
+                    text = text.replaceAll("%%%BASE_URL%%%", Util.generateStaticUri(""));
                     os.write(text.getBytes());
                 } else {
                     streamContent(is, os);

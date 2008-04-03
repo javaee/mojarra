@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.11 2007/07/19 22:10:42 jdlee Exp $
+ * $Id: Util.java,v 1.12 2007/08/01 04:16:17 jdlee Exp $
  */
 
 /*
@@ -63,7 +63,7 @@ import javax.servlet.http.HttpServletRequest;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.11 2007/07/19 22:10:42 jdlee Exp $
+ * @version $Id: Util.java,v 1.12 2007/08/01 04:16:17 jdlee Exp $
  */
 
 public class Util {      
@@ -394,12 +394,12 @@ public class Util {
         FacesContext context = FacesContext.getCurrentInstance();
         String mapping = getFacesMapping(context);
         if (isPrefixMapped(mapping)) {
-            uri = "/" + mapping + STATIC_RESOURCE_IDENTIFIER + path;
+            uri = "/" + mapping + STATIC_RESOURCE_IDENTIFIER;
         } else {
-            uri = STATIC_RESOURCE_IDENTIFIER + path + mapping;
+            uri = STATIC_RESOURCE_IDENTIFIER + mapping;
         }
 
-        return getAppBaseUrl(context) + uri;
+        return getAppBaseUrl(context) + uri + "?file=" + path;
     }
 
     public static void linkJavascript(ResponseWriter writer, String path, boolean modifyPath) throws IOException {

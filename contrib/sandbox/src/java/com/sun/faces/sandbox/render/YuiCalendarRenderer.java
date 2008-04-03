@@ -70,7 +70,8 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
     };
     
     private static final String cssIds[] = {
-        YuiConstants.CSS_CALENDAR
+        YuiConstants.CSS_CALENDAR,
+        YuiConstants.CSS_SANDBOX
     };
     
     private static final String DATE_FORMAT = "yyyy/MM/dd";
@@ -110,7 +111,7 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
             Util.linkStyleSheet(writer, cssIds[i]);
         }
 //        YuiRendererHelper.renderSandboxJavaScript(context, context.getResponseWriter(), component);
-        YuiRendererHelper.renderSandboxStylesheet(context, context.getResponseWriter(), component);
+//        YuiRendererHelper.renderSandboxStylesheet(context, context.getResponseWriter(), component);
     }
     
     public void encodeEnd(FacesContext context, UIComponent component)

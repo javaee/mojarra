@@ -52,10 +52,12 @@ public class YuiConstants {
     //***********************************************************************************************************
     // CSS
     //***********************************************************************************************************
+    public static final String CSS_BUTTON               = YUI_ROOT + "button/assets/skins/sam/button.css";
     public static final String CSS_CALENDAR             = YUI_ROOT + "calendar/assets/calendar.css";
-    public static final String CSS_MENU                 = YUI_ROOT + "menu/assets/skins/sam/menu.css";
-//    public static final String CSS_MENU_CORE = YUI_ROOT + "menu/assets/menu-core.css";
-//    public static final String CSS_SANDBOX = YUI_ROOT + "sandbox.css";
+    public static final String CSS_CONTAINER            = YUI_ROOT + "container/assets/skins/sam/container.css";
+    public static final String CSS_EDITOR               = YUI_ROOT + "editor/assets/skins/sam/editor.css";
+    public static final String CSS_MENU                 = YUI_ROOT + "menu/assets/menu.css";
+    public static final String CSS_SANDBOX              = SANDBOX_ROOT + "sandbox.css";
     public static final String CSS_TABVIEW              = YUI_ROOT + "tabview/assets/tabview.css";
     public static final String CSS_TABVIEW_DEFAULT      = YUI_ROOT + "tabview/assets/skins/sam/tabview.css";
     public static final String CSS_TABVIEW_DEFAULT_SKIN = YUI_ROOT + "tabview/assets/skins/sam/tabview-skin.css";
@@ -68,9 +70,11 @@ public class YuiConstants {
     // JavaScript
     //***********************************************************************************************************
     public static final String JS_AUTOCOMPLETE          = YUI_ROOT + "autocomplete/autocomplete-min.js";
+    public static final String JS_BUTTON                = YUI_ROOT + "button/button-beta.js";
     public static final String JS_CALENDAR              = YUI_ROOT + "calendar/calendar-min.js";
     public static final String JS_CONTAINER             = YUI_ROOT + "container/container-min.js";
-    public static final String JS_ELEMENT               = YUI_ROOT + "element/element-beta-min.js";
+    public static final String JS_EDITOR                = YUI_ROOT + "editor/editor-beta.js";
+    public static final String JS_ELEMENT               = YUI_ROOT + "element/element-beta.js";
     public static final String JS_LOGGER                = YUI_ROOT + "logger/logger-min.js";
     public static final String JS_MENU                  = YUI_ROOT + "menu/menu-min.js";
     public static final String JS_SLIDER                = YUI_ROOT + "slider/slider-min.js";

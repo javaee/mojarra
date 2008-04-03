@@ -75,7 +75,7 @@
         </renderer>
     </render-kit>
     
-    
+    <!-- *************************** YUI Tree *************************** -->
     <component>
         <component-type>com.sun.faces.sandbox.YuiTree</component-type>
         <component-class>com.sun.faces.sandbox.component.YuiTree</component-class>
@@ -90,6 +90,7 @@
             <renderer-class>com.sun.faces.sandbox.render.YuiTreeRenderer</renderer-class>
         </renderer>
     </render-kit>
+    
     <component>
         <component-type>com.sun.faces.sandbox.YuiTreeNode</component-type>
         <component-class>com.sun.faces.sandbox.component.YuiTreeNode</component-class>
@@ -224,11 +225,40 @@
         </renderer>    
     </render-kit>
     
+    <!-- *************************** YUI SubMenu *************************** -->
+    <component>
+        <component-type>com.sun.faces.sandbox.YuiSubMenu</component-type>
+        <component-class>com.sun.faces.sandbox.component.YuiSubMenu</component-class>
+        <component-extension>
+            <renderer-type>com.sun.faces.sandbox.YuiSubMenuRenderer</renderer-type>
+        </component-extension>                                                                                
+    </component>
+    
+    <render-kit>
+        <renderer>
+            <component-family>com.sun.faces.sandbox.YuiSubMenu</component-family>
+            <renderer-type>com.sun.faces.sandbox.YuiSubMenuRenderer</renderer-type>
+            <renderer-class>com.sun.faces.sandbox.render.YuiSubMenuRenderer</renderer-class>
+        </renderer>    
+    </render-kit>
+
+    <!-- *************************** YUI Menu Item *************************** -->
     <component>
         <component-type>com.sun.faces.sandbox.YuiMenuItem</component-type>
         <component-class>com.sun.faces.sandbox.component.YuiMenuItem</component-class>
+        <component-extension>
+            <renderer-type>com.sun.faces.sandbox.YuiMenuItemRenderer</renderer-type>
+        </component-extension>                                                                                
     </component>
     
+    <render-kit>
+        <renderer>
+            <component-family>com.sun.faces.sandbox.YuiMenuItem</component-family>
+            <renderer-type>com.sun.faces.sandbox.YuiMenuItemRenderer</renderer-type>
+            <renderer-class>com.sun.faces.sandbox.render.YuiMenuItemRenderer</renderer-class>
+        </renderer>    
+    </render-kit>
+
     <!-- *************************** YUI Context Menu *************************** -->
     <component>
         <component-type>com.sun.faces.sandbox.YuiContextMenu</component-type>
@@ -262,6 +292,8 @@
             <renderer-class>com.sun.faces.sandbox.render.YuiMenuBarRenderer</renderer-class>
         </renderer>    
     </render-kit>
+    
+    <!-- *************************** Download *************************** -->
     <component>
         <description></description>
         <display-name>Download</display-name>
@@ -281,6 +313,7 @@
         </renderer>
     </render-kit>
     
+    <!-- *************************** Multiflie Upload *************************** -->
     <component>
         <description></description>
         <display-name>MultiFileUpload</display-name>
@@ -300,6 +333,7 @@
         </renderer>
     </render-kit>
     
+    <!-- *************************** YUI TabView *************************** -->
     <component>
         <description></description>
         <display-name>TabView</display-name>
@@ -338,6 +372,7 @@
         </renderer>
     </render-kit>
 
+    <!-- *************************** HTML Editor *************************** -->
     <component>
         <description></description>
         <display-name>Html Editor</display-name>
