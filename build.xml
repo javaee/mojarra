@@ -51,7 +51,7 @@
 
 
     <property name="LICENSEFILE"
-              value="${basedir}/legal/jsf-cddl/CDDLv1.0.txt"/>
+              value="${basedir}/legal/jsf-cddl/LICENSE.txt"/>
 
     <!-- ************ Compiler Defaults *************************************** -->
 
