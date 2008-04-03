@@ -154,8 +154,9 @@ public abstract class ResourceHelper {
     protected String getVersion(Collection<String> resourcePaths) {
         List<String> versionedPaths = new ArrayList<String>(resourcePaths.size());
         for (String p : resourcePaths) {
-            if (isVersioned(p)) {
-                versionedPaths.add(p);
+            String vp = getVersion(p);
+            if (vp != null) {
+                versionedPaths.add(vp);
             }
         }
         String version = null;
@@ -173,11 +174,11 @@ public abstract class ResourceHelper {
      *  (i.e. matches {@link #VERSION_PATTERN}), otherwise
      *  returns <code>false</code>
      */
-    private boolean isVersioned(String pathElement) {
+    private String getVersion(String pathElement) {
 
         String[] pathElements = Util.split(pathElement, "/");
         String path = pathElements[pathElements.length - 1];
-        return (VERSION_PATTERN.matcher(path).matches());
+        return ((VERSION_PATTERN.matcher(path).matches()) ? path : null);
 
     }
 
