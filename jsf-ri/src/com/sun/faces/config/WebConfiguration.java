@@ -1,5 +1,5 @@
 /*
- * $Id: WebConfiguration.java,v 1.39 2008/02/14 00:30:34 rlubke Exp $
+ * $Id: WebConfiguration.java,v 1.40 2008/02/16 05:30:41 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -256,29 +256,34 @@ public class WebConfiguration {
 
     public void overrideContextInitParameter(BooleanWebContextInitParameter param, boolean value) {
 
-        booleanContextParameters.put(param, value);
+        if (param == null) {
+            return;
+        }
+        boolean oldVal = booleanContextParameters.put(param, value);
+        if (LOGGER.isLoggable(Level.INFO) && oldVal != value) {
+            LOGGER.log(Level.INFO,
+                       "Overriding init parameter {0}.  Changing from {1} to {2}.",
+                       new Object[] { param.getQualifiedName(), oldVal, value});
+        }
 
     }
 
 
     public void overrideContextInitParameter(WebContextInitParameter param, String value) {
 
-        if (param != null) {
-            if (value == null) {
-                contextParameters.remove(param);
-            } else {
-                contextParameters.put(param, value);
-            }
+        if (param == null || value == null || value.length() == 0) {
+            return;
         }
+        value = value.trim();
+        String oldVal = contextParameters.put(param, value);
+         if (LOGGER.isLoggable(Level.INFO) && !(oldVal.equals(value))) {
+            LOGGER.log(Level.INFO,
+                       "Overriding init parameter {0}.  Changing from {1} to {2}.",
+                       new Object[] { param.getQualifiedName(), oldVal, value});
+        }
+        
 
-    }
-
-
-    public void overrideEnvEntry(WebEnvironmentEntry entry) {
-
-        // no-op for now
-
-    }
+    }    
 
 
     // ------------------------------------------------- Package Private Methods
