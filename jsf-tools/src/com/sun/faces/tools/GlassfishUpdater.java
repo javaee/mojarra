@@ -43,10 +43,12 @@ package com.sun.faces.tools;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Properties;
 
 /**
  *
@@ -65,6 +67,8 @@ public class GlassfishUpdater {
     private static final String PATH_TO_APPSERVER_QUESTION =
           "What is the path to the GlassFish/SJSAS installation?";
     private static final String INSTALL_ROOT = "${com.sun.aas.installRoot}";
+    private static final String NEW_LINE =
+            System.getProperty("line.separator", "\n");
 
     private enum JARS {
         API("jsf-api.jar"),
@@ -102,9 +106,39 @@ public class GlassfishUpdater {
     protected GlassfishUpdater() { }
 
     protected static File libDir = null;
+    protected static Properties props;
     
     public static void main(String args[]) throws Exception {
+        // For statefile operations.
+        if (args.length != 0) {
+            if ("-statefile".equals(args[0])) {
+                if (args.length == 2) {
+                    setStateProps(args[1]);
+                    String adminUser = getProp("admin.user");
+                    String passwd = getProp("passwd.file");
+                    File appHome = new File(getProp("appserver.home"));
 
+                    displayLicense();
+                    if (askYesOrNoQuestion(AGREE_TO_LICENCE_QUESTION, "yes")) {
+                        unpackJars(appHome);
+                        updateClassPathPrefix(appHome, adminUser, passwd);
+                        System.out.println("Upgrade complete." + NEW_LINE +
+                                "Restart the server for the changes to take " +
+                                "effect.");
+                    }
+                } else {
+                    System.out.println("Provide a properties file with the " +
+                            "following props!" + NEW_LINE + "admin.user" +
+                            NEW_LINE + "passwd.file" + NEW_LINE +
+                            "appserver.home" + NEW_LINE + "Exiting...");
+                    System.exit(1);
+                }
+            } else {
+                System.out.println("Illegal Argument!" + NEW_LINE + "Exiting...");
+                System.exit(1);
+            }
+        } else {
+            // Default no command line args operation.
         displayLicense();
         if (askYesOrNoQuestion(AGREE_TO_LICENCE_QUESTION, "yes")) {
             File installDir = null;
@@ -120,14 +154,14 @@ public class GlassfishUpdater {
             String user = askQuestion(ASADMIN_USERNAME_QUESTION, "admin");
             String pass = askQuestion(ASADMIN_USER_PASSWORD_QUESTION, null);
             unpackJars(installDir);
-            upateClassPathPrefix(installDir, user, pass);
+            updateClassPathPrefix(installDir, user, pass);
             System.out.println("Upgrade complete.  Restart the server for the changes to take effect.");
         }
-        
+        }
     }
 
 
-    public static void upateClassPathPrefix(File installDir,
+    public static void updateClassPathPrefix(File installDir,
                                             String user,
                                             String pathToPasswordFile)
     throws Exception {
@@ -317,5 +351,45 @@ public class GlassfishUpdater {
         return (response != null) && response.trim().equalsIgnoreCase("yes");
     }
 
-    
+    /*
+     * Set and validate the Properties file.
+     */
+    public static void setStateProps(String path) {
+
+        props = new Properties();
+
+        // Read in the properties file.
+        try {
+            props.load(new FileInputStream(path));
+        } catch (IOException e) {
+            System.out.println("Failed to read properties file: " + path +
+                    NEW_LINE + "Exiting...");
+            System.exit(1);
+        } catch (IllegalArgumentException iae) {
+            System.out.println(path + " File is corrupt!" + NEW_LINE +
+                    "Exiting...");
+            System.exit(1);
+        }
+    }
+
+    /*
+     * Get and validate a given property.
+     */
+    public static String getProp(String prop) {
+        String value = props.getProperty(prop);
+
+        if (value == null) {
+            System.out.println(prop + " Not found in the following props " +
+                    "list: " + props + NEW_LINE + "This prop must be set!" +
+                    NEW_LINE + "Exiting...");
+            System.exit(1);
+        }
+        if (value.length() == 0) {
+            System.out.println(prop + " NOT SET!" + NEW_LINE +
+                    "This prop must be set!" + NEW_LINE + "Exiting...");
+            System.exit(1);
+        }
+
+        return value;
+    }
 }
