@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.96 2008/01/22 20:56:01 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.97 2008/01/23 15:45:43 rlubke Exp $
  */
 
 /*
@@ -349,10 +349,10 @@ public class ApplicationImpl extends Application {
             throw new NullPointerException(message);
         }
 
-        if (associate.isResponseRendered()) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "resolver");
-            throw new NullPointerException(message);
+        if (associate.hasRequestBeenServiced()) {
+            throw new IllegalStateException(
+                  MessageUtils.getExceptionMessageString(
+                        MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "ResourceHandler"));
         }
 
         this.resourceHandler = resourceHandler;
