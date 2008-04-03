@@ -36,11 +36,15 @@
 
 package com.sun.faces.io;
 
-import java.io.ObjectOutputStream;
-import java.io.StringWriter;
-import java.io.ObjectInputStream;
-
+import com.sun.faces.application.ViewHandlerResponseWrapper;
 import com.sun.faces.cactus.ServletFacesTestCase;
+
+import javax.servlet.ServletOutputStream;
+
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 public class TestIO extends ServletFacesTestCase {
     
@@ -86,5 +90,95 @@ public class TestIO extends ServletFacesTestCase {
                                
     }
 
+
+    public void testViewHandlerResponseWrapperStreamIO() throws Exception {
+
+        ViewHandlerResponseWrapper w1 =
+              new ViewHandlerResponseWrapper(getResponse());
+        ServletOutputStream os = w1.getOutputStream();
+        os.write('1');
+        try {
+            w1.getWriter();
+            assertTrue(false);
+        } catch (IllegalStateException ise) {
+            // expected
+        }
+        os.flush();
+        os.close();
+        PrintWriter writer = null;
+        try {
+            writer = w1.getWriter();
+        } catch (IllegalStateException ise) {
+            assertTrue(false);
+        }
+
+        // we've closed the stream - and should have a fake
+        // writer.  Ensure writing to it doesn't impact the result;
+        writer.print("Some junk");
+        StringWriter buf = new StringWriter();
+        w1.flushToWriter(buf, "ISO-8859-1");
+        assertTrue(!buf.toString().contains("Some junk"));
+
+        // ensure that the content that was written to the stream is
+        // present
+        assertTrue("1".equals(buf.toString()));
+
+        w1 = new ViewHandlerResponseWrapper(getResponse());
+        os = w1.getOutputStream();
+        // flushBuffer should commit the response so getWriter()
+        // should throw no Exception
+        w1.flushBuffer();
+        try {
+            w1.getWriter();
+        } catch (IllegalStateException ise) {
+            assertTrue(false);
+        }
+
+    }
+
+    public void testViewHandlerResponseWrapperCharIO() throws Exception {
+
+        ViewHandlerResponseWrapper w1 =
+              new ViewHandlerResponseWrapper(getResponse());
+        PrintWriter pw = w1.getWriter();
+        pw.write("some stuff");
+        try {
+            w1.getOutputStream();
+            assertTrue(false);
+        } catch (IllegalStateException ise) {
+            // expected
+        }
+        pw.flush();
+        pw.close();
+        ServletOutputStream os = null;
+        try {
+            os = w1.getOutputStream();
+        } catch (IllegalStateException ise) {
+            assertTrue(false);
+        }
+
+        // we've closed the stream - and should have a fake
+        // writer.  Ensure writing to it doesn't impact the result;
+        os.write('1');
+        StringWriter buf = new StringWriter();
+        w1.flushToWriter(buf, "ISO-8859-1");
+        assertTrue(!buf.toString().contains("1"));
+
+        // ensure that the content that was written to the stream is
+        // present
+        assertTrue("some stuff".equals(buf.toString()));
+
+        w1 = new ViewHandlerResponseWrapper(getResponse());
+        pw = w1.getWriter();
+        // flushBuffer should commit the response so getWriter()
+        // should throw no Exception
+        w1.flushBuffer();
+        try {
+            w1.getOutputStream();
+        } catch (IllegalStateException ise) {
+            assertTrue(false);
+        }
+
+    }
 
 } // END TestIO

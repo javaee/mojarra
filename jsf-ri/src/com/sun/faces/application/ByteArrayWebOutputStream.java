@@ -1,5 +1,5 @@
 /*
- * $Id: ByteArrayWebOutputStream.java,v 1.4 2007/05/30 16:49:43 rlubke Exp $ 
+ * $Id: ByteArrayWebOutputStream.java,v 1.5 2007/07/12 14:44:08 rlubke Exp $ 
  */
 
 /*
@@ -57,14 +57,19 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharacterCodingException;
 
 /**
- * This steam convers byte content to character.
+ * This steam converts byte content to character.  This implementation allows us
+ * to query whether or not the writer has been flushed or closed.  This is
+ * necessary to better mimic the actual Servlet response.
  */
 class ByteArrayWebOutputStream extends ServletOutputStream {
 
-        // Log instance for this class
+    public static ServletOutputStream NOOP_STREAM = new NoOpOutputStream();
+
+    // Log instance for this class
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
     private DirectByteArrayOutputStream baos;
+    private boolean committed;
 
     public ByteArrayWebOutputStream() {
         baos = new DirectByteArrayOutputStream(1024);
@@ -114,6 +119,20 @@ class ByteArrayWebOutputStream extends ServletOutputStream {
     }
 
 
+    public boolean isCommitted() {
+        return committed;
+    }
+
+    @Override
+    public void close() throws IOException {
+        committed = true;
+    }
+
+    @Override
+    public void flush() throws IOException {
+        committed = true;
+    }
+
     /**
      * <p>Write the buffered bytes to the provided OutputStream.</p>
      *
@@ -149,6 +168,113 @@ class ByteArrayWebOutputStream extends ServletOutputStream {
             return (ByteBuffer.wrap(buf, 0, count));
         }
 
+    }
+
+
+    private static class NoOpOutputStream extends ServletOutputStream {
+
+        public void write(int b) throws IOException {
+            // no-op
+        }
+
+        @Override
+        public void write(byte b[]) throws IOException {
+            // no-op
+        }
+
+        @Override
+        public void write(byte b[], int off, int len) throws IOException {
+            // no-op
+        }
+
+        @Override
+        public void flush() throws IOException {
+            // no-op
+        }
+
+        @Override
+        public void close() throws IOException {
+            // no-op
+        }
+
+        protected NoOpOutputStream() {
+            // no-op
+        }
+
+        @Override
+        public void print(String s) throws IOException {
+            // no-op
+        }
+
+        @Override
+        public void print(boolean b) throws IOException {
+            // no-op
+        }
+
+        @Override
+        public void print(char c) throws IOException {
+            // no-op
+        }
+
+        @Override
+        public void print(int i) throws IOException {
+            // no-op
+        }
+
+        @Override
+        public void print(long l) throws IOException {
+            // no-op
+        }
+
+        @Override
+        public void print(float v) throws IOException {
+            // no-op
+        }
+
+        @Override
+        public void print(double v) throws IOException {
+            // no-op
+        }
+
+        @Override
+        public void println() throws IOException {
+            // no-op
+        }
+
+        @Override
+        public void println(String s) throws IOException {
+            // no-op
+        }
+
+        @Override
+        public void println(boolean b) throws IOException {
+            // no-op
+        }
+
+        @Override
+        public void println(char c) throws IOException {
+            // no-op
+        }
+
+        @Override
+        public void println(int i) throws IOException {
+            // no-op
+        }
+
+        @Override
+        public void println(long l) throws IOException {
+            // no-op
+        }
+
+        @Override
+        public void println(float v) throws IOException {
+            // no-op
+        }
+
+        @Override
+        public void println(double v) throws IOException {
+            // no-op
+        }
     }
 }
 

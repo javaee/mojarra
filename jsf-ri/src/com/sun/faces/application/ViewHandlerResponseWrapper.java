@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerResponseWrapper.java,v 1.15 2007/05/17 14:33:10 rlubke Exp $ 
+ * $Id: ViewHandlerResponseWrapper.java,v 1.16 2007/07/12 14:44:08 rlubke Exp $ 
  */
 
 /*
@@ -53,7 +53,6 @@ import java.io.PrintWriter;
 import java.io.Writer;
 
 
-
 /**
  * <p>This class is used by {@link javax.faces.application.ViewHandler#createView} to obtain the
  * text that exists after the &lt;f:view&gt; tag.</p>
@@ -62,7 +61,7 @@ import java.io.Writer;
 public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper implements InterweavingResponse {
 
     private ByteArrayWebOutputStream basos;
-    private PrintWriter pw ;
+    private WebPrintWriter pw ;
     private CharArrayWriter caw;
     private int status = HttpServletResponse.SC_OK;
 
@@ -125,6 +124,7 @@ public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper imple
         return result;
     }
 
+    @Override
     public String toString() {
         String result = null;
         if (null != caw) {
@@ -173,9 +173,12 @@ public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper imple
         }
     }
 
+    @Override
     public ServletOutputStream getOutputStream() throws IOException {
-        if (pw != null) {
+        if (pw != null && (!pw.isComitted() && !isCommitted())) {
             throw new IllegalStateException();
+        } else if (pw != null && (pw.isComitted() || isCommitted())) {
+            return ByteArrayWebOutputStream.NOOP_STREAM;
         }
         if (null == basos) {
             basos = new ByteArrayWebOutputStream();
@@ -183,13 +186,16 @@ public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper imple
         return basos;
     }
 
+    @Override
     public PrintWriter getWriter() throws IOException {
-        if (basos != null) {
+        if (basos != null && (!basos.isCommitted() && !isCommitted())) {
             throw new IllegalStateException();
+        } else if (basos != null && (basos.isCommitted() || isCommitted())) {
+            return new WebPrintWriter(WebPrintWriter.NOOP_WRITER);
         }
         if (null == pw) {
             caw = new CharArrayWriter(1024);
-            pw = new PrintWriter(caw);
+            pw = new WebPrintWriter(caw);
         }
 
         return pw;
