@@ -541,14 +541,14 @@ public abstract class ResourceHandler {
     /**
      * <p class="changed_added_2_0">Return <code>true</code> if the
      * current request is a resource request.  This method is called by
-     * {@link ViewHandler#renderView} to determine if this request is a
-     * view request or a resource request.  This must return
-     * <code>false</code> if the viewId ends in the string ".class".</p>
+     * {@link javax.faces.webapp.FacesServlet#service} to determine if
+     * this request is a <em>view request</em> or a <em>resource
+     * request</em>.</p>
      *
      * @param context the {@link javax.faces.context.FacesContext} for this
      * request
-     * @return <code>true</code> if the current request is a safe resource request,
-     * <code>false</code> otherwise.
+     * @return <code>true</code> if the current request is a resource
+     * request, <code>false</code> otherwise.
      */
     public abstract boolean isResourceRequest(FacesContext context);
 
