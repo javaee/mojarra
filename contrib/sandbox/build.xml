@@ -470,14 +470,14 @@
                             extension-name=""/>       
     </target>
 
-    <target name="nightly" depends="dist" description="Upload nightly build to java.net">
+    <target name="nightly" depends="clean,dist" description="Upload nightly build to java.net">
         <if>
             <available file="${tasks.home}"/>
             <then>
                 <sequential>
                     <taskdef resource="org/kohsuke/javanettasks.properties">
                         <classpath>
-                            <pathelement location="${tasks.home}/javanettasks-1.0.8.jar"/>
+                            <pathelement location="${tasks.home}/javanettasks-1.0.9-jason.jar"/>
                             <fileset dir="${tasks.home}/lib" includes="*.jar"/>
                         </classpath>
                     </taskdef>
@@ -493,9 +493,9 @@
                                    fileDescription="Nightly snapshot of the source bundle for the Sandbox components"
                                    overwrite="yes"/>
                     <javaNetUpload projectName="javaserverfaces"
-                                   toFile="/RI Sandbox/JsfRiSandboxDemo.war"
-                                   fromFile="demo/dist/JsfRiSandboxDemo.war"
-                                   fileDescription="An app demonstrating the Sandbox components"
+                                   toFile="/RI Sandbox/JsfRiSandboxDemo.ear"
+                                   fromFile="demo/dist/JsfRiSandboxDemo.ear"
+                                   fileDescription="An app demonstrating the Sandbox components using JSFTemplating, Facelets, and JSP"
                                    overwrite="yes"/>
                     <javaNetUpload projectName="javaserverfaces"
                                    toFile="/RI Sandbox/README"
