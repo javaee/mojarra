@@ -54,7 +54,7 @@ import com.sun.faces.util.Util;
  *
  * @since 2.0
  *
- * RELEASE_PENDING (rlubke)
+ * RELEASE_PENDING (rlubke,driscoll)
  *                 - add logging where appropriate
  */
 public class ResourceManager {

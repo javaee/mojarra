@@ -79,7 +79,7 @@ import com.sun.faces.util.Util;
  * be the number of minutes between modification checks.
  * </p>
  *
- * RELEASE_PENDING (rlubke)
+ * RELEASE_PENDING (rlubke,driscoll)
  *                   - Change logging from INFO to FINE before release.
  *                   - leverage shutdown method in ConfigureListener
  */
