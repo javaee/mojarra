@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.56 2008/01/28 20:55:36 rlubke Exp $
+ * $Id: Application.java,v 1.57 2008/01/28 23:19:55 edburns Exp $
  */
 
 /*
@@ -392,6 +392,7 @@ public abstract class Application {
 
 
     /**
+     * PENDING_REVIEW
      * <p class="changed_added_2_0">Return the product lifecycle phase for the currently running
      * application instance.  The default value is {@link
      * ProjectStage#Production}</p>

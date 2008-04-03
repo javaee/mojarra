@@ -38,6 +38,7 @@
 package javax.faces.application;
 
 /**
+ * PENDING_REVIEW
  * <p class="changed_added_2_0">This class enables a feature similar to the <code><a target="_"
  * href="http://wiki.rubyonrails.org/rails/pages/Environments">RAILS_ENV</a></code>
  * feature of the Ruby on Rails web framework.  The constants in this
