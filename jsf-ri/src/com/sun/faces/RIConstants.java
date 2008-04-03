@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.93 2007/06/29 18:43:26 rlubke Exp $
+ * $Id: RIConstants.java,v 1.94 2007/07/19 16:38:01 rlubke Exp $
  */
 
 /*
@@ -71,16 +71,6 @@ public class RIConstants {
 
     public static final String SAVED_STATE = FACES_PREFIX + "savedState";          
 
-    /**
-     * <p>The name of the attribute in the ServletContext's attr set
-     * used to store the result of the check for the ability to load the
-     * required classes for the Faces RI.</p>
-     */
-    public static final String HAS_REQUIRED_CLASSES_ATTR = FACES_PREFIX +
-        "HasRequiredClasses";   
-
-    public static final String ONE_TIME_INITIALIZATION_ATTR =
-        FACES_PREFIX + "OneTimeInitialization";    
 
     /**
      * Request attribute containing a Set of clientIds that have messages pending

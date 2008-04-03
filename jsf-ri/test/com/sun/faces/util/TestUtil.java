@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil.java,v 1.34 2007/07/10 18:46:53 rlubke Exp $
+ * $Id: TestUtil.java,v 1.35 2007/07/19 16:38:01 rlubke Exp $
  */
 
 /*
@@ -71,7 +71,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil.java,v 1.34 2007/07/10 18:46:53 rlubke Exp $
+ * @version $Id: TestUtil.java,v 1.35 2007/07/19 16:38:01 rlubke Exp $
  */
 
 public class TestUtil extends ServletFacesTestCase {
@@ -275,25 +275,7 @@ public class TestUtil extends ServletFacesTestCase {
         assertTrue(item2.getLabel().equals(i.getLabel()) 
                     && item2.getValue().equals(i.getValue()));
     }
-
-
-    public void testVerifyRequiredClasses() {
-        ServletContext servletContext = (ServletContext) getFacesContext()
-            .getExternalContext()
-            .getContext();
-        servletContext.removeAttribute(RIConstants.HAS_REQUIRED_CLASSES_ATTR);
-        try {
-            Util.verifyRequiredClasses(getFacesContext());
-        } catch (Throwable e) {
-            assertTrue(false);
-        }
-
-        try {
-            Util.verifyRequiredClasses(getFacesContext());
-        } catch (Throwable e) {
-            assertTrue(false);
-        }
-    }    
+   
 
 
 } // end of class TestUtil

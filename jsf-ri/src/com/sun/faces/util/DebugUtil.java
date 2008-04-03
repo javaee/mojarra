@@ -1,5 +1,5 @@
 /*
- * $Id: DebugUtil.java,v 1.39 2007/04/27 22:01:06 ofung Exp $
+ * $Id: DebugUtil.java,v 1.40 2007/07/19 16:38:01 rlubke Exp $
  */
 
 /*
@@ -136,19 +136,19 @@ public class DebugUtil {
 
 
     private static void indentPrintln(Writer out, String str) {
-        int i = 0;
 
         // handle indentation
         try {
-            for (i = 0; i < curDepth; i++) {
+            for (int i = 0; i < curDepth; i++) {
                 out.write("  ");
             }
             out.write(str + "\n");
-        } catch (IOException ex) {}
+        } catch (IOException ignored) {}
     }
 
     /**
-     * Output of printTree() as a String. 
+     * @param root the root component
+     * @return the output of printTree() as a String.
      * Useful when used with a Logger. For example:
      *    logger.log(DebugUtil.printTree(root));
      */
@@ -159,9 +159,12 @@ public class DebugUtil {
     }
 
     /**
-     * Output of printTree() to a PrintStream. 
+     * Output of printTree() to a PrintStream.
      * Usage:
      *    DebugUtil.printTree(root, System.out);
+     *
+     * @param root the root component
+     * @param out the PrintStream to write to
      */
     public static void printTree(UIComponent root, PrintStream out) {
         PrintWriter writer = new PrintWriter(out);
@@ -179,7 +182,6 @@ public class DebugUtil {
         if (null == root) {
             return;
         }
-        int i = 0;
         Object value = null;
 
 /* PENDING
@@ -188,15 +190,12 @@ public class DebugUtil {
         indentPrintln(out, "id:" + root.getId());
         indentPrintln(out, "type:" + root.toString());
 
-        Iterator items = null;
-        SelectItem curItem = null;
-        int j = 0;
-
         if (root instanceof javax.faces.component.UISelectOne) {
-            items = RenderKitUtils.getSelectItems(FacesContext.getCurrentInstance(), root);
+            Iterator items =
+                  RenderKitUtils.getSelectItems(FacesContext.getCurrentInstance(), root);
             indentPrintln(out, " {");
             while (items.hasNext()) {
-                curItem = (SelectItem) items.next();
+                SelectItem curItem = (SelectItem) items.next();
                 indentPrintln(out, "\t value=" + curItem.getValue() +
                                    " label=" + curItem.getLabel() + " description=" +
                                    curItem.getDescription());
@@ -211,7 +210,8 @@ public class DebugUtil {
             Iterator<String> it = root.getAttributes().keySet().iterator();
             if (it != null) {
                 while (it.hasNext()) {
-                    String attrValue = null, attrName = it.next();
+                    String attrValue;
+                    String attrName = it.next();
                     Object attrObj = root.getAttributes().get(attrName);
 
                     if (null != attrObj) {
@@ -219,7 +219,7 @@ public class DebugUtil {
                         // out anything that'll vary from invocation to
                         // invocation
                         attrValue = attrObj.toString();
-                        int at = 0;
+                        int at;
                         boolean doTruncate = false;
                         if (-1 == (at = attrValue.indexOf("$"))) {
                             if (-1 != (at = attrValue.indexOf("@"))) {
@@ -244,10 +244,9 @@ public class DebugUtil {
 
         curDepth++;
         Iterator<UIComponent> it = root.getChildren().iterator();
-        Iterator<UIComponent> facets = root.getFacets().values().iterator();
         // print all the facets of this component
-        while(facets.hasNext()) {
-            printTree(facets.next(), out);
+        for (UIComponent uiComponent : root.getFacets().values()) {
+            printTree(uiComponent, out);
         }
         // print all the children of this component
         while (it.hasNext()) {
@@ -337,18 +336,15 @@ public class DebugUtil {
             indentPrintln(out, "null");
             return;
         }
-        int i = 0;
-        Object value = null;
 
 /* PENDING
    indentPrintln(out, "===>Type:" + root.getComponentType());
 */
         // drill down to the bottom of the first element in the array
         boolean foundBottom = false;
-        Object state = null;
         Object [] myState = root;
         while (!foundBottom) {
-            state = myState[0];
+            Object state = myState[0];
             foundBottom = !state.getClass().isArray();
             if (!foundBottom) {
                 myState = (Object []) state;
@@ -359,7 +355,7 @@ public class DebugUtil {
 
         curDepth++;
         root = (Object []) root[1];
-        for (i = 0; i < root.length; i++) {
+        for (int i = 0; i < root.length; i++) {
             printTree((Object []) root[i], out);
         }
         curDepth--;

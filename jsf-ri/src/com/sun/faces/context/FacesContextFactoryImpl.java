@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextFactoryImpl.java,v 1.19 2007/04/27 22:00:57 ofung Exp $
+ * $Id: FacesContextFactoryImpl.java,v 1.20 2007/07/19 16:38:02 rlubke Exp $
  */
 
 /*
@@ -40,7 +40,6 @@
 
 package com.sun.faces.context;
 
-import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
 
@@ -105,16 +104,7 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
                 MessageUtils.getExceptionMessageString(
                     MessageUtils.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
         }
-
-        ServletContext ctx = (ServletContext) sc;
-
-        // if this is the very first FacesContext instance we're being
-        // asked to create.
-        if (null ==
-            ctx.getAttribute(RIConstants.ONE_TIME_INITIALIZATION_ATTR)) {
-            // initialize our Factories
-            Util.verifyFactoriesAndInitDefaultRenderKit(ctx);
-        }
+      
         return (new FacesContextImpl(new ExternalContextImpl(
             (ServletContext) sc,
             (ServletRequest) request, (ServletResponse) response), lifecycle));

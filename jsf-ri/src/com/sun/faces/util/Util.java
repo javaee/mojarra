@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.215 2007/06/29 18:43:26 rlubke Exp $
+ * $Id: Util.java,v 1.216 2007/07/19 16:38:01 rlubke Exp $
  */
 
 /*
@@ -43,27 +43,19 @@
 package com.sun.faces.util;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.renderkit.RenderKitImpl;
 
 import javax.el.ELResolver;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
-import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
-import javax.faces.application.ApplicationFactory;
 import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.context.FacesContextFactory;
 import javax.faces.convert.Converter;
 import javax.faces.event.AbortProcessingException;
-import javax.faces.lifecycle.LifecycleFactory;
-import javax.faces.render.RenderKit;
-import javax.faces.render.RenderKitFactory;
-import javax.servlet.ServletContext;
 import java.beans.FeatureDescriptor;
 import java.lang.reflect.Method;
 import java.util.Iterator;
@@ -78,7 +70,7 @@ import java.util.regex.Pattern;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.215 2007/06/29 18:43:26 rlubke Exp $
+ * @version $Id: Util.java,v 1.216 2007/07/19 16:38:01 rlubke Exp $
  */
 
 public class Util {
@@ -225,123 +217,12 @@ public class Util {
 
 
     /**
-     * Verify the existence of all the factories needed by faces.  Create
-     * and install the default RenderKit into the ServletContext. <P>
-     *
-     * @see javax.faces.FactoryFinder
+     * @param context the <code>FacesContext</code> for the current request
+     * @return the Locale from the UIViewRoot, the the value of Locale.getDefault()
      */
-
-    public static void verifyFactoriesAndInitDefaultRenderKit(ServletContext context)
-        throws FacesException {
-        RenderKitFactory renderKitFactory = null;
-        LifecycleFactory lifecycleFactory = null;
-        FacesContextFactory facesContextFactory = null;
-        ApplicationFactory applicationFactory = null;
-        RenderKit defaultRenderKit = null;
-
-        renderKitFactory = (RenderKitFactory)
-            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        assert (null != renderKitFactory);
-
-        lifecycleFactory = (LifecycleFactory)
-            FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
-        assert (null != lifecycleFactory);
-
-        facesContextFactory = (FacesContextFactory)
-            FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
-        assert (null != facesContextFactory);
-
-        applicationFactory = (ApplicationFactory)
-            FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        assert (null != applicationFactory);
-
-        defaultRenderKit =
-            renderKitFactory.getRenderKit(null,
-                                          RenderKitFactory.HTML_BASIC_RENDER_KIT);
-        if (defaultRenderKit == null) {
-            // create default renderkit if doesn't exist
-            //
-            defaultRenderKit = new RenderKitImpl();
-            renderKitFactory.addRenderKit(
-                RenderKitFactory.HTML_BASIC_RENDER_KIT,
-                defaultRenderKit);
-        }
-
-        context.setAttribute(RIConstants.HTML_BASIC_RENDER_KIT,
-                             defaultRenderKit);
-
-        context.setAttribute(RIConstants.ONE_TIME_INITIALIZATION_ATTR,
-                             RIConstants.ONE_TIME_INITIALIZATION_ATTR);
-    }
-
-
-    /**
-     * <p>Verifies that the required classes are available on either the
-     * ContextClassLoader, or the local ClassLoader.  Currently only
-     * checks for the class
-     * "javax.servlet.jsp.jstl.fmt.LocalizationContext", which is used
-     * for Localization.</p>
-     * <p/>
-     * <p>The result of the check is saved in the ServletContext
-     * attribute RIConstants.HAS_REQUIRED_CLASSES_ATTR.</p>
-     * <p/>
-     * <p>Algorithm:</p>
-     * <p/>
-     * <p>Check the ServletContext for the attribute, if found, and the
-     * value is false, that means we've checked before, and we don't have
-     * the classes, just throw FacesException.  If the value is true,
-     * we've checked before and we have the classes, just return.</p>
-     */
-
-    public static void verifyRequiredClasses(FacesContext facesContext)
-        throws FacesException {
-        Map<String,Object> applicationMap = facesContext.getExternalContext()
-            .getApplicationMap();
-        Boolean result = null;
-        String className = "javax.servlet.jsp.jstl.fmt.LocalizationContext";
-        Object[] params = {className};
-
-        // Have we checked before?
-        if (null != (result = (Boolean)
-            applicationMap.get(RIConstants.HAS_REQUIRED_CLASSES_ATTR))) {
-            // yes, and the check failed.
-            if (Boolean.FALSE.equals(result)) {
-                throw new
-                    FacesException(
-                        MessageUtils.getExceptionMessageString(
-                            MessageUtils.MISSING_CLASS_ERROR_MESSAGE_ID, params));
-            } else {
-                // yes, and the check passed.
-                return;
-            }
-        }
-
-        //
-        // We've not checked before, so do the check now!
-        //
-
-        try {
-            Util.loadClass(className, facesContext);
-        } catch (ClassNotFoundException e) {
-            applicationMap.put(RIConstants.HAS_REQUIRED_CLASSES_ATTR,
-                               Boolean.FALSE);
-            throw new FacesException(
-                MessageUtils.getExceptionMessageString(MessageUtils.MISSING_CLASS_ERROR_MESSAGE_ID,
-                                         params),
-                e);
-        }
-        applicationMap.put(RIConstants.HAS_REQUIRED_CLASSES_ATTR, Boolean.TRUE);
-    }
-   
-    
-    /**
-     * <p>If the FacesContext has a UIViewRoot, and this UIViewRoot has a Locale,
-     * return it.  Otherwise return Locale.getDefault().
-     */
-    
     public static Locale getLocaleFromContextOrSystem(FacesContext context) {
         Locale result, temp = Locale.getDefault();
-        UIViewRoot root = null;
+        UIViewRoot root;
         result = temp;
         if (null != context) {
             if (null != (root = context.getViewRoot())) {
@@ -494,13 +375,14 @@ public class Util {
 
 
     /**
+     * @param str local string
+     * @param set the substring
+     * @param fromIndex starting index
      * @return starting at <code>fromIndex</code>, the index of the
      *         first occurrence of any substring from <code>set</code> in
      *         <code>toSearch</code>, or -1 if no such match is found
      */
-
-    public static int indexOfSet(String str, char[] set,
-                                 int fromIndex) {
+    public static int indexOfSet(String str, char[] set, int fromIndex) {
         int result = -1;
         char[] toSearch = str.toCharArray();
         for (int i = fromIndex, len = toSearch.length; i < len; i++) {
@@ -533,26 +415,26 @@ public class Util {
     }
 
     /**
-     * <p>Leverage the Throwable.getStackTrace() method to produce a
-     * String version of the stack trace, with a "\n" before each
-     * line.</p>
+     * <p>Leverage the Throwable.getStackTrace() method to produce a String
+     * version of the stack trace, with a "\n" before each line.</p>
      *
-     * @return the String representation ofthe stack trace obtained by
-     * calling getStackTrace() on the passed in exception.  If null is
-     * passed in, we return the empty String.
-     */ 
-
+     * @param e the Throwable to obtain the stacktrace from
+     *
+     * @return the String representation ofthe stack trace obtained by calling
+     *         getStackTrace() on the passed in exception.  If null is passed
+     *         in, we return the empty String.
+     */
     public static String getStackTraceString(Throwable e) {
-	if (null == e) {
-	    return "";
-	}
-	
-	StackTraceElement[] stacks = e.getStackTrace();
-	StringBuffer sb = new StringBuffer();
-	for (int i = 0; i < stacks.length; i++) {
-	    sb.append(stacks[i].toString()).append('\n');
-	}
-	return sb.toString();
+        if (null == e) {
+            return "";
+        }
+
+        StackTraceElement[] stacks = e.getStackTrace();
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < stacks.length; i++) {
+            sb.append(stacks[i].toString()).append('\n');
+        }
+        return sb.toString();
     }
 
     /**
@@ -564,6 +446,8 @@ public class Util {
      * servlet and portlet cases, without introducing a compile-time
      * dependency on the portlet api.</p>
      *
+     * @param response the current response
+     * @return the content type of the response
      */
     public static String getContentTypeFromResponse(Object response) {
         String result = null;
@@ -590,18 +474,19 @@ public class Util {
     }
 
     public static boolean prefixViewTraversal(FacesContext context,
-					      UIComponent root,
-					      TreeTraversalCallback action) throws FacesException {
-	boolean keepGoing = false;
-	if (keepGoing = action.takeActionOnNode(context, root)) {
-	    Iterator<UIComponent> kids = root.getFacetsAndChildren();
-	    while (kids.hasNext() && keepGoing) {
-		keepGoing = prefixViewTraversal(context, 
-						kids.next(), 
-						action);
-	    }
-	}
-	return keepGoing;
+                                              UIComponent root,
+                                              TreeTraversalCallback action)
+    throws FacesException {
+        boolean keepGoing;
+        if (keepGoing = action.takeActionOnNode(context, root)) {
+            Iterator<UIComponent> kids = root.getFacetsAndChildren();
+            while (kids.hasNext() && keepGoing) {
+                keepGoing = prefixViewTraversal(context,
+                                                kids.next(),
+                                                action);
+            }
+        }
+        return keepGoing;
     }
 
     public static interface TreeTraversalCallback {
@@ -680,16 +565,13 @@ public class Util {
 
         if (mapping == null) {
          
-            String servletPath = null;
-            String pathInfo = null;
-
             // first check for javax.servlet.forward.servlet_path
             // and javax.servlet.forward.path_info for non-null
             // values.  if either is non-null, use this
             // information to generate determine the mapping.
 
-            servletPath = extContext.getRequestServletPath();
-            pathInfo = extContext.getRequestPathInfo();
+            String servletPath = extContext.getRequestServletPath();
+            String pathInfo = extContext.getRequestPathInfo();
 
             mapping = getMappingForRequest(servletPath, pathInfo);
             if (mapping == null) {

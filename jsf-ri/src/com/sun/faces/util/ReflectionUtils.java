@@ -36,8 +36,6 @@
 
 package com.sun.faces.util;
 
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletContextEvent;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Arrays;
