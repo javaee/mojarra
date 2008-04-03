@@ -162,11 +162,18 @@ public class ResourceHandlerImpl extends ResourceHandler {
     public void handleResourceRequest(FacesContext context) throws IOException {
 
         String resourceId = normalizeResourceRequest(context);
+        // handleResourceRequest called for a non-resource request,
+        // bail out.
+        if (resourceId == null) {
+            return;
+        }
+        
         ExternalContext extContext = context.getExternalContext();
         // this case should be safe in both the standard Servlet
         // and portlet environments
         HttpServletResponse response =
                   (HttpServletResponse) extContext.getResponse();
+
         if (isExcluded(resourceId)) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
