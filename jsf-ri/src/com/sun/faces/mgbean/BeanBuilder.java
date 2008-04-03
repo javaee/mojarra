@@ -1,5 +1,5 @@
 /*
- * $Id: BeanBuilder.java,v 1.3 2007/07/19 15:12:44 rlubke Exp $
+ * $Id: BeanBuilder.java,v 1.4 2007/07/31 22:09:03 rlubke Exp $
  */
 
 /*
@@ -163,6 +163,9 @@ public abstract class BeanBuilder {
 
     public Class<?> getBeanClass() {
 
+        if (beanClass == null) {
+            loadBeanClass();
+        }
         return beanClass;
 
     }
@@ -390,51 +393,53 @@ public abstract class BeanBuilder {
 
 
     private void loadBeanClass() {
-        String className = beanInfo.getClassName();
-        beanClass = loadClass(className);
-        // validate the bean class is public and has a public
-        // no-arg ctor
+        if (beanClass == null) {
+            String className = beanInfo.getClassName();
+            beanClass = loadClass(className);
+            // validate the bean class is public and has a public
+            // no-arg ctor
 
-        int classModifiers = beanClass.getModifiers();
-        if (!Modifier.isPublic(classModifiers)) {
-             String message =
-                         MessageUtils.getExceptionMessageString(
-                              MessageUtils.MANAGED_BEAN_CLASS_IS_NOT_PUBLIC_ERROR_ID,
-                              className,
-                              beanInfo.getName());
-            queueMessage(message);
-        }
-        if (Modifier.isAbstract(classModifiers)) {
-             String message =
-                         MessageUtils.getExceptionMessageString(
-                              MessageUtils.MANAGED_BEAN_CLASS_IS_ABSTRACT_ERROR_ID,
-                              className,
-                              beanInfo.getName());
-            queueMessage(message);
-        }
-
-        try {
-            Constructor ctor =
-                 beanClass.getConstructor(RIConstants.EMPTY_CLASS_ARGS);
-            if (!Modifier.isPublic(ctor.getModifiers())) {
+            int classModifiers = beanClass.getModifiers();
+            if (!Modifier.isPublic(classModifiers)) {
                 String message =
-                     MessageUtils.getExceptionMessageString(
-                          MessageUtils.MANAGED_BEAN_CLASS_NO_PUBLIC_NOARG_CTOR_ERROR_ID,
-                          className,
-                          beanInfo.getName());
+                      MessageUtils.getExceptionMessageString(
+                            MessageUtils.MANAGED_BEAN_CLASS_IS_NOT_PUBLIC_ERROR_ID,
+                            className,
+                            beanInfo.getName());
                 queueMessage(message);
             }
-        } catch (NoSuchMethodException nsme) {
-            String message =
-                 MessageUtils.getExceptionMessageString(
-                      MessageUtils.MANAGED_BEAN_CLASS_NO_PUBLIC_NOARG_CTOR_ERROR_ID,
-                      className,
-                      beanInfo.getName());
-            queueMessage(message);
-        }
+            if (Modifier.isAbstract(classModifiers)) {
+                String message =
+                      MessageUtils.getExceptionMessageString(
+                            MessageUtils.MANAGED_BEAN_CLASS_IS_ABSTRACT_ERROR_ID,
+                            className,
+                            beanInfo.getName());
+                queueMessage(message);
+            }
 
-        // class is ok, scan for annotations
-        this.isInjectible = scanForAnnotations(beanClass);
+            try {
+                Constructor ctor =
+                      beanClass.getConstructor(RIConstants.EMPTY_CLASS_ARGS);
+                if (!Modifier.isPublic(ctor.getModifiers())) {
+                    String message =
+                          MessageUtils.getExceptionMessageString(
+                                MessageUtils.MANAGED_BEAN_CLASS_NO_PUBLIC_NOARG_CTOR_ERROR_ID,
+                                className,
+                                beanInfo.getName());
+                    queueMessage(message);
+                }
+            } catch (NoSuchMethodException nsme) {
+                String message =
+                      MessageUtils.getExceptionMessageString(
+                            MessageUtils.MANAGED_BEAN_CLASS_NO_PUBLIC_NOARG_CTOR_ERROR_ID,
+                            className,
+                            beanInfo.getName());
+                queueMessage(message);
+            }
+
+            // class is ok, scan for annotations
+            this.isInjectible = scanForAnnotations(beanClass);
+        }
     }
 
 

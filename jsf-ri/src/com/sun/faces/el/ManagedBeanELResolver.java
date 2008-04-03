@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanELResolver.java,v 1.18 2007/04/27 22:00:58 ofung Exp $
+ * $Id: ManagedBeanELResolver.java,v 1.19 2007/07/31 22:09:03 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -170,14 +170,17 @@ public class ManagedBeanELResolver extends ELResolver {
             BeanBuilder builder = bean.getValue();
             String loc = Util.getLocaleFromContextOrSystem(facesContext).toString();
             Map<String,String> descriptions = builder.getDescriptions();
-            
-            String description = descriptions.get(loc);
-            if (description == null) {
-                description = descriptions.get("DEFAULT");
+
+            String description = null;
+            if (descriptions != null) {
+                description = descriptions.get(loc);
+                if (description == null) {
+                    description = descriptions.get("DEFAULT");
+                }
             }
             list.add(Util.getFeatureDescriptor(beanName,
                                                beanName,
-                                               description,
+                                               (description == null) ? "" : description,
                                                false,
                                                false,
                                                true,
