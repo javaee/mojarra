@@ -107,9 +107,9 @@ public abstract class ResourceWrapper extends Resource {
      * RELEASE_PENDING (edburns,roger) document
      * @return
      */
-    public String getURI() {
+    public String getRequestPath() {
 
-        return getWrapped().getURI();
+        return getWrapped().getRequestPath();
 
     }
 

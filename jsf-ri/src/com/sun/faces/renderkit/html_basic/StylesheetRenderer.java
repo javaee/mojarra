@@ -84,7 +84,7 @@ public class StylesheetRenderer extends Renderer {
         writer.writeAttribute("rel", "stylesheet", "rel");
         writer.writeAttribute("href",
                               ((resource != null)
-                                  ? resource.getURI()
+                                  ? resource.getRequestPath()
                                   : "RES_NOT_FOUND"),
                               "href");
         writer.endElement("link");

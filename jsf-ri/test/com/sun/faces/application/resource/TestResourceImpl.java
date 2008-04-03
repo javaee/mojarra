@@ -93,32 +93,32 @@ public class TestResourceImpl extends ServletFacesTestCase {
         Resource resource = handler.createResource("duke-nv.gif");
         assertTrue (resource != null);
         String expectedURI = "/test/faces/javax.faces.resource/duke-nv.gif";
-        assertTrue(expectedURI.equals(resource.getURI()));
+        assertTrue(expectedURI.equals(resource.getRequestPath()));
 
         resource = handler.createResource("duke-nv.gif", "nvLibrary");
         assertTrue(resource != null);
         expectedURI = "/test/faces/javax.faces.resource/duke-nv.gif?ln=nvLibrary";
-        assertTrue(expectedURI.equals(resource.getURI()));
+        assertTrue(expectedURI.equals(resource.getRequestPath()));
 
         resource = handler.createResource("duke.gif");
         assertTrue(resource != null);
         expectedURI = "/test/faces/javax.faces.resource/duke.gif?v=1.1";
-        assertTrue(expectedURI.equals(resource.getURI()));
+        assertTrue(expectedURI.equals(resource.getRequestPath()));
 
         resource = handler.createResource("duke.gif", "nvLibrary");
         assertTrue(resource != null);
         expectedURI = "/test/faces/javax.faces.resource/duke.gif?ln=nvLibrary&v=1.1";
-        assertTrue(expectedURI.equals(resource.getURI()));
+        assertTrue(expectedURI.equals(resource.getRequestPath()));
 
         resource = handler.createResource("duke.gif", "vLibrary");
         assertTrue(resource != null);
         expectedURI = "/test/faces/javax.faces.resource/duke.gif?ln=vLibrary&v=2.01.1";
-        assertTrue(expectedURI.equals(resource.getURI()));
+        assertTrue(expectedURI.equals(resource.getRequestPath()));
 
         resource = handler.createResource("duke-nv.gif", "vLibrary");
         assertTrue(resource != null);
         expectedURI = "/test/faces/javax.faces.resource/duke-nv.gif?ln=vLibrary&v=2.0";
-        assertTrue(expectedURI.equals(resource.getURI()));
+        assertTrue(expectedURI.equals(resource.getRequestPath()));
 
     }
 
@@ -133,32 +133,32 @@ public class TestResourceImpl extends ServletFacesTestCase {
         Resource resource = handler.createResource("duke-nv.gif");
         assertTrue (resource != null);
         String expectedURI = "/test/javax.faces.resource/duke-nv.gif.faces";
-        assertTrue(expectedURI.equals(resource.getURI()));
+        assertTrue(expectedURI.equals(resource.getRequestPath()));
 
         resource = handler.createResource("duke-nv.gif", "nvLibrary");
         assertTrue(resource != null);
         expectedURI = "/test/javax.faces.resource/duke-nv.gif.faces?ln=nvLibrary";
-        assertTrue(expectedURI.equals(resource.getURI()));
+        assertTrue(expectedURI.equals(resource.getRequestPath()));
 
         resource = handler.createResource("duke.gif");
         assertTrue(resource != null);
         expectedURI = "/test/javax.faces.resource/duke.gif.faces?v=1.1";
-        assertTrue(expectedURI.equals(resource.getURI()));
+        assertTrue(expectedURI.equals(resource.getRequestPath()));
 
         resource = handler.createResource("duke.gif", "nvLibrary");
         assertTrue(resource != null);
         expectedURI = "/test/javax.faces.resource/duke.gif.faces?ln=nvLibrary&v=1.1";
-        assertTrue(expectedURI.equals(resource.getURI()));
+        assertTrue(expectedURI.equals(resource.getRequestPath()));
 
         resource = handler.createResource("duke.gif", "vLibrary");
         assertTrue(resource != null);
         expectedURI = "/test/javax.faces.resource/duke.gif.faces?ln=vLibrary&v=2.01.1";
-        assertTrue(expectedURI.equals(resource.getURI()));
+        assertTrue(expectedURI.equals(resource.getRequestPath()));
 
         resource = handler.createResource("duke-nv.gif", "vLibrary");
         assertTrue(resource != null);
         expectedURI = "/test/javax.faces.resource/duke-nv.gif.faces?ln=vLibrary&v=2.0";
-        assertTrue(expectedURI.equals(resource.getURI()));
+        assertTrue(expectedURI.equals(resource.getRequestPath()));
 
     }
 

@@ -83,7 +83,7 @@ public class ScriptRenderer extends Renderer {
         writer.writeAttribute("type", "text/javascript", "type");
         writer.writeAttribute("src",
                               ((resource != null)
-                                  ? resource.getURI()
+                                  ? resource.getRequestPath()
                                   : "RES_NOT_FOUND"),
                               "src");
         writer.endElement("script");

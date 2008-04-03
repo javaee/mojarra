@@ -52,6 +52,7 @@ import javax.faces.context.FacesContext;
 
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.Util;
+import javax.faces.application.ResourceHandler;
 
 /**
  * Default implementation of {@link javax.faces.application.Resource}.
@@ -148,19 +149,19 @@ public class ResourceImpl extends Resource {
 
 
     /**
-     * @see javax.faces.application.Resource#getURI()
+     * @see javax.faces.application.Resource#getRequestPath()
      */
-    public String getURI() {
+    public String getRequestPath() {
 
         String uri;
         FacesContext context = FacesContext.getCurrentInstance();
         String facesServletMapping = Util.getFacesMapping(context);
         // If it is extension mapped
         if (Util.isPrefixMapped(facesServletMapping)) {
-            uri = facesServletMapping + "/javax.faces.resource/" +
+            uri = facesServletMapping + ResourceHandler.RESOURCE_IDENTIFIER + "/" +
                   getResourceName();
         } else {
-            uri = "/javax.faces.resource/" + getResourceName() +
+            uri = ResourceHandler.RESOURCE_IDENTIFIER + "/" + getResourceName() +
                   facesServletMapping;
         }
         boolean queryStarted = false;

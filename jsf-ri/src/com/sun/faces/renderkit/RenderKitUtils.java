@@ -857,7 +857,7 @@ public class RenderKitUtils {
             writer.write('\n');
             writer.startElement("script", null);
             writer.writeAttribute("type", "text/javascript", null);
-            writer.writeAttribute("src", ((resource != null) ? resource.getURI() : ""), null);
+            writer.writeAttribute("src", ((resource != null) ? resource.getRequestPath() : ""), null);
             writer.endElement("script");
         } else {           
             writer.write('\n');

@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.53 2008/01/16 21:02:52 edburns Exp $
+ * $Id: Application.java,v 1.54 2008/01/23 23:05:40 edburns Exp $
  */
 
 /*
@@ -68,7 +68,7 @@ import javax.el.ELResolver;
 
 
 /**
- * <p class="changed_modified_2_0"><strong>Application</strong>
+ * <p><strong class="changed_modified_2_0">Application</strong>
  * represents a per-web-application singleton object where applications
  * based on JavaServer Faces (or implementations wishing to provide
  * extended functionality) can register application-wide singletons that

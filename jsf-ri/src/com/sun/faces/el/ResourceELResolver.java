@@ -83,7 +83,7 @@ public class ResourceELResolver extends ELResolver {
      * <li>
      * If one of the above steps resulted in the creation of a {@link Resource}
      * instance, call <code>ELContext.setPropertyResolved(true)</code> and return
-     * the result of {@link javax.faces.application.Resource#getURI()}
+     * the result of {@link javax.faces.application.Resource#getRequestPath()}
      * </li>
      * </ul>
      * @see ELResolver#getValue(javax.el.ELContext, Object, Object)
@@ -110,7 +110,7 @@ public class ResourceELResolver extends ELResolver {
                 res = handler.createResource(parts[1], parts[0]);
             }
             if (res != null) {
-                ret = res.getURI();
+                ret = res.getRequestPath();
             }
             context.setPropertyResolved(true);
         }
