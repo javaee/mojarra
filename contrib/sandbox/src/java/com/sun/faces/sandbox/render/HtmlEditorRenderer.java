@@ -42,6 +42,7 @@ package com.sun.faces.sandbox.render;
 import com.sun.faces.sandbox.component.HtmlEditor;
 import com.sun.faces.sandbox.component.YuiCalendar;
 import com.sun.faces.sandbox.util.Util;
+import com.sun.faces.sandbox.util.YuiConstants;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -59,7 +60,12 @@ import org.apache.shale.remoting.Mechanism;
  *
  */
 public class HtmlEditorRenderer extends Renderer {
-    private static final String TINY_MCE = "/tinymce/tiny_mce_src.js";
+    private static final String TINY_MCE = "/tinymce/tiny_mce.js";
+    protected static final String scriptIds[] = { 
+        YuiConstants.JS_YAHOO_DOM_EVENT
+        ,TINY_MCE
+        ,"/sandbox/tiny_mce.js"
+    };
 
     @Override
     public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
@@ -85,10 +91,11 @@ public class HtmlEditorRenderer extends Renderer {
         ResponseWriter writer = context.getResponseWriter();
         
         // Load the TinyMCE script
-        Util.getXhtmlHelper().linkJavascript(context, component,
-                context.getResponseWriter(), Mechanism.CLASS_RESOURCE, TINY_MCE);
-        Util.getXhtmlHelper().linkJavascript(context, component,
-                context.getResponseWriter(), Mechanism.CLASS_RESOURCE, "/sandbox/tiny_mce.js");
+        for (int i = 0; i < scriptIds.length; i++) {
+            Util.getXhtmlHelper().linkJavascript(context, component,
+                    context.getResponseWriter(), Mechanism.CLASS_RESOURCE,
+                    scriptIds[i]);
+        }
         
         // Create the textarea to use as the WYSIWYG editor
         writer.startElement("textarea", editor);
