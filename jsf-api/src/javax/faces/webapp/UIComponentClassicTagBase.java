@@ -1685,10 +1685,11 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
         Set<String> previousJspIdSet;
 
         if (null == (previousJspIdSet = TypedCollections.dynamicallyCastSet((Set)
-            pageContext.getRequest().getAttribute(PREVIOUS_JSP_ID_SET), String.class))) {
+            pageContext.getAttribute(PREVIOUS_JSP_ID_SET, PageContext.PAGE_SCOPE), String.class))) {
             //noinspection CollectionWithoutInitialCapacity
-            pageContext.getRequest().setAttribute(PREVIOUS_JSP_ID_SET,
-                    previousJspIdSet = new HashSet<String>());
+            pageContext.setAttribute(PREVIOUS_JSP_ID_SET,
+                                     previousJspIdSet = new HashSet<String>(),
+                                     PageContext.PAGE_SCOPE);
         }
 
         // detect the iterator case
@@ -1698,8 +1699,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
                         " is nested within an iterating tag.");
             }
             isNestedInIterator = true;
-        }
-        else {
+        } else {
             isNestedInIterator = false;
             previousJspIdSet.add(id);
         }
