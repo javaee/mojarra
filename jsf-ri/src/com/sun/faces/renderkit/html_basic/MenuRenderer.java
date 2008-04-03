@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.85 2006/12/13 17:29:14 youngm Exp $
+ * $Id: MenuRenderer.java,v 1.86 2007/04/10 03:54:34 jdlee Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -478,7 +478,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                                                              uiSelectMany,
                                                              newValues[i]);
                     logger.fine("String value: " + newValues[i] +
-                                " converts to : " + converted.toString());
+                                " converts to : " + converted);
                 }
                 Array.set(result, i, converter.getAsObject(context,
                                                            uiSelectMany,
