@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationConfigProcessor.java,v 1.4 2007/04/27 22:00:56 ofung Exp $
+ * $Id: NavigationConfigProcessor.java,v 1.5 2007/05/18 20:14:42 rlubke Exp $
  */
 
 /*
@@ -114,17 +114,17 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
     public void process(Document[] documents)
     throws Exception {
 
-        for (int i = 0; i < documents.length; i++) {
+        for (Document document : documents) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
-                           MessageFormat.format(
+                        MessageFormat.format(
                                 "Processing navigation-rule elements for document: ''{0}''",
-                                documents[i].getDocumentURI()));
+                                document.getDocumentURI()));
             }
-            String namespace = documents[i].getDocumentElement()
-                 .getNamespaceURI();
-            NodeList navigationRules = documents[i].getDocumentElement()
-                 .getElementsByTagNameNS(namespace, NAVIGATION_RULE);
+            String namespace = document.getDocumentElement()
+                    .getNamespaceURI();
+            NodeList navigationRules = document.getDocumentElement()
+                    .getElementsByTagNameNS(namespace, NAVIGATION_RULE);
             if (navigationRules != null && navigationRules.getLength() > 0) {
                 addNavigationRules(navigationRules);
             }
@@ -157,9 +157,17 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                                 fromViewId = ((t == null)
                                               ? FROM_VIEW_ID_DEFAULT
                                               : t);
+                                if (!fromViewId.equals(FROM_VIEW_ID_DEFAULT) && fromViewId.charAt(0) != '/') {
+                                    if (LOGGER.isLoggable(Level.WARNING)) {
+                                    LOGGER.log(Level.WARNING,
+                                               "jsf.config.navigation.from_view_id_leading_slash",
+                                               new String[] { fromViewId });
+                                    }
+                                    fromViewId = '/' + fromViewId;
+                                }
                             } else if (NAVIGATION_CASE.equals(n.getLocalName())) {
                                 if (navigationCases == null) {
-                                    navigationCases = new ArrayList(csize);
+                                    navigationCases = new ArrayList<Node>(csize);
                                 }
                                 navigationCases.add(n);
                             }
@@ -204,6 +212,15 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                             action = getNodeText(n);
                         } else if (TO_VIEW_ID.equals(n.getLocalName())) {
                             toViewId = getNodeText(n);
+                            if (toViewId.charAt(0) != '/') {
+                                if (LOGGER.isLoggable(Level.WARNING)) {
+                                    LOGGER.log(Level.WARNING,
+                                               "jsf.config.navigation.to_view_id_leading_slash",
+                                               new String[] { toViewId,
+                                                              fromViewId });
+                                }
+                                toViewId = '/' + toViewId;           
+                            }
                         } else if (REDIRECT.equals(n.getLocalName())) {
                             redirect = true;
                         }
