@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.82 2007/07/10 18:46:52 rlubke Exp $
+ * $Id: TextRenderer.java,v 1.83 2007/07/10 18:51:34 rlubke Exp $
  */
 
 /*
@@ -135,8 +135,7 @@ public class TextRenderer extends HtmlBasicInputRenderer {
             }
 
             // style is rendered as a passthur attribute
-            RenderKitUtils.renderPassThruAttributes(
-                  writer,
+            RenderKitUtils.renderPassThruAttributes(writer,
                                                     component,
                                                     INPUT_ATTRIBUTES);
             RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
@@ -156,11 +155,9 @@ public class TextRenderer extends HtmlBasicInputRenderer {
                     writer.writeAttribute("class", styleClass, "styleClass");
                 }
                 // style is rendered as a passthru attribute
-                RenderKitUtils
-                      .renderPassThruAttributes(
-                            writer,
-                                                component,
-                                                OUTPUT_ATTRIBUTES);
+                RenderKitUtils.renderPassThruAttributes(writer,
+                                                        component,
+                                                        OUTPUT_ATTRIBUTES);
 
             }
             if (currentValue != null) {

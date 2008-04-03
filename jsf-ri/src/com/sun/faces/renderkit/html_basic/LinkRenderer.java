@@ -1,5 +1,5 @@
 /*
- * $Id: LinkRenderer.java,v 1.22 2007/07/10 18:46:52 rlubke Exp $
+ * $Id: LinkRenderer.java,v 1.23 2007/07/10 18:51:34 rlubke Exp $
  */
 
 /*
@@ -85,8 +85,7 @@ public abstract class LinkRenderer extends HtmlBasicRenderer {
             writer.writeAttribute("name", writtenId, "name");
         }
 
-        RenderKitUtils.renderPassThruAttributes(
-              writer,
+        RenderKitUtils.renderPassThruAttributes(writer,
                                                 component,
                                                 ATTRIBUTES);
 

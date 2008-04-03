@@ -1,5 +1,5 @@
 /*
- * $Id: TextareaRenderer.java,v 1.24 2007/07/10 18:46:52 rlubke Exp $
+ * $Id: TextareaRenderer.java,v 1.25 2007/07/10 18:51:34 rlubke Exp $
  */
 
 /*
@@ -104,8 +104,7 @@ public class TextareaRenderer extends HtmlBasicInputRenderer {
         }
 
         // style is rendered as a passthru attribute
-        RenderKitUtils.renderPassThruAttributes(
-              writer,
+        RenderKitUtils.renderPassThruAttributes(writer,
                                                 component,
                                                 ATTRIBUTES);
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);

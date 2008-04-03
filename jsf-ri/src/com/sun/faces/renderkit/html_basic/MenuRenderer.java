@@ -35,7 +35,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.89 2007/07/10 18:46:51 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.90 2007/07/10 18:51:34 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -807,8 +807,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         }
         writeDefaultSize(writer, size);
 
-        RenderKitUtils.renderPassThruAttributes(
-              writer,
+        RenderKitUtils.renderPassThruAttributes(writer,
                                                 component,
                                                 ATTRIBUTES);
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer,

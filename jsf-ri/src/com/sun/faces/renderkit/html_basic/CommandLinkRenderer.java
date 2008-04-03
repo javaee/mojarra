@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.60 2007/07/10 18:46:52 rlubke Exp $
+ * $Id: CommandLinkRenderer.java,v 1.61 2007/07/10 18:51:34 rlubke Exp $
  */
 
 /*
@@ -333,8 +333,7 @@ public class CommandLinkRenderer extends LinkRenderer {
         writer.startElement("a", command);
         writeIdAttributeIfNecessary(context, writer, command);
         writer.writeAttribute("href", "#", "href");
-        RenderKitUtils.renderPassThruAttributes(
-              writer,
+        RenderKitUtils.renderPassThruAttributes(writer,
                                                 command,
                                                 ATTRIBUTES);
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, command);

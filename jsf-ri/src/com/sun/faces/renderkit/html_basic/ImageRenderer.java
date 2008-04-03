@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.50 2007/07/10 18:46:51 rlubke Exp $
+ * $Id: ImageRenderer.java,v 1.51 2007/07/10 18:51:34 rlubke Exp $
  */
 
 /*
@@ -59,7 +59,7 @@ import com.sun.faces.util.MessageUtils;
  * <B>ImageRenderer</B> is a class that handles the rendering of the graphic
  * ImageTag
  *
- * @version $Id: ImageRenderer.java,v 1.50 2007/07/10 18:46:51 rlubke Exp $
+ * @version $Id: ImageRenderer.java,v 1.51 2007/07/10 18:51:34 rlubke Exp $
  */
 
 public class ImageRenderer extends HtmlBasicRenderer {
@@ -131,8 +131,7 @@ public class ImageRenderer extends HtmlBasicRenderer {
             writer.writeAttribute("alt", "", "alt");
         }
 
-        RenderKitUtils.renderPassThruAttributes(
-              writer,
+        RenderKitUtils.renderPassThruAttributes(writer,
                                                 component,
                                                 ATTRIBUTES);
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);

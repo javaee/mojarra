@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.49 2007/07/10 18:46:52 rlubke Exp $
+ * $Id: GridRenderer.java,v 1.50 2007/07/10 18:51:34 rlubke Exp $
  */
 
 /*
@@ -106,8 +106,7 @@ public class GridRenderer extends HtmlBasicRenderer {
         if (styleClass != null) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
-        RenderKitUtils.renderPassThruAttributes(
-              writer,
+        RenderKitUtils.renderPassThruAttributes(writer,
                                                 component,
                                                 ATTRIBUTES);
         writer.writeText("\n", component, null);

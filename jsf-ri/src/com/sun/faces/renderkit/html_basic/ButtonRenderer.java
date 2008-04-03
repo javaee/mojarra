@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.104 2007/07/10 18:46:52 rlubke Exp $
+ * $Id: ButtonRenderer.java,v 1.105 2007/07/10 18:51:34 rlubke Exp $
  */
 
 /*
@@ -186,8 +186,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             writer.writeAttribute("value", label, "value");
         }
 
-        RenderKitUtils.renderPassThruAttributes(
-              writer,
+        RenderKitUtils.renderPassThruAttributes(writer,
                                                 component,
                                                 ATTRIBUTES);
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
