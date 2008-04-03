@@ -165,7 +165,7 @@ public class SerializationProviderFactory {
         
         WebConfiguration webConfig = WebConfiguration.getInstance(extContext);
         
-        String provider = webConfig.getContextInitParameter(
+        String provider = webConfig.getOptionValue(
               WebContextInitParameter.SerializationProviderClass);
         
         if (provider != null) {

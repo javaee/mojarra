@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListenerTestCase.java,v 1.15 2007/04/27 22:02:04 ofung Exp $
+ * $Id: ConfigureListenerTestCase.java,v 1.16 2007/06/25 20:57:22 rlubke Exp $
  */
 
 /*
@@ -406,45 +406,7 @@ public class ConfigureListenerTestCase extends TestCase {
         assertNotNull(listener);
 
     }
-
-    // Test that the proper message is logged if a subclass of ConfigureListener
-    // overrides a BooleanWebContextInitParameter
-    public void testLogOverriddenContextConfigValues() throws Exception {
-        context.setServletContextName("testLogOverriddenContextConfigValues");
-        ServletContextEvent sce = new ServletContextEvent(context);
-        setUp("test-config-1");
-
-        Logger logger = FacesLogger.CONFIG.getLogger();
-        GotMessageFilter gotMessageFilter = new GotMessageFilter();
-        logger.setFilter(gotMessageFilter);
-                
-        // Initialize the context
-        try {
-            listener.contextInitialized(sce);
-            assertFalse(gotMessageFilter.gotLogMessage());
-        } catch (FacesException e) {
-            if (e.getCause() != null) {
-                throw (Exception) e.getCause();
-            } else {
-                throw e;
-            }
-        }
-        
-        ConfigureListener subClass = new ConfigListenerSubclass();
-        
-        try {
-            subClass.contextInitialized(sce);
-            assertTrue(gotMessageFilter.gotLogMessage());
-        } catch (FacesException e) {
-            if (e.getCause() != null) {
-                throw (Exception) e.getCause();
-            } else {
-                throw e;
-            }
-        }
-        
-    }
-
+   
 
     // --------------------------------------------------------- Support Methods
 
@@ -899,14 +861,6 @@ public class ConfigureListenerTestCase extends TestCase {
         
         public boolean gotLogMessage() {
             return gotLogMessage;
-        }
-    }
-    
-    private static class ConfigListenerSubclass extends ConfigureListener {
-        @Override 
-        protected boolean isFeatureEnabled(BooleanWebContextInitParameter param) {
-            return BooleanWebContextInitParameter.ValidateFacesConfigFiles
-                  .equals(param) || super.isFeatureEnabled(param);
         }
     }
 

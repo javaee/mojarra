@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.102 2007/04/27 22:01:01 ofung Exp $
+ * $Id: FormRenderer.java,v 1.103 2007/06/25 20:57:22 rlubke Exp $
  */
 
 /*
@@ -69,7 +69,7 @@ public class FormRenderer extends HtmlBasicRenderer {
     public FormRenderer() {
         WebConfiguration webConfig = WebConfiguration.getInstance();
         writeStateAtEnd =
-             webConfig.getBooleanContextInitParameter(
+             webConfig.isOptionEnabled(
                   BooleanWebContextInitParameter.WriteStateAtFormEnd);
 
     }

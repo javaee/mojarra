@@ -1,5 +1,5 @@
 /*
- * $Id: LoadBundleTag.java,v 1.20 2007/06/18 13:34:45 rlubke Exp $
+ * $Id: LoadBundleTag.java,v 1.21 2007/06/25 20:57:22 rlubke Exp $
  */
 
 /*
@@ -40,6 +40,7 @@
 
 package com.sun.faces.taglib.jsf_core;
 
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.el.ELUtils;
 import com.sun.faces.util.FacesLogger;
@@ -317,8 +318,8 @@ public class LoadBundleTag extends TagSupport {
         extContext.getRequestMap().put(var, toStore);
 
         if (WebConfiguration.getInstance(extContext)
-              .getBooleanContextInitParameter
-                    (WebConfiguration.BooleanWebContextInitParameter.EnableLoadBundle11Compatibility)) {
+              .isOptionEnabled
+                    (BooleanWebContextInitParameter.EnableLoadBundle11Compatibility)) {
             // the UIComponent that wraps the Map
             UIComponent bundleComponent =
                   createNewLoadBundleComponent(var, toStore);

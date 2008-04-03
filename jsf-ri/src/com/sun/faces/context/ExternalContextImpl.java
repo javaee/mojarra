@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.62 2007/06/11 08:13:08 rlubke Exp $
+ * $Id: ExternalContextImpl.java,v 1.63 2007/06/25 20:57:21 rlubke Exp $
  */
 
 /*
@@ -90,7 +90,7 @@ import com.sun.faces.util.FacesLogger;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.62 2007/06/11 08:13:08 rlubke Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.63 2007/06/25 20:57:21 rlubke Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -134,7 +134,7 @@ public class ExternalContextImpl extends ExternalContext {
         this.response = response;
         WebConfiguration config = WebConfiguration.getInstance(sc);
         if (config
-              .getBooleanContextInitParameter(BooleanWebContextInitParameter.SendPoweredByHeader)) {
+              .isOptionEnabled(BooleanWebContextInitParameter.SendPoweredByHeader)) {
             ((HttpServletResponse) response)
                   .addHeader("X-Powered-By", "JSF/1.2");
         }

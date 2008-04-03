@@ -259,7 +259,7 @@ public class InjectionProviderFactory {
     private static String findProviderClass(ExternalContext extContext) {
 
         WebConfiguration webConfig = WebConfiguration.getInstance(extContext);
-        String provider = webConfig.getContextInitParameter(WebContextInitParameter.InjectionProviderClass);
+        String provider = webConfig.getOptionValue(WebContextInitParameter.InjectionProviderClass);
 
         if (provider != null) {
             return provider;

@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.53 2007/04/27 22:01:00 ofung Exp $
+ * $Id: RenderKitImpl.java,v 1.54 2007/06/25 20:57:21 rlubke Exp $
  */
 
 /*
@@ -67,7 +67,7 @@ import com.sun.faces.util.Util;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.53 2007/04/27 22:01:00 ofung Exp $
+ * @version $Id: RenderKitImpl.java,v 1.54 2007/06/25 20:57:21 rlubke Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -179,7 +179,7 @@ public class RenderKitImpl extends RenderKit {
         if (preferXHTML == null) {
             preferXHTML =
                  WebConfiguration.getInstance(context.getExternalContext())
-                      .getBooleanContextInitParameter(BooleanWebContextInitParameter.PreferXHTMLContentType);
+                      .isOptionEnabled(BooleanWebContextInitParameter.PreferXHTMLContentType);
         }
 
         // Step 1: Check the content type passed into this method 
@@ -258,8 +258,8 @@ public class RenderKitImpl extends RenderKit {
                  WebConfiguration.getInstance(
                       context.getExternalContext());
             isScriptHidingEnabled = webConfig
-                 .getBooleanContextInitParameter(
-                      WebConfiguration.BooleanWebContextInitParameter.EnableJSStyleHiding);
+                 .isOptionEnabled(
+                      BooleanWebContextInitParameter.EnableJSStyleHiding);
         }
 
         return new HtmlResponseWriter(writer,

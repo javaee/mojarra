@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.47 2007/04/27 22:00:53 ofung Exp $
+ * $Id: ApplicationAssociate.java,v 1.48 2007/06/25 20:57:22 rlubke Exp $
  */
 
 /*
@@ -48,6 +48,7 @@ import com.sun.faces.spi.InjectionProviderFactory;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 
 import javax.el.CompositeELResolver;
 import javax.el.ELResolver;
@@ -170,8 +171,8 @@ public class ApplicationAssociate {
         injectionProvider = InjectionProviderFactory.createInstance(externalContext);
         WebConfiguration webConfig = WebConfiguration.getInstance(externalContext);
         beanManager = new BeanManager(injectionProvider,
-                                      webConfig.getBooleanContextInitParameter(
-                                           WebConfiguration.BooleanWebContextInitParameter.EnableLazyBeanValidation));
+                                      webConfig.isOptionEnabled(
+                                           BooleanWebContextInitParameter.EnableLazyBeanValidation));
     }
 
     public static ApplicationAssociate getInstance(ExternalContext

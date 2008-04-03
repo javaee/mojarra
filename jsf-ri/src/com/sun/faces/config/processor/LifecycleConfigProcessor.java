@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleConfigProcessor.java,v 1.5 2007/04/27 22:00:56 ofung Exp $
+ * $Id: LifecycleConfigProcessor.java,v 1.6 2007/06/25 20:57:20 rlubke Exp $
  */
 
 /*
@@ -40,6 +40,7 @@
 
 package com.sun.faces.config.processor;
 
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
@@ -128,8 +129,8 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
                                    NodeList phaseListeners) {
 
         WebConfiguration webConfig = WebConfiguration.getInstance();
-        boolean jsPLEnabled = webConfig.getBooleanContextInitParameter(
-             WebConfiguration.BooleanWebContextInitParameter.ExternalizeJavaScript);
+        boolean jsPLEnabled = webConfig.isOptionEnabled(
+             BooleanWebContextInitParameter.ExternalizeJavaScript);
         if (phaseListeners != null && phaseListeners.getLength() > 0) {
             for (int i = 0, size = phaseListeners.getLength(); i < size; i++) {
                 String pl = getNodeText(phaseListeners.item(i));

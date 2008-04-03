@@ -1,5 +1,5 @@
 /*
- * $Id: WebResourceProvider.java,v 1.3 2007/06/07 23:10:35 rlubke Exp $
+ * $Id: WebResourceProvider.java,v 1.4 2007/06/25 20:57:21 rlubke Exp $
  */
 
 /*
@@ -42,6 +42,7 @@ package com.sun.faces.config.configprovider;
 
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.Util;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 
 import javax.faces.FacesException;
 import javax.servlet.ServletContext;
@@ -74,9 +75,8 @@ public class WebResourceProvider implements ConfigurationResourceProvider {
         // the web application deployment descriptor
         WebConfiguration webConfig = WebConfiguration.getInstance(context);
         String paths =
-             webConfig
-                  .getContextInitParameter(WebConfiguration.WebContextInitParameter.JavaxFacesConfigFiles);
-        List<URL> list = new ArrayList(6);
+             webConfig.getOptionValue(WebContextInitParameter.JavaxFacesConfigFiles);
+        List<URL> list = new ArrayList<URL>(6);
         if (paths != null) {
             for (String token : Util.split(paths.trim(), ",")) {
                 if (!WEB_INF_RESOURCE.equals(token.trim())) {

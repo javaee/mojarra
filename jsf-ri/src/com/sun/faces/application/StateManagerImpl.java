@@ -367,7 +367,7 @@ public class StateManagerImpl extends StateManager {
             WebConfiguration webConfig = 
                   WebConfiguration.getInstance(context.getExternalContext());
             String noOfViewsStr = webConfig
-                  .getContextInitParameter(WebContextInitParameter.NumberOfLogicalViews);
+                  .getOptionValue(WebContextInitParameter.NumberOfLogicalViews);
             String defaultValue =
                   WebContextInitParameter.NumberOfLogicalViews.getDefaultValue();
             try {
@@ -408,7 +408,7 @@ public class StateManagerImpl extends StateManager {
             WebConfiguration webConfig = 
                   WebConfiguration.getInstance(context.getExternalContext());
             String noOfViewsStr = webConfig
-                  .getContextInitParameter(WebContextInitParameter.NumberOfViews);
+                  .getOptionValue(WebContextInitParameter.NumberOfViews);
             String defaultValue =
                   WebContextInitParameter.NumberOfViews.getDefaultValue();
             try {

@@ -882,8 +882,7 @@ public class RenderKitUtils {
         WebConfiguration webConfig =
               WebConfiguration.getInstance(context.getExternalContext());
 
-        if (webConfig
-              .getBooleanContextInitParameter(BooleanWebContextInitParameter.ExternalizeJavaScript)) {
+        if (webConfig.isOptionEnabled(BooleanWebContextInitParameter.ExternalizeJavaScript)) {
             // PENDING
             // We need to look into how to make this work in a portlet environment.
             // For the time being, this feature will need to be disabled when running
@@ -1054,8 +1053,7 @@ public class RenderKitUtils {
             builder.deleteCharAt(builder.length() - 1);
             if (WebConfiguration
                  .getInstance(extContext)
-                 .getBooleanContextInitParameter(
-                      BooleanWebContextInitParameter.CompressJavaScript)) {
+                 .isOptionEnabled(BooleanWebContextInitParameter.CompressJavaScript)) {
                 sunJsfJs = compressJS(builder.toString());
             } else {
                 sunJsfJs = builder.toString().toCharArray();

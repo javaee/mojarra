@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.105 2007/05/18 18:08:34 rlubke Exp $
+ * $Id: ViewHandlerImpl.java,v 1.106 2007/06/25 20:57:21 rlubke Exp $
  */
 
 
@@ -81,7 +81,7 @@ import java.util.logging.Logger;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.105 2007/05/18 18:08:34 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.106 2007/06/25 20:57:21 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -159,7 +159,7 @@ public class ViewHandlerImpl extends ViewHandler {
                         .getInstance(context.getExternalContext());
             try {
                 bufSize = Integer
-                      .parseInt(webConfig.getContextInitParameter(
+                      .parseInt(webConfig.getOptionValue(
                             WebContextInitParameter.ResponseBufferSize));
             } catch (NumberFormatException nfe) {
                 bufSize = Integer
@@ -742,7 +742,7 @@ public class ViewHandlerImpl extends ViewHandler {
             contextDefaultSuffix =
                   WebConfiguration
                         .getInstance(context.getExternalContext())
-                        .getContextInitParameter(WebContextInitParameter.JspDefaultSuffix);
+                        .getOptionValue(WebContextInitParameter.JspDefaultSuffix);
             if (contextDefaultSuffix == null) {
                 contextDefaultSuffix = ViewHandler.DEFAULT_SUFFIX;
             }

@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.110 2007/06/25 20:10:47 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.111 2007/06/25 20:57:21 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -108,32 +108,6 @@ public class ConfigureListener implements ServletRequestListener,
     // ------------------------------------------ ServletContextListener Methods
 
 
-    /**
-     * A subclass of ConfigureListener can override isFeatureEnabled and reset
-     * one of the boolean values.  This method lets the user know that this 
-     * happened for a particular feature.
-     */
-    public void logOverriddenContextConfigValues() {
-        for (BooleanWebContextInitParameter param : BooleanWebContextInitParameter
-             .values()) {
-
-            if (webConfig.getBooleanContextInitParameter(param)
-                != isFeatureEnabled(param)) {
-                if (LOGGER.isLoggable(Level.INFO)) {
-                    LOGGER.log(Level.INFO,
-                               (isFeatureEnabled(param)
-                                ? "jsf.config.webconfig.configinfo.reset.enabled"
-                                : "jsf.config.webconfig.configinfo.reset.disabled"),
-                               new Object[]{
-                                    webConfig.getServletContextName(),
-                                    param.getQualifiedName()
-                               });
-                }
-            }
-        }
-    }
-
-
     public void contextInitialized(ServletContextEvent sce) {
         webAppListener.contextInitialized(sce);
         Timer timer = Timer.getInstance();
@@ -150,7 +124,6 @@ public class ConfigureListener implements ServletRequestListener,
         }
 
         webConfig = WebConfiguration.getInstance(context);
-        logOverriddenContextConfigValues();
         ConfigManager configManager = ConfigManager.getInstance();
 
         if (configManager.hasBeenInitialized(context)) {
@@ -160,7 +133,7 @@ public class ConfigureListener implements ServletRequestListener,
         // Check to see if the FacesServlet is present in the
         // web.xml.   If it is, perform faces configuration as normal,
         // otherwise, simply return.
-        if (!isFeatureEnabled(BooleanWebContextInitParameter.ForceLoadFacesConfigFiles)) {
+        if (!webConfig.isOptionEnabled(BooleanWebContextInitParameter.ForceLoadFacesConfigFiles)) {
             WebXmlProcessor processor = new WebXmlProcessor(context);
             if (!processor.isFacesServletPresent()) {
                 if (LOGGER.isLoggable(Level.FINE)) {
@@ -187,9 +160,9 @@ public class ConfigureListener implements ServletRequestListener,
 
             // see if we need to disable our TLValidator
             Util.setHtmlTLVActive(
-                  isFeatureEnabled(BooleanWebContextInitParameter.EnableHtmlTagLibraryValidator));
+                  webConfig.isOptionEnabled(BooleanWebContextInitParameter.EnableHtmlTagLibraryValidator));
 
-            if (isFeatureEnabled(BooleanWebContextInitParameter.VerifyFacesConfigObjects)) {
+            if (webConfig.isOptionEnabled(BooleanWebContextInitParameter.VerifyFacesConfigObjects)) {
                 if (LOGGER.isLoggable(Level.WARNING)) {
                     LOGGER.warning("jsf.config.verifyobjects.developement_only");
                 }
@@ -360,23 +333,6 @@ public class ConfigureListener implements ServletRequestListener,
 
     }
 
-
-
-
-    
-    /**
-     * <p>Determines if a particular feature, configured via the web
-     * deployment descriptor as a <code>true/false</code> value, is
-     * enabled or not.</p>
-     * @param param the <code>BooleanWebContextInitParameter</code> 
-     *  of interest
-     *
-     * @return <code>true</code> if the feature in question is enabled, otherwise
-     *  <code>false</code>
-     */
-    protected boolean isFeatureEnabled(BooleanWebContextInitParameter param) {
-        return webConfig.getBooleanContextInitParameter(param);      
-    }
 
     private static String getServletContextIdentifier(ServletContext context) {
         if (context.getMajorVersion() == 2 && context.getMinorVersion() < 5) {

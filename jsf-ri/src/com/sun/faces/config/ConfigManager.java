@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManager.java,v 1.10 2007/06/07 23:10:35 rlubke Exp $
+ * $Id: ConfigManager.java,v 1.11 2007/06/25 20:57:21 rlubke Exp $
  */
 
 /*
@@ -55,6 +55,7 @@ import com.sun.faces.config.processor.NavigationConfigProcessor;
 import com.sun.faces.config.processor.RenderKitConfigProcessor;
 import com.sun.faces.config.processor.ValidatorConfigProcessor;
 import com.sun.faces.util.Timer;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -257,8 +258,7 @@ public class ConfigManager {
         List<FutureTask<Document>> docTasks =
              new ArrayList<FutureTask<Document>>(RESOURCE_PROVIDERS.size() << 1);
         boolean validating = WebConfiguration.getInstance(sc)
-             .getBooleanContextInitParameter(
-                  WebConfiguration.BooleanWebContextInitParameter.ValidateFacesConfigFiles);
+             .isOptionEnabled(BooleanWebContextInitParameter.ValidateFacesConfigFiles);
         DocumentBuilderFactory factory = DbfFactory.getFactory();
         for (FutureTask<List<URL>> t : urlTasks) {
             try {
