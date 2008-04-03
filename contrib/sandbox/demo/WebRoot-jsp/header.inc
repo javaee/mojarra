@@ -7,7 +7,7 @@
 <html>
 <head>
     <title>JSF RI Sandbox  Test App</title>
-    <link rel="stylesheet" type="text/css" href="style.css"/>
+    <link rel="stylesheet" type="text/css" href="${facesContext.externalContext.request.contextPath}/style.css"/>
 </head>
 <body>
     <div class="header_main">
@@ -18,7 +18,7 @@
     </div>
     <div class="header_menu">
         <div class="header_menu_item">
-            <a href="index.jsf">Home</a>
+            <a href="${facesContext.externalContext.request.contextPath}/index.jsf">Home</a>
         </div>
     </div>
     <div style="margin: 5px;">

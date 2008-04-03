@@ -25,16 +25,17 @@ YAHOO.widget.TreeView.prototype.getUlList= function(nodeParent, node) {
 	var nRootList = nodeParent.getElementsByTagName('ul')[0];
 
 	for ( var i=0 ; i<nRootList.childNodes.length ; i++ ) {
-		if ( nRootList.childNodes[i].nodeName == 'li' ) {
-			sLabel = this.getLiLabel( nRootList.childNodes[i] );
-			if ( nRootList.childNodes[i].className == "expand" ) {
+		var childNode = nRootList.childNodes[i];
+		if ( childNode.nodeName.toLowerCase() == 'li' ) {
+			sLabel = this.getLiLabel( childNode );
+			if ( childNode.className.toLowerCase() == "expand" ) {
 				bExpand = true;
 				node.expand(true);
 			} else {
 				bExpand = false;
 			}
-		newNode = new YAHOO.widget.HTMLNode(sLabel, node, bExpand, true);
-		this.getUlList (nRootList.childNodes[i], newNode);
+			newNode = new YAHOO.widget.HTMLNode(sLabel, node, bExpand, true);
+			this.getUlList (childNode, newNode);
 		}
 	}
 };

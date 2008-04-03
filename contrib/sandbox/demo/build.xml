@@ -73,6 +73,8 @@
 
     <!-- The base resource directory -->
     <property name="resource.dir" value="${basedir}/src/resources"/>
+	
+    <property name="dep.dir" value="${basedir}/deps"/>
 
     <!-- Dependencies -->
     <property name="sandbox.dependency.base.dir" value="${sandbox.dir}/dependencies"/>
@@ -90,6 +92,27 @@
 
     <!-- ************ Executable Targets ************************************** -->
 
+	<!--
+		This file assumes you have the ant contrib lib in your Ant home:
+		http://mirrors.ibiblio.org/pub/mirrors/maven2/ant-contrib/ant-contrib/1.0b2/ant-contrib-1.0b2.jar
+	-->
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+	
+	<macrodef name="download">
+		<attribute name="target"/>
+		<attribute name="url" />
+			
+		<sequential>
+			<if>
+				<not>
+					<available file="@{target}" property="ignore.me"/>
+				</not>
+				<then>
+					<get src="@{url}" dest="@{target}" usetimestamp="true" />
+				</then>
+			</if>
+		</sequential>
+	</macrodef>
 
     <target name="init" description="Initialize and evaluate conditionals">
         <echo message="-------- ${impl.name} ${impl.version} --------"/>
@@ -110,17 +133,10 @@
                 <setproxy proxyhost="${http.proxy.host}" proxyport="${http.proxy.port}"/>
             </then>
         </if>
-        <if>
-            <not>
-                <available file="${resource.dir}/sample.png" property="ignored"/>
-            </not>
-            <then>
-                <!-- "https://duke.dev.java.net/images/JDK6/DukeWithHelmet.png" -->
-                <get src="http://www.canekpelaez.com/pensadero/posts-images/2006/11/java-duke-guitar.png" 
-                    dest="${resource.dir}/sample.png"
-                     usetimestamp="true"/>
-            </then>
-        </if>
+		<mkdir dir="${dep.dir}"/>
+        <download url="http://www.canekpelaez.com/pensadero/posts-images/2006/11/java-duke-guitar.png" target="${resource.dir}/sample.png" />
+        <download url="https://maven-repository.dev.java.net/repository/el-impl/jars/el-impl-1.0.jar" target="${dep.dir}/el-impl-1.0.jar" />
+        <download url="https://maven-repository.dev.java.net/repository/javax.el/jars/el-api-1.0.jar" target="${dep.dir}/el-api-1.0.jar" />
     </target>
 
     <target name="compile" depends="prepare,update" description="Just compile the classes">
@@ -178,6 +194,9 @@
         <delete dir="${web.jsft.dir}/WEB-INF/classes"/>
         <delete dir="${web.facelets.dir}/WEB-INF/classes"/>
         <delete dir="${web.jsp.dir}/WEB-INF/classes"/>
+        <delete dir="${web.jsft.dir}/WEB-INF/lib"/>
+        <delete dir="${web.facelets.dir}/WEB-INF/lib"/>
+        <delete dir="${web.jsp.dir}/WEB-INF/lib"/>
 
         <delete>
             <fileset dir="." includes="**/*~" defaultexcludes="no"/>
@@ -188,55 +207,77 @@
     <target name="all" depends="clean,prepare,compile"
             description="Clean and compile all components"/>
 
+	<macrodef name="copylibs">
+		<attribute name="to"/>
+		<sequential>
+	        <copy file="${httpclient.jar}" todir="@{to}" />
+	        <copy file="${fileupload.jar}" todir="@{to}" />
+	        <copy file="${codec.jar}" todir="@{to}" />
+	        <copy file="${logging.jar}" todir="@{to}" />
+	        <copy file="${io.jar}" todir="@{to}" />
+	        <copy file="${shale.remoting.jar}" todir="@{to}" />
+	        <copy file="${sandbox.dir}/build/lib/${name}-${sb.impl.version}.jar" todir="@{to}" />
+	        <copy file="${assemble.dir}/JsfRiSandboxDemo.jar" todir="@{to}" />
+			<copy file="${jsf-api.jar}" todir="@{to}" />
+			<copy file="${jsf-impl.jar}" todir="@{to}" />
+			<copy todir="@{to}">
+				<fileset dir="${dep.dir}" includes="**/*.jar"/>
+			</copy>
+		</sequential>
+	</macrodef>
+
     <target name="dist" depends="clean,compile" description="Build distribution files">
-        <mkdir dir="${dist.dir}"/>
+        <delete dir="temp"/>
         <delete dir="${assemble.dir}"/>
+		<delete dir="${web.jsp.dir}/WEB-INF/lib" />
+		<delete dir="${web.jsft.dir}/WEB-INF/lib" />
+		<delete dir="${web.facelets.dir}/WEB-INF/lib" />
+
+        <mkdir dir="${dist.dir}"/>
+        <mkdir dir="temp/WEB-INF/lib"/>
         <mkdir dir="${assemble.dir}"/>
         <mkdir dir="${assemble.dir}/lib"/>
         
-        <copy file="${httpclient.jar}" todir="${assemble.dir}/lib" />
-        <copy file="${fileupload.jar}" todir="${assemble.dir}/lib" />
-        <copy file="${codec.jar}" todir="${assemble.dir}/lib" />
-        <copy file="${logging.jar}" todir="${assemble.dir}/lib" />
-        <copy file="${io.jar}" todir="${assemble.dir}/lib" />
-        <copy file="${facelets.jar}" todir="${assemble.dir}/lib" />
-        <copy file="${shale.remoting.jar}" todir="${assemble.dir}/lib" />
-        <copy file="${jsftemplating.jar}" todir="${web.jsft.dir}/WEB-INF/lib" />
-        <copy file="${jsftemplating.df.jar}" todir="${web.jsft.dir}/WEB-INF/lib" />
-        <copy file="${sandbox.dir}/build/lib/${name}-${sb.impl.version}.jar" todir="${assemble.dir}/lib" />
-
         <jar destfile="${assemble.dir}/JsfRiSandboxDemo.jar">
             <fileset dir="${build.dir}"/>
         </jar>
         
+		<copylibs to="temp/WEB-INF/lib"/>
+		<copy file="${facelets.jar}" todir="${web.facelets.dir}/WEB-INF/lib" />
+		<copy file="${jsftemplating.jar}" todir="${web.jsft.dir}/WEB-INF/lib" />
+		<copy file="${jsftemplating.df.jar}" todir="${web.jsft.dir}/WEB-INF/lib" />
+		
         <jar destfile="${assemble.dir}/JsfRiSandboxDemo.war">
             <fileset dir="${web.dir}"/>
-            <fileset dir="${source.web.dir}"/>
-        </jar>
-        <jar destfile="${assemble.dir}/JsfRiSandboxDemo-jsftemplating.war">
-            <fileset dir="${web.jsft.dir}"/>
-            <fileset dir="${source.web.dir}"/>
-        </jar>
-        <jar destfile="${assemble.dir}/JsfRiSandboxDemo-facelets.war">
-            <fileset dir="${web.facelets.dir}"/>
             <fileset dir="${source.web.dir}"/>
         </jar>
         <jar destfile="${assemble.dir}/JsfRiSandboxDemo-jsp.war">
             <fileset dir="${web.jsp.dir}"/>
             <fileset dir="${source.web.dir}"/>
+			<fileset dir="temp/" />
+        </jar>
+        <jar destfile="${assemble.dir}/JsfRiSandboxDemo-jsftemplating.war">
+            <fileset dir="${web.jsft.dir}"/>
+            <fileset dir="${source.web.dir}"/>
+			<fileset dir="temp/" />
+        </jar>
+        <jar destfile="${assemble.dir}/JsfRiSandboxDemo-facelets.war">
+            <fileset dir="${web.facelets.dir}"/>
+            <fileset dir="${source.web.dir}"/>
+			<fileset dir="temp/" />
         </jar>
         
         <jar destfile="${dist.dir}/JsfRiSandboxDemo.ear">
             <fileset dir="${assemble.dir}"/>
             <fileset dir="${source.web.dir}"/>
         </jar>
+		
+		<copy todir="${dist.dir}">
+			<fileset dir="${assemble.dir}" includes="**/*.war"/>
+		</copy>
         
-        <delete dir="${assemble.dir}1"/>
-        <!--
-        <copy file="${httpclient.jar}" todir="${dep.jar.dir}" />
-        <copy file="${codec.jar}" todir="${dep.jar.dir}" />
-        <copy file="${logging.jar}" todir="${dep.jar.dir}" />
-        -->
+        <delete dir="${assemble.dir}"/>
+        <delete dir="temp"/>
     </target>
     
     <target name="main" depends="compile"/>
