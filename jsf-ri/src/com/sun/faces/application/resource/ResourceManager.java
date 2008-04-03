@@ -51,6 +51,8 @@ import javax.faces.context.FacesContext;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 
+import javax.faces.application.ResourceHandler;
+
 /**
  * This class is used to lookup {@link ResourceInfo} instances
  * and cache any that are successfully looked up to reduce the
