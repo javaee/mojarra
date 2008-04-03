@@ -1,5 +1,5 @@
 /*
- * $Id: Phase.java,v 1.11 2007/08/23 21:42:39 rlubke Exp $
+ * $Id: Phase.java,v 1.12 2007/08/24 16:20:33 rlubke Exp $
  */
 
 /*
@@ -55,6 +55,7 @@ import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
 
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Timer;
 import com.sun.faces.util.Util;
 
 
@@ -88,6 +89,13 @@ public abstract class Phase {
         if (i.hasNext()) {
             event = new PhaseEvent(context, this.getId(), lifecycle);
         }
+
+        // start timing - include before and after phase processing
+        Timer timer = Timer.getInstance();
+        if (timer != null) {
+            timer.startTiming();
+        }
+
         handleBeforePhase(context, i, event);
         Exception ex = null;
         try {
@@ -107,7 +115,17 @@ public abstract class Phase {
             ex = e;
         } finally {
             handleAfterPhase(context, i, event);
+            
+            // stop timing
+            if (timer != null) {
+                timer.stopTiming();
+                timer.logResult(
+                      "Execution time for phase (including any PhaseListeners) -> "
+                      + this.getId().toString());
+            }
         }
+
+        // handle any exceptions thrown by Phase.execute()
         if (ex != null) {
             if (!(ex instanceof FacesException)) {
                 ex = new FacesException(ex);
