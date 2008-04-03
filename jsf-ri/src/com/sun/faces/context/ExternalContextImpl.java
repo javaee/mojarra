@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.61 2007/06/08 00:10:06 rlubke Exp $
+ * $Id: ExternalContextImpl.java,v 1.62 2007/06/11 08:13:08 rlubke Exp $
  */
 
 /*
@@ -90,7 +90,7 @@ import com.sun.faces.util.FacesLogger;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.61 2007/06/08 00:10:06 rlubke Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.62 2007/06/11 08:13:08 rlubke Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -942,18 +942,19 @@ class SessionMap extends BaseContextMap {
     }
 
     public void clear() {
-        HttpSession session = getSession();
-        String name = null;
-        for (Enumeration e = getSession().getAttributeNames();
-             e.hasMoreElements(); ) {
-            name = (String) e.nextElement();
-            session.removeAttribute(name);
+        HttpSession session = getSession(false);
+        if (session != null) {
+            for (Enumeration e = session.getAttributeNames();
+                 e.hasMoreElements();) {
+                String name = (String) e.nextElement();
+                session.removeAttribute(name);
+            }
         }
     }
 
     // Supported by maps if overridden
     public void putAll(Map t) {
-        HttpSession session = getSession();
+        HttpSession session = getSession(true);
         for (Iterator i = t.entrySet().iterator(); i.hasNext(); ) {
             Map.Entry entry = (Map.Entry) i.next();
             session.setAttribute((String) entry.getKey(),
@@ -965,7 +966,9 @@ class SessionMap extends BaseContextMap {
         if (key == null) {
             throw new NullPointerException();
         }
-        return getSession().getAttribute(key.toString());
+        HttpSession session = getSession(false);
+        return ((session != null) ? session.getAttribute(key.toString()) : null);
+
     }
 
 
@@ -973,7 +976,7 @@ class SessionMap extends BaseContextMap {
         if (key == null) {
             throw new NullPointerException();
         }        
-        HttpSession session = getSession();
+        HttpSession session = getSession(true);
         Object result = session.getAttribute(key.toString());
         session.setAttribute(key.toString(), value);
         return (result);
@@ -984,16 +987,21 @@ class SessionMap extends BaseContextMap {
         if (key == null) {
             return null;
         }
-        String keyString = key.toString();
-        HttpSession session = getSession();
-        Object result = session.getAttribute(keyString);
-        session.removeAttribute(keyString);
-        return (result);
+        HttpSession session = getSession(false);
+        if (session != null) {
+            String keyString = key.toString();
+            Object result = session.getAttribute(keyString);
+            session.removeAttribute(keyString);
+            return (result);
+        }
+        return null;
     }
 
 
     @Override public boolean containsKey(Object key) {
-        return (getSession().getAttribute(key.toString()) != null);
+        HttpSession session = getSession(false);
+        return ((session != null)
+                && session.getAttribute(key.toString()) != null);
     }
 
     public boolean equals(Object obj) {
@@ -1004,14 +1012,18 @@ class SessionMap extends BaseContextMap {
     }
 
 
-    private HttpSession getSession() {
+    private HttpSession getSession(boolean createNew) {
         return request.getSession(true);
     }
 
     public int hashCode() {
-        int hashCode = 7 * request.getSession().hashCode();
-        for (Iterator i = entrySet().iterator(); i.hasNext(); ) {
-            hashCode += i.next().hashCode();
+        HttpSession session = getSession(false);
+        int hashCode =
+              7 * ((session != null) ? session.hashCode() : super.hashCode());
+        if (session != null) {
+            for (Iterator i = entrySet().iterator(); i.hasNext();) {
+                hashCode += i.next().hashCode();
+            }
         }
         return hashCode;
     }
@@ -1019,15 +1031,24 @@ class SessionMap extends BaseContextMap {
     // --------------------------------------------- Methods from BaseContextMap
 
     protected Iterator<Map.Entry<String,Object>> getEntryIterator() {
-        return new EntryIterator(getSession().getAttributeNames());
+        HttpSession session = getSession(false);
+        return ((session != null)
+                ? new EntryIterator(session.getAttributeNames())
+                : Collections.emptyMap().entrySet().iterator());
     }
 
     protected Iterator<String> getKeyIterator() {
-        return new KeyIterator(getSession().getAttributeNames());
+        HttpSession session = getSession(false);
+        return ((session != null)
+                ? new KeyIterator(session.getAttributeNames())
+                : Collections.emptyMap().entrySet().iterator());
     }
 
     protected Iterator<Object> getValueIterator() {
-        return new ValueIterator(getSession().getAttributeNames());
+        HttpSession session = getSession(false);
+        return ((session != null)
+                ? new ValueIterator(session.getAttributeNames())
+                : Collections.emptyMap().entrySet().iterator());
     }
 
 } // END SessionMap
