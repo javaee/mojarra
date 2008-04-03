@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManager.java,v 1.2 2007/04/24 19:04:22 rlubke Exp $
+ * $Id: ConfigManager.java,v 1.3 2007/04/26 22:28:57 rlubke Exp $
  */
 
 /*
@@ -52,6 +52,10 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.URIResolver;
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.BufferedInputStream;
@@ -250,11 +254,7 @@ public class ConfigManager {
                 List<URL> l = t.get();                
                 for (URL u : l) {
                     FutureTask<Document> d =
-                         new FutureTask<Document>(new ParseTask(factory,
-                                                                factory .isValidating()
-                                                                  ? getTransformer()
-                                                                  : null,
-                                                                u));
+                         new FutureTask<Document>(new ParseTask(factory, u));
                     docTasks.add(d);
                     executor.execute(d);
                 }
@@ -282,34 +282,7 @@ public class ConfigManager {
     }
 
 
-    /**
-     * Obtain a <code>Transformer</code> using the style sheet
-     * referenced by the <code>XSL</code> constant.
-     * @return a new Tranformer instance
-     * @throws Exception if a Tranformer instance could not be created
-     */
-    private static Transformer getTransformer() throws Exception {
 
-        TransformerFactory factory = TransformerFactory.newInstance();
-        return factory
-             .newTransformer(new StreamSource(getInputStream(ConfigManager
-                  .class.getResource(XSL))));
-
-    }
-
-
-    /**
-     * @return an <code>InputStream</code> to the resource referred to by
-     *         {@link documentURL}
-     * @throws IOException if an error occurs
-     */
-    private static InputStream getInputStream(URL url) throws IOException {
-
-        URLConnection conn = url.openConnection();
-        conn.setUseCaches(false);
-        return new BufferedInputStream(conn.getInputStream());
-
-    }
 
     // ----------------------------------------------------------- Inner Classes
 
@@ -324,7 +297,6 @@ public class ConfigManager {
 
         private URL documentURL;
         private DocumentBuilder builder;
-        private Transformer transformer;
 
         // -------------------------------------------------------- Constructors
 
@@ -335,17 +307,13 @@ public class ConfigManager {
          * </p>
          * @param factory a DocumentBuilderFactory configured with the desired
          *  parse settings
-         * @param transformer a Transform to be used to apply xslt transformations
-         *  if necessary
          * @param documentURL a URL to the configuration resource to be parsed
          */
         public ParseTask(DocumentBuilderFactory factory,
-                         Transformer transformer,
                          URL documentURL)
         throws Exception {
 
             this.documentURL = documentURL;
-            this.transformer = transformer;
             builder = factory.newDocumentBuilder();
             builder.setEntityResolver(DbfFactory.FACES_ENTITY_RESOLVER);
             builder.setErrorHandler(DbfFactory.FACES_ERROR_HANDLER);
@@ -397,18 +365,62 @@ public class ConfigManager {
         // ----------------------------------------------------- Private Methods
 
 
+        /**
+         * Obtain a <code>Transformer</code> using the style sheet
+         * referenced by the <code>XSL</code> constant.
+         *
+         * @return a new Tranformer instance
+         * @throws Exception if a Tranformer instance could not be created
+         */
+        private static Transformer getTransformer() throws Exception {
+
+            TransformerFactory factory = TransformerFactory.newInstance();
+            factory.setURIResolver(new URIResolver() {
+
+                public Source resolve(String href, String base)
+                throws TransformerException {
+                     System.out.println("URI Resolver href: " + href);
+                        System.out.println("URI Resolver base: " + base);
+                    return null;  //To change body of implemented methods use File | Settings | File Templates.
+                }
+            });
+            return factory
+                 .newTransformer(new StreamSource(getInputStream(ConfigManager
+                      .class.getResource(XSL))));
+
+        }
+
+
+        /**
+         * @return an <code>InputStream</code> to the resource referred to by
+         *         <code>url</code>
+         * @throws IOException if an error occurs
+         */
+        private static InputStream getInputStream(URL url) throws IOException {
+
+            URLConnection conn = url.openConnection();
+            conn.setUseCaches(false);
+            return new BufferedInputStream(conn.getInputStream());
+
+    }
 
         private InputSource getParseSource() throws Exception {
 
-            if (transformer != null) {
+            if (builder.isValidating()) {
                 // if we're validating, we need to apply xslt transformations
                 // to convert all documents to 1.2
                 ByteArrayOutputStream baos = new ByteArrayOutputStream(4096);
                 StreamResult sResult = new StreamResult(baos);
-                transformer
-                     .transform(new StreamSource(getInputStream(documentURL),
-                                                 documentURL.toExternalForm()),
-                                sResult);
+                DocumentBuilderFactory tFactory = DocumentBuilderFactory.newInstance();
+                tFactory.setIgnoringComments(true);
+                tFactory.setNamespaceAware(true);
+                tFactory.setValidating(false);
+                DocumentBuilder tBuilder = tFactory.newDocumentBuilder();
+                DOMSource domSource
+                     = new DOMSource(tBuilder.parse(getInputStream(documentURL),
+                                                    documentURL.toExternalForm()));
+                Transformer transformer = getTransformer();
+                transformer.transform(domSource, sResult);
                 InputSource is = new InputSource(new ByteArrayInputStream(baos.toByteArray()));
                 is.setSystemId(documentURL.toExternalForm());
                 return is;
