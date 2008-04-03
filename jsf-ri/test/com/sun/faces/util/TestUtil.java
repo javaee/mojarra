@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil.java,v 1.33 2007/04/27 22:02:11 ofung Exp $
+ * $Id: TestUtil.java,v 1.34 2007/07/10 18:46:53 rlubke Exp $
  */
 
 /*
@@ -42,6 +42,11 @@
 
 package com.sun.faces.util;
 
+import com.sun.faces.RIConstants;
+import com.sun.faces.cactus.ServletFacesTestCase;
+import com.sun.faces.renderkit.AttributeManager;
+import com.sun.faces.renderkit.RenderKitUtils;
+
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIInput;
 import javax.faces.component.UISelectItems;
@@ -61,16 +66,12 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.cactus.ServletFacesTestCase;
-import com.sun.faces.renderkit.RenderKitUtils;
-
 /**
  * <B>TestUtil</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil.java,v 1.33 2007/04/27 22:02:11 ofung Exp $
+ * @version $Id: TestUtil.java,v 1.34 2007/07/10 18:46:53 rlubke Exp $
  */
 
 public class TestUtil extends ServletFacesTestCase {
@@ -124,13 +125,16 @@ public class TestUtil extends ServletFacesTestCase {
                                                                    "text/html",
                                                                    "ISO-8859-1");
             getFacesContext().setResponseWriter(writer);
-
+            String[] attrs = AttributeManager.getAttributes(AttributeManager.Key.INPUTTEXT);
             UIInput input = new UIInput();
             input.setId("testRenderPassthruAttributes");
             input.getAttributes().put("notPresent", "notPresent");
             input.getAttributes().put("onblur", "javascript:f.blur()");
             input.getAttributes().put("onchange", "javascript:h.change()");
-            RenderKitUtils.renderPassThruAttributes(null, writer, input);
+            RenderKitUtils.renderPassThruAttributes(
+                  writer,
+                                                    input,
+                                                    attrs);
             String expectedResult = " onblur=\"javascript:f.blur()\" onchange=\"javascript:h.change()\"";
             assertEquals(expectedResult, sw.toString());
 
@@ -141,7 +145,7 @@ public class TestUtil extends ServletFacesTestCase {
             getFacesContext().setResponseWriter(writer);
             input.getAttributes().remove("onblur");
             input.getAttributes().remove("onchange");
-            RenderKitUtils.renderPassThruAttributes(null, writer, input);
+            RenderKitUtils.renderPassThruAttributes(writer, input, attrs);
             assertTrue(0 == sw.toString().length());
         } catch (IOException e) {
             assertTrue(false);
@@ -161,11 +165,11 @@ public class TestUtil extends ServletFacesTestCase {
                                                                    "text/html",
                                                                    "ISO-8859-1");
             getFacesContext().setResponseWriter(writer);
-
+            String[] attrs = AttributeManager.getAttributes(AttributeManager.Key.INPUTTEXT);
             HtmlInputText input = new HtmlInputText();
             input.setId("testRenderPassthruAttributes");
             input.setSize(12);
-            RenderKitUtils.renderPassThruAttributes(null, writer, input);
+            RenderKitUtils.renderPassThruAttributes(writer, input, attrs);
             String expectedResult = " size=\"12\"";
             assertEquals(expectedResult, sw.toString());
 
@@ -175,7 +179,7 @@ public class TestUtil extends ServletFacesTestCase {
             writer = renderKit.createResponseWriter(sw, "text/html",
                                                     "ISO-8859-1");
             input.setSize(Integer.MIN_VALUE);
-            RenderKitUtils.renderPassThruAttributes(null, writer, input);
+            RenderKitUtils.renderPassThruAttributes(writer, input, attrs);
             expectedResult = "";
             assertEquals(expectedResult, sw.toString());
 
@@ -183,9 +187,10 @@ public class TestUtil extends ServletFacesTestCase {
             writer = renderKit.createResponseWriter(sw, "text/html",
                                                     "ISO-8859-1");
             input.setReadonly(false);
-            RenderKitUtils.renderPassThruAttributes(getFacesContext(),
-                                                    writer,
-                                                    input);
+            RenderKitUtils.renderPassThruAttributes(
+                  writer,
+                                                    input,
+                                                    attrs);
             expectedResult = "";
             assertEquals(expectedResult, sw.toString());
 

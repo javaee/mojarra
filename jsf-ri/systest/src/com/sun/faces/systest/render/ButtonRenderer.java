@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.10 2007/04/27 22:01:16 ofung Exp $
+ * $Id: ButtonRenderer.java,v 1.11 2007/07/10 18:46:52 rlubke Exp $
  */
 
 /*
@@ -42,6 +42,13 @@
 
 package com.sun.faces.systest.render;
 
+import com.sun.faces.renderkit.AttributeManager;
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
+import com.sun.org.apache.commons.logging.Log;
+import com.sun.org.apache.commons.logging.LogFactory;
+
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
@@ -54,18 +61,15 @@ import javax.faces.render.Renderer;
 import java.io.IOException;
 import java.util.Map;
 
-import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
-import com.sun.org.apache.commons.logging.Log;
-import com.sun.org.apache.commons.logging.LogFactory;
-
 /**
  * <B>ButtonRenderer</B> is a class that renders the current value of
  * <code>UICommand<code> as a Button.
  */
 
 public class ButtonRenderer extends Renderer {
+
+    private static final String[] ATTRIBUTES =
+          AttributeManager.getAttributes(AttributeManager.Key.COMMANDBUTTON);
 
     public static final String CLEAR_HIDDEN_FIELD_FN_NAME = 
          "clearFormHiddenParams";
@@ -242,8 +246,10 @@ public class ButtonRenderer extends Renderer {
         }
         writer.writeAttribute("onclick", sb.toString(), null);
 
-        RenderKitUtils.renderPassThruAttributes(context, writer, component
-        );
+        RenderKitUtils.renderPassThruAttributes(
+              writer,
+                                                component,
+                                                ATTRIBUTES);
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
         if (null != (styleClass = (String)

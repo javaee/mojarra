@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.59 2007/04/27 22:01:01 ofung Exp $
+ * $Id: CommandLinkRenderer.java,v 1.60 2007/07/10 18:46:52 rlubke Exp $
  */
 
 /*
@@ -54,6 +54,7 @@ import java.util.logging.Level;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 
@@ -63,6 +64,9 @@ import com.sun.faces.util.Util;
  */
 
 public class CommandLinkRenderer extends LinkRenderer {
+
+    private static final String[] ATTRIBUTES =
+          AttributeManager.getAttributes(AttributeManager.Key.COMMANDLINK);
 
 
     private static final String SCRIPT_STATE = RIConstants.FACES_PREFIX +
@@ -329,11 +333,10 @@ public class CommandLinkRenderer extends LinkRenderer {
         writer.startElement("a", command);
         writeIdAttributeIfNecessary(context, writer, command);
         writer.writeAttribute("href", "#", "href");
-        RenderKitUtils.renderPassThruAttributes(context,
-                                                writer,
+        RenderKitUtils.renderPassThruAttributes(
+              writer,
                                                 command,
-                                                new String[]{"target",
-                                                             "onclick"});
+                                                ATTRIBUTES);
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, command);
 
         // render onclick

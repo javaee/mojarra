@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.48 2007/07/06 18:21:57 rlubke Exp $
+ * $Id: GridRenderer.java,v 1.49 2007/07/10 18:46:52 rlubke Exp $
  */
 
 /*
@@ -51,6 +51,7 @@ import java.util.Iterator;
 import java.util.logging.Level;
 
 import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.util.MessageUtils;
 
 /**
@@ -59,6 +60,9 @@ import com.sun.faces.util.MessageUtils;
  */
 
 public class GridRenderer extends HtmlBasicRenderer {
+
+    private static final String[] ATTRIBUTES =
+          AttributeManager.getAttributes(AttributeManager.Key.PANELGRID);
 
     // ---------------------------------------------------------- Public Methods
 
@@ -102,7 +106,10 @@ public class GridRenderer extends HtmlBasicRenderer {
         if (styleClass != null) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
-        RenderKitUtils.renderPassThruAttributes(context, writer, component);
+        RenderKitUtils.renderPassThruAttributes(
+              writer,
+                                                component,
+                                                ATTRIBUTES);
         writer.writeText("\n", component, null);
 
         // render the caption facet (if present)

@@ -1,5 +1,5 @@
 /*
- * $Id: LinkRenderer.java,v 1.21 2007/07/06 18:21:58 rlubke Exp $
+ * $Id: LinkRenderer.java,v 1.22 2007/07/10 18:46:52 rlubke Exp $
  */
 
 /*
@@ -50,6 +50,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.renderkit.AttributeManager;
 
 
 /**
@@ -58,6 +59,11 @@ import com.sun.faces.renderkit.RenderKitUtils;
  */
 
 public abstract class LinkRenderer extends HtmlBasicRenderer {
+
+
+    private static final String[] ATTRIBUTES =
+          AttributeManager.getAttributes(AttributeManager.Key.COMMANDLINK);
+
 
     // ------------------------------------------------------- Protected Methods
 
@@ -79,7 +85,10 @@ public abstract class LinkRenderer extends HtmlBasicRenderer {
             writer.writeAttribute("name", writtenId, "name");
         }
 
-        RenderKitUtils.renderPassThruAttributes(context, writer, component);
+        RenderKitUtils.renderPassThruAttributes(
+              writer,
+                                                component,
+                                                ATTRIBUTES);
 
         writeCommonLinkAttributes(writer, component);
         writeValue(component, writer);

@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.81 2007/07/06 20:15:19 rlubke Exp $
+ * $Id: TextRenderer.java,v 1.82 2007/07/10 18:46:52 rlubke Exp $
  */
 
 /*
@@ -51,6 +51,7 @@ import javax.faces.context.ResponseWriter;
 import java.io.IOException;
 
 import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.util.MessageUtils;
 
 /**
@@ -59,6 +60,13 @@ import com.sun.faces.util.MessageUtils;
  * static text.
  */
 public class TextRenderer extends HtmlBasicInputRenderer {
+
+
+    private static final String[] INPUT_ATTRIBUTES =
+          AttributeManager.getAttributes(AttributeManager.Key.INPUTTEXT);
+    private static final String[] OUTPUT_ATTRIBUTES = 
+          AttributeManager.getAttributes(AttributeManager.Key.OUTPUTTEXT);
+
 
     // ---------------------------------------------------------- Public Methods
 
@@ -127,7 +135,10 @@ public class TextRenderer extends HtmlBasicInputRenderer {
             }
 
             // style is rendered as a passthur attribute
-            RenderKitUtils.renderPassThruAttributes(context, writer, component);
+            RenderKitUtils.renderPassThruAttributes(
+                  writer,
+                                                    component,
+                                                    INPUT_ATTRIBUTES);
             RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
             writer.endElement("input");
@@ -146,7 +157,10 @@ public class TextRenderer extends HtmlBasicInputRenderer {
                 }
                 // style is rendered as a passthru attribute
                 RenderKitUtils
-                      .renderPassThruAttributes(context, writer, component);
+                      .renderPassThruAttributes(
+                            writer,
+                                                component,
+                                                OUTPUT_ATTRIBUTES);
 
             }
             if (currentValue != null) {

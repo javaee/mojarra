@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.104 2007/07/06 18:21:57 rlubke Exp $
+ * $Id: FormRenderer.java,v 1.105 2007/07/10 18:46:52 rlubke Exp $
  */
 
 /*
@@ -52,6 +52,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
@@ -59,6 +60,9 @@ import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 /** <B>FormRenderer</B> is a class that renders a <code>UIForm<code> as a Form. */
 
 public class FormRenderer extends HtmlBasicRenderer {
+
+    private static final String[] ATTRIBUTES =
+          AttributeManager.getAttributes(AttributeManager.Key.FORMFORM);
 
     private boolean writeStateAtEnd;
 
@@ -152,7 +156,10 @@ public class FormRenderer extends HtmlBasicRenderer {
                                   "acceptcharset");
         }
 
-        RenderKitUtils.renderPassThruAttributes(context, writer, component);
+        RenderKitUtils.renderPassThruAttributes(
+              writer,
+                                                component,
+                                                ATTRIBUTES);
         writer.writeText("\n", component, null);
 
         // this hidden field will be checked in the decode method to

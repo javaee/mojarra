@@ -174,13 +174,13 @@
         </copy>
         
         <mkdir dir="${tools.dir}/build/classes"/>
-        <javac srcdir="${tools.dir}/src"
+        <jsf.javac srcdir="${tools.dir}/src"
                destdir="${tools.dir}/build/classes">
             <classpath>
                 <path refid="impl.compile.classpath"/>
                 <path refid="ant.classpath"/>
             </classpath>
-        </javac>
+        </jsf.javac>
         <copy todir="${tools.dir}/build/classes">
             <fileset dir="${tools.dir}/src"
                      includes="**/*.properties"/>            
@@ -200,6 +200,12 @@
                 <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
         </taskdef>
+        <taskdef name="generateAttrManager"
+                 classname="com.sun.faces.ant.AttributeManagerGenTask">
+            <classpath>
+                <pathelement location="${tools.dir}/build/classes"/>
+            </classpath>
+        </taskdef>
         <generateTaglib
               generatorConfig="${tools.dir}/conf/HtmlBasicTaglib21.properties"
               facesConfig="${standard.renderkit.xml}"
@@ -214,6 +220,20 @@
                 <enable/>
             </assertions>
         </generateTaglib>
+        <generateAttrManager
+              generatorConfig="${tools.dir}/conf/HtmlBasicTaglib21.properties"
+              facesConfig="${standard.renderkit.xml}"
+              fork="true">
+            <classpath>
+                <path refid="impl.compile.classpath"/>
+                <pathelement location="${tools.dir}/build/classes"/>
+            </classpath>
+            <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>
+            <jvmarg line="${debug.jvm.args}"/>
+            <assertions>
+                <enable/>
+            </assertions>    
+        </generateAttrManager>
         <!--
         <copy todir="${build.generate.dir}">
 

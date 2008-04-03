@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.45 2007/07/06 18:21:57 rlubke Exp $
+ * $Id: TableRenderer.java,v 1.46 2007/07/10 18:46:51 rlubke Exp $
  */
 
 /*
@@ -55,11 +55,16 @@ import java.util.Collections;
 import java.util.logging.Level;
 
 import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.util.MessageUtils;
 
 /** <p>Render a {@link UIData} component as a two-dimensional table.</p> */
 
 public class TableRenderer extends HtmlBasicRenderer {
+
+
+    private static final String[] ATTRIBUTES =
+          AttributeManager.getAttributes(AttributeManager.Key.DATATABLE);
 
     // ---------------------------------------------------------- Public Methods
 
@@ -103,10 +108,10 @@ public class TableRenderer extends HtmlBasicRenderer {
         if (styleClass != null) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
-        RenderKitUtils.renderPassThruAttributes(context,
-                                                writer,
+        RenderKitUtils.renderPassThruAttributes(
+              writer,
                                                 component,
-                                                new String[]{"rows"});
+                                                ATTRIBUTES);
         writer.writeText("\n", component, null);
 
         UIComponent caption = getFacet(data, "caption");

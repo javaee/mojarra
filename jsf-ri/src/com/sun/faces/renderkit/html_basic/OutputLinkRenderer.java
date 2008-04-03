@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.34 2007/07/06 18:21:57 rlubke Exp $
+ * $Id: OutputLinkRenderer.java,v 1.35 2007/07/10 18:46:52 rlubke Exp $
  */
 
 /*
@@ -51,6 +51,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 
@@ -60,10 +61,15 @@ import com.sun.faces.util.Util;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.34 2007/07/06 18:21:57 rlubke Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.35 2007/07/10 18:46:52 rlubke Exp $
  */
 
 public class OutputLinkRenderer extends LinkRenderer {
+
+
+    private static final String[] ATTRIBUTES =
+          AttributeManager.getAttributes(AttributeManager.Key.OUTPUTLINK);
+
 
     // ---------------------------------------------------------- Public Methods
 
@@ -288,7 +294,10 @@ public class OutputLinkRenderer extends LinkRenderer {
                                  context.getExternalContext()
                                        .encodeResourceURL(sb.toString()),
                                  "href");
-        RenderKitUtils.renderPassThruAttributes(context, writer, component);
+        RenderKitUtils.renderPassThruAttributes(
+              writer,
+                                                component,
+                                                ATTRIBUTES);
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
         writeCommonLinkAttributes(writer, component);

@@ -1,5 +1,5 @@
 /*
- * $Id: MessagesRenderer.java,v 1.35 2007/07/06 20:15:19 rlubke Exp $
+ * $Id: MessagesRenderer.java,v 1.36 2007/07/10 18:46:52 rlubke Exp $
  */
 
 /*
@@ -54,6 +54,7 @@ import java.util.logging.Level;
 
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.MessageUtils;
+import com.sun.faces.renderkit.AttributeManager;
 
 /**
  * <p><B>MessagesRenderer</B> handles rendering for the Messages<p>.
@@ -62,6 +63,11 @@ import com.sun.faces.util.MessageUtils;
  */
 
 public class MessagesRenderer extends HtmlBasicRenderer {
+
+
+     private static final String[] ATTRIBUTES =
+          AttributeManager.getAttributes(AttributeManager.Key.MESSAGESMESSAGES);
+
 
     // ---------------------------------------------------------- Public Methods
 
@@ -160,7 +166,9 @@ public class MessagesRenderer extends HtmlBasicRenderer {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
         // style is rendered as a passthru attribute
-        RenderKitUtils.renderPassThruAttributes(context, writer, component);
+        RenderKitUtils.renderPassThruAttributes(writer,
+                                                component,
+                                                ATTRIBUTES);
 
         while (messageIter.hasNext()) {
             FacesMessage curMessage = (FacesMessage) messageIter.next();

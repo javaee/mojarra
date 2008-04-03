@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.23 2007/04/27 22:01:16 ofung Exp $
+ * $Id: TextRenderer.java,v 1.24 2007/07/10 18:46:52 rlubke Exp $
  */
 
 /*
@@ -56,6 +56,7 @@ import javax.faces.render.Renderer;
 import java.io.IOException;
 
 import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.util.MessageFactory;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
@@ -68,6 +69,11 @@ import com.sun.org.apache.commons.logging.LogFactory;
  * static text.
  */
 public class TextRenderer extends Renderer {
+
+    private static final String[] INPUT_ATTRIBUTES =
+              AttributeManager.getAttributes(AttributeManager.Key.INPUTTEXT);
+        private static final String[] OUTPUT_ATTRIBUTES =
+              AttributeManager.getAttributes(AttributeManager.Key.OUTPUTTEXT);
 
 
     //
@@ -210,7 +216,10 @@ public class TextRenderer extends Renderer {
             }
 
             // style is rendered as a passthur attribute
-            RenderKitUtils.renderPassThruAttributes(context, writer, component);
+            RenderKitUtils.renderPassThruAttributes(
+                  writer,
+                                                    component,
+                                                    INPUT_ATTRIBUTES);
             RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
             writer.endElement("input");
@@ -228,7 +237,10 @@ public class TextRenderer extends Renderer {
                     writer.writeAttribute("class", styleClass, "styleClass");
                 }
                 // style is rendered as a passthru attribute
-                RenderKitUtils.renderPassThruAttributes(context, writer, component);
+                RenderKitUtils.renderPassThruAttributes(
+                      writer,
+                                                        component,
+                                                        OUTPUT_ATTRIBUTES);
                 RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
             }

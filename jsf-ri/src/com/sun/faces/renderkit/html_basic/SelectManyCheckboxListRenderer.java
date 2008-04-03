@@ -35,7 +35,7 @@
  */
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.54 2007/07/06 18:21:57 rlubke Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.55 2007/07/10 18:46:52 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -60,6 +60,7 @@ import java.util.Map;
 
 import com.sun.faces.application.ConverterPropertyEditorBase;
 import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 
@@ -69,6 +70,10 @@ import com.sun.faces.util.Util;
  */
 
 public class SelectManyCheckboxListRenderer extends MenuRenderer {
+
+
+    private static final String[] ATTRIBUTES =
+          AttributeManager.getAttributes(AttributeManager.Key.SELECTMANYCHECKBOX);
 
     // ---------------------------------------------------------- Public Methods
 
@@ -303,11 +308,10 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         // Apply HTML 4.x attributes specified on UISelectMany component to all 
         // items in the list except styleClass and style which are rendered as
         // attributes of outer most table.
-        RenderKitUtils.renderPassThruAttributes(context,
-                                                writer,
+        RenderKitUtils.renderPassThruAttributes(
+              writer,
                                                 component,
-                                                new String[]{"border",
-                                                             "style"});
+                                                ATTRIBUTES);
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
         writer.endElement("input");

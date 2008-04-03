@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.49 2007/07/06 20:15:19 rlubke Exp $
+ * $Id: LabelRenderer.java,v 1.50 2007/07/10 18:46:52 rlubke Exp $
  */
 
 /*
@@ -51,10 +51,15 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.util.MessageUtils;
 
 /** <p><B>LabelRenderer</B> renders Label element.<p>. */
 public class LabelRenderer extends HtmlBasicInputRenderer {
+
+
+    private static final String[] ATTRIBUTES =
+          AttributeManager.getAttributes(AttributeManager.Key.OUTPUTLABEL);
 
 
     private static final String RENDER_END_ELEMENT =
@@ -119,7 +124,10 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
             writer.writeAttribute("for", forClientId, "for");
         }
 
-        RenderKitUtils.renderPassThruAttributes(context, writer, component);
+        RenderKitUtils.renderPassThruAttributes(
+              writer,
+                                                component,
+                                                ATTRIBUTES);
         String styleClass = (String)
             component.getAttributes().get("styleClass");
         if (null != styleClass) {

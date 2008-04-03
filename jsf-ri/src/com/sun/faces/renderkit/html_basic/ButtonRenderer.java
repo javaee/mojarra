@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.103 2007/04/27 22:01:00 ofung Exp $
+ * $Id: ButtonRenderer.java,v 1.104 2007/07/10 18:46:52 rlubke Exp $
  */
 
 /*
@@ -42,6 +42,11 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import com.sun.faces.renderkit.AttributeManager;
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
+
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -52,16 +57,15 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.logging.Level;
 
-import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
-
 /**
  * <B>ButtonRenderer</B> is a class that renders the current value of
  * <code>UICommand<code> as a Button.
  */
 
 public class ButtonRenderer extends HtmlBasicRenderer {
+
+    private static final String[] ATTRIBUTES =
+          AttributeManager.getAttributes(AttributeManager.Key.COMMANDBUTTON);
 
     // ---------------------------------------------------------- Public Methods
 
@@ -182,9 +186,10 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             writer.writeAttribute("value", label, "value");
         }
 
-        RenderKitUtils.renderPassThruAttributes(context,
-                                                writer,
-                                                component);
+        RenderKitUtils.renderPassThruAttributes(
+              writer,
+                                                component,
+                                                ATTRIBUTES);
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
         if (null != (styleClass = (String)

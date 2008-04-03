@@ -107,65 +107,7 @@ public class RenderKitUtils {
     private static final String[] BOOLEAN_ATTRIBUTES = {
           "disabled", "ismap", "readonly"
     };
-
-    /**
-     * <p>An array of all passthrough attributes for the 
-     * <code>Standard HTML RenderKit</code>
-     */
-    private static final String[] PASSTHROUGH_ATTRIBUTES = {
-          "accept",
-          "accesskey",
-          "alt",
-          "bgcolor",
-          "border",
-          "cellpadding",
-          "cellspacing",
-          "charset",
-          "cols",
-          "coords",
-          "dir",
-          "enctype",
-          "frame",
-          "height",
-          "hreflang",
-          "lang",
-          "longdesc",
-          "maxlength",
-          "onblur",
-          "onchange",
-          "onclick",
-          "ondblclick",
-          "onfocus",
-          "onkeydown",
-          "onkeypress",
-          "onkeyup",
-          "onload",
-          "onmousedown",
-          "onmousemove",
-          "onmouseout",
-          "onmouseover",
-          "onmouseup",
-          "onreset",
-          "onselect",
-          "onsubmit",
-          "onunload",
-          "rel",
-          "rows",
-          "rev",         
-          "rules",
-          "shape",
-          "size",
-          "style",
-          "summary",
-          "tabindex",
-          "target",
-          "title",
-          "usemap",
-          "width",
-    };
-    static {
-        Arrays.sort(PASSTHROUGH_ATTRIBUTES);
-    }
+   
 
     /**
      * <p>An array of attributes that must be prefixed by
@@ -387,74 +329,28 @@ public class RenderKitUtils {
      * set of HTML4 attributes that fall into this bucket.  Examples are
      * all the javascript attributes, alt, rows, cols, etc. </p>
      * 
-     * <p>This version of the method allows the user to exclude certain 
-     * attributes from being processed.</p>
-     * @param context context the {@link FacesContext} of the current request
-     * @param writer writer the {@link ResponseWriter} to be used when writing
-     *  the attributes
-     * @param component the component      
-     * @throws IOException if an error occurs writing the attributes
-     * @see RenderKitUtils#renderPassThruAttributes(javax.faces.context.FacesContext, javax.faces.context.ResponseWriter, javax.faces.component.UIComponent, String[]) 
-     */
-    public static void renderPassThruAttributes(FacesContext context,
-                                                ResponseWriter writer,
-                                                UIComponent component)
-          throws IOException {
-
-        renderPassThruAttributes(context, writer, component, EMPTY_EXCLUDES);
-
-    }    
-
-    /**
-     * <p>Render any "passthru" attributes, where we simply just output the
-     * raw name and value of the attribute.  This method is aware of the
-     * set of HTML4 attributes that fall into this bucket.  Examples are
-     * all the javascript attributes, alt, rows, cols, etc. </p>
-     * 
-     * <p>This version of the method allows the user to exclude certain 
-     * attributes from being processed.</p>
-     * 
-     * @param context context the {@link FacesContext} of the current request
-     * @param writer writer the {@link ResponseWriter} to be used when writing
+     * @param writer writer the {@link javax.faces.context.ResponseWriter} to be used when writing
      *  the attributes
      * @param component the component
-     * @param excludes any attributes that should be excluded from writing to
-     *  the response
+     * @param attributes an array off attributes to be processed
      * @throws IOException if an error occurs writing the attributes
      */
-    public static void renderPassThruAttributes(FacesContext context,
-                                                ResponseWriter writer,
+    public static void renderPassThruAttributes(ResponseWriter writer,
                                                 UIComponent component,
-                                                String[] excludes)
-          throws IOException {
+                                                String[] attributes)
+    throws IOException {
 
         assert (null != writer);
         assert (null != component);
-        
-        if (excludes == null) {
-            throw new IllegalArgumentException(
-                  MessageUtils.getExceptionMessageString(
-                        MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "excludes"));
-        }
 
         Map<String, Object> attrMap = component.getAttributes();
-
-        if (excludes.length > 0) {
-            Arrays.sort(excludes);
-        }
+        
         boolean isXhtml = writer.getContentType().equals(RIConstants.XHTML_CONTENT_TYPE);
-        for (String attrName : PASSTHROUGH_ATTRIBUTES) {
-            if (excludes.length > 0
-                 && Arrays.binarySearch(excludes, attrName) > -1) {
-                continue;
-            }
+        for (String attrName : attributes) {
+
             Object value =
                  attrMap.get(attrName);
-            if (value != null && shouldRenderAttribute(value)) {
-                if (context == null) {
-                    context = FacesContext.getCurrentInstance();
-                }
-
+            if (value != null && shouldRenderAttribute(value)) {             
                 writer.writeAttribute(prefixAttribute(attrName, isXhtml),
                                       value,
                                       attrName);               
@@ -491,6 +387,7 @@ public class RenderKitUtils {
     /**
      * <p>Renders the attributes from {@link #BOOLEAN_ATTRIBUTES} 
      * using <code>XHMTL</code> semantics (i.e., disabled="disabled").</p>
+     * 
      * @param writer writer the {@link ResponseWriter} to be used when writing
      *  the attributes
      * @param component the component
@@ -500,59 +397,17 @@ public class RenderKitUtils {
                                                          UIComponent component)
           throws IOException {
 
-        renderXHTMLStyleBooleanAttributes(writer, component, EMPTY_EXCLUDES);
-
-    }
-
-    /**
-     * <p>Renders the attributes from {@link #BOOLEAN_ATTRIBUTES} 
-     * using <code>XHMTL</code> semantics (i.e., disabled="disabled").</p>
-     * 
-     * <p>This version of the method allows the user to exclude certain 
-     * attributes from being processed.</p>
-     * 
-     * @param writer writer the {@link ResponseWriter} to be used when writing
-     *  the attributes
-     * @param component the component
-     * @param excludes any attributes that should be excluded from writing to
-     *  the response
-     * @throws IOException if an error occurs writing the attributes
-     */
-    public static void renderXHTMLStyleBooleanAttributes(ResponseWriter writer,
-                                                         UIComponent component,
-                                                         String[] excludes)
-          throws IOException {
-
         assert (writer != null);
         assert (component != null);
-
-        if (excludes == null) {
-            throw new IllegalArgumentException(
-                  MessageUtils.getExceptionMessageString(
-                        MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "excludes"));
-        }
-
-        if (excludes.length > 0) {
-            Arrays.sort(excludes);
-        }
 
         Map attrMap = component.getAttributes();
         for (String attrName : BOOLEAN_ATTRIBUTES) {
             Object val = attrMap.get(attrName);
-            if (val == null ||
-                (excludes.length > 0
-                 && Arrays.binarySearch(excludes, attrName) > -1)) {
+            if (val == null) {
                 continue;
             }
 
-            Boolean bool;
-            if (!(val instanceof Boolean)) {
-                bool = Boolean.valueOf(val.toString());
-            } else {
-                bool = (Boolean) val;
-            }
-
-            if (bool) {
+            if (Boolean.valueOf(val.toString())) {
                 writer.writeAttribute(attrName,
                                       true,
                                       attrName);
@@ -621,7 +476,9 @@ public class RenderKitUtils {
      */
     private static boolean shouldRenderAttribute(Object attributeVal) {
 
-        if (attributeVal instanceof Boolean &&
+        if (attributeVal instanceof String) {
+            return true;
+        } else if (attributeVal instanceof Boolean &&
             Boolean.FALSE.equals(attributeVal)) {
             return false;
         } else if (attributeVal instanceof Integer &&

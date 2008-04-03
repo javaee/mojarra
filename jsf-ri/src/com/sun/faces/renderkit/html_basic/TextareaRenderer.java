@@ -1,5 +1,5 @@
 /*
- * $Id: TextareaRenderer.java,v 1.23 2007/04/27 22:01:03 ofung Exp $
+ * $Id: TextareaRenderer.java,v 1.24 2007/07/10 18:46:52 rlubke Exp $
  */
 
 /*
@@ -49,6 +49,7 @@ import javax.faces.context.ResponseWriter;
 import java.io.IOException;
 
 import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.util.MessageUtils;
 
 /**
@@ -57,6 +58,10 @@ import com.sun.faces.util.MessageUtils;
  */
 
 public class TextareaRenderer extends HtmlBasicInputRenderer {
+
+
+    private static final String[] ATTRIBUTES =
+          AttributeManager.getAttributes(AttributeManager.Key.INPUTTEXTAREA);
 
     // ---------------------------------------------------------- Public Methods
 
@@ -99,7 +104,10 @@ public class TextareaRenderer extends HtmlBasicInputRenderer {
         }
 
         // style is rendered as a passthru attribute
-        RenderKitUtils.renderPassThruAttributes(context, writer, component);
+        RenderKitUtils.renderPassThruAttributes(
+              writer,
+                                                component,
+                                                ATTRIBUTES);
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
         // render default text specified

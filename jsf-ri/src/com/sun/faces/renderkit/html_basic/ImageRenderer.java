@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.49 2007/07/06 18:23:17 rlubke Exp $
+ * $Id: ImageRenderer.java,v 1.50 2007/07/10 18:46:51 rlubke Exp $
  */
 
 /*
@@ -52,16 +52,22 @@ import java.util.logging.Level;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.util.MessageUtils;
 
 /**
  * <B>ImageRenderer</B> is a class that handles the rendering of the graphic
  * ImageTag
  *
- * @version $Id: ImageRenderer.java,v 1.49 2007/07/06 18:23:17 rlubke Exp $
+ * @version $Id: ImageRenderer.java,v 1.50 2007/07/10 18:46:51 rlubke Exp $
  */
 
 public class ImageRenderer extends HtmlBasicRenderer {
+
+
+    private static final String[] ATTRIBUTES =
+          AttributeManager.getAttributes(AttributeManager.Key.GRAPHICIMAGE);
+
 
     // ---------------------------------------------------------- Public Methods
 
@@ -125,7 +131,10 @@ public class ImageRenderer extends HtmlBasicRenderer {
             writer.writeAttribute("alt", "", "alt");
         }
 
-        RenderKitUtils.renderPassThruAttributes(context, writer, component);
+        RenderKitUtils.renderPassThruAttributes(
+              writer,
+                                                component,
+                                                ATTRIBUTES);
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
         String styleClass;
         if (null != (styleClass = (String)

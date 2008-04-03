@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.68 2007/07/06 18:21:57 rlubke Exp $
+ * $Id: SecretRenderer.java,v 1.69 2007/07/10 18:46:52 rlubke Exp $
  */
 
 /*
@@ -49,6 +49,7 @@ import javax.faces.context.ResponseWriter;
 import java.io.IOException;
 
 import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.util.MessageUtils;
 
 /**
@@ -57,6 +58,10 @@ import com.sun.faces.util.MessageUtils;
  */
 
 public class SecretRenderer extends HtmlBasicInputRenderer {
+
+
+    private static final String[] ATTRIBUTES =
+          AttributeManager.getAttributes(AttributeManager.Key.INPUTSECRET);
 
     // ---------------------------------------------------------- Public Methods
 
@@ -117,7 +122,10 @@ public class SecretRenderer extends HtmlBasicInputRenderer {
             writer.writeAttribute("value", currentValue, "value");
         }
 
-        RenderKitUtils.renderPassThruAttributes(context, writer, component);
+        RenderKitUtils.renderPassThruAttributes(
+              writer,
+                                                component,
+                                                ATTRIBUTES);
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
         String styleClass;

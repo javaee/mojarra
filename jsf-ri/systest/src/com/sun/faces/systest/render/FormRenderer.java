@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.8 2007/04/27 22:01:16 ofung Exp $
+ * $Id: FormRenderer.java,v 1.9 2007/07/10 18:46:52 rlubke Exp $
  */
 
 /*
@@ -44,6 +44,7 @@ package com.sun.faces.systest.render;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.util.MessageUtils;
 
 import com.sun.org.apache.commons.logging.Log;
@@ -66,6 +67,9 @@ import java.util.Map;
  */
 
 public class FormRenderer extends Renderer {
+
+    private static final String[] ATTRIBUTES =
+          AttributeManager.getAttributes(AttributeManager.Key.FORMFORM);
 
     public static final String SCRIPT_ELEMENT = "script";
     public static final String SCRIPT_TYPE = "type";
@@ -178,7 +182,10 @@ public class FormRenderer extends Renderer {
                     "acceptcharset");
         }
         
-        RenderKitUtils.renderPassThruAttributes(context, writer, component);       
+        RenderKitUtils.renderPassThruAttributes(
+              writer,
+                                                component,
+                                                ATTRIBUTES);       
         writer.writeText("\n", null);
         
         // store the clientId of the form in request scope. This will be used

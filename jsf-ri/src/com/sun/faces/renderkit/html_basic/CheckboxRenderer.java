@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.82 2007/04/27 22:01:01 ofung Exp $
+ * $Id: CheckboxRenderer.java,v 1.83 2007/07/10 18:46:52 rlubke Exp $
  *
  */
 
@@ -53,6 +53,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 
@@ -63,6 +64,9 @@ import com.sun.faces.util.Util;
  */
 
 public class CheckboxRenderer extends HtmlBasicInputRenderer {
+
+    private static final String[] ATTRIBUTES =
+          AttributeManager.getAttributes(AttributeManager.Key.SELECTBOOLEANCHECKBOX);
 
     // ---------------------------------------------------------- Public Methods
 
@@ -172,7 +176,10 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
               component.getAttributes().get("styleClass"))) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
-        RenderKitUtils.renderPassThruAttributes(context, writer, component);
+        RenderKitUtils.renderPassThruAttributes(
+              writer,
+                                                component,
+                                                ATTRIBUTES);
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
         writer.endElement("input");
