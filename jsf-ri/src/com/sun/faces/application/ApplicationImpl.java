@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.100 2008/01/30 16:53:04 edburns Exp $
+ * $Id: ApplicationImpl.java,v 1.101 2008/02/19 18:53:51 rlubke Exp $
  */
 
 /*
@@ -105,7 +105,7 @@ import com.sun.faces.util.Util;
 public class ApplicationImpl extends Application {
 
     // Log instance for this class
-    private static final Logger logger = FacesLogger.APPLICATION.getLogger();
+    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
     private static final ELContextListener[] EMPTY_EL_CTX_LIST_ARRAY = { };
 
@@ -179,8 +179,8 @@ public class ApplicationImpl extends Application {
         propertyResolver = new PropertyResolverImpl();
         variableResolver = new VariableResolverImpl();
 
-        if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, "Created Application instance ");
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.log(Level.FINE, "Created Application instance ");
         }
     }
 
@@ -302,8 +302,23 @@ public class ApplicationImpl extends Application {
             WebConfiguration webConfig =
                   WebConfiguration.getInstance(
                         FacesContext.getCurrentInstance().getExternalContext());
-            String value =
-                  webConfig.getOptionValue(WebContextInitParameter.JavaxFacesProjectStage);
+            String value = webConfig.getEnvironmentEntry(WebConfiguration.WebEnvironmentEntry.ProjectStage);
+            if (value != null) {
+                if (LOGGER.isLoggable(Level.INFO)) {
+                    LOGGER.log(Level.INFO,
+                               "ProjectStage configured via JNDI: {0}",
+                               value);
+                }
+            } else {
+                value = webConfig.getOptionValue(WebContextInitParameter.JavaxFacesProjectStage);
+                if (value != null) {
+                    if (LOGGER.isLoggable(Level.INFO)) {
+                        LOGGER.log(Level.INFO,
+                               "ProjectStage configured via servlet context init parameter: {0}", 
+                               value);
+                    }
+                }
+            }
             if (value != null) {
                 try {
                     projectStage = ProjectStage.valueOf(value);
@@ -348,8 +363,8 @@ public class ApplicationImpl extends Application {
         }
 
         viewHandler = handler;
-        if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, MessageFormat.format("set ViewHandler Instance to ''{0}''", viewHandler.getClass().getName()));
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.log(Level.FINE, MessageFormat.format("set ViewHandler Instance to ''{0}''", viewHandler.getClass().getName()));
         }
 
     }
@@ -388,8 +403,8 @@ public class ApplicationImpl extends Application {
         }
 
         this.resourceHandler = resourceHandler;
-        if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE,
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.log(Level.FINE,
                        "set ResourceHandler Instance to ''{0}''",
                        resourceHandler.getClass().getName());
         }
@@ -417,8 +432,8 @@ public class ApplicationImpl extends Application {
         }
 
         stateManager = manager;
-        if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, MessageFormat.format("set StateManager Instance to ''{0}''",
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.log(Level.FINE, MessageFormat.format("set StateManager Instance to ''{0}''",
                                                         stateManager.getClass().getName()));
         }
 
@@ -434,8 +449,8 @@ public class ApplicationImpl extends Application {
 
         this.actionListener = listener;
 
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine(MessageFormat.format("set ActionListener Instance to ''{0}''",
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine(MessageFormat.format("set ActionListener Instance to ''{0}''",
                                              actionListener.getClass().getName()));
         }
     }
@@ -466,8 +481,8 @@ public class ApplicationImpl extends Application {
 
         this.navigationHandler = handler;
 
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine(MessageFormat.format("set NavigationHandler Instance to ''{0}''",
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine(MessageFormat.format("set NavigationHandler Instance to ''{0}''",
                                              navigationHandler.getClass().getName()));
         }
     }
@@ -504,8 +519,8 @@ public class ApplicationImpl extends Application {
         propertyResolver = new PropertyResolverImpl();
 
 
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine(MessageFormat.format("set PropertyResolver Instance to ''{0}''", resolver.getClass().getName()));
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine(MessageFormat.format("set PropertyResolver Instance to ''{0}''", resolver.getClass().getName()));
         }
     }
 
@@ -518,8 +533,8 @@ public class ApplicationImpl extends Application {
             throw new NullPointerException(message);
         }
         if (!(ref.startsWith("#{") && ref.endsWith("}"))) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine(MessageFormat.format("Expression ''{0}'' does not follow the syntax #{...}", ref));
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine(MessageFormat.format("Expression ''{0}'' does not follow the syntax #{...}", ref));
             }
             throw new ReferenceSyntaxException(ref);
         }
@@ -584,8 +599,8 @@ public class ApplicationImpl extends Application {
         associate.setLegacyVariableResolver(resolver);
         variableResolver = new VariableResolverImpl();
 
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine(MessageFormat.format("set VariableResolver Instance to ''{0}''",
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine(MessageFormat.format("set VariableResolver Instance to ''{0}''",
                                              variableResolver.getClass().getName()));
         }
     }
@@ -605,8 +620,8 @@ public class ApplicationImpl extends Application {
         
         componentMap.put(componentType, componentClass);
         
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine(MessageFormat.format("added component of type ''{0}'' and class ''{1}''",
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine(MessageFormat.format("added component of type ''{0}'' and class ''{1}''",
                                              componentType,
                                              componentClass));
         }
@@ -624,24 +639,24 @@ public class ApplicationImpl extends Application {
         try {
             returnVal = (UIComponent) newThing(componentType, componentMap);
         } catch (Exception ex) {     
-            if (logger.isLoggable(Level.WARNING)) {
-                logger.log(Level.WARNING, 
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.log(Level.WARNING,
                         "jsf.cannot_instantiate_component_error", componentType);                
             }
             throw new FacesException(ex);
         }
         if (returnVal == null) {
             Object[] params = {componentType};
-            if (logger.isLoggable(Level.SEVERE)) {
-                    logger.log(Level.SEVERE, 
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE,
                             "jsf.cannot_instantiate_component_error", params);
             }
             throw new FacesException(MessageUtils.getExceptionMessageString(
                     MessageUtils.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
         }
         
-        if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, MessageFormat.format("Created component with component type of ''{0}''",
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.log(Level.FINE, MessageFormat.format("Created component with component type of ''{0}''",
                                                         componentType));
         }
         return returnVal;
@@ -718,8 +733,8 @@ public class ApplicationImpl extends Application {
             }
         }
         
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine(MessageFormat.format("added converter of type ''{0}'' and class ''{1}''",
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine(MessageFormat.format("added converter of type ''{0}'' and class ''{1}''",
                                              converterId,
                                              converterClass));
         }
@@ -746,8 +761,8 @@ public class ApplicationImpl extends Application {
             addPropertyEditorIfNecessary(targetClass);
         }                
         
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine(MessageFormat.format("added converter of class type ''{0}''", converterClass));
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine(MessageFormat.format("added converter of class type ''{0}''", converterClass));
         }
     }
     
@@ -793,7 +808,7 @@ public class ApplicationImpl extends Application {
         if (editorClass != null) {
             PropertyEditorManager.registerEditor(targetClass, editorClass);
         } else {
-            logger.warning(MessageFormat.format("definePropertyEditorClassFor({0}) returned null.", targetClass.getName()));
+            LOGGER.warning(MessageFormat.format("definePropertyEditorClassFor({0}) returned null.", targetClass.getName()));
         }
     }
 
@@ -807,15 +822,15 @@ public class ApplicationImpl extends Application {
         Converter returnVal = (Converter) newThing(converterId, converterIdMap);
         if (returnVal == null) {
             Object[] params = {converterId};
-            if (logger.isLoggable(Level.SEVERE)) {
-                logger.log(Level.SEVERE, 
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE,
                         "jsf.cannot_instantiate_converter_error", converterId);
             }
             throw new FacesException(MessageUtils.getExceptionMessageString(
                 MessageUtils.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
         }
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine(MessageFormat.format("created converter of type ''{0}''", converterId));
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine(MessageFormat.format("created converter of type ''{0}''", converterId));
         }
         return returnVal;
     }
@@ -830,8 +845,8 @@ public class ApplicationImpl extends Application {
         Converter returnVal = (Converter) newConverter(targetClass,
                                                    converterTypeMap,targetClass);
         if (returnVal != null) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine(MessageFormat.format("Created converter of type ''{0}''",
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine(MessageFormat.format("Created converter of type ''{0}''",
                                                  returnVal.getClass().getName()));
             }
             return returnVal;
@@ -844,8 +859,8 @@ public class ApplicationImpl extends Application {
             for (int i = 0; i < interfaces.length; i++) {
                 returnVal = createConverterBasedOnClass(interfaces[i], targetClass);
                 if (returnVal != null) {
-                   if (logger.isLoggable(Level.FINE)) {
-                       logger.fine(MessageFormat.format("Created converter of type ''{0}''",
+                   if (LOGGER.isLoggable(Level.FINE)) {
+                       LOGGER.fine(MessageFormat.format("Created converter of type ''{0}''",
                                                         returnVal.getClass().getName()));
                     }
                     return returnVal;
@@ -858,8 +873,8 @@ public class ApplicationImpl extends Application {
         if (superclass != null) {
             returnVal = createConverterBasedOnClass(superclass, targetClass);
             if (returnVal != null) {
-                if (logger.isLoggable(Level.FINE)) {
-                    logger.fine(MessageFormat.format("Created converter of type ''{0}''",
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine(MessageFormat.format("Created converter of type ''{0}''",
                                                      returnVal.getClass().getName()));
                 }
                 return returnVal;
@@ -874,8 +889,8 @@ public class ApplicationImpl extends Application {
         Converter returnVal = (Converter) newConverter(targetClass,
                 converterTypeMap, baseClass);
         if (returnVal != null) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine(MessageFormat.format("Created converter of type ''{0}''",
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine(MessageFormat.format("Created converter of type ''{0}''",
                                                  returnVal.getClass().getName()));
             }
             return returnVal;
@@ -888,8 +903,8 @@ public class ApplicationImpl extends Application {
             for (int i = 0; i < interfaces.length; i++) {
                 returnVal = createConverterBasedOnClass(interfaces[i], null);
                 if (returnVal != null) {
-                   if (logger.isLoggable(Level.FINE)) {
-                       logger.fine(MessageFormat.format("Created converter of type ''{0}''",
+                   if (LOGGER.isLoggable(Level.FINE)) {
+                       LOGGER.fine(MessageFormat.format("Created converter of type ''{0}''",
                                                         returnVal.getClass().getName()));
                     }
                     return returnVal;
@@ -902,8 +917,8 @@ public class ApplicationImpl extends Application {
         if (superclass != null) {
             returnVal = createConverterBasedOnClass(superclass, null);
             if (returnVal != null) {
-                if (logger.isLoggable(Level.FINE)) {
-                    logger.fine(MessageFormat.format("Created converter of type ''{0}''",
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine(MessageFormat.format("Created converter of type ''{0}''",
                                                      returnVal.getClass().getName()));
                 }
                 return returnVal;
@@ -946,8 +961,8 @@ public class ApplicationImpl extends Application {
 
         supportedLocales = new ArrayList<Locale>(newLocales);
 
-        if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, MessageFormat.format("set Supported Locales ''{0}''",
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.log(Level.FINE, MessageFormat.format("set Supported Locales ''{0}''",
                                                         supportedLocales.toString()));
         }
     }
@@ -968,8 +983,8 @@ public class ApplicationImpl extends Application {
 
         defaultLocale = locale;
 
-        if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, (MessageFormat.format("set defaultLocale ''{0}''",
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.log(Level.FINE, (MessageFormat.format("set defaultLocale ''{0}''",
                                                          defaultLocale.getClass().getName())));
         }
     }
@@ -1002,8 +1017,8 @@ public class ApplicationImpl extends Application {
         
         validatorMap.put(validatorId, validatorClass);
         
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine(MessageFormat.format("added validator of type ''{0}'' class ''{1}''",
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine(MessageFormat.format("added validator of type ''{0}'' class ''{1}''",
                                              validatorId,
                                              validatorClass));
         }
@@ -1019,15 +1034,15 @@ public class ApplicationImpl extends Application {
         Validator returnVal = (Validator) newThing(validatorId, validatorMap);
         if (returnVal == null) {
             Object[] params = {validatorId};
-            if (logger.isLoggable(Level.SEVERE)) {
-                logger.log(Level.SEVERE, 
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE,
                         "jsf.cannot_instantiate_validator_error", params);
             }
             throw new FacesException(MessageUtils.getExceptionMessageString(
                 MessageUtils.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
         }
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine(MessageFormat.format("created validator of type ''{0}''",
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine(MessageFormat.format("created validator of type ''{0}''",
                                              validatorId));
         }
         return returnVal;
@@ -1045,8 +1060,8 @@ public class ApplicationImpl extends Application {
 
         this.messageBundle = messageBundle;
 
-        if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, MessageFormat.format("set messageBundle ''{0}''",
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.log(Level.FINE, MessageFormat.format("set messageBundle ''{0}''",
                                                         messageBundle));
         }
     }

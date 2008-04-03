@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.59 2008/01/30 16:53:03 edburns Exp $
+ * $Id: Application.java,v 1.60 2008/02/19 18:53:50 rlubke Exp $
  */
 
 /*
@@ -403,14 +403,17 @@ public abstract class Application {
      * <p>If the value has already been determined by a previous call to
      * this method, simply return that value.</p>
      *
-     * <p>Look for an entry in the <code>initParamMap</code> of the
+     * <p>Look for a <code>JNDI</code> environment entry named using the value of
+     * {@link ProjectStage#PROJECT_STAGE_JNDI_NAME} (return type of
+     * <code>java.lang.String</code>).  If found, continue with the algorith
+     * below, otherwise, look for an entry in the <code>initParamMap</code> of the
      * <code>ExternalContext</code> from the current
      * <code>FacesContext</code> with the key
      * {@link ProjectStage#PROJECT_STAGE_PARAM_NAME}
      * </p>
      *
-     * <p>If found, see if an enum constant can be obtained by calling
-     * <code>ProjectStage.valueOf()</code>, passing the value
+     * <p>If a value is found found, see if an enum constant can be obtained
+     * by calling <code>ProjectStage.valueOf()</code>, passing the value
      * from the <code>initParamMap</code>.  If this succeeds without
      * exception, save the value and return it.  If not, call
      * <code>ProjectStage.getExtension()</code>, passing the
@@ -423,6 +426,9 @@ public abstract class Application {
      *
      * </ul>
      * </div>
+     *
+     * RELEASE_PENDING (edburns, rogerk) - review language for JNDI/Init param
+     * lookup
      *
      * @since 2.0
      */

@@ -1,7 +1,4 @@
 /*
- * $Id: WebConfiguration.java,v 1.40 2008/02/16 05:30:41 rlubke Exp $
- */
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
  * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
@@ -39,13 +36,13 @@
 
 package com.sun.faces.config;
 
-import com.sun.faces.RIConstants;
 import com.sun.faces.util.FacesLogger;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.naming.Context;
 import javax.servlet.ServletContext;
 
 import java.util.ArrayList;
@@ -57,6 +54,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.faces.application.ResourceHandler;
+import javax.faces.application.ProjectStage;
 
 
 /** Class Documentation */
@@ -528,47 +526,52 @@ public class WebConfiguration {
      */
     private void processJndiEntries(String contextName) {
 
-        InitialContext initialContext = null;
+        Context initialContext = null;
         try {
             initialContext = new InitialContext();
         } catch (NamingException ne) {
-            // log WARNING - unable to get JNDI initial context
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.log(Level.WARNING, ne.toString(), ne);
+            }
         }
 
         if (initialContext != null) {
             // process environment entries
             for (WebEnvironmentEntry entry : WebEnvironmentEntry.values()) {
                 String entryName = entry.getQualifiedName();
+                String value = null;
 
                 try {
-                    String value = (String) initialContext.lookup(entryName);
-                    if (value != null) {
-                        if (LOGGER.isLoggable(Level.INFO)) {
-                            // special logic for ClientStateSavingPassword
-                            if (!entry
-                                  .equals(WebEnvironmentEntry.ClientStateSavingPassword))
-                            {
-                                if (LOGGER
-                                      .isLoggable(loggingLevel)) {
-                                    LOGGER.log(loggingLevel,
-                                               "jsf.config.webconfig.enventryinfo",
-                                               new Object[]{contextName,
-                                                            entryName,
-                                                            value});
-                                }
-                            } else {
-                                if (LOGGER
-                                      .isLoggable(loggingLevel)) {
-                                    LOGGER.log(loggingLevel,
-                                               "jsf.config.webconfig.enventry.clientencrypt",
-                                               contextName);
-                                }
+                    value = (String) initialContext.lookup(entryName);
+                } catch (NamingException root) {
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.fine(root.toString());
+                    }
+                }
+
+                if (value != null) {
+                    if (LOGGER.isLoggable(Level.INFO)) {
+                        // special logic for ClientStateSavingPassword
+                        if (!entry
+                              .equals(WebEnvironmentEntry.ClientStateSavingPassword)) {
+                            if (LOGGER
+                                  .isLoggable(loggingLevel)) {
+                                LOGGER.log(loggingLevel,
+                                           "jsf.config.webconfig.enventryinfo",
+                                           new Object[]{contextName,
+                                                        entryName,
+                                                        value});
+                            }
+                        } else {
+                            if (LOGGER
+                                  .isLoggable(loggingLevel)) {
+                                LOGGER.log(loggingLevel,
+                                           "jsf.config.webconfig.enventry.clientencrypt",
+                                           contextName);
                             }
                         }
-                        envEntries.put(entry, value);
                     }
-                } catch (NamingException ne) {
-                    // log WARNING - unable to lookup value
+                    envEntries.put(entry, value);
                 }
             }
         }
@@ -915,12 +918,13 @@ public class WebConfiguration {
 
     /**
      * <p>An <code>enum</code> of all environment entries (specified in the
-     * web.xml) recognized by the implmenetation.</p>
+     * web.xml) recognized by the implemenetation.</p>
      */
     public enum WebEnvironmentEntry {
 
 
-        ClientStateSavingPassword("ClientStateSavingPassword");
+        ClientStateSavingPassword("ClientStateSavingPassword"),
+        ProjectStage(javax.faces.application.ProjectStage.PROJECT_STAGE_JNDI_NAME);
 
         private static final String JNDI_PREFIX = "java:comp/env/";
         private String qualifiedName;
@@ -941,9 +945,11 @@ public class WebConfiguration {
 
         WebEnvironmentEntry(String qualifiedName) {
 
-            this.qualifiedName = JNDI_PREFIX 
-                                 + RIConstants.FACES_PREFIX 
-                                 + qualifiedName;
+            if (qualifiedName.startsWith(JNDI_PREFIX)) {
+                this.qualifiedName = qualifiedName;
+            } else {
+                this.qualifiedName = JNDI_PREFIX + qualifiedName;
+            }
 
         }
 
