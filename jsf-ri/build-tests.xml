@@ -283,16 +283,8 @@
                     name="com.sun.faces.application.TestAdapters"/>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.io.TestIO"/>
-                <!--
-                   Will be moving 2.0 unit/systesting to V3 soon.  They will
-                   be providing their own InjectionProvider instance so that
-                   we don't have to depend on GlassFish for building.  That said
-                   v3 is still unstable, so until then we'll continue testing on v2,
-                   but we'll exclude this test for the time being so that we
-                   can run on that platform.
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.application.TestInjection"/>
-                 -->
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.application.TestActionListenerImpl"/>
                 <test todir="${impl.test.results.dir}"

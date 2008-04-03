@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.134 2008/02/01 19:23:49 rlubke Exp $
+ $Id: build-tests.xml,v 1.135 2008/02/06 22:19:37 rlubke Exp $
 -->
 
 <!--
@@ -450,20 +450,13 @@
               request="${context.path}/faces/managed07.jsp"
               status="500"/>
 
-         <!--
-                   Will be moving 2.0 unit/systesting to V3 soon.  They will
-                   be providing their own InjectionProvider instance so that
-                   we don't have to depend on GlassFish for building.  That said
-                   v3 is still unstable, so until then we'll continue testing on v2,
-                   but we'll exclude this test for the time being so that we
-                   can run on that platform.
         <jsf.tester
               request="${context.path}/faces/resourceInjection01.jsp"
               golden="${golden.path}/resourceInjection01.txt"
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
               recordGolden="${local.golden.path}/resourceInjection01.txt"
               />
-        -->
+        
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">
