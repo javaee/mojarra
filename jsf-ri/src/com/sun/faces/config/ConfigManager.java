@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManager.java,v 1.7 2007/05/09 05:04:14 rlubke Exp $
+ * $Id: ConfigManager.java,v 1.8 2007/05/16 00:50:42 rlubke Exp $
  */
 
 /*
@@ -63,15 +63,10 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.URIResolver;
-import javax.xml.transform.Source;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -102,7 +97,7 @@ public class ConfigManager {
      * </p>
      */
     private static final List<ConfigurationResourceProvider> RESOURCE_PROVIDERS
-         = new ArrayList(3);
+         = new ArrayList<ConfigurationResourceProvider>(3);
 
     /**
      * <p>
@@ -130,7 +125,7 @@ public class ConfigManager {
      */
     @SuppressWarnings({"CollectionWithoutInitialCapacity"})
     private List<ServletContext> initializedContexts =
-         new CopyOnWriteArrayList();
+         new CopyOnWriteArrayList<ServletContext>();
 
     /**
      * <p>
@@ -270,22 +265,19 @@ public class ConfigManager {
                     docTasks.add(d);
                     executor.execute(d);
                 }
-            } catch (InterruptedException e) {
-                ;
+            } catch (InterruptedException ignored) {
             } catch (Exception e) {
                 throw new ConfigurationException(e);
             }
         }
 
-        List<Document> docs = new ArrayList(docTasks.size());
+        List<Document> docs = new ArrayList<Document>(docTasks.size());
         for (FutureTask<Document> t : docTasks) {
             try {
                 docs.add(t.get());
             } catch (ExecutionException e) {
                 throw new ConfigurationException(e);
-            } catch (InterruptedException e) {
-                ;
-            }
+            } catch (InterruptedException ignored) { }
         }
 
         executor.shutdown();
@@ -306,7 +298,8 @@ public class ConfigManager {
      * </p>
      */
     private static class ParseTask implements Callable<Document> {
-
+        private static final String FACES_SCHEMA_DEFAULT_NS =
+            "http://java.sun.com/xml/ns/javaee";
         private URL documentURL;
         private DocumentBuilder builder;
 
@@ -320,6 +313,7 @@ public class ConfigManager {
          * @param factory a DocumentBuilderFactory configured with the desired
          *  parse settings
          * @param documentURL a URL to the configuration resource to be parsed
+         * @throws Exception general error
          */
         public ParseTask(DocumentBuilderFactory factory,
                          URL documentURL)
@@ -342,14 +336,13 @@ public class ConfigManager {
          */
         public Document call() throws Exception {
 
-            InputStream stream = getInputStream(documentURL);
             try {
                 Timer timer = Timer.getInstance();
                 if (timer != null) {
                     timer.startTiming();
                 }
 
-                Document d = builder.parse(getParseSource());
+                Document d = getDocument();
 
                 if (timer != null) {
                     timer.stopTiming();
@@ -362,19 +355,48 @@ public class ConfigManager {
                      "Unable to parse document ''{0}'': {1}",
                      documentURL.toExternalForm(),
                      e.getMessage()));
-            } finally {
-                if (stream != null) {
-                    try {
-                        stream.close();
-                    } catch (IOException ioe) {
-                        ;
-                    }
-                }
             }
         }
 
 
         // ----------------------------------------------------- Private Methods
+
+
+        /**
+         * @return <code>Document</code> based on <code>documentURL</code>.
+         * @throws Exception if an error occurs during the process of building a
+         *  <code>Document</code>
+         */
+        private Document getDocument() throws Exception {
+            if (builder.getSchema() != null) {  // the Schema won't be null if validation is enabled.
+                DocumentBuilder db = getNonValidatingBuilder();
+                DOMSource domSource
+                     = new DOMSource(db.parse(getInputStream(documentURL),
+                                                    documentURL.toExternalForm()));
+
+                /*
+                 * If the Document in question is 1.2 (i.e. it has a namespace matching
+                 * FACES_SCHEMA_DEFAULT_NS, then perform validation using the cached schema
+                 * and return.  Otherwise we assume a 1.0 or 1.1 faces-config in which case
+                 * we need to transform it to 1.2 before validating using the cached schema.
+                 */
+                if (FACES_SCHEMA_DEFAULT_NS.equals(((Document) domSource.getNode()).getDocumentElement().getNamespaceURI())) {
+                    builder.getSchema().newValidator().validate(domSource);
+                    return ((Document) domSource.getNode());
+                } else {
+                    DOMResult domResult = new DOMResult();
+                    Transformer transformer = getTransformer();
+                    transformer.transform(domSource, domResult);
+                    builder.getSchema().newValidator().validate(new DOMSource(domResult.getNode()));
+                    return (Document) domResult.getNode();
+                }
+            } else {
+                // validation isn't required, parse and return
+                InputSource is = new InputSource(getInputStream(documentURL));
+                is.setSystemId(documentURL.toExternalForm());
+                return builder.parse(is);
+            }
+        }
 
 
         /**
@@ -387,15 +409,6 @@ public class ConfigManager {
         private static Transformer getTransformer() throws Exception {
 
             TransformerFactory factory = TransformerFactory.newInstance();
-            factory.setURIResolver(new URIResolver() {
-
-                public Source resolve(String href, String base)
-                throws TransformerException {
-                     System.out.println("URI Resolver href: " + href);
-                        System.out.println("URI Resolver base: " + base);
-                    return null;  //To change body of implemented methods use File | Settings | File Templates.
-                }
-            });
             return factory
                  .newTransformer(new StreamSource(getInputStream(ConfigManager
                       .class.getResource(XSL))));
@@ -406,6 +419,7 @@ public class ConfigManager {
         /**
          * @return an <code>InputStream</code> to the resource referred to by
          *         <code>url</code>
+         * @param url source <code>URL</code>
          * @throws IOException if an error occurs
          */
         private static InputStream getInputStream(URL url) throws IOException {
@@ -414,31 +428,8 @@ public class ConfigManager {
             conn.setUseCaches(false);
             return new BufferedInputStream(conn.getInputStream());
 
-    }
-
-        private InputSource getParseSource() throws Exception {
-
-            if (builder.isValidating()) {
-                // if we're validating, we need to apply xslt transformations
-                // to convert all documents to 1.2
-                ByteArrayOutputStream baos = new ByteArrayOutputStream(4096);
-                StreamResult sResult = new StreamResult(baos);
-                DocumentBuilder tBuilder = getNonValidatingBuilder();
-                DOMSource domSource
-                     = new DOMSource(tBuilder.parse(getInputStream(documentURL),
-                                                    documentURL.toExternalForm()));
-                Transformer transformer = getTransformer();
-                transformer.transform(domSource, sResult);
-                InputSource is = new InputSource(new ByteArrayInputStream(baos.toByteArray()));
-                is.setSystemId(documentURL.toExternalForm());
-                return is;
-            } else {
-                InputSource is = new InputSource(getInputStream(documentURL));
-                is.setSystemId(documentURL.toExternalForm());
-                return is;               
-            }
-
         }
+
 
 
         private DocumentBuilder getNonValidatingBuilder() throws Exception {

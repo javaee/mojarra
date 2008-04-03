@@ -36,38 +36,46 @@
 
 package com.sun.faces.config;
 
-import com.sun.faces.util.FacesLogger;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.SAXParseException;
+import org.xml.sax.*;
 import org.xml.sax.helpers.DefaultHandler;
+import org.w3c.dom.ls.LSResourceResolver;
+import org.w3c.dom.ls.LSInput;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
+import java.io.InputStream;
+import java.io.Reader;
 import java.net.URL;
-import java.util.Collections;
+import java.net.URLConnection;
 import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.Level;
+
+import com.sun.faces.util.FacesLogger;
 
 /**
  * <p>Create and configure DocumentBuilderFactory instances.</p>
  */
 public class DbfFactory {
 
-    private static final Logger LOGGER =FacesLogger.CONFIG.getLogger();
+    private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
 
-    private static final String JAXP_SCHEMA_LANGUAGE =
-        "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
-    private static final String W3C_XML_SCHEMA =
-        "http://www.w3.org/2001/XMLSchema";
-    private static final String JAXP_SCHEMA_SOURCE =
-        "http://java.sun.com/xml/jaxp/properties/schemaSource";
-    private static final String FACES_1_2_SCHEMA =
+    /**
+     * Location of the Faces 1.2 Schema
+     */
+    private static final String FACES_1_2_XSD =
          "/com/sun/faces/web-facesconfig_1_2.xsd";
 
+    /**
+     * Our cached Schema object for validation
+     */
+    private static Schema FACES_SCHEMA;
 
     /**
      * EntityResolver
@@ -75,8 +83,17 @@ public class DbfFactory {
     public static final EntityResolver FACES_ENTITY_RESOLVER =
          new FacesEntityResolver();
 
+
+    /**
+     * ErrorHandler
+     */
     public static final FacesErrorHandler FACES_ERROR_HANDLER =
          new FacesErrorHandler();
+
+
+    static {
+        initSchema();
+    }
 
 
 
@@ -86,23 +103,42 @@ public class DbfFactory {
     public static DocumentBuilderFactory getFactory(boolean validating) {
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setValidating(validating);
+        if (validating) {
+            factory.setSchema(FACES_SCHEMA);
+        }       
         factory.setNamespaceAware(true);
         factory.setIgnoringComments(true);
         factory.setIgnoringElementContentWhitespace(true);
-        factory.setAttribute(JAXP_SCHEMA_LANGUAGE, W3C_XML_SCHEMA);
-        factory.setAttribute(JAXP_SCHEMA_SOURCE,
-                             FacesEntityResolver.class.getResource(
-                                  FACES_1_2_SCHEMA).toExternalForm());
         return factory;
+
+    }   
+
+
+    /**
+     * Init our cache objects.
+     */
+    private static void initSchema() {
+
+        // First, cache the various files
+        try {
+            URL url = DbfFactory.class.getResource(FACES_1_2_XSD);
+            URLConnection conn = url.openConnection();
+            conn.setUseCaches(false);
+            InputStream in = conn.getInputStream();
+
+            // next, cache the schema
+            SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            factory.setResourceResolver((LSResourceResolver) DbfFactory.FACES_ENTITY_RESOLVER);
+            FACES_SCHEMA = factory.newSchema(new StreamSource(in));
+        } catch (Exception e) {
+            throw new ConfigurationException(e);
+        }
 
     }
 
-
     // ----------------------------------------------------------- Inner Classes
 
-
-    private static class FacesEntityResolver extends DefaultHandler {
+   private static class FacesEntityResolver extends DefaultHandler implements LSResourceResolver {
 
         /**
          * <p>Contains associations between grammar name and the physical
@@ -119,7 +155,7 @@ public class DbfFactory {
             },
             {
                 "web-facesconfig_1_2.xsd",
-                FACES_1_2_SCHEMA
+                FACES_1_2_XSD
             },
             {
                 "javaee_5.xsd",
@@ -132,6 +168,14 @@ public class DbfFactory {
             {
                 "xml.xsd",
                 "/com/sun/faces/xml.xsd"
+            },
+            {
+                "datatypes.dtd",
+                "/com/sun/faces/datatypes.dtd"
+            },
+            {
+                "XMLSchema.dtd",
+                "/com/sun/faces/XMLSchema.dtd"
             }
         };
 
@@ -171,7 +215,7 @@ public class DbfFactory {
 
         } // END JsfEntityResolver
 
-        
+
         // ----------------------------------------- Methods from DefaultHandler
 
 
@@ -246,8 +290,19 @@ public class DbfFactory {
 
         } // END resolveEntity
 
+       public LSInput resolveResource(String type, String namespaceURI, String publicId, String systemId, String baseURI) {
+           try {
+               InputSource source = resolveEntity(publicId, systemId);
+               if (source != null) {
+                   return new Input(source.getByteStream());
+               }               
+           } catch (Exception e) {
+               throw new ConfigurationException(e);
+           }
+           return null;
+       }
 
-        // ------------------------------------------------------ Public Methods
+       // ------------------------------------------------------ Public Methods
 
         public Map<String,String> getKnownEntities() {
 
@@ -270,4 +325,59 @@ public class DbfFactory {
             throw exception;
         }
     } // END FacesErrorHandler
+
+
+    private static final class Input implements LSInput {
+        InputStream in;
+        public Input(InputStream in) {
+           this.in = in;
+        }
+        public Reader getCharacterStream() {
+            return null;
+        }
+
+        public void setCharacterStream(Reader characterStream) { }
+
+        public InputStream getByteStream() {
+            return in;
+        }
+
+        public void setByteStream(InputStream byteStream) { }
+
+        public String getStringData() {
+            return null;
+        }
+
+        public void setStringData(String stringData) { }
+
+        public String getSystemId() {
+            return null;
+        }
+
+        public void setSystemId(String systemId) { }
+
+        public String getPublicId() {
+            return null;
+        }
+
+        public void setPublicId(String publicId) { }
+
+        public String getBaseURI() {
+            return null;
+        }
+
+        public void setBaseURI(String baseURI) { }
+
+        public String getEncoding() {
+            return null;
+        }
+
+        public void setEncoding(String encoding) { }
+
+        public boolean getCertifiedText() {
+            return false;
+        }
+
+        public void setCertifiedText(boolean certifiedText) { }
+    }
 }
