@@ -42,8 +42,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
-
+/**
+ * 
+ * @author Jason Lee and Mitch Blevins
+ */
 public class UrlMatcher {
     private List<String> elSnippets = new LinkedList<String>();
     private String urlPattern;
@@ -59,12 +61,9 @@ public class UrlMatcher {
             elSnippets.add(elMatcher.group());
         }
         urlPattern = elMatcher.replaceAll("([^/]+)");
-        System.out.println(pattern + " -> " + urlPattern);
-        System.out.println();
     }
 
     public Map<String, String> getInjections(String url) {
-        System.out.println("\t" + url);
         Matcher m = Pattern.compile(urlPattern).matcher(url);
         if (m.matches()) {
             int numGroups = m.groupCount();
@@ -74,28 +73,10 @@ public class UrlMatcher {
             Map<String, String> elMap = new HashMap<String, String>();
             for (int i=0; i<elSnippets.size();i++) {
                 elMap.put(elSnippets.get(i), m.group(i+1));
-                System.out.println("\t\t" + elSnippets.get(i) + " -> " + m.group(i+1));
             }
             System.out.println();
             return elMap;
         }
-        System.out.println("\t\t<null>\n");
         return null;
-    }
-
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        UrlMatcher um = new UrlMatcher("/blah/#{x.name}/foo/.*"); // note additional regext stuff, ok as long as no parenthesis
-        um.getInjections("/doesnotmatch/anything");
-        um.getInjections("/blah/12345/foo/index.faces");
-        um.getInjections("/blah/54321/foo");
-
-        um = new UrlMatcher("/#{customer.id}/order/#{order.id}/edit");
-        um.getInjections("/order/984325/edit");
-        um.getInjections("/wal-mart/order/12345/edit");
-        um.getInjections("/hobbylobby/order/989898/edit");
-        um.getInjections("/hobbylobby/order/989898/edit/extrastuff");
     }
 }

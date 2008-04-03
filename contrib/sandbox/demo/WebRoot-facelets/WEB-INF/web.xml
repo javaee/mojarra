@@ -49,7 +49,10 @@
     </context-param>
     <context-param>
         <param-name>com.sun.faces.sandbox.urlPatterns</param-name>
-        <param-value>prettyUrl.xhtml=/blah/#{testBean.queryStringValue}/foo</param-value>
+        <param-value>
+            prettyUrl.xhtml=/example1/#{testBean.queryStringValue}
+            prettyUrl.xhtml=/example/2/#{testBean.queryStringValue}
+        </param-value>
     </context-param>
 
     <servlet>
@@ -64,7 +67,11 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>/blah/*</url-pattern>
+        <url-pattern>/example1/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>/example/2/*</url-pattern>
     </servlet-mapping>
     
     <welcome-file-list>

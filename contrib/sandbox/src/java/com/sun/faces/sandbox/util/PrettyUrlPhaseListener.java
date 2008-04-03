@@ -37,24 +37,27 @@ package com.sun.faces.sandbox.util;
 
 import java.net.URLDecoder;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
+import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
+import javax.faces.lifecycle.Lifecycle;
+import javax.faces.lifecycle.LifecycleFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 /**
  * @author Jason Lee
- *
  */
 public class PrettyUrlPhaseListener implements PhaseListener {   
-    public static final String URL_PATTERNS_INIT_PARAM = "com.sun.faces.sandbox.urlPatterns";
     private static final long serialVersionUID = 1L;
-    //private static Pattern elPattern = Pattern.compile("\\#\\{[\\w\\.]+?\\}");
+
+    public static final String URL_PATTERNS_INIT_PARAM = "com.sun.faces.sandbox.urlPatterns";
     private Map<String, String> urlPatterns;
 
     public PhaseId getPhaseId() {
@@ -73,7 +76,7 @@ public class PrettyUrlPhaseListener implements PhaseListener {
                 uri = uri.substring(contextPath.length());
                 if (uri != null) {
                     for (Map.Entry<String, String> entry : urlPatterns.entrySet()) {
-                        UrlMatcher um = new UrlMatcher(entry.getValue());
+                        UrlMatcher um = new UrlMatcher(entry.getValue().trim());
                         Map<String, String> injections = um.getInjections(uri);
 
                         if (injections != null) {
@@ -84,9 +87,9 @@ public class PrettyUrlPhaseListener implements PhaseListener {
                                     vb.setValue(context, URLDecoder.decode(injection.getValue(), "UTF-8"));
                                 }
                             }
-                            
+
                             PrettyUrlRequestWrapper wrapper = new PrettyUrlRequestWrapper(request);
-                            wrapper.setTemplateName(entry.getKey());
+                            wrapper.setTemplateName(entry.getKey().trim());
                             context.getExternalContext().setRequest(wrapper);
                             break;
                         }
@@ -113,19 +116,24 @@ public class PrettyUrlPhaseListener implements PhaseListener {
                     }
                 }
             }
+
+            // If no URL patterns have been registered, unregister the PL
+            if (urlPatterns.size() == 0) {
+                System.out.println("Removing PhaseListener instance");
+                LifecycleFactory factory = (LifecycleFactory)
+                FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+                // remove ourselves from the list of listeners maintained by
+                // the lifecycle instances
+                for(Iterator<String> i = factory.getLifecycleIds(); i.hasNext(); ) {
+                    Lifecycle lifecycle = factory.getLifecycle(i.next());
+                    lifecycle.removePhaseListener(this);
+                }
+            }
         }
     }
 
     public void afterPhase(PhaseEvent event) {
-        if (event.getPhaseId() == PhaseId.RESTORE_VIEW) {   
-            FacesContext context = FacesContext.getCurrentInstance();   
-            HttpServletRequest request = (HttpServletRequest)   
-            context.getExternalContext().getRequest();   
-            System.out.println("uri = " + request.getRequestURI());
-            System.out.println("contextPath = " + request.getContextPath());
-            System.out.println("pathInfo = " + request.getPathInfo());
-            System.out.println("servletPath = " + request.getServletPath());
-        }
+        // Nothing happens here
     }
 }
 
@@ -136,7 +144,7 @@ class PrettyUrlRequestWrapper extends HttpServletRequestWrapper {
     public String getPathInfo() {   
         return "/" + template;   
     }
-    
+
     @Override
     public String getServletPath() {
         return "/";

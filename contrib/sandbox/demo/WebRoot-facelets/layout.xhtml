@@ -5,7 +5,7 @@
     xmlns:risb="http://steeplesoft.com/yuisf">
 <head>
 <title>JSF RI Sandbox Test App - Facelets</title>
-<link rel="stylesheet" type="text/css" href="${request.contextPath}/style.css" />
+<link rel="stylesheet" type="text/css" href="${facesContext.externalContext.request.contextPath}/style.css" />
 </head>
 
 <body>
@@ -16,7 +16,7 @@
 </div>
 <div class="header_menu">
     <div class="header_menu_item">
-        <a href="${request.contextPath}/index.jsf">Home</a>
+        <a href="${facesContext.externalContext.request.contextPath}/index.jsf">Home</a>
     </div>
 </div>
 <div style="margin: 5px;">

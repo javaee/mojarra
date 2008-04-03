@@ -138,6 +138,12 @@ public class DownloadPhaseListener implements PhaseListener {
             }
         } catch (IOException e) {
             System.err.println(e.getMessage());
+        } finally {
+            try {
+                is.close();
+            } catch (Exception e1) {
+                //
+            }
         }
 
         return baos.toByteArray();
