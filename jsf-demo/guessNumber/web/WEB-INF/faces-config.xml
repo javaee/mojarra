@@ -42,7 +42,7 @@
     version="1.2">
 
   <application>
-    <ocale-config>
+    <locale-config>
       <default-locale>en</default-locale>
       <supported-locale>de</supported-locale>
       <supported-locale>fr</supported-locale>
