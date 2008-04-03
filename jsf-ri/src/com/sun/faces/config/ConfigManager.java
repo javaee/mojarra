@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManager.java,v 1.17 2007/09/20 20:14:30 rlubke Exp $
+ * $Id: ConfigManager.java,v 1.18 2007/10/03 20:25:30 rlubke Exp $
  */
 
 /*
@@ -203,14 +203,8 @@ public class ConfigManager {
             } catch (Exception e) {
                 // clear out any configured factories
                 releaseFactories();
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE,
-                               "Unsanitized stacktrace from failed start...",
-                               e);
-                }
-                Throwable t = unwind(e);
-                throw new ConfigurationException("CONFIGURATION FAILED!" + t.getMessage(),
-                                                 t);               
+                throw new ConfigurationException("CONFIGURATION FAILED! " + e.getMessage(),
+                                                 e);
             }
         }
 
@@ -302,24 +296,6 @@ public class ConfigManager {
 
         executor.shutdown();
         return docs.toArray(new Document[docs.size()]);
-
-    }
-
-
-    /**
-     * @param throwable Throwable
-     * @return the root cause of this error
-     */
-    private Throwable unwind(Throwable throwable) {
-
-          Throwable t = null;
-          if (throwable != null) {
-              t =  unwind(throwable.getCause());
-              if (t == null) {
-                  t = throwable;
-              }
-          }
-          return t;
 
     }
 
