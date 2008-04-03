@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.111 2007/06/25 20:57:21 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.112 2007/06/26 17:59:03 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -375,7 +375,7 @@ public class ConfigureListener implements ServletRequestListener,
             // not JSP 2.1
             
             // first try to load a factory defined in web.xml
-            String elFactType = webConfig.getContextInitParameter(
+            String elFactType = webConfig.getOptionValue(
                   WebContextInitParameter.ExpressionFactory);
             if (elFactType == null || "".equals(elFactType.trim())) {
                 // else use EL-RI
