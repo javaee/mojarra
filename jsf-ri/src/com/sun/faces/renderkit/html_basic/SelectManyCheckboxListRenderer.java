@@ -35,7 +35,7 @@
  */
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.58 2007/08/30 19:29:13 rlubke Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.59 2007/11/12 23:08:24 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -48,7 +48,7 @@
 package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.el.ELException;
@@ -106,49 +106,51 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
 
         renderBeginText(component, border, alignVertical, context, true);
 
-        Iterator items = RenderKitUtils.getSelectItems(context, component);
-        int idx = -1;
-        while (items.hasNext()) {
-            SelectItem curItem = (SelectItem) items.next();
-            idx++;
-            // If we come across a group of options, render them as a nested
-            // table.
-            if (curItem instanceof SelectItemGroup) {
-                // write out the label for the group.
-                if (curItem.getLabel() != null) {
+        List<SelectItem> items = RenderKitUtils.getSelectItems(context, component);
+
+        if (!items.isEmpty()) {
+            int idx = -1;
+            for (SelectItem curItem : items) {
+                idx++;
+                // If we come across a group of options, render them as a nested
+                // table.
+                if (curItem instanceof SelectItemGroup) {
+                    // write out the label for the group.
+                    if (curItem.getLabel() != null) {
+                        if (alignVertical) {
+                            writer.startElement("tr", component);
+                        }
+                        writer.startElement("td", component);
+                        writer.writeText(curItem.getLabel(), component, "label");
+                        writer.endElement("td");
+                        if (alignVertical) {
+                            writer.endElement("tr");
+                        }
+
+                    }
                     if (alignVertical) {
                         writer.startElement("tr", component);
                     }
                     writer.startElement("td", component);
-                    writer.writeText(curItem.getLabel(), component, "label");
+                    writer.writeText("\n", component, null);
+                    renderBeginText(component, 0, alignVertical,
+                                    context, false);
+                    // render options of this group.
+                    SelectItem[] itemsArray =
+                          ((SelectItemGroup) curItem).getSelectItems();
+                    for (int i = 0; i < itemsArray.length; ++i) {
+                        renderOption(context, component, itemsArray[i],
+                                     alignVertical, i);
+                    }
+                    renderEndText(component, alignVertical, context);
                     writer.endElement("td");
                     if (alignVertical) {
                         writer.endElement("tr");
+                        writer.writeText("\n", component, null);
                     }
-
+                } else {
+                    renderOption(context, component, curItem, alignVertical, idx);
                 }
-                if (alignVertical) {
-                    writer.startElement("tr", component);
-                }
-                writer.startElement("td", component);
-                writer.writeText("\n", component, null);
-                renderBeginText(component, 0, alignVertical,
-                                context, false);
-                // render options of this group.
-                SelectItem[] itemsArray =
-                      ((SelectItemGroup) curItem).getSelectItems();
-                for (int i = 0; i < itemsArray.length; ++i) {
-                    renderOption(context, component, itemsArray[i],
-                                 alignVertical, i);
-                }
-                renderEndText(component, alignVertical, context);
-                writer.endElement("td");
-                if (alignVertical) {
-                    writer.endElement("tr");
-                    writer.writeText("\n", component, null);
-                }
-            } else {
-                renderOption(context, component, curItem, alignVertical, idx);
             }
         }
 

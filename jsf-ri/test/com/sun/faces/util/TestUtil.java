@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil.java,v 1.35 2007/07/19 16:38:01 rlubke Exp $
+ * $Id: TestUtil.java,v 1.36 2007/11/12 23:08:24 rlubke Exp $
  */
 
 /*
@@ -71,7 +71,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil.java,v 1.35 2007/07/19 16:38:01 rlubke Exp $
+ * @version $Id: TestUtil.java,v 1.36 2007/11/12 23:08:24 rlubke Exp $
  */
 
 public class TestUtil extends ServletFacesTestCase {
@@ -255,19 +255,19 @@ public class TestUtil extends ServletFacesTestCase {
         UISelectOne selectOne = new UISelectOne();
         selectOne.getChildren().add(items);
         Iterator iterator = RenderKitUtils.getSelectItems(getFacesContext(),
-                                                          selectOne);
+                                                          selectOne).iterator();
         assertTrue(item1.equals(iterator.next()));
         assertTrue(item2.equals(iterator.next()));
 
         items.setValue(itemsCollection);
         iterator = RenderKitUtils.getSelectItems(getFacesContext(),
-                                                 selectOne);
+                                                 selectOne).iterator();
         assertTrue(item1.equals(iterator.next()));
         assertTrue(item2.equals(iterator.next()));
 
         items.setValue(selectItemMap);
         iterator = RenderKitUtils.getSelectItems(getFacesContext(),
-                                                 selectOne);
+                                                 selectOne).iterator();
         SelectItem i = (SelectItem) iterator.next();
         assertTrue(item1.getLabel().equals(i.getLabel()) 
                     && item1.getValue().equals(i.getValue()));

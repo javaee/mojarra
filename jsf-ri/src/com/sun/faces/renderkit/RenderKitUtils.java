@@ -48,6 +48,7 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -256,7 +257,7 @@ public class RenderKitUtils {
     }
     
     /**
-     * <p>Return an Iterator over {@link javax.faces.model.SelectItem} 
+     * <p>Return a List of {@link javax.faces.model.SelectItem}
      * instances representing the available options for this component, 
      * assembled from the set of {@link javax.faces.component.UISelectItem} 
      * and/or {@link javax.faces.component.UISelectItems} components that are
@@ -268,10 +269,10 @@ public class RenderKitUtils {
      * @param component the component
      * @throws IllegalArgumentException if <code>context</code>
      *                                  is <code>null</code>
-     * @return an Iterator of the select items for the specified component
+     * @return a List of the select items for the specified component
      */
-    public static Iterator<SelectItem> getSelectItems(FacesContext context,
-                                                      UIComponent component) {
+    public static List<SelectItem> getSelectItems(FacesContext context,
+                                                  UIComponent component) {
 
         if (context == null) {            
             throw new IllegalArgumentException(
@@ -348,7 +349,7 @@ public class RenderKitUtils {
                 }
             }
         }
-        return (list.iterator());
+        return (list);
 
     }
 
@@ -691,7 +692,7 @@ public class RenderKitUtils {
                 subtype = "";
             }
             // check quality and assign values
-            if (quality.equals("not set")) {
+            if ("not set".equals(quality)) {
                 if (type.equals("*") && subtype.equals("*")) {
                     quality = "0.01";
                 } else if (!type.equals("*") && subtype.equals("*")) {

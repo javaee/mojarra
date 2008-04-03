@@ -1,5 +1,5 @@
 /*
- * $Id: DebugUtil.java,v 1.40 2007/07/19 16:38:01 rlubke Exp $
+ * $Id: DebugUtil.java,v 1.41 2007/11/12 23:08:24 rlubke Exp $
  */
 
 /*
@@ -42,19 +42,20 @@ package com.sun.faces.util;
 
 // DebugUtil.java
 
-import javax.faces.component.UIComponent;
-import javax.faces.component.ValueHolder;
-import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
-
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.faces.component.UIComponent;
+import javax.faces.component.ValueHolder;
+import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 
 import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.renderkit.RenderKitUtils;
@@ -191,14 +192,20 @@ public class DebugUtil {
         indentPrintln(out, "type:" + root.toString());
 
         if (root instanceof javax.faces.component.UISelectOne) {
-            Iterator items =
+            List<SelectItem> items =
                   RenderKitUtils.getSelectItems(FacesContext.getCurrentInstance(), root);
             indentPrintln(out, " {");
-            while (items.hasNext()) {
-                SelectItem curItem = (SelectItem) items.next();
-                indentPrintln(out, "\t value=" + curItem.getValue() +
-                                   " label=" + curItem.getLabel() + " description=" +
-                                   curItem.getDescription());
+            if (!items.isEmpty()) {
+                for (SelectItem curItem : items) {
+                    indentPrintln(out, "\t value="
+                                       + curItem.getValue()
+                                       +
+                                       " label="
+                                       + curItem.getLabel()
+                                       + " description="
+                                       +
+                                       curItem.getDescription());
+                }
             }
             indentPrintln(out, " }");
         } else {

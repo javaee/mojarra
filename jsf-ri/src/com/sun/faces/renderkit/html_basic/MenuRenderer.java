@@ -35,7 +35,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.95 2007/08/30 19:29:13 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.96 2007/11/12 23:08:24 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -642,17 +642,21 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     }
 
 
-    protected int getOptionNumber(FacesContext context, UIComponent component) {
+    protected int getOptionNumber(FacesContext context,
+                                  UIComponent component,
+                                  List<SelectItem> selectItems) {
 
-        Iterator items = RenderKitUtils.getSelectItems(context, component);
+
         int itemCount = 0;
-        while (items.hasNext()) {
-            itemCount++;
-            SelectItem item = (SelectItem) items.next();
-            if (item instanceof SelectItemGroup) {
-                int optionsLength =
-                      ((SelectItemGroup) item).getSelectItems().length;
-                itemCount = itemCount + optionsLength;
+        if (!selectItems.isEmpty()) {
+            for (Iterator items = selectItems.iterator(); items.hasNext();) {
+                itemCount++;
+                SelectItem item = (SelectItem) items.next();
+                if (item instanceof SelectItemGroup) {
+                    int optionsLength =
+                          ((SelectItemGroup) item).getSelectItems().length;
+                    itemCount += optionsLength;
+                }
             }
         }
         return itemCount;
@@ -702,29 +706,31 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     }
 
 
-    protected void renderOptions(FacesContext context, UIComponent component)
-          throws IOException {
+    protected void renderOptions(FacesContext context,
+                                 UIComponent component,
+                                 List<SelectItem> items)
+    throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
 
-        Iterator items = RenderKitUtils.getSelectItems(context, component);
-        while (items.hasNext()) {
-            SelectItem curItem = (SelectItem) items.next();
-            if (curItem instanceof SelectItemGroup) {
-                // render OPTGROUP
-                writer.startElement("optgroup", component);
-                writer.writeAttribute("label", curItem.getLabel(), "label");
+        if (!items.isEmpty()) {
+            for (SelectItem item : items) {
+                if (item instanceof SelectItemGroup) {
+                    // render OPTGROUP
+                    writer.startElement("optgroup", component);
+                    writer.writeAttribute("label", item.getLabel(), "label");
 
-                // render options of this group.
-                SelectItem[] itemsArray =
-                      ((SelectItemGroup) curItem).getSelectItems();
-                for (int i = 0; i < itemsArray.length; ++i) {
-                    renderOption(context, component, itemsArray[i]);
+                    // render options of this group.
+                    SelectItem[] itemsArray =
+                          ((SelectItemGroup) item).getSelectItems();
+                    for (int i = 0; i < itemsArray.length; ++i) {
+                        renderOption(context, component, itemsArray[i]);
+                    }
+                    writer.endElement("optgroup");
+                } else {
+                    renderOption(context, component, item);
                 }
-                writer.endElement("optgroup");
-            } else {
-                renderOption(context, component, curItem);
             }
         }
 
@@ -734,7 +740,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     // Render the "select" portion..
     //
     protected void renderSelect(FacesContext context,
-                      UIComponent component) throws IOException {
+                                UIComponent component) throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
@@ -760,7 +766,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         // Determine how many option(s) we need to render, and update
         // the component's "size" attribute accordingly;  The "size"
         // attribute will be rendered as one of the "pass thru" attributes
-        int itemCount = getOptionNumber(context, component);
+        List<SelectItem> items = RenderKitUtils.getSelectItems(context, component);
+        int itemCount = getOptionNumber(context, component, items);
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("Rendering " + itemCount + " options");
         }
@@ -777,7 +784,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer,
                                                          component);
         // Now, render the "options" portion...
-        renderOptions(context, component);
+        renderOptions(context, component, items);
 
         writer.endElement("select");
 
