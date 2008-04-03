@@ -938,12 +938,18 @@ public class RenderKitUtils {
         sb.append(formClientId);        
         sb.append("'],'");
         sb.append(commandClientId).append(',').append(commandClientId);
-        for (Param param : params) {         
-            sb.append(',');
-            sb.append(param.name.replace("'", "\\\'"));
-            sb.append(',');
-            sb.append(param.value.replace("'", "\\\'"));
-        }          
+        for (Param param : params) {
+            String pn = param.name;
+            if (pn != null && pn.length() != 0) {
+                String pv = param.value;
+                sb.append(',');
+                sb.append(pn.replace("'", "\\\'"));
+                sb.append(',');
+                if (pv != null && pv.length() != 0) {
+                    sb.append(pv.replace("'", "\\\'"));
+                }
+            }
+        }
         sb.append("','");
         sb.append(target);
         sb.append("');}return false");

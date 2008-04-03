@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.32 2007/04/27 22:01:02 ofung Exp $
+ * $Id: OutputLinkRenderer.java,v 1.33 2007/06/07 19:04:31 rlubke Exp $
  */
 
 /*
@@ -61,7 +61,7 @@ import com.sun.faces.util.Util;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.32 2007/04/27 22:01:02 ofung Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.33 2007/06/07 19:04:31 rlubke Exp $
  */
 
 public class OutputLinkRenderer extends LinkRenderer {
@@ -271,21 +271,21 @@ public class OutputLinkRenderer extends LinkRenderer {
         //Write Anchor attributes
 
         Param paramList[] = getParamList(component);
-        int
-              i = 0,
-              len = paramList.length;
         StringBuffer sb = new StringBuffer();
         sb.append(hrefVal);
-        if (0 < len) {
-            sb.append("?");
-        }
-        for (i = 0; i < len; i++) {
-            if (0 != i) {
-                sb.append("&");
+        boolean paramWritten = false;
+        for (int i = 0, len = paramList.length; i < len; i++) {
+            String pn = paramList[i].name;
+            if (pn != null && pn.length() != 0) {
+                String pv = paramList[i].value;
+                sb.append((paramWritten) ? '&' : '?');              
+                sb.append(pn);
+                sb.append('=');
+                if (pv != null && pv.length() != 0) {
+                    sb.append(pv);
+                }                
+                paramWritten = true;
             }
-            sb.append(paramList[i].name);
-            sb.append("=");
-            sb.append(paramList[i].value);
         }
         writer.writeURIAttribute("href",
                                  context.getExternalContext()

@@ -237,8 +237,11 @@
         <TD>
             <h:outputLink value="test.html" id="output_commandParamLink" styleClass="hyperlinkClass">
               <f:verbatim>link text</f:verbatim>
+              <f:param id="hlParam7_1" name="#{null}" value="should_not_be_present"/>
               <f:param id="hlParam7" name="name" value="horwat"/>
               <f:param id="hlParam8" name="value" value="password"/>
+              <f:param id="hlParam8_1" name="#{null}" value="should_not_be_present"/>
+              <f:param id="hlParam8_2" name="name_2" value="#{null}"/>
             </h:outputLink>
         </TD>
       </TR>

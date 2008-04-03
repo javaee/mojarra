@@ -64,6 +64,10 @@
        <h:commandLink id ="Link4" action="forward">
           <h:outputText value="Link4"/>
        </h:commandLink>
+       <h:commandLink value="Link5">
+           <f:param id="l5param1" name="#{null}" value="should_not_be_present"/>
+           <f:param id="l5param2" name="param5" value="#{null}"/>
+       </h:commandLink>
    </h:form>
    </f:view>
   </body>
