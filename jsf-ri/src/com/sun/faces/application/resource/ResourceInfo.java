@@ -57,7 +57,7 @@ public class ResourceInfo {
           "jsf-compressed";
 
     private String name;
-    private String version;
+    private VersionInfo version;
     private String localePrefix;
     private ResourceHelper helper;
     private LibraryInfo library;
@@ -75,7 +75,7 @@ public class ResourceInfo {
      * @param version the version of this resource (if any)
      * @param compressable if this resource should be compressed
      */
-    public ResourceInfo(LibraryInfo library, String name, String version, boolean compressable) {
+    public ResourceInfo(LibraryInfo library, String name, VersionInfo version, boolean compressable) {
         this.name = name;
         this.version = version;
         this.helper = library.getHelper();
@@ -94,7 +94,7 @@ public class ResourceInfo {
      * @param compressable if this resource should be compressed
      */
     ResourceInfo(String name,
-                 String version,
+                 VersionInfo version,
                  String localePrefix,
                  ResourceHelper helper,
                  boolean compressable) {
@@ -117,7 +117,7 @@ public class ResourceInfo {
      * @return return the version of the resource, or <code>null</code> if the
      *         resource isn't versioned.
      */
-    public String getVersion() {
+    public VersionInfo getVersion() {
         return version;
     }
 
@@ -189,7 +189,8 @@ public class ResourceInfo {
         }
         sb.append('/').append(name);
         if (version != null) {
-            sb.append('/').append(version);
+            sb.append('/').append(version.getVersion());
+            sb.append('.').append(version.getExtension());
         }
         path = sb.toString();
 

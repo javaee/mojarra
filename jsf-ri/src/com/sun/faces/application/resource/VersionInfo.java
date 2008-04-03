@@ -37,92 +37,63 @@
 package com.sun.faces.application.resource;
 
 /**
- * <p>
- * <code>LibraryInfo</code> is a simple wrapper class for information pertainant to building
- * a complete resource path using a Library.
- * <p>
+ * Metadata pertaining to versions.
  */
-public class LibraryInfo {
+public class VersionInfo implements Comparable {
 
-    private String name;
-    private VersionInfo version;
-    private String localePrefix;
-    private ResourceHelper helper;
-    private String path;
+    private String version;
+    private String extension;
+
+    // ------------------------------------------------------------ Constructors
+
 
     /**
-     * Constructs a new <code>LibraryInfo</code> using the specified details.
-     * @param name the name of the library
-     * @param version the version of the library, if any
-     * @param helper the helper class for this resource
+     * Constructs a new VersionInfo instance.
+     * @param version the version
+     * @param extension the extension (only pertains to versioned resources,
+     *  not libraries)
      */
-    LibraryInfo(String name,
-                VersionInfo version,
-                String localePrefix,
-                ResourceHelper helper) {
-        this.name = name;
+    public VersionInfo(String version, String extension) {
         this.version = version;
-        this.localePrefix = localePrefix;
-        this.helper = helper;
-        initPath();
+        this.extension = extension;
+    }
+
+    
+    // ---------------------------------------------------------- Public Methods
+
+
+    /**
+     * @return the version
+     */
+    public String getVersion() {
+
+        return version;
+
     }
 
     /**
-     * @return return the library name.
+     * @return the extension of the resource at processing time, or null
+     *  if this version is associated with a library
      */
-    public String getName() {
-        return name;
+    public String getExtension() {
+
+        return extension;
+
     }
 
-    /**
-     * @return return the version of the library, or <code>null</code>
-     *  if the library isn't versioned.
-     */
-    public VersionInfo getVersion() {
+
+    @Override
+    public String toString() {
         return version;
     }
 
-    /**
-     * @return return the {@link ResourceHelper} for this resource
-     */
-    public ResourceHelper getHelper() {
-        return helper;
+    
+    // ------------------------------------------------- Methods from Comparable
+
+
+    public int compareTo(Object o) {
+        assert(o instanceof VersionInfo);
+        VersionInfo c = (VersionInfo) o;
+        return (this.version.compareTo(c.version));
     }
-
-    /**
-     * @return the base path of the library.
-     */
-    public String getPath() {
-        return path;
-    }
-
-    /**
-     * @return the Locale prefix, if any.
-     */
-    public String getLocalePrefix() {
-        return localePrefix;
-    }
-
-
-    // --------------------------------------------------------- Private Methods
-
-
-    /**
-     * Construct the full path to the base directory of the library's resources.
-     */
-    private void initPath() {
-
-        StringBuilder sb = new StringBuilder(64);
-        sb.append(helper.getBaseResourcePath());
-        if (localePrefix != null) {
-            sb.append('/').append(localePrefix);
-        }
-        sb.append('/').append(name);
-        if (version != null) {
-            sb.append('/').append(version.getVersion());
-        }
-        path = sb.toString();
-        
-    }
-
 }

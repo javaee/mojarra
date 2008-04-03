@@ -179,7 +179,7 @@ public class TestResourceImpl extends ServletFacesTestCase {
         assertTrue(Arrays.equals(controlBytes, underTest));
 
         // step 2 - versioned
-        controlBytes = getBytes(getFacesContext().getExternalContext().getResource("/resources/duke.gif/1.1"));
+        controlBytes = getBytes(getFacesContext().getExternalContext().getResource("/resources/duke.gif/1.1.gif"));
         resource = handler.createResource("duke.gif");
         assertTrue(resource != null);
         in = resource.getInputStream();
@@ -206,7 +206,7 @@ public class TestResourceImpl extends ServletFacesTestCase {
         assertTrue(Arrays.equals(controlBytes, underTest));
 
         // step 2 - versioned
-        controlBytes = getBytes(Util.getCurrentLoader(this.getClass()).getResource("META-INF/resources/duke-jar.gif/1.1"));
+        controlBytes = getBytes(Util.getCurrentLoader(this.getClass()).getResource("META-INF/resources/duke-jar.gif/1.1.gif"));
         resource = handler.createResource("duke-jar.gif");
         assertTrue(resource != null);
         in = resource.getInputStream();

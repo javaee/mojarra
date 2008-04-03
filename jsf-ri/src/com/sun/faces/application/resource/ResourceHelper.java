@@ -47,7 +47,6 @@ import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -271,19 +270,22 @@ public abstract class ResourceHelper {
      *
      * @param resourcePaths a collection of paths (consisting of single path
      *  elements)
+     * @param isResource <code>true</code> if the version being looked up
+     *  is for a reource, otherwise, pass <code>false</code> if the version
+     *  is a library version
      * @return the latest version or if no version can be detected, otherwise
      *  this method returns <code>null</code>
      */
-    protected String getVersion(Collection<String> resourcePaths) {
+    protected VersionInfo getVersion(Collection<String> resourcePaths, boolean isResource) {
 
-        List<String> versionedPaths = new ArrayList<String>(resourcePaths.size());
+        List<VersionInfo> versionedPaths = new ArrayList<VersionInfo>(resourcePaths.size());
         for (String p : resourcePaths) {
-            String vp = getVersion(p);
+            VersionInfo vp = getVersion(p, isResource);
             if (vp != null) {
                 versionedPaths.add(vp);
             }
         }
-        String version = null;
+        VersionInfo version = null;
         if (!versionedPaths.isEmpty()) {
             Collections.sort(versionedPaths);
             version = versionedPaths.get(versionedPaths.size() - 1);
@@ -395,7 +397,7 @@ public abstract class ResourceHelper {
                     gzipFound = true;
                     break;
                 }
-                if (value.contains("*") && !value.contains("*;q=0")) {
+                if (value.contains("*") && !value.contains("*;q=0,")) {
                     // gzip not explictly listed, but client sent *
                     // meaning gzip is implicitly acceptable
                     // keep looping to ensure we don't come across a
@@ -475,15 +477,36 @@ public abstract class ResourceHelper {
 
     /**
      * @param pathElement the path element to verify
+     * @param isResource <code>true</code> if the version being looked up
+     *  is for a reource, otherwise, pass <code>false</code> if the version
+     *  is a library version
      * @return <code>true</code> if this path element represents a version
      *  (i.e. matches {@link #VERSION_PATTERN}), otherwise
      *  returns <code>false</code>
      */
-    private String getVersion(String pathElement) {
+    private VersionInfo getVersion(String pathElement, boolean isResource) {
 
         String[] pathElements = Util.split(pathElement, "/");
         String path = pathElements[pathElements.length - 1];
-        return ((VERSION_PATTERN.matcher(path).matches()) ? path : null);
+
+        String version;
+        String extension = null;
+        if (isResource) {
+            // substring the path to prune the extension off
+            int idx = path.lastIndexOf('.');
+            if (idx == -1) {
+                // not in the correct format (i.e. 1.0.gif), so bail out now
+                return null;
+            }
+            extension = path.substring(idx + 1);
+            version = path.substring(0, idx);
+        } else {
+            version = path;
+        }
+
+        return ((VERSION_PATTERN.matcher(version).matches())
+                ? new VersionInfo(version, extension)
+                : null);
 
     }
 

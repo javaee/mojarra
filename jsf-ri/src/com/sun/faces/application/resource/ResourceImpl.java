@@ -211,10 +211,10 @@ public class ResourceImpl extends Resource {
         }
         String version = "";
         if (resourceInfo.getLibraryInfo() != null && resourceInfo.getLibraryInfo().getVersion() != null) {
-            version += resourceInfo.getLibraryInfo().getVersion();
+            version += resourceInfo.getLibraryInfo().getVersion().toString();
         }
         if (resourceInfo.getVersion() != null) {
-            version += resourceInfo.getVersion();
+            version += resourceInfo.getVersion().toString();
         }
         if (version.length() > 0) {
             uri += ((queryStarted) ? "&v=" : "?v=") + version;

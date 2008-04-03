@@ -107,7 +107,7 @@ public class WebappResourceHelper extends ResourceHelper {
         // that is representing the library, but if it's empty, treat it
         // as non-existant and return null.
         if (resourcePaths != null && !resourcePaths.isEmpty()) {
-            String version = getVersion(resourcePaths);
+            VersionInfo version = getVersion(resourcePaths, false);
                 return new LibraryInfo(libraryName, version, localePrefix, this);
         }
 
@@ -171,7 +171,7 @@ public class WebappResourceHelper extends ResourceHelper {
             }
         } else {
             // ok, subdirectories exist, so find the latest 'version' directory
-            String version = getVersion(resourcePaths);
+            VersionInfo version = getVersion(resourcePaths, true);
             if (version == null) {
                 if (LOGGER.isLoggable(Level.WARNING)) {
                     LOGGER.log(Level.WARNING,

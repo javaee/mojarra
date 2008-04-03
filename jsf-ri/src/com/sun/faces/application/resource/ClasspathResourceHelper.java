@@ -151,7 +151,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
             if (subPaths.isEmpty()) {
                 return new LibraryInfo(libraryName, null, localePrefix, this);
             } else {
-                String version = getVersion(subPaths);
+                VersionInfo version = getVersion(subPaths, false);
                 return new LibraryInfo(libraryName, version, localePrefix, this);
             }
         } catch (Exception e) {
@@ -207,7 +207,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
                                              compressable);
                 }
             } else {
-                String version = getVersion(subPaths);
+                VersionInfo version = getVersion(subPaths, true);
                 if (library != null) {
                     value = new ResourceInfo(library,
                                              resourceName,
