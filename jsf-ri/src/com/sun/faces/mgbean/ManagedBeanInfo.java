@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanInfo.java,v 1.2 2007/04/27 22:00:59 ofung Exp $
+ * $Id: ManagedBeanInfo.java,v 1.3 2007/07/19 15:12:45 rlubke Exp $
  */
 
 /*
@@ -42,7 +42,6 @@ package com.sun.faces.mgbean;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Locale;
 
 /**
  * This class represents the parsed metadata for a <code>managed-bean</code>

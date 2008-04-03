@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanBuilder.java,v 1.3 2007/04/27 22:00:59 ofung Exp $
+ * $Id: ManagedBeanBuilder.java,v 1.4 2007/07/19 15:12:45 rlubke Exp $
  */
 
 /*
@@ -90,7 +90,7 @@ public class ManagedBeanBuilder extends BeanBuilder {
             super.bake();
             if (beanInfo.hasManagedProperties()) {
                 properties =
-                     new ArrayList(beanInfo.getManagedProperties().size());
+                     new ArrayList<BakedProperty>(beanInfo.getManagedProperties().size());
                 String propertyName = null;
                 try {
                     for (ManagedBeanInfo.ManagedProperty property
@@ -436,8 +436,8 @@ public class ManagedBeanBuilder extends BeanBuilder {
                     target = (Map) readMethod.invoke(bean,
                                                      RIConstants.EMPTY_METH_ARGS);
                     mapReturned = (target != null);
-                } catch (Exception e) {
-                    ; // ignore
+                } catch (Exception ignored) {
+                    // ignored
                 }
             }
             if (target == null) {
@@ -487,8 +487,8 @@ public class ManagedBeanBuilder extends BeanBuilder {
             if (readMethod != null) {
                 try {
                     temp = readMethod.invoke(bean, RIConstants.EMPTY_METH_ARGS);
-                } catch (Exception e) {
-                    ; // ignore
+                } catch (Exception ignored) {
+                    // ignored
                 }
             }
 
@@ -499,6 +499,7 @@ public class ManagedBeanBuilder extends BeanBuilder {
                         if (target == null) {
                             target = new ArrayList(len);
                         }
+                        //noinspection unchecked
                         target.add(Array.get(temp, i));
                     }
                 } else {

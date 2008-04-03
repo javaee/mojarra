@@ -1,5 +1,5 @@
 /*
- * $Id: BeanBuilder.java,v 1.2 2007/04/27 22:00:59 ofung Exp $
+ * $Id: BeanBuilder.java,v 1.3 2007/07/19 15:12:44 rlubke Exp $
  */
 
 /*
@@ -86,7 +86,7 @@ public abstract class BeanBuilder {
 
 
     /**     
-     * @param beanInfo
+     * @param beanInfo the managed bean metadata
      */
     public BeanBuilder(ManagedBeanInfo beanInfo) {
 
@@ -280,7 +280,7 @@ public abstract class BeanBuilder {
         Class<?> keyClazz = loadClass(keyClass);
         Class<?> valueClazz = loadClass(valueClass);
         Map<Expression,Expression> target = new
-             LinkedHashMap(entries.size(), 1.0f);
+             LinkedHashMap<Expression,Expression>(entries.size(), 1.0f);
         //noinspection StringBufferWithoutInitialCapacity
         for (Map.Entry<String,String> m : entries) {
             String sk = m.getKey();
@@ -303,7 +303,7 @@ public abstract class BeanBuilder {
         Class<?> valueClazz = loadClass(valueClass);
 
         //noinspection StringBufferWithoutInitialCapacity
-        List target = new ArrayList<Expression>(entries.size());
+        List<Expression> target = new ArrayList<Expression>(entries.size());
         for (String item : entries) {
             target.add((!ManagedBeanInfo.NULL_VALUE.equals(item))
                        ? new Expression(item, valueClazz)
@@ -323,6 +323,7 @@ public abstract class BeanBuilder {
                : source.entrySet()) {
             Expression k = entry.getKey();
             Expression v = entry.getValue();
+            //noinspection unchecked
             target.put(k.evaluate(context.getELContext()),
                   (v != null) ? v.evaluate(context.getELContext()) : null);
         }
@@ -336,6 +337,7 @@ public abstract class BeanBuilder {
 
         for (int i = 0, size = source.size(); i < size; i++) {
             Expression value = source.get(i);
+            //noinspection unchecked
             target.add((value != null)
                        ? value.evaluate(context.getELContext())
                        : null);
@@ -504,7 +506,7 @@ public abstract class BeanBuilder {
                 ELUtils.getScope(this.expressionString, segment);
                 if (segment[0] != null) {
                     if (references == null) {
-                        references = new ArrayList(4);
+                        references = new ArrayList<String>(4);
                     }
                     if (!references.contains(segment[0])) {
                         references.add(segment[0]);
