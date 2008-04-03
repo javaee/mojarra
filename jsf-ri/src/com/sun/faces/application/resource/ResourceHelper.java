@@ -97,6 +97,9 @@ public abstract class ResourceHelper {
     private static final Pattern RESOURCE_VERSION_PATTERN =
           Pattern.compile("^((?:\\d+)(?:_\\d+)+)\\.(\\w+)?");
 
+    /**
+     * Arbitrary file name to write the compressed bits to.
+     */
     private static final String COMPRESSED_CONTENT_FILENAME =
           "compressed-content";
 
