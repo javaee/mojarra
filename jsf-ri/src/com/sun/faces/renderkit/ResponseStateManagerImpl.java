@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.46 2007/07/26 00:17:39 rlubke Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.47 2007/08/08 17:51:08 rlubke Exp $
  */
 
 /*
@@ -100,13 +100,13 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 
 
     private SerializationProvider serialProvider;
+    private WebConfiguration webConfig;
     private Boolean compressState;
     private ByteArrayGuard guard;
     private int csBuffSize;
 
     public ResponseStateManagerImpl() {
 
-        super();
         init();
 
     }
@@ -179,8 +179,17 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
                 } else {
                     ois = serialProvider.createObjectInputStream(bis);
                 }
+                long stateTime = 0;
+                if (webConfig.isSet(WebContextInitParameter.ClientStateTimeout)) {
+                    stateTime = ois.readLong();
+                }
                 Object structure = ois.readObject();
                 Object state = ois.readObject();
+                if (stateTime != 0 && hasStateExpired(stateTime)) {
+                    // return null if state has expired.  This should cause
+                    // a ViewExpiredException to be thrown
+                    return null;
+                }
                 storeStateInRequest(context, state);
                 storeStructureInRequest(context, structure);
                 return structure;
@@ -249,6 +258,9 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
                                 1024));
                 }
 
+                if (webConfig.isSet(WebContextInitParameter.ClientStateTimeout)) {
+                    oos.writeLong(System.currentTimeMillis());
+                }
                 //noinspection NonSerializableObjectPassedToObjectStream
                 oos.writeObject(view.getStructure());
                 //noinspection NonSerializableObjectPassedToObjectStream
@@ -281,6 +293,33 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
         writer.write(STATE_FIELD_END);
 
         writeRenderKitIdField(context, writer);
+
+    }
+
+
+    /**
+     * <p>If the {@link WebContextInitParameter#ClientStateTimeout} init parameter
+     * is set, calculate the elapsed time between the time the client state was
+     * written and the time this method was invoked during restore.  If the client
+     * state has expired, return <code>true</code>.  If the client state hasn't expired,
+     * or the init parameter wasn't set, return <code>false</code>.
+     * @param stateTime the time in milliseconds that the state was written
+     *  to the client
+     * @return <code>false</code> if the client state hasn't timed out, otherwise
+     *  return <code>true</code>
+     */
+    private boolean hasStateExpired(long stateTime) {
+
+        if (webConfig.isSet(WebContextInitParameter.ClientStateTimeout)) {
+            long elapsed = (System.currentTimeMillis() - stateTime) / 60000;
+            int timeout = Integer.parseInt(
+                  webConfig.getOptionValue(
+                        WebContextInitParameter.ClientStateTimeout));
+
+            return (elapsed > timeout);
+        } else {
+            return false;
+        }
 
     }
 
@@ -364,7 +403,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
      */
     private void init() {
 
-        WebConfiguration webConfig = WebConfiguration.getInstance();
+        webConfig = WebConfiguration.getInstance();
         assert(webConfig != null);
 
         String pass = webConfig.getEnvironmentEntry(

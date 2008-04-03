@@ -1,5 +1,5 @@
 /*
- * $Id: WebConfiguration.java,v 1.29 2007/07/26 16:26:53 rlubke Exp $
+ * $Id: WebConfiguration.java,v 1.30 2007/08/08 17:51:09 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -619,6 +619,10 @@ public class WebConfiguration {
         ExpressionFactory(
               "com.sun.faces.expressionFactory",
               "com.sun.el.ExpressionFactoryImpl"
+        ),
+        ClientStateTimeout(
+              "com.sun.faces.clientStateTimeout",
+              ""
         );
 
         private String defaultValue;
