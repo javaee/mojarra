@@ -50,13 +50,14 @@ import javax.faces.context.FacesContext;
 import com.sun.faces.util.FacesLogger;
 
 /**
- * This class is used to lookup {@link javax.faces.application.Resource}
- * libraries, and cache any that are successfully looked up to reduce the
+ * This class is used to lookup {@link ResourceInfo} instances
+ * and cache any that are successfully looked up to reduce the
  * computational overhead with the scanning/version checking.
  *
  * @since 2.0
  *
  * RELEASE_PENDING (rlubke)
+ *                 - implement the ability to add additional ResourceHelpers
  *                 - implement library/resource caching
  *                 - add logging where appropriate
  */
@@ -75,11 +76,15 @@ public class ResourceManager {
 
 
     /**
-     * RELEASE_PENDING (rlubke) document
-     * @param libraryName
-     * @param resourceName
-     * @param ctx
-     * @return
+     * <p>
+     * Attempt to lookup a {@link ResourceInfo} based on the specified
+     * <code>libraryName<code> and <code>resourceName</code>
+     * </p>
+     * @param libraryName the name of the library (if any)
+     * @param resourceName the name of the resource
+     * @param ctx the {@link FacesContext} for the current request
+     * @return a {@link ResourceInfo} if a resource if found matching the
+     *  provided arguments, otherwise, return <code>null</code>
      */
     public ResourceInfo findResource(String libraryName,
                                      String resourceName,
@@ -104,7 +109,7 @@ public class ResourceManager {
 
     /**
      * <p> Attempt to lookup and return a {@link LibraryInfo} based on the
-     * specified <code>libraryName</code>. </p>
+     * specified <code>arguments</code>.
      * <p/>
      * <p> The lookup process will first search the file system of the web
      * application.  If the library is not found, then it processed to
@@ -161,12 +166,24 @@ public class ResourceManager {
     }
 
 
-    /**
-     * RELEASE_PENDING (rlubke) document
-     * @param library
-     * @param resourceName
-     * @param ctx
-     * @return
+   /**
+     * <p> Attempt to lookup and return a {@link ResourceInfo} based on the
+     * specified <code>arguments</code>.
+     * <p/>
+     * <p> The lookup process will first search the file system of the web
+     * application.  If the library is not found, then it processed to
+     * searching the classpath.</p>
+     * <p/>
+     * <p> If a library is found, this method will return a {@link
+     * LibraryInfo} instance that contains the name, version, and {@link
+     * ResourceHelper}.</p>
+     *
+     * @param library the library the resource should be found in
+     * @param resourceName the name of the resource
+     * @param localePrefix the prefix for the desired locale
+     * @param ctx         the {@link FacesContext} for the current request
+     *
+     * @return the Library instance for the specified library
      */
     private ResourceInfo findResource(LibraryInfo library,
                                       String resourceName,
@@ -195,9 +212,23 @@ public class ResourceManager {
 
 
     /**
-     * RELEASE_PENDING (rlubke) document
-     * @param context
-     * @return
+     * <p>
+     * Obtains the application configured message resources for the current
+     * request locale.  If a ResourceBundle is found and contains the key
+     * <code>javax.faces.resource.localePrefix</code>, use the value associated
+     * with that key as the prefix for locale specific resources.
+     * </p>
+     *
+     * <p>
+     * For example, say the request locale is en_US, and
+     * <code>javax.faces.resourceLocalePrefix</code> is found with a value of
+     * <code>en</code>, a resource path within a web application might look like
+     * <code>/resources/en/corp/images/greetings.jpg</code>
+     * </p>
+     *
+     * @param context the {@link FacesContext} for the current request
+     * @return the localePrefix based on the current request, or <code>null</code>
+     *  if no prefix can be determined
      */
     private String getLocalePrefix(FacesContext context) {
 
