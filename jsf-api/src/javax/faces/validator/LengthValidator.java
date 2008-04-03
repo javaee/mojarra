@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.50 2007/04/27 22:00:10 ofung Exp $
+ * $Id: LengthValidator.java,v 1.51 2007/09/26 19:24:13 rlubke Exp $
  */
 
 /*
@@ -157,8 +157,7 @@ public class LengthValidator implements Validator, StateHolder {
     // -------------------------------------------------------------- Properties
 
 
-    private int maximum = 0;
-    private boolean maximumSet = false;
+    private Integer maximum;
 
 
     /**
@@ -168,7 +167,7 @@ public class LengthValidator implements Validator, StateHolder {
      */
     public int getMaximum() {
 
-        return (this.maximum);
+        return (this.maximum != null ? this.maximum : 0);
 
     }
 
@@ -181,12 +180,10 @@ public class LengthValidator implements Validator, StateHolder {
     public void setMaximum(int maximum) {
 
         this.maximum = maximum;
-        this.maximumSet = true;
     }
 
 
-    private int minimum = 0;
-    private boolean minimumSet = false;
+    private Integer minimum;
 
 
     /**
@@ -196,7 +193,7 @@ public class LengthValidator implements Validator, StateHolder {
      */
     public int getMinimum() {
 
-        return (this.minimum);
+        return (this.minimum != null ? this.minimum : 0);
 
     }
 
@@ -209,7 +206,6 @@ public class LengthValidator implements Validator, StateHolder {
     public void setMinimum(int minimum) {
 
         this.minimum = minimum;
-        this.minimumSet = true;
 
     }
 
@@ -228,22 +224,20 @@ public class LengthValidator implements Validator, StateHolder {
         }
         if (value != null) {
             String converted = stringValue(value);
-            if (maximumSet &&
+            if (isMaximumSet() &&
                  (converted.length() > maximum)) {
                 throw new ValidatorException(MessageFactory.getMessage
                      (context,
                           MAXIMUM_MESSAGE_ID,
-                          integerToString(component,
-                                    new Integer(maximum), context),
+                          integerToString(component, maximum, context),
                           MessageFactory.getLabel(context, component)));
             }
-            if (minimumSet &&
+            if (isMinimumSet() &&
                  (converted.length() < minimum)) {
                 throw new ValidatorException(MessageFactory.getMessage
                      (context,
                           MINIMUM_MESSAGE_ID,
-                          integerToString(component,
-                                    new Integer(minimum), context),
+                          integerToString(component, minimum, context),
                           MessageFactory.getLabel(context, component)));
             }
         }
@@ -257,18 +251,19 @@ public class LengthValidator implements Validator, StateHolder {
             return false;
         }
         LengthValidator other = (LengthValidator) otherObj;
-        return ((maximum == other.maximum) &&
-             (minimum == other.minimum) &&
-             (maximumSet == other.maximumSet) &&
-             (minimumSet == other.minimumSet));
+        return ((this.getMaximum() == other.getMaximum())
+                && (this.getMinimum() == other.getMinimum())
+                && (this.isMinimumSet() == other.isMinimumSet())
+                && (this.isMaximumSet() == other.isMaximumSet()));
 
     }
 
     public int hashCode() {
 
-        int hashCode = minimum + maximum
-             + Boolean.valueOf(minimumSet).hashCode()
-             + Boolean.valueOf(maximumSet).hashCode();
+        int hashCode = (Integer.valueOf(getMinimum()).hashCode()
+                         + Integer.valueOf(getMaximum()).hashCode()
+                         + Boolean.valueOf(isMaximumSet()).hashCode()
+                         + Boolean.valueOf(isMinimumSet()).hashCode());
         return (hashCode);
 
     }
@@ -300,8 +295,21 @@ public class LengthValidator implements Validator, StateHolder {
 
         Converter converter =
              context.getApplication().createConverter("javax.faces.Number");
-        String result = converter.getAsString(context, component, toConvert);
-        return result;
+        return converter.getAsString(context, component, toConvert);
+
+    }
+
+
+    private boolean isMaximumSet() {
+
+        return (maximum != null);
+
+    }
+
+
+    private boolean isMinimumSet() {
+
+        return (minimum != null);
 
     }
 
@@ -310,11 +318,9 @@ public class LengthValidator implements Validator, StateHolder {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[4];
-        values[0] = new Integer(maximum);
-        values[1] = maximumSet ? Boolean.TRUE : Boolean.FALSE;
-        values[2] = new Integer(minimum);
-        values[3] = minimumSet ? Boolean.TRUE : Boolean.FALSE;
+        Object values[] = new Object[2];
+        values[0] = maximum;
+        values[1] = minimum;
         return (values);
 
     }
@@ -323,10 +329,8 @@ public class LengthValidator implements Validator, StateHolder {
     public void restoreState(FacesContext context, Object state) {
 
         Object values[] = (Object[]) state;
-        maximum = ((Integer) values[0]).intValue();
-        maximumSet = ((Boolean) values[1]).booleanValue();
-        minimum = ((Integer) values[2]).intValue();
-        minimumSet = ((Boolean) values[3]).booleanValue();
+        maximum = (Integer) values[0];
+        minimum = (Integer) values[1];
 
     }
 

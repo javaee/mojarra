@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidator.java,v 1.51 2007/04/27 22:00:10 ofung Exp $
+ * $Id: DoubleRangeValidator.java,v 1.52 2007/09/26 19:24:13 rlubke Exp $
  */
 
 /*
@@ -193,9 +193,7 @@ public class DoubleRangeValidator implements Validator, StateHolder {
     // -------------------------------------------------------------- Properties
 
 
-    private double maximum = Double.MAX_VALUE;
-    private boolean maximumSet = false;
-
+    private Double maximum;
 
     /**
      * <p>Return the maximum value to be enforced by this {@link
@@ -204,7 +202,7 @@ public class DoubleRangeValidator implements Validator, StateHolder {
      */
     public double getMaximum() {
 
-        return (this.maximum);
+        return (this.maximum != null ? this.maximum : Double.MAX_VALUE);
 
     }
 
@@ -217,12 +215,11 @@ public class DoubleRangeValidator implements Validator, StateHolder {
     public void setMaximum(double maximum) {
 
         this.maximum = maximum;
-        this.maximumSet = true;
+
     }
 
 
-    private double minimum = Double.MIN_VALUE;
-    private boolean minimumSet = false;
+    private Double minimum;
 
 
     /**
@@ -232,7 +229,7 @@ public class DoubleRangeValidator implements Validator, StateHolder {
      */
     public double getMinimum() {
 
-        return (this.minimum);
+        return (this.minimum != null ? this.minimum : Double.MIN_VALUE);
 
     }
 
@@ -245,7 +242,7 @@ public class DoubleRangeValidator implements Validator, StateHolder {
     public void setMinimum(double minimum) {
 
         this.minimum = minimum;
-        this.minimumSet = true;
+
     }
 
     // ------------------------------------------------------- Validator Methods
@@ -263,39 +260,39 @@ public class DoubleRangeValidator implements Validator, StateHolder {
         if (value != null) {
             try {
                 double converted = doubleValue(value);
-                if (maximumSet &&
+                if (isMaximumSet() &&
                      (converted > maximum)) {
-                    if (minimumSet) {
+                    if (isMinimumSet()) {
                         throw new ValidatorException(MessageFactory.getMessage
                              (context,
                                   NOT_IN_RANGE_MESSAGE_ID,
-                                  stringValue(component, new Double(minimum), context),
-                                  stringValue(component, new Double(maximum), context),
+                                  stringValue(component, minimum, context),
+                                  stringValue(component, maximum, context),
                                   MessageFactory.getLabel(context, component)));
 
                     } else {
                         throw new ValidatorException(MessageFactory.getMessage
                              (context,
                                   MAXIMUM_MESSAGE_ID,
-                                  stringValue(component, new Double(maximum), context),
+                                  stringValue(component, maximum, context),
                                   MessageFactory.getLabel(context, component)));
                     }
                 }
-                if (minimumSet &&
+                if (isMinimumSet() &&
                      (converted < minimum)) {
-                    if (maximumSet) {
+                    if (isMaximumSet()) {
                         throw new ValidatorException(MessageFactory.getMessage
                              (context,
                                   NOT_IN_RANGE_MESSAGE_ID,
-                                  stringValue(component, new Double(minimum), context),
-                                  stringValue(component, new Double(maximum), context),
+                                  stringValue(component, minimum, context),
+                                  stringValue(component, maximum, context),
                                   MessageFactory.getLabel(context, component)));
 
                     } else {
                         throw new ValidatorException(MessageFactory.getMessage
                              (context,
                                   MINIMUM_MESSAGE_ID,
-                                  stringValue(component, new Double(minimum), context),
+                                  stringValue(component, minimum, context),
                                   MessageFactory.getLabel(context, component)));
                     }
                 }
@@ -315,20 +312,20 @@ public class DoubleRangeValidator implements Validator, StateHolder {
             return false;
         }
         DoubleRangeValidator other = (DoubleRangeValidator) otherObj;
-        return ((maximum == other.maximum) &&
-             (minimum == other.minimum) &&
-             (maximumSet == other.maximumSet) &&
-             (minimumSet == other.minimumSet));
+        return ((this.getMaximum() == other.getMaximum())
+                && (this.getMinimum() == other.getMinimum())
+                && (this.isMaximumSet() == other.isMaximumSet())
+                && (this.isMinimumSet() == other.isMinimumSet()));
 
     }
 
 
     public int hashCode() {
 
-        int hashCode = new Double(minimum).hashCode()
-             + new Double(maximum).hashCode()
-             + Boolean.valueOf(minimumSet).hashCode()
-             + Boolean.valueOf(maximumSet).hashCode();
+        int hashCode = (Double.valueOf(this.getMinimum()).hashCode()
+             + Double.valueOf(this.getMaximum()).hashCode()
+             + Boolean.valueOf(isMinimumSet()).hashCode()
+             + Boolean.valueOf(isMaximumSet()).hashCode());
         return (hashCode);
 
     }
@@ -359,8 +356,20 @@ public class DoubleRangeValidator implements Validator, StateHolder {
                                       FacesContext context) {
 
         Converter converter = context.getApplication().createConverter("javax.faces.Number");
-        String result = converter.getAsString(context, component, toConvert);
-        return result;
+        return converter.getAsString(context, component, toConvert);
+
+    }
+
+    private boolean isMaximumSet() {
+
+        return (maximum != null);
+
+    }
+
+
+    private boolean isMinimumSet() {
+
+        return (minimum != null);
 
     }
 
@@ -369,11 +378,9 @@ public class DoubleRangeValidator implements Validator, StateHolder {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[4];
-        values[0] = new Double(maximum);
-        values[1] = maximumSet ? Boolean.TRUE : Boolean.FALSE;
-        values[2] = new Double(minimum);
-        values[3] = minimumSet ? Boolean.TRUE : Boolean.FALSE;
+        Object values[] = new Object[2];
+        values[0] = maximum;
+        values[1] = minimum;
         return (values);
 
     }
@@ -382,10 +389,8 @@ public class DoubleRangeValidator implements Validator, StateHolder {
     public void restoreState(FacesContext context, Object state) {
 
         Object values[] = (Object[]) state;
-        maximum = ((Double) values[0]).doubleValue();
-        maximumSet = ((Boolean) values[1]).booleanValue();
-        minimum = ((Double) values[2]).doubleValue();
-        minimumSet = ((Boolean) values[3]).booleanValue();
+        maximum = (Double) values[0];
+        minimum = (Double) values[1];
 
     }
 

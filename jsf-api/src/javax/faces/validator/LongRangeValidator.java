@@ -1,5 +1,5 @@
 /*
- * $Id: LongRangeValidator.java,v 1.46 2007/04/27 22:00:10 ofung Exp $
+ * $Id: LongRangeValidator.java,v 1.47 2007/09/26 19:24:13 rlubke Exp $
  */
 
 /*
@@ -193,8 +193,7 @@ public class LongRangeValidator implements Validator, StateHolder {
     // -------------------------------------------------------------- Properties
 
 
-    private long maximum = 0;
-    private boolean maximumSet = false;
+    private Long maximum;
 
 
     /**
@@ -202,7 +201,7 @@ public class LongRangeValidator implements Validator, StateHolder {
      */
     public long getMaximum() {
 
-        return (this.maximum);
+        return (this.maximum != null ? this.maximum : 0);
 
     }
 
@@ -215,13 +214,11 @@ public class LongRangeValidator implements Validator, StateHolder {
     public void setMaximum(long maximum) {
 
         this.maximum = maximum;
-        this.maximumSet = true;
 
     }
 
 
-    private long minimum = 0;
-    private boolean minimumSet = false;
+    private Long minimum;
 
 
     /**
@@ -229,7 +226,7 @@ public class LongRangeValidator implements Validator, StateHolder {
      */
     public long getMinimum() {
 
-        return (this.minimum);
+        return (this.minimum != null ? this.minimum : 0);
 
     }
 
@@ -242,7 +239,6 @@ public class LongRangeValidator implements Validator, StateHolder {
     public void setMinimum(long minimum) {
 
         this.minimum = minimum;
-        this.minimumSet = true;
 
     }
 
@@ -262,45 +258,39 @@ public class LongRangeValidator implements Validator, StateHolder {
         if (value != null) {
             try {
                 long converted = longValue(value);
-                if (maximumSet &&
+                if (isMaximumSet() &&
                      (converted > maximum)) {
-                    if (minimumSet) {
+                    if (isMinimumSet()) {
                         throw new ValidatorException(MessageFactory.getMessage
                              (context,
                                   NOT_IN_RANGE_MESSAGE_ID,
-                                  stringValue(component,
-                                            new Long(minimum), context),
-                                  stringValue(component,
-                                            new Long(maximum), context),
+                                  stringValue(component, minimum, context),
+                                  stringValue(component, maximum, context),
                                   MessageFactory.getLabel(context, component)));
 
                     } else {
                         throw new ValidatorException(MessageFactory.getMessage
                              (context,
                                   MAXIMUM_MESSAGE_ID,
-                                  stringValue(component,
-                                            new Long(maximum), context),
+                                  stringValue(component, maximum, context),
                                   MessageFactory.getLabel(context, component)));
                     }
                 }
-                if (minimumSet &&
+                if (isMinimumSet() &&
                      (converted < minimum)) {
-                    if (maximumSet) {
+                    if (isMaximumSet()) {
                         throw new ValidatorException(MessageFactory.getMessage
                              (context,
                                   NOT_IN_RANGE_MESSAGE_ID,
-                                  stringValue(component,
-                                            new Long(minimum), context),
-                                  stringValue(component,
-                                            new Long(maximum), context),
+                                  stringValue(component, minimum, context),
+                                  stringValue(component, maximum, context),
                                   MessageFactory.getLabel(context, component)));
 
                     } else {
                         throw new ValidatorException(MessageFactory.getMessage
                              (context,
                                   MINIMUM_MESSAGE_ID,
-                                  stringValue(component,
-                                            new Long(minimum), context),
+                                  stringValue(component, minimum, context),
                                   MessageFactory.getLabel(context, component)));
                     }
                 }
@@ -320,20 +310,20 @@ public class LongRangeValidator implements Validator, StateHolder {
             return false;
         }
         LongRangeValidator other = (LongRangeValidator) otherObj;
-        return ((maximum == other.maximum) &&
-             (minimum == other.minimum) &&
-             (maximumSet == other.maximumSet) &&
-             (minimumSet == other.minimumSet));
+        return ((this.getMaximum() == other.getMaximum())
+                && (this.getMinimum() == other.getMinimum())
+                && (this.isMaximumSet() == other.isMaximumSet())
+                && (this.isMinimumSet() == other.isMinimumSet()));
 
     }
 
 
     public int hashCode() {
 
-        int hashCode = new Long(minimum).hashCode()
-             + new Long(maximum).hashCode()
-             + Boolean.valueOf(minimumSet).hashCode()
-             + Boolean.valueOf(maximumSet).hashCode();
+        int hashCode = Long.valueOf(getMinimum()).hashCode()
+             + Long.valueOf(getMaximum()).hashCode()
+             + Boolean.valueOf(isMinimumSet()).hashCode()
+             + Boolean.valueOf(isMaximumSet()).hashCode();
         return (hashCode);
 
     }
@@ -365,8 +355,19 @@ public class LongRangeValidator implements Validator, StateHolder {
 
         Converter converter =
              context.getApplication().createConverter("javax.faces.Number");
-        String result = converter.getAsString(context, component, toConvert);
-        return result;
+        return converter.getAsString(context, component, toConvert);
+
+    }
+
+    private boolean isMinimumSet() {
+
+        return (minimum != null);
+
+    }
+
+    private boolean isMaximumSet() {
+
+        return (maximum != null);
 
     }
 
@@ -375,11 +376,9 @@ public class LongRangeValidator implements Validator, StateHolder {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[4];
-        values[0] = new Long(maximum);
-        values[1] = maximumSet ? Boolean.TRUE : Boolean.FALSE;
-        values[2] = new Long(minimum);
-        values[3] = minimumSet ? Boolean.TRUE : Boolean.FALSE;
+        Object values[] = new Object[2];
+        values[0] = maximum;
+        values[1] = minimum;
         return (values);
 
     }
@@ -388,10 +387,8 @@ public class LongRangeValidator implements Validator, StateHolder {
     public void restoreState(FacesContext context, Object state) {
 
         Object values[] = (Object[]) state;
-        maximum = ((Long) values[0]).longValue();
-        maximumSet = ((Boolean) values[1]).booleanValue();
-        minimum = ((Long) values[2]).longValue();
-        minimumSet = ((Boolean) values[3]).booleanValue();
+        maximum = (Long) values[0];
+        minimum = (Long) values[1];
 
     }
 

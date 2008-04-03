@@ -1,5 +1,5 @@
 /*
- * $Id: NumberConverter.java,v 1.27 2007/04/27 22:00:07 ofung Exp $
+ * $Id: NumberConverter.java,v 1.28 2007/09/26 19:24:12 rlubke Exp $
  */
 
 /*
@@ -218,16 +218,12 @@ public class NumberConverter implements Converter, StateHolder {
 
     private String currencyCode = null;
     private String currencySymbol = null;
-    private boolean groupingUsed = true;
-    private boolean integerOnly = false;
-    private int maxFractionDigits = 0;
-    private boolean maxFractionDigitsSpecified = false;
-    private int maxIntegerDigits = 0;
-    private boolean maxIntegerDigitsSpecified = false;
-    private int minFractionDigits = 0;
-    private boolean minFractionDigitsSpecified = false;
-    private int minIntegerDigits = 0;
-    private boolean minIntegerDigitsSpecified = false;
+    private Boolean groupingUsed = true;
+    private Boolean integerOnly = false;
+    private Integer maxFractionDigits;
+    private Integer maxIntegerDigits;
+    private Integer minFractionDigits;
+    private Integer minIntegerDigits;
     private Locale locale = null;
     private String pattern = null;
     private String type = "number";
@@ -292,7 +288,7 @@ public class NumberConverter implements Converter, StateHolder {
      */
     public boolean isGroupingUsed() {
 
-        return (this.groupingUsed);
+        return (this.groupingUsed != null ? this.groupingUsed : true);
 
     }
 
@@ -317,7 +313,7 @@ public class NumberConverter implements Converter, StateHolder {
      */
     public boolean isIntegerOnly() {
 
-        return (this.integerOnly);
+        return (this.integerOnly != null ? this.integerOnly : false);
 
     }
 
@@ -341,7 +337,7 @@ public class NumberConverter implements Converter, StateHolder {
      */
     public int getMaxFractionDigits() {
 
-        return (this.maxFractionDigits);
+        return (this.maxFractionDigits != null ? this.maxFractionDigits : 0);
 
     }
 
@@ -356,7 +352,6 @@ public class NumberConverter implements Converter, StateHolder {
     public void setMaxFractionDigits(int maxFractionDigits) {
 
         this.maxFractionDigits = maxFractionDigits;
-        this.maxFractionDigitsSpecified = true;
 
     }
 
@@ -367,7 +362,7 @@ public class NumberConverter implements Converter, StateHolder {
      */
     public int getMaxIntegerDigits() {
 
-        return (this.maxIntegerDigits);
+        return (this.maxIntegerDigits != null ? this.maxIntegerDigits : 0);
 
     }
 
@@ -382,7 +377,6 @@ public class NumberConverter implements Converter, StateHolder {
     public void setMaxIntegerDigits(int maxIntegerDigits) {
 
         this.maxIntegerDigits = maxIntegerDigits;
-        this.maxIntegerDigitsSpecified = true;
 
     }
 
@@ -393,7 +387,7 @@ public class NumberConverter implements Converter, StateHolder {
      */
     public int getMinFractionDigits() {
 
-        return (this.minFractionDigits);
+        return (this.minFractionDigits != null ? this.minFractionDigits : 0);
 
     }
 
@@ -408,7 +402,6 @@ public class NumberConverter implements Converter, StateHolder {
     public void setMinFractionDigits(int minFractionDigits) {
 
         this.minFractionDigits = minFractionDigits;
-        this.minFractionDigitsSpecified = true;
 
     }
 
@@ -419,7 +412,7 @@ public class NumberConverter implements Converter, StateHolder {
      */
     public int getMinIntegerDigits() {
 
-        return (this.minIntegerDigits);
+        return (this.minIntegerDigits != null ? this.minIntegerDigits : 0);
 
     }
 
@@ -434,7 +427,6 @@ public class NumberConverter implements Converter, StateHolder {
     public void setMinIntegerDigits(int minIntegerDigits) {
 
         this.minIntegerDigits = minIntegerDigits;
-        this.minIntegerDigitsSpecified = true;
 
     }
 
@@ -652,7 +644,7 @@ public class NumberConverter implements Converter, StateHolder {
         try {
             currencyClass = Class.forName("java.util.Currency");
             // container's runtime is J2SE 1.4 or greater
-        } catch (Exception cnfe) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -760,18 +752,46 @@ public class NumberConverter implements Converter, StateHolder {
     private void configureFormatter(NumberFormat formatter) {
 
         formatter.setGroupingUsed(groupingUsed);
-        if (maxIntegerDigitsSpecified) {
+        if (isMaxIntegerDigitsSet()) {
             formatter.setMaximumIntegerDigits(maxIntegerDigits);
         }
-        if (minIntegerDigitsSpecified) {
+        if (isMinIntegerDigitsSet()) {
             formatter.setMinimumIntegerDigits(minIntegerDigits);
         }
-        if (maxFractionDigitsSpecified) {
+        if (isMaxFractionDigitsSet()) {
             formatter.setMaximumFractionDigits(maxFractionDigits);
         }
-        if (minFractionDigitsSpecified) {
+        if (isMinFractionDigitsSet()) {
             formatter.setMinimumFractionDigits(minFractionDigits);
         }
+
+    }
+
+
+    private boolean isMaxIntegerDigitsSet() {
+
+        return (maxIntegerDigits != null);
+
+    }
+
+
+    private boolean isMinIntegerDigitsSet() {
+
+        return (minIntegerDigits != null);
+
+    }
+
+
+    private boolean isMaxFractionDigitsSet() {
+
+        return (maxFractionDigits != null);
+
+    }
+
+
+    private boolean isMinFractionDigitsSet() {
+
+        return (minFractionDigits != null);
 
     }
 
@@ -838,22 +858,18 @@ public class NumberConverter implements Converter, StateHolder {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[15];
+        Object values[] = new Object[11];
         values[0] = currencyCode;
         values[1] = currencySymbol;
-        values[2] = isGroupingUsed() ? Boolean.TRUE : Boolean.FALSE;
-        values[3] = isIntegerOnly() ? Boolean.TRUE : Boolean.FALSE;
-        values[4] = new Integer(maxFractionDigits);
-        values[5] = maxFractionDigitsSpecified ? Boolean.TRUE : Boolean.FALSE;
-        values[6] = new Integer(maxIntegerDigits);
-        values[7] = maxIntegerDigitsSpecified ? Boolean.TRUE : Boolean.FALSE;
-        values[8] = new Integer(minFractionDigits);
-        values[9] = minFractionDigitsSpecified ? Boolean.TRUE : Boolean.FALSE;
-        values[10] = new Integer(minIntegerDigits);
-        values[11] = minIntegerDigitsSpecified ? Boolean.TRUE : Boolean.FALSE;
-        values[12] = locale;
-        values[13] = pattern;
-        values[14] = type;
+        values[2] = groupingUsed;
+        values[3] = integerOnly;
+        values[4] = maxFractionDigits;
+        values[5] = maxIntegerDigits;
+        values[6] = minFractionDigits;
+        values[7] = minIntegerDigits;
+        values[8] = locale;
+        values[9] = pattern;
+        values[10] = type;
         return (values);
 
     }
@@ -864,19 +880,15 @@ public class NumberConverter implements Converter, StateHolder {
         Object values[] = (Object[]) state;
         currencyCode = (String) values[0];
         currencySymbol = (String) values[1];
-        groupingUsed = ((Boolean) values[2]).booleanValue();
-        integerOnly = ((Boolean) values[3]).booleanValue();
-        maxFractionDigits = ((Integer) values[4]).intValue();
-        maxFractionDigitsSpecified = ((Boolean) values[5]).booleanValue();
-        maxIntegerDigits = ((Integer) values[6]).intValue();
-        maxIntegerDigitsSpecified = ((Boolean) values[7]).booleanValue();
-        minFractionDigits = ((Integer) values[8]).intValue();
-        minFractionDigitsSpecified = ((Boolean) values[9]).booleanValue();
-        minIntegerDigits = ((Integer) values[10]).intValue();
-        minIntegerDigitsSpecified = ((Boolean) values[11]).booleanValue();
-        locale = (Locale) values[12];
-        pattern = (String) values[13];
-        type = (String) values[14];
+        groupingUsed = (Boolean) values[2];
+        integerOnly = (Boolean) values[3];
+        maxFractionDigits = (Integer) values[4];
+        maxIntegerDigits = (Integer) values[5];
+        minFractionDigits = (Integer) values[6];
+        minIntegerDigits = (Integer) values[7];
+        locale = (Locale) values[8];
+        pattern = (String) values[9];
+        type = (String) values[10];
 
     }
 
