@@ -36,12 +36,18 @@
 
 package com.sun.faces.application.resource;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.JarURLConnection;
+import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Collection;
-import java.util.List;
+import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+import java.util.jar.JarEntry;
 import java.util.regex.Pattern;
 
 import javax.faces.context.FacesContext;
@@ -80,21 +86,21 @@ public abstract class ResourceHelper {
 
 
     /**
-     * @param ctx the {@link FacesContext} for the current request
-     * @param path the path to the resource
+     * @param resource the resource to obtain an InputStream to
+     * @param ctx the {@link javax.faces.context.FacesContext} for the current request
      * @return an <code>InputStream</code> to the resource, or
      *  <code>null</code> if no resource is found
      */
-    public abstract InputStream getInputStream(String path, FacesContext ctx);
+    public abstract InputStream getInputStream(ResourceInfo resource, FacesContext ctx);
 
 
     /**
+     * @param resource the resource to obtain a URL reference to
      * @param ctx the {@link FacesContext} for the current request
-     * @param path the path to the resource
      * @return a URL to the specified resource, otherwise <code>null</code>
      *  if no resource is found
      */
-    public abstract URL getURL(String path, FacesContext ctx);
+    public abstract URL getURL(ResourceInfo resource, FacesContext ctx);
 
 
     /**
@@ -129,6 +135,34 @@ public abstract class ResourceHelper {
                                               String resourceName,
                                               String localePrefix,
                                               FacesContext ctx);
+
+
+    /**
+     * <p>
+     * The default implementation of this method will call through to
+     * {@link ResourceHelper#getURL(ResourceInfo, javax.faces.context.FacesContext)}
+     * and leverage the URL to obtain the date information of the resource and
+     * return the value of <code>URLConnection.getLastModified()</code>
+     * </p>
+     * @param resource the resource in question
+     * @param ctx the {@link FacesContext} for the current request
+     * @return the date of the resource in milliseconds (since epoch),
+     *  or <code>0</code> if the date cannot be determined
+     */
+    public long getLastModified(ResourceInfo resource, FacesContext ctx) {
+        
+        URL url = getURL(resource, ctx);
+        long ret;
+        try {
+            URLConnection con = url.openConnection();
+            ret = con.getLastModified();
+        } catch (IOException ioe) {
+            ret = 0;
+        }
+
+        return ((ret >= 0) ? ret : 0);
+
+    }
 
 
     // ------------------------------------------------------- Protected Methods

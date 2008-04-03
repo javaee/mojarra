@@ -100,23 +100,23 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
 
     /**
-     * @see ResourceHelper#getInputStream(String, javax.faces.context.FacesContext)
+     * @see ResourceHelper#getInputStream(ResourceInfo,javax.faces.context.FacesContext)
      */
-    public InputStream getInputStream(String path, FacesContext ctx) {
+    public InputStream getInputStream(ResourceInfo resource, FacesContext ctx) {
 
         ClassLoader loader = Util.getCurrentLoader(this.getClass());
-        return loader.getResourceAsStream(path);
+        return loader.getResourceAsStream(resource.getPath());
 
     }
 
 
     /**
-     * @see com.sun.faces.application.resource.ResourceHelper#getURL(String, javax.faces.context.FacesContext)
+     * @see com.sun.faces.application.resource.ResourceHelper#getURL(ResourceInfo, javax.faces.context.FacesContext)
      */
-    public URL getURL(String path, FacesContext ctx) {
+    public URL getURL(ResourceInfo resource, FacesContext ctx) {
 
         ClassLoader loader = Util.getCurrentLoader(this.getClass());
-        return loader.getResource(path);
+        return loader.getResource(resource.getPath());
 
     }
 

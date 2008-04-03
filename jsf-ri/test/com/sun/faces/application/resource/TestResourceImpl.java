@@ -39,20 +39,17 @@ package com.sun.faces.application.resource;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Map;
 
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
-import javax.servlet.http.HttpServletResponseWrapper;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletOutputStream;
 
 import com.sun.faces.cactus.ServletFacesTestCase;
-import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.cactus.TestingUtil;
 import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
 
@@ -280,21 +277,67 @@ public class TestResourceImpl extends ServletFacesTestCase {
     public void testDefaultHeaders() throws Exception {
 
         ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
-        assertTrue (handler != null);
+        assertTrue(handler != null);
 
         Resource resource = handler.createResource("duke-jar.gif");
         assertTrue(resource != null);
         Map<String,String> headers = resource.getResponseHeaders();
         assertTrue(headers != null);
-        assertTrue(headers.size() == 1);
-        String test = headers.get("Cache-Control");
-        assertTrue(test != null);
-        String control = "max-age="
-                         + WebConfiguration.WebContextInitParameter
-              .DefaultResourceMaxAge.getDefaultValue()
-                         + ", must-revalidate";
-        assertTrue(control.equals(test));
+        assertTrue(headers.size() == 3);
+        assertTrue(headers.get("Expires") != null);
+        assertTrue(headers.get("ETag") != null);
+        assertTrue(headers.get("Last-Modified") != null);
         
+    }
+
+
+    public void testUserAgentNeedsUpdate1() throws Exception {
+
+        ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
+        assertTrue(handler != null);
+
+        // no If-Modified-Since request header, so this should always
+        // return true
+        Resource resource = handler.createResource("duke-nv.gif");
+        assertTrue(resource.userAgentNeedsUpdate(getFacesContext()));
+
+        // set the creation date of the ResourceHandler back in time so that
+        // if the header was present it would return true - the lack of the header
+        // should result in true being returned in this case
+        Date date = new Date();
+        date.setYear(1980);
+        long origTime = (Long) TestingUtil.invokePrivateMethod("getCreationTime",
+                                                               null,
+                                                               null,
+                                                               ResourceHandlerImpl.class,
+                                                               handler);
+        TestingUtil.invokePrivateMethod("setCreationTime",
+                                        new Class[] { Long.TYPE },
+                                        new Object[] { date.getTime() },
+                                        ResourceHandlerImpl.class,
+                                        handler);
+        assertTrue(resource.userAgentNeedsUpdate(getFacesContext()));
+        TestingUtil.invokePrivateMethod("setCreationTime",
+                                        new Class[] { Long.TYPE },
+                                        new Object[] { origTime },
+                                        ResourceHandlerImpl.class,
+                                        handler);
+    }
+
+
+    public void beginUserAgentNeedsUpdate2(WebRequest req) {
+        req.addHeader("If-Modified-Since", "Sat, 29 Oct 1994 19:43:31 GMT");
+    }
+
+    public void testUserAgentNeedsUpdate2() throws Exception {
+
+        ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
+        assertTrue(handler != null);
+        // If-Modified-Since request header, so this should always
+        // return true
+        Resource resource = handler.createResource("duke-nv.gif");
+        assertTrue(!resource.userAgentNeedsUpdate(getFacesContext()));
+
     }
 
 

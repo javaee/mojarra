@@ -1,9 +1,14 @@
 package com.sun.faces.application.resource;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.JarURLConnection;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Set;
+import java.util.jar.JarEntry;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
@@ -54,22 +59,22 @@ public class WebappResourceHelper extends ResourceHelper {
 
 
     /**
-     * @see ResourceHelper#getInputStream(String, javax.faces.context.FacesContext)
+     * @see ResourceHelper#getInputStream(ResourceInfo,javax.faces.context.FacesContext)
      */
-    public InputStream getInputStream(String path, FacesContext ctx) {
+    public InputStream getInputStream(ResourceInfo resource, FacesContext ctx) {
 
-        return ctx.getExternalContext().getResourceAsStream(path);
+        return ctx.getExternalContext().getResourceAsStream(resource.getPath());
 
     }
 
 
     /**
-     * @see ResourceHelper#getURL(String, javax.faces.context.FacesContext)
+     * @see ResourceHelper#getURL(ResourceInfo, javax.faces.context.FacesContext)
      */
-    public URL getURL(String path, FacesContext ctx) {
+    public URL getURL(ResourceInfo resource, FacesContext ctx) {
 
         try {
-            return ctx.getExternalContext().getResource(path);
+            return ctx.getExternalContext().getResource(resource.getPath());
         } catch (MalformedURLException e) {
             return null;
         }

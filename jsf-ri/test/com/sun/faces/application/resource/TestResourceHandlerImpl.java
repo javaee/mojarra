@@ -320,6 +320,9 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     }
 
 
+    //==========================================================================
+    // Validate a resource streamed from the docroot of a webapp
+    //
     public void beginHandleResourceRequest1(WebRequest req) {
         req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
     }
@@ -336,11 +339,16 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
         byte[] test = wrapper.getBytes();
         assertTrue(Arrays.equals(control, test));
         assertTrue(response.containsHeader("content-length"));
-        assertTrue(response.containsHeader("cache-control"));
+        assertTrue(response.containsHeader("last-modified"));
+        assertTrue(response.containsHeader("expires"));
+        assertTrue(response.containsHeader("etag"));
         assertTrue(response.containsHeader("content-type"));
     }
 
 
+    //==========================================================================
+    // Validate a resource streamed from a JAR
+    //
     public void beginHandleResourceRequest2(WebRequest req) {
         req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces?ln=nvLibrary", null, null);
     }
@@ -360,12 +368,75 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
         byte[] test = wrapper.getBytes();
         assertTrue(Arrays.equals(control, test));
         assertTrue(response.containsHeader("content-length"));
-        assertTrue(response.containsHeader("cache-control"));
+        assertTrue(response.containsHeader("last-modified"));
+        assertTrue(response.containsHeader("expires"));
+        assertTrue(response.containsHeader("etag"));
         assertTrue(response.containsHeader("content-type"));
         
     }
 
 
+    //==========================================================================
+    // Validate a 304 is returned when a request contains the If-Modified-Since
+    // request header and the resource hasn't changed on the server side.
+    //
+    public void beginHandleResourceRequest3(WebRequest req) {
+        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces?ln=nvLibrary", null, null);
+        req.addHeader("If-Modified-Since", "Sat, 29 Oct 1994 19:43:31 GMT");
+    }
+
+
+    public void testHandleResourceRequest3() throws Exception {
+        ResourceHandler handler =
+              getFacesContext().getApplication().getResourceHandler();
+        assertTrue(handler != null);
+        handler.handleResourceRequest(getFacesContext());
+    }
+
+    public void endHandleResourceRequest3(WebResponse res) {
+        assertTrue(res.getStatusCode() == 304);
+    }
+
+
+    //==========================================================================
+    // Validate a 404 is returned when a request for a non existant resource
+    // is made
+    //
+    public void beginHandleResourceRequest4(WebRequest req) {
+        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-v.gif.faces?ln=nvLibrary", null, null);
+    }
+
+
+    public void testHandleResourceRequest4() throws Exception {
+        ResourceHandler handler =
+              getFacesContext().getApplication().getResourceHandler();
+        assertTrue(handler != null);
+        handler.handleResourceRequest(getFacesContext());
+    }
+
+    public void endHandleResourceRequest4(WebResponse res) {
+        assertTrue(res.getStatusCode() == 404);
+    }
+
+
+    //==========================================================================
+    // Validate a 404 is returned when a request for an excluded resource is made
+    //
+    public void beginHandleResourceRequest5(WebRequest req) {
+        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.class.faces?ln=nvLibrary", null, null);
+    }
+
+
+    public void testHandleResourceRequest5() throws Exception {
+        ResourceHandler handler =
+              getFacesContext().getApplication().getResourceHandler();
+        assertTrue(handler != null);
+        handler.handleResourceRequest(getFacesContext());
+    }
+
+    public void endHandleResourceRequest5(WebResponse res) {
+        assertTrue(res.getStatusCode() == 404);
+    }
 
 
 // ---------------------------------------------------------- Helper Methods

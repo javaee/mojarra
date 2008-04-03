@@ -71,7 +71,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
     ResourceManager manager = new ResourceManager();
     List<Pattern> excludePatterns;
     MimetypesFileTypeMap mimeTypeMap;
-    private final long creationTime;
+    private long creationTime;
     private WebConfiguration webconfig;
 
     // ------------------------------------------------------------ Constructors
@@ -195,16 +195,15 @@ public class ResourceHandlerImpl extends ResourceHandler {
             resource = createResource(resourceName, libraryName);
         }
 
-        if (resource != null) {
-
-            ExternalContext extContext = context.getExternalContext();
-            HttpServletResponse response =
+        ExternalContext extContext = context.getExternalContext();
+        HttpServletResponse response =
                   (HttpServletResponse) extContext.getResponse();
 
+        if (resource != null) {
             if (resource.userAgentNeedsUpdate(context)) {
                 ReadableByteChannel resourceChannel;
                 WritableByteChannel out;
-                ByteBuffer buf = ByteBuffer.allocate(8192);
+                ByteBuffer buf = ByteBuffer.allocate(4096);
                 try {
                     resourceChannel =
                           Channels.newChannel(resource.getInputStream());
@@ -214,7 +213,13 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
                     for (Map.Entry<String, String> cur :
                          resource.getResponseHeaders().entrySet()) {
-                        response.setHeader(cur.getKey(), cur.getValue());
+                        if ("last-modified".equalsIgnoreCase(cur.getKey())
+                              || "expires".equalsIgnoreCase(cur.getKey())) {
+                            response.setDateHeader(cur.getKey(),
+                                                   Long.parseLong(cur.getValue()));
+                        } else {
+                            response.setHeader(cur.getKey(), cur.getValue());
+                        }
                     }
                     while (-1 != (thisRead = resourceChannel.read(buf))) {
                         buf.rewind();
@@ -245,9 +250,11 @@ public class ResourceHandlerImpl extends ResourceHandler {
                     LOGGER.log(Level.WARNING, message, ioe);
                 }
             } else {
-                response.setStatus(304);
+                response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
             }
 
+        } else {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
 
 
@@ -259,6 +266,12 @@ public class ResourceHandlerImpl extends ResourceHandler {
     long getCreationTime() {
 
         return creationTime;
+
+    }
+
+    void setCreationTime(long creationTime) {
+
+        this.creationTime = creationTime;
 
     }
 
