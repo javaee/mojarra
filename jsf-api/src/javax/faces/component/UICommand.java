@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.79 2007/08/24 19:03:07 rlubke Exp $
+ * $Id: UICommand.java,v 1.80 2007/08/28 17:27:47 edburns Exp $
  */
 
 /*
@@ -397,17 +397,24 @@ public class UICommand extends UIComponentBase
     }
 
     /**
-     * <p>Intercept <code>queueEvent</code> and, for {@link ActionEvent}s,
-     * mark the phaseId for the event to be
-     * <code>PhaseId.APPLY_REQUEST_VALUES</code> if the
-     * <code>immediate</code> flag is true,
-     * <code>PhaseId.INVOKE_APPLICATION</code> otherwise.</p>
+
+     * <p>Intercept <code>queueEvent</code> and take the following
+     * action.  If the event is an <code>{@link ActionEvent}</code>,
+     * obtain the <code>UIComponent</code> instance from the event.  If
+     * the component is an <code>{@link ActionSource}</code> obtain the
+     * value of its "immediate" property.  If it is true, mark the
+     * phaseId for the event to be
+     * <code>PhaseId.APPLY_REQUEST_VALUES</code> otherwise, mark the
+     * phaseId to be <code>PhaseId.INVOKE_APPLICATION</code>.  The event
+     * must be passed on to <code>super.queueEvent()</code> before
+     * returning from this method.</p>
+
      */
 
     public void queueEvent(FacesEvent e) {
         UIComponent c = e.getComponent();
-        if (e instanceof ActionEvent && c instanceof UICommand) {
-            if (((UICommand) c).isImmediate()) {
+        if (e instanceof ActionEvent && c instanceof ActionSource) {
+            if (((ActionSource) c).isImmediate()) {
                 e.setPhaseId(PhaseId.APPLY_REQUEST_VALUES);
             } else {
                 e.setPhaseId(PhaseId.INVOKE_APPLICATION);
