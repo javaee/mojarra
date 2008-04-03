@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertDateTimeTag.java,v 1.26 2007/03/01 15:51:37 rlubke Exp $
+ * $Id: ConvertDateTimeTag.java,v 1.27 2007/04/25 04:07:00 rlubke Exp $
  */
 
 /*
@@ -29,6 +29,10 @@
 
 package com.sun.faces.taglib.jsf_core;
 
+import com.sun.faces.el.ELUtils;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.MessageUtils;
+
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
@@ -37,23 +41,18 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.DateTimeConverter;
 import javax.servlet.jsp.JspException;
-
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.TimeZone;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
-import com.sun.faces.el.ELUtils;
 
 
 /**
  * <p>ConvertDateTimeTag is a ConverterTag implementation for
  * javax.faces.convert.DateTimeConverter</p>
  *
- * @version $Id: ConvertDateTimeTag.java,v 1.26 2007/03/01 15:51:37 rlubke Exp $
+ * @version $Id: ConvertDateTimeTag.java,v 1.27 2007/04/25 04:07:00 rlubke Exp $
  */
 
 public class ConvertDateTimeTag extends AbstractConverterTag {
@@ -61,9 +60,7 @@ public class ConvertDateTimeTag extends AbstractConverterTag {
     private static final long serialVersionUID = -5815655767093677438L;
     private static ValueExpression CONVERTER_ID_EXPR = null;
 
-    // Log instance for this class
-    private static final Logger logger =
-            Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
+     private static final Logger LOGGER = FacesLogger.TAGLIB.getLogger();
 
     //
     // Instance Variables
@@ -82,8 +79,7 @@ public class ConvertDateTimeTag extends AbstractConverterTag {
     private String timeStyle;
     private TimeZone timeZone;
     private String type;// Log instance for this class
-    private static final Logger LOGGER =
-            Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
+
 
     // Attribute Instance Variables
 
@@ -238,8 +234,8 @@ public class ConvertDateTimeTag extends AbstractConverterTag {
                             "java.lang.String or java.util.Locale",
                             loc.getClass().getName()
                         };
-                        if (logger.isLoggable(Level.SEVERE)) {
-                            logger.log(Level.SEVERE,
+                        if (LOGGER.isLoggable(Level.SEVERE)) {
+                            LOGGER.log(Level.SEVERE,
                                        "jsf.core.tags.eval_result_not_expected_type",
                                        params);
                         }
@@ -271,8 +267,8 @@ public class ConvertDateTimeTag extends AbstractConverterTag {
                             "java.lang.String or java.util.TimeZone",
                             tz.getClass().getName()
                         };
-                        if (logger.isLoggable(Level.SEVERE)) {
-                            logger.log(Level.SEVERE,
+                        if (LOGGER.isLoggable(Level.SEVERE)) {
+                            LOGGER.log(Level.SEVERE,
                                        "jsf.core.tags.eval_result_not_expected_type",
                                        params);
                         }

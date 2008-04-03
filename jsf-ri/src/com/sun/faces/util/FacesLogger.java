@@ -1,5 +1,5 @@
 /*
- * $Id: FacesLogger.java,v 1.1 2007/04/22 21:57:53 rlubke Exp $
+ * $Id: FacesLogger.java,v 1.2 2007/04/25 04:07:02 rlubke Exp $
  */
 
 /*
@@ -28,6 +28,8 @@
  */
  
 package com.sun.faces.util;
+
+import java.util.logging.Logger;
 
 /**
  * <p/>
@@ -64,6 +66,10 @@ public enum FacesLogger {
 
     public String getResourcesName() {
         return LOGGER_RESOURCES;
+    }
+
+    public Logger getLogger() {
+        return Logger.getLogger(loggerName, LOGGER_RESOURCES);
     }
 
 }

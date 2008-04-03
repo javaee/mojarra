@@ -40,6 +40,7 @@ import com.sun.faces.renderkit.ApplicationObjectInputStream;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 /**
  * <p>A factory for creating <code>SerializationProvider</code>
@@ -60,8 +61,7 @@ public class SerializationProviderFactory {
      private static final String SERIALIZATION_PROVIDER_PROPERTY =
            RIConstants.FACES_PREFIX + "SerializationProvider";
 
-    private static final Logger LOGGER = Util.getLogger(Util.FACES_LOGGER 
-            + Util.APPLICATION_LOGGER);
+    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
 
     /**

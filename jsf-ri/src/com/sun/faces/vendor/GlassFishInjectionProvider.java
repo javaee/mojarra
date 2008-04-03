@@ -35,6 +35,7 @@ import com.sun.enterprise.deployment.JndiNameEnvironment;
 import com.sun.faces.spi.DiscoverableInjectionProvider;
 import com.sun.faces.spi.InjectionProviderException;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -48,8 +49,7 @@ import java.util.logging.Logger;
  */
 public class GlassFishInjectionProvider extends DiscoverableInjectionProvider {
 
-    private static final Logger LOGGER = Util.getLogger(Util.FACES_LOGGER
-                                                  + Util.APPLICATION_LOGGER);
+    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
     private InjectionManager injectionManager;
     private Switch theSwitch;
     private InvocationManager invokeMgr;

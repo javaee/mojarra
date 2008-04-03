@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.45 2007/04/22 21:41:03 rlubke Exp $
+ * $Id: ApplicationAssociate.java,v 1.46 2007/04/25 04:06:59 rlubke Exp $
  */
 
 /*
@@ -36,6 +36,7 @@ import com.sun.faces.spi.InjectionProvider;
 import com.sun.faces.spi.InjectionProviderFactory;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 import javax.el.CompositeELResolver;
 import javax.el.ELResolver;
@@ -71,8 +72,7 @@ import java.util.logging.Logger;
 public class ApplicationAssociate {
 
     // Log instance for this class
-    private static final Logger LOGGER = Util.getLogger(Util.FACES_LOGGER
-         + Util.APPLICATION_LOGGER);
+    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
     private static final String APPLICATION_IMPL_ATTR_NAME = RIConstants.FACES_PREFIX +
          "ApplicationImpl";

@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.45 2007/03/16 13:43:27 rlubke Exp $
+ * $Id: RestoreViewPhase.java,v 1.46 2007/04/25 04:07:01 rlubke Exp $
  */
 
 /*
@@ -38,6 +38,7 @@ import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.DebugUtil;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
@@ -59,14 +60,13 @@ import java.util.logging.Logger;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.45 2007/03/16 13:43:27 rlubke Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.46 2007/04/25 04:07:01 rlubke Exp $
  */
 
 public class RestoreViewPhase extends Phase {
 
 
-    private static Logger logger = Util.getLogger(Util.FACES_LOGGER
-                                                  + Util.LIFECYCLE_LOGGER);
+    private static Logger LOGGER = FacesLogger.LIFECYCLE.getLogger();
 
     private ApplicationAssociate associate;
 
@@ -82,8 +82,8 @@ public class RestoreViewPhase extends Phase {
 
     public void execute(FacesContext facesContext) throws FacesException {
 
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("Entering RestoreViewPhase");
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Entering RestoreViewPhase");
         }
         if (null == facesContext) {
             throw new FacesException(MessageUtils.getExceptionMessageString(
@@ -94,8 +94,8 @@ public class RestoreViewPhase extends Phase {
         //
         UIViewRoot viewRoot = facesContext.getViewRoot();
         if (viewRoot != null) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("Found a pre created view in FacesContext");
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("Found a pre created view in FacesContext");
             }
             facesContext.getViewRoot().setLocale(
                  facesContext.getExternalContext().getRequestLocale());
@@ -127,8 +127,8 @@ public class RestoreViewPhase extends Phase {
         }
 
         if (viewId == null) {
-            if (logger.isLoggable(Level.WARNING)) {
-                logger.warning("viewId is null");
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.warning("viewId is null");
             }
             throw new FacesException(MessageUtils.getExceptionMessageString(
                   MessageUtils.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
@@ -192,12 +192,12 @@ public class RestoreViewPhase extends Phase {
 
             doPerComponentActions(facesContext, viewRoot);           
             
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("Postback: Restored view for " + viewId);
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("Postback: Restored view for " + viewId);
             }
         } else {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("New request: creating a view for " + viewId);
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("New request: creating a view for " + viewId);
             }
             // if that fails, create one
             viewRoot = (Util.getViewHandler(facesContext)).
@@ -208,13 +208,13 @@ public class RestoreViewPhase extends Phase {
 
         facesContext.setViewRoot(viewRoot);
 
-        if (isPostBack && logger.isLoggable(Level.FINEST)) {
-            logger.log(Level.FINEST, "+=+=+=+=+=+= Restored View Printout for " + viewId);
-            DebugUtil.printTree(viewRoot, logger, Level.FINEST);
+        if (isPostBack && LOGGER.isLoggable(Level.FINEST)) {
+            LOGGER.log(Level.FINEST, "+=+=+=+=+=+= Restored View Printout for " + viewId);
+            DebugUtil.printTree(viewRoot, LOGGER, Level.FINEST);
         }
 
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("Exiting RestoreViewPhase");
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Exiting RestoreViewPhase");
         }
 
     }    

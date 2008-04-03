@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.44 2006/09/01 01:22:54 tony_robertson Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.45 2007/04/25 04:07:01 rlubke Exp $
  */
 
 /*
@@ -29,7 +29,8 @@
 
 package com.sun.faces.lifecycle;
 
-import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
+
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
@@ -57,8 +58,7 @@ public class UpdateModelValuesPhase extends Phase {
     // Instance Variables
     //
     // Log instance for this class
-    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
-            + Util.LIFECYCLE_LOGGER);
+    private static Logger LOGGER = FacesLogger.LIFECYCLE.getLogger();
 
     // Attribute Instance Variables
 
@@ -90,8 +90,8 @@ public class UpdateModelValuesPhase extends Phase {
 
 
     public void execute(FacesContext facesContext) {
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("Entering UpdateModelValuesPhase");
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Entering UpdateModelValuesPhase");
         }
         UIComponent component = facesContext.getViewRoot();
         assert (null != component);
@@ -109,11 +109,11 @@ public class UpdateModelValuesPhase extends Phase {
         // processUpdates should have been stored as a message
         // on FacesContext.
         if (exceptionMessage != null) {
-            if (logger.isLoggable(Level.WARNING)) {
-                logger.warning(exceptionMessage);
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.warning(exceptionMessage);
             }
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("Exiting UpdateModelValuesPhase");
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("Exiting UpdateModelValuesPhase");
             }
         }
     }

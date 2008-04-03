@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerImpl.java,v 1.23 2007/02/05 02:27:51 rlubke Exp $
+ * $Id: ActionListenerImpl.java,v 1.24 2007/04/25 04:06:59 rlubke Exp $
  */
 
 /*
@@ -46,6 +46,7 @@ import java.util.logging.Logger;
 import java.text.MessageFormat;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 /**
  * This action listener implementation processes action events during the
@@ -60,8 +61,7 @@ public class ActionListenerImpl implements ActionListener {
 
 
     // Log instance for this class
-    private static final Logger LOGGER = 
-          Util.getLogger(Util.FACES_LOGGER + Util.APPLICATION_LOGGER);
+    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
 
     // --------------------------------------------- Methods From ActionListener

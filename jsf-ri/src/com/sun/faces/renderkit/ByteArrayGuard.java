@@ -1,5 +1,5 @@
 /*
- * $Id: ByteArrayGuard.java,v 1.13 2006/05/31 21:13:05 rlubke Exp $
+ * $Id: ByteArrayGuard.java,v 1.14 2007/04/25 04:07:01 rlubke Exp $
  */
 
 /*
@@ -43,6 +43,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 /**
  * <p>This utility class is to provide both encryption and
@@ -58,8 +59,7 @@ public final class ByteArrayGuard {
 
 
      // Log instance for this class
-    private static final Logger LOGGER =
-            Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);
+    private static final Logger LOGGER = FacesLogger.RENDERKIT.getLogger();
     private static final int IV_LENGTH = 8;        
     private static final int KEY_LENGTH = 24;
       

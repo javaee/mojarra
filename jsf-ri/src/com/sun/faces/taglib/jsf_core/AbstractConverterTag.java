@@ -2,6 +2,7 @@ package com.sun.faces.taglib.jsf_core;
 
 import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.FacesLogger;
 
 import javax.faces.webapp.ConverterELTag;
 import javax.faces.convert.Converter;
@@ -23,8 +24,7 @@ import java.util.logging.Logger;
  */
 public class AbstractConverterTag extends ConverterELTag {
 
-    private static final Logger LOGGER =
-         Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
+    private static final Logger LOGGER = FacesLogger.TAGLIB.getLogger();
 
     /**
      * <p>The {@link javax.el.ValueExpression} that evaluates to an object that

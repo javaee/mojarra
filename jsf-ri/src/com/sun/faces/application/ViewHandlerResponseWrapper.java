@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerResponseWrapper.java,v 1.11 2007/02/15 02:46:29 rlubke Exp $ 
+ * $Id: ViewHandlerResponseWrapper.java,v 1.12 2007/04/25 04:06:59 rlubke Exp $ 
  */
 
 /*
@@ -52,6 +52,7 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 
 /**
@@ -62,8 +63,7 @@ import com.sun.faces.util.Util;
 public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper {
 
     // Log instance for this class
-    private static final Logger LOGGER = Util.getLogger(Util.FACES_LOGGER
-                                                        + Util.APPLICATION_LOGGER);
+    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
     
     private ByteArrayServletOutputStream basos;
     private PrintWriter pw ;

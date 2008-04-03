@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.118 2006/10/03 23:32:08 rlubke Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.119 2007/04/25 04:07:03 rlubke Exp $
  */
 
 /*
@@ -56,6 +56,7 @@ import java.util.logging.Logger;
 import com.sun.faces.util.MessageFactory;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 /**
  * <B>HtmlBasicRenderer</B> is a base class for implementing renderers
@@ -66,8 +67,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
 
     // Log instance for this class
-    protected static final Logger logger =
-          Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);
+    protected static final Logger logger = FacesLogger.RENDERKIT.getLogger();;
 
     // ------------------------------------------------------------ Constructors
 

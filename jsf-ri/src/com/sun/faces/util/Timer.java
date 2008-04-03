@@ -11,8 +11,7 @@ import java.util.logging.Logger;
  */
 public class Timer {
 
-    private static final Logger LOGGER =
-         Logger.getLogger(FacesLogger.TIMING.getLoggerName());
+    private static final Logger LOGGER = FacesLogger.TIMING.getLogger();
 
     long start;
     long stop;

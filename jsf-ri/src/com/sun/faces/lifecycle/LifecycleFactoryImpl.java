@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactoryImpl.java,v 1.30 2006/05/17 19:00:46 rlubke Exp $
+ * $Id: LifecycleFactoryImpl.java,v 1.31 2007/04/25 04:07:01 rlubke Exp $
  */
 
 /*
@@ -39,8 +39,8 @@ import javax.faces.event.PhaseId;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
 
-import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.FacesLogger;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -49,7 +49,7 @@ import java.util.logging.Level;
  * <B>LifecycleFactoryImpl</B> is the stock implementation of Lifecycle
  * in the JSF RI. <P>
  *
- * @version $Id: LifecycleFactoryImpl.java,v 1.30 2006/05/17 19:00:46 rlubke Exp $
+ * @version $Id: LifecycleFactoryImpl.java,v 1.31 2007/04/25 04:07:01 rlubke Exp $
  * @see	javax.faces.lifecycle.LifecycleFactory
  */
 
@@ -62,8 +62,7 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
     static final int LAST_PHASE = PhaseId.RENDER_RESPONSE.getOrdinal();
 
     // Log instance for this class
-    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
-            + Util.LIFECYCLE_LOGGER);
+    private static Logger LOGGER = FacesLogger.LIFECYCLE.getLogger();
 
     //
     // Class Variables
@@ -92,8 +91,8 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
         lifecycleMap.put(LifecycleFactory.DEFAULT_LIFECYCLE,
                          new LifecycleWrapper(new LifecycleImpl(),
                                               false));
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("Created Default Lifecycle");
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Created Default Lifecycle");
         }
         lock = new Object();
     }
@@ -142,8 +141,8 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
             message = MessageUtils.getExceptionMessageString(
                 MessageUtils.LIFECYCLE_ID_NOT_FOUND_ERROR_MESSAGE_ID,
                 params);
-            if (logger.isLoggable(Level.WARNING)) {
-                logger.warning(message);
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.warning(message);
             }
             throw new IllegalArgumentException(message);
         }
@@ -154,8 +153,8 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
             message = MessageUtils.getExceptionMessageString(
                 MessageUtils.LIFECYCLE_ID_ALREADY_ADDED_ID,
                 params);
-            if (logger.isLoggable(Level.WARNING)) {
-                logger.warning(message);
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.warning(message);
             }
             throw new IllegalStateException(message);
         }
@@ -166,8 +165,8 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
             message = MessageUtils.getExceptionMessageString(
                 MessageUtils.PHASE_ID_OUT_OF_BOUNDS_ERROR_MESSAGE_ID,
                 params);
-            if (logger.isLoggable(Level.WARNING)) {
-                logger.warning(message);
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.warning(message);
             }
             throw new IllegalArgumentException(message);
         }
@@ -192,15 +191,15 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
             String message =
                 MessageUtils.getExceptionMessageString(MessageUtils.LIFECYCLE_ID_ALREADY_ADDED_ID,
                                          params);
-            if (logger.isLoggable(Level.WARNING)) {
-                logger.warning(MessageUtils.getExceptionMessageString(
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.warning(MessageUtils.getExceptionMessageString(
                         MessageUtils.LIFECYCLE_ID_ALREADY_ADDED_ID,params));
             }
             throw new IllegalArgumentException(message);
         }
         lifecycleMap.put(lifecycleId, new LifecycleWrapper(lifecycle, false));
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("addedLifecycle: " + lifecycleId + " " + lifecycle);
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("addedLifecycle: " + lifecycleId + " " + lifecycle);
         }
     }
 
@@ -220,8 +219,8 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
                 MessageUtils.getExceptionMessageString(
                     MessageUtils.CANT_CREATE_LIFECYCLE_ERROR_MESSAGE_ID,
                     params);
-            if (logger.isLoggable(Level.WARNING)) {
-                logger.warning("LifecycleId " + lifecycleId + " does not exist");
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.warning("LifecycleId " + lifecycleId + " does not exist");
             }
             throw new IllegalArgumentException(message);
         }
@@ -230,8 +229,8 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
         result = wrapper.instance;
         wrapper.created = true;
 
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("getLifecycle: " + lifecycleId + " " + result);
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("getLifecycle: " + lifecycleId + " " + result);
         }
         return result;
     }

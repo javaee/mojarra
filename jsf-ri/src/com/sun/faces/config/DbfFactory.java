@@ -21,8 +21,7 @@ import java.util.logging.Logger;
  */
 public class DbfFactory {
 
-    private static final Logger LOGGER =
-         Logger.getLogger(FacesLogger.CONFIG.getLoggerName());
+    private static final Logger LOGGER =FacesLogger.CONFIG.getLogger();
 
     private static final String JAXP_SCHEMA_LANGUAGE =
         "http://java.sun.com/xml/jaxp/properties/schemaLanguage";

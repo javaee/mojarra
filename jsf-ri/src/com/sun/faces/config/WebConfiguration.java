@@ -18,7 +18,7 @@
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
  * 
- * [WebConfiguration] [$Id: WebConfiguration.java,v 1.20 2007/04/22 21:41:04 rlubke Exp $] [Apr 2, 2006]
+ * [WebConfiguration] [$Id: WebConfiguration.java,v 1.21 2007/04/25 04:07:00 rlubke Exp $] [Apr 2, 2006]
  * 
  * Copyright 2006 Sun Microsystems Inc. All Rights Reserved
  */
@@ -27,6 +27,7 @@ package com.sun.faces.config;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -45,8 +46,7 @@ public class WebConfiguration {
 
 
     // Log instance for this class
-    private static final Logger LOGGER = Util.getLogger(Util.FACES_LOGGER
-                                                        + Util.CONFIG_LOGGER);
+    private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
 
     // A Simple regular expression of allowable boolean values
     private static final Pattern ALLOWABLE_BOOLEANS =

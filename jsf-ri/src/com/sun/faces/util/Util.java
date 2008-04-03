@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.210 2007/04/23 20:23:06 rlubke Exp $
+ * $Id: Util.java,v 1.211 2007/04/25 04:07:02 rlubke Exp $
  */
 
 /*
@@ -31,12 +31,13 @@
 
 package com.sun.faces.util;
 
-import javax.el.ELContext;
+import com.sun.faces.RIConstants;
+import com.sun.faces.renderkit.RenderKitImpl;
+
 import javax.el.ELResolver;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
-import javax.faces.event.AbortProcessingException;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.StateManager;
@@ -47,50 +48,34 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.convert.Converter;
-import javax.faces.el.ReferenceSyntaxException;
-import javax.faces.el.ValueBinding;
+import javax.faces.event.AbortProcessingException;
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.servlet.ServletContext;
-
 import java.beans.FeatureDescriptor;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.renderkit.RenderKitImpl;
-import com.sun.faces.spi.ManagedBeanFactory.Scope;
-
 /**
  * <B>Util</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.210 2007/04/23 20:23:06 rlubke Exp $
+ * @version $Id: Util.java,v 1.211 2007/04/25 04:07:02 rlubke Exp $
  */
 
 public class Util {
 
-    //
-    // Private/Protected Constants
-    //
-    public static final String FACES_LOGGER = "javax.enterprise.resource.webcontainer.jsf";
-    
-    public static final String FACES_LOG_STRINGS = 
-            "com.sun.faces.LogStrings";        
     
     // Log instance for this class
-    private static final Logger LOGGER = getLogger(FACES_LOGGER);
+    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
     // README - make sure to add the message identifier constant
     // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution
@@ -234,10 +219,6 @@ public class Util {
             loader = fallbackClass.getClass().getClassLoader();
         }
         return loader;
-    }
-    
-    public static Logger getLogger( String loggerName ) {
-        return Logger.getLogger(loggerName, FACES_LOG_STRINGS );
     }
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerTag.java,v 1.35 2006/12/18 18:58:15 rlubke Exp $
+ * $Id: ActionListenerTag.java,v 1.36 2007/04/25 04:07:00 rlubke Exp $
  */
 
 /*
@@ -46,6 +46,7 @@ import java.io.Serializable;
 
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 
 /**
@@ -78,8 +79,7 @@ public class ActionListenerTag extends TagSupport {
     // ------------------------------------------------------------- Attributes
 
     private static final long serialVersionUID = -5222351612904952740L;
-    private static final Logger logger =
-         Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
+    private static final Logger logger = FacesLogger.TAGLIB.getLogger();
     /**
      * <p>The fully qualified class name of the {@link ActionListener}
      * instance to be created.</p>

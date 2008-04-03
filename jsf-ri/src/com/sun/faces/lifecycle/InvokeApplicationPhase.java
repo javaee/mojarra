@@ -1,5 +1,5 @@
 /*
- * $Id: InvokeApplicationPhase.java,v 1.21 2006/03/29 23:03:45 rlubke Exp $
+ * $Id: InvokeApplicationPhase.java,v 1.22 2007/04/25 04:07:00 rlubke Exp $
  */
 
 /*
@@ -39,13 +39,13 @@ import javax.faces.event.PhaseId;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
-import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 /**
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: InvokeApplicationPhase.java,v 1.21 2006/03/29 23:03:45 rlubke Exp $
+ * @version $Id: InvokeApplicationPhase.java,v 1.22 2007/04/25 04:07:00 rlubke Exp $
  */
 
 public class InvokeApplicationPhase extends Phase {
@@ -59,8 +59,7 @@ public class InvokeApplicationPhase extends Phase {
     //
 
     // Log instance for this class
-    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
-            + Util.LIFECYCLE_LOGGER);
+    private static Logger LOGGER = FacesLogger.LIFECYCLE.getLogger();
 
     //
     // Instance Variables
@@ -86,8 +85,8 @@ public class InvokeApplicationPhase extends Phase {
 
     public void execute(FacesContext facesContext) throws FacesException {
 
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("Entering InvokeApplicationsPhase");
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Entering InvokeApplicationsPhase");
         }
 
         UIViewRoot root = facesContext.getViewRoot();
@@ -98,15 +97,15 @@ public class InvokeApplicationPhase extends Phase {
         } catch (RuntimeException re) {
             String exceptionMessage = re.getMessage();
             if (null != exceptionMessage) {
-                if (logger.isLoggable(Level.WARNING)) {
-                    logger.log(Level.WARNING, exceptionMessage, re);
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.log(Level.WARNING, exceptionMessage, re);
                 }
             }
             throw new FacesException(exceptionMessage, re);
         }
 
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("Exiting InvokeApplicationsPhase");
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Exiting InvokeApplicationsPhase");
         }
     }
 

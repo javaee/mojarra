@@ -45,6 +45,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 /**
  * <p>
@@ -491,8 +492,7 @@ public class ConverterPropertyEditorFactory {
         }
     }
 
-    private static final Logger logger = Util
-        .getLogger(ConverterPropertyEditorFactory.class.getName());
+    private static final Logger logger = FacesLogger.APPLICATION.getLogger();
     private static final Pattern UnderscorePattern = Pattern.compile("_+");
     private static final Pattern SingleUnderscorePattern = Pattern
         .compile("([^_])_([^_])");

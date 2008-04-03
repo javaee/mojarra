@@ -31,6 +31,7 @@ import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParamet
 import com.sun.faces.renderkit.html_basic.HtmlBasicRenderer.Param;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -201,8 +202,7 @@ public class RenderKitUtils {
     private static final String SUN_JSF_JS = RIConstants.FACES_PREFIX + "sunJsfJs";        
                           
     
-    protected static final Logger LOGGER = 
-            Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);
+    protected static final Logger LOGGER = FacesLogger.RENDERKIT.getLogger();
           
 
     // ------------------------------------------------------------ Constructors

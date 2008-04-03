@@ -1,5 +1,5 @@
 /*
- * $Id: ColumnTag.java,v 1.19 2006/10/03 23:32:12 rlubke Exp $
+ * $Id: ColumnTag.java,v 1.20 2007/04/25 04:07:03 rlubke Exp $
  */
 
 /*
@@ -39,12 +39,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 public class ColumnTag extends UIComponentELTag {
 
     // Log instance for this class
-    private static final Logger logger = 
-            Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
+    private static final Logger logger = FacesLogger.TAGLIB.getLogger();
 
     //
     // Instance Variables

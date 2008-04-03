@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationFactoryImpl.java,v 1.16 2007/02/05 04:04:36 rlubke Exp $
+ * $Id: ApplicationFactoryImpl.java,v 1.17 2007/04/25 04:06:59 rlubke Exp $
  */
 
 /*
@@ -31,6 +31,7 @@ package com.sun.faces.application;
 
 import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.FacesLogger;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -54,8 +55,7 @@ import javax.faces.application.ApplicationFactory;
 public class ApplicationFactoryImpl extends ApplicationFactory {
 
    // Log instance for this class
-    private static final Logger logger = Util.getLogger(Util.FACES_LOGGER 
-            + Util.APPLICATION_LOGGER);
+    private static final Logger logger = FacesLogger.APPLICATION.getLogger();
     //
     // Protected Constants
     //

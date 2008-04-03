@@ -41,6 +41,7 @@ import javax.faces.convert.ConverterException;
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageFactory;
+import com.sun.faces.util.FacesLogger;
 
 /**
  * Abstract base for a {@link java.beans.PropertyEditor} that delegates to a
@@ -51,8 +52,7 @@ import com.sun.faces.util.MessageFactory;
  * ConverterPropertyEditor code).
  */
 public abstract class ConverterPropertyEditorBase extends PropertyEditorSupport {
-    protected static final Logger logger = Util
-        .getLogger(ConverterPropertyEditorBase.class.getName());
+    protected static final Logger logger = FacesLogger.APPLICATION.getLogger();
     // Name of the request scope attribute that will indicate the current
     // component being processed.
     public static final String TARGET_COMPONENT_ATTRIBUTE_NAME = RIConstants.FACES_PREFIX

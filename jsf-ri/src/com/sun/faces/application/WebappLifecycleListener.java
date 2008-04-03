@@ -28,6 +28,7 @@ package com.sun.faces.application;
 import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.spi.ManagedBeanFactory.Scope;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 import com.sun.faces.mgbean.BeanManager;
 
 import javax.servlet.ServletContext;
@@ -65,8 +66,7 @@ public class WebappLifecycleListener implements ServletRequestListener,
       ServletContextListener {
 
     // Log instance for this class
-    private static final Logger LOGGER =
-          Util.getLogger(Util.FACES_LOGGER + Util.APPLICATION_LOGGER);
+    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
     
     private ServletContext servletContext;
     private ApplicationAssociate applicationAssociate;

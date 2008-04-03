@@ -2,7 +2,7 @@
  * JSFVersionTracker
  *
  * Created on February 15, 2006, 11:41 AM
- * $Id: JSFVersionTracker.java,v 1.12 2007/03/13 02:39:05 rlubke Exp $
+ * $Id: JSFVersionTracker.java,v 1.13 2007/04/25 04:07:00 rlubke Exp $
  */
 
 /*
@@ -33,6 +33,8 @@
 package com.sun.faces.config;
 
 import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.util.FacesLogger;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -92,9 +94,7 @@ public class JSFVersionTracker implements Serializable {
      * <p>The <code>Logger</code> instance for this class.</p>
      */
     // Log instance for this class
-    private static final Logger LOGGER = 
-            Logger.getLogger("javax.enterprise.resource.webcontainer.jsf.config",
-                             "com.sun.faces.LogStrings");
+    private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
     
     //------------------------------------------------------------------- Private Methods
 

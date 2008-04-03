@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeListenerTag.java,v 1.28 2006/12/18 18:58:15 rlubke Exp $
+ * $Id: ValueChangeListenerTag.java,v 1.29 2007/04/25 04:07:00 rlubke Exp $
  */
 
 /*
@@ -32,6 +32,7 @@ package com.sun.faces.taglib.jsf_core;
 
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 import javax.el.ValueExpression;
 import javax.faces.component.EditableValueHolder;
@@ -77,8 +78,7 @@ public class ValueChangeListenerTag extends TagSupport {
     // ------------------------------------------------------------- Attributes
 
     private static final long serialVersionUID = -212845116876281363L;
-    private static final Logger logger =
-         Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
+    private static final Logger LOGGER = FacesLogger.TAGLIB.getLogger();
 
 
     /**
@@ -232,8 +232,8 @@ public class ValueChangeListenerTag extends TagSupport {
             if (instance != null) {
                 instance.processValueChange(event);
             } else {
-                 if (logger.isLoggable(Level.WARNING)) {
-                    logger.log(Level.WARNING,
+                 if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.log(Level.WARNING,
                                "jsf.core.taglib.action_or_valuechange_listener.null_type_binding",
                                new Object[] {
                                 "ValueChangeListener", 

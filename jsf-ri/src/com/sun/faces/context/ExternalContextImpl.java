@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.56 2007/04/02 18:45:07 rlubke Exp $
+ * $Id: ExternalContextImpl.java,v 1.57 2007/04/25 04:06:59 rlubke Exp $
  */
 
 /*
@@ -72,13 +72,14 @@ import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 /**
  * <p>This implementation of {@link ExternalContext} is specific to the
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.56 2007/04/02 18:45:07 rlubke Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.57 2007/04/25 04:06:59 rlubke Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -101,8 +102,7 @@ public class ExternalContextImpl extends ExternalContext {
     
     
     // Log instance for this class
-    static Logger logger = Util.getLogger(Util.FACES_LOGGER 
-            + Util.CONTEXT_LOGGER);    
+    private static Logger LOGGER = FacesLogger.CONTEXT.getLogger();    
 
     static final Class theUnmodifiableMapClass =
         Collections.unmodifiableMap(new HashMap<Object,Object>()).getClass();

@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.103 2007/04/23 22:04:04 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.104 2007/04/25 04:07:00 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -91,8 +91,7 @@ import java.text.MessageFormat;
 public class ConfigureListener implements ServletContextListener {
 
 
-    private static final Logger LOGGER =
-         Logger.getLogger(FacesLogger.CONFIG.getLoggerName());
+    private static final Logger LOGGER =FacesLogger.CONFIG.getLogger();
 
 
     /**

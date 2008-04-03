@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanConfigProcessor.java,v 1.2 2007/04/24 19:04:21 rlubke Exp $
+ * $Id: ManagedBeanConfigProcessor.java,v 1.3 2007/04/25 04:06:58 rlubke Exp $
  */
 
 /*
@@ -54,8 +54,7 @@ import java.text.MessageFormat;
  */
 public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
 
-    private static final Logger LOGGER =
-         Logger.getLogger(FacesLogger.CONFIG.getLoggerName());
+    private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
 
     /**
      * <p>/faces-config/managed-bean</p>

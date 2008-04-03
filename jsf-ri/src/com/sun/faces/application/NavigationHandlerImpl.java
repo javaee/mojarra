@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.54 2007/03/13 02:39:01 rlubke Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.55 2007/04/25 04:06:59 rlubke Exp $
  */
 
 /*
@@ -47,6 +47,7 @@ import java.util.logging.Logger;
 import com.sun.faces.config.ConfigureListener;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 /**
  * <p><strong>NavigationHandlerImpl</strong> is the class that implements
@@ -62,8 +63,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
     //
 
     // Log instance for this class
-    private static final Logger logger = Util.getLogger(Util.FACES_LOGGER
-                                                  + Util.APPLICATION_LOGGER);
+    private static final Logger logger = FacesLogger.APPLICATION.getLogger();
 
     //
     // Class Variables

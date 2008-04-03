@@ -1,5 +1,5 @@
 /*
- * $Id: RenderResponsePhase.java,v 1.23 2006/11/14 21:01:35 rlubke Exp $
+ * $Id: RenderResponsePhase.java,v 1.24 2007/04/25 04:07:01 rlubke Exp $
  */
 
 /*
@@ -47,22 +47,21 @@ import java.util.logging.Logger;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.TypedCollections;
-import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 
 /**
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RenderResponsePhase.java,v 1.23 2006/11/14 21:01:35 rlubke Exp $
+ * @version $Id: RenderResponsePhase.java,v 1.24 2007/04/25 04:07:01 rlubke Exp $
  */
 
 public class RenderResponsePhase extends Phase {
 
 
     // Log instance for this class
-    private static Logger logger = Util.getLogger(Util.FACES_LOGGER
-         + Util.LIFECYCLE_LOGGER);
+    private static Logger LOGGER = FacesLogger.LIFECYCLE.getLogger();
 
 
     public RenderResponsePhase() {
@@ -76,18 +75,18 @@ public class RenderResponsePhase extends Phase {
 
 
     public void execute(FacesContext facesContext) throws FacesException {
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("Entering RenderResponsePhase");
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Entering RenderResponsePhase");
         }
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("About to render view " +
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("About to render view " +
                  facesContext.getViewRoot().getViewId());
         }
         try {
             Map<String, Object> requestMap = facesContext.getExternalContext().getRequestMap();
 
-            //Setup message display logger.
-            if (logger.isLoggable(Level.INFO)) {
+            //Setup message display LOGGER.
+            if (LOGGER.isLoggable(Level.INFO)) {
                 Iterator<String> clientIdIter = facesContext.getClientIdsWithMessages();
 
                 //If Messages are queued
@@ -106,8 +105,8 @@ public class RenderResponsePhase extends Phase {
             facesContext.getApplication().getViewHandler().
                  renderView(facesContext, facesContext.getViewRoot());
 
-            //display results of message display logger
-            if (logger.isLoggable(Level.INFO) &&
+            //display results of message display LOGGER
+            if (LOGGER.isLoggable(Level.INFO) &&
                  requestMap.containsKey(RIConstants.CLIENT_ID_MESSAGES_NOT_DISPLAYED)) {
 
                 //remove so Set does not get modified when displaying messages.
@@ -128,14 +127,14 @@ public class RenderResponsePhase extends Phase {
                             builder.append("), detail=(").append(message.getDetail()).append(")]");
                         }
                     }
-                    logger.log(Level.INFO, "jsf.non_displayed_message", builder.toString());
+                    LOGGER.log(Level.INFO, "jsf.non_displayed_message", builder.toString());
                 }
             }
         } catch (IOException e) {
             throw new FacesException(e.getMessage(), e);
         }
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("Exiting RenderResponsePhase");
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Exiting RenderResponsePhase");
         }
     }
 

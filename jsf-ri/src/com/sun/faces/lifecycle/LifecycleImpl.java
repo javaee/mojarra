@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.77 2007/04/23 20:23:04 rlubke Exp $
+ * $Id: LifecycleImpl.java,v 1.78 2007/04/25 04:07:01 rlubke Exp $
  */
 
 /*
@@ -33,6 +33,7 @@ import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.Timer;
+import com.sun.faces.util.FacesLogger;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
@@ -61,8 +62,7 @@ public class LifecycleImpl extends Lifecycle {
 
 
     // Log instance for this class
-    private static Logger LOGGER = Util.getLogger(Util.FACES_LOGGER 
-            + Util.LIFECYCLE_LOGGER);    
+    private static Logger LOGGER = FacesLogger.LIFECYCLE.getLogger();
 
 
     // ------------------------------------------------------ Instance Variables

@@ -1,5 +1,5 @@
 /*
- * $Id: ProcessValidationsPhase.java,v 1.27 2006/03/29 23:03:46 rlubke Exp $
+ * $Id: ProcessValidationsPhase.java,v 1.28 2007/04/25 04:07:01 rlubke Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import javax.faces.event.PhaseId;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
-import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 /**
  * ProcessValidationsPhase executes <code>processValidators</code> on each
@@ -50,8 +50,7 @@ public class ProcessValidationsPhase extends Phase {
 //
     
 // Log instance for this class
-   private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
-            + Util.LIFECYCLE_LOGGER);
+   private static Logger LOGGER = FacesLogger.LIFECYCLE.getLogger();
 
 //
 // Class Variables
@@ -90,8 +89,8 @@ public class ProcessValidationsPhase extends Phase {
 
 
     public void execute(FacesContext facesContext) throws FacesException {
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("Entering ProcessValidationsPhase");
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Entering ProcessValidationsPhase");
         }
         UIComponent component = facesContext.getViewRoot();
         assert (null != component);
@@ -101,14 +100,14 @@ public class ProcessValidationsPhase extends Phase {
         } catch (RuntimeException re) {
             String exceptionMessage = re.getMessage();
             if (null != exceptionMessage) {
-                if (logger.isLoggable(Level.WARNING)) {
-                    logger.log(Level.WARNING, exceptionMessage, re);
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.log(Level.WARNING, exceptionMessage, re);
                 }
             }
 	    throw new FacesException(exceptionMessage, re);
         }
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("Exiting ProcessValidationsPhase");
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Exiting ProcessValidationsPhase");
         }
     }
 

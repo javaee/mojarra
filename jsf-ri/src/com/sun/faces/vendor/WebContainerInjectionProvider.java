@@ -28,6 +28,7 @@ package com.sun.faces.vendor;
 import com.sun.faces.spi.InjectionProvider;
 import com.sun.faces.spi.InjectionProviderException;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 import javax.annotation.PreDestroy;
 import javax.annotation.PostConstruct;
@@ -48,8 +49,7 @@ import java.util.logging.Level;
 public class WebContainerInjectionProvider implements InjectionProvider {
 
 
-    private static final Logger LOGGER = Util.getLogger(Util.FACES_LOGGER
-            + Util.APPLICATION_LOGGER);
+    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
 
     // ------------------------------------------ Methods from InjectionProvider

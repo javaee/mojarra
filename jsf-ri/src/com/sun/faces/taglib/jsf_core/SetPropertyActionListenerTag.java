@@ -1,5 +1,5 @@
 /*
- * $Id: SetPropertyActionListenerTag.java,v 1.7 2006/09/05 23:42:05 rlubke Exp $
+ * $Id: SetPropertyActionListenerTag.java,v 1.8 2007/04/25 04:07:00 rlubke Exp $
  */
 
 /*
@@ -42,6 +42,7 @@ import java.util.logging.Logger;
 
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 
 /**
@@ -80,8 +81,7 @@ public class SetPropertyActionListenerTag extends TagSupport {
     // ------------------------------------------------------------- Attributes
 
     static final long serialVersionUID = 7966883942522780374L;
-    private static final Logger logger =
-            Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
+    private static final Logger LOGGER = FacesLogger.TAGLIB.getLogger();
     /**
      * <p>The target of the value attribute.</p>
      */

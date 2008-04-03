@@ -1,5 +1,5 @@
 /*
- * $Id: PhaseListenerTag.java,v 1.13 2006/12/18 18:58:15 rlubke Exp $
+ * $Id: PhaseListenerTag.java,v 1.14 2007/04/25 04:07:00 rlubke Exp $
  */
 
 /*
@@ -31,6 +31,7 @@ package com.sun.faces.taglib.jsf_core;
 
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
@@ -59,8 +60,7 @@ import java.util.logging.Logger;
 public class PhaseListenerTag extends TagSupport {
 
 
-    private static final Logger logger =
-         Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
+    private static final Logger LOGGER = FacesLogger.TAGLIB.getLogger();
 
 
     // ------------------------------------------------------------- Attributes
@@ -258,9 +258,9 @@ public class PhaseListenerTag extends TagSupport {
             if (instance != null) {
                 return instance;
             } else {
-                 if (logger.isLoggable(Level.WARNING)) {
+                 if (LOGGER.isLoggable(Level.WARNING)) {
                     // PENDING i18n
-                    logger.warning("PhaseListener will not be processed - " +
+                    LOGGER.warning("PhaseListener will not be processed - " +
                          "both 'binding' and 'type' are null");
                 }
                 return null;

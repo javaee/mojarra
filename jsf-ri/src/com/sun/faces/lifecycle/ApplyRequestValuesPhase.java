@@ -1,5 +1,5 @@
 /*
- * $Id: ApplyRequestValuesPhase.java,v 1.23 2006/03/29 23:03:45 rlubke Exp $
+ * $Id: ApplyRequestValuesPhase.java,v 1.24 2007/04/25 04:07:01 rlubke Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import javax.faces.event.PhaseId;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
-import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 /**
  * ApplyRequestValuesPhase executes <code>processDecodes</code> on each
@@ -59,8 +59,7 @@ public class ApplyRequestValuesPhase extends Phase {
     // Instance Variables
     //
     // Log instance for this class
-    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
-            + Util.LIFECYCLE_LOGGER);
+    private static Logger LOGGER = FacesLogger.LIFECYCLE.getLogger();
 
     // Relationship Instance Variables
 
@@ -90,8 +89,8 @@ public class ApplyRequestValuesPhase extends Phase {
 
     public void execute(FacesContext facesContext) throws FacesException {
 
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("Entering ApplyRequestValuesPhase");
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Entering ApplyRequestValuesPhase");
         }
 
         UIComponent component = facesContext.getViewRoot();
@@ -102,14 +101,14 @@ public class ApplyRequestValuesPhase extends Phase {
         } catch (RuntimeException re) {
             String exceptionMessage = re.getMessage();
             if (null != exceptionMessage) {
-                if (logger.isLoggable(Level.WARNING)) {
-                    logger.log(Level.WARNING,exceptionMessage, re);
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.log(Level.WARNING,exceptionMessage, re);
                 }
             }
             throw new FacesException(exceptionMessage, re);
         }
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("Exiting ApplyRequestValuesPhase");
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Exiting ApplyRequestValuesPhase");
         }
     }
 

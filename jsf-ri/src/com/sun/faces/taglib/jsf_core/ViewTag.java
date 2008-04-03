@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.44 2006/09/05 23:42:06 rlubke Exp $
+ * $Id: ViewTag.java,v 1.45 2007/04/25 04:07:00 rlubke Exp $
  */
 
 /*
@@ -54,7 +54,7 @@ import java.util.logging.Logger;
 
 import com.sun.faces.application.ViewHandlerResponseWrapper;
 import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 /**
  * All JSF component tags must be nested within a f:view tag.  This tag
@@ -62,7 +62,7 @@ import com.sun.faces.util.Util;
  * Renderer. It exists mainly to provide a guarantee that all faces
  * components reside inside of this tag.
  *
- * @version $Id: ViewTag.java,v 1.44 2006/09/05 23:42:06 rlubke Exp $
+ * @version $Id: ViewTag.java,v 1.45 2007/04/25 04:07:00 rlubke Exp $
  */
 
 public class ViewTag extends UIComponentELTag {
@@ -75,8 +75,7 @@ public class ViewTag extends UIComponentELTag {
     // Class Variables
     //
 
-    private static final Logger logger =
-            Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
+    private static final Logger LOGGER = FacesLogger.TAGLIB.getLogger();
 
     //
     // Instance Variables
@@ -178,13 +177,13 @@ public class ViewTag extends UIComponentELTag {
         try {
             rc = super.doStartTag();
         } catch (JspException e) {
-            if (logger.isLoggable(Level.WARNING)) {
-                logger.log(Level.WARNING, "Can't leverage base class", e);
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.log(Level.WARNING, "Can't leverage base class", e);
             }
             throw e;
         } catch (Throwable t) {
-             if (logger.isLoggable(Level.WARNING)) {
-                logger.log(Level.WARNING, "Can't leverage base class", t);
+             if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.log(Level.WARNING, "Can't leverage base class", t);
             }
             throw new JspException(t);
         }

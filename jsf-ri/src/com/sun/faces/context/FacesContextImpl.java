@@ -1,5 +1,5 @@
  /*
- * $Id: FacesContextImpl.java,v 1.86 2007/02/13 05:38:22 rlubke Exp $
+ * $Id: FacesContextImpl.java,v 1.87 2007/04/25 04:06:58 rlubke Exp $
  */
 
 /*
@@ -57,7 +57,7 @@ import java.util.logging.Logger;
 import com.sun.faces.RIConstants;
 import com.sun.faces.el.ELContextImpl;
 import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
  public class FacesContextImpl extends FacesContext {
 
@@ -73,8 +73,7 @@ import com.sun.faces.util.Util;
      //
 
      // Log instance for this class
-     private static Logger logger = Util.getLogger(Util.FACES_LOGGER
-                                                   + Util.CONTEXT_LOGGER);
+     private static Logger LOGGER = FacesLogger.CONTEXT.getLogger();
 
      //
      // Instance Variables
@@ -364,8 +363,8 @@ import com.sun.faces.util.Util;
              componentMessageLists.put(clientId, list);
          }
          list.add(message);
-         if (logger.isLoggable(Level.FINE)) {
-             logger.fine("Adding Message[sourceId=" +
+         if (LOGGER.isLoggable(Level.FINE)) {
+             LOGGER.fine("Adding Message[sourceId=" +
                          (clientId != null ? clientId : "<<NONE>>") +
                          ",summary=" + message.getSummary() + ")");
          }

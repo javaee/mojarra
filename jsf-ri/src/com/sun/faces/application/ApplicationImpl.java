@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.91 2007/04/03 16:40:50 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.92 2007/04/25 04:06:59 rlubke Exp $
  */
 
 /*
@@ -37,6 +37,7 @@ import com.sun.faces.el.VariableResolverImpl;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 import javax.el.CompositeELResolver;
 import javax.el.ELContextListener;
@@ -89,8 +90,7 @@ import java.util.logging.Logger;
 public class ApplicationImpl extends Application {
 
     // Log instance for this class
-    private static final Logger logger = Util.getLogger(Util.FACES_LOGGER 
-            + Util.APPLICATION_LOGGER);
+    private static final Logger logger = FacesLogger.APPLICATION.getLogger();
 
     private static final ELContextListener[] EMPTY_EL_CTX_LIST_ARRAY = { };
 

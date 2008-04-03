@@ -60,11 +60,11 @@ import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 public class StateManagerImpl extends StateManager {
 
-    private static final Logger LOGGER =
-              Util.getLogger(Util.FACES_LOGGER + Util.APPLICATION_LOGGER);       
+    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();       
     
     private char requestIdSerial;
 

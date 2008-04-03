@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.40 2007/02/20 19:27:05 rlubke Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.41 2007/04/25 04:07:01 rlubke Exp $
  */
 
 /*
@@ -39,6 +39,7 @@ import com.sun.faces.io.Base64OutputStreamWriter;
 import com.sun.faces.spi.SerializationProvider;
 import com.sun.faces.spi.SerializationProviderFactory;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
@@ -69,8 +70,7 @@ import java.util.zip.GZIPOutputStream;
 public class ResponseStateManagerImpl extends ResponseStateManager {
 
     // Log instance for this class
-    private static final Logger LOGGER =
-          Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);
+    private static final Logger LOGGER = FacesLogger.RENDERKIT.getLogger();
 
     private static final String FACES_VIEW_STATE =
            "com.sun.faces.FACES_VIEW_STATE";

@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleConfigProcessor.java,v 1.3 2007/04/24 19:04:21 rlubke Exp $
+ * $Id: LifecycleConfigProcessor.java,v 1.4 2007/04/25 04:06:58 rlubke Exp $
  */
 
 /*
@@ -54,8 +54,7 @@ import java.util.logging.Logger;
  */
 public class LifecycleConfigProcessor extends AbstractConfigProcessor {
 
-    private static final Logger LOGGER =
-         Logger.getLogger(FacesLogger.CONFIG.getLoggerName());
+    private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
 
     private static final String JS_PHASE_LISTENER =
          "com.sun.faces.lifecycle.JsfJsResourcePhaseListener";

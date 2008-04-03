@@ -1,5 +1,5 @@
 /*
- * $Id: BeanManager.java,v 1.1 2007/04/22 21:41:05 rlubke Exp $
+ * $Id: BeanManager.java,v 1.2 2007/04/25 04:07:02 rlubke Exp $
  */
 
 /*
@@ -50,8 +50,7 @@ import java.util.logging.Logger;
  */
 public class BeanManager {
 
-    private static final Logger LOGGER =
-         Logger.getLogger(FacesLogger.MANAGEDBEAN.getLoggerName());
+    private static final Logger LOGGER = FacesLogger.MANAGEDBEAN.getLogger();
 
     @SuppressWarnings({"CollectionWithoutInitialCapacity"})
     private Map<String,BeanBuilder> managedBeans =

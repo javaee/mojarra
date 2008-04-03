@@ -27,6 +27,7 @@ package com.sun.faces.lifecycle;
 
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 import com.sun.faces.el.ELUtils;
 
 import javax.el.CompositeELResolver;
@@ -56,8 +57,7 @@ import java.util.logging.Logger;
  */
 public class ELResolverInitPhaseListener implements PhaseListener {
 
-    private static Logger LOGGER = Util.getLogger(Util.FACES_LOGGER
-                                                  + Util.LIFECYCLE_LOGGER);
+    private static Logger LOGGER = FacesLogger.LIFECYCLE.getLogger();
 
     private boolean preInitCompleted;
     private boolean postInitCompleted;
