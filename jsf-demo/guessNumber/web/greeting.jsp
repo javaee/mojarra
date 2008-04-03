@@ -68,8 +68,6 @@
                    id="errors1" for="userNo"/>
 
     </h:form>
-    <h:form>
-    </h:form>
 </f:view>
 
 <p>
