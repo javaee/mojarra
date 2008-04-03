@@ -1,8 +1,4 @@
 /*
- * $Id: HtmlUtils.java,v 1.16 2008/02/07 08:56:00 edburns Exp $
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
  * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
@@ -41,7 +37,6 @@
 package com.sun.faces.util;
 
 import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -51,7 +46,6 @@ import java.util.BitSet;
 import java.nio.charset.Charset;
 
 import com.sun.faces.renderkit.RenderKitUtils;
-import javax.faces.context.FacesContext;
 
 /**
  * Utility class for HTML.
@@ -453,7 +447,7 @@ public class HtmlUtils {
         // going gonzo, it should be even better)
         int i = (int) ch;
         if (i > 10000) {
-            bufferIndex = addToBuffer(out, buffer, bufferIndex, bufferLength, (char) i);
+            bufferIndex = addToBuffer(out, buffer, bufferIndex, bufferLength, ((char) ('0' + (i / 10000))));
             i = i % 10000;
             bufferIndex = addToBuffer(out, buffer, bufferIndex, bufferLength, ((char) ('0' + (i / 1000))));
             i = i % 1000;

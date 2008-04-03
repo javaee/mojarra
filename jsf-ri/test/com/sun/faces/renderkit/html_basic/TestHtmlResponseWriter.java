@@ -1,5 +1,5 @@
 /*
- * $Id: TestHtmlResponseWriter.java,v 1.28 2007/12/19 17:43:48 rlubke Exp $
+ * $Id: TestHtmlResponseWriter.java,v 1.29 2008/02/26 06:53:08 rlubke Exp $
  */
 
 /*
@@ -59,7 +59,7 @@ import com.sun.faces.cactus.ServletFacesTestCase;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHtmlResponseWriter.java,v 1.28 2007/12/19 17:43:48 rlubke Exp $
+ * @version $Id: TestHtmlResponseWriter.java,v 1.29 2008/02/26 06:53:08 rlubke Exp $
  */
 
 public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestCase
@@ -489,6 +489,15 @@ public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestC
         } catch (IOException e) {
             assertTrue(false);
         }
+    }
+
+    public void testWriteDecRefRegressionTest() throws Exception {
+        Character c = '\u4300';
+        String test = c.toString();
+        sw = new StringWriter();
+        writer = renderKit.createResponseWriter(sw, "text/html", "UTF-8");
+        writer.writeText(test, "value");
+        assertTrue("&#17152;", "&#17152;".equals(sw.toString()));
     }
 
 
