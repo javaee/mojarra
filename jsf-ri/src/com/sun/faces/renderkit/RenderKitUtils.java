@@ -25,14 +25,21 @@
 
 package com.sun.faces.renderkit;
 
+import com.sun.faces.RIConstants;
+import com.sun.faces.config.WebConfiguration;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
+import com.sun.faces.renderkit.html_basic.HtmlBasicRenderer.Param;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
+
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
 import javax.faces.component.UISelectItems;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.context.ExternalContext;
 import javax.faces.model.SelectItem;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
@@ -55,13 +62,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.sun.faces.RIConstants;
-import com.sun.faces.config.WebConfiguration;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
-import com.sun.faces.renderkit.html_basic.HtmlBasicRenderer.Param;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
 
 /**
  * <p>A set of utilities for use in {@link RenderKit}s.</p>
@@ -929,9 +929,9 @@ public class RenderKitUtils {
         sb.append(commandClientId).append(',').append(commandClientId);
         for (Param param : params) {         
             sb.append(',');
-            sb.append(param.name);
+            sb.append(param.name.replace("'", "\\\'"));
             sb.append(',');
-            sb.append(param.value);            
+            sb.append(param.value.replace("'", "\\\'"));
         }          
         sb.append("','");
         sb.append(target);
