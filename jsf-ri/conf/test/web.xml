@@ -45,9 +45,11 @@
         <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
         <param-value>server</param-value>
     </context-param>
+    <!-- if this PROJECT_STAGE init parameter is picked up, the test
+         will fail.  This will validate that the JNDI entry is used first -->
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
-        <param-value>UnitTest</param-value>
+        <param-value>Production</param-value>
     </context-param>
     <context-param>
         <param-name>com.sun.faces.enableHtmlTagLibValidator</param-name>
@@ -126,5 +128,11 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.jsf</url-pattern>
     </servlet-mapping>
+
+    <env-entry>
+        <env-entry-name>jsf/ProjectStage</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>UnitTest</env-entry-value>
+    </env-entry>
 
 </web-app>

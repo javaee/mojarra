@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.102 2008/02/19 22:28:48 edburns Exp $
+ * $Id: ApplicationImpl.java,v 1.103 2008/02/19 22:55:28 rlubke Exp $
  */
 
 /*
@@ -304,16 +304,16 @@ public class ApplicationImpl extends Application {
                         FacesContext.getCurrentInstance().getExternalContext());
             String value = webConfig.getEnvironmentEntry(WebConfiguration.WebEnvironmentEntry.ProjectStage);
             if (value != null) {
-                if (LOGGER.isLoggable(Level.INFO)) {
-                    LOGGER.log(Level.INFO,
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.log(Level.FINE,
                                "ProjectStage configured via JNDI: {0}",
                                value);
                 }
             } else {
                 value = webConfig.getOptionValue(WebContextInitParameter.JavaxFacesProjectStage);
                 if (value != null) {
-                    if (LOGGER.isLoggable(Level.INFO)) {
-                        LOGGER.log(Level.INFO,
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.log(Level.FINE,
                                "ProjectStage configured via servlet context init parameter: {0}", 
                                value);
                     }
@@ -325,8 +325,8 @@ public class ApplicationImpl extends Application {
                 } catch (IllegalArgumentException iae) {
                     if (LOGGER.isLoggable(Level.INFO)) {
                         LOGGER.log(Level.INFO,
-				"Unable to discern ProjectStage for value of "
-				+ value + ".", iae);
+                                   "Unable to discern ProjectStage for value {0}.",
+                                   value);
                     }
                 }
             }
