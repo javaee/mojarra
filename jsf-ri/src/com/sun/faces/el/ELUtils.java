@@ -1,5 +1,5 @@
 /*
- * $Id: ELUtils.java,v 1.1 2007/02/27 23:10:23 rlubke Exp $
+ * $Id: ELUtils.java,v 1.2 2007/04/22 21:41:04 rlubke Exp $
  */
 
 /*
@@ -29,8 +29,8 @@
 
 package com.sun.faces.el;
 
-import com.sun.faces.RIConstants;
 import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.spi.ManagedBeanFactory;
 import com.sun.faces.util.MessageUtils;
 
@@ -45,19 +45,51 @@ import javax.el.ResourceBundleELResolver;
 import javax.el.ValueExpression;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.el.EvaluationException;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.el.VariableResolver;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>Utility class for EL related methods.</p>
  */
 public class ELUtils {
 
+    private static final String SESSION = "session";
+    private static final String APPLICATION = "application";
+    private static final String APPLICATION_SCOPE = "applicationScope";
+    private static final String SESSION_SCOPE = "sessionScope";
+    private static final String REQUEST = "request";
+    private static final String REQUEST_SCOPE = "requestScope";
+    private static final String NONE = "none";
+    private static final String COOKIE_IMPLICIT_OBJ = "cookie";
+    private static final String FACES_CONTEXT_IMPLICIT_OBJ = "facesContext";
+    private static final String HEADER_IMPLICIT_OBJ = "header";
+    private static final String HEADER_VALUES_IMPLICIT_OBJ = "headerValues";
+    private static final String INIT_PARAM_IMPLICIT_OBJ = "initParam";
+    private static final String PARAM_IMPLICIT_OBJ = "param";
+    private static final String PARAM_VALUES_IMPLICIT_OBJ = "paramValues";
+    private static final String VIEW_IMPLICIT_OBJ = "view";
+
+    public enum Scope {
+        NONE("none"),
+        REQUEST("request"),
+        SESSION("session"),
+        APPLICATION("application");
+
+        String scope;
+        Scope(String scope) {
+            this.scope = scope;
+        }
+
+        public String toString() {
+            return scope;
+        }
+    }
 
     public static final ArrayELResolver ARRAY_RESOLVER = new ArrayELResolver();
 
@@ -235,7 +267,7 @@ public class ELUtils {
      * @return a List of expressions from the expressionString
      */
     @SuppressWarnings("deprecation")
-    public static List getExpressionsFromString(String expressionString)
+    public static List<String> getExpressionsFromString(String expressionString)
     throws ReferenceSyntaxException {
 
         if (null == expressionString) {
@@ -284,9 +316,8 @@ public class ELUtils {
      *  _05
      */
     @SuppressWarnings("deprecation")
-    public static ManagedBeanFactory.Scope getScope(String valueBinding,
-                                                    String[] outString)
-    throws ReferenceSyntaxException {
+    public static ELUtils.Scope getScope(String valueBinding, String[] outString)
+         throws ReferenceSyntaxException {
 
         if (valueBinding == null || 0 == valueBinding.length()) {
             return null;
@@ -311,56 +342,57 @@ public class ELUtils {
         if (null != outString) {
             outString[0] = identifier;
         }
-        if (RIConstants.REQUEST_SCOPE.equalsIgnoreCase(identifier)) {
-            return ManagedBeanFactory.Scope.REQUEST;
+        if (REQUEST_SCOPE.equalsIgnoreCase(identifier)) {
+            return Scope.REQUEST;
         }
-        if (RIConstants.SESSION_SCOPE.equalsIgnoreCase(identifier)) {
-            return ManagedBeanFactory.Scope.SESSION;
+        if (SESSION_SCOPE.equalsIgnoreCase(identifier)) {
+            return Scope.SESSION;
         }
-        if (RIConstants.APPLICATION_SCOPE.equalsIgnoreCase(identifier)) {
-            return ManagedBeanFactory.Scope.APPLICATION;
+        if (APPLICATION_SCOPE.equalsIgnoreCase(identifier)) {
+            return Scope.APPLICATION;
         }
 
         // handle implicit objects
-        if (RIConstants.INIT_PARAM_IMPLICIT_OBJ.equalsIgnoreCase(identifier)) {
-            return ManagedBeanFactory.Scope.APPLICATION;
+        if (INIT_PARAM_IMPLICIT_OBJ.equalsIgnoreCase(identifier)) {
+            return Scope.APPLICATION;
         }
-        if (RIConstants.COOKIE_IMPLICIT_OBJ.equalsIgnoreCase(identifier)) {
-            return ManagedBeanFactory.Scope.REQUEST;
+        if (COOKIE_IMPLICIT_OBJ.equalsIgnoreCase(identifier)) {
+            return Scope.REQUEST;
         }
-        if (RIConstants.FACES_CONTEXT_IMPLICIT_OBJ.equalsIgnoreCase(identifier)) {
-            return ManagedBeanFactory.Scope.REQUEST;
+        if (FACES_CONTEXT_IMPLICIT_OBJ.equalsIgnoreCase(identifier)) {
+            return Scope.REQUEST;
         }
-        if (RIConstants.HEADER_IMPLICIT_OBJ.equalsIgnoreCase(identifier)) {
-            return ManagedBeanFactory.Scope.REQUEST;
+        if (HEADER_IMPLICIT_OBJ.equalsIgnoreCase(identifier)) {
+            return Scope.REQUEST;
         }
-        if (RIConstants.HEADER_VALUES_IMPLICIT_OBJ.equalsIgnoreCase(identifier)) {
-            return ManagedBeanFactory.Scope.REQUEST;
+        if (HEADER_VALUES_IMPLICIT_OBJ.equalsIgnoreCase(identifier)) {
+            return Scope.REQUEST;
         }
-        if (RIConstants.PARAM_IMPLICIT_OBJ.equalsIgnoreCase(identifier)) {
-            return ManagedBeanFactory.Scope.REQUEST;
+        if (PARAM_IMPLICIT_OBJ.equalsIgnoreCase(identifier)) {
+            return Scope.REQUEST;
         }
-        if (RIConstants.PARAM_VALUES_IMPLICIT_OBJ.equalsIgnoreCase(identifier)) {
-            return ManagedBeanFactory.Scope.REQUEST;
+        if (PARAM_VALUES_IMPLICIT_OBJ.equalsIgnoreCase(identifier)) {
+            return Scope.REQUEST;
         }
-        if (RIConstants.VIEW_IMPLICIT_OBJ.equalsIgnoreCase(identifier)) {
-            return ManagedBeanFactory.Scope.REQUEST;
-        }
-
-        //No scope was provided in the expression so check for the
-        //expression in all of the scopes. The expression is the first
-        //segment.
-
-        if (ec.getRequestMap().get(identifier) != null) {
-            return ManagedBeanFactory.Scope.REQUEST;
-        }
-        if (ec.getSessionMap().get(identifier) != null) {
-            return ManagedBeanFactory.Scope.SESSION;
-        }
-        if (ec.getApplicationMap().get(identifier) != null) {
-            return ManagedBeanFactory.Scope.APPLICATION;
+        if (VIEW_IMPLICIT_OBJ.equalsIgnoreCase(identifier)) {
+            return Scope.REQUEST;
         }
 
+        Map<String,Object> requestMap = ec.getRequestMap();
+        if (requestMap != null && requestMap.containsKey(identifier)) {
+            return Scope.REQUEST;
+        }
+
+        Map<String,Object> sessionMap = ec.getSessionMap();
+        if (sessionMap != null && sessionMap.containsKey(identifier)) {
+            return Scope.SESSION;
+        }
+
+        Map<String,Object> appMap = ec.getApplicationMap();
+        if (appMap != null && appMap.containsKey(identifier)) {
+            return Scope.APPLICATION;
+        }
+       
         //not present in any scope
         return null;
 
@@ -370,18 +402,24 @@ public class ELUtils {
     /**
      * Create a <code>ValueExpression</code> with the expected type of
      * <code>Object.class</code>
-     * @param valueRef a value expression
+     * @param expression an EL expression
      * @return a new <code>ValueExpression</code> instance based off the
      *  provided <code>valueRef</code>
      */
-    public static ValueExpression getValueExpression(String valueRef) {
+    public static ValueExpression createValueExpression(String expression) {
 
+       return createValueExpression(expression, Object.class);
+
+    }
+
+
+    public static ValueExpression createValueExpression(String expression,
+                                                        Class<?> expectedType) {
         FacesContext context = FacesContext.getCurrentInstance();
         return context.getApplication().getExpressionFactory().
             createValueExpression(context.getELContext(),
-                                  valueRef,
-                                  Object.class);
-
+                                  expression,
+                                  expectedType);
     }
 
 
@@ -499,4 +537,155 @@ public class ELUtils {
 
     }
 
+
+    public static Scope getScopeForExpression(String expression) {
+
+        if (isMixedExpression(expression)) {
+            return (getNarrowestScopeFromExpression(expression));
+        } else {
+            return (getScopeForSingleExpression(expression));
+        }
+
+    }
+
+
+    @SuppressWarnings("deprecation")
+    public static boolean hasValidLifespan(Scope expressionScope, Scope beanScope)
+         throws EvaluationException, ReferenceSyntaxException {
+
+        //if the managed bean's scope is "none" but the scope of the
+        //referenced object is not "none", scope is invalid
+        if (beanScope == Scope.NONE) {
+            return expressionScope == Scope.NONE;
+        }
+
+        //if the managed bean's scope is "request" it is able to refer
+        //to objects in any scope
+        if (beanScope == Scope.REQUEST) {
+            return true;
+        }
+
+        //if the managed bean's scope is "session" it is able to refer
+        //to objects in other "session", "application", or "none" scopes
+        if (beanScope == Scope.SESSION) {
+            return expressionScope != Scope.REQUEST;
+        }
+
+        //if the managed bean's scope is "application" it is able to refer
+        //to objects in other "application", or "none" scopes
+        if (beanScope == Scope.APPLICATION) {
+            return !(expressionScope == Scope.REQUEST
+                     || expressionScope == Scope.SESSION);
+        }
+
+        //the managed bean is required to be in either "request", "session",
+        //"application", or "none" scopes. One of the previous decision
+        //statements must be true.
+        assert (false);
+        return false;
+    }
+
+
+    @SuppressWarnings("deprecation")
+    public static ELUtils.Scope getScopeForSingleExpression(String value)
+         throws ReferenceSyntaxException, EvaluationException {
+        String[] firstSegment = new String[1];
+        ELUtils.Scope valueScope = ELUtils.getScope(value, firstSegment);
+
+        if (null == valueScope) {
+            // Perhaps the bean hasn't been created yet.  See what its
+            // scope would be when it is created.
+            if (firstSegment[0] != null) {
+                BeanManager manager =
+                     ApplicationAssociate.getCurrentInstance().getBeanManager();
+
+                if (manager.isManaged(firstSegment[0])) {
+                    valueScope = manager.getBuilder(firstSegment[0]).getScope();
+                }
+            } else {
+                // we are referring to a bean that doesn't exist in the
+                // configuration file.  Give it a wide scope...
+                valueScope = Scope.APPLICATION;
+            }
+        }
+        return valueScope;
+    }
+
+
+    @SuppressWarnings("deprecation")
+    public static Scope getNarrowestScopeFromExpression(String expression)
+         throws ReferenceSyntaxException {
+        // break the argument expression up into its component
+        // expressions, ignoring literals.
+        List<String> expressions = ELUtils.getExpressionsFromString(expression);
+
+        int shortestScope = Scope.NONE.ordinal();
+        Scope result = Scope.NONE;
+        for (String expr : expressions) {
+        // loop over the expressions
+
+            Scope lScope = getScopeForSingleExpression(expr);
+            // don't consider none
+            if (null == lScope || lScope == Scope.NONE) {
+                continue;
+            }
+
+            int currentScope = lScope.ordinal();
+
+            // if we have no basis for comparison
+            if (ManagedBeanFactory.Scope.NONE.ordinal() == shortestScope) {
+                shortestScope = currentScope;
+                result = lScope;
+            } else {
+                // we have a basis for comparison
+                if (currentScope < shortestScope) {
+                    shortestScope = currentScope;
+                    result = lScope;
+                }
+            }
+        }
+        return result;
+    }
+
+
+    /*
+    * Determine whether String is a mixed value binding expression or not.
+    */
+    public static boolean isMixedExpression(String expression) {
+
+        if (null == expression) {
+            return false;
+        }
+
+        // if it doesn't start and end with delimiters
+        if (!(expression.startsWith("#{") && expression.endsWith("}"))) {
+            // see if it has some inside.
+            return isExpression(expression);
+        }
+        return false;
+
+    }
+
+
+    /*
+    * Determine whether String is a value binding expression or not.
+    */
+    public static boolean isExpression(String expression) {
+
+        if (null == expression) {
+            return false;
+        }
+        int start = expression.indexOf("#{");
+
+        //check to see if attribute has an expression
+        if ((expression.indexOf("#{") != -1) &&
+            (start < expression.indexOf('}'))) {
+            return true;
+        }
+        return false;
+
+
+    }
+
+    
 }

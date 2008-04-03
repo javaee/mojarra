@@ -1,5 +1,5 @@
 /*
- * $Id: TestVariableResolverImpl.java,v 1.27 2007/03/21 17:57:41 rlubke Exp $
+ * $Id: TestVariableResolverImpl.java,v 1.28 2007/04/22 21:41:29 rlubke Exp $
  */
 
 /*
@@ -33,11 +33,11 @@ package com.sun.faces.el;
 
 import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.TestBean;
+import com.sun.faces.mgbean.ManagedBeanInfo;
+import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.cactus.TestBean.InnerBean;
 import com.sun.faces.application.ApplicationImpl;
 import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.config.ManagedBeanFactoryImpl;
-import com.sun.faces.config.beans.ManagedBeanBean;
 import com.sun.faces.util.Util;
 
 import javax.faces.FactoryFinder;
@@ -52,7 +52,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestVariableResolverImpl.java,v 1.27 2007/03/21 17:57:41 rlubke Exp $
+ * @version $Id: TestVariableResolverImpl.java,v 1.28 2007/04/22 21:41:29 rlubke Exp $
  */
 
 public class TestVariableResolverImpl extends ServletFacesTestCase {
@@ -271,19 +271,20 @@ public class TestVariableResolverImpl extends ServletFacesTestCase {
     public void testManagedBean() throws Exception {
         String beanName = "com.sun.faces.TestBean";
 
-        ManagedBeanBean cmb = new ManagedBeanBean();
-
-        cmb.setManagedBeanClass(beanName);
-        cmb.setManagedBeanScope("session");
-
-        ManagedBeanFactoryImpl mbf = new ManagedBeanFactoryImpl(cmb);
+        ManagedBeanInfo beanInfo = new ManagedBeanInfo(beanName,
+                                                       beanName,
+                                                       "session",
+                                                       null,
+                                                       null,
+                                                       null,
+                                                       null);
 
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
-	ApplicationAssociate associate = ApplicationAssociate.getCurrentInstance();
-
-        associate.addManagedBeanFactory(beanName, mbf);
+        ApplicationAssociate associate = ApplicationAssociate.getCurrentInstance();
+        BeanManager manager = associate.getBeanManager();
+        manager.register(beanInfo);
 
         VariableResolver variableResolver = application.getVariableResolver();
 

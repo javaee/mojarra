@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.90 2006/09/20 17:50:20 rlubke Exp $
+ * $Id: RIConstants.java,v 1.91 2007/04/22 21:40:57 rlubke Exp $
  */
 
 /*
@@ -77,22 +77,6 @@ public class RIConstants {
      */
     public static final String CLIENT_ID_MESSAGES_NOT_DISPLAYED = FACES_PREFIX +
     	"clientIdMessagesNotDisplayed";
-
-    public static final String APPLICATION = "application";
-    public static final String APPLICATION_SCOPE = "applicationScope";
-    public static final String SESSION = "session";
-    public static final String SESSION_SCOPE = "sessionScope";
-    public static final String REQUEST = "request";
-    public static final String REQUEST_SCOPE = "requestScope";
-    public static final String NONE = "NONE";
-    public static final String COOKIE_IMPLICIT_OBJ = "cookie";
-    public static final String FACES_CONTEXT_IMPLICIT_OBJ = "facesContext";
-    public static final String HEADER_IMPLICIT_OBJ = "header";
-    public static final String HEADER_VALUES_IMPLICIT_OBJ = "headerValues";
-    public static final String INIT_PARAM_IMPLICIT_OBJ = "initParam";
-    public static final String PARAM_IMPLICIT_OBJ = "param";
-    public static final String PARAM_VALUES_IMPLICIT_OBJ = "paramValues";
-    public static final String VIEW_IMPLICIT_OBJ = "view";
 
     /*
      * <p>TLV Resource Bundle Location </p>

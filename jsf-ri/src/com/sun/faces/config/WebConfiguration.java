@@ -18,27 +18,26 @@
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
  * 
- * [WebConfiguration] [$Id: WebConfiguration.java,v 1.19 2007/03/13 02:39:04 rlubke Exp $] [Apr 2, 2006]
+ * [WebConfiguration] [$Id: WebConfiguration.java,v 1.20 2007/04/22 21:41:04 rlubke Exp $] [Apr 2, 2006]
  * 
  * Copyright 2006 Sun Microsystems Inc. All Rights Reserved
  */
 
 package com.sun.faces.config;
 
+import com.sun.faces.RIConstants;
+import com.sun.faces.util.Util;
+
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ExternalContext;
-
-import java.util.Map;
 import java.util.EnumMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-
-import com.sun.faces.util.Util;
-import com.sun.faces.RIConstants;
 
 
 /** Class Documentation */
@@ -691,6 +690,10 @@ public class WebConfiguration {
         WriteStateAtFormEnd(
             "com.sun.faces.writeStateAtFormEnd",
             true
+        ),        
+        EnableLazyBeanValidation(
+             "com.sun.faces.enableLazyBeanValidation",
+             true
         );
 
         private BooleanWebContextInitParameter alternate;

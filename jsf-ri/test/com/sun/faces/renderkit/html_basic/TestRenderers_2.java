@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.97 2007/02/27 23:10:24 rlubke Exp $
+ * $Id: TestRenderers_2.java,v 1.98 2007/04/22 21:41:37 rlubke Exp $
  */
 
 /*
@@ -67,7 +67,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.97 2007/02/27 23:10:24 rlubke Exp $
+ * @version $Id: TestRenderers_2.java,v 1.98 2007/04/22 21:41:37 rlubke Exp $
  */
 
 public class TestRenderers_2 extends JspFacesTestCase {
@@ -495,11 +495,11 @@ public class TestRenderers_2 extends JspFacesTestCase {
         img.getAttributes().put("usemap", "usemap");
         root.getChildren().add(img);
         com.sun.faces.cactus.TestBean testBean = (com.sun.faces.cactus.TestBean)
-            (ELUtils.getValueExpression("#{TestBean}")).getValue(getFacesContext().getELContext());
+            (ELUtils.createValueExpression("#{TestBean}")).getValue(getFacesContext().getELContext());
         assertTrue(null != testBean); // set in FacesTestCaseService
         testBean.setImagePath("/foo/modelReferenceImage.gif");
         img.setValueExpression("value",
-                            ELUtils.getValueExpression("#{TestBean.imagePath}"));
+                            ELUtils.createValueExpression("#{TestBean.imagePath}"));
 
         imageRenderer.encodeBegin(getFacesContext(), img);
         imageRenderer.encodeEnd(getFacesContext(), img);

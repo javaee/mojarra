@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigNavigationCase.java,v 1.10 2007/02/05 04:04:37 rlubke Exp $
+ * $Id: ConfigNavigationCase.java,v 1.11 2007/04/22 21:41:04 rlubke Exp $
  */
 
 /*
@@ -40,6 +40,23 @@ public class ConfigNavigationCase {
     private String fromOutcome = null;
     private String toViewId = null;
     private String key = null;
+    private boolean redirect;
+
+
+    public ConfigNavigationCase(String fromViewId,
+                                String fromAction,
+                                String fromOutcome,
+                                String toViewId,
+                                boolean redirect) {
+        this.fromViewId = fromViewId;
+        this.fromAction = fromAction;
+        this.fromOutcome = fromOutcome;
+        this.toViewId = toViewId;
+        this.key = fromViewId
+                   + ((fromAction == null) ? "-" : fromAction)
+                   + ((fromOutcome == null) ? "-" : fromOutcome);
+        this.redirect = redirect;
+    }
 
 
     public String getFromViewId() {
@@ -82,15 +99,12 @@ public class ConfigNavigationCase {
     }
 
 
-    protected String redirect = null;
-
-
     public boolean hasRedirect() {
-        return null != redirect;
+        return redirect;
     }
 
 
-    public void setRedirect(String redirect) {
+    public void setRedirect(boolean redirect) {
         this.redirect = redirect;
     }
 
@@ -112,11 +126,11 @@ public class ConfigNavigationCase {
 
     public String toString() {
         StringBuilder sb = new StringBuilder(64);
-        sb.append("FROM VIEW ID:").append(getFromViewId());
-        sb.append("\nFROM ACTION:").append(getFromAction());
-        sb.append("\nFROM OUTCOME:").append(getFromOutcome());
-        sb.append("\nTO VIEW ID:").append(getToViewId());
-        sb.append("\nREDIRECT:").append(hasRedirect());
+        sb.append("from-view-id=").append(getFromViewId());
+        sb.append(" from-action=").append(getFromAction());
+        sb.append(" from-outcome=").append(getFromOutcome());
+        sb.append(" to-view-id=").append(getToViewId());
+        sb.append(" redirect=").append(hasRedirect());
         return sb.toString();
     }
 }

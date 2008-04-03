@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.44 2007/03/21 18:04:07 rlubke Exp $
+ * $Id: ApplicationAssociate.java,v 1.45 2007/04/22 21:41:03 rlubke Exp $
  */
 
 /*
@@ -30,27 +30,22 @@
 package com.sun.faces.application;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.config.beans.ResourceBundleBean;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.spi.InjectionProvider;
-import com.sun.faces.spi.InjectionProviderException;
 import com.sun.faces.spi.InjectionProviderFactory;
-import com.sun.faces.spi.ManagedBeanFactory;
-import com.sun.faces.spi.ManagedBeanFactory.Scope;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 
 import javax.el.CompositeELResolver;
 import javax.el.ELResolver;
 import javax.el.ExpressionFactory;
-import javax.faces.FacesException;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
 import javax.servlet.ServletContext;
-
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -60,7 +55,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.TreeSet;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -85,11 +79,7 @@ public class ApplicationAssociate {
 
     private ApplicationImpl app = null;
 
-    //
-    // This map stores "managed bean name" | "managed bean factory"
-    // mappings.
-    //
-    private Map<String, ManagedBeanFactory> managedBeanFactoriesMap = null;
+
 
 
     /**
@@ -143,6 +133,8 @@ public class ApplicationAssociate {
     private String contextName;
     private boolean requestServiced;
 
+    private BeanManager beanManager;
+
     public ApplicationAssociate(ApplicationImpl appImpl) {
         app = appImpl;
 
@@ -162,11 +154,13 @@ public class ApplicationAssociate {
              appImpl);
         externalContext.getApplicationMap().put(ASSOCIATE_KEY, this);
         //noinspection CollectionWithoutInitialCapacity
-        managedBeanFactoriesMap = new HashMap<String, ManagedBeanFactory>();
-        //noinspection CollectionWithoutInitialCapacity
         caseListMap = new HashMap<String, List<ConfigNavigationCase>>();
         wildcardMatchList = new TreeSet<String>(new SortIt());
         injectionProvider = InjectionProviderFactory.createInstance(externalContext);
+        WebConfiguration webConfig = WebConfiguration.getInstance(externalContext);
+        beanManager = new BeanManager(injectionProvider,
+                                      webConfig.getBooleanContextInitParameter(
+                                           WebConfiguration.BooleanWebContextInitParameter.EnableLazyBeanValidation));
     }
 
     public static ApplicationAssociate getInstance(ExternalContext
@@ -218,6 +212,11 @@ public class ApplicationAssociate {
             }
         }
         applicationMap.remove(ASSOCIATE_KEY);        
+    }
+
+
+    public BeanManager getBeanManager() {
+        return beanManager;
     }
 
     /**
@@ -427,7 +426,8 @@ public class ApplicationAssociate {
 
     public ResourceBundle getResourceBundle(FacesContext context,
                                             String var) {
-        if (!resourceBundles.containsKey(var)) {
+        ApplicationResourceBundle bundle = resourceBundles.get(var);
+        if (bundle == null) {
             return null;
         }
         UIViewRoot root;
@@ -444,21 +444,9 @@ public class ApplicationAssociate {
             }
         }
         assert (null != locale);
-        ResourceBundleBean bean = resourceBundles.get(var);
-        ResourceBundle result = null;
-
-        if (null != bean) {
-            String baseName = bean.getBasename();
-            if (null != baseName) {
-                result =
-                     ResourceBundle.getBundle(baseName,
-                          locale,
-                          Thread.currentThread().
-                               getContextClassLoader());
-            }
-        }
-        // PENDING(edburns): should cache these based on var/Locale pair for performance
-        return result;
+        //ResourceBundleBean bean = resourceBundles.get(var);
+        return bundle.getResourceBundle(locale);
+        
     }
 
     /**
@@ -468,131 +456,15 @@ public class ApplicationAssociate {
      */
 
     @SuppressWarnings({"CollectionWithoutInitialCapacity"})
-    Map<String, ResourceBundleBean> resourceBundles = new HashMap<String, ResourceBundleBean>();
+    Map<String, ApplicationResourceBundle> resourceBundles =
+         new HashMap<String, ApplicationResourceBundle>();
 
-    public void addResourceBundleBean(String var, ResourceBundleBean bean) {
-        resourceBundles.put(var, bean);
+    public void addResourceBundle(String var, ApplicationResourceBundle bundle) {
+        resourceBundles.put(var, bundle);
     }
 
-    public Map<String, ResourceBundleBean> getResourceBundleBeanMap() {
+    public Map<String, ApplicationResourceBundle> getResourceBundles() {
         return resourceBundles;
-    }
-
-    /**
-     * <p>Adds a new mapping of managed bean name to a managed bean
-     * factory instance.</p>
-     *
-     * @param managedBeanName the name of the managed bean that will
-     *                        be created by the managed bean factory instance.
-     * @param factory         the managed bean factory instance.
-     */
-    synchronized public void addManagedBeanFactory(String managedBeanName,
-                                                   ManagedBeanFactory factory) {
-        managedBeanFactoriesMap.put(managedBeanName, factory);
-        factory.setManagedBeanFactoryMap(managedBeanFactoriesMap);
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.log(Level.FINE, MessageFormat.format("Added managedBeanFactory {0} for {1}",
-                 factory,
-                 managedBeanName));
-        }
-    }
-
-    public Map<String, ManagedBeanFactory> getManagedBeanFactoryMap() {
-        return managedBeanFactoriesMap;
-    }
-
-
-    /**
-     * <p>The managedBeanFactories HashMap has been populated
-     * with ManagedBeanFactoryImpl object keyed by the bean name.
-     * Find the ManagedBeanFactoryImpl object and if it exists instantiate
-     * the bean and store it in the appropriate scope, if any.</p>
-     *
-     * @param context         The Faces context.
-     * @param managedBeanName The name identifying the managed bean.
-     * @return The managed bean.
-     * @throws FacesException if the managed bean
-     *                        could not be created.
-     */
-    public Object createAndMaybeStoreManagedBeans(FacesContext context,
-                                                  String managedBeanName) throws FacesException {
-        ManagedBeanFactory managedBean = managedBeanFactoriesMap.get(managedBeanName);
-        if (managedBean == null) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.fine("Couldn't find a factory for " + managedBeanName);
-            }
-            return null;
-        }
-
-        Object bean;
-        Scope scope = managedBean.getScope();
-
-        boolean scopeIsApplication;
-        boolean scopeIsRequest;
-
-        ExternalContext extContext = context.getExternalContext();
-        if ((scopeIsApplication = (scope == Scope.APPLICATION)) ||
-             ((scope == Scope.SESSION))) {
-            if (scopeIsApplication) {
-                Map<String, Object> applicationMap = extContext.getApplicationMap();
-                synchronized (extContext.getContext()) {
-                    try {
-                        bean = managedBean.newInstance(context);
-                        if (LOGGER.isLoggable(Level.FINE)) {
-                            LOGGER.fine(MessageFormat.format("Created application scoped bean {0} successfully ", managedBeanName));
-                        }
-                    } catch (Exception ex) {
-                        Object[] params = {managedBeanName};
-                        if (LOGGER.isLoggable(Level.SEVERE)) {
-                            LOGGER.log(Level.SEVERE,
-                                 "jsf.managed_bean_creation_error", params);
-                        }
-                        throw new FacesException(ex);
-                    }
-                    //add bean to appropriate scope
-                    applicationMap.put(managedBeanName, bean);
-                }
-            } else {
-                Map<String, Object> sessionMap = extContext.getSessionMap();
-                synchronized (extContext.getSession(true)) {
-                    try {
-                        bean = managedBean.newInstance(context);
-                        if (LOGGER.isLoggable(Level.FINE)) {
-                            LOGGER.fine(MessageFormat.format("Created session scoped bean {0} successfully ", managedBeanName));
-                        }
-                    } catch (Exception ex) {
-                        Object[] params = {managedBeanName};
-                        if (LOGGER.isLoggable(Level.SEVERE)) {
-                            LOGGER.log(Level.SEVERE,
-                                 "jsf.managed_bean_creation_error", params);
-                        }
-                        throw new FacesException(ex);
-                    }
-                    //add bean to appropriate scope
-                    sessionMap.put(managedBeanName, bean);
-                }
-            }
-        } else {
-            scopeIsRequest = (scope == Scope.REQUEST);
-            try {
-                bean = managedBean.newInstance(context);
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE, MessageFormat.format("Created bean {0} successfully ", managedBeanName));
-                }
-            } catch (Exception ex) {
-                Object[] params = {managedBeanName};
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE,
-                         "jsf.managed_bean_creation_error", params);
-                }
-                throw new FacesException(ex);
-            }
-
-            if (scopeIsRequest) {
-                extContext.getRequestMap().put(managedBeanName, bean);
-            }
-        }
-        return bean;
     }
 
     // This is called by ViewHandlerImpl.renderView().
@@ -604,34 +476,6 @@ public class ApplicationAssociate {
         return responseRendered;
     }
 
-
-    /**
-     * <p>Attempts to look up a ManagedBeanFactory from the
-     * managedBeanFactoriesMap.  If not </code>null</code> and
-     * <code>ManagedBeanFactory.isInjectable()</code> returns true,
-     * pass <code>bean</code> to <code>InjectionProvider.invokePreDestr
-     *
-     * @param beanName the name of the bean for which to call PreDestroy
-     *                 annotated methods.  If <code>null</code>, all beans in argument
-     *                 <code>scope</code> have their PreDestroy annotated methods
-     *                 called.
-     * @param bean     the target bean associated with <code>beanName</code>
-     * @param scope    the managed bean scope in which to look for the bean
-     *                 or beans.
-     */
-
-    public void handlePreDestroy(String beanName, Object bean, Scope scope) {
-        ManagedBeanFactory factory = managedBeanFactoriesMap.get(beanName);
-        if (factory != null && factory.isInjectable()) {
-            try {
-                injectionProvider.invokePreDestroy(bean);
-            } catch (InjectionProviderException ipe) {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE, ipe.getMessage(), ipe);
-                }
-            }
-        }
-    }
 
     /**
      * This Comparator class will help sort the <code>ConfigNavigationCase</code> objects

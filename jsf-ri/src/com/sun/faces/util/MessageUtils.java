@@ -101,6 +101,8 @@ public class MessageUtils {
           "com.sun.faces.ERROR_GETTING_VALUE_BINDING";
     public static final String ERROR_OPENING_FILE_ERROR_MESSAGE_ID =
           "com.sun.faces.ERROR_OPENING_FILE";
+    public static final String ERROR_PROCESSING_CONFIG_ID =
+         "com.sun.faces.ERROR_PROCESSING_CONFIG";
     public static final String ERROR_REGISTERING_DTD_ERROR_MESSAGE_ID =
           "com.sun.faces.ERROR_REGISTERING_DTD";
     public static final String ERROR_SETTING_BEAN_PROPERTY_ERROR_MESSAGE_ID =
@@ -144,13 +146,61 @@ public class MessageUtils {
     public static final String LIFECYCLE_ID_NOT_FOUND_ERROR_MESSAGE_ID =
           "com.sun.faces.LIFECYCLE_ID_NOT_FOUND";
     public static final String MANAGED_BEAN_CANNOT_SET_LIST_ARRAY_PROPERTY_ID =
-          "com.sun.faces.MANAGED_BEAN_CANNOT_SET_LIST_ARRAY_PROPERTY";
-    public static final String MANAGED_BEAN_CANNOT_SET_MAP_PROPERTY_ID =
-          "com.sun.faces.MANAGED_BEAN_CANNOT_SET_MAP_PROPERTY";
+          "com.sun.faces.MANAGED_BEAN_CANNOT_SET_LIST_ARRAY_PROPERTY";    
     public static final String MANAGED_BEAN_EXISTING_VALUE_NOT_LIST_ID =
           "com.sun.faces.MANAGED_BEAN_EXISTING_VALUE_NOT_LIST";
     public static final String MANAGED_BEAN_TYPE_CONVERSION_ERROR_ID =
           "com.sun.faces.MANAGED_BEAN_TYPE_CONVERSION_ERROR";
+    public static final String MANAGED_BEAN_CLASS_NOT_FOUND_ERROR_ID =
+          "com.sun.faces.MANAGED_BEAN_CLASS_NOT_FOUND_ERROR";
+    public static final String MANAGED_BEAN_CLASS_DEPENDENCY_NOT_FOUND_ERROR_ID =
+         "com.sun.faces.MANAGED_BEAN_CLASS_DEPENDENCY_NOT_FOUND_ERROR";
+    public static final String MANAGED_BEAN_CLASS_IS_NOT_PUBLIC_ERROR_ID =
+         "com.sun.faces.MANAGED_BEAN_CLASS_IS_NOT_PUBLIC_ERROR";
+    public static final String MANAGED_BEAN_CLASS_IS_ABSTRACT_ERROR_ID =
+         "com.sun.faces.MANAGED_BEAN_CLASS_IS_ABSTRACT_ERROR";
+    public static final String MANAGED_BEAN_CLASS_NO_PUBLIC_NOARG_CTOR_ERROR_ID =
+         "com.sun.faces.MANAGED_BEAN_CLASS_NO_PUBLIC_NOARG_CTOR_ERROR";
+    public static final String MANAGED_BEAN_INJECTION_ERROR_ID =
+         "com.sun.faces.MANAGED_BEAN_INJECTION_ERROR";
+    public static final String MANAGED_BEAN_LIST_PROPERTY_CONFIG_ERROR_ID =
+         "com.sun.faces.MANAGED_BEAN_LIST_PROPERTY_CONFIG_ERROR";
+    public static final String MANAGED_BEAN_AS_LIST_CONFIG_ERROR_ID =
+         "com.sun.faces.MANAGED_BEAN_AS_LIST_CONFIG_ERROR";
+    public static final String MANAGED_BEAN_AS_MAP_CONFIG_ERROR_ID = 
+         "com.sun.faces.MANAGED_BEAN_AS_MAP_CONFIG_ERROR";
+    public static final String MANAGED_BEAN_MAP_PROPERTY_CONFIG_ERROR_ID =
+         "com.sun.faces.MANAGED_BEAN_MAP_PROPERTY_CONFIG_ERROR";
+    public static final String MANAGED_BEAN_MAP_PROPERTY_INCORRECT_SETTER_ERROR_ID =
+         "com.sun.faces.MANAGED_BEAN_MAP_PROPERTY_INCORRECT_SETTER_ERROR";
+    public static final String MANAGED_BEAN_MAP_PROPERTY_INCORRECT_GETTER_ERROR_ID =
+         "com.sun.faces.MANAGED_BEAN_MAP_PROPERTY_INCORRECT_GETTER_ERROR";
+    public static final String MANAGED_BEAN_DEFINED_PROPERTY_CLASS_NOT_COMPATIBLE_ERROR_ID =
+         "com.sun.faces.MANAGED_BEAN_DEFINED_PROPERTY_CLASS_NOT_COMPATIBLE_ERROR";
+    public static final String MANAGED_BEAN_INTROSPECTION_ERROR_ID =
+         "com.sun.faces.MANAGED_BEAN_INTROSPECTION_ERROR";
+    public static final String MANAGED_BEAN_PROPERTY_DOES_NOT_EXIST_ERROR_ID =
+         "com.sun.faces.MANAGED_BEAN_PROPERTY_DOES_NOT_EXIST_ERROR";
+    public static final String MANAGED_BEAN_PROPERTY_HAS_NO_SETTER_ID =
+         "com.sun.faces.MANAGED_BEAN_PROPERTY_HAS_NO_SETTER_ERROR";
+    public static final String MANAGED_BEAN_PROPERTY_INCORRECT_ARGS_ERROR_ID =
+         "com.sun.faces.MANAGED_BEAN_PROPERTY_INCORRECT_ARGS_ERROR";
+    public static final String MANAGED_BEAN_LIST_SETTER_DOES_NOT_ACCEPT_LIST_OR_ARRAY_ERROR_ID = 
+         "com.sun.faces.MANAGED_BEAN_LIST_SETTER_DOES_NOT_ACCEPT_LIST_OR_ARRAY_ERROR";
+    public static final String MANAGED_BEAN_LIST_GETTER_DOES_NOT_RETURN_LIST_OR_ARRAY_ERROR_ID =
+         "com.sun.faces.MANAGED_BEAN_LIST_SETTER_DOES_NOT_RETURN_LIST_OR_ARRAY_ERROR";
+    public static final String MANAGED_BEAN_LIST_GETTER_ARRAY_NO_SETTER_ERROR_ID = 
+         "com.sun.faces.MANAGED_BEAN_LIST_GETTER_ARRAY_NO_SETTER_ERROR";
+    public static final String MANAGED_BEAN_UNABLE_TO_SET_PROPERTY_ERROR_ID =
+         "com.sun.faces.MANAGED_BEAN_UNABLE_TO_SET_PROPERTY_ERROR";
+    public static final String MANAGED_BEAN_PROBLEMS_ERROR_ID =
+         "com.sun.faces.MANAGED_BEAN_PROBLEMS_ERROR";
+    public static final String MANAGED_BEAN_PROBLEMS_STARTUP_ERROR_ID =
+         "com.sun.faces.MANAGED_BEAN_PROBLEMS_STARTUP_ERROR";
+    public static final String MANAGED_BEAN_UNKNOWN_PROCESSING_ERROR_ID =
+         "com.sun.faces.MANAGED_BEAN_UNKNOWN_PROCESSING_ERROR";
+    public static final String MANAGED_BEAN_PROPERTY_UNKNOWN_PROCESSING_ERROR_ID =
+         "com.sun.faces.MANAGED_BEAN_PROPERTY_UNKNOWN_PROCESSING_ERROR";
     public static final String MAXIMUM_EVENTS_REACHED_ERROR_MESSAGE_ID =
           "com.sun.faces.MAXIMUM_EVENTS_REACHED";
     public static final String MISSING_CLASS_ERROR_MESSAGE_ID =

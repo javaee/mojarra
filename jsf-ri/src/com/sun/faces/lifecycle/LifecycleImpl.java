@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.75 2007/04/03 18:25:17 rlubke Exp $
+ * $Id: LifecycleImpl.java,v 1.76 2007/04/22 21:41:04 rlubke Exp $
  */
 
 /*
@@ -32,6 +32,7 @@ package com.sun.faces.lifecycle;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.Timer;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
@@ -245,15 +246,18 @@ public class LifecycleImpl extends Lifecycle {
         try {
             // Execute this phase itself (if still needed)
             if (!skipping(phaseId, context)) {
-                long start = System.currentTimeMillis();
-                phase.execute(context);
-                long stop = System.currentTimeMillis();
-                if (TIMING_LOGGER.isLoggable(Level.FINE)) {
-                    TIMING_LOGGER.fine("TIMING: Exectution time for phase '"
-                        + phaseId.toString() 
-                        + "': "
-                        + (stop - start));
+                Timer timer = Timer.getInstance();
+                if (timer != null) {
+                    timer.startTiming();
                 }
+
+                phase.execute(context);
+
+                if (timer != null) {
+                    timer.stopTiming();
+                    timer.logResult("Execution time for phase '"
+                        + phaseId.toString());
+                }             
             }
         } catch (Exception e) {
             // Log the problem, but continue

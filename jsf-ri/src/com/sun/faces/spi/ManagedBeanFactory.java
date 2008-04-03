@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.6 2006/09/01 01:22:59 tony_robertson Exp $
+ * $Id: ManagedBeanFactory.java,v 1.7 2007/04/22 21:41:04 rlubke Exp $
  */
 
 /*
@@ -104,6 +104,8 @@ public class NewManagedBeanFactory extends ManagedBeanFactoryWrapper {
  * notification scheme.</p>
  *
  * @author edburns, rlubke
+ * @deprecated this class is no longer used by by the implementation
+ *  as of 1.2_05
  */
 public abstract class ManagedBeanFactory {
     

@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanELResolver.java,v 1.16 2007/03/21 17:57:40 rlubke Exp $
+ * $Id: ManagedBeanELResolver.java,v 1.17 2007/04/22 21:41:04 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -29,9 +29,8 @@
 package com.sun.faces.el;
 
 import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.config.ManagedBeanFactoryImpl;
-import com.sun.faces.config.beans.DescriptionBean;
-import com.sun.faces.config.beans.ManagedBeanBean;
+import com.sun.faces.mgbean.BeanBuilder;
+import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 
@@ -41,11 +40,11 @@ import javax.el.ELResolver;
 import javax.el.PropertyNotFoundException;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-
 import java.beans.FeatureDescriptor;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
-import java.util.Locale;
+import java.util.List;
 import java.util.Map;
 
 public class ManagedBeanELResolver extends ELResolver {
@@ -68,23 +67,32 @@ public class ManagedBeanELResolver extends ELResolver {
         FacesContext facesContext = (FacesContext)
             context.getContext(FacesContext.class);
         ExternalContext externalContext = facesContext.getExternalContext();
-
-        if (externalContext.getRequestMap().containsKey(property)
-            || externalContext.getSessionMap().containsKey(property)
-            || externalContext.getApplicationMap().containsKey(property)) {
-            return null;
-        }
-
-        // if it's a managed bean, try to create it
-        ApplicationAssociate associate = 
-             ApplicationAssociate.getCurrentInstance();
-        if (null != associate) {
-            result = associate.createAndMaybeStoreManagedBeans(facesContext,
-                                                               ((String)property));
-            if ( result != null) {
-                context.setPropertyResolved(true);
+        BeanManager manager =
+             ApplicationAssociate.getCurrentInstance().getBeanManager();
+        String beanName = property.toString();
+        if (manager != null && manager.isManaged(beanName)) {
+            ELUtils.Scope scope = manager.getBuilder(beanName).getScope();
+            // check to see if the bean is already in scope
+            switch (scope) {
+                case REQUEST:
+                    if (externalContext.getRequestMap().containsKey(beanName)) {
+                        return null;
+                    }
+                case SESSION:
+                    if (externalContext.getSessionMap().containsKey(beanName)) {
+                        return null;
+                    }
+                case APPLICATION:
+                    if (externalContext.getApplicationMap().containsKey(beanName)) {
+                        return null;
+                    }
             }
+
+            // no bean found in scope.  create a new instance
+            result = manager.create(beanName, facesContext);
+            context.setPropertyResolved(result != null);
         }
+      
         return result;
     }
 
@@ -133,41 +141,39 @@ public class ManagedBeanELResolver extends ELResolver {
             return null;
         }
 
-        ArrayList<FeatureDescriptor> list = new ArrayList<FeatureDescriptor>();
-
         FacesContext facesContext =
             (FacesContext) context.getContext(FacesContext.class);
-        ApplicationAssociate associate =
-            ApplicationAssociate.getCurrentInstance();
-        Map mbMap = associate.getManagedBeanFactoryMap();
-        if (mbMap == null) {
-            return list.iterator();
+        BeanManager beanManager =
+             ApplicationAssociate.getCurrentInstance().getBeanManager();
+        if (beanManager == null || beanManager.getRegisteredBeans().isEmpty()) {
+            List<FeatureDescriptor> l = Collections.emptyList();
+            return l.iterator();
         }
-        // iterate over the list of managed beans
-        for (Iterator i = mbMap.entrySet().iterator(); i.hasNext(); ) {
-            Map.Entry entry = (Map.Entry) i.next();
-            String managedBeanName = (String) entry.getKey();
-            ManagedBeanFactoryImpl managedBeanFactory = (ManagedBeanFactoryImpl)
-                entry.getValue();
-            ManagedBeanBean managedBean = managedBeanFactory.getManagedBeanBean();
 
-            if ( managedBean != null) {
-                Locale curLocale = Util.getLocaleFromContextOrSystem(facesContext);
-                String locale = curLocale.toString();
-                DescriptionBean descBean = managedBean.getDescription(locale);
-                String desc = "";
-                descBean = (null != descBean) ? descBean :
-                           managedBean.getDescription("");
-                if (null != descBean) {
-                    // handle the case where the lang or xml:lang attributes
-                    // are not specified on the description
-                    desc = descBean.getDescription();
-                }
-                list.add(Util.getFeatureDescriptor(managedBeanName,
-                                                   managedBeanName, desc, false, false, true,
-                                                   managedBeanFactory.getManagedBeanClass(), Boolean.TRUE));
+        Map<String,BeanBuilder> beans = beanManager.getRegisteredBeans();
+        List<FeatureDescriptor> list =
+             new ArrayList<FeatureDescriptor>(beans.size());
+        // iterate over the list of managed beans
+        for (Map.Entry<String,BeanBuilder> bean : beans.entrySet()) {
+            String beanName = bean.getKey();
+            BeanBuilder builder = bean.getValue();
+            String loc = Util.getLocaleFromContextOrSystem(facesContext).toString();
+            Map<String,String> descriptions = builder.getDescriptions();
+            
+            String description = descriptions.get(loc);
+            if (description == null) {
+                description = descriptions.get("DEFAULT");
             }
+            list.add(Util.getFeatureDescriptor(beanName,
+                                               beanName,
+                                               description,
+                                               false,
+                                               false,
+                                               true,
+                                               builder.getBeanClass(),
+                                               Boolean.TRUE));
         }
+
         return list.iterator();
     }
 

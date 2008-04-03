@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.44 2007/02/27 23:10:18 rlubke Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.45 2007/04/22 21:41:29 rlubke Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.44 2007/02/27 23:10:18 rlubke Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.45 2007/04/22 21:41:29 rlubke Exp $
  */
 
 public class TestUpdateModelValuesPhase extends ServletFacesTestCase {
@@ -105,21 +105,21 @@ public class TestUpdateModelValuesPhase extends ServletFacesTestCase {
         userName.setId("userName");
         userName.setValue("one");
         userName.setValueExpression("value",
-                                 ELUtils.getValueExpression("#{TestBean.one}"));
+                                 ELUtils.createValueExpression("#{TestBean.one}"));
         userName.testSetValid(true);
         form.getChildren().add(userName);
         userName1 = new TestUIInput();
         userName1.setId("userName1");
         userName1.setValue("one");
         userName1.setValueExpression("value",
-                                  ELUtils.getValueExpression("#{TestBean.one}"));
+                                  ELUtils.createValueExpression("#{TestBean.one}"));
         userName1.testSetValid(true);
         form.getChildren().add(userName1);
         userName2 = new TestUIInput();
         userName2.setId("userName2");
         userName2.setValue("one");
         userName2.setValueExpression("value",
-                                  ELUtils.getValueExpression("#{TestBean.one}"));
+                                  ELUtils.createValueExpression("#{TestBean.one}"));
         userName2.testSetValid(true);
         form.getChildren().add(userName2);
 
@@ -161,27 +161,27 @@ public class TestUpdateModelValuesPhase extends ServletFacesTestCase {
         userName.setValue("one");
         userName.testSetValid(true);
         userName.setValueExpression("value",
-                                 ELUtils.getValueExpression("#{TestBean.two}"));
+                                 ELUtils.createValueExpression("#{TestBean.two}"));
         form.getChildren().add(userName);
         userName1 = new TestUIInput();
         userName1.setId("userName1");
         userName1.setValue("one");
         userName1.testSetValid(true);
         userName1.setValueExpression("value",
-                                  ELUtils.getValueExpression("#{TestBean.one}"));
+                                  ELUtils.createValueExpression("#{TestBean.one}"));
         form.getChildren().add(userName1);
         userName2 = new TestUIInput();
         userName2.setId("userName2");
         userName2.setValue("one");
         userName2.setValueExpression("value",
-                                  ELUtils.getValueExpression("#{TestBean.one}"));
+                                  ELUtils.createValueExpression("#{TestBean.one}"));
         userName2.testSetValid(true);
         form.getChildren().add(userName2);
         userName3 = new TestUIInput();
         userName3.setId("userName3");
         userName3.setValue("four");
         userName3.setValueExpression("value",
-                                  ELUtils.getValueExpression("#{TestBean.four}"));
+                                  ELUtils.createValueExpression("#{TestBean.four}"));
         userName3.testSetValid(true);
         form.getChildren().add(userName3);
 

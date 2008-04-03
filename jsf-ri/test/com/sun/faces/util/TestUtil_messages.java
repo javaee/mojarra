@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.61 2007/03/01 20:59:02 rlubke Exp $
+ * $Id: TestUtil_messages.java,v 1.62 2007/04/22 21:41:30 rlubke Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ import com.sun.faces.cactus.ServletFacesTestCase;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.61 2007/03/01 20:59:02 rlubke Exp $
+ * @version $Id: TestUtil_messages.java,v 1.62 2007/04/22 21:41:30 rlubke Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {
@@ -108,7 +108,7 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {MessageUtils.ERROR_GETTING_VALUEREF_VALUE_ERROR_MESSAGE_ID, "1"},
         {MessageUtils.CANT_INTROSPECT_CLASS_ERROR_MESSAGE_ID, "1"},
         {MessageUtils.CANT_CONVERT_VALUE_ERROR_MESSAGE_ID, "2"},
-        {MessageUtils.INVALID_SCOPE_LIFESPAN_ERROR_MESSAGE_ID, "1"},       
+        {MessageUtils.INVALID_SCOPE_LIFESPAN_ERROR_MESSAGE_ID, "4"},
         {MessageUtils.ENCODING_ERROR_MESSAGE_ID, "0"},
         {MessageUtils.ILLEGAL_IDENTIFIER_LVALUE_MODE_ID, "1"},
         {MessageUtils.VALIDATION_ID_ERROR_ID, "1"},
@@ -128,11 +128,10 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {MessageUtils.EMPTY_PARAMETER_ID, "0"},
         {MessageUtils.ASSERTION_FAILED_ID, "0"},
         {MessageUtils.OBJECT_CREATION_ERROR_ID, "0"},
-        {MessageUtils.CYCLIC_REFERENCE_ERROR_ID, "1"},
+        {MessageUtils.CYCLIC_REFERENCE_ERROR_ID, "2"},
         {MessageUtils.NO_DTD_FOUND_ERROR_ID, "2"},
         {MessageUtils.MANAGED_BEAN_CANNOT_SET_LIST_ARRAY_PROPERTY_ID, "2"},
-        {MessageUtils.MANAGED_BEAN_EXISTING_VALUE_NOT_LIST_ID, "2"},
-        {MessageUtils.MANAGED_BEAN_CANNOT_SET_MAP_PROPERTY_ID, "2"},
+        {MessageUtils.MANAGED_BEAN_EXISTING_VALUE_NOT_LIST_ID, "2"},        
         {MessageUtils.MANAGED_BEAN_TYPE_CONVERSION_ERROR_ID, "4"},
         {MessageUtils.APPLICATION_ASSOCIATE_CTOR_WRONG_CALLSTACK_ID, "0"},
         {MessageUtils.APPLICATION_ASSOCIATE_EXISTS_ID, "0"},
@@ -154,19 +153,33 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {MessageUtils.FACES_SERVLET_MAPPING_INCORRECT_ID, "0"},
         {MessageUtils.JS_RESOURCE_WRITING_ERROR_ID, "0"},
         {MessageUtils.CANNOT_CONVERT_ID, "2"},
-        {MessageUtils.CANNOT_VALIDATE_ID, "2"}
-    };
-
-    private String[][] toolsMessageInfo = {
-        {ToolsUtil.MANAGED_BEAN_AS_LIST_CONFIG_ERROR_ID, "1"},
-        {ToolsUtil.MANAGED_BEAN_AS_MAP_CONFIG_ERROR_ID, "1"},
-        {ToolsUtil.MANAGED_BEAN_NO_MANAGED_BEAN_CLASS_ID, "1"},
-        {ToolsUtil.MANAGED_BEAN_NO_MANAGED_BEAN_NAME_ID, "2"},
-        {ToolsUtil.MANAGED_BEAN_NO_MANAGED_BEAN_SCOPE_ID, "1"},
-        {ToolsUtil.MANAGED_BEAN_INVALID_SCOPE_ID, "2"},
-        {ToolsUtil.MANAGED_BEAN_LIST_PROPERTY_CONFIG_ERROR_ID, "2"},
-        {ToolsUtil.MANAGED_BEAN_MAP_PROPERTY_CONFIG_ERROR_ID, "2"},
-        {ToolsUtil.MANAGED_BEAN_PROPERTY_CONFIG_ERROR_ID, "2"},
+        {MessageUtils.CANNOT_VALIDATE_ID, "2"},
+        {MessageUtils.ERROR_PROCESSING_CONFIG_ID, "0"},
+        {MessageUtils.MANAGED_BEAN_CLASS_NOT_FOUND_ERROR_ID, "2"},
+        {MessageUtils.MANAGED_BEAN_CLASS_DEPENDENCY_NOT_FOUND_ERROR_ID, "3"},
+        {MessageUtils.MANAGED_BEAN_CLASS_IS_NOT_PUBLIC_ERROR_ID, "2"},
+        {MessageUtils.MANAGED_BEAN_CLASS_IS_ABSTRACT_ERROR_ID, "2"},
+        {MessageUtils.MANAGED_BEAN_CLASS_NO_PUBLIC_NOARG_CTOR_ERROR_ID, "2"},
+        {MessageUtils.MANAGED_BEAN_INJECTION_ERROR_ID, "1"},
+        {MessageUtils.MANAGED_BEAN_LIST_PROPERTY_CONFIG_ERROR_ID, "2"},
+        {MessageUtils.MANAGED_BEAN_AS_LIST_CONFIG_ERROR_ID, "1"},
+        {MessageUtils.MANAGED_BEAN_AS_MAP_CONFIG_ERROR_ID, "1"},
+        {MessageUtils.MANAGED_BEAN_MAP_PROPERTY_CONFIG_ERROR_ID, "2"},
+        {MessageUtils.MANAGED_BEAN_MAP_PROPERTY_INCORRECT_SETTER_ERROR_ID, "2"},
+        {MessageUtils.MANAGED_BEAN_MAP_PROPERTY_INCORRECT_GETTER_ERROR_ID, "2"},
+        {MessageUtils.MANAGED_BEAN_DEFINED_PROPERTY_CLASS_NOT_COMPATIBLE_ERROR_ID, "3"},
+        {MessageUtils.MANAGED_BEAN_INTROSPECTION_ERROR_ID, "1"},
+        {MessageUtils.MANAGED_BEAN_PROPERTY_DOES_NOT_EXIST_ERROR_ID, "2"},
+        {MessageUtils.MANAGED_BEAN_PROPERTY_HAS_NO_SETTER_ID, "2"},
+        {MessageUtils.MANAGED_BEAN_PROPERTY_INCORRECT_ARGS_ERROR_ID, "2"},
+        {MessageUtils.MANAGED_BEAN_LIST_SETTER_DOES_NOT_ACCEPT_LIST_OR_ARRAY_ERROR_ID, "2"},
+        {MessageUtils.MANAGED_BEAN_LIST_GETTER_DOES_NOT_RETURN_LIST_OR_ARRAY_ERROR_ID, "2"},
+        {MessageUtils.MANAGED_BEAN_LIST_GETTER_ARRAY_NO_SETTER_ERROR_ID, "2"},
+        {MessageUtils.MANAGED_BEAN_UNABLE_TO_SET_PROPERTY_ERROR_ID, "2"},
+        {MessageUtils.MANAGED_BEAN_PROBLEMS_ERROR_ID, "1"},
+        {MessageUtils.MANAGED_BEAN_PROBLEMS_STARTUP_ERROR_ID, "1"},
+        {MessageUtils.MANAGED_BEAN_UNKNOWN_PROCESSING_ERROR_ID, "1"},
+        {MessageUtils.MANAGED_BEAN_PROPERTY_UNKNOWN_PROCESSING_ERROR_ID, "1"}
     };
 
 // Attribute Instance Variables
@@ -232,40 +245,7 @@ public class TestUtil_messages extends ServletFacesTestCase {
         locale = new Locale("es", "");
         getFacesContext().getViewRoot().setLocale(locale);
         verifyParamsInMessages(messageInfo);
-    }
-
-
-    public void testVerifyToolsMessages() {
-        System.out.println("Verifying ToolsUtil messages");
-        verifyParamsInToolsMessages(toolsMessageInfo);
-    }
-
-    private void verifyParamsInToolsMessages(String[][] messageInfo) {
-        int numParams = 0;
-
-        for (int i = 0; i < messageInfo.length; i++) {
-            System.out.println("Testing message: " + messageInfo[i][0]);
-            try {
-                numParams = Integer.parseInt(messageInfo[i][1]);
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid param number specifier!");
-                assertTrue(false);
-            }
-            if (numParams == 0) {
-                String message = ToolsUtil.getMessage(messageInfo[i][0]);
-                assertTrue(message != null);
-            } else if (numParams > 0) {
-                Object[] params = generateParams(numParams);
-                String message = ToolsUtil.getMessage(messageInfo[i][0],
-                                                      params);
-                assertTrue(message != null);
-                for (int j = 0; j < params.length; j++) {
-                    assertTrue(message.indexOf((String) params[j]) != -1);
-                }
-            }
-        }
-    }
-
+    }     
 
     private void verifyParamsInMessages(String[][] messageInfo) {
         int numParams = 0;
@@ -280,14 +260,14 @@ public class TestUtil_messages extends ServletFacesTestCase {
             }
             if (numParams == 0) {
                 String message = MessageUtils.getExceptionMessageString(messageInfo[i][0]);
-                assertTrue(message != null);
+                assertTrue(messageInfo[i][0] + " was null", message != null);
             } else if (numParams > 0) {
                 Object[] params = generateParams(numParams);
                 String message = MessageUtils.getExceptionMessageString(messageInfo[i][0],
                                                           params);
                 assertTrue(message != null);
                 for (int j = 0; j < params.length; j++) {
-                    assertTrue(message.indexOf((String) params[j]) != -1);
+                    assertTrue(messageInfo[i][0] + " unable to finder marker for param " + j,message.indexOf((String) params[j]) != -1);
                 }
             }
         }

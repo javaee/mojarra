@@ -28,6 +28,7 @@ package com.sun.faces.application;
 import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.spi.ManagedBeanFactory.Scope;
 import com.sun.faces.util.Util;
+import com.sun.faces.mgbean.BeanManager;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextAttributeEvent;
@@ -226,7 +227,10 @@ public class WebappLifecycleListener implements ServletRequestListener,
         ApplicationAssociate associate = getAssociate();
         try {
             if (associate != null) {
-                associate.handlePreDestroy(beanName, bean, scope);
+                BeanManager beanManager = associate.getBeanManager();
+                if (beanManager.isManaged(beanName)) {
+                    beanManager.destroy(beanName, bean);
+                }              
             }
         } catch (Exception e) {
             String className = e.getClass().getName();

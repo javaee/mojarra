@@ -47,8 +47,9 @@
     <h:outputText value="#{replaceApplication.viewHandlerClass}" /> <br />
 
     <h:outputText value="#{replaceApplication.applicationClass}" /> <br />
-    
+   <%--
     <h:outputText value="#{replaceApplication.managedBeanFactoryClass}" /> <br />
+    --%>
 
   </h:form>
 
