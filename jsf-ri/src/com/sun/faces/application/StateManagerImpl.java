@@ -36,19 +36,14 @@
 
 package com.sun.faces.application;
 
-import javax.faces.FacesException;
-import javax.faces.application.StateManager;
-import javax.faces.component.NamingContainer;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.faces.render.ResponseStateManager;
-
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -60,24 +55,38 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.faces.FacesException;
+import javax.faces.application.StateManager;
+import javax.faces.component.NamingContainer;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.render.ResponseStateManager;
+
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.spi.SerializationProvider;
+import com.sun.faces.spi.SerializationProviderFactory;
 import com.sun.faces.util.DebugUtil;
+import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.LRUMap;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.Util;
-import com.sun.faces.util.FacesLogger;
 
 public class StateManagerImpl extends StateManager {
 
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();       
     
     private char requestIdSerial;
+    private SerializationProvider serialProvider;
+    private WebConfiguration webConfig;
 
     /** Number of views in logical view to be saved in session. */
     private int noOfViews;
@@ -85,6 +94,18 @@ public class StateManagerImpl extends StateManager {
     private Map<String,Class<?>> classMap = 
           new ConcurrentHashMap<String,Class<?>>(32);
 
+
+    // ------------------------------------------------------------ Constructors
+
+
+    public StateManagerImpl() {
+        FacesContext fContext = FacesContext.getCurrentInstance();
+        if (serialProvider == null) {
+            serialProvider = SerializationProviderFactory
+                  .createInstance(fContext.getExternalContext());
+        }
+        webConfig = WebConfiguration.getInstance(fContext.getExternalContext());
+    }
 
 
     // ---------------------------------------------------------- Public Methods
@@ -179,7 +200,7 @@ public class StateManagerImpl extends StateManager {
                 // for servers that persist session data since 
                 // UIComponent instances are not serializable.
                 viewRoot = restoreTree(((Object[]) stateArray[0]).clone());
-                viewRoot.processRestoreState(context, stateArray[1]); 
+                viewRoot.processRestoreState(context, handleRestoreState(stateArray[1])); 
 
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.fine("End restoring view in session for viewId "
@@ -239,8 +260,8 @@ public class StateManagerImpl extends StateManager {
             //
             // The motivation for this is to allow better memory tuning for 
             // apps that need this multi-window behavior.                                                     
-            int logicalMapSize = getNumberOfViewsParameter(context);
-            int actualMapSize = getNumberOfViewsInLogicalViewParameter(context);
+            int logicalMapSize = getNumberOfViewsParameter();
+            int actualMapSize = getNumberOfViewsInLogicalViewParameter();
         
             ExternalContext externalContext = context.getExternalContext();
             Object sessionObj = externalContext.getSession(true);
@@ -275,14 +296,14 @@ public class StateManagerImpl extends StateManager {
 
                 String id = idInLogicalMap + NamingContainer.SEPARATOR_CHAR +
                             idInActualMap;
-                result = new SerializedView(id, null);                
+                result = new SerializedView(id, null);
                 Object[] stateArray = actualMap.get(idInActualMap);
                 // reuse the array if possible
                 if (stateArray != null) {                    
                     stateArray[0] = tree;
-                    stateArray[1] = state;
+                    stateArray[1] = handleSaveState(state);
                 } else {
-                    actualMap.put(idInActualMap, new Object[] { tree, state });
+                    actualMap.put(idInActualMap, new Object[] { tree, handleSaveState(state) });
                 }                
             }
         } else {
@@ -353,88 +374,149 @@ public class StateManagerImpl extends StateManager {
     // --------------------------------------------------------- Private Methods
 
     /**
-         * Returns the value of ServletContextInitParameter that specifies the
-         * maximum number of views to be saved in this logical view. If none is specified
-         * returns <code>DEFAULT_NUMBER_OF_VIEWS_IN_LOGICAL_VIEW_IN_SESSION</code>.
-         * @param context the FacesContext
-         * @return number of logical views
-         */
-        protected int getNumberOfViewsInLogicalViewParameter(FacesContext context) {
+     * Returns the value of ServletContextInitParameter that specifies the
+     * maximum number of views to be saved in this logical view. If none is
+     * specified returns <code>DEFAULT_NUMBER_OF_VIEWS_IN_LOGICAL_VIEW_IN_SESSION</code>.
+     *
+     * @return number of logical views
+     */
+    protected int getNumberOfViewsInLogicalViewParameter() {
 
-            if (noOfViewsInLogicalView != 0) {
-                return noOfViewsInLogicalView;
-            }
-            WebConfiguration webConfig = 
-                  WebConfiguration.getInstance(context.getExternalContext());
-            String noOfViewsStr = webConfig
-                  .getOptionValue(WebContextInitParameter.NumberOfLogicalViews);
-            String defaultValue =
-                  WebContextInitParameter.NumberOfLogicalViews.getDefaultValue();
-            try {
-                noOfViewsInLogicalView = Integer.valueOf(noOfViewsStr);
-            } catch (NumberFormatException nfe) {
-                if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.fine("Error parsing the servetInitParameter "
-                                    +
-                                    WebContextInitParameter.NumberOfLogicalViews.getQualifiedName() 
-                                    + ". Using default "
-                                    +
-                                    noOfViewsInLogicalView);
-                }
-                try {
-                    noOfViewsInLogicalView = Integer.valueOf(defaultValue);
-                } catch (NumberFormatException ne) {
-                    // won't occur
-                }
-            }        
-       
+        if (noOfViewsInLogicalView != 0) {
             return noOfViewsInLogicalView;
-
         }
 
-
-        /**
-         * Returns the value of ServletContextInitParameter that specifies the
-         * maximum number of logical views to be saved in session. If none is specified
-         * returns <code>DEFAULT_NUMBER_OF_VIEWS_IN_SESSION</code>.
-         * @param context the FacesContext
-         * @return number of logical views
-         */
-        protected int getNumberOfViewsParameter(FacesContext context) {
-        
-            if (noOfViews != 0) {
-                return noOfViews;
+        String noOfViewsStr = webConfig
+              .getOptionValue(WebContextInitParameter.NumberOfLogicalViews);
+        String defaultValue =
+              WebContextInitParameter.NumberOfLogicalViews.getDefaultValue();
+        try {
+            noOfViewsInLogicalView = Integer.valueOf(noOfViewsStr);
+        } catch (NumberFormatException nfe) {
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("Error parsing the servetInitParameter "
+                            +
+                            WebContextInitParameter.NumberOfLogicalViews
+                                  .getQualifiedName()
+                            + ". Using default "
+                            +
+                            noOfViewsInLogicalView);
             }
-            WebConfiguration webConfig = 
-                  WebConfiguration.getInstance(context.getExternalContext());
-            String noOfViewsStr = webConfig
-                  .getOptionValue(WebContextInitParameter.NumberOfViews);
-            String defaultValue =
-                  WebContextInitParameter.NumberOfViews.getDefaultValue();
             try {
-                noOfViews = Integer.valueOf(noOfViewsStr);
-            } catch (NumberFormatException nfe) {
-                if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.fine("Error parsing the servetInitParameter "
-                                    +
-                                    WebContextInitParameter.NumberOfViews.getQualifiedName() 
-                                    + ". Using default "
-                                    +
-                                    noOfViews);
-                }
-                try {
-                    noOfViews = Integer.valueOf(defaultValue);
-                } catch (NumberFormatException ne) {
-                    // won't occur
-                }
-            }        
-       
-            return noOfViews;        
-
+                noOfViewsInLogicalView = Integer.valueOf(defaultValue);
+            } catch (NumberFormatException ne) {
+                // won't occur
+            }
         }
-    
-    
-    
+
+        return noOfViewsInLogicalView;
+
+    }
+
+
+    /**
+     * Returns the value of ServletContextInitParameter that specifies the
+     * maximum number of logical views to be saved in session. If none is
+     * specified returns <code>DEFAULT_NUMBER_OF_VIEWS_IN_SESSION</code>.
+     *
+     * @return number of logical views
+     */
+    protected int getNumberOfViewsParameter() {
+
+        if (noOfViews != 0) {
+            return noOfViews;
+        }
+
+        String noOfViewsStr = webConfig
+              .getOptionValue(WebContextInitParameter.NumberOfViews);
+        String defaultValue =
+              WebContextInitParameter.NumberOfViews.getDefaultValue();
+        try {
+            noOfViews = Integer.valueOf(noOfViewsStr);
+        } catch (NumberFormatException nfe) {
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("Error parsing the servetInitParameter "
+                            +
+                            WebContextInitParameter.NumberOfViews
+                                  .getQualifiedName()
+                            + ". Using default "
+                            +
+                            noOfViews);
+            }
+            try {
+                noOfViews = Integer.valueOf(defaultValue);
+            } catch (NumberFormatException ne) {
+                // won't occur
+            }
+        }
+
+        return noOfViews;
+
+    }
+
+
+    /**
+     * @param state the object returned from <code>UIView.processSaveState</code>
+     * @return If {@link BooleanWebContextInitParameter#SerializeServerState} is
+     *  <code>true</code>, serialize and return the state, otherwise, return
+     *  <code>state</code> unchanged.
+     */
+    private Object handleSaveState(Object state) {
+
+        if (webConfig.isOptionEnabled(BooleanWebContextInitParameter.SerializeServerState)) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream(1024);
+            ObjectOutputStream oas = null;
+            try {
+                oas = serialProvider.createObjectOutputStream(baos);
+                oas.writeObject(state);
+                oas.flush();
+            } catch (Exception e) {
+                throw new FacesException(e);
+            } finally {
+                if (oas != null) {
+                    try {
+                        oas.close();
+                    } catch (IOException ignored) { }
+                }
+            }
+            return baos.toByteArray();
+        } else {
+            return state;
+        }
+
+    }
+
+
+    /**
+     * @param state the state as it was stored in the session
+     * @return an object that can be passed to <code>UIViewRoot.processRestoreState</code>.
+     *  If {@link BooleanWebContextInitParameter#SerializeServerState} de-serialize the
+     *  state prior to returning it, otherwise return <code>state</code> as is.
+     */
+    private Object handleRestoreState(Object state) {
+
+        if (webConfig.isOptionEnabled(BooleanWebContextInitParameter.SerializeServerState)) {
+            ByteArrayInputStream bais = new ByteArrayInputStream((byte[]) state);
+            ObjectInputStream ois = null;
+            try {
+                ois = serialProvider.createObjectInputStream(bais);
+                return ois.readObject();
+            } catch (Exception e) {
+                throw new FacesException(e);
+            } finally {
+                if (ois != null) {
+                    try {
+                        ois.close();
+                    } catch (IOException ignored) { }
+                }
+            }
+        } else {
+            return state;
+        }
+
+    }
+
+
     private static void captureChild(List<TreeNode> tree, 
                                      int parent,
                                      UIComponent c) {

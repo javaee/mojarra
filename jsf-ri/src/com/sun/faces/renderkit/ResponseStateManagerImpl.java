@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.49 2007/08/08 18:36:27 rlubke Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.50 2007/09/13 20:38:52 rlubke Exp $
  */
 
 /*
@@ -145,11 +145,6 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
             return s;
         }
 
-        if (serialProvider == null) {
-            serialProvider = SerializationProviderFactory
-                  .createInstance(context.getExternalContext());
-        }
-
         StateManager stateManager = Util.getStateManager(context);
 
         String viewString = getStateParam(context);
@@ -238,10 +233,6 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     public void writeState(FacesContext context, SerializedView view)
     throws IOException {
 
-        if (serialProvider == null) {
-            serialProvider = SerializationProviderFactory
-                  .createInstance(context.getExternalContext());
-        }
         StateManager stateManager = Util.getStateManager(context);
         ResponseWriter writer = context.getResponseWriter();
 
@@ -460,6 +451,11 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
                                    defaultSize});
                 }
             csBuffSize = Integer.parseInt(defaultSize);
+        }
+
+        if (serialProvider == null) {
+            serialProvider = SerializationProviderFactory
+                  .createInstance(FacesContext.getCurrentInstance().getExternalContext());
         }
                 
     }

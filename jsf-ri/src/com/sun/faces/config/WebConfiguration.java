@@ -1,5 +1,5 @@
 /*
- * $Id: WebConfiguration.java,v 1.30 2007/08/08 17:51:09 rlubke Exp $
+ * $Id: WebConfiguration.java,v 1.31 2007/09/13 20:38:51 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -774,6 +774,10 @@ public class WebConfiguration {
         EnableLoadBundle11Compatibility(
              "com.sun.faces.enabledLoadBundle11Compatibility",
              false
+        ),
+        SerializeServerState(
+              "com.sun.faces.serializeServerState",
+              false
         );
 
         private BooleanWebContextInitParameter alternate;
