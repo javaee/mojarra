@@ -48,7 +48,6 @@
 </head>
 
 <body bgcolor="white">
-<f:loadBundle basename="carstore.bundles.Resources" var="bundle"/>
 <f:view>
     <h:form>
         <h:graphicImage url="/images/cardemo.jpg"/>

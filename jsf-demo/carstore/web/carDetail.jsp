@@ -49,8 +49,6 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 
-<f:loadBundle basename="carstore.bundles.Resources" var="bundle"/>
-
 <body bgcolor="white">
 
 <f:view>
