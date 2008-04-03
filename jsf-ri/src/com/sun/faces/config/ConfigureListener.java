@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.102 2007/04/22 21:41:04 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.103 2007/04/23 22:04:04 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -32,6 +32,7 @@ import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.el.FacesCompositeELResolver;
+import com.sun.faces.el.ELContextListenerImpl;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;

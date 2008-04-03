@@ -1,5 +1,5 @@
 /*
- * $Id: ELContextListenerImpl.java,v 1.4 2006/03/29 23:03:43 rlubke Exp $
+ * $Id: ELContextListenerImpl.java,v 1.1 2007/04/23 22:04:04 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -26,7 +26,7 @@
  * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
  */
 
-package com.sun.faces.config;
+package com.sun.faces.el;
 
 import javax.faces.context.FacesContext;
 import javax.el.ELContext;
