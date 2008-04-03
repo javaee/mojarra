@@ -50,7 +50,7 @@
     <property name="tasks.home" value="${myenv.TASKS_HOME}"/>
 
     <property name="name" value="jsf-ri-sandbox"/>
-    <property name="sb.impl.version" value="0.8"/>
+    <property name="sb.impl.version" value="0.9"/>
     <property name="impl.name" value="JSF RI Sandbox"/>
 
     <!-- ******************* Structural ************************** -->

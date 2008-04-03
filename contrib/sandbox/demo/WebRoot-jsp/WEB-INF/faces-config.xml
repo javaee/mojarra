@@ -42,6 +42,7 @@
 
     <lifecycle>
         <phase-listener>com.sun.faces.sandbox.util.PrettyUrlPhaseListener</phase-listener>
+		<phase-listener>com.sun.faces.sandbox.util.HtmlEditorResourcePhaseListener</phase-listener>
     </lifecycle>
 
     <managed-bean>
