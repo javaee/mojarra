@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.36 2007/07/10 18:51:34 rlubke Exp $
+ * $Id: OutputLinkRenderer.java,v 1.37 2007/08/24 19:03:29 rlubke Exp $
  */
 
 /*
@@ -61,7 +61,7 @@ import com.sun.faces.util.Util;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.36 2007/07/10 18:51:34 rlubke Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.37 2007/08/24 19:03:29 rlubke Exp $
  */
 
 public class OutputLinkRenderer extends LinkRenderer {
@@ -159,11 +159,7 @@ public class OutputLinkRenderer extends LinkRenderer {
             return;
         }
         for (UIComponent kid : component.getChildren()) {
-            kid.encodeBegin(context);
-            if (kid.getRendersChildren()) {
-                kid.encodeChildren(context);
-            }
-            kid.encodeEnd(context);
+            encodeRecursive(context, kid);
         }
 
     }
