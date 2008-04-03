@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.89 2007/02/27 23:10:19 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.90 2007/03/21 21:45:00 jdlee Exp $
  */
 
 /*
@@ -901,7 +901,7 @@ public class ApplicationImpl extends Application {
                 MessageUtils.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
         }
         if (logger.isLoggable(Level.FINE)) {
-            logger.fine(MessageFormat.format("created validator of type ''{0''}",
+            logger.fine(MessageFormat.format("created validator of type ''{0}''",
                                              validatorId));
         }
         return returnVal;
