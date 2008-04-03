@@ -201,6 +201,10 @@ class InitFacesContext extends FacesContext {
             return null;
         }
 
+        public String getMimeType(String file) {
+            return servletContext.getMimeType(file);
+        }
+
         public Object getContext() {
             return servletContext;
         }

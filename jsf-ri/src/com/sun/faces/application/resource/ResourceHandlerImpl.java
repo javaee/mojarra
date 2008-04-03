@@ -49,7 +49,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
-import javax.activation.MimetypesFileTypeMap;
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
 import javax.faces.context.ExternalContext;
@@ -72,7 +71,6 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
     ResourceManager manager = new ResourceManager();
     List<Pattern> excludePatterns;
-    MimetypesFileTypeMap mimeTypeMap;
     private long creationTime;
     private WebConfiguration webconfig;
 
@@ -86,9 +84,6 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
         creationTime = System.currentTimeMillis();
         webconfig = WebConfiguration.getInstance();
-        mimeTypeMap = new MimetypesFileTypeMap();
-        mimeTypeMap.addMimeTypes("text/javascript js JS");
-        mimeTypeMap.addMimeTypes("text/css css CSS");
         initExclusions();
 
     }
@@ -104,7 +99,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
         Util.notNull("resourceName", resourceName);
 
-        String contentType = getContentTypeFromResourceName(resourceName);
+        String contentType = getContentType(resourceName);
         return createResource(resourceName, null, contentType);
 
     }
@@ -117,7 +112,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
         Util.notNull("resourceName", resourceName);
 
-        String contentType = getContentTypeFromResourceName(resourceName);
+        String contentType = getContentType(resourceName);
         return createResource(resourceName, libraryName, contentType);
 
     }
@@ -198,7 +193,10 @@ public class ResourceHandlerImpl extends ResourceHandler {
                           Channels.newChannel(resource.getInputStream());
                     out = Channels.newChannel(response.getOutputStream());
                     response.setBufferSize(buf.capacity());
-                    response.setContentType(resource.getContentType());
+                    String contentType = resource.getContentType();
+                    if (contentType != null) {
+                        response.setContentType(resource.getContentType());
+                    }
                     handleHeaders(resource, response);
 
                     int size = 0;
@@ -304,13 +302,9 @@ public class ResourceHandlerImpl extends ResourceHandler {
      *  be something like path1/path2/resource.jpg or resource.jpg
      * @return the content type for this resource
      */
-    private String getContentTypeFromResourceName(String resourceName) {
+    private String getContentType(String resourceName) {
 
-        String res = resourceName;
-        if (res.contains("/")) {
-            res = res.substring(res.lastIndexOf('/') + 1);
-        }
-        return mimeTypeMap.getContentType(res);
+        return FacesContext.getCurrentInstance().getExternalContext().getMimeType(resourceName);
 
     }
 

@@ -71,7 +71,7 @@ public class ResourceManager {
     private ResourceHelper classpathHelper = ClasspathResourceHelper.getInstance();
 
     private Map<String, LibraryInfo> libraries =
-          new ConcurrentHashMap<String, LibraryInfo>(4, 1.0f);
+          new ConcurrentHashMap<String, LibraryInfo>();
     private final Lock lock = new ReentrantLock();
 
     // ------------------------------------------------------ Public Methods

@@ -1,5 +1,5 @@
 /*
- * $Id: StoreServletContext.java,v 1.11 2007/04/27 22:02:04 ofung Exp $
+ * $Id: StoreServletContext.java,v 1.12 2008/01/25 20:20:59 rlubke Exp $
  */
 
 /*
@@ -115,6 +115,10 @@ public class StoreServletContext extends Object {
 
         public String getAuthType() {
             return null;
+        }
+
+        public String getMimeType(String file) {
+            return servletContext.getMimeType(file);
         }
 
         public Object getContext() {

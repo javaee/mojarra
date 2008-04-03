@@ -35,7 +35,7 @@
  */
 
 /*
- * $Id: ExternalContext.java,v 1.34 2008/01/25 20:06:13 rlubke Exp $
+ * $Id: ExternalContext.java,v 1.35 2008/01/25 20:20:58 rlubke Exp $
  */
  
 /*
@@ -263,8 +263,19 @@ public abstract class ExternalContext {
     /**
      * RELEASE_PENDING (edburs,rogerk) javadocs
      * @return
+     *
+     * @since 2.0
      */
-    public abstract String getMimeType(String file);
+    public String getMimeType(String file) {
+
+        ExternalContext impl = getDefaultExternalContext();
+        if (impl != null) {
+            return impl.getMimeType(file);
+        }
+
+        throw new UnsupportedOperationException();
+        
+    }
 
 
     /**
