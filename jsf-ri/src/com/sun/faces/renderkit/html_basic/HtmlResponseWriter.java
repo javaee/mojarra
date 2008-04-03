@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.48 2007/08/30 19:29:12 rlubke Exp $
+ * $Id: HtmlResponseWriter.java,v 1.49 2007/09/24 18:57:34 rlubke Exp $
  */
 
 /*
@@ -88,6 +88,9 @@ public class HtmlResponseWriter extends ResponseWriter {
 
     // flag to indicate we're writing a CDATA section
     private boolean writingCdata;
+
+    // flat to indicate the current element is CDATA
+    private boolean isCdata;
 
     // flag to indicate that we're writing a 'script' or 'style' element
     private boolean isScript;
@@ -296,8 +299,11 @@ public class HtmlResponseWriter extends ResponseWriter {
                   MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "name"));
         }
 
-        // always turn escaping back on once an element ends
-        dontEscape = false;
+        if (!writingCdata) {
+            // always turn escaping back on once an element ends unless we're
+            // still writing cdata content
+            dontEscape = false;
+        }
         isXhtml = getContentType().equals(
             RIConstants.XHTML_CONTENT_TYPE);
         // Ensure we have a writer to which we can write.  Make sure
@@ -379,10 +385,12 @@ public class HtmlResponseWriter extends ResponseWriter {
                 }
             }
             if (isXhtml) {
-                if (isScript) {
-                    writerFromContext.write("\n//]]>\n");
-                } else {
-                    writerFromContext.write("\n]]>\n");
+                if (!writingCdata) {
+                    if (isScript) {
+                        writerFromContext.write("\n//]]>\n");
+                    } else {
+                        writerFromContext.write("\n]]>\n");
+                    }
                 }
             } else {
                 if (isScriptHidingEnabled) {
@@ -395,6 +403,8 @@ public class HtmlResponseWriter extends ResponseWriter {
         if ("cdata".equalsIgnoreCase(name)) {
             writerFromContext.write("]]>");
             writingCdata = false;
+            isCdata = false;
+            dontEscape = false;
             return;
         }
         // See if we need to close the start of the last element
@@ -471,11 +481,18 @@ public class HtmlResponseWriter extends ResponseWriter {
         isScriptOrStyle(name);
         scriptOrStyleSrc = false;
         if ("cdata".equalsIgnoreCase(name)) {
+            isCdata = true;
             writingCdata = true;
             dontEscape = true;
             writer.write("<![CDATA[");
             closeStart = false;
             return;
+        } else if (writingCdata) {
+            // starting an element within a cdata section,
+            // keep escaping disabled
+            isCdata = false;
+            writingCdata = true;
+            dontEscape = true;
         }
 
         writer.write('<');
@@ -555,7 +572,7 @@ public class HtmlResponseWriter extends ResponseWriter {
             return;
         }
 
-        if (writingCdata) {
+        if (isCdata) {
             return;
         }
 
@@ -787,7 +804,7 @@ public class HtmlResponseWriter extends ResponseWriter {
                   MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "value"));
         }
 
-        if (writingCdata) {
+        if (isCdata) {
             return;
         }
 
@@ -829,10 +846,12 @@ public class HtmlResponseWriter extends ResponseWriter {
                 isXhtml = getContentType().equals(
                      RIConstants.XHTML_CONTENT_TYPE);
                 if (isXhtml) {
-                    if (isScript) {
-                        writer.write("\n//<![CDATA[\n");
-                    } else {
-                        writer.write("\n<![CDATA[\n");
+                    if (!writingCdata) {
+                        if (isScript) {
+                            writer.write("\n//<![CDATA[\n");
+                        } else {
+                            writer.write("\n<![CDATA[\n");
+                        }
                     }
                 } else {
                     if (isScriptHidingEnabled) {

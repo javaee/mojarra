@@ -1,5 +1,5 @@
 /*
- * $Id: TestHtmlResponseWriter.java,v 1.26 2007/04/27 22:02:09 ofung Exp $
+ * $Id: TestHtmlResponseWriter.java,v 1.27 2007/09/24 18:57:34 rlubke Exp $
  */
 
 /*
@@ -59,7 +59,7 @@ import com.sun.faces.cactus.ServletFacesTestCase;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHtmlResponseWriter.java,v 1.26 2007/04/27 22:02:09 ofung Exp $
+ * @version $Id: TestHtmlResponseWriter.java,v 1.27 2007/09/24 18:57:34 rlubke Exp $
  */
 
 public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestCase
@@ -265,6 +265,20 @@ public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestC
         } catch (IOException e) {
             assertTrue(false);
         }
+
+        // cdata with script
+        sw = new StringWriter();
+        try {
+            writer = renderKit.createResponseWriter(sw, "application/xhtml+xml", "UTF-8");
+            writer.startElement("cdata", new UIOutput());
+            writer.startElement("script", new UIOutput());
+            writer.writeText("alert('hello');", null);
+            writer.endElement("script");
+            writer.endElement("cdata");
+            assertTrue("<![CDATA[<script>alert('hello');</script>]]>".equals(sw.toString()));
+        } catch (IOException e) {
+            assertTrue(false);
+        }
     }
 
 
@@ -333,6 +347,22 @@ public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestC
              "//]]>\n" +
              "</script>";
         System.out.println("2:" + result);
+        assertTrue(expected.equals(result));
+
+        swx = new StringWriter();
+        xmlWriter = renderKit.createResponseWriter(swx, "application/xhtml+xml", "UTF-8");
+        xmlWriter.startElement("ajax", output);
+        xmlWriter.startElement("cdata", output);
+        xmlWriter.startElement("script", output);
+        xmlWriter.writeAttribute("type", "text/javascript", "type");
+        xmlWriter.writeAttribute("language", "Javascript", "language");
+        xmlWriter.writeText("if (true && true) { alert('foo'); }", null);
+        xmlWriter.endElement("script");
+        xmlWriter.endElement("cdata");
+        xmlWriter.endElement("ajax");
+        result = swx.toString();
+        expected = "<ajax><![CDATA[<script type=\"text/javascript\" language=\"Javascript\">if (true && true) { alert('foo'); }</script>]]></ajax>";
+        System.out.println("3:" + result);
         assertTrue(expected.equals(result));
 
     }
