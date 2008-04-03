@@ -1,5 +1,5 @@
 /*
- * $Id: TestExternalContextImpl.java,v 1.23 2006/03/29 23:04:47 rlubke Exp $
+ * $Id: TestExternalContextImpl.java,v 1.24 2007/04/02 18:45:08 rlubke Exp $
  */
 
 /*
@@ -37,8 +37,8 @@ import org.apache.cactus.WebRequest;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpSession;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -50,14 +50,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.Collection;
 
 /**
  * <B>TestExternalContextImpl</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestExternalContextImpl.java,v 1.23 2006/03/29 23:04:47 rlubke Exp $
+ * @version $Id: TestExternalContextImpl.java,v 1.24 2007/04/02 18:45:08 rlubke Exp $
  */
 
 public class TestExternalContextImpl extends ServletFacesTestCase {
@@ -1318,6 +1317,20 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
             assertTrue(e instanceof UnsupportedOperationException);
         }
     }
+
+    public void testNoCookieEnum() {
+
+        Map requestCookieMap = getFacesContext().getExternalContext().getRequestCookieMap();
+        try {
+            Set entries = requestCookieMap.entrySet();
+            for (Object o : entries) {
+                // iterate to cause the failure
+            }
+        } catch (Exception e) {
+            assertTrue(false);
+        }
+    }
+
 
     public void beginRequestCookieMap(WebRequest theRequest) {
         theRequest.addCookie("foo", "bar");

@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.55 2007/03/08 18:57:02 rlubke Exp $
+ * $Id: ExternalContextImpl.java,v 1.56 2007/04/02 18:45:07 rlubke Exp $
  */
 
 /*
@@ -78,7 +78,7 @@ import com.sun.faces.util.Util;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.55 2007/03/08 18:57:02 rlubke Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.56 2007/04/02 18:45:07 rlubke Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -1442,7 +1442,7 @@ class RequestCookieMap extends BaseContextMap<Object> {
 
         public CookieArrayEnumerator(Cookie[] cookies) {
             this.cookies = cookies;
-            upperBound = cookies.length;
+            upperBound = ((this.cookies != null) ? this.cookies.length : -1);
         }
 
         public boolean hasMoreElements() {
