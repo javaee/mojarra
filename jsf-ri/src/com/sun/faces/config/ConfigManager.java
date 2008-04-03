@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManager.java,v 1.23 2007/11/09 21:16:43 rlubke Exp $
+ * $Id: ConfigManager.java,v 1.24 2008/03/05 21:34:52 rlubke Exp $
  */
 
 /*
@@ -205,8 +205,8 @@ public class ConfigManager {
             } catch (Exception e) {
                 // clear out any configured factories
                 releaseFactories();
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE,
+                if (LOGGER.isLoggable(Level.INFO)) {
+                    LOGGER.log(Level.INFO,
                                "Unsanitized stacktrace from failed start...",
                                e);
                 }
@@ -275,15 +275,12 @@ public class ConfigManager {
              new ArrayList<FutureTask<Document>>(RESOURCE_PROVIDERS.size() << 1);
         boolean validating = WebConfiguration.getInstance(sc)
              .isOptionEnabled(BooleanWebContextInitParameter.ValidateFacesConfigFiles);
-        DocumentBuilderFactory factory = DbfFactory.getFactory();
         for (FutureTask<List<URL>> t : urlTasks) {
             try {
                 List<URL> l = t.get();
                 for (URL u : l) {
                     FutureTask<Document> d =
-                         new FutureTask<Document>(new ParseTask(factory,
-                                                                validating,
-                                                                u));
+                         new FutureTask<Document>(new ParseTask(validating, u));
                     docTasks.add(d);
                     executor.execute(d);
                 }
@@ -366,19 +363,16 @@ public class ConfigManager {
          * <p>
          *   Constructs a new ParseTask instance
          * </p>
-         * @param factory a DocumentBuilderFactory configured with the desired
-         *  parse settings
+         *
          * @param validating whether or not we're validating
          * @param documentURL a URL to the configuration resource to be parsed
          * @throws Exception general error
          */
-        public ParseTask(DocumentBuilderFactory factory,
-                         boolean validating,
-                         URL documentURL)
+        public ParseTask(boolean validating, URL documentURL)
         throws Exception {
 
             this.documentURL = documentURL;
-            this.factory = factory;
+            this.factory = DbfFactory.getFactory();
             this.validating = validating;
 
         }
@@ -441,7 +435,7 @@ public class ConfigManager {
                 if (FACES_SCHEMA_DEFAULT_NS.equals(documentElement.getNamespaceURI())) {
                     Attr version = (Attr)
                             documentElement.getAttributes().getNamedItem("version");
-                    DbfFactory.FacesSchema schema = null;
+                    DbfFactory.FacesSchema schema;
                     if (version != null) {
                         String versionStr = version.getValue();
                         if ("2.0".equals(versionStr)) {
