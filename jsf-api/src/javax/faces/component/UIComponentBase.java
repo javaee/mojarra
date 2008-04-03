@@ -1659,16 +1659,9 @@ public abstract class UIComponentBase extends UIComponent {
                 throw new NullPointerException();
             }
 
-            if (attributes == null) {
-                initMap();
+            for (Map.Entry<? extends String, ?> entry : map.entrySet()) {
+                this.put(entry.getKey(), entry.getValue());
             }
-            for (String key : map.keySet()) {
-                List<String> sProperties = component.getAttributesThatAreSet(true);
-                if (sProperties != null && !sProperties.contains(key)) {
-                    sProperties.add(key);
-                }
-            }
-            attributes.putAll(map);
         }
 
         public Object remove(Object keyObj) {
