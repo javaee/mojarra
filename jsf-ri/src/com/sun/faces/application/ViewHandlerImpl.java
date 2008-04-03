@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.100 2007/03/28 22:29:04 rogerk Exp $
+ * $Id: ViewHandlerImpl.java,v 1.101 2007/03/30 11:38:01 rogerk Exp $
  */
 
 
@@ -68,7 +68,7 @@ import java.util.logging.Logger;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.100 2007/03/28 22:29:04 rogerk Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.101 2007/03/30 11:38:01 rogerk Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -257,10 +257,12 @@ public class ViewHandlerImpl extends ViewHandler {
         String mapping = Util.getFacesMapping(context);
         UIViewRoot viewRoot = null;
 
-        if (mapping != null && !Util.isPrefixMapped(mapping)) {
-            viewId = convertViewId(context, viewId);
-        } else {
-            viewId = normalizeRequestURI(viewId, mapping);
+        if (mapping != null) {
+            if (!Util.isPrefixMapped(mapping)) {
+                viewId = convertViewId(context, viewId);
+            } else {
+                viewId = normalizeRequestURI(viewId, mapping);
+            }
         }
 
         // maping could be null if a non-faces request triggered
