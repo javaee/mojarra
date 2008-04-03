@@ -45,7 +45,15 @@ import java.util.Map;
 import javax.faces.context.FacesContext;
 
 /**
- * RELEASE_PENDING (eburns,rogerk) - review docs
+ * <p class="changed">An instance of <code>Resource</code> is a Java
+ * object representation of the artifact that is served up in response
+ * to a <i>resource request</i> from the client.  Instances of
+ * <code>Resource</code> are normally created and initialized via calls
+ * to {@link ResourceHandler@createResource}.  See the documentation for
+ * {@link ResourceHandler} for more information.</p>
+ *
+ * <div class="changed">
+ * </div>
  *
  * @since 2.0
  */
@@ -62,9 +70,8 @@ public abstract class Resource {
 
 
     /**
-     * RELEASE_PENDING (eburns,rogerk) - review docs
-     * Return the content-type for this resource.
-     * @return
+     * <p class="changed">Return the MIME content-type for this resource.</p>
+     * @return the MIME content-type for this resource.
      */
     public String getContentType() {
 
@@ -74,8 +81,10 @@ public abstract class Resource {
 
 
     /**
-     * RELEASE_PENDING (eburns,rogerk) - review docs
-     * @param contentType
+     * <p class="changed">Set the MIME content-type for this resource.
+     * The default implementation performs no validation on the
+     * argument.</p>
+     * @param contentType the MIME content-type for this resource
      */
     public void setContentType(String contentType) {
 
@@ -85,9 +94,15 @@ public abstract class Resource {
 
 
     /**
-     * RELEASE_PENDING (eburns,rogerk) - review docs
-     * Return the libraryName for this resource.  May be null.
-     * @return
+     * <p class="changed">Return the libraryName for this resource.  May
+     * be <code>null</code>.  The libraryName for a resource is an
+     * optional String that indicates membership in a "resource
+     * library".  All resources with the same libraryName belong to the
+     * same "resource library".  The "resource library" concept allows
+     * disambiguating resources that have the resourceName.  See {@link
+     * ResourceHandler} for more information.</p>
+     *
+     * @return Return the libraryName for this resource.  May be null.
      */
     public String getLibraryName() {
 
@@ -97,8 +112,9 @@ public abstract class Resource {
 
 
     /**
-     * RELEASE_PENDING (eburns,rogerk) - review docs
-     * @param libraryName
+     * <p class="changed">Set the libraryName for this resource.</p>
+     * @param libraryName the libraryName for this resource.  May be
+     * <code>null</code>.
      */
     public void setLibraryName(String libraryName) {
 
@@ -108,9 +124,11 @@ public abstract class Resource {
 
 
     /**
-     * RELEASE_PENDING (eburns,rogerk) - review docs
-     * Return the resourceName for this resource.  Will never be null.
-     * @return
+     * <p class="changed">Return the resourceName for this resource.
+     * Will never be null.  All <code>Resource</code> instances must
+     * have a resourceName.</p>
+     * @return Return the resourceName for this resource.  Will never be
+     * null.
      */
     public String getResourceName() {
 
@@ -120,10 +138,17 @@ public abstract class Resource {
 
 
     /**
-     * RELEASE_PENDING (eburns,rogerk) - review docs
-     * @param resourceName
+     * <p class="changed">Set the resourceName for this resource.</p>
+     * @param resourceName a non-null String.
+     *
+     * @throws NullPointerException if argument
+     * <code>resourceName</code> is null.
      */
     public void setResourceName(String resourceName) {
+
+	if (null == resourceName) {
+	    throw new NullPointerException("PENDING_I18N: All resources must have a non-null resourceName.");
+	}
 
         this.resourceName = resourceName;
 
@@ -131,10 +156,15 @@ public abstract class Resource {
 
 
     /**
-     * RELEASE_PENDING (eburns,rogerk) - review docs
-     * If the current request is a resource request, return an InputStream
-     * containing the bytes of the resource.  Otherwise, throw an IOException.
-     * @return
+     * <p class="changed">If the current request is a resource request,
+     * (that is, {@link ResourceHandler#isResourceRequest} returns
+     * <code>true</code>), return an <code>InputStream</code> containing
+     * the bytes of the resource.  Otherwise, throw an
+     * <code>IOException</code>.</p>
+     * @return an <code>InputStream</code> containing the bytes of the
+     * resource.
+     *
+     * @throws IOException if the current request is not a resource request.
      */
     public abstract InputStream getInputStream() throws IOException;
 

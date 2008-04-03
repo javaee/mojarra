@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.35 2007/11/02 00:30:15 rlubke Exp $
+ * $Id: FacesServlet.java,v 1.36 2008/01/16 19:01:49 edburns Exp $
  */
 
 /*
@@ -203,9 +203,11 @@ public final class FacesServlet implements Servlet {
 
 
     /**
-     * RELEASE_PENDING (edburns, rogerk) - update docs
-     * <p>Process an incoming request, and create the corresponding
-     * response, by executing the request processing lifecycle.</p>
+     * <p class="changed">Process an incoming request, and create the
+     * corresponding response according to the following
+     * specification.</p>
+     * 
+     * <div class="changed">
      *
      * <p>If the <code>request</code> and <code>response</code>
      * arguments to this method are not instances of
@@ -231,13 +233,48 @@ public final class FacesServlet implements Servlet {
      *
      * </ul>
      *
-     * 
+     
+     * <p>If none of the cases described above in the specification for
+     * this method apply to the servicing of this request, the following
+     * action must be taken to service the request.</p>
+
+     * <p>Acquire a {@link FacesContext} instance for this request.</p>
+
+     * <p>Acquire the <code>ResourceHandler</code> for this request by
+     * calling {@link
+     * javax.faces.application.Application#getResourceHandler}.  Call
+     * {@link
+     * javax.faces.application.ResourceHandler#isResourceRequest}.  If
+     * this returns <code>true</code> call {@link
+     * javax.faces.application.ResourceHandler#handleResourceRequest}.
+     * If this returns <code>false</code>, call {@link
+     * javax.faces.lifecycle.Lifecycle#execute} followed by {@link
+     * javax.faces.lifecycle.Lifecycle#render}.  If a {@link
+     * javax.faces.FacesException} is thrown in either case, extract the
+     * cause from the <code>FacesException</code>.  If the cause is
+     * <code>null</code> extract the message from the
+     * <code>FacesException</code>, put it inside of a new
+     * <code>ServletException</code> instance, and pass the
+     * <code>FacesException</code> instance as the root cause, then
+     * rethrow the <code>ServletException</code> instance.  If the cause
+     * is an instance of <code>ServletException</code>, rethrow the
+     * cause.  If the cause is an instance of <code>IOException</code>,
+     * rethrow the cause.  Otherwise, create a new
+     * <code>ServletException</code> instance, passing the message from
+     * the cause, as the first argument, and the cause itself as the
+     * second argument.</p>
+
+     * In a finally block, {@link
+     * javax.faces.context.FacesContext#release} must be called.
+
+     * </div>
      *
      * @param request The servlet request we are processing
      * @param response The servlet response we are creating
      *
      * @throws IOException if an input/output error occurs during processing
      * @throws ServletException if a servlet error occurs during processing
+
      */
     public void service(ServletRequest request,
                         ServletResponse response)
