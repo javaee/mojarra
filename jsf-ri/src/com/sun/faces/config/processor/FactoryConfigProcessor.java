@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryConfigProcessor.java,v 1.5 2007/06/28 01:28:05 rlubke Exp $
+ * $Id: FactoryConfigProcessor.java,v 1.6 2007/06/28 16:28:00 rlubke Exp $
  */
 
 /*
@@ -142,10 +142,8 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
             Node factory = factories.item(i);
             NodeList children = ((Element) factory)
                  .getElementsByTagNameNS(namespace, "*");
-            System.out.println("Children: " + children + ' ' + children.getLength());
             for (int c = 0, csize = children.getLength(); c < csize; c++) {
                 Node n = children.item(c);
-                System.out.println("Node: " + n);
                 if (APPLICATION_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.APPLICATION_FACTORY,
                                getNodeText(n));
@@ -165,7 +163,6 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
 
 
     private static void setFactory(String factoryName, String factoryImpl) {
-        System.out.println("Calling setFactory: " + factoryName  + ' ' + factoryImpl);
         if (factoryName != null && factoryImpl != null) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
