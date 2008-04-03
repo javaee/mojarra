@@ -7,11 +7,11 @@
 <html>
 <head>
     <title>JSF RI Sandbox  Test App</title>
-    <link rel="stylesheet" type="text/css" href="../style.css"/>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
 <body>
     <div class="header_main">
-        <div class="header_left">JSF RI Sandbox Test App</div>
+        <div class="header_left">JSF RI Sandbox Test App - JSP</div>
         <div class="header_right"></div>
         <div style="clear: both" />
     </div>

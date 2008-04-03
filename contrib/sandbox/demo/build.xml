@@ -43,15 +43,22 @@
     <!-- The base directory for compilation targets -->
     <property name="sandbox.dir" value="${basedir}/.."/>
     <property name="build.dir" value="${basedir}/build"/>
-    <property name="web.dir" value="${basedir}/WebRoot"/>
     <property name="build.webinf.dir" value="${build.dir}/WEB-INF/"/>
-    <property name="build.classes.dir" value="${build.webinf.dir}/classes"/>
+    <property name="build.classes.dir" value="${build.dir}/classes"/>
+    
+    <property name="assemble.dir" value="${basedir}/assemble"/>
+
+    <property name="web.dir" value="${basedir}/WebRoot"/>
+    <property name="web.jsft.dir" value="${basedir}/WebRoot-jsftemplating"/>
+    <property name="web.facelets.dir" value="${basedir}/WebRoot-facelets"/>
+    <property name="web.jsp.dir" value="${basedir}/WebRoot-jsp"/>
 
     <!-- The base directory for distribution targets -->
     <property name="dist.dir" value="${basedir}/dist"/>
 
     <!-- The base directory for component sources -->
     <property name="source.dir" value="${basedir}/src/java"/>
+    <property name="source.web.dir" value="${basedir}/src/web"/>
 
     <!-- The base resource directory -->
     <property name="resource.dir" value="${basedir}/src/resources"/>
@@ -79,10 +86,6 @@
 
     <target name="prepare" depends="init" description="Prepare build directory">
         <mkdir dir="${build.dir}"/>
-        <mkdir dir="${build.webinf.dir}"/>
-        <mkdir dir="${build.classes.dir}"/>
-        <mkdir dir="${build.classes.dir}/META-INF"/>
-        <mkdir dir="${build.dir}/lib"/>       
     </target>
 
     <target name="update" description="Download project dependencies">
@@ -125,7 +128,7 @@
 
         <!-- Run javac through everything -->
         <jsf.javac srcdir="${source.dir}"
-                   destdir="${build.classes.dir}"
+                   destdir="${build.dir}"
                    source="1.5"
                    target="1.5">
             <classpath>
@@ -138,19 +141,30 @@
         </jsf.javac>
 
 
-        <copy toDir="${build.classes.dir}/">
+        <copy toDir="${web.jsft.dir}/WEB-INF/classes">
+            <fileset dir="${resource.dir}/" />
+        </copy>
+        <copy toDir="${web.facelets.dir}/WEB-INF/classes">
+            <fileset dir="${resource.dir}/" />
+        </copy>
+        <copy toDir="${web.jsp.dir}/WEB-INF/classes">
             <fileset dir="${resource.dir}/" />
         </copy>
 
+        <!--
         <copy toDir="${build.dir}/">
             <fileset dir="${web.dir}/" />
         </copy>
+        -->
     </target>
 
     <target name="clean" description="Clean build and distribution directories">
 
         <delete dir="${build.dir}"/>
         <delete dir="${dist.dir}"/>
+        <delete dir="${web.jsft.dir}/WEB-INF/classes"/>
+        <delete dir="${web.facelets.dir}/WEB-INF/classes"/>
+        <delete dir="${web.jsp.dir}/WEB-INF/classes"/>
 
         <delete>
             <fileset dir="." includes="**/*~" defaultexcludes="no"/>
@@ -163,19 +177,46 @@
 
     <target name="dist" depends="compile" description="Build distribution files">
         <mkdir dir="${dist.dir}"/>
+        <delete dir="${assemble.dir}"/>
+        <mkdir dir="${assemble.dir}"/>
+        <mkdir dir="${assemble.dir}/lib"/>
         
-        <copy file="${httpclient.jar}" todir="${build.webinf.dir}/lib" />
-        <copy file="${fileupload.jar}" todir="${build.webinf.dir}/lib" />
-        <copy file="${codec.jar}" todir="${build.webinf.dir}/lib" />
-        <copy file="${logging.jar}" todir="${build.webinf.dir}/lib" />
-        <copy file="${io.jar}" todir="${build.webinf.dir}/lib" />
-        <copy file="${facelets.jar}" todir="${build.webinf.dir}/lib" />
-        <copy file="${shale.remoting.jar}" todir="${build.webinf.dir}/lib" />
-        <copy file="${sandbox.dir}/build/lib/${name}-${sb.impl.version}.jar" todir="${build.webinf.dir}/lib" />
+        <copy file="${httpclient.jar}" todir="${assemble.dir}/lib" />
+        <copy file="${fileupload.jar}" todir="${assemble.dir}/lib" />
+        <copy file="${codec.jar}" todir="${assemble.dir}/lib" />
+        <copy file="${logging.jar}" todir="${assemble.dir}/lib" />
+        <copy file="${io.jar}" todir="${assemble.dir}/lib" />
+        <copy file="${facelets.jar}" todir="${assemble.dir}/lib" />
+        <copy file="${shale.remoting.jar}" todir="${assemble.dir}/lib" />
+        <copy file="${sandbox.dir}/build/lib/${name}-${sb.impl.version}.jar" todir="${assemble.dir}/lib" />
 
-        <jar destfile="${dist.dir}/JsfRiSandboxDemo.war">
+        <jar destfile="${assemble.dir}/JsfRiSandboxDemo.jar">
             <fileset dir="${build.dir}"/>
         </jar>
+        
+        <jar destfile="${assemble.dir}/JsfRiSandboxDemo.war">
+            <fileset dir="${web.dir}"/>
+            <fileset dir="${source.web.dir}"/>
+        </jar>
+        <jar destfile="${assemble.dir}/JsfRiSandboxDemo-jsftemplating.war">
+            <fileset dir="${web.jsft.dir}"/>
+            <fileset dir="${source.web.dir}"/>
+        </jar>
+        <jar destfile="${assemble.dir}/JsfRiSandboxDemo-facelets.war">
+            <fileset dir="${web.facelets.dir}"/>
+            <fileset dir="${source.web.dir}"/>
+        </jar>
+        <jar destfile="${assemble.dir}/JsfRiSandboxDemo-jsp.war">
+            <fileset dir="${web.jsp.dir}"/>
+            <fileset dir="${source.web.dir}"/>
+        </jar>
+        
+        <jar destfile="${dist.dir}/JsfRiSandboxDemo.ear">
+            <fileset dir="${assemble.dir}"/>
+            <fileset dir="${source.web.dir}"/>
+        </jar>
+        
+        <delete dir="${assemble.dir}1"/>
         <!--
         <copy file="${httpclient.jar}" todir="${dep.jar.dir}" />
         <copy file="${codec.jar}" todir="${dep.jar.dir}" />

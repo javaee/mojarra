@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:risb="http://java.sun.com/jsf/ri/sandbox">
+<ui:composition template="layout.xhtml">
+    <ui:define name="content">
+        <h3>Input field</h3>
+        <h:form>
+            <risb:calendar value="#{testBean.date}"></risb:calendar>
+            <h:commandButton value="Submit"></h:commandButton>
+        </h:form>
+        <h:outputText value="#{testBean.date}" rendered="#{!empty testBean.date}" />
+        <h3>Menus</h3>
+        <h:form>
+            <risb:calendar value="#{testBean.date2}" showMenus="true"></risb:calendar>
+            <h:commandButton value="Submit"></h:commandButton>
+        </h:form>
+        <h:outputText value="#{testBean.date2}" rendered="#{!empty testBean.date2}" />
+    </ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:risb="http://java.sun.com/jsf/ri/sandbox">
+<ui:composition template="layout.xhtml">
+    <ui:define name="content">
+        <h:form>
+            <h:outputText id="text" value="This should have a context menu!  Right click me!">
+                <risb:contextMenu width="225px">
+                    <risb:menuItem value="Test!" url="http://www.yahoo.com" />
+                    <risb:menuItem>
+                        <h:outputLink value="https://javaserverfaces.dev.java.net/">
+                            <h:outputText value="JSF RI Homepage" />
+                        </h:outputLink>
+                    </risb:menuItem>
+                    <risb:menuItem>
+                        <h:commandLink action="home" value="Home" />
+                    </risb:menuItem>
+                </risb:contextMenu>
+            </h:outputText>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

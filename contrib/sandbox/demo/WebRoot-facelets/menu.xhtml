@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:risb="http://java.sun.com/jsf/ri/sandbox">
+<ui:composition template="layout.xhtml">
+    <ui:define name="content">
+        <h:form>
+            <risb:menu>
+                <risb:menuItem id="jsfsites" value="JSF Sites">
+                    <risb:menuItem value="JSF RI Homepage" url="https://javaserverfaces.dev.java.net" />
+                    <risb:menuItem value="Glassfish" url="https://glassfish.dev.java.net" />
+                    <risb:menuItem id="subprojects" value="Sub Projects">
+                        <risb:menuItem value="JSFTemplating" url="https://jsftemplating.dev.java.net" />
+                        <risb:menuItem value="Facelets" url="https://facelets.dev.java.net" />
+                    </risb:menuItem>
+                </risb:menuItem>
+                <risb:menuItem id="devblogs" value="Developer Blogs">
+                    <risb:menuItem value="Ed Burns' Blog" url="http://weblogs.java.net/blog/edburns/" />
+                    <risb:menuItem value="Roger Kitain's Blog" url="http://weblogs.java.net/blog/rogerk/" />
+                    <risb:menuItem value="Ryan Lubke's Blog" url="http://blogs.sun.com/rlubke/" />
+                    <risb:menuItem value="Jacob Hookom's Blog #1" url="http://weblogs.java.net/blog/jhook/" />
+                    <risb:menuItem value="Jacob Hookom's Blog #2" url="http://hookom.blogspot.com" />
+                    <risb:menuItem value="Jason Lee's Blog" url="http://blogs.steeplesoft.com/javaserver-faces" />
+                </risb:menuItem>
+                <risb:menuItem value="Throw Away">
+                    <risb:menuItem>
+                        <h:commandLink value="Home" action="home" />
+                    </risb:menuItem>
+                </risb:menuItem>
+            </risb:menu>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

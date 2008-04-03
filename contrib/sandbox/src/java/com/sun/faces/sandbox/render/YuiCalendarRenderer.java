@@ -29,9 +29,10 @@ import com.sun.faces.sandbox.util.MessageFactory;
  */
 public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
     private static final String scriptIds[] = {
-        YuiConstants.JS_YAHOO_DOM_EVENT,
-        YuiConstants.JS_CALENDAR,
-        YuiConstants.JS_YUI_CALENDAR_HELPER
+        YuiConstants.JS_YAHOO_DOM_EVENT
+        ,YuiConstants.JS_CALENDAR
+        ,YuiConstants.JS_SANDBOX_HELPER
+        ,YuiConstants.JS_YUI_CALENDAR_HELPER
     };
     
     private static final String cssIds[] = {
@@ -155,7 +156,7 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
         String minDateString = cal.getMinDate();
         String maxDateString = cal.getMaxDate();
         
-        String javaScript = String.format("new RISANDBOX.Calendar('%sContainer','%sTrigger', '%sDay', '%sMonth', '%sYear','%s','%s','%s',%s,%s,%s,%s,%s,%s,'%s','%s',%s);",
+        String javaScript = String.format("new SANDBOX.Calendar('%sContainer','%sTrigger', '%sDay', '%sMonth', '%sYear','%s','%s','%s',%s,%s,%s,%s,%s,%s,'%s','%s',%s);",
                 component.getId(), component.getId(), clientId, clientId, clientId, clientId,
                 (date != null) ? new SimpleDateFormat("MM/yyyy").format(date) : new SimpleDateFormat("MM/yyyy").format(new Date()),
                 (date != null) ? new SimpleDateFormat("MM/dd/yyyy").format(date) : "null",
@@ -293,22 +294,22 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
                 
                 try {
                     newDate = format.parse(newValue);
+                    if (null != minDate) {
+                        if (newDate.before(minDate)) {
+                            addInvalidMessage(context, cal);
+                            return;
+                        }
+                    }
+                    if (null != maxDate) {
+                        if (newDate.after(maxDate)) {
+                            addInvalidMessage(context, cal);
+                            return;
+                        }
+                    }
                 } catch(ParseException pe) {
-                    throw new IllegalStateException("Could not parse submitted date value", pe);
+//                    throw new IllegalStateException("Could not parse submitted date value", pe);
                 }
                 
-                if (null != minDate) {
-                    if (newDate.before(minDate)) {
-                        addInvalidMessage(context, cal);
-                        return;
-                    }
-                }
-                if (null != maxDate) {
-                    if (newDate.after(maxDate)) {
-                        addInvalidMessage(context, cal);
-                        return;
-                    }
-                }
                 cal.setSubmittedValue(newValue);
             }
         }

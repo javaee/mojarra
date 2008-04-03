@@ -70,7 +70,7 @@ public class TestBean {
     public byte[] getPdf() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
-            InputStream is = this.getClass().getClassLoader().getResourceAsStream("/sample.pdf");
+            InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("/sample.pdf");
             
             int count = 0;
             byte[] buffer = new byte[4096];
@@ -89,7 +89,7 @@ public class TestBean {
     public byte[] getImage() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
-            InputStream is = this.getClass().getClassLoader().getResourceAsStream("/sample.png");
+            InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("/sample.png");
             
             int count = 0;
             byte[] buffer = new byte[4096];
@@ -106,7 +106,7 @@ public class TestBean {
     }
 
     public String getDestination() {
-        return "jsp/success";
+        return "success";
     }
 
     public FileHolder getFileHolder() {
@@ -122,6 +122,8 @@ public class TestBean {
     
     public List<Person> getPersonList() {
         List<Person> list = new ArrayList();
+        list.add(new Person("Jim", "Halpert"));
+        list.add(new Person("Michael", "Scott"));
         
         return list;
     }
@@ -136,9 +138,18 @@ public class TestBean {
 }
 
 class Person {
-    protected int id;
+    protected Integer id;
     protected String lastName;
     protected String firstName;
+    
+    public Person() {
+    }
+    
+    public Person(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+    
     public String getFirstName() {
         return firstName;
     }
@@ -151,12 +162,10 @@ class Person {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    public int getId() {
+    public Integer getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
-    
-    
 }

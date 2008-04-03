@@ -27,8 +27,9 @@ import com.sun.faces.sandbox.util.YuiConstants;
  */
 public class YuiRendererHelper {
     protected static Map<String, String> cssClasses;
-    protected static Map<String, String> imageVars;
+    protected static Map<String, String> imageVars1;
     protected static String YUI_HELPER_JS_RENDERED = "YUI_HELPER_JS";
+    protected static String YUI_HELPER_MENU_JS_RENDERED = "YUI_HELPER_MENU_JS";
     protected static String YUI_HELPER_CSS_RENDERED = "YUI_HELPER_CSS";
 
     protected static Map<String, String> getCssClasses() {
@@ -62,6 +63,7 @@ public class YuiRendererHelper {
         return cssClasses;
     }
 
+    /*
     protected static Map<String, String> getImageVars() {
         if (imageVars == null) {
             imageVars = new HashMap<String, String>();
@@ -84,6 +86,7 @@ public class YuiRendererHelper {
                     YuiConstants.YUI_ROOT + "assets/menuarodwn8_hov_1.gif");
             imageVars.put("YAHOO.widget.MenuBarItem.prototype.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH", 
                     YuiConstants.YUI_ROOT + "assets/menuarodwn8_dim_1.gif");
+            
             imageVars.put("YAHOO.widget.Calendar.prototype.IMG_ROOT", 
                     YuiConstants.YUI_ROOT + "");
             imageVars.put("YAHOO.widget.Calendar.prototype.NAV_ARROW_LEFT", 
@@ -96,6 +99,7 @@ public class YuiRendererHelper {
         }
         return imageVars;
     }
+    */
 
     public static void renderSandboxStylesheet(FacesContext context, ResponseWriter writer, UIComponent comp) throws IOException{
         if (!hasResourceBeenRendered(context, YUI_HELPER_CSS_RENDERED)) {
@@ -110,19 +114,45 @@ public class YuiRendererHelper {
             setResourceAsRendered(context, YUI_HELPER_CSS_RENDERED);
         }
     }
+    
+    public static void renderSandboxMenuJavaScript(FacesContext context, ResponseWriter writer, UIComponent comp) throws IOException{
+        Map<String, String> imageVars = new HashMap<String, String>();
+//      imageVars.put("YAHOO.widget.MenuItem.prototype.IMG_ROOT", "");
+        imageVars.put("YAHOO.widget.MenuItem.prototype.SUBMENU_INDICATOR_IMAGE_PATH", 
+                YuiConstants.YUI_ROOT + "assets/menuarorght8_nrm_1.gif");
+        imageVars.put("YAHOO.widget.MenuItem.prototype.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH", 
+                YuiConstants.YUI_ROOT + "assets/menuarorght8_hov_1.gif");
+        imageVars.put("YAHOO.widget.MenuItem.prototype.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH", 
+                YuiConstants.YUI_ROOT + "assets/menuarorght8_dim_1.gif");
+        imageVars.put("YAHOO.widget.MenuItem.prototype.CHECKED_IMAGE_PATH", 
+                YuiConstants.YUI_ROOT + "assets/menuchk8_nrm_1.gif");
+        imageVars.put("YAHOO.widget.MenuItem.prototype.SELECTED_CHECKED_IMAGE_PATH", 
+                YuiConstants.YUI_ROOT + "assets/menuchk8_hov_1.gif");
+        imageVars.put("YAHOO.widget.MenuItem.prototype.DISABLED_CHECKED_IMAGE_PATH",
+                YuiConstants.YUI_ROOT + "assets/menuchk8_dim_1.gif");
+        imageVars.put("YAHOO.widget.MenuBarItem.prototype.SUBMENU_INDICATOR_IMAGE_PATH", 
+                YuiConstants.YUI_ROOT + "assets/menuarodwn8_nrm_1.gif");
+        imageVars.put("YAHOO.widget.MenuBarItem.prototype.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH", 
+                YuiConstants.YUI_ROOT + "assets/menuarodwn8_hov_1.gif");
+        imageVars.put("YAHOO.widget.MenuBarItem.prototype.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH", 
+                YuiConstants.YUI_ROOT + "assets/menuarodwn8_dim_1.gif");
+        renderSandboxJavaScript(context, writer, comp, YUI_HELPER_MENU_JS_RENDERED, imageVars);
 
-    public static void renderSandboxJavaScript(FacesContext context, ResponseWriter writer, UIComponent comp) throws IOException{
-        if (!hasResourceBeenRendered(context, YUI_HELPER_JS_RENDERED)) {
+    }
+
+    private static void renderSandboxJavaScript(FacesContext context, ResponseWriter writer, 
+            UIComponent comp, String key, Map<String, String> imageVars) throws IOException{
+        if (!hasResourceBeenRendered(context, key)) {
             writer.startElement("script", comp);
             writer.writeAttribute("type", "text/javascript", "type");
-            writer.write("YAHOO.widget.MenuItem.prototype.IMG_ROOT = \"\";");
-            for (Map.Entry<String, String> var : getImageVars().entrySet()) {
+//            writer.write("YAHOO.widget.MenuItem.prototype.IMG_ROOT = \"\";");
+            for (Map.Entry<String, String> var : imageVars.entrySet()) {
                 writer.write(var.getKey() + " = \"" + 
                         Util.getXhtmlHelper().mapResourceId(context, Mechanism.CLASS_RESOURCE, var.getValue()) +
-                    "\";");
+                    "\";\n");
             }
             writer.endElement("script");
-            setResourceAsRendered(context, YUI_HELPER_JS_RENDERED);
+            setResourceAsRendered(context, key);
         }
     }
 

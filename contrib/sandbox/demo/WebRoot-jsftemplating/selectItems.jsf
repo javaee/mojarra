@@ -1,0 +1,7 @@
+#include /header.inc
+<h:selectOneMenu>
+    <risb:selectItems value="#{testBean.personList}" 
+        itemValue="#{item.id}" 
+        itemLabel="#{item.lastName}, #{item.firstName}" />
+</h:selectOneMenu>
+#include /footer.inc

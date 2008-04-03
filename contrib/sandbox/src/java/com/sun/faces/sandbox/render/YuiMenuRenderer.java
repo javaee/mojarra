@@ -34,6 +34,7 @@ public class YuiMenuRenderer extends Renderer {
         YuiConstants.JS_YAHOO_DOM_EVENT
         ,YuiConstants.JS_CONTAINER
         ,YuiConstants.JS_MENU
+        ,YuiConstants.JS_SANDBOX_HELPER
         ,YuiConstants.JS_YUI_MENU_HELPER
     };
     protected String cssClass = "yuimenu";
@@ -78,7 +79,7 @@ public class YuiMenuRenderer extends Renderer {
                     cssIds[i]);
         }
         
-        YuiRendererHelper.renderSandboxJavaScript(context, context.getResponseWriter(), component);
+        YuiRendererHelper.renderSandboxMenuJavaScript(context, context.getResponseWriter(), component);
         YuiRendererHelper.renderSandboxStylesheet(context, context.getResponseWriter(), component);
     }
 
@@ -179,7 +180,7 @@ public class YuiMenuRenderer extends Renderer {
         writer.writeAttribute("type", "text/javascript", "type");
 
         String ctorArgs = buildConstructorArgs(component);
-        String javaScript = "var oMenu_%%%JS_VAR%%% = new YUISF.Menu(\"%%%ID%%%\", {" + ctorArgs + "});";
+        String javaScript = "var oMenu_%%%JS_VAR%%% = new SANDBOX.Menu(\"%%%ID%%%\", {" + ctorArgs + "});";
         javaScript = javaScript.replaceAll("%%%ID%%%", component.getClientId(FacesContext.getCurrentInstance()) + "_1")
             .replaceAll("%%%JS_VAR%%%", 
                     YuiRendererHelper.getJavascriptVar(component) + "_1");
