@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.122 2007/08/30 19:29:12 rlubke Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.123 2007/09/11 18:19:05 rlubke Exp $
  */
 
 /*
@@ -196,9 +196,11 @@ public abstract class HtmlBasicRenderer extends Renderer {
             int idSuffix = id.lastIndexOf(UIViewRoot.UNIQUE_ID_PREFIX);
             if (idSuffix > 0) {
                 // but the component's own id does have a suffix
-                logger.fine("Augmenting for attribute with " +
-                            id.substring(idSuffix) +
-                            " suffix from Id attribute");
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.fine("Augmenting for attribute with " +
+                                id.substring(idSuffix) +
+                                " suffix from Id attribute");
+                }
                 forValue += id.substring(idSuffix);
             }
         }
