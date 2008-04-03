@@ -143,8 +143,8 @@ public class ResourceHandlerImpl extends ResourceHandler {
      */
     public boolean isResourceRequest(FacesContext context) {
 
-        String viewId = normalizeViewId(context);
-        return (viewId.startsWith(RESOURCE_MARKER));
+        String resourceId = normalizeResourceRequest(context);
+        return (resourceId.startsWith(RESOURCE_MARKER));
 
     }
 
@@ -154,23 +154,23 @@ public class ResourceHandlerImpl extends ResourceHandler {
      */
     public void handleResourceRequest(FacesContext context) throws IOException {
 
-        String viewId = normalizeViewId(context);
+        String resourceId = normalizeResourceRequest(context);
         ExternalContext extContext = context.getExternalContext();
         // this case should be safe in both the standard Servlet
         // and portlet environments
         HttpServletResponse response =
                   (HttpServletResponse) extContext.getResponse();
-        if (isExcluded(viewId)) {
+        if (isExcluded(resourceId)) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
-        assert (null != viewId);
-        assert (viewId.startsWith(RESOURCE_MARKER));
+        assert (null != resourceId);
+        assert (resourceId.startsWith(RESOURCE_MARKER));
 
         Resource resource = null;
-        if (RESOURCE_MARKER.length() < viewId.length()) {
-            String resourceName = viewId.substring(RESOURCE_MARKER.length());
+        if (RESOURCE_MARKER.length() < resourceId.length()) {
+            String resourceName = resourceId.substring(RESOURCE_MARKER.length());
             String libraryName = context.getExternalContext().getRequestParameterMap()
                   .get("ln");
             resource = createResource(resourceName, libraryName);
@@ -312,7 +312,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
      * @param context the <code>FacesContext</code> for the current request
      * @return the request path without JSF invocation information
      */
-    private String normalizeViewId(FacesContext context) {
+    private String normalizeResourceRequest(FacesContext context) {
 
         ExternalContext extCtx = context.getExternalContext();
         String path = (String) extCtx.getRequestMap().get(NORMALIZED_ID_KEY);
@@ -337,14 +337,14 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
 
     /**
-     * @param viewId the normalized request path as returned by
-     *  {@link #normalizeViewId(javax.faces.context.FacesContext)}
+     * @param resourceId the normalized request path as returned by
+     *  {@link #normalizeResourceRequest(javax.faces.context.FacesContext)}
      * @return <code>true</code> if the request matces an excluded resource,
      *  otherwise <code>false</code>
      */
-    private boolean isExcluded(String viewId) {
+    private boolean isExcluded(String resourceId) {
         for (Pattern pattern : excludePatterns) {
-            if (pattern.matcher(viewId).matches()) {
+            if (pattern.matcher(resourceId).matches()) {
                 return true;
             }
         }
