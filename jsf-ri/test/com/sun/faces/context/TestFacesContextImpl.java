@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.56 2007/04/27 22:02:05 ofung Exp $
+ * $Id: TestFacesContextImpl.java,v 1.57 2008/03/03 05:34:43 rlubke Exp $
  */
 
 /*
@@ -66,13 +66,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.NoSuchElementException;
 
 /**
  * <B>TestFacesContextImpl</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.56 2007/04/27 22:02:05 ofung Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.57 2008/03/03 05:34:43 rlubke Exp $
  */
 
 public class TestFacesContextImpl extends ServletFacesTestCase {
@@ -417,7 +418,122 @@ public class TestFacesContextImpl extends ServletFacesTestCase {
         f.addMessage(null, msg3);
 
         assertTrue(FacesMessage.SEVERITY_ERROR.equals(f.getMaximumSeverity()));
-    }       
+    }
+
+    public void testGetMaxSeverity3() throws Exception {
+        FacesContext f = getFacesContext();
+        Iterator<FacesMessage> messages = f.getMessages();
+        assertTrue(!messages.hasNext());
+
+        FacesMessage msg1 = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "");
+        FacesMessage msg2 = new FacesMessage(FacesMessage.SEVERITY_WARN, "", "");
+        FacesMessage msg3 = new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "");
+        FacesMessage msg4 = new FacesMessage(FacesMessage.SEVERITY_FATAL, "", "");
+        f.addMessage(null, msg2);
+        f.addMessage(null, msg1);
+        f.addMessage(null, msg3);
+
+        messages = f.getMessages();
+        assertTrue(messages.hasNext());
+        while (messages.hasNext()) {
+            messages.next();
+            messages.remove();
+        }
+        assertTrue(f.getMaximumSeverity() == null);
+
+        f.addMessage("id1", msg1);
+        f.addMessage("id3", msg1);
+        f.addMessage("id3", msg3);
+        f.addMessage("id3", msg1);
+        f.addMessage(null, msg4);
+        assertTrue(f.getMaximumSeverity() == FacesMessage.SEVERITY_FATAL);
+
+        for (Iterator<FacesMessage> i = f.getMessages(); i.hasNext(); ) {
+            FacesMessage m = i.next();
+            if (m.getSeverity() == FacesMessage.SEVERITY_FATAL) {
+                i.remove();
+            }
+        }
+        assertTrue(f.getMaximumSeverity() == FacesMessage.SEVERITY_ERROR);
+
+        for (Iterator<FacesMessage> i = f.getMessages(); i.hasNext(); ) {
+            FacesMessage m = i.next();
+            if (m.getSeverity() == FacesMessage.SEVERITY_ERROR) {
+                i.remove();
+            }
+        }
+        assertTrue(f.getMaximumSeverity() == FacesMessage.SEVERITY_INFO);
+
+        for (Iterator<FacesMessage> i = f.getMessages(); i.hasNext(); ) {
+            FacesMessage m = i.next();
+            if (m.getSeverity() == FacesMessage.SEVERITY_INFO) {
+                i.remove();
+            }
+        }
+        assertTrue(f.getMaximumSeverity() == null);
+
+
+    }
+
+
+    public void testGetMessagesWithIdsIteratorRemove() throws Exception {
+        FacesContext f = getFacesContext();
+        Iterator<FacesMessage> messages = f.getMessages();
+        assertTrue(!messages.hasNext());
+
+        FacesMessage msg1 = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "");
+        FacesMessage msg2 = new FacesMessage(FacesMessage.SEVERITY_WARN, "", "");
+        FacesMessage msg3 = new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "");
+        FacesMessage msg4 = new FacesMessage(FacesMessage.SEVERITY_FATAL, "", "");
+        f.addMessage("id1", msg1);
+        f.addMessage("id3", msg2);
+        f.addMessage("id3", msg3);
+        f.addMessage("id3", msg4);
+        f.addMessage("id2", msg1);
+
+        for (Iterator<String> i = f.getClientIdsWithMessages();
+              i.hasNext();) {
+            String id = i.next();
+            if ("id3".equals(id)) {
+                i.remove();
+            }
+        }
+
+        assertTrue(!f.getMessages("id3").hasNext());
+        assertTrue(f.getMaximumSeverity() == FacesMessage.SEVERITY_INFO);
+
+        for (Iterator<String> i = f.getClientIdsWithMessages();
+              i.hasNext();) {
+            i.next();
+            i.remove();
+        }
+
+        assertTrue(f.getMaximumSeverity() == null);
+    }
+
+    public void testGetMessagesCustomIteratorExceptions() throws Exception {
+        // we use a custom iterator for iterating over all messages.
+        // ensure the proper exceptions are thrown by next() and remove()
+        FacesContext f = getFacesContext();
+        f.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "", ""));
+
+        // next should throw NoSuchElementException after the second call to next()
+        Iterator i = f.getMessages();
+        i.next();
+        try {
+            i.next();
+            assertTrue(false);
+        } catch (NoSuchElementException nsee) { }
+
+        // remove should throw an IllegalStateException if called without having
+        // called next()
+        i = f.getMessages();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (IllegalStateException ise) { }               
+
+    }
 
 
     public void testGetApplication() {

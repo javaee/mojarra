@@ -1,5 +1,5 @@
  /*
- * $Id: FacesContextImpl.java,v 1.93 2008/01/28 20:55:37 rlubke Exp $
+ * $Id: FacesContextImpl.java,v 1.94 2008/03/03 05:34:44 rlubke Exp $
  */
 
 /*
@@ -62,6 +62,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -71,7 +72,6 @@ import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.RequestStateManager;
 
  public class FacesContextImpl extends FacesContext {
-
 
      // Log instance for this class
      private static Logger LOGGER = FacesLogger.CONTEXT.getLogger();
@@ -172,7 +172,7 @@ import com.sun.faces.util.RequestStateManager;
          assertNotReleased();
          return ((componentMessageLists == null)
                  ? Collections.<String>emptyList().iterator()
-                 : componentMessageLists.keySet().iterator());         
+                 : componentMessageLists.keySet().iterator());
      }
 
 
@@ -181,7 +181,21 @@ import com.sun.faces.util.RequestStateManager;
       */
      public Severity getMaximumSeverity() {
          assertNotReleased();
-         return maxSeverity;
+         Severity result = null;
+         if (componentMessageLists != null && !(componentMessageLists.isEmpty())) {
+             for (Iterator<FacesMessage> i =
+                   new ComponentMessagesIterator(componentMessageLists);
+                  i.hasNext();) {
+                 Severity severity = i.next().getSeverity();
+                 if (result == null || severity.compareTo(result) > 0) {
+                     result = severity;
+                 }
+                 if (result == FacesMessage.SEVERITY_FATAL) {
+                     break;
+                 }
+             }
+         }
+         return result;
      }
 
 
@@ -202,10 +216,8 @@ import com.sun.faces.util.RequestStateManager;
             pendingClientIds.clear();
          }
 
-         // Get an Iterator over the ArrayList instances
-         List<FacesMessage> messages = getMergedMessageLists();
-         if (messages.size() > 0) {
-             return messages.iterator();
+         if (componentMessageLists.size() > 0) {
+             return new ComponentMessagesIterator(componentMessageLists);
          } else {
              List<FacesMessage> emptyList = Collections.emptyList();
              return (emptyList.iterator());
@@ -252,7 +264,7 @@ import com.sun.faces.util.RequestStateManager;
              return (null);
          }
          String renderKitId = vr.getRenderKitId();
-         
+
          if (renderKitId == null) {
              return null;
          }
@@ -384,10 +396,10 @@ import com.sun.faces.util.RequestStateManager;
       * @see javax.faces.context.FacesContext#release()
       */
      public void release() {
-         
+
          RequestStateManager.remove(this, RequestStateManager.FACESCONTEXT_IMPL_ATTR_NAME);
          RequestStateManager.remove(this, RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
-         
+
          released = true;
          externalContext = null;
          responseStream = null;
@@ -396,7 +408,7 @@ import com.sun.faces.util.RequestStateManager;
          renderResponse = false;
          responseComplete = false;
          viewRoot = null;
-         
+
          // PENDING(edburns): write testcase that verifies that release
          // actually works.  This will be important to keep working as
          // ivars are added and removed on this class over time.
@@ -452,18 +464,85 @@ import com.sun.faces.util.RequestStateManager;
      }
 
 
-     private List<FacesMessage> getMergedMessageLists() {
-         List<FacesMessage> mergedList = new ArrayList<FacesMessage>();
-         if (componentMessageLists != null) {
-             for (Iterator<List<FacesMessage>> i = componentMessageLists.values().iterator(); i.hasNext();) {
-                 for (Iterator<FacesMessage> ii = i.next().iterator(); ii.hasNext();)
-                     mergedList.add(ii.next());
-             }
-         }
-         return mergedList;
-     }
+     // ---------------------------------------------------------- Inner Classes
 
-     // The testcase for this class is TestFacesContextImpl.java 
+
+     private static final class ComponentMessagesIterator
+           implements Iterator<FacesMessage> {
+
+
+         private Map<String, List<FacesMessage>> messages;
+         private int outerIndex = -1;
+         private int messagesSize;
+         private Iterator<FacesMessage> inner;
+         private Iterator<String> keys;
+
+
+         // ------------------------------------------------------- Constructors
+
+
+         ComponentMessagesIterator(Map<String, List<FacesMessage>> messages) {
+
+             this.messages = messages;
+             messagesSize = messages.size();
+             keys = messages.keySet().iterator();
+
+         }
+
+
+         // ---------------------------------------------- Methods from Iterator
+
+
+         public boolean hasNext() {
+
+             if (outerIndex == -1) {
+                 // pop our first List, if any;
+                 outerIndex++;
+                 inner = messages.get(keys.next()).iterator();
+
+             }
+             while (!inner.hasNext()) {
+                 outerIndex++;
+                 if ((outerIndex) < messagesSize) {
+                     inner = messages.get(keys.next()).iterator();
+                 } else {
+                     return false;
+                 }
+             }
+             return inner.hasNext();
+
+         }
+
+         public FacesMessage next() {
+
+             if (outerIndex >= messagesSize) {
+                 throw new NoSuchElementException();
+             }
+             if (inner != null && inner.hasNext()) {
+                 return inner.next();
+             } else {
+                 // call this.hasNext() to properly initialize/position 'inner'
+                 if (!this.hasNext()) {
+                     throw new NoSuchElementException();
+                 } else {
+                     return inner.next();
+                 }
+             }
+
+         }
+
+         public void remove() {
+
+             if (outerIndex == -1) {
+                 throw new IllegalStateException();
+             }
+             inner.remove();
+
+         }
+
+     } // END ComponentMessagesIterator
+
+     // The testcase for this class is TestFacesContextImpl.java
      // The testcase for this class is TestFacesContextImpl_Model.java
 
  } // end of class FacesContextImpl
