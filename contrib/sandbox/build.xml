@@ -186,7 +186,7 @@
                      usetimestamp="true"/>
             </then>
         </if>
-        <!-- jmock -->
+        <!-- jmock
         <if>
             <not>
                 <available file="${jmock.jar}" property="ignored"/>
@@ -203,6 +203,7 @@
                 </unzip>
             </then>
         </if>
+		-->
         <!-- logging -->
         <if>
             <not>
@@ -226,19 +227,29 @@
             </then>
         </if>
         <!-- Shale Remoting -->
+		<!-- 
+		Ugly hack to get the most recent Shale nightly, as it has a bug fix we need.  This is a bit dangerous, as the nightly
+		may introduce new bugs, but what do you do? :P  When they finally release a new version, this can go away.  
+		Come on, Craig! :)
+		-->
+		<tstamp>
+			<format property="shale.nightly.date" pattern="yyyyMMdd" offset="-1" unit="day"/>
+		</tstamp>
         <if>
             <not>
 		<and>
-	                <available file="${shale.remoting.jar}" property="ignored"/>
-        	        <available file="${shale.test.jar}" property="ignored"/>
+        	        <available file="shale-framework-${shale.nightly.date}.zip" property="ignored"/>
 		</and>
             </not>
             <then>
+				<delete>
+					<fileset dir="." includes="shale-framework*.zip" />
+				</delete>
                 <!-- ${maven.mirror}/org/apache/shale/shale-remoting/${shale.remoting.version}/shale-remoting-${shale.remoting.version}.jar" -->
-                <get src="http://people.apache.org/builds/shale/nightly/shale-framework-20070614.zip"
-                     dest="shale-framework.zip"
+                <get src="http://people.apache.org/builds/shale/nightly/shale-framework-${shale.nightly.date}.zip"
+                     dest="shale-framework-${shale.nightly.date}.zip"
                      usetimestamp="true"/>
-                <unzip src="shale-framework.zip" dest="${sandbox.dependency.base.dir}">
+                <unzip src="shale-framework-${shale.nightly.date}.zip" dest="${sandbox.dependency.base.dir}">
                     <patternset>
                         <include name="**/shale-remoting-1.1.0-SNAPSHOT.jar"/>
                         <include name="**/shale-test-1.1.0-SNAPSHOT.jar"/>
