@@ -1,5 +1,5 @@
 /*
- * $Id: Bean.java,v 1.2 2007/04/27 22:01:54 ofung Exp $
+ * $Id: Bean.java,v 1.3 2007/09/07 12:02:30 rlubke Exp $
  */
 
 /*
@@ -84,6 +84,31 @@ public class Bean {
 
     // ----------------------------------------------------------- Inner Classes
 
+    private Validator val;
+    public void setValidator2(Validator val) {
+        System.out.println("setValidator2() -> " + val.getClass().getName());
+        if (!(val instanceof LBValidator)) {
+            throw new IllegalArgumentException("Expected LBValidator, received: " + val.getClass().getName());
+        }
+        this.val = val;
+    }
+
+    public Validator getValidator2() {
+        return val;
+    }
+
+    private Converter con;
+    public void setConverter2(Converter con) {
+        System.out.println("setConverter2() -> " + con.getClass().getName());
+        if (!(con instanceof LBConverter)) {
+            throw new IllegalArgumentException("Expected LBConverter, received: " + con.getClass().getName());
+        }
+        this.con = con;
+    }
+
+    public Converter getConverter2() {
+        return con;
+    }
     private class CustomValidator1 implements Validator {
 
         public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {

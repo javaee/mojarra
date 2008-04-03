@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorTag.java,v 1.9 2007/04/27 22:01:05 ofung Exp $
+ * $Id: ValidatorTag.java,v 1.10 2007/09/07 12:02:30 rlubke Exp $
  */
 
 /*
@@ -63,7 +63,13 @@ public class ValidatorTag extends AbstractValidatorTag {
     @Override
     protected Validator createValidator() throws JspException {       
 
-        return new BindingValidator(validatorId, binding);
+        if (validatorId != null && validatorId.isLiteralText()) {
+            return createValidator(validatorId,
+                                   binding,
+                                   FacesContext.getCurrentInstance());
+        } else {
+            return new BindingValidator(validatorId, binding);
+        }
 
     }
 

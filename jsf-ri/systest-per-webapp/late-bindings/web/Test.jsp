@@ -52,7 +52,11 @@
           </h:inputText>
           <h:inputText value="hello2">
               <f:validator binding="#{bean.validator}"/>
-          </h:inputText>          
+          </h:inputText>
+          <h:inputText value="hello3">
+              <f:validator validatorId="lbv" binding="#{bean.validator2}"/>
+              <f:converter converterId="lbc" binding="#{bean.converter2}"/>
+          </h:inputText>
 
           <h:commandButton value="#{fn:toUpperCase('click me')}"
                            type="submit"/>

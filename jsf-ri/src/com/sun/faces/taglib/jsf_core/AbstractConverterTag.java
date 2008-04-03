@@ -107,8 +107,8 @@ public class AbstractConverterTag extends ConverterELTag {
 
         try {
             return createConverter(converterId,
-                 binding,
-                 FacesContext.getCurrentInstance());
+                                   binding,
+                                   FacesContext.getCurrentInstance());
         } catch (FacesException fe) {
             throw new JspException(fe.getCause());
         }

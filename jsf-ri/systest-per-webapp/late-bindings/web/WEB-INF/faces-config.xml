@@ -48,4 +48,13 @@
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
 
+    <converter>
+        <converter-id>lbc</converter-id>
+        <converter-class>com.sun.faces.systest.late.LBConverter</converter-class>
+    </converter>
+
+    <validator>
+        <validator-id>lbv</validator-id>
+        <validator-class>com.sun.faces.systest.late.LBValidator</validator-class>
+    </validator>
 </faces-config>

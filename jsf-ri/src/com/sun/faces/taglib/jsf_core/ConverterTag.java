@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterTag.java,v 1.9 2007/04/27 22:01:05 ofung Exp $
+ * $Id: ConverterTag.java,v 1.10 2007/09/07 12:02:30 rlubke Exp $
  */
 
 /*
@@ -61,7 +61,13 @@ public class ConverterTag extends AbstractConverterTag {
     @Override
     protected Converter createConverter() throws JspException {
 
-        return new BindingConverter(converterId, binding);
+        if (converterId != null && converterId.isLiteralText()) {
+            return createConverter(converterId,
+                                   binding,
+                                   FacesContext.getCurrentInstance());
+        } else {
+            return new BindingConverter(converterId, binding);
+        }
 
     }
 
