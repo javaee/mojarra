@@ -59,7 +59,6 @@ import java.io.Serializable;
 import java.sql.ResultSet;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -446,7 +445,7 @@ public class UIData extends UIComponentBase
         // Save current state for the previous row index
         saveDescendantState();
 
-        // Update to the new row index
+        // Update to the new row index        
         this.rowIndex = rowIndex;
         DataModel localModel = getDataModel();
         localModel.setRowIndex(rowIndex);
@@ -778,7 +777,7 @@ public class UIData extends UIComponentBase
      * current rowIndex of this instance must be saved aside and restored before
      * returning in all cases, regardless of the outcome of the search or if any
      * exceptions are thrown in the process.</p>
-     *
+     * 
      * <p>The implementation of this method must never return <code>true</code>
      * if setting the rowIndex of this instance to be equal to
      * <code>newIndex</code> causes this instance to return <code>false</code>
@@ -1199,7 +1198,7 @@ public class UIData extends UIComponentBase
                     continue;
                 }
                 if (column.getFacetCount() > 0) {
-                    for (UIComponent columnFacet : column.getFacets().values()) {
+                    for (UIComponent columnFacet : column.getFacets().values()) {                      
                         if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
                             columnFacet.processDecodes(context);
                         } else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
@@ -1274,8 +1273,7 @@ public class UIData extends UIComponentBase
      *
      * <ul>
      *
-     * <li>any of the saved state corresponds to components that have
-     * messages that must be displayed</li>
+     * <li>there are messages queued with severity ERROR or FATAL.</li>
      *
      * <li>this <code>UIData</code> instance is nested inside of another
      * <code>UIData</code> instance</li>
@@ -1286,37 +1284,10 @@ public class UIData extends UIComponentBase
      */
     private boolean keepSaved(FacesContext context) {
 
-        if (!isNestedWithinUIData()) {
-            // The UIData instance is not nested.  Get all client IDs that have messages
-            // and if any of them start with the the result of super.getClientId(),
-            // then get the messages and see if any are ERROR or FATAL.  If any are found,
-            // return true, otherwise false.
-            String uiDataClientId = super.getClientId(context);
-            for (Iterator<String> ids = context.getClientIdsWithMessages();
-                  ids.hasNext();) {
-                String id = ids.next();
-                if (id == null) {
-                    // getClientIdsWithMessages() will return a null element
-                    // for messages that don't have client IDs - not sure why
-                    // it was spec'd that way....
-                    continue;
-                }
-                if (id.startsWith(uiDataClientId)) {
-                    for (Iterator<FacesMessage> msgs = context.getMessages(id);
-                          msgs.hasNext();) {
-                        FacesMessage msg = msgs.next();
-                        if (FacesMessage.SEVERITY_ERROR.compareTo(msg.getSeverity()) >= 0) {
-                            return true;
-                        }
-                    }
-                }
-            }
-            return false;
-        } else {
-            return true;
-        }
-
+        return (contextHasErrorMessages(context) || isNestedWithinUIData());
+        
     }
+
 
     private Boolean isNestedWithinUIData() {
         if (isNested == null) {
@@ -1334,6 +1305,14 @@ public class UIData extends UIComponentBase
         } else {
             return isNested;
         }
+    }
+
+
+    private boolean contextHasErrorMessages(FacesContext context) {
+
+        FacesMessage.Severity sev = context.getMaximumSeverity();
+        return (sev != null && (FacesMessage.SEVERITY_ERROR.compareTo(sev) >= 0));
+
     }
 
 
