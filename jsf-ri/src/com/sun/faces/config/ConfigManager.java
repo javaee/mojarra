@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManager.java,v 1.15 2007/07/16 17:06:43 rlubke Exp $
+ * $Id: ConfigManager.java,v 1.16 2007/09/12 20:53:15 rlubke Exp $
  */
 
 /*
@@ -208,8 +208,9 @@ public class ConfigManager {
                                "Unsanitized stacktrace from failed start...",
                                e);
                 }
-                throw new ConfigurationException("CONFIGURATION FAILED!",
-                                                 unwind(e));               
+                Throwable t = unwind(e);
+                throw new ConfigurationException("CONFIGURATION FAILED!" + t.getMessage(),
+                                                 t);               
             }
         }
 
