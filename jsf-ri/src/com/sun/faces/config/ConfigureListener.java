@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.116 2007/08/20 22:15:42 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.117 2007/08/22 00:31:04 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -153,9 +153,11 @@ public class ConfigureListener implements ServletRequestListener,
 
         try {
 
-            LOGGER.log(Level.INFO,
-                       "jsf.config.listener.version",
-                       getServletContextIdentifier(context));
+            if (LOGGER.isLoggable(Level.INFO)) {
+                LOGGER.log(Level.INFO,
+                          "jsf.config.listener.version",
+                          getServletContextIdentifier(context));
+            }
 
             // see if we need to disable our TLValidator
             Util.setHtmlTLVActive(
