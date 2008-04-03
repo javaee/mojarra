@@ -143,6 +143,21 @@
 
 
 <tr>
+  <td>Multi-select with Map values</td>
+  <td>
+    <h:selectManyListbox
+                       id="nonstringStringMap"
+                    value="#{SelectManyBean.selectedMapValues}">
+      <f:selectItems
+                    value="#{SelectManyBean.stringValuesMap}"/>
+    </h:selectManyListbox>
+  </td>
+  <td>
+    <h:message        for="nonstringStringMap"/>
+  </td>
+</tr>
+
+<tr>
   <td>Multi-select with array of registered object values</td>
   <td>
     <h:selectManyListbox

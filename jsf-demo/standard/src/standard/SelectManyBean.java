@@ -1,5 +1,5 @@
 /*
- * $Id: SelectManyBean.java,v 1.6 2007/04/27 22:00:43 ofung Exp $
+ * $Id: SelectManyBean.java,v 1.7 2007/12/05 18:05:08 rlubke Exp $
  */
 
 /*
@@ -46,6 +46,8 @@ import javax.faces.model.SelectItem;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 
 /**
@@ -211,6 +213,27 @@ public class SelectManyBean implements Serializable {
         this.stringValuesList = stringValuesList;
     }
 
+    public Map getStringValuesMap() {
+        Map m = new HashMap();
+        String[] vals = {
+             "String 1",
+             "String 2",
+             "String 3",
+             "String 4" };
+        for (String s : vals) {
+            m.put(s, s);    
+        }
+        return m;
+    }
+    
+    String[] selectedMapValues;  
+    public void setSelectedMapValues(String[] values) {
+        selectedMapValues = values;
+    }
+   
+    public String[] getSelectedMapValues() {
+       return selectedMapValues;
+    }
 
     private SelectManyRegistered registeredArray[] =
           new SelectManyRegistered[]
