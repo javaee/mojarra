@@ -1,5 +1,5 @@
 /*
- * $Id: BeanManager.java,v 1.4 2007/06/25 17:18:55 rlubke Exp $
+ * $Id: BeanManager.java,v 1.5 2007/06/25 17:20:31 rlubke Exp $
  */
 
 /*
@@ -282,10 +282,10 @@ public class BeanManager {
                 builder.bake();
 
                 //noinspection CollectionWithoutInitialCapacity
-                Set refs = new HashSet();
+                Set<String> refs = new HashSet<String>();
                 refs.add(beanName);
                 //noinspection CollectionWithoutInitialCapacity
-                ArrayList<String> messages = new ArrayList();
+                ArrayList<String> messages = new ArrayList<String>();
                 validateReferences(builder, refs, messages);
                 if (!messages.isEmpty()) {
                     builder.queueMessages(messages);
