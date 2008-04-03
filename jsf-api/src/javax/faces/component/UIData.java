@@ -1294,18 +1294,29 @@ public class UIData extends UIComponentBase
      */
     private boolean keepSaved(FacesContext context) {
 
-        for (String clientId : saved.keySet()) {
-            Iterator messages = context.getMessages(clientId);
-            while (messages.hasNext()) {
-                FacesMessage message = (FacesMessage) messages.next();
-                if (message.getSeverity().compareTo(FacesMessage.SEVERITY_ERROR)
-                    >= 0) {
-                    return (true);
+        if (!isNestedWithinUIData()) {
+            // we're not nested, so we can rely on the fact that
+            // baseClientId is not null.  Get all client IDs that have messages
+            // and if any of them start with the baseClientId, then get the
+            // messages and see if any are ERROR or FATAL.
+            for (Iterator<String> ids = context.getClientIdsWithMessages();
+                  ids.hasNext();) {
+                String id = ids.next();
+                if (id.startsWith(baseClientId)) {
+                    for (Iterator<FacesMessage> msgs = context.getMessages(id);
+                          msgs.hasNext();) {
+                        FacesMessage msg = msgs.next();
+                        if (FacesMessage.SEVERITY_ERROR.compareTo(msg.getSeverity()) >= 0) {
+                            return true;
+                        }
+                    }
                 }
             }
+            return false;
+        } else {
+            return true;
         }
-        return (isNestedWithinUIData());
-
+        
     }
 
     private Boolean isNestedWithinUIData() {
