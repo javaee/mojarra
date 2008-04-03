@@ -56,7 +56,10 @@ import javax.faces.context.FacesContext;
 import com.sun.faces.util.Util;
 
 /**
- * RELEASE_PENDING (rlubke) document
+ * <p>
+ * A {@link ResourceHelper} implementation for finding/serving resources
+ * found on the classpath within the <code>META-INF/resources directory.
+ * </p>
  *
  * @since 2.0
  */
@@ -87,8 +90,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
 
     /**
-     * RELEASE_PENDING (rlubke) document
-     * @return
+     * @see com.sun.faces.application.resource.ResourceHelper#getBaseResourcePath()
      */
     public String getBaseResourcePath() {
 
@@ -98,10 +100,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
 
     /**
-     * RELEASE_PENDING (rlubke) document
-     * @param path
-     * @param ctx
-     * @return
+     * @see ResourceHelper#getInputStream(String, javax.faces.context.FacesContext)
      */
     public InputStream getInputStream(String path, FacesContext ctx) {
 
@@ -112,10 +111,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
 
     /**
-     * RELEASE_PENDING (rlubke) document
-     * @param path
-     * @param ctx
-     * @return
+     * @see com.sun.faces.application.resource.ResourceHelper#getURL(String, javax.faces.context.FacesContext)
      */
     public URL getURL(String path, FacesContext ctx) {
 
@@ -125,6 +121,9 @@ public class ClasspathResourceHelper extends ResourceHelper {
     }
 
 
+    /**
+     * @see ResourceHelper#findLibrary(String, String, javax.faces.context.FacesContext)
+     */
     public LibraryInfo findLibrary(String libraryName,
                                    String localePrefix,
                                    FacesContext ctx) {
@@ -159,6 +158,10 @@ public class ClasspathResourceHelper extends ResourceHelper {
         }
     }
 
+
+    /**
+     * @see ResourceHelper#findResource(LibraryInfo, String, String, javax.faces.context.FacesContext)
+     */
     public ResourceInfo findResource(LibraryInfo library,
                                      String resourceName,
                                      String localePrefix,
@@ -211,11 +214,10 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
 
     /**
-     * RELEASE_PENDING (rlubke) document
-     *
-     * @param url
-     *
-     * @return
+     * @param url a <code>URL</code> to a resource found on the classpath
+     * @return a <code>List</code> of single path elements that represent
+     *  the direct decendents of the URL's path.  If no path decendents are
+     *  found, an empty <code>List</code> will be returned instead.
      */
     private List<String> getSubPaths(URL url)
     throws IOException, URISyntaxException {
@@ -250,10 +252,15 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
 
     /**
-     * RELEASE_PENDING (rlubke) document
-     * @param url
-     * @return
-     * @throws IOException
+     * <p>
+     * Obtain the direct directory of file decendents of the specified JAR file
+     * URL.
+     * </p>
+     * @param url a <code>URL</code> to a resource found on the classpath
+     * @return a <code>List</code> of single path elements that represent
+     *  the direct decendents of the URL's path.  If no path decendents are
+     *  found, <code>null</code> will be returned instead.
+     * @throws IOException if an error occurrs processing the JAR file
      */
     private List<String> getPathsFromJARUrl(URL url) throws IOException {
         List<String> paths = null;
@@ -305,11 +312,15 @@ public class ClasspathResourceHelper extends ResourceHelper {
     }
 
     /**
-     * RELEASE_PENDING (rlubke) document
-     * @param url
-     * @return
-     * @throws IOException
-     * @throws URISyntaxException
+     * <p>
+     * Obtain the direct directory of file decendents of the specified file
+     * URL.
+     * </p>
+     * @param url a <code>URL</code> to a resource found on the classpath
+     * @return a <code>List</code> of single path elements that represent
+     *  the direct decendents of the URL's path.  If no path decendents are
+     *  found, <code>null</code> will be returned instead.
+     * @throws IOException if an error occurrs processing the JAR file
      */
     private List<String> getPathsFromFileURL(URL url)
     throws IOException, URISyntaxException {
