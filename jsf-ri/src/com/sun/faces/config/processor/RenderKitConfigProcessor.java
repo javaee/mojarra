@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitConfigProcessor.java,v 1.5 2007/06/28 20:12:43 rlubke Exp $
+ * $Id: RenderKitConfigProcessor.java,v 1.6 2007/06/28 21:42:00 rlubke Exp $
  */
 
 /*
@@ -41,7 +41,6 @@
 package com.sun.faces.config.processor;
 
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.Util;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationConfigProcessor.java,v 1.5 2007/06/28 20:12:43 rlubke Exp $
+ * $Id: ApplicationConfigProcessor.java,v 1.6 2007/06/28 21:42:00 rlubke Exp $
  */
 
 /*
@@ -141,12 +141,6 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
          = "variable-resolver";
 
     /**
-     * <code>/faces-config/application/locale-config</code>
-     */
-    private static final String LOCALE_CONFIG
-         = "locale-config";
-
-    /**
      * <code>/faces-config/application/locale-config/default-locale</code>
      */
     private static final String DEFAULT_LOCALE
@@ -198,6 +192,9 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
     throws Exception {
 
         Application app = getApplication();
+        ApplicationAssociate associate =
+              ApplicationAssociate.getInstance(
+                    FacesContext.getCurrentInstance().getExternalContext());
 
         for (int i = 0; i < documents.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
@@ -235,17 +232,17 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                             } else if (STATE_MANAGER.equals(n.getLocalName())) {
                                 setStateManager(app, n);
                             } else if (EL_RESOLVER.equals(n.getLocalName())) {
-                                addELResolver(app, n);
+                                addELResolver(associate, n);
                             } else if (PROPERTY_RESOLVER.equals(n.getLocalName())) {
-                                addPropertyResolver(app, n);
+                                addPropertyResolver(associate, n);
                             } else if (VARIABLE_RESOLVER.equals(n.getLocalName())) {
-                                addVariableResolver(app, n);
+                                addVariableResolver(associate, n);
                             } else if (DEFAULT_LOCALE.equals(n.getLocalName())) {
                                 setDefaultLocale(app, n);
                             } else if (SUPPORTED_LOCALE.equals(n.getLocalName())) {
                                 addSupportedLocale(app, n);
                             } else if (RESOURCE_BUNDLE.equals(n.getLocalName())) {
-                                addResouceBundle(app, n);
+                                addResouceBundle(associate, n);
                             }
                         }
                     }
@@ -401,13 +398,10 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
     }
 
 
-    private void addELResolver(Application application,
+    private void addELResolver(ApplicationAssociate associate,
                                Node elResolver) {
 
         if (elResolver != null) {
-            ApplicationAssociate associate = ApplicationAssociate
-                 .getInstance(FacesContext
-                      .getCurrentInstance().getExternalContext());
             if (associate != null) {
                 List<ELResolver> resolvers = associate
                      .getELResolversFromFacesConfig();
@@ -438,13 +432,11 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
     }
 
 
-    private void addPropertyResolver(Application application,
+    @SuppressWarnings("deprecation")
+    private void addPropertyResolver(ApplicationAssociate associate,
                                      Node propertyResolver) {
 
         if (propertyResolver != null) {
-            ApplicationAssociate associate = ApplicationAssociate
-                 .getInstance(FacesContext
-                      .getCurrentInstance().getExternalContext());
             if (associate != null) {
                 Object resolverImpl = associate.getLegacyPRChainHead();
                 if (resolverImpl == null) {
@@ -474,13 +466,11 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
     }
 
 
-    private void addVariableResolver(Application application,
+    @SuppressWarnings("deprecation")
+    private void addVariableResolver(ApplicationAssociate associate,
                                      Node variableResolver) {
 
         if (variableResolver != null) {
-            ApplicationAssociate associate = ApplicationAssociate
-                 .getInstance(FacesContext
-                      .getCurrentInstance().getExternalContext());
             if (associate != null) {
                 Object resolverImpl = associate.getLegacyVRChainHead();
                 if (resolverImpl == null) {
@@ -554,13 +544,10 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
 
 
 
-    private void addResouceBundle(Application application,
+    private void addResouceBundle(ApplicationAssociate associate,
                                   Node resourceBundle) {
 
         if (resourceBundle != null) {
-            ApplicationAssociate associate = ApplicationAssociate
-                 .getInstance(FacesContext
-                      .getCurrentInstance().getExternalContext());
             NodeList children = resourceBundle.getChildNodes();
             if (children != null) {
                 String baseName = null;
@@ -576,12 +563,12 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                             var = getNodeText(n);
                         } else if (RES_DESCRIPTIONS.equals(n.getLocalName())) {
                             if (descriptions == null) {
-                                descriptions = new ArrayList(2);
+                                descriptions = new ArrayList<Node>(2);
                             }
                             descriptions.add(n);
                         } else if (RES_DISPLAY_NAMES.equals(n.getLocalName())) {
                             if (displayNames == null) {
-                                displayNames = new ArrayList(2);
+                                displayNames = new ArrayList<Node>(2);
                             }
                             displayNames.add(n);
                         }
