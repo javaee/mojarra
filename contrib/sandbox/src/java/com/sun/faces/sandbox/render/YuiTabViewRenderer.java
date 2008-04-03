@@ -136,6 +136,13 @@ public class YuiTabViewRenderer extends Renderer {
             writer.endElement("style");
         }
         
+        if (tabView.getMinHeight() != null) {
+            writer.startElement("style", tabView);
+            writer.writeAttribute("type", "text/css", "type");
+            writer.write(".yui-content { min-height: " + tabView.getMinHeight() + "}");
+            writer.endElement("style");
+        }
+        
         writer.startElement("div", tabView);
         writer.writeAttribute("id", "tabView_" + component.getClientId(context), "id");
         writer.writeAttribute("class", "yui-navset", "class");

@@ -21,4 +21,4 @@
             <a href="${facesContext.externalContext.request.contextPath}/index.jsf">Home</a>
         </div>
     </div>
-    <div style="margin: 5px;">
+    <div id="content" style="margin: 5px;">

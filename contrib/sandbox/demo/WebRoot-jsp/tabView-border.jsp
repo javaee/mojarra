@@ -39,7 +39,7 @@
     <h3>TabView - Border Style Demo</h3>
     This page shows a normal, three tab tabView with "dynamic" <code>maxHeight</code>.
     <br /><br />
-    <risb:tabView tabStyle="border">
+    <risb:tabView tabStyle="border" orientation="left" maxHeight="auto">
         <risb:tab label="Label 1" active="true">
             <h:outputText value="Some text!"/>
         </risb:tab>

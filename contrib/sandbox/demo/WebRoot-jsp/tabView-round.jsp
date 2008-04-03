@@ -40,7 +40,7 @@
     This page shows a three tab tabView in the "round" style 
     with "auto" <code>maxHeight</code>, and "left" <code>orientation</code>.
     <br /><br />
-    <risb:tabView tabStyle="round" orientation="left" maxHeight="auto">
+    <risb:tabView tabStyle="round" minHeight="500px">
         <risb:tab label="Label 1">
             <h:outputText value="Some text!"/>
         </risb:tab>
