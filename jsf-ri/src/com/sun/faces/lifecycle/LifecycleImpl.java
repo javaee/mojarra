@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.73 2007/03/19 20:31:23 edburns Exp $
+ * $Id: LifecycleImpl.java,v 1.74 2007/04/03 17:02:49 rlubke Exp $
  */
 
 /*
@@ -29,6 +29,10 @@
 
 package com.sun.faces.lifecycle;
 
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
+
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
@@ -42,10 +46,7 @@ import java.util.ListIterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
+import java.io.IOException;
 
 
 /**
@@ -209,6 +210,7 @@ public class LifecycleImpl extends Lifecycle {
         }
                
         ListIterator<PhaseListener> listenersIterator = listeners.listIterator();
+        String listenerClass = null;
         try {
             // Notify the "beforePhase" method of interested listeners
             // (ascending)
@@ -217,6 +219,7 @@ public class LifecycleImpl extends Lifecycle {
                 PhaseEvent event = new PhaseEvent(context, phaseId, this);
                 while (listenersIterator.hasNext())  {
                     PhaseListener listener = listenersIterator.next();
+                    listenerClass = listener.getClass().getName();
                     if (phaseId.equals(listener.getPhaseId()) ||
                         PhaseId.ANY_PHASE.equals(listener.getPhaseId())) {
                         listener.beforePhase(event);                        
@@ -225,18 +228,14 @@ public class LifecycleImpl extends Lifecycle {
             }
         } catch (Exception e) {
             if (LOGGER.isLoggable(Level.WARNING)) {
-                LOGGER.warning("phase("
-                               + phaseId.toString()
-                               + ','
-                               + context
-                               +
-                               ") threw exception: "
-                               + e
-                               + ' '
-                               + e.getMessage()
-                               +
-                               "\n"
-                               + Util.getStackTraceString(e));
+                    LOGGER.log(Level.WARNING,
+                         "jsf.lifecycle.phaselistener.exception",
+                         new Object[]{
+                              listenerClass + ".beforePhase()",
+                              phaseId.toString(),
+                              context.getViewRoot().getViewId(),
+                              e});
+                    LOGGER.warning(Util.getStackTraceString(e));
             }
             // move the iterator pointer back one
             if (listenersIterator.hasPrevious()) {
@@ -259,12 +258,15 @@ public class LifecycleImpl extends Lifecycle {
             }
         } catch (Exception e) {
             // Log the problem, but continue
-            if (LOGGER.isLoggable(Level.WARNING)) {
-                LOGGER.log(Level.WARNING,
-                           "executePhase(" + phaseId.toString() + ','
-                           + context + ") threw exception",
-                           e);
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE,
+                     "jsf.lifecycle.phase.exception",
+                     new Object[]{
+                          phaseId,
+                          context.getViewRoot().getViewId(),
+                          e});
             }
+
             ex = e;
             exceptionThrown = true;
         } finally {
@@ -283,18 +285,14 @@ public class LifecycleImpl extends Lifecycle {
                 }
             } catch (Throwable e) {
                 if (LOGGER.isLoggable(Level.WARNING)) {
-                    LOGGER.warning("phase("
-                                   + phaseId.toString()
-                                   + ','
-                                   + context
-                                   +
-                                   ") threw exception: "
-                                   + e
-                                   + ' '
-                                   + e.getMessage()
-                                   +
-                                   "\n"
-                                   + Util.getStackTraceString(e));
+                    LOGGER.log(Level.WARNING,
+                         "jsf.lifecycle.phaselistener.exception",
+                         new Object[]{
+                              listenerClass + ".afterPhase()",
+                              phaseId.toString(),
+                              context.getViewRoot().getViewId(),
+                              e});
+                    LOGGER.warning(Util.getStackTraceString(e));
                 }
             }
         }
