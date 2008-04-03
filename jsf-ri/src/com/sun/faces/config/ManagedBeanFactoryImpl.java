@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactoryImpl.java,v 1.18 2007/02/27 23:10:25 rlubke Exp $
+ * $Id: ManagedBeanFactoryImpl.java,v 1.19 2007/03/16 13:43:27 rlubke Exp $
  */
 
 /*
@@ -29,6 +29,23 @@
 
 package com.sun.faces.config;
 
+import com.sun.faces.RIConstants;
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.config.beans.DescriptionBean;
+import com.sun.faces.config.beans.ListEntriesBean;
+import com.sun.faces.config.beans.ManagedBeanBean;
+import com.sun.faces.config.beans.ManagedPropertyBean;
+import com.sun.faces.config.beans.MapEntriesBean;
+import com.sun.faces.config.beans.MapEntryBean;
+import com.sun.faces.el.ELUtils;
+import com.sun.faces.spi.InjectionProvider;
+import com.sun.faces.spi.InjectionProviderException;
+import com.sun.faces.spi.ManagedBeanFactory;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.TypedCollections;
+import com.sun.faces.util.Util;
+import com.sun.org.apache.commons.beanutils.PropertyUtils;
+
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -47,23 +64,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.sun.faces.RIConstants;
-import com.sun.faces.el.ELUtils;
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.config.beans.DescriptionBean;
-import com.sun.faces.config.beans.ListEntriesBean;
-import com.sun.faces.config.beans.ManagedBeanBean;
-import com.sun.faces.config.beans.ManagedPropertyBean;
-import com.sun.faces.config.beans.MapEntriesBean;
-import com.sun.faces.config.beans.MapEntryBean;
-import com.sun.faces.spi.InjectionProviderException;
-import com.sun.faces.spi.ManagedBeanFactory;
-import com.sun.faces.spi.InjectionProvider;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.TypedCollections;
-import com.sun.faces.util.Util;
-import com.sun.org.apache.commons.beanutils.PropertyUtils;
 
 /**
  * <p>This class creates a managed bean instance. It has a contract with
@@ -127,7 +127,9 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
     // Attribute Instance Variables
 
     private ManagedBeanBean managedBean;
-    private Scope scope = Scope.NONE;    
+    private Scope scope = Scope.NONE;
+
+    private ApplicationAssociate associate;
 
     // Relationship Instance Variables
 
@@ -266,7 +268,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
         try {
             ClassLoader loader = Thread.currentThread().getContextClassLoader();
             if (loader == null) {
-                loader = FacesContext.getCurrentInstance().
+                loader = context.
                     getClass().getClassLoader();
             }
             Class mbClass = Class.forName(managedBean.getManagedBeanClass(),
@@ -287,9 +289,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
 
         // populate the bean with its contents
         try {
-            ApplicationAssociate associate = 
-                    ApplicationAssociate.getInstance(
-                          context.getExternalContext());   
+            ApplicationAssociate associate = getAssociate(context);
             InjectionProvider injectionProvider = 
                   associate.getInjectionProvider();
             
@@ -1149,6 +1149,14 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
         }
 
         return false;
+    }
+
+
+    private ApplicationAssociate getAssociate(FacesContext context) {
+        if (associate == null) {
+            associate = ApplicationAssociate.getInstance(context.getExternalContext());
+        }
+        return associate;
     }
 
     /**

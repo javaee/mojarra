@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.98 2007/03/06 23:59:17 rlubke Exp $
+ * $Id: ViewHandlerImpl.java,v 1.99 2007/03/16 13:43:27 rlubke Exp $
  */
 
 
@@ -33,6 +33,14 @@
 
 package com.sun.faces.application;
 
+import com.sun.faces.RIConstants;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
+import com.sun.faces.io.FastStringWriter;
+import com.sun.faces.util.DebugUtil;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
+
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.StateManager;
@@ -57,18 +65,10 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
-import com.sun.faces.io.FastStringWriter;
-import com.sun.faces.util.DebugUtil;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
-
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.98 2007/03/06 23:59:17 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.99 2007/03/16 13:43:27 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -80,9 +80,7 @@ public class ViewHandlerImpl extends ViewHandler {
     private static final String AFTER_VIEW_CONTENT = RIConstants.FACES_PREFIX+
                                                      "AFTER_VIEW_CONTENT";
 
-    //
-    // Relationship Instance Variables
-    //
+    private ApplicationAssociate associate;
 
     /**
      * <p>Store the value of <code>DEFAULT_SUFFIX_PARAM_NAME</code>
@@ -114,8 +112,11 @@ public class ViewHandlerImpl extends ViewHandler {
         
         try {
             if (executePageToBuildView(context, viewToRender)) {
-                response.flushBuffer(); 
-                ApplicationAssociate.getInstance(extContext).responseRendered();
+                response.flushBuffer();
+                ApplicationAssociate associate = getAssociate(context);
+                if (associate != null) {
+                    associate.responseRendered();
+                }
                 return;
             }
         } catch (IOException e) {
@@ -230,8 +231,7 @@ public class ViewHandlerImpl extends ViewHandler {
                               UIViewRoot viewToRender) 
     throws IOException, FacesException {   
 
-    ApplicationAssociate associate =
-        ApplicationAssociate.getInstance(context.getExternalContext());
+        ApplicationAssociate associate = getAssociate(context);
 
         if (null != associate) {
             associate.responseRendered();
@@ -758,7 +758,15 @@ public class ViewHandlerImpl extends ViewHandler {
 
         }
         return convertedViewId;
-    }    
+    }
+
+
+    private ApplicationAssociate getAssociate(FacesContext context) {
+        if (associate == null) {
+            associate = ApplicationAssociate.getInstance(context.getExternalContext());
+        }
+        return associate;
+    }
     
     // ----------------------------------------------------------- Inner Classes
 

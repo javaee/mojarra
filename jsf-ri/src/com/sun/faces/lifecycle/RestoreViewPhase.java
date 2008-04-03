@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.44 2007/03/06 23:59:16 rlubke Exp $
+ * $Id: RestoreViewPhase.java,v 1.45 2007/03/16 13:43:27 rlubke Exp $
  */
 
 /*
@@ -31,6 +31,14 @@
 
 package com.sun.faces.lifecycle;
 
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.config.JSFVersionTracker;
+import com.sun.faces.config.JSFVersionTracker.Version;
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.DebugUtil;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
+
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.ViewExpiredException;
@@ -47,19 +55,11 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.config.JSFVersionTracker;
-import com.sun.faces.config.JSFVersionTracker.Version;
-import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.DebugUtil;
-
 /**
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.44 2007/03/06 23:59:16 rlubke Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.45 2007/03/16 13:43:27 rlubke Exp $
  */
 
 public class RestoreViewPhase extends Phase {
@@ -67,6 +67,8 @@ public class RestoreViewPhase extends Phase {
 
     private static Logger logger = Util.getLogger(Util.FACES_LOGGER
                                                   + Util.LIFECYCLE_LOGGER);
+
+    private ApplicationAssociate associate;
 
     // ---------------------------------------------------------- Public Methods
 
@@ -139,9 +141,7 @@ public class RestoreViewPhase extends Phase {
             if (null == (viewRoot =
                   viewHandler.restoreView(facesContext, viewId))) {
                 JSFVersionTracker tracker =
-                      ApplicationAssociate
-                            .getInstance(facesContext.getExternalContext())
-                            .getJSFVersionTracker();
+                      getAssociate(facesContext).getJSFVersionTracker();
 
                 // The tracker will be null if the user turned off the 
                 // version tracking feature.  
@@ -273,6 +273,14 @@ public class RestoreViewPhase extends Phase {
                                                      renderkitId);
         return rsm.isPostback(context);
 
+    }
+
+
+    private ApplicationAssociate getAssociate(FacesContext context) {
+        if (associate == null) {
+            associate = ApplicationAssociate.getInstance(context.getExternalContext());
+        }
+        return associate;
     }
 
     // The testcase for this class is TestRestoreViewPhase.java
