@@ -1,5 +1,5 @@
 /*
- * $Id: TestGuessNumber.java,v 1.16 2007/04/27 22:00:48 ofung Exp $
+ * $Id: TestGuessNumber.java,v 1.17 2008/04/02 23:08:16 driscoll Exp $
  */
 
 /*
@@ -80,7 +80,7 @@ public class TestGuessNumber extends HtmlUnitTestCase {
                         foundImage = true;
                         assertTrue(stripJsessionInfo(
                             element.getAttributeValue("src"))
-                            .equals("/jsf-guessNumber/wave.med.gif"));
+                            .equals("/jsf-guessNumber/guess/javax.faces.resource/images/wave.med.gif"));
                     }
                 }
             }
@@ -134,7 +134,7 @@ public class TestGuessNumber extends HtmlUnitTestCase {
                         foundImage = true;
                         assertTrue(stripJsessionInfo(
                             element.getAttributeValue("src"))
-                            .equals("/jsf-guessNumber/wave.med.gif"));
+                            .equals("/jsf-guessNumber/guess/javax.faces.resource/images/wave.med.gif"));
                     }
                 }
             }
