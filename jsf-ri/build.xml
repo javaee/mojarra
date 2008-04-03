@@ -454,17 +454,6 @@
             </replacevalue>
         </replace>
         <delete file="${basedir}/merged.xml"/>
-        <taskdef name="generateBootstrap"
-                 classname="com.sun.faces.ant.BootstrapperTask">
-            <classpath>
-                <pathelement location="${tools.dir}/build/classes"/>
-            </classpath>
-        </taskdef>
-        <generateBootstrap
-              runtimeConfig="${impl.dir}/${build.dir}/classes/com/sun/faces/jsf-ri-runtime.xml"
-              copyright="${jsf.build.home}/legal/jsf-cddl/jsf-cddl-header.txt"
-              outputDir="${impl.dir}/${build.generate.dir}">
-        </generateBootstrap>
     </target>
 
     <!--
