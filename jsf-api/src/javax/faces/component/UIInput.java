@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.91 2007/04/27 22:00:04 ofung Exp $
+ * $Id: UIInput.java,v 1.92 2007/07/31 16:22:58 rlubke Exp $
  */
 
 /*
@@ -40,6 +40,12 @@
 
 package javax.faces.component;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
@@ -54,10 +60,6 @@ import javax.faces.event.ValueChangeListener;
 import javax.faces.render.Renderer;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * <p><strong>UIInput</strong> is a {@link UIComponent} that represents
@@ -146,6 +148,12 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     public static final String UPDATE_MESSAGE_ID =
          "javax.faces.component.UIInput.UPDATE";
     private static final Validator[] EMPTY_VALIDATOR = new Validator[0];
+
+    /**
+     * The <code>Logger</code> for this class.
+     */
+    private static final Logger LOGGER =
+          Logger.getLogger("javax.faces.component", "javax.faces.LogStrings");
 
     // ------------------------------------------------------------ Constructors
 
@@ -796,6 +804,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                                                messageStr,
                                                messageStr);
                 }
+                LOGGER.log(Level.SEVERE, message.getSummary(), result);
                 context.addMessage(getClientId(context), message);
                 setValid(false);
             } catch (IllegalArgumentException e) {
@@ -803,6 +812,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                      MessageFactory.getMessage(context, UPDATE_MESSAGE_ID,
                           MessageFactory.getLabel(
                                context, this));
+                LOGGER.log(Level.SEVERE, message.getSummary(), e);
                 context.addMessage(getClientId(context), message);
                 setValid(false);
             } catch (Exception e) {
@@ -810,6 +820,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                      MessageFactory.getMessage(context, UPDATE_MESSAGE_ID,
                           MessageFactory.getLabel(
                                context, this));
+                LOGGER.log(Level.SEVERE, message.getSummary(), e);
                 context.addMessage(getClientId(context), message);
                 setValid(false);
             }
