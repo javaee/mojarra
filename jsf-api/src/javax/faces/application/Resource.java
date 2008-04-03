@@ -171,7 +171,6 @@ public abstract class Resource {
 
 
     /**
-
      * <p class="changed_added_2_0">Returns a mutable
      * <code>Map&lt;String, String&gt;</code> whose entries will be sent
      * as response headers during {@link
@@ -179,7 +178,7 @@ public abstract class Resource {
      * must not persist beyond the scope of a single request.  Any
      * modifications made to the map after the resource has been served
      * will be ignored by the run-time.</p>
-
+     *
      * @return a mutable <code>Map&lt;String, String&gt;</code> of
      * headers that will be included with the response.
      */
