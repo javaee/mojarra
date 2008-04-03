@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManager.java,v 1.1 2007/04/22 21:41:04 rlubke Exp $
+ * $Id: ConfigManager.java,v 1.2 2007/04/24 19:04:22 rlubke Exp $
  */
 
 /*
@@ -43,18 +43,25 @@ import com.sun.faces.config.processor.NavigationConfigProcessor;
 import com.sun.faces.config.processor.RenderKitConfigProcessor;
 import com.sun.faces.config.processor.ValidatorConfigProcessor;
 import com.sun.faces.spi.ConfigurationResourceProvider;
-import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Timer;
 import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 
 import javax.servlet.ServletContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -115,6 +122,8 @@ public class ConfigManager {
      * </p>
      */
     private static final ConfigProcessor CONFIG_PROCESSOR_CHAIN;
+    private static final String XSL = "/com/sun/faces/jsf1_0-1_1to1_2.xsl";
+
 
     static {
         RESOURCE_PROVIDERS.add(new RIConfigResourceProvider());
@@ -168,10 +177,10 @@ public class ConfigManager {
             initializedContexts.add(sc);
             try {                
                 CONFIG_PROCESSOR_CHAIN.process(getConfigDocuments(sc));
-            } catch (Exception e) {               
+            } catch (Exception e) {
+                 // no i18n here - it's too early
                 throw new ConfigurationException(
-                     MessageUtils.getExceptionMessageString(
-                          MessageUtils.ERROR_PROCESSING_CONFIG_ID),
+                     "Unexpected error during configuration processing",
                      e);
             }
         }
@@ -232,20 +241,27 @@ public class ConfigManager {
 
         List<FutureTask<Document>> docTasks =
              new ArrayList<FutureTask<Document>>(RESOURCE_PROVIDERS.size() << 1);
-        DocumentBuilderFactory factory = DbfFactory.getFactory(true);
+        boolean validating = WebConfiguration.getInstance(sc)
+             .getBooleanContextInitParameter(
+                  WebConfiguration.BooleanWebContextInitParameter.ValidateFacesConfigFiles);
+        DocumentBuilderFactory factory = DbfFactory.getFactory(validating);
         for (FutureTask<List<URL>> t : urlTasks) {
             try {
                 List<URL> l = t.get();                
                 for (URL u : l) {
                     FutureTask<Document> d =
-                         new FutureTask<Document>(new ParseTask(factory, u));
+                         new FutureTask<Document>(new ParseTask(factory,
+                                                                factory .isValidating()
+                                                                  ? getTransformer()
+                                                                  : null,
+                                                                u));
                     docTasks.add(d);
                     executor.execute(d);
                 }
-            } catch (ExecutionException e) {
-                throw new ConfigurationException(e);
             } catch (InterruptedException e) {
                 ;
+            } catch (Exception e) {
+                throw new ConfigurationException(e);
             }
         }
 
@@ -265,6 +281,36 @@ public class ConfigManager {
 
     }
 
+
+    /**
+     * Obtain a <code>Transformer</code> using the style sheet
+     * referenced by the <code>XSL</code> constant.
+     * @return a new Tranformer instance
+     * @throws Exception if a Tranformer instance could not be created
+     */
+    private static Transformer getTransformer() throws Exception {
+
+        TransformerFactory factory = TransformerFactory.newInstance();
+        return factory
+             .newTransformer(new StreamSource(getInputStream(ConfigManager
+                  .class.getResource(XSL))));
+
+    }
+
+
+    /**
+     * @return an <code>InputStream</code> to the resource referred to by
+     *         {@link documentURL}
+     * @throws IOException if an error occurs
+     */
+    private static InputStream getInputStream(URL url) throws IOException {
+
+        URLConnection conn = url.openConnection();
+        conn.setUseCaches(false);
+        return new BufferedInputStream(conn.getInputStream());
+
+    }
+
     // ----------------------------------------------------------- Inner Classes
 
 
@@ -277,7 +323,8 @@ public class ConfigManager {
     private static class ParseTask implements Callable<Document> {
 
         private URL documentURL;
-        private DocumentBuilderFactory factory;
+        private DocumentBuilder builder;
+        private Transformer transformer;
 
         // -------------------------------------------------------- Constructors
 
@@ -288,12 +335,20 @@ public class ConfigManager {
          * </p>
          * @param factory a DocumentBuilderFactory configured with the desired
          *  parse settings
+         * @param transformer a Transform to be used to apply xslt transformations
+         *  if necessary
          * @param documentURL a URL to the configuration resource to be parsed
          */
-        public ParseTask(DocumentBuilderFactory factory, URL documentURL) {
+        public ParseTask(DocumentBuilderFactory factory,
+                         Transformer transformer,
+                         URL documentURL)
+        throws Exception {
 
             this.documentURL = documentURL;
-            this.factory = factory;
+            this.transformer = transformer;
+            builder = factory.newDocumentBuilder();
+            builder.setEntityResolver(DbfFactory.FACES_ENTITY_RESOLVER);
+            builder.setErrorHandler(DbfFactory.FACES_ERROR_HANDLER);
 
         }
 
@@ -306,16 +361,15 @@ public class ConfigManager {
          * @throws Exception if an error occurs during the parsing process
          */
         public Document call() throws Exception {
-            DocumentBuilder b = factory.newDocumentBuilder();
-            b.setEntityResolver(DbfFactory.FACES_ENTITY_RESOLVER);
-            InputStream stream = getInputStream();
+
+            InputStream stream = getInputStream(documentURL);
             try {
                 Timer timer = Timer.getInstance();
                 if (timer != null) {
                     timer.startTiming();
                 }
 
-                Document d = b.parse(stream, documentURL.toExternalForm());
+                Document d = builder.parse(getParseSource());
 
                 if (timer != null) {
                     timer.stopTiming();
@@ -323,6 +377,11 @@ public class ConfigManager {
                 }
               
                 return d;
+            } catch (Exception e) {
+                throw new ConfigurationException(MessageFormat.format(
+                     "Unable to parse document ''{0}'': {1}",
+                     documentURL.toExternalForm(),
+                     e.getMessage()));
             } finally {
                 if (stream != null) {
                     try {
@@ -338,16 +397,26 @@ public class ConfigManager {
         // ----------------------------------------------------- Private Methods
 
 
-        /**
-         * @return an <code>InputStream</code> to the resource referred to by
-         *  {@link documentURL}
-         * @throws IOException if an error occurs
-         */
-        private InputStream getInputStream() throws IOException {
 
-            URLConnection conn = documentURL.openConnection();
-            conn.setUseCaches(false);
-            return new BufferedInputStream(conn.getInputStream());
+        private InputSource getParseSource() throws Exception {
+
+            if (transformer != null) {
+                // if we're validating, we need to apply xslt transformations
+                // to convert all documents to 1.2
+                ByteArrayOutputStream baos = new ByteArrayOutputStream(4096);
+                StreamResult sResult = new StreamResult(baos);
+                transformer
+                     .transform(new StreamSource(getInputStream(documentURL),
+                                                 documentURL.toExternalForm()),
+                                sResult);
+                InputSource is = new InputSource(new ByteArrayInputStream(baos.toByteArray()));
+                is.setSystemId(documentURL.toExternalForm());
+                return is;
+            } else {
+                InputSource is = new InputSource(getInputStream(documentURL));
+                is.setSystemId(documentURL.toExternalForm());
+                return is;               
+            }
 
         }
 

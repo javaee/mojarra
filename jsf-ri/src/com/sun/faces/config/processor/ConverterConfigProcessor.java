@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterConfigProcessor.java,v 1.1 2007/04/22 21:41:42 rlubke Exp $
+ * $Id: ConverterConfigProcessor.java,v 1.2 2007/04/24 19:04:21 rlubke Exp $
  */
 
 /*
@@ -122,11 +122,11 @@ public class ConverterConfigProcessor extends AbstractConfigProcessor {
             String converterForClass = null;
             for (int c = 0, csize = children.getLength(); c < csize; c++) {
                 Node n = children.item(c);
-                if (CONVERTER_ID.equals(n.getNodeName())) {
+                if (CONVERTER_ID.equals(n.getLocalName())) {
                     converterId = getNodeText(n);
-                } else if (CONVERTER_CLASS.equals(n.getNodeName())) {
+                } else if (CONVERTER_CLASS.equals(n.getLocalName())) {
                     converterClass = getNodeText(n);
-                } else if (CONVERTER_FOR_CLASS.equals(n.getNodeName())) {
+                } else if (CONVERTER_FOR_CLASS.equals(n.getLocalName())) {
                     converterForClass = getNodeText(n);
                 }
             }

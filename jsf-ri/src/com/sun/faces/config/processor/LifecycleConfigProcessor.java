@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleConfigProcessor.java,v 1.2 2007/04/23 20:23:05 rlubke Exp $
+ * $Id: LifecycleConfigProcessor.java,v 1.3 2007/04/24 19:04:21 rlubke Exp $
  */
 
 /*
@@ -29,23 +29,22 @@
 
 package com.sun.faces.config.processor;
 
+import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.config.ConfigurationException;
 import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javax.faces.FactoryFinder;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
+import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.text.MessageFormat;
 
 /**
  * <p>
@@ -62,9 +61,14 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
          "com.sun.faces.lifecycle.JsfJsResourcePhaseListener";
 
     /**
-     * <p>/faces-config/lifecycle/phase-listener
+     * <p>/faces-config/lifecycle</p>
      */
-    private static final String PHASE_LISTENER = "/d:faces-config/d:lifecycle/d:phase-listener";
+    private static final String LIFECYCLE = "lifecycle";
+
+    /**
+     * <p>/faces-config/lifecycle/phase-listener</p>
+     */
+    private static final String PHASE_LISTENER = "phase-listener";
 
 
     // -------------------------------------------- Methods from ConfigProcessor
@@ -86,12 +90,17 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
                                 "Processing lifecycle elements for document: ''{0}''",
                                 documents[i].getDocumentURI()));
             }
-            NodeList lifecycles = documents[i].getDocumentElement().getElementsByTagName("lifecycle");
+            String namespace =
+                 documents[i].getDocumentElement().getNamespaceURI();
+            NodeList lifecycles = 
+                 documents[i].getDocumentElement().getElementsByTagNameNS(namespace,
+                                                                          LIFECYCLE);
             if (lifecycles != null) {
                 for (int c = 0, csize = lifecycles.getLength(); c < csize; c++) {
                     Node n = lifecycles.item(c);
                     if (n.getNodeType() == Node.ELEMENT_NODE) {
-                        NodeList listeners = ((Element) n).getElementsByTagName("phase-listener");
+                        NodeList listeners = ((Element) n).getElementsByTagNameNS(namespace,
+                                                                                  PHASE_LISTENER);
                         addPhaseListeners(factory, listeners);
                     }
                 }

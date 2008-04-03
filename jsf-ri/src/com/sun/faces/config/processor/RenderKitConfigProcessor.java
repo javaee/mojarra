@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitConfigProcessor.java,v 1.1 2007/04/22 21:41:42 rlubke Exp $
+ * $Id: RenderKitConfigProcessor.java,v 1.2 2007/04/24 19:04:21 rlubke Exp $
  */
 
 /*
@@ -144,11 +144,11 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
                  new ArrayList(children.getLength());
             for (int c = 0, csize = children.getLength(); c < csize; c++) {
                 Node n = children.item(c);
-                if (RENDERKIT_ID.equals(n.getNodeName())) {
+                if (RENDERKIT_ID.equals(n.getLocalName())) {
                     rkId = getNodeText(n);
-                } else if (RENDERKIT_CLASS.equals(n.getNodeName())) {
+                } else if (RENDERKIT_CLASS.equals(n.getLocalName())) {
                     rkClass = getNodeText(n);
-                } else if (RENDERER.equals(n.getNodeName())) {
+                } else if (RENDERER.equals(n.getLocalName())) {
                     renderers.add(n);
                 }
             }
@@ -192,11 +192,11 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
             String rendererClass = null;
             for (int i = 0, size = children.getLength(); i < size; i++) {
                 Node n = children.item(i);
-                if (RENDERER_FAMILY.equals(n.getNodeName())) {
+                if (RENDERER_FAMILY.equals(n.getLocalName())) {
                     rendererFamily = getNodeText(n);
-                } else if (RENDERER_TYPE.equals(n.getNodeName())) {
+                } else if (RENDERER_TYPE.equals(n.getLocalName())) {
                     rendererType = getNodeText(n);
-                } else if (RENDERER_CLASS.equals(n.getNodeName())) {
+                } else if (RENDERER_CLASS.equals(n.getLocalName())) {
                     rendererClass = getNodeText(n);
                 }
             }

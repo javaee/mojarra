@@ -260,6 +260,8 @@
               toDir="${build.classes.dir}/META-INF"/>
         <copy file="${conf.share.dir}/jsf_core.tld"
               toDir="${build.classes.dir}/META-INF"/>
+        <copy file="conf/xslt/jsf1_0-1_1to1_2.xsl"
+              toDir="${build.classes.dir}/com/sun/faces"/>
         <copy file="${conf.share.dir}/com.sun.faces.spi.injectionprovider"
               toDir="${build.classes.dir}/META-INF/services"/>
 

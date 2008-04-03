@@ -1,5 +1,5 @@
 /*
- * $Id: ComponentConfigProcessor.java,v 1.1 2007/04/22 21:41:42 rlubke Exp $
+ * $Id: ComponentConfigProcessor.java,v 1.2 2007/04/24 19:04:21 rlubke Exp $
  */
 
 /*
@@ -113,9 +113,9 @@ public class ComponentConfigProcessor extends AbstractConfigProcessor {
             String componentClass = null;
             for (int c = 0, csize = children.getLength(); c < csize; c++) {
                 Node n = children.item(c);
-                if (COMPONENT_TYPE.equals(n.getNodeName())) {
+                if (COMPONENT_TYPE.equals(n.getLocalName())) {
                     componentType = getNodeText(n);
-                } else if (COMPONENT_CLASS.equals(n.getNodeName())) {
+                } else if (COMPONENT_CLASS.equals(n.getLocalName())) {
                     componentClass = getNodeText(n);
                 }
             }

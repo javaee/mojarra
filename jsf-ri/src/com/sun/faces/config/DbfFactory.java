@@ -4,6 +4,8 @@ import com.sun.faces.util.FacesLogger;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -22,30 +24,41 @@ public class DbfFactory {
     private static final Logger LOGGER =
          Logger.getLogger(FacesLogger.CONFIG.getLoggerName());
 
+    private static final String JAXP_SCHEMA_LANGUAGE =
+        "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
+    private static final String W3C_XML_SCHEMA =
+        "http://www.w3.org/2001/XMLSchema";
+    private static final String JAXP_SCHEMA_SOURCE =
+        "http://java.sun.com/xml/jaxp/properties/schemaSource";
+    private static final String FACES_1_2_SCHEMA =
+         "/com/sun/faces/web-facesconfig_1_2.xsd";
+
+
     /**
      * EntityResolver
      */
     public static final EntityResolver FACES_ENTITY_RESOLVER =
          new FacesEntityResolver();
 
+    public static final FacesErrorHandler FACES_ERROR_HANDLER =
+         new FacesErrorHandler();
+
+
 
     // ---------------------------------------------------------- Public Methods
 
 
     public static DocumentBuilderFactory getFactory(boolean validating) {
-        // PENDING validation needs to be re-enabled.
-        // JAXP doesn't make it easy to validate both schema and DTD
-        // documents.  I've tried using SchemaFactory to handle schema
-        // validation, but it seems there are circular refs between
-        // javaee_5 and webservices client xsds which make creating
-        // a cached schema instance difficult.
-        // One possible solution would be apply xslt to all
-        // 1.0 and 1.1 documents and transform them to 1.2
+
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        //factory.setValidating(true);
+        factory.setValidating(validating);
         factory.setNamespaceAware(true);
         factory.setIgnoringComments(true);
         factory.setIgnoringElementContentWhitespace(true);
+        factory.setAttribute(JAXP_SCHEMA_LANGUAGE, W3C_XML_SCHEMA);
+        factory.setAttribute(JAXP_SCHEMA_SOURCE,
+                             FacesEntityResolver.class.getResource(
+                                  FACES_1_2_SCHEMA).toExternalForm());
         return factory;
 
     }
@@ -71,7 +84,7 @@ public class DbfFactory {
             },
             {
                 "web-facesconfig_1_2.xsd",
-                "/com/sun/faces/web-facesconfig_1_2.xsd"
+                FACES_1_2_SCHEMA
             },
             {
                 "javaee_5.xsd",
@@ -206,5 +219,20 @@ public class DbfFactory {
             return Collections.unmodifiableMap(entities);
 
         }
-    }
+    } // END FacesEntityResolver
+
+
+    private static class FacesErrorHandler implements ErrorHandler {
+        public void warning(SAXParseException exception) throws SAXException {
+            // do nothing
+        }
+
+        public void error(SAXParseException exception) throws SAXException {
+            throw exception;
+        }
+
+        public void fatalError(SAXParseException exception) throws SAXException {
+            throw exception;
+        }
+    } // END FacesErrorHandler
 }

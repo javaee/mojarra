@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryConfigProcessor.java,v 1.1 2007/04/22 21:41:42 rlubke Exp $
+ * $Id: FactoryConfigProcessor.java,v 1.2 2007/04/24 19:04:21 rlubke Exp $
  */
 
 /*
@@ -117,16 +117,16 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
                  .getElementsByTagNameNS(namespace, "*");
             for (int c = 0, csize = children.getLength(); c < csize; c++) {
                 Node n = children.item(c);
-                if (APPLICATION_FACTORY.equals(n.getNodeName())) {
+                if (APPLICATION_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.APPLICATION_FACTORY,
                                getNodeText(n));
-                } else if (LIFECYCLE_FACTORY.equals(n.getNodeName())) {
+                } else if (LIFECYCLE_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.LIFECYCLE_FACTORY,
                                getNodeText(n));
-                } else if (FACES_CONTEXT_FACTORY.equals(n.getNodeName())) {
+                } else if (FACES_CONTEXT_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.FACES_CONTEXT_FACTORY,
                                getNodeText(n));
-                } else if (RENDER_KIT_FACTORY.equals(n.getNodeName())) {
+                } else if (RENDER_KIT_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.RENDER_KIT_FACTORY,
                                getNodeText(n));
                 }

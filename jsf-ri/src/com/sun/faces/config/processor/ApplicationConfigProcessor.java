@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationConfigProcessor.java,v 1.1 2007/04/22 21:41:42 rlubke Exp $
+ * $Id: ApplicationConfigProcessor.java,v 1.2 2007/04/24 19:04:21 rlubke Exp $
  */
 
 /*
@@ -212,29 +212,29 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                              c < csize;
                              c++) {
                             Node n = children.item(c);
-                            if (MESSAGE_BUNDLE.equals(n.getNodeName())) {
+                            if (MESSAGE_BUNDLE.equals(n.getLocalName())) {
                                 setMessageBundle(app, n);
-                            } else if (DEFAULT_RENDERKIT_ID.equals(n.getNodeName())) {
+                            } else if (DEFAULT_RENDERKIT_ID.equals(n.getLocalName())) {
                                 setDefaultRenderKitId(app, n);
-                            } else if (ACTION_LISTENER.equals(n.getNodeName())) {
+                            } else if (ACTION_LISTENER.equals(n.getLocalName())) {
                                 addActionListener(app, n);
-                            } else if (NAVIGATION_HANDLER.equals(n.getNodeName())) {
+                            } else if (NAVIGATION_HANDLER.equals(n.getLocalName())) {
                                 setNavigationHandler(app, n);
-                            } else if (VIEW_HANDLER.equals(n.getNodeName())) {
+                            } else if (VIEW_HANDLER.equals(n.getLocalName())) {
                                 setViewHandler(app, n);
-                            } else if (STATE_MANAGER.equals(n.getNodeName())) {
+                            } else if (STATE_MANAGER.equals(n.getLocalName())) {
                                 setStateManager(app, n);
-                            } else if (EL_RESOLVER.equals(n.getNodeName())) {
+                            } else if (EL_RESOLVER.equals(n.getLocalName())) {
                                 addELResolver(app, n);
-                            } else if (PROPERTY_RESOLVER.equals(n.getNodeName())) {
+                            } else if (PROPERTY_RESOLVER.equals(n.getLocalName())) {
                                 addPropertyResolver(app, n);
-                            } else if (VARIABLE_RESOLVER.equals(n.getNodeName())) {
+                            } else if (VARIABLE_RESOLVER.equals(n.getLocalName())) {
                                 addVariableResolver(app, n);
-                            } else if (DEFAULT_LOCALE.equals(n.getNodeName())) {
+                            } else if (DEFAULT_LOCALE.equals(n.getLocalName())) {
                                 setDefaultLocale(app, n);
-                            } else if (SUPPORTED_LOCALE.equals(n.getNodeName())) {
+                            } else if (SUPPORTED_LOCALE.equals(n.getLocalName())) {
                                 addSupportedLocale(app, n);
-                            } else if (RESOURCE_BUNDLE.equals(n.getNodeName())) {
+                            } else if (RESOURCE_BUNDLE.equals(n.getLocalName())) {
                                 addResouceBundle(app, n);
                             }
                         }
@@ -551,16 +551,16 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                 for (int i = 0, size = children.getLength(); i < size; i++) {
                     Node n = children.item(i);
                     if (n.getNodeType() == Node.ELEMENT_NODE) {
-                        if (BASE_NAME.equals(n.getNodeName())) {
+                        if (BASE_NAME.equals(n.getLocalName())) {
                             baseName = getNodeText(n);
-                        } else if (VAR.equals(n.getNodeName())) {
+                        } else if (VAR.equals(n.getLocalName())) {
                             var = getNodeText(n);
-                        } else if (RES_DESCRIPTIONS.equals(n.getNodeName())) {
+                        } else if (RES_DESCRIPTIONS.equals(n.getLocalName())) {
                             if (descriptions == null) {
                                 descriptions = new ArrayList(2);
                             }
                             descriptions.add(n);
-                        } else if (RES_DISPLAY_NAMES.equals(n.getNodeName())) {
+                        } else if (RES_DISPLAY_NAMES.equals(n.getLocalName())) {
                             if (displayNames == null) {
                                 displayNames = new ArrayList(2);
                             }

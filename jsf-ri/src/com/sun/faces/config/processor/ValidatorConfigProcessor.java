@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorConfigProcessor.java,v 1.1 2007/04/22 21:41:42 rlubke Exp $
+ * $Id: ValidatorConfigProcessor.java,v 1.2 2007/04/24 19:04:21 rlubke Exp $
  */
 
 /*
@@ -113,9 +113,9 @@ public class ValidatorConfigProcessor extends AbstractConfigProcessor {
             for (int c = 0, csize = children.getLength(); c < csize; c++) {
                 Node n = children.item(c);
                 if (n.getNodeType() == Node.ELEMENT_NODE) {
-                    if (VALIDATOR_ID.equals(n.getNodeName())) {
+                    if (VALIDATOR_ID.equals(n.getLocalName())) {
                         validatorId = getNodeText(n);
-                    } else if (VALIDATOR_CLASS.equals(n.getNodeName())) {
+                    } else if (VALIDATOR_CLASS.equals(n.getLocalName())) {
                         validatorClass = getNodeText(n);
                     }
                 }

@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationConfigProcessor.java,v 1.1 2007/04/22 21:41:42 rlubke Exp $
+ * $Id: NavigationConfigProcessor.java,v 1.2 2007/04/24 19:04:21 rlubke Exp $
  */
 
 /*
@@ -142,12 +142,12 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                          c++) {
                         Node n = children.item(c);
                         if (n.getNodeType() == Node.ELEMENT_NODE) {
-                            if (FROM_VIEW_ID.equals(n.getNodeName())) {
+                            if (FROM_VIEW_ID.equals(n.getLocalName())) {
                                 String t = getNodeText(n);
                                 fromViewId = ((t == null)
                                               ? FROM_VIEW_ID_DEFAULT
                                               : t);
-                            } else if (NAVIGATION_CASE.equals(n.getNodeName())) {
+                            } else if (NAVIGATION_CASE.equals(n.getLocalName())) {
                                 if (navigationCases == null) {
                                     navigationCases = new ArrayList(csize);
                                 }
@@ -188,13 +188,13 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                 for (int i = 0, size = children.getLength(); i < size; i++) {
                     Node n = children.item(i);
                     if (n.getNodeType() == Node.ELEMENT_NODE) {
-                        if (FROM_OUTCOME.equals(n.getNodeName())) {
+                        if (FROM_OUTCOME.equals(n.getLocalName())) {
                             outcome = getNodeText(n);
-                        } else if (FROM_ACTION.equals(n.getNodeName())) {
+                        } else if (FROM_ACTION.equals(n.getLocalName())) {
                             action = getNodeText(n);
-                        } else if (TO_VIEW_ID.equals(n.getNodeName())) {
+                        } else if (TO_VIEW_ID.equals(n.getLocalName())) {
                             toViewId = getNodeText(n);
-                        } else if (REDIRECT.equals(n.getNodeName())) {
+                        } else if (REDIRECT.equals(n.getLocalName())) {
                             redirect = true;
                         }
                     }
