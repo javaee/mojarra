@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.53 2008/01/30 16:53:04 edburns Exp $
+ * $Id: ApplicationAssociate.java,v 1.54 2008/02/27 20:27:51 rlubke Exp $
  */
 
 /*
@@ -41,6 +41,7 @@
 package com.sun.faces.application;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.application.resource.ResourceCache;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.spi.InjectionProvider;
@@ -136,6 +137,7 @@ public class ApplicationAssociate {
     private CompositeELResolver facesELResolverForJsp = null;
 
     private InjectionProvider injectionProvider;
+    private ResourceCache resourceCache;
 
     private String contextName;
     private boolean requestServiced;
@@ -207,6 +209,14 @@ public class ApplicationAssociate {
 
         return associate;
         
+    }
+
+    public ResourceCache getResourceCache() {
+        return resourceCache;
+    }
+
+    public void setResourceCache(ResourceCache resourceCache) {
+        this.resourceCache = resourceCache;
     }
 
     public static void clearInstance(ExternalContext

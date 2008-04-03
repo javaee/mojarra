@@ -49,19 +49,19 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.faces.FacesException;
 import javax.servlet.ServletContext;
 
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
+import com.sun.faces.application.ApplicationAssociate;
 
 /**
  * <p>
@@ -82,15 +82,52 @@ import com.sun.faces.util.Util;
  *
  * RELEASE_PENDING (rlubke,driscoll)
  *                   - Change logging from INFO to FINE before release.
- *                   - leverage shutdown method in ConfigureListener
  */
 public class ResourceCache {
 
     private static final Logger LOGGER = FacesLogger.RESOURCE.getLogger();
 
+    /**
+     * Thread pool size for the case where JSF is installed as a server-wide
+     * library.
+     */
+    private static final int SHARED_THREAD_COUNT = 5;
+
+    /**
+     * Thread pool size for the case where JSF is installed as a library of
+     * a web-application.
+     */
+    private static final int NON_SHARED_THREAD_COUNT = 1;
+
+    /**
+     * Shared {@link ScheduledThreadPoolExecutor} service.
+     */
+    private static ScheduledThreadPoolExecutor service;
+
+    /**
+     * The <code>ResourceInfo<code> cache.
+     */
     private ConcurrentMap<CompositeKey,ResourceInfo> resourceCache;
+
+    /**
+     * Monitors that detect resource modifications.
+     */
     private List<ResourceMonitor> monitors;
-    private ScheduledExecutorService service;
+
+    /**
+     * The MonitorTask for this instance.
+     */
+    private ScheduledFuture monitorTask;
+
+    /**
+     * ServletContext name.
+     */
+    private String contextName;
+
+    /**
+     * Has this cache been shutdown.
+     */
+    private boolean shutdown;
 
 
     // ------------------------------------------------------------ Constructors
@@ -103,20 +140,19 @@ public class ResourceCache {
 
         WebConfiguration config = WebConfiguration.getInstance();
         assert (config != null);
+        ServletContext sc = config.getServletContext();
+        contextName = sc.getContextPath();
+        shutdown = false;
         int checkPeriod = getCheckPeriod(config);
         if (checkPeriod >= 0) {
             resourceCache = new ConcurrentHashMap<CompositeKey,ResourceInfo>();
         }
         if (checkPeriod >= 1) {
-            monitors = new ArrayList<ResourceMonitor>();
-            initMonitors(config.getServletContext());
-            service = Executors.newSingleThreadScheduledExecutor();
-            long period = checkPeriod * 1000 * 60;
-            service.scheduleWithFixedDelay(new MonitorTask(),
-                                           period,
-                                           period,
-                                           TimeUnit.MILLISECONDS);
+            initExecutor((checkPeriod * 1000 * 60));
+            initMonitors(sc);
         }
+        ApplicationAssociate associate = ApplicationAssociate.getInstance(sc);
+        associate.setResourceCache(this);
 
     }
 
@@ -129,14 +165,22 @@ public class ResourceCache {
      * @param key resource key
      * @param info resource metadata
      */
-    public void add(CompositeKey key, ResourceInfo info) {
+    public ResourceInfo add(CompositeKey key, ResourceInfo info) {
+
+        if (shutdown) {
+            throw new IllegalStateException("ResourceCache has been terminated");
+        }
+
+        Util.notNull("key", key);
+        Util.notNull("info", info);
 
         if (resourceCache != null) {
             if (LOGGER.isLoggable(Level.INFO)) {
                 LOGGER.log(Level.INFO, "Caching ResourceInfo: {0}", key);
             }
-            resourceCache.put(key, info);
+            return resourceCache.put(key, info);
         }
+        return null;
 
     }
 
@@ -148,6 +192,12 @@ public class ResourceCache {
      */
     public ResourceInfo get(CompositeKey key) {
 
+        if (shutdown) {
+            throw new IllegalStateException("ResourceCache has been terminated");
+        }
+
+        Util.notNull("key", key);
+
         return ((resourceCache != null) ? resourceCache.get(key) : null);
 
     }
@@ -157,6 +207,10 @@ public class ResourceCache {
      * <p>Empty the cache.</p>
      */
     public void clear() {
+
+        if (shutdown) {
+            throw new IllegalStateException("ResourceCache has been terminated");
+        }
 
         if (resourceCache != null) {
             resourceCache.clear();
@@ -169,21 +223,65 @@ public class ResourceCache {
 
 
     /**
-     * Clear the cache and shutdown the monitoring service.
+     * Clears the cache and cancels the MonitorTask associated with this
+     * ResourcecCache.  This method must be called before the application
+     * is undeployed to ensure the task is cancelled and ultimately purged().
      */
     public void shutdown() {
 
+        if (shutdown) {
+            return;
+        }
+        shutdown = true;
         if (resourceCache != null) {
             resourceCache.clear();
+            resourceCache = null;
         }
         if (service != null) {
-            service.shutdownNow();
+            if (LOGGER.isLoggable(Level.INFO)) {
+                LOGGER.log(Level.INFO,
+                           "[{0}] Cancelling ResourceCache update task...",
+                          contextName);
+            }
+            monitorTask.cancel(true);
+            monitorTask = null;
+            service.purge();
         }
 
     }
 
 
     // --------------------------------------------------------- Private Methods
+
+
+    private synchronized void initExecutor(long period) {
+
+        if (service == null) {
+            int poolSize = getThreadPoolSize();
+            if (LOGGER.isLoggable(Level.INFO)) {
+                LOGGER.log(Level.INFO,
+                           "Created new static ScheduledExecutorService with a pool size of {0}",
+                           poolSize);                
+            }
+            service = new ScheduledThreadPoolExecutor(poolSize);
+        }
+        monitorTask = service.scheduleWithFixedDelay(new MonitorTask(contextName),
+                                       period,
+                                       period,
+                                       TimeUnit.MILLISECONDS);
+
+    }
+
+
+    private int getThreadPoolSize() {
+
+        ClassLoader thisClassLoader = ResourceCache.class.getClassLoader();
+        return (thisClassLoader
+                  .equals(Thread.currentThread().getContextClassLoader())
+                                  ? NON_SHARED_THREAD_COUNT
+                                  : SHARED_THREAD_COUNT);
+
+    }
 
 
     private int getCheckPeriod(WebConfiguration webConfig) {
@@ -200,6 +298,7 @@ public class ResourceCache {
 
     private void initMonitors(ServletContext sc) {
 
+        monitors = new ArrayList<ResourceMonitor>();
         monitors.add(new WebappResourceMonitor(sc, "/resources/"));
         monitors.add(new WebappResourceMonitor(sc, "/WEB-INF/classes/META-INF/resources/"));
         ClassLoader loader = Util.getCurrentLoader(this.getClass());
@@ -225,7 +324,15 @@ public class ResourceCache {
                 if (url.toString().contains("jsf-impl.jar")) {
                     continue;
                 }
-                monitors.add(new JarResourceMonitor(url));
+                try {
+                    monitors.add(new JarResourceMonitor(url));
+                } catch (IOException ioe) {
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE,
+                                   "IOException occurred setting up JarResourceMonitor for URL {0}.  Updates to this resource will be ignored.",
+                                   url.toExternalForm());
+                    }
+                }
             }
         } catch (IOException ioe) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
@@ -235,7 +342,9 @@ public class ResourceCache {
             }
         }
         if (LOGGER.isLoggable(Level.INFO)) {
-            LOGGER.log(Level.INFO, "Registered ResouceMonitors:");
+            LOGGER.log(Level.INFO,
+                       "[{0}] Registered ResouceMonitors:",
+                       sc.getContextPath());
             for (ResourceMonitor monitor : monitors) {
                 LOGGER.log(Level.INFO, monitor.toString());
             }
@@ -252,7 +361,15 @@ public class ResourceCache {
      * #monitors.  If any modifications are detected, clear
      * #resourceCache and return.
      */
-    private class MonitorTask implements Runnable {
+    private final class MonitorTask implements Runnable {
+
+        private final String contextPath;
+
+        public MonitorTask(String contextPath) {
+
+            this.contextPath = contextPath;
+
+        }
 
 
         // ----------------------------------------------- Methods from Runnable
@@ -261,12 +378,16 @@ public class ResourceCache {
         public void run() {
 
             if (LOGGER.isLoggable(Level.INFO)) {
-                LOGGER.info("Starting modification search");
+                LOGGER.log(Level.INFO,
+                           "[{0}] Starting modification search",
+                           contextPath);
             }
             for (ResourceMonitor monitor : monitors) {
                 if (monitor.hasBeenModified()) {
                     if (LOGGER.isLoggable(Level.INFO)) {
-                        LOGGER.info("Modifications found, clearing cache");
+                        LOGGER.log(Level.INFO,
+                                   "[{0}] Modifications found, clearing cache",
+                                   contextPath);
                     }
                     resourceCache.clear();
                     return;
@@ -354,8 +475,8 @@ public class ResourceCache {
             if (modified) {
                 if (LOGGER.isLoggable(Level.INFO)) {
                     LOGGER.log(Level.INFO,
-                               "Change detected in webapp filesystem {0}",
-                               startPath);
+                               "[{0}] Change detected in webapp filesystem",
+                               new Object[] { sc.getContextPath(), startPath });
                 }
                 layout = temp;
             }
@@ -370,7 +491,10 @@ public class ResourceCache {
         @Override
         public String toString() {
 
-            return "[WebappResourceMonitor] Monitoring->" + startPath;
+            return "[WebappResourceMonitor] Monitoring->"
+                   + sc.getContextPath()
+                   + ':'
+                   + startPath;
 
         }
 
@@ -426,7 +550,7 @@ public class ResourceCache {
          * @param url source URL from which the URL to owning JAR will be
          *  obtained.
          */
-        public JarResourceMonitor(URL url) {
+        public JarResourceMonitor(URL url) throws IOException {
 
             Util.notNull("url", url);
             if (!"jar".equals(url.getProtocol())) {
@@ -443,13 +567,11 @@ public class ResourceCache {
                 if (jarFileURL == null) {
                     throw new IllegalStateException("Unable to obtain URL to Jar");
                 }
-            } catch (IOException ioe) {
-                throw new FacesException("Unable to connect to URL: " + url.toString(), ioe);
             } finally {
                 if (in != null) {
                     try {
                         in.close();
-                    } catch (IOException ignored) { }
+                    } catch (Exception ignored) { }
                 }
             }
             currentTimeStamp = getLastModified();
@@ -502,8 +624,12 @@ public class ResourceCache {
                 in = conn.getInputStream();
                 return conn.getLastModified();
             } catch (IOException ioe) {
-                throw new FacesException("Unable to connect to URL: "
-                                         + jarFileURL.toString(), ioe);
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE,
+                               "Unable to check JAR timestamp.",
+                               ioe);
+                }
+                return this.currentTimeStamp;
             } finally {
                 if (in != null) {
                     try {

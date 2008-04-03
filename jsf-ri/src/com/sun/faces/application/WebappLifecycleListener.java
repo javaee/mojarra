@@ -56,6 +56,7 @@ import com.sun.faces.el.ELUtils;
 import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.application.resource.ResourceCache;
 
 /**
  * <p>Central location for web application lifecycle events.<p>  
@@ -281,7 +282,15 @@ public class WebappLifecycleListener {
                                  servletContext.getAttribute(beanName), 
                                  ELUtils.Scope.APPLICATION);
         }
+        // HACK - we'll improve this when the event system is in place
+        if (applicationAssociate != null) {
+            ResourceCache cache = applicationAssociate.getResourceCache();
+            if (cache != null) {
+                cache.shutdown();
+            }
+        }
         this.applicationAssociate = null;
+
     }
 
 
@@ -296,6 +305,7 @@ public class WebappLifecycleListener {
 
         return applicationAssociate;
     }
+
 
     /**
      * This method ensures that session scoped managed beans will be
@@ -328,4 +338,4 @@ public class WebappLifecycleListener {
 
     }
 
-} // END WebappLifecycleListener>>>>>>> 1.11.4.3
+} // END WebappLifecycleListener
