@@ -105,28 +105,6 @@
       <property-class>int</property-class>
       <value>10</value>
     </managed-property>
-
   </managed-bean>
-  
-  <managed-bean>
-    <description>
-      The "backing file" bean that backs up the guessNumber webapp
-    </description>
-    <managed-bean-name>requestBean</managed-bean-name>
-    <managed-bean-class>guessNumber.UserNumberBean</managed-bean-class>
-    <managed-bean-scope>request</managed-bean-scope>
-    <managed-property>
-      <property-name>minimum</property-name>
-      <property-class>int</property-class>
-      <value>12</value>
-    </managed-property>
-    <managed-property>
-      <property-name>maximum</property-name>
-      <property-class>int</property-class>
-      <value>22</value>
-    </managed-property>
-
-  </managed-bean>
-
 
 </faces-config>
