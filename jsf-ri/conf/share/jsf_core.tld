@@ -96,7 +96,6 @@
      </description>
      <name>actionListener</name>
      <tag-class>com.sun.faces.taglib.jsf_core.ActionListenerTag</tag-class>
-     <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
      <body-content>empty</body-content>
 
      <attribute>
@@ -136,7 +135,6 @@
         </description>
         <name>attribute</name>
         <tag-class>com.sun.faces.taglib.jsf_core.AttributeTag</tag-class>
-        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
         <body-content>empty</body-content>
 
         <attribute>
@@ -168,7 +166,6 @@
         </description>
         <name>convertDateTime</name>
         <tag-class>com.sun.faces.taglib.jsf_core.ConvertDateTimeTag</tag-class>
-        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
         <body-content>empty</body-content>
 
         <attribute>
@@ -275,7 +272,6 @@
         </description>
         <name>convertNumber</name>
         <tag-class>com.sun.faces.taglib.jsf_core.ConvertNumberTag</tag-class>
-        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
         <body-content>empty</body-content>
 
         <attribute>
@@ -432,7 +428,6 @@
         </description>
         <name>converter</name>
         <tag-class>com.sun.faces.taglib.jsf_core.ConverterTag</tag-class>
-        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
         <body-content>empty</body-content>
 
         <attribute>
@@ -467,7 +462,6 @@
         </description>
         <name>facet</name>
         <tag-class>javax.faces.webapp.FacetTag</tag-class>
-        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
         <body-content>JSP</body-content>
 
         <attribute>
@@ -497,7 +491,6 @@
         </description>
         <name>loadBundle</name>
         <tag-class>com.sun.faces.taglib.jsf_core.LoadBundleTag</tag-class>
-        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
         <body-content>empty</body-content>
 
         <attribute>
@@ -531,7 +524,6 @@
         </description>
         <name>param</name>
         <tag-class>com.sun.faces.taglib.jsf_core.ParameterTag</tag-class>
-        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
         <body-content>JSP</body-content>
 
         <attribute>
@@ -584,7 +576,6 @@
     </description>
     <name>phaseListener</name>
     <tag-class>com.sun.faces.taglib.jsf_core.PhaseListenerTag</tag-class>
-    <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>empty</body-content>
 
     <attribute>
@@ -622,7 +613,6 @@
         </description>
         <name>selectItem</name>
         <tag-class>com.sun.faces.taglib.jsf_core.SelectItemTag</tag-class>
-        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
         <body-content>empty</body-content>
 
         <attribute>
@@ -727,7 +717,6 @@
         </description>
         <name>selectItems</name>
         <tag-class>com.sun.faces.taglib.jsf_core.SelectItemsTag</tag-class>
-        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
         <body-content>empty</body-content>
 
         <attribute>
@@ -807,7 +796,6 @@ creation.</p>
         </description>
         <name>setPropertyActionListener</name>
         <tag-class>com.sun.faces.taglib.jsf_core.SetPropertyActionListenerTag</tag-class>
-        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
         <body-content>empty</body-content>
 
         <attribute>
@@ -891,7 +879,6 @@ creation.</p>
         </description>
         <name>validateDoubleRange</name>
         <tag-class>com.sun.faces.taglib.jsf_core.ValidateDoubleRangeTag</tag-class>
-        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
         <body-content>JSP</body-content>
 
         <attribute>
@@ -936,7 +923,6 @@ creation.</p>
         </description>
         <name>validateLength</name>
         <tag-class>com.sun.faces.taglib.jsf_core.ValidateLengthTag</tag-class>
-        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
         <body-content>JSP</body-content>
 
         <attribute>
@@ -982,7 +968,6 @@ creation.</p>
         </description>
         <name>validateLongRange</name>
         <tag-class>com.sun.faces.taglib.jsf_core.ValidateLongRangeTag</tag-class>
-        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
         <body-content>JSP</body-content>
 
         <attribute>
@@ -1028,7 +1013,6 @@ creation.</p>
         </description>
         <name>validator</name>
         <tag-class>com.sun.faces.taglib.jsf_core.ValidatorTag</tag-class>
-        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
         <body-content>empty</body-content>
 
         <attribute>
@@ -1063,7 +1047,6 @@ creation.</p>
         </description>
         <name>valueChangeListener</name>
         <tag-class>com.sun.faces.taglib.jsf_core.ValueChangeListenerTag</tag-class>
-        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
         <body-content>empty</body-content>
 
         <attribute>
@@ -1102,7 +1085,6 @@ creation.</p>
         </description>
         <name>verbatim</name>
         <tag-class>com.sun.faces.taglib.jsf_core.VerbatimTag</tag-class>
-        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
         <body-content>JSP</body-content>
 
         <attribute>
@@ -1148,7 +1130,6 @@ creation.</p>
         </description>
         <name>view</name>
         <tag-class>com.sun.faces.taglib.jsf_core.ViewTag</tag-class>
-        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
         <body-content>JSP</body-content>
 
         <attribute>

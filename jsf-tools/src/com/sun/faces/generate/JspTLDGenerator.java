@@ -1,5 +1,5 @@
 /*
- * $Id: JspTLDGenerator.java,v 1.6 2007/04/27 22:02:50 ofung Exp $
+ * $Id: JspTLDGenerator.java,v 1.7 2007/07/19 17:27:16 rlubke Exp $
  */
 
 /*
@@ -61,7 +61,6 @@ import com.sun.faces.config.beans.RendererBean;
 public abstract class JspTLDGenerator implements Generator {
 
     // Defaults
-    private static final String TEICLASS = "com.sun.faces.taglib.FacesTagExtraInfo";
     private static final String DEFAULT_BODY_CONTENT = "JSP";
     private static final String DEFAULT_RTEXPRVALUE = "false";
 
@@ -210,13 +209,6 @@ public abstract class JspTLDGenerator implements Generator {
 
     } // END attributeShouldBeExcluded
 
-
-    /**
-     * Return the tag extra info information (if any) for a given tag.
-     */
-    protected String getTeiClass(String tagName) {
-        return TEICLASS;
-    }
 
     /**
      * Return the tag body content information (if any) for a given tag.

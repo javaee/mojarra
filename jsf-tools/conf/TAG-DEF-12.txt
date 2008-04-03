@@ -1,7 +1,6 @@
   <tag>
     <name>column</name>
     <tag-class>com.sun.faces.taglib.html_basic.ColumnTag</tag-class>
-    <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
     <description>
       <![CDATA[<p>Renders a UIComponent that represents a single column of data within a parent <code>UIData</code> component.</p>]]>

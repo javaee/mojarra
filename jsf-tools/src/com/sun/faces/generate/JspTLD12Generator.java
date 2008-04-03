@@ -1,5 +1,5 @@
 /*
- * $Id: JspTLD12Generator.java,v 1.6 2007/04/27 22:02:50 ofung Exp $
+ * $Id: JspTLD12Generator.java,v 1.7 2007/07/19 17:27:16 rlubke Exp $
  */
 
 /*
@@ -170,10 +170,6 @@ public class JspTLD12Generator extends JspTLDGenerator {
                 writer.writeText(targetPackage + '.' +
                     GeneratorUtil.makeTagClassName(GeneratorUtil.stripJavaxFacesPrefix(componentFamily),
                         GeneratorUtil.stripJavaxFacesPrefix(rendererType)));
-                writer.closeElement();
-
-                writer.startElement("tei-class");
-                writer.writeText(getTeiClass(tagName));
                 writer.closeElement();
 
                 writer.startElement("body-content");

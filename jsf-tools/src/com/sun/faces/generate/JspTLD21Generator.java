@@ -1,5 +1,5 @@
 /*
- * $Id: JspTLD21Generator.java,v 1.13 2007/04/27 22:02:50 ofung Exp $
+ * $Id: JspTLD21Generator.java,v 1.14 2007/07/19 17:27:16 rlubke Exp $
  */
 
 /*
@@ -196,11 +196,7 @@ public class JspTLD21Generator extends JspTLDGenerator {
                     GeneratorUtil.makeTagClassName(GeneratorUtil.stripJavaxFacesPrefix(componentFamily),
                         GeneratorUtil.stripJavaxFacesPrefix(rendererType)));
                 writer.closeElement();
-
-                writer.startElement("tei-class");
-                writer.writeText(getTeiClass(tagName));
-                writer.closeElement();
-
+               
                 writer.startElement("body-content");
                 writer.writeText(getBodyContent(tagName));
                 writer.closeElement();
