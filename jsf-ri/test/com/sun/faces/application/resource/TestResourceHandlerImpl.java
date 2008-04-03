@@ -148,100 +148,140 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     }
 
 
-    public void beginIsResourceRequestExcludesPrefixMapped1(WebRequest req) {
+    ////////////////////////////////////////////////////////////////////////////
+    public void beginHandleResourceRequestExcludesPrefixMapped1(WebRequest req) {
         req.setURL("localhost:8080", "/test", "/faces/", "/javax.faces.resource/test.jsp", null);
     }
 
-    public void testIsResourceRequestExcludesPrefixMapped1() throws Exception {
+    public void testHandleResourceRequestExcludesPrefixMapped1() throws Exception {
         ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
         assertTrue(handler != null);
 
-        assertTrue(!handler.isResourceRequest(getFacesContext()));
+        handler.handleResourceRequest(getFacesContext());
+    }
+
+    public void endHandleResourceRequestExcludesPrefixMapped1(WebResponse res) {
+        assertTrue(res.getStatusCode() == 404);
     }
 
 
-    public void beginIsResourceRequestExcludesPrefixMapped2(WebRequest req) {
+    ////////////////////////////////////////////////////////////////////////////
+    public void beginHandleResourceRequestExcludesPrefixMapped2(WebRequest req) {
         req.setURL("localhost:8080", "/test", "/faces/", "/javax.faces.resource/test.properties", null);
     }
 
-    public void testIsResourceRequestExcludesPrefixMapped2() throws Exception {
+    public void testHandleResourceRequestExcludesPrefixMapped2() throws Exception {
         ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
         assertTrue(handler != null);
 
-        assertTrue(!handler.isResourceRequest(getFacesContext()));
+        handler.handleResourceRequest(getFacesContext());
+    }
+
+    public void endHandleResourceRequestExcludesPrefixMapped2(WebResponse res) {
+        assertTrue(res.getStatusCode() == 404);
     }
 
 
-    public void beginIsResourceRequestExcludesPrefixMapped3(WebRequest req) {
+    ////////////////////////////////////////////////////////////////////////////
+    public void beginHandleResourceRequestExcludesPrefixMapped3(WebRequest req) {
         req.setURL("localhost:8080", "/test", "/faces/", "/javax.faces.resource/test.xhtml", null);
     }
 
-    public void testIsResourceRequestExcludesPrefixMapped3() throws Exception {
+    public void testHandleResourceRequestExcludesPrefixMapped3() throws Exception {
         ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
         assertTrue(handler != null);
 
-        assertTrue(!handler.isResourceRequest(getFacesContext()));
+        handler.handleResourceRequest(getFacesContext());
+    }
+
+    public void endHandleResourceRequestExcludesPrefixMapped3(WebResponse res) {
+        assertTrue(res.getStatusCode() == 404);
     }
 
 
-    public void beginIsResourceRequestExcludesPrefixMapped4(WebRequest req) {
+    ////////////////////////////////////////////////////////////////////////////
+    public void beginHandleResourceRequestExcludesPrefixMapped4(WebRequest req) {
         req.setURL("localhost:8080", "/test", "/faces/", "/javax.faces.resource/test.class", null);
     }
 
-    public void testIsResourceRequestExcludesPrefixMapped4() throws Exception {
+    public void testHandleResourceRequestExcludesPrefixMapped4() throws Exception {
         ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
         assertTrue(handler != null);
 
-        assertTrue(!handler.isResourceRequest(getFacesContext()));
+        handler.handleResourceRequest(getFacesContext());
     }
 
+    public void endHandleResourceRequestExcludesPrefixMapped4(WebResponse res) {
+        assertTrue(res.getStatusCode() == 404);
+    }
 
-    public void beginIsResourceRequestExcludeExtensionMapped1(WebRequest req) {
+    ////////////////////////////////////////////////////////////////////////////
+    public void beginHandleResourceRequestExcludeExtensionMapped1(WebRequest req) {
         req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.jsp.faces", null, null);
     }
 
-    public void testIsResourceRequestExcludeExtensionMapped1() throws Exception {
+    public void testHandleResourceRequestExcludeExtensionMapped1() throws Exception {
         ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
         assertTrue(handler != null);
 
-        assertTrue(!handler.isResourceRequest(getFacesContext()));
+        handler.handleResourceRequest(getFacesContext());
+    }
+
+    public void endHandleResourceRequestExcludesExtensionMapped1(WebResponse res) {
+        assertTrue(res.getStatusCode() == 404);
     }
 
 
-    public void beginIsResourceRequestExcludeExtensionMapped2(WebRequest req) {
+    ////////////////////////////////////////////////////////////////////////////
+    public void beginHandleResourceRequestExcludeExtensionMapped2(WebRequest req) {
         req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.properties.faces", null, null);
     }
 
-    public void testIsResourceRequestExcludeExtensionMapped2() throws Exception {
+    public void testHandleResourceRequestExcludeExtensionMapped2() throws Exception {
         ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
         assertTrue(handler != null);
 
-        assertTrue(!handler.isResourceRequest(getFacesContext()));
+        handler.handleResourceRequest(getFacesContext());
+    }
+
+    public void endHandleResourceRequestExcludesExtensionMapped2(WebResponse res) {
+        assertTrue(res.getStatusCode() == 404);
     }
 
 
-    public void beginIsResourceRequestExcludeExtensionMapped3(WebRequest req) {
+    ////////////////////////////////////////////////////////////////////////////
+    public void beginHandleResourceRequestExcludeExtensionMapped3(WebRequest req) {
         req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.xhtml.faces", null, null);
     }
 
-    public void testIsResourceRequestExcludeExtensionMapped3() throws Exception {
+    public void testHandleResourceRequestExcludeExtensionMapped3() throws Exception {
         ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
         assertTrue(handler != null);
 
-        assertTrue(!handler.isResourceRequest(getFacesContext()));
+        handler.handleResourceRequest(getFacesContext());
+    }
+
+    public void endHandleResourceRequestExcludesExtensionMapped3(WebResponse res) {
+        assertTrue(res.getStatusCode() == 404);
     }
 
 
-    public void beginIsResourceRequestExcludeExtensionMapped4(WebRequest req) {
+    ////////////////////////////////////////////////////////////////////////////
+    public void beginHandleResourceRequestExcludeExtensionMapped4(WebRequest req) {
         req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.class.faces", null, null);
     }
 
-    public void testIsResourceRequestExcludeExtensionMapped4() throws Exception {
+    public void testHandleResourceRequestExcludeExtensionMapped4() throws Exception {
         ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
         assertTrue(handler != null);
 
-        assertTrue(!handler.isResourceRequest(getFacesContext()));
+        handler.handleResourceRequest(getFacesContext());
     }
+
+    public void endHandleResourceRequestExcludesExtensionMapped4(WebResponse res) {
+        assertTrue(res.getStatusCode() == 404);
+    }
+
 
     ////////////////////////////////////////////////////////////////////////////
     //  The next 5 tests validate a user specified exclude.
@@ -264,12 +304,16 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
         webconfig.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.ResourceExcludes, ".gif");
         ResourceHandler handler = new ResourceHandlerImpl();
 
-        assertTrue(!handler.isResourceRequest(getFacesContext()));
+        handler.handleResourceRequest(getFacesContext());
     }
 
+    public void endUserSpecifiedResourceExclude1(WebResponse res) {
+        assertTrue(res.getStatusCode() == 404);
+    }
 
+    ////////////////////////////////////////////////////////////////////////////
     public void beginUserSpecifiedResourceExclude2(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.class.faces", null, null);
+        req.setURL("localhost:8080", "/test", "/javax.faces.resource/com.sun.faces.application.ApplicationImpl.class.faces", null, null);
     }
 
     public void testUserSpecifiedResourceExclude2() throws Exception {
@@ -280,9 +324,14 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
         assertTrue(handler.isResourceRequest(getFacesContext()));
     }
 
+    public void endUserSpecifiedResourceExclude2(WebResponse res) {
+        assertTrue(res.getStatusCode() == 200);
+    }
 
+
+    ////////////////////////////////////////////////////////////////////////////
     public void beginUserSpecifiedResourceExclude3(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.properties.faces", null, null);
+        req.setURL("localhost:8080", "/test", "/javax.faces.resource/com.sun.faces.LogStrings.properties.faces", null, null);
     }
 
     public void testUserSpecifiedResourceExclude3() throws Exception {
@@ -293,31 +342,10 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
         assertTrue(handler.isResourceRequest(getFacesContext()));
     }
 
-
-    public void beginUserSpecifiedResourceExclude4(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.xhtml.faces", null, null);
+    public void endUserSpecifiedResourceExclude3(WebResponse res) {
+        assertTrue(res.getStatusCode() == 200);
     }
 
-    public void testUserSpecifiedResourceExclude4() throws Exception {
-        WebConfiguration webconfig = WebConfiguration.getInstance(getFacesContext().getExternalContext());
-        webconfig.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.ResourceExcludes, ".gif");
-        ResourceHandler handler = new ResourceHandlerImpl();
-
-        assertTrue(handler.isResourceRequest(getFacesContext()));
-    }
-
-
-    public void beginUserSpecifiedResourceExclude5(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.jsp.faces", null, null);
-    }
-
-    public void testUserSpecifiedResourceExclude5() throws Exception {
-        WebConfiguration webconfig = WebConfiguration.getInstance(getFacesContext().getExternalContext());
-        webconfig.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.ResourceExcludes, ".gif");
-        ResourceHandler handler = new ResourceHandlerImpl();
-
-        assertTrue(handler.isResourceRequest(getFacesContext()));
-    }
 
 
     //==========================================================================

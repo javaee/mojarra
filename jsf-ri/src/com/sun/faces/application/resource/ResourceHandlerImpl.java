@@ -144,7 +144,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
     public boolean isResourceRequest(FacesContext context) {
 
         String viewId = normalizeViewId(context);
-        return (viewId.startsWith(RESOURCE_MARKER) && !isExcluded(viewId));
+        return (viewId.startsWith(RESOURCE_MARKER));
 
     }
 
@@ -155,23 +155,26 @@ public class ResourceHandlerImpl extends ResourceHandler {
     public void handleResourceRequest(FacesContext context) throws IOException {
 
         String viewId = normalizeViewId(context);
-        Resource resource = null;
+        ExternalContext extContext = context.getExternalContext();
+        // this case should be safe in both the standard Servlet
+        // and portlet environments
+        HttpServletResponse response =
+                  (HttpServletResponse) extContext.getResponse();
+        if (isExcluded(viewId)) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
 
         assert (null != viewId);
         assert (viewId.startsWith(RESOURCE_MARKER));
 
+        Resource resource = null;
         if (RESOURCE_MARKER.length() < viewId.length()) {
             String resourceName = viewId.substring(RESOURCE_MARKER.length());
             String libraryName = context.getExternalContext().getRequestParameterMap()
                   .get("ln");
             resource = createResource(resourceName, libraryName);
         }
-
-        ExternalContext extContext = context.getExternalContext();
-        // this case should be safe in both the standard Servlet
-        // and portlet environments
-        HttpServletResponse response =
-                  (HttpServletResponse) extContext.getResponse();
 
         if (resource != null) {
             if (resource.userAgentNeedsUpdate(context)) {
@@ -182,7 +185,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
                     resourceChannel =
                           Channels.newChannel(resource.getInputStream());
                     out = Channels.newChannel(response.getOutputStream());
-
+                    response.setBufferSize(buf.capacity());
                     response.setContentType(resource.getContentType());
                     handleHeaders(resource, response);
 
@@ -236,7 +239,6 @@ public class ResourceHandlerImpl extends ResourceHandler {
         } else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
-
 
     }
 
