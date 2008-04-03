@@ -1,5 +1,5 @@
 /*
- * $Id: ELUtils.java,v 1.7 2007/12/14 19:28:23 rlubke Exp $
+ * $Id: ELUtils.java,v 1.8 2008/01/25 20:23:13 rlubke Exp $
  */
 
 /*
@@ -200,8 +200,8 @@ public class ELUtils {
 
         composite.add(IMPLICIT_JSP_RESOLVER);
         composite.add(MANAGED_BEAN_RESOLVER);
-        composite.add(FACES_BUNDLE_RESOLVER);
         composite.add(RESOURCE_RESOLVER);
+        composite.add(FACES_BUNDLE_RESOLVER);
         addELResolvers(composite, associate.getELResolversFromFacesConfig());
         addVariableResolvers(composite, associate);
         addPropertyResolvers(composite, associate);
