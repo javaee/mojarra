@@ -49,8 +49,7 @@
     </application>
     
     <lifecycle>
-        <phase-listener>com.sun.faces.sandbox.util.MultiFileUploadPhaseListener</phase-listener>
-        <phase-listener>com.sun.faces.sandbox.util.DownloadPhaseListener</phase-listener>
+        <phase-listener>com.sun.faces.sandbox.util.StaticResourcePhaseListener</phase-listener>
     </lifecycle>
 
     <component>
