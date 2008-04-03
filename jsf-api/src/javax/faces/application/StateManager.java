@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.41 2007/04/27 22:00:02 ofung Exp $
+ * $Id: StateManager.java,v 1.42 2008/01/24 18:52:34 edburns Exp $
  */
 
 /*
@@ -268,7 +268,7 @@ public abstract class
      * <p/>
      * <p>This method must consult the context initialization parameter
      * named by the symbolic constant
-     * <code>StateManager.STATE_SAVING_METHOD_PARAMETER_NAME</code>
+     * <code>StateManager.STATE_SAVING_METHOD_PARAM_NAME</code>
      * to determine whether state should be saved on the client or the
      * server.  If not present, client side state saving is assumed.</p>
      * <p/>
@@ -304,7 +304,7 @@ public abstract class
      * <p/>
      * <p>This method must consult the context initialization parameter
      * named by the symbolic constant
-     * <code>StateManager.STATE_SAVING_METHOD_PARAMETER_NAME</code>
+     * <code>StateManager.STATE_SAVING_METHOD_PARAM_NAME</code>
      * to determine whether state should be saved on the client or the
      * server.  If not present, client side state saving is assumed.</p>
      * <p/>
