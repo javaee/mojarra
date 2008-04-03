@@ -40,24 +40,24 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
     <context-param>
         <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
-        <param-value>client</param-value>
+        <param-value>server</param-value>
     </context-param>
     <context-param>
         <param-name>com.sun.faces.validateXml</param-name>
-        <param-value>true</param-value>
+        <param-value>false</param-value>
     </context-param>
     <context-param>
         <param-name>com.sun.faces.verifyObjects</param-name>
         <param-value>false</param-value>
     </context-param>
-    <context-param>
-        <param-name>org.apache.shale.remoting.CLASS_RESOURCES_INCLUDES</param-name>
-        <param-value>*.htm</param-value>
-    </context-param>
-    <context-param>
-        <param-name>CLASS_RESOURCES_INCLUDES</param-name>
-        <param-value>*.htm</param-value>
-    </context-param>
+<!--    <context-param>-->
+<!--        <param-name>org.apache.shale.remoting.CLASS_RESOURCES_INCLUDES</param-name>-->
+<!--        <param-value>*.htm</param-value>-->
+<!--    </context-param>-->
+<!--    <context-param>-->
+<!--        <param-name>CLASS_RESOURCES_INCLUDES</param-name>-->
+<!--        <param-value>*.htm</param-value>-->
+<!--    </context-param>-->
     <context-param>
         <param-name>com.sun.faces.sandbox.urlPatterns</param-name>
         <param-value>
@@ -88,10 +88,4 @@
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
-    <jsp-config>
-        <jsp-property-group>
-            <url-pattern>*.jspf</url-pattern>
-            <is-xml>true</is-xml>
-        </jsp-property-group>
-    </jsp-config>
 </web-app>

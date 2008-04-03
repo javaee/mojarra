@@ -47,7 +47,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.faces.application.Application;
 import javax.faces.component.html.HtmlOutputText;
+import javax.faces.context.FacesContext;
 
 import com.sun.faces.sandbox.component.YuiTree;
 import com.sun.faces.sandbox.component.YuiTreeNode;
@@ -83,14 +85,16 @@ public class TestBean {
     }
 
     public TestBean() {
-        tree = new YuiTree();
-        YuiTreeNode node1 = new YuiTreeNode();
-        YuiTreeNode node2 = new YuiTreeNode();
-        YuiTreeNode node3 = new YuiTreeNode();
+        FacesContext fc = FacesContext.getCurrentInstance();
+        Application app = fc.getApplication();
+        tree = (YuiTree)app.createComponent(YuiTree.COMPONENT_TYPE);
+        YuiTreeNode node1 = (YuiTreeNode)app.createComponent(YuiTreeNode.COMPONENT_TYPE);
+        YuiTreeNode node2 = (YuiTreeNode)app.createComponent(YuiTreeNode.COMPONENT_TYPE);
+        YuiTreeNode node3 = (YuiTreeNode)app.createComponent(YuiTreeNode.COMPONENT_TYPE);
         
-        HtmlOutputText text1 = new HtmlOutputText(); text1.setValue("Text 1");
-        HtmlOutputText text2 = new HtmlOutputText(); text2.setValue("Text 2");
-        HtmlOutputText text3 = new HtmlOutputText(); text3.setValue("Text 3");
+        HtmlOutputText text1 = (HtmlOutputText)app.createComponent(HtmlOutputText.COMPONENT_TYPE); text1.setValue("Text 1");
+        HtmlOutputText text2 = (HtmlOutputText)app.createComponent(HtmlOutputText.COMPONENT_TYPE); text2.setValue("Text 2");
+        HtmlOutputText text3 = (HtmlOutputText)app.createComponent(HtmlOutputText.COMPONENT_TYPE); text3.setValue("Text 3");
 
         node1.getFacets().put("label", text1);
         node1.getChildren().add(node3);
