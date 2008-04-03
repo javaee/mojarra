@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ 
+ Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ 
+ The contents of this file are subject to the terms of either the GNU
+ General Public License Version 2 only ("GPL") or the Common Development
+ and Distribution License("CDDL") (collectively, the "License").  You
+ may not use this file except in compliance with the License. You can obtain
+ a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
+ or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
+ language governing permissions and limitations under the License.
+ 
+ When distributing the software, include this License Header Notice in each
+ file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
+ Sun designates this particular file as subject to the "Classpath" exception
+ as provided by Sun in the GPL Version 2 section of the License file that
+ accompanied this code.  If applicable, add the following below the License
+ Header, with the fields enclosed by brackets [] replaced by your own
+ identifying information: "Portions Copyrighted [year]
+ [name of copyright owner]"
+ 
+ Contributor(s):
+ 
+ If you wish your version of this file to be governed by only the CDDL or
+ only the GPL Version 2, indicate your decision by adding "[Contributor]
+ elects to include this software in this distribution under the [CDDL or GPL
+ Version 2] license."  If you don't indicate a single choice of license, a
+ recipient has the option to distribute your version of this file under
+ either the CDDL, the GPL Version 2 or to extend the choice of license to
+ its licensees as provided above.  However, if you add GPL Version 2 code
+ and therefore, elected the GPL Version 2 license, then the option applies
+ only if the new code is made subject to such option by the copyright
+ holder.
+-->
+
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>javax.faces</groupId>
+  <artifactId>jsf-impl</artifactId>
+  <version>1.2_05</version>
+  <description>This is the master POM file for Sun's Implementation of
+  the JSF 1.2 Specification.</description>
+  <url>http://java.sun.com/javaee/javaserverfaces/</url>
+  <issueManagement>
+    <system>issueZilla</system>
+    <url>https://javaserverfaces-spec-public.dev.java.net/servlets/ProjectIssues</url>
+  </issueManagement>
+  <mailingLists>
+    <mailingList>
+      <name>Sun's JavaServer Faces Implementation Dev List</name>
+      <post>dev@javaserverfaces.dev.java.net</post>
+      <archive>https://javaserverfaces.dev.java.net/servlets/SummarizeList?listName=dev</archive>
+    </mailingList>
+  </mailingLists>
+  <developers>
+    <developer>
+      <id>edburns</id>
+      <name>Ed Burns</name>
+      <email>ed.burns@sun.com</email>
+      <organization>Sun Microsystems, Inc.</organization>
+      <roles>
+        <role>project-owner</role>
+      </roles>
+      <timezone>-6</timezone>
+    </developer>
+    <developer>
+      <id>rlubke</id>
+      <name>Ryan Lubke</name>
+      <email>Ryan.Lubke@sun.com</email>
+      <organization>Sun Microsystems Inc</organization>
+      <roles>
+        <role>project-owner</role>
+      </roles>
+      <timezone>-9</timezone>
+    </developer>
+    <developer>
+      <id>rogerk</id>
+      <name>Roger.Kitain</name>
+      <email>Roger.Kitain@sun.com</email>
+      <organization>Sun Microsystems Inc</organization>
+      <roles>
+        <role>project-owner</role>
+      </roles>
+      <timezone>-6</timezone>
+    </developer>
+  </developers>
+  <contributors>
+    <contributor>
+      <name>Craig McClanahan</name>
+    </contributor>
+    <contributor>
+      <name>Deepak Gothe</name>
+    </contributor>
+    <contributor>
+      <name>Gregory Murray</name>
+    </contributor>
+    <contributor>
+      <name>Justyna Horwat</name>
+    </contributor>
+    <contributor>
+      <name>Jayashri Visvanathan</name>
+    </contributor>
+    <contributor>
+      <name>Jennifer Ball</name>
+    </contributor>
+    <contributor>
+      <name>Jacob Hookom</name>
+    </contributor>
+    <contributor>
+      <name>Raj Premkumar</name>
+    </contributor>
+    <contributor>
+      <name>Stan Silvert</name>
+    </contributor>
+    <contributor>
+      <name>Mike Youngstrom</name>
+    </contributor>
+  </contributors>
+  <licenses>
+    <license>
+      <name>COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0</name>
+      <url>http://www.opensource.org/licenses/cddl1.php</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <organization>
+    <name>Sun Microsystems, Inc</name>
+    <url>http://www.sun.com/</url>
+  </organization>
+  <dependencies>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>2.5</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet.jsp</groupId>
+      <artifactId>jsp-api</artifactId>
+      <version>2.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.el</groupId>
+      <artifactId>el-api</artifactId>
+      <version>1.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>jstl</groupId>
+      <artifactId>jstl</artifactId>
+      <version>1.2</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+</project>
