@@ -1,5 +1,5 @@
 /*
- * $Id: BeanManager.java,v 1.6 2007/12/03 18:36:01 rlubke Exp $
+ * $Id: BeanManager.java,v 1.7 2007/12/03 22:54:58 rlubke Exp $
  */
 
 /*
@@ -43,10 +43,8 @@ package com.sun.faces.mgbean;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -267,14 +265,14 @@ public class BeanManager {
 
 
     private void validateReferences(BeanBuilder builder,
-                                    Set<String> references,
-                                    ArrayList<String> messages) {
+                                    List<String> references,
+                                    List<String> messages) {
 
         List<String> refs = builder.getReferences();
         if (refs != null) {
             for (String ref : refs) {
                 if (isManaged(ref)) {
-                    if (!references.add(ref)) {
+                    if (references.contains(ref)) {
                         StringBuilder sb = new StringBuilder(64);
                         String[] ra =
                              references.toArray(new String[references.size()]);
@@ -290,9 +288,15 @@ public class BeanManager {
                                                         sb.toString());
                         messages.add(message);
                     } else {
-                        validateReferences(getBuilder(ref),
-                                           references,
-                                           messages);
+                        BeanBuilder b = getBuilder(ref);
+                        // If the bean has no references, then it's not
+                        // a target for cyclic detection.  
+                        if (b.getReferences() != null) {
+                            references.add(ref);
+                            validateReferences(getBuilder(ref),
+                                               references,
+                                               messages);
+                        }
                     }
                 }
             }
@@ -307,8 +311,19 @@ public class BeanManager {
             try {
                 builder.bake();
 
+                // preProcess any dependent beans
+                List<String> propRefs = builder.getReferences();
+                if (propRefs != null) {
+                    for (String reference : propRefs) {
+                        if (isManaged(reference)) {
+                            BeanBuilder b = getBuilder(reference);
+                            preProcessBean(reference, b);
+                        }
+                    }
+                }
+
                 //noinspection CollectionWithoutInitialCapacity
-                Set<String> refs = new HashSet<String>();
+                List<String> refs = new ArrayList<String>();
                 refs.add(beanName);
                 //noinspection CollectionWithoutInitialCapacity
                 ArrayList<String> messages = new ArrayList<String>();
