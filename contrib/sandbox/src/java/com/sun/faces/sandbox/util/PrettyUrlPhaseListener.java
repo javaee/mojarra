@@ -35,11 +35,14 @@
  */
 package com.sun.faces.sandbox.util;
 
+
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.el.ExpressionFactory;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
@@ -67,37 +70,41 @@ public class PrettyUrlPhaseListener implements PhaseListener {
 
     public void beforePhase(PhaseEvent event) {
         if (event.getPhaseId() == PhaseId.RESTORE_VIEW) {   
-            try {
-                FacesContext context = FacesContext.getCurrentInstance();   
-                HttpServletRequest request = (HttpServletRequest)   
-                context.getExternalContext().getRequest();   
-                String uri = request.getRequestURI();
-                String contextPath = request.getContextPath();
-                uri = uri.substring(contextPath.length());
-                if (uri != null) {
-                    for (Map.Entry<String, String> entry : urlPatterns.entrySet()) {
-                        UrlMatcher um = new UrlMatcher(entry.getValue().trim());
-                        Map<String, String> injections = um.getInjections(uri);
+            FacesContext context = FacesContext.getCurrentInstance();
+            ExpressionFactory ef = context.getApplication().getExpressionFactory();
 
-                        if (injections != null) {
-                            // Set properties
-                            for (Map.Entry<String, String> injection : injections.entrySet()) {
-                                ValueBinding vb = Util.getValueBinding(injection.getKey());
-                                if (vb != null) {
-                                    vb.setValue(context, URLDecoder.decode(injection.getValue(), "UTF-8"));
+            HttpServletRequest request = (HttpServletRequest)   
+            context.getExternalContext().getRequest();   
+            String uri = request.getRequestURI();
+            String contextPath = request.getContextPath();
+            uri = uri.substring(contextPath.length());
+            if (uri != null) {
+                for (Map.Entry<String, String> entry : urlPatterns.entrySet()) {
+                    UrlMatcher um = new UrlMatcher(entry.getValue().trim());
+                    Map<String, String> injections = um.getInjections(uri);
+
+                    if (injections != null) {
+                        // Set properties
+                        for (Map.Entry<String, String> injection : injections.entrySet()) {
+                            ValueBinding vb = Util.getValueBinding(injection.getKey());
+                            if (vb != null) {
+                                try {
+                                    vb.setValue(context, //URLDecoder.decode(injection.getValue(), "UTF-8"));
+                                            ef.coerceToType(URLDecoder.decode(injection.getValue(), "UTF-8"), vb.getType(context)));
+                                } catch (UnsupportedEncodingException e) {
+                                    // TODO Auto-generated catch block
+                                    e.printStackTrace();
                                 }
                             }
-
-                            PrettyUrlRequestWrapper wrapper = new PrettyUrlRequestWrapper(request);
-                            wrapper.setTemplateName(entry.getKey().trim());
-                            context.getExternalContext().setRequest(wrapper);
-                            break;
                         }
+
+                        PrettyUrlRequestWrapper wrapper = new PrettyUrlRequestWrapper(request);
+                        wrapper.setTemplateName(entry.getKey().trim());
+                        context.getExternalContext().setRequest(wrapper);
+                        break;
                     }
                 }
-            } catch (Exception ex) {   
-                ex.printStackTrace();   
-            }   
+            }
         }   
     }
 
@@ -149,8 +156,6 @@ class PrettyUrlRequestWrapper extends HttpServletRequestWrapper {
     public String getServletPath() {
         return "/";
     }
-
-
 
     public PrettyUrlRequestWrapper(HttpServletRequest request) {   
         super(request);   
