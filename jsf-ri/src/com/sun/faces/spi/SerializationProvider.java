@@ -72,6 +72,7 @@ public interface SerializationProvider {
      * @param source the source stream from which to read the Object(s)
      *  from
      * @return an <code>ObjectInputStream</code>
+     * @throws IOException if an error occurs when creating the input stream
      */
     public ObjectInputStream createObjectInputStream(InputStream source)
     throws IOException;
@@ -82,6 +83,7 @@ public interface SerializationProvider {
      * specified <code>destination</code>.</p>
      * @param destination the destination of the serialized Object(s)
      * @return an <code>ObjectOutputStream</code>
+     * @throws IOException if an error occurs when creating the output stream
      */
     public ObjectOutputStream createObjectOutputStream(OutputStream destination)
     throws IOException;
