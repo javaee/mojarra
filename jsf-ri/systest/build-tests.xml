@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.132 2007/04/30 23:35:43 rlubke Exp $
+ $Id: build-tests.xml,v 1.133 2007/06/04 07:05:26 rlubke Exp $
 -->
 
 <!--
@@ -1036,7 +1036,12 @@
               request="${context.path}/faces/interweaving11.jsp"              
               recordGolden="${local.golden.path}/interweaving11.txt"
               golden="${golden.path}/interweaving11.txt"/>
-        
+
+        <jsf.tester
+              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+              request="${context.path}/faces/interweaving12.jsp"
+              recordGolden="${local.golden.path}/interweaving12.txt"
+              golden="${golden.path}/interweaving12.txt"/>
         
         <jsf.tester
               request="${context.path}/faces/include-import-interweaving.jsp"

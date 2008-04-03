@@ -1115,9 +1115,9 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
         if (null == getFacetName() &&
             null != parentTag) {
             Tag p = this.getParent();
-            // If we're not inside a JSP tag or we're inside a LoopTag,
-            // flush the buffer to our wrapped response
-            if (null == p || p instanceof LoopTag) {
+            // If we're not inside a JSP tag or we're not inside
+            // a UIComponentTag flush the buffer
+            if (null == p || !(p instanceof UIComponentTagBase)) {
                 JspWriter out = pageContext.getOut();
                 if (!(out instanceof BodyContent)) {
                     try {
