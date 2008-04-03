@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManager.java,v 1.16 2007/09/12 20:53:15 rlubke Exp $
+ * $Id: ConfigManager.java,v 1.17 2007/09/20 20:14:30 rlubke Exp $
  */
 
 /*
@@ -449,7 +449,7 @@ public class ConfigManager {
                 }
             } else {
                 // validation isn't required, parse and return
-                DocumentBuilder builder = factory.newDocumentBuilder();
+                DocumentBuilder builder = getNonValidatingBuilder();
                 InputSource is = new InputSource(getInputStream(documentURL));
                 is.setSystemId(documentURL.toExternalForm());
                 return builder.parse(is);

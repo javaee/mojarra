@@ -45,7 +45,7 @@
      <taglib xmlns="http://java.sun.com/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
-         http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
+         http://java.sun.com/xml/ns/javaee/web-facesconfig_1_1.xsd">
   2. Change the namespace of all elements to the default of
      http://java.sun.com/xml/ns/javaee
 
@@ -59,7 +59,7 @@
         <xsl:element name="faces-config"
                      namespace="http://java.sun.com/xml/ns/javaee">
             <xsl:attribute name="xsi:schemaLocation"
-                           namespace="http://www.w3.org/2001/XMLSchema-instance">http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd</xsl:attribute>
+                           namespace="http://www.w3.org/2001/XMLSchema-instance">http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_1.xsd</xsl:attribute>
             <xsl:attribute name="version">1.1</xsl:attribute>
             <xsl:apply-templates select="*"/>
         </xsl:element>
