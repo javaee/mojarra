@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManager.java,v 1.6 2007/04/27 22:00:55 ofung Exp $
+ * $Id: ConfigManager.java,v 1.7 2007/05/09 05:04:14 rlubke Exp $
  */
 
 /*
@@ -84,6 +84,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * <p>
@@ -129,7 +130,7 @@ public class ConfigManager {
      */
     @SuppressWarnings({"CollectionWithoutInitialCapacity"})
     private List<ServletContext> initializedContexts =
-         new ArrayList();
+         new CopyOnWriteArrayList();
 
     /**
      * <p>
