@@ -1,12 +1,8 @@
 /*
- * $Id: ConstantMethodBinding.java,v 1.13 2007/04/27 22:01:06 ofung Exp $
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * 
+ *
  * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
- * 
+ *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -14,7 +10,7 @@
  * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
  * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- * 
+ *
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
  * Sun designates this particular file as subject to the "Classpath" exception
@@ -23,9 +19,9 @@
  * Header, with the fields enclosed by brackets [] replaced by your own
  * identifying information: "Portions Copyrighted [year]
  * [name of copyright owner]"
- * 
+ *
  * Contributor(s):
- * 
+ *
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
  * elects to include this software in this distribution under the [CDDL or GPL
@@ -38,61 +34,80 @@
  * holder.
  */
 
-package com.sun.faces.util;
-
-import javax.faces.component.StateHolder;
-import javax.faces.context.FacesContext;
-import javax.faces.el.MethodBinding;
+package com.sun.faces.application.resource;
 
 /**
- * @deprecated
+ * <p>
+ * <code>LibraryInfo</code> is a simple wrapper class for information pertainant to building
+ * a complete resource path using a Library.
+ * <p>
  */
-@SuppressWarnings("deprecation")
-public class ConstantMethodBinding extends MethodBinding
-    implements StateHolder {
+public class LibraryInfo {
 
-    private String outcome = null;
+    private String name;
+    private String version;
+    private ResourceHelper helper;
+    private String path;
 
+    /**
+     * Constructs a new <code>LibraryInfo</code> using the specified details.
+     * @param name the name of the library
+     * @param version the version of the library, if any
+     * @param helper the helper class for this resource
+     */
+    LibraryInfo(String name, String version, ResourceHelper helper) {
+        this.name = name;
+        this.version = version;
+        this.helper = helper;
+        initPath();
+    }
 
-    public ConstantMethodBinding() {
+    /**
+     * @return return the library name.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @return return the version of the library, or <code>null</code>
+     *  if the library isn't versioned.
+     */
+    public String getVersion() {
+        return version;
+    }
+
+    /**
+     * @return return the {@link ResourceHelper} for this resource
+     */
+    public ResourceHelper getHelper() {
+        return helper;
+    }
+
+    /**
+     * @return the base path of the library.
+     */
+    public String getPath() {
+        return path;
     }
 
 
-    public ConstantMethodBinding(String yourOutcome) {
-        outcome = yourOutcome;
+    // --------------------------------------------------------- Private Methods
+
+
+    /**
+     * Construct the full path to the base directory of the library's resources.
+     */
+    private void initPath() {
+
+        StringBuilder sb = new StringBuilder(64);
+        sb.append(helper.getBaseResourcePath());
+        sb.append('/').append(name);
+        if (version != null) {
+            sb.append('/').append(version);
+        }
+        path = sb.toString();
+        
     }
 
-
-    public Object invoke(FacesContext context, Object params[]) {
-        return outcome;
-    }
-
-
-    public Class getType(FacesContext context) {
-        return String.class;
-    }
-
-    // ----------------------------------------------------- StateHolder Methods
-
-    public Object saveState(FacesContext context) {
-        return outcome;
-    }
-
-
-    public void restoreState(FacesContext context, Object state) {
-        outcome = (String) state;
-    }
-
-
-    private boolean transientFlag = false;
-
-
-    public boolean isTransient() {
-        return (this.transientFlag);
-    }
-
-
-    public void setTransient(boolean transientFlag) {
-        this.transientFlag = transientFlag;
-    }
 }

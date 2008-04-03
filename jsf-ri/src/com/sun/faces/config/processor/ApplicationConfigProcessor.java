@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationConfigProcessor.java,v 1.6 2007/06/28 21:42:00 rlubke Exp $
+ * $Id: ApplicationConfigProcessor.java,v 1.7 2007/11/02 00:30:11 rlubke Exp $
  */
 
 /*
@@ -40,26 +40,7 @@
 
 package com.sun.faces.config.processor;
 
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.application.ApplicationResourceBundle;
-import com.sun.faces.el.ChainAwareVariableResolver;
-import com.sun.faces.el.DummyPropertyResolverImpl;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.Util;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Element;
-
-import javax.el.ELResolver;
-import javax.faces.application.Application;
-import javax.faces.application.NavigationHandler;
-import javax.faces.application.StateManager;
-import javax.faces.application.ViewHandler;
-import javax.faces.context.FacesContext;
-import javax.faces.el.PropertyResolver;
-import javax.faces.el.VariableResolver;
-import javax.faces.event.ActionListener;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -68,7 +49,28 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.text.MessageFormat;
+
+import javax.el.ELResolver;
+import javax.faces.application.Application;
+import javax.faces.application.NavigationHandler;
+import javax.faces.application.ResourceHandler;
+import javax.faces.application.StateManager;
+import javax.faces.application.ViewHandler;
+import javax.faces.context.FacesContext;
+import javax.faces.el.PropertyResolver;
+import javax.faces.el.VariableResolver;
+import javax.faces.event.ActionListener;
+
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.application.ApplicationResourceBundle;
+import com.sun.faces.el.ChainAwareVariableResolver;
+import com.sun.faces.el.DummyPropertyResolverImpl;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * <p>
@@ -121,6 +123,12 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
      */
     private static final String STATE_MANAGER
          = "state-manager";
+
+    /**
+     * <code>/faces-config/application/resource-handler</code>
+     */
+    private static final String RESOURCE_HANDLER
+         = "resource-handler";
 
     /**
      * <code>/faces-config/application/el-resolver</code>
@@ -243,6 +251,8 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                                 addSupportedLocale(app, n);
                             } else if (RESOURCE_BUNDLE.equals(n.getLocalName())) {
                                 addResouceBundle(associate, n);
+                            } else if (RESOURCE_HANDLER.equals(n.getLocalName())) {
+                                setResourceHandler(app, n);
                             }
                         }
                     }
@@ -387,7 +397,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                     if (LOGGER.isLoggable(Level.FINE)) {
                         LOGGER.log(Level.FINE,
                                    MessageFormat.format(
-                                        "Calling Application.setViewHandlers({0})",
+                                        "Calling Application.setViewHandler({0})",
                                         handler));
                     }
                     application.setViewHandler((ViewHandler) instance);
@@ -596,6 +606,29 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         }
         return supportedLocales;
 
+    }
+
+
+    private void setResourceHandler(Application application, Node resourceHandler) {
+
+        if (resourceHandler != null) {
+            String handler = getNodeText(resourceHandler);
+            if (handler != null) {
+                Object instance = createInstance(handler,
+                                                 ResourceHandler.class,
+                                                 application.getResourceHandler(),
+                                                 resourceHandler);
+                if (instance != null) {
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.log(Level.FINE,
+                                   MessageFormat.format(
+                                        "Calling Application.setResourceHandler({0})",
+                                        handler));
+                    }
+                    application.setResourceHandler((ResourceHandler) instance);
+                }
+            }
+        }
     }
 
 }

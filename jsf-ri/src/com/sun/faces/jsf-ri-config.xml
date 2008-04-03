@@ -40,8 +40,8 @@
 
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
-    version="1.2">
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+    version="2.0">
 
 
   <!-- Configure Object Factories -->
@@ -77,6 +77,9 @@
     <view-handler>
       com.sun.faces.application.ViewHandlerImpl
     </view-handler>
+    <resource-handler>
+      com.sun.faces.application.resource.ResourceHandlerImpl
+    </resource-handler>
   </application>
 
 
@@ -181,7 +184,6 @@
     <!-- Add our implementation specific PhaseListeners -->
     <lifecycle>
         <phase-listener>com.sun.faces.lifecycle.ELResolverInitPhaseListener</phase-listener>
-        <phase-listener>com.sun.faces.renderkit.JsfJsResourcePhaseListener</phase-listener>
     </lifecycle>
 
   <!-- Configure Standard Validators -->

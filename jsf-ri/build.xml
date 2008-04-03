@@ -94,6 +94,9 @@
         <mkdir dir="${build.generate.tld.dir}"/>        
         <mkdir dir="${build.classes.dir}"/>
         <mkdir dir="${build.classes.dir}/META-INF"/>
+        <mkdir dir="${build.classes.dir}/META-INF/resources"/>
+        <mkdir dir="${build.classes.dir}/META-INF/resources/jsfri"/>
+        <mkdir dir="${build.classes.dir}/META-INF/resources/jsfri/scripts"/>
         <mkdir dir="${build.dir}/javadocs"/>
         <mkdir dir="${build.dir}/tlddocs"/>
         <mkdir dir="${build.dir}/lib"/>
@@ -287,6 +290,8 @@
             </fileset>
         </copy>
 
+        <copy file="${source.dir}/com/sun/faces/sunjsf.js"
+              toDir="${build.classes.dir}/META-INF/resources/jsfri/scripts"/>
         <copy file="${build.generate.tld.dir}/html_basic.tld"
               toDir="${build.classes.dir}/META-INF"/>
         <copy file="${conf.share.dir}/jsf_core.tld"

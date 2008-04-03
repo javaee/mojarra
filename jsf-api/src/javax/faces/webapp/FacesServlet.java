@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.34 2007/07/16 17:06:42 rlubke Exp $
+ * $Id: FacesServlet.java,v 1.35 2007/11/02 00:30:15 rlubke Exp $
  */
 
 /*
@@ -41,8 +41,14 @@
 package javax.faces.webapp;
 
 
+import java.io.IOException;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
+import javax.faces.application.ResourceHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.lifecycle.Lifecycle;
@@ -55,11 +61,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.UnavailableException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 /**
@@ -202,6 +203,7 @@ public final class FacesServlet implements Servlet {
 
 
     /**
+     * RELEASE_PENDING (edburns, rogerk) - update docs
      * <p>Process an incoming request, and create the corresponding
      * response, by executing the request processing lifecycle.</p>
      *
@@ -258,12 +260,18 @@ public final class FacesServlet implements Servlet {
         
         // Acquire the FacesContext instance for this request
         FacesContext context = facesContextFactory.getFacesContext
-            (servletConfig.getServletContext(), request, response, lifecycle);
+              (servletConfig.getServletContext(), request, response, lifecycle);
 
         // Execute the request processing lifecycle for this request
         try {
-            lifecycle.execute(context);
-            lifecycle.render(context);
+            ResourceHandler handler =
+                  context.getApplication().getResourceHandler();
+            if (handler.isResourceRequest(context)) {
+                handler.handleResourceRequest(context);
+            } else {
+                lifecycle.execute(context);
+                lifecycle.render(context);
+            }
         } catch (FacesException e) {
             Throwable t = e.getCause();
             if (t == null) {
@@ -282,8 +290,6 @@ public final class FacesServlet implements Servlet {
             // Release the FacesContext instance for this request
             context.release();
         }
-
     }
-
 
 }

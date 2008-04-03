@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleConfigProcessor.java,v 1.8 2007/07/17 21:35:18 rlubke Exp $
+ * $Id: LifecycleConfigProcessor.java,v 1.9 2007/11/02 00:30:11 rlubke Exp $
  */
 
 /*
@@ -67,9 +67,6 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
 
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
 
-    private static final String JS_PHASE_LISTENER =
-         "com.sun.faces.lifecycle.JsfJsResourcePhaseListener";
-
     /**
      * <p>/faces-config/lifecycle</p>
      */
@@ -128,15 +125,10 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
                                    NodeList phaseListeners) {
 
         WebConfiguration webConfig = WebConfiguration.getInstance();
-        boolean jsPLEnabled = webConfig.isOptionEnabled(
-             BooleanWebContextInitParameter.ExternalizeJavaScript);
         if (phaseListeners != null && phaseListeners.getLength() > 0) {
             for (int i = 0, size = phaseListeners.getLength(); i < size; i++) {
                 Node plNode = phaseListeners.item(i);
                 String pl = getNodeText(plNode);
-                if (!jsPLEnabled && JS_PHASE_LISTENER.equals(pl)) {
-                    continue;
-                }
                 if (pl != null) {
                     Object plInstance = createInstance(pl,
                                                        PhaseListener.class,

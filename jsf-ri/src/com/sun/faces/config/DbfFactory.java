@@ -66,13 +66,28 @@ public class DbfFactory {
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
 
     /**
+     * Location of the Faces 2.0 Schema
+     */
+    private static final String FACES_2_0_XSD =
+          "/com/sun/faces/web-facesconfig_2_0.xsd";
+
+    /**
      * Location of the Faces 1.2 Schema
      */
     private static final String FACES_1_2_XSD =
          "/com/sun/faces/web-facesconfig_1_2.xsd";
 
+
+    /**
+     * Location of the Faces private 1.1 Schema
+     */
     private static final String FACES_1_1_XSD =
          "/com/sun/faces/web-facesconfig_1_1.xsd";
+
+    /**
+     * Our cached 2.0 Schema object for validation
+     */
+    private static Schema FACES_20_SCHEMA;
 
     /**
      * Our cached 1.2 Schema object for validation
@@ -93,6 +108,7 @@ public class DbfFactory {
 
     public enum FacesSchema {
 
+        FACES_20(FACES_20_SCHEMA),
         FACES_12(FACES_12_SCHEMA),
         FACES_11(FACES_11_SCHEMA);
 
@@ -141,6 +157,7 @@ public class DbfFactory {
      */
     private static void initSchema() {       
         // First, cache the various files
+        // PENDING_RELEASE (rlubke) clean this up
         try {
             URL url = DbfFactory.class.getResource(FACES_1_2_XSD);
             URLConnection conn = url.openConnection();
@@ -158,6 +175,14 @@ public class DbfFactory {
             factory.setResourceResolver((LSResourceResolver) DbfFactory.FACES_ENTITY_RESOLVER);
             FACES_11_SCHEMA = factory.newSchema(new StreamSource(in));
 
+            url = DbfFactory.class.getResource(FACES_2_0_XSD);
+            conn = url.openConnection();
+            conn.setUseCaches(false);
+            in = conn.getInputStream();
+            factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            factory.setResourceResolver((LSResourceResolver) DbfFactory.FACES_ENTITY_RESOLVER);
+            FACES_20_SCHEMA = factory.newSchema(new StreamSource(in));
+
         } catch (Exception e) {
             throw new ConfigurationException(e);
         }
@@ -166,7 +191,8 @@ public class DbfFactory {
 
     // ----------------------------------------------------------- Inner Classes
 
-   private static class FacesEntityResolver extends DefaultHandler implements LSResourceResolver {
+   private static class
+         FacesEntityResolver extends DefaultHandler implements LSResourceResolver {
 
         /**
          * <p>Contains associations between grammar name and the physical
@@ -180,6 +206,10 @@ public class DbfFactory {
             {
                 "web-facesconfig_1_1.dtd",
                 "/com/sun/faces/web-facesconfig_1_1.dtd"
+            },
+            {
+                "web-facesconfig_2_0.xsd",
+                 FACES_2_0_XSD
             },
             {
                 "web-facesconfig_1_2.xsd",

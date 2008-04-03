@@ -1,9 +1,5 @@
 /*
-<<<<<<< TestValueExpressionImpl.java
- * $Id: TestValueExpressionImpl.java,v 1.12 2007/04/27 22:02:06 ofung Exp $
-=======
- * $Id: TestValueExpressionImpl.java,v 1.12 2007/04/27 22:02:06 ofung Exp $
->>>>>>> 1.32.18.5
+ * $Id
  */
 
 /*
@@ -50,7 +46,6 @@ import com.sun.faces.TestBean;
 import com.sun.faces.cactus.TestBean.Inner2Bean;
 import com.sun.faces.cactus.TestBean.InnerBean;
 import com.sun.faces.application.ApplicationImpl;
-import com.sun.faces.spi.ManagedBeanFactory.Scope;
 import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
 import javax.faces.component.StateHolder;

@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.50 2007/04/27 22:00:02 ofung Exp $
+ * $Id: Application.java,v 1.51 2007/11/02 00:30:10 rlubke Exp $
  */
 
 /*
@@ -245,6 +245,53 @@ public abstract class Application {
      *  is <code>null</code>
      */
     public abstract void setNavigationHandler(NavigationHandler handler);
+
+
+
+    /**
+     * RELEASE_PENDING (eburns,rogerk) - review docs
+     * Return the singleton, stateless, thread-safe ResourceHandler for
+     * this Application.  An alternate implementation for this class can be
+     * declared in the application configuration resources by giving the
+     * fully qualified class name as the value of the resource-manager
+     * element within the application element.  It can also be declared via
+     * an annotation as specified in [287-ConfigAnnotations].
+     * In both cases, the decorator pattern will be followed as for
+     * every other pluggable artifact in JSF.
+     *
+     * In this way, it is possible to completely customize the
+     * implementation of resource handling to satisfy [CompRes.R02.D]
+     *
+     * @since 2.0
+     */
+    public ResourceHandler getResourceHandler() {
+
+        Application app = getRIApplicationImpl();
+        if (app != null) {
+            return app.getResourceHandler();
+        }
+
+        throw new UnsupportedOperationException();
+        
+    }
+
+    /**
+     * RELEASE_PENDING (eburns,rogerk) - review docs
+     * Setter for property resourceHandler.
+     * @param resourceHandler New value of property resourceHandler.
+     *
+     * @since 2.0
+     */
+    public void setResourceHandler(ResourceHandler resourceHandler) {
+
+        Application app = getRIApplicationImpl();
+        if (app != null) {
+            app.setResourceHandler(resourceHandler);
+        }
+
+        throw new UnsupportedOperationException();
+        
+    }
 
     
 

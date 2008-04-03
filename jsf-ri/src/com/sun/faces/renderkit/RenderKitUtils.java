@@ -48,7 +48,6 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +57,8 @@ import java.util.logging.Logger;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
+import javax.faces.application.Resource;
+import javax.faces.application.ResourceHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentBase;
 import javax.faces.component.UISelectItem;
@@ -840,6 +841,7 @@ public class RenderKitUtils {
             // We need to look into how to make this work in a portlet environment.
             // For the time being, this feature will need to be disabled when running
             // in a portlet.
+            /*
             String mapping = Util.getFacesMapping(context);
             String uri;
             if ((mapping != null) && (Util.isPrefixMapped(mapping))) {
@@ -856,6 +858,14 @@ public class RenderKitUtils {
                                   null);
             writer.endElement("script");
             writer.write("\n");
+            */
+            ResourceHandler handler = context.getApplication().getResourceHandler();
+            Resource resource = handler.createResource("scripts/sunjsf.js", "jsfri");
+            writer.write('\n');
+            writer.startElement("script", null);
+            writer.writeAttribute("type", "text/javascript", null);
+            writer.writeAttribute("src", resource.getURI(), null);
+            writer.endElement("script");
         } else {           
             writer.write('\n');
             writer.startElement("script", null);

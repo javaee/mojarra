@@ -1,5 +1,5 @@
 /*
- * $Id: WebConfiguration.java,v 1.32 2007/10/03 20:42:21 rlubke Exp $
+ * $Id: WebConfiguration.java,v 1.33 2007/11/02 00:30:11 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -643,7 +643,12 @@ public class WebConfiguration {
         ClientStateTimeout(
               "com.sun.faces.clientStateTimeout",
               ""
+        ),
+        DefaultResourceMaxAge(
+              "com.sun.faces.defaultResourceMaxAge",
+              "604800"
         );
+
 
         private String defaultValue;
         private String qualifiedName;

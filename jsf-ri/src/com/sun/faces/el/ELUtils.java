@@ -1,5 +1,5 @@
 /*
- * $Id: ELUtils.java,v 1.4 2007/07/17 23:14:01 rlubke Exp $
+ * $Id: ELUtils.java,v 1.5 2007/11/02 00:30:16 rlubke Exp $
  */
 
 /*
@@ -42,7 +42,6 @@ package com.sun.faces.el;
 
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.mgbean.BeanManager;
-import com.sun.faces.spi.ManagedBeanFactory;
 import com.sun.faces.util.MessageUtils;
 
 import javax.el.ArrayELResolver;
@@ -650,7 +649,7 @@ public class ELUtils {
             int currentScope = lScope.ordinal();
 
             // if we have no basis for comparison
-            if (ManagedBeanFactory.Scope.NONE.ordinal() == shortestScope) {
+            if (Scope.NONE.ordinal() == shortestScope) {
                 shortestScope = currentScope;
                 result = lScope;
             } else {

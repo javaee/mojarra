@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.94 2007/07/17 21:18:11 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.95 2007/11/02 00:30:14 rlubke Exp $
  */
 
 /*
@@ -40,15 +40,22 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.el.ELUtils;
-import com.sun.faces.el.FacesCompositeELResolver;
-import com.sun.faces.el.PropertyResolverImpl;
-import com.sun.faces.el.VariableResolverImpl;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.ReflectionUtils;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.FacesLogger;
+import java.beans.PropertyEditor;
+import java.beans.PropertyEditorManager;
+import java.lang.reflect.Constructor;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.el.CompositeELResolver;
 import javax.el.ELContextListener;
@@ -60,6 +67,7 @@ import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.NavigationHandler;
+import javax.faces.application.ResourceHandler;
 import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
@@ -73,22 +81,15 @@ import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionListener;
 import javax.faces.validator.Validator;
 
-import java.beans.PropertyEditor;
-import java.beans.PropertyEditorManager;
-import java.lang.reflect.Constructor;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.HashMap;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.sun.faces.RIConstants;
+import com.sun.faces.el.ELUtils;
+import com.sun.faces.el.FacesCompositeELResolver;
+import com.sun.faces.el.PropertyResolverImpl;
+import com.sun.faces.el.VariableResolverImpl;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.ReflectionUtils;
+import com.sun.faces.util.Util;
 
 
 /**
@@ -137,6 +138,7 @@ public class ApplicationImpl extends Application {
     private volatile PropertyResolverImpl propertyResolver = null;
     private volatile VariableResolverImpl variableResolver = null;
     private volatile ViewHandler viewHandler = null;
+    private volatile ResourceHandler resourceHandler;
     private volatile StateManager stateManager = null;
     private volatile ArrayList<Locale> supportedLocales = null;
     private volatile Locale defaultLocale = null;
@@ -314,6 +316,43 @@ public class ApplicationImpl extends Application {
         viewHandler = handler;
         if (logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE, MessageFormat.format("set ViewHandler Instance to ''{0}''", viewHandler.getClass().getName()));
+        }
+
+    }
+
+
+    /**
+     * @see javax.faces.application.Application#getResourceHandler()
+     * @return
+     * @since 2.0
+     */
+    @Override
+    public ResourceHandler getResourceHandler() {
+
+        return resourceHandler;
+
+    }
+
+
+    /**
+     * @see javax.faces.application.Application#setResourceHandler(javax.faces.application.ResourceHandler)
+     * @since 2.0
+     */
+    @Override
+    public synchronized void setResourceHandler(ResourceHandler resourceHandler) {
+
+        if (resourceHandler == null) {
+            String message = MessageUtils.getExceptionMessageString
+                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "resourceHandler");
+            throw new NullPointerException(message);
+        }
+
+
+        this.resourceHandler = resourceHandler;
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE,
+                       "set ResourceHandler Instance to ''{0}''",
+                       resourceHandler.getClass().getName());
         }
 
     }
