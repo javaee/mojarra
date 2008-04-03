@@ -142,11 +142,11 @@ public class YuiCalendarTag extends UISandboxComponentTag {
         setStringProperty(cal, "validatorMessage", validatorMessage);
         setStringProperty(cal, "value", value);
 
-        MethodBinding val = createMethodBinding(cal, "validator", validator, new Class[]{ Validator.class });
+        MethodBinding val = createMethodBinding(validator, new Class[]{ Validator.class });
         if (val != null) {
             cal.setValidator(val);
         }
-        MethodBinding vcl = createMethodBinding(cal, "valueChangeListener", valueChangeListener, new Class[]{ ValueChangeEvent.class });
+        MethodBinding vcl = createMethodBinding(valueChangeListener, new Class[]{ ValueChangeEvent.class });
         if (vcl != null) {
             cal.setValueChangeListener(vcl);
         }

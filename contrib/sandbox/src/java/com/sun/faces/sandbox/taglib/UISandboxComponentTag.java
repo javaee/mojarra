@@ -51,13 +51,43 @@ import com.sun.faces.sandbox.util.Util;
  *
  */
 public abstract class UISandboxComponentTag extends UIComponentTag {
-    protected void setStringProperty(UIComponent component, String attributeName,
-            String attributeValue) {
+
+    /**
+     * <p>
+     * Calls through to {@link #setStringProperty(javax.faces.component.UIComponent, String, String, boolean)}
+     * passing <code>false</code> for the <code>mustBeValueBinding</code> parameter.
+     * </p>
+     *
+     * @see UISandboxComponentTag#setStringProperty(javax.faces.component.UIComponent, String, String, boolean)
+     */
+    protected void setStringProperty(UIComponent component,
+                                     String attributeName,
+                                     String attributeValue) {
+
         setStringProperty(component, attributeName, attributeValue, false);
+
     }
 
-    protected void setStringProperty(UIComponent component, String attributeName,
-            String attributeValue, boolean mustBeValueBinding) {
+
+    /**
+     * Set a String property on the target <code>component</code>.  The
+     * value denoted by <code>attributeValue</code> may or may not represent
+     * a <code>ValueBinding</code>.
+     *
+     * @param component the target component
+     * @param attributeName the attribute/property name
+     * @param attributeValue the attribute/property value
+     * @param mustBeValueBinding if <code>true</code> <code>attributeValue</code>
+     *  must be a value expression
+     *
+     * @throws IllegalArgumentException <code>mustBeValueBinding</code> is
+     *  <code>true</code> and <code>attributeValue</code> isn't an expression
+     */
+    protected void setStringProperty(UIComponent component,
+                                     String attributeName,
+                                     String attributeValue,
+                                     boolean mustBeValueBinding) {
+
         if (attributeValue != null) {
             if (isValueReference(attributeValue)) {
                 component.setValueBinding(attributeName,
@@ -65,21 +95,55 @@ public abstract class UISandboxComponentTag extends UIComponentTag {
             }
             else {
                 if (mustBeValueBinding) {
-                    throw new IllegalStateException("The value for '" + attributeName + "' must be a ValueBinding.");   
+                    throw new IllegalArgumentException("The value for '"
+                                                       + attributeName
+                                                       + "' must be a ValueBinding.");   
                 } else {
                     component.getAttributes().put(attributeName, attributeValue);
                 }
             }
         }
+        
     }
 
-    protected void setIntegerProperty(UIComponent component, String attributeName,
-            String attributeValue) {
-        setStringProperty(component, attributeName, attributeValue, false);
-    }
 
+    /**
+     * <p>
+     * Calls through to {@link #setIntegerProperty(javax.faces.component.UIComponent, String, String, boolean)}
+     * passing <code>false</code> for the <code>mustBeValueBinding</code> parameter.
+     * </p>
+     *
+     * @see UISandboxComponentTag#setIntegerProperty(javax.faces.component.UIComponent, String, String, boolean)
+     */
     protected void setIntegerProperty(UIComponent component,
-            String attributeName, String attributeValue, boolean mustBeValueBinding) {
+                                      String attributeName,
+                                      String attributeValue) {
+
+        setStringProperty(component, attributeName, attributeValue, false);
+
+    }
+
+    /**
+     * <p>
+     * Set an Integer property on the target <code>component</code>.  The
+     * value denoted by <code>attributeValue</code> may or may not represent
+     * a <code>ValueBinding</code>.
+     * </p>
+     *
+     * @param component the target component
+     * @param attributeName the attribute/property name
+     * @param attributeValue the attribute/property value
+     * @param mustBeValueBinding if <code>true</code> <code>attributeValue</code>
+     *  must be a value expression
+     *
+     * @throws IllegalArgumentException <code>mustBeValueBinding</code> is
+     *  <code>true</code> and <code>attributeValue</code> isn't an expression
+     */
+    protected void setIntegerProperty(UIComponent component,
+                                      String attributeName,
+                                      String attributeValue,
+                                      boolean mustBeValueBinding) {
+
         if (attributeValue != null) {
             if (isValueReference(attributeValue)) {
                 component.setValueBinding(attributeName,
@@ -87,22 +151,57 @@ public abstract class UISandboxComponentTag extends UIComponentTag {
             }
             else {
                 if (mustBeValueBinding) {
-                    throw new IllegalStateException("The value for '" + attributeName + "' must be a ValueBinding.");   
+                    throw new IllegalArgumentException("The value for '"
+                                                       + attributeName
+                                                       + "' must be a ValueBinding.");
                 } else {
                     component.getAttributes().put(attributeName,
                             Integer.valueOf(attributeValue));
                 }
             }
         }
+
     }
 
-    protected void setBooleanProperty(UIComponent component, String attributeName,
-            String attributeValue) {
-        setBooleanProperty(component, attributeName, attributeValue, false);
-    }
 
+    /**
+     * <p>
+     * Calls through to {@link #setBooleanProperty(javax.faces.component.UIComponent, String, String, boolean)}
+     * passing <code>false</code> for the <code>mustBeValueBinding</code> parameter.
+     * </p>
+     *
+     * @see UISandboxComponentTag#setIntegerProperty(javax.faces.component.UIComponent, String, String, boolean)
+     */
     protected void setBooleanProperty(UIComponent component,
-            String attributeName, String attributeValue, boolean mustBeValueBinding) {
+                                      String attributeName,
+                                      String attributeValue) {
+
+        setBooleanProperty(component, attributeName, attributeValue, false);
+
+    }
+
+
+     /**
+     * <p>
+     * Set an Boolean property on the target <code>component</code>.  The
+     * value denoted by <code>attributeValue</code> may or may not represent
+     * a <code>ValueBinding</code>.
+     * </p>
+     *
+     * @param component the target component
+     * @param attributeName the attribute/property name
+     * @param attributeValue the attribute/property value
+     * @param mustBeValueBinding if <code>true</code> <code>attributeValue</code>
+     *  must be a value expression
+     *
+     * @throws IllegalArgumentException <code>mustBeValueBinding</code> is
+     *  <code>true</code> and <code>attributeValue</code> isn't an expression
+     */
+    protected void setBooleanProperty(UIComponent component,
+                                      String attributeName,
+                                      String attributeValue,
+                                      boolean mustBeValueBinding) {
+
         if (attributeValue != null) {
             if (isValueReference(attributeValue)) {
                 component.setValueBinding(attributeName,
@@ -110,35 +209,74 @@ public abstract class UISandboxComponentTag extends UIComponentTag {
             }
             else {
                 if (mustBeValueBinding) {
-                    throw new IllegalStateException("The value for '" + attributeName + "' must be a ValueBinding.");   
+                    throw new IllegalArgumentException("The value for '"
+                                                       + attributeName
+                                                       + "' must be a ValueBinding.");
                 } else {
                     component.getAttributes().put(attributeName,
                             Boolean.valueOf(attributeValue));
                 }
             }
         }
+
     }
 
-    protected void setValueBinding(UIComponent component, String attributeName, String attributeValue) {
+
+     /**
+     * <p>
+     * Store <code>attributeValue</code> as a <code>ValueBinding</code>
+     * keyed by <code>attributeName</code>
+     * </p>
+     *
+     * @param component the target component
+     * @param attributeName the attribute/property name
+     * @param attributeValue the attribute/property value
+     *
+     * @throws IllegalArgumentException <code>mustBeValueBinding</code> is
+     *  <code>true</code> and <code>attributeValue</code> isn't a syntactially
+     *  valid expression
+     */
+    protected void setValueBinding(UIComponent component,
+                                   String attributeName,
+                                   String attributeValue) {
+
         if (attributeValue != null) {
             if (isValueReference(attributeValue)) {
                 component.setValueBinding(attributeName,
                         Util.getValueBinding(attributeValue));
             }
             else {
-                throw new IllegalStateException("The value for '" + attributeName + "' must be a ValueBinding.");   
+                throw new IllegalStateException("The value for '"
+                                                + attributeName
+                                                + "' must be a ValueBinding.");
             }
-        }    
+        }
+
     }
 
-    protected MethodBinding createMethodBinding(UIComponent component,
-            String attributeName, String attributeValue, Class params[]) {
+
+    /**
+     * <p>
+     *  Creates a new <code>MethodBinding</code>/
+     * </p>
+     * @param methodReference the String from which to create
+     *  the <code>MethodBinding</code> from
+     * @param params the expected arguments of the target method
+     * @return a new <code>MethodBinding</code> based off the provided
+     *  arguments
+     *
+     * @throws IllegalArgumentException if <code>methodReference</code> isn't
+     *  an expression
+     */
+    protected MethodBinding createMethodBinding(String methodReference,
+                                                Class params[]) {
         MethodBinding mb = null;
-        if (attributeValue != null) {
-            if (!isValueReference(attributeValue)) {
-                throw new javax.faces.FacesException("Invalid MethodBinding expression:  " + attributeValue);
+        if (methodReference != null) {
+            if (!isValueReference(methodReference)) {
+                throw new IllegalArgumentException("Invalid MethodBinding expression:  "
+                                                   + methodReference);
             }
-            mb = FacesContext.getCurrentInstance().getApplication().createMethodBinding(attributeValue, params);
+            mb = FacesContext.getCurrentInstance().getApplication().createMethodBinding(methodReference, params);
         }
         return mb;
     }
