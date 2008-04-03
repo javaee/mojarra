@@ -39,11 +39,7 @@ package com.sun.faces.mgbean;
 import javax.faces.FacesException;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Ryan
- * Date: Apr 9, 2007
- * Time: 7:26:38 AM
- * To change this template use File | Settings | File Templates.
+ * <p>Represents errors from managed bean pre-processing.
  */
 public class ManagedBeanPreProcessingException extends FacesException {
 
