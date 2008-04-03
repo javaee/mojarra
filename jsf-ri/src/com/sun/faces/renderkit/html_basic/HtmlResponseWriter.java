@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.47 2007/04/27 22:01:02 ofung Exp $
+ * $Id: HtmlResponseWriter.java,v 1.48 2007/08/30 19:29:12 rlubke Exp $
  */
 
 /*
@@ -40,10 +40,8 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.io.FastStringWriter;
-import com.sun.faces.util.HtmlUtils;
-import com.sun.faces.util.MessageUtils;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -51,8 +49,11 @@ import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import java.io.IOException;
-import java.io.Writer;
+
+import com.sun.faces.RIConstants;
+import com.sun.faces.io.FastStringWriter;
+import com.sun.faces.util.HtmlUtils;
+import com.sun.faces.util.MessageUtils;
 
 
 /**

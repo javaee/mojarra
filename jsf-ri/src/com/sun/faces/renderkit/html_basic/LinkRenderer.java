@@ -1,5 +1,5 @@
 /*
- * $Id: LinkRenderer.java,v 1.23 2007/07/10 18:51:34 rlubke Exp $
+ * $Id: LinkRenderer.java,v 1.24 2007/08/30 19:29:13 rlubke Exp $
  */
 
 /*
@@ -42,15 +42,15 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import java.io.IOException;
+import java.util.logging.Level;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import java.io.IOException;
-import java.util.logging.Level;
-
-import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.renderkit.AttributeManager;
+import com.sun.faces.renderkit.RenderKitUtils;
 
 
 /**
@@ -71,6 +71,7 @@ public abstract class LinkRenderer extends HtmlBasicRenderer {
     protected abstract void renderAsActive(FacesContext context,
                                            UIComponent component)
           throws IOException;
+
 
     protected void renderAsDisabled(FacesContext context, UIComponent component)
           throws IOException {

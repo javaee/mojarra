@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.61 2007/07/10 18:51:34 rlubke Exp $
+ * $Id: CommandLinkRenderer.java,v 1.62 2007/08/30 19:29:12 rlubke Exp $
  */
 
 /*
@@ -42,6 +42,10 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import java.io.IOException;
+import java.util.Map;
+import java.util.logging.Level;
+
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
@@ -49,14 +53,10 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
 
-import java.io.IOException;
-import java.util.logging.Level;
-
 import com.sun.faces.RIConstants;
-import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.renderkit.AttributeManager;
+import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
 
 /**
  * <B>CommandLinkRenderer</B> is a class that renders the current value of
@@ -75,100 +75,51 @@ public class CommandLinkRenderer extends LinkRenderer {
     // ---------------------------------------------------------- Public Methods
 
 
+    @Override
     public void decode(FacesContext context, UIComponent component) {
 
-        if (context == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
+        rendererParamsNotNull(context, component);
+
+        if (!shouldDecode(component)) {
+            return;
         }
 
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "Begin decoding component " + component.getId());
-        }
-
-        UICommand command = (UICommand) component;
-
-        // If the component is disabled, do not change the value of the
-        // component, since its state cannot be changed.
-        if (Util.componentIsDisabledOrReadonly(component)) {
+        if (wasClicked(context, component)) {
+            component.queueEvent(new ActionEvent(component));
             if (logger.isLoggable(Level.FINE)) {
-                logger.fine("No decoding necessary since the component " +
-                            component.getId() + " is disabled");
+                logger.fine("This commandLink resulted in form submission " +
+                            " ActionEvent queued.");
+
             }
-            return;
-        }
-
-        String clientId = command.getClientId(context);
-        if (!context.getExternalContext().getRequestParameterMap()
-              .containsKey(clientId)) {
-            return;
-        }
-        ActionEvent actionEvent = new ActionEvent(component);
-        component.queueEvent(actionEvent);
-
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("This command resulted in form submission " +
-                        " ActionEvent queued " + actionEvent);
-        }
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "End decoding component " + component.getId());
         }
 
     }
 
 
+    @Override
     public void encodeBegin(FacesContext context, UIComponent component)
           throws IOException {
 
-        if (context == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "component"));
-        }
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "Begin encoding component " + component.getId());
-        }
+        rendererParamsNotNull(context, component);
 
-        UICommand command = (UICommand) component;
-
-        // suppress rendering if "rendered" property on the command is
-        // false.
-        if (!command.isRendered()) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("End encoding component " + component.getId() +
-                            " since " +
-                            "rendered attribute is set to false ");
-            }
+        if (!shouldEncode(component)) {
             return;
         }
 
-        boolean componentDisabled = false;
-        if (Boolean.TRUE.equals(command.getAttributes().get("disabled"))) {
-            componentDisabled = true;
-        }
+        boolean componentDisabled =
+              Boolean.TRUE.equals(component.getAttributes().get("disabled"));
 
         String formClientId = getFormClientId(component, context);
         if (formClientId == null) {
             if (logger.isLoggable(Level.WARNING)) {
-                logger.warning("component '" + component.getId() +
-                               "' must be enclosed inside a form ");
+                logger.log(Level.WARNING,
+                           "Component {0} must be enclosed inside a form",
+                           component.getId());
             }
         }
 
         if (componentDisabled || formClientId == null) {
-            renderAsDisabled(context, command);
+            renderAsDisabled(context, component);
         } else {
             if (!hasScriptBeenRendered(context)) {
                 RenderKitUtils
@@ -177,80 +128,45 @@ public class CommandLinkRenderer extends LinkRenderer {
                             context);
                 setScriptAsRendered(context);
             }
-            renderAsActive(context, command);
+            renderAsActive(context, component);
         }
 
     }
 
 
+    @Override
     public void encodeChildren(FacesContext context, UIComponent component)
           throws IOException {
 
-        if (context == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "component"));
-        }
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "Begin encoding children " + component.getId());
-        }
-        // suppress rendering if "rendered" property on the component is
-        // false.
-        if (!component.isRendered()) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("End encoding component " + component.getId() +
-                            " since " +
-                            "rendered attribute is set to false ");
-            }
+        rendererParamsNotNull(context, component);
+
+        if (!shouldEncodeChildren(component)) {
             return;
         }
-        for (UIComponent kid : component.getChildren()) {
-            kid.encodeBegin(context);
-            if (kid.getRendersChildren()) {
-                kid.encodeChildren(context);
-            }
-            kid.encodeEnd(context);
-        }
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "End encoding children " + component.getId());
-        }
 
+        if (component.getChildCount() > 0) {
+            for (UIComponent kid : component.getChildren()) {
+                kid.encodeBegin(context);
+                if (kid.getRendersChildren()) {
+                    kid.encodeChildren(context);
+                }
+                kid.encodeEnd(context);
+            }
+        }
+        
     }
 
 
+    @Override
     public void encodeEnd(FacesContext context, UIComponent component)
           throws IOException {
 
-        if (context == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "component"));
-        }
+        rendererParamsNotNull(context, component);
 
-        UICommand command = (UICommand) component;
-
-        // suppress rendering if "rendered" property on the command is
-        // false.
-        if (!command.isRendered()) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("End encoding component " + component.getId() +
-                            " since " +
-                            "rendered attribute is set to false ");
-            }
+        if (!shouldEncode(component)) {
             return;
         }
+
         ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
         String formClientId = getFormClientId(component, context);
@@ -261,31 +177,16 @@ public class CommandLinkRenderer extends LinkRenderer {
             return;
         }
 
-        //Write Anchor inline elements
-
-        boolean componentDisabled = false;
-        if (Boolean.TRUE.equals(command.getAttributes().get("disabled"))) {
-            componentDisabled = true;
-        }
-
-        if (componentDisabled) {
-
+        if (Boolean.TRUE.equals(component.getAttributes().get("disabled"))) {
             writer.endElement("span");
-
-            return;
-        }
-
-        //Done writing Anchor element
-        writer.endElement("a");
-
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "End encoding component " + component.getId());
+        } else {
+            writer.endElement("a");
         }
 
     }
 
 
+    @Override
     public boolean getRendersChildren() {
 
         return true;
@@ -295,6 +196,7 @@ public class CommandLinkRenderer extends LinkRenderer {
     // ------------------------------------------------------- Protected Methods
 
 
+    @Override
     protected Object getValue(UIComponent component) {
 
         return ((UICommand) component).getValue();       
@@ -322,10 +224,6 @@ public class CommandLinkRenderer extends LinkRenderer {
         assert(writer != null);
         String formClientId = getFormClientId(command, context);
         if (formClientId == null) {
-            if (logger.isLoggable(Level.WARNING)) {
-                logger.warning("component " + command.getId() +
-                               " must be enclosed inside a form ");
-            }
             return;
         }
 
@@ -411,7 +309,6 @@ public class CommandLinkRenderer extends LinkRenderer {
      *
      * @param context the <code>FacesContext</code> of the current request
      */
-    @SuppressWarnings("unchecked")
     private static void setScriptAsRendered(FacesContext context) {
 
         context.getExternalContext().getRequestMap()
@@ -428,7 +325,7 @@ public class CommandLinkRenderer extends LinkRenderer {
      *
      * @return the client ID of the parent form, if any
      */
-    private String getFormClientId(UIComponent component,
+    private static String getFormClientId(UIComponent component,
                                    FacesContext context) {
 
         UIForm form = getMyForm(component);
@@ -441,7 +338,7 @@ public class CommandLinkRenderer extends LinkRenderer {
     }
 
 
-    private UIForm getMyForm(UIComponent component) {
+    private static UIForm getMyForm(UIComponent component) {
 
         UIComponent parent = component.getParent();
         while (parent != null) {
@@ -449,15 +346,19 @@ public class CommandLinkRenderer extends LinkRenderer {
                 break;
             }
             parent = parent.getParent();
-        }
-        if (null == parent) {
-            if (logger.isLoggable(Level.WARNING)) {
-                logger.warning("component " + component.getId() +
-                               " must be enclosed inside a form ");
-            }
-        }
+        }       
 
         return (UIForm) parent;
+
+    }
+
+
+    private static boolean wasClicked(FacesContext context,
+                                      UIComponent component) {
+
+        Map<String,String> requestParamMap =
+              context.getExternalContext().getRequestParameterMap();
+        return (requestParamMap.containsKey(component.getClientId(context)));
 
     }
 

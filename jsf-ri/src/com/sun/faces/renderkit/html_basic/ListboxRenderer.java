@@ -35,7 +35,7 @@
  */
 
 /*
- * $Id: ListboxRenderer.java,v 1.26 2007/07/06 18:21:57 rlubke Exp $
+ * $Id: ListboxRenderer.java,v 1.27 2007/08/30 19:29:13 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -46,9 +46,9 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import javax.faces.context.ResponseWriter;
-
 import java.io.IOException;
+
+import javax.faces.context.ResponseWriter;
 
 /**
  * <B>ListRenderer</B> is a class that renders the current value of
@@ -61,6 +61,7 @@ public class ListboxRenderer extends MenuRenderer {
     // ------------------------------------------------------- Protected Methods
 
 
+    @Override
     protected void writeDefaultSize(ResponseWriter writer, int itemCount)
           throws IOException {
 

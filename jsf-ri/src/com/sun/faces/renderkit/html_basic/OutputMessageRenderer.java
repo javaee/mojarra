@@ -1,5 +1,5 @@
 /*
- * $Id: OutputMessageRenderer.java,v 1.33 2007/07/06 20:15:19 rlubke Exp $
+ * $Id: OutputMessageRenderer.java,v 1.34 2007/08/30 19:29:13 rlubke Exp $
  */
 
 /*
@@ -42,19 +42,19 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.logging.Level;
-
 import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.util.MessageUtils;
 
 
 /** <B>OutputMessageRenderer</B> is a class that renderes UIOutput */
@@ -64,60 +64,27 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
     // ---------------------------------------------------------- Public Methods
 
 
+    @Override
     public void encodeBegin(FacesContext context, UIComponent component)
           throws IOException {
 
-        if (context == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "component"));
-        }
+        rendererParamsNotNull(context, component);
 
     }
 
 
+    @Override
     public void encodeEnd(FacesContext context, UIComponent component)
           throws IOException {
 
-        if (context == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "component"));
-        }
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "Begin encoding component " + component.getId());
-        }
+        rendererParamsNotNull(context, component);
 
-
-        String style = (String) component.getAttributes().get("style");
-        String styleClass = (String) component.getAttributes().get("styleClass");
-        String lang = (String) component.getAttributes().get("lang");
-        String dir = (String) component.getAttributes().get("dir");
-        String title = (String) component.getAttributes().get("title");
-
-        ResponseWriter writer = context.getResponseWriter();
-        assert(writer != null);
-
-        // suppress rendering if "rendered" property on the component is
-        // false.
-        if (!component.isRendered()) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("End encoding component " + component.getId() +
-                            " since rendered attribute is set to false");
-            }
+        if (!shouldEncode(component)) {
             return;
         }
+
+
+
         Object currentObj = ((ValueHolder) component).getValue();
         String currentValue;
         if (currentObj != null) {
@@ -127,17 +94,23 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
             return;
         }
 
-        ArrayList<Object> parameterList = new ArrayList<Object>();
+        int childCount = component.getChildCount();
+        List<Object> parameterList;
 
-        // get UIParameter children...
+        if (childCount > 0) {
+            parameterList = new ArrayList<Object>(childCount);
+            // get UIParameter children...
 
-        for (UIComponent kid : component.getChildren()) {
-            //PENDING(rogerk) ignore if child is not UIParameter?
-            if (!(kid instanceof UIParameter)) {
-                continue;
+            for (UIComponent kid : component.getChildren()) {
+                //PENDING(rogerk) ignore if child is not UIParameter?
+                if (!(kid instanceof UIParameter)) {
+                    continue;
+                }
+
+                parameterList.add(((UIParameter) kid).getValue());
             }
-
-            parameterList.add(((UIParameter) kid).getValue());
+        } else {
+            parameterList = Collections.emptyList();
         }
 
         // If at least one substitution parameter was specified,
@@ -151,6 +124,14 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
             message = currentValue;
         }
 
+        ResponseWriter writer = context.getResponseWriter();
+        assert(writer != null);
+
+        String style = (String) component.getAttributes().get("style");
+        String styleClass = (String) component.getAttributes().get("styleClass");
+        String lang = (String) component.getAttributes().get("lang");
+        String dir = (String) component.getAttributes().get("dir");
+        String title = (String) component.getAttributes().get("title");
         boolean wroteSpan = false;
         if (styleClass != null
              || style != null
@@ -191,11 +172,6 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
         }
         if (wroteSpan) {
             writer.endElement("span");
-        }
-
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "End encoding component " + component.getId());
         }
 
     }

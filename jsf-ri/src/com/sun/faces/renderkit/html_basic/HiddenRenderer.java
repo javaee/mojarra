@@ -1,5 +1,5 @@
 /*
- * $Id: HiddenRenderer.java,v 1.30 2007/04/27 22:01:01 ofung Exp $
+ * $Id: HiddenRenderer.java,v 1.31 2007/08/30 19:29:12 rlubke Exp $
  */
 
 /*
@@ -42,13 +42,11 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import java.io.IOException;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-
-import java.io.IOException;
-
-import com.sun.faces.util.MessageUtils;
 
 /**
  * <B>HiddenRenderer</B> is a class that renders the current value of
@@ -59,25 +57,18 @@ public class HiddenRenderer extends HtmlBasicInputRenderer {
     // ---------------------------------------------------------- Public Methods
 
 
+    @Override
     public void encodeBegin(FacesContext context, UIComponent component)
           throws IOException {
 
-        if (context == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "component"));
-        }
+        rendererParamsNotNull(context, component);
 
     }
 
     // ------------------------------------------------------- Protected Methods
 
 
+    @Override
     protected void getEndTextToRender(FacesContext context,
                                       UIComponent component,
                                       String currentValue)

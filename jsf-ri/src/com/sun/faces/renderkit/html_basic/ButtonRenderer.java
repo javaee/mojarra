@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.105 2007/07/10 18:51:34 rlubke Exp $
+ * $Id: ButtonRenderer.java,v 1.106 2007/08/30 19:29:12 rlubke Exp $
  */
 
 /*
@@ -42,10 +42,9 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.renderkit.AttributeManager;
-import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
+import java.io.IOException;
+import java.util.Map;
+import java.util.logging.Level;
 
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
@@ -53,9 +52,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
 
-import java.io.IOException;
-import java.util.Map;
-import java.util.logging.Level;
+import com.sun.faces.renderkit.AttributeManager;
+import com.sun.faces.renderkit.RenderKitUtils;
 
 /**
  * <B>ButtonRenderer</B> is a class that renders the current value of
@@ -70,99 +68,42 @@ public class ButtonRenderer extends HtmlBasicRenderer {
     // ---------------------------------------------------------- Public Methods
 
 
+    @Override
     public void decode(FacesContext context, UIComponent component) {
 
-        if (context == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
-        }
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "Begin decoding component " + component.getId());
+        rendererParamsNotNull(context, component);
+
+        if (!shouldDecode(component)) {
+            return;
         }
 
-        // If the component is disabled, do not change the value of the
-        // component, since its state cannot be changed.
-        if (Util.componentIsDisabledOrReadonly(component)) {
+        if (wasClicked(context, component) && !isReset(component)) {
+            component.queueEvent(new ActionEvent(component));
+
             if (logger.isLoggable(Level.FINE)) {
-                logger.fine("No decoding necessary since the component " +
-                            component.getId() + " is disabled");
+                logger.fine("This command resulted in form submission " +
+                            " ActionEvent queued.");
+                logger.log(Level.FINE,
+                           "End decoding component {0}",
+                           component.getId());
             }
-            return;
-        }
-
-        // Was our command the one that caused this submission?
-        // we don' have to worry about getting the value from request parameter
-        // because we just need to know if this command caused the submission. We
-        // can get the command name by calling currentValue. This way we can 
-        // get around the IE bug.
-        String clientId = component.getClientId(context);
-        Map<String, String> requestParameterMap = context.getExternalContext()
-              .getRequestParameterMap();
-        String value = requestParameterMap.get(clientId);
-        if (value == null) {
-            if (requestParameterMap.get(clientId + ".x") == null &&
-                requestParameterMap.get(clientId + ".y") == null) {
-                return;
-            }
-        }
-
-        String type = (String) component.getAttributes().get("type");
-        if ("reset".equals(type)) {
-            return;
-        }
-        ActionEvent actionEvent = new ActionEvent(component);
-        component.queueEvent(actionEvent);
-
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("This command resulted in form submission " +
-                        " ActionEvent queued " + actionEvent);
-        }
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "End decoding component " + component.getId());
         }
 
     }
 
 
+    @Override
     public void encodeBegin(FacesContext context, UIComponent component)
           throws IOException {
 
-        if (context == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
-        }
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "Begin encoding component " + component.getId());
-        }
-        // suppress rendering if "rendered" property on the component is
-        // false.
-        if (!component.isRendered()) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("End encoding component " + component.getId() +
-                            " since rendered attribute is set to false ");
-            }
+        rendererParamsNotNull(context, component);
+
+        if (!shouldEncode(component)) {
             return;
         }
 
         // Which button type (SUBMIT, RESET, or BUTTON) should we generate?
-        String type = (String) component.getAttributes().get("type");
-        String styleClass;
-        if (type == null || (!"reset".equals(type) && !"submit".equals(type))) {
-            type = "submit";
-            // This is needed in the decode method
-            component.getAttributes().put("type", type);
-        } 
+        String type = getButtonType(component);
 
         ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
@@ -191,45 +132,104 @@ public class ButtonRenderer extends HtmlBasicRenderer {
                                                 ATTRIBUTES);
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
-        if (null != (styleClass = (String)
-              component.getAttributes().get("styleClass"))) {
+        String styleClass = (String)
+              component.getAttributes().get("styleClass");
+        if (styleClass != null && styleClass.length() > 0) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
-        writer.endElement("input");
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "End encoding component " + component.getId());
-        }
+        writer.endElement("input");        
 
     }
 
-
+    @Override
     public void encodeEnd(FacesContext context, UIComponent component)
           throws IOException {
 
-        if (context == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
-        }
-
+        rendererParamsNotNull(context, component);
+        
     }
 
     // --------------------------------------------------------- Private Methods
 
 
-    private String src(FacesContext context, String value) {
+    /**
+     * @param context the <code>FacesContext</code> for the current request
+     * @param imageURI the base URI of the image to use for the button
+     * @return the encoded result for the base imageURI
+     */
+    private static String src(FacesContext context, String imageURI) {
 
-        if (value == null) {
+        if (imageURI == null) {
             return "";
         }
-        value = context.getApplication().getViewHandler().
-              getResourceURL(context, value);
-        return (context.getExternalContext().encodeResourceURL(value));
+
+        String u = context.getApplication().getViewHandler()
+              .getResourceURL(context, imageURI);
+        return (context.getExternalContext().encodeResourceURL(u));
 
     }
+
+
+    /**
+     * <p>Determine if this component was activated on the client side.</p>
+     *
+     * @param context the <code>FacesContext</code> for the current request
+     * @param component the component of interest
+     * @return <code>true</code> if this component was in fact activated,
+     *  otherwise <code>false</code>
+     */
+    private static boolean wasClicked(FacesContext context,
+                                      UIComponent component) {
+        
+        // Was our command the one that caused this submission?
+        // we don' have to worry about getting the value from request parameter
+        // because we just need to know if this command caused the submission. We
+        // can get the command name by calling currentValue. This way we can
+        // get around the IE bug.
+        String clientId = component.getClientId(context);
+        Map<String, String> requestParameterMap = context.getExternalContext()
+              .getRequestParameterMap();
+        if (requestParameterMap.get(clientId) == null) {
+            StringBuilder builder = new StringBuilder(clientId);
+            String xValue = builder.append(".x").toString();
+            builder.setLength(clientId.length());
+            String yValue = builder.append(".y").toString();
+            return (requestParameterMap.get(xValue) != null
+                    && requestParameterMap.get(yValue) != null);
+        }
+        return true;
+
+    }
+
+    /**
+     * @param component the component of interest
+     * @return <code>true</code> if the button represents a <code>reset</code>
+     *  button, otherwise <code>false</code>
+     */
+    private static boolean isReset(UIComponent component) {
+
+        return ("reset".equals(component.getAttributes().get("type")));
+
+    }
+
+    /**
+     * <p>If the component's type attribute is null or not equal
+     * to <code>reset</code> or <code>submit</code>, default to
+     * <code>submit</code>.
+     * @param component the component of interest
+     * @return the type for this button
+     */
+    private static String getButtonType(UIComponent component) {
+
+        String type = (String) component.getAttributes().get("type");
+        if (type == null || (!"reset".equals(type) && !"submit".equals(type))) {
+            type = "submit";
+            // This is needed in the decode method
+            component.getAttributes().put("type", type);
+        }
+        return type;
+
+    }
+
 
 } // end of class ButtonRenderer

@@ -1,5 +1,5 @@
 /*
- * $Id: TextareaRenderer.java,v 1.25 2007/07/10 18:51:34 rlubke Exp $
+ * $Id: TextareaRenderer.java,v 1.26 2007/08/30 19:29:13 rlubke Exp $
  */
 
 /*
@@ -42,14 +42,14 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import java.io.IOException;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import java.io.IOException;
-
-import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.renderkit.AttributeManager;
+import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.MessageUtils;
 
 /**
@@ -66,25 +66,18 @@ public class TextareaRenderer extends HtmlBasicInputRenderer {
     // ---------------------------------------------------------- Public Methods
 
 
+    @Override
     public void encodeBegin(FacesContext context, UIComponent component)
           throws IOException {
 
-        if (context == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "component"));
-        }
+        rendererParamsNotNull(context, component);
 
     }
 
     // ------------------------------------------------------- Protected Methods
 
 
+    @Override
     protected void getEndTextToRender(FacesContext context,
                                       UIComponent component,
                                       String currentValue) throws IOException {

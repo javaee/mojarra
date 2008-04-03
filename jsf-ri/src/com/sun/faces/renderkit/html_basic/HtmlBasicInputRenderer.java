@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicInputRenderer.java,v 1.39 2007/07/06 18:21:57 rlubke Exp $
+ * $Id: HtmlBasicInputRenderer.java,v 1.40 2007/08/30 19:29:12 rlubke Exp $
  */
 
 /*
@@ -44,6 +44,7 @@ package com.sun.faces.renderkit.html_basic;
 
 import java.util.Map;
 import java.util.logging.Level;
+
 import javax.el.ValueExpression;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
@@ -52,6 +53,7 @@ import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
+
 import com.sun.faces.application.ConverterPropertyEditorBase;
 import com.sun.faces.util.MessageFactory;
 import com.sun.faces.util.MessageUtils;
@@ -71,6 +73,7 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
     // ---------------------------------------------------------- Public Methods
 
 
+    @Override
     public Object getConvertedValue(FacesContext context, UIComponent component,
                                     Object submittedValue)
           throws ConverterException {
@@ -92,10 +95,11 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
             if (converterType == null ||
                 converterType == Object.class) {
                 if (logger.isLoggable(Level.FINE)) {
-                    logger.fine("No conversion necessary for " + submittedValue
-                                + "and converterType " + converterType +
-                                " while decoding component " + component
-                          .getId());
+                    logger.log(Level.FINE,
+                               "No conversion necessary for value {0} of component {1}",
+                               new Object[]{
+                                     submittedValue,
+                                     component.getId() });
                 }
                 return newValue;
             }
@@ -105,10 +109,11 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
             // "String".
             if (converterType == String.class && !hasStringConverter(context)) {
                 if (logger.isLoggable(Level.FINE)) {
-                    logger.fine("No conversion necessary for " + submittedValue
-                                + "and converterType " + converterType +
-                                " while decoding component " + component
-                          .getId());
+                    logger.log(Level.FINE,
+                               "No conversion necessary for value {0} of component {1}",
+                               new Object[]{
+                                     submittedValue,
+                                     component.getId()});
                 }
                 return newValue;
             }
@@ -119,17 +124,20 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
                 Application application = context.getApplication();
                 converter = application.createConverter(converterType);
                 if (logger.isLoggable(Level.FINE)) {
-                    logger.fine(
-                          "Created converter " + converter + "of type " +
-                          converterType +
-                          " while decoding component " +
-                          component.getId());
+                    logger.log(Level.FINE,
+                               "Created converter ({0}) for type {1} for component {2}.",
+                               new Object[] {
+                                     converter.getClass().getName(),
+                                     converterType.getClass().getName(),
+                                     component.getId() });
                 }
             } catch (Exception e) {
                 if (logger.isLoggable(Level.FINE)) {
-                    logger.fine("Converter could not be instantiated for " +
-                                converterType + " while " +
-                                "decoding component " + component.getId());
+                    logger.log(Level.FINE,
+                               "Could not instantiate converter for type {0}: {1}",
+                               new Object[] {
+                                     converterType,
+                                     e.toString() });
                 }
                 return (null);
             }
@@ -140,15 +148,13 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
             // selectMany, converter has to be set if there is no
             // valueExpression attribute set on the component.
             if (logger.isLoggable(Level.FINE)) {
-                logger.fine("No conversion necessary for "
-                            + submittedValue
-                            +
-                            " while decoding component "
-                            + component.getId()
-                            +
-                            "since there is no explicitly registered converter and "
-                            +
-                            "component value is not bound to a model property ");
+                logger.log(Level.FINE,
+                            "No conversion necessary for value {0} of component {1}",
+                            new Object[] {
+                                  submittedValue,
+                                  component.getId() });
+                logger.fine(" since there is no explicitly registered converter "
+                            + "and the component value is not bound to a model property");
             }
             return newValue;
         }
@@ -160,10 +166,6 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
             requestMap.put(ConverterPropertyEditorBase.TARGET_COMPONENT_ATTRIBUTE_NAME, component);
             return converter.getAsObject(context, component, newValue);
         } else {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("Unexpected Converter exception " +
-                            " while decoding component " + component.getId());
-            }
             // throw converter exception.
             Object[] params = {
                   newValue,
@@ -177,6 +179,7 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
     }
 
 
+    @Override
     public void setSubmittedValue(UIComponent component, Object value) {
 
         if (component instanceof UIInput) {
@@ -191,6 +194,7 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
     // ------------------------------------------------------- Protected Methods
 
 
+    @Override
     protected Object getValue(UIComponent component) {
 
         if (component instanceof ValueHolder) {

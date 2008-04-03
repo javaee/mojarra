@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.51 2007/07/10 18:51:34 rlubke Exp $
+ * $Id: LabelRenderer.java,v 1.52 2007/08/30 19:29:13 rlubke Exp $
  */
 
 /*
@@ -42,17 +42,16 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import java.io.IOException;
+import java.util.logging.Level;
+
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import java.io.IOException;
-import java.util.logging.Level;
-
-import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.renderkit.AttributeManager;
-import com.sun.faces.util.MessageUtils;
+import com.sun.faces.renderkit.RenderKitUtils;
 
 /** <p><B>LabelRenderer</B> renders Label element.<p>. */
 public class LabelRenderer extends HtmlBasicInputRenderer {
@@ -68,35 +67,16 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
     // ---------------------------------------------------------- Public Methods
 
 
+    @Override
     public void encodeBegin(FacesContext context, UIComponent component)
           throws IOException {
 
-        if (context == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "component"));
-        }
+        rendererParamsNotNull(context, component);
 
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "Begin decoding component " + component.getId());
-        }
-
-        // suppress rendering if "rendered" property on the component is
-        // false.
-        if (!component.isRendered()) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("End encoding component " +
-                            component.getId() + " since " +
-                            "rendered attribute is set to false ");
-            }
+        if (!shouldEncode(component)) {
             return;
         }
+
         ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
 
@@ -154,19 +134,16 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
     }
 
 
+    @Override
     public void encodeEnd(FacesContext context, UIComponent component)
           throws IOException {
 
-        if (context == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "context"));
+        rendererParamsNotNull(context, component);
+
+        if (!shouldEncode(component)) {
+            return;
         }
-        if (component == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "component"));
-        }
+
         // render label end element if RENDER_END_ELEMENT is set.
         String render = (String) component.getAttributes().get(
               RENDER_END_ELEMENT);
@@ -176,14 +153,10 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
             assert(writer != null);
             writer.endElement("label");
         }
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "End encoding component " + component.getId());
-        }
 
     }
 
-    // ------------------------------------------------------- Protected Methods
+    // ------------------------------------------------------- Private Methods
 
 
     /**
@@ -214,10 +187,6 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
             parent = parent.getParent();
         }
         if (parent == null) {
-            if (logger.isLoggable(Level.WARNING)) {
-                logger.warning("component " + component.getId() +
-                               " must be enclosed inside a form ");
-            }
             return result;
         }
         String parentClientId = parent.getClientId(context);

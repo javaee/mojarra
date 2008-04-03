@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.86 2007/07/27 19:59:08 rlubke Exp $
+ * $Id: RadioRenderer.java,v 1.87 2007/08/30 19:29:13 rlubke Exp $
  */
 
 /*
@@ -42,20 +42,20 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import java.io.IOException;
+import java.util.Map;
+
+import javax.el.ELException;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectOne;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.model.SelectItem;
-import javax.el.ELException;
-
-import java.io.IOException;
-import java.util.Map;
 
 import com.sun.faces.application.ConverterPropertyEditorBase;
-import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.renderkit.AttributeManager;
+import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.Util;
 
 /**
@@ -72,6 +72,7 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
     // ------------------------------------------------------- Protected Methods
 
 
+    @Override
     protected void renderOption(FacesContext context, UIComponent component,
                                 SelectItem curItem, boolean alignVertical,
                                 int itemNumber)

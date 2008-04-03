@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.83 2007/07/10 18:51:34 rlubke Exp $
+ * $Id: TextRenderer.java,v 1.84 2007/08/30 19:29:13 rlubke Exp $
  */
 
 /*
@@ -42,17 +42,16 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import java.io.IOException;
+
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import java.io.IOException;
-
-import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.renderkit.AttributeManager;
-import com.sun.faces.util.MessageUtils;
+import com.sun.faces.renderkit.RenderKitUtils;
 
 /**
  * <B>TextRenderer</B> is a class that renders the current value of
@@ -71,25 +70,18 @@ public class TextRenderer extends HtmlBasicInputRenderer {
     // ---------------------------------------------------------- Public Methods
 
 
+    @Override
     public void encodeBegin(FacesContext context, UIComponent component)
           throws IOException {
 
-        if (context == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "component"));
-        }
+        rendererParamsNotNull(context, component);
 
     }
 
     // ------------------------------------------------------- Protected Methods
 
 
+    @Override
     protected void getEndTextToRender(FacesContext context,
                                       UIComponent component,
                                       String currentValue)
@@ -97,9 +89,8 @@ public class TextRenderer extends HtmlBasicInputRenderer {
 
         ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
-        boolean
-              shouldWriteIdAttribute = false,
-              isOutput = false;
+        boolean shouldWriteIdAttribute = false;
+        boolean isOutput = false;
 
         String style = (String) component.getAttributes().get("style");
         String styleClass = (String) component.getAttributes().get("styleClass");
@@ -113,17 +104,13 @@ public class TextRenderer extends HtmlBasicInputRenderer {
             writer.writeAttribute("name", (component.getClientId(context)),
                                   "clientId");
 
-            String autoComplete = (String)
-                  component.getAttributes().get("autocomplete");
-            if (autoComplete != null) {
-                // only output the autocomplete attribute if the value
-                // is 'off' since its lack of presence will be interpreted
-                // as 'on' by the browser
-                if ("off".equals(autoComplete)) {
-                    writer.writeAttribute("autocomplete",
-                                          "off",
-                                          "autocomplete");
-                }
+            // only output the autocomplete attribute if the value
+            // is 'off' since its lack of presence will be interpreted
+            // as 'on' by the browser
+            if ("off".equals(component.getAttributes().get("autocomplete"))) {
+                writer.writeAttribute("autocomplete",
+                                      "off",
+                                      "autocomplete");
             }
 
             // render default text specified
@@ -162,8 +149,7 @@ public class TextRenderer extends HtmlBasicInputRenderer {
             }
             if (currentValue != null) {
                 Object val = component.getAttributes().get("escape");
-                boolean escape = (val != null) && Boolean.valueOf(val.toString());
-                if (escape) {
+                if ((val != null) && Boolean.valueOf(val.toString())) {
                     writer.writeText(currentValue, component, "value");
                 } else {
                     writer.write(currentValue);

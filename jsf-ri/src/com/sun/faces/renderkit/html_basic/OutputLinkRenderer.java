@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.37 2007/08/24 19:03:29 rlubke Exp $
+ * $Id: OutputLinkRenderer.java,v 1.38 2007/08/30 19:29:13 rlubke Exp $
  */
 
 /*
@@ -42,17 +42,16 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import java.io.IOException;
+import java.util.logging.Level;
+
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import java.io.IOException;
-import java.util.logging.Level;
-
-import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.renderkit.AttributeManager;
-import com.sun.faces.util.MessageUtils;
+import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.Util;
 
 
@@ -61,7 +60,7 @@ import com.sun.faces.util.Util;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.37 2007/08/24 19:03:29 rlubke Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.38 2007/08/30 19:29:13 rlubke Exp $
  */
 
 public class OutputLinkRenderer extends LinkRenderer {
@@ -74,46 +73,19 @@ public class OutputLinkRenderer extends LinkRenderer {
     // ---------------------------------------------------------- Public Methods
 
 
+    @Override
     public void decode(FacesContext context, UIComponent component) {
 
-        if (context == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "component"));
-        }
-
-        // take no action, this is an Output component.
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("No decoding necessary since the component "
-                        + component.getId() +
-                        " is not an instance or a sub class of UIInput");
-        }
+        rendererParamsNotNull(context, component);
 
     }
 
 
+    @Override
     public void encodeBegin(FacesContext context, UIComponent component)
           throws IOException {
 
-        if (context == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "component"));
-        }
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "Begin encoding component " + component.getId());
-        }
+        rendererParamsNotNull(context, component);
 
         UIOutput output = (UIOutput) component;
         boolean componentDisabled = false;
@@ -130,83 +102,40 @@ public class OutputLinkRenderer extends LinkRenderer {
 
     }
 
-
+    @Override
     public void encodeChildren(FacesContext context, UIComponent component)
           throws IOException {
 
-        if (context == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "component"));
-        }
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "Begin encoding children " + component.getId());
-        }
-        // suppress rendering if "rendered" property on the component is
-        // false.
-        if (!component.isRendered()) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("End encoding component "
-                            + component.getId() + " since " +
-                            "rendered attribute is set to false ");
-            }
+        rendererParamsNotNull(context, component);
+
+        if (!shouldEncodeChildren(component)) {
             return;
         }
-        for (UIComponent kid : component.getChildren()) {
-            encodeRecursive(context, kid);
+
+        if (component.getChildCount() > 0) {
+            for (UIComponent kid : component.getChildren()) {
+                encodeRecursive(context, kid);
+            }
         }
 
     }
 
 
+    @Override
     public void encodeEnd(FacesContext context, UIComponent component)
           throws IOException {
 
-        if (context == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "component"));
-        }
+        rendererParamsNotNull(context, component);
 
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER, "End encoding " + component.getId());
-        }
-        // suppress rendering if "rendered" property on the component is
-        // false.
-        if (!component.isRendered()) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("End encoding component "
-                            + component.getId() + " since " +
-                            "rendered attribute is set to false ");
-            }
+        if (!shouldEncode(component)) {
             return;
         }
+
         ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
 
-        boolean componentDisabled = false;
-        if (component.getAttributes().get("disabled") != null) {
-            if ((component.getAttributes().get("disabled"))
-                  .equals(Boolean.TRUE)) {
-                componentDisabled = true;
-            }
-        }
-
-        if (componentDisabled) {
-
+        if (Boolean.TRUE.equals(component.getAttributes().get("disabled"))) {
             writer.endElement("span");
-
         } else {
             //Write Anchor inline elements
             //Done writing Anchor element
@@ -216,6 +145,7 @@ public class OutputLinkRenderer extends LinkRenderer {
     }
 
 
+    @Override
     public boolean getRendersChildren() {
 
         return true;
@@ -225,6 +155,7 @@ public class OutputLinkRenderer extends LinkRenderer {
     // ------------------------------------------------------- Protected Methods
 
 
+    @Override
     protected Object getValue(UIComponent component) {
 
         if (Util.componentIsDisabled(component)) {

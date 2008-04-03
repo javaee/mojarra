@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.105 2007/07/10 18:46:52 rlubke Exp $
+ * $Id: FormRenderer.java,v 1.106 2007/08/30 19:29:12 rlubke Exp $
  */
 
 /*
@@ -42,20 +42,19 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import java.io.IOException;
+import java.util.Map;
+import java.util.logging.Level;
+
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import java.io.IOException;
-import java.util.Map;
-import java.util.logging.Level;
-
-import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.renderkit.AttributeManager;
-import com.sun.faces.util.MessageUtils;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
+import com.sun.faces.renderkit.AttributeManager;
+import com.sun.faces.renderkit.RenderKitUtils;
 
 /** <B>FormRenderer</B> is a class that renders a <code>UIForm<code> as a Form. */
 
@@ -81,58 +80,40 @@ public class FormRenderer extends HtmlBasicRenderer {
     // ---------------------------------------------------------- Public Methods
 
 
+    @Override
     public void decode(FacesContext context, UIComponent component) {
 
+        rendererParamsNotNull(context, component);
+                
         // Was our form the one that was submitted?  If so, we need to set
         // the indicator accordingly..
-        //
         String clientId = component.getClientId(context);
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "Begin decoding component " + component.getId());
-        }
         Map<String, String> requestParameterMap = context.getExternalContext()
               .getRequestParameterMap();
         if (requestParameterMap.containsKey(clientId)) {
+            if (logger.isLoggable(Level.FINE)) {
+                logger.log(Level.FINE,
+                           "UIForm with client ID {0}, submitted",
+                           clientId);
+            }
             ((UIForm) component).setSubmitted(true);
         } else {
             ((UIForm) component).setSubmitted(false);
-        }
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "End decoding component " + component.getId());
         }
 
     }
 
 
+    @Override
     public void encodeBegin(FacesContext context, UIComponent component)
           throws IOException {
 
-        if (context == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "component"));
-        }
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER, "Begin encoding component " +
-                                    component.getId());
-        }
-        // suppress rendering if "rendered" property on the component is
-        // false.
-        if (!component.isRendered()) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("End encoding component " +
-                            component.getId() + " since " +
-                            "rendered attribute is set to false ");
-            }
+        rendererParamsNotNull(context, component);
+
+        if (!shouldEncode(component)) {
             return;
         }
+
         ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
         String clientId = component.getClientId(context);
@@ -156,8 +137,7 @@ public class FormRenderer extends HtmlBasicRenderer {
                                   "acceptcharset");
         }
 
-        RenderKitUtils.renderPassThruAttributes(
-              writer,
+        RenderKitUtils.renderPassThruAttributes(writer,
                                                 component,
                                                 ATTRIBUTES);
         writer.writeText("\n", component, null);
@@ -180,27 +160,12 @@ public class FormRenderer extends HtmlBasicRenderer {
     }
 
 
+    @Override
     public void encodeEnd(FacesContext context, UIComponent component)
           throws IOException {
 
-        if (context == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "component"));
-        }
-        // suppress rendering if "rendered" property on the component is
-        // false.
-        if (!component.isRendered()) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("End encoding component " +
-                            component.getId() + " since " +
-                            "rendered attribute is set to false ");
-            }
+        rendererParamsNotNull(context, component);
+        if (!shouldEncode(component)) {
             return;
         }
 
@@ -213,11 +178,6 @@ public class FormRenderer extends HtmlBasicRenderer {
         writer.writeText("\n", component, null);
         writer.endElement("form");
 
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "End encoding component " + component.getId());
-        }
-
     }
 
     // --------------------------------------------------------- Private Methods
@@ -229,7 +189,7 @@ public class FormRenderer extends HtmlBasicRenderer {
      * @return Return the value to be rendered as the <code>action</code> attribute
      *  of the form generated for this component.
      */
-    private String getActionStr(FacesContext context) {
+    private static String getActionStr(FacesContext context) {
 
         String viewId = context.getViewRoot().getViewId();
         String actionURL =

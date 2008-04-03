@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.216 2007/07/19 16:38:01 rlubke Exp $
+ * $Id: Util.java,v 1.217 2007/08/30 19:29:13 rlubke Exp $
  */
 
 /*
@@ -70,7 +70,7 @@ import java.util.regex.Pattern;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.216 2007/07/19 16:38:01 rlubke Exp $
+ * @version $Id: Util.java,v 1.217 2007/08/30 19:29:13 rlubke Exp $
  */
 
 public class Util {
@@ -213,6 +213,17 @@ public class Util {
             loader = fallbackClass.getClass().getClassLoader();
         }
         return loader;
+    }
+
+
+    public static void notNull(String varname, Object var) {
+
+        if (var == null) {
+            throw new NullPointerException(
+                  MessageUtils.getExceptionMessageString(
+                      MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, varname));
+        }
+        
     }
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.84 2007/07/10 18:51:34 rlubke Exp $
+ * $Id: CheckboxRenderer.java,v 1.85 2007/08/30 19:29:12 rlubke Exp $
  *
  */
 
@@ -43,19 +43,17 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import java.io.IOException;
+import java.util.Map;
+import java.util.logging.Level;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.ConverterException;
 
-import java.io.IOException;
-import java.util.Map;
-import java.util.logging.Level;
-
-import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.renderkit.AttributeManager;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
+import com.sun.faces.renderkit.RenderKitUtils;
 
 
 /**
@@ -71,30 +69,12 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
     // ---------------------------------------------------------- Public Methods
 
 
+    @Override
     public void decode(FacesContext context, UIComponent component) {
 
-        if (context == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
-        }
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "Begin decoding component " + component.getId());
-        }
+        rendererParamsNotNull(context, component);
 
-        // If the checkbox disabled, nothing would be sent in the
-        // request even if the checkbox is checked. So do not change the
-        // value of the checkbox, if it is disabled since its state
-        // cannot be changed.
-        if (Util.componentIsDisabledOrReadonly(component)) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("No decoding necessary since the component " +
-                            component.getId() + " is disabled");
-            }
+        if (!shouldDecode(component)) {
             return;
         }
 
@@ -104,48 +84,31 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
 
         Map<String, String> requestParameterMap = context.getExternalContext()
               .getRequestParameterMap();
-        String newValue = requestParameterMap.get(clientId);
-
-        if ("on".equalsIgnoreCase(newValue)
-            || "yes".equalsIgnoreCase(newValue)
-            || "true".equalsIgnoreCase(newValue)) {
-            newValue = "true";
-        } else {
-            newValue = "false";
-        }
-
-        setSubmittedValue(component, newValue);
+        String isChecked = isChecked(requestParameterMap.get(clientId));
+        setSubmittedValue(component, isChecked);
         if (logger.isLoggable(Level.FINE)) {
-            logger.fine("new value after decoding" + newValue);
-        }
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "End decoding component " + component.getId());
+            logger.log(Level.FINE,
+                       "new value after decoding: {0}",
+                       isChecked);
         }
 
     }
 
 
+    @Override
     public void encodeBegin(FacesContext context, UIComponent component)
           throws IOException {
 
-        if (context == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "component"));
-        }
+        rendererParamsNotNull(context, component);
 
     }
 
 
-    public Object getConvertedValue(FacesContext context, UIComponent component,
+    @Override
+    public Object getConvertedValue(FacesContext context,
+                                    UIComponent component,
                                     Object submittedValue)
-          throws ConverterException {
+    throws ConverterException {
 
         String newValue = (String) submittedValue;
         return Boolean.valueOf(newValue);
@@ -155,6 +118,7 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
     // ------------------------------------------------------- Protected Methods
 
 
+    @Override
     protected void getEndTextToRender(FacesContext context,
                                       UIComponent component,
                                       String currentValue) throws IOException {
@@ -182,6 +146,21 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
         writer.endElement("input");
+
+    }
+
+
+    // --------------------------------------------------------- Private Methods
+
+    /**
+     * @param value the submitted value
+     * @return "true" if the component was checked, otherise "false"
+     */
+    private static String isChecked(String value) {
+
+        return Boolean.toString("on".equalsIgnoreCase(value)
+                                || "yes".equalsIgnoreCase(value)
+                                || "true".equalsIgnoreCase(value));
 
     }
 

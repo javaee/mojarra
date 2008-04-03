@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.121 2007/07/06 18:21:57 rlubke Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.122 2007/08/30 19:29:12 rlubke Exp $
  */
 
 /*
@@ -42,6 +42,15 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
@@ -54,19 +63,9 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.render.Renderer;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
-import com.sun.faces.util.FacesLogger;
 
 /**
  * <B>HtmlBasicRenderer</B> is a base class for implementing renderers
@@ -78,6 +77,8 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
     // Log instance for this class
     protected static final Logger logger = FacesLogger.RENDERKIT.getLogger();
+
+    private static final Param[] EMPTY_PARAMS = new Param[0];
 
     // ------------------------------------------------------------ Constructors
 
@@ -91,6 +92,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
     // ---------------------------------------------------------- Public Methods
 
 
+    @Override
     public String convertClientId(FacesContext context, String clientId) {
 
         return clientId;
@@ -98,42 +100,23 @@ public abstract class HtmlBasicRenderer extends Renderer {
     }
 
 
+    @Override
     public void decode(FacesContext context, UIComponent component) {
 
-        if (context == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "component"));
-        }
-
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "Begin decoding component " + component.getId());
-        }
+        rendererParamsNotNull(context, component);
 
         if (!(component instanceof UIInput)) {
             // decode needs to be invoked only for components that are
             // instances or subclasses of UIInput.
             if (logger.isLoggable(Level.FINE)) {
-                logger.fine("No decoding necessary since the component "
-                            + component.getId() +
-                            " is not an instance or a sub class of UIInput");
+                logger.log(Level.FINE,
+                           "No decoding necessary since the component {0} is not an instance or a sub class of UIInput",
+                           component.getId());
             }
             return;
         }
 
-        // If the component is disabled, do not change the value of the
-        // component, since its state cannot be changed.
-        if (Util.componentIsDisabledOrReadonly(component)) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("No decoding necessary since the component " +
-                            component.getId() + " is disabled");
-            }
+        if (!shouldDecode(component)) {
             return;
         }
 
@@ -142,48 +125,26 @@ public abstract class HtmlBasicRenderer extends Renderer {
         Map<String, String> requestMap =
               context.getExternalContext().getRequestParameterMap();
         // Don't overwrite the value unless you have to!
-        if (requestMap.containsKey(clientId)) {
-            String newValue = requestMap.get(clientId);
+        String newValue = requestMap.get(clientId);
+        if (newValue != null) {
             setSubmittedValue(component, newValue);
             if (logger.isLoggable(Level.FINE)) {
-                logger.fine("new value after decoding" + newValue);
+                logger.log(Level.FINE,
+                           "new value after decoding {0}",
+                           newValue);
             }
-        }
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "End decoding component " + component.getId());
         }
 
     }
 
 
+    @Override
     public void encodeEnd(FacesContext context, UIComponent component)
           throws IOException {
 
-        if (context == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "component"));
-        }
+       rendererParamsNotNull(context, component);
 
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "Begin encoding component " + component.getId());
-        }
-
-        // suppress rendering if "rendered" property on the component is
-        // false.
-        if (!component.isRendered()) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("End encoding component " + component.getId() +
-                            " since " +
-                            "rendered attribute is set to false ");
-            }
+        if (!shouldEncode(component)) {
             return;
         }
 
@@ -192,13 +153,16 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
         String currentValue = getCurrentValue(context, component);
         if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, "Value to be rendered " + currentValue);
+            logger.log(Level.FINE,
+                       "Value to be rendered {0}",
+                       currentValue);
         }
         getEndTextToRender(context, component, currentValue);
 
     }
 
 
+    @Override
     public boolean getRendersChildren() {
 
         return true;
@@ -289,11 +253,9 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
         int childCount = component.getChildCount();
         if (childCount > 0) {
-            return new RenderedChildIterator(component
-                  .getChildren().iterator());
+            return component.getChildren().iterator();
         } else {
-            List<UIComponent> empty = Collections.emptyList();
-            return empty.iterator();
+            return Collections.<UIComponent>emptyList().iterator();
         }
 
     }
@@ -355,9 +317,12 @@ public abstract class HtmlBasicRenderer extends Renderer {
      */
     protected UIComponent getFacet(UIComponent component, String name) {
 
-        UIComponent facet = component.getFacet(name);
-        if ((facet != null) && !facet.isRendered()) {
-            facet = null;
+        UIComponent facet = null;
+        if (component.getFacetCount() > 0) {
+            facet = component.getFacet(name);
+            if ((facet != null) && !facet.isRendered()) {
+                facet = null;
+            }
         }
         return (facet);
 
@@ -522,20 +487,24 @@ public abstract class HtmlBasicRenderer extends Renderer {
      */
     protected Param[] getParamList(UIComponent command) {
 
-        ArrayList<Param> parameterList = new ArrayList<Param>();
+        if (command.getChildCount() > 0) {
+            ArrayList<Param> parameterList = new ArrayList<Param>();
 
-        for (UIComponent kid : command.getChildren()) {
-            if (kid instanceof UIParameter) {
-                UIParameter uiParam = (UIParameter) kid;
-                Object value = uiParam.getValue();
-                Param param = new Param(uiParam.getName(),
-                                        (value == null ? null :
-                                         value.toString()));
-                parameterList.add(param);
+            for (UIComponent kid : command.getChildren()) {
+                if (kid instanceof UIParameter) {
+                    UIParameter uiParam = (UIParameter) kid;
+                    Object value = uiParam.getValue();
+                    Param param = new Param(uiParam.getName(),
+                                            (value == null ? null :
+                                             value.toString()));
+                    parameterList.add(param);
+                }
             }
+            return parameterList.toArray(new Param[parameterList.size()]);
+        } else {
+            return EMPTY_PARAMS;
         }
 
-        return parameterList.toArray(new Param[parameterList.size()]);
 
     }
 
@@ -600,6 +569,63 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
     }
 
+    protected void rendererParamsNotNull(FacesContext context,
+                                         UIComponent component) {
+
+        Util.notNull("context", context);
+        Util.notNull("component", component);
+        
+    }
+
+
+    protected boolean shouldEncode(UIComponent component) {
+
+        // suppress rendering if "rendered" property on the component is
+        // false.
+        if (!component.isRendered()) {
+            if (logger.isLoggable(Level.FINE)) {
+                logger.log(Level.FINE,
+                           "End encoding component {0} since rendered attribute is set to false",
+                           component.getId());
+            }
+            return false;
+        }
+        return true;
+
+    }
+
+
+    protected boolean shouldDecode(UIComponent component) {
+
+        if (Util.componentIsDisabledOrReadonly(component)) {
+            if (logger.isLoggable(Level.FINE)) {
+                logger.log(Level.FINE,
+                           "No decoding necessary since the component {0} is disabled or read-only",
+                           component.getId());
+            }
+            return false;
+        }
+        return true;
+
+    }
+
+    protected boolean shouldEncodeChildren(UIComponent component) {
+
+        // suppress rendering if "rendered" property on the component is
+        // false.
+        if (!component.isRendered()) {
+            if (logger.isLoggable(Level.FINE)) {
+                logger.log(Level.FINE,
+                            "Children of component {0} will not be encoded since this component's rendered attribute is false",
+                            component.getId());
+            }
+            return false;
+        }
+        return true;
+
+    }
+
+
     // --------------------------------------------------------- Private Methods
 
 
@@ -614,35 +640,40 @@ public abstract class HtmlBasicRenderer extends Renderer {
      * @return the component with the the <code>id</code that matches
      *         <code>forComponent</code> otheriwse null if no match is found.
      */
-    private UIComponent findUIComponentBelow(UIComponent startPoint,
-                                             String forComponent) {
+    private static UIComponent findUIComponentBelow(UIComponent startPoint,
+                                                    String forComponent) {
 
         UIComponent retComp = null;
-        List<UIComponent> children = startPoint.getChildren();
-        for (int i = 0, size = children.size(); i < size; i++) {
-            UIComponent comp = children.get(i);
+        if (startPoint.getChildCount() > 0) {
+            List<UIComponent> children = startPoint.getChildren();
+            for (int i = 0, size = children.size(); i < size; i++) {
+                UIComponent comp = children.get(i);
 
-            if (comp instanceof NamingContainer) {
-                try {
-                    retComp = comp.findComponent(forComponent);
-                } catch (IllegalArgumentException iae) {
-                    continue;
+                if (comp instanceof NamingContainer) {
+                    try {
+                        retComp = comp.findComponent(forComponent);
+                    } catch (IllegalArgumentException iae) {
+                        continue;
+                    }
                 }
-            }
 
-            if (retComp == null) {
-                if (comp.getChildCount() > 0) {
-                    retComp = findUIComponentBelow(comp, forComponent);
+                if (retComp == null) {
+                    if (comp.getChildCount() > 0) {
+                        retComp = findUIComponentBelow(comp, forComponent);
+                    }
                 }
-            }
 
-            if (retComp != null) {
-                break;
+                if (retComp != null) {
+                    break;
+                }
             }
         }
         return retComp;
 
     }
+
+
+    // ----------------------------------------------------------- Inner Classes
 
 
     /**
@@ -655,89 +686,14 @@ public abstract class HtmlBasicRenderer extends Renderer {
         public String name;
         public String value;
 
-        // ------------------------------------------------------------ Constructors
+        
+        // -------------------------------------------------------- Constructors
 
 
         public Param(String name, String value) {
 
             this.name = name;
             this.value = value;
-
-        }
-
-    }
-
-    /**
-     * <p>This <code>Iterator</code> is used to Iterator over
-     * children components that are set to be rendered.</p>
-     */
-    private static class RenderedChildIterator
-          implements Iterator<UIComponent> {
-
-
-        Iterator<UIComponent> childIterator;
-        UIComponent child;
-        boolean hasNext;
-
-        // ------------------------------------------------------------ Constructors
-
-
-        private RenderedChildIterator(Iterator<UIComponent> childIterator) {
-
-            this.childIterator = childIterator;
-            update();
-
-        }
-
-        // --------------------------------------------------- Methods From Iterator
-
-        public boolean hasNext() {
-
-            return hasNext;
-
-        }
-
-
-        public UIComponent next() {
-
-            if (!hasNext) {
-                throw new NoSuchElementException();
-            }
-            UIComponent temp = child;
-            update();
-            return temp;
-
-        }
-
-        // ----------------------------------------------- Methods from Iterator
-
-
-        public void remove() {
-
-            throw new UnsupportedOperationException();
-
-        }
-
-        // --------------------------------------------------------- Private Methods
-
-
-        /**
-         * <p>Moves the internal pointer to the next renderable
-         * component skipping any that are not to be rendered.</p>
-         */
-        private void update() {
-
-            while (childIterator.hasNext()) {
-                UIComponent comp = childIterator.next();
-                if (comp.isRendered()) {
-                    child = comp;
-                    hasNext = true;
-                    return;
-                }
-            }
-
-            hasNext = false;
-            child = null;
 
         }
 

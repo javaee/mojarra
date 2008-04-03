@@ -35,7 +35,7 @@
  */
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.57 2007/07/27 19:59:08 rlubke Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.58 2007/08/30 19:29:13 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -47,22 +47,21 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.Map;
+
+import javax.el.ELException;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
-import javax.el.ELException;
-
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.Map;
 
 import com.sun.faces.application.ConverterPropertyEditorBase;
-import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.renderkit.AttributeManager;
-import com.sun.faces.util.MessageUtils;
+import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.Util;
 
 /**
@@ -79,23 +78,13 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
     // ---------------------------------------------------------- Public Methods
 
 
+    @Override
     public void encodeEnd(FacesContext context, UIComponent component)
           throws IOException {
 
-        if (context == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "component"));
-        }
+        rendererParamsNotNull(context, component);
 
-        // suppress rendering if "rendered" property on the component is
-        // false.
-        if (!component.isRendered()) {
+        if (!shouldEncode(component)) {
             return;
         }
 

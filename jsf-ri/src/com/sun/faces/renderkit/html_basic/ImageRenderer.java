@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.51 2007/07/10 18:51:34 rlubke Exp $
+ * $Id: ImageRenderer.java,v 1.52 2007/08/30 19:29:13 rlubke Exp $
  */
 
 /*
@@ -42,24 +42,23 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import java.io.IOException;
+import java.util.logging.Level;
+
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIGraphic;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import java.io.IOException;
-import java.util.logging.Level;
-
 import com.sun.faces.RIConstants;
-import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.renderkit.AttributeManager;
-import com.sun.faces.util.MessageUtils;
+import com.sun.faces.renderkit.RenderKitUtils;
 
 /**
  * <B>ImageRenderer</B> is a class that handles the rendering of the graphic
  * ImageTag
  *
- * @version $Id: ImageRenderer.java,v 1.51 2007/07/10 18:51:34 rlubke Exp $
+ * @version $Id: ImageRenderer.java,v 1.52 2007/08/30 19:29:13 rlubke Exp $
  */
 
 public class ImageRenderer extends HtmlBasicRenderer {
@@ -72,49 +71,22 @@ public class ImageRenderer extends HtmlBasicRenderer {
     // ---------------------------------------------------------- Public Methods
 
 
+    @Override
     public void encodeBegin(FacesContext context, UIComponent component)
           throws IOException {
 
-        if (context == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "component"));
-        }
+        rendererParamsNotNull(context, component);
 
     }
 
 
+    @Override
     public void encodeEnd(FacesContext context, UIComponent component)
           throws IOException {
 
-        if (context == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "component"));
-        }
+        rendererParamsNotNull(context, component);
 
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "Begin encoding component " + component.getId());
-        }
-        // suppress rendering if "rendered" property on the component is
-        // false.
-        if (!component.isRendered()) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("End encoding component " +
-                            component.getId() + " since " +
-                            "rendered attribute is set to false ");
-            }
+        if (!shouldEncode(component)) {
             return;
         }
 
@@ -151,7 +123,7 @@ public class ImageRenderer extends HtmlBasicRenderer {
     // --------------------------------------------------------- Private Methods
 
 
-    private String src(FacesContext context, UIComponent component) {
+    private static String src(FacesContext context, UIComponent component) {
 
         String value = (String) ((UIGraphic) component).getValue();
         if (value == null) {

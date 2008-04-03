@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.50 2007/07/10 18:51:34 rlubke Exp $
+ * $Id: GridRenderer.java,v 1.51 2007/08/30 19:29:12 rlubke Exp $
  */
 
 /*
@@ -41,25 +41,21 @@
 package com.sun.faces.renderkit.html_basic;
 
 
+import java.io.IOException;
+import java.util.Iterator;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.logging.Level;
-
-import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.renderkit.AttributeManager;
-import com.sun.faces.util.MessageUtils;
 
 /**
  * <B>GridRenderer</B> is a class that renders <code>UIPanel</code> component
  * as a "Grid".
  */
 
-public class GridRenderer extends HtmlBasicRenderer {
+public class GridRenderer extends BaseTableRenderer {
 
     private static final String[] ATTRIBUTES =
           AttributeManager.getAttributes(AttributeManager.Key.PANELGRID);
@@ -67,339 +63,181 @@ public class GridRenderer extends HtmlBasicRenderer {
     // ---------------------------------------------------------- Public Methods
 
 
+    @Override
     public void encodeBegin(FacesContext context, UIComponent component)
           throws IOException {
 
-        if (context == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "component"));
-        }
+        rendererParamsNotNull(context, component);
 
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER, "Begin encoding component " +
-                                    component.getId());
-        }
-
-        // suppress rendering if "rendered" property on the component is
-        // false.
-        if (!component.isRendered()) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("End encoding component "
-                            + component.getId() + " since " +
-                            "rendered attribute is set to false ");
-            }
+        if (!shouldEncode(component)) {
             return;
         }
 
         // Render the beginning of this panel
         ResponseWriter writer = context.getResponseWriter();
-        writer.startElement("table", component);
-        writeIdAttributeIfNecessary(context, writer, component);
-        String styleClass =
-              (String) component.getAttributes().get("styleClass");
-        if (styleClass != null) {
-            writer.writeAttribute("class", styleClass, "styleClass");
-        }
-        RenderKitUtils.renderPassThruAttributes(writer,
-                                                component,
-                                                ATTRIBUTES);
-        writer.writeText("\n", component, null);
+        renderTableStart(context, component, writer, ATTRIBUTES);
 
         // render the caption facet (if present)
-        UIComponent caption = getFacet(component, "caption");
-        if (caption != null) {
-            String captionClass = (String)
-                  component.getAttributes().get("captionClass");
-            String captionStyle = (String)
-                  component.getAttributes().get("captionStyle");
-            writer.startElement("caption", component);
-            if (captionClass != null) {
-                writer.writeAttribute("class", captionClass, "captionClass");
-            }
-            if (captionStyle != null) {
-                writer.writeAttribute("style", captionStyle, "captionStyle");
-            }
-            encodeRecursive(context, caption);
-            writer.endElement("caption");
-        }
+        renderCaption(context, component, writer);
 
         // Render the header facet (if any)
-        UIComponent header = getFacet(component, "header");
-        String headerClass =
-              (String) component.getAttributes().get("headerClass");
-        if (header != null) {
-            writer.startElement("thead", component);
-            writer.writeText("\n", component, null);
-            writer.startElement("tr", header);
-            writer.startElement("th", header);
-            if (headerClass != null) {
-                writer.writeAttribute("class", headerClass, "headerClass");
-            }
-            writer.writeAttribute("colspan", String.valueOf(getColumnCount(component)),
-                                  null);
-            writer.writeAttribute("scope", "colgroup", null);
-            encodeRecursive(context, header);
-            writer.endElement("th");
-            writer.endElement("tr");
-            writer.writeText("\n", component, null);
-            writer.endElement("thead");
-            writer.writeText("\n", component, null);
-        }
+        renderHeader(context, component, writer);
 
         // Render the footer facet (if any)
-        UIComponent footer = getFacet(component, "footer");
-        String footerClass =
-              (String) component.getAttributes().get("footerClass");
-        if (footer != null) {
-            writer.startElement("tfoot", component);
-            writer.writeText("\n", component, null);
-            writer.startElement("tr", footer);
-            writer.startElement("td", footer);
-            if (footerClass != null) {
-                writer.writeAttribute("class", footerClass, "footerClass");
-            }
-            writer.writeAttribute("colspan", String.valueOf(getColumnCount(component)),
-                                  null);
-            encodeRecursive(context, footer);
-            writer.endElement("td");
-            writer.endElement("tr");
-            writer.writeText("\n", component, null);
-            writer.endElement("tfoot");
-            writer.writeText("\n", component, null);
-        }
+        renderFooter(context, component, writer);
 
     }
 
 
+    @Override
     public void encodeChildren(FacesContext context, UIComponent component)
           throws IOException {
 
-        if (context == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "component"));
-        }
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "Begin encoding children " + component.getId());
-        }
+        rendererParamsNotNull(context, component);
 
-        // suppress rendering if "rendered" property on the component is
-        // false.
-        if (!component.isRendered()) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("End encoding component " +
-                            component.getId() + " since " +
-                            "rendered attribute is set to false ");
-            }
+        if (!shouldEncodeChildren(component)) {
             return;
         }
 
         // Set up the variables we will need
         ResponseWriter writer = context.getResponseWriter();
-        int columns = getColumnCount(component);
-        String columnClasses[] = getColumnClasses(component);
-        int columnStyle = 0;
-        int columnStyles = columnClasses.length;
-        String rowClasses[] = getRowClasses(component);
-        int rowStyle = 0;
-        int rowStyles = rowClasses.length;
+        TableMetaInfo info = getMetaInfo(component);
+        int columnCount = info.columns.size();
         boolean open = false;
         int i = 0;
 
         // Render our children, starting a new row as needed
-        writer.startElement("tbody", component);
-        writer.writeText("\n", component, null);
+        renderTableBodyStart(component, writer);
         for (Iterator<UIComponent> kids = getChildren(component);
              kids.hasNext();) {
             UIComponent child = kids.next();
-            if ((i % columns) == 0) {
+            if (!child.isRendered()) {
+                continue;
+            }
+            if ((i % columnCount) == 0) {
                 if (open) {
-                    writer.endElement("tr");
-                    writer.writeText("\n", component, null);
+                    renderRowEnd(component, writer);
                     open = false;
                 }
-                writer.startElement("tr", component);
-                if (rowStyles > 0) {
-                    writer.writeAttribute("class", rowClasses[rowStyle++],
-                                          "rowClasses");
-                    if (rowStyle >= rowStyles) {
-                        rowStyle = 0;
-                    }
-                }
-                writer.writeText("\n", component, null);
+                renderRowStart(component, writer);
                 open = true;
-                columnStyle = 0;
+                info.columnStyleCounter = 0;
             }
-            writer.startElement("td", component);
-            if (columnStyles > 0) {
-                try {
-                    writer.writeAttribute("class",
-                                          columnClasses[columnStyle++],
-                                          "columns");
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    // why is this here?
-                }
-                if (columnStyle >= columnStyles) {
-                    columnStyle = 0;
-                }
-            }
-            encodeRecursive(context, child);
-            writer.endElement("td");
-            writer.writeText("\n", component, null);
+            renderRow(context, component, child, writer);
             i++;
         }
         if (open) {
-            writer.endElement("tr");
-            writer.writeText("\n", component, null);
+           renderRowEnd(component, writer);
         }
-        writer.endElement("tbody");
-        writer.writeText("\n", component, null);
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "End encoding children " + component.getId());
-        }
-
+        renderTableBodyEnd(component, writer);
     }
 
 
+    @Override
     public void encodeEnd(FacesContext context, UIComponent component)
           throws IOException {
 
-        if (context == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(
-                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
-                                                         "component"));
-        }
-        // suppress rendering if "rendered" property on the component is
-        // false.
-        if (!component.isRendered()) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("End encoding component " +
-                            component.getId() + " since " +
-                            "rendered attribute is set to false ");
-            }
+        rendererParamsNotNull(context, component);
+
+        if (!shouldEncode(component)) {
             return;
         }
+
         // Render the ending of this panel
-        ResponseWriter writer = context.getResponseWriter();
-        writer.endElement("table");
-        writer.writeText("\n", component, null);
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,
-                       "End encoding component " + component.getId());
-        }
+        renderTableEnd(component, context.getResponseWriter());
 
     }
 
 
+    @Override
     public boolean getRendersChildren() {
 
         return true;
 
     }
 
-    // --------------------------------------------------------- Private Methods
+
+    // ------------------------------------------------------- Protected Methods
 
 
-    /**
-     * @param component the UIComponent of interest
-     *
-     * @return an array of stylesheet classes to be applied to
-     *  each column in the list in the order specified. Every column may or
-     *  may not have a stylesheet.
-     */
-    private String[] getColumnClasses(UIComponent component) {
+    protected void renderRow(FacesContext context,
+                             UIComponent table,
+                             UIComponent child,
+                             ResponseWriter writer)
+    throws IOException {
 
-        String values = (String) component.getAttributes().get("columnClasses");
-        if (values == null) {
-            return (new String[0]);
+        TableMetaInfo info = getMetaInfo(table);
+        writer.startElement("td", table);
+        if (info.columnClasses.length > 0) {
+            writer.writeAttribute("class",
+                                  info.getCurrentColumnStyle(),
+                                  "columns");
         }
-        values = values.trim();
-        ArrayList<String> list = new ArrayList<String>();
-        while (values.length() > 0) {
-            int comma = values.indexOf(",");
-            if (comma >= 0) {
-                list.add(values.substring(0, comma).trim());
-                values = values.substring(comma + 1);
-            } else {
-                list.add(values.trim());
-                values = "";
-            }
-        }
-        String results[] = new String[list.size()];
-        return (list.toArray(results));
+        encodeRecursive(context, child);
+        writer.endElement("td");
+        writer.writeText("\n", table, null);
 
     }
 
 
-    /**
-     * @param component the UIComponent of interest
-     *
-     * @return the number of columns of the grid converting the value
-     * specified to int if necessary.
-     */
-    private int getColumnCount(UIComponent component) {
+    protected void renderHeader(FacesContext context,
+                                UIComponent table,
+                                ResponseWriter writer) throws IOException {
 
-        int count;
-        Object value = component.getAttributes().get("columns");
-        if ((value != null) && (value instanceof Integer)) {
-            count = ((Integer) value);
-        } else {
-            count = 2;
+        TableMetaInfo info = getMetaInfo(table);
+        UIComponent header = getFacet(table, "header");
+        String headerClass =
+              (String) table.getAttributes().get("headerClass");
+        if (header != null) {
+            writer.startElement("thead", table);
+            writer.writeText("\n", table, null);
+            writer.startElement("tr", header);
+            writer.startElement("th", header);
+            if (headerClass != null) {
+                writer.writeAttribute("class", headerClass, "headerClass");
+            }
+            writer.writeAttribute("colspan",
+                                  String.valueOf(info.columns.size()),
+                                  null);
+            writer.writeAttribute("scope", "colgroup", null);
+            encodeRecursive(context, header);
+            writer.endElement("th");
+            writer.endElement("tr");
+            writer.writeText("\n", table, null);
+            writer.endElement("thead");
+            writer.writeText("\n", table, null);
         }
-        if (count < 1) {
-            count = 1;
-        }
-        return (count);
 
     }
 
 
-    /**
-     * @param component the UIComponent of interest
-     *
-     * @return an array of stylesheet classes to be applied to
-     * each row in the list in the order specified. Every row may or
-     * may not have a stylesheet.
-     */
-    private String[] getRowClasses(UIComponent component) {
+    protected void renderFooter(FacesContext context,
+                                UIComponent table,
+                                ResponseWriter writer) throws IOException {
 
-        String values = (String) component.getAttributes().get("rowClasses");
-        if (values == null) {
-            return (new String[0]);
-        }
-        values = values.trim();
-        ArrayList<String> list = new ArrayList<String>();
-        while (values.length() > 0) {
-            int comma = values.indexOf(',');
-            if (comma >= 0) {
-                list.add(values.substring(0, comma).trim());
-                values = values.substring(comma + 1);
-            } else {
-                list.add(values.trim());
-                values = "";
+        TableMetaInfo info = getMetaInfo(table);
+        UIComponent footer = getFacet(table, "footer");
+        String footerClass =
+              (String) table.getAttributes().get("footerClass");
+        if (footer != null) {
+            writer.startElement("tfoot", table);
+            writer.writeText("\n", table, null);
+            writer.startElement("tr", footer);
+            writer.startElement("td", footer);
+            if (footerClass != null) {
+                writer.writeAttribute("class", footerClass, "footerClass");
             }
+            writer.writeAttribute("colspan",
+                                  String.valueOf(info.columns.size()),
+                                  null);
+            encodeRecursive(context, footer);
+            writer.endElement("td");
+            writer.endElement("tr");
+            writer.writeText("\n", table, null);
+            writer.endElement("tfoot");
+            writer.writeText("\n", table, null);
         }
-        String results[] = new String[list.size()];
-        return (list.toArray(results));
-
+        
     }
 
 }
