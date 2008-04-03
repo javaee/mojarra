@@ -48,7 +48,7 @@
 
     <xsd:annotation>
         <xsd:documentation>
-            $Id: web-facesconfig_1_2.xsd,v 1.14 2007/06/18 20:55:26 rogerk Exp $
+            $Id: web-facesconfig_1_2.xsd,v 1.15 2008/03/26 17:46:42 rlubke Exp $
         </xsd:documentation>
     </xsd:annotation>
 
@@ -1122,7 +1122,7 @@
         </xsd:annotation>
 
         <xsd:restriction base="xsd:string">
-            <xsd:pattern value="[a-z]{2}(_|-)?([\p{L}\-\p{Nd}]{2})?"/>
+            <xsd:pattern value="([a-z]{2})[_|\-]?([\p{L}]{2})?[_|\-]?(\w+)?"/>
         </xsd:restriction>
   </xsd:simpleType>
 
