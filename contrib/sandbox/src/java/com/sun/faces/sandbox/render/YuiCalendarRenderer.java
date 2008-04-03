@@ -227,7 +227,7 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
         renderSupportingMarkup(context, writer, component);
         writer.startElement("script", component);
         writer.writeAttribute("type", "text/javascript", "style");
-        writer.writeText(javaScript, null);
+        writer.writeText("YAHOO.util.Event.onContentReady('"+ component.getId() +"Container', function() {" + javaScript + "});", null);
         writer.endElement("script");
     }
     

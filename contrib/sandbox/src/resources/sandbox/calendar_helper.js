@@ -49,8 +49,9 @@ SANDBOX.Calendar = function(divId, trigger, daySelectId, monthSelectId, yearSele
     var pos = YAHOO.util.Dom.getXY(trigger);
     var img_height = 20; 
     var elem = YAHOO.util.Dom.get(divId);
+    pos[1] += img_height;
 
-    elem.style.top  = pos[1] + img_height + "px";
+    elem.style.top  = pos[1] + "px";
     elem.style.left = pos[0] + "px";
     elem.style.position = 'absolute';
 

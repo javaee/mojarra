@@ -48,6 +48,10 @@
         <param-value>true</param-value>
     </context-param>
     <context-param>
+        <param-name>org.apache.shale.remoting.CLASS_RESOURCES_INCLUDES</param-name>
+        <param-value>*.css,*.gif,*.html,*.jpg,*.js,*.png,*.txt,*.xml,*.htm</param-value>
+    </context-param>
+    <context-param>
         <param-name>com.sun.faces.sandbox.urlPatterns</param-name>
         <param-value>
             prettyUrl.xhtml=/example1/#{testBean.queryStringValue}

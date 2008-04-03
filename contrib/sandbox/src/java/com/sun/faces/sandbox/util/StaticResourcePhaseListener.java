@@ -83,7 +83,7 @@ public class StaticResourcePhaseListener implements PhaseListener {
 
     public void beforePhase(PhaseEvent e) {
         if (e.getPhaseId() == PhaseId.RESTORE_VIEW) {
-            FacesContext context = FacesContext.getCurrentInstance();
+            FacesContext context = e.getFacesContext();
             HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
             String uri = request.getRequestURI();
             if ((uri != null) && (uri.indexOf(Util.STATIC_RESOURCE_IDENTIFIER) > -1)){

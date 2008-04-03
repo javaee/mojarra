@@ -110,7 +110,7 @@ public abstract class BaseApplet extends JApplet {
             HttpClient client = new HttpClient();
             PostMethod postMethod = new PostMethod(uploadUrl);
             postMethod.setRequestHeader("Cookie", "JSESSIONID=" + sessionId);
-            List<Part> parts = new ArrayList(); 
+            List<Part> parts = new ArrayList<Part>(); 
             for (File file : files) {
                 parts.add(new FilePart(file.getName(), file));
             }

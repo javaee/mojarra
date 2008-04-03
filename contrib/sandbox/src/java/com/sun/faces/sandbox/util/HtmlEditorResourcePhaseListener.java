@@ -3,8 +3,6 @@ package com.sun.faces.sandbox.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -18,9 +16,8 @@ public class HtmlEditorResourcePhaseListener extends StaticResourcePhaseListener
     private static final long serialVersionUID = 1L;
     private static String URL_PREFIX = "/htmlEditorResources";
 
-    public static String generateUrl(String resource) {
+    public static String generateUrl(FacesContext context, String resource) {
         String uri = "";
-        FacesContext context = FacesContext.getCurrentInstance();
         String mapping = Util.getFacesMapping(context);
         if (Util.isPrefixMapped(mapping)) {
             uri = "/" + mapping + URL_PREFIX + resource;
@@ -32,7 +29,6 @@ public class HtmlEditorResourcePhaseListener extends StaticResourcePhaseListener
     }
 
     public static void renderHtmlEditorJavascript(FacesContext context, ResponseWriter writer, UIComponent comp) throws IOException {
-//      TinyMCE_Engine.prototype.JSF_SUFFIX_MAPPING = ".jsf";
         String mapping = Util.getFacesMapping(context);
         writer.startElement("script", comp);
         writer.write("TinyMCE_Engine.prototype.JSF_MAPPING = '" + mapping + "';");
@@ -50,7 +46,7 @@ public class HtmlEditorResourcePhaseListener extends StaticResourcePhaseListener
 
     public void beforePhase(PhaseEvent event) {
         if (event.getPhaseId() == PhaseId.RESTORE_VIEW) { 
-            FacesContext context = FacesContext.getCurrentInstance();
+            FacesContext context = event.getFacesContext();
             HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
             String uri = request.getRequestURI();
             if ((uri != null) && (uri.indexOf(URL_PREFIX) > -1)){
@@ -101,7 +97,7 @@ public class HtmlEditorResourcePhaseListener extends StaticResourcePhaseListener
                      */
                     if ("text/html".equals(mimeType) || "text/css".equals(mimeType) || "text/javascript".equals(mimeType)) {
                         String text = Util.readInString(is);
-                        text = processUrls(text);
+                        text = processUrls(context, text);
                         os.write(text.getBytes());
                     } else {
                         super.processFile(context, fileName, response, mimeType);
@@ -118,17 +114,7 @@ public class HtmlEditorResourcePhaseListener extends StaticResourcePhaseListener
         }
     }
 
-    protected String processUrls(String text) {
-        /*
-        Pattern p = Pattern.compile("(\\{S\\}(.?)\\{E\\})+");
-        Matcher m = p.matcher(text);
-
-        text = m.replaceAll("test");
-        for (int i = 0; i < m.groupCount(); i++) {
-            System.out.println (m.group(i));
-        }
-        text = text.replace("\\{S\\}(.*?)\\{E\\}", text);
-         */
+    protected String processUrls(FacesContext context, String text) {
         StringBuffer buf = new StringBuffer(text.length());
         int start = text.indexOf("{S}");
         int end = -1;
@@ -137,7 +123,7 @@ public class HtmlEditorResourcePhaseListener extends StaticResourcePhaseListener
             while (start != -1) {
                 end = text.indexOf("{E}", start+3);
                 if (end > -1) {
-                    buf.append(generateUrl(text.substring(start+3, end)));
+                    buf.append(generateUrl(context, text.substring(start+3, end)));
                     start = text.indexOf("{S}", end+3);
                     if (start > -1) {
                         buf.append(text.substring(end+3, start));
@@ -152,15 +138,5 @@ public class HtmlEditorResourcePhaseListener extends StaticResourcePhaseListener
        }
         
        return text;
-    }
-
-    public static void main (String... args) {
-        HtmlEditorResourcePhaseListener l = new HtmlEditorResourcePhaseListener();
-        String text =
-            "<script language=\"javascript\" type=\"text/javascript\" src=\"{S}tiny_mce_popup.js{E}\"></script>" +
-            "<script language=\"javascript\" type=\"text/javascript\" src=\"{S}utils/mctabs.js{E}\"></script>" +
-            "<script language=\"javascript\" type=\"text/javascript\" src=\"{S}utils/form_utils.js{E}\"></script>" +
-            "<script language=\"javascript\" type=\"text/javascript\" src=\"{S}themes/advanced/jscripts/link.js{E}\"></script>";
-        System.out.println(l.processUrls (text));
     }
 }
