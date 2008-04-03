@@ -1,5 +1,5 @@
 /*
- * $Id: Phase.java,v 1.12 2007/08/24 16:20:33 rlubke Exp $
+ * $Id: Phase.java,v 1.13 2007/08/28 06:06:15 rlubke Exp $
  */
 
 /*
@@ -40,10 +40,7 @@
 
 package com.sun.faces.lifecycle;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.ListIterator;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -70,7 +67,6 @@ public abstract class Phase {
 
 
     private static Logger LOGGER = FacesLogger.LIFECYCLE.getLogger();
-    private CopyOnWriteArrayList<PhaseListener> listeners;
 
 
     // ---------------------------------------------------------- Public Methods
@@ -82,11 +78,12 @@ public abstract class Phase {
      * @param context the FacesContext for the current request
      * @param lifecycle the lifecycle for this request
      */
-    public void doPhase(FacesContext context, Lifecycle lifecycle) {
-        
-        ListIterator<PhaseListener> i = getPhaseListeners().listIterator();
+    public void doPhase(FacesContext context,
+                        Lifecycle lifecycle,
+                        ListIterator<PhaseListener> listeners) {
+
         PhaseEvent event = null;
-        if (i.hasNext()) {
+        if (listeners.hasNext()) {
             event = new PhaseEvent(context, this.getId(), lifecycle);
         }
 
@@ -96,7 +93,7 @@ public abstract class Phase {
             timer.startTiming();
         }
 
-        handleBeforePhase(context, i, event);
+        handleBeforePhase(context, listeners, event);
         Exception ex = null;
         try {
             if (!shouldSkip(context)) {
@@ -114,7 +111,7 @@ public abstract class Phase {
 
             ex = e;
         } finally {
-            handleAfterPhase(context, i, event);
+            handleAfterPhase(context, listeners, event);
             
             // stop timing
             if (timer != null) {
@@ -156,73 +153,6 @@ public abstract class Phase {
     public abstract PhaseId getId();
 
 
-    /**
-     * Add a phase listener for this <code>Phase</code> <em>if</em> the Listener
-     * is appropriate for this <code>Phase</code> or if the Listener wishes to
-     * be invoked in <code>PhaseId.ANY_PHASE</code>.
-     *
-     * @param listener the listener to add
-     */
-    public void addPhaseListener(PhaseListener listener) {
-        if (this.getId().equals(listener.getPhaseId()) ||
-            PhaseId.ANY_PHASE.equals(listener.getPhaseId())) {
-
-            if (listeners == null) {
-                listeners = new CopyOnWriteArrayList<PhaseListener>();
-            }
-
-            if (listeners.contains(listener)) {
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE,
-                               "jsf.lifecycle.duplicate_phase_listener_detected",
-                               listener.getClass().getName());
-                }
-            } else {
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE,
-                               "addPhaseListener({0},{1})",
-                               new Object[] {
-                                   this.getId().toString(),
-                                   listener.getClass().getName() });
-                }
-                listeners.add(listener);
-            }
-        }
-    }
-
-    /**
-     * @return all <code>PhaseListener</code>s registered to this
-     * <code>Phase</code>.
-     */
-    public List<PhaseListener> getPhaseListeners() {
-
-        if (listeners == null) {
-            return Collections.emptyList();
-        } else {
-            return listeners;
-        }
-        
-    }
-
-    /**
-     * Remove the specified listener if it exists.
-     * @param listener the <code>PhaseListener</code> to remove
-     */
-    public void removePhaseListener(PhaseListener listener) {
-
-        if (listeners != null) {
-
-            if (listeners.remove(listener) && LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE,
-                           "removePhaseListener({0},{1})",
-                           new Object[] { this.getId().toString(),
-                                          listener.getClass().getName() });
-            }
-        }
-
-    }
-
-
     // ------------------------------------------------------- Protected Methods
 
 
@@ -236,28 +166,32 @@ public abstract class Phase {
     protected void handleAfterPhase(FacesContext context,
                                     ListIterator<PhaseListener> listenersIterator,
                                     PhaseEvent event) {
-        // Notify the "afterPhase" method of interested listeners
-        // (descending)
+               
         while (listenersIterator.hasPrevious()) {
             PhaseListener listener = listenersIterator.previous();
-            try {
-                listener.afterPhase(event);
-            } catch (Exception e) {
-                if (LOGGER.isLoggable(Level.WARNING)) {
-                    LOGGER.log(Level.WARNING,
-                               "jsf.lifecycle.phaselistener.exception",
-                               new Object[]{
-                                     listener.getClass().getName() + ".afterPhase()",
-                                     this.getId().toString(),
-                                     ((context.getViewRoot() != null)
-                                      ? context.getViewRoot().getViewId()
-                                      : ""),
-                                     e});
-                    LOGGER.warning(Util.getStackTraceString(e));
-                    return;
+            if (this.getId().equals(listener.getPhaseId()) ||
+                PhaseId.ANY_PHASE.equals(listener.getPhaseId())) {
+                try {
+                    listener.afterPhase(event);
+                } catch (Exception e) {
+                    if (LOGGER.isLoggable(Level.WARNING)) {
+                        LOGGER.log(Level.WARNING,
+                                   "jsf.lifecycle.phaselistener.exception",
+                                   new Object[]{
+                                         listener.getClass().getName()
+                                         + ".afterPhase()",
+                                         this.getId().toString(),
+                                         ((context.getViewRoot() != null)
+                                          ? context.getViewRoot().getViewId()
+                                          : ""),
+                                         e});
+                        LOGGER.warning(Util.getStackTraceString(e));
+                        return;
+                    }
                 }
             }
         }
+
     }
 
 
@@ -268,34 +202,40 @@ public abstract class Phase {
      *  to be invoked
      * @param event the event to pass to each of the invoked listeners
      */
-    protected void handleBeforePhase(FacesContext context,
-                                     ListIterator<PhaseListener> listenersIterator,
-                                     PhaseEvent event) {
-        while (listenersIterator.hasNext()) {
-            PhaseListener listener = listenersIterator.next();
-            try {
-                listener.beforePhase(event);
-            } catch (Exception e) {
-                if (LOGGER.isLoggable(Level.WARNING)) {
-                    LOGGER.log(Level.WARNING,
-                               "jsf.lifecycle.phaselistener.exception",
-                               new Object[]{
-                                     listener.getClass().getName() + ".beforePhase()",
-                                     this.getId().toString(),
-                                     ((context.getViewRoot() != null)
-                                      ? context.getViewRoot().getViewId()
-                                      : ""),
-                                     e});
-                    LOGGER.warning(Util.getStackTraceString(e));
-                }
-                // move the iterator pointer back one
-                if (listenersIterator.hasPrevious()) {
-                    listenersIterator.previous();
-                }
-                return;
-            }
-        }
-    }
+     protected void handleBeforePhase(FacesContext context,
+                                      ListIterator<PhaseListener> listenersIterator,
+                                      PhaseEvent event) {
+
+         while (listenersIterator.hasNext()) {
+             PhaseListener listener = listenersIterator.next();
+             if (this.getId().equals(listener.getPhaseId()) ||
+                 PhaseId.ANY_PHASE.equals(listener.getPhaseId())) {
+                 try {
+                     listener.beforePhase(event);
+                 } catch (Exception e) {
+                     if (LOGGER.isLoggable(Level.WARNING)) {
+                         LOGGER.log(Level.WARNING,
+                                    "jsf.lifecycle.phaselistener.exception",
+                                    new Object[]{
+                                          listener.getClass().getName()
+                                          + ".beforePhase()",
+                                          this.getId().toString(),
+                                          ((context.getViewRoot() != null)
+                                           ? context.getViewRoot().getViewId()
+                                           : ""),
+                                          e});
+                         LOGGER.warning(Util.getStackTraceString(e));
+                     }
+                     // move the iterator pointer back one
+                     if (listenersIterator.hasPrevious()) {
+                         listenersIterator.previous();
+                     }
+                     return;
+                 }
+             }
+         }
+
+     }
 
 
     // --------------------------------------------------------- Private Methods

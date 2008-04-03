@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.51 2007/08/23 21:42:39 rlubke Exp $
+ * $Id: RestoreViewPhase.java,v 1.52 2007/08/28 06:06:15 rlubke Exp $
  */
 
 /*
@@ -42,37 +42,39 @@
 
 package com.sun.faces.lifecycle;
 
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.config.JSFVersionTracker;
-import com.sun.faces.config.JSFVersionTracker.Version;
-import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.util.DebugUtil;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.FacesLogger;
+import java.util.Iterator;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
-import javax.faces.lifecycle.Lifecycle;
 import javax.faces.application.ViewExpiredException;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
+import javax.faces.event.PhaseListener;
+import javax.faces.lifecycle.Lifecycle;
 import javax.faces.render.ResponseStateManager;
 import javax.servlet.http.HttpServletRequest;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.config.JSFVersionTracker;
+import com.sun.faces.config.JSFVersionTracker.Version;
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.DebugUtil;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
 
 /**
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.51 2007/08/23 21:42:39 rlubke Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.52 2007/08/28 06:06:15 rlubke Exp $
  */
 
 public class RestoreViewPhase extends Phase {
@@ -94,10 +96,12 @@ public class RestoreViewPhase extends Phase {
     }
 
 
-    public void doPhase(FacesContext context, Lifecycle lifecycle) {
+    public void doPhase(FacesContext context,
+                        Lifecycle lifecycle,
+                        ListIterator<PhaseListener> listeners) {
 
         Util.getViewHandler(context).initView(context);
-        super.doPhase(context, lifecycle);
+        super.doPhase(context, lifecycle, listeners);
 
     }
 

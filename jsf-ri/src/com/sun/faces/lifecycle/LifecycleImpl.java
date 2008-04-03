@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.83 2007/08/23 21:42:38 rlubke Exp $
+ * $Id: LifecycleImpl.java,v 1.84 2007/08/28 06:06:14 rlubke Exp $
  */
 
 /*
@@ -40,8 +40,8 @@
 
 package com.sun.faces.lifecycle;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -86,6 +86,10 @@ public class LifecycleImpl extends Lifecycle {
         response
     };
 
+    // List for registered PhaseListeners
+    private List<PhaseListener> listeners =
+          new CopyOnWriteArrayList<PhaseListener>();
+
         
 
     // ------------------------------------------------------- Lifecycle Methods
@@ -111,7 +115,7 @@ public class LifecycleImpl extends Lifecycle {
                 break;
             }
 
-            phases[i].doPhase(context, this);
+            phases[i].doPhase(context, this, listeners.listIterator());
 
         }
 
@@ -132,7 +136,7 @@ public class LifecycleImpl extends Lifecycle {
         }
 
         if (!context.getResponseComplete()) {
-            response.doPhase(context, this);
+            response.doPhase(context, this, listeners.listIterator());
         }
 
     }
@@ -143,12 +147,29 @@ public class LifecycleImpl extends Lifecycle {
 
         if (listener == null) {
             throw new NullPointerException
-                (MessageUtils.getExceptionMessageString
-                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "listener"));
+                  (MessageUtils.getExceptionMessageString
+                        (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "listener"));
         }
 
-        for (int i = 1, len = phases.length; i < len; i++) {
-            phases[i].addPhaseListener(listener);
+        if (listeners == null) {
+            listeners = new CopyOnWriteArrayList<PhaseListener>();
+        }
+
+        if (listeners.contains(listener)) {
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE,
+                           "jsf.lifecycle.duplicate_phase_listener_detected",
+                           listener.getClass().getName());
+            }
+        } else {
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE,
+                           "addPhaseListener({0},{1})",
+                           new Object[]{
+                                 listener.getPhaseId().toString(),
+                                 listener.getClass().getName()});
+            }
+            listeners.add(listener);
         }
 
     }
@@ -157,15 +178,7 @@ public class LifecycleImpl extends Lifecycle {
     // Return the set of PhaseListeners that have been registered
     public PhaseListener[] getPhaseListeners() {
 
-        // use a Set here to avoid ANY_PHASE duplicates
-        Set<PhaseListener> ret = new HashSet<PhaseListener>();
-        for (int i = 1, len = phases.length; i < len; i++) {
-            for (PhaseListener pl : phases[i].getPhaseListeners()) {
-                ret.add(pl);
-            }            
-        }
-
-        return ret.toArray(new PhaseListener[ret.size()]);
+        return listeners.toArray(new PhaseListener[listeners.size()]);
 
     }
 
@@ -177,10 +190,12 @@ public class LifecycleImpl extends Lifecycle {
             throw new NullPointerException
                   (MessageUtils.getExceptionMessageString
                         (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "listener"));
-        }       
+        }
 
-        for (int i = 1, len = phases.length; i < len; i++) {
-            phases[i].removePhaseListener(listener);
+        if (listeners.remove(listener) && LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.log(Level.FINE,
+                       "removePhaseListener({0})",
+                       new Object[]{listener.getClass().getName()});
         }
 
     }
