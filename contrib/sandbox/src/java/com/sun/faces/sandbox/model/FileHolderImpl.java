@@ -59,14 +59,7 @@ public class FileHolderImpl implements FileHolder {
 
     public void clearFiles() {
         for (InputStream is : files.values()) {
-            if (is != null) {
-                try {
-                    is.close();
-                    is = null;
-                } catch (IOException ioe) {
-                    //
-                }
-            }
+            closeInputStream(is);
         }
         files.clear();
     }
@@ -82,6 +75,18 @@ public class FileHolderImpl implements FileHolder {
     }
     
     public void removeFile(String fileName) {
+        closeInputStream(files.get(fileName));
+        
         files.remove(fileName);
+    }
+    
+    protected void closeInputStream (InputStream is) {
+        if (is != null) {
+            try {
+                is.close();
+            } catch (IOException ioe) {
+                //  Just let it go...
+            }
+        }
     }
 }
