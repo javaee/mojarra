@@ -1,5 +1,5 @@
 /*
- * $Id: TreeStructure.java,v 1.2 2007/04/27 22:02:11 ofung Exp $
+ * $Id: TreeStructure.java,v 1.3 2008/01/28 20:55:38 rlubke Exp $
  */
 
 /*
@@ -68,7 +68,7 @@ public class TreeStructure implements java.io.Serializable {
 
 
     public TreeStructure(UIComponent component) {
-        Util.parameterNonNull(component);
+        Util.notNull("component", component);
         this.id = component.getId();
         className = component.getClass().getName();
     }
@@ -113,7 +113,7 @@ public class TreeStructure implements java.io.Serializable {
      * Adds treeStruct as a child of this TreeStructure instance.
      */
     public void addChild(TreeStructure treeStruct) {
-        Util.parameterNonNull(treeStruct);
+        Util.notNull("treeStruct", treeStruct);
         if (children == null) {
             children = new ArrayList<TreeStructure>();
         }
@@ -125,8 +125,8 @@ public class TreeStructure implements java.io.Serializable {
      * Adds treeStruct as a facet belonging to this TreeStructure instance.
      */
     public void addFacet(String facetName, TreeStructure treeStruct) {
-        Util.parameterNonNull(facetName);
-        Util.parameterNonNull(treeStruct);
+        Util.notNull("facetName", facetName);
+        Util.notNull("treeStruct", treeStruct);
         if (facets == null) {
             facets = new HashMap<String, TreeStructure>();
         }
@@ -139,7 +139,7 @@ public class TreeStructure implements java.io.Serializable {
      * the facet list
      */
     public TreeStructure getTreeStructureForFacet(String facetName) {
-        Util.parameterNonNull(facetName);
+        Util.notNull("facetName", facetName);
         if (facets != null) {
             return ((facets.get(facetName)));
         } else {

@@ -1,0 +1,167 @@
+/*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ *
+ * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ *
+ * The contents of this file are subject to the terms of either the GNU
+ * General Public License Version 2 only ("GPL") or the Common Development
+ * and Distribution License("CDDL") (collectively, the "License").  You
+ * may not use this file except in compliance with the License. You can obtain
+ * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
+ * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
+ * language governing permissions and limitations under the License.
+ *
+ * When distributing the software, include this License Header Notice in each
+ * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
+ * Sun designates this particular file as subject to the "Classpath" exception
+ * as provided by Sun in the GPL Version 2 section of the License file that
+ * accompanied this code.  If applicable, add the following below the License
+ * Header, with the fields enclosed by brackets [] replaced by your own
+ * identifying information: "Portions Copyrighted [year]
+ * [name of copyright owner]"
+ *
+ * Contributor(s):
+ *
+ * If you wish your version of this file to be governed by only the CDDL or
+ * only the GPL Version 2, indicate your decision by adding "[Contributor]
+ * elects to include this software in this distribution under the [CDDL or GPL
+ * Version 2] license."  If you don't indicate a single choice of license, a
+ * recipient has the option to distribute your version of this file under
+ * either the CDDL, the GPL Version 2 or to extend the choice of license to
+ * its licensees as provided above.  However, if you add GPL Version 2 code
+ * and therefore, elected the GPL Version 2 license, then the option applies
+ * only if the new code is made subject to such option by the copyright
+ * holder.
+ */
+
+
+package javax.faces.application;
+
+/**
+ * <p class="changed_added_2_0">This class enables a feature similar to the <code><a target="_"
+ * href="http://wiki.rubyonrails.org/rails/pages/Environments">RAILS_ENV</a></code>
+ * feature of the Ruby on Rails web framework.  The constants in this
+ * class represent the current state of the running application in a
+ * typical product development lifecycle.  The value of this state may
+ * be queried at any time after application startup by calling {@link
+ * Application#getProjectStage}.</p>
+ * <div class="changed_added_2_0">
+ * <strong>Setting the value to be returned by
+ * <code>Application.getProjectStage()</code></strong>
+ *
+ * <p>This value is immutable at runtime and is configured by a
+ * <code>context-param</code>.  The value of <code>param-name</code> is
+ * the value of the {@link #PROJECT_STAGE_PARAM_NAME} constant in this class.  The are
+ * two kinds of valid values for <code>param-value</code>.</p>
+ *
+ * <ol>
+ *
+ * <li><p>The constants: the java language identifiers of the
+ * enum members of this class, capitalized exactly as they appear in
+ * this file.</p>
+ *
+ * <p>For example:</p>
+ * <pre><code>
+ * &lt;context-param&gt;
+ * &lt;param-name&gt;javax.faces.application.ProjectStage&lt;/param-name&gt;
+ * &lt;param-value&gt;UnitTest&lt;/param-value&gt;
+ * &lt;/context-param&gt;
+ * </code></pre>
+ *
+ * <p>In this case,
+ * <code>FacesContext.getCurrentInstance().getApplication().getProjectStage()</code>
+ * returns <code>ProjectStage.UnitTest</code>, the <code>toString()</code> for which must be <code>"UnitTest"</code></p>
+ *
+ * </li>
+ *
+ * <li><p>Every other string: Any string that is not one of the
+ * constants is represented as the enum member <code>Extension</code>.
+ * The <code>toString()</code> method of <code>Extension</code> must
+ * return the string value exactly as given in the
+ * <code>param-value</code> element.<p>
+ *
+ * <p>For example:</p>
+ * <pre><code>
+ * &lt;context-param&gt;
+ *  &lt;param-name&gt;javax.faces.application.PROJECT_STATEe&lt;/param-name&gt;
+ *  &lt;param-value&gt;Some special phase value&lt;/param-value&gt;
+ * &lt;/context-param&gt;
+ * </code></pre>
+ *
+ * <p>In this case,
+ * <code>FacesContext.getCurrentInstance().getApplication().getProjectStage()</code>
+ * returns <code>ProjectStage.Extension</code>, the <code>toString()</code> for which must be <code>"Some special phase value"</code></p>
+ *
+ * </li>
+ * </ol>
+ * </div>
+ *
+ * @since 2.0
+ */
+public enum ProjectStage {
+
+    /**
+     * This value indicates the currently running application is right
+     * now, at this moment, being developed.  This value will usually be
+     * set during iterative development.
+     */
+    Development,
+    /**
+     * This value indicates the currently running application is
+     * undergoing unit testing.
+     */
+    UnitTest,
+    /**
+     * This value indicates the currently running application is
+     * undergoing system testing.
+     */
+    SystemTest,
+    /**
+     * This value indicates the currently running application is
+     * deployed in production.
+     */
+    Production,
+    /**
+     * This value enables a minimal level of extensibility.  See
+     * {@link #toString} for details.
+     */
+    Extension;
+
+    /**
+     * The value of this constant is the value of the
+     * <code>param-name</code> for setting the current value to be
+     * returned by <code>Application.getProjectStage()</code>.
+     */
+    public static final String PROJECT_STAGE_PARAM_NAME =
+          "javax.faces.PROJECT_STAGE";
+
+    private String extensionName = "Extension";
+
+    /**
+     * <p>Specialized to account for an arbitrary product lifecycle
+     * phase value. If <code>this == Extension</code> return the value
+     * of the <code>extensionName</code> instance variable.  Otherwise,
+     * return <code>super.toString()</code>.</p>
+     */
+    @Override
+    public String toString() {
+        if (this == Extension) {
+            return this.extensionName;
+        }
+        return super.toString();
+    }
+
+    /**
+     * <p>Take the argument <code>extensionName</code>, and set it as
+     * the value of the <code>extensionName</code> instance variable of
+     * the <code>Extension</code> enum constant.  This enables
+     * customizing the value returned from {@link #toString}.  This
+     * method is only called by the runtime, during application startup,
+     * in the case where an arbitrary lifecycle phase is being
+     * assigned.</p>
+     */
+    public static ProjectStage getExtension(String extensionName) {
+        Extension.extensionName = extensionName;
+        return Extension;
+    }
+}

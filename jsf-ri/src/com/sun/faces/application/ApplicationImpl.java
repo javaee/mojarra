@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.97 2008/01/23 15:45:43 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.98 2008/01/28 20:55:39 rlubke Exp $
  */
 
 /*
@@ -70,6 +70,7 @@ import javax.faces.application.NavigationHandler;
 import javax.faces.application.ResourceHandler;
 import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
+import javax.faces.application.ProjectStage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -82,6 +83,8 @@ import javax.faces.event.ActionListener;
 import javax.faces.validator.Validator;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.el.ELUtils;
 import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.el.PropertyResolverImpl;
@@ -132,6 +135,7 @@ public class ApplicationImpl extends Application {
     // Relationship Instance Variables
 
     private ApplicationAssociate associate = null;
+    private ProjectStage projectStage;
 
     private volatile ActionListener actionListener = null;
     private volatile NavigationHandler navigationHandler = null;
@@ -286,7 +290,35 @@ public class ApplicationImpl extends Application {
         }
 
     }
-    
+
+
+    /**
+     * @see javax.faces.application.Application#getProjectStage() 
+     */
+    @Override
+    public ProjectStage getProjectStage() {
+        
+        if (projectStage == null) {
+            WebConfiguration webConfig =
+                  WebConfiguration.getInstance(
+                        FacesContext.getCurrentInstance().getExternalContext());
+            String value =
+                  webConfig.getOptionValue(WebContextInitParameter.JavaxFacesProjectStage);
+            if (value != null) {
+                try {
+                    projectStage = ProjectStage.valueOf(value);
+                } catch (IllegalArgumentException iae) {
+                    projectStage = ProjectStage.getExtension(value);
+                }
+            }
+            if (projectStage == null) {
+                projectStage = ProjectStage.Production;
+            }
+        }
+        return projectStage;
+
+    }
+
     public List<ELResolver> getApplicationELResolvers() {
         return elResolvers;
     }

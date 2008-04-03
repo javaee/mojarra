@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidatorTags.java,v 1.35 2007/04/27 22:02:10 ofung Exp $
+ * $Id: TestValidatorTags.java,v 1.36 2008/01/28 20:55:38 rlubke Exp $
  */
 
 /*
@@ -63,7 +63,7 @@ import org.apache.cactus.WebRequest;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValidatorTags.java,v 1.35 2007/04/27 22:02:10 ofung Exp $
+ * @version $Id: TestValidatorTags.java,v 1.36 2008/01/28 20:55:38 rlubke Exp $
  */
 
 public class TestValidatorTags extends JspFacesTestCase {
@@ -161,7 +161,6 @@ public class TestValidatorTags extends JspFacesTestCase {
 
 
     public void setUp() {
-        Util.setUnitTestModeEnabled(true);
         super.setUp();
     }
 
@@ -282,7 +281,6 @@ public class TestValidatorTags extends JspFacesTestCase {
              getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
         assertTrue(messages.hasNext());
 
-        Util.setUnitTestModeEnabled(false);
     }
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.218 2007/12/17 21:46:10 rlubke Exp $
+ * $Id: Util.java,v 1.219 2008/01/28 20:55:40 rlubke Exp $
  */
 
 /*
@@ -70,7 +70,7 @@ import java.util.regex.Pattern;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.218 2007/12/17 21:46:10 rlubke Exp $
+ * @version $Id: Util.java,v 1.219 2008/01/28 20:55:40 rlubke Exp $
  */
 
 public class Util {
@@ -82,21 +82,7 @@ public class Util {
     // README - make sure to add the message identifier constant
     // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution
     // parameters to test/com/sun/faces/util/TestUtil_messages (see comment there).
- 
-    // Loggers
-    public static final String RENDERKIT_LOGGER = ".renderkit";
-    public static final String TAGLIB_LOGGER = ".taglib";
-    public static final String APPLICATION_LOGGER = ".application";
-    public static final String CONTEXT_LOGGER = ".context";
-    public static final String CONFIG_LOGGER = ".config";
-    public static final String LIFECYCLE_LOGGER = ".lifecycle";
-    public static final String TIMING_LOGGER = ".timing";
 
-    /**
-     * Flag that, when true, enables special behavior in the RI to enable
-     * unit testing.
-     */
-    private static boolean unitTestModeEnabled = false;
 
     /**
      * Flag that enables/disables the core TLV.
@@ -173,13 +159,6 @@ public class Util {
 
     }
 
-    public static void setUnitTestModeEnabled(boolean enabled) {
-        unitTestModeEnabled = enabled;
-    }
-
-    public static boolean isUnitTestModeEnabled() {
-        return unitTestModeEnabled;
-    }
 
     public static void setCoreTLVActive(boolean active) {
         coreTLVEnabled = active;
@@ -410,20 +389,6 @@ public class Util {
         return result;
     }
 
-
-    public static void parameterNonNull(Object param) throws FacesException {
-        if (null == param) {
-            throw new FacesException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "param"));
-        }
-    }
-
-
-    public static void parameterNonEmpty(String param) throws FacesException {
-        if (null == param || 0 == param.length()) {
-            throw new FacesException(MessageUtils.getExceptionMessageString(MessageUtils.EMPTY_PARAMETER_ID));
-        }
-    }
 
     /**
      * <p>Leverage the Throwable.getStackTrace() method to produce a String

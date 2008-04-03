@@ -58,6 +58,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.MalformedURLException;
 
+import com.sun.faces.context.ApplicationMap;
+import com.sun.faces.context.InitParameterMap;
+
 /**
  * A special, minimal implementation of FacesContext used at application initialization time.
  * The ExternalContext returned by this FacesContext only exposes the ApplicationMap.
@@ -167,6 +170,7 @@ class InitFacesContext extends FacesContext {
 
         private ServletContext servletContext = null;
         private ApplicationMap applicationMap = null;
+        private InitParameterMap initMap = null;
 
         public ServletContextAdapter(ServletContext sc) {
             this.servletContext = sc;
@@ -210,11 +214,14 @@ class InitFacesContext extends FacesContext {
         }
 
         public String getInitParameter(String name) {
-            return null;
+            return servletContext.getInitParameter(name);
         }
 
-        public Map getInitParameterMap() {
-            return null;
+        public Map<String,String> getInitParameterMap() {
+            if (initMap == null) {
+                initMap = new InitParameterMap(servletContext);
+            }
+            return initMap;
         }
 
         public String getRemoteUser() {
@@ -234,16 +241,16 @@ class InitFacesContext extends FacesContext {
             return null;
         }
 
-        public Map<String, Object> getRequestCookieMap() {
+        public Map<String,Object> getRequestCookieMap() {
             return null;
         }
 
-        public Map<String, String> getRequestHeaderMap() {
+        public Map<String,String> getRequestHeaderMap() {
             return null;
         }
 
 
-        public Map<String, String[]> getRequestHeaderValuesMap() {
+        public Map<String,String[]> getRequestHeaderValuesMap() {
             return null;
         }
 
@@ -257,12 +264,12 @@ class InitFacesContext extends FacesContext {
         }
 
 
-        public Map<String, Object> getRequestMap() {
+        public Map<String,Object> getRequestMap() {
             return null;
         }
 
 
-        public Map<String, String> getRequestParameterMap() {
+        public Map<String,String> getRequestParameterMap() {
             return null;
         }
 
@@ -272,7 +279,7 @@ class InitFacesContext extends FacesContext {
         }
 
 
-        public Map<String, String[]> getRequestParameterValuesMap() {
+        public Map<String,String[]> getRequestParameterValuesMap() {
             return null;
         }
 
@@ -297,16 +304,17 @@ class InitFacesContext extends FacesContext {
         }
 
         public URL getResource(String path) throws MalformedURLException {
-            return null;
+            return servletContext.getResource(path);
         }
 
 
         public InputStream getResourceAsStream(String path) {
-            return null;
+            return servletContext.getResourceAsStream(path);
         }
 
         public Set<String> getResourcePaths(String path) {
-            return null;
+            //noinspection unchecked
+            return servletContext.getResourcePaths(path);
         }
 
         public Object getResponse() {
@@ -321,7 +329,7 @@ class InitFacesContext extends FacesContext {
             return null;
         }
 
-        public Map<String, Object> getSessionMap() {
+        public Map<String,Object> getSessionMap() {
             return null;
         }
 
@@ -334,9 +342,11 @@ class InitFacesContext extends FacesContext {
         }
 
         public void log(String message) {
+            servletContext.log(message);
         }
 
         public void log(String message, Throwable exception) {
+            servletContext.log(message, exception);
         }
 
         public void redirect(String url) throws IOException {
@@ -363,86 +373,4 @@ class InitFacesContext extends FacesContext {
 
     } // END ServletContextAdapter
 
-    static class ApplicationMap extends java.util.AbstractMap {
-
-        private final ServletContext servletContext;
-
-        ApplicationMap(ServletContext servletContext) {
-            this.servletContext = servletContext;
-        }
-
-        @Override
-        public Object get(Object key) {
-            if (key == null) {
-                throw new NullPointerException();
-            }
-            return servletContext.getAttribute(key.toString());
-        }
-
-
-        @Override
-        public Object put(Object key, Object value) {
-            if (key == null) {
-                throw new NullPointerException();
-            }
-            String keyString = key.toString();
-            Object result = servletContext.getAttribute(keyString);
-            servletContext.setAttribute(keyString, value);
-            return (result);
-        }
-
-
-        @Override
-        public Object remove(Object key) {
-            if (key == null) {
-                return null;
-            }
-            String keyString = key.toString();
-            Object result = servletContext.getAttribute(keyString);
-            servletContext.removeAttribute(keyString);
-            return (result);
-        }
-
-
-        public Set entrySet() {
-            throw new UnsupportedOperationException();
-        }
-
-
-        @Override
-        public boolean equals(Object obj) {
-            return !(obj == null || !(obj instanceof ApplicationMap))
-                    && super.equals(obj);
-        }
-
-
-        @Override
-        public int hashCode() {
-            int hashCode = 7 * servletContext.hashCode();
-            for (Object o : entrySet()) {
-                hashCode += o.hashCode();
-            }
-            return hashCode;
-        }
-
-
-        @Override
-        public void clear() {
-            throw new UnsupportedOperationException();
-        }
-
-
-        @Override
-        public void putAll(Map t) {
-            throw new UnsupportedOperationException();
-        }
-
-
-        @Override
-        public boolean containsKey(Object key) {
-            return (servletContext.getAttribute(key.toString()) != null);
-        }
-
-
-    } // END ApplicationMap
 }

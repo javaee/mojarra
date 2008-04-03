@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl.java,v 1.42 2007/04/27 22:02:08 ofung Exp $
+ * $Id: TestLifecycleImpl.java,v 1.43 2008/01/28 20:55:39 rlubke Exp $
  */
 
 /*
@@ -62,7 +62,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl.java,v 1.42 2007/04/27 22:02:08 ofung Exp $
+ * @version $Id: TestLifecycleImpl.java,v 1.43 2008/01/28 20:55:39 rlubke Exp $
  */
 
 public class TestLifecycleImpl extends JspFacesTestCase {
@@ -130,7 +130,6 @@ public class TestLifecycleImpl extends JspFacesTestCase {
 
 
     public void setUp() {
-        Util.setUnitTestModeEnabled(true);
         super.setUp();
 	FacesContext context = getFacesContext();
         UIViewRoot root = Util.getViewHandler(context).createView(context, null);

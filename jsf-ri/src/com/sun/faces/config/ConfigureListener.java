@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.117 2007/08/22 00:31:04 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.118 2008/01/28 20:55:37 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -59,6 +59,9 @@ import org.xml.sax.helpers.DefaultHandler;
 import javax.el.CompositeELResolver;
 import javax.el.ExpressionFactory;
 import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
+import javax.faces.application.ProjectStage;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextAttributeEvent;
@@ -397,7 +400,10 @@ public class ConfigureListener implements ServletRequestListener,
                 jspAppContext.addELResolver(compositeELResolverForJsp);
             }
             catch (IllegalStateException e) {
-                if (!Util.isUnitTestModeEnabled()) {
+                ApplicationFactory factory = (ApplicationFactory)
+                      FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+                Application app = factory.getApplication();
+                if (app.getProjectStage() != ProjectStage.UnitTest) {
                     throw e;
                 }
             }

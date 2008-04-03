@@ -1,5 +1,5 @@
 /*
- * $Id: WebConfiguration.java,v 1.36 2008/01/25 16:36:33 edburns Exp $
+ * $Id: WebConfiguration.java,v 1.37 2008/01/28 20:55:37 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -602,6 +602,10 @@ public class WebConfiguration {
         JavaxFacesConfigFiles(
               "javax.faces.CONFIG_FILES",
               ""
+        ),
+        JavaxFacesProjectStage(
+              "javax.faces.PROJECT_STAGE",
+              "Production"
         ),
         AlternateLifecycleId(
               "javax.faces.LIFECYCLE_ID",

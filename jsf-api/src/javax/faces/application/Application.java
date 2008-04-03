@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.55 2008/01/24 00:14:03 rlubke Exp $
+ * $Id: Application.java,v 1.56 2008/01/28 20:55:36 rlubke Exp $
  */
 
 /*
@@ -271,7 +271,7 @@ public abstract class Application {
      */
     public ResourceHandler getResourceHandler() {
 
-        Application app = getRIApplicationImpl();
+        Application app = getDefaultApplicationImpl();
         if (app != null) {
             return app.getResourceHandler();
         }
@@ -298,7 +298,7 @@ public abstract class Application {
      */
     public void setResourceHandler(ResourceHandler resourceHandler) {
 
-        Application app = getRIApplicationImpl();
+        Application app = getDefaultApplicationImpl();
         if (app != null) {
             app.setResourceHandler(resourceHandler);
         }
@@ -306,8 +306,6 @@ public abstract class Application {
         throw new UnsupportedOperationException();
         
     }
-
-    
 
 
     /**
@@ -383,7 +381,7 @@ public abstract class Application {
      */
     
     public ResourceBundle getResourceBundle(FacesContext ctx, String name) {
-        Application app = getRIApplicationImpl(ctx);
+        Application app = getDefaultApplicationImpl(ctx);
         if (app != null) {
             //noinspection TailRecursion
             return app.getResourceBundle(ctx, name);
@@ -391,7 +389,47 @@ public abstract class Application {
         
         throw new UnsupportedOperationException();
     }
-    
+
+
+    /**
+     * <p class="changed_added_2_0">Return the product lifecycle phase for the currently running
+     * application instance.  The default value is {@link
+     * ProjectStage#Production}</p>
+     * <div class="changed_added_2_0">
+     * <p>The implementation of this method must perform the following
+     * algorithm or an equivalent with the same end result to determine
+     * the value to return.</p>
+     * <ul>
+     *
+     * <p>If the value has already been determined by a previous call to
+     * this method, simply return that value.</p>
+     *
+     * <p>Look for an entry in the <code>initParamMap</code> of the
+     * <code>ExternalContext</code> from the current
+     * <code>FacesContext</code> with the key
+     * {@link ProjectStage#PROJECT_STAGE_PARAM_NAME}
+     * </p>
+     *
+     * <p>If found, see if an enum constant can be obtained by calling
+     * <code>ProjectStage.valueOf()</code>, passing the value
+     * from the <code>initParamMap</code>.  If this succeeds without
+     * exception, save the value and return it.  If not, call
+     * <code>ProjectStage.getExtension()</code>, passing the
+     * value from the <code>initParamMap</code>. If this succeeds
+     * without exception, save the value and return it.</p>
+     *
+     * <p>If not found, or any of the previous attempts to discover the
+     * enum constant value have failed, assign the value as
+     * <code>ProjectStage.Production</code> and return it.</p>
+     *
+     * </ul>
+     * </div>
+     *
+     * @since 2.0
+     */
+    public ProjectStage getProjectStage() {
+        return ProjectStage.Production;
+    }
 
 
     /**
@@ -476,7 +514,7 @@ public abstract class Application {
      */
 
     public void addELResolver(ELResolver resolver) {
-        Application app = getRIApplicationImpl();
+        Application app = getDefaultApplicationImpl();
         if (app != null) {
             app.addELResolver(resolver);
         } else {
@@ -519,7 +557,7 @@ public abstract class Application {
      */
 
     public ELResolver getELResolver() {
-        Application app = getRIApplicationImpl();
+        Application app = getDefaultApplicationImpl();
         if (app != null) {
             //noinspection TailRecursion
             return app.getELResolver();
@@ -829,7 +867,7 @@ public abstract class Application {
      */
 
     public ExpressionFactory getExpressionFactory() {
-        Application app = getRIApplicationImpl();
+        Application app = getDefaultApplicationImpl();
         if (app != null) {
             //noinspection TailRecursion
             return app.getExpressionFactory();
@@ -856,7 +894,7 @@ public abstract class Application {
     public Object evaluateExpressionGet(FacesContext context,
                                         String expression,
                                         Class expectedType) throws ELException {
-        Application app = getRIApplicationImpl(context);
+        Application app = getDefaultApplicationImpl(context);
         if (app != null) {
             //noinspection TailRecursion
             return app.evaluateExpressionGet(context, expression, expectedType);
@@ -924,7 +962,7 @@ public abstract class Application {
      */
 
     public void addELContextListener(ELContextListener listener) {
-        Application app = getRIApplicationImpl();
+        Application app = getDefaultApplicationImpl();
         if (app != null) {
             app.addELContextListener(listener);
         } else {
@@ -947,7 +985,7 @@ public abstract class Application {
      */
 
     public void removeELContextListener(ELContextListener listener) {
-        Application app = getRIApplicationImpl();
+        Application app = getDefaultApplicationImpl();
         if (app != null) {
             app.removeELContextListener(listener);
         } else {
@@ -971,7 +1009,7 @@ public abstract class Application {
      */
 
     public ELContextListener [] getELContextListeners() {
-        Application app = getRIApplicationImpl();
+        Application app = getDefaultApplicationImpl();
         if (app != null) {
             //noinspection TailRecursion
             return app.getELContextListeners();
@@ -1048,7 +1086,7 @@ public abstract class Application {
     // --------------------------------------------------------- Private Methods
 
 
-    private static Application getRIApplicationImpl(FacesContext context) {
+    private static Application getDefaultApplicationImpl(FacesContext context) {
         ExternalContext extContext;
         if (context != null) {
             extContext = context.getExternalContext();
@@ -1063,8 +1101,8 @@ public abstract class Application {
         return null;
     }
 
-    private static Application getRIApplicationImpl() {
-        return getRIApplicationImpl(null);
+    private static Application getDefaultApplicationImpl() {
+        return getDefaultApplicationImpl(null);
     }
 
 }

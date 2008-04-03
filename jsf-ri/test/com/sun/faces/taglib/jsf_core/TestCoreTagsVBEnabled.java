@@ -1,5 +1,5 @@
 /*
- * $Id: TestCoreTagsVBEnabled.java,v 1.13 2007/04/27 22:02:10 ofung Exp $
+ * $Id: TestCoreTagsVBEnabled.java,v 1.14 2008/01/28 20:55:38 rlubke Exp $
  */
 
 /*
@@ -61,7 +61,7 @@ import org.apache.cactus.WebRequest;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestCoreTagsVBEnabled.java,v 1.13 2007/04/27 22:02:10 ofung Exp $
+ * @version $Id: TestCoreTagsVBEnabled.java,v 1.14 2008/01/28 20:55:38 rlubke Exp $
  */
 
 public class TestCoreTagsVBEnabled extends JspFacesTestCase {
@@ -135,7 +135,6 @@ public class TestCoreTagsVBEnabled extends JspFacesTestCase {
 
     public void setUp() {
 
-        Util.setUnitTestModeEnabled(true);
         super.setUp();
         (getFacesContext().getExternalContext().getRequestMap()).put("intMin",
                                                                      new Integer(
@@ -235,8 +234,6 @@ public class TestCoreTagsVBEnabled extends JspFacesTestCase {
              getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
         assertTrue(messages.hasNext());
 
-
-        Util.setUnitTestModeEnabled(false);
     }
 
 

@@ -340,7 +340,6 @@ public abstract class ResourceHandler {
     public static final String RESOURCE_IDENTIFIER = "/javax.faces.resource";
 
     /**
-
      * <p class="changed_added_2_0">The <code>ServletContext</code> init
      * parameter consulted by the {@link #handleResourceRequest} to tell
      * which kinds of resources must never be served up in response to a
@@ -351,16 +350,13 @@ public abstract class ResourceHandler {
      * #RESOURCE_EXCLUDES_DEFAULT_VALUE} constant is used.  If manually
      * specified, the given value entirely overrides the default one and
      * does not supplement it.  </p>
-
      */
     public static final String RESOURCE_EXCLUDES_PARAM_NAME =
-          "javax.faces.resource.EXLCUDES";
+          "javax.faces.RESOURCE_EXLCUDES";
 
     /**
-
      * <p class="changed_added_2_0">The default value for the {@link
      * #RESOURCE_EXCLUDES_PARAM_NAME} init param.</p>
-
      */
     public static final String RESOURCE_EXCLUDES_DEFAULT_VALUE =
           ".class .jsp .jspx .properties .xhtml";
@@ -451,26 +447,26 @@ public abstract class ResourceHandler {
      * determines the current request is a resource request by calling
      * {@link #isResourceRequest}.  Thus, <code>createResource</code>
      * may assume that the current request is a resource request.</p>
-
+     *
      * <div class="changed_added_2_0">
-
+     *
      * <p>The default implementation must implement an algorithm
      * semantically identical to the following algorithm.</p>
-
+     *
      * For discussion, in all cases when a status code is to be set,
      * this spec talks only using the Servlet API, but it is understood
      * that in a portlet environment the appropriate equivalent API must
      * be used.
-
+     *
      * <ul>
-
+     *
      * <li><p>If the <em>resourceIdentifier</em> ends with any of the
      * extensions listed in the value of the {@link
      * #RESOURCE_EXCLUDES_PARAM_NAME} init parameter,
      * <code>HttpServletRequest.SC_NOT_FOUND</code> must be passed to
      * <code>HttpServletResponse.setStatus()</code>, then
      * <code>createResource</code> must immediately return.</p></li>
-
+     *
      * <li><p>Extract the <em>resourceName</em> from the
      * <em>resourceIdentifier</em> by taking the substring of
      * <em>resourceIdentifier</em> that starts at <code>{@link
@@ -479,12 +475,12 @@ public abstract class ResourceHandler {
      * extracted, <code>HttpServletRequest.SC_NOT_FOUND</code> must be
      * passed to <code>HttpServletResponse.setStatus()</code>, then
      * <code>createResource</code> must immediately return.</p></li>
-
+     *
      * <li><p>Extract the <em>libraryName</em> from the request by
      * looking in the request parameter map for an entry under the key
      * "ln", without the quotes.  If found, use its value as the
      * <em>libraryName</em>.</p></li>
-
+     *
      * <li><p>If <em>resourceName</em> and <em>libraryName</em> are
      * present, call {@link #createResource(String, String)} to create
      * the <code>Resource</code>.  If only <em>resourceName</em> is
@@ -494,41 +490,40 @@ public abstract class ResourceHandler {
      * <code>HttpServletRequest.SC_NOT_FOUND</code> must be passed to
      * <code>HttpServletResponse.setStatus()</code>, then
      * <code>createResource</code> must immediately return.</p></li>
-
+     *
      * <li><p>Call {@link Resource#userAgentNeedsUpdate}.  If this
      * method returns false,
      * <code>HttpServletRequest.SC_NOT_MODIFIED</code> must be passed to
      * <code>HttpServletResponse.setStatus()</code>, then
      * <code>createResource</code> must immediately return.</p></li>
-
+     *
      * <li><p>Pass the result of {@link Resource#getContentType} to
      * <code>HttpServletResponse.setContentType}.</code> </p></li>
-
+     *
      * <li><p>Call {@link Resource#getResponseHeaders}.  For each entry
      * in this <code>Map</code>, call
      * <code>HttpServletResponse.setHeader()</code>, passing the key as
      * the first argument and the value as the second argument.</p></li>
-
+     *
      * <li><p>Call {@link Resource#getInputStream} and serve up the
      * bytes of the resource to the response.</p></li>
-
-
+     *
      * <li><p>Call <code>HttpServletResponse.setContentLength()</code>
      * passing the byte count of the resource.</p></li>
-
+     *
      * <li><p>If an <code>IOException</code> is thrown during any of the
      * previous steps, log a descriptive, localized message, including
      * the <em>resourceName</em> and <em>libraryName</em> (if present).
      * Then, <code>HttpServletRequest.SC_NOT_FOUND</code> must be passed
      * to <code>HttpServletResponse.setStatus()</code>, then
      * <code>createResource</code> must immediately return.</p></li>
-
+     *
      * <li><p>In all cases in this method, any streams, channels,
      * sockets, or any other IO resources must be closed before this
      * method returns.</p></li>
-
+     *
      * </ul>
-
+     *
      * </div>
      *
      * @param context the {@link javax.faces.context.FacesContext} for this

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextFactoryImpl.java,v 1.21 2007/12/17 21:46:09 rlubke Exp $
+ * $Id: FacesContextFactoryImpl.java,v 1.22 2008/01/28 20:55:37 rlubke Exp $
  */
 
 /*
@@ -54,61 +54,42 @@ import javax.servlet.ServletResponse;
 
 public class FacesContextFactoryImpl extends FacesContextFactory {
 
-    //
-    // Protected Constants
-    //
 
-    //
-    // Class Variables
-    //
+    // ------------------------------------------------------------ Constructors
 
-    //
-    // Instance Variables
-    //
-
-    // Attribute Instance Variables
-
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Initializers    
-    //
 
     public FacesContextFactoryImpl() {
+
         super();
+
     }
 
-    //
-    // Class methods
-    //
 
-    //
-    // General Methods
-    //
+    // ---------------------------------------- Methods from FacesContextFactory
 
-    //
-    // Methods from FacesContextFactory
-    //
+
     public FacesContext getFacesContext(Object sc,
                                         Object request,
                                         Object response,
                                         Lifecycle lifecycle)
-        throws FacesException {
+    throws FacesException {
 
         try {
-            Util.parameterNonNull(sc);
-            Util.parameterNonNull(request);
-            Util.parameterNonNull(response);
-            Util.parameterNonNull(lifecycle);
+            Util.notNull("sc", sc);
+            Util.notNull("request", request);
+            Util.notNull("response", response);
+            Util.notNull("lifecycle", lifecycle);
         } catch (Exception e) {
             throw new NullPointerException(
                 MessageUtils.getExceptionMessageString(
                     MessageUtils.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
         }
-        FacesContext ctx = new FacesContextImpl(new ExternalContextImpl((ServletContext) sc,
-                                                                        (ServletRequest) request,
-                                                                        (ServletResponse) response),
-                                                lifecycle);
+        FacesContext ctx =
+              new FacesContextImpl(
+                    new ExternalContextImpl((ServletContext) sc,
+                                            (ServletRequest) request,
+                                            (ServletResponse) response),
+                                            lifecycle);
         // store the default FacesContext and ExternalContext implementations
         // in the request so that the API can delegate if the happen to be
         // decorated by 1.1 implementations
@@ -123,7 +104,6 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
     }
 
 
-// The testcase for this class is TestSerlvetFacesContextFactory.java 
-
+    // The testcase for this class is TestSerlvetFacesContextFactory.java
 
 } // end of class FacesContextFactoryImpl

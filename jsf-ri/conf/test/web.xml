@@ -46,6 +46,10 @@
         <param-value>server</param-value>
     </context-param>
     <context-param>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
+        <param-value>UnitTest</param-value>
+    </context-param>
+    <context-param>
         <param-name>com.sun.faces.enableHtmlTagLibValidator</param-name>
         <param-value>true</param-value>
     </context-param>

@@ -1,5 +1,5 @@
  /*
- * $Id: FacesContextImpl.java,v 1.92 2007/12/19 17:51:33 rlubke Exp $
+ * $Id: FacesContextImpl.java,v 1.93 2008/01/28 20:55:37 rlubke Exp $
  */
 
 /*
@@ -72,23 +72,12 @@ import com.sun.faces.util.RequestStateManager;
 
  public class FacesContextImpl extends FacesContext {
 
-     //
-     // Protected Constants
-     //
-
-     //
-     // Class Variables
-     //
 
      // Log instance for this class
      private static Logger LOGGER = FacesLogger.CONTEXT.getLogger();
 
-     //
-     // Instance Variables
-     //
      private boolean released;
 
-     // Relationship Instance Variables
      private ResponseStream responseStream = null;
      private ResponseWriter responseWriter = null;
      private ExternalContext externalContext = null;
@@ -99,6 +88,8 @@ import com.sun.faces.util.RequestStateManager;
      private RenderKit lastRk;
      private String lastRkId;
      private Severity maxSeverity;
+     private boolean renderResponse = false;
+     private boolean responseComplete = false;
 
      /**
       * Store mapping of clientId to ArrayList of FacesMessage
@@ -108,18 +99,7 @@ import com.sun.faces.util.RequestStateManager;
      private Map<String,List<FacesMessage>> componentMessageLists;
 
 
-
-     // Attribute Instance Variables
-
-     private boolean renderResponse = false;
-     private boolean responseComplete = false;
-
-
-     //
-     // Constructors and Initializers    
-     // 
-     public FacesContextImpl() {
-     }
+     // ----------------------------------------------------------- Constructors
 
 
      public FacesContextImpl(ExternalContext ec, Lifecycle lifecycle) {
@@ -137,18 +117,13 @@ import com.sun.faces.util.RequestStateManager;
              FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
      }
 
-     //
-     // Class methods
-     //
 
-     //
-     // General Methods
+     // ---------------------------------------------- Methods from FacesContext
 
-     //
-     //
-     // Methods from FacesContext
-     //
 
+     /**
+      * @see javax.faces.context.FacesContext#getExternalContext()
+      */
      public ExternalContext getExternalContext() {
          assertNotReleased();
          return externalContext;
@@ -156,8 +131,7 @@ import com.sun.faces.util.RequestStateManager;
 
 
      /**
-      * <p>Return the {@link Application} instance associated with this
-      * web application.</p>
+      * @see javax.faces.context.FacesContext#getApplication()
       */
      public Application getApplication() {
          assertNotReleased();
@@ -172,6 +146,11 @@ import com.sun.faces.util.RequestStateManager;
          return application;
      }
 
+
+     /**
+      * @see javax.faces.context.FacesContext#getELContext()
+      */
+     @Override
      public ELContext getELContext() {
          assertNotReleased();
          if (elContext == null) {
@@ -185,6 +164,10 @@ import com.sun.faces.util.RequestStateManager;
          return elContext;
      }
 
+
+     /**
+      * @see javax.faces.context.FacesContext#getClientIdsWithMessages()
+      */
      public Iterator<String> getClientIdsWithMessages() {
          assertNotReleased();
          return ((componentMessageLists == null)
@@ -192,12 +175,19 @@ import com.sun.faces.util.RequestStateManager;
                  : componentMessageLists.keySet().iterator());         
      }
 
+
+     /**
+      * @see javax.faces.context.FacesContext#getMaximumSeverity()
+      */
      public Severity getMaximumSeverity() {
          assertNotReleased();
          return maxSeverity;
      }
 
 
+     /**
+      * @see javax.faces.context.FacesContext#getMessages()
+      */
      public Iterator<FacesMessage> getMessages() {
          assertNotReleased();
          if (null == componentMessageLists) {
@@ -223,6 +213,9 @@ import com.sun.faces.util.RequestStateManager;
      }
 
 
+     /**
+      * @see FacesContext#getMessages(String)
+      */
      public Iterator<FacesMessage> getMessages(String clientId) {
          assertNotReleased();
 
@@ -249,6 +242,9 @@ import com.sun.faces.util.RequestStateManager;
      }
 
 
+     /**
+      * @see javax.faces.context.FacesContext#getRenderKit()
+      */
      public RenderKit getRenderKit() {
          assertNotReleased();
          UIViewRoot vr = getViewRoot();
@@ -271,12 +267,18 @@ import com.sun.faces.util.RequestStateManager;
      }
 
 
+     /**
+      * @see javax.faces.context.FacesContext#getResponseStream()
+      */
      public ResponseStream getResponseStream() {
          assertNotReleased();
          return responseStream;
      }
 
 
+     /**
+      * @see FacesContext#setResponseStream(javax.faces.context.ResponseStream)
+      */
      public void setResponseStream(ResponseStream newResponseStream) {
          assertNotReleased();
          if (newResponseStream == null) {
@@ -288,12 +290,18 @@ import com.sun.faces.util.RequestStateManager;
      }
 
 
+     /**
+      * @see javax.faces.context.FacesContext#getViewRoot()
+      */
      public UIViewRoot getViewRoot() {
          assertNotReleased();
          return viewRoot;
      }
 
 
+     /**
+      * @see FacesContext#setViewRoot(javax.faces.component.UIViewRoot)
+      */
      public void setViewRoot(UIViewRoot root) {
          assertNotReleased();
 
@@ -307,12 +315,18 @@ import com.sun.faces.util.RequestStateManager;
      }
 
 
+     /**
+      * @see javax.faces.context.FacesContext#getResponseWriter()
+      */
      public ResponseWriter getResponseWriter() {
          assertNotReleased();
          return responseWriter;
      }
 
 
+     /**
+      * @see FacesContext#setResponseWriter(javax.faces.context.ResponseWriter)
+      */
      public void setResponseWriter(ResponseWriter newResponseWriter) {
          assertNotReleased();
          if (newResponseWriter == null) {
@@ -324,6 +338,9 @@ import com.sun.faces.util.RequestStateManager;
      }
 
 
+     /**
+      * @see FacesContext#addMessage(String, javax.faces.application.FacesMessage)
+      */
      public void addMessage(String clientId, FacesMessage message) {
          assertNotReleased();
          // Validate our preconditions
@@ -363,6 +380,9 @@ import com.sun.faces.util.RequestStateManager;
      }
 
 
+     /**
+      * @see javax.faces.context.FacesContext#release()
+      */
      public void release() {
          
          RequestStateManager.remove(this, RequestStateManager.FACESCONTEXT_IMPL_ATTR_NAME);
@@ -386,33 +406,45 @@ import com.sun.faces.util.RequestStateManager;
      }
 
 
+     /**
+      * @see javax.faces.context.FacesContext#renderResponse()
+      */
      public void renderResponse() {
          assertNotReleased();
          renderResponse = true;
      }
 
 
+     /**
+      * @see javax.faces.context.FacesContext#responseComplete()
+      */
      public void responseComplete() {
          assertNotReleased();
          responseComplete = true;
      }
 
 
+     /**
+      * @see javax.faces.context.FacesContext#getRenderResponse()
+      */
      public boolean getRenderResponse() {
          assertNotReleased();
          return renderResponse;
      }
 
 
+     /**
+      * @see javax.faces.context.FacesContext#getResponseComplete()
+      */
      public boolean getResponseComplete() {
          assertNotReleased();
          return responseComplete;
      }
 
 
-     //
-     // Private methods
-     //
+     // -------------------------------------------------------- Private Methods
+
+
      private void assertNotReleased() {
          if (released) {
              throw new IllegalStateException();

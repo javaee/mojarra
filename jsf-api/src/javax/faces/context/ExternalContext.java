@@ -35,7 +35,7 @@
  */
 
 /*
- * $Id: ExternalContext.java,v 1.35 2008/01/25 20:20:58 rlubke Exp $
+ * $Id: ExternalContext.java,v 1.36 2008/01/28 20:55:35 rlubke Exp $
  */
  
 /*
@@ -261,8 +261,7 @@ public abstract class ExternalContext {
 
 
     /**
-     * RELEASE_PENDING (edburs,rogerk) javadocs
-     * @return
+     * <p class="changed_modified_2_0">RELEASE_PENDING (edburs,rogerk) javadocs</p>
      *
      * @since 2.0
      */

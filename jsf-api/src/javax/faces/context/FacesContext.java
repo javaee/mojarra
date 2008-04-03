@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.73 2007/12/17 21:46:07 rlubke Exp $
+ * $Id: FacesContext.java,v 1.74 2008/01/28 20:55:35 rlubke Exp $
  */
 
 /*
@@ -401,8 +401,48 @@ public abstract class FacesContext {
 
 
     /**
-     * <p>Return the {@link FacesContext} instance for the request that is
-     * being processed by the current thread, if any.</p>
+     * <p class="changed_modified_2_0">Return the {@link FacesContext} instance for the request that
+     * is being processed by the current thread.  If called during
+     * application initialization, this method must return an instance
+     * with the following behaviors.</p>
+     * <div class="changed_modified_2_0">
+     * <ol>
+     *
+     * <li><p><code>getApplication()</code> returns the correct current {@link
+     * javax.faces.application.Application} instance.</p></li>
+     *
+     * <li><p><code>getViewRoot()</code> returns a new <code>UIViewRoot</code>
+     * with its locale set to <code>Locale.getDefault()</code>
+     *
+     * <li><p><code>getExternalContext()</code> returns an
+     * <code>ExternalContext</code> instance with the following
+     * behaviors.</p></li>
+     *
+     * <ol type="a">
+     *
+     * <li><p><code>getApplicationMap()</code> returns a <code>Map</code> that
+     * is backed by the same container context instance
+     * (<code>ServletContext</code> or <code>PortletContext</code>) as the one
+     * returned by calling <code>getApplicationMap()</code> on the
+     * <code>ExternalContext</code> returned by the <code>FacesContext</code>
+     * during an actual request.</p></li>
+     *
+     * <li><p><code>getInitParameter()</code> calls through to the actual
+     * container context to return the init parameter value</p></li>
+     *
+     * <li><p><code>getInitParameterMap()</code> returns a <code>Map</code>
+     * that is backed by the same container context instance
+     * (<code>ServletContext</code> or <code>PortletContext</code>) as the one
+     * returned by calling <code>getInitParameterMap()</code> on the
+     * <code>ExternalContext</code> returned by the <code>FacesContext</code>
+     * during an actual request.</p></li>
+     *
+     * </ol>
+     *
+     * <p>The behavior of calling any methods other than those specified
+     * above, on a <code>FacesContext<code> instance obtained during
+     * startup time, is undefined.</p>
+     * </div>
      */
     public static FacesContext getCurrentInstance() {
 
