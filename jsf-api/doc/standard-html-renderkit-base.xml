@@ -2414,7 +2414,7 @@
             <description><![CDATA[<div class="changed_added_2_0">
 
 <p>Render the markup for a <code>&lt;script&gt;</code> element that
-renders the <code>Resource</code> specified by the required
+renders the script <code>Resource</code> specified by the required
 <code>name</code> attribute and optional <code>library</code>
 attribute.</p>
 
@@ -2470,7 +2470,7 @@ attribute.</p>
         <p>Render a script element.  Use the result from calling
         <code>resource.getRequestPath()</code> as the value of the "src"
         attribue and the result from calling
-        <code>resource.getContentType()</code> value of the "type"
+        <code>resource.getContentType()</code> as the value of the "type"
         attribute.</p>
 
         <p></p>
@@ -2495,7 +2495,39 @@ attribute.</p>
         </renderer>
 
         <renderer>
-            <description><![CDATA[ RELEASE_PENDING (edburns,rogerk) documentation ]]></description>
+            <description><![CDATA[<div class="changed_added_2_0">
+
+<p>Render the markup for a <code>&lt;link&gt;</code> element that
+renders the style <code>Resource</code> specified by the required
+<code>name</code> attribute and optional <code>library</code>
+attribute.</p>
+
+      <p>Decode Behavior</p>
+
+      <ul>
+
+<p>No action is required during decode for this renderer.</p>
+
+</ul>
+
+      <p>Encode Behavior</p>
+
+      <ul>
+
+<p>Execute algorithm <a href="javax.faces.Outputjavax.faces.resource.Script.html#ResourceCommonEncode">Common Encode</a>
+to obtain a <code>Resource</code> instance and output a
+<code>&lt;link&gt;</code> element.  Use the result from calling
+<code>resource.getRequestPath()</code> as the value of the "href"
+attribute, the result from calling
+<code>resource.getContentType()</code> as the value of the "type"
+attribute, the literal string "stylesheet" as the value of the "rel"
+attribute, and the literal string "screen" as the value of the "media"
+attribute.</p>
+
+<p>The stylsheet renderer must ensure that any stylesheets are included in the &lt;head&gt; of the document.  This is difficult for portals.
+</p>
+
+</div>]]></description>
             <component-family>javax.faces.Output</component-family>
             <renderer-type>javax.faces.resource.Stylesheet</renderer-type>
             <renderer-class>
