@@ -621,6 +621,13 @@ javax.faces.level=ALL
               file="${src.dir}/javax/faces/component/UIComponentHierarchy.jpg"/>
         <copy todir="${build.javadocs.dir}/javax/faces/event"
               file="${src.dir}/javax/faces/event/EventHierarchy.jpg"/>
+
+        <copy todir="${build.javadocs.dir}/">
+           <fileset dir="${doc.dir}">
+             <include name="changed-*.png" />
+           </fileset>
+        </copy>
+
     </target>
 
 
@@ -631,6 +638,7 @@ javax.faces.level=ALL
                  private="${javadoc.private}"
                  protected="${javadoc.protected}"
                  windowtitle="${Name} (${spec.version})"
+                 stylesheetfile="${src.dir}/jsf-api.css"
                  source="1.5"
                  doctitle="${Name} (${spec.version})"
                  bottom="Copyright &#169; 2002-2006 Sun Microsystems, Inc. All Rights Reserved.">

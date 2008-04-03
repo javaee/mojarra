@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.51 2007/11/02 00:30:10 rlubke Exp $
+ * $Id: Application.java,v 1.52 2008/01/16 03:09:50 edburns Exp $
  */
 
 /*
@@ -249,19 +249,31 @@ public abstract class Application {
 
 
     /**
-     * RELEASE_PENDING (eburns,rogerk) - review docs
-     * Return the singleton, stateless, thread-safe ResourceHandler for
-     * this Application.  An alternate implementation for this class can be
-     * declared in the application configuration resources by giving the
-     * fully qualified class name as the value of the resource-manager
-     * element within the application element.  It can also be declared via
-     * an annotation as specified in [287-ConfigAnnotations].
-     * In both cases, the decorator pattern will be followed as for
-     * every other pluggable artifact in JSF.
-     *
-     * In this way, it is possible to completely customize the
-     * implementation of resource handling to satisfy [CompRes.R02.D]
-     *
+     * <p class="changed">Return the singleton, stateless, thread-safe {@link
+     * ResourceHandler} for this application.  The JSF implementation
+     * must support the following techniques for declaring an alternate
+     * implementation of <code>ResourceHandler</code>.</p>
+     * <div class="changed">
+
+     * <ul>
+
+     *    <li><p>The <code>ResourceHandler</code> implementation is
+     *    declared in the application configuration resources by giving
+     *    the fully qualified class name as the value of the
+     *    <code>&lt;resource-handler&gt;</code> element within the
+     *    <code>&lt;application&gt;</code> element.  </p></li>
+
+     *    <li><p>RELEASE_PENDING(edburns) It can also be declared via an
+     *    annotation as specified in [287-ConfigAnnotations].</p></li>
+
+     * </ul>
+
+     * <p>In all of the above cases, the runtime must employ the
+     * decorator pattern as for every other pluggable artifact in
+     * JSF.</p>
+
+     * </div>
+
      * @since 2.0
      */
     public ResourceHandler getResourceHandler() {
@@ -276,10 +288,21 @@ public abstract class Application {
     }
 
     /**
-     * RELEASE_PENDING (eburns,rogerk) - review docs
-     * Setter for property resourceHandler.
-     * @param resourceHandler New value of property resourceHandler.
+
+     * <p class="changed">Set the {@link ResourceHandler} instance that will be utilized
+     * for rendering the markup for resources, and for satisfying client
+     * requests to serve up resources.</p>
+    * <div class="changed">
      *
+     * @param resourceHandler The new <code>ResourceHandler</code> instance
+     *
+     * @throws IllegalStateException if this method is called after
+     * at least one request has been processed by the
+     * <code>Lifecycle</code> instance for this application.
+     * @throws NullPointerException if <code>resourceHandler</code>
+     *  is <code>null</code>
+     * </div>
+
      * @since 2.0
      */
     public void setResourceHandler(ResourceHandler resourceHandler) {
