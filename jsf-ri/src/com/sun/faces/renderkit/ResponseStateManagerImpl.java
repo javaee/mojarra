@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.51 2008/01/07 17:02:34 rlubke Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.52 2008/01/07 19:49:12 rlubke Exp $
  */
 
 /*
@@ -91,10 +91,15 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
            + ResponseStateManager.VIEW_STATE_PARAM
            + "\" value=\"").toCharArray();
 
+     private static final char[] STATE_FIELD_START_NO_ID =
+          ("<input type=\"hidden\" name=\""
+           + ResponseStateManager.VIEW_STATE_PARAM
+           + "\" value=\"").toCharArray();
+
     private static final char[] STATE_FIELD_END =
           "\" />".toCharArray();
 
-
+    private char[] stateFieldStart;
     private SerializationProvider serialProvider;
     private WebConfiguration webConfig;
     private Boolean compressState;
@@ -232,7 +237,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
         StateManager stateManager = Util.getStateManager(context);
         ResponseWriter writer = context.getResponseWriter();
 
-        writer.write(STATE_FIELD_START);
+        writer.write(stateFieldStart);
 
         if (stateManager.isSavingStateInClient(context)) {
             ObjectOutputStream oos = null;
@@ -450,6 +455,11 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
                 }
             csBuffSize = Integer.parseInt(defaultSize);
         }
+
+        stateFieldStart = (webConfig
+              .isOptionEnabled(BooleanWebContextInitParameter.EnableViewStateIdRendering)
+                           ? STATE_FIELD_START
+                           : STATE_FIELD_START_NO_ID);
 
         if (serialProvider == null) {
             serialProvider = SerializationProviderFactory

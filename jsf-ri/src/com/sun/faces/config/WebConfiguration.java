@@ -1,5 +1,5 @@
 /*
- * $Id: WebConfiguration.java,v 1.34 2007/11/09 20:58:16 rlubke Exp $
+ * $Id: WebConfiguration.java,v 1.35 2008/01/07 19:49:12 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -823,6 +823,10 @@ public class WebConfiguration {
         SerializeServerState(
               "com.sun.faces.serializeServerState",
               false
+        ),
+        EnableViewStateIdRendering(
+            "com.sun.faces.enableViewStateIdRendering",
+            true
         );
 
         private BooleanWebContextInitParameter alternate;
