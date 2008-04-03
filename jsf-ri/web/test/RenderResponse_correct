@@ -143,7 +143,7 @@ function dpf(f) {var adp = f.adp;if (adp != null) {for (var i = 0;i < adp.length
 
 	<TD>
 
-	      <a id="basicForm:outputLink" name="basicForm:outputLink" href="test.html;jsessionid=76dba2b12d00abb0cc5af536bc5c" class="hyperlinkClass">output link text</a>
+	      <a id="basicForm:outputLink" name="basicForm:outputLink" href="test.html;jsessionid=76dba2b12d00abb0cc5af536bc5c" target="_blank" class="hyperlinkClass">output link text</a>
 
 	</TD>
 

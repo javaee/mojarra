@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.38 2007/08/30 19:29:13 rlubke Exp $
+ * $Id: OutputLinkRenderer.java,v 1.39 2007/10/19 17:25:18 rlubke Exp $
  */
 
 /*
@@ -60,7 +60,7 @@ import com.sun.faces.util.Util;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.38 2007/08/30 19:29:13 rlubke Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.39 2007/10/19 17:25:18 rlubke Exp $
  */
 
 public class OutputLinkRenderer extends LinkRenderer {
@@ -225,6 +225,11 @@ public class OutputLinkRenderer extends LinkRenderer {
                                                 component,
                                                 ATTRIBUTES);
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
+
+        String target = (String) component.getAttributes().get("target");
+        if (target != null && target.trim().length() != 0) {
+            writer.writeAttribute("target", target, "target");
+        }
 
         writeCommonLinkAttributes(writer, component);
 

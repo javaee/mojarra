@@ -203,7 +203,7 @@
 
 	<TD>
 
-	      <h:outputLink value="test.html" id="outputLink" styleClass="hyperlinkClass"><f:verbatim>output link text</f:verbatim></h:outputLink>
+	      <h:outputLink value="test.html" id="outputLink" styleClass="hyperlinkClass" target="_blank"><f:verbatim>output link text</f:verbatim></h:outputLink>
 
 	</TD>
 
