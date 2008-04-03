@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.57 2008/01/28 23:19:55 edburns Exp $
+ * $Id: Application.java,v 1.58 2008/01/30 14:31:22 edburns Exp $
  */
 
 /*
@@ -392,15 +392,13 @@ public abstract class Application {
 
 
     /**
-     * PENDING_REVIEW
-     * <p class="changed_added_2_0">Return the product lifecycle phase for the currently running
-     * application instance.  The default value is {@link
-     * ProjectStage#Production}</p>
-     * <div class="changed_added_2_0">
-     * <p>The implementation of this method must perform the following
-     * algorithm or an equivalent with the same end result to determine
-     * the value to return.</p>
-     * <ul>
+     * <p class="changed_added_2_0">Return the project stage
+     * for the currently running application instance.  The default
+     * value is {@link ProjectStage#Production}</p> 
+
+     * <div class="changed_added_2_0"> <p>The implementation of this
+     * method must perform the following algorithm or an equivalent with
+     * the same end result to determine the value to return.</p> <ul>
      *
      * <p>If the value has already been determined by a previous call to
      * this method, simply return that value.</p>

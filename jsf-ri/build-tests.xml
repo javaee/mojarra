@@ -273,8 +273,8 @@
             <suite>
                 <test todir="${impl.test.results.dir}"
                     name="com.sun.faces.el.TestResourceELResolver"/>                
-                <test todir="${impl.test.results.dir}"
-                    name="com.sun.faces.application.resource.TestResourceManager"/>
+<!--                <test todir="${impl.test.results.dir}"
+                    name="com.sun.faces.application.resource.TestResourceManager"/>-->
                 <test todir="${impl.test.results.dir}"
                     name="com.sun.faces.application.resource.TestResourceHandlerImpl"/>
                 <test todir="${impl.test.results.dir}"

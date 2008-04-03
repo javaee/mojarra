@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.98 2008/01/28 20:55:39 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.99 2008/01/30 14:31:23 edburns Exp $
  */
 
 /*
@@ -135,7 +135,6 @@ public class ApplicationImpl extends Application {
     // Relationship Instance Variables
 
     private ApplicationAssociate associate = null;
-    private ProjectStage projectStage;
 
     private volatile ActionListener actionListener = null;
     private volatile NavigationHandler navigationHandler = null;
@@ -298,24 +297,11 @@ public class ApplicationImpl extends Application {
     @Override
     public ProjectStage getProjectStage() {
         
-        if (projectStage == null) {
-            WebConfiguration webConfig =
-                  WebConfiguration.getInstance(
-                        FacesContext.getCurrentInstance().getExternalContext());
-            String value =
-                  webConfig.getOptionValue(WebContextInitParameter.JavaxFacesProjectStage);
-            if (value != null) {
-                try {
-                    projectStage = ProjectStage.valueOf(value);
-                } catch (IllegalArgumentException iae) {
-                    projectStage = ProjectStage.getExtension(value);
-                }
-            }
-            if (projectStage == null) {
-                projectStage = ProjectStage.Production;
-            }
-        }
-        return projectStage;
+        ProjectStage result = ProjectStage.Production;
+        
+        result = getAssociate().getProjectStage();
+        
+        return result;
 
     }
 
