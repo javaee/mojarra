@@ -1,5 +1,5 @@
 /*
- * $Id: IntegerConverter.java,v 1.19 2007/04/27 22:00:07 ofung Exp $
+ * $Id: IntegerConverter.java,v 1.20 2007/05/18 16:23:12 rlubke Exp $
  */
 
 /*
@@ -146,7 +146,7 @@ public class IntegerConverter implements Converter {
         }
 
         try {
-            return (Integer.toString(((Integer) value).intValue()));
+            return (Integer.toString(((Number) value).intValue()));
         } catch (Exception e) {
             throw new ConverterException(MessageFactory.getMessage(
                  context, STRING_ID, value,

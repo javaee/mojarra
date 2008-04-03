@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleConverter.java,v 1.22 2007/04/27 22:00:07 ofung Exp $
+ * $Id: DoubleConverter.java,v 1.23 2007/05/18 16:23:12 rlubke Exp $
  */
 
 /*
@@ -146,7 +146,7 @@ public class DoubleConverter implements Converter {
         }
 
         try {
-            return (Double.toString(((Double) value).doubleValue()));
+            return (Double.toString(((Number) value).doubleValue()));
         } catch (Exception e) {
             throw new ConverterException(MessageFactory.getMessage(
                  context, STRING_ID, value,
