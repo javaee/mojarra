@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.37 2007/05/30 18:56:59 edburns Exp $
+ $Id: build-tests.xml,v 1.38 2007/05/30 19:00:02 edburns Exp $
 -->
 
 <!--
@@ -57,8 +57,6 @@
          This property list *must* match the one defined in the
          systest-per-webapp build.xml. -->
     <property name="applications"
-              value="nested-loadbundles" />
-<!--
               value="replace-application,
                    invalid-mapping,
                    replace-statemanager,                                    
@@ -71,7 +69,7 @@
                    late-bindings,
                    property-resolver-jsp,
                    never-unwrap-exceptions"/>
--->
+
     <!-- 
        EXCLUDED APPLICATIONS:
           view-expired
