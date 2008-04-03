@@ -47,6 +47,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -54,6 +56,7 @@ import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 /**
  * <p>
@@ -66,6 +69,7 @@ import com.sun.faces.util.Util;
 public class ClasspathResourceHelper extends ResourceHelper {
 
     private static final ClasspathResourceHelper INSTANCE = new ClasspathResourceHelper();
+    private static final Logger LOGGER = FacesLogger.RESOURCE.getLogger();
 
     private static final String BASE_RESOURCE_PATH = "META-INF/resources";
 
@@ -190,7 +194,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
             return null;
         }
 
-        ResourceInfo value;
+        ResourceInfo value = null;
         try {
             List<String> subPaths = getSubPaths(basePathURL);
             if (subPaths.isEmpty()) {
@@ -208,17 +212,27 @@ public class ClasspathResourceHelper extends ResourceHelper {
                 }
             } else {
                 VersionInfo version = getVersion(subPaths, true);
-                if (library != null) {
-                    value = new ResourceInfo(library,
-                                             resourceName,
-                                             version,
-                                             compressable);
-                } else {
-                    value = new ResourceInfo(resourceName,
-                                             version,
-                                             localePrefix,
-                                             this,
-                                             compressable);
+                if (version == null) {
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.log(Level.WARNING,
+                               "jsf.application.resource.unable_to_determine_resource_version.",
+                               resourceName);
+                    return null;
+                }
+            }
+                if (version != null) {
+                    if (library != null) {
+                        value = new ResourceInfo(library,
+                                                 resourceName,
+                                                 version,
+                                                 compressable);
+                    } else {
+                        value = new ResourceInfo(resourceName,
+                                                 version,
+                                                 localePrefix,
+                                                 this,
+                                                 compressable);
+                    }
                 }
             }
         } catch (Exception e) {

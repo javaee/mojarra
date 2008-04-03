@@ -25,7 +25,7 @@ import com.sun.faces.util.FacesLogger;
 public class WebappResourceHelper extends ResourceHelper {
 
     private static final WebappResourceHelper INSTANCE = new WebappResourceHelper();
-    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
+    private static final Logger LOGGER = FacesLogger.RESOURCE.getLogger();
 
     private static final String BASE_RESOURCE_PATH = "/resources";
 
