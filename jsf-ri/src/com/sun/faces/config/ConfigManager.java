@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManager.java,v 1.3 2007/04/26 22:28:57 rlubke Exp $
+ * $Id: ConfigManager.java,v 1.4 2007/04/26 22:35:50 rlubke Exp $
  */
 
 /*
@@ -411,11 +411,10 @@ public class ConfigManager {
                 // to convert all documents to 1.2
                 ByteArrayOutputStream baos = new ByteArrayOutputStream(4096);
                 StreamResult sResult = new StreamResult(baos);
-                DocumentBuilderFactory tFactory = DocumentBuilderFactory.newInstance();
-                tFactory.setIgnoringComments(true);
-                tFactory.setNamespaceAware(true);
-                tFactory.setValidating(false);
+                DocumentBuilderFactory tFactory = DbfFactory.getFactory(false);
                 DocumentBuilder tBuilder = tFactory.newDocumentBuilder();
+                tBuilder.setEntityResolver(DbfFactory.FACES_ENTITY_RESOLVER);
+                tBuilder.setErrorHandler(DbfFactory.FACES_ERROR_HANDLER);
                 DOMSource domSource
                      = new DOMSource(tBuilder.parse(getInputStream(documentURL),
                                                     documentURL.toExternalForm()));
