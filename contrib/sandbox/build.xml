@@ -98,7 +98,7 @@
     <property name="tinymce.archive" value="${sandbox.dependency.base.dir}/tinymce_${tinymce.version}.zip"/>
 
     <property name="name" value="jsf-ri-sandbox"/>
-    <property name="sb.impl.version" value="0.1"/>
+    <property name="sb.impl.version" value="0.7"/>
     <property name="impl.name" value="JSF RI Sandbox"/>
     <property name="applet.archive.name" value="${name}-upload-applet" />
 
@@ -232,7 +232,7 @@
             </not>
             <then>
                 <!-- ${maven.mirror}/org/apache/shale/shale-remoting/${shale.remoting.version}/shale-remoting-${shale.remoting.version}.jar" -->
-                <get src="http://people.apache.org/builds/shale/nightly/shale-framework-20070504.zip"
+                <get src="http://people.apache.org/builds/shale/nightly/shale-framework-200700605zip"
                      dest="shale-framework.zip"
                      usetimestamp="true"/>
                 <unzip src="shale-framework.zip" dest="${sandbox.dependency.base.dir}">
@@ -250,7 +250,7 @@
             </not>
             <then>
                 <!-- ${maven.mirror}/org/apache/shale/shale-remoting/${shale.remoting.version}/shale-remoting-${shale.remoting.version}.jar" -->
-                <get src="http://people.apache.org/builds/shale/nightly/shale-framework-20070504.zip"
+                <get src="http://people.apache.org/builds/shale/nightly/shale-framework-200700605zip"
                      dest="shale-framework.zip"
                      usetimestamp="true"/>
                 <unzip src="shale-framework.zip" dest="${sandbox.dependency.base.dir}">
@@ -547,27 +547,32 @@
                             basedir="${build.classes.dir}"
                             extension-name=""/>       
     </target>
-
-    <target name="nightly" depends="clean,dist" description="Upload nightly build to java.net">
+<!--depends="clean,dist" -->
+    <target name="nightly" description="Upload nightly build to java.net">
         <if>
             <available file="${tasks.home}"/>
             <then>
                 <sequential>
                     <taskdef resource="org/kohsuke/javanettasks.properties">
                         <classpath>
-                            <pathelement location="${tasks.home}/javanettasks-1.0.9-jason.jar"/>
+                            <pathelement location="${tasks.home}/javanettasks-1.0.12.jar"/>
                             <fileset dir="${tasks.home}/lib" includes="*.jar"/>
                         </classpath>
                     </taskdef>
 
                     <javaNetUpload projectName="javaserverfaces"
-                                   toFile="/RI Sandbox/jsf-ri-sandbox-0.1.zip"
-                                   fromFile="${dist.dir}/jsf-ri-sandbox-0.1.zip"
+                                   toFile="/RI Sandbox/jsf-ri-sandbox-${sb.impl.version}.jar"
+                                   fromFile="${build.dir}/lib/jsf-ri-sandbox-${sb.impl.version}.jar"
                                    fileDescription="Nightly snapshot of the Sandbox components"
                                    overwrite="yes"/>
                     <javaNetUpload projectName="javaserverfaces"
-                                   toFile="/RI Sandbox/jsf-ri-sandbox-src-0.1.zip"
-                                   fromFile="${dist.dir}/jsf-ri-sandbox-src-0.1.zip"
+                                   toFile="/RI Sandbox/jsf-ri-sandbox-${sb.impl.version}.zip"
+                                   fromFile="${dist.dir}/jsf-ri-sandbox-${sb.impl.version}.zip"
+                                   fileDescription="Nightly snapshot of the Sandbox components, jar and javadocs"
+                                   overwrite="yes"/>
+                    <javaNetUpload projectName="javaserverfaces"
+                                   toFile="/RI Sandbox/jsf-ri-sandbox-src-${sb.impl.version}.zip"
+                                   fromFile="${dist.dir}/jsf-ri-sandbox-src-${sb.impl.version}.zip"
                                    fileDescription="Nightly snapshot of the source bundle for the Sandbox components"
                                    overwrite="yes"/>
                     <javaNetUpload projectName="javaserverfaces"
@@ -583,7 +588,7 @@
                 </sequential>
             </then>
             <else>
-                <fail message="Javanettasks version 1.0.8 is not available at the location referred by TASKS_HOME (${tasks.home}).  Ensure that the TASKS_HOME environment variable is properly set."/>
+                <fail message="Javanettasks version 1.0.12 is not available at the location referred by TASKS_HOME (${tasks.home}).  Ensure that the TASKS_HOME environment variable is properly set."/>
             </else>
         </if>
     </target>
