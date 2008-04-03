@@ -1302,6 +1302,12 @@ public class UIData extends UIComponentBase
             for (Iterator<String> ids = context.getClientIdsWithMessages();
                   ids.hasNext();) {
                 String id = ids.next();
+                if (id == null) {
+                    // getClientIdsWithMessages() will return a null element
+                    // for messages that don't have client IDs - not sure why
+                    // it was spec'd that way....
+                    continue;
+                }
                 if (id.startsWith(baseClientId)) {
                     for (Iterator<FacesMessage> msgs = context.getMessages(id);
                           msgs.hasNext();) {
