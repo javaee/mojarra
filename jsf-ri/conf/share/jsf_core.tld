@@ -75,10 +75,6 @@
 
     <!-- ============== Configuration Listener ============== -->
 
-
-    <listener>
-        <listener-class>com.sun.faces.util.ReflectionUtils$ReflectionUtilsListener</listener-class>
-    </listener>
     <!--
           This ServletContextListener initializes the runtime environment
           of the JavaServer Faces Reference Implementation when a web
@@ -86,14 +82,7 @@
     -->
     <listener>
        <listener-class>com.sun.faces.config.ConfigureListener</listener-class>
-    </listener>
-   
-    <!-- Listener implementation to handle web application lifecycle
-         events -->
-    <listener>
-        <listener-class>com.sun.faces.application.WebappLifecycleListener</listener-class>
-    </listener>
-
+    </listener>      
 
     <!-- ========== Tag Descriptions ========================================= -->
 

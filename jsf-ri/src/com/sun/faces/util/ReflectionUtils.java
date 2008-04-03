@@ -350,37 +350,5 @@ public final class ReflectionUtils {
 
     }
 
-
-    // ----------------------------------------------------------- Inner Classes
-
-
-    /**
-     * <p>A <code>SerlvetContextListener</code> to ensure that the ReflectionUtils
-     * cache is intialized and cleanup when the application starts and finishes.</p>
-     *
-     * <p>Since the Servlet spec guarantees a single thread during initialization,
-     * doing the cache init and clearing here eliminates the need to have
-     * synchronization code in the loopup methods in order to init the caches
-     * properly.</p>
-     */
-    public static class ReflectionUtilsListener
-         implements ServletContextListener {
-
-
-        // --------------------------------- Methods from ServletContextListener
-
-
-        public void contextInitialized(ServletContextEvent servletContextEvent) {
-
-            ReflectionUtils.initCache(Thread.currentThread().getContextClassLoader());
-
-        }
-
-        public void contextDestroyed(ServletContextEvent servletContextEvent) {
-
-            ReflectionUtils.clearCache(Thread.currentThread().getContextClassLoader());
-            
-        }
-    }
-
+    
 } // END ReflectionUtils

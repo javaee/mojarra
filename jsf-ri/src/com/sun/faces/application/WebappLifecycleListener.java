@@ -69,12 +69,7 @@ import java.util.logging.Logger;
  * should be invoking methods marked with the
  * <code>@PreDestroy</code> annotation.</p>
  */
-public class WebappLifecycleListener implements ServletRequestListener,
-      HttpSessionListener,
-      ServletRequestAttributeListener,
-      HttpSessionAttributeListener,
-      ServletContextAttributeListener,
-      ServletContextListener {
+public class WebappLifecycleListener {
 
     // Log instance for this class
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
@@ -99,14 +94,6 @@ public class WebappLifecycleListener implements ServletRequestListener,
         ApplicationAssociate.setCurrentInstance(getAssociate());
     }
 
-    /**
-     * Notification that a session was created.
-     *
-     * @param se the notification event
-     */
-    public void sessionCreated(HttpSessionEvent se) {
-        // not interested in this event
-    }
 
     /**
      * Notification that a session is about to be invalidated.
@@ -121,14 +108,6 @@ public class WebappLifecycleListener implements ServletRequestListener,
                                  session.getAttribute(beanName), 
                                  Scope.SESSION);
         }
-    }
-
-    /**
-     * Notification that a new attribute was added to the
-     * * servlet request. Called after the attribute is added.
-     */
-    public void attributeAdded(ServletRequestAttributeEvent srae) {
-        // not interested in this event
     }
 
     /**
@@ -159,13 +138,7 @@ public class WebappLifecycleListener implements ServletRequestListener,
                                  Scope.REQUEST);
         }
     }
-
-    /** Notification that an attribute has been added to a session. 
-     * Called after the attribute is added. 
-     */
-    public void attributeAdded(HttpSessionBindingEvent se) {
-        // not interested in this event
-    }
+    
 
     /** Notification that an attribute has been removed from a session. 
      * Called after the attribute is removed.
@@ -196,12 +169,6 @@ public class WebappLifecycleListener implements ServletRequestListener,
 
     }
 
-    /** Notification that a new attribute was added to the servlet context. 
-     * Called after the attribute is added. 
-     */
-    public void attributeAdded(ServletContextAttributeEvent scab) {
-
-    }
 
     /** Notification that an existing attribute has been removed from the servlet context. 
      * Called after the attribute is removed. 

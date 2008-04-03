@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.107 2007/05/23 19:52:53 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.108 2007/05/23 21:25:59 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -40,12 +40,14 @@
 package com.sun.faces.config;
 
 import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.application.WebappLifecycleListener;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.el.ELContextListenerImpl;
 import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.Timer;
 import com.sun.faces.util.Util;
 import org.xml.sax.Attributes;
@@ -58,9 +60,11 @@ import javax.el.ExpressionFactory;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
+import javax.servlet.*;
+import javax.servlet.http.HttpSessionAttributeListener;
+import javax.servlet.http.HttpSessionListener;
+import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.jsp.JspApplicationContext;
 import javax.servlet.jsp.JspFactory;
 import javax.xml.parsers.SAXParser;
@@ -75,11 +79,15 @@ import java.util.logging.Logger;
  * configure the Reference Implementation runtime environment.</p>
  * <p/>
  */
-@SuppressWarnings({"ForLoopReplaceableByForEach"}) 
-public class ConfigureListener implements ServletContextListener {
+public class ConfigureListener implements ServletRequestListener,
+                                          HttpSessionListener,
+                                          ServletRequestAttributeListener,
+                                          HttpSessionAttributeListener,
+                                          ServletContextAttributeListener,
+                                          ServletContextListener {
 
 
-    private static final Logger LOGGER =FacesLogger.CONFIG.getLogger();
+    private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
 
 
     /**
@@ -92,7 +100,7 @@ public class ConfigureListener implements ServletContextListener {
         FactoryFinder.RENDER_KIT_FACTORY
     };
 
-
+    protected WebappLifecycleListener webAppListener = new WebappLifecycleListener();
     protected WebConfiguration webConfig;
 
    
@@ -127,6 +135,7 @@ public class ConfigureListener implements ServletContextListener {
 
 
     public void contextInitialized(ServletContextEvent sce) {
+        webAppListener.contextInitialized(sce);
         Timer timer = Timer.getInstance();
         if (timer != null) {
             timer.startTiming();
@@ -167,6 +176,7 @@ public class ConfigureListener implements ServletContextListener {
         }
 
         FacesContext initContext = new InitFacesContext(context);
+        ReflectionUtils.initCache(Thread.currentThread().getContextClassLoader());
 
         try {
 
@@ -226,6 +236,7 @@ public class ConfigureListener implements ServletContextListener {
 
 
     public void contextDestroyed(ServletContextEvent sce) {
+        webAppListener.contextDestroyed(sce);
         ServletContext context = sce.getServletContext();
 
         LOGGER.log(Level.FINE,
@@ -242,10 +253,88 @@ public class ConfigureListener implements ServletContextListener {
             // Release the initialization mark on this web application
             ConfigManager.getInstance().destory(context);
             initContext.release();
+            ReflectionUtils.clearCache(Thread.currentThread().getContextClassLoader());
             WebConfiguration.clear(context);
         }
 
-    }    
+    }
+
+
+    // ------------------------------------- Methods from ServletRequestListener
+
+
+    public void requestDestroyed(ServletRequestEvent event) {
+        webAppListener.requestDestroyed(event);
+    }
+
+
+    public void requestInitialized(ServletRequestEvent event) {
+        webAppListener.requestInitialized(event);
+    }
+
+
+    // ----------------------------------------- Methods from HttpSessionListener
+
+
+    public void sessionCreated(HttpSessionEvent event) {
+        // ignored
+    }
+
+
+    public void sessionDestroyed(HttpSessionEvent event) {
+        webAppListener.sessionDestroyed(event);
+    }
+
+
+    // ---------------------------- Methods from ServletRequestAttributeListener
+
+
+    public void attributeAdded(ServletRequestAttributeEvent event) {
+        // ignored
+    }
+
+
+    public void attributeRemoved(ServletRequestAttributeEvent event) {
+        webAppListener.attributeRemoved(event);
+    }
+
+
+    public void attributeReplaced(ServletRequestAttributeEvent event) {
+        webAppListener.attributeReplaced(event);
+    }
+
+
+    // ------------------------------- Methods from HttpSessionAttributeListener
+
+
+    public void attributeAdded(HttpSessionBindingEvent event) {
+        // ignored
+    }
+
+
+    public void attributeRemoved(HttpSessionBindingEvent event) {
+        webAppListener.attributeRemoved(event);
+    }
+
+
+    public void attributeReplaced(HttpSessionBindingEvent event) {
+        webAppListener.attributeReplaced(event);
+    }
+
+    // ---------------------------- Methods from ServletContextAttributeListener
+
+    public void attributeAdded(ServletContextAttributeEvent event) {
+        // ignored
+    }
+
+    public void attributeRemoved(ServletContextAttributeEvent event) {
+        webAppListener.attributeRemoved(event);
+    }
+
+    public void attributeReplaced(ServletContextAttributeEvent event) {
+        webAppListener.attributeReplaced(event);
+    }
+
 
     // --------------------------------------------------------- Private Methods
    
