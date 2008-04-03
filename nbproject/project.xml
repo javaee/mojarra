@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://www.netbeans.org/ns/project/1">
+    <type>org.netbeans.modules.ant.freeform</type>
+    <configuration>
+        <general-data xmlns="http://www.netbeans.org/ns/freeform-project/1">
+            <name>Mojarra</name>
+        </general-data>
+        <general-data xmlns="http://www.netbeans.org/ns/freeform-project/2">
+            <!-- Do not use Project Properties customizer when editing this file manually. -->
+            <name>Mojarra</name>
+            <properties/>
+            <folders>
+                <source-folder>
+                    <label>Mojarra</label>
+                    <location>.</location>
+                    <encoding>UTF-8</encoding>
+                </source-folder>
+                <source-folder>
+                    <label>jsf-api\src</label>
+                    <type>java</type>
+                    <location>jsf-api/src</location>
+                    <encoding>UTF-8</encoding>
+                </source-folder>
+                <source-folder>
+                    <label>jsf-api\build\generate</label>
+                    <type>java</type>
+                    <location>jsf-api/build/generate</location>
+                    <encoding>UTF-8</encoding>
+                </source-folder>
+                <source-folder>
+                    <label>jsf-ri\src</label>
+                    <type>java</type>
+                    <location>jsf-ri/src</location>
+                    <encoding>UTF-8</encoding>
+                </source-folder>
+                <source-folder>
+                    <label>jsf-ri\build\generate</label>
+                    <type>java</type>
+                    <location>jsf-ri/build/generate</location>
+                    <encoding>UTF-8</encoding>
+                </source-folder>
+                <source-folder>
+                    <label>jsf-tools\src</label>
+                    <type>java</type>
+                    <location>jsf-tools/src</location>
+                    <encoding>UTF-8</encoding>
+                </source-folder>
+            </folders>
+            <ide-actions>
+                <action name="build">
+                    <target>main</target>
+                </action>
+                <action name="clean">
+                    <target>clean</target>
+                </action>
+                <action name="javadoc">
+                    <target>build.javadocs.dist</target>
+                </action>
+                <action name="test">
+                    <target>test</target>
+                </action>
+                <action name="rebuild">
+                    <target>clean</target>
+                    <target>main</target>
+                </action>
+            </ide-actions>
+            <view>
+                <items>
+                    <source-folder style="packages">
+                        <label>jsf-api\src</label>
+                        <location>jsf-api/src</location>
+                    </source-folder>
+                    <source-folder style="packages">
+                        <label>jsf-api\build\generate</label>
+                        <location>jsf-api/build/generate</location>
+                    </source-folder>
+                    <source-folder style="packages">
+                        <label>jsf-ri\src</label>
+                        <location>jsf-ri/src</location>
+                    </source-folder>
+                    <source-folder style="packages">
+                        <label>jsf-ri\build\generate</label>
+                        <location>jsf-ri/build/generate</location>
+                    </source-folder>
+                    <source-folder style="packages">
+                        <label>jsf-tools\src</label>
+                        <location>jsf-tools/src</location>
+                    </source-folder>
+                    <source-file>
+                        <location>build.xml</location>
+                    </source-file>
+                </items>
+                <context-menu>
+                    <ide-action name="build"/>
+                    <ide-action name="rebuild"/>
+                    <ide-action name="clean"/>
+                    <ide-action name="javadoc"/>
+                    <ide-action name="test"/>
+                </context-menu>
+            </view>
+            <subprojects/>
+        </general-data>
+        <java-data xmlns="http://www.netbeans.org/ns/freeform-project-java/1">
+            <compilation-unit>
+                <package-root>jsf-api/src</package-root>
+                <package-root>jsf-api/build/generate</package-root>
+                <package-root>jsf-ri/src</package-root>
+                <package-root>jsf-ri/build/generate</package-root>
+                <package-root>jsf-tools/src</package-root>
+                <classpath mode="compile">dependencies/glassfish/lib/appserv-rt.jar;dependencies/glassfish/lib/javaee.jar;dependencies/jars/com-sun-commons-beanutils.jar;dependencies/jars/com-sun-commons-collections.jar;dependencies/jars/com-sun-commons-digester-1.5.jar;dependencies/jars/com-sun-commons-digester.jar;dependencies/jars/com-sun-commons-logging-1.0.4.jar;dependencies/jars/com-sun-commons-logging-api.jar;dependencies/jars/commons-codec-1.3.jar;dependencies/jars/commons-collections-3.2.jar;dependencies/jars/commons-httpclient-3.1.jar;dependencies/jars/commons-io-1.3.1.jar;dependencies/jars/commons-lang-2.3.jar;dependencies/jars/commons-logging-1.1.jar;dependencies/jars/cssparser-0.9.4.jar;dependencies/jars/htmlunit-1.14.jar;dependencies/jars/ivy-2.0.0-beta1.jar;dependencies/jars/jaxen-1.1.1.jar;dependencies/jars/js-1.6R7.jar;dependencies/jars/jsp-api-2.1.jar;dependencies/jars/jsr250-api-1.0.jar;dependencies/jars/jstl-1.2.jar;dependencies/jars/junit-3.8.1.jar;dependencies/jars/maven-repository-importer-1.2.jar;dependencies/jars/nekohtml-0.9.5.jar;dependencies/jars/portlet-api-1.0.jar;dependencies/jars/servlet-api-2.5.jar;dependencies/jars/tlddoc-1.3.jar;dependencies/jars/xercesImpl-2.6.2.jar;dependencies/jars/xmlParserAPIs-2.6.2.jar;dependencies/jars/com-sun-commons-beanutils-1.6.1.jar;dependencies/apache-tomcat-6.0.13/lib/catalina.jar;dependencies/jars/com-sun-commons-collections-2.1.jar;dependencies/jetty-6.1.4rc0/lib/annotations/jetty-annotations-6.1.4rc0.jar;dependencies/jetty-6.1.4rc0/lib/plus/jetty-plus-6.1.4rc0.jar;dependencies/glassfish/lib/ant/lib/ant.jar</classpath>
+                <source-level>1.5</source-level>
+            </compilation-unit>
+        </java-data>
+    </configuration>
+</project>
