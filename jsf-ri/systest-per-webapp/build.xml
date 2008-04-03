@@ -79,7 +79,9 @@
                    converter-property-editor,
                    late-bindings,
                    property-resolver-jsp,
-                   never-unwrap-exceptions"/>
+                   never-unwrap-exceptions,
+                   write-attribute-script-disabled,
+                   write-attribute-script-enabled"/>
     <!-- 
        EXCLUDED APPLICATIONS:
           view-expired

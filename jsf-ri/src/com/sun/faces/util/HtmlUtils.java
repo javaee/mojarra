@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlUtils.java,v 1.15 2008/01/07 22:07:25 rlubke Exp $
+ * $Id: HtmlUtils.java,v 1.16 2008/02/07 08:56:00 edburns Exp $
  */
 
 /*
@@ -40,6 +40,8 @@
 
 package com.sun.faces.util;
 
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -49,6 +51,7 @@ import java.util.BitSet;
 import java.nio.charset.Charset;
 
 import com.sun.faces.renderkit.RenderKitUtils;
+import javax.faces.context.FacesContext;
 
 /**
  * Utility class for HTML.
@@ -186,7 +189,8 @@ public class HtmlUtils {
     static public void writeAttribute(Writer out,
                                       char[] buff,
                                       String text,
-                                      char[] textBuff) throws IOException {
+                                      char[] textBuff, 
+                                      boolean isScriptInAttributeValueEnabled) throws IOException {
 
         int length = text.length();
         if (length >= 16) {
@@ -195,7 +199,8 @@ public class HtmlUtils {
                 textBuff = new char[length * 2];
             }
             text.getChars(0, length, textBuff, 0);
-            writeAttribute(out, buff, textBuff, 0, length);
+            writeAttribute(out, buff, textBuff, 0, length, 
+                    isScriptInAttributeValueEnabled);
         } else {
             int buffLength = buff.length;
             int buffIndex = 0;
@@ -207,6 +212,24 @@ public class HtmlUtils {
                     // If "?" or over, no escaping is needed (this covers
                     // most of the Latin alphabet)
                     if (ch >= 0x3f) {
+                        if (ch == 's') {
+                            // If putting scripts in attribute values
+                            // has been disabled (the defualt), look for
+                            // script: in the attribute value.  
+                            // ensure the attribute value is long enough
+                            // to accomodate "script:"
+                            if (!isScriptInAttributeValueEnabled && 
+                                    ((i + 6) < text.length())) {
+                                if ('c' == text.charAt(i + 1) &&
+                                    'r' == text.charAt(i + 2) &&
+                                    'i' == text.charAt(i + 3) &&
+                                    'p' == text.charAt(i + 4) &&
+                                    't' == text.charAt(i + 5) &&
+                                    ':' == text.charAt(i + 6)) {
+                                    return;
+                                }
+                            }
+                        }
                         buffIndex = addToBuffer(out, buff, buffIndex,
                                                 buffLength, ch);
                     } else if (ch >= 0x27) { // If above "'"...
@@ -284,7 +307,8 @@ public class HtmlUtils {
     static public void writeAttribute(Writer out,
                                       char[] buffer,
                                       char[] text) throws IOException {
-        writeAttribute(out, buffer, text, 0, text.length);
+        writeAttribute(out, buffer, text, 0, text.length, 
+                WebConfiguration.BooleanWebContextInitParameter.EnableScriptInAttributeValue.getDefaultValue());
     }
 
 
@@ -297,7 +321,8 @@ public class HtmlUtils {
                                       char[] buff,
                                       char[] text,
                                       int start,
-                                      int length) throws IOException {
+                                      int length, 
+                                      boolean isScriptInAttributeValueEnabled) throws IOException {
         int buffLength = buff.length;
         int buffIndex = 0;
 
@@ -305,11 +330,30 @@ public class HtmlUtils {
         for (int i = start; i < end; i++) {
             char ch = text[i];
 
-            // Tilde or less...
+            // "Application Program Command" or less...
             if (ch < 0xA0) {
                 // If "?" or over, no escaping is needed (this covers
                 // most of the Latin alphabet)
                 if (ch >= 0x3f) {
+                    if (ch == 's') {
+                        // If putting scripts in attribute values
+                        // has been disabled (the defualt), look for
+                        // script: in the attribute value.  
+                        // ensure the attribute value is long enough
+                        // to accomodate "script:"
+                        if (!isScriptInAttributeValueEnabled &&
+                                ((i + 6) < text.length)) {
+                            if ('c' == text[i + 1] &&
+                                'r' == text[i + 2] &&
+                                'i' == text[i + 3] &&
+                                'p' == text[i + 4] &&
+                                't' == text[i + 5] &&
+                                ':' == text[i + 6]) {
+                                return;
+                            }
+                        }
+                    }
+                    
                     buffIndex = addToBuffer(out, buff, buffIndex,
                                             buffLength, ch);
                 } else if (ch >= 0x27) { // If above "'"...
@@ -1004,7 +1048,6 @@ public class HtmlUtils {
         return Charset.isSupported(encoding);
     }
     
-
     //----------------------------------------------------------
     // The following is used to verify "empty" Html elements.
     // "Empty" Html elements are those that do not require an

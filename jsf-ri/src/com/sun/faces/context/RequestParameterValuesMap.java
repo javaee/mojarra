@@ -105,7 +105,9 @@ public class RequestParameterValuesMap extends StringArrayValuesMap {
 
     @Override
     public boolean equals(Object obj) {
-        return !(obj == null || !(obj instanceof RequestParameterValuesMap))
+        return !(obj == null || !(obj.getClass()
+                   == ExternalContextImpl
+                       .theUnmodifiableMapClass))
                && super.equals(obj);
     }
 

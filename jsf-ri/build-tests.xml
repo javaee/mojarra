@@ -81,6 +81,7 @@
         <pathelement location="${jsf.test.jar}"/>
         <path refid="compile.classpath"/>
         <path refid="cactus.compile.classpath"/>        
+        <path refid="sun.commons.classpath"/>
     </path>
 
     <path id="test.runtime.classpath">

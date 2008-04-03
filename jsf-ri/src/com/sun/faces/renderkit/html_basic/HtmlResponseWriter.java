@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.51 2008/01/07 22:07:25 rlubke Exp $
+ * $Id: HtmlResponseWriter.java,v 1.52 2008/02/07 08:56:00 edburns Exp $
  */
 
 /*
@@ -51,9 +51,15 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.util.HtmlUtils;
 import com.sun.faces.util.MessageUtils;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import javax.faces.context.ExternalContext;
 
 
 /**
@@ -119,6 +125,14 @@ public class HtmlResponseWriter extends ResponseWriter {
     // Enables hiding of inlined script and style
     // elements from old browsers
     private Boolean isScriptHidingEnabled;
+    
+    // Enables scripts to be included in attribute values
+    private Boolean isScriptInAttributeValueEnabled;
+    
+    // Keep the map passed in our ctor so we can pass it to
+    // cloneWithWriter
+    private Map<WebConfiguration.BooleanWebContextInitParameter,
+                                  Boolean> configPrefs;
 
     // Internal buffer used when outputting properly escaped information
     // using HtmlUtils class.
@@ -178,27 +192,64 @@ public class HtmlResponseWriter extends ResponseWriter {
                               String contentType,
                               String encoding)
     throws FacesException {
+        this(writer, contentType, encoding, null);
 
-        this(writer, contentType, encoding, true);
+    }
+    
+    private Map initConfigPrefs() {
+        WebConfiguration webConfig = null;
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (null != context) {
+            ExternalContext extContext = context.getExternalContext();
+            if (null != extContext) {
+                webConfig = WebConfiguration.getInstance(extContext);
+            }
+        }
+        
+        
+        Map<WebConfiguration.BooleanWebContextInitParameter,
+                Boolean> prefs = 
+            new HashMap<WebConfiguration.BooleanWebContextInitParameter,
+                        Boolean>();
 
+        prefs.put(BooleanWebContextInitParameter.PreferXHTMLContentType,
+                (null == webConfig) ? BooleanWebContextInitParameter.PreferXHTMLContentType.getDefaultValue() :
+                        webConfig.isOptionEnabled(
+                         BooleanWebContextInitParameter.PreferXHTMLContentType));
+        prefs.put(BooleanWebContextInitParameter.EnableJSStyleHiding,
+                (null == webConfig) ? BooleanWebContextInitParameter.EnableJSStyleHiding.getDefaultValue() :
+                        webConfig.isOptionEnabled(
+                         BooleanWebContextInitParameter.EnableJSStyleHiding));
+        prefs.put(BooleanWebContextInitParameter.EnableScriptInAttributeValue,
+                (null == webConfig) ? BooleanWebContextInitParameter.EnableScriptInAttributeValue.getDefaultValue() :
+                        webConfig.isOptionEnabled(
+                         BooleanWebContextInitParameter.EnableScriptInAttributeValue));
+        
+        return Collections.unmodifiableMap(prefs);
     }
 
     /**
-     * Constructor sets the <code>ResponseWriter</code> and
-     * encoding.
+     * <p>Constructor sets the <code>ResponseWriter</code> and
+     * encoding.</p>
+     * 
+     * <p>The argument configPrefs is a map of configurable prefs that affect 
+     * this instance's behavior.  Supported keys are:</p>
+     * 
+     * <p>BooleanWebContextInitParameter.EnableJSStyleHiding: <code>true</code> 
+     * if the writer should attempt to hide JS from older browsers</p>
      *
      * @param writer      the <code>ResponseWriter</code>
      * @param contentType the content type.
      * @param encoding    the character encoding.
-     * @param isScriptHidingEnabled <code>true</code> if the writer
-     *  should attempt to hide JS from older browsers
+     * @param configPrefs 
      *
      * @throws javax.faces.FacesException the encoding is not recognized.
      */
     public HtmlResponseWriter(Writer writer,
                               String contentType,
                               String encoding,
-                              Boolean isScriptHidingEnabled)
+                              Map<WebConfiguration.BooleanWebContextInitParameter,
+                                  Boolean> configPrefs)
     throws FacesException {
 
         this.writer = writer;
@@ -208,7 +259,15 @@ public class HtmlResponseWriter extends ResponseWriter {
         }
 
         this.encoding = encoding;
-        this.isScriptHidingEnabled = isScriptHidingEnabled;
+        
+        this.configPrefs = (null != configPrefs) ? configPrefs : initConfigPrefs();
+        this.isScriptHidingEnabled =
+                (this.configPrefs.containsKey(BooleanWebContextInitParameter.EnableJSStyleHiding)) ?
+                    this.configPrefs.get(BooleanWebContextInitParameter.EnableJSStyleHiding) : Boolean.FALSE;
+        this.isScriptInAttributeValueEnabled = 
+                (this.configPrefs.containsKey(BooleanWebContextInitParameter.EnableScriptInAttributeValue)) ?
+                    this.configPrefs.get(BooleanWebContextInitParameter.EnableScriptInAttributeValue) : Boolean.FALSE;
+                
         this.attributesBuffer = new FastStringWriter(128);
 
         // Check the character encoding
@@ -218,7 +277,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         }
 
     }
-
+    
     // -------------------------------------------------- Methods From Closeable
 
 
@@ -276,7 +335,7 @@ public class HtmlResponseWriter extends ResponseWriter {
             return new HtmlResponseWriter(writer,
                                           getContentType(),
                                           getCharacterEncoding(),
-                                          isScriptHidingEnabled);
+                                          configPrefs);
         } catch (FacesException e) {
             // This should never happen
             throw new IllegalStateException();
@@ -619,7 +678,7 @@ public class HtmlResponseWriter extends ResponseWriter {
             HtmlUtils.writeAttribute(attributesBuffer,
                                      buffer,
                                      val,
-                                     textBuffer);
+                                     textBuffer, isScriptInAttributeValueEnabled);
             attributesBuffer.write('"');
         }
 
@@ -845,7 +904,7 @@ public class HtmlResponseWriter extends ResponseWriter {
             HtmlUtils.writeAttribute(attributesBuffer,
                                      buffer,
                                      stringValue,
-                                     textBuffer);
+                                     textBuffer, isScriptInAttributeValueEnabled);
         } else {
             HtmlUtils.writeURL(attributesBuffer,
                                stringValue,

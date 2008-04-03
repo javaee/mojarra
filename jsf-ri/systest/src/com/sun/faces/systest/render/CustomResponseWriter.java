@@ -1,5 +1,5 @@
 /*
- * $Id: CustomResponseWriter.java,v 1.11 2008/01/07 22:07:25 rlubke Exp $
+ * $Id: CustomResponseWriter.java,v 1.12 2008/02/07 08:56:01 edburns Exp $
  */
 
 /*
@@ -300,7 +300,7 @@ public class CustomResponseWriter extends ResponseWriter {
             
             // write the attribute value
             ensureTextBufferCapacity(value.toString());
-            HtmlUtils.writeAttribute(writer, buffer, value.toString(), textBuffer);
+            HtmlUtils.writeAttribute(writer, buffer, value.toString(), textBuffer, true);
             //PENDING (horwat) using String as a result of Tomcat char 
             //        writer ArrayIndexOutOfBoundsException (3584)
             writer.write("\"");
@@ -348,7 +348,7 @@ public class CustomResponseWriter extends ResponseWriter {
         ensureTextBufferCapacity(stringValue);
         // Javascript URLs should not be URL-encoded
         if (stringValue.startsWith("javascript:")) {
-            HtmlUtils.writeAttribute(writer, buffer, stringValue, textBuffer);
+            HtmlUtils.writeAttribute(writer, buffer, stringValue, textBuffer, true);
         } else {
             HtmlUtils.writeURL(writer, stringValue, textBuffer, encoding, getContentType());
         }

@@ -1,5 +1,5 @@
 /*
- * $Id: WebConfiguration.java,v 1.37 2008/01/28 20:55:37 rlubke Exp $
+ * $Id: WebConfiguration.java,v 1.38 2008/02/07 08:55:59 edburns Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -808,6 +808,10 @@ public class WebConfiguration {
         EnableJSStyleHiding(
             "com.sun.faces.enableJSStyleHiding",
              false
+        ),
+        EnableScriptInAttributeValue(
+            "com.sun.faces.enableScriptsInAttributeValues",
+             true
         ),
         WriteStateAtFormEnd(
             "com.sun.faces.writeStateAtFormEnd",

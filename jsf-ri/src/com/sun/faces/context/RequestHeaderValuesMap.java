@@ -114,7 +114,9 @@ public class RequestHeaderValuesMap extends StringArrayValuesMap {
 
     @Override
     public boolean equals(Object obj) {
-       return !(obj == null || !(obj instanceof RequestHeaderValuesMap))
+       return !(obj == null || !(obj.getClass()
+                   == ExternalContextImpl
+                       .theUnmodifiableMapClass))
                && super.equals(obj);
     }
 

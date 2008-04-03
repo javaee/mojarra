@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.56 2007/08/08 16:38:45 youngm Exp $
+ * $Id: RenderKitImpl.java,v 1.57 2008/02/07 08:56:00 edburns Exp $
  */
 
 /*
@@ -61,13 +61,15 @@ import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.renderkit.html_basic.HtmlResponseWriter;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * <B>RenderKitImpl</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.56 2007/08/08 16:38:45 youngm Exp $
+ * @version $Id: RenderKitImpl.java,v 1.57 2008/02/07 08:56:00 edburns Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -98,8 +100,38 @@ public class RenderKitImpl extends RenderKit {
 
     private ResponseStateManager responseStateManager =
          new ResponseStateManagerImpl();
-    private Boolean preferXHTML;
-    private Boolean isScriptHidingEnabled;
+    private Map<WebConfiguration.BooleanWebContextInitParameter,
+                Boolean> configPrefs;
+
+    public RenderKitImpl() {
+        initConfigPrefs();
+        
+    }
+    
+    private void initConfigPrefs() {
+        assert(null == configPrefs); // class invariant
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        WebConfiguration webConfig = WebConfiguration.getInstance(
+                                  context.getExternalContext());
+        Map<WebConfiguration.BooleanWebContextInitParameter,
+                Boolean> prefs = 
+            new HashMap<WebConfiguration.BooleanWebContextInitParameter,
+                        Boolean>();
+
+        prefs.put(BooleanWebContextInitParameter.PreferXHTMLContentType,
+                        webConfig.isOptionEnabled(
+                         BooleanWebContextInitParameter.PreferXHTMLContentType));
+        prefs.put(BooleanWebContextInitParameter.EnableJSStyleHiding,
+                        webConfig.isOptionEnabled(
+                         BooleanWebContextInitParameter.EnableJSStyleHiding));
+        prefs.put(BooleanWebContextInitParameter.EnableScriptInAttributeValue,
+                        webConfig.isOptionEnabled(
+                         BooleanWebContextInitParameter.EnableScriptInAttributeValue));
+        
+        configPrefs = Collections.unmodifiableMap(prefs);
+        
+    }
 
 
     public void addRenderer(String family, String rendererType,
@@ -170,13 +202,6 @@ public class RenderKitImpl extends RenderKit {
         boolean contentTypeNullFromResponse = false;
         FacesContext context = FacesContext.getCurrentInstance();
 
-        // Step 0: Determine if we have a preference for XHTML   
-        if (preferXHTML == null) {
-            preferXHTML =
-                 WebConfiguration.getInstance(context.getExternalContext())
-                      .isOptionEnabled(BooleanWebContextInitParameter.PreferXHTMLContentType);
-        }
-
         // Step 1: Check the content type passed into this method 
         if (null != desiredContentTypeList) {
             contentType = findMatch(
@@ -218,7 +243,7 @@ public class RenderKitImpl extends RenderKit {
             }
 
             if (null != desiredContentTypeList) {
-                if (preferXHTML) {
+                if (configPrefs.get(BooleanWebContextInitParameter.PreferXHTMLContentType)) {
                     desiredContentTypeList = RenderKitUtils.determineContentType(
                          desiredContentTypeList, SUPPORTED_CONTENT_TYPES, RIConstants.XHTML_CONTENT_TYPE);
                 } else {
@@ -256,19 +281,10 @@ public class RenderKitImpl extends RenderKit {
             characterEncoding = RIConstants.CHAR_ENCODING;
         }
 
-        if (isScriptHidingEnabled == null) {
-            WebConfiguration webConfig =
-                 WebConfiguration.getInstance(
-                      context.getExternalContext());
-            isScriptHidingEnabled = webConfig
-                 .isOptionEnabled(
-                      BooleanWebContextInitParameter.EnableJSStyleHiding);
-        }
-
         return new HtmlResponseWriter(writer,
                                       contentType,
                                       characterEncoding,
-             isScriptHidingEnabled);
+                                      configPrefs);
     }
 
     private String[] contentTypeSplit(String contentTypeString) {
