@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactoryWrapper.java,v 1.7 2007/04/27 22:01:03 ofung Exp $
+ * $Id: ManagedBeanFactoryWrapper.java,v 1.8 2007/07/31 18:17:55 rlubke Exp $
  */
 
 /*
@@ -54,6 +54,7 @@ import javax.faces.context.FacesContext;
  * returning it from the {@link #getWrapped} method.</p>
  * 
  * @author edburns, rlubke
+ * @deprecated
  */
 public abstract class ManagedBeanFactoryWrapper extends ManagedBeanFactory {
     
