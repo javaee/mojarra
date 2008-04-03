@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.114 2007/07/16 17:06:43 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.115 2007/07/20 19:17:38 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -47,6 +47,7 @@ import com.sun.faces.el.ELContextListenerImpl;
 import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.Timer;
 import com.sun.faces.util.Util;
@@ -59,15 +60,24 @@ import javax.el.CompositeELResolver;
 import javax.el.ExpressionFactory;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
-import javax.servlet.*;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextAttributeEvent;
+import javax.servlet.ServletContextAttributeListener;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.ServletRequestAttributeEvent;
+import javax.servlet.ServletRequestAttributeListener;
+import javax.servlet.ServletRequestEvent;
+import javax.servlet.ServletRequestListener;
 import javax.servlet.http.HttpSessionAttributeListener;
-import javax.servlet.http.HttpSessionListener;
-import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionBindingEvent;
+import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.http.HttpSessionListener;
 import javax.servlet.jsp.JspApplicationContext;
 import javax.servlet.jsp.JspFactory;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+
 import java.io.StringReader;
 import java.text.MessageFormat;
 import java.util.logging.Level;
@@ -128,6 +138,7 @@ public class ConfigureListener implements ServletRequestListener,
                     LOGGER.log(Level.FINE,
                                "No FacesServlet found in deployment descriptor - bypassing configuration");
                 }
+                WebConfiguration.clear(context);
                 return;
             } else {
                 if (LOGGER.isLoggable(Level.FINE)) {
@@ -326,46 +337,35 @@ public class ConfigureListener implements ServletRequestListener,
             return false;
         }
         try {
-            JspFactory.class.getMethod("getJspApplicationContext", 
-                                       ServletContext.class );
+            JspFactory.class.getMethod("getJspApplicationContext",
+                                       ServletContext.class);
         } catch (NoSuchMethodException nsme) {
             return false;
         }
         return true;
+
     }
 
-    public void registerELResolverAndListenerWithJsp(ServletContext context) {               
-        
-        // check if JSP 2.1
-        if (!isJspTwoOne()) {
-            
-            // not JSP 2.1
-            
+    public void registerELResolverAndListenerWithJsp(ServletContext context) {
+
+        if (webConfig.isSet(WebContextInitParameter.ExpressionFactory) ||
+              !isJspTwoOne()) {
+
             // first try to load a factory defined in web.xml
-            String elFactType = webConfig.getOptionValue(
-                  WebContextInitParameter.ExpressionFactory);
-            if (elFactType == null || "".equals(elFactType.trim())) {
-                // else use EL-RI
-                elFactType = WebContextInitParameter.ExpressionFactory
-                      .getDefaultValue();
+            if (!installExpressionFactory(context,
+                                          webConfig.getOptionValue(
+                                                WebContextInitParameter.ExpressionFactory))) {
+
+                    throw new ConfigurationException(
+                          MessageUtils.getExceptionMessageString(
+                                MessageUtils.INCORRECT_JSP_VERSION_ID,
+                                WebContextInitParameter.ExpressionFactory.getDefaultValue(),
+                                WebContextInitParameter.ExpressionFactory.getQualifiedName()));
+
             }
-            
-            try {
-                ExpressionFactory factory = (ExpressionFactory) Class.forName(
-                        elFactType).newInstance();
-                ApplicationAssociate associate =
-                     ApplicationAssociate.getInstance(context);
-                if (associate != null) {
-                    associate.setExpressionFactory(factory);
-                }
-            } catch (Exception e) {
-                LOGGER.log(Level.SEVERE, "Error Instantiating ExpressionFactory", e);
-            }                        
-        
+
         } else {
-            
-            // Is JSP 2.1
-            
+
             // JSP 2.1 specific check
             if (JspFactory.getDefaultFactory().getJspApplicationContext(context) == null) {
                 return;
@@ -406,6 +406,28 @@ public class ConfigureListener implements ServletRequestListener,
          }
     }
 
+    private boolean installExpressionFactory(ServletContext sc,
+                                             String elFactoryType){
+
+        if (elFactoryType == null) {
+            return false;
+        }
+        try {
+            ExpressionFactory factory = (ExpressionFactory)
+                  Class.forName(elFactoryType).newInstance();
+            ApplicationAssociate associate =
+                 ApplicationAssociate.getInstance(sc);
+            if (associate != null) {
+                associate.setExpressionFactory(factory);
+            }
+            return true;
+        } catch (Exception e) {
+            LOGGER.severe(MessageFormat.format("Unable to instantiate ExpressionFactory ''{0}''",
+                                               elFactoryType));
+            return false;
+        }
+
+    }
 
     // ----------------------------------------------------------- Inner classes
 

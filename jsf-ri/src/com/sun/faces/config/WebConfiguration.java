@@ -1,5 +1,5 @@
 /*
- * $Id: WebConfiguration.java,v 1.26 2007/06/25 20:54:16 rlubke Exp $
+ * $Id: WebConfiguration.java,v 1.27 2007/07/20 19:17:38 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -47,7 +47,11 @@ import javax.faces.context.FacesContext;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
+
+import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -81,6 +85,8 @@ public class WebConfiguration {
     private Map<WebEnvironmentEntry, String> envEntries =
           new EnumMap<WebEnvironmentEntry, String>(WebEnvironmentEntry.class);
 
+    private List<String> setParams = new ArrayList<String>();
+
     private ServletContext servletContext;
 
 
@@ -92,7 +98,8 @@ public class WebConfiguration {
         this.servletContext = servletContext;
 
         String contextName = getServletContextName();
-        
+
+        initSetList(servletContext);
         processBooleanParameters(servletContext, contextName);
         processInitParameters(servletContext, contextName);        
         processJndiEntries(contextName);
@@ -203,6 +210,30 @@ public class WebConfiguration {
     public String getEnvironmentEntry(WebEnvironmentEntry entry) {
 
         return envEntries.get(entry);
+
+    }
+
+
+    /**
+     * @param param the init parameter of interest
+     * @return <code>true</code> if the parameter was explicitly set,
+     *  otherwise, <code>false</code>
+     */
+    public boolean isSet(WebContextInitParameter param) {
+
+        return isSet(param.getQualifiedName());
+
+    }
+
+
+    /**
+     * @param param the init parameter of interest
+     * @return <code>true</code> if the parameter was explicitly set,
+     *  otherwise, <code>false</code>
+     */
+    public boolean isSet(BooleanWebContextInitParameter param) {
+
+        return isSet(param.getQualifiedName());
 
     }
 
@@ -360,6 +391,35 @@ public class WebConfiguration {
             }
 
         }
+
+    }
+
+
+    /**
+     * Adds all com.sun.faces init parameter names to a list.  This allows
+     * callers to determine if a parameter was explicitly set.
+     * @param servletContext the ServletContext of interest
+     */
+    private void initSetList(ServletContext servletContext) {
+
+        for (Enumeration e = servletContext.getInitParameterNames();
+              e.hasMoreElements(); ) {
+            String name = e.nextElement().toString();
+            if (name.startsWith("com.sun.faces")) {
+                setParams.add(name);
+            }
+        }
+
+    }
+
+
+    /**
+     * @param name the param name
+     * @return <code>true</code> if the name was explicitly specified
+     */
+    private boolean isSet(String name) {
+
+        return setParams.contains(name);
 
     }
 
