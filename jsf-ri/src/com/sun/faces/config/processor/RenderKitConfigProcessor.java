@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitConfigProcessor.java,v 1.6 2007/06/28 21:42:00 rlubke Exp $
+ * $Id: RenderKitConfigProcessor.java,v 1.7 2008/01/11 17:37:40 rlubke Exp $
  */
 
 /*
@@ -41,6 +41,8 @@
 package com.sun.faces.config.processor;
 
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.config.ConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -55,6 +57,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.text.MessageFormat;
 
 /**
@@ -65,10 +70,7 @@ import java.text.MessageFormat;
  */
 public class RenderKitConfigProcessor extends AbstractConfigProcessor {
 
-    private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
-
-    private static final String DEFAULT_RENDER_KIT_CLASS =
-         "com.sun.faces.renderkit.RenderKitImpl";
+    private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();   
 
     /**
      * <p>/faces-config/render-kit</p>
@@ -115,6 +117,10 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
     public void process(Document[] documents)
     throws Exception {
 
+        Map<String,Map<String,List<Node>>> renderers =
+              new LinkedHashMap<String,Map<String,List<Node>>>();
+        RenderKitFactory rkf = (RenderKitFactory)
+             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         for (int i = 0; i < documents.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
@@ -126,8 +132,24 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
                  .getNamespaceURI();
             NodeList renderkits = documents[i].getDocumentElement()
                  .getElementsByTagNameNS(namespace, RENDERKIT);
+
             if (renderkits != null && renderkits.getLength() > 0) {
-                addRenderKits(renderkits, namespace);
+                addRenderKits(renderkits, namespace, renderers, rkf);
+            }
+        }
+
+        // now add the accumulated renderers to the RenderKits
+        for (Map.Entry<String,Map<String,List<Node>>> entry : renderers.entrySet()) {
+            RenderKit rk = rkf.getRenderKit(null, entry.getKey());
+            if (rk == null) {
+                throw new ConfigurationException(
+                      MessageUtils.getExceptionMessageString(
+                            MessageUtils.RENDERER_CANNOT_BE_REGISTERED_ID,
+                            entry.getKey()));
+            }
+            
+            for (Map.Entry<String,List<Node>> renderEntry : entry.getValue().entrySet()) {
+                addRenderers(rk, renderEntry.getValue(), renderEntry.getKey());
             }
         }
         invokeNext(documents);
@@ -138,18 +160,19 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
     // --------------------------------------------------------- Private Methods
 
 
-    private void addRenderKits(NodeList renderKits, String namespace)
+    private void addRenderKits(NodeList renderKits,
+                               String namespace,
+                               Map<String,Map<String,List<Node>>> renderers,
+                               RenderKitFactory rkf)
     throws XPathExpressionException {
 
-        RenderKitFactory rkf = (RenderKitFactory)
-             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         for (int i = 0, size = renderKits.getLength(); i < size; i++) {
             Node renderKit = renderKits.item(i);
             NodeList children = ((Element) renderKit)
                  .getElementsByTagNameNS(namespace, "*");
             String rkId = null;
             String rkClass = null;
-            List<Node> renderers =
+            List<Node> renderersList =
                  new ArrayList<Node>(children.getLength());
             for (int c = 0, csize = children.getLength(); c < csize; c++) {
                 Node n = children.item(c);
@@ -158,18 +181,16 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
                 } else if (RENDERKIT_CLASS.equals(n.getLocalName())) {
                     rkClass = getNodeText(n);
                 } else if (RENDERER.equals(n.getLocalName())) {
-                    renderers.add(n);
+                    renderersList.add(n);
                 }
             }
 
             rkId = ((rkId == null)
                     ? RenderKitFactory.HTML_BASIC_RENDER_KIT
                     : rkId);
-            rkClass = ((rkClass == null)
-                       ? DEFAULT_RENDER_KIT_CLASS
-                       : rkClass);
+
             RenderKit rk = rkf.getRenderKit(null, rkId);
-            if (rk == null) {
+            if (rk == null && rkClass != null) {
                 rk = (RenderKit) createInstance(rkClass, RenderKit.class, null, renderKit);
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.log(Level.FINE,
@@ -180,9 +201,19 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
                 }
                 rkf.addRenderKit(rkId, rk);
             }
-            if (rk != null) {
-                addRenderers(rk, renderers, namespace);
+            Map<String,List<Node>> existingRenderers = renderers.get(rkId);
+            if (existingRenderers != null) {
+                List<Node> list = existingRenderers.get(namespace);
+                if (list != null) {
+                    list.addAll(renderersList);
+                } else {
+                    existingRenderers.put(namespace, renderersList);
+                }
+            } else {
+                existingRenderers = new HashMap<String,List<Node>>();
+                existingRenderers.put(namespace, renderersList);
             }
+            renderers.put(rkId, existingRenderers);
         }
 
     }

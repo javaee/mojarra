@@ -298,6 +298,8 @@ public class MessageUtils {
             "com.sun.faces.verifier.NO_DEF_CTOR";
     public static final String VERIFIER_WRONG_TYPE_ID =
             "com.sun.faces.verifier.WRONG_TYPE";
+    public static final String RENDERER_CANNOT_BE_REGISTERED_ID =
+          "com.sun.faces.CONFIG_RENDERER_REGISTRATION_MISSING_RENDERKIT";
    
     
     public static final String JS_RESOURCE_WRITING_ERROR_ID =
