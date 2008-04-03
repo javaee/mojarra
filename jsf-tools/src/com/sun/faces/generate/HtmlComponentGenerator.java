@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlComponentGenerator.java,v 1.29 2007/10/02 21:23:04 rlubke Exp $
+ * $Id: HtmlComponentGenerator.java,v 1.30 2007/10/04 17:13:57 rlubke Exp $
  */
 
 /*
@@ -568,28 +568,6 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         writer.outdent();
         writer.fwrite("}\n\n\n");
 
-<<<<<<< HtmlComponentGenerator.java
-        writer.fwrite("private List<String> getAttributesThatAreSet() {\n");
-        writer.indent();
-        writer.fwrite("List<String> setAttributes = null;\n");
-        writer.fwrite("String pkg = this.getClass().getPackage().getName();\n");
-        writer.fwrite("if (Arrays.binarySearch(OPTIMIZED_PACKAGES, pkg) >= 0) {\n");
-        writer.indent();
-        writer.fwrite("setAttributes = (List<String>) this.getAttributes().get(\"javax.faces.component.UIComponentBase.attributesThatAreSet\");\n");
-        writer.fwrite("if (setAttributes == null) {\n");
-        writer.indent();
-        writer.fwrite("setAttributes = new ArrayList<String>(6);\n");
-        writer.fwrite("this.getAttributes().put(\"javax.faces.component.UIComponentBase.attributesThatAreSet\", setAttributes);\n");
-        writer.outdent();
-        writer.fwrite("}\n");
-        writer.outdent();
-        writer.fwrite("}\n");
-        writer.fwrite("return setAttributes;\n");
-        writer.outdent();
-        writer.fwrite("}\n\n");
-
-
-=======
         writer.fwrite("private void handleAttribute(String name, Object value) {\n");
         writer.indent();
         writer.fwrite("List<String> setAttributes = null;\n");
@@ -617,8 +595,6 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         writer.outdent();
         writer.fwrite("}\n\n");
 
-
->>>>>>> 1.27.4.2
         // Generate the ending of this class
         writer.outdent();
         writer.write("}\n");

@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManager.java,v 1.19 2007/10/04 16:57:25 rlubke Exp $
+ * $Id: ConfigManager.java,v 1.20 2007/10/04 17:13:57 rlubke Exp $
  */
 
 /*
@@ -302,6 +302,24 @@ public class ConfigManager {
 
         executor.shutdown();
         return docs.toArray(new Document[docs.size()]);
+
+    }
+
+
+    /**
+     * @param throwable Throwable
+     * @return the root cause of this error
+     */
+    private Throwable unwind(Throwable throwable) {
+
+          Throwable t = null;
+          if (throwable != null) {
+              t =  unwind(throwable.getCause());
+              if (t == null) {
+                  t = throwable;
+              }
+          }
+          return t;
 
     }
 
