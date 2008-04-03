@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.109 2007/07/26 16:26:52 rlubke Exp $
+ * $Id: ViewHandlerImpl.java,v 1.110 2007/08/27 17:38:28 rlubke Exp $
  */
 
 
@@ -81,7 +81,7 @@ import java.util.logging.Logger;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.109 2007/07/26 16:26:52 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.110 2007/08/27 17:38:28 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -987,6 +987,11 @@ public class ViewHandlerImpl extends ViewHandler {
                     }
                 }
             }
+
+            // all state has been written.  Have 'out' point to the
+            // response so that all subsequent writes will make it to the
+            // browser.
+            out = orig;
         }
 
         private static int getNextDelimiterIndex(StringBuilder builder,
