@@ -119,7 +119,7 @@ public abstract class UISandboxComponentTag extends UIComponentTag {
                                       String attributeName,
                                       String attributeValue) {
 
-        setStringProperty(component, attributeName, attributeValue, false);
+        setIntegerProperty(component, attributeName, attributeValue, false);
 
     }
 
