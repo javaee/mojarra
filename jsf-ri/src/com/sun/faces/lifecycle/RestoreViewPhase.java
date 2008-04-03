@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.48 2007/05/17 14:26:31 rlubke Exp $
+ * $Id: RestoreViewPhase.java,v 1.49 2007/05/18 18:21:55 rlubke Exp $
  */
 
 /*
@@ -71,11 +71,13 @@ import java.util.logging.Logger;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.48 2007/05/17 14:26:31 rlubke Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.49 2007/05/18 18:21:55 rlubke Exp $
  */
 
 public class RestoreViewPhase extends Phase {
 
+    private static final String WEBAPP_ERROR_PAGE_MARKER =
+            "javax.servlet.error.message";
 
     private static Logger LOGGER = FacesLogger.LIFECYCLE.getLogger();
 
@@ -145,7 +147,7 @@ public class RestoreViewPhase extends Phase {
                   MessageUtils.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
         }
 
-        boolean isPostBack = isPostback(facesContext);
+        boolean isPostBack = (isPostback(facesContext) && !isErrorPage(facesContext));
         if (isPostBack) {
             // try to restore the view
             ViewHandler viewHandler = Util.getViewHandler(facesContext);
@@ -269,9 +271,10 @@ public class RestoreViewPhase extends Phase {
 
     /**
      * @param context the <code>FacesContext</code> for the current request
-     * @return true if the request method is POST or PUT, or the method
-     *         is GET but there are query parameters, or the request is not an
-     *         instance of HttpServletRequest.
+     * @return <code>true</code> if the {@link ResponseStateManager#isPostback(javax.faces.context.FacesContext)}
+     *  returns <code>true</code> <em>and</em> the request doesn't contain the
+     *  attribute <code>javax.servlet.error.message</code> which indicates we've been
+     *  forwarded to an error page.
      */
 
     private boolean isPostback(FacesContext context) {
@@ -284,6 +287,32 @@ public class RestoreViewPhase extends Phase {
               RenderKitUtils.getResponseStateManager(context,
                                                      renderkitId);
         return rsm.isPostback(context);
+
+    }
+
+
+    /**
+     * The Servlet specification states that if an error occurs
+     * in the application and there is a matching error-page declaration,
+     * the that original request the cause the error is forwarded
+     * to the error page.
+     *
+     * If the error occurred during a post-back and a matching
+     * error-page definition was found, then an attempt to restore
+     * the error view would be made as the javax.faces.ViewState
+     * marker would still be in the request parameters.
+     *
+     * Use this method to determine if the current request is
+     * an error page to avoid the above condition.
+     *
+     * @param context the FacesContext for the current request
+     * @return <code>true</code> if <code>WEBAPP_ERROR_PAGE_MARKER</code>
+     *  is found in the request, otherwise return <code>false</code>
+     */
+    private static boolean isErrorPage(FacesContext context) {
+
+        return (context.getExternalContext().
+                    getRequestMap().get(WEBAPP_ERROR_PAGE_MARKER) != null);
 
     }
 
