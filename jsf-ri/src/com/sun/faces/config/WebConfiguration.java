@@ -1,5 +1,5 @@
 /*
- * $Id: WebConfiguration.java,v 1.22 2007/04/27 22:00:55 ofung Exp $
+ * $Id: WebConfiguration.java,v 1.23 2007/05/16 01:00:18 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -40,7 +40,6 @@
 package com.sun.faces.config;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
 
 import javax.faces.context.ExternalContext;
