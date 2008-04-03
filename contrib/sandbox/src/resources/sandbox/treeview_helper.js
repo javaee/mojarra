@@ -1,6 +1,3 @@
-
-
-
 /**
 * Reads a nested ul/li list from the DOM and add to TreeView
 * @method readList

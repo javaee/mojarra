@@ -235,7 +235,7 @@
             </not>
             <then>
                 <!-- ${maven.mirror}/org/apache/shale/shale-remoting/${shale.remoting.version}/shale-remoting-${shale.remoting.version}.jar" -->
-                <get src="http://people.apache.org/builds/shale/nightly/shale-framework-20070607.zip"
+                <get src="http://people.apache.org/builds/shale/nightly/shale-framework-20070614.zip"
                      dest="shale-framework.zip"
                      usetimestamp="true"/>
                 <unzip src="shale-framework.zip" dest="${sandbox.dependency.base.dir}">
