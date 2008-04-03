@@ -79,18 +79,7 @@ public enum ProjectStage {
      * deployed in production.
      * </p>
      */
-    Production,
-    /**
-     * <p class="changed_added_2_0"> If the user specified value of the
-     * {@link #PROJECT_STAGE_PARAM_NAME} init param is not equal to any
-     * of the other constants in this enum, the value of {@link
-     * Application#getProjectStage} will be
-     * <code>ProjectStage.Extension</code>.  In this case, calling
-     * <code>toString()</code> on the instance returned from
-     * <code>Application.getProjectStage()</code> will return the user
-     * specified value. See {@link #toString} for details.  </p>
-     */
-    Extension;
+    Production;
 
     /**
      * <p class="changed_added_2_0">
@@ -113,35 +102,4 @@ public enum ProjectStage {
     public static final String PROJECT_STAGE_JNDI_NAME =
           "java:comp/env/jsf/ProjectStage";
     
-
-    private String extensionName = "Extension";
-
-    /**
-     * <p class="changed_added_2_0">Specialized to account for an
-     * arbitrary product lifecycle phase value. If <code>this == *
-     * Extension</code> return the value of the
-     * <code>extensionName</code> * instance variable.  Otherwise,
-     * return * <code>super.toString()</code>.</p>
-     */
-    @Override
-    public String toString() {
-        if (this == Extension) {
-            return this.extensionName;
-        }
-        return super.toString();
-    }
-
-    /**
-     * <p class="changed_added_2_0">Take the argument
-     * <code>extensionName</code>, and set it as the value of the
-     * <code>extensionName</code> instance variable of the
-     * <code>Extension</code> enum constant.  This enables customizing
-     * the value returned from {@link #toString}.  This method is only
-     * called by the runtime, during application startup, in the case
-     * where an arbitrary lifecycle phase is being assigned.</p>
-     */
-    public static ProjectStage getExtension(String extensionName) {
-        Extension.extensionName = extensionName;
-        return Extension;
-    }
 }

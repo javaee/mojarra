@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.101 2008/02/19 18:53:51 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.102 2008/02/19 22:28:48 edburns Exp $
  */
 
 /*
@@ -323,7 +323,11 @@ public class ApplicationImpl extends Application {
                 try {
                     projectStage = ProjectStage.valueOf(value);
                 } catch (IllegalArgumentException iae) {
-                    projectStage = ProjectStage.getExtension(value);
+                    if (LOGGER.isLoggable(Level.INFO)) {
+                        LOGGER.log(Level.INFO,
+				"Unable to discern ProjectStage for value of "
+				+ value + ".", iae);
+                    }
                 }
             }
             if (projectStage == null) {
