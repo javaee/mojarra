@@ -113,7 +113,7 @@ public class HtmlEditorRenderer extends Renderer {
         // Init TinyMCE
         writer.startElement("script", editor);
         writer.writeAttribute("type", "text/javascript", "type");
-        writer.write("YAHOO.util.Event.onDOMReady(function() {tinyMCE.init({" + buildConfig(context, editor) + "});});");
+        writer.write("YAHOO.util.Event.onContentReady(function() {tinyMCE.init({" + buildConfig(context, editor) + "});});");
         writer.endElement("script");
     }
     
