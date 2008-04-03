@@ -129,7 +129,7 @@ public class ResourceImpl extends Resource {
         format.setTimeZone(GMT);
         map.put("Expires", format.format(new Date(expiresTime)));
 
-        URL url = resourceInfo.getHelper().getURL(resourceInfo, FacesContext.getCurrentInstance());
+        URL url = getURL();
         try {
             URLConnection conn = url.openConnection();
             long lastModified = conn.getLastModified();
