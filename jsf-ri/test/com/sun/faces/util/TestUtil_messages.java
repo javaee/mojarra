@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.64 2007/05/21 19:59:38 rlubke Exp $
+ * $Id: TestUtil_messages.java,v 1.65 2008/01/22 21:53:52 rlubke Exp $
  */
 
 /*
@@ -54,7 +54,7 @@ import com.sun.faces.cactus.ServletFacesTestCase;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.64 2007/05/21 19:59:38 rlubke Exp $
+ * @version $Id: TestUtil_messages.java,v 1.65 2008/01/22 21:53:52 rlubke Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {
@@ -127,8 +127,7 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {MessageUtils.VALIDATION_COMMAND_ERROR_ID, "1"},
         {MessageUtils.CONTENT_TYPE_ERROR_MESSAGE_ID, "0"},
         {MessageUtils.COMPONENT_NOT_FOUND_IN_VIEW_WARNING_ID, "1"},
-        {MessageUtils.ILLEGAL_ATTEMPT_SETTING_VIEWHANDLER_ID, "0"},
-        {MessageUtils.ILLEGAL_ATTEMPT_SETTING_STATEMANAGER_ID, "0"},
+        {MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "1"},
         {MessageUtils.INVALID_MESSAGE_SEVERITY_IN_CONFIG_ID, "1"},
         {MessageUtils.CANT_CLOSE_INPUT_STREAM_ID, "0"},
         {MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID, "1"},
