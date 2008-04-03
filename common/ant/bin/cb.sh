@@ -38,7 +38,7 @@
 
 
 #
-# List all files added, modified, and removed from a cvs repository
+# List all files added, modified, and removed from a subversion repository
 #
 
 FILE=/tmp/lmtxt
@@ -48,11 +48,11 @@ ZIP=newfiles.zip
 
 echo "Scanning for modifications..."
 
-cvs -n update -dP > $FILE 2>&1
+svn status > $FILE 2>&1
 
 modifiedFiles=`grep ^"M " $FILE`
 addedFiles=`grep ^"A " $FILE`
-removedFiles=`grep ^"R " $FILE`
+removedFiles=`grep ^"D " $FILE`
 
 if [[ -z "$modifiedFiles" && -z "$addedFiles" && -z "$removedFiles" ]] 
 then
@@ -60,16 +60,10 @@ then
     exit 0;
 fi 
 
-echo -n "Modifications found.  Input issue or CR number: "
-read issue
+echo -n "Modifications found..."
 
 echo "" > $CB
-if [[ -z "${issue}" ]] 
-then 
-    echo "<< ADD DESCRIPTION HERE >>" >> $CB
-else
-    echo "<< https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=${issue} >>" >> $CB
-fi
+echo "<< ADD DESCRIPTION HERE >>" >> $CB
 echo "" >> $CB
 echo "" >> $CB
 
@@ -91,7 +85,7 @@ then
     fi
 
     if [ -n "$removedFiles" ]; then
-        grep ^"R " $FILE >> $CB
+        grep ^"D " $FILE >> $CB
         echo "" >> $CB
         echo "" >> $CB
     fi
@@ -99,7 +93,7 @@ then
     if [ -n "$modifiedFiles" ]; then
         echo "SECTION: Diffs" >> $CB
         echo "----------------------------" >> $CB
-        cvs diff -u > $DIFF
+        svn diff > $DIFF
         grep -v ^\? $DIFF >> $CB
     fi
 

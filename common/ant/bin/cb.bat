@@ -57,7 +57,7 @@ set DUMMY=zipdummy.txt
 
 echo Scanning for modifications...
 
-cvs -n update -dP 2>&1 | grep -v "^cvs server:" > %FILE%
+svn status 2>&1 | grep -v "^cvs server:" > %FILE%
 
 type %FILE% | grep "^M " > %MOD_FILE%
 type %FILE% | grep "^A " > %ADD_FILE%
@@ -101,7 +101,7 @@ echo ******************************************************************* >> %CB%
 echo * SECTION: Diffs >> %CB%
 echo ******************************************************************* >> %CB%
 
-cvs diff -u 2>&1 | grep -v "^cvs server:" | grep -v "^\?"  >> %CB%
+svn diff 2>&1 | grep -v "^cvs server:" | grep -v "^\?"  >> %CB%
 
 for /f "tokens=*" %%F in ('wc -l %ADD_FILE% ^| grep -v "      0"') do (
 	echo ******************************************************************* >> %CB%
