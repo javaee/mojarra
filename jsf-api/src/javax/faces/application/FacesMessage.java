@@ -1,5 +1,5 @@
 /*
- * $Id: FacesMessage.java,v 1.20 2007/04/27 22:00:02 ofung Exp $
+ * $Id: FacesMessage.java,v 1.21 2007/07/31 16:42:08 rlubke Exp $
  */
 
 /*
@@ -379,7 +379,7 @@ public class FacesMessage implements Serializable {
      * <p>Class used to represent message severity levels in a typesafe
      * enumeration.</p>
      */
-    public static class Severity extends Object implements Comparable {
+    public static class Severity implements Comparable {
 
 
 	// -------------------------------------------------------  Constructors
