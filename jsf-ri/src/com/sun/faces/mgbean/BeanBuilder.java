@@ -1,5 +1,5 @@
 /*
- * $Id: BeanBuilder.java,v 1.7 2008/03/10 22:46:57 rlubke Exp $
+ * $Id: BeanBuilder.java,v 1.8 2008/03/19 22:07:41 rlubke Exp $
  */
 
 /*
@@ -533,11 +533,13 @@ public abstract class BeanBuilder {
                     validateLifespanRuntime = true;
                 }
             } else {
-                this.expressionString =
-                      "#{\""
-                      + this.expressionString.replaceAll("[\\\\\"]",
-                                                         "\\\\$0")
-                      + "\"}";
+                if (this.expressionString != null) {
+                    this.expressionString =
+                          "#{\""
+                          + this.expressionString.replaceAll("[\\\\\"]",
+                                                             "\\\\$0")
+                          + "\"}";
+                }
             }
         }
 
@@ -546,6 +548,9 @@ public abstract class BeanBuilder {
 
 
         public Object evaluate(ELContext context) {
+            if (this.expressionString == null) {
+                return null;
+            }
             if (validateLifespanRuntime) {
                 ELUtils.Scope expScope =
                      ELUtils.getScope(this.expressionString, segment);
