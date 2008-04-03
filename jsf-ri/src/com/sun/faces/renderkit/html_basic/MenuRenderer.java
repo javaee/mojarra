@@ -35,7 +35,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.98 2007/12/17 21:46:10 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.99 2008/01/15 20:34:50 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -55,6 +55,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Collections;
 import java.util.logging.Level;
 
 import javax.el.ELException;
@@ -463,12 +464,15 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     }
 
 
-    protected void renderOption(FacesContext context, UIComponent component,
-	    			Converter converter, SelectItem curItem)
-    throws IOException {
+    protected void renderOption(FacesContext context,
+                                UIComponent component,
+                                Converter converter,
+                                SelectItem curItem,
+                                Object currentSelections,
+                                Object[] submittedValues) throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
-        assert(writer != null);
+        assert (writer != null);
 
         writer.writeText("\t", component, null);
         writer.startElement("option", component);
@@ -477,13 +481,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                                                curItem.getValue(), converter);
         writer.writeAttribute("value", valueString, "value");
 
-        Object submittedValues[] = getSubmittedSelectedValues(
-              component);
-        Class type = String.class;
         Object valuesArray;
         Object itemValue;
-
-        boolean isSelected;
         boolean containsValue;
         if (submittedValues != null) {
             containsValue = containsaValue(submittedValues);
@@ -491,36 +490,15 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                 valuesArray = submittedValues;
                 itemValue = valueString;
             } else {
-                valuesArray = getCurrentSelectedValues(component);
+                valuesArray = currentSelections;
                 itemValue = curItem.getValue();
             }
         } else {
-            valuesArray = getCurrentSelectedValues(component);
+            valuesArray = currentSelections;
             itemValue = curItem.getValue();
         }
-        if (valuesArray != null) {
-            type = valuesArray.getClass().getComponentType();
-        }
 
-        RequestStateManager.set(context,
-                                RequestStateManager.TARGET_COMPONENT_ATTRIBUTE_NAME,
-                                component);
-        Object newValue;
-        try {
-            newValue = context.getApplication().getExpressionFactory().
-                 coerceToType(itemValue, type);
-        } catch (ELException ele) {
-            newValue = itemValue;
-        } catch (IllegalArgumentException iae) {
-            // If coerceToType fails, per the docs it should throw
-            // an ELException, however, GF 9.0 and 9.0u1 will throw
-            // an IllegalArgumentException instead (see GF issue 1527).
-            newValue = itemValue;
-        }
-
-        isSelected = isSelected(newValue, valuesArray);
-
-        if (isSelected) {
+        if (isSelected(context, itemValue, valuesArray)) {
             writer.writeAttribute("selected", true, "selected");
         }
 
@@ -566,6 +544,23 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     }
 
 
+    @Deprecated
+    protected void renderOption(FacesContext context,
+                                UIComponent component,
+                                Converter converter,
+                                SelectItem curItem)
+    throws IOException {
+
+        this.renderOption(context,
+                          component,
+                          converter,
+                          curItem,
+                          getCurrentSelectedValues(component),
+                          getSubmittedSelectedValues(component));
+
+    }
+
+
     protected void writeDefaultSize(ResponseWriter writer, int itemCount)
           throws IOException {
 
@@ -597,21 +592,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             UISelectMany select = (UISelectMany) component;
             Object value = select.getValue();
             if (value instanceof Collection) {
-
-                Collection<?> list = (Collection) value;
-                int size = list.size();
-                if (size > 0) {
-                    // get the type of the first element - Should
-                    // we assume that all elements of the List are
-                    // the same type?
-                    return list.toArray((Object[]) Array
-                          .newInstance(list.iterator().next().getClass(),
-                                       size));
-                } else {
-                    return ((Collection) value).toArray();
-                }
-            }
-            else if (value != null && !value.getClass().isArray()) {
+                return ((Collection) value).toArray();
+            } else if (value != null && !value.getClass().isArray()) {
                 logger.warning(
                     "The UISelectMany value should be an array or a collection type, the actual type is " +
                     value.getClass().getName());
@@ -621,11 +603,9 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         }
 
         UISelectOne select = (UISelectOne) component;
-        Object returnObject;
-        if (null != (returnObject = select.getValue())) {
-            Object ret = Array.newInstance(returnObject.getClass(), 1);
-            Array.set(ret, 0, returnObject);
-            return ret;
+        Object val = select.getValue();
+        if (val != null) {
+            return new Object[] { val };
         }
         return null;
 
@@ -644,10 +624,18 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     }
 
 
+    @Deprecated
     protected int getOptionNumber(FacesContext context,
                                   UIComponent component,
                                   List<SelectItem> selectItems) {
 
+
+       return getOptionNumber(selectItems);
+
+    }
+
+
+    protected int getOptionNumber(List<SelectItem> selectItems) {
 
         int itemCount = 0;
         if (!selectItems.isEmpty()) {
@@ -674,16 +662,18 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         }
 
         UISelectOne select = (UISelectOne) component;
-        Object returnObject;
-        if (null != (returnObject = select.getSubmittedValue())) {
-            return new Object[]{returnObject};
+        Object val = select.getSubmittedValue();
+        if (val != null) {
+            return new Object[] { val };
         }
         return null;
 
     }
 
 
-    protected boolean isSelected(Object itemValue, Object valueArray) {
+    protected boolean isSelected(FacesContext context,
+                                 Object itemValue,
+                                 Object valueArray) {
 
         if (null != valueArray) {
             if (!valueArray.getClass().isArray()) {
@@ -698,8 +688,28 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                     if (itemValue == null) {
                         return true;
                     }
-                } else if (value.equals(itemValue)) {
-                    return true;
+                } else {
+                    Object newValue;
+                    if (value.getClass().isInstance(itemValue)) {
+                        newValue = itemValue;
+                    } else {
+                        try {
+                            newValue =
+                                  context.getApplication()
+                                        .getExpressionFactory().
+                                        coerceToType(itemValue, value.getClass());
+                        } catch (ELException ele) {
+                            newValue = itemValue;
+                        } catch (IllegalArgumentException iae) {
+                            // If coerceToType fails, per the docs it should throw
+                            // an ELException, however, GF 9.0 and 9.0u1 will throw
+                            // an IllegalArgumentException instead (see GF issue 1527).
+                            newValue = itemValue;
+                        }
+                    }
+                    if (value.equals(newValue)) {
+                        return true;
+                    }
                 }
             }
         }
@@ -722,6 +732,11 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         }
 
         if (!items.isEmpty()) {
+            Object currentSelections = getCurrentSelectedValues(component);
+            Object[] submittedValues = getSubmittedSelectedValues(component);
+            RequestStateManager.set(context,
+                                RequestStateManager.TARGET_COMPONENT_ATTRIBUTE_NAME,
+                                component);
             for (SelectItem item : items) {
                 if (item instanceof SelectItemGroup) {
                     // render OPTGROUP
@@ -732,11 +747,21 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                     SelectItem[] itemsArray =
                           ((SelectItemGroup) item).getSelectItems();
                     for (int i = 0; i < itemsArray.length; ++i) {
-                        renderOption(context, component, converter, itemsArray[i]);
+                        renderOption(context,
+                                     component,
+                                     converter,
+                                     itemsArray[i],
+                                     currentSelections,
+                                     submittedValues);
                     }
                     writer.endElement("optgroup");
                 } else {
-                    renderOption(context, component, converter, item);
+                    renderOption(context,
+                                 component,
+                                 converter,
+                                 item,
+                                 currentSelections,
+                                 submittedValues);
                 }
             }
         }
@@ -774,7 +799,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         // the component's "size" attribute accordingly;  The "size"
         // attribute will be rendered as one of the "pass thru" attributes
         List<SelectItem> items = RenderKitUtils.getSelectItems(context, component);
-        int itemCount = getOptionNumber(context, component, items);
+        int itemCount = getOptionNumber(items);
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("Rendering " + itemCount + " options");
         }

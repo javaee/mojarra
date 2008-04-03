@@ -35,7 +35,7 @@
  */
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.61 2007/12/17 21:46:10 rlubke Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.62 2008/01/15 20:34:50 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -50,7 +50,6 @@ package com.sun.faces.renderkit.html_basic;
 import java.io.IOException;
 import java.util.List;
 
-import javax.el.ELException;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
@@ -115,6 +114,8 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         List<SelectItem> items = RenderKitUtils.getSelectItems(context, component);
 
         if (!items.isEmpty()) {
+            Object currentSelections = getCurrentSelectedValues(component);
+            Object[] submittedValues = getSubmittedSelectedValues(component);
             int idx = -1;
             for (SelectItem curItem : items) {
                 idx++;
@@ -145,8 +146,14 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                     SelectItem[] itemsArray =
                           ((SelectItemGroup) curItem).getSelectItems();
                     for (int i = 0; i < itemsArray.length; ++i) {
-                        renderOption(context, component, converter, itemsArray[i],
-                                     alignVertical, i);
+                        renderOption(context,
+                                     component,
+                                     converter,
+                                     itemsArray[i],
+                                     currentSelections,
+                                     submittedValues,
+                                     alignVertical,
+                                     i);
                     }
                     renderEndText(component, alignVertical, context);
                     writer.endElement("td");
@@ -155,7 +162,14 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                         writer.writeText("\n", component, null);
                     }
                 } else {
-                    renderOption(context, component, converter, curItem, alignVertical, idx);
+                    renderOption(context,
+                                 component,
+                                 converter,
+                                 curItem,
+                                 currentSelections,
+                                 submittedValues,
+                                 alignVertical,
+                                 idx);
                 }
             }
         }
@@ -180,7 +194,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             writer.writeAttribute("border", border, "border");
         }
 
-        // render style and styleclass attribute on the outer table instead of
+        // render style and styleclass attribute on the outer table instead of 
         // rendering it as pass through attribute on every option in the list.
         if (outerTable) {
             // render "id" only for outerTable.
@@ -226,13 +240,17 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
     }
 
 
-    protected void renderOption(FacesContext context, UIComponent component,
-	    			Converter converter, SelectItem curItem,
-	    			boolean alignVertical, int itemNumber)
-          throws IOException {
+    protected void renderOption(FacesContext context,
+                                UIComponent component,
+                                Converter converter,
+                                SelectItem curItem,
+                                Object currentSelections,
+                                Object[] submittedValues,
+                                boolean alignVertical,
+                                int itemNumber) throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
-        assert(writer != null);
+        assert (writer != null);
 
         // disable the check box if the attribute is set.
         boolean componentDisabled = Util.componentIsDisabled(component);
@@ -265,43 +283,21 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         writer.writeAttribute("value", valueString, "value");
         writer.writeAttribute("type", "checkbox", null);
 
-        Object submittedValues[] = getSubmittedSelectedValues(
-              component);
-        boolean isSelected;
-
-        Class type = String.class;
         Object valuesArray;
         Object itemValue;
         if (submittedValues != null) {
             valuesArray = submittedValues;
             itemValue = valueString;
         } else {
-            valuesArray = getCurrentSelectedValues(component);
+            valuesArray = currentSelections;
             itemValue = curItem.getValue();
-        }
-        if (valuesArray != null) {
-            type = valuesArray.getClass().getComponentType();
         }
 
         RequestStateManager.set(context,
                                 RequestStateManager.TARGET_COMPONENT_ATTRIBUTE_NAME,
                                 component);
-        Object newValue;
-        try {
-            newValue = context.getApplication().getExpressionFactory().
-                coerceToType(itemValue, type);
-        } catch (ELException ele) {
-            newValue = itemValue;
-        } catch (IllegalArgumentException iae) {
-            // If coerceToType fails, per the docs it should throw
-            // an ELException, however, GF 9.0 and 9.0u1 will throw
-            // an IllegalArgumentException instead (see GF issue 1527).
-            newValue = itemValue;
-        }
 
-        isSelected = isSelected(newValue, valuesArray);
-
-        if (isSelected) {
+        if (isSelected(context, itemValue, valuesArray)) {
             writer.writeAttribute(getSelectedTextString(), Boolean.TRUE, null);
         }
 
@@ -350,6 +346,25 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             writer.endElement("tr");
             writer.writeText("\n", component, null);
         }
+    }
+
+    @Deprecated
+    protected void renderOption(FacesContext context,
+                                UIComponent component,
+                                Converter converter,
+                                SelectItem curItem,
+                                boolean alignVertical,
+                                int itemNumber)
+          throws IOException {
+
+        renderOption(context,
+                     component,
+                     converter,
+                     curItem,
+                     getCurrentSelectedValues(component),
+                     getSubmittedSelectedValues(component),
+                     alignVertical,
+                     itemNumber);
 
     }
 

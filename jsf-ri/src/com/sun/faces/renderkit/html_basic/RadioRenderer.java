@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.89 2007/12/17 21:46:10 rlubke Exp $
+ * $Id: RadioRenderer.java,v 1.90 2008/01/15 20:34:50 rlubke Exp $
  */
 
 /*
@@ -71,12 +71,16 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
 
     // ------------------------------------------------------- Protected Methods
 
-
+    
     @Override
-    protected void renderOption(FacesContext context, UIComponent component,
-	    			Converter converter, SelectItem curItem,
-	    			boolean alignVertical, int itemNumber)
-          throws IOException {
+    protected void renderOption(FacesContext context,
+                                UIComponent component,
+                                Converter converter,
+                                SelectItem curItem,
+                                Object currentSelections,
+                                Object[] submittedValues,
+                                boolean alignVertical,
+                                int itemNumber) throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
@@ -153,7 +157,7 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
                 writer.writeAttribute("disabled", true, "disabled");
             }
         }
-        // Apply HTML 4.x attributes specified on UISelectMany component to all 
+        // Apply HTML 4.x attributes specified on UISelectMany component to all
         // items in the list except styleClass and style which are rendered as
         // attributes of outer most table.
         RenderKitUtils.renderPassThruAttributes(writer,
@@ -192,7 +196,26 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
             writer.endElement("tr");
             writer.writeText("\n", component, null);
         }
+    }
 
+    @Override
+    protected void renderOption(FacesContext context,
+                                UIComponent component,
+                                Converter converter,
+                                SelectItem curItem,
+                                boolean alignVertical,
+                                int itemNumber)
+          throws IOException {
+
+        this.renderOption(context,
+                          component,
+                          converter,
+                          curItem,
+                          null,
+                          null,
+                          alignVertical,
+                          itemNumber);
+        
     }
 
 } // end of class RadioRenderer
