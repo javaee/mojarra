@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlComponentGenerator.java,v 1.26 2007/04/27 22:02:50 ofung Exp $
+ * $Id: HtmlComponentGenerator.java,v 1.27 2007/05/30 17:05:05 rlubke Exp $
  */
 
 /*
@@ -193,7 +193,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         }
 
         // Generate the copyright information
-        writer.writeJavadocComment(
+        writer.writeBlockComment(
             propManager.getProperty(PropertyManager.COPYRIGHT));
 
         // Generate the package declaration
