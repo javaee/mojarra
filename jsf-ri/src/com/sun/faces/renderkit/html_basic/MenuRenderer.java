@@ -35,7 +35,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.90 2007/07/10 18:51:34 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.91 2007/07/16 19:55:24 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -161,29 +161,6 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         }
         return result;
 
-    }
-
-    /*
-     * Converts the provided string array and places them into the correct provided model type.
-     */
-    private Object convertSelectManyValuesForModel(FacesContext context,
-                                                   UISelectMany uiSelectMany,
-                                                   Class modelType,
-                                                   String[] newValues) {
-        Object result = null;
-        if (modelType.isArray()) {
-            result = convertSelectManyValues(context,
-                                             uiSelectMany,
-                                             modelType,
-                                             newValues);
-        } else if (List.class.isAssignableFrom(modelType)) {
-            result = Arrays.asList((Object[]) convertSelectManyValues(
-                  context,
-                  uiSelectMany,
-                  Object[].class,
-                  newValues));
-        }
-        return result;
     }
 
 
@@ -374,6 +351,30 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
     // ------------------------------------------------------- Protected Methods
 
+
+    /*
+     * Converts the provided string array and places them into the correct provided model type.
+     */
+    protected Object convertSelectManyValuesForModel(FacesContext context,
+                                                     UISelectMany uiSelectMany,
+                                                     Class modelType,
+                                                     String[] newValues) {
+        Object result = null;
+        if (modelType.isArray()) {
+            result = convertSelectManyValues(context,
+                                             uiSelectMany,
+                                             modelType,
+                                             newValues);
+        } else if (List.class.isAssignableFrom(modelType)) {
+            result = Arrays.asList((Object[]) convertSelectManyValues(
+                  context,
+                  uiSelectMany,
+                  Object[].class,
+                  newValues));
+        }
+        return result;
+    }
+    
 
     protected Object convertSelectManyValues(FacesContext context,
                                              UISelectMany uiSelectMany,
@@ -606,10 +607,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
     }
 
-    // ------------------------------------------------- Package Private Methods
 
-
-    boolean containsaValue(Object valueArray) {
+    protected boolean containsaValue(Object valueArray) {
 
         if (null != valueArray) {
             int len = Array.getLength(valueArray);
@@ -625,7 +624,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     }
 
 
-    Object getCurrentSelectedValues(UIComponent component) {
+    protected Object getCurrentSelectedValues(UIComponent component) {
 
         if (component instanceof UISelectMany) {
             UISelectMany select = (UISelectMany) component;
@@ -668,7 +667,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
     // To derive a selectOne type component from this, override
     // these methods.
-    String getMultipleText(UIComponent component) {
+    protected String getMultipleText(UIComponent component) {
 
         if (component instanceof UISelectMany) {
             return " multiple ";
@@ -678,7 +677,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     }
 
 
-    int getOptionNumber(FacesContext context, UIComponent component) {
+    protected int getOptionNumber(FacesContext context, UIComponent component) {
 
         Iterator items = RenderKitUtils.getSelectItems(context, component);
         int itemCount = 0;
@@ -696,7 +695,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     }
 
 
-    Object[] getSubmittedSelectedValues(UIComponent component) {
+    protected Object[] getSubmittedSelectedValues(UIComponent component) {
 
         if (component instanceof UISelectMany) {
             UISelectMany select = (UISelectMany) component;
@@ -713,7 +712,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     }
 
 
-    boolean isSelected(Object itemValue, Object valueArray) {
+    protected boolean isSelected(Object itemValue, Object valueArray) {
 
         if (null != valueArray) {
             if (!valueArray.getClass().isArray()) {
@@ -738,7 +737,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     }
 
 
-    void renderOptions(FacesContext context, UIComponent component)
+    protected void renderOptions(FacesContext context, UIComponent component)
           throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
@@ -769,7 +768,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
     // Render the "select" portion..
     //
-    void renderSelect(FacesContext context,
+    protected void renderSelect(FacesContext context,
                       UIComponent component) throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
