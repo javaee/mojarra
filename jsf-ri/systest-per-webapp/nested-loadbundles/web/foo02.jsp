@@ -46,7 +46,7 @@
 
 <f:loadBundle var="bundle" basename="com.sun.faces.systest.model.BundleD" />
 
-<p>Output 04 from bundle: <h:outputText value="#{bundle.okLabel}" /></p>
+<p>Output 05 from bundle: <h:outputText id="output05" value="#{bundle.okLabel}" /></p>
 
 
 <h:outputText value="foo02"/>

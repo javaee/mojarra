@@ -47,7 +47,7 @@
 
 <f:loadBundle var="bundle" basename="com.sun.faces.systest.model.BundleC" />
 
-<p>Output 02 from bundle: <h:outputText value="#{bundle.okLabel}" /></p>
+<p>Output 03 from bundle: <h:outputText id="output03" value="#{bundle.okLabel}" /></p>
 
 <h:outputText value="bar01"/>
 </f:subview>

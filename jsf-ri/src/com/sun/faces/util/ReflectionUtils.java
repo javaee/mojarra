@@ -254,6 +254,7 @@ public final class ReflectionUtils {
 
         Map<Integer,Constructor> constructors;
         Map<String,HashMap<Integer,Method>> methods;
+        Map<String,HashMap<Integer,Method>> declaredMethods;
         Class<?> clazz;
 
 
@@ -267,6 +268,7 @@ public final class ReflectionUtils {
          */
         public MetaData(Class<?> clazz) {
 
+            String name = null;
             this.clazz = clazz;
             Constructor[] ctors = clazz.getConstructors();
             constructors = new HashMap<Integer,Constructor>(ctors.length, 1.0f);
@@ -277,7 +279,7 @@ public final class ReflectionUtils {
             Method[] meths = clazz.getMethods();
             methods = new HashMap<String,HashMap<Integer,Method>>(meths.length, 1.0f);
             for (int i = 0, len = meths.length; i < len; i++) {
-                String name = meths[i].getName();
+                name = meths[i].getName();
                 HashMap<Integer,Method> methodsMap = methods.get(name);
                 if (methodsMap == null) {
                     methodsMap = new HashMap<Integer,Method>(4, 1.0f);
@@ -285,6 +287,18 @@ public final class ReflectionUtils {
                 }
                 methodsMap.put(getKey(meths[i].getParameterTypes()), meths[i]);
             }
+            
+            meths = clazz.getDeclaredMethods();
+            declaredMethods = new HashMap<String,HashMap<Integer,Method>>(meths.length, 1.0f);
+            for (int i = 0, len = meths.length; i < len; i++) {
+                name = meths[i].getName();
+                HashMap<Integer,Method> declaredMethodsMap = declaredMethods.get(name);
+                if (declaredMethodsMap == null) {
+                    declaredMethodsMap = new HashMap<Integer,Method>(4, 1.0f);
+                    declaredMethods.put(name, declaredMethodsMap);
+                }
+                declaredMethodsMap.put(getKey(meths[i].getParameterTypes()), meths[i]);
+            }            
 
         }
 
@@ -316,8 +330,16 @@ public final class ReflectionUtils {
          */
         public Method lookupMethod(String name, Class<?>... params) {
 
-            Map<Integer,Method> methodsMap = methods.get(name);
-            return methodsMap.get(getKey(params));
+            Map<Integer,Method> map = methods.get(name);
+            Integer key = getKey(params);
+            Method result = null;
+            if ((null == map) || null == (result = map.get(key))) {
+                map = declaredMethods.get(name);
+                if (null != map) {
+                    result = map.get(key);
+                }
+            }
+            return result;
 
         }
 

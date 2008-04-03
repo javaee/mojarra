@@ -1,5 +1,5 @@
 /*
- * $Id: LoadBundleTag.java,v 1.17 2007/04/27 22:01:05 ofung Exp $
+ * $Id: LoadBundleTag.java,v 1.18 2007/06/01 18:28:31 edburns Exp $
  */
 
 /*
@@ -40,16 +40,24 @@
 
 package com.sun.faces.taglib.jsf_core;
 
+import com.sun.faces.util.FacesLogger;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.el.ValueExpression;
+import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
@@ -57,6 +65,12 @@ import javax.servlet.jsp.tagext.TagSupport;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.el.ELUtils;
+import com.sun.faces.util.ReflectionUtils;
+import java.lang.reflect.Method;
+import java.util.List;
+import javax.faces.component.UIComponent;
+import javax.faces.webapp.UIComponentClassicTagBase;
+import javax.servlet.jsp.tagext.Tag;
 
 /**
  * <p>Tag action that loads the specified ResourceBundle as a Map into
@@ -72,6 +86,11 @@ import com.sun.faces.el.ELUtils;
  */
 
 public class LoadBundleTag extends TagSupport {
+    
+    static final String 
+            PRE_VIEW_LOADBUNDLES_LIST_ATTR_NAME = 
+            "com.sun.faces.taglib.jsf_core.PRE_VIEW_LOADBUNDLES_LIST";
+    private static final Logger LOGGER = FacesLogger.TAGLIB.getLogger();
 
 
     // ------------------------------------------------------------- Attributes
@@ -148,6 +167,19 @@ public class LoadBundleTag extends TagSupport {
         Map toStore =
             new Map() {
                 // this is an immutable Map
+            
+            public String toString() {
+                StringBuffer sb = new StringBuffer();
+                Iterator<Map.Entry<String,Object>> entries = 
+                        this.entrySet().iterator();
+                Map.Entry<String,Object> cur;
+                while (entries.hasNext()) {
+                    cur = entries.next();
+                    sb.append(cur.getKey() + ": " + cur.getValue() + "\n");
+                }
+
+                return sb.toString();
+            }
 
                 // Do not need to implement for immutable Map
                 public void clear() {
@@ -180,7 +212,7 @@ public class LoadBundleTag extends TagSupport {
                 }
 
 
-                public Set entrySet() {
+                public Set<Map.Entry<String,Object>> entrySet() {
                     HashMap<String,Object> mappings = new HashMap<String, Object>();
                     Enumeration<String> keys = bundle.getKeys();
                     while (keys.hasMoreElements()) {
@@ -280,9 +312,113 @@ public class LoadBundleTag extends TagSupport {
             };
 
         context.getExternalContext().getRequestMap().put(var, toStore);
+        
+        // the UIComponent that wraps the Map
+        UIComponent bundleComponent = createNewLoadBundleComponent(var, toStore);
+        UIComponentClassicTagBase parentTag = getParentUIComponentTag();
+        
+        // Is this loadBundle tag instance outside of <f:view>?
+        if (null == parentTag) {
+            // Yes.  Store the bundleComponent in a list so the <f:view> tag
+            // can add the list contents as the first children.
+            List<UIComponent> preViewBundleComponents = 
+                    getPreViewLoadBundleComponentList();
+            preViewBundleComponents.add(bundleComponent);
+        }
+        else {
+            // No.  Use addChild to add the bundeComponent to the tree.
+            addChildToParentTagAndParentComponent(bundleComponent, parentTag);
+        }
 
         return (EVAL_BODY_INCLUDE);
 
+    }
+    
+    static void addChildToParentTagAndParentComponent(UIComponent child,
+            UIComponentClassicTagBase parentTag) {
+        
+        Method addChildToComponentAndTag = null;
+        
+        if (null != (addChildToComponentAndTag = 
+                ReflectionUtils.lookupMethod(UIComponentClassicTagBase.class,
+                "addChildToComponentAndTag",
+                UIComponent.class))) {
+            try {
+                addChildToComponentAndTag.setAccessible(true);
+                addChildToComponentAndTag.invoke(parentTag,
+                        child);
+            }
+            catch (IllegalAccessException accessException) {
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.log(Level.WARNING, 
+                            "Unable to add " + child + " to tree:", accessException);
+                }
+                
+            }
+            catch (IllegalArgumentException argumentException) {
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.log(Level.WARNING, 
+                            "Unable to add " + child + " to tree:", argumentException);
+                }
+                
+            }
+            catch (InvocationTargetException targetException) {
+                Throwable cause = targetException.getCause();
+                if (cause instanceof RuntimeException) {
+                    throw ((RuntimeException) cause);
+                }
+            }
+        }
+    }
+    
+    static List<UIComponent> getPreViewLoadBundleComponentList() {
+        List<UIComponent> result = null;
+        Map<String,Object> requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
+        if (null == (result = (List<UIComponent>)
+                requestMap.get(PRE_VIEW_LOADBUNDLES_LIST_ATTR_NAME))) {
+            result = new ArrayList<UIComponent>();
+            requestMap.put(PRE_VIEW_LOADBUNDLES_LIST_ATTR_NAME, result);
+        }
+        
+        return result;
+    }
+    
+    private UIComponent createNewLoadBundleComponent(String var, 
+            Map toStore) {
+        UIComponent result = new LoadBundleComponent(var, toStore);
+        result.setTransient(true);
+        return result;
+    }
+
+    /**
+     *
+
+     * <p>Return the <code>UIComponentClassicTagBase</code> instance
+     * that represents the tag in the page to which the special
+     * component should be added as a child.</p>
+
+     */
+    
+    private UIComponentClassicTagBase getParentUIComponentTag() {
+        UIComponentClassicTagBase result = null;
+        Tag parent = this.getParent();
+        while (null != parent && 
+                (!(parent instanceof UIComponentClassicTagBase))) {
+            parent = this.getParent();
+        }
+        result = (UIComponentClassicTagBase) parent;
+        
+        // Check for case where the <f:loadBundle> is inside of an included page,
+        // but outside of the <f:subview> for that page.  This can happen
+        // either when the <f:subview> is in the includING page *OR* when
+        // the <f:subview> is in the includED page, yet the <f:loadBundle> is
+        // outside of the <f:subview> in the includED page.
+        Stack<UIComponentClassicTagBase> viewTagStack = SubviewTag.getViewTagStack();
+        if (!viewTagStack.empty()) {
+            result = viewTagStack.peek();
+        }
+        
+        return result;
     }
 
 
@@ -295,6 +431,40 @@ public class LoadBundleTag extends TagSupport {
         this.var = null;
 
     }
+    
+    private class LoadBundleComponent extends UIComponentBase {
+            private String var;
+            private Map toStore;
+            
+            public LoadBundleComponent(String var, Map toStore) {
+                this.var = var;
+                this.toStore = toStore;
+            }
+        
+            public String getFamily() {
+                return null;
+            }
+            
+            public void encodeBegin(FacesContext context) throws IOException {
+                Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
+                
+                requestMap.put(var, toStore);
+            }
+            
+            public void encodeEnd(FacesContext context) throws IOException {
+            }
 
+            public void encodeChildren(FacesContext context) throws IOException {
+            }
+            
+            public String toString() {
+                
+                String result = "LoadBundleComponent: var: " + var + " keys: " +
+                        toStore.toString();
+                return result;
+            }
+        
+    }
+    
 
 }

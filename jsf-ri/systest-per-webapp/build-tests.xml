@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.38 2007/05/30 19:00:02 edburns Exp $
+ $Id: build-tests.xml,v 1.39 2007/06/01 18:28:31 edburns Exp $
 -->
 
 <!--
@@ -57,7 +57,8 @@
          This property list *must* match the one defined in the
          systest-per-webapp build.xml. -->
     <property name="applications"
-              value="replace-application,
+              value="nested-loadbundles,
+                   replace-application,
                    invalid-mapping,
                    replace-statemanager,                                    
                    nested-datatables,
@@ -69,7 +70,6 @@
                    late-bindings,
                    property-resolver-jsp,
                    never-unwrap-exceptions"/>
-
     <!-- 
        EXCLUDED APPLICATIONS:
           view-expired
@@ -88,6 +88,8 @@
               value="com/sun/faces/systest/InvalidMappingTestCase.class"/>
     <property name="nested-datatables"
               value="com/sun/faces/systest/NestedDatatablesTestCase.class"/>
+    <property name="nested-loadbundles"
+              value="com/sun/faces/systest/NestedLoadBundlesTestCase.class"/>
     <property name="jar-ordering"
               value="com/sun/faces/systest/JarOrderingTestCase.class"/>
     <property name="replace-lifecycle"

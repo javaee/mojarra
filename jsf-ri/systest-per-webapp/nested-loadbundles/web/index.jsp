@@ -43,16 +43,58 @@
 <%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
 
-<f:view>
+
 <html>
 <head>
 <title>subview01</title>
 </head>
 <body>
 
+<p>Correct nesting order of ResourceBundles</p>
+
+<pre><code>
+
+viewRoot
+
+  BundleA
+
+  output01
+
+  BundleB
+
+  output02
+
+  subview id=inner02
+
+    Bundle C
+
+    output03
+
+  output04
+
+  subview id=outer01
+
+    BundleD
+
+    output05
+
+  subview id=outer02
+
+    BundleE
+
+    output06
+
+  button
+
+
+</code></pre>
+
+
 <f:loadBundle var="bundle" basename="com.sun.faces.systest.model.BundleA" />
 
-<p>Output 01 from bundle: <h:outputText value="#{bundle.okLabel}" /></p>
+<f:view>
+
+<p>Output 01 from bundle: <h:outputText id="outputO1" value="#{bundle.okLabel}" /></p>
 
 <h:outputText value="Begin test <c:import> with subview tag in imported page"/>
 
@@ -65,6 +107,8 @@
 <p><c:import url="bar01.jsp"/></p>
 
 <p><h:outputText value="End test <c:import> with subview tag in imported page"/></p>
+
+<p>Output 04 from bundle: <h:outputText id="output04" value="#{bundle.okLabel}" /></p>
 
 <p>
 <h:outputText value="Begin test <c:import> with subview tag in importing page"/>
@@ -84,6 +128,13 @@
 
 <p><h:outputText value="End test <c:import> with subview tag in importing page"/></p>
 
+<h:form prependId="false">
+
+<p>Reload: <h:commandButton id="button" value="#{bundle.okLabel}" /></p>
+
+</h:form>
+
+</f:view>
+
 </body>
 </html>
-</f:view>

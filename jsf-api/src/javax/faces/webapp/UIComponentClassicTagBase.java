@@ -719,6 +719,21 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
         createdComponents.add(child.getId());
     }
 
+    /*
+     * Adds argument child to component tree as a child of this component.
+     */
+    
+    void addChildToComponentAndTag(UIComponent child) {
+        UIComponent myComponent = this.getComponentInstance();
+
+        int indexOfNextChildTag = this.getIndexOfNextChildTag();
+        if (indexOfNextChildTag > myComponent.getChildCount()) {
+            indexOfNextChildTag = myComponent.getChildCount();
+        }
+        myComponent.getChildren().add(indexOfNextChildTag, child);
+        this.addChild(child);        
+    }
+
     protected void addFacet(String name) {
 
         if (createdFacets == null) {

@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.47 2007/05/17 14:26:31 rlubke Exp $
+ * $Id: ViewTag.java,v 1.48 2007/06/01 18:28:31 edburns Exp $
  */
 
 /*
@@ -40,6 +40,9 @@
 
 package com.sun.faces.taglib.jsf_core;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Stack;
 import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.MethodExpression;
@@ -51,6 +54,7 @@ import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKitFactory;
+import javax.faces.webapp.UIComponentClassicTagBase;
 import javax.faces.webapp.UIComponentELTag;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
@@ -73,7 +77,7 @@ import com.sun.faces.util.FacesLogger;
  * Renderer. It exists mainly to provide a guarantee that all faces
  * components reside inside of this tag.
  *
- * @version $Id: ViewTag.java,v 1.47 2007/05/17 14:26:31 rlubke Exp $
+ * @version $Id: ViewTag.java,v 1.48 2007/06/01 18:28:31 edburns Exp $
  */
 
 public class ViewTag extends UIComponentELTag {
@@ -201,6 +205,19 @@ public class ViewTag extends UIComponentELTag {
 
         // this must happen after our overriderProperties executes.
         pageContext.getResponse().setLocale(facesContext.getViewRoot().getLocale());
+        
+        List<UIComponent> preViewLoadBundleComponents = LoadBundleTag.getPreViewLoadBundleComponentList();
+        if (!preViewLoadBundleComponents.isEmpty()) {
+            Iterator<UIComponent> iter = preViewLoadBundleComponents.iterator();
+            UIComponent cur;
+            while (iter.hasNext()) {
+                cur = iter.next();
+                LoadBundleTag.addChildToParentTagAndParentComponent(cur, this);
+            }
+            preViewLoadBundleComponents.clear();
+        }
+        Stack<UIComponentClassicTagBase> viewTagStack = SubviewTag.getViewTagStack();
+        viewTagStack.push(this);
     return rc;
     }
 
@@ -223,6 +240,9 @@ public class ViewTag extends UIComponentELTag {
     UIOutput verbatim = null;
     String content, trimContent;
     int contentLen;
+    
+    Stack<UIComponentClassicTagBase> viewTagStack = SubviewTag.getViewTagStack();
+    viewTagStack.pop();
 
         if (null == (bodyContent = getBodyContent()) ||
             null == (content = bodyContent.getString()) ||
@@ -237,7 +257,7 @@ public class ViewTag extends UIComponentELTag {
     verbatim.setValue(content);
 
     root.getChildren().add(verbatim);
-
+    
     return result;
     }
 

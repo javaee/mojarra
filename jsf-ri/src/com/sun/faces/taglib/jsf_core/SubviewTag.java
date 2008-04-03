@@ -1,5 +1,5 @@
 /*
- * $Id: SubviewTag.java,v 1.13 2007/05/17 14:26:31 rlubke Exp $
+ * $Id: SubviewTag.java,v 1.14 2007/06/01 18:28:31 edburns Exp $
  */
 
 /*
@@ -40,9 +40,13 @@
 
 package com.sun.faces.taglib.jsf_core;
 
+import java.util.Map;
+import java.util.Stack;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
+import javax.faces.context.FacesContext;
+import javax.faces.webapp.UIComponentClassicTagBase;
 import javax.faces.webapp.UIComponentELTag;
 import javax.servlet.jsp.JspException;
 
@@ -51,8 +55,12 @@ import java.io.IOException;
 import com.sun.faces.application.InterweavingResponse;
 
 public class SubviewTag extends UIComponentELTag {
-
-
+    
+    static final String 
+            VIEWTAG_STACK_ATTR_NAME = 
+            "com.sun.faces.taglib.jsf_core.VIEWTAG_STACK";
+    
+    
     // ------------------------------------------------------------ Constructors
 
 
@@ -121,5 +129,45 @@ public class SubviewTag extends UIComponentELTag {
         return verbatim;
 
     }
+
+    public int doEndTag() throws JspException {
+        int retValue;
+
+        getViewTagStack().pop();
+        retValue = super.doEndTag();
+        return retValue;
+    }
+
+    public int doStartTag() throws JspException {
+        int retValue;
+        
+        retValue = super.doStartTag();
+        getViewTagStack().push(this);
+        
+        return retValue;
+    }
+
+    /** 
+     *  maintain a Stack of UIComponentClassicTagBase instances, each of
+     *  which is a "view" tag.  The bottom most element on the stack is
+     *  the ViewTag itself.  Subsequent instances are SubviewTag
+     *  instances.
+     */
+    
+    static Stack<UIComponentClassicTagBase> getViewTagStack() {
+        Stack<UIComponentClassicTagBase> result = null;
+        
+        Map<String,Object> requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
+        if (null == (result = (Stack<UIComponentClassicTagBase>)
+                requestMap.get(VIEWTAG_STACK_ATTR_NAME))) {
+            result = new Stack<UIComponentClassicTagBase>();
+            requestMap.put(VIEWTAG_STACK_ATTR_NAME, result);
+        }
+        
+        
+        return result;
+    }
+    
+    
 
 }

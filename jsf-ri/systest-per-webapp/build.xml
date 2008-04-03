@@ -66,7 +66,8 @@
          This property list *must* match the one defined in the
          systest-per-webapp build-tests.xml. -->
     <property name="applications"
-              value="replace-application,
+              value="nested-loadbundles,
+                   replace-application,
                    replace-statemanager,  
                    invalid-mapping,
                    nested-datatables,
@@ -78,7 +79,6 @@
                    late-bindings,
                    property-resolver-jsp,
                    never-unwrap-exceptions"/>
-
     <!-- 
        EXCLUDED APPLICATIONS:
           view-expired
