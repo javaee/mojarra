@@ -133,7 +133,7 @@ public class YuiTabViewRenderer extends Renderer {
             writer.write(".yui-skin-sam .yui-navset .yui-nav .selected a, .yui-skin-sam .yui-navset .yui-nav a:focus, .yui-skin-sam .yui-navset .yui-nav a:hover { background:#214197 url(" +
                     Util.generateStaticUri(YuiConstants.YUI_ROOT + "assets/skins/sam/sprite.png") + ") repeat-x left -1400px;}");
             writer.write(".yui-skin-sam .yui-navset .yui-content div { border: 0px solid #808080;}");
-            writer.write(".yui-skin-sam .yui-navset .yui-content { border-left: 1px solid #808080; border-right: 1px solid #808080; border-bottom: 1px solid #808080;}");
+            writer.write(".yui-skin-sam .yui-navset .yui-content { border-left: 1px solid #808080; border-right: 1px solid #808080; border-bottom: 1px solid #808080; background:  #FFFFFF none repeat scroll 0%; }");
             writer.endElement("style");
             extraClass="yui-skin-sam";
         }
