@@ -39,13 +39,17 @@
  */
 package com.sun.faces.sandbox.util;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
@@ -62,8 +66,11 @@ public class StaticResourcePhaseListener implements PhaseListener {
 //  TODO:  Class.forName("some.shale.class"); useShaleStuff(); catch (ClassNotFound) {useOurStuff()}; 
     private static final long serialVersionUID = 1L;
     protected static Map<String, String> mimeTypes = new HashMap<String, String>();
+    protected static SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.US);
     protected static List<String> attachmentTypes = new ArrayList<String>();
-    {
+    private String URL_PREFIX = Util.STATIC_RESOURCE_IDENTIFIER;
+
+    static {
         mimeTypes.put("css", "text/css");
         mimeTypes.put("gif", "image/gif");
         mimeTypes.put("htm", "text/html");
@@ -75,62 +82,106 @@ public class StaticResourcePhaseListener implements PhaseListener {
         mimeTypes.put("jar", "application/x-java-applet");
 
         attachmentTypes.add("application/x-java-applet");
+        format.setTimeZone(TimeZone.getTimeZone("GMT"));
     }
 
     public void afterPhase(PhaseEvent event) {
         // Do nothing
     }
+    
+    protected boolean isThisMyFile(String uri) {
+        return (uri != null) && (uri.indexOf(URL_PREFIX) > -1);
+    }
+    
+    protected String buildFileName(HttpServletRequest req) {
+        String fileName = req.getParameter("file");
+        return "/META-INF/static" + (fileName.startsWith("/") ? "" : "/") + fileName;
+    }
 
     public void beforePhase(PhaseEvent e) {
         if (e.getPhaseId() == PhaseId.RESTORE_VIEW) {
             FacesContext context = e.getFacesContext();
+
+            // TODO:  make this work in a portlet environment
+            // TODO:  find a portlet environment in which I can test :P
+            if (!(context.getExternalContext().getRequest() instanceof HttpServletRequest)) {
+                return;
+            }
             HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+            HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
             String uri = request.getRequestURI();
-            if ((uri != null) && (uri.indexOf(Util.STATIC_RESOURCE_IDENTIFIER) > -1)){
+            if (isThisMyFile(uri)){
                 // TODO:  make sure we can sandbox this correctly (i.e., no file=../foo.txt)
-                String fileName = request.getParameter("file");
+                String fileName = buildFileName(request); //request.getParameter("file");
                 if ((fileName != null) && !"".equals(fileName.trim())) {
-                    fileName = "/META-INF/static" + (fileName.startsWith("/") ? "" : "/") + fileName;
-                    HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
-                    String mimeType = getMimeType(fileName);
-                    response.setContentType(mimeType);
-                    processFile(context, fileName, response, mimeType);
+                    if (request.getAttribute("STATIC-FILE-"+fileName) != Boolean.TRUE) {
+                        File file = new File (fileName);
+                        try {
+                            if (!hasBeenModified(context, file)) {
+                                String mimeType = getMimeType(fileName);
+                                response.setContentType(mimeType);
+                                synchronized(format) {
+                                    response.setHeader("Last-Modified", 
+                                            format.format(file.lastModified()));
+                                }
+                                processFile(context, fileName, response, mimeType);
+                                request.setAttribute("STATIC-FILE"+fileName, Boolean.TRUE);
+                            }
+                            context.responseComplete();
+                        } catch (IOException ioe) {
+                            try {
+                                response.sendError(404, "Could not find " + fileName);
+                            } catch (Exception exc) {
+                                //
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 
-    protected void processFile(FacesContext context, String fileName, HttpServletResponse response, String mimeType) {
-        try {
-            InputStream is = getClass().getResourceAsStream(fileName);
-            if (is != null) {
-                try {
-                    OutputStream os = response.getOutputStream();
-                    if (attachmentTypes.indexOf(mimeType) > -1) {
-                        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
-                    }
-                    /* This is a little ugly, but we need a way to make any CSS or JS references to static
-                     * resources, such as images, point to a URL that this PL will pick up.  Ryan suggested
-                     * a custom OutputStream like ViewHandlerImpl.WriteBehindStringWriter, which I'll have
-                     * to chew on a bit.  This will get me by for now, I hope.
-                     */
-                    if ("text/css".equals(mimeType) || "text/javascript".equals(mimeType)) {
-                        String text = Util.readInString(is);
-                        text = text.replaceAll("%%%BASE_URL%%%", Util.generateStaticUri(""));
-                        os.write(text.getBytes());
-                    } else {
-                        streamContent(is, os);
-                    }
-                } finally {
-                    is.close();
+    protected void processFile(FacesContext context, String fileName, HttpServletResponse response, String mimeType) throws IOException {
+        InputStream is = getClass().getResourceAsStream(fileName);
+        if (is != null) {
+            try {
+                OutputStream os = response.getOutputStream();
+                if (attachmentTypes.indexOf(mimeType) > -1) {
+                    response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
                 }
-            } else {
-                response.sendError(404, "Could not find " + fileName);
+                /* This is a little ugly, but we need a way to make any CSS or JS references to static
+                 * resources, such as images, point to a URL that this PL will pick up.  Ryan suggested
+                 * a custom OutputStream like ViewHandlerImpl.WriteBehindStringWriter, which I'll have
+                 * to chew on a bit.  This will get me by for now, I hope.
+                 */
+                if ("text/css".equals(mimeType) || "text/javascript".equals(mimeType)) {
+                    String text = Util.readInString(is);
+                    text = text.replaceAll("%%%BASE_URL%%%", Util.generateStaticUri(""));
+                    os.write(text.getBytes());
+                } else {
+                    streamContent(is, os);
+                }
+            } finally {
+                is.close();
             }
-            context.responseComplete();
-        } catch (IOException ioe) {
-            System.err.println(ioe.getMessage());
+        } else {
+            response.sendError(404, "Could not find " + fileName);
         }
+        context.responseComplete();
+    }
+
+    protected boolean hasBeenModified(FacesContext context, File file) throws IOException {
+        Object obj = context.getExternalContext().getRequest();
+        if (obj instanceof HttpServletRequest) {
+            HttpServletRequest req = (HttpServletRequest) obj;
+            long lastModified = req.getDateHeader("If-Modified-Since");
+            if ((lastModified > -1) && (file.lastModified() > lastModified)) {
+                HttpServletResponse resp = (HttpServletResponse) context.getExternalContext().getResponse();
+                resp.sendError(HttpServletResponse.SC_NOT_MODIFIED);
+                return true;
+            }
+        }
+        return false;
     }
 
     protected void streamContent(InputStream is, OutputStream os) throws IOException {

@@ -1,22 +1,54 @@
 package com.sun.faces.sandbox.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-import javax.faces.event.PhaseEvent;
-import javax.faces.event.PhaseId;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 public class HtmlEditorResourcePhaseListener extends StaticResourcePhaseListener {   
     private static final long serialVersionUID = 1L;
-    private static String URL_PREFIX = "/tinymce";
+    
+    protected String URL_PREFIX = "/tinymce";
 
-    public static String generateUrl(FacesContext context, String resource) {
+    @Override
+    protected boolean isThisMyFile(String uri) {
+        return (uri != null) && (uri.indexOf(URL_PREFIX) > -1);
+    }
+
+    @Override
+    protected String buildFileName(HttpServletRequest req) {
+        String uri = req.getRequestURI();
+        return uri.substring(uri.indexOf("/", 1));
+    }
+
+
+    /*
+    @Override
+    protected void processFile(FacesContext context, String fileName, HttpServletResponse response, String mimeType) {
+        try {
+            if (fileName.charAt(0) != '/') {
+                fileName = "/" + fileName;
+            }
+            InputStream is = getClass().getResourceAsStream(fileName);
+            if (is != null) {
+                try {
+                    OutputStream os = response.getOutputStream();
+                    if ("text/html".equals(mimeType) || "text/css".equals(mimeType) || "text/javascript".equals(mimeType)) {
+                        String text = Util.readInString(is);
+                        os.write(text.getBytes());
+                    } else {
+                        super.processFile(context, fileName, response, mimeType);
+                    }
+                } finally {
+                    is.close();
+                }
+            } else {
+                response.sendError(404, "Could not find " + fileName);
+            }
+            context.responseComplete();
+        } catch (IOException ioe) {
+            System.err.println(ioe.getMessage());
+        }
+    }
+
+    private static String generateUrl(FacesContext context, String resource) {
         String uri = "";
         String mapping = Util.getFacesMapping(context);
         if (Util.isPrefixMapped(mapping)) {
@@ -28,7 +60,7 @@ public class HtmlEditorResourcePhaseListener extends StaticResourcePhaseListener
         return Util.getAppBaseUrl(context) + uri;
     }
 
-    public static void renderHtmlEditorJavascript(FacesContext context, ResponseWriter writer, UIComponent comp) throws IOException {
+    private static void renderHtmlEditorJavascript(FacesContext context, ResponseWriter writer, UIComponent comp) throws IOException {
         String mapping = Util.getFacesMapping(context);
         writer.startElement("script", comp);
         writer.write("TinyMCE_Engine.prototype.JSF_MAPPING = '" + mapping + "';");
@@ -64,7 +96,7 @@ public class HtmlEditorResourcePhaseListener extends StaticResourcePhaseListener
         return PhaseId.RESTORE_VIEW;
     }
 
-    protected String extractFileName(FacesContext context, String uri) {
+    private String extractFileName(FacesContext context, String uri) {
         String fileName = "";
         String mapping = Util.getFacesMapping(context);
         int start = uri.indexOf(URL_PREFIX); // + URL_PREFIX.length();
@@ -80,41 +112,7 @@ public class HtmlEditorResourcePhaseListener extends StaticResourcePhaseListener
         return fileName;
     }
 
-    @Override
-    protected void processFile(FacesContext context, String fileName, HttpServletResponse response, String mimeType) {
-        try {
-            if (fileName.charAt(0) != '/') {
-                fileName = "/" + fileName;
-            }
-            InputStream is = getClass().getResourceAsStream(fileName);
-            if (is != null) {
-                try {
-                    OutputStream os = response.getOutputStream();
-                    /* This is a little ugly, but we need a way to make any CSS or JS references to static
-                     * resources, such as images, point to a URL that this PL will pick up.  Ryan suggested
-                     * a custom OutputStream like ViewHandlerImpl.WriteBehindStringWriter, which I'll have
-                     * to chew on a bit.  This will get me by for now, I hope.
-                     */
-                    if ("text/html".equals(mimeType) || "text/css".equals(mimeType) || "text/javascript".equals(mimeType)) {
-                        String text = Util.readInString(is);
-//                        text = processUrls(context, text);
-                        os.write(text.getBytes());
-                    } else {
-                        super.processFile(context, fileName, response, mimeType);
-                    }
-                } finally {
-                    is.close();
-                }
-            } else {
-                response.sendError(404, "Could not find " + fileName);
-            }
-            context.responseComplete();
-        } catch (IOException ioe) {
-            System.err.println(ioe.getMessage());
-        }
-    }
-
-    protected String processUrls(FacesContext context, String text) {
+    private String processUrls(FacesContext context, String text) {
         StringBuffer buf = new StringBuffer(text.length());
         int start = text.indexOf("{S}");
         int end = -1;
@@ -139,4 +137,5 @@ public class HtmlEditorResourcePhaseListener extends StaticResourcePhaseListener
         
        return text;
     }
+    */
 }
