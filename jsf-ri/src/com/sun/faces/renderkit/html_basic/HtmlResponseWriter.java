@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.54 2008/03/20 19:33:59 rlubke Exp $
+ * $Id: HtmlResponseWriter.java,v 1.55 2008/03/26 15:54:38 rlubke Exp $
  */
 
 /*
@@ -125,10 +125,10 @@ public class HtmlResponseWriter extends ResponseWriter {
     // Enables hiding of inlined script and style
     // elements from old browsers
     private Boolean isScriptHidingEnabled;
-    
+
     // Enables scripts to be included in attribute values
     private Boolean isScriptInAttributeValueEnabled;
-    
+
     // Keep the map passed in our ctor so we can pass it to
     // cloneWithWriter
     private Map<WebConfiguration.BooleanWebContextInitParameter,
@@ -195,7 +195,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         this(writer, contentType, encoding, null);
 
     }
-    
+
     private Map initConfigPrefs() {
         WebConfiguration webConfig = null;
         FacesContext context = FacesContext.getCurrentInstance();
@@ -205,10 +205,10 @@ public class HtmlResponseWriter extends ResponseWriter {
                 webConfig = WebConfiguration.getInstance(extContext);
             }
         }
-        
-        
+
+
         Map<WebConfiguration.BooleanWebContextInitParameter,
-                Boolean> prefs = 
+                Boolean> prefs =
             new HashMap<WebConfiguration.BooleanWebContextInitParameter,
                         Boolean>();
 
@@ -224,24 +224,24 @@ public class HtmlResponseWriter extends ResponseWriter {
                 (null == webConfig) ? BooleanWebContextInitParameter.EnableScriptInAttributeValue.getDefaultValue() :
                         webConfig.isOptionEnabled(
                          BooleanWebContextInitParameter.EnableScriptInAttributeValue));
-        
+
         return Collections.unmodifiableMap(prefs);
     }
 
     /**
      * <p>Constructor sets the <code>ResponseWriter</code> and
      * encoding.</p>
-     * 
-     * <p>The argument configPrefs is a map of configurable prefs that affect 
+     *
+     * <p>The argument configPrefs is a map of configurable prefs that affect
      * this instance's behavior.  Supported keys are:</p>
-     * 
-     * <p>BooleanWebContextInitParameter.EnableJSStyleHiding: <code>true</code> 
+     *
+     * <p>BooleanWebContextInitParameter.EnableJSStyleHiding: <code>true</code>
      * if the writer should attempt to hide JS from older browsers</p>
      *
      * @param writer      the <code>ResponseWriter</code>
      * @param contentType the content type.
      * @param encoding    the character encoding.
-     * @param configPrefs 
+     * @param configPrefs
      *
      * @throws javax.faces.FacesException the encoding is not recognized.
      */
@@ -259,15 +259,15 @@ public class HtmlResponseWriter extends ResponseWriter {
         }
 
         this.encoding = encoding;
-        
+
         this.configPrefs = (null != configPrefs) ? configPrefs : initConfigPrefs();
         this.isScriptHidingEnabled =
                 (this.configPrefs.containsKey(BooleanWebContextInitParameter.EnableJSStyleHiding)) ?
                     this.configPrefs.get(BooleanWebContextInitParameter.EnableJSStyleHiding) : Boolean.FALSE;
-        this.isScriptInAttributeValueEnabled = 
+        this.isScriptInAttributeValueEnabled =
                 (this.configPrefs.containsKey(BooleanWebContextInitParameter.EnableScriptInAttributeValue)) ?
                     this.configPrefs.get(BooleanWebContextInitParameter.EnableScriptInAttributeValue) : Boolean.FALSE;
-                
+
         this.attributesBuffer = new FastStringWriter(128);
 
         // Check the character encoding
@@ -277,7 +277,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         }
 
     }
-    
+
     // -------------------------------------------------- Methods From Closeable
 
 
@@ -377,14 +377,6 @@ public class HtmlResponseWriter extends ResponseWriter {
         }
         isXhtml = getContentType().equals(
             RIConstants.XHTML_CONTENT_TYPE);
-        // Ensure we have a writer to which we can write.  Make sure
-        // to honor decoration.
-        FacesContext context = FacesContext.getCurrentInstance();
-        ResponseWriter writerFromContext = (null != context) ?
-            context.getResponseWriter() :
-            this;
-        writerFromContext = (null == writerFromContext) ? this : writerFromContext;
-
 
         if (isScriptOrStyle(name)
              && !scriptOrStyleSrc
@@ -395,8 +387,6 @@ public class HtmlResponseWriter extends ResponseWriter {
             if (result != null) {
                 String trim = result.trim();
                 if (isXhtml) {
-
-
                     if (isScript) {
                         Matcher
                             cdataStartSlashSlash =
@@ -413,66 +403,66 @@ public class HtmlResponseWriter extends ResponseWriter {
                             cdataEndSlashSlash.find()) {
                             start = cdataStartSlashSlash.end() - cdataStartSlashSlash.start();
                             end = trimLen - (cdataEndSlashSlash.end() - cdataEndSlashSlash.start());
-                            writerFromContext.write(trim.substring(start, end));
+                            writer.write(trim.substring(start, end));
                         }
                         // case 2 start is // end is /* */
                         else if ((null != cdataStartSlashSlash.reset() && cdataStartSlashSlash.find()) &&
                                  cdataEndSlashStar.find()) {
                             start = cdataStartSlashSlash.end() - cdataStartSlashSlash.start();
                             end = trimLen - (cdataEndSlashStar.end() - cdataEndSlashStar.start());
-                            writerFromContext.write(trim.substring(start, end));
+                            writer.write(trim.substring(start, end));
                         }
                         // case 3 start is /* */ end is /* */
                         else if (cdataStartSlashStar.find() &&
                                  (null != cdataEndSlashStar.reset() && cdataEndSlashStar.find())) {
                             start = cdataStartSlashStar.end() - cdataStartSlashStar.start();
                             end = trimLen - (cdataEndSlashStar.end() - cdataEndSlashStar.start());
-                            writerFromContext.write(trim.substring(start, end));
+                            writer.write(trim.substring(start, end));
                         }
                         // case 4 start is /* */ end is //
                         else if ((null != cdataStartSlashStar.reset() && cdataStartSlashStar.find()) &&
                                  (null != cdataEndSlashStar.reset() && cdataEndSlashSlash.find())) {
                             start = cdataStartSlashStar.end() - cdataStartSlashStar.start();
                             end = trimLen - (cdataEndSlashSlash.end() - cdataEndSlashSlash.start());
-                            writerFromContext.write(trim.substring(start, end));
+                            writer.write(trim.substring(start, end));
                         }
                         // case 5 no commented out cdata present.
                         else {
-                            writerFromContext.write(result);
+                            writer.write(result);
                         }
                     } else {
                         if (trim.startsWith("<![CDATA[") && trim.endsWith("]]>")) {
-                            writerFromContext.write(trim.substring(9, trim.length() - 3));
+                            writer.write(trim.substring(9, trim.length() - 3));
                         } else {
-                            writerFromContext.write(result);
+                            writer.write(result);
                         }
                     }
                 } else {
                     if (trim.startsWith("<!--") && trim.endsWith("//-->")) {
-                        writerFromContext.write(trim.substring(4, trim.length() - 5));
+                        writer.write(trim.substring(4, trim.length() - 5));
                     } else {
-                        writerFromContext.write(result);
+                        writer.write(result);
                     }
                 }
             }
             if (isXhtml) {
                 if (!writingCdata) {
                     if (isScript) {
-                        writerFromContext.write("\n//]]>\n");
+                        writer.write("\n//]]>\n");
                     } else {
-                        writerFromContext.write("\n]]>\n");
+                        writer.write("\n]]>\n");
                     }
                 }
             } else {
                 if (isScriptHidingEnabled) {
-                    writerFromContext.write("\n//-->\n");
+                    writer.write("\n//-->\n");
                 }
             }
         }
         isScript = false;
         isStyle = false;
         if ("cdata".equalsIgnoreCase(name)) {
-            writerFromContext.write("]]>");
+            writer.write("]]>");
             writingCdata = false;
             isCdata = false;
             dontEscape = false;
@@ -496,9 +486,9 @@ public class HtmlResponseWriter extends ResponseWriter {
             closeStart = false;
         }
 
-        writerFromContext.write("</");
-        writerFromContext.write(name);
-        writerFromContext.write('>');
+        writer.write("</");
+        writer.write(name);
+        writer.write('>');
 
     }
 
@@ -660,7 +650,7 @@ public class HtmlResponseWriter extends ResponseWriter {
                 // NOTE:  HTML 4.01 states that boolean attributes
                 //        may legally take a single value which is the
                 //        name of the attribute itself or appear using
-                //        minimization.  
+                //        minimization.
                 //  http://www.w3.org/TR/html401/intro/sgmltut.html#h-3.3.4.2
                 attributesBuffer.write(' ');
                 attributesBuffer.write(name);
