@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleConfigProcessor.java,v 1.7 2007/06/28 20:12:43 rlubke Exp $
+ * $Id: LifecycleConfigProcessor.java,v 1.8 2007/07/17 21:35:18 rlubke Exp $
  */
 
 /*
@@ -43,7 +43,6 @@ package com.sun.faces.config.processor;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.Util;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

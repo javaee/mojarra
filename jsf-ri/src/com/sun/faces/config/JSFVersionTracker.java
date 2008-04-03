@@ -2,7 +2,7 @@
  * JSFVersionTracker
  *
  * Created on February 15, 2006, 11:41 AM
- * $Id: JSFVersionTracker.java,v 1.14 2007/04/27 22:00:55 ofung Exp $
+ * $Id: JSFVersionTracker.java,v 1.15 2007/07/17 21:35:18 rlubke Exp $
  */
 
 /*
@@ -104,8 +104,6 @@ public class JSFVersionTracker implements Serializable {
     /**
      * <p>The <code>Logger</code> instance for this class.</p>
      */
-    // Log instance for this class
-    private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
     
     //------------------------------------------------------------------- Private Methods
 

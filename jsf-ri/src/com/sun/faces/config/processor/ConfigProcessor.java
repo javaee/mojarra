@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigProcessor.java,v 1.2 2007/04/27 22:00:56 ofung Exp $
+ * $Id: ConfigProcessor.java,v 1.3 2007/07/17 21:35:18 rlubke Exp $
  */
 
 /*
@@ -56,14 +56,20 @@ public interface ConfigProcessor {
      *   {@link ConfigProcessor#process(org.w3c.dom.Document[])}
      *   has completed.
      * </p>
+     *
+     * @param nextProcessor the next processor in the chain to be invoked
      */
-    public ConfigProcessor setNext(ConfigProcessor nextProcessor);
+    public void setNext(ConfigProcessor nextProcessor);
 
 
     /**
      * <p>
      *  Process the array of <code>Document</code>s.
      * </p>
+     *
+     * @param documents an array of <code>Document</code> objects to be
+     *  processed
+     * @throws Exception if an error occurs during processing
      */
     public void process(Document[] documents)
     throws Exception;
@@ -74,6 +80,9 @@ public interface ConfigProcessor {
      *  Invoke the <code>ConfigProcess</code> specified by
      *  a call to {@link ConfigProcessor#setNext(ConfigProcessor)}, if any.
      * </p>
+     * @param documents an array of <code>Document</code> objects to be
+     *  processed
+     * @throws Exception if an error occurs invoking the next processor
      */
     public void invokeNext(Document[] documents)
     throws Exception;

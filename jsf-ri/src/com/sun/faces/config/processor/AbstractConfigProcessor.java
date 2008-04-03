@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractConfigProcessor.java,v 1.4 2007/06/28 20:12:43 rlubke Exp $
+ * $Id: AbstractConfigProcessor.java,v 1.5 2007/07/17 21:35:18 rlubke Exp $
  */
 
 /*
@@ -77,10 +77,9 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
     /**
      * @see ConfigProcessor#setNext(ConfigProcessor)
      */
-    public ConfigProcessor setNext(ConfigProcessor nextProcessor) {
+    public void setNext(ConfigProcessor nextProcessor) {
 
         this.nextProcessor = nextProcessor;
-        return this;
         
     }
     
