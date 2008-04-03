@@ -1,8 +1,4 @@
-if (typeof RISANDBOX == "undefined") {
-    RISANDBOX = YAHOO.namespace("RISANDBOX");
-}
-
-RISANDBOX.Calendar = function(divId, trigger, daySelectId, monthSelectId, yearSelectId, clientId, startMonth, selectedDate, multiSelect, showWeekdays,
+SANDBOX.Calendar = function(divId, trigger, daySelectId, monthSelectId, yearSelectId, clientId, startMonth, selectedDate, multiSelect, showWeekdays,
         startWeekday, showWeekHeader, showWeekFooter, hideBlankWeeks, minDate, maxDate, showMenus) {
     this.divId = divId;
     this.clientId = clientId;
@@ -51,18 +47,18 @@ RISANDBOX.Calendar = function(divId, trigger, daySelectId, monthSelectId, yearSe
         this.initYearSelects(selDate.getDate(), selDate.getMonth() + 1, selDate.getFullYear());   
     }
 }
-RISANDBOX.Calendar.prototype.dayChanged = function() {
+SANDBOX.Calendar.prototype.dayChanged = function() {
     this.update();
 }
-RISANDBOX.Calendar.prototype.monthChanged = function() {
+SANDBOX.Calendar.prototype.monthChanged = function() {
     this.initDaySelects();
     this.update();
 }
-RISANDBOX.Calendar.prototype.yearChanged = function() {
+SANDBOX.Calendar.prototype.yearChanged = function() {
     this.initYearSelects();
     this.update();
 }
-RISANDBOX.Calendar.prototype.initDaySelects = function(d, m, y) {
+SANDBOX.Calendar.prototype.initDaySelects = function(d, m, y) {
     var daySelect = YAHOO.util.Dom.get(this.daySelectId);
     var monthSelect = YAHOO.util.Dom.get(this.monthSelectId);
     var yearSelect = YAHOO.util.Dom.get(this.yearSelectId);
@@ -97,7 +93,7 @@ RISANDBOX.Calendar.prototype.initDaySelects = function(d, m, y) {
     }  
 }
 
-RISANDBOX.Calendar.prototype.initMonthSelects = function(d, m, y) {
+SANDBOX.Calendar.prototype.initMonthSelects = function(d, m, y) {
     var daySelect = YAHOO.util.Dom.get(this.daySelectId);
     var monthSelect = YAHOO.util.Dom.get(this.monthSelectId);
     var yearSelect = YAHOO.util.Dom.get(this.yearSelectId);
@@ -135,7 +131,7 @@ RISANDBOX.Calendar.prototype.initMonthSelects = function(d, m, y) {
     this.initDaySelects(day, month, year);
 }
 
-RISANDBOX.Calendar.prototype.initYearSelects = function(d, m, y) {
+SANDBOX.Calendar.prototype.initYearSelects = function(d, m, y) {
     var daySelect = YAHOO.util.Dom.get(this.daySelectId);
     var monthSelect = YAHOO.util.Dom.get(this.monthSelectId);
     var yearSelect = YAHOO.util.Dom.get(this.yearSelectId);
@@ -172,7 +168,7 @@ RISANDBOX.Calendar.prototype.initYearSelects = function(d, m, y) {
     this.initMonthSelects(day, month, year);
 }
 
-RISANDBOX.Calendar.prototype.getMinDays = function(month, year) {
+SANDBOX.Calendar.prototype.getMinDays = function(month, year) {
         var defaultValue = 1;
         if (isNaN(month)) {
             return defaultValue;
@@ -185,7 +181,7 @@ RISANDBOX.Calendar.prototype.getMinDays = function(month, year) {
         }	
 	return defaultValue;
 }
-RISANDBOX.Calendar.prototype.getMaxDays = function(month, year) {
+SANDBOX.Calendar.prototype.getMaxDays = function(month, year) {
         var defaultValue = 31;
         if (isNaN(month)) {
             return defaultValue;
@@ -206,7 +202,7 @@ RISANDBOX.Calendar.prototype.getMaxDays = function(month, year) {
         } 
         return monthLength[month-1];
 }
-RISANDBOX.Calendar.prototype.getMinMonths = function(year) {
+SANDBOX.Calendar.prototype.getMinMonths = function(year) {
         var defaultValue = 1;
         if (isNaN(year)) {
             return defaultValue;
@@ -219,7 +215,7 @@ RISANDBOX.Calendar.prototype.getMinMonths = function(year) {
         }
 	return defaultValue;
 }
-RISANDBOX.Calendar.prototype.getMaxMonths = function(year) {
+SANDBOX.Calendar.prototype.getMaxMonths = function(year) {
         var defaultValue = 12;
         if (isNaN(year)) {
             return defaultValue;
@@ -233,7 +229,7 @@ RISANDBOX.Calendar.prototype.getMaxMonths = function(year) {
 	return defaultValue;
 }
 
-RISANDBOX.Calendar.prototype.getMinYears = function(year) {
+SANDBOX.Calendar.prototype.getMinYears = function(year) {
         var defaultValue = parseInt(this.startMonth.substring(3,7)) - 50;
         var min = this.minDate.substring(6,10);
         if (!isNaN(min) && min != "") {
@@ -246,7 +242,7 @@ RISANDBOX.Calendar.prototype.getMinYears = function(year) {
 	return parseInt(year) - 50;
 }
 
-RISANDBOX.Calendar.prototype.getMaxYears = function(year) {
+SANDBOX.Calendar.prototype.getMaxYears = function(year) {
         var defaultValue = parseInt(this.startMonth.substring(3,7)) + 50;
         var max = this.maxDate.substring(6,10);
         if (!isNaN(max) && max != "") {
@@ -259,7 +255,7 @@ RISANDBOX.Calendar.prototype.getMaxYears = function(year) {
 	return parseInt(year) + 50;
 }
 
-RISANDBOX.Calendar.prototype.toggle = function() {
+SANDBOX.Calendar.prototype.toggle = function() {
     if (YAHOO.util.Dom.get(this.divId).style.display=="none") {
         this.calendar.show();
     } else {
@@ -267,7 +263,7 @@ RISANDBOX.Calendar.prototype.toggle = function() {
     }
 }
 
-RISANDBOX.Calendar.prototype.update = function () {
+SANDBOX.Calendar.prototype.update = function () {
     if (YAHOO.util.Dom.get(this.divId).style.display!="none") {
         var showCalendar = true;
     }
