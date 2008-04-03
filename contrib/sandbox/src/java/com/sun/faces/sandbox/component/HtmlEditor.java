@@ -39,8 +39,6 @@
  */
 package com.sun.faces.sandbox.component;
 
-import com.sun.faces.sandbox.model.FileHolderImpl;
-
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 

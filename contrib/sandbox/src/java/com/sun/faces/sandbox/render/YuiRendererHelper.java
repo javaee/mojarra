@@ -48,8 +48,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import org.apache.shale.remoting.Mechanism;
-
 import com.sun.faces.sandbox.util.Util;
 import com.sun.faces.sandbox.util.YuiConstants;
 
@@ -61,107 +59,70 @@ import com.sun.faces.sandbox.util.YuiConstants;
  *
  */
 public class YuiRendererHelper {
-    protected static Map<String, String> cssClasses;
+//    private static Map<String, String> cssClasses;
     protected static Map<String, String> imageVars1;
     protected static String YUI_HELPER_JS_RENDERED = "YUI_HELPER_JS";
     protected static String YUI_HELPER_MENU_JS_RENDERED = "YUI_HELPER_MENU_JS";
     protected static String YUI_HELPER_CSS_RENDERED = "YUI_HELPER_CSS";
+    protected static String[] cssRules = new String[] {
+        // Calendar
+        ".yui-calendar .calnavleft { background: url('%%%BASE_URL%%%/yui/calendar/assets/callt.gif') no-repeat; }",
+        ".yui-calendar .calnavright { background: url('%%%BASE_URL%%%/yui/calendar/assets/calrt.gif') no-repeat; }",
+        ".yui-calcontainer .calclose { background: url('%%%BASE_URL%%%/yui/calendar/assets/calx.gif') no-repeat; }",
+        // Menu
+        ".yuimenu .topscrollbar, .yuimenu .bottomscrollbar { background-image:url('%%%BASE_URL%%%/menu/assets/map.gif'); }",
+        ".yuimenu .topscrollbar { background-image:url('%%%BASE_URL%%%/menu/assets/map.gif'); }",
+        ".yuimenu .topscrollbar_disabled { background-image:url('%%%BASE_URL%%%/menu/assets/map.gif'); }",
+        ".yuimenu .bottomscrollbar { background-image:url('%%%BASE_URL%%%/menu/assets/map.gif'); }",
+        ".yuimenu .bottomscrollbar_disabled { background-image:url('%%%BASE_URL%%%/menu/assets/map.gif'); }",
+        ".yuimenuitemlabel .submenuindicator, .yuimenuitemlabel .checkedindicator,  .yuimenubaritemlabel .submenuindicator { background-image:url('%%%BASE_URL%%%/menu/assets/map.gif'); }",
 
-    protected static Map<String, String> getCssClasses() {
-        if (cssClasses == null) {
-            cssClasses = new HashMap<String, String>();
-            cssClasses.put(".ygtvtn", YuiConstants.YUI_ROOT + "assets/tn.gif");
-            cssClasses.put(".ygtvtm", YuiConstants.YUI_ROOT + "assets/tm.gif");
-            cssClasses.put(".ygtvtmh", YuiConstants.YUI_ROOT + "assets/tmh.gif");
-            cssClasses.put(".ygtvtp", YuiConstants.YUI_ROOT + "assets/tp.gif");
-            cssClasses.put(".ygtvtph", YuiConstants.YUI_ROOT + "assets/tph.gif");
-            cssClasses.put(".ygtvln", YuiConstants.YUI_ROOT + "assets/ln.gif");
-            cssClasses.put(".ygtvlm", YuiConstants.YUI_ROOT + "assets/lm.gif");
-            cssClasses.put(".ygtvlmh", YuiConstants.YUI_ROOT + "assets/lmh.gif");
-            cssClasses.put(".ygtvlp", YuiConstants.YUI_ROOT + "assets/lp.gif");
-            cssClasses.put(".ygtvlph", YuiConstants.YUI_ROOT + "assets/lph.gif");
-            cssClasses.put(".ygtvloading", YuiConstants.YUI_ROOT + "assets/loading.gif");
-            cssClasses.put(".ygtvdepthcell", YuiConstants.YUI_ROOT + "assets/vline.gif");
+        ".yuimenu { background-color: #efefef; border:solid 1px #527B97; }",
+        ".yuimenubar { background-color: #efefef; }",
+        ".yuimenuitem a.selected, .yuimenubaritem a.selected { background-color:#527B97; }",
+        /*
+        "div.yuimenu { background-color: #efefef; border:solid 1px #527B97; }",
+        "div.yuimenubar { background-color: #efefef; }",
+        "div.yuimenu ul { border-color: #527B97; }",
+        "div.yuimenu li.yuimenuitem { padding:2px 24px; }",
+        "div.yuimenubar h6 { border-color:#527B97; }",
+        "div.yuimenubar li.selected { background-color:#527B97; }",
+        "div.yuimenubar li.yuimenubaritem { border-color:#527B97; }",
+        "div.yuimenu li.selected, div.yuimenubar li.selected { background-color: #527B97; }",
+        */
 
-            cssClasses.put("div.yuimenu div.topscrollbar, div.yuimenu div.bottomscrollbar", YuiConstants.YUI_ROOT + "assets/map.gif");
-            cssClasses.put("div.yuimenu div.topscrollbar", YuiConstants.YUI_ROOT + "assets/map.gif");
-            cssClasses.put("div.yuimenu div.topscrollbar_disabled", YuiConstants.YUI_ROOT + "assets/map.gif");
-            cssClasses.put("div.yuimenu div.bottomscrollbar", YuiConstants.YUI_ROOT + "assets/map.gif");
-            cssClasses.put("div.yuimenu div.bottomscrollbar_disabled", YuiConstants.YUI_ROOT + "assets/map.gif");
-            cssClasses.put("div.yuimenu li.hassubmenu em.submenuindicator, div.yuimenubar li.hassubmenu em.submenuindicator", YuiConstants.YUI_ROOT + "assets/map.gif");
-            cssClasses.put("div.yuimenu li.checked em.checkedindicator", YuiConstants.YUI_ROOT + "assets/map.gif");
+        // TreeView
+        ".ygtvtn { background: url('%%%BASE_URL%%%/yui/treeview/assets/sprite-orig.gif') 0 -5600px no-repeat; }",
+        ".ygtvtm { background: url('%%%BASE_URL%%%/yui/treeview/assets/sprite-orig.gif') 0 -4000px no-repeat; }",
+        ".ygtvtmh { background: url('%%%BASE_URL%%%/yui/treeview/assets/sprite-orig.gif') 0 -4800px no-repeat; }",
+        ".ygtvtp { background: url('%%%BASE_URL%%%/yui/treeview/assets/sprite-orig.gif') 0 -6400px no-repeat; }",
+        ".ygtvtph { background: url('%%%BASE_URL%%%/yui/treeview/assets/sprite-orig.gif') 0 -7200px no-repeat; }",
+        ".ygtvln { background: url('%%%BASE_URL%%%/yui/treeview/assets/sprite-orig.gif') 0 -1600px no-repeat; }",
+        ".ygtvlm { background: url('%%%BASE_URL%%%/yui/treeview/assets/sprite-orig.gif') 0 0px no-repeat; }",
+        ".ygtvlmh { background: url('%%%BASE_URL%%%/yui/treeview/assets/sprite-orig.gif') 0 -800px no-repeat; }",
+        ".ygtvlp { background: url('%%%BASE_URL%%%/yui/treeview/assets/sprite-orig.gif') 0 -2400px no-repeat; }",
+        ".ygtvlph { background: url('%%%BASE_URL%%%/yui/treeview/assets/sprite-orig.gif') 0 -3200px no-repeat; }",
+        ".ygtvloading { background: url('%%%BASE_URL%%%/yui/treeview/assets/treeview-loading.gif') 0 0 no-repeat; }",
+        ".ygtvdepthcell { background: url('%%%BASE_URL%%%/yui/treeview/assets/sprite-orig.gif') 0 -8000px no-repeat; }"
+    };
 
-            cssClasses.put(".yui-calendar .calnavleft", YuiConstants.YUI_ROOT + "assets/callt.gif");
-            cssClasses.put(".yui-calendar .calnavright", YuiConstants.YUI_ROOT + "assets/calrt.gif");
-        }
-
-        return cssClasses;
-    }
-
-    /*
-    protected static Map<String, String> getImageVars() {
-        if (imageVars == null) {
-            imageVars = new HashMap<String, String>();
-//          imageVars.put("YAHOO.widget.MenuItem.prototype.IMG_ROOT", "");
-            imageVars.put("YAHOO.widget.MenuItem.prototype.SUBMENU_INDICATOR_IMAGE_PATH", 
-                    YuiConstants.YUI_ROOT + "assets/menuarorght8_nrm_1.gif");
-            imageVars.put("YAHOO.widget.MenuItem.prototype.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH", 
-                    YuiConstants.YUI_ROOT + "assets/menuarorght8_hov_1.gif");
-            imageVars.put("YAHOO.widget.MenuItem.prototype.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH", 
-                    YuiConstants.YUI_ROOT + "assets/menuarorght8_dim_1.gif");
-            imageVars.put("YAHOO.widget.MenuItem.prototype.CHECKED_IMAGE_PATH", 
-                    YuiConstants.YUI_ROOT + "assets/menuchk8_nrm_1.gif");
-            imageVars.put("YAHOO.widget.MenuItem.prototype.SELECTED_CHECKED_IMAGE_PATH", 
-                    YuiConstants.YUI_ROOT + "assets/menuchk8_hov_1.gif");
-            imageVars.put("YAHOO.widget.MenuItem.prototype.DISABLED_CHECKED_IMAGE_PATH",
-                    YuiConstants.YUI_ROOT + "assets/menuchk8_dim_1.gif");
-            imageVars.put("YAHOO.widget.MenuBarItem.prototype.SUBMENU_INDICATOR_IMAGE_PATH", 
-                    YuiConstants.YUI_ROOT + "assets/menuarodwn8_nrm_1.gif");
-            imageVars.put("YAHOO.widget.MenuBarItem.prototype.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH", 
-                    YuiConstants.YUI_ROOT + "assets/menuarodwn8_hov_1.gif");
-            imageVars.put("YAHOO.widget.MenuBarItem.prototype.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH", 
-                    YuiConstants.YUI_ROOT + "assets/menuarodwn8_dim_1.gif");
-            
-            imageVars.put("YAHOO.widget.Calendar.prototype.IMG_ROOT", 
-                    YuiConstants.YUI_ROOT + "");
-            imageVars.put("YAHOO.widget.Calendar.prototype.NAV_ARROW_LEFT", 
-                    YuiConstants.YUI_ROOT + "assets/callt.gif");
-            imageVars.put("YAHOO.widget.Calendar.prototype.NAV_ARROW_RIGHT", 
-                    YuiConstants.YUI_ROOT + "assets/calrt.gif");
-
-
-
-        }
-        return imageVars;
-    }
-    */
 
     // TODO:  This needs to be improved
     public static void renderSandboxStylesheet(FacesContext context, ResponseWriter writer, UIComponent comp) throws IOException{
-        if (!hasResourceBeenRendered(context, YUI_HELPER_CSS_RENDERED)) {
+        if (!Util.hasResourceBeenRendered(context, YUI_HELPER_CSS_RENDERED)) {
             writer.startElement("style", comp);
             writer.writeAttribute("type", "text/css", "type");
-            for (Map.Entry<String, String> cssClass : getCssClasses().entrySet()) {
-                writer.write(cssClass.getKey() + " {background-image:url(" + 
-                        Util.getXhtmlHelper().mapResourceId(context, Mechanism.CLASS_RESOURCE, cssClass.getValue()) +
-                ");}");
+            for (String rule : cssRules) {
+                writer.write(rule.replaceAll("%%%BASE_URL%%%", Util.generateStaticUri("") + "?file="));
             }
-            writer.write("div.yuimenu { background-color: #efefef; border:solid 1px #527B97; }");
-            writer.write("div.yuimenubar { background-color: #efefef; }");
-            writer.write("div.yuimenu ul { border-color: #527B97; }");
-            writer.write("div.yuimenu li.yuimenuitem { padding:2px 24px; }");
-            writer.write("div.yuimenubar h6 { border-color:#527B97; }");
-            writer.write("div.yuimenubar li.selected { background-color:#527B97; }");
-            writer.write("div.yuimenubar li.yuimenubaritem { border-color:#527B97; }");
-            writer.write("div.yuimenu li.selected, div.yuimenubar li.selected { background-color: #527B97; }");
+            
             writer.endElement("style");
-            setResourceAsRendered(context, YUI_HELPER_CSS_RENDERED);
+            Util.setResourceAsRendered(context, YUI_HELPER_CSS_RENDERED);
         }
     }
     
     public static void renderSandboxMenuJavaScript(FacesContext context, ResponseWriter writer, UIComponent comp) throws IOException{
         Map<String, String> imageVars = new HashMap<String, String>();
-//      imageVars.put("YAHOO.widget.MenuItem.prototype.IMG_ROOT", "");
         imageVars.put("YAHOO.widget.MenuItem.prototype.SUBMENU_INDICATOR_IMAGE_PATH", 
                 YuiConstants.YUI_ROOT + "assets/menuarorght8_nrm_1.gif");
         imageVars.put("YAHOO.widget.MenuItem.prototype.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH", 
@@ -186,17 +147,16 @@ public class YuiRendererHelper {
 
     private static void renderSandboxJavaScript(FacesContext context, ResponseWriter writer, 
             UIComponent comp, String key, Map<String, String> imageVars) throws IOException{
-        if (!hasResourceBeenRendered(context, key)) {
+        if (!Util.hasResourceBeenRendered(context, key)) {
             writer.startElement("script", comp);
             writer.writeAttribute("type", "text/javascript", "type");
 //            writer.write("YAHOO.widget.MenuItem.prototype.IMG_ROOT = \"\";");
             for (Map.Entry<String, String> var : imageVars.entrySet()) {
                 writer.write(var.getKey() + " = \"" + 
-                        Util.getXhtmlHelper().mapResourceId(context, Mechanism.CLASS_RESOURCE, var.getValue()) +
-                    "\";\n");
+                        Util.generateStaticUri(var.getValue()) + "\";");
             }
             writer.endElement("script");
-            setResourceAsRendered(context, key);
+            Util.setResourceAsRendered(context, key);
         }
     }
     
@@ -225,26 +185,6 @@ public class YuiRendererHelper {
         }
 
         return output;
-    }
-
-    /**
-     * @param context the <code>FacesContext</code> for the current request
-     *
-     * @return <code>true</code> If the YUI JS and CSS overrides have been rendered
-     */
-    private static boolean hasResourceBeenRendered(FacesContext context, String key) {
-        return (context.getExternalContext().getRequestMap().get(key) != null);
-    }
-
-
-    /**
-     * <p>Set a flag to indicate that the YUI JS and CSS overrides have been rendered
-     *
-     * @param context the <code>FacesContext</code> of the current request
-     */
-    @SuppressWarnings("unchecked")
-    private static void setResourceAsRendered(FacesContext context, String key) {
-        context.getExternalContext().getRequestMap().put(key, Boolean.TRUE);
     }
 
     private static String sanitizeStringForJavaScript( String s )

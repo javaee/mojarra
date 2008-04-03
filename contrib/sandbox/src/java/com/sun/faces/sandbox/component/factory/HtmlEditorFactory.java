@@ -22,13 +22,13 @@
  */
 package com.sun.faces.sandbox.component.factory;
 
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+
 import com.sun.faces.sandbox.component.HtmlEditor;
 import com.sun.jsftemplating.annotation.UIComponentFactory;
 import com.sun.jsftemplating.component.factory.ComponentFactoryBase;
 import com.sun.jsftemplating.layout.descriptors.LayoutComponent;
-
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 
 
 /**

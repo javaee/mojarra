@@ -46,8 +46,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 
-import org.apache.shale.remoting.Mechanism;
-
 import com.sun.faces.sandbox.component.YuiMenuBase;
 import com.sun.faces.sandbox.component.YuiMenuItem;
 import com.sun.faces.sandbox.util.Util;
@@ -116,15 +114,13 @@ public class YuiMenuRenderer extends Renderer {
             return;
         }
 
+        ResponseWriter writer = context.getResponseWriter();
+        
         for (int i = 0; i < scriptIds.length; i++) {
-            Util.getXhtmlHelper().linkJavascript(context, component,
-                    context.getResponseWriter(), Mechanism.CLASS_RESOURCE,
-                    scriptIds[i]);
+            Util.linkJavascript(writer, scriptIds[i], true);
         }
         for (int i = 0; i < cssIds.length; i++) {
-            Util.getXhtmlHelper().linkStylesheet(context, component,
-                    context.getResponseWriter(), Mechanism.CLASS_RESOURCE,
-                    cssIds[i]);
+            Util.linkStyleSheet(writer, cssIds[i]);
         }
         
         YuiRendererHelper.renderSandboxMenuJavaScript(context, context.getResponseWriter(), component);
@@ -173,7 +169,7 @@ public class YuiMenuRenderer extends Renderer {
         writer.writeAttribute("class", "first-of-type", "class");
 
         for (UIComponent child : component.getChildren()) {
-            if (child instanceof YuiMenuItem) {
+            if ((child instanceof YuiMenuItem) && child.isRendered()) {
                 renderMenuItem(writer, (YuiMenuItem)child);
             } else {
                 child.encodeAll(FacesContext.getCurrentInstance());
@@ -250,6 +246,7 @@ public class YuiMenuRenderer extends Renderer {
      * @return the JavaScript associative array text (minus the curly braces) representing the desired arguments
      */
     protected String buildConstructorArgs(YuiMenuBase component) {
-        return "width: \"" + component.getWidth() + "\", clicktohide: false, visible: true";
+        return "width: \"" + component.getWidth() + "\", autosubmenudisplay: " +
+            component.getAutoShow() + ", clicktohide: false, visible: true";
     }
 }

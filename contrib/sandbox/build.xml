@@ -85,6 +85,7 @@
     <property name="logging.version" value="1.1" />
     <property name="shale.version" value="1.1.0-SNAPSHOT" />
     <property name="tinymce.version" value="2_1_1_1" />
+    <property name="yui.version" value="2.3.0rc1" />
     
     <property name="codec.jar" value="${sandbox.dependency.base.dir}/commons-codec-${codec.version}.jar"/>
     <property name="facelets.jar" value="${sandbox.dependency.base.dir}/jsf-facelets-${facelets.version}.jar"/>
@@ -99,9 +100,11 @@
     <property name="shale.remoting.jar" value="${sandbox.dependency.base.dir}/shale-remoting-${shale.version}.jar"/>
     <property name="shale.test.jar" value="${sandbox.dependency.base.dir}/shale-test-${shale.version}.jar"/>
     <property name="tinymce.archive" value="${sandbox.dependency.base.dir}/tinymce_${tinymce.version}.zip"/>
+    <property name="yui.archive" value="${sandbox.dependency.base.dir}/yui_${yui.version}.zip"/>
 
     <property name="applet.archive.name" value="${name}-upload-applet" />
 	<property name="htmleditor.dir" value="${resource.dir}/html_editor" />
+	<property name="yui.dir" value="${resource.dir}/yui" />
 
     <path id="impl.compile.classpath">
         <pathelement location="${jsf-api.jar}"/>
@@ -232,7 +235,6 @@
         Ugly hack to get the most recent Shale nightly, as it has a bug fix we need.  This is a bit dangerous, as the nightly
         may introduce new bugs, but what do you do? :P  When they finally release a new version, this can go away.  
         Come on, Craig! :)
-        -->
         <tstamp>
             <format property="shale.nightly.date" pattern="yyyyMMdd" offset="-1" unit="day"/>
         </tstamp>
@@ -246,7 +248,6 @@
                 <delete>
                     <fileset dir="." includes="shale-framework*.zip" />
                 </delete>
-                <!-- ${maven.mirror}/org/apache/shale/shale-remoting/${shale.remoting.version}/shale-remoting-${shale.remoting.version}.jar" -->
                 <get src="http://people.apache.org/builds/shale/nightly/shale-framework-${shale.nightly.date}.zip"
                      dest="shale-framework-${shale.nightly.date}.zip"
                      usetimestamp="true"/>
@@ -259,6 +260,8 @@
                 </unzip>
             </then>
         </if>
+        -->
+
         <!-- JSFTemplating -->
         <if>
             <not>
@@ -301,6 +304,26 @@
                 <delete dir="tinymce.work"/>
             </then>
         </if>
+        <!-- YUI -->
+        <if>
+            <not>
+                <available file="${yui.dir}" property="ignored"/>
+            </not>
+            <then>
+                <get src="http://easynews.dl.sourceforge.net/sourceforge/yui/yui${yui.version}.zip"
+                     dest="${yui.archive}"
+                     usetimestamp="true"/>
+                <mkdir dir="${yui.dir}"/>
+                <mkdir dir="yui.work"/>
+                <unzip src="${yui.archive}" dest="yui.work"/>
+                <copy todir="${yui.dir}">
+                    <fileset dir="yui.work/yui/build">
+                        <exclude name="**/.DS_Store"/>
+                    </fileset>
+                </copy>
+                <delete dir="yui.work"/>
+            </then>
+        </if>
     </target>
 
     <path id="sandbox.compile.classpath">
@@ -329,7 +352,7 @@
         </apt>
     </target>
 
-    <target name="compile" depends="prepare,update,apt" description="Just compile the classes">
+    <target name="compile" depends="prepare,update" description="Just compile the classes">
         <if>
             <equals arg1="${container.name}" arg2="glassfish"/>
             <then>

@@ -40,7 +40,6 @@
 package com.sun.faces.sandbox.render;
 
 import java.io.IOException;
-import java.io.StringWriter;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;

@@ -76,7 +76,8 @@ public class YuiMenuBarRenderer extends YuiMenuRenderer {
     }
 
     protected String buildConstructorArgs(YuiMenuBase component) {
-        return "width: \"" + component.getWidth() + "\", autosubmenudisplay: true, visible: true";
+        return "width: \"" + component.getWidth() + "\", autosubmenudisplay: " +
+        component.getAutoShow() + ", visible: true";
     }
 
     @Override

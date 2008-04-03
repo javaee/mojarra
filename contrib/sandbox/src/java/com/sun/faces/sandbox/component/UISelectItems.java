@@ -42,9 +42,6 @@ import java.lang.reflect.Proxy;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.el.ELContext;
-import javax.el.ELResolver;
-import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;

@@ -38,6 +38,7 @@ package com.sun.faces.sandbox.component;
 
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.ConverterException;
 /**
  * @author Jason Lee
  */

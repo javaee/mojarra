@@ -40,25 +40,13 @@
 package com.sun.faces.sandbox.render;
 
 import java.io.IOException;
-import java.io.StringWriter;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
 
-import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 
-import org.apache.shale.remoting.Mechanism;
-
 import com.sun.faces.sandbox.component.YuiTree;
-import com.sun.faces.sandbox.component.YuiTreeNode;
-import com.sun.faces.sandbox.model.HtmlNode;
-import com.sun.faces.sandbox.model.MenuNode;
-import com.sun.faces.sandbox.model.TextNode;
-import com.sun.faces.sandbox.model.TreeNode;
 import com.sun.faces.sandbox.util.Util;
 import com.sun.faces.sandbox.util.YuiConstants;
 
@@ -98,14 +86,10 @@ public class YuiTreeRenderer extends Renderer {
         ResponseWriter writer = context.getResponseWriter();
 
         for (int i = 0; i < scriptIds.length; i++) {
-            Util.getXhtmlHelper().linkJavascript(context, component,
-                    context.getResponseWriter(), Mechanism.CLASS_RESOURCE,
-                    scriptIds[i]);
+            Util.linkJavascript(writer, scriptIds[i], true);
         }
         for (int i = 0; i < cssIds.length; i++) {
-            Util.getXhtmlHelper().linkStylesheet(context, component,
-                    context.getResponseWriter(), Mechanism.CLASS_RESOURCE,
-                    cssIds[i]);
+            Util.linkStyleSheet(writer, cssIds[i]);
         }
 
         YuiRendererHelper.renderSandboxStylesheet(context, writer, tree);

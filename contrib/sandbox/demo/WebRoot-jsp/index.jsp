@@ -61,8 +61,9 @@
             </li>
             <li>TabView Demo
             	<ul>
-            		<li><a href="tabView.jsf?tabStyle=module">Module Style</a></li>
+            		<li><a href="tabView.jsf">Default Style</a></li>
             		<li><a href="tabView.jsf?tabStyle=border">Border Style</a></li>
+            		<li><a href="tabView.jsf?tabStyle=module">Module Style</a></li>
             		<li><a href="tabView.jsf?tabStyle=round">Round Style</a></li>
             	</ul>
             </li>

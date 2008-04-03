@@ -53,12 +53,10 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.convert.DateTimeConverter;
 
-import org.apache.shale.remoting.Mechanism;
-
 import com.sun.faces.sandbox.component.YuiCalendar;
+import com.sun.faces.sandbox.util.MessageFactory;
 import com.sun.faces.sandbox.util.Util;
 import com.sun.faces.sandbox.util.YuiConstants;
-import com.sun.faces.sandbox.util.MessageFactory;
 
 /**
  * @author Jason Lee
@@ -103,16 +101,13 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
             tempcal.setTime(oldDate);
         }        
         
+        ResponseWriter writer = context.getResponseWriter();
         for (int i = 0; i < scriptIds.length; i++) {
-            Util.getXhtmlHelper().linkJavascript(context, component,
-                    context.getResponseWriter(), Mechanism.CLASS_RESOURCE,
-                    scriptIds[i]);
+            Util.linkJavascript(writer, scriptIds[i], true);
         }
         
         for (int i = 0; i < cssIds.length; i++) {
-            Util.getXhtmlHelper().linkStylesheet(context, component,
-                    context.getResponseWriter(), Mechanism.CLASS_RESOURCE,
-                    cssIds[i]);
+            Util.linkStyleSheet(writer, cssIds[i]);
         }
 //        YuiRendererHelper.renderSandboxJavaScript(context, context.getResponseWriter(), component);
         YuiRendererHelper.renderSandboxStylesheet(context, context.getResponseWriter(), component);
@@ -237,8 +232,7 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
         writer.writeAttribute("id", component.getId() + "Trigger", "id");
         writer.writeAttribute("alt", "calendar", "alt");
         writer.writeAttribute("style", "vertical-align: middle", "style");
-        writer.writeAttribute("src",
-                Util.getXhtmlHelper().mapResourceId(context, Mechanism.CLASS_RESOURCE,"/yui/assets/calendar_icon.gif"), "src");
+        writer.writeAttribute("src", Util.generateStaticUri("/sandbox/calendar_icon.gif"), "src");
         writer.endElement("img");
         
         writer.startElement("div", component);

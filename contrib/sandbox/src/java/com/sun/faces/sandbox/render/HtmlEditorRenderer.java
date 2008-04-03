@@ -47,12 +47,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 
-import org.apache.shale.remoting.Mechanism;
-
 import com.sun.faces.sandbox.component.HtmlEditor;
-import com.sun.faces.sandbox.util.HtmlEditorResourcePhaseListener;
 import com.sun.faces.sandbox.util.Util;
-import com.sun.faces.sandbox.util.YuiConstants;
 
 /**
  * @author Jason Lee
@@ -89,15 +85,10 @@ public class HtmlEditorRenderer extends Renderer {
         
         // Load the TinyMCE script
         for (int i = 0; i < scriptIds.length; i++) {
-            Util.getXhtmlHelper().linkJavascript(context, component,
-                    context.getResponseWriter(), Mechanism.CLASS_RESOURCE,
-                    scriptIds[i]);
+            Util.linkJavascript(writer, scriptIds[i], true);
         }
         
-        Util.linkJavascript(writer, Util.getAppBaseUrl(context) + TINY_MCE); 
-//                HtmlEditorResourcePhaseListener.generateUrl(context, TINY_MCE));
-//        HtmlEditorResourcePhaseListener.renderHtmlEditorJavascript(context, writer, editor);
-//        Util.linkJavascript(writer, HtmlEditorResourcePhaseListener.generateUrl(context, "/sandbox/tiny_mce.js"));
+        Util.linkJavascript(writer, context.getExternalContext().getRequestContextPath() + TINY_MCE, false); 
         
         // Create the textarea to use as the WYSIWYG editor
         writer.startElement("textarea", editor);

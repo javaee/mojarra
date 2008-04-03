@@ -215,7 +215,6 @@
 	        <copy file="${codec.jar}" todir="@{to}" />
 	        <copy file="${logging.jar}" todir="@{to}" />
 	        <copy file="${io.jar}" todir="@{to}" />
-	        <copy file="${shale.remoting.jar}" todir="@{to}" />
 	        <copy file="${sandbox.dir}/build/lib/${name}-${sb.impl.version}.jar" todir="@{to}" />
 	        <copy file="${assemble.dir}/JsfRiSandboxDemo.jar" todir="@{to}" />
 			<copy file="${jsf-api.jar}" todir="@{to}" />

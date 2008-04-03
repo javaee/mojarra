@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.10 2007/07/08 02:43:25 jdlee Exp $
+ * $Id: Util.java,v 1.11 2007/07/19 22:10:42 jdlee Exp $
  */
 
 /*
@@ -38,7 +38,7 @@
  * holder.
  */
 
-// Util.java
+//Util.java
 
 package com.sun.faces.sandbox.util;
 
@@ -58,15 +58,12 @@ import javax.faces.el.ValueBinding;
 import javax.faces.render.Renderer;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.shale.remoting.Mechanism;
-import org.apache.shale.remoting.XhtmlHelper;
-
 /**
  * <B>Util</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.10 2007/07/08 02:43:25 jdlee Exp $
+ * @version $Id: Util.java,v 1.11 2007/07/19 22:10:42 jdlee Exp $
  */
 
 public class Util {      
@@ -79,11 +76,11 @@ public class Util {
      * "readonly". <P>
      */
     private static String booleanPassthruAttributes[] = {
-         "disabled",
-         "readonly",
-         "ismap"
+        "disabled",
+        "readonly",
+        "ismap"
     };
-    
+
     private static final String INVOCATION_PATH = "com.sun.faces.sandbox.INVOCATION_PATH";
     /**
      * This array contains attributes whose value is just rendered
@@ -93,64 +90,62 @@ public class Util {
      * removed from this array.<P>
      */
     private static String passthruAttributes[] = {
-         "accept",
-         "accesskey",
-         "alt",
-         "bgcolor",
-         "border",
-         "cellpadding",
-         "cellspacing",
-         "charset",
-         "cols",
-         "coords",
-         "dir",
-         "enctype",
-         "frame",
-         "height",
-         "hreflang",
-         "lang",
-         "longdesc",
-         "maxlength",
-         "onblur",
-         "onchange",
-         "onclick",
-         "ondblclick",
-         "onfocus",
-         "onkeydown",
-         "onkeypress",
-         "onkeyup",
-         "onload",
-         "onmousedown",
-         "onmousemove",
-         "onmouseout",
-         "onmouseover",
-         "onmouseup",
-         "onreset",
-         "onselect",
-         "onsubmit",
-         "onunload",
-         "rel",
-         "rev",
-         "rows",
-         "rules",
-         "shape",
-         "size",
-         "style",
-         "summary",
-         "tabindex",
-         "target",
-         "title",
-         "usemap",
-         "width"
+        "accept",
+        "accesskey",
+        "alt",
+        "bgcolor",
+        "border",
+        "cellpadding",
+        "cellspacing",
+        "charset",
+        "cols",
+        "coords",
+        "dir",
+        "enctype",
+        "frame",
+        "height",
+        "hreflang",
+        "lang",
+        "longdesc",
+        "maxlength",
+        "onblur",
+        "onchange",
+        "onclick",
+        "ondblclick",
+        "onfocus",
+        "onkeydown",
+        "onkeypress",
+        "onkeyup",
+        "onload",
+        "onmousedown",
+        "onmousemove",
+        "onmouseout",
+        "onmouseover",
+        "onmouseup",
+        "onreset",
+        "onselect",
+        "onsubmit",
+        "onunload",
+        "rel",
+        "rev",
+        "rows",
+        "rules",
+        "shape",
+        "size",
+        "style",
+        "summary",
+        "tabindex",
+        "target",
+        "title",
+        "usemap",
+        "width"
     };
-    
-    protected static XhtmlHelper xhtmlHelper;
 
     public static boolean componentIsDisabledOnReadonly(UIComponent component) {
         Object disabledOrReadonly = null;
         boolean result = false;
         if (null !=
-             (disabledOrReadonly = component.getAttributes().get("disabled"))) {
+            (disabledOrReadonly = component.getAttributes().get("disabled"))) {
             if (disabledOrReadonly instanceof String) {
                 result = ((String) disabledOrReadonly).equalsIgnoreCase("true");
             } else {
@@ -158,8 +153,8 @@ public class Util {
             }
         }
         if ((result == false) &&
-             null !=
-                  (disabledOrReadonly = component.getAttributes().get("readonly"))) {
+                null !=
+                    (disabledOrReadonly = component.getAttributes().get("readonly"))) {
             if (disabledOrReadonly instanceof String) {
                 result = ((String) disabledOrReadonly).equalsIgnoreCase("true");
             } else {
@@ -169,36 +164,21 @@ public class Util {
 
         return result;
     }
-    
-    
+
+
     public static Object evaluateVBExpression(String expression) {
         if (expression == null || (!isVBExpression(expression))) {
             return expression;
         }
         FacesContext context = FacesContext.getCurrentInstance();
         Object result =
-             getValueBinding(expression).getValue(
-                  context);
+            getValueBinding(expression).getValue(
+                    context);
         return result;
-
-    }
-    
-    public static String generateStaticUri(String path) {
-        String uri = "";
-        FacesContext context = FacesContext.getCurrentInstance();
-        String mapping = getFacesMapping(context);
-        if (isPrefixMapped(mapping)) {
-            uri = "/" + mapping + STATIC_RESOURCE_IDENTIFIER;
-        } else {
-            uri = STATIC_RESOURCE_IDENTIFIER + mapping;
-        }
-
-        String fullPath = getAppBaseUrl(context) + uri + "?file=" + path ; 
-        return fullPath;
     }
     
     public static Converter getConverterForClass(Class converterClass,
-                                                 FacesContext facesContext) {
+            FacesContext facesContext) {
         if (converterClass == null) {
             return null;
         }
@@ -211,7 +191,7 @@ public class Util {
     }
 
     public static Converter getConverterForIdentifer(String converterId,
-                                                     FacesContext facesContext) {
+            FacesContext facesContext) {
         if (converterId == null) {
             return null;
         }
@@ -226,7 +206,7 @@ public class Util {
 
     public static ClassLoader getCurrentLoader(Object fallbackClass) {
         ClassLoader loader =
-             Thread.currentThread().getContextClassLoader();
+            Thread.currentThread().getContextClassLoader();
         if (loader == null) {
             loader = fallbackClass.getClass().getClassLoader();
         }
@@ -262,7 +242,7 @@ public class Util {
         // Check for a previously stored mapping   
         ExternalContext extContext = context.getExternalContext();
         String mapping =
-              (String) extContext.getRequestMap().get(INVOCATION_PATH);
+            (String) extContext.getRequestMap().get(INVOCATION_PATH);
 
         if (mapping == null) {
 
@@ -283,7 +263,7 @@ public class Util {
 
             mapping = getMappingForRequest(servletPath, pathInfo);
         }
-        
+
         // if the FacesServlet is mapped to /* throw an 
         // Exception in order to prevent an endless 
         // RequestDispatcher loop
@@ -342,8 +322,8 @@ public class Util {
         String empty = "";
         for (i = 0; i < passthruAttributes.length; i++) {
             if (null != (attrVal = attrs.get(passthruAttributes[i]))
-                 &&
-                 !empty.equals(attrVal)) {
+                    &&
+                    !empty.equals(attrVal)) {
                 result = true;
                 break;
             }
@@ -351,9 +331,9 @@ public class Util {
         if (!result) {
             for (i = 0; i < booleanPassthruAttributes.length; i++) {
                 if (null !=
-                     (attrVal = attrs.get(booleanPassthruAttributes[i]))
-                     &&
-                     !empty.equals(attrVal)) {
+                    (attrVal = attrs.get(booleanPassthruAttributes[i]))
+                    &&
+                    !empty.equals(attrVal)) {
                     result = true;
                     break;
                 }
@@ -393,8 +373,8 @@ public class Util {
 
 
     /*
-    * Determine whether String is a value binding expression or not.
-    */
+     * Determine whether String is a value binding expression or not.
+     */
     public static boolean isVBExpression(String expression) {
         if (null == expression) {
             return false;
@@ -402,42 +382,68 @@ public class Util {
         int start = 0;
         //check to see if attribute has an expression
         if (((start = expression.indexOf("#{")) != -1) &&
-             (start < expression.indexOf('}'))) {
+                (start < expression.indexOf('}'))) {
             return true;
         }
         return false;
     }
 
 
-    public static void linkJavascript(ResponseWriter writer, String path) throws IOException {
-        // TODO:  Class.forName("some.shale.class"); useShaleStuff(); catch (ClassNotFound) {useOurStuff()}; 
-        writer.startElement("script", null);
-        writer.writeAttribute("type", "text/javascript", "type");
-        writer.writeAttribute("src", path, "src");
-        writer.endElement("script");
+    public static String generateStaticUri(String path) {
+        String uri = "";
+        FacesContext context = FacesContext.getCurrentInstance();
+        String mapping = getFacesMapping(context);
+        if (isPrefixMapped(mapping)) {
+            uri = "/" + mapping + STATIC_RESOURCE_IDENTIFIER + path;
+        } else {
+            uri = STATIC_RESOURCE_IDENTIFIER + path + mapping;
+        }
+
+        return getAppBaseUrl(context) + uri;
     }
 
-    public static void linkStyleSheet1(ResponseWriter writer, String path) throws IOException {
-        writer.startElement("link", null);
-        writer.writeAttribute("rel", "stylesheet", "rel");
-        writer.writeAttribute("type", "text/css", "type");
-        writer.writeAttribute("href", generateStaticUri(path), "href");
-        writer.endElement("link");
+    public static void linkJavascript(ResponseWriter writer, String path, boolean modifyPath) throws IOException {
+        // TODO:  Class.forName("some.shale.class"); useShaleStuff(); catch (ClassNotFound) {useOurStuff()};
+        if ((path != null) && (path.length() > 0)) {
+            if (modifyPath) {
+                path = generateStaticUri(path);
+            }
+            if (!Util.hasResourceBeenRendered("RENDERED"+path)) {
+                writer.startElement("script", null);
+                writer.writeAttribute("type", "text/javascript", "type");
+                writer.writeAttribute("src", path, "src");
+    //            writer.writeAttribute("src", generateStaticUri(path), "src");
+                writer.endElement("script");
+                setResourceAsRendered("RENDERED"+path);
+            }
+        }
     }
 
+    public static void linkStyleSheet(ResponseWriter writer, String path) throws IOException {
+        if ((path != null) && (path.length() > 0)) {
+            if (!Util.hasResourceBeenRendered("RENDERED"+path)) {
+                writer.startElement("link", null);
+                writer.writeAttribute("rel", "stylesheet", "rel");
+                writer.writeAttribute("type", "text/css", "type");
+                writer.writeAttribute("href", generateStaticUri(path), "href");
+                writer.endElement("link");
+                setResourceAsRendered("RENDERED"+path);
+            }
+        }
+    }
+
+    /*
     public static XhtmlHelper getXhtmlHelper() {
         if (xhtmlHelper == null) {
             xhtmlHelper = new XhtmlHelper();
         }
-        
+
         return xhtmlHelper;
     }
+    */
 
-    public static Class loadClass(String name,
-                                  Object fallbackClass)
-         throws ClassNotFoundException {
-        ClassLoader loader = Util.getCurrentLoader(fallbackClass);
-        return loader.loadClass(name);
+    public static Class loadClass(String name, Object fallbackClass) throws ClassNotFoundException {
+        return Util.getCurrentLoader(fallbackClass).loadClass(name);
     }
 
 
@@ -446,11 +452,11 @@ public class Util {
         InputStream is = renderer.getClass().getResourceAsStream(path);
         if (is != null) {
             String template = readInString(is);
-            
+
             for (Map.Entry<String, String> field : fields.entrySet()) {
                 template = template.replaceAll("%%%"+field.getKey()+"%%%", field.getValue());
             }
-            
+
             writer.writeText(template, null);
             is.close();
         }
@@ -469,19 +475,19 @@ public class Util {
                 }
             }
             ret = baos.toString();
-            
+
             baos.close();
             is.close();
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
-        
+
         return ret;
     }
 
     public static void renderBooleanPassThruAttributes(ResponseWriter writer,
-                                                       UIComponent component)
-         throws IOException {
+            UIComponent component)
+    throws IOException {
         renderBooleanPassThruAttributes(writer, component, null);
     }
 
@@ -490,12 +496,12 @@ public class Util {
      * Render any boolean "passthru" attributes.
      */
     public static void renderBooleanPassThruAttributes(ResponseWriter writer,
-                                                       UIComponent component,
-                                                       String[] excludes)
-         throws IOException {
+            UIComponent component,
+            String[] excludes)
+    throws IOException {
 
         int i = 0, len = booleanPassthruAttributes.length, j,
-             jLen = (null != excludes ? excludes.length : 0);
+        jLen = (null != excludes ? excludes.length : 0);
         Object value = null;
         boolean result;
         boolean skip = false;
@@ -504,7 +510,7 @@ public class Util {
             if (null != excludes) {
                 for (j = 0; j < jLen; j++) {
                     if (null != excludes[j] &&
-                         excludes[j].equals(booleanPassthruAttributes[i])) {
+                            excludes[j].equals(booleanPassthruAttributes[i])) {
                         skip = true;
                         break;
                     }
@@ -515,7 +521,7 @@ public class Util {
             }
 
             value =
-                 component.getAttributes().get(booleanPassthruAttributes[i]);
+                component.getAttributes().get(booleanPassthruAttributes[i]);
             if (value != null) {
                 if (value instanceof Boolean) {
                     result = ((Boolean) value).booleanValue();
@@ -529,8 +535,8 @@ public class Util {
                 if (result) {
                     // NOTE:  render things like readonly="readonly" here
                     writer.writeAttribute(booleanPassthruAttributes[i],
-                         booleanPassthruAttributes[i],
-                         booleanPassthruAttributes[i]);
+                            booleanPassthruAttributes[i],
+                            booleanPassthruAttributes[i]);
                     // NOTE:  otherwise render nothing
                 }
             }
@@ -539,8 +545,8 @@ public class Util {
 
 
     public static void renderPassThruAttributes(ResponseWriter writer,
-                                                UIComponent component)
-         throws IOException {
+            UIComponent component)
+    throws IOException {
         renderPassThruAttributes(writer, component, null);
     }
 
@@ -551,12 +557,12 @@ public class Util {
      * all the javascript attributes, alt, rows, cols, etc.  <P>
      */
     public static void renderPassThruAttributes(ResponseWriter writer,
-                                                UIComponent component,
-                                                String[] excludes)
-         throws IOException {
+            UIComponent component,
+            String[] excludes)
+    throws IOException {
 
         int i = 0, len = passthruAttributes.length, j,
-             jLen = (null != excludes ? excludes.length : 0);
+        jLen = (null != excludes ? excludes.length : 0);
         Object value = null;
         boolean skip = false;
         for (i = 0; i < len; i++) {
@@ -564,7 +570,7 @@ public class Util {
             if (null != excludes) {
                 for (j = 0; j < jLen; j++) {
                     if (null != excludes[j] &&
-                         excludes[j].equals(passthruAttributes[i])) {
+                            excludes[j].equals(passthruAttributes[i])) {
                         skip = true;
                         break;
                     }
@@ -581,7 +587,7 @@ public class Util {
                 }
                 //PENDING(rogerk) will revisit "null" param soon..
                 writer.writeAttribute(passthruAttributes[i], value,
-                     passthruAttributes[i]);
+                        passthruAttributes[i]);
             }
         }
     }
@@ -625,8 +631,8 @@ public class Util {
             return servletPath.substring(servletPath.lastIndexOf('.'));
         }
     }
-    
-    
+
+
     /**
      * @return true if and only if the argument
      *         <code>attributeVal</code> is an instance of a wrapper for a
@@ -636,52 +642,78 @@ public class Util {
 
     private static boolean shouldRenderAttribute(Object attributeVal) {
         if (attributeVal instanceof Boolean &&
-             ((Boolean) attributeVal).booleanValue() ==
-                  Boolean.FALSE.booleanValue()) {
+                ((Boolean) attributeVal).booleanValue() ==
+                    Boolean.FALSE.booleanValue()) {
             return false;
         } else if (attributeVal instanceof Integer &&
-             ((Integer) attributeVal).intValue() == Integer.MIN_VALUE) {
+                ((Integer) attributeVal).intValue() == Integer.MIN_VALUE) {
             return false;
         } else if (attributeVal instanceof Double &&
-             ((Double) attributeVal).doubleValue() == Double.MIN_VALUE) {
+                ((Double) attributeVal).doubleValue() == Double.MIN_VALUE) {
             return false;
         } else if (attributeVal instanceof Character &&
-             ((Character) attributeVal).charValue() == Character.MIN_VALUE) {
+                ((Character) attributeVal).charValue() == Character.MIN_VALUE) {
             return false;
         } else if (attributeVal instanceof Float &&
-             ((Float) attributeVal).floatValue() == Float.MIN_VALUE) {
+                ((Float) attributeVal).floatValue() == Float.MIN_VALUE) {
             return false;
         } else if (attributeVal instanceof Short &&
-             ((Short) attributeVal).shortValue() == Short.MIN_VALUE) {
+                ((Short) attributeVal).shortValue() == Short.MIN_VALUE) {
             return false;
         } else if (attributeVal instanceof Byte &&
-             ((Byte) attributeVal).byteValue() == Byte.MIN_VALUE) {
+                ((Byte) attributeVal).byteValue() == Byte.MIN_VALUE) {
             return false;
         } else if (attributeVal instanceof Long &&
-             ((Long) attributeVal).longValue() == Long.MIN_VALUE) {
+                ((Long) attributeVal).longValue() == Long.MIN_VALUE) {
             return false;
         }
         return true;
     }
-    
+
     private Util() {
         throw new IllegalStateException();
     }
 
-    @Deprecated
     public static String getAppBaseUrl(FacesContext context) {
-        return context.getExternalContext().getRequestContextPath();
-        /*
         String baseUrl = "";
         Object obj = context.getExternalContext().getRequest();
         if (obj instanceof HttpServletRequest ) {
             HttpServletRequest req = (HttpServletRequest )obj;
-            baseUrl = //req.getScheme() + "://" + req.getServerName() +
-                //":" + req.getServerPort() + 
-                req.getContextPath();
+            baseUrl = req.getScheme() + "://" + req.getServerName() +
+                ":" + req.getServerPort() + req.getContextPath();
         }
         
         return baseUrl;
-        */
+//        return context.getExternalContext().getRequestContextPath();
     }
+    
+    /**
+     * @param context the <code>FacesContext</code> for the current request
+     *
+     * @return <code>true</code> If the YUI JS and CSS overrides have been rendered
+     */
+    public static boolean hasResourceBeenRendered(String key) {
+        return hasResourceBeenRendered(FacesContext.getCurrentInstance(), key);
+    }
+    
+    public static boolean hasResourceBeenRendered(FacesContext context, String key) {
+        return (context.getExternalContext().getRequestMap().get(key) != null);
+    }
+
+
+    /**
+     * <p>Set a flag to indicate that the YUI JS and CSS overrides have been rendered
+     *
+     * @param context the <code>FacesContext</code> of the current request
+     */
+    public static void setResourceAsRendered(String key) {
+        setResourceAsRendered(FacesContext.getCurrentInstance(), key);
+    }
+    
+    @SuppressWarnings("unchecked")
+    public static void setResourceAsRendered(FacesContext context, String key) {
+        context.getExternalContext().getRequestMap().put(key, Boolean.TRUE);
+    }
+
+
 } // end of class Util

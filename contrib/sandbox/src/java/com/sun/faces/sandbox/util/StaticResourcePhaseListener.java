@@ -95,7 +95,16 @@ public class StaticResourcePhaseListener implements PhaseListener {
     
     protected String buildFileName(HttpServletRequest req) {
         String fileName = req.getParameter("file");
-        return "/META-INF/static" + (fileName.startsWith("/") ? "" : "/") + fileName;
+        if (fileName == null) {
+            fileName = req.getRequestURI().toString();
+            int index = fileName.indexOf(URL_PREFIX) + URL_PREFIX.length();
+            fileName = fileName.substring(index);
+            String mapping = Util.getFacesMapping(FacesContext.getCurrentInstance());
+            if (!Util.isPrefixMapped(mapping)) {
+                fileName = fileName.substring(0, fileName.length() - mapping.length());
+            }
+        }
+        return (fileName.startsWith("/") ? "" : "/") + fileName;
     }
 
     public void beforePhase(PhaseEvent e) {
@@ -156,7 +165,7 @@ public class StaticResourcePhaseListener implements PhaseListener {
                  */
                 if ("text/css".equals(mimeType) || "text/javascript".equals(mimeType)) {
                     String text = Util.readInString(is);
-                    text = text.replaceAll("%%%BASE_URL%%%", Util.generateStaticUri(""));
+                    text = text.replaceAll("%%%BASE_URL%%%", Util.generateStaticUri("") + "?file=");
                     os.write(text.getBytes());
                 } else {
                     streamContent(is, os);

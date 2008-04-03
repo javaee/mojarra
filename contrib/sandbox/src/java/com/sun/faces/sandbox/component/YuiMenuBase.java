@@ -52,8 +52,11 @@ public abstract class YuiMenuBase extends UIOutput {
      * The width of the rendered menu.  Default width is (an arbitraty) 200 pixels.
      */
     protected String width="200px";
+    protected String autoShow="true";
     
-    public String getWidth() { return ComponentHelper.getValue(this, "width", width); }
+    public String getWidth()    { return ComponentHelper.getValue(this, "width", width); }
+    public String getAutoShow() { return ComponentHelper.getValue(this, "autoShow", autoShow); }
 
-    public void setWidth(String width) { this.width = width; }
+    public void setWidth(String width)       { this.width = width; }
+    public void setAutoShow(String autoShow) { this.autoShow = autoShow; }
 }

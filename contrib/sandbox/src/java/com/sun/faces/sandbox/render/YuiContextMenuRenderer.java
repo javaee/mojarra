@@ -77,6 +77,7 @@ public class YuiContextMenuRenderer extends YuiMenuRenderer {
     }
     
     private String buildConstructorArgs(YuiContextMenu component) {
-        return ("trigger: \"%%%TRIGGER%%%\", width: \"" + component.getWidth() + "\"");
+        return ("trigger: \"%%%TRIGGER%%%\", width: \"" + component.getWidth() + "\", autosubmenudisplay: " +
+        component.getAutoShow());
     }
 }

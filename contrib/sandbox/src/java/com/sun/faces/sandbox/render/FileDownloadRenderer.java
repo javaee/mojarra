@@ -167,7 +167,7 @@ public class FileDownloadRenderer extends Renderer {
         String uri = "";
         String mapping = Util.getFacesMapping(context);
         if (Util.isPrefixMapped(mapping)) {
-            uri = Util.getAppBaseUrl(context) + mapping + "/" + FileDownload.DOWNLOAD_URI;
+            uri = mapping + "/" + FileDownload.DOWNLOAD_URI;
         } else {
             uri = FileDownload.DOWNLOAD_URI + mapping;
         }

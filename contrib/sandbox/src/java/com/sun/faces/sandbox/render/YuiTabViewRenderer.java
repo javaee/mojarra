@@ -47,8 +47,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 
-import org.apache.shale.remoting.Mechanism;
-
 import com.sun.faces.sandbox.component.YuiTab;
 import com.sun.faces.sandbox.component.YuiTabView;
 import com.sun.faces.sandbox.util.Util;
@@ -73,6 +71,7 @@ public class YuiTabViewRenderer extends Renderer {
 
     public void encodeBegin(FacesContext context, UIComponent component)
     throws IOException {
+        String extraClass = "";
         if (context == null) {
             throw new NullPointerException("param 'context' is null");
         }
@@ -88,52 +87,55 @@ public class YuiTabViewRenderer extends Renderer {
         YuiTabView tabView = (YuiTabView) component;
         // Render the div that will hold the tree
         ResponseWriter writer = context.getResponseWriter();
-
         for (int i = 0; i < scriptIds.length; i++) {
-            Util.getXhtmlHelper().linkJavascript(context, component,
-                    context.getResponseWriter(), Mechanism.CLASS_RESOURCE,
-                    scriptIds[i]);
+            Util.linkJavascript(writer, scriptIds[i], true);
         }
+        
         for (int i = 0; i < cssIds.length; i++) {
-            Util.getXhtmlHelper().linkStylesheet(context, component,
-                    context.getResponseWriter(), Mechanism.CLASS_RESOURCE,
-                    cssIds[i]);
+            Util.linkStyleSheet(writer, cssIds[i]);
         }
 
         YuiRendererHelper.renderSandboxStylesheet(context, writer, tabView);
 
         if (YuiTabView.TABSTYLE_BORDER.equalsIgnoreCase(tabView.getTabStyle())) {
-            Util.getXhtmlHelper().linkStylesheet(context, component,
-                    context.getResponseWriter(), Mechanism.CLASS_RESOURCE,
-                    YuiConstants.CSS_TABVIEW_BORDER_TABS);
+            Util.linkStyleSheet(writer, YuiConstants.CSS_TABVIEW_BORDER_TABS);
         } else if (YuiTabView.TABSTYLE_MODULE.equalsIgnoreCase(tabView.getTabStyle())) {
-            Util.getXhtmlHelper().linkStylesheet(context, component,
-                    context.getResponseWriter(), Mechanism.CLASS_RESOURCE,
-                    YuiConstants.CSS_TABVIEW_MODULE_TABS);
+            Util.linkStyleSheet(writer, YuiConstants.CSS_TABVIEW_MODULE_TABS);
             writer.startElement("style", tabView);
             writer.writeAttribute("type", "text/css", "type");
             writer.write(".yui-navset .yui-nav {background-image:url(" + 
-                    Util.getXhtmlHelper().mapResourceId(context, Mechanism.CLASS_RESOURCE, YuiConstants.YUI_ROOT + "assets/newcats_bkgd.gif") + ");}\n");
+                    Util.generateStaticUri("/sandbox/img/newcats_bkgd.gif") + ");}");
             writer.write(".yui-navset .yui-nav .selected a {background-image:url(" + 
-                    Util.getXhtmlHelper().mapResourceId(context, Mechanism.CLASS_RESOURCE, YuiConstants.YUI_ROOT + "assets/tab_right.gif") + ");}\n");
+                    Util.generateStaticUri("/sandbox/img/tab_right.gif") + ");}");
             writer.write(".yui-navset .yui-nav .selected {background-image:url(" + 
-                    Util.getXhtmlHelper().mapResourceId(context, Mechanism.CLASS_RESOURCE, YuiConstants.YUI_ROOT + "assets/ptr.gif") + ");}\n");
+                    Util.generateStaticUri("/sandbox/img/ptr.gif") + ");}");
             writer.write(".yui-navset .yui-nav .selected em {background-image:url(" + 
-                    Util.getXhtmlHelper().mapResourceId(context, Mechanism.CLASS_RESOURCE, YuiConstants.YUI_ROOT + "assets/tab_left.gif") + ");}\n");
+                    Util.generateStaticUri("/sandbox/img/tab_left.gif") + ");}");
             writer.endElement("style");
         } else  if (YuiTabView.TABSTYLE_ROUND.equalsIgnoreCase(tabView.getTabStyle())) {
-            Util.getXhtmlHelper().linkStylesheet(context, component,
-                    context.getResponseWriter(), Mechanism.CLASS_RESOURCE,
-                    YuiConstants.CSS_TABVIEW_ROUND_TABS);
+            Util.linkStyleSheet(writer, YuiConstants.CSS_TABVIEW_ROUND_TABS);
             writer.startElement("style", tabView);
             writer.writeAttribute("type", "text/css", "type");
             writer.write(".yui-navset .yui-nav li a {background-image:url(" + 
-                    Util.getXhtmlHelper().mapResourceId(context, Mechanism.CLASS_RESOURCE, YuiConstants.YUI_ROOT + "assets/round_4px_trans_gray.gif") +
-                ");}\n");
+                    Util.generateStaticUri("/sandbox/img/round_4px_trans_gray.gif") +
+                ");}");
             writer.write(".yui-navset .yui-nav li a em {background-image:url(" + 
-                    Util.getXhtmlHelper().mapResourceId(context, Mechanism.CLASS_RESOURCE, YuiConstants.YUI_ROOT + "assets/round_4px_trans_gray.gif") +
-                ");}\n");
+                    Util.generateStaticUri("/sandbox/img/round_4px_trans_gray.gif") +
+                ");}");
             writer.endElement("style");
+        } else {
+            Util.linkStyleSheet(writer, YuiConstants.CSS_TABVIEW_DEFAULT);
+//            Util.linkStyleSheet(writer, YuiConstants.CSS_TABVIEW_DEFAULT_SKIN);
+            writer.startElement("style", tabView);
+            writer.writeAttribute("type", "text/css", "type");
+            writer.write(".yui-skin-sam .yui-navset .yui-nav a { background:#dadbdb url(" +
+                    Util.generateStaticUri(YuiConstants.YUI_ROOT + "assets/skins/sam/sprite.png") + ") repeat-x;}");
+            writer.write(".yui-skin-sam .yui-navset .yui-nav .selected a, .yui-skin-sam .yui-navset .yui-nav a:focus, .yui-skin-sam .yui-navset .yui-nav a:hover { background:#214197 url(" +
+                    Util.generateStaticUri(YuiConstants.YUI_ROOT + "assets/skins/sam/sprite.png") + ") repeat-x left -1400px;}");
+            writer.write(".yui-skin-sam .yui-navset .yui-content div { border: 0px solid #808080;}");
+            writer.write(".yui-skin-sam .yui-navset .yui-content { border-left: 1px solid #808080; border-right: 1px solid #808080; border-bottom: 1px solid #808080;}");
+            writer.endElement("style");
+            extraClass="yui-skin-sam";
         }
         
         if (tabView.getMinHeight() != null) {
@@ -143,6 +145,10 @@ public class YuiTabViewRenderer extends Renderer {
             writer.endElement("style");
         }
         
+        writer.startElement("div", tabView);
+        writer.writeAttribute("id", "tabView_" + component.getClientId(context), "id");
+        writer.writeAttribute("class", extraClass, "class");
+                
         writer.startElement("div", tabView);
         writer.writeAttribute("id", "tabView_" + component.getClientId(context), "id");
         writer.writeAttribute("class", "yui-navset", "class");
@@ -215,6 +221,7 @@ public class YuiTabViewRenderer extends Renderer {
         
         writer.endElement("div"); // content div
         writer.endElement("div"); // containing div
+        writer.endElement("div"); // containing div
         writer.startElement("script", component);
         writer.writeAttribute("type", "text/javascript", "type");
         String jsName = "tabView_" + YuiRendererHelper.getJavascriptVar(component);
@@ -228,21 +235,21 @@ public class YuiTabViewRenderer extends Renderer {
     }
     
     private final static String AUTO_HEIGHT_JS =
-        "\nYAHOO.util.Event.onContentReady('%%%TABVIEW%%%', function() { \n" +
-        "var tabs = %%%TABVIEW%%%.get('tabs'); \n" +
-        "var height = %%%TABVIEW%%%.get('activeTab').get('contentEl').offsetHeight;\n" +  /* seed with visible tab */ 
+        "YAHOO.util.Event.onContentReady('%%%TABVIEW%%%', function() { " +
+        "var tabs = %%%TABVIEW%%%.get('tabs'); " +
+        "var height = %%%TABVIEW%%%.get('activeTab').get('contentEl').offsetHeight;" +  /* seed with visible tab */ 
       
-        "for (var i = 0, len = tabs.length; i < len; i++) { \n" +
-        "    if ( tabs[i] == %%%TABVIEW%%%.get('activeTab') ) { \n" +
-        "        continue; \n" +  /* skip active tab */
+        "for (var i = 0, len = tabs.length; i < len; i++) { " +
+        "    if ( tabs[i] == %%%TABVIEW%%%.get('activeTab') ) { " +
+        "        continue; " +  /* skip active tab */
         "    } " +
           
-        "    tabs[i].set('contentVisible', true); \n" + /* so we can measure */ 
-        "    height = Math.max(tabs[i].get('contentEl').offsetHeight, height); \n" +
-        "    tabs[i].set('contentVisible', false); \n" +
-        "} \n" +
+        "    tabs[i].set('contentVisible', true); " + /* so we can measure */ 
+        "    height = Math.max(tabs[i].get('contentEl').offsetHeight, height); " +
+        "    tabs[i].set('contentVisible', false); " +
+        "} " +
       
-        "%%%TABVIEW%%%.getElementsByClassName('yui-content')[0].style.height = height + 'px'; \n" +
+        "%%%TABVIEW%%%.getElementsByClassName('yui-content')[0].style.height = height + 'px'; " +
   
-        "});\n";
+        "});";
 }

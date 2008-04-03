@@ -41,8 +41,6 @@ package com.sun.faces.sandbox.component;
 
 import javax.faces.component.UIOutput;
 
-import com.sun.faces.sandbox.model.TreeNode;
-
 /**
  * @author Jason Lee
  *
