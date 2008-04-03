@@ -37,25 +37,29 @@
 
 package com.sun.faces.spi;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.vendor.WebContainerInjectionProvider;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Enumeration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.net.URL;
+import java.net.URLConnection;
 
 import javax.faces.context.ExternalContext;
 import javax.servlet.ServletContext;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import com.sun.faces.RIConstants;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
+import com.sun.faces.vendor.WebContainerInjectionProvider;
 
 
 /**
@@ -337,50 +341,75 @@ public class InjectionProviderFactory {
 
     private static String[] getServiceEntries() {
 
-        String[] results = EMPTY_ARRAY;
+        List<String> results = null;
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         if (loader == null) {
-            return results;
+            return EMPTY_ARRAY;
         }
 
-        InputStream input = null;
-        BufferedReader reader = null;
-
+        Enumeration<URL> urls = null;
         try {
-            input = loader.getResourceAsStream(INJECTION_SERVICE);
-            if (input != null) {
-                try {
-                    reader = new BufferedReader(new InputStreamReader(input, "UTF-8"));
-                } catch (Exception e) {
-                    reader = new BufferedReader(new InputStreamReader(input));
-                }
-                List<String> list = new ArrayList<String>(4);
-                for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-                    list.add(line.trim());
-                }
-                results = list.toArray(new String[list.size()]);
-            }
-        } catch (Exception e) {
+            urls = loader.getResources(INJECTION_SERVICE);
+        } catch (IOException ioe) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE,
-                           "jsf.spi.injection.provider.cannot_read_service",
-                           e);
-            }
-            results = EMPTY_ARRAY;
-        } finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (Exception ignored) {}
-            }
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (Exception ignored) {}
+                           ioe.toString(),
+                           ioe);
             }
         }
 
-        return results;
+        if (urls != null) {
+            InputStream input = null;
+            BufferedReader reader = null;
+            while (urls.hasMoreElements()) {
+                try {
+                    if (results == null) {
+                        results = new ArrayList<String>();
+                    }
+                    URL url = urls.nextElement();
+                    URLConnection conn = url.openConnection();
+                    conn.setUseCaches(false);
+                    input = conn.getInputStream();
+                    if (input != null) {
+                        try {
+                            reader =
+                                  new BufferedReader(new InputStreamReader(input, "UTF-8"));
+                        } catch (Exception e) {
+                            reader =
+                                  new BufferedReader(new InputStreamReader(input));
+                        }
+                        for (String line = reader.readLine();
+                             line != null;
+                             line = reader.readLine()) {
+                            results.add(line.trim());
+                        }
+                    }
+                } catch (Exception e) {
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE,
+                                   "jsf.spi.injection.provider.cannot_read_service",
+                                   e);
+                    }
+                } finally {
+                    if (input != null) {
+                        try {
+                            input.close();
+                        } catch (Exception ignored) {
+                        }
+                    }
+                    if (reader != null) {
+                        try {
+                            reader.close();
+                        } catch (Exception ignored) {
+                        }
+                    }
+                }
+            }
+        }
+
+        return ((results != null && !results.isEmpty())
+                ? results.toArray(new String[results.size()])
+                : EMPTY_ARRAY);
 
     }
 
