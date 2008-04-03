@@ -36,7 +36,7 @@
 -->
 <!-- =========== FULL CONFIGURATION FILE ================================== -->
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xi="http://www.w3.org/2001/XInclude" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd" version="1.2">
-<!-- Generic User Interface Components -->
+  <!-- Generic User Interface Components -->
   <component>
     <component-type>javax.faces.Column</component-type>
     <component-class>javax.faces.component.UIColumn</component-class>
@@ -3937,7 +3937,7 @@
       <component-family>javax.faces.ViewRoot</component-family>
     </component-extension>
   </component>
-<!-- Concrete HTML Components -->
+  <!-- Concrete HTML Components -->
   <component>
     <description><![CDATA[<p>Represents a column that will be rendered 
       in an HTML <code>table</code> element.</p>]]></description>
@@ -17427,7 +17427,7 @@
       <renderer-type>javax.faces.Radio</renderer-type>
     </component-extension>
   </component>
-<!-- Standard HTML Renderkit -->
+  <!-- Standard HTML Renderkit -->
   <render-kit>
     <description><![CDATA[
      The standard HTML RenderKit.  Please see the spec for additional
@@ -25810,6 +25810,40 @@
       <renderer-extension>
         <renders-children>true</renders-children>
       </renderer-extension>
+    </renderer>
+    <renderer>
+      <description><![CDATA[ RELEASE_PENDING (edburns,rogerk) documentation ]]></description>
+      <component-family>javax.faces.Output</component-family>
+      <renderer-type>javax.faces.resource.Script</renderer-type>
+      <renderer-class>
+        com.sun.faces.renderkit.html_basic.ScriptRenderer
+    </renderer-class>
+
+      <attribute>
+        <description><![CDATA[ RELEASE_PENDING (edburns,rogerk) documentation ]]></description>
+        <display-name>Resource URL</display-name>
+        <icon/>
+        <attribute-name>url</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+    </renderer>
+    <renderer>
+      <description><![CDATA[ RELEASE_PENDING (edburns,rogerk) documentation ]]></description>
+      <component-family>javax.faces.Output</component-family>
+      <renderer-type>javax.faces.resource.Stylesheet</renderer-type>
+      <renderer-class>
+        com.sun.faces.renderkit.html_basic.StylesheetRenderer
+    </renderer-class>
+
+      <attribute>
+        <description><![CDATA[ RELEASE_PENDING (edburns,rogerk) documentation ]]></description>
+        <display-name>Resource URL</display-name>
+        <icon/>
+        <attribute-name>url</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
     </renderer>
   </render-kit>
 </faces-config>

@@ -36,18 +36,18 @@
 
 <!doctype html public "-//w3c//dtd html 4.0 transitional//en">
 
-<html>
-<head>
-    <title>CarStore</title>
-    <link rel="stylesheet" type="text/css"
-          href="${pageContext.request.contextPath}/stylesheet.css">
-</head>
-
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/blueprints/ee5/components/ui" prefix="d" %>
+<%@ taglib uri="http://java.sun.com/jsf/mojarra/extensions" prefix="mjx" %>
 
 <f:view>
+<html>
+<head>
+    <title>CarStore</title>
+    <mjx:outputStyle url="#{resource['styles/stylesheet.css']}"/>
+</head>
+
 <h:form>
 
     <h:panelGrid columns="1"
@@ -58,12 +58,12 @@
                  summary="#{bundle.chooseLocale}"
                  title="#{bundle.chooseLocale}">
 
-        <h:graphicImage url="/images/cardemo.jpg"/>
+        <h:graphicImage url="#{resource['images/cardemo.jpg']}"/>
 
         <h:outputText styleClass="maintitle"
                       value="#{bundle.chooseLocale}"/>
 
-        <h:graphicImage id="mapImage" url="/images/world.jpg"
+        <h:graphicImage id="mapImage" url="#{resource['images/world.jpg']}"
                         alt="#{bundle.chooseLocale}"
                         usemap="#worldMap"/>
 

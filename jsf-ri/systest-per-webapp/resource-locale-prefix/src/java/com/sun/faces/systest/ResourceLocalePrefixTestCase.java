@@ -1,5 +1,5 @@
 /*
- * $Id: ResourceLocalePrefixTestCase.java,v 1.1 2007/11/15 00:43:27 rlubke Exp $
+ * $Id: ResourceLocalePrefixTestCase.java,v 1.2 2007/11/16 00:43:21 rlubke Exp $
  */
 
 /*
@@ -100,7 +100,7 @@ public class ResourceLocalePrefixTestCase extends AbstractTestCase {
     // ------------------------------------------------- Individual Test Methods
 
 
-    public void testReplaceVariableResolver() throws Exception {
+    public void testLocalePrefixes() throws Exception {
 
         String[] locales = {"en", "de", "fr", "ja"};
         WebClient client = new WebClient();
@@ -121,7 +121,7 @@ public class ResourceLocalePrefixTestCase extends AbstractTestCase {
                       : locale))).equals(img.getSrcAttribute()));
             img = images.get(1);
             assertTrue((
-                  "/jsf-resource-locale-prefix/faces/javax.faces.resource/duke.gif?loc="
+                  "/jsf-resource-locale-prefix/faces/javax.faces.resource/duke.gif?ln=lib&loc="
                   + (("ja".equals(locale)
                       ? "en"
                       : locale))).equals(img.getSrcAttribute()));

@@ -36,29 +36,28 @@
 
 <!doctype html public "-//w3c//dtd html 4.0 transitional//en">
 
+<%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
+<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
+<%@ taglib uri="https://javaserverfaces.dev.java.net/demo/carstore" prefix="cs" %>
+<%@ taglib uri="http://java.sun.com/jsf/mojarra/extensions" prefix="mjx" %>
+
+<f:view>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <title>Customer Details</title>
-    <link rel="stylesheet" type="text/css"
-          href="${pageContext.request.contextPath}/stylesheet.css">
-
-    <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
-    <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-    <%@ taglib uri="https://javaserverfaces.dev.java.net/demo/carstore"
-               prefix="cs" %>
+    <mjx:outputStyle url="#{resource['styles/stylesheet.css']}"/>
 </head>
 
 <body>
 
-<f:view>
 <h:form>
 
 <h:panelGrid id="mainPanel" columns="1" footerClass="subtitle"
              headerClass="subtitlebig" styleClass="medium"
              columnClasses="medium">
 
-<h:graphicImage url="/images/cardemo.jpg"/>
+<h:graphicImage url="#{resource['images/cardemo.jpg']}"/>
 
 <h:outputText value="#{bundle.customerTitle}"/>
 
@@ -205,7 +204,7 @@
 
 <h:commandButton value="#{bundle.finishButton}" action="finish"/>
 
-<h:graphicImage id="duke" url="/images/duke.gif"/>
+<h:graphicImage id="duke" url="#{resource['images/duke.gif']}"/>
 
 <h:outputText value="#{bundle.buyLabel}"/>
 

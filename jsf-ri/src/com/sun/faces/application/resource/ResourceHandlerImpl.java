@@ -89,6 +89,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
         webconfig = WebConfiguration.getInstance();
         mimeTypeMap = new MimetypesFileTypeMap();
         mimeTypeMap.addMimeTypes("text/javascript js JS");
+        mimeTypeMap.addMimeTypes("text/css css CSS");
         initExclusions();
 
     }
@@ -169,7 +170,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
         Resource resource = null;
         if (ResourceHandler.RESOURCE_IDENTIFIER.length() < resourceId.length()) {
-            String resourceName = resourceId.substring(RESOURCE_IDENTIFIER.length());
+            String resourceName = resourceId.substring(RESOURCE_IDENTIFIER.length() + 1);
             String libraryName = context.getExternalContext().getRequestParameterMap()
                   .get("ln");
             resource = createResource(resourceName, libraryName);

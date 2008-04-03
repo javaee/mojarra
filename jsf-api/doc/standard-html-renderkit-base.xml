@@ -2410,6 +2410,26 @@
             </renderer-extension>
         </renderer>
 
+        <renderer>
+            <description><![CDATA[ RELEASE_PENDING (edburns,rogerk) documentation ]]></description>
+            <component-family>javax.faces.Output</component-family>
+            <renderer-type>javax.faces.resource.Script</renderer-type>
+            <renderer-class>
+               <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-script-renderer-class/text())"/>
+            </renderer-class>
+            <xi:include href="output-resource-attrs.xml" xpointer="xpointer(/root/*)"/>
+        </renderer>
+
+        <renderer>
+            <description><![CDATA[ RELEASE_PENDING (edburns,rogerk) documentation ]]></description>
+            <component-family>javax.faces.Output</component-family>
+            <renderer-type>javax.faces.resource.Stylesheet</renderer-type>
+            <renderer-class>
+               <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-stylesheet-renderer-class/text())"/>
+            </renderer-class>
+            <xi:include href="output-resource-attrs.xml" xpointer="xpointer(/root/*)"/>
+        </renderer>
+
     </render-kit>
 
 </faces-config>

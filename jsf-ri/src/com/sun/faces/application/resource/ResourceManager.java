@@ -96,23 +96,25 @@ public class ResourceManager {
         String localePrefix = getLocalePrefix(ctx);
         if (libraryName != null) {
             library = findLibrary(libraryName, localePrefix, ctx);
-            if (library == null && localePrefix == null) {
-                return null;
-            } else {
+            if (library == null && localePrefix != null) {
                 // no localized library found.  Try to find
                 // a library that isn't localized.
                 library = findLibrary(libraryName, null, ctx);
             }
+            if (library == null) {
+                return null;
+            }
         }
 
+        String resName = trimLeadingSlash(resourceName);
         ResourceInfo info = findResource(library,
-                                         resourceName,
+                                         resName,
                                          localePrefix,
                                          ctx);
         if (info == null && localePrefix != null) {
             // no localized resource found, try to find a
             // resource that isn't localized
-            info = findResource(library, resourceName, null, ctx);
+            info = findResource(library, resName, null, ctx);
         }
         return info;
 
@@ -260,14 +262,18 @@ public class ResourceManager {
                     localePrefix =
                           appBundle
                                 .getString("javax.faces.resource.localePrefix");
-                } catch (MissingResourceException e) {
-                    LOGGER.log(Level.INFO,
-                               "Unable to find key 'javax.faces.resource.localePrefix' in application message bundle.\nAssuming default Locale.\n", e);
-                }
+                } catch (MissingResourceException ignored) { }
         }
         return localePrefix;
 
     }
 
+    private String trimLeadingSlash(String s) {
+        if (s.charAt(0) == '/') {
+            return s.substring(1);
+        } else {
+            return s;
+        }
+    }
 
 }

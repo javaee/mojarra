@@ -1,5 +1,5 @@
 /*
- * $Id: JspTLD21Generator.java,v 1.15 2007/10/23 13:57:33 rlubke Exp $
+ * $Id: JspTLD21Generator.java,v 1.16 2007/11/16 00:43:20 rlubke Exp $
  */
 
 /*
@@ -152,6 +152,9 @@ public class JspTLD21Generator extends JspTLDGenerator {
 
                 RendererBean renderer = rendererIter.next();
                 String rendererType = renderer.getRendererType();
+                if (rendererType.contains("javax.faces.resource")) {
+                    continue;
+                }
                 writer.startElement("tag");
 
                 DescriptionBean description = renderer.getDescription("");
