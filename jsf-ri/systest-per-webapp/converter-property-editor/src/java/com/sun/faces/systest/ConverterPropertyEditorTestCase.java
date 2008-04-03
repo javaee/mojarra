@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterPropertyEditorTestCase.java,v 1.3 2007/04/27 22:01:46 ofung Exp $
+ * $Id: ConverterPropertyEditorTestCase.java,v 1.4 2008/04/01 15:18:41 rlubke Exp $
  */
 
 /*
@@ -137,20 +137,23 @@ public class ConverterPropertyEditorTestCase extends AbstractTestCase {
 	page = (HtmlPage) button.click();
 
 	assertTrue(-1 != page.asText().indexOf("This selectOneMenu is bound to a list of test.Payment"));
+    assertTrue(!page.asText().contains("Validation Error"));
 
-	page = getPage("/faces/selectoneRadio.jsp");
+    page = getPage("/faces/selectoneRadio.jsp");
 	list = getAllElementsOfGivenClass(page, null, HtmlSubmitInput.class); 
 	button = (HtmlSubmitInput) list.get(0);
 	page = (HtmlPage) button.click();
 
 	assertTrue(-1 != page.asText().indexOf("This selectOneRadio is bound to a list of test.Payment"));
+    assertTrue(!page.asText().contains("Validation Error"));
 
-	page = getPage("/faces/selectmany.jsp");
+    page = getPage("/faces/selectmany.jsp");
 	list = getAllElementsOfGivenClass(page, null, HtmlSubmitInput.class); 
 	button = (HtmlSubmitInput) list.get(0);
 	page = (HtmlPage) button.click();
 
 	assertTrue(-1 != page.asText().indexOf("This selectManyMenu is bound to a list of test.Payment"));
+    assertTrue(!page.asText().contains("Validation Error"));
 
         page = getPage("/faces/selectmanyListbox.jsp");
         list = getAllElementsOfGivenClass(page, null, HtmlSubmitInput.class); 
@@ -158,6 +161,7 @@ public class ConverterPropertyEditorTestCase extends AbstractTestCase {
         page = (HtmlPage) button.click();
 
         assertTrue(-1 != page.asText().indexOf("This selectManyListbox is bound to a list of test.Payment"));
+        assertTrue(!page.asText().contains("Validation Error"));
 
         page = getPage("/faces/selectmanyCheckbox.jsp");
         list = getAllElementsOfGivenClass(page, null, HtmlSubmitInput.class); 
@@ -165,6 +169,7 @@ public class ConverterPropertyEditorTestCase extends AbstractTestCase {
         page = (HtmlPage) button.click();
 
         assertTrue(-1 != page.asText().indexOf("This selectManyCheckbox is bound to a list of test.Payment"));
+        assertTrue(!page.asText().contains("Validation Error"));
 
     }
 

@@ -1,12 +1,12 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.54 2008/02/27 20:27:51 rlubke Exp $
+ * $Id: ApplicationAssociate.java,v 1.55 2008/04/01 15:18:41 rlubke Exp $
  */
 
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * 
+ *
  * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
- * 
+ *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -14,7 +14,7 @@
  * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
  * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- * 
+ *
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
  * Sun designates this particular file as subject to the "Classpath" exception
@@ -23,9 +23,9 @@
  * Header, with the fields enclosed by brackets [] replaced by your own
  * identifying information: "Portions Copyrighted [year]
  * [name of copyright owner]"
- * 
+ *
  * Contributor(s):
- * 
+ *
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
  * elects to include this software in this distribution under the [CDDL or GPL
@@ -144,8 +144,12 @@ public class ApplicationAssociate {
 
     private BeanManager beanManager;
 
+    private PropertyEditorHelper propertyEditorHelper;
+
     public ApplicationAssociate(ApplicationImpl appImpl) {
         app = appImpl;
+
+        propertyEditorHelper = new PropertyEditorHelper(appImpl);
 
         FacesContext ctx = FacesContext.getCurrentInstance();
         if (ctx == null) {
@@ -208,7 +212,7 @@ public class ApplicationAssociate {
         }
 
         return associate;
-        
+
     }
 
     public ResourceCache getResourceCache() {
@@ -228,12 +232,21 @@ public class ApplicationAssociate {
                 me.resourceBundles.clear();
             }
         }
-        applicationMap.remove(ASSOCIATE_KEY);        
+        applicationMap.remove(ASSOCIATE_KEY);
     }
 
 
     public BeanManager getBeanManager() {
         return beanManager;
+    }
+
+    /**
+     * Obtain the PropertyEditorHelper instance for this app.
+     *
+     * @return
+     */
+    public PropertyEditorHelper getPropertyEditorHelper() {
+        return propertyEditorHelper;
     }
 
     /**
@@ -465,7 +478,7 @@ public class ApplicationAssociate {
         assert (null != locale);
         //ResourceBundleBean bean = resourceBundles.get(var);
         return bundle.getResourceBundle(locale);
-        
+
     }
 
     /**

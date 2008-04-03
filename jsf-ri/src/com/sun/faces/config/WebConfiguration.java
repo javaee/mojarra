@@ -256,7 +256,7 @@ public class WebConfiguration {
         if (param == null) {
             return;
         }
-        boolean oldVal = booleanContextParameters.put(param, value);        
+        boolean oldVal = booleanContextParameters.put(param, value);
         if (LOGGER.isLoggable(Level.INFO) && oldVal != value) {
             LOGGER.log(Level.INFO,
                        "Overriding init parameter {0}.  Changing from {1} to {2}.",
@@ -282,9 +282,9 @@ public class WebConfiguration {
                                         value});
             }
         }
-        
 
-    }    
+
+    }
 
 
     // ------------------------------------------------- Package Private Methods
@@ -856,6 +856,10 @@ public class WebConfiguration {
         EnableViewStateIdRendering(
             "com.sun.faces.enableViewStateIdRendering",
             true
+        ),
+        RegisterConverterPropertyEditors(
+            "com.sun.faces.registerConverterPropertyEditors",
+            false
         );
 
         private BooleanWebContextInitParameter alternate;

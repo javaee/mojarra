@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.103 2008/02/19 22:55:28 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.104 2008/04/01 15:18:41 rlubke Exp $
  */
 
 /*
@@ -85,6 +85,7 @@ import javax.faces.validator.Validator;
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.el.ELUtils;
 import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.el.PropertyResolverImpl;
@@ -794,6 +795,12 @@ public class ApplicationImpl extends Application {
      */
     
     private void addPropertyEditorIfNecessary(Class targetClass) {
+        WebConfiguration webConfig = WebConfiguration.getInstance();
+        if (!webConfig
+              .isOptionEnabled(BooleanWebContextInitParameter.RegisterConverterPropertyEditors)) {
+            return;
+        }
+
         PropertyEditor editor = PropertyEditorManager.findEditor(targetClass);
         if (null != editor) {
             return;
