@@ -1,5 +1,5 @@
 /*
- * $Id: BeanManager.java,v 1.3 2007/04/27 22:00:59 ofung Exp $
+ * $Id: BeanManager.java,v 1.4 2007/06/25 17:18:55 rlubke Exp $
  */
 
 /*
@@ -231,12 +231,12 @@ public class BeanManager {
 
 
     private void addBean(String beanName, BeanBuilder builder) {
+
         if (configPreprocessed) {
             preProcessBean(beanName, builder);
-            managedBeans.put(beanName, builder);
-        } else {
-            managedBeans.put(beanName, builder);
         }
+        managedBeans.put(beanName, builder);
+
     }
 
 
