@@ -286,7 +286,13 @@ public abstract class UIComponentBase extends UIComponent {
                 this.clientId = getId();
             }
             if (parentId != null) {
-                this.clientId = parentId + NamingContainer.SEPARATOR_CHAR + this.clientId;
+                StringBuilder idBuilder =
+                      new StringBuilder(parentId.length()
+                                        + 1
+                                        + this.clientId.length());
+                this.clientId = idBuilder.append(parentId)
+                      .append(NamingContainer.SEPARATOR_CHAR)
+                      .append(this.clientId).toString();
             }
 
             // allow the renderer to convert the clientId
