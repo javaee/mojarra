@@ -59,7 +59,6 @@
     <property name="build.dir" value="${basedir}/build"/>
     <property name="build.classes.dir" value="${build.dir}/classes"/>
     <property name="build.generate.dir" value="${build.dir}/generate"/>
-    <property name="build.applet.dir" value="${build.dir}/applet"/>
     <property name="dep.jar.dir" value="${build.classes.dir}/META-INF/static/jars/" />
 
     <!-- The base directory for distribution targets -->
@@ -76,36 +75,6 @@
     <property name="maven.mirror" value="http://mirrors.ibiblio.org/pub/mirrors/maven2"/>
     <property name="sourceforge.mirror" value="http://superb-east.dl.sourceforge.net/sourceforge"/>
     
-    <property name="codec.version" value="1.3" />
-    <property name="facelets.version" value="1.1.11" />
-    <property name="fileupload.version" value="1.1.1" />
-    <property name="httpclient.version" value="3.0.1" />
-    <property name="io.version" value="1.2" />
-    <property name="jmock.version" value="1.2.0" />
-    <property name="logging.version" value="1.1" />
-    <property name="shale.version" value="1.1.0-SNAPSHOT" />
-    <property name="tinymce.version" value="2_1_1_1" />
-    <property name="yui.version" value="2.3.0" />
-    
-    <property name="codec.jar" value="${sandbox.dependency.base.dir}/commons-codec-${codec.version}.jar"/>
-    <property name="facelets.jar" value="${sandbox.dependency.base.dir}/jsf-facelets-${facelets.version}.jar"/>
-    <property name="fileupload.jar" value="${sandbox.dependency.base.dir}/commons-fileupload-${fileupload.version}.jar"/>
-    <property name="httpclient.jar" value="${sandbox.dependency.base.dir}/commons-httpclient-${httpclient.version}.jar"/>
-    <property name="io.jar" value="${sandbox.dependency.base.dir}/commons-io-${io.version}.jar"/>
-    <property name="jmock.jar" value="${sandbox.dependency.base.dir}/jmock-${jmock.version}.jar"/>
-    <property name="jsftemplating.jar" value="${sandbox.dependency.base.dir}/jsftemplating.jar"/>
-    <property name="jsftemplating.dt.jar" value="${sandbox.dependency.base.dir}/jsftemplating-dt.jar"/>
-    <property name="jsftemplating.df.jar" value="${sandbox.dependency.base.dir}/jsftemplating-dynafaces-0.1.jar"/>
-    <property name="logging.jar" value="${sandbox.dependency.base.dir}/commons-logging-${logging.version}.jar"/>
-    <property name="shale.remoting.jar" value="${sandbox.dependency.base.dir}/shale-remoting-${shale.version}.jar"/>
-    <property name="shale.test.jar" value="${sandbox.dependency.base.dir}/shale-test-${shale.version}.jar"/>
-    <property name="tinymce.archive" value="${sandbox.dependency.base.dir}/tinymce_${tinymce.version}.zip"/>
-    <property name="yui.archive" value="${sandbox.dependency.base.dir}/yui_${yui.version}.zip"/>
-
-    <property name="applet.archive.name" value="${name}-upload-applet" />
-	<property name="htmleditor.dir" value="${resource.dir}/html_editor" />
-	<property name="yui.dir" value="${resource.dir}/yui" />
-
     <path id="impl.compile.classpath">
         <pathelement location="${jsf-api.jar}"/>
         <pathelement location="${jsf-impl.jar}"/>
@@ -124,7 +93,6 @@
 
     <target name="prepare" depends="init" description="Prepare build directory">
         <mkdir dir="${build.dir}"/>
-        <mkdir dir="${build.applet.dir}"/>
         <mkdir dir="${build.generate.dir}"/>
         <mkdir dir="${build.classes.dir}"/>
         <mkdir dir="${build.classes.dir}/META-INF"/>
@@ -146,69 +114,7 @@
                 <setproxy proxyhost="${http.proxy.host}" proxyport="${http.proxy.port}"/>
             </then>
         </if>
-        <!-- httpclient -->
-        <if>
-            <not>
-                <available file="${httpclient.jar}" property="ignored"/>
-            </not>
-            <then>
-                <get src="${maven.mirror}/commons-httpclient/commons-httpclient/${httpclient.version}/commons-httpclient-${httpclient.version}.jar"
-                     dest="${httpclient.jar}"
-                     usetimestamp="true"/>
-            </then>
-        </if>
-        <!-- fileupload -->
-        <if>
-            <not>
-                <available file="${fileupload.jar}" property="ignored"/>
-            </not>
-            <then>
-                <get src="${maven.mirror}/commons-fileupload/commons-fileupload/${fileupload.version}/commons-fileupload-${fileupload.version}.jar"
-                     dest="${fileupload.jar}"
-                     usetimestamp="true"/>
-            </then>
-        </if>
-        <!-- codec -->
-        <if>
-            <not>
-                <available file="${codec.jar}" property="ignored"/>
-            </not>
-            <then>
-                <get src="${maven.mirror}/commons-codec/commons-codec/${codec.version}/commons-codec-${codec.version}.jar"
-                     dest="${codec.jar}"
-                     usetimestamp="true"/>
-            </then>
-        </if>
-        <!-- io -->
-        <if>
-            <not>
-                <available file="${io.jar}" property="ignored"/>
-            </not>
-            <then>
-                <get src="${maven.mirror}/commons-io/commons-io/${io.version}/commons-io-${io.version}.jar"
-                     dest="${io.jar}"
-                     usetimestamp="true"/>
-            </then>
-        </if>
-        <!-- jmock
-        <if>
-            <not>
-                <available file="${jmock.jar}" property="ignored"/>
-            </not>
-            <then>
-                <get src="http://www.jmock.org/dist/jmock-${jmock.version}-jars.zip"
-                     dest="jmock.zip"
-                     usetimestamp="true"/>
-                <unzip src="jmock.zip" dest="${sandbox.dependency.base.dir}">
-                    <patternset>
-                        <include name="**/*.jar"/>
-                    </patternset>
-                    <mapper type="flatten"/>
-                </unzip>
-            </then>
-        </if>
-        -->
-        <!-- logging -->
+        <!-- left for information purposes
         <if>
             <not>
                 <available file="${logging.jar}" property="ignored"/>
@@ -219,139 +125,12 @@
                      usetimestamp="true"/>
             </then>
         </if>
-        <!-- facelets -->
-        <if>
-            <not>
-                <available file="${facelets.jar}" property="ignored"/>
-            </not>
-            <then>
-                <get src="${maven.mirror}/com/sun/facelets/jsf-facelets/${facelets.version}/jsf-facelets-${facelets.version}.jar"
-                     dest="${facelets.jar}"
-                     usetimestamp="true"/>
-            </then>
-        </if>
-        <!-- Shale Remoting -->
-        <!-- 
-        Ugly hack to get the most recent Shale nightly, as it has a bug fix we need.  This is a bit dangerous, as the nightly
-        may introduce new bugs, but what do you do? :P  When they finally release a new version, this can go away.  
-        Come on, Craig! :)
-        <tstamp>
-            <format property="shale.nightly.date" pattern="yyyyMMdd" offset="-1" unit="day"/>
-        </tstamp>
-        <if>
-            <not>
-        <and>
-                    <available file="shale-framework-${shale.nightly.date}.zip" property="ignored"/>
-        </and>
-            </not>
-            <then>
-                <delete>
-                    <fileset dir="." includes="shale-framework*.zip" />
-                </delete>
-                <get src="http://people.apache.org/builds/shale/nightly/shale-framework-${shale.nightly.date}.zip"
-                     dest="shale-framework-${shale.nightly.date}.zip"
-                     usetimestamp="true"/>
-                <unzip src="shale-framework-${shale.nightly.date}.zip" dest="${sandbox.dependency.base.dir}">
-                    <patternset>
-                        <include name="**/shale-remoting-1.1.0-SNAPSHOT.jar"/>
-                        <include name="**/shale-test-1.1.0-SNAPSHOT.jar"/>
-                    </patternset>
-                    <mapper type="flatten"/>
-                </unzip>
-            </then>
-        </if>
-        -->
-
-        <!-- JSFTemplating -->
-        <if>
-            <not>
-                <and>
-                    <available file="${jsftemplating.jar}" property="ignored"/>
-                    <available file="${jsftemplating.dt.jar}" property="ignored"/>
-                    <available file="${jsftemplating.df.jar}" property="ignored"/>
-                </and>
-            </not>
-            <then>
-                <get src="https://jsftemplating.dev.java.net/files/documents/5015/57603/jsftemplating.jar"
-                     dest="${jsftemplating.jar}"
-                     usetimestamp="true"/>
-                <get src="https://jsftemplating.dev.java.net/files/documents/5015/57604/jsftemplating-dt.jar"
-                     dest="${jsftemplating.dt.jar}"
-                     usetimestamp="true"/>
-                <get src="https://jsftemplating.dev.java.net/files/documents/5015/57605/jsftemplating-dynafaces-0.1.jar"
-                     dest="${jsftemplating.df.jar}"
-                     usetimestamp="true"/>
-                     
-            </then>
-        </if>
-        <!-- TinyMCE -->
-        <if>
-            <not>
-                <available file="${htmleditor.dir}" property="ignored"/>
-            </not>
-            <then>
-                <get src="${sourceforge.mirror}/tinymce/tinymce_${tinymce.version}.zip"
-                     dest="${tinymce.archive}"
-                     usetimestamp="true"/>
-                <mkdir dir="${htmleditor.dir}"/>
-                <mkdir dir="tinymce.work"/>
-                <unzip src="${tinymce.archive}" dest="tinymce.work"/>
-                <copy todir="${htmleditor.dir}">
-                    <fileset dir="tinymce.work/tinymce/jscripts/tiny_mce">
-                        <exclude name="**/*_src.js"/>
-                    </fileset>
-                </copy>
-                <delete dir="tinymce.work"/>
-            </then>
-        </if>
-        <!-- YUI -->
-        <if>
-            <not>
-                <available file="${yui.dir}" property="ignored"/>
-            </not>
-            <then>
-                <get src="http://easynews.dl.sourceforge.net/sourceforge/yui/yui${yui.version}.zip"
-                     dest="${yui.archive}"
-                     usetimestamp="true"/>
-                <delete dir="${yui.dir}"/>
-                <mkdir dir="${yui.dir}"/>
-                <mkdir dir="yui.work"/>
-                <unzip src="${yui.archive}" dest="yui.work"/>
-                <copy todir="${yui.dir}">
-                    <fileset dir="yui.work/yui/build">
-                        <exclude name="**/.DS_Store"/>
-                    </fileset>
-                </copy>
-                <delete dir="yui.work"/>
-            </then>
-        </if>
+	-->
     </target>
 
     <path id="sandbox.compile.classpath">
         <fileset dir="${sandbox.dependency.base.dir}" includes="*.jar"/>
     </path>
-
-    <target name="apt">
-        <taskdef name="apt" classname="org.apache.tools.ant.taskdefs.Apt" />
-        <echo>
-            ${build.classes.dir}
-            ${jsf-api.jar}
-            ${jsf-impl.jar}
-            ${tools.dir}/build/classes
-        </echo>
-        <apt srcdir="${source.dir}"
-            fork="true"
-            destdir="${build.classes.dir}"
-            debug="${compile.debug}"
-            deprecation="${compile.deprecation}"
-            excludes="**/annotation/**"
-            optimize="${compile.optimize}">
-            <classpath>
-                <path refid="sandbox.compile.classpath"/>
-                <path refid="impl.compile.classpath"/>
-            </classpath>
-        </apt>
-    </target>
 
     <target name="compile" depends="prepare,update" description="Just compile the classes">
         <if>
@@ -366,17 +145,6 @@
 
         <!-- Run javac through everything -->
         <jsf.javac srcdir="${source.dir}"
-                   destdir="${build.applet.dir}"
-                   includes="com/sun/faces/sandbox/web/"
-                   source="1.5"
-                   target="1.5">
-            <classpath>
-                <path refid="sandbox.compile.classpath"/>
-                <path refid="impl.compile.classpath"/>
-            </classpath>
-        </jsf.javac>
-
-        <jsf.javac srcdir="${source.dir}"
                    destdir="${build.classes.dir}"
                    excludes="${exclude.path}"
                    source="1.5"
@@ -390,10 +158,6 @@
         <copy toDir="${build.classes.dir}">
             <fileset dir="${resource.dir}" />
         </copy>
-        <copy file="${httpclient.jar}" todir="${dep.jar.dir}" />
-        <copy file="${codec.jar}" todir="${dep.jar.dir}" />
-        <copy file="${logging.jar}" todir="${dep.jar.dir}" />
-
     </target>
 
     <target name="clean" description="Clean build and distribution directories">
@@ -543,15 +307,6 @@
     -->
 
     <target name="jars" depends="compile,getpassword">
-        <jar destfile="${dep.jar.dir}/${applet.archive.name}.jar">
-            <fileset dir="${build.applet.dir}">
-                <exclude name="**/.svn" />
-            </fileset>
-        </jar>
-        <copy file="${httpclient.jar}" todir="${dep.jar.dir}" />
-        <copy file="${codec.jar}" todir="${dep.jar.dir}" />
-        <copy file="${logging.jar}" todir="${dep.jar.dir}" />
-
         <if>
             <available file="keystore.ks" property="ignored" />
             <then>
@@ -595,11 +350,6 @@
                                    toFile="/RI Sandbox/${sb.impl.version}/jsf-ri-sandbox-src-${sb.impl.version}.zip"
                                    fromFile="${dist.dir}/jsf-ri-sandbox-src-${sb.impl.version}.zip"
                                    fileDescription="Nightly snapshot of the source bundle for the Sandbox components"
-                                   overwrite="yes"/>
-                    <javaNetUpload projectName="javaserverfaces"
-                                   toFile="/RI Sandbox/${sb.impl.version}/JsfRiSandboxDemo.ear"
-                                   fromFile="demo/dist/JsfRiSandboxDemo.ear"
-                                   fileDescription="An app demonstrating the Sandbox components using JSFTemplating, Facelets, and JSP"
                                    overwrite="yes"/>
                     <javaNetUpload projectName="javaserverfaces"
                                    toFile="/RI Sandbox/${sb.impl.version}/README"

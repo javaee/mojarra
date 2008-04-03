@@ -1,6 +1,0 @@
-#include /header.inc
-"<h1>You uploaded some files!</h1>
-<h:dataTable value="#{testBean.fileNames}" var="fileName">
-    <h:column><h:outputText value="#{fileName}"/></h:column>
-</h:dataTable>
-#include /footer.inc
