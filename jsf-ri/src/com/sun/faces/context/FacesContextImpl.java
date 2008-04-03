@@ -1,5 +1,5 @@
  /*
- * $Id: FacesContextImpl.java,v 1.89 2007/07/17 22:04:44 rlubke Exp $
+ * $Id: FacesContextImpl.java,v 1.90 2007/11/26 22:08:11 rlubke Exp $
  */
 
 /*
@@ -101,6 +101,7 @@ import com.sun.faces.util.FacesLogger;
      private RenderKitFactory rkFactory;
      private RenderKit lastRk;
      private String lastRkId;
+     private Severity maxSeverity;
 
      /**
       * Store mapping of clientId to ArrayList of FacesMessage
@@ -200,24 +201,7 @@ import com.sun.faces.util.FacesLogger;
 
      public Severity getMaximumSeverity() {
          assertNotReleased();
-         Severity max = FacesMessage.SEVERITY_INFO;
-
-         if (null == componentMessageLists) {
-             return null;
-         }
-         // Get an Iterator over the ArrayList instances
-         List messages = getMergedMessageLists();
-         for (int i = 0, size = messages.size(); i < size; i++) {
-             Severity s = ((FacesMessage) messages.get(i)).getSeverity();
-             if (s.getOrdinal() > max.getOrdinal()) {
-                 max = s;
-             }
-
-             if (FacesMessage.SEVERITY_FATAL.equals(max)) {
-                 break;
-             }
-         }
-         return max;
+         return maxSeverity;
      }
 
 
@@ -356,6 +340,15 @@ import com.sun.faces.util.FacesLogger;
                  (
                      MessageUtils.getExceptionMessageString(
                          MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "message"));
+         }
+
+         if (maxSeverity == null) {
+             maxSeverity = message.getSeverity();
+         } else {
+             Severity sev = message.getSeverity();
+             if (sev.getOrdinal() > maxSeverity.getOrdinal()) {
+                 maxSeverity = sev;
+             }
          }
 
          if (componentMessageLists == null) {
