@@ -764,19 +764,28 @@ public class UIData extends UIComponentBase
     }
 
     /**
-     * <p>Override behavior from {@link UIComponentBase#invokeOnComponent} to
-     * provide special care for positioning the data properly before finding the
-     * component and invoking the callback on it.  If the argument
-     * <code>clientId</code> is equal to <code>this.getClientId()</code> simply
-     * invoke the <code>contextCallback</code>, passing the <code>context</code>
-     * argument and <b>this</b> as arguments, and return <code>true.</code>
-     * Otherwise, attempt to extract a rowIndex from the <code>clientId</code>.
-     * For example, if the argument <code>clientId</code> was
-     * <code>form:data:3:customerHeader</code> the rowIndex would be
-     * <code>3</code>.  Let this value be called <code>newIndex</code>. The
-     * current rowIndex of this instance must be saved aside and restored before
-     * returning in all cases, regardless of the outcome of the search or if any
-     * exceptions are thrown in the process.</p>
+     * <p>Override behavior from {@link
+     * UIComponentBase#invokeOnComponent} to provide special care for
+     * positioning the data properly before finding the component and
+     * invoking the callback on it.  If the argument
+     * <code>clientId</code> is equal to <code>this.getClientId()</code>
+     * simply invoke the <code>contextCallback</code>, passing the
+     * <code>context</code> argument and <b>this</b> as arguments, and
+     * return <code>true.</code> If the argument <code>clientId</code>
+     * is not equal to <code>this.getClientId()</code>, inspect each of
+     * the facet children of this <code>UIData</code> instance and for
+     * each one, compare its <code>clientId</code> with the argument
+     * <code>clientId</code>.  If there is a match, invoke the
+     * <code>contextCallback</code>, passing the <code>context</code>
+     * argument and <b>this</b> as arguments, and return
+     * <code>true</code>. Otherwise, attempt to extract a rowIndex from
+     * the <code>clientId</code>.  For example, if the argument
+     * <code>clientId</code> was <code>form:data:3:customerHeader</code>
+     * the rowIndex would be <code>3</code>.  Let this value be called
+     * <code>newIndex</code>. The current rowIndex of this instance must
+     * be saved aside and restored before returning in all cases,
+     * regardless of the outcome of the search or if any exceptions are
+     * thrown in the process.</p>
      * 
      * <p>The implementation of this method must never return <code>true</code>
      * if setting the rowIndex of this instance to be equal to
