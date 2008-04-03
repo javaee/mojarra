@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFinder.java,v 1.36 2007/04/27 22:00:02 ofung Exp $
+ * $Id: FactoryFinder.java,v 1.37 2007/05/21 21:23:29 rlubke Exp $
  */
 
 /*
@@ -176,7 +176,7 @@ public final class FactoryFinder {
      * <p/>
      * <ol>
      * <p/>
-     * <li><p>the actual factory class, if {@link getFactory} has been
+     * <li><p>the actual factory class, if {@link FactoryFinder#getFactory(String)} has been
      * called before on this factoryName</p></li>
      * <p/>
      * <li><p>An <code>ArrayList</code> of <code>Strings</code>
@@ -466,7 +466,7 @@ public final class FactoryFinder {
 
     /**
      * <p>Perform the logic to get the implementation class for the
-     * second step of {@link getImplementationInstance}.</p>
+     * second step of {@link FactoryFinder#getImplementationInstance(ClassLoader, String, java.util.List)}.</p>
      */
 
     private static String getImplNameFromServices(ClassLoader classLoader,
