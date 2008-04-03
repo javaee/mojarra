@@ -94,9 +94,10 @@ public class HtmlEditorRenderer extends Renderer {
                     scriptIds[i]);
         }
         
-        Util.linkJavascript(writer, HtmlEditorResourcePhaseListener.generateUrl(context, TINY_MCE));
-        HtmlEditorResourcePhaseListener.renderHtmlEditorJavascript(context, writer, editor);
-        Util.linkJavascript(writer, HtmlEditorResourcePhaseListener.generateUrl(context, "/sandbox/tiny_mce.js"));
+        Util.linkJavascript(writer, Util.getAppBaseUrl(context) + TINY_MCE); 
+//                HtmlEditorResourcePhaseListener.generateUrl(context, TINY_MCE));
+//        HtmlEditorResourcePhaseListener.renderHtmlEditorJavascript(context, writer, editor);
+//        Util.linkJavascript(writer, HtmlEditorResourcePhaseListener.generateUrl(context, "/sandbox/tiny_mce.js"));
         
         // Create the textarea to use as the WYSIWYG editor
         writer.startElement("textarea", editor);

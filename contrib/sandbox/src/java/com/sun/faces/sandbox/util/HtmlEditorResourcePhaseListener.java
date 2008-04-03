@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class HtmlEditorResourcePhaseListener extends StaticResourcePhaseListener {   
     private static final long serialVersionUID = 1L;
-    private static String URL_PREFIX = "/htmlEditorResources";
+    private static String URL_PREFIX = "/tinymce";
 
     public static String generateUrl(FacesContext context, String resource) {
         String uri = "";
@@ -50,7 +50,7 @@ public class HtmlEditorResourcePhaseListener extends StaticResourcePhaseListener
             HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
             String uri = request.getRequestURI();
             if ((uri != null) && (uri.indexOf(URL_PREFIX) > -1)){
-                String fileName = extractFileName(context, uri);
+                String fileName = uri.substring(uri.indexOf("/", 1)); //extractFileName(context, uri);
                 HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
                 String mimeType = getMimeType(fileName);
                 response.setContentType(mimeType);
@@ -67,7 +67,7 @@ public class HtmlEditorResourcePhaseListener extends StaticResourcePhaseListener
     protected String extractFileName(FacesContext context, String uri) {
         String fileName = "";
         String mapping = Util.getFacesMapping(context);
-        int start = uri.indexOf(URL_PREFIX) + URL_PREFIX.length();
+        int start = uri.indexOf(URL_PREFIX); // + URL_PREFIX.length();
         int end = uri.length();
         if (Util.isPrefixMapped(mapping)) {
             start += mapping.length();
