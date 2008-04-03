@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.57 2007/04/25 04:06:59 rlubke Exp $
+ * $Id: ExternalContextImpl.java,v 1.58 2007/04/26 20:10:59 rlubke Exp $
  */
 
 /*
@@ -79,7 +79,7 @@ import com.sun.faces.util.FacesLogger;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.57 2007/04/25 04:06:59 rlubke Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.58 2007/04/26 20:10:59 rlubke Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -592,7 +592,13 @@ abstract class BaseContextMap<V> extends AbstractMap<String,V> {
             return getKeyIterator();
         }
 
-	@Override
+
+        @Override
+        public boolean contains(Object o) {
+            return BaseContextMap.this.containsKey(o);
+        }
+
+    @Override
         public boolean remove(Object o) {
             if (!(o instanceof String)) {
                 return false;
