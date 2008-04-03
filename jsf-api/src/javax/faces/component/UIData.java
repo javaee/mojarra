@@ -833,7 +833,7 @@ public class UIData extends UIComponentBase
         try {
             // If we need to strip out the rowIndex from our id
             // PENDING(edburns): is this safe with respect to I18N?
-            if (myId.endsWith(String.valueOf(savedRowIndex))) {
+            if (myId.endsWith(NamingContainer.SEPARATOR_CHAR + Integer.toString(savedRowIndex, 10))) {
                 lastSep = myId.lastIndexOf(NamingContainer.SEPARATOR_CHAR);
                 assert (-1 != lastSep);
                 myId = myId.substring(0, lastSep);

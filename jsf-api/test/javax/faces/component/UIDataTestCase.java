@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.45 2008/03/24 16:08:01 rlubke Exp $
+ * $Id: UIDataTestCase.java,v 1.46 2008/03/24 20:07:19 rlubke Exp $
  */
 
 /*
@@ -727,7 +727,46 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 
 
     }
-    
+
+
+    public void testInvokeOnComponent2() throws Exception {
+
+        setupModel();
+        setupRenderers();
+        UIViewRoot viewRoot = facesContext.getApplication().getViewHandler().createView(facesContext, "/view");
+        viewRoot.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
+        facesContext.setViewRoot(viewRoot);
+        UIForm form = new UIForm();
+        form.setId("form");
+        viewRoot.getChildren().add(form);
+        UIData data = (UIData) component;
+        data.setId("data3");
+        form.getChildren().add(data);
+        UIColumn column = new UIColumn();
+        data.getChildren().add(column);
+        UIOutput output = new UIOutput();
+        output.setId("test4");
+        column.getChildren().add(output);
+
+        data.setRowIndex(3);
+        assertEquals(3, data.getRowIndex());
+        boolean found = viewRoot.invokeOnComponent(facesContext, "form:data3:4:test4",
+                new ContextCallback() {
+
+                  public void invokeContextCallback(FacesContext context,
+                                                    UIComponent component) {
+                      UIData data = (UIData) getNamingContainer(component);
+                      UIForm form = (UIForm) getNamingContainer(data);
+                      assertEquals(4, data.getRowIndex());
+                      assertEquals("form", form.getId());
+                      assertEquals("test4", component.getId());
+                  }
+        });
+        assertEquals(3, data.getRowIndex());
+        assertTrue(found);
+
+    }
+
     /**
      * <p>Test invokeOnComponent on the following tree.</p>
      *
@@ -852,10 +891,10 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
      *
      *
      */
-    
+
     public void testInvokeOnComponentNested() throws Exception {
-        
-	UIData 
+
+	UIData
 	    outer = (UIData) component,
 	    inner = new UIData();
 	List innerBeans = new ArrayList();
@@ -867,11 +906,11 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
             innerBeans.add(bean);
         }
 	DataModel innerDataModel = new ListDataModel(innerBeans);
-        
+
 
 	// set up the model for the outer table.
 	setupModel();
-        
+
 	// set up the tree for the outer data table
         setupRenderers();
         UIViewRoot viewRoot = facesContext.getApplication().getViewHandler().createView(facesContext, null);
@@ -887,17 +926,17 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 
         // Set up for this test
         setupModel();
-        
+
         UIForm form1 = new UIForm(), form2 = new UIForm();
         form1.setId("form1");
         form2.setId("form2");
         column.getChildren().add(form1);
         column.getChildren().add(form2);
-        
+
         // replace the "component" ivar with a new instance.
         component = new UIData();
         List beans = new ArrayList();
-        
+
         for (int i = 0; i < 10; i++) {
             TestDataBean bean = new TestDataBean();
             bean.setCommand("command" + i);
@@ -910,10 +949,10 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 
         setupModel();
         setupTree(form1, true, true);
-        
+
         component = new UIData();
         beans = new ArrayList();
-        
+
         for (int i = 0; i < 10; i++) {
             TestDataBean bean = new TestDataBean();
             bean.setCommand("command" + i);
@@ -926,16 +965,16 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 
         setupModel();
         setupTree(form2, true, true);
-        
+
         boolean exceptionThrown = false, found = false;
-        // At this point we have two forms, each containing a UIData 
+        // At this point we have two forms, each containing a UIData
         UIData outerData = (UIData) viewRoot.findComponent("outerData");
         UIData data1 = (UIData) viewRoot.findComponent("outerData:form1:data");
         UIData data2 = (UIData) viewRoot.findComponent("outerData:form2:data");
         assertNotNull(data1);
         assertNotNull(data2);
-        
-        
+
+
         // Case 1, positive invoke on form1:data:commandHeader component of the 4th row
         found = false;
         outerData.setRowIndex(1);
@@ -945,7 +984,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         found = viewRoot.invokeOnComponent(facesContext, "outerData:2:form1:data:4:commandHeader",
                 new ContextCallback() {
 
-                  public void invokeContextCallback(FacesContext context, 
+                  public void invokeContextCallback(FacesContext context,
                                                     UIComponent component) {
                       UIData data = (UIData) getNamingContainer(component);
                       UIForm form = (UIForm) getNamingContainer(data);
@@ -957,7 +996,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         assertEquals(1, outerData.getRowIndex());
         assertEquals(3, data1.getRowIndex());
         assertTrue(found);
-        
+
         // Case 2, positive invoke on form2:data:commandHeader component of the 5th row
         outerData.setRowIndex(3);
         assertEquals(3, outerData.getRowIndex());
@@ -967,7 +1006,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         found = viewRoot.invokeOnComponent(facesContext, "outerData:1:form2:data:5:commandHeader",
                 new ContextCallback() {
 
-                  public void invokeContextCallback(FacesContext context, 
+                  public void invokeContextCallback(FacesContext context,
                                                     UIComponent component) {
                       UIData data = (UIData) getNamingContainer(component);
                       UIForm form = (UIForm) getNamingContainer(data);
@@ -979,7 +1018,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         assertEquals(3, outerData.getRowIndex());
         assertEquals(4, data2.getRowIndex());
         assertTrue(found);
-        
+
         // Case 3, not found invoke on form2:data:5:yoyodyne
         outerData.setRowIndex(1);
         assertEquals(1, outerData.getRowIndex());
@@ -989,7 +1028,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         found = viewRoot.invokeOnComponent(facesContext, "outerData:2:form2:data:5:yoyodyne",
                 new ContextCallback() {
 
-                  public void invokeContextCallback(FacesContext context, 
+                  public void invokeContextCallback(FacesContext context,
                                                     UIComponent component) {
                       fail();
                  }
@@ -997,7 +1036,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         assertEquals(1, outerData.getRowIndex());
         assertEquals(4, data2.getRowIndex());
         assertTrue(!found);
-        
+
         // Case 4, not found due to invalid rowIndex
         outerData.setRowIndex(1);
         assertEquals(1, outerData.getRowIndex());
@@ -1007,7 +1046,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         found = viewRoot.invokeOnComponent(facesContext, "outerData:3:form1:data:999:commandHeader",
                 new ContextCallback() {
 
-                  public void invokeContextCallback(FacesContext context, 
+                  public void invokeContextCallback(FacesContext context,
                                                     UIComponent component) {
                       fail();
                  }
@@ -1015,7 +1054,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         assertEquals(1, outerData.getRowIndex());
         assertEquals(3, data1.getRowIndex());
         assertTrue(!found);
-        
+
         // Case 5, not found due to invalid clientId (too many ':')
         outerData.setRowIndex(3);
         assertEquals(3, outerData.getRowIndex());
@@ -1027,12 +1066,12 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
             found = viewRoot.invokeOnComponent(facesContext, "outerData:1:form2:data::7:commandHeader",
                     new ContextCallback() {
 
-                      public void invokeContextCallback(FacesContext context, 
+                      public void invokeContextCallback(FacesContext context,
                                                         UIComponent component) {
                           fail();
                      }
             });
-        } 
+        }
         catch (FacesException fe) {
             assertTrue(fe.getCause() instanceof NumberFormatException);
             exceptionThrown = true;
@@ -1041,7 +1080,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         assertEquals(6, data2.getRowIndex());
         assertTrue(!found);
         assertTrue(exceptionThrown);
-        
+
         // Case 6, not found due to callback throwing Exception
         found = false;
         exceptionThrown = true;
@@ -1053,7 +1092,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
             found = viewRoot.invokeOnComponent(facesContext, "outerData:1:form1:data:4:commandHeader",
                     new ContextCallback() {
 
-                      public void invokeContextCallback(FacesContext context, 
+                      public void invokeContextCallback(FacesContext context,
                                                         UIComponent component) {
                           throw new IllegalStateException();
                       }
@@ -1068,7 +1107,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         assertTrue(exceptionThrown);
 
 
-    }    
+    }
 
     // Test request processing lifecycle (with controls in header facets)
     public void testTreeLifecycleFacets() throws Exception {
@@ -1480,7 +1519,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
     }
 
     public void testNestedTablesWithIds() throws Exception {
-	UIData 
+	UIData
 	    outer = (UIData) component,
 	    inner = new UIData();
 	List innerBeans = new ArrayList();
@@ -1524,13 +1563,13 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 	request.setAttribute("foo", foo);
 	request.removeAttribute("foo");
         setupRenderers();
-	
+
 	renderResponse();
 	checkResponse("/javax/faces/component/UIDataTestCase_9_withIds.xml");
     }
 
     public void testNestedTablesWithoutIds() throws Exception {
-	UIData 
+	UIData
 	    outer = (UIData) component,
 	    inner = new UIData();
 	List innerBeans = new ArrayList();
@@ -1572,7 +1611,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 	request.setAttribute("foo", foo);
 	request.removeAttribute("foo");
         setupRenderers();
-	
+
 	renderResponse();
 	checkResponse("/javax/faces/component/UIDataTestCase_9_withoutIds.xml");
     }
@@ -1879,19 +1918,19 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         RenderKit renderKit =
             renderKitFactory.getRenderKit(facesContext,
 					  RenderKitFactory.HTML_BASIC_RENDER_KIT);
-        renderKit.addRenderer(UICommand.COMPONENT_FAMILY, 
+        renderKit.addRenderer(UICommand.COMPONENT_FAMILY,
 			      "javax.faces.Button", new ButtonRenderer());
-        renderKit.addRenderer(UIData.COMPONENT_FAMILY, 
+        renderKit.addRenderer(UIData.COMPONENT_FAMILY,
 			      "javax.faces.Table", new TableRenderer());
-        renderKit.addRenderer(UIInput.COMPONENT_FAMILY, 
+        renderKit.addRenderer(UIInput.COMPONENT_FAMILY,
 			      "javax.faces.Text", new TextRenderer());
-        renderKit.addRenderer(UIOutput.COMPONENT_FAMILY, 
+        renderKit.addRenderer(UIOutput.COMPONENT_FAMILY,
 			      "javax.faces.Text", new TextRenderer());
 
     }
-    
+
     /* If labels == true the tree looks like this
-     
+
      * root: viewId: /view
      *
      *  data: id: data
@@ -2005,7 +2044,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
     // ids==true hard coded ids
     // ids==false no ids
     protected UICommand setupTree(UIComponent root, boolean labels, boolean ids) throws Exception {
-	
+
         // Attach our UIData to the view root
         UIData data = (UIData) component;
 	if (ids) {
@@ -2347,7 +2386,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         return command;
 
     }
-    
+
 
 
     // --------------------------------------------------------- Private Classes
@@ -2599,7 +2638,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
             if ((context == null) || (component == null)) {
                 throw new NullPointerException();
             }
-            
+
             Object value;
             if (component instanceof UIInput) {
                 UIInput input = (UIInput) component;
@@ -2610,7 +2649,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
             } else {
                 value = ((UIOutput) component).getValue();
             }
-        
+
             ResponseWriter writer = context.getResponseWriter();
             writer.write
                 ("<text id='" + component.getClientId(context) + "' value='" +
