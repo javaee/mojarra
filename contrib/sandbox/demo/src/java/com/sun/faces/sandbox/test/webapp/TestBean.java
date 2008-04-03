@@ -67,7 +67,7 @@ public class TestBean {
     protected FileHolder fileHolder = new FileHolderImpl();
     protected String editorValue = "This <i>should</i> be editable!";
     protected String queryStringValue;
-    
+
     public String getQueryStringValue() {
         return queryStringValue;
     }
@@ -91,7 +91,7 @@ public class TestBean {
         YuiTreeNode node1 = (YuiTreeNode)app.createComponent(YuiTreeNode.COMPONENT_TYPE);
         YuiTreeNode node2 = (YuiTreeNode)app.createComponent(YuiTreeNode.COMPONENT_TYPE);
         YuiTreeNode node3 = (YuiTreeNode)app.createComponent(YuiTreeNode.COMPONENT_TYPE);
-        
+
         HtmlOutputText text1 = (HtmlOutputText)app.createComponent(HtmlOutputText.COMPONENT_TYPE); text1.setValue("Text 1");
         HtmlOutputText text2 = (HtmlOutputText)app.createComponent(HtmlOutputText.COMPONENT_TYPE); text2.setValue("Text 2");
         HtmlOutputText text3 = (HtmlOutputText)app.createComponent(HtmlOutputText.COMPONENT_TYPE); text3.setValue("Text 3");
@@ -127,9 +127,11 @@ public class TestBean {
 
     public byte[] getPdf() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        InputStream is = null;
         try {
-            InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("/sample.pdf");
-            
+            is = //Thread.currentThread().getContextClassLoader().getResourceAsStream("/sample.pdf");
+                FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/sample.pdf");
+
             int count = 0;
             byte[] buffer = new byte[4096];
             while ((count = is.read(buffer)) != -1) {
@@ -139,16 +141,26 @@ public class TestBean {
             }
         } catch (IOException e) {
             System.err.println(e.getMessage());
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch(Exception e) {
+                    //  just make sure it's closed
+                }
+            }
         }
-        
+
         return baos.toByteArray();
     }
-    
+
     public byte[] getImage() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        InputStream is = null;
         try {
-            InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("/sample.png");
-            
+            is = //Thread.currentThread().getContextClassLoader().getResourceAsStream("/sample.png");
+                FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/sample.png");
+
             int count = 0;
             byte[] buffer = new byte[4096];
             while ((count = is.read(buffer)) != -1) {
@@ -158,8 +170,16 @@ public class TestBean {
             }
         } catch (IOException e) {
             System.err.println(e.getMessage());
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch(Exception e) {
+                    //  just make sure it's closed
+                }
+            }
         }
-        
+
         return baos.toByteArray();
     }
 
@@ -174,15 +194,15 @@ public class TestBean {
     public String[] getFileNames() {
         String[] fileNames = fileHolder.getFileNames().toArray(new String[]{});
         fileHolder.clearFiles();
-        
+
         return fileNames;
     }
-    
+
     public List<Person> getPersonList() {
         List<Person> list = new ArrayList();
         list.add(new Person("Jim", "Halpert"));
         list.add(new Person("Michael", "Scott"));
-        
+
         return list;
     }
 
@@ -199,15 +219,15 @@ class Person {
     protected Integer id;
     protected String lastName;
     protected String firstName;
-    
+
     public Person() {
     }
-    
+
     public Person(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }
-    
+
     public String getFirstName() {
         return firstName;
     }
