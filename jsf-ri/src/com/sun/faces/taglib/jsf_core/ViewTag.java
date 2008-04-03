@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.53 2008/01/15 21:23:40 rlubke Exp $
+ * $Id: ViewTag.java,v 1.54 2008/03/10 22:30:38 rlubke Exp $
  */
 
 /*
@@ -80,7 +80,7 @@ import com.sun.faces.RIConstants;
  * Renderer. It exists mainly to provide a guarantee that all faces
  * components reside inside of this tag.
  *
- * @version $Id: ViewTag.java,v 1.53 2008/01/15 21:23:40 rlubke Exp $
+ * @version $Id: ViewTag.java,v 1.54 2008/03/10 22:30:38 rlubke Exp $
  */
 
 public class ViewTag extends UIComponentELTag {
@@ -187,8 +187,8 @@ public class ViewTag extends UIComponentELTag {
                 throw new JspException("Exception attemtping to write content above the <f:view> tag.", e);
             }
         } else {
-            if (LOGGER.isLoggable(Level.WARNING)) {
-                LOGGER.log(Level.WARNING,
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE,
                            "jsf.core.taglib.viewtag.interweaving_failed");
             }
         }

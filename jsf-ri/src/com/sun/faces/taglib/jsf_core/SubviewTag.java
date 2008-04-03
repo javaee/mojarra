@@ -1,5 +1,5 @@
 /*
- * $Id: SubviewTag.java,v 1.17 2008/01/15 21:22:04 rlubke Exp $
+ * $Id: SubviewTag.java,v 1.18 2008/03/10 22:30:38 rlubke Exp $
  */
 
 /*
@@ -122,41 +122,42 @@ public class SubviewTag extends UIComponentELTag {
         boolean cont = true;
         if (isBytes == null) {
             cont = false;
-            if (LOGGER.isLoggable(Level.WARNING)) {
-                LOGGER.log(Level.WARNING,
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE,
                            "jsf.core.taglib.subviewtag.interweaving_failed_isbytes");
             }
         }
         if (isChars == null) {
             cont = false;
-             if (LOGGER.isLoggable(Level.WARNING)) {
-                LOGGER.log(Level.WARNING,
+             if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE,
                            "jsf.core.taglib.subviewtag.interweaving_failed_ischars");
             }
         }
         if (resetBuffers == null) {
             cont = false;
-             if (LOGGER.isLoggable(Level.WARNING)) {
-                LOGGER.log(Level.WARNING,
+             if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE,
                            "jsf.core.taglib.subviewtag.interweaving_failed_resetbuffers");
             }
         }
         if (getChars == null) {
             cont = false;
-             if (LOGGER.isLoggable(Level.WARNING)) {
-                LOGGER.log(Level.WARNING,
+             if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE,
                            "jsf.core.taglib.subviewtag.interweaving_failed_getchars");
             }
         }
         if (customFlush == null) {
             cont = false;
-            if (LOGGER.isLoggable(Level.WARNING)) {
-                LOGGER.log(Level.WARNING,
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE,
                            "jsf.core.taglib.viewtag.interweaving_failed");
             }
         }
 
         if (cont) {
+>>>>>>> 1.15.4.3
             try {
                 if ((Boolean) isBytes.invoke(response)) {
                     customFlush.invoke(response);
