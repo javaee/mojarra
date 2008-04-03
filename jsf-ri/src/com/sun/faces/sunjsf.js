@@ -1,5 +1,5 @@
 /*
- * $Id: sunjsf.js,v 1.6 2007/04/27 22:00:53 ofung Exp $
+ * $Id: sunjsf.js,v 1.7 2008/03/31 16:56:40 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -63,22 +63,21 @@ function dpf(f) {
  * called 'adp' and stored on the form.
  *
  * @param f - the target form
- * @param pvp - parameter value pairs.  This is a string in the form
- *   of 'param1,value1,param2,value2' where the value of param1 is
- *   value1, and the value of param2 is value2
+ * @param pvp - associative array of parameter
+ *  key/value pairs to be added to the form as hidden input
+ *  fields.
  */
 function apf(f, pvp) {
     var adp = new Array();
     f.adp = adp;
-    var ps = pvp.split(',');
-    for (var i = 0,ii = 0;i < ps.length;i++,ii++) {
+    var i = 0;
+    for (k in pvp) {
         var p = document.createElement("input");
-                p.type = "hidden";
-                p.name = ps[i];
-                p.value = ps[i + 1];
-                f.appendChild(p);
-                adp[ii] = p;
-                i += 1;
+        p.type = "hidden";
+        p.name = k;
+        p.value = pvp[k];
+        f.appendChild(p);
+        adp[i++] = p;
     }
 };
 
@@ -90,9 +89,9 @@ function apf(f, pvp) {
  * has been submitted to handle DOM caching issues.
  *
  * @param f - the target form
- * @param pvp - parameter value pairs.  This is a string in the form
- *   of 'param1,value1,param2,value2' where the value of param1 is
- *   value1, and the value of param2 is value2
+ * @param pvp - associative array of parameter
+ *  key/value pairs to be added to the form as hidden input
+ *  fields.
  * @param t - the target of the form submission
  */
 function jsfcljs(f, pvp, t) {        

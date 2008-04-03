@@ -15,15 +15,15 @@
 
 <script type="text/javascript" language="Javascript">
 <!--
-function dpf(f) {var adp = f.adp;if (adp != null) {for (var i = 0;i < adp.length;i++) {f.removeChild(adp[i]);}}};function apf(f, pvp) {var adp = new Array();f.adp = adp;var ps = pvp.split(',');for (var i = 0,ii = 0;i < ps.length;i++,ii++) {var p = document.createElement("input");p.type = "hidden";p.name = ps[i];p.value = ps[i + 1];f.appendChild(p);adp[ii] = p;i += 1;}};function jsfcljs(f, pvp, t) {apf(f, pvp);var ft = f.target;if (t) {f.target = t;}f.submit();f.target = ft;dpf(f);};
+function dpf(f) {var adp = f.adp;if (adp != null) {for (var i = 0;i < adp.length;i++) {f.removeChild(adp[i]);}}};function apf(f, pvp) {var adp = new Array();f.adp = adp;var i = 0;for (k in pvp) {var p = document.createElement("input");p.type = "hidden";p.name = k;p.value = pvp[k];f.appendChild(p);adp[i++] = p;}};function jsfcljs(f, pvp, t) {apf(f, pvp);var ft = f.target;if (t) {f.target = t;}f.submit();f.target = ft;dpf(f);};
 //-->
 </script>
-<a id="form01:Link1" href="#" onclick="if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('form01'),'form01:Link1,form01:Link1,param1,value1,param2,value2','');}return false">Link1</a><a id="form01:Link2" href="#" onclick="if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('form01'),'form01:Link2,form01:Link2,param1,value1,param2,value2','');}return false">Link2</a>
+<a id="form01:Link1" href="#" onclick="if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('form01'),{'form01:Link1':'form01:Link1','param1':'value1','param2':'value2'},'');}return false">Link1</a><a id="form01:Link2" href="#" onclick="if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('form01'),{'form01:Link2':'form01:Link2','param1':'value1','param2':'value2'},'');}return false">Link2</a>
 </form>
 <form id="form02" name="form02" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=750fc1d1a9e7fcfe677e9db962b6" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="form02" value="form02" />
 <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id138:j_id139" />
-<a id="form02:Link3" href="#" onclick="if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('form02'),'form02:Link3,form02:Link3,param3,value3,param4,value4','');}return false">Link3</a><a id="form02:Link4" href="#" onclick="if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('form02'),'form02:Link4,form02:Link4','');}return false">Link4</a><a href="#" onclick="if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('form02'),'form02:j_id_id47,form02:j_id_id47,param5,','');}return false">Link5</a>
+<a id="form02:Link3" href="#" onclick="if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('form02'),{'form02:Link3':'form02:Link3','param3':'value3','param4':'value4'},'');}return false">Link3</a><a id="form02:Link4" href="#" onclick="if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('form02'),{'form02:Link4':'form02:Link4'},'');}return false">Link4</a><a href="#" onclick="if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('form02'),{'form02:j_id_id47':'form02:j_id_id47','param5':''},'');}return false">Link5</a>
 </form>
   </body>
 </html>

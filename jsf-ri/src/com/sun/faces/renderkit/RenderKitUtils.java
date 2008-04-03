@@ -90,19 +90,19 @@ public class RenderKitUtils {
      */
     private static final String XHTML_ATTR_PREFIX = "xml:";
 
-    
+
     /**
-     * <p><code>Boolean</code> attributes to be rendered 
+     * <p><code>Boolean</code> attributes to be rendered
      * using <code>XHMTL</code> semantics.
      */
     private static final String[] BOOLEAN_ATTRIBUTES = {
           "disabled", "ismap", "readonly"
     };
-   
+
 
     /**
      * <p>An array of attributes that must be prefixed by
-     * {@link #XHTML_ATTR_PREFIX} when rendering 
+     * {@link #XHTML_ATTR_PREFIX} when rendering
      * <code>XHTML Transitional</code> content.
      */
     private static final String[] XHTML_PREFIX_ATTRIBUTES = {
@@ -112,7 +112,7 @@ public class RenderKitUtils {
     /**
      * <p>The maximum number of array elements that can be used
      * to hold content types from an accept String.</p>
-     */ 
+     */
     private final static int MAX_CONTENT_TYPES = 50;
 
     /**
@@ -122,18 +122,18 @@ public class RenderKitUtils {
      *      "text" - type
      *      "html; level=1" - subtype
      *      "0.5" - quality value
-     *      "1" - level value </p> 
-     */ 
+     *      "1" - level value </p>
+     */
     private final static int MAX_CONTENT_TYPE_PARTS = 4;
-                                                                                                                         
+
     /**
      * The character that is used to delimit content types
      * in an accept String.</p>
      */
     private final static String CONTENT_TYPE_DELIMITER = ",";
-                                                                                                                         
+
     /**
-     * The character that is used to delimit the type and 
+     * The character that is used to delimit the type and
      * subtype portions of a content type in an accept String.
      * Example: text/html </p>
      */
@@ -174,10 +174,10 @@ public class RenderKitUtils {
      */
     private static final String ATTRIBUTES_THAT_ARE_SET_KEY =
         UIComponentBase.class.getName() + ".attributesThatAreSet";
-                          
-    
+
+
     protected static final Logger LOGGER = FacesLogger.RENDERKIT.getLogger();
-          
+
 
     // ------------------------------------------------------------ Constructors
 
@@ -208,7 +208,7 @@ public class RenderKitUtils {
     /**
      * <p>Obtain and return the {@link ResponseStateManager} for
      * the specified #renderKitId.</p>
-     * 
+     *
      * @param context the {@link FacesContext} of the current request
      * @param renderKitId {@link RenderKit} ID
      * @return the {@link ResponseStateManager} for the specified
@@ -225,7 +225,7 @@ public class RenderKitUtils {
 
         RenderKit renderKit = context.getRenderKit();
         if (renderKit == null) {
-            // check request scope for a RenderKitFactory implementation            
+            // check request scope for a RenderKitFactory implementation
             RenderKitFactory factory = (RenderKitFactory)
                   RequestStateManager.get(context, RequestStateManager.RENDER_KIT_IMPL_REQ);
             if (factory != null) {
@@ -247,11 +247,11 @@ public class RenderKitUtils {
         return renderKit.getResponseStateManager();
 
     }
-    
+
     /**
      * <p>Return a List of {@link javax.faces.model.SelectItem}
-     * instances representing the available options for this component, 
-     * assembled from the set of {@link javax.faces.component.UISelectItem} 
+     * instances representing the available options for this component,
+     * assembled from the set of {@link javax.faces.component.UISelectItem}
      * and/or {@link javax.faces.component.UISelectItems} components that are
      * direct children of this component.  If there are no such children, an
      * empty <code>Iterator</code> is returned.</p>
@@ -266,18 +266,18 @@ public class RenderKitUtils {
     public static List<SelectItem> getSelectItems(FacesContext context,
                                                   UIComponent component) {
 
-        if (context == null) {            
+        if (context == null) {
             throw new IllegalArgumentException(
                 MessageUtils.getExceptionMessageString(
                     MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
         }
-        
+
         ArrayList<SelectItem> list = new ArrayList<SelectItem>();
         for (UIComponent kid : component.getChildren()) {
             if (kid instanceof UISelectItem) {
                 UISelectItem item = (UISelectItem) kid;
                 Object value = item.getValue();
-                
+
                 if (value == null) {
                     list.add(new SelectItem(item.getItemValue(),
                                             item.getItemLabel(),
@@ -327,7 +327,7 @@ public class RenderKitUtils {
                         if (key == null || val == null) {
                             continue;
                         }
-                        list.add(new SelectItem(val, 
+                        list.add(new SelectItem(val,
                                                 key.toString()));
                     }
                 } else {
@@ -351,7 +351,7 @@ public class RenderKitUtils {
      * raw name and value of the attribute.  This method is aware of the
      * set of HTML4 attributes that fall into this bucket.  Examples are
      * all the javascript attributes, alt, rows, cols, etc. </p>
-     * 
+     *
      * @param writer writer the {@link javax.faces.context.ResponseWriter} to be used when writing
      *  the attributes
      * @param component the component
@@ -422,14 +422,14 @@ public class RenderKitUtils {
         } else {
             return attrName;
         }
-        
+
     }
 
 
     /**
-     * <p>Renders the attributes from {@link #BOOLEAN_ATTRIBUTES} 
+     * <p>Renders the attributes from {@link #BOOLEAN_ATTRIBUTES}
      * using <code>XHMTL</code> semantics (i.e., disabled="disabled").</p>
-     * 
+     *
      * @param writer writer the {@link ResponseWriter} to be used when writing
      *  the attributes
      * @param component the component
@@ -460,8 +460,8 @@ public class RenderKitUtils {
 
     /**
      * <p>Given an accept String from the client, and a <code>String</code>
-     * of server supported content types, determine the best qualified 
-     * content type for the client.  If no match is found, or either of the 
+     * of server supported content types, determine the best qualified
+     * content type for the client.  If no match is found, or either of the
      * arguments are <code>null</code>,  <code>null</code> is returned.</p>
      *
      * @param accept The client accept String
@@ -472,26 +472,26 @@ public class RenderKitUtils {
      */
     public static String determineContentType(String accept, String serverSupportedTypes, String preferredType) {
         String contentType = null;
-                                                                                                                         
+
         if (null == accept || null == serverSupportedTypes) {
             return contentType;
         }
-                                                                                                                         
+
         String[][] clientContentTypes = buildTypeArrayFromString(accept);
         String[][] serverContentTypes = buildTypeArrayFromString(serverSupportedTypes);
         String[][] preferredContentType = buildTypeArrayFromString(preferredType);
         String[][] matchedInfo = findMatch(clientContentTypes, serverContentTypes, preferredContentType);
-                                                                                                                         
+
         // if best match exits and best match is not some wildcard,
         // return best match
         if ((matchedInfo[0][1] != null) && !(matchedInfo[0][2].equals("*"))) {
             contentType = matchedInfo[0][1] + CONTENT_TYPE_SUBTYPE_DELIMITER + matchedInfo[0][2];
         }
-                                                                                                                         
+
         return contentType;
     }
-    
-    
+
+
     /**
      * @param contentType the content type in question
      * @return <code>true</code> if the content type is a known XML-based
@@ -562,7 +562,7 @@ public class RenderKitUtils {
     /**
      * <p>Determines if an attribute should be rendered based on the
      * specified #attributeVal.</p>
-     * 
+     *
      * @param attributeVal the attribute value
      * @return <code>true</code> if and only if #attributeVal is
      *  an instance of a wrapper for a primitive type and its value is
@@ -635,7 +635,7 @@ public class RenderKitUtils {
         String level = null;
         String quality = null;
 
-        // Parse "types"        
+        // Parse "types"
         String[] types = Util.split(accept, CONTENT_TYPE_DELIMITER);
         int index = -1;
         for (int i=0; i<types.length; i++) {
@@ -644,7 +644,7 @@ public class RenderKitUtils {
             // Check to see if our accept string contains the delimiter that is used
             // to add uniqueness to a type/subtype, and/or delimits a qualifier value:
             //    Example: text/html;level=1,text/html;level=2; q=.5
-            if (token.contains(";")) {                
+            if (token.contains(";")) {
                 String[] typeParts = Util.split(token, ";");
                 typeSubType = new StringBuilder(typeParts[0].trim());
                 for (int j=1; j<typeParts.length; j++) {
@@ -653,14 +653,14 @@ public class RenderKitUtils {
                     // if "level" is present, make sure it gets included in the "type/subtype"
                     if (token.contains("level")) {
                         typeSubType.append(';').append(token);
-                        String[] levelParts = Util.split(token, "=");                        
+                        String[] levelParts = Util.split(token, "=");
                         level = levelParts[0].trim();
                         if (level.equalsIgnoreCase("level")) {
                             level = levelParts[1].trim();
                         }
                     } else {
                         quality = token;
-                        String[] qualityParts = Util.split(quality, "=");                       
+                        String[] qualityParts = Util.split(quality, "=");
                         quality = qualityParts[0].trim();
                         if (quality.equalsIgnoreCase("q")) {
                             quality = qualityParts[1].trim();
@@ -675,7 +675,7 @@ public class RenderKitUtils {
                 quality = "not set"; // to identifiy that no quality was supplied
             }
             // now split type and subtype
-            if (typeSubType.indexOf(CONTENT_TYPE_SUBTYPE_DELIMITER) >= 0) {               
+            if (typeSubType.indexOf(CONTENT_TYPE_SUBTYPE_DELIMITER) >= 0) {
                 String[] typeSubTypeParts = Util.split(typeSubType.toString(), CONTENT_TYPE_SUBTYPE_DELIMITER);
                 type = typeSubTypeParts[0].trim();
                 subtype = typeSubTypeParts[1].trim();
@@ -710,12 +710,12 @@ public class RenderKitUtils {
      * quality will be returned.</p>
      *
      * @param clientContentTypes An <code>array</code> of accept <code>String</code>
-     * information for the client built from @{link #buildTypeArrayFromString}. 
+     * information for the client built from @{link #buildTypeArrayFromString}.
      * @param serverSupportedContentTypes An <code>array</code> of accept <code>String</code>
-     * information for the server supported types built from @{link #buildTypeArrayFromString}. 
+     * information for the server supported types built from @{link #buildTypeArrayFromString}.
      * @param preferredContentType An <code>array</code> of preferred content type information.
      * @return An <code>array</code> containing the parts of the preferred content type for the
-     * client.  The information is stored as outlined in @{link #buildTypeArrayFromString}. 
+     * client.  The information is stored as outlined in @{link #buildTypeArrayFromString}.
      */
     private static String[][] findMatch(String[][] clientContentTypes,
                                         String[][] serverSupportedContentTypes,
@@ -797,7 +797,7 @@ public class RenderKitUtils {
                 }
             }
         }
-                
+
         match[0][0] = results[idx][0];
         match[0][1] = results[idx][1];
         match[0][2] = results[idx][2];
@@ -806,7 +806,7 @@ public class RenderKitUtils {
 
     /**
      * <p>Replaces all occurrences of <code>-</code> with <code>$_</code>.</p>
-     * 
+     *
      * @param origIdentifier the original identifer that needs to be
      *  'ECMA-ized'
      * @return an ECMA valid identifer
@@ -859,11 +859,11 @@ public class RenderKitUtils {
             writer.writeAttribute("type", "text/javascript", null);
             writer.writeAttribute("src", ((resource != null) ? resource.getRequestPath() : ""), null);
             writer.endElement("script");
-        } else {           
+        } else {
             writer.write('\n');
             writer.startElement("script", null);
             writer.writeAttribute("type", "text/javascript", null);
-            writer.writeAttribute("language", "Javascript", null);           
+            writer.writeAttribute("language", "Javascript", null);
             writeSunJS(context, writer);
             writer.endElement("script");
             writer.write("\n");
@@ -890,29 +890,29 @@ public class RenderKitUtils {
                                                      String target,
                                                      Param[] params) {
 
-        StringBuilder sb = new StringBuilder(256);    
+        StringBuilder sb = new StringBuilder(256);
         sb.append("if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('");
-        sb.append(formClientId);        
-        sb.append("'),'");
-        sb.append(commandClientId).append(',').append(commandClientId);
+        sb.append(formClientId);
+        sb.append("'),{'");
+        sb.append(commandClientId).append("':'").append(commandClientId);
         for (Param param : params) {
             String pn = param.name;
             if (pn != null && pn.length() != 0) {
                 String pv = param.value;
-                sb.append(',');
+                sb.append("','");
                 sb.append(pn.replace("'", "\\\'"));
-                sb.append(',');
+                sb.append("':'");
                 if (pv != null && pv.length() != 0) {
                     sb.append(pv.replace("'", "\\\'"));
                 }
             }
         }
-        sb.append("','");
+        sb.append("'},'");
         sb.append(target);
         sb.append("');}return false");
 
         return sb.toString();
-        
+
     }
 
 
@@ -920,17 +920,17 @@ public class RenderKitUtils {
      * <p>This is a utility method for compressing multi-lined javascript.
      * In the case of {@link #SUN_JSF_JS} it offers about a 47% decrease
      * in length.</p>
-     * 
-     * <p>For our purposes, compression is just trimming each line and 
+     *
+     * <p>For our purposes, compression is just trimming each line and
      * then writing it out.  It's pretty simplistic, but it works.</p>
-     * 
+     *
      * @param JSString the string to compress
      * @return the compressed string
      */
     public static char[] compressJS(String JSString) {
 
         BufferedReader reader = new BufferedReader(new StringReader(JSString));
-        StringWriter writer = new StringWriter(1024);          
+        StringWriter writer = new StringWriter(1024);
         try {
             for (String line = reader.readLine();
                  line != null;
@@ -951,19 +951,19 @@ public class RenderKitUtils {
     /**
      * <p>Return the implementation JavaScript.  If compression
      * is enabled, the result will be compressed.</p>
-     * 
+     *
      * @param context - the <code>FacesContext</code> for the current request
      * @param writer - the <code>Writer</code> to write the JS to
      * @throws IOException if the JavaScript cannot be written
-     * 
+     *
      */
     public static void writeSunJS(FacesContext context, Writer writer)
-    throws IOException {   
+    throws IOException {
         writer.write((char[]) context.getExternalContext().getApplicationMap()
               .get(SUN_JSF_JS));
     }
-    
-    
+
+
     // --------------------------------------------------------- Private Methods
 
 
@@ -1031,5 +1031,5 @@ public class RenderKitUtils {
             }
         }
     }
-                           
+
 } // END RenderKitUtils

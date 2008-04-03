@@ -1,5 +1,5 @@
 /*
- * $Id: OutputMessageRenderer.java,v 1.34 2007/08/30 19:29:13 rlubke Exp $
+ * $Id: OutputMessageRenderer.java,v 1.35 2008/03/31 16:56:40 rlubke Exp $
  */
 
 /*
@@ -117,9 +117,13 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
         // use the string as a MessageFormat instance.
         String message;
         if (parameterList.size() > 0) {
-            message = MessageFormat.format
-                  (currentValue, parameterList.toArray
-                        (new Object[parameterList.size()]));
+            MessageFormat fmt = new MessageFormat(currentValue,
+                                                  context.getViewRoot().getLocale());
+            StringBuffer buf = new StringBuffer(currentValue.length() * 2);
+            fmt.format(parameterList.toArray(new Object[parameterList.size()]),
+                       buf,
+                       null);
+            message = buf.toString();
         } else {
             message = currentValue;
         }
