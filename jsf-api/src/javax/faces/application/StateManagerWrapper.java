@@ -1,5 +1,5 @@
 /*
- * $Id: StateManagerWrapper.java,v 1.7 2007/04/27 22:00:02 ofung Exp $
+ * $Id: StateManagerWrapper.java,v 1.8 2007/11/02 16:17:18 rlubke Exp $
  */
 
 /*
@@ -46,7 +46,6 @@ import javax.faces.component.UIViewRoot;
 import java.io.IOException;
 
 /**
-
  * <p>Provides a simple implementation of {@link StateManager} that can
  * be subclassed by developers wishing to provide specialized behavior
  * to an existing {@link StateManager} instance.  The default
