@@ -1,5 +1,5 @@
 /*
- * $Id: LoadBundleTag.java,v 1.19 2007/06/05 23:21:01 rlubke Exp $
+ * $Id: LoadBundleTag.java,v 1.20 2007/06/18 13:34:45 rlubke Exp $
  */
 
 /*
@@ -439,7 +439,7 @@ public class LoadBundleTag extends TagSupport {
 
     }
     
-    private class LoadBundleComponent extends UIComponentBase {
+    private static class LoadBundleComponent extends UIComponentBase {
             private String var;
             private Map toStore;
             
@@ -465,10 +465,9 @@ public class LoadBundleTag extends TagSupport {
             }
             
             public String toString() {
-                
-                String result = "LoadBundleComponent: var: " + var + " keys: " +
+
+                return "LoadBundleComponent: var: " + var + " keys: " +
                         toStore.toString();
-                return result;
             }
         
     }
