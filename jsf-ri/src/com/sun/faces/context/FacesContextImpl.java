@@ -1,5 +1,5 @@
  /*
- * $Id: FacesContextImpl.java,v 1.91 2007/12/17 21:46:09 rlubke Exp $
+ * $Id: FacesContextImpl.java,v 1.92 2007/12/19 17:51:33 rlubke Exp $
  */
 
 /*
@@ -227,7 +227,6 @@ import com.sun.faces.util.RequestStateManager;
          assertNotReleased();
 
          //remove client id from pending display messages list.
-         Map requestMap = getExternalContext().getRequestMap();
          Set pendingClientIds = (Set)
               RequestStateManager.get(this, RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
          if (pendingClientIds != null && !pendingClientIds.isEmpty()) {
