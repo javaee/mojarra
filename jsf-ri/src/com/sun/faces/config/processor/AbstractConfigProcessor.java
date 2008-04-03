@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractConfigProcessor.java,v 1.3 2007/06/28 17:02:46 rlubke Exp $
+ * $Id: AbstractConfigProcessor.java,v 1.4 2007/06/28 20:12:43 rlubke Exp $
  */
 
 /*
@@ -41,6 +41,9 @@
 package com.sun.faces.config.processor;
 
 import com.sun.faces.application.ApplicationResourceBundle;
+import com.sun.faces.config.ConfigurationException;
+import com.sun.faces.util.ReflectionUtils;
+import com.sun.faces.util.Util;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -49,9 +52,11 @@ import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 
+import java.lang.reflect.Constructor;
+import java.text.MessageFormat;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -176,6 +181,93 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
         }
 
         return null;
+
+    }
+
+
+    protected Object createInstance(String className, Node source) {
+        return createInstance(className, null, null, source);
+    }
+
+    protected Object createInstance(String className,
+                                    Class rootType,
+                                    Object root,
+                                    Node source) {
+        Class clazz;
+        Object returnObject = null;
+        if (className != null) {
+            try {
+                clazz = loadClass(className, returnObject, rootType);
+                if (clazz != null) {
+                    // Look for an adapter constructor if we've got
+                    // an object to adapt
+                    if ((rootType != null) && (root != null)) {
+                        Constructor construct =
+                              ReflectionUtils.lookupConstructor(
+                                    clazz,
+                                    rootType);
+                        if (construct != null) {
+                            returnObject = construct.newInstance(root);
+                        }
+                    }
+                }
+                if (clazz != null && returnObject == null) {
+                    returnObject = clazz.newInstance();
+                }
+            } catch (ClassNotFoundException cnfe) {
+                throw new ConfigurationException(
+                      buildMessage(MessageFormat.format("Unable to find class ''{0}''",
+                                                        className),
+                                   source));
+            } catch (NoClassDefFoundError ncdfe) {
+                throw new ConfigurationException(
+                      buildMessage(MessageFormat.format("Class ''{0}'' is missing a runtime dependency: {1}",
+                                                        className,
+                                                        ncdfe.toString()),
+                                   source));
+            } catch (ClassCastException cce) {
+                throw new ConfigurationException(
+                      buildMessage(MessageFormat.format("Class ''{0}'' is not an instance of ''{1}''",
+                                                        className,
+                                                        rootType),
+                                   source));
+            } catch (Exception e) {
+                throw new ConfigurationException(
+                      buildMessage(MessageFormat.format("Unable to create a new instance of ''{0}'': {1}",
+                                                        className,
+                                                        e.toString()),
+                                   source));
+            }
+        }
+
+        return returnObject;
+        
+    }
+
+
+    protected Class<?> loadClass(String className,
+                                 Object fallback,
+                                 Class<?> expectedType)
+    throws ClassNotFoundException {
+
+        Class<?> clazz = Util.loadClass(className, fallback);
+        if (expectedType != null && !expectedType.isAssignableFrom(clazz)) {
+            throw new ClassCastException();
+        }
+        return clazz;
+        
+    }
+
+
+    // --------------------------------------------------------- Private Methods
+
+
+    private String buildMessage(String cause, Node source) {
+
+        return MessageFormat.format("\n  Source Document: {0}\n  Cause: {1}",
+                                    source.getOwnerDocument().getDocumentURI(),
+                                    cause);
+
     }
 
 

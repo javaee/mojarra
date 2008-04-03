@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationConfigProcessor.java,v 1.4 2007/04/27 22:00:56 ofung Exp $
+ * $Id: ApplicationConfigProcessor.java,v 1.5 2007/06/28 20:12:43 rlubke Exp $
  */
 
 /*
@@ -305,9 +305,10 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
 
             String listener = getNodeText(actionListener);
             if (listener != null) {
-                Object instance = Util.createInstance(listener,
-                                                      ActionListener.class,
-                                                      application.getActionListener());
+                Object instance = createInstance(listener,
+                                                 ActionListener.class,
+                                                 application.getActionListener(),
+                                                 actionListener);
                 if (instance != null) {
                     if (LOGGER.isLoggable(Level.FINE)) {
                         LOGGER.log(Level.FINE,
@@ -330,9 +331,10 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
 
             String handler = getNodeText(navigationHandler);
             if (handler != null) {
-                Object instance = Util.createInstance(handler,
-                                                      NavigationHandler.class,
-                                                      application.getNavigationHandler());
+                Object instance = createInstance(handler,
+                                                 NavigationHandler.class,
+                                                 application.getNavigationHandler(),
+                                                 navigationHandler);
                 if (instance != null) {
                     if (LOGGER.isLoggable(Level.FINE)) {
                         LOGGER.log(Level.FINE,
@@ -355,9 +357,10 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         if (stateManager != null) {
             String manager = getNodeText(stateManager);
             if (manager != null) {
-                Object instance = Util.createInstance(manager,
-                                                      StateManager.class,
-                                                      application.getStateManager());
+                Object instance = createInstance(manager,
+                                                 StateManager.class,
+                                                 application.getStateManager(),
+                                                 stateManager);
                 if (instance != null) {
                     if (LOGGER.isLoggable(Level.FINE)) {
                         LOGGER.log(Level.FINE,
@@ -379,9 +382,10 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         if (viewHandler != null) {
             String handler = getNodeText(viewHandler);
             if (handler != null) {
-                Object instance = Util.createInstance(handler,
-                                                      ViewHandler.class,
-                                                      application.getViewHandler());
+                Object instance = createInstance(handler,
+                                                 ViewHandler.class,
+                                                 application.getViewHandler(),
+                                                 viewHandler);
                 if (instance != null) {
                     if (LOGGER.isLoggable(Level.FINE)) {
                         LOGGER.log(Level.FINE,
@@ -414,7 +418,10 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                 }
                 String elResolverClass = getNodeText(elResolver);
                 if (elResolverClass != null) {
-                    Object elRes = Util.createInstance(elResolverClass);
+                    Object elRes = createInstance(elResolverClass,
+                                                  ELResolver.class,
+                                                  null,
+                                                  elResolver);
                     if (elRes != null) {
                         if (LOGGER.isLoggable(Level.FINE)) {
                             LOGGER.log(Level.FINE,
@@ -446,9 +453,10 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
 
                 String resolver = getNodeText(propertyResolver);
                 if (resolver != null) {
-                    resolverImpl = Util.createInstance(resolver,
-                                                       PropertyResolver.class,
-                                                       resolverImpl);
+                    resolverImpl = createInstance(resolver,
+                                                  PropertyResolver.class,
+                                                  resolverImpl,
+                                                  propertyResolver);
                     if (LOGGER.isLoggable(Level.FINE)) {
                         LOGGER.log(Level.FINE,
                                    MessageFormat.format(
@@ -480,9 +488,10 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                 }
                 String resolver = getNodeText(variableResolver);
                 if (resolver != null) {
-                    resolverImpl = Util.createInstance(resolver,
-                                                       VariableResolver.class,
-                                                       resolverImpl);
+                    resolverImpl = createInstance(resolver,
+                                                  VariableResolver.class,
+                                                  resolverImpl,
+                                                  variableResolver);
                     if (LOGGER.isLoggable(Level.FINE)) {
                         LOGGER.log(Level.FINE,
                                    MessageFormat.format(

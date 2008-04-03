@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleConfigProcessor.java,v 1.6 2007/06/25 20:57:20 rlubke Exp $
+ * $Id: LifecycleConfigProcessor.java,v 1.7 2007/06/28 20:12:43 rlubke Exp $
  */
 
 /*
@@ -133,12 +133,16 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
              BooleanWebContextInitParameter.ExternalizeJavaScript);
         if (phaseListeners != null && phaseListeners.getLength() > 0) {
             for (int i = 0, size = phaseListeners.getLength(); i < size; i++) {
-                String pl = getNodeText(phaseListeners.item(i));
+                Node plNode = phaseListeners.item(i);
+                String pl = getNodeText(plNode);
                 if (!jsPLEnabled && JS_PHASE_LISTENER.equals(pl)) {
                     continue;
                 }
                 if (pl != null) {
-                    Object plInstance = Util.createInstance(pl);
+                    Object plInstance = createInstance(pl,
+                                                       PhaseListener.class,
+                                                       null,
+                                                       plNode);
                     if (plInstance != null) {
                         for (Iterator t = factory.getLifecycleIds(); t.hasNext();)
                         {

@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.213 2007/06/06 19:07:39 rlubke Exp $
+ * $Id: Util.java,v 1.214 2007/06/28 20:12:44 rlubke Exp $
  */
 
 /*
@@ -79,7 +79,7 @@ import java.util.regex.Pattern;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.213 2007/06/06 19:07:39 rlubke Exp $
+ * @version $Id: Util.java,v 1.214 2007/06/28 20:12:44 rlubke Exp $
  */
 
 public class Util {
@@ -423,57 +423,7 @@ public class Util {
     }
 
 
-    public static Object createInstance(String className) {
-        return createInstance(className, null, null);
-    }
-
-
-    public static Object createInstance(String className,
-                                        Class rootType,
-                                        Object root) {
-        Class clazz;
-        Object returnObject = null;
-        if (className != null) {
-            try {
-                clazz = Util.loadClass(className, returnObject);
-                if (clazz != null) {
-                    // Look for an adapter constructor if we've got
-                    // an object to adapt
-                    if ((rootType != null) && (root != null)) {
-
-                        Constructor construct =
-                              ReflectionUtils.lookupConstructor(
-                                    clazz,
-                                    rootType);
-                        if (construct != null) {
-                            returnObject = construct.newInstance(root);
-                        } 
-                    }
-                }
-                if (clazz != null && returnObject == null) {
-                    if (LOGGER.isLoggable(Level.FINE)) {
-                            LOGGER.log(Level.FINE,
-                                       "jsf.util.no.adapter.ctor.available",
-                                       new Object[]{
-                                             clazz.getName(),
-                                             (rootType != null ? rootType.getName() : "null")
-                                       });
-                        }
-                        returnObject = clazz.newInstance();
-                }
-            } catch (Exception e) {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    Object[] params = new Object[1];
-                    params[0] = className;
-                    String msg = MessageUtils.getExceptionMessageString(
-                          MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,
-                          params);
-                    LOGGER.log(Level.SEVERE, msg, e);
-                }
-            }
-        }
-        return returnObject;
-    }
+    
 
     // W3C XML specification refers to IETF RFC 1766 for language code
     // structure, therefore the value for the xml:lang attribute should

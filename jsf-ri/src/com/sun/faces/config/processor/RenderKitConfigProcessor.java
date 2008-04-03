@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitConfigProcessor.java,v 1.4 2007/04/27 22:00:56 ofung Exp $
+ * $Id: RenderKitConfigProcessor.java,v 1.5 2007/06/28 20:12:43 rlubke Exp $
  */
 
 /*
@@ -151,7 +151,7 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
             String rkId = null;
             String rkClass = null;
             List<Node> renderers =
-                 new ArrayList(children.getLength());
+                 new ArrayList<Node>(children.getLength());
             for (int c = 0, csize = children.getLength(); c < csize; c++) {
                 Node n = children.item(c);
                 if (RENDERKIT_ID.equals(n.getLocalName())) {
@@ -171,7 +171,7 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
                        : rkClass);
             RenderKit rk = rkf.getRenderKit(null, rkId);
             if (rk == null) {
-                rk = (RenderKit) Util.createInstance(rkClass);
+                rk = (RenderKit) createInstance(rkClass, RenderKit.class, null, renderKit);
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.log(Level.FINE,
                                MessageFormat.format(
@@ -214,7 +214,10 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
             if ((rendererFamily != null)
                   && (rendererType != null)
                   && (rendererClass != null)) {
-                Renderer r = (Renderer) Util.createInstance(rendererClass);                
+                Renderer r = (Renderer) createInstance(rendererClass,
+                                                       Renderer.class,
+                                                       null,
+                                                       renderer);                
                 if (r != null) {
                     if (LOGGER.isLoggable(Level.FINE)) {
                         LOGGER.log(Level.FINE,
