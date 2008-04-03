@@ -75,8 +75,13 @@ public class YuiTreeNodeRenderer extends Renderer {
         }
 
         YuiTreeNode treeNode = (YuiTreeNode)component;
-        UIComponent labelFacet = treeNode.getFacet("label");
         ResponseWriter writer = context.getResponseWriter();
+
+        UIComponent labelFacet = treeNode.getFacet("label");
+        if (labelFacet == null) {
+            throw new FacesException ("treeNode id " +
+                    treeNode.getClientId(context) + " is missing its label facet.");
+        }
         
 //        String output = YuiRendererHelper.getRenderedOutput(context, writer, labelFacet);
 //        String name =  YuiRendererHelper.getJavascriptVar(treeNode);
