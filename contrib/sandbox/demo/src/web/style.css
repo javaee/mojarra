@@ -44,54 +44,6 @@ body {
 	color: #294089;
 }
 
-a {
-	text-decoration: none;
-	font-weight: bold;
-}
-
-a.highLightLink {
-	font-weight: bold; 
-	text-decoration:none;
-}
-
-a:link {
-	color: #294089;
-}
-
-a:visited {
-	color: #294089;
-}
-
-a:hover {
-	color: #294089;
-	text-decoration: underline;
-}
-
-a:active {
-	color: #294089;
-}
-
-
-input.btn {
-	font-family: Verdana;
-}
-
-a.highLightLink:link {
-	color: White
-}
-
-a.highLightLink:visited {
-	color: White
-}
-
-a.highLightLink:hover {
-	color: White
-}
-
-a.highLightLink:active {
-	color: White
-}
-
 td {
 	vertical-align: top;
 }
@@ -130,19 +82,6 @@ a.header_menu_item {
 	color: #294089;
 }
 
-.errorMessage {
-	color: Red;
-	font-size: 10pt;
-}
-
-.evenRow {
-	background-color: #ececec;
-}
-
-.oddRow {
-	background-color: #FFFFFF;
-}
-
 .appTitle {
 	font-size: 14pt;
 	font-weight: bold;
@@ -161,13 +100,6 @@ a.header_menu_item {
 	font-weight: bold;
 	background-color: lightgrey;
 	color: black;
-}
-
-
-.progressBox {
-	border: 1px; 
-	border-color: Black; 
-	border-style: solid;
 }
 
 .left {
@@ -193,4 +125,3 @@ a.header_menu_item {
 .nowrap {
 	white-space: nowrap;
 }
-
