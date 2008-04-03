@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.152 2007/09/05 23:44:56 rlubke Exp $
+ * $Id: UIComponent.java,v 1.153 2007/10/01 20:24:10 rlubke Exp $
  */
 
 /*
@@ -305,7 +305,6 @@ public abstract class UIComponent implements StateHolder {
                 if (sProperties != null) {
                     sProperties.remove(name);
                 }
-                attributesThatAreSet.remove(name);
                 bindings.remove(name);
                 if (bindings.isEmpty()) {
                     bindings = null;
