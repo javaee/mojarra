@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManager.java,v 1.9 2007/06/05 20:19:48 rlubke Exp $
+ * $Id: ConfigManager.java,v 1.10 2007/06/07 23:10:35 rlubke Exp $
  */
 
 /*
@@ -40,6 +40,7 @@
 
 package com.sun.faces.config;
 
+import com.sun.faces.config.configprovider.ConfigurationResourceProvider;
 import com.sun.faces.config.configprovider.MetaInfResourceProvider;
 import com.sun.faces.config.configprovider.RIConfigResourceProvider;
 import com.sun.faces.config.configprovider.WebResourceProvider;
@@ -53,7 +54,6 @@ import com.sun.faces.config.processor.ManagedBeanConfigProcessor;
 import com.sun.faces.config.processor.NavigationConfigProcessor;
 import com.sun.faces.config.processor.RenderKitConfigProcessor;
 import com.sun.faces.config.processor.ValidatorConfigProcessor;
-import com.sun.faces.spi.ConfigurationResourceProvider;
 import com.sun.faces.util.Timer;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -63,9 +63,10 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamSource;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -73,13 +74,14 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * <p>
@@ -96,8 +98,7 @@ public class ConfigManager {
      *  specification.
      * </p>
      */
-    private static final List<ConfigurationResourceProvider> RESOURCE_PROVIDERS
-         = new ArrayList<ConfigurationResourceProvider>(3);
+    private static final List<ConfigurationResourceProvider> RESOURCE_PROVIDERS;
 
     /**
      * <p>
@@ -137,9 +138,12 @@ public class ConfigManager {
 
 
     static {
-        RESOURCE_PROVIDERS.add(new RIConfigResourceProvider());
-        RESOURCE_PROVIDERS.add(new MetaInfResourceProvider());
-        RESOURCE_PROVIDERS.add(new WebResourceProvider());
+        List<ConfigurationResourceProvider> l =
+          new ArrayList<ConfigurationResourceProvider>(3);
+        l.add(new RIConfigResourceProvider());
+        l.add(new MetaInfResourceProvider());
+        l.add(new WebResourceProvider());
+        RESOURCE_PROVIDERS = Collections.unmodifiableList(l);
         ConfigProcessor[] configProcessors = {
              new FactoryConfigProcessor(),
              new LifecycleConfigProcessor(),

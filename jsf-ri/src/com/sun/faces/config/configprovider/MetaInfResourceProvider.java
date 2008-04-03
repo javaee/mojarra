@@ -1,5 +1,5 @@
 /*
- * $Id: MetaInfResourceProvider.java,v 1.2 2007/04/27 22:00:55 ofung Exp $
+ * $Id: MetaInfResourceProvider.java,v 1.3 2007/06/07 23:10:35 rlubke Exp $
  */
 
 /*
@@ -40,7 +40,6 @@
 
 package com.sun.faces.config.configprovider;
 
-import com.sun.faces.spi.ConfigurationResourceProvider;
 import com.sun.faces.util.Util;
 
 import javax.faces.FacesException;
