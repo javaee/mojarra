@@ -3,6 +3,7 @@
     <li><a href="calendar.jsf">Calendar Demo</a></li>
     <li><a href="contextMenu.jsf">Context Menu Demo</a></li>
     <li><a href="download.jsf">Download Demo</a></li>
+    <li><a href="htmlEditor.jsf">HTML Editor Demo</a></li>
     <li><a href="menu.jsf">Menu Demo</a></li>
     <li><a href="menuBar.jsf">Menu Bar Demo</a></li>
     <li><a href="multiFileUpload.jsf">Multi-file Upload Demo</a></li>

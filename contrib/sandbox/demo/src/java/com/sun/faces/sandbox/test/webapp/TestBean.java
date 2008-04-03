@@ -27,7 +27,16 @@ public class TestBean {
     protected Date date;
     protected Date date2;
     protected FileHolder fileHolder = new FileHolderImpl();
+    protected String editorValue = "This <i>should</i> be editable!";
     
+    public String getEditorValue() {
+        return editorValue;
+    }
+
+    public void setEditorValue(String editorValue) {
+        this.editorValue = editorValue;
+    }
+
     public TestBean() {
         tree = new YuiTree();
         YuiTreeNode node1 = new YuiTreeNode();

@@ -72,8 +72,8 @@ public class FileDownloadRenderer extends Renderer {
     }
 
     protected void renderInline(FacesContext context, FileDownload comp) throws IOException {
-        String width = comp.getWidth();
-        String height = comp.getHeight();
+//        String width = comp.getWidth();
+//        String height = comp.getHeight();
         
         ResponseWriter writer = context.getResponseWriter();
         String uri = generateUri(context, comp);

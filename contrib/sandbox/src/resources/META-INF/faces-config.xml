@@ -324,4 +324,23 @@
             <renderer-class>com.sun.faces.sandbox.render.YuiTabRenderer</renderer-class>
         </renderer>
     </render-kit>
+
+    <component>
+        <description></description>
+        <display-name>Html Editor</display-name>
+        <component-type>com.sun.faces.sandbox.HtmlEditor</component-type>
+        <component-class>com.sun.faces.sandbox.component.HtmlEditor</component-class>
+        <component-extension>
+            <renderer-type>com.sun.faces.sandbox.HtmlEditorRenderer</renderer-type>
+        </component-extension>
+    </component>
+    
+    <render-kit>
+        <description>Renderkit implementation for the HtmlEditor component</description>
+        <renderer>
+            <component-family>com.sun.faces.sandbox.HtmlEditor</component-family>
+            <renderer-type>com.sun.faces.sandbox.HtmlEditorRenderer</renderer-type>
+            <renderer-class>com.sun.faces.sandbox.render.HtmlEditorRenderer</renderer-class>
+        </renderer>
+    </render-kit>
 </faces-config>

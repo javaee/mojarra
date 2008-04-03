@@ -50,8 +50,6 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
         Calendar tempcal = Calendar.getInstance();
         YuiCalendar cal = (YuiCalendar) component;
         
-        SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
-        
         if (null != cal.getValue() && cal.getValue() instanceof Date) {
             Date oldDate = (Date) cal.getValue();
             tempcal.setTime(oldDate);
@@ -336,19 +334,26 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
     protected String getStringValue(FacesContext context, UIComponent component) throws ConverterException {
         return getConverter(context, component).getAsString(context, component, ((YuiCalendar)component).getValue());
     }
-    
-    private void addUpdateMessage(FacesContext context, YuiCalendar cal) {
-        FacesMessage message = MessageFactory.getMessage(context, cal.UPDATE_MESSAGE_ID, MessageFactory.getLabel(context, cal));
-        context.addMessage(cal.getClientId(context), message);
-    }
-    
+
     private void addRequiredMessage(FacesContext context, YuiCalendar cal) {
         FacesMessage message;
         if (null != cal.getRequiredMessage()) {
             message = new FacesMessage(cal.getRequiredMessage());
         } else {
-            message = MessageFactory.getMessage(context, cal.REQUIRED_MESSAGE_ID, MessageFactory.getLabel(context, cal));
+            message = MessageFactory.getMessage(context, YuiCalendar.REQUIRED_MESSAGE_ID, MessageFactory.getLabel(context, cal));
         }
+        context.addMessage(cal.getClientId(context), message);
+    }
+    
+    
+    private void addInvalidMessage(FacesContext context, YuiCalendar cal) {
+        FacesMessage message = MessageFactory.getMessage(context, YuiCalendar.INVALID_MESSAGE_ID, MessageFactory.getLabel(context, cal));
+        context.addMessage(cal.getClientId(context), message);
+    }
+    
+    /*
+    private void addUpdateMessage(FacesContext context, YuiCalendar cal) {
+        FacesMessage message = MessageFactory.getMessage(context, cal.UPDATE_MESSAGE_ID, MessageFactory.getLabel(context, cal));
         context.addMessage(cal.getClientId(context), message);
     }
     
@@ -361,9 +366,5 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
         }
         context.addMessage(cal.getClientId(context), message);
     }
-    
-    private void addInvalidMessage(FacesContext context, YuiCalendar cal) {
-        FacesMessage message = MessageFactory.getMessage(context, cal.INVALID_MESSAGE_ID, MessageFactory.getLabel(context, cal));
-        context.addMessage(cal.getClientId(context), message);
-    }
+    */
 }

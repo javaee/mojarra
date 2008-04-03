@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.2 2007/01/26 22:33:24 jdlee Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.3 2007/04/16 19:20:42 jdlee Exp $
  */
 
 /*
@@ -73,9 +73,9 @@ public abstract class HtmlBasicRenderer extends Renderer {
             throw new NullPointerException();
         }
 
-        UIInput uiInput = null;
+        
         if (component instanceof UIInput) {
-            uiInput = (UIInput) component;
+            //uiInput = (UIInput) component;
         } else {
             // decode needs to be invoked only for components that are
             // instances or subclasses of UIInput.
@@ -102,8 +102,8 @@ public abstract class HtmlBasicRenderer extends Renderer {
          throws IOException {
 
         String currentValue = null;
-        ResponseWriter writer = null;
-        String styleClass = null;
+//        ResponseWriter writer = null;
+//        String styleClass = null;
 
         if (context == null || component == null) {
             throw new NullPointerException();
@@ -115,7 +115,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
             return;
         }
 
-        writer = context.getResponseWriter();
+//        writer = context.getResponseWriter();
 
         currentValue = getCurrentValue(context, component);
         getEndTextToRender(context, component, currentValue);
@@ -229,10 +229,10 @@ public abstract class HtmlBasicRenderer extends Renderer {
         } else {
             // throw converter exception if no converter can be
             // identified
-            Object[] params = {
-                 currentValue,
-                 "null Converter"
-            };
+//            Object[] params = {
+//                 currentValue,
+//                 "null Converter"
+//            };
 
             throw new ConverterException("No converter can be identified")
             ;
@@ -433,7 +433,6 @@ public abstract class HtmlBasicRenderer extends Renderer {
     protected void writeIdAttributeIfNecessary(FacesContext context,
                                                ResponseWriter writer,
                                                UIComponent component) {
-        String id;
         if (shouldWriteIdAttribute(component)) {
             try {
                 writer.writeAttribute("id", component.getClientId(context),

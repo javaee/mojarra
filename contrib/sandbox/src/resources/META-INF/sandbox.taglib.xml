@@ -91,4 +91,11 @@
             <component-type>com.sun.faces.sandbox.YuiTab</component-type>
         </component>
     </tag>
+    <tag>
+        <tag-name>htmlEditor</tag-name>
+        <component>
+            <component-type>com.sun.faces.sandbox.HtmlEditor</component-type>
+            <renderer-type>com.sun.faces.sandbox.HtmlEditorRenderer</renderer-type>
+        </component>
+    </tag>
 </facelet-taglib>
