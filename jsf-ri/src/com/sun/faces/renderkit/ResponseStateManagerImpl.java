@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.44 2007/06/26 17:55:52 rlubke Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.45 2007/07/25 22:50:37 rlubke Exp $
  */
 
 /*
@@ -88,17 +88,10 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     private static final String FACES_VIEW_STRUCTURE =
            "com.sun.faces.FACES_VIEW_STRUCTURE";
 
-    private static final char[] STATE_FIELD_START =
-          ("<input type=\"hidden\" name=\""
-           + ResponseStateManager.VIEW_STATE_PARAM
-           + "\" id=\""
-           + ResponseStateManager.VIEW_STATE_PARAM
-           + "\" value=\"").toCharArray();
-
     private static final char[] STATE_FIELD_END =
           "\" />".toCharArray();
 
-
+    private char[] stateFieldStart;
     private SerializationProvider serialProvider;
     private Boolean compressState;   
     private ByteArrayGuard guard; 
@@ -106,7 +99,6 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 
     public ResponseStateManagerImpl() {
 
-        super();        
         init();
 
     }      
@@ -222,7 +214,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
         StateManager stateManager = Util.getStateManager(context);
         ResponseWriter writer = context.getResponseWriter();
 
-        writer.write(STATE_FIELD_START);
+        writer.write(stateFieldStart);
 
         if (stateManager.isSavingStateInClient(context)) {
             ObjectOutputStream oos = null;
@@ -407,6 +399,19 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
                                    defaultSize});
                 }   
             csBuffSize = Integer.parseInt(defaultSize);
+        }
+
+        if (webConfig
+              .isOptionEnabled(BooleanWebContextInitParameter.EnableXhtmlStateForms)) {
+            stateFieldStart = ("<input type=\"hidden\" name=\""
+                               + ResponseStateManager.VIEW_STATE_PARAM
+                               + "\" value=\"").toCharArray();
+        } else {
+            stateFieldStart = ("<input type=\"hidden\" name=\""
+                               + ResponseStateManager.VIEW_STATE_PARAM
+                               + "\" id=\""
+                               + ResponseStateManager.VIEW_STATE_PARAM
+                               + "\" value=\"").toCharArray();
         }
                 
     }

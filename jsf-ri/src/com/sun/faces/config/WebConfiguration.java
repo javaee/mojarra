@@ -1,5 +1,5 @@
 /*
- * $Id: WebConfiguration.java,v 1.27 2007/07/20 19:17:38 rlubke Exp $
+ * $Id: WebConfiguration.java,v 1.28 2007/07/25 22:50:37 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -770,6 +770,10 @@ public class WebConfiguration {
         EnableLoadBundle11Compatibility(
              "com.sun.faces.enabledLoadBundle11Compatibility",
              false
+        ),
+        EnableXhtmlStateForms(
+              "com.sun.faces.enableXhtmlStateForms",
+              false
         );
 
         private BooleanWebContextInitParameter alternate;
