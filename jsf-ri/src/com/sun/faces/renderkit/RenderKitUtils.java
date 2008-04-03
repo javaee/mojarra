@@ -545,12 +545,12 @@ public class RenderKitUtils {
                                                           List<String> setAttributes)
     throws IOException {
 
-        Collections.sort(setAttributes);
+        String[] attributes = setAttributes.toArray(new String[setAttributes.size()]);
+        Arrays.sort(attributes);
         boolean isXhtml =
               RIConstants.XHTML_CONTENT_TYPE.equals(writer.getContentType());
         Map<String, Object> attrMap = component.getAttributes();
-        for (String name : setAttributes) {
-
+        for (String name : attributes) {
             if (Arrays.binarySearch(knownAttributes, name) >= 0) {
                 Object value =
                       attrMap.get(name);
@@ -561,6 +561,7 @@ public class RenderKitUtils {
                 }
             }
         }
+
     }
 
 
