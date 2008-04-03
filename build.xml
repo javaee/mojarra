@@ -79,6 +79,7 @@
         <delete dir="${basedir}/build"/>
         <delete dir="${dist.dir}"/>
         <call.modules target="clean"/>        
+        <ant dir="jsf-demo" target="clean" />
     </target>  
     
     <target name="main" description="Build Mojarra">
