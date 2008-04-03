@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.62 2007/05/30 18:49:13 rlubke Exp $
+ * $Id: UIComponentTag.java,v 1.63 2007/05/30 20:07:21 kenpaulsen Exp $
  */
 
 /*
@@ -147,8 +147,8 @@ public abstract class UIComponentTag extends UIComponentClassicTagBase implement
 	if (value == null) {
 	    throw new NullPointerException();
 	}
-        if ((value.indexOf("#{") != -1) &&
-            (value.indexOf("#{") < value.indexOf('}'))) {
+	int start = value.indexOf("#{");
+	if ((start != -1) && (start < value.indexOf('}', start))) {
             return true;
         }
         return false;
