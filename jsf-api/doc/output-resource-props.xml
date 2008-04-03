@@ -53,13 +53,30 @@
 
 -->
 <root>
-    <property>
+    <attribute>
         <description>
-            <![CDATA[ RELEASE_PENDING (edburns,rogerk) documentation ]]>
+            <![CDATA[<div class="changed_added_2_0"><p>The <em>resourceName</em> for this resource.</p></div>]]>
         </description>
-        <display-name>Resource URL</display-name>
+        <display-name>Resource Name</display-name>
         <icon></icon>
-        <property-name>url</property-name>
-        <property-class>java.lang.String</property-class>
-    </property>
+        <attribute-name>name</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+            <required>true</required>
+        </attribute-extension>
+
+    </attribute>
+    <attribute>
+        <description>
+            <![CDATA[<div class="changed_added_2_0"><p>The <em>libraryName</em> for this resource.</p></div>]]>
+        </description>
+        <display-name>Library Name</display-name>
+        <icon></icon>
+        <attribute-name>library</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+            <required>true</required>
+        </attribute-extension>
+
+    </attribute>
 </root>

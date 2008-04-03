@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitSpecificationGenerator.java,v 1.12 2007/04/27 22:02:50 ofung Exp $
+ * $Id: RenderKitSpecificationGenerator.java,v 1.13 2008/01/24 17:43:02 edburns Exp $
  */
 
 /*
@@ -57,6 +57,7 @@ import com.sun.faces.config.beans.DescriptionBean;
 import com.sun.faces.config.beans.FacesConfigBean;
 import com.sun.faces.config.beans.RenderKitBean;
 import com.sun.faces.config.beans.RendererBean;
+import java.util.Locale;
 
 
 /**
@@ -222,10 +223,36 @@ public class RenderKitSpecificationGenerator implements Generator {
 
                 RendererBean renderer = rendererIter.next();
                 String curType = renderer.getRendererType();
-                sb.append("  <DD><A HREF=\"" + renderKitId + "/" +
+                DescriptionBean[] descriptions = renderer.getDescriptions();
+                String enclosingDiv = null;
+                if (null != descriptions) {
+                    // Get the current operating locale
+                    String localeStr = Locale.getDefault().getCountry().toLowerCase();
+                    // iterate over the descriptions and try to find one that matches 
+                    // the country of the current locale
+                    for (DescriptionBean cur : descriptions) {
+                        if (null != cur.getLang() && 
+                            (-1 != localeStr.indexOf(cur.getLang().toLowerCase()))) {
+                            enclosingDiv = GeneratorUtil.getFirstDivFromString(renderer.getDescription(cur.getLang()).getDescription());
+                            break;
+                        }
+                    }
+                    
+                }
+                if (null != enclosingDiv) {
+                    sb.append("  <DD>" + enclosingDiv);
+                    sb.append("<A HREF=\"" + renderKitId + "/" +
                     curFamily + curType +
                     ".html\" TARGET=\"rendererFrame\">" + curType +
-                    "</A><DD>\n");
+                            "</A>");
+                    sb.append("</div></DD>\n");
+                }
+                else {
+                    sb.append("  <DD><A HREF=\"" + renderKitId + "/" +
+                    curFamily + curType +
+                    ".html\" TARGET=\"rendererFrame\">" + curType +
+                            "</A></DD>\n");
+                }
             }
         }
 
