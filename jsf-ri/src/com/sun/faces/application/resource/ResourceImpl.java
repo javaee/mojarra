@@ -198,10 +198,10 @@ public class ResourceImpl extends Resource {
         String facesServletMapping = Util.getFacesMapping(context);
         // If it is extension mapped
         if (Util.isPrefixMapped(facesServletMapping)) {
-            uri = facesServletMapping + ResourceHandler.RESOURCE_IDENTIFIER + "/" +
+            uri = facesServletMapping + ResourceHandler.RESOURCE_IDENTIFIER + '/' +
                   getResourceName();
         } else {
-            uri = ResourceHandler.RESOURCE_IDENTIFIER + "/" + getResourceName() +
+            uri = ResourceHandler.RESOURCE_IDENTIFIER + '/' + getResourceName() +
                   facesServletMapping;
         }
         boolean queryStarted = false;
