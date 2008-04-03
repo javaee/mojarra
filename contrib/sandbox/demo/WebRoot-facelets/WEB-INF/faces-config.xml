@@ -42,7 +42,11 @@
     <application>
         <view-handler>com.sun.facelets.FaceletViewHandler</view-handler>
     </application>
-    
+
+    <lifecycle>
+        <phase-listener>com.sun.faces.sandbox.util.PrettyUrlPhaseListener</phase-listener>
+    </lifecycle>
+
     <managed-bean>
         <managed-bean-name>testBean</managed-bean-name>
         <managed-bean-class>com.sun.faces.sandbox.test.webapp.TestBean</managed-bean-class>

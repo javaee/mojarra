@@ -73,24 +73,28 @@
     <property name="sourceforge.mirror" value="http://superb-east.dl.sourceforge.net/sourceforge"/>
     
     
-    <property name="httpclient.version" value="3.0.1" />
-    <property name="fileupload.version" value="1.1.1" />
     <property name="codec.version" value="1.3" />
-    <property name="io.version" value="1.2" />
-    <property name="logging.version" value="1.1" />
     <property name="facelets.version" value="1.1.11" />
-    <property name="shale.remoting.version" value="1.1.0-SNAPSHOT" />
+    <property name="fileupload.version" value="1.1.1" />
+    <property name="httpclient.version" value="3.0.1" />
+    <property name="io.version" value="1.2" />
+    <property name="jmock.version" value="1.2.0" />
+    <property name="logging.version" value="1.1" />
+    <property name="shale.version" value="1.1.0-SNAPSHOT" />
     <property name="tinymce.version" value="2_1_0" />
-    <property name="httpclient.jar" value="${sandbox.dependency.base.dir}/commons-httpclient-${httpclient.version}.jar"/>
-    <property name="fileupload.jar" value="${sandbox.dependency.base.dir}/commons-fileupload-${fileupload.version}.jar"/>
+    
     <property name="codec.jar" value="${sandbox.dependency.base.dir}/commons-codec-${codec.version}.jar"/>
-    <property name="io.jar" value="${sandbox.dependency.base.dir}/commons-io-${io.version}.jar"/>
-    <property name="logging.jar" value="${sandbox.dependency.base.dir}/commons-logging-${logging.version}.jar"/>
     <property name="facelets.jar" value="${sandbox.dependency.base.dir}/jsf-facelets-${facelets.version}.jar"/>
-    <property name="shale.remoting.jar" value="${sandbox.dependency.base.dir}/shale-remoting-${shale.remoting.version}.jar"/>
+    <property name="fileupload.jar" value="${sandbox.dependency.base.dir}/commons-fileupload-${fileupload.version}.jar"/>
+    <property name="httpclient.jar" value="${sandbox.dependency.base.dir}/commons-httpclient-${httpclient.version}.jar"/>
+    <property name="io.jar" value="${sandbox.dependency.base.dir}/commons-io-${io.version}.jar"/>
+    <property name="jmock.jar" value="${sandbox.dependency.base.dir}/jmock-${jmock.version}.jar"/>
     <property name="jsftemplating.jar" value="${sandbox.dependency.base.dir}/jsftemplating.jar"/>
     <property name="jsftemplating.dt.jar" value="${sandbox.dependency.base.dir}/jsftemplating-dt.jar"/>
     <property name="jsftemplating.df.jar" value="${sandbox.dependency.base.dir}/jsftemplating-dynafaces-0.1.jar"/>
+    <property name="logging.jar" value="${sandbox.dependency.base.dir}/commons-logging-${logging.version}.jar"/>
+    <property name="shale.remoting.jar" value="${sandbox.dependency.base.dir}/shale-remoting-${shale.version}.jar"/>
+    <property name="shale.test.jar" value="${sandbox.dependency.base.dir}/shale-test-${shale.version}.jar"/>
     <property name="tinymce.archive" value="${sandbox.dependency.base.dir}/tinymce_${tinymce.version}.zip"/>
 
     <property name="name" value="jsf-ri-sandbox"/>
@@ -182,6 +186,23 @@
                      usetimestamp="true"/>
             </then>
         </if>
+        <!-- jmock -->
+        <if>
+            <not>
+                <available file="${jmock.jar}" property="ignored"/>
+            </not>
+            <then>
+                <get src="http://www.jmock.org/dist/jmock-${jmock.version}-jars.zip"
+                     dest="jmock.zip"
+                     usetimestamp="true"/>
+                <unzip src="jmock.zip" dest="${sandbox.dependency.base.dir}">
+                    <patternset>
+                        <include name="**/*.jar"/>
+                    </patternset>
+                    <mapper type="flatten"/>
+                </unzip>
+            </then>
+        </if>
         <!-- logging -->
         <if>
             <not>
@@ -211,12 +232,30 @@
             </not>
             <then>
                 <!-- ${maven.mirror}/org/apache/shale/shale-remoting/${shale.remoting.version}/shale-remoting-${shale.remoting.version}.jar" -->
-                <get src="http://people.apache.org/builds/shale/nightly/shale-framework-20070427.zip"
+                <get src="http://people.apache.org/builds/shale/nightly/shale-framework-20070504.zip"
                      dest="shale-framework.zip"
                      usetimestamp="true"/>
                 <unzip src="shale-framework.zip" dest="${sandbox.dependency.base.dir}">
                     <patternset>
                         <include name="**/shale-remoting-1.1.0-SNAPSHOT.jar"/>
+                    </patternset>
+                    <mapper type="flatten"/>
+                </unzip>
+            </then>
+        </if>
+        <!-- Shale Remoting -->
+        <if>
+            <not>
+                <available file="${shale.test.jar}" property="ignored"/>
+            </not>
+            <then>
+                <!-- ${maven.mirror}/org/apache/shale/shale-remoting/${shale.remoting.version}/shale-remoting-${shale.remoting.version}.jar" -->
+                <get src="http://people.apache.org/builds/shale/nightly/shale-framework-20070504.zip"
+                     dest="shale-framework.zip"
+                     usetimestamp="true"/>
+                <unzip src="shale-framework.zip" dest="${sandbox.dependency.base.dir}">
+                    <patternset>
+                        <include name="**/shale-test-1.1.0-SNAPSHOT.jar"/>
                     </patternset>
                     <mapper type="flatten"/>
                 </unzip>

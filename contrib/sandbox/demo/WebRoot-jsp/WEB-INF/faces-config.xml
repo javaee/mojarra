@@ -36,22 +36,25 @@
  holder.
 -->
 
-<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
-	version="1.2">
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+    version="1.2">
+
+    <lifecycle>
+        <phase-listener>com.sun.faces.sandbox.util.PrettyUrlPhaseListener</phase-listener>
+    </lifecycle>
 
     <managed-bean>
         <managed-bean-name>testBean</managed-bean-name>
         <managed-bean-class>com.sun.faces.sandbox.test.webapp.TestBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
-    
-	<navigation-rule>
-		<from-view-id>*</from-view-id>
-		<navigation-case>
-			<from-outcome>home</from-outcome>
-			<to-view-id>/index.jsf</to-view-id>
-		</navigation-case>
+
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>home</from-outcome>
+            <to-view-id>/index.jsf</to-view-id>
+        </navigation-case>
     </navigation-rule>
 </faces-config>

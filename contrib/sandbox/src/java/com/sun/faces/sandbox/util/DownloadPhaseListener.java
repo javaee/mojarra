@@ -42,6 +42,7 @@ package com.sun.faces.sandbox.util;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Logger;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
@@ -58,9 +59,10 @@ import com.sun.faces.sandbox.component.FileDownload;
  * @author Jason Lee
  *
  */
-// TODO:  Can this be merged with the StaticResourcePhaseListener?
+//TODO:  Can this be merged with the StaticResourcePhaseListener?
 public class DownloadPhaseListener implements PhaseListener {
     private static final long serialVersionUID = 1L;
+    private transient Logger logger = Logger.getLogger(DownloadPhaseListener.class.getName());
 
     /* (non-Javadoc)
      * @see javax.faces.event.PhaseListener#afterPhase(javax.faces.event.PhaseEvent)
@@ -72,40 +74,41 @@ public class DownloadPhaseListener implements PhaseListener {
             HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
             String uri = request.getRequestURI();
             if ((uri != null) && (uri.indexOf(FileDownload.DOWNLOAD_URI) > -1)){
-                HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
-                String clientId = request.getParameter(FileDownload.REQUEST_PARAM);
-                FileDownload comp = (FileDownload)request.getSession().getAttribute("HtmlDownload-" + clientId);
-                if (comp != null) {
-                    Object value = comp.getData();
-                    if (value != null) {
-                        byte[] data = null;
-                        if (value instanceof byte[]) {
-                            data = (byte[]) value;
-                        } else if (value instanceof ByteArrayOutputStream) {
-                            data = ((ByteArrayOutputStream) value).toByteArray();
-                        } else if (value instanceof InputStream) {
-                            data = getBytes((InputStream)value);
-                        } else {
-                            throw new FacesException("HtmlDownload:  an unsupported data type was found:  " +
-                                    value.getClass().getName());
-                        }
-                        String mimeType = comp.getMimeType();
-                        if (FileDownload.METHOD_DOWNLOAD.equals(comp.getMethod())) {
-                            response.setHeader("Content-Disposition", "attachment; filename=\"" +
-                                    comp.getFileName() + "\"");
-                        } else {
-                            response.setHeader("Content-Disposition", "inline; filename=\"" +
-                                    comp.getFileName() + "\"");                        }
-                        response.setContentType(mimeType);
-                        try {
+                try {
+                    HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
+                    String clientId = request.getParameter(FileDownload.REQUEST_PARAM);
+                    FileDownload comp = (FileDownload)request.getSession().getAttribute("HtmlDownload-" + clientId);
+                    if (comp != null) {
+                        Object value = comp.getData();
+                        if (value != null) {
+                            byte[] data = null;
+                            if (value instanceof byte[]) {
+                                data = (byte[]) value;
+                            } else if (value instanceof ByteArrayOutputStream) {
+                                data = ((ByteArrayOutputStream) value).toByteArray();
+                            } else if (value instanceof InputStream) {
+                                data = getBytes((InputStream)value);
+                            } else {
+                                throw new FacesException("HtmlDownload:  an unsupported data type was found:  " +
+                                        value.getClass().getName());
+                            }
+                            String mimeType = comp.getMimeType();
+                            if (FileDownload.METHOD_DOWNLOAD.equals(comp.getMethod())) {
+                                response.setHeader("Content-Disposition", "attachment; filename=\"" +
+                                        comp.getFileName() + "\"");
+                            } else {
+                                response.setHeader("Content-Disposition", "inline; filename=\"" +
+                                        comp.getFileName() + "\"");                        }
+                            response.setContentType(mimeType);
                             ServletOutputStream sos = response.getOutputStream();
                             sos.write(data);
                             sos.flush();
                             context.responseComplete();
-                        } catch (IOException e1) {
-                            e1.printStackTrace();
                         }
                     }
+                } catch (IOException e1) {
+                    logger.severe(e1.getMessage());
+                    e1.printStackTrace();
                 }
             }
         }
@@ -136,7 +139,7 @@ public class DownloadPhaseListener implements PhaseListener {
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
-        
+
         return baos.toByteArray();
     }
 

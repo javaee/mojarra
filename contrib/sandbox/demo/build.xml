@@ -115,7 +115,8 @@
                 <available file="${resource.dir}/sample.png" property="ignored"/>
             </not>
             <then>
-                <get src="https://duke.dev.java.net/images/JDK6/DukeWithHelmet.png"
+                <!-- "https://duke.dev.java.net/images/JDK6/DukeWithHelmet.png" -->
+                <get src="http://www.canekpelaez.com/pensadero/posts-images/2006/11/java-duke-guitar.png" 
                     dest="${resource.dir}/sample.png"
                      usetimestamp="true"/>
             </then>

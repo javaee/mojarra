@@ -43,6 +43,7 @@
     <li><a href="menu.jsf">Menu Demo</a></li>
     <li><a href="menuBar.jsf">Menu Bar Demo</a></li>
     <li><a href="multiFileUpload.jsf">Multi-file Upload Demo</a></li>
+    <li><a href="blah/This is a pretty URL/foo">Pretty URL PhaseListener Demo</a></li>
     <!-- li><a href="selectItems.jsf">SelectItems Demo</a></li -->
     <li><a href="tabView.jsf">TabView Demo</a></li>
     <li><a href="tree.jsf">Tree Demo</a></li>

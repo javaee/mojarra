@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<!--
+<%--
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  
  Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
@@ -34,40 +32,11 @@
  and therefore, elected the GPL Version 2 license, then the option applies
  only if the new code is made subject to such option by the copyright
  holder.
--->
+--%>
 
-<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
-    <display-name>JSF RI Sandbox Facelets Demo</display-name>
-    <context-param>
-        <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
-        <param-value>.xhtml</param-value>
-    </context-param>
-    <context-param>
-        <param-name>facelets.DEVELOPMENT</param-name>
-        <param-value>true</param-value>
-    </context-param>
-    <context-param>
-        <param-name>com.sun.faces.sandbox.urlPatterns</param-name>
-        <param-value>prettyUrl.xhtml=/blah/#{testBean.queryStringValue}/foo</param-value>
-    </context-param>
-
-    <servlet>
-        <servlet-name>Faces Servlet</servlet-name>
-        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>*.jsf</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>/blah/*</url-pattern>
-    </servlet-mapping>
-    
-    <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
-    </welcome-file-list>
-</web-app>
+<%@ include file="header.inc"%>
+<f:view>
+    <h3>Pretty URL</h3>
+    <h:outputText value="You specified '#{testBean.queryStringValue}'" />
+</f:view>
+<%@ include file="footer.inc"%>

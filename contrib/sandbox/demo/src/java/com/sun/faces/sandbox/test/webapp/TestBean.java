@@ -64,7 +64,16 @@ public class TestBean {
     protected Date date2;
     protected FileHolder fileHolder = new FileHolderImpl();
     protected String editorValue = "This <i>should</i> be editable!";
+    protected String queryStringValue;
     
+    public String getQueryStringValue() {
+        return queryStringValue;
+    }
+
+    public void setQueryStringValue(String queryStringValue) {
+        this.queryStringValue = queryStringValue;
+    }
+
     public String getEditorValue() {
         return editorValue;
     }
