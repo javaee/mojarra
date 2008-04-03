@@ -203,5 +203,10 @@
     <validator-class>javax.faces.validator.LongRangeValidator</validator-class>
   </validator>
 
+  <!-- Add our implementation specific Validators -->
+  <validator>
+      <validator-id>com.sun.faces.ext.validator.RegexValidator</validator-id>
+      <validator-class>com.sun.faces.ext.validator.RegexValidator</validator-class>
+  </validator>
 
 </faces-config>
