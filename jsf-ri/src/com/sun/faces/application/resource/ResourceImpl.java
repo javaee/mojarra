@@ -189,7 +189,6 @@ public class ResourceImpl extends Resource {
 
     /**
      * @see javax.faces.application.Resource#userAgentNeedsUpdate(javax.faces.context.FacesContext)
-     * RELEASE_PENDING (rlubke) revisit implementation
      */
     public boolean userAgentNeedsUpdate(FacesContext context) {
 
