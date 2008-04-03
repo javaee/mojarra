@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKit.java,v 1.25 2007/04/27 22:02:09 ofung Exp $
+ * $Id: TestRenderKit.java,v 1.26 2007/08/08 16:38:46 youngm Exp $
  */
 
 /*
@@ -68,7 +68,7 @@ import org.apache.cactus.WebRequest;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.25 2007/04/27 22:02:09 ofung Exp $
+ * @version $Id: TestRenderKit.java,v 1.26 2007/08/08 16:38:46 youngm Exp $
  */
 
 public class TestRenderKit extends ServletFacesTestCase {
@@ -271,6 +271,22 @@ public class TestRenderKit extends ServletFacesTestCase {
         // accept header  
         writer = renderKit.createResponseWriter(new StringWriter(), null, "ISO-8859-1");
         assertEquals(writer.getContentType(), "text/html");
+        
+    	//Ensure we correctly support */* in content type ranges
+    	writer = renderKit.createResponseWriter(new StringWriter(), 
+    			"application/xhtml+xml,*/*", 
+    			"ISO-8859-1");
+    	assertEquals(writer.getContentType(), "application/xhtml+xml");
+
+    	writer = renderKit.createResponseWriter(new StringWriter(), 
+    			"text/css,*/*",
+    			"ISO-8859-1");
+    	assertEquals(writer.getContentType(), "text/html");
+
+    	writer = renderKit.createResponseWriter(new StringWriter(), 
+    			"*/*",
+    			"ISO-8859-1");
+    	assertEquals(writer.getContentType(), "text/html");
     }
 
     public void beginCreateResponseWriter1(WebRequest theRequest) {

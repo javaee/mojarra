@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.55 2007/07/19 15:32:45 rlubke Exp $
+ * $Id: RenderKitImpl.java,v 1.56 2007/08/08 16:38:45 youngm Exp $
  */
 
 /*
@@ -67,7 +67,7 @@ import com.sun.faces.util.Util;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.55 2007/07/19 15:32:45 rlubke Exp $
+ * @version $Id: RenderKitImpl.java,v 1.56 2007/08/08 16:38:45 youngm Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -234,9 +234,17 @@ public class RenderKitImpl extends RenderKit {
         }
 
         // Step 4: Default to text/html
-        if (null == desiredContentTypeList ||
-             RIConstants.ALL_MEDIA.equals(desiredContentTypeList)) {
-            contentType = RIConstants.HTML_CONTENT_TYPE;
+        if (contentType == null) {
+	        if (null == desiredContentTypeList) {
+	        	contentType = RIConstants.HTML_CONTENT_TYPE;
+	        } else {
+	        	String[] desiredContentTypes = contentTypeSplit(desiredContentTypeList);
+	        	for (String desiredContentType : desiredContentTypes) {
+	        		if (RIConstants.ALL_MEDIA.equals(desiredContentType.trim())) {
+	        			contentType = RIConstants.HTML_CONTENT_TYPE;
+	        		}
+	        	}
+	        }
         }
 
         if (null == contentType) {
