@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.44 2007/04/27 22:00:14 ofung Exp $
+ * $Id: UIDataTestCase.java,v 1.45 2008/03/24 16:08:01 rlubke Exp $
  */
 
 /*
@@ -516,7 +516,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         form2.setId("form2");
         viewRoot.getChildren().add(form1);
         viewRoot.getChildren().add(form2);
-        setupTree(form1, true, true);
+        setupTree2(form1, true, true);
         
         // replace the "component" ivar with a new instance.
         component = new UIData();
@@ -533,7 +533,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         assertEquals(10, model.getRowCount());
 
         setupModel();
-        setupTree(form2, true, true);
+        setupTree2(form2, true, true);
         
         boolean exceptionThrown = false, found = false;
         // At this point we have two forms, each containing a UIData 
@@ -689,6 +689,41 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         assertEquals(3, data1.getRowIndex());
         assertTrue(!found);
         assertTrue(exceptionThrown);
+
+        // Case 7, positive: ensure UIData-level facets are considered
+        found = false;
+        data1.setRowIndex(3);
+        assertEquals(3, data1.getRowIndex());
+        found = viewRoot.invokeOnComponent(facesContext, "form1:data:uidataHeader",
+                new ContextCallback() {
+
+                  public void invokeContextCallback(FacesContext context,
+                                                    UIComponent component) {
+                      UIData data = (UIData) getNamingContainer(component);
+                      UIForm form = (UIForm) getNamingContainer(data);
+                      assertEquals("form1", form.getId());
+                      assertEquals("uidataHeader", component.getId());
+                  }
+        });
+        assertEquals(3, data1.getRowIndex());
+        assertTrue(found);
+
+        found = false;
+        data1.setRowIndex(3);
+        assertEquals(3, data1.getRowIndex());
+        found = viewRoot.invokeOnComponent(facesContext, "form1:data:uidataFooter",
+                new ContextCallback() {
+
+                  public void invokeContextCallback(FacesContext context,
+                                                    UIComponent component) {
+                      UIData data = (UIData) getNamingContainer(component);
+                      UIForm form = (UIForm) getNamingContainer(data);
+                      assertEquals("form1", form.getId());
+                      assertEquals("uidataFooter", component.getId());
+                  }
+        });
+        assertEquals(3, data1.getRowIndex());
+        assertTrue(found);
 
 
     }
@@ -2129,6 +2164,187 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         data.getChildren().add(column);
 
 	return command;
+
+    }
+
+    // Set up the component tree corresponding to the data model
+    // labels==true - header facet of command and input contain labels
+    // labels==false - header facet of command and input contain controls
+    // ids==true hard coded ids
+    // ids==false no ids
+    protected UICommand setupTree2(UIComponent root,
+                                   boolean labels,
+                                   boolean ids) throws Exception {
+
+        // Attach our UIData to the view root
+        UIData data = (UIData) component;
+        if (ids) {
+            data.setId("data");
+        }
+        if (null == root) {
+            UIViewRoot viewRoot = facesContext.getApplication().getViewHandler()
+                  .createView(facesContext, null);
+            viewRoot.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
+            viewRoot.setViewId("/view");
+            facesContext.setViewRoot(viewRoot);
+            root = viewRoot;
+        }
+        root.getChildren().add(data);
+
+        // setup a UIData-level header and footer
+        UIOutput header = new UIOutput();
+        header.setId("uidataHeader");
+        data.getFacets().put("header", header);
+        header.getClientId(facesContext);
+        UIOutput footer = new UIOutput();
+        footer.setId("uidataFooter");
+        data.getFacets().put("footer", footer);
+        footer.getClientId(facesContext);
+
+        // Set up columns with facets and fields for each property
+        UIColumn column;
+        UICommand command;
+        UIInput input;
+        UIOutput output;
+        UIOutput label;
+        UIOutput constant;
+        UICommand hcommand;
+        UIInput hinput;
+
+        column = new UIColumn();
+        if (ids) {
+            column.setId("commandColumn");
+        }
+        if (labels) {
+            label = new UIOutput();
+            if (ids) {
+                label.setId("commandHeader");
+            }
+            label.setValue("Command Header");
+            column.getFacets().put("header", label);
+        } else {
+            hcommand = new UICommand();
+            if (ids) {
+                hcommand.setId("hcommand");
+            }
+            hcommand.setImmediate(true);
+            hcommand.setActionListener
+                  (application.createMethodBinding
+                        ("#{hb.action}",
+                         new Class[]{ActionEvent.class}));
+            hcommand.setValue("Command Action");
+            column.getFacets().put("header", hcommand);
+        }
+        label = new UIOutput();
+        if (ids) {
+            label.setId("commandFooter");
+        }
+        label.setValue("Command Footer");
+        column.getFacets().put("footer", label);
+        command = new UICommand();
+        if (ids) {
+            command.setId("command");
+        }
+        command.setValueBinding("value",
+                                application.createValueBinding("#{foo.command}"));
+        column.getChildren().add(command);
+        data.getChildren().add(column);
+        command.addActionListener(new TestDataActionListener());
+
+        column = new UIColumn();
+        if (ids) {
+            column.setId("inputColumn");
+        }
+        if (labels) {
+            label = new UIOutput();
+            if (ids) {
+                label.setId("inputHeader");
+            }
+            label.setValue("Input Header");
+            column.getFacets().put("header", label);
+        } else {
+            hinput = new UIInput();
+            if (ids) {
+                hinput.setId("hinput");
+            }
+            hinput.setValidator
+                  (application.createMethodBinding
+                        ("#{hb.validate}",
+                         new Class[]{FacesContext.class,
+                                     UIComponent.class,
+                                     Object.class}));
+            hinput.setValueBinding
+                  ("value",
+                   application.createValueBinding("#{hb.value}"));
+            column.getFacets().put("header", hinput);
+        }
+        label = new UIOutput();
+        if (ids) {
+            label.setId("inputFooter");
+        }
+        label.setValue("Input Footer");
+        column.getFacets().put("footer", label);
+        input = new UIInput();
+        if (ids) {
+            input.setId("input");
+        }
+        input.setValueBinding("value",
+                              application.createValueBinding("#{foo.input}"));
+        column.getChildren().add(input);
+        data.getChildren().add(column);
+        input.addValidator(new TestDataValidator());
+        input.addValueChangeListener(new TestDataValueChangeListener());
+
+        column = new UIColumn();
+        if (ids) {
+            column.setId("outputColumn");
+        }
+        label = new UIOutput();
+        if (ids) {
+            label.setId("outputHeader");
+        }
+        label.setValue("Output Header");
+        column.getFacets().put("header", label);
+        label = new UIOutput();
+        if (ids) {
+            label.setId("outputFooter");
+        }
+        label.setValue("Output Footer");
+        column.getFacets().put("footer", label);
+        output = new UIOutput();
+        if (ids) {
+            output.setId("output");
+        }
+        output.setValueBinding("value",
+                               application.createValueBinding("#{foo.output}"));
+        column.getChildren().add(output);
+        data.getChildren().add(column);
+
+        column = new UIColumn();
+        if (ids) {
+            column.setId("constantColumn");
+        }
+        label = new UIOutput();
+        if (ids) {
+            label.setId("constantHeader");
+        }
+        label.setValue("Constant Header");
+        column.getFacets().put("header", label);
+        label = new UIOutput();
+        if (ids) {
+            label.setId("constantFooter");
+        }
+        label.setValue("Constant Footer");
+        column.getFacets().put("footer", label);
+        constant = new UIOutput();
+        if (ids) {
+            constant.setId("constant");
+        }
+        constant.setValue("Constant Value");
+        column.getChildren().add(constant);
+        data.getChildren().add(column);
+
+        return command;
 
     }
     

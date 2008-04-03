@@ -61,6 +61,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Iterator;
 
 
 /**
@@ -786,7 +787,7 @@ public class UIData extends UIComponentBase
      * be saved aside and restored before returning in all cases,
      * regardless of the outcome of the search or if any exceptions are
      * thrown in the process.</p>
-     * 
+     *
      * <p>The implementation of this method must never return <code>true</code>
      * if setting the rowIndex of this instance to be equal to
      * <code>newIndex</code> causes this instance to return <code>false</code>
@@ -816,6 +817,18 @@ public class UIData extends UIComponentBase
                 throw new FacesException(e);
             }
         }
+
+        // check the facets, if any, of UIData
+        if (this.getFacetCount() > 0) {
+            for (Iterator<UIComponent> i = this.getFacets().values().iterator(); i.hasNext(); ) {
+                UIComponent c = i.next();
+                if (clientId.equals(c.getClientId(context))) {
+                    callback.invokeContextCallback(context, c);
+                    return true;
+                }
+            }
+        }
+
         int lastSep, newRow, savedRowIndex = this.getRowIndex();
         try {
             // If we need to strip out the rowIndex from our id
@@ -1207,7 +1220,7 @@ public class UIData extends UIComponentBase
                     continue;
                 }
                 if (column.getFacetCount() > 0) {
-                    for (UIComponent columnFacet : column.getFacets().values()) {                      
+                    for (UIComponent columnFacet : column.getFacets().values()) {
                         if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
                             columnFacet.processDecodes(context);
                         } else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
@@ -1294,7 +1307,7 @@ public class UIData extends UIComponentBase
     private boolean keepSaved(FacesContext context) {
 
         return (contextHasErrorMessages(context) || isNestedWithinUIData());
-        
+
     }
 
 
