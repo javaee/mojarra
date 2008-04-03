@@ -1,5 +1,5 @@
 /*
- * $Id: ELUtils.java,v 1.6 2007/11/05 21:11:10 rlubke Exp $
+ * $Id: ELUtils.java,v 1.7 2007/12/14 19:28:23 rlubke Exp $
  */
 
 /*
@@ -436,6 +436,14 @@ public class ELUtils {
             createValueExpression(context.getELContext(),
                                   expression,
                                   expectedType);
+    }
+
+
+    public static Object coerce(Object value, Class<?> toType) {
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        return context.getApplication().getExpressionFactory().coerceToType(value, toType);
+
     }
 
 
