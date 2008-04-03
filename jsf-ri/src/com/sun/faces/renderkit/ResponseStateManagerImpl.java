@@ -1,12 +1,12 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.45 2007/07/25 22:50:37 rlubke Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.46 2007/07/26 00:17:39 rlubke Exp $
  */
 
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * 
+ *
  * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
- * 
+ *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -14,7 +14,7 @@
  * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
  * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- * 
+ *
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
  * Sun designates this particular file as subject to the "Classpath" exception
@@ -23,9 +23,9 @@
  * Header, with the fields enclosed by brackets [] replaced by your own
  * identifying information: "Portions Copyrighted [year]
  * [name of copyright owner]"
- * 
+ *
  * Contributor(s):
- * 
+ *
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
  * elects to include this software in this distribution under the [CDDL or GPL
@@ -88,26 +88,34 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     private static final String FACES_VIEW_STRUCTURE =
            "com.sun.faces.FACES_VIEW_STRUCTURE";
 
+    private static final char[] STATE_FIELD_START =
+          ("<input type=\"hidden\" name=\""
+           + ResponseStateManager.VIEW_STATE_PARAM
+           + "\" id=\""
+           + ResponseStateManager.VIEW_STATE_PARAM
+           + "\" value=\"").toCharArray();
+
     private static final char[] STATE_FIELD_END =
           "\" />".toCharArray();
 
-    private char[] stateFieldStart;
+
     private SerializationProvider serialProvider;
-    private Boolean compressState;   
-    private ByteArrayGuard guard; 
+    private Boolean compressState;
+    private ByteArrayGuard guard;
     private int csBuffSize;
 
     public ResponseStateManagerImpl() {
 
+        super();
         init();
 
-    }      
+    }
 
     /** @see {@link ResponseStateManager#getComponentStateToRestore(javax.faces.context.FacesContext)} */
     @Override
     @SuppressWarnings("deprecation")
     public Object getComponentStateToRestore(FacesContext context) {
-                 
+
         return context.getExternalContext().getRequestMap()
               .get(FACES_VIEW_STATE);
 
@@ -141,31 +149,31 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
             serialProvider = SerializationProviderFactory
                   .createInstance(context.getExternalContext());
         }
-        
+
         StateManager stateManager = Util.getStateManager(context);
 
         String viewString = getStateParam(context);
-       
+
         if (viewString == null) {
             return null;
         }
 
         if (stateManager.isSavingStateInClient(context)) {
-                    
-         
-            ObjectInputStream ois = null;           
 
-            try {                           
+
+            ObjectInputStream ois = null;
+
+            try {
                 InputStream bis;
                 if (guard != null) {
                     bis = new CipherInputStream(
                           new Base64InputStream(viewString),
-                          guard.getDecryptionCipher());                    
+                          guard.getDecryptionCipher());
                 } else {
                     bis = new Base64InputStream(viewString);
                 }
-                    
-                if (compressState) {                                        
+
+                if (compressState) {
                     ois = serialProvider.createObjectInputStream(
                           new GZIPInputStream(bis));
                 } else {
@@ -197,7 +205,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
             }
         } else {
             return viewString;
-        }       
+        }
     }
 
 
@@ -214,7 +222,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
         StateManager stateManager = Util.getStateManager(context);
         ResponseWriter writer = context.getResponseWriter();
 
-        writer.write(stateFieldStart);
+        writer.write(STATE_FIELD_START);
 
         if (stateManager.isSavingStateInClient(context)) {
             ObjectOutputStream oos = null;
@@ -250,9 +258,9 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 
                 // flush everything to the underlying writer
                 bos.finish();
-                
+
                 if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.fine("Client State: total number of characters" 
+                    LOGGER.fine("Client State: total number of characters"
                                 + " written: " + bos.getTotalCharsWritten());
                 }
             } finally {
@@ -263,7 +271,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
                         // ignore
                     }
                 }
-                    
+
             }
 
         } else {
@@ -300,7 +308,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 
         context.getExternalContext().getRequestMap()
              .put(FACES_VIEW_STRUCTURE, structure);
-        
+
     }
 
 
@@ -346,19 +354,19 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
             pValue = null;
         }
         return pValue;
-        
+
     }
 
 
     /**
      * <p>Perform the necessary intialization to make this
-     * class work.</p>    
+     * class work.</p>
      */
     private void init() {
-        
+
         WebConfiguration webConfig = WebConfiguration.getInstance();
         assert(webConfig != null);
-        
+
         String pass = webConfig.getEnvironmentEntry(
                         WebEnvironmentEntry.ClientStateSavingPassword);
         if (pass != null) {
@@ -368,7 +376,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
                             BooleanWebContextInitParameter.CompressViewState);
         String size = webConfig.getOptionValue(
                          WebContextInitParameter.ClientStateWriteBufferSize);
-        String defaultSize = 
+        String defaultSize =
               WebContextInitParameter.ClientStateWriteBufferSize.getDefaultValue();
         try {
             csBuffSize = Integer.parseInt(size);
@@ -380,12 +388,12 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
                                    WebContextInitParameter.ClientStateWriteBufferSize.getQualifiedName(),
                                    size,
                                    defaultSize});
-                }          
+                }
                 csBuffSize = Integer.parseInt(defaultSize);
             } else {
                 csBuffSize /= 2;
                 if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.fine("Using client state buffer size of " 
+                    LOGGER.fine("Using client state buffer size of "
                                 + csBuffSize);
                 }
             }
@@ -397,21 +405,8 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
                                    WebContextInitParameter.ClientStateWriteBufferSize.getQualifiedName(),
                                    size,
                                    defaultSize});
-                }   
+                }
             csBuffSize = Integer.parseInt(defaultSize);
-        }
-
-        if (webConfig
-              .isOptionEnabled(BooleanWebContextInitParameter.EnableXhtmlStateForms)) {
-            stateFieldStart = ("<input type=\"hidden\" name=\""
-                               + ResponseStateManager.VIEW_STATE_PARAM
-                               + "\" value=\"").toCharArray();
-        } else {
-            stateFieldStart = ("<input type=\"hidden\" name=\""
-                               + ResponseStateManager.VIEW_STATE_PARAM
-                               + "\" id=\""
-                               + ResponseStateManager.VIEW_STATE_PARAM
-                               + "\" value=\"").toCharArray();
         }
                 
     }

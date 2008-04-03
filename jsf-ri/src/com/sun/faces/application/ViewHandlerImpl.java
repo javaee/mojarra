@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.107 2007/06/29 18:43:25 rlubke Exp $
+ * $Id: ViewHandlerImpl.java,v 1.108 2007/07/26 00:17:38 rlubke Exp $
  */
 
 
@@ -81,7 +81,7 @@ import java.util.logging.Logger;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.107 2007/06/29 18:43:25 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.108 2007/07/26 00:17:38 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -915,8 +915,8 @@ public class ViewHandlerImpl extends ViewHandler {
             StringBuilder builder = fWriter.getBuffer();
             // begin writing...
             int totalLen = builder.length();
-            StringBuilder stateBuilder = state.getBuffer();
-            int stateLen = stateBuilder.length();
+            StateBuffer stateBuilder = new StateBuffer(state.getBuffer(),
+                                                       context);
             int pos = 0;
             int tildeIdx = getNextDelimiterIndex(builder, pos);
             while (pos < totalLen) {
@@ -940,29 +940,35 @@ public class ViewHandlerImpl extends ViewHandler {
                               pos) == tildeIdx) {
                             // buf is effectively zero'd out at this point
                             int statePos = 0;
+                            int stateLen = stateBuilder.length();
                             while (statePos < stateLen) {
                                 if ((stateLen - statePos) > bufSize) {
                                     // enough state to fill the buffer
-                                    stateBuilder.getChars(statePos,
-                                                          (statePos + bufSize),
-                                                          buf,
-                                                          0);
+                                    stateBuilder.getBuffer().getChars(statePos,
+                                                                      (statePos + bufSize),
+                                                                      buf,
+                                                                      0);
                                     orig.write(buf);
                                     statePos += bufSize;
                                 } else {
+                                    stateBuilder.getBuffer().getChars(statePos,
+                                                                      stateLen,
+                                                                      buf,
+                                                                      0);
                                     int slen = (stateLen - statePos);
-                                    stateBuilder.getChars(statePos,
-                                                          stateLen,
-                                                          buf,
-                                                          0);
                                     orig.write(buf, 0, slen);
                                     statePos += slen;
                                 }
-
                             }
+
                              // push us past the last '~' at the end of the marker
                             pos += (len + STATE_MARKER_LEN);
                             tildeIdx = getNextDelimiterIndex(builder, pos);
+                            if (tildeIdx != -1) {
+                                // we have more state to write, so update the
+                                // buffer
+                                stateBuilder.updateBuffer();    
+                            }
                         } else {
                             pos = tildeIdx;
                             tildeIdx = getNextDelimiterIndex(builder,
@@ -994,6 +1000,51 @@ public class ViewHandlerImpl extends ViewHandler {
             return builder.indexOf(RIConstants.SAVESTATE_FIELD_DELIMITER,
                                    offset);
         }
+
+
+        /*
+         * A simple wrapper around the state content returned by the
+         * StateManager.  If 'EnabexhtmlStateForms' is enabled, we need
+         * to remove the 'id' content from the buffer *after* the first
+         * time we've written the state field out.
+         */
+        private static class StateBuffer {
+
+            private static final String ID_SECTION =
+                  "id=\"" + ResponseStateManager.VIEW_STATE_PARAM + '"';
+
+            private boolean stateWrittenOnce;
+            private StringBuilder stateContent;
+            private boolean xhtml;
+
+            public StateBuffer(StringBuilder stateContent,
+                               FacesContext context) {
+                this.stateContent = stateContent;
+                WebConfiguration webConfig = WebConfiguration
+                      .getInstance(context.getExternalContext());
+                xhtml = webConfig.isOptionEnabled(
+                      WebConfiguration.BooleanWebContextInitParameter.EnableXhtmlStateForms);
+            }
+
+            public StringBuilder getBuffer() {
+               return stateContent;
+            }
+
+            public void updateBuffer() {
+                if (xhtml && !stateWrittenOnce) {
+                    stateWrittenOnce = true;
+                    int startIdx = stateContent.indexOf(ID_SECTION);
+                    int endIdx = startIdx + ID_SECTION.length();
+                    stateContent.replace(startIdx, endIdx + 1, "");
+                    stateContent.trimToSize();
+                }
+            }
+
+            public int length() {
+                return stateContent.length();
+            }
+        }
+
 
     }
 
