@@ -891,9 +891,9 @@ public class RenderKitUtils {
                                                      Param[] params) {
 
         StringBuilder sb = new StringBuilder(256);    
-        sb.append("if(typeof jsfcljs == 'function'){jsfcljs(document.forms['");
+        sb.append("if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('");
         sb.append(formClientId);        
-        sb.append("'],'");
+        sb.append("'),'");
         sb.append(commandClientId).append(',').append(commandClientId);
         for (Param param : params) {
             String pn = param.name;
