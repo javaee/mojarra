@@ -1,5 +1,5 @@
 /*
- * $Id: WebConfiguration.java,v 1.24 2007/05/21 19:59:38 rlubke Exp $
+ * $Id: WebConfiguration.java,v 1.25 2007/06/05 23:21:02 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -707,6 +707,10 @@ public class WebConfiguration {
         EnableLazyBeanValidation(
              "com.sun.faces.enableLazyBeanValidation",
              true
+        ),
+        EnableLoadBundle11Compatibility(
+             "com.sun.faces.enabledLoadBundle11Compatibility",
+             false
         );
 
         private BooleanWebContextInitParameter alternate;

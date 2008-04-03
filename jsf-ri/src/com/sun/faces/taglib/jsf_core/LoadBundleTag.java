@@ -1,5 +1,5 @@
 /*
- * $Id: LoadBundleTag.java,v 1.18 2007/06/01 18:28:31 edburns Exp $
+ * $Id: LoadBundleTag.java,v 1.19 2007/06/05 23:21:01 rlubke Exp $
  */
 
 /*
@@ -40,14 +40,32 @@
 
 package com.sun.faces.taglib.jsf_core;
 
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.el.ELUtils;
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.ReflectionUtils;
+import com.sun.faces.util.Util;
+
+import javax.el.ValueExpression;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIComponentBase;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.webapp.UIComponentClassicTagBase;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.Tag;
+import javax.servlet.jsp.tagext.TagSupport;
+
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -55,22 +73,6 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.el.ValueExpression;
-import javax.faces.component.UIComponentBase;
-import javax.faces.context.FacesContext;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.TagSupport;
-
-import com.sun.faces.util.Util;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.el.ELUtils;
-import com.sun.faces.util.ReflectionUtils;
-import java.lang.reflect.Method;
-import java.util.List;
-import javax.faces.component.UIComponent;
-import javax.faces.webapp.UIComponentClassicTagBase;
-import javax.servlet.jsp.tagext.Tag;
 
 /**
  * <p>Tag action that loads the specified ResourceBundle as a Map into
@@ -311,23 +313,28 @@ public class LoadBundleTag extends TagSupport {
                 }
             };
 
-        context.getExternalContext().getRequestMap().put(var, toStore);
-        
-        // the UIComponent that wraps the Map
-        UIComponent bundleComponent = createNewLoadBundleComponent(var, toStore);
-        UIComponentClassicTagBase parentTag = getParentUIComponentTag();
-        
-        // Is this loadBundle tag instance outside of <f:view>?
-        if (null == parentTag) {
-            // Yes.  Store the bundleComponent in a list so the <f:view> tag
-            // can add the list contents as the first children.
-            List<UIComponent> preViewBundleComponents = 
-                    getPreViewLoadBundleComponentList();
-            preViewBundleComponents.add(bundleComponent);
-        }
-        else {
-            // No.  Use addChild to add the bundeComponent to the tree.
-            addChildToParentTagAndParentComponent(bundleComponent, parentTag);
+        ExternalContext extContext = context.getExternalContext();
+        extContext.getRequestMap().put(var, toStore);
+
+        if (WebConfiguration.getInstance(extContext)
+              .getBooleanContextInitParameter
+                    (WebConfiguration.BooleanWebContextInitParameter.EnableLoadBundle11Compatibility)) {
+            // the UIComponent that wraps the Map
+            UIComponent bundleComponent =
+                  createNewLoadBundleComponent(var, toStore);
+            UIComponentClassicTagBase parentTag = getParentUIComponentTag();
+
+            // Is this loadBundle tag instance outside of <f:view>?
+            if (null == parentTag) {
+                // Yes.  Store the bundleComponent in a list so the <f:view> tag
+                // can add the list contents as the first children.
+                List<UIComponent> preViewBundleComponents =
+                      getPreViewLoadBundleComponentList();
+                preViewBundleComponents.add(bundleComponent);
+            } else {
+                // No.  Use addChild to add the bundeComponent to the tree.
+                addChildToParentTagAndParentComponent(bundleComponent, parentTag);
+            }
         }
 
         return (EVAL_BODY_INCLUDE);
