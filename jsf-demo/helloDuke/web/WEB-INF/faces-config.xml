@@ -60,4 +60,14 @@
     </navigation-case>
   </navigation-rule>
 
+  <managed-bean>
+    <description>
+      The "backing file" bean that backs up the helloDuke webapp
+    </description>
+    <managed-bean-name>UserNameBean</managed-bean-name>
+    <managed-bean-class>helloDuke.UserNameBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+
+
 </faces-config>

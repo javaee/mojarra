@@ -65,7 +65,6 @@
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
     <body bgcolor="white">
     <h2>My name is Duke.  What is yours?</h2>
-    <jsp:useBean id="UserNameBean" class="helloDuke.UserNameBean" scope="session" />
     <f:view>
     <h:form id="helloForm" >
         <h:graphicImage id="waveImg" url="/wave.med.gif" />
