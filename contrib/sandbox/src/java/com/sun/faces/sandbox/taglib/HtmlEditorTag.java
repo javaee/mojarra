@@ -65,9 +65,9 @@ public class HtmlEditorTag extends UISandboxComponentTag {
                 " not expected type.  Expected: com.sun.faces.sandbox.component.HtmlEditor.  Perhaps you're missing a tag?");
         }
         HtmlEditor editor = (HtmlEditor)component;
-        setIntegerProperty(editor, "cols", cols);
+        setStringProperty(editor, "cols", cols);
         setStringProperty (editor, "config", config);
-        setIntegerProperty(editor, "rows", rows);
+        setStringProperty (editor, "rows", rows);
         setStringProperty (editor, "themeStyle", themeStyle);
         setStringProperty (editor, "toolbarLocation", toolbarLocation);
         setStringProperty (editor, "value", value);
