@@ -35,18 +35,37 @@
 --%>
 
 <%@ include file="header.inc" %>
-<ul>
-    <li><a href="calendar.jsf">Calendar Demo</a></li>
-    <li><a href="contextMenu.jsf">Context Menu Demo</a></li>
-    <li><a href="download.jsf">Download Demo</a></li>
-    <li><a href="htmlEditor.jsf">HTML Editor Demo</a></li>
-    <li><a href="menu.jsf">Menu Demo</a></li>
-    <li><a href="menuBar.jsf">Menu Bar Demo</a></li>
-    <li><a href="multiFileUpload.jsf">Multi-file Upload Demo</a></li>
-    <li><a href="example1/This+is+pretty+URL+%231">Pretty URL PhaseListener Demo #1</a></li>
-    <li><a href="example/2/This+is+pretty+URL+%232">Pretty URL PhaseListener Demo #2</a></li>
-    <!-- li><a href="selectItems.jsf">SelectItems Demo</a></li -->
-    <li><a href="tabView.jsf">TabView Demo</a></li>
-    <li><a href="tree.jsf">Tree Demo</a></li>
-</ul>
+        <ul>
+            <li><a href="calendar.jsf">Calendar Demo</a></li>
+            <li><a href="download.jsf">Download Demo</a></li>
+            <li>HtmlEditor Demo
+				<ul>
+					<li><a href="htmlEditor.jsf?mode=normal">Normal Mode</a></li>
+					<li><a href="htmlEditor.jsf?mode=simplified">Simplified Mode</a></li>
+					<li><a href="htmlEditor.jsf?mode=full">Full Mode</a></li>
+				</ul>
+			</li>
+			<li>Menu Demo
+				<ul>
+		            <li><a href="menu.jsf">Menu Demo</a></li>
+		            <li><a href="contextMenu.jsf">Context Menu Demo</a></li>
+		            <li><a href="menuBar.jsf">Menu Bar Demo</a></li>
+	            </ul>
+            </li>
+            <li><a href="multiFileUpload.jsf">Multi-file Upload Demo</a></li>
+			<li>Pretty URL Demo
+				<ul>
+            		<li><a href="example1/This+is+pretty+URL+%231">Pretty URL PhaseListener Demo #1</a></li>
+            		<li><a href="example/2/This+is+pretty+URL+%232">Pretty URL PhaseListener Demo #2</a></li>
+            	</ul>
+            </li>
+            <li>TabView Demo
+            	<ul>
+            		<li><a href="tabView.jsf?tabStyle=module">Module Style</a></li>
+            		<li><a href="tabView.jsf?tabStyle=border">Border Style</a></li>
+            		<li><a href="tabView.jsf?tabStyle=round">Round Style</a></li>
+            	</ul>
+            </li>
+            <li><a href="tree.jsf">Tree Demo</a></li>
+        </ul>
 <%@ include file="footer.inc" %>

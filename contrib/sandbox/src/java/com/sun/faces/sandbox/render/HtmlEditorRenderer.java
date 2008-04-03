@@ -59,9 +59,9 @@ import com.sun.faces.sandbox.util.YuiConstants;
  *
  */
 public class HtmlEditorRenderer extends Renderer {
-    private static final String TINY_MCE = "/tinymce/tiny_mce.js";
+    private static final String TINY_MCE = "/html_editor/tiny_mce.js";
     protected static final String scriptIds[] = { 
-        YuiConstants.JS_YAHOO_DOM_EVENT
+        //YuiConstants.JS_YAHOO_DOM_EVENT
     };
 
     @Override
@@ -109,38 +109,24 @@ public class HtmlEditorRenderer extends Renderer {
             writer.write((String)editor.getValue());
         }
         writer.endElement("textarea");
-    }
-    
-    @Override
-    public void encodeEnd(FacesContext context, UIComponent component)
-            throws IOException {
-        HtmlEditor editor = (HtmlEditor)component;
-        String id = editor.getClientId(context);
-        ResponseWriter writer = context.getResponseWriter();
-        
-        // Init TinyMCE
         writer.startElement("script", editor);
+        writer.writeAttribute("language", "javascript", "language");
         writer.writeAttribute("type", "text/javascript", "type");
-//        writer.write("YAHOO.util.Event.onContentReady(\"" + id + "\", function() {\n");
-        writer.write("YAHOO.util.Event.onDOMReady(function() {\n");
-        writer.write("  tinyMCE.init({" + buildConfig(context, editor) + "});\n");
-        writer.write("});"); //, null, true);");
+        writer.write("  tinyMCE.init({" + buildConfig(context, editor) + "});");
         writer.endElement("script");
     }
-
-
-
+    
     private String buildConfig(FacesContext context, HtmlEditor comp) {
         StringBuilder config = new StringBuilder();
         String id = comp.getClientId(context);
         
         config.append("mode:'exact'")
+            .append(",elements:'" + id +"'")
 //            .append(",theme_advanced_layout_manager : 'RowLayout'")
             .append(",theme: 'advanced'")
             .append(",theme_advanced_toolbar_location : '" + comp.getToolbarLocation() + "'")
-            .append(",theme_advanced_path_location : \"bottom\"")
-            .append(",theme_advanced_toolbar_align : \"center\"")
-            .append(",elements:'" + id +"'")
+            .append(",theme_advanced_path_location : 'bottom'")
+            .append(",theme_advanced_toolbar_align : 'center'")
             .append(getThemeStyleConfigs(comp))
             .append((comp.getConfig() != null) ? "," + comp.getConfig() : "");
         
@@ -149,35 +135,33 @@ public class HtmlEditorRenderer extends Renderer {
     
     private String getThemeStyleConfigs(HtmlEditor comp) {
         StringBuilder config = new StringBuilder();
-        // TODO:  Add this back in post-1.0 when we figure out how best to support the HTML pages in the library?
         if ("full".equalsIgnoreCase(comp.getThemeStyle())) {
-            config.append(",plugins : \"table,save,advhr,advimage,advlink,emotions,iespell,insertdatetime,preview,zoom,flash,searchreplace,print,contextmenu\",")
-                .append("theme_advanced_buttons1_add_before : \"save,separator\",")
-                .append("theme_advanced_buttons1_add : \"fontselect,fontsizeselect\",")
-                .append("theme_advanced_buttons2_add : \"separator,insertdate,inserttime,preview,zoom,separator,forecolor,backcolor\",")
-                .append("theme_advanced_buttons2_add_before: \"cut,copy,paste,separator,search,replace,separator\",")
-                .append("theme_advanced_buttons3_add_before : \"tablecontrols,separator\",")
-                .append("theme_advanced_buttons3_add : \"emotions,iespell,flash,advhr,separator,print\",")
-                .append("theme_advanced_toolbar_location : \"top\",")
-                .append("theme_advanced_toolbar_align : \"left\",")
-                .append("plugin_insertdate_dateFormat : \"%Y-%m-%d\",")
-                .append("plugin_insertdate_timeFormat : \"%H:%M:%S\",")
-                .append("extended_valid_elements : \"a[name|href|target|title|onclick],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]\",")
-                .append("external_link_list_url : \"example_data/example_link_list.js\",")
-                .append("external_image_list_url : \"example_data/example_image_list.js\",")
-                .append("flash_external_list_url : \"example_data/example_flash_list.js\"");
+            config.append(",plugins : 'table,save,advhr,advimage,advlink,emotions,iespell,insertdatetime,preview,zoom,flash,searchreplace,print,contextmenu',")
+                .append("theme_advanced_buttons1_add_before : 'save,separator',")
+                .append("theme_advanced_buttons1_add : 'fontselect,fontsizeselect',")
+                .append("theme_advanced_buttons2_add : 'separator,insertdate,inserttime,preview,zoom,separator,forecolor,backcolor',")
+                .append("theme_advanced_buttons2_add_before: 'cut,copy,paste,separator,search,replace,separator',")
+                .append("theme_advanced_buttons3_add_before : 'tablecontrols,separator',")
+                .append("theme_advanced_buttons3_add : 'emotions,iespell,flash,advhr,separator,print',")
+                .append("theme_advanced_toolbar_location : 'top',")
+                .append("theme_advanced_toolbar_align : 'left',")
+                .append("plugin_insertdate_dateFormat : '%Y-%m-%d',")
+                .append("plugin_insertdate_timeFormat : '%H:%M:%S',")
+                .append("extended_valid_elements : 'a[name|href|target|title|onclick],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]',")
+                .append("external_link_list_url : 'example_data/example_link_list.js',")
+                .append("external_image_list_url : 'example_data/example_image_list.js',")
+                .append("flash_external_list_url : 'example_data/example_flash_list.js'");
         } else if ("simplified".equalsIgnoreCase(comp.getThemeStyle())) {
-            //config.append(",theme_advanced_buttons1 : \"bold,italic,underline,separator,strikethrough,justifyleft,justifycenter,justifyright, justifyfull,bullist,numlist,undo,redo,link,unlink\",")
-            config.append(",theme_advanced_buttons1 : \"bold,italic,underline,separator,strikethrough,justifyleft,justifycenter,justifyright,justifyfull,bullist,numlist,undo,redo,link,unlink\",")
-                .append("theme_advanced_buttons2 : \"\",")
-                .append("theme_advanced_buttons3 : \"\",")
-                .append("extended_valid_elements : \"a[name|href|target|title|onclick],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]\"");
+            //config.append(",theme_advanced_buttons1 : 'bold,italic,underline,separator,strikethrough,justifyleft,justifycenter,justifyright, justifyfull,bullist,numlist,undo,redo,link,unlink',")
+            config.append(",theme_advanced_buttons1 : 'bold,italic,underline,separator,strikethrough,justifyleft,justifycenter,justifyright,justifyfull,bullist,numlist,undo,redo,link,unlink',")
+                .append("theme_advanced_buttons2 : '',")
+                .append("theme_advanced_buttons3 : '',")
+                .append("extended_valid_elements : 'a[name|href|target|title|onclick],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]'");
         } else {
-//            config.append(",theme: 'advanced'");
-            config.append(",theme_advanced_buttons1 : \"bold,italic,underline,strikethrough,separator,justifyleft,justifycenter,justifyright,justifyfull,separator,styleselect,formatselect,separator,bullist,numlist,separator,outdent,indent\",")
-            .append("theme_advanced_buttons2 : \"undo,redo,separator,link,unlink,anchor,image,cleanup,help,code,separator,hr,removeformat,visualaid,separator,sub,sup\",")
-            .append("theme_advanced_buttons3 : \"\",")
-            .append("extended_valid_elements : \"a[name|href|target|title|onclick],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]\"");
+            config.append(",theme_advanced_buttons1 : 'bold,italic,underline,strikethrough,separator,justifyleft,justifycenter,justifyright,justifyfull,separator,styleselect,formatselect,separator,bullist,numlist,separator,outdent,indent',")
+            .append("theme_advanced_buttons2 : 'undo,redo,separator,link,unlink,anchor,image,cleanup,help,code,separator,hr,removeformat,visualaid,separator,sub,sup',")
+            .append("theme_advanced_buttons3 : '',")
+            .append("extended_valid_elements : 'a[name|href|target|title|onclick],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]'");
         }
         
         return config.toString();

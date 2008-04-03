@@ -41,8 +41,6 @@ package com.sun.faces.sandbox.component;
 
 import javax.faces.component.UIOutput;
 
-import com.sun.faces.sandbox.model.TreeNode;
-
 /**
  * @author Jason Lee
  *
@@ -55,36 +53,21 @@ public class YuiTabView extends UIOutput {
     public static String TABSTYLE_ROUND = "round";
     public static String TABSTYLE_MODULE = "module";
     
-    protected String tabStyle = TABSTYLE_ROUND; // Currently supports "border", "round" or "module"
-    protected String orientation = "top"; // top, right, bottom, or left
     private String minHeight = null;
     private String maxHeight = "auto"; // "dynamic", "auto", or "##px"
+    protected String tabStyle = TABSTYLE_ROUND; // Currently supports "border", "round" or "module"
+    protected String orientation = "top"; // top, right, bottom, or left
     
     public YuiTabView()          { setRendererType(RENDERER_TYPE); }
     public String getFamily()    { return COMPONENT_TYPE; }
     
-    public String getOrientation() {
-        return orientation;
-    }
-    public void setOrientation(String orientation) {
-        this.orientation = orientation;
-    }
-    public String getTabStyle() {
-        return tabStyle;
-    }
-    public void setTabStyle(String tabStyle) {
-        this.tabStyle = tabStyle;
-    }
-    public String getMaxHeight() {
-        return maxHeight;
-    }
-    public void setMaxHeight(String maxHeight) {
-        this.maxHeight = maxHeight;
-    }
-    public String getMinHeight() {
-        return minHeight;
-    }
-    public void setMinHeight(String minHeight) {
-        this.minHeight = minHeight;
-    }
+    public String getMaxHeight()   { return ComponentHelper.getValue(this, "maxHeight", maxHeight); }
+    public String getMinHeight()   { return ComponentHelper.getValue(this, "minheight", minHeight); }
+    public String getOrientation() { return ComponentHelper.getValue(this, "orientation", orientation); }
+    public String getTabStyle()    { return ComponentHelper.getValue(this, "tabStyle", tabStyle); }
+    
+    public void setMaxHeight(String maxHeight)     { this.maxHeight = maxHeight; }
+    public void setMinHeight(String minHeight)     { this.minHeight = minHeight; }
+    public void setOrientation(String orientation) { this.orientation = orientation; }
+    public void setTabStyle(String tabStyle)       { this.tabStyle = tabStyle; }
 }

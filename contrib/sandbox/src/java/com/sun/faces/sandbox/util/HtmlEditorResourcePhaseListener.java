@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 public class HtmlEditorResourcePhaseListener extends StaticResourcePhaseListener {   
     private static final long serialVersionUID = 1L;
     
-    protected String URL_PREFIX = "/tinymce";
+    protected String URL_PREFIX = "/html_editor";
 
     @Override
     protected boolean isThisMyFile(String uri) {

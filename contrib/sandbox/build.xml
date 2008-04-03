@@ -84,7 +84,7 @@
     <property name="jmock.version" value="1.2.0" />
     <property name="logging.version" value="1.1" />
     <property name="shale.version" value="1.1.0-SNAPSHOT" />
-    <property name="tinymce.version" value="2_1_0" />
+    <property name="tinymce.version" value="2_1_1_1" />
     
     <property name="codec.jar" value="${sandbox.dependency.base.dir}/commons-codec-${codec.version}.jar"/>
     <property name="facelets.jar" value="${sandbox.dependency.base.dir}/jsf-facelets-${facelets.version}.jar"/>
@@ -101,6 +101,7 @@
     <property name="tinymce.archive" value="${sandbox.dependency.base.dir}/tinymce_${tinymce.version}.zip"/>
 
     <property name="applet.archive.name" value="${name}-upload-applet" />
+	<property name="htmleditor.dir" value="${resource.dir}/html_editor" />
 
     <path id="impl.compile.classpath">
         <pathelement location="${jsf-api.jar}"/>
@@ -283,16 +284,16 @@
         <!-- TinyMCE -->
         <if>
             <not>
-                <available file="${resource.dir}/tinymce" property="ignored"/>
+                <available file="${htmleditor.dir}" property="ignored"/>
             </not>
             <then>
                 <get src="${sourceforge.mirror}/tinymce/tinymce_${tinymce.version}.zip"
                      dest="${tinymce.archive}"
                      usetimestamp="true"/>
-                <mkdir dir="${resource.dir}/tinymce"/>
+                <mkdir dir="${htmleditor.dir}"/>
                 <mkdir dir="tinymce.work"/>
                 <unzip src="${tinymce.archive}" dest="tinymce.work"/>
-                <copy todir="${resource.dir}/tinymce">
+                <copy todir="${htmleditor.dir}">
                     <fileset dir="tinymce.work/tinymce/jscripts/tiny_mce">
                         <exclude name="**/*_src.js"/>
                     </fileset>

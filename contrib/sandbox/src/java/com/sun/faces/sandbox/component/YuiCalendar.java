@@ -111,7 +111,7 @@ public class YuiCalendar extends UIInput {
     public Integer getStartWeekday()   { return ComponentHelper.getValue(this, "startWeekday", startWeekday); }
     public String getMinDate()         { return ComponentHelper.getValue(this, "minDate", minDate); }
     public String getMaxDate()         { return ComponentHelper.getValue(this, "maxDate", maxDate); }   
-    public Boolean getShowMenus()    { return ComponentHelper.getValue(this, "showMenus", showMenus); }
+    public Boolean getShowMenus()      { return ComponentHelper.getValue(this, "showMenus", showMenus); }
 
     public void setHideBlankWeeks(Boolean hideBlankWeeks) { this.hideBlankWeeks = hideBlankWeeks; }
     public void setMultiSelect(Boolean multiSelect)       { this.multiSelect = multiSelect; }
@@ -122,7 +122,7 @@ public class YuiCalendar extends UIInput {
     public void setStartWeekday(Integer startWeekday)     { this.startWeekday = startWeekday; }
     public void setMinDate(String minDate)                { this.minDate = minDate; }
     public void setMaxDate(String maxDate)                { this.maxDate = maxDate; }
-    public void setShowMenus(Boolean showMenus)       { this.showMenus = showMenus; }
+    public void setShowMenus(Boolean showMenus)           { this.showMenus = showMenus; }
 
 
     
