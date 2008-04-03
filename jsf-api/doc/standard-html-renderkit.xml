@@ -36,7 +36,7 @@
 -->
 <!-- =========== FULL CONFIGURATION FILE ================================== -->
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xi="http://www.w3.org/2001/XInclude" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd" version="1.2">
-<!-- Generic User Interface Components -->
+  <!-- Generic User Interface Components -->
   <component>
     <component-type>javax.faces.Column</component-type>
     <component-class>javax.faces.component.UIColumn</component-class>
@@ -3937,7 +3937,7 @@
       <component-family>javax.faces.ViewRoot</component-family>
     </component-extension>
   </component>
-<!-- Concrete HTML Components -->
+  <!-- Concrete HTML Components -->
   <component>
     <description><![CDATA[<p>Represents a column that will be rendered 
       in an HTML <code>table</code> element.</p>]]></description>
@@ -6837,33 +6837,6 @@
       <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
-      </property-extension>
-    </property>
-    <property>
-      <description><![CDATA[
-          <p>Context-relative URL to retrieve the resource associated
-          with this component. This is an alias for the "value"
-          property.</p>
-        ]]></description>
-      <display-name>URL</display-name>
-      <icon/>
-      <property-name>url</property-name>
-      <property-class>java.lang.Object</property-class>
-      <property-extension>
-        <value-expression-enabled>true</value-expression-enabled>
-      </property-extension>
-    </property>
-    <property>
-      <description><![CDATA[
-          <p>The value of this attribute will be rendered as the value
-          of the "src" attribute on the rendered markup.</p>
-        ]]></description>
-      <display-name>Value</display-name>
-      <icon/>
-      <property-name>value</property-name>
-      <property-class>java.lang.Object</property-class>
-      <property-extension>
-        <value-expression-enabled>true</value-expression-enabled>
       </property-extension>
     </property>
     <property>
@@ -17454,7 +17427,7 @@
       <renderer-type>javax.faces.Radio</renderer-type>
     </component-extension>
   </component>
-<!-- Standard HTML Renderkit -->
+  <!-- Standard HTML Renderkit -->
   <render-kit>
     <description><![CDATA[
      The standard HTML RenderKit.  Please see the spec for additional
@@ -19624,33 +19597,6 @@
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
-        </attribute-extension>
-      </attribute>
-      <attribute>
-        <description><![CDATA[
-          <p>Context-relative URL to retrieve the resource associated
-          with this component. This is an alias for the "value"
-          property.</p>
-        ]]></description>
-        <display-name>URL</display-name>
-        <icon/>
-        <attribute-name>url</attribute-name>
-        <attribute-class>java.lang.Object</attribute-class>
-        <attribute-extension>
-          <value-expression-enabled>true</value-expression-enabled>
-        </attribute-extension>
-      </attribute>
-      <attribute>
-        <description><![CDATA[
-          <p>The value of this attribute will be rendered as the value
-          of the "src" attribute on the rendered markup.</p>
-        ]]></description>
-        <display-name>Value</display-name>
-        <icon/>
-        <attribute-name>value</attribute-name>
-        <attribute-class>java.lang.Object</attribute-class>
-        <attribute-extension>
-          <value-expression-enabled>true</value-expression-enabled>
         </attribute-extension>
       </attribute>
       <attribute>
