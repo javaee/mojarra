@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.61 2007/04/27 22:00:12 ofung Exp $
+ * $Id: UIComponentTag.java,v 1.62 2007/05/30 18:49:13 rlubke Exp $
  */
 
 /*
@@ -133,7 +133,7 @@ public abstract class UIComponentTag extends UIComponentClassicTagBase implement
     /**
      * <p>Return <code>true</code> if the specified value conforms to the
      * syntax requirements of a value binding expression.  Such expressions
-`     * may be used on most component tag attributes to signal a desire for
+`    * may be used on most component tag attributes to signal a desire for
      * deferred evaluation of the attribute or property value to be set on
      * the underlying {@link UIComponent}.</p>
      *
