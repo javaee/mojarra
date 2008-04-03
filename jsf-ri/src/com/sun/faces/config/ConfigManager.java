@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManager.java,v 1.4 2007/04/26 22:35:50 rlubke Exp $
+ * $Id: ConfigManager.java,v 1.5 2007/04/27 03:46:33 rlubke Exp $
  */
 
 /*
@@ -411,10 +411,7 @@ public class ConfigManager {
                 // to convert all documents to 1.2
                 ByteArrayOutputStream baos = new ByteArrayOutputStream(4096);
                 StreamResult sResult = new StreamResult(baos);
-                DocumentBuilderFactory tFactory = DbfFactory.getFactory(false);
-                DocumentBuilder tBuilder = tFactory.newDocumentBuilder();
-                tBuilder.setEntityResolver(DbfFactory.FACES_ENTITY_RESOLVER);
-                tBuilder.setErrorHandler(DbfFactory.FACES_ERROR_HANDLER);
+                DocumentBuilder tBuilder = getNonValidatingBuilder();
                 DOMSource domSource
                      = new DOMSource(tBuilder.parse(getInputStream(documentURL),
                                                     documentURL.toExternalForm()));
@@ -428,6 +425,17 @@ public class ConfigManager {
                 is.setSystemId(documentURL.toExternalForm());
                 return is;               
             }
+
+        }
+
+
+        private DocumentBuilder getNonValidatingBuilder() throws Exception {
+
+            DocumentBuilderFactory tFactory = DbfFactory.getFactory(false);
+            DocumentBuilder tBuilder = tFactory.newDocumentBuilder();
+            tBuilder.setEntityResolver(DbfFactory.FACES_ENTITY_RESOLVER);
+            tBuilder.setErrorHandler(DbfFactory.FACES_ERROR_HANDLER);
+            return tBuilder;
 
         }
 
