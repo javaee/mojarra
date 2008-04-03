@@ -51,6 +51,7 @@ import javax.faces.application.ResourceHandler;
 import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.cactus.TestingUtil;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.RequestStateManager;
 import org.apache.cactus.WebRequest;
 
 /**
@@ -278,7 +279,9 @@ public class TestResourceImpl extends ServletFacesTestCase {
 
         ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
         assertTrue(handler != null);
-
+        RequestStateManager.set(getFacesContext(),
+                                RequestStateManager.RESOURCE_REQUEST,
+                                Boolean.TRUE);
         Resource resource = handler.createResource("duke-jar.gif");
         assertTrue(resource != null);
         Map<String,String> headers = resource.getResponseHeaders();
@@ -287,6 +290,14 @@ public class TestResourceImpl extends ServletFacesTestCase {
         assertTrue(headers.get("Expires") != null);
         assertTrue(headers.get("ETag") != null);
         assertTrue(headers.get("Last-Modified") != null);
+
+        // now assert that an empty map is returned if we're not servicing
+        // a resource request
+        RequestStateManager.set(getFacesContext(),
+                                RequestStateManager.RESOURCE_REQUEST,
+                                Boolean.FALSE);
+        headers = resource.getResponseHeaders();
+        assertTrue(headers.isEmpty());
         
     }
 

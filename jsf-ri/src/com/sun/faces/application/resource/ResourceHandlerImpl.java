@@ -60,6 +60,7 @@ import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.RequestStateManager;
 
 /**
  * This is the default implementation of {@link ResourceHandler}.
@@ -68,8 +69,6 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
     // Log instance for this class
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
-    private static final String NORMALIZED_ID_KEY =
-          ResourceHandlerImpl.class.getName() + "NORMALIZED_ID";
 
     ResourceManager manager = new ResourceManager();
     List<Pattern> excludePatterns;
@@ -143,8 +142,16 @@ public class ResourceHandlerImpl extends ResourceHandler {
      */
     public boolean isResourceRequest(FacesContext context) {
 
-        String resourceId = normalizeResourceRequest(context);
-        return (resourceId.startsWith(ResourceHandler.RESOURCE_IDENTIFIER));
+        Boolean isResourceRequest = (Boolean)
+              RequestStateManager.get(context,
+                                      RequestStateManager.RESOURCE_REQUEST);
+        if (isResourceRequest == null) {
+            String resourceId = normalizeResourceRequest(context);
+            isResourceRequest =
+                  resourceId.startsWith(ResourceHandler.RESOURCE_IDENTIFIER);
+        }
+
+        return (isResourceRequest);
 
     }
 
@@ -314,22 +321,18 @@ public class ResourceHandlerImpl extends ResourceHandler {
      */
     private String normalizeResourceRequest(FacesContext context) {
 
-        ExternalContext extCtx = context.getExternalContext();
-        String path = (String) extCtx.getRequestMap().get(NORMALIZED_ID_KEY);
-        if (path == null) {
-            String facesServletMapping = Util.getFacesMapping(context);
-            // If it is extension mapped
-            if (!Util.isPrefixMapped(facesServletMapping)) {
-                path = context.getExternalContext().getRequestServletPath();
-                // strip off the extension
-                int i = path.lastIndexOf(".");
-                if (0 < i) {
-                    path = path.substring(0, i);
-                }
-            } else {
-                path = context.getExternalContext().getRequestPathInfo();
+        String path;
+        String facesServletMapping = Util.getFacesMapping(context);
+        // If it is extension mapped
+        if (!Util.isPrefixMapped(facesServletMapping)) {
+            path = context.getExternalContext().getRequestServletPath();
+            // strip off the extension
+            int i = path.lastIndexOf(".");
+            if (0 < i) {
+                path = path.substring(0, i);
             }
-            extCtx.getRequestMap().put(NORMALIZED_ID_KEY, path);
+        } else {
+            path = context.getExternalContext().getRequestPathInfo();
         }
         return path;
 

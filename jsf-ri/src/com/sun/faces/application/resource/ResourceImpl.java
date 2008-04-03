@@ -46,6 +46,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.Collections;
 
 import javax.faces.application.Resource;
 import javax.faces.context.FacesContext;
@@ -56,6 +57,10 @@ import javax.faces.application.ResourceHandler;
 
 /**
  * Default implementation of {@link javax.faces.application.Resource}.
+ * The ResourceImpl instance itself has the same lifespan as the
+ * request, however, the ResourceInfo instances that back this object
+ * are cached by the ResourceManager to reduce the time spent scanning
+ * for resources.
  */
 public class ResourceImpl extends Resource {
 
@@ -71,10 +76,14 @@ public class ResourceImpl extends Resource {
     /* The meta data on the resource */
     private ResourceInfo resourceInfo;
 
+    /*
+     * Response headers that need to be added by the ResourceManager
+     * implementation.
+     */
+    private Map<String,String> responseHeaders;
 
 
-
-    // -------------------------------------------------------- Constructors
+    // ------------------------------------------------------------ Constructors
 
 
     /**
@@ -95,7 +104,7 @@ public class ResourceImpl extends Resource {
     }
 
 
-    // ------------------------------------------------------ Public Methods
+    // --------------------------------------------------- Methods from Resource
 
 
     /**
@@ -117,34 +126,55 @@ public class ResourceImpl extends Resource {
 
 
     /**
+     * <p>
+     * Implementation note.  Any values added to getResponseHeaders()
+     * will only be visible across multiple calls to this method when
+     * servicing a resource request (i.e. {@link ResourceHandler#isResourceRequest(javax.faces.context.FacesContext)}
+     * returns <code>true</code>).  If we're not servicing a resource request,
+     * an empty Map will be returned and the values added are effectively thrown
+     * away.
+     * </p>
+     * 
      * @see javax.faces.application.Resource#getResponseHeaders()
      */
     public Map<String, String> getResponseHeaders() {
 
-        HashMap<String,String> map = new HashMap<String,String>(3, 1.0f);
+        if (isResourceRequest()) {
+            if (responseHeaders == null)
+            responseHeaders = new HashMap<String, String>(6, 1.0f);
 
-        long expiresTime = new Date().getTime() +
-                  Long.parseLong(owner.getWebConfig().getOptionValue(
-                        WebConfiguration.WebContextInitParameter.DefaultResourceMaxAge));
-        SimpleDateFormat format = new SimpleDateFormat(RFC1123_DATE_PATTERN, Locale.US);
-        format.setTimeZone(GMT);
-        map.put("Expires", format.format(new Date(expiresTime)));
+            long expiresTime = new Date().getTime() +
+                               Long.parseLong(owner
+                                     .getWebConfig().getOptionValue(
+                                     WebConfiguration.WebContextInitParameter.DefaultResourceMaxAge));
+            SimpleDateFormat format =
+                  new SimpleDateFormat(RFC1123_DATE_PATTERN, Locale.US);
+            format.setTimeZone(GMT);
+            responseHeaders.put("Expires", format.format(new Date(expiresTime)));
 
-        URL url = getURL();
-        try {
-            URLConnection conn = url.openConnection();
-            long lastModified = conn.getLastModified();
-            long contentLength = conn.getContentLength();
-            if (lastModified == 0) {
-                lastModified = owner.getCreationTime();
+            URL url = getURL();
+            try {
+                URLConnection conn = url.openConnection();
+                long lastModified = conn.getLastModified();
+                long contentLength = conn.getContentLength();
+                if (lastModified == 0) {
+                    lastModified = owner.getCreationTime();
+                }
+                responseHeaders.put("Last-Modified", format.format(new Date(lastModified)));
+                if (lastModified != 0 && contentLength != -1) {
+                    responseHeaders.put("ETag", "W/\""
+                                    + contentLength
+                                    + '-'
+                                    + lastModified
+                                    + '"');
+                }
+            } catch (IOException ignored) {
             }
-            map.put("Last-Modified", format.format(new Date(lastModified)));
-            if (lastModified != 0 && contentLength != -1) {
-                map.put("ETag", "W/\"" + contentLength + '-' + lastModified + '"');
-            }
-        } catch (IOException ignored) { }
+            return responseHeaders;
+        } else {
+            return Collections.emptyMap();
+        }
 
-        return map;
     }
 
 
@@ -206,5 +236,15 @@ public class ResourceImpl extends Resource {
 
     }
 
+
+    // --------------------------------------------------------- Private Methods
+
+
+    private boolean isResourceRequest() {
+
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        return (ctx.getApplication().getResourceHandler().isResourceRequest(ctx));
+
+    }
 
 }

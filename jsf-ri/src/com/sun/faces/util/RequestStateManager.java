@@ -175,6 +175,14 @@ public class RequestStateManager {
           "com.sun.faces.FACES_VIEW_STRUCTURE";
 
     /**
+     * Leveraged by ResourceHandlerImpl to denote whether or not a request
+     * is a resource request.  A <code>Boolean</code> value will be assoicated
+     * with this key.
+     */
+    public static final String RESOURCE_REQUEST =
+          "com.sun.faces.RESOURCE_REQUEST";
+
+    /**
      * <p>The key under with the Map containing the implementation specific
      * attributes will be stored within the request.<p>
      */
