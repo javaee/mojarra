@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeListenerTag.java,v 1.30 2007/04/27 22:01:05 ofung Exp $
+ * $Id: ValueChangeListenerTag.java,v 1.31 2007/11/12 20:43:31 rlubke Exp $
  */
 
 /*
@@ -206,7 +206,6 @@ public class ValueChangeListenerTag extends TagSupport {
     private static class BindingValueChangeListener
          implements ValueChangeListener, Serializable {
 
-        private transient ValueChangeListener instance;
         private ValueExpression type;
         private ValueExpression binding;
 
@@ -236,10 +235,8 @@ public class ValueChangeListenerTag extends TagSupport {
          */
         public void processValueChange(ValueChangeEvent event) throws AbortProcessingException {
 
-            if (instance == null) {
-                instance = (ValueChangeListener)
+            ValueChangeListener instance = (ValueChangeListener)
                     Util.getListenerInstance(type, binding);
-            }
             if (instance != null) {
                 instance.processValueChange(event);
             } else {

@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerTag.java,v 1.37 2007/04/27 22:01:04 ofung Exp $
+ * $Id: ActionListenerTag.java,v 1.38 2007/11/12 20:43:31 rlubke Exp $
  */
 
 /*
@@ -205,7 +205,6 @@ public class ActionListenerTag extends TagSupport {
     private static class BindingActionListener
          implements ActionListener, Serializable {
 
-        private transient ActionListener instance;
         private ValueExpression type;
         private ValueExpression binding;
 
@@ -234,10 +233,8 @@ public class ActionListenerTag extends TagSupport {
          */
         public void processAction(ActionEvent event) throws AbortProcessingException {           
 
-            if (instance == null) {
-                instance = (ActionListener)
+            ActionListener instance = (ActionListener)
                      Util.getListenerInstance(type, binding);
-            }
             if (instance != null) {
                 instance.processAction(event);
             } else {

@@ -1,5 +1,5 @@
 /*
- * $Id: PhaseListenerTag.java,v 1.15 2007/04/27 22:01:05 ofung Exp $
+ * $Id: PhaseListenerTag.java,v 1.16 2007/11/12 20:43:31 rlubke Exp $
  */
 
 /*
@@ -189,7 +189,6 @@ public class PhaseListenerTag extends TagSupport {
     private static class BindingPhaseListener
          implements PhaseListener, Serializable {
 
-        private transient PhaseListener instance;
         private ValueExpression type;
         private ValueExpression binding;
 
@@ -262,10 +261,8 @@ public class PhaseListenerTag extends TagSupport {
          *          should be performed
          */
         public PhaseListener getPhaseListener() throws AbortProcessingException {
-            if (instance == null) {
-                instance = (PhaseListener)
+            PhaseListener instance = (PhaseListener)
                      Util.getListenerInstance(type, binding);
-            }
             if (instance != null) {
                 return instance;
             } else {
