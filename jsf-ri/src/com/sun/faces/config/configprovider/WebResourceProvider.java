@@ -1,5 +1,5 @@
 /*
- * $Id: WebResourceProvider.java,v 1.4 2007/06/25 20:57:21 rlubke Exp $
+ * $Id: WebResourceProvider.java,v 1.5 2007/08/06 18:07:19 rlubke Exp $
  */
 
 /*
@@ -79,8 +79,9 @@ public class WebResourceProvider implements ConfigurationResourceProvider {
         List<URL> list = new ArrayList<URL>(6);
         if (paths != null) {
             for (String token : Util.split(paths.trim(), ",")) {
-                if (!WEB_INF_RESOURCE.equals(token.trim())) {
-                    URL u = getContextURLForPath(context, token.trim());
+                String path = token.trim();
+                if (!WEB_INF_RESOURCE.equals(path) && path.length() != 0) {
+                    URL u = getContextURLForPath(context, path);
                     if (u != null) {
                         list.add(u);
                     } else {

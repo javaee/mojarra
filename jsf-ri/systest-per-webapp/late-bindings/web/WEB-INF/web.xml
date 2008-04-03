@@ -46,6 +46,12 @@
     </description>
     <display-name>JSF Systests</display-name>
 
+    <!-- Added for passive validation of issue 610 -->
+    <context-param>
+        <param-name>javax.faces.CONFIG_FILES</param-name>
+        <param-value></param-value>
+    </context-param>
+
     <!-- Faces Servlet -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
