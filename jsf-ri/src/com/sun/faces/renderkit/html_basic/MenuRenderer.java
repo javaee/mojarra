@@ -35,7 +35,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.93 2007/07/27 19:59:08 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.94 2007/08/14 17:09:24 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -600,7 +600,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         if (curItem.isEscape()) {
             String label = curItem.getLabel();
             if (label == null) {
-                label = curItem.getValue().toString();
+                label = valueString;
             }
             writer.writeText(label, component, "label");
         } else {
