@@ -56,16 +56,10 @@ public abstract class UISandboxComponentTag extends UIComponentTag {
 
     // shared by all tags, but only used if exposed via the TLD
     private String disabled;
-    private String binding;
 
     public void setDisabled(String disabled) {
         this.disabled = disabled;
     }
-
-    public void setBinding(String binding) {
-        this.binding = binding;
-    }
-
 
     // --------------------------------------------- Methods from UIComponentTag
 
@@ -74,8 +68,7 @@ public abstract class UISandboxComponentTag extends UIComponentTag {
 
         super.setProperties(component);
         setBooleanProperty(component, "disabled", disabled);
-        setValueBinding(component, "binding", binding);
-
+        
     }
 
 
