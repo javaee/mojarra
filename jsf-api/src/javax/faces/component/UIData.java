@@ -65,25 +65,24 @@ import java.util.Map;
 
 
 /**
- * <p><strong>UIData</strong> is a {@link UIComponent} that supports
- * data binding to a collection of data objects represented by a
- * {@link DataModel} instance, which is the current value of this component
- * itself (typically established via a {@link ValueExpression}).
- * During iterative processing over the rows of data in the data model,
- * the object for the current row is exposed as a request attribute
- * under the key specified by the <code>var</code> property.</p>
- *
- * <p>Only children of type {@link UIColumn} should be processed by
- * renderers associated with this component.</p>
- *
+ * <p><strong>UIData</strong> is a {@link UIComponent} that supports data
+ * binding to a collection of data objects represented by a {@link DataModel}
+ * instance, which is the current value of this component itself (typically
+ * established via a {@link ValueExpression}). During iterative processing over
+ * the rows of data in the data model, the object for the current row is exposed
+ * as a request attribute under the key specified by the <code>var</code>
+ * property.</p>
+ * <p/>
+ * <p>Only children of type {@link UIColumn} should be processed by renderers
+ * associated with this component.</p>
+ * <p/>
  * <p>By default, the <code>rendererType</code> property is set to
  * <code>javax.faces.Table</code>.  This value can be changed by calling the
  * <code>setRendererType()</code> method.</p>
  */
 
 public class UIData extends UIComponentBase
-    implements NamingContainer {
-
+      implements NamingContainer {
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -99,7 +98,6 @@ public class UIData extends UIComponentBase
      */
     public static final String COMPONENT_FAMILY = "javax.faces.Data";
 
-
     // ------------------------------------------------------------ Constructors
 
 
@@ -114,7 +112,6 @@ public class UIData extends UIComponentBase
 
     }
 
-
     // ------------------------------------------------------ Instance Variables
 
 
@@ -127,32 +124,31 @@ public class UIData extends UIComponentBase
 
     /**
      * <p>The {@link DataModel} associated with this component, lazily
-     * instantiated if requested.  This object is not part of the saved
-     * and restored state of the component.</p>
+     * instantiated if requested.  This object is not part of the saved and
+     * restored state of the component.</p>
      */
     private DataModel model = null;
-    
-    
+
+
     /**
-     * <p> During iteration through the rows of this table,
-     * This ivar is used to store the previous "var" value 
-     * for this instance.  When the row iteration is complete,
-     * this value is restored to the request map.
+     * <p> During iteration through the rows of this table, This ivar is used to
+     * store the previous "var" value for this instance.  When the row iteration
+     * is complete, this value is restored to the request map.
      */
-    
+
     private Object oldVar;
 
 
     /**
-     * <p>The zero-relative index of the current row number, or -1 for
-     * no current row association.</p>
+     * <p>The zero-relative index of the current row number, or -1 for no
+     * current row association.</p>
      */
     private int rowIndex = -1;
 
 
     /**
-     * <p>The number of rows to display, or zero for all remaining
-     * rows in the table.</p>
+     * <p>The number of rows to display, or zero for all remaining rows in the
+     * table.</p>
      */
     private int rows = 0;
     private boolean rowsSet = false;
@@ -160,13 +156,13 @@ public class UIData extends UIComponentBase
 
     /**
      * <p>This map contains <code>SavedState</code> instances for each
-     * descendant component, keyed by the client identifier of the
-     * descendant.  Because descendant client identifiers will contain
-     * the <code>rowIndex</code> value of the parent, per-row state
-     * information is actually preserved.</p>
+     * descendant component, keyed by the client identifier of the descendant.
+     * Because descendant client identifiers will contain the
+     * <code>rowIndex</code> value of the parent, per-row state information is
+     * actually preserved.</p>
      */
     @SuppressWarnings({"CollectionWithoutInitialCapacity"})
-    private Map<String,SavedState> saved = new HashMap<String,SavedState>();
+    private Map<String, SavedState> saved = new HashMap<String, SavedState>();
 
 
     /**
@@ -180,8 +176,6 @@ public class UIData extends UIComponentBase
      * current row will be exposed when iterating.</p>
      */
     private String var = null;
-
-
 
     // -------------------------------------------------------------- Properties
 
@@ -199,25 +193,25 @@ public class UIData extends UIComponentBase
      */
     public int getFirst() {
 
-	if (this.firstSet) {
-	    return (this.first);
-	}
-	ValueExpression ve = getValueExpression("first");
-	if (ve != null) {
-	    Integer value;
-	    try {
-		value = (Integer) ve.getValue(getFacesContext().getELContext());
-	    }
-	    catch (ELException e) {
-		throw new FacesException(e);
-	    }
-	    if (null == value) {
-		return first;
-	    }
-	    return (value.intValue());
-	} else {
-	    return (this.first);
-	}
+        if (this.firstSet) {
+            return (this.first);
+        }
+        ValueExpression ve = getValueExpression("first");
+        if (ve != null) {
+            Integer value;
+            try {
+                value = (Integer) ve.getValue(getFacesContext().getELContext());
+            }
+            catch (ELException e) {
+                throw new FacesException(e);
+            }
+            if (null == value) {
+                return first;
+            }
+            return (value.intValue());
+        } else {
+            return (this.first);
+        }
 
     }
 
@@ -228,16 +222,15 @@ public class UIData extends UIComponentBase
      *
      * @param first New first row number
      *
-     * @throws IllegalArgumentException if <code>first</code>
-     *  is negative
+     * @throws IllegalArgumentException if <code>first</code> is negative
      */
     public void setFirst(int first) {
 
-	if (first < 0) {
-	    throw new IllegalArgumentException(String.valueOf(first));
-	}
+        if (first < 0) {
+            throw new IllegalArgumentException(String.valueOf(first));
+        }
         this.first = first;
-	this.firstSet = true;
+        this.firstSet = true;
 
     }
 
@@ -254,13 +247,12 @@ public class UIData extends UIComponentBase
 
 
     /**
-     * <p>Set the footer facet of this component.  A convenience
-     * method for <code>getFacets().put("footer", footer)</code>.</p>
-     * 
+     * <p>Set the footer facet of this component.  A convenience method for
+     * <code>getFacets().put("footer", footer)</code>.</p>
+     *
      * @param footer the new footer facet
-     * 
-     * @throws NullPointerException if <code>footer</code> is
-     *   <code>null</code>
+     *
+     * @throws NullPointerException if <code>footer</code> is <code>null</code>
      */
     public void setFooter(UIComponent footer) {
 
@@ -281,13 +273,12 @@ public class UIData extends UIComponentBase
 
 
     /**
-     * <p>Set the header facet of this component.  A convenience
-     * method for <code>getFacets().put("header", header)</code>.</p>
-     * 
+     * <p>Set the header facet of this component.  A convenience method for
+     * <code>getFacets().put("header", header)</code>.</p>
+     *
      * @param header the new header facet
-     * 
-     * @throws NullPointerException if <code>header</code> is
-     *   <code>null</code>
+     *
+     * @throws NullPointerException if <code>header</code> is <code>null</code>
      */
     public void setHeader(UIComponent header) {
 
@@ -305,14 +296,14 @@ public class UIData extends UIComponentBase
      */
     public boolean isRowAvailable() {
 
-	return (getDataModel().isRowAvailable());
+        return (getDataModel().isRowAvailable());
 
     }
 
 
     /**
-     * <p>Return the number of rows in the underlying data model.  If the
-     * number of available rows is unknown, return -1.</p>
+     * <p>Return the number of rows in the underlying data model.  If the number
+     * of available rows is unknown, return -1.</p>
      *
      * @throws FacesException if an error occurs getting the row count
      */
@@ -327,9 +318,9 @@ public class UIData extends UIComponentBase
      * <p>Return the data object representing the data for the currently
      * selected row index, if any.</p>
      *
-     * @throws FacesException if an error occurs getting the row data
-     * @throws IllegalArgumentException if now row data is available
-     *  at the currently specified row index
+     * @throws FacesException           if an error occurs getting the row data
+     * @throws IllegalArgumentException if now row data is available at the
+     *                                  currently specified row index
      */
     public Object getRowData() {
 
@@ -339,9 +330,9 @@ public class UIData extends UIComponentBase
 
 
     /**
-     * <p>Return the zero-relative index of the currently selected row.  If
-     * we are not currently positioned on a row, return -1.  This property
-     * is <strong>not</strong> enabled for value binding expressions.</p>
+     * <p>Return the zero-relative index of the currently selected row.  If we
+     * are not currently positioned on a row, return -1.  This property is
+     * <strong>not</strong> enabled for value binding expressions.</p>
      *
      * @throws FacesException if an error occurs getting the row index
      */
@@ -431,7 +422,7 @@ public class UIData extends UIComponentBase
         // Clear or expose the current row data as a request scope attribute
         if (var != null) {
             Map<String, Object> requestMap =
-                 getFacesContext().getExternalContext().getRequestMap();
+                  getFacesContext().getExternalContext().getRequestMap();
             if (rowIndex == -1) {
                 oldVar = requestMap.remove(var);
             } else if (isRowAvailable()) {
@@ -452,60 +443,58 @@ public class UIData extends UIComponentBase
 
 
     /**
-     * <p>Return the number of rows to be displayed, or zero for all
-     * remaining rows in the table.  The default value of this
-     * property is zero.</p>
+     * <p>Return the number of rows to be displayed, or zero for all remaining
+     * rows in the table.  The default value of this property is zero.</p>
      */
     public int getRows() {
 
-	if (this.rowsSet) {
-	    return (this.rows);
-	}
-	ValueExpression ve = getValueExpression("rows");
-	if (ve != null) {
-	    Integer value;
-	    try {
-		value = (Integer) ve.getValue(getFacesContext().getELContext());
-	    }
-	    catch (ELException e) {
-		throw new FacesException(e);
-	    }
+        if (this.rowsSet) {
+            return (this.rows);
+        }
+        ValueExpression ve = getValueExpression("rows");
+        if (ve != null) {
+            Integer value;
+            try {
+                value = (Integer) ve.getValue(getFacesContext().getELContext());
+            }
+            catch (ELException e) {
+                throw new FacesException(e);
+            }
 
-	    if (null == value) {
-		return rows;
-	    }
-	    return (value.intValue());
-	} else {
-	    return (this.rows);
-	}
+            if (null == value) {
+                return rows;
+            }
+            return (value.intValue());
+        } else {
+            return (this.rows);
+        }
 
     }
 
 
     /**
-     * <p>Set the number of rows to be displayed, or zero for all
-     * remaining rows in the table.</p>
+     * <p>Set the number of rows to be displayed, or zero for all remaining rows
+     * in the table.</p>
      *
      * @param rows New number of rows
      *
-     * @throws IllegalArgumentException if <code>rows</code>
-     *  is negative
+     * @throws IllegalArgumentException if <code>rows</code> is negative
      */
     public void setRows(int rows) {
 
-	if (rows < 0) {
-	    throw new IllegalArgumentException(String.valueOf(rows));
-	}
+        if (rows < 0) {
+            throw new IllegalArgumentException(String.valueOf(rows));
+        }
         this.rows = rows;
-	this.rowsSet = true;
+        this.rowsSet = true;
 
     }
 
 
     /**
-     * <p>Return the request-scope attribute under which the data object
-     * for the current row will be exposed when iterating.  This property
-     * is <strong>not</strong> enabled for value binding expressions.</p>
+     * <p>Return the request-scope attribute under which the data object for the
+     * current row will be exposed when iterating.  This property is
+     * <strong>not</strong> enabled for value binding expressions.</p>
      */
     public String getVar() {
 
@@ -515,8 +504,8 @@ public class UIData extends UIComponentBase
 
 
     /**
-     * <p>Set the request-scope attribute under which the data object
-     * for the current row wil be exposed when iterating.</p>
+     * <p>Set the request-scope attribute under which the data object for the
+     * current row wil be exposed when iterating.</p>
      *
      * @param var The new request-scope attribute name
      */
@@ -526,7 +515,6 @@ public class UIData extends UIComponentBase
 
     }
 
-
     // ----------------------------------------------------- StateHolder Methods
 
 
@@ -535,15 +523,15 @@ public class UIData extends UIComponentBase
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-             values = new Object[9];
+            values = new Object[9];
         }
-       
+
         values[0] = super.saveState(context);
         values[1] = new Integer(first);
-	values[2] = firstSet ? Boolean.TRUE : Boolean.FALSE;
+        values[2] = firstSet ? Boolean.TRUE : Boolean.FALSE;
         values[3] = new Integer(rowIndex);
         values[4] = new Integer(rows);
-	values[5] = rowsSet ? Boolean.TRUE : Boolean.FALSE;
+        values[5] = rowsSet ? Boolean.TRUE : Boolean.FALSE;
         values[6] = saved;
         values[7] = value;
         values[8] = var;
@@ -557,11 +545,12 @@ public class UIData extends UIComponentBase
         values = (Object[]) state;
         super.restoreState(context, values[0]);
         first = ((Integer) values[1]).intValue();
-	firstSet = ((Boolean) values[2]).booleanValue();
+        firstSet = ((Boolean) values[2]).booleanValue();
         rowIndex = ((Integer) values[3]).intValue();
         rows = ((Integer) values[4]).intValue();
-	rowsSet = ((Boolean) values[5]).booleanValue();
-        saved = TypedCollections.dynamicallyCastMap((Map) values[6], String.class, SavedState.class);
+        rowsSet = ((Boolean) values[5]).booleanValue();
+        saved = TypedCollections
+              .dynamicallyCastMap((Map) values[6], String.class, SavedState.class);
         value = values[7];
         var = (String) values[8];
 
@@ -569,7 +558,7 @@ public class UIData extends UIComponentBase
 
 
     /**
-     * <p>Return the value of the UIData.  This value must either be 
+     * <p>Return the value of the UIData.  This value must either be
      * be of type {@link DataModel}, or a type that can be adapted
      * into a {@link DataModel}.  <code>UIData</code> will automatically
      * adapt the following types:</p>
@@ -584,120 +573,114 @@ public class UIData extends UIComponentBase
      */
     public Object getValue() {
 
-	if (this.value != null) {
-	    return (this.value);
-	}
-	ValueExpression ve = getValueExpression("value");
-	if (ve != null) {
-	    try {
-		return (ve.getValue(getFacesContext().getELContext()));
-	    }
-	    catch (ELException e) {
-		throw new FacesException(e);
-	    }
+        if (this.value != null) {
+            return (this.value);
+        }
+        ValueExpression ve = getValueExpression("value");
+        if (ve != null) {
+            try {
+                return (ve.getValue(getFacesContext().getELContext()));
+            }
+            catch (ELException e) {
+                throw new FacesException(e);
+            }
 
-	} else {
-	    return (null);
-	}
+        } else {
+            return (null);
+        }
 
     }
 
 
     /**
-     * <p>Set the value of the <code>UIData</code>.  This value must either be 
-     * be of type {@link DataModel}, or a type that can be adapted
-     * into a {@link DataModel}.</p>
-     * 
+     * <p>Set the value of the <code>UIData</code>.  This value must either be
+     * be of type {@link DataModel}, or a type that can be adapted into a {@link
+     * DataModel}.</p>
+     *
      * @param value the new value
      */
     public void setValue(Object value) {
-	setDataModel(null);
+        setDataModel(null);
         this.value = value;
 
     }
-
 
     // ----------------------------------------------------- UIComponent Methods
 
 
     /**
-     * <p>If "name" is something other than "value", "var", or
-     * "rowIndex", rely on the superclass conversion from
-     * <code>ValueBinding</code> to <code>ValueExpression</code>.</p>
+     * <p>If "name" is something other than "value", "var", or "rowIndex", rely
+     * on the superclass conversion from <code>ValueBinding</code> to
+     * <code>ValueExpression</code>.</p>
      *
-     * @param name Name of the attribute or property for which to set a
-     *  {@link ValueBinding}
-     * @param binding The {@link ValueBinding} to set, or <code>null</code>
-     *  to remove any currently set {@link ValueBinding}
+     * @param name    Name of the attribute or property for which to set a
+     *                {@link ValueBinding}
+     * @param binding The {@link ValueBinding} to set, or <code>null</code> to
+     *                remove any currently set {@link ValueBinding}
      *
      * @throws IllegalArgumentException if <code>name</code> is one of
-     *  <code>id</code>, <code>parent</code>, <code>var</code>, or
-     *  <code>rowIndex</code>
-     * @throws NullPointerException if <code>name</code>
-     *  is <code>null</code>
-     *
-     * @deprecated This has been replaced by {@link
-     * #setValueExpression(java.lang.String, javax.el.ValueExpression)}.
+     *                                  <code>id</code>, <code>parent</code>,
+     *                                  <code>var</code>, or <code>rowIndex</code>
+     * @throws NullPointerException     if <code>name</code> is <code>null</code>
+     * @deprecated This has been replaced by {@link #setValueExpression(java.lang.String,
+     *javax.el.ValueExpression)}.
      */
     public void setValueBinding(String name, ValueBinding binding) {
-        
+
         if ("value".equals(name)) {
             setDataModel(null);
         } else if ("var".equals(name) || "rowIndex".equals(name)) {
             throw new IllegalArgumentException();
         }
         super.setValueBinding(name, binding);
-        
+
     }
-    
-   /**
+
+    /**
      * <p>Set the {@link ValueExpression} used to calculate the value for the
-     * specified attribute or property name, if any.  In addition, if a
-     * {@link ValueExpression} is set for the <code>value</code> property,
-     * remove any synthesized {@link DataModel} for the data previously
-     * bound to this component.</p>
+     * specified attribute or property name, if any.  In addition, if a {@link
+     * ValueExpression} is set for the <code>value</code> property, remove any
+     * synthesized {@link DataModel} for the data previously bound to this
+     * component.</p>
      *
-     * @param name Name of the attribute or property for which to set a
-     *  {@link ValueExpression}
+     * @param name    Name of the attribute or property for which to set a
+     *                {@link ValueExpression}
      * @param binding The {@link ValueExpression} to set, or <code>null</code>
-     *  to remove any currently set {@link ValueExpression}
+     *                to remove any currently set {@link ValueExpression}
      *
      * @throws IllegalArgumentException if <code>name</code> is one of
-     *  <code>id</code>, <code>parent</code>, <code>var</code>, or
-     *  <code>rowIndex</code>
-     * @throws NullPointerException if <code>name</code>
-     *  is <code>null</code>
+     *                                  <code>id</code>, <code>parent</code>,
+     *                                  <code>var</code>, or <code>rowIndex</code>
+     * @throws NullPointerException     if <code>name</code> is <code>null</code>
      * @since 1.2
      */
     public void setValueExpression(String name, ValueExpression binding) {
-        
+
         if ("value".equals(name)) {
             this.model = null;
         } else if ("var".equals(name) || "rowIndex".equals(name)) {
             throw new IllegalArgumentException();
         }
         super.setValueExpression(name, binding);
-        
+
     }
 
     /**
      * <p>Return a client identifier for this component that includes the
-     * current value of the <code>rowIndex</code> property, if it is not
-     * set to -1.  This implies that multiple calls to
-     * <code>getClientId()</code> may return different results,
-     * but ensures that child components can themselves generate
-     * row-specific client identifiers (since {@link UIData} is a
-     * {@link NamingContainer}).</p>
+     * current value of the <code>rowIndex</code> property, if it is not set to
+     * -1.  This implies that multiple calls to <code>getClientId()</code> may
+     * return different results, but ensures that child components can
+     * themselves generate row-specific client identifiers (since {@link UIData}
+     * is a {@link NamingContainer}).</p>
      *
-     * @throws NullPointerException if <code>context</code>
-     *  is <code>null</code>
+     * @throws NullPointerException if <code>context</code> is <code>null</code>
      */
     public String getClientId(FacesContext context) {
 
         if (context == null) {
             throw new NullPointerException();
         }
-	String baseClientId = super.getClientId(context);
+        String baseClientId = super.getClientId(context);
         if (rowIndex >= 0) {
             return (baseClientId + NamingContainer.SEPARATOR_CHAR + rowIndex);
         } else {
@@ -705,92 +688,96 @@ public class UIData extends UIComponentBase
         }
 
     }
-    
+
     /**
-     * <p>Override behavior from {@link
-     * UIComponentBase#invokeOnComponent} to provide special care for
-     * positioning the data properly before finding the component and
-     * invoking the callback on it.  If the argument
-     * <code>clientId</code> is equal to <code>this.getClientId()</code>
-     * simply invoke the <code>contextCallback</code>, passing the
-     * <code>context</code> argument and <b>this</b> as arguments, and
-     * return <code>true.</code> Otherwise, attempt to extract a
-     * rowIndex from the <code>clientId</code>.  For example, if the
-     * argument <code>clientId</code> was
+     * <p>Override behavior from {@link UIComponentBase#invokeOnComponent} to
+     * provide special care for positioning the data properly before finding the
+     * component and invoking the callback on it.  If the argument
+     * <code>clientId</code> is equal to <code>this.getClientId()</code> simply
+     * invoke the <code>contextCallback</code>, passing the <code>context</code>
+     * argument and <b>this</b> as arguments, and return <code>true.</code>
+     * Otherwise, attempt to extract a rowIndex from the <code>clientId</code>.
+     * For example, if the argument <code>clientId</code> was
      * <code>form:data:3:customerHeader</code> the rowIndex would be
-     * <code>3</code>.  Let this value be called <code>newIndex</code>.
-     * The current rowIndex of this instance must be saved aside and
-     * restored before returning in all cases, regardless of the outcome
-     * of the search or if any exceptions are thrown in the process.</p>
+     * <code>3</code>.  Let this value be called <code>newIndex</code>. The
+     * current rowIndex of this instance must be saved aside and restored before
+     * returning in all cases, regardless of the outcome of the search or if any
+     * exceptions are thrown in the process.</p>
      * 
-     * <p>The implementation of this method must never return
-     * <code>true</code> if setting the rowIndex of this instance to be
-     * equal to <code>newIndex</code> causes this instance to return
-     * <code>false</code> from {@link #isRowAvailable}.</p>
+     * <p>The implementation of this method must never return <code>true</code>
+     * if setting the rowIndex of this instance to be equal to
+     * <code>newIndex</code> causes this instance to return <code>false</code>
+     * from {@link #isRowAvailable}.</p>
      *
-     * @since 1.2
      * @throws NullPointerException {@inheritDoc}
-     * @throws FacesException {@inheritDoc}  Also throws 
-     * <code>FacesException</code> if any exception is thrown when deriving
-     * the rowIndex from the argument <code>clientId</code>.
-     *
-     */ 
-    public boolean invokeOnComponent(FacesContext context, String clientId, 
-            ContextCallback callback) throws FacesException {
-	if (null == context || null == clientId || null == callback) {
-	    throw new NullPointerException();
-	}
+     * @throws FacesException       {@inheritDoc}  Also throws <code>FacesException</code>
+     *                              if any exception is thrown when deriving the
+     *                              rowIndex from the argument <code>clientId</code>.
+     * @since 1.2
+     */
+    public boolean invokeOnComponent(FacesContext context, String clientId,
+                                     ContextCallback callback)
+          throws FacesException {
+        if (null == context || null == clientId || null == callback) {
+            throw new NullPointerException();
+        }
 
         String myId = super.getClientId(context);
-	boolean found = false;        
-	if (clientId.equals(myId)) {
-	    try {
-		callback.invokeContextCallback(context, this);
-		return true;
-	    }
-	    catch (Exception e) {
-		throw new FacesException(e);
-	    }
-	} 
+        boolean found = false;
+        if (clientId.equals(myId)) {
+            try {
+                callback.invokeContextCallback(context, this);
+                return true;
+            }
+            catch (Exception e) {
+                throw new FacesException(e);
+            }
+        }
         int lastSep, newRow, savedRowIndex = this.getRowIndex();
         try {
             // If we need to strip out the rowIndex from our id
             // PENDING(edburns): is this safe with respect to I18N?
             if (myId.endsWith(String.valueOf(savedRowIndex))) {
                 lastSep = myId.lastIndexOf(NamingContainer.SEPARATOR_CHAR);
-                assert(-1 != lastSep);
+                assert (-1 != lastSep);
                 myId = myId.substring(0, lastSep);
             }
-        
-	    // myId will be something like form:outerData for a non-nested table,
+
+            // myId will be something like form:outerData for a non-nested table,
             // and form:outerData:3:data for a nested table.
             // clientId will be something like form:outerData:3:outerColumn
-	    // for a non-nested table.  clientId will be something like
-	    // outerData:3:data:3:input for a nested table.
+            // for a non-nested table.  clientId will be something like
+            // outerData:3:data:3:input for a nested table.
             if (clientId.startsWith(myId)) {
                 int preRowIndexSep, postRowIndexSep;
-                
-                if (-1 != (preRowIndexSep = 
-                           clientId.indexOf(NamingContainer.SEPARATOR_CHAR, 
-                                            myId.length()))) {
+
+                if (-1 != (preRowIndexSep =
+                      clientId.indexOf(NamingContainer.SEPARATOR_CHAR,
+                                       myId.length()))) {
                     // Check the length
                     if (++preRowIndexSep < clientId.length()) {
                         if (-1 != (postRowIndexSep =
-                                clientId.indexOf(NamingContainer.SEPARATOR_CHAR,
-                                preRowIndexSep + 1))) {
+                              clientId.indexOf(NamingContainer.SEPARATOR_CHAR,
+                                               preRowIndexSep + 1))) {
                             try {
-                                newRow = Integer.valueOf(clientId.substring(preRowIndexSep,
-                                        postRowIndexSep)).intValue();
+                                newRow = Integer
+                                      .valueOf(clientId.substring(preRowIndexSep,
+                                                                  postRowIndexSep))
+                                      .intValue();
                             } catch (NumberFormatException ex) {
                                 // PENDING(edburns): I18N
-                                String message = "Trying to extract rowIndex from clientId \'" + 
-                                        clientId + "\' " + ex.getMessage();
-                                throw new NumberFormatException(message); 
+                                String message =
+                                      "Trying to extract rowIndex from clientId \'"
+                                      +
+                                      clientId
+                                      + "\' "
+                                      + ex.getMessage();
+                                throw new NumberFormatException(message);
                             }
                             this.setRowIndex(newRow);
                             if (this.isRowAvailable()) {
-                                found = super.invokeOnComponent(context, 
-                                        clientId, callback);
+                                found = super.invokeOnComponent(context,
+                                                                clientId, callback);
                             }
                         }
                     }
@@ -806,22 +793,20 @@ public class UIData extends UIComponentBase
         finally {
             this.setRowIndex(savedRowIndex);
         }
-	return found;
+        return found;
     }
-    
 
 
     /**
-     * <p>Override the default {@link UIComponentBase#queueEvent} processing
-     * to wrap any queued events in a wrapper so that we can reset the current
-     * row index in <code>broadcast()</code>.</p>
+     * <p>Override the default {@link UIComponentBase#queueEvent} processing to
+     * wrap any queued events in a wrapper so that we can reset the current row
+     * index in <code>broadcast()</code>.</p>
      *
      * @param event {@link FacesEvent} to be queued
      *
-     * @throws IllegalStateException if this component is not a
-     *  descendant of a {@link UIViewRoot}
-     * @throws NullPointerException if <code>event</code>
-     *  is <code>null</code>
+     * @throws IllegalStateException if this component is not a descendant of a
+     *                               {@link UIViewRoot}
+     * @throws NullPointerException  if <code>event</code> is <code>null</code>
      */
     public void queueEvent(FacesEvent event) {
 
@@ -831,169 +816,153 @@ public class UIData extends UIComponentBase
 
 
     /**
-     * <p>Override the default {@link UIComponentBase#broadcast} processing
-     * to unwrap any wrapped {@link FacesEvent} and reset the current row index,
+     * <p>Override the default {@link UIComponentBase#broadcast} processing to
+     * unwrap any wrapped {@link FacesEvent} and reset the current row index,
      * before the event is actually broadcast.  For events that we did not wrap
      * (in <code>queueEvent()</code>), default processing will occur.</p>
      *
      * @param event The {@link FacesEvent} to be broadcast
      *
      * @throws AbortProcessingException Signal the JavaServer Faces
-     *  implementation that no further processing on the current event
-     *  should be performed
-     * @throws IllegalArgumentException if the implementation class
-     *  of this {@link FacesEvent} is not supported by this component
-     * @throws NullPointerException if <code>event</code> is
-     * <code>null</code>
+     *                                  implementation that no further
+     *                                  processing on the current event should
+     *                                  be performed
+     * @throws IllegalArgumentException if the implementation class of this
+     *                                  {@link FacesEvent} is not supported by
+     *                                  this component
+     * @throws NullPointerException     if <code>event</code> is <code>null</code>
      */
     public void broadcast(FacesEvent event)
-	throws AbortProcessingException {
+          throws AbortProcessingException {
 
-	if (!(event instanceof WrapperEvent)) {
-	    super.broadcast(event);
-	    return;
-	}
+        if (!(event instanceof WrapperEvent)) {
+            super.broadcast(event);
+            return;
+        }
 
-	// Set up the correct context and fire our wrapped event
-	WrapperEvent revent = (WrapperEvent) event;
-	if (isNestedWithinUIData()) {
-	    setDataModel(null);
-	}
+        // Set up the correct context and fire our wrapped event
+        WrapperEvent revent = (WrapperEvent) event;
+        if (isNestedWithinUIData()) {
+            setDataModel(null);
+        }
         int oldRowIndex = getRowIndex();
-	setRowIndex(revent.getRowIndex());
-	FacesEvent rowEvent = revent.getFacesEvent();
-	rowEvent.getComponent().broadcast(rowEvent);
+        setRowIndex(revent.getRowIndex());
+        FacesEvent rowEvent = revent.getFacesEvent();
+        rowEvent.getComponent().broadcast(rowEvent);
         setRowIndex(oldRowIndex);
-	return;
+        return;
 
     }
 
 
     /**
-     * <p>In addition to the default behavior, ensure that any saved
-     * per-row state for our child input components is discarded
-     * unless it is needed to rerender the current page with errors.
+     * <p>In addition to the default behavior, ensure that any saved per-row
+     * state for our child input components is discarded unless it is needed to
+     * rerender the current page with errors.
      *
      * @param context FacesContext for the current request
      *
-     * @throws IOException if an input/output error occurs while rendering
-     * @throws NullPointerException if <code>context</code>
-     *  is <code>null</code>
+     * @throws IOException          if an input/output error occurs while
+     *                              rendering
+     * @throws NullPointerException if <code>context</code> is <code>null</code>
      */
     public void encodeBegin(FacesContext context) throws IOException {
 
-	setDataModel(null); // re-evaluate even with server-side state saving
+        setDataModel(null); // re-evaluate even with server-side state saving
         if (!keepSaved(context)) {
             //noinspection CollectionWithoutInitialCapacity
-            saved = new HashMap<String,SavedState>();
+            saved = new HashMap<String, SavedState>();
         }
         super.encodeBegin(context);
 
     }
 
 
-
     /**
-     * <p>Override the default {@link UIComponentBase#processDecodes}
-     * processing to perform the following steps.</p>
-     * <ul>
-     * <li>If the <code>rendered</code> property of this {@link UIComponent}
-     *     is <code>false</code>, skip further processing.</li>
-     * <li>Set the current <code>rowIndex</code> to -1.</li>
-     * <li>Call the <code>processDecodes()</code> method of all facets
-     *     of this {@link UIData}, in the order determined
-     *     by a call to <code>getFacets().keySet().iterator()</code>.</li>
-     * <li>Call the <code>processDecodes()</code> method of all facets
-     *     of the {@link UIColumn} children of this {@link UIData}.</li>
-     * <li>Iterate over the set of rows that were included when this
-     *     component was rendered (i.e. those defined by the <code>first</code>
-     *     and <code>rows</code> properties), performing the following
-     *     processing for each row:
-     *     <ul>
-     *     <li>Set the current <code>rowIndex</code> to the appropriate
-     *         value for this row.</li>
-     *     <li>If <code>isRowAvailable()</code> returns <code>true</code>,
-     *         iterate over the children components of each {@link UIColumn}
-     *         child of this {@link UIData} component, calling the
-     *         <code>processDecodes()</code> method for each such child.</li>
-     *     </ul></li>
-     * <li>Set the current <code>rowIndex</code> to -1.</li>
-     * <li>Call the <code>decode()</code> method of this component.</li>
-     * <li>If a <code>RuntimeException</code> is thrown during
-     *     decode processing, call {@link FacesContext#renderResponse}
-     *     and re-throw the exception.</li>
-     * </ul>
+     * <p>Override the default {@link UIComponentBase#processDecodes} processing
+     * to perform the following steps.</p> <ul> <li>If the <code>rendered</code>
+     * property of this {@link UIComponent} is <code>false</code>, skip further
+     * processing.</li> <li>Set the current <code>rowIndex</code> to -1.</li>
+     * <li>Call the <code>processDecodes()</code> method of all facets of this
+     * {@link UIData}, in the order determined by a call to
+     * <code>getFacets().keySet().iterator()</code>.</li> <li>Call the
+     * <code>processDecodes()</code> method of all facets of the {@link
+     * UIColumn} children of this {@link UIData}.</li> <li>Iterate over the set
+     * of rows that were included when this component was rendered (i.e. those
+     * defined by the <code>first</code> and <code>rows</code> properties),
+     * performing the following processing for each row: <ul> <li>Set the
+     * current <code>rowIndex</code> to the appropriate value for this row.</li>
+     * <li>If <code>isRowAvailable()</code> returns <code>true</code>, iterate
+     * over the children components of each {@link UIColumn} child of this
+     * {@link UIData} component, calling the <code>processDecodes()</code>
+     * method for each such child.</li> </ul></li> <li>Set the current
+     * <code>rowIndex</code> to -1.</li> <li>Call the <code>decode()</code>
+     * method of this component.</li> <li>If a <code>RuntimeException</code> is
+     * thrown during decode processing, call {@link FacesContext#renderResponse}
+     * and re-throw the exception.</li> </ul>
      *
      * @param context {@link FacesContext} for the current request
      *
-     * @throws NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */ 
+     * @throws NullPointerException if <code>context</code> is <code>null</code>
+     */
     public void processDecodes(FacesContext context) {
 
-	if (context == null) {
-	    throw new NullPointerException();
-	}
+        if (context == null) {
+            throw new NullPointerException();
+        }
         if (!isRendered()) {
             return;
         }
 
-	setDataModel(null); // Re-evaluate even with server-side state saving
-	if (null == saved || !keepSaved(context)) {
-        //noinspection CollectionWithoutInitialCapacity
-        saved = new HashMap<String,SavedState>(); // We don't need saved state here
-	}
+        setDataModel(null); // Re-evaluate even with server-side state saving
+        if (null == saved || !keepSaved(context)) {
+            //noinspection CollectionWithoutInitialCapacity
+            saved =
+                  new HashMap<String, SavedState>(); // We don't need saved state here
+        }
 
-	iterate(context, PhaseId.APPLY_REQUEST_VALUES);
-	decode(context);
+        iterate(context, PhaseId.APPLY_REQUEST_VALUES);
+        decode(context);
 
     }
 
 
     /**
      * <p>Override the default {@link UIComponentBase#processValidators}
-     * processing to perform the following steps.</p>
-     * <ul>
-     * <li>If the <code>rendered</code> property of this {@link UIComponent}
-     *     is <code>false</code>, skip further processing.</li>
-     * <li>Set the current <code>rowIndex</code> to -1.</li>
-     * <li>Call the <code>processValidators()</code> method of all facets
-     *     of this {@link UIData}, in the order determined
-     *     by a call to <code>getFacets().keySet().iterator()</code>.</li>
-     * <li>Call the <code>processValidators()</code> method of all facets
-     *     of the {@link UIColumn} children of this {@link UIData}.</li>
-     * <li>Iterate over the set of rows that were included when this
-     *     component was rendered (i.e. those defined by the <code>first</code>
-     *     and <code>rows</code> properties), performing the following
-     *     processing for each row:
-     *     <ul>
-     *     <li>Set the current <code>rowIndex</code> to the appropriate
-     *         value for this row.</li>
-     *     <li>If <code>isRowAvailable()</code> returns <code>true</code>,
-     *         iterate over the children components of each {@link UIColumn}
-     *         child of this {@link UIData} component, calling the
-     *         <code>processValidators()</code> method for each such child.</li>
-     *     </ul></li>
-     * <li>Set the current <code>rowIndex</code> to -1.</li>
-     * </ul>
+     * processing to perform the following steps.</p> <ul> <li>If the
+     * <code>rendered</code> property of this {@link UIComponent} is
+     * <code>false</code>, skip further processing.</li> <li>Set the current
+     * <code>rowIndex</code> to -1.</li> <li>Call the <code>processValidators()</code>
+     * method of all facets of this {@link UIData}, in the order determined by a
+     * call to <code>getFacets().keySet().iterator()</code>.</li> <li>Call the
+     * <code>processValidators()</code> method of all facets of the {@link
+     * UIColumn} children of this {@link UIData}.</li> <li>Iterate over the set
+     * of rows that were included when this component was rendered (i.e. those
+     * defined by the <code>first</code> and <code>rows</code> properties),
+     * performing the following processing for each row: <ul> <li>Set the
+     * current <code>rowIndex</code> to the appropriate value for this row.</li>
+     * <li>If <code>isRowAvailable()</code> returns <code>true</code>, iterate
+     * over the children components of each {@link UIColumn} child of this
+     * {@link UIData} component, calling the <code>processValidators()</code>
+     * method for each such child.</li> </ul></li> <li>Set the current
+     * <code>rowIndex</code> to -1.</li> </ul>
      *
      * @param context {@link FacesContext} for the current request
      *
-     * @throws NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */ 
+     * @throws NullPointerException if <code>context</code> is <code>null</code>
+     */
     public void processValidators(FacesContext context) {
 
-	if (context == null) {
-	    throw new NullPointerException();
-	}
+        if (context == null) {
+            throw new NullPointerException();
+        }
         if (!isRendered()) {
             return;
         }
-	if (isNestedWithinUIData()) {
-	    setDataModel(null);
-	}
-	iterate(context, PhaseId.PROCESS_VALIDATIONS);
+        if (isNestedWithinUIData()) {
+            setDataModel(null);
+        }
+        iterate(context, PhaseId.PROCESS_VALIDATIONS);
         // This is not a EditableValueHolder, so no further processing is required
 
     }
@@ -1028,40 +997,36 @@ public class UIData extends UIComponentBase
      *
      * @param context {@link FacesContext} for the current request
      *
-     * @throws NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */ 
+     * @throws NullPointerException if <code>context</code> is <code>null</code>
+     */
     public void processUpdates(FacesContext context) {
 
-	if (context == null) {
-	    throw new NullPointerException();
-	}
+        if (context == null) {
+            throw new NullPointerException();
+        }
         if (!isRendered()) {
             return;
         }
-	if (isNestedWithinUIData()) {
+        if (isNestedWithinUIData()) {
             setDataModel(null);
-	}
-	iterate(context, PhaseId.UPDATE_MODEL_VALUES);
+        }
+        iterate(context, PhaseId.UPDATE_MODEL_VALUES);
         // This is not a EditableValueHolder, so no further processing is required
 
     }
-
 
     // --------------------------------------------------------- Protected Methods
 
 
     /**
-     * <p>Return the internal {@link DataModel} object representing the
-     * data objects that we will iterate over in this component's
-     * rendering.</p>
-     *
+     * <p>Return the internal {@link DataModel} object representing the data
+     * objects that we will iterate over in this component's rendering.</p>
+     * <p/>
      * <p>If the model has been cached by a previous call to {@link
-     * #setDataModel}, return it.  Otherwise call {@link #getValue}.  If
-     * the result is null, create an empty {@link ListDataModel} and
-     * return it.  If the result is an instance of {@link DataModel},
-     * return it.  Otherwise, adapt the result as described in {@link
-     * #getValue} and return it.</p>
+     * #setDataModel}, return it.  Otherwise call {@link #getValue}.  If the
+     * result is null, create an empty {@link ListDataModel} and return it.  If
+     * the result is an instance of {@link DataModel}, return it.  Otherwise,
+     * adapt the result as described in {@link #getValue} and return it.</p>
      */
     protected DataModel getDataModel() {
 
@@ -1087,32 +1052,30 @@ public class UIData extends UIComponentBase
         } else {
             setDataModel(new ScalarDataModel(current));
         }
-	return (model);
+        return (model);
 
     }
 
     /**
-     * <p>Set the internal DataModel.  This <code>UIData</code> instance
-     * must use the given {@link DataModel} as its internal value
-     * representation from now until the next call to
-     * <code>setDataModel</code>.  If the given <code>DataModel</code>
-     * is <code>null</code>, the internal <code>DataModel</code> must be
-     * reset in a manner so that the next call to {@link #getDataModel}
-     * causes lazy instantion of a newly refreshed
+     * <p>Set the internal DataModel.  This <code>UIData</code> instance must
+     * use the given {@link DataModel} as its internal value representation from
+     * now until the next call to <code>setDataModel</code>.  If the given
+     * <code>DataModel</code> is <code>null</code>, the internal
+     * <code>DataModel</code> must be reset in a manner so that the next call to
+     * {@link #getDataModel} causes lazy instantion of a newly refreshed
      * <code>DataModel</code>.</p>
+     * <p/>
+     * <p>Subclasses might call this method if they either want to restore the
+     * internal <code>DataModel</code> during the <em>Restore View</em> phase or
+     * if they want to explicitly refresh the current <code>DataModel</code> for
+     * the <em>Render Response</em> phase.</p>
      *
-     * <p>Subclasses might call this method if they either want to
-     * restore the internal <code>DataModel</code> during the
-     * <em>Restore View</em> phase or if they want to explicitly refresh
-     * the current <code>DataModel</code> for the <em>Render
-     * Response</em> phase.</p>
-     *
-     * @param dataModel the new <code>DataModel</code> or
-     * <code>null</code> to cause the model to be refreshed.
+     * @param dataModel the new <code>DataModel</code> or <code>null</code> to
+     *                  cause the model to be refreshed.
      */
 
     protected void setDataModel(DataModel dataModel) {
-	this.model = dataModel;
+        this.model = dataModel;
     }
 
     // ---------------------------------------------------- Private Methods
@@ -1134,101 +1097,102 @@ public class UIData extends UIComponentBase
      * </ul>
      *
      * @param context {@link FacesContext} for the current request
-     * @param phaseId {@link PhaseId} of the phase we are currently running     
+     * @param phaseId {@link PhaseId} of the phase we are currently running
      */
     private void iterate(FacesContext context, PhaseId phaseId) {
 
-	// Process each facet of this component exactly once
-	setRowIndex(-1);
-	Iterator facets = getFacets().keySet().iterator();
-	while (facets.hasNext()) {
-	    UIComponent facet = getFacets().get(facets.next());
-	    if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
-		facet.processDecodes(context);
-	    } else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
-		facet.processValidators(context);
-	    } else if (phaseId == PhaseId.UPDATE_MODEL_VALUES) {
-		facet.processUpdates(context);
-	    } else {
-		throw new IllegalArgumentException();
-	    }
-	}
+        // Process each facet of this component exactly once
+        setRowIndex(-1);
+        Iterator facets = getFacets().keySet().iterator();
+        while (facets.hasNext()) {
+            UIComponent facet = getFacets().get(facets.next());
+            if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
+                facet.processDecodes(context);
+            } else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
+                facet.processValidators(context);
+            } else if (phaseId == PhaseId.UPDATE_MODEL_VALUES) {
+                facet.processUpdates(context);
+            } else {
+                throw new IllegalArgumentException();
+            }
+        }
 
-	// Process each facet of our child UIColumn components exactly once
-	setRowIndex(-1);
-	Iterator columns = getChildren().iterator();
-	while (columns.hasNext()) {
-	    UIComponent column = (UIComponent) columns.next();
-	    if (!(column instanceof UIColumn)) {
-		continue;
-	    }
-	    if (!column.isRendered()) {
-		continue;
-	    }
-	    Iterator columnFacets = column.getFacets().keySet().iterator();
-	    while (columnFacets.hasNext()) {
-		UIComponent columnFacet = column.getFacets().get(columnFacets.next());
-		if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
-		    columnFacet.processDecodes(context);
-		} else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
-		    columnFacet.processValidators(context);
-		} else if (phaseId == PhaseId.UPDATE_MODEL_VALUES) {
-		    columnFacet.processUpdates(context);
-		} else {
-		    throw new IllegalArgumentException();
-		}
-	    }
-	}
+        // Process each facet of our child UIColumn components exactly once
+        setRowIndex(-1);
+        Iterator columns = getChildren().iterator();
+        while (columns.hasNext()) {
+            UIComponent column = (UIComponent) columns.next();
+            if (!(column instanceof UIColumn)) {
+                continue;
+            }
+            if (!column.isRendered()) {
+                continue;
+            }
+            Iterator columnFacets = column.getFacets().keySet().iterator();
+            while (columnFacets.hasNext()) {
+                UIComponent columnFacet =
+                      column.getFacets().get(columnFacets.next());
+                if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
+                    columnFacet.processDecodes(context);
+                } else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
+                    columnFacet.processValidators(context);
+                } else if (phaseId == PhaseId.UPDATE_MODEL_VALUES) {
+                    columnFacet.processUpdates(context);
+                } else {
+                    throw new IllegalArgumentException();
+                }
+            }
+        }
 
-	// Iterate over our UIColumn children, once per row
-	int processed = 0;
+        // Iterate over our UIColumn children, once per row
+        int processed = 0;
         int rowIndex = getFirst() - 1;
-	int rows = getRows();
+        int rows = getRows();
 
         while (true) {
 
-	    // Have we processed the requested number of rows?
-	    if ((rows > 0) && (++processed > rows)) {
-		break;
-	    }
+            // Have we processed the requested number of rows?
+            if ((rows > 0) && (++processed > rows)) {
+                break;
+            }
 
-	    // Expose the current row in the specified request attribute
-	    setRowIndex(++rowIndex);
-	    if (!isRowAvailable()) {
+            // Expose the current row in the specified request attribute
+            setRowIndex(++rowIndex);
+            if (!isRowAvailable()) {
                 break; // Scrolled past the last row
             }
 
-	    // Perform phase-specific processing as required
-	    // on the *children* of the UIColumn (facets have
-	    // been done a single time with rowIndex=-1 already)
-	    Iterator kids = getChildren().iterator();
-	    while (kids.hasNext()) {
-		UIComponent kid = (UIComponent) kids.next();
-		if (!(kid instanceof UIColumn)) {
-		    continue;
-		}
-		Iterator grandkids = kid.getChildren().iterator();
-		while (grandkids.hasNext()) {
-		    UIComponent grandkid = (UIComponent) grandkids.next();
-		    if (!grandkid.isRendered()) {
-			continue;
-		    }
-		    if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
-			grandkid.processDecodes(context);
-		    } else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
-			grandkid.processValidators(context);
-		    } else if (phaseId == PhaseId.UPDATE_MODEL_VALUES) {
-			grandkid.processUpdates(context);
-		    } else {
-			throw new IllegalArgumentException();
-		    }
-		}
-	    }
+            // Perform phase-specific processing as required
+            // on the *children* of the UIColumn (facets have
+            // been done a single time with rowIndex=-1 already)
+            Iterator kids = getChildren().iterator();
+            while (kids.hasNext()) {
+                UIComponent kid = (UIComponent) kids.next();
+                if (!(kid instanceof UIColumn)) {
+                    continue;
+                }
+                Iterator grandkids = kid.getChildren().iterator();
+                while (grandkids.hasNext()) {
+                    UIComponent grandkid = (UIComponent) grandkids.next();
+                    if (!grandkid.isRendered()) {
+                        continue;
+                    }
+                    if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
+                        grandkid.processDecodes(context);
+                    } else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
+                        grandkid.processValidators(context);
+                    } else if (phaseId == PhaseId.UPDATE_MODEL_VALUES) {
+                        grandkid.processUpdates(context);
+                    } else {
+                        throw new IllegalArgumentException();
+                    }
+                }
+            }
 
-	}
+        }
 
-	// Clean up after ourselves
-	setRowIndex(-1);
+        // Clean up after ourselves
+        setRowIndex(-1);
 
     }
 
@@ -1269,12 +1233,12 @@ public class UIData extends UIComponentBase
     }
 
     private boolean isNestedWithinUIData() {
-	UIComponent parent = this;
-	while (null != (parent = parent.getParent())) {
-	    if (parent instanceof UIData) {
-		return true;
-	    }
-	}
+        UIComponent parent = this;
+        while (null != (parent = parent.getParent())) {
+            if (parent instanceof UIData) {
+                return true;
+            }
+        }
         return (false);
     }
 
@@ -1302,7 +1266,7 @@ public class UIData extends UIComponentBase
      * descendants.</p>
      *
      * @param component Component for which to restore state information
-     * @param context {@link FacesContext} for the current request
+     * @param context   {@link FacesContext} for the current request
      */
     private void restoreDescendantState(UIComponent component,
                                         FacesContext context) {
@@ -1335,17 +1299,18 @@ public class UIData extends UIComponentBase
         // Restore state for facets of this component
         Iterator facetNames = component.getFacets().keySet().iterator();
         while (facetNames.hasNext()) {
-            UIComponent c = component.getFacet( (String) facetNames.next() );
-            if (c!=null)
+            UIComponent c = component.getFacet((String) facetNames.next());
+            if (c != null) {
                 restoreDescendantState(c, context);
+            }
         }
 
     }
 
 
     /**
-     * <p>Save state information for all descendant components, as described
-     * for <code>setRowIndex()</code>.</p>
+     * <p>Save state information for all descendant components, as described for
+     * <code>setRowIndex()</code>.</p>
      */
     private void saveDescendantState() {
 
@@ -1366,7 +1331,7 @@ public class UIData extends UIComponentBase
      * descendants.</p>
      *
      * @param component Component for which to save state information
-     * @param context {@link FacesContext} for the current request
+     * @param context   {@link FacesContext} for the current request
      */
     private void saveDescendantState(UIComponent component,
                                      FacesContext context) {
@@ -1394,62 +1359,69 @@ public class UIData extends UIComponentBase
         // Save state for facets of this component
         Iterator facetNames = component.getFacets().keySet().iterator();
         while (facetNames.hasNext()) {
-            UIComponent c = component.getFacet( (String) facetNames.next() );
-            if (c!=null)
+            UIComponent c = component.getFacet((String) facetNames.next());
+            if (c != null) {
                 saveDescendantState(c, context);
+            }
         }
 
     }
 
 }
 
-
 // ------------------------------------------------------------- Private Classes
 
 
 // Private class to represent saved state information
 @SuppressWarnings({"SerializableHasSerializationMethods",
-                   "NonSerializableFieldInSerializableClass"})
+      "NonSerializableFieldInSerializableClass"})
 class SavedState implements Serializable {
 
     private static final long serialVersionUID = 2920252657338389849L;
     private Object submittedValue;
 
     Object getSubmittedValue() {
-	return (this.submittedValue);
+        return (this.submittedValue);
     }
+
     void setSubmittedValue(Object submittedValue) {
-	this.submittedValue = submittedValue;
+        this.submittedValue = submittedValue;
     }
 
     private boolean valid = true;
+
     boolean isValid() {
-	return (this.valid);
+        return (this.valid);
     }
+
     void setValid(boolean valid) {
-	this.valid = valid;
+        this.valid = valid;
     }
 
     private Object value;
+
     Object getValue() {
-	return (this.value);
+        return (this.value);
     }
+
     public void setValue(Object value) {
-	this.value = value;
+        this.value = value;
     }
 
     private boolean localValueSet;
+
     boolean isLocalValueSet() {
-	return (this.localValueSet);
+        return (this.localValueSet);
     }
+
     public void setLocalValueSet(boolean localValueSet) {
-	this.localValueSet = localValueSet;
+        this.localValueSet = localValueSet;
     }
 
     public String toString() {
-	return ("submittedValue: " + submittedValue + 
-		" value: " + value + 
-		" localValueSet: " + localValueSet);
+        return ("submittedValue: " + submittedValue +
+                " value: " + value +
+                " localValueSet: " + localValueSet);
     }
 
 }
@@ -1477,11 +1449,11 @@ class WrapperEvent extends FacesEvent {
     }
 
     public PhaseId getPhaseId() {
-	return (this.event.getPhaseId());
+        return (this.event.getPhaseId());
     }
 
     public void setPhaseId(PhaseId phaseId) {
-	this.event.setPhaseId(phaseId);
+        this.event.setPhaseId(phaseId);
     }
 
     public boolean isAppropriateListener(FacesListener listener) {
