@@ -67,7 +67,7 @@ public class YuiMenuBarRenderer extends YuiMenuRenderer {
         writer.writeAttribute("type", "text/javascript", "type");
 
         String javaScript = "var oMenu_%%%JS_VAR%%% = new YAHOO.widget.MenuBar(\"%%%ID%%%\", {" +
-            buildConstructorArgs(component) + "}); oMenu_%%%JS_VAR%%%.render();" ;
+            buildConstructorArgs(component) + "}); YAHOO.util.Event.onDOMReady(oMenu_%%%JS_VAR%%%.render);" ;
         javaScript = javaScript.replaceAll("%%%JS_VAR%%%",  
             YuiRendererHelper.getJavascriptVar(component) + "_1")
             .replaceAll("%%%ID%%%", component.getClientId(FacesContext.getCurrentInstance()) + "_1");

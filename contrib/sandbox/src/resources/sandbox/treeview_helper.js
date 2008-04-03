@@ -29,6 +29,7 @@ YAHOO.widget.TreeView.prototype.getUlList= function(nodeParent, node) {
 			sLabel = this.getLiLabel( nRootList.childNodes[i] );
 			if ( nRootList.childNodes[i].className == "expand" ) {
 				bExpand = true;
+				node.expand(true);
 			} else {
 				bExpand = false;
 			}

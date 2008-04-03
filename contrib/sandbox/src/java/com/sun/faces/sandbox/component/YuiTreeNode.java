@@ -39,9 +39,8 @@
  */
 package com.sun.faces.sandbox.component;
 
+import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
-
-import com.sun.faces.sandbox.model.TreeNode;
 
 /**
  * @author Jason Lee
@@ -51,6 +50,17 @@ public class YuiTreeNode extends UIOutput {
     public static String COMPONENT_TYPE = "com.sun.faces.sandbox.YuiTreeNode";
     public static String RENDERER_TYPE  = "com.sun.faces.sandbox.YuiTreeNodeRenderer";
     
+    protected boolean expanded=false;
+    
     public YuiTreeNode()      { setRendererType(RENDERER_TYPE); }
+
     public String getFamily() { return COMPONENT_TYPE; }
+    public boolean getExpanded() { return ComponentHelper.getValue(this, "expanded", expanded); }
+    public void setExpanded(boolean expanded) { 
+        this.expanded = expanded; 
+        UIComponent parent = this.getParent();
+        if (expanded && (parent instanceof YuiTreeNode)) {
+            ((YuiTreeNode)parent).setExpanded(expanded);
+        }
+    }
 }

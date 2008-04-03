@@ -70,7 +70,7 @@ public class YuiConstants {
     public static final String JS_UTILITIES = YUI_ROOT + "utilities.js";
     public static final String JS_YAHOO_DOM_EVENT = YUI_ROOT + "yahoo-dom-event.js";
     
-//    public static final String JS_SANDBOX_HELPER = SANDBOX_ROOT + "sandbox.js";
+    public static final String JS_SANDBOX_HELPER = SANDBOX_ROOT + "sandbox.js";
     public static final String JS_YUI_CALENDAR_HELPER = SANDBOX_ROOT + "calendar_helper.js";
     public static final String JS_YUI_MENU_HELPER = SANDBOX_ROOT + "menu_helper.js";
     public static final String JS_YUI_TREEVIEW_HELPER = SANDBOX_ROOT + "treeview_helper.js";

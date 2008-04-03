@@ -83,6 +83,9 @@ public class YuiTreeNodeRenderer extends Renderer {
 //        writer.write("var treeNode_" + name + " = new YAHOO.widget.HTMLNode('" + 
 //                output + "', treeNode_" + YuiRendererHelper.getJavascriptVar(treeNode.getParent()) + ", false, true);\n");
         writer.startElement("li", null);
+        if (treeNode.getExpanded()) {
+            writer.writeAttribute("class", "expand", "class");
+        }
         labelFacet.encodeAll(context);
         if (treeNode.getChildCount() > 0) {
             writer.startElement("ul", null);

@@ -137,6 +137,7 @@ public class YuiRendererHelper {
     }
     */
 
+    // TODO:  This needs to be improved
     public static void renderSandboxStylesheet(FacesContext context, ResponseWriter writer, UIComponent comp) throws IOException{
         if (!hasResourceBeenRendered(context, YUI_HELPER_CSS_RENDERED)) {
             writer.startElement("style", comp);
@@ -144,8 +145,16 @@ public class YuiRendererHelper {
             for (Map.Entry<String, String> cssClass : getCssClasses().entrySet()) {
                 writer.write(cssClass.getKey() + " {background-image:url(" + 
                         Util.getXhtmlHelper().mapResourceId(context, Mechanism.CLASS_RESOURCE, cssClass.getValue()) +
-                    ");}\n");
+                ");}");
             }
+            writer.write("div.yuimenu { background-color: #efefef; border:solid 1px #527B97; }");
+            writer.write("div.yuimenubar { background-color: #efefef; }");
+            writer.write("div.yuimenu ul { border-color: #527B97; }");
+            writer.write("div.yuimenu li.yuimenuitem { padding:2px 24px; }");
+            writer.write("div.yuimenubar h6 { border-color:#527B97; }");
+            writer.write("div.yuimenubar li.selected { background-color:#527B97; }");
+            writer.write("div.yuimenubar li.yuimenubaritem { border-color:#527B97; }");
+            writer.write("div.yuimenu li.selected, div.yuimenubar li.selected { background-color: #527B97; }");
             writer.endElement("style");
             setResourceAsRendered(context, YUI_HELPER_CSS_RENDERED);
         }
