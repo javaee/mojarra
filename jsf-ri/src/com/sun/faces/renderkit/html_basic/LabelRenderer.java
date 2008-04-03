@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.48 2007/07/06 18:21:58 rlubke Exp $
+ * $Id: LabelRenderer.java,v 1.49 2007/07/06 20:15:19 rlubke Exp $
  */
 
 /*
@@ -133,11 +133,8 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
             logger.fine("Value to be rendered " + value);
         }
         if (value != null && value.length() != 0) {
-            boolean escape = true;
-            Object val;
-            if (null != (val = component.getAttributes().get("escape"))) {
-                escape = Boolean.valueOf(val.toString());
-            }
+            Object val = component.getAttributes().get("escape");
+            boolean escape = (val != null) && Boolean.valueOf(val.toString());
 
             if (escape) {
                 writer.writeText(value, component, "value");

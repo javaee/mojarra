@@ -1,5 +1,5 @@
 /*
- * $Id: OutputMessageRenderer.java,v 1.32 2007/07/06 18:21:57 rlubke Exp $
+ * $Id: OutputMessageRenderer.java,v 1.33 2007/07/06 20:15:19 rlubke Exp $
  */
 
 /*
@@ -51,7 +51,6 @@ import javax.faces.context.ResponseWriter;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.logging.Level;
 
 import com.sun.faces.renderkit.RenderKitUtils;
@@ -182,8 +181,9 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
             }
         }
 
-        boolean escape =
-              Boolean.valueOf(component.getAttributes().get("escape").toString());          
+        Object val = component.getAttributes().get("escape");
+        boolean escape = (val != null) && Boolean.valueOf(val.toString());
+        
         if (escape) {
             writer.writeText(message, component, "value");
         } else {
