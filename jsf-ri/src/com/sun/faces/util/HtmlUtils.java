@@ -1,8 +1,8 @@
 /*
- * $Id: HtmlUtils.java,v 1.13 2007/04/27 22:01:06 ofung Exp $
+ * $Id: HtmlUtils.java,v 1.14 2007/12/19 17:43:47 rlubke Exp $
  */
 /*
- * $Id: HtmlUtils.java,v 1.13 2007/04/27 22:01:06 ofung Exp $
+ * $Id: HtmlUtils.java,v 1.14 2007/12/19 17:43:47 rlubke Exp $
  */
 
 /*
@@ -100,22 +100,28 @@ public class HtmlUtils {
                         buffIndex = addToBuffer(out, buff, buffIndex,
                                                 buffLength, ch);
                     } else if (ch == '<') {
-                        buffIndex = flushBuffer(out, buff, buffIndex);
-
-                        out.write("&lt;");
+                        buffIndex = addToBuffer(out,
+                                                buff,
+                                                buffIndex,
+                                                buffLength,
+                                                LT_CHARS);
                     } else if (ch == '>') {
-                        buffIndex = flushBuffer(out, buff, buffIndex);
-
-                        out.write("&gt;");
+                        buffIndex = addToBuffer(out,
+                                                buff,
+                                                buffIndex,
+                                                buffLength,
+                                                GT_CHARS);
                     } else {
                         buffIndex = addToBuffer(out, buff, buffIndex,
                                                 buffLength, ch);
                     }
                 } else {
                     if (ch == '&') {
-                        buffIndex = flushBuffer(out, buff, buffIndex);
-
-                        out.write("&amp;");
+                        buffIndex = addToBuffer(out,
+                                                buff,
+                                                buffIndex,
+                                                buffLength,
+                                                AMP_CHARS);
                     } else {
                         buffIndex = addToBuffer(out, buff, buffIndex,
                                                 buffLength, ch);
@@ -123,18 +129,17 @@ public class HtmlUtils {
                 }
             } else if (ch <= 0xff) {
                 // ISO-8859-1 entities: encode as needed
-                buffIndex = flushBuffer(out, buff, buffIndex);
-
-                out.write('&');
-                out.write(sISO8859_1_Entities[ch - 0xA0]);
-                out.write(';');
+                buffIndex = addToBuffer(out,
+                                        buff,
+                                        buffIndex,
+                                        buffLength,
+                                        sISO8859_1_Entities[ch - 0xA0]);
             } else {
                 // Double-byte characters to encode.
                 // PENDING: when outputting to an encoding that
                 // supports double-byte characters (UTF-8, for example),
                 // we should not be encoding
-                buffIndex = flushBuffer(out, buff, buffIndex);
-                _writeDecRef(out, ch);
+                buffIndex = _writeDecRef(out, buff, buffIndex, buffLength, ch);
             }
         }
 
@@ -170,39 +175,46 @@ public class HtmlUtils {
                         buffIndex = addToBuffer(out, buff, buffIndex,
                                                 buffLength, ch);
                     } else if (ch == '<') {
-                        buffIndex = flushBuffer(out, buff, buffIndex);
-                        out.write("&lt;");
+                        buffIndex = addToBuffer(out,
+                                                buff,
+                                                buffIndex,
+                                                buffLength,
+                                                LT_CHARS);
                     } else if (ch == '>') {
-                        buffIndex = flushBuffer(out, buff, buffIndex);
-                        out.write("&gt;");
+                        buffIndex = addToBuffer(out,
+                                                buff,
+                                                buffIndex,
+                                                buffLength,
+                                                GT_CHARS);
                     } else {
                         buffIndex = addToBuffer(out, buff, buffIndex,
                                                 buffLength, ch);
                     }
                 } else {
                     if (ch == '&') {
-                        buffIndex = flushBuffer(out, buff, buffIndex);
-
-                        out.write("&amp;");
+                        buffIndex = addToBuffer(out,
+                                                buff,
+                                                buffIndex,
+                                                buffLength,
+                                                AMP_CHARS);
                     } else {
                         buffIndex = addToBuffer(out, buff, buffIndex,
                                                 buffLength, ch);
                     }
                 }
             } else if (ch <= 0xff) {
-                // ISO-8859-1 entities: encode as needed 
-                buffIndex = flushBuffer(out, buff, buffIndex);
-
-                out.write('&');
-                out.write(sISO8859_1_Entities[ch - 0xA0]);
-                out.write(';');
+                // ISO-8859-1 entities: encode as needed
+                buffIndex = addToBuffer(out,
+                                        buff,
+                                        buffIndex,
+                                        buffLength,
+                                        sISO8859_1_Entities[ch - 0xA0]);
             } else {
                 // Double-byte characters to encode.
                 // PENDING: when outputting to an encoding that
                 // supports double-byte characters (UTF-8, for example),
                 // we should not be encoding
-                buffIndex = flushBuffer(out, buff, buffIndex);
-                _writeDecRef(out, ch);
+                buffIndex = _writeDecRef(out, buff, buffIndex, buffLength, ch);
             }
         }
 
@@ -238,29 +250,44 @@ public class HtmlUtils {
                         buffIndex = addToBuffer(out, buff, buffIndex,
                                                 buffLength, ch);                       
                     } else if (ch == '<') {
-                        buffIndex = flushBuffer(out, buff, buffIndex);
-                        out.write("&lt;");
+                        buffIndex = addToBuffer(out,
+                                                buff,
+                                                buffIndex,
+                                                buffLength,
+                                                LT_CHARS);
                     } else if (ch == '>') {
-                        buffIndex = flushBuffer(out, buff, buffIndex);
-                        out.write("&gt;");
+                        buffIndex = addToBuffer(out,
+                                                buff,
+                                                buffIndex,
+                                                buffLength,
+                                                GT_CHARS);
                     } else {
                         buffIndex = addToBuffer(out, buff, buffIndex,
                                                 buffLength, ch);
                     }
                 } else {
                     if (ch == '&') {
-                        buffIndex = flushBuffer(out, buff, buffIndex);
-                        
                         // HTML 4.0, section B.7.1: ampersands followed by
                         // an open brace don't get escaped
-                        if ((i + 1 < length) && (text.charAt(i + 1) == '{'))
-                            out.write(ch);
-                        else
-                            out.write("&amp;");
+                        if ((i + 1 < length) && (text.charAt(i + 1) == '{')) {
+                            buffIndex = addToBuffer(out,
+                                                    buff,
+                                                    buffIndex,
+                                                    buffLength,
+                                                    ch);
+                        } else {
+                            buffIndex = addToBuffer(out,
+                                                buff,
+                                                buffIndex,
+                                                buffLength,
+                                                AMP_CHARS);
+                        }
                     } else if (ch == '"') {
-                        buffIndex = flushBuffer(out, buff, buffIndex);
-
-                        out.write("&quot;");
+                        buffIndex = addToBuffer(out,
+                                                buff,
+                                                buffIndex,
+                                                buffLength,
+                                                QUOT_CHARS);
                     } else {
                         buffIndex = addToBuffer(out, buff, buffIndex,
                                                 buffLength, ch);
@@ -268,19 +295,17 @@ public class HtmlUtils {
                 }
             } else if (ch <= 0xff) {
                 // ISO-8859-1 entities: encode as needed
-                buffIndex = flushBuffer(out, buff, buffIndex);
-
-                out.write('&');
-                out.write(sISO8859_1_Entities[ch - 0xA0]);
-                out.write(';');
+                buffIndex = addToBuffer(out,
+                                        buff,
+                                        buffIndex,
+                                        buffLength,
+                                        sISO8859_1_Entities[ch - 0xA0]);
             } else {
-                buffIndex = flushBuffer(out, buff, buffIndex);
-                
                 // Double-byte characters to encode.
                 // PENDING: when outputting to an encoding that
                 // supports double-byte characters (UTF-8, for example),
                 // we should not be encoding
-                _writeDecRef(out, ch);
+                buffIndex = _writeDecRef(out, buff, buffIndex, buffLength, ch);
             }
         }
 
@@ -325,30 +350,44 @@ public class HtmlUtils {
                         buffIndex = addToBuffer(out, buff, buffIndex,
                                                 buffLength, ch);                       
                     } else if (ch == '<') {
-                        buffIndex = flushBuffer(out, buff, buffIndex);
-                        out.write("&lt;");
+                        buffIndex = addToBuffer(out,
+                                                buff,
+                                                buffIndex,
+                                                buffLength,
+                                                LT_CHARS);
                     } else if (ch == '>') {
-                        buffIndex = flushBuffer(out, buff, buffIndex);
-
-                        out.write("&gt;");
+                        buffIndex = addToBuffer(out,
+                                                buff,
+                                                buffIndex,
+                                                buffLength,
+                                                GT_CHARS);
                     } else {
                         buffIndex = addToBuffer(out, buff, buffIndex,
                                                 buffLength, ch);
                     }
                 } else {
                     if (ch == '&') {
-                        buffIndex = flushBuffer(out, buff, buffIndex);
-
                         // HTML 4.0, section B.7.1: ampersands followed by
                         // an open brace don't get escaped
-                        if ((i + 1 < end) && (text[i + 1] == '{'))
-                            out.write(ch);
-                        else
-                            out.write("&amp;");
+                        if ((i + 1 < end) && (text[i + 1] == '{')) {
+                            buffIndex = addToBuffer(out,
+                                                    buff,
+                                                    buffIndex,
+                                                    buffLength,
+                                                    ch);
+                        } else {
+                            buffIndex = addToBuffer(out,
+                                                buff,
+                                                buffIndex,
+                                                buffLength,
+                                                AMP_CHARS);
+                        }
                     } else if (ch == '"') {
-                        buffIndex = flushBuffer(out, buff, buffIndex);
-
-                        out.write("&quot;");
+                        buffIndex = addToBuffer(out,
+                                                buff,
+                                                buffIndex,
+                                                buffLength,
+                                                QUOT_CHARS);
                     } else {
                         buffIndex = addToBuffer(out, buff, buffIndex,
                                                 buffLength, ch);
@@ -356,19 +395,17 @@ public class HtmlUtils {
                 }
             } else if (ch <= 0xff) {
                 // ISO-8859-1 entities: encode as needed
-                buffIndex = flushBuffer(out, buff, buffIndex);
-
-                out.write('&');
-                out.write(sISO8859_1_Entities[ch - 0xA0]);
-                out.write(';');
+                buffIndex = addToBuffer(out,
+                                        buff,
+                                        buffIndex,
+                                        buffLength,
+                                        sISO8859_1_Entities[ch - 0xA0]);
             } else {
-                buffIndex = flushBuffer(out, buff, buffIndex);
-                
                 // Double-byte characters to encode.
                 // PENDING: when outputting to an encoding that
                 // supports double-byte characters (UTF-8, for example),
                 // we should not be encoding
-                _writeDecRef(out, ch);
+                buffIndex = _writeDecRef(out, buff, buffIndex, buffLength, ch);
             }
         }
 
@@ -381,54 +418,63 @@ public class HtmlUtils {
      * the decimal version, but Netscape didn't support hex escapes until
      * 4.7.4.
      */
-    static private void _writeDecRef(Writer out, char ch) throws IOException {
+    static private int _writeDecRef(Writer out,
+                                    char[] buffer,
+                                    int bufferIndex,
+                                    int bufferLength,
+                                    char ch) throws IOException {
         if (ch == '\u20ac') {
-            out.write("&euro;");
-            return;
+            bufferIndex = addToBuffer(out,
+                                      buffer,
+                                      bufferIndex,
+                                      bufferLength,
+                                      EURO_CHARS);
+            return bufferIndex;
         }
-        out.write("&#");
+        bufferIndex = addToBuffer(out,
+                                  buffer,
+                                  bufferIndex,
+                                  bufferLength,
+                                  DEC_REF_START);
         // Formerly used String.valueOf().  This version tests out
         // about 40% faster in a microbenchmark (and on systems where GC is
         // going gonzo, it should be even better)
         int i = (int) ch;
         if (i > 10000) {
-            out.write('0' + (i / 10000));
+            bufferIndex = addToBuffer(out, buffer, bufferIndex, bufferLength, (char) i);
             i = i % 10000;
-            out.write('0' + (i / 1000));
+            bufferIndex = addToBuffer(out, buffer, bufferIndex, bufferLength, ((char) ('0' + (i / 1000))));
             i = i % 1000;
-            out.write('0' + (i / 100));
+            bufferIndex = addToBuffer(out, buffer, bufferIndex, bufferLength, ((char) ('0' + (i / 100))));
             i = i % 100;
-            out.write('0' + (i / 10));
+            bufferIndex = addToBuffer(out, buffer, bufferIndex, bufferLength, ((char) ('0' + (i / 10))));
             i = i % 10;
-            out.write('0' + i);
+            bufferIndex = addToBuffer(out, buffer, bufferIndex, bufferLength, ((char) ('0' + i)));
         } else if (i > 1000) {
-            out.write('0' + (i / 1000));
+            bufferIndex = addToBuffer(out, buffer, bufferIndex, bufferLength, ((char) ('0' + (i / 1000))));
             i = i % 1000;
-            out.write('0' + (i / 100));
+            bufferIndex = addToBuffer(out, buffer, bufferIndex, bufferLength, ((char) ('0' + (i / 100))));
             i = i % 100;
-            out.write('0' + (i / 10));
+            bufferIndex = addToBuffer(out, buffer, bufferIndex, bufferLength, ((char) ('0' + (i / 10))));
             i = i % 10;
-            out.write('0' + i);
+            bufferIndex = addToBuffer(out, buffer, bufferIndex, bufferLength, ((char) ('0' + i)));
         } else {
-            out.write('0' + (i / 100));
+            bufferIndex = addToBuffer(out, buffer, bufferIndex, bufferLength, ((char) ('0' + (i / 100))));
             i = i % 100;
-            out.write('0' + (i / 10));
+            bufferIndex = addToBuffer(out, buffer, bufferIndex, bufferLength, ((char) ('0' + (i / 10))));
             i = i % 10;
-            out.write('0' + i);
+            bufferIndex = addToBuffer(out, buffer, bufferIndex, bufferLength, ((char) ('0' + i)));
         }
 
-        out.write(';');
+        return addToBuffer(out, buffer, bufferIndex, bufferLength, ';');
+        
     }
 
     // 
     // Buffering scheme: we use a tremendously simple buffering
     // scheme that greatly reduces the number of calls into the
     // Writer/PrintWriter.  In practice this has produced significant
-    // measured performance gains (at least in JDK 1.3.1).  We only
-    // support adding single characters to the buffer, so anytime
-    // multiple characters need to be written out, the entire buffer
-    // gets flushed.  In practice, this is good enough, and keeps
-    // the core simple.
+    // measured performance gains (at least in JDK 1.3.1).
     //
 
     /**
@@ -448,6 +494,26 @@ public class HtmlUtils {
         buffer[bufferIndex] = ch;
 
         return bufferIndex + 1;
+    }
+
+    /**
+     * Add an array of characters to the buffer, flushing the buffer
+     * if the buffer is full, and returning the new buffer index. 
+     */
+    private static int addToBuffer(Writer out,
+                                   char[] buffer,
+                                   int bufferIndex,
+                                   int bufferLength,
+                                   char[] toAdd) throws IOException {
+
+        if (bufferIndex >= bufferLength
+            || (toAdd.length + bufferIndex >= bufferLength)) {
+            out.write(buffer, 0, bufferIndex);
+            bufferIndex = 0;
+        }
+        System.arraycopy(toAdd, 0, buffer, bufferIndex, toAdd.length);
+        return bufferIndex + toAdd.length;
+
     }
 
 
@@ -610,10 +676,9 @@ public class HtmlUtils {
     static private boolean isAmpEscaped(String text, int idx) {       
         for (int i = 1, ix = idx; i < AMP_CHARS.length; i++, ix++) {
             if (text.charAt(ix) == AMP_CHARS[i]) {
-                continue;    
-            } else {
-                return false;
+                continue;
             }
+            return false;
         }
         return true;
     }
@@ -635,6 +700,11 @@ public class HtmlUtils {
     }
 
     static private final char[] AMP_CHARS = "&amp;".toCharArray();
+    static private final char[] QUOT_CHARS = "&quot;".toCharArray();
+    static private final char[] GT_CHARS = "&gt;".toCharArray();
+    static private final char[] LT_CHARS = "&lt;".toCharArray();
+    static private final char[] EURO_CHARS = "&euro;".toCharArray();
+    static private final char[] DEC_REF_START = "&#".toCharArray();
     static private final int MAX_BYTES_PER_CHAR = 10;
     static private final BitSet DONT_ENCODE_SET = new BitSet(256);
 
@@ -680,103 +750,103 @@ public class HtmlUtils {
     //
     // Entities from HTML 4.0, section 24.2.1; character codes 0xA0 to 0xFF
     //
-    static private String[] sISO8859_1_Entities = new String[]{
-        "nbsp",
-        "iexcl",
-        "cent",
-        "pound",
-        "curren",
-        "yen",
-        "brvbar",
-        "sect",
-        "uml",
-        "copy",
-        "ordf",
-        "laquo",
-        "not",
-        "shy",
-        "reg",
-        "macr",
-        "deg",
-        "plusmn",
-        "sup2",
-        "sup3",
-        "acute",
-        "micro",
-        "para",
-        "middot",
-        "cedil",
-        "sup1",
-        "ordm",
-        "raquo",
-        "frac14",
-        "frac12",
-        "frac34",
-        "iquest",
-        "Agrave",
-        "Aacute",
-        "Acirc",
-        "Atilde",
-        "Auml",
-        "Aring",
-        "AElig",
-        "Ccedil",
-        "Egrave",
-        "Eacute",
-        "Ecirc",
-        "Euml",
-        "Igrave",
-        "Iacute",
-        "Icirc",
-        "Iuml",
-        "ETH",
-        "Ntilde",
-        "Ograve",
-        "Oacute",
-        "Ocirc",
-        "Otilde",
-        "Ouml",
-        "times",
-        "Oslash",
-        "Ugrave",
-        "Uacute",
-        "Ucirc",
-        "Uuml",
-        "Yacute",
-        "THORN",
-        "szlig",
-        "agrave",
-        "aacute",
-        "acirc",
-        "atilde",
-        "auml",
-        "aring",
-        "aelig",
-        "ccedil",
-        "egrave",
-        "eacute",
-        "ecirc",
-        "euml",
-        "igrave",
-        "iacute",
-        "icirc",
-        "iuml",
-        "eth",
-        "ntilde",
-        "ograve",
-        "oacute",
-        "ocirc",
-        "otilde",
-        "ouml",
-        "divide",
-        "oslash",
-        "ugrave",
-        "uacute",
-        "ucirc",
-        "uuml",
-        "yacute",
-        "thorn",
-        "yuml"
+    static private char[][] sISO8859_1_Entities = new char[][]{
+        "&nbsp;".toCharArray(),
+        "&iexcl;".toCharArray(),
+        "&cent;".toCharArray(),
+        "&pound;".toCharArray(),
+        "&curren;".toCharArray(),
+        "&yen;".toCharArray(),
+        "&brvbar;".toCharArray(),
+        "&sect;".toCharArray(),
+        "&uml;".toCharArray(),
+        "&copy;".toCharArray(),
+        "&ordf;".toCharArray(),
+        "&laquo;".toCharArray(),
+        "&not;".toCharArray(),
+        "&shy;".toCharArray(),
+        "&reg;".toCharArray(),
+        "&macr;".toCharArray(),
+        "&deg;".toCharArray(),
+        "&plusmn;".toCharArray(),
+        "&sup2;".toCharArray(),
+        "&sup3;".toCharArray(),
+        "&acute;".toCharArray(),
+        "&micro;".toCharArray(),
+        "&para;".toCharArray(),
+        "&middot;".toCharArray(),
+        "&cedil;".toCharArray(),
+        "&sup1;".toCharArray(),
+        "&ordm;".toCharArray(),
+        "&raquo;".toCharArray(),
+        "&frac14;".toCharArray(),
+        "&frac12;".toCharArray(),
+        "&frac34;".toCharArray(),
+        "&iquest;".toCharArray(),
+        "&Agrave;".toCharArray(),
+        "&Aacute;".toCharArray(),
+        "&Acirc;".toCharArray(),
+        "&Atilde;".toCharArray(),
+        "&Auml;".toCharArray(),
+        "&Aring;".toCharArray(),
+        "&AElig;".toCharArray(),
+        "&Ccedil;".toCharArray(),
+        "&Egrave;".toCharArray(),
+        "&Eacute;".toCharArray(),
+        "&Ecirc;".toCharArray(),
+        "&Euml;".toCharArray(),
+        "&Igrave;".toCharArray(),
+        "&Iacute;".toCharArray(),
+        "&Icirc;".toCharArray(),
+        "&Iuml;".toCharArray(),
+        "&ETH;".toCharArray(),
+        "&Ntilde;".toCharArray(),
+        "&Ograve;".toCharArray(),
+        "&Oacute;".toCharArray(),
+        "&Ocirc;".toCharArray(),
+        "&Otilde;".toCharArray(),
+        "&Ouml;".toCharArray(),
+        "&times;".toCharArray(),
+        "&Oslash;".toCharArray(),
+        "&Ugrave;".toCharArray(),
+        "&Uacute;".toCharArray(),
+        "&Ucirc;".toCharArray(),
+        "&Uuml;".toCharArray(),
+        "&Yacute;".toCharArray(),
+        "&THORN;".toCharArray(),
+        "&szlig;".toCharArray(),
+        "&agrave;".toCharArray(),
+        "&aacute;".toCharArray(),
+        "&acirc;".toCharArray(),
+        "&atilde;".toCharArray(),
+        "&auml;".toCharArray(),
+        "&aring;".toCharArray(),
+        "&aelig;".toCharArray(),
+        "&ccedil;".toCharArray(),
+        "&egrave;".toCharArray(),
+        "&eacute;".toCharArray(),
+        "&ecirc;".toCharArray(),
+        "&euml;".toCharArray(),
+        "&igrave;".toCharArray(),
+        "&iacute;".toCharArray(),
+        "&icirc;".toCharArray(),
+        "&iuml;".toCharArray(),
+        "&eth;".toCharArray(),
+        "&ntilde;".toCharArray(),
+        "&ograve;".toCharArray(),
+        "&oacute;".toCharArray(),
+        "&ocirc;".toCharArray(),
+        "&otilde;".toCharArray(),
+        "&ouml;".toCharArray(),
+        "&divide;".toCharArray(),
+        "&oslash;".toCharArray(),
+        "&ugrave;".toCharArray(),
+        "&uacute;".toCharArray(),
+        "&ucirc;".toCharArray(),
+        "&uuml;".toCharArray(),
+        "&yacute;".toCharArray(),
+        "&thorn;".toCharArray(),
+        "&yuml;".toCharArray()
     };
 
 

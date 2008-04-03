@@ -1,5 +1,5 @@
 /*
- * $Id: TestHtmlResponseWriter.java,v 1.27 2007/09/24 18:57:34 rlubke Exp $
+ * $Id: TestHtmlResponseWriter.java,v 1.28 2007/12/19 17:43:48 rlubke Exp $
  */
 
 /*
@@ -59,7 +59,7 @@ import com.sun.faces.cactus.ServletFacesTestCase;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHtmlResponseWriter.java,v 1.27 2007/09/24 18:57:34 rlubke Exp $
+ * @version $Id: TestHtmlResponseWriter.java,v 1.28 2007/12/19 17:43:48 rlubke Exp $
  */
 
 public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestCase
@@ -182,27 +182,16 @@ public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestC
     //
     public void testWriteAttribute() {
         try {
-            writer.startElement("input", new UIInput());
+            UIInput in = new UIInput();
+            writer.startElement("input", in);
             writer.writeAttribute("type", "text", "type");
-            assertTrue(sw.toString().equals("<input type=" + "\"text\""));
-            Boolean bool = new Boolean("true");
-            writer.writeAttribute("readonly", bool, "readonly");
-            assertTrue(
-                sw.toString().equals("<input type=" + "\"text\"" + " readonly=\"readonly\""));
-            //
-            //Assert that boolean "false" values don't get written out
-            //
-            bool = new Boolean("false");
-            writer.writeAttribute("disabled", bool, "disabled");
-            assertTrue(
-                sw.toString().equals("<input type=" + "\"text\"" + " readonly=\"readonly\""));
-            //
-            //Assert correct escape char
-            //
+            writer.writeAttribute("readonly", Boolean.TRUE, "readonly");
+            writer.writeAttribute("disabled", Boolean.FALSE, "disabled");
             writer.writeAttribute("greaterthan", ">", "greaterthan");
+            writer.endElement("input");
             assertTrue(sw.toString().equals("<input type=" + "\"text\"" +
                                             " readonly=\"readonly\"" +
-                                            " greaterthan=" + "\"&gt;\""));
+                                            " greaterthan=" + "\"&gt;\" />"));
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -228,7 +217,8 @@ public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestC
                 renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
             writer.startElement("foo", new UIInput());
             writer.writeURIAttribute("player", "Bobby Orr", "player");
-            assertTrue(sw.toString().equals("<foo player=" + "\"Bobby+Orr\""));
+            writer.endElement("input");
+            assertTrue(sw.toString().equals("<foo player=" + "\"Bobby+Orr\" />"));
             //
             // test no URL encoding (javascript)
             //
@@ -237,9 +227,10 @@ public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestC
                 renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
             writer.startElement("foo", new UIInput());
             writer.writeURIAttribute("player", "javascript:Bobby Orr", null);
+            writer.endElement("foo");
             assertTrue(
                 sw.toString().equals("<foo player=" +
-                                     "\"javascript:Bobby Orr\""));
+                                     "\"javascript:Bobby Orr\"></foo>"));
         } catch (IOException e) {
             assertTrue(false);
         }
