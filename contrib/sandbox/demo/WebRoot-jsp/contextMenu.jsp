@@ -46,7 +46,7 @@
 					</h:outputLink>
 				</risb:menuItem>
 				<risb:menuItem>
-					<h:commandLink action="#{home}" value="Home" />
+					<h:outputLink action="index.jsf" value="Home" />
 				</risb:menuItem>
 			</risb:contextMenu>
 		</h:outputText>
