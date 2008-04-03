@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.52 2008/01/07 19:49:12 rlubke Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.53 2008/04/02 17:14:40 rlubke Exp $
  */
 
 /*
@@ -161,20 +161,17 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 
             try {
                 InputStream bis;
-                if (guard != null) {
-                    bis = new CipherInputStream(
-                          new Base64InputStream(viewString),
-                          guard.getDecryptionCipher());
+                if (compressState) {
+                    bis = new GZIPInputStream(new Base64InputStream(viewString));
                 } else {
                     bis = new Base64InputStream(viewString);
                 }
-
-                if (compressState) {
-                    ois = serialProvider.createObjectInputStream(
-                          new GZIPInputStream(bis));
+                if (guard != null) {
+                    ois = serialProvider.createObjectInputStream(new CipherInputStream(bis, guard.getDecryptionCipher()));
                 } else {
                     ois = serialProvider.createObjectInputStream(bis);
                 }
+
                 long stateTime = 0;
                 if (webConfig.isSet(WebContextInitParameter.ClientStateTimeout)) {
                     try {
@@ -247,16 +244,15 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
                       new Base64OutputStreamWriter(csBuffSize,
                                                    writer);
                 OutputStream base;
-                if (guard != null) {
-                    base = new CipherOutputStream(bos,
-                                                  guard.getEncryptionCipher());
+                if (compressState) {
+                    base = new GZIPOutputStream(bos, 1024);
                 } else {
                     base = bos;
                 }
-                if (compressState) {
+                if (guard != null) {
                     oos = serialProvider.createObjectOutputStream(
-                          new BufferedOutputStream(new GZIPOutputStream(base),
-                                                   1024));
+                          new BufferedOutputStream(
+                                new CipherOutputStream(base, guard.getEncryptionCipher())));
                 } else {
                     oos = serialProvider
                           .createObjectOutputStream(new BufferedOutputStream(
@@ -465,8 +461,8 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
             serialProvider = SerializationProviderFactory
                   .createInstance(FacesContext.getCurrentInstance().getExternalContext());
         }
-                
+
     }
 
-   
+
 } // end of class ResponseStateManagerImpl

@@ -174,19 +174,18 @@
             <fileset dir="${basedir}/carstore/src/java">
                 <include name="**/*.properties"/>
             </fileset>
-        </copy>        
+        </copy>
 
-        <run-tests demo-war="${cardemo.war}" 
+        <run-tests demo-war="${cardemo.war}"
                    demo-name="jsf-cardemo"
                    tests="cardemo"
-                   context-path="${cardemo.context.path}"/> 
+                   context-path="${cardemo.context.path}"/>
 
-        <run-tests demo-war="${mojarra_ext.war}" 
+        <run-tests demo-war="${mojarra_ext.war}"
                    demo-name="mojarra_ext"
                    tests="mojarra_ext"
                    context-path="${mojarra_ext.context.path}"/>
 
-    </target>   
+    </target>
 
 </project>
-

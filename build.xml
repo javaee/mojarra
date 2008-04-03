@@ -69,6 +69,9 @@
                 <filelist dir="${impl.dir}">
                     <file name="build.xml"/>
                 </filelist>              
+                <filelist dir="${demo.dir}">
+                    <file name="build.xml"/>
+                </filelist>              
             </subant>
         </sequential>
     </macrodef>
@@ -201,12 +204,12 @@
 
   </target>
 
-    <target name="build.java.net" 
+    <target name="build.java.net"
             depends="prepare.build.java.net">
 
         <antcall target="build.as.updater.jars" />
 
-    </target>   
+    </target>
 
     <target name="nightly" depends="build.java.net"
             description="update nightly build">
@@ -253,11 +256,11 @@
 
 
 
-    <target name="build.samples.zip" depends="main" description="Build the demo distribution">       
+    <target name="build.samples.zip" depends="main" description="Build the demo distribution">
 
-        <ant dir="${demo.dir}" 
+        <ant dir="${demo.dir}"
              antfile="build.xml"
-             target="main" 
+             target="main"
              inheritAll="false"/>
         <mkdir dir="samples"/>
         <copy todir="${basedir}/samples/jsf-samples"
@@ -299,10 +302,10 @@
         <fileset dir="${basedir}/legal/jsf-cddl"
                  includes="BINARY_LICENSE.txt" />
         <manifest>
-          <attribute name="Main-Class" 
+          <attribute name="Main-Class"
                      value="com.sun.faces.tools.GlassfishUpdater" />
         </manifest>
-      </jar>    
+      </jar>
     </target>
 
 </project>
