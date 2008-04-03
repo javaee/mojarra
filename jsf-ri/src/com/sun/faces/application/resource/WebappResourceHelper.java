@@ -1,5 +1,6 @@
 package com.sun.faces.application.resource;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -61,7 +62,8 @@ public class WebappResourceHelper extends ResourceHelper {
     /**
      * @see ResourceHelper#getInputStream(ResourceInfo,javax.faces.context.FacesContext)
      */
-    public InputStream getInputStream(ResourceInfo resource, FacesContext ctx) {
+    protected InputStream getNonCompressedInputStream(ResourceInfo resource, FacesContext ctx)
+    throws IOException {
 
         return ctx.getExternalContext().getResourceAsStream(resource.getPath());
 
@@ -114,11 +116,12 @@ public class WebappResourceHelper extends ResourceHelper {
 
 
     /**
-     * @see ResourceHelper#findResource(LibraryInfo, String, String, javax.faces.context.FacesContext)
+     * @see ResourceHelper#findResource(LibraryInfo, String, String, boolean, javax.faces.context.FacesContext)
      */
     public ResourceInfo findResource(LibraryInfo library,
                                      String resourceName,
                                      String localePrefix,
+                                     boolean compressable,
                                      FacesContext ctx) {
 
         String basePath;
@@ -152,11 +155,19 @@ public class WebappResourceHelper extends ResourceHelper {
               ctx.getExternalContext().getResourcePaths(basePath);
         // if getResourcePaths returns null or an empty set, this means that we have
         // a non-directory resource, therefor, this resource isn't versioned.
+        ResourceInfo value;
         if (resourcePaths == null || resourcePaths.size() == 0) {
             if (library != null) {
-                return new ResourceInfo(library, resourceName, null);
+                value = new ResourceInfo(library,
+                                         resourceName,
+                                         null,
+                                         compressable);
             } else {
-                return new ResourceInfo(resourceName, null, localePrefix, this);
+                value = new ResourceInfo(resourceName,
+                                         null,
+                                         localePrefix,
+                                         this,
+                                         compressable);
             }
         } else {
             // ok, subdirectories exist, so find the latest 'version' directory
@@ -170,17 +181,25 @@ public class WebappResourceHelper extends ResourceHelper {
                 }
             }
             if (library != null) {
-                return new ResourceInfo(library, resourceName, version);
+                value = new ResourceInfo(library,
+                                         resourceName,
+                                         version,
+                                         compressable);
             } else {
-                return new ResourceInfo(resourceName, version, localePrefix, this);
+                value = new ResourceInfo(resourceName,
+                                         version,
+                                         localePrefix,
+                                         this,
+                                         compressable);
             }
         }
 
+        if (value.isCompressable()) {
+            value = handleCompression(value);
+        }
+        return value;
+
     }
-
-
-    // --------------------------------------------------------- Private Methods
-
 
 
 }

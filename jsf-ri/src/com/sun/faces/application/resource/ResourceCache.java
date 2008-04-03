@@ -238,13 +238,15 @@ public class ResourceCache {
             resourceCache = null;
         }
         if (service != null) {
-            if (LOGGER.isLoggable(Level.INFO)) {
-                LOGGER.log(Level.INFO,
-                           "[{0}] Cancelling ResourceCache update task...",
-                          contextName);
+            if (monitorTask != null) {
+                if (LOGGER.isLoggable(Level.INFO)) {
+                    LOGGER.log(Level.INFO,
+                               "[{0}] Cancelling ResourceCache update task...",
+                               contextName);
+                }
+                monitorTask.cancel(true);
+                monitorTask = null;
             }
-            monitorTask.cancel(true);
-            monitorTask = null;
             service.purge();
         }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListenerTestCase.java,v 1.17 2008/02/14 00:32:11 rlubke Exp $
+ * $Id: ConfigureListenerTestCase.java,v 1.18 2008/03/07 17:28:51 rlubke Exp $
  */
 
 /*
@@ -165,6 +165,7 @@ public class ConfigureListenerTestCase extends TestCase {
             (this.getClass().getClassLoader());
         context = new MockServletContext();
         context.addInitParameter("javax.faces.PROJECT_STAGE", "UnitTest");
+        context.addInitParameter("com.sun.faces.resourceUpdateCheckPeriod", "-1");
         listener = new ConfigureListener();
 
     }

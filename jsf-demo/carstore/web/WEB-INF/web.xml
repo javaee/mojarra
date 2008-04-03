@@ -54,6 +54,14 @@
         <param-value>true</param-value>
     </context-param>
 
+    <context-param>
+        <param-name>com.sun.faces.compressibleMimeTypes</param-name>
+        <param-value>
+               text/javascript,              
+               text/css
+        </param-value>
+    </context-param>
+
     <!-- Faces Servlet -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>

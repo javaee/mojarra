@@ -302,6 +302,7 @@ public class TestResourceImpl extends ServletFacesTestCase {
     }
 
 
+    @SuppressWarnings({"deprecation"})
     public void testUserAgentNeedsUpdate1() throws Exception {
 
         ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();

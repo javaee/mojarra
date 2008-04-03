@@ -36,6 +36,14 @@
 
 package com.sun.faces.application.resource;
 
+import java.io.File;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
+import javax.faces.context.FacesContext;
+
+import com.sun.faces.util.FacesLogger;
+
 /**
  * <p/>
  * <code>ResourceInfo</code> is a simple wrapper class for information
@@ -44,12 +52,18 @@ package com.sun.faces.application.resource;
  */
 public class ResourceInfo {
 
+    private static final Logger LOGGER = FacesLogger.RESOURCE.getLogger();
+    private static final String COMPRESSED_CONTENT_DIRECTORY =
+          "jsf-compressed";
+
     private String name;
     private String version;
     private String localePrefix;
     private ResourceHelper helper;
     private LibraryInfo library;
     private String path;
+    private String compressedPath;
+    private boolean compressable;
 
 
     /**
@@ -59,13 +73,15 @@ public class ResourceInfo {
      * @param library the library containing this resource
      * @param name the resource name
      * @param version the version of this resource (if any)
+     * @param compressable if this resource should be compressed
      */
-    public ResourceInfo(LibraryInfo library, String name, String version) {
+    public ResourceInfo(LibraryInfo library, String name, String version, boolean compressable) {
         this.name = name;
         this.version = version;
         this.helper = library.getHelper();
         this.library = library;
         this.localePrefix = library.getLocalePrefix();
+        this.compressable = compressable;
         initPath();
     }
 
@@ -75,15 +91,18 @@ public class ResourceInfo {
      * @param version the version of the resource
      * @param localePrefix the locale prefix for this resource (if any)
      * @param helper helper the helper class for this resource
+     * @param compressable if this resource should be compressed
      */
     ResourceInfo(String name,
                  String version,
                  String localePrefix,
-                 ResourceHelper helper) {
+                 ResourceHelper helper,
+                 boolean compressable) {
         this.name = name;
         this.version = version;
         this.localePrefix = localePrefix;
         this.helper = helper;
+        this.compressable = compressable;
         initPath();
     }
 
@@ -124,11 +143,28 @@ public class ResourceInfo {
     }
 
     /**
-     * @return returns the full path (including the library, if any) of the
+     * @return the full path (including the library, if any) of the
      *  resource.
      */
     public String getPath() {
         return path;
+    }
+
+    /**
+     * @return the path to which the compressed bits for this resource
+     *  reside.  If this resource isn't compressable and this method is called,
+     *  it will return <code>null</code>
+     */
+    public String getCompressedPath() {
+        return compressedPath;
+    }
+
+    /**
+     * @return <code>true</code> if this resource should be compressed,
+     *  otherwise <code>false</code>
+     */
+    public boolean isCompressable() {
+        return compressable;
     }
 
 
@@ -136,7 +172,9 @@ public class ResourceInfo {
 
 
     /**
-     * Create the full path to the resource.
+     * Create the full path to the resource.  If the resource can be compressed,
+     * setup the compressedPath ivar so that the path refers to the
+     * directory refereneced by the context attribute <code>javax.servlet.context.tempdir</code>.  
      */
     private void initPath() {
 
@@ -154,6 +192,37 @@ public class ResourceInfo {
             sb.append('/').append(version);
         }
         path = sb.toString();
+
+        if (compressable) {
+            FacesContext ctx = FacesContext.getCurrentInstance();
+            File servletTmpDir = (File) ctx.getExternalContext()
+                  .getApplicationMap().get("javax.servlet.context.tempdir");
+            if (servletTmpDir == null || !servletTmpDir.isDirectory()) {
+                if (LOGGER.isLoggable(Level.INFO)) {
+                    // PENDING i18n
+                    LOGGER.log(Level.INFO,
+                               "File ({0}) referenced by javax.servlet.context.tempdir attribute is null, or was is not a directory.  Compression for {1} will be unavailable.",
+                               new Object[]{((servletTmpDir == null)
+                                             ? "null"
+                                             : servletTmpDir.toString()),
+                                            path});
+                }
+                compressable = false;
+            } else {
+                String tPath = ((path.charAt(0) == '/') ? path : '/' + path);
+                File newDir = new File(servletTmpDir, COMPRESSED_CONTENT_DIRECTORY
+                                                      + tPath);
+                try {
+                    newDir.mkdirs();
+                    compressedPath = newDir.getCanonicalPath();
+                } catch (Exception e) {
+                    LOGGER.log(Level.SEVERE,
+                               e.toString(),
+                               e);
+                    compressable = false;
+                }
+            }
+        }
         
     }
 

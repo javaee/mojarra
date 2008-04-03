@@ -126,15 +126,14 @@ public class ResourceHandlerImpl extends ResourceHandler {
                                    String contentType) {
 
         Util.notNull("resourceName", resourceName);
-
+        String ctype = ((contentType != null)
+                        ? contentType
+                        : getContentType(resourceName));
         ResourceInfo info = manager.findResource(libraryName,
                                                  resourceName,
+                                                 ctype,
                                                  FacesContext.getCurrentInstance());
-        return ((info != null)
-                ? new ResourceImpl(this, info, (contentType != null)
-                                               ? contentType
-                                               : getContentType(resourceName))
-                : null);
+        return ((info != null) ? new ResourceImpl(this, info, ctype) : null);
 
     }
 

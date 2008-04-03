@@ -36,15 +36,6 @@
 
 package com.sun.faces.config;
 
-import com.sun.faces.util.FacesLogger;
-
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.naming.Context;
-import javax.servlet.ServletContext;
-
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Enumeration;
@@ -53,8 +44,16 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+
 import javax.faces.application.ResourceHandler;
-import javax.faces.application.ProjectStage;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.servlet.ServletContext;
+
+import com.sun.faces.util.FacesLogger;
 
 
 /** Class Documentation */
@@ -257,7 +256,7 @@ public class WebConfiguration {
         if (param == null) {
             return;
         }
-        boolean oldVal = booleanContextParameters.put(param, value);
+        boolean oldVal = booleanContextParameters.put(param, value);        
         if (LOGGER.isLoggable(Level.INFO) && oldVal != value) {
             LOGGER.log(Level.INFO,
                        "Overriding init parameter {0}.  Changing from {1} to {2}.",
@@ -274,10 +273,14 @@ public class WebConfiguration {
         }
         value = value.trim();
         String oldVal = contextParameters.put(param, value);
-         if (LOGGER.isLoggable(Level.INFO) && !(oldVal.equals(value))) {
-            LOGGER.log(Level.INFO,
-                       "Overriding init parameter {0}.  Changing from {1} to {2}.",
-                       new Object[] { param.getQualifiedName(), oldVal, value});
+        if (oldVal != null) {
+            if (LOGGER.isLoggable(Level.INFO) && !(oldVal.equals(value))) {
+                LOGGER.log(Level.INFO,
+                           "Overriding init parameter {0}.  Changing from {1} to {2}.",
+                           new Object[]{param.getQualifiedName(),
+                                        oldVal,
+                                        value});
+            }
         }
         
 
@@ -678,7 +681,12 @@ public class WebConfiguration {
         ResourceUpdateCheckPeriod(
               "com.sun.faces.resourceUpdateCheckPeriod",
               "5" // in minutes
+        ),
+        CompressableMimeTypes(
+              "com.sun.faces.compressableMimeTypes",
+              ""
         );
+
 
 
         private String defaultValue;

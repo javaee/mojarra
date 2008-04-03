@@ -39,6 +39,13 @@ package com.sun.faces.application.resource;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import javax.faces.application.Application;
 import javax.faces.application.ProjectStage;
@@ -46,6 +53,8 @@ import javax.faces.application.ResourceHandler;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.config.WebConfiguration;
 
 /**
  * This class is used to lookup {@link ResourceInfo} instances
@@ -53,27 +62,62 @@ import com.sun.faces.util.Util;
  * computational overhead with the scanning/version checking.
  *
  * @since 2.0
- *
- * RELEASE_PENDING (rlubke,driscoll)
- *                 - add logging where appropriate
  */
 public class ResourceManager {
 
+    private static final Logger LOGGER = FacesLogger.RESOURCE.getLogger();
 
+    /**
+     * {@link Pattern} for valid mime types to configure compression.
+     */
+    private static final Pattern CONFIG_MIMETYPE_PATTERN =
+          Pattern.compile("[a-z-]*/[a-z0-9.\\*-]*");
+
+    /**
+     * {@link ResourceHelper} used for looking up webapp-based resources.
+     */
     private ResourceHelper webappHelper = WebappResourceHelper.getInstance();
+
+    /**
+     * {@link ResourceHelper} used for looking up classpath-based resources.
+     */
     private ResourceHelper classpathHelper = ClasspathResourceHelper.getInstance();
+
+    /**
+     * Cache for storing {@link ResourceInfo} instances to reduce the cost
+     * of the resource lookups.
+     */
     private ResourceCache cache;
+
+    /**
+     * Patterns used to find {@link ResourceInfo} instances that may have their
+     * content compressed.
+     */
+    private List<Pattern> compressableTypes;
+
+    /**
+     * This lock is used to ensure the lookup of compressable {@link ResourceInfo}
+     * instances are atomic to prevent theading issues when writing the compressed
+     * content during a lookup.
+     */
+    private ReentrantLock lock = new ReentrantLock();
 
 
     // ------------------------------------------------------------ Constructors
 
 
+    /**
+     * Constructs a new <code>ResourceManager</code>.  Note:  if the current
+     * {@link ProjectStage} is {@link ProjectStage#Development} caching or
+     * {@link ResourceInfo} instances will not occur.
+     */
     public ResourceManager() {
 
         Application app = FacesContext.getCurrentInstance().getApplication();
-        if (app.getProjectStage() == ProjectStage.Production) {
+        if (app.getProjectStage() != ProjectStage.Development) {
             cache = new ResourceCache(); 
         }
+        initCompressableTypes();
 
     }
 
@@ -86,45 +130,70 @@ public class ResourceManager {
      * Attempt to lookup a {@link ResourceInfo} based on the specified
      * <code>libraryName<code> and <code>resourceName</code>
      * </p>
+     *
+     * <p>
+     * Implementation Note:  Synchronization is necessary when looking up
+     * compressed resources.  This ensures the atomicity of the content
+     * being compressed.  As such, the cost of doing this is low as once
+     * the resource is in the cache, the lookup won't be performed again
+     * until the cache is cleared.  That said, it's not a good idea
+     * to have caching disabled in a production environment if leveraging
+     * compression.
+     *
+     * If the resource isn't compressable, then we don't worry about creating
+     * a few extra copies of ResourceInfo until the cache is populated.
+     * </p>
+     *
      * @param libraryName the name of the library (if any)
      * @param resourceName the name of the resource
-     * @param ctx the {@link FacesContext} for the current request
+     * @param contentType the content type of the resource.  This will be
+     *  used to determine if the resource is compressable
+     * @param ctx the {@link javax.faces.context.FacesContext} for the current
+     *  request
+     *  
      * @return a {@link ResourceInfo} if a resource if found matching the
      *  provided arguments, otherwise, return <code>null</code>
      */
     public ResourceInfo findResource(String libraryName,
                                      String resourceName,
+                                     String contentType,
                                      FacesContext ctx) {
 
         String localePrefix = getLocalePrefix(ctx);
-        ResourceInfo info = getFromCache(resourceName, libraryName, localePrefix);
+        ResourceInfo info =
+              getFromCache(resourceName, libraryName, localePrefix);
         if (info == null) {
-            LibraryInfo library = null;
-
-            if (libraryName != null) {
-                library = findLibrary(libraryName, localePrefix, ctx);
-                if (library == null && localePrefix != null) {
-                    // no localized library found.  Try to find
-                    // a library that isn't localized.
-                    library = findLibrary(libraryName, null, ctx);
+            boolean compressable = isCompressable(contentType, ctx);
+            if (compressable) {
+                lock.lock();
+                try {
+                    info = getFromCache(resourceName, libraryName, localePrefix);
+                    if (info == null) {
+                        info = doLookup(libraryName,
+                                        resourceName,
+                                        localePrefix,
+                                        compressable,
+                                        ctx);
+                        if (info != null) {
+                            addToCache(info);
+                        }
+                    }
+                } finally {
+                    lock.unlock();
                 }
-                if (library == null) {
-                    return null;
+            } else {
+                info = doLookup(libraryName,
+                                resourceName,
+                                localePrefix,
+                                compressable,
+                                ctx);
+                if (info != null) {
+                    addToCache(info);
                 }
             }
 
-            String resName = trimLeadingSlash(resourceName);
-            info = findResource(library, resName, localePrefix, ctx);
-            if (info == null && localePrefix != null) {
-                // no localized resource found, try to find a
-                // resource that isn't localized
-                info = findResource(library, resName, null, ctx);
-            }
-            if (info != null) {
-                addToCache(info);
-            }
         }
-        
+
         return info;
 
     }
@@ -133,6 +202,58 @@ public class ResourceManager {
     // ----------------------------------------------------- Private Methods
 
 
+    /**
+     * Attempt to look up the Resource based on the provided details.
+     *
+     * @param libraryName the name of the library (if any)
+     * @param resourceName the name of the resource
+     * @param localePrefix the locale prefix for this resource (if any)
+     * @param compressable if this resource can be compressed
+     * @param ctx the {@link javax.faces.context.FacesContext} for the current
+     *  request
+     *
+     * @return a {@link ResourceInfo} if a resource if found matching the
+     *  provided arguments, otherwise, return <code>null</code>
+     */
+    private ResourceInfo doLookup(String libraryName,
+                                  String resourceName,
+                                  String localePrefix,
+                                  boolean compressable,
+                                  FacesContext ctx) {
+        
+        LibraryInfo library = null;
+        if (libraryName != null) {
+            library = findLibrary(libraryName, localePrefix, ctx);
+            if (library == null && localePrefix != null) {
+                // no localized library found.  Try to find
+                // a library that isn't localized.
+                library = findLibrary(libraryName, null, ctx);
+            }
+            if (library == null) {
+                return null;
+            }
+        }
+
+        String resName = trimLeadingSlash(resourceName);
+        ResourceInfo info =
+              findResource(library, resName, localePrefix, compressable, ctx);
+        if (info == null && localePrefix != null) {
+            // no localized resource found, try to find a
+            // resource that isn't localized
+            info = findResource(library, resName, null, compressable, ctx);
+        }
+        return info;
+
+    }
+
+
+    /**
+     * @param name the resource name
+     * @param library the library name
+     * @param localePrefix the Locale prefix
+     * @return the {@link ResourceInfo} from the cache or <code>null</code>
+     *  if no cached entry is found
+     */
     private ResourceInfo getFromCache(String name,
                                       String library,
                                       String localePrefix) {
@@ -147,6 +268,10 @@ public class ResourceManager {
     }
 
 
+    /**
+     * Adds the the specified {@link ResourceInfo} to the cache.
+     * @param info the @{link ResourceInfo} to add.
+     */
     private void addToCache(ResourceInfo info) {
 
         if (cache == null) {
@@ -214,28 +339,34 @@ public class ResourceManager {
      * @param library the library the resource should be found in
      * @param resourceName the name of the resource
      * @param localePrefix the prefix for the desired locale
-     * @param ctx         the {@link FacesContext} for the current request
+     * @param compressable <code>true</code> if the resource can be compressed
+     * @param ctx the {@link javax.faces.context.FacesContext} for the current request
      *
      * @return the Library instance for the specified library
      */
     private ResourceInfo findResource(LibraryInfo library,
                                       String resourceName,
                                       String localePrefix,
+                                      boolean compressable,
                                       FacesContext ctx) {
+
         if (library != null) {
             return library.getHelper().findResource(library,
                                                     resourceName,
                                                     localePrefix,
+                                                    compressable,
                                                     ctx);
         } else {
             ResourceInfo resource = webappHelper.findResource(null,
                                                               resourceName,
                                                               localePrefix,
+                                                              compressable,
                                                               ctx);
             if (resource == null) {
                 resource = classpathHelper.findResource(null,
                                                         resourceName,
                                                         localePrefix,
+                                                        compressable, 
                                                         ctx);
             }
             return resource;
@@ -290,15 +421,92 @@ public class ResourceManager {
      * @return the String without a leading slash if it has one.
      */
     private String trimLeadingSlash(String s) {
+
         if (s.charAt(0) == '/') {
             return s.substring(1);
         } else {
             return s;
         }
+
     }
 
 
-    // ----------------------------------------------------------- Inner Classes
+    /**
+     * @param contentType content-type in question
+     * @param ctx the @{link FacesContext} for the current request
+     * @return <code>true</code> if this resource can be compressed, otherwise
+     *  <code>false</code>
+     */
+    private boolean isCompressable(String contentType, FacesContext ctx) {
+
+        // No compression when developing.
+        if (contentType == null || ctx.getApplication().getProjectStage() == ProjectStage.Development) {
+            return false;
+        } else {
+            if (compressableTypes != null && !compressableTypes.isEmpty()) {
+                for (Pattern p : compressableTypes) {
+                    boolean matches = p.matcher(contentType).matches();
+                    if (matches) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+
+    }
+
+
+    /**
+     * Init <code>compressableTypes</code> from the configuration.
+     */
+    private void initCompressableTypes() {
+
+        WebConfiguration config = WebConfiguration.getInstance();
+        String value = config.getOptionValue(WebConfiguration.WebContextInitParameter.CompressableMimeTypes);
+        if (value != null && value.length() > 0) {
+            String[] values = Util.split(value, ",");
+            if (values != null) {
+                for (String s : values) {
+                    String pattern = s.trim();
+                    if (!isPatternValid(pattern)) {
+                        continue;
+                    }
+                    if (pattern.endsWith("/*")) {
+                        pattern = pattern.substring(0, pattern.indexOf("/*"));
+                        pattern += "/[a-z0-9.-]*";
+                    }
+                    if (compressableTypes == null) {
+                        compressableTypes = new ArrayList<Pattern>(values.length);
+                    }
+                    try {
+                        compressableTypes.add(Pattern.compile(pattern));
+                    } catch (PatternSyntaxException pse) {
+                        if (LOGGER.isLoggable(Level.WARNING)) {
+                            // PENDING i18n
+                            LOGGER.log(Level.WARNING,
+                                       "Mime type {0} doesn't match expected pattern {1}: ignoring.",
+                                       new Object[] { pattern, pse.getPattern()});
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+
+    /**
+     * @param input input mime-type pattern from the configuration
+     * @return <code>true</code> if the input matches the expected pattern,
+     *  otherwise <code>false</code>
+     */
+    private boolean isPatternValid(String input) {
+
+        return (CONFIG_MIMETYPE_PATTERN.matcher(input).matches());
+
+    }
 
 
 }

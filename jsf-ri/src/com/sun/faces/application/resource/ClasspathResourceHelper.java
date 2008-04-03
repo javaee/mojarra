@@ -100,9 +100,10 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
 
     /**
-     * @see ResourceHelper#getInputStream(ResourceInfo,javax.faces.context.FacesContext)
+     * @see ResourceHelper#getNonCompressedInputStream(ResourceInfo, javax.faces.context.FacesContext)
      */
-    public InputStream getInputStream(ResourceInfo resource, FacesContext ctx) {
+    protected InputStream getNonCompressedInputStream(ResourceInfo resource, FacesContext ctx)
+    throws IOException {
 
         ClassLoader loader = Util.getCurrentLoader(this.getClass());
         return loader.getResourceAsStream(resource.getPath());
@@ -160,11 +161,12 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
 
     /**
-     * @see ResourceHelper#findResource(LibraryInfo, String, String, javax.faces.context.FacesContext)
+     * @see ResourceHelper#findResource(LibraryInfo, String, String, boolean, javax.faces.context.FacesContext)
      */
     public ResourceInfo findResource(LibraryInfo library,
                                      String resourceName,
                                      String localePrefix,
+                                     boolean compressable,
                                      FacesContext ctx) {
 
         ClassLoader loader = Util.getCurrentLoader(this);
@@ -188,25 +190,45 @@ public class ClasspathResourceHelper extends ResourceHelper {
             return null;
         }
 
+        ResourceInfo value;
         try {
             List<String> subPaths = getSubPaths(basePathURL);
             if (subPaths.isEmpty()) {
                 if (library != null) {
-                    return new ResourceInfo(library, resourceName, null);
+                    value = new ResourceInfo(library,
+                                             resourceName,
+                                             null,
+                                             compressable);
                 } else {
-                    return new ResourceInfo(resourceName, null, localePrefix, this);
+                    value = new ResourceInfo(resourceName,
+                                             null,
+                                             localePrefix,
+                                             this,
+                                             compressable);
                 }
             } else {
                 String version = getVersion(subPaths);
                 if (library != null) {
-                    return new ResourceInfo(library, resourceName, version);
+                    value = new ResourceInfo(library,
+                                             resourceName,
+                                             version,
+                                             compressable);
                 } else {
-                    return new ResourceInfo(resourceName, version, localePrefix, this);
+                    value = new ResourceInfo(resourceName,
+                                             version,
+                                             localePrefix,
+                                             this,
+                                             compressable);
                 }
             }
         } catch (Exception e) {
             throw new FacesException(e);
         }
+        if (value.isCompressable()) {
+            value = handleCompression(value);
+        }
+        return value;
+
     }
 
 
@@ -325,6 +347,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
         return paths;
     }
 
+
     /**
      * <p>
      * Obtain the direct directory of file decendents of the specified file
@@ -354,4 +377,5 @@ public class ClasspathResourceHelper extends ResourceHelper {
         return paths;
 
     }
+    
 }

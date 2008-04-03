@@ -43,6 +43,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Arrays;
+import java.util.zip.GZIPOutputStream;
 
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
@@ -52,6 +53,7 @@ import javax.servlet.http.HttpServletResponseWrapper;
 
 import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
 import org.apache.cactus.WebResponse;
 
@@ -385,7 +387,8 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     // Validate a resource streamed from a JAR
     //
     public void beginHandleResourceRequest2(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces?ln=nvLibrary", null, null);
+        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
+        req.addParameter("ln", "nvLibrary-jar");
     }
 
     public void testHandleResourceRequest2() throws Exception {
@@ -397,8 +400,8 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
               .getExternalContext().getResponse();
         TestResponseWrapper wrapper = new TestResponseWrapper(response);
         getFacesContext().getExternalContext().setResponse(wrapper);
-        byte[] control = getBytes(getFacesContext()
-              .getExternalContext().getResource("/resources/nvLibrary/duke-nv.gif"));
+        byte[] control = getBytes(Util.getCurrentLoader(this)
+              .getResource("META-INF/resources/nvLibrary-jar/duke-nv.gif"));
         handler.handleResourceRequest(getFacesContext());
         byte[] test = wrapper.getBytes();
         assertTrue(Arrays.equals(control, test));
@@ -416,7 +419,8 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     // request header and the resource hasn't changed on the server side.
     //
     public void beginHandleResourceRequest3(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces?ln=nvLibrary", null, null);
+        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
+        req.addParameter("ln", "nvLibrary");
         req.addHeader("If-Modified-Since", "Sat, 29 Oct 1994 19:43:31 GMT");
     }
 
@@ -438,7 +442,8 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     // is made
     //
     public void beginHandleResourceRequest4(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-v.gif.faces?ln=nvLibrary", null, null);
+        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-v.gif.faces", null, null);
+        req.addParameter("ln", "nvLibrary");
     }
 
 
@@ -458,7 +463,8 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     // Validate a 404 is returned when a request for an excluded resource is made
     //
     public void beginHandleResourceRequest5(WebRequest req) {
-        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.class.faces?ln=nvLibrary", null, null);
+        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.class.faces", null, null);
+        req.addParameter("ln", "nvLibrary");
     }
 
 
@@ -474,16 +480,274 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     }
 
 
+    //==========================================================================
+    // Validate a resource streamed from the docroot of a webapp is compressed
+    //
+    public void beginHandleResourceRequest6(WebRequest req) {
+        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
+        req.addHeader("accept-encoding", "deflate");
+        req.addHeader("accept-encoding", "gzip");
+    }
+
+    public void testHandleResourceRequest6() throws Exception {
+
+        WebConfiguration config = WebConfiguration.getInstance();
+        config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.CompressableMimeTypes, "image/gif");
+        ResourceHandler handler = new ResourceHandlerImpl();
+        HttpServletResponse response = (HttpServletResponse) getFacesContext().getExternalContext().getResponse();
+        TestResponseWrapper wrapper = new TestResponseWrapper(response);
+        getFacesContext().getExternalContext().setResponse(wrapper);
+        byte[] control = getBytes(getFacesContext().getExternalContext().getResource("/resources/duke-nv.gif"), true);
+        handler.handleResourceRequest(getFacesContext());
+        byte[] test = wrapper.getBytes();
+        assertTrue(Arrays.equals(control, test));
+        assertTrue(response.containsHeader("content-length"));
+        assertTrue(response.containsHeader("last-modified"));
+        assertTrue(response.containsHeader("expires"));
+        assertTrue(response.containsHeader("etag"));
+        assertTrue(response.containsHeader("content-type"));
+        assertTrue(response.containsHeader("content-encoding"));
+
+    }
+
+
+    //==========================================================================
+    // Validate a resource streamed from a JAR is compressed
+    //
+    public void beginHandleResourceRequest7(WebRequest req) {
+        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
+        req.addParameter("ln", "nvLibrary-jar");
+        req.addHeader("accept-encoding", "gzip,deflate");
+    }
+
+    public void testHandleResourceRequest7() throws Exception {
+
+        WebConfiguration config = WebConfiguration.getInstance();
+        config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.CompressableMimeTypes, "image/gif");
+        ResourceHandler handler = new ResourceHandlerImpl();
+        HttpServletResponse response = (HttpServletResponse) getFacesContext()
+              .getExternalContext().getResponse();
+        TestResponseWrapper wrapper = new TestResponseWrapper(response);
+        getFacesContext().getExternalContext().setResponse(wrapper);
+        byte[] control = getBytes(Util.getCurrentLoader(this)
+              .getResource("META-INF/resources/nvLibrary-jar/duke-nv.gif"), true);
+        handler.handleResourceRequest(getFacesContext());
+        byte[] test = wrapper.getBytes();
+        assertTrue(Arrays.equals(control, test));
+        assertTrue(response.containsHeader("content-length"));
+        assertTrue(response.containsHeader("last-modified"));
+        assertTrue(response.containsHeader("expires"));
+        assertTrue(response.containsHeader("etag"));
+        assertTrue(response.containsHeader("content-type"));
+        assertTrue(response.containsHeader("content-encoding"));
+
+    }
+
+    //==========================================================================
+    // Validate a resource streamed from the docroot of a webapp isn't compressed
+    // when the client doesn't send the accept-encoding request header
+    //
+    public void beginHandleResourceRequest8(WebRequest req) {
+        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
+    }
+
+    public void testHandleResourceRequest8() throws Exception {
+
+        WebConfiguration config = WebConfiguration.getInstance();
+        config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.CompressableMimeTypes, "image/gif");
+        ResourceHandler handler = new ResourceHandlerImpl();
+        HttpServletResponse response = (HttpServletResponse) getFacesContext().getExternalContext().getResponse();
+        TestResponseWrapper wrapper = new TestResponseWrapper(response);
+        getFacesContext().getExternalContext().setResponse(wrapper);
+        byte[] control = getBytes(getFacesContext().getExternalContext().getResource("/resources/duke-nv.gif"));
+        handler.handleResourceRequest(getFacesContext());
+        byte[] test = wrapper.getBytes();
+        assertTrue(Arrays.equals(control, test));
+        assertTrue(response.containsHeader("content-length"));
+        assertTrue(response.containsHeader("last-modified"));
+        assertTrue(response.containsHeader("expires"));
+        assertTrue(response.containsHeader("etag"));
+        assertTrue(response.containsHeader("content-type"));
+        assertTrue(!response.containsHeader("content-encoding"));
+
+    }
+
+
+    //==========================================================================
+    // Validate a resource streamed from a JAR isn't compressed
+    // when the client doesn't send the accept-encoding request header
+    //
+    public void beginHandleResourceRequest9(WebRequest req) {
+        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
+        req.addParameter("ln", "nvLibrary-jar");
+    }
+
+    public void testHandleResourceRequest9() throws Exception {
+
+        WebConfiguration config = WebConfiguration.getInstance();
+        config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.CompressableMimeTypes, "image/gif");
+        ResourceHandler handler = new ResourceHandlerImpl();
+        HttpServletResponse response = (HttpServletResponse) getFacesContext()
+              .getExternalContext().getResponse();
+        TestResponseWrapper wrapper = new TestResponseWrapper(response);
+        getFacesContext().getExternalContext().setResponse(wrapper);
+        byte[] control = getBytes(getFacesContext()
+              .getExternalContext().getResource("/resources/nvLibrary/duke-nv.gif"));
+        handler.handleResourceRequest(getFacesContext());
+        byte[] test = wrapper.getBytes();
+        assertTrue(Arrays.equals(control, test));
+        assertTrue(response.containsHeader("content-length"));
+        assertTrue(response.containsHeader("last-modified"));
+        assertTrue(response.containsHeader("expires"));
+        assertTrue(response.containsHeader("etag"));
+        assertTrue(response.containsHeader("content-type"));
+        assertTrue(!response.containsHeader("content-encoding"));
+
+    }
+
+
+    //==========================================================================
+    // Validate an accept-encoding of gzip;q=0 means non-compressed content
+    // is sent to the user-agent
+    //
+    public void beginHandleResourceRequest10(WebRequest req) {
+        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
+        req.addHeader("accept-encoding", "gzip;q=0, deflate");
+    }
+
+    public void testHandleResourceRequest10() throws Exception {
+
+        WebConfiguration config = WebConfiguration.getInstance();
+        config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.CompressableMimeTypes, "image/gif");
+        ResourceHandler handler = new ResourceHandlerImpl();
+        HttpServletResponse response = (HttpServletResponse) getFacesContext().getExternalContext().getResponse();
+        TestResponseWrapper wrapper = new TestResponseWrapper(response);
+        getFacesContext().getExternalContext().setResponse(wrapper);
+        byte[] control = getBytes(getFacesContext().getExternalContext().getResource("/resources/duke-nv.gif"), false);
+        handler.handleResourceRequest(getFacesContext());
+        byte[] test = wrapper.getBytes();
+        assertTrue(Arrays.equals(control, test));
+        assertTrue(response.containsHeader("content-length"));
+        assertTrue(response.containsHeader("last-modified"));
+        assertTrue(response.containsHeader("expires"));
+        assertTrue(response.containsHeader("etag"));
+        assertTrue(response.containsHeader("content-type"));
+        assertTrue(!response.containsHeader("content-encoding"));
+
+    }
+
+
+    //==========================================================================
+    // Validate an accept-encoding of that doesn't include gzip, and includes
+    // *;q=0 will not send compressed content to the user-agent
+    // is sent to the user-agent
+    //
+    public void beginHandleResourceRequest11(WebRequest req) {
+        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
+        req.addHeader("accept-encoding", "deflate");
+        req.addHeader("accept-encoding", "*;q=0");
+    }
+
+    public void testHandleResourceRequest11() throws Exception {
+
+        WebConfiguration config = WebConfiguration.getInstance();
+        config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.CompressableMimeTypes, "image/gif");
+        ResourceHandler handler = new ResourceHandlerImpl();
+        HttpServletResponse response = (HttpServletResponse) getFacesContext().getExternalContext().getResponse();
+        TestResponseWrapper wrapper = new TestResponseWrapper(response);
+        getFacesContext().getExternalContext().setResponse(wrapper);
+        byte[] control = getBytes(getFacesContext().getExternalContext().getResource("/resources/duke-nv.gif"), false);
+        handler.handleResourceRequest(getFacesContext());
+        byte[] test = wrapper.getBytes();
+        assertTrue(Arrays.equals(control, test));
+        assertTrue(response.containsHeader("content-length"));
+        assertTrue(response.containsHeader("last-modified"));
+        assertTrue(response.containsHeader("expires"));
+        assertTrue(response.containsHeader("etag"));
+        assertTrue(response.containsHeader("content-type"));
+        assertTrue(!response.containsHeader("content-encoding"));
+
+    }
+
+
+    //==========================================================================
+    // Validate an accept-encoding of that doesn't include gzip, and includes
+    // * will send compressed content
+    //
+    public void beginHandleResourceRequest12(WebRequest req) {
+        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
+        req.addHeader("accept-encoding", "identity;q=1.0");
+        req.addHeader("accept-encoding", "*;q=0.5");
+        req.addHeader("accept-encoding", "deflate;q=1.0");
+    }
+
+    public void testHandleResourceRequest12() throws Exception {
+
+        WebConfiguration config = WebConfiguration.getInstance();
+        config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.CompressableMimeTypes, "image/gif");
+        ResourceHandler handler = new ResourceHandlerImpl();
+        HttpServletResponse response = (HttpServletResponse) getFacesContext().getExternalContext().getResponse();
+        TestResponseWrapper wrapper = new TestResponseWrapper(response);
+        getFacesContext().getExternalContext().setResponse(wrapper);
+        byte[] control = getBytes(getFacesContext().getExternalContext().getResource("/resources/duke-nv.gif"), true);
+        handler.handleResourceRequest(getFacesContext());
+        byte[] test = wrapper.getBytes();
+        assertTrue(Arrays.equals(control, test));
+        assertTrue(response.containsHeader("content-length"));
+        assertTrue(response.containsHeader("last-modified"));
+        assertTrue(response.containsHeader("expires"));
+        assertTrue(response.containsHeader("etag"));
+        assertTrue(response.containsHeader("content-type"));
+        assertTrue(response.containsHeader("content-encoding"));
+
+    }
+
+
+    //==========================================================================
+    // Validate an accept-encoding of that doesn't include gzip will not send
+    // compressed content.
+    //
+    public void beginHandleResourceRequest13(WebRequest req) {
+        req.setURL("localhost:8080", "/test", "/javax.faces.resource/duke-nv.gif.faces", null, null);
+        req.addHeader("accept-encoding", "identity;q=0.5, deflate;q=1.0");
+    }
+
+    public void testHandleResourceRequest13() throws Exception {
+
+        WebConfiguration config = WebConfiguration.getInstance();
+        config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.CompressableMimeTypes, "image/gif");
+        ResourceHandler handler = new ResourceHandlerImpl();
+        HttpServletResponse response = (HttpServletResponse) getFacesContext().getExternalContext().getResponse();
+        TestResponseWrapper wrapper = new TestResponseWrapper(response);
+        getFacesContext().getExternalContext().setResponse(wrapper);
+        byte[] control = getBytes(getFacesContext().getExternalContext().getResource("/resources/duke-nv.gif"), false);
+        handler.handleResourceRequest(getFacesContext());
+        byte[] test = wrapper.getBytes();
+        assertTrue(Arrays.equals(control, test));
+        assertTrue(response.containsHeader("content-length"));
+        assertTrue(response.containsHeader("last-modified"));
+        assertTrue(response.containsHeader("expires"));
+        assertTrue(response.containsHeader("etag"));
+        assertTrue(response.containsHeader("content-type"));
+        assertTrue(!response.containsHeader("content-encoding"));
+
+    }
+
+
 // ---------------------------------------------------------- Helper Methods
 
 
     private byte[] getBytes(URL url) throws Exception {
 
+        return getBytes(url, false);
+
+    }
+
+    private byte[] getBytes(URL url, boolean compress) throws Exception {
         URLConnection c = url.openConnection();
         c.setUseCaches(false);
         InputStream in = c.getInputStream();
-        return getBytes(in);
-
+        return ((compress) ? getCompressedBytes(in) : getBytes(in));
     }
 
     private byte[] getBytes(InputStream in) throws Exception {
@@ -493,6 +757,19 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
             o.write(i);
         }
         in.close();
+        return o.toByteArray();
+
+    }
+
+    private byte[] getCompressedBytes(InputStream in) throws Exception {
+
+        ByteArrayOutputStream o = new ByteArrayOutputStream();
+        GZIPOutputStream compress = new GZIPOutputStream(o);
+        for (int i = in.read(); i != -1; i = in.read()) {
+            compress.write(i);
+        }
+        compress.flush();
+        compress.close();
         return o.toByteArray();
 
     }
