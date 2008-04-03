@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.42 2007/04/27 22:01:00 ofung Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.43 2007/06/06 16:54:47 rlubke Exp $
  */
 
 /*
@@ -348,8 +348,13 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
      */
     private static String getStateParam(FacesContext context) {
 
-        return context.getExternalContext().getRequestParameterMap().get(
-              ResponseStateManager.VIEW_STATE_PARAM);
+        String pValue = context.getExternalContext().getRequestParameterMap().
+              get(ResponseStateManager.VIEW_STATE_PARAM);
+        if (pValue != null && pValue.length() == 0) {
+            pValue = null;
+        }
+        return pValue;
+        
     }
 
 
