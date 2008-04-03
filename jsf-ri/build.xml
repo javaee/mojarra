@@ -462,7 +462,6 @@
               out="merged.xml"
               style="conf/xslt/merge-config.xsl">
         </xslt>
-        <copy file="merged.xml" tofile="test-merged.xml"/> 
         <replace file="${basedir}/merged.xml">
             <replacetoken><![CDATA[xmlns:jsf="http://java.sun.com/xml/ns/javaee"]]></replacetoken>
             <replacevalue><![CDATA[]]></replacevalue>
