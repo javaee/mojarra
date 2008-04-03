@@ -145,8 +145,11 @@ public class YuiMenuRenderer extends Renderer {
         }
 
         ResponseWriter writer = context.getResponseWriter();
+        writer.startElement("div", component);
+        writer.writeAttribute("class", "yui-skin-sam", "class");
         idCount = 0;
         renderMenu(writer, (YuiMenuBase)component);
+        writer.endElement("div");
         renderJavaScript(writer, (YuiMenuBase)component);
     }
 

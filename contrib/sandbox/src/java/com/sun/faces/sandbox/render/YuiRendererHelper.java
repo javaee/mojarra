@@ -70,16 +70,24 @@ public class YuiRendererHelper {
         ".yui-calendar .calnavright { background: url('%%%BASE_URL%%%/yui/calendar/assets/calrt.gif') no-repeat; }",
         ".yui-calcontainer .calclose { background: url('%%%BASE_URL%%%/yui/calendar/assets/calx.gif') no-repeat; }",
         // Menu
-        ".yuimenu .topscrollbar, .yuimenu .bottomscrollbar { background-image:url('%%%BASE_URL%%%/menu/assets/map.gif'); }",
-        ".yuimenu .topscrollbar { background-image:url('%%%BASE_URL%%%/menu/assets/map.gif'); }",
-        ".yuimenu .topscrollbar_disabled { background-image:url('%%%BASE_URL%%%/menu/assets/map.gif'); }",
-        ".yuimenu .bottomscrollbar { background-image:url('%%%BASE_URL%%%/menu/assets/map.gif'); }",
-        ".yuimenu .bottomscrollbar_disabled { background-image:url('%%%BASE_URL%%%/menu/assets/map.gif'); }",
-        ".yuimenuitemlabel .submenuindicator, .yuimenuitemlabel .checkedindicator,  .yuimenubaritemlabel .submenuindicator { background-image:url('%%%BASE_URL%%%/menu/assets/map.gif'); }",
+        ".yui-skin-sam .yuimenubar { background: url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png') repeat-x 0 0; }",
+        ".yui-skin-sam .yuimenubaritem a.selected { background: url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png') repeat-x 0 -1700px;}",
+        ".yui-skin-sam .yuimenubarnav a.selected .submenuindicator { background: url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png') repeat-x -16px -856px;}",
+        ".yui-skin-sam .yuimenu .topscrollbar, .yui-skin-sam .yuimenu .bottomscrollbar { background: #fff url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png') no-repeat 0 0;}",
+        ".yui-skin-sam .yuimenuitemlabel .submenuindicator,.yui-skin-sam .yuimenuitemlabel .checkedindicator, .yui-skin-sam .yuimenubaritemlabel .submenuindicator { background: url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png') no-repeat;}",
+        ".yui-skin-sam .yuimenubar .yuimenuitem a.selected .submenuindicator {background: url('%%%BASE_URL%%%/yui/assets/skins/sam/sprite.png') no-repeat 0 -906px; }",
+
+        ".yuimenu .topscrollbar, .yuimenu .bottomscrollbar { background-image:url('%%%BASE_URL%%%/yui/menu/assets/map.gif'); }",
+        ".yuimenu .topscrollbar { background-image:url('%%%BASE_URL%%%/yui/menu/assets/map.gif'); }",
+        ".yuimenu .topscrollbar_disabled { background-image:url('%%%BASE_URL%%%/yui/menu/assets/map.gif'); }",
+        ".yuimenu .bottomscrollbar { background-image:url('%%%BASE_URL%%%/yui/menu/assets/map.gif'); }",
+        ".yuimenu .bottomscrollbar_disabled { background-image:url('%%%BASE_URL%%%/yui/menu/assets/map.gif'); }",
+        ".yuimenuitemlabel .submenuindicator, .yuimenuitemlabel .checkedindicator,  .yuimenubaritemlabel .submenuindicator { background-image:url('%%%BASE_URL%%%/yui/menu/assets/map.gif'); }",
 
         ".yuimenu { background-color: #efefef; border:solid 1px #527B97; }",
         ".yuimenubar { background-color: #efefef; }",
         ".yuimenuitem a.selected, .yuimenubaritem a.selected { background-color:#527B97; }",
+
         /*
         "div.yuimenu { background-color: #efefef; border:solid 1px #527B97; }",
         "div.yuimenubar { background-color: #efefef; }",
@@ -113,7 +121,7 @@ public class YuiRendererHelper {
             writer.startElement("style", comp);
             writer.writeAttribute("type", "text/css", "type");
             for (String rule : cssRules) {
-                writer.write(rule.replaceAll("%%%BASE_URL%%%", Util.generateStaticUri("") + "?file="));
+                writer.write(rule.replaceAll("%%%BASE_URL%%%", Util.generateStaticUri("") + "?file=")+"\n");
             }
             
             writer.endElement("style");
@@ -124,23 +132,23 @@ public class YuiRendererHelper {
     public static void renderSandboxMenuJavaScript(FacesContext context, ResponseWriter writer, UIComponent comp) throws IOException{
         Map<String, String> imageVars = new HashMap<String, String>();
         imageVars.put("YAHOO.widget.MenuItem.prototype.SUBMENU_INDICATOR_IMAGE_PATH", 
-                YuiConstants.YUI_ROOT + "assets/menuarorght8_nrm_1.gif");
+                YuiConstants.SANDBOX_ROOT + "img/menuarorght8_nrm_1.gif");
         imageVars.put("YAHOO.widget.MenuItem.prototype.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH", 
-                YuiConstants.YUI_ROOT + "assets/menuarorght8_hov_1.gif");
+                YuiConstants.SANDBOX_ROOT + "img/menuarorght8_hov_1.gif");
         imageVars.put("YAHOO.widget.MenuItem.prototype.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH", 
-                YuiConstants.YUI_ROOT + "assets/menuarorght8_dim_1.gif");
+                YuiConstants.SANDBOX_ROOT + "img/menuarorght8_dim_1.gif");
         imageVars.put("YAHOO.widget.MenuItem.prototype.CHECKED_IMAGE_PATH", 
-                YuiConstants.YUI_ROOT + "assets/menuchk8_nrm_1.gif");
+                YuiConstants.SANDBOX_ROOT + "img/menuchk8_nrm_1.gif");
         imageVars.put("YAHOO.widget.MenuItem.prototype.SELECTED_CHECKED_IMAGE_PATH", 
-                YuiConstants.YUI_ROOT + "assets/menuchk8_hov_1.gif");
+                YuiConstants.SANDBOX_ROOT + "img/menuchk8_hov_1.gif");
         imageVars.put("YAHOO.widget.MenuItem.prototype.DISABLED_CHECKED_IMAGE_PATH",
-                YuiConstants.YUI_ROOT + "assets/menuchk8_dim_1.gif");
+                YuiConstants.SANDBOX_ROOT + "img/menuchk8_dim_1.gif");
         imageVars.put("YAHOO.widget.MenuBarItem.prototype.SUBMENU_INDICATOR_IMAGE_PATH", 
-                YuiConstants.YUI_ROOT + "assets/menuarodwn8_nrm_1.gif");
+                YuiConstants.SANDBOX_ROOT + "img/menuarodwn8_nrm_1.gif");
         imageVars.put("YAHOO.widget.MenuBarItem.prototype.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH", 
-                YuiConstants.YUI_ROOT + "assets/menuarodwn8_hov_1.gif");
+                YuiConstants.SANDBOX_ROOT + "img/menuarodwn8_hov_1.gif");
         imageVars.put("YAHOO.widget.MenuBarItem.prototype.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH", 
-                YuiConstants.YUI_ROOT + "assets/menuarodwn8_dim_1.gif");
+                YuiConstants.SANDBOX_ROOT + "img/menuarodwn8_dim_1.gif");
         renderSandboxJavaScript(context, writer, comp, YUI_HELPER_MENU_JS_RENDERED, imageVars);
 
     }

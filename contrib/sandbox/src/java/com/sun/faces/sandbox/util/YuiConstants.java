@@ -46,48 +46,44 @@ package com.sun.faces.sandbox.util;
  *
  */
 public class YuiConstants {
-    public static final String YUI_ROOT = "/yui/";
-    public static final String SANDBOX_ROOT = "/sandbox/";
-    
-    public static final String CSS_CALENDAR = YUI_ROOT + "calendar/assets/calendar.css";
-    
-    public static final String CSS_MENU = YUI_ROOT + "menu/assets/menu.css";
-    public static final String CSS_MENU_CORE = YUI_ROOT + "menu/assets/menu-core.css";
-    
-//    public static final String CSS_SANDBOX = YUI_ROOT + "sandbox.css";
-    public static final String CSS_TABVIEW = YUI_ROOT + "tabview/assets/tabview.css";
-    public static final String CSS_TABVIEW_DEFAULT = YUI_ROOT + "tabview/assets/skins/sam/tabview.css";
-    public static final String CSS_TABVIEW_DEFAULT_SKIN = YUI_ROOT + "tabview/assets/skins/sam/tabview-skin.css";
-    public static final String CSS_TABVIEW_BORDER_TABS = YUI_ROOT + "tabview/assets/border_tabs.css";
-    public static final String CSS_TABVIEW_MODULE_TABS = "/sandbox/css/module_tabs.css";
-    public static final String CSS_TABVIEW_ROUND_TABS = "/sandbox/css/round_tabs.css";
-    
-    public static final String CSS_TREEVIEW = YUI_ROOT + "treeview/assets/treeview.css";
+    public static final String YUI_ROOT                 = "/yui/";
+    public static final String SANDBOX_ROOT             = "/sandbox/";
 
-    public static final String JS_AUTOCOMPLETE = YUI_ROOT + "autocomplete/autocomplete-min.js";
+    //***********************************************************************************************************
+    // CSS
+    //***********************************************************************************************************
+    public static final String CSS_CALENDAR             = YUI_ROOT + "calendar/assets/calendar.css";
+    public static final String CSS_MENU                 = YUI_ROOT + "menu/assets/skins/sam/menu.css";
+//    public static final String CSS_MENU_CORE = YUI_ROOT + "menu/assets/menu-core.css";
+//    public static final String CSS_SANDBOX = YUI_ROOT + "sandbox.css";
+    public static final String CSS_TABVIEW              = YUI_ROOT + "tabview/assets/tabview.css";
+    public static final String CSS_TABVIEW_DEFAULT      = YUI_ROOT + "tabview/assets/skins/sam/tabview.css";
+    public static final String CSS_TABVIEW_DEFAULT_SKIN = YUI_ROOT + "tabview/assets/skins/sam/tabview-skin.css";
+    public static final String CSS_TABVIEW_BORDER_TABS  = YUI_ROOT + "tabview/assets/border_tabs.css";
+    public static final String CSS_TABVIEW_MODULE_TABS  = SANDBOX_ROOT + "sandbox/css/module_tabs.css";
+    public static final String CSS_TABVIEW_ROUND_TABS   = SANDBOX_ROOT + "sandbox/css/round_tabs.css";
+    public static final String CSS_TREEVIEW             = YUI_ROOT + "treeview/assets/treeview.css";
+
+    //***********************************************************************************************************
+    // JavaScript
+    //***********************************************************************************************************
+    public static final String JS_AUTOCOMPLETE          = YUI_ROOT + "autocomplete/autocomplete-min.js";
+    public static final String JS_CALENDAR              = YUI_ROOT + "calendar/calendar-min.js";
+    public static final String JS_CONTAINER             = YUI_ROOT + "container/container-min.js";
+    public static final String JS_ELEMENT               = YUI_ROOT + "element/element-beta-min.js";
+    public static final String JS_LOGGER                = YUI_ROOT + "logger/logger-min.js";
+    public static final String JS_MENU                  = YUI_ROOT + "menu/menu-min.js";
+    public static final String JS_SLIDER                = YUI_ROOT + "slider/slider-min.js";
+    public static final String JS_TABVIEW               = YUI_ROOT + "tabview/tabview-min.js";
+    public static final String JS_TREEVIEW              = YUI_ROOT + "treeview/treeview-min.js";
+    public static final String JS_UTILITIES             = YUI_ROOT + "utilities/utilities.js";
+    public static final String JS_YAHOO_DOM_EVENT       = YUI_ROOT + "yahoo-dom-event/yahoo-dom-event.js";
     
-    public static final String JS_CALENDAR = YUI_ROOT + "calendar/calendar-min.js";
-    
-    public static final String JS_CONTAINER = YUI_ROOT + "container/container-min.js";
-    
-    public static final String JS_ELEMENT = YUI_ROOT + "element/element-beta-min.js";
-    
-    public static final String JS_LOGGER = YUI_ROOT + "logger/logger-min.js";
-    
-    public static final String JS_MENU = YUI_ROOT + "menu/menu-min.js";
-    
-    public static final String JS_SLIDER = YUI_ROOT + "slider/slider-min.js";
-    
-    public static final String JS_TABVIEW = YUI_ROOT + "tabview/tabview-min.js";
-    
-    public static final String JS_TREEVIEW = YUI_ROOT + "treeview/treeview-min.js";
-    
-    public static final String JS_UTILITIES = YUI_ROOT + "utilities/utilities.js";
-    
-    public static final String JS_YAHOO_DOM_EVENT = YUI_ROOT + "yahoo-dom-event/yahoo-dom-event.js";
-    
-    public static final String JS_SANDBOX_HELPER = SANDBOX_ROOT + "sandbox.js";
-    public static final String JS_YUI_CALENDAR_HELPER = SANDBOX_ROOT + "calendar_helper.js";
-    public static final String JS_YUI_MENU_HELPER = SANDBOX_ROOT + "menu_helper.js";
-    public static final String JS_YUI_TREEVIEW_HELPER = SANDBOX_ROOT + "treeview_helper.js";
+    //***********************************************************************************************************
+    // Helper JavaScript
+    //***********************************************************************************************************
+    public static final String JS_SANDBOX_HELPER        = SANDBOX_ROOT + "sandbox.js";
+    public static final String JS_YUI_CALENDAR_HELPER   = SANDBOX_ROOT + "calendar_helper.js";
+    public static final String JS_YUI_MENU_HELPER       = SANDBOX_ROOT + "menu_helper.js";
+    public static final String JS_YUI_TREEVIEW_HELPER   = SANDBOX_ROOT + "treeview_helper.js";
 }

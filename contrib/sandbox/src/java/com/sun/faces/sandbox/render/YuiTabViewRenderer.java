@@ -145,6 +145,7 @@ public class YuiTabViewRenderer extends Renderer {
             writer.endElement("style");
         }
         
+        // Added to support the new default tab style, which requires an enclosing container with a certain class
         writer.startElement("div", tabView);
         writer.writeAttribute("id", "tabView_" + component.getClientId(context), "id");
         writer.writeAttribute("class", extraClass, "class");
