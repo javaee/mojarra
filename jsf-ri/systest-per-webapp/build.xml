@@ -66,7 +66,8 @@
          This property list *must* match the one defined in the
          systest-per-webapp build-tests.xml. -->
     <property name="applications"
-              value="nested-loadbundles,
+              value="resource-locale-prefix,
+                   nested-loadbundles,
                    replace-application,
                    replace-statemanager,  
                    invalid-mapping,

@@ -46,6 +46,7 @@ public class ResourceInfo {
 
     private String name;
     private String version;
+    private String localePrefix;
     private ResourceHelper helper;
     private LibraryInfo library;
     private String path;
@@ -64,6 +65,7 @@ public class ResourceInfo {
         this.version = version;
         this.helper = library.getHelper();
         this.library = library;
+        this.localePrefix = library.getLocalePrefix();
         initPath();
     }
 
@@ -71,11 +73,16 @@ public class ResourceInfo {
      * Constructs a new <code>ResourceInfo</code> using the specified details.
      * @param name the resource name
      * @param version the version of the resource
+     * @param localePrefix the locale prefix for this resource (if any)
      * @param helper helper the helper class for this resource
      */
-    ResourceInfo(String name, String version, ResourceHelper helper) {
+    ResourceInfo(String name,
+                 String version,
+                 String localePrefix,
+                 ResourceHelper helper) {
         this.name = name;
         this.version = version;
+        this.localePrefix = localePrefix;
         this.helper = helper;
         initPath();
     }
@@ -110,6 +117,13 @@ public class ResourceInfo {
     }
 
     /**
+     * @return the Locale prefix, if any.
+     */
+    public String getLocalePrefix() {
+        return localePrefix;   
+    }
+
+    /**
      * @return returns the full path (including the library, if any) of the
      *  resource.
      */
@@ -131,6 +145,9 @@ public class ResourceInfo {
             sb.append(library.getPath());
         } else {
             sb.append(helper.getBaseResourcePath());
+        }
+        if (library == null && localePrefix != null) {
+            sb.append('/').append(localePrefix);
         }
         sb.append('/').append(name);
         if (version != null) {

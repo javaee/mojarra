@@ -148,10 +148,10 @@ public class ClasspathResourceHelper extends ResourceHelper {
         try {
             List<String> subPaths = getSubPaths(basePathURL);
             if (subPaths.isEmpty()) {
-                return new LibraryInfo(libraryName, null, this);
+                return new LibraryInfo(libraryName, null, localePrefix, this);
             } else {
                 String version = getVersion(subPaths);
-                return new LibraryInfo(libraryName, version, this);
+                return new LibraryInfo(libraryName, version, localePrefix, this);
             }
         } catch (Exception e) {
             throw new FacesException(e);
@@ -194,14 +194,14 @@ public class ClasspathResourceHelper extends ResourceHelper {
                 if (library != null) {
                     return new ResourceInfo(library, resourceName, null);
                 } else {
-                    return new ResourceInfo(resourceName, null, this);
+                    return new ResourceInfo(resourceName, null, localePrefix, this);
                 }
             } else {
                 String version = getVersion(subPaths);
                 if (library != null) {
                     return new ResourceInfo(library, resourceName, version);
                 } else {
-                    return new ResourceInfo(resourceName, version, this);
+                    return new ResourceInfo(resourceName, version, localePrefix, this);
                 }
             }
         } catch (Exception e) {

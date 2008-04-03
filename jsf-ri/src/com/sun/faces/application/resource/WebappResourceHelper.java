@@ -106,7 +106,7 @@ public class WebappResourceHelper extends ResourceHelper {
         // as non-existant and return null.
         if (resourcePaths != null && !resourcePaths.isEmpty()) {
             String version = getVersion(resourcePaths);
-                return new LibraryInfo(libraryName, version, this);
+                return new LibraryInfo(libraryName, version, localePrefix, this);
         }
 
         return null;
@@ -156,7 +156,7 @@ public class WebappResourceHelper extends ResourceHelper {
             if (library != null) {
                 return new ResourceInfo(library, resourceName, null);
             } else {
-                return new ResourceInfo(resourceName, null, this);
+                return new ResourceInfo(resourceName, null, localePrefix, this);
             }
         } else {
             // ok, subdirectories exist, so find the latest 'version' directory
@@ -172,7 +172,7 @@ public class WebappResourceHelper extends ResourceHelper {
             if (library != null) {
                 return new ResourceInfo(library, resourceName, version);
             } else {
-                return new ResourceInfo(resourceName, version, this);
+                return new ResourceInfo(resourceName, version, localePrefix, this);
             }
         }
 

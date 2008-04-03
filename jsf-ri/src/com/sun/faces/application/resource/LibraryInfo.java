@@ -46,6 +46,7 @@ public class LibraryInfo {
 
     private String name;
     private String version;
+    private String localePrefix;
     private ResourceHelper helper;
     private String path;
 
@@ -55,9 +56,13 @@ public class LibraryInfo {
      * @param version the version of the library, if any
      * @param helper the helper class for this resource
      */
-    LibraryInfo(String name, String version, ResourceHelper helper) {
+    LibraryInfo(String name,
+                String version,
+                String localePrefix,
+                ResourceHelper helper) {
         this.name = name;
         this.version = version;
+        this.localePrefix = localePrefix;
         this.helper = helper;
         initPath();
     }
@@ -91,6 +96,13 @@ public class LibraryInfo {
         return path;
     }
 
+    /**
+     * @return the Locale prefix, if any.
+     */
+    public String getLocalePrefix() {
+        return localePrefix;
+    }
+
 
     // --------------------------------------------------------- Private Methods
 
@@ -102,6 +114,9 @@ public class LibraryInfo {
 
         StringBuilder sb = new StringBuilder(64);
         sb.append(helper.getBaseResourcePath());
+        if (localePrefix != null) {
+            sb.append('/').append(localePrefix);
+        }
         sb.append('/').append(name);
         if (version != null) {
             sb.append('/').append(version);

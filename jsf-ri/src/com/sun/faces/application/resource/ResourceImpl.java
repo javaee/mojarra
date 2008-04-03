@@ -178,6 +178,10 @@ public class ResourceImpl extends Resource {
         if (version.length() > 0) {
             uri += ((queryStarted) ? "&v=" : "?v=") + version;
         }
+        String localePrefix = resourceInfo.getLocalePrefix();
+        if (localePrefix != null) {
+            uri += ((queryStarted) ? "&loc=" : "?loc=") + localePrefix;
+        }
         uri = context.getApplication().getViewHandler()
               .getResourceURL(context,
                               uri);

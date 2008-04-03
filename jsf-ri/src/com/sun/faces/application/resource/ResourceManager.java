@@ -43,11 +43,13 @@ import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
 
 /**
  * This class is used to lookup {@link ResourceInfo} instances
@@ -94,12 +96,25 @@ public class ResourceManager {
         String localePrefix = getLocalePrefix(ctx);
         if (libraryName != null) {
             library = findLibrary(libraryName, localePrefix, ctx);
-            if (library == null) {
+            if (library == null && localePrefix == null) {
                 return null;
+            } else {
+                // no localized library found.  Try to find
+                // a library that isn't localized.
+                library = findLibrary(libraryName, null, ctx);
             }
         }
 
-        return findResource(library, resourceName, localePrefix, ctx);
+        ResourceInfo info = findResource(library,
+                                         resourceName,
+                                         localePrefix,
+                                         ctx);
+        if (info == null && localePrefix != null) {
+            // no localized resource found, try to find a
+            // resource that isn't localized
+            info = findResource(library, resourceName, null, ctx);
+        }
+        return info;
 
     }
 
@@ -239,13 +254,15 @@ public class ResourceManager {
                   context.getApplication().getViewHandler().calculateLocale(context);
                 try {
                     ResourceBundle appBundle =
-                          ResourceBundle.getBundle(appBundleName, locale);
+                          ResourceBundle.getBundle(appBundleName,
+                                                   locale,
+                                                   Util.getCurrentLoader(ResourceManager.class));
                     localePrefix =
                           appBundle
                                 .getString("javax.faces.resource.localePrefix");
                 } catch (MissingResourceException e) {
-                    //LOGGER.log(Level.INFO,
-                    //           "Unable to find key 'javax.faces.resource.localePrefix' in application message bundle.\nAssuming default Locale.\n", e);
+                    LOGGER.log(Level.INFO,
+                               "Unable to find key 'javax.faces.resource.localePrefix' in application message bundle.\nAssuming default Locale.\n", e);
                 }
         }
         return localePrefix;

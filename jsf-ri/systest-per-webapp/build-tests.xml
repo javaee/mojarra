@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.39 2007/06/01 18:28:31 edburns Exp $
+ $Id: build-tests.xml,v 1.40 2007/11/15 00:43:26 rlubke Exp $
 -->
 
 <!--
@@ -57,7 +57,8 @@
          This property list *must* match the one defined in the
          systest-per-webapp build.xml. -->
     <property name="applications"
-              value="nested-loadbundles,
+              value="resource-locale-prefix,
+                   nested-loadbundles,
                    replace-application,
                    invalid-mapping,
                    replace-statemanager,                                    
@@ -80,6 +81,8 @@
     -->
     
     <!-- Property definitions to map the application to a JUnit test case -->
+    <property name="resource-locale-prefix"
+              value="com/sun/faces/systest/ResourceLocalePrefixTestCase.class"/>
     <property name="replace-application" 
               value="com/sun/faces/systest/ReplaceApplicationTestCase.class"/>
     <property name="replace-statemanager"

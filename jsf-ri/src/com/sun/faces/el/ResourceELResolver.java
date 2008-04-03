@@ -112,8 +112,8 @@ public class ResourceELResolver extends ELResolver {
             if (res != null) {
                 ret = res.getURI();
             }
+            context.setPropertyResolved(true);
         }
-        context.setPropertyResolved(ret != null);
         return ret;
     }
 
