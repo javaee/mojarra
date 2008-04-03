@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.53 2007/10/18 17:05:24 rlubke Exp $
+ * $Id: UIForm.java,v 1.54 2008/02/22 01:49:30 rlubke Exp $
  */
 
 /*
@@ -285,4 +285,27 @@ public class UIForm extends UIComponentBase implements NamingContainer {
         return null;
     }
 
+    private Object[] values;
+
+    @Override
+    public Object saveState(FacesContext context) {
+
+        if (values == null) {
+             values = new Object[2];
+        }
+        values[0] = super.saveState(context);
+        values[1] = prependId;
+
+        return values;
+
+    }
+
+    @Override
+    public void restoreState(FacesContext context, Object state) {
+
+        values = (Object[]) state;
+        super.restoreState(context, values[0]);
+        prependId = (Boolean) values[1];
+        
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: UIFormTestCase.java,v 1.14 2007/04/27 22:00:15 ofung Exp $
+ * $Id: UIFormTestCase.java,v 1.15 2008/02/22 01:49:30 rlubke Exp $
  */
 
 /*
@@ -304,6 +304,17 @@ public class UIFormTestCase extends UIComponentBaseTestCase {
             "subview:input", input.getClientId(facesContext));
     
 
+    }
+
+    public void testSaveState() throws Exception {
+        UIForm form = new UIForm();
+        form.getAttributes().put("foo", "bar");
+        form.setPrependId(true);
+        Object state = form.saveState(facesContext);
+        form = new UIForm();
+        form.restoreState(facesContext, state);
+        assertTrue("bar".equals(form.getAttributes().get("foo")));
+        assertTrue(form.isPrependId());
     }
 
 
