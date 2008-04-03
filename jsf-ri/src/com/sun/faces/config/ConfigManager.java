@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManager.java,v 1.14 2007/06/28 20:12:44 rlubke Exp $
+ * $Id: ConfigManager.java,v 1.15 2007/07/16 17:06:43 rlubke Exp $
  */
 
 /*
@@ -60,6 +60,8 @@ import com.sun.faces.util.Timer;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
+import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
 import javax.servlet.ServletContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -199,6 +201,8 @@ public class ConfigManager {
             try {                
                 CONFIG_PROCESSOR_CHAIN.process(getConfigDocuments(sc));
             } catch (Exception e) {
+                // clear out any configured factories
+                releaseFactories();
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.log(Level.FINE,
                                "Unsanitized stacktrace from failed start...",
@@ -221,6 +225,7 @@ public class ConfigManager {
      */
     public void destory(ServletContext sc) {
 
+        releaseFactories();
         initializedContexts.remove(sc);
         
     }
@@ -315,7 +320,24 @@ public class ConfigManager {
           }
           return t;
 
-      }
+    }
+
+
+    /**
+     * Calls through to {@link javax.faces.FactoryFinder#releaseFactories()}
+     * ignoring any exceptions.
+     */
+    private void releaseFactories() {
+        try {
+            FactoryFinder.releaseFactories();
+        } catch (FacesException ignored) {
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE,
+                           "Exception thrown from FactoryFinder.releaseFactories()",
+                           ignored);
+            }
+        }
+    }
 
 
     // ----------------------------------------------------------- Inner Classes

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.33 2007/04/27 22:00:11 ofung Exp $
+ * $Id: FacesServlet.java,v 1.34 2007/07/16 17:06:42 rlubke Exp $
  */
 
 /*
@@ -41,8 +41,6 @@
 package javax.faces.webapp;
 
 
-import java.io.IOException;
-
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
@@ -54,8 +52,14 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.UnavailableException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -83,6 +87,13 @@ public final class FacesServlet implements Servlet {
      */
     public static final String LIFECYCLE_ID_ATTR =
         "javax.faces.LIFECYCLE_ID";
+
+
+    /**
+     * The <code>Logger</code> for this class.
+     */
+    private static final Logger LOGGER =
+          Logger.getLogger("javax.faces.webapp", "javax.faces.LogStrings");
 
 
     /**
@@ -154,12 +165,11 @@ public final class FacesServlet implements Servlet {
                 FactoryFinder.getFactory
                 (FactoryFinder.FACES_CONTEXT_FACTORY);
         } catch (FacesException e) {
-            Throwable rootCause = e.getCause();
-            if (rootCause == null) {
-                throw e;
-            } else {
-                throw new ServletException(e.getMessage(), rootCause);
-            }
+            ResourceBundle rb = LOGGER.getResourceBundle();
+            String msg = rb.getString("severe.webapp.facesservlet.init_failed");
+            Throwable rootCause = (e.getCause() != null) ? e.getCause() : e;
+            LOGGER.log(Level.SEVERE, msg, rootCause);
+            throw new UnavailableException(msg);
         }
 
         // Acquire our Lifecycle instance

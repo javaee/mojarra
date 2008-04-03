@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.113 2007/06/28 01:28:05 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.114 2007/07/16 17:06:43 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -174,15 +174,14 @@ public class ConfigureListener implements ServletRequestListener,
                 }               
             }
             registerELResolverAndListenerWithJsp(context);
-            
-        } finally {
-           
             ApplicationAssociate associate =
                  ApplicationAssociate.getInstance(context);
             if (associate != null) {
                 associate.setContextName(getServletContextIdentifier(context));
             }
             RenderKitUtils.loadSunJsfJs(initContext.getExternalContext());
+            
+        } finally {
             Verifier.setCurrentInstance(null);
             initContext.release();
             LOGGER.log(Level.FINE,
