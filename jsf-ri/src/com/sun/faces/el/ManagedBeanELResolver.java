@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanELResolver.java,v 1.19 2007/07/31 22:09:03 rlubke Exp $
+ * $Id: ManagedBeanELResolver.java,v 1.20 2007/12/03 18:36:01 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -77,27 +77,12 @@ public class ManagedBeanELResolver extends ELResolver {
         Object result = null;
         FacesContext facesContext = (FacesContext)
             context.getContext(FacesContext.class);
-        ExternalContext externalContext = facesContext.getExternalContext();
         BeanManager manager =
              ApplicationAssociate.getCurrentInstance().getBeanManager();
         String beanName = property.toString();
-        if (manager != null && manager.isManaged(beanName)) {
-            ELUtils.Scope scope = manager.getBuilder(beanName).getScope();
-            // check to see if the bean is already in scope
-            switch (scope) {
-                case REQUEST:
-                    if (externalContext.getRequestMap().containsKey(beanName)) {
-                        return null;
-                    }
-                case SESSION:
-                    if (externalContext.getSessionMap().containsKey(beanName)) {
-                        return null;
-                    }
-                case APPLICATION:
-                    if (externalContext.getApplicationMap().containsKey(beanName)) {
-                        return null;
-                    }
-            }
+        if (manager != null
+              && manager.isManaged(beanName)
+              && !manager.isBeanInScope(beanName, facesContext)) {
 
             // no bean found in scope.  create a new instance
             result = manager.create(beanName, facesContext);
@@ -128,6 +113,27 @@ public class ManagedBeanELResolver extends ELResolver {
             String message = MessageUtils.getExceptionMessageString
                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "base and property"); // ?????
             throw new PropertyNotFoundException(message);
+        }
+
+        // The spec states that nothing ManagedBeanELResolver should
+        // do nothing in setValue() so that the BeanELResolver can do its
+        // thing, however, in 1.1, calling setValue() for a reference
+        // that happened to be a managed bean cause the bean to be created
+        // and pushed to scope if it wasn't already there.  So ultimately,
+        // the user should be able to create a ValueExpression and call
+        // setValue() and expect it to work without having to call getValue()
+        // first.
+        FacesContext facesContext = (FacesContext)
+            context.getContext(FacesContext.class);
+        BeanManager manager =
+             ApplicationAssociate.getCurrentInstance().getBeanManager();
+        String beanName = property.toString();
+        if (manager != null
+              && manager.isManaged(beanName)
+              && !manager.isBeanInScope(beanName, facesContext)) {
+
+            // no bean found in scope.  create a new instance
+            manager.create(beanName, facesContext);
         }
 
     }

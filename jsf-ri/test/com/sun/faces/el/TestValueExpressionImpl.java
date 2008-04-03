@@ -374,6 +374,14 @@ public class TestValueExpressionImpl extends ServletFacesTestCase
                 .create("TestBean[\"inner\"].customers[2].nicknames.foo");
         valueExpression.setValue(getFacesContext().getELContext(), "bar");
         assertTrue(((String) inner2.getNicknames().get("foo")).equals("bar"));
+
+        // ensure we can call setValue() successfully if the bean isn't already
+        // in scope at the time of invocation
+        Map<String,Object> sm = getFacesContext().getExternalContext().getSessionMap();
+        sm.remove("mixedBean");
+        valueExpression = this.create("mixedBean.prop");
+        valueExpression.setValue(getFacesContext().getELContext(), "passed");
+        assertTrue("passed".equals(valueExpression.getValue(getFacesContext().getELContext())));
     }
     
     public void testNullReference() throws Exception

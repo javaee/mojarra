@@ -1,5 +1,5 @@
 /*
- * $Id: BeanManager.java,v 1.5 2007/06/25 17:20:31 rlubke Exp $
+ * $Id: BeanManager.java,v 1.6 2007/12/03 18:36:01 rlubke Exp $
  */
 
 /*
@@ -40,12 +40,6 @@
 
 package com.sun.faces.mgbean;
 
-import com.sun.faces.el.ELUtils;
-import com.sun.faces.spi.InjectionProvider;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.MessageUtils;
-
-import javax.faces.context.FacesContext;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -55,6 +49,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+
+import com.sun.faces.el.ELUtils;
+import com.sun.faces.spi.InjectionProvider;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.MessageUtils;
 
 /**
  * <p>Main interface for dealing with JSF managed beans</p>
@@ -160,6 +162,30 @@ public class BeanManager {
             }
         }
 
+    }
+
+
+    public boolean isBeanInScope(String name, FacesContext context) {
+
+        ELUtils.Scope scope = this.getBuilder(name).getScope();
+        ExternalContext externalContext = context.getExternalContext();
+        // check to see if the bean is already in scope
+        switch (scope) {
+            case REQUEST:
+                if (externalContext.getRequestMap().containsKey(name)) {
+                    return true;
+                }
+            case SESSION:
+                if (externalContext.getSessionMap().containsKey(name)) {
+                    return true;
+                }
+            case APPLICATION:
+                if (externalContext.getApplicationMap().containsKey(name)) {
+                    return true;
+                }
+        }
+        return false;
+        
     }
 
 
