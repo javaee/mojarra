@@ -78,7 +78,7 @@
 
     <!-- Version -->
     <property name="spec.version" value="2.0"/>
-    <property name="impl.name" value="Sun Microsystems JavaServer Faces Implementation"/>
+    <property name="impl.name" value="Mojarra"/>
     <property name="build.number" value="${DSTAMP}"/>
     <property name="build.type" value="NIGHTLY"/>
     <property name="impl.version.number" value="2.0.0" />
