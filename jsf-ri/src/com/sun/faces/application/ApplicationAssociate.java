@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.52 2008/01/30 14:31:23 edburns Exp $
+ * $Id: ApplicationAssociate.java,v 1.53 2008/01/30 16:53:04 edburns Exp $
  */
 
 /*
@@ -42,7 +42,6 @@ package com.sun.faces.application;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.spi.InjectionProvider;
 import com.sun.faces.spi.InjectionProviderFactory;
@@ -67,7 +66,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.TreeSet;
-import javax.faces.application.ProjectStage;
 
 /**
  * <p>Break out the things that are associated with the Application, but
@@ -143,8 +141,6 @@ public class ApplicationAssociate {
     private boolean requestServiced;
 
     private BeanManager beanManager;
-    
-    private ProjectStage projectStage;
 
     public ApplicationAssociate(ApplicationImpl appImpl) {
         app = appImpl;
@@ -436,30 +432,6 @@ public class ApplicationAssociate {
     public TreeSet<String> getNavigationWildCardList() {
         return wildcardMatchList;
     }
-    
-    public ProjectStage getProjectStage() {
-        
-        if (projectStage == null) {
-            WebConfiguration webConfig =
-                  WebConfiguration.getInstance(
-                        FacesContext.getCurrentInstance().getExternalContext());
-            String value =
-                  webConfig.getOptionValue(WebContextInitParameter.JavaxFacesProjectStage);
-            if (value != null) {
-                try {
-                    projectStage = ProjectStage.valueOf(value);
-                } catch (IllegalArgumentException iae) {
-                    projectStage = ProjectStage.getExtension(value);
-                }
-            }
-            if (projectStage == null) {
-                projectStage = ProjectStage.Production;
-            }
-        }
-        return projectStage;
-
-    }
-    
 
     public ResourceBundle getResourceBundle(FacesContext context,
                                             String var) {

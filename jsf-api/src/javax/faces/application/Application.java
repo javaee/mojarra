@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.58 2008/01/30 14:31:22 edburns Exp $
+ * $Id: Application.java,v 1.59 2008/01/30 16:53:03 edburns Exp $
  */
 
 /*
@@ -427,6 +427,12 @@ public abstract class Application {
      * @since 2.0
      */
     public ProjectStage getProjectStage() {
+        
+        Application app = getDefaultApplicationImpl();
+        if (app != null) {
+            return app.getProjectStage();
+        }
+        
         return ProjectStage.Production;
     }
 
