@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListenerTestCase.java,v 1.13 2006/05/18 17:02:15 rlubke Exp $
+ * $Id: ConfigureListenerTestCase.java,v 1.14 2007/04/25 04:43:31 rlubke Exp $
  */
 
 /*
@@ -33,6 +33,7 @@ package com.sun.faces.config;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.mock.MockServletContext;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 import java.util.logging.Filter;
 import java.util.logging.LogRecord;
@@ -402,7 +403,7 @@ public class ConfigureListenerTestCase extends TestCase {
         ServletContextEvent sce = new ServletContextEvent(context);
         setUp("test-config-1");
 
-        Logger logger = Logger.getLogger(Util.FACES_LOGGER + Util.CONFIG_LOGGER);
+        Logger logger = FacesLogger.CONFIG.getLogger();
         GotMessageFilter gotMessageFilter = new GotMessageFilter();
         logger.setFilter(gotMessageFilter);
                 
