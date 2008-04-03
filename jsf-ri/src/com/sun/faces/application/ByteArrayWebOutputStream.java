@@ -1,5 +1,5 @@
 /*
- * $Id: ByteArrayWebOutputStream.java,v 1.2 2007/05/17 14:26:30 rlubke Exp $ 
+ * $Id: ByteArrayWebOutputStream.java,v 1.3 2007/05/17 14:33:10 rlubke Exp $ 
  */
 
 /*
@@ -30,7 +30,7 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 
 import javax.servlet.ServletOutputStream;
 import javax.faces.FacesException;
@@ -52,8 +52,7 @@ import java.nio.charset.CharacterCodingException;
 class ByteArrayWebOutputStream extends ServletOutputStream {
 
         // Log instance for this class
-    private static final Logger LOGGER =
-                Util.getLogger(Util.FACES_LOGGER + Util.APPLICATION_LOGGER);
+    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
     private DirectByteArrayOutputStream baos;
 

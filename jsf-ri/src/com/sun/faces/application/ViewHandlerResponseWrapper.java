@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerResponseWrapper.java,v 1.14 2007/05/17 14:26:30 rlubke Exp $ 
+ * $Id: ViewHandlerResponseWrapper.java,v 1.15 2007/05/17 14:33:10 rlubke Exp $ 
  */
 
 /*
@@ -51,16 +51,7 @@ import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.CharacterCodingException;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
-import java.util.logging.Logger;
-import java.util.logging.Level;
 
-import com.sun.faces.util.Util;
-import com.sun.faces.util.FacesLogger;
 
 
 /**
@@ -70,9 +61,6 @@ import com.sun.faces.util.FacesLogger;
 
 public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper implements InterweavingResponse {
 
-    // Log instance for this class
-    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
-    
     private ByteArrayWebOutputStream basos;
     private PrintWriter pw ;
     private CharArrayWriter caw;
