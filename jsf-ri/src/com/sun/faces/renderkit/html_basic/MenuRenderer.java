@@ -35,7 +35,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.92 2007/07/23 17:06:50 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.93 2007/07/27 19:59:08 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -54,6 +54,7 @@ import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 
+import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectMany;
@@ -554,10 +555,13 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         try {
             newValue = context.getApplication().getExpressionFactory().
                  coerceToType(itemValue, type);
-        } catch (Exception e) {
-            // this should catch an ELException, but there is a bug
-            // in ExpressionFactory.coerceToType() in GF
-            newValue = null;
+        } catch (ELException ele) {
+            newValue = itemValue;
+        } catch (IllegalArgumentException iae) {
+            // If coerceToType fails, per the docs it should throw
+            // an ELException, however, GF 9.0 and 9.0u1 will throw
+            // an IllegalArgumentException instead (see GF issue 1527).
+            newValue = itemValue;
         }
 
         isSelected = isSelected(newValue, valuesArray);

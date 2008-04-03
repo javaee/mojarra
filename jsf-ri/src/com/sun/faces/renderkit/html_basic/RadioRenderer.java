@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.85 2007/07/10 18:51:34 rlubke Exp $
+ * $Id: RadioRenderer.java,v 1.86 2007/07/27 19:59:08 rlubke Exp $
  */
 
 /*
@@ -48,6 +48,7 @@ import javax.faces.component.UISelectOne;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.model.SelectItem;
+import javax.el.ELException;
 
 import java.io.IOException;
 import java.util.Map;
@@ -99,8 +100,18 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
         Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
         requestMap.put(ConverterPropertyEditorBase.TARGET_COMPONENT_ATTRIBUTE_NAME, 
                 component);
-        Object newValue = context.getApplication().getExpressionFactory().
-              coerceToType(itemValue, type);
+        Object newValue;
+        try {
+            newValue = context.getApplication().getExpressionFactory().
+                  coerceToType(itemValue, type);
+        } catch (ELException ele) {
+            newValue = itemValue;
+        } catch (IllegalArgumentException iae) {
+            // If coerceToType fails, per the docs it should throw
+            // an ELException, however, GF 9.0 and 9.0u1 will throw
+            // an IllegalArgumentException instead (see GF issue 1527).
+            newValue = itemValue;
+        }
 
         // disable the radio button if the attribute is set.
         boolean componentDisabled = Util.componentIsDisabled(component);

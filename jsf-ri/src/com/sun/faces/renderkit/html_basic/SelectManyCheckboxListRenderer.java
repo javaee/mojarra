@@ -35,7 +35,7 @@
  */
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.56 2007/07/10 18:51:34 rlubke Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.57 2007/07/27 19:59:08 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -53,6 +53,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
+import javax.el.ELException;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -288,8 +289,18 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
         requestMap.put(ConverterPropertyEditorBase.TARGET_COMPONENT_ATTRIBUTE_NAME, 
                 component);
-        Object newValue = context.getApplication().getExpressionFactory().
-              coerceToType(itemValue, type);
+        Object newValue;
+        try {
+            newValue = context.getApplication().getExpressionFactory().
+                coerceToType(itemValue, type);
+        } catch (ELException ele) {
+            newValue = itemValue;
+        } catch (IllegalArgumentException iae) {
+            // If coerceToType fails, per the docs it should throw
+            // an ELException, however, GF 9.0 and 9.0u1 will throw
+            // an IllegalArgumentException instead (see GF issue 1527).
+            newValue = itemValue;
+        }
 
         isSelected = isSelected(newValue, valuesArray);
 

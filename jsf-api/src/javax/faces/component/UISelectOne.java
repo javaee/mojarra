@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.55 2007/04/27 22:00:05 ofung Exp $
+ * $Id: UISelectOne.java,v 1.56 2007/07/27 19:59:08 rlubke Exp $
  */
 
 /*
@@ -41,12 +41,14 @@
 package javax.faces.component;
 
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import javax.el.ELException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
+
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 
 /**
@@ -188,10 +190,13 @@ public class UISelectOne extends UIInput {
                 try {
                     newValue = getFacesContext().getApplication().
                         getExpressionFactory().coerceToType(item.getValue(), type);
-                } catch (Exception e) {
-                    // this should catch an ELException, but there is a bug
-                    // in ExpressionFactory.coerceToType() in GF
-                    newValue = null;
+                } catch (ELException ele) {
+                    newValue = item.getValue();
+                } catch (IllegalArgumentException iae) {
+                    // If coerceToType fails, per the docs it should throw
+                    // an ELException, however, GF 9.0 and 9.0u1 will throw
+                    // an IllegalArgumentException instead (see GF issue 1527).                    
+                    newValue = item.getValue();
                 }
                 if (value.equals(newValue)) {
                     return (true);
