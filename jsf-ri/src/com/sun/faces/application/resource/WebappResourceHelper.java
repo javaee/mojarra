@@ -9,7 +9,11 @@ import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 
 /**
- * RELEASE_PENDING (rlubke) document
+ * <p>
+ * A {@link ResourceHelper} implementation for finding/serving resources
+ * found within <code>&lt;contextroot&gt;/resources</code> directory of a
+ * web application.
+ * </p>
  *
  * @since 2.0
  */
@@ -40,8 +44,7 @@ public class WebappResourceHelper extends ResourceHelper {
 
 
     /**
-     * RELEASE_PENDING (rlubke) document
-     * @return
+     * @see com.sun.faces.application.resource.ResourceHelper#getBaseResourcePath()
      */
     public String getBaseResourcePath() {
 
@@ -51,9 +54,7 @@ public class WebappResourceHelper extends ResourceHelper {
 
 
     /**
-     * RELEASE_PENDING (rlubke) document
-     * @param ctx
-     * @return
+     * @see ResourceHelper#getInputStream(String, javax.faces.context.FacesContext)
      */
     public InputStream getInputStream(String path, FacesContext ctx) {
 
@@ -63,9 +64,7 @@ public class WebappResourceHelper extends ResourceHelper {
 
 
     /**
-     * RELEASE_PENDING (rlubke) document
-     * @param ctx
-     * @return
+     * @see ResourceHelper#getURL(String, javax.faces.context.FacesContext)
      */
     public URL getURL(String path, FacesContext ctx) {
 
@@ -78,6 +77,9 @@ public class WebappResourceHelper extends ResourceHelper {
     }
 
 
+    /**
+     * @see ResourceHelper#findLibrary(String, String, javax.faces.context.FacesContext)
+     */
     public LibraryInfo findLibrary(String libraryName,
                                    String localePrefix,
                                    FacesContext ctx) {
@@ -105,6 +107,10 @@ public class WebappResourceHelper extends ResourceHelper {
         return null;
     }
 
+
+    /**
+     * @see ResourceHelper#findResource(LibraryInfo, String, String, javax.faces.context.FacesContext)
+     */
     public ResourceInfo findResource(LibraryInfo library,
                                      String resourceName,
                                      String localePrefix,
@@ -152,7 +158,10 @@ public class WebappResourceHelper extends ResourceHelper {
             String version = getVersion(resourcePaths);
             if (version == null) {
                 // Problem here - they aren't following the property format
-                throw new MalformedResourcePathException("TODO"); // TODO
+                // RELEASE_PENDING (rlubke) i18n
+                throw new MalformedResourcePathException("Resource '"
+                                                         + resourceName
+                                                         + "' represents a directory, but there are no discernable versions within said directory");
             }
             if (library != null) {
                 return new ResourceInfo(library, resourceName, version);
