@@ -37,21 +37,13 @@
 package com.sun.faces.application.resource;
 
 import java.util.Locale;
-import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.faces.context.FacesContext;
-
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.Util;
 
 import javax.faces.application.ResourceHandler;
+import javax.faces.context.FacesContext;
+
+import com.sun.faces.util.Util;
 
 /**
  * This class is used to lookup {@link ResourceInfo} instances
@@ -67,14 +59,10 @@ import javax.faces.application.ResourceHandler;
  */
 public class ResourceManager {
 
-    private Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
     private ResourceHelper webappHelper = WebappResourceHelper.getInstance();
     private ResourceHelper classpathHelper = ClasspathResourceHelper.getInstance();
 
-    private Map<String, LibraryInfo> libraries =
-          new ConcurrentHashMap<String, LibraryInfo>();
-    private final Lock lock = new ReentrantLock();
 
     // ------------------------------------------------------ Public Methods
 
@@ -147,29 +135,6 @@ public class ResourceManager {
     private LibraryInfo findLibrary(String libraryName,
                                     String localePrefix,
                                     FacesContext ctx) {
-
-        /*LibraryInfo library = libraries.get(libraryName);
-        if (library == null) {
-            lock.lock();
-            try {
-                library = libraries.get(libraryName);
-                if (library == null) {
-                    library = searchWebapp(libraryName, ctx);
-                    if (library != null) {
-                        libraries.put(libraryName, library);
-                        return library;
-                    } else {
-                        try {
-                            library = searchClasspath(libraryName);
-                        } catch (Exception e) {
-                            throw new LibraryNotFoundException(libraryName, e);
-                        }
-                    }
-                }
-            } finally {
-                lock.unlock();
-            }
-        }*/
 
         LibraryInfo library = webappHelper.findLibrary(libraryName,
                                                        localePrefix,
