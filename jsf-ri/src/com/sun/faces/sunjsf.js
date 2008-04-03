@@ -18,7 +18,7 @@
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
  *
- * sunjsf.js $Id: sunjsf.js,v 1.2 2007/04/26 17:52:29 rlubke Exp $ 
+ * sunjsf.js $Id: sunjsf.js,v 1.3 2007/04/26 17:59:38 rlubke Exp $ 
  *
  * Copyright 2006 Sun Microsystems Inc. All Rights Reserved
  */
@@ -86,7 +86,7 @@ function jsfcljs(f, pvp, t) {
     if (t) {
         f.target = t;
     }
-    t.target = null;
+    f.target = null;
     f.submit();   
     dpf(f);    
 };
