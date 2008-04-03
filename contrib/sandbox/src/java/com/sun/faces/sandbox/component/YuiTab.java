@@ -36,6 +36,6 @@ public class YuiTab extends UIOutput {
     public void setLabel(String label) {
         this.label = label;
     }
-    public YuiTab()          { setRendererType(RENDERER_TYPE); }
+    public YuiTab()              { setRendererType(RENDERER_TYPE); }
     public String getFamily()    { return COMPONENT_TYPE; }
 }

@@ -10,6 +10,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 
+import com.sun.faces.sandbox.component.YuiTabView;
+
 /**
  * @author Jason Lee
  *

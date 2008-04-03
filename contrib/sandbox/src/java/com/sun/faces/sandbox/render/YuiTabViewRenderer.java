@@ -22,6 +22,8 @@ import com.sun.faces.sandbox.util.YuiConstants;
  * @author Jason Lee
  *
  */
+// TODO
+// http://tech.groups.yahoo.com/group/ydn-javascript/message/7472
 public class YuiTabViewRenderer extends Renderer {
     private static final String scriptIds[] = {
         YuiConstants.JS_UTILITIES,
@@ -144,18 +146,49 @@ public class YuiTabViewRenderer extends Renderer {
         writer.endElement("ul");
         writer.startElement("div", tabView);
         writer.writeAttribute("class", "yui-content", "class");
+//        String maxHeight = tabView.getMaxHeight();
+//        if ((maxHeight != null) && !"auto".equalsIgnoreCase(maxHeight)) {
+//            if (!"dynamic".equalsIgnoreCase(maxHeight)) {
+//                writer.writeAttribute("style", "height:  " + maxHeight + "; maxHeight:  " + maxHeight, "style");
+//            }
+//        }
     }
 
     @Override
     public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
+        YuiTabView tabView = (YuiTabView) component;
+        
         writer.endElement("div"); // content div
         writer.endElement("div"); // containing div
         writer.startElement("script", component);
         writer.writeAttribute("type", "text/javascript", "type");
         String jsName = "tabView_" + YuiRendererHelper.getJavascriptVar(component);
-        writer.write ("var " + jsName + " = new YAHOO.widget.TabView('tabView_" + component.getClientId(context) + "');");
+        writer.write ("var " + jsName + " = new YAHOO.widget.TabView('tabView_" + component.getClientId(context) + "', " +
+                "{ orientation: '" + tabView.getOrientation() + "' });");
         //writer.writeText(text, property)
+        if ("auto".equalsIgnoreCase(tabView.getMaxHeight())) {
+            writer.write(AUTO_HEIGHT_JS.replaceAll("%%%TABVIEW%%%", jsName));
+        }
         writer.endElement("script");
     }
+    
+    private final static String AUTO_HEIGHT_JS =
+        "\nYAHOO.util.Event.onContentReady('%%%TABVIEW%%%', function() { \n" +
+        "var tabs = %%%TABVIEW%%%.get('tabs'); \n" +
+        "var height = %%%TABVIEW%%%.get('activeTab').get('contentEl').offsetHeight;\n" +  /* seed with visible tab */ 
+      
+        "for (var i = 0, len = tabs.length; i < len; i++) { \n" +
+        "    if ( tabs[i] == %%%TABVIEW%%%.get('activeTab') ) { \n" +
+        "        continue; \n" +  /* skip active tab */
+        "    } " +
+          
+        "    tabs[i].set('contentVisible', true); \n" + /* so we can measure */ 
+        "    height = Math.max(tabs[i].get('contentEl').offsetHeight, height); \n" +
+        "    tabs[i].set('contentVisible', false); \n" +
+        "} \n" +
+      
+        "%%%TABVIEW%%%.getElementsByClassName('yui-content')[0].style.height = height + 'px'; \n" +
+  
+        "});\n";
 }

@@ -21,6 +21,7 @@ public class YuiTabView extends UIOutput {
     
     protected String tabStyle = "border"; // Currently supports "border", "round" or "module"
     protected String orientation = "top"; // top, right, bottom, or left
+    private String maxHeight = "dynamic"; // "dynamic", "auto", or "##px"
     
     public YuiTabView()          { setRendererType(RENDERER_TYPE); }
     public String getFamily()    { return COMPONENT_TYPE; }
@@ -36,5 +37,11 @@ public class YuiTabView extends UIOutput {
     }
     public void setTabStyle(String tabStyle) {
         this.tabStyle = tabStyle;
+    }
+    public String getMaxHeight() {
+        return maxHeight;
+    }
+    public void setMaxHeight(String maxHeight) {
+        this.maxHeight = maxHeight;
     }
 }

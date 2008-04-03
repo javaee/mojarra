@@ -1667,6 +1667,12 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             <rtexprvalue>false</rtexprvalue>
             <description></description>
         </attribute>
+        <attribute>
+            <name>maxHeight</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description></description>
+        </attribute>
     </tag>
     <!-- ******************************************************************* -->
     <!-- End TabView tag attributes                                          -->

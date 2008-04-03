@@ -12,8 +12,9 @@ import com.sun.faces.sandbox.component.YuiTabView;
  *
  */
 public class YuiTabViewTag extends UISandboxComponentTag {
-    protected String orientation;
-    protected String tabStyle;
+    private String orientation;
+    private String tabStyle;
+    private String maxHeight;
 
     public String getComponentType() { return YuiTabView.COMPONENT_TYPE; }
     public String getRendererType()  { return YuiTabView.RENDERER_TYPE; }
@@ -24,6 +25,9 @@ public class YuiTabViewTag extends UISandboxComponentTag {
     public void setTabStyle(String tabStyle) {
         this.tabStyle = tabStyle;
     }
+    public void setMaxHeight(String maxHeight) {
+        this.maxHeight = maxHeight;
+    }
 
     protected void setProperties(UIComponent component) {
         super.setProperties(component);
@@ -33,5 +37,6 @@ public class YuiTabViewTag extends UISandboxComponentTag {
         YuiTabView tabView = (YuiTabView)component;
         setStringProperty(tabView, "tabStyle", tabStyle);
         setStringProperty(tabView, "orientation", orientation);
+        setStringProperty(tabView, "maxHeight", maxHeight);
     }
 }
