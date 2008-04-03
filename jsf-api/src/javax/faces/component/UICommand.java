@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.80 2007/08/28 17:27:47 edburns Exp $
+ * $Id: UICommand.java,v 1.81 2007/10/18 17:05:23 rlubke Exp $
  */
 
 /*
@@ -193,13 +193,12 @@ public class UICommand extends UIComponentBase
     /**
      * <p>The immediate flag.</p>
      */
-    private boolean immediate = false;
-    private boolean immediateSet = false;
+    private Boolean immediate;
 
 
     public boolean isImmediate() {
 
-	if (this.immediateSet) {
+	if (this.immediate != null) {
 	    return (this.immediate);
 	}
 	ValueExpression ve = getValueExpression("immediate");
@@ -211,7 +210,7 @@ public class UICommand extends UIComponentBase
 		throw new FacesException(e);
 	    }
 	} else {
-	    return (this.immediate);
+	    return (false);
 	}
 
     }
@@ -219,11 +218,7 @@ public class UICommand extends UIComponentBase
 
     public void setImmediate(boolean immediate) {
 
-	// if the immediate value is changing.
-	if (immediate != this.immediate) {
-	    this.immediate = immediate;
-	}
-	this.immediateSet = true;
+        this.immediate = immediate;
 
     }
 
@@ -323,15 +318,14 @@ public class UICommand extends UIComponentBase
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-             values = new Object[6];
+             values = new Object[5];
         }
       
         values[0] = super.saveState(context);
         values[1] = saveAttachedState(context, methodBindingActionListener);
         values[2] = saveAttachedState(context, actionExpression);
-        values[3] = immediate ? Boolean.TRUE : Boolean.FALSE;
-        values[4] = immediateSet ? Boolean.TRUE : Boolean.FALSE;
-        values[5] = value;
+        values[3] = immediate;
+        values[4] = value;
         
         return (values);
 
@@ -345,9 +339,8 @@ public class UICommand extends UIComponentBase
             restoreAttachedState(context, values[1]);
         actionExpression = 
 	    (MethodExpression) restoreAttachedState(context, values[2]);
-        immediate = ((Boolean) values[3]).booleanValue();
-        immediateSet = ((Boolean) values[4]).booleanValue();
-        value = values[5];
+        immediate = (Boolean) values[3];
+        value = values[4];
         
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: UIMessages.java,v 1.18 2007/04/27 22:00:05 ofung Exp $
+ * $Id: UIMessages.java,v 1.19 2007/10/18 17:05:24 rlubke Exp $
  */
 
 /*
@@ -95,12 +95,9 @@ public class UIMessages extends UIComponentBase {
     // ------------------------------------------------------ Instance Variables
 
 
-    private boolean globalOnly = false;
-    private boolean globalOnlySet = false;
-    private boolean showDetail = false;
-    private boolean showDetailSet = false;
-    private boolean showSummary = true;
-    private boolean showSummarySet = false;
+    private Boolean globalOnly;
+    private Boolean showDetail;
+    private Boolean showSummary;
 
     // -------------------------------------------------------------- Properties
 
@@ -119,7 +116,7 @@ public class UIMessages extends UIComponentBase {
      */
     public boolean isGlobalOnly() {
 
-	if (this.globalOnlySet) {
+	if (this.globalOnly != null) {
 	    return (this.globalOnly);
 	}
 	ValueExpression ve = getValueExpression("globalOnly");
@@ -131,7 +128,7 @@ public class UIMessages extends UIComponentBase {
 		throw new FacesException(e);
 	    }
 	} else {
-	    return (this.globalOnly);
+	    return (false);
 	}
 
     }
@@ -146,7 +143,6 @@ public class UIMessages extends UIComponentBase {
     public void setGlobalOnly(boolean globalOnly) {
 
 	this.globalOnly = globalOnly;
-	this.globalOnlySet = true;
 
     }
 
@@ -157,7 +153,7 @@ public class UIMessages extends UIComponentBase {
      */
     public boolean isShowDetail() {
 
-	if (this.showDetailSet){
+	if (this.showDetail != null){
 	    return (this.showDetail);
 	}
 	ValueExpression ve = getValueExpression("showDetail");
@@ -169,7 +165,7 @@ public class UIMessages extends UIComponentBase {
 		throw new FacesException(e);
 	    }
 	} else {
-	    return (this.showDetail);
+	    return (false);
 	}
 
     }
@@ -184,7 +180,6 @@ public class UIMessages extends UIComponentBase {
     public void setShowDetail(boolean showDetail) {
 
 	this.showDetail = showDetail;
-	this.showDetailSet = true;
 
     }
 
@@ -196,7 +191,7 @@ public class UIMessages extends UIComponentBase {
      */
     public boolean isShowSummary() {
 
-	if (this.showSummarySet) {
+	if (this.showSummary != null) {
 	    return (this.showSummary);
 	}
 	ValueExpression ve = getValueExpression("showSummary");
@@ -208,7 +203,7 @@ public class UIMessages extends UIComponentBase {
 		throw new FacesException(e);
 	    }
 	} else {
-	    return (this.showSummary);
+	    return (true);
 	}
 
     }
@@ -223,7 +218,6 @@ public class UIMessages extends UIComponentBase {
     public void setShowSummary(boolean showSummary) {
 
 	this.showSummary = showSummary;
-	this.showSummarySet = true;
 
     }
 
@@ -236,16 +230,13 @@ public class UIMessages extends UIComponentBase {
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-             values = new Object[7];
+             values = new Object[4];
         }
        
         values[0] = super.saveState(context);
-        values[1] = this.globalOnly ? Boolean.TRUE : Boolean.FALSE;
-        values[2] = this.globalOnlySet ? Boolean.TRUE : Boolean.FALSE;
-        values[3] = this.showDetail ? Boolean.TRUE : Boolean.FALSE;
-        values[4] = this.showDetailSet ? Boolean.TRUE : Boolean.FALSE;
-        values[5] = this.showSummary ? Boolean.TRUE : Boolean.FALSE;
-        values[6] = this.showSummarySet ? Boolean.TRUE : Boolean.FALSE;
+        values[1] = this.globalOnly;
+        values[2] = this.showDetail;
+        values[3] = this.showSummary;
 
         return (values);
 
@@ -256,12 +247,9 @@ public class UIMessages extends UIComponentBase {
 
         values = (Object[]) state;
         super.restoreState(context, values[0]);
-        globalOnly = ((Boolean) values[1]).booleanValue();
-        globalOnlySet = ((Boolean) values[2]).booleanValue();
-        showDetail = ((Boolean) values[3]).booleanValue();
-        showDetailSet = ((Boolean) values[4]).booleanValue();
-        showSummary = ((Boolean) values[5]).booleanValue();
-        showSummarySet = ((Boolean) values[6]).booleanValue();
+        globalOnly = (Boolean) values[1];
+        showDetail = (Boolean) values[2];
+        showSummary = (Boolean) values[3];
 
     }
 

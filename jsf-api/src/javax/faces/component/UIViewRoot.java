@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.49 2007/04/27 22:00:05 ofung Exp $
+ * $Id: UIViewRoot.java,v 1.50 2007/10/18 17:05:23 rlubke Exp $
  */
 
 /*
@@ -914,7 +914,7 @@ public class UIViewRoot extends UIComponentBase {
         values[1] = renderKitId;
         values[2] = viewId;
         values[3] = locale;
-        values[4] = new Integer(lastId);
+        values[4] = lastId;
         values[5] = saveAttachedState(context, beforePhase);
         values[6] = saveAttachedState(context, afterPhase);
         values[7] = saveAttachedState(context, phaseListeners);

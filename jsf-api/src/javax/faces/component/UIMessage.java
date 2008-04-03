@@ -1,5 +1,5 @@
 /*
- * $Id: UIMessage.java,v 1.19 2007/04/27 22:00:05 ofung Exp $
+ * $Id: UIMessage.java,v 1.20 2007/10/18 17:05:23 rlubke Exp $
  */
 
 /*
@@ -240,10 +240,10 @@ public class UIMessage extends UIComponentBase {
        
         values[0] = super.saveState(context);
         values[1] = this.forVal;
-        values[2] = this.showDetail ? Boolean.TRUE : Boolean.FALSE;
-        values[3] = this.showDetailSet ? Boolean.TRUE : Boolean.FALSE;
-        values[4] = this.showSummary ? Boolean.TRUE : Boolean.FALSE;
-        values[5] = this.showSummarySet ? Boolean.TRUE : Boolean.FALSE;
+        values[2] = this.showDetail;
+        values[3] = this.showDetailSet;
+        values[4] = this.showSummary;
+        values[5] = this.showSummarySet;
         return (values);
 
     }
@@ -254,10 +254,10 @@ public class UIMessage extends UIComponentBase {
         values = (Object[]) state;
         super.restoreState(context, values[0]);
 	forVal = (String) values[1];
-        showDetail = ((Boolean) values[2]).booleanValue();
-        showDetailSet = ((Boolean) values[3]).booleanValue();
-        showSummary = ((Boolean) values[4]).booleanValue();
-        showSummarySet = ((Boolean) values[5]).booleanValue();
+        showDetail = (Boolean) values[2];
+        showDetailSet = (Boolean) values[3];
+        showSummary = (Boolean) values[4];
+        showSummarySet = (Boolean) values[5];
 
     }
 

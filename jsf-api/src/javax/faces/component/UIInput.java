@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.94 2007/09/24 19:13:42 edburns Exp $
+ * $Id: UIInput.java,v 1.95 2007/10/18 17:05:23 rlubke Exp $
  */
 
 /*
@@ -269,15 +269,14 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     /**
      * <p>The "required field" state for this component.</p>
      */
-    private boolean required = false;
-    private boolean requiredSet = false;
+    private Boolean required;
 
     /**
      * <p>Return the "required field" state for this component.</p>
      */
     public boolean isRequired() {
 
-        if (this.requiredSet) {
+        if (required != null) {
             return (this.required);
         }
         ValueExpression ve = getValueExpression("required");
@@ -289,13 +288,12 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                 throw new FacesException(e);
             }
         } else {
-            return (this.required);
+            return (false);
         }
 
     }
 
-    private String requiredMessage = null;
-    private boolean requiredMessageSet = false;
+    private String requiredMessage;
 
     /**
      * <p>If there has been a call to {@link #setRequiredMessage} on this
@@ -306,7 +304,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      */
 
     public String getRequiredMessage() {
-        if (requiredMessageSet) {
+        if (requiredMessage != null) {
             return requiredMessage;
         }
 
@@ -319,7 +317,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                 throw new FacesException(e);
             }
         } else {
-            return (this.requiredMessage);
+            return (null);
         }
 
     }
@@ -334,12 +332,10 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      */
 
     public void setRequiredMessage(String message) {
-        requiredMessageSet = true;
         requiredMessage = message;
     }
 
-    private String converterMessage = null;
-    private boolean converterMessageSet = false;
+    private String converterMessage;
 
     /**
      * <p>If there has been a call to {@link #setConverterMessage} on this
@@ -350,7 +346,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      */
 
     public String getConverterMessage() {
-        if (converterMessageSet) {
+        if (converterMessage != null) {
             return converterMessage;
         }
 
@@ -363,7 +359,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                 throw new FacesException(e);
             }
         } else {
-            return (this.converterMessage);
+            return (null);
         }
 
     }
@@ -378,12 +374,10 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      */
 
     public void setConverterMessage(String message) {
-        converterMessageSet = true;
         converterMessage = message;
     }
 
-    private String validatorMessage = null;
-    private boolean validatorMessageSet = false;
+    private String validatorMessage;
 
     /**
      * <p>If there has been a call to {@link #setRequiredMessage} on this
@@ -394,7 +388,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      */
 
     public String getValidatorMessage() {
-        if (validatorMessageSet) {
+        if (validatorMessage != null) {
             return validatorMessage;
         }
 
@@ -407,7 +401,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                 throw new FacesException(e);
             }
         } else {
-            return (this.validatorMessage);
+            return (null);
         }
 
     }
@@ -422,7 +416,6 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      */
 
     public void setValidatorMessage(String message) {
-        validatorMessageSet = true;
         validatorMessage = message;
     }
 
@@ -451,20 +444,18 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     public void setRequired(boolean required) {
 
         this.required = required;
-        this.requiredSet = true;
 
     }
 
     /**
      * <p>The immediate flag.</p>
      */
-    private boolean immediate = false;
-    private boolean immediateSet = false;
+    private Boolean immediate;
 
 
     public boolean isImmediate() {
 
-        if (this.immediateSet) {
+        if (this.immediate != null) {
             return (this.immediate);
         }
         ValueExpression ve = getValueExpression("immediate");
@@ -477,7 +468,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
             }
 
         } else {
-            return (this.immediate);
+            return (false);
         }
 
     }
@@ -485,11 +476,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
     public void setImmediate(boolean immediate) {
 
-        // if the immediate value is changing.
-        if (immediate != this.immediate) {
-            this.immediate = immediate;
-        }
-        this.immediateSet = true;
+        this.immediate = immediate;
 
     }
 
@@ -1228,23 +1215,18 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-            values = new Object[14];
+            values = new Object[9];
         }
 
         values[0] = super.saveState(context);
-        values[1] = localValueSet ? Boolean.TRUE : Boolean.FALSE;
-        values[2] = required ? Boolean.TRUE : Boolean.FALSE;
-        values[3] = requiredSet ? Boolean.TRUE : Boolean.FALSE;
-        values[4] = requiredMessage;
-        values[5] = requiredMessageSet ? Boolean.TRUE : Boolean.FALSE;
-        values[6] = converterMessage;
-        values[7] = converterMessageSet ? Boolean.TRUE : Boolean.FALSE;
-        values[8] = validatorMessage;
-        values[9] = validatorMessageSet ? Boolean.TRUE : Boolean.FALSE;
-        values[10] = this.valid ? Boolean.TRUE : Boolean.FALSE;
-        values[11] = immediate ? Boolean.TRUE : Boolean.FALSE;
-        values[12] = immediateSet ? Boolean.TRUE : Boolean.FALSE;
-        values[13] = saveAttachedState(context, validators);
+        values[1] = localValueSet;
+        values[2] = required;
+        values[3] = requiredMessage;
+        values[4] = converterMessage;
+        values[5] = validatorMessage;
+        values[6] = valid;
+        values[7] = immediate;
+        values[8] = saveAttachedState(context, validators);
         return (values);
 
     }
@@ -1254,23 +1236,18 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
         values = (Object[]) state;
         super.restoreState(context, values[0]);
-        localValueSet = ((Boolean) values[1]).booleanValue();
-        required = ((Boolean) values[2]).booleanValue();
-        requiredSet = ((Boolean) values[3]).booleanValue();
-        requiredMessage = ((String) values[4]);
-        requiredMessageSet = ((Boolean) values[5]).booleanValue();
-        converterMessage = ((String) values[6]);
-        converterMessageSet = ((Boolean) values[7]).booleanValue();
-        validatorMessage = ((String) values[8]);
-        validatorMessageSet = ((Boolean) values[9]).booleanValue();
-        valid = ((Boolean) values[10]).booleanValue();
-        immediate = ((Boolean) values[11]).booleanValue();
-        immediateSet = ((Boolean) values[12]).booleanValue();
+        localValueSet = (Boolean) values[1];
+        required = (Boolean) values[2];
+        requiredMessage = ((String) values[3]);
+        converterMessage = ((String) values[4]);
+        validatorMessage = ((String) values[5]);
+        valid = (Boolean) values[6];
+        immediate = (Boolean) values[7];
         List<Validator> restoredValidators;
         Iterator<Validator> iter;
 
         if (null != (restoredValidators = TypedCollections.dynamicallyCastList((List)
-             restoreAttachedState(context, values[13]), Validator.class))) {
+             restoreAttachedState(context, values[8]), Validator.class))) {
             // if there were some validators registered prior to this
             // method being invoked, merge them with the list to be
             // restored.

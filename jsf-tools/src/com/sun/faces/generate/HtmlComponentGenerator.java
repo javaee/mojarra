@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlComponentGenerator.java,v 1.30 2007/10/04 17:13:57 rlubke Exp $
+ * $Id: HtmlComponentGenerator.java,v 1.31 2007/10/18 17:05:24 rlubke Exp $
  */
 
 /*
@@ -321,23 +321,10 @@ public class HtmlComponentGenerator extends AbstractGenerator {
 
             // Generate the instance variable
             writer.fwrite("private ");
-            writer.write(type);
+            writer.write(primitive(type) ? GeneratorUtil.convertToObject(type) : type);
             writer.write(' ');
             writer.write(var);
-            if (pb.getDefaultValue() != null) {
-                writer.write(" = ");
-                writer.write(pb.getDefaultValue());
-            } else if (primitive(type)) {
-                writer.write(" = ");
-                writer.write(TYPE_DEFAULTS.get(type));
-            }
             writer.write(";\n");
-            if (primitive(type) || (pb.getDefaultValue() != null)) {
-                writer.fwrite("private boolean ");
-                writer.write(var);
-                writer.write("_set = false;\n");
-            }
-            writer.write("\n");
 
             // Document getter method
             String description = "<p>Return the value of the <code>" +
@@ -362,17 +349,10 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             writer.write(capitalize(pb.getPropertyName()));
             writer.write("() {\n");
             writer.indent();
-            if (primitive(type) || (pb.getDefaultValue() != null)) {
-                writer.fwrite("if (this.");
-                writer.write(var);
-                writer.write("_set) {\n");
-                writer.indent();
-            } else {
-                writer.fwrite("if (null != this.");
-                writer.write(var);
-                writer.write(") {\n");
-                writer.indent();
-            }
+            writer.fwrite("if (null != this.");
+            writer.write(var);
+            writer.write(") {\n");
+            writer.indent();
             writer.fwrite("return this.");
             writer.write(var);
             writer.write(";\n");
@@ -383,36 +363,20 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             writer.write("\");\n");
             writer.fwrite("if (_ve != null) {\n");
             writer.indent();
-            if (primitive(type)) {
-                writer.fwrite(
-                      "Object _result = _ve.getValue(getFacesContext().getELContext());\n");
-                writer.fwrite("if (_result == null) {\n");
-                writer.indent();
-                writer.fwrite("return ");
-                writer.write(TYPE_DEFAULTS.get(type));
-                writer.write(";\n");
-                writer.outdent();
-                writer.fwrite("} else {\n");
-                writer.indent();
-                writer.fwrite("return ((");
-                writer.write(GeneratorUtil.convertToObject(type));
-                writer.write(") _result).");
-                writer.write(GeneratorUtil.convertToPrimitive(type));
-                writer.write("();\n");
-                writer.outdent();
-                writer.fwrite("}\n");
-            } else {
-                writer.fwrite("return (");
-                writer.write(type);
-                writer.write(
-                      ") _ve.getValue(getFacesContext().getELContext());\n");
-            }
+            writer.fwrite("return (");
+            writer.write(primitive(type)
+                         ? GeneratorUtil.convertToObject(type)
+                         : type);
+            writer.write(
+                  ") _ve.getValue(getFacesContext().getELContext());\n");
             writer.outdent();
             writer.fwrite("} else {\n");
             writer.indent();
             if (primitive(type) || (pb.getDefaultValue() != null)) {
-                writer.fwrite("return this.");
-                writer.write(var);
+                writer.fwrite("return ");
+                writer.write(pb.getDefaultValue() != null
+                             ? pb.getDefaultValue()
+                             : TYPE_DEFAULTS.get(type));
                 writer.write(";\n");
             } else {
                 writer.fwrite("return null;\n");
@@ -441,11 +405,6 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             writer.write(" = ");
             writer.write(var);
             writer.write(";\n");
-            if (primitive(type) || (pb.getDefaultValue() != null)) {
-                writer.fwrite("this.");
-                writer.write(var);
-                writer.write("_set = true;\n");
-            }
             if ((pb.isPassThrough() && pb.getDefaultValue() == null)
                   || (cb.getComponentClass().contains("HtmlCommandButton")
                         && "onclick".equals(pb.getPropertyName()))) {
@@ -472,14 +431,6 @@ public class HtmlComponentGenerator extends AbstractGenerator {
      */
     private void suffix() throws Exception {
 
-        int p = 0; // Number of primitive properties
-        for (int i = 0, size = properties.size(); i < size; i++) {
-            PropertyBean pb = properties.get(i);
-            if (primitive(pb.getPropertyClass())) {
-                p++;
-            }
-        }
-
         writer.fwrite("private Object[] _values;\n\n");
         // Generate the saveState() method
         writer.fwrite("public Object saveState(FacesContext _context) {\n");
@@ -487,7 +438,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         writer.fwrite("if (_values == null) {\n");
         writer.indent();
         writer.fwrite("_values = new Object[");
-        writer.write(String.valueOf((properties.size() + p + 1)));
+        writer.write(String.valueOf((properties.size() + 1)));
         writer.write("];\n");
         writer.outdent();
         writer.fwrite("}\n");
@@ -497,31 +448,11 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         for (int i = 0; i < properties.size(); i++) {
             PropertyBean pb = properties.get(i);
             String name = mangle(pb.getPropertyName());
-            String type = pb.getPropertyClass();
             writer.fwrite("_values[");
             writer.write(String.valueOf(n++));
             writer.write("] = ");
-            if ("boolean".equals(type)) {
-                writer.write("this.");
-                writer.write(name);
-                writer.write(" ? Boolean.TRUE : Boolean.FALSE");
-            } else if (primitive(type)) {
-                writer.write("new ");
-                writer.write(GeneratorUtil.convertToObject(type));
-                writer.write("(this.");
-                writer.write(name);
-                writer.write(")");
-            } else {
-                writer.write(name);
-            }
+            writer.write(name);
             writer.write(";\n");
-            if (primitive(type)) {
-                writer.fwrite("_values[");
-                writer.write(String.valueOf(n++));
-                writer.write("] = this.");
-                writer.write(name);
-                writer.write("_set ? Boolean.TRUE : Boolean.FALSE;\n");
-            }
         }
         writer.fwrite("return _values;\n");
         writer.outdent();
@@ -541,29 +472,17 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             writer.fwrite("this.");
             writer.write(name);
             writer.write(" = ");
-            if (primitive(type)) {
-                writer.write("((");
-                writer.write(GeneratorUtil.convertToObject(type));
-                writer.write(") _values[");
-                writer.write(String.valueOf(n++));
-                writer.write("]).");
-                writer.write(GeneratorUtil.convertToPrimitive(type));
-                writer.write("()");
-            } else {
-                writer.write("(");
-                writer.write(type);
-                writer.write(") _values[");
-                writer.write(String.valueOf(n++));
-                writer.write("]");
-            }
+
+            writer.write("(");
+            writer.write(primitive(type)
+                         ? GeneratorUtil.convertToObject(type)
+                         : type);
+            writer.write(") _values[");
+            writer.write(String.valueOf(n++));
+            writer.write("]");
+
             writer.write(";\n");
-            if (primitive(type)) {
-                writer.fwrite("this.");
-                writer.write(name);
-                writer.write("_set = ((Boolean) _values[");
-                writer.write(String.valueOf(n++));
-                writer.write("]).booleanValue();\n");
-            }
+
         }
         writer.outdent();
         writer.fwrite("}\n\n\n");
@@ -594,6 +513,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         writer.fwrite("}\n");
         writer.outdent();
         writer.fwrite("}\n\n");
+
 
         // Generate the ending of this class
         writer.outdent();

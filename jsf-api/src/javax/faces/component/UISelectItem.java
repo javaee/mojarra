@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItem.java,v 1.40 2007/04/27 22:00:05 ofung Exp $
+ * $Id: UISelectItem.java,v 1.41 2007/10/18 17:05:24 rlubke Exp $
  */
 
 /*
@@ -103,10 +103,8 @@ public class UISelectItem extends UIComponentBase {
 
 
     private String itemDescription = null;
-    private boolean itemDisabled = false;
-    private boolean itemDisabledSet = false;
-    private boolean itemEscaped = true;
-    private boolean itemEscapedSet = false;
+    private Boolean itemDisabled;
+    private Boolean itemEscaped;
     private String itemLabel = null;
     private Object itemValue = null;
     private Object value = null;
@@ -161,7 +159,7 @@ public class UISelectItem extends UIComponentBase {
      */
     public boolean isItemDisabled() {
 
-	if (this.itemDisabledSet) {
+	if (this.itemDisabled != null) {
 	    return (this.itemDisabled);
 	}
 	ValueExpression ve = getValueExpression("itemDisabled");
@@ -173,7 +171,7 @@ public class UISelectItem extends UIComponentBase {
 		throw new FacesException(e);
 	    }
 	} else {
-	    return (this.itemDisabled);
+	    return (false);
 	}
 
     }
@@ -186,7 +184,6 @@ public class UISelectItem extends UIComponentBase {
     public void setItemDisabled(boolean itemDisabled) {
 
         this.itemDisabled = itemDisabled;
-        this.itemDisabledSet = true;
 
     }
     
@@ -195,7 +192,7 @@ public class UISelectItem extends UIComponentBase {
      */
     public boolean isItemEscaped() {
 
-	if (this.itemEscapedSet) {
+	if (this.itemEscaped != null) {
 	    return (this.itemEscaped);
 	}
 	ValueExpression ve = getValueExpression("itemEscaped");
@@ -207,7 +204,7 @@ public class UISelectItem extends UIComponentBase {
 		throw new FacesException(e);
 	    }
 	} else {
-	    return (this.itemEscaped);
+	    return (true);
 	}
 
     }
@@ -220,7 +217,6 @@ public class UISelectItem extends UIComponentBase {
     public void setItemEscaped(boolean itemEscaped) {
 
         this.itemEscaped = itemEscaped;
-        this.itemEscapedSet = true;
 
     }
     
@@ -341,18 +337,16 @@ public class UISelectItem extends UIComponentBase {
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-             values = new Object[9];
+             values = new Object[7];
         }
        
         values[0] = super.saveState(context);
         values[1] = itemDescription;
-        values[2] = itemDisabled ? Boolean.TRUE : Boolean.FALSE;
-        values[3] = itemDisabledSet ? Boolean.TRUE : Boolean.FALSE;
-        values[4] = itemEscaped ? Boolean.TRUE : Boolean.FALSE;
-        values[5] = itemEscapedSet ? Boolean.TRUE : Boolean.FALSE;
-        values[6] = itemLabel;
-        values[7] = itemValue;
-        values[8] = value;
+        values[2] = itemDisabled;
+        values[3] = itemEscaped;
+        values[4] = itemLabel;
+        values[5] = itemValue;
+        values[6] = value;
         return (values);
 
     }
@@ -363,13 +357,11 @@ public class UISelectItem extends UIComponentBase {
         values = (Object[]) state;
         super.restoreState(context, values[0]);
         itemDescription = (String) values[1];
-        itemDisabled = ((Boolean) values[2]).booleanValue();
-        itemDisabledSet = ((Boolean) values[3]).booleanValue();
-        itemEscaped = ((Boolean) values[4]).booleanValue();
-        itemEscapedSet = ((Boolean) values[5]).booleanValue();
-        itemLabel = (String) values[6];
-        itemValue = values[7];
-        value = values[8];
+        itemDisabled = (Boolean) values[2];
+        itemEscaped = (Boolean) values[3];
+        itemLabel = (String) values[4];
+        itemValue = values[5];
+        value = values[6];
 
     }
 

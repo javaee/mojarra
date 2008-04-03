@@ -118,8 +118,7 @@ public class UIData extends UIComponentBase
     /**
      * <p>The first row number (zero-relative) to be displayed.</p>
      */
-    private int first = 0;
-    private boolean firstSet = false;
+    private Integer first;
 
 
     /**
@@ -149,8 +148,7 @@ public class UIData extends UIComponentBase
      * <p>The number of rows to display, or zero for all remaining rows in the
      * table.</p>
      */
-    private int rows = 0;
-    private boolean rowsSet = false;
+    private Integer rows;
 
 
     /**
@@ -228,7 +226,7 @@ public class UIData extends UIComponentBase
      */
     public int getFirst() {
 
-        if (this.firstSet) {
+        if (this.first != null) {
             return (this.first);
         }
         ValueExpression ve = getValueExpression("first");
@@ -245,7 +243,7 @@ public class UIData extends UIComponentBase
             }
             return (value.intValue());
         } else {
-            return (this.first);
+            return (0);
         }
 
     }
@@ -265,7 +263,6 @@ public class UIData extends UIComponentBase
             throw new IllegalArgumentException(String.valueOf(first));
         }
         this.first = first;
-        this.firstSet = true;
 
     }
 
@@ -449,7 +446,7 @@ public class UIData extends UIComponentBase
         // Save current state for the previous row index
         saveDescendantState();
 
-        // Update to the new row index        
+        // Update to the new row index
         this.rowIndex = rowIndex;
         DataModel localModel = getDataModel();
         localModel.setRowIndex(rowIndex);
@@ -483,7 +480,7 @@ public class UIData extends UIComponentBase
      */
     public int getRows() {
 
-        if (this.rowsSet) {
+        if (this.rows != null) {
             return (this.rows);
         }
         ValueExpression ve = getValueExpression("rows");
@@ -501,7 +498,7 @@ public class UIData extends UIComponentBase
             }
             return (value.intValue());
         } else {
-            return (this.rows);
+            return (0);
         }
 
     }
@@ -521,7 +518,6 @@ public class UIData extends UIComponentBase
             throw new IllegalArgumentException(String.valueOf(rows));
         }
         this.rows = rows;
-        this.rowsSet = true;
 
     }
 
@@ -558,18 +554,16 @@ public class UIData extends UIComponentBase
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-            values = new Object[9];
+            values = new Object[7];
         }
 
         values[0] = super.saveState(context);
-        values[1] = new Integer(first);
-        values[2] = firstSet ? Boolean.TRUE : Boolean.FALSE;
-        values[3] = new Integer(rowIndex);
-        values[4] = new Integer(rows);
-        values[5] = rowsSet ? Boolean.TRUE : Boolean.FALSE;
-        values[6] = saved;
-        values[7] = value;
-        values[8] = var;
+        values[1] = first;
+        values[2] = rowIndex;
+        values[3] = rows;
+        values[4] = saved;
+        values[5] = value;
+        values[6] = var;
         return (values);
 
     }
@@ -579,15 +573,13 @@ public class UIData extends UIComponentBase
 
         values = (Object[]) state;
         super.restoreState(context, values[0]);
-        first = ((Integer) values[1]).intValue();
-        firstSet = ((Boolean) values[2]).booleanValue();
-        rowIndex = ((Integer) values[3]).intValue();
-        rows = ((Integer) values[4]).intValue();
-        rowsSet = ((Boolean) values[5]).booleanValue();
+        first = (Integer) values[1];
+        rowIndex = (Integer) values[2];
+        rows = (Integer) values[3];
         saved = TypedCollections
-              .dynamicallyCastMap((Map) values[6], String.class, SavedState.class);
-        value = values[7];
-        var = (String) values[8];
+              .dynamicallyCastMap((Map) values[4], String.class, SavedState.class);
+        value = values[5];
+        var = (String) values[6];
 
     }
 
@@ -786,7 +778,7 @@ public class UIData extends UIComponentBase
      * current rowIndex of this instance must be saved aside and restored before
      * returning in all cases, regardless of the outcome of the search or if any
      * exceptions are thrown in the process.</p>
-     * 
+     *
      * <p>The implementation of this method must never return <code>true</code>
      * if setting the rowIndex of this instance to be equal to
      * <code>newIndex</code> causes this instance to return <code>false</code>
@@ -1207,7 +1199,7 @@ public class UIData extends UIComponentBase
                     continue;
                 }
                 if (column.getFacetCount() > 0) {
-                    for (UIComponent columnFacet : column.getFacets().values()) {                      
+                    for (UIComponent columnFacet : column.getFacets().values()) {
                         if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
                             columnFacet.processDecodes(context);
                         } else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
@@ -1323,7 +1315,7 @@ public class UIData extends UIComponentBase
         } else {
             return true;
         }
-        
+
     }
 
     private Boolean isNestedWithinUIData() {

@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.52 2007/04/27 22:00:04 ofung Exp $
+ * $Id: UIForm.java,v 1.53 2007/10/18 17:05:24 rlubke Exp $
  */
 
 /*
@@ -148,13 +148,12 @@ public class UIForm extends UIComponentBase implements NamingContainer {
     /**
      * <p>The prependId flag.</p>
      */
-    private boolean prependId = true;
-    private boolean prependIdSet = false;
+    private Boolean prependId;
 
 
     public boolean isPrependId() {
 
-	if (this.prependIdSet) {
+	if (this.prependId != null) {
 	    return (this.prependId);
 	}
 	ValueExpression ve = getValueExpression("prependId");
@@ -166,7 +165,7 @@ public class UIForm extends UIComponentBase implements NamingContainer {
 		throw new FacesException(e);
 	    }
 	} else {
-	    return (this.prependId);
+	    return (true);
 	}
 
     }
@@ -174,11 +173,7 @@ public class UIForm extends UIComponentBase implements NamingContainer {
 
     public void setPrependId(boolean prependId) {
 
-	// if the prependId value is changing.
-	if (prependId != this.prependId) {
-	    this.prependId = prependId;
-	}
-	this.prependIdSet = true;
+        this.prependId = prependId;
 
     }
 
