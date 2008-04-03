@@ -136,7 +136,7 @@ public class StateManagerImpl extends StateManager {
                   RenderKitUtils.getResponseStateManager(context, renderKitId);
             if (hasGetStateMethod(rsm)) {
                 Object[] stateArray = (Object[]) rsm.getState(context, viewId);
-                id = stateArray[0];
+                id = ((stateArray != null) ? stateArray[0] : null);
             } else {
                 id = rsm.getTreeStructureToRestore(context, viewId);
             }
@@ -634,20 +634,25 @@ public class StateManagerImpl extends StateManager {
         ResponseStateManager rsm =
               RenderKitUtils.getResponseStateManager(context, renderKitId);
         Object[] treeStructure;
-         if (hasGetStateMethod(rsm)){
-
-        Object[] stateArray = (Object[]) rsm.getState(context, viewId);
+        if (hasGetStateMethod(rsm)) {
+            Object[] stateArray = (Object[]) rsm.getState(context, viewId);
+            if (stateArray == null) {
+                // this is necessary as some frameworks may call
+                // ViewHandler.restoreView() for non-postback requests.
+                return null;
+            }
             treeStructure = (Object[]) stateArray[0];
         } else {
-           treeStructure = (Object[]) rsm
+            treeStructure = (Object[]) rsm
                   .getTreeStructureToRestore(context, viewId);
         }
 
         if (treeStructure == null) {
             return null;
         }
-
-        return restoreTree(treeStructure);
+        UIViewRoot root = restoreTree(treeStructure);
+        root.setViewId(viewId);
+        return root;
     }
 
     private String createUniqueRequestId(FacesContext ctx) {
