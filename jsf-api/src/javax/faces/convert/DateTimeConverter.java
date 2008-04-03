@@ -1,5 +1,5 @@
 /*
- * $Id: DateTimeConverter.java,v 1.34 2007/04/27 22:00:07 ofung Exp $
+ * $Id: DateTimeConverter.java,v 1.35 2007/09/26 19:05:18 rlubke Exp $
  */
 
 /*
@@ -389,7 +389,7 @@ public class DateTimeConverter implements Converter, StateHolder {
             Locale locale = getLocale(context);
 
             // Create and configure the parser to be used
-            parser = getDateFormat(context, locale);
+            parser = getDateFormat(locale);
             if (null != timeZone) {
                 parser.setTimeZone(timeZone);
             }
@@ -449,8 +449,7 @@ public class DateTimeConverter implements Converter, StateHolder {
             Locale locale = getLocale(context);
 
             // Create and configure the formatter to be used
-            DateFormat formatter =
-                 getDateFormat(context, locale);
+            DateFormat formatter = getDateFormat(locale);
             if (null != timeZone) {
                 formatter.setTimeZone(timeZone);
             }
@@ -476,12 +475,11 @@ public class DateTimeConverter implements Converter, StateHolder {
      * <p>Return a <code>DateFormat</code> instance to use for formatting
      * and parsing in this {@link Converter}.</p>
      *
-     * @param context The {@link FacesContext} for the current request
      * @param locale  The <code>Locale</code> used to select formatting
      *                and parsing conventions
      * @throws ConverterException if no instance can be created
      */
-    private DateFormat getDateFormat(FacesContext context, Locale locale) {
+    private DateFormat getDateFormat(Locale locale) {
 
         // PENDING(craigmcc) - Implement pooling if needed for performance?
 
