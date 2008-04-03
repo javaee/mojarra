@@ -1295,10 +1295,11 @@ public class UIData extends UIComponentBase
     private boolean keepSaved(FacesContext context) {
 
         if (!isNestedWithinUIData()) {
-            // we're not nested, so we can rely on the fact that
-            // baseClientId is not null.  Get all client IDs that have messages
-            // and if any of them start with the baseClientId, then get the
-            // messages and see if any are ERROR or FATAL.
+            // The UIData instance is not nested.  Get all client IDs that have messages
+            // and if any of them start with the the result of super.getClientId(),
+            // then get the messages and see if any are ERROR or FATAL.  If any are found,
+            // return true, otherwise false.
+            String uiDataClientId = super.getClientId(context);
             for (Iterator<String> ids = context.getClientIdsWithMessages();
                   ids.hasNext();) {
                 String id = ids.next();
@@ -1308,7 +1309,7 @@ public class UIData extends UIComponentBase
                     // it was spec'd that way....
                     continue;
                 }
-                if (id.startsWith(baseClientId)) {
+                if (id.startsWith(uiDataClientId)) {
                     for (Iterator<FacesMessage> msgs = context.getMessages(id);
                           msgs.hasNext();) {
                         FacesMessage msg = msgs.next();
