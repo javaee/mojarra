@@ -192,7 +192,6 @@ class InitFacesContext extends FacesContext {
             return null;
         }
 
-        @SuppressWarnings("unchecked")
         public Map<String, Object> getApplicationMap() {
             if (applicationMap == null) {
                 applicationMap =
@@ -205,6 +204,7 @@ class InitFacesContext extends FacesContext {
             return null;
         }
 
+        @Override
         public String getMimeType(String file) {
             return servletContext.getMimeType(file);
         }
