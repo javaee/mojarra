@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.50 2007/09/13 20:38:52 rlubke Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.51 2008/01/07 17:02:34 rlubke Exp $
  */
 
 /*
@@ -51,6 +51,7 @@ import com.sun.faces.spi.SerializationProvider;
 import com.sun.faces.spi.SerializationProviderFactory;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.RequestStateManager;
 
 import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
@@ -83,11 +84,6 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     // Log instance for this class
     private static final Logger LOGGER = FacesLogger.RENDERKIT.getLogger();
 
-    private static final String FACES_VIEW_STATE =
-           "com.sun.faces.FACES_VIEW_STATE";
-    private static final String FACES_VIEW_STRUCTURE =
-           "com.sun.faces.FACES_VIEW_STRUCTURE";
-
     private static final char[] STATE_FIELD_START =
           ("<input type=\"hidden\" name=\""
            + ResponseStateManager.VIEW_STATE_PARAM
@@ -116,8 +112,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     @SuppressWarnings("deprecation")
     public Object getComponentStateToRestore(FacesContext context) {
 
-        return context.getExternalContext().getRequestMap()
-              .get(FACES_VIEW_STATE);
+        return RequestStateManager.get(context, RequestStateManager.FACES_VIEW_STATE);
 
     }
 
@@ -140,7 +135,8 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
                                             String treeId) {
 
         Object s =
-             context.getExternalContext().getRequestMap().get(FACES_VIEW_STRUCTURE);
+             RequestStateManager.get(context,
+                                     RequestStateManager.FACES_VIEW_STRUCTURE);
         if (s != null) {
             return s;
         }
@@ -342,16 +338,18 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
         // store the state object temporarily in request scope
         // until it is processed by getComponentStateToRestore
         // which resets it.
-        context.getExternalContext().getRequestMap()
-              .put(FACES_VIEW_STATE, state);
+        RequestStateManager.set(context,
+                                RequestStateManager.FACES_VIEW_STATE,
+                                state);
 
     }
 
     private static void storeStructureInRequest(FacesContext context,
                                                 Object structure) {
 
-        context.getExternalContext().getRequestMap()
-             .put(FACES_VIEW_STRUCTURE, structure);
+        RequestStateManager.set(context,
+                                RequestStateManager.FACES_VIEW_STRUCTURE,
+                                structure);
 
     }
 

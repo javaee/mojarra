@@ -161,6 +161,20 @@ public class RequestStateManager {
           RIConstants.FACES_PREFIX + "LegacyVariableResolver";
 
     /**
+     * Leveraged by the RequestStateManager to allow deprecated ResponseStateManager
+     * methods to continue to work if called.
+     */
+    public static final String FACES_VIEW_STATE =
+          "com.sun.faces.FACES_VIEW_STATE";
+
+    /**
+     * Leveraged by the RequestStateManager to allow deprecated ResponseStateManager
+     * methods to continue to work if called.
+     */
+    public static final String FACES_VIEW_STRUCTURE =
+          "com.sun.faces.FACES_VIEW_STRUCTURE";
+
+    /**
      * <p>The key under with the Map containing the implementation specific
      * attributes will be stored within the request.<p>
      */
