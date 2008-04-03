@@ -81,8 +81,14 @@ public class WriteAttributeScriptEnabledTestCase extends AbstractTestCase {
     
     public void testWriteAttributeDisabled() throws Exception {
         client.setThrowExceptionOnFailingStatusCode(false);
-       
+
+        // HACK: The first request to the page will result in the value
+        // having jsessionid encoded in the link value.  Making a second
+        // request to the page means we've joined the session and the value
+        // will no longer include the jsessionid (at least when cookies are enabled)
+        // and clicking the link will not produce JS errors.
         HtmlPage page = getPage("/faces/test.jsp");
+        page = getPage("/faces/test.jsp");
 
         HtmlAnchor link = (HtmlAnchor) page.getAnchors().get(0);
 

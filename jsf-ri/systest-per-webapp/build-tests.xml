@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.41 2008/02/07 08:56:01 edburns Exp $
+ $Id: build-tests.xml,v 1.42 2008/02/19 23:17:25 rlubke Exp $
 -->
 
 <!--
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- 
+
  Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
- 
+
  The contents of this file are subject to the terms of either the GNU
  General Public License Version 2 only ("GPL") or the Common Development
  and Distribution License("CDDL") (collectively, the "License").  You
@@ -16,7 +16,7 @@
  a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
  or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
  language governing permissions and limitations under the License.
- 
+
  When distributing the software, include this License Header Notice in each
  file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
  Sun designates this particular file as subject to the "Classpath" exception
@@ -25,9 +25,9 @@
  Header, with the fields enclosed by brackets [] replaced by your own
  identifying information: "Portions Copyrighted [year]
  [name of copyright owner]"
- 
+
  Contributor(s):
- 
+
  If you wish your version of this file to be governed by only the CDDL or
  only the GPL Version 2, indicate your decision by adding "[Contributor]
  elects to include this software in this distribution under the [CDDL or GPL
@@ -48,12 +48,12 @@
 
     <!-- =========================== Configuration ============================ -->
 
-    
-    <property file="${user.home}/build.properties"/>   
-    <property file="../../build.properties"/>    
-    <import file="${jsf.build.home}/common/ant/common.xml"/>    
 
-    <!-- Property containing all of the currenly running systests.  
+    <property file="${user.home}/build.properties"/>
+    <property file="../../build.properties"/>
+    <import file="${jsf.build.home}/common/ant/common.xml"/>
+
+    <!-- Property containing all of the currenly running systests.
          This property list *must* match the one defined in the
          systest-per-webapp build.xml. -->
     <property name="applications"
@@ -61,9 +61,9 @@
                    nested-loadbundles,
                    replace-application,
                    invalid-mapping,
-                   replace-statemanager,                                    
+                   replace-statemanager,
                    nested-datatables,
-                   jar-ordering,                  
+                   jar-ordering,
                    replace-lifecycle,
                    string-converter,
                    replace-variableresolver,
@@ -73,7 +73,7 @@
                    never-unwrap-exceptions,
                    write-attribute-script-disabled,
                    write-attribute-script-enabled"/>
-    <!-- 
+    <!--
        EXCLUDED APPLICATIONS:
           view-expired
           core-tags
@@ -82,152 +82,91 @@
           wcag-datatable
     -->
 
-    <!-- ************ Executable Targets ************************************** -->
+    <!-- Property definitions to map the application to a JUnit test case -->
+    <property name="resource-locale-prefix"
+              value="com/sun/faces/systest/ResourceLocalePrefixTestCase.class"/>
+    <property name="replace-application"
+              value="com/sun/faces/systest/ReplaceApplicationTestCase.class"/>
+    <property name="replace-statemanager"
+              value="com/sun/faces/systest/ReplaceStateManagerTestCase.class"/>
+    <property name="invalid-mapping"
+              value="com/sun/faces/systest/InvalidMappingTestCase.class"/>
+    <property name="nested-datatables"
+              value="com/sun/faces/systest/NestedDatatablesTestCase.class"/>
+    <property name="nested-loadbundles"
+              value="com/sun/faces/systest/NestedLoadBundlesTestCase.class"/>
+    <property name="jar-ordering"
+              value="com/sun/faces/systest/JarOrderingTestCase.class"/>
+    <property name="replace-lifecycle"
+              value="com/sun/faces/systest/ReplaceLifecycleTestCase.class"/>
+    <property name="string-converter"
+              value="com/sun/faces/systest/StringConverterTestCase.class"/>
+    <property name="replace-variableresolver"
+              value="com/sun/faces/systest/ReplaceVariableResolverTestCase.class"/>
+    <property name="converter-property-editor"
+              value="com/sun/faces/systest/ConverterPropertyEditorTestCase.class"/>
+    <property name="late-bindings"
+              value="com/sun/faces/systest/LateBindingTestCase.class"/>
+    <property name="property-resolver-jsp"
+              value="com/sun/faces/systest/PropertyResolverJspTestCase.class"/>
+    <property name="never-unwrap-exceptions"
+              value="com/sun/faces/systest/NeverUnwrapExceptionsTestCase.class"/>
+    <property name="write-attribute-script-disabled"
+              value="com/sun/faces/systest/WriteAttributeScriptDisabledTestCase.class"/>
+    <property name="write-attribute-script-enabled"
+              value="com/sun/faces/systest/WriteAttributeScriptEnabledTestCase.class"/>
 
 
-    <target name="init"
-            description="Initialize and evaluate conditionals">
-        <echo message="-------- ${Name} ${impl.version} --------"/>
+    <!--
+        EXCLUDED APPLICATIONS:
+
+        <property name="core-tags
+                  value="com/sun/faces/systest/CoreTagsTestCase.class"/>
+        <property name="view-expired"
+                  value="com/sun/faces/systest/ViewExpiredExceptionTestCase.class"/>
+        <property name="wcag-datatable"
+              value="com/sun/faces/systest/WcagDataTableTestCase.class"/>
+    -->
+
+
+    <!-- ======================== Test Execution ============================== -->
+
+
+    <target name="test"
+            description="Execute all tests against installed applications">
+
+        <for list="${applications}" param="app" trim="true">
+            <sequential>
+                <propertycopy name="test.name"
+                              from="@{app}"
+                              override="true"/>
+                <test-webapp app-name="@{app}"
+                             app-base-dir="${basedir}/@{app}"
+                             test-case="${test.name}"/>
+            </sequential>
+        </for>
+
     </target>
 
-
-    <target name="prepare" depends="init"
-            description="Prepare build directory">       
-
-    </target>    
-
-    <macrodef name="build.app">
-        <attribute name="base-app-dir"/>
-        <attribute name="appname"/>
+    <macrodef name="test-webapp">
+        <attribute name="app-name"/>
+        <attribute name="app-base-dir"/>
+        <attribute name="test-case"/>
         <sequential>
-            <mkdir dir="@{base-app-dir}/build/classes"/>
-            <jsf.javac srcdir="@{base-app-dir}/src/java"
-                       destdir="@{base-app-dir}/build/classes">
-                <classpath>
-                    <path refid="test.compile.classpath"/>
-                </classpath>
-            </jsf.javac>
-            <jsf.war archive-name="jsf-@{appname}"
-                     basedir="@{base-app-dir}/build"
-                     webxml="@{base-app-dir}/web/WEB-INF/web.xml">
-                <archive-elements>
-                    <zipfileset dir="@{base-app-dir}/web"
-                                includes="**/*"/>
-                    <zipfileset dir="@{base-app-dir}/build/classes"
-                                prefix="WEB-INF/classes"/>
-                    <zipfileset dir="@{base-app-dir}/src/java"
-                                includes="**/*.properties,**/*.xml"
-                                prefix="WEB-INF/classes"/>
-                    <zipfileset file="${jsf.test.jar}"
-                                prefix="WEB-INF/lib"/>
-                    <zipfileset dir="${basedir}/build/classes"
-                                prefix="WEB-INF/classes"/>
-                    <zipfileset dir="${impl.dir}/build/test/classes"
-                                prefix="WEB-INF/classes"/>
-                </archive-elements>
-            </jsf.war>
-            <mkdir dir="@{base-app-dir}/build/jsf-@{appname}" />
-            <unwar src="@{base-app-dir}/build/jsf-@{appname}.war"
-                   dest="@{base-app-dir}/build/jsf-@{appname}" />
+            <path id="test.classpath">
+                <pathelement location="@{app-base-dir}/build/classes"/>
+                <pathelement location="${basedir}/build/classes"/>
+                <path refid="htmlunit.runtime.classpath"/>
+            </path>
+            <jsf.junit classpath-refid="test.classpath"
+                       context-path="/jsf-@{app-name}"
+                       test-results-dir="${impl.test.results.dir}">
+                <tests>
+                    <fileset dir="@{app-base-dir}/build/classes"
+                             includes="@{test-case}"/>
+                </tests>
+            </jsf.junit>
         </sequential>
     </macrodef>
 
-    <macrodef name="deploy.app">
-        <attribute name="base-app-dir"/>
-        <attribute name="appname"/>
-        <sequential>
-            <deploy.artifact
-                  artifact="@{base-app-dir}/build/jsf-@{appname}.war"
-                  appName="jsf-@{appname}"/>
-        </sequential>
-    </macrodef>
-
-    <macrodef name="undeploy.app">
-        <attribute name="appname"/>
-        <sequential>
-            <undeploy.artifact artifact="jsf-@{appname}.war"
-                               appName="jsf-@{appname}"/>
-        </sequential>
-    </macrodef>
-
-    <target name="compile.base.sources">
-        <mkdir dir="${basedir}/build/classes"/>
-        <jsf.javac srcdir="${impl.dir}/systest/src"
-                   destdir="${basedir}/build/classes">
-            <classpath>
-                <path refid="test.compile.classpath"/>
-            </classpath>
-        </jsf.javac>
-    </target>
-
-    <target name="install" depends="compile.base.sources">
-        
-        <for list="${applications}" param="app" trim="true">
-            <sequential>
-                <undeploy.app appname="@{app}"/>
-                <build.app appname="@{app}"
-                            base-app-dir="${basedir}/@{app}"/>
-                <deploy.app appname="@{app}"
-                            base-app-dir="${basedir}/@{app}"/>
-            </sequential>
-        </for>
-
-    </target>
-
-    <target name="build" depends="compile.base.sources">
-        
-        <for list="${applications}" param="app" trim="true">
-            <sequential>
-                <build.app appname="@{app}"
-                            base-app-dir="${basedir}/@{app}"/>
-            </sequential>
-        </for>
-
-    </target>
-
-    <target name="remove">
-        
-        <for list="${applications}" param="app" trim="true">
-            <sequential>
-                <undeploy.app appname="@{app}"/>              
-            </sequential>
-        </for>
-        
-    </target>
-
-    <target name="clean"
-            description="Clean build and distribution directories">
-        
-        <delete dir="${basedir}/build"/>
-        <for list="${applications}" param="app" trim="true">
-            <sequential>
-               <delete dir="${basedir}/@{app}/build"/>
-            </sequential>
-        </for>
-               
-    </target>    
-
-
-    <!-- ********** Test Execution Targets ************************************ -->
-
-    <target name="test.no.install" 
-            description="Execute all tests against installed /jsf-* applications">
-
-        <ant antfile="build-tests.xml" target="test">
-          <property name="applications" value="${applications}" />
-        </ant>
-
-    </target>    
-
-
-
-    <target name="test" depends="install"
-            description="Execute all tests against installed /jsf-* applications">
-
-        <ant antfile="build-tests.xml" target="test">
-          <property name="applications" value="${applications}" />
-        </ant>
-
-    </target>    
-        
 </project>
