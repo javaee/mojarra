@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.115 2007/07/20 19:17:38 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.116 2007/08/20 22:15:42 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -163,7 +163,7 @@ public class ConfigureListener implements ServletRequestListener,
 
             if (webConfig.isOptionEnabled(BooleanWebContextInitParameter.VerifyFacesConfigObjects)) {
                 if (LOGGER.isLoggable(Level.WARNING)) {
-                    LOGGER.warning("jsf.config.verifyobjects.developement_only");
+                    LOGGER.warning("jsf.config.verifyobjects.development_only");
                 }
                 // if we're verifying, force bean validation to occur at startup as well
                 webConfig.overrideContextInitParameter(BooleanWebContextInitParameter.EnableLazyBeanValidation, false);
