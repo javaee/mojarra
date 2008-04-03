@@ -190,7 +190,10 @@ public class ResourceInfo {
         sb.append('/').append(name);
         if (version != null) {
             sb.append('/').append(version.getVersion());
-            sb.append('.').append(version.getExtension());
+            String extension = version.getExtension();
+            if (extension != null) {
+                sb.append('.').append(extension);    
+            }
         }
         path = sb.toString();
 

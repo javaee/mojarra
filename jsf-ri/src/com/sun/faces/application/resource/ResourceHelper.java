@@ -93,9 +93,15 @@ public abstract class ResourceHelper {
      *   1_11.323
      *   1_11_1.gif
      *   1_11_1_2.txt
+     *   1_1
+     *   1_11
+     *   1_11_1
+     *   1_11_1_2
+     *
+     *  The extension is optional.
      */
     private static final Pattern RESOURCE_VERSION_PATTERN =
-          Pattern.compile("^((?:\\d+)(?:_\\d+)+)\\.(\\w+)?");
+          Pattern.compile("^((?:\\d+)(?:_\\d+)+)[\\.]?(\\w+)?");
 
     /**
      * Arbitrary file name to write the compressed bits to.

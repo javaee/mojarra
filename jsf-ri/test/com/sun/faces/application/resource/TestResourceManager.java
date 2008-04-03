@@ -297,6 +297,27 @@ public class TestResourceManager extends ServletFacesTestCase {
         assertTrue("META-INF/resources/vLibrary-jar/2_0/duke.gif/1_1.gif".equals(resource.getPath()));
     }
 
+    public void testNoExtensionVersionedResource() throws Exception {
+        ResourceInfo resource = manager.findResource("vLibrary", "duke2.gif", "image/gif", getFacesContext());
+        assertTrue(resource != null);
+
+        // validate the library
+        assertTrue(resource.getLibraryInfo() != null);
+        assertTrue("vLibrary".equals(resource.getLibraryInfo().getName()));
+        assertTrue("2_0".equals(resource.getLibraryInfo().getVersion().toString()));
+        assertTrue(resource.getLibraryInfo().getHelper() instanceof WebappResourceHelper);
+        assertTrue("/resources/vLibrary/2_0".equals(resource.getLibraryInfo().getPath()));
+
+        // validate the resource
+        assertTrue(resource.getHelper() instanceof WebappResourceHelper);
+        assertTrue(!resource.isCompressable());
+        assertTrue(resource.getCompressedPath() == null);
+        assertTrue("1_1".equals(resource.getVersion().toString()));
+        assertTrue(resource.getVersion().getExtension() == null);
+        assertTrue("duke2.gif".equals(resource.getName()));
+        assertTrue("/resources/vLibrary/2_0/duke2.gif/1_1".equals(resource.getPath()));   
+    }
+
 
     public void testInvalidLibraryName() throws Exception {
         assertTrue(manager.findResource("noSuchLibrary", "duke.gif", "image/gif", getFacesContext()) == null);
