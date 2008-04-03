@@ -23,7 +23,7 @@ import org.apache.shale.remoting.Mechanism;
  *
  */
 public class HtmlEditorRenderer extends Renderer {
-    private static final String TINY_MCE = "/tiny_mce/tiny_mce_src.js";
+    private static final String TINY_MCE = "/tinymce/tiny_mce.js";
 
     @Override
     public void encodeBegin(FacesContext context, UIComponent component) throws IOException {

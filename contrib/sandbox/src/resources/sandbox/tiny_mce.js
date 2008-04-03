@@ -62,6 +62,32 @@ TinyMCE_Engine.prototype.loadCSS = function(url) {
         }
     };
     
+TinyMCE_Engine.prototype.importCSS = function(doc, css) {
+        var css_ary = css.replace(/\s+/, '').split(',');
+        var csslen, elm, headArr, x, css_file;
+
+        for (x = 0, csslen = css_ary.length; x<csslen; x++) {
+            css_file = css_ary[x];
+
+            if (css_file != null && css_file != 'null' && css_file.length > 0) {
+                // Is relative, make absolute
+                if (css_file.indexOf('://') == -1 && css_file.charAt(0) != '/')
+                    css_file = this.documentBasePath + "/" + css_file;
+
+                if (typeof(doc.createStyleSheet) == "undefined") {
+                    elm = doc.createElement("link");
+
+                    elm.rel = "stylesheet";
+                    elm.href = this.mungeURL(css_file);
+
+                    if ((headArr = doc.getElementsByTagName("head")) != null && headArr.length > 0)
+                        headArr[0].appendChild(elm);
+                } else
+                    doc.createStyleSheet(this.mungeURL(css_file));
+            }
+        }
+    }
+    
     
 TinyMCE_Engine.prototype.getButtonHTML = function(id, lang, img, cmd, ui, val) {
         var h = '', m, x, io = '';
