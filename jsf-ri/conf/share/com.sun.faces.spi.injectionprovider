@@ -1,3 +1,2 @@
-com.sun.faces.vendor.GlassFishInjectionProvider:com.sun.enterprise.InjectionManager
 com.sun.faces.vendor.Tomcat6InjectionProvider:org.apache.catalina.util.DefaultAnnotationProcessor
 com.sun.faces.vendor.Jetty6InjectionProvider:org.mortbay.jetty.plus.annotation.InjectionCollection
