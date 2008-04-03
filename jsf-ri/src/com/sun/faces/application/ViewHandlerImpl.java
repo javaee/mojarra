@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.104 2007/05/17 14:26:30 rlubke Exp $
+ * $Id: ViewHandlerImpl.java,v 1.105 2007/05/18 18:08:34 rlubke Exp $
  */
 
 
@@ -81,7 +81,7 @@ import java.util.logging.Logger;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.104 2007/05/17 14:26:30 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.105 2007/05/18 18:08:34 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -893,8 +893,7 @@ public class ViewHandlerImpl extends ViewHandler {
 
         /**
          * <p> Write directly from our FastStringWriter to the provided
-         * writer.</p>
-         * @param writer where to write
+         * writer.</p>       
          * @throws IOException if an error occurs
          */
         public void flushToWriter() throws IOException {
@@ -919,7 +918,7 @@ public class ViewHandlerImpl extends ViewHandler {
             while (pos < totalLen) {
                 if (tildeIdx != -1) {
                     if (tildeIdx > pos && (tildeIdx - pos) > bufSize) {
-                        // theres enough content before the first ~
+                        // there's enough content before the first ~
                         // to fill the entire buffer
                         builder.getChars(pos, (pos + bufSize), buf, 0);
                         orig.write(buf);
