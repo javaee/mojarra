@@ -35,7 +35,7 @@
  */
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.59 2007/11/12 23:08:24 rlubke Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.60 2007/11/29 00:51:15 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -54,8 +54,10 @@ import java.util.Map;
 import javax.el.ELException;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
+import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.convert.Converter;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
 
@@ -104,6 +106,11 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             border = (Integer) borderObj;
         }
 
+        Converter converter = null;
+        if(component instanceof ValueHolder) {
+            converter = ((ValueHolder)component).getConverter();
+        }
+
         renderBeginText(component, border, alignVertical, context, true);
 
         List<SelectItem> items = RenderKitUtils.getSelectItems(context, component);
@@ -139,7 +146,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                     SelectItem[] itemsArray =
                           ((SelectItemGroup) curItem).getSelectItems();
                     for (int i = 0; i < itemsArray.length; ++i) {
-                        renderOption(context, component, itemsArray[i],
+                        renderOption(context, component, converter, itemsArray[i],
                                      alignVertical, i);
                     }
                     renderEndText(component, alignVertical, context);
@@ -149,7 +156,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                         writer.writeText("\n", component, null);
                     }
                 } else {
-                    renderOption(context, component, curItem, alignVertical, idx);
+                    renderOption(context, component, converter, curItem, alignVertical, idx);
                 }
             }
         }
@@ -174,7 +181,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             writer.writeAttribute("border", border, "border");
         }
 
-        // render style and styleclass attribute on the outer table instead of 
+        // render style and styleclass attribute on the outer table instead of
         // rendering it as pass through attribute on every option in the list.
         if (outerTable) {
             // render "id" only for outerTable.
@@ -221,8 +228,8 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
 
 
     protected void renderOption(FacesContext context, UIComponent component,
-                                SelectItem curItem, boolean alignVertical,
-                                int itemNumber)
+	    			Converter converter, SelectItem curItem,
+	    			boolean alignVertical, int itemNumber)
           throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
@@ -255,7 +262,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
               Integer.toString(itemNumber);
         writer.writeAttribute("id", idString, "id");
         String valueString = getFormattedValue(context, component,
-                                               curItem.getValue());
+                                               curItem.getValue(), converter);
         writer.writeAttribute("value", valueString, "value");
         writer.writeAttribute("type", "checkbox", null);
 
@@ -278,7 +285,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         }
 
         Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
-        requestMap.put(ConverterPropertyEditorBase.TARGET_COMPONENT_ATTRIBUTE_NAME, 
+        requestMap.put(ConverterPropertyEditorBase.TARGET_COMPONENT_ATTRIBUTE_NAME,
                 component);
         Object newValue;
         try {
@@ -307,7 +314,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             }
         }
 
-        // Apply HTML 4.x attributes specified on UISelectMany component to all 
+        // Apply HTML 4.x attributes specified on UISelectMany component to all
         // items in the list except styleClass and style which are rendered as
         // attributes of outer most table.
         RenderKitUtils.renderPassThruAttributes(writer,

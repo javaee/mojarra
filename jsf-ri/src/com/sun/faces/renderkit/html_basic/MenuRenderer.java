@@ -35,7 +35,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.96 2007/11/12 23:08:24 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.97 2007/11/29 00:51:15 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -62,6 +62,7 @@ import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectMany;
 import javax.faces.component.UISelectOne;
+import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
@@ -463,7 +464,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
 
     protected void renderOption(FacesContext context, UIComponent component,
-                                SelectItem curItem) throws IOException {
+	    			Converter converter, SelectItem curItem)
+    throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
@@ -472,7 +474,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         writer.startElement("option", component);
 
         String valueString = getFormattedValue(context, component,
-                                               curItem.getValue());
+                                               curItem.getValue(), converter);
         writer.writeAttribute("value", valueString, "value");
 
         Object submittedValues[] = getSubmittedSelectedValues(
@@ -714,6 +716,11 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
 
+        Converter converter = null;
+        if(component instanceof ValueHolder) {
+            converter = ((ValueHolder)component).getConverter();
+        }
+
         if (!items.isEmpty()) {
             for (SelectItem item : items) {
                 if (item instanceof SelectItemGroup) {
@@ -725,11 +732,11 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                     SelectItem[] itemsArray =
                           ((SelectItemGroup) item).getSelectItems();
                     for (int i = 0; i < itemsArray.length; ++i) {
-                        renderOption(context, component, itemsArray[i]);
+                        renderOption(context, component, converter, itemsArray[i]);
                     }
                     writer.endElement("optgroup");
                 } else {
-                    renderOption(context, component, item);
+                    renderOption(context, component, converter, item);
                 }
             }
         }

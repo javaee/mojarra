@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.87 2007/08/30 19:29:13 rlubke Exp $
+ * $Id: RadioRenderer.java,v 1.88 2007/11/29 00:51:15 rlubke Exp $
  */
 
 /*
@@ -51,6 +51,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectOne;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.convert.Converter;
 import javax.faces.model.SelectItem;
 
 import com.sun.faces.application.ConverterPropertyEditorBase;
@@ -74,8 +75,8 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
 
     @Override
     protected void renderOption(FacesContext context, UIComponent component,
-                                SelectItem curItem, boolean alignVertical,
-                                int itemNumber)
+	    			Converter converter, SelectItem curItem,
+	    			boolean alignVertical, int itemNumber)
           throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
@@ -141,9 +142,9 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
               Integer.toString(itemNumber);
         writer.writeAttribute("id", idString, "id");
 
-        writer.writeAttribute("value",
+	writer.writeAttribute("value",
                               (getFormattedValue(context, component,
-                                                 curItem.getValue())),
+                                      curItem.getValue(), converter)),
                               "value");
 
         // Don't render the disabled attribute twice if the 'parent'

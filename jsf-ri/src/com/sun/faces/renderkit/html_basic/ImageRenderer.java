@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.53 2007/11/15 22:14:24 rlubke Exp $
+ * $Id: ImageRenderer.java,v 1.54 2007/11/29 00:51:15 rlubke Exp $
  */
 
 /*
@@ -59,7 +59,7 @@ import com.sun.faces.renderkit.RenderKitUtils;
  * <B>ImageRenderer</B> is a class that handles the rendering of the graphic
  * ImageTag
  *
- * @version $Id: ImageRenderer.java,v 1.53 2007/11/15 22:14:24 rlubke Exp $
+ * @version $Id: ImageRenderer.java,v 1.54 2007/11/29 00:51:15 rlubke Exp $
  */
 
 public class ImageRenderer extends HtmlBasicRenderer {
@@ -139,8 +139,7 @@ public class ImageRenderer extends HtmlBasicRenderer {
         }
     }
 
-    // The testcase for this class is TestRenderers_2.java 
+    // The testcase for this class is TestRenderers_2.java
 
 } // end of class ImageRenderer
-
 

@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.123 2007/09/11 18:19:05 rlubke Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.124 2007/11/29 00:51:14 rlubke Exp $
  */
 
 /*
@@ -388,6 +388,66 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
     }
 
+    /**
+     * Overloads getFormattedValue to take a advantage of a previously
+     * obtained converter.
+     * @param context the FacesContext for the current request
+     * @param component UIComponent of interest
+     * @param currentValue the current value of <code>component</code>
+     * @param converter the component's converter
+     * @return the currentValue after any associated Converter has been
+     *  applied
+     *
+     * @throws ConverterException if the value cannot be converted
+     */
+    protected String getFormattedValue(FacesContext context,
+                                       UIComponent component,
+                                       Object currentValue,
+                                       Converter converter)
+          throws ConverterException {
+
+        // formatting is supported only for components that support
+        // converting value attributes.
+        if (!(component instanceof ValueHolder)) {
+            if (currentValue != null) {
+                return currentValue.toString();
+            }
+            return null;
+        }
+
+        if (converter == null) {
+            // If there is a converter attribute, use it to to ask application
+            // instance for a converter with this identifer.
+            converter = ((ValueHolder) component).getConverter();
+        }
+
+        if (converter == null) {
+            // if value is null and no converter attribute is specified, then
+            // return a zero length String.
+            if(currentValue == null) {
+        	return "";
+            }
+            // Do not look for "by-type" converters for Strings
+            if (currentValue instanceof String) {
+                return (String) currentValue;
+            }
+
+            // if converter attribute set, try to acquire a converter
+            // using its class type.
+
+            Class converterType = currentValue.getClass();
+            converter = Util.getConverterForClass(converterType, context);
+
+            // if there is no default converter available for this identifier,
+            // assume the model type to be String.
+            if (converter == null) {
+                return currentValue.toString();
+            }
+        }
+
+        return converter.getAsString(context, component, currentValue);
+    }
+
 
     /**
      * @param context the FacesContext for the current request
@@ -404,47 +464,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
                                        Object currentValue)
           throws ConverterException {
 
-        String result = null;
-        // formatting is supported only for components that support
-        // converting value attributes.
-        if (!(component instanceof ValueHolder)) {
-            if (currentValue != null) {
-                result = currentValue.toString();
-            }
-            return result;
-        }
-
-        // If there is a converter attribute, use it to to ask application
-        // instance for a converter with this identifer.
-        Converter converter = ((ValueHolder) component).getConverter();
-
-        // if value is null and no converter attribute is specified, then
-        // return a zero length String.
-        if (converter == null && currentValue == null) {
-            return "";
-        }
-
-        if (converter == null) {
-            // Do not look for "by-type" converters for Strings
-            if (currentValue instanceof String) {
-                return (String) currentValue;
-            }
-
-            // if converter attribute set, try to acquire a converter
-            // using its class type.
-
-            Class converterType = currentValue.getClass();
-            converter = Util.getConverterForClass(converterType, context);
-
-            // if there is no default converter available for this identifier,
-            // assume the model type to be String.
-            if (converter == null) {
-                result = currentValue.toString();
-                return result;
-            }
-        }
-
-        return converter.getAsString(context, component, currentValue);
+        return getFormattedValue(context, component, currentValue, null);
 
     }
 
