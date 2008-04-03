@@ -533,8 +533,8 @@
                             basedir="${build.classes.dir}"
                             extension-name=""/>       
     </target>
-<!--depends="clean,dist" -->
-    <target name="nightly" description="Upload nightly build to java.net">
+
+    <target name="nightly" depends="clean,dist" description="Upload nightly build to java.net">
         <if>
             <available file="${tasks.home}"/>
             <then>
