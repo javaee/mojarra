@@ -60,8 +60,8 @@ public class YuiConstants {
     public static final String CSS_TABVIEW_DEFAULT      = YUI_ROOT + "tabview/assets/skins/sam/tabview.css";
     public static final String CSS_TABVIEW_DEFAULT_SKIN = YUI_ROOT + "tabview/assets/skins/sam/tabview-skin.css";
     public static final String CSS_TABVIEW_BORDER_TABS  = YUI_ROOT + "tabview/assets/border_tabs.css";
-    public static final String CSS_TABVIEW_MODULE_TABS  = SANDBOX_ROOT + "sandbox/css/module_tabs.css";
-    public static final String CSS_TABVIEW_ROUND_TABS   = SANDBOX_ROOT + "sandbox/css/round_tabs.css";
+    public static final String CSS_TABVIEW_MODULE_TABS  = SANDBOX_ROOT + "css/module_tabs.css";
+    public static final String CSS_TABVIEW_ROUND_TABS   = SANDBOX_ROOT + "css/round_tabs.css";
     public static final String CSS_TREEVIEW             = YUI_ROOT + "treeview/assets/treeview.css";
 
     //***********************************************************************************************************
