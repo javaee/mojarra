@@ -35,7 +35,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.91 2007/07/16 19:55:24 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.92 2007/07/23 17:06:50 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -46,6 +46,13 @@
 // MenuRenderer.java
 
 package com.sun.faces.renderkit.html_basic;
+
+import com.sun.faces.RIConstants;
+import com.sun.faces.application.ConverterPropertyEditorBase;
+import com.sun.faces.renderkit.AttributeManager;
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
 
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
@@ -60,19 +67,13 @@ import javax.faces.model.SelectItemGroup;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
-
-import com.sun.faces.RIConstants;
-import com.sun.faces.application.ConverterPropertyEditorBase;
-import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.renderkit.AttributeManager;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
 
 /**
  * <B>MenuRenderer</B> is a class that renders the current value of
@@ -366,11 +367,19 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                                              modelType,
                                              newValues);
         } else if (List.class.isAssignableFrom(modelType)) {
-            result = Arrays.asList((Object[]) convertSelectManyValues(
-                  context,
-                  uiSelectMany,
-                  Object[].class,
-                  newValues));
+            Object[] values = (Object[]) convertSelectManyValues(context,
+                                                                 uiSelectMany,
+                                                                 Object[].class,
+                                                                 newValues);
+            // perform a manual copy as the Array returned from
+            // Arrays.asList() isn't mutable.  It seems a waste
+            // to also call Collections.addAll(Arrays.asList())
+            List<Object> l = new ArrayList<Object>(values.length);
+            //noinspection ManualArrayToCollectionCopy
+            for (Object v : values) {
+                l.add(v);
+            }
+            result = l;
         }
         return result;
     }
