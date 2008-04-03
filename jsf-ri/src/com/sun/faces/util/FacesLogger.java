@@ -1,5 +1,5 @@
 /*
- * $Id: FacesLogger.java,v 1.3 2007/04/27 22:01:06 ofung Exp $
+ * $Id: FacesLogger.java,v 1.4 2008/02/08 18:41:10 rlubke Exp $
  */
 
 /*
@@ -60,7 +60,7 @@ public enum FacesLogger {
 
     private static final String LOGGER_RESOURCES
          = "com.sun.faces.LogStrings";
-    private static final String FACES_LOGGER_NAME_PREFIX
+    public static final String FACES_LOGGER_NAME_PREFIX
          = "javax.enterprise.resource.webcontainer.jsf.";
     private String loggerName;
 
