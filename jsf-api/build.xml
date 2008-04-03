@@ -223,7 +223,13 @@
                 <path refid="sun.commons.classpath"/>
                 <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
-        </taskdef>        
+        </taskdef>
+        <copy todir="${build.generate.dir}/facesdoc/">
+           <fileset dir="${doc.dir}">
+             <include name="changed*.png" />
+           </fileset>
+        </copy>
+        
         <generateRenderkitDocs
               generatorConfig="${tools.dir}/conf/HtmlBasicTaglib21.properties"
               facesConfig="${standard.renderkit.xml}"

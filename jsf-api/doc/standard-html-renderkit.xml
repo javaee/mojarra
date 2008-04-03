@@ -36,7 +36,7 @@
 -->
 <!-- =========== FULL CONFIGURATION FILE ================================== -->
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xi="http://www.w3.org/2001/XInclude" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd" version="1.2">
-  <!-- Generic User Interface Components -->
+<!-- Generic User Interface Components -->
   <component>
     <component-type>javax.faces.Column</component-type>
     <component-class>javax.faces.component.UIColumn</component-class>
@@ -3937,7 +3937,7 @@
       <component-family>javax.faces.ViewRoot</component-family>
     </component-extension>
   </component>
-  <!-- Concrete HTML Components -->
+<!-- Concrete HTML Components -->
   <component>
     <description><![CDATA[<p>Represents a column that will be rendered 
       in an HTML <code>table</code> element.</p>]]></description>
@@ -17427,7 +17427,7 @@
       <renderer-type>javax.faces.Radio</renderer-type>
     </component-extension>
   </component>
-  <!-- Standard HTML Renderkit -->
+<!-- Standard HTML Renderkit -->
   <render-kit>
     <description><![CDATA[
      The standard HTML RenderKit.  Please see the spec for additional
@@ -25812,7 +25812,81 @@
       </renderer-extension>
     </renderer>
     <renderer>
-      <description><![CDATA[ RELEASE_PENDING (edburns,rogerk) documentation ]]></description>
+      <description><![CDATA[<div class="changed_added_2_0">
+
+<p>Render the markup for a <code>&lt;script&gt;</code> element that
+renders the <code>Resource</code> specified by the required
+<code>name</code> attribute and optional <code>library</code>
+attribute.</p>
+
+      <p>Decode Behavior</p>
+
+      <ul>
+
+<p>No action is required during decode for this renderer.</p>
+
+</ul>
+
+      <p>Encode Behavior</p>
+
+      <ul>
+
+        <p><a name="ResourceCommonEncode">Common Encode Behavior</a></p>
+
+          <ul>
+
+          <p>This algorithm is used by all resource renderers to obtain
+          a <code>Resource</code> instance which is then rendered in a
+          specific way depending on what kind of renderer is doing the
+          encoding.</p>
+
+	  <li><p>Look in the component attribute <code>Map</code> for a
+	  value under the key <em>name</em>.</p></li>
+
+	  <li><p>Look in the component attribute <code>Map</code> for a
+	  value under the key <em>library</em>.</p></li>
+
+	  <li><p>If values were found for both <em>name</em> and
+	  <em>library</em>, create the resource by calling
+	  <code>Application.getResourceHandler.createResource(<em>name</em>,
+	  <em>library</em>);</code> </p></li>
+
+	  <li><p>If a value was found for only <em>name</em>, create the
+	  resource by calling
+	  <code>Application.getResourceHandler.createResource(<em>name</em>);</code>
+	  </p></li>
+
+	  <li><p>Otherwise throw an <code>IOException</code> with a
+	  descriptive localized message stating that the <em>name</em>
+	  attribute is required to render a resource.</p></li>
+
+          </ul>
+
+        <p>Use the algorithm <em>Common Encode</em> above to obtain a
+        reference to the <code>Resource</code> to be encoded.</p>
+
+        <p>If this is NOT the first time this <code>Resource</code> has
+        been referenced on this request take no action and return.</p>
+
+        <p>Render a script element.  Use the result from calling
+        <code>resource.getRequestPath()</code> as the value of the "src"
+        attribue and the result from calling
+        <code>resource.getContentType()</code> value of the "type"
+        attribute.</p>
+
+        <p></p>
+
+
+
+</p>
+
+
+
+       </ul>
+
+
+
+</div>]]></description>
       <component-family>javax.faces.Output</component-family>
       <renderer-type>javax.faces.resource.Script</renderer-type>
       <renderer-class>

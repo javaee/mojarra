@@ -171,15 +171,15 @@ public abstract class Resource {
 
 
     /**
-     * RELEASE_PENDING (eburns,rogerk) - review docs
-     *
-     * <p class="changed_added_2_0">Returns a <code>Map&lt;String,
-     * String&gt;</code> of response headers to be sent with this
-     * resource, or an empty <code>Map</code> if no response headers are
-     * to be sent.  This <code>Map</code> must be mutable so the headers
-     * that are actually sent with the resource are a proper super set
-     * of the ones in this map.</p>
-     *
+
+     * <p class="changed_added_2_0">Returns a mutable
+     * <code>Map&lt;String, String&gt;</code> whose entries will be sent
+     * as response headers during {@link
+     * ResourceHandler#handleResourceRequest}.  The entries in this map
+     * must not persist beyond the scope of a single request.  Any
+     * modifications made to the map after the resource has been served
+     * will be ignored by the run-time.</p>
+
      * @return a mutable <code>Map&lt;String, String&gt;</code> of
      * headers that will be included with the response.
      */
