@@ -109,14 +109,27 @@ public class HtmlEditorRenderer extends Renderer {
             writer.write((String)editor.getValue());
         }
         writer.endElement("textarea");
+    }
+    
+    @Override
+    public void encodeEnd(FacesContext context, UIComponent component)
+            throws IOException {
+        HtmlEditor editor = (HtmlEditor)component;
+        String id = editor.getClientId(context);
+        ResponseWriter writer = context.getResponseWriter();
         
         // Init TinyMCE
         writer.startElement("script", editor);
         writer.writeAttribute("type", "text/javascript", "type");
-        writer.write("YAHOO.util.Event.onContentReady(function() {tinyMCE.init({" + buildConfig(context, editor) + "});});");
+//        writer.write("YAHOO.util.Event.onContentReady(\"" + id + "\", function() {\n");
+        writer.write("YAHOO.util.Event.onDOMReady(function() {\n");
+        writer.write("  tinyMCE.init({" + buildConfig(context, editor) + "});\n");
+        writer.write("});"); //, null, true);");
         writer.endElement("script");
     }
-    
+
+
+
     private String buildConfig(FacesContext context, HtmlEditor comp) {
         StringBuilder config = new StringBuilder();
         String id = comp.getClientId(context);
@@ -137,7 +150,6 @@ public class HtmlEditorRenderer extends Renderer {
     private String getThemeStyleConfigs(HtmlEditor comp) {
         StringBuilder config = new StringBuilder();
         // TODO:  Add this back in post-1.0 when we figure out how best to support the HTML pages in the library?
-        /*
         if ("full".equalsIgnoreCase(comp.getThemeStyle())) {
             config.append(",plugins : \"table,save,advhr,advimage,advlink,emotions,iespell,insertdatetime,preview,zoom,flash,searchreplace,print,contextmenu\",")
                 .append("theme_advanced_buttons1_add_before : \"save,separator\",")
@@ -154,9 +166,7 @@ public class HtmlEditorRenderer extends Renderer {
                 .append("external_link_list_url : \"example_data/example_link_list.js\",")
                 .append("external_image_list_url : \"example_data/example_image_list.js\",")
                 .append("flash_external_list_url : \"example_data/example_flash_list.js\"");
-        } else 
-        */    
-        if ("simplified".equalsIgnoreCase(comp.getThemeStyle())) {
+        } else if ("simplified".equalsIgnoreCase(comp.getThemeStyle())) {
             //config.append(",theme_advanced_buttons1 : \"bold,italic,underline,separator,strikethrough,justifyleft,justifycenter,justifyright, justifyfull,bullist,numlist,undo,redo,link,unlink\",")
             config.append(",theme_advanced_buttons1 : \"bold,italic,underline,separator,strikethrough,justifyleft,justifycenter,justifyright,justifyfull,bullist,numlist,undo,redo,link,unlink\",")
                 .append("theme_advanced_buttons2 : \"\",")
