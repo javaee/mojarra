@@ -298,7 +298,7 @@ public class InjectionProviderFactory {
         if (parts.length != 2) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE,
-                           "jsf.spi.serializtion.invalid_service_entry",
+                           "jsf.spi.injection.invalid_service_entry",
                            new Object[] { entry });
             }
             return null;
@@ -313,7 +313,7 @@ public class InjectionProviderFactory {
             } else {
                 if (LOGGER.isLoggable(Level.SEVERE)) {
                     LOGGER.log(Level.SEVERE,
-                               "jsf.spi.serialization.provider.entry_not_discoverable",
+                               "jsf.spi.injection.provider.entry_not_discoverable",
                                new Object[] { parts[0] });
                 }
                 return null;
@@ -321,7 +321,7 @@ public class InjectionProviderFactory {
         } catch (ClassNotFoundException cnfe) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE,
-                           "jsf.spi.serialization.provider_not_found",
+                           "jsf.spi.injection.provider_not_found",
                            new Object[] { parts[0] });
             }
             return null;
@@ -363,7 +363,7 @@ public class InjectionProviderFactory {
         } catch (Exception e) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE,
-                           "jsf.spi.serialization.provider.cannot_read_service",
+                           "jsf.spi.injection.provider.cannot_read_service",
                            e);
             }
             results = EMPTY_ARRAY;
