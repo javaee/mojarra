@@ -36,10 +36,10 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.el.ELUtils;
-import com.sun.faces.io.FastStringWriter;
-import com.sun.faces.mgbean.BeanManager;
-import com.sun.faces.util.FacesLogger;
+import java.io.PrintWriter;
+import java.util.Enumeration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextAttributeEvent;
@@ -47,14 +47,15 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletRequestAttributeEvent;
 import javax.servlet.ServletRequestEvent;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionEvent;
 
-import java.io.PrintWriter;
-import java.util.Enumeration;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.sun.faces.el.ELUtils;
+import com.sun.faces.io.FastStringWriter;
+import com.sun.faces.mgbean.BeanManager;
+import com.sun.faces.util.FacesLogger;
 
 /**
  * <p>Central location for web application lifecycle events.<p>  
@@ -83,6 +84,7 @@ public class WebappLifecycleListener {
                                  request.getAttribute(beanName), 
                                  ELUtils.Scope.REQUEST);
         }
+        syncSessionScopedBeans(request);
         ApplicationAssociate.setCurrentInstance(null);
     }
 
@@ -293,6 +295,30 @@ public class WebappLifecycleListener {
         }
 
         return applicationAssociate;
+    }
+
+
+    /**
+     * This method ensures that session scoped managed beans will be
+     * synchronized properly in a clustered environment.
+     *
+     * @param request the current <code>ServletRequest</code>
+     */
+    private void syncSessionScopedBeans(ServletRequest request) {
+
+        if (request instanceof HttpServletRequest) {
+            HttpSession session = ((HttpServletRequest) request).getSession(false);
+            if (session != null) {
+                BeanManager manager = applicationAssociate.getBeanManager();
+                for (Enumeration e = session.getAttributeNames(); e.hasMoreElements(); ) {
+                    String name = (String) e.nextElement();
+                    if (manager.isManaged(name)) {
+                        session.setAttribute(name, session.getAttribute(name));
+                    }
+                }
+            }
+        }
+
     }
 
 } // END WebappLifecycleListener

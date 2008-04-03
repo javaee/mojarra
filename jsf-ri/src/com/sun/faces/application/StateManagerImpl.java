@@ -52,6 +52,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -82,9 +83,10 @@ import com.sun.faces.util.Util;
 
 public class StateManagerImpl extends StateManager {
 
-    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();       
+    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
+    private static final String STATEMANAGED_SERIAL_ID_KEY =
+          StateManagerImpl.class.getName() + ".SerialId";
     
-    private char requestIdSerial;
     private SerializationProvider serialProvider;
     private WebConfiguration webConfig;
 
@@ -281,11 +283,11 @@ public class StateManagerImpl extends StateManager {
                 String idInLogicalMap = (String)
                       requestMap.get(RIConstants.LOGICAL_VIEW_MAP);
                 if (idInLogicalMap == null) {
-                    idInLogicalMap = createUniqueRequestId();
+                    idInLogicalMap = createUniqueRequestId(context);
                 }
                 assert(null != idInLogicalMap);
                 
-                String idInActualMap = createUniqueRequestId();
+                String idInActualMap = createUniqueRequestId(context);
                
                 Map<String, Object[]> actualMap = TypedCollections.dynamicallyCastMap(
                       logicalMap.get(idInLogicalMap), String.class, Object[].class);
@@ -304,7 +306,9 @@ public class StateManagerImpl extends StateManager {
                     stateArray[1] = handleSaveState(state);
                 } else {
                     actualMap.put(idInActualMap, new Object[] { tree, handleSaveState(state) });
-                }                
+                }
+                // always call put/setAttribute as we may be in a clustered environment.
+                sessionMap.put(RIConstants.LOGICAL_VIEW_MAP, logicalMap);
             }
         } else {
             result = new SerializedView(tree, state);
@@ -643,13 +647,18 @@ public class StateManagerImpl extends StateManager {
 
         return restoreTree(treeStructure);
     }
-    
-     private String createUniqueRequestId() {
 
-        if (requestIdSerial++ == Character.MAX_VALUE) {
-            requestIdSerial = 0;
+    private String createUniqueRequestId(FacesContext ctx) {
+
+        Map<String, Object> sm = ctx.getExternalContext().getSessionMap();
+        AtomicInteger idgen =
+              (AtomicInteger) sm.get(STATEMANAGED_SERIAL_ID_KEY);
+        if (idgen == null) {
+            idgen = new AtomicInteger(1);
         }
-        return UIViewRoot.UNIQUE_ID_PREFIX + ((int) requestIdSerial);
+        // always call put/setAttribute as we may be in a clustered environment.
+        sm.put(STATEMANAGED_SERIAL_ID_KEY, idgen);
+        return (UIViewRoot.UNIQUE_ID_PREFIX + idgen.getAndIncrement());
 
     }
 
