@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.95 2007/10/18 17:05:23 rlubke Exp $
+ * $Id: UIInput.java,v 1.96 2007/11/05 21:46:26 rlubke Exp $
  */
 
 /*
@@ -380,9 +380,9 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     private String validatorMessage;
 
     /**
-     * <p>If there has been a call to {@link #setRequiredMessage} on this
+     * <p>If there has been a call to {@link #setValidatorMessage} on this
      * instance, return the message.  Otherwise, call {@link #getValueExpression}
-     * passing the key "requiredMessage", get the result of the expression, and return it.
+     * passing the key "validatorMessage", get the result of the expression, and return it.
      * Any {@link ELException}s thrown during the call to <code>getValue()</code>
      * must be wrapped in a {@link FacesException} and rethrown.
      */
