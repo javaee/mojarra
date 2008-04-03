@@ -353,7 +353,7 @@ public abstract class ResourceHandler {
      *
      * @param resourceName the name of the resource.
      *
-     * @thows NullPointerException if <code>resourceName</code> is
+     * @throws NullPointerException if <code>resourceName</code> is
      *  <code>null</code>.
      *
      * @return a newly created <code>Resource</code> instance, suitable
@@ -376,7 +376,7 @@ public abstract class ResourceHandler {
      * @param libraryName the name of the library in which this resource
      * resides (if any).
      *
-     * @thows NullPointerException if <code>resourceName</code> is
+     * @throws NullPointerException if <code>resourceName</code> is
      *  <code>null</code>
      *
      * @return a newly created <code>Resource</code> instance, suitable
@@ -406,7 +406,7 @@ public abstract class ResourceHandler {
      * extension of <code>resourceName</code> to {@link
      * javax.activation.MimetypesFileTypeMap#getContentType}.</p>
      *
-     * @thows NullPointerException if <code>resourceName</code> is
+     * @throws NullPointerException if <code>resourceName</code> is
      *  <code>null</code>.
      *
      * @return a newly created <code>Resource</code> instance, suitable

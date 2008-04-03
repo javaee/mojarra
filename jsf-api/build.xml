@@ -642,6 +642,7 @@ javax.faces.level=ALL
                  destdir="${build.javadocs.dir}"
                  Overview="${src.dir}/overview.html"
                  private="${javadoc.private}"
+                 link="http://java.sun.com/javase/6/docs/api/"
                  protected="${javadoc.protected}"
                  windowtitle="${Name} (${spec.version})"
                  stylesheetfile="${src.dir}/jsf-api.css"
