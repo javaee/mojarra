@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.52 2008/01/10 22:28:55 rlubke Exp $
+ * $Id: ViewTag.java,v 1.53 2008/01/15 21:23:40 rlubke Exp $
  */
 
 /*
@@ -69,7 +69,6 @@ import java.util.logging.Logger;
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 
-import com.sun.faces.application.InterweavingResponse;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.ReflectionUtils;
@@ -81,7 +80,7 @@ import com.sun.faces.RIConstants;
  * Renderer. It exists mainly to provide a guarantee that all faces
  * components reside inside of this tag.
  *
- * @version $Id: ViewTag.java,v 1.52 2008/01/10 22:28:55 rlubke Exp $
+ * @version $Id: ViewTag.java,v 1.53 2008/01/15 21:23:40 rlubke Exp $
  */
 
 public class ViewTag extends UIComponentELTag {
