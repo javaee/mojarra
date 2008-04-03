@@ -309,7 +309,11 @@ public class WebappLifecycleListener {
         if (request instanceof HttpServletRequest) {
             HttpSession session = ((HttpServletRequest) request).getSession(false);
             if (session != null) {
-                BeanManager manager = applicationAssociate.getBeanManager();
+                ApplicationAssociate associate = getAssociate();
+                if (associate == null) {
+                    return;
+                }
+                BeanManager manager = associate.getBeanManager();
                 for (Enumeration e = session.getAttributeNames(); e.hasMoreElements(); ) {
                     String name = (String) e.nextElement();
                     if (manager.isManaged(name)) {
