@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.51 2008/01/10 21:37:02 rlubke Exp $
+ * $Id: ViewTag.java,v 1.52 2008/01/10 22:28:55 rlubke Exp $
  */
 
 /*
@@ -81,7 +81,7 @@ import com.sun.faces.RIConstants;
  * Renderer. It exists mainly to provide a guarantee that all faces
  * components reside inside of this tag.
  *
- * @version $Id: ViewTag.java,v 1.51 2008/01/10 21:37:02 rlubke Exp $
+ * @version $Id: ViewTag.java,v 1.52 2008/01/10 22:28:55 rlubke Exp $
  */
 
 public class ViewTag extends UIComponentELTag {
@@ -158,11 +158,8 @@ public class ViewTag extends UIComponentELTag {
      *
      * <ul>
      *
-     * <li><p>Get the {@link InterweavingResponse} from the
-     * request, which was placed there by {@link
-     * ViewHandler#renderView}, and call {@link
-     * InterweavingResponse#flushContentToWrappedResponse}.  This
-     * causes any content that appears before the view to be written out
+     * <li><p>Reflect the response object for a method called flushContentToWrappedResponse
+     * and invoke it. This causes any content that appears before the view to be written out
      * to the response.  This is necessary to allow proper ordering to
      * happen.</p></li>
      *
