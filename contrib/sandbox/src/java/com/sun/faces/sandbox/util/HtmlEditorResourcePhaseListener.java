@@ -97,7 +97,7 @@ public class HtmlEditorResourcePhaseListener extends StaticResourcePhaseListener
                      */
                     if ("text/html".equals(mimeType) || "text/css".equals(mimeType) || "text/javascript".equals(mimeType)) {
                         String text = Util.readInString(is);
-                        text = processUrls(context, text);
+//                        text = processUrls(context, text);
                         os.write(text.getBytes());
                     } else {
                         super.processFile(context, fileName, response, mimeType);
