@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManager.java,v 1.21 2007/11/07 20:25:54 edburns Exp $
+ * $Id: ConfigManager.java,v 1.22 2007/11/07 22:04:16 rlubke Exp $
  */
 
 /*
@@ -438,29 +438,33 @@ public class ConfigManager {
                  * we need to transform it to reference a special 1.1 schema before validating.
                  */
                 Node documentElement = ((Document) domSource.getNode()).getDocumentElement();
-                DocumentBuilder builder = null;
                 if (FACES_SCHEMA_DEFAULT_NS.equals(documentElement.getNamespaceURI())) {
                     Attr version = (Attr)
                             documentElement.getAttributes().getNamedItem("version");
-                    if (null != version) {
+                    DbfFactory.FacesSchema schema = null;
+                    if (version != null) {
                         String versionStr = version.getValue();
-                        if (null != versionStr) {
-                            if ("2.0".equals(versionStr)) {
-                                builder = getBuilderForSchema(DbfFactory.FacesSchema.FACES_20);
-                            }
+                        if ("2.0".equals(versionStr)) {
+                            schema = DbfFactory.FacesSchema.FACES_20;
+                        } else if ("1.2".equals(versionStr)) {
+                            schema = DbfFactory.FacesSchema.FACES_12;
+                        } else {
+                            // RELEASE_PENDING i18n
+                            throw new ConfigurationException("Unknown Schema version: " + versionStr);
                         }
+                        DocumentBuilder builder = getBuilderForSchema(schema);
+                        builder.getSchema().newValidator().validate(domSource);
+                        return ((Document) domSource.getNode());
+                    } else {
+                        // RELEASE_PENDING i18n
+                        // this shouldn't happen, but...
+                        throw new ConfigurationException("No document version available.");
                     }
-                    if (null == builder) {
-                        builder = getBuilderForSchema(DbfFactory.FacesSchema.FACES_12);
-                    }
-                    builder.getSchema().newValidator().validate(domSource);                
-                    
-                    return ((Document) domSource.getNode());
                 } else {
                     DOMResult domResult = new DOMResult();
                     Transformer transformer = getTransformer();
                     transformer.transform(domSource, domResult);
-                    builder = getBuilderForSchema(DbfFactory.FacesSchema.FACES_11);
+                    DocumentBuilder builder = getBuilderForSchema(DbfFactory.FacesSchema.FACES_11);
                     builder.getSchema().newValidator().validate(new DOMSource(domResult.getNode()));
                     return (Document) domResult.getNode();
                 }
