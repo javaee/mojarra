@@ -68,7 +68,6 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
     // Log instance for this class
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
-    private static final String RESOURCE_MARKER = "/javax.faces.resource/";
     private static final String NORMALIZED_ID_KEY =
           ResourceHandlerImpl.class.getName() + "NORMALIZED_ID";
 
@@ -144,7 +143,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
     public boolean isResourceRequest(FacesContext context) {
 
         String resourceId = normalizeResourceRequest(context);
-        return (resourceId.startsWith(RESOURCE_MARKER));
+        return (resourceId.startsWith(ResourceHandler.RESOURCE_IDENTIFIER));
 
     }
 
@@ -166,11 +165,11 @@ public class ResourceHandlerImpl extends ResourceHandler {
         }
 
         assert (null != resourceId);
-        assert (resourceId.startsWith(RESOURCE_MARKER));
+        assert (resourceId.startsWith(ResourceHandler.RESOURCE_IDENTIFIER));
 
         Resource resource = null;
-        if (RESOURCE_MARKER.length() < resourceId.length()) {
-            String resourceName = resourceId.substring(RESOURCE_MARKER.length());
+        if (ResourceHandler.RESOURCE_IDENTIFIER.length() < resourceId.length()) {
+            String resourceName = resourceId.substring(RESOURCE_IDENTIFIER.length());
             String libraryName = context.getExternalContext().getRequestParameterMap()
                   .get("ln");
             resource = createResource(resourceName, libraryName);

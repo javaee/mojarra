@@ -53,6 +53,14 @@ import javax.faces.context.FacesContext;
  */
 public abstract class ResourceHandler {
 
+    /**
+     * RELEASE PENDING (edburs,rogerk) - review docs
+     */
+    public static final String RESOURCE_IDENTIFIER = "/javax.faces.resource";
+
+
+    // ---------------------------------------------------------- Public Methods
+    
 
     /**
      * RELEASE_PENDING (eburns,rogerk) - review docs

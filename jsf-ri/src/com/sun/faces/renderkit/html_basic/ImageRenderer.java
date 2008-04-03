@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.52 2007/08/30 19:29:13 rlubke Exp $
+ * $Id: ImageRenderer.java,v 1.53 2007/11/15 22:14:24 rlubke Exp $
  */
 
 /*
@@ -45,6 +45,7 @@ package com.sun.faces.renderkit.html_basic;
 import java.io.IOException;
 import java.util.logging.Level;
 
+import javax.faces.application.ResourceHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIGraphic;
 import javax.faces.context.FacesContext;
@@ -58,7 +59,7 @@ import com.sun.faces.renderkit.RenderKitUtils;
  * <B>ImageRenderer</B> is a class that handles the rendering of the graphic
  * ImageTag
  *
- * @version $Id: ImageRenderer.java,v 1.52 2007/08/30 19:29:13 rlubke Exp $
+ * @version $Id: ImageRenderer.java,v 1.53 2007/11/15 22:14:24 rlubke Exp $
  */
 
 public class ImageRenderer extends HtmlBasicRenderer {
@@ -129,10 +130,13 @@ public class ImageRenderer extends HtmlBasicRenderer {
         if (value == null) {
             return "";
         }
-        value = context.getApplication().getViewHandler().
-              getResourceURL(context, value);
-        return (context.getExternalContext().encodeResourceURL(value));
-
+        if (value.contains(ResourceHandler.RESOURCE_IDENTIFIER)) {
+            return value;
+        } else {
+            value = context.getApplication().getViewHandler().
+                  getResourceURL(context, value);
+            return (context.getExternalContext().encodeResourceURL(value));
+        }
     }
 
     // The testcase for this class is TestRenderers_2.java 

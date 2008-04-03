@@ -49,7 +49,7 @@
 <body bgcolor="white">
 <f:view>
     <h:form id="responseForm">
-        <h:graphicImage id="waveImg" url="/wave.med.gif"/>
+        <h:graphicImage id="waveImg" url="#{resource['images/wave.med.gif']}"/>
         <h2>
             <h:outputText id="result" lang="en"
                           value="#{UserNumberBean.response}"/>

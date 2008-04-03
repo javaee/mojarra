@@ -57,7 +57,7 @@
             it?
         </h2>
 
-        <h:graphicImage id="waveImg" url="/wave.med.gif"/>
+        <h:graphicImage id="waveImg" url="#{resource['images/wave.med.gif']}"/>
         <h:inputText id="userNo" label="User Number"
                      value="#{UserNumberBean.userNumber}"
                      validator="#{UserNumberBean.validate}"/>
