@@ -35,7 +35,7 @@
  */
 
 /*
- * $Id: ExternalContext.java,v 1.36 2008/01/28 20:55:35 rlubke Exp $
+ * $Id: ExternalContext.java,v 1.37 2008/01/29 21:02:45 edburns Exp $
  */
  
 /*
@@ -61,10 +61,10 @@ import java.util.Map;
 
 
 /**
- * <p>This class allows the Faces API to be unaware of the nature of its
- * containing application environment.  In particular, this class allows
- * JavaServer Faces based appications to run in either a Servlet or a Portlet
- * environment.</p>
+ * <p><span class="changed_modified_2_0">This</span> class allows the
+ * Faces API to be unaware of the nature of its containing application
+ * environment.  In particular, this class allows JavaServer Faces based
+ * appications to run in either a Servlet or a Portlet environment.</p>
  *
  * <p>In the method descriptions below, paragraphs starting with
  * <em>Servlet:</em> and <em>Portlet:</em> denote behavior that is
@@ -261,7 +261,22 @@ public abstract class ExternalContext {
 
 
     /**
-     * <p class="changed_modified_2_0">RELEASE_PENDING (edburs,rogerk) javadocs</p>
+     * <p class="changed_added_2_0">Returns the MIME type of the
+     * specified file or <code>null</code> if the MIME type is not
+     * known.  The MIME type is determined by the container.</p>
+
+     * <div class="changed_added_2_0">
+ 
+     * <p><em>Servlet:</em> This must be the value returned by the
+     * <code>javax.servlet.ServletContext</code> method
+     * <code>getMimeType()</code>.</p>
+     *
+     * <p><em>Portlet:</em> This must be the value returned by the
+     * <code>javax.portlet.PortletContext</code> method
+     * <code>getMimeType()</code>.</p>
+
+     * </div>
+
      *
      * @since 2.0
      */

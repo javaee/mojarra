@@ -55,244 +55,6 @@ import javax.faces.context.FacesContext;
  *
  * <div class="changed_added_2_0">
  *
- * <p class="javadocSection">Terminology and Purpose</p>
- *
- * <ul>
- *
- * <p>Web based distributed applications generally follow a pattern
- * where the user-agent sends several requests to the server with the
- * end goal of displaying a user interface.  Generally, the response to
- * the first request tells the user-agent what additional requests are
- * needed to achieve that goal.  In JSF, the first request and
- * post-backs to the first request are called <em>view requests</em>.
- * Within the scope of a view request, additional requests for scripts,
- * images, stylesheets, and other artifacts, are called <em>resource
- * requests</em>.  The <code>ResourceHandler</code> facility defines how
- * JSF handles resource requests.  Specifically, it defines how
- * resources must be packaged, how the run-time loads these packaged
- * resources and converts them into correctly localized Java object
- * {@link Resource} instances, and how the run-time serves them up to
- * the client in response to resource requests.</p>
- *
- * </ul>
- *
- * <p class="javadocSection">Packaging Resources</p>
- *
- * <ul>
- *
- * <p><code>ResourceHandler</code> defines a path based packaging
- * convention for resources.  The default implementation of
- * <code>ResourceHandle</code> must support packaging resources in the
- * classpath or in the web application root, according to the following
- * specification.  Other implementations of <code>ResourceHandler</code>
- * are free to package resources however they like. For the default
- * implementation, if a resource is packaged in the classpath, it must
- * be under the JAR entry name:</p>
- *
- * <ul><p><code>META-INF/resources/&lt;resourceIdentifier&gt;</code></p></ul>
- *
- * <p>If packaged under the web app root, they must be under the path:</p>
- *
- * <ul><p><code>resources/&lt;resourceIdentifier&gt;</code></p></ul>
- *
- * <p>relative to the web app root.</p>
- *
- * <p>&lt;resourceIdentifier&gt; consists of several segments, specified
- * as follows.</p>
- *
- * <p><ul><code>
- * [localePrefix/][libraryName/][libraryVersion/]resourceName[/resourceVersion]</code></ul>
- * </p>
- *
- * <p>The run-time must enforce the following rules to consider a
- * &lt;resourceIdentifier&gt;s valid.  A &lt;resourceIdentifier&gt; that
- * does not follow these rules must not be considered valid and must be
- * ignored silently.</p>
- *
- * <ul>
- *
- * <li><p>Segments in square brackets [] are optional.</p></li>
- *
- * <li><p>The segments must appear in the order shown above.</p></li>
- *
- * <li><p>If libraryVersion is present, it must be preceded by
- * libraryName</p></li>
- *
- * <li><p>If resourceVersion is present, it must be preceded by
- * resourceName</p></li>
- *
- * <li><p>There must be a '/' between adjacent segments in a
- * &lt;resourceIdentifier&gt;</p></li>
- *
- * <li><p>If libraryVersion or resourceVersion are present, both must be
- * a '.'  separated list of integers, neither starting nor ending with
- * '.'</p></li>
- *
- * </ul>
- *
- * <p>The <a name="validResourceIdentifiers">following</a> examples
- * illustrate the nine valid combinations of the above resource
- * identifier segments.</p>
- *
- * <table border="1">
- *
- * <thead>
- * <tr>
- * <th>localePrefix [optional]</th>
- * <th>libraryName [optional]</th>
- * <th>libraryVersion [optional]</th>
- * <th>resourceName [required]</th>
- * <th>resourceVersion [required]</th>
- * <th>Description</th>
- * <th>actual resourceIdentifier</th>
- * </tr>
- * </thead>
- * <tbody>
- * <tr>
- * <td></td>
- * <td></td>
- * <td></td>
- * <td>duke.gif</td>
- * <td></td>
- *
- * <td>A non-localized, non-versioned image resource called "duke.gif", not
- * in a library</td>
- *
- * <td>duke.gif
- * </td>
- *
- * </tr>
- *
- * <tr>
- * <td></td>
- * <td>corporate</td>
- * <td></td>
- * <td>duke.gif</td>
- * <td></td>
- *
- * <td>A non-localized, non-versioned image resource called "duke.gif" in a
- * library called "corporate"</td>
- *
- * <td>corporate/duke.gif
- * </td>
- *
- * </tr>
- *
- * <tr>
- * <td></td>
- * <td>corporate</td>
- * <td>2.3</td>
- * <td>duke.gif</td>
- * <td></td>
- *
- * <td>A non-localized, non-versioned image resource called "duke.gif", in
- * version 2.3 of the "corporate" library</td>
- *
- * <td>corporate/2.3/duke.gif
- * </td>
- *
- * </tr>
- *
- * <tr>
- * <td></td>
- * <td>basic</td>
- * <td>2.3</td>
- * <td>script.js</td>
- * <td>1.3.4</td>
- *
- * <td>A non-localized, version 1.3.4 script resource called "script.js",
- * in versioned 2.3 library called "basic".</td>
- *
- * <td>basic/2.3/script.js/1.3.4
- * </td>
- *
- * </tr>
- *
- * <tr>
- * <td>de</td>
- * <td></td>
- * <td></td>
- * <td>header.css</td>
- * <td></td>
- *
- * <td>A non-versioned style resource called "header.css" localized for
- * locale "de"</td>
- *
- * <td>de/header.css
- * </td>
- *
- * </tr>
- *
- * <tr>
- * <td>de_AT</td>
- * <td></td>
- * <td></td>
- * <td>footer.css</td>
- * <td>1.4.2</td>
- *
- * <td>Version 1.4.2 of style resource "footer.css", localized for locale "de_AT"</td>
- *
- * <td>de_AT/footer.css/1.4.2
- * </td>
- *
- * </tr>
- *
- * <tr>
- * <td>zh</td>
- * <td>extraFancy</td>
- * <td></td>
- * <td>menu-bar.css</td>
- * <td>2.4</td>
- *
- * <td>Version 2.4 of style resource called, "menu-bar.css" in
- * non-versioned library, "extraFancy", localized for locale "zh"</td>
- *
- * <td>zh/extraFancy/menu-bar.css/2.4
- * </td>
- *
- * </tr>
- *
- * <tr>
- * <td>ja</td>
- * <td>mild</td>
- * <td>0.1</td>
- * <td>ajaxTransaction.js</td>
- * <td></td>
- *
- * <td>Non-versioned script resource called, "ajaxTransaction.js", in
- * version 0.1 of library called "mild", localized for locale "ja"</td>
- *
- * <td>ja/mild/0.1/ajaxTransaction.js
- * </td>
- *
- * </tr>
- *
- * <tr>
- * <td>de_ch</td>
- * <td>grassy</td>
- * <td>1.0</td>
- * <td>bg.png</td>
- * <td>1.0</td>
- *
- * <td>Version 1.0 of image resource called "bg.png", in version 1.0 of
- * library called "grassy" localized for locale "de_ch"</td>
- *
- * <td>de_ch/grassy/1.0/bg.png/1.0
- * </td>
- *
- * </tr>
- *
- * </tbody>
- * </table>
- *
- * <p>Note that when resourceName and resourceVersion are both present
- * the name of the file that contains the bytes of the resource is
- * actually the version number, and that this file resides in a
- * directory named &lt;resourceName&gt;, where &lt;resourceName&gt; is
- * the actual name of the resource.</p>
- *
- * </ul>
- *
  * <p class="javadocSection">Encoding Resources</p>
  *
  * <ul>
@@ -370,9 +132,8 @@ public abstract class ResourceHandler {
      * <p class="changed_added_2_0">Create an instance of
      * <code>Resource</code> given the argument
      * <code>resourceName</code>.  The content-type of the resource is
-     * derived by passing the file extension of
-     * <code>resourceName</code> to
-     * <code>javax.activation.MimetypesFileTypeMap.getContentType()</code>.</p>
+     * derived by passing the <em>resourceName</em> to {@link
+     * javax.faces.context.ExternalContext#getMimeType}</p>
      *
      * @param resourceName the name of the resource.
      *
@@ -390,9 +151,9 @@ public abstract class ResourceHandler {
      * <code>Resource</code> with a resourceName given by the value of
      * the argument <code>resourceName</code> that is a member of the
      * library named by the argument <code>libraryName</code>.  The
-     * content-type of the resource is derived by passing the file
-     * extension of <code>resourceName</code> to
-     * <code>javax.activation.MimetypesFileTypeMap.getContentType()</code>.</p>
+     * content-type of the resource is derived by passing the
+     * <em>resourceName</em> to
+     * {@link javax.faces.context.ExternalContext#getMimeType}.</p>
      *
      * @param resourceName the name of the resource.
      *
@@ -425,9 +186,9 @@ public abstract class ResourceHandler {
      * @param contentType the mime content that this
      * <code>Resource</code> instance will return from {@link
      * Resource#getContentType}.  If the value is <code>null</code>, The
-     * content-type of the resource is derived by passing the file
-     * extension of <code>resourceName</code> to
-     * <code>javax.activation.MimetypesFileTypeMap.getContentType()</code>.</p>
+     * content-type of the resource is derived by passing the
+     * <em>resourceName</em> to {@link
+     * javax.faces.context.ExternalContext#getMimeType}</p>
      *
      * @throws <code>NullPointerException</code> if
      * <code>resourceName</code> is <code>null</code>.

@@ -238,7 +238,8 @@
         <ant dir="${api.dir}"
              antfile="build.xml" target="javadocs"/>
         <echo>Copy the API Javadocs to the dist</echo>
-        <copy todir="${dist.home}/javadocs">
+        <filter token="build.number" value="${build.number}" />
+        <copy todir="${dist.home}/javadocs" filtering="true">
             <fileset dir="${api.dir}/build/javadocs"/>
         </copy>
 

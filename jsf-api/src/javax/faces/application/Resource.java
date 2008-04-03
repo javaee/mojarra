@@ -86,9 +86,9 @@ public abstract class Resource {
      * argument.</p>
      * @param contentType the MIME content-type for this resource.  May
      * be <code>null</code>.  If the value is <code>null</code>, The
-     * content-type of the resource is derived by passing the file
-     * extension of <code>resourceName</code> to
-     * <code>javax.activation.MimetypesFileTypeMap.getContentType()</code>.
+     * content-type of the resource is derived by passing the
+     * <em>resourceName</em> to {@link
+     * javax.faces.context.ExternalContext#getMimeType}.
      */
     public void setContentType(String contentType) {
 
@@ -251,7 +251,8 @@ public abstract class Resource {
      * </div>
      *
      * @return the path to this resource, intended to be included in the
-     * encoded view that is sent to the browser during a view request.
+     * encoded view that is sent to the browser when sending a faces
+     * response.
      */
     public abstract String getRequestPath();
 

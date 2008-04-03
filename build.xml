@@ -48,6 +48,7 @@
     <import file="${jsf.build.home}/common/ant/common.xml"/>
     <property name="tasks.home" value="${myenv.TASKS_HOME}"/>
     <property name="dist.dir" value="${basedir}/dist"/>
+    <property name="javaserverfaces-spec-eg.dir" value="${basedir}/../javaserverfaces-spec-eg"/>
 
 
     <property name="LICENSEFILE"
@@ -165,10 +166,35 @@
 
    <target name="build.javadocs.dist" depends="prepare.build.java.net">
 
+       <copy todir="${demo.dir}/dist" flatten="true">
+
+         <fileset dir="${javaserverfaces-spec-eg.dir}">
+
+           <include name="**/*${build.number}*.pdf" />
+
+         </fileset>
+
+         <fileset dir="${basedir}/docs">
+
+           <include name="**/build.javadocs.dist*.html" />
+
+         </fileset>
+
+       </copy>
+
+       <filter token="build.number" value="${build.number}" />
+       <filter token="spec.version" value="${spec.version}" />
+       <filter token="build.type" value="${build.type}" />
+
+       <copy filtering="true"
+             file="${basedir}/docs/build.javadocs.dist-index.html"
+             tofile="${demo.dir}/dist/index.html">
+       </copy>
+
         <!-- Create the javadocs distribution -->
         <zip destfile="${dist.dir}/jsf-javadocs-${spec.version}.zip">
             <zipfileset dir="${demo.dir}/dist"
-                        includes="javadocs/**,renderkitdocs/**,tlddocs/**"
+                        includes="index.html,javadocs/**,renderkitdocs/**,tlddocs/**,*.pdf"
                         prefix="mojarra-${impl.version}"/>
         </zip>
 
@@ -279,3 +305,5 @@
     </target>
 
 </project>
+
+

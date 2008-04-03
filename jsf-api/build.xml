@@ -648,7 +648,7 @@ javax.faces.level=ALL
                  stylesheetfile="${src.dir}/jsf-api.css"
                  source="1.5"
                  doctitle="${Name} (${spec.version})"
-                 bottom="Copyright &#169; 2002-2006 Sun Microsystems, Inc. All Rights Reserved.">
+                 bottom="Copyright &#169; 2002-2008 Sun Microsystems, Inc. All Rights Reserved.">
             <fileset dir="${src.dir}">
                 <include name="**/*.java"/>
             </fileset>
