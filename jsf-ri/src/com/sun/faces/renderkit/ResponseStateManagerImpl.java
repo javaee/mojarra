@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.47 2007/08/08 17:51:08 rlubke Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.48 2007/08/08 18:35:57 rlubke Exp $
  */
 
 /*
@@ -181,7 +181,21 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
                 }
                 long stateTime = 0;
                 if (webConfig.isSet(WebContextInitParameter.ClientStateTimeout)) {
-                    stateTime = ois.readLong();
+                    try {
+                        stateTime = ois.readLong();
+                    } catch (IOException ioe) {
+                        if (LOGGER.isLoggable(Level.FINE)) {
+                            LOGGER.fine("Client state timeout is enabled, but unable to find the "
+                                        + "time marker in the serialized state.  Assuming state "
+                                        + "to be old and returning null.");
+                        }
+                        // we've caught an exception trying to read the time
+                        // marker.  This most likely means a view that has been
+                        // around before upgrading to the release that included
+                        // this feature.  So, no marker, return null now to
+                        // cause a ViewExpiredException
+                        return null;
+                    }
                 }
                 Object structure = ois.readObject();
                 Object state = ois.readObject();
