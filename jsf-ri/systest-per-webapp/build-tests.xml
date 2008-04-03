@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.34 2007/03/13 19:08:17 rlubke Exp $
+ $Id: build-tests.xml,v 1.35 2007/03/19 20:31:24 edburns Exp $
 -->
 
 <!--
@@ -56,7 +56,8 @@
                    replace-variableresolver,
                    converter-property-editor,
                    late-bindings,
-                   property-resolver-jsp"/>
+                   property-resolver-jsp,
+                   never-unwrap-exceptions"/>
 
     <!-- 
        EXCLUDED APPLICATIONS:
@@ -90,6 +91,8 @@
               value="com/sun/faces/systest/LateBindingTestCase.class"/>
     <property name="property-resolver-jsp"
               value="com/sun/faces/systest/PropertyResolverJspTestCase.class"/>
+    <property name="never-unwrap-exceptions"
+              value="com/sun/faces/systest/NeverUnwrapExceptionsTestCase.class"/>
     
     
     <!--

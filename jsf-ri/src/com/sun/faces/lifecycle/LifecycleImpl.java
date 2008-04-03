@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.72 2007/02/07 22:08:10 rlubke Exp $
+ * $Id: LifecycleImpl.java,v 1.73 2007/03/19 20:31:23 edburns Exp $
  */
 
 /*
@@ -301,11 +301,7 @@ public class LifecycleImpl extends Lifecycle {
         // Allow all afterPhase listeners to execute before throwing the
         // exception caught during the phase execution.
         if (exceptionThrown) {
-            // unwind exceptions to root cause
-            while (ex.getCause() != null) {
-                ex = ex.getCause();
-            }
-
+ 
             if (!(ex instanceof FacesException)) {
                 ex = new FacesException(ex);
             }

@@ -1,5 +1,5 @@
 /*
- * $Id: MethodBindingMethodExpressionAdapter.java,v 1.5 2006/08/09 18:26:03 rlubke Exp $
+ * $Id: MethodBindingMethodExpressionAdapter.java,v 1.6 2007/03/19 20:31:22 edburns Exp $
  */
 
 /*
@@ -84,17 +84,11 @@ import java.lang.reflect.Method;
 	    throw new EvaluationException(e);
 	}
 	catch (ELException e) {
-        // look for the root cause and pass that to the
-        // ctor of EvaluationException
-        Throwable cause = e.getCause();
-        if (cause != null) {
-            while (cause.getCause() != null) {
-                cause = cause.getCause();
+            Throwable cause = e.getCause();
+            if (cause == null) {
+                cause = e;
             }
-        } else {
-            cause = e;
-        }
-	    throw new EvaluationException(cause);
+            throw new EvaluationException(cause);
 	} catch (NullPointerException e) {
 	    throw new javax.faces.el.MethodNotFoundException(e);
 	}

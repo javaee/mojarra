@@ -65,7 +65,8 @@
                    replace-variableresolver,
                    converter-property-editor,
                    late-bindings,
-                   property-resolver-jsp"/>
+                   property-resolver-jsp,
+                   never-unwrap-exceptions"/>
 
     <!-- 
        EXCLUDED APPLICATIONS:
