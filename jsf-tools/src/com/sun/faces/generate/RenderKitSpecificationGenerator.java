@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitSpecificationGenerator.java,v 1.13 2008/01/24 17:43:02 edburns Exp $
+ * $Id: RenderKitSpecificationGenerator.java,v 1.14 2008/01/25 19:59:05 edburns Exp $
  */
 
 /*
@@ -224,7 +224,9 @@ public class RenderKitSpecificationGenerator implements Generator {
                 RendererBean renderer = rendererIter.next();
                 String curType = renderer.getRendererType();
                 DescriptionBean[] descriptions = renderer.getDescriptions();
-                String enclosingDiv = null;
+                String 
+                        enclosingDiv = null,
+                        enclosingSpan = null;
                 if (null != descriptions) {
                     // Get the current operating locale
                     String localeStr = Locale.getDefault().getCountry().toLowerCase();
@@ -233,19 +235,26 @@ public class RenderKitSpecificationGenerator implements Generator {
                     for (DescriptionBean cur : descriptions) {
                         if (null != cur.getLang() && 
                             (-1 != localeStr.indexOf(cur.getLang().toLowerCase()))) {
-                            enclosingDiv = GeneratorUtil.getFirstDivFromString(renderer.getDescription(cur.getLang()).getDescription());
+                            
+                            if (null == (enclosingDiv = 
+                                   GeneratorUtil.getFirstDivFromString(renderer.getDescription(cur.getLang()).getDescription()))) {
+                                enclosingSpan = GeneratorUtil.getFirstSpanFromString(renderer.getDescription(cur.getLang()).getDescription());
+                            }
+                            
                             break;
                         }
                     }
                     
                 }
-                if (null != enclosingDiv) {
-                    sb.append("  <DD>" + enclosingDiv);
+                if (null != enclosingDiv || null != enclosingSpan) {
+                    sb.append("  <DD>" + 
+                         (null != enclosingDiv ? enclosingDiv : enclosingSpan));
                     sb.append("<A HREF=\"" + renderKitId + "/" +
                     curFamily + curType +
                     ".html\" TARGET=\"rendererFrame\">" + curType +
                             "</A>");
-                    sb.append("</div></DD>\n");
+                    sb.append((null != enclosingDiv ? "</div>" : "</span>") + 
+                            "</DD>\n");
                 }
                 else {
                     sb.append("  <DD><A HREF=\"" + renderKitId + "/" +

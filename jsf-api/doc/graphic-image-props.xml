@@ -126,6 +126,38 @@
     </property>
 
     <property>
+        <description><![CDATA[
+          <p>Context-relative URL to retrieve the resource associated
+          with this component. This is an alias for the "value"
+          property.</p>
+        ]]></description>
+        <display-name>URL</display-name>
+        <icon></icon>
+        <property-name>url</property-name>
+        <property-class>java.lang.Object</property-class>
+        <property-extension>
+            <value-expression-enabled>true</value-expression-enabled>
+        </property-extension>
+    </property>
+
+
+
+    <property>
+        <description><![CDATA[
+          <p>The value of this attribute will be rendered as the value
+          of the "src" attribute on the rendered markup.</p>
+        ]]></description>
+        <display-name>Value</display-name>
+        <icon></icon>
+        <property-name>value</property-name>
+        <property-class>java.lang.Object</property-class>
+        <property-extension>
+            <value-expression-enabled>true</value-expression-enabled>
+        </property-extension>
+    </property>
+
+
+    <property>
         <description>
         Override for the width of this image.
         </description>

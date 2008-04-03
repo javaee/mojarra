@@ -1,5 +1,5 @@
 /*
- * $Id: GeneratorUtil.java,v 1.7 2008/01/24 17:43:02 edburns Exp $
+ * $Id: GeneratorUtil.java,v 1.8 2008/01/25 19:59:05 edburns Exp $
  */
 
 /*
@@ -257,6 +257,23 @@ public class GeneratorUtil {
         return result;
     }
 
+    public static String getFirstSpanFromString(String toParse) {
+        String result = null;
+        
+        if (null == toParse) {
+            return result;
+        }
+        
+        int divStart, divEnd;
+        if (-1 != (divStart = toParse.indexOf("<span"))) {
+            if (-1 != (divEnd = toParse.indexOf(">", divStart))) {
+                result = toParse.substring(divStart, divEnd + 1);
+            }
+        }
+        
+        return result;
+    }
+    
 
     public static FacesConfigBean getConfigBean(String facesConfig)
     throws Exception {

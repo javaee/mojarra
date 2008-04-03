@@ -53,10 +53,10 @@
 -->
 <root xmlns:xi="http://www.w3.org/2001/XInclude">
     <property>
-        <description>
+        <description><![CDATA[
           A mutable Map of the attributes associated with
           this component, keyed by attribute name.
-        </description>
+        ]]></description>
         <display-name>Attributes Map</display-name>
         <icon></icon>
         <property-name>attributes</property-name>
@@ -68,10 +68,10 @@
     </property>
 
     <property>
-        <description>
+        <description><![CDATA[
           The number of child components associated with
           this component.
-        </description>
+        ]]></description>
         <display-name>Child Component Count</display-name>
         <icon></icon>
         <property-name>childCount</property-name>
@@ -83,10 +83,10 @@
     </property>
 
     <property>
-        <description>
+        <description><![CDATA[
           A mutable List of the child components associated with
           this component.
-        </description>
+        ]]></description>
         <display-name>Child Component List</display-name>
         <icon></icon>
         <property-name>children</property-name>
@@ -98,10 +98,10 @@
     </property>
 
     <property>
-        <description>
+        <description><![CDATA[
           A mutable Map of the facets associated with
           this component, keyed by facet name.
-        </description>
+        ]]></description>
         <display-name>Facets Map</display-name>
         <icon></icon>
         <property-name>facets</property-name>
@@ -113,10 +113,10 @@
     </property>
 
     <property>
-        <description>
+        <description><![CDATA[
           The component family to which this component belongs.  This property
           is used to select an appropriate Renderer.
-        </description>
+        ]]></description>
         <display-name>Component Family</display-name>
         <icon></icon>
         <property-name>family</property-name>
@@ -128,11 +128,11 @@
     </property>
 
     <property>
-        <description>
+        <description><![CDATA[
           The component identifier for this component.  This value must be
           unique within the closest parent component that is a naming
           container.
-        </description>
+        ]]></description>
         <display-name>Component Identifier</display-name>
         <icon></icon>
         <property-name>id</property-name>
@@ -140,11 +140,11 @@
     </property>
 
     <property>
-        <description>
+        <description><![CDATA[
           The parent component for this component.  On the root component
           in the component tree (which must be of type UIViewRoot), this
           property is null.
-        </description>
+        ]]></description>
         <display-name>Parent Component</display-name>
         <icon></icon>
         <property-name>parent</property-name>
@@ -156,11 +156,11 @@
     </property>
 
     <property>
-        <description>
+        <description><![CDATA[
           Flag indicating whether or not this component should be rendered
           (during Render Response Phase), or processed on any subsequent
           form submit.  The default value for this property is true.
-        </description>
+        ]]></description>
         <display-name>Rendered Flag</display-name>
         <icon></icon>
         <property-name>rendered</property-name>
@@ -171,10 +171,10 @@
     </property>
 
     <property>
-        <description>
+        <description><![CDATA[
           Identifier used (in conjunction with the "family" property) to
           select an appropriate Renderer to encode and decode this component.
-        </description>
+        ]]></description>
         <display-name>Renderer Type</display-name>
         <icon></icon>
         <property-name>rendererType</property-name>
@@ -185,11 +185,11 @@
     </property>
 
     <property>
-        <description>
+        <description><![CDATA[
           Flag indicating whether or not this component takes responsibility
           for rendering its own children.  This decision is normally delegated
           to the associated Renderer, if there is one.
-        </description>
+        ]]></description>
         <display-name>Renders Children</display-name>
         <icon></icon>
         <property-name>rendersChildren</property-name>
