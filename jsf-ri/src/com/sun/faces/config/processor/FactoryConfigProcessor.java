@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryConfigProcessor.java,v 1.6 2007/06/28 16:28:00 rlubke Exp $
+ * $Id: FactoryConfigProcessor.java,v 1.7 2007/06/28 16:31:41 rlubke Exp $
  */
 
 /*
@@ -129,7 +129,6 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
         // validate that we actually have factories at this point.
         // If we don't, there is much point in going further.
         verifyFactoriesExist();
-
         invokeNext(documents);
 
     }
@@ -138,6 +137,7 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
 
 
     private void processFactories(NodeList factories, String namespace) {
+
         for (int i = 0, size = factories.getLength(); i < size; i++) {
             Node factory = factories.item(i);
             NodeList children = ((Element) factory)
@@ -159,10 +159,12 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
                 }
             }
         }
+
     }
 
 
     private static void setFactory(String factoryName, String factoryImpl) {
+
         if (factoryName != null && factoryImpl != null) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
