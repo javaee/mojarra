@@ -81,7 +81,7 @@ public class HtmlTaglib21Generator extends HtmlTaglib12Generator {
         // Generate the class declaration
         writer.writePublicClassDeclaration(tagClassName,
                                            "UIComponentELTag",
-                                           null, false, true);
+                                           null, false, false);
 
 
     } // END writeClassDeclaration
