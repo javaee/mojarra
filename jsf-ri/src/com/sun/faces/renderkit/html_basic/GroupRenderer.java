@@ -1,5 +1,5 @@
 /*
- * $Id: GroupRenderer.java,v 1.33 2007/04/27 22:01:01 ofung Exp $
+ * $Id: GroupRenderer.java,v 1.34 2007/07/06 18:21:57 rlubke Exp $
  */
 
 /*
@@ -54,7 +54,7 @@ import com.sun.faces.util.MessageUtils;
  * Arbitrary grouping "renderer" that simply renders its children
  * recursively in the <code>encodeEnd()</code> method.
  *
- * @version $Id: GroupRenderer.java,v 1.33 2007/04/27 22:01:01 ofung Exp $
+ * @version $Id: GroupRenderer.java,v 1.34 2007/07/06 18:21:57 rlubke Exp $
  */
 public class GroupRenderer extends HtmlBasicRenderer {
 
@@ -187,9 +187,10 @@ public class GroupRenderer extends HtmlBasicRenderer {
 
 
     /**
-     * <p>Return true if we need to render a div or span element around this group.
-     *
      * @param component <code>UIComponent</code> for this group
+     *
+     * @return <code>true</code> if we need to render a div or span element
+     *  around this group.
      */
     private boolean divOrSpan(UIComponent component) {
 

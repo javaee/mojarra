@@ -35,7 +35,7 @@
  */
 
 /*
- * $Id: ListboxRenderer.java,v 1.25 2007/04/27 22:01:02 ofung Exp $
+ * $Id: ListboxRenderer.java,v 1.26 2007/07/06 18:21:57 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -65,7 +65,7 @@ public class ListboxRenderer extends MenuRenderer {
           throws IOException {
 
         // If size not specified, default to number of items
-        writer.writeAttribute("size", new Integer(itemCount), "size");
+        writer.writeAttribute("size", itemCount, "size");
 
     }
 

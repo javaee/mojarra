@@ -35,7 +35,7 @@
  */
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.53 2007/04/27 22:01:03 ofung Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.54 2007/07/06 18:21:57 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -96,8 +96,8 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
 
-        String alignStr = null;
-        Object borderObj = null;
+        String alignStr;
+        Object borderObj;
         boolean alignVertical = false;
         int border = 0;
 
@@ -112,10 +112,9 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         renderBeginText(component, border, alignVertical, context, true);
 
         Iterator items = RenderKitUtils.getSelectItems(context, component);
-        SelectItem curItem = null;
         int idx = -1;
         while (items.hasNext()) {
-            curItem = (SelectItem) items.next();
+            SelectItem curItem = (SelectItem) items.next();
             idx++;
             // If we come across a group of options, render them as a nested
             // table.
@@ -147,7 +146,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                     renderOption(context, component, itemsArray[i],
                                  alignVertical, i);
                 }
-                renderEndText(component, alignVertical, context, false);
+                renderEndText(component, alignVertical, context);
                 writer.endElement("td");
                 if (alignVertical) {
                     writer.endElement("tr");
@@ -158,7 +157,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             }
         }
 
-        renderEndText(component, alignVertical, context, true);
+        renderEndText(component, alignVertical, context);
 
     }
 
@@ -206,8 +205,9 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
     }
 
 
-    protected void renderEndText(UIComponent component, boolean alignVertical,
-                                 FacesContext context, boolean outerTable)
+    protected void renderEndText(UIComponent component,
+                                 boolean alignVertical,
+                                 FacesContext context)
           throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
@@ -232,9 +232,9 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         assert(writer != null);
 
         // disable the check box if the attribute is set.
-        String labelClass = null;
         boolean componentDisabled = Util.componentIsDisabled(component);
 
+        String labelClass;
         if (componentDisabled || curItem.isDisabled()) {
             labelClass = (String) component.
                   getAttributes().get("disabledClass");
@@ -262,18 +262,18 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         writer.writeAttribute("value", valueString, "value");
         writer.writeAttribute("type", "checkbox", null);
 
-        Object submittedValues[] = getSubmittedSelectedValues(context,
-                                                              component);
+        Object submittedValues[] = getSubmittedSelectedValues(
+              component);
         boolean isSelected;
 
         Class type = String.class;
-        Object valuesArray = null;
-        Object itemValue = null;
+        Object valuesArray;
+        Object itemValue;
         if (submittedValues != null) {
             valuesArray = submittedValues;
             itemValue = valueString;
         } else {
-            valuesArray = getCurrentSelectedValues(context, component);
+            valuesArray = getCurrentSelectedValues(component);
             itemValue = curItem.getValue();
         }
         if (valuesArray != null) {

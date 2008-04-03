@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.82 2007/04/27 22:01:02 ofung Exp $
+ * $Id: RadioRenderer.java,v 1.83 2007/07/06 18:21:58 rlubke Exp $
  */
 
 /*
@@ -99,9 +99,9 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
               coerceToType(itemValue, type);
 
         // disable the radio button if the attribute is set.
-        String labelClass = null;
         boolean componentDisabled = Util.componentIsDisabled(component);
 
+        String labelClass;
         if (componentDisabled || curItem.isDisabled()) {
             labelClass = (String) component.
                   getAttributes().get("disabledClass");

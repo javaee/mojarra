@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.69 2007/04/27 22:01:02 ofung Exp $
+ * $Id: MessageRenderer.java,v 1.70 2007/07/06 18:21:57 rlubke Exp $
  */
 
 /*
@@ -94,7 +94,6 @@ public class MessageRenderer extends HtmlBasicRenderer {
         }
         if (component instanceof UIOutput) {
             omRenderer.encodeBegin(context, component);
-            return;
         }
 
     }
@@ -115,7 +114,6 @@ public class MessageRenderer extends HtmlBasicRenderer {
         }
         if (component instanceof UIOutput) {
             omRenderer.encodeChildren(context, component);
-            return;
         }
 
     }
@@ -123,10 +121,6 @@ public class MessageRenderer extends HtmlBasicRenderer {
 
     public void encodeEnd(FacesContext context, UIComponent component)
           throws IOException {
-
-        Iterator messageIter = null;
-        FacesMessage curMessage = null;
-        ResponseWriter writer = null;
 
         if (context == null) {
             throw new NullPointerException(
@@ -157,10 +151,12 @@ public class MessageRenderer extends HtmlBasicRenderer {
             }
             return;
         }
-        writer = context.getResponseWriter();
+        ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
 
-        String clientId = ((UIMessage) component).getFor();
+        UIMessage message = (UIMessage) component;
+
+        String clientId = message.getFor();
         //"for" attribute required for Message. Should be taken care of
         //by TLD in JSP case, but need to cover non-JSP case.
         if (clientId == null) {
@@ -170,8 +166,8 @@ public class MessageRenderer extends HtmlBasicRenderer {
             return;
         }
 
-        clientId = augmentIdReference(context, clientId, component);
-        messageIter = getMessageIter(context, clientId, component);
+        clientId = augmentIdReference(clientId, component);
+        Iterator messageIter = getMessageIter(context, clientId, component);
 
 
         assert(messageIter != null);
@@ -179,23 +175,19 @@ public class MessageRenderer extends HtmlBasicRenderer {
             //no messages to render
             return;
         }
-        curMessage = (FacesMessage) messageIter.next();
+        FacesMessage curMessage = (FacesMessage) messageIter.next();
 
-        String
-              summary = null,
-              detail = null,
-              severityStyle = null,
-              severityStyleClass = null;
-        boolean
-              showSummary = ((UIMessage) component).isShowSummary(),
-              showDetail = ((UIMessage) component).isShowDetail();
+        String severityStyle = null;
+        String severityStyleClass = null;
+        boolean showSummary = message.isShowSummary();
+        boolean showDetail = message.isShowDetail();
 
         // make sure we have a non-null value for summary and
         // detail.
-        summary = (null != (summary = curMessage.getSummary())) ?
+        String summary = (null != (summary = curMessage.getSummary())) ?
                   summary : "";
         // Default to summary if we have no detail
-        detail = (null != (detail = curMessage.getDetail())) ?
+        String detail = (null != (detail = curMessage.getDetail())) ?
                  detail : summary;
 
         if (curMessage.getSeverity() == FacesMessage.SEVERITY_INFO) {
@@ -281,12 +273,8 @@ public class MessageRenderer extends HtmlBasicRenderer {
 
         }
 
-        Object tooltip = component.getAttributes().get("tooltip");
-        boolean isTooltip = false;
-        if (tooltip instanceof Boolean) {
-            //if it's not a boolean can ignore it
-            isTooltip = ((Boolean) tooltip).booleanValue();
-        }
+        boolean isTooltip = Boolean.valueOf(
+              component.getAttributes().get("tooltip").toString());
 
         boolean wroteTooltip = false;
         if (showSummary && showDetail && isTooltip) {

@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.44 2007/04/27 22:01:03 ofung Exp $
+ * $Id: TableRenderer.java,v 1.45 2007/07/06 18:21:57 rlubke Exp $
  */
 
 /*
@@ -258,7 +258,6 @@ public class TableRenderer extends HtmlBasicRenderer {
 
         // Set up variables we will need
         String columnClasses[] = getColumnClasses(data);
-        int numColumnClasses = columnClasses.length;
         String rowClasses[] = getRowClasses(data);
         int numRowClasses = rowClasses.length;
         ResponseWriter writer = context.getResponseWriter();

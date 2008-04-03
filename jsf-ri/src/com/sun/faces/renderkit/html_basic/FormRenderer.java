@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.103 2007/06/25 20:57:22 rlubke Exp $
+ * $Id: FormRenderer.java,v 1.104 2007/07/06 18:21:57 rlubke Exp $
  */
 
 /*
@@ -217,10 +217,10 @@ public class FormRenderer extends HtmlBasicRenderer {
 
 
     /**
-     * <p>Return the value to be rendered as the <code>action</code> attribute
-     * of the form generated for this component.</p>
-     *
      * @param context FacesContext for the response we are creating
+     *
+     * @return Return the value to be rendered as the <code>action</code> attribute
+     *  of the form generated for this component.
      */
     private String getActionStr(FacesContext context) {
 

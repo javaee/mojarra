@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.120 2007/04/27 22:01:01 ofung Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.121 2007/07/06 18:21:57 rlubke Exp $
  */
 
 /*
@@ -64,7 +64,6 @@ import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sun.faces.util.MessageFactory;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
@@ -78,7 +77,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
 
     // Log instance for this class
-    protected static final Logger logger = FacesLogger.RENDERKIT.getLogger();;
+    protected static final Logger logger = FacesLogger.RENDERKIT.getLogger();
 
     // ------------------------------------------------------------ Constructors
 
@@ -90,20 +89,6 @@ public abstract class HtmlBasicRenderer extends Renderer {
     }
 
     // ---------------------------------------------------------- Public Methods
-
-
-    public void addGenericErrorMessage(FacesContext facesContext,
-                                       UIComponent component,
-                                       String messageId, String param) {
-
-        Object[] params = new Object[3];
-        params[0] = param;
-        facesContext.addMessage(component.getClientId(facesContext),
-                                MessageFactory.getMessage(facesContext,
-                                                          messageId,
-                                                          params));
-
-    }
 
 
     public String convertClientId(FacesContext context, String clientId) {
@@ -175,9 +160,6 @@ public abstract class HtmlBasicRenderer extends Renderer {
     public void encodeEnd(FacesContext context, UIComponent component)
           throws IOException {
 
-        String currentValue = null;
-        ResponseWriter writer = null;
-
         if (context == null) {
             throw new NullPointerException(
                   MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
@@ -205,10 +187,10 @@ public abstract class HtmlBasicRenderer extends Renderer {
             return;
         }
 
-        writer = context.getResponseWriter();
+        ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
 
-        currentValue = getCurrentValue(context, component);
+        String currentValue = getCurrentValue(context, component);
         if (logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE, "Value to be rendered " + currentValue);
         }
@@ -240,8 +222,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
      *
      * @return the (possibly augmented) <code>forValue<code>.
      */
-    protected String augmentIdReference(FacesContext context,
-                                        String forValue,
+    protected String augmentIdReference(String forValue,
                                         UIComponent fromComponent) {
 
         int forSuffix = forValue.lastIndexOf(UIViewRoot.UNIQUE_ID_PREFIX);
@@ -266,6 +247,11 @@ public abstract class HtmlBasicRenderer extends Renderer {
      * <p>Render nested child components by invoking the encode methods
      * on those components, but only when the <code>rendered</code>
      * property is <code>true</code>.</p>
+     *
+     * @param context FacesContext for the current request
+     * @param component the component to recursively encode
+     *
+     * @throws IOException if an error occurrs during the encode process
      */
     protected void encodeRecursive(FacesContext context, UIComponent component)
           throws IOException {
@@ -293,11 +279,11 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
 
     /**
-     * <p>Return an Iterator over the children of the specified
-     * component, selecting only those that have a
-     * <code>rendered</code> property of <code>true</code>.</p>
-     *
      * @param component <code>UIComponent</code> for which to extract children
+     *
+     * @return an Iterator over the children of the specified
+     *  component, selecting only those that have a
+     *  <code>rendered</code> property of <code>true</code>.
      */
     protected Iterator<UIComponent> getChildren(UIComponent component) {
 
@@ -314,8 +300,11 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
 
     /**
-     * Gets value to be rendered and formats it if required. Sets to empty
-     * string if value is null.
+     * @param context the FacesContext for the current request
+     * @param component the UIComponent whose value we're interested in
+     *
+     * @return the value to be rendered and formats it if required. Sets to
+     *  empty string if value is null.
      */
     protected String getCurrentValue(FacesContext context,
                                      UIComponent component) {
@@ -340,23 +329,29 @@ public abstract class HtmlBasicRenderer extends Renderer {
     /**
      * Renderers override this method to write appropriate HTML content into
      * the buffer.
+     *
+     * @param context the FacesContext for the current request
+     * @param component the UIComponent of interest
+     * @param currentValue <code>component</code>'s current value
+     *
+     * @throws IOException if an error occurs rendering the text
      */
     protected void getEndTextToRender(FacesContext context,
                                       UIComponent component,
                                       String currentValue) throws IOException {
 
-        return;
+        // no-op unless overridden
 
     }
 
 
     /**
-     * <p>Return the specified facet from the specified component, but
-     * <strong>only</strong> if its <code>rendered</code> property is
-     * set to <code>true</code>.
-     *
      * @param component Component from which to return a facet
      * @param name      Name of the desired facet
+     *
+     * @return the specified facet from the specified component, but
+     *  <strong>only</strong> if its <code>rendered</code> property is
+     *  set to <code>true</code>.
      */
     protected UIComponent getFacet(UIComponent component, String name) {
 
@@ -372,6 +367,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
     /**
      * Locates the component identified by <code>forComponent</code>
      *
+     * @param context the FacesContext for the current request
      * @param forComponent - the component to search for
      * @param component    - the starting point in which to begin the search
      *
@@ -418,7 +414,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
             if (logger.isLoggable(Level.WARNING)) {
                 logger.warning(MessageUtils.getExceptionMessageString(
                       MessageUtils.COMPONENT_NOT_FOUND_IN_VIEW_WARNING_ID,
-                      new Object[]{forComponent}));
+                      forComponent));
             }
         }
         return result;
@@ -427,8 +423,14 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
 
     /**
-     * Renderers override this method in case output value needs to be
-     * formatted
+     * @param context the FacesContext for the current request
+     * @param component UIComponent of interest
+     * @param currentValue the current value of <code>component</code>
+     *
+     * @return the currentValue after any associated Converter has been
+     *  applied
+     *
+     * @throws ConverterException if the value cannot be converted
      */
     protected String getFormattedValue(FacesContext context,
                                        UIComponent component,
@@ -445,11 +447,9 @@ public abstract class HtmlBasicRenderer extends Renderer {
             return result;
         }
 
-        Converter converter = null;
-
         // If there is a converter attribute, use it to to ask application
         // instance for a converter with this identifer.
-        converter = ((ValueHolder) component).getConverter();
+        Converter converter = ((ValueHolder) component).getConverter();
 
         // if value is null and no converter attribute is specified, then
         // return a zero length String.
@@ -486,7 +486,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
                                       String forComponent,
                                       UIComponent component) {
 
-        Iterator messageIter = null;
+        Iterator messageIter;
         // Attempt to use the "for" attribute to locate 
         // messages.  Three possible scenarios here:
         // 1. valid "for" attribute - messages returned
@@ -552,12 +552,23 @@ public abstract class HtmlBasicRenderer extends Renderer {
     /**
      * Renderers override this method to store the previous value
      * of the associated component.
+     *
+     * @param component the target component to which the submitted value
+     *  will be set
+     * @param value the value to set
      */
     protected void setSubmittedValue(UIComponent component, Object value) {
+
+        // no-op unless overridden
+
     }
 
 
-    /** @return true if this renderer should render an id attribute. */
+    /**
+     * @param component the component of interest
+     *
+     * @return true if this renderer should render an id attribute.
+     */
     protected boolean shouldWriteIdAttribute(UIComponent component) {
 
         String id;

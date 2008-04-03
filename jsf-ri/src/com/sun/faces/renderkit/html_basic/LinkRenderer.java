@@ -1,5 +1,5 @@
 /*
- * $Id: LinkRenderer.java,v 1.20 2007/04/27 22:01:02 ofung Exp $
+ * $Id: LinkRenderer.java,v 1.21 2007/07/06 18:21:58 rlubke Exp $
  */
 
 /*
@@ -42,9 +42,7 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
-import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 

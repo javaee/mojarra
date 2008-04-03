@@ -35,7 +35,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.87 2007/04/27 22:01:02 ofung Exp $
+ * $Id: MenuRenderer.java,v 1.88 2007/07/06 18:21:57 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -94,12 +94,11 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
               uiSelectMany.getValueExpression("value");
 
         Object result = newValues; // default case, set local value
-        Class modelType = null;
         boolean throwException = false;
 
         // If we have a ValueExpression
         if (null != valueExpression) {
-            modelType = valueExpression.getType(context.getELContext());
+            Class modelType = valueExpression.getType(context.getELContext());
             // Does the valueExpression resolve properly to something with
             // a type?
             if(modelType != null) {
@@ -158,13 +157,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
     }
 
-    /**
+    /*
      * Converts the provided string array and places them into the correct provided model type.
-     * @param context
-     * @param uiSelectMany
-     * @param modelType
-     * @param newValues
-     * @return
      */
     private Object convertSelectManyValuesForModel(FacesContext context,
                                                    UISelectMany uiSelectMany,
@@ -192,7 +186,6 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                                         String newValue)
           throws ConverterException {
 
-        Object convertedValue = null;
         if (RIConstants.NO_VALUE.equals(newValue)) {
             return null;
         }
@@ -205,7 +198,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             return null;
         }
 
-        convertedValue =
+        Object convertedValue =
               super.getConvertedValue(context, uiSelectOne, newValue);
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("SelectOne Component  " + uiSelectOne.getId() +
@@ -259,7 +252,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                                 +
                                 component.getId()
                                 + " after decoding "
-                                + newValues);
+                                + Arrays.toString(newValues));
                 }
             } else {
                 // Use the empty array, not null, to distinguish
@@ -292,7 +285,6 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                 setSubmittedValue(component, RIConstants.NO_VALUE);
             }
         }
-        return;
 
     }
 
@@ -383,8 +375,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                                              String[] newValues)
           throws ConverterException {
 
-        Object result = null;
-        Converter converter = null;
+        Object result;
+        Converter converter;
         int len = (null != newValues ? newValues.length : 0);
 
         Class elementType = arrayClass.getComponentType();
@@ -514,25 +506,25 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                                                curItem.getValue());
         writer.writeAttribute("value", valueString, "value");
 
-        Object submittedValues[] = getSubmittedSelectedValues(context,
-                                                              component);
+        Object submittedValues[] = getSubmittedSelectedValues(
+              component);
         Class type = String.class;
-        Object valuesArray = null;
-        Object itemValue = null;
+        Object valuesArray;
+        Object itemValue;
 
-        boolean isSelected = false;
-        boolean containsValue = false;
+        boolean isSelected;
+        boolean containsValue;
         if (submittedValues != null) {
             containsValue = containsaValue(submittedValues);
             if (containsValue) {
                 valuesArray = submittedValues;
                 itemValue = valueString;
             } else {
-                valuesArray = getCurrentSelectedValues(context, component);
+                valuesArray = getCurrentSelectedValues(component);
                 itemValue = curItem.getValue();
             }
         } else {
-            valuesArray = getCurrentSelectedValues(context, component);
+            valuesArray = getCurrentSelectedValues(component);
             itemValue = curItem.getValue();
         }
         if (valuesArray != null) {
@@ -542,7 +534,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
         requestMap.put(ConverterPropertyEditorBase.TARGET_COMPONENT_ATTRIBUTE_NAME,
                 component);
-        Object newValue = null;
+        Object newValue;
         try {
             newValue = context.getApplication().getExpressionFactory().
                  coerceToType(itemValue, type);
@@ -558,7 +550,6 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             writer.writeAttribute("selected", true, "selected");
         }
 
-        String labelClass = null;
         Boolean disabledAttr =
               (Boolean) component.getAttributes().get("disabled");
         boolean componentDisabled = false;
@@ -574,6 +565,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             writer.writeAttribute("disabled", true, "disabled");
         }
 
+        String labelClass;
         if (componentDisabled || curItem.isDisabled()) {
             labelClass = (String) component.
                   getAttributes().get("disabledClass");
@@ -627,8 +619,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     }
 
 
-    Object getCurrentSelectedValues(FacesContext context,
-                                    UIComponent component) {
+    Object getCurrentSelectedValues(UIComponent component) {
 
         if (component instanceof UISelectMany) {
             UISelectMany select = (UISelectMany) component;
@@ -699,8 +690,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     }
 
 
-    Object[] getSubmittedSelectedValues(FacesContext context,
-                                        UIComponent component) {
+    Object[] getSubmittedSelectedValues(UIComponent component) {
 
         if (component instanceof UISelectMany) {
             UISelectMany select = (UISelectMany) component;
@@ -749,9 +739,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         assert(writer != null);
 
         Iterator items = RenderKitUtils.getSelectItems(context, component);
-        SelectItem curItem = null;
         while (items.hasNext()) {
-            curItem = (SelectItem) items.next();
+            SelectItem curItem = (SelectItem) items.next();
             if (curItem instanceof SelectItemGroup) {
                 // render OPTGROUP
                 writer.startElement("optgroup", component);
@@ -788,7 +777,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         writer.writeAttribute("name", component.getClientId(context),
                               "clientId");
         // render styleClass attribute if present.
-        String styleClass = null;
+        String styleClass;
         if (null !=
             (styleClass =
                   (String) component.getAttributes().get("styleClass"))) {

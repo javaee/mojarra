@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.47 2007/04/27 22:01:02 ofung Exp $
+ * $Id: LabelRenderer.java,v 1.48 2007/07/06 18:21:58 rlubke Exp $
  */
 
 /*
@@ -81,10 +81,6 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
             logger.log(Level.FINER,
                        "Begin decoding component " + component.getId());
         }
-        ResponseWriter writer = null;
-        String forValue = null;
-        String styleClass = (String)
-              component.getAttributes().get("styleClass");
 
         // suppress rendering if "rendered" property on the component is
         // false.
@@ -96,15 +92,14 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
             }
             return;
         }
-        writer = context.getResponseWriter();
+        ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
 
-        UIComponent forComponent = null;
         String forClientId = null;
-        forValue = (String) component.getAttributes().get("for");
+        String forValue = (String) component.getAttributes().get("for");
         if (forValue != null) {
-            forValue = augmentIdReference(context, forValue, component);
-            forComponent = getForComponent(context, forValue, component);
+            forValue = augmentIdReference(forValue, component);
+            UIComponent forComponent = getForComponent(context, forValue, component);
             if (forComponent == null) {
                 // it could that the component hasn't been created yet. So
                 // construct the clientId for component.
@@ -125,6 +120,8 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
         }
 
         RenderKitUtils.renderPassThruAttributes(context, writer, component);
+        String styleClass = (String)
+            component.getAttributes().get("styleClass");
         if (null != styleClass) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
@@ -137,17 +134,9 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
         }
         if (value != null && value.length() != 0) {
             boolean escape = true;
-            Object val = null;
+            Object val;
             if (null != (val = component.getAttributes().get("escape"))) {
-                if (val instanceof Boolean) {
-                    escape = ((Boolean) val).booleanValue();
-                } else if (val instanceof String) {
-                    try {
-                        escape =
-                              Boolean.valueOf((String) val).booleanValue();
-                    } catch (Throwable e) {
-                    }
-                }
+                escape = Boolean.valueOf(val.toString());
             }
 
             if (escape) {

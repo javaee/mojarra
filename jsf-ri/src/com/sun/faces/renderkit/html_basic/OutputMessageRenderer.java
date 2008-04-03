@@ -1,5 +1,5 @@
 /*
- * $Id: OutputMessageRenderer.java,v 1.31 2007/04/27 22:01:02 ofung Exp $
+ * $Id: OutputMessageRenderer.java,v 1.32 2007/07/06 18:21:57 rlubke Exp $
  */
 
 /*
@@ -100,7 +100,7 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
                        "Begin encoding component " + component.getId());
         }
 
-        String currentValue = null;
+
         String style = (String) component.getAttributes().get("style");
         String styleClass = (String) component.getAttributes().get("styleClass");
         String lang = (String) component.getAttributes().get("lang");
@@ -120,12 +120,9 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
             return;
         }
         Object currentObj = ((ValueHolder) component).getValue();
+        String currentValue;
         if (currentObj != null) {
-            if (currentObj instanceof String) {
-                currentValue = (String) currentObj;
-            } else {
-                currentValue = currentObj.toString();
-            }
+            currentValue = currentObj.toString();
         } else {
             // if the value is null, do not output anything.
             return;
@@ -135,12 +132,8 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
 
         // get UIParameter children...
 
-        Iterator<UIComponent> kids = component.getChildren().iterator();
-        while (kids.hasNext()) {
-            UIComponent kid = kids.next();
-
+        for (UIComponent kid : component.getChildren()) {
             //PENDING(rogerk) ignore if child is not UIParameter?
-
             if (!(kid instanceof UIParameter)) {
                 continue;
             }
@@ -150,7 +143,7 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
 
         // If at least one substitution parameter was specified,
         // use the string as a MessageFormat instance.
-        String message = null;
+        String message;
         if (parameterList.size() > 0) {
             message = MessageFormat.format
                   (currentValue, parameterList.toArray
@@ -188,18 +181,9 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
                 writer.writeAttribute("title", title, "title");
             }
         }
-        Boolean escape = Boolean.TRUE;
-        Object val = component.getAttributes().get("escape");
-        if (val != null) {
-            if (val instanceof Boolean) {
-                escape = (Boolean) val;
-            } else if (val instanceof String) {
-                try {
-                    escape = Boolean.valueOf((String) val);
-                } catch (Throwable e) {
-                }
-            }
-        }
+
+        boolean escape =
+              Boolean.valueOf(component.getAttributes().get("escape").toString());          
         if (escape) {
             writer.writeText(message, component, "value");
         } else {

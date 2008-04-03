@@ -1,5 +1,5 @@
 /*
- * $Id: MessagesRenderer.java,v 1.33 2007/04/27 22:01:02 ofung Exp $
+ * $Id: MessagesRenderer.java,v 1.34 2007/07/06 18:21:57 rlubke Exp $
  */
 
 /*
@@ -86,10 +86,6 @@ public class MessagesRenderer extends HtmlBasicRenderer {
     public void encodeEnd(FacesContext context, UIComponent component)
           throws IOException {
 
-        Iterator messageIter = null;
-        FacesMessage curMessage = null;
-        ResponseWriter writer = null;
-
         if (context == null) {
             throw new NullPointerException(
                   MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
@@ -115,7 +111,9 @@ public class MessagesRenderer extends HtmlBasicRenderer {
             }
             return;
         }
-        writer = context.getResponseWriter();
+
+        UIMessages messages = (UIMessages) component;
+        ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
 
         // String clientId = ((UIMessages) component).getFor();
@@ -123,14 +121,14 @@ public class MessagesRenderer extends HtmlBasicRenderer {
         // if no clientId was included
         if (clientId == null) {
             // and the author explicitly only wants global messages
-            if (((UIMessages) component).isGlobalOnly()) {
+            if (messages.isGlobalOnly()) {
                 // make it so only global messages get displayed.
                 clientId = "";
             }
         }
 
         //"for" attribute optional for Messages
-        messageIter = getMessageIter(context, clientId, component);
+        Iterator messageIter = getMessageIter(context, clientId, component);
 
         assert(messageIter != null);
         
@@ -139,9 +137,8 @@ public class MessagesRenderer extends HtmlBasicRenderer {
         }
 
         String layout = (String) component.getAttributes().get("layout");
-        boolean showSummary = ((UIMessages) component).isShowSummary();
-        boolean showDetail = ((UIMessages) component).isShowDetail();
-        String style = (String) component.getAttributes().get("style");
+        boolean showSummary = messages.isShowSummary();
+        boolean showDetail = messages.isShowDetail();
         String styleClass = (String) component.getAttributes().get(
               "styleClass");
 
@@ -166,20 +163,17 @@ public class MessagesRenderer extends HtmlBasicRenderer {
         RenderKitUtils.renderPassThruAttributes(context, writer, component);
 
         while (messageIter.hasNext()) {
-            curMessage = (FacesMessage) messageIter.next();
+            FacesMessage curMessage = (FacesMessage) messageIter.next();
 
-            String
-                  summary = null,
-                  detail = null,
-                  severityStyle = null,
-                  severityStyleClass = null;
+            String severityStyle = null;
+            String severityStyleClass = null;
 
             // make sure we have a non-null value for summary and
             // detail.
-            summary = (null != (summary = curMessage.getSummary())) ?
+            String summary = (null != (summary = curMessage.getSummary())) ?
                       summary : "";
             // Default to summary if we have no detail
-            detail = (null != (detail = curMessage.getDetail())) ?
+            String detail = (null != (detail = curMessage.getDetail())) ?
                      detail : summary;
 
 
@@ -216,8 +210,7 @@ public class MessagesRenderer extends HtmlBasicRenderer {
             }
 
             if (severityStyle != null) {
-                style = severityStyle;
-                writer.writeAttribute("style", style, "style");
+                writer.writeAttribute("style", severityStyle, "style");
             }
             if (severityStyleClass != null) {
                 styleClass = severityStyleClass;
@@ -228,12 +221,8 @@ public class MessagesRenderer extends HtmlBasicRenderer {
                 writer.startElement("td", component);
             }
 
-            Object tooltip = component.getAttributes().get("tooltip");
-            boolean isTooltip = false;
-            if (tooltip instanceof Boolean) {
-                //if it's not a boolean can ignore it
-                isTooltip = ((Boolean) tooltip).booleanValue();
-            }
+            boolean isTooltip = Boolean.valueOf(
+              component.getAttributes().get("tooltip").toString());
 
             boolean wroteTooltip = false;
             if (showSummary && showDetail && isTooltip) {

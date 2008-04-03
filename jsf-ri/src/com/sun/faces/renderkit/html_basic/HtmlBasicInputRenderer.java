@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicInputRenderer.java,v 1.38 2007/04/27 22:01:01 ofung Exp $
+ * $Id: HtmlBasicInputRenderer.java,v 1.39 2007/07/06 18:21:57 rlubke Exp $
  */
 
 /*
@@ -78,18 +78,16 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
         String newValue = (String) submittedValue;
         // if we have no local value, try to get the valueExpression.
         ValueExpression valueExpression = component.getValueExpression("value");
-        Class converterType = null;
         Converter converter = null;
-        Object result = null;
+
         // If there is a converter attribute, use it to to ask application
         // instance for a converter with this identifer.
-
         if (component instanceof ValueHolder) {
             converter = ((ValueHolder) component).getConverter();
         }
 
         if (null == converter && null != valueExpression) {
-            converterType = valueExpression.getType(context.getELContext());
+            Class converterType = valueExpression.getType(context.getELContext());
             // if converterType is null, assume the modelType is "String".
             if (converterType == null ||
                 converterType == Object.class) {
@@ -135,7 +133,7 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
                 }
                 return (null);
             }
-        } else if (converter == null && valueExpression == null) {
+        } else if (converter == null) {
             // if there is no valueExpression and converter attribute set,
             // assume the modelType as "String" since we have no way of
             // figuring out the type. So for the selectOne and
@@ -160,8 +158,7 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
             // make sure our special ConverterPropertyEditor knows about this value.
             Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
             requestMap.put(ConverterPropertyEditorBase.TARGET_COMPONENT_ATTRIBUTE_NAME, component);
-            result = converter.getAsObject(context, component, newValue);
-            return result;
+            return converter.getAsObject(context, component, newValue);
         } else {
             if (logger.isLoggable(Level.FINE)) {
                 logger.fine("Unexpected Converter exception " +

@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.48 2007/04/27 22:01:02 ofung Exp $
+ * $Id: ImageRenderer.java,v 1.49 2007/07/06 18:23:17 rlubke Exp $
  */
 
 /*
@@ -58,7 +58,7 @@ import com.sun.faces.util.MessageUtils;
  * <B>ImageRenderer</B> is a class that handles the rendering of the graphic
  * ImageTag
  *
- * @version $Id: ImageRenderer.java,v 1.48 2007/04/27 22:01:02 ofung Exp $
+ * @version $Id: ImageRenderer.java,v 1.49 2007/07/06 18:23:17 rlubke Exp $
  */
 
 public class ImageRenderer extends HtmlBasicRenderer {
@@ -86,9 +86,6 @@ public class ImageRenderer extends HtmlBasicRenderer {
     public void encodeEnd(FacesContext context, UIComponent component)
           throws IOException {
 
-        ResponseWriter writer = null;
-        String styleClass = null;
-
         if (context == null) {
             throw new NullPointerException(
                   MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
@@ -115,7 +112,7 @@ public class ImageRenderer extends HtmlBasicRenderer {
             return;
         }
 
-        writer = context.getResponseWriter();
+        ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
 
         writer.startElement("img", component);
@@ -130,6 +127,7 @@ public class ImageRenderer extends HtmlBasicRenderer {
 
         RenderKitUtils.renderPassThruAttributes(context, writer, component);
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
+        String styleClass;
         if (null != (styleClass = (String)
               component.getAttributes().get("styleClass"))) {
             writer.writeAttribute("class", styleClass, "styleClass");

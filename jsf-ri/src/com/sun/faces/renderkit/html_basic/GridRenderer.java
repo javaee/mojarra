@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.47 2007/04/27 22:01:01 ofung Exp $
+ * $Id: GridRenderer.java,v 1.48 2007/07/06 18:21:57 rlubke Exp $
  */
 
 /*
@@ -210,51 +210,49 @@ public class GridRenderer extends HtmlBasicRenderer {
         int rowStyle = 0;
         int rowStyles = rowClasses.length;
         boolean open = false;
-        Iterator<UIComponent> kids = null;
         int i = 0;
 
         // Render our children, starting a new row as needed
         writer.startElement("tbody", component);
         writer.writeText("\n", component, null);
-
-        if (null != (kids = getChildren(component))) {
-            while (kids.hasNext()) {
-                UIComponent child = kids.next();
-                if ((i % columns) == 0) {
-                    if (open) {
-                        writer.endElement("tr");
-                        writer.writeText("\n", component, null);
-                        open = false;
-                    }
-                    writer.startElement("tr", component);
-                    if (rowStyles > 0) {
-                        writer.writeAttribute("class", rowClasses[rowStyle++],
-                                              "rowClasses");
-                        if (rowStyle >= rowStyles) {
-                            rowStyle = 0;
-                        }
-                    }
+        for (Iterator<UIComponent> kids = getChildren(component);
+             kids.hasNext();) {
+            UIComponent child = kids.next();
+            if ((i % columns) == 0) {
+                if (open) {
+                    writer.endElement("tr");
                     writer.writeText("\n", component, null);
-                    open = true;
+                    open = false;
+                }
+                writer.startElement("tr", component);
+                if (rowStyles > 0) {
+                    writer.writeAttribute("class", rowClasses[rowStyle++],
+                                          "rowClasses");
+                    if (rowStyle >= rowStyles) {
+                        rowStyle = 0;
+                    }
+                }
+                writer.writeText("\n", component, null);
+                open = true;
+                columnStyle = 0;
+            }
+            writer.startElement("td", component);
+            if (columnStyles > 0) {
+                try {
+                    writer.writeAttribute("class",
+                                          columnClasses[columnStyle++],
+                                          "columns");
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    // why is this here?
+                }
+                if (columnStyle >= columnStyles) {
                     columnStyle = 0;
                 }
-                writer.startElement("td", component);
-                if (columnStyles > 0) {
-                    try {
-                        writer.writeAttribute("class",
-                                              columnClasses[columnStyle++],
-                                              "columns");
-                    } catch (ArrayIndexOutOfBoundsException e) {
-                    }
-                    if (columnStyle >= columnStyles) {
-                        columnStyle = 0;
-                    }
-                }
-                encodeRecursive(context, child);
-                writer.endElement("td");
-                writer.writeText("\n", component, null);
-                i++;
             }
+            encodeRecursive(context, child);
+            writer.endElement("td");
+            writer.writeText("\n", component, null);
+            i++;
         }
         if (open) {
             writer.endElement("tr");
@@ -315,9 +313,11 @@ public class GridRenderer extends HtmlBasicRenderer {
 
 
     /**
-     * Returns an array of stylesheet classes to be applied to
-     * each column in the list in the order specified. Every column may or
-     * may not have a stylesheet
+     * @param component the UIComponent of interest
+     *
+     * @return an array of stylesheet classes to be applied to
+     *  each column in the list in the order specified. Every column may or
+     *  may not have a stylesheet.
      */
     private String[] getColumnClasses(UIComponent component) {
 
@@ -344,7 +344,9 @@ public class GridRenderer extends HtmlBasicRenderer {
 
 
     /**
-     * Returns number of columns of the grid converting the value
+     * @param component the UIComponent of interest
+     *
+     * @return the number of columns of the grid converting the value
      * specified to int if necessary.
      */
     private int getColumnCount(UIComponent component) {
@@ -365,9 +367,11 @@ public class GridRenderer extends HtmlBasicRenderer {
 
 
     /**
-     * Returns an array of stylesheet classes to be applied to
+     * @param component the UIComponent of interest
+     *
+     * @return an array of stylesheet classes to be applied to
      * each row in the list in the order specified. Every row may or
-     * may not have a stylesheet
+     * may not have a stylesheet.
      */
     private String[] getRowClasses(UIComponent component) {
 
@@ -378,7 +382,7 @@ public class GridRenderer extends HtmlBasicRenderer {
         values = values.trim();
         ArrayList<String> list = new ArrayList<String>();
         while (values.length() > 0) {
-            int comma = values.indexOf(",");
+            int comma = values.indexOf(',');
             if (comma >= 0) {
                 list.add(values.substring(0, comma).trim());
                 values = values.substring(comma + 1);

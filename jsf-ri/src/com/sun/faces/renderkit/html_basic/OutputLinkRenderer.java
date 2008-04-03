@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.33 2007/06/07 19:04:31 rlubke Exp $
+ * $Id: OutputLinkRenderer.java,v 1.34 2007/07/06 18:21:57 rlubke Exp $
  */
 
 /*
@@ -48,7 +48,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.logging.Level;
 
 import com.sun.faces.renderkit.RenderKitUtils;
@@ -61,7 +60,7 @@ import com.sun.faces.util.Util;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.33 2007/06/07 19:04:31 rlubke Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.34 2007/07/06 18:21:57 rlubke Exp $
  */
 
 public class OutputLinkRenderer extends LinkRenderer {
@@ -153,9 +152,7 @@ public class OutputLinkRenderer extends LinkRenderer {
             }
             return;
         }
-        Iterator<UIComponent> kids = component.getChildren().iterator();
-        while (kids.hasNext()) {
-            UIComponent kid = kids.next();
+        for (UIComponent kid : component.getChildren()) {
             kid.encodeBegin(context);
             if (kid.getRendersChildren()) {
                 kid.encodeChildren(context);
