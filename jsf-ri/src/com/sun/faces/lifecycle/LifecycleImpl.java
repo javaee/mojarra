@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.81 2007/08/20 22:31:30 rlubke Exp $
+ * $Id: LifecycleImpl.java,v 1.82 2007/08/20 22:42:59 rlubke Exp $
  */
 
 /*
@@ -166,7 +166,7 @@ public class LifecycleImpl extends Lifecycle {
                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "listener"));
         }
 
-        if (listeners.contains(listener)) {
+        if (isListenerPresent(listener)) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
                            "jsf.lifecycle.duplicate_phase_listener_detected",
@@ -369,6 +369,18 @@ public class LifecycleImpl extends Lifecycle {
         } else {
             return (false);
         }
+
+    }
+
+    private boolean isListenerPresent(PhaseListener listener) {
+
+        for (int i = 0, len = listeners.size(); i < len; i++) {
+            if (listeners.get(i).getClass().getName()
+                  .equals(listener.getClass().getName())) {
+                return true;
+            }
+        }
+        return false;
 
     }
         
