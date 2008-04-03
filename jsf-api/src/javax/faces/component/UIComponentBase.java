@@ -280,7 +280,7 @@ public abstract class UIComponentBase extends UIComponent {
             }
 
             // now resolve our own client id
-            this.clientId = this.id;
+            this.clientId = getId();
             if (this.clientId == null) {
                 this.clientId = context.getViewRoot().createUniqueId();
             }
