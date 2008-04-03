@@ -1,5 +1,5 @@
 /*
- * $Id: ByteArrayGuard.java,v 1.15 2007/04/27 22:01:00 ofung Exp $
+ * $Id: ByteArrayGuard.java,v 1.16 2007/07/19 15:32:45 rlubke Exp $
  */
 
 /*
@@ -53,7 +53,6 @@ import java.security.SecureRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
 
 /**
@@ -169,8 +168,8 @@ public final class ByteArrayGuard {
 
     /** 
      * Obtain a <code>Cipher</code> for decrypting data.
-     * @param keyGen
-     * @param random
+     * @param keyGen the key factory
+     * @param random secure random
      * @param rawKey must be 24 bytes in length.
      * @param iv initialization vector  @return a 3DES block cipher to be used for decryption based on the
      * specified key
@@ -197,8 +196,8 @@ public final class ByteArrayGuard {
 
     /** 
      * Obtain a <code>Cipher</code> for encrypting data.
-     * @param keyGen
-     * @param random
+     * @param keyGen the key factory
+     * @param random secure random
      * @param rawKey must be 24 bytes in length.  @return a 3DES block cipher to be used for encryption based on the
      * specified key
      * @return an initialized <code>Cipher</code> for decryption

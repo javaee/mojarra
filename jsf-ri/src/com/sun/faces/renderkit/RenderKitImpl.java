@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.54 2007/06/25 20:57:21 rlubke Exp $
+ * $Id: RenderKitImpl.java,v 1.55 2007/07/19 15:32:45 rlubke Exp $
  */
 
 /*
@@ -67,7 +67,7 @@ import com.sun.faces.util.Util;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.54 2007/06/25 20:57:21 rlubke Exp $
+ * @version $Id: RenderKitImpl.java,v 1.55 2007/07/19 15:32:45 rlubke Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -119,13 +119,13 @@ public class RenderKitImpl extends RenderKit {
                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "renderer");
             throw new NullPointerException(message);
         }
-        HashMap<Object, Renderer> renderers = null;
 
-
-        if (null == (renderers = rendererFamilies.get(family))) {
-            rendererFamilies
-                 .put(family, renderers = new HashMap<Object, Renderer>());
+        HashMap<Object,Renderer> renderers = rendererFamilies.get(family);
+        if (renderers == null) {
+            renderers = new HashMap<Object,Renderer>();
+            rendererFamilies.put(family, renderers);
         }
+
         renderers.put(rendererType, renderer);
 
     }
@@ -146,14 +146,9 @@ public class RenderKitImpl extends RenderKit {
 
         assert(rendererFamilies != null);
 
-        HashMap<Object, Renderer> renderers = null;
-        Renderer renderer = null;
+        HashMap<Object, Renderer> renderers = rendererFamilies.get(family);
+        return ((renderers != null) ? renderers.get(rendererType) : null);
 
-        if (null != (renderers = rendererFamilies.get(family))) {
-            renderer = renderers.get(rendererType);
-        }
-
-        return renderer;
     }
 
 
@@ -284,17 +279,16 @@ public class RenderKitImpl extends RenderKit {
 
     private String findMatch(String desiredContentTypeList,
                              String[] supportedTypes) {
-        String contentType = null;
 
+        String contentType = null;
         String[] desiredTypes = contentTypeSplit(desiredContentTypeList);
-        String curContentType = null, curDesiredType = null;
 
         // For each entry in the desiredTypes array, look for a match in
         // the supportedTypes array
         for (int i = 0, ilen = desiredTypes.length; i < ilen; i++) {
-            curDesiredType = desiredTypes[i];
+            String curDesiredType = desiredTypes[i];
             for (int j = 0, jlen = supportedTypes.length; j < jlen; j++) {
-                curContentType = supportedTypes[j].trim();
+                String curContentType = supportedTypes[j].trim();
                 if (curDesiredType.contains(curContentType)) {
                     if (curContentType.contains(RIConstants.HTML_CONTENT_TYPE)) {
                         contentType = RIConstants.HTML_CONTENT_TYPE;

@@ -93,12 +93,6 @@ public class RenderKitUtils {
      */
     private static final String XHTML_ATTR_PREFIX = "xml:";
 
-    /**
-     * <p>A placholder value for calling the non-exclude version
-     * of @{link #renderPassThruAttributes} and 
-     * {@link #renderXHTMLStyleBooleanAttributes}.</p>
-     */
-    private static final String[] EMPTY_EXCLUDES = new String[0];
     
     /**
      * <p><code>Boolean</code> attributes to be rendered 
@@ -240,6 +234,7 @@ public class RenderKitUtils {
      * @param component the component
      * @throws IllegalArgumentException if <code>context</code>
      *                                  is <code>null</code>
+     * @return an Iterator of the select items for the specified component
      */
     public static Iterator<SelectItem> getSelectItems(FacesContext context,
                                                       UIComponent component) {
@@ -268,9 +263,8 @@ public class RenderKitUtils {
                     throw new IllegalArgumentException(
                         MessageUtils.getExceptionMessageString(
                             MessageUtils.VALUE_NOT_SELECT_ITEM_ID,
-                            new Object[] {
-                                  component.getId(),
-                                  value.getClass().getName() }));
+                            component.getId(),
+                            value.getClass().getName()));
                 }
             } else if (kid instanceof UISelectItems) {
                 Object value = ((UISelectItems) kid).getValue();
@@ -289,9 +283,8 @@ public class RenderKitUtils {
                             throw new IllegalArgumentException(
                                   MessageUtils.getExceptionMessageString(
                                         MessageUtils.VALUE_NOT_SELECT_ITEM_ID,
-                                        new Object[]{
-                                              component.getId(),
-                                              value.getClass().getName()}));
+                                        component.getId(),
+                                        value.getClass().getName()));
                         }
                     }
                 } else if (value instanceof Map) {
@@ -310,11 +303,10 @@ public class RenderKitUtils {
                     throw new IllegalArgumentException(
                           MessageUtils.getExceptionMessageString(
                             MessageUtils.CHILD_NOT_OF_EXPECTED_TYPE_ID,
-                            new Object[] {
-                                  "UISelectItem/UISelectItems",
-                                  component.getFamily(),
-                                  component.getId(),
-                                  value != null ? value.getClass().getName() : "null"}));
+                            "UISelectItem/UISelectItems",
+                            component.getFamily(),
+                            component.getId(),
+                            value != null ? value.getClass().getName() : "null"));
                 }
             }
         }
@@ -527,6 +519,7 @@ public class RenderKitUtils {
      * The array is used for comparison purposes in the findMatch method.</p>
      *
      * @param accept An accept <code>String</code>
+     * @return an two dimensional array containing content-type/quality info
      */
     private static String[][] buildTypeArrayFromString(String accept) {
         String[][] arrayAccept = new String[MAX_CONTENT_TYPES][MAX_CONTENT_TYPE_PARTS];
@@ -534,10 +527,9 @@ public class RenderKitUtils {
         if ((accept == null) || (accept.length() == 0))
             return arrayAccept;
         // some helper variables
-        String token = null;
-        StringBuilder typeSubType = null;
-        String type = null;
-        String subtype = null;
+        StringBuilder typeSubType;
+        String type;
+        String subtype;
         String level = null;
         String quality = null;
 
@@ -545,7 +537,7 @@ public class RenderKitUtils {
         String[] types = Util.split(accept, CONTENT_TYPE_DELIMITER);
         int index = -1;
         for (int i=0; i<types.length; i++) {
-            token = types[i].trim();
+            String token = types[i].trim();
             index += 1;
             // Check to see if our accept string contains the delimiter that is used
             // to add uniqueness to a type/subtype, and/or delimits a qualifier value:
@@ -623,14 +615,10 @@ public class RenderKitUtils {
      * @return An <code>array</code> containing the parts of the preferred content type for the
      * client.  The information is stored as outlined in @{link #buildTypeArrayFromString}. 
      */
-    private static String[][] findMatch(String[][] clientContentTypes, String[][] serverSupportedContentTypes,
-        String[][] preferredContentType) {
-        // client/server array index variables
-        int cidx = 0;
-        int sidx = 0;
-                                                                                                                         
-        String browserType = "";
-        String serverType = "";
+    private static String[][] findMatch(String[][] clientContentTypes,
+                                        String[][] serverSupportedContentTypes,
+                                        String[][] preferredContentType) {
+
         // result array
         String[][] results = new String[MAX_CONTENT_TYPES][MAX_CONTENT_TYPE_PARTS];
         int resultidx = -1;
@@ -638,13 +626,13 @@ public class RenderKitUtils {
         double highestQFactor = 0;
         // the record with the highest quality
         int idx = 0;
-        for (sidx = 0; sidx < MAX_CONTENT_TYPES; sidx++) {
+        for (int sidx = 0; sidx < MAX_CONTENT_TYPES; sidx++) {
             // get server type
-            serverType = serverSupportedContentTypes[sidx][1];
+            String serverType = serverSupportedContentTypes[sidx][1];
             if (serverType != null) {
-                for (cidx = 0; cidx < MAX_CONTENT_TYPES; cidx++) {
+                for (int cidx = 0; cidx < MAX_CONTENT_TYPES; cidx++) {
                     // get browser type
-                    browserType = clientContentTypes[cidx][1];
+                    String browserType = clientContentTypes[cidx][1];
                     if (browserType != null) {
                         // compare them and check for wildcard
                         if ((browserType.equalsIgnoreCase(serverType)) || (browserType.equals("*"))) {
@@ -745,7 +733,7 @@ public class RenderKitUtils {
             // For the time being, this feature will need to be disabled when running
             // in a portlet.
             String mapping = Util.getFacesMapping(context);
-            String uri = null;
+            String uri;
             if ((mapping != null) && (Util.isPrefixMapped(mapping))) {
                 uri = mapping + '/' + RIConstants.SUN_JSF_JS_URI;
             } else {
@@ -780,9 +768,11 @@ public class RenderKitUtils {
      * must be rendered prior to using this method.</p>
      * @param formClientId the client ID of the form
      * @param commandClientId the client ID of the command
-     * @param target
-     *@param params the nested parameters, if any @return a String suitable for the <code>onclick</code> handler
+     * @param target the link target
+     * @param params the nested parameters, if any @return a String suitable for the <code>onclick</code> handler
      *  of a command
+     * @return the default <code>onclick</code> JavaScript for the default
+     *  command link component
      */
     public static String getCommandLinkOnClickScript(String formClientId,
                                                      String commandClientId,
@@ -853,6 +843,7 @@ public class RenderKitUtils {
      * 
      * @param context - the <code>FacesContext</code> for the current request
      * @param writer - the <code>Writer</code> to write the JS to
+     * @throws IOException if the JavaScript cannot be written
      * 
      */
     public static void writeSunJS(FacesContext context, Writer writer)
@@ -870,8 +861,7 @@ public class RenderKitUtils {
      * comments/empty lines it encoutners, and, if enabled, compressing the
      * result.</p>  This method should only be called when the application is
      * being initialized.
-     *
-     * @return the JavaScript sans comments and blank lines
+     * @param extContext the ExternalContext for this application
      */
     public synchronized static void loadSunJsfJs(ExternalContext extContext) {
         Map<String, Object> appMap =
