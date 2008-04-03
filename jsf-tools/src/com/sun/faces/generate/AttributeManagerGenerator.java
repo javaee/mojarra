@@ -1,5 +1,5 @@
 /*
- * $Id: AttributeManagerGenerator.java,v 1.1 2007/07/10 18:46:53 rlubke Exp $
+ * $Id: AttributeManagerGenerator.java,v 1.2 2007/08/28 10:47:37 rlubke Exp $
  */
 
 /*
@@ -245,6 +245,11 @@ public class AttributeManagerGenerator extends AbstractGenerator {
                 boolean attributeWritten = false;
                 for (int ii = 0, llen = props.length; ii < llen; ii++) {
                     PropertyBean aBean = props[ii];
+                    // The RI doesn't use any JS for the command button, so
+                    // treat
+                    if (key.contains("Button") && "onclick".equals(aBean.getPropertyName())) {
+                        aBean.setPassThrough(true);
+                    }
                     if (aBean.isPassThrough()) {
                         if ((key.contains("Radio") || "SelectManyCheckbox".equals(key))
                             && ("style".equals(aBean.getPropertyName())
@@ -258,6 +263,10 @@ public class AttributeManagerGenerator extends AbstractGenerator {
                         if (attributeWritten) {
                             writer.write(",\n");
                         }
+                    }
+                    if (key.contains("Button") && "onclick".equals(aBean.getPropertyName())) {
+                        // reset to the original state
+                        aBean.setPassThrough(false);
                     }
 
                 }
