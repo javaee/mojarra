@@ -1,5 +1,5 @@
 /*
- * $Id: ReplaceApplicationTestCase.java,v 1.9 2007/04/27 22:01:58 ofung Exp $
+ * $Id: ReplaceApplicationTestCase.java,v 1.10 2007/11/05 21:11:43 rlubke Exp $
  */
 
 /*
@@ -131,8 +131,6 @@ public class ReplaceApplicationTestCase extends AbstractTestCase {
 	assertTrue(-1 != page.asText().indexOf("com.sun.faces.systest.NewStateManager"));
 	assertTrue(-1 != page.asText().indexOf("com.sun.faces.systest.NewViewHandler"));
 	assertTrue(-1 != page.asText().indexOf("com.sun.faces.systest.NewApplication"));
-	//assertTrue(-1 != page.asText().indexOf("com.sun.faces.systest.NewManagedBeanFactory"));        
-	
     }
 
 }

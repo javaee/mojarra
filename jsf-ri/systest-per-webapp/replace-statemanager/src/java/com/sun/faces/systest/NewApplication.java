@@ -1,6 +1,6 @@
 /*
 
- * $Id: NewApplication.java,v 1.7 2007/04/27 22:01:59 ofung Exp $
+ * $Id: NewApplication.java,v 1.8 2007/11/05 21:11:46 rlubke Exp $
 
  */
 
@@ -69,7 +69,7 @@ import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 
 import javax.faces.application.NavigationHandler;
-
+import javax.faces.application.ResourceHandler;
 import javax.faces.application.ViewHandler;
 
 import javax.faces.application.StateManager;
@@ -218,8 +218,15 @@ public class NewApplication extends Application {
 
     }
 
+  
+   public void setResourceHandler(ResourceHandler rh) {
+       oldApp.setResourceHandler(rh);
+   }
 
 
+   public ResourceHandler getResourceHandler() {
+      return oldApp.getResourceHandler();
+   }
 
 
     public PropertyResolver getPropertyResolver() {

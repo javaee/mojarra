@@ -1,5 +1,5 @@
 /*
- * $Id: ELUtils.java,v 1.5 2007/11/02 00:30:16 rlubke Exp $
+ * $Id: ELUtils.java,v 1.6 2007/11/05 21:11:10 rlubke Exp $
  */
 
 /*
@@ -123,6 +123,9 @@ public class ELUtils {
     public static final ScopedAttributeELResolver SCOPED_RESOLVER =
         new ScopedAttributeELResolver();
 
+    public static final ResourceELResolver RESOURCE_RESOLVER =
+          new ResourceELResolver();
+
 
     // ------------------------------------------------------------ Constructors
 
@@ -163,6 +166,7 @@ public class ELUtils {
         addPropertyResolvers(composite, associate);
         addELResolvers(composite, associate.getApplicationELResolvers());
         composite.add(MANAGED_BEAN_RESOLVER);
+        composite.add(RESOURCE_RESOLVER);
         composite.add(BUNDLE_RESOLVER);
         composite.add(FACES_BUNDLE_RESOLVER);
         composite.add(MAP_RESOLVER);
@@ -197,6 +201,7 @@ public class ELUtils {
         composite.add(IMPLICIT_JSP_RESOLVER);
         composite.add(MANAGED_BEAN_RESOLVER);
         composite.add(FACES_BUNDLE_RESOLVER);
+        composite.add(RESOURCE_RESOLVER);
         addELResolvers(composite, associate.getELResolversFromFacesConfig());
         addVariableResolvers(composite, associate);
         addPropertyResolvers(composite, associate);

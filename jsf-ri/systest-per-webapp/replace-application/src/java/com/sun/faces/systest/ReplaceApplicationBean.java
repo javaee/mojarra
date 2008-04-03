@@ -1,5 +1,5 @@
 /*
- * $Id: ReplaceApplicationBean.java,v 1.6 2007/04/27 22:01:58 ofung Exp $
+ * $Id: ReplaceApplicationBean.java,v 1.7 2007/11/05 21:11:43 rlubke Exp $
  */
 
 /*
@@ -61,8 +61,4 @@ public class ReplaceApplicationBean {
 	return context.getApplication().toString();
     }
 
-    public String getManagedBeanFactoryClass() {
-        return NewManagedBeanFactory.mostRecentMBF.toString();
-    }
-    
 }
