@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.92 2007/07/31 16:22:58 rlubke Exp $
+ * $Id: UIInput.java,v 1.93 2007/07/31 16:32:41 rlubke Exp $
  */
 
 /*
@@ -784,7 +784,6 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                 ve.setValue(context.getELContext(), getLocalValue());
                 setValue(null);
                 setLocalValueSet(false);
-                return;
             } catch (ELException e) {
                 String messageStr = e.getMessage();
                 Throwable result = e.getCause();
@@ -1028,9 +1027,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         // If our value is valid and not empty, call all validators
         if (isValid() && !isEmpty(newValue)) {
             if (this.validators != null) {
-                Iterator<Validator> validators = this.validators.iterator();
-                while (validators.hasNext()) {
-                    Validator validator = validators.next();
+                for (Validator validator : this.validators) {
                     try {
                         validator.validate(context, this, newValue);
                     }
@@ -1042,9 +1039,10 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                         String validatorMessageString = getValidatorMessage();
 
                         if (null != validatorMessageString) {
-                            message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                                       validatorMessageString,
-                                                       validatorMessageString);
+                            message =
+                                  new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                                   validatorMessageString,
+                                                   validatorMessageString);
                             message.setSeverity(FacesMessage.SEVERITY_ERROR);
                         } else {
                             message = ve.getFacesMessage();
