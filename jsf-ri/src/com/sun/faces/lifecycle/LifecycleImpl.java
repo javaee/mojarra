@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.80 2007/07/20 20:15:13 rlubke Exp $
+ * $Id: LifecycleImpl.java,v 1.81 2007/08/20 22:31:30 rlubke Exp $
  */
 
 /*
@@ -167,8 +167,8 @@ public class LifecycleImpl extends Lifecycle {
         }
 
         if (listeners.contains(listener)) {
-            if (LOGGER.isLoggable(Level.WARNING)) {
-                LOGGER.log(Level.WARNING,
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE,
                            "jsf.lifecycle.duplicate_phase_listener_detected",
                            listener.getClass().getName());
             }
