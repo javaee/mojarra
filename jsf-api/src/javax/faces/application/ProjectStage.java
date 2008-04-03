@@ -81,10 +81,14 @@ public enum ProjectStage {
      */
     Production,
     /**
-     * <p class="changed_added_2_0">
-     * This value enables a minimal level of extensibility.  See
-     * {@link #toString} for details.
-     * </p>
+     * <p class="changed_added_2_0"> If the user specified value of the
+     * {@link #PROJECT_STAGE_PARAM_NAME} init param is not equal to any
+     * of the other constants in this enum, the value of {@link
+     * Application#getProjectStage} will be
+     * <code>ProjectStage.Extension</code>.  In this case, calling
+     * <code>toString()</code> on the instance returned from
+     * <code>Application.getProjectStage()</code> will return the user
+     * specified value. See {@link #toString} for details.  </p>
      */
     Extension;
 

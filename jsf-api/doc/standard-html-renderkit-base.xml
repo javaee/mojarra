@@ -2463,19 +2463,18 @@ attribute.</p>
           encoding.</p>
 
 	  <li><p>Look in the component attribute <code>Map</code> for a
-	  value under the key <em>name</em>.</p></li>
+	  value under the key <em>name</em>.  A value is required for
+	  this attribute.</p></li>
 
 	  <li><p>Look in the component attribute <code>Map</code> for a
-	  value under the key <em>library</em>.</p></li>
+	  value under the key <em>library</em>.  This attribute is
+	  optional, therefore, <em>library</em> may be
+	  <code>null</code>.</p></li>
 
-	  <li><p>If values were found for both <em>name</em> and
-	  <em>library</em>, create the resource by calling
+	  <li><p>Create the resource by calling
 	  <code>Application.getResourceHandler.createResource(<em>name</em>,
-	  <em>library</em>);</code> </p></li>
+	  <em>library</em>);</code>.</p></li>
 
-	  <li><p>If a value was found for only <em>name</em>, create the
-	  resource by calling
-	  <code>Application.getResourceHandler.createResource(<em>name</em>);</code>
 	  </p></li>
 
 	  <li><p>Otherwise throw an <code>IOException</code> with a

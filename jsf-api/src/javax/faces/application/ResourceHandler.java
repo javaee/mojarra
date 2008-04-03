@@ -55,6 +55,40 @@ import javax.faces.context.FacesContext;
  *
  * <div class="changed_added_2_0">
  *
+ * <p class="javadocSection">Packaging Resources</p>
+ *
+ * <ul>
+ *
+ *  <p>ResourceHandler defines a path based packaging convention for
+ *  resources.  The default implementation of
+ *  <code>ResourceHandler</code> must support packaging resources in the
+ *  classpath or in the web application root. See section 2.6.1 of the
+ *  spec prose document <a
+ *  href="../../../overview-summary.html#prose_document">linked in the
+ *  overview summary</a> for the normative specification of packaging
+ *  resources.</p>
+
+ * <p>Briefly, The default implementation must support packaging
+ * resources in the web application root under the path</p>
+ *
+ * <p><code>resources/&lt;resourceIdentifier&gt;</code></p>
+ *
+ * <p>relative to the web app root.</p>
+ *
+ * <p>For the default implementation, resources packaged in the
+ * classpath must reside under the JAR entry name</p>
+ *
+ * <p><code>META-INF/resources/&lt;resourceIdentifier&gt;</code></p>
+
+ * <p><code>&lt;resourceIdentifier&gt;</code> consists of several
+ * segments, specified as follows.</p>
+
+ * <p><code>[localePrefix/][libraryName/][libraryVersion/]resourceName[/resourceVersion]</code></p>
+ *
+ * <p>Note that <em>resourceName</em> is the only required segment.</p>
+ *
+ * </ul>
+ *
  * <p class="javadocSection">Encoding Resources</p>
  *
  * <ul>

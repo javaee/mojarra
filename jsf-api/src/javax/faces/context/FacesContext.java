@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.75 2008/01/31 05:19:38 edburns Exp $
+ * $Id: FacesContext.java,v 1.76 2008/01/31 13:49:45 edburns Exp $
  */
 
 /*
@@ -428,13 +428,6 @@ public abstract class FacesContext {
      * startup" must be supported during application startup time.  The
      * result of calling a method during application startup time that
      * does not have this designation is undefined.</p> 
-
-     * <div class="changed_added_2_0"> <ol>
-     *
-     * <p>The behavior of calling any methods other than those specified
-     * above, on a <code>FacesContext</code> instance obtained during
-     * startup time, is undefined.</p>
-     * </div>
      */
     public static FacesContext getCurrentInstance() {
 
