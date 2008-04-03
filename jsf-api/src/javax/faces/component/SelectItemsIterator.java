@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemsIterator.java,v 1.17 2007/04/27 22:00:03 ofung Exp $
+ * $Id: SelectItemsIterator.java,v 1.18 2008/01/08 22:29:24 rlubke Exp $
  */
 
 /*
@@ -48,6 +48,7 @@ import java.util.NoSuchElementException;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.ListIterator;
+import java.util.Collection;
 
 import javax.faces.model.SelectItem;
 
@@ -122,6 +123,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
      *
      * @throws NoSuchElementException if there are no more elements
      */
+    @SuppressWarnings({"unchecked"})
     public SelectItem next() {
 
         if (!hasNext()) {
@@ -150,8 +152,8 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
             } else if (value instanceof SelectItem[]) {
                 items = Arrays.asList((SelectItem[]) value).iterator();
                 return (next());
-            } else if (value instanceof List) {
-                items = TypedCollections.dynamicallyCastList((List) value, SelectItem.class).iterator();
+              } else if (value instanceof Collection) {
+                items = ((Collection) value).iterator();
                 return (next());
             } else if (value instanceof Map) {
                 List<SelectItem> list = new ArrayList<SelectItem>(((Map) value).size());

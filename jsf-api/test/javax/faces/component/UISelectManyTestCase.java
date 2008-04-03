@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectManyTestCase.java,v 1.31 2007/04/27 22:00:15 ofung Exp $
+ * $Id: UISelectManyTestCase.java,v 1.32 2008/01/08 22:29:24 rlubke Exp $
  */
 
 /*
@@ -54,6 +54,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
 
 
 /**
@@ -313,6 +315,44 @@ public class UISelectManyTestCase extends UIInputTestCase {
 
     }
 
+    // Test validation against a nested Set of available options
+    public void testValidateNestedSet() throws Exception {
+
+        // Set up UISelectMany with nested UISelectItems
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        root.getChildren().add(component);
+        UISelectMany selectMany = (UISelectMany) component;
+        UISelectItems selectItems = new UISelectItems();
+        selectItems.setValue(setupOptionsSet());
+        selectMany.getChildren().add(selectItems);
+        selectMany.setRequired(true);
+        checkMessages(0);
+
+        // Verify that all legal values will validate
+        for (int i = 0; i < legalValues.length; i++) {
+            selectMany.setValid(true);
+            selectMany.setSubmittedValue
+                (new Object[] { legalValues[0], legalValues[i] });
+            selectMany.validate(facesContext);
+            assertTrue("Value '" + legalValues[i] + "' found",
+                       selectMany.isValid());
+            checkMessages(0);
+        }
+
+        // Verify that illegal values will not validate
+        for (int i = 0; i < illegalValues.length; i++) {
+            selectMany.setValid(true);
+            selectMany.setSubmittedValue
+                (new Object[] { legalValues[0], illegalValues[i] });
+            selectMany.validate(facesContext);
+            assertTrue("Value '" + illegalValues[i] + "' not found",
+                       !selectMany.isValid());
+            checkMessages(i + 1);
+        }
+
+
+    }
+
 
     // Test validation of a required field
     public void testValidateRequired() throws Exception {
@@ -443,6 +483,28 @@ public class UISelectManyTestCase extends UIInputTestCase {
               new SelectItem("C2"),
               new SelectItem("C3") });
         List options = new ArrayList();
+        options.add(new SelectItem("A1"));
+        group = new SelectItemGroup("Group B");
+        group.setSelectItems(new SelectItem[]
+            { new SelectItem("B1"),
+              subgroup,
+              new SelectItem("B2"),
+              new SelectItem("B3") });
+        options.add(group);
+        options.add(new SelectItem("A2"));
+        options.add(new SelectItem("A3"));
+        return (options);
+    }
+
+    // Create an options list with nested groups
+    protected Set setupOptionsSet() {
+        SelectItemGroup group, subgroup;
+        subgroup = new SelectItemGroup("Group C");
+        subgroup.setSelectItems(new SelectItem[]
+            { new SelectItem("C1"),
+              new SelectItem("C2"),
+              new SelectItem("C3") });
+        Set options = new HashSet();
         options.add(new SelectItem("A1"));
         group = new SelectItemGroup("Group B");
         group.setSelectItems(new SelectItem[]
