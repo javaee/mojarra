@@ -1,17 +1,16 @@
 package com.sun.faces.application.resource;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.JarURLConnection;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Set;
-import java.util.jar.JarEntry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
+
+import com.sun.faces.util.FacesLogger;
 
 /**
  * <p>
@@ -25,6 +24,7 @@ import javax.faces.context.FacesContext;
 public class WebappResourceHelper extends ResourceHelper {
 
     private static final WebappResourceHelper INSTANCE = new WebappResourceHelper();
+    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
     private static final String BASE_RESOURCE_PATH = "/resources";
 
@@ -162,11 +162,12 @@ public class WebappResourceHelper extends ResourceHelper {
             // ok, subdirectories exist, so find the latest 'version' directory
             String version = getVersion(resourcePaths);
             if (version == null) {
-                // Problem here - they aren't following the property format
-                // RELEASE_PENDING (rlubke) i18n
-                throw new MalformedResourcePathException("Resource '"
-                                                         + resourceName
-                                                         + "' represents a directory, but there are no discernable versions within said directory");
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.log(Level.WARNING,
+                               "jsf.application.resource.unable_to_determine_resource_version.",
+                               resourceName);
+                    return null;
+                }
             }
             if (library != null) {
                 return new ResourceInfo(library, resourceName, version);
