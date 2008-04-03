@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.36 2008/01/16 19:01:49 edburns Exp $
+ * $Id: FacesServlet.java,v 1.37 2008/01/16 21:02:53 edburns Exp $
  */
 
 /*
@@ -203,11 +203,11 @@ public final class FacesServlet implements Servlet {
 
 
     /**
-     * <p class="changed">Process an incoming request, and create the
+     * <p class="changed_added_2_0">Process an incoming request, and create the
      * corresponding response according to the following
      * specification.</p>
      * 
-     * <div class="changed">
+     * <div class="changed_added_2_0">
      *
      * <p>If the <code>request</code> and <code>response</code>
      * arguments to this method are not instances of

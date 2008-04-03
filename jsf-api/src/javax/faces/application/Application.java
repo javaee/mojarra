@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.52 2008/01/16 03:09:50 edburns Exp $
+ * $Id: Application.java,v 1.53 2008/01/16 21:02:52 edburns Exp $
  */
 
 /*
@@ -68,13 +68,13 @@ import javax.el.ELResolver;
 
 
 /**
- * <p><strong>Application</strong> represents a per-web-application
- * singleton object where applications based on JavaServer Faces (or
- * implementations wishing to provide extended functionality) can
- * register application-wide singletons that provide functionality
- * required by JavaServer Faces.  Default implementations of each
- * object are provided for cases where the application does not choose
- * to customize the behavior.</p>
+ * <p class="changed_modified_2_0"><strong>Application</strong>
+ * represents a per-web-application singleton object where applications
+ * based on JavaServer Faces (or implementations wishing to provide
+ * extended functionality) can register application-wide singletons that
+ * provide functionality required by JavaServer Faces.  Default
+ * implementations of each object are provided for cases where the
+ * application does not choose to customize the behavior.</p>
  *
  * <p>The instance of {@link Application} is created by calling the
  * <code>getApplication()</code> method of {@link ApplicationFactory}.
@@ -249,11 +249,11 @@ public abstract class Application {
 
 
     /**
-     * <p class="changed">Return the singleton, stateless, thread-safe {@link
+     * <p class="changed_added_2_0">Return the singleton, stateless, thread-safe {@link
      * ResourceHandler} for this application.  The JSF implementation
      * must support the following techniques for declaring an alternate
      * implementation of <code>ResourceHandler</code>.</p>
-     * <div class="changed">
+     * <div class="changed_added_2_0">
 
      * <ul>
 
@@ -289,10 +289,10 @@ public abstract class Application {
 
     /**
 
-     * <p class="changed">Set the {@link ResourceHandler} instance that will be utilized
+     * <p class="changed_added_2_0">Set the {@link ResourceHandler} instance that will be utilized
      * for rendering the markup for resources, and for satisfying client
      * requests to serve up resources.</p>
-    * <div class="changed">
+    * <div class="changed_added_2_0">
      *
      * @param resourceHandler The new <code>ResourceHandler</code> instance
      *

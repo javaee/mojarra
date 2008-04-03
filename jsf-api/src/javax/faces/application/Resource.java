@@ -45,14 +45,14 @@ import java.util.Map;
 import javax.faces.context.FacesContext;
 
 /**
- * <p class="changed">An instance of <code>Resource</code> is a Java
+ * <p class="changed_added_2_0">An instance of <code>Resource</code> is a Java
  * object representation of the artifact that is served up in response
  * to a <i>resource request</i> from the client.  Instances of
  * <code>Resource</code> are normally created and initialized via calls
  * to {@link ResourceHandler@createResource}.  See the documentation for
  * {@link ResourceHandler} for more information.</p>
  *
- * <div class="changed">
+ * <div class="changed_added_2_0">
  * </div>
  *
  * @since 2.0
@@ -70,7 +70,7 @@ public abstract class Resource {
 
 
     /**
-     * <p class="changed">Return the MIME content-type for this resource.</p>
+     * <p class="changed_added_2_0">Return the MIME content-type for this resource.</p>
      * @return the MIME content-type for this resource.
      */
     public String getContentType() {
@@ -81,7 +81,7 @@ public abstract class Resource {
 
 
     /**
-     * <p class="changed">Set the MIME content-type for this resource.
+     * <p class="changed_added_2_0">Set the MIME content-type for this resource.
      * The default implementation performs no validation on the
      * argument.</p>
      * @param contentType the MIME content-type for this resource
@@ -94,7 +94,7 @@ public abstract class Resource {
 
 
     /**
-     * <p class="changed">Return the libraryName for this resource.  May
+     * <p class="changed_added_2_0">Return the libraryName for this resource.  May
      * be <code>null</code>.  The libraryName for a resource is an
      * optional String that indicates membership in a "resource
      * library".  All resources with the same libraryName belong to the
@@ -112,7 +112,7 @@ public abstract class Resource {
 
 
     /**
-     * <p class="changed">Set the libraryName for this resource.</p>
+     * <p class="changed_added_2_0">Set the libraryName for this resource.</p>
      * @param libraryName the libraryName for this resource.  May be
      * <code>null</code>.
      */
@@ -124,7 +124,7 @@ public abstract class Resource {
 
 
     /**
-     * <p class="changed">Return the resourceName for this resource.
+     * <p class="changed_added_2_0">Return the resourceName for this resource.
      * Will never be null.  All <code>Resource</code> instances must
      * have a resourceName.</p>
      * @return Return the resourceName for this resource.  Will never be
@@ -138,7 +138,7 @@ public abstract class Resource {
 
 
     /**
-     * <p class="changed">Set the resourceName for this resource.</p>
+     * <p class="changed_added_2_0">Set the resourceName for this resource.</p>
      * @param resourceName a non-null String.
      *
      * @throws NullPointerException if argument
@@ -156,7 +156,7 @@ public abstract class Resource {
 
 
     /**
-     * <p class="changed">If the current request is a resource request,
+     * <p class="changed_added_2_0">If the current request is a resource request,
      * (that is, {@link ResourceHandler#isResourceRequest} returns
      * <code>true</code>), return an <code>InputStream</code> containing
      * the bytes of the resource.  Otherwise, throw an

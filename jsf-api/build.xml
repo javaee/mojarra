@@ -624,7 +624,7 @@ javax.faces.level=ALL
 
         <copy todir="${build.javadocs.dir}/">
            <fileset dir="${doc.dir}">
-             <include name="changed-*.png" />
+             <include name="changed*.png" />
            </fileset>
         </copy>
 
