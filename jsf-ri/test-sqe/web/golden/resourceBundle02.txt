@@ -1,4 +1,0 @@
-
-
-
-Value from Faces component is Value From ResourceBundle.
