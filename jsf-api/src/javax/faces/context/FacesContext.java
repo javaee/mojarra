@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.74 2008/01/28 20:55:35 rlubke Exp $
+ * $Id: FacesContext.java,v 1.75 2008/01/31 05:19:38 edburns Exp $
  */
 
 /*
@@ -55,10 +55,11 @@ import javax.el.ELContext;
 
 
 /**
- * <p><strong>FacesContext</strong> contains all of the per-request state
- * information related to the processing of a single JavaServer Faces request,
- * and the rendering of the corresponding response.  It is passed to, and
- * potentially modified by, each phase of the request processing lifecycle.</p>
+ * <p><strong class="changed_modified_2_0">FacesContext</strong>
+ * contains all of the per-request state information related to the
+ * processing of a single JavaServer Faces request, and the rendering of
+ * the corresponding response.  It is passed to, and potentially
+ * modified by, each phase of the request processing lifecycle.</p>
  *
  * <p>A {@link FacesContext} instance is associated with a particular
  * request at the beginning of request processing, by a call to the
@@ -79,9 +80,14 @@ public abstract class FacesContext {
 
 
     /**
-     * <p>Return the {@link Application} instance associated with this
-     * web application.</p>
-     *
+     * <p><span class="changed_modified_2_0">Return</span> the {@link
+     * Application} instance associated with this web application.</p>
+
+     * <p class="changed_added_2_0">It is valid to call this method
+     * during application startup.  If called during application
+     * startup, returns the correct current {@link
+     * javax.faces.application.Application} instance.</p>
+
      * @throws IllegalStateException if this method is called after
      *  this instance has been released
      */
@@ -156,9 +162,17 @@ public abstract class FacesContext {
     }
     
     /**
-     * <p>Return the {@link ExternalContext} instance for this
-     * <code>FacesContext</code> instance.</p>
-     *
+     * <p><span class="changed_modified_2_0">Return</span> the {@link
+     * ExternalContext} instance for this <code>FacesContext</code>
+     * instance.</p>
+
+     * <p class="changed_added_2_0">It is valid to call this method
+     * during application startup.  If called during application
+     * startup, this method returns an {@link ExternalContext} instance
+     * with the special behaviors indicated in the javadoc for that
+     * class.  Methods document as being valid to call during
+     * application startup must be supported.</p>
+
      * @throws IllegalStateException if this method is called after
      *  this instance has been released
      */
@@ -296,8 +310,14 @@ public abstract class FacesContext {
 
 
     /**
-     * <p>Return the root component that is associated with the this request.
-     * </p>
+     * <p><span class="changed_modified_2_0">Return</span> the root
+     * component that is associated with the this request.  </p>
+
+     * <p class="changed_added_2_0">It is valid to call this method
+     * during application startup.  If called during application
+     * startup, this method returns a new <code>UIViewRoot</code> with
+     * its locale set to <code>Locale.getDefault()</code>.</p>
+
      *
      * @throws IllegalStateException if this method is called after
      *  this instance has been released
@@ -401,46 +421,18 @@ public abstract class FacesContext {
 
 
     /**
-     * <p class="changed_modified_2_0">Return the {@link FacesContext} instance for the request that
-     * is being processed by the current thread.  If called during
-     * application initialization, this method must return an instance
-     * with the following behaviors.</p>
-     * <div class="changed_modified_2_0">
-     * <ol>
-     *
-     * <li><p><code>getApplication()</code> returns the correct current {@link
-     * javax.faces.application.Application} instance.</p></li>
-     *
-     * <li><p><code>getViewRoot()</code> returns a new <code>UIViewRoot</code>
-     * with its locale set to <code>Locale.getDefault()</code>
-     *
-     * <li><p><code>getExternalContext()</code> returns an
-     * <code>ExternalContext</code> instance with the following
-     * behaviors.</p></li>
-     *
-     * <ol type="a">
-     *
-     * <li><p><code>getApplicationMap()</code> returns a <code>Map</code> that
-     * is backed by the same container context instance
-     * (<code>ServletContext</code> or <code>PortletContext</code>) as the one
-     * returned by calling <code>getApplicationMap()</code> on the
-     * <code>ExternalContext</code> returned by the <code>FacesContext</code>
-     * during an actual request.</p></li>
-     *
-     * <li><p><code>getInitParameter()</code> calls through to the actual
-     * container context to return the init parameter value</p></li>
-     *
-     * <li><p><code>getInitParameterMap()</code> returns a <code>Map</code>
-     * that is backed by the same container context instance
-     * (<code>ServletContext</code> or <code>PortletContext</code>) as the one
-     * returned by calling <code>getInitParameterMap()</code> on the
-     * <code>ExternalContext</code> returned by the <code>FacesContext</code>
-     * during an actual request.</p></li>
-     *
-     * </ol>
+     * <p class="changed_modified_2_0">Return the {@link FacesContext}
+     * instance for the request that is being processed by the current
+     * thread.  If called during application initialization, any method
+     * documented as "valid to call this method during application
+     * startup" must be supported during application startup time.  The
+     * result of calling a method during application startup time that
+     * does not have this designation is undefined.</p> 
+
+     * <div class="changed_added_2_0"> <ol>
      *
      * <p>The behavior of calling any methods other than those specified
-     * above, on a <code>FacesContext<code> instance obtained during
+     * above, on a <code>FacesContext</code> instance obtained during
      * startup time, is undefined.</p>
      * </div>
      */

@@ -35,7 +35,7 @@
  */
 
 /*
- * $Id: ExternalContext.java,v 1.37 2008/01/29 21:02:45 edburns Exp $
+ * $Id: ExternalContext.java,v 1.38 2008/01/31 05:19:38 edburns Exp $
  */
  
 /*
@@ -69,6 +69,15 @@ import java.util.Map;
  * <p>In the method descriptions below, paragraphs starting with
  * <em>Servlet:</em> and <em>Portlet:</em> denote behavior that is
  * specific to that particular environment.</p>
+
+ * <p class="changed_added_2_0">If a reference to an
+ * <code>ExternalContext</code> is obtained during application startup
+ * time, any method documented as "valid to call this method during
+ * application startup" must be supported during application startup
+ * time.  The result of calling a method during application startup time
+ * that does not have this designation is undefined.</p>
+
+
  */
 
 public abstract class ExternalContext {
@@ -204,13 +213,13 @@ public abstract class ExternalContext {
     
 
     /**
-     * <p>Return a mutable <code>Map</code> representing the application
-     * scope attributes for the current application.  The returned
-     * <code>Map</code> must implement the entire contract for a
-     * modifiable map as described in the JavaDocs for
-     * <code>java.util.Map</code>.  Modifications made in the
-     * <code>Map</code> must cause the corresponding changes in the set
-     * of application scope attributes.  Particularly the
+     * <p><span class="changed_modified_2_0">Return</span> a mutable
+     * <code>Map</code> representing the application scope attributes
+     * for the current application.  The returned <code>Map</code> must
+     * implement the entire contract for a modifiable map as described
+     * in the JavaDocs for <code>java.util.Map</code>.  Modifications
+     * made in the <code>Map</code> must cause the corresponding changes
+     * in the set of application scope attributes.  Particularly the
      * <code>clear()</code>, <code>remove()</code>, <code>put()</code>,
      * <code>putAll()</code>, and <code>get()</code> operations must
      * take the appropriate action on the underlying data structure.</p>
@@ -227,6 +236,15 @@ public abstract class ExternalContext {
      * called on removal.  Any exception thrown by the
      * <code>PreDestroy</code> annotated methods must by caught and not
      * rethrown.  The exception may be logged.</p>
+
+     * <p class="changed_added_2_0">It is valid to call this method
+     * during application startup.  If called at startup time, this
+     * method returns a <code>Map</code> that is backed by the same
+     * container context instance (<code>ServletContext</code> or
+     * <code>PortletContext</code>) as the one returned by calling
+     * <code>getApplicationMap()</code> on the
+     * <code>ExternalContext</code> returned by the
+     * <code>FacesContext</code> during an actual request.</p>
      *
      * <p><em>Servlet:</em>  This must be the set of attributes available via
      * the <code>javax.servlet.ServletContext</code> methods
@@ -265,6 +283,16 @@ public abstract class ExternalContext {
      * specified file or <code>null</code> if the MIME type is not
      * known.  The MIME type is determined by the container.</p>
 
+     * <p class="changed_added_2_0">It is valid to call this method
+     * during application startup.  If called during application
+     * startup, this method calls through to the
+     * <code>getMimeType()</code> method on the same container
+     * context instance (<code>ServletContext</code> or
+     * <code>PortletContext</code>) as the one used when calling
+     * <code>getMimeType()</code> on the
+     * <code>ExternalContext</code> returned by the
+     * <code>FacesContext</code> during an actual request.</p>
+
      * <div class="changed_added_2_0">
  
      * <p><em>Servlet:</em> This must be the value returned by the
@@ -293,8 +321,18 @@ public abstract class ExternalContext {
 
 
     /**
-     * <p>Return the application environment object instance for the current
+     * <p><span class="changed_modified_2_0">Return</span> the
+     * application environment object instance for the current
      * appication.</p>
+
+     * <p class="changed_added_2_0">It is valid to call this method
+     * during application startup.  If called during application
+     * startup, this returns the same container context instance
+     * (<code>ServletContext</code> or <code>PortletContext</code>) as
+     * the one returned when calling <code>getContext()</code> on the
+     * <code>ExternalContext</code> returned by the
+     * <code>FacesContext</code> during an actual request.</p>
+
      *
      * <p><em>Servlet:</em>  This must be the current application's
      * <code>javax.servlet.ServletContext</code> instance.</p>
@@ -306,8 +344,8 @@ public abstract class ExternalContext {
 
 
     /**
-     * <p>Return the value of the specified application initialization
-     * parameter (if any).</p>
+     * <p><span class="changed_modified_2_0">Return</span> the value of
+     * the specified application initialization parameter (if any).</p>
      *
      * <p><em>Servlet:</em> This must be the result of the
      * <code>javax.servlet.ServletContext</code> method
@@ -316,7 +354,12 @@ public abstract class ExternalContext {
      * <p><em>Portlet:</em> This must be the result of the
      * <code>javax.portlet.PortletContext</code> method
      * <code>getInitParameter(name)</code>.</p>
-     *
+
+     * <p class="changed_added_2_0">It is valid to call this method
+     * during application startup.  If called during application
+     * startup, this method calls through to the actual container
+     * context to return the init parameter value.</p>
+
      * @param name Name of the requested initialization parameter
      *
      * @throws NullPointerException if <code>name</code>
@@ -326,13 +369,23 @@ public abstract class ExternalContext {
 
 
     /**
-     * <p>Return an immutable <code>Map</code> whose keys are the set of
-     * application initialization parameter names configured for this
-     * application, and whose values are the corresponding parameter
-     * values.  The returned <code>Map</code> must implement the entire
-     * contract for an unmodifiable map as described in the JavaDocs
-     * for <code>java.util.Map</code>.</p>
-     *
+     * <p><span class="changed_modified_2_0">Return</span></span> an
+     * immutable <code>Map</code> whose keys are the set of application
+     * initialization parameter names configured for this application,
+     * and whose values are the corresponding parameter values.  The
+     * returned <code>Map</code> must implement the entire contract for
+     * an unmodifiable map as described in the JavaDocs for
+     * <code>java.util.Map</code>.</p>
+
+     * <p class="changed_added_2_0">It is valid to call this method
+     * during application startup.  If called during application
+     * startup, this method returns a <code>Map</code> that is backed by
+     * the same container context instance (<code>ServletContext</code>
+     * or <code>PortletContext</code>) as the one returned by calling
+     * <code>getInitParameterMap()</code> on the
+     * <code>ExternalContext</code> returned by the
+     * <code>FacesContext</code> during an actual request.</p>
+
      * <p><em>Servlet:</em> This result must be as if it were synthesized
      * by calling the <code>javax.servlet.ServletContext</code>
      * method <code>getInitParameterNames</code>, and putting
@@ -825,9 +878,21 @@ public abstract class ExternalContext {
     
 
     /**
-     * <p>Return a <code>URL</code> for the application resource mapped to the
-     * specified path, if it exists; otherwise, return <code>null</code>.</p>
+     * <p><span class="changed_modified_2_0">Return</span> a
+     * <code>URL</code> for the application resource mapped to the
+     * specified path, if it exists; otherwise, return
+     * <code>null</code>.</p>
      *
+     * <p class="changed_added_2_0">It is valid to call this method
+     * during application startup.  If called during application
+     * startup, this method calls through to the
+     * <code>getResource()</code> method on the same container
+     * context instance (<code>ServletContext</code> or
+     * <code>PortletContext</code>) as the one used when calling
+     * <code>getResource()</code> on the
+     * <code>ExternalContext</code> returned by the
+     * <code>FacesContext</code> during an actual request.</p>
+
      * <p><em>Servlet:</em> This must be the value returned by the
      * <code>javax.servlet.ServletContext</code> method
      * <code>getResource(path)</code>.</p>
@@ -848,9 +913,20 @@ public abstract class ExternalContext {
 
 
     /**
-     * <p>Return an <code>InputStream</code> for an application resource
-     * mapped to the specified path, if it exists; otherwise, return
+     * <p><span class="changed_modified_2_0">Return</span> an
+     * <code>InputStream</code> for an application resource mapped to
+     * the specified path, if it exists; otherwise, return
      * <code>null</code>.</p>
+
+     * <p class="changed_added_2_0">It is valid to call this method
+     * during application startup.  If called during application
+     * startup, this method calls through to the
+     * <code>getResourceAsStream()</code> method on the same container
+     * context instance (<code>ServletContext</code> or
+     * <code>PortletContext</code>) as the one used when calling
+     * <code>getResourceAsStream()</code> on the
+     * <code>ExternalContext</code> returned by the
+     * <code>FacesContext</code> during an actual request.</p>
      *
      * <p><em>Servlet:</em> This must be the value returned by the
      * <code>javax.servlet.ServletContext</code> method
@@ -870,9 +946,20 @@ public abstract class ExternalContext {
 
 
     /**
-     * <p>Return the <code>Set</code> of resource paths for all application
-     * resources whose resource path starts with the specified argument.</p>
+     * <p><span class="changed_modified_2_0">Return</span> the
+     * <code>Set</code> of resource paths for all application resources
+     * whose resource path starts with the specified argument.</p>
      *
+     * <p class="changed_added_2_0">It is valid to call this method
+     * during application startup.  If called during application
+     * startup, this method calls through to the
+     * <code>getResourcePaths()</code> method on the same container
+     * context instance (<code>ServletContext</code> or
+     * <code>PortletContext</code>) as the one used when calling
+     * <code>getResourcePaths()</code> on the
+     * <code>ExternalContext</code> returned by the
+     * <code>FacesContext</code> during an actual request.</p>
+
      * <p><em>Servlet:</em> This must be the value returned by the
      * <code>javax.servlet.ServletContext</code> method
      * <code>getResourcePaths(path).</code></p>
@@ -1070,7 +1157,17 @@ public abstract class ExternalContext {
 
 
     /**
-     * <p>Log the specified message to the application object.</p>
+     * <p><span class="changed_modified_2_0">Log</span> the specified
+     * message to the application object.</p>
+
+     * <p class="changed_added_2_0">It is valid to call this method
+     * during application startup.  If called during application
+     * startup, this calls the <code>log()</code> method on the same
+     * container context instance (<code>ServletContext</code> or
+     * <code>PortletContext</code>) as the one used during a call to
+     * <code>log()</code> on the <code>ExternalContext</code> returned
+     * by the <code>FacesContext</code> during an actual request.</p>
+
      *
      * <p><em>Servlet:</em> This must be performed by calling the
      * <code>javax.servlet.ServletContext</code> method
@@ -1089,7 +1186,16 @@ public abstract class ExternalContext {
 
 
     /**
-     * <p>Log the specified message and exception to the application object.</p>
+     * <p><span class="changed_modified_2_0">Log</span> the specified
+     * message and exception to the application object.</p>
+
+     * <p class="changed_added_2_0">It is valid to call this method
+     * during application startup.  If called during application
+     * startup, this calls the <code>log()</code> method on the same
+     * container context instance (<code>ServletContext</code> or
+     * <code>PortletContext</code>) as the one used when calling
+     * <code>log()</code> on the <code>ExternalContext</code> returned
+     * by the <code>FacesContext</code> during an actual request.</p>
      *
      * <p><em>Servlet:</em> This must be performed by calling the
      * <code>javax.servlet.ServletContext</code> method

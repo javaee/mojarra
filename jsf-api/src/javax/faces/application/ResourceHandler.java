@@ -101,6 +101,20 @@ public abstract class ResourceHandler {
      */
     public static final String RESOURCE_IDENTIFIER = "/javax.faces.resource";
 
+
+    /**
+     * <p class="changed_added_2_0">The name of a key within the
+     * application message bundle named by the return from {@link
+     * Application#getMessageBundle} whose value is the locale prefix
+     * used to find a packaged resource to return from {@link
+     * #createResource} (or one of its variants).
+     */
+
+    public static final String LOCALE_PREFIX = 
+	"javax.faces.resource.localePrefix";
+
+
+
     /**
      * <p class="changed_added_2_0">The <code>ServletContext</code> init
      * parameter consulted by the {@link #handleResourceRequest} to tell
@@ -134,7 +148,17 @@ public abstract class ResourceHandler {
      * <code>resourceName</code>.  The content-type of the resource is
      * derived by passing the <em>resourceName</em> to {@link
      * javax.faces.context.ExternalContext#getMimeType}</p>
-     *
+
+     * <div class="changed_added_2_0">
+
+     * <p>The algorithm specified in section 2.6.1.4 of the spec prose
+     * document <a
+     * href="../../../overview-summary.html#prose_document">linked in
+     * the overview summary</a> must be executed to create the
+     * <code>Resource</code></p>
+
+     * </div>
+
      * @param resourceName the name of the resource.
      *
      * @throws NullPointerException if <code>resourceName</code> is
@@ -155,6 +179,16 @@ public abstract class ResourceHandler {
      * <em>resourceName</em> to
      * {@link javax.faces.context.ExternalContext#getMimeType}.</p>
      *
+     * <div class="changed_added_2_0">
+
+     * <p>The algorithm specified in section 2.6.1.4 of the spec prose
+     * document <a
+     * href="../../../overview-summary.html#prose_document">linked in
+     * the overview summary</a> must be executed to create the
+     * <code>Resource</code></p>
+
+     * </div>
+
      * @param resourceName the name of the resource.
      *
      * @param libraryName the name of the library in which this resource
@@ -178,6 +212,16 @@ public abstract class ResourceHandler {
      * that claims to have the content-type given by the argument
      * <code>content-type</code>.</p>
      *
+     * <div class="changed_added_2_0">
+
+     * <p>The algorithm specified in section 2.6.1.4 of the spec prose
+     * document <a
+     * href="../../../overview-summary.html#prose_document">linked in
+     * the overview summary</a> must be executed to create the
+     * <code>Resource</code></p>
+
+     * </div>
+
      * @param resourceName the name of the resource.
      *
      * @param libraryName the name of the library in which this resource
@@ -206,7 +250,7 @@ public abstract class ResourceHandler {
      * for satisfying resource requests.  This method is called from
      * {@link javax.faces.webapp.FacesServlet#service} after that method
      * determines the current request is a resource request by calling
-     * {@link #isResourceRequest}.  Thus, <code>createResource</code>
+     * {@link #isResourceRequest}.  Thus, <code>handleResourceRequest</code>
      * may assume that the current request is a resource request.</p>
      *
      * <div class="changed_added_2_0">
@@ -226,7 +270,7 @@ public abstract class ResourceHandler {
      * #RESOURCE_EXCLUDES_PARAM_NAME} init parameter,
      * <code>HttpServletRequest.SC_NOT_FOUND</code> must be passed to
      * <code>HttpServletResponse.setStatus()</code>, then
-     * <code>createResource</code> must immediately return.</p></li>
+     * <code>handleResourceRequest</code> must immediately return.</p></li>
      *
      * <li><p>Extract the <em>resourceName</em> from the
      * <em>resourceIdentifier</em> by taking the substring of
@@ -235,7 +279,7 @@ public abstract class ResourceHandler {
      * <em>resourceIdentifier</em>.  If no <em>resourceName</em> can be
      * extracted, <code>HttpServletRequest.SC_NOT_FOUND</code> must be
      * passed to <code>HttpServletResponse.setStatus()</code>, then
-     * <code>createResource</code> must immediately return.</p></li>
+     * <code>handleResourceRequest</code> must immediately return.</p></li>
      *
      * <li><p>Extract the <em>libraryName</em> from the request by
      * looking in the request parameter map for an entry under the key
@@ -250,16 +294,16 @@ public abstract class ResourceHandler {
      * successfully created,
      * <code>HttpServletRequest.SC_NOT_FOUND</code> must be passed to
      * <code>HttpServletResponse.setStatus()</code>, then
-     * <code>createResource</code> must immediately return.</p></li>
+     * <code>handleResourceRequest</code> must immediately return.</p></li>
      *
      * <li><p>Call {@link Resource#userAgentNeedsUpdate}.  If this
      * method returns false,
      * <code>HttpServletRequest.SC_NOT_MODIFIED</code> must be passed to
      * <code>HttpServletResponse.setStatus()</code>, then
-     * <code>createResource</code> must immediately return.</p></li>
+     * <code>handleResourceRequest</code> must immediately return.</p></li>
      *
      * <li><p>Pass the result of {@link Resource#getContentType} to
-     * <code>HttpServletResponse.setContentType}.</code> </p></li>
+     * <code>HttpServletResponse.setContentType.</code> </p></li>
      *
      * <li><p>Call {@link Resource#getResponseHeaders}.  For each entry
      * in this <code>Map</code>, call
@@ -277,7 +321,7 @@ public abstract class ResourceHandler {
      * the <em>resourceName</em> and <em>libraryName</em> (if present).
      * Then, <code>HttpServletRequest.SC_NOT_FOUND</code> must be passed
      * to <code>HttpServletResponse.setStatus()</code>, then
-     * <code>createResource</code> must immediately return.</p></li>
+     * <code>handleResourceRequest</code> must immediately return.</p></li>
      *
      * <li><p>In all cases in this method, any streams, channels,
      * sockets, or any other IO resources must be closed before this

@@ -81,14 +81,15 @@ public abstract class Resource {
 
 
     /**
-     * <p class="changed_added_2_0">Set the MIME content-type for this resource.
-     * The default implementation performs no validation on the
-     * argument.</p>
-     * @param contentType the MIME content-type for this resource.  May
-     * be <code>null</code>.  If the value is <code>null</code>, The
-     * content-type of the resource is derived by passing the
-     * <em>resourceName</em> to {@link
-     * javax.faces.context.ExternalContext#getMimeType}.
+
+     * <p class="changed_added_2_0">Set the MIME content-type for this
+     * resource.  The default implementation performs no validation on
+     * the argument.</p>
+     * @param contentType the MIME content-type for this resource.  The
+     * default implementation must accept <code>null</code> as a
+     * parameter.  If the value is <code>null</code>, The content-type
+     * of the resource is derived by passing the <em>resourceName</em>
+     * to {@link javax.faces.context.ExternalContext#getMimeType}.
      */
     public void setContentType(String contentType) {
 
@@ -107,7 +108,8 @@ public abstract class Resource {
      * resourceName.  See {@link ResourceHandler} for more
      * information.</p>
      *
-     * @return Return the libraryName for this resource.  May be null.
+     * @return Return the libraryName for this resource.  May be
+     * <code>null</code>.
      */
     public String getLibraryName() {
 
@@ -118,8 +120,9 @@ public abstract class Resource {
 
     /**
      * <p class="changed_added_2_0">Set the libraryName for this resource.</p>
-     * @param libraryName the libraryName for this resource.  May be
-     * <code>null</code>.
+     * @param libraryName the libraryName for this resource.  The
+     * default implementation must accept <code>null</code> for the
+     * <em>libraryName</em>.
      */
     public void setLibraryName(String libraryName) {
 
@@ -282,8 +285,7 @@ public abstract class Resource {
     /**
      * <p class="changed_added_2_0">Return <code>true</code> if the
      * user-agent requesting this resource needs an update.  Returns
-     * <code>false</code> otherwise.  If <code>false</code>, the caller
-     * should send a 304 not modified to the client.
+     * <code>false</code> otherwise.  
      *
      * @return <code>true</code> or <code>false</code> depending on
      * whether or not the user-agent needs an update of this resource.

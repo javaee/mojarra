@@ -261,7 +261,7 @@ public class ResourceManager {
                                                    Util.getCurrentLoader(ResourceManager.class));
                     localePrefix =
                           appBundle
-                                .getString("javax.faces.resource.localePrefix");
+                                .getString(ResourceHandler.LOCALE_PREFIX);
                 } catch (MissingResourceException ignored) { }
         }
         return localePrefix;
