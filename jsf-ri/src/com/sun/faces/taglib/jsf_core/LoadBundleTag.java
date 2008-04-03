@@ -1,5 +1,5 @@
 /*
- * $Id: LoadBundleTag.java,v 1.21 2007/06/25 20:57:22 rlubke Exp $
+ * $Id: LoadBundleTag.java,v 1.22 2007/07/19 15:50:55 rlubke Exp $
  */
 
 /*
@@ -104,6 +104,7 @@ public class LoadBundleTag extends TagSupport {
     /**
      * <p>Set the base name of the <code>ResourceBundle</code> to be
      * loaded.</p>
+     * @param basename the ValueExpression which will resolve the basename
      */
     public void setBasename(ValueExpression basename) {
         this.basenameExpression = basename;
@@ -116,10 +117,10 @@ public class LoadBundleTag extends TagSupport {
     /**
      * <p>Set the name of the attribute in the request scope under which
      * to store the <code>ResourceBundle</code> <code>Map</code>.</p>
+     * @param var the variable name to export the loaded ResourceBundle to
      */
-
-    public void setVar(String newVar) {
-        var = newVar;
+    public void setVar(String var) {
+        this.var = var;
     }
 
 
@@ -178,7 +179,7 @@ public class LoadBundleTag extends TagSupport {
                 Map.Entry<String,Object> cur;
                 while (entries.hasNext()) {
                     cur = entries.next();
-                    sb.append(cur.getKey() + ": " + cur.getValue() + "\n");
+                    sb.append(cur.getKey()).append(": ").append(cur.getValue()).append('\n');
                 }
 
                 return sb.toString();
@@ -201,10 +202,9 @@ public class LoadBundleTag extends TagSupport {
 
                 public boolean containsValue(Object value) {
                     Enumeration<String> keys = bundle.getKeys();
-                    Object curObj = null;
                     boolean result = false;
                     while (keys.hasMoreElements()) {
-                        curObj = bundle.getObject(keys.nextElement());
+                        Object curObj = bundle.getObject(keys.nextElement());
                         if ((curObj == value) ||
                             ((null != curObj) && curObj.equals(value))) {
                             result = true;
@@ -228,11 +228,8 @@ public class LoadBundleTag extends TagSupport {
 
 
                 public boolean equals(Object obj) {
-                    if ((obj == null) || !(obj instanceof Map)) {
-                        return false;
-                    }
-
-                    return entrySet().equals(((Map) obj).entrySet());
+                    return !((obj == null) || !(obj instanceof Map))
+                           && entrySet().equals(((Map) obj).entrySet());
 
                 }
 
@@ -241,13 +238,11 @@ public class LoadBundleTag extends TagSupport {
                     if (null == key) {
                         return null;
                     }
-                    Object result = null;
                     try {
-                        result = bundle.getObject(key.toString());
+                        return bundle.getObject(key.toString());
                     } catch (MissingResourceException e) {
-                        result = "???" + key + "???";
+                        return "???" + key + "???";
                     }
-                    return result;
                 }
 
 
@@ -257,10 +252,8 @@ public class LoadBundleTag extends TagSupport {
 
 
                 public boolean isEmpty() {
-                    boolean result = true;
                     Enumeration<String> keys = bundle.getKeys();
-                    result = !keys.hasMoreElements();
-                    return result;
+                    return !keys.hasMoreElements();
                 }
 
 
@@ -345,7 +338,7 @@ public class LoadBundleTag extends TagSupport {
     static void addChildToParentTagAndParentComponent(UIComponent child,
             UIComponentClassicTagBase parentTag) {
         
-        Method addChildToComponentAndTag = null;
+        Method addChildToComponentAndTag;
         
         if (null != (addChildToComponentAndTag = 
                 ReflectionUtils.lookupMethod(UIComponentClassicTagBase.class,
@@ -380,8 +373,9 @@ public class LoadBundleTag extends TagSupport {
     }
     
     static List<UIComponent> getPreViewLoadBundleComponentList() {
-        List<UIComponent> result = null;
+        List<UIComponent> result;
         Map<String,Object> requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
+        //noinspection unchecked
         if (null == (result = (List<UIComponent>)
                 requestMap.get(PRE_VIEW_LOADBUNDLES_LIST_ATTR_NAME))) {
             result = new ArrayList<UIComponent>();
@@ -399,22 +393,17 @@ public class LoadBundleTag extends TagSupport {
     }
 
     /**
-     *
-
-     * <p>Return the <code>UIComponentClassicTagBase</code> instance
-     * that represents the tag in the page to which the special
-     * component should be added as a child.</p>
-
+     * @return the <code>UIComponentClassicTagBase</code> instance
+     *  that represents the tag in the page to which the special
+     *  component should be added as a child
      */
-    
     private UIComponentClassicTagBase getParentUIComponentTag() {
-        UIComponentClassicTagBase result = null;
         Tag parent = this.getParent();
         while (null != parent && 
                 (!(parent instanceof UIComponentClassicTagBase))) {
             parent = this.getParent();
         }
-        result = (UIComponentClassicTagBase) parent;
+        UIComponentClassicTagBase result = (UIComponentClassicTagBase) parent;
         
         // Check for case where the <f:loadBundle> is inside of an included page,
         // but outside of the <f:subview> for that page.  This can happen

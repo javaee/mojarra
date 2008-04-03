@@ -36,7 +36,6 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.FacesLogger;
 
@@ -52,11 +51,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Ryan
- * Date: Feb 28, 2007
- * Time: 2:09:24 PM
- * To change this template use File | Settings | File Templates.
+ * <p>Base class for all <code>ConverterTag<code>s.</p>
  */
 public class AbstractConverterTag extends ConverterELTag {
 

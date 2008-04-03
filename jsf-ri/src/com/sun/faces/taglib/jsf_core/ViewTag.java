@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.48 2007/06/01 18:28:31 edburns Exp $
+ * $Id: ViewTag.java,v 1.49 2007/07/19 15:50:55 rlubke Exp $
  */
 
 /*
@@ -77,7 +77,7 @@ import com.sun.faces.util.FacesLogger;
  * Renderer. It exists mainly to provide a guarantee that all faces
  * components reside inside of this tag.
  *
- * @version $Id: ViewTag.java,v 1.48 2007/06/01 18:28:31 edburns Exp $
+ * @version $Id: ViewTag.java,v 1.49 2007/07/19 15:50:55 rlubke Exp $
  */
 
 public class ViewTag extends UIComponentELTag {
@@ -154,7 +154,7 @@ public class ViewTag extends UIComponentELTag {
      *
      * <ul>
      *
-     * <li><p>Get the {@link WebResponseWrapper} from the
+     * <li><p>Get the {@link InterweavingResponse} from the
      * request, which was placed there by {@link
      * ViewHandler#renderView}, and call {@link
      * InterweavingResponse#flushContentToWrappedResponse}.  This
@@ -188,7 +188,7 @@ public class ViewTag extends UIComponentELTag {
         }
     }
 
-        int rc = 0;
+        int rc;
         try {
             rc = super.doStartTag();
         } catch (JspException e) {
@@ -218,7 +218,7 @@ public class ViewTag extends UIComponentELTag {
         }
         Stack<UIComponentClassicTagBase> viewTagStack = SubviewTag.getViewTagStack();
         viewTagStack.push(this);
-    return rc;
+        return rc;
     }
 
     /**
@@ -234,31 +234,32 @@ public class ViewTag extends UIComponentELTag {
      */
 
     public int doAfterBody() throws JspException {
-    int result = EVAL_PAGE;
-        BodyContent bodyContent = null;
-    UIViewRoot root = FacesContext.getCurrentInstance().getViewRoot();
-    UIOutput verbatim = null;
-    String content, trimContent;
-    int contentLen;
-    
-    Stack<UIComponentClassicTagBase> viewTagStack = SubviewTag.getViewTagStack();
-    viewTagStack.pop();
+        int result = EVAL_PAGE;
+        BodyContent bodyContent;
+        UIViewRoot root = FacesContext.getCurrentInstance().getViewRoot();
+        UIOutput verbatim;
+        String content;
+        String trimContent;
+
+        Stack<UIComponentClassicTagBase> viewTagStack =
+              SubviewTag.getViewTagStack();
+        viewTagStack.pop();
 
         if (null == (bodyContent = getBodyContent()) ||
             null == (content = bodyContent.getString()) ||
-            0 == (contentLen = (trimContent = content.trim()).length()) ||
+            0 == (trimContent = content.trim()).length() ||
             (trimContent.startsWith("<!--") && trimContent.endsWith("-->"))) {
-        return result;
+            return result;
         }
 
-    bodyContent.clearBody();
+        bodyContent.clearBody();
 
-    verbatim = createVerbatimComponent();
-    verbatim.setValue(content);
+        verbatim = createVerbatimComponent();
+        verbatim.setValue(content);
 
-    root.getChildren().add(verbatim);
-    
-    return result;
+        root.getChildren().add(verbatim);
+
+        return result;
     }
 
     /**
@@ -270,7 +271,7 @@ public class ViewTag extends UIComponentELTag {
     public int doEndTag() throws JspException {
         int rc = super.doEndTag();
         // store the response character encoding
-        HttpSession session = null;
+        HttpSession session;
 
         if (null != (session = pageContext.getSession())) {
             session.setAttribute(ViewHandler.CHARACTER_ENCODING_KEY,
@@ -284,7 +285,6 @@ public class ViewTag extends UIComponentELTag {
      * This should never get called for PageTag.
      */
     public String getComponentType() {
-        assert (false);
         throw new IllegalStateException();
     }
 

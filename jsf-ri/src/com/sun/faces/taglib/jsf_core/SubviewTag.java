@@ -1,5 +1,5 @@
 /*
- * $Id: SubviewTag.java,v 1.14 2007/06/01 18:28:31 edburns Exp $
+ * $Id: SubviewTag.java,v 1.15 2007/07/19 15:50:55 rlubke Exp $
  */
 
 /*
@@ -148,16 +148,16 @@ public class SubviewTag extends UIComponentELTag {
     }
 
     /** 
-     *  maintain a Stack of UIComponentClassicTagBase instances, each of
+     *  @return Stack of UIComponentClassicTagBase instances, each of
      *  which is a "view" tag.  The bottom most element on the stack is
      *  the ViewTag itself.  Subsequent instances are SubviewTag
      *  instances.
      */
-    
     static Stack<UIComponentClassicTagBase> getViewTagStack() {
-        Stack<UIComponentClassicTagBase> result = null;
+        Stack<UIComponentClassicTagBase> result;
         
         Map<String,Object> requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
+        //noinspection unchecked
         if (null == (result = (Stack<UIComponentClassicTagBase>)
                 requestMap.get(VIEWTAG_STACK_ATTR_NAME))) {
             result = new Stack<UIComponentClassicTagBase>();

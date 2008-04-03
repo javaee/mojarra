@@ -1,5 +1,5 @@
 /*
- * $Id: ColumnTag.java,v 1.21 2007/04/27 22:01:04 ofung Exp $
+ * $Id: ColumnTag.java,v 1.22 2007/07/19 15:50:56 rlubke Exp $
  */
 
 /*
@@ -92,7 +92,7 @@ public class ColumnTag extends UIComponentELTag {
 
     protected void setProperties(UIComponent component) {
         super.setProperties(component);
-        UIColumn column = null;
+        UIColumn column;
 
         try {
             column = (UIColumn) component;
@@ -120,9 +120,8 @@ public class ColumnTag extends UIComponentELTag {
     //
 
     public int doStartTag() throws JspException {
-        int rc = 0;
         try {
-            rc = super.doStartTag();
+            return super.doStartTag();
         } catch (JspException e) {
             if (logger.isLoggable(Level.WARNING)) {
                 logger.log(Level.WARNING, getDebugString(), e);
@@ -134,14 +133,12 @@ public class ColumnTag extends UIComponentELTag {
             }
             throw new JspException(t);
         }
-        return rc;
     }
 
 
     public int doEndTag() throws JspException {
-        int rc = 0;
         try {
-            rc = super.doEndTag();
+            return super.doEndTag();
         } catch (JspException e) {
             if (logger.isLoggable(Level.WARNING)) {
                 logger.log(Level.WARNING, getDebugString(), e);
@@ -153,7 +150,6 @@ public class ColumnTag extends UIComponentELTag {
             }
             throw new JspException(t);
         }
-        return rc;
     }
 
     // RELEASE
@@ -164,9 +160,8 @@ public class ColumnTag extends UIComponentELTag {
     }
 
     public String getDebugString() {
-        String result = "id: " + this.getId() + " class: " +
+        return "id: " + this.getId() + " class: " +
             this.getClass().getName();
-        return result;
     }
 
 }

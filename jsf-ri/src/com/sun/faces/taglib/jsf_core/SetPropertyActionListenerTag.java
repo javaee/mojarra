@@ -1,5 +1,5 @@
 /*
- * $Id: SetPropertyActionListenerTag.java,v 1.9 2007/04/27 22:01:05 ofung Exp $
+ * $Id: SetPropertyActionListenerTag.java,v 1.10 2007/07/19 15:50:55 rlubke Exp $
  */
 
 /*
@@ -49,11 +49,8 @@ import javax.faces.webapp.UIComponentELTag;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
-import java.util.logging.Logger;
 
 import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.FacesLogger;
 
 
 /**
@@ -92,7 +89,7 @@ public class SetPropertyActionListenerTag extends TagSupport {
     // ------------------------------------------------------------- Attributes
 
     static final long serialVersionUID = 7966883942522780374L;
-    private static final Logger LOGGER = FacesLogger.TAGLIB.getLogger();
+
     /**
      * <p>The target of the value attribute.</p>
      */
@@ -139,8 +136,6 @@ public class SetPropertyActionListenerTag extends TagSupport {
      */
     public int doStartTag() throws JspException {
 
-        ActionListener handler = null;
-
         // Locate our parent UIComponentTag
         UIComponentClassicTagBase tag =
             UIComponentELTag.getParentUIComponentClassicTagBase(pageContext);
@@ -168,7 +163,7 @@ public class SetPropertyActionListenerTag extends TagSupport {
                     MessageUtils.NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID, params));
         }
 
-        handler = new SetPropertyActionListenerImpl(target, value);
+        ActionListener handler = new SetPropertyActionListenerImpl(target, value);
         ((ActionSource) component).addActionListener(handler);
 
         return (SKIP_BODY);

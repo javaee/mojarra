@@ -1,5 +1,5 @@
 /*
- * $Id: CoreValidator.java,v 1.20 2007/04/27 22:01:05 ofung Exp $
+ * $Id: CoreValidator.java,v 1.21 2007/07/19 15:50:55 rlubke Exp $
  */
 
 /*
@@ -115,8 +115,7 @@ public class CoreValidator extends FacesValidator {
 	    !Util.isCoreTLVActive()) {
 	    return null;
 	}
-        DefaultHandler h = new CoreValidatorHandler();
-        return h;
+        return new CoreValidatorHandler();
     }
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: SetPropertyActionListenerImpl.java,v 1.9 2007/04/27 22:01:05 ofung Exp $
+ * $Id: SetPropertyActionListenerImpl.java,v 1.10 2007/07/19 15:50:55 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -48,7 +48,7 @@ import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 
-public class SetPropertyActionListenerImpl extends Object implements ActionListener, StateHolder {
+public class SetPropertyActionListenerImpl implements ActionListener, StateHolder {
     
     private ValueExpression targetExpression = null;
     
