@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.58 2007/04/26 20:10:59 rlubke Exp $
+ * $Id: ExternalContextImpl.java,v 1.59 2007/04/26 20:15:28 rlubke Exp $
  */
 
 /*
@@ -79,7 +79,7 @@ import com.sun.faces.util.FacesLogger;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.58 2007/04/26 20:10:59 rlubke Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.59 2007/04/26 20:15:28 rlubke Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -1313,6 +1313,11 @@ class RequestHeaderValuesMap extends StringArrayValuesMap {
 
     RequestHeaderValuesMap(HttpServletRequest request) {
         this.request = request;
+    }
+
+
+    @Override public boolean containsKey(Object key) {
+        return (request.getHeaders(key.toString()) != null);
     }
 
 
