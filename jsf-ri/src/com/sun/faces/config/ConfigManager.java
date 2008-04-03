@@ -1,12 +1,12 @@
 /*
- * $Id: ConfigManager.java,v 1.18 2007/10/03 20:25:30 rlubke Exp $
+ * $Id: ConfigManager.java,v 1.19 2007/10/04 16:57:25 rlubke Exp $
  */
 
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * 
+ *
  * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
- * 
+ *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -14,7 +14,7 @@
  * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
  * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- * 
+ *
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
  * Sun designates this particular file as subject to the "Classpath" exception
@@ -23,9 +23,9 @@
  * Header, with the fields enclosed by brackets [] replaced by your own
  * identifying information: "Portions Copyrighted [year]
  * [name of copyright owner]"
- * 
+ *
  * Contributor(s):
- * 
+ *
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
  * elects to include this software in this distribution under the [CDDL or GPL
@@ -198,13 +198,19 @@ public class ConfigManager {
 
         if (!hasBeenInitialized(sc)) {
             initializedContexts.add(sc);
-            try {                
+            try {
                 CONFIG_PROCESSOR_CHAIN.process(getConfigDocuments(sc));
             } catch (Exception e) {
                 // clear out any configured factories
                 releaseFactories();
-                throw new ConfigurationException("CONFIGURATION FAILED! " + e.getMessage(),
-                                                 e);
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.log(Level.FINE,
+                               "Unsanitized stacktrace from failed start...",
+                               e);
+                }
+                Throwable t = unwind(e);
+                throw new ConfigurationException("CONFIGURATION FAILED! " + t.getMessage(),
+                                                 t);
             }
         }
 
@@ -222,7 +228,7 @@ public class ConfigManager {
 
         releaseFactories();
         initializedContexts.remove(sc);
-        
+
     }
 
 
@@ -253,7 +259,7 @@ public class ConfigManager {
 
         ExecutorService executor =
              Executors.newFixedThreadPool(NUMBER_OF_TASK_THREADS);
-        
+
         List<FutureTask<List<URL>>> urlTasks =
              new ArrayList<FutureTask<List<URL>>>(RESOURCE_PROVIDERS.size());
         for (ConfigurationResourceProvider p : RESOURCE_PROVIDERS) {
@@ -270,7 +276,7 @@ public class ConfigManager {
         DocumentBuilderFactory factory = DbfFactory.getFactory();
         for (FutureTask<List<URL>> t : urlTasks) {
             try {
-                List<URL> l = t.get();                
+                List<URL> l = t.get();
                 for (URL u : l) {
                     FutureTask<Document> d =
                          new FutureTask<Document>(new ParseTask(factory,
