@@ -47,6 +47,8 @@ import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.sun.faces.util.Util;
+
 /**
  * @see javax.faces.context.ExternalContext#getRequestHeaderValuesMap()
  */
@@ -74,9 +76,7 @@ public class RequestHeaderValuesMap extends StringArrayValuesMap {
 
     @Override
     public String[] get(Object key) {
-        if (key == null) {
-            throw new NullPointerException();
-        }
+        Util.notNull("key", key);
 
         List<String> valuesList = new ArrayList<String>();
         Enumeration valuesEnum = this.request.getHeaders(key.toString());

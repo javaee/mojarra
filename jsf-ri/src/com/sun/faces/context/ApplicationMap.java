@@ -42,6 +42,8 @@ import java.util.Iterator;
 
 import javax.servlet.ServletContext;
 
+import com.sun.faces.util.Util;
+
 /**
  * @see javax.faces.context.ExternalContext#getApplicationMap()
  */
@@ -83,18 +85,14 @@ public class ApplicationMap extends BaseContextMap<Object> {
 
     @Override
     public Object get(Object key) {
-        if (key == null) {
-            throw new NullPointerException();
-        }
+        Util.notNull("key", key);
         return servletContext.getAttribute(key.toString());
     }
 
 
     @Override
     public Object put(String key, Object value) {
-        if (key == null) {
-            throw new NullPointerException();
-        }
+        Util.notNull("key", key);
         Object result = servletContext.getAttribute(key);
         servletContext.setAttribute(key, value);
         return (result);

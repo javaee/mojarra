@@ -48,6 +48,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
 
 /**
  * @see javax.faces.context.ExternalContext#getSessionMap()  
@@ -103,9 +104,7 @@ public class SessionMap extends BaseContextMap<Object> {
 
     @Override
     public Object get(Object key) {
-        if (key == null) {
-            throw new NullPointerException();
-        }
+        Util.notNull("key", key);
         HttpSession session = getSession(false);
         return ((session != null) ? session.getAttribute(key.toString()) : null);
 
@@ -114,9 +113,7 @@ public class SessionMap extends BaseContextMap<Object> {
 
     @Override
     public Object put(String key, Object value) {
-        if (key == null) {
-            throw new NullPointerException();
-        }
+        Util.notNull("key", key);
         HttpSession session = getSession(true);
         Object result = session.getAttribute(key);
         if (!(value instanceof Serializable)) {

@@ -44,6 +44,8 @@ import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.sun.faces.util.Util;
+
 /**
  * @see javax.faces.context.ExternalContext#getRequestHeaderMap()  
  */
@@ -65,9 +67,7 @@ public class RequestHeaderMap extends BaseContextMap<String> {
 
     @Override
     public String get(Object key) {
-        if (key == null) {
-            throw new NullPointerException();
-        }
+        Util.notNull("key", key);
 
         return (request.getHeader(key.toString()));
     }

@@ -44,6 +44,8 @@ import java.util.Iterator;
 
 import javax.servlet.ServletContext;
 
+import com.sun.faces.util.Util;
+
 /**
  * @see javax.faces.context.ExternalContext#getInitParameterMap()  
  */
@@ -65,9 +67,7 @@ public class InitParameterMap extends BaseContextMap<String> {
 
     @Override
     public String get(Object key) {
-        if (key == null) {
-            throw new NullPointerException();
-        }
+        Util.notNull("key", key);
         String keyString = key.toString();
         return servletContext.getInitParameter(keyString);
     }

@@ -47,6 +47,8 @@ import java.util.NoSuchElementException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Cookie;
 
+import com.sun.faces.util.Util;
+
 /**
  * @see javax.faces.context.ExternalContext#getRequestCookieMap()  
  */
@@ -68,9 +70,7 @@ public class RequestCookieMap extends BaseContextMap<Object> {
 
     @Override
     public Object get(Object key) {
-        if (key == null) {
-            throw new NullPointerException();
-        }
+        Util.notNull("key", key);
 
         Cookie[] cookies = request.getCookies();
         if (null == cookies) {

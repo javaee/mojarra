@@ -44,6 +44,8 @@ import java.util.Iterator;
 
 import javax.servlet.ServletRequest;
 
+import com.sun.faces.util.Util;
+
 /**
  * @see javax.faces.context.ExternalContext#getRequestParameterMap() 
  */
@@ -65,10 +67,7 @@ public class RequestParameterMap extends BaseContextMap<String> {
 
     @Override
     public String get(Object key) {
-        if (key == null) {
-            throw new NullPointerException();
-        }
-
+        Util.notNull("key", key);
         return request.getParameter(key.toString());
     }
 

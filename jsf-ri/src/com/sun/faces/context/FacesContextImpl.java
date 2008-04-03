@@ -1,5 +1,5 @@
  /*
- * $Id: FacesContextImpl.java,v 1.94 2008/03/03 05:34:44 rlubke Exp $
+ * $Id: FacesContextImpl.java,v 1.95 2008/03/10 16:39:24 rlubke Exp $
  */
 
 /*
@@ -70,6 +70,7 @@ import com.sun.faces.el.ELContextImpl;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.RequestStateManager;
+import com.sun.faces.util.Util;
 
  public class FacesContextImpl extends FacesContext {
 
@@ -103,14 +104,8 @@ import com.sun.faces.util.RequestStateManager;
 
 
      public FacesContextImpl(ExternalContext ec, Lifecycle lifecycle) {
-         if (null == ec) {
-             throw new NullPointerException
-                 (MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "ec"));
-         }
-         if (null == lifecycle) {
-             throw new NullPointerException
-                 (MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "lifecycle"));
-         }
+         Util.notNull("ec", ec);
+         Util.notNull("lifecycle", lifecycle);
          this.externalContext = ec;
          setCurrentInstance(this);
          rkFactory = (RenderKitFactory)
@@ -291,14 +286,10 @@ import com.sun.faces.util.RequestStateManager;
      /**
       * @see FacesContext#setResponseStream(javax.faces.context.ResponseStream)
       */
-     public void setResponseStream(ResponseStream newResponseStream) {
+     public void setResponseStream(ResponseStream responseStream) {
          assertNotReleased();
-         if (newResponseStream == null) {
-             throw new NullPointerException(
-                 MessageUtils.getExceptionMessageString(
-                     MessageUtils.NULL_RESPONSE_STREAM_ERROR_MESSAGE_ID));
-         }
-         responseStream = newResponseStream;
+         Util.notNull("responseStrean", responseStream);
+         this.responseStream = responseStream;
      }
 
 
@@ -316,13 +307,7 @@ import com.sun.faces.util.RequestStateManager;
       */
      public void setViewRoot(UIViewRoot root) {
          assertNotReleased();
-
-         if (root == null) {
-             throw new NullPointerException
-                 (MessageUtils.getExceptionMessageString(
-                     MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "root"));
-         }
-
+         Util.notNull("root", root);
          viewRoot = root;
      }
 
@@ -339,14 +324,10 @@ import com.sun.faces.util.RequestStateManager;
      /**
       * @see FacesContext#setResponseWriter(javax.faces.context.ResponseWriter)
       */
-     public void setResponseWriter(ResponseWriter newResponseWriter) {
+     public void setResponseWriter(ResponseWriter responseWriter) {
          assertNotReleased();
-         if (newResponseWriter == null) {
-             throw new NullPointerException(
-                 MessageUtils.getExceptionMessageString(
-                     MessageUtils.NULL_RESPONSE_WRITER_ERROR_MESSAGE_ID));
-         }
-         responseWriter = newResponseWriter;
+         Util.notNull("responseWriter", responseWriter);
+         this.responseWriter = responseWriter;
      }
 
 
@@ -356,12 +337,7 @@ import com.sun.faces.util.RequestStateManager;
      public void addMessage(String clientId, FacesMessage message) {
          assertNotReleased();
          // Validate our preconditions
-         if (null == message) {
-             throw new NullPointerException
-                 (
-                     MessageUtils.getExceptionMessageString(
-                         MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "message"));
-         }
+         Util.notNull("message", message);
 
          if (maxSeverity == null) {
              maxSeverity = message.getSeverity();

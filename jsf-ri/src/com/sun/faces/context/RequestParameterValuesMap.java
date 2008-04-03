@@ -44,6 +44,8 @@ import java.util.Iterator;
 
 import javax.servlet.ServletRequest;
 
+import com.sun.faces.util.Util;
+
 /**
  * @see javax.faces.context.ExternalContext#getRequestParameterValuesMap()  
  */
@@ -65,10 +67,7 @@ public class RequestParameterValuesMap extends StringArrayValuesMap {
 
     @Override
     public String[] get(Object key) {
-        if (key == null) {
-            throw new NullPointerException();
-        }
-
+        Util.notNull("key", key);
         return request.getParameterValues(key.toString());
     }
 
