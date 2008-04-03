@@ -29,11 +29,11 @@
 # This build.properties allows for the building of 
 # javaserverfaces-sources against Glassfish.
 #
-# $Id: build.properties.glassfish,v 1.12 2007/06/08 01:15:20 rlubke Exp $
+# $Id: build.properties.glassfish,v 1.13 2007/10/12 19:04:19 rlubke Exp $
 # -----------------------------------------------------------------------------
 
 # --------------------------------------------------
-#    BUILD REQUIRES ANT 1.7.0 OR ABOVE
+#   BUILD REQUIRES ANT 1.7.0 OR ABOVE
 # --------------------------------------------------
 
 # --------------------------------------------------
