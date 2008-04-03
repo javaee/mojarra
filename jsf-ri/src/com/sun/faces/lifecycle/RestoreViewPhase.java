@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.50 2007/06/18 21:35:49 rlubke Exp $
+ * $Id: RestoreViewPhase.java,v 1.51 2007/08/23 21:42:39 rlubke Exp $
  */
 
 /*
@@ -53,6 +53,7 @@ import com.sun.faces.util.FacesLogger;
 
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
+import javax.faces.lifecycle.Lifecycle;
 import javax.faces.application.ViewExpiredException;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
@@ -71,7 +72,7 @@ import java.util.logging.Logger;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.50 2007/06/18 21:35:49 rlubke Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.51 2007/08/23 21:42:39 rlubke Exp $
  */
 
 public class RestoreViewPhase extends Phase {
@@ -85,6 +86,20 @@ public class RestoreViewPhase extends Phase {
 
     // ---------------------------------------------------------- Public Methods
 
+
+    public PhaseId getId() {
+
+        return PhaseId.RESTORE_VIEW;
+
+    }
+
+
+    public void doPhase(FacesContext context, Lifecycle lifecycle) {
+
+        Util.getViewHandler(context).initView(context);
+        super.doPhase(context, lifecycle);
+
+    }
 
     /**
      * PRECONDITION: the necessary factories have been installed in the
@@ -101,7 +116,7 @@ public class RestoreViewPhase extends Phase {
         if (null == facesContext) {
             throw new FacesException(MessageUtils.getExceptionMessageString(
                   MessageUtils.NULL_CONTEXT_ERROR_MESSAGE_ID));
-        }        
+        }
 
         // If an app had explicitely set the tree in the context, use that;
         //
@@ -113,6 +128,9 @@ public class RestoreViewPhase extends Phase {
             facesContext.getViewRoot().setLocale(
                  facesContext.getExternalContext().getRequestLocale());
             doPerComponentActions(facesContext, viewRoot);
+            if (!isPostback(facesContext)) {
+                facesContext.responseComplete();
+            }
             return;
         }
 
@@ -156,8 +174,8 @@ public class RestoreViewPhase extends Phase {
                 JSFVersionTracker tracker =
                       getAssociate(facesContext).getJSFVersionTracker();
 
-                // The tracker will be null if the user turned off the 
-                // version tracking feature.  
+                // The tracker will be null if the user turned off the
+                // version tracking feature.
                 if (null != tracker) {
                     // Get the versions of the current ViewHandler and
                     // StateManager.  If they are older than the current
@@ -203,8 +221,8 @@ public class RestoreViewPhase extends Phase {
                 }
             }
             facesContext.setViewRoot(viewRoot);
-            doPerComponentActions(facesContext, viewRoot);           
-            
+            doPerComponentActions(facesContext, viewRoot);
+
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.fine("Postback: Restored view for " + viewId);
             }
@@ -229,14 +247,8 @@ public class RestoreViewPhase extends Phase {
             LOGGER.fine("Exiting RestoreViewPhase");
         }
 
-    }    
-
-
-    public PhaseId getId() {
-
-        return PhaseId.RESTORE_VIEW;
-
     }
+
 
     // ------------------------------------------------------- Protected Methods
 

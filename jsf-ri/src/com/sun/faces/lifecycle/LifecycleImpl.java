@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.82 2007/08/20 22:42:59 rlubke Exp $
+ * $Id: LifecycleImpl.java,v 1.83 2007/08/23 21:42:38 rlubke Exp $
  */
 
 /*
@@ -40,25 +40,18 @@
 
 package com.sun.faces.lifecycle;
 
-import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.Timer;
-import com.sun.faces.util.FacesLogger;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseEvent;
-import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.render.ResponseStateManager;
-import javax.servlet.http.HttpServletRequest;
 
-import java.util.ListIterator;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.MessageUtils;
 
 
 /**
@@ -78,11 +71,8 @@ public class LifecycleImpl extends Lifecycle {
 
     // ------------------------------------------------------ Instance Variables
 
-
-    // The set of PhaseListeners registered with this Lifecycle instance
-    private CopyOnWriteArrayList<PhaseListener> listeners =
-          new CopyOnWriteArrayList<PhaseListener>();
-
+    // The Phase instance for the render() method
+    private Phase response = new RenderResponsePhase();
 
     // The set of Phase instances that are executed by the execute() method
     // in order by the ordinal property of each phase
@@ -92,12 +82,10 @@ public class LifecycleImpl extends Lifecycle {
         new ApplyRequestValuesPhase(),
         new ProcessValidationsPhase(),
         new UpdateModelValuesPhase(),
-        new InvokeApplicationPhase()
+        new InvokeApplicationPhase(),
+        response
     };
 
-
-    // The Phase instance for the render() method
-    private Phase response = new RenderResponsePhase();
         
 
     // ------------------------------------------------------- Lifecycle Methods
@@ -115,23 +103,16 @@ public class LifecycleImpl extends Lifecycle {
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("execute(" + context + ")");
         }
-        
-        for (int i = 1; i < phases.length; i++) { // Skip ANY_PHASE placeholder
+
+        for (int i = 1, len = phases.length -1 ; i < len; i++) { // Skip ANY_PHASE placeholder
 
             if (context.getRenderResponse() ||
                 context.getResponseComplete()) {
                 break;
             }
 
-            PhaseId phaseId = (PhaseId) PhaseId.VALUES.get(i);
-            phase(phaseId, phases[i], context);
+            phases[i].doPhase(context, this);
 
-            if (reload(phaseId, context)) {
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.fine("Skipping rest of execute() because of a reload");
-                }
-                context.renderResponse();
-            }
         }
 
     }
@@ -151,7 +132,7 @@ public class LifecycleImpl extends Lifecycle {
         }
 
         if (!context.getResponseComplete()) {
-            phase(PhaseId.RENDER_RESPONSE, response, context);
+            response.doPhase(context, this);
         }
 
     }
@@ -166,20 +147,8 @@ public class LifecycleImpl extends Lifecycle {
                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "listener"));
         }
 
-        if (isListenerPresent(listener)) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE,
-                           "jsf.lifecycle.duplicate_phase_listener_detected",
-                           listener.getClass().getName());
-            }
-        } else {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.fine("addPhaseListener("
-                            + listener.getPhaseId().toString()
-                            + ","
-                            + listener);
-            }
-            listeners.add(listener);
+        for (int i = 1, len = phases.length; i < len; i++) {
+            phases[i].addPhaseListener(listener);
         }
 
     }
@@ -188,7 +157,15 @@ public class LifecycleImpl extends Lifecycle {
     // Return the set of PhaseListeners that have been registered
     public PhaseListener[] getPhaseListeners() {
 
-        return listeners.toArray(new PhaseListener[listeners.size()]);      
+        // use a Set here to avoid ANY_PHASE duplicates
+        Set<PhaseListener> ret = new HashSet<PhaseListener>();
+        for (int i = 1, len = phases.length; i < len; i++) {
+            for (PhaseListener pl : phases[i].getPhaseListeners()) {
+                ret.add(pl);
+            }            
+        }
+
+        return ret.toArray(new PhaseListener[ret.size()]);
 
     }
 
@@ -200,187 +177,11 @@ public class LifecycleImpl extends Lifecycle {
             throw new NullPointerException
                   (MessageUtils.getExceptionMessageString
                         (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "listener"));
+        }       
+
+        for (int i = 1, len = phases.length; i < len; i++) {
+            phases[i].removePhaseListener(listener);
         }
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine("removePhaseListener(" +
-                        listener.getPhaseId().toString()
-                        + "," + listener);
-        }
-
-        listeners.remove(listener);
-
-    }
-
-
-    // --------------------------------------------------------- Private Methods
-
-
-    // Execute the specified phase, calling all listeners as well
-    private void phase(PhaseId phaseId, Phase phase, FacesContext context)
-   throws FacesException {
-
-        boolean exceptionThrown = false;
-        Throwable ex = null;
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine("phase(" + phaseId.toString() + ',' + context + ')');
-        }
-
-        if (PhaseId.RESTORE_VIEW.equals(phaseId)) {
-            Util.getViewHandler(context).initView(context);
-        }
-               
-        ListIterator<PhaseListener> listenersIterator = listeners.listIterator();
-        String listenerClass = null;
-        try {
-            // Notify the "beforePhase" method of interested listeners
-            // (ascending)
-
-            if (listenersIterator.hasNext()) {
-                PhaseEvent event = new PhaseEvent(context, phaseId, this);
-                while (listenersIterator.hasNext())  {
-                    PhaseListener listener = listenersIterator.next();
-                    listenerClass = listener.getClass().getName();
-                    if (phaseId.equals(listener.getPhaseId()) ||
-                        PhaseId.ANY_PHASE.equals(listener.getPhaseId())) {
-                        listener.beforePhase(event);                        
-                    }                   
-                }
-            }
-        } catch (Exception e) {
-            if (LOGGER.isLoggable(Level.WARNING)) {
-                    LOGGER.log(Level.WARNING,
-                         "jsf.lifecycle.phaselistener.exception",
-                         new Object[]{
-                              listenerClass + ".beforePhase()",
-                              phaseId.toString(),
-                              ((context.getViewRoot() != null) ? context.getViewRoot().getViewId() : ""),
-                              e});
-                    LOGGER.warning(Util.getStackTraceString(e));
-            }
-            // move the iterator pointer back one
-            if (listenersIterator.hasPrevious()) {
-                listenersIterator.previous();
-            }
-        }
-
-        try {
-            // Execute this phase itself (if still needed)
-            if (!skipping(phaseId, context)) {
-                Timer timer = Timer.getInstance();
-                if (timer != null) {
-                    timer.startTiming();
-                }
-
-                phase.execute(context);
-
-                if (timer != null) {
-                    timer.stopTiming();
-                    timer.logResult("Execution time for phase '"
-                        + phaseId.toString());
-                }             
-            }
-        } catch (Exception e) {
-            // Log the problem, but continue
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE,
-                     "jsf.lifecycle.phase.exception",
-                     new Object[]{
-                          phaseId.toString(),
-                          ((context.getViewRoot() != null) ? context.getViewRoot().getViewId() : ""),
-                          e});
-            }
-
-            ex = e;
-            exceptionThrown = true;
-        } finally {
-            try {
-                // Notify the "afterPhase" method of interested listeners
-                // (descending)
-                if (listenersIterator.hasPrevious()) {
-                    PhaseEvent event = new PhaseEvent(context, phaseId, this);
-                    while (listenersIterator.hasPrevious()) {
-                        PhaseListener listener = listenersIterator.previous();
-                        if (phaseId.equals(listener.getPhaseId()) ||
-                            PhaseId.ANY_PHASE.equals(listener.getPhaseId())) {
-                            listener.afterPhase(event);
-                        }
-                    }
-                }
-            } catch (Throwable e) {
-                if (LOGGER.isLoggable(Level.WARNING)) {
-                    LOGGER.log(Level.WARNING,
-                         "jsf.lifecycle.phaselistener.exception",
-                         new Object[]{
-                              listenerClass + ".afterPhase()",
-                              phaseId.toString(),
-                              ((context.getViewRoot() != null) ? context.getViewRoot().getViewId() : ""),
-                              e});
-                    LOGGER.warning(Util.getStackTraceString(e));
-                }
-            }
-        }
-        // Allow all afterPhase listeners to execute before throwing the
-        // exception caught during the phase execution.
-        if (exceptionThrown) {
- 
-            if (!(ex instanceof FacesException)) {
-                ex = new FacesException(ex);
-            }
-
-            throw(FacesException) ex;
-        }
-    }
-
-
-    // Return "true" if this request is a browser reload and we just
-    // completed the Restore View phase
-    private boolean reload(PhaseId phaseId, FacesContext context) {
-
-        if (!PhaseId.RESTORE_VIEW.equals(phaseId)) {
-            return (false);
-        }
-        if (!(context.getExternalContext().getRequest()instanceof
-              HttpServletRequest)) {
-            return (false);
-        }
-        String renderkitId =
-              context.getApplication().getViewHandler().
-                    calculateRenderKitId(context);
-        ResponseStateManager rsm =
-              RenderKitUtils.getResponseStateManager(context,
-                                                     renderkitId);
-        boolean postback = rsm.isPostback(context);
-        if (postback) {
-            return false;
-        }
-        // assume it is reload.
-        return true;
-    }
-
-
-    // Return "true" if we should be skipping the actual phase execution
-    private boolean skipping(PhaseId phaseId, FacesContext context) {
-
-        if (context.getResponseComplete()) {
-            return (true);
-        } else if (context.getRenderResponse() &&
-                   !PhaseId.RENDER_RESPONSE.equals(phaseId)) {
-            return (true);
-        } else {
-            return (false);
-        }
-
-    }
-
-    private boolean isListenerPresent(PhaseListener listener) {
-
-        for (int i = 0, len = listeners.size(); i < len; i++) {
-            if (listeners.get(i).getClass().getName()
-                  .equals(listener.getClass().getName())) {
-                return true;
-            }
-        }
-        return false;
 
     }
         
