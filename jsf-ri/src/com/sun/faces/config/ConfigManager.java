@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManager.java,v 1.20 2007/10/04 17:13:57 rlubke Exp $
+ * $Id: ConfigManager.java,v 1.21 2007/11/07 20:25:54 edburns Exp $
  */
 
 /*
@@ -88,6 +88,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Node;
 
 /**
  * <p>
@@ -435,15 +437,30 @@ public class ConfigManager {
                  * and return.  Otherwise we assume a 1.0 or 1.1 faces-config in which case
                  * we need to transform it to reference a special 1.1 schema before validating.
                  */
-                if (FACES_SCHEMA_DEFAULT_NS.equals(((Document) domSource.getNode()).getDocumentElement().getNamespaceURI())) {
-                    DocumentBuilder builder = getBuilderForSchema(DbfFactory.FacesSchema.FACES_12);
-                    builder.getSchema().newValidator().validate(domSource);
+                Node documentElement = ((Document) domSource.getNode()).getDocumentElement();
+                DocumentBuilder builder = null;
+                if (FACES_SCHEMA_DEFAULT_NS.equals(documentElement.getNamespaceURI())) {
+                    Attr version = (Attr)
+                            documentElement.getAttributes().getNamedItem("version");
+                    if (null != version) {
+                        String versionStr = version.getValue();
+                        if (null != versionStr) {
+                            if ("2.0".equals(versionStr)) {
+                                builder = getBuilderForSchema(DbfFactory.FacesSchema.FACES_20);
+                            }
+                        }
+                    }
+                    if (null == builder) {
+                        builder = getBuilderForSchema(DbfFactory.FacesSchema.FACES_12);
+                    }
+                    builder.getSchema().newValidator().validate(domSource);                
+                    
                     return ((Document) domSource.getNode());
                 } else {
                     DOMResult domResult = new DOMResult();
                     Transformer transformer = getTransformer();
                     transformer.transform(domSource, domResult);
-                    DocumentBuilder builder = getBuilderForSchema(DbfFactory.FacesSchema.FACES_11);
+                    builder = getBuilderForSchema(DbfFactory.FacesSchema.FACES_11);
                     builder.getSchema().newValidator().validate(new DOMSource(domResult.getNode()));
                     return (Document) domResult.getNode();
                 }
