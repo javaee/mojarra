@@ -35,7 +35,7 @@
  */
 
 /*
- * $Id: ExternalContext.java,v 1.30 2007/04/27 22:00:06 ofung Exp $
+ * $Id: ExternalContext.java,v 1.31 2007/09/24 19:57:28 edburns Exp $
  */
  
 /*
@@ -407,7 +407,32 @@ public abstract class ExternalContext {
 
         throw new UnsupportedOperationException();
     }
-    
+
+    /**
+     * <p>Returns a String containing the real path for a given virtual
+     * path. </p>
+     *
+     * <p><em>Servlet:</em> This must be the value returned by the
+     * <code>javax.servlet.ServletContext</code> method
+     * <code>getRealPath()</code>.</p>
+     *
+     * <p><em>Portlet:</em> This must be the value returned by the
+     * <code>javax.portlet.PortletContext</code> method
+     * <code>getRealPath()</code>.</p>
+     *
+     * @param path The context of the requested initialization parameter
+     *
+     * @since 2.0
+     */
+    public String getRealPath(String path) {
+        ExternalContext impl;
+        if (null != (impl = (ExternalContext) this.getRequestMap().
+                get("com.sun.faces.ExternalContextImpl"))) {
+            return impl.getRealPath(path);
+        }
+
+        throw new UnsupportedOperationException();
+    }
 
 
     /**
