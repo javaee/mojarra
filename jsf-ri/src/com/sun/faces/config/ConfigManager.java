@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManager.java,v 1.8 2007/05/16 00:50:42 rlubke Exp $
+ * $Id: ConfigManager.java,v 1.9 2007/06/05 20:19:48 rlubke Exp $
  */
 
 /*
@@ -133,7 +133,7 @@ public class ConfigManager {
      * </p>
      */
     private static final ConfigProcessor CONFIG_PROCESSOR_CHAIN;
-    private static final String XSL = "/com/sun/faces/jsf1_0-1_1to1_2.xsl";
+    private static final String XSL = "/com/sun/faces/jsf1_0-1_1toSchema.xsl";
 
 
     static {
@@ -255,13 +255,15 @@ public class ConfigManager {
         boolean validating = WebConfiguration.getInstance(sc)
              .getBooleanContextInitParameter(
                   WebConfiguration.BooleanWebContextInitParameter.ValidateFacesConfigFiles);
-        DocumentBuilderFactory factory = DbfFactory.getFactory(validating);
+        DocumentBuilderFactory factory = DbfFactory.getFactory();
         for (FutureTask<List<URL>> t : urlTasks) {
             try {
                 List<URL> l = t.get();                
                 for (URL u : l) {
                     FutureTask<Document> d =
-                         new FutureTask<Document>(new ParseTask(factory, u));
+                         new FutureTask<Document>(new ParseTask(factory,
+                                                                validating,
+                                                                u));
                     docTasks.add(d);
                     executor.execute(d);
                 }
@@ -301,7 +303,8 @@ public class ConfigManager {
         private static final String FACES_SCHEMA_DEFAULT_NS =
             "http://java.sun.com/xml/ns/javaee";
         private URL documentURL;
-        private DocumentBuilder builder;
+        private DocumentBuilderFactory factory;
+        private boolean validating;
 
         // -------------------------------------------------------- Constructors
 
@@ -312,17 +315,18 @@ public class ConfigManager {
          * </p>
          * @param factory a DocumentBuilderFactory configured with the desired
          *  parse settings
+         * @param validating whether or not we're validating
          * @param documentURL a URL to the configuration resource to be parsed
          * @throws Exception general error
          */
         public ParseTask(DocumentBuilderFactory factory,
+                         boolean validating,
                          URL documentURL)
         throws Exception {
 
             this.documentURL = documentURL;
-            builder = factory.newDocumentBuilder();
-            builder.setEntityResolver(DbfFactory.FACES_ENTITY_RESOLVER);
-            builder.setErrorHandler(DbfFactory.FACES_ERROR_HANDLER);
+            this.factory = factory;
+            this.validating = validating;
 
         }
 
@@ -368,7 +372,7 @@ public class ConfigManager {
          *  <code>Document</code>
          */
         private Document getDocument() throws Exception {
-            if (builder.getSchema() != null) {  // the Schema won't be null if validation is enabled.
+            if (validating) {  // the Schema won't be null if validation is enabled.
                 DocumentBuilder db = getNonValidatingBuilder();
                 DOMSource domSource
                      = new DOMSource(db.parse(getInputStream(documentURL),
@@ -378,20 +382,23 @@ public class ConfigManager {
                  * If the Document in question is 1.2 (i.e. it has a namespace matching
                  * FACES_SCHEMA_DEFAULT_NS, then perform validation using the cached schema
                  * and return.  Otherwise we assume a 1.0 or 1.1 faces-config in which case
-                 * we need to transform it to 1.2 before validating using the cached schema.
+                 * we need to transform it to reference a special 1.1 schema before validating.
                  */
                 if (FACES_SCHEMA_DEFAULT_NS.equals(((Document) domSource.getNode()).getDocumentElement().getNamespaceURI())) {
+                    DocumentBuilder builder = getBuilderForSchema(DbfFactory.FacesSchema.FACES_12);
                     builder.getSchema().newValidator().validate(domSource);
                     return ((Document) domSource.getNode());
                 } else {
                     DOMResult domResult = new DOMResult();
                     Transformer transformer = getTransformer();
                     transformer.transform(domSource, domResult);
+                    DocumentBuilder builder = getBuilderForSchema(DbfFactory.FacesSchema.FACES_11);
                     builder.getSchema().newValidator().validate(new DOMSource(domResult.getNode()));
                     return (Document) domResult.getNode();
                 }
             } else {
                 // validation isn't required, parse and return
+                DocumentBuilder builder = factory.newDocumentBuilder();
                 InputSource is = new InputSource(getInputStream(documentURL));
                 is.setSystemId(documentURL.toExternalForm());
                 return builder.parse(is);
@@ -434,12 +441,22 @@ public class ConfigManager {
 
         private DocumentBuilder getNonValidatingBuilder() throws Exception {
 
-            DocumentBuilderFactory tFactory = DbfFactory.getFactory(false);
+            DocumentBuilderFactory tFactory = DbfFactory.getFactory();
+            tFactory.setValidating(false);
             DocumentBuilder tBuilder = tFactory.newDocumentBuilder();
             tBuilder.setEntityResolver(DbfFactory.FACES_ENTITY_RESOLVER);
             tBuilder.setErrorHandler(DbfFactory.FACES_ERROR_HANDLER);
             return tBuilder;
 
+        }
+
+        private DocumentBuilder getBuilderForSchema(DbfFactory.FacesSchema schema)
+        throws Exception {
+            factory.setSchema(schema.getSchema());
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            builder.setEntityResolver(DbfFactory.FACES_ENTITY_RESOLVER);
+            builder.setErrorHandler(DbfFactory.FACES_ERROR_HANDLER);
+            return builder;
         }
 
     } // END ParseTask

@@ -71,16 +71,42 @@ public class DbfFactory {
     private static final String FACES_1_2_XSD =
          "/com/sun/faces/web-facesconfig_1_2.xsd";
 
+    private static final String FACES_1_1_XSD =
+         "/com/sun/faces/web-facesconfig_1_1.xsd";
+
     /**
-     * Our cached Schema object for validation
+     * Our cached 1.2 Schema object for validation
      */
-    private static Schema FACES_SCHEMA;
+    private static Schema FACES_12_SCHEMA;
+
+    /**
+     * Our cached 1.1 Schema object for validation
+     */
+    private static Schema FACES_11_SCHEMA;
 
     /**
      * EntityResolver
      */
     public static final EntityResolver FACES_ENTITY_RESOLVER =
          new FacesEntityResolver();
+
+
+    public enum FacesSchema {
+
+        FACES_12(FACES_12_SCHEMA),
+        FACES_11(FACES_11_SCHEMA);
+
+        private Schema schema;
+
+        FacesSchema(Schema schema) {
+            this.schema = schema;
+        }
+
+        public Schema getSchema() {
+            return schema;
+        }
+
+    }
 
 
     /**
@@ -99,12 +125,9 @@ public class DbfFactory {
     // ---------------------------------------------------------- Public Methods
 
 
-    public static DocumentBuilderFactory getFactory(boolean validating) {
+    public static DocumentBuilderFactory getFactory() {
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        if (validating) {
-            factory.setSchema(FACES_SCHEMA);
-        }       
         factory.setNamespaceAware(true);
         factory.setIgnoringComments(true);
         factory.setIgnoringElementContentWhitespace(true);
@@ -116,19 +139,25 @@ public class DbfFactory {
     /**
      * Init our cache objects.
      */
-    private static void initSchema() {
-
+    private static void initSchema() {       
         // First, cache the various files
         try {
             URL url = DbfFactory.class.getResource(FACES_1_2_XSD);
             URLConnection conn = url.openConnection();
             conn.setUseCaches(false);
             InputStream in = conn.getInputStream();
-
-            // next, cache the schema
             SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             factory.setResourceResolver((LSResourceResolver) DbfFactory.FACES_ENTITY_RESOLVER);
-            FACES_SCHEMA = factory.newSchema(new StreamSource(in));
+            FACES_12_SCHEMA = factory.newSchema(new StreamSource(in));
+
+            url = DbfFactory.class.getResource(FACES_1_1_XSD);
+            conn = url.openConnection();
+            conn.setUseCaches(false);
+            in = conn.getInputStream();
+            factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            factory.setResourceResolver((LSResourceResolver) DbfFactory.FACES_ENTITY_RESOLVER);
+            FACES_11_SCHEMA = factory.newSchema(new StreamSource(in));
+
         } catch (Exception e) {
             throw new ConfigurationException(e);
         }
@@ -155,6 +184,10 @@ public class DbfFactory {
             {
                 "web-facesconfig_1_2.xsd",
                 FACES_1_2_XSD
+            },
+            {
+                "web-facesconfig_1_1.xsd",
+                FACES_1_1_XSD
             },
             {
                 "javaee_5.xsd",

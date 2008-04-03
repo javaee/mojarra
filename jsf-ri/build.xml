@@ -248,7 +248,7 @@
         </jsf.javac>
 
         <copy todir="${build.classes.dir}">
-            <fileset dir="${source.dir}" includes="**/*.properties,**/*.js"/>
+            <fileset dir="${source.dir}" includes="**/*.properties,**/*.js,**/*.xsd"/>
             <!--<fileset dir="${tools.dir}/src" includes="**/*.properties"/>-->
         </copy>
         
@@ -271,7 +271,7 @@
               toDir="${build.classes.dir}/META-INF"/>
         <copy file="${conf.share.dir}/jsf_core.tld"
               toDir="${build.classes.dir}/META-INF"/>
-        <copy file="conf/xslt/jsf1_0-1_1to1_2.xsl"
+        <copy file="conf/xslt/jsf1_0-1_1toSchema.xsl"
               toDir="${build.classes.dir}/com/sun/faces"/>
         <copy file="${conf.share.dir}/com.sun.faces.spi.injectionprovider"
               toDir="${build.classes.dir}/META-INF/services"/>

@@ -60,7 +60,7 @@
                      namespace="http://java.sun.com/xml/ns/javaee">
             <xsl:attribute name="xsi:schemaLocation"
                            namespace="http://www.w3.org/2001/XMLSchema-instance">http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd</xsl:attribute>
-            <xsl:attribute name="version">1.2</xsl:attribute>
+            <xsl:attribute name="version">1.1</xsl:attribute>
             <xsl:apply-templates select="*"/>
         </xsl:element>
     </xsl:template>
