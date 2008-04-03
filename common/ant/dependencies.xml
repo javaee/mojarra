@@ -370,7 +370,7 @@ java -Xmx256m -jar ${dependency.base.dir}/${glassfish.installer.jar} -console < 
                            property="ignored"/>
             </not>
             <then>
-                <get src="http://www.devlib.org/apache/tomcat/tomcat-6/v6.0.13/bin/apache-tomcat-6.0.13.zip"
+                <get src="http://archive.apache.org/dist/tomcat/tomcat-6/v6.0.13/bin/apache-tomcat-6.0.13.zip"
                      dest="${dependency.base.dir}/apache-tomcat-6.0.13.zip"
                      usetimestamp="true"/>
                 <unzip
