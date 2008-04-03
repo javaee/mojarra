@@ -97,6 +97,8 @@ public class InjectionProviderFactory {
      * If this propery is not defined, then a default, no-op,
      * <code>InjectionProvider</code> will be returned.
      *
+     * @param extContext ExteranlContext for the current request
+     *
      * @return an implementation of the <code>InjectionProvider</code>
      *  interfaces
      */
@@ -272,9 +274,7 @@ public class InjectionProviderFactory {
             if (serviceEntries.length > 0) {
                 for (int i = 0; i < serviceEntries.length; i++) {
                     provider = getProviderFromEntry(serviceEntries[i]);
-                    if (provider == null) {
-                        continue;
-                    } else {
+                    if (provider != null) {
                         break;
                     }
                 }
@@ -354,11 +354,11 @@ public class InjectionProviderFactory {
                 } catch (Exception e) {
                     reader = new BufferedReader(new InputStreamReader(input));
                 }
-                List list = new ArrayList(4);
+                List<String> list = new ArrayList<String>(4);
                 for (String line = reader.readLine(); line != null; line = reader.readLine()) {
                     list.add(line.trim());
                 }
-                results = (String[]) list.toArray(new String[list.size()]);
+                results = list.toArray(new String[list.size()]);
             }
         } catch (Exception e) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
@@ -371,12 +371,12 @@ public class InjectionProviderFactory {
             if (input != null) {
                 try {
                     input.close();
-                } catch (Exception e) {}
+                } catch (Exception ignored) {}
             }
             if (reader != null) {
                 try {
                     reader.close();
-                } catch (Exception e) {}
+                } catch (Exception ignored) {}
             }
         }
 
