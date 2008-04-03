@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.79 2007/04/27 22:00:59 ofung Exp $
+ * $Id: LifecycleImpl.java,v 1.80 2007/07/20 20:15:13 rlubke Exp $
  */
 
 /*
@@ -165,11 +165,22 @@ public class LifecycleImpl extends Lifecycle {
                 (MessageUtils.getExceptionMessageString
                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "listener"));
         }
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine("addPhaseListener(" + listener.getPhaseId().toString()
-                      + "," + listener);
+
+        if (listeners.contains(listener)) {
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.log(Level.WARNING,
+                           "jsf.lifecycle.duplicate_phase_listener_detected",
+                           listener.getClass().getName());
+            }
+        } else {
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("addPhaseListener("
+                            + listener.getPhaseId().toString()
+                            + ","
+                            + listener);
+            }
+            listeners.add(listener);
         }
-        listeners.add(listener);        
 
     }
 
