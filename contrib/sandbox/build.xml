@@ -228,33 +228,19 @@
         <!-- Shale Remoting -->
         <if>
             <not>
-                <available file="${shale.remoting.jar}" property="ignored"/>
+		<and>
+	                <available file="${shale.remoting.jar}" property="ignored"/>
+        	        <available file="${shale.test.jar}" property="ignored"/>
+		</and>
             </not>
             <then>
                 <!-- ${maven.mirror}/org/apache/shale/shale-remoting/${shale.remoting.version}/shale-remoting-${shale.remoting.version}.jar" -->
-                <get src="http://people.apache.org/builds/shale/nightly/shale-framework-200700605zip"
+                <get src="http://people.apache.org/builds/shale/nightly/shale-framework-20070607.zip"
                      dest="shale-framework.zip"
                      usetimestamp="true"/>
                 <unzip src="shale-framework.zip" dest="${sandbox.dependency.base.dir}">
                     <patternset>
                         <include name="**/shale-remoting-1.1.0-SNAPSHOT.jar"/>
-                    </patternset>
-                    <mapper type="flatten"/>
-                </unzip>
-            </then>
-        </if>
-        <!-- Shale Remoting -->
-        <if>
-            <not>
-                <available file="${shale.test.jar}" property="ignored"/>
-            </not>
-            <then>
-                <!-- ${maven.mirror}/org/apache/shale/shale-remoting/${shale.remoting.version}/shale-remoting-${shale.remoting.version}.jar" -->
-                <get src="http://people.apache.org/builds/shale/nightly/shale-framework-200700605zip"
-                     dest="shale-framework.zip"
-                     usetimestamp="true"/>
-                <unzip src="shale-framework.zip" dest="${sandbox.dependency.base.dir}">
-                    <patternset>
                         <include name="**/shale-test-1.1.0-SNAPSHOT.jar"/>
                     </patternset>
                     <mapper type="flatten"/>
@@ -271,13 +257,13 @@
                 </and>
             </not>
             <then>
-                <get src="https://jsftemplating.dev.java.net/files/documents/5015/55741/jsftemplating.jar"
+                <get src="https://jsftemplating.dev.java.net/files/documents/5015/57603/jsftemplating.jar"
                      dest="${jsftemplating.jar}"
                      usetimestamp="true"/>
-                <get src="https://jsftemplating.dev.java.net/files/documents/5015/55742/jsftemplating-dt.jar"
+                <get src="https://jsftemplating.dev.java.net/files/documents/5015/57604/jsftemplating-dt.jar"
                      dest="${jsftemplating.dt.jar}"
                      usetimestamp="true"/>
-                <get src="https://jsftemplating.dev.java.net/files/documents/5015/55743/jsftemplating-dynafaces-0.1.jar"
+                <get src="https://jsftemplating.dev.java.net/files/documents/5015/57605/jsftemplating-dynafaces-0.1.jar"
                      dest="${jsftemplating.df.jar}"
                      usetimestamp="true"/>
                      
