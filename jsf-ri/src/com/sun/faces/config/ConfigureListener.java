@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.100 2007/04/03 16:40:50 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.101 2007/04/03 20:19:44 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -66,6 +66,9 @@ import org.xml.sax.helpers.DefaultHandler;
 import javax.el.CompositeELResolver;
 import javax.el.ELResolver;
 import javax.el.ExpressionFactory;
+import javax.el.ELContext;
+import javax.el.FunctionMapper;
+import javax.el.VariableMapper;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
@@ -107,7 +110,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -118,6 +120,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -381,11 +384,16 @@ public class ConfigureListener implements ServletContextListener {
             }
 
             // Step 7, verify that all the configured factories are available
-            // and optionall that configured objects can be created
+            // and optionall that configured objects can be created.  Clear
+            // the InitFacesContext to ensure it isn't picked up by any of the
+            // objects validated by these methods - reinit the context after
+            // verification is complete.
+            initContext.release();
             verifyFactories();
             if (isFeatureEnabled(BooleanWebContextInitParameter.VerifyFacesConfigObjects)) {
                 verifyObjects(context, fcb);
             }
+            initContext = new InitFacesContext(context);
             // Step 8, register FacesCompositeELResolver and ELContextListener with
             // Jsp.
             registerELResolverAndListenerWithJsp(context);
@@ -1589,6 +1597,7 @@ public class ConfigureListener implements ServletContextListener {
     private static class InitFacesContext extends FacesContext {
 
         private ExternalContext ec;
+        private UIViewRoot viewRoot;
 
         public InitFacesContext(ServletContext sc) {
             ec = new ServletContextAdapter(sc);
@@ -1596,11 +1605,14 @@ public class ConfigureListener implements ServletContextListener {
         }
 
         public Application getApplication() {
-            throw new UnsupportedOperationException();
+            ApplicationFactory factory = (ApplicationFactory)
+                 FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+            return factory.getApplication();
         }
 
         public Iterator<String> getClientIdsWithMessages() {
-            throw new UnsupportedOperationException();
+            List<String> list = Collections.emptyList();
+            return list.iterator();
         }
 
         public ExternalContext getExternalContext() {
@@ -1608,55 +1620,60 @@ public class ConfigureListener implements ServletContextListener {
         }
 
         public FacesMessage.Severity getMaximumSeverity() {
-            throw new UnsupportedOperationException();
+            return FacesMessage.SEVERITY_INFO;
         }
 
         public Iterator<FacesMessage> getMessages() {
-            throw new UnsupportedOperationException();
+            List<FacesMessage> list = Collections.emptyList();
+            return list.iterator();
         }
 
         public Iterator<FacesMessage> getMessages(String clientId) {
-            throw new UnsupportedOperationException();
+            return getMessages();
         }
 
         public RenderKit getRenderKit() {
-            throw new UnsupportedOperationException();
+            return null;
         }
 
         public boolean getRenderResponse() {
-            throw new UnsupportedOperationException();
+            return true;
         }
 
         public boolean getResponseComplete() {
-            throw new UnsupportedOperationException();
+            return true;
         }
 
         public ResponseStream getResponseStream() {
-            throw new UnsupportedOperationException();
+            return null;
         }
 
         public void setResponseStream(ResponseStream responseStream) {
-            throw new UnsupportedOperationException();
+            ;
         }
 
         public ResponseWriter getResponseWriter() {
-            throw new UnsupportedOperationException();
+            return null;
         }
 
         public void setResponseWriter(ResponseWriter responseWriter) {
-            throw new UnsupportedOperationException();
+            ;
         }
 
         public UIViewRoot getViewRoot() {
-            throw new UnsupportedOperationException();
+            if (viewRoot == null) {
+                viewRoot = new UIViewRoot();
+                viewRoot.setLocale(Locale.getDefault());
+            }            
+            return viewRoot;
         }
 
         public void setViewRoot(UIViewRoot root) {
-            throw new UnsupportedOperationException();
+            ;
         }
 
         public void addMessage(String clientId, FacesMessage message) {
-            throw new UnsupportedOperationException();
+            ;
         }
 
         public void release() {
@@ -1664,11 +1681,27 @@ public class ConfigureListener implements ServletContextListener {
         }
 
         public void renderResponse() {
-            throw new UnsupportedOperationException();
+            ;
         }
 
         public void responseComplete() {
-            throw new UnsupportedOperationException();
+            ;
+        }
+
+        public ELContext getELContext() {
+            return new ELContext() {
+                public ELResolver getELResolver() {
+                    return null;
+                }
+
+                public FunctionMapper getFunctionMapper() {
+                    return null;
+                }
+
+                public VariableMapper getVariableMapper() {
+                    return null; 
+                }
+            };
         }
     }
 
