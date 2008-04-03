@@ -99,8 +99,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
         Util.notNull("resourceName", resourceName);
 
-        String contentType = getContentType(resourceName);
-        return createResource(resourceName, null, contentType);
+        return createResource(resourceName, null, null);
 
     }
 
@@ -112,8 +111,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
         Util.notNull("resourceName", resourceName);
 
-        String contentType = getContentType(resourceName);
-        return createResource(resourceName, libraryName, contentType);
+        return createResource(resourceName, libraryName, null);
 
     }
 
@@ -131,7 +129,9 @@ public class ResourceHandlerImpl extends ResourceHandler {
                                                  resourceName,
                                                  FacesContext.getCurrentInstance());
         return ((info != null)
-                ? new ResourceImpl(this, info, contentType)
+                ? new ResourceImpl(this, info, (contentType != null)
+                                               ? contentType
+                                               : getContentType(resourceName))
                 : null);
 
     }
