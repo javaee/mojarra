@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.9 2007/06/28 18:09:25 jdlee Exp $
+ * $Id: Util.java,v 1.10 2007/07/08 02:43:25 jdlee Exp $
  */
 
 /*
@@ -66,7 +66,7 @@ import org.apache.shale.remoting.XhtmlHelper;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.9 2007/06/28 18:09:25 jdlee Exp $
+ * @version $Id: Util.java,v 1.10 2007/07/08 02:43:25 jdlee Exp $
  */
 
 public class Util {      
@@ -668,15 +668,20 @@ public class Util {
         throw new IllegalStateException();
     }
 
+    @Deprecated
     public static String getAppBaseUrl(FacesContext context) {
+        return context.getExternalContext().getRequestContextPath();
+        /*
         String baseUrl = "";
         Object obj = context.getExternalContext().getRequest();
         if (obj instanceof HttpServletRequest ) {
             HttpServletRequest req = (HttpServletRequest )obj;
-            baseUrl = req.getScheme() + "://" + req.getServerName() +
-                ":" + req.getServerPort() + req.getContextPath();
+            baseUrl = //req.getScheme() + "://" + req.getServerName() +
+                //":" + req.getServerPort() + 
+                req.getContextPath();
         }
         
         return baseUrl;
+        */
     }
 } // end of class Util
