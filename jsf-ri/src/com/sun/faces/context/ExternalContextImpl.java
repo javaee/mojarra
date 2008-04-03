@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.60 2007/04/27 22:00:57 ofung Exp $
+ * $Id: ExternalContextImpl.java,v 1.61 2007/06/08 00:10:06 rlubke Exp $
  */
 
 /*
@@ -90,7 +90,7 @@ import com.sun.faces.util.FacesLogger;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.60 2007/04/27 22:00:57 ofung Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.61 2007/06/08 00:10:06 rlubke Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -110,10 +110,6 @@ public class ExternalContextImpl extends ExternalContext {
     
    private static final String EXTERNALCONTEXT_IMPL_ATTR_NAME = RIConstants.FACES_PREFIX + 
              "ExternalContextImpl";
-    
-    
-    // Log instance for this class
-    private static Logger LOGGER = FacesLogger.CONTEXT.getLogger();    
 
     static final Class theUnmodifiableMapClass =
         Collections.unmodifiableMap(new HashMap<Object,Object>()).getClass();
