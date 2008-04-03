@@ -28,13 +28,21 @@ public class FileDownloadRenderer extends Renderer {
     }
     
     @Override
-    public void encodeBegin(FacesContext context, UIComponent comp) throws IOException {
-        if ((context == null) || (comp == null)) {
-            throw new NullPointerException();
+    public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
+        if (context == null) {
+            throw new NullPointerException("param 'context' is null");
         }
-        FileDownload dl = (FileDownload) comp;
-        super.encodeBegin(context, comp);
-        if ((dl.getUrlVar() != null) || (comp.getChildCount() > 0)){
+        if (component == null) {
+            throw new NullPointerException("param 'component' is null");
+        }
+
+        // suppress rendering if "rendered" property on the component is false.
+        if (!component.isRendered()) {
+            return;
+        }
+        FileDownload dl = (FileDownload) component;
+        super.encodeBegin(context, component);
+        if ((dl.getUrlVar() != null) || (component.getChildCount() > 0)){
             setElValue(context, dl);
         }
         if (FileDownload.METHOD_DOWNLOAD.equals(dl.getMethod())) { // || (comp.getChildCount() == 0)) {
@@ -54,11 +62,19 @@ public class FileDownloadRenderer extends Renderer {
     }
 
     @Override
-    public void encodeEnd(FacesContext context, UIComponent comp) throws IOException {
-        if ((context == null) || (comp == null)) {
-            throw new NullPointerException();
+    public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
+        if (context == null) {
+            throw new NullPointerException("param 'context' is null");
         }
-        FileDownload dl = (FileDownload) comp;
+        if (component == null) {
+            throw new NullPointerException("param 'component' is null");
+        }
+
+        // suppress rendering if "rendered" property on the component is false.
+        if (!component.isRendered()) {
+            return;
+        }
+        FileDownload dl = (FileDownload) component;
         if (FileDownload.METHOD_INLINE.equals(dl.getMethod())) {
             renderInline(context, dl);
         } else if (FileDownload.METHOD_DOWNLOAD.equals(dl.getMethod())) {
@@ -68,7 +84,7 @@ public class FileDownloadRenderer extends Renderer {
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         request.getSession().setAttribute("HtmlDownload-" + dl.getClientId(context), dl);
         resetElValue(context, dl);
-        super.encodeEnd(context, comp);
+        super.encodeEnd(context, component);
     }
 
     protected void renderInline(FacesContext context, FileDownload comp) throws IOException {

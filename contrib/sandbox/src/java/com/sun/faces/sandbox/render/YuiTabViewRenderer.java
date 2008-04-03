@@ -37,7 +37,6 @@ public class YuiTabViewRenderer extends Renderer {
 
     public void encodeBegin(FacesContext context, UIComponent component)
     throws IOException {
-
         if (context == null) {
             throw new NullPointerException("param 'context' is null");
         }
@@ -156,6 +155,18 @@ public class YuiTabViewRenderer extends Renderer {
 
     @Override
     public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
+        if (context == null) {
+            throw new NullPointerException("param 'context' is null");
+        }
+        if (component == null) {
+            throw new NullPointerException("param 'component' is null");
+        }
+
+        // suppress rendering if "rendered" property on the component is false.
+        if (!component.isRendered()) {
+            return;
+        }
+
         ResponseWriter writer = context.getResponseWriter();
         YuiTabView tabView = (YuiTabView) component;
         

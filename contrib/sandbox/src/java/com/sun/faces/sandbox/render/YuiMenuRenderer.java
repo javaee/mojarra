@@ -68,6 +68,18 @@ public class YuiMenuRenderer extends Renderer {
      */
     @Override
     public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
+        if (context == null) {
+            throw new NullPointerException("param 'context' is null");
+        }
+        if (component == null) {
+            throw new NullPointerException("param 'component' is null");
+        }
+
+        // suppress rendering if "rendered" property on the component is false.
+        if (!component.isRendered()) {
+            return;
+        }
+
         for (int i = 0; i < scriptIds.length; i++) {
             Util.getXhtmlHelper().linkJavascript(context, component,
                     context.getResponseWriter(), Mechanism.CLASS_RESOURCE,
@@ -88,8 +100,16 @@ public class YuiMenuRenderer extends Renderer {
      */
     @Override
     public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
-        if ((context == null) || (component == null)) {
-            throw new NullPointerException();
+        if (context == null) {
+            throw new NullPointerException("param 'context' is null");
+        }
+        if (component == null) {
+            throw new NullPointerException("param 'component' is null");
+        }
+
+        // suppress rendering if "rendered" property on the component is false.
+        if (!component.isRendered()) {
+            return;
         }
 
         ResponseWriter writer = context.getResponseWriter();

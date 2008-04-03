@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -91,6 +92,18 @@ public class YuiTreeRenderer extends Renderer {
 
     @Override
     public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
+        if (context == null) {
+            throw new NullPointerException("param 'context' is null");
+        }
+        if (component == null) {
+            throw new NullPointerException("param 'component' is null");
+        }
+
+        // suppress rendering if "rendered" property on the component is false.
+        if (!component.isRendered()) {
+            return;
+        }
+
         ResponseWriter writer = context.getResponseWriter();
         String id = YuiRendererHelper.getJavascriptVar(component);
         String jsObjName = "tree" + id;

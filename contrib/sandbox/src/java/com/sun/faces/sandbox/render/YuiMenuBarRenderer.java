@@ -20,17 +20,6 @@ import com.sun.faces.sandbox.component.YuiMenuBase;
  */
 public class YuiMenuBarRenderer extends YuiMenuRenderer {
     protected String cssClass = "yuimenubar";
-    /*
-    @Override
-    public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
-        super.encodeBegin(context, component);
-        ResponseWriter writer = context.getResponseWriter();
-        writer.startElement("style", component);
-        writer.writeAttribute("type", "text/css", "type");
-        writer.writeText("div #" + component.getId() + "_1 { height: 20px; }", null);
-        writer.endElement("style");
-    }
-    */
     
     protected String getCssClass() {
         return "yuimenubar";

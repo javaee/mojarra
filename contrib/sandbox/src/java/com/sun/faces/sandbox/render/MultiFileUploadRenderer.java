@@ -22,11 +22,20 @@ import com.sun.faces.sandbox.util.Util;
  */
 public class MultiFileUploadRenderer extends Renderer {
     @Override
-    public void encodeEnd(FacesContext context, UIComponent comp) throws IOException {
-        if ((context == null) || (comp == null)) {
-            throw new NullPointerException();
+    public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
+        if (context == null) {
+            throw new NullPointerException("param 'context' is null");
         }
-        MultiFileUpload ul = (MultiFileUpload)comp;
+        if (component == null) {
+            throw new NullPointerException("param 'component' is null");
+        }
+
+        // suppress rendering if "rendered" property on the component is false.
+        if (!component.isRendered()) {
+            return;
+        }
+
+        MultiFileUpload ul = (MultiFileUpload)component;
         renderAppletTag(context, ul);
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         request.getSession().setAttribute("HtmlMultiFileUpload-" + ul.getClientId(context), ul);

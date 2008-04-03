@@ -68,7 +68,7 @@
     <property name="io.version" value="1.2" />
     <property name="logging.version" value="1.1" />
     <property name="facelets.version" value="1.1.11" />
-    <property name="shale.remoting.version" value="1.0.4" />
+    <property name="shale.remoting.version" value="1.1.0-SNAPSHOT" />
     <property name="tinymce.version" value="2_1_0" />
     <property name="httpclient.jar" value="${sandbox.dependency.base.dir}/commons-httpclient-${httpclient.version}.jar"/>
     <property name="fileupload.jar" value="${sandbox.dependency.base.dir}/commons-fileupload-${fileupload.version}.jar"/>
@@ -199,9 +199,16 @@
                 <available file="${shale.remoting.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${maven.mirror}/org/apache/shale/shale-remoting/${shale.remoting.version}/shale-remoting-${shale.remoting.version}.jar"
-                     dest="${shale.remoting.jar}"
+                <!-- ${maven.mirror}/org/apache/shale/shale-remoting/${shale.remoting.version}/shale-remoting-${shale.remoting.version}.jar" -->
+                <get src="http://people.apache.org/builds/shale/nightly/shale-framework-20070419.zip"
+                     dest="shale-framework.zip"
                      usetimestamp="true"/>
+                <unzip src="shale-framework.zip" dest="${sandbox.dependency.base.dir}">
+                    <patternset>
+                        <include name="**/shale-remoting-1.1.0-SNAPSHOT.jar"/>
+                    </patternset>
+                    <mapper type="flatten"/>
+                </unzip>
             </then>
         </if>
         <!-- JSFTemplating -->
@@ -214,13 +221,13 @@
                 </and>
             </not>
             <then>
-                <get src="https://jsftemplating.dev.java.net/files/documents/5015/50893/jsftemplating.jar"
+                <get src="https://jsftemplating.dev.java.net/files/documents/5015/55741/jsftemplating.jar"
                      dest="${jsftemplating.jar}"
                      usetimestamp="true"/>
-                <get src="https://jsftemplating.dev.java.net/files/documents/5015/50895/jsftemplating-dt.jar"
+                <get src="https://jsftemplating.dev.java.net/files/documents/5015/55742/jsftemplating-dt.jar"
                      dest="${jsftemplating.dt.jar}"
                      usetimestamp="true"/>
-                <get src="https://jsftemplating.dev.java.net/files/documents/5015/50896/jsftemplating-dynafaces-0.1.jar"
+                <get src="https://jsftemplating.dev.java.net/files/documents/5015/55743/jsftemplating-dynafaces-0.1.jar"
                      dest="${jsftemplating.df.jar}"
                      usetimestamp="true"/>
                      
@@ -248,7 +255,33 @@
         </if>
     </target>
 
-    <target name="compile" depends="prepare,update" description="Just compile the classes">
+    <path id="sandbox.compile.classpath">
+        <fileset dir="${sandbox.dependency.base.dir}" includes="*.jar"/>
+    </path>
+
+    <target name="apt">
+        <taskdef name="apt" classname="org.apache.tools.ant.taskdefs.Apt" />
+        <echo>
+            ${build.classes.dir}
+            ${jsf-api.jar}
+            ${jsf-impl.jar}
+            ${tools.dir}/build/classes
+        </echo>
+        <apt srcdir="${source.dir}"
+            fork="true"
+            destdir="${build.classes.dir}"
+            debug="${compile.debug}"
+            deprecation="${compile.deprecation}"
+            excludes="**/annotation/**"
+            optimize="${compile.optimize}">
+            <classpath>
+                <path refid="sandbox.compile.classpath"/>
+                <path refid="impl.compile.classpath"/>
+            </classpath>
+        </apt>
+    </target>
+
+    <target name="compile" depends="prepare,update,apt" description="Just compile the classes">
         <if>
             <equals arg1="${container.name}" arg2="glassfish"/>
             <then>
@@ -258,10 +291,6 @@
                 <property name="exclude.path" value="com/sun/faces/vendor/**,com/sun/faces/sandbox/web/**"/>
             </else>
         </if>
-
-        <path id="sandbox.compile.classpath">
-            <fileset dir="${sandbox.dependency.base.dir}" includes="*.jar"/>
-        </path>
 
         <!-- Run javac through everything -->
         <jsf.javac srcdir="${source.dir}"
@@ -333,8 +362,7 @@
         </uptodate>
     </target>
 
-    <target name="generate"
-        depends="check.generation.necessity">
+    <target name="generate" depends="check.generation.necessity">
             <!-- unless="skip.generation" -->
 
         <delete dir="${build.generate.dir}"/>
@@ -419,7 +447,7 @@
     <target name="javadoc" description="Generate javadocs">
         <mkdir dir="${build.dir}/javadocs" />
         <javadoc packagenames="com.sun.faces.sandbox."
-                verbose="no"
+                verbose="false"
                 defaultexcludes="yes"
                 classpathref="impl.compile.classpath"
                 destdir="${build.dir}/javadocs"

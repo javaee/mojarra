@@ -17,11 +17,11 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>FacesServlet</servlet-name>
-    <url-pattern>/resource/*</url-pattern>
+    <url-pattern>*.jsf</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>FacesServlet</servlet-name>
-    <url-pattern>*.jsf</url-pattern>
+    <url-pattern>/resource/*</url-pattern>
   </servlet-mapping>
   <welcome-file-list>
     <welcome-file>index.jsf</welcome-file>

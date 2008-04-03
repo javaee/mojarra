@@ -18,7 +18,7 @@
     </div>
     <div class="header_menu">
         <div class="header_menu_item">
-            <a href="..">Home</a>
+            <a href="index.jsf">Home</a>
         </div>
     </div>
     <div style="margin: 5px;">

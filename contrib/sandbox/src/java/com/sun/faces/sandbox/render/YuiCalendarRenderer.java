@@ -47,6 +47,18 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
     
     public void encodeBegin(FacesContext context, UIComponent component)
     throws IOException {
+        if (context == null) {
+            throw new NullPointerException("param 'context' is null");
+        }
+        if (component == null) {
+            throw new NullPointerException("param 'component' is null");
+        }
+
+        // suppress rendering if "rendered" property on the component is false.
+        if (!component.isRendered()) {
+            return;
+        }
+
         Calendar tempcal = Calendar.getInstance();
         YuiCalendar cal = (YuiCalendar) component;
         
@@ -72,8 +84,16 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
     
     public void encodeEnd(FacesContext context, UIComponent component)
     throws IOException {
-        if ((context == null) || (component == null)) {
-            throw new NullPointerException();
+        if (context == null) {
+            throw new NullPointerException("param 'context' is null");
+        }
+        if (component == null) {
+            throw new NullPointerException("param 'component' is null");
+        }
+
+        // suppress rendering if "rendered" property on the component is false.
+        if (!component.isRendered()) {
+            return;
         }
         YuiCalendar cal = (YuiCalendar) component;
         
@@ -192,10 +212,15 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
     
     public void decode(FacesContext context, UIComponent component) {
         if (context == null) {
-            throw new NullPointerException("Argument Error: Parameter 'context' is null");
+            throw new NullPointerException("param 'context' is null");
         }
         if (component == null) {
-            throw new NullPointerException("Argument Error: Parameter 'component' is null");
+            throw new NullPointerException("param 'component' is null");
+        }
+
+        // suppress rendering if "rendered" property on the component is false.
+        if (!component.isRendered()) {
+            return;
         }
         
         if (!(component instanceof YuiCalendar)) {
