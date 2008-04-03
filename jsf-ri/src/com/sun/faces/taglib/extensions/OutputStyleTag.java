@@ -45,9 +45,14 @@ import javax.el.ValueExpression;
  */
 public class OutputStyleTag extends UIComponentELTag {
 
-    private ValueExpression url;
-    public void setUrl(ValueExpression url) {
-        this.url = url;
+    private ValueExpression name;
+    public void setName(ValueExpression name) {
+        this.name = name;
+    }
+
+    private ValueExpression library;
+    public void setLibrary(ValueExpression library) {
+        this.library = library;
     }
 
 
@@ -67,8 +72,11 @@ public class OutputStyleTag extends UIComponentELTag {
     @Override
     protected void setProperties(UIComponent component) {
         super.setProperties(component);
-        if (url != null) {
-            component.setValueExpression("url", url);
+        if (name != null) {
+            component.setValueExpression("name", name);
+        }
+        if (library != null) {
+            component.setValueExpression("library", library);
         }
     }
 

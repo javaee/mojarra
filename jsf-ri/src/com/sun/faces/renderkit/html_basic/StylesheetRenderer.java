@@ -37,11 +37,13 @@
 package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.faces.render.Renderer;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.component.UIComponent;
+import javax.faces.application.Resource;
 
 /**
  * RELEASE_PENDING (rlubke) document
@@ -69,11 +71,22 @@ public class StylesheetRenderer extends Renderer {
     public void encodeEnd(FacesContext context, UIComponent component)
           throws IOException {
 
+        Map<String,Object> attributes = component.getAttributes();
+
+        String name = (String) attributes.get("name");
+        String library = (String) attributes.get("library");
+        Resource resource = context.getApplication().getResourceHandler()
+              .createResource(name, library);
+
         ResponseWriter writer = context.getResponseWriter();
         writer.startElement("link", component);
         writer.writeAttribute("type", "text/css", "type");
         writer.writeAttribute("rel", "stylesheet", "rel");
-        writer.writeAttribute("href", component.getAttributes().get("url"), "href");
+        writer.writeAttribute("href",
+                              ((resource != null)
+                                  ? resource.getURI()
+                                  : "RES_NOT_FOUND"),
+                              "href");
         writer.endElement("link");
 
     }

@@ -46,7 +46,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html;CHARSET=iso-8859-1">
     <title>CarStore</title>
-    <mjx:outputStyle url="#{resource['styles/stylesheet.css']}"/>
+    <mjx:outputStyle name="styles/stylesheet.css"/>
 </head>
 
 <body bgcolor="white">

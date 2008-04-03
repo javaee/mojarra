@@ -42,7 +42,7 @@
 
 <head>
     <title>Welcome to CarStore</title>
-    <mjx:outputStyle url="#{resource['styles/stylesheet.css']}"/>
+    <mjx:outputStyle name="styles/stylesheet.css"/>
 </head>
 
 

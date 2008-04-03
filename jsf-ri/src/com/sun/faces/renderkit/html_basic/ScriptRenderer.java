@@ -37,11 +37,13 @@
 package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
+import javax.faces.application.Resource;
 
 /**
  * RELEASE_PENDING (rlubke)
@@ -69,10 +71,21 @@ public class ScriptRenderer extends Renderer {
     public void encodeEnd(FacesContext context, UIComponent component)
           throws IOException {
 
+        Map<String,Object> attributes = component.getAttributes();
+
+        String name = (String) attributes.get("name");
+        String library = (String) attributes.get("library");
+        Resource resource = context.getApplication().getResourceHandler()
+              .createResource(name, library);
+
         ResponseWriter writer = context.getResponseWriter();
         writer.startElement("script", component);
         writer.writeAttribute("type", "text/javascript", "type");
-        writer.writeAttribute("src", component.getAttributes().get("url"), "src");
+        writer.writeAttribute("src",
+                              ((resource != null)
+                                  ? resource.getURI()
+                                  : "RES_NOT_FOUND"),
+                              "src");
         writer.endElement("script");
 
     }

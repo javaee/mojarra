@@ -66,11 +66,19 @@
             ]]>
         </description>
         <attribute>
-            <name>url</name>
+            <name>name</name>
+            <required>true</required>
             <deferred-value>
                 <type>java.lang.String</type>
             </deferred-value>
         </attribute>
+        <attribute>
+            <name>library</name>
+            <required>false</required>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>        
     </tag>
 
     <tag>
@@ -86,7 +94,15 @@
                 ]]>
         </description>
         <attribute>
-            <name>url</name>
+            <name>name</name>
+            <required>true</required>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <name>library</name>
+            <required>false</required>
             <deferred-value>
                 <type>java.lang.String</type>
             </deferred-value>

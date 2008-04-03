@@ -45,7 +45,7 @@
 <html>
 <head>
     <title>CarStore</title>
-    <mjx:outputStyle url="#{resource['styles/stylesheet.css']}"/>
+    <mjx:outputStyle name="styles/stylesheet.css"/>
 </head>
 
 <h:form>
