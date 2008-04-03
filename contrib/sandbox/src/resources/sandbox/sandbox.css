@@ -50,3 +50,11 @@
 .ygtvlph {background: url(%%%BASE_URL%%%/yui/assets/lph.gif) 0 0 no-repeat;}
 .ygtvloading {background: url(%%%BASE_URL%%%/yui/assets/loading.gif) 0 0 no-repeat;}
 .ygtvdepthcell {background: url(%%%BASE_URL%%%/yui/assets/vline.gif) 0 0 no-repeat;}
+
+div.yuimenu { background-color:#efefef; border:solid 1px #527B97; }
+div.yuimenu ul { border-color: #527B97; }
+div.yuimenu li.yuimenuitem { padding:2px 24px; }
+div.yuimenubar h6 { border-color:#527B97; }
+div.yuimenubar li.selected { background-color: #527B97; }
+div.yuimenubar li.yuimenubaritem { border-color:#527B97; }
+div.yuimenu li.selected, div.yuimenubar li.selected { background-color: #527B97; }

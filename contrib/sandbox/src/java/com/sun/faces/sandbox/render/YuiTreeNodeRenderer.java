@@ -78,25 +78,30 @@ public class YuiTreeNodeRenderer extends Renderer {
         UIComponent labelFacet = treeNode.getFacet("label");
         ResponseWriter writer = context.getResponseWriter();
         
-        String output = YuiRendererHelper.getRenderedOutput(context, writer, labelFacet);
-        String name =  YuiRendererHelper.getJavascriptVar(treeNode);
-        writer.write("var treeNode_" + name + " = new YAHOO.widget.HTMLNode('" + 
-                output + "', treeNode_" + YuiRendererHelper.getJavascriptVar(treeNode.getParent()) + ", false, true);\n");
+//        String output = YuiRendererHelper.getRenderedOutput(context, writer, labelFacet);
+//        String name =  YuiRendererHelper.getJavascriptVar(treeNode);
+//        writer.write("var treeNode_" + name + " = new YAHOO.widget.HTMLNode('" + 
+//                output + "', treeNode_" + YuiRendererHelper.getJavascriptVar(treeNode.getParent()) + ", false, true);\n");
+        writer.startElement("li", null);
+        labelFacet.encodeAll(context);
+        if (treeNode.getChildCount() > 0) {
+            writer.startElement("ul", null);
+        }
     }
 
     @Override
     public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
-        if (context == null) {
-            throw new NullPointerException("param 'context' is null");
+        YuiTreeNode treeNode = (YuiTreeNode)component;
+        ResponseWriter writer = context.getResponseWriter();
+        if (treeNode.getChildCount() > 0) {
+            writer.endElement("ul");
         }
-        if (component == null) {
-            throw new NullPointerException("param 'component' is null");
-        }
+        writer.endElement("li");
+        writer.write("\n");
+    }
 
-        // suppress rendering if "rendered" property on the component is false.
-        if (!component.isRendered()) {
-            return;
-        }
-        super.encodeEnd(context, component);
+    @Override
+    public boolean getRendersChildren() {
+        return false;
     }
 }

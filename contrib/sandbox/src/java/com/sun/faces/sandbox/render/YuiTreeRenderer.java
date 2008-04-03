@@ -70,7 +70,8 @@ public class YuiTreeRenderer extends Renderer {
     //public static int level = 0;
     private static final String scriptIds[] = {
         YuiConstants.JS_YAHOO_DOM_EVENT,
-        YuiConstants.JS_TREEVIEW
+        YuiConstants.JS_TREEVIEW,
+        YuiConstants.JS_YUI_TREEVIEW_HELPER
     };
 
     private static final String cssIds[] = { 
@@ -112,16 +113,9 @@ public class YuiTreeRenderer extends Renderer {
         writer.startElement("div", tree);
         writer.writeAttribute("id", component.getId(), "id");
         Util.renderPassThruAttributes(writer, component);
-        writer.endElement("div");
 
-        String id = YuiRendererHelper.getJavascriptVar(component);
-        String jsObjName = "tree" + id;
-
-        writer.startElement("script", null);
-        writer.write("var " + jsObjName +";\n(function() {\n");
-        writer.write("function init_" + jsObjName + "() {\n");
-        writer.write(jsObjName + " = new YAHOO.widget.TreeView('" + id + "');\n");
-        writer.write("var treeNode_" + id + " = " + jsObjName + ".getRoot();\n");
+        writer.startElement("ul", null);
+//        tree.encodeChildren(context);
     }
     
     
@@ -141,12 +135,27 @@ public class YuiTreeRenderer extends Renderer {
         }
 
         ResponseWriter writer = context.getResponseWriter();
+        writer.endElement("ul");
+        writer.endElement("div");
+
         String id = YuiRendererHelper.getJavascriptVar(component);
         String jsObjName = "tree" + id;
 
+        writer.startElement("script", null);
+        writer.writeAttribute("type", "text/javascript", "type");
+        writer.write("var " + jsObjName +";\n");
+        writer.write("(function() {\n");
+        writer.write("function init_" + jsObjName + "() {\n");
+        writer.write(jsObjName + " = new YAHOO.widget.TreeView('" + component.getId() + "');\n");
+        writer.write(jsObjName + ".readList();");
         writer.write(jsObjName + ".draw();\n}\n");
         writer.write("YAHOO.util.Event.addListener(window, \"load\", init_" + jsObjName + ");\n})();\n");
 
         writer.endElement("script");
+    }
+
+    @Override
+    public boolean getRendersChildren() {
+        return false;
     }
 }

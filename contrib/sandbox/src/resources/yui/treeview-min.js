@@ -1,44 +1,8 @@
 /*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * 
- * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
- * 
- * The contents of this file are subject to the terms of either the GNU
- * General Public License Version 2 only ("GPL") or the Common Development
- * and Distribution License("CDDL") (collectively, the "License").  You
- * may not use this file except in compliance with the License. You can obtain
- * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
- * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
- * language governing permissions and limitations under the License.
- * 
- * When distributing the software, include this License Header Notice in each
- * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
- * Sun designates this particular file as subject to the "Classpath" exception
- * as provided by Sun in the GPL Version 2 section of the License file that
- * accompanied this code.  If applicable, add the following below the License
- * Header, with the fields enclosed by brackets [] replaced by your own
- * identifying information: "Portions Copyrighted [year]
- * [name of copyright owner]"
- * 
- * Contributor(s):
- * 
- * If you wish your version of this file to be governed by only the CDDL or
- * only the GPL Version 2, indicate your decision by adding "[Contributor]
- * elects to include this software in this distribution under the [CDDL or GPL
- * Version 2] license."  If you don't indicate a single choice of license, a
- * recipient has the option to distribute your version of this file under
- * either the CDDL, the GPL Version 2 or to extend the choice of license to
- * its licensees as provided above.  However, if you add GPL Version 2 code
- * and therefore, elected the GPL Version 2 license, then the option applies
- * only if the new code is made subject to such option by the copyright
- * holder.
- */
-
-/*
 Copyright (c) 2007, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-version: 2.2.0
+version: 2.2.2
 */
 
 YAHOO.widget.TreeView=function(id){if(id){this.init(id);}};YAHOO.widget.TreeView.prototype={id:null,_el:null,_nodes:null,locked:false,_expandAnim:null,_collapseAnim:null,_animCount:0,maxAnim:2,setExpandAnim:function(type){if(YAHOO.widget.TVAnim.isValid(type)){this._expandAnim=type;}},setCollapseAnim:function(type){if(YAHOO.widget.TVAnim.isValid(type)){this._collapseAnim=type;}},animateExpand:function(el,node){if(this._expandAnim&&this._animCount<this.maxAnim){var tree=this;var a=YAHOO.widget.TVAnim.getAnim(this._expandAnim,el,function(){tree.expandComplete(node);});if(a){++this._animCount;this.fireEvent("animStart",{"node":node,"type":"expand"});a.animate();}
@@ -103,4 +67,4 @@ this.html=oData.html;this.contentElId="ygtvcontentel"+this.index;this.hasIcon=ha
 if(this.hasIcon){sb[sb.length]='<td';sb[sb.length]=' id="'+this.getToggleElId()+'"';sb[sb.length]=' class="'+this.getStyle()+'"';sb[sb.length]=' onclick="javascript:'+this.getToggleLink()+'"';if(this.hasChildren(true)){sb[sb.length]=' onmouseover="this.className=';sb[sb.length]='YAHOO.widget.TreeView.getNode(\'';sb[sb.length]=this.tree.id+'\','+this.index+').getHoverStyle()"';sb[sb.length]=' onmouseout="this.className=';sb[sb.length]='YAHOO.widget.TreeView.getNode(\'';sb[sb.length]=this.tree.id+'\','+this.index+').getStyle()"';}
 sb[sb.length]='><div class="ygtvspacer"></div></td>';}
 sb[sb.length]='<td';sb[sb.length]=' id="'+this.contentElId+'"';sb[sb.length]=' class="'+this.contentStyle+'"';sb[sb.length]=(this.nowrap)?' nowrap="nowrap" ':'';sb[sb.length]=' >';sb[sb.length]=this.html;sb[sb.length]='</td>';sb[sb.length]='</tr>';sb[sb.length]='</table>';return sb.join("");},toString:function(){return"HTMLNode ("+this.index+")";}});YAHOO.widget.MenuNode=function(oData,oParent,expanded){if(oData){this.init(oData,oParent,expanded);this.setUpLabel(oData);}
-this.multiExpand=false;};YAHOO.extend(YAHOO.widget.MenuNode,YAHOO.widget.TextNode,{toString:function(){return"MenuNode ("+this.index+") "+this.label;}});YAHOO.widget.TVAnim=function(){return{FADE_IN:"TVFadeIn",FADE_OUT:"TVFadeOut",getAnim:function(type,el,callback){if(YAHOO.widget[type]){return new YAHOO.widget[type](el,callback);}else{return null;}},isValid:function(type){return(YAHOO.widget[type]);}};}();YAHOO.widget.TVFadeIn=function(el,callback){this.el=el;this.callback=callback;};YAHOO.widget.TVFadeIn.prototype={animate:function(){var tvanim=this;var s=this.el.style;s.opacity=0.1;s.filter="alpha(opacity=10)";s.display="";var dur=0.4;var a=new YAHOO.util.Anim(this.el,{opacity:{from:0.1,to:1,unit:""}},dur);a.onComplete.subscribe(function(){tvanim.onComplete();});a.animate();},onComplete:function(){this.callback();},toString:function(){return"TVFadeIn";}};YAHOO.widget.TVFadeOut=function(el,callback){this.el=el;this.callback=callback;};YAHOO.widget.TVFadeOut.prototype={animate:function(){var tvanim=this;var dur=0.4;var a=new YAHOO.util.Anim(this.el,{opacity:{from:1,to:0.1,unit:""}},dur);a.onComplete.subscribe(function(){tvanim.onComplete();});a.animate();},onComplete:function(){var s=this.el.style;s.display="none";s.filter="alpha(opacity=100)";this.callback();},toString:function(){return"TVFadeOut";}};YAHOO.register("treeview",YAHOO.widget.TreeView,{version:"2.2.0",build:"127"});
+this.multiExpand=false;};YAHOO.extend(YAHOO.widget.MenuNode,YAHOO.widget.TextNode,{toString:function(){return"MenuNode ("+this.index+") "+this.label;}});YAHOO.widget.TVAnim=function(){return{FADE_IN:"TVFadeIn",FADE_OUT:"TVFadeOut",getAnim:function(type,el,callback){if(YAHOO.widget[type]){return new YAHOO.widget[type](el,callback);}else{return null;}},isValid:function(type){return(YAHOO.widget[type]);}};}();YAHOO.widget.TVFadeIn=function(el,callback){this.el=el;this.callback=callback;};YAHOO.widget.TVFadeIn.prototype={animate:function(){var tvanim=this;var s=this.el.style;s.opacity=0.1;s.filter="alpha(opacity=10)";s.display="";var dur=0.4;var a=new YAHOO.util.Anim(this.el,{opacity:{from:0.1,to:1,unit:""}},dur);a.onComplete.subscribe(function(){tvanim.onComplete();});a.animate();},onComplete:function(){this.callback();},toString:function(){return"TVFadeIn";}};YAHOO.widget.TVFadeOut=function(el,callback){this.el=el;this.callback=callback;};YAHOO.widget.TVFadeOut.prototype={animate:function(){var tvanim=this;var dur=0.4;var a=new YAHOO.util.Anim(this.el,{opacity:{from:1,to:0.1,unit:""}},dur);a.onComplete.subscribe(function(){tvanim.onComplete();});a.animate();},onComplete:function(){var s=this.el.style;s.display="none";s.filter="alpha(opacity=100)";this.callback();},toString:function(){return"TVFadeOut";}};YAHOO.register("treeview",YAHOO.widget.TreeView,{version:"2.2.2",build:"204"});

@@ -1,44 +1,8 @@
 /*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * 
- * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
- * 
- * The contents of this file are subject to the terms of either the GNU
- * General Public License Version 2 only ("GPL") or the Common Development
- * and Distribution License("CDDL") (collectively, the "License").  You
- * may not use this file except in compliance with the License. You can obtain
- * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
- * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
- * language governing permissions and limitations under the License.
- * 
- * When distributing the software, include this License Header Notice in each
- * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
- * Sun designates this particular file as subject to the "Classpath" exception
- * as provided by Sun in the GPL Version 2 section of the License file that
- * accompanied this code.  If applicable, add the following below the License
- * Header, with the fields enclosed by brackets [] replaced by your own
- * identifying information: "Portions Copyrighted [year]
- * [name of copyright owner]"
- * 
- * Contributor(s):
- * 
- * If you wish your version of this file to be governed by only the CDDL or
- * only the GPL Version 2, indicate your decision by adding "[Contributor]
- * elects to include this software in this distribution under the [CDDL or GPL
- * Version 2] license."  If you don't indicate a single choice of license, a
- * recipient has the option to distribute your version of this file under
- * either the CDDL, the GPL Version 2 or to extend the choice of license to
- * its licensees as provided above.  However, if you add GPL Version 2 code
- * and therefore, elected the GPL Version 2 license, then the option applies
- * only if the new code is made subject to such option by the copyright
- * holder.
- */
-
-/*
 Copyright (c) 2007, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-version: 2.2.0
+version: 2.2.2
 */
 
 YAHOO.widget.Slider=function(sElementId,sGroup,oThumb,sType){if(sElementId){this.init(sElementId,sGroup,true);this.initSlider(sType);this.initThumb(oThumb);}};YAHOO.widget.Slider.getHorizSlider=function(sBGElId,sHandleElId,iLeft,iRight,iTickSize){return new YAHOO.widget.Slider(sBGElId,sBGElId,new YAHOO.widget.SliderThumb(sHandleElId,sBGElId,iLeft,iRight,0,0,iTickSize),"horiz");};YAHOO.widget.Slider.getVertSlider=function(sBGElId,sHandleElId,iUp,iDown,iTickSize){return new YAHOO.widget.Slider(sBGElId,sBGElId,new YAHOO.widget.SliderThumb(sHandleElId,sBGElId,0,0,iUp,iDown,iTickSize),"vert");};YAHOO.widget.Slider.getSliderRegion=function(sBGElId,sHandleElId,iLeft,iRight,iUp,iDown,iTickSize){return new YAHOO.widget.Slider(sBGElId,sBGElId,new YAHOO.widget.SliderThumb(sHandleElId,sBGElId,iLeft,iRight,iUp,iDown,iTickSize),"region");};YAHOO.widget.Slider.ANIM_AVAIL=true;YAHOO.extend(YAHOO.widget.Slider,YAHOO.util.DragDrop,{initSlider:function(sType){this.type=sType;this.createEvent("change",this);this.createEvent("slideStart",this);this.createEvent("slideEnd",this);this.isTarget=false;this.animate=YAHOO.widget.Slider.ANIM_AVAIL;this.backgroundEnabled=true;this.tickPause=40;this.enableKeys=true;this.keyIncrement=20;this.moveComplete=true;this.animationDuration=0.2;},initThumb:function(t){var self=this;this.thumb=t;t.cacheBetweenDrags=true;t.onChange=function(){self.handleThumbChange();};if(t._isHoriz&&t.xTicks&&t.xTicks.length){this.tickPause=Math.round(360/t.xTicks.length);}else if(t.yTicks&&t.yTicks.length){this.tickPause=Math.round(360/t.yTicks.length);}
@@ -69,4 +33,4 @@ this._isHoriz=(iLeft||iRight);this._isVert=(iUp||iDown);this._isRegion=(this._is
 var val=(this._isHoriz)?this.getXValue():this.getYValue();return val;},getXValue:function(){if(!this.available){return 0;}
 var newOffset=this.getOffsetFromParent();return(newOffset[0]-this.startOffset[0]);},getYValue:function(){if(!this.available){return 0;}
 var newOffset=this.getOffsetFromParent();return(newOffset[1]-this.startOffset[1]);},toString:function(){return"SliderThumb "+this.id;},onChange:function(x,y){}});if("undefined"==typeof YAHOO.util.Anim){YAHOO.widget.Slider.ANIM_AVAIL=false;}
-YAHOO.register("slider",YAHOO.widget.Slider,{version:"2.2.0",build:"127"});
+YAHOO.register("slider",YAHOO.widget.Slider,{version:"2.2.2",build:"204"});

@@ -1,44 +1,8 @@
 /*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * 
- * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
- * 
- * The contents of this file are subject to the terms of either the GNU
- * General Public License Version 2 only ("GPL") or the Common Development
- * and Distribution License("CDDL") (collectively, the "License").  You
- * may not use this file except in compliance with the License. You can obtain
- * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
- * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
- * language governing permissions and limitations under the License.
- * 
- * When distributing the software, include this License Header Notice in each
- * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
- * Sun designates this particular file as subject to the "Classpath" exception
- * as provided by Sun in the GPL Version 2 section of the License file that
- * accompanied this code.  If applicable, add the following below the License
- * Header, with the fields enclosed by brackets [] replaced by your own
- * identifying information: "Portions Copyrighted [year]
- * [name of copyright owner]"
- * 
- * Contributor(s):
- * 
- * If you wish your version of this file to be governed by only the CDDL or
- * only the GPL Version 2, indicate your decision by adding "[Contributor]
- * elects to include this software in this distribution under the [CDDL or GPL
- * Version 2] license."  If you don't indicate a single choice of license, a
- * recipient has the option to distribute your version of this file under
- * either the CDDL, the GPL Version 2 or to extend the choice of license to
- * its licensees as provided above.  However, if you add GPL Version 2 code
- * and therefore, elected the GPL Version 2 license, then the option applies
- * only if the new code is made subject to such option by the copyright
- * holder.
- */
-
-/*
 Copyright (c) 2007, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-version: 2.2.0
+version: 2.2.2
 */
 
 (function(){YAHOO.widget.TabView=function(el,attr){attr=attr||{};if(arguments.length==1&&!YAHOO.lang.isString(el)&&!el.nodeName){attr=el;el=attr.element||null;}
@@ -68,4 +32,4 @@ _setLabel.call(this,value);}});this.setAttributeConfig('contentEl',{value:attr.c
 this.replaceChild(value,current);}}});this.setAttributeConfig('content',{value:attr.content,method:function(value){this.get('contentEl').innerHTML=value;}});var _dataLoaded=false;this.setAttributeConfig('dataSrc',{value:attr.dataSrc});this.setAttributeConfig('cacheData',{value:attr.cacheData||false,validator:YAHOO.lang.isBoolean});this.setAttributeConfig('loadMethod',{value:attr.loadMethod||'GET',validator:YAHOO.lang.isString});this.setAttributeConfig('dataLoaded',{value:false,validator:YAHOO.lang.isBoolean,writeOnce:true});this.setAttributeConfig('dataTimeout',{value:attr.dataTimeout||null,validator:YAHOO.lang.isNumber});this.setAttributeConfig('active',{value:attr.active||this.hasClass(this.ACTIVE_CLASSNAME),method:function(value){if(value===true){this.addClass(this.ACTIVE_CLASSNAME);this.set('title','active');}else{this.removeClass(this.ACTIVE_CLASSNAME);this.set('title','');}},validator:function(value){return YAHOO.lang.isBoolean(value)&&!this.get('disabled');}});this.setAttributeConfig('disabled',{value:attr.disabled||this.hasClass(this.DISABLED_CLASSNAME),method:function(value){if(value===true){Dom.addClass(this.get('element'),this.DISABLED_CLASSNAME);}else{Dom.removeClass(this.get('element'),this.DISABLED_CLASSNAME);}},validator:YAHOO.lang.isBoolean});this.setAttributeConfig('href',{value:attr.href||'#',method:function(value){this.getElementsByTagName('a')[0].href=value;},validator:YAHOO.lang.isString});this.setAttributeConfig('contentVisible',{value:attr.contentVisible,method:function(value){if(value){this.get('contentEl').style.display='block';if(this.get('dataSrc')){if(!this.get('dataLoaded')||!this.get('cacheData')){_dataConnect.call(this);}}}else{this.get('contentEl').style.display='none';}},validator:YAHOO.lang.isBoolean});};var _createTabElement=function(attr){var el=document.createElement('li');var a=document.createElement('a');a.href=attr.href||'#';el.appendChild(a);var label=attr.label||null;var labelEl=attr.labelEl||null;if(labelEl){if(!label){label=_getLabel.call(this,labelEl);}}else{labelEl=_createlabelEl.call(this);}
 a.appendChild(labelEl);return el;};var _getlabelEl=function(){return this.getElementsByTagName(this.LABEL_TAGNAME)[0];};var _createlabelEl=function(){var el=document.createElement(this.LABEL_TAGNAME);return el;};var _setLabel=function(label){var el=this.get('labelEl');el.innerHTML=label;};var _getLabel=function(){var label,el=this.get('labelEl');if(!el){return undefined;}
 return el.innerHTML;};var _dataConnect=function(){if(!YAHOO.util.Connect){return false;}
-Dom.addClass(this.get('contentEl').parentNode,this.LOADING_CLASSNAME);this.dataConnection=YAHOO.util.Connect.asyncRequest(this.get('loadMethod'),this.get('dataSrc'),{success:function(o){this.loadHandler.success.call(this,o);this.set('dataLoaded',true);this.dataConnection=null;Dom.removeClass(this.get('contentEl').parentNode,this.LOADING_CLASSNAME);},failure:function(o){this.loadHandler.failure.call(this,o);this.dataConnection=null;Dom.removeClass(this.get('contentEl').parentNode,this.LOADING_CLASSNAME);},scope:this,timeout:this.get('dataTimeout')});};YAHOO.widget.Tab=Tab;})();YAHOO.register("tabview",YAHOO.widget.TabView,{version:"2.2.0",build:"127"});
+Dom.addClass(this.get('contentEl').parentNode,this.LOADING_CLASSNAME);this.dataConnection=YAHOO.util.Connect.asyncRequest(this.get('loadMethod'),this.get('dataSrc'),{success:function(o){this.loadHandler.success.call(this,o);this.set('dataLoaded',true);this.dataConnection=null;Dom.removeClass(this.get('contentEl').parentNode,this.LOADING_CLASSNAME);},failure:function(o){this.loadHandler.failure.call(this,o);this.dataConnection=null;Dom.removeClass(this.get('contentEl').parentNode,this.LOADING_CLASSNAME);},scope:this,timeout:this.get('dataTimeout')});};YAHOO.widget.Tab=Tab;})();YAHOO.register("tabview",YAHOO.widget.TabView,{version:"2.2.2",build:"204"});
