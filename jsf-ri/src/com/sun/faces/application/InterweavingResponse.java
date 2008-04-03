@@ -1,5 +1,5 @@
 /*
- * $Id: InterweavingResponse.java,v 1.2 2007/05/17 14:26:30 rlubke Exp $
+ * $Id: InterweavingResponse.java,v 1.3 2008/01/10 21:37:01 rlubke Exp $
  */
 
 /*
@@ -42,6 +42,16 @@ import java.io.IOException;
  * beit byte or character following similar semantics of the
  * Servlet and Porlet response classes.  Buffered content should
  * only be written when explicitly requested.
+ * </p>
+ *
+ * <p>
+ * Instead of ViewTag looking for this type and peforming the flush
+ * of the buffered content, the response object obtained from the
+ * ExternalContext need merely provide a method
+ * "public void flushContentToWrappedResponse() throws IOException".
+ * ViewTag will use reflection to obtain the method.
+ * </p>
+ * @deprecated
  */
 public interface InterweavingResponse {
 

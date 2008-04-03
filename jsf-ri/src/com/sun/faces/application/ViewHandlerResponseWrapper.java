@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerResponseWrapper.java,v 1.16 2007/07/12 14:44:08 rlubke Exp $ 
+ * $Id: ViewHandlerResponseWrapper.java,v 1.17 2008/01/10 21:37:01 rlubke Exp $ 
  */
 
 /*
@@ -58,7 +58,7 @@ import java.io.Writer;
  * text that exists after the &lt;f:view&gt; tag.</p>
  */
 
-public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper implements InterweavingResponse {
+public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper {
 
     private ByteArrayWebOutputStream basos;
     private WebPrintWriter pw ;

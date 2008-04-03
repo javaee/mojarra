@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.114 2007/12/17 21:46:08 rlubke Exp $
+ * $Id: ViewHandlerImpl.java,v 1.115 2008/01/10 21:37:01 rlubke Exp $
  */
 
 
@@ -82,7 +82,7 @@ import java.util.logging.Logger;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.114 2007/12/17 21:46:08 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.115 2008/01/10 21:37:01 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -219,7 +219,7 @@ public class ViewHandlerImpl extends ViewHandler {
 
         // write any AFTER_VIEW_CONTENT to the response
         // side effect: AFTER_VIEW_CONTENT removed
-        InterweavingResponse wrapper = (InterweavingResponse)
+        ViewHandlerResponseWrapper wrapper = (ViewHandlerResponseWrapper)
               RequestStateManager.remove(context, RequestStateManager.AFTER_VIEW_CONTENT);
         if (null != wrapper) {
             wrapper.flushToWriter(response.getWriter(),
@@ -466,7 +466,7 @@ public class ViewHandlerImpl extends ViewHandler {
         Object originalResponse = extContext.getResponse();
 
         // replace the response with our wrapper
-        InterweavingResponse wrapped = getWrapper(extContext);
+        ViewHandlerResponseWrapper wrapped = getWrapper(extContext);
         extContext.setResponse(wrapped);
 
         // build the view by executing the page
@@ -805,7 +805,7 @@ public class ViewHandlerImpl extends ViewHandler {
     }
 
 
-    private static InterweavingResponse getWrapper(ExternalContext extContext) {
+    private static ViewHandlerResponseWrapper getWrapper(ExternalContext extContext) {
         Object response = extContext.getResponse();
         if (response instanceof HttpServletResponse) {
             return new ViewHandlerResponseWrapper((HttpServletResponse) response);

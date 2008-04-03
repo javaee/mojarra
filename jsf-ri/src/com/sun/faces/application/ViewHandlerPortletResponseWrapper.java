@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandlerPortletResponseWrapper.java,v 1.2 2007/05/17 14:26:30 rlubke Exp $ 
+ * $Id: ViewHandlerPortletResponseWrapper.java,v 1.3 2008/01/10 21:37:01 rlubke Exp $ 
  */
 
 /*
@@ -38,6 +38,7 @@ import java.util.Locale;
 /**
  * This is an example of a Portlet implementation of the InterweavingResponse.
  * Bridges may use this code as an example, or refer to it directly.
+ * @deprecated
  */
 public class ViewHandlerPortletResponseWrapper implements RenderResponse, InterweavingResponse {
 

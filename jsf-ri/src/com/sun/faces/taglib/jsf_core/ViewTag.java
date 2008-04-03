@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.50 2008/01/08 18:26:07 rlubke Exp $
+ * $Id: ViewTag.java,v 1.51 2008/01/10 21:37:02 rlubke Exp $
  */
 
 /*
@@ -66,10 +66,14 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 
 import com.sun.faces.application.InterweavingResponse;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.ReflectionUtils;
+import com.sun.faces.RIConstants;
 
 /**
  * All JSF component tags must be nested within a f:view tag.  This tag
@@ -77,7 +81,7 @@ import com.sun.faces.util.FacesLogger;
  * Renderer. It exists mainly to provide a guarantee that all faces
  * components reside inside of this tag.
  *
- * @version $Id: ViewTag.java,v 1.50 2008/01/08 18:26:07 rlubke Exp $
+ * @version $Id: ViewTag.java,v 1.51 2008/01/10 21:37:02 rlubke Exp $
  */
 
 public class ViewTag extends UIComponentELTag {
@@ -174,19 +178,24 @@ public class ViewTag extends UIComponentELTag {
                         MessageUtils.FACES_CONTEXT_NOT_FOUND_ID));
         }
 
-
-    // flush out any content above the view tag
-    Object response = facesContext.getExternalContext().getResponse();
-    if (response instanceof InterweavingResponse) {
-        try {
-        pageContext.getOut().flush();
-        ((InterweavingResponse)response).flushContentToWrappedResponse();
+        // flush out any content above the view tag
+        Object response = facesContext.getExternalContext().getResponse();
+        Method customFlush = ReflectionUtils.lookupMethod(response.getClass(),
+                                                          "flushContentToWrappedResponse",
+                                                          RIConstants.EMPTY_CLASS_ARGS);
+        if (customFlush != null) {
+            try {
+                pageContext.getOut().flush();
+                customFlush.invoke(response, RIConstants.EMPTY_METH_ARGS);
+            } catch (Exception e) {
+                throw new JspException("Exception attemtping to write content above the <f:view> tag.", e);
+            }
+        } else {
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.log(Level.WARNING,
+                           "jsf.core.taglib.viewtag.interweaving_failed");
+            }
         }
-        catch (IOException e) {
-        throw new JspException("Can't write content above <f:view> tag"
-                               + " " + e.getMessage());
-        }
-    }
 
         int rc;
         try {
