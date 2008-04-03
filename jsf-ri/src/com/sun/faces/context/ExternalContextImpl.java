@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.63 2007/06/25 20:57:21 rlubke Exp $
+ * $Id: ExternalContextImpl.java,v 1.64 2007/07/17 22:04:44 rlubke Exp $
  */
 
 /*
@@ -47,11 +47,9 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
-import javax.servlet.ServletRequestWrapper;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -75,7 +73,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
@@ -83,14 +80,13 @@ import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.Util;
-import com.sun.faces.util.FacesLogger;
 
 /**
  * <p>This implementation of {@link ExternalContext} is specific to the
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.63 2007/06/25 20:57:21 rlubke Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.64 2007/07/17 22:04:44 rlubke Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -188,6 +184,8 @@ public class ExternalContextImpl extends ExternalContext {
         response.setCharacterEncoding(encoding);
     }
 
+
+    @SuppressWarnings("unchecked")
     public Map<String,Object> getApplicationMap() {
         if (applicationMap == null) {
             applicationMap = new ApplicationMap(servletContext);
@@ -196,6 +194,7 @@ public class ExternalContextImpl extends ExternalContext {
     }
 
 
+    @SuppressWarnings("unchecked")
     public Map<String,Object> getSessionMap() {
         if (sessionMap == null) {
             sessionMap = new SessionMap((HttpServletRequest) request);
@@ -204,6 +203,7 @@ public class ExternalContextImpl extends ExternalContext {
     }
 
 
+    @SuppressWarnings("unchecked")
     public Map<String,Object> getRequestMap() {
         if (requestMap == null) {
             requestMap = new RequestMap(this.request);
@@ -215,7 +215,7 @@ public class ExternalContextImpl extends ExternalContext {
     public Map<String,String> getRequestHeaderMap() {
         if (null == requestHeaderMap) {
             requestHeaderMap = 
-                Collections.<String, String>unmodifiableMap(
+                Collections.unmodifiableMap(
                     new RequestHeaderMap((HttpServletRequest) request));                                                      
         }
         return requestHeaderMap;
@@ -225,7 +225,7 @@ public class ExternalContextImpl extends ExternalContext {
     public Map<String,String[]> getRequestHeaderValuesMap() {
         if (null == requestHeaderValuesMap) {
             requestHeaderValuesMap = 
-                Collections.<String,String[]>unmodifiableMap(
+                Collections.unmodifiableMap(
                     new RequestHeaderValuesMap((HttpServletRequest) request));
         }
         return requestHeaderValuesMap;
@@ -235,7 +235,7 @@ public class ExternalContextImpl extends ExternalContext {
     public Map<String,Object> getRequestCookieMap() {
         if (null == cookieMap) {
             cookieMap =
-                Collections.<String,Object>unmodifiableMap(
+                Collections.unmodifiableMap(
                     new RequestCookieMap((HttpServletRequest) request));
         }
         return cookieMap;
@@ -245,7 +245,7 @@ public class ExternalContextImpl extends ExternalContext {
     public Map<String,String> getInitParameterMap() {
         if (null == initParameterMap) {
             initParameterMap = 
-                Collections.<String,String>unmodifiableMap(
+                Collections.unmodifiableMap(
                     new InitParameterMap(servletContext));
         }
         return initParameterMap;
@@ -255,7 +255,7 @@ public class ExternalContextImpl extends ExternalContext {
     public Map<String,String> getRequestParameterMap() {
         if (null == requestParameterMap) {
             requestParameterMap = 
-                Collections.<String,String>unmodifiableMap(
+                Collections.unmodifiableMap(
                     new RequestParameterMap(request));
         }
         return requestParameterMap;
@@ -265,7 +265,7 @@ public class ExternalContextImpl extends ExternalContext {
     public Map<String,String[]> getRequestParameterValuesMap() {
         if (null == requestParameterValuesMap) {
             requestParameterValuesMap = 
-                Collections.<String,String[]>unmodifiableMap(
+                Collections.unmodifiableMap(
                     new RequestParameterValuesMap(request));
         }
         return requestParameterValuesMap;
@@ -564,7 +564,7 @@ abstract class BaseContextMap<V> extends AbstractMap<String,V> {
 
     abstract class BaseSet<E> extends AbstractSet<E> {
 
-	@Override
+        @Override
         public int size() {
             int size = 0;
             for (Iterator<E> i = iterator(); i.hasNext(); size++) {
@@ -577,24 +577,22 @@ abstract class BaseContextMap<V> extends AbstractMap<String,V> {
 
     class EntrySet extends BaseSet<Map.Entry<String, V>> {
 
-	@Override
+        @Override
         public Iterator<Map.Entry<String, V>> iterator() {
             return getEntryIterator();
         }
 
-	@Override
+        @Override
         public boolean remove(Object o) {
-            if (!(o instanceof Map.Entry)) {
-                return false;
-            }
-            return removeKey(((Map.Entry) o).getKey());
+            return o instanceof Map.Entry
+                   && removeKey(((Map.Entry) o).getKey());
         }
 
     }
 
     class KeySet extends BaseSet<String> {
 
-	@Override
+        @Override
         public Iterator<String> iterator() {
             return getKeyIterator();
         }
@@ -605,18 +603,15 @@ abstract class BaseContextMap<V> extends AbstractMap<String,V> {
             return BaseContextMap.this.containsKey(o);
         }
 
-    @Override
+        @Override
         public boolean remove(Object o) {
-            if (!(o instanceof String)) {
-                return false;
-            }
-            return removeKey((String) o);
+            return o instanceof String && removeKey(o);
         }
     }
 
     class ValueCollection extends AbstractCollection<V> {
 
-	@Override
+        @Override
         public int size() {
             int size = 0;
             for (Iterator i = iterator(); i.hasNext(); size++) {
@@ -625,12 +620,12 @@ abstract class BaseContextMap<V> extends AbstractMap<String,V> {
             return size;
         }
 
-	@Override
+        @Override
         public Iterator<V> iterator() {
             return getValueIterator();
         }
 
-	@Override
+        @Override
         public boolean remove(Object o) {
             return removeValue(o);
         }
@@ -748,13 +743,13 @@ abstract class BaseContextMap<V> extends AbstractMap<String,V> {
             throw new UnsupportedOperationException();
         }
 
-
+        @Override
         public int hashCode() {
             return ((key == null ? 0 : key.hashCode()) ^
                 (value == null ? 0 : value.hashCode()));
         }
 
-
+        @Override
         public boolean equals(Object obj) {
             if (obj == null || !(obj instanceof Map.Entry)) {
                 return false;
@@ -778,6 +773,7 @@ abstract class BaseContextMap<V> extends AbstractMap<String,V> {
 
 abstract class StringArrayValuesMap extends BaseContextMap<String[]> {
 
+    @Override
     public boolean equals(Object obj) {
         
         if (obj == null || 
@@ -799,7 +795,7 @@ abstract class StringArrayValuesMap extends BaseContextMap<String[]> {
             return false;
         } else {
             for (Object key : thisKeys) {
-                Object[] thisVal = (Object[]) this.get(key);
+                Object[] thisVal = this.get(key);
                 Object[] objVal = (Object[]) objMap.get(key);
                 if (!(Arrays.equals(thisVal, objVal))) {
                     return false;
@@ -822,6 +818,7 @@ abstract class StringArrayValuesMap extends BaseContextMap<String[]> {
         return hashCode;
     }
 
+    @Override
     public boolean containsValue(Object value) {
                 
         if (value == null || !value.getClass().isArray()) {
@@ -848,16 +845,16 @@ class ApplicationMap extends BaseContextMap {
         this.servletContext = servletContext;
     }
 
+    @Override
     public void clear() {
-        String name = null;
         for (Enumeration e = servletContext.getAttributeNames();
              e.hasMoreElements(); ) {
-            name = (String) e.nextElement();
-            servletContext.removeAttribute(name);
+            servletContext.removeAttribute((String) e.nextElement());
         }
     }
 
     // Supported by maps if overridden
+    @Override
     public void putAll(Map t) {
         for (Iterator i = t.entrySet().iterator(); i.hasNext(); ) {
             Map.Entry entry = (Map.Entry) i.next();
@@ -866,6 +863,7 @@ class ApplicationMap extends BaseContextMap {
         }
     }
 
+    @Override
     public Object get(Object key) {
         if (key == null) {
             throw new NullPointerException();
@@ -873,7 +871,7 @@ class ApplicationMap extends BaseContextMap {
         return servletContext.getAttribute(key.toString());
     }
 
-
+    @Override
     public Object put(Object key, Object value) {
         if (key == null) {
             throw new NullPointerException();
@@ -883,7 +881,7 @@ class ApplicationMap extends BaseContextMap {
         return (result);
     }
 
-
+    @Override
     public Object remove(Object key) {
         if (key == null) {
             return null;
@@ -895,18 +893,18 @@ class ApplicationMap extends BaseContextMap {
     }
 
 
-    @Override public boolean containsKey(Object key) {
+    @Override
+    public boolean containsKey(Object key) {
         return (servletContext.getAttribute(key.toString()) != null);
     }
 
+    @Override
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof ApplicationMap)) {
-            return false;
-        }
-        return super.equals(obj);
+        return !(obj == null || !(obj instanceof ApplicationMap))
+                   && super.equals(obj);
     }
 
-
+    @Override
     public int hashCode() {
         int hashCode = 7 * servletContext.hashCode();
         for (Iterator i = entrySet().iterator(); i.hasNext(); ) {
@@ -918,15 +916,17 @@ class ApplicationMap extends BaseContextMap {
     // --------------------------------------------- Methods from BaseContextMap
 
 
-
+    @SuppressWarnings("unchecked")
     protected Iterator<Map.Entry<String, Object>> getEntryIterator() {
         return new EntryIterator(servletContext.getAttributeNames());
     }
 
+    @SuppressWarnings("unchecked")
     protected Iterator<String> getKeyIterator() {
         return new KeyIterator(servletContext.getAttributeNames());
     }
 
+    @SuppressWarnings("unchecked")
     protected Iterator<Object> getValueIterator() {
         return new ValueIterator(servletContext.getAttributeNames());
     }
@@ -941,6 +941,7 @@ class SessionMap extends BaseContextMap {
         this.request = request;
     }
 
+    @Override
     public void clear() {
         HttpSession session = getSession(false);
         if (session != null) {
@@ -953,6 +954,7 @@ class SessionMap extends BaseContextMap {
     }
 
     // Supported by maps if overridden
+    @Override
     public void putAll(Map t) {
         HttpSession session = getSession(true);
         for (Iterator i = t.entrySet().iterator(); i.hasNext(); ) {
@@ -962,6 +964,7 @@ class SessionMap extends BaseContextMap {
         }
     }
 
+    @Override
     public Object get(Object key) {
         if (key == null) {
             throw new NullPointerException();
@@ -982,7 +985,7 @@ class SessionMap extends BaseContextMap {
         return (result);
     }
 
-
+    @Override
     public Object remove(Object key) {
         if (key == null) {
             return null;
@@ -998,24 +1001,25 @@ class SessionMap extends BaseContextMap {
     }
 
 
-    @Override public boolean containsKey(Object key) {
+    @Override
+    public boolean containsKey(Object key) {
         HttpSession session = getSession(false);
         return ((session != null)
                 && session.getAttribute(key.toString()) != null);
     }
 
+    @Override
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof SessionMap)) {
-            return false;
-        }
-        return super.equals(obj);
+        return !(obj == null || !(obj instanceof SessionMap))
+               && super.equals(obj);
     }
 
 
     private HttpSession getSession(boolean createNew) {
-        return request.getSession(true);
+        return request.getSession(createNew);
     }
 
+    @Override
     public int hashCode() {
         HttpSession session = getSession(false);
         int hashCode =
@@ -1030,6 +1034,7 @@ class SessionMap extends BaseContextMap {
 
     // --------------------------------------------- Methods from BaseContextMap
 
+    @SuppressWarnings("unchecked")
     protected Iterator<Map.Entry<String,Object>> getEntryIterator() {
         HttpSession session = getSession(false);
         return ((session != null)
@@ -1037,6 +1042,7 @@ class SessionMap extends BaseContextMap {
                 : Collections.emptyMap().entrySet().iterator());
     }
 
+    @SuppressWarnings("unchecked")
     protected Iterator<String> getKeyIterator() {
         HttpSession session = getSession(false);
         return ((session != null)
@@ -1044,6 +1050,7 @@ class SessionMap extends BaseContextMap {
                 : Collections.emptyMap().entrySet().iterator());
     }
 
+    @SuppressWarnings("unchecked")
     protected Iterator<Object> getValueIterator() {
         HttpSession session = getSession(false);
         return ((session != null)
@@ -1062,16 +1069,16 @@ class RequestMap extends BaseContextMap {
         this.request = request;     
     }
 
+    @Override
     public void clear() {
-        String name = null;
         for (Enumeration e = request.getAttributeNames();
              e.hasMoreElements(); ) {
-            name = (String) e.nextElement();
-            request.removeAttribute(name);
+            request.removeAttribute((String) e.nextElement());
         }
     }
 
     // Supported by maps if overridden
+    @Override
     public void putAll(Map t) {
         for (Iterator i = t.entrySet().iterator(); i.hasNext(); ) {
             Map.Entry entry = (Map.Entry) i.next();
@@ -1080,6 +1087,7 @@ class RequestMap extends BaseContextMap {
         }
     }
 
+    @Override
     public Object get(Object key) {
         if (key == null) {
             throw new NullPointerException();
@@ -1097,7 +1105,7 @@ class RequestMap extends BaseContextMap {
         return (result);
     }
 
-
+    @Override
     public Object remove(Object key) {
         if (key == null) {
             return null;
@@ -1109,17 +1117,18 @@ class RequestMap extends BaseContextMap {
     }
 
 
-    @Override public boolean containsKey(Object key) {
+    @Override
+    public boolean containsKey(Object key) {
         return (request.getAttribute(key.toString()) != null);
     }
 
+    @Override
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof RequestMap)) {
-            return false;
-        }
-        return super.equals(obj);
+        return !(obj == null || !(obj instanceof RequestMap))
+               && super.equals(obj);
     }
 
+    @Override
     public int hashCode() {
         int hashCode = 7 * request.hashCode();
         for (Iterator i = entrySet().iterator(); i.hasNext(); ) {
@@ -1130,14 +1139,17 @@ class RequestMap extends BaseContextMap {
 
     // --------------------------------------------- Methods from BaseContextMap
 
+    @SuppressWarnings("unchecked")
     protected Iterator<Map.Entry<String,Object>> getEntryIterator() {
         return new EntryIterator(request.getAttributeNames());
     }
 
+    @SuppressWarnings("unchecked")
     protected Iterator<String> getKeyIterator() {
         return new KeyIterator(request.getAttributeNames());
     }
 
+    @SuppressWarnings("unchecked")
     protected Iterator<Object> getValueIterator() {
         return new ValueIterator(request.getAttributeNames());
     }
@@ -1153,7 +1165,7 @@ class RequestParameterMap extends BaseContextMap<String> {
         this.request = request;
     }
 
-
+    @Override
     public String get(Object key) {
         if (key == null) {
             throw new NullPointerException();
@@ -1162,31 +1174,36 @@ class RequestParameterMap extends BaseContextMap<String> {
         return request.getParameter(key.toString());
     }
 
+    @Override
     public Set<Map.Entry<String,String>> entrySet() {
         return Collections.unmodifiableSet(super.entrySet());
     }
 
+    @Override
     public Set<String> keySet() {
         return Collections.unmodifiableSet(super.keySet());
     }
 
+    @Override
     public Collection<String> values() {
         return Collections.unmodifiableCollection(super.values());
     }
 
 
-    @Override public boolean containsKey(Object key) {
+    @Override
+    public boolean containsKey(Object key) {
         return (request.getParameter(key.toString()) != null);
     }
 
+    @Override
     public boolean equals(Object obj) {
-        if (obj == null ||
-            !(obj.getClass() == ExternalContextImpl.theUnmodifiableMapClass)) {
-            return false;
-        }
-        return super.equals(obj);
+        return !(obj == null ||
+                 !(obj.getClass()
+                   == ExternalContextImpl
+                       .theUnmodifiableMapClass)) && super.equals(obj);
     }
 
+    @Override
     public int hashCode() {
         int hashCode = 7 * request.hashCode();
         for (Iterator i = entrySet().iterator(); i.hasNext(); ) {
@@ -1221,7 +1238,8 @@ class RequestParameterValuesMap extends StringArrayValuesMap {
     }
 
 
-    @Override public String[] get(Object key) {
+    @Override
+    public String[] get(Object key) {
         if (key == null) {
             throw new NullPointerException();
         }
@@ -1230,22 +1248,27 @@ class RequestParameterValuesMap extends StringArrayValuesMap {
     }
 
 
-    @Override public boolean containsKey(Object key) {
+    @Override
+    public boolean containsKey(Object key) {
         return (request.getParameterValues(key.toString()) != null);
     }
 
+    @Override
     public Set<Map.Entry<String,String[]>> entrySet() {
         return Collections.unmodifiableSet(super.entrySet());
     }
 
+    @Override
     public Set<String> keySet() {
         return Collections.unmodifiableSet(super.keySet());
     }
 
+    @Override
     public Collection<String[]> values() {
         return Collections.unmodifiableCollection(super.values());
     }
 
+    @Override
     public int hashCode() {        
         return hashCode(request);
     }
@@ -1276,7 +1299,7 @@ class RequestHeaderMap extends BaseContextMap<String> {
         this.request = request;
     }
 
-
+    @Override
     public String get(Object key) {
         if (key == null) {
             throw new NullPointerException();
@@ -1285,32 +1308,37 @@ class RequestHeaderMap extends BaseContextMap<String> {
         return (request.getHeader(key.toString()));
     }
 
+    @Override
     public Set<Map.Entry<String,String>> entrySet() {
         return Collections.unmodifiableSet(super.entrySet());
     }
 
+    @Override
     public Set<String> keySet() {
         return Collections.unmodifiableSet(super.keySet());
     }
 
+    @Override
     public Collection<String> values() {
         return Collections.unmodifiableCollection(super.values());
     }
 
 
-    @Override public boolean containsKey(Object key) {
+    @Override
+    public boolean containsKey(Object key) {
         return (request.getHeader(key.toString()) != null);
     }
 
+    @Override
     public boolean equals(Object obj) {
-        if (obj == null ||
-            !(obj.getClass() == ExternalContextImpl.theUnmodifiableMapClass)) {
-            return false;
-        }
-        return super.equals(obj);
+        return !(obj == null ||
+                 !(obj.getClass()
+                   == ExternalContextImpl
+                       .theUnmodifiableMapClass)) && super.equals(obj);
     }
 
-     public int hashCode() {
+    @Override
+    public int hashCode() {
         int hashCode = 7 * request.hashCode();
         for (Iterator i = entrySet().iterator(); i.hasNext(); ) {
             hashCode += i.next().hashCode();
@@ -1344,11 +1372,12 @@ class RequestHeaderValuesMap extends StringArrayValuesMap {
     }
 
 
-    @Override public boolean containsKey(Object key) {
+    @Override
+    public boolean containsKey(Object key) {
         return (request.getHeaders(key.toString()) != null);
     }
 
-
+    @Override
     public String[] get(Object key) {
         if (key == null) {
             throw new NullPointerException();
@@ -1363,18 +1392,22 @@ class RequestHeaderValuesMap extends StringArrayValuesMap {
         return valuesList.toArray(new String[valuesList.size()]); 
     }
 
+    @Override
     public Set<Map.Entry<String,String[]>> entrySet() {
         return Collections.unmodifiableSet(super.entrySet());
     }
 
+    @Override
     public Set<String> keySet() {
         return Collections.unmodifiableSet(super.keySet());
     }
 
+    @Override
     public Collection<String[]> values() {
         return Collections.unmodifiableCollection(super.values());
     }        
 
+    @Override
     public int hashCode() {        
         return hashCode(request);
     }
@@ -1404,7 +1437,7 @@ class RequestCookieMap extends BaseContextMap<Object> {
         this.request = newRequest;
     }
 
-
+    @Override
     public Object get(Object key) {
         if (key == null) {
             throw new NullPointerException();
@@ -1427,27 +1460,31 @@ class RequestCookieMap extends BaseContextMap<Object> {
         return result;
     }
 
+    @Override
     public Set<Map.Entry<String,Object>> entrySet() {
         return Collections.unmodifiableSet(super.entrySet());
     }
 
+    @Override
     public Set<String> keySet() {
         return Collections.unmodifiableSet(super.keySet());
     }
 
+    @Override
     public Collection<Object> values() {
         return Collections.unmodifiableCollection(super.values());
     }
 
+    @Override
     public boolean equals(Object obj) {
-        if (obj == null || 
-            !(obj.getClass() == ExternalContextImpl.theUnmodifiableMapClass)) {
-            return false;
-        }
-        return super.equals(obj);
+        return !(obj == null ||
+                 !(obj.getClass()
+                   == ExternalContextImpl
+                       .theUnmodifiableMapClass)) && super.equals(obj);
     }
 
-     public int hashCode() {
+    @Override
+    public int hashCode() {
         int hashCode = 7 * request.hashCode();
         for (Iterator i = entrySet().iterator(); i.hasNext(); ) {
             hashCode += i.next().hashCode();
@@ -1509,7 +1546,7 @@ class InitParameterMap extends BaseContextMap<String> {
         servletContext = newServletContext;
     }
 
-
+    @Override
     public String get(Object key) {
         if (key == null) {
             throw new NullPointerException();
@@ -1518,32 +1555,38 @@ class InitParameterMap extends BaseContextMap<String> {
         return servletContext.getInitParameter(keyString);
     }
 
+    @Override
     public Set<Map.Entry<String,String>> entrySet() {
         return Collections.unmodifiableSet(super.entrySet());
     }
 
+    @Override
     public Set<String> keySet() {
         return Collections.unmodifiableSet(super.keySet());
     }
 
+    @Override
     public Collection<String> values() {
         return Collections.unmodifiableCollection(super.values());
     }
 
-
-    @Override public boolean containsKey(Object key) {
+    @Override
+    public boolean containsKey(Object key) {
         return (servletContext.getInitParameter(key.toString()) != null);
     }
 
+
+
     public boolean equals(Object obj) {
-        if (obj == null ||
-            !(obj.getClass() == ExternalContextImpl.theUnmodifiableMapClass)) {
-            return false;
-        }
-        return super.equals(obj);
+        return !(obj == null ||
+                 !(obj.getClass()
+                   == ExternalContextImpl
+                       .theUnmodifiableMapClass)) && super.equals(obj);
     }
 
-     public int hashCode() {
+
+
+    public int hashCode() {
         int hashCode = 7 * servletContext.hashCode();
         for (Iterator i = entrySet().iterator(); i.hasNext(); ) {
             hashCode += i.next().hashCode();

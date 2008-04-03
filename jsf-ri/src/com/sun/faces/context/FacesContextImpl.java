@@ -1,5 +1,5 @@
  /*
- * $Id: FacesContextImpl.java,v 1.88 2007/04/27 22:00:57 ofung Exp $
+ * $Id: FacesContextImpl.java,v 1.89 2007/07/17 22:04:44 rlubke Exp $
  */
 
 /*
@@ -193,14 +193,9 @@ import com.sun.faces.util.FacesLogger;
 
      public Iterator<String> getClientIdsWithMessages() {
          assertNotReleased();
-         Iterator<String> result = null;
-         if (null == componentMessageLists) {
-             result = Collections.<String>emptyList().iterator();
-         } else {
-             result = componentMessageLists.keySet().iterator();
-
-         }
-         return result;
+         return ((componentMessageLists == null)
+                 ? Collections.<String>emptyList().iterator()
+                 : componentMessageLists.keySet().iterator());         
      }
 
      public Severity getMaximumSeverity() {
