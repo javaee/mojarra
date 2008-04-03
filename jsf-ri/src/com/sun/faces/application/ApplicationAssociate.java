@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.41 2007/03/20 20:27:16 rlubke Exp $
+ * $Id: ApplicationAssociate.java,v 1.42 2007/03/20 20:32:41 rlubke Exp $
  */
 
 /*
@@ -67,7 +67,7 @@ import java.util.logging.Logger;
  * <p>Break out the things that are associated with the Application, but
  * need to be present even when the user has replaced the Application
  * instance.</p>
- *
+ * <p/>
  * <p>For example: the user replaces ApplicationFactory, and wants to
  * intercept calls to createValueExpression() and createMethodExpression() for
  * certain kinds of expressions, but allow the existing application to
@@ -78,10 +78,10 @@ public class ApplicationAssociate {
 
     // Log instance for this class
     private static final Logger LOGGER = Util.getLogger(Util.FACES_LOGGER
-                                                        + Util.APPLICATION_LOGGER);
+         + Util.APPLICATION_LOGGER);
 
     private static final String APPLICATION_IMPL_ATTR_NAME = RIConstants.FACES_PREFIX +
-                                                             "ApplicationImpl";
+         "ApplicationImpl";
 
     private ApplicationImpl app = null;
 
@@ -100,7 +100,7 @@ public class ApplicationAssociate {
      * some of them will have a trailing asterisk "*" signifying wild
      * card, and some may be specified as an asterisk "*".
      */
-    private Map<String,List<ConfigNavigationCase>> caseListMap = null;
+    private Map<String, List<ConfigNavigationCase>> caseListMap = null;
 
     /**
      * The List that contains all view identifier strings ending in an
@@ -113,7 +113,7 @@ public class ApplicationAssociate {
     private boolean responseRendered = false;
 
     private static final String ASSOCIATE_KEY = RIConstants.FACES_PREFIX +
-                                                "ApplicationAssociate";
+         "ApplicationAssociate";
 
     private List<ELResolver> elResolversFromFacesConfig = null;
 
@@ -137,50 +137,50 @@ public class ApplicationAssociate {
     private boolean requestServiced;
 
     public ApplicationAssociate(ApplicationImpl appImpl) {
-    app = appImpl;
+        app = appImpl;
 
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
         if (externalContext == null) {
             throw new IllegalStateException(
-                MessageUtils.getExceptionMessageString(
-                    MessageUtils.APPLICATION_ASSOCIATE_CTOR_WRONG_CALLSTACK_ID));
+                 MessageUtils.getExceptionMessageString(
+                      MessageUtils.APPLICATION_ASSOCIATE_CTOR_WRONG_CALLSTACK_ID));
         }
 
         if (null != externalContext.getApplicationMap().get(ASSOCIATE_KEY)) {
             throw new IllegalStateException(
-                MessageUtils.getExceptionMessageString(
-                    MessageUtils.APPLICATION_ASSOCIATE_EXISTS_ID));
+                 MessageUtils.getExceptionMessageString(
+                      MessageUtils.APPLICATION_ASSOCIATE_EXISTS_ID));
         }
         externalContext.getApplicationMap().put(APPLICATION_IMPL_ATTR_NAME,
-                                                appImpl);
+             appImpl);
         externalContext.getApplicationMap().put(ASSOCIATE_KEY, this);
         //noinspection CollectionWithoutInitialCapacity
         managedBeanFactoriesMap = new HashMap<String, ManagedBeanFactory>();
         //noinspection CollectionWithoutInitialCapacity
-        caseListMap = new HashMap<String,List<ConfigNavigationCase>>();
+        caseListMap = new HashMap<String, List<ConfigNavigationCase>>();
         wildcardMatchList = new TreeSet<String>(new SortIt());
         injectionProvider = InjectionProviderFactory.createInstance(externalContext);
     }
 
     public static ApplicationAssociate getInstance(ExternalContext
-        externalContext) {
-    	if(externalContext == null) {
-    		return null;
-    	}
+         externalContext) {
+        if (externalContext == null) {
+            return null;
+        }
         Map applicationMap = externalContext.getApplicationMap();
-    return ((ApplicationAssociate)
-        applicationMap.get(ASSOCIATE_KEY));
+        return ((ApplicationAssociate)
+             applicationMap.get(ASSOCIATE_KEY));
     }
 
     public static ApplicationAssociate getInstance(ServletContext context) {
-    	if(context == null) {
-    		return null;
-    	}
+        if (context == null) {
+            return null;
+        }
         return (ApplicationAssociate) context.getAttribute(ASSOCIATE_KEY);
     }
 
     public static void clearInstance(ExternalContext
-        externalContext) {
+         externalContext) {
         Map applicationMap = externalContext.getApplicationMap();
         ApplicationAssociate me = (ApplicationAssociate) applicationMap.get(ASSOCIATE_KEY);
         if (null != me) {
@@ -188,13 +188,14 @@ public class ApplicationAssociate {
                 me.resourceBundles.clear();
             }
         }
-    applicationMap.remove(ASSOCIATE_KEY);
+        applicationMap.remove(ASSOCIATE_KEY);
     }
 
     /**
      * This method is called by <code>ConfigureListener</code> and will
      * contain any <code>VariableResolvers</code> defined within
      * faces-config configuration files.
+     *
      * @param resolver
      */
     @SuppressWarnings("deprecation")
@@ -211,6 +212,7 @@ public class ApplicationAssociate {
      * This method is called by <code>ConfigureListener</code> and will
      * contain any <code>PropertyResolvers</code> defined within
      * faces-config configuration files.
+     *
      * @param resolver
      */
     @SuppressWarnings("deprecation")
@@ -236,7 +238,7 @@ public class ApplicationAssociate {
     }
 
     public List<ELResolver> getELResolversFromFacesConfig() {
-         return elResolversFromFacesConfig;
+        return elResolversFromFacesConfig;
     }
 
     public void setExpressionFactory(ExpressionFactory expressionFactory) {
@@ -268,16 +270,16 @@ public class ApplicationAssociate {
      * Application.setPropertyResolver()
      */
     @SuppressWarnings("deprecation")
-    public void setLegacyPropertyResolver(PropertyResolver resolver){
+    public void setLegacyPropertyResolver(PropertyResolver resolver) {
         this.legacyPropertyResolver = resolver;
     }
 
-     /**
+    /**
      * Returns the PropertyResolver called through
      * Application.getPropertyResolver()
      */
-     @SuppressWarnings("deprecation")
-    public PropertyResolver getLegacyPropertyResolver(){
+    @SuppressWarnings("deprecation")
+    public PropertyResolver getLegacyPropertyResolver() {
         return legacyPropertyResolver;
     }
 
@@ -286,7 +288,7 @@ public class ApplicationAssociate {
      * Application.setVariableResolver()
      */
     @SuppressWarnings("deprecation")
-    public void setLegacyVariableResolver(VariableResolver resolver){
+    public void setLegacyVariableResolver(VariableResolver resolver) {
         this.legacyVariableResolver = resolver;
     }
 
@@ -295,7 +297,7 @@ public class ApplicationAssociate {
      * Application.getVariableResolver()
      */
     @SuppressWarnings("deprecation")
-    public VariableResolver getLegacyVariableResolver(){
+    public VariableResolver getLegacyVariableResolver() {
         return legacyVariableResolver;
     }
 
@@ -310,7 +312,7 @@ public class ApplicationAssociate {
 
     /**
      * @return <code>true</code> if we've processed a request, otherwise
-     *  <code>false</code>
+     *         <code>false</code>
      */
     public boolean hasRequestBeenServiced() {
         return requestServiced;
@@ -375,7 +377,7 @@ public class ApplicationAssociate {
      *
      * @return Map the map of navigation mappings.
      */
-    public Map<String,List<ConfigNavigationCase>> getNavigationCaseListMappings() {
+    public Map<String, List<ConfigNavigationCase>> getNavigationCaseListMappings() {
         if (caseListMap == null) {
             return Collections.emptyMap();
         }
@@ -412,7 +414,7 @@ public class ApplicationAssociate {
                 locale = defaultLocale;
             }
         }
-        assert(null != locale);
+        assert (null != locale);
         ResourceBundleBean bean = resourceBundles.get(var);
         ResourceBundle result = null;
 
@@ -420,10 +422,10 @@ public class ApplicationAssociate {
             String baseName = bean.getBasename();
             if (null != baseName) {
                 result =
-                    ResourceBundle.getBundle(baseName,
-                                             locale,
-                                             Thread.currentThread().
-                                                 getContextClassLoader());
+                     ResourceBundle.getBundle(baseName,
+                          locale,
+                          Thread.currentThread().
+                               getContextClassLoader());
             }
         }
         // PENDING(edburns): should cache these based on var/Locale pair for performance
@@ -432,18 +434,18 @@ public class ApplicationAssociate {
 
     /**
      * keys: <var> element from faces-config<p>
-     *
+     * <p/>
      * values: ResourceBundleBean instances.
      */
 
     @SuppressWarnings({"CollectionWithoutInitialCapacity"})
-    Map<String,ResourceBundleBean> resourceBundles = new HashMap<String, ResourceBundleBean>();
+    Map<String, ResourceBundleBean> resourceBundles = new HashMap<String, ResourceBundleBean>();
 
     public void addResourceBundleBean(String var, ResourceBundleBean bean) {
         resourceBundles.put(var, bean);
     }
 
-    public Map<String,ResourceBundleBean> getResourceBundleBeanMap() {
+    public Map<String, ResourceBundleBean> getResourceBundleBeanMap() {
         return resourceBundles;
     }
 
@@ -458,18 +460,17 @@ public class ApplicationAssociate {
     synchronized public void addManagedBeanFactory(String managedBeanName,
                                                    ManagedBeanFactory factory) {
         managedBeanFactoriesMap.put(managedBeanName, factory);
-    factory.setManagedBeanFactoryMap(managedBeanFactoriesMap);
+        factory.setManagedBeanFactoryMap(managedBeanFactoriesMap);
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.log(Level.FINE, MessageFormat.format("Added managedBeanFactory {0} for {1}",
-                                                        factory,
-                                                        managedBeanName));
+                 factory,
+                 managedBeanName));
         }
     }
 
-    public Map<String,ManagedBeanFactory> getManagedBeanFactoryMap() {
+    public Map<String, ManagedBeanFactory> getManagedBeanFactoryMap() {
         return managedBeanFactoriesMap;
     }
-
 
 
     /**
@@ -482,7 +483,7 @@ public class ApplicationAssociate {
      * @param managedBeanName The name identifying the managed bean.
      * @return The managed bean.
      * @throws FacesException if the managed bean
-     *                                   could not be created.
+     *                        could not be created.
      */
     public Object createAndMaybeStoreManagedBeans(FacesContext context,
                                                   String managedBeanName) throws FacesException {
@@ -502,9 +503,9 @@ public class ApplicationAssociate {
 
         ExternalContext extContext = context.getExternalContext();
         if ((scopeIsApplication = (scope == Scope.APPLICATION)) ||
-            ((scope == Scope.SESSION))) {
+             ((scope == Scope.SESSION))) {
             if (scopeIsApplication) {
-                Map<String,Object> applicationMap = extContext.getApplicationMap();
+                Map<String, Object> applicationMap = extContext.getApplicationMap();
                 synchronized (extContext.getContext()) {
                     try {
                         bean = managedBean.newInstance(context);
@@ -515,7 +516,7 @@ public class ApplicationAssociate {
                         Object[] params = {managedBeanName};
                         if (LOGGER.isLoggable(Level.SEVERE)) {
                             LOGGER.log(Level.SEVERE,
-                                       "jsf.managed_bean_creation_error", params);
+                                 "jsf.managed_bean_creation_error", params);
                         }
                         throw new FacesException(ex);
                     }
@@ -523,7 +524,7 @@ public class ApplicationAssociate {
                     applicationMap.put(managedBeanName, bean);
                 }
             } else {
-                Map<String,Object> sessionMap = extContext.getSessionMap();
+                Map<String, Object> sessionMap = extContext.getSessionMap();
                 synchronized (extContext.getSession(true)) {
                     try {
                         bean = managedBean.newInstance(context);
@@ -534,7 +535,7 @@ public class ApplicationAssociate {
                         Object[] params = {managedBeanName};
                         if (LOGGER.isLoggable(Level.SEVERE)) {
                             LOGGER.log(Level.SEVERE,
-                                       "jsf.managed_bean_creation_error", params);
+                                 "jsf.managed_bean_creation_error", params);
                         }
                         throw new FacesException(ex);
                     }
@@ -553,7 +554,7 @@ public class ApplicationAssociate {
                 Object[] params = {managedBeanName};
                 if (LOGGER.isLoggable(Level.SEVERE)) {
                     LOGGER.log(Level.SEVERE,
-                               "jsf.managed_bean_creation_error", params);
+                         "jsf.managed_bean_creation_error", params);
                 }
                 throw new FacesException(ex);
             }
@@ -571,7 +572,7 @@ public class ApplicationAssociate {
     }
 
     boolean isResponseRendered() {
-    return responseRendered;
+        return responseRendered;
     }
 
 
@@ -582,14 +583,12 @@ public class ApplicationAssociate {
      * pass <code>bean</code> to <code>InjectionProvider.invokePreDestr
      *
      * @param beanName the name of the bean for which to call PreDestroy
-     * annotated methods.  If <code>null</code>, all beans in argument
-     * <code>scope</code> have their PreDestroy annotated methods
-     * called.
-     *
-     * @param bean the target bean associated with <code>beanName</code>
-     *
-     * @param scope the managed bean scope in which to look for the bean
-     * or beans.
+     *                 annotated methods.  If <code>null</code>, all beans in argument
+     *                 <code>scope</code> have their PreDestroy annotated methods
+     *                 called.
+     * @param bean     the target bean associated with <code>beanName</code>
+     * @param scope    the managed bean scope in which to look for the bean
+     *                 or beans.
      */
 
     public void handlePreDestroy(String beanName, Object bean, Scope scope) {
@@ -624,6 +623,7 @@ public class ApplicationAssociate {
 
     /**
      * Getter for property JSFVersionTracker.
+     *
      * @return Value of property JSFVersionTracker.
      */
     public com.sun.faces.config.JSFVersionTracker getJSFVersionTracker() {
@@ -632,6 +632,7 @@ public class ApplicationAssociate {
 
     /**
      * Setter for property JSFVersionTracker.
+     *
      * @param JSFVersionTracker New value of property JSFVersionTracker.
      */
     public void setJSFVersionTracker(com.sun.faces.config.JSFVersionTracker JSFVersionTracker) {
