@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextFactoryImpl.java,v 1.20 2007/07/19 16:38:02 rlubke Exp $
+ * $Id: FacesContextFactoryImpl.java,v 1.21 2007/12/17 21:46:09 rlubke Exp $
  */
 
 /*
@@ -42,6 +42,7 @@ package com.sun.faces.context;
 
 import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.RequestStateManager;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
@@ -104,10 +105,20 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
                 MessageUtils.getExceptionMessageString(
                     MessageUtils.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
         }
-      
-        return (new FacesContextImpl(new ExternalContextImpl(
-            (ServletContext) sc,
-            (ServletRequest) request, (ServletResponse) response), lifecycle));
+        FacesContext ctx = new FacesContextImpl(new ExternalContextImpl((ServletContext) sc,
+                                                                        (ServletRequest) request,
+                                                                        (ServletResponse) response),
+                                                lifecycle);
+        // store the default FacesContext and ExternalContext implementations
+        // in the request so that the API can delegate if the happen to be
+        // decorated by 1.1 implementations
+        RequestStateManager.set(ctx,
+                                RequestStateManager.FACESCONTEXT_IMPL_ATTR_NAME,
+                                ctx);
+        RequestStateManager.set(ctx,
+                                RequestStateManager.EXTERNALCONTEXT_IMPL_ATTR_NAME,
+                                ctx.getExternalContext());
+        return ctx;
 
     }
 

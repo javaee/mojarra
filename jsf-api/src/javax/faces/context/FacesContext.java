@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.72 2007/04/27 22:00:06 ofung Exp $
+ * $Id: FacesContext.java,v 1.73 2007/12/17 21:46:07 rlubke Exp $
  */
 
 /*
@@ -42,6 +42,8 @@ package javax.faces.context;
 
 
 import java.util.Iterator;
+import java.util.Map;
+
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
@@ -139,11 +141,15 @@ public abstract class FacesContext {
      */ 
 
     public ELContext getELContext() {
-        FacesContext impl;
-        if (null != (impl = (FacesContext) getExternalContext().getRequestMap().
-                get("com.sun.faces.FacesContextImpl"))) {
-            //noinspection TailRecursion
-            return impl.getELContext();
+
+        Map m = (Map) getExternalContext().getRequestMap().get("com.sun.faces.util.RequestStateManager");
+        if (m != null) {
+            FacesContext impl = (FacesContext) m.get("com.sun.faces.FacesContextImpl");
+            if (impl != null) {
+                return impl.getELContext();
+            } else {
+                throw new UnsupportedOperationException();
+            }
         }
         throw new UnsupportedOperationException();
 

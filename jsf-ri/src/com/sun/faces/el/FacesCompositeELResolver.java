@@ -1,5 +1,5 @@
 /*
- * $Id: FacesCompositeELResolver.java,v 1.8 2007/07/17 23:14:01 rlubke Exp $
+ * $Id: FacesCompositeELResolver.java,v 1.9 2007/12/17 21:46:09 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -39,11 +39,10 @@
 
 package com.sun.faces.el;
 
-import com.sun.faces.RIConstants;
+import com.sun.faces.util.RequestStateManager;
 
 import java.beans.FeatureDescriptor;
 import java.util.Iterator;
-import java.util.Map;
 
 import javax.el.ELResolver;
 import javax.el.ELContext;
@@ -157,8 +156,9 @@ public class FacesCompositeELResolver extends CompositeELResolver {
      */
 
     private void setChainType() {
-        Map<String, Object> requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
-        requestMap.put(RIConstants.EL_RESOLVER_CHAIN_TYPE_NAME, chainType);
+        RequestStateManager.set(FacesContext.getCurrentInstance(),
+                                RequestStateManager.EL_RESOLVER_CHAIN_TYPE_NAME,
+                                chainType);
     }
 
     /**
@@ -167,8 +167,8 @@ public class FacesCompositeELResolver extends CompositeELResolver {
      */
     
     private void clearChainType() {
-        Map<String, Object> requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
-        requestMap.remove(RIConstants.EL_RESOLVER_CHAIN_TYPE_NAME);
+        RequestStateManager.remove(FacesContext.getCurrentInstance(),
+                                   RequestStateManager.EL_RESOLVER_CHAIN_TYPE_NAME);
     }
 
 }

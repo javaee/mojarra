@@ -1,5 +1,5 @@
 /*
- * $Id: SubviewTag.java,v 1.15 2007/07/19 15:50:55 rlubke Exp $
+ * $Id: SubviewTag.java,v 1.16 2007/12/17 21:46:10 rlubke Exp $
  */
 
 /*
@@ -40,7 +40,6 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import java.util.Map;
 import java.util.Stack;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -53,14 +52,10 @@ import javax.servlet.jsp.JspException;
 import java.io.IOException;
 
 import com.sun.faces.application.InterweavingResponse;
+import com.sun.faces.util.RequestStateManager;
 
 public class SubviewTag extends UIComponentELTag {
-    
-    static final String 
-            VIEWTAG_STACK_ATTR_NAME = 
-            "com.sun.faces.taglib.jsf_core.VIEWTAG_STACK";
-    
-    
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -154,16 +149,15 @@ public class SubviewTag extends UIComponentELTag {
      *  instances.
      */
     static Stack<UIComponentClassicTagBase> getViewTagStack() {
-        Stack<UIComponentClassicTagBase> result;
-        
-        Map<String,Object> requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
+
+        FacesContext ctx = FacesContext.getCurrentInstance();
         //noinspection unchecked
-        if (null == (result = (Stack<UIComponentClassicTagBase>)
-                requestMap.get(VIEWTAG_STACK_ATTR_NAME))) {
+        Stack<UIComponentClassicTagBase> result = (Stack<UIComponentClassicTagBase>)
+              RequestStateManager.get(ctx, RequestStateManager.VIEWTAG_STACK_ATTR_NAME);
+        if (result == null) {
             result = new Stack<UIComponentClassicTagBase>();
-            requestMap.put(VIEWTAG_STACK_ATTR_NAME, result);
+            RequestStateManager.set(ctx, RequestStateManager.VIEWTAG_STACK_ATTR_NAME, result);
         }
-        
         
         return result;
     }

@@ -1,5 +1,5 @@
 /*
- * $Id: RenderResponsePhase.java,v 1.26 2007/07/19 15:01:56 rlubke Exp $
+ * $Id: RenderResponsePhase.java,v 1.27 2007/12/17 21:46:09 rlubke Exp $
  */
 
 /*
@@ -51,21 +51,20 @@ import javax.faces.event.PhaseId;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sun.faces.RIConstants;
 import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.RequestStateManager;
 
 
 /**
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RenderResponsePhase.java,v 1.26 2007/07/19 15:01:56 rlubke Exp $
+ * @version $Id: RenderResponsePhase.java,v 1.27 2007/12/17 21:46:09 rlubke Exp $
  */
 
 public class RenderResponsePhase extends Phase {
@@ -88,8 +87,6 @@ public class RenderResponsePhase extends Phase {
                  facesContext.getViewRoot().getViewId());
         }
         try {
-            Map<String, Object> requestMap = facesContext.getExternalContext().getRequestMap();
-
             //Setup message display LOGGER.
             if (LOGGER.isLoggable(Level.INFO)) {
                 Iterator<String> clientIdIter = facesContext.getClientIdsWithMessages();
@@ -102,7 +99,9 @@ public class RenderResponsePhase extends Phase {
                     while (clientIdIter.hasNext()) {
                         clientIds.add(clientIdIter.next());
                     }
-                    requestMap.put(RIConstants.CLIENT_ID_MESSAGES_NOT_DISPLAYED, clientIds);
+                    RequestStateManager.set(facesContext,
+                                            RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED,
+                                            clientIds);
                 }
             }
 
@@ -112,11 +111,14 @@ public class RenderResponsePhase extends Phase {
 
             //display results of message display LOGGER
             if (LOGGER.isLoggable(Level.INFO) &&
-                 requestMap.containsKey(RIConstants.CLIENT_ID_MESSAGES_NOT_DISPLAYED)) {
+                 RequestStateManager.containsKey(facesContext,
+                                                 RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED)) {
 
                 //remove so Set does not get modified when displaying messages.
                 Set<String> clientIds = TypedCollections.dynamicallyCastSet(
-                     (Set) requestMap.remove(RIConstants.CLIENT_ID_MESSAGES_NOT_DISPLAYED), String.class);
+                     (Set) RequestStateManager.remove(facesContext,
+                                                      RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED),
+                     String.class);
                 if (!clientIds.isEmpty()) {
 
                     //Display each message possibly not displayed.

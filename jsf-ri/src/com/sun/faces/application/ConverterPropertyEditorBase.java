@@ -41,7 +41,6 @@
 package com.sun.faces.application;
 
 import java.beans.PropertyEditorSupport;
-import java.util.Map;
 import java.util.logging.Logger;
 import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
@@ -50,9 +49,10 @@ import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
-import com.sun.faces.RIConstants;
+
 import com.sun.faces.util.MessageFactory;
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.RequestStateManager;
 
 /**
  * Abstract base for a {@link java.beans.PropertyEditor} that delegates to a
@@ -64,10 +64,6 @@ import com.sun.faces.util.FacesLogger;
  */
 public abstract class ConverterPropertyEditorBase extends PropertyEditorSupport {
     protected static final Logger logger = FacesLogger.APPLICATION.getLogger();
-    // Name of the request scope attribute that will indicate the current
-    // component being processed.
-    public static final String TARGET_COMPONENT_ATTRIBUTE_NAME = RIConstants.FACES_PREFIX
-        + "ComponentForValue";
 
     /**
      * Return the target class of the objects that are being edited. This is
@@ -85,17 +81,15 @@ public abstract class ConverterPropertyEditorBase extends PropertyEditorSupport 
      * for creating and setting error messages, although they may also use
      * attributes of the component to customize the conversion). For now, do
      * this by looking for a request attribute keyed on
-     * {@link TARGET_COMPONENT_ATTRIBUTE_NAME}.
+     * {@link RequestStateManager#TARGET_COMPONENT_ATTRIBUTE_NAME}.
      * 
      * @return the current component, or null.
      */
     protected UIComponent getComponent() {
         FacesContext context = FacesContext.getCurrentInstance();
         if (context != null) {
-            Map<String, Object> requestMap = context.getExternalContext()
-                .getRequestMap();
-            return (UIComponent) requestMap
-                .get(TARGET_COMPONENT_ATTRIBUTE_NAME);
+            return ((UIComponent) RequestStateManager.get(context,
+                                                          RequestStateManager.TARGET_COMPONENT_ATTRIBUTE_NAME));
         }
         return null;
     }

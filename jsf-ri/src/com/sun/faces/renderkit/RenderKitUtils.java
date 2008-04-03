@@ -48,8 +48,6 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -58,8 +56,6 @@ import java.util.logging.Logger;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
-import javax.faces.application.Resource;
-import javax.faces.application.ResourceHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentBase;
 import javax.faces.component.UISelectItem;
@@ -71,6 +67,8 @@ import javax.faces.model.SelectItem;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.ResponseStateManager;
+import javax.faces.application.Resource;
+import javax.faces.application.ResourceHandler;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
@@ -79,18 +77,12 @@ import com.sun.faces.renderkit.html_basic.HtmlBasicRenderer.Param;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.RequestStateManager;
 
 /**
  * <p>A set of utilities for use in {@link RenderKit}s.</p>
  */
-public class RenderKitUtils {    
-
-    /**
-     * <p>A <code>request</code> scope attribute defining the
-     * {@link RenderKit} being used for this request.
-     */
-    private static final String RENDER_KIT_IMPL_REQ =
-          RIConstants.FACES_PREFIX + "renderKitImplForRequest";
+public class RenderKitUtils {
 
     /**
      * <p>The prefix to append to certain attributes when renderking
@@ -237,7 +229,7 @@ public class RenderKitUtils {
             Map<String, Object> requestMap =
                   context.getExternalContext().getRequestMap();
             RenderKitFactory factory = (RenderKitFactory)
-                  requestMap.get(RENDER_KIT_IMPL_REQ);
+                  RequestStateManager.get(context, RequestStateManager.RENDER_KIT_IMPL_REQ);
             if (factory != null) {
                 renderKit = factory.getRenderKit(context, renderKitId);
             } else {
@@ -247,7 +239,9 @@ public class RenderKitUtils {
                 if (factory == null) {
                     throw new IllegalStateException();
                 } else {
-                    requestMap.put(RENDER_KIT_IMPL_REQ, factory);
+                    RequestStateManager.set(context,
+                                            RequestStateManager.RENDER_KIT_IMPL_REQ,
+                                            factory);
                 }
                 renderKit = factory.getRenderKit(context, renderKitId);
             }

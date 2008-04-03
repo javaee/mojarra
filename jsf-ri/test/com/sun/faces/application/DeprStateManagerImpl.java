@@ -1,5 +1,5 @@
 /* 
- * $Id: DeprStateManagerImpl.java,v 1.9 2007/04/27 22:02:03 ofung Exp $ 
+ * $Id: DeprStateManagerImpl.java,v 1.10 2007/12/17 21:46:11 rlubke Exp $ 
  */ 
 
 
@@ -47,9 +47,9 @@ package com.sun.faces.application;
 import com.sun.faces.RIConstants;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.TreeStructure;
-import com.sun.faces.util.Util;
 import com.sun.faces.util.LRUMap;
 import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.RequestStateManager;
 
 import javax.faces.application.StateManager;
 import javax.faces.component.UIComponent;
@@ -69,7 +69,7 @@ import javax.faces.component.NamingContainer;
  * <B>DeprStateManagerImpl</B> is a test class which implements
  * deprecated methods only. 
  *
- * @version $Id: DeprStateManagerImpl.java,v 1.9 2007/04/27 22:02:03 ofung Exp $
+ * @version $Id: DeprStateManagerImpl.java,v 1.10 2007/12/17 21:46:11 rlubke Exp $
  */
 public class DeprStateManagerImpl extends StateManager {
 
@@ -81,8 +81,8 @@ public class DeprStateManagerImpl extends StateManager {
         RIConstants.FACES_PREFIX + "NUMBER_OF_VIEWS_IN_LOGICAL_VIEW_IN_SESSION";
     private static final int DEFAULT_NUMBER_OF_VIEWS_IN_LOGICAL_VIEW_IN_SESSION = 15;
 
-    private static final String FACES_VIEW_LIST =
-        RIConstants.FACES_PREFIX + "VIEW_LIST";
+    private static final String LOGICAL_VIEW_MAP =
+          RIConstants.FACES_PREFIX + "logicalViewMap";
     /**
      * Number of views in logical view to be saved in session.
      */
@@ -130,7 +130,7 @@ public class DeprStateManagerImpl extends StateManager {
             String id = null,
                    idInActualMap = null,
                    idInLogicalMap = (String)
-                context.getExternalContext().getRequestMap().get(RIConstants.LOGICAL_VIEW_MAP);
+                RequestStateManager.get(context, RequestStateManager.LOGICAL_VIEW_MAP);
             LRUMap logicalMap = null, actualMap = null;
             int 
                 logicalMapSize = getNumberOfViewsParameter(context),
@@ -140,9 +140,9 @@ public class DeprStateManagerImpl extends StateManager {
             Map sessionMap = context.getExternalContext().getSessionMap();
             
  	    synchronized (this) {
-                if (null == (logicalMap = (LRUMap) sessionMap.get(RIConstants.LOGICAL_VIEW_MAP))) {
+                if (null == (logicalMap = (LRUMap) sessionMap.get(LOGICAL_VIEW_MAP))) {
                     logicalMap = new LRUMap(logicalMapSize);
- 		    sessionMap.put(RIConstants.LOGICAL_VIEW_MAP, logicalMap);
+ 		    sessionMap.put(LOGICAL_VIEW_MAP, logicalMap);
                 }
                 assert(null != logicalMap); 
 
@@ -281,11 +281,11 @@ public class DeprStateManagerImpl extends StateManager {
 		TreeStructure structRoot = null;
 		Object [] stateArray = null;
 		synchronized (sessionObj) {
-		    logicalMap = (Map) sessionMap.get(RIConstants.LOGICAL_VIEW_MAP);
+		    logicalMap = (Map) sessionMap.get(LOGICAL_VIEW_MAP);
                     if (logicalMap != null) {
                         actualMap = (Map) logicalMap.get(idInLogicalMap);
                         if (actualMap != null) {
-                            context.getExternalContext().getRequestMap().put(RIConstants.LOGICAL_VIEW_MAP, 
+                            RequestStateManager.set(context, RequestStateManager.LOGICAL_VIEW_MAP,
                                 idInLogicalMap);
                             stateArray = (Object []) actualMap.get(idInActualMap);
                         }

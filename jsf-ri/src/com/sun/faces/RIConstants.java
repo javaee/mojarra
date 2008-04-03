@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.94 2007/07/19 16:38:01 rlubke Exp $
+ * $Id: RIConstants.java,v 1.95 2007/12/17 21:46:08 rlubke Exp $
  */
 
 /*
@@ -63,25 +63,12 @@ public class RIConstants {
            + "saveStateFieldMarker" 
            + SAVESTATE_FIELD_DELIMITER;
 
-    public static final String LOGICAL_VIEW_MAP = FACES_PREFIX +
-        "logicalViewMap";
+    public static final String SAVED_STATE = FACES_PREFIX + "savedState";
 
-    public static final String ACTUAL_VIEW_MAP = FACES_PREFIX +
-        "actualViewMap";
-
-    public static final String SAVED_STATE = FACES_PREFIX + "savedState";          
-
-
-    /**
-     * Request attribute containing a Set of clientIds that have messages pending
-     * display when rendering response.
-     */
-    public static final String CLIENT_ID_MESSAGES_NOT_DISPLAYED = FACES_PREFIX +
-    	"clientIdMessagesNotDisplayed";
 
     /*
-     * <p>TLV Resource Bundle Location </p>
-     */
+    * <p>TLV Resource Bundle Location </p>
+    */
     public static final String TLV_RESOURCE_LOCATION =
         FACES_PREFIX + "resources.Resources";
 
@@ -94,8 +81,6 @@ public class RIConstants {
     
     public static final Class[] EMPTY_CLASS_ARGS = new Class[0];
     public static final Object[] EMPTY_METH_ARGS = new Object[0];
-    
-    public static final String EL_RESOLVER_CHAIN_TYPE_NAME = FACES_PREFIX + "ELResolverChainType";
 
     /**
      *<p>ResponseWriter Content Types and Encoding</p>
@@ -111,14 +96,6 @@ public class RIConstants {
           FACES_PREFIX + "DefaultLifecycle";
     public static final String DEFAULT_STATEMANAGER =
           FACES_PREFIX + "DefaultStateManager";
-
-   /**
-    * <p>The <code>request</code> scoped attribute to store the
-    * {@link javax.faces.webapp.FacesServlet} path of the original
-    * request.</p>
-    */
-   public static final String INVOCATION_PATH =
-       FACES_PREFIX + "INVOCATION_PATH";
 
 
     private RIConstants() {

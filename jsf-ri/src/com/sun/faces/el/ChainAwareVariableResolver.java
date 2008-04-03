@@ -1,5 +1,5 @@
 /*
- * $Id: ChainAwareVariableResolver.java,v 1.5 2007/07/17 23:14:01 rlubke Exp $
+ * $Id: ChainAwareVariableResolver.java,v 1.6 2007/12/17 21:46:09 rlubke Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.EvaluationException;
 import javax.faces.el.VariableResolver;
 
-import com.sun.faces.RIConstants;
+import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.el.FacesCompositeELResolver.ELResolverChainType;
 
 /**
@@ -91,7 +91,8 @@ public class ChainAwareVariableResolver extends VariableResolver {
             throws EvaluationException {
         Object result = null;
         ELResolverChainType type = null;
-        Object valueObject = context.getExternalContext().getRequestMap().get(RIConstants.EL_RESOLVER_CHAIN_TYPE_NAME);
+        Object valueObject = RequestStateManager.get(context,
+                                                     RequestStateManager.EL_RESOLVER_CHAIN_TYPE_NAME);
         if (null != valueObject && 
             valueObject instanceof ELResolverChainType) {
             type = (ELResolverChainType) valueObject;

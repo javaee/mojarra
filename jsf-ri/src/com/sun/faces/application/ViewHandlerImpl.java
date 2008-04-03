@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.113 2007/11/16 01:33:44 rlubke Exp $
+ * $Id: ViewHandlerImpl.java,v 1.114 2007/12/17 21:46:08 rlubke Exp $
  */
 
 
@@ -52,6 +52,7 @@ import com.sun.faces.util.DebugUtil;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.RequestStateManager;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -81,16 +82,13 @@ import java.util.logging.Logger;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.113 2007/11/16 01:33:44 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.114 2007/12/17 21:46:08 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
 
     // Log instance for this class
     private static final Logger logger = FacesLogger.APPLICATION.getLogger();
-
-    private static final String AFTER_VIEW_CONTENT = RIConstants.FACES_PREFIX+
-                                                     "AFTER_VIEW_CONTENT";
 
     private ApplicationAssociate associate;
 
@@ -222,7 +220,7 @@ public class ViewHandlerImpl extends ViewHandler {
         // write any AFTER_VIEW_CONTENT to the response
         // side effect: AFTER_VIEW_CONTENT removed
         InterweavingResponse wrapper = (InterweavingResponse)
-              extContext.getRequestMap().remove(AFTER_VIEW_CONTENT);
+              RequestStateManager.remove(context, RequestStateManager.AFTER_VIEW_CONTENT);
         if (null != wrapper) {
             wrapper.flushToWriter(response.getWriter(),
                     response.getCharacterEncoding());
@@ -440,7 +438,7 @@ public class ViewHandlerImpl extends ViewHandler {
 
         ExternalContext extContext = context.getExternalContext();
 
-        if ("/*".equals(extContext.getRequestMap().get(RIConstants.INVOCATION_PATH))) {
+        if ("/*".equals(RequestStateManager.get(context, RequestStateManager.INVOCATION_PATH))) {
             throw new FacesException(MessageUtils.getExceptionMessageString(
                   MessageUtils.FACES_SERVLET_MAPPING_INCORRECT_ID));
         }
@@ -493,7 +491,9 @@ public class ViewHandlerImpl extends ViewHandler {
 
         // Put the AFTER_VIEW_CONTENT into request scope
         // temporarily
-        extContext.getRequestMap().put(AFTER_VIEW_CONTENT, wrapped);
+        RequestStateManager.set(context,
+                                RequestStateManager.AFTER_VIEW_CONTENT,
+                                wrapped);
 
         return false;
 

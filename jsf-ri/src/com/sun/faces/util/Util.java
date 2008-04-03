@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.217 2007/08/30 19:29:13 rlubke Exp $
+ * $Id: Util.java,v 1.218 2007/12/17 21:46:10 rlubke Exp $
  */
 
 /*
@@ -70,7 +70,7 @@ import java.util.regex.Pattern;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.217 2007/08/30 19:29:13 rlubke Exp $
+ * @version $Id: Util.java,v 1.218 2007/12/17 21:46:10 rlubke Exp $
  */
 
 public class Util {
@@ -572,7 +572,7 @@ public class Util {
         // Check for a previously stored mapping   
         ExternalContext extContext = context.getExternalContext();
         String mapping =
-              (String) extContext.getRequestMap().get(RIConstants.INVOCATION_PATH);
+              (String) RequestStateManager.get(context, RequestStateManager.INVOCATION_PATH);
 
         if (mapping == null) {
          
@@ -603,7 +603,9 @@ public class Util {
         //}
 
         if (mapping != null) {
-            extContext.getRequestMap().put(RIConstants.INVOCATION_PATH, mapping);
+            RequestStateManager.set(context,
+                                    RequestStateManager.INVOCATION_PATH,
+                                    mapping);
         }
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.log(Level.FINE,

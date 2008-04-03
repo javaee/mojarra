@@ -1,6 +1,6 @@
 
 /*
- * $Id: TestStateManagerImpl.java,v 1.21 2007/04/27 22:02:03 ofung Exp $
+ * $Id: TestStateManagerImpl.java,v 1.22 2007/12/17 21:46:11 rlubke Exp $
  */
 
 /*
@@ -40,10 +40,11 @@
  */
 
 package com.sun.faces.application;
-import com.sun.faces.RIConstants;
 import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.cactus.TestingUtil;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.RequestStateManager;
+
 import java.util.Map;
 import java.util.Locale;
 import javax.faces.application.StateManager.SerializedView;
@@ -316,15 +317,15 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         
         // See that the Logical View and Actual View maps are correctly created
         Map sessionMap = getFacesContext().getExternalContext().getSessionMap();
-        assertTrue(sessionMap.containsKey(RIConstants.LOGICAL_VIEW_MAP));
-        assertTrue(((Map)sessionMap.get(RIConstants.LOGICAL_VIEW_MAP)).containsKey("j_id1"));
+        assertTrue(sessionMap.containsKey(RequestStateManager.LOGICAL_VIEW_MAP));
+        assertTrue(((Map)sessionMap.get(RequestStateManager.LOGICAL_VIEW_MAP)).containsKey("j_id1"));
         
         newRoot = wrapper.restoreView(getFacesContext(), "test", "HTML_BASIC");
         assertNotNull(newRoot);
         assertEquals(root.getAttributes().get("checkThisValue"),
                      newRoot.getAttributes().get("checkThisValue"));
-        assertNotNull(getFacesContext().getExternalContext().getRequestMap().get(RIConstants.LOGICAL_VIEW_MAP));
-        assertEquals(getFacesContext().getExternalContext().getRequestMap().get(RIConstants.LOGICAL_VIEW_MAP), 
+        assertNotNull(RequestStateManager.get(getFacesContext(), RequestStateManager.LOGICAL_VIEW_MAP));
+        assertEquals(RequestStateManager.get(getFacesContext(), RequestStateManager.LOGICAL_VIEW_MAP),
                      "j_id1");
         
         

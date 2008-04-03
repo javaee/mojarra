@@ -1,5 +1,5 @@
 /*
- * $Id: LoadBundleTag.java,v 1.22 2007/07/19 15:50:55 rlubke Exp $
+ * $Id: LoadBundleTag.java,v 1.23 2007/12/17 21:46:10 rlubke Exp $
  */
 
 /*
@@ -47,6 +47,7 @@ import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.RequestStateManager;
 
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
@@ -373,13 +374,15 @@ public class LoadBundleTag extends TagSupport {
     }
     
     static List<UIComponent> getPreViewLoadBundleComponentList() {
-        List<UIComponent> result;
-        Map<String,Object> requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
+        FacesContext ctx = FacesContext.getCurrentInstance();
         //noinspection unchecked
-        if (null == (result = (List<UIComponent>)
-                requestMap.get(PRE_VIEW_LOADBUNDLES_LIST_ATTR_NAME))) {
+        List<UIComponent> result = (List<UIComponent>)
+              RequestStateManager.get(ctx, PRE_VIEW_LOADBUNDLES_LIST_ATTR_NAME);
+        if (result == null) {
             result = new ArrayList<UIComponent>();
-            requestMap.put(PRE_VIEW_LOADBUNDLES_LIST_ATTR_NAME, result);
+            RequestStateManager.set(ctx,
+                                    PRE_VIEW_LOADBUNDLES_LIST_ATTR_NAME,
+                                    result);
         }
         
         return result;

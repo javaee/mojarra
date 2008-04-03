@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.65 2007/09/24 19:57:28 edburns Exp $
+ * $Id: ExternalContextImpl.java,v 1.66 2007/12/17 21:46:09 rlubke Exp $
  */
 
 /*
@@ -74,19 +74,19 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.RequestStateManager;
 
 /**
  * <p>This implementation of {@link ExternalContext} is specific to the
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.65 2007/09/24 19:57:28 edburns Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.66 2007/12/17 21:46:09 rlubke Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -103,9 +103,6 @@ public class ExternalContextImpl extends ExternalContext {
     private Map<String,String[]> requestHeaderValuesMap = null;
     private Map<String,Object> cookieMap = null;
     private Map<String,String> initParameterMap = null;
-    
-   private static final String EXTERNALCONTEXT_IMPL_ATTR_NAME = RIConstants.FACES_PREFIX + 
-             "ExternalContextImpl";
 
     static final Class theUnmodifiableMapClass =
         Collections.unmodifiableMap(new HashMap<Object,Object>()).getClass();
@@ -134,9 +131,7 @@ public class ExternalContextImpl extends ExternalContext {
             ((HttpServletResponse) response)
                   .addHeader("X-Powered-By", "JSF/1.2");
         }
-
-        // Store this in request scope so jsf-api can access it.
-        this.getRequestMap().put(EXTERNALCONTEXT_IMPL_ATTR_NAME, this);
+        
     }
 
 

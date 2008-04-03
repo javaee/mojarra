@@ -65,7 +65,6 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.render.ResponseStateManager;
 
-import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
@@ -80,12 +79,17 @@ import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.RequestStateManager;
+import com.sun.faces.RIConstants;
 
 public class StateManagerImpl extends StateManager {
 
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
     private static final String STATEMANAGED_SERIAL_ID_KEY =
           StateManagerImpl.class.getName() + ".SerialId";
+
+    private static final String LOGICAL_VIEW_MAP =
+          RIConstants.FACES_PREFIX + "logicalViewMap";
     
     private SerializationProvider serialProvider;
     private WebConfiguration webConfig;
@@ -169,17 +173,17 @@ public class StateManagerImpl extends StateManager {
                 Object [] stateArray = null;
                 synchronized (sessionObj) {
                     Map logicalMap = (Map) externalCtx.getSessionMap()
-                          .get(RIConstants.LOGICAL_VIEW_MAP);
+                          .get(LOGICAL_VIEW_MAP);
                     if (logicalMap != null) {
                         Map actualMap = (Map) logicalMap.get(idInLogicalMap);
                         if (actualMap != null) {
-                            Map<String,Object> requestMap = 
-                                  context.getExternalContext().getRequestMap();
-                            requestMap.put(RIConstants.LOGICAL_VIEW_MAP,
-                                           idInLogicalMap);
+                            RequestStateManager.set(context,
+                                                    RequestStateManager.LOGICAL_VIEW_MAP,
+                                                    idInLogicalMap);
                             if (rsm.isPostback(context)) {
-                                requestMap.put(RIConstants.ACTUAL_VIEW_MAP,
-                                               idInActualMap);
+                                RequestStateManager.set(context,
+                                                        RequestStateManager.ACTUAL_VIEW_MAP,
+                                                        idInActualMap);
                             }
                             stateArray =
                                   (Object[]) actualMap.get(idInActualMap);
@@ -272,16 +276,14 @@ public class StateManagerImpl extends StateManager {
 
             synchronized (sessionObj) {
                 Map<String, Map> logicalMap = TypedCollections.dynamicallyCastMap(
-                      (Map) sessionMap.get(RIConstants.LOGICAL_VIEW_MAP), String.class, Map.class);
+                      (Map) sessionMap.get(LOGICAL_VIEW_MAP), String.class, Map.class);
                 if (logicalMap == null) {
                     logicalMap = new LRUMap<String, Map>(logicalMapSize);
-                    sessionMap.put(RIConstants.LOGICAL_VIEW_MAP, logicalMap);
+                    sessionMap.put(LOGICAL_VIEW_MAP, logicalMap);
                 }
-
-                Map<String, Object> requestMap =
-                      externalContext.getRequestMap();
+            
                 String idInLogicalMap = (String)
-                      requestMap.get(RIConstants.LOGICAL_VIEW_MAP);
+                      RequestStateManager.get(context, RequestStateManager.LOGICAL_VIEW_MAP);
                 if (idInLogicalMap == null) {
                     idInLogicalMap = createUniqueRequestId(context);
                 }
@@ -308,7 +310,7 @@ public class StateManagerImpl extends StateManager {
                     actualMap.put(idInActualMap, new Object[] { tree, handleSaveState(state) });
                 }
                 // always call put/setAttribute as we may be in a clustered environment.
-                sessionMap.put(RIConstants.LOGICAL_VIEW_MAP, logicalMap);
+                sessionMap.put(LOGICAL_VIEW_MAP, logicalMap);
             }
         } else {
             result = new SerializedView(tree, state);

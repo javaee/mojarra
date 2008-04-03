@@ -1,5 +1,5 @@
  /*
- * $Id: FacesContextImpl.java,v 1.90 2007/11/26 22:08:11 rlubke Exp $
+ * $Id: FacesContextImpl.java,v 1.91 2007/12/17 21:46:09 rlubke Exp $
  */
 
 /*
@@ -65,19 +65,16 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sun.faces.RIConstants;
 import com.sun.faces.el.ELContextImpl;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.RequestStateManager;
 
  public class FacesContextImpl extends FacesContext {
 
      //
      // Protected Constants
      //
-     
-     private static final String FACESCONTEXT_IMPL_ATTR_NAME = RIConstants.FACES_PREFIX + 
-             "FacesContextImpl";
 
      //
      // Class Variables
@@ -136,10 +133,6 @@ import com.sun.faces.util.FacesLogger;
          }
          this.externalContext = ec;
          setCurrentInstance(this);
-         // Store this in request scope so jsf-api can access it.
-         this.externalContext.getRequestMap().put(FACESCONTEXT_IMPL_ATTR_NAME, 
-                 this);
-
          rkFactory = (RenderKitFactory)
              FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
      }
@@ -213,10 +206,10 @@ import com.sun.faces.util.FacesLogger;
          }
 
          //Clear set of clientIds from pending display messages list.
-         Map<String,Object> requestMap = getExternalContext().getRequestMap();
-         if (requestMap.containsKey(RIConstants.CLIENT_ID_MESSAGES_NOT_DISPLAYED)) {
-        	 Set pendingClientIds = (Set)requestMap.get(RIConstants.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
-        	 pendingClientIds.clear();
+         if (RequestStateManager.containsKey(this, RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED)) {
+            Set pendingClientIds = (Set)
+                   RequestStateManager.get(this, RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
+            pendingClientIds.clear();
          }
 
          // Get an Iterator over the ArrayList instances
@@ -236,7 +229,7 @@ import com.sun.faces.util.FacesLogger;
          //remove client id from pending display messages list.
          Map requestMap = getExternalContext().getRequestMap();
          Set pendingClientIds = (Set)
-              requestMap.get(RIConstants.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
+              RequestStateManager.get(this, RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
          if (pendingClientIds != null && !pendingClientIds.isEmpty()) {
             pendingClientIds.remove(clientId);
          }
@@ -373,8 +366,8 @@ import com.sun.faces.util.FacesLogger;
 
      public void release() {
          
-         this.externalContext.getRequestMap().remove(FACESCONTEXT_IMPL_ATTR_NAME);
-         this.externalContext.getRequestMap().remove(RIConstants.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
+         RequestStateManager.remove(this, RequestStateManager.FACESCONTEXT_IMPL_ATTR_NAME);
+         RequestStateManager.remove(this, RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
          
          released = true;
          externalContext = null;

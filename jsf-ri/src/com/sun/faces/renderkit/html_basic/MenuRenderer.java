@@ -35,7 +35,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.97 2007/11/29 00:51:15 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.98 2007/12/17 21:46:10 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -71,11 +71,11 @@ import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.application.ConverterPropertyEditorBase;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.RequestStateManager;
 
 /**
  * <B>MenuRenderer</B> is a class that renders the current value of
@@ -290,9 +290,9 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             // need to set the 'TARGET_COMPONENT_ATTRIBUTE_NAME' request attr so the
             // coerce-value call in the jsf-api UISelectMany.matchValue will work
             // (need a better way to determine the currently processing UIComponent ...)
-            Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
-            requestMap.put(ConverterPropertyEditorBase.TARGET_COMPONENT_ATTRIBUTE_NAME,
-                    component);
+            RequestStateManager.set(context,
+                                    RequestStateManager.TARGET_COMPONENT_ATTRIBUTE_NAME,
+                                    component);
             return convertSelectManyValue(context,
                                           ((UISelectMany) component),
                                           (String[]) submittedValue);
@@ -502,9 +502,9 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             type = valuesArray.getClass().getComponentType();
         }
 
-        Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
-        requestMap.put(ConverterPropertyEditorBase.TARGET_COMPONENT_ATTRIBUTE_NAME,
-                component);
+        RequestStateManager.set(context,
+                                RequestStateManager.TARGET_COMPONENT_ATTRIBUTE_NAME,
+                                component);
         Object newValue;
         try {
             newValue = context.getApplication().getExpressionFactory().

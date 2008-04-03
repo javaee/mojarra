@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.37 2007/04/27 22:02:03 ofung Exp $
+ * $Id: TestViewHandlerImpl.java,v 1.38 2007/12/17 21:46:11 rlubke Exp $
  */
 
 
@@ -78,6 +78,7 @@ import com.sun.faces.context.ExternalContextImpl;
 import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.RequestStateManager;
 
 
 /**
@@ -85,7 +86,7 @@ import com.sun.faces.util.Util;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestViewHandlerImpl.java,v 1.37 2007/04/27 22:02:03 ofung Exp $
+ * @version $Id: TestViewHandlerImpl.java,v 1.38 2007/12/17 21:46:11 rlubke Exp $
  */
 
 
@@ -243,7 +244,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
         // returned must have that path prefixed.
         testRequest.setServletPath("/faces");
         testRequest.setPathInfo("/path/test.jsp");
-        testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
+        RequestStateManager.remove(facesContext, RequestStateManager.INVOCATION_PATH);
         String path = handler.getActionURL(facesContext, "/path/test.jsp");
         System.out.println("VIEW ID PATH 2: " + path);
         assertEquals(contextPath + "/faces/path/test.jsp", path);
@@ -254,7 +255,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
         // to the provided viewId
         testRequest.setServletPath("/path/firstRequest.jsf");
         testRequest.setPathInfo(null);
-        testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
+        RequestStateManager.remove(facesContext, RequestStateManager.INVOCATION_PATH);
         path = handler.getActionURL(facesContext, "/path/test");
         System.out.println("VIEW ID PATH 3: " + path);
         assertEquals(contextPath + "/path/test.jsf", path);
@@ -264,7 +265,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
         // the extension defined in the deployment descriptor
         testRequest.setServletPath("/path/firstRequest.jsf");
         testRequest.setPathInfo(null);
-        testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
+        RequestStateManager.remove(facesContext, RequestStateManager.INVOCATION_PATH);
         path = handler.getActionURL(facesContext, "/path/t.est.jsp");
         System.out.println("VIEW ID PATH 4: " + path);
         assertEquals(contextPath + "/path/t.est.jsf", path);
@@ -274,7 +275,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
         // the servlet path
         testRequest.setServletPath("/faces");
         testRequest.setPathInfo(null);
-        testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
+        RequestStateManager.remove(facesContext, RequestStateManager.INVOCATION_PATH);
         path = handler.getActionURL(facesContext, "/path/t.est");
         System.out.println("VIEW ID PATH 5: " + path);
         assertEquals(contextPath + "/faces/path/t.est", path);

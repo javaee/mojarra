@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverChainWrapper.java,v 1.16 2007/07/17 23:14:01 rlubke Exp $
+ * $Id: VariableResolverChainWrapper.java,v 1.17 2007/12/17 21:46:09 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -51,6 +51,7 @@ import java.beans.FeatureDescriptor;
 import java.util.*;
 
 import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.RequestStateManager;
 
 public class VariableResolverChainWrapper extends ELResolver {
     
@@ -61,14 +62,6 @@ public class VariableResolverChainWrapper extends ELResolver {
     public VariableResolverChainWrapper(VariableResolver variableResolver) {
         this.legacyVR = variableResolver;
     }
-
-    /**
-     * <p>Private request scoped attribute to protect against infinite
-     * loops on expressions that touch a custom legacy VariableResolver
-     * that delegates to its parent VariableResolver.</p>
-     */
-    
-    private static final String REENTRANT_GUARD = "com.sun.faces.LegacyVariableResolver";
 
     @Override
     @SuppressWarnings("deprecation")
@@ -88,13 +81,13 @@ public class VariableResolverChainWrapper extends ELResolver {
         
         FacesContext facesContext = (FacesContext)
             context.getContext(FacesContext.class);
-        Map<String, Object> requestMap = facesContext.getExternalContext().getRequestMap();
         String propString = property.toString();
         try {
         // If we are already in the midst of an expression evaluation
         // that touched this resolver...
             //noinspection unchecked
-            List<String> varNames = (List<String>) requestMap.get(REENTRANT_GUARD);
+            List<String> varNames = (List<String>) RequestStateManager.get(facesContext,
+                                                                           RequestStateManager.REENTRANT_GUARD);
             if (varNames != null
                  && !varNames.isEmpty()
                  && varNames.contains(propString)) {
@@ -105,7 +98,9 @@ public class VariableResolverChainWrapper extends ELResolver {
             // Make sure subsequent calls don't take action.
             if (varNames == null) {
                 varNames = new ArrayList<String>();
-                requestMap.put(REENTRANT_GUARD, varNames);
+                RequestStateManager.set(facesContext,
+                                        RequestStateManager.REENTRANT_GUARD,
+                                        varNames);
             }
             varNames.add(propString);
             
@@ -117,7 +112,8 @@ public class VariableResolverChainWrapper extends ELResolver {
         } finally {
             // Make sure to remove the guard after the call returns
             //noinspection unchecked
-            List<String> varNames = (List<String>) requestMap.get(REENTRANT_GUARD);
+            List<String> varNames = (List<String>) RequestStateManager.get(facesContext,
+                                                                           RequestStateManager.REENTRANT_GUARD);
             if (varNames != null && !varNames.isEmpty()) {
                 varNames.remove(propString);
             }
