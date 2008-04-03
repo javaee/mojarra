@@ -147,8 +147,13 @@ public class ResourceHandlerImpl extends ResourceHandler {
                                       RequestStateManager.RESOURCE_REQUEST);
         if (isResourceRequest == null) {
             String resourceId = normalizeResourceRequest(context);
-            isResourceRequest =
-                  resourceId.startsWith(ResourceHandler.RESOURCE_IDENTIFIER);
+            isResourceRequest = (resourceId != null
+                                 ? resourceId
+                  .startsWith(ResourceHandler.RESOURCE_IDENTIFIER)
+                                 : Boolean.FALSE);
+            RequestStateManager.set(context,
+                                    RequestStateManager.RESOURCE_REQUEST,
+                                    isResourceRequest);
         }
 
         return (isResourceRequest);
