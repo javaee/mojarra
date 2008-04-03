@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlComponentGenerator.java,v 1.28 2007/09/05 23:44:57 rlubke Exp $
+ * $Id: HtmlComponentGenerator.java,v 1.29 2007/10/02 21:23:04 rlubke Exp $
  */
 
 /*
@@ -270,9 +270,12 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         PropertyBean[] pbs = cb.getProperties();
         for (PropertyBean pb : pbs) {
             if (pb.isPassThrough() && pb.getDefaultValue() != null) {
-                writer.fwrite("getAttributesThatAreSet().add(\"");
+                writer.fwrite("handleAttribute(\"");
                 writer.write(pb.getPropertyName());
-                writer.write("\");\n");
+                writer.write("\", ");
+                writer.write(pb.getDefaultValue());
+                writer.write(");\n");
+
             }
         }
 
@@ -446,16 +449,11 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             if ((pb.isPassThrough() && pb.getDefaultValue() == null)
                   || (cb.getComponentClass().contains("HtmlCommandButton")
                         && "onclick".equals(pb.getPropertyName()))) {
-                writer.fwrite("List<String> setAttrs = getAttributesThatAreSet();\n");
-                writer.fwrite("if (setAttrs != null && !setAttrs.contains(\"");
-                writer.write(var);
-                writer.write("\")) {\n");
-                writer.indent();
-                writer.fwrite("setAttrs.add(\"");
+                writer.fwrite("handleAttribute(\"");
                 writer.write(pb.getPropertyName());
-                writer.write("\");\n");
-                writer.outdent();
-                writer.fwrite("}\n");
+                 writer.write("\", ");
+                writer.write(var);
+                writer.write(");\n");
             }
 
             writer.outdent();
@@ -570,6 +568,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         writer.outdent();
         writer.fwrite("}\n\n\n");
 
+<<<<<<< HtmlComponentGenerator.java
         writer.fwrite("private List<String> getAttributesThatAreSet() {\n");
         writer.indent();
         writer.fwrite("List<String> setAttributes = null;\n");
@@ -590,6 +589,36 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         writer.fwrite("}\n\n");
 
 
+=======
+        writer.fwrite("private void handleAttribute(String name, Object value) {\n");
+        writer.indent();
+        writer.fwrite("List<String> setAttributes = null;\n");
+        writer.fwrite("String pkg = this.getClass().getPackage().getName();\n");
+        writer.fwrite("if (Arrays.binarySearch(OPTIMIZED_PACKAGES, pkg) >= 0) {\n");
+        writer.indent();
+        writer.fwrite("setAttributes = (List<String>) this.getAttributes().get(\"javax.faces.component.UIComponentBase.attributesThatAreSet\");\n");
+        writer.fwrite("if (setAttributes == null) {\n");
+        writer.indent();
+        writer.fwrite("setAttributes = new ArrayList<String>(6);\n");
+        writer.fwrite("this.getAttributes().put(\"javax.faces.component.UIComponentBase.attributesThatAreSet\", setAttributes);\n");
+        writer.outdent();
+        writer.fwrite("}\n");
+        writer.fwrite("if (value == null) {\n");
+        writer.indent();
+        writer.fwrite("setAttributes.remove(name);\n");
+        writer.outdent();
+        writer.fwrite("} else if (!setAttributes.contains(name)) {\n");
+        writer.indent();
+        writer.fwrite("setAttributes.add(name);\n");
+        writer.outdent();
+        writer.fwrite("}\n");
+        writer.outdent();
+        writer.fwrite("}\n");
+        writer.outdent();
+        writer.fwrite("}\n\n");
+
+
+>>>>>>> 1.27.4.2
         // Generate the ending of this class
         writer.outdent();
         writer.write("}\n");

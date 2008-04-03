@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.36 2007/04/27 22:02:03 ofung Exp $
+ * $Id: TestApplicationImpl.java,v 1.37 2007/10/02 21:23:04 rlubke Exp $
  */
 
 /*
@@ -42,26 +42,24 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.TestComponent;
-import com.sun.faces.cactus.JspFacesTestCase;
-import com.sun.faces.cactus.TestingUtil;
-import com.sun.faces.util.Util;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
-import javax.faces.convert.IntegerConverter;
+import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
-import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.convert.IntegerConverter;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.el.ValueBinding;
@@ -69,16 +67,19 @@ import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
+import com.sun.faces.RIConstants;
+import com.sun.faces.TestComponent;
+import com.sun.faces.TestForm;
+import com.sun.faces.cactus.JspFacesTestCase;
+import com.sun.faces.cactus.TestingUtil;
+import com.sun.faces.util.Util;
 
 /**
  * <B>TestApplicationImpl</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.36 2007/04/27 22:02:03 ofung Exp $
+ * @version $Id: TestApplicationImpl.java,v 1.37 2007/10/02 21:23:04 rlubke Exp $
  */
 
 public class TestApplicationImpl extends JspFacesTestCase {
@@ -457,6 +458,14 @@ public class TestApplicationImpl extends JspFacesTestCase {
             application.createComponent(testComponent.getComponentType())));
         assertTrue(newTestComponent != testComponent);
 
+    }
+
+
+    public void testCreateComponentExtension() {
+        application.addComponent(TestForm.COMPONENT_TYPE,
+                                 TestForm.class.getName());
+        UIComponent c = application.createComponent(TestForm.COMPONENT_TYPE);
+        assertTrue(c != null);
     }
 
 
