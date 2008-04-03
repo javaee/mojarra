@@ -1,13 +1,13 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.108 2007/07/26 00:17:38 rlubke Exp $
+ * $Id: ViewHandlerImpl.java,v 1.109 2007/07/26 16:26:52 rlubke Exp $
  */
 
 
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * 
+ *
  * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
- * 
+ *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -15,7 +15,7 @@
  * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
  * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- * 
+ *
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
  * Sun designates this particular file as subject to the "Classpath" exception
@@ -24,9 +24,9 @@
  * Header, with the fields enclosed by brackets [] replaced by your own
  * identifying information: "Portions Copyrighted [year]
  * [name of copyright owner]"
- * 
+ *
  * Contributor(s):
- * 
+ *
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
  * elects to include this software in this distribution under the [CDDL or GPL
@@ -81,7 +81,7 @@ import java.util.logging.Logger;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.108 2007/07/26 00:17:38 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.109 2007/07/26 16:26:52 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -121,7 +121,7 @@ public class ViewHandlerImpl extends ViewHandler {
         ExternalContext extContext = context.getExternalContext();
         ServletRequest request = (ServletRequest) extContext.getRequest();
         ServletResponse response = (ServletResponse) extContext.getResponse();
-        
+
         try {
             if (executePageToBuildView(context, viewToRender)) {
                 response.flushBuffer();
@@ -134,7 +134,7 @@ public class ViewHandlerImpl extends ViewHandler {
         } catch (IOException e) {
             throw new FacesException(e);
         }
-        
+
         if (logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE, "Completed building view for : \n" +
                     viewToRender.getViewId());
@@ -143,14 +143,14 @@ public class ViewHandlerImpl extends ViewHandler {
             logger.log(Level.FINEST, "+=+=+=+=+=+= Printout for " + viewToRender.getViewId() + " about to render.");
             DebugUtil.printTree(viewToRender, logger, Level.FINEST);
         }
-        
+
         // set up the ResponseWriter
-        
+
         RenderKitFactory renderFactory = (RenderKitFactory)
         FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         RenderKit renderKit =
                 renderFactory.getRenderKit(context, viewToRender.getRenderKitId());
-                
+
         ResponseWriter oldWriter = context.getResponseWriter();
 
         if (bufSize == -1) {
@@ -181,15 +181,15 @@ public class ViewHandlerImpl extends ViewHandler {
                                                        request.getCharacterEncoding());
         }
         context.setResponseWriter(newWriter);
-        
+
         newWriter.startDocument();
-        
+
         doRenderView(context, viewToRender);
-        
+
         newWriter.endDocument();
-        
+
         // replace markers in the body content and write it to response.
-        
+
         // flush directly to the response
         if (stateWriter.stateWritten()) {
             stateWriter.flushToWriter();
@@ -197,11 +197,11 @@ public class ViewHandlerImpl extends ViewHandler {
 
         // clear the ThreadLocal reference.
         stateWriter.release();
-                        
+
         if (null != oldWriter) {
             context.setResponseWriter(oldWriter);
         }
-        
+
         // write any AFTER_VIEW_CONTENT to the response
         // side effect: AFTER_VIEW_CONTENT removed
         InterweavingResponse wrapper = (InterweavingResponse)
@@ -210,9 +210,9 @@ public class ViewHandlerImpl extends ViewHandler {
             wrapper.flushToWriter(response.getWriter(),
                     response.getCharacterEncoding());
         }
-        
-        response.flushBuffer();                
-               
+
+        response.flushBuffer();
+
     }
 
     /**
@@ -231,7 +231,7 @@ public class ViewHandlerImpl extends ViewHandler {
      *
      * <p>Flush the response buffer, and remove the after view content
      * from the request scope.</p>
-     * 
+     *
      * @param context the <code>FacesContext</code> for the current request
      * @param viewToRender the view to render
      * @throws IOException if an error occurs rendering the view to the client
@@ -240,8 +240,8 @@ public class ViewHandlerImpl extends ViewHandler {
      */
 
     private void doRenderView(FacesContext context,
-                              UIViewRoot viewToRender) 
-    throws IOException, FacesException {   
+                              UIViewRoot viewToRender)
+    throws IOException, FacesException {
 
         ApplicationAssociate associate = getAssociate(context);
 
@@ -300,7 +300,7 @@ public class ViewHandlerImpl extends ViewHandler {
                     outerViewHandler.calculateRenderKitId(context);
             viewRoot = Util.getStateManager(context).restoreView(context,
                                                                  viewId,
-                                                                 renderKitId);            
+                                                                 renderKitId);
         }
 
         return viewRoot;
@@ -316,7 +316,7 @@ public class ViewHandlerImpl extends ViewHandler {
 
         UIViewRoot result = (UIViewRoot)
                 context.getApplication().createComponent(UIViewRoot.COMPONENT_TYPE);
-        
+
         if (viewId != null) {
             String mapping = Util.getFacesMapping(context);
 
@@ -326,7 +326,7 @@ public class ViewHandlerImpl extends ViewHandler {
                 } else {
                     viewId = normalizeRequestURI(viewId, mapping);
                     if (viewId.equals(mapping)) {
-                        // The request was to the FacesServlet only - no 
+                        // The request was to the FacesServlet only - no
                         // path info
                         // on some containers this causes a recursion in the
                         // RequestDispatcher and the request appears to hang.
@@ -337,13 +337,13 @@ public class ViewHandlerImpl extends ViewHandler {
             }
 
             result.setViewId(viewId);
-        } 
+        }
 
         Locale locale = null;
         String renderKitId = null;
 
         // use the locale from the previous view if is was one which will be
-        // the case if this is called from NavigationHandler. There wouldn't be 
+        // the case if this is called from NavigationHandler. There wouldn't be
         // one for the initial case.
         if (context.getViewRoot() != null) {
             locale = context.getViewRoot().getLocale();
@@ -356,7 +356,7 @@ public class ViewHandlerImpl extends ViewHandler {
         // PENDING(): not sure if we should set the RenderKitId here.
         // The UIViewRoot ctor sets the renderKitId to the default
         // one.
-        // if there was no locale from the previous view, calculate the locale 
+        // if there was no locale from the previous view, calculate the locale
         // for this view.
         if (locale == null) {
             locale =
@@ -402,12 +402,12 @@ public class ViewHandlerImpl extends ViewHandler {
      * are properly handled.
      * @param context the <code>FacesContext</code> for the current request
      * @param viewToExecute the view to build
-     * @return <code>true</code> if the response should be immediately flushed 
-     *  to the client, otherwise <code>false</code> 
-     * @throws IOException if an error occurs executing the page    
+     * @return <code>true</code> if the response should be immediately flushed
+     *  to the client, otherwise <code>false</code>
+     * @throws IOException if an error occurs executing the page
      */
     private boolean executePageToBuildView(FacesContext context,
-                                        UIViewRoot viewToExecute) 
+                                        UIViewRoot viewToExecute)
     throws IOException {
 
         if (null == context) {
@@ -428,7 +428,7 @@ public class ViewHandlerImpl extends ViewHandler {
                   MessageUtils.FACES_SERVLET_MAPPING_INCORRECT_ID));
         }
 
-        String requestURI = viewToExecute.getViewId();             
+        String requestURI = viewToExecute.getViewId();
 
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("About to execute view " + requestURI);
@@ -437,7 +437,7 @@ public class ViewHandlerImpl extends ViewHandler {
         // update the JSTL locale attribute in request scope so that JSTL
         // picks up the locale from viewRoot. This attribute must be updated
         // before the JSTL setBundle tag is called because that is when the
-        // new LocalizationContext object is created based on the locale.       
+        // new LocalizationContext object is created based on the locale.
         if (extContext.getRequest() instanceof ServletRequest) {
             Config.set((ServletRequest)
             extContext.getRequest(),
@@ -456,30 +456,30 @@ public class ViewHandlerImpl extends ViewHandler {
 
         // build the view by executing the page
         extContext.dispatch(requestURI);
-        
+
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("After dispacthMessage to viewId " + requestURI);
         }
-        
+
         // replace the original response
         extContext.setResponse(originalResponse);
-        
-        // Follow the JSTL 1.2 spec, section 7.4,  
+
+        // Follow the JSTL 1.2 spec, section 7.4,
         // on handling status codes on a forward
-        if (wrapped.getStatus() < 200 || wrapped.getStatus() > 299) {  
+        if (wrapped.getStatus() < 200 || wrapped.getStatus() > 299) {
             // flush the contents of the wrapper to the response
-            // this is necessary as the user may be using a custom 
+            // this is necessary as the user may be using a custom
             // error page - this content should be propagated
             wrapped.flushContentToWrappedResponse();
-            return true;            
-        }               
-        
+            return true;
+        }
+
         // Put the AFTER_VIEW_CONTENT into request scope
         // temporarily
         extContext.getRequestMap().put(AFTER_VIEW_CONTENT, wrapped);
 
         return false;
-        
+
     }
 
 
@@ -492,8 +492,8 @@ public class ViewHandlerImpl extends ViewHandler {
         }
 
         Locale result = null;
-        // determine the locales that are acceptable to the client based on the 
-        // Accept-Language header and the find the best match among the 
+        // determine the locales that are acceptable to the client based on the
+        // Accept-Language header and the find the best match among the
         // supported locales specified by the client.
         Iterator<Locale> locales = context.getExternalContext().getRequestLocales();
         while (locales.hasNext()) {
@@ -521,7 +521,7 @@ public class ViewHandlerImpl extends ViewHandler {
             String message = MessageUtils.getExceptionMessageString
                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
             throw new NullPointerException(message);
-        }       
+        }
 
         Map<String,String> requestParamMap = context.getExternalContext()
             .getRequestParameterMap();
@@ -633,7 +633,7 @@ public class ViewHandlerImpl extends ViewHandler {
         }
 
         if (viewId.charAt(0) != '/') {
-            String message = 
+            String message =
                   MessageUtils.getExceptionMessageString(
                         MessageUtils.ILLEGAL_VIEW_ID_ID,
                         viewId);
@@ -686,13 +686,13 @@ public class ViewHandlerImpl extends ViewHandler {
         }
 
     }
-   
+
 
     /**
-     * <p>if the specified mapping is a prefix mapping, and the provided 
+     * <p>if the specified mapping is a prefix mapping, and the provided
      * request URI (usually the value from <code>ExternalContext.getRequestServletPath()</code>)
      * starts with <code>mapping + '/'</code>, prune the mapping from the
-     * URI and return it, otherwise, return the original URI. 
+     * URI and return it, otherwise, return the original URI.
      * @param uri the servlet request path
      * @param mapping the FacesServlet mapping used for this request
      * @return the URI without additional FacesServlet mappings
@@ -755,7 +755,7 @@ public class ViewHandlerImpl extends ViewHandler {
                             + contextDefaultSuffix);
             }
         }
-           
+
         String convertedViewId = viewId;
         // if the viewId doesn't already use the above suffix,
         // replace or append.
@@ -796,7 +796,7 @@ public class ViewHandlerImpl extends ViewHandler {
         throw new IllegalArgumentException();
 
     }
-    
+
     // ----------------------------------------------------------- Inner Classes
 
     /**
@@ -897,7 +897,7 @@ public class ViewHandlerImpl extends ViewHandler {
 
         /**
          * <p> Write directly from our FastStringWriter to the provided
-         * writer.</p>       
+         * writer.</p>
          * @throws IOException if an error occurs
          */
         public void flushToWriter() throws IOException {
@@ -915,8 +915,8 @@ public class ViewHandlerImpl extends ViewHandler {
             StringBuilder builder = fWriter.getBuffer();
             // begin writing...
             int totalLen = builder.length();
-            StateBuffer stateBuilder = new StateBuffer(state.getBuffer(),
-                                                       context);
+            StringBuilder stateBuilder = state.getBuffer();
+            int stateLen = stateBuilder.length();
             int pos = 0;
             int tildeIdx = getNextDelimiterIndex(builder, pos);
             while (pos < totalLen) {
@@ -940,35 +940,29 @@ public class ViewHandlerImpl extends ViewHandler {
                               pos) == tildeIdx) {
                             // buf is effectively zero'd out at this point
                             int statePos = 0;
-                            int stateLen = stateBuilder.length();
                             while (statePos < stateLen) {
                                 if ((stateLen - statePos) > bufSize) {
                                     // enough state to fill the buffer
-                                    stateBuilder.getBuffer().getChars(statePos,
-                                                                      (statePos + bufSize),
-                                                                      buf,
-                                                                      0);
+                                    stateBuilder.getChars(statePos,
+                                                          (statePos + bufSize),
+                                                          buf,
+                                                          0);
                                     orig.write(buf);
                                     statePos += bufSize;
                                 } else {
-                                    stateBuilder.getBuffer().getChars(statePos,
-                                                                      stateLen,
-                                                                      buf,
-                                                                      0);
                                     int slen = (stateLen - statePos);
+                                    stateBuilder.getChars(statePos,
+                                                          stateLen,
+                                                          buf,
+                                                          0);
                                     orig.write(buf, 0, slen);
                                     statePos += slen;
                                 }
-                            }
 
+                            }
                              // push us past the last '~' at the end of the marker
                             pos += (len + STATE_MARKER_LEN);
                             tildeIdx = getNextDelimiterIndex(builder, pos);
-                            if (tildeIdx != -1) {
-                                // we have more state to write, so update the
-                                // buffer
-                                stateBuilder.updateBuffer();    
-                            }
                         } else {
                             pos = tildeIdx;
                             tildeIdx = getNextDelimiterIndex(builder,
@@ -1000,51 +994,6 @@ public class ViewHandlerImpl extends ViewHandler {
             return builder.indexOf(RIConstants.SAVESTATE_FIELD_DELIMITER,
                                    offset);
         }
-
-
-        /*
-         * A simple wrapper around the state content returned by the
-         * StateManager.  If 'EnabexhtmlStateForms' is enabled, we need
-         * to remove the 'id' content from the buffer *after* the first
-         * time we've written the state field out.
-         */
-        private static class StateBuffer {
-
-            private static final String ID_SECTION =
-                  "id=\"" + ResponseStateManager.VIEW_STATE_PARAM + '"';
-
-            private boolean stateWrittenOnce;
-            private StringBuilder stateContent;
-            private boolean xhtml;
-
-            public StateBuffer(StringBuilder stateContent,
-                               FacesContext context) {
-                this.stateContent = stateContent;
-                WebConfiguration webConfig = WebConfiguration
-                      .getInstance(context.getExternalContext());
-                xhtml = webConfig.isOptionEnabled(
-                      WebConfiguration.BooleanWebContextInitParameter.EnableXhtmlStateForms);
-            }
-
-            public StringBuilder getBuffer() {
-               return stateContent;
-            }
-
-            public void updateBuffer() {
-                if (xhtml && !stateWrittenOnce) {
-                    stateWrittenOnce = true;
-                    int startIdx = stateContent.indexOf(ID_SECTION);
-                    int endIdx = startIdx + ID_SECTION.length();
-                    stateContent.replace(startIdx, endIdx + 1, "");
-                    stateContent.trimToSize();
-                }
-            }
-
-            public int length() {
-                return stateContent.length();
-            }
-        }
-
 
     }
 

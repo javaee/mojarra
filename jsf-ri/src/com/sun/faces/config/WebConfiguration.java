@@ -1,11 +1,11 @@
 /*
- * $Id: WebConfiguration.java,v 1.28 2007/07/25 22:50:37 rlubke Exp $
+ * $Id: WebConfiguration.java,v 1.29 2007/07/26 16:26:53 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * 
+ *
  * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
- * 
+ *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -13,7 +13,7 @@
  * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
  * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- * 
+ *
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
  * Sun designates this particular file as subject to the "Classpath" exception
@@ -22,9 +22,9 @@
  * Header, with the fields enclosed by brackets [] replaced by your own
  * identifying information: "Portions Copyrighted [year]
  * [name of copyright owner]"
- * 
+ *
  * Contributor(s):
- * 
+ *
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
  * elects to include this software in this distribution under the [CDDL or GPL
@@ -72,7 +72,7 @@ public class WebConfiguration {
     // Key under which we store our WebConfiguration instance.
     private static final String WEB_CONFIG_KEY =
           "com.sun.faces.config.WebConfiguration";
-    
+
     // Logging level.  Defaults to FINE
     private Level loggingLevel = Level.FINE;
 
@@ -101,7 +101,7 @@ public class WebConfiguration {
 
         initSetList(servletContext);
         processBooleanParameters(servletContext, contextName);
-        processInitParameters(servletContext, contextName);        
+        processInitParameters(servletContext, contextName);
         processJndiEntries(contextName);
 
     }
@@ -113,14 +113,14 @@ public class WebConfiguration {
     /**
      * Return the WebConfiguration instance for this application passing
      * the result of FacesContext.getCurrentInstance().getExternalContext()
-     * to {@link #getInstance(javax.faces.context.ExternalContext)}.     
+     * to {@link #getInstance(javax.faces.context.ExternalContext)}.
      * @return the WebConfiguration for this application or <code>null</code>
      *  if no FacesContext is available.
      */
     public static WebConfiguration getInstance() {
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        return getInstance(facesContext.getExternalContext());        
+        return getInstance(facesContext.getExternalContext());
 
     }
 
@@ -141,8 +141,8 @@ public class WebConfiguration {
         }
 
     }
-    
-    
+
+
     /**
      * Return the WebConfiguration instance for this application.
      * @param servletContext the ServletContext
@@ -165,7 +165,7 @@ public class WebConfiguration {
 
     /**
      * @return The <code>ServletContext</code> originally used to construct
-     * this WebConfiguration instance     
+     * this WebConfiguration instance
      */
     public ServletContext getServletContext() {
 
@@ -291,7 +291,7 @@ public class WebConfiguration {
      * <p>Is the configured value valid against the default boolean pattern.</p>
      * @param param the boolean parameter
      * @param value the configured value
-     * @return <code>true</code> if the value is valid, 
+     * @return <code>true</code> if the value is valid,
      *  otherwise <code>false</code>
      */
     private boolean isValueValid(BooleanWebContextInitParameter param,
@@ -370,8 +370,8 @@ public class WebConfiguration {
                         value = param.getDefaultValue();
                     }
                 }
-                
-                // first param processed should be 
+
+                // first param processed should be
                 // com.sun.faces.displayConfiguration
                 if (BooleanWebContextInitParameter.DisplayConfiguration
                       .equals(param) && value) {
@@ -461,7 +461,7 @@ public class WebConfiguration {
 
             if ((value == null || value.length() == 0) && !param.isDeprecated()) {
                 value = param.getDefaultValue();
-            } 
+            }
             if (value == null || value.length() == 0) {
                 continue;
             }
@@ -491,7 +491,7 @@ public class WebConfiguration {
 
 
     /**
-     * <p>Process all JNDI entries.</p>     
+     * <p>Process all JNDI entries.</p>
      * @param contextName the context name
      */
     private void processJndiEntries(String contextName) {
@@ -500,7 +500,7 @@ public class WebConfiguration {
         try {
             initialContext = new InitialContext();
         } catch (NamingException ne) {
-            // log WARNING - unable to get JNDI initial context            
+            // log WARNING - unable to get JNDI initial context
         }
 
         if (initialContext != null) {
@@ -702,7 +702,7 @@ public class WebConfiguration {
         DisplayConfiguration(
               "com.sun.faces.displayConfiguration",
               false
-        ), 
+        ),
         ValidateFacesConfigFiles(
               "com.sun.faces.validateXml",
               false
@@ -745,7 +745,7 @@ public class WebConfiguration {
         ),
         CompressJavaScript(
             "com.sun.faces.compressJavaScript",
-            true            
+            true
         ),
         ExternalizeJavaScript(
             "com.sun.faces.externalizeJavaScript",
@@ -762,7 +762,7 @@ public class WebConfiguration {
         WriteStateAtFormEnd(
             "com.sun.faces.writeStateAtFormEnd",
             true
-        ),        
+        ),
         EnableLazyBeanValidation(
              "com.sun.faces.enableLazyBeanValidation",
              true
@@ -770,10 +770,6 @@ public class WebConfiguration {
         EnableLoadBundle11Compatibility(
              "com.sun.faces.enabledLoadBundle11Compatibility",
              false
-        ),
-        EnableXhtmlStateForms(
-              "com.sun.faces.enableXhtmlStateForms",
-              false
         );
 
         private BooleanWebContextInitParameter alternate;
