@@ -749,16 +749,22 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * stack, deleting the stack if this was the last entry.</p>
      */
     private void popUIComponentClassicTagBase() {
-        Map<String,Object> requestMap =
+        Map<String, Object> requestMap =
               context.getExternalContext().getRequestMap();
         List list = (List) requestMap.get(COMPONENT_TAG_STACK_ATTR);
-        if (list != null) {
-            list.remove(list.size() - 1);
-            if (list.size() < 1) {
+
+        // if an exception occurred in a nested  tag,
+        //there could be a few tags left in the stack.
+        UIComponentClassicTagBase uic = null;
+        while (list != null && uic != this) {
+            int idx = list.size() - 1;
+            uic = (UIComponentClassicTagBase) list.get(idx);
+            list.remove(idx);
+            if (idx < 1) {
                 requestMap.remove(COMPONENT_TAG_STACK_ATTR);
+                list = null;
             }
         }
-
     }
 
 
