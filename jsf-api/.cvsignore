@@ -1,4 +1,5 @@
-build.properties
-build
 target
+build
+build.properties
+.DS_Store
 dist
