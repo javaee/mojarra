@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.93 2007/07/31 16:32:41 rlubke Exp $
+ * $Id: UIInput.java,v 1.94 2007/09/24 19:13:42 edburns Exp $
  */
 
 /*
@@ -756,13 +756,16 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * <li>Set the <code>localValueSet</code> property of this
      * {@link UIInput} to false.</li>
      * </ul></li>
-     * <li>If the <code>setValue()</code> method call fails:
+     * <li>If the <code>setValue()</code> method throws an Exception:
      * <ul>
      * <li>Enqueue an error message by calling <code>addMessage()</code>
      * on the specified {@link FacesContext} instance.</li>
      * <li>Set the <code>valid</code> property of this {@link UIInput}
      * to <code>false</code>.</li>
      * </ul></li>
+     * The exception must not be re-thrown.  This enables tree traversal
+     * to continue for this lifecycle phase, as in all the other lifecycle
+     * phases. 
      * </ul>
      *
      * @param context {@link FacesContext} for the request we are processing
