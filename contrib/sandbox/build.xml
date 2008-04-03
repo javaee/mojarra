@@ -49,6 +49,10 @@
     <import file="${jsf.build.home}/common/ant/common.xml"/>
     <property name="tasks.home" value="${myenv.TASKS_HOME}"/>
 
+    <property name="name" value="jsf-ri-sandbox"/>
+    <property name="sb.impl.version" value="0.8"/>
+    <property name="impl.name" value="JSF RI Sandbox"/>
+
     <!-- ******************* Structural ************************** -->
 
     <!-- The base directory for compilation targets -->
@@ -71,7 +75,6 @@
     <property name="sandbox.dependency.base.dir" value="${basedir}/dependencies"/>
     <property name="maven.mirror" value="http://mirrors.ibiblio.org/pub/mirrors/maven2"/>
     <property name="sourceforge.mirror" value="http://superb-east.dl.sourceforge.net/sourceforge"/>
-    
     
     <property name="codec.version" value="1.3" />
     <property name="facelets.version" value="1.1.11" />
@@ -97,9 +100,6 @@
     <property name="shale.test.jar" value="${sandbox.dependency.base.dir}/shale-test-${shale.version}.jar"/>
     <property name="tinymce.archive" value="${sandbox.dependency.base.dir}/tinymce_${tinymce.version}.zip"/>
 
-    <property name="name" value="jsf-ri-sandbox"/>
-    <property name="sb.impl.version" value="0.7"/>
-    <property name="impl.name" value="JSF RI Sandbox"/>
     <property name="applet.archive.name" value="${name}-upload-applet" />
 
     <path id="impl.compile.classpath">
