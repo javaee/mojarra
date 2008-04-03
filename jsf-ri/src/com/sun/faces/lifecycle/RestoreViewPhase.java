@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.47 2007/04/27 22:00:59 ofung Exp $
+ * $Id: RestoreViewPhase.java,v 1.48 2007/05/17 14:26:31 rlubke Exp $
  */
 
 /*
@@ -71,7 +71,7 @@ import java.util.logging.Logger;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.47 2007/04/27 22:00:59 ofung Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.48 2007/05/17 14:26:31 rlubke Exp $
  */
 
 public class RestoreViewPhase extends Phase {
@@ -200,7 +200,7 @@ public class RestoreViewPhase extends Phase {
                                                    viewId);
                 }
             }
-
+            facesContext.setViewRoot(viewRoot);
             doPerComponentActions(facesContext, viewRoot);           
             
             if (LOGGER.isLoggable(Level.FINE)) {
@@ -213,6 +213,7 @@ public class RestoreViewPhase extends Phase {
             // if that fails, create one
             viewRoot = (Util.getViewHandler(facesContext)).
                   createView(facesContext, viewId);
+            facesContext.setViewRoot(viewRoot);
             facesContext.renderResponse();
         }
         assert(null != viewRoot);

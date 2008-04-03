@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.103 2007/04/27 22:00:54 ofung Exp $
+ * $Id: ViewHandlerImpl.java,v 1.104 2007/05/17 14:26:30 rlubke Exp $
  */
 
 
@@ -69,6 +69,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.jstl.core.Config;
 
+
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
@@ -80,7 +81,7 @@ import java.util.logging.Logger;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.103 2007/04/27 22:00:54 ofung Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.104 2007/05/17 14:26:30 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -203,7 +204,7 @@ public class ViewHandlerImpl extends ViewHandler {
         
         // write any AFTER_VIEW_CONTENT to the response
         // side effect: AFTER_VIEW_CONTENT removed
-        ViewHandlerResponseWrapper wrapper = (ViewHandlerResponseWrapper)
+        InterweavingResponse wrapper = (InterweavingResponse)
               extContext.getRequestMap().remove(AFTER_VIEW_CONTENT);
         if (null != wrapper) {
             wrapper.flushToWriter(response.getWriter(),
@@ -446,9 +447,7 @@ public class ViewHandlerImpl extends ViewHandler {
         Object originalResponse = extContext.getResponse();
 
         // replace the response with our wrapper
-        ViewHandlerResponseWrapper wrapped = 
-              new ViewHandlerResponseWrapper(
-                    (HttpServletResponse)extContext.getResponse());
+        InterweavingResponse wrapped = getWrapper(extContext);
         extContext.setResponse(wrapped);
 
         // build the view by executing the page
@@ -782,6 +781,16 @@ public class ViewHandlerImpl extends ViewHandler {
             associate = ApplicationAssociate.getInstance(context.getExternalContext());
         }
         return associate;
+    }
+
+
+    private static InterweavingResponse getWrapper(ExternalContext extContext) {
+        Object response = extContext.getResponse();
+        if (response instanceof HttpServletResponse) {
+            return new ViewHandlerResponseWrapper((HttpServletResponse) response);
+        }
+        throw new IllegalArgumentException();
+
     }
     
     // ----------------------------------------------------------- Inner Classes

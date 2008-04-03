@@ -1,5 +1,5 @@
 /*
- * $Id: SubviewTag.java,v 1.12 2007/04/27 22:01:05 ofung Exp $
+ * $Id: SubviewTag.java,v 1.13 2007/05/17 14:26:31 rlubke Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import javax.servlet.jsp.JspException;
 
 import java.io.IOException;
 
-import com.sun.faces.application.ViewHandlerResponseWrapper;
+import com.sun.faces.application.InterweavingResponse;
 
 public class SubviewTag extends UIComponentELTag {
 
@@ -90,9 +90,9 @@ public class SubviewTag extends UIComponentELTag {
         String value = null;
 
         Object response = getFacesContext().getExternalContext().getResponse();
-        if (response instanceof ViewHandlerResponseWrapper) {
-            ViewHandlerResponseWrapper wrapped =
-                  (ViewHandlerResponseWrapper) response;
+        if (response instanceof InterweavingResponse) {
+            InterweavingResponse wrapped =
+                  (InterweavingResponse) response;
             try {
                 if (wrapped.isBytes()) {
                     wrapped.flushContentToWrappedResponse();
@@ -110,7 +110,7 @@ public class SubviewTag extends UIComponentELTag {
                         }
                     }
                 }
-                wrapped.clearWrappedResponse();
+                wrapped.resetBuffers();
             } catch (IOException e) {
                 throw new FacesException(new JspException(
                       "Can't write content above <f:view> tag"

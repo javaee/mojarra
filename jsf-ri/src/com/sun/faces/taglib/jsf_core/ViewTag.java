@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.46 2007/04/27 22:01:05 ofung Exp $
+ * $Id: ViewTag.java,v 1.47 2007/05/17 14:26:31 rlubke Exp $
  */
 
 /*
@@ -63,7 +63,7 @@ import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sun.faces.application.ViewHandlerResponseWrapper;
+import com.sun.faces.application.InterweavingResponse;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.FacesLogger;
 
@@ -73,7 +73,7 @@ import com.sun.faces.util.FacesLogger;
  * Renderer. It exists mainly to provide a guarantee that all faces
  * components reside inside of this tag.
  *
- * @version $Id: ViewTag.java,v 1.46 2007/04/27 22:01:05 ofung Exp $
+ * @version $Id: ViewTag.java,v 1.47 2007/05/17 14:26:31 rlubke Exp $
  */
 
 public class ViewTag extends UIComponentELTag {
@@ -150,10 +150,10 @@ public class ViewTag extends UIComponentELTag {
      *
      * <ul>
      *
-     * <li><p>Get the {@link ViewHandlerResponseWrapper} from the
+     * <li><p>Get the {@link WebResponseWrapper} from the
      * request, which was placed there by {@link
      * ViewHandler#renderView}, and call {@link
-     * ViewHandlerResponseWrapper#flushContentToWrappedResponse}.  This
+     * InterweavingResponse#flushContentToWrappedResponse}.  This
      * causes any content that appears before the view to be written out
      * to the response.  This is necessary to allow proper ordering to
      * happen.</p></li>
@@ -173,10 +173,10 @@ public class ViewTag extends UIComponentELTag {
 
     // flush out any content above the view tag
     Object response = facesContext.getExternalContext().getResponse();
-    if (response instanceof ViewHandlerResponseWrapper) {
+    if (response instanceof InterweavingResponse) {
         try {
         pageContext.getOut().flush();
-        ((ViewHandlerResponseWrapper)response).flushContentToWrappedResponse();
+        ((InterweavingResponse)response).flushContentToWrappedResponse();
         }
         catch (IOException e) {
         throw new JspException("Can't write content above <f:view> tag"

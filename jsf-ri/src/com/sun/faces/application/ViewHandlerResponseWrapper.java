@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerResponseWrapper.java,v 1.13 2007/04/27 22:00:54 ofung Exp $ 
+ * $Id: ViewHandlerResponseWrapper.java,v 1.14 2007/05/17 14:26:30 rlubke Exp $ 
  */
 
 /*
@@ -42,16 +42,13 @@
 
 package com.sun.faces.application;
 
-import javax.faces.FacesException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
-import java.io.ByteArrayOutputStream;
 import java.io.CharArrayWriter;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.nio.ByteBuffer;
@@ -71,12 +68,12 @@ import com.sun.faces.util.FacesLogger;
  * text that exists after the &lt;f:view&gt; tag.</p>
  */
 
-public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper {
+public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper implements InterweavingResponse {
 
     // Log instance for this class
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
     
-    private ByteArrayServletOutputStream basos;
+    private ByteArrayWebOutputStream basos;
     private PrintWriter pw ;
     private CharArrayWriter caw;
     private int status = HttpServletResponse.SC_OK;
@@ -180,7 +177,7 @@ public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper {
         writer.flush();
     }
 
-    public void clearWrappedResponse() throws IOException {
+    public void resetBuffers() throws IOException {
         if (null != caw) {
             caw.reset();
         } else if (null != basos) {
@@ -193,7 +190,7 @@ public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper {
             throw new IllegalStateException();
         }
         if (null == basos) {
-            basos = new ByteArrayServletOutputStream();
+            basos = new ByteArrayWebOutputStream();
         }
         return basos;
     }
@@ -208,98 +205,6 @@ public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper {
         }
 
         return pw;
-    }
-    
-    
-    // ----------------------------------------------------------- Inner Classes
-    
-
-    static class ByteArrayServletOutputStream extends ServletOutputStream {
-        private DirectByteArrayOutputStream baos;        
-
-        public ByteArrayServletOutputStream() {
-            baos = new DirectByteArrayOutputStream(1024);
-        }
-
-        public void write(int n) {
-            baos.write(n);
-        }
-
-        /** <p>It's important to not expose this as reset.</p> */
-
-        public void resetByteArray() {
-            baos.reset();
-        }
-        
-        public byte[] toByteArray() {
-            return baos.toByteArray();
-        }
-
-
-        /**
-         * Converters the buffered bytes into chars based on the
-         * specified encoding and writes them to the provided Writer.
-         * @param writer target Writer
-         * @param encoding character encoding
-         */
-        public void writeTo(Writer writer, String encoding) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.fine("Converting buffered ServletOutputStream bytes" 
-                            + " to chars using " + encoding);
-            }
-            
-            ByteBuffer bBuff = baos.getByteBuffer();
-            CharsetDecoder decoder = Charset.forName(encoding).newDecoder();
-
-            try {
-                CharBuffer cBuff = decoder.decode(bBuff);
-                writer.write(cBuff.array());
-            } catch (CharacterCodingException cce) {
-                throw new FacesException(cce);
-            } catch (IOException ioe) {
-                throw new FacesException(ioe);
-            }
-        }
-
-        
-        /**
-         * <p>Write the buffered bytes to the provided OutputStream.</p>
-         * @param stream the stream to write to
-         */
-        public void writeTo(OutputStream stream) {
-            try {                
-                stream.write(baos.getByteBuffer().array());
-            } catch (IOException ioe) {
-                throw new FacesException(ioe);
-            }
-        }
-       
-    }
-    
-    
-    private static class DirectByteArrayOutputStream extends ByteArrayOutputStream {
-        
-        
-        // -------------------------------------------------------- Constructors
-        
-        
-        public DirectByteArrayOutputStream(int initialCapacity) {
-            super(initialCapacity);
-        }
-        
-        
-        // ------------------------------------------------------- PublicMethods
-        
-
-        /**
-         * Return the buffer backing this ByteArrayOutputStream as a 
-         * ByteBuffer.
-         * @return buf wrapped in a ByteBuffer
-         */
-        public ByteBuffer getByteBuffer() {
-            return (ByteBuffer.wrap(buf, 0, count)); 
-        }
-        
     }
 
 
