@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.212 2007/04/27 22:01:06 ofung Exp $
+ * $Id: Util.java,v 1.213 2007/06/06 19:07:39 rlubke Exp $
  */
 
 /*
@@ -79,7 +79,7 @@ import java.util.regex.Pattern;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.212 2007/04/27 22:01:06 ofung Exp $
+ * @version $Id: Util.java,v 1.213 2007/06/06 19:07:39 rlubke Exp $
  */
 
 public class Util {
@@ -788,7 +788,7 @@ public class Util {
      *
      * @return the appropriate mapping based on the current request
      *
-     * @see HttpServletRequest#getServletPath()
+     * @see javax.servlet.http.HttpServletRequest#getServletPath()
      */
     private static String getMappingForRequest(String servletPath, String pathInfo) {
 
