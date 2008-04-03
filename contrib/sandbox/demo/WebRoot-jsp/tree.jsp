@@ -79,10 +79,5 @@
 
 	<h3>Component Binding</h3>
 	<risb:tree binding="#{testBean.tree}" />
-	<hr />
-	<script type="text/javascript" src="http://yui.yahooapis.com/2.2.2/build/logger/logger-min.js"></script> 
-	<script type="text/javascript">
-		YAHOO.util.Event.onDOMReady(function() { (new YAHOO.widget.LogReader()).show(); });
-	</script>
 </f:view>
 <%@ include file="footer.inc" %>
