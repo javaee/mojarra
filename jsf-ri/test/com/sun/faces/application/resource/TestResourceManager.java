@@ -96,9 +96,9 @@ public class TestResourceManager extends ServletFacesTestCase {
         assertTrue(resource.getHelper() instanceof WebappResourceHelper);
         assertTrue(!resource.isCompressable());
         assertTrue(resource.getCompressedPath() == null);
-        assertTrue("1.1".equals(resource.getVersion().toString()));
+        assertTrue("1_1".equals(resource.getVersion().toString()));
         assertTrue("duke.gif".equals(resource.getName()));
-        assertTrue("/resources/duke.gif/1.1.gif".equals(resource.getPath()));
+        assertTrue("/resources/duke.gif/1_1.gif".equals(resource.getPath()));
     }
 
     public void testWebappNonVersionedLibraryVersionedResource() throws Exception {
@@ -116,9 +116,9 @@ public class TestResourceManager extends ServletFacesTestCase {
         assertTrue(resource.getHelper() instanceof WebappResourceHelper);
         assertTrue(!resource.isCompressable());
         assertTrue(resource.getCompressedPath() == null);
-        assertTrue("1.1".equals(resource.getVersion().toString()));
+        assertTrue("1_1".equals(resource.getVersion().toString()));
         assertTrue("duke.gif".equals(resource.getName()));
-        assertTrue("/resources/nvLibrary/duke.gif/1.1.gif".equals(resource.getPath()));
+        assertTrue("/resources/nvLibrary/duke.gif/1_1.gif".equals(resource.getPath()));
     }
 
     public void testWebappNonVersionedLibraryNonVersionedResource() throws Exception {
@@ -148,9 +148,9 @@ public class TestResourceManager extends ServletFacesTestCase {
         // validate the library
         assertTrue(resource.getLibraryInfo() != null);
         assertTrue("vLibrary".equals(resource.getLibraryInfo().getName()));
-        assertTrue("2.0".equals(resource.getLibraryInfo().getVersion().toString()));
+        assertTrue("2_0".equals(resource.getLibraryInfo().getVersion().toString()));
         assertTrue(resource.getLibraryInfo().getHelper() instanceof WebappResourceHelper);
-        assertTrue("/resources/vLibrary/2.0".equals(resource.getLibraryInfo().getPath()));
+        assertTrue("/resources/vLibrary/2_0".equals(resource.getLibraryInfo().getPath()));
 
         // validate the resource
         assertTrue(resource.getHelper() instanceof WebappResourceHelper);
@@ -158,7 +158,7 @@ public class TestResourceManager extends ServletFacesTestCase {
         assertTrue(resource.getCompressedPath() == null);
         assertTrue(resource.getVersion() == null);
         assertTrue("duke-nv.gif".equals(resource.getName()));
-        assertTrue("/resources/vLibrary/2.0/duke-nv.gif".equals(resource.getPath()));
+        assertTrue("/resources/vLibrary/2_0/duke-nv.gif".equals(resource.getPath()));
     }
 
     public void testWebappVersionedLibraryVersionedResource() throws Exception {
@@ -168,17 +168,17 @@ public class TestResourceManager extends ServletFacesTestCase {
         // validate the library
         assertTrue(resource.getLibraryInfo() != null);
         assertTrue("vLibrary".equals(resource.getLibraryInfo().getName()));
-        assertTrue("2.0".equals(resource.getLibraryInfo().getVersion().toString()));
+        assertTrue("2_0".equals(resource.getLibraryInfo().getVersion().toString()));
         assertTrue(resource.getLibraryInfo().getHelper() instanceof WebappResourceHelper);
-        assertTrue("/resources/vLibrary/2.0".equals(resource.getLibraryInfo().getPath()));
+        assertTrue("/resources/vLibrary/2_0".equals(resource.getLibraryInfo().getPath()));
 
         // validate the resource
         assertTrue(resource.getHelper() instanceof WebappResourceHelper);
         assertTrue(!resource.isCompressable());
         assertTrue(resource.getCompressedPath() == null);
-        assertTrue("1.1".equals(resource.getVersion().toString()));
+        assertTrue("1_1".equals(resource.getVersion().toString()));
         assertTrue("duke.gif".equals(resource.getName()));
-        assertTrue("/resources/vLibrary/2.0/duke.gif/1.1.gif".equals(resource.getPath()));
+        assertTrue("/resources/vLibrary/2_0/duke.gif/1_1.gif".equals(resource.getPath()));
     }
 
 
@@ -212,9 +212,9 @@ public class TestResourceManager extends ServletFacesTestCase {
         assertTrue(resource.getHelper() instanceof ClasspathResourceHelper);
         assertTrue(!resource.isCompressable());
         assertTrue(resource.getCompressedPath() == null);
-        assertTrue("1.1".equals(resource.getVersion().toString()));
+        assertTrue("1_1".equals(resource.getVersion().toString()));
         assertTrue("duke-jar.gif".equals(resource.getName()));
-        assertTrue("META-INF/resources/duke-jar.gif/1.1.gif".equals(resource.getPath()));
+        assertTrue("META-INF/resources/duke-jar.gif/1_1.gif".equals(resource.getPath()));
     }
 
     public void testJarNonVersionedLibraryVersionedResource() throws Exception {
@@ -232,9 +232,9 @@ public class TestResourceManager extends ServletFacesTestCase {
         assertTrue(resource.getHelper() instanceof ClasspathResourceHelper);
         assertTrue(!resource.isCompressable());
         assertTrue(resource.getCompressedPath() == null);
-        assertTrue("1.1".equals(resource.getVersion().toString()));
+        assertTrue("1_1".equals(resource.getVersion().toString()));
         assertTrue("duke.gif".equals(resource.getName()));
-        assertTrue("META-INF/resources/nvLibrary-jar/duke.gif/1.1.gif".equals(resource.getPath()));
+        assertTrue("META-INF/resources/nvLibrary-jar/duke.gif/1_1.gif".equals(resource.getPath()));
     }
 
     public void testJarNonVersionedLibraryNonVersionedResource() throws Exception {
@@ -264,9 +264,9 @@ public class TestResourceManager extends ServletFacesTestCase {
         // validate the library
         assertTrue(resource.getLibraryInfo() != null);
         assertTrue("vLibrary-jar".equals(resource.getLibraryInfo().getName()));
-        assertTrue("2.0".equals(resource.getLibraryInfo().getVersion().toString()));
+        assertTrue("2_0".equals(resource.getLibraryInfo().getVersion().toString()));
         assertTrue(resource.getLibraryInfo().getHelper() instanceof ClasspathResourceHelper);
-        assertTrue("META-INF/resources/vLibrary-jar/2.0".equals(resource.getLibraryInfo().getPath()));
+        assertTrue("META-INF/resources/vLibrary-jar/2_0".equals(resource.getLibraryInfo().getPath()));
 
         // validate the resource
         assertTrue(resource.getHelper() instanceof ClasspathResourceHelper);
@@ -274,7 +274,7 @@ public class TestResourceManager extends ServletFacesTestCase {
         assertTrue(resource.getCompressedPath() == null);
         assertTrue(resource.getVersion() == null);
         assertTrue("duke-nv.gif".equals(resource.getName()));
-        assertTrue("META-INF/resources/vLibrary-jar/2.0/duke-nv.gif".equals(resource.getPath()));
+        assertTrue("META-INF/resources/vLibrary-jar/2_0/duke-nv.gif".equals(resource.getPath()));
     }
 
     public void testJarVersionedLibraryVersionedResource() throws Exception {
@@ -284,17 +284,17 @@ public class TestResourceManager extends ServletFacesTestCase {
         // validate the library
         assertTrue(resource.getLibraryInfo() != null);
         assertTrue("vLibrary-jar".equals(resource.getLibraryInfo().getName()));
-        assertTrue("2.0".equals(resource.getLibraryInfo().getVersion().toString()));
+        assertTrue("2_0".equals(resource.getLibraryInfo().getVersion().toString()));
         assertTrue(resource.getLibraryInfo().getHelper() instanceof ClasspathResourceHelper);
-        assertTrue("META-INF/resources/vLibrary-jar/2.0".equals(resource.getLibraryInfo().getPath()));
+        assertTrue("META-INF/resources/vLibrary-jar/2_0".equals(resource.getLibraryInfo().getPath()));
 
         // validate the resource
         assertTrue(resource.getHelper() instanceof ClasspathResourceHelper);
         assertTrue(!resource.isCompressable());
         assertTrue(resource.getCompressedPath() == null);
-        assertTrue("1.1".equals(resource.getVersion().toString()));
+        assertTrue("1_1".equals(resource.getVersion().toString()));
         assertTrue("duke.gif".equals(resource.getName()));
-        assertTrue("META-INF/resources/vLibrary-jar/2.0/duke.gif/1.1.gif".equals(resource.getPath()));
+        assertTrue("META-INF/resources/vLibrary-jar/2_0/duke.gif/1_1.gif".equals(resource.getPath()));
     }
 
 

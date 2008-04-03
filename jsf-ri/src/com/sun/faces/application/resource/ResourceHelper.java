@@ -53,6 +53,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 import java.util.zip.GZIPOutputStream;
 
 import javax.faces.context.ExternalContext;
@@ -75,15 +76,26 @@ public abstract class ResourceHelper {
     private static final Logger LOGGER = FacesLogger.RESOURCE.getLogger();
 
     /**
-     * This pattern represents a version for a library or resource.
+     * This pattern represents a version for a library.
      * Examples:
-     *   1.1
-     *   1.11
-     *   1.11.1.
-     *   1.11.1.2
+     *   1_1
+     *   1_11
+     *   1_11_1
+     *   1_11_1_2
      */
-    private static final Pattern VERSION_PATTERN =
-          Pattern.compile("^(\\d+)(\\.\\d+)+");
+    private static final Pattern LIBRARY_VERSION_PATTERN =
+          Pattern.compile("^(\\d+)(_\\d+)+");
+
+    /**
+     * This pattern represents a version for a resource.
+     * Examples:
+     *   1_1.jpg
+     *   1_11.323
+     *   1_11_1.gif
+     *   1_11_1_2.txt
+     */
+    private static final Pattern RESOURCE_VERSION_PATTERN =
+          Pattern.compile("^((?:\\d+)(?:_\\d+)+)\\.(\\w+)?");
 
     private static final String COMPRESSED_CONTENT_FILENAME =
           "compressed-content";
@@ -482,7 +494,7 @@ public abstract class ResourceHelper {
      *  is for a reource, otherwise, pass <code>false</code> if the version
      *  is a library version
      * @return <code>true</code> if this path element represents a version
-     *  (i.e. matches {@link #VERSION_PATTERN}), otherwise
+     *  (i.e. matches {@link #LIBRARY_VERSION_PATTERN}), otherwise
      *  returns <code>false</code>
      */
     private VersionInfo getVersion(String pathElement, boolean isResource) {
@@ -490,24 +502,17 @@ public abstract class ResourceHelper {
         String[] pathElements = Util.split(pathElement, "/");
         String path = pathElements[pathElements.length - 1];
 
-        String version;
         String extension = null;
         if (isResource) {
-            // substring the path to prune the extension off
-            int idx = path.lastIndexOf('.');
-            if (idx == -1) {
-                // not in the correct format (i.e. 1.0.gif), so bail out now
-                return null;
-            }
-            extension = path.substring(idx + 1);
-            version = path.substring(0, idx);
+            Matcher m = RESOURCE_VERSION_PATTERN.matcher(path);
+            return ((m.matches())
+                    ? new VersionInfo(m.group(1), m.group(2))
+                    : null);
         } else {
-            version = path;
+            return ((LIBRARY_VERSION_PATTERN.matcher(path).matches())
+                    ? new VersionInfo(path, extension)
+                    : null);
         }
-
-        return ((VERSION_PATTERN.matcher(version).matches())
-                ? new VersionInfo(version, extension)
-                : null);
 
     }
 
