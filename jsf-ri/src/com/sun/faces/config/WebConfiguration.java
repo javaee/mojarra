@@ -1,5 +1,5 @@
 /*
- * $Id: WebConfiguration.java,v 1.25 2007/06/05 23:21:02 rlubke Exp $
+ * $Id: WebConfiguration.java,v 1.26 2007/06/25 20:54:16 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -172,8 +172,7 @@ public class WebConfiguration {
      * @param param the parameter of interest
      * @return the value of the specified boolean parameter
      */
-    public boolean getBooleanContextInitParameter(
-          BooleanWebContextInitParameter param) {
+    public boolean isOptionEnabled(BooleanWebContextInitParameter param) {
 
         if (booleanContextParameters.get(param) != null) {
             return booleanContextParameters.get(param);
@@ -189,7 +188,7 @@ public class WebConfiguration {
      * @param param the parameter of interest
      * @return the value of the specified parameter
      */
-    public String getContextInitParameter(WebContextInitParameter param) {
+    public String getOptionValue(WebContextInitParameter param) {
 
         return contextParameters.get(param);
 
