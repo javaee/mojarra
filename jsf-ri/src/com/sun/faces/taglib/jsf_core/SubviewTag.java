@@ -1,5 +1,5 @@
 /*
- * $Id: SubviewTag.java,v 1.16 2007/12/17 21:46:10 rlubke Exp $
+ * $Id: SubviewTag.java,v 1.17 2008/01/15 21:22:04 rlubke Exp $
  */
 
 /*
@@ -41,6 +41,9 @@
 package com.sun.faces.taglib.jsf_core;
 
 import java.util.Stack;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
@@ -49,12 +52,18 @@ import javax.faces.webapp.UIComponentClassicTagBase;
 import javax.faces.webapp.UIComponentELTag;
 import javax.servlet.jsp.JspException;
 
-import java.io.IOException;
+import java.lang.reflect.Method;
 
-import com.sun.faces.application.InterweavingResponse;
 import com.sun.faces.util.RequestStateManager;
+import com.sun.faces.util.ReflectionUtils;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.RIConstants;
 
 public class SubviewTag extends UIComponentELTag {
+
+
+    private static final Logger LOGGER = FacesLogger.TAGLIB.getLogger();
+
 
     // ------------------------------------------------------------ Constructors
 
@@ -92,15 +101,67 @@ public class SubviewTag extends UIComponentELTag {
               super.createVerbatimComponentFromBodyContent();
         String value = null;
 
-        Object response = getFacesContext().getExternalContext().getResponse();
-        if (response instanceof InterweavingResponse) {
-            InterweavingResponse wrapped =
-                  (InterweavingResponse) response;
+        FacesContext ctx = getFacesContext();
+        Object response = ctx.getExternalContext().getResponse();
+        // flush out any content above the view tag
+        Method customFlush = ReflectionUtils.lookupMethod(response.getClass(),
+                                                          "flushContentToWrappedResponse",
+                                                          RIConstants.EMPTY_CLASS_ARGS);
+        Method isBytes = ReflectionUtils.lookupMethod(response.getClass(),
+                                                      "isBytes",
+                                                      RIConstants.EMPTY_CLASS_ARGS);
+        Method isChars = ReflectionUtils.lookupMethod(response.getClass(),
+                                                      "isChars",
+                                                      RIConstants.EMPTY_CLASS_ARGS);
+        Method resetBuffers = ReflectionUtils.lookupMethod(response.getClass(),
+                                                           "resetBuffers",
+                                                           RIConstants.EMPTY_CLASS_ARGS);
+        Method getChars = ReflectionUtils.lookupMethod(response.getClass(),
+                                                       "getChars",
+                                                       RIConstants.EMPTY_CLASS_ARGS);
+        boolean cont = true;
+        if (isBytes == null) {
+            cont = false;
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.log(Level.WARNING,
+                           "jsf.core.taglib.subviewtag.interweaving_failed_isbytes");
+            }
+        }
+        if (isChars == null) {
+            cont = false;
+             if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.log(Level.WARNING,
+                           "jsf.core.taglib.subviewtag.interweaving_failed_ischars");
+            }
+        }
+        if (resetBuffers == null) {
+            cont = false;
+             if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.log(Level.WARNING,
+                           "jsf.core.taglib.subviewtag.interweaving_failed_resetbuffers");
+            }
+        }
+        if (getChars == null) {
+            cont = false;
+             if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.log(Level.WARNING,
+                           "jsf.core.taglib.subviewtag.interweaving_failed_getchars");
+            }
+        }
+        if (customFlush == null) {
+            cont = false;
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.log(Level.WARNING,
+                           "jsf.core.taglib.viewtag.interweaving_failed");
+            }
+        }
+
+        if (cont) {
             try {
-                if (wrapped.isBytes()) {
-                    wrapped.flushContentToWrappedResponse();
-                } else if (wrapped.isChars()) {
-                    char[] chars = wrapped.getChars();
+                if ((Boolean) isBytes.invoke(response)) {
+                    customFlush.invoke(response);
+                } else if ((Boolean) isChars.invoke(response)) {
+                    char[] chars = (char[]) getChars.invoke(response);
                     if (null != chars && 0 < chars.length) {
                         if (null != verbatim) {
                             value = (String) verbatim.getValue();
@@ -113,11 +174,10 @@ public class SubviewTag extends UIComponentELTag {
                         }
                     }
                 }
-                wrapped.resetBuffers();
-            } catch (IOException e) {
-                throw new FacesException(new JspException(
-                      "Can't write content above <f:view> tag"
-                      + " " + e.getMessage()));
+                resetBuffers.invoke(response);
+
+            } catch (Exception e) {
+                throw new FacesException("Response interweaving failed!", e);
             }
         }
 
@@ -161,7 +221,6 @@ public class SubviewTag extends UIComponentELTag {
         
         return result;
     }
-    
     
 
 }
