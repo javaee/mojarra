@@ -441,8 +441,8 @@ public abstract class ResourceHandler {
      *
      * @param context the {@link javax.faces.context.FacesContext} for this
      * request
-     * @return true if the current request is a safe resource request,
-     * false otherwise.
+     * @return <code>true</code> if the current request is a safe resource request,
+     * <code>false</code> otherwise.
      */
     public abstract boolean isResourceRequest(FacesContext context);
 
