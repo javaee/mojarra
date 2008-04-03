@@ -134,6 +134,7 @@ public class YuiTreeRenderer extends Renderer {
             return;
         }
 
+        YuiTree tree = (YuiTree) component;
         ResponseWriter writer = context.getResponseWriter();
         writer.endElement("ul");
         writer.endElement("div");
@@ -143,13 +144,16 @@ public class YuiTreeRenderer extends Renderer {
 
         writer.startElement("script", null);
         writer.writeAttribute("type", "text/javascript", "type");
-        writer.write("var " + jsObjName +";\n");
-        writer.write("(function() {\n");
-        writer.write("function init_" + jsObjName + "() {\n");
-        writer.write(jsObjName + " = new YAHOO.widget.TreeView('" + component.getId() + "');\n");
+        writer.write("var " + jsObjName +";");
+        writer.write("(function() {");
+        writer.write("function init_" + jsObjName + "() {");
+        writer.write(jsObjName + " = new YAHOO.widget.TreeView('" + component.getId() + "');");
         writer.write(jsObjName + ".readList();");
-        writer.write(jsObjName + ".draw();\n}\n");
-        writer.write("YAHOO.util.Event.addListener(window, \"load\", init_" + jsObjName + ");\n})();\n");
+        writer.write(jsObjName + ".draw();");
+        if (tree.getShowExpanded() == true) {
+            writer.write(jsObjName + ".expandAll();");
+        }
+        writer.write("} YAHOO.util.Event.addListener(window, \"load\", init_" + jsObjName + ");})();");
 
         writer.endElement("script");
     }

@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.8 2007/04/27 21:59:53 ofung Exp $
+ * $Id: Util.java,v 1.9 2007/06/28 18:09:25 jdlee Exp $
  */
 
 /*
@@ -66,7 +66,7 @@ import org.apache.shale.remoting.XhtmlHelper;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.8 2007/04/27 21:59:53 ofung Exp $
+ * @version $Id: Util.java,v 1.9 2007/06/28 18:09:25 jdlee Exp $
  */
 
 public class Util {      
@@ -409,12 +409,12 @@ public class Util {
     }
 
 
-    public static void linkJavascript1(ResponseWriter writer, String path) throws IOException {
+    public static void linkJavascript(ResponseWriter writer, String path) throws IOException {
         // TODO:  Class.forName("some.shale.class"); useShaleStuff(); catch (ClassNotFound) {useOurStuff()}; 
-//        writer.startElement("script", null);
-//        writer.writeAttribute("type", "text/javascript", "type");
-//        writer.writeAttribute("src", generateStaticUri(path), "src");
-//        writer.endElement("script");
+        writer.startElement("script", null);
+        writer.writeAttribute("type", "text/javascript", "type");
+        writer.writeAttribute("src", path, "src");
+        writer.endElement("script");
     }
 
     public static void linkStyleSheet1(ResponseWriter writer, String path) throws IOException {

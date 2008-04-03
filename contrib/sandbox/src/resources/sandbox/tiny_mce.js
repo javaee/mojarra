@@ -34,16 +34,18 @@
  * holder.
  */
 
-// /JsfRiSandboxDemo-jsp/static/tiny_mce/tiny_mce.js.jsf
-TinyMCE_Engine.prototype.JSF_SUFFIX_MAPPING = ".jsf";
-
 TinyMCE_Engine.prototype.mungeURL = function (url) {
-        if (this.JSF_SUFFIX_MAPPING != null) {
-            return url + this.JSF_SUFFIX_MAPPING;
+	if (this.MAPPING_TYPE == 'prefix') {
+		return this.JSF_MAPPING + url;	
+	} else {
+        return url + this.JSF_MAPPING;
+	}
+	/*
         } else {
             document.write(url.split("/")); 
         }
-    };
+    */
+};
 
 TinyMCE_Engine.prototype.loadScript = function(url) {
         url = this.mungeURL(url);

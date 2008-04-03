@@ -61,28 +61,28 @@ import javax.servlet.http.HttpServletResponse;
 public class StaticResourcePhaseListener implements PhaseListener {
 //  TODO:  Class.forName("some.shale.class"); useShaleStuff(); catch (ClassNotFound) {useOurStuff()}; 
     private static final long serialVersionUID = 1L;
-    protected static Map mimeTypes = new HashMap();
+    protected static Map<String, String> mimeTypes = new HashMap<String, String>();
+    protected static List<String> attachmentTypes = new ArrayList<String>();
     {
         mimeTypes.put("css", "text/css");
         mimeTypes.put("gif", "image/gif");
+        mimeTypes.put("htm", "text/html");
+        mimeTypes.put("html", "text/html");
         mimeTypes.put("jpg", "images/jpg");
         mimeTypes.put("js", "text/javascript");
         mimeTypes.put("pdf", "application/pdf");
         mimeTypes.put("png", "image/png");
         mimeTypes.put("jar", "application/x-java-applet");
-    }
-    protected static List attachmentTypes = new ArrayList();
-    {
+
         attachmentTypes.add("application/x-java-applet");
     }
 
-    public PhaseId getPhaseId() {
-        return PhaseId.RESTORE_VIEW;
+    public void afterPhase(PhaseEvent event) {
+        // Do nothing
     }
 
     public void beforePhase(PhaseEvent e) {
-        PhaseId phase = e.getPhaseId();
-        if (phase == PhaseId.RESTORE_VIEW) {
+        if (e.getPhaseId() == PhaseId.RESTORE_VIEW) {
             FacesContext context = FacesContext.getCurrentInstance();
             HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
             String uri = request.getRequestURI();
@@ -90,55 +90,65 @@ public class StaticResourcePhaseListener implements PhaseListener {
                 // TODO:  make sure we can sandbox this correctly (i.e., no file=../foo.txt)
                 String fileName = request.getParameter("file");
                 if ((fileName != null) && !"".equals(fileName.trim())) {
-                    fileName = "/META-INF/static" +
-                    (fileName.startsWith("/") ? "" : "/") + fileName;
+                    fileName = "/META-INF/static" + (fileName.startsWith("/") ? "" : "/") + fileName;
                     HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
-                    try {
-                        InputStream is = getClass().getResourceAsStream(fileName);
-                        if (is != null) {
-                            OutputStream os = response.getOutputStream();
-                            String mimeType = getMimeType(fileName);
-                            response.setContentType(mimeType);
-                            if (attachmentTypes.indexOf(mimeType) > -1) {
-                                response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
-                            }
-                            /* This is a little ugly, but we need a way to make any CSS or JS references to static
-                             * resources, such as images, point to a URL that this PL will pick up.  Ryan suggested
-                             * a custom OutputStream like ViewHandlerImpl.WriteBehindStringWriter, which I'll have
-                             * to chew on a bit.  This will get me by for now, I hope.
-                             */
-                            if ("text/css".equals(mimeType) || "text/javascript".equals(mimeType)) {
-                                String text = Util.readInString(is);
-                                text = text.replaceAll("%%%BASE_URL%%%", Util.generateStaticUri(""));
-                                os.write(text.getBytes());
-                            } else {
-                                int count = 0;
-                                byte[] buffer = new byte[4096];
-                                while ((count = is.read(buffer)) != -1) {
-                                    if (count > 0) {
-                                        os.write(buffer, 0, count);
-                                    }
-                                }
-                            }
-                            is.close();
-                        } else {
-                            response.sendError(404);
-                        }
-                        context.responseComplete();
-                    } catch (IOException ioe) {
-                        System.err.println(ioe.getMessage());
-                    }
+                    String mimeType = getMimeType(fileName);
+                    response.setContentType(mimeType);
+                    processFile(context, fileName, response, mimeType);
                 }
             }
         }
     }
 
+    protected void processFile(FacesContext context, String fileName, HttpServletResponse response, String mimeType) {
+        try {
+            InputStream is = getClass().getResourceAsStream(fileName);
+            if (is != null) {
+                try {
+                    OutputStream os = response.getOutputStream();
+                    if (attachmentTypes.indexOf(mimeType) > -1) {
+                        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+                    }
+                    /* This is a little ugly, but we need a way to make any CSS or JS references to static
+                     * resources, such as images, point to a URL that this PL will pick up.  Ryan suggested
+                     * a custom OutputStream like ViewHandlerImpl.WriteBehindStringWriter, which I'll have
+                     * to chew on a bit.  This will get me by for now, I hope.
+                     */
+                    if ("text/css".equals(mimeType) || "text/javascript".equals(mimeType)) {
+                        String text = Util.readInString(is);
+                        text = text.replaceAll("%%%BASE_URL%%%", Util.generateStaticUri(""));
+                        os.write(text.getBytes());
+                    } else {
+                        streamContent(is, os);
+                    }
+                } finally {
+                    is.close();
+                }
+            } else {
+                response.sendError(404, "Could not find " + fileName);
+            }
+            context.responseComplete();
+        } catch (IOException ioe) {
+            System.err.println(ioe.getMessage());
+        }
+    }
+
+    protected void streamContent(InputStream is, OutputStream os) throws IOException {
+        int count = 0;
+        byte[] buffer = new byte[4096];
+        while ((count = is.read(buffer)) != -1) {
+            if (count > 0) {
+                os.write(buffer, 0, count);
+            }
+        }
+    }
+
+    public PhaseId getPhaseId() {
+        return PhaseId.RESTORE_VIEW;
+    }
+
     protected String getMimeType(String fileName) {
         String extension = fileName.substring(fileName.lastIndexOf(".")+1);
         return (String)mimeTypes.get(extension);
-    }
-
-    public void afterPhase(PhaseEvent event) {
-        // Do nothing
     }
 }

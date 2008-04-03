@@ -50,12 +50,12 @@ import com.sun.faces.sandbox.model.TreeNode;
 public class YuiTree extends UIOutput {
     public static String COMPONENT_TYPE = "com.sun.faces.sandbox.YuiTree";
     public static String RENDERER_TYPE  = "com.sun.faces.sandbox.YuiTreeRenderer";
-    TreeNode model;
+    private boolean showExpanded;
     
     public YuiTree()          { setRendererType(RENDERER_TYPE); }
     public String getFamily() { return COMPONENT_TYPE; }
 
-    public TreeNode getModel() { return ComponentHelper.getValue(this, "model", model); }
+    public boolean getShowExpanded() { return ComponentHelper.getValue(this, "showExpanded", showExpanded); }
 
-    public void setModel(TreeNode model) { this.model = model; }
+    public void setShowExpanded(boolean showExpanded) { this.showExpanded = showExpanded; }
 }

@@ -48,7 +48,7 @@ import com.sun.faces.sandbox.component.YuiTree;
  *
  */
 public class YuiTreeTag  extends UISandboxComponentTag {
-    protected String model;
+    protected String showExpanded;
     
     // General Methods
     public String getRendererType()  { return YuiTree.RENDERER_TYPE; }
@@ -60,8 +60,8 @@ public class YuiTreeTag  extends UISandboxComponentTag {
             throw new IllegalStateException("Component " + component.toString() + " not expected type.  Expected: com.sun.faces.sandbox.component.YuiTree.  Perhaps you're missing a tag?");
         }
         YuiTree tree = (YuiTree)component;
-        setValueBinding(tree, "model", model);
+        setValueBinding(tree, "showExpanded", showExpanded);
     }
 
-    public void setModel(String model) { this.model = model; }
+    public void setShowExpanded(String showExpanded) { this.showExpanded = showExpanded; }
 }

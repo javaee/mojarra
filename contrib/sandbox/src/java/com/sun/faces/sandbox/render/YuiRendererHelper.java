@@ -200,7 +200,7 @@ public class YuiRendererHelper {
             setResourceAsRendered(context, key);
         }
     }
-
+    
     /**
      * Return a JavaScript-friendly variable name based on the clientId
      */

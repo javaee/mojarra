@@ -39,13 +39,7 @@
  */
 package com.sun.faces.sandbox.render;
 
-import com.sun.faces.sandbox.component.HtmlEditor;
-import com.sun.faces.sandbox.component.YuiCalendar;
-import com.sun.faces.sandbox.util.Util;
-import com.sun.faces.sandbox.util.YuiConstants;
-
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.Map;
 
 import javax.faces.component.UIComponent;
@@ -55,6 +49,11 @@ import javax.faces.render.Renderer;
 
 import org.apache.shale.remoting.Mechanism;
 
+import com.sun.faces.sandbox.component.HtmlEditor;
+import com.sun.faces.sandbox.util.HtmlEditorResourcePhaseListener;
+import com.sun.faces.sandbox.util.Util;
+import com.sun.faces.sandbox.util.YuiConstants;
+
 /**
  * @author Jason Lee
  *
@@ -63,8 +62,6 @@ public class HtmlEditorRenderer extends Renderer {
     private static final String TINY_MCE = "/tinymce/tiny_mce.js";
     protected static final String scriptIds[] = { 
         YuiConstants.JS_YAHOO_DOM_EVENT
-        ,TINY_MCE
-        ,"/sandbox/tiny_mce.js"
     };
 
     @Override
@@ -97,6 +94,10 @@ public class HtmlEditorRenderer extends Renderer {
                     scriptIds[i]);
         }
         
+        Util.linkJavascript(writer, HtmlEditorResourcePhaseListener.generateUrl(TINY_MCE));
+        HtmlEditorResourcePhaseListener.renderHtmlEditorJavascript(context, writer, editor);
+        Util.linkJavascript(writer, HtmlEditorResourcePhaseListener.generateUrl("/sandbox/tiny_mce.js"));
+        
         // Create the textarea to use as the WYSIWYG editor
         writer.startElement("textarea", editor);
         writer.writeAttribute("id", id, "id");
@@ -124,6 +125,7 @@ public class HtmlEditorRenderer extends Renderer {
             .append(",theme: 'advanced'")
             .append(",theme_advanced_toolbar_location : '" + comp.getToolbarLocation() + "'")
             .append(",theme_advanced_path_location : \"bottom\"")
+            .append(",theme_advanced_toolbar_align : \"center\"")
             .append(",elements:'" + id +"'")
             .append(getThemeStyleConfigs(comp))
             .append((comp.getConfig() != null) ? "," + comp.getConfig() : "");
@@ -133,6 +135,8 @@ public class HtmlEditorRenderer extends Renderer {
     
     private String getThemeStyleConfigs(HtmlEditor comp) {
         StringBuilder config = new StringBuilder();
+        // TODO:  Add this back in post-1.0 when we figure out how best to support the HTML pages in the library?
+        /*
         if ("full".equalsIgnoreCase(comp.getThemeStyle())) {
             config.append(",plugins : \"table,save,advhr,advimage,advlink,emotions,iespell,insertdatetime,preview,zoom,flash,searchreplace,print,contextmenu\",")
                 .append("theme_advanced_buttons1_add_before : \"save,separator\",")
@@ -149,14 +153,20 @@ public class HtmlEditorRenderer extends Renderer {
                 .append("external_link_list_url : \"example_data/example_link_list.js\",")
                 .append("external_image_list_url : \"example_data/example_image_list.js\",")
                 .append("flash_external_list_url : \"example_data/example_flash_list.js\"");
-        } else if ("simplified".equalsIgnoreCase(comp.getThemeStyle())) {
-            config.append(",theme_advanced_buttons1 : \"bold,italic,underline,separator,strikethrough,justifyleft,justifycenter,justifyright, justifyfull,bullist,numlist,undo,redo,link,unlink\",")
+        } else 
+        */    
+        if ("simplified".equalsIgnoreCase(comp.getThemeStyle())) {
+            //config.append(",theme_advanced_buttons1 : \"bold,italic,underline,separator,strikethrough,justifyleft,justifycenter,justifyright, justifyfull,bullist,numlist,undo,redo,link,unlink\",")
+            config.append(",theme_advanced_buttons1 : \"bold,italic,underline,separator,strikethrough,justifyleft,justifycenter,justifyright,justifyfull,bullist,numlist,undo,redo,link,unlink\",")
                 .append("theme_advanced_buttons2 : \"\",")
                 .append("theme_advanced_buttons3 : \"\",")
-                .append("theme_advanced_toolbar_align : \"left\",")
                 .append("extended_valid_elements : \"a[name|href|target|title|onclick],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]\"");
         } else {
-            config.append(",theme: 'advanced'");
+//            config.append(",theme: 'advanced'");
+            config.append(",theme_advanced_buttons1 : \"bold,italic,underline,strikethrough,separator,justifyleft,justifycenter,justifyright,justifyfull,separator,styleselect,formatselect,separator,bullist,numlist,separator,outdent,indent\",")
+            .append("theme_advanced_buttons2 : \"undo,redo,separator,link,unlink,anchor,image,cleanup,help,code,separator,hr,removeformat,visualaid,separator,sub,sup\",")
+            .append("theme_advanced_buttons3 : \"\",")
+            .append("extended_valid_elements : \"a[name|href|target|title|onclick],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]\"");
         }
         
         return config.toString();
