@@ -1158,8 +1158,13 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
             // below)
             //noinspection ObjectEquality
             if (temp == this
-                 && !this.getFacesJspId().equals(temp.getFacesJspId())) {
+                 && !this.getJspId().equals(temp.getJspId())) {
                 tagInstance = this;
+            } else if (temp != null
+                         && temp != this
+                         && this.getJspId().equals(temp.getJspId())) {
+                // new instance, same JSP ID - this is the EVAL_BODY_AGAIN case.
+                tagInstance = temp;
             }
         }
 
@@ -1301,7 +1306,6 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
         this.parent = null;
 
         this.id = null;
-        this.jspId = null;
         this.facesJspId = null;
         this.created = false;
 	this.bodyContent = null;
@@ -1485,7 +1489,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
             } else {
                 // jspId will be null if we're running in a container
                 // that doesn't support JspIdConsumer
-                facesJspId = context.getViewRoot().createUniqueId();
+                facesJspId = getFacesContext().getViewRoot().createUniqueId();
             }
         }
         return facesJspId;
@@ -1564,19 +1568,11 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
             // transformed into a unique "id" by appending a counter which gets
             // stored in request scope with jspId as the key for use during next
             // iteration.
-            if (isDuplicateId(this.id)) {
+        if (isDuplicateId(this.id)) {
+            if (!isSpecifiedIdUnique(this.id)) {
                 if (isNestedInIterator) {
                     this.id = generateIncrementedId(this.id);
                 } else {
-                    // verify whether or not this ID is unique within
-                    // it's closest naming container to prevent false
-                    // positives.
-                    UIComponentClassicTagBase containerTag = getParentNamingContainerTag();
-                    if (containerTag.createdComponents == null
-                            || !containerTag.createdComponents.contains(this.id)) {
-                        return (this.id);
-                    }
-
                     StringWriter writer = new StringWriter(128);
                     printTree(context.getViewRoot(), this.id, writer, 0);
                     String msg = "Component ID '"
@@ -1589,8 +1585,22 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
                     throw new JspException(msg);
                 }
             }
-	    return (this.id);
         }
+        return (this.id);
+    }
+
+    }
+
+
+    /**
+     * @param id the component ID
+     * @return <code>true</code> if this ID is unique within the closest naming
+     *  container, otherwise <code>false</code>
+     */
+    private boolean isSpecifiedIdUnique(String id) {
+
+        UIComponentClassicTagBase containerTag = getParentNamingContainerTag();
+        return (containerTag.component.findComponent(this.id) == null);
 
     }
 
@@ -1635,6 +1645,10 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      */
 
     public void setJspId(String id) {
+        // reset JSP ID here instead of release as we may need
+        // to check the ID after the tag has been used
+        this.jspId = null;
+
         Map<String,Object> reqMap =
              getFacesContext().getExternalContext().getRequestMap();
         AtomicInteger aInt = (AtomicInteger) reqMap.get(JAVAX_FACES_PAGECONTEXT_COUNTER);
