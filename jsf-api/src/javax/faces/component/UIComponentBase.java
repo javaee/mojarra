@@ -337,8 +337,14 @@ public abstract class UIComponentBase extends UIComponent {
      */
     public void setId(String id) {
 
-        validateId(id);
-        this.id = id;
+        // if the current ID is not null, and the passed
+        // argument is the same, no need to validate it
+        // as it has already been validated.
+        if (this.id == null || !(this.id.equals(id))) {
+            validateId(id);
+            this.id = id;
+        }
+        
         this.clientId = null; // Erase any cached value
 
     }
