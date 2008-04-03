@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorTag.java,v 1.7 2007/03/01 20:59:01 rlubke Exp $
+ * $Id: ValidatorTag.java,v 1.8 2007/04/23 20:23:05 rlubke Exp $
  */
 
 /*
@@ -82,9 +82,6 @@ public class ValidatorTag extends AbstractValidatorTag {
         }
 
 
-        private Validator instance;
-
-
         // -------------------------------------------- Methods from StateHolder
 
         private Object[] state;
@@ -144,9 +141,9 @@ public class ValidatorTag extends AbstractValidatorTag {
                              Object value)
         throws ValidatorException {
 
-            if (instance == null) {
-                instance = createValidator(validatorId, binding, context);
-            }
+
+           Validator instance = createValidator(validatorId, binding, context);
+
 
             if (instance != null) {
                 instance.validate(context, component, value);

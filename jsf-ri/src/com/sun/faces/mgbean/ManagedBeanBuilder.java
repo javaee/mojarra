@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanBuilder.java,v 1.1 2007/04/22 21:41:05 rlubke Exp $
+ * $Id: ManagedBeanBuilder.java,v 1.2 2007/04/23 20:23:05 rlubke Exp $
  */
 
 /*
@@ -455,8 +455,7 @@ public class ManagedBeanBuilder extends BeanBuilder {
     private class BakedListProperty implements BakedProperty {
 
         private List<Expression> listEntries;
-        private PropertyDescriptor pd;
-        boolean targetIsArray;
+        private PropertyDescriptor pd;        
 
 
         BakedListProperty(List<Expression> listEntries,

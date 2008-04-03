@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleConfigProcessor.java,v 1.1 2007/04/22 21:41:42 rlubke Exp $
+ * $Id: LifecycleConfigProcessor.java,v 1.2 2007/04/23 20:23:05 rlubke Exp $
  */
 
 /*
@@ -135,9 +135,7 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
                                  .addPhaseListener((PhaseListener) plInstance);
                         }
                     }
-                } else {
-                    throw new ConfigurationException("Unable to instantiate PhaseListener: " + pl);
-                }
+                } 
             }
         }
 

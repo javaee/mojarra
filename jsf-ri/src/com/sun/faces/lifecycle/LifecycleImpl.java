@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.76 2007/04/22 21:41:04 rlubke Exp $
+ * $Id: LifecycleImpl.java,v 1.77 2007/04/23 20:23:04 rlubke Exp $
  */
 
 /*
@@ -62,9 +62,7 @@ public class LifecycleImpl extends Lifecycle {
 
     // Log instance for this class
     private static Logger LOGGER = Util.getLogger(Util.FACES_LOGGER 
-            + Util.LIFECYCLE_LOGGER);
-    private static Logger TIMING_LOGGER = Util.getLogger(Util.FACES_LOGGER
-            + Util.TIMING_LOGGER);
+            + Util.LIFECYCLE_LOGGER);    
 
 
     // ------------------------------------------------------ Instance Variables

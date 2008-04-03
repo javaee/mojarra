@@ -145,7 +145,7 @@ public class DbfFactory {
             if (systemId == null) {
                 InputSource result;
                 try {
-                    result = super.resolveEntity(publicId, systemId);
+                    result = super.resolveEntity(publicId, null);
                 }
                 catch (Exception e) {
                     throw new SAXException(e);

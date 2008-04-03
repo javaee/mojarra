@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.209 2007/04/02 17:16:11 rogerk Exp $
+ * $Id: Util.java,v 1.210 2007/04/23 20:23:06 rlubke Exp $
  */
 
 /*
@@ -76,7 +76,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.209 2007/04/02 17:16:11 rogerk Exp $
+ * @version $Id: Util.java,v 1.210 2007/04/23 20:23:06 rlubke Exp $
  */
 
 public class Util {
@@ -746,8 +746,7 @@ public class Util {
               (String) extContext.getRequestMap().get(INVOCATION_PATH);
 
         if (mapping == null) {
-
-            Object request = extContext.getRequest();
+         
             String servletPath = null;
             String pathInfo = null;
 

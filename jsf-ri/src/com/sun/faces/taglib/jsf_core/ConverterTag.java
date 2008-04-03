@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterTag.java,v 1.7 2007/03/01 20:59:02 rlubke Exp $
+ * $Id: ConverterTag.java,v 1.8 2007/04/23 20:23:05 rlubke Exp $
  */
 
 /*
@@ -151,11 +151,7 @@ public class ConverterTag extends AbstractConverterTag {
 
         private Converter getDelegate(FacesContext context) {
 
-            if (instance == null) {
-                return createConverter(converterId, binding, context);
-            }
-
-            return instance;
+            return createConverter(converterId, binding, context);
 
         }
 
