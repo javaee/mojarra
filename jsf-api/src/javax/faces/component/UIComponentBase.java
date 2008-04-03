@@ -1242,7 +1242,7 @@ public abstract class UIComponentBase extends UIComponent {
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-             values = new Object[8];
+             values = new Object[9];
         }
 
         if (attributes != null) {
@@ -1258,6 +1258,7 @@ public abstract class UIComponentBase extends UIComponent {
         values[5] = renderedSet ? Boolean.TRUE : Boolean.FALSE;
         values[6] = rendererType;
         values[7] = saveAttachedState(context, listeners);
+        values[8] = attributesThatAreSet;
         assert(!transientFlag);
 
         return (values);
@@ -1294,6 +1295,7 @@ public abstract class UIComponentBase extends UIComponent {
                 listeners = restoredListeners;
             }
         }
+        attributesThatAreSet = (List<String>) values[8];
     }
 
 
@@ -1511,6 +1513,11 @@ public abstract class UIComponentBase extends UIComponent {
     //     private 'attributes' map directly to the state saving process.
     private static class AttributesMap implements Map<String, Object>, Serializable {
 
+        // this KEY is special to the AttributesMap - this allows the implementation
+        // to access the the List containing the attributes that have been set
+        private static final String ATTRIBUTES_THAT_ARE_SET_KEY =
+              UIComponentBase.class.getName() + ".attributesThatAreSet";
+
         private HashMap<String, Object> attributes;
         private transient Map<String,PropertyDescriptor> pdMap;
         private transient UIComponent component;
@@ -1519,8 +1526,10 @@ public abstract class UIComponentBase extends UIComponent {
         // -------------------------------------------------------- Constructors
 
         private AttributesMap(UIComponent component) {
+
             this.component = component;
             this.pdMap = ((UIComponentBase) component).getDescriptorMap();
+
         }
 
         private AttributesMap(UIComponent component,
@@ -1530,6 +1539,9 @@ public abstract class UIComponentBase extends UIComponent {
         }
 
         public boolean containsKey(Object keyObj) {
+            if (ATTRIBUTES_THAT_ARE_SET_KEY.equals(keyObj)) {
+                return true;
+            }
             String key = (String) keyObj;
             PropertyDescriptor pd =
                 getPropertyDescriptor(key);
@@ -1548,6 +1560,9 @@ public abstract class UIComponentBase extends UIComponent {
             String key = (String) keyObj;
             if (key == null) {
                 throw new NullPointerException();
+            }
+            if (ATTRIBUTES_THAT_ARE_SET_KEY.equals(key)) {
+                return component.getAttributesThatAreSet(false);
             }
             PropertyDescriptor pd =
                 getPropertyDescriptor(key);
@@ -1588,6 +1603,17 @@ public abstract class UIComponentBase extends UIComponent {
                 throw new NullPointerException();
             }
 
+            if (ATTRIBUTES_THAT_ARE_SET_KEY.equals(keyValue)) {
+                if (component.attributesThatAreSet == null) {
+                    if (value instanceof List) {
+                        //noinspection unchecked
+                        component.attributesThatAreSet = (List<String>) value;
+                        return component.attributesThatAreSet;
+                    }
+                }
+                return null;
+            }
+
             PropertyDescriptor pd =
                 getPropertyDescriptor(keyValue);
             if (pd != null) {
@@ -1620,17 +1646,27 @@ public abstract class UIComponentBase extends UIComponent {
                 if (attributes == null) {
                     initMap();
                 }
+                List<String> sProperties = component.getAttributesThatAreSet(true);
+                if (sProperties != null && !sProperties.contains(keyValue)) {
+                    sProperties.add(keyValue);
+                }
                 return (attributes.put(keyValue, value));
             }
         }
 
-        public void putAll(Map<? extends String, ? extends Object> map) {
+        public void putAll(Map<? extends String, ?> map) {
             if (map == null) {
                 throw new NullPointerException();
             }
 
             if (attributes == null) {
                 initMap();
+            }
+            for (String key : map.keySet()) {
+                List<String> sProperties = component.getAttributesThatAreSet(true);
+                if (sProperties != null && !sProperties.contains(key)) {
+                    sProperties.add(key);
+                }
             }
             attributes.putAll(map);
         }
@@ -1640,12 +1676,19 @@ public abstract class UIComponentBase extends UIComponent {
             if (key == null) {
                 throw new NullPointerException();
             }
+            if (ATTRIBUTES_THAT_ARE_SET_KEY.equals(key)) {
+                return null;
+            }
             PropertyDescriptor pd =
                 getPropertyDescriptor(key);
             if (pd != null) {
                 throw new IllegalArgumentException(key);
             } else {
                 if (attributes != null) {
+                    List<String> sProperties = component.getAttributesThatAreSet(false);
+                    if (sProperties != null) {
+                        sProperties.remove(key);
+                    }
                     return (attributes.remove(key));
                 } else {
                     return null;

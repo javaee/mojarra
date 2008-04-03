@@ -36,27 +36,6 @@
 
 package com.sun.faces.renderkit;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.config.WebConfiguration;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
-import com.sun.faces.renderkit.html_basic.HtmlBasicRenderer.Param;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.FacesLogger;
-
-import javax.faces.FacesException;
-import javax.faces.FactoryFinder;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UISelectItem;
-import javax.faces.component.UISelectItems;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-import javax.faces.model.SelectItem;
-import javax.faces.render.RenderKit;
-import javax.faces.render.RenderKitFactory;
-import javax.faces.render.ResponseStateManager;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -69,11 +48,35 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIComponentBase;
+import javax.faces.component.UISelectItem;
+import javax.faces.component.UISelectItems;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
+import javax.faces.model.SelectItem;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
+import javax.faces.render.ResponseStateManager;
+
+import com.sun.faces.RIConstants;
+import com.sun.faces.config.WebConfiguration;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
+import com.sun.faces.renderkit.html_basic.HtmlBasicRenderer.Param;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
 
 /**
  * <p>A set of utilities for use in {@link RenderKit}s.</p>
@@ -146,7 +149,37 @@ public class RenderKitUtils {
      * <p>JavaScript to be rendered when a commandLink is used.
      * This may be expaned to include other uses.</p>
      */
-    private static final String SUN_JSF_JS = RIConstants.FACES_PREFIX + "sunJsfJs";        
+    private static final String SUN_JSF_JS = RIConstants.FACES_PREFIX + "sunJsfJs";
+
+
+    /**
+     * This array represents the packages that can leverage the
+     * <code>attributesThatAreSet</code> List for optimized attribute
+     * rendering.
+     *
+     * IMPLEMENTATION NOTE:  This must be kept in sync with the array
+     * in UIComponentBase$AttributesMap and HtmlComponentGenerator.
+     *
+     * Hopefully JSF 2.0 will remove the need for this.
+     */
+    private static final String[] OPTIMIZED_PACKAGES = {
+          "javax.faces.component",
+          "javax.faces.component.html"
+    };
+    static {
+        // Sort the array for use with Arrays.binarySearch()
+        Arrays.sort(OPTIMIZED_PACKAGES);
+    }
+
+
+    /**
+     * IMPLEMENTATION NOTE:  This must be kept in sync with the Key
+     * in UIComponentBase$AttributesMap and HtmlComponentGenerator.
+     *
+     * Hopefully JSF 2.0 will remove the need for this.
+     */
+    private static final String ATTRIBUTES_THAT_ARE_SET_KEY =
+        UIComponentBase.class.getName() + ".attributesThatAreSet";
                           
     
     protected static final Logger LOGGER = FacesLogger.RENDERKIT.getLogger();
@@ -272,6 +305,10 @@ public class RenderKitUtils {
                     list.add((SelectItem) value);
                 } else if (value instanceof SelectItem[]) {
                     SelectItem[] items = (SelectItem[]) value;
+                    // we manually copy the elements so that the list is
+                    // modifiable.  Arrays.asList() returns a non-mutable
+                    // list.
+                    //noinspection ManualArrayToCollectionCopy
                     for (SelectItem item : items) {
                         list.add(item);
                     }
@@ -336,16 +373,35 @@ public class RenderKitUtils {
         assert (null != component);
 
         Map<String, Object> attrMap = component.getAttributes();
-        
-        boolean isXhtml = writer.getContentType().equals(RIConstants.XHTML_CONTENT_TYPE);
-        for (String attrName : attributes) {
 
-            Object value =
-                 attrMap.get(attrName);
-            if (value != null && shouldRenderAttribute(value)) {             
-                writer.writeAttribute(prefixAttribute(attrName, isXhtml),
-                                      value,
-                                      attrName);               
+        // PENDING - think anyone would run the RI using another implementation
+        // of the jsf-api?  If they did, then this would fall apart.  That
+        // scenario seems extremely unlikely.
+        if (canBeOptimized(component)) {
+            //noinspection unchecked
+            List<String> setAttributes = (List<String>)
+              component.getAttributes().get(ATTRIBUTES_THAT_ARE_SET_KEY);
+            if (setAttributes != null) {
+                renderPassThruAttributesOptimized(writer,
+                                                  component,
+                                                  attributes,
+                                                  setAttributes);
+            }
+        } else {
+            // this block should only be hit by custom components leveraging
+            // the RI's rendering code.  We make no assumptions and loop through
+            // all known attributes.
+            boolean isXhtml =
+                  RIConstants.XHTML_CONTENT_TYPE.equals(writer.getContentType());
+            for (String attrName : attributes) {
+
+                Object value =
+                      attrMap.get(attrName);
+                if (value != null && shouldRenderAttribute(value)) {
+                    writer.writeAttribute(prefixAttribute(attrName, isXhtml),
+                                          value,
+                                          attrName);
+                }
             }
 
         }
@@ -455,6 +511,57 @@ public class RenderKitUtils {
 
 
     // --------------------------------------------------------- Private Methods
+
+
+    /**
+     * @param component the UIComponent in question
+     * @return <code>true</code> if the component is within the
+     *  <code>javax.faces.component</code> or <code>javax.faces.component.html</code>
+     *  packages, otherwise return <code>false</code>
+     */
+    private static boolean canBeOptimized(UIComponent component) {
+
+        String pkg = component.getClass().getPackage().getName();
+        return (Arrays.binarySearch(OPTIMIZED_PACKAGES, pkg) >= 0);
+
+    }
+
+
+    /**
+     * <p>For each attribute in <code>setAttributes</code>, perform a binary
+     * search against the array of <code>knownAttributes</code>  If a match is found
+     * and the value is not <code>null</code>, render the attribute.
+     * @param writer the current writer
+     * @param component the component whose attributes we're rendering
+     * @param knownAttributes an array of pass-through attributes supported by
+     *  this component
+     * @param setAttributes a <code>List</code> of attributes that have been set
+     *  on the provided component
+     * @throws IOException if an error occurs during the write
+     */
+    private static void renderPassThruAttributesOptimized(ResponseWriter writer,
+                                                          UIComponent component,
+                                                          String[] knownAttributes,
+                                                          List<String> setAttributes)
+    throws IOException {
+
+        Collections.sort(setAttributes);
+        boolean isXhtml =
+              RIConstants.XHTML_CONTENT_TYPE.equals(writer.getContentType());
+        Map<String, Object> attrMap = component.getAttributes();
+        for (String name : setAttributes) {
+
+            if (Arrays.binarySearch(knownAttributes, name) >= 0) {
+                Object value =
+                      attrMap.get(name);
+                if (value != null && shouldRenderAttribute(value)) {
+                    writer.writeAttribute(prefixAttribute(name, isXhtml),
+                                          value,
+                                          name);
+                }
+            }
+        }
+    }
 
 
     /**

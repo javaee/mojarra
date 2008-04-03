@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.151 2007/09/05 16:02:44 rogerk Exp $
+ * $Id: UIComponent.java,v 1.152 2007/09/05 23:44:56 rlubke Exp $
  */
 
 /*
@@ -41,6 +41,14 @@
 package javax.faces.component;
 
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.ValueExpression;
@@ -51,12 +59,6 @@ import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
 import javax.faces.render.Renderer;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 /**
  * <p><strong>UIComponent</strong> is the base class for all user interface
@@ -76,6 +78,32 @@ import java.util.Map;
  */
 
 public abstract class UIComponent implements StateHolder {
+
+    /**
+     * This array represents the packages that can leverage the
+     * <code>attributesThatAreSet</code> List for optimized attribute
+     * rendering.
+     *
+     * Hopefully JSF 2.0 will remove the need for this.
+     */
+    private static final String[] OPTIMIZED_PACKAGES = {
+          "javax.faces.component",
+          "javax.faces.component.html"
+    };
+
+    static {
+        // Sort the array for use with Arrays.binarySearch()
+        Arrays.sort(OPTIMIZED_PACKAGES);
+    }
+
+    /**
+     * List of attributes that have been set on the component (this
+     * may be from setValueExpression, the attributes map, or setters
+     * from the concrete HTML components.  This allows
+     * for faster rendering of attributes as this list is authoratative
+     * on what has been set.
+     */
+    List<String> attributesThatAreSet;
 
 
     // -------------------------------------------------------------- Attributes
@@ -254,6 +282,12 @@ public abstract class UIComponent implements StateHolder {
                     //noinspection CollectionWithoutInitialCapacity
                     bindings = new HashMap<String, ValueExpression>();
                 }
+                // add this binding name to the 'attributesThatAreSet' list
+                List<String> sProperties = getAttributesThatAreSet(true);
+                if (sProperties != null && !sProperties.contains(name)) {
+                    sProperties.add(name);
+                }
+
                 bindings.put(name, binding);
             } else {
                 ELContext context =
@@ -266,6 +300,12 @@ public abstract class UIComponent implements StateHolder {
             }
         } else {
             if (bindings != null) {
+                // remove this binding name from the 'attributesThatAreSet' list
+                List<String> sProperties = getAttributesThatAreSet(false);
+                if (sProperties != null) {
+                    sProperties.remove(name);
+                }
+                attributesThatAreSet.remove(name);
                 bindings.remove(name);
                 if (bindings.isEmpty()) {
                     bindings = null;
@@ -1138,5 +1178,27 @@ private void doFind(FacesContext context, String clientId) {
      */
     protected abstract Renderer getRenderer(FacesContext context);
 
+
+    // --------------------------------------------------------- Package Private
+
+
+    /**
+     * @param create <code>true</code> if the list should be created
+     * @return A List of Strings of all the attributes that have been set
+     *  against this component.  If the component isn't in the default
+     *  javax.faces.component or javax.faces.component.html packages, or
+     *  create is <code>false</code>, this will return null;
+     */
+    List<String> getAttributesThatAreSet(boolean create) {
+
+        String pkg = this.getClass().getPackage().getName();
+        if (create && Arrays.binarySearch(OPTIMIZED_PACKAGES, pkg) >= 0) {
+            if (attributesThatAreSet == null) {
+                attributesThatAreSet = new ArrayList<String>(6);
+            }
+        }
+        return attributesThatAreSet;
+        
+    }
 
 }
