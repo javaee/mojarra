@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.148 2007/02/12 20:18:46 jdlee Exp $
+ * $Id: UIComponentBase.java,v 1.149 2007/04/25 21:08:00 rlubke Exp $
  */
 
 /*
@@ -547,7 +547,7 @@ public abstract class UIComponentBase extends UIComponent {
      * @throws NullPointerException {@inheritDoc}
      */ 
     public UIComponent findComponent(String expr) {
-
+        System.out.println("Expression: " + expr);
         if (expr == null) {
             throw new NullPointerException();
         }
@@ -577,15 +577,18 @@ public abstract class UIComponentBase extends UIComponent {
         for (int i = 0, length = (segments.length - 1);
              i < segments.length;
              i++, length--) {
-            result = findComponent(base, segments[i], (length == 0));
+            result = findComponent(base, segments[i], (i == 0));
             // the first element of the expression may match base.id 
             // (vs. a child if of base)
             if (i == 0 && result == null &&
-                 segments[i].equals((base != null ? base.getId() : null))) {
+                 segments[i].equals(base.getId())) {
                 result = base;
-            }          
-            if (result == null && length > 0) {
+            }
+            if (result != null && (!(result instanceof NamingContainer)) && length > 0) {
                 throw new IllegalArgumentException(segments[i]);
+            }
+            if (result == null) {
+                break;
             }
             base = result;
         }
@@ -610,17 +613,19 @@ public abstract class UIComponentBase extends UIComponent {
     private static UIComponent findComponent(UIComponent base,
                                              String id,
                                              boolean checkId) {
-        
+        if (checkId && id.equals(base.getId())) {
+            return base;
+        }
         // Search through our facets and children       
         UIComponent result = null;
         for (Iterator i = base.getFacetsAndChildren(); i.hasNext(); ) {
-            UIComponent kid = (UIComponent) i.next(); 
+            UIComponent kid = (UIComponent) i.next();
             if (!(kid instanceof NamingContainer)) {
                 if (checkId && id.equals(kid.getId())) {
                     result = kid;
                     break;
                 }
-                result = findComponent(kid, id, checkId);
+                result = findComponent(kid, id, true);
                 if (result != null) {
                     break;
                 }
@@ -629,7 +634,6 @@ public abstract class UIComponentBase extends UIComponent {
                 break;
             }
         }                
-        
         return (result);
 
     }
