@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.110 2007/08/27 17:38:28 rlubke Exp $
+ * $Id: ViewHandlerImpl.java,v 1.111 2007/11/14 20:41:29 rlubke Exp $
  */
 
 
@@ -81,7 +81,7 @@ import java.util.logging.Logger;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.110 2007/08/27 17:38:28 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.111 2007/11/14 20:41:29 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -105,6 +105,23 @@ public class ViewHandlerImpl extends ViewHandler {
         if (logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE,"Created ViewHandler instance ");
         }
+    }
+    
+
+    /**
+     * Do not call the default implementation of {@link ViewHandler#initView(javax.faces.context.FacesContext)}
+     * if the {@link javax.faces.context.ExternalContext#getRequestCharacterEncoding()} returns a
+     * <code>non-null</code> result.
+     *
+     * @see ViewHandler#initView(javax.faces.context.FacesContext)
+     */
+    @Override
+    public void initView(FacesContext context) throws FacesException {
+
+        if (context.getExternalContext().getRequestCharacterEncoding() == null) {
+            super.initView(context);
+        }
+        
     }
 
 
