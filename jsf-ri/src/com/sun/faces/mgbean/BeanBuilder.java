@@ -1,5 +1,5 @@
 /*
- * $Id: BeanBuilder.java,v 1.5 2007/12/14 19:25:26 rlubke Exp $
+ * $Id: BeanBuilder.java,v 1.6 2008/02/28 23:52:14 rlubke Exp $
  */
 
 /*
@@ -408,7 +408,8 @@ public abstract class BeanBuilder {
                             beanInfo.getName());
                 queueMessage(message);
             }
-            if (Modifier.isAbstract(classModifiers)) {
+            if (Modifier.isInterface(classModifiers)
+                || Modifier.isAbstract(classModifiers)) {
                 String message =
                       MessageUtils.getExceptionMessageString(
                             MessageUtils.MANAGED_BEAN_CLASS_IS_ABSTRACT_ERROR_ID,
@@ -437,8 +438,10 @@ public abstract class BeanBuilder {
                 queueMessage(message);
             }
 
-            // class is ok, scan for annotations
-            this.isInjectible = scanForAnnotations(beanClass);
+            if (!hasMessages()) {
+                // class is ok, scan for annotations
+                this.isInjectible = scanForAnnotations(beanClass);
+            }
         }
     }
 
@@ -461,16 +464,20 @@ public abstract class BeanBuilder {
         if (clazz != null) {
             while (clazz != Object.class) {
                 Field[] fields = clazz.getDeclaredFields();
-                for (Field field : fields) {
-                    if (field.getAnnotations().length > 0) {
-                        return true;
+                if (fields != null) {
+                    for (Field field : fields) {
+                        if (field.getAnnotations().length > 0) {
+                            return true;
+                        }
                     }
                 }
 
                 Method[] methods = clazz.getDeclaredMethods();
-                for (Method method : methods) {
-                    if (method.getDeclaredAnnotations().length > 0) {
-                        return true;
+                if (methods != null) {
+                    for (Method method : methods) {
+                        if (method.getDeclaredAnnotations().length > 0) {
+                            return true;
+                        }
                     }
                 }
 
