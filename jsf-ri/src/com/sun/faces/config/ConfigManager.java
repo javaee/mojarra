@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManager.java,v 1.11 2007/06/25 20:57:21 rlubke Exp $
+ * $Id: ConfigManager.java,v 1.12 2007/06/28 01:50:47 rlubke Exp $
  */
 
 /*
@@ -40,6 +40,7 @@
 
 package com.sun.faces.config;
 
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.config.configprovider.ConfigurationResourceProvider;
 import com.sun.faces.config.configprovider.MetaInfResourceProvider;
 import com.sun.faces.config.configprovider.RIConfigResourceProvider;
@@ -54,8 +55,8 @@ import com.sun.faces.config.processor.ManagedBeanConfigProcessor;
 import com.sun.faces.config.processor.NavigationConfigProcessor;
 import com.sun.faces.config.processor.RenderKitConfigProcessor;
 import com.sun.faces.config.processor.ValidatorConfigProcessor;
+import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Timer;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -83,6 +84,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * <p>
@@ -91,6 +94,8 @@ import java.util.concurrent.FutureTask;
  * </p>
  */
 public class ConfigManager {
+
+    private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
 
     /**
      * <p>
@@ -194,10 +199,15 @@ public class ConfigManager {
             try {                
                 CONFIG_PROCESSOR_CHAIN.process(getConfigDocuments(sc));
             } catch (Exception e) {
-                 // no i18n here - it's too early
-                throw new ConfigurationException(
-                     "Unexpected error during configuration processing",
-                     e);
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.log(Level.FINE,
+                               "Unsanitized stacktrace from failed start...",
+                               e);
+                }
+                throw (RuntimeException) unwind(e);
+                //throw new ConfigurationException(
+                //     "Unexpected error during configuration processing",
+                //     e);
             }
         }
 
@@ -292,6 +302,22 @@ public class ConfigManager {
     }
 
 
+    /**
+     * @param throwable Throwable
+     * @return the root cause of this error
+     */
+    private Throwable unwind(Throwable throwable) {
+
+          Throwable t = null;
+          if (throwable != null) {
+              t =  unwind(throwable.getCause());
+              if (t == null) {
+                  t = throwable;
+              }
+          }
+          return t;
+
+      }
 
 
     // ----------------------------------------------------------- Inner Classes
