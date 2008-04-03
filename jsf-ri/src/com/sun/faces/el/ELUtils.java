@@ -1,5 +1,5 @@
 /*
- * $Id: ELUtils.java,v 1.3 2007/04/27 22:00:57 ofung Exp $
+ * $Id: ELUtils.java,v 1.4 2007/07/17 23:14:01 rlubke Exp $
  */
 
 /*
@@ -70,13 +70,9 @@ import java.util.Map;
  */
 public class ELUtils {
 
-    private static final String SESSION = "session";
-    private static final String APPLICATION = "application";
     private static final String APPLICATION_SCOPE = "applicationScope";
     private static final String SESSION_SCOPE = "sessionScope";
-    private static final String REQUEST = "request";
     private static final String REQUEST_SCOPE = "requestScope";
-    private static final String NONE = "none";
     private static final String COOKIE_IMPLICIT_OBJ = "cookie";
     private static final String FACES_CONTEXT_IMPLICIT_OBJ = "facesContext";
     private static final String HEADER_IMPLICIT_OBJ = "header";
@@ -224,6 +220,8 @@ public class ELUtils {
 
     /**
      * @param associate the <code>ApplicationAssociate</code>
+     * @param provideDefault whether or not to return a
+     *  <code>DummpyPropertyResolverImpl</code>
      * @return the <code>PropertyResolver</code>s set via
      *  {@link javax.faces.application.Application#setPropertyResolver(javax.faces.el.PropertyResolver)}
      *  or, if that is <code>null</code>, return the <code>PropertyResolver</code>
@@ -231,6 +229,7 @@ public class ELUtils {
      *  null, and <code>provideDefault</code> is <code>true</code>,
      *  return the <code>DummyPropertyResolverImpl</code>.
      */
+    @SuppressWarnings("deprecation")
     public static PropertyResolver getDelegatePR(ApplicationAssociate associate,
                                                  boolean provideDefault)  {
 
@@ -249,6 +248,8 @@ public class ELUtils {
 
     /**
      * @param associate the <code>ApplicationAssociate</code>
+     * @param provideDefault whether or not to return a
+     *  <code>DummpyPropertyResolverImpl</code>
      * @return the <code>VariableResolver</code>s set via
      *  {@link javax.faces.application.Application#setVariableResolver(javax.faces.el.VariableResolver)}
      *  or, if that is <code>null</code>, return the <code>VariableResolver</code>
@@ -256,6 +257,7 @@ public class ELUtils {
      *  null, , and <code>provideDefault</code> is <code>true</code>,
      *  return the <code>ChainAwareVariableResolver</code>.
      */
+    @SuppressWarnings("deprecation")
     public static VariableResolver getDelegateVR(ApplicationAssociate associate,
                                                  boolean provideDefault) {
 
@@ -276,13 +278,14 @@ public class ELUtils {
      * @param expressionString the expression string, with delimiters
      *                         intact.
      * @return a List of expressions from the expressionString
+     * @throws ReferenceSyntaxException if the expression string is invalid
      */
     @SuppressWarnings("deprecation")
     public static List<String> getExpressionsFromString(String expressionString)
     throws ReferenceSyntaxException {
 
         if (null == expressionString) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
         //noinspection CollectionWithoutInitialCapacity
         List<String> result = new ArrayList<String>();
@@ -322,9 +325,7 @@ public class ELUtils {
      *
      * @return the scope of the expression
      *
-     * PENDING: This should be private to ManagedBeanFactoryImpl.  Keep it
-     *  here for now as ManagedBeanFactoryImpl is going to be changed for
-     *  _05
+     * @throws ReferenceSyntaxException if valueBinding is syntactically invalid
      */
     @SuppressWarnings("deprecation")
     public static ELUtils.Scope getScope(String valueBinding, String[] outString)
@@ -464,6 +465,7 @@ public class ELUtils {
      *  the <code>PropertyResolver</code>s will be added.
      * @param associate our ApplicationAssociate
      */
+    @SuppressWarnings("deprecation")
     private static void addPropertyResolvers(CompositeELResolver target,
                                              ApplicationAssociate associate) {
 
@@ -482,6 +484,7 @@ public class ELUtils {
      *  the <code>VariableResolver</code>s will be added.
      * @param associate our ApplicationAssociate
      */
+    @SuppressWarnings("deprecation")
     private static void addVariableResolvers(CompositeELResolver target,
                                              ApplicationAssociate associate) {
 
@@ -497,6 +500,8 @@ public class ELUtils {
      * <p/>
      * The the first segment of a String tokenized by a "." or "["
      *
+     * @param valueBinding the expression from which the first segment
+     *  will be obtained
      * @return index of the first occurrence of . or [
      */
     private static int getFirstSegmentIndex(String valueBinding) {
@@ -592,6 +597,7 @@ public class ELUtils {
         //the managed bean is required to be in either "request", "session",
         //"application", or "none" scopes. One of the previous decision
         //statements must be true.
+        //noinspection ConstantConditions
         assert (false);
         return false;
     }
@@ -669,11 +675,8 @@ public class ELUtils {
         }
 
         // if it doesn't start and end with delimiters
-        if (!(expression.startsWith("#{") && expression.endsWith("}"))) {
-            // see if it has some inside.
-            return isExpression(expression);
-        }
-        return false;
+        return (!(expression.startsWith("#{") && expression.endsWith("}")))
+                  && isExpression(expression);
 
     }
 
@@ -689,11 +692,8 @@ public class ELUtils {
         int start = expression.indexOf("#{");
 
         //check to see if attribute has an expression
-        if ((expression.indexOf("#{") != -1) &&
-            (start < expression.indexOf('}'))) {
-            return true;
-        }
-        return false;
+        return (expression.indexOf("#{") != -1) &&
+               (start < expression.indexOf('}'));
 
 
     }

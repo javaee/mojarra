@@ -1,5 +1,5 @@
 /*
- * $Id: ELConstants.java,v 1.6 2007/04/27 22:00:57 ofung Exp $
+ * $Id: ELConstants.java,v 1.7 2007/07/17 23:14:01 rlubke Exp $
  */
 
 /*
@@ -41,9 +41,6 @@ package com.sun.faces.el;
 
 /**
  * @author jhook
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
  */
 public interface ELConstants {
     public static final int APPLICATION = 0;

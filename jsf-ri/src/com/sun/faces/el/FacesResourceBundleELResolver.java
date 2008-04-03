@@ -1,5 +1,5 @@
 /*
- * $Id: FacesResourceBundleELResolver.java,v 1.12 2007/04/27 22:00:58 ofung Exp $
+ * $Id: FacesResourceBundleELResolver.java,v 1.13 2007/07/17 23:14:01 rlubke Exp $
  */
 
 /*
@@ -76,12 +76,12 @@ public class FacesResourceBundleELResolver extends ELResolver {
                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "base and property"); // ?????
             throw new PropertyNotFoundException(message);
         }
-        ResourceBundle result = null;
         FacesContext facesContext = (FacesContext)
            context.getContext(FacesContext.class);
         Application app = facesContext.getApplication();
 
-        result = app.getResourceBundle(facesContext, property.toString());
+        ResourceBundle result =
+              app.getResourceBundle(facesContext, property.toString());
         if (null != result) {
             context.setPropertyResolved(true);
         }
@@ -104,12 +104,12 @@ public class FacesResourceBundleELResolver extends ELResolver {
             throw new PropertyNotFoundException(message);
         }
 
-        ResourceBundle result = null;
         FacesContext facesContext = (FacesContext)
            context.getContext(FacesContext.class);
         Application app = facesContext.getApplication();
 
-        result = app.getResourceBundle(facesContext, property.toString());
+        ResourceBundle result =
+              app.getResourceBundle(facesContext, property.toString());
         if (null != result) {
             context.setPropertyResolved(true);
             return ResourceBundle.class;
@@ -121,7 +121,7 @@ public class FacesResourceBundleELResolver extends ELResolver {
 
     public void  setValue(ELContext context, Object base, Object property,
         Object val) throws ELException {
-        String message = null;
+        String message;
 
         if (base == null && property == null) {
             message = MessageUtils.getExceptionMessageString
@@ -129,12 +129,12 @@ public class FacesResourceBundleELResolver extends ELResolver {
             throw new PropertyNotFoundException(message);
         }
 
-        ResourceBundle result = null;
         FacesContext facesContext = (FacesContext)
            context.getContext(FacesContext.class);
         Application app = facesContext.getApplication();
 
-        result = app.getResourceBundle(facesContext, property.toString());
+        ResourceBundle result =
+              app.getResourceBundle(facesContext, property.toString());
         if (null != result) {
             context.setPropertyResolved(true);
             message = MessageUtils.getExceptionMessageString
@@ -156,12 +156,12 @@ public class FacesResourceBundleELResolver extends ELResolver {
                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "property");
             throw new PropertyNotFoundException(message);
         }
-        ResourceBundle result = null;
         FacesContext facesContext = (FacesContext)
            context.getContext(FacesContext.class);
         Application app = facesContext.getApplication();
 
-        result = app.getResourceBundle(facesContext, property.toString());
+        ResourceBundle result =
+              app.getResourceBundle(facesContext, property.toString());
         if (null != result) {
             context.setPropertyResolved(true);
             return true;

@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverChainWrapper.java,v 1.15 2007/04/27 22:00:58 ofung Exp $
+ * $Id: VariableResolverChainWrapper.java,v 1.16 2007/07/17 23:14:01 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -91,17 +91,18 @@ public class VariableResolverChainWrapper extends ELResolver {
         Map<String, Object> requestMap = facesContext.getExternalContext().getRequestMap();
         String propString = property.toString();
         try {
-	    // If we are already in the midst of an expression evaluation
-	    // that touched this resolver...
+        // If we are already in the midst of an expression evaluation
+        // that touched this resolver...
+            //noinspection unchecked
             List<String> varNames = (List<String>) requestMap.get(REENTRANT_GUARD);
             if (varNames != null
                  && !varNames.isEmpty()
                  && varNames.contains(propString)) {
-		// take no action and return.
+                // take no action and return.
                 context.setPropertyResolved(false);
                 return null;
             }
-	        // Make sure subsequent calls don't take action.
+            // Make sure subsequent calls don't take action.
             if (varNames == null) {
                 varNames = new ArrayList<String>();
                 requestMap.put(REENTRANT_GUARD, varNames);
@@ -113,9 +114,9 @@ public class VariableResolverChainWrapper extends ELResolver {
         } catch (EvaluationException ex) {
             context.setPropertyResolved(false);
             throw new ELException(ex);
-        }
-	finally {
-	    // Make sure to remove the guard after the call returns
+        } finally {
+            // Make sure to remove the guard after the call returns
+            //noinspection unchecked
             List<String> varNames = (List<String>) requestMap.get(REENTRANT_GUARD);
             if (varNames != null && !varNames.isEmpty()) {
                 varNames.remove(propString);
@@ -123,7 +124,7 @@ public class VariableResolverChainWrapper extends ELResolver {
             // Make sure that the ELContext "resolved" indicator is set 
             // in accordance wth the result of the resolution.
             context.setPropertyResolved(result != null);
-	}
+        }
         return result;
     }
 
@@ -131,8 +132,7 @@ public class VariableResolverChainWrapper extends ELResolver {
     public Class<?> getType(ELContext context, Object base, Object property)
         throws ELException {
 
-        Object result = null;
-        result = getValue(context, base, property);
+        Object result = getValue(context, base, property);
         context.setPropertyResolved(result != null);
         if (result != null) {
             return result.getClass();

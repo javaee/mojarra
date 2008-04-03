@@ -1,5 +1,5 @@
 /*
- * $Id: FacesCompositeELResolver.java,v 1.7 2007/04/27 22:00:57 ofung Exp $
+ * $Id: FacesCompositeELResolver.java,v 1.8 2007/07/17 23:14:01 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -65,14 +65,12 @@ public class FacesCompositeELResolver extends CompositeELResolver {
     public Object getValue(ELContext context, Object base, Object property) 
         throws ELException {
         
-        Object result = null;
-                               
-        context.setPropertyResolved(false);                      
+        context.setPropertyResolved(false);
         if (FacesContext.getCurrentInstance() == null) {
             return null;
         }                    
         setChainType();
-        result = super.getValue(context, base, property);
+        Object result = super.getValue(context, base, property);
         clearChainType();
         
         return result;
@@ -80,14 +78,13 @@ public class FacesCompositeELResolver extends CompositeELResolver {
 
     public Class<?> getType(ELContext context, Object base, Object property) 
         throws ELException {
-        Class result = null;
-        
+
         context.setPropertyResolved(false);
         if (FacesContext.getCurrentInstance() == null) {
             return null;
         }
         setChainType();
-        result = super.getType(context, base, property);
+        Class<?> result = super.getType(context, base, property);
         clearChainType();
 
         return result;
@@ -108,22 +105,20 @@ public class FacesCompositeELResolver extends CompositeELResolver {
     
     public boolean isReadOnly(ELContext context, Object base, Object property) 
         throws ELException {
-        boolean result = false;
         context.setPropertyResolved(false);
         if (FacesContext.getCurrentInstance() == null) {
             return false;
         }
         setChainType();
-        result = super.isReadOnly(context, base, property);
+        boolean result = super.isReadOnly(context, base, property);
         clearChainType();
         return result;
     }
 
     
     public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
-        Iterator<FeatureDescriptor> result = null;
         setChainType();
-        result = super.getFeatureDescriptors(context, base);
+        Iterator<FeatureDescriptor> result = super.getFeatureDescriptors(context, base);
         clearChainType();
         return result;
     }
@@ -140,7 +135,9 @@ public class FacesCompositeELResolver extends CompositeELResolver {
      * JSF chain, specified in section 5.6.2 of the spec.</p>
      */
 
-    public enum ELResolverChainType { JSP, Faces
+    public enum ELResolverChainType {
+        JSP,
+        Faces
     }
 
     private ELResolverChainType chainType;
@@ -148,8 +145,8 @@ public class FacesCompositeELResolver extends CompositeELResolver {
     /**
      * <p>Guarantee that this instance knows of what chain it is a
      * member.</p>
+     * @param chainType the {@link ELResolverChainType} 
      */
-
     public FacesCompositeELResolver(ELResolverChainType chainType) {
         this.chainType = chainType;
     }

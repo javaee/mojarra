@@ -1,5 +1,5 @@
 /*
- * $Id: ELContextImpl.java,v 1.10 2007/04/27 22:00:57 ofung Exp $
+ * $Id: ELContextImpl.java,v 1.11 2007/07/17 23:14:01 rlubke Exp $
  */
 
 /*
@@ -67,6 +67,7 @@ public class ELContextImpl extends ELContext {
 
     /**
      * Constructs a new ELContext associated with the given ELResolver.
+     * @param resolver the ELResolver to return from {@link #getELResolver()} 
      */
     public ELContextImpl(ELResolver resolver) {
         this.resolver = resolver;

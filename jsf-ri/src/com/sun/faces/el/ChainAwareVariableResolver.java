@@ -1,5 +1,5 @@
 /*
- * $Id: ChainAwareVariableResolver.java,v 1.4 2007/04/27 22:00:57 ofung Exp $
+ * $Id: ChainAwareVariableResolver.java,v 1.5 2007/07/17 23:14:01 rlubke Exp $
  */
 
 /*
@@ -97,16 +97,16 @@ public class ChainAwareVariableResolver extends VariableResolver {
             type = (ELResolverChainType) valueObject;
         }
         if (ELResolverChainType.JSP == type) {
-            ValueExpression ve = null;
-            ve = context.getApplication().getExpressionFactory().createValueExpression(context.getELContext(),
-                    "#{" + name + "}", Object.class);
+            ValueExpression ve = context.getApplication().getExpressionFactory()
+                  .createValueExpression(context.getELContext(),
+                                         "#{" + name + "}", Object.class);
             result = ve.getValue(context.getELContext());
         }
         else if (ELResolverChainType.Faces == type) {
             ELResolver elr = context.getApplication().getELResolver();
             result = elr.getValue(context.getELContext(), null, name);
-        }
-        else {
+        } else {
+            //noinspection ConstantConditions
             assert(false);
         }
 

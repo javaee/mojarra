@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverImpl.java,v 1.32 2007/04/27 22:00:58 ofung Exp $
+ * $Id: PropertyResolverImpl.java,v 1.33 2007/07/17 23:14:01 rlubke Exp $
  */
 
 /*
@@ -77,7 +77,7 @@ public class PropertyResolverImpl extends PropertyResolver {
             return delegate.getType(base, index);
         }
 
-        Class<? extends Object> type = base.getClass();
+        Class<?> type = base.getClass();
         try {
             if (type.isArray()) {
                 Array.get(base, index);
@@ -114,16 +114,14 @@ public class PropertyResolverImpl extends PropertyResolver {
             return delegate.getType(base, property);
         }
 
-        Class result = null;
         try {
             FacesContext context = FacesContext.getCurrentInstance();
-            result = context.getApplication().getELResolver().getType(context.getELContext(), base,property);
+            return context.getApplication().getELResolver().getType(context.getELContext(), base,property);
         } catch (javax.el.PropertyNotFoundException pnfe) {
             throw new PropertyNotFoundException(pnfe);
         } catch (ELException elex) {
             throw new EvaluationException(elex);
         }
-        return result;
     }
 
     // Specified by javax.faces.el.PropertyResolver.getValue(Object,int)
@@ -165,16 +163,14 @@ public class PropertyResolverImpl extends PropertyResolver {
             return delegate.getValue(base, property);
         }
 
-        Object result = null;
         try {
             FacesContext context = FacesContext.getCurrentInstance();
-            result = context.getApplication().getELResolver().getValue(context.getELContext(), base,property);
+            return context.getApplication().getELResolver().getValue(context.getELContext(), base,property);
         } catch (javax.el.PropertyNotFoundException pnfe) {
             throw new PropertyNotFoundException(pnfe);
         } catch (ELException elex) {
             throw new EvaluationException(elex);
         }
-        return result;
     }
 
     // Specified by javax.faces.el.PropertyResolver.isReadOnly(Object,int)
@@ -203,14 +199,12 @@ public class PropertyResolverImpl extends PropertyResolver {
             return delegate.isReadOnly(base, property);
         }
 
-        boolean result = false;
         try {
             FacesContext context = FacesContext.getCurrentInstance();
-            result = context.getApplication().getELResolver().isReadOnly(context.getELContext(), base,property);
+            return context.getApplication().getELResolver().isReadOnly(context.getELContext(), base,property);
         } catch (ELException elex) {
             throw new EvaluationException(elex);
         }
-        return result;
     }
 
     // Specified by javax.faces.el.PropertyResolver.setValue(Object,int,Object)
@@ -225,7 +219,7 @@ public class PropertyResolverImpl extends PropertyResolver {
         }
         
         FacesContext context = FacesContext.getCurrentInstance();
-        Class<? extends Object> type = base.getClass();
+        Class<?> type = base.getClass();
         if (type.isArray()) {
             try {
                 Array.set(base, index, (context.getApplication().
@@ -241,7 +235,8 @@ public class PropertyResolverImpl extends PropertyResolver {
             }
         } else if (base instanceof List) {
             try {
-            	// Inherently not type safe, but nothing can be done about it.
+                // Inherently not type safe, but nothing can be done about it.
+                //noinspection unchecked
                 ((List) base).set(index, value);
             } catch (IndexOutOfBoundsException ioobe) {
                 throw new PropertyNotFoundException(MessageUtils.getExceptionMessageString(
@@ -313,7 +308,8 @@ public class PropertyResolverImpl extends PropertyResolver {
         if (index < 0) {
             throw new PropertyNotFoundException(MessageUtils.getExceptionMessageString(
                         MessageUtils.EL_OUT_OF_BOUNDS_ERROR_ID,
-                        new Object[]{base, new Integer(index)}));
+                        base,
+                        index));
         }
     }
 }
