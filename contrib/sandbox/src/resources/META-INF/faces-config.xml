@@ -43,7 +43,9 @@
               version="1.2">
     
     <application>
+	<!--
         <message-bundle>com.sun.faces.sandbox.Messages</message-bundle>
+	-->
     </application>
     
     <lifecycle>

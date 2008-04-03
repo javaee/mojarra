@@ -187,7 +187,7 @@
     <target name="all" depends="clean,prepare,compile"
             description="Clean and compile all components"/>
 
-    <target name="dist" depends="compile" description="Build distribution files">
+    <target name="dist" depends="clean,compile" description="Build distribution files">
         <mkdir dir="${dist.dir}"/>
         <delete dir="${assemble.dir}"/>
         <mkdir dir="${assemble.dir}"/>
