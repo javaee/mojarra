@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.52 2007/08/30 21:32:35 rlubke Exp $
+ * $Id: GridRenderer.java,v 1.53 2007/09/04 16:35:24 rlubke Exp $
  */
 
 /*
@@ -145,6 +145,8 @@ public class GridRenderer extends BaseTableRenderer {
 
         // Render the ending of this panel
         renderTableEnd(component, context.getResponseWriter());
+
+        clearMetaInfo(component);
 
     }
 
