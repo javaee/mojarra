@@ -321,7 +321,7 @@
             <if>
                 <os family="unix"/>
                 <then>
-                    <exec executable="sh" failonerror="true">
+                    <exec executable="bash" failonerror="true">
                         <arg line="${change.bundle.dir}/cb.sh"/>
                     </exec>
                 </then>
