@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.42 2007/01/26 20:33:43 rlubke Exp $
+ * $Id: TableRenderer.java,v 1.43 2007/04/27 09:23:19 rogerk Exp $
  */
 
 /*
@@ -175,18 +175,6 @@ public class TableRenderer extends HtmlBasicRenderer {
             writer.startElement("tfoot", data);
             writer.writeText("\n", component, null);
         }
-        if (footer != null) {
-            writer.startElement("tr", footer);
-            writer.startElement("td", footer);
-            if (footerClass != null) {
-                writer.writeAttribute("class", footerClass, "footerClass");
-            }
-            writer.writeAttribute("colspan", String.valueOf(columns.size()), null);
-            encodeRecursive(context, footer);
-            writer.endElement("td");
-            writer.endElement("tr");
-            writer.writeText("\n", component, null);
-        }
         if (footerFacets > 0) {
             writer.startElement("tr", data);
             writer.writeText("\n", component, null);
@@ -207,6 +195,18 @@ public class TableRenderer extends HtmlBasicRenderer {
                 writer.endElement("td");
                 writer.writeText("\n", component, null);
             }
+            writer.endElement("tr");
+            writer.writeText("\n", component, null);
+        }
+        if (footer != null) {
+            writer.startElement("tr", footer);
+            writer.startElement("td", footer);
+            if (footerClass != null) {
+                writer.writeAttribute("class", footerClass, "footerClass");
+            }
+            writer.writeAttribute("colspan", String.valueOf(columns.size()), null);
+            encodeRecursive(context, footer);
+            writer.endElement("td");
             writer.endElement("tr");
             writer.writeText("\n", component, null);
         }
