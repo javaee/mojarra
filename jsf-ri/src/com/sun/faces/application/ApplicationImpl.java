@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.95 2007/11/02 00:30:14 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.96 2008/01/22 20:56:01 rlubke Exp $
  */
 
 /*
@@ -273,14 +273,18 @@ public class ApplicationImpl extends Application {
 
         if (associate.hasRequestBeenServiced()) {
             throw new IllegalStateException(
-                    MessageUtils.getExceptionMessageString(
-                    MessageUtils.APPLICATION_INIT_COMPLETE_ERROR_ID));
+                  MessageUtils.getExceptionMessageString(
+                        MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "ELResolver"));
         }
-        if (elResolvers == null) {
-            //noinspection CollectionWithoutInitialCapacity
-            elResolvers = new ArrayList<ELResolver>();
+
+        if (resolver != null) {
+            if (elResolvers == null) {
+                //noinspection CollectionWithoutInitialCapacity
+                elResolvers = new ArrayList<ELResolver>();
+            }
+            elResolvers.add(resolver);
         }
-        elResolvers.add(resolver);
+
     }
     
     public List<ELResolver> getApplicationELResolvers() {
@@ -298,21 +302,19 @@ public class ApplicationImpl extends Application {
 
 
     public synchronized void setViewHandler(ViewHandler handler) {
+
         if (handler == null) {
             String message = MessageUtils.getExceptionMessageString
                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "handler");
             throw new NullPointerException(message);
         }
 
-        if (associate.isResponseRendered()) {
-            // at least one response has been rendered.
-            if (logger.isLoggable(Level.SEVERE)) {
-                logger.log(Level.SEVERE,
-                     "jsf.illegal_attempt_setting_viewhandler_error");
-            }
-            throw new IllegalStateException(MessageUtils.getExceptionMessageString(
-                 MessageUtils.ILLEGAL_ATTEMPT_SETTING_VIEWHANDLER_ID));
+        if (associate.hasRequestBeenServiced()) {
+            throw new IllegalStateException(
+                  MessageUtils.getExceptionMessageString(
+                        MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "ViewHandler"));
         }
+
         viewHandler = handler;
         if (logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE, MessageFormat.format("set ViewHandler Instance to ''{0}''", viewHandler.getClass().getName()));
@@ -347,6 +349,11 @@ public class ApplicationImpl extends Application {
             throw new NullPointerException(message);
         }
 
+        if (associate.isResponseRendered()) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "resolver");
+            throw new NullPointerException(message);
+        }
 
         this.resourceHandler = resourceHandler;
         if (logger.isLoggable(Level.FINE)) {
@@ -364,21 +371,19 @@ public class ApplicationImpl extends Application {
 
 
     public synchronized void setStateManager(StateManager manager) {
+
         if (manager == null) {
             String message = MessageUtils.getExceptionMessageString
                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "manager");
             throw new NullPointerException(message);
         }
 
-        if (associate.isResponseRendered()) {
-            // at least one response has been rendered.
-            if (logger.isLoggable(Level.SEVERE)) {
-                logger.log(Level.SEVERE,
-                     "jsf.illegal_attempt_setting_statemanager_error");
-            }
-            throw new IllegalStateException(MessageUtils.getExceptionMessageString(
-                 MessageUtils.ILLEGAL_ATTEMPT_SETTING_STATEMANAGER_ID));
+        if (associate.hasRequestBeenServiced()) {
+            throw new IllegalStateException(
+                  MessageUtils.getExceptionMessageString(
+                        MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "StateManager"));
         }
+
         stateManager = manager;
         if (logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE, MessageFormat.format("set StateManager Instance to ''{0}''",
@@ -449,17 +454,17 @@ public class ApplicationImpl extends Application {
 
     @SuppressWarnings("deprecation")
     public void setPropertyResolver(PropertyResolver resolver) {
-        // Throw Illegal State Exception if  a PropertyResolver is set after 
-        // a request has been processed.
-         if (associate.hasRequestBeenServiced()) {
-            throw new IllegalStateException(
-                    MessageUtils.getExceptionMessageString(
-                    MessageUtils.APPLICATION_INIT_COMPLETE_ERROR_ID));
-        }
+
         if (resolver == null) {
             String message = MessageUtils.getExceptionMessageString
                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "resolver");
             throw new NullPointerException(message);
+        }
+
+        if (associate.hasRequestBeenServiced()) {
+            throw new IllegalStateException(
+                  MessageUtils.getExceptionMessageString(
+                        MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "PropertyResolver"));
         }
 
         propertyResolver.setDelegate(ELUtils.getDelegatePR(associate, true));
@@ -530,18 +535,17 @@ public class ApplicationImpl extends Application {
 
     @SuppressWarnings("deprecation")
     public void setVariableResolver(VariableResolver resolver) {
-        // Throw Illegal State Exception if  a PropertyResolver is set after
-        // a request has been processed. 
-        if (associate.hasRequestBeenServiced()) {
-            throw new IllegalStateException(
-                    MessageUtils.getExceptionMessageString(
-                    MessageUtils.APPLICATION_INIT_COMPLETE_ERROR_ID));
-        }
 
         if (resolver == null) {
             String message = MessageUtils.getExceptionMessageString
                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "resolver");
             throw new NullPointerException(message);
+        }
+
+        if (associate.hasRequestBeenServiced()) {
+            throw new IllegalStateException(
+                  MessageUtils.getExceptionMessageString(
+                        MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "VariableResolver"));
         }
 
         variableResolver.setDelegate(ELUtils.getDelegateVR(associate, true));

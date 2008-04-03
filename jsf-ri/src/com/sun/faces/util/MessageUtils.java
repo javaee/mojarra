@@ -56,8 +56,6 @@ public class MessageUtils {
           "com.sun.faces.APPLICATION_ASSOCIATE_CTOR_WRONG_CALLSTACK";
     public static final String APPLICATION_ASSOCIATE_EXISTS_ID =
           "com.sun.faces.APPLICATION_ASSOCIATE_EXISTS";
-    public static final String APPLICATION_INIT_COMPLETE_ERROR_ID =
-          "com.sun.faces.APPLICATION_INIT_COMPLETE_ERROR_ID";
     public static final String ASSERTION_FAILED_ID =
           "com.sun.faces.ASSERTION_FAILED";
     public static final String ATTRIBUTE_NOT_SUPORTED_ERROR_MESSAGE_ID =
@@ -130,10 +128,8 @@ public class MessageUtils {
           "com.sun.faces.FACES_CONTEXT_NOT_FOUND";
     public static final String FILE_NOT_FOUND_ERROR_MESSAGE_ID =
           "com.sun.faces.FILE_NOT_FOUND";
-    public static final String ILLEGAL_ATTEMPT_SETTING_STATEMANAGER_ID =
-          "com.sun.faces.ILLEGAL_ATTEMPT_SETTING_STATEMANAGER";
-    public static final String ILLEGAL_ATTEMPT_SETTING_VIEWHANDLER_ID =
-          "com.sun.faces.ILLEGAL_ATTEMPT_SETTING_VIEWHANDLER";
+    public static final String ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID =
+          "com.sun.faces.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT";    
     public static final String ILLEGAL_CHARACTERS_ERROR_MESSAGE_ID =
           "com.sun.faces.ILLEGAL_CHARACTERS_ERROR";
     public static final String ILLEGAL_IDENTIFIER_LVALUE_MODE_ID =
