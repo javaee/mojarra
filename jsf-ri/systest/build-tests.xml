@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.131 2007/04/27 22:01:07 ofung Exp $
+ $Id: build-tests.xml,v 1.132 2007/04/30 23:35:43 rlubke Exp $
 -->
 
 <!--
@@ -281,13 +281,13 @@
                 <fileset dir="${basedir}/build/classes"
                          includes="com/sun/faces/jsptest/ViewTagTestCase.class,
                                    com/sun/faces/jsptest/CommandLinkNoFormTestCase.class,
-                                   com/sun/faces/jsptest/PrependIdTestCase.class,
                                    com/sun/faces/jsptest/FormElTestCase.class,
                                    com/sun/faces/jsptest/MissingActionListenerMethodTestCase.class,
                                    com/sun/faces/jsptest/ConverterTestCase.class,
                                    com/sun/faces/jsptest/IdRefTestCase.class,
                                    com/sun/faces/jsptest/ForEachTestCase.class"/>
                                <!--
+                                   com/sun/faces/jsptest/PrependIdTestCase.class,
                                -->
             </tests>
         </jsf.junit>       

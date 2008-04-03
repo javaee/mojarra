@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
@@ -10,9 +12,9 @@
     <h1>Verify property ordering</h1>
 
 
-<form id="j_id_id15" name="j_id_id15" method="post" action="/jsf-systest/faces/managed04.jsp;jsessionid=b76d0071bbe2d0ec398b04d50039" enctype="application/x-www-form-urlencoded">
-<input type="hidden" name="j_id_id15" value="j_id_id15" />
-<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id85:j_id86" />
+<form id="j_id_id16" name="j_id_id16" method="post" action="/jsf-systest/faces/managed04.jsp;jsessionid=4be1e1717b6e7c5f2bff5c4165d0" enctype="application/x-www-form-urlencoded">
+<input type="hidden" name="j_id_id16" value="j_id_id16" />
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id43:j_id44" />
  one two three fourfivesixseveneight
 </form>
 

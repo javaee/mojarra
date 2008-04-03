@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html
 PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -10,9 +12,9 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     
     <body bgcolor="white">
     
-<form id="form" name="form" method="post" action="/jsf-systest/faces/include-import-interweaving.jsp;jsessionid=bc2576d426f8000866901808a81f" enctype="application/x-www-form-urlencoded">
+<form id="form" name="form" method="post" action="/jsf-systest/faces/include-import-interweaving.jsp;jsessionid=4bbc0a31bc8e689ae2830143bdb5" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="form" value="form" />
-<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id41:j_id42" />
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id27:j_id28" />
 
     
         <p>Outer Template Text followed by 
@@ -26,6 +28,8 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
  
 	    <p>Subview on the outside only with jsp:include:</p>
             
+
+
 
 
 
@@ -60,6 +64,8 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 
 
 
+
+
 <p>Subview 2: Inner template text followed by
 <span id="form:innerSubView:innerComponent3">inner component 3</span></p>
 
@@ -85,6 +91,8 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 
 
 
+
+
 <p>Subview 2: Inner template text followed by
 <span id="form:subview03:innerSubView2:innerComponent4">inner component 4</span></p>
 
@@ -101,6 +109,8 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         
 	    <p>Subview on the outside only with c:import:</p>
             
+
+
 
 
 
@@ -134,6 +144,8 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 
 
 
+
+
 <p>Subview 5: Inner template text followed by
 <span id="form:innerSubView4:innerComponent7">inner component 7</span></p>
 
@@ -151,6 +163,8 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 
 	    <p>Template Text on the outside</p>
             
+
+
 
 
 

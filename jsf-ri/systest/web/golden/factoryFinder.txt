@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
@@ -10,9 +12,9 @@
     <h1>Print out the names of the current Factories</h1>
 
 
-<form id="j_id_id15" name="j_id_id15" method="post" action="/jsf-systest/faces/factoryFinder.jsp;jsessionid=b6724ba361fea07143135fb7294e" enctype="application/x-www-form-urlencoded">
-<input type="hidden" name="j_id_id15" value="j_id_id15" />
-<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id5:j_id6" />
+<form id="j_id_id16" name="j_id_id16" method="post" action="/jsf-systest/faces/factoryFinder.jsp;jsessionid=4a6a287194d75d4c7d41f07ebeac" enctype="application/x-www-form-urlencoded">
+<input type="hidden" name="j_id_id16" value="j_id_id16" />
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id3:j_id4" />
 ApplicationFactoryWrapper FacesContextFactoryWrapper LifecycleFactoryWrapper RenderKitFactoryWrapper 
 </form>
 

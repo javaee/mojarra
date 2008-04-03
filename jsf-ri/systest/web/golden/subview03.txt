@@ -1,3 +1,5 @@
+
+
 <!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
@@ -16,7 +18,9 @@
 <p>
 Begin test &lt;c:include&gt; with subview tag in included page</p>
 
-<p><!--
+<p>
+
+<!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
@@ -30,7 +34,9 @@ foo01
 
 <p>subview03</p>
 
-<p><!--
+<p>
+
+<!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->

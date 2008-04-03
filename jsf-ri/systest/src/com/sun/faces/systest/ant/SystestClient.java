@@ -185,7 +185,7 @@ import java.util.Map;
  * </ul>
  *
  * @author Craig R. McClanahan
- * @version $Revision: 1.19 $ $Date: 2007/04/27 22:01:12 $
+ * @version $Revision: 1.20 $ $Date: 2007/04/30 23:35:43 $
  */
 
 public class SystestClient extends Task {
@@ -711,6 +711,11 @@ public class SystestClient extends Task {
                     outData = line;
                 else
                     outText += line + "\r\n";
+
+                if (line.trim().length() == 0 && saveResponse.isEmpty()) {
+                    lines++;
+                    continue;
+                }
                 saveResponse.add(line);
                 lines++;
             }
@@ -757,7 +762,7 @@ public class SystestClient extends Task {
                     success = false;
             }
             if (success) {
-                result = validateData(outData);
+                result = validateData(outText);
                 if (result != null)
                     success = false;
             }
@@ -968,6 +973,11 @@ public class SystestClient extends Task {
                     outData = line;
                 else
                     outText += line + "\r\n";
+
+                if (line.trim().length() == 0 && saveResponse.isEmpty()) {
+                    lines++;
+                    continue;
+                }
                 saveResponse.add(line);
                 lines++;
             }
@@ -996,7 +1006,7 @@ public class SystestClient extends Task {
                     success = false;
             }
             if (success) {
-                result = validateData(outData);
+                result = validateData(outText);
                 if (result != null)
                     success = false;
             }
@@ -1154,6 +1164,9 @@ public class SystestClient extends Task {
             if (line == null) {
                 break;
             }
+            if (line.trim().length() == 0 && saveGolden.isEmpty()) {
+                continue;
+            }
             saveGolden.add(line);
         }
         is.close();
@@ -1268,7 +1281,7 @@ public class SystestClient extends Task {
      * @param data The output data to be tested
      */
     protected String validateData(String data) {
-
+        data = data.trim();
         if (outContent == null) {
             return (null);
         } else if (data.startsWith(outContent)) {
@@ -1329,7 +1342,7 @@ public class SystestClient extends Task {
 		    !golden.equals(response)) {
                     response = stripJsessionidFromLine(response);
                     golden = stripJsessionidFromLine(golden);
-                    if (!golden.equals(response)) {
+                    if (!golden.trim().equals(response.trim())) {
                         ok = false;
                         break;
                     }

@@ -1,3 +1,5 @@
+
+
 <!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
@@ -8,9 +10,9 @@
 
 
 
-<form id="j_id_id10" name="j_id_id10" method="post" action="/jsf-systest/faces/interweaving03.jsp;jsessionid=b685a9f1d31c72652f9b7619cbcf" enctype="application/x-www-form-urlencoded">
-<input type="hidden" name="j_id_id10" value="j_id_id10" />
-<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id11:j_id12" />
+<form id="j_id_id11" name="j_id_id11" method="post" action="/jsf-systest/faces/interweaving03.jsp;jsessionid=4b9d4981e04824d79b869a2f026c" enctype="application/x-www-form-urlencoded">
+<input type="hidden" name="j_id_id11" value="j_id_id11" />
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id5:j_id6" />
 <table>
 <tbody>
 <tr>

@@ -1,3 +1,5 @@
+
+
 <!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
@@ -15,7 +17,9 @@
 <body>
 <p>Begin test jsp:include without subview and iterator tag in included page</p>
 <br />
-<p><!--
+<p>
+
+<!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
@@ -29,19 +33,19 @@
   
     Array[0]: 
     This component has no ID <br>
-    <input type="text" name="j_id_id15pc2" value="This component has no ID " /><br>
+    <input type="text" name="j_id_id16pc2" value="This component has no ID " /><br>
   
     Array[1]: 
     This component has no ID <br>
-    <input type="text" name="j_id_id15pc2j_id_1" value="This component has no ID " /><br>
+    <input type="text" name="j_id_id16pc2j_id_1" value="This component has no ID " /><br>
   
     Array[2]: 
     This component has no ID <br>
-    <input type="text" name="j_id_id15pc2j_id_2" value="This component has no ID " /><br>
+    <input type="text" name="j_id_id16pc2j_id_2" value="This component has no ID " /><br>
   
     Array[3]: 
     This component has no ID <br>
-    <input type="text" name="j_id_id15pc2j_id_3" value="This component has no ID " /><br>
+    <input type="text" name="j_id_id16pc2j_id_3" value="This component has no ID " /><br>
   
 
 </p>

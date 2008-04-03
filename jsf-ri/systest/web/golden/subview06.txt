@@ -1,3 +1,5 @@
+
+
 <!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
@@ -16,7 +18,9 @@
 <p>Begin test &lt;c:import&gt; with iterator tag in imported page</p>
 
 <br />
-<p><!--
+<p>
+
+<!--
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
@@ -31,19 +35,19 @@
   
     Array[0]: 
     This component has no ID <br>
-    <input type="text" name="subviewOuter:subviewInner:j_id_id17pc2" value="This component has no ID " /><br>
+    <input type="text" name="subviewOuter:subviewInner:j_id_id18pc2" value="This component has no ID " /><br>
   
     Array[1]: 
     This component has no ID <br>
-    <input type="text" name="subviewOuter:subviewInner:j_id_id17pc2j_id_1" value="This component has no ID " /><br>
+    <input type="text" name="subviewOuter:subviewInner:j_id_id18pc2j_id_1" value="This component has no ID " /><br>
   
     Array[2]: 
     This component has no ID <br>
-    <input type="text" name="subviewOuter:subviewInner:j_id_id17pc2j_id_2" value="This component has no ID " /><br>
+    <input type="text" name="subviewOuter:subviewInner:j_id_id18pc2j_id_2" value="This component has no ID " /><br>
   
     Array[3]: 
     This component has no ID <br>
-    <input type="text" name="subviewOuter:subviewInner:j_id_id17pc2j_id_3" value="This component has no ID " /><br>
+    <input type="text" name="subviewOuter:subviewInner:j_id_id18pc2j_id_3" value="This component has no ID " /><br>
   
 
 
