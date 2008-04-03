@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.106 2007/05/21 19:59:38 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.107 2007/05/23 19:52:53 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -42,34 +42,22 @@ package com.sun.faces.config;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
-import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.el.ELContextListenerImpl;
+import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.Util;
 import com.sun.faces.util.Timer;
+import com.sun.faces.util.Util;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import javax.el.CompositeELResolver;
-import javax.el.ELContext;
-import javax.el.ELResolver;
 import javax.el.ExpressionFactory;
-import javax.el.FunctionMapper;
-import javax.el.VariableMapper;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
-import javax.faces.application.Application;
-import javax.faces.application.ApplicationFactory;
-import javax.faces.application.FacesMessage;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseStream;
-import javax.faces.context.ResponseWriter;
-import javax.faces.render.RenderKit;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -77,21 +65,10 @@ import javax.servlet.jsp.JspApplicationContext;
 import javax.servlet.jsp.JspFactory;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.text.MessageFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.text.MessageFormat;
 
 /**
  * <p>Parse all relevant JavaServer Faces configuration resources, and
@@ -326,8 +303,8 @@ public class ConfigureListener implements ServletContextListener {
         // return null unless JspRuntimeContext has been loaded.
         try {
             Class.forName("org.apache.jasper.compiler.JspRuntimeContext");
-        } catch (ClassNotFoundException cnfe) {
-            ;
+        } catch (ClassNotFoundException ignored) {
+            // ignored
         }
 
         if (JspFactory.getDefaultFactory() == null) {
@@ -416,391 +393,6 @@ public class ConfigureListener implements ServletContextListener {
 
 
     // ----------------------------------------------------------- Inner classes
-
-
-    private static class InitFacesContext extends FacesContext {
-
-        private ExternalContext ec;
-        private UIViewRoot viewRoot;
-
-        public InitFacesContext(ServletContext sc) {
-            ec = new ServletContextAdapter(sc);
-            setCurrentInstance(this);
-        }
-
-        public Application getApplication() {
-            ApplicationFactory factory = (ApplicationFactory)
-                 FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-            return factory.getApplication();
-        }
-
-        public Iterator<String> getClientIdsWithMessages() {
-            List<String> list = Collections.emptyList();
-            return list.iterator();
-        }
-
-        public ExternalContext getExternalContext() {
-            return ec;
-        }
-
-        public FacesMessage.Severity getMaximumSeverity() {
-            return FacesMessage.SEVERITY_INFO;
-        }
-
-        public Iterator<FacesMessage> getMessages() {
-            List<FacesMessage> list = Collections.emptyList();
-            return list.iterator();
-        }
-
-        public Iterator<FacesMessage> getMessages(String clientId) {
-            return getMessages();
-        }
-
-        public RenderKit getRenderKit() {
-            return null;
-        }
-
-        public boolean getRenderResponse() {
-            return true;
-        }
-
-        public boolean getResponseComplete() {
-            return true;
-        }
-
-        public ResponseStream getResponseStream() {
-            return null;
-        }
-
-        public void setResponseStream(ResponseStream responseStream) {
-            ;
-        }
-
-        public ResponseWriter getResponseWriter() {
-            return null;
-        }
-
-        public void setResponseWriter(ResponseWriter responseWriter) {
-            ;
-        }
-
-        public UIViewRoot getViewRoot() {
-            if (viewRoot == null) {
-                viewRoot = new UIViewRoot();
-                viewRoot.setLocale(Locale.getDefault());
-            }            
-            return viewRoot;
-        }
-
-        public void setViewRoot(UIViewRoot root) {
-            ;
-        }
-
-        public void addMessage(String clientId, FacesMessage message) {
-            ;
-        }
-
-        public void release() {
-            setCurrentInstance(null);
-        }
-
-        public void renderResponse() {
-            ;
-        }
-
-        public void responseComplete() {
-            ;
-        }
-
-        public ELContext getELContext() {
-            return new ELContext() {
-                public ELResolver getELResolver() {
-                    return null;
-                }
-
-                public FunctionMapper getFunctionMapper() {
-                    return null;
-                }
-
-                public VariableMapper getVariableMapper() {
-                    return null; 
-                }
-            };
-        }
-    }
-
-    private static class ServletContextAdapter extends ExternalContext {
-        
-        private ServletContext servletContext = null;
-        private ApplicationMap applicationMap = null;
-        
-        public ServletContextAdapter(ServletContext sc) {
-            this.servletContext = sc;
-        }
-        
-        public void dispatch(String path) throws IOException {
-        }
-    
-        public String encodeActionURL(String url) {
-            return null;
-        }   
-
-        public String encodeNamespace(String name) {
-            return null;
-        }
-
-
-        public String encodeResourceURL(String url) {
-            return null;
-        }
-
-       @SuppressWarnings("unchecked")
-       public Map<String,Object> getApplicationMap() {
-            if (applicationMap == null) {
-                applicationMap = 
-                    new ApplicationMap(servletContext);
-            }
-            return applicationMap;
-        }
-        
-        public String getAuthType() {
-            return null;
-        }
-
-        public Object getContext() {
-            return servletContext;
-        }
-
-        public String getInitParameter(String name) {
-            return null;
-        }
-
-        public Map getInitParameterMap() {
-            return null;
-        }
-
-        public String getRemoteUser() {
-            return null;
-        }
-
-
-        public Object getRequest() {
-            return null;
-        }
-
-	public void setRequest(Object request) {
-	}
-
-        public String getRequestContextPath() {
-            return null;
-        }
-
-        public Map<String,Object> getRequestCookieMap() {
-            return null;
-        }
-
-        public Map<String,String> getRequestHeaderMap() {
-            return null;
-        }
-
-
-        public Map<String,String[]> getRequestHeaderValuesMap() {
-            return null;
-        }
-
-
-        public Locale getRequestLocale() {
-            return null;
-        }
-
-        public Iterator<Locale> getRequestLocales() {
-            return null;
-        }
-
-
-
-        public Map<String,Object> getRequestMap() {
-            return null;
-        }
-
-
-        public Map<String,String> getRequestParameterMap() {
-            return null;
-        }
-
-
-        public Iterator<String> getRequestParameterNames() {
-            return null;
-        }
-
-
-        public Map<String,String[]> getRequestParameterValuesMap() {
-            return null;
-        }
-
-
-        public String getRequestPathInfo() {
-            return null;
-        }
-
-
-        public String getRequestServletPath() {
-            return null;
-        }
-        
-         
-    public String getRequestContentType() {
-        return null;
-    }
-
-    public String getResponseContentType() {
-        return null;
-    }
-
-        public URL getResource(String path) throws MalformedURLException {
-            return null;
-        }
-
-
-        public InputStream getResourceAsStream(String path) {
-            return null;
-        }
-
-        public Set<String> getResourcePaths(String path) {
-            return null;
-        }
-
-        public Object getResponse() {
-            return null;
-        }
-
-        public void setResponse(Object response) {
-        }
-
-        public Object getSession(boolean create) {
-            return null;
-        }
-
-        public Map<String,Object> getSessionMap() {
-            return null;
-        }
-
-        public java.security.Principal getUserPrincipal() {
-            return null;
-        }
-        
-        public boolean isUserInRole(String role) {
-            return false;
-        }
-
-        public void log(String message) {
-        }
-        
-        public void log(String message, Throwable exception){
-        }
-        
-        public void redirect(String url) throws IOException {
-        }
-
-        public String getRequestCharacterEncoding() {
-            return null;
-        }
-
-        public void setRequestCharacterEncoding(String requestCharacterEncoding) throws UnsupportedEncodingException {
-
-        }
-
-        public String getResponseCharacterEncoding() {
-            return null;
-        }
-
-        public void setResponseCharacterEncoding(String responseCharacterEncoding) {
-        }
-
-    }
-
-    static class ApplicationMap extends java.util.AbstractMap {
-
-        private final ServletContext servletContext;
-
-        ApplicationMap(ServletContext servletContext) {
-            this.servletContext = servletContext;
-        }
-
-        @Override
-        public Object get(Object key) {
-            if (key == null) {
-                throw new NullPointerException();
-            }
-            return servletContext.getAttribute(key.toString());
-        }
-
-
-        @Override
-        public Object put(Object key, Object value) {
-            if (key == null) {
-                throw new NullPointerException();
-            }
-            String keyString = key.toString();
-            Object result = servletContext.getAttribute(keyString);
-            servletContext.setAttribute(keyString, value);
-            return (result);
-        }
-
-
-        @Override
-        public Object remove(Object key) {
-            if (key == null) {
-                return null;
-            }
-            String keyString = key.toString();
-            Object result = servletContext.getAttribute(keyString);
-            servletContext.removeAttribute(keyString);
-            return (result);
-        }
-
-
-        public Set entrySet() {
-           throw new UnsupportedOperationException();
-        }
-
-
-        @Override
-        public boolean equals(Object obj) {
-            return !(obj == null || !(obj instanceof ApplicationMap))
-                 && super.equals(obj);
-        }
-
-
-        @Override
-        public int hashCode() {
-            int hashCode = 7 * servletContext.hashCode();
-            for (Object o : entrySet()) {
-                hashCode += o.hashCode();
-            }
-            return hashCode;
-        }
-
-
-        @Override
-        public void clear() {
-            throw new UnsupportedOperationException();
-        }
-
-
-        @Override
-        public void putAll(Map t) {
-            throw new UnsupportedOperationException();
-        }
-
-
-        @Override
-        public boolean containsKey(Object key) {
-            return (servletContext.getAttribute(key.toString()) != null);
-        }
-
-                
-    } // END ApplicationMap
 
 
     /**
