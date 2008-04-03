@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.74 2007/04/03 17:02:49 rlubke Exp $
+ * $Id: LifecycleImpl.java,v 1.75 2007/04/03 18:25:17 rlubke Exp $
  */
 
 /*
@@ -46,7 +46,6 @@ import java.util.ListIterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.io.IOException;
 
 
 /**
@@ -233,7 +232,7 @@ public class LifecycleImpl extends Lifecycle {
                          new Object[]{
                               listenerClass + ".beforePhase()",
                               phaseId.toString(),
-                              context.getViewRoot().getViewId(),
+                              ((context.getViewRoot() != null) ? context.getViewRoot().getViewId() : ""),
                               e});
                     LOGGER.warning(Util.getStackTraceString(e));
             }
@@ -262,8 +261,8 @@ public class LifecycleImpl extends Lifecycle {
                 LOGGER.log(Level.SEVERE,
                      "jsf.lifecycle.phase.exception",
                      new Object[]{
-                          phaseId,
-                          context.getViewRoot().getViewId(),
+                          phaseId.toString(),
+                          ((context.getViewRoot() != null) ? context.getViewRoot().getViewId() : ""),
                           e});
             }
 
@@ -290,7 +289,7 @@ public class LifecycleImpl extends Lifecycle {
                          new Object[]{
                               listenerClass + ".afterPhase()",
                               phaseId.toString(),
-                              context.getViewRoot().getViewId(),
+                              ((context.getViewRoot() != null) ? context.getViewRoot().getViewId() : ""),
                               e});
                     LOGGER.warning(Util.getStackTraceString(e));
                 }
