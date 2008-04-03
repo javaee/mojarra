@@ -1794,6 +1794,7 @@ public abstract class UIComponentBase extends UIComponent {
         private UIComponent component;
 
         public ChildrenList(UIComponent component) {
+            super(6);
             this.component = component;
         }
 
@@ -2085,6 +2086,7 @@ public abstract class UIComponentBase extends UIComponent {
         UIComponent component;
 
         public FacetsMap(UIComponent component) {
+            super(3, 1.0f);
             this.component = component;
         }
 

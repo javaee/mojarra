@@ -714,7 +714,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
     protected void addChild(UIComponent child) {
 
         if (createdComponents == null) {
-            createdComponents = new ArrayList<String>(32);
+            createdComponents = new ArrayList<String>(6);
         }
         createdComponents.add(child.getId());
     }
@@ -738,7 +738,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 
         if (createdFacets == null) {
             //noinspection CollectionWithoutInitialCapacity
-            createdFacets = new ArrayList<String>();
+            createdFacets = new ArrayList<String>(3);
         }
         createdFacets.add(name);
 
