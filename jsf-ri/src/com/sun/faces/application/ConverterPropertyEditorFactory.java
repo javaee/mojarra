@@ -56,7 +56,6 @@ import java.util.regex.Pattern;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
-import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
 
 /**
@@ -272,7 +271,7 @@ public class ConverterPropertyEditorFactory {
          * Obtain the bytes that define the given class by looking for the
          * ".class" resource and loading the binary data.
          * 
-         * @throws IOException
+         * @throws IOException if an error occurs loading the binary data
          */
         private void loadTemplateBytes() throws IOException {
             String resourceName = '/'
@@ -372,7 +371,7 @@ public class ConverterPropertyEditorFactory {
          * <code>templateBytes</code>, but with all the replacements in
          * <code>replacements</code> performed.
          * 
-         * @param replacements
+         * @param replacements one or more Utf8InfoReplacments
          * @return the bytes for the new class definition.
          */
         private byte[] replaceInTemplate(Utf8InfoReplacement... replacements) {
@@ -397,14 +396,13 @@ public class ConverterPropertyEditorFactory {
         }
 
         /**
-         * Generate the bytes for a new class with the given name and target
+         * @return the bytes for a new class with the given name and target
          * class.
          * 
          * @param newClassName
          *            the binary name of the new class.
          * @param targetClassName
          *            the binary name of the PropertyEditor's target class.
-         * @return
          */
         public byte[] generateClassBytesFor(String newClassName,
             String targetClassName) {
@@ -458,7 +456,7 @@ public class ConverterPropertyEditorFactory {
             if ((c == null) && (myLoader != null) && (myLoader != targetLoader)) {
                 try {
                     c = myLoader.loadClass(name);
-                } catch (ClassNotFoundException e2) {
+                } catch (ClassNotFoundException ignored) {
                 }
             }
             // Otherwise go ahead with the targetLoader and with the dynamic
@@ -542,7 +540,7 @@ public class ConverterPropertyEditorFactory {
      * Create a <code>ConverterPropertyEditorFactory</code> that uses the
      * specified template class.
      * 
-     * @param templateClass
+     * @param templateClass the template
      */
     public ConverterPropertyEditorFactory(
         Class<? extends ConverterPropertyEditorBase> templateClass) {
@@ -550,7 +548,7 @@ public class ConverterPropertyEditorFactory {
     }
 
     /**
-     * Return the single default instance of this class (created with the
+     * @return the single default instance of this class (created with the
      * default template class).
      */
     public static synchronized ConverterPropertyEditorFactory getDefaultInstance() {

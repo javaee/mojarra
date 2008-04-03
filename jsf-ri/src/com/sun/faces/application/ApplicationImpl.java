@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.93 2007/04/27 22:00:53 ofung Exp $
+ * $Id: ApplicationImpl.java,v 1.94 2007/07/17 21:18:11 rlubke Exp $
  */
 
 /*
@@ -639,7 +639,7 @@ public class ApplicationImpl extends Application {
             for (Class<?> clazz : types) {
                 // go directly against map to prevent cyclic method calls
                 converterTypeMap.put(clazz, converterClass);
-                addPropertyEditorIfNecessary(clazz, converterClass);
+                addPropertyEditorIfNecessary(clazz);
             }
         }
         
@@ -668,7 +668,7 @@ public class ApplicationImpl extends Application {
             addConverter(converterId, converterClass);
         } else {
             converterTypeMap.put(targetClass, converterClass);
-            addPropertyEditorIfNecessary(targetClass, converterClass);
+            addPropertyEditorIfNecessary(targetClass);
         }                
         
         if (logger.isLoggable(Level.FINE)) {
@@ -695,9 +695,11 @@ public class ApplicationImpl extends Application {
      * passing the <code>ConverterPropertyEditor</code> class for the
      * <code>targetClass</code> if the target class is not one of the standard
      * by-type converter target classes.
+     * @param targetClass the target class for which a PropertyEditory may or
+     *  may not be created
      */
     
-    private void addPropertyEditorIfNecessary(Class targetClass, String converterClass) {
+    private void addPropertyEditorIfNecessary(Class targetClass) {
         PropertyEditor editor = PropertyEditorManager.findEditor(targetClass);
         if (null != editor) {
             return;
@@ -1050,6 +1052,7 @@ public class ApplicationImpl extends Application {
      *
      * @param key Used to look up the value in the <code>Map</code>.
      * @param map The <code>Map</code> that will be searched.
+     * @param targetClass the target class for the single argument ctor
      * @return The new object instance.
      */
     protected Object newConverter(Class key, Map<Class,Object> map, Class targetClass) {
@@ -1077,9 +1080,7 @@ public class ApplicationImpl extends Application {
         }
         
         Constructor ctor = 
-              ReflectionUtils.lookupConstructor(
-                    clazz,
-                                                Class.class);
+              ReflectionUtils.lookupConstructor(clazz, Class.class);
         Throwable cause = null;
         if (ctor != null) {
             try {

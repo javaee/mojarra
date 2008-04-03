@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigNavigationCase.java,v 1.12 2007/04/27 22:00:53 ofung Exp $
+ * $Id: ConfigNavigationCase.java,v 1.13 2007/07/17 21:18:12 rlubke Exp $
  */
 
 /*
@@ -124,6 +124,7 @@ public class ConfigNavigationCase {
      * The "key" is defined as the combination of
      * <code>from-view-id</code><code>from-action</code>
      * <code>from-outcome</code>.
+     * @return the derived key
      */
     public String getKey() {
         return key;

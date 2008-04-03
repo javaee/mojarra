@@ -51,7 +51,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import com.sun.faces.RIConstants;
-import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageFactory;
 import com.sun.faces.util.FacesLogger;
 
@@ -131,7 +130,7 @@ public abstract class ConverterPropertyEditorBase extends PropertyEditorSupport 
             setValue(converter.getAsObject(context, component, textValue));
         } catch (ConverterException ce) {
             logger.warning("setAsText: ConverterException: " + ce.getMessage());
-            addConversionErrorMessage(context, component, ce, textValue);
+            addConversionErrorMessage(context, component, ce);
         }
     }
 
@@ -160,13 +159,14 @@ public abstract class ConverterPropertyEditorBase extends PropertyEditorSupport 
         try {
             return converter.getAsString(context, component, getValue());
         } catch (ConverterException ce) {
-            addConversionErrorMessage(context, component, ce, getValue());
+            addConversionErrorMessage(context, component, ce);
             return super.getAsText();
         }
     }
 
     private void addConversionErrorMessage(FacesContext context,
-        UIComponent component, ConverterException ce, Object value) {
+                                           UIComponent component,
+                                           ConverterException ce) {
         String converterMessageString = null;
         FacesMessage message;
         UIInput input;

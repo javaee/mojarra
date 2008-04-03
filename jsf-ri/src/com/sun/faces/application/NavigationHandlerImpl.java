@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.56 2007/04/27 22:00:54 ofung Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.57 2007/07/17 21:18:12 rlubke Exp $
  */
 
 /*
@@ -55,7 +55,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sun.faces.config.ConfigureListener;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;

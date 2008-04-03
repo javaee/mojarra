@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationFactoryImpl.java,v 1.18 2007/04/27 22:00:53 ofung Exp $
+ * $Id: ApplicationFactoryImpl.java,v 1.19 2007/07/17 21:18:11 rlubke Exp $
  */
 
 /*
@@ -40,7 +40,6 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.FacesLogger;
 

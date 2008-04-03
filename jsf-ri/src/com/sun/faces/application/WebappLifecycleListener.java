@@ -36,27 +36,20 @@
 
 package com.sun.faces.application;
 
+import com.sun.faces.el.ELUtils;
 import com.sun.faces.io.FastStringWriter;
-import com.sun.faces.spi.ManagedBeanFactory.Scope;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.FacesLogger;
 import com.sun.faces.mgbean.BeanManager;
+import com.sun.faces.util.FacesLogger;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextAttributeEvent;
-import javax.servlet.ServletContextAttributeListener;
 import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletRequestAttributeEvent;
-import javax.servlet.ServletRequestAttributeListener;
 import javax.servlet.ServletRequestEvent;
-import javax.servlet.ServletRequestListener;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionAttributeListener;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionEvent;
-import javax.servlet.http.HttpSessionListener;
 
 import java.io.PrintWriter;
 import java.util.Enumeration;
@@ -77,20 +70,28 @@ public class WebappLifecycleListener {
     private ServletContext servletContext;
     private ApplicationAssociate applicationAssociate;
 
-    /** The request is about to go out of scope of the web application. */
+    /**
+     * The request is about to go out of scope of the web application.
+     *
+     * @param event the notification event
+     */
     public void requestDestroyed(ServletRequestEvent event) {       
         ServletRequest request = event.getServletRequest();
         for (Enumeration e = request.getAttributeNames(); e.hasMoreElements(); ) {
             String beanName = (String)e.nextElement();
             handleAttributeEvent(beanName, 
                                  request.getAttribute(beanName), 
-                                 Scope.REQUEST);
+                                 ELUtils.Scope.REQUEST);
         }
         ApplicationAssociate.setCurrentInstance(null);
     }
 
-    /** The request is about to come into scope of the web application. */
-    public void requestInitialized(ServletRequestEvent sre) {
+    /**
+     * The request is about to come into scope of the web application.
+     *
+     * @param event the notification event
+     */
+    public void requestInitialized(ServletRequestEvent event) {
         ApplicationAssociate.setCurrentInstance(getAssociate());
     }
 
@@ -106,23 +107,26 @@ public class WebappLifecycleListener {
             String beanName = (String)e.nextElement();
             handleAttributeEvent(beanName, 
                                  session.getAttribute(beanName), 
-                                 Scope.SESSION);
+                                 ELUtils.Scope.SESSION);
         }
     }
 
     /**
      * Notification that an existing attribute has been removed from the
-     * * servlet request. Called after the attribute is removed.
+     * servlet request. Called after the attribute is removed.
+     * @param event the notification event
      */
     public void attributeRemoved(ServletRequestAttributeEvent event) {
         handleAttributeEvent(event.getName(),
                              event.getValue(),
-                             Scope.REQUEST);
+                             ELUtils.Scope.REQUEST);
     }
 
     /**
      * Notification that an attribute was replaced on the
-     * * servlet request. Called after the attribute is replaced.
+     * servlet request. Called after the attribute is replaced.
+     *
+     * @param event the notification event
      */
     public void attributeReplaced(ServletRequestAttributeEvent event) {
         String attrName = event.getName();
@@ -135,22 +139,28 @@ public class WebappLifecycleListener {
         if (event.getValue() != newValue) {
             handleAttributeEvent(attrName,
                                  event.getValue(),
-                                 Scope.REQUEST);
+                                 ELUtils.Scope.REQUEST);
         }
     }
     
 
-    /** Notification that an attribute has been removed from a session. 
+    /**
+     * Notification that an attribute has been removed from a session.
      * Called after the attribute is removed.
+     *
+     * @param event the nofication event
      */
     public void attributeRemoved(HttpSessionBindingEvent event) {
         handleAttributeEvent(event.getName(),
                              event.getValue(),
-                             Scope.SESSION);
+                             ELUtils.Scope.SESSION);
     }
 
-    /** Notification that an attribute has been replaced in a session. 
-     * Called after the attribute is replaced. 
+    /**
+     * Notification that an attribute has been replaced in a session.
+     * Called after the attribute is replaced.
+     *
+     * @param event the notification event
      */
     public void attributeReplaced(HttpSessionBindingEvent event) {
         HttpSession session = event.getSession();
@@ -164,23 +174,29 @@ public class WebappLifecycleListener {
         if (event.getValue() != newValue) {
             handleAttributeEvent(attrName,
                                  event.getValue(),
-                                 Scope.SESSION);
+                                 ELUtils.Scope.SESSION);
         }
 
     }
 
 
-    /** Notification that an existing attribute has been removed from the servlet context. 
-     * Called after the attribute is removed. 
+    /**
+     * Notification that an existing attribute has been removed from the servlet context.
+     * Called after the attribute is removed.
+     *
+     * @param event the notification event
      */
     public void attributeRemoved(ServletContextAttributeEvent event) {
         handleAttributeEvent(event.getName(),
                              event.getValue(),
-                             Scope.APPLICATION);
+                             ELUtils.Scope.APPLICATION);
     }
 
-    /** Notification that an attribute on the servlet context has been replaced. 
-     * Called after the attribute is replaced. 
+    /**
+     * Notification that an attribute on the servlet context has been replaced.
+     * Called after the attribute is replaced.
+     *
+     * @param event the notification event
      */
     public void attributeReplaced(ServletContextAttributeEvent event) {
         ServletContext context = event.getServletContext();
@@ -194,13 +210,13 @@ public class WebappLifecycleListener {
         if (event.getValue() != newValue) {
             handleAttributeEvent(attrName,
                                  event.getValue(),
-                                 Scope.APPLICATION);
+                                 ELUtils.Scope.APPLICATION);
         }
     }
 
     private void handleAttributeEvent(String beanName,
                                       Object bean,
-                                      Scope scope) {
+                                      ELUtils.Scope scope) {
 
         ApplicationAssociate associate = getAssociate();
         try {
@@ -240,9 +256,11 @@ public class WebappLifecycleListener {
      * All ServletContextListeners are notified of context
      * initialization before any filter or servlet in the web
      * application is initialized.
+     *
+     * @param event the notification event
      */
-    public void contextInitialized(ServletContextEvent sce) {
-        this.servletContext = sce.getServletContext();
+    public void contextInitialized(ServletContextEvent event) {
+        this.servletContext = event.getServletContext();
     }
 
     /**
@@ -250,6 +268,8 @@ public class WebappLifecycleListener {
      * All servlets and filters have been destroy()ed before any
      * ServletContextListeners are notified of context
      * destruction.
+     *
+     * @param event the nofication event
      */
     public void contextDestroyed(ServletContextEvent event) {
         
@@ -257,7 +277,7 @@ public class WebappLifecycleListener {
             String beanName = (String)e.nextElement();
             handleAttributeEvent(beanName, 
                                  servletContext.getAttribute(beanName), 
-                                 Scope.APPLICATION);
+                                 ELUtils.Scope.APPLICATION);
         }
         this.applicationAssociate = null;
     }
