@@ -154,6 +154,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
      */
     public boolean isResourceRequest(FacesContext context) {
 
+        // RELEASE_PENDING (rlubke) revisit        
         String viewId = normalizeViewId(context);
         boolean result = false;
         boolean matchesExcludeEntry = false;
@@ -178,9 +179,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
      */
     public void handleResourceRequest(FacesContext context) throws IOException {
 
-        // TODO merge ViewHandler stuff from jsf-extendsions to here
-
-        // PENDING REVIEW
+        // RELEASE_PENDING (rlubke) revisit
         String viewId = normalizeViewId(context);
         String resourceName;
         String libraryName;
@@ -302,8 +301,5 @@ public class ResourceHandlerImpl extends ResourceHandler {
         return path;
 
     }
-
-    // ----------------------------------------------------------- Inner Classes
-
 
 }

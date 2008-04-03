@@ -156,6 +156,7 @@ public class ResourceImpl extends Resource {
 
     /**
      * @see javax.faces.application.Resource#userAgentNeedsUpdate(javax.faces.context.FacesContext)
+     * RELEASE_PENDING (rlubke) revisit implementation
      */
     public boolean userAgentNeedsUpdate(FacesContext context) {
 
@@ -172,7 +173,6 @@ public class ResourceImpl extends Resource {
             return true;
         }
 
-        // PENDING (fix)
         /*
         if (resourceInfo.getOrigin() == OriginEnum.FileSystem) {
             ExternalContext extContext = context.getExternalContext();
