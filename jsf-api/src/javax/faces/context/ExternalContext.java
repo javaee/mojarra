@@ -35,7 +35,7 @@
  */
 
 /*
- * $Id: ExternalContext.java,v 1.31 2007/09/24 19:57:28 edburns Exp $
+ * $Id: ExternalContext.java,v 1.32 2007/09/24 20:12:38 edburns Exp $
  */
  
 /*
@@ -422,6 +422,10 @@ public abstract class ExternalContext {
      *
      * @param path The context of the requested initialization parameter
      *
+     * <p>The default implementation throws 
+     * <code>UnsupportedOperationException</code> and is provided
+     * for the sole purpose of not breaking existing applications that extend
+     * this class.</p>
      * @since 2.0
      */
     public String getRealPath(String path) {
