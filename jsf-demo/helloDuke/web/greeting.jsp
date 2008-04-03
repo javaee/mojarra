@@ -75,4 +75,5 @@
 		          type="submit" />
     </h:form>
     </f:view>
+    </body>
 </HTML>  
