@@ -129,8 +129,7 @@ public class TestBean {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         InputStream is = null;
         try {
-            is = //Thread.currentThread().getContextClassLoader().getResourceAsStream("/sample.pdf");
-                FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/sample.pdf");
+            is = Thread.currentThread().getContextClassLoader().getResourceAsStream("/sample.pdf");
 
             int count = 0;
             byte[] buffer = new byte[4096];
@@ -158,8 +157,7 @@ public class TestBean {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         InputStream is = null;
         try {
-            is = //Thread.currentThread().getContextClassLoader().getResourceAsStream("/sample.png");
-                FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/sample.png");
+            is = Thread.currentThread().getContextClassLoader().getResourceAsStream("/sample.png");
 
             int count = 0;
             byte[] buffer = new byte[4096];
