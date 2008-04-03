@@ -104,8 +104,26 @@
         <zip destfile="${dist.dir}/javaserverfaces_source.zip">
 
             <zipfileset dir="${basedir}"
-                        excludes="**/*.class, **/build.properties/**, **/CVS/**, **/build/**, **/dist/**, **/www/**,
-          **/jsf-demo/**, **/dependencies/**, **/test-sqe/**, **/contrib/**" prefix="javaserverfaces_sources"/>
+                        excludes="**/*.class,
+                                  **/build.properties/**,
+                                  **/CVS/**,
+                                  **/build/javadocs/**,
+                                  **/build/classes/**,
+                                  **/build/lib/**,
+                                  **/build/generate/facesdoc/**,
+                                  **/build/generate/last-generation,
+                                  **/build/tlddocs/**,
+                                  **/build/generate/last-taglib-generation,
+                                  **/build/generate/conf/**,
+                                  **/build/TAG*txt,
+                                  **/dist/**,
+                                  **/www/**,
+                                  **/jsf-demo/**,
+                                  **/dependencies/**,
+                                  **/test-sqe/**,
+                                  **/contrib/**,
+                                  **/repo/**"
+                        prefix="javaserverfaces_sources"/>
              <zipfileset dir="${basedir}"
                         includes="${basedir}/build.xml" prefix="javaserverfaces_sources"/>
 

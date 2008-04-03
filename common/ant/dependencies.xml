@@ -58,6 +58,7 @@
     <property name="jsp.api.version" value="2.1"/>
     <property name="jstl.api.version" value="1.2"/>
     <property name="annotation.api.version" value="1.0"/>
+    <property name="portlet.api.version" value="1.0"/>
     <property name="maven.repository.importer.version" value="1.2"/>
 	
     <property name="maven2.mirror" value="http://mirrors.ibiblio.org/pub/mirrors/maven2"/>
@@ -86,6 +87,7 @@
     <property name="sun-commons-digester.jar"      value="${dependency.jar.dir}/com-sun-commons-digester.jar"/>
     <property name="sun-commons-collections.jar"   value="${dependency.jar.dir}/com-sun-commons-collections.jar"/>
     <property name="sun-commons-logging.jar"       value="${dependency.jar.dir}/com-sun-commons-logging-api.jar"/>
+    <property name="portlet.jar"                   value="${dependency.jar.dir}/portlet-api-${portlet.api.version}.jar"/>
 
     <property name="glassfish.download.url"        value="http://java.net/download/javaee5/fcs_branch/promoted" />
     <property name="glassfish.installer.jar"       value="glassfish-installer-v1_ur1-p01-b02.jar"/>    
@@ -229,6 +231,18 @@
                      dest="${annotation.jar}"
                      usetimestamp="true"/>
 
+            </then>
+        </if>
+
+        <!-- Portlet -->
+        <if>
+            <not>
+                <available file="${portlet.jar}" property="ignored"/>
+            </not>
+            <then>
+                <get src="${maven2.mirror}/javax/portlet/portlet-api/${portlet.api.version}/portlet-api-${portlet.api.version}.jar"
+                     dest="${portlet.jar}"
+                     usetimestamp="true"/>
             </then>
         </if>
 
