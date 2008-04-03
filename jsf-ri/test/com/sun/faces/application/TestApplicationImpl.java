@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.34 2007/02/27 23:10:20 rlubke Exp $
+ * $Id: TestApplicationImpl.java,v 1.35 2007/04/03 16:40:50 rlubke Exp $
  */
 
 /*
@@ -31,22 +31,24 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.cactus.JspFacesTestCase;
-import com.sun.faces.TestComponent;
 import com.sun.faces.RIConstants;
-import com.sun.faces.util.Util;
+import com.sun.faces.TestComponent;
+import com.sun.faces.cactus.JspFacesTestCase;
 import com.sun.faces.cactus.TestingUtil;
+import com.sun.faces.util.Util;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.Map;
-
+import javax.el.ELException;
+import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.convert.IntegerConverter;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
+import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.el.PropertyResolver;
@@ -56,15 +58,16 @@ import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 
-import javax.el.ELException;
-import javax.el.ValueExpression;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 /**
  * <B>TestApplicationImpl</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.34 2007/02/27 23:10:20 rlubke Exp $
+ * @version $Id: TestApplicationImpl.java,v 1.35 2007/04/03 16:40:50 rlubke Exp $
  */
 
 public class TestApplicationImpl extends JspFacesTestCase {
@@ -613,6 +616,53 @@ public class TestApplicationImpl extends JspFacesTestCase {
         result = ve2.getValue(getFacesContext().getELContext());      
         assertTrue(result.equals("TestOldVariableResolver"));
     }
+
+    public void testConverterUpdate() {        
+
+        FacesContext context = getFacesContext();
+        Application app = context.getApplication();
+
+        Converter intConverter = application.createConverter("javax.faces.Integer");
+        Converter intConverter2 = application.createConverter(Integer.TYPE);
+        Converter intConverter3 = application.createConverter(Integer.class);
+
+        assertTrue(IntegerConverter.class.equals(intConverter.getClass())
+             && IntegerConverter.class.equals(intConverter2.getClass())
+             && IntegerConverter.class.equals(intConverter3.getClass()));
+
+        app.addConverter("javax.faces.Integer", CustomIntConverter.class.getName());
+
+        intConverter = application.createConverter("javax.faces.Integer");
+        intConverter2 = application.createConverter(Integer.TYPE);
+        intConverter3 = application.createConverter(Integer.class);
+
+        assertTrue(CustomIntConverter.class.equals(intConverter.getClass())
+             && CustomIntConverter.class.equals(intConverter2.getClass())
+             && CustomIntConverter.class.equals(intConverter3.getClass()));
+
+        app.addConverter(Integer.TYPE, IntegerConverter.class.getName());
+
+        intConverter = application.createConverter("javax.faces.Integer");
+        intConverter2 = application.createConverter(Integer.TYPE);
+        intConverter3 = application.createConverter(Integer.class);
+
+        assertTrue(IntegerConverter.class.equals(intConverter.getClass())
+             && IntegerConverter.class.equals(intConverter2.getClass())
+             && IntegerConverter.class.equals(intConverter3.getClass()));
+
+        app.addConverter(Integer.class, CustomIntConverter.class.getName());
+
+        intConverter = application.createConverter("javax.faces.Integer");
+        intConverter2 = application.createConverter(Integer.TYPE);
+        intConverter3 = application.createConverter(Integer.class);
+
+        assertTrue(CustomIntConverter.class.equals(intConverter.getClass())
+             && CustomIntConverter.class.equals(intConverter2.getClass())
+             && CustomIntConverter.class.equals(intConverter3.getClass()));
+
+        // reset to the standard converter
+        app.addConverter("javax.faces.Integer", IntegerConverter.class.getName());
+    }
     
     public static void clearResourceBundlesFromAssociate(ApplicationImpl application) {
         ApplicationAssociate associate = (ApplicationAssociate)
@@ -629,6 +679,22 @@ public class TestApplicationImpl extends JspFacesTestCase {
             if (null != resourceBundles) {
                 resourceBundles.clear();
             }
+        }
+    }
+
+
+    // ----------------------------------------------------------- Inner Classes
+
+    public static class CustomIntConverter implements Converter {
+
+        private IntegerConverter delegate = new IntegerConverter();
+
+        public Object getAsObject(FacesContext context, UIComponent component, String value) {
+            return delegate.getAsObject(context, component, value);
+        }
+
+        public String getAsString(FacesContext context, UIComponent component, Object value) {
+            return delegate.getAsString(context, component, value);
         }
     }
 

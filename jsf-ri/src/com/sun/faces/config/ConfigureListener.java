@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.99 2007/03/21 17:57:42 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.100 2007/04/03 16:40:50 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -107,6 +107,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -168,35 +169,7 @@ public class ConfigureListener implements ServletContextListener {
         FactoryFinder.FACES_CONTEXT_FACTORY,
         FactoryFinder.LIFECYCLE_FACTORY,
         FactoryFinder.RENDER_KIT_FACTORY
-    };
-
-    /**
-     * <p>Array of known primitive types.</p>
-     */
-    private static final Class[] PRIM_CLASSES_TO_CONVERT = {
-        java.lang.Boolean.TYPE,
-        java.lang.Byte.TYPE,
-        java.lang.Character.TYPE,
-        java.lang.Double.TYPE,
-        java.lang.Float.TYPE,
-        java.lang.Integer.TYPE,
-        java.lang.Long.TYPE,
-        java.lang.Short.TYPE
-    };
-
-    /**
-     * <p>Array of known converters for primitive types.</p>
-     */
-    private static final String[] CONVERTERS_FOR_PRIMS = {
-        "javax.faces.convert.BooleanConverter",
-        "javax.faces.convert.ByteConverter",
-        "javax.faces.convert.CharacterConverter",
-        "javax.faces.convert.DoubleConverter",
-        "javax.faces.convert.FloatConverter",
-        "javax.faces.convert.IntegerConverter",
-        "javax.faces.convert.LongConverter",
-        "javax.faces.convert.ShortConverter"
-    };
+    };    
 
 
     /**
@@ -719,17 +692,6 @@ public class ConfigureListener implements ServletContextListener {
     private void configure(ConverterBean[] config) throws Exception {
        
         Application application = application();
-
-        // at a minimum, configure the primitive converters
-        for (int i = 0, len = PRIM_CLASSES_TO_CONVERT.length; i < len; i++) {
-            if (LOGGER.isLoggable(Level.FINER)) {
-                LOGGER.finer(MessageFormat.format("addConverterByClass(converterForClass={0},coverterClass={1})",
-                                                  PRIM_CLASSES_TO_CONVERT[i],
-                                                  CONVERTERS_FOR_PRIMS[i]));
-            }
-            application.addConverter(PRIM_CLASSES_TO_CONVERT[i],
-                                     CONVERTERS_FOR_PRIMS[i]);
-        }
 
         if (config == null) {
             return;

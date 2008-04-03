@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.90 2007/03/21 21:45:00 jdlee Exp $
+ * $Id: ApplicationImpl.java,v 1.91 2007/04/03 16:40:50 rlubke Exp $
  */
 
 /*
@@ -29,6 +29,15 @@
 
 package com.sun.faces.application;
 
+import com.sun.faces.RIConstants;
+import com.sun.faces.el.ELUtils;
+import com.sun.faces.el.FacesCompositeELResolver;
+import com.sun.faces.el.PropertyResolverImpl;
+import com.sun.faces.el.VariableResolverImpl;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.ReflectionUtils;
+import com.sun.faces.util.Util;
+
 import javax.el.CompositeELResolver;
 import javax.el.ELContextListener;
 import javax.el.ELException;
@@ -55,6 +64,7 @@ import javax.faces.validator.Validator;
 import java.beans.PropertyEditor;
 import java.beans.PropertyEditorManager;
 import java.lang.reflect.Constructor;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -63,19 +73,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.text.MessageFormat;
-
-import com.sun.faces.el.ELUtils;
-import com.sun.faces.el.FacesCompositeELResolver;
-import com.sun.faces.el.PropertyResolverImpl;
-import com.sun.faces.el.VariableResolverImpl;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.ReflectionUtils;
-import com.sun.faces.util.Util;
-import com.sun.faces.RIConstants;
 
 
 /**
@@ -92,6 +93,29 @@ public class ApplicationImpl extends Application {
             + Util.APPLICATION_LOGGER);
 
     private static final ELContextListener[] EMPTY_EL_CTX_LIST_ARRAY = { };
+
+    private static final Map<String,Class<?>[]> STANDARD_CONV_ID_TO_TYPE_MAP =
+         new HashMap<String,Class<?>[]>(8, 1.0f);
+    private static final Map<Class<?>,String> STANDARD_TYPE_TO_CONV_ID_MAP =
+         new HashMap<Class<?>,String>(16, 1.0f);
+
+    static {
+        STANDARD_CONV_ID_TO_TYPE_MAP.put("javax.faces.Byte", new Class[] { Byte.TYPE, Byte.class});
+        STANDARD_CONV_ID_TO_TYPE_MAP.put("javax.faces.Boolean", new Class[] { Boolean.TYPE, Boolean.class});
+        STANDARD_CONV_ID_TO_TYPE_MAP.put("javax.faces.Character", new Class[] { Character.TYPE, Character.class});
+        STANDARD_CONV_ID_TO_TYPE_MAP.put("javax.faces.Short", new Class[] { Short.TYPE, Short.class });
+        STANDARD_CONV_ID_TO_TYPE_MAP.put("javax.faces.Integer", new Class[] { Integer.TYPE, Integer.class });
+        STANDARD_CONV_ID_TO_TYPE_MAP.put("javax.faces.Long", new Class[] { Long.TYPE, Long.class });
+        STANDARD_CONV_ID_TO_TYPE_MAP.put("javax.faces.Float", new Class[] { Float.TYPE, Float.class });
+        STANDARD_CONV_ID_TO_TYPE_MAP.put("javax.faces.Double", new Class[] { Double.TYPE, Double.class });
+        for (Map.Entry<String,Class<?>[]> entry : STANDARD_CONV_ID_TO_TYPE_MAP.entrySet()) {
+            Class<?>[] types = entry.getValue();
+            String key = entry.getKey();
+            for (Class<?> clazz : types) {
+                STANDARD_TYPE_TO_CONV_ID_MAP.put(clazz, key);
+            }
+        }
+    }
 
     // Relationship Instance Variables
 
@@ -598,6 +622,15 @@ public class ApplicationImpl extends Application {
         }
         
         converterIdMap.put(converterId, converterClass);
+
+        Class<?>[] types = STANDARD_CONV_ID_TO_TYPE_MAP.get(converterId);
+        if (types != null) {
+            for (Class<?> clazz : types) {
+                // go directly against map to prevent cyclic method calls
+                converterTypeMap.put(clazz, converterClass);
+                addPropertyEditorIfNecessary(clazz, converterClass);
+            }
+        }
         
         if (logger.isLoggable(Level.FINE)) {
             logger.fine(MessageFormat.format("added converter of type ''{0}'' and class ''{1}''",
@@ -618,9 +651,14 @@ public class ApplicationImpl extends Application {
                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "converterClass");
             throw new NullPointerException(message);
         }
-        
-        converterTypeMap.put(targetClass, converterClass);
-        addPropertyEditorIfNecessary(targetClass, converterClass);
+
+        String converterId = STANDARD_TYPE_TO_CONV_ID_MAP.get(targetClass);
+        if (converterId != null) {
+            addConverter(converterId, converterClass);
+        } else {
+            converterTypeMap.put(targetClass, converterClass);
+            addPropertyEditorIfNecessary(targetClass, converterClass);
+        }                
         
         if (logger.isLoggable(Level.FINE)) {
             logger.fine(MessageFormat.format("added converter of class type ''{0}''", converterClass));
