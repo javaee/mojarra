@@ -2,7 +2,7 @@
  * JSFVersionTracker
  *
  * Created on February 15, 2006, 11:41 AM
- * $Id: JSFVersionTracker.java,v 1.16 2007/10/03 20:42:21 rlubke Exp $
+ * $Id: JSFVersionTracker.java,v 1.17 2007/10/04 16:58:35 rlubke Exp $
  */
 
 /*
@@ -276,7 +276,7 @@ public class JSFVersionTracker implements Serializable {
         getTrackedClassMap().put(fqcn, version);
     }
     
-    void publishInstanceToApplication() {
+  /*  void publishInstanceToApplication() {
         ExternalContext extContext = FacesContext.getCurrentInstance().getExternalContext();
         if (null != extContext) {
             ApplicationAssociate associate = ApplicationAssociate.getInstance(extContext);
@@ -284,7 +284,7 @@ public class JSFVersionTracker implements Serializable {
                 associate.setJSFVersionTracker(this);
             }
         }
-    }
+    }*/
     
     // Public methods, used by the runtime once the instance has been published 
     // to the application.
