@@ -1,5 +1,5 @@
 /*
- * $Id: SubviewTag.java,v 1.18 2008/03/10 22:30:38 rlubke Exp $
+ * $Id: SubviewTag.java,v 1.19 2008/03/11 19:01:20 rlubke Exp $
  */
 
 /*
@@ -157,7 +157,6 @@ public class SubviewTag extends UIComponentELTag {
         }
 
         if (cont) {
->>>>>>> 1.15.4.3
             try {
                 if ((Boolean) isBytes.invoke(response)) {
                     customFlush.invoke(response);
