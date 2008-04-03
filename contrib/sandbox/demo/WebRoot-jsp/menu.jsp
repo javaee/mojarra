@@ -50,6 +50,7 @@
 				<risb:menuItem value="Ed Burns' Blog" url="http://weblogs.java.net/blog/edburns/" />
 				<risb:menuItem value="Roger Kitain's Blog" url="http://weblogs.java.net/blog/rogerk/" />
 				<risb:menuItem value="Ryan Lubke's Blog" url="http://blogs.sun.com/rlubke/" />
+				<risb:menuItem value="Ken Paulsen's Blog" url="http://blogs.sun.com/paulsen/" />
 				<risb:menuItem value="Jacob Hookom's Blog #1" url="http://weblogs.java.net/blog/jhook/" />
 				<risb:menuItem value="Jacob Hookom's Blog #2" url="http://hookom.blogspot.com" />
 				<risb:menuItem value="Jason Lee's Blog" url="http://blogs.steeplesoft.com/javaserver-faces" />
