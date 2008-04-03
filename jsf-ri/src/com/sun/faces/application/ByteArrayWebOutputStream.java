@@ -1,5 +1,5 @@
 /*
- * $Id: ByteArrayWebOutputStream.java,v 1.5 2007/07/12 14:44:08 rlubke Exp $ 
+ * $Id: ByteArrayWebOutputStream.java,v 1.6 2007/07/13 22:20:39 rlubke Exp $ 
  */
 
 /*
@@ -63,7 +63,7 @@ import java.nio.charset.CharacterCodingException;
  */
 class ByteArrayWebOutputStream extends ServletOutputStream {
 
-    public static ServletOutputStream NOOP_STREAM = new NoOpOutputStream();
+    public static final ServletOutputStream NOOP_STREAM = new NoOpOutputStream();
 
     // Log instance for this class
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
