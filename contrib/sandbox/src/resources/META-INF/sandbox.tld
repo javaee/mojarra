@@ -810,7 +810,6 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
         <name>tree</name>
         <tag-class>com.sun.faces.sandbox.taglib.YuiTreeTag</tag-class>
         <body-content>JSP</body-content>
-        <description></description>
         <attribute>
             <name>id</name>
             <required>false</required>
@@ -847,7 +846,6 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
         <name>treeNode</name>
         <tag-class>com.sun.faces.sandbox.taglib.YuiTreeNodeTag</tag-class>
         <body-content>JSP</body-content>
-        <description></description>
         <attribute>
             <name>id</name>
             <required>false</required>
@@ -1670,19 +1668,16 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             <name>tabStyle</name>
             <required>false</required>
             <rtexprvalue>false</rtexprvalue>
-            <description></description>
         </attribute>
         <attribute>
             <name>orientation</name>
             <required>false</required>
             <rtexprvalue>false</rtexprvalue>
-            <description></description>
         </attribute>
         <attribute>
             <name>maxHeight</name>
             <required>false</required>
             <rtexprvalue>false</rtexprvalue>
-            <description></description>
         </attribute>
     </tag>
     <!-- ******************************************************************* -->
@@ -1706,19 +1701,16 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             <name>active</name>
             <required>false</required>
             <rtexprvalue>false</rtexprvalue>
-            <description></description>
         </attribute>
         <attribute>
             <name>disabled</name>
             <required>false</required>
             <rtexprvalue>false</rtexprvalue>
-            <description></description>
         </attribute>
         <attribute>
             <name>label</name>
             <required>false</required>
             <rtexprvalue>false</rtexprvalue>
-            <description></description>
         </attribute>
     </tag>
     <!-- ******************************************************************* -->
