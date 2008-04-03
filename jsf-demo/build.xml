@@ -86,7 +86,7 @@
 
     <target name="clean">
 
-        <delete file="jsf-${impl.version}.zip"/>
+        <delete file="mojarra-${impl.version}.zip"/>
         <delete dir="${dist.home}"/>
         <delete dir="${basedir}/test/build"/>
 
@@ -172,15 +172,15 @@
     <!-- target for building standalone JSF distribution -->
     <target name="dist" depends="dist.binary">
         <echo>create the zip file</echo>
-        <move todir="${basedir}/jsf-${impl.version}">
+        <move todir="${basedir}/mojarra-${impl.version}">
             <fileset dir="dist"/>
         </move>
-        <zip zipfile="jsf-${impl.version}.zip">
+        <zip zipfile="mojarra-${impl.version}.zip">
             <fileset dir="${basedir}"
-                     includes="jsf-${impl.version}/**"/>
+                     includes="mojarra-${impl.version}/**"/>
         </zip>
         <move todir="dist">
-            <fileset dir="${basedir}/jsf-${impl.version}"/>
+            <fileset dir="${basedir}/mojarra-${impl.version}"/>
         </move>
 
         <echo>Creating Special JAR for GlassFish</echo>
@@ -224,7 +224,12 @@
         </copy>
         <antcall target="api.javadocs"/>
         <antcall target="ri.tlddocs"/>
+        <!--
+           rlubke: commented out for now since release notes are 
+                   maintained live at https://javaserverfaces.dev.java.net/nonav/rlnotes/<version>
+
         <antcall target="copydocs"/>
+        -->
     </target>
 
     <target name="api.javadocs" unless="build.wspack">

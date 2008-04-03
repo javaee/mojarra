@@ -39,7 +39,7 @@
 
 <!-- ************ JSF build file ************************************** -->
 
-<project name="javaserverfaces" default="main" basedir=".">
+<project name="mojarra" default="main" basedir=".">
 
     <!-- ************ Per user local properties ******************************* -->
 
@@ -74,17 +74,17 @@
 
     <target name="clean"
             description="Clean build and distribution directories">       
-        <delete file="jsf-samples.zip"/>
+        <delete file="mojarra-samples.zip"/>
         <delete dir="${basedir}/build"/>
         <delete dir="${dist.dir}"/>
         <call.modules target="clean"/>        
     </target>  
     
-    <target name="main" description="Build API and RI">
+    <target name="main" description="Build Mojarra">
         <call.modules target="main"/>
     </target>
 
-    <target name="test" description="Run API, RI, Demo automated tests">
+    <target name="test" description="Run API, Impl, and Demo automated tests">
         <call.modules target="test"/>
     </target>
     
@@ -101,7 +101,7 @@
 
     <!-- Create the source distribution -->
     <target name="jsf.source">                
-        <zip destfile="${dist.dir}/javaserverfaces_source.zip">
+        <zip destfile="${dist.dir}/mojarra-${impl.version}-source.zip">
 
             <zipfileset dir="${basedir}"
                         excludes="**/*.class,
@@ -123,15 +123,15 @@
                                   **/test-sqe/**,
                                   **/contrib/**,
                                   **/repo/**"
-                        prefix="javaserverfaces_sources"/>
+                        prefix="mojarra-${impl.version}-sources"/>
              <zipfileset dir="${basedir}"
-                        includes="${basedir}/build.xml" prefix="javaserverfaces_sources"/>
+                        includes="${basedir}/build.xml" prefix="mojarra-${impl.version}-sources"/>
 
         </zip>
         
         <!-- create a special source bundle for GlassFish Java EE 5 docs -->
-        <mkdir dir="${basedir}/srctemp/jsf-1.2-javadoc-src/jsf-api/src"/>
-            <copy todir="${basedir}/srctemp/jsf-1.2-javadoc-src/jsf-api/src">
+        <mkdir dir="${basedir}/srctemp/jsf-${spec.version}-javadoc-src/jsf-api/src"/>
+            <copy todir="${basedir}/srctemp/jsf-${spec.version}-javadoc-src/jsf-api/src">
                 <fileset dir="${api.dir}/src" excludes="**/CVS/**"/>
                 <fileset dir="${api.dir}/build/generate" includes="**/javax/**"/>
             </copy>
@@ -150,14 +150,14 @@
              target="dist" 
              inheritAll="false"/>
 
-        <copy file="${demo.dir}/jsf-${impl.version}.zip"
-              tofile="${dist.dir}/javaserverfaces_binary.zip"/>
+        <copy file="${demo.dir}/mojarra-${impl.version}.zip"
+              tofile="${dist.dir}/mojarra-${impl.version}-binary.zip"/>
        
         <copy file="${demo.dir}/glassfish-jsf-${impl.version}.jar"
               todir="${dist.dir}"/>
 
         <delete file="${demo.dir}/glassfish-jsf-${impl.version}.jar"/>
-        <delete file="${demo.dir}/jsf-${impl.version}.zip"/>
+        <delete file="${demo.dir}/mojarra-${impl.version}.zip"/>
 
         <ant target="jsf.source"/>
 
@@ -166,10 +166,10 @@
    <target name="build.javadocs.dist" depends="prepare.build.java.net">
 
         <!-- Create the javadocs distribution -->
-        <zip destfile="${dist.dir}/jsf-javadocs-${impl.version}.zip">
+        <zip destfile="${dist.dir}/jsf-javadocs-${spec.version}.zip">
             <zipfileset dir="${demo.dir}/dist"
                         includes="javadocs/**,renderkitdocs/**,tlddocs/**"
-                        prefix="jsf-${impl.version}"/>
+                        prefix="mojarra-${impl.version}"/>
         </zip>
 
   </target>
@@ -178,17 +178,6 @@
             depends="prepare.build.java.net">
 
         <antcall target="build.as.updater.jars" />
-
-        <installerBuilder
-              classFile="${dist.dir}/javaserverfaces_binary.class"
-              licenseFile="${LICENSEFILE}"
-              zipFile="${dist.dir}/javaserverfaces_binary.zip"/>
-
-        <installerBuilder
-              classFile="${dist.dir}/javaserverfaces_source.class"
-              licenseFile="${LICENSEFILE}"
-              zipFile="${dist.dir}/javaserverfaces_source.zip">
-        </installerBuilder>
 
     </target>   
 
@@ -210,22 +199,22 @@
                     </taskdef>
 
                     <javaNetUpload projectName="javaserverfaces"
-                                   toFile="/nightly/javaserverfaces_binary.class"
-                                   fromFile="${dist.dir}/javaserverfaces_binary.class"
-                                   fileDescription="Nightly snapshot.Requires Glassfish/JavaEE5. Run 'java -cp . javaserverfaces_binary' to install"
+                                   toFile="/nightly/mojarra-nightly-binary.zip"
+                                   fromFile="${dist.dir}/mojarra-${impl.version}-binary.zip"
+                                   fileDescription="Mojarra ${impl.version.number} nightly binary bundle."
                                    overwrite="yes"/>
 
 
                     <javaNetUpload projectName="javaserverfaces"
-                                   toFile="/nightly/javaserverfaces_source.class"
-                                   fromFile="${dist.dir}/javaserverfaces_source.class"
-                                   fileDescription="Nightly source snapshot. Run 'java -cp . javaserverfaces_source' to install"
+                                   toFile="/nightly/mojarra-nightly-source.zip"
+                                   fromFile="${dist.dir}/mojarra-${impl.version}-source.zip"
+                                   fileDescription="Mojarra ${impl.version.number} nightly source bundle."
                                    overwrite="yes"/>
 
                     <javaNetUpload projectName="javaserverfaces"
-                                   toFile="/nightly/jsf-glassfish-updater.jar"
-                                   fromFile="${dist.dir}/jsf-glassfish-updater-${impl.version}.jar"
-                                   fileDescription="Installer for updating an existing glassfish binary with a new JSF implementation. Run 'java -jar jsf-glassfish-updater.jar' and follow the instructions."
+                                   toFile="/nightly/mojarra-nightly-glassfish-updater.jar"
+                                   fromFile="${dist.dir}/mojarra-${impl.version}-glassfish-updater.jar"
+                                   fileDescription="Installer for updating an existing glassfish binary with a new Mojarra implementation. Run 'java -jar mojarra-nightly-updater.jar' and follow the instructions."
                                    overwrite="yes"/>
                 </sequential>
             </then>
@@ -235,42 +224,7 @@
         </if>
     </target>
 
-    <target name="weekly" depends="build.java.net"
-            description="update weekly build">
-        <if>
-            <available
-                  file="${tasks.home}/javanettasks-1.0.8.jar"/>
-            <then>
-                <sequential>
-                    <taskdef
-                          resource="org/kohsuke/javanettasks.properties">
-                        <classpath>
-                            <pathelement
-                                  location="${tasks.home}/javanettasks-1.0.8.jar"/>
-                            <fileset dir="${tasks.home}/lib"
-                                     includes="*.jar"/>
-                        </classpath>
-                    </taskdef>
 
-                    <javaNetUpload projectName="javaserverfaces"
-                                   toFile="/weekly/javaserverfaces_binary.class"
-                                   fromFile="${dist.dir}/javaserverfaces_binary.class"
-                                   fileDescription="Weekly binary snapshot. Requires Glassfish/JavaEE5. Run 'java -cp . javaserverfaces_binary' to install"
-                                   overwrite="yes"/>
-
-
-                    <javaNetUpload projectName="javaserverfaces"
-                                   toFile="/weekly/javaserverfaces_source.class"
-                                   fromFile="${dist.dir}/javaserverfaces_source.class"
-                                   fileDescription="Weekly source snapshot. Run 'java -cp . javaserverfaces_source' to install"
-                                   overwrite="yes"/>
-                </sequential>
-            </then>
-            <else>
-                <fail message="Javanettasks version 1.0.8 is not available at the location referred by TASKS_HOME (${tasks.home}).  Ensure that the TASKS_HOME environment variable is properly set."/>
-            </else>
-        </if>
-    </target>    
 
     <target name="build.samples.zip" depends="main" description="Build the demo distribution">       
 
@@ -295,20 +249,20 @@
 
         <copy toFile="${basedir}/samples/jsf-samples/License.txt"
               file="${LICENSEFILE}"/>
-        <zip destfile="${basedir}/jsf-samples.zip"
+        <zip destfile="${basedir}/mojarra-samples.zip"
              basedir="${basedir}/samples"/>
         <delete dir="samples"/>
 
         <installerBuilder
-              classFile="${dist.dir}/javaserverfaces_samples.class"
+              classFile="${dist.dir}/mojarra-samples.class"
               licenseFile="${LICENSEFILE}"
-              zipFile="${basedir}/jsf-samples.zip"/>
+              zipFile="${basedir}/mojarra-samples.zip"/>
     </target>
 
     <target name="build.as.updater.jars">
      <mkdir dir="${dist.dir}"/>
      <ant dir="jsf-api" target="tools.javac" inheritAll="false" />
-     <jar destfile="${dist.dir}/jsf-glassfish-updater-${impl.version}.jar">
+     <jar destfile="${dist.dir}/mojarra-${impl.version}-glassfish-updater.jar">
         <fileset dir="${basedir}/jsf-tools/build/classes"
                  includes="com/sun/faces/tools/GlassfishUpdater*.class" />
         <fileset dir="${basedir}/jsf-api/build/lib/"
