@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryConfigProcessor.java,v 1.7 2007/06/28 16:31:41 rlubke Exp $
+ * $Id: FactoryConfigProcessor.java,v 1.8 2007/10/03 20:29:53 rlubke Exp $
  */
 
 /*
@@ -187,7 +187,7 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
             } catch (Exception e) {
                 throw new ConfigurationException(
                       MessageFormat.format("Factory ''{0}'' was not configured properly.",
-                                           FACTORY_NAMES[i]));
+                                           FACTORY_NAMES[i]), e);
             }
         }
 
