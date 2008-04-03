@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.53 2008/02/27 17:09:05 rlubke Exp $
+ * $Id: HtmlResponseWriter.java,v 1.54 2008/03/20 19:33:59 rlubke Exp $
  */
 
 /*
@@ -977,7 +977,7 @@ public class HtmlResponseWriter extends ResponseWriter {
             int curIdx = 0;
             while (curIdx < totalLength) {
                 if ((totalLength - curIdx) > buffer.length) {
-                    int end = curIdx + buffer.length - 1;
+                    int end = curIdx + buffer.length;
                     b.getChars(curIdx, end, buffer, 0);
                     writer.write(buffer);
                     curIdx += buffer.length;

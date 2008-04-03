@@ -1,5 +1,5 @@
 /*
- * $Id: TestHtmlResponseWriter.java,v 1.30 2008/02/27 17:09:05 rlubke Exp $
+ * $Id: TestHtmlResponseWriter.java,v 1.31 2008/03/20 19:33:58 rlubke Exp $
  */
 
 /*
@@ -60,7 +60,7 @@ import com.sun.faces.cactus.ServletFacesTestCase;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHtmlResponseWriter.java,v 1.30 2008/02/27 17:09:05 rlubke Exp $
+ * @version $Id: TestHtmlResponseWriter.java,v 1.31 2008/03/20 19:33:58 rlubke Exp $
  */
 
 public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestCase
@@ -510,16 +510,17 @@ public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestC
      */
     public void testAttributesSumGreaterThan1024RegresssionTest() throws Exception {
         StringBuilder value = new StringBuilder();
-        for (int i = 0; i < 2046; i++) {
-            value.append('a');
+        for (int i = 0; i < 2111; i++) {
+            value.append(i);
         }
         sw = new StringWriter();
         writer = renderKit.createResponseWriter(sw, "text/html", "UTF-8");
         writer.startElement("input", null);
         writer.writeAttribute("onclick", value.toString(), "onclick");
+        writer.writeAttribute("onclick", value.toString(), "onclick");
         writer.endElement("input");
         StringBuilder control = new StringBuilder();
-        control.append("<input onclick=\"").append(value.toString()).append("\" />");
+        control.append("<input onclick=\"").append(value.toString()).append("\" onclick=\"").append(value.toString()).append("\" />");
         assertTrue(sw.toString(), control.toString().trim().equals(sw.toString().trim()));
 
     }
