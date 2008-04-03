@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.49 2007/07/17 20:50:46 rlubke Exp $
+ * $Id: ApplicationAssociate.java,v 1.50 2007/10/03 20:42:21 rlubke Exp $
  */
 
 /*
@@ -496,29 +496,6 @@ public class ApplicationAssociate {
         public int compare(String fromViewId1, String fromViewId2) {
             return -(fromViewId1.compareTo(fromViewId2));
         }
-    }
-
-    /**
-     * Holds value of property JSFVersionTracker.
-     */
-    private com.sun.faces.config.JSFVersionTracker JSFVersionTracker;
-
-    /**
-     * Getter for property JSFVersionTracker.
-     *
-     * @return Value of property JSFVersionTracker.
-     */
-    public com.sun.faces.config.JSFVersionTracker getJSFVersionTracker() {
-        return this.JSFVersionTracker;
-    }
-
-    /**
-     * Setter for property JSFVersionTracker.
-     *
-     * @param JSFVersionTracker New value of property JSFVersionTracker.
-     */
-    public void setJSFVersionTracker(com.sun.faces.config.JSFVersionTracker JSFVersionTracker) {
-        this.JSFVersionTracker = JSFVersionTracker;
     }
 
 }

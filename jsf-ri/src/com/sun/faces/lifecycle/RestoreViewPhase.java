@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.52 2007/08/28 06:06:15 rlubke Exp $
+ * $Id: RestoreViewPhase.java,v 1.53 2007/10/03 20:42:21 rlubke Exp $
  */
 
 /*
@@ -61,9 +61,8 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.render.ResponseStateManager;
 import javax.servlet.http.HttpServletRequest;
 
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.config.JSFVersionTracker;
-import com.sun.faces.config.JSFVersionTracker.Version;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.DebugUtil;
 import com.sun.faces.util.FacesLogger;
@@ -74,7 +73,7 @@ import com.sun.faces.util.Util;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.52 2007/08/28 06:06:15 rlubke Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.53 2007/10/03 20:42:21 rlubke Exp $
  */
 
 public class RestoreViewPhase extends Phase {
@@ -84,7 +83,8 @@ public class RestoreViewPhase extends Phase {
 
     private static Logger LOGGER = FacesLogger.LIFECYCLE.getLogger();
 
-    private ApplicationAssociate associate;
+    private WebConfiguration webConfig;
+
 
     // ---------------------------------------------------------- Public Methods
 
@@ -173,57 +173,24 @@ public class RestoreViewPhase extends Phase {
         if (isPostBack) {
             // try to restore the view
             ViewHandler viewHandler = Util.getViewHandler(facesContext);
-            if (null == (viewRoot =
-                  viewHandler.restoreView(facesContext, viewId))) {
-                JSFVersionTracker tracker =
-                      getAssociate(facesContext).getJSFVersionTracker();
+            viewRoot = viewHandler.restoreView(facesContext, viewId);
 
-                // The tracker will be null if the user turned off the
-                // version tracking feature.
-                if (null != tracker) {
-                    // Get the versions of the current ViewHandler and
-                    // StateManager.  If they are older than the current
-                    // version of the implementation, fall back to the
-                    // JSF 1.1 behavior.
-                    // NOTE: The ViewHandler or StateManager could
-                    //  be registered using something other than
-                    //  the faces-config.xml, if this is the case,
-                    //  the assume that we're using a 1.2 implementation.
-                    boolean viewHandlerIsOld;
-                    boolean stateManagerIsOld;
-                    Version toTest = tracker.
-                          getVersionForTrackedClassName(viewHandler
-                                .getClass().getName());
-                    if (toTest != null) {
-                        Version currentVersion = tracker.getCurrentVersion();
-
-
-                        viewHandlerIsOld = (toTest.compareTo(currentVersion) < 0);
-                        toTest = tracker.
-                             getVersionForTrackedClassName(facesContext
-                                  .getApplication().getStateManager()
-                                  .getClass().getName());
-                        stateManagerIsOld = (toTest.compareTo(currentVersion) < 0);
-                    } else {
-                        viewHandlerIsOld = false;
-                        stateManagerIsOld = false;
-                    }
-
-                    if (viewHandlerIsOld || stateManagerIsOld) {
-                        viewRoot = viewHandler.createView(facesContext, viewId);
-                        if (null != viewRoot) {
-                            facesContext.renderResponse();
-                        }
-                    }
-                }
-
-                if (null == viewRoot) {
+            if (viewRoot == null) {
+                if (is11CompatEnabled(facesContext)) {
+                    // 1.1 -> create a new view and flag that the response should
+                    //        be immediately rendered
+                    viewRoot = viewHandler.createView(facesContext, viewId);
+                    facesContext.renderResponse();
+                } else {
                     Object[] params = {viewId};
-                    throw new ViewExpiredException(MessageUtils.getExceptionMessageString(
-                          MessageUtils.RESTORE_VIEW_ERROR_MESSAGE_ID, params),
-                                                   viewId);
+                    throw new ViewExpiredException(
+                          MessageUtils.getExceptionMessageString(
+                                MessageUtils.RESTORE_VIEW_ERROR_MESSAGE_ID,
+                                params),
+                          viewId);
                 }
             }
+
             facesContext.setViewRoot(viewRoot);
             doPerComponentActions(facesContext, viewRoot);
 
@@ -331,11 +298,20 @@ public class RestoreViewPhase extends Phase {
     }
 
 
-    private ApplicationAssociate getAssociate(FacesContext context) {
-        if (associate == null) {
-            associate = ApplicationAssociate.getInstance(context.getExternalContext());
+    private WebConfiguration getWebConfig(FacesContext context) {
+
+        if (webConfig == null) {
+            webConfig = WebConfiguration.getInstance(context.getExternalContext());
         }
-        return associate;
+        return webConfig;
+
+    }
+
+    private boolean is11CompatEnabled(FacesContext context) {
+
+        return (getWebConfig(context).isOptionEnabled(
+              BooleanWebContextInitParameter.EnableRestoreView11Compatibility));
+        
     }
 
     // The testcase for this class is TestRestoreViewPhase.java

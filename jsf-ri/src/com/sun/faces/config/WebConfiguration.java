@@ -1,5 +1,5 @@
 /*
- * $Id: WebConfiguration.java,v 1.31 2007/09/13 20:38:51 rlubke Exp $
+ * $Id: WebConfiguration.java,v 1.32 2007/10/03 20:42:21 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -333,30 +333,40 @@ public class WebConfiguration {
             if (strValue != null && strValue.length() > 0 && param.isDeprecated()) {
                 BooleanWebContextInitParameter alternate = param.getAlternate();
                 if (LOGGER.isLoggable(Level.WARNING)) {
-                    LOGGER.log(Level.WARNING,
-                               "jsf.config.webconfig.param.deprecated",
-                               new Object[]{
-                                     contextName,
-                                     param.getQualifiedName(),
-                                     alternate.getQualifiedName()});
+                    if (alternate != null) {
+                        LOGGER.log(Level.WARNING,
+                                   "jsf.config.webconfig.param.deprecated",
+                                   new Object[]{
+                                         contextName,
+                                         param.getQualifiedName(),
+                                         alternate.getQualifiedName()});
+                    } else {
+                        LOGGER.log(Level.WARNING,
+                                   "jsf.config.webconfig.param.deprecated.no_replacement",
+                                   new Object[]{
+                                         contextName,
+                                         param.getQualifiedName()});
+                    }
                 }
 
-                if (isValueValid(param, strValue)) {
-                    value = Boolean.valueOf(strValue);
-                } else {
-                    value = param.getDefaultValue();
-                }
+                if (alternate != null) {
+                    if (isValueValid(param, strValue)) {
+                        value = Boolean.valueOf(strValue);
+                    } else {
+                        value = param.getDefaultValue();
+                    }
 
-                if (LOGGER.isLoggable(Level.INFO)) {
-                    LOGGER.log(Level.INFO,
-                               ((value)
-                                ? "jsf.config.webconfig.configinfo.reset.enabled"
-                                : "jsf.config.webconfig.configinfo.reset.disabled"),
-                               new Object[]{contextName,
-                                            alternate.getQualifiedName()});
-                }
+                    if (LOGGER.isLoggable(Level.INFO) && alternate != null) {
+                        LOGGER.log(Level.INFO,
+                                   ((value)
+                                    ? "jsf.config.webconfig.configinfo.reset.enabled"
+                                    : "jsf.config.webconfig.configinfo.reset.disabled"),
+                                   new Object[]{contextName,
+                                                alternate.getQualifiedName()});
+                    }
 
-                booleanContextParameters.put(alternate, value);
+                    booleanContextParameters.put(alternate, value);
+                }
                 continue;
             }
 
@@ -438,24 +448,34 @@ public class WebConfiguration {
 
             if (value != null && value.length() > 0 && param.isDeprecated()) {
                 WebContextInitParameter alternate = param.getAlternate();
-                if (LOGGER.isLoggable(Level.WARNING)) {
-                    LOGGER.log(Level.WARNING,
-                               "jsf.config.webconfig.param.deprecated",
-                               new Object[]{
-                                     contextName,
-                                     param.getQualifiedName(),
-                                     alternate.getQualifiedName()});
+                 if (LOGGER.isLoggable(Level.WARNING)) {
+                    if (alternate != null) {
+                        LOGGER.log(Level.WARNING,
+                                   "jsf.config.webconfig.param.deprecated",
+                                   new Object[]{
+                                         contextName,
+                                         param.getQualifiedName(),
+                                         alternate.getQualifiedName()});
+                    } else {
+                        LOGGER.log(Level.WARNING,
+                                   "jsf.config.webconfig.param.deprecated.no_replacement",
+                                   new Object[]{
+                                         contextName,
+                                         param.getQualifiedName()});
+                    }
                 }
 
-                if (LOGGER.isLoggable(Level.INFO)) {
-                    LOGGER.log(Level.INFO,
-                               "jsf.config.webconfig.configinfo.reset",
-                               new Object[]{contextName,
-                                            alternate.getQualifiedName(),
-                                            value});
-                }
+                if (alternate != null) {
+                    if (LOGGER.isLoggable(Level.INFO)) {
+                        LOGGER.log(Level.INFO,
+                                   "jsf.config.webconfig.configinfo.reset",
+                                   new Object[]{contextName,
+                                                alternate.getQualifiedName(),
+                                                value});
+                    }
 
-                contextParameters.put(alternate, value);
+                    contextParameters.put(alternate, value);
+                }
                 continue;
             }
 
@@ -721,7 +741,9 @@ public class WebConfiguration {
         ),
         DisableArtifactVersioning(
               "com.sun.faces.disableVersionTracking",
-              false
+              false,
+              true,
+              null
         ),
         EnableHtmlTagLibraryValidator(
               "com.sun.faces.enableHtmlTagLibValidator",
@@ -774,6 +796,10 @@ public class WebConfiguration {
         EnableLoadBundle11Compatibility(
              "com.sun.faces.enabledLoadBundle11Compatibility",
              false
+        ),
+        EnableRestoreView11Compatibility(
+              "com.sun.faces.enableRestoreView11Compatibility",
+              false
         ),
         SerializeServerState(
               "com.sun.faces.serializeServerState",

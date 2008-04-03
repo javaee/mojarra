@@ -2,7 +2,7 @@
  * JSFVersionTracker
  *
  * Created on February 15, 2006, 11:41 AM
- * $Id: JSFVersionTracker.java,v 1.15 2007/07/17 21:35:18 rlubke Exp $
+ * $Id: JSFVersionTracker.java,v 1.16 2007/10/03 20:42:21 rlubke Exp $
  */
 
 /*
@@ -93,6 +93,13 @@ com.sun.faces.application.ApplicationAssociate}.</p>
 
 	</ol>
 
+ *
+ *
+ * NOTE:  This class is no longer used.  It is kept with the runtime as Shale
+ * checks for the existence of this class in order to determine what
+ * runtime it is executing within.
+ *
+ *
  *
  * @author edburns
  */
