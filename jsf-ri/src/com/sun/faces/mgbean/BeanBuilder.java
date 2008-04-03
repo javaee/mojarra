@@ -1,5 +1,5 @@
 /*
- * $Id: BeanBuilder.java,v 1.4 2007/07/31 22:09:03 rlubke Exp $
+ * $Id: BeanBuilder.java,v 1.5 2007/12/14 19:25:26 rlubke Exp $
  */
 
 /*
@@ -541,10 +541,16 @@ public abstract class BeanBuilder {
                 validateLifespan(expScope, true);
             }
             if (ve == null) {
-                ve = ELUtils.createValueExpression(expressionString,
-                                                   expectedType);   
+                ve = ((expectedType.isPrimitive())
+                      ? ELUtils.createValueExpression(expressionString, expectedType)
+                      : ELUtils.createValueExpression(expressionString, Object.class));
             }
-            return ve.getValue(context);
+            if (expectedType.isPrimitive()) {
+                return ve.getValue(context);
+            } else {
+                Object tmpval = ve.getValue(context);
+                return ((tmpval != null) ? ELUtils.coerce(tmpval, expectedType) : null);
+            }
         }
 
 
