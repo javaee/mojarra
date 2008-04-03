@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorConfigProcessor.java,v 1.4 2007/04/27 22:00:56 ofung Exp $
+ * $Id: ValidatorConfigProcessor.java,v 1.5 2007/05/21 19:59:38 rlubke Exp $
  */
 
 /*
@@ -40,17 +40,19 @@
 
 package com.sun.faces.config.processor;
 
+import com.sun.faces.config.Verifier;
 import com.sun.faces.util.FacesLogger;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.Element;
 
 import javax.faces.application.Application;
+import javax.faces.validator.Validator;
 import javax.xml.xpath.XPathExpressionException;
+import java.text.MessageFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.text.MessageFormat;
 
 /**
  * <p>
@@ -113,6 +115,7 @@ public class ValidatorConfigProcessor extends AbstractConfigProcessor {
     throws XPathExpressionException {
 
         Application app = getApplication();
+        Verifier verifier = Verifier.getCurrentInstance();
         for (int i = 0, size = validators.getLength(); i < size; i++) {
             Node validator = validators.item(i);
 
@@ -138,6 +141,11 @@ public class ValidatorConfigProcessor extends AbstractConfigProcessor {
                                     "Calling Application.addValidator({0},{1})",
                                     validatorId,
                                     validatorClass));
+                }
+                if (verifier != null) {
+                    verifier.validateObject(Verifier.ObjectType.VALIDATOR,
+                                            validatorClass,
+                                            Validator.class);
                 }
                 app.addValidator(validatorId, validatorClass);
             }

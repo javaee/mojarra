@@ -288,6 +288,17 @@ public class MessageUtils {
           "com.sun.faces.CANNOT_CONVERT";
     public static final String CANNOT_VALIDATE_ID =
           "com.sun.faces.CANNOT_VALIDATE";
+    public static final String VERIFIER_CLASS_NOT_FOUND_ID =
+           "com.sun.faces.verifier.CLASS_NOT_FOUND";
+    public static final String VERIFIER_CLASS_MISSING_DEP_ID =
+            "com.sun.faces.verifier.CLASS_MISSING_DEP";
+    public static final String VERIFIER_CTOR_NOT_PUBLIC_ID =
+            "com.sun.faces.verifier.NON_PUBLIC_DEF_CTOR";
+    public static final String VERIFIER_NO_DEF_CTOR_ID =
+            "com.sun.faces.verifier.NO_DEF_CTOR";
+    public static final String VERIFIER_WRONG_TYPE_ID =
+            "com.sun.faces.verifier.WRONG_TYPE";
+   
     
     public static final String JS_RESOURCE_WRITING_ERROR_ID =
         "com.sun.faces.JS_RESOURCE_WRITING_ERROR";

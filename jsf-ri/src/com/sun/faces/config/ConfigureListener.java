@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.105 2007/04/27 22:00:55 ofung Exp $
+ * $Id: ConfigureListener.java,v 1.106 2007/05/21 19:59:38 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -201,14 +201,29 @@ public class ConfigureListener implements ServletContextListener {
             Util.setHtmlTLVActive(
                   isFeatureEnabled(BooleanWebContextInitParameter.EnableHtmlTagLibraryValidator));
 
+            if (isFeatureEnabled(BooleanWebContextInitParameter.VerifyFacesConfigObjects)) {
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.warning("jsf.config.verifyobjects.developement_only");
+                }
+                // if we're verifying, force bean validation to occur at startup as well
+                webConfig.overrideContextInitParameter(BooleanWebContextInitParameter.EnableLazyBeanValidation, false);
+                Verifier.setCurrentInstance(new Verifier());
+            }
             configManager.initialize(context);
 
             // Step 7, verify that all the configured factories are available
-            // and optionall that configured objects can be created.  Clear
-            // the InitFacesContext to ensure it isn't picked up by any of the
-            // objects validated by these methods - reinit the context after
-            // verification is complete.
-            // PENDING interweave verify logic into ConfigProcessors
+            // and optionall that configured objects can be created. 
+            Verifier v = Verifier.getCurrentInstance();
+            if (v != null && !v.isApplicationValid()) {
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.severe("jsf.config.verifyobjects.failures_detected");
+                    StringBuilder sb = new StringBuilder(128);
+                    for (String m : v.getMessages()) {
+                        sb.append(m).append('\n');
+                    }
+                    LOGGER.severe(sb.toString());
+                }               
+            }
             verifyFactories();
             registerELResolverAndListenerWithJsp(context);
             
@@ -220,6 +235,7 @@ public class ConfigureListener implements ServletContextListener {
                 associate.setContextName(getServletContextIdentifier(context));
             }
             RenderKitUtils.loadSunJsfJs(initContext.getExternalContext());
+            Verifier.setCurrentInstance(null);
             initContext.release();
             LOGGER.log(Level.FINE,
                        "jsf.config.listener.version.complete");
@@ -702,7 +718,7 @@ public class ConfigureListener implements ServletContextListener {
         }
 
     }
-    
+
     static class ApplicationMap extends java.util.AbstractMap {
 
         private final ServletContext servletContext;
@@ -711,7 +727,7 @@ public class ConfigureListener implements ServletContextListener {
             this.servletContext = servletContext;
         }
 
-
+        @Override
         public Object get(Object key) {
             if (key == null) {
                 throw new NullPointerException();
@@ -720,6 +736,7 @@ public class ConfigureListener implements ServletContextListener {
         }
 
 
+        @Override
         public Object put(Object key, Object value) {
             if (key == null) {
                 throw new NullPointerException();
@@ -731,6 +748,7 @@ public class ConfigureListener implements ServletContextListener {
         }
 
 
+        @Override
         public Object remove(Object key) {
             if (key == null) {
                 return null;
@@ -747,12 +765,14 @@ public class ConfigureListener implements ServletContextListener {
         }
 
 
+        @Override
         public boolean equals(Object obj) {
             return !(obj == null || !(obj instanceof ApplicationMap))
                  && super.equals(obj);
         }
 
 
+        @Override
         public int hashCode() {
             int hashCode = 7 * servletContext.hashCode();
             for (Object o : entrySet()) {
@@ -760,16 +780,26 @@ public class ConfigureListener implements ServletContextListener {
             }
             return hashCode;
         }
-        
+
+
+        @Override
         public void clear() {
             throw new UnsupportedOperationException();
         }
 
+
+        @Override
         public void putAll(Map t) {
             throw new UnsupportedOperationException();
         }
-       
 
+
+        @Override
+        public boolean containsKey(Object key) {
+            return (servletContext.getAttribute(key.toString()) != null);
+        }
+
+                
     } // END ApplicationMap
 
 

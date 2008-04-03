@@ -1,5 +1,5 @@
 /*
- * $Id: WebConfiguration.java,v 1.23 2007/05/16 01:00:18 rlubke Exp $
+ * $Id: WebConfiguration.java,v 1.24 2007/05/21 19:59:38 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -223,9 +223,9 @@ public class WebConfiguration {
     }
 
 
-    public void overrideContextInitParameter(BooleanWebContextInitParameter param) {
+    public void overrideContextInitParameter(BooleanWebContextInitParameter param, boolean value) {
 
-        // no-op for now
+        booleanContextParameters.put(param, value);
 
     }
 

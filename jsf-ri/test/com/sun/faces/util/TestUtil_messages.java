@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.63 2007/04/27 22:02:11 ofung Exp $
+ * $Id: TestUtil_messages.java,v 1.64 2007/05/21 19:59:38 rlubke Exp $
  */
 
 /*
@@ -54,7 +54,7 @@ import com.sun.faces.cactus.ServletFacesTestCase;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.63 2007/04/27 22:02:11 ofung Exp $
+ * @version $Id: TestUtil_messages.java,v 1.64 2007/05/21 19:59:38 rlubke Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {
@@ -190,7 +190,12 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {MessageUtils.MANAGED_BEAN_PROBLEMS_ERROR_ID, "1"},
         {MessageUtils.MANAGED_BEAN_PROBLEMS_STARTUP_ERROR_ID, "1"},
         {MessageUtils.MANAGED_BEAN_UNKNOWN_PROCESSING_ERROR_ID, "1"},
-        {MessageUtils.MANAGED_BEAN_PROPERTY_UNKNOWN_PROCESSING_ERROR_ID, "1"}
+        {MessageUtils.MANAGED_BEAN_PROPERTY_UNKNOWN_PROCESSING_ERROR_ID, "1"},
+        {MessageUtils.VERIFIER_CLASS_MISSING_DEP_ID, "3"},
+        {MessageUtils.VERIFIER_CLASS_NOT_FOUND_ID, "2"},
+        {MessageUtils.VERIFIER_CTOR_NOT_PUBLIC_ID, "2"},
+        {MessageUtils.VERIFIER_NO_DEF_CTOR_ID, "2"},
+        {MessageUtils.VERIFIER_WRONG_TYPE_ID, "3"}
     };
 
 // Attribute Instance Variables

@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterConfigProcessor.java,v 1.4 2007/04/27 22:00:56 ofung Exp $
+ * $Id: ConverterConfigProcessor.java,v 1.5 2007/05/21 19:59:37 rlubke Exp $
  */
 
 /*
@@ -40,18 +40,20 @@
 
 package com.sun.faces.config.processor;
 
+import com.sun.faces.config.ConfigurationException;
+import com.sun.faces.config.Verifier;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
-import com.sun.faces.config.ConfigurationException;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.Element;
 
 import javax.faces.application.Application;
+import javax.faces.convert.Converter;
+import java.text.MessageFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.text.MessageFormat;
 
 /**
  * <p>
@@ -122,7 +124,7 @@ public class ConverterConfigProcessor extends AbstractConfigProcessor {
     private void addConverters(NodeList converters, String namespace) {
 
         Application application = getApplication();
-
+        Verifier verifier = Verifier.getCurrentInstance();
         for (int i = 0, size = converters.getLength(); i < size; i++) {
             Node converter = converters.item(i);
             NodeList children = ((Element) converter)
@@ -149,6 +151,11 @@ public class ConverterConfigProcessor extends AbstractConfigProcessor {
                                     converterId,
                                     converterClass));
                 }
+                if (verifier != null) {
+                    verifier.validateObject(Verifier.ObjectType.CONVERTER,
+                                            converterClass,
+                                            Converter.class);
+                }
                 application.addConverter(converterId, converterClass);
             } else if (converterClass != null && converterForClass != null) {
                 try {
@@ -160,6 +167,11 @@ public class ConverterConfigProcessor extends AbstractConfigProcessor {
                                         "[Converter for Class] Calling Application.addConverter({0}, {1}",
                                         converterForClass,
                                         converterClass));
+                    }
+                    if (verifier != null) {
+                        verifier.validateObject(Verifier.ObjectType.CONVERTER,
+                                converterClass,
+                                Converter.class);
                     }
                     application.addConverter(cfcClass, converterClass);
                 } catch (ClassNotFoundException cnfe) {
