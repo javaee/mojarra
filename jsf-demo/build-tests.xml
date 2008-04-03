@@ -45,6 +45,7 @@
     <property name="guessNumber.context.path" value="/jsf-guessNumber"/>
     <property name="components.context.path" value="/jsf-components"/>
     <property name="cardemo.context.path" value="/jsf-cardemo"/>
+    <property name="mojarra_ext.context.path" value="/mojarra_ext"/>
     <property name="mapping-extension.context.path"
               value="/jsf-mappingDemo-extension"/>
     <property name="mapping-prefix.context.path"
@@ -60,6 +61,8 @@
               value="${basedir}/guessNumber/build/jsf-guessNumber.war"/>
     <property name="cardemo.war"
               value="${basedir}/carstore/build/jsf-cardemo.war"/>
+    <property name="mojarra_ext.war"
+              value="${basedir}/mojarra_ext/build/mojarra_ext.war"/>
     <property name="mapping-extension.war"
               value="${basedir}/test/mappingDemo/build/jsf-mappingDemo-extension.war"/>
     <property name="mapping-prefix.war"
@@ -150,7 +153,7 @@
                    demo-name="jsf-components"
                    tests="components"
                    context-path="${components.context.path}"/>
-        
+
          <run-tests demo-war="${guessNumber.war}" 
                    demo-name="jsf-guessNumber"
                    tests="guessNumber"
@@ -171,12 +174,18 @@
             <fileset dir="${basedir}/carstore/src/java">
                 <include name="**/*.properties"/>
             </fileset>
-        </copy>
-        
+        </copy>        
+
         <run-tests demo-war="${cardemo.war}" 
                    demo-name="jsf-cardemo"
                    tests="cardemo"
                    context-path="${cardemo.context.path}"/> 
+
+        <run-tests demo-war="${mojarra_ext.war}" 
+                   demo-name="mojarra_ext"
+                   tests="mojarra_ext"
+                   context-path="${mojarra_ext.context.path}"/>
+
     </target>   
 
 </project>

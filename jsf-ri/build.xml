@@ -298,6 +298,8 @@
               toDir="${build.classes.dir}/META-INF"/>
         <copy file="${conf.share.dir}/jsfri_extensions.tld"
               toDir="${build.classes.dir}/META-INF"/>
+        <copy file="${conf.share.dir}/mojarra_ext.tld"
+              toDir="${build.classes.dir}/META-INF"/>
         <copy file="conf/xslt/jsf1_0-1_1toSchema.xsl"
               toDir="${build.classes.dir}/com/sun/faces"/>
         <copy file="${conf.share.dir}/com.sun.faces.spi.injectionprovider"
