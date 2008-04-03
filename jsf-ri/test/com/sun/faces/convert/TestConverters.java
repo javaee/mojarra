@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.45 2007/12/04 18:40:44 rlubke Exp $
+ * $Id: TestConverters.java,v 1.46 2007/12/04 23:26:06 rlubke Exp $
  */
 
 /*
@@ -73,7 +73,7 @@ import org.apache.cactus.WebRequest;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.45 2007/12/04 18:40:44 rlubke Exp $
+ * @version $Id: TestConverters.java,v 1.46 2007/12/04 23:26:06 rlubke Exp $
  */
 
 public class TestConverters extends JspFacesTestCase {
@@ -796,7 +796,7 @@ public class TestConverters extends JspFacesTestCase {
         NumberConverter converter = (NumberConverter) application.createConverter("javax.faces.Number");
         converter.setType("currency");
         converter.setLocale(Locale.FRANCE);
-        String toConv = "12 345,68 €";
+        String toConv = "12 345,68 " + '\u20aC';
         Number number = (Number) converter.getAsObject(getFacesContext(),
                                                        text,
                                                        toConv);
