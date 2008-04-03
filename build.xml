@@ -225,7 +225,7 @@
                     <javaNetUpload projectName="javaserverfaces"
                                    toFile="/nightly/jsf-glassfish-updater.jar"
                                    fromFile="${dist.dir}/jsf-glassfish-updater-${impl.version}.jar"
-                                   fileDescription="Installer for updating an existing glassfish binary with a new JSF implementation. Run 'java -jar jsf-glassfish-updater.jar PATH_TO_GLASSFISH_INSTALL_DIRECTORY' to install."
+                                   fileDescription="Installer for updating an existing glassfish binary with a new JSF implementation. Run 'java -jar jsf-glassfish-updater.jar' and follow the instructions."
                                    overwrite="yes"/>
                 </sequential>
             </then>
@@ -306,21 +306,14 @@
     </target>
 
     <target name="build.as.updater.jars">
-      <mkdir dir="${dist.dir}" />
-      <mkdir dir="${dist.dir}/tmp" />
-      <unjar src="${basedir}/jsf-ri/build/lib/jsf-impl.jar"
-             dest="${dist.dir}/tmp" />
-      <delete dir="${dist.dir}/tmp/com/sun/org/apache" />
-      <jar destfile="${dist.dir}/tmp/jsf-impl.jar" 
-           basedir="${dist.dir}/tmp" />
-
-      <ant dir="jsf-api" target="tools.javac" inheritAll="false" />
+     <mkdir dir="${dist.dir}"/>
+     <ant dir="jsf-api" target="tools.javac" inheritAll="false" />
      <jar destfile="${dist.dir}/jsf-glassfish-updater-${impl.version}.jar">
         <fileset dir="${basedir}/jsf-tools/build/classes"
-                 includes="com/sun/faces/tools/GlassfishUpdater.class" />
+                 includes="com/sun/faces/tools/GlassfishUpdater*.class" />
         <fileset dir="${basedir}/jsf-api/build/lib/"
                  includes="jsf-api.jar" />
-        <fileset dir="${dist.dir}/tmp"
+        <fileset dir="${basedir}/jsf-ri/build/lib/"
                  includes="jsf-impl.jar" />
         <fileset dir="${basedir}/legal/jsf-cddl"
                  includes="BINARY_LICENSE.txt" />
