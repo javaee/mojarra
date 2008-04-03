@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRootTestCase.java,v 1.25 2007/04/27 22:00:15 ofung Exp $
+ * $Id: UIViewRootTestCase.java,v 1.26 2008/03/17 22:25:48 rlubke Exp $
  */
 
 /*
@@ -225,12 +225,21 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
     public void testLocaleFromVB() throws Exception {
 	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
 	ValueExpression expression = application.getExpressionFactory().createValueExpression(facesContext.getELContext(),
-											      "#{locale}", java.util.Locale.class);
+											      "#{locale}", Object.class);
 	request.setAttribute("locale", Locale.CHINESE);
 	assertEquals(Locale.getDefault(), root.getLocale());
 	root.setValueExpression("locale", expression);
 	assertEquals(Locale.CHINESE, root.getLocale());
-	root.setLocale(Locale.CANADA_FRENCH);
+
+           // test locale from String
+        request.setAttribute("locale", "en");
+        assertEquals(new Locale("en"), root.getLocale());
+        request.setAttribute("locale", "en_IE");
+        assertEquals(new Locale("en", "IE"), root.getLocale());
+        request.setAttribute("locale", "en_IE_EURO");
+        assertEquals(new Locale("en", "IE", "EURO"), root.getLocale());
+        
+    root.setLocale(Locale.CANADA_FRENCH);
 	assertEquals(Locale.CANADA_FRENCH, root.getLocale());
     }
 

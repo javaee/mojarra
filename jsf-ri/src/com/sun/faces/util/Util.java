@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.219 2008/01/28 20:55:40 rlubke Exp $
+ * $Id: Util.java,v 1.220 2008/03/17 22:25:49 rlubke Exp $
  */
 
 /*
@@ -70,7 +70,7 @@ import java.util.regex.Pattern;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.219 2008/01/28 20:55:40 rlubke Exp $
+ * @version $Id: Util.java,v 1.220 2008/03/17 22:25:49 rlubke Exp $
  */
 
 public class Util {
@@ -301,21 +301,20 @@ public class Util {
         }
 
         Locale result = null;
-        String
-            lang = null,
-            country = null,
-            variant = null;
+        String lang = null;
+        String country = null;
+        String variant = null;
         char[] seps = {
             '-',
             '_'
         };
-        int
-            i = 0,
-            j = 0;
+        int inputLength = localeStr.length();
+        int i = 0;
+        int j = 0;
 
         // to have a language, the length must be >= 2
-        if ((localeStr.length() >= 2) &&
-            (-1 == (i = indexOfSet(localeStr, seps, 0)))) {
+        if ((inputLength >= 2) &&
+            ((i = indexOfSet(localeStr, seps, 0)) == -1)) {
             // we have only Language, no country or variant
             if (2 != localeStr.length()) {
                 throw new
@@ -326,25 +325,25 @@ public class Util {
         }
 
         // we have a separator, it must be either '-' or '_'
-        if (-1 != i) {
+        if (i != -1) {
             lang = localeStr.substring(0, i);
             // look for the country sep.
             // to have a country, the length must be >= 5
-            if ((localeStr.length() >= 5) &&
-                (-1 == (j = indexOfSet(localeStr, seps, i + 1)))) {
+            if ((inputLength >= 5) &&
+                ((j = indexOfSet(localeStr, seps, i + 1)) == -1)) {
                 // no further separators, length must be 5
-                if (5 != localeStr.length()) {
+                if (inputLength != 5) {
                     throw new
                         IllegalArgumentException("Illegal locale String: " +
                                                  localeStr);
                 }
                 country = localeStr.substring(i + 1);
             }
-            if (-1 != j) {
+            if (j != -1) {
                 country = localeStr.substring(i + 1, j);
                 // if we have enough separators for language, locale,
                 // and variant, the length must be >= 8.
-                if (localeStr.length() >= 8) {
+                if (inputLength >= 8) {
                     variant = localeStr.substring(j + 1);
                 } else {
                     throw new
@@ -353,11 +352,11 @@ public class Util {
                 }
             }
         }
-        if (null != variant && null != country && null != lang) {
+        if (variant != null && country != null && lang != null) {
             result = new Locale(lang, country, variant);
-        } else if (null != lang && null != country) {
+        } else if (lang != null && country != null) {
             result = new Locale(lang, country);
-        } else if (null != lang) {
+        } else if (lang != null) {
             result = new Locale(lang, "");
         }
         return result;
@@ -374,10 +373,9 @@ public class Util {
      */
     public static int indexOfSet(String str, char[] set, int fromIndex) {
         int result = -1;
-        char[] toSearch = str.toCharArray();
-        for (int i = fromIndex, len = toSearch.length; i < len; i++) {
+        for (int i = fromIndex, len = str.length(); i < len; i++) {
             for (int j = 0, innerLen = set.length; j < innerLen; j++) {
-                if (toSearch[i] == set[j]) {
+                if (str.charAt(i) == set[j]) {
                     result = i;
                     break;
                 }

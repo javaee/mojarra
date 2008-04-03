@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.50 2007/10/18 17:05:23 rlubke Exp $
+ * $Id: UIViewRoot.java,v 1.51 2008/03/17 22:25:48 rlubke Exp $
  */
 
 /*
@@ -851,37 +851,101 @@ public class UIViewRoot extends UIComponentBase {
     }
 
 
-    /**
-     * Returns the locale represented by the expression.
-     *
-     * @param localeExpr a String in the format specified by JSTL Specification
-     *                   as follows:
-     *                   "A String value is interpreted as the printable
-     *                   representation of a locale, which must contain a
-     *                   two-letter (lower-case) language code (as defined by
-     *                   ISO-639), and may contain a two-letter (upper-case)
-     *                   country code (as defined by ISO-3166). Language and
-     *                   country codes must be separated by hyphen (???-???) or
-     *                   underscore (???_???)."
-     *
-     * @return Locale instance cosntructed from the expression.
-     */
-    private static Locale getLocaleFromString(String localeExpr) {
-        Locale result = Locale.getDefault();
-        if (localeExpr.indexOf('_') == -1 || localeExpr.indexOf('-') == -1) {
-            // expression has just language code in it. make sure the 
-            // expression contains exactly 2 characters.
-            if (localeExpr.length() == 2) {
-                result = new Locale(localeExpr, "");
+    // W3C XML specification refers to IETF RFC 1766 for language code
+    // structure, therefore the value for the xml:lang attribute should
+    // be in the form of language or language-country or
+    // language-country-variant.
+
+    private static Locale getLocaleFromString(String localeStr)
+        throws IllegalArgumentException {
+        // length must be at least 2.
+        if (null == localeStr || localeStr.length() < 2) {
+            throw new IllegalArgumentException("Illegal locale String: " +
+                                               localeStr);
+        }
+
+        Locale result = null;
+        String lang = null;
+        String country = null;
+        String variant = null;
+        char[] seps = {
+            '-',
+            '_'
+        };
+        int inputLength = localeStr.length();
+        int i = 0;
+        int j = 0;
+
+        // to have a language, the length must be >= 2
+        if ((inputLength >= 2) &&
+            ((i = indexOfSet(localeStr, seps, 0)) == -1)) {
+            // we have only Language, no country or variant
+            if (2 != localeStr.length()) {
+                throw new
+                    IllegalArgumentException("Illegal locale String: " +
+                                             localeStr);
             }
-        } else {
-            // expression has country code in it. make sure the expression 
-            // contains exactly 5 characters.
-            if (localeExpr.length() == 5) {
-                // get the language and country to construct the locale.
-                String language = localeExpr.substring(0, 1);
-                String country = localeExpr.substring(3, 4);
-                result = new Locale(language, country);
+            lang = localeStr.toLowerCase();
+        }
+
+        // we have a separator, it must be either '-' or '_'
+        if (i != -1) {
+            lang = localeStr.substring(0, i);
+            // look for the country sep.
+            // to have a country, the length must be >= 5
+            if ((inputLength >= 5) &&
+                (-1 == (j = indexOfSet(localeStr, seps, i + 1)))) {
+                // no further separators, length must be 5
+                if (inputLength != 5) {
+                    throw new
+                        IllegalArgumentException("Illegal locale String: " +
+                                                 localeStr);
+                }
+                country = localeStr.substring(i + 1);
+            }
+            if (j != -1) {
+                country = localeStr.substring(i + 1, j);
+                // if we have enough separators for language, locale,
+                // and variant, the length must be >= 8.
+                if (inputLength >= 8) {
+                    variant = localeStr.substring(j + 1);
+                } else {
+                    throw new
+                        IllegalArgumentException("Illegal locale String: " +
+                                                 localeStr);
+                }
+            }
+        }
+        if (variant != null && country != null && lang != null) {
+            result = new Locale(lang, country, variant);
+        } else if (lang != null && country != null) {
+            result = new Locale(lang, country);
+        } else if (lang != null) {
+            result = new Locale(lang, "");
+        }
+        return result;
+    }
+
+
+    /**
+     * @param str local string
+     * @param set the substring
+     * @param fromIndex starting index
+     * @return starting at <code>fromIndex</code>, the index of the
+     *         first occurrence of any substring from <code>set</code> in
+     *         <code>toSearch</code>, or -1 if no such match is found
+     */
+    private static int indexOfSet(String str, char[] set, int fromIndex) {
+        int result = -1;
+        for (int i = fromIndex, len = str.length(); i < len; i++) {
+            for (int j = 0, innerLen = set.length; j < innerLen; j++) {
+                if (str.charAt(i) == set[j]) {
+                    result = i;
+                    break;
+                }
+            }
+            if (-1 != result) {
+                break;
             }
         }
         return result;
