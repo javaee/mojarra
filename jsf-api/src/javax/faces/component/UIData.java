@@ -135,7 +135,6 @@ public class UIData extends UIComponentBase
      * store the previous "var" value for this instance.  When the row iteration
      * is complete, this value is restored to the request map.
      */
-
     private Object oldVar;
 
 
@@ -176,6 +175,42 @@ public class UIData extends UIComponentBase
      * current row will be exposed when iterating.</p>
      */
     private String var = null;
+
+
+    /**
+     * <p>Holds the base client ID that will be used to generate per-row
+     * client IDs (this will be null if this UIData is nested within another).</p>
+     *
+     * <p>This is not part of the component state.</p>
+     */
+    private String baseClientId = null;
+
+
+    /**
+     * <p> Length of the cached <code>baseClientId</code> plus one for the
+     * NamingContainer.SEPARATOR_CHAR. </p>
+     *
+     * <p>This is not part of the component state.</p>
+     */
+    private int baseClientIdLength;
+
+
+    /**
+     * <p>StringBuilder used to build per-row client IDs.</p>
+     *
+     * <p>This is not part of the component state.</p>
+     */
+    private StringBuilder clientIdBuilder = null;
+
+
+    /**
+     * <p>Flag indicating whether or not this UIData instance is nested
+     * within another UIData instance</p>
+     *
+     * <p>This is not part of the component state.</p>
+     */
+    private Boolean isNested = null;
+    
 
     // -------------------------------------------------------------- Properties
 
@@ -680,11 +715,59 @@ public class UIData extends UIComponentBase
         if (context == null) {
             throw new NullPointerException();
         }
-        String baseClientId = super.getClientId(context);
+
+        // If baseClientId and clientIdBuilder are both null, this is the
+        // first time that getClientId() has been called.
+        // If we're not nested within another UIData, then:
+        //   - create a new StringBuilder assigned to clientIdBuilder containing
+        //   our client ID.
+        //   - toString() the builder - this result will be our baseClientId
+        //     for the duration of the component
+        //   - append SEPARATOR_CHAR to the builder
+        //  If we are nested within another UIData, then:
+        //   - create an empty StringBuilder that will be used to build
+        //     this instance's ID
+        if (baseClientId == null && clientIdBuilder == null) {
+            if (!isNestedWithinUIData()) {
+                clientIdBuilder = new StringBuilder(super.getClientId(context));
+                baseClientId = clientIdBuilder.toString();
+                baseClientIdLength = (baseClientId.length() + 1);
+                clientIdBuilder.append(NamingContainer.SEPARATOR_CHAR);
+                clientIdBuilder.setLength(baseClientIdLength);
+            } else {
+                clientIdBuilder = new StringBuilder();
+            }
+        }
         if (rowIndex >= 0) {
-            return (baseClientId + NamingContainer.SEPARATOR_CHAR + rowIndex);
+            String cid;
+            if (!isNestedWithinUIData()) {
+                // we're not nested, so the clientIdBuilder is already
+                // primed with clientID + SEPARATOR_CHAR.  Append
+                // the current rowIndex, and toString() the builder.
+                // reset the builder to it's primed state.
+                cid = clientIdBuilder.append(rowIndex).toString();
+                clientIdBuilder.setLength(baseClientIdLength);
+            } else {
+                // we're nested, so we have to build the ID from scratch
+                // each time.  Reuse the same clientIdBuilder instance
+                // for each call by resetting the length to 0 after
+                // the ID has been computed.
+                cid = clientIdBuilder.append(super.getClientId(context))
+                      .append(NamingContainer.SEPARATOR_CHAR).append(rowIndex)
+                      .toString();
+                clientIdBuilder.setLength(0);
+            }
+            return (cid);
         } else {
-            return (baseClientId);
+            if (!isNestedWithinUIData()) {
+                // Not nested and no row available, so just return our baseClientId
+                return (baseClientId);
+            } else {
+                // nested and no row available, return the result of getClientId().
+                // this is necessary as the client ID will reflect the row that
+                // this table represents
+                return super.getClientId(context);
+            }
         }
 
     }
@@ -777,7 +860,8 @@ public class UIData extends UIComponentBase
                             this.setRowIndex(newRow);
                             if (this.isRowAvailable()) {
                                 found = super.invokeOnComponent(context,
-                                                                clientId, callback);
+                                                                clientId,
+                                                                callback);
                             }
                         }
                     }
@@ -850,7 +934,6 @@ public class UIData extends UIComponentBase
         FacesEvent rowEvent = revent.getFacesEvent();
         rowEvent.getComponent().broadcast(rowEvent);
         setRowIndex(oldRowIndex);
-        return;
 
     }
 
@@ -917,8 +1000,7 @@ public class UIData extends UIComponentBase
         setDataModel(null); // Re-evaluate even with server-side state saving
         if (null == saved || !keepSaved(context)) {
             //noinspection CollectionWithoutInitialCapacity
-            saved =
-                  new HashMap<String, SavedState>(); // We don't need saved state here
+            saved = new HashMap<String, SavedState>(); // We don't need saved state here
         }
 
         iterate(context, PhaseId.APPLY_REQUEST_VALUES);
@@ -1103,43 +1185,39 @@ public class UIData extends UIComponentBase
 
         // Process each facet of this component exactly once
         setRowIndex(-1);
-        Iterator facets = getFacets().keySet().iterator();
-        while (facets.hasNext()) {
-            UIComponent facet = getFacets().get(facets.next());
-            if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
-                facet.processDecodes(context);
-            } else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
-                facet.processValidators(context);
-            } else if (phaseId == PhaseId.UPDATE_MODEL_VALUES) {
-                facet.processUpdates(context);
-            } else {
-                throw new IllegalArgumentException();
+        if (getFacetCount() > 0) {
+            for (UIComponent facet : getFacets().values()) {
+                if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
+                    facet.processDecodes(context);
+                } else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
+                    facet.processValidators(context);
+                } else if (phaseId == PhaseId.UPDATE_MODEL_VALUES) {
+                    facet.processUpdates(context);
+                } else {
+                    throw new IllegalArgumentException();
+                }
             }
         }
 
         // Process each facet of our child UIColumn components exactly once
         setRowIndex(-1);
-        Iterator columns = getChildren().iterator();
-        while (columns.hasNext()) {
-            UIComponent column = (UIComponent) columns.next();
-            if (!(column instanceof UIColumn)) {
-                continue;
-            }
-            if (!column.isRendered()) {
-                continue;
-            }
-            Iterator columnFacets = column.getFacets().keySet().iterator();
-            while (columnFacets.hasNext()) {
-                UIComponent columnFacet =
-                      column.getFacets().get(columnFacets.next());
-                if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
-                    columnFacet.processDecodes(context);
-                } else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
-                    columnFacet.processValidators(context);
-                } else if (phaseId == PhaseId.UPDATE_MODEL_VALUES) {
-                    columnFacet.processUpdates(context);
-                } else {
-                    throw new IllegalArgumentException();
+        if (getChildCount() > 0) {
+            for (UIComponent column : getChildren()) {
+                if (!(column instanceof UIColumn) || !column.isRendered()) {
+                    continue;
+                }
+                if (column.getFacetCount() > 0) {
+                    for (UIComponent columnFacet : column.getFacets().values()) {                      
+                        if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
+                            columnFacet.processDecodes(context);
+                        } else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
+                            columnFacet.processValidators(context);
+                        } else if (phaseId == PhaseId.UPDATE_MODEL_VALUES) {
+                            columnFacet.processUpdates(context);
+                        } else {
+                            throw new IllegalArgumentException();
+                        }
+                    }
                 }
             }
         }
@@ -1165,26 +1243,26 @@ public class UIData extends UIComponentBase
             // Perform phase-specific processing as required
             // on the *children* of the UIColumn (facets have
             // been done a single time with rowIndex=-1 already)
-            Iterator kids = getChildren().iterator();
-            while (kids.hasNext()) {
-                UIComponent kid = (UIComponent) kids.next();
-                if (!(kid instanceof UIColumn)) {
-                    continue;
-                }
-                Iterator grandkids = kid.getChildren().iterator();
-                while (grandkids.hasNext()) {
-                    UIComponent grandkid = (UIComponent) grandkids.next();
-                    if (!grandkid.isRendered()) {
+            if (getChildCount() > 0) {
+                for (UIComponent kid : getChildren()) {
+                    if (!(kid instanceof UIColumn) || !kid.isRendered()) {
                         continue;
                     }
-                    if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
-                        grandkid.processDecodes(context);
-                    } else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
-                        grandkid.processValidators(context);
-                    } else if (phaseId == PhaseId.UPDATE_MODEL_VALUES) {
-                        grandkid.processUpdates(context);
-                    } else {
-                        throw new IllegalArgumentException();
+                    if (kid.getChildCount() > 0) {
+                        for (UIComponent grandkid : kid.getChildren()) {
+                            if (!grandkid.isRendered()) {
+                                continue;
+                            }
+                            if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
+                                grandkid.processDecodes(context);
+                            } else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
+                                grandkid.processValidators(context);
+                            } else if (phaseId == PhaseId.UPDATE_MODEL_VALUES) {
+                                grandkid.processUpdates(context);
+                            } else {
+                                throw new IllegalArgumentException();
+                            }
+                        }
                     }
                 }
             }
@@ -1216,9 +1294,7 @@ public class UIData extends UIComponentBase
      */
     private boolean keepSaved(FacesContext context) {
 
-        Iterator clientIds = saved.keySet().iterator();
-        while (clientIds.hasNext()) {
-            String clientId = (String) clientIds.next();
+        for (String clientId : saved.keySet()) {
             Iterator messages = context.getMessages(clientId);
             while (messages.hasNext()) {
                 FacesMessage message = (FacesMessage) messages.next();
@@ -1232,14 +1308,22 @@ public class UIData extends UIComponentBase
 
     }
 
-    private boolean isNestedWithinUIData() {
-        UIComponent parent = this;
-        while (null != (parent = parent.getParent())) {
-            if (parent instanceof UIData) {
-                return true;
+    private Boolean isNestedWithinUIData() {
+        if (isNested == null) {
+            UIComponent parent = this;
+            while (null != (parent = parent.getParent())) {
+                if (parent instanceof UIData) {
+                    isNested = Boolean.TRUE;
+                    break;
+                }
             }
+            if (isNested == null) {
+                isNested = Boolean.FALSE;
+            }
+            return isNested;
+        } else {
+            return isNested;
         }
-        return (false);
     }
 
 
@@ -1250,11 +1334,11 @@ public class UIData extends UIComponentBase
     private void restoreDescendantState() {
 
         FacesContext context = getFacesContext();
-        Iterator kids = getChildren().iterator();
-        while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
-            if (kid instanceof UIColumn) {
-                restoreDescendantState(kid, context);
+        if (getChildCount() > 0) {
+            for (UIComponent kid : getChildren()) {
+                if (kid instanceof UIColumn) {
+                    restoreDescendantState(kid, context);
+                }
             }
         }
 
@@ -1292,16 +1376,16 @@ public class UIData extends UIComponentBase
         }
 
         // Restore state for children of this component
-        Iterator kids = component.getChildren().iterator();
-        while (kids.hasNext()) {
-            restoreDescendantState((UIComponent) kids.next(), context);
+        if (component.getChildCount() > 0) {
+            for (UIComponent kid : component.getChildren()) {
+                restoreDescendantState(kid, context);
+            }
         }
+
         // Restore state for facets of this component
-        Iterator facetNames = component.getFacets().keySet().iterator();
-        while (facetNames.hasNext()) {
-            UIComponent c = component.getFacet((String) facetNames.next());
-            if (c != null) {
-                restoreDescendantState(c, context);
+        if (component.getFacetCount() > 0) {
+            for (UIComponent facet : component.getFacets().values()) {
+                restoreDescendantState(facet, context);
             }
         }
 
@@ -1315,11 +1399,11 @@ public class UIData extends UIComponentBase
     private void saveDescendantState() {
 
         FacesContext context = getFacesContext();
-        Iterator kids = getChildren().iterator();
-        while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
-            if (kid instanceof UIColumn) {
-                saveDescendantState(kid, context);
+        if (getChildCount() > 0) {
+            for (UIComponent kid : getChildren()) {
+                if (kid instanceof UIColumn) {
+                    saveDescendantState(kid, context);
+                }
             }
         }
 
@@ -1352,16 +1436,16 @@ public class UIData extends UIComponentBase
         }
 
         // Save state for children of this component
-        Iterator kids = component.getChildren().iterator();
-        while (kids.hasNext()) {
-            saveDescendantState((UIComponent) kids.next(), context);
+        if (component.getChildCount() > 0) {
+            for (UIComponent uiComponent : component.getChildren()) {
+                saveDescendantState(uiComponent, context);
+            }
         }
+
         // Save state for facets of this component
-        Iterator facetNames = component.getFacets().keySet().iterator();
-        while (facetNames.hasNext()) {
-            UIComponent c = component.getFacet((String) facetNames.next());
-            if (c != null) {
-                saveDescendantState(c, context);
+        if (component.getFacetCount() > 0) {
+            for (UIComponent facet : component.getFacets().values()) {
+                saveDescendantState(facet, context);
             }
         }
 
