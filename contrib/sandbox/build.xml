@@ -203,7 +203,7 @@
                 </unzip>
             </then>
         </if>
-		-->
+        -->
         <!-- logging -->
         <if>
             <not>
@@ -227,24 +227,24 @@
             </then>
         </if>
         <!-- Shale Remoting -->
-		<!-- 
-		Ugly hack to get the most recent Shale nightly, as it has a bug fix we need.  This is a bit dangerous, as the nightly
-		may introduce new bugs, but what do you do? :P  When they finally release a new version, this can go away.  
-		Come on, Craig! :)
-		-->
-		<tstamp>
-			<format property="shale.nightly.date" pattern="yyyyMMdd" offset="-1" unit="day"/>
-		</tstamp>
+        <!-- 
+        Ugly hack to get the most recent Shale nightly, as it has a bug fix we need.  This is a bit dangerous, as the nightly
+        may introduce new bugs, but what do you do? :P  When they finally release a new version, this can go away.  
+        Come on, Craig! :)
+        -->
+        <tstamp>
+            <format property="shale.nightly.date" pattern="yyyyMMdd" offset="-1" unit="day"/>
+        </tstamp>
         <if>
             <not>
-		<and>
-        	        <available file="shale-framework-${shale.nightly.date}.zip" property="ignored"/>
-		</and>
+        <and>
+                    <available file="shale-framework-${shale.nightly.date}.zip" property="ignored"/>
+        </and>
             </not>
             <then>
-				<delete>
-					<fileset dir="." includes="shale-framework*.zip" />
-				</delete>
+                <delete>
+                    <fileset dir="." includes="shale-framework*.zip" />
+                </delete>
                 <!-- ${maven.mirror}/org/apache/shale/shale-remoting/${shale.remoting.version}/shale-remoting-${shale.remoting.version}.jar" -->
                 <get src="http://people.apache.org/builds/shale/nightly/shale-framework-${shale.nightly.date}.zip"
                      dest="shale-framework-${shale.nightly.date}.zip"
@@ -283,7 +283,7 @@
         <!-- TinyMCE -->
         <if>
             <not>
-                <available file="${tinymce.archive}" property="ignored"/>
+                <available file="${resource.dir}/tinymce" property="ignored"/>
             </not>
             <then>
                 <get src="${sourceforge.mirror}/tinymce/tinymce_${tinymce.version}.zip"
@@ -555,7 +555,7 @@
                         </classpath>
                     </taskdef>
 
-					<ant dir="demo/" target="dist" inheritAll="false"/>
+                    <ant dir="demo/" target="dist" inheritAll="false"/>
                     <javaNetUpload projectName="javaserverfaces"
                                    toFile="/RI Sandbox/${sb.impl.version}/jsf-ri-sandbox-${sb.impl.version}.jar"
                                    fromFile="${build.dir}/lib/jsf-ri-sandbox-${sb.impl.version}.jar"
