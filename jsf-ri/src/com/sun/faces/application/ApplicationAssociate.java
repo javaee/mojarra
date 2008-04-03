@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.48 2007/06/25 20:57:22 rlubke Exp $
+ * $Id: ApplicationAssociate.java,v 1.49 2007/07/17 20:50:46 rlubke Exp $
  */
 
 /*
@@ -46,8 +46,6 @@ import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.spi.InjectionProvider;
 import com.sun.faces.spi.InjectionProviderFactory;
 import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.FacesLogger;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 
 import javax.el.CompositeELResolver;
@@ -68,7 +66,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.TreeSet;
-import java.util.logging.Logger;
 
 /**
  * <p>Break out the things that are associated with the Application, but
@@ -83,11 +80,9 @@ import java.util.logging.Logger;
 
 public class ApplicationAssociate {
 
-    // Log instance for this class
-    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
-    private static final String APPLICATION_IMPL_ATTR_NAME = RIConstants.FACES_PREFIX +
-         "ApplicationImpl";
+    private static final String APPLICATION_IMPL_ATTR_NAME =
+          RIConstants.FACES_PREFIX + "ApplicationImpl";
 
     private ApplicationImpl app = null;
 
@@ -236,7 +231,7 @@ public class ApplicationAssociate {
      * contain any <code>VariableResolvers</code> defined within
      * faces-config configuration files.
      *
-     * @param resolver
+     * @param resolver VariableResolver
      */
     @SuppressWarnings("deprecation")
     public void setLegacyVRChainHead(VariableResolver resolver) {
@@ -253,7 +248,7 @@ public class ApplicationAssociate {
      * contain any <code>PropertyResolvers</code> defined within
      * faces-config configuration files.
      *
-     * @param resolver
+     * @param resolver PropertyResolver
      */
     @SuppressWarnings("deprecation")
     public void setLegacyPRChainHead(PropertyResolver resolver) {
@@ -308,6 +303,7 @@ public class ApplicationAssociate {
     /**
      * Maintains the PropertyResolver called through
      * Application.setPropertyResolver()
+     * @param resolver PropertyResolver
      */
     @SuppressWarnings("deprecation")
     public void setLegacyPropertyResolver(PropertyResolver resolver) {
@@ -315,7 +311,7 @@ public class ApplicationAssociate {
     }
 
     /**
-     * Returns the PropertyResolver called through
+     * @return the PropertyResolver called through
      * Application.getPropertyResolver()
      */
     @SuppressWarnings("deprecation")
@@ -326,6 +322,7 @@ public class ApplicationAssociate {
     /**
      * Maintains the PropertyResolver called through
      * Application.setVariableResolver()
+     * @param resolver VariableResolver
      */
     @SuppressWarnings("deprecation")
     public void setLegacyVariableResolver(VariableResolver resolver) {
@@ -333,7 +330,7 @@ public class ApplicationAssociate {
     }
 
     /**
-     * Returns the VariableResolver called through
+     * @return the VariableResolver called through
      * Application.getVariableResolver()
      */
     @SuppressWarnings("deprecation")
