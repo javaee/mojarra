@@ -52,6 +52,35 @@ import com.sun.faces.sandbox.util.Util;
  */
 public abstract class UISandboxComponentTag extends UIComponentTag {
 
+    // --------------------------------------------------- Common Tag Properties
+
+    // shared by all tags, but only used if exposed via the TLD
+    private String disabled;
+    private String binding;
+
+    public void setDisabled(String disabled) {
+        this.disabled = disabled;
+    }
+
+    public void setBinding(String binding) {
+        this.binding = binding;
+    }
+
+
+    // --------------------------------------------- Methods from UIComponentTag
+
+
+    protected void setProperties(UIComponent component) {
+
+        super.setProperties(component);
+        setBooleanProperty(component, "disabled", disabled);
+        setValueBinding(component, "binding", binding);
+
+    }
+
+
+    // ------------------------------------------------------- Protected Methods
+
     /**
      * <p>
      * Calls through to {@link #setStringProperty(javax.faces.component.UIComponent, String, String, boolean)}
