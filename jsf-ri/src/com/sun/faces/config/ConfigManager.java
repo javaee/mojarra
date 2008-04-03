@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManager.java,v 1.22 2007/11/07 22:04:16 rlubke Exp $
+ * $Id: ConfigManager.java,v 1.23 2007/11/09 21:16:43 rlubke Exp $
  */
 
 /*
@@ -449,14 +449,12 @@ public class ConfigManager {
                         } else if ("1.2".equals(versionStr)) {
                             schema = DbfFactory.FacesSchema.FACES_12;
                         } else {
-                            // RELEASE_PENDING i18n
                             throw new ConfigurationException("Unknown Schema version: " + versionStr);
                         }
                         DocumentBuilder builder = getBuilderForSchema(schema);
                         builder.getSchema().newValidator().validate(domSource);
                         return ((Document) domSource.getNode());
                     } else {
-                        // RELEASE_PENDING i18n
                         // this shouldn't happen, but...
                         throw new ConfigurationException("No document version available.");
                     }
