@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.50 2007/10/03 20:42:21 rlubke Exp $
+ * $Id: ApplicationAssociate.java,v 1.51 2008/01/09 14:44:16 rlubke Exp $
  */
 
 /*
@@ -145,13 +145,13 @@ public class ApplicationAssociate {
     public ApplicationAssociate(ApplicationImpl appImpl) {
         app = appImpl;
 
-        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-        if (externalContext == null) {
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        if (ctx == null) {
             throw new IllegalStateException(
                  MessageUtils.getExceptionMessageString(
                       MessageUtils.APPLICATION_ASSOCIATE_CTOR_WRONG_CALLSTACK_ID));
         }
-
+        ExternalContext externalContext = ctx.getExternalContext();
         if (null != externalContext.getApplicationMap().get(ASSOCIATE_KEY)) {
             throw new IllegalStateException(
                  MessageUtils.getExceptionMessageString(
