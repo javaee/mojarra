@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.150 2007/04/27 22:00:04 ofung Exp $
+ * $Id: UIComponent.java,v 1.151 2007/09/05 16:02:44 rogerk Exp $
  */
 
 /*
@@ -639,7 +639,7 @@ private UIComponent found = null;
 private void doFind(FacesContext context, String clientId) {
   context.getViewRoot().invokeOnComponent(context, clientId,
       new ContextCallback() {
-         public void invokeOnComponent(FacesContext context,
+         public void invokeContextCallback(FacesContext context,
                                        UIComponent component) {
            found = component;
          }
