@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.45 2007/04/27 22:00:02 ofung Exp $
+ * $Id: ViewHandler.java,v 1.46 2008/01/14 16:35:26 edburns Exp $
  */
 
 /*
@@ -139,6 +139,8 @@ public abstract class ViewHandler {
       * <li><p>Otherwise, return <code>null</code></p></li>
       *
       * </ul>
+      *
+      * @since 1.2
       */ 
      
      public String calculateCharacterEncoding(FacesContext context) {
