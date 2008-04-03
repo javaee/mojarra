@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.44 2007/04/27 22:02:05 ofung Exp $
+ * $Id: TestConverters.java,v 1.45 2007/12/04 18:40:44 rlubke Exp $
  */
 
 /*
@@ -42,9 +42,14 @@
 
 package com.sun.faces.convert;
 
-import com.sun.faces.cactus.JspFacesTestCase;
-import com.sun.faces.util.Util;
-import org.apache.cactus.WebRequest;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
@@ -57,22 +62,18 @@ import javax.faces.context.FacesContextFactory;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.convert.DateTimeConverter;
+import javax.faces.convert.NumberConverter;
 
-import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
-import java.util.Locale;
+import com.sun.faces.cactus.JspFacesTestCase;
+import com.sun.faces.util.Util;
+import org.apache.cactus.WebRequest;
 
 /**
  * Test encode and decode methods in Renderer classes.
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.44 2007/04/27 22:02:05 ofung Exp $
+ * @version $Id: TestConverters.java,v 1.45 2007/12/04 18:40:44 rlubke Exp $
  */
 
 public class TestConverters extends JspFacesTestCase {
@@ -141,6 +142,7 @@ public class TestConverters extends JspFacesTestCase {
 
             testDateConverter(root);
             testNumberConverter(root);
+            testConverterInheritance(root);
             testBooleanConverter(root);
             testConverterInheritance(root);
             //assertTrue(verifyExpectedOutput());
@@ -787,6 +789,18 @@ public class TestConverters extends JspFacesTestCase {
         String str = converter.getAsString(getFacesContext(), text, obj);
         assertTrue(str.equals(stringToConvert));
 
+    }
+
+    public void testNumberConverterCurrency() throws Exception {
+        UIInput text = new UIInput();
+        NumberConverter converter = (NumberConverter) application.createConverter("javax.faces.Number");
+        converter.setType("currency");
+        converter.setLocale(Locale.FRANCE);
+        String toConv = "12 345,68 €";
+        Number number = (Number) converter.getAsObject(getFacesContext(),
+                                                       text,
+                                                       toConv);
+        assertTrue(number != null);
     }
 
     public void testDoubleConverter(UIViewRoot root) throws ConverterException,

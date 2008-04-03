@@ -1,5 +1,5 @@
 /*
- * $Id: NumberConverter.java,v 1.28 2007/09/26 19:24:12 rlubke Exp $
+ * $Id: NumberConverter.java,v 1.29 2007/12/04 18:40:44 rlubke Exp $
  */
 
 /*
@@ -553,6 +553,28 @@ public class NumberConverter implements Converter, StateHolder {
                 configureCurrency(parser);
             }
             parser.setParseIntegerOnly(isIntegerOnly());
+            boolean groupSepChanged = false;
+            // BEGIN HACK 4510618
+            // This lovely bit of code is for a workaround in some
+            // oddities in the JDK's parsing code.
+            // See:  http://bugs.sun.com/view_bug.do?bug_id=4510618
+            if (parser instanceof DecimalFormat) {
+                DecimalFormat dParser = (DecimalFormat) parser;
+                DecimalFormatSymbols symbols = dParser.getDecimalFormatSymbols();
+                if (symbols.getGroupingSeparator() == '\u00a0') {
+                    symbols.setGroupingSeparator(' ');
+                    dParser.setDecimalFormatSymbols(symbols);
+                }
+                try {
+                    return dParser.parse(value);
+                } catch (ParseException pe) {
+                    if (groupSepChanged) {
+                        symbols.setGroupingSeparator('\u00a0');
+                        dParser.setDecimalFormatSymbols(symbols);
+                    }
+                }
+            }
+            // END HACK 4510618
 
             // Perform the requested parsing
             returnValue = parser.parse(value);
