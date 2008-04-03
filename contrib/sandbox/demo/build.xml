@@ -200,7 +200,7 @@
         <copy file="${logging.jar}" todir="${assemble.dir}/lib" />
         <copy file="${io.jar}" todir="${assemble.dir}/lib" />
         <copy file="${facelets.jar}" todir="${assemble.dir}/lib" />
-        <copy file="${shale.remoting.jar}" todir="${web.jsft.dir}/WEB-INF/lib" />
+        <copy file="${shale.remoting.jar}" todir="${assemble.dir}/lib" />
         <copy file="${jsftemplating.jar}" todir="${web.jsft.dir}/WEB-INF/lib" />
         <copy file="${jsftemplating.df.jar}" todir="${web.jsft.dir}/WEB-INF/lib" />
         <copy file="${sandbox.dir}/build/lib/${name}-${sb.impl.version}.jar" todir="${assemble.dir}/lib" />

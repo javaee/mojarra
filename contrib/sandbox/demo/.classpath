@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/java"/>
-	<classpathentry kind="src" path="src/test"/>
 	<classpathentry kind="lib" path="C:/src/jsf/HEAD/jsf-ri/build/lib/jsf-impl.jar"/>
 	<classpathentry kind="lib" path="C:/src/jsf/HEAD/jsf-api/build/lib/jsf-api.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>

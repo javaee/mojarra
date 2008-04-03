@@ -463,8 +463,6 @@
 
         </zip>
         <antcall target="sandbox.source"/>
-        <ant dir="demo/" target="dist" inheritAll="false"/>
-
     </target>
     
     <target name="docs" description="Generate the tld and javadoc documentation">
@@ -546,28 +544,29 @@
                         </classpath>
                     </taskdef>
 
+					<ant dir="demo/" target="dist" inheritAll="false"/>
                     <javaNetUpload projectName="javaserverfaces"
-                                   toFile="/RI Sandbox/jsf-ri-sandbox-${sb.impl.version}.jar"
+                                   toFile="/RI Sandbox/${sb.impl.version}/jsf-ri-sandbox-${sb.impl.version}.jar"
                                    fromFile="${build.dir}/lib/jsf-ri-sandbox-${sb.impl.version}.jar"
                                    fileDescription="Nightly snapshot of the Sandbox components"
                                    overwrite="yes"/>
                     <javaNetUpload projectName="javaserverfaces"
-                                   toFile="/RI Sandbox/jsf-ri-sandbox-${sb.impl.version}.zip"
+                                   toFile="/RI Sandbox/${sb.impl.version}/jsf-ri-sandbox-${sb.impl.version}.zip"
                                    fromFile="${dist.dir}/jsf-ri-sandbox-${sb.impl.version}.zip"
                                    fileDescription="Nightly snapshot of the Sandbox components, jar and javadocs"
                                    overwrite="yes"/>
                     <javaNetUpload projectName="javaserverfaces"
-                                   toFile="/RI Sandbox/jsf-ri-sandbox-src-${sb.impl.version}.zip"
+                                   toFile="/RI Sandbox/${sb.impl.version}/jsf-ri-sandbox-src-${sb.impl.version}.zip"
                                    fromFile="${dist.dir}/jsf-ri-sandbox-src-${sb.impl.version}.zip"
                                    fileDescription="Nightly snapshot of the source bundle for the Sandbox components"
                                    overwrite="yes"/>
                     <javaNetUpload projectName="javaserverfaces"
-                                   toFile="/RI Sandbox/JsfRiSandboxDemo.ear"
+                                   toFile="/RI Sandbox/${sb.impl.version}/JsfRiSandboxDemo.ear"
                                    fromFile="demo/dist/JsfRiSandboxDemo.ear"
                                    fileDescription="An app demonstrating the Sandbox components using JSFTemplating, Facelets, and JSP"
                                    overwrite="yes"/>
                     <javaNetUpload projectName="javaserverfaces"
-                                   toFile="/RI Sandbox/README"
+                                   toFile="/RI Sandbox/${sb.impl.version}/README"
                                    fromFile="README"
                                    fileDescription=""
                                    overwrite="yes"/>
