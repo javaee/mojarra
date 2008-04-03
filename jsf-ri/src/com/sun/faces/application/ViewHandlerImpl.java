@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.99 2007/03/16 13:43:27 rlubke Exp $
+ * $Id: ViewHandlerImpl.java,v 1.100 2007/03/28 22:29:04 rogerk Exp $
  */
 
 
@@ -68,7 +68,7 @@ import java.util.logging.Logger;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.99 2007/03/16 13:43:27 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.100 2007/03/28 22:29:04 rogerk Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -306,16 +306,19 @@ public class ViewHandlerImpl extends ViewHandler {
         if (viewId != null) {
             String mapping = Util.getFacesMapping(context);
 
-            if (mapping != null && !Util.isPrefixMapped(mapping)) {
-                viewId = convertViewId(context, viewId);
-            } else {
-                viewId = normalizeRequestURI(viewId, mapping);
-                if (viewId.equals(mapping)) {
-                    // The request was to the FacesServlet only - no path info
-                    // on some containers this causes a recursion in the
-                    // RequestDispatcher and the request appears to hang.
-                    // If this is detected, return status 404
-                    send404Error(context);
+            if (mapping != null) {
+                if (!Util.isPrefixMapped(mapping)) {
+                   viewId = convertViewId(context, viewId);
+                } else {
+                    viewId = normalizeRequestURI(viewId, mapping);
+                    if (viewId.equals(mapping)) {
+                        // The request was to the FacesServlet only - no 
+                        // path info
+                        // on some containers this causes a recursion in the
+                        // RequestDispatcher and the request appears to hang.
+                        // If this is detected, return status 404
+                        send404Error(context);
+                    }
                 }
             }
 
