@@ -102,6 +102,8 @@ public class ResourceHandlerImpl extends ResourceHandler {
      */
     public Resource createResource(String resourceName) {
 
+        Util.notNull("resourceName", resourceName);
+
         String contentType = getContentTypeFromResourceName(resourceName);
         return createResource(resourceName, null, contentType);
 
@@ -112,6 +114,8 @@ public class ResourceHandlerImpl extends ResourceHandler {
      * @see ResourceHandler#createResource(String, String)
      */
     public Resource createResource(String resourceName, String libraryName) {
+
+        Util.notNull("resourceName", resourceName);
 
         String contentType = getContentTypeFromResourceName(resourceName);
         return createResource(resourceName, libraryName, contentType);
@@ -126,6 +130,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
                                    String libraryName,
                                    String contentType) {
 
+        Util.notNull("resourceName", resourceName);
 
         ResourceInfo info = manager.findResource(libraryName,
                                                  resourceName,
