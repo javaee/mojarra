@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.112 2007/06/26 17:59:03 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.113 2007/06/28 01:28:05 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -57,7 +57,6 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import javax.el.CompositeELResolver;
 import javax.el.ExpressionFactory;
-import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.servlet.*;
@@ -88,17 +87,6 @@ public class ConfigureListener implements ServletRequestListener,
 
 
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
-
-
-    /**
-     * <p>All known factory names.</p>
-     */
-    private static final String[] FACTORY_NAMES = {
-        FactoryFinder.APPLICATION_FACTORY,
-        FactoryFinder.FACES_CONTEXT_FACTORY,
-        FactoryFinder.LIFECYCLE_FACTORY,
-        FactoryFinder.RENDER_KIT_FACTORY
-    };
 
     protected WebappLifecycleListener webAppListener = new WebappLifecycleListener();
     protected WebConfiguration webConfig;
@@ -185,7 +173,6 @@ public class ConfigureListener implements ServletRequestListener,
                     LOGGER.severe(sb.toString());
                 }               
             }
-            verifyFactories();
             registerELResolverAndListenerWithJsp(context);
             
         } finally {
@@ -313,25 +300,6 @@ public class ConfigureListener implements ServletRequestListener,
 
 
     // --------------------------------------------------------- Private Methods
-   
-        
-
-    /**
-     * <p>Verify that all of the required factory objects are available.</p>
-     *
-     * @throws FacesException if a factory cannot be created
-     */
-    private void verifyFactories() throws FacesException {
-
-        for (int i = 0, len = FACTORY_NAMES.length; i < len; i++) {
-            try {
-                FactoryFinder.getFactory(FACTORY_NAMES[i]);
-            } catch (Exception e) {
-                throw new FacesException(e);
-            }
-        }
-
-    }
 
 
     private static String getServletContextIdentifier(ServletContext context) {

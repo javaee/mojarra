@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryConfigProcessor.java,v 1.4 2007/04/27 22:00:56 ofung Exp $
+ * $Id: FactoryConfigProcessor.java,v 1.5 2007/06/28 01:28:05 rlubke Exp $
  */
 
 /*
@@ -40,16 +40,18 @@
 
 package com.sun.faces.config.processor;
 
+import com.sun.faces.config.ConfigurationException;
 import com.sun.faces.util.FacesLogger;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.Element;
 
 import javax.faces.FactoryFinder;
+
+import java.text.MessageFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.text.MessageFormat;
 
 
 /**
@@ -68,24 +70,35 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
     private static final String FACTORY = "factory";
 
     /**
-     * <code>/faces-config/factory/application-factory
+     * <code>/faces-config/factory/application-factory</code>
      */
     private static final String APPLICATION_FACTORY = "application-factory";
 
     /**
-     * <code>/faces-config/factory/faces-context-factory
+     * <code>/faces-config/factory/faces-context-factory</code>
      */
     private static final String FACES_CONTEXT_FACTORY = "faces-context-factory";
 
     /**
-     * <code>faces-config/factory/lifecycle-factory
+     * <code>faces-config/factory/lifecycle-factory</code>
      */
     private static final String LIFECYCLE_FACTORY = "lifecycle-factory";
 
     /**
-     * <cod>/faces-config/factory/render-kit-factory
+     * <code>/faces-config/factory/render-kit-factory</code>
      */
     private static final String RENDER_KIT_FACTORY = "render-kit-factory";
+
+
+    /**
+     * <code>Array of Factory names for post-configuration validation.</code>
+     */
+    private static final String[] FACTORY_NAMES = {
+          FactoryFinder.APPLICATION_FACTORY,
+          FactoryFinder.FACES_CONTEXT_FACTORY,
+          FactoryFinder.LIFECYCLE_FACTORY,
+          FactoryFinder.RENDER_KIT_FACTORY
+    };
 
 
     // -------------------------------------------- Methods from ConfigProcessor
@@ -113,6 +126,10 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
             }
         }
 
+        // validate that we actually have factories at this point.
+        // If we don't, there is much point in going further.
+        verifyFactoriesExist();
+
         invokeNext(documents);
 
     }
@@ -125,8 +142,10 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
             Node factory = factories.item(i);
             NodeList children = ((Element) factory)
                  .getElementsByTagNameNS(namespace, "*");
+            System.out.println("Children: " + children + ' ' + children.getLength());
             for (int c = 0, csize = children.getLength(); c < csize; c++) {
                 Node n = children.item(c);
+                System.out.println("Node: " + n);
                 if (APPLICATION_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.APPLICATION_FACTORY,
                                getNodeText(n));
@@ -146,16 +165,31 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
 
 
     private static void setFactory(String factoryName, String factoryImpl) {
-
+        System.out.println("Calling setFactory: " + factoryName  + ' ' + factoryImpl);
         if (factoryName != null && factoryImpl != null) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
                            MessageFormat.format(
-                                "Calling FactoryFinder.setFactory({0}, {1}",
+                                "Calling FactoryFinder.setFactory({0}, {1})",
                                 factoryName,
                                 factoryImpl));
             }
             FactoryFinder.setFactory(factoryName, factoryImpl);
+        }
+
+    }
+
+        
+    private void verifyFactoriesExist() {
+
+        for (int i = 0, len = FACTORY_NAMES.length; i < len; i++) {
+            try {
+                FactoryFinder.getFactory(FACTORY_NAMES[i]);
+            } catch (Exception e) {
+                throw new ConfigurationException(
+                      MessageFormat.format("Factory ''{0}'' was not configured properly.",
+                                           FACTORY_NAMES[i]));
+            }
         }
 
     }
