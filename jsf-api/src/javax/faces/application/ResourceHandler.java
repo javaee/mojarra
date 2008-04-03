@@ -339,6 +339,33 @@ public abstract class ResourceHandler {
      */
     public static final String RESOURCE_IDENTIFIER = "/javax.faces.resource";
 
+    /**
+
+     * <p class="changed_added_2_0">The <code>ServletContext</code> init
+     * parameter consulted by the {@link #handleResourceRequest} to tell
+     * which kinds of resources must never be served up in response to a
+     * resource request.  The value of this parameter is a single space
+     * separated list of file extensions, including the leading '.'
+     * character (without the quotes).  If not specified, the default
+     * value given in the value of the {@link
+     * #RESOURCE_EXCLUDES_DEFAULT_VALUE} constant is used.  If manually
+     * specified, the given value entirely overrides the default one and
+     * does not supplement it.  </p>
+
+     */
+    public static final String RESOURCE_EXCLUDES_PARAM_NAME =
+          "javax.faces.resource.EXLCUDES";
+
+    /**
+
+     * <p class="changed_added_2_0">The default value for the {@link
+     * #RESOURCE_EXCLUDES_PARAM_NAME} init param.</p>
+
+     */
+    public static final String RESOURCE_EXCLUDES_DEFAULT_VALUE =
+          ".class .jsp .jspx .properties .xhtml";
+
+
 
     // ---------------------------------------------------------- Public Methods
     
@@ -348,8 +375,8 @@ public abstract class ResourceHandler {
      * <code>Resource</code> given the argument
      * <code>resourceName</code>.  The content-type of the resource is
      * derived by passing the file extension of
-     * <code>resourceName</code> to {@link
-     * javax.activation.MimetypesFileTypeMap#getContentType}.</p>
+     * <code>resourceName</code> to
+     * <code>javax.activation.MimetypesFileTypeMap.getContentType()</code>.</p>
      *
      * @param resourceName the name of the resource.
      *
@@ -368,16 +395,16 @@ public abstract class ResourceHandler {
      * the argument <code>resourceName</code> that is a member of the
      * library named by the argument <code>libraryName</code>.  The
      * content-type of the resource is derived by passing the file
-     * extension of <code>resourceName</code> to {@link
-     * javax.activation.MimetypesFileTypeMap#getContentType}.</p>
+     * extension of <code>resourceName</code> to
+     * <code>javax.activation.MimetypesFileTypeMap.getContentType()</code>.</p>
      *
      * @param resourceName the name of the resource.
      *
      * @param libraryName the name of the library in which this resource
-     * resides (if any).
+     * resides, may be <code>null</code>.
      *
-     * @throws NullPointerException if <code>resourceName</code> is
-     *  <code>null</code>
+     * @throws <code>NullPointerException</code> if
+     * <code>resourceName</code> is <code>null</code>
      *
      * @return a newly created <code>Resource</code> instance, suitable
      * for use in encoding or decoding the named resource.
@@ -388,26 +415,26 @@ public abstract class ResourceHandler {
 
     /**
      * <p class="changed_added_2_0">Create an instance of
-     * <code>Resource</code> with a resourceName given by the value of
-     * the argument <code>resourceName</code> that is a member of the
-     * library named by the argument <code>libraryName</code> that
-     * claims to have the content-type given by the argument
+     * <code>Resource</code> with a <em>resourceName</em> given by the
+     * value of the argument <code>resourceName</code> that is a member
+     * of the library named by the argument <code>libraryName</code>
+     * that claims to have the content-type given by the argument
      * <code>content-type</code>.</p>
      *
      * @param resourceName the name of the resource.
      *
      * @param libraryName the name of the library in which this resource
-     * resides (if any).
+     * resides, may be <code>null</code>.
      *
      * @param contentType the mime content that this
      * <code>Resource</code> instance will return from {@link
-     * Resource#getContentType}.  If the value is null, The
+     * Resource#getContentType}.  If the value is <code>null</code>, The
      * content-type of the resource is derived by passing the file
-     * extension of <code>resourceName</code> to {@link
-     * javax.activation.MimetypesFileTypeMap#getContentType}.</p>
+     * extension of <code>resourceName</code> to
+     * <code>javax.activation.MimetypesFileTypeMap.getContentType()</code>.</p>
      *
-     * @throws NullPointerException if <code>resourceName</code> is
-     *  <code>null</code>.
+     * @throws <code>NullPointerException</code> if
+     * <code>resourceName</code> is <code>null</code>.
      *
      * @return a newly created <code>Resource</code> instance, suitable
      * for use in encoding or decoding the named resource.
@@ -418,12 +445,91 @@ public abstract class ResourceHandler {
 
 
     /**
-     * <p class="changed_added_2_0">This method specifieds the contract
+     * <p class="changed_added_2_0">This method specifies the contract
      * for satisfying resource requests.  This method is called from
      * {@link javax.faces.webapp.FacesServlet#service} after that method
      * determines the current request is a resource request by calling
      * {@link #isResourceRequest}.  Thus, <code>createResource</code>
      * may assume that the current request is a resource request.</p>
+
+     * <div class="changed_added_2_0">
+
+     * <p>The default implementation must implement an algorithm
+     * semantically identical to the following algorithm.</p>
+
+     * For discussion, in all cases when a status code is to be set,
+     * this spec talks only using the Servlet API, but it is understood
+     * that in a portlet environment the appropriate equivalent API must
+     * be used.
+
+     * <ul>
+
+     * <li><p>If the <em>resourceIdentifier</em> ends with any of the
+     * extensions listed in the value of the {@link
+     * #RESOURCE_EXCLUDES_PARAM_NAME} init parameter,
+     * <code>HttpServletRequest.SC_NOT_FOUND</code> must be passed to
+     * <code>HttpServletResponse.setStatus()</code>, then
+     * <code>createResource</code> must immediately return.</p></li>
+
+     * <li><p>Extract the <em>resourceName</em> from the
+     * <em>resourceIdentifier</em> by taking the substring of
+     * <em>resourceIdentifier</em> that starts at <code>{@link
+     * #RESOURCE_IDENTIFIER}.length() + 1</code> and goes to the end of
+     * <em>resourceIdentifier</em>.  If no <em>resourceName</em> can be
+     * extracted, <code>HttpServletRequest.SC_NOT_FOUND</code> must be
+     * passed to <code>HttpServletResponse.setStatus()</code>, then
+     * <code>createResource</code> must immediately return.</p></li>
+
+     * <li><p>Extract the <em>libraryName</em> from the request by
+     * looking in the request parameter map for an entry under the key
+     * "ln", without the quotes.  If found, use its value as the
+     * <em>libraryName</em>.</p></li>
+
+     * <li><p>If <em>resourceName</em> and <em>libraryName</em> are
+     * present, call {@link #createResource(String, String)} to create
+     * the <code>Resource</code>.  If only <em>resourceName</em> is
+     * present, call {@link #createResource(String)} to create the
+     * <code>Resource</code>.  If the <code>Resource</code> cannot be
+     * successfully created,
+     * <code>HttpServletRequest.SC_NOT_FOUND</code> must be passed to
+     * <code>HttpServletResponse.setStatus()</code>, then
+     * <code>createResource</code> must immediately return.</p></li>
+
+     * <li><p>Call {@link Resource#userAgentNeedsUpdate}.  If this
+     * method returns false,
+     * <code>HttpServletRequest.SC_NOT_MODIFIED</code> must be passed to
+     * <code>HttpServletResponse.setStatus()</code>, then
+     * <code>createResource</code> must immediately return.</p></li>
+
+     * <li><p>Pass the result of {@link Resource#getContentType} to
+     * <code>HttpServletResponse.setContentType}.</code> </p></li>
+
+     * <li><p>Call {@link Resource#getResponseHeaders}.  For each entry
+     * in this <code>Map</code>, call
+     * <code>HttpServletResponse.setHeader()</code>, passing the key as
+     * the first argument and the value as the second argument.</p></li>
+
+     * <li><p>Call {@link Resource#getInputStream} and serve up the
+     * bytes of the resource to the response.</p></li>
+
+
+     * <li><p>Call <code>HttpServletResponse.setContentLength()</code>
+     * passing the byte count of the resource.</p></li>
+
+     * <li><p>If an <code>IOException</code> is thrown during any of the
+     * previous steps, log a descriptive, localized message, including
+     * the <em>resourceName</em> and <em>libraryName</em> (if present).
+     * Then, <code>HttpServletRequest.SC_NOT_FOUND</code> must be passed
+     * to <code>HttpServletResponse.setStatus()</code>, then
+     * <code>createResource</code> must immediately return.</p></li>
+
+     * <li><p>In all cases in this method, any streams, channels,
+     * sockets, or any other IO resources must be closed before this
+     * method returns.</p></li>
+
+     * </ul>
+
+     * </div>
      *
      * @param context the {@link javax.faces.context.FacesContext} for this
      * request

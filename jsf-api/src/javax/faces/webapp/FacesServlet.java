@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.37 2008/01/16 21:02:53 edburns Exp $
+ * $Id: FacesServlet.java,v 1.38 2008/01/25 16:36:32 edburns Exp $
  */
 
 /*
@@ -64,9 +64,10 @@ import javax.servlet.http.HttpServletResponse;
 
 
 /**
- * <p><strong>FacesServlet</strong> is a servlet that manages the request
- * processing lifecycle for web applications that are utilizing JavaServer
- * Faces to construct the user interface.</p>
+ * <p><strong class="changed_modified_2_0">FacesServlet</strong> is a
+ * servlet that manages the request processing lifecycle for web
+ * applications that are utilizing JavaServer Faces to construct the
+ * user interface.</p>
  */
 
 public final class FacesServlet implements Servlet {
@@ -203,11 +204,11 @@ public final class FacesServlet implements Servlet {
 
 
     /**
-     * <p class="changed_added_2_0">Process an incoming request, and create the
+     * <p class="changed_modified_2_0">Process an incoming request, and create the
      * corresponding response according to the following
      * specification.</p>
      * 
-     * <div class="changed_added_2_0">
+     * <div class="changed_modified_2_0">
      *
      * <p>If the <code>request</code> and <code>response</code>
      * arguments to this method are not instances of

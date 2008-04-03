@@ -1,5 +1,5 @@
 /*
- * $Id: WebConfiguration.java,v 1.35 2008/01/07 19:49:12 rlubke Exp $
+ * $Id: WebConfiguration.java,v 1.36 2008/01/25 16:36:33 edburns Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -56,6 +56,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import javax.faces.application.ResourceHandler;
 
 
 /** Class Documentation */
@@ -607,8 +608,8 @@ public class WebConfiguration {
               ""
         ),
         ResourceExcludes(
-            "javax.faces.resource.EXCLUDES",
-            ".class .jsp .jspx .properties .xhtml"
+            ResourceHandler.RESOURCE_EXCLUDES_PARAM_NAME,
+            ResourceHandler.RESOURCE_EXCLUDES_DEFAULT_VALUE
         ),
         NumberOfViews(
               "com.sun.faces.numberOfViewsInSession",

@@ -84,7 +84,11 @@ public abstract class Resource {
      * <p class="changed_added_2_0">Set the MIME content-type for this resource.
      * The default implementation performs no validation on the
      * argument.</p>
-     * @param contentType the MIME content-type for this resource
+     * @param contentType the MIME content-type for this resource.  May
+     * be <code>null</code>.  If the value is <code>null</code>, The
+     * content-type of the resource is derived by passing the file
+     * extension of <code>resourceName</code> to
+     * <code>javax.activation.MimetypesFileTypeMap.getContentType()</code>.
      */
     public void setContentType(String contentType) {
 
