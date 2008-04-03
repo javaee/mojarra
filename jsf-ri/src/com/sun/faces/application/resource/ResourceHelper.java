@@ -397,7 +397,8 @@ public abstract class ResourceHelper {
                     gzipFound = true;
                     break;
                 }
-                if (value.contains("*") && !value.contains("*;q=0,")) {
+                if (value.contains("*")
+                      && (!value.contains("*;q=0,") && !value.endsWith("*;q=0"))) {
                     // gzip not explictly listed, but client sent *
                     // meaning gzip is implicitly acceptable
                     // keep looping to ensure we don't come across a
