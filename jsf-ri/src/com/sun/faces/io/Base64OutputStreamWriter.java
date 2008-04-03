@@ -163,7 +163,7 @@ public class Base64OutputStreamWriter extends OutputStream {
      * <p>Encodes the remaining bytes and flushes the <code>char[]</code>
      * to the wrapped <code>Writer</code>.</p>
      *
-     * @throws IOException
+     * @throws IOException if an error occurs writing the remaining bytes
      */
     public void finish() throws IOException {
         encodePendingBytes(true);        
