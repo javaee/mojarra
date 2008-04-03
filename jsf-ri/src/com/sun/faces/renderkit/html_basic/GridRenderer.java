@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.51 2007/08/30 19:29:12 rlubke Exp $
+ * $Id: GridRenderer.java,v 1.52 2007/08/30 21:32:35 rlubke Exp $
  */
 
 /*
@@ -170,7 +170,7 @@ public class GridRenderer extends BaseTableRenderer {
         writer.startElement("td", table);
         if (info.columnClasses.length > 0) {
             writer.writeAttribute("class",
-                                  info.getCurrentColumnStyle(),
+                                  info.getCurrentColumnClass(),
                                   "columns");
         }
         encodeRecursive(context, child);
