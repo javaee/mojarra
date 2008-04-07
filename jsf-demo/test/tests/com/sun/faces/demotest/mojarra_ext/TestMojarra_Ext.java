@@ -1,5 +1,5 @@
 /*
- * $Id: TestMojarra_Ext.java,v 1.2 2008/04/02 23:47:54 driscoll Exp $
+ * $Id: TestMojarra_Ext.java,v 1.1.2.1 2008/04/01 15:54:10 driscoll Exp $
  */
 
 /*
@@ -56,20 +56,19 @@ public class TestMojarra_Ext extends HtmlUnitTestCase {
      * Check that we get the validation message for incorrect entry, with RegEx.
      * Then, check that a correct entry goes through.
      */
-    public void testMojarra_Ext() throws Exception {
+    public void testMojarra_Ext_Regex() throws Exception {
 
-        String formName = "ext_form";
+        String firstPageName = "/mojarra_ext/faces/welcome.jsp";
+        String formName = "regex_form";
         String inputName = "sampleRegex";
         String incorrectValue = "jest";  // will fail, doesn't start with t
         String correctValue = "test";    // will pass, starts with t
         String welcomeTitle = "Test Regex Validator";
-        String secondTitle = "Regex Demo";
+        String secondTitle = "Credit Card Demo";
         String submitButtonName = "submit";
         String validationMessageName = "regexError";
 
-        assertTrue(true);
-
-        HtmlPage greetingPage = accessAppAndGetGreetingJSP();
+        HtmlPage greetingPage = (HtmlPage) getInitialPage();
 
         assertTrue(greetingPage.getTitleText().equals(welcomeTitle));
 
@@ -81,7 +80,7 @@ public class TestMojarra_Ext extends HtmlUnitTestCase {
         assertTrue(form != null);
         assertTrue(form.getIdAttribute().equals(formName));
         assertTrue(stripJsessionInfo(form.getActionAttribute()).equals(
-                "/mojarra_ext/faces/welcome.jsp"));
+                firstPageName));
 
 
         HtmlTextInput input = (HtmlTextInput) form.getInputByName(
@@ -122,13 +121,90 @@ public class TestMojarra_Ext extends HtmlUnitTestCase {
 
         assertTrue(resultPage.getTitleText().equals(secondTitle));
 
-
     }
+    public void testMojarra_Ext_CreditCard() throws Exception {
+
+        String initialPage = "/faces/landing.jsp";
+        String firstPageName = "/mojarra_ext/faces/landing.jsp";
+        String formName = "credit_card_form";
+        String inputName = "sampleCreditCard";        
+        String incorrectValue1 = "4111 1111 1111 1112";
+        String incorrectError1 = "Not a valid credit card number.";
+        String incorrectValue2 = "4111x1111x1111x1111";
+        String incorrectError2 = "Invalid characters in value";
+        String correctValue = "4111 1111 1111 1111";    
+        String welcomeTitle = "Credit Card Demo";
+        String secondTitle = "Test Regex Validator";
+        String submitButtonName = "submit";
+        String validationMessageName = "creditcardError";
+
+        HtmlPage greetingPage = (HtmlPage) getPage(initialPage);
+
+        assertTrue(greetingPage.getTitleText().equals(welcomeTitle));
+
+        List forms = greetingPage.getForms();
+        assertTrue(forms != null);
+        assertTrue(forms.size() == 1);
+
+        HtmlForm form = (HtmlForm) forms.get(0);
+        assertTrue(form != null);
+        assertTrue(form.getIdAttribute().equals(formName));
+        assertTrue(stripJsessionInfo(form.getActionAttribute()).equals(
+                firstPageName));
 
 
-    private HtmlPage accessAppAndGetGreetingJSP() throws Exception {
-        HtmlPage page = (HtmlPage) getInitialPage();
-        return page;
+        HtmlTextInput input = (HtmlTextInput) form.getInputByName(
+                formName + NamingContainer.SEPARATOR_CHAR + inputName);
+        assertTrue(input != null);
+        
+        // Set first incorrect value
+        input.setValueAttribute(incorrectValue1);
+
+        // "click" the submit button to send the value
+        HtmlPage resultPage = (HtmlPage) form.submit(
+                formName + NamingContainer.SEPARATOR_CHAR + submitButtonName);
+        assertTrue(resultPage != null);
+
+        assertTrue(resultPage.getTitleText().equals(welcomeTitle));
+
+
+        // check for the validation message
+        HtmlElement validationElement = resultPage.getHtmlElementById(
+                formName + NamingContainer.SEPARATOR_CHAR + validationMessageName);
+
+        assertTrue(validationElement != null);
+
+        assertTrue(validationElement.asText().contains(incorrectError1));
+
+        // Set second incorrect value
+        input.setValueAttribute(incorrectValue2);
+
+        // "click" the submit button to send the value
+        resultPage = (HtmlPage) form.submit(
+                formName + NamingContainer.SEPARATOR_CHAR + submitButtonName);
+        assertTrue(resultPage != null);
+
+        assertTrue(resultPage.getTitleText().equals(welcomeTitle));
+
+        // check for the validation message
+        validationElement = resultPage.getHtmlElementById(
+                formName + NamingContainer.SEPARATOR_CHAR + validationMessageName);
+
+        assertTrue(validationElement != null);
+
+        assertTrue(validationElement.asText().contains(incorrectError2));
+        
+
+        // Set a correct value
+        input.setValueAttribute(correctValue);
+
+        // "click" the submit button to send the value
+        resultPage = (HtmlPage) form.submit(
+                formName + NamingContainer.SEPARATOR_CHAR + submitButtonName);
+        assertTrue(resultPage != null);
+
+        assertTrue(resultPage.getTitleText().equals(secondTitle));
+
     }
     
 } // end of class 

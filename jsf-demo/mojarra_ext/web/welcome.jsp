@@ -53,7 +53,7 @@
     </head>
     <body>
         <f:view>
-            <h:form id="ext_form">
+            <h:form id="regex_form">
                 <h1><h:outputText value="Test Regex Validator" /></h1>
                 <p>Enter Any word starting with t</p>
                 <h:inputText id="sampleRegex" value="#{BackingBean.sample}" required="true" >

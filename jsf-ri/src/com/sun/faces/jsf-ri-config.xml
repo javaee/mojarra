@@ -208,5 +208,9 @@
       <validator-id>com.sun.faces.ext.validator.RegexValidator</validator-id>
       <validator-class>com.sun.faces.ext.validator.RegexValidator</validator-class>
   </validator>
+  <validator>
+      <validator-id>com.sun.faces.ext.validator.CreditCardValidator</validator-id>
+      <validator-class>com.sun.faces.ext.validator.CreditCardValidator</validator-class>
+  </validator>
 
 </faces-config>

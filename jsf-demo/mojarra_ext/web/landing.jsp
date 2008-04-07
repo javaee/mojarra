@@ -47,19 +47,20 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Regex Demo</title>
+        <title>Credit Card Demo</title>
     </head>
     <body>
         <f:view>
-            <h:form>
-                <h2><h:outputText value="Regex demo"/></h2>
-                <p>Start with j, end with t</p>
-                <h:inputText value="#{BackingBean.sample}" >
-                    <mj:regexValidator pattern="j.*t" />
+            <h:form id="credit_card_form">
+                <h2><h:outputText value="Credit Card Demo"/></h2>
+                <p>Enter a valid credit card number</p>
+                <p>Hint: 4111 1111 1111 1111 is a valid number</p>
+                <h:inputText id="sampleCreditCard" value="#{BackingBean.sample}" required="true" >
+                    <mj:creditcardValidator />
                 </h:inputText>
+                <h:message id="creditcardError" for="sampleCreditCard"/>
                 <br/>
-                <h:commandButton action="back" value="Back" />
-                <h:messages showDetail="true" showSummary="false" layout="table"/>
+                <h:commandButton id="submit" action="back" value="Back" />
             </h:form>
         </f:view>
         

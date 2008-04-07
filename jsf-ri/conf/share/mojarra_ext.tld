@@ -65,4 +65,14 @@
             <required>true</required>
         </attribute>
     </tag>
+    <tag>
+        <name>creditcardValidator</name>
+        <description>
+            A validator that checks a credit card number to see that it's valid, 
+            using the Luhn Algorithm.  The credit card number may only have numbers,
+            as well as dashes and spaces, which are ignored.
+        </description>
+        <tag-class>com.sun.faces.ext.taglib.CreditCardValidatorTag</tag-class>
+        <body-content>empty</body-content>
+    </tag>
 </taglib>
