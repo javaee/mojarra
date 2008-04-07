@@ -1606,7 +1606,21 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
     private boolean isSpecifiedIdUnique(String id) {
 
         UIComponentClassicTagBase containerTag = getParentNamingContainerTag();
-        return (containerTag.component.findComponent(this.id) == null);
+        UIComponent c = containerTag.component.findComponent(id);
+        if (c == null) {
+            return true;
+        } else {
+            UIComponent parent = c.getParent();
+            if (parent.equals(this.parentTag.component)) {
+                // the component we found has the same parent, If we find
+                // a sibling with the same ID, return true so that the
+                // id is incremented, otherwise, return false.
+                List<String> created = this.parentTag.createdComponents;
+                return !(created != null && created.contains(id));
+            } else {
+                return false;
+            }
+        }
 
     }
 

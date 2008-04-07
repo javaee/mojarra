@@ -48,12 +48,14 @@ import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import javax.faces.component.NamingContainer;
 
@@ -150,6 +152,36 @@ public class ForEachTestCase extends AbstractTestCase {
         assertTrue(-1 != page.asText().indexOf("newValueid1"));
 	assertTrue(-1 != page.asText().indexOf("newValueid2"));
 	assertTrue(-1 != page.asText().indexOf("newValueid3"));
+    }
+
+    public void testForEachIssue714() throws Exception {
+        
+        HtmlPage page = getPage("/faces/forEach04.jsp");
+        List<HtmlSpan> spans = new ArrayList<HtmlSpan>(2);
+        getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
+        assertTrue(spans.size() == 2);
+        HtmlSpan span = spans.get(0);
+        assertTrue("j_id_id16:idfrag1:frag1".equals(span.getIdAttribute()));
+        span = spans.get(1);
+        assertTrue("j_id_id16:idfrag2:frag2".equals(span.getIdAttribute()));
+
+        // submit the form to ensure no duplicate ID exceptions are
+        // raised during post-back
+        List<HtmlSubmitInput> buttons = new ArrayList<HtmlSubmitInput>(1);
+        buttons = getAllElementsOfGivenClass(page, buttons, HtmlSubmitInput.class);
+        assertTrue(buttons.size() == 1);
+        HtmlSubmitInput submit = buttons.get(0);
+        page = (HtmlPage) submit.click();
+
+        // validate the IDs are as expected after post-back
+        spans = new ArrayList<HtmlSpan>(2);
+        getAllElementsOfGivenClass(page, spans, HtmlSpan.class);
+        assertTrue(spans.size() == 2);
+        span = spans.get(0);
+        assertTrue("j_id_id16:idfrag1:frag1".equals(span.getIdAttribute()));
+        span = spans.get(1);
+        assertTrue("j_id_id16:idfrag2:frag2".equals(span.getIdAttribute()));
+
     }
 
 }
