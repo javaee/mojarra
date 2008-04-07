@@ -146,8 +146,8 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             if (componentClass.startsWith(compPackage)) {
                 cb = cb1;
 
-                if (logger.isLoggable(Level.INFO)) {
-                    logger.log(Level.INFO,
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.log(Level.FINE,
                                "Generating concrete HTML component class " +
                                cb.getComponentClass());
                 }

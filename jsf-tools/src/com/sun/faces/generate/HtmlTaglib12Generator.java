@@ -773,8 +773,8 @@ public class HtmlTaglib12Generator extends AbstractGenerator {
                         "Could not determine tag class name");
                 }
 
-                if (logger.isLoggable(Level.INFO)) {
-                    logger.log(Level.INFO, "Generating " + tagClassName + "...");
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.log(Level.FINE, "Generating " + tagClassName + "...");
                 }
 
 

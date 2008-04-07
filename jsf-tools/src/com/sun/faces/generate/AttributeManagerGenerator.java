@@ -122,7 +122,6 @@ public class AttributeManagerGenerator extends AbstractGenerator {
         String packagePath = TARGET_PACKAGE.replace('.', File.separatorChar);
         File packageDir = new File(getBaseOutputDirectory(),
                                    packagePath);
-        System.out.println("PACKAGE DIR: " + packageDir.getAbsolutePath());
         if (!packageDir.exists()) {
             packageDir.mkdirs();
         }
@@ -138,7 +137,6 @@ public class AttributeManagerGenerator extends AbstractGenerator {
                                   File.separatorChar +
                                   manager
                                         .getProperty(PropertyManager.BASE_OUTPUT_DIR));
-        System.out.println("BASE OUTPUT DIR: " + outputDir.getAbsolutePath());
 
         if (!outputDir.exists()) {
             outputDir.mkdirs();
