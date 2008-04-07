@@ -128,7 +128,10 @@ public class RenderKitImpl extends RenderKit {
         prefs.put(BooleanWebContextInitParameter.EnableScriptInAttributeValue,
                         webConfig.isOptionEnabled(
                          BooleanWebContextInitParameter.EnableScriptInAttributeValue));
-        
+        prefs.put(BooleanWebContextInitParameter.DisableUnicodeEscaping,
+                        webConfig.isOptionEnabled(
+                         BooleanWebContextInitParameter.DisableUnicodeEscaping));
+
         configPrefs = Collections.unmodifiableMap(prefs);
         
     }

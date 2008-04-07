@@ -87,6 +87,10 @@ public class HtmlResponseWriter extends ResponseWriter {
     //
     private boolean closeStart;
 
+    //Flag to escape Unicode
+    //
+    private boolean escapeUnicode;
+
     // True when we shouldn't be escaping output (basically,
     // inside of <script> and <style> elements).
     //
@@ -224,6 +228,10 @@ public class HtmlResponseWriter extends ResponseWriter {
                 (null == webConfig) ? BooleanWebContextInitParameter.EnableScriptInAttributeValue.getDefaultValue() :
                         webConfig.isOptionEnabled(
                          BooleanWebContextInitParameter.EnableScriptInAttributeValue));
+        prefs.put(BooleanWebContextInitParameter.DisableUnicodeEscaping,
+                (null == webConfig) ? BooleanWebContextInitParameter.DisableUnicodeEscaping.getDefaultValue() :
+                        webConfig.isOptionEnabled(
+                         BooleanWebContextInitParameter.DisableUnicodeEscaping));
 
         return Collections.unmodifiableMap(prefs);
     }
@@ -267,7 +275,8 @@ public class HtmlResponseWriter extends ResponseWriter {
         this.isScriptInAttributeValueEnabled =
                 (this.configPrefs.containsKey(BooleanWebContextInitParameter.EnableScriptInAttributeValue)) ?
                     this.configPrefs.get(BooleanWebContextInitParameter.EnableScriptInAttributeValue) : Boolean.FALSE;
-
+        this.escapeUnicode = (this.configPrefs.containsKey(BooleanWebContextInitParameter.DisableUnicodeEscaping)) ?
+                !this.configPrefs.get(BooleanWebContextInitParameter.DisableUnicodeEscaping) : Boolean.TRUE;
         this.attributesBuffer = new FastStringWriter(128);
 
         // Check the character encoding
@@ -666,6 +675,7 @@ public class HtmlResponseWriter extends ResponseWriter {
             String val = value.toString();
             ensureTextBufferCapacity(val);
             HtmlUtils.writeAttribute(attributesBuffer,
+                                     escapeUnicode,
                                      buffer,
                                      val,
                                      textBuffer, isScriptInAttributeValueEnabled);
@@ -729,7 +739,7 @@ public class HtmlResponseWriter extends ResponseWriter {
             writer.write(text);
         } else {
             charHolder[0] = text;
-            HtmlUtils.writeText(writer, buffer, charHolder);
+            HtmlUtils.writeText(writer, escapeUnicode, buffer, charHolder);
         }
 
     }
@@ -762,7 +772,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         if (dontEscape) {
             writer.write(text);
         } else {
-            HtmlUtils.writeText(writer, buffer, text);
+            HtmlUtils.writeText(writer, escapeUnicode, buffer, text);
         }
 
     }
@@ -796,6 +806,7 @@ public class HtmlResponseWriter extends ResponseWriter {
             String val = text.toString();
             ensureTextBufferCapacity(val);
             HtmlUtils.writeText(writer,
+                                escapeUnicode,
                                 buffer,
                                 val,
                                 textBuffer);
@@ -837,7 +848,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         if (dontEscape) {
             writer.write(text, off, len);
         } else {
-            HtmlUtils.writeText(writer, buffer, text, off, len);
+            HtmlUtils.writeText(writer, escapeUnicode, buffer, text, off, len);
         }
 
     }
@@ -892,6 +903,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         // Javascript URLs should not be URL-encoded
         if (stringValue.startsWith("javascript:")) {
             HtmlUtils.writeAttribute(attributesBuffer,
+                                     escapeUnicode,
                                      buffer,
                                      stringValue,
                                      textBuffer, isScriptInAttributeValueEnabled);

@@ -860,6 +860,10 @@ public class WebConfiguration {
         RegisterConverterPropertyEditors(
             "com.sun.faces.registerConverterPropertyEditors",
             false
+        ),
+        DisableUnicodeEscaping(
+            "com.sun.faces.disableUnicodeEscaping",
+            false
         );
 
         private BooleanWebContextInitParameter alternate;

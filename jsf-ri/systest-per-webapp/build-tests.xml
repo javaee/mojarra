@@ -68,6 +68,7 @@
                    string-converter,
                    replace-variableresolver,
                    converter-property-editor,
+                   disable-unicode-escaping,
                    late-bindings,
                    property-resolver-jsp,
                    never-unwrap-exceptions,
@@ -115,6 +116,8 @@
               value="com/sun/faces/systest/WriteAttributeScriptDisabledTestCase.class"/>
     <property name="write-attribute-script-enabled"
               value="com/sun/faces/systest/WriteAttributeScriptEnabledTestCase.class"/>
+    <property name="disable-unicode-escaping"
+              value="com/sun/faces/systest/UnicodeTestCase.class"/>
 
 
     <!--

@@ -59,9 +59,10 @@ public class HtmlUtils {
     //-------------------------------------------------
 
     static public void writeText(Writer out,
+    							 boolean escapeUnicode,
                                  char[] buffer,
                                  char[] text) throws IOException {
-        writeText(out, buffer, text, 0, text.length);
+        writeText(out, escapeUnicode, buffer, text, 0, text.length);
     }
 
 
@@ -69,6 +70,7 @@ public class HtmlUtils {
      * Write char array text.
      */
     static public void writeText(Writer out,
+                                 boolean escapeUnicode,
                                  char[] buff,
                                  char[] text,
                                  int start,
@@ -78,7 +80,7 @@ public class HtmlUtils {
 
         int end = start + length;
         for (int i = start; i < end; i++) {
-            buffIndex = writeTextChar(out, text[i], buffIndex, buff, buffLength);
+            buffIndex = writeTextChar(out, escapeUnicode, text[i], buffIndex, buff, buffLength);
         }
 
         flushBuffer(out, buff, buffIndex);
@@ -89,6 +91,7 @@ public class HtmlUtils {
      * Write String text.  
      */
     static public void writeText(Writer out,
+                                 boolean escapeUnicode,
                                  char[] buff,
                                  String text,
                                  char[] textBuff) throws IOException {
@@ -97,13 +100,13 @@ public class HtmlUtils {
 
         if (length >= 16) {
             text.getChars(0, length, textBuff, 0);
-            writeText(out, buff, textBuff, 0, length);
+            writeText(out, escapeUnicode, buff, textBuff, 0, length);
         } else {
             int buffLength = buff.length;
             int buffIndex = 0;
             for (int i = 0; i < length; i++) {
                 char ch = text.charAt(i);
-                buffIndex = writeTextChar(out, ch, buffIndex, buff, buffLength);
+                buffIndex = writeTextChar(out, escapeUnicode, ch, buffIndex, buff, buffLength);
             }
             flushBuffer(out, buff, buffIndex);
         }
@@ -112,6 +115,7 @@ public class HtmlUtils {
     }
 
     private static int writeTextChar(Writer out,
+                                     boolean escapeUnicode,
                                      char ch,
                                      int buffIndex,
                                      char[] buff,
@@ -164,12 +168,13 @@ public class HtmlUtils {
                                     buffLength,
                                     sISO8859_1_Entities[ch - 0xA0]);
         } else {
-            // Double-byte characters to encode.
-            // PENDING: when outputting to an encoding that
-            // supports double-byte characters (UTF-8, for example),
-            // we should not be encoding
-            nextIndex =
-                  _writeDecRef(out, buff, buffIndex, buffLength, ch);
+            if(escapeUnicode) {
+                nextIndex =
+                      _writeDecRef(out, buff, buffIndex, buffLength, ch);
+            } else {
+                nextIndex = addToBuffer(out, buff, buffIndex,
+                        buffLength, ch);
+            }
         }
         return nextIndex;
     }
@@ -181,6 +186,7 @@ public class HtmlUtils {
      * places if you make any changes!!!
      */
     static public void writeAttribute(Writer out,
+                                      boolean escapeUnicode,
                                       char[] buff,
                                       String text,
                                       char[] textBuff, 
@@ -193,7 +199,7 @@ public class HtmlUtils {
                 textBuff = new char[length * 2];
             }
             text.getChars(0, length, textBuff, 0);
-            writeAttribute(out, buff, textBuff, 0, length, 
+            writeAttribute(out, escapeUnicode, buff, textBuff, 0, length,
                     isScriptInAttributeValueEnabled);
         } else {
             int buffLength = buff.length;
@@ -209,10 +215,10 @@ public class HtmlUtils {
                         if (ch == 's') {
                             // If putting scripts in attribute values
                             // has been disabled (the defualt), look for
-                            // script: in the attribute value.  
+                            // script: in the attribute value.
                             // ensure the attribute value is long enough
                             // to accomodate "script:"
-                            if (!isScriptInAttributeValueEnabled && 
+                            if (!isScriptInAttributeValueEnabled &&
                                     ((i + 6) < text.length())) {
                                 if ('c' == text.charAt(i + 1) &&
                                     'r' == text.charAt(i + 2) &&
@@ -284,12 +290,13 @@ public class HtmlUtils {
                                             buffLength,
                                             sISO8859_1_Entities[ch - 0xA0]);
                 } else {
-                    // Double-byte characters to encode.
-                    // PENDING: when outputting to an encoding that
-                    // supports double-byte characters (UTF-8, for example),
-                    // we should not be encoding
-                    buffIndex =
-                          _writeDecRef(out, buff, buffIndex, buffLength, ch);
+                    if(escapeUnicode) {
+                        buffIndex =
+                              _writeDecRef(out, buff, buffIndex, buffLength, ch);
+                    } else {
+                        buffIndex = addToBuffer(out, buff, buffIndex,
+                                buffLength, ch);
+                    }
                 }
             }
 
@@ -299,9 +306,10 @@ public class HtmlUtils {
 
 
     static public void writeAttribute(Writer out,
+                                      boolean escapeUnicode,
                                       char[] buffer,
                                       char[] text) throws IOException {
-        writeAttribute(out, buffer, text, 0, text.length, 
+        writeAttribute(out, escapeUnicode, buffer, text, 0, text.length,
                 WebConfiguration.BooleanWebContextInitParameter.EnableScriptInAttributeValue.getDefaultValue());
     }
 
@@ -312,6 +320,7 @@ public class HtmlUtils {
      * any changes!!!
      */
     static public void writeAttribute(Writer out,
+                                      boolean escapeUnicode,
                                       char[] buff,
                                       char[] text,
                                       int start,
@@ -407,11 +416,12 @@ public class HtmlUtils {
                                         buffLength,
                                         sISO8859_1_Entities[ch - 0xA0]);
             } else {
-                // Double-byte characters to encode.
-                // PENDING: when outputting to an encoding that
-                // supports double-byte characters (UTF-8, for example),
-                // we should not be encoding
-                buffIndex = _writeDecRef(out, buff, buffIndex, buffLength, ch);
+                if(escapeUnicode) {
+                    buffIndex = _writeDecRef(out, buff, buffIndex, buffLength, ch);
+                } else {
+                    buffIndex = addToBuffer(out, buff, buffIndex,
+                            buffLength, ch);
+                }
             }
         }
 
