@@ -61,6 +61,7 @@
                 </h:inputText>
                 <h:message id="regexError" for="sampleRegex" showDetail="true" showSummary="false"/><br/>
                 <h:commandButton id="submit" action="landing" value="Go" />
+                <mj:focus for="regex_form:sampleRegex"/>
             </h:form>
         </f:view>
     </body>

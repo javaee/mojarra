@@ -213,4 +213,18 @@
       <validator-class>com.sun.faces.ext.validator.CreditCardValidator</validator-class>
   </validator>
 
+  <!-- Add our implementation specific Components  -->
+    <component>
+        <component-type>com.sun.faces.ext.focus</component-type>
+        <component-class>com.sun.faces.ext.component.UIFocus</component-class>
+    </component>
+    
+    <!-- Add our implementation specific Renderers -->
+    <render-kit>
+        <renderer>
+            <component-family>FocusFamily</component-family>
+            <renderer-type>com.sun.faces.ext.render.FocusHTMLRenderer</renderer-type>
+            <renderer-class>com.sun.faces.ext.render.FocusHTMLRenderer</renderer-class>
+        </renderer>
+    </render-kit>
 </faces-config>

@@ -75,4 +75,33 @@
         <tag-class>com.sun.faces.ext.taglib.CreditCardValidatorTag</tag-class>
         <body-content>empty</body-content>
     </tag>
+    <tag>
+        <name>focus</name>
+        <description>
+            A tag to set the focus on a specified field.  Place it within a form 
+            tag, and set the for attribute to point to the field that should receive 
+            the focus.
+        </description>
+        <tag-class>com.sun.faces.ext.taglib.FocusTag</tag-class>
+        <attribute>
+            <name>binding</name>
+            <description>A value binding that points to a bean property</description>
+        </attribute>
+        <attribute>
+            <name>id</name>
+            <description>The client id of this component</description>
+        </attribute>
+        <attribute>
+            <name>rendered</name>
+            <description>Is this component rendered?</description>
+        </attribute>
+        <attribute>
+            <name>for</name>
+            <description>component ID that should receive the focus</description>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+            <required>true</required>
+        </attribute>
+    </tag>
 </taglib>

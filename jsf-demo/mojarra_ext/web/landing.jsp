@@ -61,6 +61,7 @@
                 <h:message id="creditcardError" for="sampleCreditCard"/>
                 <br/>
                 <h:commandButton id="submit" action="back" value="Back" />
+                <mj:focus for="credit_card_form:sampleCreditCard"/>
             </h:form>
         </f:view>
         
