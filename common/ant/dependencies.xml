@@ -326,20 +326,29 @@
 
         <if>
             <not>
-                <available file="${glassfish.home}" property="ignored" />
+                <available file="${dependency.base.dir}/${glassfish.installer.jar}${fl.os}.jar" property="ignored"/>
             </not>
             <then>
-                <if>
-                    <not>
-                        <available file="${dependency.base.dir}/${glassfish.installer.jar}${fl.os}.jar"
-                                property="ignored"/>
-                    </not>
-                    <then>
-                        <get src="${glassfish.download.url}/${dl.os}/${glassfish.installer.jar}${fl.os}.jar"
-                            dest="${dependency.base.dir}/${glassfish.installer.jar}${fl.os}.jar"
-                            usetimestamp="true"/>
-                    </then>
-                </if>
+                <!-- The jar is not available, so delete ant dependencies/glassfish dir that may exist and "run" the new jar -->
+                <echo>
+The current GlassFish installer jar was not found, so we are deleting any 
+existing GlassFish installation in the Mojarra tree.  We will download the 
+current version, extract and configure it inside the tree.  This will not 
+affect any glassfish.home pointing to a GlassFish installation outside the 
+Mojarra tree.
+                </echo>
+                <delete dir="${dependency.base.dir}/glassfish"/>
+                <get src="${glassfish.download.url}/${dl.os}/${glassfish.installer.jar}${fl.os}.jar"
+                    dest="${dependency.base.dir}/${glassfish.installer.jar}${fl.os}.jar"
+                    usetimestamp="true"/>
+            </then>
+        </if>
+                
+        <if>
+            <not>
+                <available file="${dependency.base.dir}/glassfish" property="ignored"/>
+            </not>
+            <then>
                 <echo file="${dependency.base.dir}/install.bat">
 <![CDATA[
 echo a > input
@@ -350,17 +359,17 @@ java -Xmx256m -jar ${dependency.base.dir}/${glassfish.installer.jar}${fl.os}.jar
                 <exec executable="${dependency.base.dir}/install.bat" dir="${dependency.base.dir}" />
                 <delete file="${dependency.base.dir}/install.bat"/>
                 <delete file="${dependency.base.dir}/input"/>
-                <ant antfile="${glassfish.home}/setup.xml" dir="${glassfish.home}" target="setup"/>
+                <ant antfile="${dependency.base.dir}/glassfish/setup.xml" dir="${dependency.base.dir}/glassfish" target="setup"/>
                 <echo file="${dependency.base.dir}/glassfish/password.txt">AS_ADMIN_PASSWORD=adminadmin</echo>
                 <!--
                 Download and install the Eclipse JDT compiler to help speed up unit tests.  See Jan Luehe's
                 blog for more information:  http://blogs.sun.com/jluehe/entry/how_to_enable_eclipse_s.
                 -->
                 <get src="http://blogs.sun.com/roller/resources/jluehe/jasper-compiler-jdt.jar"
-                    dest="${glassfish.home}/lib/jasper-compiler-jdt.jar"
+                    dest="${dependency.base.dir}/glassfish/lib/jasper-compiler-jdt.jar"
                     usetimestamp="true"/>
                 <get src="http://blogs.sun.com/roller/resources/jluehe/jasper-compiler-jdt-ext.jar"
-                    dest="${glassfish.home}/lib/jasper-compiler-jdt-ext.jar"
+                    dest="${dependency.base.dir}/glassfish/lib/jasper-compiler-jdt-ext.jar"
                     usetimestamp="true"/>
             </then>
         </if>

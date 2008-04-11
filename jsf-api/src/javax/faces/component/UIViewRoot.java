@@ -479,6 +479,21 @@ public class UIViewRoot extends UIComponentBase {
 
     // ------------------------------------------------ Lifecycle Phase Handlers
 
+    // avoid creating the PhaseEvent if possible by doing redundant
+    // null checks.
+    private void notifyBefore(FacesContext context, PhaseId phaseId) {
+        if (null != beforePhase || null != phaseListeners) {
+            notifyPhaseListeners(context, phaseId, true);
+        }
+    }
+    
+    // avoid creating the PhaseEvent if possible by doing redundant
+    // null checks.
+    private void notifyAfter(FacesContext context, PhaseId phaseId) {
+        if (null != afterPhase || null != phaseListeners) {
+            notifyPhaseListeners(context, phaseId, false);
+        }
+    }
 
     /**
      * <p>Override the default {@link UIComponentBase#processDecodes}
@@ -493,36 +508,16 @@ public class UIViewRoot extends UIComponentBase {
      * @throws NullPointerException if <code>context</code>
      *                              is <code>null</code>
      */
+    @Override
     public void processDecodes(FacesContext context) {
         skipPhase = false;
-        // avoid creating the PhaseEvent if possible by doing redundant
-        // null checks.
-        if (null != beforePhase || null != phaseListeners) {
-            notifyPhaseListeners(context, PhaseId.APPLY_REQUEST_VALUES, true);
-        }
+        notifyBefore(context, PhaseId.APPLY_REQUEST_VALUES);
         if (!skipPhase) {
             super.processDecodes(context);
             broadcastEvents(context, PhaseId.APPLY_REQUEST_VALUES);
         }
-        // clear out the events if we're skipping to render-response
-        // or if there is a response complete signal.
-        if (context.getRenderResponse() || context.getResponseComplete()) {
-            if (events != null) {
-                for (List<FacesEvent> eventList : events) {
-                    if (eventList != null) {
-                        eventList.clear();
-                    }
-                }
-                events = null;
-            }
-        }
-
-        // avoid creating the PhaseEvent if possible by doing redundant
-        // null checks.
-        if (null != beforePhase || null != phaseListeners) {
-            notifyPhaseListeners(context, PhaseId.APPLY_REQUEST_VALUES, false);
-        }
-
+        clearFacesEvents(context);
+        notifyAfter(context, PhaseId.APPLY_REQUEST_VALUES);
     }
 
     /**
@@ -538,15 +533,11 @@ public class UIViewRoot extends UIComponentBase {
      * listeners must be logged and swallowed.  After listeners are invoked
      * call superclass processing.</p>
      */
-
+    @Override
     public void encodeBegin(FacesContext context) throws IOException {
 
         skipPhase = false;
-        // avoid creating the PhaseEvent if possible by doing redundant
-        // null checks.
-        if (null != beforePhase || null != phaseListeners) {
-            notifyPhaseListeners(context, PhaseId.RENDER_RESPONSE, true);
-        }
+        notifyBefore(context, PhaseId.RENDER_RESPONSE);
 
         if (!skipPhase) {
             super.encodeBegin(context);
@@ -561,16 +552,11 @@ public class UIViewRoot extends UIComponentBase {
      * occur during invocation of the afterPhase listener must be
      * logged and swallowed.</p>
      */
-
+    @Override
     public void encodeEnd(FacesContext context) throws IOException {
         super.encodeEnd(context);
 
-        // avoid creating the PhaseEvent if possible by doing redundant
-        // null checks.
-        if (null != afterPhase || null != phaseListeners) {
-            notifyPhaseListeners(context, PhaseId.RENDER_RESPONSE, false);
-        }
-
+        notifyAfter(context, PhaseId.RENDER_RESPONSE);
     }
 
     /**
@@ -662,35 +648,16 @@ public class UIViewRoot extends UIComponentBase {
      * @throws NullPointerException if <code>context</code>
      *                              is <code>null</code>
      */
+    @Override
     public void processValidators(FacesContext context) {
         skipPhase = false;
-        // avoid creating the PhaseEvent if possible by doing redundant
-        // null checks.
-        if (null != beforePhase || null != phaseListeners) {
-            notifyPhaseListeners(context, PhaseId.PROCESS_VALIDATIONS, true);
-        }
+        notifyBefore(context, PhaseId.PROCESS_VALIDATIONS);
         if (!skipPhase) {
             super.processValidators(context);
             broadcastEvents(context, PhaseId.PROCESS_VALIDATIONS);
         }
-        // clear out the events if we're skipping to render-response
-        // or if there is a response complete signal.
-        if (context.getRenderResponse() || context.getResponseComplete()) {
-            if (events != null) {
-                for (List<FacesEvent> eventList : events) {
-                    if (eventList != null) {
-                        eventList.clear();
-                    }
-                }
-                events = null;
-            }
-        }
-
-        // avoid creating the PhaseEvent if possible by doing redundant
-        // null checks.
-        if (null != beforePhase || null != phaseListeners) {
-            notifyPhaseListeners(context, PhaseId.PROCESS_VALIDATIONS, false);
-        }
+        clearFacesEvents(context);
+        notifyAfter(context, PhaseId.PROCESS_VALIDATIONS);
     }
 
 
@@ -706,35 +673,16 @@ public class UIViewRoot extends UIComponentBase {
      * @throws NullPointerException if <code>context</code>
      *                              is <code>null</code>
      */
+    @Override
     public void processUpdates(FacesContext context) {
         skipPhase = false;
-        // avoid creating the PhaseEvent if possible by doing redundant
-        // null checks.
-        if (null != beforePhase || null != phaseListeners) {
-            notifyPhaseListeners(context, PhaseId.UPDATE_MODEL_VALUES, true);
-        }
+        notifyBefore(context, PhaseId.UPDATE_MODEL_VALUES);
         if (!skipPhase) {
             super.processUpdates(context);
             broadcastEvents(context, PhaseId.UPDATE_MODEL_VALUES);
         }
-        // clear out the events if we're skipping to render-response
-        // or if there is a response complete signal.
-        if (context.getRenderResponse() || context.getResponseComplete()) {
-            if (events != null) {
-                for (List<FacesEvent> eventList : events) {
-                    if (eventList != null) {
-                        eventList.clear();
-                    }
-                }
-                events = null;
-            }
-        }
-
-        // avoid creating the PhaseEvent if possible by doing redundant
-        // null checks.
-        if (null != beforePhase || null != phaseListeners) {
-            notifyPhaseListeners(context, PhaseId.UPDATE_MODEL_VALUES, false);
-        }
+        clearFacesEvents(context);
+        notifyAfter(context, PhaseId.UPDATE_MODEL_VALUES);
     }
 
 
@@ -752,18 +700,20 @@ public class UIViewRoot extends UIComponentBase {
      */
     public void processApplication(FacesContext context) {
         skipPhase = false;
-        // avoid creating the PhaseEvent if possible by doing redundant
-        // null checks.
-        if (null != beforePhase || null != phaseListeners) {
-            notifyPhaseListeners(context, PhaseId.INVOKE_APPLICATION, true);
-        }
+        notifyBefore(context, PhaseId.INVOKE_APPLICATION);
 
         if (!skipPhase) {
             // NOTE - no tree walk is performed; this is a UIViewRoot-only operation
             broadcastEvents(context, PhaseId.INVOKE_APPLICATION);
         }
-        // clear out the events if we're skipping to render-response
-        // or if there is a response complete signal.
+        clearFacesEvents(context);
+        notifyAfter(context, PhaseId.INVOKE_APPLICATION);
+    }
+
+
+    // clear out the events if we're skipping to render-response
+    // or if there is a response complete signal.
+    private void clearFacesEvents(FacesContext context) {
         if (context.getRenderResponse() || context.getResponseComplete()) {
             if (events != null) {
                 for (List<FacesEvent> eventList : events) {
@@ -773,12 +723,6 @@ public class UIViewRoot extends UIComponentBase {
                 }
                 events = null;
             }
-        }
-
-        // avoid creating the PhaseEvent if possible by doing redundant
-        // null checks.
-        if (null != beforePhase || null != phaseListeners) {
-            notifyPhaseListeners(context, PhaseId.INVOKE_APPLICATION, false);
         }
     }
 
@@ -968,6 +912,7 @@ public class UIViewRoot extends UIComponentBase {
 
     private Object[] values;
 
+    @Override
     public Object saveState(FacesContext context) {
 
         if (values == null) {
@@ -986,7 +931,7 @@ public class UIViewRoot extends UIComponentBase {
 
     }
 
-
+    @Override
     public void restoreState(FacesContext context, Object state) {
 
         values = (Object[]) state;
