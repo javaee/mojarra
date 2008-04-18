@@ -515,8 +515,8 @@ public class RenderKitUtils {
      */
     private static boolean canBeOptimized(UIComponent component) {
 
-        String pkg = component.getClass().getPackage().getName();
-        return (Arrays.binarySearch(OPTIMIZED_PACKAGES, pkg) >= 0);
+        Package p = component.getClass().getPackage();
+        return ((p != null) && (Arrays.binarySearch(OPTIMIZED_PACKAGES, p.getName()) >= 0));       
 
     }
 
