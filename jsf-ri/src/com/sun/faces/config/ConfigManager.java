@@ -405,7 +405,7 @@ public class ConfigManager {
                 throw new ConfigurationException(MessageFormat.format(
                      "Unable to parse document ''{0}'': {1}",
                      documentURL.toExternalForm(),
-                     e.getMessage()));
+                     e.getMessage()), e);
             }
         }
 

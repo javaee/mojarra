@@ -226,7 +226,7 @@ public abstract class BeanBuilder {
                      MessageUtils.getExceptionMessageString(
                           MessageUtils.MANAGED_BEAN_INJECTION_ERROR_ID,
                           beanInfo.getName());
-                throw new ManagedBeanCreationException(message);
+                throw new ManagedBeanCreationException(message, ipe);
             }
         }
 

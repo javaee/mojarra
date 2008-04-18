@@ -235,7 +235,7 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
                       buildMessage(MessageFormat.format("Unable to create a new instance of ''{0}'': {1}",
                                                         className,
                                                         e.toString()),
-                                   source));
+                                   source), e);
             }
         }
 
