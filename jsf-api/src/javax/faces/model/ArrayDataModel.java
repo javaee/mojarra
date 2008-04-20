@@ -146,7 +146,7 @@ public class ArrayDataModel extends DataModel {
         if (array == null) {
 	    return (null);
         } else if (!isRowAvailable()) {
-            throw new IllegalArgumentException();
+            throw new NoRowAvailableException();
         } else {
             return (array[index]);
         }

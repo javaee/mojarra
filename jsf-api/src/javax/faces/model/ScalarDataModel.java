@@ -143,7 +143,7 @@ public class ScalarDataModel extends DataModel {
         if (scalar == null) {
 	    return (null);
         } else if (!isRowAvailable()) {
-            throw new IllegalArgumentException();
+            throw new NoRowAvailableException();
         } else {
             return (scalar);
         }

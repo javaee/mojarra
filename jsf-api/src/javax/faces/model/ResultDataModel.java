@@ -163,7 +163,7 @@ public class ResultDataModel extends DataModel {
         if (result == null) {
 	    return (null);
         } else if (!isRowAvailable()) {
-            throw new IllegalArgumentException();
+            throw new NoRowAvailableException();
         } else {
             return (rows[index]);
         }

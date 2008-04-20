@@ -223,7 +223,7 @@ public class ResultSetDataModel extends DataModel {
         if (resultSet == null) {
 	    return (null);
         } else if (!isRowAvailable()) {
-            throw new IllegalArgumentException();
+            throw new NoRowAvailableException();
         }
         try {
             getMetaData();
