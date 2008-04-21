@@ -309,7 +309,7 @@
     <property name="tomcat6.home"
               value="${dependency.base.dir}/apache-tomcat-6.0.13"/>
     <property name="glassfish.jar"
-              value="${glassfish.home}/lib/appserv-rt.jar"/>
+              value="${dependency.base.dir}/glassfish/lib/appserv-rt.jar"/>
     <property name="tomcat6.jar"
               value="${tomcat6.home}/lib/catalina.jar"/>
     <property name="jetty.version.dir" value="6.1.4"/>

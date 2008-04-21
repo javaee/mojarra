@@ -91,7 +91,7 @@
         <pathelement location="${jsf-impl.jar}"/>
         <pathelement location="${jsf.test.jar}"/>
         <!-- Temporary until javax.security is available on maven -->
-        <pathelement location="${container.home}/lib/javaee.jar"/>
+        <pathelement location="${jsf.build.home}/dependencies/glassfish/lib/javaee.jar"/>
         <path refid="compile.classpath"/>
         <path refid="cactus.runtime.classpath"/>        
     </path>

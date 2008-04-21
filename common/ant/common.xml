@@ -219,6 +219,9 @@
             <echo message="Creating archive '@{archive-name}'..."/>
 
             <jar destfile="@{basedir}/@{archive-name}.war">
+                <manifest>
+                    <attribute name="HK2-Import-Bundles" value="org.glassfish.external:apache-commons"/>
+                </manifest>
                 <zipfileset file="@{webxml}"
                             prefix="WEB-INF"/>
                 <archive-elements/>

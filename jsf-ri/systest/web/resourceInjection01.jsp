@@ -47,12 +47,7 @@
 
 <f:view>
    
-    <h:outputText value="#{resourceInjectionBean.injectedData1}" />
-    <h:outputText value="#{resourceInjectionBean.injectedData2}" />
-    <h:outputText value="#{resourceInjectionBean.injectedData3}" />
-    <h:outputText value="#{resourceInjectionBean.injectedData4}" />
-    <h:outputText value="#{resourceInjectionBean.injectedData5}" />
-    <h:outputText value="#{resourceInjectionBean.injectedData6}" />
+    <h:outputText value="#{resourceInjectionBean.welcomeMessage}" />
    
 </f:view>
 

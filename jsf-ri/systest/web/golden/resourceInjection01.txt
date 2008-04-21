@@ -9,7 +9,7 @@
   <body>
     <h1>Test Resource Injection in Managed Beans</h1>
 
-000000
+Hello World from env-entry!
 
     <hr>
   </body>
