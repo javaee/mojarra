@@ -92,14 +92,20 @@
     <target name="test" description="Run API, Impl, and Demo automated tests">
         <call.modules target="test"/>
     </target>
-    
-    <target name="test.with.container.refresh" 
+
+    <target name="test.with.container.refresh"
             description="Stop the target container, deploy the build artifacts, restart the container and test">
-        <container.stop/>
-        <antcall target="container.deploy"/>
-        <container.start/>
-        <call.modules target="test"/>
-        <container.stop/>
+        <trycatch>
+            <try>
+                <container.stop/>
+                <antcall target="container.deploy"/>
+                <container.start/>
+                <call.modules target="test"/>
+            </try>
+            <finally>
+                <container.stop/>
+            </finally>
+        </trycatch>
     </target>
         
 
