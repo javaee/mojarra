@@ -58,6 +58,7 @@ import java.util.logging.Logger;
 
 import javax.faces.FacesException;
 import javax.faces.application.StateManager;
+import javax.faces.application.ProjectStage;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
@@ -97,8 +98,7 @@ public class StateManagerImpl extends StateManager {
     /** Number of views in logical view to be saved in session. */
     private int noOfViews;
     private int noOfViewsInLogicalView;
-    private Map<String,Class<?>> classMap = 
-          new ConcurrentHashMap<String,Class<?>>(32);
+    private Map<String,Class<?>> classMap;
 
 
     // ------------------------------------------------------------ Constructors
@@ -109,6 +109,9 @@ public class StateManagerImpl extends StateManager {
         serialProvider = SerializationProviderFactory
                              .createInstance(fContext.getExternalContext());
         webConfig = WebConfiguration.getInstance(fContext.getExternalContext());
+        if (fContext.getApplication().getProjectStage() != ProjectStage.Development) {
+            classMap = new ConcurrentHashMap<String,Class<?>>(32);
+        }
     }
 
 
@@ -603,10 +606,10 @@ public class StateManagerImpl extends StateManager {
     throws FacesException {
 
         try {
-            Class<?> t = classMap.get(n.componentType);
+            Class<?> t = ((classMap != null) ? classMap.get(n.componentType) : null);
             if (t == null) {
                 t = Util.loadClass(n.componentType, n);
-                if (t != null) {
+                if (t != null && classMap != null) {
                     classMap.put(n.componentType, t);
                 } else {
                     throw new NullPointerException();

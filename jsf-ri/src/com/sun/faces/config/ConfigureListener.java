@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.118 2008/01/28 20:55:37 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.117.4.1 2008/04/17 21:17:05 rlubke Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -39,28 +39,26 @@
 
 package com.sun.faces.config;
 
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.application.WebappLifecycleListener;
-import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
-import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
-import com.sun.faces.el.ELContextListenerImpl;
-import com.sun.faces.el.FacesCompositeELResolver;
-import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.ReflectionUtils;
-import com.sun.faces.util.Timer;
-import com.sun.faces.util.Util;
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.el.CompositeELResolver;
 import javax.el.ExpressionFactory;
 import javax.faces.FactoryFinder;
-import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
+import javax.faces.application.Application;
 import javax.faces.application.ProjectStage;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
@@ -72,6 +70,7 @@ import javax.servlet.ServletRequestAttributeEvent;
 import javax.servlet.ServletRequestAttributeListener;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionAttributeListener;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionEvent;
@@ -81,10 +80,27 @@ import javax.servlet.jsp.JspFactory;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import java.io.StringReader;
-import java.text.MessageFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.application.WebappLifecycleListener;
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
+import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
+import com.sun.faces.el.ELContextListenerImpl;
+import com.sun.faces.el.ELUtils;
+import com.sun.faces.el.FacesCompositeELResolver;
+import com.sun.faces.scripting.GroovyHelper;
+import com.sun.faces.scripting.GroovyHelperFactory;
+import com.sun.faces.mgbean.BeanBuilder;
+import com.sun.faces.mgbean.BeanManager;
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.ReflectionUtils;
+import com.sun.faces.util.Timer;
+import com.sun.faces.util.Util;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * <p>Parse all relevant JavaServer Faces configuration resources, and
@@ -101,7 +117,11 @@ public class ConfigureListener implements ServletRequestListener,
 
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
 
-    protected WebappLifecycleListener webAppListener = new WebappLifecycleListener();
+    private ScheduledThreadPoolExecutor webResourcePool =
+          new ScheduledThreadPoolExecutor(1);
+    private ScheduledFuture monitor;
+
+    protected WebappLifecycleListener webAppListener;
     protected WebConfiguration webConfig;
 
    
@@ -110,12 +130,14 @@ public class ConfigureListener implements ServletRequestListener,
 
 
     public void contextInitialized(ServletContextEvent sce) {
+        ServletContext context = sce.getServletContext();
+        webAppListener = new WebappLifecycleListener(context);
         webAppListener.contextInitialized(sce);
         Timer timer = Timer.getInstance();
         if (timer != null) {
             timer.startTiming();
         }
-        ServletContext context = sce.getServletContext();
+
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.log(Level.FINE,
@@ -174,7 +196,9 @@ public class ConfigureListener implements ServletRequestListener,
                 webConfig.overrideContextInitParameter(BooleanWebContextInitParameter.EnableLazyBeanValidation, false);
                 Verifier.setCurrentInstance(new Verifier());
             }
+            initScripting();
             configManager.initialize(context);
+            initConfigMonitoring(context);
 
             // Step 7, verify that all the configured factories are available
             // and optionall that configured objects can be created. 
@@ -189,7 +213,7 @@ public class ConfigureListener implements ServletRequestListener,
                     LOGGER.severe(sb.toString());
                 }               
             }
-            registerELResolverAndListenerWithJsp(context);
+            registerELResolverAndListenerWithJsp(context, false);
             ApplicationAssociate associate =
                  ApplicationAssociate.getInstance(context);
             if (associate != null) {
@@ -213,7 +237,12 @@ public class ConfigureListener implements ServletRequestListener,
 
     public void contextDestroyed(ServletContextEvent sce) {
         webAppListener.contextDestroyed(sce);
+        webAppListener = null;
         ServletContext context = sce.getServletContext();
+        GroovyHelper helper = GroovyHelper.getCurrentInstance(context);
+        if (helper != null) {
+            helper.setClassLoader();
+        }
 
         LOGGER.log(Level.FINE,
                    "ConfigureListener.contextDestroyed({0})",
@@ -222,10 +251,14 @@ public class ConfigureListener implements ServletRequestListener,
         try {
             // Release any allocated application resources
             FactoryFinder.releaseFactories();
+            //monitor.cancel(true);
+            //webResourcePool.purge();
+            webResourcePool.shutdown();
         } finally {
             FacesContext initContext = new InitFacesContext(context);
             ApplicationAssociate
                   .clearInstance(initContext.getExternalContext());
+            ApplicationAssociate.setCurrentInstance(null);
             // Release the initialization mark on this web application
             ConfigManager.getInstance().destory(context);
             initContext.release();
@@ -240,12 +273,16 @@ public class ConfigureListener implements ServletRequestListener,
 
 
     public void requestDestroyed(ServletRequestEvent event) {
-        webAppListener.requestDestroyed(event);
+        if (webAppListener != null) {
+            webAppListener.requestDestroyed(event);
+        }
     }
 
 
     public void requestInitialized(ServletRequestEvent event) {
-        webAppListener.requestInitialized(event);
+        if (webAppListener != null) {
+            webAppListener.requestInitialized(event);
+        }
     }
 
 
@@ -253,12 +290,16 @@ public class ConfigureListener implements ServletRequestListener,
 
 
     public void sessionCreated(HttpSessionEvent event) {
-        // ignored
+       if (webAppListener != null) {
+           webAppListener.sessionCreated(event);
+       }
     }
 
 
     public void sessionDestroyed(HttpSessionEvent event) {
-        webAppListener.sessionDestroyed(event);
+        if (webAppListener != null) {
+            webAppListener.sessionDestroyed(event);
+        }
     }
 
 
@@ -271,12 +312,16 @@ public class ConfigureListener implements ServletRequestListener,
 
 
     public void attributeRemoved(ServletRequestAttributeEvent event) {
-        webAppListener.attributeRemoved(event);
+        if (webAppListener != null) {
+            webAppListener.attributeRemoved(event);
+        }
     }
 
 
     public void attributeReplaced(ServletRequestAttributeEvent event) {
-        webAppListener.attributeReplaced(event);
+        if (webAppListener != null) {
+            webAppListener.attributeReplaced(event);
+        }
     }
 
 
@@ -289,12 +334,16 @@ public class ConfigureListener implements ServletRequestListener,
 
 
     public void attributeRemoved(HttpSessionBindingEvent event) {
-        webAppListener.attributeRemoved(event);
+        if (webAppListener != null) {
+            webAppListener.attributeRemoved(event);
+        }
     }
 
 
     public void attributeReplaced(HttpSessionBindingEvent event) {
-        webAppListener.attributeReplaced(event);
+        if (webAppListener != null) {
+            webAppListener.attributeReplaced(event);
+        }
     }
 
 
@@ -306,15 +355,154 @@ public class ConfigureListener implements ServletRequestListener,
     }
 
     public void attributeRemoved(ServletContextAttributeEvent event) {
-        webAppListener.attributeRemoved(event);
+        if (webAppListener != null) {
+            webAppListener.attributeRemoved(event);
+        }
     }
 
     public void attributeReplaced(ServletContextAttributeEvent event) {
-        webAppListener.attributeReplaced(event);
+        if (webAppListener != null) {
+            webAppListener.attributeReplaced(event);
+        }
     }
 
 
     // --------------------------------------------------------- Private Methods
+
+    
+    private void initConfigMonitoring(ServletContext context) {
+
+        //noinspection unchecked
+        List<URL> webURLs =
+              (List<URL>) context.getAttribute("com.sun.faces.webresources");
+        if (isDevModeEnabled() && webURLs != null && !webURLs.isEmpty()) {
+            monitor = webResourcePool
+                  .scheduleAtFixedRate(new WebConfigResourceMonitor(context, webURLs),
+                                       2000,
+                                       2000,
+                                       TimeUnit.MILLISECONDS);
+        }
+        context.removeAttribute("com.sun.faces.webresources");
+
+    }
+
+    private void initScripting() {
+        //if (isDevModeEnabled()) {
+            GroovyHelper helper = GroovyHelperFactory.createHelper();
+            if (helper != null) {
+                helper.setClassLoader();
+            }
+        //}
+    }
+
+
+    private boolean isDevModeEnabled() {
+
+        // interrogate the init parameter directly vs looking up the application
+        return "Development".equals(webConfig.getOptionValue(WebContextInitParameter.JavaxFacesProjectStage));
+
+    }
+
+
+    /**
+     * This method will be invoked {@link WebConfigResourceMonitor} when
+     * changes to any of the faces-config.xml files included in WEB-INF
+     * are modified.
+     */
+    private void reload(ServletContext sc) {
+
+        if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.log(Level.INFO,
+                       "Reloading JSF configuration for context {0}",
+                       getServletContextIdentifier(sc));
+        }
+        GroovyHelper helper = GroovyHelper.getCurrentInstance();
+        if (helper != null) {
+            helper.setClassLoader();
+        }
+        // tear down the application
+        try {
+            List<HttpSession> sessions = webAppListener.getActiveSessions();
+            if (sessions != null) {
+                for (HttpSession session : sessions) {
+                    if (LOGGER.isLoggable(Level.INFO)) {
+                        LOGGER.log(Level.INFO,
+                                   "Invalidating Session {0}",
+                                   session.getId());
+                    }
+                    session.invalidate();
+                }
+            }
+            ApplicationAssociate associate = ApplicationAssociate.getInstance(sc);
+            if (associate != null) {
+                BeanManager manager = associate.getBeanManager();
+                for (Map.Entry<String,BeanBuilder> entry : manager.getRegisteredBeans().entrySet()) {
+                    String name = entry.getKey();
+                    BeanBuilder bean = entry.getValue();
+                    if (bean.getScope() == ELUtils.Scope.APPLICATION) {
+                        if (LOGGER.isLoggable(Level.INFO)) {
+                            LOGGER.log(Level.INFO,
+                                       "Removing application scoped managed bean: {0}",
+                                       name);
+                        }
+                        sc.removeAttribute(name);
+                    }
+
+                }
+            }
+            // Release any allocated application resources
+            FactoryFinder.releaseFactories();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            FacesContext initContext = new InitFacesContext(sc);
+            ApplicationAssociate
+                  .clearInstance(initContext.getExternalContext());
+            ApplicationAssociate.setCurrentInstance(null);
+            // Release the initialization mark on this web application
+            ConfigManager.getInstance().destory(sc);
+            initContext.release();
+            ReflectionUtils.clearCache(Thread.currentThread().getContextClassLoader());
+            WebConfiguration.clear(sc);
+        }
+
+        // bring the application back up, avoid re-registration of certain JSP
+        // artifacts.  No verification will be performed either to make this
+        // light weight.
+
+        // init a new WebAppLifecycleListener so that the cached ApplicationAssociate
+        // is removed.
+        webAppListener = new WebappLifecycleListener(sc);
+
+        FacesContext initContext = new InitFacesContext(sc);
+        ReflectionUtils
+              .initCache(Thread.currentThread().getContextClassLoader());
+
+        try {
+            ConfigManager configManager = ConfigManager.getInstance();
+            configManager.initialize(sc);
+
+
+            registerELResolverAndListenerWithJsp(sc, true);
+            ApplicationAssociate associate =
+                  ApplicationAssociate.getInstance(sc);
+            if (associate != null) {
+                associate.setContextName(getServletContextIdentifier(sc));
+            }
+            RenderKitUtils.loadSunJsfJs(initContext.getExternalContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            initContext.release();
+        }
+
+        if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.log(Level.INFO,
+                       "Reload complete.",
+                       getServletContextIdentifier(sc));
+        }
+
+    }
 
 
     private static String getServletContextIdentifier(ServletContext context) {
@@ -351,7 +539,7 @@ public class ConfigureListener implements ServletRequestListener,
 
     }
 
-    public void registerELResolverAndListenerWithJsp(ServletContext context) {
+    public void registerELResolverAndListenerWithJsp(ServletContext context, boolean reloaded) {
 
         if (webConfig.isSet(WebContextInitParameter.ExpressionFactory) ||
               !isJspTwoOne()) {
@@ -403,7 +591,7 @@ public class ConfigureListener implements ServletRequestListener,
                 ApplicationFactory factory = (ApplicationFactory)
                       FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
                 Application app = factory.getApplication();
-                if (app.getProjectStage() != ProjectStage.UnitTest) {
+                if (app.getProjectStage() != ProjectStage.UnitTest && !reloaded) {
                     throw e;
                 }
             }
@@ -587,6 +775,124 @@ public class ConfigureListener implements ServletRequestListener,
         } // END WebXmlHandler
 
     } // END WebXmlProcessor
+
+
+     private class WebConfigResourceMonitor implements Runnable {
+
+        private List<Monitor> monitors;
+        private ServletContext sc;
+
+        // -------------------------------------------------------- Constructors
+
+
+        public WebConfigResourceMonitor(ServletContext sc, List<URL> urls) {
+
+            assert (urls != null);
+            this.sc = sc;
+            for (URL url : urls) {
+                if (monitors == null) {
+                    monitors = new ArrayList<Monitor>(urls.size());
+                }
+                monitors.add(new Monitor(url));
+            }
+
+        }
+
+
+        // ----------------------------------------------- Methods from Runnable
+
+        /**
+         * PENDING javadocs
+         */
+        public void run() {
+
+            assert (monitors != null);
+            boolean reloaded = false;
+            for (Monitor m : monitors) {
+                if (m.hasBeenModified()) {
+                    if (!reloaded) {
+                        reloaded = true;
+                    }
+                }
+            }
+            if (reloaded) {
+                reload(sc);
+            }
+
+        }
+
+
+        // ------------------------------------------------------- Inner Classes
+
+
+        private class Monitor {
+
+            private URL url;
+            private long timestamp = -1;
+
+            // ---------------------------------------------------- Constructors
+
+
+            Monitor(URL url) {
+
+                this.url = url;
+                this.timestamp = getLastModified();
+                LOGGER.log(Level.INFO,
+                           "Monitoring {0} for modifications",
+                           url.toExternalForm());
+
+            }
+
+
+            // ----------------------------------------- Package Private Methods
+
+
+            boolean hasBeenModified() {
+                long temp = getLastModified();
+                if (timestamp < temp) {
+                    timestamp = temp;
+                    LOGGER.log(Level.INFO,
+                           "{0} changed!",
+                           url.toExternalForm());
+                    return true;
+                }
+                return false;
+
+            }
+
+
+            // ------------------------------------------------- Private Methods
+
+
+            private long getLastModified() {
+
+                InputStream in = null;
+                try {
+                    URLConnection conn = url.openConnection();
+                    conn.connect();
+                    in = conn.getInputStream();
+                    return conn.getLastModified();
+                } catch (IOException ioe) {
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE,
+                                   "Unable to check JAR timestamp.",
+                                   ioe);
+                    }
+                    return this.timestamp;
+                } finally {
+                    if (in != null) {
+                        try {
+                            in.close();
+                        } catch (IOException ignored) {
+                        }
+                    }
+                }
+
+            }
+
+        } // END Monitor
+
+    } // END WebConfigResourceMonitor
 
 }
 

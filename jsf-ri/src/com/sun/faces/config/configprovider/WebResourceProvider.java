@@ -97,6 +97,11 @@ public class WebResourceProvider implements ConfigurationResourceProvider {
         if (webFacesConfig != null) {
             list.add(webFacesConfig);
         }
+
+        // PENDING (rlubke,driscoll) this is a temporary measure to prevent
+        // having to find the web-based configuration resources twice
+        context.setAttribute("com.sun.faces.webresources", list);
+
         return list;
     }
 

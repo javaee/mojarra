@@ -41,6 +41,8 @@
 package com.sun.faces.mgbean;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.scripting.GroovyHelper;
+import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.el.ELUtils;
 import com.sun.faces.spi.InjectionProvider;
 import com.sun.faces.spi.InjectionProviderException;
@@ -163,10 +165,7 @@ public abstract class BeanBuilder {
 
     public Class<?> getBeanClass() {
 
-        if (beanClass == null) {
-            loadBeanClass();
-        }
-        return beanClass;
+        return loadBeanClass();
 
     }
 
@@ -185,11 +184,11 @@ public abstract class BeanBuilder {
     protected Object newBeanInstance() {
 
         try {
-            return beanClass.newInstance();
+            return loadBeanClass().newInstance();
         } catch (Exception e) {
             String message = MessageUtils.getExceptionMessageString(
                  MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,
-                 beanClass.getName());
+                 beanInfo.getClassName());
             throw new ManagedBeanCreationException(message, e);
         }
 
@@ -392,14 +391,30 @@ public abstract class BeanBuilder {
     // --------------------------------------------------------- Private Methods
 
 
-    private void loadBeanClass() {
+    private Class<?> loadBeanClass() {
         if (beanClass == null) {
             String className = beanInfo.getClassName();
-            beanClass = loadClass(className);
+            Class<?> clazz = null;
+            ApplicationAssociate associate =
+                  ApplicationAssociate.getCurrentInstance();
+
+            if (GroovyHelper.isGroovyScript(className)) {
+                GroovyHelper helper = associate.getGroovyHelper();
+                if (helper != null) {
+                    clazz = helper.loadScript(className);
+                    if (!associate.isDevModeEnabled()) {
+                        beanClass = clazz;
+                    }
+                }
+            }
+            if (clazz == null) {
+                clazz = loadClass(className);
+                beanClass = clazz;
+            }
+
             // validate the bean class is public and has a public
             // no-arg ctor
-
-            int classModifiers = beanClass.getModifiers();
+            int classModifiers = clazz.getModifiers();
             if (!Modifier.isPublic(classModifiers)) {
                 String message =
                       MessageUtils.getExceptionMessageString(
@@ -420,7 +435,7 @@ public abstract class BeanBuilder {
 
             try {
                 Constructor ctor =
-                      beanClass.getConstructor(RIConstants.EMPTY_CLASS_ARGS);
+                      clazz.getConstructor(RIConstants.EMPTY_CLASS_ARGS);
                 if (!Modifier.isPublic(ctor.getModifiers())) {
                     String message =
                           MessageUtils.getExceptionMessageString(
@@ -440,9 +455,11 @@ public abstract class BeanBuilder {
 
             if (!hasMessages()) {
                 // class is ok, scan for annotations
-                this.isInjectible = scanForAnnotations(beanClass);
+                this.isInjectible = scanForAnnotations(clazz);
             }
+            return clazz;
         }
+        return beanClass;
     }
 
 

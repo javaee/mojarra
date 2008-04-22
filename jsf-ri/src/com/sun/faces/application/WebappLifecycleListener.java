@@ -38,6 +38,8 @@ package com.sun.faces.application;
 
 import java.io.PrintWriter;
 import java.util.Enumeration;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -71,6 +73,22 @@ public class WebappLifecycleListener {
     
     private ServletContext servletContext;
     private ApplicationAssociate applicationAssociate;
+    private List<HttpSession> activeSessions;
+
+
+    // ------------------------------------------------------------ Constructors
+
+
+    public WebappLifecycleListener() { }
+
+    public WebappLifecycleListener(ServletContext servletContext) {
+
+        this.servletContext = servletContext;
+
+    }
+
+
+    // ---------------------------------------------------------- Public Methods
 
     /**
      * The request is about to go out of scope of the web application.
@@ -100,12 +118,30 @@ public class WebappLifecycleListener {
 
 
     /**
+     * Notfication that a session has been created.
+     * @param event the notification event
+     */
+    public void sessionCreated(HttpSessionEvent event) {
+        ApplicationAssociate associate = getAssociate();
+        // PENDING this should only create a new list if in dev mode
+         if (associate != null && associate.isDevModeEnabled()) {
+            if (activeSessions == null) {
+                activeSessions = new ArrayList<HttpSession>();
+            }
+            activeSessions.add(event.getSession());
+        }
+    }
+
+    /**
      * Notification that a session is about to be invalidated.
      *
      * @param event the notification event
      */
     public void sessionDestroyed(HttpSessionEvent event) {        
         HttpSession session = event.getSession();
+        if (activeSessions != null) {
+            activeSessions.remove(event.getSession());
+        }
         for (Enumeration e = session.getAttributeNames(); e.hasMoreElements(); ) {
             String beanName = (String)e.nextElement();
             handleAttributeEvent(beanName, 
@@ -263,7 +299,9 @@ public class WebappLifecycleListener {
      * @param event the notification event
      */
     public void contextInitialized(ServletContextEvent event) {
-        this.servletContext = event.getServletContext();
+        if (this.servletContext == null) {
+            this.servletContext = event.getServletContext();
+        }
     }
 
     /**
@@ -291,6 +329,11 @@ public class WebappLifecycleListener {
         }
         this.applicationAssociate = null;
 
+    }
+
+
+    public List<HttpSession> getActiveSessions() {
+        return activeSessions;
     }
 
 

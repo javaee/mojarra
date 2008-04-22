@@ -59,10 +59,12 @@
     <property name="jstl.api.version" value="1.2"/>
     <property name="annotation.api.version" value="1.0"/>
     <property name="portlet.api.version" value="1.0"/>
+    <property name="groovy.version" value="1.5.5"/>
     <property name="maven.repository.importer.version" value="1.2"/>
 	
     <property name="maven2.mirror" value="http://mirrors.ibiblio.org/pub/mirrors/maven2"/>
 	<property name="java.net.maven" value="https://maven-repository.dev.java.net/nonav/repository/"/>
+    <property name="codehaus.maven" value="http://repository.codehaus.org"/>
     <property name="download.java.net" value="http://download.java.net/javaee5/external/shared"/>
 
     <property name="junit.home" value="${dependency.base.dir}/junit${junit.version}"/>
@@ -88,6 +90,7 @@
     <property name="sun-commons-collections.jar"   value="${dependency.jar.dir}/com-sun-commons-collections.jar"/>
     <property name="sun-commons-logging.jar"       value="${dependency.jar.dir}/com-sun-commons-logging-api.jar"/>
     <property name="portlet.jar"                   value="${dependency.jar.dir}/portlet-api-${portlet.api.version}.jar"/>
+    <property name="groovy.jar"                    value="${dependency.jar.dir}/groovy-all-${groovy.version}.jar"/>
 
     <property name="glassfish.download.url"        value="http://download.java.net/javaee5/v2ur1/promoted/" />
     <property name="glassfish.installer.jar"       value="glassfish-installer-v2ur1-b09d-"/>    
@@ -242,6 +245,18 @@
             <then>
                 <get src="${maven2.mirror}/javax/portlet/portlet-api/${portlet.api.version}/portlet-api-${portlet.api.version}.jar"
                      dest="${portlet.jar}"
+                     usetimestamp="true"/>
+            </then>
+        </if>
+
+        <!-- Groovy -->
+        <if>
+            <not>
+                <available file="${groovy.jar}" property="ignored"/>
+            </not>
+            <then>
+                <get src="${codehaus.maven}/org/codehaus/groovy/groovy-all/${groovy.version}/groovy-all-${groovy.version}.jar"
+                     dest="${groovy.jar}"
                      usetimestamp="true"/>
             </then>
         </if>

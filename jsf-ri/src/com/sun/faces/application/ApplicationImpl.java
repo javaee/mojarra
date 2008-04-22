@@ -83,6 +83,7 @@ import javax.faces.event.ActionListener;
 import javax.faces.validator.Validator;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.scripting.GroovyHelper;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
@@ -1104,7 +1105,7 @@ public class ApplicationImpl extends Application {
         assert (key != null && map != null);
 
         Object result;
-        Class clazz;
+        Class clazz = null;
         Object value;
 
         value = map.get(key);
@@ -1113,13 +1114,25 @@ public class ApplicationImpl extends Application {
         }
         assert (value instanceof String || value instanceof Class);
         if (value instanceof String) {
-            try {
-                clazz = Util.loadClass((String) value, value);
+             String cValue = (String) value;
+             try {
+                if (GroovyHelper.isGroovyScript(cValue)) {
+                    GroovyHelper helper = associate.getGroovyHelper();
+                    if (helper != null) {
+                        clazz = helper.loadScript(cValue);
+                        if (!associate.isDevModeEnabled()) {
+                            map.put(key, clazz); // cache it to prevent continued lookups
+                        }
+                    }
+                }
+                if (clazz == null) {
+                    clazz = Util.loadClass((String) value, value);
+                    map.put(key, clazz);
+                }
                 assert (clazz != null);
-                map.put(key, clazz);
-            } catch (Throwable t) {
-                throw new FacesException(t.getMessage(), t);
-            }
+             } catch (Exception e) {
+                 throw new FacesException(e.getMessage(), e);
+             }
         } else {
             clazz = (Class) value;
         }
@@ -1160,7 +1173,7 @@ public class ApplicationImpl extends Application {
         assert (key != null && map != null);
 
         Object result = null;
-        Class clazz;
+        Class clazz = null;
         Object value;
 
         value = map.get(key);
@@ -1169,13 +1182,25 @@ public class ApplicationImpl extends Application {
         }
         assert (value instanceof String || value instanceof Class);
         if (value instanceof String) {
-            try {
-                clazz = Util.loadClass((String) value, value);
+            String cValue = (String) value;
+             try {
+                if (GroovyHelper.isGroovyScript(cValue)) {
+                    GroovyHelper helper = associate.getGroovyHelper();
+                    if (helper != null) {
+                        clazz = helper.loadScript(cValue);
+                        if (!associate.isDevModeEnabled()) {
+                            map.put(key, clazz); // cache it to prevent continued lookups
+                        }
+                    }
+                }
+                if (clazz == null) {
+                    clazz = Util.loadClass((String) value, value);
+                    map.put(key, clazz);
+                }
                 assert (clazz != null);
-                map.put(key, clazz);
-            } catch (Throwable t) {
-                throw new FacesException(t.getMessage(), t);
-            }
+             } catch (Exception e) {
+                 throw new FacesException(e.getMessage(), e);
+             }
         } else {
             clazz = (Class) value;
         }
@@ -1205,13 +1230,7 @@ public class ApplicationImpl extends Application {
         }
         return result;
     }
-    
-    
-    ApplicationAssociate getAssociate() {
-        return associate;
-    }
-
-
+   
     // The testcase for this class is
     // com.sun.faces.application.TestApplicationImpl.java
 

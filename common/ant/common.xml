@@ -8,7 +8,7 @@
  The contents of this file are subject to the terms of either the GNU
  General Public License Version 2 only ("GPL") or the Common Development
  and Distribution License("CDDL") (collectively, the "License").  You
- may not use this file except in compliance with the License. You can obtain
+ may not use this file except in complicomance with the License. You can obtain
  a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
  or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
  language governing permissions and limitations under the License.
@@ -141,6 +141,7 @@
         <pathelement location="${tomcat6.jar}"/>
         <pathelement location="${jetty.annotations.jar}"/>
         <pathelement location="${jetty.plus.jar}"/>
+        <pathelement location="${groovy.jar}"/>
     </path>
     
     <path id="sun.commons.classpath">

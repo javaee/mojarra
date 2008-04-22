@@ -41,6 +41,7 @@
 package com.sun.faces.application;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.scripting.GroovyHelper;
 import com.sun.faces.application.resource.ResourceCache;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.mgbean.BeanManager;
@@ -57,6 +58,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
+import javax.faces.application.ProjectStage;
 import javax.servlet.ServletContext;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -143,6 +145,8 @@ public class ApplicationAssociate {
     private boolean requestServiced;
 
     private BeanManager beanManager;
+    private GroovyHelper groovyHelper;
+    private boolean devModeEnabled;
 
     private PropertyEditorHelper propertyEditorHelper;
 
@@ -174,6 +178,8 @@ public class ApplicationAssociate {
         beanManager = new BeanManager(injectionProvider,
                                       webConfig.isOptionEnabled(
                                            BooleanWebContextInitParameter.EnableLazyBeanValidation));
+        groovyHelper = GroovyHelper.getCurrentInstance();
+        devModeEnabled = (appImpl.getProjectStage() == ProjectStage.Development);
     }
 
     public static ApplicationAssociate getInstance(ExternalContext
@@ -238,6 +244,14 @@ public class ApplicationAssociate {
 
     public BeanManager getBeanManager() {
         return beanManager;
+    }
+
+    public GroovyHelper getGroovyHelper() {
+        return groovyHelper;
+    }
+
+    public boolean isDevModeEnabled() {
+        return devModeEnabled;
     }
 
     /**
