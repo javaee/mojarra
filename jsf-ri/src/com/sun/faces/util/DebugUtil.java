@@ -56,6 +56,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.el.ValueExpression;
 
 import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.renderkit.RenderKitUtils;
@@ -189,62 +190,69 @@ public class DebugUtil {
    indentPrintln(out, "===>Type:" + root.getComponentType());
 */
         indentPrintln(out, "id:" + root.getId());
-        indentPrintln(out, "type:" + root.toString());
+        indentPrintln(out, "type:" + root.getClass().getName());
 
         if (root instanceof javax.faces.component.UISelectOne) {
-            List<SelectItem> items =
-                  RenderKitUtils.getSelectItems(FacesContext.getCurrentInstance(), root);
-            indentPrintln(out, " {");
-            if (!items.isEmpty()) {
-                for (SelectItem curItem : items) {
-                    indentPrintln(out, "\t value="
-                                       + curItem.getValue()
-                                       +
-                                       " label="
-                                       + curItem.getLabel()
-                                       + " description="
-                                       +
-                                       curItem.getDescription());
+            List<SelectItem> items = null;
+            try {
+                items = RenderKitUtils.getSelectItems(FacesContext.getCurrentInstance(),
+                                                      root);
+            } catch (Exception e) {
+                 // select items couldn't be resolved at this time
+                indentPrintln(out, " { SelectItem(s) not resolvable at this point in time }");
+            }
+            if (items != null) {
+                indentPrintln(out, " {");
+                if (!items.isEmpty()) {
+                    for (SelectItem curItem : items) {
+                        indentPrintln(out, "\t value = "
+                                           + curItem.getValue()
+                                           +
+                                           ", label = "
+                                           + curItem.getLabel()
+                                           + ", description = "
+                                           +
+                                           curItem.getDescription());
+                    }
+                }
+                indentPrintln(out, " }");
+            }
+        } else {
+            ValueExpression ve = null;
+            if (root instanceof ValueHolder) {
+                ve = root.getValueExpression("value");
+                try {
+                    value = ((ValueHolder) root).getValue();
+                } catch (Exception e) {
+                    value = "UNAVAILABLE";
                 }
             }
-            indentPrintln(out, " }");
-        } else {
-            if (root instanceof ValueHolder) {
-                value = ((ValueHolder)root).getValue();
+            if (ve != null) {
+                indentPrintln(out, "expression/value = " + ve.getExpressionString() + " : " + value);
+            } else {
+                indentPrintln(out, "value = " + value);
             }
-            indentPrintln(out, "value= " + value);
 
             Iterator<String> it = root.getAttributes().keySet().iterator();
             if (it != null) {
-                while (it.hasNext()) {
-                    String attrValue;
+                while (it.hasNext()) {                   
                     String attrName = it.next();
-                    Object attrObj = root.getAttributes().get(attrName);
-
-                    if (null != attrObj) {
-                        // chop off the address since we don't want to print
-                        // out anything that'll vary from invocation to
-                        // invocation
-                        attrValue = attrObj.toString();
-                        int at;
-                        boolean doTruncate = false;
-                        if (-1 == (at = attrValue.indexOf("$"))) {
-                            if (-1 != (at = attrValue.indexOf("@"))) {
-                                doTruncate = true;
-                            }
-                        } else {
-                            doTruncate = true;
-                        }
-
-                        if (doTruncate) {
-                            attrValue = attrValue.substring(0, at);
-                        }
-                    } else {
-                        attrValue = (String) attrObj;
+                    ve = root.getValueExpression(attrName);
+                    String expr = null;
+                    if (ve != null) {
+                        expr = ve.getExpressionString();
                     }
-
-                    indentPrintln(out, "attr=" + attrName +
-                                       " : " + attrValue);
+                    String val;
+                    try {
+                        val = root.getAttributes().get(attrName).toString();
+                    } catch (Exception e) {
+                        val = "UNAVAILABLE";
+                    }
+                    if (expr != null) {
+                        indentPrintln(out, "attr = " + attrName + " : [" + expr + " : " + val + " ]");
+                    } else {
+                        indentPrintln(out, "attr = " + attrName + " : " + val);
+                    }
                 }
             }
         }
