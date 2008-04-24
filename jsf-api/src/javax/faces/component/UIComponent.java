@@ -1453,10 +1453,12 @@ private void doFind(FacesContext context, String clientId) {
      */
     List<String> getAttributesThatAreSet(boolean create) {
 
-        String pkg = this.getClass().getPackage().getName();
-        if (create && Arrays.binarySearch(OPTIMIZED_PACKAGES, pkg) >= 0) {
-            if (attributesThatAreSet == null) {
-                attributesThatAreSet = new ArrayList<String>(6);
+        Package p = this.getClass().getPackage();
+        if (p != null) {
+            if (create && Arrays.binarySearch(OPTIMIZED_PACKAGES, p.getName()) >= 0) {
+                if (attributesThatAreSet == null) {
+                    attributesThatAreSet = new ArrayList<String>(6);
+                }
             }
         }
         return attributesThatAreSet;
