@@ -47,10 +47,12 @@ import javax.faces.context.FacesContext;
 
 
 /**
- * <p><strong>Converter</strong> is an interface describing a Java class
- * that can perform Object-to-String and String-to-Object conversions
- * between model data objects and a String representation of those
- * objects that is suitable for rendering.</p>
+ * <p><strong class="changed_modified_2_0">Converter</strong> is an
+ * interface describing a Java class that can perform Object-to-String
+ * and String-to-Object conversions between model data objects and a
+ * String representation of those objects that is suitable for
+ * rendering.</p>
+
  * <p/>
  * <p>{@link Converter} implementations must have a zero-arguments public
  * constructor.  In addition, if the {@link Converter} class wishes to have
@@ -72,6 +74,12 @@ import javax.faces.context.FacesContext;
  * of the current {@link FacesContext}, unless the
  * <code>Converter</code> maintains its own <code>Locale</code> as part
  * of its state.</p>
+ *
+ * <p class="changed_added_2_0">If the class implementing
+ * <code>Converter</code> has a {@link
+ * javax.faces.application.ResourceDependency} annotation, the action
+ * described in <code>ResourceDependency</code> must be taken when
+ * {@link javax.faces.component.ValueHolder#setConverter} is called.</p>
  */
 
 public interface Converter {

@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:mjx="http://java.sun.com/jsf/mojarra/extensions"
+      xmlns:hb="https://javaserverfaces.dev.java.net/demo/headbody"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<f:view contentType="text/html"/>
+
+<mjx:head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>Head and Body Investigation</title>
+</mjx:head>
+
+
+<mjx:body>
+
+<h1>Template Text</h1>
+
+<h:form prependId="false">
+<h:panelGrid border="1" columns="2">
+
+<h:panelGroup>
+
+  <h:inputText />
+
+  <mjx:outputScript name="ajaxZero.js" library="javax.faces" target="head"/>
+  <mjx:outputScript name="ajaxOne.js" library="javax.faces" target="head"/>
+  <mjx:outputScript name="ajaxTwo.js" library="javax.faces" target="body"/>
+  <mjx:outputScript name="ajaxThree.js" library="javax.faces"/>
+  <mjx:outputScript name="scriptInForm.js" library="form" target="form"/>
+
+  <mjx:outputStylesheet name="basic.css" />
+
+  <hb:myComponent />
+
+</h:panelGroup>
+
+<h:panelGroup>
+
+  <h:inputText />
+
+</h:panelGroup>
+
+</h:panelGrid>
+
+<h:commandButton value="submit" />
+
+<p><span id="replaceByJavaScript" /></p>
+
+</h:form>
+
+<form>
+
+<p><input type="submit" value="callScriptInHead" onclick="inAjax(); return false; " /></p>
+<p><input type="submit" value="call2ndScriptInHead" onclick="inAjaxOne(); return false; " /></p>
+<p><input type="submit" value="callScriptInBody" onclick="inAjaxTwo(); return false; " /></p>
+<p><input type="submit" value="callScriptInPlace" onclick="inAjaxThree(); return false; " /></p>
+<p><input type="submit" value="callScriptInForm" onclick="inScriptInForm(); return false; " /></p>
+<p><input type="submit" value="call script rendered by @ResourceDependency" onclick="inMyComponent(); return false; " /></p>
+
+</form>
+
+</mjx:body>
+
+</html>

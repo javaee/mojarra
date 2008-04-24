@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.104 2008/04/01 15:18:41 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.100.2.11 2008/04/17 18:51:30 edburns Exp $
  */
 
 /*
@@ -79,6 +79,7 @@ import javax.faces.el.PropertyResolver;
 import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.el.ValueBinding;
 import javax.faces.el.VariableResolver;
+import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionListener;
 import javax.faces.validator.Validator;
 
@@ -95,6 +96,19 @@ import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.Util;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Type;
+import java.util.List;
+import java.util.List;
+import javax.faces.event.SystemEvent;
+import javax.el.ValueExpression;
+import javax.faces.application.Resource;
+import javax.faces.component.UIOutput;
+import javax.faces.event.AfterAddToParentEvent;
+import javax.faces.event.ComponentSystemEventListener;
+import javax.faces.event.SystemEvent;
+import javax.faces.event.SystemEventListener;
+import javax.faces.event.SystemEventListenerHolder;
 
 
 /**
@@ -166,7 +180,7 @@ public class ApplicationImpl extends Application {
     private ArrayList<ELContextListener> elContextListeners = null;
     private ArrayList<ELResolver> elResolvers = null;
     private CompositeELResolver compositeELResolver = null;
-
+    
     /**
      * Constructor
      */
@@ -254,6 +268,9 @@ public class ApplicationImpl extends Application {
             if (null == result || createOne) {
                 result = this.createComponent(componentType);
                 componentExpression.setValue((context.getELContext()), result);
+            } 
+            if (null != result) {
+                Util.processListenerForAnnotation((UIComponent) result);
             }
         } catch (Exception ex) {
             throw new FacesException(ex);
@@ -665,6 +682,8 @@ public class ApplicationImpl extends Application {
             LOGGER.log(Level.FINE, MessageFormat.format("Created component with component type of ''{0}''",
                                                         componentType));
         }
+        Util.processListenerForAnnotation(returnVal);
+        
         return returnVal;
     }
 
@@ -701,6 +720,9 @@ public class ApplicationImpl extends Application {
             if (null == result || createOne) {
                 result = this.createComponent(componentType);
                 componentBinding.setValue(context, result);
+            } 
+            if (null != result) {
+                Util.processListenerForAnnotation((UIComponent)result);
             }
         } catch (Exception ex) {
             throw new FacesException(ex);
@@ -1082,7 +1104,216 @@ public class ApplicationImpl extends Application {
     public String getMessageBundle() {
         return messageBundle;
     }
+    
+    public void publishEvent(Class<? extends SystemEvent> facesEventClass,
+            SystemEventListenerHolder source) {
+        
+        // Look for listeners stored on the source instance
+        
+        try {
+            // See if source implements ListenerHolder
+            List<SystemEventListener> listeners = null;
+            SystemEvent event = null;
+            // If so, see if source has any listeners for this type of event
+            listeners = ((SystemEventListenerHolder) source).getListenersForEventClass(facesEventClass);
+            // if you found some listeners, 
+            if (!listeners.isEmpty()) {
+                // invoke them
+                event = traverseListenerList(listeners, null, source,
+                        facesEventClass);
+            }
+        
+            // look for listeners stored on the application
+        
+            // look for listeners for this specific source class.
+            listeners = getListeners(facesEventClass,
+                    source.getClass());
 
+            // if you found some listeners, 
+            if (!listeners.isEmpty()) {
+                event = traverseListenerList(listeners, event, source,
+                        facesEventClass);
+            }
+
+            // look for listeners not specific to this source class
+            listeners = getListeners(facesEventClass, null);
+            // if you found some listeners, 
+            if (!listeners.isEmpty()) {
+                event = traverseListenerList(listeners, event, source,
+                        facesEventClass);
+            }
+        } catch (AbortProcessingException ape) {
+            // PENDING(rlubke): log message
+            // PENDING(edburns): do we need to specify that a message must be logged?
+        }
+    }
+    
+    public void subscribeToEvent(Class<? extends SystemEvent> facesEventClass,
+            SystemEventListener listener) {
+        FacesContext.getCurrentInstance().getApplication().subscribeToEvent(facesEventClass, null,
+                listener);
+    }
+    
+    
+    public void subscribeToEvent(Class<? extends SystemEvent> facesEventClass,
+            Class sourceClass,
+            SystemEventListener listener) {
+        List<SystemEventListener> listeners = maybeCreateAndGetListeners(facesEventClass, 
+                sourceClass);
+        
+        listeners.add(listener);
+    }
+    
+    public void unsubscribeFromEvent(Class<? extends SystemEvent> facesEventClass,
+            Class sourceClass,
+            SystemEventListener listener) {
+        List<SystemEventListener> listeners = getListeners(facesEventClass, 
+                sourceClass);
+        
+        listeners.remove(listener);
+    }
+    
+    public void unsubscribeFromEvent(Class<? extends SystemEvent> facesEventClass,
+            SystemEventListener listener) {
+        FacesContext.getCurrentInstance().getApplication().unsubscribeFromEvent(facesEventClass, 
+                null, listener);
+    }
+    
+    private class ListenerKey {
+
+        private Class<? extends SystemEvent> facesEventClass;
+        private Class sourceClass;
+        public ListenerKey(Class<? extends SystemEvent> facesEventClass,
+            Class sourceClass) {
+            this.facesEventClass = facesEventClass;
+            this.sourceClass = sourceClass;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final ApplicationImpl.ListenerKey other = (ApplicationImpl.ListenerKey) obj;
+            if (this.facesEventClass != other.facesEventClass && (this.facesEventClass == null || !this.facesEventClass.equals(other.facesEventClass))) {
+                return false;
+            }
+            if (this.sourceClass != other.sourceClass && (this.sourceClass == null || !this.sourceClass.equals(other.sourceClass))) {
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 5;
+            hash = 83 * hash + (this.facesEventClass != null ? this.facesEventClass.hashCode() : 0);
+            hash = 83 * hash + (this.sourceClass != null ? this.sourceClass.hashCode() : 0);
+            return hash;
+        }
+        
+        
+    }
+    
+    private Map<ListenerKey, List<SystemEventListener>> listenersByListenerKey;
+    
+    private List<SystemEventListener> getListeners(Class<? extends SystemEvent> facesEventClass,
+            Class sourceClass) {
+        List<SystemEventListener> listeners = null;
+        ListenerKey key = new ListenerKey(facesEventClass, sourceClass);
+        
+        // PENDING(rlubke): high performance thread safety
+        if (null != listenersByListenerKey) {
+            listeners = listenersByListenerKey.get(key);
+        }
+        if (null == listeners) {
+            listeners = Collections.EMPTY_LIST;
+        }
+        
+        return listeners;
+    }
+    
+    private List<SystemEventListener> maybeCreateAndGetListeners(Class<? extends SystemEvent> facesEventClass,
+            Class sourceClass) {
+        List<SystemEventListener> listeners = null;
+        ListenerKey key = new ListenerKey(facesEventClass, sourceClass);
+        
+        // PENDING(rlubke): high performance thread safety
+        if (null == listenersByListenerKey) {
+            listenersByListenerKey = new HashMap<ListenerKey, List<SystemEventListener>>();
+            listeners = new ArrayList<SystemEventListener>();
+            listenersByListenerKey.put(key, listeners);
+        }
+        else {
+            if (null == (listeners = listenersByListenerKey.get(key))) {
+                listeners = new ArrayList<SystemEventListener>();
+                listenersByListenerKey.put(key, listeners);
+            }
+        }
+        assert(null != listenersByListenerKey);
+        
+        return listeners;
+    }
+    
+    private SystemEvent traverseListenerList(List<SystemEventListener> listeners, 
+            SystemEvent event, Object source, 
+            Class<? extends SystemEvent> facesEventClass) throws SecurityException, IllegalArgumentException, AbortProcessingException {
+        for (SystemEventListener curListener : listeners) {
+            if (curListener.isListenerForSource(source)) {
+                if (null == event) {
+                    // Build the SystemEvent
+                    Constructor ctor = null;
+                    Type[] ctorParams = null;
+                    Constructor allCtors[] = null;
+                    try {
+                        allCtors = facesEventClass.getConstructors();
+                        // first look for an exact match
+                        for (Constructor cur : allCtors) {
+                            ctorParams = cur.getGenericParameterTypes();
+                            if (ctorParams.length == 1) {
+                                if (source.getClass().equals(ctorParams[0])) {
+                                    ctor = cur;
+                                    break;
+                                }
+                            }
+                        }
+                        if (null == ctor) {
+                            // Failing that, look for an isAssignableFrom match
+                            for (Constructor cur : allCtors) {
+                                ctorParams = cur.getGenericParameterTypes();
+                                if (ctorParams.length == 1 &&
+
+                                       ctorParams[0] instanceof Class) {
+                                    Class listenerCtorParamClass = (Class) ctorParams[0];
+                                    // PENDING ryan, not sure if I have this right.  I often
+                                    // get these two backwards.
+                                    if (listenerCtorParamClass.isAssignableFrom(source.getClass())) {
+                                        ctor = cur;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        if (null != ctor) {
+                            event = (SystemEvent) ctor.newInstance(source);
+                        }
+                    } catch (InstantiationException e) {
+                    } catch (IllegalAccessException e) {
+                    } catch (InvocationTargetException e) {
+                    }
+                }
+                assert(null != event);
+                if (event.isAppropriateListener(curListener)) {
+                    event.processListener(curListener);
+                }
+            }
+        }
+        return event;
+    }
+    
     /**
      * <p>PRECONDITIONS: the values in the Map are either Strings
      * representing fully qualified java class names, or java.lang.Class

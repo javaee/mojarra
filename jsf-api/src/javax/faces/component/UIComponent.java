@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.153 2007/10/01 20:24:10 rlubke Exp $
+ * $Id: UIComponent.java,v 1.153.8.13 2008/04/17 18:51:28 edburns Exp $
  */
 
 /*
@@ -44,6 +44,7 @@ package javax.faces.component;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -56,16 +57,22 @@ import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ComponentSystemEvent;
+import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.FacesEvent;
+import javax.faces.event.SystemEvent;
+import javax.faces.event.SystemEventListener;
 import javax.faces.event.FacesListener;
+import javax.faces.event.SystemEventListenerHolder;
 import javax.faces.render.Renderer;
 
 /**
- * <p><strong>UIComponent</strong> is the base class for all user interface
- * components in JavaServer Faces.  The set of {@link UIComponent} instances
- * associated with a particular request and response are organized into a
- * component tree under a {@link UIViewRoot} that represents
- * the entire content of the request or response.</p>
+ * <p><strong class="changed_modified_2_0">UIComponent</strong> is the
+ * base class for all user interface components in JavaServer Faces.
+ * The set of {@link UIComponent} instances associated with a particular
+ * request and response are organized into a component tree under a
+ * {@link UIViewRoot} that represents the entire content of the request
+ * or response.</p>
  *
  * <p>For the convenience of component developers,
  * {@link UIComponentBase} provides the default
@@ -75,9 +82,16 @@ import javax.faces.render.Renderer;
  * {@link UIComponentBase}, instead of directly
  * implementing this abstract class, to reduce the impact of any future changes
  * to the method signatures.</p>
+ *
+ * <p class="changed_added_2_0">If the {@link
+ * javax.faces.event.ListenerFor} annotation is attached to the class
+ * definition of a <code>Component</code>, that class must also
+ * implement {@link javax.faces.event.ComponentSystemEventListener}.
+ * </p>
+
  */
 
-public abstract class UIComponent implements StateHolder {
+public abstract class UIComponent implements StateHolder, SystemEventListenerHolder {
 
     /**
      * This array represents the packages that can leverage the
@@ -516,26 +530,56 @@ public abstract class UIComponent implements StateHolder {
 
 
     /**
-     * <p>Return a mutable <code>List</code> representing the child
-     * {@link UIComponent}s associated with this component.  The returned
-     * implementation must support all of the standard and optional
-     * <code>List</code> methods, plus support the following additional
-     * requirements:</p>
-     * <ul>
-     * <li>The <code>List</code> implementation must implement
-     *     the <code>java.io.Serializable</code> interface.</li>
-     * <li>Any attempt to add a <code>null</code> must throw
-     *     a NullPointerException</li>
-     * <li>Any attempt to add an object that does not implement
-     *     {@link UIComponent} must throw a ClassCastException.</li>
-     * <li>Whenever a new child component is added, the <code>parent</code>
-     *     property of the child must be set to this component instance.
-     *     If the <code>parent</code> property of the child was already
-     *     non-null, the child must first be removed from its previous
-     *     parent (where it may have been either a child or a facet).</li>
-     * <li>Whenever an existing child component is removed, the
-     *     <code>parent</code> property of the child must be set to
-     *     <code>null</code>.</li>
+     * <p><span class="changed_modified_2_0">Return</span> a mutable
+     * <code>List</code> representing the child {@link UIComponent}s
+     * associated with this component.  The returned implementation must
+     * support all of the standard and optional <code>List</code>
+     * methods, plus support the following additional requirements:</p>
+     * <ul> <li>The <code>List</code> implementation must implement the
+     * <code>java.io.Serializable</code> interface.</li> <li>Any attempt
+     * to add a <code>null</code> must throw a NullPointerException</li>
+     * <li>Any attempt to add an object that does not implement {@link
+     * UIComponent} must throw a ClassCastException.</li> <li>Whenever a
+     * new child component is added, the <code>parent</code> property of
+     * the child must be set to this component instance.  If the
+     * <code>parent</code> property of the child was already non-null,
+     * the child must first be removed from its previous parent (where
+     * it may have been either a child or a facet).</li> <li>Whenever an
+     * existing child component is removed, the <code>parent</code>
+     * property of the child must be set to <code>null</code>.</li>
+
+     * <li class="changed_added_2_0"><p>After the child component has
+     *     been added to the view, if the following condition is
+     *     <strong>not</strong> met:</p>
+     *
+     *     <ul><p>{@link javax.faces.render.ResponseStateManager#isPostback}
+     *     returns <code>true</code> and {@link
+     *     javax.faces.context.FacesContext#getCurrentPhaseId} returns {@link
+     *     javax.faces.event.PhaseId#RESTORE_VIEW}</p></ul>
+
+     *     <p>{@link javax.faces.application.Application#publishEvent}
+     *     must be called, passing {@link
+     *     javax.faces.event.AfterAddToParentEvent}<code>.class</code>
+     *     as the first argument and the newly added component as the
+     *     second argument.</p>
+
+     *     <p>The newly added component must be inspected for the
+     *     presence of the {@link
+     *     javax.faces.application.ResourceDependency} annotation.  If
+     *     the annotation is present, the action described in the
+     *     javadoc for that class must be taken on the newly added
+     *     component instance.</p>
+
+     *     <p>If the newly added component instance returns
+     *     non-<code>null</code> from {@link UIComponent#getRenderer}
+     *     the {@link Renderer} must be inspected for the presence of
+     *     the {@link javax.faces.application.ResourceDependency}
+     *     annotation.  If the annotation is present, the action
+     *     described in the javadoc for that class must be taken on the
+     *     <code>Renderer</code>.</p>
+
+     * </li>
+
      * </ul>
      */
     public abstract List<UIComponent> getChildren();
@@ -734,8 +778,7 @@ private void doFind(FacesContext context, String clientId) {
         }
         return found;
     }
-
-
+    
     // ------------------------------------------------ Facet Management Methods
 
 
@@ -857,15 +900,32 @@ private void doFind(FacesContext context, String clientId) {
 
 
     /**
-     * <p>If our <code>rendered</code> property is <code>true</code>,
-     * render the beginning of the current state of this
-     * {@link UIComponent} to the response contained in the specified
-     * {@link FacesContext}.
-     * </p>
+     * <p><span class="changed_modified_2_0">If</span> our
+     * <code>rendered</code> property is <code>true</code>, render the
+     * beginning of the current state of this {@link UIComponent} to the
+     * response contained in the specified {@link FacesContext}.  If our
+     * <code>rendered</code> property is <code>false</code>, return
+     * immediately.  </p>
      * 
-     * <p>If a {@link Renderer} is associated with this {@link UIComponent}, 
-     * the actual encoding will be delegated to 
-     * {@link Renderer#encodeBegin(FacesContext, UIComponent)}.</p> 
+     * <p>Otherwise, take the following actions.</p>
+     *
+     * <ul>
+
+     * <li class="changed_added_2_0"><p>Call {@link
+     * UIComponent#pushComponentToEL}.  </p></li>
+
+     * <li class="changed_added_2_0"><p>Call {@link
+     * javax.faces.application.Application#publishEvent}, passing {@link
+     * javax.faces.event.BeforeRenderEvent}<code>.class</code> as the
+     * first argument and the component instance to be rendered as the
+     * second argument.  </p></li>
+
+     * <li><p>If a {@link Renderer} is associated with this {@link
+     * UIComponent}, the actual encoding will be delegated to
+     * {@link Renderer#encodeBegin(FacesContext, UIComponent)}.
+     * </p></li>
+     *
+     * </ul>
      *
      * @param context {@link FacesContext} for the response we are creating
      *
@@ -896,13 +956,16 @@ private void doFind(FacesContext context, String clientId) {
 
 
     /**
-     * <p>If our <code>rendered</code> property is <code>true</code>,
-     * render the ending of the current state of this
-     * {@link UIComponent}.</p>
+     * <p><span class="changed_modified_2_0">If</span> our
+     * <code>rendered</code> property is <code>true</code>, render the
+     * ending of the current state of this {@link UIComponent}.</p>
      * 
      * <p>If a {@link Renderer} is associated with this {@link UIComponent}, 
      * the actual encoding will be delegated to 
      * {@link Renderer#encodeEnd(FacesContext, UIComponent)}.</p> 
+     *
+     * <p class="changed_added_2_0">Call {@link
+     * UIComponent#popComponentFromEL}.</p>
      *
      * @param context {@link FacesContext} for the response we are creating
      *
@@ -913,12 +976,14 @@ private void doFind(FacesContext context, String clientId) {
     public abstract void encodeEnd(FacesContext context) throws IOException;
 
     /**
-     * <p>If this component returns <code>true</code> from {@link
-     * #isRendered}, render this component and all its children that
-     * return <code>true</code> from <code>isRendered()</code>,
-     * regardless of the value of the {@link #getRendersChildren} flag.
-     * </p>
+     * <p>If this component
+     * returns <code>true</code> from {@link #isRendered}, take the
+     * following action.</p>
      *
+     * <p>Render this component and all its children that return
+     * <code>true</code> from <code>isRendered()</code>, regardless of
+     * the value of the {@link #getRendersChildren} flag.</p></li>
+
      * @since 1.2
      *
      * @throws IOException if an input/output error occurs while rendering
@@ -945,8 +1010,81 @@ private void doFind(FacesContext context, String clientId) {
         
         encodeEnd(context);
     }
+    
+    private UIComponent previouslyPushed;
 
+    /**
+     * <p class="changed_added_2_0">Push the current
+     * <code>UIComponent</code> <code>this</code> onto a data structure
+     * so that any previous component is preserved for a subsequent call
+     * to {@link #popComponentFromEL}.  This method and
+     * <code>popComponentFromEL()</code> form the basis for the contract
+     * that enables the EL Expression "<code>#{component}</code>" to
+     * resolve to the "current" component that is being processed in the
+     * lifecycle.  The requirements for when
+     * <code>pushComponentToEL()</code> and
+     * <code>popComponentFromEL()</code> must be called are specified as
+     * needed in the javadoc for this class.</p>
+     *
+     * <p class="changed_added_2_0">After
+     * <code>pushComponentToEL()</code> returns, a call to {@link
+     * #getCurrentComponent} must return <code>this</code>
+     * <code>UIComponent</code> instance until
+     * <code>popComponentFromEL()</code> is called, after which point
+     * the previous <code>UIComponent</code> instance will be returned
+     * from <code>getCurrentComponent()</code></p>
+     *
+     */
 
+    protected void pushComponentToEL(FacesContext context) {
+        Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
+        
+        previouslyPushed = (UIComponent) requestMap.put("component", this);
+    }
+
+    /**
+     * <p class="changed_added_2_0">Pop the current
+     * <code>UIComponent</code> <code>this</code> from from a data
+     * structure so that the previous component becomes the current
+     * component.</p>
+     */
+    
+    protected void popComponentFromEL(FacesContext context) {
+        Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
+        
+        if (null != previouslyPushed) {
+            requestMap.put("component", previouslyPushed);
+        }
+        else {
+            requestMap.remove("component");
+        }
+    }
+
+    /**
+     * <p class="changed_added_2_0">Return the <code>UIComponent</code>
+     * instance that is currently processing.  This is equivalent to
+     * evaluating the EL expression "<code>#{component}</code>" and
+     * doing a <code>getValue</code> operation on the resultant
+     * <code>ValueExpression</code>.</p>
+     *
+     * <p class="changed_added_2_0">This method must return
+     * <code>null</code> if there is no currently processing
+     * <code>UIComponent</code></p>
+     */
+
+    public static UIComponent getCurrentComponent() {
+	FacesContext context = FacesContext.getCurrentInstance();
+	UIComponent result = null;
+	
+        Map<String, Object> requestMap = context.getExternalContext().
+	    getRequestMap();
+        
+	if (requestMap.containsKey("component")) {
+	    result = (UIComponent) requestMap.get("component");
+	}
+
+	return result;
+    }
 
     // -------------------------------------------------- Event Listener Methods
 
@@ -1030,20 +1168,115 @@ private void doFind(FacesContext context, String clientId) {
      */
     public abstract void queueEvent(FacesEvent event);
 
+    /**
+     * <p class="changed_added_2_0">Install the listener instance
+     * referenced by argument <code>componentListener</code> as a
+     * listener for events of type <code>eventClass</code> originating
+     * from this specific instance of <code>UIComponent</code>.  The
+     * default implementation creates an inner {@link
+     * SystemEventListener} instance that wraps argument
+     * <code>componentListener</code> as the <code>listener</code>
+     * argument.  This inner class must call through to the argument
+     * <code>componentListener</code> in its implementation of {@link
+     * SystemEventListener#processEvent} and its implementation of
+     * {@link SystemEventListener#isListenerForSource} must return
+     * true if the instance class of this <code>UIComponent</code> is
+     * assignable from the argument to
+     * <code>isListenerForSource</code>.</p>
+     *
+     * @param context {@link FacesContext} for the current request
+     *
+     * @param eventClass the <code>Class</code> of event for which
+     * <code>listener</code> must be fired.
+
+     * @param componentListener the implementation of {@link
+     * ComponentSystemEventListener} whose {@link
+     * ComponentSystemEventListener#processEvent} method must be called
+     * when events of type <code>facesEventClass</code> are fired.
+
+     *  @throws <code>NullPointerException</code> if any of the
+     *  arguments are <code>null</code>.
+
+     */
+    
+    public void subscribeToEvent(FacesContext context, 
+            Class<? extends SystemEvent> eventClass, 
+            final ComponentSystemEventListener componentListener) {
+        if (null == listenersByEventClass) {
+            listenersByEventClass = new HashMap<Class<? extends SystemEvent>, 
+                                                List<SystemEventListener>>();
+        }
+        final Class instanceClass = this.getClass();
+        SystemEventListener facesLifecycleListener = new SystemEventListener() {
+
+            public void processEvent(SystemEvent event) throws AbortProcessingException {
+                componentListener.processEvent((ComponentSystemEvent) event);
+            }
+
+            public boolean isListenerForSource(Object component) {
+                return instanceClass.isAssignableFrom(component.getClass());
+            }
+
+            @Override
+            public boolean equals(Object obj) {
+                return componentListener.equals(obj);
+            }
+            
+            
+        };
+        List<SystemEventListener> listenersForEventClass = null;
+        if (null == (listenersForEventClass = listenersByEventClass.get(eventClass))) {
+            listenersForEventClass = new ArrayList<SystemEventListener>();
+            listenersByEventClass.put(eventClass, listenersForEventClass);
+        }
+        listenersForEventClass.add(facesLifecycleListener);
+    }
+    
+    public void unsubscribeFromEvent(FacesContext context, 
+            Class<? extends SystemEvent> facesEventClass,
+            ComponentSystemEventListener listener) {
+        List<SystemEventListener> listenersForEventClass = getListenersForEventClass(facesEventClass);
+        listenersForEventClass.remove(listener);
+    }
+    
+    private Map<Class<? extends SystemEvent>, List<SystemEventListener>> listenersByEventClass;
+    
+    public List<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> facesEventClass) {
+        List<SystemEventListener> result = null;
+        if (null != listenersByEventClass) {
+            result = listenersByEventClass.get(facesEventClass);
+        }
+        if (null == result) {
+            result = Collections.EMPTY_LIST;
+        }
+        
+        return result;
+    }
+
+
 
     // ------------------------------------------------ Lifecycle Phase Handlers
 
 
     /**
-     * <p>Perform the component tree processing required by the
-     * <em>Restore View</em> phase of the request processing
-     * lifecycle for all facets of this component, all children of this
-     * component, and this component itself, as follows.</p>
-     * <ul>
+     * <p><span class="changed_modified_2_0">Perform</span> the
+     * component tree processing required by the <em>Restore View</em>
+     * phase of the request processing lifecycle for all facets of this
+     * component, all children of this component, and this component
+     * itself, as follows.</p> <ul> <li
+     * class="changed_modified_2_0">Call the <code>restoreState()</code>
+     * method of this component.</li> 
+     *
+     * <li class="changed_added_2_0">Call
+     * {@link UIComponent#pushComponentToEL}.  </li>
+
      * <li>Call the <code>processRestoreState()</code> method of all
      * facets and children of this {@link UIComponent} in the order
-     * determined by a call to <code>getFacetsAndChildren()</code>.</li>
-     * <li>Call the <code>restoreState()</code> method of this component.</li>
+     * determined by a call to <code>getFacetsAndChildren()</code>.
+     * <span class="changed_added_2_0">After returning from the
+     * <code>processRestoreState()</code> method on a child or facet,
+     * call {@link UIComponent#popComponentFromEL}</span></li>
+
      * </ul>
      *
      * <p>This method may not be called if the state saving method is
@@ -1059,17 +1292,26 @@ private void doFind(FacesContext context, String clientId) {
 
 
     /**
-     * <p>Perform the component tree processing required by the
-     * <em>Apply Request Values</em> phase of the request processing
-     * lifecycle for all facets of this component, all children of this
-     * component, and this component itself, as follows.</p>
+     * <p><span class="changed_modified_2_0">Perform</span> the
+     * component tree processing required by the <em>Apply Request
+     * Values</em> phase of the request processing lifecycle for all
+     * facets of this component, all children of this component, and
+     * this component itself, as follows.</p>
+
      * <ul>
      * <li>If the <code>rendered</code> property of this {@link UIComponent}
      *     is <code>false</code>, skip further processing.</li>
+     * <li class="changed_added_2_0">Call {@link #pushComponentToEL}.</li>
      * <li>Call the <code>processDecodes()</code> method of all facets
      *     and children of this {@link UIComponent}, in the order determined
      *     by a call to <code>getFacetsAndChildren()</code>.</li>
      * <li>Call the <code>decode()</code> method of this component.</li>
+
+     * <li>Call {@link #popComponentFromEL} from inside of a
+     * <code>finally block, just before returning.</code></li>
+
+
+
      * <li>If a <code>RuntimeException</code> is thrown during
      *     decode processing, call {@link FacesContext#renderResponse}
      *     and re-throw the exception.</li>
@@ -1084,13 +1326,16 @@ private void doFind(FacesContext context, String clientId) {
 
 
     /**
-     * <p>Perform the component tree processing required by the
-     * <em>Process Validations</em> phase of the request processing
-     * lifecycle for all facets of this component, all children of this
-     * component, and this component itself, as follows.</p>
+     * <p><span class="changed_modified_2_0">Perform</span> the
+     * component tree processing required by the <em>Process
+     * Validations</em> phase of the request processing lifecycle for
+     * all facets of this component, all children of this component, and
+     * this component itself, as follows.</p>
+
      * <ul>
      * <li>If the <code>rendered</code> property of this {@link UIComponent}
      *     is <code>false</code>, skip further processing.</li>
+     * <li class="changed_added_2_0">Call {@link #pushComponentToEL}.</li>
      * <li>Call the <code>processValidators()</code> method of all facets
      *     and children of this {@link UIComponent}, in the order determined
      *     by a call to <code>getFacetsAndChildren()</code>.</li>
@@ -1105,17 +1350,28 @@ private void doFind(FacesContext context, String clientId) {
 
 
     /**
-     * <p>Perform the component tree processing required by the
-     * <em>Update Model Values</em> phase of the request processing
-     * lifecycle for all facets of this component, all children of this
-     * component, and this component itself, as follows.</p>
-     * <ul>
-     * <li>If the <code>rendered</code> property of this {@link UIComponent}
-     *     is <code>false</code>, skip further processing.</li>
+     * <p><span class="changed_modified_2_0">Perform</span> the
+     * component tree processing required by the <em>Update Model
+     * Values</em> phase of the request processing lifecycle for all
+     * facets of this component, all children of this component, and
+     * this component itself, as follows.</p> 
+
+     * <ul> 
+
+     * <li>If the <code>rendered</code> property of this {@link
+     * UIComponent} is <code>false</code>, skip further processing.</li>
+
+     * <li class="changed_added_2_0">Call {@link
+     * #pushComponentToEL}.</li>
+
      * <li>Call the <code>processUpdates()</code> method of all facets
-     *     and children of this {@link UIComponent}, in the order determined
-     *     by a call to <code>getFacetsAndChildren()</code>.</li>
-     * </ul>
+     * and children of this {@link UIComponent}, in the order determined
+     * by a call to <code>getFacetsAndChildren()</code>.  <span
+     * class="changed_added_2_0">After returning from the
+     * <code>processUpdates()</code> method on a child or facet, call
+     * {@link UIComponent#popComponentFromEL}</span></li>
+ 
+    * </ul>
      *
      * @param context {@link FacesContext} for the request we are processing
      *
@@ -1126,19 +1382,26 @@ private void doFind(FacesContext context, String clientId) {
 
 
     /**
-     * <p>Perform the component tree processing required by the state
-     * saving portion of the <em>Render Response</em> phase of the
-     * request processing lifecycle for all facets of this component,
-     * all children of this component, and this component itself, as
-     * follows.</p> <ul>
+     * <p><span class="changed_modified_2_0">Perform</span> the
+     * component tree processing required by the state saving portion of
+     * the <em>Render Response</em> phase of the request processing
+     * lifecycle for all facets of this component, all children of this
+     * component, and this component itself, as follows.</p>
+
+     * <ul>
      *
      * <li>consult the <code>transient</code> property of this
      * component.  If true, just return <code>null</code>.</li>
-     *
+
+     * <li class="changed_added_2_0">Call {@link
+     * #pushComponentToEL}.</li>
+
      * <li>Call the <code>processSaveState()</code> method of all facets
      * and children of this {@link UIComponent} in the order determined
      * by a call to <code>getFacetsAndChildren()</code>, skipping
-     * children and facets that are transient.</li>
+     * children and facets that are transient.  Ensure that {@link
+     * #popComponentFromEL} is called correctly after each child or
+     * facet.</li>
      *
      * <li>Call the <code>saveState()</code> method of this component.</li>
      *
@@ -1190,13 +1453,10 @@ private void doFind(FacesContext context, String clientId) {
      */
     List<String> getAttributesThatAreSet(boolean create) {
 
-        Package p = this.getClass().getPackage();
-        if (p != null) {
-            String pkg = p.getName();
-            if (create && Arrays.binarySearch(OPTIMIZED_PACKAGES, pkg) >= 0) {
-                if (attributesThatAreSet == null) {
-                    attributesThatAreSet = new ArrayList<String>(6);
-                }
+        String pkg = this.getClass().getPackage().getName();
+        if (create && Arrays.binarySearch(OPTIMIZED_PACKAGES, pkg) >= 0) {
+            if (attributesThatAreSet == null) {
+                attributesThatAreSet = new ArrayList<String>(6);
             }
         }
         return attributesThatAreSet;

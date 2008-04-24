@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolder.java,v 1.20 2007/04/27 22:00:05 ofung Exp $
+ * $Id: ValueHolder.java,v 1.20.12.1 2008/04/21 20:31:24 edburns Exp $
  */
 
 /*
@@ -46,10 +46,10 @@ import javax.el.ValueExpression;
 
 
 /**
- * <p><strong>ValueHolder</strong> is an interface that may be implemented
- * by any concrete {@link UIComponent} that wishes to support a local
- * value, as well as access data in the model tier via a <em>value
- * expression</em>, and support conversion 
+ * <p><strong class="changed_modified_2_0">ValueHolder</strong> is an
+ * interface that may be implemented by any concrete {@link UIComponent}
+ * that wishes to support a local value, as well as access data in the
+ * model tier via a <em>value expression</em>, and support conversion
  * between String and the model tier data's native data type.
  */
 
@@ -96,8 +96,15 @@ public interface ValueHolder {
 
 
     /**
-     * <p>Set the {@link Converter} (if any)
-     * that is registered for this {@link UIComponent}.</p>
+     * <p><span class="changed_modified_2_0">Set</span> the {@link
+     * Converter} (if any) that is registered for this {@link
+     * UIComponent}.</p>
+     *
+     * <p class="changed_added_2_0">The argument
+     * <code>converter</code> must be inspected for the presence of the
+     * {@link javax.faces.application.ResourceDependency} annotation.
+     * If this annotation is present, the action described in
+     * <code>ResourceDependency</code> must be taken.</p>
      *
      * @param converter New {@link Converter} (or <code>null</code>)
      */

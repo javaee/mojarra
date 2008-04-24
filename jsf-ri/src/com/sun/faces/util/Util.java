@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.220 2008/03/17 22:25:49 rlubke Exp $
+ * $Id: Util.java,v 1.219.2.7 2008/04/17 19:59:21 edburns Exp $
  */
 
 /*
@@ -64,13 +64,17 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import javax.faces.event.ComponentSystemEventListener;
+import javax.faces.event.SystemEventListener;
+import javax.faces.event.ListenerFor;
+import javax.faces.event.SystemEvent;
 
 /**
  * <B>Util</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.220 2008/03/17 22:25:49 rlubke Exp $
+ * @version $Id: Util.java,v 1.219.2.7 2008/04/17 19:59:21 edburns Exp $
  */
 
 public class Util {
@@ -462,6 +466,22 @@ public class Util {
         }
         return keepGoing;
     }
+    
+    public static void processListenerForAnnotation(UIComponent source) {
+        if (source.getClass().isAnnotationPresent(ListenerFor.class) &&
+            source instanceof SystemEventListener) {
+            ListenerFor listenerFor = (ListenerFor) 
+                    source.getClass().getAnnotation(ListenerFor.class);
+            assert(null != listenerFor);
+            Class<? extends SystemEvent> eventClass = listenerFor.systemEventClass();
+            Class sourceClass = listenerFor.sourceClass();
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            source.subscribeToEvent(facesContext, eventClass, 
+                    (ComponentSystemEventListener) source);
+        }
+        
+    }
+
 
     public static interface TreeTraversalCallback {
 	public boolean takeActionOnNode(FacesContext context, 

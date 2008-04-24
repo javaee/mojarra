@@ -83,7 +83,7 @@ import javax.faces.context.FacesContext;
  * <p><code>&lt;resourceIdentifier&gt;</code> consists of several
  * segments, specified as follows.</p>
 
- * <p><code>[localePrefix/][libraryName/][libraryVersion/]resourceName[/resourceVersion]</code></p>
+ * <p><code>[localePrefix/][libraryName/][libraryVersion/]resourceName[/resourceVersion]</code></p>
  *
  * <p>Note that <em>resourceName</em> is the only required segment.</p>
  *
@@ -385,5 +385,44 @@ public abstract class ResourceHandler {
      * request, <code>false</code> otherwise.
      */
     public abstract boolean isResourceRequest(FacesContext context);
+    
+    /**
+     * <p class="changed_added_2_0">Return the <code>renderer-type</code> for a 
+     * {@link javax.faces.render.Renderer} that is capable of rendering this 
+     * resource. The default implementation must return values according to the
+     * following table.  If no <code>renderer-type</code> can be determined,
+     * <code>null</code> must be returned.</p> 
+     * 
+     * <table border="1">
+     * 
+     * <tr>
+     * 
+     * <th>example resource name</th>
+     * 
+     * <th>renderer-type</th>
+     * 
+     * </tr>
+     * 
+     * <tr>
+     * 
+     * <td>mycomponent.js</td>
+     * 
+     * <td><code>javax.faces.resource.Script</code></td>
+     * 
+     * </tr>
+     * 
+     * <tr>
+     * 
+     * <td>mystyle.css</td>
+     * 
+     * <td><code>javax.faces.resource.Stylesheet</code></td>
+     * 
+     * </tr>
+     * 
+     * </table>
+     */
+    
+    public abstract String getRendererTypeForResourceName(String resourceName);
+    
 
 }

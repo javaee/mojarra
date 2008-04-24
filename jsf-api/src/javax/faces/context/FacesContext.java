@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.76 2008/01/31 13:49:45 edburns Exp $
+ * $Id: FacesContext.java,v 1.76.2.2 2008/04/09 08:59:05 edburns Exp $
  */
 
 /*
@@ -52,6 +52,7 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.render.RenderKit;
 
 import javax.el.ELContext;
+import javax.faces.event.PhaseId;
 
 
 /**
@@ -326,10 +327,18 @@ public abstract class FacesContext {
 
 
     /**
-     * <p>Set the root component that is associated with this request.
-     * This method can only be called by the application handler (or a
-     * class that the handler calls), and only during the <em>Invoke
-     * Application</em> phase of the request processing lifecycle.</p>
+     * <p><span class="changed_modified_2_0">Set</span> the root
+     * component that is associated with this request.  This method can
+     * only be called by the application handler (or a class that the
+     * handler calls), and only during the <em>Invoke Application</em>
+     * phase of the request processing lifecycle.</p>
+
+     * <p class="changed_added_2_0">If the current
+     * <code>UIViewRoot</code> is non-<code>null</code>, and calling
+     * <code>equals()</code> on the argument <code>root</code>, passing
+     * the current <code>UIViewRoot</code> returns <code>false</code>,
+     * the <code>clear</code> method must be called on the
+     * <code>Map</code> returned from {@link UIViewRoot#getViewMap}.</p>
      *
      * @param root The new component {@link UIViewRoot} component
      *
@@ -406,7 +415,32 @@ public abstract class FacesContext {
      *  this instance has been released
      */
     public abstract void responseComplete();
+    
+    private PhaseId currentPhaseId;
+    
+    /**
+     * <p class="changed_added_2_0">Return the value last set on this
+     * <code>FacesContext</code> instance when {@link #setCurrentPhaseId}
+     * was called.</p>
+     * 
 
+     */
+    public PhaseId getCurrentPhaseId() {
+        return currentPhaseId;
+    }
+    
+    /**
+     * <p class="changed_added_2_0">The implementation must call this method
+     * at the earliest possble point in time after entering into a new phase
+     * in the request processing lifecycle.</p>
+     * 
+     * @param currentPhaseId The {@link javax.faces.event.PhaseId} for the 
+     * current phase.
+     */
+
+    public void setCurrentPhaseId(PhaseId currentPhaseId) {
+        this.currentPhaseId = currentPhaseId;
+    }
 
     // ---------------------------------------------------------- Static Methods
 

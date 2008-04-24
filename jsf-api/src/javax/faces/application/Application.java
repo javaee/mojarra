@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.61 2008/02/19 22:28:48 edburns Exp $
+ * $Id: Application.java,v 1.59.2.10 2008/04/12 16:32:29 edburns Exp $
  */
 
 /*
@@ -43,7 +43,10 @@ package javax.faces.application;
 
 import java.util.Iterator;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.faces.FacesException;
@@ -64,6 +67,9 @@ import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
 import javax.el.ELException;
 import javax.el.ELResolver;
+import javax.faces.event.SystemEvent;
+import javax.faces.event.SystemEventListener;
+import javax.faces.event.SystemEventListenerHolder;
 
 
 
@@ -654,6 +660,12 @@ public abstract class Application {
      * class specified by a previous call to <code>addComponent()</code> for
      * the specified component type.</p>
      *
+     * <p class="changed_added_2_0">Before the component instance is
+     * returned, it must be inspected for the presence of a {@link
+     * javax.faces.event.ListenerFor} annotation.  If this annotation is present,
+     * the action listed in {@link javax.faces.event.ListenerFor} must be taken on
+     * the component, before it is returned from this method.</p>
+     * 
      * @param componentType The component type for which to create and
      *  return a new {@link UIComponent} instance
      *
@@ -672,6 +684,12 @@ public abstract class Application {
      * {@link
      * #createComponent(javax.el.ValueExpression,javax.faces.context.FacesContext,java.lang.String)}.</p>
      *
+     * <p class="changed_added_2_0">Before the component instance is
+     * returned, it must be inspected for the presence of a {@link
+     * javax.faces.event.ListenerFor} annotation.  If this annotation is present,
+     * the action listed in {@link javax.faces.event.ListenerFor} must be taken on
+     * the component, before it is returned from this method.</p>
+     * 
      * @param componentBinding {@link ValueBinding} representing a
      * component value binding expression (typically specified by the
      * <code>component</code> attribute of a custom tag)
@@ -707,6 +725,12 @@ public abstract class Application {
      * @param componentType Component type to create if the {@link
      * ValueExpression} does not return a component instance
      *
+     * <p class="changed_added_2_0">Before the component instance is
+     * returned, it must be inspected for the presence of a {@link
+     * javax.faces.event.ListenerFor} annotation.  If this annotation is present,
+     * the action listed in {@link javax.faces.event.ListenerFor} must be taken on
+     * the component, before it is returned from this method.</p>
+     * 
      * @throws FacesException if a {@link UIComponent} cannot be created
      * @throws NullPointerException if any parameter is <code>null</code>
      *
@@ -1089,6 +1113,218 @@ public abstract class Application {
      */
     public abstract ValueBinding createValueBinding(String ref)
         throws ReferenceSyntaxException;
+    
+    /**
+
+     * <p class="changed_added_2_0">If there are one or more listeners
+     * for events of the type represented by
+     * <code>systemEventClass</code>, call those listeners, passing
+     * <code>source</code> as the source of the event.  The
+     * implementation should be as fast as possible in determining
+     * whether or not a listener for the given
+     * <code>systemEventClass</code> and <code>source</code> has been
+     * installed, and should return immediately once such a
+     * determination has been made.  The implementation of
+     * <code>publishEvent</code> must honor the requirements stated in
+     * {@link #subscribeToEvent} regarding the storage and retrieval of
+     * listener instances.</p>
+
+     * <div class="changed_added_2_0">
+
+     * <p>The default implementation must implement an algorithm
+     * semantically equivalent to the following to locate listener
+     * instances and to invoke them.</p>
+
+     * 	<ul>
+
+	  <li><p>If the <code>source</code> argument implements {@link
+	  javax.faces.event.SystemEventListenerHolder}, call {@link
+	  javax.faces.event.SystemEventListenerHolder#getListenersForEventClass}
+	  on it, passing the <code>systemEventClass</code> argument.  If
+	  the list is not empty, perform algorithm
+	  <em>traverseListenerList</em> on the list.</p></li>
+
+	  <li><p>If any <code>Application</code> level listeners have
+	  been installed by previous calls to {@link
+	  #subscribeToEvent(java.lang.Class, java.lang.Class,
+	  SystemEventListener)}, perform algorithm
+	  <em>traverseListenerList</em> on the list.</p></li>
+
+	  <li><p>If any <code>Application</code> level listeners have
+	  been installed by previous calls to {@link
+	  #subscribeToEvent(java.lang.Class, SystemEventListener)},
+	  perform algorithm <em>traverseListenerList</em> on the
+	  list.</p></li>
+
+	</ul>
+
+     * <p>If the act of invoking the <code>processListener</code> method
+     * causes an {@link javax.faces.event.AbortProcessingException} to
+     * be thrown, processing of the listeners must be aborted.</p>
+
+     * <p>Algorithm <em>traverseListenerList</em>: For each listener in
+     * the list,</p>
+
+     * 	<ul>
+
+	  <li><p>Call {@link
+	  SystemEventListener#isListenerForSource}, passing the
+	  <code>source</code> argument.  If this returns
+	  <code>false</code>, take no action on the listener.</p></li>
+
+	  <li><p>Otherwise, if the event to be passed to the listener
+	  instances has not yet been constructed, construct the event,
+	  passing <code>source</code> as the argument to the
+	  one-argument constructor that takes an <code>Object</code>.
+	  This same event instance must be passed to all listener
+	  instances.</p></li>
+
+	  <li><p>Call {@link SystemEvent#isAppropriateListener},
+	  passing the listener instance as the argument.  If this
+	  returns <code>false</code>, take no action on the
+	  listener.</p></li>
+
+	  <li><p>Call {@link SystemEvent#processListener},
+	  passing the listener instance.  </p></li>
+
+	</ul>
+
+
+     * </div>
+
+     * @param systemEventClass The <code>Class</code> of event that is
+     * being published.  Must be non-<code>null</code>.  
+
+     * @param source The source for the event of type
+     * <code>systemEventClass</code>.  Must be non-<code>null</code>, and must
+     * implement {@link SystemEventListenerHolder}.
+
+    */
+    
+    public abstract void publishEvent(Class<? extends SystemEvent> systemEventClass,
+            SystemEventListenerHolder source);
+
+    /**
+     * <p class="changed_added_2_0">Install the listener instance
+     * referenced by argument <code>listener</code> into the 
+     * application as a listener for events of type
+     * <code>systemEventClass</code> that originate from objects of type
+     * <code>sourceClass</code>.</p>
+
+     * <div class="changed_added_2_0">
+
+     * <p>If argument <code>sourceClass</code> is non-<code>null</code>,
+     * <code>sourceClass</code> and <code>systemEventClass</code> must be
+     * used to store the argument <code>listener</code> in the application in
+     * such a way that the <code>listener</code> can be quickly looked
+     * up by the implementation of {@link #publishEvent} given
+     * <code>systemEventClass</code> and an instance of the
+     * <code>Class</code> referenced by <code>sourceClass</code>.  If
+     * argument <code>sourceClass</code> is <code>null</code>, the
+     * <code>listener</code> must be discoverable by the implementation
+     * of {@link #publishEvent} given only <code>systemEventClass</code>.
+     * </p>
+
+
+     * </div>
+
+     * @param systemEventClass the <code>Class</code> of event for which
+     * <code>listener</code> must be fired.
+     
+     * @param sourceClass the <code>Class</code> of the instance which
+     * causes events of type <code>systemEventClass</code> to be fired.
+     * May be <code>null</code>.
+
+     * @param listener the implementation of {@link
+     * SystemEventListener} whose {@link
+     * SystemEventListener#processEvent} method must be called when
+     * events of type <code>systemEventClass</code> are fired.
+
+     * @throws <code>NullPointerException</code> if any combination of
+     * <code>systemEventClass</code>, or <code>listener</code> are
+     * <code>null</code>.
+     */ 
+    
+    public abstract void subscribeToEvent(Class<? extends SystemEvent> systemEventClass,
+            Class sourceClass,
+            SystemEventListener listener);
+    
+
+    /**
+     * <p class="changed_added_2_0">Install the listener instance
+     * referenced by argument <code>listener</code> into application 
+     * as a listener for events of type
+     * <code>systemEventClass</code>.  The default implementation simply calls 
+     * through to {@link #subscribeToEvent(java.lang.Class, java.lang.Class, javax.faces.event.SystemEventListener)} passing <code>null</code> as the <code>sourceClass</code> argument</p>
+
+     * @param systemEventClass the <code>Class</code> of event for which
+     * <code>listener</code> must be fired.
+     
+     * @param listener the implementation of {@link
+     * SystemEventListener} whose {@link
+     * SystemEventListener#processEvent} method must be called when
+     * events of type <code>systemEventClass</code> are fired.
+
+     * @throws <code>NullPointerException</code> if any combination of
+     * <code>systemEventClass</code>, or <code>listener</code> are
+     * <code>null</code>.
+     */ 
+    public abstract void subscribeToEvent(Class<? extends SystemEvent> systemEventClass,
+            SystemEventListener listener);
+
+    /**
+     * <p class="changed_added_2_0">Remove the listener instance
+     * referenced by argument <code>listener</code> from the application
+     * as a listener for events of type
+     * <code>systemEventClass</code> that originate from objects of type
+     * <code>sourceClass</code>.  See {@link
+     * #subscribeToEvent(java.lang.Class, java.lang.Class,
+     * javax.faces.event.SystemEventListener)} for the specification
+     * of how the listener is stored, and therefore, how it must be
+     * removed.</p>
+
+     * @param systemEventClass the <code>Class</code> of event for which
+     * <code>listener</code> must be fired.
+     
+     * @param sourceClass the <code>Class</code> of the instance which
+     * causes events of type <code>systemEventClass</code> to be fired.
+     * May be <code>null</code>.
+
+     * @param listener the implementation of {@link
+     * SystemEventListener} to remove from the internal data
+     * structure.
+
+     * @throws <code>NullPointerException</code> if any combination of
+     * <code>context</code>, 
+     * <code>systemEventClass</code>, or <code>listener</code> are
+     * <code>null</code>.
+     */ 
+
+    public abstract void unsubscribeFromEvent(Class<? extends SystemEvent> systemEventClass,
+            Class sourceClass,
+
+            SystemEventListener listener);
+
+    /**
+     * <p class="changed_added_2_0">Remove the listener instance
+     * referenced by argument <code>listener</code> from the application 
+     * as a listener for events of type <code>systemEventClass</code>.  The 
+     * default implementation simply calls through to {@link #unsubscribeFromEvent(java.lang.Class, javax.faces.event.SystemEventListener)} passing <code>null</code> as the <code>sourceClass</code> argument</p>
+
+     * @param systemEventClass the <code>Class</code> of event for which
+     * <code>listener</code> must be fired.
+     
+     * @param listener the implementation of {@link
+     * SystemEventListener} to remove from the internal data
+     * structure.
+
+     * @throws <code>NullPointerException</code> if any combination of
+     * <code>context</code>, <code>systemEventClass</code>, or 
+     * <code>listener</code> are
+     * <code>null</code>.
+     */ 
+    public abstract void unsubscribeFromEvent(Class<? extends SystemEvent> systemEventClass,
+            SystemEventListener listener);
 
 
     // --------------------------------------------------------- Private Methods

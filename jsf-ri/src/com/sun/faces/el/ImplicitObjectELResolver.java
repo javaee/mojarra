@@ -1,5 +1,5 @@
 /*
- * $Id: ImplicitObjectELResolver.java,v 1.13 2007/11/05 21:11:42 rlubke Exp $
+ * $Id: ImplicitObjectELResolver.java,v 1.13.8.1 2008/03/14 02:41:02 edburns Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -62,7 +62,8 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
     static final String[] IMPLICIT_OBJECTS = new String[] {
         "application", "applicationScope", "cookie", "facesContext",
         "header", "headerValues", "initParam", "param", "paramValues",
-        "request", "requestScope", "resource", "session", "sessionScope", "view" };
+        "request", "requestScope", "resource", "session", "sessionScope", 
+        "view", "viewScope" };
 
     public ImplicitObjectELResolver() {
     }
@@ -133,6 +134,9 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
                 case VIEW:
                     context.setPropertyResolved(true);
                     return facesContext.getViewRoot();
+                case VIEW_SCOPE:
+                    context.setPropertyResolved(true);
+                    return facesContext.getViewRoot().getViewMap();
                 default:
                     return null;
             }

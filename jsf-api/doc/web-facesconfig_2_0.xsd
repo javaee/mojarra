@@ -48,7 +48,7 @@
 
     <xsd:annotation>
         <xsd:documentation>
-            $Id: web-facesconfig_2_0.xsd,v 1.2 2008/03/17 22:25:49 rlubke Exp $
+            $Id: web-facesconfig_2_0.xsd,v 1.1.8.2 2008/03/20 21:12:50 edburns Exp $
         </xsd:documentation>
     </xsd:annotation>
 
@@ -409,7 +409,16 @@
                 <xsd:annotation>
                     <xsd:documentation>
                         <![CDATA[
-                        RELEASE_PENDING (edburns, roger) add docs
+
+                            The "resource-handler" element contains the
+                            fully qualified class name of the concrete
+                            ResourceHandler implementation class that
+                            will be used during rendering and decoding
+                            of resource requests The standard
+                            constructor based decorator pattern used for
+                            other application singletons will be
+                            honored.
+
                         ]]>
 
                     </xsd:documentation>
@@ -1088,6 +1097,11 @@
                     </xsd:documentation>
             </xsd:annotation>                
             </xsd:element>
+            <xsd:element name="faces-lifecycle-listener" 
+                         type="javaee:faces-config-lifecycle-listenerType" 
+                         minOccurs="0" 
+                         maxOccurs="unbounded">
+            </xsd:element>
             <xsd:element name="lifecycle-extension"
                          type="javaee:faces-config-lifecycle-extensionType"
                          minOccurs="0"
@@ -1290,6 +1304,7 @@
         <xsd:simpleContent>
             <xsd:restriction base="javaee:string">
                 <xsd:enumeration value="request"/>
+                <xsd:enumeration value="view"/>
                 <xsd:enumeration value="session"/>
                 <xsd:enumeration value="application"/>
                 <xsd:enumeration value="none"/>
@@ -2094,6 +2109,94 @@
                 <xsd:element name="value"
                              type="javaee:faces-config-valueType"/>
             </xsd:choice>
+        </xsd:sequence>
+        <xsd:attribute name="id" type="xsd:ID"/>
+    </xsd:complexType>
+
+    <!-- **************************************************** -->
+
+    <xsd:complexType name="faces-config-lifecycle-listenerType">
+        <xsd:annotation>
+            <xsd:documentation>
+
+                        <![CDATA[
+
+The presence of this element within the <lifecycle> element in an
+application configuration resource file indicates the developer wants to
+add an application scoped listener to this application instance.
+Elements nested within this element allow selecting the kinds of events
+that will be delivered to the listener instance, and allow selecting the
+kinds of classes that can be the source of events that are delivered to
+the listener instance.
+
+                        ]]>
+
+
+
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="faces-lifecycle-listener-class"
+                         type="javaee:fully-qualified-classType">
+                <xsd:annotation>
+                    <xsd:documentation>
+
+                        <![CDATA[
+                            The "faces-lifecycle-listener-class" element
+                            contains the fully qualified class name of
+                            the concrete FacesLifecycleListener
+                            implementation class that will be called
+                            when events of the type specified by the
+                            "faces-lifecycle-event-class" are sent by
+                            the runtime.  If no
+                            "faces-lifecycle-event-class" is specified,
+                            all events of all types are delivered to the
+                            listener.
+                        ]]>
+
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="faces-lifecycle-event-class" minOccurs="0"
+                         type="javaee:fully-qualified-classType">
+                <xsd:annotation>
+                    <xsd:documentation>
+
+                        <![CDATA[
+
+                            The "faces-lifecycle-event-class" element,
+                            if present, contains the fully qualified
+                            class name of the FacesEvent subclass for
+                            which events will be delivered to the class
+                            whose fully qualified class name is given by
+                            the "faces-lifecycle-listener-class"
+                            element.
+
+                          ]]>
+
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="source-class" minOccurs="0"
+                         type="javaee:fully-qualified-classType">
+                <xsd:annotation>
+                    <xsd:documentation>
+
+                        <![CDATA[
+
+                            The "source-class" element, if present,
+                            contains the fully qualified class name of
+                            the class that will be the source for the
+                            event to be delivered to the class whose
+                            fully qualified class name is given by the
+                            "faces-lifecycle-listener-class" element.
+
+                          ]]>
+
+
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
         </xsd:sequence>
         <xsd:attribute name="id" type="xsd:ID"/>
     </xsd:complexType>

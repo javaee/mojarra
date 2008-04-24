@@ -80,6 +80,12 @@
     <output-text-renderer-class>
         com.sun.faces.renderkit.html_basic.TextRenderer
     </output-text-renderer-class>
+    <output-body-renderer-class>
+        com.sun.faces.renderkit.html_basic.BodyRenderer
+    </output-body-renderer-class>
+    <output-head-renderer-class>
+        com.sun.faces.renderkit.html_basic.HeadRenderer
+    </output-head-renderer-class>
     <output-script-renderer-class>
         com.sun.faces.renderkit.html_basic.ScriptRenderer
     </output-script-renderer-class>

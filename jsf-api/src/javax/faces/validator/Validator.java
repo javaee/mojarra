@@ -48,13 +48,14 @@ import java.util.EventListener;
 
 
 /**
- * <p>A <strong>Validator</strong> implementation is a class that can
- * perform validation (correctness checks) on a {@link
- * javax.faces.component.EditableValueHolder}.  Zero or more
- * <code>Validator</code>s can be associated with each
- * {@link javax.faces.component.EditableValueHolder} in
- * the view, and are called during the <em>Process Validations</em>
- * phase of the request processing lifecycle.</p>
+ * <p>A <strong class="changed_modified_2_0">Validator</strong>
+ * implementation is a class that can perform validation (correctness
+ * checks) on a {@link javax.faces.component.EditableValueHolder}.  Zero
+ * or more <code>Validator</code>s can be associated with each {@link
+ * javax.faces.component.EditableValueHolder} in the view, and are
+ * called during the <em>Process Validations</em> phase of the request
+ * processing lifecycle.</p>
+
  * <p/>
  * <p>Individual {@link Validator}s should examine the value and
  * component that they are passed, and throw a {@link ValidatorException}
@@ -71,6 +72,14 @@ import java.util.EventListener;
  * wishes to have configuration property values saved and restored with
  * the view, the implementation must also implement {@link
  * StateHolder}.</p>
+
+ * <p class="changed_added_2_0">If the class implementing
+ * <code>Validator</code> has a {@link
+ * javax.faces.application.ResourceDependency} annotation, the action
+ * described in <code>ResourceDependency</code> must be taken when
+ * {@link javax.faces.component.EditableValueHolder#addValidator} is
+ * called.</p>
+
  */
 
 public interface Validator extends EventListener {

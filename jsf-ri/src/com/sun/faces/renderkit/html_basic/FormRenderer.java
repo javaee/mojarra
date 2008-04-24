@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.106 2007/08/30 19:29:12 rlubke Exp $
+ * $Id: FormRenderer.java,v 1.106.8.6 2008/04/21 20:31:24 edburns Exp $
  */
 
 /*
@@ -43,11 +43,13 @@
 package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.logging.Level;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
@@ -55,6 +57,7 @@ import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
+import javax.faces.render.Renderer;
 
 /** <B>FormRenderer</B> is a class that renders a <code>UIForm<code> as a Form. */
 
@@ -156,7 +159,6 @@ public class FormRenderer extends HtmlBasicRenderer {
             context.getApplication().getViewHandler().writeState(context);
             writer.write('\n');
         }
-
     }
 
 
@@ -172,6 +174,17 @@ public class FormRenderer extends HtmlBasicRenderer {
         // Render the end tag for form
         ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
+        
+        // Render ay resources that have been targeted for this form.
+
+        UIViewRoot viewRoot = context.getViewRoot();
+        ListIterator iter = (viewRoot.getComponentResources(context, "form")).listIterator();
+        while (iter.hasNext()) {
+            UIComponent resource = (UIComponent)iter.next();
+            resource.encodeAll(context);
+        }
+        
+        // Render the end tag for form
         if (writeStateAtEnd) {
             context.getApplication().getViewHandler().writeState(context);
         }

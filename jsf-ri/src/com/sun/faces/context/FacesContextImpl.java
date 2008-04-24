@@ -1,5 +1,5 @@
  /*
- * $Id: FacesContextImpl.java,v 1.95 2008/03/10 16:39:24 rlubke Exp $
+ * $Id: FacesContextImpl.java,v 1.93.2.4 2008/04/09 08:59:06 edburns Exp $
  */
 
 /*
@@ -308,6 +308,12 @@ import com.sun.faces.util.Util;
      public void setViewRoot(UIViewRoot root) {
          assertNotReleased();
          Util.notNull("root", root);
+
+         if (null != viewRoot && 
+             !viewRoot.equals(root)) {
+             viewRoot.getViewMap().clear();
+         }
+
          viewRoot = root;
      }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ELConstants.java,v 1.8 2007/11/05 21:11:11 rlubke Exp $
+ * $Id: ELConstants.java,v 1.8.8.1 2008/03/14 02:41:02 edburns Exp $
  */
 
 /*
@@ -72,5 +72,7 @@ public interface ELConstants {
     public static final int SESSION_SCOPE = 13;
 
     public static final int VIEW = 14;
+
+    public static final int VIEW_SCOPE = 15;
     
 }

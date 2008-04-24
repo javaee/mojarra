@@ -43,6 +43,9 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.faces.component.UIComponent;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.FacesEvent;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextAttributeEvent;
 import javax.servlet.ServletContextEvent;
@@ -58,7 +61,15 @@ import com.sun.faces.el.ELUtils;
 import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.util.FacesLogger;
+import java.util.Map;
 import com.sun.faces.application.resource.ResourceCache;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.event.SystemEvent;
+import javax.faces.event.ViewMapCreatedEvent;
+import javax.faces.event.ViewMapCreatedEvent;
+import javax.faces.event.ViewMapDestroyedEvent;
+import javax.faces.event.ViewMapListener;
 
 /**
  * <p>Central location for web application lifecycle events.<p>  
@@ -66,7 +77,7 @@ import com.sun.faces.application.resource.ResourceCache;
  * should be invoking methods marked with the
  * <code>@PreDestroy</code> annotation.</p>
  */
-public class WebappLifecycleListener {
+public class WebappLifecycleListener implements ViewMapListener {
 
     // Log instance for this class
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
@@ -116,6 +127,22 @@ public class WebappLifecycleListener {
         ApplicationAssociate.setCurrentInstance(getAssociate());
     }
 
+    public boolean isListenerForSource(Object component) {
+        return (component instanceof UIViewRoot);
+    }
+
+    public void processEvent(SystemEvent event) throws AbortProcessingException {
+        if (event instanceof ViewMapCreatedEvent) {
+            
+        } else if (event instanceof ViewMapDestroyedEvent) {
+            Map<String, Object> viewMap = ((UIViewRoot)event.getSource()).getViewMap();
+            for (Map.Entry<String, Object> cur : viewMap.entrySet()) {
+                handleAttributeEvent(cur.getKey(), cur.getValue(),
+                        ELUtils.Scope.VIEW);
+            }
+            
+        }
+    }
 
     /**
      * Notfication that a session has been created.
@@ -131,6 +158,8 @@ public class WebappLifecycleListener {
             activeSessions.add(event.getSession());
         }
     }
+
+
 
     /**
      * Notification that a session is about to be invalidated.

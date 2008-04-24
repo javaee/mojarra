@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleConfigProcessor.java,v 1.9 2007/11/02 00:30:11 rlubke Exp $
+ * $Id: LifecycleConfigProcessor.java,v 1.9.8.3 2008/04/11 13:40:23 edburns Exp $
  */
 
 /*
@@ -43,6 +43,7 @@ package com.sun.faces.config.processor;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -56,6 +57,10 @@ import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.Application;
+import javax.faces.context.FacesContext;
+import javax.faces.event.SystemEvent;
+import javax.faces.event.SystemEventListener;
 
 /**
  * <p>
@@ -77,7 +82,29 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
      */
     private static final String PHASE_LISTENER = "phase-listener";
 
+    /**
+     * <p>/faces-config/lifecycle/faces-lifecycle-listener</p>
+     */
+    private static final String FACES_LIFECYCLE_LISTENER = "faces-lifecycle-listener";
 
+    /**
+     * <p>/faces-config/lifecycle/faces-lifecycle-listener/faces-lifecycle-listener-class</p>
+     */
+    private static final String FACES_LIFECYCLE_LISTENER_CLASS =
+         "faces-lifecycle-listener-class";
+
+    /**
+     * <p>/faces-config/lifecycle/faces-lifecycle-listener/faces-lifecycle-event-class</p>
+     */
+    private static final String FACES_LIFECYCLE_EVENT_CLASS =
+         "faces-lifecycle-event-class";
+
+    /**
+     * <p>/faces-config/lifecycle/faces-lifecycle-listener/source-class</p>
+     */
+    private static final String SOURCE_CLASS =
+         "source-class";
+    
     // -------------------------------------------- Methods from ConfigProcessor
 
 
@@ -109,6 +136,11 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
                         NodeList listeners = ((Element) n).getElementsByTagNameNS(namespace,
                                                                                   PHASE_LISTENER);
                         addPhaseListeners(factory, listeners);
+
+                        listeners = ((Element) n).getElementsByTagNameNS(namespace,
+                                 FACES_LIFECYCLE_LISTENER);
+                        addFacesLifecycleListeners(factory, listeners);
+                        
                     }
                 }
             }            
@@ -156,4 +188,66 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
 
     }
 
+    private void addFacesLifecycleListeners(LifecycleFactory factory,
+                                   NodeList facesLifecycleListeners) {
+
+        WebConfiguration webConfig = WebConfiguration.getInstance();
+        if (facesLifecycleListeners != null && facesLifecycleListeners.getLength() > 0) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            Application application = context.getApplication();
+            for (int i = 0, size = facesLifecycleListeners.getLength(); i < size; i++) {
+                Node fllNode = facesLifecycleListeners.item(i);
+                NodeList children = fllNode.getChildNodes();
+                String
+                        listenerClass = null,
+                        eventClass = null,
+                        sourceClass = null;
+                for (int j = 0,  len = children.getLength(); j < len; j++) {
+                    Node n = children.item(j);
+                    if (n.getNodeType() == Node.ELEMENT_NODE) {
+                        if (FACES_LIFECYCLE_LISTENER_CLASS.equals(n.getLocalName())) {
+                            listenerClass = getNodeText(n);
+                        } else if (FACES_LIFECYCLE_EVENT_CLASS.equals(n.getLocalName())) {
+                            eventClass = getNodeText(n);
+                        } else if (SOURCE_CLASS.equals(n.getLocalName())) {
+                            sourceClass = getNodeText(n);
+                        } 
+                    }
+                }
+                if (listenerClass != null) {
+                    SystemEventListener fllInstance = (SystemEventListener)
+                            createInstance(listenerClass,
+                                           SystemEventListener.class, null,
+                                           fllNode);
+                    if (fllInstance != null) {
+                        try {
+                            // If there is an eventClass, use it, otherwise use
+                            // SystemEvent.class
+                            Class eventClazz = (null != eventClass &&
+                                                0 < eventClass.length()) ?
+                                   Util.loadClass(eventClass, this.getClass()) :
+                                   SystemEvent.class;
+                            // If there is a sourceClass, use it, otherwise use null
+                            Class sourceClazz = (null != sourceClass &&
+                                                 0 < sourceClass.length()) ? 
+                                    Util.loadClass(sourceClass, this.getClass()) :
+                                    null;
+                            application.subscribeToEvent(eventClazz, 
+                                    sourceClazz, fllInstance);
+                        }
+                        catch (ClassNotFoundException cnfe) {
+                            if (LOGGER.isLoggable(Level.FINE)) {
+                                LOGGER.log(Level.FINE,
+                                           MessageFormat.format(
+                                                "Adding FacesLifecycleListener ''{0}'' to application",
+                                                listenerClass));
+                            }
+                        }
+                    }
+                } 
+            }
+        }
+
+    }
+    
 }

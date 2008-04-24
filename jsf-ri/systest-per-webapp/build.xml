@@ -62,11 +62,24 @@
         <path refid="htmlunit.compile.classpath"/>
     </path>
 
+    <property name="jsf-facelets.jar"
+              value="${user.home}/.m2/repository/javax/faces/jsf-facelets/1.1.11-115/jsf-facelets-1.1.11-115.jar" />
+
+    <property name="aaa-facelet-viewhandler.jar"
+              value="${basedir}/../../jsf-demo/head-body/src/main/webapp/WEB-INF/lib/aaa-facelet-viewhandler.jar" />
+
+
+    <property name="applications-using-facelets"
+              value="populate-view,
+                     attachedObjectsWithResourceDependencies" />
+
     <!-- Property containing all of the currenly running systests.  
          This property list *must* match the one defined in the
          systest-per-webapp build-tests.xml. -->
     <property name="applications"
-              value="resource-locale-prefix,
+              value="componentScope,
+                   viewScope,
+                   resource-locale-prefix,
                    nested-loadbundles,
                    replace-application,
                    replace-statemanager,  
@@ -117,25 +130,57 @@
                     <path refid="test.compile.classpath"/>
                 </classpath>
             </jsf.javac>
-            <jsf.war archive-name="jsf-@{appname}"
-                     basedir="@{base-app-dir}/build"
-                     webxml="@{base-app-dir}/web/WEB-INF/web.xml">
-                <archive-elements>
-                    <zipfileset dir="@{base-app-dir}/web"
-                                includes="**/*"/>
-                    <zipfileset dir="@{base-app-dir}/build/classes"
-                                prefix="WEB-INF/classes"/>
-                    <zipfileset dir="@{base-app-dir}/src/java"
-                                includes="**/*.properties,**/*.xml"
-                                prefix="WEB-INF/classes"/>
-                    <zipfileset file="${jsf.test.jar}"
-                                prefix="WEB-INF/lib"/>
-                    <zipfileset dir="${basedir}/build/classes"
-                                prefix="WEB-INF/classes"/>
-                    <zipfileset dir="${impl.dir}/build/test/classes"
-                                prefix="WEB-INF/classes"/>
-                </archive-elements>
-            </jsf.war>
+            <if>
+              <contains string="${applications-using-facelets}"
+                        substring="@{appname}" />
+              <!-- include facelets if the test needs facelets -->
+              <then>
+		<jsf.war archive-name="jsf-@{appname}"
+			 basedir="@{base-app-dir}/build"
+			 webxml="@{base-app-dir}/web/WEB-INF/web.xml">
+		    <archive-elements>
+			<zipfileset dir="@{base-app-dir}/web"
+				    includes="**/*"/>
+			<zipfileset dir="@{base-app-dir}/build/classes"
+				    prefix="WEB-INF/classes"/>
+			<zipfileset dir="@{base-app-dir}/src/java"
+				    includes="**/*.properties,**/*.xml"
+				    prefix="WEB-INF/classes"/>
+			<zipfileset file="${jsf.test.jar}"
+				    prefix="WEB-INF/lib"/>
+			<zipfileset file="${jsf-facelets.jar}"
+				    prefix="WEB-INF/lib"/>
+			<zipfileset file="${aaa-facelet-viewhandler.jar}"
+				    prefix="WEB-INF/lib"/>
+			<zipfileset dir="${basedir}/build/classes"
+				    prefix="WEB-INF/classes"/>
+			<zipfileset dir="${impl.dir}/build/test/classes"
+				    prefix="WEB-INF/classes"/>
+		    </archive-elements>
+		</jsf.war>
+              </then>
+              <else>
+		<jsf.war archive-name="jsf-@{appname}"
+			 basedir="@{base-app-dir}/build"
+			 webxml="@{base-app-dir}/web/WEB-INF/web.xml">
+		    <archive-elements>
+			<zipfileset dir="@{base-app-dir}/web"
+				    includes="**/*"/>
+			<zipfileset dir="@{base-app-dir}/build/classes"
+				    prefix="WEB-INF/classes"/>
+			<zipfileset dir="@{base-app-dir}/src/java"
+				    includes="**/*.properties,**/*.xml"
+				    prefix="WEB-INF/classes"/>
+			<zipfileset file="${jsf.test.jar}"
+				    prefix="WEB-INF/lib"/>
+			<zipfileset dir="${basedir}/build/classes"
+				    prefix="WEB-INF/classes"/>
+			<zipfileset dir="${impl.dir}/build/test/classes"
+				    prefix="WEB-INF/classes"/>
+		    </archive-elements>
+		</jsf.war>
+              </else>
+            </if>
             <mkdir dir="@{base-app-dir}/build/jsf-@{appname}" />
             <unwar src="@{base-app-dir}/build/jsf-@{appname}.war"
                    dest="@{base-app-dir}/build/jsf-@{appname}" />

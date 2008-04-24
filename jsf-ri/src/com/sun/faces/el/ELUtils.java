@@ -1,5 +1,5 @@
 /*
- * $Id: ELUtils.java,v 1.8 2008/01/25 20:23:13 rlubke Exp $
+ * $Id: ELUtils.java,v 1.8.2.1 2008/03/14 02:41:02 edburns Exp $
  */
 
 /*
@@ -72,6 +72,7 @@ public class ELUtils {
     private static final String APPLICATION_SCOPE = "applicationScope";
     private static final String SESSION_SCOPE = "sessionScope";
     private static final String REQUEST_SCOPE = "requestScope";
+    private static final String VIEW_SCOPE = "viewScope";
     private static final String COOKIE_IMPLICIT_OBJ = "cookie";
     private static final String FACES_CONTEXT_IMPLICIT_OBJ = "facesContext";
     private static final String HEADER_IMPLICIT_OBJ = "header";
@@ -84,6 +85,7 @@ public class ELUtils {
     public enum Scope {
         NONE("none"),
         REQUEST("request"),
+        VIEW("view"),
         SESSION("session"),
         APPLICATION("application");
 
@@ -361,6 +363,9 @@ public class ELUtils {
         if (REQUEST_SCOPE.equalsIgnoreCase(identifier)) {
             return Scope.REQUEST;
         }
+        if (VIEW_SCOPE.equalsIgnoreCase(identifier)) {
+            return Scope.VIEW;
+        }
         if (SESSION_SCOPE.equalsIgnoreCase(identifier)) {
             return Scope.SESSION;
         }
@@ -397,6 +402,11 @@ public class ELUtils {
         Map<String,Object> requestMap = ec.getRequestMap();
         if (requestMap != null && requestMap.containsKey(identifier)) {
             return Scope.REQUEST;
+        }
+
+        Map<String,Object> viewMap = FacesContext.getCurrentInstance().getViewRoot().getViewMap();
+        if (requestMap != null && viewMap.containsKey(identifier)) {
+            return Scope.VIEW;
         }
 
         Map<String,Object> sessionMap = ec.getSessionMap();
@@ -592,22 +602,30 @@ public class ELUtils {
         if (beanScope == Scope.REQUEST) {
             return true;
         }
+        
+        //if the managed bean's scope is "view" it is able to refer to 
+        //objects in other "view", "session", "application" or "none" scopes.
+        if (beanScope == Scope.VIEW) {
+            return expressionScope != Scope.REQUEST;
+        }
 
         //if the managed bean's scope is "session" it is able to refer
         //to objects in other "session", "application", or "none" scopes
         if (beanScope == Scope.SESSION) {
-            return expressionScope != Scope.REQUEST;
+            return !(expressionScope == Scope.REQUEST
+                     || expressionScope == Scope.VIEW);
         }
 
         //if the managed bean's scope is "application" it is able to refer
         //to objects in other "application", or "none" scopes
         if (beanScope == Scope.APPLICATION) {
             return !(expressionScope == Scope.REQUEST
+                     || expressionScope == Scope.VIEW
                      || expressionScope == Scope.SESSION);
         }
 
-        //the managed bean is required to be in either "request", "session",
-        //"application", or "none" scopes. One of the previous decision
+        //the managed bean is required to be in either "request", "view",
+        // "session", "application", or "none" scopes. One of the previous decision
         //statements must be true.
         //noinspection ConstantConditions
         assert (false);

@@ -39,16 +39,39 @@ package com.sun.faces.renderkit.html_basic;
 import java.io.IOException;
 import java.util.Map;
 
-import javax.faces.render.Renderer;
+import javax.faces.application.Resource;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.component.UIComponent;
-import javax.faces.application.Resource;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.AfterAddToParentEvent;
+import javax.faces.event.ComponentSystemEvent;
+import javax.faces.event.ComponentSystemEventListener;
+import javax.faces.event.ListenerFor;
+import javax.faces.render.Renderer;
 
 /**
  * RELEASE_PENDING (rlubke) document
+ * PENDING(edburns): subscribe for BeforeRemoveFromParent
+ * 
  */
-public class StylesheetRenderer extends Renderer {
+@ListenerFor(systemEventClass=AfterAddToParentEvent.class, sourceClass=UIOutput.class)
+public class StylesheetRenderer extends Renderer implements ComponentSystemEventListener {
+
+    public static final String RENDERER_TYPE = "javax.faces.resource.Stylesheet";
+
+    /* When this method is called, we know that there is a component
+     * with a stylesheet renderer somewhere in the view.  we need to make it
+     * so that when the <head> element is encountered, this component 
+     * can be called upon to render itself.
+     * 
+     */
+    public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
+        UIComponent component = event.getComponent();
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getViewRoot().addComponentResource(context, component, "head");
+    }
 
     @Override
     public void decode(FacesContext context, UIComponent component) {
@@ -72,9 +95,18 @@ public class StylesheetRenderer extends Renderer {
           throws IOException {
 
         Map<String,Object> attributes = component.getAttributes();
+        Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
 
         String name = (String) attributes.get("name");
         String library = (String) attributes.get("library");
+        String key = name + library;
+        
+        // Ensure this stylesheet is not rendered more than once per request
+        if (requestMap.containsKey(key)) {
+            return;
+        }
+        requestMap.put(key, Boolean.TRUE);
+        
         Resource resource = context.getApplication().getResourceHandler()
               .createResource(name, library);
 

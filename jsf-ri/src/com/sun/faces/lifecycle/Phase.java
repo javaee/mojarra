@@ -1,5 +1,5 @@
 /*
- * $Id: Phase.java,v 1.13 2007/08/28 06:06:15 rlubke Exp $
+ * $Id: Phase.java,v 1.13.8.1 2008/03/27 15:26:59 edburns Exp $
  */
 
 /*
@@ -82,6 +82,7 @@ public abstract class Phase {
                         Lifecycle lifecycle,
                         ListIterator<PhaseListener> listeners) {
 
+        context.setCurrentPhaseId(getId());
         PhaseEvent event = null;
         if (listeners.hasNext()) {
             event = new PhaseEvent(context, this.getId(), lifecycle);

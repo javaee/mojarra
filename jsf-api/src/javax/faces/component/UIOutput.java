@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.54 2007/04/27 22:00:05 ofung Exp $
+ * $Id: UIOutput.java,v 1.54.12.1 2008/04/21 20:31:24 edburns Exp $
  */
 
 /*
@@ -41,9 +41,12 @@
 package javax.faces.component;
 
 
+import java.util.Map;
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
+import javax.faces.application.ResourceDependency;
+import javax.faces.application.ResourceHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
@@ -135,7 +138,7 @@ public class UIOutput extends UIComponentBase
     }
 
 
-    // --------------------------------------- ConvertibleValueHolder Properties
+    // --------------------------------------- EditableValueHolder Properties
 
 
     public Converter getConverter() {
@@ -161,9 +164,63 @@ public class UIOutput extends UIComponentBase
     public void setConverter(Converter converter) {
 
         this.converter = converter;
+        processResourceDependencyAnnotationForAdd(FacesContext.getCurrentInstance(), 
+                converter);
 
     }
 
+    private void processResourceDependencyAnnotationForAdd(FacesContext context,
+            Converter source) {
+        if (!source.getClass().isAnnotationPresent(ResourceDependency.class)) {
+            return;
+        }
+
+        // Create a component resource
+        UIOutput resourceComponent = (UIOutput)
+                context.getApplication().createComponent("javax.faces.Output");
+
+        // Get the resourceMetadata from the annotation
+        ResourceDependency resourceDep = (ResourceDependency) source.getClass().getAnnotation(ResourceDependency.class);
+        String
+                    resourceName = resourceDep.name(),
+                    library = resourceDep.library(),
+                    target = resourceDep.target();
+
+        if (0 == resourceName.length()) {
+            throw new IllegalArgumentException("Zero length resource name in annotation ResourceDependency");
+        }
+
+        if (0 == library.length()) {
+            library = null;
+        }
+
+        if (0 == target.length()) {
+            target = null;
+        }
+
+        // Create a resource around it
+        ResourceHandler resourceHandler = context.getApplication().getResourceHandler();
+        // Imbue the component resource with the metadata
+
+        resourceComponent.setRendererType(resourceHandler.getRendererTypeForResourceName(resourceName));
+        Map<String, Object> attrs = resourceComponent.getAttributes();
+        attrs.put("name", resourceName);
+        if (null != library) {
+            attrs.put("library", library);
+        }
+        if (null != target) {
+            attrs.put("target", target);
+        }
+
+        // Tell the viewRoot we have this resource
+        if (null != target) {
+            context.getViewRoot().addComponentResource(context,
+                    resourceComponent, target);
+        } else {
+            context.getViewRoot().addComponentResource(context,
+                    resourceComponent);
+        }
+    }
 
 
     public Object getLocalValue() {

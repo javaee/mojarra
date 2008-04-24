@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.96 2007/11/05 21:46:26 rlubke Exp $
+ * $Id: UIInput.java,v 1.96.8.1 2008/04/21 20:31:24 edburns Exp $
  */
 
 /*
@@ -43,6 +43,7 @@ package javax.faces.component;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -51,6 +52,8 @@ import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
+import javax.faces.application.ResourceDependency;
+import javax.faces.application.ResourceHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
@@ -1128,8 +1131,66 @@ public class UIInput extends UIOutput implements EditableValueHolder {
             validators = new ArrayList<Validator>();
         }
         validators.add(validator);
+        processResourceDependencyAnnotationForAdd(FacesContext.getCurrentInstance(), 
+                validator);
 
     }
+    
+    private void processResourceDependencyAnnotationForAdd(FacesContext context,
+            Validator source) {
+        if (!source.getClass().isAnnotationPresent(ResourceDependency.class)) {
+            return;
+        }
+
+        // Create a component resource
+        UIOutput resourceComponent = (UIOutput)
+                context.getApplication().createComponent("javax.faces.Output");
+
+        // Get the resourceMetadata from the annotation
+        ResourceDependency resourceDep = (ResourceDependency) source.getClass().getAnnotation(ResourceDependency.class);
+        String
+                    resourceName = resourceDep.name(),
+                    library = resourceDep.library(),
+                    target = resourceDep.target();
+
+        if (0 == resourceName.length()) {
+            throw new IllegalArgumentException("Zero length resource name in annotation ResourceDependency");
+        }
+
+        if (0 == library.length()) {
+            library = null;
+        }
+
+        if (0 == target.length()) {
+            target = null;
+        }
+
+        // Create a resource around it
+        ResourceHandler resourceHandler = context.getApplication().getResourceHandler();
+        // Imbue the component resource with the metadata
+
+        resourceComponent.setRendererType(resourceHandler.getRendererTypeForResourceName(resourceName));
+        Map<String, Object> attrs = resourceComponent.getAttributes();
+        attrs.put("name", resourceName);
+        if (null != library) {
+            attrs.put("library", library);
+        }
+        if (null != target) {
+            attrs.put("target", target);
+        }
+
+        // Tell the viewRoot we have this resource
+        if (null != target) {
+            context.getViewRoot().addComponentResource(context,
+                    resourceComponent, target);
+        } else {
+            context.getViewRoot().addComponentResource(context,
+                    resourceComponent);
+        }
+    }
+
+    
+    
 
 
     /**

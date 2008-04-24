@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.53 2007/10/03 20:42:21 rlubke Exp $
+ * $Id: RestoreViewPhase.java,v 1.53.8.3 2008/04/12 16:32:30 edburns Exp $
  */
 
 /*
@@ -68,12 +68,13 @@ import com.sun.faces.util.DebugUtil;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import javax.faces.event.AfterAddToParentEvent;
 
 /**
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.53 2007/10/03 20:42:21 rlubke Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.53.8.3 2008/04/12 16:32:30 edburns Exp $
  */
 
 public class RestoreViewPhase extends Phase {
@@ -204,10 +205,15 @@ public class RestoreViewPhase extends Phase {
             // if that fails, create one
             viewRoot = (Util.getViewHandler(facesContext)).
                   createView(facesContext, viewId);
+            viewRoot.subscribeToEvent(facesContext,
+                    AfterAddToParentEvent.class, viewRoot);
             facesContext.setViewRoot(viewRoot);
             facesContext.renderResponse();
+	    facesContext.getApplication().publishEvent(AfterAddToParentEvent.class, 
+						       viewRoot);
         }
         assert(null != viewRoot);
+        
 
         if (isPostBack && LOGGER.isLoggable(Level.FINEST)) {
             LOGGER.log(Level.FINEST, "+=+=+=+=+=+= Restored View Printout for " + viewId);

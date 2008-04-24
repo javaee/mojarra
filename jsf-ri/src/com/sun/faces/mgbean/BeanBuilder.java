@@ -1,5 +1,5 @@
 /*
- * $Id: BeanBuilder.java,v 1.8 2008/03/19 22:07:41 rlubke Exp $
+ * $Id: BeanBuilder.java,v 1.5.4.3 2008/03/21 02:23:22 edburns Exp $
  */
 
 /*
@@ -467,6 +467,8 @@ public abstract class BeanBuilder {
         String scope = beanInfo.getScope();
         if ("request".equals(scope)) {
             this.scope = ELUtils.Scope.REQUEST;
+        } else if ("view".equals(scope)) {
+            this.scope = ELUtils.Scope.VIEW;
         } else if ("session".equals(scope)) {
             this.scope = ELUtils.Scope.SESSION;
         } else if ("application".equals(scope)) {

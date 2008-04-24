@@ -44,12 +44,46 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 import javax.faces.application.Resource;
+import javax.faces.component.UIOutput;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.AfterAddToParentEvent;
+import javax.faces.event.ComponentSystemEvent;
+import javax.faces.event.ComponentSystemEventListener;
+import javax.faces.event.ListenerFor;
 
 /**
  * RELEASE_PENDING (rlubke)
+ * 
+ * PENDING(edburns): subscribe for BeforeRemoveFromParent
  */
-public class ScriptRenderer extends Renderer {
+@ListenerFor(systemEventClass=AfterAddToParentEvent.class, sourceClass=UIOutput.class)
+public class ScriptRenderer extends Renderer implements ComponentSystemEventListener {
+    
+    public static final String RENDERER_TYPE = "javax.faces.resource.Script";
 
+    /*
+     * Indicates that the component associated with this Renderer has already
+     * been added to the facet in the view.
+     */ 
+
+    /* When this method is called, we know that there is a component
+     * with a script renderer somewhere in the view.  We need to make it
+     * so that when an element with a name given by the value of the optional
+     * "target" component attribute is encountered, this component 
+     * can be called upon to render itself.
+     * This method will add the component (associated with this Renderer)
+     * to a facet in the view only if a "target" component attribute is set.
+     * 
+     */
+    public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
+        UIComponent component = event.getComponent();
+        FacesContext context = FacesContext.getCurrentInstance();
+        
+        if (component.getAttributes().containsKey("target")) {
+            context.getViewRoot().addComponentResource(context, component);
+        }
+    }
+    
     @Override
     public void decode(FacesContext context, UIComponent component) {
         // no-op
@@ -72,9 +106,19 @@ public class ScriptRenderer extends Renderer {
           throws IOException {
 
         Map<String,Object> attributes = component.getAttributes();
+        Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
 
         String name = (String) attributes.get("name");
         String library = (String) attributes.get("library");
+        
+        String key = name + library;
+        
+        // Ensure this script is not rendered more than once per request
+        if (requestMap.containsKey(key)) {
+            return;
+        }
+        requestMap.put(key, Boolean.TRUE);
+        
         Resource resource = context.getApplication().getResourceHandler()
               .createResource(name, library);
 

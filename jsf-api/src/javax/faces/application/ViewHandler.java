@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.46 2008/01/14 16:35:26 edburns Exp $
+ * $Id: ViewHandler.java,v 1.46.4.1 2008/03/14 02:40:57 edburns Exp $
  */
 
 /*
@@ -192,9 +192,10 @@ public abstract class ViewHandler {
 
 
     /**
-     * <p>Create and return a new {@link UIViewRoot} instance
-     * initialized with information from the argument
-     * <code>FacesContext</code> and <code>viewId</code>.</p>
+     * <p><strong class="changed_modified_2_0">Create</strong> and
+     * return a new {@link UIViewRoot} instance initialized with
+     * information from the argument <code>FacesContext</code> and
+     * <code>viewId</code>.</p>
      *
      * <p>If there is an existing <code>ViewRoot</code> available on the
      * {@link FacesContext}, this method must copy its
@@ -204,6 +205,25 @@ public abstract class ViewHandler {
      * values of the  <code>locale</code> and <code>renderKitId</code>,
      * proeprties, respectively, of the newly created
      * <code>UIViewRoot</code>.</p>
+
+     * <p class="changed_added_2_0">If the view is written using
+     * Facelets, the markup comprising the view must be executed, with
+     * the UIComponent instances in the view being encountered in the
+     * same depth-first order as in other lifecycle methods defined on
+     * {@link javax.faces.component.UIComponent}, and added to the view
+     * (but not rendered) during the traversal.  The runtime must
+     * guarantee that the view must be fully populated before the
+     * <code>afterPhase()</code> method of any {@link
+     * javax.faces.event.PhaseListener}s attached to the application or
+     * to the <code>UIViewRoot</code> (via {@link
+     * UIViewRoot#setAfterPhaseListener} or {@link
+     * UIViewRoot#addPhaseListener}) are called.  IMPORTANT: the new
+     * <code>UIViewRoot</code> instance must be passed to {@link
+     * javax.faces.context.FacesContext#setViewRoot}
+     * <strong>before</strong> the execution of the Facelets view
+     * resulting in tree creation.  This enables the broadest possible
+     * range of implementations for how tree creation is actually
+     * implemented.</p>
      *
      * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>

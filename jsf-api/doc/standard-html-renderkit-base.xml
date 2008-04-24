@@ -910,6 +910,31 @@
      The standard HTML RenderKit.  Please see the spec for additional
      details for the standard render-kit.
 
+     <div class="changed_added_2_0">
+     <p>The following new renderers have been
+     added in this release of the specification.  The default
+     implementation of the spec must not expose these renderers to JSP
+     based views.</p>
+
+<dl>
+<dt>javax.faces.Output</dt>
+
+<dd>javax.faces.Body
+</dd>
+
+<dd>javax.faces.Head
+</dd>
+
+<dd>javax.faces.resource.Script
+</dd>
+
+<dd>javax.faces.resource.Stylesheet
+</dd>
+
+</dl>
+
+     </div>
+
      <p>General notes on decoding</p>
 
      <ul>
@@ -1336,7 +1361,8 @@
 
         <renderer>
 
-            <description><![CDATA[<p>Renders an HTML "form" element.</p>
+            <description><![CDATA[<span class="changed_modified_2_0">
+            Renders</span> an HTML "form" element.
 
       <p>Decode Behavior</p>
 
@@ -1364,17 +1390,29 @@
       on the <code>ExternalContext</code>.  The value of the acceptcharset
       attribute must be rendered as the value of "accept-charset".
       If the "styleClass" attribute is specified, render its value as the 
-      value of the "class" attribute.  Call <code>ViewHandler.writeState()</code>
-      before the the close of the "form" element.  Render all the
-      necessary hidden fields for all commandLink instances in the page
-      just before the close of the "form" element.  Render a "name"
+      value of the "class" attribute.  Render a "name"
       attribute with a value the same as the "id" attribute as described
       in "<a href="renderkit-summary.html">General Notes on
       Encoding</a>" regarding the "id" attribute for UIInput
-      components.</p>
-
-      </ul>]]>
-
+      components.  Call <code>ViewHandler.writeState()</code>
+      before the the close of the "form" element.  Render all the
+      necessary hidden fields for all commandLink instances in the page
+      just before the close of the "form" element.  
+      <div class="changed_modified_2_0">
+      Just before rendering the closing <code>&lt;/form&gt;</code> element tag, render 
+      any resources that have been targeted for this form:
+      <ul>
+      <li>Obtain a <code>UIViewRoot</code> instance.</li>
+      <li>Obtain a <code>List</code> of component resources targeted for
+      this form with a call to <code>UIViewRoot.getComponentResources()</code>
+      with the <code>String "form"</code> as the argument.</li>
+      <li>Iterate over the returned <code>List</code> of <code>UIComponent</code> instances         
+      and call <code>encodeAll</code> on each <code>UIComponent</code> instance.
+      </ul>
+      </div>
+      </p>
+      </ul>
+      </div>]]>
             </description>
             <component-family>javax.faces.Form</component-family>
             <renderer-type>javax.faces.Form</renderer-type>
@@ -2441,6 +2479,25 @@ renders the script <code>Resource</code> specified by the required
 <code>name</code> attribute and optional <code>library</code>
 attribute.</p>
 
+<p>The implementation of this renderer must have a <a target="_"
+href="../../javadocs/javax/faces/event/ListenerFor.html"><code>@ListenerFor</code></a>
+annotation attached to it, at the class level, declaring <a target="_"
+href="../../javadocs/javax/faces/event/AfterAddToParentEvent.html"><code>AfterAddToParentEvent.class</code></a>
+as the value of the <code>systemEventClass</code> attribute and <a
+target="_"
+href="../../javadocs/javax/faces/component/UIOutput.html"><code>UIOutput.class</code></a>
+as the value of the <code>sourceClass</code> attribute.  The presence of
+this annotation on a renderer implies the renderer implements <a
+target="_"
+href="../../javadocs/javax/faces/event/ComponentSystemEventListener.html"><code>ComponentSystemEventListener</code></a>,
+which this renderer must do.  The implementation of
+<code>processEvent()</code> must extract the <code>UIComponent</code>
+from the argument event and look for the presence of the key
+"<code>target</code>" in the component's attribute <code>Map</code>.  If
+and only if such a key is present, the implementation of
+<code>processEvent()</code> must pass the component to <a target="_"
+href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(javax.faces.context.FacesContext,%20javax.faces.component.UIComponent)"><code>UIViewRoot.addComponentResource()</code></a>.</p>
+
       <p>Decode Behavior</p>
 
       <ul>
@@ -2546,6 +2603,21 @@ attribute, the literal string "stylesheet" as the value of the "rel"
 attribute, and the literal string "screen" as the value of the "media"
 attribute.</p>
 
+<p>The implementation of this renderer must have a <a target="_"
+href="../../javadocs/javax/faces/event/ListenerFor.html"><code>@ListenerFor</code></a>
+annotation attached to it, at the class level, declaring <a target="_"
+href="../../javadocs/javax/faces/event/AfterAddToParentEvent.html"><code>AfterAddToParentEvent.class</code></a>
+as the value of the <code>systemEventClass</code> attribute and <a target="_"
+href="../../javadocs/javax/faces/component/UIOutput.html"><code>UIOutput.class</code></a>
+as the value of the <code>sourceClass</code> attribute.  The presence of
+this annotation on a renderer implies the renderer implements <a target="_"
+href="../../javadocs/javax/faces/event/ComponentSystemEventListener.html"><code>ComponentSystemEventListener</code></a>,
+which this renderer must do.  The implementation of
+<code>processEvent()</code> must extract the <code>UIComponent</code>
+from the argument event pass it to <a target="_"
+href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(javax.faces.context.FacesContext,%20javax.faces.component.UIComponent,%20java.lang.String)"><code>UIViewRoot.addComponentResource()</code></a>, specifying
+the literal string "<code>head</code>" as the last argument.</p>
+
 <p>The stylsheet renderer must ensure that any stylesheets are included in the &lt;head&gt; of the document.  This is difficult for portals.
 </p>
 
@@ -2557,6 +2629,83 @@ attribute.</p>
             </renderer-class>
             <xi:include href="output-resource-attrs.xml" xpointer="xpointer(/root/*)"/>
         </renderer>
+
+        <renderer>
+            <description><![CDATA[<div class="changed_added_2_0">
+
+<p>Render the markup for a <code>&lt;head&gt;</code> element.</p>
+
+      <p>Decode Behavior</p>
+
+      <ul>
+
+<p>No action is required during decode for this renderer.</p>
+
+</ul>
+
+      <p>Encode Behavior</p>
+
+      <ul>
+
+<p>Render the starting <code>&lt;head&gt;</code> element tag.  Just before rendering the
+      closing <code>&lt;/head&gt;</code> element tag, render any resources that have been targeted
+      for this "head" element:
+      <ul>
+      <li>Obtain a <code>UIViewRoot</code> instance.</li>
+      <li>Obtain a <code>List</code> of component resources targeted for
+      this "head" element with a call to <code>UIViewRoot.getComponentResources()</code>
+      with the <code>String "head"</code> as the argument.</li>
+      <li>Iterate over the returned <code>List</code> of <code>UIComponent</code> instances
+      and call <code>encodeAll</code> on each <code>UIComponent</code> instance. 
+      </ul>
+      Render the ending <code>&lt;/head&gt;</code> element tag.</p>
+
+</div>]]></description>
+            <component-family>javax.faces.Output</component-family>
+            <renderer-type>javax.faces.Head</renderer-type>
+            <renderer-class>
+               <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-head-renderer-class/text())"/>
+            </renderer-class>
+        </renderer>
+
+        <renderer>
+            <description><![CDATA[<div class="changed_added_2_0">
+
+<p>Render the markup for a <code>&lt;body&gt;</code> element.</p>
+
+      <p>Decode Behavior</p>
+
+      <ul>
+
+<p>No action is required during decode for this renderer.</p>
+
+</ul>
+
+      <p>Encode Behavior</p>
+
+      <ul>
+
+<p>Render the starting <code>&lt;body&gt;</code> element tag. Just before rendering the
+      closing <code>&lt;/body&gt;</code> element tag, render any resources that have been targeted
+      for this "body" element:
+      <ul>
+      <li>Obtain a <code>UIViewRoot</code> instance.</li>
+      <li>Obtain a <code>List</code> of component resources targeted for
+      this "body" element with a call to <code>UIViewRoot.getComponentResources()</code>
+      with the <code>String "body"</code> as the argument.</li>
+      <li>Iterate over the returned <code>List</code> of <code>UIComponent</code> instances
+      and call <code>encodeAll</code> on each <code>UIComponent</code> instance.
+      </ul>
+      Render the ending <code>&lt;/body&gt;</code> element tag.</p>
+
+</div>]]></description>
+            <component-family>javax.faces.Output</component-family>
+            <renderer-type>javax.faces.Body</renderer-type>
+            <renderer-class>
+               <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-body-renderer-class/text())"/>
+            </renderer-class>
+        </renderer>
+
 
     </render-kit>
 

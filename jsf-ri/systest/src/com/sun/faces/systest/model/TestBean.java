@@ -1,5 +1,5 @@
 /*
- * $Id: TestBean.java,v 1.30 2007/04/27 22:01:13 ofung Exp $
+ * $Id: TestBean.java,v 1.30.12.2 2008/04/21 16:56:05 edburns Exp $
  */
 
 /*
@@ -47,6 +47,8 @@ import javax.faces.component.NamingContainer;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlCommandButton;
 import javax.faces.context.FacesContext;
+import javax.faces.event.SystemEvent;
+import javax.faces.event.SystemEventListener;
 import javax.faces.model.SelectItem;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.event.ActionEvent;
@@ -58,6 +60,7 @@ import javax.faces.el.PropertyNotFoundException;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 import java.util.Map;
 import java.util.HashMap;
@@ -65,6 +68,7 @@ import java.util.HashMap;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.context.ExternalContext;
+import javax.faces.event.SystemEventListenerHolder;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
@@ -72,7 +76,11 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * <p>Test JavaBean for managed object creation facility.</p>
  */
-public class TestBean {
+public class TestBean implements SystemEventListenerHolder {
+
+    public List<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> arg0) {
+        return Collections.EMPTY_LIST;
+    }
     
 public enum Suit { Hearts, Clubs, Diamonds, Spades }
 public enum Color { Red, Blue, Green, Orange }
@@ -582,11 +590,17 @@ public enum Color { Red, Blue, Green, Orange }
     @PostConstruct
     public void postConstruct() {
         setPostConstructCalled(true);
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getApplication().publishEvent(TestBeanPostConstructEvent.class, this);
     }
 
     @PreDestroy
     public void preDestroy() {
         setPreDestroyCalled(true);
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (null != context) {
+            context.getApplication().publishEvent(TestBeanPreDestroyEvent.class, this);
+        }
     }
 
     /**

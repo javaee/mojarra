@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.39 2007/04/27 22:00:10 ofung Exp $
+ * $Id: Renderer.java,v 1.39.12.7 2008/04/17 18:51:29 edburns Exp $
  */
 
 /*
@@ -49,12 +49,13 @@ import javax.faces.context.FacesContext;
 
 
 /**
- * <p>A <strong>Renderer</strong> converts the internal representation of
- * {@link UIComponent}s into the output stream (or writer) associated with
- * the response we are creating for a particular request.  Each
- * <code>Renderer</code> knows how to render one or more {@link UIComponent}
- * types (or classes), and advertises a set of render-dependent attributes
- * that it recognizes for each supported {@link UIComponent}.</p>
+ * <p>A <strong class="changed_modified_2_0">Renderer</strong> converts
+ * the internal representation of {@link UIComponent}s into the output
+ * stream (or writer) associated with the response we are creating for a
+ * particular request.  Each <code>Renderer</code> knows how to render
+ * one or more {@link UIComponent} types (or classes), and advertises a
+ * set of render-dependent attributes that it recognizes for each
+ * supported {@link UIComponent}.</p>
  *
  * <p>Families of {@link Renderer}s are packaged as a {@link RenderKit},
  * and together support the rendering of all of the {@link UIComponent}s
@@ -67,10 +68,16 @@ import javax.faces.context.FacesContext;
  * remainder of the lifetime of a web application.  Because each instance
  * may be invoked from more than one request processing thread simultaneously,
  * they MUST be programmed in a thread-safe manner.</p>
+ *
+ * <p class="changed_added_2_0">If the {@link
+ * javax.faces.event.ListenerFor} annotation is attached to the class
+ * definition of a <code>Renderer</code>, that class must also implement
+ * {@link javax.faces.event.ComponentSystemEventListener}.  </p>
  */
 
 public abstract class Renderer {
-
+    
+    
     // ------------------------------------------------------ Rendering Methods
 
 

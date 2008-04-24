@@ -67,6 +67,7 @@
     <property name="build.mifdocs.dir" value="${build.dir}/mifdocs"/>
     <property name="javadoc.private" value="false"/>
     <property name="javadoc.protected" value="true"/>
+    <property name="artifact-id" value="jsf-api"/>
 
     <property name="assertion.classes" value="-ea:javax.faces..."/>
     <property name="name" value="jsf-api"/>
@@ -757,6 +758,45 @@ javax.faces.level=ALL
       <argument line="deployment-to-maven-repository t${DSTAMP}${TSTAMP}" />
     </commandline>
   </cvs>
+</target>
+
+<target name="push-local-to-maven" depends="push-to-maven-prepare" description="install jsf-api to the local maven repo.">
+
+  <exec executable="mvn" os="SunOS">
+    <arg line="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar " />
+  </exec>
+  <exec executable="mvn" os="Linux">
+    <arg line="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar  " />
+  </exec>
+  <exec executable="mvn" os="Mac OS X">
+    <arg line="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar  " />
+  </exec>
+  <exec executable="mvn" os="Darwin">
+    <arg line="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar  " />
+  </exec>
+  <exec executable="mvn.bat" os="Windows 2000">
+    <arg line="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar  " />
+  </exec>
+  <exec executable="mvn.bat" os="Windows 2003">
+    <arg line="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar  " />
+  </exec>
+  <exec executable="mvn.bat" os="Windows XP">
+    <arg line="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar  " />
+  </exec>
+
+</target>
+
+<target name="diffapis">
+
+  <difftrees treeA="${src.dir}" treeB="/Users/edburns/Documents/Projects/JavaEE/workareas/jsf-trunk/jsf-api/src" />
+
+</target>
+
+
+<target name="edburns">
+
+  <echo message="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar" />
+
 </target>
 
 

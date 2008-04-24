@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.51 2008/03/17 22:25:48 rlubke Exp $
+ * $Id: UIViewRoot.java,v 1.50.8.18 2008/04/21 20:31:24 edburns Exp $
  */
 
 /*
@@ -49,77 +49,93 @@ import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
+import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
-import javax.faces.render.RenderKit;
 import javax.faces.webapp.FacesServlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.event.AfterAddToParentEvent;
+import javax.faces.event.ComponentSystemEventListener;
+import javax.faces.event.ViewMapCreatedEvent;
+import javax.faces.event.ViewMapDestroyedEvent;
 
 
 /**
- * <p><strong>UIViewRoot</strong> is the UIComponent that represents the
- * root of the UIComponent tree.  This component has no rendering, it
- * just serves as the root of the component tree, and as a place to hang
- * per-view {@link PhaseListener}s.</p>
- * <p/>
+ * <p><strong class="changed_modified_2_0">UIViewRoot</strong> is the
+ * UIComponent that represents the root of the UIComponent tree.  This
+ * component has no rendering, it just serves as the root of the
+ * component tree, and as a place to hang per-view {@link
+ * PhaseListener}s.</p>
+
+ * <p class="changed_modified_2_0">To enable <code>UIViewRoot</code>
+ * <code>PhaseListener</code>s to be invoked on restore view, this class
+ * implements {@link ComponentSystemEventListener}.  The restore view
+ * phase implementation must guarantee that an {@link
+ * AfterAddToParentEvent} is passed to this instance at the appropriate
+ * time to indicate that the view has been completely populated.  See
+ * {@link #processEvent} for more information.</p>
+
  * <p>For each of the following lifecycle phase methods:</p>
- * <p/>
+
  * <ul>
- * <p/>
+
  * <li><p>{@link #processDecodes} </p></li>
- * <p/>
+
  * <li><p>{@link #processValidators} </p></li>
- * <p/>
+
  * <li><p>{@link #processUpdates} </p></li>
- * <p/>
+
  * <li><p>{@link #processApplication} </p></li>
- * <p/>
+
  * <li><p>RenderResponse, via {@link #encodeBegin} and {@link
  * #encodeEnd} </p></li>
- * <p/>
+
  * </ul>
- * <p/>
+
  * <p>Take the following action regarding
  * <code>PhaseListener</code>s.</p>
- * <p/>
+
  * <ul>
- * <p/>
+
  * <p>Initialize a state flag to <code>false</code>.</p>
- * <p/>
+
  * <p>If {@link #getBeforePhaseListener} returns non-<code>null</code>,
  * invoke the listener, passing in the correct corresponding {@link
  * PhaseId} for this phase.</p>
- * <p/>
+
  * <p>Upon return from the listener, call {@link
  * FacesContext#getResponseComplete} and {@link
  * FacesContext#getRenderResponse}.  If either return <code>true</code>
  * set the internal state flag to <code>true</code>. </p>
- * <p/>
+
  * <p>If or one or more listeners have been added by a call to {@link
  * #addPhaseListener}, invoke the <code>beforePhase</code> method on
  * each one whose {@link PhaseListener#getPhaseId} matches the current
  * phaseId, passing in the same <code>PhaseId</code> as in the previous
  * step.</p>
- * <p/>
+
  * <p>Upon return from each listener, call {@link
  * FacesContext#getResponseComplete} and {@link
  * FacesContext#getRenderResponse}.  If either return <code>true</code>
  * set the internal state flag to <code>true</code>. </p>
- * <p/>
- * <p/>
+
+
  * <p>Execute any processing for this phase if the internal state flag
  * was not set.</p>
- * <p/>
+
  * <p>If {@link #getAfterPhaseListener} returns non-<code>null</code>,
  * invoke the listener, passing in the correct corresponding {@link
  * PhaseId} for this phase.</p>
@@ -134,7 +150,7 @@ import java.util.logging.Logger;
  * </ul>
  */
 
-public class UIViewRoot extends UIComponentBase {
+public class UIViewRoot extends UIComponentBase implements ComponentSystemEventListener {
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -163,14 +179,39 @@ public class UIViewRoot extends UIComponentBase {
 
     /**
      * <p>Create a new {@link UIViewRoot} instance with default property
-     * values.</p>
+     * values.  The default implementation must call 
+     * {@link UIComponentBase#pushComponentToEL}.</p>
      */
     public UIViewRoot() {
 
         super();
         setRendererType(null);
+        FacesContext context = FacesContext.getCurrentInstance();
+        pushComponentToEL(context);
 
     }
+
+    /**
+     * <p class="changed_added_2_0">Cause any <code>UIViewRoot</code>
+     * {@link PhaseListener}s installed on this instance to be notified
+     * of the restore view phase.  The default implementation compares
+     * the argument <code>event</code>'s <code>getClass()</code> with
+     * {@link AfterAddToParentEvent}<code>.class</code> using
+     * <code>equals()</code>.  If and only if the comparison is
+     * <code>true</code>, the default implementation must notify any
+     * <code>UIViewRoot</code> {@link PhaseListener}s installed on this
+     * instance that we are in the <strong>AFTER</strong> restore view
+     * phase.</p>
+     */
+
+    public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
+	if (event.getClass().equals(AfterAddToParentEvent.class)) {
+	    notifyPhaseListeners(FacesContext.getCurrentInstance(), 
+				 PhaseId.RESTORE_VIEW, false);
+	}
+    }
+    
+    
 
     // ------------------------------------------------------ Instance Variables
 
@@ -197,15 +238,16 @@ public class UIViewRoot extends UIComponentBase {
 
 
     /**
-     * <p>The render kit identifier of the {@link RenderKit} associated
+     * <p>The render kit identifier of the {@link javax.faces.render.RenderKit} associated
      * wth this view.</p>
      */
     private String renderKitId = null;
 
 
     /**
-     * <p>Return the render kit identifier of the {@link RenderKit}
-     * associated with this view.  Unless explicitly set, as in {@link
+     * <p>Return the render kit identifier of the {@link
+     * javax.faces.render.RenderKit} associated with this view.  Unless
+     * explicitly set, as in {@link
      * javax.faces.application.ViewHandler#createView}, the returned
      * value will be <code>null.</code></p>
      */
@@ -234,15 +276,15 @@ public class UIViewRoot extends UIComponentBase {
 
 
     /**
-     * <p>Set the render kit identifier of the {@link RenderKit}
+     * <p>Set the render kit identifier of the {@link javax.faces.render.RenderKit}
      * associated with this view.  This method may be called at any time
      * between the end of <em>Apply Request Values</em> phase of the
      * request processing lifecycle (i.e. when events are being broadcast)
      * and the beginning of the <em>Render Response</em> phase.</p>
      *
-     * @param renderKitId The new {@link RenderKit} identifier,
+     * @param renderKitId The new {@link javax.faces.render.RenderKit} identifier,
      *                    or <code>null</code> to disassociate this view with any
-     *                    specific {@link RenderKit} instance
+     *                    specific {@link javax.faces.render.RenderKit} instance
      */
     public void setRenderKitId(String renderKitId) {
 
@@ -289,14 +331,14 @@ public class UIViewRoot extends UIComponentBase {
     }
 
     /**
-     * <p>Allow an arbitrary method to be called for the "beforePhase"
-     * event as the UIViewRoot runs through its lifecycle.  This method
-     * will be called for all phases except {@link
-     * PhaseId#RESTORE_VIEW}.  Unlike a true {@link PhaseListener},
-     * this approach doesn't allow for only receiving {@link
-     * PhaseEvent}s for a given phase.</p>
-     * <p/>
-     * <p>The method must conform to the signature of {@link
+     * <p><span class="changed_modified_2_0">Allow</span> an arbitrary
+     * method to be called for the "beforePhase" event as the UIViewRoot
+     * runs through its lifecycle.  This method will be called for all
+     * phases <span class="changed_modified_2_0">including {@link
+     * PhaseId#RESTORE_VIEW}</span>.  Unlike a true {@link
+     * PhaseListener}, this approach doesn't allow for only receiving
+     * {@link PhaseEvent}s for a given phase.</p> <p/> <p>The method
+     * must conform to the signature of {@link
      * PhaseListener#beforePhase}.</p>
      *
      * @param newBeforePhase the {@link MethodExpression} that will be
@@ -317,14 +359,14 @@ public class UIViewRoot extends UIComponentBase {
     }
 
     /**
-     * <p>Allow an arbitrary method to be called for the "afterPhase"
-     * event as the UIViewRoot runs through its lifecycle.  This method
-     * will be called for all phases except {@link
-     * PhaseId#RESTORE_VIEW}.  Unlike a true {@link PhaseListener},
-     * this approach doesn't allow for only receiving {@link
-     * PhaseEvent}s for a given phase.</p>
-     * <p/>
-     * <p>The method must conform to the signature of {@link
+     * <p><span class="changed_modified_2_0">Allow</span> an arbitrary
+     * method to be called for the "afterPhase" event as the UIViewRoot
+     * runs through its lifecycle.  This method will be called for all
+     * phases <span class="changed_modified_2_0">including {@link
+     * PhaseId#RESTORE_VIEW}</span>.  Unlike a true {@link
+     * PhaseListener}, this approach doesn't allow for only receiving
+     * {@link PhaseEvent}s for a given phase.</p> <p/> <p>The method
+     * must conform to the signature of {@link
      * PhaseListener#afterPhase}.</p>
      *
      * @param newAfterPhase the {@link MethodExpression} that will be
@@ -349,6 +391,169 @@ public class UIViewRoot extends UIComponentBase {
             phaseListeners = new ArrayList<PhaseListener>();
         }
         phaseListeners.add(newPhaseListener);
+    }
+
+    /**
+     * <p class="changed_added_2_0">Add argument <code>component</code>,
+     * which is assumed to represent a resource instance, as a resource
+     * to this view.  A resource instance is rendered by a resource
+     * <code>Renderer</code>, as described in the Standard HTML
+     * RenderKit. The default implementation must call through to
+     * {@link #addComponentResource(javax.faces.context.FacesContext, 
+     * javax.faces.component.UIComponent, java.lang.String)}.</p>
+     *
+     * <div class="changed_added_2_0">
+     * <p>
+     * 
+     * @param context {@link FacesContext} for the current request
+     * @param componentResource The {@link UIComponent} representing a 
+     * {@link javax.faces.application.Resource} instance 
+     */
+    public void addComponentResource(FacesContext context, UIComponent componentResource) {
+        addComponentResource(context, componentResource, null);
+    }
+
+    /**
+     * <p class="changed_added_2_0">Add argument <code>component</code>,
+     * which is assumed to represent a resource instance, as a resource
+     * to this view.  A resource instance is rendered by a resource
+     * <code>Renderer</code>, as described in the Standard HTML
+     * RenderKit. </p>
+     *
+     * <div class="changed_added_2_0">
+     * <p>
+     * The <code>component</code> must be added using the following algorithm:
+     * <ul>
+     * <li>If the <code>target</code> argument is <code>null</code>, look for a <code>target</code>
+     * attribute on the <code>component</code>.<br>
+     * If there is no <code>target</code> attribute, set <code>target</code> to be the default value <code>head</code></li>
+     * <li>Call {@link #getComponentResources} to obtain the child list for the
+     * given target.</li>
+     * <li>Add the <code>component</code> resource to the list.</li>
+     * </ul>
+     * </p>
+     * </div>
+     *  
+     * @param context {@link FacesContext} for the current request
+     * @param componentResource The {@link UIComponent} representing a 
+     * {@link javax.faces.application.Resource} instance 
+     * @param target The name of the facet for which the {@link UIComponent} will be added 
+     */
+    public void addComponentResource(FacesContext context, UIComponent componentResource, String target) {
+        final Map<String,Object> attributes = componentResource.getAttributes();
+        // look for a target in the component attribute set if arg is not set.
+        if (target == null) {
+            target = (String) attributes.get("target");
+        }
+        if (target == null) {
+            target = "head";
+        }
+        List<UIComponent> facetChildren = getComponentResources(context, target);
+        // add the resource to the facet
+        facetChildren.add(componentResource);
+    }
+
+    /**
+     * <p class="changed_added_2_0">Return a <code>List</code> of 
+     * {@link UIComponent}s for the provided <code>target</code> agrument.
+     * Each <code>component</code> in the <code>List</code> is assumed to 
+     * represent a resource instance.</p>
+     *
+     * <div class="changed_added_2_0">
+     * <p>The default implementation must use an algorithm equivalent to the
+     * the following.</p>
+     * <ul>
+     * <li>Locate the facet for the <code>component</code> by calling <code>getFacet()</code> using
+     * <code>target</code> as the argument.</li>
+     * <li>If the facet is not found, create the facet by calling <code>context.getApplication().createComponent()
+     * </code> using <code>javax.faces.Panel</code> as the argument</li> 
+     * <ul>
+     * <li>Set the <code>id</code> of the facet to be <code>target</code></li>
+     * <li>Add the facet to the facets <code>Map</code> using <code>target</code> as the key</li>
+     * </ul>
+     * <li>return the children of the facet</li>
+     * </ul>
+
+     * </div>
+     *
+     * @param target The name of the facet for which the components will be returned. 
+     *
+     * @return A <code>List</code> of {@link UIComponent} children of the facet with the 
+     * name <code>target</code>.  If no children are found for the facet, return
+     * <code>Collections.emptyList()</code>.
+     *
+     * @throws NullPointerException  if <code>target</code>
+     *                               is <code>null</code>
+     */
+    public List<UIComponent> getComponentResources(FacesContext context, 
+            String target) {
+        if (target == null) {
+            throw new NullPointerException();
+        }
+        UIComponent facet = getFacet(target);
+        if (facet == null) {
+            facet = context.getApplication().createComponent("javax.faces.Panel");
+            facet.setId(target);
+            getFacets().put(target, facet);
+        }
+        
+        return facet.getChildren();
+    }
+    
+    /**
+     * <p class="changed_added_2_0">Remove argument <code>component</code>,
+     * which is assumed to represent a resource instance, as a resource
+     * to this view.</p>
+     *
+     * <div class="changed_added_2_0">
+     * <p>
+     * 
+     * @param context {@link FacesContext} for the current request
+     * @param componentResource The {@link UIComponent} representing a 
+     * {@link javax.faces.application.Resource} instance 
+     */
+    public void removeComponentResource(FacesContext context, UIComponent componentResource) {
+        removeComponentResource(context, componentResource, null);
+    }
+    
+    /**
+     * <p class="changed_added_2_0">Remove argument <code>component</code>,
+     * which is assumed to represent a resource instance, as a resource
+     * to this view.  A resource instance is rendered by a resource
+     * <code>Renderer</code>, as described in the Standard HTML
+     * RenderKit. </p>
+     *
+     * <div class="changed_added_2_0">
+     * <p>
+     * The <code>component</code> must be removed using the following algorithm:
+     * <ul>
+     * <li>If the <code>target</code> argument is <code>null</code>, look for a <code>target</code>
+     * attribute on the <code>component</code>.<br>
+     * If there is no <code>target</code> attribute, set <code>target</code> to be the default value <code>head</code></li>
+     * <li>Call {@link #getComponentResources} to obtain the child list for the
+     * given target.</li>
+     * <li>Remove the <code>component</code> resource from the child list.</li>
+     * </ul>
+     * </p>
+     * </div>
+     *  
+     * @param context {@link FacesContext} for the current request
+     * @param componentResource The {@link UIComponent} representing a 
+     * {@link javax.faces.application.Resource} instance 
+     * @param target The name of the facet for which the {@link UIComponent} will be added 
+     */
+    public void removeComponentResource(FacesContext context, UIComponent componentResource, String target) {
+        final Map<String,Object> attributes = componentResource.getAttributes();
+        // look for a target in the component attribute set if arg is not set.
+        if (target == null) {
+            target = (String) attributes.get("target");
+        }
+        if (target == null) {
+            target = "head";
+        }
+        List<UIComponent> facetChildren = getComponentResources(context, target);
+        // add the resource to the facet
+        facetChildren.remove(componentResource);
     }
 
     /**
@@ -906,6 +1111,56 @@ public class UIViewRoot extends UIComponentBase {
         // Make sure to appraise the EL of this switch in Locale.
         FacesContext.getCurrentInstance().getELContext().setLocale(locale);
     }
+    
+    private Map<String, Object> viewScope = null;
+
+    /**
+     *
+     * <div class="changed_added_2_0">
+
+     * <p>Return a <code>Map</code> that acts as the interface to the
+     * data store that is the "view scope".  This map must be
+     * instantiated lazily and cached for return from subsequent calls
+     * to this method on this <code>UIViewRoot</code> instance.
+     * PENDING(edburns): better to do it eagerly?  Immediately after
+     * instantiation, {@link
+     * javax.faces.application.Application#publishEvent} must be called,
+     * passing {@link ViewMapCreatedEvent}<code>.class</code> as the
+     * first argument and this <code>UIViewRoot</code> instance as the
+     * second argument.</p>
+
+     * <p>The returned <code>Map</code> must be implemented such that
+     * calling <code>clear()</code> on the <code>Map</code> causes
+     * {@link javax.faces.application.Application#publishEvent} to be
+     * called, passing {@link ViewMapDestroyedEvent}<code>.class</code>
+     * as the first argument and this <code>UIViewRoot</code> instance
+     * as the second argument.</p>
+
+     * <p>See {@link FacesContext#setViewRoot} for the specification of
+     * when the <code>clear()</code> method must be called.</p>
+
+
+     * </div>
+     *
+     */
+    
+    public Map<String, Object> getViewMap() {
+        if (null == viewScope) {
+            viewScope = new HashMap<String, Object>() {
+
+                @Override
+                public void clear() {
+                    FacesContext context = FacesContext.getCurrentInstance();
+                    context.getApplication().publishEvent(ViewMapDestroyedEvent.class, UIViewRoot.this);
+                    super.clear();
+                }
+                
+            };
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.getApplication().publishEvent(ViewMapCreatedEvent.class, this);
+        }
+        return viewScope;
+    }
 
     // ----------------------------------------------------- StateHolder Methods
 
@@ -916,7 +1171,7 @@ public class UIViewRoot extends UIComponentBase {
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-            values = new Object[8];
+            values = new Object[9];
         }
 
         values[0] = super.saveState(context);
@@ -927,6 +1182,7 @@ public class UIViewRoot extends UIComponentBase {
         values[5] = saveAttachedState(context, beforePhase);
         values[6] = saveAttachedState(context, afterPhase);
         values[7] = saveAttachedState(context, phaseListeners);
+        values[8] = saveAttachedState(context, viewScope);
         return (values);
 
     }
@@ -946,6 +1202,8 @@ public class UIViewRoot extends UIComponentBase {
               (MethodExpression) restoreAttachedState(context, values[6]);
         phaseListeners = TypedCollections.dynamicallyCastList((List)
               restoreAttachedState(context, values[7]), PhaseListener.class);
+        viewScope =
+              (Map<String, Object>) restoreAttachedState(context, values[8]);
     }
 
 

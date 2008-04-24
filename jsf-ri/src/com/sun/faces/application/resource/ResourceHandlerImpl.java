@@ -161,6 +161,26 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
     }
 
+    @Override
+    public String getRendererTypeForResourceName(String resourceName) {
+        String rendererType = null;
+        
+        String contentType = getContentType(resourceName);
+        if (null != contentType) {
+            contentType = contentType.toLowerCase();
+            if (-1 != contentType.indexOf("javascript")) {
+                rendererType = "javax.faces.resource.Script";
+            }
+            else if (-1 != contentType.indexOf("css")) {
+                rendererType = "javax.faces.resource.Stylesheet";
+            }
+        }
+        return rendererType;
+    }
+    
+    
+
+
 
     /**
      * @see javax.faces.application.ResourceHandler#handleResourceRequest(javax.faces.context.FacesContext)

@@ -1,7 +1,7 @@
 package com.sun.faces.el;
 
 /*
- * $Id: ScopedAttributeELResolver.java,v 1.13 2007/07/17 23:14:01 rlubke Exp $
+ * $Id: ScopedAttributeELResolver.java,v 1.13.12.2 2008/03/14 02:41:52 edburns Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -77,8 +77,10 @@ public class ScopedAttributeELResolver extends ELResolver {
         ExternalContext ec = facesContext.getExternalContext();
         Object result;
         if (null == (result = ec.getRequestMap().get(attribute))) {
-            if (null == (result = ec.getSessionMap().get(attribute))) {
-                result = ec.getApplicationMap().get(attribute);
+            if (null == (result = facesContext.getViewRoot().getViewMap().get(attribute))) {
+                if (null == (result = ec.getSessionMap().get(attribute))) {
+                    result = ec.getApplicationMap().get(attribute);
+                }
             }
         }
         
@@ -120,6 +122,8 @@ public class ScopedAttributeELResolver extends ELResolver {
         ExternalContext ec = facesContext.getExternalContext();
         if ((ec.getRequestMap().get(attribute)) != null) {
             ec.getRequestMap().put(attribute, val);
+        } else if ((facesContext.getViewRoot().getViewMap().get(attribute)) != null) {
+            facesContext.getViewRoot().getViewMap().put(attribute, val);
         } else if ((ec.getSessionMap().get(attribute)) != null) {
             ec.getSessionMap().put(attribute, val);
         } else if ((ec.getApplicationMap().get(attribute)) != null) {
@@ -163,6 +167,17 @@ public class ScopedAttributeELResolver extends ELResolver {
                                                "request scope attribute", false, false, true, attrValue.getClass(),
                                                Boolean.TRUE));
         }
+        
+       // add attributes in view scope.
+       attrs = facesContext.getViewRoot().getViewMap().entrySet();
+        for (Entry<String, Object> entry : attrs) {
+            String attrName = entry.getKey();
+            Object attrValue = entry.getValue();
+            list.add(Util.getFeatureDescriptor(attrName, attrName,
+                                               "view scope attribute", false, false, true, attrValue.getClass(),
+                                               Boolean.TRUE));
+        }
+        
 
        // add attributes in session scope.
        attrs = ec.getSessionMap().entrySet();

@@ -1,0 +1,13 @@
+body { background-color: #ffb57a }
+th { background-color: #dcdcdc }
+tr { vertical-align: top }
+td { background-color: #ffda9c }
+a:link { color: black }
+a:visited { color: black }
+.verticaltext {
+writing-mode: tb-rl;
+filter: flipv fliph;
+}
+.complete { color: green }
+.authoractionrequired { color: red }
+.publisheractionrequired { color: blue }

@@ -59,6 +59,10 @@ public class OutputScriptTag extends UIComponentELTag {
         this.library = library;
     }
 
+    private ValueExpression target;
+    public void setTarget(ValueExpression target) {
+        this.target = target;
+    }
 
     // --------------------------------------------------------- General Methods
 
@@ -81,6 +85,9 @@ public class OutputScriptTag extends UIComponentELTag {
         }
         if (library != null) {
             component.setValueExpression("library", library);
+        }
+        if (target != null) {
+            component.setValueExpression("target", target);
         }
     }
 

@@ -81,4 +81,18 @@
         </attribute-extension>
 
     </attribute>
+    <attribute>
+        <description>
+            <![CDATA[<div class="changed_added_2_0"><p>The <em>target</em> area for which this resource will be rendered.  For example, <em>target="head"</em> would cause the resource to be rendered within the <em>head</em> element.</p></div>]]>
+        </description>
+        <display-name>Target</display-name>
+        <icon></icon>
+        <attribute-name>target</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+            <required>true</required>
+            <tag-attribute>false</tag-attribute>
+        </attribute-extension>
+
+    </attribute>
 </root>

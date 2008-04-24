@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.117.4.1 2008/04/17 21:17:05 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.118.2.2 2008/04/11 13:40:23 edburns Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -79,6 +79,10 @@ import javax.servlet.jsp.JspApplicationContext;
 import javax.servlet.jsp.JspFactory;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+
+import javax.faces.component.UIViewRoot;
+import javax.faces.event.ViewMapCreatedEvent;
+import javax.faces.event.ViewMapDestroyedEvent;
 
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.application.WebappLifecycleListener;
@@ -220,6 +224,13 @@ public class ConfigureListener implements ServletRequestListener,
                 associate.setContextName(getServletContextIdentifier(context));
             }
             RenderKitUtils.loadSunJsfJs(initContext.getExternalContext());
+            
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            facesContext.getApplication().subscribeToEvent(ViewMapCreatedEvent.class, 
+                    UIViewRoot.class, webAppListener);
+            facesContext.getApplication().subscribeToEvent(ViewMapDestroyedEvent.class, 
+                    UIViewRoot.class, webAppListener);
+            
             
         } finally {
             Verifier.setCurrentInstance(null);

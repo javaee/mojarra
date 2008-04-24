@@ -1,5 +1,5 @@
 /*
- * $Id: EditableValueHolder.java,v 1.13 2007/04/27 22:00:03 ofung Exp $
+ * $Id: EditableValueHolder.java,v 1.13.12.1 2008/04/21 20:31:24 edburns Exp $
  */
 
 /*
@@ -49,9 +49,10 @@ import javax.faces.render.Renderer;
 
 
 /**
- * <p><strong>EditableValueHolder</strong> is an extension of ValueHolder
- * that describes additional features supported by editable components,
- * including {@link ValueChangeEvent}s and {@link Validator}s.
+ * <p><strong class="changed_modified_2_0">EditableValueHolder</strong>
+ * is an extension of ValueHolder that describes additional features
+ * supported by editable components, including {@link ValueChangeEvent}s
+ * and {@link Validator}s.
  */
 
 public interface EditableValueHolder extends ValueHolder {
@@ -212,8 +213,16 @@ public interface EditableValueHolder extends ValueHolder {
     public void setValueChangeListener(MethodBinding valueChangeMethod);
 
     /**
-     * <p>Add a {@link Validator} instance to the set associated with
-     * this component.</p>
+     * <p><span class="changed_modified_2_0">Add</span> a {@link
+     * Validator} instance to the set associated with this
+     * component.</p>
+     *
+     * <p class="changed_added_2_0">The argument
+     * <code>validator</code> must be inspected for the presence of the
+     * {@link javax.faces.application.ResourceDependency} annotation.
+     * If this annotation is present, the action described in
+     * <code>ResourceDependency</code> must be taken.</p>
+
      *
      * @param validator The {@link Validator} to add
      *

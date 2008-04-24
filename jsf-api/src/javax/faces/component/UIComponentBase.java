@@ -71,11 +71,20 @@ import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.FactoryFinder;
+import javax.faces.application.ResourceDependency;
+import javax.faces.application.ResourceHandler;
+import javax.faces.event.AfterAddToParentEvent;
+import javax.faces.event.BeforeRenderEvent;
+import javax.faces.event.PhaseId;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
+import javax.faces.render.ResponseStateManager;
 
 /**
- * <p><strong>UIComponentBase</strong> is a convenience base class that
- * implements the default concrete behavior of all methods defined by
- * {@link UIComponent}.</p>
+ * <p><strong class="changed_modified_2_0">UIComponentBase</strong> is a
+ * convenience base class that implements the default concrete behavior
+ * of all methods defined by {@link UIComponent}.</p>
  *
  * <p>By default, this class defines <code>getRendersChildren()</code>
  * to find the renderer for this component and call its
@@ -801,6 +810,11 @@ public abstract class UIComponentBase extends UIComponent {
         if (!isRendered()) {
             return;
         }
+        
+        pushComponentToEL(context);
+ 
+        context.getApplication().publishEvent(BeforeRenderEvent.class, this);
+        
         String rendererType = getRendererType();
         if (rendererType != null) {
             Renderer renderer = this.getRenderer(context);
@@ -858,6 +872,7 @@ public abstract class UIComponentBase extends UIComponent {
                 // We've already logged for this component
             }
         }
+        popComponentFromEL(context);
 
     }
 
@@ -1014,6 +1029,8 @@ public abstract class UIComponentBase extends UIComponent {
             return;
         }
 
+        pushComponentToEL(context);
+
         // Process all facets and children of this component
         Iterator kids = getFacetsAndChildren();
         while (kids.hasNext()) {
@@ -1027,6 +1044,9 @@ public abstract class UIComponentBase extends UIComponent {
         } catch (RuntimeException e) {
             context.renderResponse();
             throw e;
+        }
+        finally {
+            popComponentFromEL(context);
         }
 
     }
@@ -1046,11 +1066,15 @@ public abstract class UIComponentBase extends UIComponent {
             return;
         }
 
+
+        pushComponentToEL(context);
+        
         // Process all the facets and children of this component
         Iterator kids = getFacetsAndChildren();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
             kid.processValidators(context);
+            popComponentFromEL(context);
         }
     }
 
@@ -1069,11 +1093,14 @@ public abstract class UIComponentBase extends UIComponent {
             return;
         }
 
+        pushComponentToEL(context);
+
         // Process all facets and children of this component
         Iterator kids = getFacetsAndChildren();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
             kid.processUpdates(context);
+            popComponentFromEL(context);
         }
     }
 
@@ -1094,6 +1121,9 @@ public abstract class UIComponentBase extends UIComponent {
         Object [] stateStruct = new Object[2];
         Object [] childState = EMPTY_ARRAY;
 
+        pushComponentToEL(context);
+
+        
         // Process this component itself
         stateStruct[MY_STATE] = saveState(context);
 
@@ -1112,9 +1142,12 @@ public abstract class UIComponentBase extends UIComponent {
                     kid = (UIComponent) kids.next();
                     if (!kid.isTransient()) {
                         stateList.add(kid.processSaveState(context));
+                        popComponentFromEL(context);
                     }
                 }
             }
+            
+            pushComponentToEL(context);
 
             // if we have facets, add them to the stateList
             if (this.getFacetCount() > 0) {
@@ -1128,6 +1161,7 @@ public abstract class UIComponentBase extends UIComponent {
                     facet = (UIComponent) entry.getValue();
                     if (!facet.isTransient()) {
                         facetState = facet.processSaveState(context);
+                        popComponentFromEL(context);
                         facetSaveState = new Object[2];
                         facetSaveState[0] = entry.getKey();
                         facetSaveState[1] = facetState;
@@ -1174,7 +1208,9 @@ public abstract class UIComponentBase extends UIComponent {
                 if (currentState == null) {
                     continue;
                 }
+                pushComponentToEL(context);     
                 kid.processRestoreState(context, currentState);
+                popComponentFromEL(context);
             }
         }
 
@@ -1191,7 +1227,9 @@ public abstract class UIComponentBase extends UIComponent {
                     facetName = (String) facetSaveState[0];
                     facetState = facetSaveState[1];
                     facet = getFacets().get(facetName);
+                    pushComponentToEL(context);
                     facet.processRestoreState(context, facetState);
+                    popComponentFromEL(context);
                 }
                 ++j;
             }
@@ -1856,17 +1894,23 @@ public abstract class UIComponentBase extends UIComponent {
                 eraseParent(element);
                 element.setParent(component);
                 super.add(index, element);
+                FacesContext context = FacesContext.getCurrentInstance();
+                doPostAddProcessing(context, element);
             }
         }
 
         public boolean add(UIComponent element) {
+            boolean result = false;
             if (element == null) {
                 throw new NullPointerException();
             } else {
                 eraseParent(element);
                 element.setParent(component);
-                return (super.add(element));
+                result = super.add(element);
+                FacesContext context = FacesContext.getCurrentInstance();
+                doPostAddProcessing(context, element);
             }
+            return result;
         }
 
         public boolean addAll(Collection<? extends UIComponent> collection) {
@@ -1927,6 +1971,9 @@ public abstract class UIComponentBase extends UIComponent {
 
         public UIComponent remove(int index) {
             UIComponent child = get(index);
+            // PENDING(edburns): publish beforeRemoveFromParent
+            // PENDING(edburns): make sure to do the inverse of 
+            // processResourceDepenencyOnComponentAndMaybeRenderer()
             super.remove(index);
             child.setParent(null);
             return (child);
@@ -1981,6 +2028,116 @@ public abstract class UIComponentBase extends UIComponent {
                 element.setParent(component);
                 super.set(index, element);
                 return (previous);
+            }
+        }
+        
+        private static void doPostAddProcessing(FacesContext context, UIComponent added) {
+            if (!isPostbackAndRestoreView(context)) {
+                context.getApplication().publishEvent(AfterAddToParentEvent.class, added);
+                processResourceDependencyOnComponentAndMaybeRenderer(context,
+                        added);
+            }
+        }
+        
+        private static final String IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME = "com.sun.faces.IS_POSTBACK_AND_RESTORE_VIEW";
+        
+        private static boolean isPostbackAndRestoreView(FacesContext context) {
+            boolean result = false;
+            Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
+            if (requestMap.containsKey(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME)) {
+                result = Boolean.TRUE == requestMap.get(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME) ? true : false;
+            }
+            else {
+                result = getResponseStateManager(context, 
+                    context.getViewRoot().getRenderKitId()).isPostback(context) &&
+                    context.getCurrentPhaseId().equals(PhaseId.RESTORE_VIEW);
+                requestMap.put(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME,
+                        result ? Boolean.TRUE : Boolean.FALSE);
+                
+            }
+            return result;
+        }
+        
+    private static ResponseStateManager getResponseStateManager(
+            FacesContext context, String renderKitId)
+            throws FacesException {
+
+        assert (null != renderKitId);
+        assert (null != context);
+
+        RenderKit renderKit = context.getRenderKit();
+        if (renderKit == null) {
+            RenderKitFactory factory = (RenderKitFactory) FactoryFinder
+                 .getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+            if (factory == null) {
+                throw new IllegalStateException();
+            }
+            renderKit = factory.getRenderKit(context, renderKitId);
+        }
+        return renderKit.getResponseStateManager();
+
+    }
+        
+        
+        private static void processResourceDependencyOnComponentAndMaybeRenderer(FacesContext context, 
+                UIComponent added) {
+            processResourceDependencyAnnotation(context, added);
+            Renderer renderer = added.getRenderer(context);
+            if (null != renderer) {
+                processResourceDependencyAnnotation(context, renderer);
+            }
+        }
+        
+        private static void processResourceDependencyAnnotation(FacesContext context, 
+                Object source) {
+            UIOutput resourceComponent = null;
+            if (!source.getClass().isAnnotationPresent(ResourceDependency.class)) {
+                return;
+            }
+
+            // Create a component resource
+            resourceComponent = (UIOutput) context.getApplication().createComponent("javax.faces.Output");
+
+            // Get the resourceMetadata from the annotation
+            ResourceDependency resourceDep = (ResourceDependency) source.getClass().getAnnotation(ResourceDependency.class);
+            String
+                    resourceName = resourceDep.name(),
+                    library = resourceDep.library(),
+                    target = resourceDep.target();
+
+            if (0 == resourceName.length()) {
+                throw new IllegalArgumentException("Zero length resource name in annotation ResourceDependency");
+            }
+
+            if (0 == library.length()) {
+                library = null;
+            }
+
+            if (0 == target.length()) {
+                target = null;
+            }
+
+            // Create a resource around it
+            ResourceHandler resourceHandler = context.getApplication().getResourceHandler();
+            // Imbue the component resource with the metadata
+
+            resourceComponent.setRendererType(resourceHandler.getRendererTypeForResourceName(resourceName));
+            Map<String, Object> attrs = resourceComponent.getAttributes();
+            attrs.put("name", resourceName);
+            if (null != library) {
+                attrs.put("library", library);
+            }
+            if (null != target) {
+                attrs.put("target", target);
+            }
+
+            // Tell the viewRoot we have this resource
+            if (null != target) {
+                context.getViewRoot().addComponentResource(context,
+                       resourceComponent, target);
+            } else {
+                context.getViewRoot().addComponentResource(context,
+                       resourceComponent);
             }
         }
 

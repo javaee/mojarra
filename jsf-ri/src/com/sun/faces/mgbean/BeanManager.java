@@ -1,5 +1,5 @@
 /*
- * $Id: BeanManager.java,v 1.8 2008/01/08 18:26:06 rlubke Exp $
+ * $Id: BeanManager.java,v 1.8.4.1 2008/03/14 02:41:03 edburns Exp $
  */
 
 /*
@@ -173,6 +173,10 @@ public class BeanManager {
                 if (externalContext.getRequestMap().containsKey(name)) {
                     return true;
                 }
+            case VIEW:
+                if (context.getViewRoot().getViewMap().containsKey(name)) {
+                    return true;
+                }
             case SESSION:
                 if (externalContext.getSessionMap().containsKey(name)) {
                     return true;
@@ -219,6 +223,14 @@ public class BeanManager {
                         break;
                     case SESSION:
                         synchronized(facesContext.getExternalContext().getSession(true)) {
+                            bean = createAndPush(name,
+                                                 builder,
+                                                 scope,
+                                                 facesContext);
+                        }
+                        break;
+                    case VIEW:
+                        synchronized(facesContext.getViewRoot().getViewMap()) {
                             bean = createAndPush(name,
                                                  builder,
                                                  scope,
@@ -402,6 +414,7 @@ public class BeanManager {
         
         static {
             handlerMap.put(ELUtils.Scope.REQUEST, new RequestScopeHandler());
+            handlerMap.put(ELUtils.Scope.VIEW, new ViewScopeHandler());
             handlerMap.put(ELUtils.Scope.SESSION, new SessionScopeHandler());
             handlerMap.put(ELUtils.Scope.APPLICATION, new ApplicationScopeHandler());
         }
@@ -434,6 +447,17 @@ public class BeanManager {
             }
 
         }
+        
+        private static class ViewScopeHandler implements ScopeHandler {
+
+            public void handle(String name, Object bean, FacesContext context) {
+
+                context.getViewRoot().getViewMap().put(name, bean);
+
+            }
+
+        }
+        
 
         private static class SessionScopeHandler implements ScopeHandler  {
 

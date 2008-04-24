@@ -206,7 +206,8 @@ public class StateManagerImpl extends StateManager {
                 // of the TreeNode instances.  This is a problem 
                 // for servers that persist session data since 
                 // UIComponent instances are not serializable.
-                viewRoot = restoreTree(((Object[]) stateArray[0]).clone());
+                viewRoot = restoreTree(renderKitId,
+                        ((Object[]) stateArray[0]).clone());
                 viewRoot.processRestoreState(context, handleRestoreState(stateArray[1])); 
 
                 if (LOGGER.isLoggable(Level.FINE)) {
@@ -651,7 +652,7 @@ public class StateManagerImpl extends StateManager {
         if (treeStructure == null) {
             return null;
         }
-        UIViewRoot root = restoreTree(treeStructure);
+        UIViewRoot root = restoreTree(renderKitId, treeStructure);
         root.setViewId(viewId);
         return root;
     }
@@ -692,7 +693,7 @@ public class StateManagerImpl extends StateManager {
     }
 
 
-    private UIViewRoot restoreTree(Object[] tree)
+    private UIViewRoot restoreTree(String renderKitId, Object[] tree)
     throws FacesException {
 
         UIComponent c;
@@ -714,6 +715,11 @@ public class StateManagerImpl extends StateManager {
                 tree[i] = c;
                 if (i != tn.parent) {
                     ((UIComponent) tree[tn.parent]).getChildren().add(c);
+                } else {
+                    assert(c instanceof UIViewRoot);
+                    UIViewRoot viewRoot = (UIViewRoot) c;
+                    FacesContext.getCurrentInstance().setViewRoot(viewRoot);
+                    viewRoot.setRenderKitId(renderKitId);
                 }
             }
         }

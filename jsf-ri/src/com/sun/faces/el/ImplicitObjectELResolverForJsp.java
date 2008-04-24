@@ -1,5 +1,5 @@
 /*
- * $Id: ImplicitObjectELResolverForJsp.java,v 1.14 2007/11/15 00:43:28 rlubke Exp $
+ * $Id: ImplicitObjectELResolverForJsp.java,v 1.14.6.1 2008/03/14 02:41:02 edburns Exp $
  */
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -86,6 +86,9 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
             case VIEW:
                 context.setPropertyResolved(true);
                 return facesContext.getViewRoot();
+            case VIEW_SCOPE:
+                context.setPropertyResolved(true);
+                return facesContext.getViewRoot().getViewMap();
             case RESOURCE:
                 context.setPropertyResolved(true);
                 return facesContext.getApplication().getResourceHandler();
