@@ -17,11 +17,23 @@ import javax.faces.component.UIViewRoot;
  * to {@link UIViewRoot#getViewMap} on a <code>UIViewRoot</code>
  * instance.  The source for this event is the
  * <code>UIViewRoot<code>.</p>
-
+ *
  * </div>
+ *
+ * @since 2.0
  */
 public class ViewMapCreatedEvent extends ComponentSystemEvent {
 
+    private static final long serialVersionUID = 8684338297976265379L;
+
+
+    // ------------------------------------------------------------ Constructors
+
+
+    /**
+     * RELEASE_PENDING (edburns,rogerk) document
+     * @param component
+     */
     public ViewMapCreatedEvent(UIViewRoot component) {
         super(component);
     }

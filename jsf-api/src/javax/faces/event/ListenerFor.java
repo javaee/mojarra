@@ -27,18 +27,25 @@ import java.lang.annotation.Target;
  * javax.faces.render.Renderer} classes.  See the javadocs for those
  * classes for specific information on how to process the annotation in
  * those cases.</p>
+ *
+ * @since 2.0
  */
 
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target(value=ElementType.TYPE)
 public @interface ListenerFor {
+
     /**
      * <p class="changed_added_2_0">The kind of system event for which
      * this class will be installed as a listener.  The implementation
      * only supports exact matches on the <code>Class</code> and does
      * not honor subclass relationships.</p>
+     *
+     * RELEASE_PENDING (edburns,rogerk) should this state that the default
+     *  implementation doesn't support subclass relationships?  
      */ 
     public Class<? extends SystemEvent> systemEventClass();
+
 
     /**
      * <p class="changed_added_2_0">The kind of object that emits events
@@ -46,4 +53,5 @@ public @interface ListenerFor {
      * attribute.</p>
      */ 
     public Class sourceClass();
+
 }

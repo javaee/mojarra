@@ -5,7 +5,6 @@
 
 package javax.faces.event;
 
-import javax.faces.component.UIComponent;
 
 /**
  * <p class="changed_added_2_0">By implementing this class, an object
@@ -15,6 +14,8 @@ import javax.faces.component.UIComponent;
  * indicated by the <code>facesEventClass</code> argument passed when
  * the listener is installed using {@link
  * javax.faces.application.Application#subscribeToEvent}.</p>
+ *
+ * @since 2.0
  */
 public interface SystemEventListener extends FacesListener {
 
@@ -30,7 +31,6 @@ public interface SystemEventListener extends FacesListener {
      * @throws AbortProcessingException if lifecycle processing should
      * cease for this request.
      */
-
     public void processEvent(SystemEvent event) throws AbortProcessingException;
 
     /**
@@ -42,4 +42,5 @@ public interface SystemEventListener extends FacesListener {
      * appropriateness of sending an event to this listener instance.  
      */ 
     public boolean isListenerForSource(Object source);
+
 }

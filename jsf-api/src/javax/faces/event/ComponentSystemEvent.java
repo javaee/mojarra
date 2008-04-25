@@ -12,10 +12,21 @@ import javax.faces.component.UIComponent;
  * <p><strong class="changed_added_2_0">ComponentSystemEvent</strong> is
  * the base class for {@link SystemEvent}s that are specific to a {@link
  * UIComponent} instance.</p>
-
+ *
+ * @since 2.0
  */
 public abstract class ComponentSystemEvent extends SystemEvent {
+
+    private static final long serialVersionUID = -4726746661822507506L;
+
     
+    // ------------------------------------------------------------ Constructors
+
+
+    /**
+     * RELEASE_PENDING (edburns,rogerk) document
+     * @param component
+     */
     public ComponentSystemEvent(UIComponent component) {
         super(component);
     }
@@ -25,7 +36,7 @@ public abstract class ComponentSystemEvent extends SystemEvent {
 
 
     /**
-     * <p>Return the source {@link UIComponent} that sent this event.
+     * @return the source {@link UIComponent} that sent this event.
      */
     public UIComponent getComponent() {
 

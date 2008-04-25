@@ -6,8 +6,9 @@
 package javax.faces.event;
 
 /**
+ * RELEASE_PENDING (edburns,rogerk) document
  *
- * @author edburns
+ * @since 2.0
  */
 public interface ViewMapListener extends SystemEventListener {
 

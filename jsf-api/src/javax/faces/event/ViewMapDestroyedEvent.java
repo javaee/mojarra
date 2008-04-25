@@ -19,11 +19,23 @@ import javax.faces.component.UIViewRoot;
  * UIViewRoot is different from the current, non-<code>null</code>
  * UIViewRoot.  See {@link javax.faces.context.FacesContext#setViewRoot}
  * for the normative specification of this behavior.</p>
-
+ *
  * </div>
+ *
+ * @since 2.0
  */
 public class ViewMapDestroyedEvent extends ComponentSystemEvent {
 
+    private static final long serialVersionUID = 4470489935758914483L;
+
+
+    // ------------------------------------------------------------ Constructors
+
+
+    /**
+     * RELEASE_PENDING (edburs,rogerk) document
+     * @param component
+     */
     public ViewMapDestroyedEvent(UIViewRoot component) {
         super(component);
     }

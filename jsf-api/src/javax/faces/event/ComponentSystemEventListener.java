@@ -15,6 +15,7 @@ package javax.faces.event;
  * {@link ComponentSystemEvent} because the event will always be associated with
  * a {@link javax.faces.component.UIComponent} instance.</p>
  *
+ * @since 2.0
  */
 public interface ComponentSystemEventListener extends FacesListener {
 
@@ -29,6 +30,6 @@ public interface ComponentSystemEventListener extends FacesListener {
      * @throws AbortProcessingException if lifecycle processing should
      * cease for this request.
      */
-
     public void processEvent(ComponentSystemEvent event) throws AbortProcessingException;
+    
 }

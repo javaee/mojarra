@@ -58,21 +58,19 @@ import java.util.List;
  * management system.  One way to ensure this is to have the class and
  * the list members implement {@link javax.faces.component.StateHolder}
  * or {@link java.io.Serializable}.</p>
+ *
+ * @since 2.0
  */
 
 public interface SystemEventListenerHolder {
 
     /**
      * <div class="changed_added_2_0">
-     
      * <p>Return a <code>List</code> of {@link SystemEventListener}
      * instances that have been installed into the class implementing
      * this interface.</p>
-
      * </div>
-     *
-     */ 
-    
+     */
     public List<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> facesEventClass);
 
 }

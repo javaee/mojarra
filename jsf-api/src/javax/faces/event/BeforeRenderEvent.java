@@ -20,12 +20,21 @@ import javax.faces.component.UIComponent;
  * UIComponent#getParent}, {@link UIComponent#getClientId}, and other
  * methods that depend upon the component instance being added into the
  * view.</p>
-
+ *
  * </div>
-
+ *
+ * @since 2.0
  */
 public class BeforeRenderEvent extends ComponentSystemEvent {
 
+
+    // ------------------------------------------------------------ Constructors
+
+
+    /**
+     * RELEASE_PENDING (edburns,rogerk) document
+     * @param component
+     */
     public BeforeRenderEvent(UIComponent component) {
         super(component);
     }
