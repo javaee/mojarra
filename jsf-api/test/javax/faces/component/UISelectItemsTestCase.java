@@ -160,7 +160,7 @@ public class UISelectItemsTestCase extends UIComponentBaseTestCase {
 
     public void testValueBindings() {
 
-	super.testValueBindings();
+	super.PENDING_FIXME_testValueBindings();
 	UISelectItems test = (UISelectItems) component;
 
 	// "value" property

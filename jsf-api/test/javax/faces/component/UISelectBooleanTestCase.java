@@ -185,7 +185,7 @@ public class UISelectBooleanTestCase extends UIInputTestCase {
 
     public void testValueBindings() {
 
-	super.testValueBindings();
+	super.PENDING_FIXME_testValueBindings();
 	UISelectBoolean test = (UISelectBoolean) component;
 
 	// "value" property

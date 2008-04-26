@@ -176,7 +176,7 @@ public class UIParameterTestCase extends UIComponentBaseTestCase {
 
     public void testValueBindings() {
 
-	super.testValueBindings();
+	super.PENDING_FIXME_testValueBindings();
 	UIParameter test = (UIParameter) component;
 
 	// "name" property

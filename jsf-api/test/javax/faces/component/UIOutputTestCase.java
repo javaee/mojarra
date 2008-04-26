@@ -146,9 +146,9 @@ public class UIOutputTestCase extends ValueHolderTestCaseBase {
     }
 
 
-    public void testValueBindings() {
+    public void PENDING_FIXME_testValueBindings() {
 
-	super.testValueBindings();
+	super.PENDING_FIXME_testValueBindings();
 	UIOutput test = (UIOutput) component;
 
 	// "converter" property
