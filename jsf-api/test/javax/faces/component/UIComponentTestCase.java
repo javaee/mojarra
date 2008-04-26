@@ -41,9 +41,18 @@
 package javax.faces.component;
 
 
+import com.sun.faces.mock.MockApplication;
+import com.sun.faces.mock.MockExternalContext;
+import com.sun.faces.mock.MockFacesContext;
+import com.sun.faces.mock.MockHttpServletRequest;
+import com.sun.faces.mock.MockHttpServletResponse;
+import com.sun.faces.mock.MockHttpSession;
+import com.sun.faces.mock.MockLifecycle;
+import com.sun.faces.mock.MockRenderKit;
+import com.sun.faces.mock.MockServletConfig;
+import com.sun.faces.mock.MockServletContext;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -51,6 +60,10 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
+import javax.faces.FactoryFinder;
+import javax.faces.application.ApplicationFactory;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -107,6 +120,18 @@ public class UIComponentTestCase extends TestCase {
         }
         
     };    
+    
+    // Mock object instances for our tests
+    protected MockApplication         application = null;
+    protected MockServletConfig       config = null;
+    protected MockExternalContext     externalContext = null;
+    protected MockFacesContext        facesContext = null;
+    protected MockLifecycle           lifecycle = null;
+    protected MockHttpServletRequest  request = null;
+    protected MockHttpServletResponse response = null;
+    protected MockServletContext      servletContext = null;
+    protected MockHttpSession         session = null;
+    
 
     // ------------------------------------------------------------ Constructors
 
@@ -129,6 +154,47 @@ public class UIComponentTestCase extends TestCase {
         expectedRendered = true;
         expectedRendererType = null;
         expectedRendersChildren = false;
+        
+        // Set up Servlet API Objects
+        servletContext = new MockServletContext();
+        servletContext.addInitParameter("appParamName", "appParamValue");
+        servletContext.setAttribute("appScopeName", "appScopeValue");
+        config = new MockServletConfig(servletContext);
+        session = new MockHttpSession();
+        session.setAttribute("sesScopeName", "sesScopeValue");
+        request = new MockHttpServletRequest(session);
+        request.setAttribute("reqScopeName", "reqScopeValue");
+        response = new MockHttpServletResponse();
+
+        // Set up Faces API Objects
+	FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY,
+				 "com.sun.faces.mock.MockApplicationFactory");
+	FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
+				 "com.sun.faces.mock.MockRenderKitFactory");
+
+        externalContext =
+            new MockExternalContext(servletContext, request, response);
+        lifecycle = new MockLifecycle();
+        facesContext = new MockFacesContext(externalContext, lifecycle);
+        ApplicationFactory applicationFactory = (ApplicationFactory)
+            FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        application = (MockApplication) applicationFactory.getApplication();
+        facesContext.setApplication(application);
+	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+	root.setViewId("/viewId");
+        facesContext.setViewRoot(root);
+        RenderKitFactory renderKitFactory = (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        RenderKit renderKit = new MockRenderKit();
+        try {
+            renderKitFactory.addRenderKit(RenderKitFactory.HTML_BASIC_RENDER_KIT,
+                                          renderKit);
+        } catch (IllegalArgumentException e) {
+            ;
+        }
+        Map map = new HashMap();
+        externalContext.setRequestParameterMap(map);
+        
         component = new TestComponent(expectedId);
 
     }
