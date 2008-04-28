@@ -162,7 +162,7 @@ public abstract class ResourceHandler {
      * does not supplement it.  </p>
      */
     public static final String RESOURCE_EXCLUDES_PARAM_NAME =
-          "javax.faces.RESOURCE_EXLCUDES";
+          "javax.faces.RESOURCE_EXCLUDES";
 
     /**
      * <p class="changed_added_2_0">The default value for the {@link
