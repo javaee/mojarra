@@ -329,6 +329,68 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
     }
 
 
+    public void testPhaseListenerExceptions() throws Exception {
+        PhaseId[] ids = {
+              PhaseId.APPLY_REQUEST_VALUES,
+              PhaseId.PROCESS_VALIDATIONS,
+              PhaseId.UPDATE_MODEL_VALUES,
+              PhaseId.INVOKE_APPLICATION,
+              PhaseId.RENDER_RESPONSE };
+        Class[] args = new Class[]{PhaseEvent.class};
+        MethodExpression beforeExpression = facesContext.getApplication()
+              .getExpressionFactory()
+              .createMethodExpression(facesContext.getELContext(),
+                                      "#{bean.beforePhase}", null,
+                                      args);
+        MethodExpression afterExpression = facesContext.getApplication()
+              .getExpressionFactory()
+              .createMethodExpression(facesContext.getELContext(),
+                                      "#{bean.afterPhase}", null,
+                                      args);
+        for (PhaseId id : ids) {
+            UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+            PhaseListenerBean bean = new PhaseListenerBean(id, true, false);
+            PhaseListenerBean pl1 = new PhaseListenerBean(id);
+            PhaseListenerBean pl2 = new PhaseListenerBean(id);
+            facesContext.getExternalContext().getRequestMap().put("bean", bean);
+            root.setBeforePhaseListener(beforeExpression);
+            root.setAfterPhaseListener(afterExpression);
+            root.addPhaseListener(pl1);
+            root.addPhaseListener(pl2);
+
+            // validate behavior
+            callRightLifecycleMethodGivenPhaseId(root, id);
+            assertTrue(bean.isBeforePhaseCalled());
+            assertTrue(!bean.isAfterPhaseCalled());
+            assertTrue(!pl1.isBeforePhaseCalled());
+            assertTrue(!pl1.isAfterPhaseCalled());
+            assertTrue(!pl2.isBeforePhaseCalled());
+            assertTrue(!pl2.isAfterPhaseCalled());
+
+            // ensure PLs are invoked properly in the case of exceptions
+            root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+            bean = new PhaseListenerBean(id);
+            pl1 = new PhaseListenerBean(id, true, false);
+            pl2 = new PhaseListenerBean(id);
+            facesContext.getExternalContext().getRequestMap().put("bean", bean);
+            root.setBeforePhaseListener(beforeExpression);
+            root.setAfterPhaseListener(afterExpression);
+            root.addPhaseListener(pl1);
+            root.addPhaseListener(pl2);
+
+            // validate behavior
+            callRightLifecycleMethodGivenPhaseId(root, id);
+            assertTrue(bean.isBeforePhaseCalled());
+            assertTrue(bean.isAfterPhaseCalled());
+            assertTrue(pl1.isBeforePhaseCalled());
+            assertTrue(!pl1.isAfterPhaseCalled());
+            assertTrue(!pl2.isBeforePhaseCalled());
+            assertTrue(!pl2.isAfterPhaseCalled());
+        }
+
+    }
+
+
 	
     public void doTestPhaseMethodExpression(UIViewRoot root, 
 					 boolean skipping) throws Exception {
@@ -751,33 +813,52 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
         vr.setLocale(new Locale("fr", "FR"));
     }
 
-    public static class PhaseListenerBean extends Object implements PhaseListener {
-	private boolean beforePhaseCalled = false;
-	private boolean afterPhaseCalled = false;
-	private PhaseId phaseId = null;
+    public static class PhaseListenerBean extends Object
+          implements PhaseListener {
+        private boolean beforePhaseCalled = false;
+        private boolean afterPhaseCalled = false;
+        private PhaseId phaseId = null;
+        private boolean exceptionBefore;
+        private boolean exceptionAfter;
 
-	public PhaseListenerBean(PhaseId phaseId) {
-	    this.phaseId = phaseId;
-	}
+        public PhaseListenerBean(PhaseId phaseId) {
+            this.phaseId = phaseId;
+        }
 
-	public boolean isBeforePhaseCalled() {
-	    return beforePhaseCalled;
-	}
-	
-	public boolean isAfterPhaseCalled() {
-	    return afterPhaseCalled;
-	}
-	
-	public void beforePhase(PhaseEvent e) {
-	    beforePhaseCalled = true;
-	}
-	    
-	public void afterPhase(PhaseEvent e) {
-	    afterPhaseCalled = true;
-	}
+        public PhaseListenerBean(PhaseId phaseId,
+                                 boolean exceptionBefore,
+                                 boolean exceptionAfter) {
+            this(phaseId);
+            this.exceptionBefore = exceptionBefore;
+            this.exceptionAfter = exceptionAfter;
+        }
 
-	public PhaseId getPhaseId() { return phaseId; }
-	    
+        public boolean isBeforePhaseCalled() {
+            return beforePhaseCalled;
+        }
+
+        public boolean isAfterPhaseCalled() {
+            return afterPhaseCalled;
+        }
+
+        public void beforePhase(PhaseEvent e) {
+            beforePhaseCalled = true;
+            if (exceptionBefore) {
+                throw new RuntimeException();
+            }
+        }
+
+        public void afterPhase(PhaseEvent e) {
+            afterPhaseCalled = true;
+            if (exceptionAfter) {
+                throw new RuntimeException();
+            }
+        }
+
+        public PhaseId getPhaseId() {
+            return phaseId;
+        }
+
     }
 
     public static class PhaseSkipTestComponent extends UIInput {

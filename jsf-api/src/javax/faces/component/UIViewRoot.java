@@ -65,6 +65,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.ListIterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.event.AfterAddToParentEvent;
@@ -225,7 +226,21 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
 
     private boolean skipPhase;
 
-    // -------------------------------------------------------------- Properties
+    /**
+     * <p>Set and cleared during the lifetime of a lifecycle phase.  Has no
+     * meaning between phases.  If <code>true</code>, the
+     * <code>MethodExpression</code> associated with <code>afterPhase</code>
+     * will not be invoked nor will any PhaseListeners associated with this
+     * UIViewRoot.
+     */
+    private boolean beforeMethodException;
+
+    /**
+     * <p>Set and cleared during the lifetime of a lifecycle phase.  Has no
+     * meaning between phases.
+     */
+    private ListIterator<PhaseListener> phaseListenerIterator;
+
 
     // -------------------------------------------------------------- Properties
 
@@ -264,7 +279,12 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
                     result = (String) vb.getValue(context.getELContext());
                 }
                 catch (ELException e) {
-                    // PENDING(edburns): log this
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE,
+                                   "severe.component.unable_to_process_expression",
+                                   new Object[]{vb.getExpressionString(),
+                                                "renderKitId"});
+                    }
                     result = null;
                 }
             } else {
@@ -684,10 +704,17 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
 
     // ------------------------------------------------ Lifecycle Phase Handlers
 
+    private void initState() {
+        skipPhase = false;
+        beforeMethodException = false;
+        phaseListenerIterator =
+              ((phaseListeners != null) ? phaseListeners.listIterator() : null);
+    }
+
     // avoid creating the PhaseEvent if possible by doing redundant
     // null checks.
     private void notifyBefore(FacesContext context, PhaseId phaseId) {
-        if (null != beforePhase || null != phaseListeners) {
+        if (null != beforePhase || null != phaseListenerIterator) {
             notifyPhaseListeners(context, phaseId, true);
         }
     }
@@ -695,7 +722,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
     // avoid creating the PhaseEvent if possible by doing redundant
     // null checks.
     private void notifyAfter(FacesContext context, PhaseId phaseId) {
-        if (null != afterPhase || null != phaseListeners) {
+        if (null != afterPhase || null != phaseListenerIterator) {
             notifyPhaseListeners(context, phaseId, false);
         }
     }
@@ -715,14 +742,17 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      */
     @Override
     public void processDecodes(FacesContext context) {
-        skipPhase = false;
+        initState();
         notifyBefore(context, PhaseId.APPLY_REQUEST_VALUES);
-        if (!skipPhase) {
-            super.processDecodes(context);
-            broadcastEvents(context, PhaseId.APPLY_REQUEST_VALUES);
+        try {
+            if (!skipPhase) {
+                super.processDecodes(context);
+                broadcastEvents(context, PhaseId.APPLY_REQUEST_VALUES);
+            }
+        } finally {
+            clearFacesEvents(context);
+            notifyAfter(context, PhaseId.APPLY_REQUEST_VALUES);
         }
-        clearFacesEvents(context);
-        notifyAfter(context, PhaseId.APPLY_REQUEST_VALUES);
     }
 
     /**
@@ -741,9 +771,8 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
     @Override
     public void encodeBegin(FacesContext context) throws IOException {
 
-        skipPhase = false;
+        initState();
         notifyBefore(context, PhaseId.RENDER_RESPONSE);
-
         if (!skipPhase) {
             super.encodeBegin(context);
         }
@@ -760,7 +789,6 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
     @Override
     public void encodeEnd(FacesContext context) throws IOException {
         super.encodeEnd(context);
-
         notifyAfter(context, PhaseId.RENDER_RESPONSE);
     }
 
@@ -782,7 +810,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
 
         boolean hasPhaseMethodExpression =
               (isBefore && (null != beforePhase)) ||
-              (!isBefore && (null != afterPhase));
+              (!isBefore && (null != afterPhase) && !beforeMethodException);
         MethodExpression expression = isBefore ? beforePhase : afterPhase;
 
         if (hasPhaseMethodExpression) {
@@ -792,14 +820,26 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
                             context.getRenderResponse();
             }
             catch (Exception e) {
-                // PENDING(edburns): log this
+                if (isBefore) {
+                    beforeMethodException = true;
+                }
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE,
+                               "severe.component.unable_to_process_expression",
+                               new Object[] { expression.getExpressionString(),
+                                              (isBefore ? "beforePhase" : "afterPhase")});
+                }
+                return;
             }
         }
-        if (null != phaseListeners) {
-            Iterator<PhaseListener> iter = phaseListeners.iterator();
-            PhaseListener curListener;
-            while (iter.hasNext()) {
-                curListener = iter.next();
+        if (phaseListenerIterator != null && !beforeMethodException) {
+            while ((isBefore)
+                   ? phaseListenerIterator.hasNext()
+                   : phaseListenerIterator.hasPrevious()) {
+                PhaseListener curListener = ((isBefore)
+                                             ? phaseListenerIterator.next()
+                                             : phaseListenerIterator
+                                                   .previous());
                 if (phaseId == curListener.getPhaseId() ||
                     PhaseId.ANY_PHASE == curListener.getPhaseId()) {
                     try {
@@ -812,7 +852,15 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
                                     context.getRenderResponse();
                     }
                     catch (Exception e) {
-                        // PENDING(edburns): log this
+                        if (isBefore && phaseListenerIterator.hasPrevious()) {
+                            phaseListenerIterator.previous();
+                        }
+                        if (LOGGER.isLoggable(Level.SEVERE)) {
+                            LOGGER.log(Level.SEVERE,
+                                       "severe.component.uiviewroot_error_invoking_phaselistener",
+                                       curListener.getClass().getName());
+                        }
+                        return;
                     }
                 }
             }
@@ -855,14 +903,17 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      */
     @Override
     public void processValidators(FacesContext context) {
-        skipPhase = false;
+        initState();
         notifyBefore(context, PhaseId.PROCESS_VALIDATIONS);
-        if (!skipPhase) {
-            super.processValidators(context);
-            broadcastEvents(context, PhaseId.PROCESS_VALIDATIONS);
+        try {
+            if (!skipPhase) {
+                super.processValidators(context);
+                broadcastEvents(context, PhaseId.PROCESS_VALIDATIONS);
+            }
+        } finally {
+            clearFacesEvents(context);
+            notifyAfter(context, PhaseId.PROCESS_VALIDATIONS);
         }
-        clearFacesEvents(context);
-        notifyAfter(context, PhaseId.PROCESS_VALIDATIONS);
     }
 
 
@@ -880,14 +931,17 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      */
     @Override
     public void processUpdates(FacesContext context) {
-        skipPhase = false;
+        initState();
         notifyBefore(context, PhaseId.UPDATE_MODEL_VALUES);
-        if (!skipPhase) {
-            super.processUpdates(context);
-            broadcastEvents(context, PhaseId.UPDATE_MODEL_VALUES);
+        try {
+            if (!skipPhase) {
+                super.processUpdates(context);
+                broadcastEvents(context, PhaseId.UPDATE_MODEL_VALUES);
+            }
+        } finally {
+            clearFacesEvents(context);
+            notifyAfter(context, PhaseId.UPDATE_MODEL_VALUES);
         }
-        clearFacesEvents(context);
-        notifyAfter(context, PhaseId.UPDATE_MODEL_VALUES);
     }
 
 
@@ -904,15 +958,17 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      *                              is <code>null</code>
      */
     public void processApplication(FacesContext context) {
-        skipPhase = false;
+        initState();
         notifyBefore(context, PhaseId.INVOKE_APPLICATION);
-
-        if (!skipPhase) {
-            // NOTE - no tree walk is performed; this is a UIViewRoot-only operation
-            broadcastEvents(context, PhaseId.INVOKE_APPLICATION);
+        try {
+            if (!skipPhase) {
+                // NOTE - no tree walk is performed; this is a UIViewRoot-only operation
+                broadcastEvents(context, PhaseId.INVOKE_APPLICATION);
+            }
+        } finally {
+            clearFacesEvents(context);
+            notifyAfter(context, PhaseId.INVOKE_APPLICATION);
         }
-        clearFacesEvents(context);
-        notifyAfter(context, PhaseId.INVOKE_APPLICATION);
     }
 
 
@@ -978,7 +1034,11 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
                     resultLocale = vb.getValue(context.getELContext());
                 }
                 catch (ELException e) {
-                    // PENDING(edburns): log this
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE,
+                                   "severe.component.unable_to_process_expression",
+                                   new Object[]{vb.getExpressionString(), "locale"});
+                    }
                 }
 
                 if (null == resultLocale) {
