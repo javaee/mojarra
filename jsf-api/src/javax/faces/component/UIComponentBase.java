@@ -580,6 +580,11 @@ public abstract class UIComponentBase extends UIComponent {
             throw new NullPointerException();
         }
 
+        if (expr.length() == 0) {
+            // if an empty value is provided, fail fast.
+            throw new IllegalArgumentException("\"\"");
+        }
+
         // Identify the base component from which we will perform our search
         UIComponent base = this;
         if (expr.charAt(0) == NamingContainer.SEPARATOR_CHAR) {
