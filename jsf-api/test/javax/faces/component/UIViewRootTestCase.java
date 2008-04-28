@@ -41,38 +41,27 @@
 package javax.faces.component;
 
 
+import com.sun.faces.mock.MockRenderKit;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.io.IOException;
 import javax.faces.FactoryFinder;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseListener;
-import javax.faces.event.PhaseId;
-import javax.faces.validator.Validator;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIInput;
 import javax.faces.event.PhaseId;
-import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import com.sun.faces.mock.MockExternalContext;
-import com.sun.faces.mock.MockFacesContext;
-import com.sun.faces.mock.MockHttpServletRequest;
-import com.sun.faces.mock.MockHttpServletResponse;
-import com.sun.faces.mock.MockLifecycle;
-import com.sun.faces.mock.MockServletContext;
-import javax.faces.TestUtil;
 
 import javax.el.ValueExpression;
 import javax.el.MethodExpression;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
 
 
 /**
@@ -124,6 +113,7 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
     };
 
     public void setUp() {
+        FactoryFinder.releaseFactories();
 	super.setUp();
 	for (int i = 0, len = FACTORIES.length; i < len; i++) {
 	    System.getProperties().remove(FACTORIES[i][0]);
@@ -137,6 +127,19 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 	    FactoryFinder.setFactory(FACTORIES[i][0],
 				     FACTORIES[i][1]);
 	}
+        
+	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+	root.setViewId("/viewId");
+        facesContext.setViewRoot(root);
+        RenderKitFactory renderKitFactory = (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        RenderKit renderKit = new MockRenderKit();
+        try {
+            renderKitFactory.addRenderKit(RenderKitFactory.HTML_BASIC_RENDER_KIT,
+                                          renderKit);
+        } catch (IllegalArgumentException e) {
+            ;
+        }
 
 	
     }
@@ -159,6 +162,7 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 
         // Register three listeners, with the second one set to abort
         UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        facesContext.setViewRoot(root);
         root.addFacesListener
             (new TestListener("a", false));
         root.addFacesListener
@@ -185,6 +189,8 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 
         // Register a listener that will conditionally queue a new event
         UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        facesContext.setViewRoot(root);
+
         root.addFacesListener
             (new TestListener("t", "2", "4"));
         TestListener.trace(null);
@@ -224,7 +230,8 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 
     public void testLocaleFromVB() throws Exception {
 	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
-	ValueExpression expression = application.getExpressionFactory().createValueExpression(facesContext.getELContext(),
+        facesContext.setViewRoot(root);
+        ValueExpression expression = application.getExpressionFactory().createValueExpression(facesContext.getELContext(),
 											      "#{locale}", Object.class);
 	request.setAttribute("locale", Locale.CHINESE);
 	assertEquals(Locale.getDefault(), root.getLocale());
@@ -245,7 +252,8 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 
     public void testUninitializedInstance() throws Exception {
 	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
-	assertEquals(javax.faces.render.RenderKitFactory.HTML_BASIC_RENDER_KIT,
+        facesContext.setViewRoot(root);
+        assertEquals(javax.faces.render.RenderKitFactory.HTML_BASIC_RENDER_KIT,
 		     root.getRenderKitId());
 	assertEquals(Locale.getDefault(), root.getLocale());
 	
@@ -253,38 +261,46 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 
     public void testPhaseMethExpression() throws Exception {
 	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
-	doTestPhaseMethodExpression(root, false);
+        facesContext.setViewRoot(root);
+        doTestPhaseMethodExpression(root, false);
     }
 
     public void testPhaseMethExpressionSkipping() throws Exception {
 	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        facesContext.setViewRoot(root);
 	doTestPhaseMethodExpression(root, true);
     }
 
     public void testPhaseListener() throws Exception {
 	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        facesContext.setViewRoot(root);
 	doTestPhaseListener(root, false);
     }
 
     public void testPhaseListenerSkipping() throws Exception {
 	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        facesContext.setViewRoot(root);
 	doTestPhaseListener(root, true);
     }
 
     public void testPhaseMethodExpressionAndListener() throws Exception {
 	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        facesContext.setViewRoot(root);
 	doTestPhaseMethodExpressionAndListener(root, false);
     }
 
     public void testPhaseMethodExpressionAndListenerSkipping() throws Exception {
 	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        facesContext.setViewRoot(root);
 	doTestPhaseMethodExpressionAndListener(root, true);
     }
 
     public void testPhaseMethExpressionState() throws Exception {
 	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        facesContext.setViewRoot(root);
 	Object state = root.saveState(facesContext);
 	root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        facesContext.setViewRoot(root);
 	root.restoreState(facesContext, state);
 
 	doTestPhaseMethodExpression(root, false);
@@ -292,8 +308,10 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 
     public void testPhaseListenerState() throws Exception {
 	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        facesContext.setViewRoot(root);
 	Object state = root.saveState(facesContext);
 	root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        facesContext.setViewRoot(root);
 	root.restoreState(facesContext, state);
 
 	doTestPhaseListener(root, false);
@@ -301,8 +319,10 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 
     public void testPhaseMethodExpressionAndListenerState() throws Exception {
 	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        facesContext.setViewRoot(root);
 	Object state = root.saveState(facesContext);
 	root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        facesContext.setViewRoot(root);
 	root.restoreState(facesContext, state);
 
 	doTestPhaseMethodExpressionAndListener(root, false);
@@ -482,6 +502,7 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
     // Test Events List Clearing
     public void testEventsListClear() {
         UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        facesContext.setViewRoot(root);
         TestEvent event1, event2, event3, event4 = null;
         event1 = new TestEvent(root, "1");
         event1.setPhaseId(PhaseId.APPLY_REQUEST_VALUES);
@@ -634,6 +655,7 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 
         // Register an event listener for the specified phase id
         UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        facesContext.setViewRoot(root);
 	TestEvent event = null;
         TestListener listener = new TestListener("t");
         root.addFacesListener(listener);
