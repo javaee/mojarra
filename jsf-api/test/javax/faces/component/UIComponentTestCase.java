@@ -174,6 +174,8 @@ public class UIComponentTestCase extends TestCase {
 
         externalContext =
             new MockExternalContext(servletContext, request, response);
+        Map map = new HashMap();
+        externalContext.setRequestParameterMap(map);
         lifecycle = new MockLifecycle();
         facesContext = new MockFacesContext(externalContext, lifecycle);
         ApplicationFactory applicationFactory = (ApplicationFactory)
@@ -192,8 +194,6 @@ public class UIComponentTestCase extends TestCase {
         } catch (IllegalArgumentException e) {
             ;
         }
-        Map map = new HashMap();
-        externalContext.setRequestParameterMap(map);
         
         component = new TestComponent(expectedId);
 

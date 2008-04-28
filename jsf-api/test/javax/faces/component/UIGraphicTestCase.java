@@ -199,7 +199,7 @@ public class UIGraphicTestCase extends UIComponentBaseTestCase {
 
     public void PENDING_FIXME_testValueBindings() {
 
-	super.PENDING_FIXME_testValueBindings();
+	super.testValueBindings();
 	UIGraphic test = (UIGraphic) component;
 
 	// "value" property

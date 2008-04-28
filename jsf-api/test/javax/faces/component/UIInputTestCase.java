@@ -470,9 +470,9 @@ public class UIInputTestCase extends UIOutputTestCase {
 
 
     // Test that appropriate properties are value binding enabled
-    public void PENDING_FIXME_testValueBindings() {
+    public void testValueBindings() {
 
-	super.PENDING_FIXME_testValueBindings();
+	super.testValueBindings();
 	UIInput test = (UIInput) component;
 
 	// "required" property

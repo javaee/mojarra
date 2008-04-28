@@ -399,7 +399,7 @@ public class UISelectManyTestCase extends UIInputTestCase {
     // Test that appropriate properties are value binding enabled
     public void testValueBindings() {
 
-	super.PENDING_FIXME_testValueBindings();
+	super.testValueBindings();
 	UISelectMany test = (UISelectMany) component;
 
 	// "value" property

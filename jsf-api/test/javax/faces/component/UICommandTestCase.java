@@ -419,7 +419,7 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
 
     public void PENDING_FIXME_testValueBindings() {
 
-	super.PENDING_FIXME_testValueBindings();
+	super.testValueBindings();
 	UICommand test = (UICommand) component;
 
 	// "immediate" property

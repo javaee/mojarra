@@ -1619,7 +1619,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 
     public void PENDING_FIXME_testValueBindings() {
 
-	super.PENDING_FIXME_testValueBindings();
+	super.testValueBindings();
 	UIData test = (UIData) component;
 
 	// "first" property

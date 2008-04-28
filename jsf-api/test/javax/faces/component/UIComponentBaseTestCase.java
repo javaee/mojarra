@@ -82,15 +82,6 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
 
     // Mock object instances for our tests
-    protected MockApplication         application = null;
-    protected MockServletConfig       config = null;
-    protected MockExternalContext     externalContext = null;
-    protected MockFacesContext        facesContext = null;
-    protected MockLifecycle           lifecycle = null;
-    protected MockHttpServletRequest  request = null;
-    protected MockHttpServletResponse response = null;
-    protected MockServletContext      servletContext = null;
-    protected MockHttpSession         session = null;
 
 
     // ------------------------------------------------------------ Constructors
@@ -112,47 +103,6 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     // Set up instance variables required by this test case.
     public void setUp() {
 
-        // Set up Servlet API Objects
-        servletContext = new MockServletContext();
-        servletContext.addInitParameter("appParamName", "appParamValue");
-        servletContext.setAttribute("appScopeName", "appScopeValue");
-        config = new MockServletConfig(servletContext);
-        session = new MockHttpSession();
-        session.setAttribute("sesScopeName", "sesScopeValue");
-        request = new MockHttpServletRequest(session);
-        request.setAttribute("reqScopeName", "reqScopeValue");
-        response = new MockHttpServletResponse();
-
-        // Set up Faces API Objects
-	FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY,
-				 "com.sun.faces.mock.MockApplicationFactory");
-	FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
-				 "com.sun.faces.mock.MockRenderKitFactory");
-
-        externalContext =
-            new MockExternalContext(servletContext, request, response);
-        lifecycle = new MockLifecycle();
-        facesContext = new MockFacesContext(externalContext, lifecycle);
-        ApplicationFactory applicationFactory = (ApplicationFactory)
-            FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        application = (MockApplication) applicationFactory.getApplication();
-        facesContext.setApplication(application);
-	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
-	root.setViewId("/viewId");
-        facesContext.setViewRoot(root);
-        RenderKitFactory renderKitFactory = (RenderKitFactory)
-            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        RenderKit renderKit = new MockRenderKit();
-        try {
-            renderKitFactory.addRenderKit(RenderKitFactory.HTML_BASIC_RENDER_KIT,
-                                          renderKit);
-        } catch (IllegalArgumentException e) {
-            ;
-        }
-        Map map = new HashMap();
-        externalContext.setRequestParameterMap(map);
-
-
         // Set up the component under test
         super.setUp();
         component = new TestComponent(expectedId);
@@ -168,6 +118,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
     // Tear down instance variables required by ths test case
     public void tearDown() {
+        externalContext.setRequestParameterMap(null);
 
         super.tearDown();
         application = null;
@@ -389,7 +340,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     }
 
 
-    public void PENDING_FIXME_testValueBindings() {
+    public void testValueBindings() {
 
 	UIComponentBase test = (UIComponentBase) component;
 
@@ -456,7 +407,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
     }
 
-    public void PENDING_FIXME_testValueExpressions() throws Exception {
+    public void testValueExpressions() throws Exception {
 
 	UIComponentBase test = (UIComponentBase) component;
 

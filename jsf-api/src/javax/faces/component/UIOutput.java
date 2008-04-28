@@ -171,7 +171,7 @@ public class UIOutput extends UIComponentBase
 
     private void processResourceDependencyAnnotationForAdd(FacesContext context,
             Converter source) {
-        if (!source.getClass().isAnnotationPresent(ResourceDependency.class)) {
+        if (null == source || !source.getClass().isAnnotationPresent(ResourceDependency.class)) {
             return;
         }
 
