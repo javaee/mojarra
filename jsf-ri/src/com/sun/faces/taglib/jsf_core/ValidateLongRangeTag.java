@@ -149,7 +149,7 @@ public class ValidateLongRangeTag extends MaxMinValidatorTag {
                                   context)).longValue();
             } else {
                 minimum =
-                Integer.valueOf(minimumExpression.getExpressionString()).
+                Long.valueOf(minimumExpression.getExpressionString()).
                     longValue();
             }
         }
@@ -160,7 +160,7 @@ public class ValidateLongRangeTag extends MaxMinValidatorTag {
                                   context)).longValue();
             } else {
                 maximum =
-                Integer.valueOf(maximumExpression.getExpressionString()).
+                Long.valueOf(maximumExpression.getExpressionString()).
                     longValue();
             }
         }

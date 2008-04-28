@@ -114,7 +114,7 @@
                                                                                      
       <h:inputText id="text7">
         <f:validateLongRange binding="#{validatorBean.longRangeValidator}"
-           maximum="4" />
+           minimum="13000000000" maximum="13999999999" />
       </h:inputText>
                                                                                      
       <h:message for="text7" />
