@@ -149,6 +149,7 @@ public class TagTestCaseBase extends TestCase {
 				 "com.sun.faces.mock.MockRenderKitFactory");
         externalContext =
             new MockExternalContext(servletContext, request, response);
+        externalContext.setRequestParameterMap(new HashMap());
         lifecycle = new MockLifecycle();
         facesContext = new MockFacesContext(externalContext, lifecycle);
         ApplicationFactory applicationFactory = (ApplicationFactory)
