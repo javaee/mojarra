@@ -48,7 +48,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -123,7 +122,6 @@ public class ConfigureListener implements ServletRequestListener,
 
     private ScheduledThreadPoolExecutor webResourcePool =
           new ScheduledThreadPoolExecutor(1);
-    private ScheduledFuture monitor;
 
     protected WebappLifecycleListener webAppListener;
     protected WebConfiguration webConfig;
@@ -387,11 +385,10 @@ public class ConfigureListener implements ServletRequestListener,
         List<URL> webURLs =
               (List<URL>) context.getAttribute("com.sun.faces.webresources");
         if (isDevModeEnabled() && webURLs != null && !webURLs.isEmpty()) {
-            monitor = webResourcePool
-                  .scheduleAtFixedRate(new WebConfigResourceMonitor(context, webURLs),
-                                       2000,
-                                       2000,
-                                       TimeUnit.MILLISECONDS);
+            webResourcePool.scheduleAtFixedRate(new WebConfigResourceMonitor(context, webURLs),
+                                               2000,
+                                               2000,
+                                               TimeUnit.MILLISECONDS);
         }
         context.removeAttribute("com.sun.faces.webresources");
 

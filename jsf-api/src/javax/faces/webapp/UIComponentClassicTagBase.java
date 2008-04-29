@@ -1542,9 +1542,9 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
         Map<String,Object> requestMap = getFacesContext().getExternalContext().getRequestMap();
         Integer serialNum = (Integer) requestMap.get(componentId);
         if (null == serialNum) {
-            serialNum = new Integer(1);
+            serialNum = 1;
         } else {
-            serialNum = new Integer(serialNum.intValue() + 1);
+            serialNum = serialNum.intValue() + 1;
         }
         requestMap.put(componentId, serialNum);
         componentId = componentId + UNIQUE_ID_PREFIX + serialNum.intValue();

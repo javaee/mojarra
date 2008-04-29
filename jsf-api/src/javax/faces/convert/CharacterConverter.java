@@ -111,7 +111,7 @@ public class CharacterConverter implements Converter {
         }
 
         try {
-            return (new Character(value.charAt(0)));
+            return (value.charAt(0));
         } catch (Exception e) {
             throw new ConverterException(
                  MessageFactory.getMessage(context,

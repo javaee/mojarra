@@ -421,9 +421,7 @@ public class ResultSetDataModel extends DataModel {
             if (!containsKey(key)) {
                 throw new IllegalArgumentException();
             }
-            if (!(key instanceof String)) {
-                throw new IllegalArgumentException();
-            }
+            
             try {
                 resultSet.absolute(index + 1);
                 Object previous = resultSet.getObject((String) realKey(key));
