@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.sun.faces.extensions</groupId>
+  <artifactId>jsf-ezcomp</artifactId>
+  <packaging>war</packaging>
+  <name>jsf-ezcomp</name>
+  <url>https://jsf-extensions.dev.java.net/</url>
+  <description>Run time jsf-extensions: compres</description>
+  <version>0.1</version>
+
+  <scm>
+    <connection>scm:svn:http://jsf-extensions.dev.java.net/svn/jsf-extensions/trunk</connection>
+    <developerConnection>scm:svn:https://jsf-extensions.dev.java.net/svn/jsf-extensions/trunk</developerConnection>
+    <url>https://jsf-extensions.dev.java.net/source/browse/jsf-extensions/</url>
+  </scm>
+
+  <build>
+    <defaultGoal>install</defaultGoal>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <targetPath>resources</targetPath>
+        <includes>
+            <include>*.taglib.xml</include>
+            <include>faces-config.xml</include>
+            <include>*.js</include>
+        </includes>
+     </resource>
+   </resources>
+    <finalName>jsf-ezcomp</finalName>
+    <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>RELEASE</version>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+        </plugins>
+  </build>
+
+
+  <repositories>
+    <repository>
+      <snapshots />
+      <id>codecaus</id>
+      <name>codehaus</name>
+      <url>http://repository.codehaus.org</url>
+    </repository>
+    <repository>
+      <snapshots />
+      <id>java.net</id>
+      <name>Java.net Maven 1.x Repository for external projects</name>
+      <url>https://maven-repository.dev.java.net/nonav/repository</url>
+      <layout>legacy</layout>
+    </repository>
+    <repository>
+      <snapshots />
+      <id>java.net.shared</id>
+      <name>Java.net Maven 1.x Repository for glassfish dependencies</name>
+      <url>http://download.java.net/javaee5/external/shared</url>
+      <layout>legacy</layout>
+    </repository>
+    <repository>
+      <snapshots />
+      <id>ibiblio</id>
+      <url>http://www.ibiblio.org/maven2/</url>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <dependency>
+      <groupId>javax.faces</groupId>
+      <artifactId>jsf-facelets</artifactId>
+      <version>1.1.11-EZCOMP</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.faces</groupId>
+      <artifactId>jsf-api</artifactId>
+      <version>2.0.0-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+            <groupId>javaee</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>6-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+  </dependencies>
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <reportSets><reportSet /></reportSets>
+      </plugin>
+       <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-compiler-plugin</artifactId>
+         <configuration>
+           <source>1.5</source>
+           <target>1.5</target>
+         </configuration>
+       </plugin>
+    </plugins>
+  </reporting>
+
+</project>
