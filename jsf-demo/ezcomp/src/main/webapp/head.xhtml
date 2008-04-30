@@ -4,7 +4,7 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:mjx="http://java.sun.com/jsf/mojarra/extensions"
       xmlns:hb="https://javaserverfaces.dev.java.net/demo/headbody"
-      xmlns:ez="http://java.sun.com/jsf/render-kit/ezcomp"
+      xmlns:ez="http://java.sun.com/jsf/composite/ezcomp"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 <f:view contentType="text/html"/>
 
@@ -19,13 +19,22 @@
 <h1>Template Text</h1>
 
 <h:form prependId="false">
+
+<p>
+<ez:loginPanel> 
+  <ui:param name="username" value="edburns" />
+  <ui:param name="password" value="foo" />
+</ez:loginPanel>
+
+Next to a composite component
+</p>
+
+
 <h:panelGrid border="1" columns="2">
 
 <h:panelGroup>
 
   <h:inputText />
-
-  <p><ez:input_login /> Next to a composite component</p>
 
   <mjx:outputScript name="ajaxZero.js" library="javax.faces" target="head"/>
   <mjx:outputScript name="ajaxOne.js" library="javax.faces" target="head"/>

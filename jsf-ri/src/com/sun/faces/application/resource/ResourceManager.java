@@ -306,9 +306,9 @@ public class ResourceManager {
      *
      * @return the Library instance for the specified library
      */
-    private LibraryInfo findLibrary(String libraryName,
-                                    String localePrefix,
-                                    FacesContext ctx) {
+     LibraryInfo findLibrary(String libraryName,
+                             String localePrefix,
+                             FacesContext ctx) {
 
         LibraryInfo library = webappHelper.findLibrary(libraryName,
                                                        localePrefix,
