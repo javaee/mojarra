@@ -42,6 +42,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.ConverterException;
 import javax.faces.render.Renderer;
+import javax.faces.FacesException;
 
 /**
  * Proxy instance for a groovy-based Renderers.  This allows the Renderer
@@ -51,15 +52,13 @@ import javax.faces.render.Renderer;
 public class RendererProxy extends Renderer {
 
     private String scriptName;
-    private GroovyHelper groovyHelper;
 
 
     // ------------------------------------------------------------ Constructors
 
 
-    public RendererProxy(String scriptName, GroovyHelper groovyHelper) {
+    public RendererProxy(String scriptName) {
         this.scriptName = scriptName;
-        this.groovyHelper = groovyHelper;
     }
 
 
@@ -113,7 +112,11 @@ public class RendererProxy extends Renderer {
 
     private Renderer getGroovyDelegate() {
 
-        return ((Renderer) groovyHelper.newInstance(scriptName));
+        try {
+            return ((Renderer) GroovyHelper.newInstance(scriptName));
+        } catch (Exception e) {
+            throw new FacesException(e);
+        }
 
     }
 }

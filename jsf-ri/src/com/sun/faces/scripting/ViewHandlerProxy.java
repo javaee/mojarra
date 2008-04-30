@@ -52,19 +52,15 @@ import javax.faces.context.FacesContext;
 public class ViewHandlerProxy extends ViewHandler {
 
     private String scriptName;
-    private GroovyHelper groovyHelper;
     private ViewHandler vhDelegate;
 
 
     // ------------------------------------------------------------ Constructors
     
 
-    public ViewHandlerProxy(String scriptName,
-                                  GroovyHelper groovyHelper,
-                                  ViewHandler vhDelegate) {
+    public ViewHandlerProxy(String scriptName, ViewHandler vhDelegate) {
 
         this.scriptName = scriptName;
-        this.groovyHelper = groovyHelper;
         this.vhDelegate = vhDelegate;
 
     }
@@ -123,9 +119,13 @@ public class ViewHandlerProxy extends ViewHandler {
 
     private ViewHandler getGroovyDelegate() {
 
-        return ((ViewHandler) groovyHelper.newInstance(scriptName,
-                                                       ViewHandler.class,
-                                                       vhDelegate));
+        try {
+            return ((ViewHandler) GroovyHelper.newInstance(scriptName,
+                                                           ViewHandler.class,
+                                                           vhDelegate));
+        } catch (Exception e) {
+            throw new FacesException(e);
+        }
 
     }
     

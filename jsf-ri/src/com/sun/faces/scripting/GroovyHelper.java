@@ -6,18 +6,12 @@ import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 
+import com.sun.faces.util.Util;
+
 /**
- * Created by IntelliJ IDEA. User: rlubke Date: Apr 16, 2008 Time: 11:15:48 AM
- * To change this template use File | Settings | File Templates.
+ * Base class for interfacing with Groovy.
  */
 public abstract class GroovyHelper {
-
-
-    public static boolean isGroovyScript(String value) {
-
-        return value.endsWith(".groovy");
-
-    }
 
 
     public static GroovyHelper getCurrentInstance(FacesContext ctx) {
@@ -43,8 +37,9 @@ public abstract class GroovyHelper {
     }
     public abstract Class<?> loadScript(String name);
 
-    public Object newInstance(String name, Class<?> type, Object root) {
-        Class<?> delegate = loadScript(name);
+    public static Object newInstance(String name, Class<?> type, Object root)
+    throws Exception {
+        Class<?> delegate = Util.loadClass(name, GroovyHelper.class);
         try {
             Constructor decorationCtor = requiresDecoration(delegate, type, root);
             if (decorationCtor != null) {
@@ -57,7 +52,7 @@ public abstract class GroovyHelper {
         }
     }
 
-    public Object newInstance(String name) {
+    public static Object newInstance(String name) throws Exception {
         return newInstance(name, null, null);
     }
 
@@ -67,7 +62,7 @@ public abstract class GroovyHelper {
     // --------------------------------------------------------- Private Methods
 
 
-     private Constructor requiresDecoration(Class<?> groovyClass, Class<?> ctorArgument, Object root) {
+     private static Constructor requiresDecoration(Class<?> groovyClass, Class<?> ctorArgument, Object root) {
         if (root != null) {
             try {
                 return groovyClass.getConstructor(ctorArgument);

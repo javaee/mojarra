@@ -39,6 +39,7 @@ package com.sun.faces.scripting;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
+import javax.faces.FacesException;
 
 /**
  * Proxy instance for a groovy-based PhaseListeners.  This allows the PhaseListener
@@ -48,14 +49,12 @@ import javax.faces.event.PhaseListener;
 public class PhaseListenerProxy implements PhaseListener {
 
     private String scriptName;
-    private GroovyHelper groovyHelper;
 
     // ------------------------------------------------------------ Constructors
 
 
-    public PhaseListenerProxy(String scriptName, GroovyHelper groovyHelper) {
+    public PhaseListenerProxy(String scriptName) {
         this.scriptName = scriptName;
-        this.groovyHelper = groovyHelper;
     }
 
     // ---------------------------------------------- Methods from PhaseListener
@@ -82,7 +81,11 @@ public class PhaseListenerProxy implements PhaseListener {
 
     private PhaseListener getGroovyDelegate() {
 
-        return ((PhaseListener) groovyHelper.newInstance(scriptName));
+        try {
+            return ((PhaseListener) GroovyHelper.newInstance(scriptName));
+        } catch (Exception e) {
+            throw new FacesException(e);
+        }
 
     }
 

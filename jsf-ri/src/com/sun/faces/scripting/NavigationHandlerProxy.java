@@ -38,6 +38,7 @@ package com.sun.faces.scripting;
 
 import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
+import javax.faces.FacesException;
 
 /**
  * Proxy instance for a groovy-based NavigationHandlers.  This allows the NavigationHandler
@@ -48,18 +49,15 @@ public class NavigationHandlerProxy extends NavigationHandler {
 
 
     private String scriptName;
-    private GroovyHelper groovyHelper;
     private NavigationHandler nvDelegate;
 
     // ------------------------------------------------------------ Constructors
 
 
     public NavigationHandlerProxy(String scriptName,
-                                  GroovyHelper groovyHelper,
                                   NavigationHandler nvDelegate) {
 
         this.scriptName = scriptName;
-        this.groovyHelper = groovyHelper;
         this.nvDelegate = nvDelegate;
 
     }
@@ -82,9 +80,13 @@ public class NavigationHandlerProxy extends NavigationHandler {
 
     private NavigationHandler getGroovyDelegate() {
 
-        return ((NavigationHandler) groovyHelper.newInstance(scriptName,
-                                                             NavigationHandler.class,
-                                                             nvDelegate));
+        try {
+            return ((NavigationHandler) GroovyHelper.newInstance(scriptName,
+                                                                 NavigationHandler.class,
+                                                                 nvDelegate));
+        } catch (Exception e) {
+            throw new FacesException(e);
+        }
 
     }
 }

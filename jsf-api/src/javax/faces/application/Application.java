@@ -48,6 +48,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.locks.ReentrantLock;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Type;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -70,7 +78,7 @@ import javax.el.ELResolver;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEventListenerHolder;
-
+import javax.faces.event.AbortProcessingException;
 
 
 /**
@@ -1113,9 +1121,9 @@ public abstract class Application {
      */
     public abstract ValueBinding createValueBinding(String ref)
         throws ReferenceSyntaxException;
-    
-    /**
 
+
+    /**
      * <p class="changed_added_2_0">If there are one or more listeners
      * for events of the type represented by
      * <code>systemEventClass</code>, call those listeners, passing
@@ -1128,91 +1136,128 @@ public abstract class Application {
      * <code>publishEvent</code> must honor the requirements stated in
      * {@link #subscribeToEvent} regarding the storage and retrieval of
      * listener instances.</p>
-
+     *
      * <div class="changed_added_2_0">
-
+     *
      * <p>The default implementation must implement an algorithm
      * semantically equivalent to the following to locate listener
      * instances and to invoke them.</p>
-
+     *
      * 	<ul>
-
-	  <li><p>If the <code>source</code> argument implements {@link
-	  javax.faces.event.SystemEventListenerHolder}, call {@link
-	  javax.faces.event.SystemEventListenerHolder#getListenersForEventClass}
-	  on it, passing the <code>systemEventClass</code> argument.  If
-	  the list is not empty, perform algorithm
-	  <em>traverseListenerList</em> on the list.</p></li>
-
-	  <li><p>If any <code>Application</code> level listeners have
-	  been installed by previous calls to {@link
-	  #subscribeToEvent(java.lang.Class, java.lang.Class,
-	  SystemEventListener)}, perform algorithm
-	  <em>traverseListenerList</em> on the list.</p></li>
-
-	  <li><p>If any <code>Application</code> level listeners have
-	  been installed by previous calls to {@link
-	  #subscribeToEvent(java.lang.Class, SystemEventListener)},
-	  perform algorithm <em>traverseListenerList</em> on the
-	  list.</p></li>
-
-	</ul>
-
+     *
+     * <li><p>If the <code>source</code> argument implements {@link
+     * javax.faces.event.SystemEventListenerHolder}, call {@link
+     * javax.faces.event.SystemEventListenerHolder#getListenersForEventClass}
+     * on it, passing the <code>systemEventClass</code> argument.  If
+     * the list is not empty, perform algorithm
+     * <em>traverseListenerList</em> on the list.</p></li>
+     *
+     * <li><p>If any <code>Application</code> level listeners have
+     * been installed by previous calls to {@link
+     * #subscribeToEvent(java.lang.Class, java.lang.Class,
+     *     SystemEventListener)}, perform algorithm
+     * <em>traverseListenerList</em> on the list.</p></li>
+     *
+     * <li><p>If any <code>Application</code> level listeners have
+     * been installed by previous calls to {@link
+     * #subscribeToEvent(java.lang.Class, SystemEventListener)},
+     * perform algorithm <em>traverseListenerList</em> on the
+     * list.</p></li>
+     *
+     * </ul>
+     *
      * <p>If the act of invoking the <code>processListener</code> method
      * causes an {@link javax.faces.event.AbortProcessingException} to
      * be thrown, processing of the listeners must be aborted.</p>
-
+     *
      * <p>Algorithm <em>traverseListenerList</em>: For each listener in
      * the list,</p>
-
-     * 	<ul>
-
-	  <li><p>Call {@link
-	  SystemEventListener#isListenerForSource}, passing the
-	  <code>source</code> argument.  If this returns
-	  <code>false</code>, take no action on the listener.</p></li>
-
-	  <li><p>Otherwise, if the event to be passed to the listener
-	  instances has not yet been constructed, construct the event,
-	  passing <code>source</code> as the argument to the
-	  one-argument constructor that takes an <code>Object</code>.
-	  This same event instance must be passed to all listener
-	  instances.</p></li>
-
-	  <li><p>Call {@link SystemEvent#isAppropriateListener},
-	  passing the listener instance as the argument.  If this
-	  returns <code>false</code>, take no action on the
-	  listener.</p></li>
-
-	  <li><p>Call {@link SystemEvent#processListener},
-	  passing the listener instance.  </p></li>
-
-	</ul>
-
-
+     *
+     * <ul>
+     *
+     * <li><p>Call {@link
+     * SystemEventListener#isListenerForSource}, passing the
+     * <code>source</code> argument.  If this returns
+     * <code>false</code>, take no action on the listener.</p></li>
+     *
+     * <li><p>Otherwise, if the event to be passed to the listener
+     * instances has not yet been constructed, construct the event,
+     * passing <code>source</code> as the argument to the
+     * one-argument constructor that takes an <code>Object</code>.
+     * This same event instance must be passed to all listener
+     * instances.</p></li>
+     *
+     * <li><p>Call {@link SystemEvent#isAppropriateListener},
+     * passing the listener instance as the argument.  If this
+     * returns <code>false</code>, take no action on the
+     * listener.</p></li>
+     *
+     * <li><p>Call {@link SystemEvent#processListener},
+     * passing the listener instance.  </p></li>
+     *
+     * </ul>
      * </div>
-
+     *
      * @param systemEventClass The <code>Class</code> of event that is
-     * being published.  Must be non-<code>null</code>.  
-
+     * being published.  Must be non-<code>null</code>.
+     *
      * @param source The source for the event of type
      * <code>systemEventClass</code>.  Must be non-<code>null</code>, and must
      * implement {@link SystemEventListenerHolder}.
+     *
+     * @since 2.0
+     */
+    public void publishEvent(Class<? extends SystemEvent> systemEventClass,
+                             SystemEventListenerHolder source) {
+        // Look for listeners stored on the source instance
 
-    */
-    
-    public abstract void publishEvent(Class<? extends SystemEvent> systemEventClass,
-            SystemEventListenerHolder source);
+        try {
+            // See if source implements ListenerHolder
+            List<SystemEventListener> listeners;
+            SystemEvent event = null;
+            // If so, see if source has any listeners for this type of event
+            listeners = source.getListenersForEventClass(systemEventClass);
+            // if you found some listeners,
+            if (!listeners.isEmpty()) {
+                // invoke them
+                event = traverseListenerList(listeners, null, source,
+                        systemEventClass);
+            }
+
+            // look for listeners stored on the application
+
+            // look for listeners for this specific source class.
+            listeners = getListeners(systemEventClass,
+                    source.getClass());
+
+            // if you found some listeners,
+            if (!listeners.isEmpty()) {
+                event = traverseListenerList(listeners, event, source,
+                        systemEventClass);
+            }
+
+            // look for listeners not specific to this source class
+            listeners = getListeners(systemEventClass, null);
+            // if you found some listeners,
+            if (listeners != null) {
+                event = traverseListenerList(listeners, event, source,
+                        systemEventClass);
+            }
+        } catch (AbortProcessingException ape) {
+            // PENDING(rlubke): log message
+            // PENDING(edburns): do we need to specify that a message must be logged?
+        }
+    }
 
     /**
      * <p class="changed_added_2_0">Install the listener instance
-     * referenced by argument <code>listener</code> into the 
+     * referenced by argument <code>listener</code> into the
      * application as a listener for events of type
      * <code>systemEventClass</code> that originate from objects of type
      * <code>sourceClass</code>.</p>
-
+     *
      * <div class="changed_added_2_0">
-
+     *
      * <p>If argument <code>sourceClass</code> is non-<code>null</code>,
      * <code>sourceClass</code> and <code>systemEventClass</code> must be
      * used to store the argument <code>listener</code> in the application in
@@ -1224,53 +1269,65 @@ public abstract class Application {
      * <code>listener</code> must be discoverable by the implementation
      * of {@link #publishEvent} given only <code>systemEventClass</code>.
      * </p>
-
-
+     *
      * </div>
-
+     *
      * @param systemEventClass the <code>Class</code> of event for which
      * <code>listener</code> must be fired.
-     
+     *
      * @param sourceClass the <code>Class</code> of the instance which
      * causes events of type <code>systemEventClass</code> to be fired.
      * May be <code>null</code>.
-
+     *
      * @param listener the implementation of {@link
      * SystemEventListener} whose {@link
      * SystemEventListener#processEvent} method must be called when
      * events of type <code>systemEventClass</code> are fired.
-
+     *
      * @throws <code>NullPointerException</code> if any combination of
      * <code>systemEventClass</code>, or <code>listener</code> are
      * <code>null</code>.
-     */ 
-    
-    public abstract void subscribeToEvent(Class<? extends SystemEvent> systemEventClass,
-            Class sourceClass,
-            SystemEventListener listener);
-    
+     *
+     * @since 2.0
+     */
+    public void subscribeToEvent(Class<? extends SystemEvent> systemEventClass,
+                                 Class sourceClass,
+                                 SystemEventListener listener) {
+
+        List<SystemEventListener> listeners =
+              maybeCreateAndGetListeners(systemEventClass, sourceClass);
+        listeners.add(listener);
+
+    }
+
 
     /**
      * <p class="changed_added_2_0">Install the listener instance
-     * referenced by argument <code>listener</code> into application 
+     * referenced by argument <code>listener</code> into application
      * as a listener for events of type
-     * <code>systemEventClass</code>.  The default implementation simply calls 
+     * <code>systemEventClass</code>.  The default implementation simply calls
      * through to {@link #subscribeToEvent(java.lang.Class, java.lang.Class, javax.faces.event.SystemEventListener)} passing <code>null</code> as the <code>sourceClass</code> argument</p>
-
+     *
      * @param systemEventClass the <code>Class</code> of event for which
      * <code>listener</code> must be fired.
-     
+     *
      * @param listener the implementation of {@link
      * SystemEventListener} whose {@link
      * SystemEventListener#processEvent} method must be called when
      * events of type <code>systemEventClass</code> are fired.
-
+     *
      * @throws <code>NullPointerException</code> if any combination of
      * <code>systemEventClass</code>, or <code>listener</code> are
      * <code>null</code>.
-     */ 
-    public abstract void subscribeToEvent(Class<? extends SystemEvent> systemEventClass,
-            SystemEventListener listener);
+     *
+     * @since 2.0
+     */
+    public void subscribeToEvent(Class<? extends SystemEvent> systemEventClass,
+                                 SystemEventListener listener) {
+
+        subscribeToEvent(systemEventClass, null, listener);
+
+    }
 
     /**
      * <p class="changed_added_2_0">Remove the listener instance
@@ -1282,52 +1339,154 @@ public abstract class Application {
      * javax.faces.event.SystemEventListener)} for the specification
      * of how the listener is stored, and therefore, how it must be
      * removed.</p>
-
+     *
      * @param systemEventClass the <code>Class</code> of event for which
      * <code>listener</code> must be fired.
-     
+     *
      * @param sourceClass the <code>Class</code> of the instance which
      * causes events of type <code>systemEventClass</code> to be fired.
      * May be <code>null</code>.
-
+     *
      * @param listener the implementation of {@link
      * SystemEventListener} to remove from the internal data
      * structure.
-
+     *
      * @throws <code>NullPointerException</code> if any combination of
-     * <code>context</code>, 
+     * <code>context</code>,
      * <code>systemEventClass</code>, or <code>listener</code> are
      * <code>null</code>.
-     */ 
+     */
+    public void unsubscribeFromEvent(Class<? extends SystemEvent> systemEventClass,
+                                     Class sourceClass,
+                                     SystemEventListener listener) {
 
-    public abstract void unsubscribeFromEvent(Class<? extends SystemEvent> systemEventClass,
-            Class sourceClass,
+        List<SystemEventListener> listeners = getListeners(systemEventClass,
+                                                           sourceClass);
+        if (listeners != null) {
+            listeners.remove(listener);
+        }
 
-            SystemEventListener listener);
+    }
 
     /**
      * <p class="changed_added_2_0">Remove the listener instance
-     * referenced by argument <code>listener</code> from the application 
-     * as a listener for events of type <code>systemEventClass</code>.  The 
+     * referenced by argument <code>listener</code> from the application
+     * as a listener for events of type <code>systemEventClass</code>.  The
      * default implementation simply calls through to {@link #unsubscribeFromEvent(java.lang.Class, javax.faces.event.SystemEventListener)} passing <code>null</code> as the <code>sourceClass</code> argument</p>
-
+     *
      * @param systemEventClass the <code>Class</code> of event for which
      * <code>listener</code> must be fired.
-     
+     *
      * @param listener the implementation of {@link
      * SystemEventListener} to remove from the internal data
      * structure.
-
+     *
      * @throws <code>NullPointerException</code> if any combination of
-     * <code>context</code>, <code>systemEventClass</code>, or 
+     * <code>context</code>, <code>systemEventClass</code>, or
      * <code>listener</code> are
      * <code>null</code>.
-     */ 
-    public abstract void unsubscribeFromEvent(Class<? extends SystemEvent> systemEventClass,
-            SystemEventListener listener);
+     */
+    public void unsubscribeFromEvent(Class<? extends SystemEvent> systemEventClass,
+            SystemEventListener listener) {
+
+        unsubscribeFromEvent(systemEventClass, null, listener);
+
+    }
 
 
     // --------------------------------------------------------- Private Methods
+
+
+
+    private Map<ListenerKey, List<SystemEventListener>> listenersByListenerKey =
+          new ConcurrentHashMap<ListenerKey,List<SystemEventListener>>();
+    private ReentrantLock lock = new ReentrantLock(true);
+
+    private List<SystemEventListener> getListeners(Class<? extends SystemEvent> facesEventClass,
+                                                   Class sourceClass) {
+
+        ListenerKey key = new ListenerKey(facesEventClass, sourceClass);
+
+        List<SystemEventListener> listeners = null;
+        if (!listenersByListenerKey.isEmpty()) {
+            listeners = listenersByListenerKey.get(key);
+        }
+
+        return listeners;
+    }
+
+    private List<SystemEventListener> maybeCreateAndGetListeners(Class<? extends SystemEvent> facesEventClass,
+            Class sourceClass) {
+
+        ListenerKey key = new ListenerKey(facesEventClass, sourceClass);
+
+        List<SystemEventListener> listeners = listenersByListenerKey.get(key);
+        if (listeners == null) {
+            lock.lock();
+            try {
+                listeners = listenersByListenerKey.get(key);
+                if (listeners == null) {
+                    listeners = new CopyOnWriteArrayList<SystemEventListener>();
+                    listenersByListenerKey.put(key, listeners);
+                }
+            } finally {
+                lock.unlock();
+            }            
+        }
+
+        return listeners;
+
+    }
+
+    private SystemEvent traverseListenerList(List<SystemEventListener> listeners,
+                                             SystemEvent event,
+                                             Object source,
+                                             Class<? extends SystemEvent> facesEventClass)
+    throws SecurityException, IllegalArgumentException, AbortProcessingException {
+
+        for (SystemEventListener curListener : listeners) {
+            if (curListener.isListenerForSource(source)) {
+                if (null == event) {
+                    // Build the SystemEvent looking for an exact match
+                    // on the constructor
+                    Constructor ctor = null;
+                    try {
+                        ctor = facesEventClass.getDeclaredConstructor(source.getClass());
+                    } catch (NoSuchMethodException ignored) {
+                        // no hit, so look for an assignable match
+                        Constructor[] ctors = facesEventClass.getConstructors();
+                        if (ctors != null) {
+                            for (Constructor c : ctors) {
+                                Class<?>[] params = c.getParameterTypes();
+                                if (params.length != 1) {
+                                    continue;
+                                }
+                                if (params[0].isAssignableFrom(source.getClass())) {
+                                    ctor = c;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if (ctor != null) {
+                        try {
+                            event = (SystemEvent) ctor.newInstance(source);
+                        } catch (Exception e) {
+                            // PENDING (rlubke) need to log this
+                        }
+                    }
+
+                }
+                assert(null != event);
+                if (event.isAppropriateListener(curListener)) {
+                    event.processListener(curListener);
+                }
+            }
+        }
+        return event;
+
+    }
 
 
     private static Application getDefaultApplicationImpl(FacesContext context) {
@@ -1348,5 +1507,62 @@ public abstract class Application {
     private static Application getDefaultApplicationImpl() {
         return getDefaultApplicationImpl(null);
     }
+
+
+    // ----------------------------------------------------------- Inner Classes
+
+
+    private class ListenerKey {
+
+        private Class<? extends SystemEvent> facesEventClass;
+        private Class sourceClass;
+
+        // -------------------------------------------------------- Constructors
+
+
+        public ListenerKey(Class<? extends SystemEvent> facesEventClass,
+                           Class sourceClass) {
+
+            this.facesEventClass = facesEventClass;
+            this.sourceClass = sourceClass;
+
+        }
+
+
+        // ---------------------------------------------------- Methods from Map
+
+        @Override
+        public boolean equals(Object obj) {
+
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final Application.ListenerKey other = (Application.ListenerKey) obj;
+            return !(this.facesEventClass != other.facesEventClass
+                       && (this.facesEventClass == null
+                             || !this.facesEventClass .equals(other.facesEventClass))) 
+                   && !(this.sourceClass != other.sourceClass
+                          && (this .sourceClass == null
+                              || !this .sourceClass.equals(other.sourceClass)));
+
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 5;
+            hash += (83 * hash + (this.facesEventClass != null
+                                     ? this .facesEventClass.hashCode()
+                                     : 0));
+            hash += (83 * hash + (this.sourceClass != null
+                                     ? this.sourceClass.hashCode()
+                                     : 0));
+            return hash;
+        }
+
+    } // END ListenerKey
+
 
 }

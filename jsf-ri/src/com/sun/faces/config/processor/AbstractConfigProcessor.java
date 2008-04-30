@@ -46,7 +46,6 @@ import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.Util;
-import com.sun.faces.scripting.GroovyHelper;
 import com.sun.faces.scripting.RendererProxy;
 import com.sun.faces.scripting.NavigationHandlerProxy;
 import com.sun.faces.scripting.ELResolverProxy;
@@ -210,15 +209,24 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
         Class clazz;
         Object returnObject = null;
         if (className != null) {
-            GroovyHelper groovyHelper = GroovyHelper.getCurrentInstance();
             try {
-                if (isDevModeEnabled() && groovyHelper != null && GroovyHelper
-                      .isGroovyScript(className)) {
-                    returnObject = createScriptProxy(rootType, className, root, groovyHelper);
-                }
-                if (returnObject == null) {
-                    clazz = loadClass(className, returnObject, rootType, groovyHelper);
-                    if (clazz != null) {
+                clazz = loadClass(className, returnObject, rootType);
+                if (clazz != null) {
+                    if (isDevModeEnabled()) {
+                        Class<?>[] interfaces = clazz.getInterfaces();
+                        if (interfaces != null) {
+                            for (Class<?> c : interfaces) {
+                                if ("groovy.lang.GroovyObject"
+                                      .equals(c.getName())) {
+                                    // all groovy classes will implement this interface
+                                    returnObject =
+                                          createScriptProxy(rootType, className, root);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if (returnObject == null) {
                         // Look for an adapter constructor if we've got
                         // an object to adapt
                         if ((rootType != null) && (root != null)) {
@@ -235,6 +243,7 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
                         returnObject = clazz.newInstance();
                     }
                 }
+
             } catch (ClassNotFoundException cnfe) {
                 throw new ConfigurationException(
                       buildMessage(MessageFormat.format("Unable to find class ''{0}''",
@@ -268,16 +277,10 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
 
     protected Class<?> loadClass(String className,
                                  Object fallback,
-                                 Class<?> expectedType,
-                                 GroovyHelper groovyHelper)
+                                 Class<?> expectedType)
     throws ClassNotFoundException {
 
-        Class<?> clazz;
-        if (groovyHelper != null && GroovyHelper.isGroovyScript(className)) {
-            clazz = groovyHelper.loadScript(className);
-        } else {
-            clazz = Util.loadClass(className, fallback);
-        }
+        Class<?> clazz = Util.loadClass(className, fallback);
         if (expectedType != null && !expectedType.isAssignableFrom(clazz)) {
                 throw new ClassCastException();
         }
@@ -300,26 +303,19 @@ public abstract class AbstractConfigProcessor implements ConfigProcessor {
 
     private Object createScriptProxy(Class<?> artifactType,
                                      String scriptName,
-                                     Object root,
-                                     GroovyHelper groovyHelper) {
+                                     Object root) {
         if (Renderer.class.equals(artifactType)) {
-            return new RendererProxy(scriptName, groovyHelper);
+            return new RendererProxy(scriptName);
         } else if (PhaseListener.class.equals(artifactType)) {
-            return new PhaseListenerProxy(scriptName, groovyHelper);
+            return new PhaseListenerProxy(scriptName);
         } else if (ViewHandler.class.equals(artifactType)) {
-            return new ViewHandlerProxy(scriptName,
-                                              groovyHelper,
-                                              (ViewHandler) root);
+            return new ViewHandlerProxy(scriptName, (ViewHandler) root);
         } else if (NavigationHandler.class.equals(artifactType)) {
-            return new NavigationHandlerProxy(scriptName,
-                                              groovyHelper,
-                                              (NavigationHandler) root);
+            return new NavigationHandlerProxy(scriptName, (NavigationHandler) root);
         } else if (ActionListener.class.equals(artifactType)) {
-            return new ActionListenerProxy(scriptName,
-                                           groovyHelper,
-                                           (ActionListener) root);
+            return new ActionListenerProxy(scriptName, (ActionListener) root);
         } else if (ELResolver.class.equals(artifactType)) {
-            return new ELResolverProxy(scriptName, groovyHelper);
+            return new ELResolverProxy(scriptName);
         } else {
             return null;
         }

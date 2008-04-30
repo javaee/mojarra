@@ -40,6 +40,7 @@ package com.sun.faces.scripting;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
+import javax.faces.FacesException;
 
 /**
  * Proxy instance for a groovy-based ActionListener.  This allows the ActionListener
@@ -49,7 +50,6 @@ import javax.faces.event.ActionListener;
 public class ActionListenerProxy implements ActionListener {
 
     private String scriptName;
-    private GroovyHelper groovyHelper;
     private ActionListener alDelegate;
 
 
@@ -57,11 +57,9 @@ public class ActionListenerProxy implements ActionListener {
 
 
     public ActionListenerProxy(String scriptName,
-                               GroovyHelper groovyHelper,
                                ActionListener alDelegate) {
 
         this.scriptName = scriptName;
-        this.groovyHelper = groovyHelper;
         this.alDelegate = alDelegate;
 
     }
@@ -83,9 +81,13 @@ public class ActionListenerProxy implements ActionListener {
 
     private ActionListener getGroovyDelegate() {
 
-        return ((ActionListener) groovyHelper.newInstance(scriptName,
-                                                          ActionListener.class,
-                                                          alDelegate));
+        try {
+            return ((ActionListener) GroovyHelper.newInstance(scriptName,
+                                                              ActionListener.class,
+                                                              alDelegate));
+        } catch (Exception e) {
+            throw new FacesException(e);
+        }
 
     }
 
