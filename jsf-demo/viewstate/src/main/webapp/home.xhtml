@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:mjx="http://java.sun.com/jsf/mojarra/extensions"
+      xmlns:vs="https://javaserverfaces.dev.java.net/demo/viewstate"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<f:view contentType="text/html"/>
+
+<mjx:head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>Collect And Encode View State</title>
+</mjx:head>
+
+
+<mjx:body>
+
+<h:form id="form1" prependId="false">
+
+    <h:panelGrid styleClass="title-panel">
+        <h:outputText value="Collect And Encode View State" styleClass="title-panel-text"/>
+        <h:outputText value="Powered By JavaServer Faces 2.0" styleClass="title-panel-subtext"/>
+    </h:panelGrid>
+
+    <h:panelGrid columns="1" border="1">
+`
+        <h:panelGrid border="1">
+            <f:facet name="header">
+                <h:outputText value="Instructions" styleClass="keytitle"/>
+            </f:facet>
+            <h:outputText value="#{bundle.instructions}" escape="false"/>
+        </h:panelGrid>
+
+        <h:panelGrid border="1">
+            <f:facet name="header">
+                <h:outputText value="Form Controls" styleClass="keytitle"/>
+            </f:facet>
+            <h:panelGrid columns="4" border="1">
+                <h:panelGrid columns="2" border="1">
+                    <h:outputText value="text1:"/>
+                    <h:inputText id="text1"/>
+                </h:panelGrid>
+                <h:panelGrid columns="2" border="1">
+                   <h:outputText value="oneMenu:"/>
+                    <h:selectOneMenu id="oneMenu" onchange="displayViewState(this); return false;" >
+                        <f:selectItems value="#{Bean.options1}" />
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <h:panelGrid columns="2" border="1">
+                    <h:outputText value="manyMenu:"/>
+                    <h:selectManyMenu id="manyMenu" onchange="displayViewState(this); return false;">
+                        <f:selectItems value="#{Bean.options2}" />
+                    </h:selectManyMenu>
+                </h:panelGrid>
+                <h:panelGrid columns="2" border="1">
+                    <h:outputText value="checkbox:"/>
+                    <h:selectBooleanCheckbox id="checkbox" value="checkbox" onchange="displayViewState(this); return false;"/>
+                </h:panelGrid>
+                <h:panelGrid columns="2" border="1">
+                    <h:outputText value="manyCheckbox:"/>
+                    <h:selectManyCheckbox id="manyCheckbox" onchange="displayViewState(this); return false;">
+                        <f:selectItems value="#{Bean.options3}" />
+                    </h:selectManyCheckbox>
+                </h:panelGrid>
+                <h:panelGrid columns="2" border="1">
+                    <h:outputText value="radio:"/>
+                    <h:selectOneRadio id="radio" layout="lineDirection" onchange="displayViewState(this); return false;"
+                        value="none" tabindex="30">
+                        <f:selectItems value="#{Bean.options3}" />
+                    </h:selectOneRadio>
+                </h:panelGrid>
+            <h:panelGrid styleClass="serialize-border">
+                <h:commandButton value="Serialize" onclick="displayViewState(this); return false;"/>
+            </h:panelGrid>
+            <h:panelGrid>
+                <h:commandButton type="reset" onclick="resetValues(); return false;" value="Reset" />
+            </h:panelGrid>
+            </h:panelGrid>
+        </h:panelGrid>
+    </h:panelGrid>
+</h:form>
+        
+<h:form id="form2" prependId="false">
+    <h:panelGrid border="1" columns="2" cellspacing="20">
+        <h:panelGrid columns="2" border="1">
+            <f:facet name="header">
+                <h:outputText value="Options" styleClass="keytitle"/>
+            </f:facet>
+            <h:panelGrid border="1">
+                <h:selectOneRadio id="options" layout="pageDirection"
+                    value="none" tabindex="30" onchange="buildOptions(); displayAssociativeArray(); return false;">
+                    <f:selectItem itemValue="inputs" itemLabel="inputs"/>
+                    <f:selectItem itemValue="ignore" itemLabel="ignore"/>
+                    <f:selectItem itemValue="none" itemLabel="none"/>
+                </h:selectOneRadio>
+            </h:panelGrid>
+            <h:panelGrid border="1">
+                <h:selectManyMenu id="optionsMenu" onchange="displayAssociativeArray(); return false;" />
+            </h:panelGrid>
+        </h:panelGrid>
+
+        <vs:ticker/>
+
+    </h:panelGrid>
+
+    <h:panelGrid border="1">
+        <f:facet name="header">
+            <h:outputText value="Options Associative Array" styleClass="keytitle"/>
+        </f:facet>
+        <h:panelGrid border="1">
+            <h:outputText id="associativeArray" value=""/>
+        </h:panelGrid>
+    </h:panelGrid>
+
+
+</h:form>
+
+</mjx:body>
+
+</html>
