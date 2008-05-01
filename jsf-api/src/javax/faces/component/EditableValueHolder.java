@@ -220,8 +220,15 @@ public interface EditableValueHolder extends ValueHolder {
      * <p class="changed_added_2_0">The argument
      * <code>validator</code> must be inspected for the presence of the
      * {@link javax.faces.application.ResourceDependency} annotation.
-     * If this annotation is present, the action described in
-     * <code>ResourceDependency</code> must be taken.</p>
+     * If the <code>ResourceDependency</code> annotation is present,
+     * the action described in <code>ResourceDependency</code> must
+     * be taken.  If the <code>ResourceDependency</code> annotation is
+     * not present, the argument <code>validator</code> must be inspected 
+     * for the presence of the {@link 
+     * javax.faces.application.ResourceDependencies} annotation.
+     * If the <code>ResourceDependencies</code> annotation
+     * is present, the action described in <code>ResourceDependencies</code>
+     * must be taken.</p>
 
      *
      * @param validator The {@link Validator} to add

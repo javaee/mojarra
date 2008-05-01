@@ -78,7 +78,11 @@ import java.util.EventListener;
  * javax.faces.application.ResourceDependency} annotation, the action
  * described in <code>ResourceDependency</code> must be taken when
  * {@link javax.faces.component.EditableValueHolder#addValidator} is
- * called.</p>
+ * called.  If the class implementing <code>Validator</code> has a {@link
+ * javax.faces.application.ResourceDependencies</code> annotation, the
+ * action described in <code>ResourceDependencies</code> must be taken
+ * when {@link javax.faces.component.EditableValueHolder#addValidator} 
+ * is called.</p>
 
  */
 
