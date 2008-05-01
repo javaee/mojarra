@@ -1347,17 +1347,8 @@ public class ApplicationImpl extends Application {
         if (value instanceof String) {
              String cValue = (String) value;
              try {
-                if (GroovyHelper.isGroovyScript(cValue)) {
-                    GroovyHelper helper = associate.getGroovyHelper();
-                    if (helper != null) {
-                        clazz = helper.loadScript(cValue);
-                        if (!associate.isDevModeEnabled()) {
-                            map.put(key, clazz); // cache it to prevent continued lookups
-                        }
-                    }
-                }
-                if (clazz == null) {
-                    clazz = Util.loadClass((String) value, value);
+               clazz = Util.loadClass(cValue, value);
+                if (!associate.isDevModeEnabled()) {
                     map.put(key, clazz);
                 }
                 assert (clazz != null);
@@ -1415,17 +1406,8 @@ public class ApplicationImpl extends Application {
         if (value instanceof String) {
             String cValue = (String) value;
              try {
-                if (GroovyHelper.isGroovyScript(cValue)) {
-                    GroovyHelper helper = associate.getGroovyHelper();
-                    if (helper != null) {
-                        clazz = helper.loadScript(cValue);
-                        if (!associate.isDevModeEnabled()) {
-                            map.put(key, clazz); // cache it to prevent continued lookups
-                        }
-                    }
-                }
-                if (clazz == null) {
-                    clazz = Util.loadClass((String) value, value);
+                clazz = Util.loadClass(cValue, value);
+                if (!associate.isDevModeEnabled()) {
                     map.put(key, clazz);
                 }
                 assert (clazz != null);

@@ -41,7 +41,6 @@
 package com.sun.faces.mgbean;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.scripting.GroovyHelper;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.el.ELUtils;
 import com.sun.faces.spi.InjectionProvider;
@@ -393,22 +392,12 @@ public abstract class BeanBuilder {
 
     private Class<?> loadBeanClass() {
         if (beanClass == null) {
-            String className = beanInfo.getClassName();
-            Class<?> clazz = null;
+           String className = beanInfo.getClassName();
+            Class<?> clazz = loadClass(className);
             ApplicationAssociate associate =
                   ApplicationAssociate.getCurrentInstance();
 
-            if (GroovyHelper.isGroovyScript(className)) {
-                GroovyHelper helper = associate.getGroovyHelper();
-                if (helper != null) {
-                    clazz = helper.loadScript(className);
-                    if (!associate.isDevModeEnabled()) {
-                        beanClass = clazz;
-                    }
-                }
-            }
-            if (clazz == null) {
-                clazz = loadClass(className);
+            if (!associate.isDevModeEnabled()) {
                 beanClass = clazz;
             }
 

@@ -82,7 +82,6 @@ public class RegexValidator implements Validator, Serializable {
                 throw new ValidatorException(fmsg);
             }
         } catch (PatternSyntaxException pse) {
-            Object[] params = {pse.getMessage()};
             fmsg = MojarraMessageFactory.getMessage(locale,
                     "com.sun.faces.ext.validator.regexValidator.EXP_ERR",
                     (Object) null);

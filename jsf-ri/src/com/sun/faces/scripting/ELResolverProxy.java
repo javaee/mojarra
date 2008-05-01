@@ -41,6 +41,7 @@ import java.util.Iterator;
 
 import javax.el.ELContext;
 import javax.el.ELResolver;
+import javax.faces.FacesException;
 
 /**
  * Proxy instance for a groovy-based ELResolvers.  This allows the ELResolver
@@ -50,16 +51,14 @@ import javax.el.ELResolver;
 public class ELResolverProxy extends ELResolver {
 
     private String scriptName;
-    private GroovyHelper groovyHelper;
 
 
 
     // ------------------------------------------------------------ Constructors
 
 
-    public ELResolverProxy(String scriptName, GroovyHelper groovyHelper) {
+    public ELResolverProxy(String scriptName) {
         this.scriptName = scriptName;
-        this.groovyHelper = groovyHelper;
     }
 
     // ------------------------------------------------- Methods from ELResolver
@@ -96,7 +95,11 @@ public class ELResolverProxy extends ELResolver {
 
    private ELResolver getGroovyDelegate() {
 
-        return ((ELResolver) groovyHelper.newInstance(scriptName));
+       try {
+            return ((ELResolver) GroovyHelper.newInstance(scriptName));
+       } catch (Exception e) {
+           throw new FacesException(e);
+       }
 
     }
 }

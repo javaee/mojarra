@@ -46,7 +46,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.application.FacesMessage;
 import java.util.Locale;
 import java.io.Serializable;
-import javax.el.ELContext;
 
 /**
  * A Validator that checks against a Regular Expression (which is the pattern 
@@ -68,8 +67,6 @@ public class CreditCardValidator implements Validator, Serializable {
         FacesMessage fmsg;
 
         Locale locale = context.getViewRoot().getLocale();
-
-        ELContext elcontext = context.getELContext();
 
         if (obj == null) {
             return;

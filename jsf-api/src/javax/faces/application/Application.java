@@ -125,7 +125,7 @@ public abstract class Application {
      * <li>The <code>processAction()</code> method must finally retrieve
      *     the <code>NavigationHandler</code> instance for this
      *     application and call {@link
-     *     NavigationHandler#handleNavigation} passing: 
+     *     NavigationHandler#handleNavigation} passing:
      *
      *     <ul>
 
@@ -171,7 +171,7 @@ public abstract class Application {
     /**
      * <p>Return the default <code>Locale</code> for this application.  If
      * not explicitly set, <code>null</code> is returned.</p>
-     */ 
+     */
     public abstract Locale getDefaultLocale();
 
 
@@ -283,7 +283,7 @@ public abstract class Application {
         }
 
         throw new UnsupportedOperationException();
-        
+
     }
 
     /**
@@ -310,7 +310,7 @@ public abstract class Application {
         }
 
         throw new UnsupportedOperationException();
-        
+
     }
 
 
@@ -325,7 +325,7 @@ public abstract class Application {
      * that aids in allowing custom <code>PropertyResolver</code>s to
      * affect the EL resolution process.</p>
      *
-     * @deprecated This has been replaced by {@link #getELResolver}.  
+     * @deprecated This has been replaced by {@link #getELResolver}.
      */
     public abstract PropertyResolver getPropertyResolver();
 
@@ -363,7 +363,7 @@ public abstract class Application {
      * serviced.
      */
     public abstract void setPropertyResolver(PropertyResolver resolver);
-    
+
     /**
      * <p>Find a <code>ResourceBundle</code> as defined in the
      * application configuration resources under the specified name.  If
@@ -371,7 +371,7 @@ public abstract class Application {
      * instance that uses the locale of the current {@link
      * javax.faces.component.UIViewRoot}.</p>
      *
-     * <p>The default implementation throws 
+     * <p>The default implementation throws
      * <code>UnsupportedOperationException</code> and is provided
      * for the sole purpose of not breaking existing applications that extend
      * this class.</p>
@@ -385,14 +385,14 @@ public abstract class Application {
      *
      * @since 1.2
      */
-    
+
     public ResourceBundle getResourceBundle(FacesContext ctx, String name) {
         Application app = getDefaultApplicationImpl(ctx);
         if (app != null) {
             //noinspection TailRecursion
             return app.getResourceBundle(ctx, name);
         }
-        
+
         throw new UnsupportedOperationException();
     }
 
@@ -400,7 +400,7 @@ public abstract class Application {
     /**
      * <p class="changed_added_2_0">Return the project stage
      * for the currently running application instance.  The default
-     * value is {@link ProjectStage#Production}</p> 
+     * value is {@link ProjectStage#Production}</p>
 
      * <div class="changed_added_2_0"> <p>The implementation of this
      * method must perform the following algorithm or an equivalent with
@@ -436,12 +436,12 @@ public abstract class Application {
      * @since 2.0
      */
     public ProjectStage getProjectStage() {
-        
+
         Application app = getDefaultApplicationImpl();
         if (app != null) {
             return app.getProjectStage();
         }
-        
+
         return ProjectStage.Production;
     }
 
@@ -460,7 +460,7 @@ public abstract class Application {
      * that aids in allowing custom <code>VariableResolver</code>s to
      * affect the EL resolution process.</p>
      *
-     * @deprecated This has been replaced by {@link #getELResolver}.  
+     * @deprecated This has been replaced by {@link #getELResolver}.
      */
     public abstract VariableResolver getVariableResolver();
 
@@ -476,7 +476,7 @@ public abstract class Application {
      *
      *  <p>It is illegal to call this method after
      * the application has received any requests from the client.  If an
-     * attempt is made to register a listener after that time it must have 
+     * attempt is made to register a listener after that time it must have
      * no effect.</p>
      *
      * @param resolver The new {@link VariableResolver} instance
@@ -519,7 +519,7 @@ public abstract class Application {
      * <code>CompositeELResolver</code> that is already in the
      * chain.</p>
      *
-     * <p>The default implementation throws 
+     * <p>The default implementation throws
      * <code>UnsupportedOperationException</code> and is provided
      * for the sole purpose of not breaking existing applications that extend
      * {@link Application}.</p>
@@ -564,7 +564,7 @@ public abstract class Application {
      *	</ol>
      *
      * <p>The default implementation throws <code>UnsupportedOperationException</code>
-     * and is provided for the sole purpose of not breaking existing applications 
+     * and is provided for the sole purpose of not breaking existing applications
      * that extend {@link Application}.</p>
      *
      * @since 1.2
@@ -665,7 +665,7 @@ public abstract class Application {
      * javax.faces.event.ListenerFor} annotation.  If this annotation is present,
      * the action listed in {@link javax.faces.event.ListenerFor} must be taken on
      * the component, before it is returned from this method.</p>
-     * 
+     *
      * @param componentType The component type for which to create and
      *  return a new {@link UIComponent} instance
      *
@@ -673,7 +673,7 @@ public abstract class Application {
      *  specified type cannot be created
      * @throws NullPointerException if <code>componentType</code>
      *  is <code>null</code>
-     */ 
+     */
     public abstract UIComponent createComponent(String componentType)
         throws FacesException;
 
@@ -689,7 +689,7 @@ public abstract class Application {
      * javax.faces.event.ListenerFor} annotation.  If this annotation is present,
      * the action listed in {@link javax.faces.event.ListenerFor} must be taken on
      * the component, before it is returned from this method.</p>
-     * 
+     *
      * @param componentBinding {@link ValueBinding} representing a
      * component value binding expression (typically specified by the
      * <code>component</code> attribute of a custom tag)
@@ -730,14 +730,14 @@ public abstract class Application {
      * javax.faces.event.ListenerFor} annotation.  If this annotation is present,
      * the action listed in {@link javax.faces.event.ListenerFor} must be taken on
      * the component, before it is returned from this method.</p>
-     * 
+     *
      * @throws FacesException if a {@link UIComponent} cannot be created
      * @throws NullPointerException if any parameter is <code>null</code>
      *
-     * <p>A default implementation is provided that throws 
+     * <p>A default implementation is provided that throws
      * <code>UnsupportedOperationException</code> so that users
      * that decorate <code>Application</code> can continue to function</p>.
-     * 
+     *
      * @since 1.2
      */
     public UIComponent createComponent(ValueExpression componentExpression,
@@ -759,7 +759,7 @@ public abstract class Application {
         boolean createOne = false;
 
         try {
-            if (null != (result = 
+            if (null != (result =
                 componentExpression.getValue(context.getELContext()))) {
                 // if the result is not an instance of UIComponent
                 createOne = (!(result instanceof UIComponent));
@@ -773,7 +773,7 @@ public abstract class Application {
             throw new FacesException(elex);
         }
 
-        return (UIComponent) result;    
+        return (UIComponent) result;
     }
 
 
@@ -797,7 +797,7 @@ public abstract class Application {
      * @throws NullPointerException if <code>converterId</code>
      *  or <code>converterClass</code> is <code>null</code>
      */
-    public abstract void addConverter(String converterId, 
+    public abstract void addConverter(String converterId,
 				      String converterClass);
 
 
@@ -829,7 +829,7 @@ public abstract class Application {
      *  created
      * @throws NullPointerException if <code>converterId</code>
      *  is <code>null</code>
-     */ 
+     */
     public abstract Converter createConverter(String converterId);
 
 
@@ -874,7 +874,7 @@ public abstract class Application {
      */
     public abstract Iterator<String> getConverterIds();
 
-    
+
     /**
      * <p>Return an <code>Iterator</code> over the set of <code>Class</code>
      * instances for which {@link Converter} classes have been explicitly
@@ -891,7 +891,7 @@ public abstract class Application {
      * <code>ExpressionFactory</code> from the JSP container by calling
      * <code>JspFactory.getDefaultFactory().getJspApplicationContext(servletContext).getExpressionFactory()</code>. </p>
      *
-     * <p>An implementation is provided that throws 
+     * <p>An implementation is provided that throws
      * <code>UnsupportedOperationException</code> so that users that decorate
      * the <code>Application</code> continue to work.
      *
@@ -917,7 +917,7 @@ public abstract class Application {
      * {@link FacesContext#getELContext} and pass it to {@link
      * ValueExpression#getValue}, returning the result.</p>
      *
-     * <p>An implementation is provided that throws 
+     * <p>An implementation is provided that throws
      * <code>UnsupportedOperationException</code> so that users that decorate
      * the <code>Application</code> continue to work.
      *
@@ -963,7 +963,7 @@ public abstract class Application {
     /**
      * <p>Return an <code>Iterator</code> over the supported
      * <code>Locale</code>s for this appication.</p>
-     */ 
+     */
     public abstract Iterator<Locale> getSupportedLocales();
 
 
@@ -977,7 +977,7 @@ public abstract class Application {
      * @throws NullPointerException if the argument
      * <code>newLocales</code> is <code>null</code>.
      *
-     */ 
+     */
     public abstract void setSupportedLocales(Collection<Locale> locales);
 
     /**
@@ -985,8 +985,8 @@ public abstract class Application {
      * <code>ELContextListener</code> that will be notified on creation
      * of <code>ELContext</code> instances.  This listener will be
      * called once per request.</p>
-     * 
-     * <p>An implementation is provided that throws 
+     *
+     * <p>An implementation is provided that throws
      * <code>UnsupportedOperationException</code> so that users that decorate
      * the <code>Application</code> continue to work.
      *
@@ -1009,10 +1009,10 @@ public abstract class Application {
      * <code>listener</code> is not in the list, no exception is thrown
      * and no action is performed.</p>
      *
-     * <p>An implementation is provided that throws 
+     * <p>An implementation is provided that throws
      * <code>UnsupportedOperationException</code> so that users that decorate
      * the <code>Application</code> continue to work.
-     * 
+     *
      * @since 1.2
      */
 
@@ -1033,7 +1033,7 @@ public abstract class Application {
      * <p>Otherwise, return an array representing the list of listeners
      * added by calls to {@link #addELContextListener}.</p>
      *
-     * <p>An implementation is provided that throws 
+     * <p>An implementation is provided that throws
      * <code>UnsupportedOperationException</code> so that users that decorate
      * the <code>Application</code> continue to work.
      *
@@ -1064,7 +1064,7 @@ public abstract class Application {
      * @throws NullPointerException if <code>validatorId</code>
      *  or <code>validatorClass</code> is <code>null</code>
      */
-    public abstract void addValidator(String validatorId, 
+    public abstract void addValidator(String validatorId,
 				      String validatorClass);
 
 
@@ -1080,7 +1080,7 @@ public abstract class Application {
      *  specified id cannot be created
      * @throws NullPointerException if <code>validatorId</code>
      *  is <code>null</code>
-     */ 
+     */
     public abstract Validator createValidator(String validatorId)
         throws FacesException;
 
@@ -1113,7 +1113,7 @@ public abstract class Application {
      */
     public abstract ValueBinding createValueBinding(String ref)
         throws ReferenceSyntaxException;
-    
+
     /**
 
      * <p class="changed_added_2_0">If there are one or more listeners
@@ -1193,20 +1193,20 @@ public abstract class Application {
      * </div>
 
      * @param systemEventClass The <code>Class</code> of event that is
-     * being published.  Must be non-<code>null</code>.  
+     * being published.  Must be non-<code>null</code>.
 
      * @param source The source for the event of type
      * <code>systemEventClass</code>.  Must be non-<code>null</code>, and must
      * implement {@link SystemEventListenerHolder}.
 
     */
-    
+
     public abstract void publishEvent(Class<? extends SystemEvent> systemEventClass,
             SystemEventListenerHolder source);
 
     /**
      * <p class="changed_added_2_0">Install the listener instance
-     * referenced by argument <code>listener</code> into the 
+     * referenced by argument <code>listener</code> into the
      * application as a listener for events of type
      * <code>systemEventClass</code> that originate from objects of type
      * <code>sourceClass</code>.</p>
@@ -1230,7 +1230,7 @@ public abstract class Application {
 
      * @param systemEventClass the <code>Class</code> of event for which
      * <code>listener</code> must be fired.
-     
+
      * @param sourceClass the <code>Class</code> of the instance which
      * causes events of type <code>systemEventClass</code> to be fired.
      * May be <code>null</code>.
@@ -1243,23 +1243,23 @@ public abstract class Application {
      * @throws <code>NullPointerException</code> if any combination of
      * <code>systemEventClass</code>, or <code>listener</code> are
      * <code>null</code>.
-     */ 
-    
+     */
+
     public abstract void subscribeToEvent(Class<? extends SystemEvent> systemEventClass,
             Class sourceClass,
             SystemEventListener listener);
-    
+
 
     /**
      * <p class="changed_added_2_0">Install the listener instance
-     * referenced by argument <code>listener</code> into application 
+     * referenced by argument <code>listener</code> into application
      * as a listener for events of type
-     * <code>systemEventClass</code>.  The default implementation simply calls 
+     * <code>systemEventClass</code>.  The default implementation simply calls
      * through to {@link #subscribeToEvent(java.lang.Class, java.lang.Class, javax.faces.event.SystemEventListener)} passing <code>null</code> as the <code>sourceClass</code> argument</p>
 
      * @param systemEventClass the <code>Class</code> of event for which
      * <code>listener</code> must be fired.
-     
+
      * @param listener the implementation of {@link
      * SystemEventListener} whose {@link
      * SystemEventListener#processEvent} method must be called when
@@ -1268,7 +1268,7 @@ public abstract class Application {
      * @throws <code>NullPointerException</code> if any combination of
      * <code>systemEventClass</code>, or <code>listener</code> are
      * <code>null</code>.
-     */ 
+     */
     public abstract void subscribeToEvent(Class<? extends SystemEvent> systemEventClass,
             SystemEventListener listener);
 
@@ -1285,7 +1285,7 @@ public abstract class Application {
 
      * @param systemEventClass the <code>Class</code> of event for which
      * <code>listener</code> must be fired.
-     
+
      * @param sourceClass the <code>Class</code> of the instance which
      * causes events of type <code>systemEventClass</code> to be fired.
      * May be <code>null</code>.
@@ -1295,10 +1295,10 @@ public abstract class Application {
      * structure.
 
      * @throws <code>NullPointerException</code> if any combination of
-     * <code>context</code>, 
+     * <code>context</code>,
      * <code>systemEventClass</code>, or <code>listener</code> are
      * <code>null</code>.
-     */ 
+     */
 
     public abstract void unsubscribeFromEvent(Class<? extends SystemEvent> systemEventClass,
             Class sourceClass,
@@ -1307,22 +1307,22 @@ public abstract class Application {
 
     /**
      * <p class="changed_added_2_0">Remove the listener instance
-     * referenced by argument <code>listener</code> from the application 
-     * as a listener for events of type <code>systemEventClass</code>.  The 
+     * referenced by argument <code>listener</code> from the application
+     * as a listener for events of type <code>systemEventClass</code>.  The
      * default implementation simply calls through to {@link #unsubscribeFromEvent(java.lang.Class, javax.faces.event.SystemEventListener)} passing <code>null</code> as the <code>sourceClass</code> argument</p>
 
      * @param systemEventClass the <code>Class</code> of event for which
      * <code>listener</code> must be fired.
-     
+
      * @param listener the implementation of {@link
      * SystemEventListener} to remove from the internal data
      * structure.
 
      * @throws <code>NullPointerException</code> if any combination of
-     * <code>context</code>, <code>systemEventClass</code>, or 
+     * <code>context</code>, <code>systemEventClass</code>, or
      * <code>listener</code> are
      * <code>null</code>.
-     */ 
+     */
     public abstract void unsubscribeFromEvent(Class<? extends SystemEvent> systemEventClass,
             SystemEventListener listener);
 

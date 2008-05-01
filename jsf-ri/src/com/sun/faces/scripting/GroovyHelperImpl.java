@@ -37,6 +37,7 @@
 package com.sun.faces.scripting;
 
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,7 +45,9 @@ import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
 import groovy.util.GroovyScriptEngine;
+
 
 /**
  * Helper class to interface with the Groovy runtime.
@@ -55,7 +58,7 @@ class GroovyHelperImpl extends GroovyHelper {
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
     private static final String SCRIPT_PATH = "/WEB-INF/groovy/";
 
-    private GroovyScriptEngine engine;
+    private MojarraGroovyClassLoader loader;
 
     // ------------------------------------------------------------ Constructors
 
@@ -72,8 +75,10 @@ class GroovyHelperImpl extends GroovyHelper {
 
         if (u != null) {
 
-            engine = new GroovyScriptEngine(new URL[]{u},
-                                            Thread.currentThread().getContextClassLoader());
+            GroovyScriptEngine engine =
+                  new GroovyScriptEngine(new URL[]{u},
+                                         Thread.currentThread().getContextClassLoader());
+            loader = new MojarraGroovyClassLoader(engine);
             if (LOGGER.isLoggable(Level.INFO)) {
                 LOGGER.log(Level.INFO,
                            "Groovy support enabled.");
@@ -87,7 +92,7 @@ class GroovyHelperImpl extends GroovyHelper {
     }
     
     public void addURL(URL toAdd) {
-        engine.getGroovyClassLoader().addURL(toAdd);
+        loader.getGroovyScriptEngine().getGroovyClassLoader().addURL(toAdd);
     }
 
     // ---------------------------------------------------------- Public Methods
@@ -99,21 +104,56 @@ class GroovyHelperImpl extends GroovyHelper {
             if (script.endsWith(".groovy")) {
                 script = script.substring(0, script.indexOf(".groovy"));
             }
-            return engine.loadScriptByName(script);
+            //return engine.loadScriptByName(script);
+            return Util.loadClass(script, this);
         } catch (Exception e) {
             throw new FacesException(e);
         }
-    }
-
-
-    public Object newInstance(String name) {
-        return newInstance(name, null, null);
-    }
+    }    
 
     public void setClassLoader() {
-        Thread.currentThread()
-              .setContextClassLoader(engine.getGroovyClassLoader());
+        Thread.currentThread().setContextClassLoader(loader);
     }
 
+
+    // ----------------------------------------------------------- Inner Classes
+
+    private static final class MojarraGroovyClassLoader extends URLClassLoader {
+
+        private GroovyScriptEngine gse;
+
+        public MojarraGroovyClassLoader(GroovyScriptEngine gse) {
+            super(new URL[0], gse.getGroovyClassLoader());
+            this.gse = gse;
+        }
+        
+        public GroovyScriptEngine getGroovyScriptEngine() {
+            return gse;
+        }
+
+        @Override
+        public Class<?> loadClass(String name) throws ClassNotFoundException {
+            if (name == null) {
+                throw new NullPointerException();
+            }
+            Class<?> c;
+            try {
+                c = gse.getGroovyClassLoader().getParent().loadClass(name);
+            } catch (ClassNotFoundException cnfe) {
+                try {
+                    c = gse.loadScriptByName(name);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            if (c == null) {
+                throw new ClassNotFoundException(name);
+            }
+            return c;
+        }
+
+
+
+    }
 
 }

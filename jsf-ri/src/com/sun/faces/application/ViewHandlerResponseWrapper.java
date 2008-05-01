@@ -126,7 +126,7 @@ public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper {
 
     @Override
     public String toString() {
-        String result = null;
+        String result = "null";
         if (null != caw) {
             result = caw.toString();
         } else if (null != basos) {

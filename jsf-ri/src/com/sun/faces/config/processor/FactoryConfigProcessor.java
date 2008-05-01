@@ -138,27 +138,45 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
 
     private void processFactories(NodeList factories, String namespace) {
 
-        for (int i = 0, size = factories.getLength(); i < size; i++) {
-            Node factory = factories.item(i);
-            NodeList children = ((Element) factory)
-                 .getElementsByTagNameNS(namespace, "*");
-            for (int c = 0, csize = children.getLength(); c < csize; c++) {
-                Node n = children.item(c);
-                if (APPLICATION_FACTORY.equals(n.getLocalName())) {
-                    setFactory(FactoryFinder.APPLICATION_FACTORY,
-                               getNodeText(n));
-                } else if (LIFECYCLE_FACTORY.equals(n.getLocalName())) {
-                    setFactory(FactoryFinder.LIFECYCLE_FACTORY,
-                               getNodeText(n));
-                } else if (FACES_CONTEXT_FACTORY.equals(n.getLocalName())) {
-                    setFactory(FactoryFinder.FACES_CONTEXT_FACTORY,
-                               getNodeText(n));
-                } else if (RENDER_KIT_FACTORY.equals(n.getLocalName())) {
-                    setFactory(FactoryFinder.RENDER_KIT_FACTORY,
-                               getNodeText(n));
+        // Loop 1. Thread.currentThread().getContextClassLoader() is 
+        // is the Groovy ClassLoader.
+        
+        // Loop 2. Thread.currentThread().getContextClassLoader() is the
+        // PARENT of the GroovyClassloader, which happens to be the 
+        // webapp classloader.
+        Thread currentThread = Thread.currentThread();
+        ClassLoader origClassLoader = currentThread.getContextClassLoader();
+        
+        for (int outer = 0; outer < 2; outer++) {
+            
+            if (1 == outer) {
+                currentThread.setContextClassLoader(origClassLoader.getParent().getParent());
+            }
+
+            for (int i = 0, size = factories.getLength(); i < size; i++) {
+                Node factory = factories.item(i);
+                NodeList children = ((Element) factory)
+                     .getElementsByTagNameNS(namespace, "*");
+                for (int c = 0, csize = children.getLength(); c < csize; c++) {
+                    Node n = children.item(c);
+                    if (APPLICATION_FACTORY.equals(n.getLocalName())) {
+                        setFactory(FactoryFinder.APPLICATION_FACTORY,
+                                getNodeText(n));
+                    } else if (LIFECYCLE_FACTORY.equals(n.getLocalName())) {
+                        setFactory(FactoryFinder.LIFECYCLE_FACTORY,
+                                getNodeText(n));
+                    } else if (FACES_CONTEXT_FACTORY.equals(n.getLocalName())) {
+                        setFactory(FactoryFinder.FACES_CONTEXT_FACTORY,
+                                getNodeText(n));
+                    } else if (RENDER_KIT_FACTORY.equals(n.getLocalName())) {
+                        setFactory(FactoryFinder.RENDER_KIT_FACTORY,
+                                getNodeText(n));
+                    }
                 }
             }
         }
+        
+        currentThread.setContextClassLoader(origClassLoader);
 
     }
 
