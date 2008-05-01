@@ -66,6 +66,7 @@
 
     <!-- The base directory for component tests -->
     <property name="test.dir" value="${basedir}/test"/>
+    <property name="artifact-id" value="jsf-impl" />
     
     <!-- Misc -->
     <property name="conf.share.dir" value="${basedir}/conf/share"/>
@@ -542,6 +543,34 @@
   </cvs>
 </target>
 
-   
+<target name="push-local-to-maven" depends="push-to-maven-prepare" description="install jsf-impl to the local maven repo.">
+
+  <exec executable="mvn" os="SunOS">
+    <arg line="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar " />
+  </exec>
+  <exec executable="mvn" os="Linux">
+    <arg line="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar  " />
+  </exec>
+  <exec executable="mvn" os="Mac OS X">
+    <arg line="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar  " />
+  </exec>
+  <exec executable="mvn" os="Darwin">
+    <arg line="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar  " />
+  </exec>
+  <exec executable="mvn.bat" os="Windows 2000">
+    <arg line="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar  " />
+  </exec>
+  <exec executable="mvn.bat" os="Windows 2003">
+    <arg line="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar  " />
+  </exec>
+  <exec executable="mvn.bat" os="Windows XP">
+    <arg line="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar  " />
+  </exec>
+
+</target>   
+
+<target name="edburns">
+  <echo message="artifactId=${artifact-id} Dversion=${snapshot.version} file=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar" />
+</target>
     
 </project>

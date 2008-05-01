@@ -2,6 +2,7 @@ package com.sun.faces.scripting;
 
 import java.lang.reflect.Constructor;
 
+import java.net.URL;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
@@ -62,7 +63,8 @@ public abstract class GroovyHelper {
     }
 
     public abstract void setClassLoader();
-
+    
+    public abstract void addURL(URL toAdd);
 
     // --------------------------------------------------------- Private Methods
 

@@ -65,6 +65,10 @@ class GroovyHelperImpl extends GroovyHelper {
         FacesContext ctx = FacesContext.getCurrentInstance();
         // only called during init - safe to cast and save.
         URL u = ctx.getExternalContext().getResource(SCRIPT_PATH);
+        
+        if (u == null) {
+            u = ctx.getExternalContext().getResource("/");
+        }
 
         if (u != null) {
 
@@ -80,6 +84,10 @@ class GroovyHelperImpl extends GroovyHelper {
         } else {
             throw new UnsupportedOperationException();
         }
+    }
+    
+    public void addURL(URL toAdd) {
+        engine.getGroovyClassLoader().addURL(toAdd);
     }
 
     // ---------------------------------------------------------- Public Methods

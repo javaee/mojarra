@@ -45,6 +45,10 @@
         <param-name>facelets.DEVELOPMENT</param-name>
         <param-value>true</param-value>
     </context-param>
+    <context-param>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
+        <param-value>Development</param-value>
+    </context-param>
 
     <context-param>
         <description>
@@ -74,5 +78,18 @@
         <url-pattern>/faces/*</url-pattern>
         <url-pattern>*.jsf</url-pattern>
     </servlet-mapping>
+
+    <filter>
+	<filter-name>GroovyFilter</filter-name>
+	<filter-class>com.sun.faces.scripting.GroovySupportFilter</filter-class>
+    </filter>
+    <filter-mapping>
+	 <filter-name>GroovyFilter</filter-name>
+	 <url-pattern>/*</url-pattern>
+	 <dispatcher>REQUEST</dispatcher>
+	 <dispatcher>FORWARD</dispatcher>
+	 <dispatcher>INCLUDE</dispatcher>
+	 <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
 
 </web-app>

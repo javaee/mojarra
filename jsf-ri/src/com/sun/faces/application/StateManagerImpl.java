@@ -99,6 +99,7 @@ public class StateManagerImpl extends StateManager {
     private int noOfViews;
     private int noOfViewsInLogicalView;
     private Map<String,Class<?>> classMap;
+    private boolean isDevelopmentMode;
 
 
     // ------------------------------------------------------------ Constructors
@@ -109,7 +110,7 @@ public class StateManagerImpl extends StateManager {
         serialProvider = SerializationProviderFactory
                              .createInstance(fContext.getExternalContext());
         webConfig = WebConfiguration.getInstance(fContext.getExternalContext());
-        if (fContext.getApplication().getProjectStage() != ProjectStage.Development) {
+        if (!(isDevelopmentMode = (fContext.getApplication().getProjectStage() == ProjectStage.Development))) {
             classMap = new ConcurrentHashMap<String,Class<?>>(32);
         }
     }
@@ -613,7 +614,9 @@ public class StateManagerImpl extends StateManager {
                 if (t != null && classMap != null) {
                     classMap.put(n.componentType, t);
                 } else {
-                    throw new NullPointerException();
+                    if (!isDevelopmentMode) {
+                        throw new NullPointerException();
+                    }
                 }
             }
             
