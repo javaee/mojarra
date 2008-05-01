@@ -7,5 +7,9 @@ public class loginPanel extends UIComponentBase {
     context.getExternalContext().getRequestMap().put("groovyCalled", 
                                                      Boolean.TRUE);
   } 
+
+  public String getFamily() {
+    return "ezcomp.LoginPanel";
+  }
     
 }

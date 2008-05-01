@@ -41,12 +41,14 @@ import java.net.URLClassLoader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import groovy.util.GroovyScriptEngine;
+import java.util.Set;
+import javax.faces.FacesException;
+import javax.faces.context.ExternalContext;
 
 
 /**
@@ -66,29 +68,49 @@ class GroovyHelperImpl extends GroovyHelper {
     GroovyHelperImpl() throws Exception {
 
         FacesContext ctx = FacesContext.getCurrentInstance();
+        ExternalContext extContext = ctx.getExternalContext();
         // only called during init - safe to cast and save.
-        URL u = ctx.getExternalContext().getResource(SCRIPT_PATH);
+        URL u = extContext.getResource(SCRIPT_PATH);
+        URL scriptRoots[] = null;
+        int size = 0, i = 0;
         
-        if (u == null) {
-            u = ctx.getExternalContext().getResource("/");
-        }
-
-        if (u != null) {
-
-            GroovyScriptEngine engine =
-                  new GroovyScriptEngine(new URL[]{u},
-                                         Thread.currentThread().getContextClassLoader());
-            loader = new MojarraGroovyClassLoader(engine);
-            if (LOGGER.isLoggable(Level.INFO)) {
-                LOGGER.log(Level.INFO,
-                           "Groovy support enabled.");
+        Set<String> resourceRoots = 
+                extContext.getResourcePaths("/resources/");
+        if (null != resourceRoots && !resourceRoots.isEmpty()) {
+            // Determine the size of script roots that end with "/"
+            for (String cur : resourceRoots) {
+                if (cur.endsWith("/")) {
+                    size++;
+                }
             }
-            ctx.getExternalContext().getApplicationMap()
-                  .put("com.sun.faces.groovyhelper", this);
-
+            if (null != u) {
+                scriptRoots = new URL[size + 1];
+            } else {
+                scriptRoots = new URL[size];
+            }
+            for (String cur : resourceRoots) {
+                if (cur.endsWith("/")) {
+                    scriptRoots[i++] = extContext.getResource(cur);
+                }
+            }
+            
         } else {
-            throw new UnsupportedOperationException();
+            scriptRoots = new URL[1];
         }
+        if (null != u) {
+            scriptRoots[i] = u;
+        }
+
+        GroovyScriptEngine engine =
+                new GroovyScriptEngine(scriptRoots,
+                Thread.currentThread().getContextClassLoader());
+        loader = new MojarraGroovyClassLoader(engine);
+        if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.log(Level.INFO,
+                    "Groovy support enabled.");
+        }
+        extContext.getApplicationMap().put("com.sun.faces.groovyhelper", this);
+
     }
     
     public void addURL(URL toAdd) {
