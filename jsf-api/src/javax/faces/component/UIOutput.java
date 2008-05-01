@@ -40,6 +40,9 @@
 
 package javax.faces.component;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import java.util.Map;
 import javax.el.ELException;
