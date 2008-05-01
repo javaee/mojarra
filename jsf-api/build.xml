@@ -58,6 +58,7 @@
     <property name="build.dir" value="build"/>
     <property name="build.classes.dir" value="${build.dir}/classes"/>
     <property name="build.lib.dir" value="${build.dir}/lib"/>
+    <property name="build.resources.dir" value="${build.dir}/javascript/resources/javax.faces"/>
     <property name="build.temp.dir" value="${build.dir}/temp"/>
     <property name="build.test.dir" value="${build.dir}/test"/>
     <property name="build.generate.dir" value="${build.dir}/generate"/>
@@ -104,6 +105,7 @@
         <mkdir dir="${build.lib.dir}"/>
         <mkdir dir="${build.javadocs.dir}"/>
         <mkdir dir="${build.generate.dir}"/>
+        <mkdir dir="${build.resources.dir}"/>
     </target>
 
     <target name="attributes"
@@ -166,6 +168,12 @@
         <copy todir="${build.lib.dir}">
             <fileset dir="${doc.dir}">
                 <include name="*.dtd"/>
+            </fileset>
+        </copy>
+
+        <copy todir="${build.resources.dir}">
+            <fileset dir="${basedir}/resources">
+                <include name="*"/>
             </fileset>
         </copy>
     </target>
@@ -574,6 +582,9 @@ javax.faces.level=ALL
                             extension-name="javax.faces"
                             includes="**/*.class,**/LogStrings.properties"/>
 
+        <jar jarfile="${build.lib.dir}/${name}.jar" update="yes">
+            <metainf dir="${build.dir}/javascript"/>
+        </jar>
     </target>
 
 
