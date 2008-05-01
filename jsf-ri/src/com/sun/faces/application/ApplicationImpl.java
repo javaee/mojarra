@@ -96,8 +96,12 @@ import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.Util;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.List;
 import javax.faces.event.SystemEvent;
@@ -686,6 +690,38 @@ public class ApplicationImpl extends Application {
         
         return returnVal;
     }
+
+    @Override
+    public UIComponent createComponent(Resource componentResource) throws FacesException {
+        UIComponent result = null;
+        FacesContext context = FacesContext.getCurrentInstance();
+        InputStream resourceInputStream = null;
+        try {
+            if (null != resourceInputStream && null == (resourceInputStream = componentResource.getInputStream())) {
+                return null;
+            }
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            return null;
+        }
+        String className = componentResource.getResourceName();
+        int lastDot = className.lastIndexOf(".");
+        className = className.substring(0, lastDot);
+        
+        try {
+            Class componentClass = com.sun.faces.util.Util.loadClass(className, context);
+            result = (UIComponent) componentClass.newInstance();
+        } catch (IllegalAccessException ex) { 
+            LOGGER.log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+        }
+        
+        return result;
+    }
+        
 
     @SuppressWarnings("deprecation")
     public UIComponent createComponent(ValueBinding componentBinding,

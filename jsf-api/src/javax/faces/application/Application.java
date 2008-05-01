@@ -43,10 +43,7 @@ package javax.faces.application;
 
 import java.util.Iterator;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.faces.FacesException;
@@ -676,7 +673,15 @@ public abstract class Application {
      */
     public abstract UIComponent createComponent(String componentType)
         throws FacesException;
+    
+    public UIComponent createComponent(Resource componentResource) 
+            throws FacesException {
 
+        UIComponent result = null;
+        
+        return result;
+    }
+    
 
     /**
      * <p>Wrap the argument <code>componentBinding</code> in an
