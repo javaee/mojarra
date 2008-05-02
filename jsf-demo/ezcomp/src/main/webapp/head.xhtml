@@ -24,6 +24,7 @@
 <ez:loginPanel> 
   <ui:param name="usernameLabel" value="Username" />
   <ui:param name="passwordLabel" value="Password" />
+  <ui:param name="param" value="#{bean}" />
 </ez:loginPanel>
 
 Next to a composite component
@@ -69,8 +70,6 @@ Next to a composite component
 <p><input type="submit" value="callScriptInBody" onclick="inAjaxTwo(); return false; " /></p>
 <p><input type="submit" value="callScriptInPlace" onclick="inAjaxThree(); return false; " /></p>
 <p><input type="submit" value="callScriptInForm" onclick="inScriptInForm(); return false; " /></p>
-<p><input type="submit" value="call script rendered by @ResourceDependency" onclick="inMyComponent(); return false; " /></p>
-
 </form>
 
 </mjx:body>

@@ -49,4 +49,32 @@
          <component-type>headbody.MyComponent</component-type>  
          <component-class>headbody.MyComponent</component-class>  
      </component>  
+
+  <managed-bean>
+    <managed-bean-name>bean</managed-bean-name>
+    <managed-bean-class>
+      model.Bean
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+    <navigation-rule>
+        <from-view-id>/head.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>login</from-outcome>
+            <to-view-id>/page2.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <from-view-id>/page2.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>back</from-outcome>
+            <to-view-id>/head.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+
+  
+
 </faces-config>
