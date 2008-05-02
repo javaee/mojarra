@@ -45,10 +45,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 import java.util.jar.JarOutputStream;
@@ -56,10 +59,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- *
+ * This updater supports GFv1, v2, and v3.
  * @author edburns
  */
 public class GlassfishUpdater {
+
+    private enum Version {
+        GFv1orv2,
+        GFv3
+    }
 
     private static final String ASADMIN_NAME = "asadmin";
     private static final String BACKUP_SUFFIX = "jsfbak";
@@ -69,6 +77,8 @@ public class GlassfishUpdater {
     }
 
     protected static File libDir = null;
+    protected static File modulesDir = null;
+    protected static Version version = null;
 
     public static void main(String args[]) throws IOException {
         if (0 == args.length) {
@@ -99,6 +109,16 @@ public class GlassfishUpdater {
             return;
         }
 
+        // detect the GF version.  If GF_HOME/modules exists, this
+        // is a v3 installation we're updating.  We'll have to take different
+        // action.
+        modulesDir = new File(gfInstallDir, "modules");
+        if (modulesDir.exists() && modulesDir.isDirectory()) {
+            version = Version.GFv3;
+        } else {
+            version = Version.GFv1orv2;
+        }
+
         // Get the glassfish lib directory
         libDir = new File(gfInstallDir, "lib");
         if (!libDir.isDirectory()) {
@@ -109,8 +129,17 @@ public class GlassfishUpdater {
         if (licenseAccepted()) {
             System.out.println("Updating glassfish at\n" + gfInstallDir.toString());
             System.out.println("with new JSF jars.");
-            stripJsfFromJavaEEJar(libDir);
-            unpackJsfJarsToLib(libDir);
+            if (Version.GFv1orv2 == version) {
+                stripJsfFromJavaEEJar(libDir);
+                unpackJsfJarsToLib(libDir);
+            } else {
+                try {
+                    updateV3Jars();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.exit(1);
+                }
+            }
         }
 
     }
@@ -263,6 +292,119 @@ public class GlassfishUpdater {
        }
 
        return filename + BACKUP_SUFFIX + i;
+    }
+
+
+    // Methods for updating V3
+    private static Map<String,String> mapping = new HashMap<String,String>(2, 1.0f);
+    static {
+        mapping.put("javax.javaee", "jsf-api.jar");
+        mapping.put("jsf-connector", "jsf-impl.jar");
+    }
+
+    private static void updateV3Jars() throws Exception {
+        for (Map.Entry<String,String> entry : mapping.entrySet()) {
+            final String targetKey = entry.getKey();
+            File modulesDirTmp;
+            if ("jsf-connector".equals(targetKey)) {
+                modulesDirTmp = new File(modulesDir, "web");
+            } else {
+                modulesDirTmp = modulesDir;
+            }
+            String[] files = modulesDirTmp.list(new FilenameFilter() {
+                public boolean accept(File dir, String name) {
+                    return name.startsWith(targetKey) && name.endsWith(".jar");
+                }
+            });
+            if (files.length != 1) {
+                throw new RuntimeException("Multiple .jar files starting with " + targetKey + ".  Update cannot proceed");
+            }
+
+            File f = new File(modulesDirTmp, files[0]);
+            // we now have the jar we need to backup
+            String backupName = getBackupFilename(modulesDirTmp, files[0]);
+            File backup = new File(modulesDirTmp, backupName);
+            FileInputStream in = new FileInputStream(f);
+            FileOutputStream out = new FileOutputStream(backup);
+            byte[] buf = new byte[1024];
+            for (int total = in.read(buf); total != -1; total = in.read(buf)) {
+                out.write(buf, 0, total);
+            }
+            out.flush();
+            out.close();
+            in.close();
+
+            // backup created.  Now update the file by removing the
+            // javax.faces or com.sun.faces entries.
+            String jarSource = entry.getValue();
+            String pkg = ((jarSource.equals("jsf-api.jar") ? "javax/faces" : "com/sun/faces"));
+            f = new File(modulesDirTmp, files[0]);
+            String copyName = files[0] + ".copy";
+            File copy = new File(modulesDirTmp, copyName);
+            JarInputStream jarIn = new JarInputStream(new FileInputStream(f));
+            JarOutputStream jarOut = new JarOutputStream(new FileOutputStream(copy), jarIn.getManifest());
+
+            JarEntry newEntry = null, cur = null;
+            Matcher mat = null;
+            int n;
+            while (null != (cur = jarIn.getNextJarEntry())) {
+
+                // If the current entry does not include javax.faces...
+                if (!cur.getName().startsWith(pkg)) {
+                    // copy it to the newJar.
+                    newEntry = new JarEntry(cur.getName());
+                    jarOut.putNextEntry(newEntry);
+                    while ((n = jarIn.read(buf, 0, buf.length)) != -1) {
+                        jarOut.write(buf, 0, n);
+                    }
+                }
+            }
+            jarIn.close();
+            jarOut.flush();
+            jarOut.close();
+
+            // ok, the copy is now without the javax.faces classes.
+            // read in from the packaged jsf-api.jar and add the entries
+            jarIn = new JarInputStream(Thread.currentThread()
+                  .getContextClassLoader().
+                  getResourceAsStream(jarSource));
+            JarInputStream jarInCopy = new JarInputStream(new FileInputStream(copy));
+            jarOut = new JarOutputStream(new FileOutputStream(f), jarInCopy.getManifest());
+            while (null != (cur = jarIn.getNextJarEntry())) {
+                if (cur.getName().contains("MANIFEST.MF") || cur.getName()
+                      .contains("com.sun.faces.spi.injectionprovider")) {
+                    continue;
+                }
+
+                // copy it to the newJar.
+                newEntry = new JarEntry(cur.getName());
+                jarOut.putNextEntry(newEntry);
+                while ((n = jarIn.read(buf, 0, buf.length)) != -1) {
+                    jarOut.write(buf, 0, n);
+                }
+
+            }
+            while (null != (cur = jarInCopy.getNextJarEntry())) {                
+
+                // copy it to the newJar.
+                newEntry = new JarEntry(cur.getName());
+                try {
+                jarOut.putNextEntry(newEntry);
+                } catch (Exception e) {
+                    continue;
+                }
+                while ((n = jarInCopy.read(buf, 0, buf.length)) != -1) {
+                    jarOut.write(buf, 0, n);
+                }
+
+            }
+            jarIn.close();
+            jarInCopy.close();
+            jarOut.flush();
+            jarOut.close();
+            copy.delete();
+            
+        }
     }
 
 }
