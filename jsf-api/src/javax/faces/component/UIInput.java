@@ -40,6 +40,10 @@
 
 package javax.faces.component;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -52,6 +56,7 @@ import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
+import javax.faces.application.ResourceDependencies;
 import javax.faces.application.ResourceDependency;
 import javax.faces.application.ResourceHandler;
 import javax.faces.context.FacesContext;
@@ -1138,20 +1143,58 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     
     private void processResourceDependencyAnnotationForAdd(FacesContext context,
             Validator source) {
+        
         if (!source.getClass().isAnnotationPresent(ResourceDependency.class)) {
-            return;
+            if (!source.getClass().isAnnotationPresent(ResourceDependencies.class)) {
+                return;
+            } else {
+                try {
+                    ResourceDependencies resourceDeps =
+                        (ResourceDependencies) source.getClass().getAnnotation(ResourceDependencies.class);
+                    Method valueMethod = resourceDeps.getClass().getMethod("value", new Class[] {});
+                    if (!valueMethod.getReturnType().isArray()) {
+                        throw new IllegalArgumentException (
+                            "@ResourceDependencies annotation does not contain Array of @ResourceDependency annotations");
+                    }
+                    Object[] values = (Object[]) valueMethod.invoke(resourceDeps, new Object[] {});
+                    for (Object value : values) {
+                        if (!(value instanceof Annotation)) {
+                            throw new IllegalArgumentException (
+                                "@ResourceDependencies annotations array does not contain an Annotation type");
+                        }
+                        Annotation annotation = (Annotation)value;
+                        if (!(annotation.annotationType() == ResourceDependency.class)) {
+                            throw new IllegalArgumentException (
+                                "@ResourceDependencies annotation contains a non @ResourceDependency annotation");
+                        }
+                        ResourceDependency resourceDep = (ResourceDependency)annotation;
+                        createComponentResource(context, resourceDep);
+                    }
+                } catch(NoSuchMethodException e) {
+                    throw new FacesException(e);
+                } catch (IllegalAccessException e) {
+                    throw new FacesException(e);
+                } catch (InvocationTargetException e) {
+                    throw new FacesException (e.getTargetException());
+                }
+            }
+        } else {
+            // Get the resourceMetadata from the annotation
+            ResourceDependency resourceDep = (ResourceDependency) source.getClass().getAnnotation(ResourceDependency.class);
+            createComponentResource(context, resourceDep);
         }
+    }
 
+    private void createComponentResource(FacesContext context, ResourceDependency resourceDep) {
         // Create a component resource
         UIOutput resourceComponent = (UIOutput)
                 context.getApplication().createComponent("javax.faces.Output");
 
         // Get the resourceMetadata from the annotation
-        ResourceDependency resourceDep = (ResourceDependency) source.getClass().getAnnotation(ResourceDependency.class);
         String
-                    resourceName = resourceDep.name(),
-                    library = resourceDep.library(),
-                    target = resourceDep.target();
+            resourceName = resourceDep.name(),
+            library = resourceDep.library(),
+            target = resourceDep.target();
 
         if (0 == resourceName.length()) {
             throw new IllegalArgumentException("Zero length resource name in annotation ResourceDependency");
@@ -1188,10 +1231,6 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                     resourceComponent);
         }
     }
-
-    
-    
-
 
     /**
      * <p>Return the set of registered {@link Validator}s for this
