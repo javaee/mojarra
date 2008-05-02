@@ -1,8 +1,18 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wairole="http://www.w3.org/2005/01/wai-rdf/GUIRoleTaxonomy#" xmlns:waistate="http://www.w3.org/2005/07/aaa">
+<head>
+<meta content="no-cache" http-equiv="Pragma" />
+<meta content="no-cache" http-equiv="Cache-Control" />
+<meta content="no-store" http-equiv="Cache-Control" />
+<meta content="max-age=0" http-equiv="Cache-Control" />
+<meta content="1" http-equiv="Expires" />
+<title>Login</title>
+<link rel="stylesheet" type="text/css" href="css_master.css" />
+    <link rel="stylesheet" type="text/css" href="css_ns6up.css" />
+</head>
+
+    <body id="body3" class="LogBdy" focus="loginform.j_username">
+    <form method="POST" class="form" name="loginform" action="j_security_check" >
 
     <table border="0" cellpadding="0" cellspacing="0" align="center" title="">
 	<tr><td width="50%">
@@ -36,25 +46,14 @@ User Name:
 </label>
 					</span></div></td>
 
-				    <td><div class="logInp">
-
-<h:inputText id="username" />
-
-
-
-</div></td></tr>
+				    <td><div class="logInp"><input type="text" name="j_username" id="Login.username" tabindex="1" /></div></td></tr>
 				<tr><td nowrap="nowrap"><div class="logLblLst">
 					&nbsp;<span class="LblLev2Txt">
 <label id="sun_label19" for="Login.password" class="LblLev2Txt_sun4">
 Password: 
 </label>
 					</span></div></td>
-				    <td><div class="logInpLst"> 
-
-<h:inputText id="password" />
-
-
-</div></td></tr>
+				    <td><div class="logInpLst"><input type="password" name="j_password" id="Login.password" onKeyPress="return submitenter(event, 'loginButton', 'Login')" tabindex="2" /></div></td></tr>
 				<tr><td><img id="sun_image22" src="dot.gif" alt="" height="15" width="1" border="0" />
 				    </td>
 
@@ -63,9 +62,11 @@ Password:
 				<tr><td><div class="logBtn">
 
 					
-<h:commandButton id="loginButton" value="Login" action="login"/>
-
-
+					    <input type="submit" class="Btn1"
+						value="Login"
+						title="Log In to Sun Java System Application Server" tabindex="3"
+						name="loginButton" id="loginButton" />
+					    <input type="hidden" name="loginButton.DisabledHiddenField" value="true" />
 					</div>
 				    </td></tr></table>
 				</td></tr>
@@ -87,10 +88,14 @@ Password:
 	    &nbsp;</td></tr>
     <tr class="LogBotBnd" style="background-image: url(gradlogbot.jpg);background-repeat:repeat-x;background-position:left top;">
 	<td>&nbsp;</td>
-	<td>&nbsp;</td>
+	<td><div class="logCpy"><span class="logTxtCpy">
+
+<span id="text1">Copyright @ 2007 Sun Microsystems, Inc. All rights reserved. Unpublished - rights reserved under the Copyright Laws of the United States.Sun Microsystems, Inc. has intellectual property rights relating to technology embodied in the product that is described in this document. In particular, and without limitation, these intellectual property rights may include one or more of the U.S. patents listed at http://www.sun.com/patents and one or more additional patents or pending patent applications in the U.S. and in other countries.U.S. Government Rights - Commercial software. Government users are subject to the Sun Microsystems, Inc. standard license agreement and applicable provisions of the FAR and its supplements.Use is subject to license terms.This distribution may include materials developed by third parties.Portions may be derived from Berkeley BSD systems, licensed from U. of CA. Sun, Sun Microsystems, the Sun logo, Java, Jini, Netra, Solaris, Sun Ray and Sun Java System Application Server are trademarks or registered trademarks of Sun Microsystems, Inc. in the U.S. and other countries.</span>
+	    </span></div></td>
 	<td>&nbsp;</td></tr>
 
 </table>
-
-
+</form>
+</body>
 </html>
+
