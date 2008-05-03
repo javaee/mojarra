@@ -568,7 +568,13 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      *     javax.faces.application.ResourceDependency} annotation.  If
      *     the annotation is present, the action described in the
      *     javadoc for that class must be taken on the newly added
-     *     component instance.</p>
+     *     component instance.  If the <code>ResourceDependency</code>
+     *     annotation is not present, the component must be inspected
+     *     for the presence of the {@link 
+     *     javax.faces.application.ResourceDependencies} annotation.
+     *     If the annotation is present, the action described in the
+     *     javadoc for the <code>ResourceDependencies</code>  class 
+     *     must be taken on the newly added component instance.</p>
 
      *     <p>If the newly added component instance returns
      *     non-<code>null</code> from {@link UIComponent#getRenderer}
@@ -576,7 +582,12 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      *     the {@link javax.faces.application.ResourceDependency}
      *     annotation.  If the annotation is present, the action
      *     described in the javadoc for that class must be taken on the
-     *     <code>Renderer</code>.</p>
+     *     <code>Renderer</code>.  If the <code>ResourceDependency</code>
+     *     annotation is not present, the {@link Renderer} must be 
+     *     inspected for the presence of the {@link
+     *     javax.faces.application.ResourceDependencies} annotation.
+     *     If the annotation is present, the action described in the
+     *     javadoc for that class must be taken on the <code>Renderer</code>.</p>
 
      * </li>
 

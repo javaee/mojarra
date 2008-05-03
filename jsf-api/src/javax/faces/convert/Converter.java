@@ -79,7 +79,11 @@ import javax.faces.context.FacesContext;
  * <code>Converter</code> has a {@link
  * javax.faces.application.ResourceDependency} annotation, the action
  * described in <code>ResourceDependency</code> must be taken when
- * {@link javax.faces.component.ValueHolder#setConverter} is called.</p>
+ * {@link javax.faces.component.ValueHolder#setConverter} is called.
+ * If the class implementing <code>Converter</code> has a {@link
+ * javax.faces.application.ResourceDependencies</code> annotation, the
+ * action described in <code>ResourceDependencies</code> must be taken 
+ * when {@link javax.faces.component.ValueHolder#setConverter} is called.</p>
  */
 
 public interface Converter {
