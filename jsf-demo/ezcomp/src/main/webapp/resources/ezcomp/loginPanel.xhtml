@@ -6,26 +6,26 @@
 
     <table border="0" cellpadding="0" cellspacing="0" align="center" title="">
 	<tr><td width="50%">
-<img id="sun_image5" src="dot.gif" alt="" height="1" width="1" border="0" />	    </td><td><img id="sun_image7" src="images/other/dot.gif" alt="" height="1" width="728" border="0" />	    </td><td width="50%"><img id="sun_image9" src="dot.gif" alt="" height="1" width="1" border="0" />
+<img id="sun_image5" src="#{resource['ezcomp:dot.gif']}" alt="" height="1" width="1" border="0" />	    </td><td><img id="sun_image7" src="#{resource['ezcomp:dot.gif']}" alt="" height="1" width="728" border="0" />	    </td><td width="50%"><img id="sun_image9" src="#{resource['ezcomp:dot.gif']}" alt="" height="1" width="1" border="0" />
 	    </td>
 	</tr>
-	<tr class="LogTopBnd"><td><img src="gradlogtop.jpg" width="1" height="30" border="0" />
+	<tr class="LogTopBnd"><td><img src="#{resource['ezcomp:gradlogtop.jpg']}" width="1" height="30" border="0" />
         </td>
 	    <td valign="middle" nowrap="nowrap">
 
-<img id="sun_image11" src="dot.gif" alt="" height="30" width="1" border="0" />
+<img id="sun_image11" src="#{resource['ezcomp:dot.gif']}" alt="" height="30" width="1" border="0" />
 	    </td>
 	    <td></td>
 	</tr>
             <tr><td class="LogMidBnd"></td>
-	    <td class="LogCntTd" style="background-image: url(login-backimage.jpg);background-repeat:no-repeat;background-position:left top;" align="center" valign="middle">
+	    <td class="LogCntTd" style="background-image: url(#{resource['ezcomp:login-backimage.jpg']});background-repeat:no-repeat;background-position:left top;" align="center" valign="middle">
 		<table border="0" background="suntheme/images/other/dot.gif" cellpadding="0" cellspacing="0" width="100%" title="">
 		    <tr><td width="260">
-<img id="sun_image13" src="dot.gif" alt="" height="245" width="260" border="0" />
+<img id="sun_image13" src="#{resource['ezcomp:dot.gif']}" alt="" height="245" width="260" border="0" />
 			</td>
 
 			<td width="415" bgcolor="#FFFFFF" valign="top" align="left">&nbsp;
-<img id="sun_image15" src="LoginProductName.png" alt="Application Server Administration Console" height="42" width="318" border="0" />
+<img id="sun_image15" src="#{resource['ezcomp:LoginProductName.png']}" alt="Application Server Administration Console" height="42" width="318" border="0" />
 			    <table border="0" cellspacing="0" cellpadding="0">
 				<tr><td>&nbsp;</td>
 				    <td></td></tr>
@@ -55,7 +55,7 @@ Password:
 
 
 </div></td></tr>
-				<tr><td><img id="sun_image22" src="dot.gif" alt="" height="15" width="1" border="0" />
+				<tr><td><img id="sun_image22" src="#{resource['ezcomp:dot.gif']}" alt="" height="15" width="1" border="0" />
 				    </td>
 
 				    <td>  
@@ -63,7 +63,19 @@ Password:
 				<tr><td><div class="logBtn">
 
 					
-<h:commandButton id="loginButton" value="Login" action="login"/>
+<h:commandButton id="loginButton" value="Login" action="login"  
+                 onkeypress="javascript: submitenter(event, 'loginButton', Login');" 
+                 onclick="javascript: submitAndDisable(this, 'Login');" 
+                 onfocus="javascript: if (this.disabled==0) this.className='Btn1Hov'" 
+                 onblur="javascript: if (this.disabled==0) this.className='Btn1'" 
+                 onmouseout="javascript: if (this.disabled==0) this.className='Btn1'" 
+                 onmouseover="javascript: if (this.disabled==0) this.className='Btn1Hov'" 
+                 tabindex="3" 
+                 title="Log In to Sun Java System Application Server" 
+                 class="Btn1"
+
+
+/>
 
 
 					</div>
@@ -72,7 +84,7 @@ Password:
 			    <tr><td>&nbsp;</td></tr>
 
 			    <tr><td>
-<img id="sun_image25" src="dot.gif" alt="" height="33" width="1" border="0" />
+<img id="sun_image25" src="#{resource['ezcomp:dot.gif']}" alt="" height="33" width="1" border="0" />
 				</td>
 				<td>&nbsp;</td></tr>
 			</table>
@@ -83,9 +95,9 @@ Password:
 	</td>
 
 	<td class="LogMidBnd" 
-	    style="background-image: url(gradlogsides.jpg);background-repeat:repeat-x;background-position:left top;">
+	    style="background-image: url(#{resource['ezcomp:gradlogsides.jpg']});background-repeat:repeat-x;background-position:left top;">
 	    &nbsp;</td></tr>
-    <tr class="LogBotBnd" style="background-image: url(gradlogbot.jpg);background-repeat:repeat-x;background-position:left top;">
+    <tr class="LogBotBnd" style="background-image: url(#{resource['ezcomp:gradlogbot.jpg']});background-repeat:repeat-x;background-position:left top;">
 	<td>&nbsp;</td>
 	<td>&nbsp;</td>
 	<td>&nbsp;</td></tr>

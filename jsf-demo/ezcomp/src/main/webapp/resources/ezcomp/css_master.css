@@ -19,10 +19,10 @@
  * 
  * Copyright 2007 Sun Microsystems, Inc. All rights reserved.
  */
-@import url(layout.css);
-@import url(typography.css);
-@import url(colorAndMedia.css);
+@import url(#{resource['ezcomp:layout.css']});
+@import url(#{resource['ezcomp:typography.css']});
+@import url(#{resource['ezcomp:colorAndMedia.css']});
 
-@import url("table2.css");
-@import url("commontaskssection.css");
-@import url("progressBar.css");
+@import url(#{resource['ezcomp:table2.css']});
+@import url(#{resource['ezcomp:commontaskssection.css']});
+@import url(#{resource['ezcomp:progressBar.css']});

@@ -150,10 +150,10 @@
 	background:#B6C6D6
 }
 .commonTaskSection_4_sun4 {
-	background:#B6C6D6 url(bkgrnd.gif) right top repeat-x;
+  background:#B6C6D6 url(#{resource['ezcomp:bkgrnd.gif']}) right top repeat-x;
 }
 .commonTaskSection_4_sun4 .TskScnTpBx_sun4 {
-	background:url(s-curve.gif) bottom left repeat-x;
+  background:url(#{resource['ezcomp:s-curve.gif']}) bottom left repeat-x;
 }
 .commonTaskSection_4_sun4 .header_sun4, .commonTaskSection_4_sun4 .help_sun4, .commonTaskGroup_4_sun4 .header_sun4 {
 	color: #4B5E6A;
@@ -174,17 +174,17 @@
 	border-right-color:#AABCC8;
 }
 .commonTask_4_sun4 .background_sun4 {
-	background: #9AB2BF url(gradation-grey.gif) right top repeat-x;
+  background: #9AB2BF url(#{resource['ezcomp:gradation-grey.gif']}) right top repeat-x;
 }
 .commonTask_4_sun4 a.TskScnTxtBg_sun4 {
 	border-left-color:#AABCC8;
 }
 .commonTask_4_sun4 a.TskScnTxtBg_sun4:link,.commonTask_4_sun4  a.TskScnTxtBg_sun4:visited {
-	background: #E2E7EA url(grad1.gif) right top repeat-x;
+  background: #E2E7EA url(#{resource['ezcomp:grad1.gif']}) right top repeat-x;
 	color:#333333;
 }
 .commonTask_4_sun4 a.TskScnTxtBg_sun4:hover {
-	background:#4581B3 url(grad2.gif) right top repeat-x;
+  background:#4581B3 url(#{resource['ezcomp:grad2.gif']}) right top repeat-x;
 	color:#FFF;
 }
 .commonTask_4_sun4 .infoPanel_sun4 {
@@ -207,16 +207,16 @@
 	color:#666666;
 }
 .commonTask_4_sun4 .TskScnTskLftBtm_sun4 {
-	background-image: url(leftBottom.gif);
+  background-image: url(#{resource['ezcomp:leftBottom.gif']});
 }     
 .commonTask_4_sun4 .TskScnTskLftTp_sun4 {
-	background-image: url(leftTop.gif);
+  background-image: url(#{resource['ezcomp:leftTop.gif']});
 }             
 .commonTask_4_sun4 .TskScnTskRghtBtm_sun4 {
-	background-image: url(rightBottom.gif);
+  background-image: url(#{resource['ezcomp:rightBottom.gif']});
 }     
 .commonTask_4_sun4 .TskScnTskRghtTp_sun4 {
-	background-image: url(rightTop.gif);
+  background-image: url(#{resource['ezcomp:rightTop.gif']});
 } 
 .commonTask_4_sun4 .TskScnTskRghtBrdr_sun4 {
 	background-color: #AABCC8;

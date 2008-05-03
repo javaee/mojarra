@@ -39,7 +39,7 @@
 
   /* Styles from old table */
   color:#fff; 
-  background:#36586F url(table_titlebar_gradient.gif) bottom left repeat-x;
+  background:#36586F url(#{resource['ezcomp:table_titlebar_gradient.gif']}) bottom left repeat-x;
   text-align:left; 
   background-position:5px 5px; 
   padding:3px 10px 2px 10px;

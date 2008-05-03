@@ -106,16 +106,16 @@
 	border-color:#666664;
 }
 .progressBar_4_sun4 .barIndeterminatePaused_sun4 {
-	background: #A0CCE7 url(still-indeterminate.gif) repeat-x top;
+  background: #A0CCE7 url(#{resource['ezcomp:still-indeterminate.gif']}) repeat-x top;
 }
 .progressBar_4_sun4 .barIndeterminate_sun4 {
-	background: #A0CCE7 url(indeterminate.gif) repeat-x top;
+  background: #A0CCE7 url(#{resource['ezcomp:indeterminate.gif']}) repeat-x top;
 }
 .progressBar_4_sun4 .barDeterminate_sun4 {
-	background: #A0CCE7 url(reg-slice.gif) repeat-x top;
+  background: #A0CCE7 url(#{resource['ezcomp:reg-slice.gif']}) repeat-x top;
 }
 .progressBar_4_sun4 .failure_sun4 {
-	background-image:url(failed_small.gif);
+  background-image:url(#{resource['ezcomp:failed_small.gif']});
 	background-position:top left;
 	background-repeat:no-repeat;
 }
