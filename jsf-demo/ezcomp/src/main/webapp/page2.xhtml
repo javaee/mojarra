@@ -23,6 +23,14 @@
   <p>This will be true if the groovy component was called: <h:outputText
   value="${groovyCalled}" />.</p>
 
+  <p>This will be true if the retargeted actionListener was called:
+  <h:outputText value="${actionListenerCalled}" />.</p>
+
+  <p>This will be true if the retargeted valueChangeListener was called:
+  <h:outputText value="${valueChangeListenerCalled}" />.</p>
+
+
+
   <h:commandButton value="back" action="#{bean.backAction}" />
 
 </h:form>

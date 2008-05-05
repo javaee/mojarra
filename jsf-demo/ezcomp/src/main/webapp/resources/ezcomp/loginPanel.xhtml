@@ -38,7 +38,9 @@ User Name:
 
 				    <td><div class="logInp">
 
-<h:inputText id="username" />
+<h:inputText id="username">
+    <f:attachedObjectTarget />
+</h:inputText>
 
 
 
@@ -72,10 +74,10 @@ Password:
                  onmouseover="javascript: if (this.disabled==0) this.className='Btn1Hov'" 
                  tabindex="3" 
                  title="Log In to Sun Java System Application Server" 
-                 class="Btn1"
+                 class="Btn1">
+  <f:attachedObjectTarget />
 
-
-/>
+</h:commandButton>
 
 
 					</div>

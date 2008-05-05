@@ -25,6 +25,8 @@
   <ui:param name="usernameLabel" value="Username" />
   <ui:param name="passwordLabel" value="Password" />
   <ui:param name="param" value="#{bean}" />
+  <f:actionListener binding="#{bean.actionListener}" />
+  <f:valueChangeListener binding="#{bean.valueChangeListener}" />
 </ez:loginPanel>
 
 Next to a composite component

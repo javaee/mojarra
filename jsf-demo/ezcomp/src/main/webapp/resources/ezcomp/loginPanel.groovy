@@ -1,5 +1,6 @@
 import javax.faces.component.UINamingContainer;
 import javax.faces.component.ValueHolder;
+import javax.faces.component.CompositeComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.application.ResourceDependencies;
 import javax.faces.application.ResourceDependency;
@@ -21,7 +22,7 @@ import javax.faces.application.ResourceDependency;
   @ResourceDependency(library="ezcomp", name="gradlogbot.jpg"),
   @ResourceDependency(library="ezcomp", name="primary-roll.gif")
                        ])
-public class loginPanel extends UINamingContainer {
+public class loginPanel extends UINamingContainer implements CompositeComponent {
     
     public void processUpdates(FacesContext context) {
         
