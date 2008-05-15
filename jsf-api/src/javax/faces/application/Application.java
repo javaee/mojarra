@@ -415,8 +415,8 @@ public abstract class Application {
      * <code>java.lang.String</code>).  If found, continue with the
      * algorithm below, otherwise, look for an entry in the
      * <code>initParamMap</code> of the <code>ExternalContext</code>
-     * from the current <code>FacesContext</code> with the key {@link
-     * ProjectStage#PROJECT_STAGE_PARAM_NAME}
+     * from the current <code>FacesContext</code> with the key given by
+     * the value of {@link ProjectStage#PROJECT_STAGE_PARAM_NAME}
 
      * </p>
      *
