@@ -420,7 +420,7 @@ public abstract class Application {
 
      * </p>
      *
-     * <p>If a value is found found, see if an enum constant can be
+     * <p>If a value is found, see if an enum constant can be
      * obtained by calling <code>ProjectStage.valueOf()</code>, passing
      * the value from the <code>initParamMap</code>.  If this succeeds
      * without exception, save the value and return it.</p>
