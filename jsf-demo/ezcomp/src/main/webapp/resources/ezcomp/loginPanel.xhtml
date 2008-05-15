@@ -32,7 +32,7 @@
 				<tr><td nowrap="nowrap"><div class="logLbl">
 					&nbsp;<span class="LblLev2Txt">
 <label id="sun_label17" for="Login.username" class="LblLev2Txt_sun4">
-User Name: 
+<h:outputText value="#{usernameLabel}" />
 </label>
 					</span></div></td>
 
@@ -47,13 +47,13 @@ User Name:
 </div></td></tr>
 				<tr><td nowrap="nowrap"><div class="logLblLst">
 					&nbsp;<span class="LblLev2Txt">
-<label id="sun_label19" for="Login.password" class="LblLev2Txt_sun4">
-Password: 
+<label id="sun_label19" for="Login.pin" class="LblLev2Txt_sun4">
+<h:outputText value="#{pinLabel}" />
 </label>
 					</span></div></td>
 				    <td><div class="logInpLst"> 
 
-<h:inputText id="password" >
+<h:inputText id="pin" >
       <f:attachedObjectTarget />
 </h:inputText>
 

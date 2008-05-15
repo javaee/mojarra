@@ -20,60 +20,22 @@
 
 <h:form prependId="false">
 
-<p>
 <ez:loginPanel> 
   <ui:param name="usernameLabel" value="Username" />
-  <ui:param name="passwordLabel" value="Password" />
+  <ui:param name="pinLabel" value="PIN" />
   <ui:param name="param" value="#{bean}" />
-  <f:actionListener binding="#{bean.actionListener}" />
+  <f:actionListener id="loginButton" binding="#{bean.actionListener}" />
   <f:valueChangeListener id="username" 
                          binding="#{bean.useridValueChangeListener}" />
-  <f:valueChangeListener id="password" 
+  <f:valueChangeListener id="pin" 
                          binding="#{bean.passwordValueChangeListener}" />
+  <f:validateLength id="username" minimum="4" />
+  <f:convertNumber id="pin"/>
 </ez:loginPanel>
 
-Next to a composite component
-</p>
-
-
-<h:panelGrid border="1" columns="2">
-
-<h:panelGroup>
-
-  <h:inputText />
-
-  <mjx:outputScript name="ajaxZero.js" library="javax.faces" target="head"/>
-  <mjx:outputScript name="ajaxOne.js" library="javax.faces" target="head"/>
-  <mjx:outputScript name="ajaxTwo.js" library="javax.faces" target="body"/>
-  <mjx:outputScript name="ajaxThree.js" library="javax.faces"/>
-  <mjx:outputScript name="scriptInForm.js" library="form" target="form"/>
-
-  <hb:myComponent />
-
-</h:panelGroup>
-
-<h:panelGroup>
-
-  <h:inputText />
-
-</h:panelGroup>
-
-</h:panelGrid>
-
-<h:commandButton value="submit" />
-
-<p><span id="replaceByJavaScript" /></p>
+<h:messages />
 
 </h:form>
-
-<form>
-
-<p><input type="submit" value="callScriptInHead" onclick="inAjax(); return false; " /></p>
-<p><input type="submit" value="call2ndScriptInHead" onclick="inAjaxOne(); return false; " /></p>
-<p><input type="submit" value="callScriptInBody" onclick="inAjaxTwo(); return false; " /></p>
-<p><input type="submit" value="callScriptInPlace" onclick="inAjaxThree(); return false; " /></p>
-<p><input type="submit" value="callScriptInForm" onclick="inScriptInForm(); return false; " /></p>
-</form>
 
 </mjx:body>
 
