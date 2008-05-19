@@ -56,6 +56,7 @@ import com.sun.faces.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 import javax.el.ELContext;
+import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.application.ResourceHandler;
 
@@ -135,7 +136,7 @@ public class ResourceImpl extends Resource {
             // Premature optimization is the root of all evil.  Blah blah.
             private List<Integer> buf = new ArrayList<Integer>(1024);
             boolean readingExpression = false;
-            boolean faildExpressionTest = false;
+            boolean failedExpressionTest = false;
             boolean writingExpression = false;
 
             public boolean isWritingExpression() {
@@ -147,11 +148,11 @@ public class ResourceImpl extends Resource {
             }
 
             public boolean isFailedExpressionTest() {
-                return faildExpressionTest;
+                return failedExpressionTest;
             }
 
             public void setFailedExpressionTest(boolean testingForExpression) {
-                this.faildExpressionTest = testingForExpression;
+                this.failedExpressionTest = testingForExpression;
             }
 
             public List<Integer> getBuf() {
@@ -252,6 +253,41 @@ public class ResourceImpl extends Resource {
                     chars[i++] = (char) cur;
                 }
                 String expressionBody = new String(chars);
+                int colon;
+                // If this expression contains a ":"
+                if (-1 != (colon = expressionBody.indexOf(":"))) {
+                    // Make sure it contains only one ":"
+                    if (!isPropertyValid(expressionBody)) {
+                        // RELEASE_PENDING i18n
+                        throw new ELException("Invalid resource format.  Property " +
+                                expressionBody + " contains more than one colon (:)");
+                    }
+                    String[] parts = Util.split(expressionBody, ":");
+                    if (null == parts[0] || null == parts[1]) {
+                        // RELEASE_PENDING i18n
+                        throw new ELException("Invalid resource format.  Property " +
+                                expressionBody + " cannot be parsed to extract resource name and library name");
+                        
+                    }
+                    try {
+                        int mark = parts[0].indexOf("[") + 2;
+                        char quoteMark = parts[0].charAt(mark - 1);
+                        parts[0] = parts[0].substring(mark, colon);
+                        if (parts[0].equals("this")) {
+                            parts[0] = ResourceImpl.this.getLibraryName();
+                            mark = parts[1].indexOf("]") - 1;
+                            parts[1] = parts[1].substring(0, mark);
+                            expressionBody = "resource[" + quoteMark + parts[0]+
+                                    ":" + parts[1] + quoteMark + "]";
+                        }
+                    }
+                    catch (Exception e) {
+                        // RELEASE_PENDING i18n
+                        throw new ELException("Invalid resource format.  Property " +
+                                expressionBody + " cannot be parsed");
+                        
+                    }
+                }
                 ELContext elContext = context.getELContext();
                 ValueExpression ve = context.getApplication().getExpressionFactory().
                         createValueExpression(elContext, "#{" + expressionBody +
@@ -269,6 +305,12 @@ public class ResourceImpl extends Resource {
                 for (i = 0; i < length; i++) {
                     buf.add((int) expressionResult.charAt(i));
                 }
+            }
+            
+            
+            private boolean isPropertyValid(String property) {
+                int idx = property.indexOf(':');
+                return (property.indexOf(':', idx + 1) == -1);
             }
             
         };
