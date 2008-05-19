@@ -4,6 +4,7 @@ import javax.faces.component.CompositeComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.application.ResourceDependencies;
 import javax.faces.application.ResourceDependency;
+import javax.faces.application.Resource;
 
 @ResourceDependencies( [
   @ResourceDependency(library="ezcomp", name="css_master.css"),
@@ -13,14 +14,7 @@ import javax.faces.application.ResourceDependency;
   @ResourceDependency(library="ezcomp", name="table2.css"),
   @ResourceDependency(library="ezcomp", name="commontaskssection.css"),
   @ResourceDependency(library="ezcomp", name="progressBar.css"),
-  @ResourceDependency(library="ezcomp", name="css_ns6up.css"),
-  @ResourceDependency(library="ezcomp", name="LoginProductName.png"),
-  @ResourceDependency(library="ezcomp", name="login-backimage.jpg"),
-  @ResourceDependency(library="ezcomp", name="dot.gif"),
-  @ResourceDependency(library="ezcomp", name="primary-enabled.gif"),
-  @ResourceDependency(library="ezcomp", name="gradlogsides.jpg"),
-  @ResourceDependency(library="ezcomp", name="gradlogbot.jpg"),
-  @ResourceDependency(library="ezcomp", name="primary-roll.gif")
+  @ResourceDependency(library="ezcomp", name="css_ns6up.css")
                        ])
 public class loginPanel extends UINamingContainer implements CompositeComponent {
     
@@ -35,6 +29,16 @@ public class loginPanel extends UINamingContainer implements CompositeComponent 
         super.processUpdates(context);
 
     } 
+    
+    private Resource resource;
+
+    public Resource getResource() {
+        return resource;
+    }
+
+    public void setResource(Resource resource) {
+        this.resource = resource;
+    }
     
     public String getFamily() {
         return "ezcomp.LoginPanel";

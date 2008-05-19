@@ -5,10 +5,16 @@
 
 package javax.faces.component;
 
+import javax.faces.application.Resource;
+
 /**
  *
  * @author edburns
  */
 public interface CompositeComponent {
 
+    public Resource getResource();
+    public void setResource(Resource toSet);
+
+    
 }
