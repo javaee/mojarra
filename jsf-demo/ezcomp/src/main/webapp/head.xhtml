@@ -20,10 +20,9 @@
 
 <h:form prependId="false">
 
-<ez:loginPanel> 
-  <ui:param name="usernameLabel" value="Username" />
-  <ui:param name="pinLabel" value="PIN" />
-  <ui:param name="param" value="#{bean}" />
+<ez:loginPanel usernameLabel="#{header.Accept}"
+               pinLabel="PIN"
+               model="#{bean}"> 
   <f:actionListener id="loginButton" binding="#{bean.actionListener}" />
   <f:valueChangeListener id="username" 
                          binding="#{bean.useridValueChangeListener}" />
