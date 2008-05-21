@@ -45,10 +45,10 @@
 
      <component>  
          <description><![CDATA[Your description here]]></description>  
-         <display-name>MyComponent</display-name>  
-         <component-type>headbody.MyComponent</component-type>  
-         <component-class>headbody.MyComponent</component-class>  
-     </component>  
+         <display-name>SimpleCompositeComponent</display-name>  
+         <component-type>SimpleCompositeComponent</component-type>  
+         <component-class>component.SimpleCompositeComponent</component-class> 
+     </component>
 
   <managed-bean>
     <managed-bean-name>bean</managed-bean-name>

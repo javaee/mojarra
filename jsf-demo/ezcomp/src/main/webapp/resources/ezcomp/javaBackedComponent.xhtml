@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <table>
+<tr>
+
+<td>
+<h:outputText value="#{usernameLabel}" />
+</td>
+
+<td>
+<h:inputText id="username">
+    <f:attachedObjectTarget />
+</h:inputText>
+
+</tr>
+
+<tr>
+
+<td><h:outputText value="#{pinLabel}" /></td>
+
+<td>
+<h:inputText id="pin" >
+      <f:attachedObjectTarget />
+</h:inputText>
+</td>
+
+</tr>
+
+<tr>
+
+<td>&nbsp;</td>
+					
+<td>
+<h:commandButton id="loginButton" value="Login" action="#{model.loginAction}">
+  <f:attachedObjectTarget />
+</h:commandButton>
+</td>
+
+</tr>
+
+</table>
+
+</html>

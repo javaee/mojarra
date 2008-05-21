@@ -20,7 +20,8 @@
 
 <h:form prependId="false">
 
-<ez:loginPanel usernameLabel="#{header.Accept}"
+<ez:loginPanel id="scriptBackedLoginPanel"
+               usernameLabel="#{header.Host}"
                pinLabel="PIN"
                model="#{bean}"> 
   <f:actionListener id="loginButton" binding="#{bean.actionListener}" />
@@ -31,6 +32,13 @@
   <f:validateLength id="username" minimum="4" />
   <f:convertNumber id="pin"/>
 </ez:loginPanel>
+
+<ez:javaBackedComponent id="javaBackedLoginPanel"
+               componentType="SimpleCompositeComponent"
+               usernameLabel="#{header.Accept}"
+               pinLabel="PIN"
+               model="#{bean}"> 
+</ez:javaBackedComponent>
 
 <h:messages />
 
