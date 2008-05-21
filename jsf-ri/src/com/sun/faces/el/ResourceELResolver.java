@@ -49,9 +49,7 @@ import javax.faces.application.ResourceHandler;
 
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
-import javax.faces.component.CompositeComponent;
 import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 
 /**
  * ELResolver to resolve expressions like the following:
@@ -112,18 +110,16 @@ public class ResourceELResolver extends ELResolver {
                 String[] parts = Util.split(prop, ":");
                 
                 // If the enclosing entity for this expression is itself 
-                // a resource the "this" syntax for the library name must
+                // a resource, the "this" syntax for the library name must
                 // be supported.
                 if (null != parts[0] && parts[0].equals("this")) {
                     UIComponent currentComponent = UIComponent.getCurrentComponent();
-                    if (currentComponent instanceof CompositeComponent) {
-                        Resource componentResource = 
-                                ((CompositeComponent)currentComponent).getResource();
-                        if (null != componentResource) {
-                            String libName = null;
-                            if (null != (libName = componentResource.getLibraryName())) {
-                                parts[0] = libName;
-                            }
+                    Resource componentResource = (Resource)
+                                currentComponent.getAttributes().get(Resource.COMPONENT_RESOURCE_KEY);
+                    if (null != componentResource) {
+                        String libName = null;
+                        if (null != (libName = componentResource.getLibraryName())) {
+                            parts[0] = libName;
                         }
                     }
                     
