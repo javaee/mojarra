@@ -45,7 +45,6 @@ import com.sun.enterprise.deployment.InjectionInfo;
 import com.sun.enterprise.deployment.JndiNameEnvironment;
 import com.sun.faces.spi.DiscoverableInjectionProvider;
 import com.sun.faces.spi.InjectionProviderException;
-import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
 
 import java.lang.reflect.InvocationTargetException;
@@ -53,6 +52,8 @@ import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.faces.FacesException;
 
 /**
  * <p>This <code>InjectionProvider</code> is specific to the
@@ -64,6 +65,8 @@ public class GlassFishInjectionProvider extends DiscoverableInjectionProvider {
     private InjectionManager injectionManager;
     private Switch theSwitch;
     private InvocationManager invokeMgr;
+    private Method getInjectionInfoMethod;
+    private boolean usingNewAPI;
 
     /**
      * <p>Constructs a new <code>GlassFishInjectionProvider</code> instance.</p>
@@ -175,14 +178,20 @@ public class GlassFishInjectionProvider extends DiscoverableInjectionProvider {
     throws InjectionException {
         LinkedList<Method> postConstructMethods = new LinkedList<Method>();
 
-        Class<? extends Object> nextClass = instance.getClass();
+        Class<?> nextClass = instance.getClass();
 
         // Process each class in the inheritance hierarchy, starting with
         // the most derived class and ignoring java.lang.Object.
         while ((!Object.class.equals(nextClass)) && (nextClass != null)) {
 
-            InjectionInfo injInfo =
-                 envDescriptor.getInjectionInfoByClass(nextClass.getName());
+            InjectionInfo injInfo;
+            Object argument = ((usingNewAPI(envDescriptor)) ? nextClass : nextClass.getName());
+            try {
+                injInfo = (InjectionInfo) getInjectionInfoMethod
+                      .invoke(envDescriptor, argument);
+            } catch (Exception e) {
+                throw new InjectionException(e.getMessage());
+            }
 
             if (injInfo.getPostConstructMethodName() != null) {
 
@@ -214,7 +223,7 @@ public class GlassFishInjectionProvider extends DiscoverableInjectionProvider {
      * @throws InjectionException if an error occurs
      */
     private Method getPostConstructMethod(InjectionInfo injInfo,
-                                          Class<? extends Object> resourceClass)
+                                          Class<?> resourceClass)
         throws InjectionException {
 
         Method m = injInfo.getPostConstructMethod();
@@ -294,9 +303,32 @@ public class GlassFishInjectionProvider extends DiscoverableInjectionProvider {
 
         }
 
-        return;
-
     }
 
+
+    /**
+     * This method is necessary to allow us to run within older and newer
+     * versions of GlassFish.
+     */
+    private boolean usingNewAPI(JndiNameEnvironment envDescriptor) {
+
+        if (getInjectionInfoMethod == null) {
+            try {
+                getInjectionInfoMethod =
+                      envDescriptor.getClass().getMethod("getInjectionInfoByClass", String.class);
+                usingNewAPI = false;
+            } catch (NoSuchMethodException nsme) {
+                // using a later version of the API if we get here
+                try {
+                    getInjectionInfoMethod = envDescriptor.getClass().getMethod("getInjectionInfoByClass", Class.class);
+                    usingNewAPI = true;
+                } catch (NoSuchMethodException nsme2) {
+                    throw new FacesException(nsme2);
+                }
+            }
+        }
+        return usingNewAPI;
+
+    }
 
 } // END GlassFishInjectionProvider
