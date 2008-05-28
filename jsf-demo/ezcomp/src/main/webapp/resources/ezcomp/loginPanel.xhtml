@@ -4,6 +4,89 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
+
+<p>The composite component facility allows, but does not require, the
+composite component author to declare the usage contract of the
+component, which is comprised of:</p>
+
+	<ul>
+
+	  <li><p>the allowable attributes</p>
+
+          <p>These can be thought of as a list of name=value pairs.
+          "name" is the name of the attribute.  "value" is the type of
+          the attribute: <code>ValueExpression</code> or
+          <code>MethodExpression</code>.</p>
+
+          </li>
+
+	  <li><p>the allowable attached objects</p>
+
+          <p>These can be thought of as a list of name=value pairs.
+          "name" is the name of the attached object target, which must
+          be a child component inside of the PDL file for the component.
+          "value" is the kind of tag that represents the attached
+          object.  For example, "valueChangeListener" or
+          "lengthValidator".</p>
+
+	<ul>
+
+	  <li><p>listeners
+	  </p></li>
+
+	  <li><p>converters
+	  </p></li>
+
+	  <li><p>validators
+	  </p></li>
+
+	</ul>
+
+          </li>
+
+         <li><p>The facets supported by this component.
+	  </p></li>
+
+	  <li><p>The allowable child components.  
+	  </p></li>
+
+	</ul>
+
+<p>It is possible for the composite component author to declare the
+<code>component-type</code> of the top level component.  If not
+declared, a script implemented component is looked for, with the same
+name as the composite component PDL file.  If no script implemented
+component can be found, the default composite component impl is
+used. </p>
+
+<p>Here is an example of a component contract that might be found in a
+component PDL file.  The contract itself, and any of the content within
+it, are completely optional.</p>
+
+<pre><code>
+
+&lt;ui:componentContract componentType="foo.loginPanel"&gt;
+
+  &lt;f:attribute name="usernameLabel" value="ValueExpression" 
+               description="#{resource['this:usernameLabelDescription']}" /&gt;
+  &lt;f:attribute name="pinLabel" value="ValueExpression" /&gt;
+  &lt;f:attribute name="model" value="ValueExpression" /&gt;
+
+  &lt;f:valueChangeListener for="username" /&gt;
+  &lt;f:valueChangeListener for="password" /&gt;
+  &lt;f:actionListener for="loginButton" /&gt;
+  &lt;f:validateLength for="username" /&gt;
+  &lt;f:convertNumber for="pin" /&gt;
+
+  &lt;f:facet name="productName"/&gt;
+
+  &lt;h:commandButton id="cancelButton" /&gt;
+
+&lt;/ui:componentContract&gt;
+
+</code></pre>
+
+
     <table border="0" cellpadding="0" cellspacing="0" align="center" title="">
 	<tr><td width="50%">
 <img id="sun_image5" src="#{resource['this:dot.gif']}" alt="" height="1" width="1" border="0" />	    </td><td><img id="sun_image7" src="#{resource['this:dot.gif']}" alt="" height="1" width="728" border="0" />	    </td><td width="50%"><img id="sun_image9" src="#{resource['this:dot.gif']}" alt="" height="1" width="1" border="0" />
