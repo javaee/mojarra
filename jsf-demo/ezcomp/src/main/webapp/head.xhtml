@@ -24,13 +24,13 @@
                usernameLabel="#{header.Host}"
                pinLabel="PIN"
                model="#{bean}"> 
-  <f:actionListener id="loginButton" binding="#{bean.actionListener}" />
-  <f:valueChangeListener id="username" 
+  <f:actionListener for="loginButton" binding="#{bean.actionListener}" />
+  <f:valueChangeListener for="username" 
                          binding="#{bean.useridValueChangeListener}" />
-  <f:valueChangeListener id="pin" 
+  <f:valueChangeListener for="pin" 
                          binding="#{bean.passwordValueChangeListener}" />
-  <f:validateLength id="username" minimum="4" />
-  <f:convertNumber id="pin"/>
+  <f:validateLength for="username" minimum="4" />
+  <f:convertNumber for="pin"/>
 </ez:loginPanel>
 
 <ez:javaBackedComponent id="javaBackedLoginPanel"
