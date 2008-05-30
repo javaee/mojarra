@@ -127,8 +127,7 @@ public class TestHASDeprStateManagerImpl extends ServletFacesTestCase {
     }
 
     public void testRender() {
-        UIViewRoot newView = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
-        newView.setViewId(TEST_URI);
+        UIViewRoot newView = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), TEST_URI);
         newView.setLocale(Locale.US);
         getFacesContext().setViewRoot(newView);
                                                                                                                       

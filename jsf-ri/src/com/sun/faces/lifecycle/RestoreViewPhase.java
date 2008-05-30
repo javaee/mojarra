@@ -134,7 +134,7 @@ public class RestoreViewPhase extends Phase {
                  facesContext.getExternalContext().getRequestLocale());
             doPerComponentActions(facesContext, viewRoot);
             if (!isPostback(facesContext)) {
-                facesContext.responseComplete();
+                facesContext.renderResponse();
             }
             return;
         }

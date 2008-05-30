@@ -48,6 +48,7 @@ package com.sun.faces.application;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
+import javax.faces.event.PhaseId;
 import javax.faces.application.StateManager;
 import javax.faces.application.StateManager.SerializedView;
 import javax.faces.application.ViewHandler;
@@ -336,8 +337,9 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
 
 
     public void testRender() {
-        UIViewRoot newView = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
-        newView.setViewId(TEST_URI);
+        getFacesContext().setCurrentPhaseId(PhaseId.RENDER_RESPONSE);
+        UIViewRoot newView = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), TEST_URI);
+        //newView.setViewId(TEST_URI);
         getFacesContext().setViewRoot(newView);
 
         try {

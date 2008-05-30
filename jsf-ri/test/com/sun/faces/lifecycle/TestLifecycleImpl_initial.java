@@ -46,6 +46,7 @@ import com.sun.faces.cactus.JspFacesTestCase;
 import org.apache.cactus.WebRequest;
 
 import javax.faces.FacesException;
+import javax.faces.application.ViewHandler;
 
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletRequest;
@@ -134,6 +135,8 @@ public class TestLifecycleImpl_initial extends JspFacesTestCase {
         LifecycleImpl life = new LifecycleImpl();
 
 	Object oldRequest = facesService.wrapRequestToHideParameters();
+        ViewHandler vh = getFacesContext().getApplication().getViewHandler();
+        getFacesContext().setViewRoot(vh.createView(getFacesContext(), "/greeting.jsp"));
 
         try {
             life.execute(getFacesContext());

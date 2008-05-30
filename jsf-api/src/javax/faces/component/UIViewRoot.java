@@ -175,6 +175,14 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
     private static final Logger LOGGER =
           Logger.getLogger("javax.faces", "javax.faces.LogStrings");
 
+    private static final String LOCATION_IDENTIFIER_PREFIX = "javax_faces_location_";
+    private static final Map<String,String> LOCATION_IDENTIFIER_MAP =
+          new HashMap<String,String>(6, 1.0f);
+    static {
+        LOCATION_IDENTIFIER_MAP.put("head", LOCATION_IDENTIFIER_PREFIX + "HEAD");
+        LOCATION_IDENTIFIER_MAP.put("form", LOCATION_IDENTIFIER_PREFIX + "FORM");
+    }
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -510,11 +518,12 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
         if (target == null) {
             throw new NullPointerException();
         }
-        UIComponent facet = getFacet(target);
+        String location = getIdentifier(target);
+        UIComponent facet = getFacet(location);
         if (facet == null) {
             facet = context.getApplication().createComponent("javax.faces.Panel");
-            facet.setId(target);
-            getFacets().put(target, facet);
+            facet.setId(location);
+            getFacets().put(location, facet);
         }
         
         return facet.getChildren();
@@ -1206,18 +1215,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
     
     public Map<String, Object> getViewMap() {
         if (null == viewScope) {
-            viewScope = new HashMap<String, Object>() {
-
-                @Override
-                public void clear() {
-                    FacesContext context = FacesContext.getCurrentInstance();
-                    context.getApplication().publishEvent(ViewMapDestroyedEvent.class, UIViewRoot.this);
-                    super.clear();
-                }
-                
-            };
-            FacesContext context = FacesContext.getCurrentInstance();
-            context.getApplication().publishEvent(ViewMapCreatedEvent.class, this);
+            viewScope = new ViewMap();
         }
         return viewScope;
     }
@@ -1265,6 +1263,36 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
         viewScope =
               (Map<String, Object>) restoreAttachedState(context, values[8]);
     }
+
+
+    private static String getIdentifier(String target) {
+        // check map
+        String id = LOCATION_IDENTIFIER_MAP.get(target);
+        if (id == null) {
+            id = LOCATION_IDENTIFIER_PREFIX + target;
+            LOCATION_IDENTIFIER_MAP.put(target, id);
+        }
+        return id;
+    }
+
+
+    // ----------------------------------------------------------- Inner Classes
+
+
+    private static final class ViewMap extends HashMap<String,Object> {
+
+        private static final long serialVersionUID = -1l;
+
+        @Override
+        public void clear() {
+
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.getApplication()
+                  .publishEvent(ViewMapDestroyedEvent.class, context.getViewRoot());
+            super.clear();
+
+        }
+    } // END ViewMap
 
 
 }

@@ -58,7 +58,7 @@
 
 	<TD>
 
-	      <h:textentry_input id="userName" text="Default_username" />
+	      <h:inputText id="userName" value="Default_username" />
 
 	</TD>
 
@@ -68,7 +68,7 @@
 
 	<TD>
 
-	      <h:textentry_secret id="password" text="Default_password" />
+	      <h:inputSecret id="password" value="Default_password" />
 
 	</TD>
 
@@ -79,7 +79,7 @@
 	<TD>
 
 	      <h:commandButton id="login" value="Login" 
-				    commandName="login"/>
+				    action="login"/>
 
 	</TD>
 
@@ -91,7 +91,7 @@
 	<TD>
 
 	      <h:commandButton id="imageButton" image="duke.gif"
-				    commandName="login"/>
+				    action="login"/>
 
 	</TD>
 
@@ -101,7 +101,7 @@
 
 	<TD>
 
-	      <h:commandLink id="link" href="hello.html"
+	      <h:commandLink id="link"
 				       value="link text"/>
 
 	</TD>
@@ -112,8 +112,9 @@
 
 	<TD>
 
-	      <h:commandLink id="imageLink" href="hello.html"
-				       image="duke.gif"/>
+	      <h:commandLink id="imageLink"
+
+                       value="duke.gif"/>
 
 	</TD>
 
@@ -123,7 +124,7 @@
 
 	<TD>
 
-	      <h:outputText id="userLabel" text="Output Text" />
+	      <h:outputText id="userLabel" value="Output Text" />
 
 	</TD>
 
@@ -133,10 +134,9 @@
 
 	<TD>
 
-	      <h:selectManyCheckbox id="validUser" label="Valid User"
-					    selected="true" />
+	      <h:selectManyCheckbox id="validUser" label="Valid User"/>
 
-	</TD>
+    </TD>
 
       </TR>
 
@@ -146,16 +146,16 @@
 
 	      <h:selectOneListbox id="appleQuantity">
 
-		<f:selectItem  value="0" label="0"/>
-		<f:selectItem  value="1" label="1"/>
-		<f:selectItem  value="2" label="2"/>
-		<f:selectItem  value="3" label="3"/>
-		<f:selectItem  value="4" label="4" selected="true"/>
-		<f:selectItem  value="5" label="5"/>
-		<f:selectItem  value="6" label="6"/>
-		<f:selectItem  value="7" label="7"/>
-		<f:selectItem  value="8" label="8"/>
-		<f:selectItem  value="9" label="9"/>
+		<f:selectItem  value="0" itemLabel="0"/>
+		<f:selectItem  value="1" itemLabel="1"/>
+		<f:selectItem  value="2" itemLabel="2"/>
+		<f:selectItem  value="3" itemLabel="3"/>
+		<f:selectItem  value="4" itemLabel="4"/>
+		<f:selectItem  value="5" itemLabel="5"/>
+		<f:selectItem  value="6" itemLabel="6"/>
+		<f:selectItem  value="7" itemLabel="7"/>
+		<f:selectItem  value="8" itemLabel="8"/>
+		<f:selectItem  value="9" itemLabel="9"/>
 
 	      </h:selectOneListbox>
 
@@ -169,12 +169,11 @@
 
 	<TD>
 
-	      <h:selectOneRadio id="shipType" align="horizontal">
+	      <h:selectOneRadio id="shipType">
 
-		<f:selectItem value="nextDay" label="Next Day" />
-		<f:selectItem value="nextWeek" label="Next Week" 
-                                  selected="true" />
-		<f:selectItem value="nextMonth" label="Next Month" />
+		<f:selectItem value="nextDay" itemLabel="Next Day" />
+		<f:selectItem value="nextWeek" itemLabel="Next Week" />
+		<f:selectItem value="nextMonth" itemLabel="Next Month" />
 
               </h:selectOneRadio>
 
@@ -185,13 +184,11 @@
       <TR>
 
 	<TD>
-		<h:selectOneRadio id="verticalRadio" 
-                                            align="vertical" border="1" >
+		<h:selectOneRadio id="verticalRadio" border="1">
 
-  		<f:selectItem value="nextDay" label="Next Day" 
-                                  selected="true" />
-		<f:selectItem value="nextWeek" label="Next Week"  />
-		<f:selectItem value="nextMonth" label="Next Month" />
+            <f:selectItem value="nextDay" itemLabel="Next Day"/>
+		<f:selectItem value="nextWeek" itemLabel="Next Week"  />
+		<f:selectItem value="nextMonth" itemLabel="Next Month" />
 
                 </h:selectOneRadio>
 
@@ -203,7 +200,7 @@
 
 	<TD>
 
-	      <h:textentry_textarea id="address" text="Hi There" 
+	      <h:inputTextarea id="address" value="Hi There"
                                         rows="10" cols="10"/>
 
 	</TD>

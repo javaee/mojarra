@@ -57,7 +57,8 @@
          This property list *must* match the one defined in the
          systest-per-webapp build.xml. -->
     <property name="applications"
-              value="resource-locale-prefix,
+              value="componentScope,
+                   resource-locale-prefix,
                    nested-loadbundles,
                    replace-application,
                    invalid-mapping,

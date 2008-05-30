@@ -1049,8 +1049,9 @@ private void doFind(FacesContext context, String clientId) {
 
     protected void pushComponentToEL(FacesContext context) {
         Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
-        
-        previouslyPushed = (UIComponent) requestMap.put("component", this);
+        if (requestMap != null) { // requestMap will be null during application init
+            previouslyPushed = (UIComponent) requestMap.put("component", this);
+        }
     }
 
     /**

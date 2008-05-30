@@ -77,9 +77,7 @@
          This property list *must* match the one defined in the
          systest-per-webapp build-tests.xml. -->
     <property name="applications"
-              value="componentScope,
-                   viewScope,
-                   resource-locale-prefix,
+              value="resource-locale-prefix,
                    nested-loadbundles,
                    replace-application,
                    replace-statemanager,  
