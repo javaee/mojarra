@@ -42,18 +42,29 @@ package javax.faces.component;
 
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
+import java.util.MissingResourceException;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
+import javax.faces.application.Resource;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
@@ -506,6 +517,244 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * UIComponentBase#encodeChildren}.</p>
      */
     public abstract boolean getRendersChildren();
+    
+
+    
+    private transient Map<String, String> resourceBundleMap = null;
+    
+    /**
+     * <p>Return a <code>Map&lt;String,String&gt;</code> of the 
+     * <code>ResourceBundle</code> for this component.  A component may have a
+     * <code>ResourceBundle</code> associated with it.  This bundle may contain
+     * localized properties relating to instances of this component.
+     * The default implementation first looks for a <code>ResourceBundle</code>
+     * with a base name equal to the fully qualified class name of the 
+     * current instance.  If no such bundle is found, and the component
+     * is a composite component, a {@link Resource} is created, with the 
+     * <em>resourceName</em> being derived by taking the <em>resourceName</em>
+     * of the {@link Resource} for this composite component and replacing the
+     * file extension with ".properties".  The <em>libraryName</em> is taken
+     * directly from the {@link Resource} for this composite component.  If 
+     * the resultant {@link Resource} exists and can be found, the 
+     * <code>InputStream</code> for the resource is used to create a 
+     * <code>ResourceBundle</code>.  If either of the two previous steps for
+     * obtaining the <code>ResourceBundle</code> for this component is successful,
+     * the <code>ResourceBundle</code> is wrapped in a 
+     * <code>Map&lt;String,String&gt;</code> and returned.  Otherwise
+     * <code>Collections.EMPTY_MAP</code> is returned.
+     * 
+     * 
+     */
+    public Map<String,String> getResourceBundleMap() {
+        
+        if (null == resourceBundleMap) {
+            // See if there is a ResourceBundle under the FQCN for this class
+            String className = this.getClass().getName();
+            Locale currentLocale = null;
+            FacesContext context = null;
+            UIViewRoot root = null;
+            ResourceBundle resourceBundle = null;
+            
+            // Step 1: look for a ResourceBundle under the FQCN of this instance
+            if (null != (context = FacesContext.getCurrentInstance())) {
+                if (null != (root = context.getViewRoot())) {
+                    currentLocale = root.getLocale();
+                }
+            }
+            if (null == currentLocale) {
+                currentLocale = Locale.getDefault();
+            }
+            try {
+                resourceBundle = 
+                        ResourceBundle.getBundle(className, currentLocale);
+            } catch (MissingResourceException e) {
+                // It is not an error if there is no ResourceBundle
+            }
+            
+            // Step 2: if this is a composite component, look for a 
+            // ResourceBundle as a Resource
+            if (null == resourceBundle) {
+                if (this.getAttributes().containsKey(Resource.COMPONENT_RESOURCE_KEY)) {
+                    Resource compositeComponentResource = (Resource)
+                            this.getAttributes().get(Resource.COMPONENT_RESOURCE_KEY);
+                    if (null != compositeComponentResource) {
+                        String resourceName = 
+                                compositeComponentResource.getResourceName();
+                        int i = 0;
+                        if (-1 != (i = resourceName.lastIndexOf("."))) {
+                            resourceName = resourceName.substring(0, i) + 
+                                    ".properties";
+                            if (null != context) {
+                                compositeComponentResource = context.getApplication().getResourceHandler().
+                                        createResource(resourceName,
+                                        compositeComponentResource.getLibraryName());
+                                try {
+                                    InputStream propertiesInputStream = compositeComponentResource.getInputStream();
+                                    resourceBundle = new PropertyResourceBundle(propertiesInputStream);
+                                } catch (IOException ex) {
+                                    Logger.getLogger(UIComponent.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // Step 3: if the previous steps yielded a ResourceBundle, wrap it
+            // with a Map
+            
+            if (null != resourceBundle) {
+                final ResourceBundle bundle = resourceBundle;
+                resourceBundleMap = 
+                        new Map() {
+                            // this is an immutable Map
+
+                            public String toString() {
+                                StringBuffer sb = new StringBuffer();
+                                Iterator<Map.Entry<String, Object>> entries =
+                                        this.entrySet().iterator();
+                                Map.Entry<String, Object> cur;
+                                while (entries.hasNext()) {
+                                    cur = entries.next();
+                                    sb.append(cur.getKey()).append(": ").append(cur.getValue()).append('\n');
+                                }
+
+                                return sb.toString();
+                            }
+
+                            // Do not need to implement for immutable Map
+                            public void clear() {
+                                throw new UnsupportedOperationException();
+                            }
+
+
+                            public boolean containsKey(Object key) {
+                                boolean result = false;
+                                if (null != key) {
+                                    result = (null != bundle.getObject(key.toString()));
+                                }
+                                return result;
+                            }
+
+
+                            public boolean containsValue(Object value) {
+                                Enumeration<String> keys = bundle.getKeys();
+                                boolean result = false;
+                                while (keys.hasMoreElements()) {
+                                    Object curObj = bundle.getObject(keys.nextElement());
+                                    if ((curObj == value) ||
+                                            ((null != curObj) && curObj.equals(value))) {
+                                        result = true;
+                                        break;
+                                    }
+                                }
+                                return result;
+                            }
+
+
+                            public Set<Map.Entry<String, Object>> entrySet() {
+                                HashMap<String, Object> mappings = new HashMap<String, Object>();
+                                Enumeration<String> keys = bundle.getKeys();
+                                while (keys.hasMoreElements()) {
+                                    String key = keys.nextElement();
+                                    Object value = bundle.getObject(key);
+                                    mappings.put(key, value);
+                                }
+                                return mappings.entrySet();
+                            }
+
+
+                            @Override
+                            public boolean equals(Object obj) {
+                                return !((obj == null) || !(obj instanceof Map))
+                                         && entrySet().equals(((Map) obj).entrySet());
+
+                            }
+
+
+                            public Object get(Object key) {
+                                if (null == key) {
+                                    return null;
+                                }
+                                try {
+                                    return bundle.getObject(key.toString());
+                                } catch (MissingResourceException e) {
+                                    return "???" + key + "???";
+                                }
+                            }
+
+
+                            public int hashCode() {
+                                return bundle.hashCode();
+                            }
+
+
+                            public boolean isEmpty() {
+                                Enumeration<String> keys = bundle.getKeys();
+                                return !keys.hasMoreElements();
+                            }
+
+
+                            public Set keySet() {
+                                Set<String> keySet = new HashSet<String>();
+                                Enumeration<String> keys = bundle.getKeys();
+                                while (keys.hasMoreElements()) {
+                                    keySet.add(keys.nextElement());
+                                }
+                                return keySet;
+                            }
+
+
+                            // Do not need to implement for immutable Map
+                            public Object put(Object k, Object v) {
+                                throw new UnsupportedOperationException();
+                            }
+
+
+                            // Do not need to implement for immutable Map
+                            public void putAll(Map t) {
+                                throw new UnsupportedOperationException();
+                            }
+
+
+                            // Do not need to implement for immutable Map
+                            public Object remove(Object k) {
+                                throw new UnsupportedOperationException();
+                            }
+
+
+                            public int size() {
+                                int result = 0;
+                                Enumeration<String> keys = bundle.getKeys();
+                                while (keys.hasMoreElements()) {
+                                    keys.nextElement();
+                                    result++;
+                                }
+                                return result;
+                            }
+
+
+                            public java.util.Collection values() {
+                                ArrayList<Object> result = new ArrayList<Object>();
+                                Enumeration<String> keys = bundle.getKeys();
+                                while (keys.hasMoreElements()) {
+                                    result.add(
+                                            bundle.getObject(keys.nextElement()));
+                                }
+                                return result;
+                            }
+                        };
+
+            }
+
+            if (null == resourceBundleMap) {
+                resourceBundleMap = Collections.EMPTY_MAP;
+            }
+
+        }
+        
+        return resourceBundleMap;
+    }
     
     
     // This is necessary for JSF components that extend from UIComponent
