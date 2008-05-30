@@ -7,7 +7,7 @@
 <ui:componentContract>
 
   <f:attribute name="usernameLabel" value="ValueExpression" 
-               description="#{resource['this:usernameLabelDescription']}" />
+               description="#{component.resourceBundleMap.description}" />
   <f:attribute name="pinLabel" value="ValueExpression" />
   <f:attribute name="model" value="ValueExpression" />
   <f:valueChangeListener for="username" />

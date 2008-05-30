@@ -1,10 +1,8 @@
 import javax.faces.component.UINamingContainer;
 import javax.faces.component.ValueHolder;
-import javax.faces.component.CompositeComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.application.ResourceDependencies;
 import javax.faces.application.ResourceDependency;
-import javax.faces.application.Resource;
 
 @ResourceDependencies( [
   @ResourceDependency(library="ezcomp", name="css_master.css"),
@@ -16,7 +14,7 @@ import javax.faces.application.Resource;
   @ResourceDependency(library="ezcomp", name="progressBar.css"),
   @ResourceDependency(library="ezcomp", name="css_ns6up.css")
                        ])
-public class loginPanel extends UINamingContainer implements CompositeComponent {
+public class loginPanel extends UINamingContainer {
     
     public void processUpdates(FacesContext context) {
         
@@ -29,16 +27,6 @@ public class loginPanel extends UINamingContainer implements CompositeComponent 
         super.processUpdates(context);
 
     } 
-    
-    private Resource resource;
-
-    public Resource getResource() {
-        return resource;
-    }
-
-    public void setResource(Resource resource) {
-        this.resource = resource;
-    }
     
     public String getFamily() {
         return "ezcomp.LoginPanel";
