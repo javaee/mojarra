@@ -5,14 +5,14 @@ import javax.faces.application.ResourceDependencies;
 import javax.faces.application.ResourceDependency;
 
 @ResourceDependencies( [
-  @ResourceDependency(library="ezcomp", name="css_master.css"),
-  @ResourceDependency(library="ezcomp", name="layout.css"),
-  @ResourceDependency(library="ezcomp", name="typography.css"),
-  @ResourceDependency(library="ezcomp", name="colorAndMedia.css"),
-  @ResourceDependency(library="ezcomp", name="table2.css"),
-  @ResourceDependency(library="ezcomp", name="commontaskssection.css"),
-  @ResourceDependency(library="ezcomp", name="progressBar.css"),
-  @ResourceDependency(library="ezcomp", name="css_ns6up.css")
+  @ResourceDependency(library="this", name="css_master.css"),
+  @ResourceDependency(library="this", name="layout.css"),
+  @ResourceDependency(library="this", name="typography.css"),
+  @ResourceDependency(library="this", name="colorAndMedia.css"),
+  @ResourceDependency(library="this", name="table2.css"),
+  @ResourceDependency(library="this", name="commontaskssection.css"),
+  @ResourceDependency(library="this", name="progressBar.css"),
+  @ResourceDependency(library="this", name="css_ns6up.css")
                        ])
 public class loginPanel extends UINamingContainer {
     
