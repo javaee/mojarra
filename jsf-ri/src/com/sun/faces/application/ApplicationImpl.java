@@ -719,6 +719,8 @@ public class ApplicationImpl extends Application {
             LOGGER.log(Level.SEVERE, null, ex);
         }
         
+        Util.processListenerForAnnotation(result);
+        
         return result;
     }
         
