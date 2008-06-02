@@ -523,7 +523,7 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
     private transient Map<String, String> resourceBundleMap = null;
     
     /**
-     * <p>Return a <code>Map&lt;String,String&gt;</code> of the 
+     * <p class="changed_added_2_0">Return a <code>Map&lt;String,String&gt;</code> of the 
      * <code>ResourceBundle</code> for this component.  A component may have a
      * <code>ResourceBundle</code> associated with it.  This bundle may contain
      * localized properties relating to instances of this component.
@@ -541,7 +541,7 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * obtaining the <code>ResourceBundle</code> for this component is successful,
      * the <code>ResourceBundle</code> is wrapped in a 
      * <code>Map&lt;String,String&gt;</code> and returned.  Otherwise
-     * <code>Collections.EMPTY_MAP</code> is returned.
+     * <code>Collections.EMPTY_MAP</code> is returned.</p>
      * 
      * 
      */
