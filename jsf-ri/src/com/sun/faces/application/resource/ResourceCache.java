@@ -79,9 +79,6 @@ import com.sun.faces.application.ApplicationAssociate;
  * then no caching will be perfomed.  Otherwise, the value of the option will
  * be the number of minutes between modification checks.
  * </p>
- *
- * RELEASE_PENDING (rlubke,driscoll)
- *                   - Change logging from INFO to FINE before release.
  */
 public class ResourceCache {
 
@@ -175,8 +172,8 @@ public class ResourceCache {
         Util.notNull("info", info);
 
         if (resourceCache != null) {
-            if (LOGGER.isLoggable(Level.INFO)) {
-                LOGGER.log(Level.INFO, "Caching ResourceInfo: {0}", key);
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE, "Caching ResourceInfo: {0}", key);
             }
             return resourceCache.put(key, info);
         }
@@ -214,8 +211,8 @@ public class ResourceCache {
 
         if (resourceCache != null) {
             resourceCache.clear();
-            if (LOGGER.isLoggable(Level.INFO)) {
-                LOGGER.log(Level.INFO, "Caching Cleared");
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE, "Cache Cleared");
             }
         }
 
@@ -239,8 +236,8 @@ public class ResourceCache {
         }
         if (service != null) {
             if (monitorTask != null) {
-                if (LOGGER.isLoggable(Level.INFO)) {
-                    LOGGER.log(Level.INFO,
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.log(Level.FINE,
                                "[{0}] Cancelling ResourceCache update task...",
                                contextName);
                 }
@@ -260,8 +257,8 @@ public class ResourceCache {
 
         if (service == null) {
             int poolSize = getThreadPoolSize();
-            if (LOGGER.isLoggable(Level.INFO)) {
-                LOGGER.log(Level.INFO,
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE,
                            "Created new static ScheduledExecutorService with a pool size of {0}",
                            poolSize);                
             }
@@ -343,12 +340,12 @@ public class ResourceCache {
                            ioe);
             }
         }
-        if (LOGGER.isLoggable(Level.INFO)) {
-            LOGGER.log(Level.INFO,
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.log(Level.FINE,
                        "[{0}] Registered ResouceMonitors:",
                        sc.getContextPath());
             for (ResourceMonitor monitor : monitors) {
-                LOGGER.log(Level.INFO, monitor.toString());
+                LOGGER.log(Level.FINE, monitor.toString());
             }
         }
 
@@ -379,15 +376,15 @@ public class ResourceCache {
 
         public void run() {
 
-            if (LOGGER.isLoggable(Level.INFO)) {
-                LOGGER.log(Level.INFO,
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE,
                            "[{0}] Starting modification search",
                            contextPath);
             }
             for (ResourceMonitor monitor : monitors) {
                 if (monitor.hasBeenModified()) {
-                    if (LOGGER.isLoggable(Level.INFO)) {
-                        LOGGER.log(Level.INFO,
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.log(Level.FINE,
                                    "[{0}] Modifications found, clearing cache",
                                    contextPath);
                     }
@@ -475,8 +472,8 @@ public class ResourceCache {
             createSnapshot(temp);
             boolean modified = !layout.equals(temp);
             if (modified) {
-                if (LOGGER.isLoggable(Level.INFO)) {
-                    LOGGER.log(Level.INFO,
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.log(Level.FINE,
                                "[{0}] Change detected in webapp filesystem",
                                new Object[] { sc.getContextPath(), startPath });
                 }
@@ -591,8 +588,8 @@ public class ResourceCache {
 
             long ts = getLastModified();
             if (ts > currentTimeStamp) {
-                if (LOGGER.isLoggable(Level.INFO)) {
-                    LOGGER.log(Level.INFO,
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.log(Level.FINE,
                                "Timestamp for JAR ({0}) changed.",
                                jarFileURL.toExternalForm());
                 }
