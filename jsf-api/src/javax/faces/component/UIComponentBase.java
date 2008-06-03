@@ -73,6 +73,7 @@ import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.FactoryFinder;
+import javax.faces.application.Resource;
 import javax.faces.application.ResourceDependencies;
 import javax.faces.application.ResourceDependency;
 import javax.faces.application.ResourceHandler;
@@ -2108,16 +2109,17 @@ public abstract class UIComponentBase extends UIComponent {
         
         private void processResourceDependencyOnComponentAndMaybeRenderer(FacesContext context, 
                 UIComponent added) {
-            processResourceDependencyAnnotation(context, added);
+            processResourceDependencyAnnotation(context, added, null);
             Renderer renderer = added.getRenderer(context);
             if (null != renderer) {
-                processResourceDependencyAnnotation(context, renderer);
+                processResourceDependencyAnnotation(context, added, renderer);
             }
         }
         
         private void processResourceDependencyAnnotation(FacesContext context, 
-                Object source) {
+                UIComponent component, Renderer renderer) {
             UIOutput resourceComponent = null;
+            Object source = (null == renderer) ? component : renderer;
             if (!source.getClass().isAnnotationPresent(ResourceDependency.class)) {
                 if (!source.getClass().isAnnotationPresent(ResourceDependencies.class)) {
                     return;
@@ -2142,7 +2144,7 @@ public abstract class UIComponentBase extends UIComponent {
                                     "@ResourceDependencies annotation contains a non @ResourceDependency annotation");
                             }
                             ResourceDependency resourceDep = (ResourceDependency)annotation;
-                            createComponentResource(context, resourceDep);
+                            createComponentResource(context, component, resourceDep);
                         }
                     } catch(NoSuchMethodException e) {
                         throw new FacesException(e);
@@ -2155,11 +2157,12 @@ public abstract class UIComponentBase extends UIComponent {
             } else {
                 // Get the resourceMetadata from the annotation
                 ResourceDependency resourceDep = (ResourceDependency) source.getClass().getAnnotation(ResourceDependency.class);
-                createComponentResource(context, resourceDep);
+                createComponentResource(context, component, resourceDep);
             }
         }
 
-        private static void createComponentResource(FacesContext context, ResourceDependency resourceDep) {
+        private static void createComponentResource(FacesContext context, 
+                UIComponent source, ResourceDependency resourceDep) {
 
             // Create a component resource
             UIOutput resourceComponent = (UIOutput) context.getApplication().createComponent("javax.faces.Output");
@@ -2168,6 +2171,22 @@ public abstract class UIComponentBase extends UIComponent {
                 resourceName = resourceDep.name(),
                 library = resourceDep.library(),
                 target = resourceDep.target();
+            
+            // If the enclosing entity for this expression is itself 
+            // a resource, the "this" syntax for the library name must
+            // be supported.
+            if (null != library && library.equals("this")) {
+                Resource componentResource = (Resource)
+                   source.getAttributes().get(Resource.COMPONENT_RESOURCE_KEY);
+                if (null != componentResource) {
+                    String libName = null;
+                    if (null != (libName = componentResource.getLibraryName())) {
+                        library = libName;
+                    }
+                }
+
+            }
+            
 
             if (0 == resourceName.length()) {
                 throw new IllegalArgumentException("Zero length resource name in annotation ResourceDependency");
