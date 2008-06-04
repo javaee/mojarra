@@ -1045,31 +1045,32 @@ private void doFind(FacesContext context, String clientId) {
      * from <code>getCurrentComponent()</code></p>
      *
      */
-
     protected void pushComponentToEL(FacesContext context) {
-        Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
-        if (requestMap != null) { // requestMap will be null during application init
-            previouslyPushed = (UIComponent) requestMap.put("component", this);
-        }
+
+        Map<String,Object> viewMap = context.getViewRoot().getViewMap();
+        previouslyPushed = (UIComponent) viewMap.put("component", this);
+
     }
+
 
     /**
      * <p class="changed_added_2_0">Pop the current
-     * <code>UIComponent</code> <code>this</code> from from a data
+     * <code>UIComponent</code> <code>this</code> from a data
      * structure so that the previous component becomes the current
      * component.</p>
      */
-    
     protected void popComponentFromEL(FacesContext context) {
-        Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
-        
-        if (null != previouslyPushed) {
-            requestMap.put("component", previouslyPushed);
+
+        Map<String,Object> viewMap = context.getViewRoot().getViewMap();
+        if (previouslyPushed != null) {
+            viewMap.put("component", previouslyPushed);
         }
         else {
-            requestMap.remove("component");
+            viewMap.remove("component");
         }
+
     }
+
 
     /**
      * <p class="changed_added_2_0">Return the <code>UIComponent</code>
@@ -1082,19 +1083,12 @@ private void doFind(FacesContext context, String clientId) {
      * <code>null</code> if there is no currently processing
      * <code>UIComponent</code></p>
      */
-
     public static UIComponent getCurrentComponent() {
-	FacesContext context = FacesContext.getCurrentInstance();
-	UIComponent result = null;
-	
-        Map<String, Object> requestMap = context.getExternalContext().
-	    getRequestMap();
-        
-	if (requestMap.containsKey("component")) {
-	    result = (UIComponent) requestMap.get("component");
-	}
 
-	return result;
+        FacesContext context = FacesContext.getCurrentInstance();
+        Map<String, Object> viewMap = context.getViewRoot().getViewMap();
+        return (UIComponent) viewMap.get("component");
+
     }
 
     // -------------------------------------------------- Event Listener Methods
