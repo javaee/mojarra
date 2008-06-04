@@ -1191,9 +1191,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      * data store that is the "view scope".  This map must be
      * instantiated lazily and cached for return from subsequent calls
      * to this method on this <code>UIViewRoot</code> instance.
-     * PENDING(edburns): better to do it eagerly?  Immediately after
-     * instantiation, {@link
-     * javax.faces.application.Application#publishEvent} must be called,
+     * {@link javax.faces.application.Application#publishEvent} must be called,
      * passing {@link ViewMapCreatedEvent}<code>.class</code> as the
      * first argument and this <code>UIViewRoot</code> instance as the
      * second argument.</p>

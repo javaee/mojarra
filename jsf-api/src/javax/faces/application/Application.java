@@ -45,13 +45,16 @@ import java.util.Iterator;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.Lock;
 import java.lang.reflect.Constructor;
 
 import javax.faces.FacesException;
@@ -1221,32 +1224,23 @@ public abstract class Application {
         }
 
         try {
-            // The side-effect of calling traverseListenerList
+            // The side-effect of calling invokeListenersFor
             // will create a SystemEvent object appropriate to event/source
             // combination.  This event will be passed on subsequent invocations
-            // of traverseListenerList
+            // of invokeListenersFor
             SystemEvent event;
-            CompositeKey key = new CompositeKey(systemEventClass, source.getClass());
 
             // Look for and invoke any listeners stored on the source instance.
-            event = traverseListenerList(source.getListenersForEventClass(systemEventClass),
-                                         null,
-                                         source,
-                                         systemEventClass);
+            event = invokeComponentListenersFor(source.getListenersForEventClass(systemEventClass),
+                                                systemEventClass,
+                                                source);
 
-            // look for and invokie any listeners stored on the application
+            // look for and invoke any listeners stored on the application
             // using source type.
-            event = traverseListenerList(getListeners(key),
-                                         event,
-                                         source,
-                                         systemEventClass);
+            event = invokeListenersFor(systemEventClass, event, source, true);
 
-            // look for and invoke any listeners not specific to the source class
-            key.sourceClass = null;
-            traverseListenerList(getListeners(key),
-                                 event,
-                                 source,
-                                 systemEventClass);
+            // look for and invoke any listeners not specific to the source class          
+            invokeListenersFor(systemEventClass, event, source, false);
         } catch (AbortProcessingException ape) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE,
@@ -1309,7 +1303,9 @@ public abstract class Application {
         }
 
         List<SystemEventListener> listeners =
-              getListeners(new CompositeKey(systemEventClass, sourceClass), true);
+              getListeners(getSystemEventInfo(systemEventClass, true),
+                           sourceClass,
+                           true);
         listeners.add(listener);
 
     }
@@ -1382,7 +1378,8 @@ public abstract class Application {
         }
 
         List<SystemEventListener> listeners =
-              getListeners(new CompositeKey(systemEventClass, sourceClass));
+              getListeners(getSystemEventInfo(systemEventClass),
+                           sourceClass);
         if (listeners != null) {
             listeners.remove(listener);
         }
@@ -1417,47 +1414,89 @@ public abstract class Application {
 
     // --------------------------------------------------------- Private Methods
 
+    // SystemEventInfo cache
+    private final ConcurrentMap<Class<? extends SystemEvent>,SystemEventInfo> systemEventInfoMap =
+          new ConcurrentHashMap<Class<? extends SystemEvent>,SystemEventInfo>();
+    private final ComponentSystemEventInfo componentEventInfo = new ComponentSystemEventInfo();
+    private final Lock lock = new ReentrantLock(true);
 
-
-    private final Map<CompositeKey, List<SystemEventListener>> listenersByListenerKey =
-          new ConcurrentHashMap<CompositeKey,List<SystemEventListener>>();
-    private final ReentrantLock lock = new ReentrantLock(true);
-    private final EventFactory eventFactory = new EventFactory();
 
     /**
-     * @see #getListeners(CompositeKey, boolean)
+     * @see #getListeners(javax.faces.application.Application.SystemEventInfo, Class, boolean)
      */
-    private List<SystemEventListener> getListeners(CompositeKey key) {
+    private List<SystemEventListener> getListeners(SystemEventInfo systemEventInfo,
+                                                   Class<?> sourceClass) {
 
-        return getListeners(key, false);
+        return getListeners(systemEventInfo, sourceClass, false);
 
     }
 
 
     /**
      * @return <code>List&gt;SystemEventListener&lt;</code> based on the provided
-     * combination of <code>facesEventClass</code> and <code>sourceClass</code>.
+     * combination of <code>systemEventInfo</code> and <code>sourceClass</code>.
      * If no <code>List<code> is found for this combination and <code>create</code>
      * is true, then initialize a new <code>List</code> and return that, otherwise
      * return <code>null</code>.
      */
-    private List<SystemEventListener> getListeners(CompositeKey key, boolean create) {
+    private List<SystemEventListener> getListeners(SystemEventInfo systemEventInfo,
+                                                   Class<?> sourceClass,
+                                                   boolean create) {
 
-        List<SystemEventListener> listeners = listenersByListenerKey.get(key);
-        if (listeners == null && create) {
-            lock.lock(); 
+        List<SystemEventListener> listeners = null;
+        if (systemEventInfo != null) {
+            EventInfo sourceInfo = systemEventInfo.getEventInfo(sourceClass, create);
+            if (sourceInfo != null) {
+                listeners = sourceInfo.getListeners();
+            }
+        }
+        return listeners;
+        
+    }
+
+
+    /**
+     * @see #getSystemEventInfo(Class, boolean)
+     */
+    private SystemEventInfo getSystemEventInfo(Class<? extends SystemEvent> systemEvent) {
+
+        return getSystemEventInfo(systemEvent, false);
+
+    }
+
+
+    /**
+     * @return a <code>SystemEventInfo</code> for the specified system event.
+     */
+    private SystemEventInfo getSystemEventInfo(Class<? extends SystemEvent> systemEvent,
+                                               boolean create) {
+
+        SystemEventInfo info = systemEventInfoMap.get(systemEvent);
+        if (info == null && create) {
+            lock.lock();
             try {
-                listeners = listenersByListenerKey.get(key);
-                if (listeners == null) {
-                    listeners = new CopyOnWriteArrayList<SystemEventListener>();
-                    listenersByListenerKey.put(key, listeners);
+                info = systemEventInfoMap.get(systemEvent);
+                if (info == null) {
+                    info = new SystemEventInfo(systemEvent);
+                    systemEventInfoMap.put(systemEvent, info);
                 }
             } finally {
                 lock.unlock();
-            }            
+            }
         }
 
-        return listeners;
+        return info;
+
+    }
+
+
+    private SystemEvent invokeComponentListenersFor(List<SystemEventListener> listeners,
+                                           Class<? extends SystemEvent> systemEventClass,
+                                           Object source) {
+
+        EventInfo eventInfo = componentEventInfo.getEventInfo(systemEventClass,
+                                                              source.getClass());
+        return processListeners(listeners, null, source, eventInfo);
 
     }
 
@@ -1466,27 +1505,50 @@ public abstract class Application {
      * Traverse the <code>List</code> of listeners and invoke any that are relevent
      * for the specified source.
      *
-     * @throws AbortProcessingException
+     * @throws AbortProcessingException propagated from the listener invocation
      */
-    private SystemEvent traverseListenerList(List<SystemEventListener> listeners,
-                                             SystemEvent event,
-                                             Object source,
-                                             Class<? extends SystemEvent> facesEventClass)
+    private SystemEvent invokeListenersFor(Class<? extends SystemEvent> systemEventClass,
+                                           SystemEvent event,
+                                           Object source,
+                                           boolean useSourceLookup)
     throws AbortProcessingException {
 
-        if (listeners != null && !listeners.isEmpty()) {
+        SystemEventInfo systemEventInfo =
+              systemEventInfoMap.get(systemEventClass);
+        if (systemEventInfo != null) {
+            Class<?> sourceClass =
+                  ((useSourceLookup) ? source.getClass() : Void.class);
+            EventInfo eventInfo = systemEventInfo.getEventInfo(sourceClass, false);
+            if (eventInfo != null) {
+                List<SystemEventListener> listeners = eventInfo.getListeners();
+                event = processListeners(listeners, event, source, eventInfo);
+            }
+        }
+
+        return event;
+
+    }
+
+
+    private SystemEvent processListeners(List<SystemEventListener> listeners,
+                                         SystemEvent event,
+                                         Object source,
+                                         EventInfo eventInfo) {
+
+          if (listeners != null && !listeners.isEmpty()) {
             for (SystemEventListener curListener : listeners) {
                 if (curListener.isListenerForSource(source)) {
-                    if (null == event) {
-                        event = eventFactory.createEventFor(facesEventClass, source);
+                    if (event == null) {
+                        event = eventInfo.createSystemEvent(source);
                     }
-                    assert (null != event);
+                    assert (event != null);
                     if (event.isAppropriateListener(curListener)) {
                         event.processListener(curListener);
                     }
                 }
             }
         }
+
         return event;
 
     }
@@ -1525,129 +1587,186 @@ public abstract class Application {
     // ----------------------------------------------------------- Inner Classes
 
 
-    /**
-     * Composite representation of a SystemEvent and some source type.
-     */
-    private static class CompositeKey {
+    private static class ComponentSystemEventInfo {
 
-        private Class<? extends SystemEvent> facesEventClass;
-        private Class sourceClass;
+        private ConcurrentMap <Class<?>, EventInfo> events =
+              new ConcurrentHashMap<Class<?>, EventInfo>();
+        private final Lock lock = new ReentrantLock(true);
+
+        // ------------------------------------------------------ Public Methods
+
+         public EventInfo getEventInfo(Class<? extends SystemEvent> systemEvent,
+                                       Class<?> sourceClass) {
+
+            EventInfo info = events.get(sourceClass);
+            if (info == null) {
+                lock.lock();
+                try {
+                    info = events.get(sourceClass);
+                    if (info == null) {
+                        info = new EventInfo(systemEvent, sourceClass);
+                        events.put(sourceClass, info);
+                    }
+                } finally {
+                    lock.unlock();
+                }
+            }
+            return info;
+
+        }
+    }
+
+    /**
+     * Simple wrapper class for application level SystemEvents.  It provides the
+     * structure to map a single SystemEvent to multiple sources which are
+     * represented by <code>SourceInfo</code> instances.
+     */
+    private static class SystemEventInfo {
+
+        private ConcurrentMap <Class<?>, EventInfo> events =
+              new ConcurrentHashMap<Class<?>, EventInfo>();
+        private Class<? extends SystemEvent> systemEvent;
+        private final Lock lock = new ReentrantLock(true);
+
 
         // -------------------------------------------------------- Constructors
 
 
-        public CompositeKey(Class<? extends SystemEvent> facesEventClass,
-                           Class sourceClass) {
+        private SystemEventInfo(Class<? extends SystemEvent> systemEvent) {
 
-            this.facesEventClass = facesEventClass;
-            this.sourceClass = sourceClass;
+            this.systemEvent = systemEvent;
 
         }
 
 
-        // ---------------------------------------------------- Methods from Map
+        // ------------------------------------------------------ Public Methods
 
-        @Override
-        public boolean equals(Object obj) {
 
-            if (obj == null) {
-                return false;
+        public EventInfo getEventInfo(Class<?> source, boolean create) {
+
+            Class<?> sourceClass = ((source == null) ? Void.class : source);
+            EventInfo info = events.get(sourceClass);
+            if (info == null && create) {
+                lock.lock();
+                try {
+                    info = events.get(sourceClass);
+                    if (info == null) {
+                        info = new EventInfo(systemEvent, sourceClass);
+                        events.put(sourceClass, info);
+                    }
+                } finally {
+                    lock.unlock();
+                }
             }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            final CompositeKey other = (CompositeKey) obj;
-            return !(this.facesEventClass != other.facesEventClass
-                       && (this.facesEventClass == null
-                             || !this.facesEventClass .equals(other.facesEventClass))) 
-                   && !(this.sourceClass != other.sourceClass
-                          && (this .sourceClass == null
-                              || !this .sourceClass.equals(other.sourceClass)));
+            return info;
 
         }
 
-        @Override
-        public int hashCode() {
-            int hash = 5;
-            hash += (83 * hash + (this.facesEventClass != null
-                                     ? this .facesEventClass.hashCode()
-                                     : 0));
-            hash += (83 * hash + (this.sourceClass != null
-                                     ? this.sourceClass.hashCode()
-                                     : 0));
-            return hash;
-        }
-
-    } // END ListenerKey
+    } // END SystemEventInfo
 
 
     /**
-     * Helper class for constructing new Events.
+     *
      */
-    private static final class EventFactory {
+    private static class EventInfo {
+        private Class<? extends SystemEvent> systemEvent;
+        private Class<?> sourceClass;
+        private List<SystemEventListener> listeners;
+        private Constructor eventConstructor;
+        private Map<Class<?>,Constructor> constructorMap;
 
-        private final ConcurrentHashMap<CompositeKey,Constructor> cache
-              = new ConcurrentHashMap<CompositeKey,Constructor>();
+        // ---------------------------------------------------- Constructors
 
-        public SystemEvent createEventFor(Class<? extends SystemEvent> event,
-                                          Object source) {
 
-            CompositeKey key = new CompositeKey(event, source.getClass());
-            Constructor c = lookup(key);
-            if (c != null) {
+        public EventInfo(Class<? extends SystemEvent> systemEvent,
+                          Class<?> sourceClass) {
+
+            this.systemEvent = systemEvent;
+            this.sourceClass = sourceClass;
+            this.listeners = new CopyOnWriteArrayList<SystemEventListener>();
+            this.constructorMap = new HashMap<Class<?>,Constructor>();
+            if (!sourceClass.equals(Void.class)) {
+                eventConstructor = getEventConstructor(sourceClass);
+            }
+
+        }
+
+        // -----------------------------------------------------_ Public Methods
+
+
+        public List<SystemEventListener> getListeners() {
+
+            return listeners;
+
+        }
+
+
+        public SystemEvent createSystemEvent(Object source) {
+
+            Constructor toInvoke = getCachedConstructor(source.getClass());
+            if (toInvoke != null) {
                 try {
-                    if (c.getParameterTypes().length == 0) {
-                        return ((SystemEvent) c.newInstance());
-                    } else {
-                        return ((SystemEvent) c.newInstance(source));
-                    }
+                    return (SystemEvent) toInvoke.newInstance(source);
                 } catch (Exception e) {
-                    // unrecoverable issue when constructing the event - we
-                    // shouldn't continue.
                     throw new FacesException(e);
                 }
             }
             return null;
+
         }
+
 
         // ----------------------------------------------------- Private Methods
 
 
-        private Constructor lookup(CompositeKey key) {
-            Constructor ctor = cache.get(key);
-            if (ctor == null) {
-                Class<? extends SystemEvent> event = key.facesEventClass;
-                Class<?> source = key.sourceClass;
+        private Constructor getCachedConstructor(Class<?> source) {
 
-                assert (event != null);
-                assert (source != null);
+            if (eventConstructor != null) {
+                return eventConstructor;
+            } else {
+                Constructor c = constructorMap.get(source);
+                if (c == null) {
+                    c = getEventConstructor(source);
+                    if (c != null) {
+                        constructorMap.put(source, c);
+                    }
+                }
+                return c;
+            }
 
-                try {
-                    ctor = event.getDeclaredConstructor(source);
-                } catch (NoSuchMethodException ignored) {
-                    // no hit, so look for an assignable match
-                    Constructor[] ctors = event.getConstructors();
-                    if (ctors != null) {
-                        for (Constructor c : ctors) {
-                            Class<?>[] params = c.getParameterTypes();
-                            if (params.length != 1) {
-                                continue;
-                            }
-                            if (params[0].isAssignableFrom(source)) {
-                                ctor = c;
-                                break;
-                            }
+        }
+
+        private Constructor getEventConstructor(Class<?> source) {
+
+            Constructor ctor = null;
+            try {
+                return systemEvent.getDeclaredConstructor(source);
+            } catch (NoSuchMethodException ignored) {
+                Constructor[] ctors = systemEvent.getConstructors();
+                if (ctors != null) {
+                    for (Constructor c : ctors) {
+                        Class<?>[] params = c.getParameterTypes();
+                        if (params.length != 1) {
+                            continue;
+                        }
+                        if (params[0].isAssignableFrom(source)) {
+                            return c;
                         }
                     }
                 }
-                if (ctor != null) {
-                    cache.put(key, ctor);
+                if (eventConstructor == null) {
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.log(Level.FINE,
+                                   "Unable to find Constructor within {0} that accepts {1} instances.",
+                                   new Object[] { systemEvent.getName(), sourceClass.getName() });
+                    }
                 }
             }
             return ctor;
+
         }
 
-    } // END EventFactory
+    } // END SourceInfo
 
 
 }

@@ -293,6 +293,8 @@
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.application.TestApplicationImpl"/>
                 <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.application.TestApplicationEvents"/>
+                <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.application.TestApplicationImpl_Config"/>
                 <test todir="${impl.test.results.dir}"
                     name="com.sun.faces.application.TestFacesMessage"/>

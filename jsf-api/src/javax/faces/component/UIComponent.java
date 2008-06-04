@@ -44,7 +44,6 @@ package javax.faces.component;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -1001,8 +1000,9 @@ private void doFind(FacesContext context, String clientId) {
      * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    
+
     public void encodeAll(FacesContext context) throws IOException {
+
         if (!isRendered()) {
             return;
         }
@@ -1010,17 +1010,16 @@ private void doFind(FacesContext context, String clientId) {
         encodeBegin(context);
         if (getRendersChildren()) {
             encodeChildren(context);
-        }
-        else            if (this.getChildCount() > 0) {
-                Iterator kids = getChildren().iterator();
-                while (kids.hasNext()) {
-                    UIComponent kid = (UIComponent) kids.next();
-                    kid.encodeAll(context);
-                }
+        } else if (this.getChildCount() > 0) {
+            for (UIComponent kid : getChildren()) {
+                kid.encodeAll(context);
             }
-        
+        }
+
         encodeEnd(context);
+
     }
+
     
     private UIComponent previouslyPushed;
 
@@ -1196,73 +1195,72 @@ private void doFind(FacesContext context, String clientId) {
      * assignable from the argument to
      * <code>isListenerForSource</code>.</p>
      *
-     * @param context {@link FacesContext} for the current request
-     *
      * @param eventClass the <code>Class</code> of event for which
      * <code>listener</code> must be fired.
-
      * @param componentListener the implementation of {@link
      * ComponentSystemEventListener} whose {@link
      * ComponentSystemEventListener#processEvent} method must be called
      * when events of type <code>facesEventClass</code> are fired.
-
-     *  @throws <code>NullPointerException</code> if any of the
-     *  arguments are <code>null</code>.
-
+     *
+     * @throws <code>NullPointerException</code> if any of the
+     * arguments are <code>null</code>.
      */
-    
-    public void subscribeToEvent(FacesContext context, 
-            Class<? extends SystemEvent> eventClass, 
-            final ComponentSystemEventListener componentListener) {
+    public void subscribeToEvent(Class<? extends SystemEvent> eventClass,
+                                 ComponentSystemEventListener componentListener) {
         if (null == listenersByEventClass) {
             listenersByEventClass = new HashMap<Class<? extends SystemEvent>, 
-                                                List<SystemEventListener>>();
+                                                List<SystemEventListener>>(3, 1.0f);
         }
-        final Class instanceClass = this.getClass();
-        SystemEventListener facesLifecycleListener = new SystemEventListener() {
-
-            public void processEvent(SystemEvent event) throws AbortProcessingException {
-                componentListener.processEvent((ComponentSystemEvent) event);
-            }
-
-            public boolean isListenerForSource(Object component) {
-                return instanceClass.isAssignableFrom(component.getClass());
-            }
-
-            @Override
-            public boolean equals(Object obj) {
-                return componentListener.equals(obj);
-            }
-            
-            
-        };
-        List<SystemEventListener> listenersForEventClass = null;
-        if (null == (listenersForEventClass = listenersByEventClass.get(eventClass))) {
-            listenersForEventClass = new ArrayList<SystemEventListener>();
+        SystemEventListener facesLifecycleListener =
+              new ComponentSystemEventListenerAdapter(componentListener, this);
+        List<SystemEventListener> listenersForEventClass =
+              listenersByEventClass.get(eventClass);
+        if (listenersForEventClass == null) {
+            listenersForEventClass = new ArrayList<SystemEventListener>(3);
             listenersByEventClass.put(eventClass, listenersForEventClass);
         }
         listenersForEventClass.add(facesLifecycleListener);
     }
-    
-    public void unsubscribeFromEvent(FacesContext context, 
-            Class<? extends SystemEvent> facesEventClass,
-            ComponentSystemEventListener listener) {
-        List<SystemEventListener> listenersForEventClass = getListenersForEventClass(facesEventClass);
-        listenersForEventClass.remove(listener);
+
+    /**
+     * RELEASE_PENDING (edburns,rogerk) document
+     * @param facesEventClass
+     * @param listener
+     */
+    public void unsubscribeFromEvent(Class<? extends SystemEvent> facesEventClass,
+                                     ComponentSystemEventListener listener) {
+        List<SystemEventListener> listeners = getListenersForEventClass(facesEventClass);
+        if (listeners != null && !listeners.isEmpty()) {
+            for (Iterator<SystemEventListener> i = listeners.iterator(); i.hasNext();) {
+                SystemEventListener item = i.next();
+                // order of the equals operation is important here
+                // it must called against 'item' to ensure the proper
+                // equals method is invoked, otherwise the listener will
+                // not be removed
+                if (item.equals(listener)) {
+                    i.remove();
+                    break;
+                }
+            }
+        }
+        
     }
     
     private Map<Class<? extends SystemEvent>, List<SystemEventListener>> listenersByEventClass;
-    
+
+    /**
+     * RELEASE_PENDING (edburns,roger) document
+     * @param facesEventClass
+     * @return
+     */
     public List<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> facesEventClass) {
+
         List<SystemEventListener> result = null;
-        if (null != listenersByEventClass) {
+        if (listenersByEventClass != null) {
             result = listenersByEventClass.get(facesEventClass);
         }
-        if (null == result) {
-            result = Collections.EMPTY_LIST;
-        }
-        
         return result;
+
     }
 
 
@@ -1476,5 +1474,62 @@ private void doFind(FacesContext context, String clientId) {
         return attributesThatAreSet;
         
     }
+
+
+    private static final class ComponentSystemEventListenerAdapter
+       implements SystemEventListener {
+
+        ComponentSystemEventListener wrapped;
+        Class<?> instanceClass;
+
+
+        // -------------------------------------------------------- Constructors
+
+
+        ComponentSystemEventListenerAdapter(ComponentSystemEventListener wrapped,
+                                            UIComponent component) {
+
+            this.wrapped = wrapped;
+            this.instanceClass = component.getClass();
+
+        }
+
+
+        // ------------------------------------ Methods from SystemEventListener
+
+
+        public void processEvent(SystemEvent event) throws AbortProcessingException {
+
+            wrapped.processEvent((ComponentSystemEvent) event);
+
+        }
+
+
+        public boolean isListenerForSource(Object component) {
+
+            return instanceClass.isAssignableFrom(component.getClass());
+
+        }
+
+
+        // ------------------------------------------------------ Public Methods
+
+
+        @Override
+        public int hashCode() {
+            return wrapped.hashCode();
+        }
+
+
+        @Override
+        public boolean equals(Object obj) {
+
+            return !(obj == null
+                     || !(obj instanceof ComponentSystemEventListener))
+                   && wrapped.equals(obj);
+
+        }
+
+    } // END ComponentSystemEventListenerAdapter
 
 }

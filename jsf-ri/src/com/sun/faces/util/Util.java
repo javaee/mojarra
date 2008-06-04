@@ -494,9 +494,7 @@ public class Util {
             assert(null != listenerFor);
             Class<? extends SystemEvent> eventClass = listenerFor.systemEventClass();
             Class sourceClass = listenerFor.sourceClass();
-            FacesContext facesContext = FacesContext.getCurrentInstance();
-            source.subscribeToEvent(facesContext, eventClass, 
-                    (ComponentSystemEventListener) source);
+            source.subscribeToEvent(eventClass, (ComponentSystemEventListener) source);
         }
         
     }
