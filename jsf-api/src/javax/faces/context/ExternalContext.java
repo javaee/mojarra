@@ -120,6 +120,120 @@ public abstract class ExternalContext {
 
     // ---------------------------------------------------------- Public Methods
 
+    /**
+     * <p class="changed_added_2_0">Adds the cookie represented by the
+     * arguments to the response.</p>
+     *
+     * <div class="changed_added_2_0">
+
+     * <p><em>Servlet:</em> This must be accomplished by calling the
+     * <code>javax.servlet.http.HttpServletResponse</code> method
+     * <code>addCookie()</code>.  The <code>Cookie</code> argument must
+     * be constructed by passing the <code>name</code> and
+     * <code>value</code> parameters.  If the <code>properties</code>
+     * arugument is non-<code>null</code> and not empty, the
+     * <code>Cookie</code> instance must be initialized as described
+     * below.</p>
+
+     * <table border="1">
+     
+     * <tr>
+
+     * <th>Key in "values" <code>Map</code></th>
+
+     * <th>Expected type of value.</th>
+
+     * <th>Name of setter method on <code>Cookie</code> instance to be
+     * set with the value from the <code>Map</code>.  </th>
+
+     * </tr>
+
+     * <tr>
+
+     * <td>comment</td>
+     
+     * <td>String</td>
+
+     * <td>setComment</td>
+
+     * </tr>
+
+     * <tr>
+
+     * <td>domain</td>
+     
+     * <td>String</td>
+
+     * <td>setDomain</td>
+
+     * </tr>
+
+     * <tr>
+
+     * <td>maxAge</td>
+     
+     * <td>Integer</td>
+
+     * <td>setMaxAge</td>
+
+     * </tr>
+
+     * <tr>
+
+     * <td>secure</td>
+     
+     * <td>Boolean</td>
+
+     * <td>setSecure</td>
+
+     * </tr>
+
+     * <tr>
+
+     * <td>path</td>
+     
+     * <td>String</td>
+
+     * <td>setPath</td>
+
+     * </tr>
+
+     * </table>
+
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided for
+     * the sole purpose of not breaking existing applications that
+     * extend this class.</p>
+
+     * </div>
+
+     * @param name To be passed as the first argument to the
+     * <code>Cookie</code> constructor.
+
+     * @param value To be passed as the second argument to the
+     * <code>Cookie</code> constructor.
+
+     * @param properties A <code>Map</code> containg key/value pairs to be passed
+     * as arguments to the setter methods as described above.
+
+     * @throws IllegalArgumentException if the <code>properties
+     * Map</code> is not-<code>null</code> and not empty and contains
+     * any keys that are not one of the keys listed above.
+
+     * @since 2.0
+     */
+
+    public void addResponseCookie(String name, String value, 
+				  Map<String, Object> properties) throws IllegalArgumentException {
+        ExternalContext impl = getDefaultExternalContext();
+        if (impl != null) {
+            impl.addResponseCookie(name, value, properties);
+	    return;
+        }
+
+        throw new UnsupportedOperationException();
+    }
+
 
     /**
      * <p>Dispatch a request to the specified resource to create output
@@ -275,6 +389,8 @@ public abstract class ExternalContext {
      * <code>getMimeType()</code>.</p>
      *
      * </div>
+     *
+     * @param file The file for which the mime type should be obtained.
 
      *
      * @since 2.0
@@ -537,19 +653,24 @@ public abstract class ExternalContext {
     }
 
     /**
-     * <p>Returns a String containing the real path for a given virtual
-     * path. </p>
+     * <p class="changed_added_2_0">Returns a String containing the real
+     * path for a given virtual path. </p>
+
+     * <div class="changed_added_2_0">
      *
      * <p><em>Servlet:</em> This must be the value returned by the
      * <code>javax.servlet.ServletContext</code> method
      * <code>getRealPath()</code>.</p>
-     *
-     * @param path The context of the requested initialization parameter
-     *
+
      * <p>The default implementation throws 
      * <code>UnsupportedOperationException</code> and is provided
      * for the sole purpose of not breaking existing applications that extend
      * this class.</p>
+
+     * </div>
+
+     * @param path The context of the requested initialization parameter
+
      * @since 2.0
      */
     public String getRealPath(String path) {
@@ -989,6 +1110,37 @@ public abstract class ExternalContext {
         throw new UnsupportedOperationException();
 
     }
+
+    /**
+     * <p class="changed_added_2_0">Returns an <code>OutputStream</code>
+     * suitable for writing binary data to the user-agent.</p>
+     *
+     * <div class="changed_added_2_0">
+
+     * <p><em>Servlet:</em> This must return the value returned by the
+     * <code>javax.servlet.ServletResponse</code> method
+     * <code>getOutputStream()</code>.</p>
+
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided for
+     * the sole purpose of not breaking existing applications that
+     * extend this class.</p>
+
+     * </div>
+
+     * @since 2.0
+     */
+
+    public java.io.OutputStream getResponseOutputStream() {
+	java.io.OutputStream result;
+        ExternalContext impl = getDefaultExternalContext();
+        if (impl != null) {
+            result = impl.getResponseOutputStream();
+            return result;
+        }
+
+        throw new UnsupportedOperationException();
+    }
     
     
     /**
@@ -1039,6 +1191,9 @@ public abstract class ExternalContext {
      * extend this class.</p>
 
      * </div>
+
+     * @param contentType The content type to be set as the contentType
+     * of the response.
 
      * @since 2.0
      */

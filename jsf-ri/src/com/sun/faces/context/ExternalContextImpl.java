@@ -36,6 +36,7 @@
 
 package com.sun.faces.context;
 
+import java.io.OutputStream;
 import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -568,6 +569,16 @@ public class ExternalContextImpl extends ExternalContext {
         return ((HttpServletRequest) request).isUserInRole(role);
     }
 
+    @Override
+    public void addResponseCookie(String arg0, String arg1, Map<String, Object> arg2) throws IllegalArgumentException {
+         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public OutputStream getResponseOutputStream() {
+         throw new UnsupportedOperationException();
+    }
+    
     @Override
     public String getRequestScheme() {
          throw new UnsupportedOperationException();
