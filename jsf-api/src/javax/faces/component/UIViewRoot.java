@@ -59,9 +59,7 @@ import javax.faces.webapp.FacesServlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -690,8 +688,8 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
                     UIComponent source = event.getComponent();
                     try {
                         source.broadcast(event);
-                    } catch (AbortProcessingException e) {
-                        ; // A "return" here would abort remaining events too
+                    } catch (AbortProcessingException ignored) {
+                        // A "return" here would abort remaining events too
                     }
                     eventsForPhaseId.remove(0); // Stay at current position
                 }
