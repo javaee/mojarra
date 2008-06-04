@@ -49,6 +49,10 @@ import com.sun.org.apache.commons.digester.CallParamRule;
 import com.sun.org.apache.commons.digester.Digester;
 
 import javax.faces.FactoryFinder;
+import javax.faces.event.SystemEventListener;
+import javax.faces.event.SystemEvent;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ViewMapDestroyedEvent;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
@@ -86,8 +90,6 @@ public class TestNavigationHandler extends ServletFacesTestCase {
 //
     private List testResultList = null;
     protected Digester digester = null;
-    private ApplicationImpl application = null;
-    private NavigationHandlerTestImpl navHandler = null;
 
 // Attribute Instance Variables
 
@@ -180,16 +182,17 @@ public class TestNavigationHandler extends ServletFacesTestCase {
 
     public void testNavigationHandler() {
 
-        ApplicationFactory aFactory =
-            (ApplicationFactory) FactoryFinder.getFactory(
-                FactoryFinder.APPLICATION_FACTORY);
-        Application application = (ApplicationImpl) aFactory.getApplication();
+        Application application = getFacesContext().getApplication();
+        ViewMapDestroyedListener listener = new ViewMapDestroyedListener();
+        application.subscribeToEvent(ViewMapDestroyedEvent.class,
+                                     UIViewRoot.class,
+                                     listener);
         loadTestResultList();
         NavigationHandlerImpl navHandler = (NavigationHandlerImpl) application.getNavigationHandler();
         FacesContext context = getFacesContext();
 
-        String newViewId = null;
-        UIViewRoot page = null;
+        String newViewId;
+        UIViewRoot page;
         boolean gotException = false;
 
         for (int i = 0; i < testResultList.size(); i++) {
@@ -201,6 +204,7 @@ public class TestNavigationHandler extends ServletFacesTestCase {
             page.setViewId(testResult.fromViewId);
             page.setLocale(Locale.US);
             context.setViewRoot(page);
+            listener.reset();
             try {
                 navHandler.handleNavigation(context, testResult.fromAction,
                                             testResult.fromOutcome);
@@ -210,14 +214,24 @@ public class TestNavigationHandler extends ServletFacesTestCase {
                 gotException = true;
             }
             if (!gotException) {
+                if (!testResult.fromViewId.equals(testResult.toViewId)
+                    && testResult.fromOutcome != null) {
+                    assertTrue(listener.getPassedEvent() instanceof ViewMapDestroyedEvent);
+                } else {
+                    assertTrue(!listener.wasProcessEventInvoked());
+                    assertTrue(listener.getPassedEvent() == null);
+                }
+                listener.reset();
                 newViewId = context.getViewRoot().getViewId();
                 if (testResult.fromOutcome == null) {
+                    listener.reset();
                     System.out.println(
                         "assertTrue(" + newViewId + ".equals(" +
                         testResult.fromViewId +
                         "))");
                     assertTrue(newViewId.equals(testResult.fromViewId));
                 } else {
+                    listener.reset();
                     System.out.println(
                         "assertTrue(" + newViewId + ".equals(" +
                         testResult.toViewId +
@@ -226,6 +240,9 @@ public class TestNavigationHandler extends ServletFacesTestCase {
                 }
             }
         }
+        application.unsubscribeFromEvent(ViewMapDestroyedEvent.class,
+                                         UIViewRoot.class,
+                                         listener);
     }
 
      public void testSimilarFromViewId() {
@@ -289,6 +306,36 @@ public class TestNavigationHandler extends ServletFacesTestCase {
         public String fromAction = null;
         public String fromOutcome = null;
         public String toViewId = null;
+    }
+
+    private static final class ViewMapDestroyedListener
+          implements SystemEventListener {
+
+        private SystemEvent event;
+        private boolean processEventInvoked;
+
+        public void processEvent(SystemEvent event)
+        throws AbortProcessingException {
+            this.processEventInvoked = true;
+            this.event = event;
+        }
+
+        public boolean isListenerForSource(Object source) {
+            return (source instanceof UIViewRoot);
+        }
+
+        public SystemEvent getPassedEvent() {
+            return event;
+        }
+
+        public boolean wasProcessEventInvoked() {
+            return processEventInvoked;
+        }
+
+        public void reset() {
+            processEventInvoked = false;
+            event = null;
+        }
     }
 
 } // end of class TestNavigationHandler
