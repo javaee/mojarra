@@ -166,12 +166,6 @@ public class NavigationHandlerImpl extends NavigationHandler {
             ViewHandler viewHandler = Util.getViewHandler(context);
             assert (null != viewHandler);
 
-            // if the viewId is changing, the implementation must clear
-            // the View scope.
-            UIViewRoot current = context.getViewRoot();
-            if (!current.getViewId().equals(caseStruct.viewId)) {
-                current.getViewMap().clear();
-            }
             if (caseStruct.navCase.hasRedirect()) {
                 // perform a 302 redirect.
                 String newPath =
