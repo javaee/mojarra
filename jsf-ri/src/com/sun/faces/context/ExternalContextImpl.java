@@ -568,6 +568,28 @@ public class ExternalContextImpl extends ExternalContext {
         return ((HttpServletRequest) request).isUserInRole(role);
     }
 
+    @Override
+    public String getRequestScheme() {
+         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public String getRequestServerName() {
+         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public String getRequestServerPort() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setResponseContentType(String arg0) {
+         throw new UnsupportedOperationException();
+    }
+    
+    
+
 
     // ----------------------------------------------------------- Inner Classes
 
