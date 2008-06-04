@@ -105,7 +105,7 @@ public abstract class UIComponentBase extends UIComponent {
 
     // -------------------------------------------------------------- Attributes
 
-    private static Logger log = Logger.getLogger("javax.faces.component",
+    private static Logger LOGGER = Logger.getLogger("javax.faces.component",
             "javax.faces.LogStrings");
 
 
@@ -153,8 +153,8 @@ public abstract class UIComponentBase extends UIComponent {
             for (PropertyDescriptor aPd : pd) {
                 pdMap.put(aPd.getName(), aPd);
             }
-            if (log.isLoggable(Level.FINE)) {
-                log.log(Level.FINE, "fine.component.populating_descriptor_map",
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE, "fine.component.populating_descriptor_map",
                         new Object[]{clazz,
                                      Thread.currentThread().getName()});
             }
@@ -775,9 +775,7 @@ public abstract class UIComponentBase extends UIComponent {
             return;
         }
 
-        Iterator<FacesListener> iter = listeners.iterator();
-        while (iter.hasNext()) {
-            FacesListener listener = iter.next();
+        for (FacesListener listener : listeners) {
             if (event.isAppropriateListener(listener)) {
                 event.processListener(listener);
             }
@@ -798,9 +796,10 @@ public abstract class UIComponentBase extends UIComponent {
             Renderer renderer = this.getRenderer(context);
             if (renderer != null) {
                 renderer.decode(context, this);
-            }else {
-                // TODO: i18n
-                log.fine("Can't get Renderer for type " + rendererType);
+            } else {
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine("Can't get Renderer for type " + rendererType);
+                }
             }
         }
     }
@@ -828,8 +827,9 @@ public abstract class UIComponentBase extends UIComponent {
             if (renderer != null) {
                 renderer.encodeBegin(context, this);
             } else {
-                // TODO: i18n
-                log.fine("Can't get Renderer for type " + rendererType);
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine("Can't get Renderer for type " + rendererType);
+                }
             }
         }
 
@@ -851,9 +851,8 @@ public abstract class UIComponentBase extends UIComponent {
             Renderer renderer = this.getRenderer(context);
             if (renderer != null) {
                 renderer.encodeChildren(context, this);
-            } else {
-                // We've already logged for this component
             }
+            // We've already logged for this component
         }
     }
 
@@ -1051,8 +1050,7 @@ public abstract class UIComponentBase extends UIComponent {
         } catch (RuntimeException e) {
             context.renderResponse();
             throw e;
-        }
-        finally {
+        } finally {
             popComponentFromEL(context);
         }
 
@@ -1072,7 +1070,6 @@ public abstract class UIComponentBase extends UIComponent {
         if (!isRendered()) {
             return;
         }
-
 
         pushComponentToEL(context);
         
@@ -1130,7 +1127,6 @@ public abstract class UIComponentBase extends UIComponent {
 
         pushComponentToEL(context);
 
-        
         // Process this component itself
         stateStruct[MY_STATE] = saveState(context);
 
@@ -1215,7 +1211,7 @@ public abstract class UIComponentBase extends UIComponent {
                 if (currentState == null) {
                     continue;
                 }
-                pushComponentToEL(context);     
+                pushComponentToEL(context);
                 kid.processRestoreState(context, currentState);
                 popComponentFromEL(context);
             }
@@ -1245,7 +1241,6 @@ public abstract class UIComponentBase extends UIComponent {
 
     // ------------------------------------------------------- Protected Methods
 
-
     protected FacesContext getFacesContext() {
 
 	// PENDING(edburns): we can't use the cache ivar because we
@@ -1271,17 +1266,15 @@ public abstract class UIComponentBase extends UIComponent {
             result = context.getRenderKit().getRenderer(getFamily(),
                                                         rendererType);
             if (null == result) {
-                if (log.isLoggable(Level.FINE)) {
-                    // PENDING(edburns): I18N
-                    log.fine("Can't get Renderer for type " + rendererType);
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine("Can't get Renderer for type " + rendererType);
                 }
             }
         } else {
-            if (log.isLoggable(Level.FINE)) {
+            if (LOGGER.isLoggable(Level.FINE)) {
                 String id = this.getId();
                 id = (null != id) ? id : this.getClass().getName();
-                // PENDING(edburns): I18N
-                log.fine("No renderer-type for component " + id);
+                LOGGER.fine("No renderer-type for component " + id);
             }
         }
         return result;
@@ -1324,9 +1317,9 @@ public abstract class UIComponentBase extends UIComponent {
         // transparency before we restore its values.
         if (values[0] != null) {
             attributes = new AttributesMap(this,
-                                          (HashMap) TypedCollections.dynamicallyCastMap((Map) values[0],
-                                                                                        String.class,
-                                                                                        Object.class));
+                                          (Map) TypedCollections.dynamicallyCastMap((Map) values[0],
+                                                                                    String.class,
+                                                                                    Object.class));
         }
         bindings = restoreBindingsState(context, values[1]);
         clientId = (String) values[2];
@@ -1347,6 +1340,7 @@ public abstract class UIComponentBase extends UIComponent {
                 listeners = restoredListeners;
             }
         }
+        //noinspection unchecked
         attributesThatAreSet = (List<String>) values[8];
     }
 
@@ -1570,7 +1564,7 @@ public abstract class UIComponentBase extends UIComponent {
         private static final String ATTRIBUTES_THAT_ARE_SET_KEY =
               UIComponentBase.class.getName() + ".attributesThatAreSet";
 
-        private HashMap<String, Object> attributes;
+        private Map<String, Object> attributes;
         private transient Map<String,PropertyDescriptor> pdMap;
         private transient UIComponent component;
         private static final long serialVersionUID = -6773035086539772945L;
@@ -1585,9 +1579,10 @@ public abstract class UIComponentBase extends UIComponent {
         }
 
         private AttributesMap(UIComponent component,
-                              HashMap<String,Object> attributes) {
+                              Map<String,Object> attributes) {
             this(component);
             this.attributes = attributes;
+
         }
 
         public boolean containsKey(Object keyObj) {
@@ -1851,12 +1846,13 @@ public abstract class UIComponentBase extends UIComponent {
 
         // This is dependent on serialization occuring with in a
         // a Faces request, however, since UIComponentBase.{save,restore}State()
-        // don't actually serialize the AttributesMap, these methods are here
+        // doesn't actually serialize the AttributesMap, these methods are here
         // purely to be good citizens.
         private void writeObject(ObjectOutputStream out) throws IOException {
             if (attributes == null) {
                 out.writeObject(new HashMap(1, 1.0f));
             } else {
+                //noinspection NonSerializableObjectPassedToObjectStream
                 out.writeObject(attributes);
             }
             out.writeObject(component.getClass());
@@ -1869,6 +1865,7 @@ public abstract class UIComponentBase extends UIComponent {
             attributes = null;
             pdMap = null;
             component = null;
+            //noinspection unchecked
             attributes = (HashMap) in.readObject();
             Class clazz = (Class) in.readObject();
             try {
@@ -2015,9 +2012,8 @@ public abstract class UIComponentBase extends UIComponent {
 
         public boolean removeAll(Collection<?> collection) {
             boolean result = false;
-            Iterator<?> elements = collection.iterator();
-            while (elements.hasNext()) {
-                if (remove(elements.next())) {
+            for (Object elements : collection) {
+                if (remove(elements)) {
                     result = true;
                 }
             }
