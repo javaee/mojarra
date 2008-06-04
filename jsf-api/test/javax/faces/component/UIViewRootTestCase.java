@@ -989,6 +989,7 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 
         public void reset() {
             processEventInvoked = false;
+            event = null;
         }
 
     }
