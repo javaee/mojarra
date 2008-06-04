@@ -2111,47 +2111,33 @@ public abstract class UIComponentBase extends UIComponent {
         }
         
         private void processResourceDependencyAnnotation(FacesContext context, 
-                Object source) {
+                                                         Object source) {
+            Class<?> sourceClass = source.getClass();
             UIOutput resourceComponent = null;
-            if (!source.getClass().isAnnotationPresent(ResourceDependency.class)) {
-                if (!source.getClass().isAnnotationPresent(ResourceDependencies.class)) {
-                    return;
-                } else {
-                    try {
-                        ResourceDependencies resourceDeps =
-                            (ResourceDependencies) source.getClass().getAnnotation(ResourceDependencies.class);
-                        Method valueMethod = resourceDeps.getClass().getMethod("value", new Class[] {});
-                        if (!valueMethod.getReturnType().isArray()) {
-                            throw new IllegalArgumentException (
-                                "@ResourceDependencies annotation does not contain Array of @ResourceDependency annotations");
-                        }
-                        Object[] values = (Object[]) valueMethod.invoke(resourceDeps, new Object[] {});
-                        for (Object value : values) {
-                            if (!(value instanceof Annotation)) {
-                                throw new IllegalArgumentException (
-                                    "@ResourceDependencies annotations array does not contain an Annotation type");
-                            }
-                            Annotation annotation = (Annotation)value;
-                            if (!(annotation.annotationType() == ResourceDependency.class)) {
-                                throw new IllegalArgumentException (
-                                    "@ResourceDependencies annotation contains a non @ResourceDependency annotation");
-                            }
-                            ResourceDependency resourceDep = (ResourceDependency)annotation;
-                            createComponentResource(context, resourceDep);
-                        }
-                    } catch(NoSuchMethodException e) {
-                        throw new FacesException(e);
-                    } catch (IllegalAccessException e) {
-                        throw new FacesException(e);
-                    } catch (InvocationTargetException e) {
-                        throw new FacesException (e.getTargetException());
+            // check for both as it would be legal to have a single
+            // @ResourceDependencies and @ResourceDependency annotation
+            // defined
+            // NOTE - calling isAnnotationPresent and getAnnotation without
+            // caching the metadata will be a performance sink as these methods
+            // are backed by a sync'd utility method.  We'll need to come up
+            // with something better.
+            if (sourceClass.isAnnotationPresent(ResourceDependencies.class)) {
+                ResourceDependencies resourceDeps =
+                      source.getClass()
+                            .getAnnotation(ResourceDependencies.class);
+                ResourceDependency[] dependencies = resourceDeps.value();
+                if (dependencies != null) {
+                    for (ResourceDependency dependency : dependencies) {
+                        createComponentResource(context, dependency);
                     }
                 }
-            } else {
-                // Get the resourceMetadata from the annotation
-                ResourceDependency resourceDep = (ResourceDependency) source.getClass().getAnnotation(ResourceDependency.class);
-                createComponentResource(context, resourceDep);
             }
+            if (sourceClass.isAnnotationPresent(ResourceDependencies.class)) {
+                ResourceDependency resource =
+                      sourceClass.getAnnotation(ResourceDependency.class);
+                createComponentResource(context, resource);
+            }
+
         }
 
         private static void createComponentResource(FacesContext context, ResourceDependency resourceDep) {
