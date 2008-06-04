@@ -512,7 +512,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      *                               is <code>null</code>
      */
     public List<UIComponent> getComponentResources(FacesContext context, 
-            String target) {
+                                                   String target) {
         if (target == null) {
             throw new NullPointerException();
         }
@@ -610,12 +610,11 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
         if (event == null) {
             throw new NullPointerException();
         }
-        int i;
-        int len = PhaseId.VALUES.size();
         // We are a UIViewRoot, so no need to check for the ISE
         if (events == null) {
+            int len = PhaseId.VALUES.size();
             List<List<FacesEvent>> events = new ArrayList<List<FacesEvent>>(len);
-            for (i = 0; i < len; i++) {
+            for (int i = 0; i < len; i++) {
                 events.add(new ArrayList<FacesEvent>(5));
             }
             this.events = events;
@@ -1210,7 +1209,9 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      */
     
     public Map<String, Object> getViewMap() {
-        if (null == viewScope) {
+        if (viewScope == null) {          
+            getFacesContext().getApplication()
+                  .publishEvent(ViewMapCreatedEvent.class, this);
             viewScope = new ViewMap();
         }
         return viewScope;
@@ -1256,6 +1257,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
               (MethodExpression) restoreAttachedState(context, values[6]);
         phaseListeners = TypedCollections.dynamicallyCastList((List)
               restoreAttachedState(context, values[7]), PhaseListener.class);
+        //noinspection unchecked
         viewScope =
               (Map<String, Object>) restoreAttachedState(context, values[8]);
     }
