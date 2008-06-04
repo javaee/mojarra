@@ -406,6 +406,99 @@ public abstract class ExternalContext {
         throw new UnsupportedOperationException();
 
     }
+
+
+    /**
+     * <p class="changed_added_2_0">Returns the name of the scheme used
+     * to make this request, for example, http, https, or ftp.</p>
+     *
+     * <div class="changed_added_2_0">
+     * <p><em>Servlet:</em> This must be the value returned by the
+     * <code>javax.servlet.ServletRequest</code> method
+     * <code>getScheme()</code>.</p>
+     *
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided for
+     * the sole purpose of not breaking existing applications that
+     * extend this class.</p>
+
+     * </div>
+
+     * @since 2.0
+     */
+
+    public String getRequestScheme() {
+	String result;
+        ExternalContext impl = getDefaultExternalContext();
+        if (impl != null) {
+            result = impl.getRequestScheme();
+            return result;
+        }
+
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * <p class="changed_added_2_0">Returns the host name of the server
+     * to which the request was sent.</p>
+     *
+     * <div class="changed_added_2_0">
+
+     * <p><em>Servlet:</em> This must be the value returned by the
+     * <code>javax.servlet.ServletRequest</code> method
+     * <code>getServerName()</code>.</p>
+     
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided for
+     * the sole purpose of not breaking existing applications that
+     * extend this class.</p>
+
+     * </div>
+
+     * @since 2.0
+     */
+
+    public String getRequestServerName() {
+	String result;
+        ExternalContext impl = getDefaultExternalContext();
+        if (impl != null) {
+            result = impl.getRequestServerName();
+            return result;
+        }
+
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * <p class="changed_added_2_0">Returns the port number to which
+     * the request was sent.</p>
+     *
+     * <div class="changed_added_2_0">
+
+     * <p><em>Servlet:</em> This must be the value returned by the
+     * <code>javax.servlet.ServletRequest</code> method
+     * <code>getServerPort()</code>.</p>
+     
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided for
+     * the sole purpose of not breaking existing applications that
+     * extend this class.</p>
+
+     * </div>
+
+     * @since 2.0
+     */
+
+    public String getRequestServerPort() {
+	String result;
+        ExternalContext impl = getDefaultExternalContext();
+        if (impl != null) {
+            result = impl.getRequestServerPort();
+            return result;
+        }
+
+        throw new UnsupportedOperationException();
+    }
     
     /**
      *
@@ -929,7 +1022,36 @@ public abstract class ExternalContext {
     }
     
 
+    /**
+     * <p class="changed_added_2_0">Sets the content type of the
+     * response being sent to the client, if the response has not been
+     * committed yet.</p>
+     *
+     * <div class="changed_added_2_0">
 
+     * <p><em>Servlet:</em> This must call
+     * <code>setContentType()</code> on the underlying
+     * <code>javax.servlet.ServletResponse</code> instance.</p>
+
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided for
+     * the sole purpose of not breaking existing applications that
+     * extend this class.</p>
+
+     * </div>
+
+     * @since 2.0
+     */
+
+    public void setResponseContentType(String contentType) {
+        ExternalContext impl = getDefaultExternalContext();
+        if (impl != null) {
+            impl.setResponseContentType(contentType);
+            return;
+        }
+
+        throw new UnsupportedOperationException();
+    }
 
 
     /**
