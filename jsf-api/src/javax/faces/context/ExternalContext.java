@@ -1278,6 +1278,38 @@ public abstract class ExternalContext {
 
 
     /**
+     * <p class="changed_added_2_0">Invalidates this session then unbinds any objects bound to it.</p>
+     *
+     * <div class="changed_added_2_0">
+
+     * <p><em>Servlet:</em> This must be the value returned by the
+     * <code>javax.servlet.http.HttpSession</code> method
+     * <code>invalidate()</code>.</p>
+
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided for
+     * the sole purpose of not breaking existing applications that
+     * extend this class.</p>
+
+     * </div>
+
+     * @since 2.0
+     */
+
+    public void invalidateSession() {
+        ExternalContext impl = getDefaultExternalContext();
+        if (impl != null) {
+            impl.invalidateSession();
+            return;
+        }
+
+        throw new UnsupportedOperationException();
+    }
+
+
+
+
+    /**
      * <p>Return <code>true</code> if the currently authenticated user is
      * included in the specified role.  Otherwise, return <code>false</code>.
      * </p>

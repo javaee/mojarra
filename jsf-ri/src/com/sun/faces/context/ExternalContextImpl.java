@@ -570,6 +570,13 @@ public class ExternalContextImpl extends ExternalContext {
     }
 
     @Override
+    public void invalidateSession() {
+        throw new UnsupportedOperationException();
+    }
+    
+    
+
+    @Override
     public void addResponseCookie(String arg0, String arg1, Map<String, Object> arg2) throws IllegalArgumentException {
          throw new UnsupportedOperationException();
     }
