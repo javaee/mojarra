@@ -82,19 +82,16 @@ public @interface ResourceDependency {
 
     /**
      * RELEASE_PENDING (edburns,rogerk) Add docs
-     * @return
      */
     public String name();
 
     /**
      * RELEASE_PENDING (edburns,rogerk) Add docs
-     * @return
      */
     public String library() default "";
 
     /**
      * RELEASE_PENDING (edburns,rogerk) Add docs
-     * @return
      */
     public String target() default "";
 

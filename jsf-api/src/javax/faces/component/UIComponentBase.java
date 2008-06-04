@@ -1900,8 +1900,14 @@ public abstract class UIComponentBase extends UIComponent {
             } else {
                 eraseParent(element);
                 element.setParent(component);
-                super.add(index, element);
                 FacesContext context = FacesContext.getCurrentInstance();
+                // Make sure to clear our cache if the component is a UIViewRoot and
+                // it does not yet have children.  This will be the case when
+                // the UIViewRoot has been freshly instantiated.
+                if (0 == this.size() && this.component instanceof UIViewRoot) {
+                    clearPostbackAndRestoreViewCache(context);
+                }
+                super.add(index, element);
                 doPostAddProcessing(context, element);
             }
         }
@@ -1913,8 +1919,15 @@ public abstract class UIComponentBase extends UIComponent {
             } else {
                 eraseParent(element);
                 element.setParent(component);
-                result = super.add(element);
                 FacesContext context = FacesContext.getCurrentInstance();
+                // Make sure to clear our cache if the component is a UIViewRoot and
+                // it does not yet have children.  This will be the case when
+                // the UIViewRoot has been freshly instantiated.
+                if (0 == this.size() && this.component instanceof UIViewRoot) {
+                    clearPostbackAndRestoreViewCache(context);
+                }
+
+                result = super.add(element);
                 doPostAddProcessing(context, element);
             }
             return result;
@@ -2038,7 +2051,7 @@ public abstract class UIComponentBase extends UIComponent {
             }
         }
         
-        private static void doPostAddProcessing(FacesContext context, UIComponent added) {
+        private void doPostAddProcessing(FacesContext context, UIComponent added) {
             if (!isPostbackAndRestoreView(context)) {
                 context.getApplication().publishEvent(AfterAddToParentEvent.class, added);
                 processResourceDependencyOnComponentAndMaybeRenderer(context,
@@ -2048,7 +2061,13 @@ public abstract class UIComponentBase extends UIComponent {
         
         private static final String IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME = "com.sun.faces.IS_POSTBACK_AND_RESTORE_VIEW";
         
-        private static boolean isPostbackAndRestoreView(FacesContext context) {
+        private void clearPostbackAndRestoreViewCache(FacesContext context) {
+            Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
+            requestMap.remove(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME);
+                        
+        }
+        
+        private boolean isPostbackAndRestoreView(FacesContext context) {
             boolean result = false;
             Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
             if (requestMap.containsKey(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME)) {
@@ -2056,8 +2075,8 @@ public abstract class UIComponentBase extends UIComponent {
             }
             else {
                 result = getResponseStateManager(context, 
-                    context.getViewRoot().getRenderKitId()).isPostback(context)
-                         && PhaseId.RESTORE_VIEW.equals(context.getCurrentPhaseId());
+                    context.getViewRoot().getRenderKitId()).isPostback(context) &&
+                    context.getCurrentPhaseId().equals(PhaseId.RESTORE_VIEW);
                 requestMap.put(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME,
                         result ? Boolean.TRUE : Boolean.FALSE);
                 
@@ -2086,7 +2105,7 @@ public abstract class UIComponentBase extends UIComponent {
     }
         
         
-        private static void processResourceDependencyOnComponentAndMaybeRenderer(FacesContext context, 
+        private void processResourceDependencyOnComponentAndMaybeRenderer(FacesContext context, 
                 UIComponent added) {
             processResourceDependencyAnnotation(context, added);
             Renderer renderer = added.getRenderer(context);
@@ -2095,7 +2114,7 @@ public abstract class UIComponentBase extends UIComponent {
             }
         }
         
-        private static void processResourceDependencyAnnotation(FacesContext context, 
+        private void processResourceDependencyAnnotation(FacesContext context, 
                 Object source) {
             UIOutput resourceComponent = null;
             if (!source.getClass().isAnnotationPresent(ResourceDependency.class)) {
