@@ -1245,7 +1245,6 @@ private void doFind(FacesContext context, String clientId) {
     /**
      * RELEASE_PENDING (edburns,roger) document
      * @param facesEventClass
-     * @return
      */
     public List<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> facesEventClass) {
 
