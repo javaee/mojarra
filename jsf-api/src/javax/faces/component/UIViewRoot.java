@@ -59,9 +59,7 @@ import javax.faces.webapp.FacesServlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -514,7 +512,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      *                               is <code>null</code>
      */
     public List<UIComponent> getComponentResources(FacesContext context, 
-            String target) {
+                                                   String target) {
         if (target == null) {
             throw new NullPointerException();
         }
@@ -612,12 +610,11 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
         if (event == null) {
             throw new NullPointerException();
         }
-        int i;
-        int len = PhaseId.VALUES.size();
         // We are a UIViewRoot, so no need to check for the ISE
         if (events == null) {
+            int len = PhaseId.VALUES.size();
             List<List<FacesEvent>> events = new ArrayList<List<FacesEvent>>(len);
-            for (i = 0; i < len; i++) {
+            for (int i = 0; i < len; i++) {
                 events.add(new ArrayList<FacesEvent>(5));
             }
             this.events = events;
@@ -690,8 +687,8 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
                     UIComponent source = event.getComponent();
                     try {
                         source.broadcast(event);
-                    } catch (AbortProcessingException e) {
-                        ; // A "return" here would abort remaining events too
+                    } catch (AbortProcessingException ignored) {
+                        // A "return" here would abort remaining events too
                     }
                     eventsForPhaseId.remove(0); // Stay at current position
                 }
@@ -1191,9 +1188,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      * data store that is the "view scope".  This map must be
      * instantiated lazily and cached for return from subsequent calls
      * to this method on this <code>UIViewRoot</code> instance.
-     * PENDING(edburns): better to do it eagerly?  Immediately after
-     * instantiation, {@link
-     * javax.faces.application.Application#publishEvent} must be called,
+     * {@link javax.faces.application.Application#publishEvent} must be called,
      * passing {@link ViewMapCreatedEvent}<code>.class</code> as the
      * first argument and this <code>UIViewRoot</code> instance as the
      * second argument.</p>
@@ -1214,7 +1209,9 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      */
     
     public Map<String, Object> getViewMap() {
-        if (null == viewScope) {
+        if (viewScope == null) {          
+            getFacesContext().getApplication()
+                  .publishEvent(ViewMapCreatedEvent.class, this);
             viewScope = new ViewMap();
         }
         return viewScope;
@@ -1260,6 +1257,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
               (MethodExpression) restoreAttachedState(context, values[6]);
         phaseListeners = TypedCollections.dynamicallyCastList((List)
               restoreAttachedState(context, values[7]), PhaseListener.class);
+        //noinspection unchecked
         viewScope =
               (Map<String, Object>) restoreAttachedState(context, values[8]);
     }

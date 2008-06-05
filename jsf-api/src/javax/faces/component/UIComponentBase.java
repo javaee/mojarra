@@ -105,7 +105,7 @@ public abstract class UIComponentBase extends UIComponent {
 
     // -------------------------------------------------------------- Attributes
 
-    private static Logger log = Logger.getLogger("javax.faces.component",
+    private static Logger LOGGER = Logger.getLogger("javax.faces.component",
             "javax.faces.LogStrings");
 
 
@@ -153,8 +153,8 @@ public abstract class UIComponentBase extends UIComponent {
             for (PropertyDescriptor aPd : pd) {
                 pdMap.put(aPd.getName(), aPd);
             }
-            if (log.isLoggable(Level.FINE)) {
-                log.log(Level.FINE, "fine.component.populating_descriptor_map",
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE, "fine.component.populating_descriptor_map",
                         new Object[]{clazz,
                                      Thread.currentThread().getName()});
             }
@@ -775,9 +775,7 @@ public abstract class UIComponentBase extends UIComponent {
             return;
         }
 
-        Iterator<FacesListener> iter = listeners.iterator();
-        while (iter.hasNext()) {
-            FacesListener listener = iter.next();
+        for (FacesListener listener : listeners) {
             if (event.isAppropriateListener(listener)) {
                 event.processListener(listener);
             }
@@ -798,9 +796,10 @@ public abstract class UIComponentBase extends UIComponent {
             Renderer renderer = this.getRenderer(context);
             if (renderer != null) {
                 renderer.decode(context, this);
-            }else {
-                // TODO: i18n
-                log.fine("Can't get Renderer for type " + rendererType);
+            } else {
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine("Can't get Renderer for type " + rendererType);
+                }
             }
         }
     }
@@ -828,8 +827,9 @@ public abstract class UIComponentBase extends UIComponent {
             if (renderer != null) {
                 renderer.encodeBegin(context, this);
             } else {
-                // TODO: i18n
-                log.fine("Can't get Renderer for type " + rendererType);
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine("Can't get Renderer for type " + rendererType);
+                }
             }
         }
 
@@ -851,9 +851,8 @@ public abstract class UIComponentBase extends UIComponent {
             Renderer renderer = this.getRenderer(context);
             if (renderer != null) {
                 renderer.encodeChildren(context, this);
-            } else {
-                // We've already logged for this component
             }
+            // We've already logged for this component
         }
     }
 
@@ -1051,8 +1050,7 @@ public abstract class UIComponentBase extends UIComponent {
         } catch (RuntimeException e) {
             context.renderResponse();
             throw e;
-        }
-        finally {
+        } finally {
             popComponentFromEL(context);
         }
 
@@ -1072,7 +1070,6 @@ public abstract class UIComponentBase extends UIComponent {
         if (!isRendered()) {
             return;
         }
-
 
         pushComponentToEL(context);
         
@@ -1130,7 +1127,6 @@ public abstract class UIComponentBase extends UIComponent {
 
         pushComponentToEL(context);
 
-        
         // Process this component itself
         stateStruct[MY_STATE] = saveState(context);
 
@@ -1215,7 +1211,7 @@ public abstract class UIComponentBase extends UIComponent {
                 if (currentState == null) {
                     continue;
                 }
-                pushComponentToEL(context);     
+                pushComponentToEL(context);
                 kid.processRestoreState(context, currentState);
                 popComponentFromEL(context);
             }
@@ -1245,7 +1241,6 @@ public abstract class UIComponentBase extends UIComponent {
 
     // ------------------------------------------------------- Protected Methods
 
-
     protected FacesContext getFacesContext() {
 
 	// PENDING(edburns): we can't use the cache ivar because we
@@ -1271,17 +1266,15 @@ public abstract class UIComponentBase extends UIComponent {
             result = context.getRenderKit().getRenderer(getFamily(),
                                                         rendererType);
             if (null == result) {
-                if (log.isLoggable(Level.FINE)) {
-                    // PENDING(edburns): I18N
-                    log.fine("Can't get Renderer for type " + rendererType);
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine("Can't get Renderer for type " + rendererType);
                 }
             }
         } else {
-            if (log.isLoggable(Level.FINE)) {
+            if (LOGGER.isLoggable(Level.FINE)) {
                 String id = this.getId();
                 id = (null != id) ? id : this.getClass().getName();
-                // PENDING(edburns): I18N
-                log.fine("No renderer-type for component " + id);
+                LOGGER.fine("No renderer-type for component " + id);
             }
         }
         return result;
@@ -1324,9 +1317,9 @@ public abstract class UIComponentBase extends UIComponent {
         // transparency before we restore its values.
         if (values[0] != null) {
             attributes = new AttributesMap(this,
-                                          (HashMap) TypedCollections.dynamicallyCastMap((Map) values[0],
-                                                                                        String.class,
-                                                                                        Object.class));
+                                          (Map) TypedCollections.dynamicallyCastMap((Map) values[0],
+                                                                                    String.class,
+                                                                                    Object.class));
         }
         bindings = restoreBindingsState(context, values[1]);
         clientId = (String) values[2];
@@ -1347,6 +1340,7 @@ public abstract class UIComponentBase extends UIComponent {
                 listeners = restoredListeners;
             }
         }
+        //noinspection unchecked
         attributesThatAreSet = (List<String>) values[8];
     }
 
@@ -1570,7 +1564,7 @@ public abstract class UIComponentBase extends UIComponent {
         private static final String ATTRIBUTES_THAT_ARE_SET_KEY =
               UIComponentBase.class.getName() + ".attributesThatAreSet";
 
-        private HashMap<String, Object> attributes;
+        private Map<String, Object> attributes;
         private transient Map<String,PropertyDescriptor> pdMap;
         private transient UIComponent component;
         private static final long serialVersionUID = -6773035086539772945L;
@@ -1585,9 +1579,10 @@ public abstract class UIComponentBase extends UIComponent {
         }
 
         private AttributesMap(UIComponent component,
-                              HashMap<String,Object> attributes) {
+                              Map<String,Object> attributes) {
             this(component);
             this.attributes = attributes;
+
         }
 
         public boolean containsKey(Object keyObj) {
@@ -1851,12 +1846,13 @@ public abstract class UIComponentBase extends UIComponent {
 
         // This is dependent on serialization occuring with in a
         // a Faces request, however, since UIComponentBase.{save,restore}State()
-        // don't actually serialize the AttributesMap, these methods are here
+        // doesn't actually serialize the AttributesMap, these methods are here
         // purely to be good citizens.
         private void writeObject(ObjectOutputStream out) throws IOException {
             if (attributes == null) {
                 out.writeObject(new HashMap(1, 1.0f));
             } else {
+                //noinspection NonSerializableObjectPassedToObjectStream
                 out.writeObject(attributes);
             }
             out.writeObject(component.getClass());
@@ -1869,6 +1865,7 @@ public abstract class UIComponentBase extends UIComponent {
             attributes = null;
             pdMap = null;
             component = null;
+            //noinspection unchecked
             attributes = (HashMap) in.readObject();
             Class clazz = (Class) in.readObject();
             try {
@@ -1900,8 +1897,14 @@ public abstract class UIComponentBase extends UIComponent {
             } else {
                 eraseParent(element);
                 element.setParent(component);
-                super.add(index, element);
                 FacesContext context = FacesContext.getCurrentInstance();
+                // Make sure to clear our cache if the component is a UIViewRoot and
+                // it does not yet have children.  This will be the case when
+                // the UIViewRoot has been freshly instantiated.
+                if (0 == this.size() && this.component instanceof UIViewRoot) {
+                    clearPostbackAndRestoreViewCache(context);
+                }
+                super.add(index, element);
                 doPostAddProcessing(context, element);
             }
         }
@@ -1913,8 +1916,15 @@ public abstract class UIComponentBase extends UIComponent {
             } else {
                 eraseParent(element);
                 element.setParent(component);
-                result = super.add(element);
                 FacesContext context = FacesContext.getCurrentInstance();
+                // Make sure to clear our cache if the component is a UIViewRoot and
+                // it does not yet have children.  This will be the case when
+                // the UIViewRoot has been freshly instantiated.
+                if (0 == this.size() && this.component instanceof UIViewRoot) {
+                    clearPostbackAndRestoreViewCache(context);
+                }
+
+                result = super.add(element);
                 doPostAddProcessing(context, element);
             }
             return result;
@@ -2002,9 +2012,8 @@ public abstract class UIComponentBase extends UIComponent {
 
         public boolean removeAll(Collection<?> collection) {
             boolean result = false;
-            Iterator<?> elements = collection.iterator();
-            while (elements.hasNext()) {
-                if (remove(elements.next())) {
+            for (Object elements : collection) {
+                if (remove(elements)) {
                     result = true;
                 }
             }
@@ -2038,7 +2047,7 @@ public abstract class UIComponentBase extends UIComponent {
             }
         }
         
-        private static void doPostAddProcessing(FacesContext context, UIComponent added) {
+        private void doPostAddProcessing(FacesContext context, UIComponent added) {
             if (!isPostbackAndRestoreView(context)) {
                 context.getApplication().publishEvent(AfterAddToParentEvent.class, added);
                 processResourceDependencyOnComponentAndMaybeRenderer(context,
@@ -2048,7 +2057,13 @@ public abstract class UIComponentBase extends UIComponent {
         
         private static final String IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME = "com.sun.faces.IS_POSTBACK_AND_RESTORE_VIEW";
         
-        private static boolean isPostbackAndRestoreView(FacesContext context) {
+        private void clearPostbackAndRestoreViewCache(FacesContext context) {
+            Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
+            requestMap.remove(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME);
+                        
+        }
+        
+        private boolean isPostbackAndRestoreView(FacesContext context) {
             boolean result = false;
             Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
             if (requestMap.containsKey(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME)) {
@@ -2056,8 +2071,8 @@ public abstract class UIComponentBase extends UIComponent {
             }
             else {
                 result = getResponseStateManager(context, 
-                    context.getViewRoot().getRenderKitId()).isPostback(context)
-                         && PhaseId.RESTORE_VIEW.equals(context.getCurrentPhaseId());
+                    context.getViewRoot().getRenderKitId()).isPostback(context) &&
+                    context.getCurrentPhaseId().equals(PhaseId.RESTORE_VIEW);
                 requestMap.put(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME,
                         result ? Boolean.TRUE : Boolean.FALSE);
                 
@@ -2086,7 +2101,7 @@ public abstract class UIComponentBase extends UIComponent {
     }
         
         
-        private static void processResourceDependencyOnComponentAndMaybeRenderer(FacesContext context, 
+        private void processResourceDependencyOnComponentAndMaybeRenderer(FacesContext context, 
                 UIComponent added) {
             processResourceDependencyAnnotation(context, added);
             Renderer renderer = added.getRenderer(context);
@@ -2095,48 +2110,34 @@ public abstract class UIComponentBase extends UIComponent {
             }
         }
         
-        private static void processResourceDependencyAnnotation(FacesContext context, 
-                Object source) {
+        private void processResourceDependencyAnnotation(FacesContext context, 
+                                                         Object source) {
+            Class<?> sourceClass = source.getClass();
             UIOutput resourceComponent = null;
-            if (!source.getClass().isAnnotationPresent(ResourceDependency.class)) {
-                if (!source.getClass().isAnnotationPresent(ResourceDependencies.class)) {
-                    return;
-                } else {
-                    try {
-                        ResourceDependencies resourceDeps =
-                            (ResourceDependencies) source.getClass().getAnnotation(ResourceDependencies.class);
-                        Method valueMethod = resourceDeps.getClass().getMethod("value", new Class[] {});
-                        if (!valueMethod.getReturnType().isArray()) {
-                            throw new IllegalArgumentException (
-                                "@ResourceDependencies annotation does not contain Array of @ResourceDependency annotations");
-                        }
-                        Object[] values = (Object[]) valueMethod.invoke(resourceDeps, new Object[] {});
-                        for (Object value : values) {
-                            if (!(value instanceof Annotation)) {
-                                throw new IllegalArgumentException (
-                                    "@ResourceDependencies annotations array does not contain an Annotation type");
-                            }
-                            Annotation annotation = (Annotation)value;
-                            if (!(annotation.annotationType() == ResourceDependency.class)) {
-                                throw new IllegalArgumentException (
-                                    "@ResourceDependencies annotation contains a non @ResourceDependency annotation");
-                            }
-                            ResourceDependency resourceDep = (ResourceDependency)annotation;
-                            createComponentResource(context, resourceDep);
-                        }
-                    } catch(NoSuchMethodException e) {
-                        throw new FacesException(e);
-                    } catch (IllegalAccessException e) {
-                        throw new FacesException(e);
-                    } catch (InvocationTargetException e) {
-                        throw new FacesException (e.getTargetException());
+            // check for both as it would be legal to have a single
+            // @ResourceDependencies and @ResourceDependency annotation
+            // defined
+            // NOTE - calling isAnnotationPresent and getAnnotation without
+            // caching the metadata will be a performance sink as these methods
+            // are backed by a sync'd utility method.  We'll need to come up
+            // with something better.
+            if (sourceClass.isAnnotationPresent(ResourceDependencies.class)) {
+                ResourceDependencies resourceDeps =
+                      source.getClass()
+                            .getAnnotation(ResourceDependencies.class);
+                ResourceDependency[] dependencies = resourceDeps.value();
+                if (dependencies != null) {
+                    for (ResourceDependency dependency : dependencies) {
+                        createComponentResource(context, dependency);
                     }
                 }
-            } else {
-                // Get the resourceMetadata from the annotation
-                ResourceDependency resourceDep = (ResourceDependency) source.getClass().getAnnotation(ResourceDependency.class);
-                createComponentResource(context, resourceDep);
             }
+            if (sourceClass.isAnnotationPresent(ResourceDependencies.class)) {
+                ResourceDependency resource =
+                      sourceClass.getAnnotation(ResourceDependency.class);
+                createComponentResource(context, resource);
+            }
+
         }
 
         private static void createComponentResource(FacesContext context, ResourceDependency resourceDep) {

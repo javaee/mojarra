@@ -66,9 +66,16 @@ import java.util.Map;
  * environment.  In particular, this class allows JavaServer Faces based
  * appications to run in either a Servlet or a Portlet environment.</p>
  *
- * <p>In the method descriptions below, paragraphs starting with
- * <em>Servlet:</em> and <em>Portlet:</em> denote behavior that is
- * specific to that particular environment.</p>
+ * <p class="changed_modified_2_0">The documentation for this class only
+ * specifies the behavior for the <em>Servlet</em> implementation of
+ * <code>ExternalContext</code>.  The <em>Portlet</em> implementation of
+ * <code>ExternalContext</code> is specified under the revision of the
+ * <span style="text-decoration: underline;">Portlet Bridge
+ * Specification for JavaServer Faces</span> JSR that corresponds to
+ * this version of the JSF specification.  See the Preface of the
+ * &quot;prose document&quot;, <a
+ * href="../../../overview-summary.html#overview_description">linked
+ * from the javadocs</a>, for a reference.</p>
 
  * <p class="changed_added_2_0">If a reference to an
  * <code>ExternalContext</code> is obtained during application startup
@@ -113,6 +120,120 @@ public abstract class ExternalContext {
 
     // ---------------------------------------------------------- Public Methods
 
+    /**
+     * <p class="changed_added_2_0">Adds the cookie represented by the
+     * arguments to the response.</p>
+     *
+     * <div class="changed_added_2_0">
+
+     * <p><em>Servlet:</em> This must be accomplished by calling the
+     * <code>javax.servlet.http.HttpServletResponse</code> method
+     * <code>addCookie()</code>.  The <code>Cookie</code> argument must
+     * be constructed by passing the <code>name</code> and
+     * <code>value</code> parameters.  If the <code>properties</code>
+     * arugument is non-<code>null</code> and not empty, the
+     * <code>Cookie</code> instance must be initialized as described
+     * below.</p>
+
+     * <table border="1">
+     
+     * <tr>
+
+     * <th>Key in "values" <code>Map</code></th>
+
+     * <th>Expected type of value.</th>
+
+     * <th>Name of setter method on <code>Cookie</code> instance to be
+     * set with the value from the <code>Map</code>.  </th>
+
+     * </tr>
+
+     * <tr>
+
+     * <td>comment</td>
+     
+     * <td>String</td>
+
+     * <td>setComment</td>
+
+     * </tr>
+
+     * <tr>
+
+     * <td>domain</td>
+     
+     * <td>String</td>
+
+     * <td>setDomain</td>
+
+     * </tr>
+
+     * <tr>
+
+     * <td>maxAge</td>
+     
+     * <td>Integer</td>
+
+     * <td>setMaxAge</td>
+
+     * </tr>
+
+     * <tr>
+
+     * <td>secure</td>
+     
+     * <td>Boolean</td>
+
+     * <td>setSecure</td>
+
+     * </tr>
+
+     * <tr>
+
+     * <td>path</td>
+     
+     * <td>String</td>
+
+     * <td>setPath</td>
+
+     * </tr>
+
+     * </table>
+
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided for
+     * the sole purpose of not breaking existing applications that
+     * extend this class.</p>
+
+     * </div>
+
+     * @param name To be passed as the first argument to the
+     * <code>Cookie</code> constructor.
+
+     * @param value To be passed as the second argument to the
+     * <code>Cookie</code> constructor.
+
+     * @param properties A <code>Map</code> containg key/value pairs to be passed
+     * as arguments to the setter methods as described above.
+
+     * @throws IllegalArgumentException if the <code>properties
+     * Map</code> is not-<code>null</code> and not empty and contains
+     * any keys that are not one of the keys listed above.
+
+     * @since 2.0
+     */
+
+    public void addResponseCookie(String name, String value, 
+				  Map<String, Object> properties) throws IllegalArgumentException {
+        ExternalContext impl = getDefaultExternalContext();
+        if (impl != null) {
+            impl.addResponseCookie(name, value, properties);
+	    return;
+        }
+
+        throw new UnsupportedOperationException();
+    }
+
 
     /**
      * <p>Dispatch a request to the specified resource to create output
@@ -123,21 +244,12 @@ public abstract class ExternalContext {
      * <code>getRequestDispatcher(path)</code>, and calling the
      * <code>forward()</code> method on the resulting object.</p>
      *
-     * <p><em>Portlet:</em> This must be accomplished by calling the
-     * <code>javax.portlet.PortletContext</code> method
-     * <code>getRequestDispatcher()</code>, and calling the
-     * <code>include()</code> method on the resulting object.</p>
-     *
      * @param path Context relative path to the specified resource,
      *  which must start with a slash ("/") character
      *
-     * @throws javax.faces.FacesException thrown if a <code>ServletException</code>
-     *  or <code>PortletException</code> occurs
+     * @throws javax.faces.FacesException thrown if a <code>ServletException</code> occurs
      * @throws IllegalArgumentException if no request dispatcher
      *  can be created for the specified path
-     * @throws IllegalStateException if this method is called in a portlet
-     *  environment, and the current request is an <code>ActionRequest</code>
-     *  instead of a <code>RenderRequest</code>
      * @throws IOException if an input/output error occurs
      * @throws NullPointerException if <code>path</code>
      *  is <code>null</code>
@@ -155,10 +267,6 @@ public abstract class ExternalContext {
      * <code>javax.servlet.http.HttpServletResponse</code> method
      * <code>encodeURL(url)</code>.</p>
      *
-     * <p><em>Portlet:</em> This must be the value returned by the
-     * <code>javax.portlet.PortletResponse</code> method
-     * <code>encodeURL(url)</code>.</p>
-     *
      * @param url The input URL to be encoded
      *
      * @throws NullPointerException if <code>url</code>
@@ -174,16 +282,8 @@ public abstract class ExternalContext {
      *
      * <p><em>Servlet:</em> The input value must be returned unchanged.</p>
      *
-     * <p><em>Portlet:</em> The returned value must be the input value
-     * prefixed by the value returned by the
-     * <code>javax.portlet.RenderResponse</code> method
-     * <code>getNamespace()</code>.</p>
-     *
      * @param name Name to be encoded
      *
-     * @throws IllegalStateException if this method is called in a portlet
-     *  environment, and the current response is an <code>ActionResponse</code>
-     *  instead of a <code>RenderResponse</code>
      * @throws NullPointerException if <code>name</code>
      *  is <code>null</code>
      */
@@ -197,10 +297,6 @@ public abstract class ExternalContext {
      *
      * <p><em>Servlet:</em> This must be the value returned by the
      * <code>javax.servlet.http.HttpServletResponse</code> method
-     * <code>encodeURL(url)</code>.</p>
-     *
-     * <p><em>Portlet:</em> This must be the value returned by the
-     * <code>javax.portlet.PortletResponse</code> method
      * <code>encodeURL(url)</code>.</p>
      *
      * @param url The input URL to be encoded
@@ -251,10 +347,6 @@ public abstract class ExternalContext {
      * <code>getAttribute()</code>, <code>getAttributeNames()</code>,
      * <code>removeAttribute()</code>, and <code>setAttribute()</code>.</p>
      *
-     * <p><em>Portlet:</em>  This must be the set of attributes available via
-     * the <code>javax.portlet.PortletContext</code> methods
-     * <code>getAttribute()</code>, <code>getAttributeNames()</code>,
-     * <code>removeAttribute()</code>, and <code>setAttribute()</code>.</p>
      */
     public abstract Map<String, Object> getApplicationMap();
 
@@ -271,9 +363,6 @@ public abstract class ExternalContext {
      * <code>javax.servlet.http.HttpServletRequest</code> method
      * <code>getAuthType()</code>.</p>
      *
-     * <p><em>Portlet:</em> This must be the value returned by the
-     * <code>javax.portlet.http.PortletRequest</code> method
-     * <code>getAuthType()</code>.</p>
      */
     public abstract String getAuthType();
 
@@ -299,11 +388,9 @@ public abstract class ExternalContext {
      * <code>javax.servlet.ServletContext</code> method
      * <code>getMimeType()</code>.</p>
      *
-     * <p><em>Portlet:</em> This must be the value returned by the
-     * <code>javax.portlet.PortletContext</code> method
-     * <code>getMimeType()</code>.</p>
-
      * </div>
+     *
+     * @param file The file for which the mime type should be obtained.
 
      *
      * @since 2.0
@@ -337,8 +424,6 @@ public abstract class ExternalContext {
      * <p><em>Servlet:</em>  This must be the current application's
      * <code>javax.servlet.ServletContext</code> instance.</p>
      *
-     * <p><em>Portlet:</em>  This must be the current application's
-     * <code>javax.portlet.PortletContext</code> instance.</p>
      */
     public abstract Object getContext();
 
@@ -351,10 +436,6 @@ public abstract class ExternalContext {
      * <code>javax.servlet.ServletContext</code> method
      * <code>getInitParameter(name)</code>.</p>
      *
-     * <p><em>Portlet:</em> This must be the result of the
-     * <code>javax.portlet.PortletContext</code> method
-     * <code>getInitParameter(name)</code>.</p>
-
      * <p class="changed_added_2_0">It is valid to call this method
      * during application startup.  If called during application
      * startup, this method calls through to the actual container
@@ -391,10 +472,6 @@ public abstract class ExternalContext {
      * method <code>getInitParameterNames</code>, and putting
      * each configured parameter name/value pair into the result.</p>
      *
-     * <p><em>Portlet:</em> This result must be as if it were synthesized
-     * by calling the <code>javax.portlet.PortletContext</code>
-     * method <code>getInitParameterNames</code>, and putting
-     * each configured parameter name/value pair into the result.</p>
      */
     public abstract Map getInitParameterMap();
     
@@ -407,9 +484,6 @@ public abstract class ExternalContext {
      * <code>javax.servlet.http.HttpServletRequest</code> method
      * <code>getRemoteUser()</code>.</p>
      *
-     * <p><em>Portlet:</em> This must be the value returned by the
-     * <code>javax.portlet.http.PortletRequest</code> method
-     * <code>getRemoteUser()</code>.</p>
      */
     public abstract String getRemoteUser();
 
@@ -421,11 +495,6 @@ public abstract class ExternalContext {
      * <p><em>Servlet:</em>  This must be the current request's
      * <code>javax.servlet.http.HttpServletRequest</code> instance.</p>
      *
-     * <p><em>Portlet:</em>  This must be the current request's
-     * <code>javax.portlet.PortletRequest</code> instance, which
-     * will be either an <code>ActionRequest</code> or a
-     * <code>RenderRequest</code> depending upon when this method
-     * is called.</p>
      */
     public abstract Object getRequest();
 
@@ -453,6 +522,99 @@ public abstract class ExternalContext {
         throw new UnsupportedOperationException();
 
     }
+
+
+    /**
+     * <p class="changed_added_2_0">Returns the name of the scheme used
+     * to make this request, for example, http, https, or ftp.</p>
+     *
+     * <div class="changed_added_2_0">
+     * <p><em>Servlet:</em> This must be the value returned by the
+     * <code>javax.servlet.ServletRequest</code> method
+     * <code>getScheme()</code>.</p>
+     *
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided for
+     * the sole purpose of not breaking existing applications that
+     * extend this class.</p>
+
+     * </div>
+
+     * @since 2.0
+     */
+
+    public String getRequestScheme() {
+	String result;
+        ExternalContext impl = getDefaultExternalContext();
+        if (impl != null) {
+            result = impl.getRequestScheme();
+            return result;
+        }
+
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * <p class="changed_added_2_0">Returns the host name of the server
+     * to which the request was sent.</p>
+     *
+     * <div class="changed_added_2_0">
+
+     * <p><em>Servlet:</em> This must be the value returned by the
+     * <code>javax.servlet.ServletRequest</code> method
+     * <code>getServerName()</code>.</p>
+     
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided for
+     * the sole purpose of not breaking existing applications that
+     * extend this class.</p>
+
+     * </div>
+
+     * @since 2.0
+     */
+
+    public String getRequestServerName() {
+	String result;
+        ExternalContext impl = getDefaultExternalContext();
+        if (impl != null) {
+            result = impl.getRequestServerName();
+            return result;
+        }
+
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * <p class="changed_added_2_0">Returns the port number to which
+     * the request was sent.</p>
+     *
+     * <div class="changed_added_2_0">
+
+     * <p><em>Servlet:</em> This must be the value returned by the
+     * <code>javax.servlet.ServletRequest</code> method
+     * <code>getServerPort()</code>.</p>
+     
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided for
+     * the sole purpose of not breaking existing applications that
+     * extend this class.</p>
+
+     * </div>
+
+     * @since 2.0
+     */
+
+    public String getRequestServerPort() {
+	String result;
+        ExternalContext impl = getDefaultExternalContext();
+        if (impl != null) {
+            result = impl.getRequestServerPort();
+            return result;
+        }
+
+        throw new UnsupportedOperationException();
+    }
     
     /**
      *
@@ -466,10 +628,6 @@ public abstract class ExternalContext {
      *
      * <p><em>Servlet:</em> This must call through to the
      * <code>javax.servlet.ServletRequest</code> method
-     * <code>setCharacterEncoding()</code>.</p>
-     *
-     * <p><em>Portlet:</em> This must call through to the
-     * <code>javax.portlet.ActionRequest</code> method
      * <code>setCharacterEncoding()</code>.</p>
      *
      * <p>The default implementation throws 
@@ -495,23 +653,24 @@ public abstract class ExternalContext {
     }
 
     /**
-     * <p>Returns a String containing the real path for a given virtual
-     * path. </p>
+     * <p class="changed_added_2_0">Returns a String containing the real
+     * path for a given virtual path. </p>
+
+     * <div class="changed_added_2_0">
      *
      * <p><em>Servlet:</em> This must be the value returned by the
      * <code>javax.servlet.ServletContext</code> method
      * <code>getRealPath()</code>.</p>
-     *
-     * <p><em>Portlet:</em> This must be the value returned by the
-     * <code>javax.portlet.PortletContext</code> method
-     * <code>getRealPath()</code>.</p>
-     *
-     * @param path The context of the requested initialization parameter
-     *
+
      * <p>The default implementation throws 
      * <code>UnsupportedOperationException</code> and is provided
      * for the sole purpose of not breaking existing applications that extend
      * this class.</p>
+
+     * </div>
+
+     * @param path The context of the requested initialization parameter
+
      * @since 2.0
      */
     public String getRealPath(String path) {
@@ -533,9 +692,6 @@ public abstract class ExternalContext {
      * <code>javax.servlet.http.HttpServletRequest</code> method
      * <code>getContextPath()</code>.</p>
      *
-     * <p><em>Portlet:</em> This must be the value returned by the
-     * <code>javax.portlet.PortletRequest</code> method
-     * <code>getContextPath()</code>.</p>
      */
     public abstract String getRequestContextPath();
 
@@ -554,7 +710,6 @@ public abstract class ExternalContext {
      * <code>getCookies()</code>, unless <code>null</code> was returned,
      * in which case this must be a zero-length array.</p>
      *
-     * <p><em>Portlet:</em> Ths must be an empty Map.</p>
      */
     public abstract Map<String, Object> getRequestCookieMap();
     
@@ -573,12 +728,6 @@ public abstract class ExternalContext {
      * the <code>javax.servlet.http.HttpServletRequest</code> methods
      * <code>getHeader()</code> and <code>getHeaderNames()</code>.</p>
      *
-     * <p><em>Portlet:</em> This must be the set of properties available via
-     * the <code>javax.portlet.PortletRequest</code> methods
-     * <code>getProperty()</code> and <code>getPropertyNames()</code>.
-     * As such, HTTP headers will only be included if they were provided
-     * by the portlet container, and additional properties provided by
-     * the portlet container may also be included.</p>
      */
     public abstract Map<String, String> getRequestHeaderMap();
     
@@ -597,12 +746,6 @@ public abstract class ExternalContext {
      * the <code>javax.servlet.http.HttpServletRequest</code> methods
      * <code>getHeaders()</code> and <code>getHeaderNames()</code>.</p>
      *
-     * <p><em>Portlet:</em> This must be the set of properties available via
-     * the <code>javax.portlet.PortletRequest</code> methods
-     * <code>getProperties()</code> and <code>getPropertyNames()</code>.
-     * As such, HTTP headers will only be included if they were provided
-     * by the portlet container, and additional properties provided by
-     * the portlet container may also be included.</p>
      */
     public abstract Map<String, String []> getRequestHeaderValuesMap();
     
@@ -615,9 +758,6 @@ public abstract class ExternalContext {
      * <code>javax.servlet.ServletRequest</code> method
      * <code>getLocale()</code>.</p>
      *
-     * <p><em>Portlet:</em> This must be the value returned by the
-     * <code>javax.portlet.PortletRequest</code> method
-     * <code>getLocale()</code>.</p>
      */
     public abstract Locale getRequestLocale();
     
@@ -631,9 +771,6 @@ public abstract class ExternalContext {
      * over the values returned by the <code>javax.servlet.ServletRequest</code>
      * method <code>getLocales()</code>.</p>
      *
-     * <p><em>Portlet:</em> This must be an <code>Iterator</code>
-     * over the values returned by the <code>javax.portlet.PortletRequest</code>
-     * method <code>getLocales()</code>.</p>
      */
     public abstract Iterator<Locale> getRequestLocales();
 
@@ -668,10 +805,6 @@ public abstract class ExternalContext {
      * <code>getAttribute()</code>, <code>getAttributeNames()</code>,
      * <code>removeAttribute()</code>, and <code>setAttribute()</code>.</p>
      *
-     * <p><em>Portlet:</em>  This must be the set of attributes available via
-     * the <code>javax.portlet.PortletRequest</code> methods
-     * <code>getAttribute()</code>, <code>getAttributeNames()</code>,
-     * <code>removeAttribute()</code>, and <code>setAttribute()</code>.</p>
      */
     public abstract Map<String, Object> getRequestMap();
 
@@ -688,9 +821,6 @@ public abstract class ExternalContext {
      * the <code>javax.servlet.ServletRequest</code> methods
      * <code>getParameter()</code> and <code>getParameterNames()</code>.</p>
      *
-     * <p><em>Portlet:</em> This must be the set of parameters available via
-     * the <code>javax.portlet.PortletRequest</code> methods
-     * <code>getParameter()</code> and <code>getParameterNames()</code>.</p>
      */
     public abstract Map<String, String> getRequestParameterMap();
     
@@ -703,9 +833,6 @@ public abstract class ExternalContext {
      * values returned by the <code>javax.servlet.ServletRequest</code>
      * method <code>getParameterNames()</code>.</p>
      *
-     * <p><em>Portlet:</em> This must be an <code>Iterator</code> over the
-     * values returned by the <code>javax.portlet.PortletRequest</code>
-     * method <code>getParameterNames()</code>.</p>
      */
     public abstract Iterator<String> getRequestParameterNames();
 
@@ -723,10 +850,6 @@ public abstract class ExternalContext {
      * <code>getParameterValues()</code> and
      * <code>getParameterNames()</code>.</p>
      *
-     * <p><em>Portlet:</em> This must be the set of parameters available via
-     * the <code>javax.portlet.PortletRequest</code> methods
-     * <code>getParameterValues()</code> and
-     * <code>getParameterNames()</code>.</p>
      */
     public abstract Map<String, String []> getRequestParameterValuesMap();
     
@@ -739,7 +862,6 @@ public abstract class ExternalContext {
      * <code>javax.servlet.http.HttpServletRequest</code> method
      * <code>getPathInfo()</code>.</p>
      *
-     * <p><em>Portlet:</em> This must be <code>null</code>.</p>
      */
     public abstract String getRequestPathInfo();
     
@@ -752,7 +874,6 @@ public abstract class ExternalContext {
      * <code>javax.servlet.http.HttpServletRequest</code> method
      * <code>getServletPath()</code>.</p>
      *
-     * <p><em>Portlet:</em> This must be <code>null</code>.</p>
      */
     public abstract String getRequestServletPath();
     
@@ -763,10 +884,6 @@ public abstract class ExternalContext {
      *
      * <p><em>Servlet:</em> This must return the value returned by the
      * <code>javax.servlet.ServletRequest</code> method
-     * <code>getCharacterEncoding()</code>.</p>
-     *
-     * <p><em>Portlet:</em> This must return the value returned by the
-     * <code>javax.portlet.ActionRequest</code> method
      * <code>getCharacterEncoding()</code>.</p>
      *
      * <p>The default implementation throws 
@@ -796,8 +913,6 @@ public abstract class ExternalContext {
      * <code>javax.servlet.ServletRequest</code> method
      * <code>getContentType()</code>.</p>
      *
-     * <p><em>Portlet:</em> This must return <code>null</code>.</p>
-     *
      * <p>The default implementation throws 
      * <code>UnsupportedOperationException</code> and is provided
      * for the sole purpose of not breaking existing applications that extend
@@ -824,8 +939,6 @@ public abstract class ExternalContext {
      * <p><em>Servlet:</em> This must return the value returned by the
      * <code>javax.servlet.ServletResponse</code> method
      * <code>getCharacterEncoding()</code>.</p>
-     *
-     * <p><em>Portlet:</em> This must return <code>null</code>.</p>
      *
      * <p>The default implementation throws 
      * <code>UnsupportedOperationException</code> and is provided
@@ -854,8 +967,6 @@ public abstract class ExternalContext {
      * <p><em>Servlet:</em> This must return the value returned by the
      * <code>javax.servlet.ServletResponse</code> method
      * <code>getContentType()</code>.</p>
-     *
-     * <p><em>Portlet:</em> This must return <code>null</code>.</p>
      *
      * <p>The default implementation throws 
      * <code>UnsupportedOperationException</code> and is provided
@@ -897,10 +1008,6 @@ public abstract class ExternalContext {
      * <code>javax.servlet.ServletContext</code> method
      * <code>getResource(path)</code>.</p>
      *
-     * <p><em>Portlet:</em> This must be the value returned by the
-     * <code>javax.portlet.PortletContext</code> method
-     * <code>getResource(path)</code>.</p>
-     *
      * @param path The path to the requested resource, which must
      *  start with a slash ("/" character
      *
@@ -932,10 +1039,6 @@ public abstract class ExternalContext {
      * <code>javax.servlet.ServletContext</code> method
      * <code>getResourceAsStream(path)</code>.</p>
      *
-     * <p><em>Portlet:</em> This must be the value returned by the
-     * <code>javax.portlet.PortletContext</code> method
-     * <code>getResourceAsStream(path)</code>.</p>
-     *
      * @param path The path to the requested resource, which must
      *  start with a slash ("/" character
      *
@@ -964,10 +1067,6 @@ public abstract class ExternalContext {
      * <code>javax.servlet.ServletContext</code> method
      * <code>getResourcePaths(path).</code></p>
      *
-     * <p><em>Portlet:</em> This must be the value returned by the
-     * <code>javax.portlet.PortletContext</code> method
-     * <code>getResourcePaths(path).</code></p>
-     *
      * @param path Partial path used to match resources, which must
      *  start with a slash ("/") character
      *
@@ -984,11 +1083,6 @@ public abstract class ExternalContext {
      * <p><em>Servlet:</em>  This is the current request's
      * <code>javax.servlet.http.HttpServletResponse</code> instance.</p>
      *
-     * <p><em>Portlet:</em>  This is the current request's
-     * <code>javax.portlet.PortletResponse</code> instance, which
-     * will be either an <code>ActionResponse</code> or a
-     * <code>RenderResponse</code> depending upon when this method
-     * is called.</p>
      */
     public abstract Object getResponse();
 
@@ -1016,6 +1110,37 @@ public abstract class ExternalContext {
         throw new UnsupportedOperationException();
 
     }
+
+    /**
+     * <p class="changed_added_2_0">Returns an <code>OutputStream</code>
+     * suitable for writing binary data to the user-agent.</p>
+     *
+     * <div class="changed_added_2_0">
+
+     * <p><em>Servlet:</em> This must return the value returned by the
+     * <code>javax.servlet.ServletResponse</code> method
+     * <code>getOutputStream()</code>.</p>
+
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided for
+     * the sole purpose of not breaking existing applications that
+     * extend this class.</p>
+
+     * </div>
+
+     * @since 2.0
+     */
+
+    public java.io.OutputStream getResponseOutputStream() {
+	java.io.OutputStream result;
+        ExternalContext impl = getDefaultExternalContext();
+        if (impl != null) {
+            result = impl.getResponseOutputStream();
+            return result;
+        }
+
+        throw new UnsupportedOperationException();
+    }
     
     
     /**
@@ -1026,8 +1151,6 @@ public abstract class ExternalContext {
      * <p><em>Servlet:</em> This must call through to the
      * <code>javax.servlet.ServletResponse</code> method
      * <code>setCharacterEncoding()</code>.</p>
-     *
-     * <p><em>Portlet:</em> This method must take no action.</p>
      *
      * <p>The default implementation throws 
      * <code>UnsupportedOperationException</code> and is provided
@@ -1051,7 +1174,39 @@ public abstract class ExternalContext {
     }
     
 
+    /**
+     * <p class="changed_added_2_0">Sets the content type of the
+     * response being sent to the client, if the response has not been
+     * committed yet.</p>
+     *
+     * <div class="changed_added_2_0">
 
+     * <p><em>Servlet:</em> This must call
+     * <code>setContentType()</code> on the underlying
+     * <code>javax.servlet.ServletResponse</code> instance.</p>
+
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided for
+     * the sole purpose of not breaking existing applications that
+     * extend this class.</p>
+
+     * </div>
+
+     * @param contentType The content type to be set as the contentType
+     * of the response.
+
+     * @since 2.0
+     */
+
+    public void setResponseContentType(String contentType) {
+        ExternalContext impl = getDefaultExternalContext();
+        if (impl != null) {
+            impl.setResponseContentType(contentType);
+            return;
+        }
+
+        throw new UnsupportedOperationException();
+    }
 
 
     /**
@@ -1065,10 +1220,6 @@ public abstract class ExternalContext {
      * <p><em>Servlet:</em> This must return the result of calling
      * <code>getSession(create)</code> on the underlying
      * <code>javax.servlet.http.HttpServletRequest</code> instance.</p>
-     *
-     * <p>em>Portlet:</em> This must return the result of calling
-     * <code>getPortletSession(create)</code> on the underlying
-     * <code>javax.portlet.PortletRequest</code> instance.</p>
      *
      * @param create Flag indicating whether or not a new session should be
      *  created if there is no session associated with the current request
@@ -1109,12 +1260,6 @@ public abstract class ExternalContext {
      * <code>getAttribute()</code>, <code>getAttributeNames()</code>,
      * <code>removeAttribute()</code>, and <code>setAttribute()</code>.</p>
      *
-     * <p><em>Portlet:</em>  This must be the set of attributes available via
-     * the <code>javax.portlet.PortletSession</code> methods
-     * <code>getAttribute()</code>, <code>getAttributeNames()</code>,
-     * <code>removeAttribute()</code>, and <code>setAttribute()</code>.
-     * All session attribute access must occur in PORTLET_SCOPE scope
-     * within the session.</p>
      */
     public abstract Map<String, Object> getSessionMap();
 
@@ -1128,11 +1273,40 @@ public abstract class ExternalContext {
      * <code>javax.servlet.http.HttpServletRequest</code> method
      * <code>getUserPrincipal()</code>.</p>
      *
-     * <p><em>Portlet:</em> This must be the value returned by the
-     * <code>javax.portlet.http.PortletRequest</code> method
-     * <code>getUserPrincipal()</code>.</p>
      */
     public abstract Principal getUserPrincipal();
+
+
+    /**
+     * <p class="changed_added_2_0">Invalidates this session then unbinds any objects bound to it.</p>
+     *
+     * <div class="changed_added_2_0">
+
+     * <p><em>Servlet:</em> This must be the value returned by the
+     * <code>javax.servlet.http.HttpSession</code> method
+     * <code>invalidate()</code>.</p>
+
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided for
+     * the sole purpose of not breaking existing applications that
+     * extend this class.</p>
+
+     * </div>
+
+     * @since 2.0
+     */
+
+    public void invalidateSession() {
+        ExternalContext impl = getDefaultExternalContext();
+        if (impl != null) {
+            impl.invalidateSession();
+            return;
+        }
+
+        throw new UnsupportedOperationException();
+    }
+
+
 
 
     /**
@@ -1142,10 +1316,6 @@ public abstract class ExternalContext {
      *
      * <p><em>Servlet:</em> This must be the value returned by the
      * <code>javax.servlet.http.HttpServletRequest</code> method
-     * <code>isUserInRole(role)</code>.</p>
-     *
-     * <p><em>Portlet:</em> This must be the value returned by the
-     * <code>javax.portlet.http.PortletRequest</code> method
      * <code>isUserInRole(role)</code>.</p>
      *
      * @param role Logical role name to be checked
@@ -1173,10 +1343,6 @@ public abstract class ExternalContext {
      * <code>javax.servlet.ServletContext</code> method
      * <code>log(String)</code>.</p>
      *
-     * <p><em>Portlet:</em> This must be performed by calling the
-     * <code>javax.portlet.PortletContext</code> method
-     * <code>log(String)</code>.</p>
-     *
      * @param message Message to be logged
      *
      * @throws NullPointerException if <code>message</code>
@@ -1201,10 +1367,6 @@ public abstract class ExternalContext {
      * <code>javax.servlet.ServletContext</code> method
      * <code>log(String,Throwable)</code>.</p>
      *
-     * <p><em>Portlet:</em> This must be performed by calling the
-     * <code>javax.portlet.PortletContext</code> method
-     * <code>log(String,Throwable)</code>.</p>
-     *
      * @param message Message to be logged
      * @param exception Exception to be logged
      *
@@ -1221,10 +1383,6 @@ public abstract class ExternalContext {
      *
      * <p><em>Servlet:</em> This must be accomplished by calling the
      * <code>javax.servlet.http.HttpServletResponse</code> method
-     * <code>sendRedirect()</code>.</p>
-     *
-     * <p><em>Portlet:</em> This must be accomplished by calling the
-     * <code>javax.portlet.ActionResponse</code> method
      * <code>sendRedirect()</code>.</p>
      *
      * @param url Absolute URL to which the client should be redirected

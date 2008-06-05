@@ -64,7 +64,6 @@ public class AfterAddToParentEvent extends ComponentSystemEvent {
     /**
      * RELEASE_PENDING (edburns,rogerk) add documentation
      * @param listener
-     * @return
      */
     @Override
     public boolean isAppropriateListener(FacesListener listener) {
