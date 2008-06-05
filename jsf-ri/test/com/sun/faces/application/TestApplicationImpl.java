@@ -54,10 +54,10 @@ import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.StateManager;
-import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIInput;
+import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.IntegerConverter;
@@ -72,13 +72,14 @@ import javax.faces.event.AfterAddToParentEvent;
 import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ListenersFor;
+import javax.faces.event.BeforeRenderEvent;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.TestComponent;
 import com.sun.faces.TestForm;
 import com.sun.faces.cactus.JspFacesTestCase;
 import com.sun.faces.cactus.TestingUtil;
-import com.sun.faces.util.Util;
 
 /**
  * <B>TestApplicationImpl</B> is a class ...
@@ -697,14 +698,22 @@ public class TestApplicationImpl extends JspFacesTestCase {
     }
 
 
-    public void testListenerFor() {
+    public void testListenerFor() throws Exception {
 
         Application application = getFacesContext().getApplication();
-        application.addComponent("CustomInput", CustomInput.class.getName());
-        CustomInput c = (CustomInput) application.createComponent("CustomInput");
+        application.addComponent("CustomInput", CustomOutput.class.getName());
+        CustomOutput c = (CustomOutput) application.createComponent("CustomInput");
         UIViewRoot root = getFacesContext().getViewRoot();
         root.getChildren().add(c);
         assertTrue(c.getEvent() instanceof AfterAddToParentEvent);
+
+        application.addComponent("CustomInput2", CustomOutput2.class.getName());
+        CustomOutput2 c2 = (CustomOutput2) application.createComponent("CustomInput2");
+        root.getChildren().add(c2);
+        assertTrue(c2.getEvent() instanceof AfterAddToParentEvent);
+        c2.reset();
+        c2.encodeAll(getFacesContext());
+        assertTrue(c2.getEvent() instanceof BeforeRenderEvent);
     }
 
 
@@ -745,9 +754,9 @@ public class TestApplicationImpl extends JspFacesTestCase {
     }
 
     @ListenerFor(systemEventClass=AfterAddToParentEvent.class,
-                 sourceClass=TestApplicationImpl.CustomInput.class)
-    public static final class CustomInput
-          extends UIInput
+                 sourceClass= CustomOutput.class)
+    public static final class CustomOutput
+          extends UIOutput
           implements ComponentSystemEventListener {
 
         private boolean processEventInvoked;
@@ -755,6 +764,39 @@ public class TestApplicationImpl extends JspFacesTestCase {
 
         public void processEvent(ComponentSystemEvent event)
         throws AbortProcessingException {
+            processEventInvoked = true;
+            this.event = event;
+        }
+
+        public void reset() {
+            processEventInvoked = false;
+            event = null;
+        }
+
+        public boolean isProcessEventInvoked() {
+            return processEventInvoked;
+        }
+
+        public ComponentSystemEvent getEvent() {
+            return event;
+        }
+    }
+
+    @ListenersFor({
+        @ListenerFor(systemEventClass = AfterAddToParentEvent.class,
+                     sourceClass = CustomOutput.class),
+        @ListenerFor(systemEventClass = BeforeRenderEvent.class,
+                     sourceClass = CustomOutput.class)
+    })
+    public static final class CustomOutput2
+          extends UIOutput
+          implements ComponentSystemEventListener {
+
+        private boolean processEventInvoked;
+        private ComponentSystemEvent event;
+
+        public void processEvent(ComponentSystemEvent event)
+              throws AbortProcessingException {
             processEventInvoked = true;
             this.event = event;
         }

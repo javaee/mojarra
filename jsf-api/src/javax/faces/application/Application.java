@@ -1414,9 +1414,13 @@ public abstract class Application {
 
     // --------------------------------------------------------- Private Methods
 
+    /**
+     * RELEASE_PENDING (rlubke,driscoll) Look into ConcurrentHashMap+FutureTask
+     * instead of locking.
+     */
     // SystemEventInfo cache
-    private final ConcurrentMap<Class<? extends SystemEvent>,SystemEventInfo> systemEventInfoMap =
-          new ConcurrentHashMap<Class<? extends SystemEvent>,SystemEventInfo>();
+    private final Map<Class<? extends SystemEvent>,SystemEventInfo> systemEventInfoMap =
+          new HashMap<Class<? extends SystemEvent>,SystemEventInfo>();
     private final ComponentSystemEventInfo componentEventInfo = new ComponentSystemEventInfo();
     private final Lock lock = new ReentrantLock(true);
 
@@ -1586,33 +1590,53 @@ public abstract class Application {
 
     // ----------------------------------------------------------- Inner Classes
 
-
+    /**
+     * RELEASE_PENDING (rlubke,driscoll) Look into ConcurrentHashMap+FutureTask
+     * instead of locking.
+     */
     private static class ComponentSystemEventInfo {
 
-        private ConcurrentMap <Class<?>, EventInfo> events =
-              new ConcurrentHashMap<Class<?>, EventInfo>();
-        private final Lock lock = new ReentrantLock(true);
+        private Map<Class<?>, Map<Class<? extends SystemEvent>,EventInfo>> events =
+              new HashMap<Class<?>, Map<Class<? extends SystemEvent>,EventInfo>>();
+        private final Lock eventsLock = new ReentrantLock(true);
+        private final Lock listenersLock = new ReentrantLock(true);
 
         // ------------------------------------------------------ Public Methods
 
-         public EventInfo getEventInfo(Class<? extends SystemEvent> systemEvent,
-                                       Class<?> sourceClass) {
+        public EventInfo getEventInfo(Class<? extends SystemEvent> systemEvent,
+                                      Class<?> sourceClass) {
 
-            EventInfo info = events.get(sourceClass);
-            if (info == null) {
-                lock.lock();
+            Map<Class<? extends SystemEvent>, EventInfo> listenersMap =
+                  events.get(sourceClass);
+            if (listenersMap == null) {
+                eventsLock.lock();
                 try {
-                    info = events.get(sourceClass);
-                    if (info == null) {
-                        info = new EventInfo(systemEvent, sourceClass);
-                        events.put(sourceClass, info);
+                    listenersMap = events.get(sourceClass);
+                    if (listenersMap == null) {
+                        listenersMap =
+                              new HashMap<Class<? extends SystemEvent>, EventInfo>(4, 1.0f);
+                        events.put(sourceClass, listenersMap);
                     }
                 } finally {
-                    lock.unlock();
+                    eventsLock.unlock();
                 }
             }
-            return info;
 
+            EventInfo info = listenersMap.get(systemEvent);
+            if (info == null) {
+                listenersLock.lock();
+                try {
+                    info = listenersMap.get(systemEvent);
+                    if (info == null) {
+                        info = new EventInfo(systemEvent, sourceClass);
+                        listenersMap.put(systemEvent, info);
+                    }
+                } finally {
+                    listenersLock.unlock();
+                }
+            }
+
+            return info;
         }
     }
 
@@ -1623,8 +1647,8 @@ public abstract class Application {
      */
     private static class SystemEventInfo {
 
-        private ConcurrentMap <Class<?>, EventInfo> events =
-              new ConcurrentHashMap<Class<?>, EventInfo>();
+        private Map <Class<?>, EventInfo> events =
+              new HashMap<Class<?>, EventInfo>();
         private Class<? extends SystemEvent> systemEvent;
         private final Lock lock = new ReentrantLock(true);
 
