@@ -202,9 +202,9 @@ public class ResourceInfo {
             File servletTmpDir = (File) ctx.getExternalContext()
                   .getApplicationMap().get("javax.servlet.context.tempdir");
             if (servletTmpDir == null || !servletTmpDir.isDirectory()) {
-                if (LOGGER.isLoggable(Level.INFO)) {
+                if (LOGGER.isLoggable(Level.FINE)) {
                     // PENDING i18n
-                    LOGGER.log(Level.INFO,
+                    LOGGER.log(Level.FINE,
                                "File ({0}) referenced by javax.servlet.context.tempdir attribute is null, or was is not a directory.  Compression for {1} will be unavailable.",
                                new Object[]{((servletTmpDir == null)
                                              ? "null"

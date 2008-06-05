@@ -36,6 +36,7 @@
 
 package com.sun.faces.context;
 
+import java.io.OutputStream;
 import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -567,6 +568,45 @@ public class ExternalContextImpl extends ExternalContext {
     public boolean isUserInRole(String role) {
         return ((HttpServletRequest) request).isUserInRole(role);
     }
+
+    @Override
+    public void invalidateSession() {
+        throw new UnsupportedOperationException();
+    }
+    
+    
+
+    @Override
+    public void addResponseCookie(String arg0, String arg1, Map<String, Object> arg2) throws IllegalArgumentException {
+         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public OutputStream getResponseOutputStream() {
+         throw new UnsupportedOperationException();
+    }
+    
+    @Override
+    public String getRequestScheme() {
+         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public String getRequestServerName() {
+         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public String getRequestServerPort() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setResponseContentType(String arg0) {
+         throw new UnsupportedOperationException();
+    }
+    
+    
 
 
     // ----------------------------------------------------------- Inner Classes

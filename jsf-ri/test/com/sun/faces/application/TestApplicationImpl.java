@@ -57,6 +57,7 @@ import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.IntegerConverter;
@@ -66,6 +67,11 @@ import javax.faces.el.ValueBinding;
 import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
+import javax.faces.event.ListenerFor;
+import javax.faces.event.AfterAddToParentEvent;
+import javax.faces.event.ComponentSystemEventListener;
+import javax.faces.event.ComponentSystemEvent;
+import javax.faces.event.AbortProcessingException;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.TestComponent;
@@ -689,6 +695,20 @@ public class TestApplicationImpl extends JspFacesTestCase {
         // reset to the standard converter
         app.addConverter("javax.faces.Integer", IntegerConverter.class.getName());
     }
+
+
+    public void testListenerFor() {
+
+        Application application = getFacesContext().getApplication();
+        application.addComponent("CustomInput", CustomInput.class.getName());
+        CustomInput c = (CustomInput) application.createComponent("CustomInput");
+        UIViewRoot root = getFacesContext().getViewRoot();
+        root.getChildren().add(c);
+        assertTrue(c.getEvent() instanceof AfterAddToParentEvent);
+    }
+
+
+    // ---------------------------------------------------------- Public Methods
     
     public static void clearResourceBundlesFromAssociate(ApplicationImpl application) {
         ApplicationAssociate associate = (ApplicationAssociate)
@@ -721,6 +741,35 @@ public class TestApplicationImpl extends JspFacesTestCase {
 
         public String getAsString(FacesContext context, UIComponent component, Object value) {
             return delegate.getAsString(context, component, value);
+        }
+    }
+
+    @ListenerFor(systemEventClass=AfterAddToParentEvent.class,
+                 sourceClass=TestApplicationImpl.CustomInput.class)
+    public static final class CustomInput
+          extends UIInput
+          implements ComponentSystemEventListener {
+
+        private boolean processEventInvoked;
+        private ComponentSystemEvent event;
+
+        public void processEvent(ComponentSystemEvent event)
+        throws AbortProcessingException {
+            processEventInvoked = true;
+            this.event = event;
+        }
+
+        public void reset() {
+            processEventInvoked = false;
+            event = null;
+        }
+
+        public boolean isProcessEventInvoked() {
+            return processEventInvoked;
+        }
+
+        public ComponentSystemEvent getEvent() {
+            return event;
         }
     }
 

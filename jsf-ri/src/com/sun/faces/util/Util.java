@@ -488,15 +488,13 @@ public class Util {
     
     public static void processListenerForAnnotation(UIComponent source) {
         if (source.getClass().isAnnotationPresent(ListenerFor.class) &&
-            source instanceof SystemEventListener) {
+            source instanceof ComponentSystemEventListener) {
             ListenerFor listenerFor = (ListenerFor) 
                     source.getClass().getAnnotation(ListenerFor.class);
             assert(null != listenerFor);
             Class<? extends SystemEvent> eventClass = listenerFor.systemEventClass();
             Class sourceClass = listenerFor.sourceClass();
-            FacesContext facesContext = FacesContext.getCurrentInstance();
-            source.subscribeToEvent(facesContext, eventClass, 
-                    (ComponentSystemEventListener) source);
+            source.subscribeToEvent(eventClass, (ComponentSystemEventListener) source);
         }
         
     }
