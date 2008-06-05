@@ -488,7 +488,7 @@ public class Util {
     
     public static void processListenerForAnnotation(UIComponent source) {
         if (source.getClass().isAnnotationPresent(ListenerFor.class) &&
-            source instanceof SystemEventListener) {
+            source instanceof ComponentSystemEventListener) {
             ListenerFor listenerFor = (ListenerFor) 
                     source.getClass().getAnnotation(ListenerFor.class);
             assert(null != listenerFor);
