@@ -1181,41 +1181,59 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
     private Map<String, Object> viewScope = null;
 
     /**
-     *
+     * <p class="changed_added_2_0">This implementation simply calls through to {@link
+     * #getViewMap(boolean)}, passing <code>true</code> as the argument, and
+     * returns the result.</p>
      * <div class="changed_added_2_0">
+     *
+     * @since 2.0
+     */
+    public Map<String, Object> getViewMap() {
 
-     * <p>Return a <code>Map</code> that acts as the interface to the
-     * data store that is the "view scope".  This map must be
-     * instantiated lazily and cached for return from subsequent calls
-     * to this method on this <code>UIViewRoot</code> instance.
-     * {@link javax.faces.application.Application#publishEvent} must be called,
-     * passing {@link ViewMapCreatedEvent}<code>.class</code> as the
-     * first argument and this <code>UIViewRoot</code> instance as the
-     * second argument.</p>
+        return getViewMap(true);
+        
+    }
 
-     * <p>The returned <code>Map</code> must be implemented such that
-     * calling <code>clear()</code> on the <code>Map</code> causes
-     * {@link javax.faces.application.Application#publishEvent} to be
+    /**
+     * <p class="changed_added_2_0">Returns a <code>Map</code> that acts as the
+     * interface to the data store that is the "view scope", or, if this
+     * instance does not have such a <code>Map</code> and the
+     * <code>create</code> argument is <code>true</code>, creates one and
+     * returns it.  This map must be instantiated lazily and cached for return
+     * from subsequent calls to this method on this <code>UIViewRoot</code>
+     * instance. {@link javax.faces.application.Application#publishEvent} must
+     * be called, passing {@link ViewMapCreatedEvent}<code>.class</code> as the
+     * first argument and this <code>UIViewRoot</code> instance as the second
+     * argument.</p>
+     *
+     * <p>The returned <code>Map</code> must be implemented such that calling
+     * <code>clear()</code> on the <code>Map</code> causes {@link javax.faces.application.Application#publishEvent} to be
      * called, passing {@link ViewMapDestroyedEvent}<code>.class</code>
      * as the first argument and this <code>UIViewRoot</code> instance
      * as the second argument.</p>
-
-     * <p>See {@link FacesContext#setViewRoot} for the specification of
-     * when the <code>clear()</code> method must be called.</p>
-
-
+     * 
+     * <p>See {@link FacesContext#setViewRoot} for the specification of when the
+     * <code>clear()</code> method must be called.</p>
+     * <p/>
      * </div>
      *
+     * @param create <code>true</code> to create a new <code>Map</code> for this
+     *               instance if necessary; <code>false</code> to return
+     *               <code>null</code> if there's no current <code>Map</code>.
+     *
+     * @since 2.0
      */
-    
-    public Map<String, Object> getViewMap() {
-        if (viewScope == null) {          
+    public Map<String, Object> getViewMap(boolean create) {
+
+        if (create && viewScope == null) {
+            viewScope = new ViewMap();
             getFacesContext().getApplication()
                   .publishEvent(ViewMapCreatedEvent.class, this);
-            viewScope = new ViewMap();
         }
         return viewScope;
+        
     }
+
 
     // ----------------------------------------------------- StateHolder Methods
 

@@ -309,9 +309,11 @@ import com.sun.faces.util.Util;
          assertNotReleased();
          Util.notNull("root", root);
 
-         if (null != viewRoot && 
-             !viewRoot.equals(root)) {
-             viewRoot.getViewMap().clear();
+         if (viewRoot != null && !viewRoot.equals(root)) {
+             Map<String,Object> viewMap = viewRoot.getViewMap(false);
+             if (viewMap != null) {
+                viewRoot.getViewMap().clear();
+             }
          }
 
          viewRoot = root;
