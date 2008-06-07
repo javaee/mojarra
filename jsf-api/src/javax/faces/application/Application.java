@@ -53,8 +53,11 @@ import java.util.logging.Level;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.concurrent.locks.Lock;
+import java.util.concurrent.Future;
+import java.util.concurrent.Callable;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
 import java.lang.reflect.Constructor;
 
 import javax.faces.FacesException;
@@ -1231,9 +1234,7 @@ public abstract class Application {
             SystemEvent event;
 
             // Look for and invoke any listeners stored on the source instance.
-            event = invokeComponentListenersFor(source.getListenersForEventClass(systemEventClass),
-                                                systemEventClass,
-                                                source);
+            event = invokeComponentListenersFor(systemEventClass, source);
 
             // look for and invoke any listeners stored on the application
             // using source type.
@@ -1303,9 +1304,7 @@ public abstract class Application {
         }
 
         List<SystemEventListener> listeners =
-              getListeners(getSystemEventInfo(systemEventClass, true),
-                           sourceClass,
-                           true);
+              getListeners(systemEventClass, sourceClass);
         listeners.add(listener);
 
     }
@@ -1378,8 +1377,7 @@ public abstract class Application {
         }
 
         List<SystemEventListener> listeners =
-              getListeners(getSystemEventInfo(systemEventClass),
-                           sourceClass);
+              getListeners(systemEventClass, sourceClass);
         if (listeners != null) {
             listeners.remove(listener);
         }
@@ -1414,93 +1412,44 @@ public abstract class Application {
 
     // --------------------------------------------------------- Private Methods
 
-    /**
-     * RELEASE_PENDING (rlubke,driscoll) Look into ConcurrentHashMap+FutureTask
-     * instead of locking.
-     */
-    // SystemEventInfo cache
-    private final Map<Class<? extends SystemEvent>,SystemEventInfo> systemEventInfoMap =
-          new HashMap<Class<? extends SystemEvent>,SystemEventInfo>();
-    private final ComponentSystemEventInfo componentEventInfo = new ComponentSystemEventInfo();
-    private final Lock lock = new ReentrantLock(true);
+   
+    private final SystemEventHelper systemEventHelper = new SystemEventHelper();
+    private final ComponentSystemEventHelper compSysEventHelper = new ComponentSystemEventHelper();
 
 
     /**
-     * @see #getListeners(javax.faces.application.Application.SystemEventInfo, Class, boolean)
+     * @return the SystemEventListeners that should be used for the
+     * provided combination of SystemEvent and source.
      */
-    private List<SystemEventListener> getListeners(SystemEventInfo systemEventInfo,
+    private List<SystemEventListener> getListeners(Class<? extends SystemEvent> systemEvent,
                                                    Class<?> sourceClass) {
 
-        return getListeners(systemEventInfo, sourceClass, false);
-
-    }
-
-
-    /**
-     * @return <code>List&gt;SystemEventListener&lt;</code> based on the provided
-     * combination of <code>systemEventInfo</code> and <code>sourceClass</code>.
-     * If no <code>List<code> is found for this combination and <code>create</code>
-     * is true, then initialize a new <code>List</code> and return that, otherwise
-     * return <code>null</code>.
-     */
-    private List<SystemEventListener> getListeners(SystemEventInfo systemEventInfo,
-                                                   Class<?> sourceClass,
-                                                   boolean create) {
-
         List<SystemEventListener> listeners = null;
-        if (systemEventInfo != null) {
-            EventInfo sourceInfo = systemEventInfo.getEventInfo(sourceClass, create);
-            if (sourceInfo != null) {
-                listeners = sourceInfo.getListeners();
-            }
+        EventInfo sourceInfo =
+              systemEventHelper.getEventInfo(systemEvent, sourceClass);
+        if (sourceInfo != null) {
+            listeners = sourceInfo.getListeners();
         }
+
         return listeners;
         
     }
 
 
     /**
-     * @see #getSystemEventInfo(Class, boolean)
+     * @return process any listeners for the specified SystemEventListenerHolder
+     *  and return any SystemEvent that may have been created as a side-effect
+     *  of processing the listeners.
      */
-    private SystemEventInfo getSystemEventInfo(Class<? extends SystemEvent> systemEvent) {
+    private SystemEvent invokeComponentListenersFor(Class<? extends SystemEvent> systemEventClass,
+                                                    SystemEventListenerHolder source) {
 
-        return getSystemEventInfo(systemEvent, false);
-
-    }
-
-
-    /**
-     * @return a <code>SystemEventInfo</code> for the specified system event.
-     */
-    private SystemEventInfo getSystemEventInfo(Class<? extends SystemEvent> systemEvent,
-                                               boolean create) {
-
-        SystemEventInfo info = systemEventInfoMap.get(systemEvent);
-        if (info == null && create) {
-            lock.lock();
-            try {
-                info = systemEventInfoMap.get(systemEvent);
-                if (info == null) {
-                    info = new SystemEventInfo(systemEvent);
-                    systemEventInfoMap.put(systemEvent, info);
-                }
-            } finally {
-                lock.unlock();
-            }
-        }
-
-        return info;
-
-    }
-
-
-    private SystemEvent invokeComponentListenersFor(List<SystemEventListener> listeners,
-                                           Class<? extends SystemEvent> systemEventClass,
-                                           Object source) {
-
-        EventInfo eventInfo = componentEventInfo.getEventInfo(systemEventClass,
+        EventInfo eventInfo = compSysEventHelper.getEventInfo(systemEventClass,
                                                               source.getClass());
-        return processListeners(listeners, null, source, eventInfo);
+        return processListeners(source.getListenersForEventClass(systemEventClass),
+                                null,
+                                source,
+                                eventInfo);
 
     }
 
@@ -1517,16 +1466,12 @@ public abstract class Application {
                                            boolean useSourceLookup)
     throws AbortProcessingException {
 
-        SystemEventInfo systemEventInfo =
-              systemEventInfoMap.get(systemEventClass);
-        if (systemEventInfo != null) {
-            Class<?> sourceClass =
-                  ((useSourceLookup) ? source.getClass() : Void.class);
-            EventInfo eventInfo = systemEventInfo.getEventInfo(sourceClass, false);
-            if (eventInfo != null) {
-                List<SystemEventListener> listeners = eventInfo.getListeners();
-                event = processListeners(listeners, event, source, eventInfo);
-            }
+        EventInfo eventInfo = systemEventHelper.getEventInfo(systemEventClass,
+                                                             source,
+                                                             useSourceLookup);
+        if (eventInfo != null) {
+            List<SystemEventListener> listeners = eventInfo.getListeners();
+            event = processListeners(listeners, event, source, eventInfo);
         }
 
         return event;
@@ -1534,6 +1479,10 @@ public abstract class Application {
     }
 
 
+    /**
+     * Iterate through and invoke the listeners.  If the passed event was
+     * <code>null</code>, create the event, and return it.
+     */
     private SystemEvent processListeners(List<SystemEventListener> listeners,
                                          SystemEvent event,
                                          Object source,
@@ -1578,6 +1527,7 @@ public abstract class Application {
 
     }
 
+
     /**
      * HACK to get around 1.1 applications running in a 1.2 environment.
      */
@@ -1590,55 +1540,112 @@ public abstract class Application {
 
     // ----------------------------------------------------------- Inner Classes
 
-    /**
-     * RELEASE_PENDING (rlubke,driscoll) Look into ConcurrentHashMap+FutureTask
-     * instead of locking.
-     */
-    private static class ComponentSystemEventInfo {
 
-        private Map<Class<?>, Map<Class<? extends SystemEvent>,EventInfo>> events =
-              new HashMap<Class<?>, Map<Class<? extends SystemEvent>,EventInfo>>();
-        private final Lock eventsLock = new ReentrantLock(true);
-        private final Lock listenersLock = new ReentrantLock(true);
+    /**
+     * Utility class for dealing with application events.
+     */
+    private static class SystemEventHelper {
+
+        private final Cache<Class<? extends SystemEvent>, SystemEventInfo> systemEventInfoCache;
+
+
+        // -------------------------------------------------------- Constructors
+
+
+        public SystemEventHelper() {
+
+            systemEventInfoCache =
+                  new Cache<Class<? extends SystemEvent>, SystemEventInfo>(
+                        new Factory<Class<? extends SystemEvent>, SystemEventInfo>() {
+                            public SystemEventInfo newInstance(final Class<? extends SystemEvent> arg)
+                                  throws InterruptedException {
+                                return new SystemEventInfo(arg);
+                            }
+                        }
+                  );
+
+        }
+
 
         // ------------------------------------------------------ Public Methods
+
+
+        public EventInfo getEventInfo(Class<? extends SystemEvent> systemEventClass,
+                                      Class<?> sourceClass) {
+
+            EventInfo info = null;
+            SystemEventInfo systemEventInfo = systemEventInfoCache.get(systemEventClass);
+            if (systemEventInfo != null) {
+                info = systemEventInfo.getEventInfo(sourceClass);
+            }
+
+            return info;
+
+        }
+
+
+        public EventInfo getEventInfo(Class<? extends SystemEvent> systemEventClass,
+                                      Object source,
+                                      boolean useSourceForLookup) {
+
+            Class<?> sourceClass =
+                  ((useSourceForLookup) ? source.getClass() : Void.class);
+            return getEventInfo(systemEventClass, sourceClass);
+
+        }
+
+
+    } // END SystemEventHelper
+
+
+    /**
+     * Utility class for dealing with {@link UIComponent} events.
+     */
+    private static class ComponentSystemEventHelper {
+
+        private Cache<Class<?>,Cache<Class<? extends SystemEvent>,EventInfo>> sourceCache;
+
+
+        // -------------------------------------------------------- Constructors
+
+
+        public ComponentSystemEventHelper() {
+
+            // Initialize the 'sources' cache for, ahem, readability...
+            // ~generics++
+            Factory<Class<?>, Cache<Class<? extends SystemEvent>, EventInfo>> eventCacheFactory =
+                  new Factory<Class<?>, Cache<Class<? extends SystemEvent>, EventInfo>>() {
+                      public Cache<Class<? extends SystemEvent>, EventInfo> newInstance(
+                            final Class<?> sourceClass)
+                            throws InterruptedException {
+                          Factory<Class<? extends SystemEvent>, EventInfo> eventInfoFactory =
+                                new Factory<Class<? extends SystemEvent>, EventInfo>() {
+                                    public EventInfo newInstance(final Class<? extends SystemEvent> systemEventClass)
+                                          throws InterruptedException {
+                                        return new EventInfo(systemEventClass, sourceClass);
+                                    }
+                                };
+                          return new Cache<Class<? extends SystemEvent>, EventInfo>(eventInfoFactory);
+                      }
+                  };
+            sourceCache = new Cache<Class<?>,Cache<Class<? extends SystemEvent>,EventInfo>>(eventCacheFactory);
+
+        }
+
+        // ------------------------------------------------------ Public Methods
+
 
         public EventInfo getEventInfo(Class<? extends SystemEvent> systemEvent,
                                       Class<?> sourceClass) {
 
-            Map<Class<? extends SystemEvent>, EventInfo> listenersMap =
-                  events.get(sourceClass);
-            if (listenersMap == null) {
-                eventsLock.lock();
-                try {
-                    listenersMap = events.get(sourceClass);
-                    if (listenersMap == null) {
-                        listenersMap =
-                              new HashMap<Class<? extends SystemEvent>, EventInfo>(4, 1.0f);
-                        events.put(sourceClass, listenersMap);
-                    }
-                } finally {
-                    eventsLock.unlock();
-                }
-            }
+            Cache<Class<? extends SystemEvent>, EventInfo> eventsCache =
+                  sourceCache.get(sourceClass);
+            return eventsCache.get(systemEvent);
 
-            EventInfo info = listenersMap.get(systemEvent);
-            if (info == null) {
-                listenersLock.lock();
-                try {
-                    info = listenersMap.get(systemEvent);
-                    if (info == null) {
-                        info = new EventInfo(systemEvent, sourceClass);
-                        listenersMap.put(systemEvent, info);
-                    }
-                } finally {
-                    listenersLock.unlock();
-                }
-            }
-
-            return info;
         }
-    }
+
+    } // END ComponentSystemEventHelper
+
 
     /**
      * Simple wrapper class for application level SystemEvents.  It provides the
@@ -1647,10 +1654,15 @@ public abstract class Application {
      */
     private static class SystemEventInfo {
 
-        private Map <Class<?>, EventInfo> events =
-              new HashMap<Class<?>, EventInfo>();
+        private Cache<Class<?>,EventInfo> cache = new Cache<Class<?>,EventInfo>(
+              new Factory<Class<?>, EventInfo>() {
+                  public EventInfo newInstance(Class<?> arg)
+                        throws InterruptedException {
+                      return new EventInfo(systemEvent, arg);
+                  }
+              }
+        );
         private Class<? extends SystemEvent> systemEvent;
-        private final Lock lock = new ReentrantLock(true);
 
 
         // -------------------------------------------------------- Constructors
@@ -1666,23 +1678,10 @@ public abstract class Application {
         // ------------------------------------------------------ Public Methods
 
 
-        public EventInfo getEventInfo(Class<?> source, boolean create) {
+        public EventInfo getEventInfo(Class<?> source) {
 
             Class<?> sourceClass = ((source == null) ? Void.class : source);
-            EventInfo info = events.get(sourceClass);
-            if (info == null && create) {
-                lock.lock();
-                try {
-                    info = events.get(sourceClass);
-                    if (info == null) {
-                        info = new EventInfo(systemEvent, sourceClass);
-                        events.put(sourceClass, info);
-                    }
-                } finally {
-                    lock.unlock();
-                }
-            }
-            return info;
+            return cache.get(sourceClass);
 
         }
 
@@ -1690,7 +1689,9 @@ public abstract class Application {
 
 
     /**
-     *
+     * Represent a logical association between a SystemEvent and a Source.
+     * This call will contain the Listeners specific to this association
+     * as well as provide a method to construct new SystemEvents as required.
      */
     private static class EventInfo {
         private Class<? extends SystemEvent> systemEvent;
@@ -1699,11 +1700,11 @@ public abstract class Application {
         private Constructor eventConstructor;
         private Map<Class<?>,Constructor> constructorMap;
 
-        // ---------------------------------------------------- Constructors
+        // -------------------------------------------------------- Constructors
 
 
         public EventInfo(Class<? extends SystemEvent> systemEvent,
-                          Class<?> sourceClass) {
+                         Class<?> sourceClass) {
 
             this.systemEvent = systemEvent;
             this.sourceClass = sourceClass;
@@ -1715,7 +1716,7 @@ public abstract class Application {
 
         }
 
-        // -----------------------------------------------------_ Public Methods
+        // ------------------------------------------------------ Public Methods
 
 
         public List<SystemEventListener> getListeners() {
@@ -1760,6 +1761,7 @@ public abstract class Application {
 
         }
 
+
         private Constructor getEventConstructor(Class<?> source) {
 
             Constructor ctor = null;
@@ -1792,5 +1794,102 @@ public abstract class Application {
 
     } // END SourceInfo
 
+
+    /**
+     * Factory interface for creating various cacheable objects.
+     */
+    private interface Factory<K,V> {
+
+        V newInstance(final K arg) throws InterruptedException;
+
+    } // END Factory
+
+
+    /**
+     * A concurrent caching mechanism.
+     */
+    private static final class Cache<K,V> {
+
+        private ConcurrentMap<K,Future<V>> cache =
+              new ConcurrentHashMap<K,Future<V>>();
+        private Factory<K,V> factory;
+
+
+        // -------------------------------------------------------- Constructors
+
+
+        /**
+         * Constructs this cache using the specified <code>Factory</code>.
+         * @param factory
+         */
+        public Cache(Factory<K,V> factory) {
+
+            this.factory = factory;
+
+        }
+
+
+        // ------------------------------------------------------ Public Methods
+
+
+        /**
+         * If a value isn't associated with the specified key, a new
+         * {@link Callable} will be created wrapping the <code>Factory</code>
+         * specified via the constructor and passed to a {@link FutureTask}.  This task
+         * will be passed to the backing ConcurrentMap.  When {@link FutureTask#get()}
+         * is invoked, the Factory will return the new Value which will be cached
+         * by the {@link FutureTask}.
+         *
+         * @param key the key the value is associated with
+         * @return the value for the specified key, if any
+         */
+        public V get(final K key) {
+
+            while (true) {
+                Future<V> f = cache.get(key);
+                if (f == null) {
+                    Callable<V> callable = new Callable<V>() {
+                        public V call() throws Exception {
+                            return factory.newInstance(key);
+                        }
+                    };
+                    FutureTask<V> ft = new FutureTask<V>(callable);
+                    // here is the real beauty of the concurrent utilities.
+                    // 1.  putIfAbsent() is atomic
+                    // 2.  putIfAbsent() will return the value already associated
+                    //     with the specified key
+                    // So, if multiple threads make it to this point
+                    // they will all be calling f.get() on the same
+                    // FutureTask instance, so this guarantees that the instances
+                    // that the invoked Callable will return will be created once
+                    f = cache.putIfAbsent(key, ft);
+                    if (f == null) {
+                        f = ft;
+                        ft.run();
+                    }
+                }
+                try {
+                    return f.get();
+                } catch (CancellationException ce) {
+                    if (LOGGER.isLoggable(Level.FINEST)) {
+                        LOGGER.log(Level.FINEST,
+                                   ce.toString(),
+                                   ce);
+                    }
+                    cache.remove(key);
+                } catch (InterruptedException ie) {
+                    if (LOGGER.isLoggable(Level.FINEST)) {
+                        LOGGER.log(Level.FINEST,
+                                   ie.toString(),
+                                   ie);
+                    }
+                    cache.remove(key);
+                } catch (ExecutionException ee) {
+                    throw new FacesException(ee);
+                }
+            }
+        }
+
+    } // END Cache
 
 }
