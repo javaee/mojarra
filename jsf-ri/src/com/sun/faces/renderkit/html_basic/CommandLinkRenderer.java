@@ -297,7 +297,7 @@ public class CommandLinkRenderer extends LinkRenderer {
      */
     private static boolean hasScriptBeenRendered(FacesContext context) {
 
-        return (context.getExternalContext().getRequestMap()
+        return (context.getAttributes()
               .get(SCRIPT_STATE) != null);
 
     }
@@ -311,7 +311,7 @@ public class CommandLinkRenderer extends LinkRenderer {
      */
     private static void setScriptAsRendered(FacesContext context) {
 
-        context.getExternalContext().getRequestMap()
+        context.getAttributes()
               .put(SCRIPT_STATE, Boolean.TRUE);
 
     }

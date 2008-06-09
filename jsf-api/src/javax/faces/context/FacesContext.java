@@ -93,6 +93,68 @@ public abstract class FacesContext {
      *  this instance has been released
      */
     public abstract Application getApplication();
+    
+    
+    /**
+     * <p class="changed_added_2_0">Return a mutable <code>Map</code> 
+     * representing the attributes associated wth this
+     * <code>FacesContext</code> instance.  This <code>Map</code> is 
+     * useful to store attributes that you want to go out of scope when the
+     * Faces lifecycle for the current request ends, which is not always the same 
+     * as the request ending, especially in the case of Servlet filters
+     * that are invoked <strong>after</strong> the Faces lifecycle for this
+     * request completes.  Accessing this <code>Map</code> does not cause any 
+     * events to fire, as is the case with the other maps: for request, session, and 
+     * application scope.</p>
+     * 
+     * <div class="changed_added_2_0">
+     * 
+     * <p>The <code>Map</code> returned by this method is not associated with
+     * the request.  If you would like to get or set request attributes,
+     * see {@link ExternalContext#getRequestMap}.  The 
+     * returned implementation must support all of the
+     * standard and optional <code>Map</code> methods, plus support the 
+     * following additional requirements:</p>
+     * 
+     * <ul>
+
+     * <li><p>The Map implementation must implement the 
+     * <code>java.io.Serializable</code> interface.</p></li>
+
+     * <li><p>Any attempt to add a <code>null</code> key or value must throw a
+     * <code>NullPointerException</code>.</p></li>
+
+     * <li><p>The <code>Map</code> must be cleared when the {@link #release} 
+     * is called.</p></li>
+     * 
+     * </ul>
+     * 
+     * <p>The default implementation throws 
+     * <code>UnsupportedOperationException</code> and is provided
+     * for the sole purpose of not breaking existing applications that extend
+     * this class.</p>
+     *
+     * </div>
+     * 
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     *
+     * @since 2.0
+     */
+
+    public Map<Object, Object> getAttributes() {
+        
+        Map m = (Map) getExternalContext().getRequestMap().get("com.sun.faces.util.RequestStateManager");
+        if (m != null) {
+            FacesContext impl = (FacesContext) m.get("com.sun.faces.FacesContextImpl");
+            if (impl != null) {
+                return impl.getAttributes();
+            } else {
+                throw new UnsupportedOperationException();
+            }
+        }
+        throw new UnsupportedOperationException();
+    }
 
 
     /**

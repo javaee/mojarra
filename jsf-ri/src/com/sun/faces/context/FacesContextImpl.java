@@ -71,6 +71,7 @@ import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.util.Util;
+import java.util.HashMap;
 
  public class FacesContextImpl extends FacesContext {
 
@@ -91,6 +92,7 @@ import com.sun.faces.util.Util;
      private Severity maxSeverity;
      private boolean renderResponse = false;
      private boolean responseComplete = false;
+     private Map<Object, Object> attributes = null;
 
      /**
       * Store mapping of clientId to ArrayList of FacesMessage
@@ -140,6 +142,20 @@ import com.sun.faces.util.Util;
          assert (null != application);
          return application;
      }
+
+    @Override
+    public Map<Object, Object> getAttributes() {
+        
+        assertNotReleased();
+        
+        if (null == attributes) {
+            attributes = new HashMap<Object,Object>();
+        }
+        
+        return attributes;
+    }
+     
+     
 
 
      /**
@@ -392,6 +408,11 @@ import com.sun.faces.util.Util;
          renderResponse = false;
          responseComplete = false;
          viewRoot = null;
+         
+         if (null != attributes) {
+             attributes.clear();
+             attributes = null;
+         }
 
          // PENDING(edburns): write testcase that verifies that release
          // actually works.  This will be important to keep working as

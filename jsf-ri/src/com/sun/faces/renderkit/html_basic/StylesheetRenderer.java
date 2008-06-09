@@ -95,17 +95,17 @@ public class StylesheetRenderer extends Renderer implements ComponentSystemEvent
           throws IOException {
 
         Map<String,Object> attributes = component.getAttributes();
-        Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
+        Map<Object, Object> contextMap = context.getAttributes();
 
         String name = (String) attributes.get("name");
         String library = (String) attributes.get("library");
         String key = name + library;
         
         // Ensure this stylesheet is not rendered more than once per request
-        if (requestMap.containsKey(key)) {
+        if (contextMap.containsKey(key)) {
             return;
         }
-        requestMap.put(key, Boolean.TRUE);
+        contextMap.put(key, Boolean.TRUE);
         
         Resource resource = context.getApplication().getResourceHandler()
               .createResource(name, library);
