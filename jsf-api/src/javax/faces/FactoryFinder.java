@@ -52,8 +52,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Callable;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.Future;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.lang.reflect.Constructor;
+import java.net.URL;
+import java.net.URLConnection;
 
 
 /**
@@ -166,28 +179,8 @@ public final class FactoryFinder {
 
     // ------------------------------------------------------- Static Variables
 
-    /**
-     * <p>Keys are web application class loaders.  Values are factory
-     * maps for each web application.</p>
-     * <p/>
-     * <p>For the nested map, the keys are the factoryName, which must
-     * be one of the <code>*_FACTORY</code> constants above.  Values are
-     * one of: </p>
-     * <p/>
-     * <ol>
-     * <p/>
-     * <li><p>the actual factory class, if {@link FactoryFinder#getFactory(String)} has been
-     * called before on this factoryName</p></li>
-     * <p/>
-     * <li><p>An <code>ArrayList</code> of <code>Strings</code>
-     * representing the configured implementations of for the
-     * factoryName.</p></li>
-     * <p/>
-     * </ol>
-     */
-    @SuppressWarnings({"CollectionWithoutInitialCapacity"})
-    private static final Map<ClassLoader, Map<String, Object>> applicationMaps =
-         new HashMap<ClassLoader, Map<String, Object>>();
+    private static final FactoryManagerCache FACTORIES_CACHE =
+          new FactoryManagerCache();
 
 
     /**
@@ -204,7 +197,6 @@ public final class FactoryFinder {
     /**
      * <p>Map of Class instances for the our factory names.</p>
      */
-
     private static Map<String, Class> factoryClasses = null;
 
     private static final Logger LOGGER =
@@ -242,35 +234,9 @@ public final class FactoryFinder {
         // Identify the web application class loader
         ClassLoader classLoader = getClassLoader();
 
-        synchronized (applicationMaps) {
-            Map<String, Object> appMap = getApplicationMap();
-            // assert(null != appMap);
-
-            Object factory;
-            Object factoryOrList = appMap.get(factoryName);
-
-            // If this factory has been retrieved before
-            if (factoryOrList != null && (!(factoryOrList instanceof List))) {
-                // just return it.
-                return (factoryOrList);
-            }
-            // else, this factory has not been retrieved before; let's
-            // find it.
-
-            factory = getImplementationInstance(classLoader, factoryName,
-                 (List) factoryOrList);
-
-            if (null == factory) {
-                ResourceBundle rb = LOGGER.getResourceBundle();
-                String message = rb.getString("severe.no_factory");
-                message = MessageFormat.format(message, factoryName);
-                throw new IllegalStateException(message);
-            }
-
-            // Record and return the new instance
-            appMap.put(factoryName, factory);
-            return (factory);
-        }
+        FactoryManager manager =
+              FACTORIES_CACHE.getApplicationFactoryManager(classLoader);
+        return manager.getFactory(classLoader, factoryName);
 
     }
 
@@ -292,36 +258,18 @@ public final class FactoryFinder {
      * @throws NullPointerException     if <code>factoryname</code>
      *                                  is null
      */
-
     public static void setFactory(String factoryName,
                                   String implName) {
-        validateFactoryName(factoryName);
-        Object previouslySetFactories;
-        Map<String, Object> appMap;
-        synchronized (applicationMaps) {
-            appMap = getApplicationMap();
-            // assert(null != appMap);
 
-            // Has set or get been called on this factoryName before?
-            if (null != (previouslySetFactories = appMap.get(factoryName))) {
-                // Yes.  Has get been called on this factoryName before?
-                // If previouslySetFactories is not a List, get has been
-                // called.
-                if (!(previouslySetFactories instanceof List)) {
-                    // take no action.
-                    return;
-                }
-                // get has not been called, previouslySetFactories is a
-                // List
-            } else {
-                // No.  Create a List for this FactoryName.
-                //noinspection CollectionWithoutInitialCapacity
-                previouslySetFactories = new ArrayList<String>();
-                appMap.put(factoryName, previouslySetFactories);
-            }
-            // Put this at the beginning of the list.
-            (TypedCollections.dynamicallyCastList((List) previouslySetFactories, String.class)).add(0, implName);
-        }
+        validateFactoryName(factoryName);
+
+        // Identify the web application class loader
+        ClassLoader classLoader = getClassLoader();
+
+        FactoryManager manager =
+              FACTORIES_CACHE.getApplicationFactoryManager(classLoader);
+        manager.addFactory(factoryName, implName);
+
     }
 
 
@@ -340,17 +288,10 @@ public final class FactoryFinder {
         // Identify the web application class loader
         ClassLoader cl = getClassLoader();
 
-        // Release any and all factory instances corresponding to this
-        // class loader
-        synchronized (applicationMaps) {
-            HashMap map = (HashMap) applicationMaps.get(cl);
-            if (map != null) {
-                map.clear();
-                applicationMaps.remove(cl);
-            }
-        }
+        FACTORIES_CACHE.removeApplicationFactoryManager(cl);
 
     }
+
 
     // -------------------------------------------------------- Private Methods
 
@@ -429,7 +370,8 @@ public final class FactoryFinder {
     private static Object getImplementationInstance(ClassLoader classLoader,
                                                     String factoryName,
                                                     List implementations)
-         throws FacesException {
+    throws FacesException {
+
         Object result = null;
         String curImplClass;
         int len;
@@ -446,11 +388,15 @@ public final class FactoryFinder {
         }
 
         // step 2.
-        if (null != (curImplClass = getImplNameFromServices(classLoader,
-             factoryName))) {
-            result = getImplGivenPreviousImpl(classLoader, factoryName,
-                 curImplClass, result);
-        }
+        List<String> fromServices = getImplNameFromServices(classLoader, factoryName);
+        if (fromServices != null) {
+            for (String name : fromServices) {
+                result = getImplGivenPreviousImpl(classLoader,
+                                                  factoryName,
+                                                  name,
+                                                  result);
+            }
+        }        
 
         // step 3.
         if (null != implementations) {
@@ -462,59 +408,74 @@ public final class FactoryFinder {
         }
 
         return result;
+
     }
+
 
     /**
      * <p>Perform the logic to get the implementation class for the
      * second step of {@link FactoryFinder#getImplementationInstance(ClassLoader, String, java.util.List)}.</p>
      */
-
-    private static String getImplNameFromServices(ClassLoader classLoader,
-                                                  String factoryName) {
+    private static List<String> getImplNameFromServices(ClassLoader classLoader,
+                                                        String factoryName) {
 
         // Check for a services definition
-        String result = null;
+        List<String> result = null;
+        String resourceName = "META-INF/services/" + factoryName;
+        InputStream stream;
         BufferedReader reader = null;
-        String resourceName = "META-INF/services/" + factoryName;        
-        InputStream stream = null;
         try {
-            stream = classLoader.getResourceAsStream(resourceName);
-            if (stream != null) {
-                // Deal with systems whose native encoding is possibly
-                // different from the way that the services entry was created
-                try {
-                    reader =
-                         new BufferedReader(new InputStreamReader(stream,
-                              "UTF-8"));
-                } catch (UnsupportedEncodingException e) {
-                    reader = new BufferedReader(new InputStreamReader(stream));
+            Enumeration<URL> e = classLoader.getResources(resourceName);
+            while (e.hasMoreElements()) {
+                URL url = e.nextElement();
+                URLConnection conn = url.openConnection();
+                conn.setUseCaches(false);
+                stream = conn.getInputStream();
+                if (stream != null) {
+                    // Deal with systems whose native encoding is possibly
+                    // different from the way that the services entry was created
+                    try {
+                        reader =
+                              new BufferedReader(new InputStreamReader(stream,
+                                                                       "UTF-8"));
+                        if (result == null) {
+                            result = new ArrayList<String>(3);
+                        }
+                        result.add(reader.readLine());
+                    } catch (UnsupportedEncodingException uee) {
+                        reader =
+                              new BufferedReader(new InputStreamReader(stream));
+                    } finally {
+                        if (reader != null) {
+                            reader.close();
+                            reader = null;
+                        }
+                        if (stream != null) {
+                            stream.close();
+                            //noinspection UnusedAssignment
+                            stream = null;
+                        }
+                    }
+
                 }
-                result = reader.readLine();
             }
         } catch (IOException e) {
-        } catch (SecurityException e) {
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (Throwable t) {
-                    ;
-                }
-                //noinspection UnusedAssignment
-                reader = null;
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE,
+                           e.toString(),
+                           e);
             }
-            if (stream != null) {
-                try {
-                    stream.close();
-                } catch (Throwable t) {
-                    ;
-                }
-                //noinspection UnusedAssignment
-                stream = null;
+        } catch (SecurityException e) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE,
+                           e.toString(),
+                           e);
             }
         }
         return result;
+
     }
+
 
     /**
      * <p>Implement the decorator pattern for the factory
@@ -535,7 +496,6 @@ public final class FactoryFinder {
      * @param previousImpl if non-<code>null</code>, the factory
      *                     instance to be passed to the constructor of the new factory.
      */
-
     private static Object getImplGivenPreviousImpl(ClassLoader classLoader,
                                                    String factoryName,
                                                    String implName,
@@ -549,8 +509,7 @@ public final class FactoryFinder {
 
         // if we have a previousImpl and the appropriate one arg ctor.
         if ((null != previousImpl) &&
-             (null != (factoryClass = getFactoryClass(classLoader,
-                  factoryName)))) {
+             (null != (factoryClass = getFactoryClass(factoryName)))) {
             try {
                 clazz = Class.forName(implName, false, classLoader);
                 getCtorArg = new Class[1];
@@ -581,15 +540,16 @@ public final class FactoryFinder {
             }
         }
         return result;
+
     }
+
 
     /**
      * @return the <code>java.lang.Class</code> for the argument
      *         factory.
      */
+    private static Class getFactoryClass(String factoryClassName) {
 
-    private static Class getFactoryClass(ClassLoader classLoader,
-                                         String factoryClassName) {
         if (null == factoryClasses) {
             factoryClasses = new HashMap<String, Class>(FACTORY_NAMES.length);
             factoryClasses.put(APPLICATION_FACTORY,
@@ -602,45 +562,178 @@ public final class FactoryFinder {
                  javax.faces.render.RenderKitFactory.class);
         }
         return factoryClasses.get(factoryClassName);
+
     }
+
 
     /**
-     * <p>This method must only be called from within a synchronized
-     * block for the {@link #applicationMaps} ivar.</p>
+     * Ensure the provided factory name is valid.
      */
-
-    private static Map<String, Object> getApplicationMap() {
-        // Identify the web application class loader
-        ClassLoader classLoader = getClassLoader();
-        Map<String, Object> result ;
-
-        // Return any previously instantiated factory instance (of the
-        // specified name) for this web application
-        result = applicationMaps.get(classLoader);
-        if (result == null) {
-            //noinspection CollectionWithoutInitialCapacity
-            result = new HashMap<String, Object>();
-            applicationMaps.put(classLoader, result);
-        }
-        return result;
-    }
-
     private static void validateFactoryName(String factoryName) {
-        // Validate the requested factory name
+
         if (factoryName == null) {
             throw new NullPointerException();
         }
-        boolean found = false;
-        for (int i = 0; i < FACTORY_NAMES.length; i++) {
-            if (factoryName.equals(FACTORY_NAMES[i])) {
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
+        if (Arrays.binarySearch(FACTORY_NAMES, factoryName) < 0) {
             throw new IllegalArgumentException(factoryName);
         }
+
     }
+
+
+    // ----------------------------------------------------------- Inner Classes
+
+
+    /**
+     * Managed the mappings between a web application and its configured
+     * factories.
+     */
+    private static final class FactoryManagerCache {
+
+        private ConcurrentMap<ClassLoader,Future<FactoryManager>> applicationMap =
+              new ConcurrentHashMap<ClassLoader, Future<FactoryManager>>();
+
+
+        // ------------------------------------------------------ Public Methods
+
+
+        private FactoryManager getApplicationFactoryManager(ClassLoader cl) {
+
+            while (true) {
+                Future<FactoryManager> factories = applicationMap.get(cl);
+                if (factories == null) {
+                    Callable<FactoryManager> callable =
+                          new Callable<FactoryManager>() {
+                              public FactoryManager call()
+                                    throws Exception {
+                                  return new FactoryManager();
+                              }
+                          };
+
+                    FutureTask<FactoryManager> ft =
+                          new FutureTask<FactoryManager>(callable);
+                    factories = applicationMap.putIfAbsent(cl, ft);
+                    if (factories == null) {
+                        factories = ft;
+                        ft.run();
+                    }
+                }
+
+                try {
+                    return factories.get();
+                } catch (CancellationException ce) {
+                    if (LOGGER.isLoggable(Level.FINEST)) {
+                        LOGGER.log(Level.FINEST,
+                                   ce.toString(),
+                                   ce);
+                    }
+                    applicationMap.remove(cl);
+                } catch (InterruptedException ie) {
+                    if (LOGGER.isLoggable(Level.FINEST)) {
+                        LOGGER.log(Level.FINEST,
+                                   ie.toString(),
+                                   ie);
+                    }
+                    applicationMap.remove(cl);
+                } catch (ExecutionException ee) {
+                    throw new FacesException(ee);
+                }
+
+            }
+
+        }
+
+
+        public void removeApplicationFactoryManager(ClassLoader cl) {
+
+            applicationMap.remove(cl);
+
+        }
+
+    } // END FactoryCache
+
+
+    /**
+     * Maintains the factories for a single web application.
+     */
+    private static final class FactoryManager {
+
+        private final Map<String,Object> factories;
+        private final ReentrantReadWriteLock lock;
+
+
+        // -------------------------------------------------------- Consturctors
+
+
+        public FactoryManager() {
+            factories = new HashMap<String,Object>();
+            for (String name : FACTORY_NAMES) {
+                factories.put(name, new ArrayList(4));
+            }
+            lock = new ReentrantReadWriteLock(true);
+        }
+
+
+        // ------------------------------------------------------ Public Methods
+
+
+        public void addFactory(String factoryName, String implementation) {
+
+            Object result = factories.get(factoryName);
+            lock.writeLock().lock();
+            try {
+                if (result instanceof List) {
+                    TypedCollections.dynamicallyCastList((List) result, String.class).add(0, implementation);
+                }
+            } finally {
+                lock.writeLock().unlock();
+            }
+        }
+
+
+        public Object getFactory(ClassLoader cl, String factoryName) {
+
+            Object factoryOrList;
+            lock.readLock().lock();
+            try {
+                factoryOrList = factories.get(factoryName);
+                if (!(factoryOrList instanceof List)) {
+                    return factoryOrList;
+                }
+            } finally {
+                lock.readLock().unlock();
+            }
+
+            // factory hasn't been constructed
+            lock.writeLock().lock();
+            try {
+                // double check the current value.  Another thread
+                // may have completed the initialization by the time
+                // this thread entered this block
+                factoryOrList = factories.get(factoryName);
+                if (!(factoryOrList instanceof List)) {
+                    return factoryOrList;
+                }
+                Object factory = getImplementationInstance(cl,
+                                                           factoryName,
+                                                           (List) factoryOrList);
+
+                if (factory == null) {
+                    ResourceBundle rb = LOGGER.getResourceBundle();
+                    String message = rb.getString("severe.no_factory");
+                    message = MessageFormat.format(message, factoryName);
+                    throw new IllegalStateException(message);
+                }
+
+                // Record and return the new instance
+                factories.put(factoryName, factory);
+                return (factory);
+            } finally {
+                lock.writeLock().unlock();
+            }
+        }
+
+    } // END FactoryManager
 
 
 }

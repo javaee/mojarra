@@ -93,6 +93,68 @@ public abstract class FacesContext {
      *  this instance has been released
      */
     public abstract Application getApplication();
+    
+    
+    /**
+     * <p class="changed_added_2_0">Return a mutable <code>Map</code> 
+     * representing the attributes associated wth this
+     * <code>FacesContext</code> instance.  This <code>Map</code> is 
+     * useful to store attributes that you want to go out of scope when the
+     * Faces lifecycle for the current request ends, which is not always the same 
+     * as the request ending, especially in the case of Servlet filters
+     * that are invoked <strong>after</strong> the Faces lifecycle for this
+     * request completes.  Accessing this <code>Map</code> does not cause any 
+     * events to fire, as is the case with the other maps: for request, session, and 
+     * application scope.</p>
+     * 
+     * <div class="changed_added_2_0">
+     * 
+     * <p>The <code>Map</code> returned by this method is not associated with
+     * the request.  If you would like to get or set request attributes,
+     * see {@link ExternalContext#getRequestMap}.  The 
+     * returned implementation must support all of the
+     * standard and optional <code>Map</code> methods, plus support the 
+     * following additional requirements:</p>
+     * 
+     * <ul>
+
+     * <li><p>The Map implementation must implement the 
+     * <code>java.io.Serializable</code> interface.</p></li>
+
+     * <li><p>Any attempt to add a <code>null</code> key or value must throw a
+     * <code>NullPointerException</code>.</p></li>
+
+     * <li><p>The <code>Map</code> must be cleared when the {@link #release} 
+     * is called.</p></li>
+     * 
+     * </ul>
+     * 
+     * <p>The default implementation throws 
+     * <code>UnsupportedOperationException</code> and is provided
+     * for the sole purpose of not breaking existing applications that extend
+     * this class.</p>
+     *
+     * </div>
+     * 
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     *
+     * @since 2.0
+     */
+
+    public Map<Object, Object> getAttributes() {
+        
+        Map m = (Map) getExternalContext().getRequestMap().get("com.sun.faces.util.RequestStateManager");
+        if (m != null) {
+            FacesContext impl = (FacesContext) m.get("com.sun.faces.FacesContextImpl");
+            if (impl != null) {
+                return impl.getAttributes();
+            } else {
+                throw new UnsupportedOperationException();
+            }
+        }
+        throw new UnsupportedOperationException();
+    }
 
 
     /**
@@ -373,16 +435,24 @@ public abstract class FacesContext {
 
 
     /**
-     * <p>Release any resources associated with this
-     * <code>FacesContext</code> instance.  Faces implementations may
-     * choose to pool instances in the associated {@link
-     * FacesContextFactory} to avoid repeated object creation and
-     * garbage collection.  After <code>release()</code> is called on a
-     * <code>FacesContext</code> instance (until the
-     * <code>FacesContext</code> instance has been recycled by the
-     * implementation for re-use), calling any other methods will cause
-     * an <code>IllegalStateException</code> to be thrown.</p>
-     *
+     * <p><span class="changed_modified_2_0">Release</span> any
+     * resources associated with this <code>FacesContext</code>
+     * instance.  Faces implementations may choose to pool instances in
+     * the associated {@link FacesContextFactory} to avoid repeated
+     * object creation and garbage collection.  After
+     * <code>release()</code> is called on a <code>FacesContext</code>
+     * instance (until the <code>FacesContext</code> instance has been
+     * recycled by the implementation for re-use), calling any other
+     * methods will cause an <code>IllegalStateException</code> to be
+     * thrown.</p>
+
+     * <p class="changed_added_2_0">If a call was made to {@link
+     * #getAttributes} during the processing for this request, the
+     * implementation must call <code>clear()</code> on the
+     * <code>Map</code> returned from <code>getAttributes()</code>, and
+     * then de-allocate the data-structure behind that
+     * <code>Map</code>.</p>
+
      * <p>The implementation must call {@link #setCurrentInstance}
      * passing <code>null</code> to remove the association between this
      * thread and this dead <code>FacesContext</code> instance.</p>
