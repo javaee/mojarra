@@ -1047,9 +1047,9 @@ private void doFind(FacesContext context, String clientId) {
      */
     protected void pushComponentToEL(FacesContext context) {
 
-        Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
-        if (requestMap != null) {
-            previouslyPushed = (UIComponent) requestMap.put("component", this);
+        Map<Object,Object> contextMap = context.getAttributes();
+        if (contextMap != null) {
+            previouslyPushed = (UIComponent) contextMap.put("component", this);
         }
 
     }
@@ -1063,12 +1063,12 @@ private void doFind(FacesContext context, String clientId) {
      */
     protected void popComponentFromEL(FacesContext context) {
 
-        Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
-        if (requestMap != null) {
+        Map<Object,Object> contextMap = context.getAttributes();
+        if (contextMap != null) {
             if (previouslyPushed != null) {
-                requestMap.put("component", previouslyPushed);
+                contextMap.put("component", previouslyPushed);
             } else {
-                requestMap.remove("component");
+                contextMap.remove("component");
             }
         }
 
@@ -1089,8 +1089,8 @@ private void doFind(FacesContext context, String clientId) {
     public static UIComponent getCurrentComponent() {
 
         FacesContext context = FacesContext.getCurrentInstance();
-        Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
-        return (UIComponent) requestMap.get("component");
+        Map<Object, Object> contextMap = context.getAttributes();
+        return (UIComponent) contextMap.get("component");
 
     }
 
