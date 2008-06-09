@@ -813,6 +813,12 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
         listener.reset();
         root.getViewMap().clear();
         assertTrue(listener.wasProcessEventInvoked());
+        
+        root = new UIViewRoot();
+        listener.reset();
+        assertTrue(!listener.wasProcessEventInvoked());
+        root.getViewMap(false);
+        assertTrue(!listener.wasProcessEventInvoked());
 
         app.unsubscribeFromEvent(ViewMapCreatedEvent.class,
                                  UIViewRoot.class,
