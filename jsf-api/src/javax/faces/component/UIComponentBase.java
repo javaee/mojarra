@@ -2058,22 +2058,22 @@ public abstract class UIComponentBase extends UIComponent {
         private static final String IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME = "com.sun.faces.IS_POSTBACK_AND_RESTORE_VIEW";
         
         private void clearPostbackAndRestoreViewCache(FacesContext context) {
-            Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
-            requestMap.remove(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME);
+            Map<Object, Object> contextMap = context.getAttributes();
+            contextMap.remove(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME);
                         
         }
         
         private boolean isPostbackAndRestoreView(FacesContext context) {
             boolean result = false;
-            Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
-            if (requestMap.containsKey(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME)) {
-                result = Boolean.TRUE == requestMap.get(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME) ? true : false;
+            Map<Object, Object> contextMap = context.getAttributes();
+            if (contextMap.containsKey(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME)) {
+                result = Boolean.TRUE == contextMap.get(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME) ? true : false;
             }
             else {
                 result = getResponseStateManager(context, 
                     context.getViewRoot().getRenderKitId()).isPostback(context) &&
                     context.getCurrentPhaseId().equals(PhaseId.RESTORE_VIEW);
-                requestMap.put(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME,
+                contextMap.put(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME,
                         result ? Boolean.TRUE : Boolean.FALSE);
                 
             }
@@ -2132,7 +2132,7 @@ public abstract class UIComponentBase extends UIComponent {
                     }
                 }
             }
-            if (sourceClass.isAnnotationPresent(ResourceDependencies.class)) {
+            if (sourceClass.isAnnotationPresent(ResourceDependency.class)) {
                 ResourceDependency resource =
                       sourceClass.getAnnotation(ResourceDependency.class);
                 createComponentResource(context, resource);
