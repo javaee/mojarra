@@ -738,7 +738,7 @@ see the <i>angle brackets</i> on this text
 <form id="form4" name="form4" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=76dba2b12d00abb0cc5af536bc5c" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="form4" value="form4" />
 <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id1:j_id2" />
-<a href="http://localhost:8080/test/;jsessionid=76dba2b12d00abb0cc5af536bc5c">
+<a href="test.html;jsessionid=76dba2b12d00abb0cc5af536bc5c">
       Link Enabled
   </a><span>
       Link Disabled

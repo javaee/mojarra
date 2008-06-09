@@ -895,7 +895,7 @@ see the <i>angle brackets</i> on this text"></h:outputText>
 </h:form>
 
 <h:form id="form4">
-  <h:outputLink>
+  <h:outputLink value="test.html">
       Link Enabled
   </h:outputLink> 
   <h:outputLink disabled="true">

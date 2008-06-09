@@ -70,6 +70,7 @@ class InitFacesContext extends FacesContext {
     private ExternalContext ec;
     private UIViewRoot viewRoot;
     private FacesContext orig;
+    private Map<Object,Object> attributes;
 
     public InitFacesContext(ServletContext sc) {
         ec = new ServletContextAdapter(sc);
@@ -82,6 +83,17 @@ class InitFacesContext extends FacesContext {
                 FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         return factory.getApplication();
     }
+    
+    @Override
+    public Map<Object, Object> getAttributes() {
+        
+        if (null == attributes) {
+            attributes = new HashMap<Object,Object>();
+        }
+        
+        return attributes;
+    }
+    
 
     public Iterator<String> getClientIdsWithMessages() {
         List<String> list = Collections.emptyList();
@@ -143,6 +155,10 @@ class InitFacesContext extends FacesContext {
 
     public void release() {
         setCurrentInstance(orig);
+        if (null != attributes) {
+            attributes.clear();
+            attributes = null;
+        }
     }
 
     public void renderResponse() { }

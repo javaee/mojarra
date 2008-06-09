@@ -182,6 +182,32 @@ public class TestApplicationEvents extends ServletFacesTestCase {
         assertTrue(!listener.wasIsListenerForSourceInvoked());
         assertTrue(!listener.wasProcessEventInvoked());
 
+        // verify multiple events for a single source works
+        listener = new TestListener(UIViewRoot.class);
+        application.subscribeToEvent(TestApplicationEvents.TestSystemEvent2.class,
+                                     UIViewRoot.class,
+                                     listener);
+        application.subscribeToEvent(TestApplicationEvents.TestSystemEvent3.class,
+                                     UIViewRoot.class,
+                                     listener);
+
+        application.publishEvent(TestApplicationEvents.TestSystemEvent2.class, getFacesContext().getViewRoot());
+        assertTrue(listener.getPassedSource() == getFacesContext().getViewRoot());
+        assertTrue(listener.getPassedSystemEvent() instanceof TestSystemEvent2);
+        assertTrue(listener.getPassedSystemEvent().getSource() == getFacesContext().getViewRoot());
+        listener.reset();
+        application.publishEvent(TestApplicationEvents.TestSystemEvent3.class, getFacesContext().getViewRoot());
+        assertTrue(listener.getPassedSource() == getFacesContext().getViewRoot());
+        assertTrue(listener.getPassedSystemEvent() instanceof TestSystemEvent3);
+        assertTrue(listener.getPassedSystemEvent().getSource() == getFacesContext().getViewRoot());
+
+        application.unsubscribeFromEvent(TestApplicationEvents.TestSystemEvent2.class,
+                                         UIViewRoot.class,
+                                         listener);
+        application.unsubscribeFromEvent(TestApplicationEvents.TestSystemEvent3.class,
+                                         UIViewRoot.class,
+                                         listener);
+
     }
 
     ////////////////////////////////////////////////////////////////////////////

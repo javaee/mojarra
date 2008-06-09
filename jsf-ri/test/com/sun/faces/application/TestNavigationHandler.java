@@ -203,6 +203,7 @@ public class TestNavigationHandler extends ServletFacesTestCase {
             page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
             page.setViewId(testResult.fromViewId);
             page.setLocale(Locale.US);
+            page.getViewMap(); // cause the map to be created
             context.setViewRoot(page);
             listener.reset();
             try {

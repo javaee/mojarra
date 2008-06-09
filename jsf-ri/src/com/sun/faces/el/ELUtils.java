@@ -404,8 +404,8 @@ public class ELUtils {
             return Scope.REQUEST;
         }
 
-        Map<String,Object> viewMap = FacesContext.getCurrentInstance().getViewRoot().getViewMap();
-        if (requestMap != null && viewMap.containsKey(identifier)) {
+        Map<String,Object> viewMap = context.getViewRoot().getViewMap(false);
+        if (viewMap != null && viewMap.containsKey(identifier)) {
             return Scope.VIEW;
         }
 

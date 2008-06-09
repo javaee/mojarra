@@ -44,6 +44,8 @@ import java.util.Iterator;
 import java.beans.FeatureDescriptor;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Map;
+
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -75,9 +77,10 @@ public class ScopedAttributeELResolver extends ELResolver {
         FacesContext facesContext = (FacesContext)
             context.getContext(FacesContext.class);
         ExternalContext ec = facesContext.getExternalContext();
+        Map<String,Object> viewMap = facesContext.getViewRoot().getViewMap(false);
         Object result;
         if (null == (result = ec.getRequestMap().get(attribute))) {
-            if (null == (result = facesContext.getViewRoot().getViewMap().get(attribute))) {
+            if (null == (result = ((viewMap != null) ? viewMap.get(attribute) : null))) {
                 if (null == (result = ec.getSessionMap().get(attribute))) {
                     result = ec.getApplicationMap().get(attribute);
                 }
@@ -169,13 +172,17 @@ public class ScopedAttributeELResolver extends ELResolver {
         }
         
        // add attributes in view scope.
-       attrs = facesContext.getViewRoot().getViewMap().entrySet();
-        for (Entry<String, Object> entry : attrs) {
-            String attrName = entry.getKey();
-            Object attrValue = entry.getValue();
-            list.add(Util.getFeatureDescriptor(attrName, attrName,
-                                               "view scope attribute", false, false, true, attrValue.getClass(),
-                                               Boolean.TRUE));
+        Map<String, Object> viewMap =
+              facesContext.getViewRoot().getViewMap(false);
+        if (viewMap != null && viewMap.size() != 0) {
+            attrs = facesContext.getViewRoot().getViewMap().entrySet();
+            for (Entry<String, Object> entry : attrs) {
+                String attrName = entry.getKey();
+                Object attrValue = entry.getValue();
+                list.add(Util.getFeatureDescriptor(attrName, attrName,
+                                                   "view scope attribute", false, false, true, attrValue.getClass(),
+                                                   Boolean.TRUE));
+            }
         }
         
 
