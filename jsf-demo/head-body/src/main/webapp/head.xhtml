@@ -2,18 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:mjx="http://java.sun.com/jsf/mojarra/extensions"
       xmlns:hb="https://javaserverfaces.dev.java.net/demo/headbody"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 <f:view contentType="text/html"/>
 
-<mjx:head>
+<h:head>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
     <title>Head and Body Investigation</title>
-</mjx:head>
+</h:head>
 
 
-<mjx:body>
+<h:body>
 
 <h1>Template Text</h1>
 
@@ -24,13 +23,13 @@
 
   <h:inputText />
 
-  <mjx:outputScript name="ajaxZero.js" library="javax.faces" target="head"/>
-  <mjx:outputScript name="ajaxOne.js" library="javax.faces" target="head"/>
-  <mjx:outputScript name="ajaxTwo.js" library="javax.faces" target="body"/>
-  <mjx:outputScript name="ajaxThree.js" library="javax.faces"/>
-  <mjx:outputScript name="scriptInForm.js" library="form" target="form"/>
+  <h:outputScript name="ajaxZero.js" library="javax.faces" target="head"/>
+  <h:outputScript name="ajaxOne.js" library="javax.faces" target="head"/>
+  <h:outputScript name="ajaxTwo.js" library="javax.faces" target="body"/>
+  <h:outputScript name="ajaxThree.js" library="javax.faces"/>
+  <h:outputScript name="scriptInForm.js" library="form" target="form"/>
 
-  <mjx:outputStylesheet name="basic.css" />
+  <h:outputStylesheet name="basic.css" />
 
   <hb:myComponent />
 
@@ -61,6 +60,6 @@
 
 </form>
 
-</mjx:body>
+</h:body>
 
 </html>

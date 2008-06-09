@@ -59,7 +59,7 @@
 
     <context-param>
 	<param-name>facelets.LIBRARIES</param-name>
-	<param-value>/WEB-INF/extensions.taglib.xml;/WEB-INF/demo.taglib.xml</param-value>
+	<param-value>/WEB-INF/demo.taglib.xml</param-value>
     </context-param>
 
     <!-- Faces Servlet -->

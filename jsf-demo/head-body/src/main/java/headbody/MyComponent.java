@@ -3,7 +3,7 @@ package headbody;
 import javax.faces.application.ResourceDependency;
 import javax.faces.component.UIOutput;
 
-@ResourceDependency (name="ajax.js", library="javax.faces", target="head")
+@ResourceDependency (name="mycomponent.js", library="mylib", target="head")
 public class MyComponent extends UIOutput {
 
     public static final String COMPONENT_TYPE = "headbody.MyComponent";

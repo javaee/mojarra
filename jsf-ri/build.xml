@@ -58,6 +58,11 @@
     <property name="build.generate.tld.dir"
               value="${build.generate.dir}/conf/share"/>
 
+    <!-- The base directory for binary dependency libs under local version 
+         control -->
+    <property name="local.lib.dir"
+              value="${basedir}/../lib"/>
+
     <!-- The base directory for distribution targets -->
     <property name="dist.dir" value="${basedir}/dist"/>
 
@@ -452,6 +457,11 @@
                      includes="com-sun-commons*.jar"/>
         </unjar>
         -->
+        <unjar dest="${build.classes.dir}">
+            <fileset dir="${local.lib.dir}"
+                     includes="jsf-facelets-2.0-SNAPSHOT.jar"/>
+        </unjar>
+
         <jsf.manifested.jar jarfile="${build.dir}/lib/${name}.jar"
                             basedir="${build.classes.dir}"
                             extension-name="com.sun.faces"/>
