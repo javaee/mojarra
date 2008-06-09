@@ -435,16 +435,24 @@ public abstract class FacesContext {
 
 
     /**
-     * <p>Release any resources associated with this
-     * <code>FacesContext</code> instance.  Faces implementations may
-     * choose to pool instances in the associated {@link
-     * FacesContextFactory} to avoid repeated object creation and
-     * garbage collection.  After <code>release()</code> is called on a
-     * <code>FacesContext</code> instance (until the
-     * <code>FacesContext</code> instance has been recycled by the
-     * implementation for re-use), calling any other methods will cause
-     * an <code>IllegalStateException</code> to be thrown.</p>
-     *
+     * <p><span class="changed_modified_2_0">Release</span> any
+     * resources associated with this <code>FacesContext</code>
+     * instance.  Faces implementations may choose to pool instances in
+     * the associated {@link FacesContextFactory} to avoid repeated
+     * object creation and garbage collection.  After
+     * <code>release()</code> is called on a <code>FacesContext</code>
+     * instance (until the <code>FacesContext</code> instance has been
+     * recycled by the implementation for re-use), calling any other
+     * methods will cause an <code>IllegalStateException</code> to be
+     * thrown.</p>
+
+     * <p class="changed_added_2_0">If a call was made to {@link
+     * #getAttributes} during the processing for this request, the
+     * implementation must call <code>clear()</code> on the
+     * <code>Map</code> returned from <code>getAttributes()</code>, and
+     * then de-allocate the data-structure behind that
+     * <code>Map</code>.</p>
+
      * <p>The implementation must call {@link #setCurrentInstance}
      * passing <code>null</code> to remove the association between this
      * thread and this dead <code>FacesContext</code> instance.</p>
