@@ -47,6 +47,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.Cookie;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -89,6 +91,13 @@ public class ExternalContextImpl extends ExternalContext {
     private Map<String,String[]> requestHeaderValuesMap = null;
     private Map<String,Object> cookieMap = null;
     private Map<String,String> initParameterMap = null;
+
+    private enum ALLOWABLE_COOKIE_PROPERTIES {
+        domain,
+        maxAge,
+        path,
+        secure
+    }
 
     static final Class theUnmodifiableMapClass =
         Collections.unmodifiableMap(new HashMap<Object,Object>()).getClass();
@@ -563,50 +572,123 @@ public class ExternalContextImpl extends ExternalContext {
 
 
     /**
-     * @see ExternalContext#isUserInRole(String)
+     * @see javax.faces.context.ExternalContext#isUserInRole(String)
      */
     public boolean isUserInRole(String role) {
         return ((HttpServletRequest) request).isUserInRole(role);
     }
 
+
+    /**
+     * @see javax.faces.context.ExternalContext#invalidateSession()
+     */
     @Override
     public void invalidateSession() {
-        throw new UnsupportedOperationException();
-    }
-    
-    
 
-    @Override
-    public void addResponseCookie(String arg0, String arg1, Map<String, Object> arg2) throws IllegalArgumentException {
-         throw new UnsupportedOperationException();
+        HttpSession session = ((HttpServletRequest) request).getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
     }
 
+
+    /**
+     * @see ExternalContext#addResponseCookie(String, String, java.util.Map)
+     * @param name
+     * @param value
+     * @param properties
+     */
     @Override
-    public OutputStream getResponseOutputStream() {
-         throw new UnsupportedOperationException();
+    public void addResponseCookie(String name,
+                                  String value,
+                                  Map<String,Object> properties) {
+
+        HttpServletResponse res = (HttpServletResponse) response;
+
+        Cookie cookie = new Cookie(name, value);
+        if (properties != null && properties.size() != 0) {
+            for (Map.Entry<String,Object> entry : properties.entrySet()) {
+                String key = entry.getKey();
+                ALLOWABLE_COOKIE_PROPERTIES p = ALLOWABLE_COOKIE_PROPERTIES.valueOf(key);
+                Object v = entry.getValue();
+                switch (p) {
+                    case domain:
+                        cookie.setDomain((String) v);
+                        break;
+                    case maxAge:
+                        cookie.setMaxAge((Integer) v);
+                        break;
+                    case path:
+                        cookie.setPath((String) v);
+                        break;
+                    case secure:
+                        cookie.setSecure((Boolean) v);
+                        break;
+                    default:
+                        throw new IllegalStateException(); // shouldn't happen
+                }
+            }
+        }
+        res.addCookie(cookie);
+
     }
-    
+
+
+    /**
+     * @see javax.faces.context.ExternalContext#getResponseOutputStream()
+     */
+    @Override
+    public OutputStream getResponseOutputStream() throws IOException {
+
+        return response.getOutputStream();
+        
+    }
+
+
+    /**
+     * @see javax.faces.context.ExternalContext#getRequestScheme()
+     */
     @Override
     public String getRequestScheme() {
-         throw new UnsupportedOperationException();
+
+        return request.getScheme();
+
     }
 
+
+    /**
+     * @see javax.faces.context.ExternalContext#getRequestServerName()
+     */
     @Override
     public String getRequestServerName() {
-         throw new UnsupportedOperationException();
+
+        return request.getServerName();
+
     }
 
+
+    /**
+     * @see javax.faces.context.ExternalContext#getRequestServerPort()
+     */
     @Override
-    public String getRequestServerPort() {
-        throw new UnsupportedOperationException();
+    public int getRequestServerPort() {
+
+        return request.getServerPort();
+
     }
 
+
+    /**
+     * @see ExternalContext#setResponseContentType(String)
+     * @param contentType
+     */
     @Override
-    public void setResponseContentType(String arg0) {
-         throw new UnsupportedOperationException();
+    public void setResponseContentType(String contentType) {
+
+        response.setContentType(contentType);
+        
     }
-    
-    
 
 
     // ----------------------------------------------------------- Inner Classes

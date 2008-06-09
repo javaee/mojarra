@@ -36,9 +36,6 @@
 
 package com.sun.faces.util;
 
-import java.util.Map;
-import java.util.HashMap;
-
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.RIConstants;
@@ -182,13 +179,6 @@ public class RequestStateManager {
     public static final String RESOURCE_REQUEST =
           "com.sun.faces.RESOURCE_REQUEST";
 
-    /**
-     * <p>The key under with the Map containing the implementation specific
-     * attributes will be stored within the request.<p>
-     */
-    private static final String KEY =
-          RequestStateManager.class.getName();
-
 
     // ---------------------------------------------------------- Public Methods
 
@@ -203,8 +193,7 @@ public class RequestStateManager {
         if (ctx == null || key == null) {
             return null;
         }
-        Map<String,Object> reqState = getStateMap(ctx);
-        return reqState.get(key);
+        return ctx.getAttributes().get(key);
 
     }
 
@@ -228,8 +217,7 @@ public class RequestStateManager {
         if (value == null) {
             remove(ctx, key);
         }
-        Map<String,Object> reqState = getStateMap(ctx);
-        reqState.put(key, value);
+        ctx.getAttributes().put(key, value);
 
     }
 
@@ -248,8 +236,8 @@ public class RequestStateManager {
         if (ctx == null || key == null) {
             return null;
         }
-        Map<String,Object> reqState = getStateMap(ctx);
-        return reqState.remove(key);
+
+        return ctx.getAttributes().remove(key);
 
     }
 
@@ -261,34 +249,8 @@ public class RequestStateManager {
      */
     public static boolean containsKey(FacesContext ctx, String key) {
 
-        if (ctx == null || key == null) {
-            return false;
-        }
-        Map<String,Object> reqState = getStateMap(ctx);
-        return reqState.containsKey(key);
-
-    }
-
-
-    // --------------------------------------------------------- Private Methods
-
-
-    /**
-     * @param ctx the <code>FacesContext</code> for the current request
-     * @return the Map from the request containing the implementation specific
-     *  attributes needed for processing
-     */
-    private static Map<String,Object> getStateMap(FacesContext ctx) {
-
-        assert (ctx != null); // all callers guard against a null context
-        Map<String,Object> requestMap = ctx.getExternalContext().getRequestMap();
-        //noinspection unchecked
-        Map<String,Object> reqState = (Map<String,Object>) requestMap.get(KEY);
-        if (reqState == null) {
-            reqState = new HashMap<String,Object>();
-            requestMap.put(KEY, reqState);
-        }
-        return reqState;
+        return !(ctx == null || key == null) && ctx.getAttributes()
+              .containsKey(key);
 
     }
 
