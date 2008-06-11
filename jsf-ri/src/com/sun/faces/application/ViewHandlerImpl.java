@@ -897,7 +897,7 @@ public class ViewHandlerImpl extends ViewHandler {
 
 
         public void release() {
-            CUR_WRITER.set(null);
+            CUR_WRITER.remove();
         }
 
 

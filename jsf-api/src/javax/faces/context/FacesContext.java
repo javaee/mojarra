@@ -524,7 +524,11 @@ public abstract class FacesContext {
      */
     protected static void setCurrentInstance(FacesContext context) {
 
-        instance.set(context);
+        if (context == null) {
+            instance.remove();
+        } else {
+            instance.set(context);
+        }
 
     }
 

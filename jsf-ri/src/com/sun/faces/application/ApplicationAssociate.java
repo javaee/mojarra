@@ -200,7 +200,13 @@ public class ApplicationAssociate {
     }
 
     public static void setCurrentInstance(ApplicationAssociate associate) {
-        instance.set(associate);
+
+        if (associate == null) {
+            instance.remove();
+        } else {
+            instance.set(associate);
+        }
+        
     }
 
     public static ApplicationAssociate getCurrentInstance() {
