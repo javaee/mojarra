@@ -160,6 +160,8 @@
         <copy todir="${build.classes.dir}">
             <fileset dir="${src.dir}">
                 <exclude name="**/*.java"/>
+                <exclude name="**/*.html"/>
+                <exclude name="**/*.jpg"/>
             </fileset>
         </copy>
 
@@ -569,10 +571,38 @@ javax.faces.level=ALL
     -->
     <target name="jars" depends="build">
 
-        <jsf.manifested.jar jarfile="${build.lib.dir}/${name}.jar"
+         <copy file="${basedir}/mojarra-jsf-api.bnd" tofile="tmp.bnd"/>
+        <replace file="tmp.bnd"
+                 token="@spec.version@"
+                 value="${spec.version}"/>
+        <replace file="tmp.bnd"
+                 token="@impl.name@"
+                 value="${impl.name}"/>
+        <replace file="tmp.bnd"
+                 token="@impl.version@"
+                 value="${impl.version}"/>
+        <if>
+            <equals arg1="${build.type}" arg2=""/>
+            <then>
+                <replace file="tmp.bnd"
+                         token="@osgi.version@"
+                         value="${impl.version.number}"/>
+            </then>
+            <else>
+                <replace file="tmp.bnd"
+                         token="@osgi.version@"
+                         value="${impl.version.number}-${build.type}"/>
+            </else>
+        </if>
+        <replace file="tmp.bnd"
+                 token="@extension.name@"
+                 value="javax.faces"/>
+        <jsf.osgi.jar jarfile="${build.lib.dir}/${name}.jar"
                             basedir="${build.classes.dir}"
                             extension-name="javax.faces"
-                            includes="**/*.class,**/LogStrings.properties"/>
+                            bndfile="tmp.bnd"
+                            includes="**/*.class,**/*.properties"/>
+        <delete file="tmp.bnd"/>
 
     </target>
 

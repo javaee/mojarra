@@ -451,21 +451,42 @@
     -->
 
     <target name="jars" depends="compile">
-        <!--
-        <unjar dest="${build.classes.dir}">
-            <fileset dir="${dependency.jar.dir}"
-                     includes="com-sun-commons*.jar"/>
-        </unjar>
-        -->
         <unjar dest="${build.classes.dir}">
             <fileset dir="${local.lib.dir}"
                      includes="jsf-facelets-2.0-SNAPSHOT.jar"/>
         </unjar>
 
-        <jsf.manifested.jar jarfile="${build.dir}/lib/${name}.jar"
-                            basedir="${build.classes.dir}"
-                            extension-name="com.sun.faces"/>
-        <!--<delete dir="${build.classes.dir}/com/sun/org"/>-->
+        <copy file="${basedir}/mojarra-jsf-impl.bnd" tofile="tmp.bnd"/>
+        <replace file="tmp.bnd"
+                 token="@spec.version@"
+                 value="${spec.version}"/>
+        <replace file="tmp.bnd"
+                 token="@impl.name@"
+                 value="${impl.name}"/>
+        <replace file="tmp.bnd"
+                 token="@impl.version@"
+                 value="${impl.version}"/>
+        <if>
+            <equals arg1="${build.type}" arg2=""/>
+            <then>
+                <replace file="tmp.bnd"
+                         token="@osgi.version@"
+                         value="${impl.version.number}"/>
+            </then>
+            <else>
+                <replace file="tmp.bnd"
+                         token="@osgi.version@"
+                         value="${impl.version.number}-${build.type}"/>
+            </else>
+        </if>
+        <replace file="tmp.bnd"
+                 token="@extension.name@"
+                 value="com.sun.faces"/>
+        <jsf.osgi.jar jarfile="${build.dir}/lib/${name}.jar"
+                      bndfile="tmp.bnd"
+                      basedir="${build.classes.dir}"
+                      extension-name="com.sun.faces"/>
+        <delete file="tmp.bnd"/>
     </target>
 
     <target name="main" depends="update,jars"/>

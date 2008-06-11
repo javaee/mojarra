@@ -1,5 +1,5 @@
 /*
- * $Id: MessageFactory.java,v 1.15 2007/04/27 22:02:51 ofung Exp $
+ * $Id: MessageFactory.java,v 1.15.4.1 2008/06/10 18:00:16 rlubke Exp $
  */
 
 /*
@@ -61,6 +61,9 @@ import java.util.ResourceBundle;
  */
 
 @protection@ class MessageFactory {
+
+    private static final String MOJARRA_RESOURCE_BASENAME =
+        "com.sun.faces.resources.Messages";
 
     private MessageFactory() {
     }
@@ -180,15 +183,30 @@ import java.util.ResourceBundle;
             // see if we have a hit
             try {
                 summary = bundle.getString(messageId);
-                // we couldn't find a summary anywhere!  Return null
-                if (null == summary) {
-                    return null;
-                }
                 detail = bundle.getString(messageId + "_detail");
             } catch (MissingResourceException e) {
                 // ignore
             }
         }
+
+        // no hit found in the standard javax.faces.Messages bundle.
+        // check the Mojarra resources
+        if (summary == null) {
+            // see if we have a summary in the app provided bundle
+            bundle = ResourceBundle.getBundle(MOJARRA_RESOURCE_BASENAME,
+                                              locale,
+                                              getCurrentLoader(bundleName));
+            if (null == bundle) {
+                throw new NullPointerException();
+            }
+            // see if we have a hit
+            try {
+                summary = bundle.getString(messageId);
+            } catch (MissingResourceException e) {
+                return null;
+            }
+        }
+
         // At this point, we have a summary and a bundle.     
         FacesMessage ret = new BindingFacesMessage(locale, summary, detail, params);
         ret.setSeverity(FacesMessage.SEVERITY_ERROR);
