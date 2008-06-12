@@ -894,6 +894,25 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
         assertTrue(isInjectable);
     }
+
+    public void testViewScopeAnnotationCallBacks() throws Exception {
+
+        BeanManager beanManager =
+             ApplicationAssociate.getInstance(getFacesContext().getExternalContext()).getBeanManager();
+        ManagedBeanInfo bean = new ManagedBeanInfo("viewBean",
+                                                   "com.sun.faces.config.TestManagedBeanFactory$InjectionBean",
+                                                   "view",
+                                                   null,
+                                                   null,
+                                                   null,
+                                                   null);
+        beanManager.register(bean);
+        InjectionBean injectionBean = (InjectionBean) beanManager.create("viewBean", getFacesContext());
+        assertTrue(injectionBean.initCalled);
+        getFacesContext().getViewRoot().getViewMap().clear();
+        assertTrue(injectionBean.destroyCalled);
+
+    }
 	
     /************* PENDING(edburns): rewrite to exercise new edge case
      * detection.
