@@ -2119,8 +2119,7 @@ public abstract class UIComponentBase extends UIComponent {
                         createComponentResource(context, dependency);
                     }
                 }
-            }
-            if (sourceClass.isAnnotationPresent(ResourceDependency.class)) {
+            } else if (sourceClass.isAnnotationPresent(ResourceDependency.class)) {
                 ResourceDependency resource =
                       sourceClass.getAnnotation(ResourceDependency.class);
                 createComponentResource(context, resource);
