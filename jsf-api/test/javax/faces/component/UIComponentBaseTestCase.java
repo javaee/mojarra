@@ -1389,6 +1389,9 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         assertNull(listener.getEvent());
         c1.encodeEnd(facesContext);
         assertNull(listener.getEvent());
+
+        application.unsubscribeFromEvent(BeforeRenderEvent.class, listener);
+        
     }
 
 
