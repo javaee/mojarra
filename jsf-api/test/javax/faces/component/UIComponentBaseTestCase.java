@@ -66,6 +66,11 @@ import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.validator.ValidatorException;
 import javax.faces.event.AbortProcessingException;
+import javax.faces.event.SystemEventListener;
+import javax.faces.event.SystemEvent;
+import javax.faces.event.AfterAddToParentEvent;
+import javax.faces.event.BeforeRenderEvent;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -1342,7 +1347,75 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     
     }
 
-    
+
+    public void testChildrenListAfterAddPublish() {
+
+        Listener listener = new Listener();
+        application.subscribeToEvent(AfterAddToParentEvent.class, listener);
+
+        UIComponent c1 = createComponent();
+        UIComponent c2 = createComponent();
+        UIComponent c3 = createComponent();
+
+        c1.getChildren().add(c2);
+        SystemEvent e = listener.getEvent();
+        assertNotNull(e);
+        assertTrue(e.getSource() == c2);
+        assertTrue(((UIComponent) e.getSource()).getParent() == c1);
+        listener.reset();
+        c2.getChildren().add(c3);
+        e = listener.getEvent();
+        assertNotNull(e);
+        assertTrue(e.getSource() == c3);
+        assertTrue(((UIComponent) e.getSource()).getParent() == c2);
+
+        application.unsubscribeFromEvent(AfterAddToParentEvent.class, listener);
+
+    }
+
+
+    public void testEncodeBeginPublish() throws Exception {
+
+        Listener listener = new Listener();
+        application.subscribeToEvent(BeforeRenderEvent.class, listener);
+
+        UIComponent c1 = createComponent();
+        c1.encodeBegin(facesContext);
+        SystemEvent e = listener.getEvent();
+        assertNotNull(e);
+        assertTrue(e.getSource() == c1);
+        listener.reset();
+        c1.encodeChildren(facesContext);
+        assertNull(listener.getEvent());
+        c1.encodeEnd(facesContext);
+        assertNull(listener.getEvent());
+    }
+
+
+    // --------------------------------------------------------- Private Classes
+
+
+    private static final class Listener implements SystemEventListener {
+
+        private SystemEvent event;
+
+        public void processEvent(SystemEvent event)
+        throws AbortProcessingException {
+            this.event = event;
+        }
+
+        public boolean isListenerForSource(Object source) {
+            return (source instanceof UIComponent);
+        }
+
+        public SystemEvent getEvent() {
+            return event;
+        }
+
+        public void reset() {
+            event = null;
+        }
+    }
     
 
 }
