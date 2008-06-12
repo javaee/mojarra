@@ -122,6 +122,14 @@ public class TestComponent extends UIComponentBase {
         super.processUpdates(context);
     }
 
+    public void callPushComponent(FacesContext context) {
+        pushComponentToEL(context);
+    }
+
+    public void callPopComponent(FacesContext context) {
+        popComponentFromEL(context);
+    }
+
 
     // --------------------------------------------------- Static Trace Methods
 
