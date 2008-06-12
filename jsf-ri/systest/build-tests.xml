@@ -137,6 +137,7 @@
                 test.renderkit,
                 test.hello,
                 test.external,
+                test.el,
                 test.managed,
                 test.message,
                 test.converter,
@@ -237,6 +238,17 @@
               request="${context.path}/faces/external03.jsp"
               outContent="/external03.jsp PASSED"/>
 
+    </target>
+
+    <target name="test.el">
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/systest/el/ELTestCase.class"/> 
+            </tests>
+        </jsf.junit>
     </target>
 
 
