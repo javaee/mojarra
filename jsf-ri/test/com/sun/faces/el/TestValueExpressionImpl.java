@@ -433,6 +433,8 @@ public class TestValueExpressionImpl extends ServletFacesTestCase
         assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
         valueExpression = this.create("requestScope");
         assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
+        valueExpression = this.create("viewScope");
+        assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
 
         // these are immutable Maps
         valueExpression = this.create("param");
@@ -460,6 +462,8 @@ public class TestValueExpressionImpl extends ServletFacesTestCase
         valueExpression = this.create("sessionScope.value");
         assertTrue(!valueExpression.isReadOnly(getFacesContext().getELContext()));
         valueExpression = this.create("requestScope.value");
+        assertTrue(!valueExpression.isReadOnly(getFacesContext().getELContext()));
+        valueExpression = this.create("viewScope.value");
         assertTrue(!valueExpression.isReadOnly(getFacesContext().getELContext()));
 
         // these are immutable Maps
@@ -512,6 +516,8 @@ public class TestValueExpressionImpl extends ServletFacesTestCase
         assertTrue(valueExpression.getType(getFacesContext().getELContext()) == null);
         valueExpression = this.create("requestScope");
         assertTrue(valueExpression.getType(getFacesContext().getELContext()) == null);
+        valueExpression = this.create("viewScope");
+        assertTrue(valueExpression.getType(getFacesContext().getELContext()) == null);
 
         // these are immutable Maps
         valueExpression = this.create("param");
@@ -545,6 +551,8 @@ public class TestValueExpressionImpl extends ServletFacesTestCase
         getFacesContext().getExternalContext().getRequestMap().put(property,
                 property);
 
+        getFacesContext().getViewRoot().getViewMap().put(property, property);
+
         // these are mutable Maps
         valueExpression = this.create("applicationScope." + property);
         assertTrue(valueExpression.getType(getFacesContext().getELContext()).getName().equals(
@@ -553,6 +561,11 @@ public class TestValueExpressionImpl extends ServletFacesTestCase
         assertTrue(valueExpression.getType(getFacesContext().getELContext()).getName().equals(
                 "java.lang.Object"));
         valueExpression = this.create("requestScope." + property);
+        assertTrue(valueExpression.getType(getFacesContext().getELContext()).getName().equals(
+                "java.lang.Object"));
+        valueExpression = this.create("viewScope." + property);
+        valueExpression.setValue(getFacesContext().getELContext(), property);
+        assertTrue(getFacesContext().getViewRoot().getViewMap().containsKey(property));
         assertTrue(valueExpression.getType(getFacesContext().getELContext()).getName().equals(
                 "java.lang.Object"));
 
@@ -691,6 +704,8 @@ public class TestValueExpressionImpl extends ServletFacesTestCase
         valueExpression = this.create("requestScope.TestRequestBean.inner.two");
         assertEquals(ELUtils.Scope.REQUEST, ELUtils.getScope(
                 "requestScope.TestRequestBean.inner.two", null));
+
+        assertEquals(ELUtils.Scope.VIEW, ELUtils.getScope("viewScope.foo", null));
 
         valueExpression = this.create("TestNoneBean");
         assertNull(ELUtils.getScope("TestNoneBean", null));
