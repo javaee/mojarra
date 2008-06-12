@@ -36,8 +36,6 @@
 
 package javax.faces.component;
 
-import java.lang.annotation.Annotation;
-
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
@@ -99,7 +97,6 @@ import javax.faces.render.ResponseStateManager;
  * to manage the rendering of their children should override this method
  * to return <code>true</code> instead.</p>
  */
-
 public abstract class UIComponentBase extends UIComponent {
 
 
@@ -964,13 +961,11 @@ public abstract class UIComponentBase extends UIComponent {
 
         //noinspection CollectionWithoutInitialCapacity
         List<FacesListener> results = new ArrayList<FacesListener>();
-	Iterator<FacesListener> items = listeners.iterator();
-	while (items.hasNext()) {
-	    FacesListener item = items.next();
-	    if (((Class<?>)clazz).isAssignableFrom(item.getClass())) {
-		results.add(item);
-	    }
-	}
+        for (FacesListener listener : listeners) {
+            if (((Class<?>) clazz).isAssignableFrom(listener.getClass())) {
+                results.add(listener);
+            }
+        }
 
         return (results.toArray
                 ((FacesListener []) java.lang.reflect.Array.newInstance(clazz,
@@ -1201,9 +1196,7 @@ public abstract class UIComponentBase extends UIComponent {
 
         // Process all the children of this component
         if (this.getChildCount() > 0) {
-            Iterator kids = getChildren().iterator();
-            while (kids.hasNext()) {
-                UIComponent kid = (UIComponent) kids.next();
+            for (UIComponent kid : getChildren()) {
                 if (kid.isTransient()) {
                     continue;
                 }
@@ -1883,10 +1876,12 @@ public abstract class UIComponentBase extends UIComponent {
     private static class ChildrenList extends ArrayList<UIComponent> {
 
         private UIComponent component;
+        private boolean isViewRoot;
 
         public ChildrenList(UIComponent component) {
             super(6);
             this.component = component;
+            this.isViewRoot = (component instanceof UIViewRoot);
         }
 
         public void add(int index, UIComponent element) {
@@ -1901,7 +1896,7 @@ public abstract class UIComponentBase extends UIComponent {
                 // Make sure to clear our cache if the component is a UIViewRoot and
                 // it does not yet have children.  This will be the case when
                 // the UIViewRoot has been freshly instantiated.
-                if (0 == this.size() && this.component instanceof UIViewRoot) {
+                if (this.size() == 0 && isViewRoot) {
                     clearPostbackAndRestoreViewCache(context);
                 }
                 super.add(index, element);
@@ -1910,7 +1905,6 @@ public abstract class UIComponentBase extends UIComponent {
         }
 
         public boolean add(UIComponent element) {
-            boolean result = false;
             if (element == null) {
                 throw new NullPointerException();
             } else {
@@ -1920,14 +1914,13 @@ public abstract class UIComponentBase extends UIComponent {
                 // Make sure to clear our cache if the component is a UIViewRoot and
                 // it does not yet have children.  This will be the case when
                 // the UIViewRoot has been freshly instantiated.
-                if (0 == this.size() && this.component instanceof UIViewRoot) {
+                if (this.size() == 0 && isViewRoot) {
                     clearPostbackAndRestoreViewCache(context);
                 }
-
-                result = super.add(element);
+                boolean result = super.add(element);
                 doPostAddProcessing(context, element);
+                return result;
             }
-            return result;
         }
 
         public boolean addAll(Collection<? extends UIComponent> collection) {
@@ -1988,9 +1981,6 @@ public abstract class UIComponentBase extends UIComponent {
 
         public UIComponent remove(int index) {
             UIComponent child = get(index);
-            // PENDING(edburns): publish beforeRemoveFromParent
-            // PENDING(edburns): make sure to do the inverse of 
-            // processResourceDepenencyOnComponentAndMaybeRenderer()
             super.remove(index);
             child.setParent(null);
             return (child);
@@ -2064,18 +2054,17 @@ public abstract class UIComponentBase extends UIComponent {
         }
         
         private boolean isPostbackAndRestoreView(FacesContext context) {
-            boolean result = false;
+            Boolean result;
             Map<Object, Object> contextMap = context.getAttributes();
-            if (contextMap.containsKey(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME)) {
-                result = Boolean.TRUE == contextMap.get(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME) ? true : false;
-            }
-            else {
+            result = (Boolean) contextMap.get(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME);
+            if (result != null) {
+                return result;
+            } else {
                 result = getResponseStateManager(context, 
                     context.getViewRoot().getRenderKitId()).isPostback(context) &&
                     context.getCurrentPhaseId().equals(PhaseId.RESTORE_VIEW);
                 contextMap.put(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME,
-                        result ? Boolean.TRUE : Boolean.FALSE);
-                
+                               result ? Boolean.TRUE : Boolean.FALSE);
             }
             return result;
         }
@@ -2113,7 +2102,6 @@ public abstract class UIComponentBase extends UIComponent {
         private void processResourceDependencyAnnotation(FacesContext context, 
                                                          Object source) {
             Class<?> sourceClass = source.getClass();
-            UIOutput resourceComponent = null;
             // check for both as it would be legal to have a single
             // @ResourceDependencies and @ResourceDependency annotation
             // defined
@@ -2145,20 +2133,19 @@ public abstract class UIComponentBase extends UIComponent {
             // Create a component resource
             UIOutput resourceComponent = (UIOutput) context.getApplication().createComponent("javax.faces.Output");
 
-            String
-                resourceName = resourceDep.name(),
-                library = resourceDep.library(),
-                target = resourceDep.target();
+            String resourceName = resourceDep.name();
+            String library = resourceDep.library();
+            String target = resourceDep.target();
 
-            if (0 == resourceName.length()) {
-                throw new IllegalArgumentException("Zero length resource name in annotation ResourceDependency");
+            if (resourceName.length() == 0) {
+                resourceName = null;
             }
 
-            if (0 == library.length()) {
+            if (library.length() == 0) {
                 library = null;
             }
 
-            if (0 == target.length()) {
+            if (target.length() == 0) {
                 target = null;
             }
 
@@ -2468,9 +2455,8 @@ public abstract class UIComponentBase extends UIComponent {
 
         public boolean removeAll(Collection c) {
             boolean result = false;
-            Iterator v = c.iterator();
-            while (v.hasNext()) {
-                if (remove(v.next())) {
+            for (Object element : c) {
+                if (remove(element)) {
                     result = true;
                 }
             }
@@ -2618,9 +2604,8 @@ public abstract class UIComponentBase extends UIComponent {
         }
 
         public boolean containsAll(Collection c) {
-            Iterator v = c.iterator();
-            while (v.hasNext()) {
-                if (!map.containsKey(v.next())) {
+            for (Object item : c) {
+                if (!map.containsKey(item)) {
                     return (false);
                 }
             }
@@ -2646,11 +2631,9 @@ public abstract class UIComponentBase extends UIComponent {
 
         public boolean removeAll(Collection c) {
             boolean result = false;
-            Iterator v = c.iterator();
-            while (v.hasNext()) {
-                Object o = v.next();
-                if (map.containsKey(o)) {
-                    map.remove(o);
+            for (Object item : c) {
+                if (map.containsKey(item)) {
+                    map.remove(item);
                     result = true;
                 }
             }
