@@ -58,7 +58,7 @@
 if (javax == null || typeof javax == "undefined") {
     var javax = new Object();
 }
-if (javax.faces == null || typeof java.faces == "undefined") {
+if (javax.faces == null || typeof javax.faces == "undefined") {
     javax["faces"] = new Object();
 }
 if (javax.faces.Ajax == null || typeof javax.faces.Ajax == "undefined") {
