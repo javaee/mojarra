@@ -40,8 +40,7 @@
 
 package com.sun.faces.config.processor;
 
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
-import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.ConfigurationException;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import org.w3c.dom.Document;
@@ -58,7 +57,6 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.application.Application;
-import javax.faces.context.FacesContext;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 
@@ -138,9 +136,8 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
                         addPhaseListeners(factory, listeners);
 
                         listeners = ((Element) n).getElementsByTagNameNS(namespace,
-                                 FACES_LIFECYCLE_LISTENER);
-                        addFacesLifecycleListeners(factory, listeners);
-                        
+                                                                         FACES_LIFECYCLE_LISTENER);
+                        addFacesLifecycleListeners(listeners);
                     }
                 }
             }            
@@ -156,7 +153,6 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
     private void addPhaseListeners(LifecycleFactory factory,
                                    NodeList phaseListeners) {
 
-        WebConfiguration webConfig = WebConfiguration.getInstance();
         if (phaseListeners != null && phaseListeners.getLength() > 0) {
             for (int i = 0, size = phaseListeners.getLength(); i < size; i++) {
                 Node plNode = phaseListeners.item(i);
@@ -178,8 +174,7 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
                                                 pl,
                                                 lfId));
                             }
-                            lifecycle
-                                 .addPhaseListener((PhaseListener) plInstance);
+                            lifecycle.addPhaseListener((PhaseListener) plInstance);
                         }
                     }
                 } 
@@ -188,20 +183,16 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
 
     }
 
-    private void addFacesLifecycleListeners(LifecycleFactory factory,
-                                   NodeList facesLifecycleListeners) {
+    private void addFacesLifecycleListeners(NodeList facesLifecycleListeners) {
 
-        WebConfiguration webConfig = WebConfiguration.getInstance();
         if (facesLifecycleListeners != null && facesLifecycleListeners.getLength() > 0) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            Application application = context.getApplication();
+            Application application = getApplication();
             for (int i = 0, size = facesLifecycleListeners.getLength(); i < size; i++) {
                 Node fllNode = facesLifecycleListeners.item(i);
                 NodeList children = fllNode.getChildNodes();
-                String
-                        listenerClass = null,
-                        eventClass = null,
-                        sourceClass = null;
+                String listenerClass = null;
+                String eventClass = null;
+                String sourceClass = null;
                 for (int j = 0,  len = children.getLength(); j < len; j++) {
                     Node n = children.item(j);
                     if (n.getNodeType() == Node.ELEMENT_NODE) {
@@ -223,25 +214,30 @@ public class LifecycleConfigProcessor extends AbstractConfigProcessor {
                         try {
                             // If there is an eventClass, use it, otherwise use
                             // SystemEvent.class
-                            Class eventClazz = (null != eventClass &&
-                                                0 < eventClass.length()) ?
-                                   Util.loadClass(eventClass, this.getClass()) :
-                                   SystemEvent.class;
+                            //noinspection unchecked
+                            Class<? extends SystemEvent> eventClazz =
+                                  (eventClass != null && 0 < eventClass .length())
+                                     ? (Class<? extends SystemEvent>) loadClass(eventClass, this, null)
+                                     : SystemEvent.class;
                             // If there is a sourceClass, use it, otherwise use null
-                            Class sourceClazz = (null != sourceClass &&
-                                                 0 < sourceClass.length()) ? 
-                                    Util.loadClass(sourceClass, this.getClass()) :
-                                    null;
+                            Class sourceClazz =
+                                  (sourceClass != null && sourceClass.length() != 0)
+                                  ? Util.loadClass(sourceClass, this.getClass())
+                                  : null;
                             application.subscribeToEvent(eventClazz, 
-                                    sourceClazz, fllInstance);
-                        }
-                        catch (ClassNotFoundException cnfe) {
+                                                         sourceClazz,
+                                                         fllInstance);
                             if (LOGGER.isLoggable(Level.FINE)) {
                                 LOGGER.log(Level.FINE,
-                                           MessageFormat.format(
-                                                "Adding FacesLifecycleListener ''{0}'' to application",
-                                                listenerClass));
+                                           "Subscribing for event {0} and source {1} using listener {2}",
+                                           new Object[] {
+                                                 eventClazz.getName(),
+                                                 ((sourceClazz != null) ? sourceClazz.getName() : "ANY"),
+                                                 fllInstance.getClass().getName()
+                                           });
                             }
+                        } catch (ClassNotFoundException cnfe) {
+                            throw new ConfigurationException(cnfe);
                         }
                     }
                 } 
