@@ -46,6 +46,12 @@
                   location="${jsf.build.home}/common/lib/ant-contrib.jar"/>
         </classpath>
     </taskdef>
+    <taskdef resource="aQute/bnd/ant/taskdef.properties">
+        <classpath>
+            <pathelement
+                  location="${jsf.build.home}/common/lib/bnd-0.0.249.jar"/>
+        </classpath>
+    </taskdef>
 
     <taskdef name="installerBuilder" classname="org.jvnet.poormans_installer.builder.BuilderTask">
         <classpath>
@@ -80,7 +86,7 @@
     <property name="spec.version" value="2.0"/>
     <property name="impl.name" value="Mojarra"/>
     <property name="build.number" value="${DSTAMP}"/>
-    <property name="build.type" value="NIGHTLY"/>
+    <property name="build.type" value="SNAPSHOT"/>
     <property name="impl.version.number" value="2.0.0" />
     <property name="impl.version" value="${impl.version.number}-${build.number}-${build.type}"/>
     <property name="snapshot.version" value="${impl.version.number}-SNAPSHOT"/>
@@ -284,6 +290,26 @@
                                value="@{extension-name}"/>
                 </manifest>                
             </jar>
+        </sequential>
+    </macrodef>
+
+    <!--
+       Build an OSGi bundle
+    -->
+    <macrodef name="jsf.osgi.jar">
+        <attribute name="jarfile"/>
+        <attribute name="basedir"/>
+        <attribute name="bndfile"/>
+        <attribute name="extension-name"/>
+        <attribute name="excludes" default=""/>
+        <attribute name="includes" default=""/>
+        <sequential>
+            <bnd
+                classpath="@{basedir}"
+                failok="false"
+                exceptions="false"
+                files="@{bndfile}"
+                output="@{jarfile}"/>
         </sequential>
     </macrodef>
 
