@@ -51,6 +51,7 @@
 
     <!-- Structural -->
     <property name="doc.dir" value="${basedir}/doc"/>
+    <property name="resources.dir" value="${basedir}/resources"/>
     <property name="src.dir" value="${basedir}/src"/>
     <property name="tools.dir" value="${basedir}/tools"/>
     <property name="test.dir" value="${basedir}/test"/>
@@ -58,6 +59,7 @@
     <property name="build.dir" value="build"/>
     <property name="build.classes.dir" value="${build.dir}/classes"/>
     <property name="build.lib.dir" value="${build.dir}/lib"/>
+    <property name="build.resources.dir" value="${build.dir}/javascript/resources/javax.faces"/>
     <property name="build.temp.dir" value="${build.dir}/temp"/>
     <property name="build.test.dir" value="${build.dir}/test"/>
     <property name="build.generate.dir" value="${build.dir}/generate"/>
@@ -104,6 +106,7 @@
         <mkdir dir="${build.lib.dir}"/>
         <mkdir dir="${build.javadocs.dir}"/>
         <mkdir dir="${build.generate.dir}"/>
+        <mkdir dir="${build.resources.dir}"/>
     </target>
 
     <target name="attributes"
@@ -160,6 +163,8 @@
         <copy todir="${build.classes.dir}">
             <fileset dir="${src.dir}">
                 <exclude name="**/*.java"/>
+                <exclude name="**/*.html"/>
+                <exclude name="**/*.jpg"/>
             </fileset>
         </copy>
 
@@ -168,6 +173,15 @@
                 <include name="*.dtd"/>
             </fileset>
         </copy>
+
+        <concat destfile="${build.resources.dir}/ajax.js" append="yes" fixlastline="yes">
+            <filelist dir="${resources.dir}">
+                <file name="OpenAjax.js"/>
+                <file name="ajax.js"/>
+                <file name="utils.js"/>
+            </filelist>
+        </concat>
+
     </target>
 
     <target name="check.generation.necessity">
@@ -569,10 +583,43 @@ javax.faces.level=ALL
     -->
     <target name="jars" depends="build">
 
-        <jsf.manifested.jar jarfile="${build.lib.dir}/${name}.jar"
+         <copy file="${basedir}/mojarra-jsf-api.bnd" tofile="tmp.bnd"/>
+        <replace file="tmp.bnd"
+                 token="@spec.version@"
+                 value="${spec.version}"/>
+        <replace file="tmp.bnd"
+                 token="@impl.name@"
+                 value="${impl.name}"/>
+        <replace file="tmp.bnd"
+                 token="@impl.version@"
+                 value="${impl.version}"/>
+        <if>
+            <equals arg1="${build.type}" arg2=""/>
+            <then>
+                <replace file="tmp.bnd"
+                         token="@osgi.version@"
+                         value="${impl.version.number}"/>
+            </then>
+            <else>
+                <replace file="tmp.bnd"
+                         token="@osgi.version@"
+                         value="${impl.version.number}-${build.type}"/>
+            </else>
+        </if>
+        <replace file="tmp.bnd"
+                 token="@extension.name@"
+                 value="javax.faces"/>
+        <jsf.osgi.jar jarfile="${build.lib.dir}/${name}.jar"
                             basedir="${build.classes.dir}"
                             extension-name="javax.faces"
-                            includes="**/*.class,**/LogStrings.properties"/>
+                            bndfile="tmp.bnd"
+                            includes="**/*.class,**/*.properties"/>
+        <delete file="tmp.bnd"/>
+
+        <jar jarfile="${build.lib.dir}/${name}.jar" update="yes">
+            <metainf dir="${build.dir}/javascript"/>
+        </jar>
+
 
     </target>
 
@@ -615,6 +662,7 @@ javax.faces.level=ALL
         <uptodate property="javadoc.notrequired"
                   targetfile="${build.javadocs.dir}/packages.html">
             <srcfiles dir="${src.dir}" includes="**/*.java"/>
+            <srcfiles dir="${resources.dir}" includes="**/*.js"/>
             <srcfiles dir="${build.generate.dir}" includes="**/*.java"/>
         </uptodate>
     </target>
