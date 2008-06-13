@@ -183,6 +183,9 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
         root.addComponentResource(facesContext, resource2, "form");
         components = root.getComponentResources(facesContext, "form");
         assertTrue(components.size() == 1);
+        root.addComponentResource(facesContext, resource2, "body");
+        components = root.getComponentResources(facesContext, "body");
+        assertTrue(components.size() == 1);
 
         // the default implementation masks the facet name values
         // of head and form to ensure there are no collisions with valid
@@ -190,8 +193,10 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
         // get("form") will return null.
         assertNull(root.getFacet("head"));
         assertNull(root.getFacet("form"));
+        assertNull(root.getFacet("body"));
         assertNotNull(root.getFacet("javax_faces_location_HEAD"));
         assertNotNull(root.getFacet("javax_faces_location_FORM"));
+        assertNotNull(root.getFacet("javax_faces_location_BODY"));
 
         // custom locations will also be masked
         root.addComponentResource(facesContext, resource2, "gt");
