@@ -67,11 +67,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.sun.faces.el.ELContextImpl;
-import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.util.Util;
-import java.util.HashMap;
 
  public class FacesContextImpl extends FacesContext {
 
@@ -92,7 +90,6 @@ import java.util.HashMap;
      private Severity maxSeverity;
      private boolean renderResponse = false;
      private boolean responseComplete = false;
-     private Map<Object, Object> attributes = null;
 
      /**
       * Store mapping of clientId to ArrayList of FacesMessage
@@ -147,12 +144,8 @@ import java.util.HashMap;
     public Map<Object, Object> getAttributes() {
         
         assertNotReleased();
+        return super.getAttributes();
         
-        if (null == attributes) {
-            attributes = new HashMap<Object,Object>();
-        }
-        
-        return attributes;
     }
      
      
@@ -409,11 +402,6 @@ import java.util.HashMap;
          responseComplete = false;
          viewRoot = null;
          
-         if (null != attributes) {
-             attributes.clear();
-             attributes = null;
-         }
-
          // PENDING(edburns): write testcase that verifies that release
          // actually works.  This will be important to keep working as
          // ivars are added and removed on this class over time.

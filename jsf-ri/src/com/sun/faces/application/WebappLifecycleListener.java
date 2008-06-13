@@ -132,15 +132,14 @@ public class WebappLifecycleListener implements ViewMapListener {
     }
 
     public void processEvent(SystemEvent event)
-          throws AbortProcessingException {
-        if (event instanceof ViewMapCreatedEvent) {
-
-        } else if (event instanceof ViewMapDestroyedEvent) {
+    throws AbortProcessingException {
+        if (event instanceof ViewMapDestroyedEvent) {
             Map<String, Object> viewMap =
                   ((UIViewRoot) event.getSource()).getViewMap(false);
             if (viewMap != null && viewMap.size() != 0) {
                 for (Map.Entry<String, Object> cur : viewMap.entrySet()) {
-                    handleAttributeEvent(cur.getKey(), cur.getValue(),
+                    handleAttributeEvent(cur.getKey(),
+                                         cur.getValue(),
                                          ELUtils.Scope.VIEW);
                 }
             }

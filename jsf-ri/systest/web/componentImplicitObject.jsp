@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
+<%--
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  
  Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
@@ -33,26 +32,27 @@
  and therefore, elected the GPL Version 2 license, then the option applies
  only if the new code is made subject to such option by the copyright
  holder.
--->
-<web-app version="2.5" 
-         xmlns="http://java.sun.com/xml/ns/javaee" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee web-app_2_5.xsd">
-  <description>
-       Webapp to test that script content may not be written as an attribute, by default.
-  </description>
-  <display-name>Write Attribute Script Disabled</display-name>
+--%>
 
-  <!-- Faces Servlet -->
-  <servlet>
-    <servlet-name>Faces Servlet</servlet-name>
-    <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-    <load-on-startup> 1 </load-on-startup>
-  </servlet>
-    
-  <servlet-mapping>
-    <servlet-name>Faces Servlet</servlet-name>
-    <url-pattern>/faces/*</url-pattern>
-  </servlet-mapping>
-
-</web-app>
+<%@ page contentType="text/html" %>
+<%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
+<%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
+<%
+    java.util.List<String> l = new java.util.ArrayList<String>(2);
+    l.add("one");
+    l.add("two");
+    request.setAttribute("list", l);
+%>
+<f:view>
+    <h:form prependId="false">
+        <h:outputText id="ot" value="#{component.id}"/>
+        <h:dataTable value="#{requestScope.list}" var="v">
+            <h:column>
+                <f:facet name="header" >
+                    <h:outputText id="facetOT" value="#{component.id}"/>
+                </f:facet>
+                <h:inputText id="it" value="#{component.id}"/>
+            </h:column>
+        </h:dataTable>        
+    </h:form>
+</f:view>

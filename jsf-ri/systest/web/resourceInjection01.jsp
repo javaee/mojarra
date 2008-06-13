@@ -48,6 +48,7 @@
 <f:view>
    
     <h:outputText value="#{resourceInjectionBean.welcomeMessage}" />
+    <h:outputText value="#{resourceInjectionBean2.welcomeMessage}" />    
    
 </f:view>
 

@@ -114,7 +114,11 @@ public class Verifier {
      */
     public static void setCurrentInstance(Verifier verifier) {
 
-        VERIFIER.set(verifier);
+        if (verifier == null) {
+            VERIFIER.remove();
+        } else {
+            VERIFIER.set(verifier);
+        }
 
     }
 

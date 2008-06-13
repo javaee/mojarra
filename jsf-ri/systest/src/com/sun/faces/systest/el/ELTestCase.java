@@ -1,8 +1,8 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- * 
+ *
  * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
- * 
+ *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -10,7 +10,7 @@
  * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
  * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- * 
+ *
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
  * Sun designates this particular file as subject to the "Classpath" exception
@@ -19,9 +19,9 @@
  * Header, with the fields enclosed by brackets [] replaced by your own
  * identifying information: "Portions Copyrighted [year]
  * [name of copyright owner]"
- * 
+ *
  * Contributor(s):
- * 
+ *
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
  * elects to include this software in this distribution under the [CDDL or GPL
@@ -34,24 +34,27 @@
  * holder.
  */
 
-package com.sun.faces.systest;
-
-import java.net.URL;
-
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.sun.faces.htmlunit.AbstractTestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+package com.sun.faces.systest.el;
 
 import java.util.List;
+import java.util.ArrayList;
 
-public class ViewScopeTestCase extends AbstractTestCase {
+import junit.framework.Test;
+import junit.framework.TestSuite;
+import com.sun.faces.htmlunit.AbstractTestCase;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSpan;
+import com.gargoylesoftware.htmlunit.html.HtmlInput;
 
-    public ViewScopeTestCase(String name) {
+/**
+ * Validate new EL features such as the component implicit object
+ */
+public class ELTestCase extends AbstractTestCase {
+
+    public ELTestCase(String name) {
         super(name);
     }
+
 
     /**
      * Set up instance variables required by this test case.
@@ -65,7 +68,7 @@ public class ViewScopeTestCase extends AbstractTestCase {
      * Return the tests included in this test suite.
      */
     public static Test suite() {
-        return (new TestSuite(ViewScopeTestCase.class));
+        return (new TestSuite(ELTestCase.class));
     }
 
 
@@ -75,24 +78,30 @@ public class ViewScopeTestCase extends AbstractTestCase {
     public void tearDown() {
         super.tearDown();
     }
-    
-    
+
     // ------------------------------------------------------------ Test Methods
-    
-    public void testWriteAttributeDisabled() throws Exception {
-        client.setThrowExceptionOnFailingStatusCode(false);
 
-        // HACK: The first request to the page will result in the value
-        // having jsessionid encoded in the link value.  Making a second
-        // request to the page means we've joined the session and the value
-        // will no longer include the jsessionid (at least when cookies are enabled)
-        // and clicking the link will not produce JS errors.
-        HtmlPage page = getPage("/faces/test.jsp");
-        page = getPage("/faces/test.jsp");
 
-        HtmlAnchor link = (HtmlAnchor) page.getAnchors().get(0);
+    public void testComponentImplicitObject() throws Exception {
+        HtmlPage page = getPage("/faces/componentImplicitObject.jsp");
+        List<HtmlSpan> outputs = new ArrayList<HtmlSpan>(2);
+        getAllElementsOfGivenClass(page, outputs, HtmlSpan.class);
+        assertTrue(outputs.size() ==2);
+        HtmlSpan s = outputs.get(0);
+        assertTrue("ot".equals(s.getId()));
+        assertTrue("ot".equals(s.asText()));
+        s = outputs.get(1);
+        assertTrue(s.getId().contains("facetOT"));
+        assertTrue("facetOT".equals(s.asText()));
+        List<HtmlInput> inputs = new ArrayList<HtmlInput>(2);
+        getAllElementsOfGivenClass(page, inputs, HtmlInput.class);
+        HtmlInput i = inputs.get(2);
+        assertTrue(i.getId().contains("0:it"));
+        assertTrue("it".equals(i.asText()));
+        i = inputs.get(3);
+        assertTrue(i.getId().contains("1:it"));
+        assertTrue("it".equals(i.asText()));
 
-        HtmlPage errorPage = (HtmlPage) link.click();
-        assertTrue(errorPage.asText().indexOf("new value!") >= 0);
     }
+
 }

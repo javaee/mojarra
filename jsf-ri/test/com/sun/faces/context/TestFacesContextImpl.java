@@ -67,6 +67,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.NoSuchElementException;
+import java.util.Map;
 
 /**
  * <B>TestFacesContextImpl</B> is a class ...
@@ -600,6 +601,13 @@ public class TestFacesContextImpl extends ServletFacesTestCase {
         root.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
         assertTrue(context.getRenderKit() != null);
         
+    }
+
+
+    public void testGetAttributes() {
+        FacesContext ctx = getFacesContext();
+        Map<Object,Object> m = ctx.getAttributes();
+        assertNotNull(m);
     }
 
 

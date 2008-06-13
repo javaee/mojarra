@@ -44,12 +44,14 @@ package com.sun.faces.context;
 
 import com.sun.faces.cactus.ServletFacesTestCase;
 import org.apache.cactus.WebRequest;
+import org.apache.cactus.WebResponse;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
+import javax.faces.context.ExternalContext;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -61,6 +63,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.Collections;
 
 /**
  * <B>TestExternalContextImpl</B> is a class ...
@@ -72,17 +75,6 @@ import java.util.Set;
 
 public class TestExternalContextImpl extends ServletFacesTestCase {
 
-//
-// Protected Constants
-//
-
-//
-// Class Variables
-//
-
-//
-// Instance Variables
-//
     // These constants identify positions in the boolean supported array;
     // Each one is named after the existing method in the Map interface;
     // For example, "ApplicationMap" implementation of Map interface
@@ -107,14 +99,6 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
 
     public boolean[] supported = new boolean[13];
 
-// Attribute Instance Variables
-
-// Relationship Instance Variables
-
-//
-// Constructors and Initializers
-//
-
     public TestExternalContextImpl() {
         super("TestExternalContext");
     }
@@ -123,22 +107,173 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
     public TestExternalContextImpl(String name) {
         super(name);
     }
-//
-// Class methods
-//
 
-//
-// Methods from TestCase
-//
-
-//
-// General Methods
-//
     public void initializeSupported() {
         for (int i = 0; i < supported.length; i++) {
             supported[i] = false;
         }
     }
+
+
+    // ------------------------------------------------------------- TestMethods
+
+
+    ////////////////////////////////////////////////////////////////////////////
+    // Tests for methods added in 2.0
+
+
+    public void testAddResponseCookie() {
+
+        ExternalContext ctx = getFacesContext().getExternalContext();
+
+        // first cookie - no properties
+        ctx.addResponseCookie("cookie1", "value1", null);
+
+        // second cookie - empty map
+        ctx.addResponseCookie("cookie2", "value2", Collections.<String,Object>emptyMap());
+
+        // third cookie - domain specified
+        Map<String,Object> m = new HashMap<String,Object>();
+        m.put("domain", "snoozer");
+        ctx.addResponseCookie("cookie3", "value3", m);
+
+        // fourth cookie - max age
+        m.clear();
+        m.put("maxAge", 360);
+        ctx.addResponseCookie("cookie4", "value4", m);
+
+        // fifth cookie - path
+        m.clear();
+        m.put("path", "/foo");
+        ctx.addResponseCookie("cookie5", "value5", m);
+
+        // sixth cookie - secure
+        m.clear();
+        m.put("secure", true);
+        ctx.addResponseCookie("cookie6", "value6", m);
+
+        // seventh cookie - multiple values
+        m.clear();
+        m.put("maxAge", 40);
+        m.put("path", "/foobar");
+        m.put("domain", "snoozer");
+        ctx.addResponseCookie("cookie7", "value7", m);
+
+        // invalid map property results in IllegalArgumentException
+        m.clear();
+        m.put("invalid", "invalid");
+        try {
+            ctx.addResponseCookie("cookie8", "value8", m);
+            assertTrue(false);
+        } catch (IllegalArgumentException ignored) {
+        } catch (Exception e) {
+            assertTrue(false);
+        }
+
+    }
+
+    public void endAddResponseCookie(WebResponse res) {
+        org.apache.cactus.Cookie c = res.getCookie("cookie1");
+        assertNotNull(c);
+        assertTrue("value1".equals(c.getValue()));
+        assertTrue("localhost".equals(c.getDomain()));
+        assertTrue("/test".equals(c.getPath()));
+        assertTrue(!c.isSecure());
+        assertNull(c.getExpiryDate());
+
+        c = res.getCookie("cookie2");
+        assertNotNull(c);
+        assertTrue("value2".equals(c.getValue()));
+        assertTrue("localhost".equals(c.getDomain()));
+        assertTrue("/test".equals(c.getPath()));
+        assertTrue(!c.isSecure());
+        assertNull(c.getExpiryDate());
+
+        c = res.getCookie("cookie3");
+        assertNotNull(c);
+        assertTrue("value3".equals(c.getValue()));
+        assertTrue("snoozer".equals(c.getDomain()));
+        assertTrue("/test".equals(c.getPath()));
+        assertTrue(!c.isSecure());
+        assertNull(c.getExpiryDate());
+
+        c = res.getCookie("cookie4");
+        assertNotNull(c);
+        assertTrue("value4".equals(c.getValue()));
+        assertTrue("localhost".equals(c.getDomain()));
+        assertTrue("/test".equals(c.getPath()));
+        assertTrue(!c.isSecure());
+        assertNotNull(c.getExpiryDate());
+
+        c = res.getCookie("cookie5");
+        assertNotNull(c);
+        assertTrue("value5".equals(c.getValue()));
+        assertTrue("localhost".equals(c.getDomain()));
+        assertTrue("/foo".equals(c.getPath()));
+        assertTrue(!c.isSecure());
+        assertNull(c.getExpiryDate());
+
+        c = res.getCookie("cookie6");
+        assertNotNull(c);
+        assertTrue("value6".equals(c.getValue()));
+        assertTrue("localhost".equals(c.getDomain()));
+        assertTrue("/test".equals(c.getPath()));
+        assertTrue(c.isSecure());
+        assertNull(c.getExpiryDate());
+
+        c = res.getCookie("cookie7");
+        assertNotNull(c);
+        assertTrue("value7".equals(c.getValue()));
+        assertTrue("snoozer".equals(c.getDomain()));
+        assertTrue("/foobar".equals(c.getPath()));
+        assertTrue(!c.isSecure());
+        assertNotNull(c.getExpiryDate());
+    }
+
+
+    public void testInvalidateSession() {
+        ExternalContext ctx = getFacesContext().getExternalContext();
+        Map<String,Object> map = ctx.getSessionMap();
+        map.put("foo", "bar");
+        ctx.invalidateSession();
+        try {
+            session.getAttribute("foor");
+            assertTrue(false);
+        } catch (IllegalStateException ignored) {
+
+        } catch (Exception e) {
+            assertTrue(false);
+        }
+    }
+
+    public void testRequestScheme() {
+        ExternalContext ctx = getFacesContext().getExternalContext();
+        assertTrue(ctx.getRequestScheme().equals(request.getScheme()));
+    }
+
+    public void testServerPort() {
+        ExternalContext ctx = getFacesContext().getExternalContext();
+        assertTrue(ctx.getRequestServerPort() == request.getServerPort());
+    }
+
+    public void testServerName() {
+        ExternalContext ctx = getFacesContext().getExternalContext();
+        assertTrue(ctx.getRequestServerName().equals(request.getServerName()));
+    }
+
+    public void testGetResponseOutputStream() throws Exception {
+        ExternalContext ctx = getFacesContext().getExternalContext();
+        assertTrue(ctx.getResponseOutputStream() != null);
+    }
+
+    public void testResponseContentType() {
+        ExternalContext ctx = getFacesContext().getExternalContext();
+        ctx.setResponseContentType("text/plain");
+        response.getContentType().contains("text/plain");
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////
 
 //PENDING(rogerk) the unit test for ExternalContext should cast the Object instances
 // to the expected type.  It should test put and get.  It should test the

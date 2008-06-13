@@ -685,6 +685,54 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         assertTrue(exceptionThrown);
 
     }
+
+    public void testViewScope() throws Exception {
+        TestBean testBean = new TestBean();
+        testBean.setOne("one");
+
+        getFacesContext().getExternalContext().getRequestMap().put("TestRefBean", testBean);
+        ManagedBeanInfo.ManagedProperty property =
+             new ManagedBeanInfo.ManagedProperty("one",
+                                                 null,
+                                                 "#{TestRefBean.one}",
+                                                 null,
+                                                 null);
+        List<ManagedBeanInfo.ManagedProperty> list =
+             new ArrayList<ManagedBeanInfo.ManagedProperty>(1);
+        list.add(property);
+        ManagedBeanInfo bean = new ManagedBeanInfo(beanName,
+                                                   beanName,
+                                                   "view",
+                                                   null,
+                                                   null,
+                                                   list,
+                                                   null);
+        BeanManager beanManager =
+             ApplicationAssociate.getCurrentInstance().getBeanManager();
+        beanManager.register(bean);
+
+        try {
+            // request scope is shorter than view scope, so creation should fail
+            beanManager.create(beanName, getFacesContext());
+            assertTrue(false);
+        } catch (Exception ignored) {
+        }
+
+        bean = new ManagedBeanInfo(beanName,
+                                   beanName,
+                                   "view",
+                                   null,
+                                   null,
+                                   null,
+                                   null);
+        beanManager.getRegisteredBeans().remove(beanName);
+        beanManager.register(bean);
+
+        Object beanObject = beanManager.create(beanName, getFacesContext());
+        assertNotNull(beanObject);
+        assertTrue(getFacesContext().getViewRoot().getViewMap().containsKey(beanName));
+        
+    }
     
     public void testNoneScope() throws Exception {
         //Testing value ref scope
@@ -845,6 +893,25 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
                                                                  builder);
 
         assertTrue(isInjectable);
+    }
+
+    public void testViewScopeAnnotationCallBacks() throws Exception {
+
+        BeanManager beanManager =
+             ApplicationAssociate.getInstance(getFacesContext().getExternalContext()).getBeanManager();
+        ManagedBeanInfo bean = new ManagedBeanInfo("viewBean",
+                                                   "com.sun.faces.config.TestManagedBeanFactory$InjectionBean",
+                                                   "view",
+                                                   null,
+                                                   null,
+                                                   null,
+                                                   null);
+        beanManager.register(bean);
+        InjectionBean injectionBean = (InjectionBean) beanManager.create("viewBean", getFacesContext());
+        assertTrue(injectionBean.initCalled);
+        getFacesContext().getViewRoot().getViewMap().clear();
+        assertTrue(injectionBean.destroyCalled);
+
     }
 	
     /************* PENDING(edburns): rewrite to exercise new edge case
