@@ -66,7 +66,7 @@ if (typeof OpenAjax != "undefined" &&
 if (javax == null || typeof javax == "undefined") {
     var javax = new Object();
 }
-if (javax.faces == null || typeof java.faces == "undefined") {
+if (javax.faces == null || typeof javax.faces == "undefined") {
     javax["faces"] = new Object();
 }
 if (javax.faces.Ajax == null || typeof javax.faces.Ajax == "undefined") {
@@ -117,7 +117,7 @@ javax.faces.Ajax = function() {
         var queryComponents = new Array();
         var javaxViewState = document.getElementById("javax.faces.ViewState");
         var queryComponent = null;
-        var sourceSerialized = false;
+        //var sourceSerialized = false; // current unused
         for (var i = 0; i < elements.length; i++) {
             queryComponent = utils.serializeElement(elements[i]);
             if (queryComponent) {
