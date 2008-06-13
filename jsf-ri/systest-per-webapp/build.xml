@@ -70,8 +70,7 @@
 
 
     <property name="applications-using-facelets"
-              value="populate-view,
-                     attachedObjectsWithResourceDependencies" />
+              value="" />
 
     <!-- Property containing all of the currenly running systests.  
          This property list *must* match the one defined in the
