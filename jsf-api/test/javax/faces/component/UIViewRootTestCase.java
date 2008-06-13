@@ -164,6 +164,49 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
     // ------------------------------------------------- Individual Test Methods
 
 
+    public void testAddGetComponentResources() {
+
+        application.addComponent("javax.faces.Panel", "javax.faces.component.UIPanel");
+        UIViewRoot root = new UIViewRoot();
+        UIOutput resource = new UIOutput();
+
+        // no target argument should result in target being head
+        root.addComponentResource(facesContext, resource);
+        List<UIComponent> components = root.getComponentResources(facesContext, "head");
+        assertNotNull(components);
+        assertTrue(components.size() == 1);
+        assertTrue(components.get(0) == resource);
+        UIOutput resource2 = new UIOutput();
+        root.addComponentResource(facesContext, resource2);
+        assertTrue(components.size() == 2);
+        assertTrue(components.get(1) == resource2);
+        root.addComponentResource(facesContext, resource2, "form");
+        components = root.getComponentResources(facesContext, "form");
+        assertTrue(components.size() == 1);
+        root.addComponentResource(facesContext, resource2, "body");
+        components = root.getComponentResources(facesContext, "body");
+        assertTrue(components.size() == 1);
+
+        // the default implementation masks the facet name values
+        // of head and form to ensure there are no collisions with valid
+        // facets by the name.  Calling UIViewRoot.getFacet("head") or
+        // get("form") will return null.
+        assertNull(root.getFacet("head"));
+        assertNull(root.getFacet("form"));
+        assertNull(root.getFacet("body"));
+        assertNotNull(root.getFacet("javax_faces_location_HEAD"));
+        assertNotNull(root.getFacet("javax_faces_location_FORM"));
+        assertNotNull(root.getFacet("javax_faces_location_BODY"));
+
+        // custom locations will also be masked
+        root.addComponentResource(facesContext, resource2, "gt");
+        assertNotNull(root.getFacet("javax_faces_location_gt"));
+        components = root.getComponentResources(facesContext, "gt");
+        assertTrue(components.size() == 1);
+
+    }
+
+
     // Test AbortProcessingException support
     public void testAbortProcessingException() {
 

@@ -43,6 +43,7 @@ package javax.faces.context;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.HashMap;
 
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
@@ -76,6 +77,7 @@ import javax.faces.event.PhaseId;
 
 public abstract class FacesContext {
 
+    private Map<Object,Object> attributes;
 
     // -------------------------------------------------------------- Properties
 
@@ -111,25 +113,9 @@ public abstract class FacesContext {
      * 
      * <p>The <code>Map</code> returned by this method is not associated with
      * the request.  If you would like to get or set request attributes,
-     * see {@link ExternalContext#getRequestMap}.  The 
-     * returned implementation must support all of the
-     * standard and optional <code>Map</code> methods, plus support the 
-     * following additional requirements:</p>
+     * see {@link ExternalContext#getRequestMap}.  
      * 
-     * <ul>
-
-     * <li><p>The Map implementation must implement the 
-     * <code>java.io.Serializable</code> interface.</p></li>
-
-     * <li><p>Any attempt to add a <code>null</code> key or value must throw a
-     * <code>NullPointerException</code>.</p></li>
-
-     * <li><p>The <code>Map</code> must be cleared when the {@link #release} 
-     * is called.</p></li>
-     * 
-     * </ul>
-     * 
-     * <p>The default implementation throws 
+     * <p>The default implementation throws
      * <code>UnsupportedOperationException</code> and is provided
      * for the sole purpose of not breaking existing applications that extend
      * this class.</p>
@@ -143,17 +129,12 @@ public abstract class FacesContext {
      */
 
     public Map<Object, Object> getAttributes() {
-        
-        Map m = (Map) getExternalContext().getRequestMap().get("com.sun.faces.util.RequestStateManager");
-        if (m != null) {
-            FacesContext impl = (FacesContext) m.get("com.sun.faces.FacesContextImpl");
-            if (impl != null) {
-                return impl.getAttributes();
-            } else {
-                throw new UnsupportedOperationException();
-            }
+
+        if (attributes == null) {
+            attributes = new HashMap<Object,Object>();
         }
-        throw new UnsupportedOperationException();
+        return attributes;
+ 
     }
 
 
@@ -198,11 +179,6 @@ public abstract class FacesContext {
      *
      * </ul>
      *
-     * <p>The default implementation throws 
-     * <code>UnsupportedOperationException</code> and is provided
-     * for the sole purpose of not breaking existing applications that extend
-     * this class.</p>
-     *
      * @throws IllegalStateException if this method is called after
      *  this instance has been released
      *
@@ -211,15 +187,12 @@ public abstract class FacesContext {
 
     public ELContext getELContext() {
 
-        Map m = (Map) getExternalContext().getRequestMap().get("com.sun.faces.util.RequestStateManager");
-        if (m != null) {
-            FacesContext impl = (FacesContext) m.get("com.sun.faces.FacesContextImpl");
-            if (impl != null) {
-                return impl.getELContext();
-            } else {
-                throw new UnsupportedOperationException();
-            }
+        Map<Object,Object> ctxAttributes = getAttributes();
+        FacesContext impl = (FacesContext) ctxAttributes.get("com.sun.faces.FacesContextImpl");
+        if (impl != null) {
+            return impl.getELContext();
         }
+        
         throw new UnsupportedOperationException();
 
     }
@@ -551,7 +524,11 @@ public abstract class FacesContext {
      */
     protected static void setCurrentInstance(FacesContext context) {
 
-        instance.set(context);
+        if (context == null) {
+            instance.remove();
+        } else {
+            instance.set(context);
+        }
 
     }
 

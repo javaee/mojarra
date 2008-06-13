@@ -50,6 +50,7 @@ package javax.faces.context;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.Principal;
@@ -125,7 +126,7 @@ public abstract class ExternalContext {
      * arguments to the response.</p>
      *
      * <div class="changed_added_2_0">
-
+     *
      * <p><em>Servlet:</em> This must be accomplished by calling the
      * <code>javax.servlet.http.HttpServletResponse</code> method
      * <code>addCookie()</code>.  The <code>Cookie</code> argument must
@@ -134,104 +135,107 @@ public abstract class ExternalContext {
      * arugument is non-<code>null</code> and not empty, the
      * <code>Cookie</code> instance must be initialized as described
      * below.</p>
-
+     *
      * <table border="1">
-     
+     *
      * <tr>
-
+     *
      * <th>Key in "values" <code>Map</code></th>
-
+     *
      * <th>Expected type of value.</th>
-
+     *
      * <th>Name of setter method on <code>Cookie</code> instance to be
      * set with the value from the <code>Map</code>.  </th>
-
+     *
      * </tr>
-
+     *
      * <tr>
-
+     *
      * <td>comment</td>
-     
+     *
      * <td>String</td>
-
+     *
      * <td>setComment</td>
-
+     *
      * </tr>
-
+     *
      * <tr>
-
+     *
      * <td>domain</td>
-     
+     *
      * <td>String</td>
-
+     *
      * <td>setDomain</td>
-
+     *
      * </tr>
-
+     *
      * <tr>
-
+     *
      * <td>maxAge</td>
-     
+     *
      * <td>Integer</td>
-
+     *
      * <td>setMaxAge</td>
-
+     *
      * </tr>
-
+     *
      * <tr>
-
+     *
      * <td>secure</td>
-     
+     *
      * <td>Boolean</td>
-
+     *
      * <td>setSecure</td>
-
+     *
      * </tr>
-
+     *
      * <tr>
-
+     *
      * <td>path</td>
-     
+     *
      * <td>String</td>
-
+     *
      * <td>setPath</td>
-
+     *
      * </tr>
-
+     *
      * </table>
-
+     *
      * <p>The default implementation throws
      * <code>UnsupportedOperationException</code> and is provided for
      * the sole purpose of not breaking existing applications that
      * extend this class.</p>
-
+     *
      * </div>
-
+     *
      * @param name To be passed as the first argument to the
      * <code>Cookie</code> constructor.
-
+     *
      * @param value To be passed as the second argument to the
      * <code>Cookie</code> constructor.
-
+     *
      * @param properties A <code>Map</code> containg key/value pairs to be passed
      * as arguments to the setter methods as described above.
-
+     *
      * @throws IllegalArgumentException if the <code>properties
      * Map</code> is not-<code>null</code> and not empty and contains
      * any keys that are not one of the keys listed above.
-
+     *
      * @since 2.0
      */
 
-    public void addResponseCookie(String name, String value, 
-				  Map<String, Object> properties) throws IllegalArgumentException {
+    public void addResponseCookie(String name,
+                                  String value,
+                                  Map<String, Object> properties) {
+
         ExternalContext impl = getDefaultExternalContext();
         if (impl != null) {
             impl.addResponseCookie(name, value, properties);
-	    return;
+            return;
         }
 
         throw new UnsupportedOperationException();
+
     }
 
 
@@ -457,7 +461,7 @@ public abstract class ExternalContext {
      * returned <code>Map</code> must implement the entire contract for
      * an unmodifiable map as described in the JavaDocs for
      * <code>java.util.Map</code>.</p>
-
+     *
      * <p class="changed_added_2_0">It is valid to call this method
      * during application startup.  If called during application
      * startup, this method returns a <code>Map</code> that is backed by
@@ -466,7 +470,7 @@ public abstract class ExternalContext {
      * <code>getInitParameterMap()</code> on the
      * <code>ExternalContext</code> returned by the
      * <code>FacesContext</code> during an actual request.</p>
-
+     *
      * <p><em>Servlet:</em> This result must be as if it were synthesized
      * by calling the <code>javax.servlet.ServletContext</code>
      * method <code>getInitParameterNames</code>, and putting
@@ -537,18 +541,16 @@ public abstract class ExternalContext {
      * <code>UnsupportedOperationException</code> and is provided for
      * the sole purpose of not breaking existing applications that
      * extend this class.</p>
-
+     *
      * </div>
-
+     *
      * @since 2.0
      */
-
     public String getRequestScheme() {
-	String result;
+
         ExternalContext impl = getDefaultExternalContext();
         if (impl != null) {
-            result = impl.getRequestScheme();
-            return result;
+            return impl.getRequestScheme();
         }
 
         throw new UnsupportedOperationException();
@@ -559,30 +561,29 @@ public abstract class ExternalContext {
      * to which the request was sent.</p>
      *
      * <div class="changed_added_2_0">
-
+     *
      * <p><em>Servlet:</em> This must be the value returned by the
      * <code>javax.servlet.ServletRequest</code> method
      * <code>getServerName()</code>.</p>
-     
+     *
      * <p>The default implementation throws
      * <code>UnsupportedOperationException</code> and is provided for
      * the sole purpose of not breaking existing applications that
      * extend this class.</p>
-
+     *
      * </div>
-
+     *
      * @since 2.0
      */
-
     public String getRequestServerName() {
-	String result;
+
         ExternalContext impl = getDefaultExternalContext();
         if (impl != null) {
-            result = impl.getRequestServerName();
-            return result;
+            return impl.getRequestServerName();
         }
 
         throw new UnsupportedOperationException();
+
     }
 
     /**
@@ -590,27 +591,25 @@ public abstract class ExternalContext {
      * the request was sent.</p>
      *
      * <div class="changed_added_2_0">
-
+     *
      * <p><em>Servlet:</em> This must be the value returned by the
      * <code>javax.servlet.ServletRequest</code> method
      * <code>getServerPort()</code>.</p>
-     
+     *
      * <p>The default implementation throws
      * <code>UnsupportedOperationException</code> and is provided for
      * the sole purpose of not breaking existing applications that
      * extend this class.</p>
-
+     *
      * </div>
-
+     *
      * @since 2.0
      */
+    public int getRequestServerPort() {
 
-    public String getRequestServerPort() {
-	String result;
         ExternalContext impl = getDefaultExternalContext();
         if (impl != null) {
-            result = impl.getRequestServerPort();
-            return result;
+            return impl.getRequestServerPort();
         }
 
         throw new UnsupportedOperationException();
@@ -655,32 +654,33 @@ public abstract class ExternalContext {
     /**
      * <p class="changed_added_2_0">Returns a String containing the real
      * path for a given virtual path. </p>
-
+     *
      * <div class="changed_added_2_0">
      *
      * <p><em>Servlet:</em> This must be the value returned by the
      * <code>javax.servlet.ServletContext</code> method
      * <code>getRealPath()</code>.</p>
-
+     *
      * <p>The default implementation throws 
      * <code>UnsupportedOperationException</code> and is provided
      * for the sole purpose of not breaking existing applications that extend
      * this class.</p>
-
+     *
      * </div>
-
+     *
      * @param path The context of the requested initialization parameter
-
+     *
      * @since 2.0
      */
     public String getRealPath(String path) {
-        ExternalContext impl;
-        if (null != (impl = (ExternalContext) this.getRequestMap().
-                get("com.sun.faces.ExternalContextImpl"))) {
+
+        ExternalContext impl = getDefaultExternalContext();
+        if (impl != null) {
             return impl.getRealPath(path);
         }
 
         throw new UnsupportedOperationException();
+
     }
 
 
@@ -986,7 +986,6 @@ public abstract class ExternalContext {
 
     }
 
-    
 
     /**
      * <p><span class="changed_modified_2_0">Return</span> a
@@ -1116,30 +1115,29 @@ public abstract class ExternalContext {
      * suitable for writing binary data to the user-agent.</p>
      *
      * <div class="changed_added_2_0">
-
+     *
      * <p><em>Servlet:</em> This must return the value returned by the
      * <code>javax.servlet.ServletResponse</code> method
      * <code>getOutputStream()</code>.</p>
-
+     *
      * <p>The default implementation throws
      * <code>UnsupportedOperationException</code> and is provided for
      * the sole purpose of not breaking existing applications that
      * extend this class.</p>
-
+     *
      * </div>
-
+     *
      * @since 2.0
      */
+    public OutputStream getResponseOutputStream() throws IOException {
 
-    public java.io.OutputStream getResponseOutputStream() {
-	java.io.OutputStream result;
         ExternalContext impl = getDefaultExternalContext();
         if (impl != null) {
-            result = impl.getResponseOutputStream();
-            return result;
+            return impl.getResponseOutputStream();
         }
 
         throw new UnsupportedOperationException();
+
     }
     
     
@@ -1180,25 +1178,25 @@ public abstract class ExternalContext {
      * committed yet.</p>
      *
      * <div class="changed_added_2_0">
-
+     *
      * <p><em>Servlet:</em> This must call
      * <code>setContentType()</code> on the underlying
      * <code>javax.servlet.ServletResponse</code> instance.</p>
-
+     *
      * <p>The default implementation throws
      * <code>UnsupportedOperationException</code> and is provided for
      * the sole purpose of not breaking existing applications that
      * extend this class.</p>
-
+     *
      * </div>
-
+     *
      * @param contentType The content type to be set as the contentType
      * of the response.
-
+     *
      * @since 2.0
      */
-
     public void setResponseContentType(String contentType) {
+
         ExternalContext impl = getDefaultExternalContext();
         if (impl != null) {
             impl.setResponseContentType(contentType);
@@ -1206,6 +1204,7 @@ public abstract class ExternalContext {
         }
 
         throw new UnsupportedOperationException();
+
     }
 
 
@@ -1281,22 +1280,22 @@ public abstract class ExternalContext {
      * <p class="changed_added_2_0">Invalidates this session then unbinds any objects bound to it.</p>
      *
      * <div class="changed_added_2_0">
-
+     *
      * <p><em>Servlet:</em> This must be the value returned by the
      * <code>javax.servlet.http.HttpSession</code> method
      * <code>invalidate()</code>.</p>
-
+     *
      * <p>The default implementation throws
      * <code>UnsupportedOperationException</code> and is provided for
      * the sole purpose of not breaking existing applications that
      * extend this class.</p>
-
+     *
      * </div>
-
+     *
      * @since 2.0
      */
-
     public void invalidateSession() {
+
         ExternalContext impl = getDefaultExternalContext();
         if (impl != null) {
             impl.invalidateSession();
@@ -1304,9 +1303,8 @@ public abstract class ExternalContext {
         }
 
         throw new UnsupportedOperationException();
+
     }
-
-
 
 
     /**
@@ -1329,7 +1327,7 @@ public abstract class ExternalContext {
     /**
      * <p><span class="changed_modified_2_0">Log</span> the specified
      * message to the application object.</p>
-
+     *
      * <p class="changed_added_2_0">It is valid to call this method
      * during application startup.  If called during application
      * startup, this calls the <code>log()</code> method on the same
@@ -1337,7 +1335,7 @@ public abstract class ExternalContext {
      * <code>PortletContext</code>) as the one used during a call to
      * <code>log()</code> on the <code>ExternalContext</code> returned
      * by the <code>FacesContext</code> during an actual request.</p>
-
+     *
      *
      * <p><em>Servlet:</em> This must be performed by calling the
      * <code>javax.servlet.ServletContext</code> method
@@ -1401,13 +1399,11 @@ public abstract class ExternalContext {
 
     // --------------------------------------------------------- Private Methods
 
+    
     private ExternalContext getDefaultExternalContext() {
-        ExternalContext extCtx = null;
-        Map m = (Map) getRequestMap().get("com.sun.faces.util.RequestStateManager");
-        if (m != null) {
-            extCtx = (ExternalContext) m.get("com.sun.faces.ExternalContextImpl");
-        }
-        return extCtx;
+
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        return (ExternalContext) ctx.getAttributes().get("com.sun.faces.ExternalContextImpl");
 
     }
 }
