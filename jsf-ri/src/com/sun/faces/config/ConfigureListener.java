@@ -395,12 +395,12 @@ public class ConfigureListener implements ServletRequestListener,
     }
 
     private void initScripting() {
-        //if (isDevModeEnabled()) {
+        if (webConfig.isOptionEnabled(BooleanWebContextInitParameter.EnableGroovyScripting)) {
             GroovyHelper helper = GroovyHelperFactory.createHelper();
             if (helper != null) {
                 helper.setClassLoader();
             }
-        //}
+        }
     }
 
 

@@ -864,6 +864,10 @@ public class WebConfiguration {
         DisableUnicodeEscaping(
             "com.sun.faces.disableUnicodeEscaping",
             false
+        ),
+        EnableGroovyScripting(
+            "com.sun.faces.enableGroovyScripting",
+            false
         );
 
         private BooleanWebContextInitParameter alternate;

@@ -179,6 +179,11 @@ public abstract class FacesContext {
      *
      * </ul>
      *
+     * <p>The default implementation throws 
+     * <code>UnsupportedOperationException</code> and is provided
+     * for the sole purpose of not breaking existing applications that extend
+     * this class.</p>
+     *
      * @throws IllegalStateException if this method is called after
      *  this instance has been released
      *

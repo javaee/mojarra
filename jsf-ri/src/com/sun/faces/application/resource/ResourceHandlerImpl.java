@@ -137,7 +137,16 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
     }
 
-
+    @Override
+    public boolean libraryExists(String libraryName) {
+        boolean result = false;
+        FacesContext context = FacesContext.getCurrentInstance();
+        LibraryInfo info = manager.findLibrary(libraryName, null, context);
+        result = null != info;
+        
+        return result;
+    }
+    
     /**
      * @see ResourceHandler#isResourceRequest(javax.faces.context.FacesContext)
      */

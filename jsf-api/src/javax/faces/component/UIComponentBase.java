@@ -36,6 +36,8 @@
 
 package javax.faces.component;
 
+import java.lang.annotation.Annotation;
+
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
@@ -71,6 +73,7 @@ import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.FactoryFinder;
+import javax.faces.application.Resource;
 import javax.faces.application.ResourceDependencies;
 import javax.faces.application.ResourceDependency;
 import javax.faces.application.ResourceHandler;
@@ -1981,6 +1984,9 @@ public abstract class UIComponentBase extends UIComponent {
 
         public UIComponent remove(int index) {
             UIComponent child = get(index);
+            // PENDING(edburns): publish beforeRemoveFromParent
+            // PENDING(edburns): make sure to do the inverse of 
+            // processResourceDepenencyOnComponentAndMaybeRenderer()
             super.remove(index);
             child.setParent(null);
             return (child);
@@ -2092,16 +2098,15 @@ public abstract class UIComponentBase extends UIComponent {
         
         private void processResourceDependencyOnComponentAndMaybeRenderer(FacesContext context, 
                 UIComponent added) {
-            processResourceDependencyAnnotation(context, added);
+            processResourceDependencyAnnotation(context, added, null);
             Renderer renderer = added.getRenderer(context);
             if (null != renderer) {
-                processResourceDependencyAnnotation(context, renderer);
+                processResourceDependencyAnnotation(context, added, renderer);
             }
         }
         
         private void processResourceDependencyAnnotation(FacesContext context, 
-                                                         Object source) {
-            Class<?> sourceClass = source.getClass();
+                UIComponent component, Renderer renderer) {
             // check for both as it would be legal to have a single
             // @ResourceDependencies and @ResourceDependency annotation
             // defined
@@ -2109,32 +2114,75 @@ public abstract class UIComponentBase extends UIComponent {
             // caching the metadata will be a performance sink as these methods
             // are backed by a sync'd utility method.  We'll need to come up
             // with something better.
-            if (sourceClass.isAnnotationPresent(ResourceDependencies.class)) {
-                ResourceDependencies resourceDeps =
-                      source.getClass()
-                            .getAnnotation(ResourceDependencies.class);
-                ResourceDependency[] dependencies = resourceDeps.value();
-                if (dependencies != null) {
-                    for (ResourceDependency dependency : dependencies) {
-                        createComponentResource(context, dependency);
+            UIOutput resourceComponent = null;
+            Object source = (null == renderer) ? component : renderer;
+            if (!source.getClass().isAnnotationPresent(ResourceDependency.class)) {
+                if (!source.getClass().isAnnotationPresent(ResourceDependencies.class)) {
+                    return;
+                } else {
+                    try {
+                        ResourceDependencies resourceDeps =
+                            (ResourceDependencies) source.getClass().getAnnotation(ResourceDependencies.class);
+                        Method valueMethod = resourceDeps.getClass().getMethod("value", new Class[] {});
+                        if (!valueMethod.getReturnType().isArray()) {
+                            throw new IllegalArgumentException (
+                                "@ResourceDependencies annotation does not contain Array of @ResourceDependency annotations");
+                        }
+                        Object[] values = (Object[]) valueMethod.invoke(resourceDeps, new Object[] {});
+                        for (Object value : values) {
+                            if (!(value instanceof Annotation)) {
+                                throw new IllegalArgumentException (
+                                    "@ResourceDependencies annotations array does not contain an Annotation type");
+                            }
+                            Annotation annotation = (Annotation)value;
+                            if (!(annotation.annotationType() == ResourceDependency.class)) {
+                                throw new IllegalArgumentException (
+                                    "@ResourceDependencies annotation contains a non @ResourceDependency annotation");
+                            }
+                            ResourceDependency resourceDep = (ResourceDependency)annotation;
+                            createComponentResource(context, component, resourceDep);
+                        }
+                    } catch(NoSuchMethodException e) {
+                        throw new FacesException(e);
+                    } catch (IllegalAccessException e) {
+                        throw new FacesException(e);
+                    } catch (InvocationTargetException e) {
+                        throw new FacesException (e.getTargetException());
                     }
                 }
-            } else if (sourceClass.isAnnotationPresent(ResourceDependency.class)) {
-                ResourceDependency resource =
-                      sourceClass.getAnnotation(ResourceDependency.class);
-                createComponentResource(context, resource);
+            } else {
+                // Get the resourceMetadata from the annotation
+                ResourceDependency resourceDep = (ResourceDependency) source.getClass().getAnnotation(ResourceDependency.class);
+                createComponentResource(context, component, resourceDep);
             }
-
         }
 
-        private static void createComponentResource(FacesContext context, ResourceDependency resourceDep) {
+        private static void createComponentResource(FacesContext context, 
+                UIComponent source, ResourceDependency resourceDep) {
 
             // Create a component resource
             UIOutput resourceComponent = (UIOutput) context.getApplication().createComponent("javax.faces.Output");
 
-            String resourceName = resourceDep.name();
-            String library = resourceDep.library();
-            String target = resourceDep.target();
+            String
+                resourceName = resourceDep.name(),
+                library = resourceDep.library(),
+                target = resourceDep.target();
+            
+            // If the enclosing entity for this expression is itself 
+            // a resource, the "this" syntax for the library name must
+            // be supported.
+            if (null != library && library.equals("this")) {
+                Resource componentResource = (Resource)
+                   source.getAttributes().get(Resource.COMPONENT_RESOURCE_KEY);
+                if (null != componentResource) {
+                    String libName = null;
+                    if (null != (libName = componentResource.getLibraryName())) {
+                        library = libName;
+                    }
+                }
+
+            }
+            
 
             if (resourceName.length() == 0) {
                 resourceName = null;

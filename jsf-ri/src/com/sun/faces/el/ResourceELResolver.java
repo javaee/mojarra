@@ -49,6 +49,7 @@ import javax.faces.application.ResourceHandler;
 
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import javax.faces.component.UIComponent;
 
 /**
  * ELResolver to resolve expressions like the following:
@@ -107,6 +108,23 @@ public class ResourceELResolver extends ELResolver {
                     throw new ELException("Invalid resource format.  Property " + prop + " contains more than one colon (:)");
                 }
                 String[] parts = Util.split(prop, ":");
+                
+                // If the enclosing entity for this expression is itself 
+                // a resource, the "this" syntax for the library name must
+                // be supported.
+                if (null != parts[0] && parts[0].equals("this")) {
+                    UIComponent currentComponent = UIComponent.getCurrentComponent();
+                    Resource componentResource = (Resource)
+                                currentComponent.getAttributes().get(Resource.COMPONENT_RESOURCE_KEY);
+                    if (null != componentResource) {
+                        String libName = null;
+                        if (null != (libName = componentResource.getLibraryName())) {
+                            parts[0] = libName;
+                        }
+                    }
+                    
+                }
+                
                 res = handler.createResource(parts[1], parts[0]);
             }
             if (res != null) {

@@ -37,8 +37,24 @@ import java.lang.annotation.Target;
  * <li><p>If <em>name</em> is the empty string throw an
  * <code>IllegalArgumentException</code> </p></li>
  *
- * <li><p>If <em>library</em> is the empty string, let <em>library</em> be
- * <code>null</code>.</p></li>
+ * <li><p>If <em>library</em> is the empty string, let <em>library</em>
+ * be <code>null</code>.  Otherwise, if the literal string
+ * <code>&quot;this&quot;</code> is the value of <em>library</em>
+ * attribute, take the following action to replace the
+ * <code>&quot;this&quot;</code> value for <em>library</em>.</p>
+
+ * <p>If the annotated artifact is an instance of {@link
+ * javax.faces.component.UIComponent}, or is an instance of {@link
+ * javax.faces.render.Renderer} and an instance of the
+ * <code>UIComponent</code> for that kind of <code>Renderer</code> is
+ * available, ask the <code>UIComponent</code> instance for the
+ * component attribute under the key {@link
+ * Resource#COMPONENT_RESOURCE_KEY}.  If a value exists under that key,
+ * assume the value is a {@link Resource} and replace the
+ * <code>&quot;this&quot;</code> value for <em>library</em> with the
+ * return from {@link Resource#getLibraryName}.</p>
+
+ * </li>
  *
  * <li><p>If <em>target</em> is the empty string, let <em>target</em> be
  * <code>null</code>.</p></li>
