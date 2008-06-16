@@ -60,6 +60,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionListener;
+import javax.faces.event.SystemEventListener;
+import javax.faces.event.SystemEvent;
 
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.application.ApplicationResourceBundle;
@@ -67,6 +69,7 @@ import com.sun.faces.el.ChainAwareVariableResolver;
 import com.sun.faces.el.DummyPropertyResolverImpl;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
+import com.sun.faces.config.ConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -190,6 +193,30 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
     private static final String RES_DISPLAY_NAMES
          = "display-name";
 
+    /**
+     * <code>/faces-config/application/system-event-listener</code>
+     */
+    private static final String SYSTEM_EVENT_LISTENER
+         = "system-event-listener";
+
+    /**
+     * <code>/faces-config/application/system-event-listener/system-event-listener-class</code>
+     */
+    private static final String SYSTEM_EVENT_LISTENER_CLASS
+         = "system-event-listener-class";
+
+    /**
+     * <code>/faces-config/application/system-event-listener/system-event-class</code>
+     */
+    private static final String SYSTEM_EVENT_CLASS
+         = "system-event-class";
+
+    /**
+     * <code>/faces-config/application/system-event-listener/source-class</code>
+     */
+    private static final String SOURCE_CLASS
+         = "source-class";
+
     // -------------------------------------------- Methods from ConfigProcessor
 
 
@@ -253,6 +280,8 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                                 addResouceBundle(associate, n);
                             } else if (RESOURCE_HANDLER.equals(n.getLocalName())) {
                                 setResourceHandler(app, n);
+                            } else if (SYSTEM_EVENT_LISTENER.equals(n.getLocalName())) {
+                                addSystemEventListener(app, n);
                             }
                         }
                     }
@@ -626,6 +655,64 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                                         handler));
                     }
                     application.setResourceHandler((ResourceHandler) instance);
+                }
+            }
+        }
+    }
+
+
+    private void addSystemEventListener(Application application,
+                                        Node systemEventListener) {
+
+        NodeList children = systemEventListener.getChildNodes();
+        String listenerClass = null;
+        String eventClass = null;
+        String sourceClass = null;
+        for (int j = 0, len = children.getLength(); j < len; j++) {
+            Node n = children.item(j);
+            if (n.getNodeType() == Node.ELEMENT_NODE) {
+                if (SYSTEM_EVENT_LISTENER_CLASS.equals(n.getLocalName())) {
+                    listenerClass = getNodeText(n);
+                } else if (SYSTEM_EVENT_CLASS.equals(n.getLocalName())) {
+                    eventClass = getNodeText(n);
+                } else if (SOURCE_CLASS.equals(n.getLocalName())) {
+                    sourceClass = getNodeText(n);
+                }
+            }
+        }
+        if (listenerClass != null) {
+            SystemEventListener selInstance = (SystemEventListener)
+                  createInstance(listenerClass,
+                                 SystemEventListener.class,
+                                 null,
+                                 systemEventListener);
+            if (selInstance != null) {
+                try {
+                    // If there is an eventClass, use it, otherwise use
+                    // SystemEvent.class
+                    //noinspection unchecked
+                    Class<? extends SystemEvent> eventClazz =
+                          (Class<? extends SystemEvent>) loadClass(eventClass, this, null);
+                    // If there is a sourceClass, use it, otherwise use null
+                    Class sourceClazz =
+                          (sourceClass != null && sourceClass.length() != 0)
+                          ? Util.loadClass(sourceClass, this.getClass())
+                          : null;
+                    application.subscribeToEvent(eventClazz,
+                                                 sourceClazz,
+                                                 selInstance);
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.log(Level.FINE,
+                                   "Subscribing for event {0} and source {1} using listener {2}",
+                                   new Object[]{
+                                         eventClazz.getName(),
+                                         ((sourceClazz != null) ? sourceClazz
+                                               .getName() : "ANY"),
+                                         selInstance.getClass().getName()
+                                   });
+                    }
+                } catch (ClassNotFoundException cnfe) {
+                    throw new ConfigurationException(cnfe);
                 }
             }
         }
