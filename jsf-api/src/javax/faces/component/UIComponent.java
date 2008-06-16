@@ -816,6 +816,8 @@ private void doFind(FacesContext context, String clientId) {
      *     non-null, the component must first be removed from its previous
      *     parent (where it may have been either a child or a facet).</li>
      *     </ul></li>
+     *     <li>RELEASE_PENDING (edburns,rogerk) document ResourceDependency
+     *          requirement of FacetMap.put().</li>
      * <li>Whenever an existing facet {@link UIComponent} is removed:
      *     <ul>
      *     <li>The <code>parent</code> property of the facet must be
