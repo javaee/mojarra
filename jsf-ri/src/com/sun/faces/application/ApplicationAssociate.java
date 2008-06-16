@@ -150,8 +150,6 @@ public class ApplicationAssociate {
 
     private PropertyEditorHelper propertyEditorHelper;
 
-    private Field defaultApplicationImpl;
-
     public ApplicationAssociate(ApplicationImpl appImpl) {
         app = appImpl;
 
@@ -182,14 +180,13 @@ public class ApplicationAssociate {
         devModeEnabled = (appImpl.getProjectStage() == ProjectStage.Development);
 
         try {
-            defaultApplicationImpl = Application.class.getDeclaredField("defaultApplication");
+            Field defaultApplicationImpl = Application.class.getDeclaredField("defaultApplication");
             defaultApplicationImpl.setAccessible(true);
             defaultApplicationImpl.set(app, app);
         } catch (Exception e) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE, e.toString(), e);
-            }
-            defaultApplicationImpl = null;
+            }            
         }
     }
 
