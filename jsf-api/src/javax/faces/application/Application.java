@@ -63,7 +63,6 @@ import java.lang.reflect.Constructor;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.context.ExternalContext;
 import javax.faces.convert.Converter;
 import javax.faces.el.MethodBinding;
 import javax.faces.el.PropertyResolver;
@@ -108,6 +107,9 @@ public abstract class Application {
 
     private static final Logger LOGGER =
           Logger.getLogger("javax.faces.application", "javax.faces.LogStrings");
+
+    @SuppressWarnings({"UnusedDeclaration"})
+    private Application defaultApplication;
 
     // ------------------------------------------------------------- Properties
 
@@ -290,9 +292,8 @@ public abstract class Application {
      */
     public ResourceHandler getResourceHandler() {
 
-        Application app = getDefaultApplicationImpl();
-        if (app != null) {
-            return app.getResourceHandler();
+        if (defaultApplication != null) {
+            return defaultApplication.getResourceHandler();
         }
 
         throw new UnsupportedOperationException();
@@ -317,9 +318,8 @@ public abstract class Application {
      */
     public void setResourceHandler(ResourceHandler resourceHandler) {
 
-        Application app = getDefaultApplicationImpl();
-        if (app != null) {
-            app.setResourceHandler(resourceHandler);
+        if (defaultApplication != null) {
+            defaultApplication.setResourceHandler(resourceHandler);
         }
 
         throw new UnsupportedOperationException();
@@ -400,13 +400,13 @@ public abstract class Application {
      */
     
     public ResourceBundle getResourceBundle(FacesContext ctx, String name) {
-        Application app = getDefaultApplicationImpl(ctx);
-        if (app != null) {
-            //noinspection TailRecursion
-            return app.getResourceBundle(ctx, name);
+
+       if (defaultApplication != null) {
+            return defaultApplication.getResourceBundle(ctx, name);
         }
         
         throw new UnsupportedOperationException();
+
     }
 
 
@@ -450,9 +450,8 @@ public abstract class Application {
      */
     public ProjectStage getProjectStage() {
         
-        Application app = getDefaultApplicationImpl();
-        if (app != null) {
-            return app.getProjectStage();
+        if (defaultApplication != null) {
+            return defaultApplication.getProjectStage();
         }
         
         return ProjectStage.Production;
@@ -541,12 +540,13 @@ public abstract class Application {
      */
 
     public void addELResolver(ELResolver resolver) {
-        Application app = getDefaultApplicationImpl();
-        if (app != null) {
-            app.addELResolver(resolver);
+
+        if (defaultApplication != null) {
+            defaultApplication.addELResolver(resolver);
         } else {
             throw new UnsupportedOperationException();
         }
+
     }
 
     /**
@@ -584,12 +584,13 @@ public abstract class Application {
      */
 
     public ELResolver getELResolver() {
-        Application app = getDefaultApplicationImpl();
-        if (app != null) {
+
+        if (defaultApplication != null) {
             //noinspection TailRecursion
-            return app.getELResolver();
+            return defaultApplication.getELResolver();
         }
         throw new UnsupportedOperationException();
+
     }
 
 
@@ -912,13 +913,14 @@ public abstract class Application {
      */
 
     public ExpressionFactory getExpressionFactory() {
-        Application app = getDefaultApplicationImpl();
-        if (app != null) {
+
+        if (defaultApplication != null) {
             //noinspection TailRecursion
-            return app.getExpressionFactory();
+            return defaultApplication.getExpressionFactory();
         }
 
         throw new UnsupportedOperationException();
+
     }
 
     /**
@@ -939,12 +941,14 @@ public abstract class Application {
     public Object evaluateExpressionGet(FacesContext context,
                                         String expression,
                                         Class expectedType) throws ELException {
-        Application app = getDefaultApplicationImpl(context);
-        if (app != null) {
-            //noinspection TailRecursion
-            return app.evaluateExpressionGet(context, expression, expectedType);
+
+        if (defaultApplication != null) {
+            return defaultApplication.evaluateExpressionGet(context,
+                                                                expression,
+                                                                expectedType);
         }
         throw new UnsupportedOperationException();
+
     }
 
     /**
@@ -1007,12 +1011,13 @@ public abstract class Application {
      */
 
     public void addELContextListener(ELContextListener listener) {
-        Application app = getDefaultApplicationImpl();
-        if (app != null) {
-            app.addELContextListener(listener);
+
+        if (defaultApplication != null) {
+            defaultApplication.addELContextListener(listener);
         } else {
             throw new UnsupportedOperationException();
         }
+
     }
 
     /**
@@ -1030,9 +1035,9 @@ public abstract class Application {
      */
 
     public void removeELContextListener(ELContextListener listener) {
-        Application app = getDefaultApplicationImpl();
-        if (app != null) {
-            app.removeELContextListener(listener);
+
+        if (defaultApplication != null) {
+            defaultApplication.removeELContextListener(listener);
         } else {
             throw new UnsupportedOperationException();
         }
@@ -1054,13 +1059,14 @@ public abstract class Application {
      */
 
     public ELContextListener [] getELContextListeners() {
-        Application app = getDefaultApplicationImpl();
-        if (app != null) {
+
+        if (defaultApplication != null) {
             //noinspection TailRecursion
-            return app.getELContextListeners();
+            return defaultApplication.getELContextListeners();
         } else {
             throw new UnsupportedOperationException();
         }
+
     }
 
 
@@ -1503,37 +1509,6 @@ public abstract class Application {
         }
 
         return event;
-
-    }
-
-
-    /**
-     * HACK to get around 1.1 applications running in a 1.2 environment.
-     */
-    private static Application getDefaultApplicationImpl(FacesContext context) {
-
-        ExternalContext extContext;
-        if (context != null) {
-            extContext = context.getExternalContext();
-        } else {
-            extContext =
-                 FacesContext.getCurrentInstance().getExternalContext();
-        }
-        if (extContext != null) {
-            return ((Application) extContext.getApplicationMap().
-                 get("com.sun.faces.ApplicationImpl"));
-        }
-        return null;
-
-    }
-
-
-    /**
-     * HACK to get around 1.1 applications running in a 1.2 environment.
-     */
-    private static Application getDefaultApplicationImpl() {
-
-        return getDefaultApplicationImpl(null);
 
     }
 

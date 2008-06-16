@@ -43,7 +43,6 @@ package javax.faces.context;
 
 import java.util.Iterator;
 import java.util.Map;
-import java.util.HashMap;
 
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
@@ -77,7 +76,8 @@ import javax.faces.event.PhaseId;
 
 public abstract class FacesContext {
 
-    private Map<Object,Object> attributes;
+    @SuppressWarnings({"UnusedDeclaration"})
+    private FacesContext defaultFacesContext;
 
     // -------------------------------------------------------------- Properties
 
@@ -131,10 +131,10 @@ public abstract class FacesContext {
 
     public Map<Object, Object> getAttributes() {
 
-        if (attributes == null) {
-            attributes = new HashMap<Object,Object>();
+        if (defaultFacesContext != null) {
+            return defaultFacesContext.getAttributes();
         }
-        return attributes;
+        throw new UnsupportedOperationException();
  
     }
 
@@ -188,12 +188,10 @@ public abstract class FacesContext {
 
     public ELContext getELContext() {
 
-        Map<Object,Object> ctxAttributes = getAttributes();
-        FacesContext impl = (FacesContext) ctxAttributes.get("com.sun.faces.FacesContextImpl");
-        if (impl != null) {
-            return impl.getELContext();
+        if (defaultFacesContext != null) {
+            return defaultFacesContext.getELContext();
         }
-        
+
         throw new UnsupportedOperationException();
 
     }

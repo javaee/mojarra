@@ -42,25 +42,10 @@ import com.sun.faces.RIConstants;
 
 /**
  * <p>
- * This helper class is for managing per-request state within the
- * the implementation.
- * </p>
- *
- * <p>
- * Mojarra stores several request scoped attributes during its processing.
- * Each time an attribute is added or removed, the action of doing so results
- * in the ServletRequestAttributeListener Mojarra uses for ManagedBean tracking
- * to be triggered.  Additionally, any other ServletRequestAttributeListeners
- * will be invoked.  Since these attributes are, for all intents and purposes,
- * private, reducing the footprint of their usage is ideal.
- * </p>
- *
- * <p>
- * To that end, this class should be used to for all interactions with implementation
- * specific per-request attributes.  There may be cases where an attribute must
- * be in the request instead of the FacesContext attributes map.  For those
- * cases call the appropriate method containing the boolean parameter,
- * <code>useFacesContext</code> with a value of <code>false</code>.
+ * This helper class is used a central location for per-request state
+ * that is needed by Mojarra.  This class leverages FacesContext.getAttributes()
+ * which as added in 2.0 instead of the request scope to prevent the unecessary
+ * triggering of ServletREquestAttributeListeners.
  * </p>
  */
 public class RequestStateManager {
@@ -84,28 +69,11 @@ public class RequestStateManager {
      * This will be used when generating bytecode for custom converters.
      */
     public static final String TARGET_COMPONENT_ATTRIBUTE_NAME =
-          RIConstants.FACES_PREFIX + "ComponentForValue";
-
-    /**
-     * Attribute to lookup the ExternalContextImpl.  This is used by the
-     * API to delegate to when a 1.1 ExternalContext implementation decorates
-     * the 1.2 implementation.
-     */
-    public static final String EXTERNALCONTEXT_IMPL_ATTR_NAME =
-          RIConstants.FACES_PREFIX + "ExternalContextImpl";
-
-    /**
-     * Attribute to lookup the FacesContextImpl.  This is used by the
-     * API to delegate to when a 1.1 ExternalContext implementation decorates
-     * the 1.2 implementation.
-     */
-    public static final String FACESCONTEXT_IMPL_ATTR_NAME =
-          RIConstants.FACES_PREFIX + "FacesContextImpl";
+          RIConstants.FACES_PREFIX + "ComponentForValue";    
 
     /**
      * Attribute defining the {@link javax.faces.render.RenderKit} being used
-     * for this request.  Storing it in the request reduces the overhead of
-     * querying the RenderKitFactory multiple times.
+     * for this request.
      */
     public static final String RENDER_KIT_IMPL_REQ =
           RIConstants.FACES_PREFIX + "renderKitImplForRequest";
@@ -182,53 +150,19 @@ public class RequestStateManager {
 
 
     /**
-     * Calls through to {@link #get(javax.faces.context.FacesContext, String, boolean)}
-     * passing <code>true</code> for the <code>useFacesContext</code> param.
-     *
-     * @see #get(javax.faces.context.FacesContext, String, boolean)
-     */
-    public static Object get(FacesContext ctx, String key) {
-
-        return get(ctx, key, true);
-
-    }
-
-
-    /**
      * @param ctx the <code>FacesContext</code> for the current request
      * @param key the key for the value
-     * @param useFacesContext if <code>true</code> then the value will
-     *  be retrienved from the FacesContext attributes map, otherwise it will be
-     *  retrieved from the ExternalContext request map.
      * @return the value associated with the specified key.
      */
-    public static Object get(FacesContext ctx,
-                             String key,
-                             boolean useFacesContext) {
+    public static Object get(FacesContext ctx, String key) {
 
         if (ctx == null || key == null) {
             return null;
         }
-
-        return ((useFacesContext)
-                ? ctx.getAttributes().get(key)
-                : ctx.getExternalContext().getRequestMap().get(key));
+        return ctx.getAttributes().get(key);
 
     }
 
-
-    /**
-     * Calls through to {@link #set(javax.faces.context.FacesContext, String, Object, boolean)}
-     * passing <code>true</code> for the <code>useFacesContext</code> param.
-     *
-     * @see #set(javax.faces.context.FacesContext, String, Object, boolean)
-     */
-    public static void set(FacesContext ctx, String key, Object value) {
-
-        set(ctx, key, value, true);
-
-    }
-    
 
     /**
      * <p>
@@ -240,40 +174,16 @@ public class RequestStateManager {
      * @param ctx the <code>FacesContext</code> for the current request
      * @param key the key for the value
      * @param value the value to store
-     * @param useFacesContext if <code>true</code> then the key/value pair will
-     *  be stored in the FacesContext attrigbutes map, otherwise it they will be
-     *  stored in the ExternalContext request map
      */
-    public static void set(FacesContext ctx,
-                           String key,
-                           Object value,
-                           boolean useFacesContext) {
+    public static void set(FacesContext ctx, String key, Object value) {
 
         if (ctx == null || key == null) {
             return;
         }
         if (value == null) {
-            remove(ctx, key, useFacesContext);
+            remove(ctx, key);
         }
-
-        if (useFacesContext) {
-            ctx.getAttributes().put(key, value);
-        } else {
-            ctx.getExternalContext().getRequestMap().put(key, value);
-        }
-
-    }
-
-
-    /**
-     * Calls through to {@link #remove(javax.faces.context.FacesContext, String, boolean)}
-     * passing <code>true</code> for the <code>useFacesContext</code> param.
-     *
-     * @see #remove(javax.faces.context.FacesContext, String, boolean)
-     */
-    public static Object remove(FacesContext ctx, String key) {
-
-        return remove(ctx, key, true);
+        ctx.getAttributes().put(key, value);
 
     }
 
@@ -285,35 +195,15 @@ public class RequestStateManager {
      *
      * @param ctx the <code>FacesContext</code> for the current request
      * @param key the key for the value
-     * @param useFacesContext if <code>true</code> then the key/value pair will
-     *  be removed from the FacesContext attrigbutes map, otherwise it they will
-     *  be removed from the ExternalContext request map
      * @return the value previous associated with the specified key, if any
      */
-    public static Object remove(FacesContext ctx,
-                                String key,
-                                boolean useFacesContext) {
+    public static Object remove(FacesContext ctx, String key) {
 
         if (ctx == null || key == null) {
             return null;
         }
 
-        return ((useFacesContext)
-                ? ctx.getAttributes().remove(key)
-                : ctx.getExternalContext().getRequestMap().remove(key));
-
-    }
-
-
-    /**
-     * Calls through to {@link #containsKey(javax.faces.context.FacesContext, String, boolean)}
-     * passing <code>true</code> for the <code>useFacesContext</code> param.
-     *
-     * @see #containsKey(javax.faces.context.FacesContext, String, boolean)
-     */
-    public static boolean containsKey(FacesContext ctx, String key) {
-
-        return containsKey(ctx, key, true);
+        return ctx.getAttributes().remove(key);
 
     }
 
@@ -321,18 +211,12 @@ public class RequestStateManager {
     /**
      * @param ctx the <code>FacesContext</code> for the current request
      * @param key the key for the value
-     * @param useFacesContext if <code>true</code> then the key will be checked
-     *  in the FacesContext attrigbutes map, otherwise it it will be checked in
-     *  the ExternalContext request map
      * @return true if the specified key exists in the Map
      */
-    public static boolean containsKey(FacesContext ctx, String key, boolean useFacesContext) {
+    public static boolean containsKey(FacesContext ctx, String key) {
 
-        return !(ctx == null || key == null) && ((useFacesContext)
-                                                 ? ctx.getAttributes().containsKey(key)
-                                                 : ctx.getExternalContext()
-                                                       .getRequestMap()
-                                                       .containsKey(key));
+        return !(ctx == null || key == null) && ctx.getAttributes()
+              .containsKey(key);
 
     }
 

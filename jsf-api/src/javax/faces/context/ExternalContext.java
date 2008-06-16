@@ -89,6 +89,10 @@ import java.util.Map;
  */
 
 public abstract class ExternalContext {
+
+    
+    @SuppressWarnings({"UnusedDeclaration"})
+    private ExternalContext defaultExternalContext;
     
 
     // ------------------------------------------------------ Manifest Constants
@@ -228,9 +232,8 @@ public abstract class ExternalContext {
                                   String value,
                                   Map<String, Object> properties) {
 
-        ExternalContext impl = getDefaultExternalContext();
-        if (impl != null) {
-            impl.addResponseCookie(name, value, properties);
+        if (defaultExternalContext != null) {
+            defaultExternalContext.addResponseCookie(name, value, properties);
             return;
         }
 
@@ -401,9 +404,8 @@ public abstract class ExternalContext {
      */
     public String getMimeType(String file) {
 
-        ExternalContext impl = getDefaultExternalContext();
-        if (impl != null) {
-            return impl.getMimeType(file);
+        if (defaultExternalContext != null) {
+            return defaultExternalContext.getMimeType(file);
         }
 
         throw new UnsupportedOperationException();
@@ -517,9 +519,8 @@ public abstract class ExternalContext {
      */
     public void setRequest(Object request) {
 
-        ExternalContext impl = getDefaultExternalContext();
-        if (impl != null) {
-            impl.setRequest(request);
+        if (defaultExternalContext != null) {
+            defaultExternalContext.setRequest(request);
             return;
         }
 
@@ -548,9 +549,8 @@ public abstract class ExternalContext {
      */
     public String getRequestScheme() {
 
-        ExternalContext impl = getDefaultExternalContext();
-        if (impl != null) {
-            return impl.getRequestScheme();
+        if (defaultExternalContext != null) {
+            return defaultExternalContext.getRequestScheme();
         }
 
         throw new UnsupportedOperationException();
@@ -577,9 +577,8 @@ public abstract class ExternalContext {
      */
     public String getRequestServerName() {
 
-        ExternalContext impl = getDefaultExternalContext();
-        if (impl != null) {
-            return impl.getRequestServerName();
+        if (defaultExternalContext != null) {
+            return defaultExternalContext.getRequestServerName();
         }
 
         throw new UnsupportedOperationException();
@@ -607,9 +606,8 @@ public abstract class ExternalContext {
      */
     public int getRequestServerPort() {
 
-        ExternalContext impl = getDefaultExternalContext();
-        if (impl != null) {
-            return impl.getRequestServerPort();
+        if (defaultExternalContext != null) {
+            return defaultExternalContext.getRequestServerPort();
         }
 
         throw new UnsupportedOperationException();
@@ -642,9 +640,8 @@ public abstract class ExternalContext {
      */
     public void setRequestCharacterEncoding(String encoding) throws UnsupportedEncodingException {
 
-        ExternalContext impl = getDefaultExternalContext();
-        if (impl != null) {
-            impl.setRequestCharacterEncoding(encoding);
+        if (defaultExternalContext != null) {
+            defaultExternalContext.setRequestCharacterEncoding(encoding);
             return;
         }
 
@@ -674,9 +671,8 @@ public abstract class ExternalContext {
      */
     public String getRealPath(String path) {
 
-        ExternalContext impl = getDefaultExternalContext();
-        if (impl != null) {
-            return impl.getRealPath(path);
+        if (defaultExternalContext != null) {
+            return defaultExternalContext.getRealPath(path);
         }
 
         throw new UnsupportedOperationException();
@@ -896,9 +892,8 @@ public abstract class ExternalContext {
      */
     public String getRequestCharacterEncoding() {
 
-        ExternalContext impl = getDefaultExternalContext();
-        if (impl != null) {
-            return impl.getRequestCharacterEncoding();
+        if (defaultExternalContext != null) {
+            return defaultExternalContext.getRequestCharacterEncoding();
         }
         throw new UnsupportedOperationException();
 
@@ -922,9 +917,8 @@ public abstract class ExternalContext {
      */
     public String getRequestContentType() {
 
-        ExternalContext impl = getDefaultExternalContext();
-        if (impl != null) {
-            return impl.getRequestContentType();
+        if (defaultExternalContext != null) {
+            return defaultExternalContext.getRequestContentType();
         }
 
         throw new UnsupportedOperationException();
@@ -949,9 +943,8 @@ public abstract class ExternalContext {
      */
     public String getResponseCharacterEncoding() {
 
-        ExternalContext impl = getDefaultExternalContext();
-        if (impl != null) {
-            return impl.getResponseCharacterEncoding();
+        if (defaultExternalContext != null) {
+            return defaultExternalContext.getResponseCharacterEncoding();
         }
 
         throw new UnsupportedOperationException();
@@ -977,9 +970,8 @@ public abstract class ExternalContext {
      */
     public String getResponseContentType() {
 
-        ExternalContext impl = getDefaultExternalContext();
-        if (impl != null) {
-            return impl.getResponseContentType();
+        if (defaultExternalContext != null) {
+            return defaultExternalContext.getResponseContentType();
         }
 
         throw new UnsupportedOperationException();
@@ -1100,9 +1092,8 @@ public abstract class ExternalContext {
      */
     public void setResponse(Object response) {
 
-        ExternalContext impl = getDefaultExternalContext();
-        if (impl != null) {
-            impl.setResponse(response);
+        if (defaultExternalContext != null) {
+            defaultExternalContext.setResponse(response);
             return;
         }
         
@@ -1131,9 +1122,8 @@ public abstract class ExternalContext {
      */
     public OutputStream getResponseOutputStream() throws IOException {
 
-        ExternalContext impl = getDefaultExternalContext();
-        if (impl != null) {
-            return impl.getResponseOutputStream();
+        if (defaultExternalContext != null) {
+            return defaultExternalContext.getResponseOutputStream();
         }
 
         throw new UnsupportedOperationException();
@@ -1161,9 +1151,8 @@ public abstract class ExternalContext {
      */
     public void setResponseCharacterEncoding(String encoding) {
 
-        ExternalContext impl = getDefaultExternalContext();
-        if (impl != null) {
-            impl.setResponseCharacterEncoding(encoding);
+        if (defaultExternalContext != null) {
+            defaultExternalContext.setResponseCharacterEncoding(encoding);
             return;
         }
         
@@ -1197,9 +1186,8 @@ public abstract class ExternalContext {
      */
     public void setResponseContentType(String contentType) {
 
-        ExternalContext impl = getDefaultExternalContext();
-        if (impl != null) {
-            impl.setResponseContentType(contentType);
+        if (defaultExternalContext != null) {
+            defaultExternalContext.setResponseContentType(contentType);
             return;
         }
 
@@ -1296,9 +1284,8 @@ public abstract class ExternalContext {
      */
     public void invalidateSession() {
 
-        ExternalContext impl = getDefaultExternalContext();
-        if (impl != null) {
-            impl.invalidateSession();
+        if (defaultExternalContext != null) {
+            defaultExternalContext.invalidateSession();
             return;
         }
 
@@ -1397,13 +1384,4 @@ public abstract class ExternalContext {
 	throws IOException;
 
 
-    // --------------------------------------------------------- Private Methods
-
-    
-    private ExternalContext getDefaultExternalContext() {
-
-        FacesContext ctx = FacesContext.getCurrentInstance();
-        return (ExternalContext) ctx.getAttributes().get("com.sun.faces.ExternalContextImpl");
-
-    }
 }
