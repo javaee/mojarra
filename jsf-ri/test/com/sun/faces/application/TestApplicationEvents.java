@@ -13,8 +13,11 @@ import javax.faces.application.Application;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIOutput;
+import javax.faces.context.FacesContext;
 
 import com.sun.faces.cactus.ServletFacesTestCase;
+import com.sun.faces.CustomSystemEvent;
 
 /**
  * @since 2.0.0
@@ -248,6 +251,22 @@ public class TestApplicationEvents extends ServletFacesTestCase {
         application.publishEvent(TestApplicationEvents.TestSystemEvent2.class, input);
         assertTrue(!listener.wasIsListenerForSourceInvoked());
         assertTrue(!listener.wasProcessEventInvoked());
+
+    }
+
+
+    public void testListenersFromConfig() {
+
+        FacesContext ctx = getFacesContext();
+        Application app = ctx.getApplication();
+        // SystemEventListener1 is only interested in UIOutput sources, while
+        // SystemEventListener2 is interested in any events.
+        app.publishEvent(CustomSystemEvent.class, new UIInput());
+        assertNull(ctx.getAttributes().remove("SystemEventListener1"));
+        assertNotNull(ctx.getAttributes().remove("SystemEventListener2"));
+        app.publishEvent(CustomSystemEvent.class, new UIOutput());
+        assertNotNull(ctx.getAttributes().remove("SystemEventListener1"));
+        assertNotNull(ctx.getAttributes().remove("SystemEventListener2"));
 
     }
 

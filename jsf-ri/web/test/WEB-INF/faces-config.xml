@@ -59,6 +59,15 @@
       <base-name>com.sun.faces.TestResourceBundle2</base-name>
       <var>testResourceBundle2</var>
     </resource-bundle>
+      <system-event-listener>
+          <system-event-listener-class>com.sun.faces.SystemEventListener1</system-event-listener-class>
+          <system-event-class>com.sun.faces.CustomSystemEvent</system-event-class>
+          <source-class>javax.faces.component.UIOutput</source-class>
+      </system-event-listener>
+      <system-event-listener>
+          <system-event-listener-class>com.sun.faces.SystemEventListener2</system-event-listener-class>
+          <system-event-class>com.sun.faces.CustomSystemEvent</system-event-class>
+      </system-event-listener>
   </application>
 
 
