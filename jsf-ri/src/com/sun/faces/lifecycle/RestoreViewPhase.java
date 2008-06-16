@@ -208,8 +208,8 @@ public class RestoreViewPhase extends Phase {
             viewRoot.subscribeToEvent(AfterAddToParentEvent.class, viewRoot);
             facesContext.setViewRoot(viewRoot);
             facesContext.renderResponse();
-	    facesContext.getApplication().publishEvent(AfterAddToParentEvent.class, 
-						       viewRoot);
+            facesContext.getApplication().publishEvent(AfterAddToParentEvent.class,
+                                                       viewRoot);
         }
         assert(null != viewRoot);
         
