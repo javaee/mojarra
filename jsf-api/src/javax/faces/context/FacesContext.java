@@ -107,7 +107,8 @@ public abstract class FacesContext {
      * that are invoked <strong>after</strong> the Faces lifecycle for this
      * request completes.  Accessing this <code>Map</code> does not cause any 
      * events to fire, as is the case with the other maps: for request, session, and 
-     * application scope.</p>
+     * application scope.  When {@link #release()} is invoked, the attributes
+     * must be cleared.</p>
      * 
      * <div class="changed_added_2_0">
      * 
