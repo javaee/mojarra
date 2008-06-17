@@ -43,7 +43,6 @@ package javax.faces.context;
 
 import java.util.Iterator;
 import java.util.Map;
-import java.util.HashMap;
 
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
@@ -77,7 +76,8 @@ import javax.faces.event.PhaseId;
 
 public abstract class FacesContext {
 
-    private Map<Object,Object> attributes;
+    @SuppressWarnings({"UnusedDeclaration"})
+    private FacesContext defaultFacesContext;
 
     // -------------------------------------------------------------- Properties
 
@@ -107,7 +107,8 @@ public abstract class FacesContext {
      * that are invoked <strong>after</strong> the Faces lifecycle for this
      * request completes.  Accessing this <code>Map</code> does not cause any 
      * events to fire, as is the case with the other maps: for request, session, and 
-     * application scope.</p>
+     * application scope.  When {@link #release()} is invoked, the attributes
+     * must be cleared.</p>
      * 
      * <div class="changed_added_2_0">
      * 
@@ -130,10 +131,10 @@ public abstract class FacesContext {
 
     public Map<Object, Object> getAttributes() {
 
-        if (attributes == null) {
-            attributes = new HashMap<Object,Object>();
+        if (defaultFacesContext != null) {
+            return defaultFacesContext.getAttributes();
         }
-        return attributes;
+        throw new UnsupportedOperationException();
  
     }
 
@@ -187,12 +188,10 @@ public abstract class FacesContext {
 
     public ELContext getELContext() {
 
-        Map<Object,Object> ctxAttributes = getAttributes();
-        FacesContext impl = (FacesContext) ctxAttributes.get("com.sun.faces.FacesContextImpl");
-        if (impl != null) {
-            return impl.getELContext();
+        if (defaultFacesContext != null) {
+            return defaultFacesContext.getELContext();
         }
-        
+
         throw new UnsupportedOperationException();
 
     }
