@@ -99,10 +99,10 @@
            java.util.PropertyPermission is read,write
            java.lang.ReflectPermission is "*"                   
     -->
-    <macrodef name="config.container"
+    <target name="config.container"
             description="Perform any container specific configuration necessary for the unit tests to run">
         <sequential>
-            <echo message="Provide 'undeploy.artifact' implementation"/>
+            <echo message="Provide 'config.container' implementation"/>
         </sequential>
     </macrodef>
 
