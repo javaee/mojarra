@@ -63,6 +63,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.NoSuchElementException;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -90,6 +91,7 @@ import com.sun.faces.util.Util;
      private Severity maxSeverity;
      private boolean renderResponse = false;
      private boolean responseComplete = false;
+     private Map<Object,Object> attributes;
 
      /**
       * Store mapping of clientId to ArrayList of FacesMessage
@@ -140,15 +142,17 @@ import com.sun.faces.util.Util;
          return application;
      }
 
+
     @Override
-    public Map<Object, Object> getAttributes() {
+    public Map<Object,Object> getAttributes() {
         
         assertNotReleased();
-        return super.getAttributes();
-        
+        if (attributes == null) {
+            attributes = new HashMap<Object,Object>();
+        }
+        return attributes;
+
     }
-     
-     
 
 
      /**
@@ -389,8 +393,7 @@ import com.sun.faces.util.Util;
       * @see javax.faces.context.FacesContext#release()
       */
      public void release() {
-
-         RequestStateManager.remove(this, RequestStateManager.FACESCONTEXT_IMPL_ATTR_NAME);
+        
          RequestStateManager.remove(this, RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
 
          released = true;
@@ -401,6 +404,10 @@ import com.sun.faces.util.Util;
          renderResponse = false;
          responseComplete = false;
          viewRoot = null;
+         if (attributes != null) {
+             attributes.clear();
+             attributes = null;
+         }
          
          // PENDING(edburns): write testcase that verifies that release
          // actually works.  This will be important to keep working as

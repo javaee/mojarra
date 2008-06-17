@@ -48,6 +48,7 @@ import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.spi.InjectionProvider;
 import com.sun.faces.spi.InjectionProviderFactory;
 import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.FacesLogger;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 
 import javax.el.CompositeELResolver;
@@ -59,6 +60,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
 import javax.faces.application.ProjectStage;
+import javax.faces.application.Application;
 import javax.servlet.ServletContext;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -69,6 +71,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.TreeSet;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+import java.lang.reflect.Field;
 
 /**
  * <p>Break out the things that are associated with the Application, but
@@ -83,14 +88,9 @@ import java.util.TreeSet;
 
 public class ApplicationAssociate {
 
-
-    private static final String APPLICATION_IMPL_ATTR_NAME =
-          RIConstants.FACES_PREFIX + "ApplicationImpl";
+    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
     private ApplicationImpl app = null;
-
-
-
 
     /**
      * Overall Map containing <code>from-view-id</code> key and
@@ -167,8 +167,6 @@ public class ApplicationAssociate {
                  MessageUtils.getExceptionMessageString(
                       MessageUtils.APPLICATION_ASSOCIATE_EXISTS_ID));
         }
-        externalContext.getApplicationMap().put(APPLICATION_IMPL_ATTR_NAME,
-             appImpl);
         externalContext.getApplicationMap().put(ASSOCIATE_KEY, this);
         //noinspection CollectionWithoutInitialCapacity
         caseListMap = new HashMap<String, List<ConfigNavigationCase>>();
@@ -180,6 +178,16 @@ public class ApplicationAssociate {
                                            BooleanWebContextInitParameter.EnableLazyBeanValidation));
         groovyHelper = GroovyHelper.getCurrentInstance();
         devModeEnabled = (appImpl.getProjectStage() == ProjectStage.Development);
+
+        try {
+            Field defaultApplicationImpl = Application.class.getDeclaredField("defaultApplication");
+            defaultApplicationImpl.setAccessible(true);
+            defaultApplicationImpl.set(app, app);
+        } catch (Exception e) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, e.toString(), e);
+            }            
+        }
     }
 
     public static ApplicationAssociate getInstance(ExternalContext
