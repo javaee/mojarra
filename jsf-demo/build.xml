@@ -118,6 +118,9 @@
             depends="copyDemoSource,main">
         <echo>Build the demos from the jsf-demo repository</echo>
         <echo>copy the sample war files to the zip area</echo>
+
+        <!-- Not including these old demos in the distribution 
+
         <copy todir="${dist.home}/samples"
               file="${basedir}/components/build/jsf-components.war"/>
         <copy todir="${dist.home}/samples"
@@ -132,10 +135,14 @@
               file="${basedir}/webtier-sample/build/webtier-sample.war"/>
         <copy todir="${dist.home}/samples"
               file="${basedir}/lib/ui.jar"/>
+
+        -->
     </target>
 
     <target name="copyDemoSource" depends="copyJars">
         <echo>copy the necessary samples</echo>
+
+        <!-- Not including these old demos in the distribution 
 
         <copy todir="${dist.home}/samples/guessNumber" includeEmptyDirs="false">
             <fileset dir="${basedir}/guessNumber" excludes="build.xml"/>
@@ -160,10 +167,14 @@
             <fileset dir="${basedir}/components"
                      excludes="build.xml"/>
         </copy>
+
         <copy tofile="${dist.home}/samples/build.properties" 
               file="${basedir}/demo-standalone/build.properties.sample"/>
         <copy todir="${dist.home}/samples" 
               file="${basedir}/demo-standalone/build.xml"/>
+
+        -->
+
     </target>
 
 
@@ -205,8 +216,8 @@
 
     <target name="prepare.dist">
         <mkdir dir="${dist.home}"/>
+        <mkdir dir="${dist.home}/docs"/>
         <mkdir dir="${dist.home}/samples"/>
-        <mkdir dir="${dist.home}/metadata"/>
         <mkdir dir="${dist.home}/renderkitdocs"/>
 
         <echo>Handle the top level files</echo>
@@ -215,12 +226,7 @@
         <copy file="${impl.dir}/THIRDPARTYLICENSEREADME.txt"
               todir="${dist.home}"/>
         <copy todir="${dist.home}/lib">
-            <fileset dir="${api.dir}/build/lib" includes="*.dtd"/>
-        </copy>
-        <copy todir="${dist.home}/metadata">
-            <fileset dir="${api.dir}/doc"/>
-            <fileset dir="${impl.dir}/src/com/sun/faces"
-                     includes="standard-html-renderkit.xml"/>
+            <fileset dir="${api.dir}/build/lib"/>
         </copy>
         <ant dir="${api.dir}"
              antfile="build.xml"
@@ -229,6 +235,9 @@
         <copy todir="${dist.home}/renderkitdocs">
             <fileset dir="${api.dir}/build/generate/facesdoc"/>
         </copy>
+        <jar file="${dist.home}/docs/renderkitdocs-${impl.version}.jar">
+           <fileset dir="${dist.home}" includes="renderkitdocs/**"/>
+        </jar>
         <antcall target="api.javadocs"/>
         <antcall target="ri.tlddocs"/>
         <!--
@@ -237,6 +246,9 @@
 
         <antcall target="copydocs"/>
         -->
+        <delete dir="${dist.home}/renderkitdocs"/>
+        <delete dir="${dist.home}/tlddocs"/>
+        <delete dir="${dist.home}/javadocs"/>
     </target>
 
     <target name="api.javadocs" unless="build.wspack">
@@ -249,6 +261,9 @@
         <copy todir="${dist.home}/javadocs" filtering="true">
             <fileset dir="${api.dir}/build/javadocs"/>
         </copy>
+        <jar file="${dist.home}/docs/javadocs-${impl.version}.jar">
+           <fileset dir="${dist.home}" includes="javadocs/**"/>
+        </jar>
 
     </target>
 
@@ -261,6 +276,9 @@
         <copy todir="${dist.home}/tlddocs">
             <fileset dir="${impl.dir}/build/tlddocs"/>
         </copy>
+        <jar file="${dist.home}/docs/tlddocs-${impl.version}.jar">
+           <fileset dir="${dist.home}" includes="tlddocs/**"/>
+        </jar>
 
     </target>
 
