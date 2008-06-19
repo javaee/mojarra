@@ -1614,6 +1614,19 @@ public abstract class UIComponentBase extends UIComponent {
     private static void createComponentResource(FacesContext context,
                                                 ResourceDependency resourceDep) {
 
+        //noinspection unchecked
+        List<ResourceDependency> addedResources = (List<ResourceDependency>)
+              context.getAttributes().get("javax.faces.ADDED_RESOURCES");
+        if (addedResources == null) {
+            addedResources = new ArrayList<ResourceDependency>();
+            context.getAttributes().put("javax.faces.ADDED_RESOURCES", addedResources);
+        }
+        if (addedResources.size() > 0 && addedResources.contains(resourceDep)) {
+            // resource annotation has already been processed, don't add another
+            // component.
+            return;
+        }
+        addedResources.add(resourceDep);
         // Create a component resource
         UIOutput resourceComponent = (UIOutput) context.getApplication()
               .createComponent("javax.faces.Output");

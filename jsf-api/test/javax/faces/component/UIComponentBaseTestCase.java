@@ -168,8 +168,13 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         root.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
         facesContext.setViewRoot(root);        
         ResourceComponent child = new ResourceComponent();
+        ResourceComponent child2 = new ResourceComponent();
         root.getChildren().add(parent);
         parent.getChildren().add(child);
+        // adding a second ResourceComponent with the exact same annotations
+        // shouldn't result in another output component being added as this
+        // is a waste
+        parent.getChildren().add(child2);
         List<UIComponent> headComponents = root.getComponentResources(facesContext, "head");
         System.out.println(headComponents.toString());
         assertTrue(headComponents.size() == 1);
@@ -191,8 +196,13 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         root.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
         facesContext.setViewRoot(root);
         ResourceComponent child = new ResourceComponent();
+        ResourceComponent child2 = new ResourceComponent();
         root.getChildren().add(parent);
         parent.getFacets().put("facet", child);
+        // adding a second ResourceComponent with the exact same annotations
+        // shouldn't result in another output component being added as this
+        // is a waste
+        parent.getFacets().put("facet2", child2);
         List<UIComponent> headComponents = root.getComponentResources(facesContext, "head");
         System.out.println(headComponents.toString());
         assertTrue(headComponents.size() == 1);

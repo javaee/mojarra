@@ -176,6 +176,7 @@
 
         <concat destfile="${build.resources.dir}/ajax.js" append="yes" fixlastline="yes">
             <filelist dir="${resources.dir}">
+                <file name="object.js"/>
                 <file name="OpenAjax.js"/>
                 <file name="ajax.js"/>
                 <file name="utils.js"/>

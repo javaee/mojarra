@@ -329,6 +329,10 @@ public class DigesterFactory {
                 "/com/sun/faces/web-facesconfig_1_2.xsd"
             },
             {
+                "web-facesconfig_2_0.xsd",
+                "/com/sun/faces/web-facesconfig_2_0.xsd"
+            },
+            {
                 "javaee_5.xsd",
                 "/com/sun/faces/javaee_5.xsd"
             },

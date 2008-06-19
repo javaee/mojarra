@@ -72,13 +72,28 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
         try {
             defaultFacesContext = FacesContext.class.getDeclaredField("defaultFacesContext");
             defaultFacesContext.setAccessible(true);
-            defaultExternalContext = ExternalContext.class.getDeclaredField("defaultExternalContext");
-            defaultExternalContext.setAccessible(true);
+        } catch (NoSuchFieldException nsfe) {
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE, "Unable to find private field named 'defaultFacesContext' in javax.faces.context.FacesContext.");
+            }
         } catch (Exception e) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE, e.toString(), e);
             }
             defaultFacesContext = null;
+        }
+
+        try {
+            defaultExternalContext = ExternalContext.class.getDeclaredField("defaultExternalContext");
+            defaultExternalContext.setAccessible(true);
+        } catch (NoSuchFieldException nsfe) {
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE, "Unable to find private field named 'defaultExternalContext' in javax.faces.context.ExternalContext.");
+            }
+        } catch (Exception e) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, e.toString(), e);
+            }
             defaultExternalContext = null;
         }
 
