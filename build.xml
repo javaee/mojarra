@@ -68,10 +68,14 @@
                 </filelist>    
                 <filelist dir="${impl.dir}">
                     <file name="build.xml"/>
-                </filelist>              
+                </filelist>
+                <!-- taking jsf-demo out of the standard build/test loop
+                     as one can't build the current source bundle as jsf-demo
+                     isn't included
                 <filelist dir="${demo.dir}">
                     <file name="build.xml"/>
-                </filelist>              
+                </filelist>
+                     -->
             </subant>
         </sequential>
     </macrodef>
