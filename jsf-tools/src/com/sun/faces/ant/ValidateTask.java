@@ -113,7 +113,7 @@ public class ValidateTask extends Task {
         factory.setValidating(true);
         factory.setNamespaceAware(true);
         File schemaSource = new File(schemaDir + File.separatorChar +
-            "web-facesconfig_1_2.xsd");
+            "web-facesconfig_2_0.xsd");
         try {
             SAXParser parser = factory.newSAXParser();
             parser.setProperty(
@@ -226,7 +226,7 @@ public class ValidateTask extends Task {
                 } catch (FileNotFoundException e) {
                     //
 		}
-            } else if (systemId.indexOf("web-facesconfig_1_2.xsd") > 0) {
+            } else if (systemId.indexOf("web-facesconfig_2_0.xsd") > 0) {
                 try {
                     source =
                     new InputSource(new FileInputStream(facesConfig));

@@ -41,7 +41,7 @@
      targetNamespace="http://java.sun.com/xml/ns/javaee"
      xmlns:javaee="http://java.sun.com/xml/ns/javaee"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-     xmlns:w3xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
      elementFormDefault="qualified"
      attributeFormDefault="unqualified"
      version="2.0">
