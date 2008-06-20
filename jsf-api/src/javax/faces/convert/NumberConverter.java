@@ -561,9 +561,6 @@ public class NumberConverter implements Converter, StateHolder {
             if (parser instanceof DecimalFormat) {
                 DecimalFormat dParser = (DecimalFormat) parser;
 
-		// Begin HACK TRINIDAD-1124
-		dParser.setParseBigDecimal(true);
-		// END HACK TRINIDAD-1124
                 DecimalFormatSymbols symbols = dParser.getDecimalFormatSymbols();
                 if (symbols.getGroupingSeparator() == '\u00a0') {
                     symbols.setGroupingSeparator(' ');
