@@ -40,6 +40,7 @@ import java.text.MessageFormat;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -48,8 +49,9 @@ import javax.annotation.Resource;
 /**
  * <p>This bean is used to track the user's guesses.</p>
  */
-public class UserNumberBean {
+public class UserNumberBean implements Serializable {
 
+    private static final long serialVersionUID = 7288057381787349138L;
     private static final Logger LOGGER = Logger.getLogger("guessnumber");
     
 
