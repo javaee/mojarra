@@ -40,11 +40,10 @@
 
 package javax.faces.component;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
@@ -168,84 +167,81 @@ public class UIOutput extends UIComponentBase
     public void setConverter(Converter converter) {
 
         this.converter = converter;
-        processResourceDependencyAnnotationForAdd(FacesContext.getCurrentInstance(), 
-                converter);
+        if (converter != null) {
+            processResourceDependencyAnnotation(FacesContext.getCurrentInstance(),
+                                                converter);
+        }
 
     }
 
-    private void processResourceDependencyAnnotationForAdd(FacesContext context,
-            Converter source) {
-        if (null == source) { 
-            return;
-        }
-        if (!source.getClass().isAnnotationPresent(ResourceDependency.class)) {
-            if (!source.getClass().isAnnotationPresent(ResourceDependencies.class)) {
-                return;
-            } else {
-                try {
-                    ResourceDependencies resourceDeps =
-                        (ResourceDependencies) source.getClass().getAnnotation(ResourceDependencies.class);
-                    Method valueMethod = resourceDeps.getClass().getMethod("value", new Class[] {});
-                    if (!valueMethod.getReturnType().isArray()) {
-                        throw new IllegalArgumentException (
-                            "@ResourceDependencies annotation does not contain Array of @ResourceDependency annotations");
-                    }
-                    Object[] values = (Object[]) valueMethod.invoke(resourceDeps, new Object[] {});
-                    for (Object value : values) {
-                        if (!(value instanceof Annotation)) {
-                            throw new IllegalArgumentException (
-                                "@ResourceDependencies annotations array does not contain an Annotation type");
-                        }
-                        Annotation annotation = (Annotation)value;
-                        if (!(annotation.annotationType() == ResourceDependency.class)) {
-                            throw new IllegalArgumentException (
-                                "@ResourceDependencies annotation contains a non @ResourceDependency annotation");
-                        }
-                        ResourceDependency resourceDep = (ResourceDependency)annotation;
-                        createComponentResource(context, resourceDep);
-                    }
-                } catch(NoSuchMethodException e) {
-                    throw new FacesException(e);
-                } catch (IllegalAccessException e) {
-                    throw new FacesException(e);
-                } catch (InvocationTargetException e) {
-                    throw new FacesException (e.getTargetException());
+   private static void processResourceDependencyAnnotation(FacesContext context,
+                                                            Object source) {
+        Class<?> sourceClass = source.getClass();
+        // NOTE - calling isAnnotationPresent and getAnnotation without
+        // caching the metadata will be a performance sink as these methods
+        // are backed by a sync'd utility method.  We'll need to come up
+        // with something better.
+        if (sourceClass.isAnnotationPresent(ResourceDependencies.class)) {
+            ResourceDependencies resourceDeps =
+                  source.getClass()
+                        .getAnnotation(ResourceDependencies.class);
+            ResourceDependency[] dependencies = resourceDeps.value();
+            if (dependencies != null) {
+                for (ResourceDependency dependency : dependencies) {
+                    createComponentResource(context, dependency);
                 }
             }
-        } else {
-            // Get the resourceMetadata from the annotation
-            ResourceDependency resourceDep = (ResourceDependency) source.getClass().getAnnotation(ResourceDependency.class);
-            createComponentResource(context, resourceDep);
+        } else if (sourceClass.isAnnotationPresent(ResourceDependency.class)) {
+            ResourceDependency resource =
+                  sourceClass.getAnnotation(ResourceDependency.class);
+            createComponentResource(context, resource);
         }
+
     }
 
-    private void createComponentResource(FacesContext context, ResourceDependency resourceDep) {
+    private static void createComponentResource(FacesContext context,
+                                                ResourceDependency resourceDep) {
+
+        //noinspection unchecked
+        List<ResourceDependency> addedResources = (List<ResourceDependency>)
+              context.getAttributes().get("javax.faces.ADDED_RESOURCES");
+        if (addedResources == null) {
+            addedResources = new ArrayList<ResourceDependency>();
+            context.getAttributes().put("javax.faces.ADDED_RESOURCES", addedResources);
+        }
+        if (addedResources.size() > 0 && addedResources.contains(resourceDep)) {
+            // resource annotation has already been processed, don't add another
+            // component.
+            return;
+        }
+        addedResources.add(resourceDep);
         // Create a component resource
-        UIOutput resourceComponent = (UIOutput)
-                context.getApplication().createComponent("javax.faces.Output");
+        UIOutput resourceComponent = (UIOutput) context.getApplication()
+              .createComponent("javax.faces.Output");
 
-        String
-            resourceName = resourceDep.name(),
-            library = resourceDep.library(),
-            target = resourceDep.target();
+        String resourceName = resourceDep.name();
+        String library = resourceDep.library();
+        String target = resourceDep.target();
 
-        if (0 == resourceName.length()) {
-            throw new IllegalArgumentException("Zero length resource name in annotation ResourceDependency");
+        if (resourceName.length() == 0) {
+            resourceName = null;
         }
 
-        if (0 == library.length()) {
+        if (library.length() == 0) {
             library = null;
         }
 
-        if (0 == target.length()) {
+        if (target.length() == 0) {
             target = null;
         }
 
         // Create a resource around it
-        ResourceHandler resourceHandler = context.getApplication().getResourceHandler();
+        ResourceHandler resourceHandler =
+              context.getApplication().getResourceHandler();
         // Imbue the component resource with the metadata
 
-        resourceComponent.setRendererType(resourceHandler.getRendererTypeForResourceName(resourceName));
+        resourceComponent
+              .setRendererType(resourceHandler.getRendererTypeForResourceName(resourceName));
         Map<String, Object> attrs = resourceComponent.getAttributes();
         attrs.put("name", resourceName);
         if (null != library) {
@@ -257,11 +253,11 @@ public class UIOutput extends UIComponentBase
 
         // Tell the viewRoot we have this resource
         if (null != target) {
-            context.getViewRoot().addComponentResource(context,
-                    resourceComponent, target);
+            context.getViewRoot()
+                  .addComponentResource(context, resourceComponent, target);
         } else {
-            context.getViewRoot().addComponentResource(context,
-                    resourceComponent);
+            context.getViewRoot()
+                  .addComponentResource(context, resourceComponent);
         }
     }
 

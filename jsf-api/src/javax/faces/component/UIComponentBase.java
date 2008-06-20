@@ -1586,9 +1586,6 @@ public abstract class UIComponentBase extends UIComponent {
     private static void processResourceDependencyAnnotation(FacesContext context,
                                                             Object source) {
         Class<?> sourceClass = source.getClass();
-        // check for both as it would be legal to have a single
-        // @ResourceDependencies and @ResourceDependency annotation
-        // defined
         // NOTE - calling isAnnotationPresent and getAnnotation without
         // caching the metadata will be a performance sink as these methods
         // are backed by a sync'd utility method.  We'll need to come up
