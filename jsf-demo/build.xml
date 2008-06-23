@@ -187,10 +187,12 @@
     <target name="copyJars" depends="prepare.dist">
         <copy file="${jsf-api.jar}" todir="${dist.home}/lib"/>
         <copy file="${jsf-impl.jar}" todir="${dist.home}/lib"/>
+        <!--
         <copy file="${impl.dir}/build/generate/conf/share/html_basic.tld"
               todir="${dist.home}/lib"/>
         <copy file="${impl.dir}/conf/share/jsf_core.tld"
               todir="${dist.home}/lib"/>
+              -->
     </target>
 
     <!-- target for building standalone JSF distribution -->
@@ -232,7 +234,7 @@
         <copy file="${impl.dir}/THIRDPARTYLICENSEREADME.txt"
               todir="${dist.home}"/>
         <copy todir="${dist.home}/lib">
-            <fileset dir="${api.dir}/build/lib"/>
+            <fileset dir="${api.dir}/build/lib" includes="*.jar"/>
         </copy>
         <ant dir="${api.dir}"
              antfile="build.xml"
@@ -241,9 +243,9 @@
         <copy todir="${dist.home}/renderkitdocs">
             <fileset dir="${api.dir}/build/generate/facesdoc"/>
         </copy>
-        <jar file="${dist.home}/docs/renderkitdocs-${impl.version}.jar">
+        <zip zipfile="${dist.home}/docs/renderkitdocs-${impl.version}.zip">
            <fileset dir="${dist.home}" includes="renderkitdocs/**"/>
-        </jar>
+        </zip>
         <antcall target="api.javadocs"/>
         <antcall target="ri.tlddocs"/>
         <!--
@@ -267,9 +269,9 @@
         <copy todir="${dist.home}/javadocs" filtering="true">
             <fileset dir="${api.dir}/build/javadocs"/>
         </copy>
-        <jar file="${dist.home}/docs/javadocs-${impl.version}.jar">
+        <zip zipfile="${dist.home}/docs/javadocs-${impl.version}.zip">
            <fileset dir="${dist.home}" includes="javadocs/**"/>
-        </jar>
+        </zip>
 
     </target>
 
@@ -282,9 +284,9 @@
         <copy todir="${dist.home}/tlddocs">
             <fileset dir="${impl.dir}/build/tlddocs"/>
         </copy>
-        <jar file="${dist.home}/docs/tlddocs-${impl.version}.jar">
+        <zip zipfile="${dist.home}/docs/tlddocs-${impl.version}.zip">
            <fileset dir="${dist.home}" includes="tlddocs/**"/>
-        </jar>
+        </zip>
 
     </target>
 
