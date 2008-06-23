@@ -24,8 +24,13 @@ public abstract class ComponentSystemEvent extends SystemEvent {
 
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) document
-     * @param component
+     * <p class="changed_added_2_0">Pass the argument
+     * <code>component</code> to the superclass constructor.</p>
+
+     * @param component the <code>UIComponent</code> reference to be
+     * passed to the superclass constructor.
+     *
+     * @throws <code>NullPointerException</code> if the argument is <code>null</code>.
      */
     public ComponentSystemEvent(UIComponent component) {
         super(component);

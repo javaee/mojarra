@@ -51,8 +51,14 @@ public class AfterAddToParentEvent extends ComponentSystemEvent {
 
 
     /**
-     * RELEASE_PENDING (edburns,roger) add documentation
-     * @param component
+     * <p class="changed_added_2_0">Instantiate a new
+     * <code>AfterAddToParentEvent</code> that indicates the argument
+     * <code>component</code> was just added to the view.</p>
+
+     * @param component the <code>UIComponent</code> that has just been
+     * added to the view.
+     *
+     * @throws <code>NullPointerException</code> if the argument is <code>null</code>.
      */
     public AfterAddToParentEvent(UIComponent component) {
         super(component);
@@ -62,7 +68,9 @@ public class AfterAddToParentEvent extends ComponentSystemEvent {
     // --------------------------------------- Methods from ComponentSystemEvent
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) add documentation
+     * <p class="changed_added_2_0">Returns <code>true</code> if and
+     * only if the argument <code>listener</code> is an instance of
+     * {@link SystemEventListener}.</p>
      * @param listener
      */
     @Override

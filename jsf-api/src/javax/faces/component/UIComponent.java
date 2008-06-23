@@ -793,12 +793,13 @@ private void doFind(FacesContext context, String clientId) {
 
 
     /**
-     * <p>Return a mutable <code>Map</code> representing the facet
-     * {@link UIComponent}s associated with this {@link UIComponent},
-     * keyed by facet name (which must be a String).  The returned
-     * implementation must support all of the standard and optional
-     * <code>Map</code> methods, plus support the following additional
-     * requirements:</p>
+     * <p><span class="changed_modified_2_0">Return</span> a mutable
+     * <code>Map</code> representing the facet {@link UIComponent}s
+     * associated with this {@link UIComponent}, keyed by facet name
+     * (which must be a String).  The returned implementation must
+     * support all of the standard and optional <code>Map</code>
+     * methods, plus support the following additional requirements:</p>
+
      * <ul>
      * <li>The <code>Map</code> implementation must implement
      *     the <code>java.io.Serializable</code> interface.</li>
@@ -816,8 +817,23 @@ private void doFind(FacesContext context, String clientId) {
      *     non-null, the component must first be removed from its previous
      *     parent (where it may have been either a child or a facet).</li>
      *     </ul></li>
-     *     <li>RELEASE_PENDING (edburns,rogerk) document ResourceDependency
-     *          requirement of FacetMap.put().</li>
+     *     <li class="changed_added_2_0">
+
+     *     <p>The newly added component must be inspected for the
+     *     presence of the {@link
+     *     javax.faces.application.ResourceDependency} annotation.  If
+     *     the annotation is present, the action described in the
+     *     javadoc for that class must be taken on the newly added
+     *     component instance.  If the <code>ResourceDependency</code>
+     *     annotation is not present, the component must be inspected
+     *     for the presence of the {@link
+     *     javax.faces.application.ResourceDependencies} annotation.  If
+     *     the annotation is present, the action described in the
+     *     javadoc for the <code>ResourceDependencies</code> class must
+     *     be taken on the newly added component instance.</p>
+
+     * </li>
+
      * <li>Whenever an existing facet {@link UIComponent} is removed:
      *     <ul>
      *     <li>The <code>parent</code> property of the facet must be
@@ -1224,21 +1240,40 @@ private void doFind(FacesContext context, String clientId) {
     }
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) document
-     * @param facesEventClass
-     * @param listener
+     * <p class="changed_added_2_0">Remove the listener instance *
+     *     referenced by argument <code>componentListener</code> as a *
+     *     listener for events of type <code>eventClass</code>
+     *     originating * from this specific instance of
+     *     <code>UIComponent</code>.  When doing the comparison to
+     *     determine if an existing listener is equal to the argument
+     *     <code>componentListener</code> (and thus must be removed),
+     *     the <code>equals()</code> method on the <em>existing
+     *     listener</em> must be invoked, passing the argument
+     *     <code>componentListener</code>, rather than the other way
+     *     around.</p>
+     *
+     * @param eventClass the <code>Class</code> of event for which
+     * <code>listener</code> must be removed.
+     * @param componentListener the implementation of {@link
+     * ComponentSystemEventListener} whose {@link
+     * ComponentSystemEventListener#processEvent} method must no longer be called
+     * when events of type <code>eventClass</code> are fired.
+     *
+     * @throws <code>NullPointerException</code> if any of the
+     * arguments are <code>null</code>.
+
      */
-    public void unsubscribeFromEvent(Class<? extends SystemEvent> facesEventClass,
-                                     ComponentSystemEventListener listener) {
-        List<SystemEventListener> listeners = getListenersForEventClass(facesEventClass);
+    public void unsubscribeFromEvent(Class<? extends SystemEvent> eventClass,
+                                     ComponentSystemEventListener componentListener) {
+        List<SystemEventListener> listeners = getListenersForEventClass(eventClass);
         if (listeners != null && !listeners.isEmpty()) {
             for (Iterator<SystemEventListener> i = listeners.iterator(); i.hasNext();) {
                 SystemEventListener item = i.next();
                 // order of the equals operation is important here
                 // it must called against 'item' to ensure the proper
-                // equals method is invoked, otherwise the listener will
+                // equals method is invoked, otherwise the componentListener will
                 // not be removed
-                if (item.equals(listener)) {
+                if (item.equals(componentListener)) {
                     i.remove();
                     break;
                 }
@@ -1250,14 +1285,23 @@ private void doFind(FacesContext context, String clientId) {
     private Map<Class<? extends SystemEvent>, List<SystemEventListener>> listenersByEventClass;
 
     /**
-     * RELEASE_PENDING (edburns,roger) document
-     * @param facesEventClass
+     * <p class="changed_added_2_0">Return the
+     * <code>SystemEventListener</code> instances registered on this
+     * <code>UIComponent</code> instance that are interested in events
+     * of type <code>eventClass</code>.</p>
+
+     * @param eventClass the <code>Class</code> of event for which the
+     * listeners must be returned.
+
      */
-    public List<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> facesEventClass) {
+    public List<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> eventClass) {
+
+	// RELEASE_PENDING: make this return immutable Set<SystemEventListener>
+	// make this return the empty set if no such listeners are found.
 
         List<SystemEventListener> result = null;
         if (listenersByEventClass != null) {
-            result = listenersByEventClass.get(facesEventClass);
+            result = listenersByEventClass.get(eventClass);
         }
         return result;
 
