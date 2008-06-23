@@ -87,6 +87,7 @@
         <delete dir="${dist.dir}"/>
         <call.modules target="clean"/>        
         <ant dir="jsf-demo" target="clean" />
+        <ant dir="updatecenter" target="updatecenter.clean" />
     </target>  
     
     <target name="main" description="Build Mojarra">
@@ -316,6 +317,10 @@
                      value="com.sun.faces.tools.GlassfishUpdater" />
         </manifest>
       </jar>
+    </target>
+
+    <target name="updatecenter" depends="main">
+      <ant dir="updatecenter" target="updatecenter.main"/>
     </target>
 
 </project>
