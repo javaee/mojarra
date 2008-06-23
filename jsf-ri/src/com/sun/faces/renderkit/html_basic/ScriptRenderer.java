@@ -52,9 +52,8 @@ import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.ListenerFor;
 
 /**
- * RELEASE_PENDING (rlubke)
- * 
- * PENDING(edburns): subscribe for BeforeRemoveFromParent
+ * <p>This <code>Renderer</code> handles the rendering of external <code>script</code>
+ * references.</p>
  */
 @ListenerFor(systemEventClass=AfterAddToParentEvent.class, sourceClass=UIOutput.class)
 public class ScriptRenderer extends Renderer implements ComponentSystemEventListener {
