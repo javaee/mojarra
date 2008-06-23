@@ -1,0 +1,51 @@
+<project name="mojarra-updatecenter" default="updatecenter.main" basedir=".">
+
+    <property file="${user.home}/build.properties"/>
+    <property file="../build.properties"/>
+
+    <import file="${jsf.build.home}/common/ant/common.xml"/>
+
+
+    <property name="build_main" value="build/jsf2.0"/>
+    <property name="build_conf" value="build/jsf2.0_configurator"/>
+    <property name="build_install" value="build/jsf2.0_installer"/>
+    <property name="ucversion" value="01_00_00"/>
+
+
+    <target name="updatecenter.main" 
+      depends="updatecenter.build, updatecenter.dist"/>
+
+    <!-- create the raw files necessary for the distro, but not packed into jars -->
+    <target name="updatecenter.build">
+      <mkdir dir="build/jsf2.0/info"/>
+      <copy file="conf/info.xml" todir="build/jsf2.0/info"/>
+      <mkdir dir="${build_main}/module"/>
+      <mkdir dir="${build_install}/META-INF/services"/>
+      <copy file="conf/com.sun.appserv.addons.Installer" todir="${build_install}/META-INF/services"/>
+      <copy file="../jsf-api/build/lib/jsf-api.jar" todir="${build_install}"/>
+      <copy file="../jsf-ri/build/lib/jsf-impl.jar" todir="${build_install}"/>
+      <javac srcdir="src" destdir="${build_install}" classpath="lib/sdk-addon-api-0.2.jar"/>
+
+      <mkdir dir="build/jsf2.0_configurator/META-INF/services"/>
+      <copy file="conf/com.sun.appserv.addons.Configurator" todir="build/jsf2.0_configurator/META-INF/services"/>
+      <javac srcdir="src" destdir="build/jsf2.0_configurator" classpath="lib/sdk-addon-api-0.2.jar"/>
+    </target>
+
+    <!-- Pack the distro into the single distribution jar -->
+    <target name="updatecenter.dist">
+      <mkdir dir="dist"/>
+      <jar destfile="dist/jsf2.0_configurator_${ucversion}.jar" basedir="${build_conf}"/>
+      <copy file="dist/jsf2.0_configurator_${ucversion}.jar" todir="${build_install}"/>
+      <jar destfile="dist/jsf2.0_installer.jar" basedir="${build_install}"/>
+      <copy file="dist/jsf2.0_installer.jar" todir="${build_main}/module"/>
+      <jar destfile="dist/jsf2.0.nbm" basedir="${build_main}"/>
+    </target>
+
+    <target name="updatecenter.clean">
+      <delete dir="build"/>
+      <delete dir="dist"/>
+    </target>
+
+</project>
+
+
