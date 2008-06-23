@@ -1311,7 +1311,9 @@ public abstract class Application {
 
         List<SystemEventListener> listeners =
               getListeners(systemEventClass, sourceClass);
-        listeners.add(listener);
+        if (!listeners.contains(listener)) {
+            listeners.add(listener);
+        }
 
     }
 

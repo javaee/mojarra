@@ -1218,7 +1218,9 @@ private void doFind(FacesContext context, String clientId) {
             listenersForEventClass = new ArrayList<SystemEventListener>(3);
             listenersByEventClass.put(eventClass, listenersForEventClass);
         }
-        listenersForEventClass.add(facesLifecycleListener);
+        if (!listenersForEventClass.contains(facesLifecycleListener)) {
+            listenersForEventClass.add(facesLifecycleListener);
+        }
     }
 
     /**
