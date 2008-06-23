@@ -2141,7 +2141,6 @@
                         SystemEventListener implementation class that will be
                         called when events of the type specified by the
                         "system-event-class" are sent by the runtime.
-                        RELEASE_PENDING (edburns,roger) review above
 
                     </xsd:documentation>
                 </xsd:annotation>
@@ -2156,7 +2155,6 @@
                         which events will be delivered to the class whose fully
                         qualified class name is given by the
                         "system-event-listener-class" element.
-                        RELEASE_PENDING (edburns,roger) review above
 
                     </xsd:documentation>
                 </xsd:annotation>
@@ -2171,7 +2169,6 @@
                         source for the event to be delivered to the class whose
                         fully qualified class name is given by the
                         "system-event-listener-class" element.
-                        RELEASE_PENDING (edburns,roger) review above
 
                     </xsd:documentation>
                 </xsd:annotation>
