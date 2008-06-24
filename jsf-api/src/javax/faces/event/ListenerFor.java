@@ -35,15 +35,20 @@ import java.lang.annotation.Target;
 @Target(value=ElementType.TYPE)
 public @interface ListenerFor {
 
+    /* RELEASE_PENDING (edburns,rogerk) should this state that the default
+     *  implementation doesn't support subclass relationships?  
+     * edburns: yes.  I went a step further and said the impl must not honor
+     * subclass relationships.
+     */ 
+
+
     /**
      * <p class="changed_added_2_0">The kind of system event for which
      * this class will be installed as a listener.  The implementation
-     * only supports exact matches on the <code>Class</code> and does
+     * only supports exact matches on the <code>Class</code> and must
      * not honor subclass relationships.</p>
-     *
-     * RELEASE_PENDING (edburns,rogerk) should this state that the default
-     *  implementation doesn't support subclass relationships?  
-     */ 
+     */
+
     public Class<? extends SystemEvent> systemEventClass();
 
 

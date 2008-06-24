@@ -52,9 +52,8 @@ import javax.faces.event.ListenerFor;
 import javax.faces.render.Renderer;
 
 /**
- * RELEASE_PENDING (rlubke) document
- * PENDING(edburns): subscribe for BeforeRemoveFromParent
- * 
+ * <p>This <code>Renderer</code> handles the rendering of external <code>stylesheet</code>
+ * references.</p>
  */
 @ListenerFor(systemEventClass=AfterAddToParentEvent.class, sourceClass=UIOutput.class)
 public class StylesheetRenderer extends Renderer implements ComponentSystemEventListener {

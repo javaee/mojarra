@@ -307,7 +307,9 @@ public class ResourceCache {
                 URL url = urls.nextElement();
                 if (!"jar".equals(url.getProtocol())) {
                     // RELEASE_PENDING - should be a better way to handle this case
-                    if (url.toString().contains("/WEB-INF/classes/META-INF/resources")) {
+                    String urlString = url.toString();
+                    if (urlString.contains("/WEB-INF/classes/META-INF/resources")
+                        || urlString.contains("jsf-ri-runtime.xml")) {
                         continue;
                     }
                     if (LOGGER.isLoggable(Level.WARNING)) {
@@ -317,9 +319,6 @@ public class ResourceCache {
                     }
                     continue;
                 }
-                // don't monitor jsf-impl.jar
-                // RELEASE_PENDING clean this up - if we change the artifact it would
-                // have to be changed here.
                 if (url.toString().contains("jsf-impl.jar")) {
                     continue;
                 }

@@ -136,8 +136,4 @@ javax.faces.Ajax = function() {
         return viewState;
 
     }
-
-    this.ajaxRequest = function(element, options) {
-
-    }
 } 

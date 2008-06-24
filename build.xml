@@ -68,10 +68,14 @@
                 </filelist>    
                 <filelist dir="${impl.dir}">
                     <file name="build.xml"/>
-                </filelist>              
+                </filelist>
+                <!-- taking jsf-demo out of the standard build/test loop
+                     as one can't build the current source bundle as jsf-demo
+                     isn't included
                 <filelist dir="${demo.dir}">
                     <file name="build.xml"/>
-                </filelist>              
+                </filelist>
+                     -->
             </subant>
         </sequential>
     </macrodef>
@@ -83,6 +87,7 @@
         <delete dir="${dist.dir}"/>
         <call.modules target="clean"/>        
         <ant dir="jsf-demo" target="clean" />
+        <ant dir="updatecenter" target="updatecenter.clean" />
     </target>  
     
     <target name="main" description="Build Mojarra">
@@ -312,6 +317,10 @@
                      value="com.sun.faces.tools.GlassfishUpdater" />
         </manifest>
       </jar>
+    </target>
+
+    <target name="updatecenter" depends="main">
+      <ant dir="updatecenter" target="updatecenter.main"/>
     </target>
 
 </project>

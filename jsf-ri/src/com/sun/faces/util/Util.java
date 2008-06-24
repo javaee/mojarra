@@ -495,8 +495,7 @@ public class Util {
                 Class<? extends SystemEvent> eventClass =
                       listenerFor.systemEventClass();
                 source.subscribeToEvent(eventClass, (ComponentSystemEventListener) source);
-            }
-            if (source.getClass().isAnnotationPresent(ListenersFor.class)) {
+            } else if (source.getClass().isAnnotationPresent(ListenersFor.class)) {
                 ListenersFor listenersFor = source.getClass().getAnnotation(ListenersFor.class);
                 ListenerFor[] listeners = listenersFor.value();
                 if (listeners != null) {

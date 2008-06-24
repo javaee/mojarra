@@ -128,7 +128,7 @@ public class ExternalContextImpl extends ExternalContext {
         if (config
               .isOptionEnabled(BooleanWebContextInitParameter.SendPoweredByHeader)) {
             ((HttpServletResponse) response)
-                  .addHeader("X-Powered-By", "JSF/1.2");
+                  .addHeader("X-Powered-By", "JSF/2.0");
         }
         
     }

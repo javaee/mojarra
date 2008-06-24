@@ -31,11 +31,17 @@ public class ViewMapCreatedEvent extends ComponentSystemEvent {
 
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) document
-     * @param component
+     * <p class="changed_added_2_0">Instantiate a new
+     * <code>ViewMapCreatedEvent</code> that indicates the argument
+     * <code>root</code> was just associated with its view map.</p>
+
+     * @param root the <code>UIViewRoot</code> for which a view map has
+     * just been created.
+     *
+     * @throws <code>NullPointerException</code> if the argument is <code>null</code>.
      */
-    public ViewMapCreatedEvent(UIViewRoot component) {
-        super(component);
+    public ViewMapCreatedEvent(UIViewRoot root) {
+        super(root);
     }
 
 }

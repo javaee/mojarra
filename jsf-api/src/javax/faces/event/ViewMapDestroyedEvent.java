@@ -33,11 +33,17 @@ public class ViewMapDestroyedEvent extends ComponentSystemEvent {
 
 
     /**
-     * RELEASE_PENDING (edburs,rogerk) document
-     * @param component
+     * <p class="changed_added_2_0">Instantiate a new
+     * <code>ViewMapDestroydEvent</code> that indicates the argument
+     * <code>root</code> just had its associated view map destroyed.</p>
+
+     * @param root the <code>UIViewRoot</code> for which the view map has
+     * just been destroyed.
+     *
+     * @throws <code>NullPointerException</code> if the argument is <code>null</code>.
      */
-    public ViewMapDestroyedEvent(UIViewRoot component) {
-        super(component);
+    public ViewMapDestroyedEvent(UIViewRoot root) {
+        super(root);
     }
 
 }
