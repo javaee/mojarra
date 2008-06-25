@@ -424,6 +424,11 @@
                     </xsd:documentation>
                 </xsd:annotation>
             </xsd:element>
+            <xsd:element name="system-event-listener"
+                         type="javaee:faces-config-system-event-listenerType"
+                         minOccurs="0"
+                         maxOccurs="unbounded">
+            </xsd:element>
             <xsd:element 
                 name="locale-config"
                 type="javaee:faces-config-locale-configType"/>
@@ -1096,11 +1101,6 @@
                     
                     </xsd:documentation>
             </xsd:annotation>                
-            </xsd:element>
-            <xsd:element name="faces-lifecycle-listener" 
-                         type="javaee:faces-config-lifecycle-listenerType" 
-                         minOccurs="0" 
-                         maxOccurs="unbounded">
             </xsd:element>
             <xsd:element name="lifecycle-extension"
                          type="javaee:faces-config-lifecycle-extensionType"
@@ -2115,13 +2115,13 @@
 
     <!-- **************************************************** -->
 
-    <xsd:complexType name="faces-config-lifecycle-listenerType">
+    <xsd:complexType name="faces-config-system-event-listenerType">
         <xsd:annotation>
             <xsd:documentation>
 
-                The presence of this element within the "lifecycle" element in
+                The presence of this element within the "application" element in
                 an application configuration resource file indicates the
-                developer wants to add an application scoped listener to this
+                developer wants to add an SystemEventListener to this
                 application instance.  Elements nested within this element allow
                 selecting the kinds of events that will be delivered to the
                 listener instance, and allow selecting the kinds of classes that
@@ -2131,32 +2131,30 @@
             </xsd:documentation>
         </xsd:annotation>
         <xsd:sequence>
-            <xsd:element name="faces-lifecycle-listener-class"
+            <xsd:element name="system-event-listener-class"
                          type="javaee:fully-qualified-classType">
                 <xsd:annotation>
                     <xsd:documentation>
 
-                        The "faces-lifecycle-listener-class" element contains
+                        The "system-event-listener-class" element contains
                         the fully qualified class name of the concrete
-                        FacesLifecycleListener implementation class that will be
+                        SystemEventListener implementation class that will be
                         called when events of the type specified by the
-                        "faces-lifecycle-event-class" are sent by the runtime.
-                        If no "faces-lifecycle-event-class" is specified, all
-                        events of all types are delivered to the listener.
+                        "system-event-class" are sent by the runtime.
 
                     </xsd:documentation>
                 </xsd:annotation>
             </xsd:element>
-            <xsd:element name="faces-lifecycle-event-class" minOccurs="0"
+            <xsd:element name="system-event-class" 
                          type="javaee:fully-qualified-classType">
                 <xsd:annotation>
                     <xsd:documentation>
 
-                        The "faces-lifecycle-event-class" element, if present,
-                        contains the fully qualified class name of the
-                        FacesEvent subclass for which events will be delivered
-                        to the class whose fully qualified class name is given
-                        by the "faces-lifecycle-listener-class" element.
+                        The "system-event-class" element contains the fully
+                        qualified class name of the SystemEvent subclass for
+                        which events will be delivered to the class whose fully
+                        qualified class name is given by the
+                        "system-event-listener-class" element.
 
                     </xsd:documentation>
                 </xsd:annotation>
@@ -2170,7 +2168,7 @@
                         fully qualified class name of the class that will be the
                         source for the event to be delivered to the class whose
                         fully qualified class name is given by the
-                        "faces-lifecycle-listener-class" element.
+                        "system-event-listener-class" element.
 
                     </xsd:documentation>
                 </xsd:annotation>

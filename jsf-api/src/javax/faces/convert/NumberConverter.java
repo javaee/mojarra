@@ -560,6 +560,7 @@ public class NumberConverter implements Converter, StateHolder {
             // See:  http://bugs.sun.com/view_bug.do?bug_id=4510618
             if (parser instanceof DecimalFormat) {
                 DecimalFormat dParser = (DecimalFormat) parser;
+
                 DecimalFormatSymbols symbols = dParser.getDecimalFormatSymbols();
                 if (symbols.getGroupingSeparator() == '\u00a0') {
                     symbols.setGroupingSeparator(' ');

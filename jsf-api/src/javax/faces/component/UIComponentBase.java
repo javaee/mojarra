@@ -36,8 +36,6 @@
 
 package javax.faces.component;
 
-import java.lang.annotation.Annotation;
-
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
@@ -1519,6 +1517,160 @@ public abstract class UIComponentBase extends UIComponent {
     }
 
 
+    private static void doPostAddProcessing(FacesContext context,
+                                            UIComponent added) {
+        if (!isPostbackAndRestoreView(context)) {
+            context.getApplication()
+                  .publishEvent(AfterAddToParentEvent.class, added);
+            processResourceDependencyOnComponentAndMaybeRenderer(context,
+                                                                 added);
+        }
+    }
+
+    private static final String IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME =
+          "javax.faces.IS_POSTBACK_AND_RESTORE_VIEW";
+
+    private static void clearPostbackAndRestoreViewCache(FacesContext context) {
+        Map<Object, Object> contextMap = context.getAttributes();
+        contextMap.remove(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME);
+
+    }
+
+    private static boolean isPostbackAndRestoreView(FacesContext context) {
+        Boolean result;
+        Map<Object, Object> contextMap = context.getAttributes();
+        result = (Boolean) contextMap
+              .get(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME);
+        if (result != null) {
+            return result;
+        } else {
+            result = getResponseStateManager(context,
+                                             context.getViewRoot().getRenderKitId()).isPostback(context)
+                     && context.getCurrentPhaseId().equals(PhaseId.RESTORE_VIEW);
+            contextMap.put(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME,
+                           result ? Boolean.TRUE : Boolean.FALSE);
+        }
+        return result;
+    }
+
+    private static ResponseStateManager getResponseStateManager(
+          FacesContext context, String renderKitId)
+          throws FacesException {
+
+        assert (null != renderKitId);
+        assert (null != context);
+
+        RenderKit renderKit = context.getRenderKit();
+        if (renderKit == null) {
+            RenderKitFactory factory = (RenderKitFactory) FactoryFinder
+                  .getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+            if (factory == null) {
+                throw new IllegalStateException();
+            }
+            renderKit = factory.getRenderKit(context, renderKitId);
+        }
+        return renderKit.getResponseStateManager();
+
+    }
+
+
+    private static void processResourceDependencyOnComponentAndMaybeRenderer(
+          FacesContext context,
+          UIComponent added) {
+        processResourceDependencyAnnotation(context, added);
+        Renderer renderer = added.getRenderer(context);
+        if (null != renderer) {
+            processResourceDependencyAnnotation(context, renderer);
+        }
+    }
+
+    private static void processResourceDependencyAnnotation(FacesContext context,
+                                                            Object source) {
+        Class<?> sourceClass = source.getClass();
+        // NOTE - calling isAnnotationPresent and getAnnotation without
+        // caching the metadata will be a performance sink as these methods
+        // are backed by a sync'd utility method.  We'll need to come up
+        // with something better.
+        if (sourceClass.isAnnotationPresent(ResourceDependencies.class)) {
+            ResourceDependencies resourceDeps =
+                  source.getClass()
+                        .getAnnotation(ResourceDependencies.class);
+            ResourceDependency[] dependencies = resourceDeps.value();
+            if (dependencies != null) {
+                for (ResourceDependency dependency : dependencies) {
+                    createComponentResource(context, dependency);
+                }
+            }
+        } else if (sourceClass.isAnnotationPresent(ResourceDependency.class)) {
+            ResourceDependency resource =
+                  sourceClass.getAnnotation(ResourceDependency.class);
+            createComponentResource(context, resource);
+        }
+
+    }
+
+    private static void createComponentResource(FacesContext context,
+                                                ResourceDependency resourceDep) {
+
+        //noinspection unchecked
+        List<ResourceDependency> addedResources = (List<ResourceDependency>)
+              context.getAttributes().get("javax.faces.ADDED_RESOURCES");
+        if (addedResources == null) {
+            addedResources = new ArrayList<ResourceDependency>();
+            context.getAttributes().put("javax.faces.ADDED_RESOURCES", addedResources);
+        }
+        if (addedResources.size() > 0 && addedResources.contains(resourceDep)) {
+            // resource annotation has already been processed, don't add another
+            // component.
+            return;
+        }
+        addedResources.add(resourceDep);
+        // Create a component resource
+        UIOutput resourceComponent = (UIOutput) context.getApplication()
+              .createComponent("javax.faces.Output");
+
+        String resourceName = resourceDep.name();
+        String library = resourceDep.library();
+        String target = resourceDep.target();
+
+        if (resourceName.length() == 0) {
+            resourceName = null;
+        }
+
+        if (library.length() == 0) {
+            library = null;
+        }
+
+        if (target.length() == 0) {
+            target = null;
+        }
+
+        // Create a resource around it
+        ResourceHandler resourceHandler =
+              context.getApplication().getResourceHandler();
+        // Imbue the component resource with the metadata
+
+        resourceComponent
+              .setRendererType(resourceHandler.getRendererTypeForResourceName(resourceName));
+        Map<String, Object> attrs = resourceComponent.getAttributes();
+        attrs.put("name", resourceName);
+        if (null != library) {
+            attrs.put("library", library);
+        }
+        if (null != target) {
+            attrs.put("target", target);
+        }
+
+        // Tell the viewRoot we have this resource
+        if (null != target) {
+            context.getViewRoot()
+                  .addComponentResource(context, resourceComponent, target);
+        } else {
+            context.getViewRoot()
+                  .addComponentResource(context, resourceComponent);
+        }
+    }
+
     // --------------------------------------------------------- Private Classes
 
     // For state saving
@@ -2042,183 +2194,8 @@ public abstract class UIComponentBase extends UIComponent {
                 return (previous);
             }
         }
-        
-        private void doPostAddProcessing(FacesContext context, UIComponent added) {
-            if (!isPostbackAndRestoreView(context)) {
-                context.getApplication().publishEvent(AfterAddToParentEvent.class, added);
-                processResourceDependencyOnComponentAndMaybeRenderer(context,
-                        added);
-            }
-        }
-        
-        private static final String IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME = "com.sun.faces.IS_POSTBACK_AND_RESTORE_VIEW";
-        
-        private void clearPostbackAndRestoreViewCache(FacesContext context) {
-            Map<Object, Object> contextMap = context.getAttributes();
-            contextMap.remove(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME);
-                        
-        }
-        
-        private boolean isPostbackAndRestoreView(FacesContext context) {
-            Boolean result;
-            Map<Object, Object> contextMap = context.getAttributes();
-            result = (Boolean) contextMap.get(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME);
-            if (result != null) {
-                return result;
-            } else {
-                result = getResponseStateManager(context, 
-                    context.getViewRoot().getRenderKitId()).isPostback(context) &&
-                    context.getCurrentPhaseId().equals(PhaseId.RESTORE_VIEW);
-                contextMap.put(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME,
-                               result ? Boolean.TRUE : Boolean.FALSE);
-            }
-            return result;
-        }
-        
-    private static ResponseStateManager getResponseStateManager(
-            FacesContext context, String renderKitId)
-            throws FacesException {
-
-        assert (null != renderKitId);
-        assert (null != context);
-
-        RenderKit renderKit = context.getRenderKit();
-        if (renderKit == null) {
-            RenderKitFactory factory = (RenderKitFactory) FactoryFinder
-                 .getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-            if (factory == null) {
-                throw new IllegalStateException();
-            }
-            renderKit = factory.getRenderKit(context, renderKitId);
-        }
-        return renderKit.getResponseStateManager();
-
     }
         
-        
-        private void processResourceDependencyOnComponentAndMaybeRenderer(FacesContext context, 
-                UIComponent added) {
-            processResourceDependencyAnnotation(context, added, null);
-            Renderer renderer = added.getRenderer(context);
-            if (null != renderer) {
-                processResourceDependencyAnnotation(context, added, renderer);
-            }
-        }
-        
-        private void processResourceDependencyAnnotation(FacesContext context, 
-                UIComponent component, Renderer renderer) {
-            // check for both as it would be legal to have a single
-            // @ResourceDependencies and @ResourceDependency annotation
-            // defined
-            // NOTE - calling isAnnotationPresent and getAnnotation without
-            // caching the metadata will be a performance sink as these methods
-            // are backed by a sync'd utility method.  We'll need to come up
-            // with something better.
-            UIOutput resourceComponent = null;
-            Object source = (null == renderer) ? component : renderer;
-            if (!source.getClass().isAnnotationPresent(ResourceDependency.class)) {
-                if (!source.getClass().isAnnotationPresent(ResourceDependencies.class)) {
-                    return;
-                } else {
-                    try {
-                        ResourceDependencies resourceDeps =
-                            (ResourceDependencies) source.getClass().getAnnotation(ResourceDependencies.class);
-                        Method valueMethod = resourceDeps.getClass().getMethod("value", new Class[] {});
-                        if (!valueMethod.getReturnType().isArray()) {
-                            throw new IllegalArgumentException (
-                                "@ResourceDependencies annotation does not contain Array of @ResourceDependency annotations");
-                        }
-                        Object[] values = (Object[]) valueMethod.invoke(resourceDeps, new Object[] {});
-                        for (Object value : values) {
-                            if (!(value instanceof Annotation)) {
-                                throw new IllegalArgumentException (
-                                    "@ResourceDependencies annotations array does not contain an Annotation type");
-                            }
-                            Annotation annotation = (Annotation)value;
-                            if (!(annotation.annotationType() == ResourceDependency.class)) {
-                                throw new IllegalArgumentException (
-                                    "@ResourceDependencies annotation contains a non @ResourceDependency annotation");
-                            }
-                            ResourceDependency resourceDep = (ResourceDependency)annotation;
-                            createComponentResource(context, component, resourceDep);
-                        }
-                    } catch(NoSuchMethodException e) {
-                        throw new FacesException(e);
-                    } catch (IllegalAccessException e) {
-                        throw new FacesException(e);
-                    } catch (InvocationTargetException e) {
-                        throw new FacesException (e.getTargetException());
-                    }
-                }
-            } else {
-                // Get the resourceMetadata from the annotation
-                ResourceDependency resourceDep = (ResourceDependency) source.getClass().getAnnotation(ResourceDependency.class);
-                createComponentResource(context, component, resourceDep);
-            }
-        }
-
-        private static void createComponentResource(FacesContext context, 
-                UIComponent source, ResourceDependency resourceDep) {
-
-            // Create a component resource
-            UIOutput resourceComponent = (UIOutput) context.getApplication().createComponent("javax.faces.Output");
-
-            String
-                resourceName = resourceDep.name(),
-                library = resourceDep.library(),
-                target = resourceDep.target();
-            
-            // If the enclosing entity for this expression is itself 
-            // a resource, the "this" syntax for the library name must
-            // be supported.
-            if (null != library && library.equals("this")) {
-                Resource componentResource = (Resource)
-                   source.getAttributes().get(Resource.COMPONENT_RESOURCE_KEY);
-                if (null != componentResource) {
-                    String libName = null;
-                    if (null != (libName = componentResource.getLibraryName())) {
-                        library = libName;
-                    }
-                }
-
-            }
-            
-
-            if (resourceName.length() == 0) {
-                resourceName = null;
-            }
-
-            if (library.length() == 0) {
-                library = null;
-            }
-
-            if (target.length() == 0) {
-                target = null;
-            }
-
-            // Create a resource around it
-            ResourceHandler resourceHandler = context.getApplication().getResourceHandler();
-            // Imbue the component resource with the metadata
-
-            resourceComponent.setRendererType(resourceHandler.getRendererTypeForResourceName(resourceName));
-            Map<String, Object> attrs = resourceComponent.getAttributes();
-            attrs.put("name", resourceName);
-            if (null != library) {
-                attrs.put("library", library);
-            }
-            if (null != target) {
-                attrs.put("target", target);
-            }
-
-            // Tell the viewRoot we have this resource
-            if (null != target) {
-                context.getViewRoot().addComponentResource(context, resourceComponent, target);
-            } else {
-                context.getViewRoot().addComponentResource(context, resourceComponent);
-            }
-        }
-    }
-
 
     // Private implementation of ListIterator for ChildrenList
     private static class ChildrenListIterator implements ListIterator<UIComponent> {
@@ -2366,10 +2343,12 @@ public abstract class UIComponentBase extends UIComponent {
     private static class FacetsMap extends HashMap<String, UIComponent> {
 
         UIComponent component;
+        private boolean isViewRoot;
 
         public FacetsMap(UIComponent component) {
             super(3, 1.0f);
             this.component = component;
+            isViewRoot = (component instanceof UIViewRoot);
         }
 
         public void clear() {
@@ -2403,7 +2382,16 @@ public abstract class UIComponentBase extends UIComponent {
             }
             eraseParent(value);
             value.setParent(component);
-            return (super.put(key, value));
+            // Make sure to clear our cache if the component is a UIViewRoot and
+            // it does not yet have children.  This will be the case when
+            // the UIViewRoot has been freshly instantiated.
+            FacesContext ctx = FacesContext.getCurrentInstance();
+            if (this.size() == 0 && isViewRoot) {
+                clearPostbackAndRestoreViewCache(ctx);
+            }
+            UIComponent result = super.put(key, value);
+            doPostAddProcessing(ctx, value);
+            return (result);
         }
 
         public void putAll(Map<? extends String, ? extends UIComponent> map) {

@@ -70,6 +70,7 @@ class InitFacesContext extends FacesContext {
     private ExternalContext ec;
     private UIViewRoot viewRoot;
     private FacesContext orig;
+    private Map<Object,Object> attributes;
 
     public InitFacesContext(ServletContext sc) {
         ec = new ServletContextAdapter(sc);
@@ -142,8 +143,21 @@ class InitFacesContext extends FacesContext {
     public void addMessage(String clientId, FacesMessage message) { }
 
     public void release() {
-        setCurrentInstance(orig);      
+        setCurrentInstance(orig);
+        if (null != attributes) {
+            attributes.clear();
+            attributes = null;
+        }
     }
+    
+    @Override
+    public Map<Object, Object> getAttributes() {
+        if (attributes == null) {
+            attributes = new HashMap<Object,Object>();
+        }
+        return attributes;
+    }
+    
 
     public void renderResponse() { }
 

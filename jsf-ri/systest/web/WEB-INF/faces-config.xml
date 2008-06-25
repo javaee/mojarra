@@ -56,6 +56,9 @@
       <base-name>com.sun.faces.systest.resources.ResourceBundle03</base-name>
         <var>resourceBundle03</var>
     </resource-bundle>
+      <view-handler>
+          com.sun.facelets.FaceletViewHandler
+      </view-handler>
   </application>
   <factory>
     <application-factory>com.sun.faces.systest.lifecycle.ApplicationFactoryWrapper</application-factory>

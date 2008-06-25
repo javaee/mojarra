@@ -97,17 +97,24 @@ import java.lang.annotation.Target;
 public @interface ResourceDependency {
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) Add docs
+     * <p class="changed_added_2_0">The <em>resourceName</em> of the
+     * resource pointed to by this <code>ResourceDependency</code>.</p>
      */
     public String name();
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) Add docs
+     * <p class="changed_added_2_0">The <em>libraryName</em> in which
+     * the resource pointed to by this <code>ResourceDependency</code>
+     * resides.  If not specified, defaults to the empty string.</p>
      */
     public String library() default "";
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) Add docs
+     * <p class="changed_added_2_0">The value given for this attribute
+     * will be passed as the "target" argument to {@link
+     * javax.faces.component.UIViewRoot#addComponentResource(javax.faces.context.FacesContext, javax.faces.component.UIComponent, java.lang.String)}.  If this attribute is specified, {@link
+ * javax.faces.component.UIViewRoot#addComponentResource(javax.faces.context.FacesContext,
+ * javax.faces.component.UIComponent)} must be called instead, as described above.</p>
      */
     public String target() default "";
 

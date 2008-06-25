@@ -32,8 +32,15 @@ public class BeforeRenderEvent extends ComponentSystemEvent {
 
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) document
-     * @param component
+
+     * <p class="changed_added_2_0">Instantiate a new
+     * <code>BeforeRenderEvent</code> that indicates the argument
+     * <code>component</code> is about to be rendered.</p>
+
+     * @param component the <code>UIComponent</code> that is about to be
+     * rendered.
+
+     * @throws <code>NullPointerException</code> if the argument is <code>null</code>.
      */
     public BeforeRenderEvent(UIComponent component) {
         super(component);

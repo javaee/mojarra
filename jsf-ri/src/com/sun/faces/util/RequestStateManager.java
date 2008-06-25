@@ -42,28 +42,11 @@ import com.sun.faces.RIConstants;
 
 /**
  * <p>
- * This helper class is used to reduced the number of per-request state
- * variables we store in the request.
+ * This helper class is used a central location for per-request state
+ * that is needed by Mojarra.  This class leverages FacesContext.getAttributes()
+ * which as added in 2.0 instead of the request scope to prevent the unecessary
+ * triggering of ServletREquestAttributeListeners.
  * </p>
- *
- * <p>
- * Mojarra stores several request scoped attributes during its processing.
- * Each time an attribute is added or removed, the action of doing so results
- * in the ServletRequestAttributeListener Mojarra uses for ManagedBean tracking
- * to be triggered.  Additionally, any other ServletRequestAttributeListeners
- * will be invoked.  Since these attributes are, for all intents and purposes,
- * private, reducing the footprint of their usage is ideal.
- * </p>
- *
- * <p>
- * To that end, this class should be used to for all interactions with implementation
- * specific request scoped attributes.  By using this class, all attributes
- * needed by the implementation will be stored within a Map within the the request,
- * so that we only trigger one ServletRequestAttributeListener event per request (
- * that one event will be the first time we add the Map to the request).
- * </p>
- *
- * @since 1.2_08
  */
 public class RequestStateManager {
 
@@ -86,28 +69,11 @@ public class RequestStateManager {
      * This will be used when generating bytecode for custom converters.
      */
     public static final String TARGET_COMPONENT_ATTRIBUTE_NAME =
-          RIConstants.FACES_PREFIX + "ComponentForValue";
-
-    /**
-     * Attribute to lookup the ExternalContextImpl.  This is used by the
-     * API to delegate to when a 1.1 ExternalContext implementation decorates
-     * the 1.2 implementation.
-     */
-    public static final String EXTERNALCONTEXT_IMPL_ATTR_NAME =
-          RIConstants.FACES_PREFIX + "ExternalContextImpl";
-
-    /**
-     * Attribute to lookup the FacesContextImpl.  This is used by the
-     * API to delegate to when a 1.1 ExternalContext implementation decorates
-     * the 1.2 implementation.
-     */
-    public static final String FACESCONTEXT_IMPL_ATTR_NAME =
-          RIConstants.FACES_PREFIX + "FacesContextImpl";
+          RIConstants.FACES_PREFIX + "ComponentForValue";    
 
     /**
      * Attribute defining the {@link javax.faces.render.RenderKit} being used
-     * for this request.  Storing it in the request reduces the overhead of
-     * querying the RenderKitFactory multiple times.
+     * for this request.
      */
     public static final String RENDER_KIT_IMPL_REQ =
           RIConstants.FACES_PREFIX + "renderKitImplForRequest";

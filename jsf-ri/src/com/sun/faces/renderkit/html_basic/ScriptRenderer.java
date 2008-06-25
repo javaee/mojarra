@@ -52,8 +52,8 @@ import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.ListenerFor;
 
 /**
- * RELEASE_PENDING (rlubke)
- * 
+ * <p>This <code>Renderer</code> handles the rendering of external <code>script</code>
+ * references.</p>
  * PENDING(edburns): subscribe for BeforeRemoveFromParent
  */
 @ListenerFor(systemEventClass=AfterAddToParentEvent.class, sourceClass=UIOutput.class)
@@ -78,9 +78,10 @@ public class ScriptRenderer extends Renderer implements ComponentSystemEventList
     public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
         UIComponent component = event.getComponent();
         FacesContext context = FacesContext.getCurrentInstance();
-        
-        if (component.getAttributes().containsKey("target")) {
-            context.getViewRoot().addComponentResource(context, component);
+
+        String target = (String) component.getAttributes().get("target");
+        if (target != null) {
+            context.getViewRoot().addComponentResource(context, component, target);
         }
     }
     

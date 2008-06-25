@@ -86,10 +86,11 @@ public class MetaInfResourceProvider implements ConfigurationResourceProvider {
                     URL nextElement = items.nextElement();
                     String jarUrl = nextElement.toString();
                     String jarName = null;
-                    int resourceIndex;
+                    int resourceIndex = jarUrl.indexOf(META_INF_RESOURCES);
                     // If this resource has a faces-config file inside of it
-                    if (-1 != (resourceIndex =
-                          jarUrl.indexOf(META_INF_RESOURCES))) {
+                    // and is within a JAR.  Classpath resources not included
+                    // within a JAR will not be sorted.
+                    if (resourceIndex != -1 && "jar".equals(nextElement.getProtocol())) {
                         // Search backwards for the previous occurrence of File.SEPARATOR
                         int sepIndex = resourceIndex - 2;
                         char sep = ' ';
@@ -102,7 +103,7 @@ public class MetaInfResourceProvider implements ConfigurationResourceProvider {
                         }
                         if ('/' == sep) {
                             jarName =
-                                  jarUrl.substring(sepIndex + 1, resourceIndex);
+                                  jarUrl.substring(sepIndex + 1, resourceIndex - 2);
                         }
                     }
                     if (null != jarName) {

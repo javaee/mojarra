@@ -23,8 +23,14 @@ public abstract class SystemEvent extends EventObject {
 
 
     /**
-     * RELEASE_PENDING (edburns,roger) document
-     * @param source
+     * <p class="changed_added_2_0">Pass the argument
+     * <code>source</code> to the superclass constructor.</p>
+
+     * @param source the <code>source</code> reference to be
+     * passed to the superclass constructor.
+     *
+     * @throws <code>NullPointerException</code> if the argument is
+     * <code>null</code>.
      */
     public SystemEvent(Object source) {
         super(source);
@@ -35,12 +41,9 @@ public abstract class SystemEvent extends EventObject {
 
 
     /**
-     * <p>Return <code>true</code> if this {@link FacesListener} is an instance
-     * of a listener class that this event supports.  Typically, this will be
-     * accomplished by an "instanceof" check on the listener class.</p>
-     *
-     * RELEASE_PENDING (edburns,rogerk) I'm not sure it's important to include
-     *  the instanceof information.  Let the implementation deal with it.
+     * <p>Return <code>true</code> if this {@link FacesListener} is an
+     * instance of a the appropriate listener class that this event
+     * supports.</p>
      *
      * @param listener {@link FacesListener} to evaluate
      */
