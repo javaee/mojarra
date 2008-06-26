@@ -2,7 +2,7 @@
 <module_updates timestamp="00/50/08/20/06/2008">
 
 <!--	distribution="http://${glassfish.updatecenter.server}/beta/modules/faces/2.0/jsf2.0.nbm" -->
-<module_group name="Java EE Upgrades">
+<module_group name="Webtier Technologies">
     <module 
 	codenamebase="com.sun.faces.updatecenter" 
 	distribution="http://localhost:8080/jsf2.0.nbm"
@@ -16,7 +16,7 @@
 	OpenIDE-Module="com.sun.faces.updatecenter/2" 
 	OpenIDE-Module-Display-Category="Runtimes" 
 	OpenIDE-Module-Implementation-Version="200712201750" 
-	OpenIDE-Module-Long-Description="Updated JSF 2.0 implementation.  Current version supports EDR2.  This version replaces the default version of JSF that ships with Glassfish.  Please note that if you've upgraded JSF before (to the latest version of 1.2, for instance), you'll have to uninstall that update before installing this one.  Also, Glassfish needs to be restarted *twice* for the update to take effect - and the second restart requires that you use asadmin, rather than the Admin GUI, since the Admin GUI depends on JSF.  Once the second restart is complete, Admin GUI may again be used normally." 
+	OpenIDE-Module-Long-Description="Updated JSF 2.0 implementation.  Current version supports EDR2.  This version replaces the default version of JSF that ships with Glassfish.  Please note that if you've upgraded JSF before (to the latest version of 1.2, for instance), you *must* uninstall that update before installing this one.  Also, Glassfish needs to be restarted *twice* for the update to take effect - and the second restart requires that you use asadmin, rather than the Admin GUI, since the Admin GUI depends on JSF.  Once the second restart is complete, Admin GUI may again be used normally." 
 	OpenIDE-Module-Module-Dependencies="" 
 	OpenIDE-Module-Name="JSF 2.0 for GlassFish" 
 	OpenIDE-Module-Requires="" 

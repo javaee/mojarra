@@ -22,17 +22,20 @@
       <mkdir dir="${build_main}/module"/>
       <mkdir dir="${build_install}/META-INF/services"/>
       <copy file="conf/com.sun.appserv.addons.Installer" todir="${build_install}/META-INF/services"/>
-      <copy file="../jsf-api/build/lib/jsf-api.jar" todir="${build_install}"/>
-      <copy file="../jsf-ri/build/lib/jsf-impl.jar" todir="${build_install}"/>
+      <copy file="lib/jsf-api.jar" todir="${build_install}"/>
+      <copy file="lib/jsf-impl.jar" todir="${build_install}"/>
       <javac srcdir="src" destdir="${build_install}" classpath="lib/sdk-addon-api-0.2.jar"/>
 
       <mkdir dir="build/jsf2.0_configurator/META-INF/services"/>
       <copy file="conf/com.sun.appserv.addons.Configurator" todir="build/jsf2.0_configurator/META-INF/services"/>
       <javac srcdir="src" destdir="build/jsf2.0_configurator" classpath="lib/sdk-addon-api-0.2.jar"/>
       <copy file="conf/server.xml" todir="build"/>
+      <copy todir="build/descriptions">
+          <fileset dir="conf/descriptions"/>
+      </copy>
     </target>
 
-    <!-- Pack the distro into the single distribution jar -->
+    <!-- Create the distributed artifacts -->
     <target name="updatecenter.dist">
       <mkdir dir="dist"/>
       <jar destfile="dist/jsf2.0_configurator_${ucversion}.jar" basedir="${build_conf}"/>
@@ -41,11 +44,17 @@
       <copy file="dist/jsf2.0_installer.jar" todir="${build_main}/module"/>
       <jar destfile="dist/jsf2.0.nbm" basedir="${build_main}"/>
       <copy file="build/server.xml" todir="dist"/>
+      <zip basedir="build/descriptions" destfile="dist/descriptions.zip"/>
     </target>
 
     <target name="updatecenter.clean">
       <delete dir="build"/>
       <delete dir="dist"/>
+    </target>
+
+    <target name="updatecenter.cleanall" depends="updatecenter.clean">
+      <delete file="lib/jsf-api.jar"/>
+      <delete file="lib/jsf-impl.jar"/>
     </target>
 
 </project>
