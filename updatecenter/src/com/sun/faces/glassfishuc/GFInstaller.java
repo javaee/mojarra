@@ -57,7 +57,7 @@ import java.util.zip.ZipException;
  */
 public class GFInstaller implements Installer {
     
-    static final String IMPL_JAR = "jsf-impl.jar";
+    static final String IMPL_JAR = "jsf-impl2.jar";
 
     static final String API_JAR = "jsf-api.jar";
     
@@ -142,32 +142,23 @@ public class GFInstaller implements Installer {
 
         File implNew = new File(tmpWorkDir + File.separator + IMPL_JAR);
         File implOrig = new File(appServerLibDir + File.separator + IMPL_JAR);
-        File implOld = new File(appServerLibDir + File.separator + IMPL_JAR + ".old");
 
         // check if api jar already exists.  If it does, that's an error.
         if (apiTo.exists()) {
+            System.out.println("JSF API jar already exists - have you installed a different version already?  If so, uninstall it before running this upgrade.");
             throw new AddonFatalException("JSF API jar already exists - have you installed a different version already?  If so, uninstall it before running this upgrade.");
         }
 
-        // check if a backup impl file already exists, If it does, that's an error.
-        if (implOld.exists()) {
-            throw new AddonFatalException("JSF Impl backup jar already exists - have you installed a different version already?  If so, uninstall it before running this upgrade.");
+        if (implOrig.exists()) {
+            System.out.println("Updated JSF implementation jar already exists at: "+implOrig);
+            throw new AddonFatalException("Updated JSF implementation jar already exists at: "+implOrig);
         }
+        
+        System.out.println("Installing new impl file "+implOrig);
+        copyFile(implNew, implOrig);
 
         System.out.println("Installing new api file "+apiTo);
         copyFile(apiFrom, apiTo);
-
-        if (!implOrig.exists()) {
-            throw new AddonFatalException("JSF implementation jar does not exist at: "+implOrig);
-        }
-
-        System.out.println("Backing up old impl file to "+implOld);
-        if (!implOrig.renameTo(implOld)) {
-            throw new AddonFatalException("Could not backup JSF impl jar from "+implOrig+" to "+implOld);
-        }
-
-        System.out.println("Installing new impl file "+implOrig);
-        copyFile(implNew, implOrig);
 
         // Copy a configurator plugin to AS_HOME/lib/addons directory.
         File confJarFrom = new File(tmpWorkDir +  File.separator + CONFIGURATOR_JAR);
@@ -210,12 +201,7 @@ public class GFInstaller implements Installer {
         // delete impl jar immedately, replace with backed up jar
         File implJar = new File(appServerLibDir + File.separator + IMPL_JAR);
         System.out.println("Deleting implJar "+implJar);
-        implJar.delete();
-        File implJarOld = new File(appServerLibDir + File.separator + IMPL_JAR + ".old");
-        System.out.println("Moving "+implJarOld+" to "+implJar);
-        if (!implJarOld.renameTo(implJar)) {
-            throw new AddonFatalException("SEVERE ERROR: Could not restore old version of JSF impl, App Server is now in an inconsistent state, this requires immediate attention.");
-        }
+        implJar.deleteOnExit();
 
     }
 
@@ -243,6 +229,7 @@ public class GFInstaller implements Installer {
             in.close();
             out.close();
         } catch (Exception e){
+            System.out.println("Exception copying file from "+sourceFile+" to "+destinationFile);
             throw new AddonFatalException("Exception copying file from "+sourceFile+" to "+destinationFile,  e);
         }
     }
