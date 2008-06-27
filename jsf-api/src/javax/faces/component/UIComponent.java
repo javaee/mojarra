@@ -48,6 +48,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Collections;
+import java.util.HashSet;
 
 import javax.el.ELContext;
 import javax.el.ELException;
@@ -1224,19 +1227,17 @@ private void doFind(FacesContext context, String clientId) {
                                  ComponentSystemEventListener componentListener) {
         if (null == listenersByEventClass) {
             listenersByEventClass = new HashMap<Class<? extends SystemEvent>, 
-                                                List<SystemEventListener>>(3, 1.0f);
+                                                Set<SystemEventListener>>(3, 1.0f);
         }
-        SystemEventListener facesLifecycleListener =
+        SystemEventListener systemEventListener =
               new ComponentSystemEventListenerAdapter(componentListener, this);
-        List<SystemEventListener> listenersForEventClass =
+        Set<SystemEventListener> listenersForEventClass =
               listenersByEventClass.get(eventClass);
         if (listenersForEventClass == null) {
-            listenersForEventClass = new ArrayList<SystemEventListener>(3);
+            listenersForEventClass = new HashSet<SystemEventListener>(3);
             listenersByEventClass.put(eventClass, listenersForEventClass);
         }
-        if (!listenersForEventClass.contains(facesLifecycleListener)) {
-            listenersForEventClass.add(facesLifecycleListener);
-        }
+        listenersForEventClass.add(systemEventListener);
     }
 
     /**
@@ -1265,7 +1266,7 @@ private void doFind(FacesContext context, String clientId) {
      */
     public void unsubscribeFromEvent(Class<? extends SystemEvent> eventClass,
                                      ComponentSystemEventListener componentListener) {
-        List<SystemEventListener> listeners = getListenersForEventClass(eventClass);
+        Set<SystemEventListener> listeners = listenersByEventClass.get(eventClass);
         if (listeners != null && !listeners.isEmpty()) {
             for (Iterator<SystemEventListener> i = listeners.iterator(); i.hasNext();) {
                 SystemEventListener item = i.next();
@@ -1278,11 +1279,17 @@ private void doFind(FacesContext context, String clientId) {
                     break;
                 }
             }
+            if (listeners.isEmpty()) {
+                listenersByEventClass.remove(eventClass);
+            }
         }
-        
     }
     
-    private Map<Class<? extends SystemEvent>, List<SystemEventListener>> listenersByEventClass;
+    private Map<Class<? extends SystemEvent>,Set<SystemEventListener>> listenersByEventClass;
+    @SuppressWarnings({"unchecked"})
+    private static final Set<SystemEventListener> EMPTY =
+          Collections.unmodifiableSet(Collections.EMPTY_SET);
+
 
     /**
      * <p class="changed_added_2_0">Return the
@@ -1294,16 +1301,13 @@ private void doFind(FacesContext context, String clientId) {
      * listeners must be returned.
 
      */
-    public List<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> eventClass) {
+    public Set<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> eventClass) {
 
-	// RELEASE_PENDING: make this return immutable Set<SystemEventListener>
-	// make this return the empty set if no such listeners are found.
-
-        List<SystemEventListener> result = null;
+        Set<SystemEventListener> result = null;
         if (listenersByEventClass != null) {
             result = listenersByEventClass.get(eventClass);
         }
-        return result;
+        return ((result != null) ? Collections.unmodifiableSet(result) : EMPTY);
 
     }
 

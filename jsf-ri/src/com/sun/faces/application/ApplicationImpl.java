@@ -53,14 +53,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Future;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -247,11 +248,9 @@ public class ApplicationImpl extends Application {
         Util.notNull("systemEventClass", systemEventClass);
         Util.notNull("listener", listener);
 
-        List<SystemEventListener> listeners =
+        Set<SystemEventListener> listeners =
               getListeners(systemEventClass, sourceClass);
-        if (!listeners.contains(listener)) {
-            listeners.add(listener);
-        }
+        listeners.add(listener);
 
     }
 
@@ -279,7 +278,7 @@ public class ApplicationImpl extends Application {
         Util.notNull("systemEventClass", systemEventClass);
         Util.notNull("listener", listener);
 
-        List<SystemEventListener> listeners =
+        Set<SystemEventListener> listeners =
               getListeners(systemEventClass, sourceClass);
         if (listeners != null) {
             listeners.remove(listener);
@@ -1342,10 +1341,10 @@ public class ApplicationImpl extends Application {
      * @return the SystemEventListeners that should be used for the
      * provided combination of SystemEvent and source.
      */
-    private List<SystemEventListener> getListeners(Class<? extends SystemEvent> systemEvent,
-                                                   Class<?> sourceClass) {
+    private Set<SystemEventListener> getListeners(Class<? extends SystemEvent> systemEvent,
+                                                  Class<?> sourceClass) {
 
-        List<SystemEventListener> listeners = null;
+        Set<SystemEventListener> listeners = null;
         EventInfo sourceInfo =
               systemEventHelper.getEventInfo(systemEvent, sourceClass);
         if (sourceInfo != null) {
@@ -1389,7 +1388,7 @@ public class ApplicationImpl extends Application {
                                                              source,
                                                              useSourceLookup);
         if (eventInfo != null) {
-            List<SystemEventListener> listeners = eventInfo.getListeners();
+            Set<SystemEventListener> listeners = eventInfo.getListeners();
             event = processListeners(listeners, event, source, eventInfo);
         }
 
@@ -1401,7 +1400,7 @@ public class ApplicationImpl extends Application {
      * Iterate through and invoke the listeners.  If the passed event was
      * <code>null</code>, create the event, and return it.
      */
-    private SystemEvent processListeners(List<SystemEventListener> listeners,
+    private SystemEvent processListeners(Set<SystemEventListener> listeners,
                                          SystemEvent event,
                                          Object source,
                                          EventInfo eventInfo) {
@@ -1583,7 +1582,7 @@ public class ApplicationImpl extends Application {
     private static class EventInfo {
         private Class<? extends SystemEvent> systemEvent;
         private Class<?> sourceClass;
-        private List<SystemEventListener> listeners;
+        private Set<SystemEventListener> listeners;
         private Constructor eventConstructor;
         private Map<Class<?>,Constructor> constructorMap;
 
@@ -1595,7 +1594,7 @@ public class ApplicationImpl extends Application {
 
             this.systemEvent = systemEvent;
             this.sourceClass = sourceClass;
-            this.listeners = new CopyOnWriteArrayList<SystemEventListener>();
+            this.listeners = new CopyOnWriteArraySet<SystemEventListener>();
             this.constructorMap = new HashMap<Class<?>,Constructor>();
             if (!sourceClass.equals(Void.class)) {
                 eventConstructor = getEventConstructor(sourceClass);
@@ -1606,7 +1605,7 @@ public class ApplicationImpl extends Application {
         // ------------------------------------------------------ Public Methods
 
 
-        public List<SystemEventListener> getListeners() {
+        public Set<SystemEventListener> getListeners() {
 
             return listeners;
 

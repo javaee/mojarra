@@ -40,7 +40,7 @@
 
 package javax.faces.event;
 
-import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -66,11 +66,11 @@ public interface SystemEventListenerHolder {
 
     /**
      * <div class="changed_added_2_0">
-     * <p>Return a <code>List</code> of {@link SystemEventListener}
+     * <p>Return a <code>Set</code> of {@link SystemEventListener}
      * instances that have been installed into the class implementing
      * this interface.</p>
      * </div>
      */
-    public List<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> facesEventClass);
+    public Set<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> facesEventClass);
 
 }

@@ -1,23 +1,23 @@
 package com.sun.faces.application;
 
-import java.util.List;
+import java.util.Set;
 
-import javax.faces.event.SystemEventListener;
-import javax.faces.event.SystemEvent;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.FacesListener;
-import javax.faces.event.SystemEventListenerHolder;
-import javax.faces.event.ComponentSystemEventListener;
-import javax.faces.event.ComponentSystemEvent;
 import javax.faces.application.Application;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIInput;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ComponentSystemEvent;
+import javax.faces.event.ComponentSystemEventListener;
+import javax.faces.event.FacesListener;
+import javax.faces.event.SystemEvent;
+import javax.faces.event.SystemEventListener;
+import javax.faces.event.SystemEventListenerHolder;
 
-import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.CustomSystemEvent;
+import com.sun.faces.cactus.ServletFacesTestCase;
 
 /**
  * @since 2.0.0
@@ -437,7 +437,7 @@ public class TestApplicationEvents extends ServletFacesTestCase {
     private static final class TestSystemEventListenerHolder
           implements SystemEventListenerHolder {
 
-        public List<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> facesEventClass) {
+        public Set<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> facesEventClass) {
             return null;
         }
 
