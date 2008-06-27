@@ -72,7 +72,7 @@ import org.w3c.dom.Node;
 public class GFConfigurator implements Configurator {
 
     private static final String PREFIX_VALUE = "${com.sun.aas.installRoot}/lib/jsf-api.jar${path.separator}"+
-            "${com.sun.aas.installRoot}/lib/jsf-impl2.jar";
+            "${com.sun.aas.installRoot}/lib/jsf-impl.jar";
     private static final String SEPARATOR = "${path.separator}";
 
     

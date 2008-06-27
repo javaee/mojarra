@@ -23,7 +23,7 @@
       <mkdir dir="${build_install}/META-INF/services"/>
       <copy file="conf/com.sun.appserv.addons.Installer" todir="${build_install}/META-INF/services"/>
       <copy file="lib/jsf-api.jar" todir="${build_install}"/>
-      <copy file="lib/jsf-impl.jar" tofile="${build_install}/jsf-impl2.jar"/>
+      <copy file="lib/jsf-impl.jar" todir="${build_install}"/>
       <javac srcdir="src" destdir="${build_install}" classpath="lib/sdk-addon-api-0.2.jar"/>
 
       <mkdir dir="build/jsf2.0_configurator/META-INF/services"/>
@@ -54,7 +54,7 @@
 
     <target name="updatecenter.cleanall" depends="updatecenter.clean">
       <delete file="lib/jsf-api.jar"/>
-      <delete file="lib/jsf-impl2.jar"/>
+      <delete file="lib/jsf-impl.jar"/>
     </target>
 
 </project>
