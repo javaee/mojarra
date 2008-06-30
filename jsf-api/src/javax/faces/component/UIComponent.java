@@ -48,9 +48,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.Collections;
-import java.util.HashSet;
 
 import javax.el.ELContext;
 import javax.el.ELException;
@@ -203,18 +200,18 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * @deprecated This has been replaced by {@link #setValueExpression}.
      */
     public abstract void setValueBinding(String name, ValueBinding binding);
-    
+
     // The set of ValueExpressions for this component, keyed by property
     // name This collection is lazily instantiated
     // The set of ValueExpressions for this component, keyed by property
     // name This collection is lazily instantiated
-    protected Map<String,ValueExpression> bindings = null;    
+    protected Map<String,ValueExpression> bindings = null;
 
     /**
      * <p>Return the {@link ValueExpression} used to calculate the value for the
      * specified attribute or property name, if any.</p>
      *
-     * <p>This method must be overridden and implemented for components that 
+     * <p>This method must be overridden and implemented for components that
      * comply with JSF 1.2 and later.</p>
      *
      * @since 1.2
@@ -269,7 +266,7 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * collection of <code>ValueExpression</code>s under the key given
      * by the argument <code>name</code>.</p>
      *
-     * <p>This method must be overridden and implemented for components that 
+     * <p>This method must be overridden and implemented for components that
      * comply with JSF 1.2 and later.</p>
      *
      * @since 1.2
@@ -329,7 +326,7 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
         }
 
     }
-    
+
     // -------------------------------------------------------------- Properties
 
 
@@ -338,7 +335,7 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * one if necessary.  The associated {@link Renderer}, if any,
      * will be asked to convert the clientId to a form suitable for
      * transmission to the client.</p>
-     * 
+     *
      * <p>The return from this method must be the same value throughout
      * the lifetime of the instance, unless the <code>id</code> property
      * of the component is changed, or the component is placed in
@@ -347,7 +344,7 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * calls to this method must always return the same value.  The
      * implementation must follow these steps in determining the
      * clientId:</p>
-     * 
+     *
      * <p>Find the closest ancestor to <b>this</b> component in the view
      * hierarchy that implements <code>NamingContainer</code>.  Call
      * <code>getContainerClientId()</code> on it and save the result as
@@ -368,18 +365,18 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      *  is <code>null</code>
      */
     public abstract String getClientId(FacesContext context);
-    
+
     /**
      * <p>Allow components that implement {@link NamingContainer} to
      * selectively disable prepending their clientId to their
      * descendent's clientIds by breaking the prepending logic into a
      * seperately callable method.  See {@link #getClientId} for usage.</p>
-     * 
+     *
      * <p>By default, this method will call through to {@link
      * #getClientId} and return the result.
      *
      * @since 1.2
-     * 
+     *
      *  @throws NullPointerException if <code>context</code> is
      *  <code>null</code>
      */
@@ -451,9 +448,9 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * <code>UIComponent</code>.  <strong>This method must
      * never be called by developers;  a {@link UIComponent}'s internal
      * implementation will call it as components are added to or
-     * removed from a parent's child <code>List</code> or 
+     * removed from a parent's child <code>List</code> or
      * facet <code>Map</code></strong>.</p>
-     * 
+     *
      * @param parent The new parent, or <code>null</code> for the root node
      *  of a component tree
      */
@@ -471,13 +468,13 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
     /**
      * <p>Set the <code>rendered</code> property of this
      * {@link UIComponent}.</p>
-     * 
+     *
      * @param rendered If <code>true</code> render this component;
      *  otherwise, do not render this component
      */
     public abstract void setRendered(boolean rendered);
 
-    
+
     /**
      * <p>Return the {@link Renderer} type for this {@link UIComponent}
      * (if any).</p>
@@ -508,8 +505,8 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * UIComponentBase#encodeChildren}.</p>
      */
     public abstract boolean getRendersChildren();
-    
-    
+
+
     // This is necessary for JSF components that extend from UIComponent
     // directly rather than extending from UIComponentBase.  Such components
     // may need to have implementations provided for methods that originated
@@ -518,7 +515,7 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
     // getValueExpression() method.
     private boolean isUIComponentBase;
     private boolean isUIComponentBaseIsSet = false;
-    
+
     private boolean isUIComponentBase() {
         if (!isUIComponentBaseIsSet) {
             isUIComponentBase = (this instanceof UIComponentBase);
@@ -572,10 +569,10 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      *     javadoc for that class must be taken on the newly added
      *     component instance.  If the <code>ResourceDependency</code>
      *     annotation is not present, the component must be inspected
-     *     for the presence of the {@link 
+     *     for the presence of the {@link
      *     javax.faces.application.ResourceDependencies} annotation.
      *     If the annotation is present, the action described in the
-     *     javadoc for the <code>ResourceDependencies</code>  class 
+     *     javadoc for the <code>ResourceDependencies</code>  class
      *     must be taken on the newly added component instance.</p>
 
      *     <p>If the newly added component instance returns
@@ -585,7 +582,7 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      *     annotation.  If the annotation is present, the action
      *     described in the javadoc for that class must be taken on the
      *     <code>Renderer</code>.  If the <code>ResourceDependency</code>
-     *     annotation is not present, the {@link Renderer} must be 
+     *     annotation is not present, the {@link Renderer} must be
      *     inspected for the presence of the {@link
      *     javax.faces.application.ResourceDependencies} annotation.
      *     If the annotation is present, the action described in the
@@ -627,7 +624,7 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * identifier (which is matched exactly against the <code>id</code>
      * property of a {@link UIComponent}, or a series of such identifiers
      * linked by the {@link NamingContainer#SEPARATOR_CHAR} character value.
-     * The search algorithm should operates as follows, though alternate 
+     * The search algorithm should operates as follows, though alternate
      * alogrithms may be used as long as the end result is the same:</p>
      * <ul>
      * <li>Identify the {@link UIComponent} that will be the base for searching,
@@ -679,7 +676,7 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      *  is <code>null</code>
      */
     public abstract UIComponent findComponent(String expr);
-    
+
     /**
      *
      * <p>Starting at this component in the View hierarchy, search for a
@@ -688,8 +685,8 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * ContextCallback#invokeContextCallback} method on the argument
      * <code>callback</code>, passing the current {@link FacesContext}
      * and the found component as arguments. This method is similar to
-     * {@link #findComponent} but it does not support the leading 
-     * {@link NamingContainer#SEPARATOR_CHAR} syntax for searching from the 
+     * {@link #findComponent} but it does not support the leading
+     * {@link NamingContainer#SEPARATOR_CHAR} syntax for searching from the
      * root of the View.</p>
      *
      * <p>The default implementation will first check if
@@ -757,7 +754,7 @@ private void doFind(FacesContext context, String clientId) {
      * @throws NullPointerException if any of the arguments are null
      *
      * @throws FacesException if the argument Callback throws an
-     * Exception, it is wrapped in a <code>FacesException</code> and re-thrown.  
+     * Exception, it is wrapped in a <code>FacesException</code> and re-thrown.
      *
      * @return <code>true</code> if the a component with the given
      * <code>clientId</code> is found, the callback method was
@@ -766,13 +763,13 @@ private void doFind(FacesContext context, String clientId) {
      * component with the given <code>clientId</code> is found.
      *
      */
-    
+
     public boolean invokeOnComponent(FacesContext context, String clientId,
             ContextCallback callback) throws FacesException {
         if (null == context || null == clientId || null == callback) {
             throw new NullPointerException();
         }
-        
+
         boolean found = false;
         if (clientId.equals(this.getClientId(context))) {
             try {
@@ -783,7 +780,7 @@ private void doFind(FacesContext context, String clientId) {
             }
         } else {
             Iterator<UIComponent> itr = this.getFacetsAndChildren();
-            
+
             while (itr.hasNext() && !found) {
                 found = itr.next().invokeOnComponent(context, clientId,
                         callback);
@@ -791,7 +788,7 @@ private void doFind(FacesContext context, String clientId) {
         }
         return found;
     }
-    
+
     // ------------------------------------------------ Facet Management Methods
 
 
@@ -845,7 +842,7 @@ private void doFind(FacesContext context, String clientId) {
      * </ul>
      */
     public abstract Map<String, UIComponent> getFacets();
-    
+
     /**
      * <p>Return the number of facet {@link UIComponent}s that are
      * associated with this {@link UIComponent}.  If there are no
@@ -853,9 +850,9 @@ private void doFind(FacesContext context, String clientId) {
      * the creation of a facet component map.</p>
      *
      * <p>For backwards compatability with classes that extend UIComponent
-     * directly, a default implementation is provided that simply calls 
-     * {@link #getFacets} and then calls the <code>size()</code> method on the 
-     * returned <code>Map</code>.  A more optimized version of this method is 
+     * directly, a default implementation is provided that simply calls
+     * {@link #getFacets} and then calls the <code>size()</code> method on the
+     * returned <code>Map</code>.  A more optimized version of this method is
      * provided in {@link UIComponentBase#getFacetCount}.
      *
      * @since 1.2
@@ -888,8 +885,8 @@ private void doFind(FacesContext context, String clientId) {
      * <code>remove()</code> operation.</p>
      */
     public abstract Iterator<UIComponent> getFacetsAndChildren();
-    
-    
+
+
     // -------------------------------------------- Lifecycle Processing Methods
 
 
@@ -937,7 +934,7 @@ private void doFind(FacesContext context, String clientId) {
      * response contained in the specified {@link FacesContext}.  If our
      * <code>rendered</code> property is <code>false</code>, return
      * immediately.  </p>
-     * 
+     *
      * <p>Otherwise, take the following actions.</p>
      *
      * <ul>
@@ -972,10 +969,10 @@ private void doFind(FacesContext context, String clientId) {
      * render the child {@link UIComponent}s of this {@link UIComponent}.
      * This method will only be called
      * if the <code>rendersChildren</code> property is <code>true</code>.</p>
-     * 
-     * <p>If a {@link Renderer} is associated with this {@link UIComponent}, 
-     * the actual encoding will be delegated to 
-     * {@link Renderer#encodeChildren(FacesContext, UIComponent)}.</p> 
+     *
+     * <p>If a {@link Renderer} is associated with this {@link UIComponent},
+     * the actual encoding will be delegated to
+     * {@link Renderer#encodeChildren(FacesContext, UIComponent)}.</p>
      *
      * @param context {@link FacesContext} for the response we are creating
      *
@@ -990,10 +987,10 @@ private void doFind(FacesContext context, String clientId) {
      * <p><span class="changed_modified_2_0">If</span> our
      * <code>rendered</code> property is <code>true</code>, render the
      * ending of the current state of this {@link UIComponent}.</p>
-     * 
-     * <p>If a {@link Renderer} is associated with this {@link UIComponent}, 
-     * the actual encoding will be delegated to 
-     * {@link Renderer#encodeEnd(FacesContext, UIComponent)}.</p> 
+     *
+     * <p>If a {@link Renderer} is associated with this {@link UIComponent},
+     * the actual encoding will be delegated to
+     * {@link Renderer#encodeEnd(FacesContext, UIComponent)}.</p>
      *
      * <p class="changed_added_2_0">Call {@link
      * UIComponent#popComponentFromEL}.</p>
@@ -1041,7 +1038,7 @@ private void doFind(FacesContext context, String clientId) {
 
     }
 
-    
+
     private UIComponent previouslyPushed;
 
     /**
@@ -1155,7 +1152,7 @@ private void doFind(FacesContext context, String clientId) {
     /**
      * <p>Return an array of registered {@link FacesListener}s that are
      * instances of the specified class.  If there are no such registered
-     * listeners, a zero-length array is returned.  The returned 
+     * listeners, a zero-length array is returned.  The returned
      * array can be safely be cast to an array strongly typed to
      * an element type of <code>clazz</code>.</p>
      *
@@ -1226,18 +1223,20 @@ private void doFind(FacesContext context, String clientId) {
     public void subscribeToEvent(Class<? extends SystemEvent> eventClass,
                                  ComponentSystemEventListener componentListener) {
         if (null == listenersByEventClass) {
-            listenersByEventClass = new HashMap<Class<? extends SystemEvent>, 
-                                                Set<SystemEventListener>>(3, 1.0f);
+            listenersByEventClass = new HashMap<Class<? extends SystemEvent>,
+                                                List<SystemEventListener>>(3, 1.0f);
         }
-        SystemEventListener systemEventListener =
+        SystemEventListener facesLifecycleListener =
               new ComponentSystemEventListenerAdapter(componentListener, this);
-        Set<SystemEventListener> listenersForEventClass =
+        List<SystemEventListener> listenersForEventClass =
               listenersByEventClass.get(eventClass);
         if (listenersForEventClass == null) {
-            listenersForEventClass = new HashSet<SystemEventListener>(3);
+            listenersForEventClass = new ArrayList<SystemEventListener>(3);
             listenersByEventClass.put(eventClass, listenersForEventClass);
         }
-        listenersForEventClass.add(systemEventListener);
+        if (!listenersForEventClass.contains(facesLifecycleListener)) {
+            listenersForEventClass.add(facesLifecycleListener);
+        }
     }
 
     /**
@@ -1266,7 +1265,7 @@ private void doFind(FacesContext context, String clientId) {
      */
     public void unsubscribeFromEvent(Class<? extends SystemEvent> eventClass,
                                      ComponentSystemEventListener componentListener) {
-        Set<SystemEventListener> listeners = listenersByEventClass.get(eventClass);
+        List<SystemEventListener> listeners = getListenersForEventClass(eventClass);
         if (listeners != null && !listeners.isEmpty()) {
             for (Iterator<SystemEventListener> i = listeners.iterator(); i.hasNext();) {
                 SystemEventListener item = i.next();
@@ -1279,17 +1278,11 @@ private void doFind(FacesContext context, String clientId) {
                     break;
                 }
             }
-            if (listeners.isEmpty()) {
-                listenersByEventClass.remove(eventClass);
-            }
         }
-    }
-    
-    private Map<Class<? extends SystemEvent>,Set<SystemEventListener>> listenersByEventClass;
-    @SuppressWarnings({"unchecked"})
-    private static final Set<SystemEventListener> EMPTY =
-          Collections.unmodifiableSet(Collections.EMPTY_SET);
 
+    }
+
+    private Map<Class<? extends SystemEvent>, List<SystemEventListener>> listenersByEventClass;
 
     /**
      * <p class="changed_added_2_0">Return the
@@ -1301,13 +1294,16 @@ private void doFind(FacesContext context, String clientId) {
      * listeners must be returned.
 
      */
-    public Set<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> eventClass) {
+    public List<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> eventClass) {
 
-        Set<SystemEventListener> result = null;
+	// RELEASE_PENDING: make this return immutable Set<SystemEventListener>
+	// make this return the empty set if no such listeners are found.
+
+        List<SystemEventListener> result = null;
         if (listenersByEventClass != null) {
             result = listenersByEventClass.get(eventClass);
         }
-        return ((result != null) ? Collections.unmodifiableSet(result) : EMPTY);
+        return result;
 
     }
 

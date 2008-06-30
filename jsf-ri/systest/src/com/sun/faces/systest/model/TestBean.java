@@ -78,8 +78,8 @@ import javax.servlet.http.HttpSession;
  */
 public class TestBean implements SystemEventListenerHolder {
 
-    public Set<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> arg0) {
-        return Collections.EMPTY_SET;
+    public List<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> arg0) {
+        return Collections.EMPTY_LIST;
     }
     
 public enum Suit { Hearts, Clubs, Diamonds, Spades }

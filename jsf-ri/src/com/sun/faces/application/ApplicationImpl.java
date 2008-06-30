@@ -1400,7 +1400,7 @@ public class ApplicationImpl extends Application {
      * Iterate through and invoke the listeners.  If the passed event was
      * <code>null</code>, create the event, and return it.
      */
-    private SystemEvent processListeners(Set<SystemEventListener> listeners,
+    private SystemEvent processListeners(Collection<SystemEventListener> listeners,
                                          SystemEvent event,
                                          Object source,
                                          EventInfo eventInfo) {

@@ -1,6 +1,6 @@
 package com.sun.faces.application;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
@@ -437,7 +437,7 @@ public class TestApplicationEvents extends ServletFacesTestCase {
     private static final class TestSystemEventListenerHolder
           implements SystemEventListenerHolder {
 
-        public Set<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> facesEventClass) {
+        public List<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> facesEventClass) {
             return null;
         }
 
