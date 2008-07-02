@@ -7,6 +7,7 @@ package com.sun.faces.lifecycle;
 
 import java.util.Map;
 import javax.faces.application.Application;
+import javax.faces.application.FacesMessage;
 import javax.faces.application.ProjectStage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
@@ -24,6 +25,8 @@ public class ProjectStagePhaseListener implements PhaseListener {
     
     public static final String VIEW_HAS_MESSAGE_OR_MESSAGES_ELEMENT =
             "com.sun.faces.lifecycle.ProjectStageHasMessages";
+    public static final String VIEW_HAS_FORM_ELEMENT =
+            "com.sun.faces.lifecycle.ProjectStageHasForm";
 
     public void afterPhase(PhaseEvent event) {
         FacesContext context = event.getFacesContext();
@@ -51,6 +54,12 @@ public class ProjectStagePhaseListener implements PhaseListener {
                 messages.setRendererType("javax.faces.Messages");
                 root.addComponentResource(context, messages, "body");
             }
+            if (!context.getAttributes().containsKey(VIEW_HAS_FORM_ELEMENT)) {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+                        "Warning: This page has no form element.", ""));
+
+            }
+
         }
     }
 

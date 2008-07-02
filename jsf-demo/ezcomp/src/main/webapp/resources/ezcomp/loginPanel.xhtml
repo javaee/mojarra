@@ -12,6 +12,9 @@
                      shortDescription="An illustration of the composite component feature">
 
   <composite:editableValueHolder name="username" />
+  <composite:actionSource name="loginEvent" />
+  <composite:actionSource name="cancelEvent" />
+  <composite:actionSource name="allEvents" targets="loginEvent,cancelEvent" />
 
 </composite:interface>
 
@@ -24,6 +27,20 @@
      <h:inputText id="username" />
 
   </p>
+
+  <p>
+
+    <h:commandButton id="loginEvent" value="Login" action="login">
+
+    </h:commandButton>  
+
+    <h:commandButton id="cancelEvent" value="Cancel" action="cancel">
+
+    </h:commandButton>  
+
+
+  </p>
+
 
 </composite:implementation>
 

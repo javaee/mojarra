@@ -676,8 +676,14 @@ public class ApplicationImpl extends Application {
         }
         Util.processListenerForAnnotation(returnVal);
         if (ProjectStage.Development == super.getProjectStage()) {
-            if (componentType.equals("javax.faces.Messages")) {
+            if (componentType.equals("javax.faces.Messages") ||
+                componentType.equals("javax.faces.component.html.HtmlMessages")) {
                 FacesContext.getCurrentInstance().getAttributes().put(ProjectStagePhaseListener.VIEW_HAS_MESSAGE_OR_MESSAGES_ELEMENT,
+                        Boolean.TRUE);
+            }
+            if (componentType.equals("javax.faces.HtmlForm") ||
+                componentType.equals("javax.faces.component.html.HtmlForm")) {
+                FacesContext.getCurrentInstance().getAttributes().put(ProjectStagePhaseListener.VIEW_HAS_FORM_ELEMENT,
                         Boolean.TRUE);
             }
         }

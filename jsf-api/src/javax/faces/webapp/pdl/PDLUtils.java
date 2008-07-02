@@ -37,48 +37,51 @@ public class PDLUtils {
         String handlerTagId, componentTagId;
         
         // For each of the attached objects in this composite component...
-        for (AttachedObjectTarget curTargetList : targetList) {
-            targetComponents = curTargetList.getTargets();
+        for (AttachedObjectTarget curTarget : targetList) {
+            targetComponents = curTarget.getTargets();
             // ...get the list of targets for this attached object target...
-            for (UIComponent curTarget : targetComponents) {
+            for (UIComponent curTargetComponent : targetComponents) {
                 // ...if the current target is an ActionSource2...
-                if (curTarget instanceof ActionSource2) {
+                if (curTargetComponent instanceof ActionSource2) {
                     // ...search the handlers list for a handler with an
-                    // ID attribute equal to the componentId of curTarget, and
+                    // ID attribute equal to the componentId of curTargetComponent, and
                     // that is an instanceof ActionListenerAttachedObjectHandler
                     for (AttachedObjectHandler curHandler : handlers) {
-                        if ((null != (handlerTagId = curHandler.getFor())) &&
-                                (null != (componentTagId = curTarget.getId())) &&
+                        if (null != (handlerTagId = curHandler.getFor())) {
+                            
+
+                            
+                            (null != (componentTagId = curTargetComponent.getId())) &&
                                 componentTagId.equals(handlerTagId) &&
                                 curHandler instanceof ActionSource2AttachedObjectHandler) {
-                            curHandler.applyAttachedObject(context, curTarget);
+                            curHandler.applyAttachedObject(context, curTargetComponent);
                         }
                     }
                 }
-                if (curTarget instanceof EditableValueHolder) {
+                if (curTargetComponent instanceof EditableValueHolder) {
                     // ...search the handlers list for a handler with an
-                    // ID attribute equal to the componentId of curTarget, and
+                    // ID attribute equal to the componentId of curTargetComponent, and
                     // that is an instanceof EditableValueHolderAttachedObjectHandler.
                     for (AttachedObjectHandler curHandler : handlers) {
                         if ((null != (handlerTagId = curHandler.getFor())) &&
-                                (null != (componentTagId = curTarget.getId())) &&
+                                (null != (componentTagId = curTargetComponent.getId())) &&
                                 componentTagId.equals(handlerTagId)) {
                             if (curHandler instanceof EditableValueHolderAttachedObjectHandler) {
-                                curHandler.applyAttachedObject(context, curTarget);
+                                curHandler.applyAttachedObject(context, curTargetComponent);
                             }
                         }
                     }
                 }
-                if (curTarget instanceof ValueHolder) {
+                if (curTargetComponent instanceof ValueHolder) {
                 // ...search the handlers list for a handler with an
-                // ID attribute equal to the componentId of curTarget, and
+                // ID attribute equal to the componentId of curTargetComponent, and
                 // that is an instanceof ConvertHandler.
                     for (AttachedObjectHandler curHandler : handlers) {
                         if ((null != (handlerTagId = curHandler.getFor())) &&
-                                (null != (componentTagId = curTarget.getId())) &&
+                                (null != (componentTagId = curTargetComponent.getId())) &&
                                 componentTagId.equals(handlerTagId)) {
                             if (curHandler instanceof ValueHolderAttachedObjectHandler) {
-                                curHandler.applyAttachedObject(context, curTarget);
+                                curHandler.applyAttachedObject(context, curTargetComponent);
                             }
                         }
                     }

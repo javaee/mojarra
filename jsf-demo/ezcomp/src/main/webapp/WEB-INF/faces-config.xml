@@ -61,6 +61,10 @@
             <from-outcome>login</from-outcome>
             <to-view-id>/page2.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>cancel</from-outcome>
+            <to-view-id>/page2.xhtml</to-view-id>
+        </navigation-case>
     </navigation-rule>
 
     <navigation-rule>
