@@ -15,8 +15,9 @@
 
   <ui:debug hotkey="p" rendered="true"/>
 
-<ez:loginPanel>
-
+<ez:loginPanel id="loginPanel">
+  <f:valueChangeListener for="username"
+                         binding="#{bean.useridValueChangeListener}" />
 </ez:loginPanel>
 
 </h:body>
