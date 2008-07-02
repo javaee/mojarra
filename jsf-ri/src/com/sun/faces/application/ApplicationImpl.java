@@ -49,7 +49,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -63,7 +62,6 @@ import javax.el.ELException;
 import javax.el.ELResolver;
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
-import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.NavigationHandler;
@@ -79,12 +77,10 @@ import javax.faces.el.PropertyResolver;
 import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.el.ValueBinding;
 import javax.faces.el.VariableResolver;
-import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionListener;
 import javax.faces.validator.Validator;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.scripting.GroovyHelper;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
@@ -92,27 +88,16 @@ import com.sun.faces.el.ELUtils;
 import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.el.PropertyResolverImpl;
 import com.sun.faces.el.VariableResolverImpl;
+import com.sun.faces.lifecycle.ProjectStagePhaseListener;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.Util;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Type;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
-import java.util.List;
-import javax.faces.event.SystemEvent;
 import javax.el.ValueExpression;
 import javax.faces.application.Resource;
-import javax.faces.component.UIOutput;
-import javax.faces.event.AfterAddToParentEvent;
-import javax.faces.event.ComponentSystemEventListener;
-import javax.faces.event.SystemEvent;
-import javax.faces.event.SystemEventListener;
-import javax.faces.event.SystemEventListenerHolder;
 
 
 /**
@@ -355,6 +340,9 @@ public class ApplicationImpl extends Application {
             }
             if (projectStage == null) {
                 projectStage = ProjectStage.Production;
+            }
+            if (projectStage == ProjectStage.Development) {
+                java.beans.Beans.setDesignTime(true);
             }
         }
         return projectStage;
@@ -687,6 +675,12 @@ public class ApplicationImpl extends Application {
                                                         componentType));
         }
         Util.processListenerForAnnotation(returnVal);
+        if (ProjectStage.Development == super.getProjectStage()) {
+            if (componentType.equals("javax.faces.Messages")) {
+                FacesContext.getCurrentInstance().getAttributes().put(ProjectStagePhaseListener.VIEW_HAS_MESSAGE_OR_MESSAGES_ELEMENT,
+                        Boolean.TRUE);
+            }
+        }
         
         return returnVal;
     }

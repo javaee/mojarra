@@ -450,11 +450,14 @@
          =================================================================== 
     -->
 
-    <target name="jars" depends="compile">
+    <target name="unjar.facelet" unless="no.facelets">
         <unjar dest="${build.classes.dir}">
             <fileset dir="${local.lib.dir}"
                      includes="jsf-facelets-2.0-SNAPSHOT.jar"/>
         </unjar>
+    </target>
+
+    <target name="jars" depends="compile,unjar.facelet">
 
         <copy file="${basedir}/mojarra-jsf-impl.bnd" tofile="tmp.bnd"/>
         <replace file="tmp.bnd"

@@ -104,6 +104,10 @@ import javax.faces.render.Renderer;
 
 public abstract class UIComponent implements StateHolder, SystemEventListenerHolder {
 
+    public static final String BEANINFO_KEY = "javax.faces.component.BEANINFO_KEY";
+    
+    
+    
     /**
      * This array represents the packages that can leverage the
      * <code>attributesThatAreSet</code> List for optimized attribute
