@@ -71,8 +71,6 @@ import org.w3c.dom.Node;
  */
 public class GFConfigurator implements Configurator {
 
-//    private static final String PREFIX_VALUE = "${com.sun.aas.installRoot}/lib/jsf-api.jar${path.separator}"+
-//            "${com.sun.aas.installRoot}/lib/jsf-impl.jar";
     private static final String PREFIX_VALUE = "${com.sun.aas.installRoot}/lib/jsf-api.jar${path.separator}"+
             "${com.sun.aas.installRoot}/lib/jsf-impl.jar";
     private static final String SEPARATOR = "${path.separator}";
@@ -134,11 +132,12 @@ public class GFConfigurator implements Configurator {
 
         // We'll unconfigure domain.xml here
 
-
         String domainRoot = cc.getDomainDirectory().getAbsolutePath();
         String domainFilePath = domainRoot 
                 + File.separator + "config" 
                 + File.separator + "domain.xml";
+
+        System.out.println("domain.xml is at: "+domainFilePath);
 
         File domain = new File(domainFilePath);
 

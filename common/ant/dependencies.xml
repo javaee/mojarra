@@ -432,10 +432,7 @@ java -Xmx256m -jar ${dependency.base.dir}/${glassfish.installer.jar}${fl.os}.jar
             </and>
         </condition>
         <condition property="dl.os" value="WINNT">
-        	<or>
-	            <os name="Windows XP"/>
-        		<os name="Windows 2000"/>
-    		</or>
+	    <os family="winnt"/>
         </condition>
         <condition property="dl.os" value="Darwin">
             <os name="Mac OS X"/>
@@ -464,10 +461,7 @@ java -Xmx256m -jar ${dependency.base.dir}/${glassfish.installer.jar}${fl.os}.jar
             </and>
         </condition>
         <condition property="fl.os" value="windows">
-        	<or>
-	            <os name="Windows XP"/>
-        		<os name="Windows 2000"/>
-    		</or>
+            <os family="winnt"/>
         </condition>
         <condition property="fl.os" value="darwin">
             <os name="Mac OS X"/>

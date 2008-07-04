@@ -51,6 +51,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.zip.GZIPOutputStream;
+import java.util.zip.GZIPInputStream;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
@@ -98,6 +100,8 @@ public class StateManagerImpl extends StateManager {
     /** Number of views in logical view to be saved in session. */
     private int noOfViews;
     private int noOfViewsInLogicalView;
+
+    private boolean compressViewState;
     private Map<String,Class<?>> classMap;
     private boolean isDevelopmentMode;
 
@@ -113,6 +117,8 @@ public class StateManagerImpl extends StateManager {
         if (!(isDevelopmentMode = (fContext.getApplication().getProjectStage() == ProjectStage.Development))) {
             classMap = new ConcurrentHashMap<String,Class<?>>(32);
         }
+        compressViewState =
+              webConfig.isOptionEnabled(BooleanWebContextInitParameter.CompressViewState);
     }
 
 
@@ -476,7 +482,10 @@ public class StateManagerImpl extends StateManager {
             ByteArrayOutputStream baos = new ByteArrayOutputStream(1024);
             ObjectOutputStream oas = null;
             try {
-                oas = serialProvider.createObjectOutputStream(baos);
+                oas = serialProvider
+                      .createObjectOutputStream(((compressViewState)
+                                                 ? new GZIPOutputStream(baos, 1024)
+                                                 : baos));
                 oas.writeObject(state);
                 oas.flush();
             } catch (Exception e) {
@@ -508,7 +517,10 @@ public class StateManagerImpl extends StateManager {
             ByteArrayInputStream bais = new ByteArrayInputStream((byte[]) state);
             ObjectInputStream ois = null;
             try {
-                ois = serialProvider.createObjectInputStream(bais);
+                ois = serialProvider
+                      .createObjectInputStream(((compressViewState)
+                                                ? new GZIPInputStream(bais, 1024)
+                                                : bais));
                 return ois.readObject();
             } catch (Exception e) {
                 throw new FacesException(e);

@@ -73,6 +73,7 @@ import javax.faces.application.ResourceHandler;
 import javax.faces.application.ViewHandler;
 
 import javax.faces.application.StateManager;
+import javax.faces.application.ProjectStage;
 
 import javax.faces.component.ActionSource;
 
@@ -93,6 +94,9 @@ import javax.faces.el.ValueBinding;
 import javax.faces.el.VariableResolver;
 
 import javax.faces.event.ActionListener;
+import javax.faces.event.SystemEvent;
+import javax.faces.event.SystemEventListenerHolder;
+import javax.faces.event.SystemEventListener;
 
 import javax.faces.render.RenderKit;
 
@@ -126,7 +130,44 @@ public class NewApplication extends Application {
 
     }
 
+    @Override
+    public ProjectStage getProjectStage() {
+        return oldApp.getProjectStage();
+    }
 
+    @Override
+    public void publishEvent(Class<? extends SystemEvent> systemEventClass,
+                             SystemEventListenerHolder source) {
+        oldApp.publishEvent(systemEventClass, source);
+    }
+
+    @Override
+    public void subscribeToEvent(Class<? extends SystemEvent> systemEventClass,
+                                 Class sourceClass,
+                                 SystemEventListener listener) {
+        oldApp.subscribeToEvent(systemEventClass, sourceClass, listener);
+    }
+
+    @Override
+    public void subscribeToEvent(Class<? extends SystemEvent> systemEventClass,
+                                 SystemEventListener listener) {
+        oldApp.subscribeToEvent(systemEventClass, listener);
+    }
+
+    @Override
+    public void unsubscribeFromEvent(Class<? extends SystemEvent> systemEventClass,
+                                     Class sourceClass,
+                                     SystemEventListener listener) {
+        oldApp.unsubscribeFromEvent(systemEventClass,
+                                    sourceClass,
+                                    listener);
+    }
+
+    @Override
+    public void unsubscribeFromEvent(Class<? extends SystemEvent> systemEventClass,
+                                     SystemEventListener listener) {
+        oldApp.unsubscribeFromEvent(systemEventClass, listener);
+    }
 
 
 

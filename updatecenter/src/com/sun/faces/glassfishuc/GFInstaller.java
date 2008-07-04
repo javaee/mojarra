@@ -115,7 +115,7 @@ public class GFInstaller implements Installer {
         String addOnsLibDir =
                 appServerInstallRoot + File.separator+ "lib" + File.separator + "addons";
   
-        //Dir location of roller addon installer jar
+        //Dir location of addon installer jar
         String installerJar =
                 addOnsDir + File.separator + INSTALLER_JAR;
         
@@ -136,8 +136,6 @@ public class GFInstaller implements Installer {
         } catch (IOException ioEx) {
             throw new AddonFatalException("Could not unbundle jar "+installerJar, ioEx);
         }
-
-
         
         File apiFrom = new File(tmpWorkDir + File.separator + API_JAR);
         File apiTo = new File(appServerLibDir + File.separator + API_JAR);
@@ -196,22 +194,27 @@ public class GFInstaller implements Installer {
         
         // delete installer jar
         File installerJar = new File(addOnsDir + File.separator + INSTALLER_JAR);
+        System.out.println("Deleting installerJar "+installerJar);
         installerJar.deleteOnExit();
             
         // delete configurator jar
         File configJar = new File(addOnsLibDir +  File.separator + CONFIGURATOR_JAR);
+        System.out.println("Deleting configJar "+configJar);
         configJar.deleteOnExit();
         
         // delete API jar
         File apiJar = new File(appServerLibDir + File.separator + API_JAR);
+        System.out.println("Deleting apiJar "+apiJar);
         apiJar.deleteOnExit();
 
         // delete impl jar immedately, replace with backed up jar
         File implJar = new File(appServerLibDir + File.separator + IMPL_JAR);
+        System.out.println("Deleting implJar "+implJar);
         implJar.delete();
         File implJarOld = new File(appServerLibDir + File.separator + IMPL_JAR + ".old");
+        System.out.println("Moving "+implJarOld+" to "+implJar);
         if (!implJarOld.renameTo(implJar)) {
-            throw new AddonFatalException("SEVERE ERROR: Could not restore old version of JSF impl, App Server is now in an inconsistent state, required immediate attention.");
+            throw new AddonFatalException("SEVERE ERROR: Could not restore old version of JSF impl, App Server is now in an inconsistent state, this requires immediate attention.");
         }
 
     }
