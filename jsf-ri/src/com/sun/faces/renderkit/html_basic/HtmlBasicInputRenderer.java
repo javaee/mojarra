@@ -131,12 +131,13 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
                                      component.getId() });
                 }
             } catch (Exception e) {
-                if (logger.isLoggable(Level.FINE)) {
-                    logger.log(Level.FINE,
+                if (logger.isLoggable(Level.SEVERE)) {
+                    logger.log(Level.SEVERE,
                                "Could not instantiate converter for type {0}: {1}",
                                new Object[] {
                                      converterType,
                                      e.toString() });
+                    logger.log(Level.SEVERE, "", e);
                 }
                 return (null);
             }

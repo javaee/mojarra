@@ -485,29 +485,6 @@ public class Util {
         }
         return keepGoing;
     }
-    
-    public static void processListenerForAnnotation(UIComponent source) {
-        if (source instanceof ComponentSystemEventListener) {
-            if (source.getClass().isAnnotationPresent(ListenerFor.class)) {
-                ListenerFor listenerFor =
-                      source.getClass().getAnnotation(ListenerFor.class);
-                assert (null != listenerFor);
-                Class<? extends SystemEvent> eventClass =
-                      listenerFor.systemEventClass();
-                source.subscribeToEvent(eventClass, (ComponentSystemEventListener) source);
-            } else if (source.getClass().isAnnotationPresent(ListenersFor.class)) {
-                ListenersFor listenersFor = source.getClass().getAnnotation(ListenersFor.class);
-                ListenerFor[] listeners = listenersFor.value();
-                if (listeners != null) {
-                    for (ListenerFor listener : listeners) {
-                        source.subscribeToEvent(listener.systemEventClass(),
-                                                (ComponentSystemEventListener) source);
-                    }
-                }
-            }
-        }
-
-    }
 
 
     public static interface TreeTraversalCallback {

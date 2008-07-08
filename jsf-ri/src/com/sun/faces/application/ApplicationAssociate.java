@@ -43,6 +43,7 @@ package com.sun.faces.application;
 import com.sun.faces.RIConstants;
 import com.sun.faces.scripting.GroovyHelper;
 import com.sun.faces.application.resource.ResourceCache;
+import com.sun.faces.application.annotation.AnnotationManager;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.spi.InjectionProvider;
@@ -146,6 +147,7 @@ public class ApplicationAssociate {
 
     private BeanManager beanManager;
     private GroovyHelper groovyHelper;
+    private AnnotationManager annotationManager;
     private boolean devModeEnabled;
 
     private PropertyEditorHelper propertyEditorHelper;
@@ -176,6 +178,7 @@ public class ApplicationAssociate {
         beanManager = new BeanManager(injectionProvider,
                                       webConfig.isOptionEnabled(
                                            BooleanWebContextInitParameter.EnableLazyBeanValidation));
+        annotationManager = new AnnotationManager();
         groovyHelper = GroovyHelper.getCurrentInstance();
         devModeEnabled = (appImpl.getProjectStage() == ProjectStage.Development);
 
@@ -245,6 +248,10 @@ public class ApplicationAssociate {
 
     public void setResourceCache(ResourceCache resourceCache) {
         this.resourceCache = resourceCache;
+    }
+
+    public AnnotationManager getAnnotationManager() {
+        return annotationManager;
     }
 
     public static void clearInstance(ExternalContext

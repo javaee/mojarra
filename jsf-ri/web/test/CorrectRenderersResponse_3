@@ -5,7 +5,7 @@
 </select>
 <select id="myListbox" name="myListbox" multiple="multiple" size="5">	<option value="Red">Red</option>
 	<option value="Blue" selected="selected">Blue</option>
-<optgroup label="group">	<option value="Green">Green</option>
+<optgroup label="group" disabled="disabled">	<option value="Green">Green</option>
 	<option value="Yellow">Yellow</option>
 </optgroup></select>
 <table border="0" id="myCheckboxlist" class="styleClass">

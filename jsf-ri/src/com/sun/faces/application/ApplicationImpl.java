@@ -62,6 +62,7 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -73,6 +74,7 @@ import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
+import javax.faces.render.Renderer;
 import javax.faces.application.Application;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.ResourceHandler;
@@ -175,7 +177,7 @@ public class ApplicationImpl extends Application {
     private Map<String,Object> validatorMap = null;
     private volatile String messageBundle = null;
 
-    private ArrayList<ELContextListener> elContextListeners = null;
+    private List<ELContextListener> elContextListeners = null;
     private ArrayList<ELResolver> elResolvers = null;
     private CompositeELResolver compositeELResolver = null;
     private final SystemEventHelper systemEventHelper = new SystemEventHelper();
@@ -191,6 +193,7 @@ public class ApplicationImpl extends Application {
         converterIdMap = new ConcurrentHashMap<String, Object>();
         converterTypeMap = new ConcurrentHashMap<Class, Object>();
         validatorMap = new ConcurrentHashMap<String, Object>();
+        elContextListeners = new CopyOnWriteArrayList<ELContextListener>();
         navigationHandler = new NavigationHandlerImpl(associate);
         propertyResolver = new PropertyResolverImpl();
         variableResolver = new VariableResolverImpl();
@@ -298,35 +301,55 @@ public class ApplicationImpl extends Application {
     }
 
 
+    /**
+     * @see javax.faces.application.Application#addELContextListener(javax.el.ELContextListener)
+     */
+    @Override
     public void addELContextListener(ELContextListener listener) {
         if (listener != null) {
-            if (elContextListeners == null) {
-                //noinspection CollectionWithoutInitialCapacity
-                elContextListeners = new ArrayList<ELContextListener>();
-            }
             elContextListeners.add(listener);
         }
     }
-    
+
+
+    /**
+     * @see javax.faces.application.Application#removeELContextListener(javax.el.ELContextListener)
+     */
+    @Override
     public void removeELContextListener(ELContextListener listener) {
-        if (listener != null && elContextListeners != null) {
+        if (listener != null) {
             elContextListeners.remove(listener);
         }
     }
-    
+
+
+    /**
+     * @see javax.faces.application.Application#getELContextListeners()
+     */
+    @Override
     public ELContextListener [] getELContextListeners() {
-        if (elContextListeners != null ) {
+        if (!elContextListeners.isEmpty()) {
             return (elContextListeners.toArray(
                        new ELContextListener[elContextListeners.size()]));
         } else {
             return (EMPTY_EL_CTX_LIST_ARRAY);
         }
     }
-   
+
+
+    /**
+     * @see javax.faces.application.Application#getExpressionFactory()
+     */
+    @Override
     public ExpressionFactory getExpressionFactory() {
         return associate.getExpressionFactory();
     }
 
+
+    /**
+     * @see javax.faces.application.Application#evaluateExpressionGet(javax.faces.context.FacesContext, String, Class)
+     */
+    @Override
     public Object evaluateExpressionGet(FacesContext context, 
         String expression, Class expectedType) throws ELException {
         ValueExpression ve = 
@@ -334,49 +357,34 @@ public class ApplicationImpl extends Application {
                 expression,expectedType);     
         return (ve.getValue(context.getELContext()));
     }
-    
+
+
+    /**
+     * @see javax.faces.application.Application#createComponent(javax.el.ValueExpression, javax.faces.context.FacesContext, String)
+     */
+    @Override
     public UIComponent createComponent(ValueExpression componentExpression,
-        FacesContext context, String componentType) throws FacesException {
-    	if (null == componentExpression) {
-    		String message = MessageUtils.getExceptionMessageString
-    		(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "componentExpression");
-    		throw new NullPointerException(message);
-    	}
-    	if (null == context) {
-    		String message = MessageUtils.getExceptionMessageString
-    		(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
-    		throw new NullPointerException(message);
-    	}
-    	if (null == componentType) {
-    		String message = MessageUtils.getExceptionMessageString
-    		(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "componentType");
-    		throw new NullPointerException(message);
-    	}
+                                       FacesContext context,
+                                       String componentType)
+    throws FacesException {
 
-        Object result;
-        boolean createOne = false;
+        Util.notNull("componentExpression", componentExpression);
+        Util.notNull("context", context);
+        Util.notNull("componentType", componentType);
 
-        try {
-            if (null != (result = 
-                componentExpression.getValue(context.getELContext()))) {
-                // if the result is not an instance of UIComponent
-                createOne = (!(result instanceof UIComponent));
-                // we have to create one.
-            }
-            if (null == result || createOne) {
-                result = this.createComponent(componentType);
-                componentExpression.setValue((context.getELContext()), result);
-            } 
-            if (null != result) {
-                Util.processListenerForAnnotation((UIComponent) result);
-            }
-        } catch (Exception ex) {
-            throw new FacesException(ex);
-        }
+        return createComponentApplyAnnotations(context,
+                                               componentExpression,
+                                               componentType,
+                                               null,
+                                               true);
 
-        return (UIComponent) result;    
     }
 
+
+    /**
+     * @see javax.faces.application.Application#getELResolver()
+     */
+    @Override
     public ELResolver getELResolver() {
 
         if (compositeELResolver == null) {
@@ -389,7 +397,12 @@ public class ApplicationImpl extends Application {
         return compositeELResolver;
 
     }
-    
+
+
+    /**
+     * @see javax.faces.application.Application#addELResolver(javax.el.ELResolver)
+     */
+    @Override
     public void addELResolver(ELResolver resolver) {
 
         if (associate.hasRequestBeenServiced()) {
@@ -458,24 +471,30 @@ public class ApplicationImpl extends Application {
     public List<ELResolver> getApplicationELResolvers() {
         return elResolvers;
     }
-    
+
+
+    /**
+     * @see javax.faces.application.Application#getActionListener()
+     */
     public ActionListener getActionListener() {
         return actionListener;
     }
 
 
+    /**
+     * @see javax.faces.application.Application#getViewHandler()
+     */
     public ViewHandler getViewHandler() {
         return viewHandler;
     }
 
 
-    public synchronized void setViewHandler(ViewHandler handler) {
+    /**
+     * @see javax.faces.application.Application#setViewHandler(javax.faces.application.ViewHandler)
+     */
+    public synchronized void setViewHandler(ViewHandler viewHandler) {
 
-        if (handler == null) {
-            String message = MessageUtils.getExceptionMessageString
-                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "handler");
-            throw new NullPointerException(message);
-        }
+        Util.notNull("viewHandler", viewHandler);
 
         if (associate.hasRequestBeenServiced()) {
             throw new IllegalStateException(
@@ -483,7 +502,7 @@ public class ApplicationImpl extends Application {
                         MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "ViewHandler"));
         }
 
-        viewHandler = handler;
+        this.viewHandler = viewHandler;
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.log(Level.FINE, MessageFormat.format("set ViewHandler Instance to ''{0}''", viewHandler.getClass().getName()));
         }
@@ -493,8 +512,6 @@ public class ApplicationImpl extends Application {
 
     /**
      * @see javax.faces.application.Application#getResourceHandler()
-     * @return
-     * @since 2.0
      */
     @Override
     public ResourceHandler getResourceHandler() {
@@ -506,16 +523,11 @@ public class ApplicationImpl extends Application {
 
     /**
      * @see javax.faces.application.Application#setResourceHandler(javax.faces.application.ResourceHandler)
-     * @since 2.0
      */
     @Override
     public synchronized void setResourceHandler(ResourceHandler resourceHandler) {
 
-        if (resourceHandler == null) {
-            String message = MessageUtils.getExceptionMessageString
-                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "resourceHandler");
-            throw new NullPointerException(message);
-        }
+        Util.notNull("resourceHandler", resourceHandler);
 
         if (associate.hasRequestBeenServiced()) {
             throw new IllegalStateException(
@@ -533,18 +545,20 @@ public class ApplicationImpl extends Application {
     }
 
 
+    /**
+     * @see javax.faces.application.Application#getStateManager()
+     */
     public StateManager getStateManager() {
         return stateManager;
     }
 
 
-    public synchronized void setStateManager(StateManager manager) {
+    /**
+     * @see javax.faces.application.Application#setStateManager(javax.faces.application.StateManager)
+     */
+    public synchronized void setStateManager(StateManager stateManager) {
 
-        if (manager == null) {
-            String message = MessageUtils.getExceptionMessageString
-                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "manager");
-            throw new NullPointerException(message);
-        }
+        Util.notNull("stateManager", stateManager);
 
         if (associate.hasRequestBeenServiced()) {
             throw new IllegalStateException(
@@ -552,7 +566,7 @@ public class ApplicationImpl extends Application {
                         MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "StateManager"));
         }
 
-        stateManager = manager;
+        this.stateManager = stateManager;
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.log(Level.FINE, MessageFormat.format("set StateManager Instance to ''{0}''",
                                                         stateManager.getClass().getName()));
@@ -561,14 +575,14 @@ public class ApplicationImpl extends Application {
     }
 
 
-    public synchronized void setActionListener(ActionListener listener) {
-        if (listener == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "listener");
-            throw new NullPointerException(message);
-        }
+    /**
+     * @see Application#setActionListener(javax.faces.event.ActionListener)
+     */
+    public synchronized void setActionListener(ActionListener actionListener) {
 
-        this.actionListener = listener;
+        Util.notNull("actionListener", actionListener);
+
+        this.actionListener = actionListener;
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine(MessageFormat.format("set ActionListener Instance to ''{0}''",
@@ -578,9 +592,7 @@ public class ApplicationImpl extends Application {
 
 
     /**
-     * Return the <code>NavigationHandler</code> instance
-     * installed present in this application instance.  If
-     * an instance does not exist, it will be created.
+     * @see javax.faces.application.Application#getNavigationHandler()
      */
     public NavigationHandler getNavigationHandler() {
         return navigationHandler;
@@ -588,19 +600,13 @@ public class ApplicationImpl extends Application {
 
 
     /**
-     * Set a <code>NavigationHandler</code> instance for this
-     * application instance.
-     *
-     * @param handler The <code>NavigationHandler</code> instance.
+     * @see javax.faces.application.Application#setNavigationHandler(javax.faces.application.NavigationHandler)
      */
-    public synchronized void setNavigationHandler(NavigationHandler handler) {
-        if (handler == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "handler");
-            throw new NullPointerException(message);
-        }
+    public synchronized void setNavigationHandler(NavigationHandler navigationHandler) {
 
-        this.navigationHandler = handler;
+        Util.notNull("navigationHandler", navigationHandler);
+
+        this.navigationHandler = navigationHandler;
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine(MessageFormat.format("set NavigationHandler Instance to ''{0}''",
@@ -608,26 +614,36 @@ public class ApplicationImpl extends Application {
         }
     }
 
+
+    /**
+     * @see javax.faces.application.Application#setPropertyResolver(javax.faces.el.PropertyResolver)
+     */
     @SuppressWarnings("deprecation")
     public PropertyResolver getPropertyResolver() {
         return propertyResolver;
     }
-    
+
+
+    /**
+     * @see javax.faces.application.Application#getResourceBundle(javax.faces.context.FacesContext, String)
+     */
+    @Override
     public ResourceBundle getResourceBundle(FacesContext context, String var) {
-        if (null == context || null == var) {
-            throw new FacesException("context or var is null.");
-        }
+
+        Util.notNull("context", context);
+        Util.notNull("var", var);
         return associate.getResourceBundle(context, var);
+
     }
 
-    @SuppressWarnings("deprecation")
-    public void setPropertyResolver(PropertyResolver resolver) {
 
-        if (resolver == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "resolver");
-            throw new NullPointerException(message);
-        }
+    /**
+     * @see javax.faces.application.Application#setPropertyResolver(javax.faces.el.PropertyResolver)
+     */
+    @SuppressWarnings("deprecation")
+    public void setPropertyResolver(PropertyResolver propertyResolver) {
+
+        Util.notNull("propertyResolver", propertyResolver);
 
         if (associate.hasRequestBeenServiced()) {
             throw new IllegalStateException(
@@ -635,24 +651,25 @@ public class ApplicationImpl extends Application {
                         MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "PropertyResolver"));
         }
 
-        propertyResolver.setDelegate(ELUtils.getDelegatePR(associate, true));
-        associate.setLegacyPropertyResolver(resolver);
+        this.propertyResolver.setDelegate(ELUtils.getDelegatePR(associate, true));
+        associate.setLegacyPropertyResolver(propertyResolver);
         propertyResolver = new PropertyResolverImpl();
 
 
         if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine(MessageFormat.format("set PropertyResolver Instance to ''{0}''", resolver.getClass().getName()));
+            LOGGER.fine(MessageFormat.format("set PropertyResolver Instance to ''{0}''", propertyResolver.getClass().getName()));
         }
     }
 
+
+    /**
+     * @see javax.faces.application.Application#createMethodBinding(String, Class[])
+     */
     @SuppressWarnings("deprecation")
     public MethodBinding createMethodBinding(String ref, Class params[]) {
-        MethodExpression result;
-        if (ref == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "ref");
-            throw new NullPointerException(message);
-        }
+
+        Util.notNull("ref", ref);
+
         if (!(ref.startsWith("#{") && ref.endsWith("}"))) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.fine(MessageFormat.format("Expression ''{0}'' does not follow the syntax #{...}", ref));
@@ -660,29 +677,32 @@ public class ApplicationImpl extends Application {
             throw new ReferenceSyntaxException(ref);
         }
         FacesContext context = FacesContext.getCurrentInstance();
+        MethodExpression result;
         try {
             // return a MethodBinding that wraps a MethodExpression.
-	    if (null == params) {
-		params = RIConstants.EMPTY_CLASS_ARGS;
-	    }
-            result = 
-                getExpressionFactory().
-                    createMethodExpression(context.getELContext(), ref, null,
-                    params);
+            if (null == params) {
+                params = RIConstants.EMPTY_CLASS_ARGS;
+            }
+            result =
+                  getExpressionFactory().
+                        createMethodExpression(context.getELContext(), ref, null,
+                                               params);
         } catch (ELException elex) {
             throw new ReferenceSyntaxException(elex);
         }
         return (new MethodBindingMethodExpressionAdapter(result));
+
     }
 
+
+    /**
+     * @see javax.faces.application.Application#createValueBinding(String)
+     */
     @SuppressWarnings("deprecation")
     public ValueBinding createValueBinding(String ref)
-        throws ReferenceSyntaxException {
-        if (ref == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "ref");
-            throw new NullPointerException(message);
-        }
+    throws ReferenceSyntaxException {
+
+        Util.notNull("ref", ref);
         ValueExpression result;
         FacesContext context = FacesContext.getCurrentInstance();
          // return a ValueBinding that wraps a ValueExpression.
@@ -694,21 +714,26 @@ public class ApplicationImpl extends Application {
             throw new ReferenceSyntaxException(elex);
          } 
          return (new ValueBindingValueExpressionAdapter(result));
+
     }
 
+
+    /**
+     * @see javax.faces.application.Application#getVariableResolver()
+     */
     @SuppressWarnings("deprecation")
     public VariableResolver getVariableResolver() {       
         return variableResolver;
     }
 
-    @SuppressWarnings("deprecation")
-    public void setVariableResolver(VariableResolver resolver) {
 
-        if (resolver == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "resolver");
-            throw new NullPointerException(message);
-        }
+    /**
+     * @see javax.faces.application.Application#setVariableResolver(javax.faces.el.VariableResolver)
+     */
+    @SuppressWarnings("deprecation")
+    public void setVariableResolver(VariableResolver variableResolver) {
+
+        Util.notNull("variableResolver", variableResolver);
 
         if (associate.hasRequestBeenServiced()) {
             throw new IllegalStateException(
@@ -716,29 +741,26 @@ public class ApplicationImpl extends Application {
                         MessageUtils.ILLEGAL_ATTEMPT_SETTING_APPLICATION_ARTIFACT_ID, "VariableResolver"));
         }
 
-        variableResolver.setDelegate(ELUtils.getDelegateVR(associate, true));
-        associate.setLegacyVariableResolver(resolver);
+        this.variableResolver.setDelegate(ELUtils.getDelegateVR(associate, true));
+        associate.setLegacyVariableResolver(variableResolver);
         variableResolver = new VariableResolverImpl();
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine(MessageFormat.format("set VariableResolver Instance to ''{0}''",
                                              variableResolver.getClass().getName()));
         }
+
     }
 
 
+    /**
+     * @see javax.faces.application.Application#addComponent(String, String)
+     */
     public void addComponent(String componentType, String componentClass) {
-        if (componentType == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "componentType");
-            throw new NullPointerException(message);
-        }
-        if (componentClass == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "componentClass");
-            throw new NullPointerException(message);
-        }
-        
+
+        Util.notNull("componentType", componentType);
+        Util.notNull("componentType", componentClass);
+
         componentMap.put(componentType, componentClass);
         
         if (LOGGER.isLoggable(Level.FINE)) {
@@ -746,89 +768,108 @@ public class ApplicationImpl extends Application {
                                              componentType,
                                              componentClass));
         }
+        
     }
 
 
-    public UIComponent createComponent(String componentType)
-        throws FacesException {
-        if (componentType == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "componentType");
-            throw new NullPointerException(message);
-        }
-        UIComponent returnVal;
-        try {
-            returnVal = (UIComponent) newThing(componentType, componentMap);
-        } catch (Exception ex) {     
-            if (LOGGER.isLoggable(Level.WARNING)) {
-                LOGGER.log(Level.WARNING,
-                        "jsf.cannot_instantiate_component_error", componentType);                
-            }
-            throw new FacesException(ex);
-        }
-        if (returnVal == null) {
-            Object[] params = {componentType};
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE,
-                            "jsf.cannot_instantiate_component_error", params);
-            }
-            throw new FacesException(MessageUtils.getExceptionMessageString(
-                    MessageUtils.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
-        }
-        
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.log(Level.FINE, MessageFormat.format("Created component with component type of ''{0}''",
-                                                        componentType));
-        }
-        Util.processListenerForAnnotation(returnVal);
-        
-        return returnVal;
+    /**
+     * @see javax.faces.application.Application#createComponent(String)
+     */
+    public UIComponent createComponent(String componentType) throws FacesException {
+
+        Util.notNull("componentType", componentType);
+
+        return createComponentApplyAnnotations(FacesContext.getCurrentInstance(),
+                                               componentType,
+                                               null,
+                                               true);
+
     }
 
+
+    /**
+     * @see javax.faces.application.Application#createComponent(javax.faces.el.ValueBinding, javax.faces.context.FacesContext, String)
+     */
     @SuppressWarnings("deprecation")
     public UIComponent createComponent(ValueBinding componentBinding,
                                        FacesContext context,
                                        String componentType)
-        throws FacesException {
-        if (null == componentBinding) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "componentBinding");
-            throw new NullPointerException(message);
-        }
-        if (null == context) {
-                String message = MessageUtils.getExceptionMessageString
-                    (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
-                throw new NullPointerException(message);
-            }
-        if (null == componentType) {
-                String message = MessageUtils.getExceptionMessageString
-                    (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "componentType");
-                throw new NullPointerException(message);
-            }
+    throws FacesException {
+
+        Util.notNull("componentBinding", componentBinding);
+        Util.notNull("context", context);
+        Util.notNull("componentType", componentType);
 
         Object result;
         boolean createOne = false;
         try {
-            if (null != (result = componentBinding.getValue(context))) {
-                // if the result is not an instance of UIComponent
+            result = componentBinding.getValue(context);
+            if (result != null) {
                 createOne = (!(result instanceof UIComponent));
-                // we have to create one.
             }
-          
-            if (null == result || createOne) {
-                result = this.createComponent(componentType);
+
+            if (result == null || createOne) {
+                result = this.createComponentApplyAnnotations(context,
+                                                              componentType,
+                                                              null,
+                                                              false);
                 componentBinding.setValue(context, result);
-            } 
-            if (null != result) {
-                Util.processListenerForAnnotation((UIComponent)result);
             }
         } catch (Exception ex) {
             throw new FacesException(ex);
         }
+
         return (UIComponent) result;
+
     }
 
 
+    /**
+     * @see javax.faces.application.Application#createComponent(javax.el.ValueExpression, javax.faces.context.FacesContext, String, String)
+     */
+    @Override
+    public UIComponent createComponent(ValueExpression componentExpression,
+                                       FacesContext context,
+                                       String componentType,
+                                       String rendererType) {
+
+        Util.notNull("componentExpression", componentExpression);
+        Util.notNull("context", context);
+        Util.notNull("componentType", componentType);
+        Util.notNull("rendererType", rendererType);
+
+        return createComponentApplyAnnotations(context,
+                                               componentExpression,
+                                               componentType,
+                                               rendererType,
+                                               true);
+
+    }
+
+
+    /**
+     * @see javax.faces.application.Application#createComponent(javax.faces.context.FacesContext, String, String)
+     */
+    @Override
+    public UIComponent createComponent(FacesContext context,
+                                       String componentType,
+                                       String rendererType) {
+
+        Util.notNull("context", context);
+        Util.notNull("componentType", componentType);
+        Util.notNull("rendererType", rendererType);
+
+        return createComponentApplyAnnotations(context,
+                                               componentType,
+                                               rendererType,
+                                               true);
+
+    }
+
+
+    /**
+     * @see javax.faces.application.Application#getComponentTypes()
+     */
     public Iterator<String> getComponentTypes() {
 
         return componentMap.keySet().iterator();
@@ -836,18 +877,14 @@ public class ApplicationImpl extends Application {
     }
 
 
+    /**
+     * @see javax.faces.application.Application#addConverter(String, String)
+     */
     public void addConverter(String converterId, String converterClass) {
-        if (converterId == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "converterId");
-            throw new NullPointerException(message);
-        }
-        if (converterClass == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "converterClass");
-            throw new NullPointerException(message);
-        }
-        
+
+        Util.notNull("converterId", converterId);
+        Util.notNull("converterClass", converterClass);
+
         converterIdMap.put(converterId, converterClass);
 
         Class<?>[] types = STANDARD_CONV_ID_TO_TYPE_MAP.get(converterId);
@@ -867,17 +904,13 @@ public class ApplicationImpl extends Application {
     }
 
 
+    /**
+     * @see javax.faces.application.Application#addConverter(Class, String)
+     */
     public void addConverter(Class targetClass, String converterClass) {
-        if (targetClass == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "targetClass");
-            throw new NullPointerException(message);
-        }
-        if (converterClass == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "converterClass");
-            throw new NullPointerException(message);
-        }
+
+        Util.notNull("targetClass", targetClass);
+        Util.notNull("converterClass", converterClass);
 
         String converterId = STANDARD_TYPE_TO_CONV_ID_MAP.get(targetClass);
         if (converterId != null) {
@@ -945,12 +978,12 @@ public class ApplicationImpl extends Application {
     }
 
 
+    /**
+     * @see javax.faces.application.Application#createConverter(String)
+     */
     public Converter createConverter(String converterId) {
-        if (converterId == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "convertedId");
-            throw new NullPointerException(message);
-        }
+
+        Util.notNull("converterId", converterId);
         Converter returnVal = (Converter) newThing(converterId, converterIdMap);
         if (returnVal == null) {
             Object[] params = {converterId};
@@ -964,16 +997,17 @@ public class ApplicationImpl extends Application {
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine(MessageFormat.format("created converter of type ''{0}''", converterId));
         }
+        associate.getAnnotationManager().applyConverterAnnotations(FacesContext.getCurrentInstance(), returnVal);
         return returnVal;
     }
 
 
+    /**
+     * @see javax.faces.application.Application#createConverter(Class)
+     */
     public Converter createConverter(Class targetClass) {
-        if (targetClass == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "targetClass");
-            throw new NullPointerException(message);
-        }
+
+        Util.notNull("targetClass", targetClass);
         Converter returnVal = (Converter) newConverter(targetClass,
                                                    converterTypeMap,targetClass);
         if (returnVal != null) {
@@ -981,6 +1015,7 @@ public class ApplicationImpl extends Application {
                 LOGGER.fine(MessageFormat.format("Created converter of type ''{0}''",
                                                  returnVal.getClass().getName()));
             }
+            associate.getAnnotationManager().applyConverterAnnotations(FacesContext.getCurrentInstance(), returnVal);
             return returnVal;
         } 
 
@@ -995,6 +1030,7 @@ public class ApplicationImpl extends Application {
                        LOGGER.fine(MessageFormat.format("Created converter of type ''{0}''",
                                                         returnVal.getClass().getName()));
                     }
+                    associate.getAnnotationManager().applyConverterAnnotations(FacesContext.getCurrentInstance(), returnVal);
                     return returnVal;
                 }
             }
@@ -1009,9 +1045,10 @@ public class ApplicationImpl extends Application {
                     LOGGER.fine(MessageFormat.format("Created converter of type ''{0}''",
                                                      returnVal.getClass().getName()));
                 }
+                associate.getAnnotationManager().applyConverterAnnotations(FacesContext.getCurrentInstance(), returnVal);
                 return returnVal;
             }
-        } 
+        }
         return returnVal;
     }
 
@@ -1059,6 +1096,10 @@ public class ApplicationImpl extends Application {
         return returnVal;
     }
 
+
+    /**
+     * @see javax.faces.application.Application#getConverterIds()
+     */
     public Iterator<String> getConverterIds() {
        
         return converterIdMap.keySet().iterator();
@@ -1066,6 +1107,9 @@ public class ApplicationImpl extends Application {
     }
 
 
+    /**
+     * @see javax.faces.application.Application#getConverterTypes()
+     */
     public Iterator<Class> getConverterTypes() {
                 
         return converterTypeMap.keySet().iterator();
@@ -1073,6 +1117,9 @@ public class ApplicationImpl extends Application {
     }
 
 
+    /**
+     * @see javax.faces.application.Application#getSupportedLocales()
+     */
     public Iterator<Locale> getSupportedLocales() {
 
             if (null != supportedLocales) {
@@ -1084,12 +1131,12 @@ public class ApplicationImpl extends Application {
     }
 
 
+    /**
+     * @see javax.faces.application.Application#setSupportedLocales(java.util.Collection)
+     */
     public synchronized void setSupportedLocales(Collection<Locale> newLocales) {
-        if (null == newLocales) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "newLocales");
-            throw new NullPointerException(message);
-        }
+
+        Util.notNull("newLocales", newLocales);
 
         supportedLocales = new ArrayList<Locale>(newLocales);
 
@@ -1097,21 +1144,24 @@ public class ApplicationImpl extends Application {
             LOGGER.log(Level.FINE, MessageFormat.format("set Supported Locales ''{0}''",
                                                         supportedLocales.toString()));
         }
+
     }
 
 
+    /**
+     * @see javax.faces.application.Application#getDefaultLocale()
+     */
     public Locale getDefaultLocale() {
         return defaultLocale;
     }
 
 
+    /**
+     * @see javax.faces.application.Application#setDefaultLocale(java.util.Locale)
+     */
     public synchronized void setDefaultLocale(Locale locale) {
 
-        if (locale == null) {
-            String message = MessageUtils.getExceptionMessageString
-                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "locale");
-            throw new NullPointerException(message);
-        }
+        Util.notNull("locale", locale);
 
         defaultLocale = locale;
 
@@ -1125,28 +1175,30 @@ public class ApplicationImpl extends Application {
     protected String defaultRenderKitId = null;
 
 
+    /**
+     * @see javax.faces.application.Application#getDefaultRenderKitId()
+     */
     public String getDefaultRenderKitId() {
         return defaultRenderKitId;
     }
 
 
+    /**
+     * @see javax.faces.application.Application#setDefaultRenderKitId(String)
+     */
     public void setDefaultRenderKitId(String renderKitId) {
         defaultRenderKitId = renderKitId;
     }
 
 
+    /**
+     * @see javax.faces.application.Application#addValidator(String, String)
+     */
     public void addValidator(String validatorId, String validatorClass) {
-        if (validatorId == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "validatorId");
-            throw new NullPointerException(message);
-        }
-        if (validatorClass == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "validatorClass");
-            throw new NullPointerException(message);
-        }
-        
+
+        Util.notNull("validatorId", validatorId);
+        Util.notNull("validatorClass", validatorClass);
+
         validatorMap.put(validatorId, validatorClass);
         
         if (LOGGER.isLoggable(Level.FINE)) {
@@ -1154,15 +1206,16 @@ public class ApplicationImpl extends Application {
                                              validatorId,
                                              validatorClass));
         }
+
     }
 
 
+    /**
+     * @see javax.faces.application.Application#createValidator(String)
+     */
     public Validator createValidator(String validatorId) throws FacesException {
-        if (validatorId == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "validatorId");
-            throw new NullPointerException(message);
-        }
+
+        Util.notNull("validatorId", validatorId);
         Validator returnVal = (Validator) newThing(validatorId, validatorMap);
         if (returnVal == null) {
             Object[] params = {validatorId};
@@ -1177,10 +1230,14 @@ public class ApplicationImpl extends Application {
             LOGGER.fine(MessageFormat.format("created validator of type ''{0}''",
                                              validatorId));
         }
+        associate.getAnnotationManager().applyValidatorAnnotations(FacesContext.getCurrentInstance(), returnVal);
         return returnVal;
     }
 
 
+    /**
+     * @see javax.faces.application.Application#getValidatorIds()
+     */
     public Iterator<String> getValidatorIds() {        
         
         return validatorMap.keySet().iterator();
@@ -1188,6 +1245,9 @@ public class ApplicationImpl extends Application {
     }
 
 
+    /**
+     * @see javax.faces.application.Application#setMessageBundle(String)
+     */
     public synchronized void setMessageBundle(String messageBundle) {
 
         this.messageBundle = messageBundle;
@@ -1199,6 +1259,9 @@ public class ApplicationImpl extends Application {
     }
 
 
+    /**
+     * @see javax.faces.application.Application#getMessageBundle()
+     */
     public String getMessageBundle() {
         return messageBundle;
     }
@@ -1226,7 +1289,7 @@ public class ApplicationImpl extends Application {
         assert (key != null && map != null);
 
         Object result;
-        Class clazz = null;
+        Class clazz;
         Object value;
 
         value = map.get(key);
@@ -1285,7 +1348,7 @@ public class ApplicationImpl extends Application {
         assert (key != null && map != null);
 
         Object result = null;
-        Class clazz = null;
+        Class clazz;
         Object value;
 
         value = map.get(key);
@@ -1335,6 +1398,104 @@ public class ApplicationImpl extends Application {
     }
 
 
+    /**
+     * Leveraged by {@link Application#createComponent(String)} and {@link Application#createComponent(javax.faces.context.FacesContext, String, String)}
+     * This method will apply any component and render annotations that may be present.
+     */
+    private UIComponent createComponentApplyAnnotations(FacesContext ctx,
+                                                        String componentType,
+                                                        String rendererType,
+                                                        boolean applyAnnotations) {
+
+        UIComponent c;
+        try {
+            c = (UIComponent) newThing(componentType, componentMap);
+        } catch (Exception ex) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE,
+                        "jsf.cannot_instantiate_component_error", componentType);
+            }
+            throw new FacesException(ex);
+        }
+        if (c == null) {
+            Object[] params = {componentType};
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE,
+                            "jsf.cannot_instantiate_component_error", params);
+            }
+            throw new FacesException(MessageUtils.getExceptionMessageString(
+                    MessageUtils.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
+        }
+
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.log(Level.FINE, MessageFormat.format("Created component with component type of ''{0}''",
+                                                        componentType));
+        }
+
+        if (applyAnnotations) {
+            applyAnnotations(ctx, rendererType, c);
+        }
+        return c;
+
+    }
+
+
+    /**
+     * Leveraged by {@link Application#createComponent(javax.el.ValueExpression, javax.faces.context.FacesContext, String)} and
+     * {@link Application#createComponent(javax.el.ValueExpression, javax.faces.context.FacesContext, String, String)}.
+     * This method will apply any component and render annotations that may be present.
+     */
+    private UIComponent createComponentApplyAnnotations(FacesContext ctx,
+                                                        ValueExpression componentExpression,
+                                                        String componentType,
+                                                        String rendererType,
+                                                        boolean applyAnnotations) {
+
+        UIComponent c;
+
+        try {
+            c = (UIComponent) componentExpression
+                  .getValue(ctx.getELContext());
+
+            if (c == null) {
+                c = this.createComponentApplyAnnotations(ctx,
+                                                         componentType,
+                                                         rendererType,
+                                                         applyAnnotations);
+                componentExpression.setValue((ctx.getELContext()), c);
+            }
+        } catch (Exception ex) {
+            throw new FacesException(ex);
+        }
+
+        return c;
+
+    }
+
+
+    /**
+     * Process any annotations associated with this component/renderer.
+     */
+    private void applyAnnotations(FacesContext ctx,
+                                  String rendererType,
+                                  UIComponent c) {
+
+        if (c != null && ctx != null) {
+            associate.getAnnotationManager()
+                  .applyComponentAnnotations(ctx, c);
+            if (rendererType != null) {
+                c.setRendererType(rendererType);
+                Renderer r =
+                      ctx.getRenderKit().getRenderer(c.getFamily(), rendererType);
+                if (r != null) {
+                    associate.getAnnotationManager()
+                          .applyRendererAnnotations(ctx, r, c);
+                }
+            }
+
+        }
+
+    }
 
 
     /**
@@ -1774,6 +1935,7 @@ public class ApplicationImpl extends Application {
                     throw new FacesException(ee);
                 }
             }
+
         }
 
     } // END Cache

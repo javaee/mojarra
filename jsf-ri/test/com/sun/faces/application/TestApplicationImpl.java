@@ -45,19 +45,24 @@ package com.sun.faces.application;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.List;
 
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
+import javax.faces.render.RenderKitFactory;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.StateManager;
+import javax.faces.application.ResourceDependencies;
+import javax.faces.application.ResourceDependency;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
+import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.IntegerConverter;
@@ -698,22 +703,37 @@ public class TestApplicationImpl extends JspFacesTestCase {
     }
 
 
-    public void testListenerFor() throws Exception {
+    public void testComponentAnnotatations() throws Exception {
 
+        getFacesContext().getAttributes().put("javax.faces.IS_POSTBACK_AND_RESTORE_VIEW", Boolean.FALSE);
         Application application = getFacesContext().getApplication();
         application.addComponent("CustomInput", CustomOutput.class.getName());
         CustomOutput c = (CustomOutput) application.createComponent("CustomInput");
+        CustomOutput c2 = (CustomOutput) application.createComponent("CustomInput");
         UIViewRoot root = getFacesContext().getViewRoot();
         root.getChildren().add(c);
+        root.getChildren().add(c2);
         assertTrue(c.getEvent() instanceof AfterAddToParentEvent);
+        assertTrue(c2.getEvent() instanceof AfterAddToParentEvent);
+        List<UIComponent> headComponents = root.getComponentResources(getFacesContext(), "head");
+        System.out.println(headComponents.toString());
+        assertTrue(headComponents.size() == 1);
+        assertTrue(headComponents.get(0) instanceof UIOutput);
+        assertTrue("test".equals(headComponents.get(0).getAttributes().get("library")));
+        List<UIComponent> bodyComponents = root.getComponentResources(getFacesContext(), "body");
+        assertTrue(bodyComponents.size() == 1);
+        assertTrue(bodyComponents.get(0) instanceof UIOutput);
+        assertTrue("test.js".equals(bodyComponents.get(0).getAttributes().get("name")));
+        assertTrue("body".equals(bodyComponents.get(0).getAttributes().get("target")));
 
         application.addComponent("CustomInput2", CustomOutput2.class.getName());
-        CustomOutput2 c2 = (CustomOutput2) application.createComponent("CustomInput2");
-        root.getChildren().add(c2);
-        assertTrue(c2.getEvent() instanceof AfterAddToParentEvent);
-        c2.reset();
-        c2.encodeAll(getFacesContext());
-        assertTrue(c2.getEvent() instanceof BeforeRenderEvent);
+        CustomOutput2 c3 = (CustomOutput2) application.createComponent("CustomInput2");
+        root.getChildren().add(c3);
+        assertTrue(c3.getEvent() instanceof AfterAddToParentEvent);
+        c3.reset();
+        c3.encodeAll(getFacesContext());
+        assertTrue(c3.getEvent() instanceof BeforeRenderEvent);
+
     }
 
 
@@ -755,6 +775,10 @@ public class TestApplicationImpl extends JspFacesTestCase {
 
     @ListenerFor(systemEventClass=AfterAddToParentEvent.class,
                  sourceClass= CustomOutput.class)
+    @ResourceDependencies({
+        @ResourceDependency(name="#{'test.js'}",library="test",target="#{'body'}"),
+        @ResourceDependency(name="test.css",library="#{'test'}")
+    })
     public static final class CustomOutput
           extends UIOutput
           implements ComponentSystemEventListener {
