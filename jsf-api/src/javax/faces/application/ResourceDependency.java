@@ -34,6 +34,8 @@ import java.lang.annotation.Target;
  * the <em>name</em>, <em>library</em>, and <em>target</em>
  * attributes.</p></li>
  *
+ * RELEASE_PENDING (edburns,rogerk) unnecessary - compiler will complain before
+ *  getting this far.
  * <li><p>If <em>name</em> is the empty string throw an
  * <code>IllegalArgumentException</code> </p></li>
  *
@@ -61,6 +63,7 @@ import java.lang.annotation.Target;
  * <li><p>If <em>target</em> is non-<code>null</code>, store it under the key
  * "target". </p></li>
  *
+ * RELEASE_PENDING (edburns,rogerk) unnecessary verbage.  
  * <li><p>If <em>target</em> is non-<code>null</code>, call {@link
  * javax.faces.component.UIViewRoot#addComponentResource(javax.faces.context.FacesContext,
  * javax.faces.component.UIComponent, java.lang.String)}, passing the
