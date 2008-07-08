@@ -158,62 +158,6 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     }
 
 
-    public void testAddChildWithComponentResource() {
-
-        application.addComponent("javax.faces.Output", "javax.faces.component.UIOutput");
-        application.addComponent("javax.faces.Panel", "javax.faces.component.UIPanel");
-        facesContext.getAttributes().put("javax.faces.IS_POSTBACK_AND_RESTORE_VIEW", Boolean.FALSE);
-        UIViewRoot root = new UIViewRoot();
-        UIComponent parent = createComponent();
-        root.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
-        facesContext.setViewRoot(root);        
-        ResourceComponent child = new ResourceComponent();
-        ResourceComponent child2 = new ResourceComponent();
-        root.getChildren().add(parent);
-        parent.getChildren().add(child);
-        // adding a second ResourceComponent with the exact same annotations
-        // shouldn't result in another output component being added as this
-        // is a waste
-        parent.getChildren().add(child2);
-        List<UIComponent> headComponents = root.getComponentResources(facesContext, "head");
-        System.out.println(headComponents.toString());
-        assertTrue(headComponents.size() == 1);
-        assertTrue(headComponents.get(0) instanceof UIOutput);
-        List<UIComponent> bodyComponents = root.getComponentResources(facesContext, "body");
-        assertTrue(bodyComponents.size() == 1);
-        assertTrue(bodyComponents.get(0) instanceof UIOutput);
-        
-    }
-
-
-    public void testAddFacetWithComponentResource() {
-
-        application.addComponent("javax.faces.Output", "javax.faces.component.UIOutput");
-        application.addComponent("javax.faces.Panel", "javax.faces.component.UIPanel");
-        facesContext.getAttributes().put("javax.faces.IS_POSTBACK_AND_RESTORE_VIEW", Boolean.FALSE);
-        UIViewRoot root = new UIViewRoot();
-        UIComponent parent = createComponent();
-        root.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
-        facesContext.setViewRoot(root);
-        ResourceComponent child = new ResourceComponent();
-        ResourceComponent child2 = new ResourceComponent();
-        root.getChildren().add(parent);
-        parent.getFacets().put("facet", child);
-        // adding a second ResourceComponent with the exact same annotations
-        // shouldn't result in another output component being added as this
-        // is a waste
-        parent.getFacets().put("facet2", child2);
-        List<UIComponent> headComponents = root.getComponentResources(facesContext, "head");
-        System.out.println(headComponents.toString());
-        assertTrue(headComponents.size() == 1);
-        assertTrue(headComponents.get(0) instanceof UIOutput);
-        List<UIComponent> bodyComponents = root.getComponentResources(facesContext, "body");
-        assertTrue(bodyComponents.size() == 1);
-        assertTrue(bodyComponents.get(0) instanceof UIOutput);
-
-    }
-
-
     public void testComponentToFromEL() {
 
         TestComponent c = new TestComponent();
@@ -1477,17 +1421,6 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
         public void reset() {
             event = null;
-        }
-    }
-
-    
-    @ResourceDependencies ({
-        @ResourceDependency(name="test.js",library="test",target="body"),
-        @ResourceDependency(name="test.css",library="test")
-    })
-    private static final class ResourceComponent extends UIComponentBase {
-        public String getFamily() {
-            return "ResourceComponent";
         }
     }
 
