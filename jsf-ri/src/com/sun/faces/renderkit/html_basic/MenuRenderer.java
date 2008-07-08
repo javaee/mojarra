@@ -743,6 +743,15 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                     writer.startElement("optgroup", component);
                     writer.writeAttribute("label", item.getLabel(), "label");
 
+                    // if the component is disabled, "disabled" attribute would be rendered
+                    // on "select" tag, so don't render "disabled" on every option.
+                    boolean componentDisabled =
+                          Boolean.TRUE.equals(component.getAttributes().get("disabled"));
+                    if ((!componentDisabled) && item.isDisabled()) {
+                        writer.writeAttribute("disabled", true, "disabled");
+                    }
+
+
                     // render options of this group.
                     SelectItem[] itemsArray =
                           ((SelectItemGroup) item).getSelectItems();
