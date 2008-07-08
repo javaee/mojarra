@@ -659,6 +659,16 @@ public abstract class Application {
      * class specified by a previous call to <code>addComponent()</code> for
      * the specified component type.</p>
      *
+     * RELEASE_PENDING (edburns, rogerk) The javadocs for ListenerFor state that the
+     * factory responsible for or acting upon an artifact that must take this annotation
+     * into account will take the appropriate action. Seems like the documentation is circular
+     * and should be clarified either here, or in ListenFor
+     *
+     * RELEASE_PENDING (edburns, rogerk) this method will process @ResourceDependency
+     * *and* @ListenerFor annotations (and their plural equivalents).
+     * No action is taken on the Renderer unless createComponent() that takes
+     * an additional rendererType argument is called.
+     *
      * <p class="changed_added_2_0">Before the component instance is
      * returned, it must be inspected for the presence of a {@link
      * javax.faces.event.ListenerFor} annotation.  If this annotation is present,
@@ -682,6 +692,9 @@ public abstract class Application {
      * implementation of {@link ValueExpression} and call through to
      * {@link
      * #createComponent(javax.el.ValueExpression,javax.faces.context.FacesContext,java.lang.String)}.</p>
+     *
+     * RELEASE_PENDING (edburns,rogerk) do we really want to add new functionality
+     * to a deperecated method.  I don't think we do.
      *
      * <p class="changed_added_2_0">Before the component instance is
      * returned, it must be inspected for the presence of a {@link
@@ -724,6 +737,16 @@ public abstract class Application {
      * @param componentType Component type to create if the {@link
      * ValueExpression} does not return a component instance
      *
+     * RELEASE_PENDING (edburns, rogerk) The javadocs for ListenerFor state that the
+     * factory responsible for or acting upon an artifact that must take this annotation
+     * into account will take the appropriate action. Seems like the documentation is circular
+     * and should be clarified either here, or in ListenFor
+     *
+     * RELEASE_PENDING (edburns, rogerk) this method will process @ResourceDependency
+     * *and* @ListenerFor annotations (and their plural equivalents).
+     * No action is taken on the Renderer unless createComponent() that takes
+     * an additional rendererType argument is called.
+     *
      * <p class="changed_added_2_0">Before the component instance is
      * returned, it must be inspected for the presence of a {@link
      * javax.faces.event.ListenerFor} annotation.  If this annotation is present,
@@ -742,38 +765,67 @@ public abstract class Application {
     public UIComponent createComponent(ValueExpression componentExpression,
                                        FacesContext context,
                                        String componentType)
-	throws FacesException {
-        if (null == componentExpression || null == context ||
-            null == componentType) {
-        	// PENDING - i18n
-            StringBuilder builder = new StringBuilder(64);
-            builder.append("null parameters - ");
-            builder.append("componentExpression: ").append(componentExpression);
-            builder.append(", context: ").append(context);
-            builder.append(", componentType: ").append(componentType);
-            throw new NullPointerException(builder.toString());
+    throws FacesException {
+
+        if (defaultApplication != null) {
+            return defaultApplication.createComponent(componentExpression,
+                                                      context,
+                                                      componentType);
         }
 
-        Object result;
-        boolean createOne = false;
+        throw new UnsupportedOperationException();
 
-        try {
-            if (null != (result = 
-                componentExpression.getValue(context.getELContext()))) {
-                // if the result is not an instance of UIComponent
-                createOne = (!(result instanceof UIComponent));
-                // we have to create one.
-            }
-            if (null == result || createOne) {
-                result = this.createComponent(componentType);
-                componentExpression.setValue((context.getELContext()), result);
-            }
-        } catch (ELException elex) {
-            throw new FacesException(elex);
-        }
-
-        return (UIComponent) result;    
     }
+
+
+    /**
+     * RELEASE_PENDING (edburs,rogerk) docs
+     * @param componentExpression
+     * @param context
+     * @param componentType
+     * @param rendererType
+     * @return
+     * @throws FacesException
+     * @since 2.0
+     */
+    public UIComponent createComponent(ValueExpression componentExpression,
+                                       FacesContext context,
+                                       String componentType,
+                                       String rendererType) {
+
+        if (defaultApplication != null) {
+            return defaultApplication.createComponent(componentExpression,
+                                                      context,
+                                                      componentType,
+                                                      rendererType);
+        }
+
+        throw new UnsupportedOperationException();
+
+    }
+
+
+    /**
+     * RELEASE_PENDING (edburns,rogerk) docs
+     * @param componentType
+     * @param rendererType
+     * @return
+     * @throws FacesException
+     * @since 2.0
+     */
+     public UIComponent createComponent(FacesContext context,
+                                        String componentType,
+                                        String rendererType) {
+
+        if (defaultApplication != null) {
+            defaultApplication.createComponent(context,
+                                               componentType,
+                                               rendererType);
+        }
+
+        throw new UnsupportedOperationException();
+
+     }
 
 
     /**
@@ -928,8 +980,8 @@ public abstract class Application {
 
         if (defaultApplication != null) {
             return defaultApplication.evaluateExpressionGet(context,
-                                                                expression,
-                                                                expectedType);
+                                                            expression,
+                                                            expectedType);
         }
         throw new UnsupportedOperationException();
 

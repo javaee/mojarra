@@ -1132,97 +1132,9 @@ public class UIInput extends UIOutput implements EditableValueHolder {
             validators = new ArrayList<Validator>();
         }
         validators.add(validator);
-        processResourceDependencyAnnotation(FacesContext.getCurrentInstance(),
-                                            validator);
 
     }
     
-    private static void processResourceDependencyAnnotation(FacesContext context,
-                                                            Object source) {
-        Class<?> sourceClass = source.getClass();
-        // NOTE - calling isAnnotationPresent and getAnnotation without
-        // caching the metadata will be a performance sink as these methods
-        // are backed by a sync'd utility method.  We'll need to come up
-        // with something better.
-        if (sourceClass.isAnnotationPresent(ResourceDependencies.class)) {
-            ResourceDependencies resourceDeps =
-                  source.getClass()
-                        .getAnnotation(ResourceDependencies.class);
-            ResourceDependency[] dependencies = resourceDeps.value();
-            if (dependencies != null) {
-                for (ResourceDependency dependency : dependencies) {
-                    createComponentResource(context, dependency);
-                }
-            }
-        } else if (sourceClass.isAnnotationPresent(ResourceDependency.class)) {
-            ResourceDependency resource =
-                  sourceClass.getAnnotation(ResourceDependency.class);
-            createComponentResource(context, resource);
-        }
-
-    }
-
-    private static void createComponentResource(FacesContext context,
-                                                ResourceDependency resourceDep) {
-
-        //noinspection unchecked
-        List<ResourceDependency> addedResources = (List<ResourceDependency>)
-              context.getAttributes().get("javax.faces.ADDED_RESOURCES");
-        if (addedResources == null) {
-            addedResources = new ArrayList<ResourceDependency>();
-            context.getAttributes().put("javax.faces.ADDED_RESOURCES", addedResources);
-        }
-        if (addedResources.size() > 0 && addedResources.contains(resourceDep)) {
-            // resource annotation has already been processed, don't add another
-            // component.
-            return;
-        }
-        addedResources.add(resourceDep);
-        // Create a component resource
-        UIOutput resourceComponent = (UIOutput) context.getApplication()
-              .createComponent("javax.faces.Output");
-
-        String resourceName = resourceDep.name();
-        String library = resourceDep.library();
-        String target = resourceDep.target();
-
-        if (resourceName.length() == 0) {
-            resourceName = null;
-        }
-
-        if (library.length() == 0) {
-            library = null;
-        }
-
-        if (target.length() == 0) {
-            target = null;
-        }
-
-        // Create a resource around it
-        ResourceHandler resourceHandler =
-              context.getApplication().getResourceHandler();
-        // Imbue the component resource with the metadata
-
-        resourceComponent
-              .setRendererType(resourceHandler.getRendererTypeForResourceName(resourceName));
-        Map<String, Object> attrs = resourceComponent.getAttributes();
-        attrs.put("name", resourceName);
-        if (null != library) {
-            attrs.put("library", library);
-        }
-        if (null != target) {
-            attrs.put("target", target);
-        }
-
-        // Tell the viewRoot we have this resource
-        if (null != target) {
-            context.getViewRoot()
-                  .addComponentResource(context, resourceComponent, target);
-        } else {
-            context.getViewRoot()
-                  .addComponentResource(context, resourceComponent);
-        }
-    }
 
     /**
      * <p>Return the set of registered {@link Validator}s for this
