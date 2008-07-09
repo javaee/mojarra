@@ -51,7 +51,7 @@ public class VersionInfo implements Comparable {
      * Constructs a new VersionInfo instance.
      * @param version the version
      * @param extension the extension (only pertains to versioned resources,
-     *  not libraries)
+     *  not libraries, and thus may be <code>null</code>)
      */
     public VersionInfo(String version, String extension) {
         this.version = version;
@@ -84,10 +84,40 @@ public class VersionInfo implements Comparable {
 
     @Override
     public String toString() {
+
         return version;
+
     }
 
-    
+
+    @Override
+    public int hashCode() {
+
+        return (version.hashCode() + ((extension != null)
+                                      ? extension.hashCode()
+                                      : 0));
+
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (obj == null || !(obj instanceof VersionInfo)) {
+            return false;
+        }
+        VersionInfo passed = (VersionInfo) obj;
+        boolean versionsEqual = this.version.equals(passed.version);
+        boolean extensionEqual;
+        if (this.extension == null) {
+            extensionEqual = (passed.extension == null);
+        } else {
+            extensionEqual = this.extension.equals(passed.extension);
+        }
+        return (versionsEqual && extensionEqual);
+
+    }
+
+
     // ------------------------------------------------- Methods from Comparable
 
 
