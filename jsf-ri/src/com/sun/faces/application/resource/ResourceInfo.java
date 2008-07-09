@@ -203,7 +203,6 @@ public class ResourceInfo {
                   .getApplicationMap().get("javax.servlet.context.tempdir");
             if (servletTmpDir == null || !servletTmpDir.isDirectory()) {
                 if (LOGGER.isLoggable(Level.FINE)) {
-                    // PENDING i18n
                     LOGGER.log(Level.FINE,
                                "File ({0}) referenced by javax.servlet.context.tempdir attribute is null, or was is not a directory.  Compression for {1} will be unavailable.",
                                new Object[]{((servletTmpDir == null)
@@ -217,8 +216,16 @@ public class ResourceInfo {
                 File newDir = new File(servletTmpDir, COMPRESSED_CONTENT_DIRECTORY
                                                       + tPath);
                 try {
-                    newDir.mkdirs();
-                    compressedPath = newDir.getCanonicalPath();
+                    if (newDir.mkdirs()) {
+                        compressedPath = newDir.getCanonicalPath();
+                    } else {
+                        compressable = false;
+                        if (LOGGER.isLoggable(Level.WARNING)) {
+                            LOGGER.log(Level.WARNING,
+                                       "jsf.application.resource.unable_to_create_compression_directory",
+                                       newDir.getCanonicalPath());
+                        }
+                    }
                 } catch (Exception e) {
                     LOGGER.log(Level.SEVERE,
                                e.toString(),
