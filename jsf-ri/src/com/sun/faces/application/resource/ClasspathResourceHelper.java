@@ -194,7 +194,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
             return null;
         }
 
-        ResourceInfo value= null;
+        ResourceInfo value;
         try {
             List<String> subPaths = getSubPaths(basePathURL);
             if (subPaths.isEmpty()) {
@@ -215,7 +215,7 @@ public class ClasspathResourceHelper extends ResourceHelper {
                 if (version == null) {
                     if (LOGGER.isLoggable(Level.WARNING)) {
                         LOGGER.log(Level.WARNING,
-                                   "jsf.application.resource.unable_to_determine_resource_version.",
+                                   "jsf.application.resource.unable_to_determine_resource_version",
                                    resourceName);
                     }
                     return null;
