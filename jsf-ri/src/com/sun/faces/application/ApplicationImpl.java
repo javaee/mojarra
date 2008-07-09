@@ -836,7 +836,6 @@ public class ApplicationImpl extends Application {
         Util.notNull("componentExpression", componentExpression);
         Util.notNull("context", context);
         Util.notNull("componentType", componentType);
-        Util.notNull("rendererType", rendererType);
 
         return createComponentApplyAnnotations(context,
                                                componentExpression,
@@ -857,7 +856,6 @@ public class ApplicationImpl extends Application {
 
         Util.notNull("context", context);
         Util.notNull("componentType", componentType);
-        Util.notNull("rendererType", rendererType);
 
         return createComponentApplyAnnotations(context,
                                                componentType,
