@@ -40,6 +40,8 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
@@ -71,10 +73,16 @@ class GroovyHelperImpl extends GroovyHelper {
 
         if (u != null) {
 
-            GroovyScriptEngine engine =
+            final GroovyScriptEngine engine =
                   new GroovyScriptEngine(new URL[]{u},
                                          Thread.currentThread().getContextClassLoader());
-            loader = new MojarraGroovyClassLoader(engine);
+
+            loader = AccessController.doPrivileged(
+                  new PrivilegedAction<MojarraGroovyClassLoader>() {
+                      public MojarraGroovyClassLoader run() {
+                          return new MojarraGroovyClassLoader(engine);
+                      }
+                  });
             if (LOGGER.isLoggable(Level.INFO)) {
                 LOGGER.log(Level.INFO,
                            "Groovy support enabled.");
