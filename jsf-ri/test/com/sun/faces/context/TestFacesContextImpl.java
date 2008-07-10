@@ -69,6 +69,8 @@ import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.Map;
 
+import org.apache.cactus.WebRequest;
+
 /**
  * <B>TestFacesContextImpl</B> is a class ...
  * <p/>
@@ -608,6 +610,27 @@ public class TestFacesContextImpl extends ServletFacesTestCase {
         FacesContext ctx = getFacesContext();
         Map<Object,Object> m = ctx.getAttributes();
         assertNotNull(m);
+    }
+
+
+    public void beginIsPostback1(WebRequest req) {
+        req.addParameter("javax.faces.ViewState", "something");
+    }
+
+    public void testIsPostback1() {
+        String key = "com.sun.faces.context.FacesContextImpl_POST_BACK";
+        FacesContext ctx = getFacesContext();
+        assertTrue(ctx.isPostback());
+        assertTrue(ctx.getAttributes().containsKey(key));
+        assertTrue(Boolean.TRUE.equals(getFacesContext().getAttributes().get(key)));
+    }
+
+    public void testIsPostback2() {
+        String key = "com.sun.faces.context.FacesContextImpl_POST_BACK";
+        FacesContext ctx = getFacesContext();
+        assertTrue(!ctx.isPostback());
+        assertTrue(ctx.getAttributes().containsKey(key));
+        assertTrue(Boolean.FALSE.equals(getFacesContext().getAttributes().get(key)));
     }
 
 

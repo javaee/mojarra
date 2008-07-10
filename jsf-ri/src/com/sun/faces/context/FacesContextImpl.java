@@ -45,6 +45,7 @@ import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.FacesMessage;
+import javax.faces.application.ViewHandler;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
@@ -71,8 +72,12 @@ import com.sun.faces.el.ELContextImpl;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.util.Util;
+import com.sun.faces.renderkit.RenderKitUtils;
 
  public class FacesContextImpl extends FacesContext {
+
+     private static final String POST_BACK_MARKER =
+           FacesContextImpl.class.getName() + "_POST_BACK";
 
      // Log instance for this class
      private static Logger LOGGER = FacesLogger.CONTEXT.getLogger();
@@ -144,6 +149,28 @@ import com.sun.faces.util.Util;
 
 
     @Override
+    public boolean isPostback() {
+
+        Boolean postback = (Boolean) this.getAttributes().get(POST_BACK_MARKER);
+        if (postback == null) {
+            RenderKit rk = this.getRenderKit();
+            if (rk != null) {
+                postback = rk.getResponseStateManager().isPostback(this);
+            } else {
+                // ViewRoot hasn't been set yet, so calculate the RK
+                ViewHandler vh = this.getApplication().getViewHandler();
+                String rkId = vh.calculateRenderKitId(this);
+                postback = RenderKitUtils.getResponseStateManager(this, rkId).isPostback(this);
+            }
+            this.getAttributes().put(POST_BACK_MARKER, postback);
+        }
+
+        return postback.booleanValue();
+
+    }
+
+
+     @Override
     public Map<Object,Object> getAttributes() {
         
         assertNotReleased();

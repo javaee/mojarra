@@ -58,12 +58,10 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.render.ResponseStateManager;
 import javax.servlet.http.HttpServletRequest;
 
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
-import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.DebugUtil;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
@@ -133,7 +131,7 @@ public class RestoreViewPhase extends Phase {
             facesContext.getViewRoot().setLocale(
                  facesContext.getExternalContext().getRequestLocale());
             doPerComponentActions(facesContext, viewRoot);
-            if (!isPostback(facesContext)) {
+            if (!facesContext.isPostback()) {
                 facesContext.renderResponse();
             }
             return;
@@ -170,7 +168,7 @@ public class RestoreViewPhase extends Phase {
                   MessageUtils.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
         }
 
-        boolean isPostBack = (isPostback(facesContext) && !isErrorPage(facesContext));
+        boolean isPostBack = (facesContext.isPostback() && !isErrorPage(facesContext));
         if (isPostBack) {
             // try to restore the view
             ViewHandler viewHandler = Util.getViewHandler(facesContext);
@@ -253,28 +251,6 @@ public class RestoreViewPhase extends Phase {
     }
 
     // --------------------------------------------------------- Private Methods
-
-
-    /**
-     * @param context the <code>FacesContext</code> for the current request
-     * @return <code>true</code> if the {@link ResponseStateManager#isPostback(javax.faces.context.FacesContext)}
-     *  returns <code>true</code> <em>and</em> the request doesn't contain the
-     *  attribute <code>javax.servlet.error.message</code> which indicates we've been
-     *  forwarded to an error page.
-     */
-
-    private boolean isPostback(FacesContext context) {
-
-        // Get the renderKitId by calling viewHandler.calculateRenderKitId().
-        String renderkitId =
-              context.getApplication().getViewHandler().
-                    calculateRenderKitId(context);
-        ResponseStateManager rsm =
-              RenderKitUtils.getResponseStateManager(context,
-                                                     renderkitId);
-        return rsm.isPostback(context);
-
-    }
 
 
     /**
