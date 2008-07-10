@@ -215,22 +215,24 @@ public class ResourceInfo {
                 String tPath = ((path.charAt(0) == '/') ? path : '/' + path);
                 File newDir = new File(servletTmpDir, COMPRESSED_CONTENT_DIRECTORY
                                                       + tPath);
-                try {
-                    if (newDir.mkdirs()) {
-                        compressedPath = newDir.getCanonicalPath();
-                    } else {
-                        compressable = false;
-                        if (LOGGER.isLoggable(Level.WARNING)) {
-                            LOGGER.log(Level.WARNING,
-                                       "jsf.application.resource.unable_to_create_compression_directory",
-                                       newDir.getCanonicalPath());
+                if (!newDir.exists()) {
+                    try {
+                        if (newDir.mkdirs()) {
+                            compressedPath = newDir.getCanonicalPath();
+                        } else {
+                            compressable = false;
+                            if (LOGGER.isLoggable(Level.WARNING)) {
+                                LOGGER.log(Level.WARNING,
+                                           "jsf.application.resource.unable_to_create_compression_directory",
+                                           newDir.getCanonicalPath());
+                            }
                         }
+                    } catch (Exception e) {
+                        LOGGER.log(Level.SEVERE,
+                                   e.toString(),
+                                   e);
+                        compressable = false;
                     }
-                } catch (Exception e) {
-                    LOGGER.log(Level.SEVERE,
-                               e.toString(),
-                               e);
-                    compressable = false;
                 }
             }
         }
