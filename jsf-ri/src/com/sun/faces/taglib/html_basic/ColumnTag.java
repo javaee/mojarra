@@ -45,6 +45,7 @@ import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.webapp.UIComponentELTag;
 import javax.servlet.jsp.JspException;
+import javax.el.ValueExpression;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -66,15 +67,21 @@ public class ColumnTag extends UIComponentELTag {
     // Setter Methods
     //
     // PROPERTY: footerClass
-    private javax.el.ValueExpression footerClass;
-    public void setFooterClass(javax.el.ValueExpression footerClass) {
+    private ValueExpression footerClass;
+    public void setFooterClass(ValueExpression footerClass) {
         this.footerClass = footerClass;
     }
 
     // PROPERTY: headerClass
-    private javax.el.ValueExpression headerClass;
-    public void setHeaderClass(javax.el.ValueExpression headerClass) {
+    private ValueExpression headerClass;
+    public void setHeaderClass(ValueExpression headerClass) {
         this.headerClass = headerClass;
+    }
+
+    // PROPERTY: rowHeader
+    private ValueExpression rowHeader;
+    public void setRowHeader(ValueExpression rowHeader) {
+        this.rowHeader = rowHeader;
     }
 
     //
@@ -100,18 +107,13 @@ public class ColumnTag extends UIComponentELTag {
             throw new IllegalStateException("Component " + component.toString() + " not expected type.  Expected: UIColumn.  Perhaps you're missing a tag?");
         }
         if (footerClass != null) {
-            if (!footerClass.isLiteralText()) {
-                column.setValueExpression("footerClass", footerClass);
-            } else {
-                column.getAttributes().put("footerClass", footerClass.getExpressionString());
-            }
+            column.setValueExpression("footerClass", footerClass);
         }
         if (headerClass != null) {
-            if (!headerClass.isLiteralText()) {
-                column.setValueExpression("headerClass", headerClass);
-            } else {
-                column.getAttributes().put("headerClass", headerClass.getExpressionString());
-            }
+            column.setValueExpression("headerClass", headerClass);
+        }
+        if (rowHeader != null) {
+            column.setValueExpression("rowHeader", rowHeader);
         }
     }
 

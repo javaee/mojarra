@@ -43,6 +43,8 @@ package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
+import java.util.ArrayList;
 
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
@@ -51,6 +53,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
 import com.sun.faces.renderkit.AttributeManager;
+import com.sun.faces.util.Util;
 
 /** <p>Render a {@link UIData} component as a two-dimensional table.</p> */
 
@@ -81,8 +84,11 @@ public class TableRenderer extends BaseTableRenderer {
 
         renderTableStart(context, component, writer, ATTRIBUTES);
 
-        // Render the caption if present
+        // Render the caption (if any)
         renderCaption(context, data, writer);
+
+        // Render column groups (if any)
+        renderColumnGroups(context, data);
 
         // Render the header facets (if any)
         renderHeader(context, component, writer);
@@ -112,8 +118,12 @@ public class TableRenderer extends BaseTableRenderer {
         int processed = 0;
         int rowIndex = data.getFirst() - 1;
         int rows = data.getRows();
-
-        renderTableBodyStart(component, writer);
+        List<Integer> bodyRows = getBodyRows(data);
+        boolean hasBodyRows = (bodyRows != null && !bodyRows.isEmpty());
+        boolean wroteTableBody = false;
+        if (!hasBodyRows) {
+            renderTableBodyStart(component, writer);
+        }
         while (true) {
 
             // Have we displayed the requested number of rows?
@@ -124,6 +134,15 @@ public class TableRenderer extends BaseTableRenderer {
             data.setRowIndex(++rowIndex);
             if (!data.isRowAvailable()) {
                 break; // Scrolled past the last row
+            }
+
+            // render any table body rows
+            if (hasBodyRows && bodyRows.contains(data.getRowIndex())) {
+                if (wroteTableBody) {
+                    writer.endElement("tbody");
+                }
+                writer.startElement("tbody", data);
+                wroteTableBody = true;
             }
 
             // Render the beginning of this row
@@ -175,6 +194,37 @@ public class TableRenderer extends BaseTableRenderer {
 
 
     // ------------------------------------------------------- Protected Methods
+
+
+    private List<Integer> getBodyRows(UIData data) {
+
+        List<Integer> result = null;
+        String bodyRows = (String) data.getAttributes().get("bodyrows");
+        if (bodyRows != null) {
+            String [] rows = Util.split(bodyRows, ",");
+            if (rows != null) {
+                result = new ArrayList<Integer>(rows.length);
+                for (String curRow : rows) {
+                    result.add(Integer.valueOf(curRow));
+                }
+            }
+        }
+
+        return result;
+
+     }
+
+
+    protected void renderColumnGroups(FacesContext context,
+                                      UIComponent table)
+          throws IOException {
+
+        UIComponent colGroups = getFacet(table, "colgroups");
+        if (colGroups != null) {
+            encodeRecursive(context, colGroups);
+        }
+
+    }
 
 
     protected void renderFooter(FacesContext context,
@@ -295,7 +345,14 @@ public class TableRenderer extends BaseTableRenderer {
         for (UIColumn column : info.columns) {
 
             // Render the beginning of this cell
-            writer.startElement("td", column);
+            boolean isRowHeader = Boolean.TRUE.equals(column.getAttributes().get("rowHeader"));
+            if (isRowHeader) {
+                writer.startElement("th", column);
+                writer.writeAttribute("scope", "row", null);
+            } else {
+                writer.startElement("td", column);
+            }
+            
             if (info.columnClasses.length > 0) {
                 writer.writeAttribute("class",
                                       info.columnClasses[columnStyleIdx++],
@@ -313,7 +370,11 @@ public class TableRenderer extends BaseTableRenderer {
             }
 
             // Render the ending of this cell
-            writer.endElement("td");
+            if (isRowHeader) {
+                writer.endElement("th");
+            } else {
+                writer.endElement("td");
+            }
             writer.writeText("\n", table, null);
 
         }
