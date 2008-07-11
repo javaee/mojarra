@@ -215,8 +215,9 @@ public class ResourceInfo {
                 String tPath = ((path.charAt(0) == '/') ? path : '/' + path);
                 File newDir = new File(servletTmpDir, COMPRESSED_CONTENT_DIRECTORY
                                                       + tPath);
-                if (!newDir.exists()) {
-                    try {
+
+                try {
+                    if (!newDir.exists()) {
                         if (newDir.mkdirs()) {
                             compressedPath = newDir.getCanonicalPath();
                         } else {
@@ -227,12 +228,14 @@ public class ResourceInfo {
                                            newDir.getCanonicalPath());
                             }
                         }
-                    } catch (Exception e) {
-                        LOGGER.log(Level.SEVERE,
-                                   e.toString(),
-                                   e);
-                        compressable = false;
+                    } else {
+                        compressedPath = newDir.getCanonicalPath();
                     }
+                } catch (Exception e) {
+                    LOGGER.log(Level.SEVERE,
+                               e.toString(),
+                               e);
+                    compressable = false;
                 }
             }
         }
