@@ -33,26 +33,45 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
 package com.sun.faces.systest;
 
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+
+import com.sun.faces.config.WebConfiguration;
 
 /**
- * @author youngm
+ * a filter which sets the character encoding of the request and response to the one set by the browsers
+ * Accept-Encoding header.
+ * This is mainly usful for the UnicodeTestCase where we have to check the response with different encodings.
  */
-public class UnicodeBean {
+public class UnicodeBeanFilter implements Filter {
 
-    /**
-     * The unicode value \u1234 should be encoded with ISO-8859-1 and US-ASCII output.
-     * The unicode value \u00c4 should be encoded with US-ASCII only.
-     * No encoding should happen with UTF-8 output as the stream will be able
-     * to represent the UTF-16 representation of the string. 
-     */
-    public String getValue() {
-        return "a\u1234a Unicode, german umlaut a=b\u00c4b";
+    private ServletContext ctx;
+    public void init(FilterConfig filterConfig) throws ServletException {
+        ctx = filterConfig.getServletContext();
     }
 
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        if (servletRequest instanceof HttpServletRequest) {
+            HttpServletRequest hreq = (HttpServletRequest) servletRequest;
+            String charsetEncoding = hreq.getHeader("Accept-Encoding");
+            
+            servletRequest.setCharacterEncoding(charsetEncoding);
+            servletResponse.setCharacterEncoding(charsetEncoding);
+            WebConfiguration config = WebConfiguration.getInstance(ctx);            
+            config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.DisableUnicodeEscaping, servletRequest.getParameter("escape"));
+        }
+        filterChain.doFilter(servletRequest, servletResponse);
+    }
+
+    public void destroy() {
+    }
 }
