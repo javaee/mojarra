@@ -2514,7 +2514,7 @@
     </property>
     <property>
       <description>
-          Converter instance registered with this component.
+            Converter instance registered with this component.
         </description>
       <display-name>Converter</display-name>
       <icon/>
@@ -2526,11 +2526,11 @@
     </property>
     <property>
       <description>
-          For output components, this is the same as the "value" property.
-          For input components, this is the most recently user-entered
-          value, which will be pushed to the application data model during
-          Update Model Values phase, if a value binding is present for the
-          "value" property.
+            For output components, this is the same as the "value" property.
+            For input components, this is the most recently user-entered
+            value, which will be pushed to the application data model during
+            Update Model Values phase, if a value binding is present for the
+            "value" property.
         </description>
       <display-name>Local Value</display-name>
       <icon/>
@@ -2542,12 +2542,12 @@
     </property>
     <property>
       <description>
-          The current value of this component.
+            The current value of this component.
         </description>
       <display-name>Value</display-name>
       <icon/>
       <property-name>value</property-name>
-      <property-class>java.lang.Object</property-class>
+      <property-class>java.lang.Boolean</property-class>
       <property-extension>
         <value-expression-enabled>true</value-expression-enabled>
       </property-extension>
@@ -2699,8 +2699,8 @@
     </property>
     <property>
       <description>
-          Flag indicating whether the user has selected this component.
-          This is an alias for the "value" property.
+            Flag indicating whether the user has selected this component.
+            This is an alias for the "value" property.
         </description>
       <display-name>Selected Flag</display-name>
       <icon/>
@@ -12718,7 +12718,7 @@
     </property>
     <property>
       <description>
-          Converter instance registered with this component.
+            Converter instance registered with this component.
         </description>
       <display-name>Converter</display-name>
       <icon/>
@@ -12730,11 +12730,11 @@
     </property>
     <property>
       <description>
-          For output components, this is the same as the "value" property.
-          For input components, this is the most recently user-entered
-          value, which will be pushed to the application data model during
-          Update Model Values phase, if a value binding is present for the
-          "value" property.
+            For output components, this is the same as the "value" property.
+            For input components, this is the most recently user-entered
+            value, which will be pushed to the application data model during
+            Update Model Values phase, if a value binding is present for the
+            "value" property.
         </description>
       <display-name>Local Value</display-name>
       <icon/>
@@ -12746,12 +12746,12 @@
     </property>
     <property>
       <description>
-          The current value of this component.
+            The current value of this component.
         </description>
       <display-name>Value</display-name>
       <icon/>
       <property-name>value</property-name>
-      <property-class>java.lang.Object</property-class>
+      <property-class>java.lang.Boolean</property-class>
       <property-extension>
         <value-expression-enabled>true</value-expression-enabled>
       </property-extension>
@@ -12903,8 +12903,8 @@
     </property>
     <property>
       <description>
-          Flag indicating whether the user has selected this component.
-          This is an alias for the "value" property.
+            Flag indicating whether the user has selected this component.
+            This is an alias for the "value" property.
         </description>
       <display-name>Selected Flag</display-name>
       <icon/>

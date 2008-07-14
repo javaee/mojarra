@@ -48,6 +48,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.UISelectBoolean;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.ConverterException;
@@ -133,7 +134,7 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
         writer.writeAttribute("name", component.getClientId(context),
                               "clientId");
 
-        if ("true".equals(currentValue)) {
+        if (((UISelectBoolean) component).isSelected()) {
             writer.writeAttribute("checked", Boolean.TRUE, "value");
         }
         if (null != (styleClass = (String)
