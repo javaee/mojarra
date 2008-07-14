@@ -139,7 +139,7 @@ class GroovyHelperImpl extends GroovyHelper {
                 try {
                     c = gse.loadScriptByName(name);
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    throw new ClassNotFoundException(name, e);
                 }
             }
             if (c == null) {
