@@ -37,15 +37,18 @@
 package com.sun.faces.util;
 
 import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.renderkit.RenderKitUtils;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
-import java.util.BitSet;
 import java.nio.charset.Charset;
-
-import com.sun.faces.renderkit.RenderKitUtils;
+import java.util.BitSet;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Arrays;
 
 /**
  * Utility class for HTML.
@@ -53,16 +56,20 @@ import com.sun.faces.renderkit.RenderKitUtils;
  */
 public class HtmlUtils {
 
+    private final static Set<String> UTF_CHARSET = new HashSet<String>(Arrays.asList("UTF-8", "UTF-16",
+            "UTF-16BE", "UTF-16LE", "UTF-32", "UTF-32BE", "UTF-32LE", "x-UTF-16LE-BOM", "X-UTF-32BE-BOM",
+            "X-UTF-32LE-BOM", ""));
+
     //-------------------------------------------------
     // The following methods include the handling of
     // escape characters....
     //-------------------------------------------------
 
     static public void writeText(Writer out,
-    							 boolean escapeUnicode,
-                                 char[] buffer,
+                                 boolean escapeUnicode,
+                                 boolean escapeIsocode, char[] buffer,
                                  char[] text) throws IOException {
-        writeText(out, escapeUnicode, buffer, text, 0, text.length);
+        writeText(out, escapeUnicode, escapeIsocode, buffer, text, 0, text.length);
     }
 
 
@@ -71,7 +78,7 @@ public class HtmlUtils {
      */
     static public void writeText(Writer out,
                                  boolean escapeUnicode,
-                                 char[] buff,
+                                 boolean escapeIsocode, char[] buff,
                                  char[] text,
                                  int start,
                                  int length) throws IOException {
@@ -80,7 +87,7 @@ public class HtmlUtils {
 
         int end = start + length;
         for (int i = start; i < end; i++) {
-            buffIndex = writeTextChar(out, escapeUnicode, text[i], buffIndex, buff, buffLength);
+            buffIndex = writeTextChar(out, escapeUnicode, escapeIsocode, text[i], buffIndex, buff, buffLength);
         }
 
         flushBuffer(out, buff, buffIndex);
@@ -92,7 +99,7 @@ public class HtmlUtils {
      */
     static public void writeText(Writer out,
                                  boolean escapeUnicode,
-                                 char[] buff,
+                                 boolean escapeIsocode, char[] buff,
                                  String text,
                                  char[] textBuff) throws IOException {
 
@@ -100,13 +107,13 @@ public class HtmlUtils {
 
         if (length >= 16) {
             text.getChars(0, length, textBuff, 0);
-            writeText(out, escapeUnicode, buff, textBuff, 0, length);
+            writeText(out, escapeUnicode, escapeIsocode, buff, textBuff, 0, length);
         } else {
             int buffLength = buff.length;
             int buffIndex = 0;
             for (int i = 0; i < length; i++) {
                 char ch = text.charAt(i);
-                buffIndex = writeTextChar(out, escapeUnicode, ch, buffIndex, buff, buffLength);
+                buffIndex = writeTextChar(out, escapeUnicode, escapeIsocode, ch, buffIndex, buff, buffLength);
             }
             flushBuffer(out, buff, buffIndex);
         }
@@ -116,6 +123,7 @@ public class HtmlUtils {
 
     private static int writeTextChar(Writer out,
                                      boolean escapeUnicode,
+                                     boolean escapeIsocode,
                                      char ch,
                                      int buffIndex,
                                      char[] buff,
@@ -161,14 +169,21 @@ public class HtmlUtils {
                 }
             }
         } else if (ch <= 0xff) {
-            // ISO-8859-1 entities: encode as needed
-            nextIndex = addToBuffer(out,
-                                    buff,
-                                    buffIndex,
-                                    buffLength,
-                                    sISO8859_1_Entities[ch - 0xA0]);
+            if (escapeIsocode) {
+                // ISO-8859-1 entities: encode as needed
+                nextIndex = addToBuffer(out,
+                                        buff,
+                                        buffIndex,
+                                        buffLength,
+                                        sISO8859_1_Entities[ch - 0xA0]);
+            }
+            else {
+                nextIndex = addToBuffer(out, buff, buffIndex,
+                        buffLength, ch);
+            }
         } else {
             if(escapeUnicode) {
+                // UNICODE entities: encode as needed
                 nextIndex =
                       _writeDecRef(out, buff, buffIndex, buffLength, ch);
             } else {
@@ -187,9 +202,10 @@ public class HtmlUtils {
      */
     static public void writeAttribute(Writer out,
                                       boolean escapeUnicode,
+                                      boolean escapeIsocode,
                                       char[] buff,
                                       String text,
-                                      char[] textBuff, 
+                                      char[] textBuff,
                                       boolean isScriptInAttributeValueEnabled) throws IOException {
 
         int length = text.length();
@@ -199,7 +215,7 @@ public class HtmlUtils {
                 textBuff = new char[length * 2];
             }
             text.getChars(0, length, textBuff, 0);
-            writeAttribute(out, escapeUnicode, buff, textBuff, 0, length,
+            writeAttribute(out, escapeUnicode, escapeIsocode, buff, textBuff, 0, length,
                     isScriptInAttributeValueEnabled);
         } else {
             int buffLength = buff.length;
@@ -291,6 +307,7 @@ public class HtmlUtils {
                                             sISO8859_1_Entities[ch - 0xA0]);
                 } else {
                     if(escapeUnicode) {
+                        // UNICODE entities: encode as needed
                         buffIndex =
                               _writeDecRef(out, buff, buffIndex, buffLength, ch);
                     } else {
@@ -307,9 +324,10 @@ public class HtmlUtils {
 
     static public void writeAttribute(Writer out,
                                       boolean escapeUnicode,
+                                      boolean escapeIsocode,
                                       char[] buffer,
                                       char[] text) throws IOException {
-        writeAttribute(out, escapeUnicode, buffer, text, 0, text.length,
+        writeAttribute(out, escapeUnicode, escapeIsocode, buffer, text, 0, text.length,
                 WebConfiguration.BooleanWebContextInitParameter.EnableScriptInAttributeValue.getDefaultValue());
     }
 
@@ -321,10 +339,11 @@ public class HtmlUtils {
      */
     static public void writeAttribute(Writer out,
                                       boolean escapeUnicode,
+                                      boolean escapeIsocode,
                                       char[] buff,
                                       char[] text,
                                       int start,
-                                      int length, 
+                                      int length,
                                       boolean isScriptInAttributeValueEnabled) throws IOException {
         int buffLength = buff.length;
         int buffIndex = 0;
@@ -409,14 +428,21 @@ public class HtmlUtils {
                     }
                 }
             } else if (ch <= 0xff) {
-                // ISO-8859-1 entities: encode as needed
-                buffIndex = addToBuffer(out,
-                                        buff,
-                                        buffIndex,
-                                        buffLength,
-                                        sISO8859_1_Entities[ch - 0xA0]);
+                if (escapeIsocode) {
+                    // ISO-8859-1 entities: encode as needed
+                    buffIndex = addToBuffer(out,
+                                            buff,
+                                            buffIndex,
+                                            buffLength,
+                                            sISO8859_1_Entities[ch - 0xA0]);
+                }
+                else {
+                    buffIndex = addToBuffer(out, buff, buffIndex,
+                            buffLength, ch);
+                }
             } else {
                 if(escapeUnicode) {
+                    // UNICODE entities: encode as needed
                     buffIndex = _writeDecRef(out, buff, buffIndex, buffLength, ch);
                 } else {
                     buffIndex = addToBuffer(out, buff, buffIndex,
@@ -1051,7 +1077,23 @@ public class HtmlUtils {
     static public boolean validateEncoding(String encoding) {
         return Charset.isSupported(encoding);
     }
-    
+
+    //----------------------------------------------------------
+    // Check if the given encoding is the ISO-8859-1 encoding
+    //----------------------------------------------------------
+    //
+    static public boolean isISO8859_1encoding(String encoding) {
+        return "ISO-8859-1".equals(encoding);
+    }
+
+    //----------------------------------------------------------
+    // Check if the given encoding is a UTF encoding
+    //----------------------------------------------------------
+    //
+    static public boolean isUTFencoding(String encoding) {
+        return UTF_CHARSET.contains(encoding);
+    }
+
     //----------------------------------------------------------
     // The following is used to verify "empty" Html elements.
     // "Empty" Html elements are those that do not require an

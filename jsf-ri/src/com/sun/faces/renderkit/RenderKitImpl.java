@@ -61,8 +61,6 @@ import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.renderkit.html_basic.HtmlResponseWriter;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
-import java.util.Collections;
-import java.util.Map;
 
 /**
  * <B>RenderKitImpl</B> is a class ...
@@ -100,43 +98,16 @@ public class RenderKitImpl extends RenderKit {
 
     private ResponseStateManager responseStateManager =
          new ResponseStateManagerImpl();
-    private Map<WebConfiguration.BooleanWebContextInitParameter,
-                Boolean> configPrefs;
+
+    private WebConfiguration webConfig;
 
     public RenderKitImpl() {
-        initConfigPrefs();
-        
-    }
-    
-    private void initConfigPrefs() {
-        assert(null == configPrefs); // class invariant
 
         FacesContext context = FacesContext.getCurrentInstance();
-        WebConfiguration webConfig = WebConfiguration.getInstance(
-                                  context.getExternalContext());
-        Map<WebConfiguration.BooleanWebContextInitParameter,
-                Boolean> prefs = 
-            new HashMap<WebConfiguration.BooleanWebContextInitParameter,
-                        Boolean>();
+        webConfig = WebConfiguration.getInstance(context.getExternalContext());
 
-        prefs.put(BooleanWebContextInitParameter.PreferXHTMLContentType,
-                        webConfig.isOptionEnabled(
-                         BooleanWebContextInitParameter.PreferXHTMLContentType));
-        prefs.put(BooleanWebContextInitParameter.EnableJSStyleHiding,
-                        webConfig.isOptionEnabled(
-                         BooleanWebContextInitParameter.EnableJSStyleHiding));
-        prefs.put(BooleanWebContextInitParameter.EnableScriptInAttributeValue,
-                        webConfig.isOptionEnabled(
-                         BooleanWebContextInitParameter.EnableScriptInAttributeValue));
-        prefs.put(BooleanWebContextInitParameter.DisableUnicodeEscaping,
-                        webConfig.isOptionEnabled(
-                         BooleanWebContextInitParameter.DisableUnicodeEscaping));
-
-        configPrefs = Collections.unmodifiableMap(prefs);
-        
     }
-
-
+    
     public void addRenderer(String family, String rendererType,
                             Renderer renderer) {
         if (family == null) {
@@ -246,7 +217,7 @@ public class RenderKitImpl extends RenderKit {
             }
 
             if (null != desiredContentTypeList) {
-                if (configPrefs.get(BooleanWebContextInitParameter.PreferXHTMLContentType)) {
+                if (webConfig.isOptionEnabled(BooleanWebContextInitParameter.PreferXHTMLContentType)) {
                     desiredContentTypeList = RenderKitUtils.determineContentType(
                          desiredContentTypeList, SUPPORTED_CONTENT_TYPES, RIConstants.XHTML_CONTENT_TYPE);
                 } else {
@@ -284,10 +255,19 @@ public class RenderKitImpl extends RenderKit {
             characterEncoding = RIConstants.CHAR_ENCODING;
         }
 
+        boolean scriptHiding = webConfig
+              .isOptionEnabled(BooleanWebContextInitParameter.EnableJSStyleHiding);
+        boolean scriptInAttributes = webConfig
+              .isOptionEnabled(BooleanWebContextInitParameter.EnableScriptInAttributeValue);
+        WebConfiguration.DisableUnicodeEscaping escaping = WebConfiguration
+              .DisableUnicodeEscaping
+              .getByValue(webConfig.getOptionValue(WebConfiguration.WebContextInitParameter.DisableUnicodeEscaping));
         return new HtmlResponseWriter(writer,
                                       contentType,
                                       characterEncoding,
-                                      configPrefs);
+                                      scriptHiding,
+                                      scriptInAttributes,
+                                      escaping);
     }
 
     private String[] contentTypeSplit(String contentTypeString) {

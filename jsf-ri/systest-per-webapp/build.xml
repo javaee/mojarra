@@ -92,14 +92,14 @@
                    property-resolver-jsp,
                    never-unwrap-exceptions,
                    write-attribute-script-disabled,
-                   write-attribute-script-enabled"/>
+                   write-attribute-script-enabled,
+                   wcag-datatable"/>
     <!-- 
        EXCLUDED APPLICATIONS:
           view-expired
           core-tags
           el-performance
           command-link-redirect
-          wcag-datatable
     -->
 
     <!-- ************ Executable Targets ************************************** -->

@@ -73,14 +73,14 @@
                    property-resolver-jsp,
                    never-unwrap-exceptions,
                    write-attribute-script-disabled,
-                   write-attribute-script-enabled"/>
+                   write-attribute-script-enabled,
+                   wcag-datatable"/>
     <!--
        EXCLUDED APPLICATIONS:
           view-expired
           core-tags
           el-performance
           command-link-redirect
-          wcag-datatable
     -->
 
     <!-- Property definitions to map the application to a JUnit test case -->
@@ -118,7 +118,8 @@
               value="com/sun/faces/systest/WriteAttributeScriptEnabledTestCase.class"/>
     <property name="disable-unicode-escaping"
               value="com/sun/faces/systest/UnicodeTestCase.class"/>
-
+    <property name="wcag-datatable"
+              value="com/sun/faces/systest/WcagDataTableTestCase.class"/>
 
     <!--
         EXCLUDED APPLICATIONS:
@@ -127,8 +128,6 @@
                   value="com/sun/faces/systest/CoreTagsTestCase.class"/>
         <property name="view-expired"
                   value="com/sun/faces/systest/ViewExpiredExceptionTestCase.class"/>
-        <property name="wcag-datatable"
-              value="com/sun/faces/systest/WcagDataTableTestCase.class"/>
     -->
 
 

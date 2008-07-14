@@ -56,9 +56,6 @@ import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.util.HtmlUtils;
 import com.sun.faces.util.MessageUtils;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import javax.faces.context.ExternalContext;
 
 
@@ -87,9 +84,17 @@ public class HtmlResponseWriter extends ResponseWriter {
     //
     private boolean closeStart;
 
+    // Configuration flag regarding disableUnicodeEscaping
+    //
+    private WebConfiguration.DisableUnicodeEscaping disableUnicodeEscaping;
+
     //Flag to escape Unicode
     //
     private boolean escapeUnicode;
+
+    // Flag to escape ISO-8859-1 codes
+    //
+    private boolean escapeIso;
 
     // True when we shouldn't be escaping output (basically,
     // inside of <script> and <style> elements).
@@ -132,11 +137,6 @@ public class HtmlResponseWriter extends ResponseWriter {
 
     // Enables scripts to be included in attribute values
     private Boolean isScriptInAttributeValueEnabled;
-
-    // Keep the map passed in our ctor so we can pass it to
-    // cloneWithWriter
-    private Map<WebConfiguration.BooleanWebContextInitParameter,
-                                  Boolean> configPrefs;
 
     // Internal buffer used when outputting properly escaped information
     // using HtmlUtils class.
@@ -196,44 +196,7 @@ public class HtmlResponseWriter extends ResponseWriter {
                               String contentType,
                               String encoding)
     throws FacesException {
-        this(writer, contentType, encoding, null);
-
-    }
-
-    private Map initConfigPrefs() {
-        WebConfiguration webConfig = null;
-        FacesContext context = FacesContext.getCurrentInstance();
-        if (null != context) {
-            ExternalContext extContext = context.getExternalContext();
-            if (null != extContext) {
-                webConfig = WebConfiguration.getInstance(extContext);
-            }
-        }
-
-
-        Map<WebConfiguration.BooleanWebContextInitParameter,
-                Boolean> prefs =
-            new HashMap<WebConfiguration.BooleanWebContextInitParameter,
-                        Boolean>();
-
-        prefs.put(BooleanWebContextInitParameter.PreferXHTMLContentType,
-                (null == webConfig) ? BooleanWebContextInitParameter.PreferXHTMLContentType.getDefaultValue() :
-                        webConfig.isOptionEnabled(
-                         BooleanWebContextInitParameter.PreferXHTMLContentType));
-        prefs.put(BooleanWebContextInitParameter.EnableJSStyleHiding,
-                (null == webConfig) ? BooleanWebContextInitParameter.EnableJSStyleHiding.getDefaultValue() :
-                        webConfig.isOptionEnabled(
-                         BooleanWebContextInitParameter.EnableJSStyleHiding));
-        prefs.put(BooleanWebContextInitParameter.EnableScriptInAttributeValue,
-                (null == webConfig) ? BooleanWebContextInitParameter.EnableScriptInAttributeValue.getDefaultValue() :
-                        webConfig.isOptionEnabled(
-                         BooleanWebContextInitParameter.EnableScriptInAttributeValue));
-        prefs.put(BooleanWebContextInitParameter.DisableUnicodeEscaping,
-                (null == webConfig) ? BooleanWebContextInitParameter.DisableUnicodeEscaping.getDefaultValue() :
-                        webConfig.isOptionEnabled(
-                         BooleanWebContextInitParameter.DisableUnicodeEscaping));
-
-        return Collections.unmodifiableMap(prefs);
+        this(writer, contentType, encoding, null, null, null);
     }
 
     /**
@@ -249,15 +212,15 @@ public class HtmlResponseWriter extends ResponseWriter {
      * @param writer      the <code>ResponseWriter</code>
      * @param contentType the content type.
      * @param encoding    the character encoding.
-     * @param configPrefs
      *
      * @throws javax.faces.FacesException the encoding is not recognized.
      */
     public HtmlResponseWriter(Writer writer,
                               String contentType,
                               String encoding,
-                              Map<WebConfiguration.BooleanWebContextInitParameter,
-                                  Boolean> configPrefs)
+                              Boolean isScriptHidingEnabled,
+                              Boolean isScriptInAttributeValueEnabled,
+                              WebConfiguration.DisableUnicodeEscaping disableUnicodeEscaping)
     throws FacesException {
 
         this.writer = writer;
@@ -268,15 +231,39 @@ public class HtmlResponseWriter extends ResponseWriter {
 
         this.encoding = encoding;
 
-        this.configPrefs = (null != configPrefs) ? configPrefs : initConfigPrefs();
-        this.isScriptHidingEnabled =
-                (this.configPrefs.containsKey(BooleanWebContextInitParameter.EnableJSStyleHiding)) ?
-                    this.configPrefs.get(BooleanWebContextInitParameter.EnableJSStyleHiding) : Boolean.FALSE;
-        this.isScriptInAttributeValueEnabled =
-                (this.configPrefs.containsKey(BooleanWebContextInitParameter.EnableScriptInAttributeValue)) ?
-                    this.configPrefs.get(BooleanWebContextInitParameter.EnableScriptInAttributeValue) : Boolean.FALSE;
-        this.escapeUnicode = (this.configPrefs.containsKey(BooleanWebContextInitParameter.DisableUnicodeEscaping)) ?
-                !this.configPrefs.get(BooleanWebContextInitParameter.DisableUnicodeEscaping) : Boolean.TRUE;
+        // init those configuration parameters not yet initialized
+        WebConfiguration webConfig = null;
+        if (isScriptHidingEnabled == null) {
+            webConfig = getWebConfiguration(webConfig);
+            isScriptHidingEnabled = (null == webConfig) ? BooleanWebContextInitParameter.EnableJSStyleHiding.getDefaultValue() :
+                                webConfig.isOptionEnabled(
+                                BooleanWebContextInitParameter.EnableJSStyleHiding);
+        }
+
+        if (isScriptInAttributeValueEnabled == null) {
+            webConfig = getWebConfiguration(webConfig);
+            isScriptInAttributeValueEnabled = (null == webConfig) ? BooleanWebContextInitParameter.EnableScriptInAttributeValue.getDefaultValue() :
+                             webConfig.isOptionEnabled(
+                             BooleanWebContextInitParameter.EnableScriptInAttributeValue);
+        }
+
+        if (disableUnicodeEscaping == null) {
+            webConfig = getWebConfiguration(webConfig);
+            disableUnicodeEscaping =
+                    WebConfiguration.DisableUnicodeEscaping.getByValue(
+                        (null == webConfig) ? WebConfiguration.WebContextInitParameter.DisableUnicodeEscaping.getDefaultValue() :
+                                webConfig.getOptionValue(
+                                 WebConfiguration.WebContextInitParameter.DisableUnicodeEscaping));
+            if (disableUnicodeEscaping == null) {
+                disableUnicodeEscaping = WebConfiguration.DisableUnicodeEscaping.False;
+            }
+        }
+
+        // and store them for later use
+        this.isScriptHidingEnabled = isScriptHidingEnabled;
+        this.isScriptInAttributeValueEnabled = isScriptInAttributeValueEnabled;
+        this.disableUnicodeEscaping = disableUnicodeEscaping;
+
         this.attributesBuffer = new FastStringWriter(128);
 
         // Check the character encoding
@@ -285,6 +272,43 @@ public class HtmlResponseWriter extends ResponseWriter {
                   MessageUtils.ENCODING_ERROR_MESSAGE_ID));
         }
 
+        String charsetName = encoding.toUpperCase();
+
+        switch (disableUnicodeEscaping)
+        {
+            case True:
+                // html escape noting (except the dangerous characters like "<>'" etc
+                escapeUnicode = false;
+                escapeIso = false;
+                break;
+            case False:
+                // html escape any non-ascii character
+                escapeUnicode = true;
+                escapeIso = true;
+                break;
+            case Auto:
+                // is stream capable of rendering unicode, do not escape
+                escapeUnicode = !HtmlUtils.isUTFencoding(charsetName);
+                // is stream capable of rendering unicode or iso-8859-1, do not escape
+                escapeIso = !HtmlUtils.isISO8859_1encoding(charsetName) && !HtmlUtils.isUTFencoding(charsetName);
+                break;
+        }
+    }
+
+    private WebConfiguration getWebConfiguration(WebConfiguration webConfig) {
+        if (webConfig != null)
+        {
+            return webConfig;
+        }
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (null != context) {
+            ExternalContext extContext = context.getExternalContext();
+            if (null != extContext) {
+                webConfig = WebConfiguration.getInstance(extContext);
+            }
+        }
+        return webConfig;
     }
 
     // -------------------------------------------------- Methods From Closeable
@@ -344,7 +368,9 @@ public class HtmlResponseWriter extends ResponseWriter {
             return new HtmlResponseWriter(writer,
                                           getContentType(),
                                           getCharacterEncoding(),
-                                          configPrefs);
+                                          isScriptHidingEnabled,
+                                          isScriptInAttributeValueEnabled,
+                                          disableUnicodeEscaping);
         } catch (FacesException e) {
             // This should never happen
             throw new IllegalStateException();
@@ -676,9 +702,11 @@ public class HtmlResponseWriter extends ResponseWriter {
             ensureTextBufferCapacity(val);
             HtmlUtils.writeAttribute(attributesBuffer,
                                      escapeUnicode,
+                                     escapeIso,
                                      buffer,
                                      val,
-                                     textBuffer, isScriptInAttributeValueEnabled);
+                                     textBuffer,
+                                     isScriptInAttributeValueEnabled);
             attributesBuffer.write('"');
         }
 
@@ -739,7 +767,7 @@ public class HtmlResponseWriter extends ResponseWriter {
             writer.write(text);
         } else {
             charHolder[0] = text;
-            HtmlUtils.writeText(writer, escapeUnicode, buffer, charHolder);
+            HtmlUtils.writeText(writer, escapeUnicode, escapeIso, buffer, charHolder);
         }
 
     }
@@ -772,7 +800,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         if (dontEscape) {
             writer.write(text);
         } else {
-            HtmlUtils.writeText(writer, escapeUnicode, buffer, text);
+            HtmlUtils.writeText(writer, escapeUnicode, escapeIso, buffer, text);
         }
 
     }
@@ -807,6 +835,7 @@ public class HtmlResponseWriter extends ResponseWriter {
             ensureTextBufferCapacity(val);
             HtmlUtils.writeText(writer,
                                 escapeUnicode,
+					            escapeIso,
                                 buffer,
                                 val,
                                 textBuffer);
@@ -848,7 +877,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         if (dontEscape) {
             writer.write(text, off, len);
         } else {
-            HtmlUtils.writeText(writer, escapeUnicode, buffer, text, off, len);
+            HtmlUtils.writeText(writer, escapeUnicode, escapeIso, buffer, text, off, len);
         }
 
     }
@@ -904,9 +933,11 @@ public class HtmlResponseWriter extends ResponseWriter {
         if (stringValue.startsWith("javascript:")) {
             HtmlUtils.writeAttribute(attributesBuffer,
                                      escapeUnicode,
+                                     escapeIso,
                                      buffer,
                                      stringValue,
-                                     textBuffer, isScriptInAttributeValueEnabled);
+                                     textBuffer,
+                                     isScriptInAttributeValueEnabled);
         } else {
             HtmlUtils.writeURL(attributesBuffer,
                                stringValue,

@@ -685,6 +685,10 @@ public class WebConfiguration {
         CompressableMimeTypes(
               "com.sun.faces.compressableMimeTypes",
               ""
+        ),
+        DisableUnicodeEscaping(
+            "com.sun.faces.disableUnicodeEscaping",
+            "false"
         );
 
 
@@ -860,10 +864,6 @@ public class WebConfiguration {
         RegisterConverterPropertyEditors(
             "com.sun.faces.registerConverterPropertyEditors",
             false
-        ),
-        DisableUnicodeEscaping(
-            "com.sun.faces.disableUnicodeEscaping",
-            false
         );
 
         private BooleanWebContextInitParameter alternate;
@@ -969,6 +969,33 @@ public class WebConfiguration {
 
         }
 
+    }
+
+    /**
+     * <p>An <code>enum</code> of all possible values for the <code>disableUnicodeEscaping</code>
+     * configuration parameter.</p>
+     */
+    public enum DisableUnicodeEscaping {
+        True("true"),
+        False("false"),
+        Auto("auto");
+
+        private final String value;
+
+        DisableUnicodeEscaping(String value) {
+            this.value = value;
+        }
+
+        public static DisableUnicodeEscaping getByValue(String value)
+        {
+            for (DisableUnicodeEscaping disableUnicodeEscaping : DisableUnicodeEscaping.values()) {
+                if (disableUnicodeEscaping.value.equals(value)) {
+                    return disableUnicodeEscaping;
+                }
+            }
+
+            return null;
+        }
     }
 
 } // END WebConfiguration

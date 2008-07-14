@@ -36,25 +36,10 @@
 
 package com.sun.faces.systest;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
-import com.gargoylesoftware.htmlunit.html.HtmlSelect;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import java.util.List;
-import java.util.Random;
-import java.util.ResourceBundle;
-
-import javax.faces.component.NamingContainer;
 
 /**
  * <p> Make sure that an application that replaces the ApplicationFactory but
@@ -104,11 +89,91 @@ public class UnicodeTestCase extends AbstractTestCase {
 
     // ------------------------------------------------- Individual Test Methods
 
-    public void testUnicode() throws Exception {
-        HtmlPage page = getPage("/faces/index.jsp");
+    public void testUnicodeEscapingTrue() throws Exception {
+        client.addRequestHeader("Accept-Encoding", "UTF-8");
+        HtmlPage page = getPage("/faces/indexUTF.jsp?escape=true");
         assertTrue(
-              "Title should contain the unicode character '\u1234' and not the escaped entity '&#4660;'.",
-              page.getWebResponse().getContentAsString().contains("\u1234"));
+              "Title should contain the unicode characters '\u1234' and '\u00c4'.",
+              page.getWebResponse().getContentAsString().contains("a\u1234a") &&
+              !page.getWebResponse().getContentAsString().contains("a&#4660;a") &&
+              page.getWebResponse().getContentAsString().contains("b\u00c4b") &&
+              !page.getWebResponse().getContentAsString().contains("b&Auml;b"));
+
+        client.addRequestHeader("Accept-Encoding", "US-ASCII");
+        page = getPage("/faces/indexUSASCII.jsp?escape=true");
+        assertTrue(
+              "Title should contain the unicode characters replaced by ?.",
+              !page.getWebResponse().getContentAsString().contains("a\u1234a") &&
+              page.getWebResponse().getContentAsString().contains("a?a") &&
+              !page.getWebResponse().getContentAsString().contains("b\u00c4b") &&
+              page.getWebResponse().getContentAsString().contains("b?b"));
+
+        client.addRequestHeader("Accept-Encoding", "ISO-8859-1");
+        page = getPage("/faces/indexISO8859_1.jsp?escape=true");
+        assertTrue(
+              "Title should contain the unicode character replaced by ? but the correct iso character.",
+              !page.getWebResponse().getContentAsString().contains("a\u1234a") &&
+              page.getWebResponse().getContentAsString().contains("a?a") &&
+              page.getWebResponse().getContentAsString().contains("b\u00c4b") &&
+              !page.getWebResponse().getContentAsString().contains("b&Auml;b"));
+    }
+
+    public void testUnicodeEscapingFalse() throws Exception {
+        client.addRequestHeader("Accept-Encoding", "UTF-8");
+        HtmlPage page = getPage("/faces/indexUTF.jsp?escape=false");
+        assertTrue(
+              "Title should contain the escaped unicode characters only.",
+              !page.getWebResponse().getContentAsString().contains("a\u1234a") &&
+              page.getWebResponse().getContentAsString().contains("a&#4660;a") &&
+              !page.getWebResponse().getContentAsString().contains("b\u00c4b") &&
+              page.getWebResponse().getContentAsString().contains("b&Auml;b"));
+
+        client.addRequestHeader("Accept-Encoding", "US-ASCII");
+        page = getPage("/faces/indexUSASCII.jsp?escape=false");
+        assertTrue(
+              "Title should contain the escaped unicode characters only.",
+              !page.getWebResponse().getContentAsString().contains("a\u1234a") &&
+              page.getWebResponse().getContentAsString().contains("a&#4660;a") &&
+              !page.getWebResponse().getContentAsString().contains("b\u00c4b") &&
+              page.getWebResponse().getContentAsString().contains("b&Auml;b"));
+
+        client.addRequestHeader("Accept-Encoding", "ISO-8859-1");
+        page = getPage("/faces/indexISO8859_1.jsp?escape=false");
+        assertTrue(
+              "Title should contain the escaped unicode characters only.",
+              !page.getWebResponse().getContentAsString().contains("a\u1234a") &&
+              page.getWebResponse().getContentAsString().contains("a&#4660;a") &&
+              !page.getWebResponse().getContentAsString().contains("b\u00c4b") &&
+              page.getWebResponse().getContentAsString().contains("b&Auml;b"));
+    }
+
+    public void testUnicodeEscapingAuto() throws Exception {
+        client.addRequestHeader("Accept-Encoding", "UTF-8");
+        HtmlPage page = getPage("/faces/indexUTF.jsp?escape=auto");
+        assertTrue(
+              "Title should contain the unicode characters '\u1234' and '\u00c4'.",
+              page.getWebResponse().getContentAsString().contains("a\u1234a") &&
+              !page.getWebResponse().getContentAsString().contains("a&#4660;a") &&
+              page.getWebResponse().getContentAsString().contains("b\u00c4b") &&
+              !page.getWebResponse().getContentAsString().contains("b&Auml;b"));
+
+        client.addRequestHeader("Accept-Encoding", "US-ASCII");
+        page = getPage("/faces/indexUSASCII.jsp?escape=auto");
+        assertTrue(
+              "Title should contain the escaped entity '&#4660;' and the escaped umlaut a.",
+              !page.getWebResponse().getContentAsString().contains("a\u1234a") &&
+              page.getWebResponse().getContentAsString().contains("a&#4660;a") &&
+              !page.getWebResponse().getContentAsString().contains("b\u00c4b") &&
+              page.getWebResponse().getContentAsString().contains("b&Auml;b"));
+
+        client.addRequestHeader("Accept-Encoding", "ISO-8859-1");
+        page = getPage("/faces/indexISO8859_1.jsp?escape=auto");
+        assertTrue(
+              "Title should contain the escaped entity '&#4660;' and the correct iso character.",
+              !page.getWebResponse().getContentAsString().contains("a\u1234a") &&
+              page.getWebResponse().getContentAsString().contains("a&#4660;a") &&
+              page.getWebResponse().getContentAsString().contains("b\u00c4b") &&
+              !page.getWebResponse().getContentAsString().contains("b&Auml;b"));
     }
 
 }
