@@ -160,7 +160,7 @@ public class NumberConverter implements Converter, StateHolder {
      * string for this message may optionally include the following
      * placeholders:
      * <ul>
-     * <li><code>{0}</code> replaced by the unconverted value.</li>
+     * <li><code>{0}</code> replaced by the unconverted value.</li>                              HA
      * <li><code>{1}</code> replaced by an example value.</li>
      * <li><code>{2}</code> replaced by a <code>String</code> whose value
      * is the label of the input component that produced this message.</li>
@@ -212,6 +212,9 @@ public class NumberConverter implements Converter, StateHolder {
      */
     public static final String STRING_ID =
          "javax.faces.converter.STRING";
+
+
+     private static final String NBSP = "\u00a0";
 
     // ------------------------------------------------------ Instance Variables
 
@@ -560,18 +563,25 @@ public class NumberConverter implements Converter, StateHolder {
             // See:  http://bugs.sun.com/view_bug.do?bug_id=4510618
             if (parser instanceof DecimalFormat) {
                 DecimalFormat dParser = (DecimalFormat) parser;
-
-                DecimalFormatSymbols symbols = dParser.getDecimalFormatSymbols();
+                DecimalFormatSymbols symbols =
+                      dParser.getDecimalFormatSymbols();
                 if (symbols.getGroupingSeparator() == '\u00a0') {
+                    groupSepChanged = true;
+                    String tValue;
+                    if (value.contains(NBSP)) {
+                        tValue = value.replace('\u00a0', ' ');
+                    } else {
+                        tValue = value;
+                    }
                     symbols.setGroupingSeparator(' ');
                     dParser.setDecimalFormatSymbols(symbols);
-                }
-                try {
-                    return dParser.parse(value);
-                } catch (ParseException pe) {
-                    if (groupSepChanged) {
-                        symbols.setGroupingSeparator('\u00a0');
-                        dParser.setDecimalFormatSymbols(symbols);
+                    try {
+                        return dParser.parse(tValue);
+                    } catch (ParseException pe) {
+                        if (groupSepChanged) {
+                            symbols.setGroupingSeparator('\u00a0');
+                            dParser.setDecimalFormatSymbols(symbols);
+                        }
                     }
                 }
             }

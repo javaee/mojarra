@@ -1541,8 +1541,7 @@ public abstract class UIComponentBase extends UIComponent {
         if (result != null) {
             return result;
         } else {
-            result = getResponseStateManager(context,
-                                             context.getViewRoot().getRenderKitId()).isPostback(context)
+            result = context.isPostback()
                      && context.getCurrentPhaseId().equals(PhaseId.RESTORE_VIEW);
             contextMap.put(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME,
                            result ? Boolean.TRUE : Boolean.FALSE);

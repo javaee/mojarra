@@ -69,6 +69,17 @@ public abstract class ResourceHandlerWrapper extends ResourceHandler {
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
+     * is to call {@link ResourceHandler#createAjaxResource()} on the
+     * wrapped {@link ResourceHandler} object.</p>
+     */
+    public Resource createAjaxResource() {
+
+        return getWrapped().createAjaxResource();
+
+    }
+
+    /**
+     * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link ResourceHandler#createResource(String)} on the
      * wrapped {@link ResourceHandler} object.</p>
      */

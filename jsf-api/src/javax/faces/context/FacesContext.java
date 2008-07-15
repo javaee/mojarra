@@ -446,6 +446,32 @@ public abstract class FacesContext {
      */
     public abstract void renderResponse();
 
+    /**
+     * RELEASE_PENDING (edburns,rogerk) Please review the docs.
+     * <p class="changed_added_2_0">
+     * This utility method simply returns the result of
+     * {@link javax.faces.render.ResponseStateManager#isPostback(FacesContext)}.
+     * </p>
+     *
+     * <p class="changed_added_2_0">The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided
+     * for the sole purpose of not breaking existing applications that extend
+     * this class.</p>
+     * 
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     *
+     * @since 2.0
+     */
+    public boolean isPostback() {
+
+        if (defaultFacesContext != null) {
+            defaultFacesContext.isPostback();
+        }
+
+        throw new UnsupportedOperationException();
+
+    }
 
     /**
      * <p>Signal the JavaServer Faces implementation that the HTTP response
