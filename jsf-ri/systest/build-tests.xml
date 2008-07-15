@@ -152,6 +152,7 @@
                 test.validator01,
                 test.validator02,
                 test.validator03,
+                test.valuechange,
                 test.component,
                 test.component01,
                 test.navigation,
@@ -623,6 +624,19 @@
               request="${context.path}/faces/jsp/tlvTest01.jsp"
               status="200"/>
 
+    </target>
+
+    <target name="test.valuechange"
+            description="Test ValueChangeListeners">
+
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/jsptest/ValueChangeListenerTestCase.class"/>
+            </tests>
+        </jsf.junit>
     </target>
 
     <target name="test.converter"

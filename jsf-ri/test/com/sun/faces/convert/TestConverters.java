@@ -791,7 +791,7 @@ public class TestConverters extends JspFacesTestCase {
 
     }
 
-    public void testNumberConverterCurrency() throws Exception {
+    public void testNumberConverterSpacesNBSP() throws Exception {
         UIInput text = new UIInput();
         NumberConverter converter = (NumberConverter) application.createConverter("javax.faces.Number");
         converter.setType("currency");
@@ -801,6 +801,14 @@ public class TestConverters extends JspFacesTestCase {
                                                        text,
                                                        toConv);
         assertTrue(number != null);
+
+        converter.setType("number");
+        toConv = "5" + "\u00a0" + "000" + "\u00a0" + "000,01";
+        number = (Number) converter.getAsObject(getFacesContext(),
+                                                text,
+                                                toConv);
+        assertTrue("Number was: " + number.toString() + ", expected 5000000.01",
+                   "5000000.01".equals(number.toString()));
     }
 
     public void testDoubleConverter(UIViewRoot root) throws ConverterException,

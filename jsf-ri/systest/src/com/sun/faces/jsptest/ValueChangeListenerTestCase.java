@@ -49,6 +49,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.gargoylesoftware.htmlunit.html.HtmlUnorderedList;
+import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -171,4 +172,42 @@ public class ValueChangeListenerTestCase extends AbstractTestCase {
 	assertTrue(hasMessagesContent && hasMessageContent);
 	
     }
+
+    // Test case for Issue 752
+    // https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=752
+    public void testValueChangeListener02() throws Exception {
+        
+        HtmlPage page = getPage("/faces/valueChangeListener02.jsp");
+        List list = getAllElementsOfGivenClass(page,
+                                               null,
+                                               HtmlSubmitInput.class);
+        HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
+        page = (HtmlPage) button.click();
+        assertTrue(!page.asText().contains("old value"));
+        assertTrue(!page.asText().contains("new value"));
+
+        list = getAllElementsOfGivenClass(page,
+                                          null,
+                                          HtmlCheckBoxInput.class);
+        HtmlCheckBoxInput input = (HtmlCheckBoxInput) list.get(0);
+        input.setChecked(false);
+        list = getAllElementsOfGivenClass(page,
+                                               null,
+                                               HtmlSubmitInput.class);
+        button = (HtmlSubmitInput) list.get(0);
+        page = (HtmlPage) button.click();
+
+        assertTrue(page.asText().contains("old value: true"));
+        assertTrue(page.asText().contains("new value: false"));
+
+        list = getAllElementsOfGivenClass(page,
+                                          null,
+                                          HtmlSubmitInput.class);
+        button = (HtmlSubmitInput) list.get(0);
+        page = (HtmlPage) button.click();
+        assertTrue(!page.asText().contains("old value"));
+        assertTrue(!page.asText().contains("new value"));
+
+    }
+
 }

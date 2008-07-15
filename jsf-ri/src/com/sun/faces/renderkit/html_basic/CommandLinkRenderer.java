@@ -146,11 +146,7 @@ public class CommandLinkRenderer extends LinkRenderer {
 
         if (component.getChildCount() > 0) {
             for (UIComponent kid : component.getChildren()) {
-                kid.encodeBegin(context);
-                if (kid.getRendersChildren()) {
-                    kid.encodeChildren(context);
-                }
-                kid.encodeEnd(context);
+                encodeRecursive(context, kid);
             }
         }
         
