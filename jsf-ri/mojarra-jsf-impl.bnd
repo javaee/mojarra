@@ -53,5 +53,6 @@ Import-Package: javax.faces.*,javax.servlet.*,javax.el.*,javax.annotation.*,java
   org.apache.*;resolution:=optional
 Include-Resource: META-INF=build/classes/META-INF,build/classes
 Bundle-Version: @osgi.version@
-Bundle-Name: mojarra-jsf-impl
-Bundle-Symbolic-Name: mojarra-jsf-impl
+Bundle-Name: Mojarra JSF Implementation @impl.version@
+Bundle-Description: Mojarra JSF Implementation (javax.faces/@spec.version@) @impl.version@
+Bundle-SymbolicName: javax.faces.jsf-impl
