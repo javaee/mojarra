@@ -681,11 +681,6 @@ public class ApplicationImpl extends Application {
                 FacesContext.getCurrentInstance().getAttributes().put(ProjectStagePhaseListener.VIEW_HAS_MESSAGE_OR_MESSAGES_ELEMENT,
                         Boolean.TRUE);
             }
-            if (componentType.equals("javax.faces.HtmlForm") ||
-                componentType.equals("javax.faces.component.html.HtmlForm")) {
-                FacesContext.getCurrentInstance().getAttributes().put(ProjectStagePhaseListener.VIEW_HAS_FORM_ELEMENT,
-                        Boolean.TRUE);
-            }
         }
         
         return returnVal;

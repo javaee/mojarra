@@ -5,11 +5,15 @@
 
 package com.sun.faces.lifecycle;
 
+import com.sun.faces.util.Util;
+import com.sun.faces.util.Util.TreeTraversalCallback;
 import java.util.Map;
+import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.ProjectStage;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIForm;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
@@ -25,15 +29,13 @@ public class ProjectStagePhaseListener implements PhaseListener {
     
     public static final String VIEW_HAS_MESSAGE_OR_MESSAGES_ELEMENT =
             "com.sun.faces.lifecycle.ProjectStageHasMessages";
-    public static final String VIEW_HAS_FORM_ELEMENT =
-            "com.sun.faces.lifecycle.ProjectStageHasForm";
 
     public void afterPhase(PhaseEvent event) {
         FacesContext context = event.getFacesContext();
         Application app = context.getApplication();
         if (ProjectStage.Development == app.getProjectStage()) {
+            UIViewRoot root = context.getViewRoot();
             if (!context.getAttributes().containsKey(VIEW_HAS_MESSAGE_OR_MESSAGES_ELEMENT)) {
-                UIViewRoot root = context.getViewRoot();
                 
                 // Add a component to style the error messages
                 UIOutput messagesStyle = (UIOutput) app.createComponent("javax.faces.Output");
@@ -54,12 +56,25 @@ public class ProjectStagePhaseListener implements PhaseListener {
                 messages.setRendererType("javax.faces.Messages");
                 root.addComponentResource(context, messages, "body");
             }
-            if (!context.getAttributes().containsKey(VIEW_HAS_FORM_ELEMENT)) {
+            // scan for a form component
+            final Boolean [] result = new Boolean[1];
+            result[0] = Boolean.FALSE;
+            
+            Util.prefixViewTraversal(context, root, new TreeTraversalCallback() {
+
+                public boolean takeActionOnNode(FacesContext context, UIComponent curNode) throws FacesException {
+                    if (curNode instanceof UIForm) {
+                        result[0] = Boolean.TRUE;
+                        return false;
+                    }
+                    return true;
+                }
+            });
+            if (!result[0].booleanValue()) {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
                         "Warning: This page has no form element.", ""));
-
             }
-
+                
         }
     }
 
