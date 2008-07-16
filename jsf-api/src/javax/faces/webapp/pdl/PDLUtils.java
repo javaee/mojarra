@@ -20,6 +20,21 @@ import javax.faces.context.FacesContext;
  */
 public class PDLUtils {
 
+    /**
+     * 
+     * 
+     * @param context
+     * @param topLevelComponent The UIComponent in the view to which the attached
+     * objects must be attached.  This UIComponent must have its component metadata
+     * already associated and available from via the JavaBeans API.
+     * @param handlers specified by the page author in the consuming page, 
+     * provided to this method by the PDL implementation, this is a list of 
+     * implementations of {@link AttachedObjectHandler}, each one of which 
+     * represents a relationship between an attached object and the UIComponent 
+     * to which it is attached.
+     */
+    
+    
     public static void retargetAttachedObjects(FacesContext context,
             UIComponent topLevelComponent,
             List<AttachedObjectHandler> handlers) {
@@ -31,58 +46,58 @@ public class PDLUtils {
             return;
         }
         BeanDescriptor componentDescriptor = componentBeanInfo.getBeanDescriptor();
+        // There is an entry in targetList for each attached object in the 
+        // <composite:interface> section of the composite component.
         List<AttachedObjectTarget> targetList = (List<AttachedObjectTarget>)
                 componentDescriptor.getValue(AttachedObjectTarget.ATTACHED_OBJECT_TARGETS_KEY);
+        // Each entry in targetList will vend one or more UIComponent instances
+        // that is to serve as the target of an attached object in the consuming
+        // page.
         List<UIComponent> targetComponents = null;
-        String handlerTagId, componentTagId;
+        String forAttributeValue, curTargetName, handlerTagId, componentTagId;
+        boolean foundMatch = false;
         
-        // For each of the attached objects in this composite component...
-        for (AttachedObjectTarget curTarget : targetList) {
-            targetComponents = curTarget.getTargets();
-            // ...get the list of targets for this attached object target...
-            for (UIComponent curTargetComponent : targetComponents) {
-                // ...if the current target is an ActionSource2...
-                if (curTargetComponent instanceof ActionSource2) {
-                    // ...search the handlers list for a handler with an
-                    // ID attribute equal to the componentId of curTargetComponent, and
-                    // that is an instanceof ActionListenerAttachedObjectHandler
-                    for (AttachedObjectHandler curHandler : handlers) {
-                        if (null != (handlerTagId = curHandler.getFor())) {
-                            
+        // For each of the attached object handlers...
+        for (AttachedObjectHandler curHandler : handlers) {
+            // Get the name given to this attached object by the page author
+            // in the consuming page.
+            forAttributeValue = curHandler.getFor();
+            // For each of the attached objects in the <composite:interface> section
+            // of this composite component...
+            foundMatch = false;
+            for (AttachedObjectTarget curTarget : targetList) {
+                if (foundMatch) {
+                    break;
+                }
+                // Get the name given to this attached object target by the
+                // composite component author
+                curTargetName = curTarget.getName();
+                targetComponents = curTarget.getTargets();
 
-                            
-                            (null != (componentTagId = curTargetComponent.getId())) &&
-                                componentTagId.equals(handlerTagId) &&
-                                curHandler instanceof ActionSource2AttachedObjectHandler) {
+                if (curHandler instanceof ActionSource2AttachedObjectHandler &&
+                    curTarget instanceof ActionSource2AttachedObjectTarget) {
+                    if (forAttributeValue.equals(curTargetName)) {
+                        for (UIComponent curTargetComponent : targetComponents) {
                             curHandler.applyAttachedObject(context, curTargetComponent);
+                            foundMatch = true;
                         }
                     }
                 }
-                if (curTargetComponent instanceof EditableValueHolder) {
-                    // ...search the handlers list for a handler with an
-                    // ID attribute equal to the componentId of curTargetComponent, and
-                    // that is an instanceof EditableValueHolderAttachedObjectHandler.
-                    for (AttachedObjectHandler curHandler : handlers) {
-                        if ((null != (handlerTagId = curHandler.getFor())) &&
-                                (null != (componentTagId = curTargetComponent.getId())) &&
-                                componentTagId.equals(handlerTagId)) {
-                            if (curHandler instanceof EditableValueHolderAttachedObjectHandler) {
-                                curHandler.applyAttachedObject(context, curTargetComponent);
-                            }
+                else if (curHandler instanceof EditableValueHolderAttachedObjectHandler &&
+                         curTarget instanceof EditableValueHolderAttachedObjectTarget) {
+                    if (forAttributeValue.equals(curTargetName)) {
+                        for (UIComponent curTargetComponent : targetComponents) {
+                            curHandler.applyAttachedObject(context, curTargetComponent);
+                            foundMatch = true;
                         }
                     }
                 }
-                if (curTargetComponent instanceof ValueHolder) {
-                // ...search the handlers list for a handler with an
-                // ID attribute equal to the componentId of curTargetComponent, and
-                // that is an instanceof ConvertHandler.
-                    for (AttachedObjectHandler curHandler : handlers) {
-                        if ((null != (handlerTagId = curHandler.getFor())) &&
-                                (null != (componentTagId = curTargetComponent.getId())) &&
-                                componentTagId.equals(handlerTagId)) {
-                            if (curHandler instanceof ValueHolderAttachedObjectHandler) {
-                                curHandler.applyAttachedObject(context, curTargetComponent);
-                            }
+                else if (curHandler instanceof ValueHolderAttachedObjectHandler &&
+                         curTarget instanceof ValueHolderAttachedObjectTarget) {
+                    if (forAttributeValue.equals(curTargetName)) {
+                        for (UIComponent curTargetComponent : targetComponents) {
+                            curHandler.applyAttachedObject(context, curTargetComponent);
+                            foundMatch = true;
                         }
                     }
                 }
