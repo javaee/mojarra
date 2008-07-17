@@ -1,10 +1,8 @@
 package com.sun.faces.util;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -19,13 +17,12 @@ import java.util.concurrent.locks.ReentrantLock;
  *   <li>
  *     This Map implementation is <em>NOT</em> Serialziable.
  *   <li>
+ *   <li>
+ *     This cannot be cast as a general Map implementation.
+ *   </li>
  * </ul>
- *
- * Since this Map implementation is <em>very</em> non-standard, it shoudn't
- * be cast to Map.
- *
  */
-public class MultiKeyConcurrentHashMap<K, V> implements ConcurrentMap<K, V> {
+public class MultiKeyConcurrentHashMap<K, V> {
 
     /*
      * The basic strategy is to subdivide the table among Segments,
@@ -1055,59 +1052,37 @@ public class MultiKeyConcurrentHashMap<K, V> implements ConcurrentMap<K, V> {
 
 
     /**
-     * Unsupported.
-     */
-    public void putAll(Map<? extends K, ? extends V> t) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * This is here strictly to get this to compile.  Users of this class
-     * should use {@link #remove(Object, Object, Object, Object)}.
      * @see Map#remove(Object)
      */
-    public V remove(Object key) {
+    public V remove(K key) {
         int hash = hash(key, null, null, null);
         return segmentFor(hash).remove(key, null, null, null, hash, null);
     }
 
     /**
-     * Removes the key(s) (and its corresponding value) from this table. This
-     * method does nothing if the key(s) is/are not in the table.
-     *
-     * @return the value to which the key(s) had been mapped in this table, or
-     *         <tt>null</tt> if the key(s) did not have a mapping.
-     *
-     * @throws NullPointerException if the key is <tt>null</tt>.
+     * @see Map#remove(Object)
+     */
+    public V remove(K key1, K key2) {
+        int hash = hash(key1, key2, null, null);
+        return segmentFor(hash).remove(key1, key2, null, null, hash, null);
+    }
+
+    /**
+     * @see Map#remove(Object)
+     */
+    public V remove(K key1, K key2, K key3) {
+        int hash = hash(key1, key2, key3, null);
+        return segmentFor(hash).remove(key1, key2, null, null, hash, null);
+    }
+
+    /**
+     * @see Map#remove(Object)
      */
     public V remove(K key1, K key2, K key3, K key4) {
         // we don't have multiple versions of remove here because
         // erasure would cause a collision with boolean remove(Object, Object)
         int hash = hash(key1, key2, key3, key4);
         return segmentFor(hash).remove(key1, key2, key3, key4, hash, null);
-    }
-
-    /**
-     * Remove entry for key only if currently mapped to given value. Acts as
-     * <pre>
-     *  if (map.get(key).equals(value)) {
-     *     map.remove(key);
-     *     return true;
-     * } else return false;
-     * </pre>
-     * except that the action is performed atomically.
-     *
-     * @param key   key with which the specified value is associated.
-     * @param value value associated with the specified key.
-     *
-     * @return true if the value was removed
-     *
-     * @throws NullPointerException if the specified key is <tt>null</tt>.
-     */
-    public boolean remove(Object key, Object value) {
-        int hash = hash(key, null, null, null);
-        return segmentFor(hash).remove(key, null, null, null, hash, value)
-               != null;
     }
 
 
