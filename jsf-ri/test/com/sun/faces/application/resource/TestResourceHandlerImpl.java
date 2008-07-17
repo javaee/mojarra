@@ -93,12 +93,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
         assertTrue(handler != null);
         assertTrue(handler instanceof ResourceHandlerImpl);
 
-        Resource resource = handler.createAjaxResource();
-        assertTrue(resource != null);
-        assertTrue("javax.faces".equals(resource.getLibraryName()));
-        assertTrue("ajax.js".equals(resource.getResourceName()));
-
-        resource = handler.createResource("duke-nv.gif");
+        Resource resource = handler.createResource("duke-nv.gif");
         assertTrue(resource != null);
         assertTrue(resource.getLibraryName() == null);
         assertTrue("duke-nv.gif".equals(resource.getResourceName()));
