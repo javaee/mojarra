@@ -4,6 +4,13 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:composite="http://java.sun.com/jsf/composite">
+<head>
+
+<title>Not present in rendered output</title>
+
+</head>
+
+<body>
 
 <composite:interface name="loginPanel" 
                      displayName="Very Simple Login Panel" 
@@ -20,28 +27,47 @@
 
 <composite:implementation>
 
-  <p>This is the login panel</p>
+  <ui:decorate template="loginPanelTemplate.xhtml">
 
-  <p>
+    <ui:define name="header">
 
-     <h:inputText id="username" />
+      <p>This is the login panel header</p>
 
-  </p>
+    </ui:define>
 
-  <p>
+    <ui:define name="body">
 
-    <h:commandButton id="loginEvent" value="Login" action="login">
+      <p>
 
-    </h:commandButton>  
+         <h:inputText id="username" />
 
-    <h:commandButton id="cancelEvent" value="Cancel" action="cancel">
+      </p>
 
-    </h:commandButton>  
+      <p>
+
+	<h:commandButton id="loginEvent" value="Login" action="login">
+
+	</h:commandButton>  
+
+	<h:commandButton id="cancelEvent" value="Cancel" action="cancel">
+
+	</h:commandButton>  
 
 
-  </p>
+      </p>
 
+    </ui:define>
+
+    <ui:define name="footer">
+
+     <p>This is the login panel footer</p>
+
+    </ui:define>
+
+  </ui:decorate>
 
 </composite:implementation>
+
+</body>
 
 </html>
