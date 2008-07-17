@@ -87,9 +87,7 @@ public abstract class Resource {
      * the argument.</p>
      * @param contentType the MIME content-type for this resource.  The
      * default implementation must accept <code>null</code> as a
-     * parameter.  If the value is <code>null</code>, The content-type
-     * of the resource is derived by passing the <em>resourceName</em>
-     * to {@link javax.faces.context.ExternalContext#getMimeType}.
+     * parameter.  
      */
     public void setContentType(String contentType) {
 
