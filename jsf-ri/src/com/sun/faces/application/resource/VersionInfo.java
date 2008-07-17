@@ -93,7 +93,7 @@ public class VersionInfo implements Comparable {
     @Override
     public int hashCode() {
 
-        return (version.hashCode() + ((extension != null)
+        return (version.hashCode() ^ ((extension != null)
                                       ? extension.hashCode()
                                       : 0));
 
