@@ -25,16 +25,16 @@
 
     <ez:loginPanel id="loginPanel" usernameLabel="Username" pinLabel="PIN" 
                    loginLabel="Login" model="#{bean}">
+
       <f:valueChangeListener for="usernameInput"
 			     binding="#{bean.useridValueChangeListener}" />
+      <f:valueChangeListener for="pinInput"
+			     binding="#{bean.passwordValueChangeListener}" />
+      <f:valueChangeListener for="allInputs"
+			     binding="#{bean.allInputsListener}" />
+
       <f:actionListener for="loginEvent" 
                         binding="#{bean.loginEventListener}" />
-
-      <f:actionListener for="cancelEvent" 
-                        binding="#{bean.cancelEventListener}" />
-
-      <f:actionListener for="allEvents" 
-                        binding="#{bean.allEventsListener}" />
 
     </ez:loginPanel>
 

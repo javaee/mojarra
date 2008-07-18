@@ -27,7 +27,7 @@ public class Bean implements ActionListener, ValueChangeListener {
         return "back";
     }
 
-    public ActionListener getActionListener() {
+    public ActionListener getLoginEventListener() {
         return this;
     }
     
@@ -42,10 +42,14 @@ public class Bean implements ActionListener, ValueChangeListener {
         other.setRequestKey("passwordValueChangeListener");
         return ((ValueChangeListener) other);
     }
-    
-    // PENDING(edburns): This ends up being installed twice each time
-    // the page says install it once, not correct.
-    
+
+    public ValueChangeListener getAllInputsListener() {
+        Bean other = new Bean();
+        other.setRequestKey("allInputsValueChangeListener");
+        return ((ValueChangeListener) other);
+    }
+
+
     public void processValueChange(ValueChangeEvent arg0) throws AbortProcessingException {
         FacesContext.getCurrentInstance().getExternalContext().getRequestMap().
                 put(getRequestKey(), Boolean.TRUE);
@@ -55,7 +59,7 @@ public class Bean implements ActionListener, ValueChangeListener {
 
     public void processAction(ActionEvent event) {
         FacesContext.getCurrentInstance().getExternalContext().getRequestMap().
-                put("actionListenerCalled", Boolean.TRUE);
+                put("loginEventCalled", Boolean.TRUE);
         
     }
 
