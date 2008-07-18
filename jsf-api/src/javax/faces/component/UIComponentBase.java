@@ -1577,15 +1577,16 @@ public abstract class UIComponentBase extends UIComponent {
     private static void processResourceDependencyOnComponentAndMaybeRenderer(
           FacesContext context,
           UIComponent added) {
-        processResourceDependencyAnnotation(context, added);
+        processResourceDependencyAnnotation(context, added, null);
         Renderer renderer = added.getRenderer(context);
         if (null != renderer) {
-            processResourceDependencyAnnotation(context, renderer);
+            processResourceDependencyAnnotation(context, added, renderer);
         }
     }
 
-    private static void processResourceDependencyAnnotation(FacesContext context,
-                                                            Object source) {
+   private static void processResourceDependencyAnnotation(FacesContext context,
+            UIComponent component, Renderer renderer) {
+        Object source = (null == renderer) ? component : renderer;
         Class<?> sourceClass = source.getClass();
         // NOTE - calling isAnnotationPresent and getAnnotation without
         // caching the metadata will be a performance sink as these methods
@@ -1598,19 +1599,20 @@ public abstract class UIComponentBase extends UIComponent {
             ResourceDependency[] dependencies = resourceDeps.value();
             if (dependencies != null) {
                 for (ResourceDependency dependency : dependencies) {
-                    createComponentResource(context, dependency);
+                    createComponentResource(context, component, dependency);
                 }
             }
         } else if (sourceClass.isAnnotationPresent(ResourceDependency.class)) {
             ResourceDependency resource =
                   sourceClass.getAnnotation(ResourceDependency.class);
-            createComponentResource(context, resource);
+            createComponentResource(context, component, resource);
         }
 
     }
 
     private static void createComponentResource(FacesContext context,
-                                                ResourceDependency resourceDep) {
+            UIComponent source,
+            ResourceDependency resourceDep) {
 
         //noinspection unchecked
         List<ResourceDependency> addedResources = (List<ResourceDependency>)
@@ -1632,6 +1634,22 @@ public abstract class UIComponentBase extends UIComponent {
         String resourceName = resourceDep.name();
         String library = resourceDep.library();
         String target = resourceDep.target();
+
+
+	// If the enclosing entity for this expression is itself 
+	// a resource, the "this" syntax for the library name must
+	// be supported.
+	if (null != library && library.equals("this")) {
+	    Resource componentResource = (Resource)
+		source.getAttributes().get(Resource.COMPONENT_RESOURCE_KEY);
+	    if (null != componentResource) {
+		String libName = null;
+		if (null != (libName = componentResource.getLibraryName())) {
+		    library = libName;
+		}
+	    }
+	    
+	}
 
         if (resourceName.length() == 0) {
             resourceName = null;
