@@ -25,9 +25,8 @@
 
   <composite:editableValueHolder name="usernameInput" />
   <composite:editableValueHolder name="pinInput" />
+  <composite:actionSource name="allInputs" targets="usernameInput,pinInput" />
   <composite:actionSource name="loginEvent" />
-  <composite:actionSource name="cancelEvent" />
-  <composite:actionSource name="allEvents" targets="loginEvent,cancelEvent" />
 
 </composite:interface>
 

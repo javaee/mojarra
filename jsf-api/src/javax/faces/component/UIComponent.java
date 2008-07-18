@@ -1319,17 +1319,20 @@ private void doFind(FacesContext context, String clientId) {
      * from <code>getCurrentComponent()</code></p>
      *
      */
-    protected void pushComponentToEL(FacesContext context) {
+    protected final void pushComponentToEL(FacesContext context, UIComponent component) {
 
         Map<Object,Object> contextMap = context.getAttributes();
+        if (null == component) {
+            component = this;
+        }
         if (contextMap != null) {
-            previouslyPushed = (UIComponent) contextMap.put("component", this);
+            previouslyPushed = (UIComponent) contextMap.put("component", component);
             // If this is a composite component...
-            if (this.getAttributes().containsKey(Resource.COMPONENT_RESOURCE_KEY)) {
+            if (component.getAttributes().containsKey(Resource.COMPONENT_RESOURCE_KEY)) {
                 // make it so #{compositeComponent} resolves to this composite 
                 // component, preserving the previous value if present
                 previouslyPushedCompositeComponent = 
-                        (UIComponent) contextMap.put("compositeComponent", this);
+                        (UIComponent) contextMap.put("compositeComponent", component);
             }
         }
 
@@ -1342,7 +1345,7 @@ private void doFind(FacesContext context, String clientId) {
      * structure so that the previous component becomes the current
      * component.</p>
      */
-    protected void popComponentFromEL(FacesContext context) {
+    protected final void popComponentFromEL(FacesContext context) {
 
         Map<Object,Object> contextMap = context.getAttributes();
         if (contextMap != null) {
@@ -1353,7 +1356,8 @@ private void doFind(FacesContext context, String clientId) {
             }
             
             if (null != previouslyPushedCompositeComponent) {
-                contextMap.put("compositeComponent", previouslyPushed);
+                contextMap.put("compositeComponent", 
+                        previouslyPushedCompositeComponent);
             } 
         }
 

@@ -884,7 +884,7 @@ public abstract class UIComponentBase extends UIComponent {
             return;
         }
         
-        pushComponentToEL(context);
+        pushComponentToEL(context,null);
  
         context.getApplication().publishEvent(BeforeRenderEvent.class, this);
         
@@ -1100,7 +1100,7 @@ public abstract class UIComponentBase extends UIComponent {
             return;
         }
 
-        pushComponentToEL(context);
+        pushComponentToEL(context,null);
 
         // Process all facets and children of this component
         Iterator kids = getFacetsAndChildren();
@@ -1136,7 +1136,7 @@ public abstract class UIComponentBase extends UIComponent {
             return;
         }
 
-        pushComponentToEL(context);
+        pushComponentToEL(context,null);
         
         // Process all the facets and children of this component
         Iterator kids = getFacetsAndChildren();
@@ -1162,7 +1162,7 @@ public abstract class UIComponentBase extends UIComponent {
             return;
         }
 
-        pushComponentToEL(context);
+        pushComponentToEL(context,null);
 
         // Process all facets and children of this component
         Iterator kids = getFacetsAndChildren();
@@ -1190,7 +1190,7 @@ public abstract class UIComponentBase extends UIComponent {
         Object [] stateStruct = new Object[2];
         Object [] childState = EMPTY_ARRAY;
 
-        pushComponentToEL(context);
+        pushComponentToEL(context,null);
 
         // Process this component itself
         stateStruct[MY_STATE] = saveState(context);
@@ -1215,7 +1215,7 @@ public abstract class UIComponentBase extends UIComponent {
                 }
             }
             
-            pushComponentToEL(context);
+            pushComponentToEL(context,null);
 
             // if we have facets, add them to the stateList
             if (this.getFacetCount() > 0) {
@@ -1274,7 +1274,7 @@ public abstract class UIComponentBase extends UIComponent {
                 if (currentState == null) {
                     continue;
                 }
-                pushComponentToEL(context);
+                pushComponentToEL(context,null);
                 kid.processRestoreState(context, currentState);
                 popComponentFromEL(context);
             }
@@ -1293,7 +1293,7 @@ public abstract class UIComponentBase extends UIComponent {
                     facetName = (String) facetSaveState[0];
                     facetState = facetSaveState[1];
                     facet = getFacets().get(facetName);
-                    pushComponentToEL(context);
+                    pushComponentToEL(context,null);
                     facet.processRestoreState(context, facetState);
                     popComponentFromEL(context);
                 }

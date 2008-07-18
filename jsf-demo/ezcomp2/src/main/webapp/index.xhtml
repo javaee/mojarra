@@ -24,7 +24,7 @@
   <div id="compositeComponent" class="grayBox" style="border: 1px solid #090;">
 
     <ez:loginPanel id="loginPanel" usernameLabel="Username" pinLabel="PIN" 
-                   loginLabel="Login">
+                   loginLabel="Login" model="#{bean}">
       <f:valueChangeListener for="usernameInput"
 			     binding="#{bean.useridValueChangeListener}" />
       <f:actionListener for="loginEvent" 

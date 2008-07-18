@@ -195,7 +195,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
         super();
         setRendererType(null);
         FacesContext context = FacesContext.getCurrentInstance();
-        pushComponentToEL(context);
+        pushComponentToEL(context,null);
 
     }
 
@@ -656,6 +656,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
                           eventsForPhaseId.get(0);
                     UIComponent source = event.getComponent();
                     try {
+                        this.pushComponentToEL(context, source);
                         source.broadcast(event);
                     } catch (AbortProcessingException e) {
                         if (LOGGER.isLoggable(Level.SEVERE)) {
@@ -674,6 +675,9 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
                                                     id});
                             LOGGER.log(Level.SEVERE, e.toString(), e);
                         }
+                    }
+                    finally {
+                        popComponentFromEL(context);
                     }
                     eventsForPhaseId.remove(0); // Stay at current position
                 }
