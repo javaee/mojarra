@@ -18,8 +18,8 @@ public class loginPanel extends UINamingContainer {
     
     public void processUpdates(FacesContext context) {
         
-        ValueHolder username = this.findComponent("username");
-        ValueHolder password = this.findComponent("password");
+        ValueHolder username = this.findComponent("usernameInput");
+        ValueHolder password = this.findComponent("pinInput");
         
         context.getExternalContext().getRequestMap().put("groovyCalled", 
                                                          username.getValue());

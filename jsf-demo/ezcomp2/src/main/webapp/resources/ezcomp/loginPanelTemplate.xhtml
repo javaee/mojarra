@@ -17,7 +17,7 @@ This does not appear
 
 <ui:composition>
 
-<p>#{component.resourceBundleMap.localizedText}</p>
+<p>#{compositeComponent.resourceBundleMap.localizedText}</p>
 
     <table border="0" cellpadding="0" cellspacing="0" align="center" title="">
 	<tr><td width="50%">
@@ -47,7 +47,7 @@ This does not appear
 				<tr><td nowrap="nowrap"><div class="logLbl">
 					&nbsp;<span class="LblLev2Txt">
 <label id="sun_label17" for="Login.username" class="LblLev2Txt_sun4">
-<h:outputText value="#{usernameLabel}" />
+<h:outputText value="#{compositeComponent.elAttrs.usernameLabel}" />
 </label>
 					</span></div></td>
 
@@ -60,7 +60,7 @@ This does not appear
 				<tr><td nowrap="nowrap"><div class="logLblLst">
 					&nbsp;<span class="LblLev2Txt">
 <label id="sun_label19" for="Login.pin" class="LblLev2Txt_sun4">
-<h:outputText value="#{pinLabel}" />
+<h:outputText value="#{compositeComponent.elAttrs.pinLabel}" />
 </label>
 					</span></div></td>
 				    <td><div class="logInpLst"> 

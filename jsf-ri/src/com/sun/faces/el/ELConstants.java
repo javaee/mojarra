@@ -49,32 +49,34 @@ public interface ELConstants {
 
     public static final int COMPONENT = 2;
 
-    public static final int COOKIE = 3;
+    public static final int COMPOSITE_COMPONENT = 3;
 
-    public static final int FACES_CONTEXT = 4;
+    public static final int COOKIE = 4;
 
-    public static final int HEADER = 5;
+    public static final int FACES_CONTEXT = 5;
 
-    public static final int HEADER_VALUES = 6;
+    public static final int HEADER = 6;
 
-    public static final int INIT_PARAM = 7;
+    public static final int HEADER_VALUES = 7;
 
-    public static final int PARAM = 8;
+    public static final int INIT_PARAM = 8;
 
-    public static final int PARAM_VALUES = 9;
+    public static final int PARAM = 9;
 
-    public static final int REQUEST = 10;
+    public static final int PARAM_VALUES = 10;
 
-    public static final int REQUEST_SCOPE = 11;
+    public static final int REQUEST = 11;
 
-    public static final int RESOURCE = 12;
+    public static final int REQUEST_SCOPE = 12;
 
-    public static final int SESSION = 13;
+    public static final int RESOURCE = 13;
 
-    public static final int SESSION_SCOPE = 14;
+    public static final int SESSION = 14;
 
-    public static final int VIEW = 15;
+    public static final int SESSION_SCOPE = 15;
 
-    public static final int VIEW_SCOPE = 16;
+    public static final int VIEW = 16;
+
+    public static final int VIEW_SCOPE = 17;
     
 }

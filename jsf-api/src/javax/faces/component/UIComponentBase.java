@@ -36,6 +36,7 @@
 
 package javax.faces.component;
 
+import java.util.Map.Entry;
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
@@ -203,6 +204,74 @@ public abstract class UIComponentBase extends UIComponent {
         }
         return (attributes);
 
+    }
+    
+    private transient Map<String, Object> elAttrs = null;
+    
+    public Map<String, Object> getElAttrs() {
+        if (null == elAttrs) {
+            final Map<String, Object> realAttributes = getAttributes();
+            elAttrs = new Map<String, Object>() {
+
+                public void clear() {
+                    realAttributes.clear();
+                }
+
+                public boolean containsKey(Object key) {
+                    return realAttributes.containsKey(key);
+                }
+
+                public boolean containsValue(Object value) {
+                    return realAttributes.containsValue(value);
+                }
+
+                public Set<Entry<String, Object>> entrySet() {
+                    return realAttributes.entrySet();
+                }
+
+                public Object get(Object key) {
+                    Object result = realAttributes.get(key);
+
+                    if (result instanceof ValueExpression) {
+                        ValueExpression ve = (ValueExpression) result;
+                        result = ve.getValue(FacesContext.getCurrentInstance().getELContext());
+                    }
+
+                    return result;
+                }
+
+                public boolean isEmpty() {
+                    return realAttributes.isEmpty();
+                }
+
+                public Set<String> keySet() {
+                    return realAttributes.keySet();
+                }
+
+                public Object put(String key, Object value) {
+                    return realAttributes.put(key, value);
+                }
+
+                public void putAll(Map<? extends String, ? extends Object> t) {
+                    realAttributes.putAll(t);
+                }
+
+                public Object remove(Object key) {
+                    return realAttributes.remove(key);
+                }
+
+                public int size() {
+                    return realAttributes.size();
+                }
+
+                public Collection<Object> values() {
+                    return realAttributes.values();
+                }
+
+            };
+        }
+        
+        return elAttrs;
     }
 
 

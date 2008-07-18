@@ -173,8 +173,9 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * </ul>
      */
     public abstract Map<String, Object> getAttributes();
-
-
+    
+    public abstract Map<String, Object> getElAttrs();
+    
     // ---------------------------------------------------------------- Bindings
 
 
@@ -1294,6 +1295,7 @@ private void doFind(FacesContext context, String clientId) {
 
     
     private UIComponent previouslyPushed;
+    private UIComponent previouslyPushedCompositeComponent;
 
     /**
      * <p class="changed_added_2_0">Push the current
@@ -1322,6 +1324,13 @@ private void doFind(FacesContext context, String clientId) {
         Map<Object,Object> contextMap = context.getAttributes();
         if (contextMap != null) {
             previouslyPushed = (UIComponent) contextMap.put("component", this);
+            // If this is a composite component...
+            if (this.getAttributes().containsKey(Resource.COMPONENT_RESOURCE_KEY)) {
+                // make it so #{compositeComponent} resolves to this composite 
+                // component, preserving the previous value if present
+                previouslyPushedCompositeComponent = 
+                        (UIComponent) contextMap.put("compositeComponent", this);
+            }
         }
 
     }
@@ -1342,6 +1351,10 @@ private void doFind(FacesContext context, String clientId) {
             } else {
                 contextMap.remove("component");
             }
+            
+            if (null != previouslyPushedCompositeComponent) {
+                contextMap.put("compositeComponent", previouslyPushed);
+            } 
         }
 
     }

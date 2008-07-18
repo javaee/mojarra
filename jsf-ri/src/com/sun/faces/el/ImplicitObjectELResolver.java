@@ -60,7 +60,7 @@ import com.sun.faces.util.MessageUtils;
 public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
 
     static final String[] IMPLICIT_OBJECTS = new String[] {
-        "application", "applicationScope", "component", "cookie", "facesContext",
+        "application", "applicationScope", "component", "compositeComponent", "cookie", "facesContext",
         "header", "headerValues", "initParam", "param", "paramValues",
         "request", "requestScope", "resource", "session", "sessionScope", 
         "view", "viewScope" };
@@ -98,6 +98,9 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
                 case COMPONENT:
                     context.setPropertyResolved(true);
                     return facesContext.getAttributes().get("component");
+                case COMPOSITE_COMPONENT:
+                    context.setPropertyResolved(true);
+                    return facesContext.getAttributes().get("compositeComponent");
                 case COOKIE:
                     context.setPropertyResolved(true);
                     return extCtx.getRequestCookieMap();
