@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:ez="http://java.sun.com/jsf/composite/ezcomp">
+<h:head>
+<title>The Simplest EZComp Demo That Could Possibly Work</title>
+<style type="text/css">
+.grayBox { padding: 8px; margin: 10px 0; border: 1px solid #CCC; background-color: #f9f9f9;  }
+</style>
+
+</h:head>
+
+<h:body>
+
+<p>Login Panel Component</p>
+
+
+  <ui:debug hotkey="p" rendered="true"/>
+
+<h:form>
+
+  <div id="compositeComponent" class="grayBox" style="border: 1px solid #090;">
+
+    <ez:loginPanel id="loginPanel" usernameLabel="Username" pinLabel="PIN" 
+                   loginLabel="Login">
+      <f:valueChangeListener for="usernameInput"
+			     binding="#{bean.useridValueChangeListener}" />
+      <f:actionListener for="loginEvent" 
+                        binding="#{bean.loginEventListener}" />
+
+      <f:actionListener for="cancelEvent" 
+                        binding="#{bean.cancelEventListener}" />
+
+      <f:actionListener for="allEvents" 
+                        binding="#{bean.allEventsListener}" />
+
+    </ez:loginPanel>
+
+  </div>
+
+<p><h:commandButton value="reload" /></p>
+
+</h:form>
+
+</h:body>
+
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:composite="http://java.sun.com/jsf/composite">
+<head>
+
+<title>Not present in rendered output</title>
+
+</head>
+
+<body>
+
+<composite:interface name="loginPanel" 
+                     displayName="Very Simple Login Panel" 
+                     preferred="true"
+                     expert="false"
+                     shortDescription="An illustration of the composite component feature">
+
+  <composite:attribute name="usernameLabel" default="Username" />
+  <composite:attribute name="pinLabel" default="PIN" />
+  <composite:attribute name="loginLabel" default="Login" />
+  <composite:attribute name="model" required="true"/>
+
+  <composite:editableValueHolder name="usernameInput" />
+  <composite:editableValueHolder name="pinInput" />
+  <composite:actionSource name="loginEvent" />
+  <composite:actionSource name="cancelEvent" />
+  <composite:actionSource name="allEvents" targets="loginEvent,cancelEvent" />
+
+</composite:interface>
+
+<composite:implementation>
+
+  <ui:decorate template="loginPanelTemplate.xhtml">
+
+    <ui:define name="usernameInput">
+
+      <h:inputText id="usernameInput" />
+
+    </ui:define>
+
+    <ui:define name="pinInput">
+
+      <h:inputText id="pinInput" />
+
+    </ui:define>
+
+    <ui:define name="loginEvent">
+
+      <h:commandButton id="loginEvent" value="#{loginLabel}" 
+                 action="#{model.loginAction}" 
+                 onkeypress="javascript: submitenter(event, 'loginButton', Login');" 
+                 onclick="javascript: submitAndDisable(this, 'Login');" 
+                 onfocus="javascript: if (this.disabled==0) this.className='Btn1Hov'" 
+                 onblur="javascript: if (this.disabled==0) this.className='Btn1'" 
+                 onmouseout="javascript: if (this.disabled==0) this.className='Btn1'" 
+                 onmouseover="javascript: if (this.disabled==0) this.className='Btn1Hov'" 
+                 tabindex="3" 
+                 title="Log In to Sun Java System Application Server" 
+                 class="Btn1"
+                       />
+
+    </ui:define>
+
+  </ui:decorate>
+
+</composite:implementation>
+
+</body>
+
+</html>
