@@ -889,32 +889,25 @@ private void doFind(FacesContext context, String clientId) {
 
 
     /**
+     * RELEASE_PENDING (edburns,rogerk) review docs
      * <p><span class="changed_modified_2_0">If</span> our
      * <code>rendered</code> property is <code>true</code>, render the
      * beginning of the current state of this {@link UIComponent} to the
-     * response contained in the specified {@link FacesContext}.  If our
-     * <code>rendered</code> property is <code>false</code>, return
-     * immediately.  </p>
-     *
-     * <p>Otherwise, take the following actions.</p>
-     *
-     * <ul>
-
-     * <li class="changed_added_2_0"><p>Call {@link
-     * UIComponent#pushComponentToEL}.  </p></li>
-
-     * <li class="changed_added_2_0"><p>Call {@link
-     * javax.faces.application.Application#publishEvent}, passing {@link
-     * javax.faces.event.BeforeRenderEvent}<code>.class</code> as the
+     * response contained in the specified {@link FacesContext}. 
+     * Call {@link #pushComponentToEL(javax.faces.context.FacesContext)}.
+     * Call {@link javax.faces.application.Application#publishEvent}, passing
+     * {@link javax.faces.event.BeforeRenderEvent}<code>.class</code> as the
      * first argument and the component instance to be rendered as the
-     * second argument.  </p></li>
+     * second argument.</p></li>
 
-     * <li><p>If a {@link Renderer} is associated with this {@link
+     * <p>If a {@link Renderer} is associated with this {@link
      * UIComponent}, the actual encoding will be delegated to
      * {@link Renderer#encodeBegin(FacesContext, UIComponent)}.
-     * </p></li>
+     * </p>
      *
-     * </ul>
+     * <p class="changed_added_2_0">If our <code>rendered</code> property is
+     * <code>false</code>, call {@link #pushComponentToEL(javax.faces.context.FacesContext)}
+     * and return immediately.</p>
      *
      * @param context {@link FacesContext} for the response we are creating
      *
@@ -945,6 +938,7 @@ private void doFind(FacesContext context, String clientId) {
 
 
     /**
+     * RELEASE_PENDING (edburns,rogerk) review docs
      * <p><span class="changed_modified_2_0">If</span> our
      * <code>rendered</code> property is <code>true</code>, render the
      * ending of the current state of this {@link UIComponent}.</p>
@@ -954,7 +948,8 @@ private void doFind(FacesContext context, String clientId) {
      * {@link Renderer#encodeEnd(FacesContext, UIComponent)}.</p>
      *
      * <p class="changed_added_2_0">Call {@link
-     * UIComponent#popComponentFromEL}.</p>
+     * UIComponent#popComponentFromEL}. before returning regardless of the value
+     *  of the <code>rendered</p> property.
      *
      * @param context {@link FacesContext} for the response we are creating
      *

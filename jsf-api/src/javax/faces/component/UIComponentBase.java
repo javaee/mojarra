@@ -808,12 +808,13 @@ public abstract class UIComponentBase extends UIComponent {
         if (context == null) {
             throw new NullPointerException();
         }
+
+        pushComponentToEL(context);
+        
         if (!isRendered()) {
             return;
         }
         
-        pushComponentToEL(context);
- 
         context.getApplication().publishEvent(BeforeRenderEvent.class, this);
         
         String rendererType = getRendererType();
@@ -862,6 +863,7 @@ public abstract class UIComponentBase extends UIComponent {
             throw new NullPointerException();
         }
         if (!isRendered()) {
+            popComponentFromEL(context);
             return;
         }
         String rendererType = getRendererType();
