@@ -92,8 +92,15 @@ import javax.faces.render.Renderer;
 
 public abstract class UIComponent implements StateHolder, SystemEventListenerHolder {
 
-    private static final String CURRENT_COMPONENT =
-          UIComponent.class.getName() + "_CURRENT_COMPONENT";
+    /**
+     * The key to which the <code>UIComponent</code> currently being processed will
+     * be associated with within the {@link FacesContext} attributes map.
+     *
+     * @see javax.faces.context.FacesContext#getAttributes()
+     *
+     * @since 2.0
+     */
+    public static final String CURRENT_COMPONENT = "javax.faces.component.CURRENT_COMPONENT";
 
     /**
      * This array represents the packages that can leverage the
@@ -999,14 +1006,15 @@ private void doFind(FacesContext context, String clientId) {
 
     /**
      * <p class="changed_added_2_0">Push the current
-     * <code>UIComponent</code> <code>this</code> onto a data structure
-     * so that any previous component is preserved for a subsequent call
-     * to {@link #popComponentFromEL}.  This method and
-     * <code>popComponentFromEL()</code> form the basis for the contract
-     * that enables the EL Expression "<code>#{component}</code>" to
+     * <code>UIComponent</code> <code>this</code> to the {@link FacesContext}
+     * attribute map using the key {@link #CURRENT_COMPONENT} saving the previous
+     * <code>UIComponent</code> associated with {@link #CURRENT_COMPONENT} for a
+     * subsequent call to {@link @popComponentFromEL}.</p>
+     *
+     * <pclass="changed_added_2_0">This method and <code>popComponentFromEL()</code> form the basis for
+     * the contract that enables the EL Expression "<code>#{component}</code>" to
      * resolve to the "current" component that is being processed in the
-     * lifecycle.  The requirements for when
-     * <code>pushComponentToEL()</code> and
+     * lifecycle.  The requirements for when <code>pushComponentToEL()</code> and
      * <code>popComponentFromEL()</code> must be called are specified as
      * needed in the javadoc for this class.</p>
      *
@@ -1018,8 +1026,11 @@ private void doFind(FacesContext context, String clientId) {
      * the previous <code>UIComponent</code> instance will be returned
      * from <code>getCurrentComponent()</code></p>
      *
+     * @see javax.faces.context.FacesContext#getAttributes()
+     *
+     * @since 2.0
      */
-    protected void pushComponentToEL(FacesContext context) {
+    protected final void pushComponentToEL(FacesContext context) {
 
         Map<Object,Object> contextMap = context.getAttributes();
         if (contextMap != null) {
@@ -1031,11 +1042,15 @@ private void doFind(FacesContext context, String clientId) {
 
     /**
      * <p class="changed_added_2_0">Pop the current
-     * <code>UIComponent</code> <code>this</code> from a data
-     * structure so that the previous component becomes the current
+     * <code>UIComponent</code> from the {@link FacesContext} attributes map
+     * so that the previous <code>UIComponent</code>, if any, becomes the current
      * component.</p>
+     *
+     * @see javax.faces.context.FacesContext#getAttributes()
+     *
+     * @since 2.0
      */
-    protected void popComponentFromEL(FacesContext context) {
+    protected final void popComponentFromEL(FacesContext context) {
 
         Map<Object,Object> contextMap = context.getAttributes();
         if (contextMap != null) {
