@@ -278,19 +278,7 @@ public abstract class ResourceHandler {
                                             String libraryName,
                                             String contentType);
 
-    /**
-     * <p class="changed_added_2_0">Create an instance of the Ajax 
-     * <code>Resource</code> with the <em>resourceName</em> 
-     * <code>ajax.js</code> that is a member of the library
-     * <code>javax.faces</code> as specified in section 13.1 of the spec
-     * prose document <a
-     * href="../../../overview-summary.html#prose_document">linked in
-     * the overview summary</a>.
-     *
-     * @return a newly created Ajax <code>Resource</code> instance.
-     */
-    public abstract Resource createAjaxResource();
-    
+
     /**
      * <p class="changed_added_2_0">This method specifies the contract
      * for satisfying resource requests.  This method is called from
