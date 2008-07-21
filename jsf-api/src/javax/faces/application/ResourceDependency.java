@@ -11,18 +11,28 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * <p class="changed_added_2_0">Instances of {@link javax.faces.component.UIComponent}
- * or {@link javax.faces.render.Renderer} that have this annotation attached at
- * the class level will automatically have a resource dependency added so that
- * the named resource will be present in user agent's view of the
- * <code>UIViewRoot</code> in which this component or renderer is used.</p>
+ * <p class="changed_added_2_0">Instances of {@link
+ * javax.faces.component.UIComponent} or {@link
+ * javax.faces.render.Renderer} that have this annotation (or {@link
+ * ResourceDependencies} attached at the class level will automatically
+ * have a resource dependency added so that the named resource will be
+ * present in user agent's view of the <code>UIViewRoot</code> in which
+ * this component or renderer is used.</p>
+
  * <p/>
+
  * <div class="changed_added_2_0">
+
  * <p/>
- * <p>For all callsites that must process this annotation (listed at the point
- * in the specification where the annotation processing must occur), the
- * following action must be taken.  </p>
- *
+
+ * <p>The default implementation must support attaching this annotation
+ * to {@link javax.faces.component.UIComponent} or {@link
+ * javax.faces.render.Renderer} classes.  In both cases, the event that
+ * precipitates the processing of this annotation is the insertion of a
+ * <code>UIComponent</code> instance into the view hierarchy on an
+ * initial request for a view.  When that event happens, the following
+ * action must be taken.  </p>
+
  * <ol>
  * <li><p> If this annotation is not present on the class in question, no action
  * must be taken.  </p></li>
@@ -33,11 +43,6 @@ import java.lang.annotation.Target;
  * <li><p>Get the annotation instance from the class and obtain the values of
  * the <em>name</em>, <em>library</em>, and <em>target</em>
  * attributes.</p></li>
- *
- * RELEASE_PENDING (edburns,rogerk) unnecessary - compiler will complain before
- *  getting this far.
- * <li><p>If <em>name</em> is the empty string throw an
- * <code>IllegalArgumentException</code> </p></li>
  *
  * <li><p>If <em>library</em> is the empty string, let <em>library</em> be
  * <code>null</code>.</p></li>
@@ -63,18 +68,19 @@ import java.lang.annotation.Target;
  * <li><p>If <em>target</em> is non-<code>null</code>, store it under the key
  * "target". </p></li>
  *
- * RELEASE_PENDING (edburns,rogerk) unnecessary verbage.  
- * <li><p>If <em>target</em> is non-<code>null</code>, call {@link
- * javax.faces.component.UIViewRoot#addComponentResource(javax.faces.context.FacesContext,
- * javax.faces.component.UIComponent, java.lang.String)}, passing the
- * <code>UIOutput</code> instance and the <em>target</em> String as the second
- * and third parameters, respectively.</p></li>
- *
  * <li><p>Otherwise, if <em>target</em> is <code>null</code>, call {@link
  * javax.faces.component.UIViewRoot#addComponentResource(javax.faces.context.FacesContext,
  * javax.faces.component.UIComponent)}, passing the <code>UIOutput</code>
  * instance as the second argument.</p></li>
  * </ol>
+
+ * <p>Example:</p>
+
+<pre><code>
+  &#0064;ResourceDependency(library="corporate", name="colorAndMedia.css"),
+</code></pre>
+
+
  * </div>
  *
  * @since 2.0

@@ -447,7 +447,6 @@ public abstract class FacesContext {
     public abstract void renderResponse();
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) Please review the docs.
      * <p class="changed_added_2_0">
      * This utility method simply returns the result of
      * {@link javax.faces.render.ResponseStateManager#isPostback(FacesContext)}.

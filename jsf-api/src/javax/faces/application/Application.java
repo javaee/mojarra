@@ -655,28 +655,29 @@ public abstract class Application {
 
 
     /**
-     * <p>Instantiate and return a new {@link UIComponent} instance of the
-     * class specified by a previous call to <code>addComponent()</code> for
-     * the specified component type.</p>
-     *
-     * RELEASE_PENDING (edburns, rogerk) The javadocs for ListenerFor state that the
-     * factory responsible for or acting upon an artifact that must take this annotation
-     * into account will take the appropriate action. Seems like the documentation is circular
-     * and should be clarified either here, or in ListenFor
-     *
-     * RELEASE_PENDING (edburns, rogerk) this method will process @ResourceDependency
-     * *and* @ListenerFor annotations (and their plural equivalents).
-     * No action is taken on the Renderer unless createComponent() that takes
-     * an additional rendererType argument is called.
+     * <p><span class="changed_modified_2_0">Instantiate</span> and
+     * return a new {@link UIComponent} instance of the class specified
+     * by a previous call to <code>addComponent()</code> for the
+     * specified component type.</p>
      *
      * <p class="changed_added_2_0">Before the component instance is
      * returned, it must be inspected for the presence of a {@link
-     * javax.faces.event.ListenerFor} annotation.  If this annotation is present,
-     * the action listed in {@link javax.faces.event.ListenerFor} must be taken on
-     * the component, before it is returned from this method.</p>
-     * 
+     * javax.faces.event.ListenerFor} (or {@link
+     * javax.faces.event.ListenersFor}) or {@link ResourceDependency}
+     * (or {@link ResourceDependencies}) annotation.  If any of these
+     * annotations are present, the action listed in {@link
+     * javax.faces.event.ListenerFor} or {@link ResourceDependency} must
+     * be taken on the component, before it is returned from this
+     * method.  This variant of <code>createComponent</code> must
+     * <strong>not</strong> inspect the {@link
+     * javax.faces.render.Renderer} for the component to be returned for
+     * any of the afore mentioned annotations.  Such inspection is the
+     * province of {@link #createComponent(ValueExpression,
+     * FacesContext, String, String)} or {@link
+     * #createComponent(FacesContext, String, String)}.</p>
+
      * @param componentType The component type for which to create and
-     *  return a new {@link UIComponent} instance
+     * return a new {@link UIComponent} instance
      *
      * @throws FacesException if a {@link UIComponent} of the
      *  specified type cannot be created
@@ -693,15 +694,6 @@ public abstract class Application {
      * {@link
      * #createComponent(javax.el.ValueExpression,javax.faces.context.FacesContext,java.lang.String)}.</p>
      *
-     * RELEASE_PENDING (edburns,rogerk) do we really want to add new functionality
-     * to a deperecated method.  I don't think we do.
-     *
-     * <p class="changed_added_2_0">Before the component instance is
-     * returned, it must be inspected for the presence of a {@link
-     * javax.faces.event.ListenerFor} annotation.  If this annotation is present,
-     * the action listed in {@link javax.faces.event.ListenerFor} must be taken on
-     * the component, before it is returned from this method.</p>
-     * 
      * @param componentBinding {@link ValueBinding} representing a
      * component value binding expression (typically specified by the
      * <code>component</code> attribute of a custom tag)
@@ -730,28 +722,28 @@ public abstract class Application {
      * <code>setValue()</code> method of the specified {@link
      * ValueExpression}, and return it.</p>
      *
+     * <p class="changed_added_2_0">Before the component instance is
+     * returned, it must be inspected for the presence of a {@link
+     * javax.faces.event.ListenerFor} (or {@link
+     * javax.faces.event.ListenersFor}) or {@link ResourceDependency}
+     * (or {@link ResourceDependencies}) annotation.  If any of these
+     * annotations are present, the action listed in {@link
+     * javax.faces.event.ListenerFor} or {@link ResourceDependency} must
+     * be taken on the component, before it is returned from this
+     * method.  This variant of <code>createComponent</code> must
+     * <strong>not</strong> inspect the {@link
+     * javax.faces.render.Renderer} for the component to be returned for
+     * any of the afore mentioned annotations.  Such inspection is the
+     * province of {@link #createComponent(ValueExpression,
+     * FacesContext, String, String)} or {@link
+     * #createComponent(FacesContext, String, String)}.</p>
+     *
      * @param componentExpression {@link ValueExpression} representing a
      * component value expression (typically specified by the
      * <code>component</code> attribute of a custom tag)
      * @param context {@link FacesContext} for the current request
      * @param componentType Component type to create if the {@link
      * ValueExpression} does not return a component instance
-     *
-     * RELEASE_PENDING (edburns, rogerk) The javadocs for ListenerFor state that the
-     * factory responsible for or acting upon an artifact that must take this annotation
-     * into account will take the appropriate action. Seems like the documentation is circular
-     * and should be clarified either here, or in ListenFor
-     *
-     * RELEASE_PENDING (edburns, rogerk) this method will process @ResourceDependency
-     * *and* @ListenerFor annotations (and their plural equivalents).
-     * No action is taken on the Renderer unless createComponent() that takes
-     * an additional rendererType argument is called.
-     *
-     * <p class="changed_added_2_0">Before the component instance is
-     * returned, it must be inspected for the presence of a {@link
-     * javax.faces.event.ListenerFor} annotation.  If this annotation is present,
-     * the action listed in {@link javax.faces.event.ListenerFor} must be taken on
-     * the component, before it is returned from this method.</p>
      * 
      * @throws FacesException if a {@link UIComponent} cannot be created
      * @throws NullPointerException if any parameter is <code>null</code>
@@ -779,13 +771,43 @@ public abstract class Application {
 
 
     /**
-     * RELEASE_PENDING (edburs,rogerk) docs
-     * @param componentExpression
-     * @param context
-     * @param componentType
-     * @param rendererType
-     * @return
-     * @throws FacesException
+     * 
+
+     * <p class="changed_added_2_0">Like {@link
+     * #createComponent(ValueExpression, FacesContext, String)} except
+     * the <code>Renderer</code> for the component to be returned must
+     * be inspected for the annotations mentioned in {@link
+     * #createComponent(ValueExpression, FacesContext, String)} as
+     * specified in the documentation for that method.  The
+     * <code>Renderer</code> instance to inspect must be obtained by
+     * calling {@link FacesContext#getRenderKit} and calling {@link
+     * javax.faces.render.RenderKit#getRenderer} on the result, passing
+     * the argument <code>componentType</code> as the first argument and
+     * the argument <code>rendererType</code> as the second argument.
+     * If no such <code>Renderer</code> can be found, a message must be
+     * logged with a helpful error message.  Otherwise, {@link
+     * UIComponent#setRendererType} must be called on the newly created
+     * <code>UIComponent</code> instance, passing the argument
+     * <code>rendererType</code> as the argument.</p>
+
+     * @param componentExpression {@link ValueExpression} representing a
+     * component value expression (typically specified by the
+     * <code>component</code> attribute of a custom tag)
+
+     * @param context {@link FacesContext} for the current request
+
+     * @param componentType Component type to create if the {@link
+     * ValueExpression} does not return a component instance
+
+     * @param rendererType The renderer-type of the
+     * <code>Renderer</code> that will render this component.  A
+     * <code>null</code> value must be accepted for this parameter.
+
+     * @throws FacesException if a {@link UIComponent} cannot be created
+     * @throws NullPointerException if any of the parameters
+     * <code>componentExpression</code>, <code>context</code>, or
+     * <code>componentType</code> are <code>null</code>
+
      * @since 2.0
      */
     public UIComponent createComponent(ValueExpression componentExpression,
@@ -806,11 +828,36 @@ public abstract class Application {
 
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) docs
-     * @param componentType
-     * @param rendererType
-     * @return
-     * @throws FacesException
+     * <p class="changed_added_2_0">Like {@link
+     * #createComponent(String)} except the <code>Renderer</code> for
+     * the component to be returned must be inspected for the
+     * annotations mentioned in {@link #createComponent(ValueExpression,
+     * FacesContext, String)} as specified in the documentation for that
+     * method.  The <code>Renderer</code> instance to inspect must be
+     * obtained by calling {@link FacesContext#getRenderKit} and calling
+     * {@link javax.faces.render.RenderKit#getRenderer} on the result,
+     * passing the argument <code>componentType</code> as the first
+     * argument and the argument <code>rendererType</code> as the second
+     * argument.  If no such <code>Renderer</code> can be found, a
+     * message must be logged with a helpful error message.  Otherwise,
+     * {@link UIComponent#setRendererType} must be called on the newly
+     * created <code>UIComponent</code> instance, passing the argument
+     * <code>rendererType</code> as the argument.</p>
+
+     * @param context {@link FacesContext} for the current request
+
+     * @param componentType Component type to create
+
+     * @param rendererType The renderer-type of the
+     * <code>Renderer</code> that will render this component.  A
+     * <code>null</code> value must be accepted for this parameter.
+
+     * @throws FacesException if a {@link UIComponent} cannot be created
+
+     * @throws NullPointerException if any of the parameters
+     * <code>context</code>, or <code>componentType</code> are
+     * <code>null</code>
+
      * @since 2.0
      */
      public UIComponent createComponent(FacesContext context,
@@ -1215,10 +1262,10 @@ public abstract class Application {
      *
      * <p>If the act of invoking the <code>processListener</code> method
      * causes an {@link javax.faces.event.AbortProcessingException} to
-     * be thrown, processing of the listeners must be aborted.</p>
-     *
-     * RELEASE_PENDING (edburns,rogerk) it may be prudent to specify how the
-     * abortprocessingexception should be handled.  Logged or thrown?
+     * be thrown, processing of the listeners must be aborted, no
+     * further processing of the listeners for this event must take
+     * place, and the exception must be logged with
+     * <code>Level.SEVERE</code>.</p>
      *
      * <p>Algorithm <em>traverseListenerList</em>: For each listener in
      * the list,</p>

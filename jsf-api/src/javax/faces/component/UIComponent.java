@@ -565,32 +565,6 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      *     as the first argument and the newly added component as the
      *     second argument.</p>
 
-     *     <p>The newly added component must be inspected for the
-     *     presence of the {@link
-     *     javax.faces.application.ResourceDependency} annotation.  If
-     *     the annotation is present, the action described in the
-     *     javadoc for that class must be taken on the newly added
-     *     component instance.  If the <code>ResourceDependency</code>
-     *     annotation is not present, the component must be inspected
-     *     for the presence of the {@link
-     *     javax.faces.application.ResourceDependencies} annotation.
-     *     If the annotation is present, the action described in the
-     *     javadoc for the <code>ResourceDependencies</code>  class
-     *     must be taken on the newly added component instance.</p>
-
-     *     <p>If the newly added component instance returns
-     *     non-<code>null</code> from {@link UIComponent#getRenderer}
-     *     the {@link Renderer} must be inspected for the presence of
-     *     the {@link javax.faces.application.ResourceDependency}
-     *     annotation.  If the annotation is present, the action
-     *     described in the javadoc for that class must be taken on the
-     *     <code>Renderer</code>.  If the <code>ResourceDependency</code>
-     *     annotation is not present, the {@link Renderer} must be
-     *     inspected for the presence of the {@link
-     *     javax.faces.application.ResourceDependencies} annotation.
-     *     If the annotation is present, the action described in the
-     *     javadoc for that class must be taken on the <code>Renderer</code>.</p>
-
      * </li>
 
      * </ul>
@@ -820,22 +794,6 @@ private void doFind(FacesContext context, String clientId) {
      *     non-null, the component must first be removed from its previous
      *     parent (where it may have been either a child or a facet).</li>
      *     </ul></li>
-     *     <li class="changed_added_2_0">
-
-     *     <p>The newly added component must be inspected for the
-     *     presence of the {@link
-     *     javax.faces.application.ResourceDependency} annotation.  If
-     *     the annotation is present, the action described in the
-     *     javadoc for that class must be taken on the newly added
-     *     component instance.  If the <code>ResourceDependency</code>
-     *     annotation is not present, the component must be inspected
-     *     for the presence of the {@link
-     *     javax.faces.application.ResourceDependencies} annotation.  If
-     *     the annotation is present, the action described in the
-     *     javadoc for the <code>ResourceDependencies</code> class must
-     *     be taken on the newly added component instance.</p>
-
-     * </li>
 
      * <li>Whenever an existing facet {@link UIComponent} is removed:
      *     <ul>

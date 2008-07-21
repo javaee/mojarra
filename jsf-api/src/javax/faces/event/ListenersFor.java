@@ -43,9 +43,27 @@ import java.lang.annotation.Target;
 import java.lang.annotation.ElementType;
 
 /**
- * Container Annotation to specify multiple @ListenerFor annotations
- * on a single component.
- *
+ * <p class="changed_added_2_0">Container annotation to specify multiple
+ * {@link ListenerFor} annotations on a single class.  Example:</p>
+
+ * <pre><code>
+
+    &#0064;ListenersFor({
+        &#0064;ListenerFor(systemEventClass=AfterAddToParentEvent.class),
+        &#0064;ListenerFor(systemEventClass=BeforeRenderEvent.class,
+                     sourceClass=CustomOutput.class)
+    })
+
+ * </code></pre>
+
+ * <div class="changed_added_2_0">
+
+ * <p>The action described in {@link ListenerFor} must be taken for each
+ * <code>&#0064;ListenerFor</code> present in the container
+ * annotation. </p>
+
+ * </div>
+
  * @since 2.0
  */
 @Retention(value= RetentionPolicy.RUNTIME)

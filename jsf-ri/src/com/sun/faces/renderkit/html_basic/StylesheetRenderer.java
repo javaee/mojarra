@@ -55,7 +55,7 @@ import javax.faces.render.Renderer;
  * <p>This <code>Renderer</code> handles the rendering of external <code>stylesheet</code>
  * references.</p>
  */
-@ListenerFor(systemEventClass=AfterAddToParentEvent.class, sourceClass=UIOutput.class)
+@ListenerFor(systemEventClass=AfterAddToParentEvent.class)
 public class StylesheetRenderer extends Renderer implements ComponentSystemEventListener {
 
     public static final String RENDERER_TYPE = "javax.faces.resource.Stylesheet";

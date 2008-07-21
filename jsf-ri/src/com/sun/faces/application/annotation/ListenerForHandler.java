@@ -1,9 +1,11 @@
 package com.sun.faces.application.annotation;
 
+import javax.faces.application.Application;
 import javax.faces.event.ListenerFor;
 import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
+import javax.faces.event.SystemEventListener;
 
 /**
  * {@link AnnotationHandler} responsible for processing {@link ListenerFor} annotations.
@@ -47,6 +49,24 @@ class ListenerForHandler implements AnnotationHandler {
                                             (ComponentSystemEventListener) listener);
             }
         }
+	else if (listener instanceof SystemEventListener) {
+	    Class sourceClassValue = null;
+	    Application app = ctx.getApplication();
+            for (int i = 0, len = listenersFor.length; i < len; i++) {
+		sourceClassValue = listenersFor[i].sourceClass();
+		if (sourceClassValue == Void.class) {
+		    app.subscribeToEvent(listenersFor[i].systemEventClass(), 
+					 (SystemEventListener) listener); 
+                }
+                else {
+		    app.subscribeToEvent(listenersFor[i].systemEventClass(), 
+					 listenersFor[i].sourceClass(),
+					 (SystemEventListener) listener); 
+                    
+                }
+	    }
+	}
+
 
     }
 
