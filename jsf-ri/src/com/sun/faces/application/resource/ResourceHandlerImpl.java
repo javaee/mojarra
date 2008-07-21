@@ -76,10 +76,6 @@ public class ResourceHandlerImpl extends ResourceHandler {
     private long creationTime;
     private WebConfiguration webconfig;
 
-    private static final String AJAX_RESOURCE_NAME = "ajax.js";
-    private static final String AJAX_RESOURCE_LIBRARY = "javax.faces";
-
-
     // ------------------------------------------------------------ Constructors
 
 
@@ -97,15 +93,6 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
     // ------------------------------------------- Methods from Resource Handler
 
-
-    /**
-     * @see ResourceHandler#createAjaxResource()
-     */
-    public Resource createAjaxResource() {
-
-        return createResource(AJAX_RESOURCE_NAME, AJAX_RESOURCE_LIBRARY, null);
-
-    }
 
     /**
      * @see ResourceHandler#createResource(String)

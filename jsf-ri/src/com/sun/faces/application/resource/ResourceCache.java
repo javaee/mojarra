@@ -47,8 +47,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ScheduledFuture;
@@ -61,6 +59,7 @@ import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MultiKeyConcurrentHashMap;
 import com.sun.faces.application.ApplicationAssociate;
 
 /**
@@ -104,7 +103,7 @@ public class ResourceCache {
     /**
      * The <code>ResourceInfo<code> cache.
      */
-    private ConcurrentMap<CompositeKey,ResourceInfo> resourceCache;
+    private MultiKeyConcurrentHashMap<String,ResourceInfo> resourceCache;
 
     /**
      * Monitors that detect resource modifications.
@@ -142,7 +141,7 @@ public class ResourceCache {
         shutdown = false;
         int checkPeriod = getCheckPeriod(config);
         if (checkPeriod >= 0) {
-            resourceCache = new ConcurrentHashMap<CompositeKey,ResourceInfo>();
+            resourceCache = new MultiKeyConcurrentHashMap<String,ResourceInfo>(30);
         }
         if (checkPeriod >= 1) {
             initExecutor((checkPeriod * 1000 * 60));
@@ -159,23 +158,26 @@ public class ResourceCache {
 
     /**
      * Add the {@link ResourceInfo} to the internal cache.
-     * @param key resource key
      * @param info resource metadata
      */
-    public ResourceInfo add(CompositeKey key, ResourceInfo info) {
+    public ResourceInfo add(ResourceInfo info) {
 
         if (shutdown) {
             throw new IllegalStateException("ResourceCache has been terminated");
         }
 
-        Util.notNull("key", key);
         Util.notNull("info", info);
 
         if (resourceCache != null) {
             if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, "Caching ResourceInfo: {0}", key);
+                LOGGER.log(Level.FINE,
+                           "Caching ResourceInfo: {0}",
+                           info.toString());
             }
-            return resourceCache.put(key, info);
+            return resourceCache.putIfAbsent(info.name,
+                                             info.libraryName,
+                                             info.localePrefix,
+                                             info);
         }
         return null;
 
@@ -183,19 +185,21 @@ public class ResourceCache {
 
 
     /**
-     * @param key resource key
+     * @param name the resource name
+     * @param libraryName the library name
+     * @param localePrefix the locale prefix
      * @return the {@link ResourceInfo} associated with <code>key<code>
      *  if any.
      */
-    public ResourceInfo get(CompositeKey key) {
+    public ResourceInfo get(String name, String libraryName, String localePrefix) {
 
         if (shutdown) {
             throw new IllegalStateException("ResourceCache has been terminated");
         }
 
-        Util.notNull("key", key);
+        Util.notNull("name", name);
 
-        return ((resourceCache != null) ? resourceCache.get(key) : null);
+        return ((resourceCache != null) ? resourceCache.get(name, libraryName, localePrefix) : null);
 
     }
 
@@ -640,69 +644,5 @@ public class ResourceCache {
 
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Represents a composite of a resource name, library, and localePrefix.
-     */
-    public static class CompositeKey {
-
-        private static final String EMPTY = "";
-
-        private final String name;
-        private final String library;
-        private final String localePrefix;
-
-
-        // -------------------------------------------------------- Constructors
-
-
-        public CompositeKey(String name,
-                             String library,
-                             String localePrefix) {
-
-            this.name = ((name != null) ? name : EMPTY);
-            this.library = ((library != null) ? library : EMPTY);
-            this.localePrefix = ((localePrefix != null) ? localePrefix : EMPTY);
-
-        }
-
-
-        // ------------------------------------------------------ Public Methods
-
-
-        @Override
-        public int hashCode() {
-
-            return (name.hashCode()
-                      + library.hashCode()
-                      + localePrefix.hashCode());
-
-        }
-
-
-        @Override
-        public boolean equals(Object obj) {
-
-            if (!(obj instanceof CompositeKey)) {
-                return false;
-            } else {
-                CompositeKey key = (CompositeKey) obj;
-                return (name.equals(key.name)
-                        && library.equals(key.library)
-                        && localePrefix.equals(key.localePrefix));
-            }
-
-        }
-
-
-        @Override
-        public String toString() {
-
-            return "[name=" + name + ",library=" + library + ",localePrefix=" + localePrefix + ']';
-
-        }
-
-    } // END CompositeKey
 
 } // END ResourceCache

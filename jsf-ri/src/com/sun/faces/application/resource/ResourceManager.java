@@ -261,9 +261,7 @@ public class ResourceManager {
         if (cache == null) {
             return null;
         }
-        ResourceCache.CompositeKey key =
-              new ResourceCache.CompositeKey(name, library, localePrefix);
-        return cache.get(key);
+        return cache.get(name, library, localePrefix);
 
     }
 
@@ -277,13 +275,7 @@ public class ResourceManager {
         if (cache == null) {
             return;
         }
-        ResourceCache.CompositeKey key =
-              new ResourceCache.CompositeKey(info.getName(),
-                                             ((info.getLibraryInfo() != null)
-                                              ? info.getLibraryInfo().getName()
-                                              : null),
-                                             info.getLocalePrefix());
-        cache.add(key, info);
+        cache.add(info);
 
     }
 

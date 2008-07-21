@@ -103,6 +103,14 @@ public class LibraryInfo {
         return localePrefix;
     }
 
+    public String toString() {
+        return "LibraryInfo{" +
+               "name='" + name + '\'' +
+               ", version=" + ((version != null) ? version : "NONE") + '\'' +
+               ", localePrefix='" + ((localePrefix != null) ? localePrefix : "NONE") + '\'' +
+               ", path='" + path + '\'' +
+               '}';
+    }
 
     // --------------------------------------------------------- Private Methods
 

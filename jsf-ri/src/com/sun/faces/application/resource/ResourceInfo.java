@@ -56,9 +56,10 @@ public class ResourceInfo {
     private static final String COMPRESSED_CONTENT_DIRECTORY =
           "jsf-compressed";
 
-    private String name;
+    String name;
+    String libraryName;
+    String localePrefix;
     private VersionInfo version;
-    private String localePrefix;
     private ResourceHelper helper;
     private LibraryInfo library;
     private String path;
@@ -80,6 +81,7 @@ public class ResourceInfo {
         this.version = version;
         this.helper = library.getHelper();
         this.library = library;
+        this.libraryName = library.getName();
         this.localePrefix = library.getLocalePrefix();
         this.compressable = compressable;
         initPath();
@@ -167,6 +169,19 @@ public class ResourceInfo {
         return compressable;
     }
 
+    @Override
+    public String toString() {
+        return "ResourceInfo{" +
+               "name='" + name + '\'' +
+               ", version=\'" + ((version != null) ? version : "NONE") + '\'' +
+               ", libraryName='" + libraryName + '\'' +
+               ", libraryVersion='" + ((library != null) ? library.getVersion() : "NONE") + '\'' +
+               ", localePrefix='" + ((localePrefix != null) ? localePrefix : "NONE") + '\'' +
+               ", path='" + path + '\'' +
+               ", compressable='" + compressable + '\'' +
+               ", compressedPath=" + compressedPath +
+               '}';
+    }
 
     // --------------------------------------------------------- Private Methods
 
