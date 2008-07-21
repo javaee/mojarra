@@ -554,7 +554,7 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      *     been added to the view, if the following condition is
      *     <strong>not</strong> met:</p>
      *
-     *     <ul><p>{@link javax.faces.render.ResponseStateManager#isPostback}
+     *     <ul><p>{@link javax.faces.context.FacesContext#isPostback}
      *     returns <code>true</code> and {@link
      *     javax.faces.context.FacesContext#getCurrentPhaseId} returns {@link
      *     javax.faces.event.PhaseId#RESTORE_VIEW}</p></ul>
