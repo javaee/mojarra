@@ -92,6 +92,9 @@ import javax.faces.render.Renderer;
 
 public abstract class UIComponent implements StateHolder, SystemEventListenerHolder {
 
+    private static final String CURRENT_COMPONENT =
+          UIComponent.class.getName() + "_CURRENT_COMPONENT";
+
     /**
      * This array represents the packages that can leverage the
      * <code>attributesThatAreSet</code> List for optimized attribute
@@ -1067,7 +1070,7 @@ private void doFind(FacesContext context, String clientId) {
 
         Map<Object,Object> contextMap = context.getAttributes();
         if (contextMap != null) {
-            previouslyPushed = (UIComponent) contextMap.put("component", this);
+            previouslyPushed = (UIComponent) contextMap.put(CURRENT_COMPONENT, this);
         }
 
     }
@@ -1084,9 +1087,9 @@ private void doFind(FacesContext context, String clientId) {
         Map<Object,Object> contextMap = context.getAttributes();
         if (contextMap != null) {
             if (previouslyPushed != null) {
-                contextMap.put("component", previouslyPushed);
+                contextMap.put(CURRENT_COMPONENT, previouslyPushed);
             } else {
-                contextMap.remove("component");
+                contextMap.remove(CURRENT_COMPONENT);
             }
         }
 
@@ -1108,7 +1111,7 @@ private void doFind(FacesContext context, String clientId) {
 
         FacesContext context = FacesContext.getCurrentInstance();
         Map<Object, Object> contextMap = context.getAttributes();
-        return (UIComponent) contextMap.get("component");
+        return (UIComponent) contextMap.get(CURRENT_COMPONENT);
 
     }
 
@@ -1295,9 +1298,6 @@ private void doFind(FacesContext context, String clientId) {
 
      */
     public List<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> eventClass) {
-
-	// RELEASE_PENDING: make this return immutable Set<SystemEventListener>
-	// make this return the empty set if no such listeners are found.
 
         List<SystemEventListener> result = null;
         if (listenersByEventClass != null) {
