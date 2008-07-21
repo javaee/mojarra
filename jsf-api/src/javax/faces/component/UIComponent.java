@@ -1299,9 +1299,6 @@ private void doFind(FacesContext context, String clientId) {
      */
     public List<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> eventClass) {
 
-	// RELEASE_PENDING: make this return immutable Set<SystemEventListener>
-	// make this return the empty set if no such listeners are found.
-
         List<SystemEventListener> result = null;
         if (listenersByEventClass != null) {
             result = listenersByEventClass.get(eventClass);
