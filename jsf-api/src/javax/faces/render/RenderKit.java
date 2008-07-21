@@ -74,7 +74,6 @@ import java.io.OutputStream;
  * ResponseStateManager} instance, which is used in the process of
  * saving and restoring tree structure and state.</p>
  */
-    // PENDING(edburns): remove limitation
 public abstract class RenderKit {
 
 
