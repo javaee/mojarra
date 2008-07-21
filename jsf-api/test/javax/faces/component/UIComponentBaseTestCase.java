@@ -159,22 +159,22 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
 
     public void testComponentToFromEL() {
-
+        final String key = UIComponent.class.getName() + "_CURRENT_COMPONENT";
         TestComponent c = new TestComponent();
         facesContext.getAttributes().clear();
-        assertNull(facesContext.getAttributes().get("component"));
+        assertNull(facesContext.getAttributes().get(key));
         c.pushComponentToEL(facesContext);
-        assertTrue(facesContext.getAttributes().get("component") == c);
+        assertTrue(facesContext.getAttributes().get(key) == c);
         c.popComponentFromEL(facesContext);
-        assertNull(facesContext.getAttributes().get("component"));
+        assertNull(facesContext.getAttributes().get(key));
 
         // ensure a push/pop seqeunce restores the previous component
         TestComponent c1 = new TestComponent();
-        facesContext.getAttributes().put("component", c1);
+        facesContext.getAttributes().put(key, c1);
         c.pushComponentToEL(facesContext);
-        assertTrue(facesContext.getAttributes().get("component") == c);
+        assertTrue(facesContext.getAttributes().get(key) == c);
         c.popComponentFromEL(facesContext);
-        assertTrue(facesContext.getAttributes().get("component") == c1);
+        assertTrue(facesContext.getAttributes().get(key) == c1);
 
     }
 
