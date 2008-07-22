@@ -159,7 +159,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
 
     public void testComponentToFromEL() {
-        final String key = UIComponent.class.getName() + "_CURRENT_COMPONENT";
+        final String key = UIComponent.CURRENT_COMPONENT;
         TestComponent c = new TestComponent();
         facesContext.getAttributes().clear();
         assertNull(facesContext.getAttributes().get(key));
