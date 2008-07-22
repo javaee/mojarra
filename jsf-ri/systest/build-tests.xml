@@ -310,7 +310,8 @@
                                    com/sun/faces/jsptest/MissingActionListenerMethodTestCase.class,
                                    com/sun/faces/jsptest/ConverterTestCase.class,
                                    com/sun/faces/jsptest/IdRefTestCase.class,
-                                   com/sun/faces/jsptest/ForEachTestCase.class"/>
+                                   com/sun/faces/jsptest/ForEachTestCase.class,
+                                   com/sun/faces/jsptest/SetPropertyTestCase.class"/>
                                <!--
                                    com/sun/faces/jsptest/PrependIdTestCase.class,
                                -->
