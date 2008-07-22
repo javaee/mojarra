@@ -1482,13 +1482,18 @@ public class ApplicationImpl extends Application {
             associate.getAnnotationManager()
                   .applyComponentAnnotations(ctx, c);
             if (rendererType != null) {
-                c.setRendererType(rendererType);
                 Renderer r =
                       ctx.getRenderKit().getRenderer(c.getFamily(), rendererType);
                 if (r != null) {
+		    c.setRendererType(rendererType);
                     associate.getAnnotationManager()
                           .applyRendererAnnotations(ctx, r, c);
                 }
+		else {
+		    if (LOGGER.isLoggable(Level.FINE)) {
+			LOGGER.log(Level.FINE, "PENDING_I18N Unable to create Renderer with rendererType" + rendererType + " for Component with componentType " + c.getFamily());
+		    }
+		}
             }
 
         }

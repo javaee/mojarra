@@ -51,6 +51,7 @@ import javax.el.ELResolver;
 import javax.el.PropertyNotFoundException;
 import javax.el.PropertyNotWritableException;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -97,7 +98,11 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
                     return extCtx.getApplicationMap();
                 case COMPONENT:
                     context.setPropertyResolved(true);
-                    return facesContext.getAttributes().get("component");
+                    // Leverage the fact that the UIComponent is stored within
+                    // the FacesContext attributes map under a well known key
+                    // instead of calling FacesContext.getCurrentComponent() to
+                    // avoid an additional ThreadLocal lookup.
+                    return facesContext.getAttributes().get(UIComponent.CURRENT_COMPONENT);
                 case COOKIE:
                     context.setPropertyResolved(true);
                     return extCtx.getRequestCookieMap();

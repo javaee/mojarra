@@ -55,7 +55,7 @@ import javax.faces.event.ListenerFor;
  * <p>This <code>Renderer</code> handles the rendering of external <code>script</code>
  * references.</p>
  */
-@ListenerFor(systemEventClass=AfterAddToParentEvent.class, sourceClass=UIOutput.class)
+@ListenerFor(systemEventClass=AfterAddToParentEvent.class)
 public class ScriptRenderer extends Renderer implements ComponentSystemEventListener {
     
     public static final String RENDERER_TYPE = "javax.faces.resource.Script";

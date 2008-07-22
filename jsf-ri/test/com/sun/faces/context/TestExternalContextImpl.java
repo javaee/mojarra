@@ -1403,7 +1403,6 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
             requestHeaderValuesMap.hashCode() ==
             getFacesContext().getExternalContext().getRequestHeaderValuesMap()
             .hashCode());
-        // PENDING (visvan) Fix this test
         assertTrue(
             requestHeaderValuesMap.equals(
                 getFacesContext().getExternalContext()
