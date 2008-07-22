@@ -1074,6 +1074,9 @@ private void doFind(FacesContext context, String clientId) {
      * <p class="changed_added_2_0">This method must return
      * <code>null</code> if there is no currently processing
      * <code>UIComponent</code></p>
+     * RELEASE_PENDING (eburns,rogerk) Consider adding FacesContext argument
+     * to getCurrentComponent().  There is no need to call this from the EL
+     * since we have the 'component' implicit object.  
      */
     public static UIComponent getCurrentComponent() {
 
