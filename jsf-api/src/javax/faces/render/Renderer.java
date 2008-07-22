@@ -69,10 +69,23 @@ import javax.faces.context.FacesContext;
  * may be invoked from more than one request processing thread simultaneously,
  * they MUST be programmed in a thread-safe manner.</p>
  *
- * <p class="changed_added_2_0">If the {@link
- * javax.faces.event.ListenerFor} annotation is attached to the class
- * definition of a <code>Renderer</code>, that class must also implement
- * {@link javax.faces.event.ComponentSystemEventListener}.  </p>
+ * <div class="changed_added_2_0">
+
+ * <p>If the {@link javax.faces.event.ListenerFor} annotation is
+ * attached to the class definition of a <code>Renderer</code>, that
+ * class must also implement {@link
+ * javax.faces.event.ComponentSystemEventListener}, and the action
+ * pertaining to the processing of <code>ResourceDependency</code> on a
+ * <code>Renderer</code> described in {@link
+ * javax.faces.event.ListenerFor} must be taken. </p>
+
+ * <p>If the {@link javax.faces.application.ResourceDependency}
+ * annotation is attached to the class definition of a
+ * <code>Renderer</code>, the action pertaining to the processing of
+ * <code>ResourceDependency</code> on a <code>Renderer</code> described
+ * in {@link UIComponent#getChildren} must be taken. </p>
+
+ * </div>
  */
 
 public abstract class Renderer {

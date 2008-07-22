@@ -92,8 +92,15 @@ import javax.faces.render.Renderer;
 
 public abstract class UIComponent implements StateHolder, SystemEventListenerHolder {
 
-    private static final String CURRENT_COMPONENT =
-          UIComponent.class.getName() + "_CURRENT_COMPONENT";
+    /**
+     * The key to which the <code>UIComponent</code> currently being processed will
+     * be associated with within the {@link FacesContext} attributes map.
+     *
+     * @see javax.faces.context.FacesContext#getAttributes()
+     *
+     * @since 2.0
+     */
+    public static final String CURRENT_COMPONENT = "javax.faces.component.CURRENT_COMPONENT";
 
     /**
      * This array represents the packages that can leverage the
@@ -554,7 +561,7 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      *     been added to the view, if the following condition is
      *     <strong>not</strong> met:</p>
      *
-     *     <ul><p>{@link javax.faces.render.ResponseStateManager#isPostback}
+     *     <ul><p>{@link javax.faces.context.FacesContext#isPostback}
      *     returns <code>true</code> and {@link
      *     javax.faces.context.FacesContext#getCurrentPhaseId} returns {@link
      *     javax.faces.event.PhaseId#RESTORE_VIEW}</p></ul>
@@ -564,32 +571,6 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      *     javax.faces.event.AfterAddToParentEvent}<code>.class</code>
      *     as the first argument and the newly added component as the
      *     second argument.</p>
-
-     *     <p>The newly added component must be inspected for the
-     *     presence of the {@link
-     *     javax.faces.application.ResourceDependency} annotation.  If
-     *     the annotation is present, the action described in the
-     *     javadoc for that class must be taken on the newly added
-     *     component instance.  If the <code>ResourceDependency</code>
-     *     annotation is not present, the component must be inspected
-     *     for the presence of the {@link
-     *     javax.faces.application.ResourceDependencies} annotation.
-     *     If the annotation is present, the action described in the
-     *     javadoc for the <code>ResourceDependencies</code>  class
-     *     must be taken on the newly added component instance.</p>
-
-     *     <p>If the newly added component instance returns
-     *     non-<code>null</code> from {@link UIComponent#getRenderer}
-     *     the {@link Renderer} must be inspected for the presence of
-     *     the {@link javax.faces.application.ResourceDependency}
-     *     annotation.  If the annotation is present, the action
-     *     described in the javadoc for that class must be taken on the
-     *     <code>Renderer</code>.  If the <code>ResourceDependency</code>
-     *     annotation is not present, the {@link Renderer} must be
-     *     inspected for the presence of the {@link
-     *     javax.faces.application.ResourceDependencies} annotation.
-     *     If the annotation is present, the action described in the
-     *     javadoc for that class must be taken on the <code>Renderer</code>.</p>
 
      * </li>
 
@@ -820,22 +801,6 @@ private void doFind(FacesContext context, String clientId) {
      *     non-null, the component must first be removed from its previous
      *     parent (where it may have been either a child or a facet).</li>
      *     </ul></li>
-     *     <li class="changed_added_2_0">
-
-     *     <p>The newly added component must be inspected for the
-     *     presence of the {@link
-     *     javax.faces.application.ResourceDependency} annotation.  If
-     *     the annotation is present, the action described in the
-     *     javadoc for that class must be taken on the newly added
-     *     component instance.  If the <code>ResourceDependency</code>
-     *     annotation is not present, the component must be inspected
-     *     for the presence of the {@link
-     *     javax.faces.application.ResourceDependencies} annotation.  If
-     *     the annotation is present, the action described in the
-     *     javadoc for the <code>ResourceDependencies</code> class must
-     *     be taken on the newly added component instance.</p>
-
-     * </li>
 
      * <li>Whenever an existing facet {@link UIComponent} is removed:
      *     <ul>
@@ -931,32 +896,25 @@ private void doFind(FacesContext context, String clientId) {
 
 
     /**
+     * RELEASE_PENDING (edburns,rogerk) review docs
      * <p><span class="changed_modified_2_0">If</span> our
      * <code>rendered</code> property is <code>true</code>, render the
      * beginning of the current state of this {@link UIComponent} to the
-     * response contained in the specified {@link FacesContext}.  If our
-     * <code>rendered</code> property is <code>false</code>, return
-     * immediately.  </p>
-     *
-     * <p>Otherwise, take the following actions.</p>
-     *
-     * <ul>
-
-     * <li class="changed_added_2_0"><p>Call {@link
-     * UIComponent#pushComponentToEL}.  </p></li>
-
-     * <li class="changed_added_2_0"><p>Call {@link
-     * javax.faces.application.Application#publishEvent}, passing {@link
-     * javax.faces.event.BeforeRenderEvent}<code>.class</code> as the
+     * response contained in the specified {@link FacesContext}. 
+     * Call {@link #pushComponentToEL(javax.faces.context.FacesContext)}.
+     * Call {@link javax.faces.application.Application#publishEvent}, passing
+     * {@link javax.faces.event.BeforeRenderEvent}<code>.class</code> as the
      * first argument and the component instance to be rendered as the
-     * second argument.  </p></li>
+     * second argument.</p></li>
 
-     * <li><p>If a {@link Renderer} is associated with this {@link
+     * <p>If a {@link Renderer} is associated with this {@link
      * UIComponent}, the actual encoding will be delegated to
      * {@link Renderer#encodeBegin(FacesContext, UIComponent)}.
-     * </p></li>
+     * </p>
      *
-     * </ul>
+     * <p class="changed_added_2_0">If our <code>rendered</code> property is
+     * <code>false</code>, call {@link #pushComponentToEL(javax.faces.context.FacesContext)}
+     * and return immediately.</p>
      *
      * @param context {@link FacesContext} for the response we are creating
      *
@@ -987,6 +945,7 @@ private void doFind(FacesContext context, String clientId) {
 
 
     /**
+     * RELEASE_PENDING (edburns,rogerk) review docs
      * <p><span class="changed_modified_2_0">If</span> our
      * <code>rendered</code> property is <code>true</code>, render the
      * ending of the current state of this {@link UIComponent}.</p>
@@ -996,7 +955,8 @@ private void doFind(FacesContext context, String clientId) {
      * {@link Renderer#encodeEnd(FacesContext, UIComponent)}.</p>
      *
      * <p class="changed_added_2_0">Call {@link
-     * UIComponent#popComponentFromEL}.</p>
+     * UIComponent#popComponentFromEL}. before returning regardless of the value
+     *  of the <code>rendered</p> property.
      *
      * @param context {@link FacesContext} for the response we are creating
      *
@@ -1046,14 +1006,15 @@ private void doFind(FacesContext context, String clientId) {
 
     /**
      * <p class="changed_added_2_0">Push the current
-     * <code>UIComponent</code> <code>this</code> onto a data structure
-     * so that any previous component is preserved for a subsequent call
-     * to {@link #popComponentFromEL}.  This method and
-     * <code>popComponentFromEL()</code> form the basis for the contract
-     * that enables the EL Expression "<code>#{component}</code>" to
+     * <code>UIComponent</code> <code>this</code> to the {@link FacesContext}
+     * attribute map using the key {@link #CURRENT_COMPONENT} saving the previous
+     * <code>UIComponent</code> associated with {@link #CURRENT_COMPONENT} for a
+     * subsequent call to {@link @popComponentFromEL}.</p>
+     *
+     * <pclass="changed_added_2_0">This method and <code>popComponentFromEL()</code> form the basis for
+     * the contract that enables the EL Expression "<code>#{component}</code>" to
      * resolve to the "current" component that is being processed in the
-     * lifecycle.  The requirements for when
-     * <code>pushComponentToEL()</code> and
+     * lifecycle.  The requirements for when <code>pushComponentToEL()</code> and
      * <code>popComponentFromEL()</code> must be called are specified as
      * needed in the javadoc for this class.</p>
      *
@@ -1065,8 +1026,11 @@ private void doFind(FacesContext context, String clientId) {
      * the previous <code>UIComponent</code> instance will be returned
      * from <code>getCurrentComponent()</code></p>
      *
+     * @see javax.faces.context.FacesContext#getAttributes()
+     *
+     * @since 2.0
      */
-    protected void pushComponentToEL(FacesContext context) {
+    protected final void pushComponentToEL(FacesContext context) {
 
         Map<Object,Object> contextMap = context.getAttributes();
         if (contextMap != null) {
@@ -1078,11 +1042,15 @@ private void doFind(FacesContext context, String clientId) {
 
     /**
      * <p class="changed_added_2_0">Pop the current
-     * <code>UIComponent</code> <code>this</code> from a data
-     * structure so that the previous component becomes the current
+     * <code>UIComponent</code> from the {@link FacesContext} attributes map
+     * so that the previous <code>UIComponent</code>, if any, becomes the current
      * component.</p>
+     *
+     * @see javax.faces.context.FacesContext#getAttributes()
+     *
+     * @since 2.0
      */
-    protected void popComponentFromEL(FacesContext context) {
+    protected final void popComponentFromEL(FacesContext context) {
 
         Map<Object,Object> contextMap = context.getAttributes();
         if (contextMap != null) {
@@ -1106,6 +1074,9 @@ private void doFind(FacesContext context, String clientId) {
      * <p class="changed_added_2_0">This method must return
      * <code>null</code> if there is no currently processing
      * <code>UIComponent</code></p>
+     * RELEASE_PENDING (eburns,rogerk) Consider adding FacesContext argument
+     * to getCurrentComponent().  There is no need to call this from the EL
+     * since we have the 'component' implicit object.  
      */
     public static UIComponent getCurrentComponent() {
 
