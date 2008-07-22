@@ -2517,10 +2517,7 @@ attribute.</p>
 href="../../javadocs/javax/faces/event/ListenerFor.html"><code>@ListenerFor</code></a>
 annotation attached to it, at the class level, declaring <a target="_"
 href="../../javadocs/javax/faces/event/AfterAddToParentEvent.html"><code>AfterAddToParentEvent.class</code></a>
-as the value of the <code>systemEventClass</code> attribute and <a
-target="_"
-href="../../javadocs/javax/faces/component/UIOutput.html"><code>UIOutput.class</code></a>
-as the value of the <code>sourceClass</code> attribute.  The presence of
+as the value of the <code>systemEventClass</code> attribute.  The presence of
 this annotation on a renderer implies the renderer implements <a
 target="_"
 href="../../javadocs/javax/faces/event/ComponentSystemEventListener.html"><code>ComponentSystemEventListener</code></a>,
@@ -2641,9 +2638,7 @@ attribute.</p>
 href="../../javadocs/javax/faces/event/ListenerFor.html"><code>@ListenerFor</code></a>
 annotation attached to it, at the class level, declaring <a target="_"
 href="../../javadocs/javax/faces/event/AfterAddToParentEvent.html"><code>AfterAddToParentEvent.class</code></a>
-as the value of the <code>systemEventClass</code> attribute and <a target="_"
-href="../../javadocs/javax/faces/component/UIOutput.html"><code>UIOutput.class</code></a>
-as the value of the <code>sourceClass</code> attribute.  The presence of
+as the value of the <code>systemEventClass</code> attribute.  The presence of
 this annotation on a renderer implies the renderer implements <a target="_"
 href="../../javadocs/javax/faces/event/ComponentSystemEventListener.html"><code>ComponentSystemEventListener</code></a>,
 which this renderer must do.  The implementation of
