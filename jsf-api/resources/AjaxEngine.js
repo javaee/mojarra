@@ -157,7 +157,6 @@ javax.faces.Ajax.AjaxEngine = function() {
                     req.xmlReq.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                 }
                 content = req.queryString;
-alert("CONTENT:"+content);
             }
             req.xmlReq.send(content);
         }
