@@ -74,73 +74,66 @@ if (javax.faces.Ajax == null || typeof javax.faces.Ajax == "undefined") {
 }
 
 /**
- * <p><span class="changed_added_2_0">Collect</span> and encode
- * state for input controls associated with the specified
- * <code>form</code> element. 
- *
- * @param form The <code>form</code> element whose contained
- * <code>input</code> controls will be collected and encoded.
- * Only successful controls will be collected and encoded in 
- * accordance with: <a href="http://www.w3.org/TR/html401/interact/forms.html#h-17.13.2">
- * Section 17.13.2 of the HTML Specification</a>.
- * @return The encoded state for the specified form's input controls.
- * @function viewState
+ * Namespace containing JSF 2.0 JavaScript  
+ * @namespace javax.faces.Ajax 
  */
-javax.faces.Ajax.viewState = function(form) {
+javax.faces.Ajax = function() {
 
-    var viewState = javax.faces.Ajax.AjaxEngine.serializeForm(form);
-    return viewState;
+    /**
+     * <p><span class="changed_added_2_0">Collect</span> and encode
+     * state for input controls associated with the specified
+     * <code>form</code> element. 
+     *
+     * @param form The <code>form</code> element whose contained
+     * <code>input</code> controls will be collected and encoded.
+     * @param options An associative array that may contain
+     * the following options: 
+     * <ul>
+     * <li><code>inputs</code>: A comma seperated <code>String</code> 
+     * containing a list of client ids of input elements that must be 
+     * colected and encoded.  If not specified, all input controls must 
+     * be collected and encoded.</li>
+     * <li><code>ignore</code>: A comma seperated <code>String</code>
+     * containing a list of client ids of input elements that must not
+     * be collected and encoded.</li>   
+     * </ul>
+     * Only successful controls will be collected and encoded in 
+     * accordance with: <a href="http://www.w3.org/TR/html401/interact/forms.html#h-17.13.2">
+     * Section 17.13.2 of the HTML Specification</a>.
+     * @return The encoded state for the specified form's input controls.
+     * @function viewState
+     */
+    this.viewState = function(form, options) {
+        if (options != null && options != 'undefined') {
+            if (options.constructor != Array) {
+                // PENDING better error or log message
+                throw "Second argument must be an associative array"; 
+            }
+        }
 
-}
+        var utils = new javax.faces.Ajax.utils();
+        var elements = utils.getFormElements(form, options);
 
-/**
- * <p><span class="changed_added_2_0">Send</span> an Ajax request
- * to the server.
- *
- * @param event The DOM event that triggered this Ajax request.
- * @param options The set of available options that can be sent as
- * request parameters to control client and/or server side 
- * request processing. 
- */
-javax.faces.Ajax.ajaxRequest = function(event, options) {
+        var queryComponents = new Array();
+        var javaxViewState = document.getElementById("javax.faces.ViewState");
+        var queryComponent = null;
+        //var sourceSerialized = false; // current unused
+        for (var i = 0; i < elements.length; i++) {
+            queryComponent = utils.serializeElement(elements[i]);
+            if (queryComponent) {
+                // We'll add the viewState at the end..
+                if (-1 == queryComponent.indexOf("javax.faces.ViewState")) {
+                    queryComponents.push(queryComponent);
+                }
+            }
+        }
 
-    // Make sure we have the event that triggered this Ajax request..
-    event = event || window.event || null;
+        if (javaxViewState)
+            queryComponents.push(utils.serializeElement(javaxViewState));
 
-    // Determine the element that triggered this Ajax request..
-    var element = event.target || event.srcElement || null;
+        viewState = queryComponents.join('&');
 
-    var utils = new javax.faces.Ajax.Utils();
-    var form = utils.getForm(element); 
-    var viewState = javax.faces.Ajax.viewState(form);
+        return viewState;
 
-    var args = new Object();
-    utils.extend(args, options);
-    args["javax.faces.Ajax.ajaxRequest"] = "true";
-    args["method"] = "POST";
-    args["url"] = form.action;
-    args["source"] = element;
-
-    var ajaxEngine = new javax.faces.Ajax.AjaxEngine();
-    ajaxEngine.setupArguments(args);
-    ajaxEngine.queryString = viewState;
-    ajaxEngine.sendRequest();
+    }
 } 
-
-/**
- * <p><span class="changed_added_2_0">Receive</span> an Ajax response
- * from the server.
- *
- * @param request The <code>XMLHttpRequest</code> instance that 
- * contains the status code and response message from the server.
- */ 
-javax.faces.Ajax.ajaxResponse = function(request) {
-
-    //PENDING needs to be fleshed out..
-
-    alert ("STATUS:"+request.status);
-    alert ("RES TXT:"+request.responseTxt);
-    alert ("RES XML:"+request.responseXML);
-
-}
-
