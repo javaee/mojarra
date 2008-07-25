@@ -2,17 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:mjx="http://java.sun.com/jsf/mojarra/extensions"
       xmlns:s="https://javaserverfaces.dev.java.net/demo/stock">
 <f:view contentType="text/html"/>
 
-<mjx:head>
+<h:head>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
     <title>ajaxRequest/queueEvent Example</title>
-</mjx:head>
+</h:head>
 
 
-<mjx:body>
+<h:body>
 
   <h:form id="myform" prependId="false">
     <h:panelGrid styleClass="title-panel">
@@ -46,10 +45,10 @@
 
     <s:stockTable id="stockdata" border="1" columns="8" cellspacing="5" styleClass="panel-data-border"/>
 
-  <mjx:outputStylesheet name="stylesheet.css" />
+  <h:outputStylesheet name="stylesheet.css" />
 
 </h:form>
 
-</mjx:body>
+</h:body>
 
 </html>
