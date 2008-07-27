@@ -213,7 +213,7 @@ public class PhaseId implements Comparable {
      * <p>List of valid {@link PhaseId} instances, in ascending order
      * of their ordinal value.</p>
      */
-    public static final List VALUES =
+    public static final List<PhaseId> VALUES =
         Collections.unmodifiableList(Arrays.asList(values));
 
 
