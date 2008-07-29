@@ -95,14 +95,9 @@ public class ManagedBeanELResolver extends ELResolver {
     public Class<?> getType(ELContext context, Object base, Object property)
         throws ELException {
 
-        if (property == null) {
+        if (base == null && property == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "property");
-            throw new PropertyNotFoundException(message);
-        }
-        if (base == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "base");
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "base and property");
             throw new PropertyNotFoundException(message);
         }
 
@@ -113,14 +108,9 @@ public class ManagedBeanELResolver extends ELResolver {
     public void setValue(ELContext context, Object base, Object property,
                           Object val) throws ELException {
 
-        if (property == null) {
+        if (base == null && property == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "property");
-            throw new PropertyNotFoundException(message);
-        }
-        if (base == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "base");
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "base and property");
             throw new PropertyNotFoundException(message);
         }
 
