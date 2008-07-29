@@ -49,7 +49,6 @@ import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.ELResolver;
 import javax.el.PropertyNotFoundException;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import java.beans.FeatureDescriptor;
 import java.util.ArrayList;
@@ -76,17 +75,17 @@ public class ManagedBeanELResolver extends ELResolver {
 
         Object result = null;
         FacesContext facesContext = (FacesContext)
-            context.getContext(FacesContext.class);
-        BeanManager manager =
-             ApplicationAssociate.getCurrentInstance().getBeanManager();
-        String beanName = property.toString();
-        if (manager != null
-              && manager.isManaged(beanName)
-              && !manager.isBeanInScope(beanName, facesContext)) {
+              context.getContext(FacesContext.class);
+        BeanManager manager = getBeanManager();
+        if (manager != null) {
+            String beanName = property.toString();
+            if (manager.isManaged(beanName)
+                && !manager.isBeanInScope(beanName, facesContext)) {
 
-            // no bean found in scope.  create a new instance
-            result = manager.create(beanName, facesContext);
-            context.setPropertyResolved(result != null);
+                // no bean found in scope.  create a new instance
+                result = manager.create(beanName, facesContext);
+                context.setPropertyResolved(result != null);
+            }
         }
       
         return result;
@@ -96,9 +95,14 @@ public class ManagedBeanELResolver extends ELResolver {
     public Class<?> getType(ELContext context, Object base, Object property)
         throws ELException {
 
-        if (base == null && property == null) {
+        if (property == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "base and property"); // ?????
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "property");
+            throw new PropertyNotFoundException(message);
+        }
+        if (base == null) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "base");
             throw new PropertyNotFoundException(message);
         }
 
@@ -106,12 +110,17 @@ public class ManagedBeanELResolver extends ELResolver {
 
     }
 
-    public void  setValue(ELContext context, Object base, Object property,
+    public void setValue(ELContext context, Object base, Object property,
                           Object val) throws ELException {
 
-        if (base == null && property == null) {
+        if (property == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "base and property"); // ?????
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "property");
+            throw new PropertyNotFoundException(message);
+        }
+        if (base == null) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "base");
             throw new PropertyNotFoundException(message);
         }
 
@@ -125,15 +134,15 @@ public class ManagedBeanELResolver extends ELResolver {
         // first.
         FacesContext facesContext = (FacesContext)
             context.getContext(FacesContext.class);
-        BeanManager manager =
-             ApplicationAssociate.getCurrentInstance().getBeanManager();
-        String beanName = property.toString();
-        if (manager != null
-              && manager.isManaged(beanName)
-              && !manager.isBeanInScope(beanName, facesContext)) {
+        BeanManager manager = getBeanManager();
+        if (manager != null) {
+            String beanName = property.toString();
+            if (manager.isManaged(beanName)
+                && !manager.isBeanInScope(beanName, facesContext)) {
 
-            // no bean found in scope.  create a new instance
-            manager.create(beanName, facesContext);
+                // no bean found in scope.  create a new instance
+                manager.create(beanName, facesContext);
+            }
         }
 
     }
@@ -160,8 +169,7 @@ public class ManagedBeanELResolver extends ELResolver {
 
         FacesContext facesContext =
             (FacesContext) context.getContext(FacesContext.class);
-        BeanManager beanManager =
-             ApplicationAssociate.getCurrentInstance().getBeanManager();
+        BeanManager beanManager = getBeanManager();
         if (beanManager == null || beanManager.getRegisteredBeans().isEmpty()) {
             List<FeatureDescriptor> l = Collections.emptyList();
             return l.iterator();
@@ -202,6 +210,17 @@ public class ManagedBeanELResolver extends ELResolver {
             return null;
         }
         return Object.class;
+    }
+
+
+    // --------------------------------------------------------- Private Methods
+
+
+    private static BeanManager getBeanManager() {
+
+        ApplicationAssociate associate = ApplicationAssociate.getCurrentInstance();
+        return ((associate != null) ? associate.getBeanManager() : null);
+
     }
 
 }
