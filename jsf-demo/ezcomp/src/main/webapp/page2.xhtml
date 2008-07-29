@@ -16,6 +16,8 @@
 
 <h:form prependId="false">
 
+  <p>Result page</p>
+
   <p>This will be true if the groovy component was called: <h:outputText
   value="${groovyCalled}" />.</p>
 
@@ -38,6 +40,13 @@
   <p>This will be true if the retargeted valueChangeListener for the
   password field was called: <h:outputText
   value="${passwordValueChangeListener}" />.</p>
+
+  <p>This will be true if the retargeted valueChangeListener for 
+  allInputs was called: <h:outputText
+  value="${allInputsValueChangeListener}" />.</p>
+
+  <p>This will be true if the loginAction on the model was called:
+  <h:outputText value="${loginActionCalled}" />.</p>
 
 
 

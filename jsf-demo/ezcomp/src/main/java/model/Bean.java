@@ -36,6 +36,9 @@ public class Bean implements ActionListener, ValueChangeListener {
 
     
     public String loginAction() {
+        FacesContext.getCurrentInstance().getExternalContext().getRequestMap().
+	    put("loginActionCalled", Boolean.TRUE);
+        
         return "login";
     }
 
@@ -80,8 +83,11 @@ public class Bean implements ActionListener, ValueChangeListener {
     // the page says install it once, not correct.
     
     public void processValueChange(ValueChangeEvent arg0) throws AbortProcessingException {
-        FacesContext.getCurrentInstance().getExternalContext().getRequestMap().
-                put(getRequestKey(), Boolean.TRUE);
+        String newValue = (String) arg0.getNewValue();
+        if (null != newValue && !(0 == newValue.length())) {
+            FacesContext.getCurrentInstance().getExternalContext().getRequestMap().
+                    put(getRequestKey(), newValue);
+        }
     }
     
     

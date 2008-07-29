@@ -17,6 +17,18 @@
                      preferred="true"
                      expert="false"
                      shortDescription="An illustration of the composite component feature">
+  <composite:attribute name="model" required="true">
+ 
+    <composite:attribute name="loginAction" required="true">
+      <composite:deferred-method>
+        <composite:method-signature>
+                    java.lang.Object action()
+        </composite:method-signature>
+      </composite:deferred-method>
+     </composite:attribute>
+
+   </composite:attribute>
+
 
   <composite:editableValueHolder name="username" />
   <composite:actionSource name="loginEvent" />
@@ -45,7 +57,7 @@
 
       <p>
 
-	<h:commandButton id="loginEvent" value="Login" action="login">
+	<h:commandButton id="loginEvent" value="Login" action="#{compositeComponent.elAttrs.model.loginAction}">
 
 	</h:commandButton>  
 

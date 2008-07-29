@@ -3,9 +3,10 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:ez="http://java.sun.com/jsf/composite/ezcomp">
+      xmlns:ez="http://java.sun.com/jsf/composite/ezcomp"
+      xmlns:ct="http://domain.com/path">
 <h:head>
-<title>The Simplest EZComp Demo That Could Possibly Work</title>
+<title>A more complex composite component demo than ezcomp</title>
 <style type="text/css">
 .grayBox { padding: 8px; margin: 10px 0; border: 1px solid #CCC; background-color: #f9f9f9;  }
 </style>
@@ -41,6 +42,14 @@
   </div>
 
 <p><h:commandButton value="reload" /></p>
+
+<div id="compositeComponent" class="grayBox" style="border: 1px solid #090;">
+
+  <ct:foo />
+
+</div>
+
+
 
 </h:form>
 
