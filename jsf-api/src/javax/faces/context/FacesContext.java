@@ -198,7 +198,7 @@ public abstract class FacesContext {
     }
 
     /**
-     * <p><span class="changed_added_2_0">Return</span> a 
+     * <p class="changed_added_2_0">Return a 
      * <code>List</code> of client identifiers from the current request
      * with the request parameter name <code>javax.faces.partial.execute</code>.
      * If the value of the request parameter is <code>none</code>, or
@@ -207,17 +207,27 @@ public abstract class FacesContext {
      * will be processed during the <code>execute</code> phase of the
      * request processing lifecycle.</p>
      */
-    public abstract List<String> getExecutePhaseClientIds();
+    public List<String> getExecutePhaseClientIds() {
+        if (defaultFacesContext != null) {
+            return defaultFacesContext.getExecutePhaseClientIds();
+        }
+        throw new UnsupportedOperationException();
+    }
 
     /**
-     * <p><span class="changed_added_2_0">Set</span> the <code>List</code>
+     * <p class="changed_added_2_0">Set the <code>List</code>
      * of client identifiers that will be used to identify components that
      * will be processed during the <code>execute</code> phase of the 
      * request processing lifecycle.</p>
      *
      * @param executePhaseClientIds The <code>List</code> of client identifiers.
      */ 
-    public abstract void setExecutePhaseClientIds(List<String>executePhaseClientIds);
+    public void setExecutePhaseClientIds(List<String>executePhaseClientIds) {
+        if (defaultFacesContext != null) {
+            defaultFacesContext.setExecutePhaseClientIds(executePhaseClientIds);
+        }
+        throw new UnsupportedOperationException();
+    }
     
     /**
      * <p><span class="changed_modified_2_0">Return</span> the {@link
@@ -294,7 +304,7 @@ public abstract class FacesContext {
     public abstract RenderKit getRenderKit();
 
     /**
-     * <p><span class="changed_added_2_0">Return</span> a
+     * <p class="changed_added_2_0">Return a
      * <code>List</code> of client identifiers from the current request
      * with the request parameter name <code>javax.faces.partial.render</code>.
      * If the value of the request parameter is <code>none</code>, or
@@ -303,17 +313,27 @@ public abstract class FacesContext {
      * will be processed during the <code>render</code> phase of the
      * request processing lifecycle.</p>
      */
-    public abstract List<String> getRenderPhaseClientIds();
+    public List<String> getRenderPhaseClientIds() {
+        if (defaultFacesContext != null) {
+            return defaultFacesContext.getRenderPhaseClientIds();
+        }
+        throw new UnsupportedOperationException();
+    }
 
     /**
-     * <p><span class="changed_added_2_0">Set</span> the <code>List</code>
+     * <p class="changed_added_2_0">Set the <code>List</code>
      * of client identifiers that will be used to identify components that
      * will be processed during the <code>render</code> phase of the 
      * request processing lifecycle.</p>
      *
      * @param renderPhaseClientIds The <code>List</code> of client identifiers.
      */ 
-    public abstract void setRenderPhaseClientIds(List<String>renderPhaseClientIds);
+    public void setRenderPhaseClientIds(List<String>renderPhaseClientIds) {
+        if (defaultFacesContext != null) {
+            defaultFacesContext.setRenderPhaseClientIds(renderPhaseClientIds);
+        }
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * <p>Return <code>true</code> if the <code>renderResponse()</code>
@@ -527,7 +547,12 @@ public abstract class FacesContext {
      * <code>javax.faces.partial</code> is present in the current
      * request.  Otherwise, return <code>false</code>.</p>
      */
-    public abstract boolean isPartialRequest();
+    public boolean isPartialRequest() {
+        if (defaultFacesContext != null) {
+            return defaultFacesContext.isPartialRequest();
+        }
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * <p class="changed_added_2_0">
@@ -535,7 +560,12 @@ public abstract class FacesContext {
      * <code>javax.faces.partial.Ajax</code> is present in the current
      * request.  Otherwise, return <code>false</code>.</p>
      */
-    public abstract boolean isAjaxRequest();
+    public boolean isAjaxRequest() {
+        if (defaultFacesContext != null) {
+            return defaultFacesContext.isAjaxRequest();
+        }
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * <p>Signal the JavaServer Faces implementation that the HTTP response
