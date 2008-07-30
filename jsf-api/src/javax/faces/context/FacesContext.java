@@ -523,7 +523,7 @@ public abstract class FacesContext {
 
     /**
      * <p class="changed_added_2_0">
-     * <p>Return <code>true</code> if the request parameter
+     * Return <code>true</code> if the request parameter
      * <code>javax.faces.partial</code> is present in the current
      * request.  Otherwise, return <code>false</code>.</p>
      */
@@ -531,7 +531,7 @@ public abstract class FacesContext {
 
     /**
      * <p class="changed_added_2_0">
-     * <p>Return <code>true</code> if the request parameter
+     * Return <code>true</code> if the request parameter
      * <code>javax.faces.partial.Ajax</code> is present in the current
      * request.  Otherwise, return <code>false</code>.</p>
      */
