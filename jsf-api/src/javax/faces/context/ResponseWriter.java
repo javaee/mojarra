@@ -58,6 +58,7 @@ import javax.faces.component.UIComponent;
 
 public abstract class ResponseWriter extends Writer {
 
+    private boolean enableWriter = true;
 
     /**
      * <p>Return the content type (such as "text/html") for this {@link
@@ -292,9 +293,20 @@ public abstract class ResponseWriter extends Writer {
      * <p class="changed_added_2_0">Enable or disable the writing capabilities
      * of this <code>Writer</code>.  The <code>Writer</code> is enabled by default.
      * This method may be used to temporarily ensure that no output be written
-     * the response.</p>
+     * to the response.</p>
      */
-    public abstract void enableWriter(boolean enable); 
+    public void enableWriter(boolean enable) {
+        enableWriter = enable;
+    }
 
+    /**
+     * <p class="changed_added_2_0">Returns <code>true</code> if this <code>Writer</code>
+     * is enabled for writing, <code>false</code> otherwise.
+     * This method may be used to temporarily ensure that no output be written
+     * to the response.</p>
+     */
+    public boolean isWriterEnabled() {
+        return enableWriter;
+    }
 
 }
