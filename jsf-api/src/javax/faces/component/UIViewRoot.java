@@ -770,7 +770,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
         try {
             if (!skipPhase) {
                 if (!context.isPartialRequest() ||
-                    context.getExecutePhaseClientIds.isEmpty()) {
+                    context.getExecutePhaseClientIds().isEmpty()) {
                     super.processDecodes(context);
                 } else {
                     invokedCallback = invokeContextCallbackOnSubtrees(context,
@@ -1334,7 +1334,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
         else {
             subtrees = context.getExecutePhaseClientIds();
             if (subtrees.isEmpty()) {
-                subtrees = getRenderPhaseClientIds();
+                subtrees = context.getRenderPhaseClientIds();
             }
         }
 
