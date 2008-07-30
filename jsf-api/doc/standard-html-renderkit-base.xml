@@ -931,6 +931,10 @@
 <dd>javax.faces.resource.Stylesheet
 </dd>
 
+<dd>javax.faces.Composite
+</dd>
+
+
 </dl>
 
      </div>
@@ -2469,6 +2473,31 @@
             <renderer-extension>
                 <renders-children>true</renders-children>
             </renderer-extension>
+        </renderer>
+
+        <renderer>
+            <description><![CDATA[<div class="changed_added_2_0">
+
+<p>Renders a composite component.</p>
+
+      <p>Decode Behavior</p>
+
+      <ul>
+
+<p>No action is required during decode for this renderer.</p>
+
+</ul>
+
+      <p>Encode Behavior</p>
+
+
+</div>]]></description>
+
+            <component-family>javax.faces.NamingContainer</component-family>
+            <renderer-type>javax.faces.Composite</renderer-type>
+            <renderer-class>
+               <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/naming-container-composite-renderer-class/text())"/>
+            </renderer-class>
         </renderer>
 
         <renderer>

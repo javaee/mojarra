@@ -137,7 +137,7 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * of the components in the <code>&lt;composite:implementation&gt;</code>
      * section of the <em>composite component PDL file</em>.</p>
      */
-    public static final String COMPOSITE_FACET = "javax.faces.component.COMPOSITE_FACET";
+    public static final String COMPOSITE_FACET_NAME = "javax.faces.component.COMPOSITE_FACET_NAME";
     
     
     /**
@@ -1414,7 +1414,7 @@ private void doFind(FacesContext context, String clientId) {
         return (UIComponent) contextMap.get("component");
 
     }
-
+    
     // -------------------------------------------------- Event Listener Methods
 
 
