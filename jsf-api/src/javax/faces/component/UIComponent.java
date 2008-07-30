@@ -1415,6 +1415,14 @@ private void doFind(FacesContext context, String clientId) {
 
     }
     
+    public static UIComponent getCurrentCompositeComponent() {
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        Map<Object, Object> contextMap = context.getAttributes();
+        return (UIComponent) contextMap.get("compositeComponent");
+
+    }
+    
     // -------------------------------------------------- Event Listener Methods
 
 

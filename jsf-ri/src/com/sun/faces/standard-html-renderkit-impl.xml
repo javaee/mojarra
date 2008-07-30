@@ -92,6 +92,10 @@
     <naming-container-composite-renderer-class>
         com.sun.faces.renderkit.html_basic.CompositeRenderer
     </naming-container-composite-renderer-class>
+    <output-consuming-page-composite-children-renderer-class>
+        com.sun.faces.renderkit.html_basic.ConsumingPageCompositeChildrenRenderer
+    </output-consuming-page-composite-children-renderer-class>
+
     <output-stylesheet-renderer-class>
         com.sun.faces.renderkit.html_basic.StylesheetRenderer
     </output-stylesheet-renderer-class>
