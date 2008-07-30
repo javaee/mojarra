@@ -195,6 +195,28 @@ public abstract class FacesContext {
         throw new UnsupportedOperationException();
 
     }
+
+    /**
+     * <p><span class="changed_added_2_0">Return</span> a 
+     * <code>List</code> of client identifiers from the current request
+     * with the request parameter name <code>javax.faces.partial.execute</code>.
+     * If the value of the request parameter is <code>none</code>, or
+     * there is no such request parameter, return an empty <code>List</code>. 
+     * These client identifiers are used to identify components that 
+     * will be processed during the <code>execute</code> phase of the
+     * request processing lifecycle.</p>
+     */
+    public abstract List<String> getExecutePhaseClientIds();
+
+    /**
+     * <p><span class="changed_added_2_0">Set</span> the <code>List</code>
+     * of client identifiers that will be used to identify components that
+     * will be processed during the <code>execute</code> phase of the 
+     * request processing lifecycle.</p>
+     *
+     * @param The <code>List</code> of client identifiers.
+     */ 
+    public abstract void setExecutePhaseClientIds(List<String>executePhaseClientIds);
     
     /**
      * <p><span class="changed_modified_2_0">Return</span> the {@link
@@ -270,6 +292,27 @@ public abstract class FacesContext {
      */
     public abstract RenderKit getRenderKit();
 
+    /**
+     * <p><span class="changed_added_2_0">Return</span> a
+     * <code>List</code> of client identifiers from the current request
+     * with the request parameter name <code>javax.faces.partial.render</code>.
+     * If the value of the request parameter is <code>none</code>, or
+     * there is no such request parameter, return an empty <code>List</code>.
+     * These client identifiers are used to identify components that
+     * will be processed during the <code>render</code> phase of the
+     * request processing lifecycle.</p>
+     */
+    public abstract List<String> getRenderPhaseClientIds();
+
+    /**
+     * <p><span class="changed_added_2_0">Set</span> the <code>List</code>
+     * of client identifiers that will be used to identify components that
+     * will be processed during the <code>render</code> phase of the 
+     * request processing lifecycle.</p>
+     *
+     * @param The <code>List</code> of client identifiers.
+     */ 
+    public abstract void setRenderPhaseClientIds(List<String>renderPhaseClientIds);
 
     /**
      * <p>Return <code>true</code> if the <code>renderResponse()</code>
@@ -322,7 +365,12 @@ public abstract class FacesContext {
      * <p>Return the {@link ResponseWriter} to which components should
      * direct their character-based output.  Within a given response,
      * components can use either the ResponseStream or the ResponseWriter,
-     * but not both.
+     * but not both.</p>
+     * <p class="changed_added_2_0">If {@link #isAjaxRequest} returns
+     * <code>true</code>, the current request has been initiated using
+     * <code>Ajax</code> techniques and the response writer instance 
+     * from this method must be capable of delivering the partial response 
+     * in a suitable format such as <code>XML</code>.</p> 
      *
      * @throws IllegalStateException if this method is called after
      *  this instance has been released
@@ -471,6 +519,22 @@ public abstract class FacesContext {
         throw new UnsupportedOperationException();
 
     }
+
+    /**
+     * <p class="changed_added_2_0">
+     * <p>Return <code>true</code> if the request parameter
+     * <code>javax.faces.partial</code> is present in the current
+     * request.  Otherwise, return <code>false</code>.</p>
+     */
+    public abstract boolean isPartialRequest();
+
+    /**
+     * <p class="changed_added_2_0">
+     * <p>Return <code>true</code> if the request parameter
+     * <code>javax.faces.partial.Ajax</code> is present in the current
+     * request.  Otherwise, return <code>false</code>.</p>
+     */
+    public abstract boolean isAjaxRequest();
 
     /**
      * <p>Signal the JavaServer Faces implementation that the HTTP response
