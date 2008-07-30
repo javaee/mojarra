@@ -215,7 +215,7 @@ public abstract class FacesContext {
      * will be processed during the <code>execute</code> phase of the 
      * request processing lifecycle.</p>
      *
-     * @param The <code>List</code> of client identifiers.
+     * @param executePhaseClientIds The <code>List</code> of client identifiers.
      */ 
     public abstract void setExecutePhaseClientIds(List<String>executePhaseClientIds);
     
@@ -311,7 +311,7 @@ public abstract class FacesContext {
      * will be processed during the <code>render</code> phase of the 
      * request processing lifecycle.</p>
      *
-     * @param The <code>List</code> of client identifiers.
+     * @param renderPhaseClientIds The <code>List</code> of client identifiers.
      */ 
     public abstract void setRenderPhaseClientIds(List<String>renderPhaseClientIds);
 
