@@ -46,7 +46,10 @@ import javax.el.MethodExpression;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
+import javax.faces.component.ContextCallback;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
+import javax.faces.context.ResponseWriterWrapper;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.ComponentSystemEvent;
@@ -735,6 +738,18 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
     }
 
     /**
+     * <p class="changed_added_2_0">If {@link
+     * javax.faces.context.FacesContext#isPartialRequest} returns <code>true</code>,
+     * call {@link javax.faces.context.FacesContext.getExecutePhaseClientIds}.
+     * This returns a list of client ids that must be processed during the
+     * <code>execute</code> portion of the request processing lifecycle.
+     * For each client id in the list, using <code>invokeOnComponent</code>,
+     * call the respective <code>processDecodes</code> method on the component
+     * with that client id.  If {@link javax.faces.context.FacesContext#isPartialRequest} 
+     * returns <code>false</code>, or the list of client ids returned from {@link
+     * javax.faces.context.FacesContext.getExecutePhaseClientIds} is empty,
+     * perform the default <code>processDecodes</code> processing.
+     * </p>
      * <p>Override the default {@link UIComponentBase#processDecodes}
      * behavior to broadcast any queued events after the default
      * processing has been completed and to clear out any events
@@ -751,9 +766,19 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
     public void processDecodes(FacesContext context) {
         initState();
         notifyBefore(context, PhaseId.APPLY_REQUEST_VALUES);
+        boolean invokedCallback = false;
         try {
             if (!skipPhase) {
-                super.processDecodes(context);
+                if (!context.isPartialRequest() ||
+                    context.getExecutePhaseClientIds.isEmpty()) {
+                    super.processDecodes(context);
+                } else {
+                    invokedCallback = invokeContextCallbackOnSubtrees(context,
+                        new PhaseAwareContextCallback(PhaseId.APPLY_REQUEST_VALUES));
+                    if (!invokedCallback) {
+                        super.processDecodes(context);
+                    }
+                }
                 broadcastEvents(context, PhaseId.APPLY_REQUEST_VALUES);
             }
         } finally {
@@ -1292,9 +1317,101 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
         return id;
     }
 
+    // ----------------------------------------------------------- Partial Subtree Methods
+
+    private boolean invokeContextCallbackOnSubtrees(FacesContext context,
+            PhaseAwareContextCallback cb) {
+        List<String> subtrees = null;
+
+        // If this callback is intended for RENDER_RESPONSE, use
+        // getRenderPhaseClientIds().  Otherwise, use
+        // getExecutePhaseClientIds().  If getExecutePhaseClientIds() is
+        // empty, use getRenderPhaseClientIds().
+
+        if (cb.getPhaseId() == PhaseId.RENDER_RESPONSE) {
+            subtrees = context.getRenderPhaseClientIds();
+        }
+        else {
+            subtrees = context.getExecutePhaseClientIds();
+            if (subtrees.isEmpty()) {
+                subtrees = getRenderPhaseClientIds();
+            }
+        }
+
+        boolean result = false;
+
+        for (String cur : subtrees) {
+            if (invokeOnComponent(context, cur, cb)) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+ 
 
     // ----------------------------------------------------------- Inner Classes
 
+    private class PhaseAwareContextCallback implements ContextCallback {
+
+        private PhaseId curPhase = null;
+        private PhaseAwareContextCallback(PhaseId curPhase) {
+            this.curPhase = curPhase;
+        }
+
+        private PhaseId getPhaseId() {
+            return curPhase;
+        }
+        public void invokeContextCallback(FacesContext facesContext,
+                                          UIComponent comp) {
+            try {
+
+                if (curPhase == PhaseId.APPLY_REQUEST_VALUES) {
+
+                    // PENDING handle immediate request(s)
+                    // If the user requested an immediate request
+                    // Make sure to set the immediate flag here.
+
+                    comp.processDecodes(facesContext);
+                } else if (curPhase == PhaseId.PROCESS_VALIDATIONS) {
+                    comp.processValidators(facesContext);
+                } else if (curPhase == PhaseId.UPDATE_MODEL_VALUES) {
+                    comp.processUpdates(facesContext);
+                } else if (curPhase == PhaseId.RENDER_RESPONSE) {
+
+                    if (comp.isRendered()) {
+                        ResponseWriter writer = facesContext.getResponseWriter();
+
+                        writer.startElement("render", comp);
+                        writer.writeAttribute("id", comp.getClientId(facesContext), "id");
+                        try {
+                            writer.startElement("markup", comp);
+                            writer.write("<![CDATA[");
+
+                            // do the default behavior...
+                            comp.encodeAll(facesContext);
+
+                            writer.write("]]>");
+                            writer.endElement("markup");
+                        }
+                        catch (Exception ce) {
+                            // PENDING 
+                        }
+                        writer.endElement("render");
+                    }
+                }
+                else {
+                    throw new IllegalStateException("I18N: Unexpected " +
+                                                    "PhaseId passed to " +
+                                              " PhaseAwareContextCallback: " +
+                                                    curPhase.toString());
+                }
+            }
+            catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
 
     private static final class ViewMap extends HashMap<String,Object> {
 
