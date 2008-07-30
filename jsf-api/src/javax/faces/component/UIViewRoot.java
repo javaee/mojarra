@@ -740,14 +740,14 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
     /**
      * <p class="changed_added_2_0">If {@link
      * javax.faces.context.FacesContext#isPartialRequest} returns <code>true</code>,
-     * call {@link javax.faces.context.FacesContext.getExecutePhaseClientIds}.
+     * call {@link javax.faces.context.FacesContext#getExecutePhaseClientIds}.
      * This returns a list of client ids that must be processed during the
      * <code>execute</code> portion of the request processing lifecycle.
      * For each client id in the list, using <code>invokeOnComponent</code>,
      * call the respective <code>processDecodes</code> method on the component
      * with that client id.  If {@link javax.faces.context.FacesContext#isPartialRequest} 
      * returns <code>false</code>, or the list of client ids returned from {@link
-     * javax.faces.context.FacesContext.getExecutePhaseClientIds} is empty,
+     * javax.faces.context.FacesContext#getExecutePhaseClientIds} is empty,
      * perform the default <code>processDecodes</code> processing.
      * </p>
      * <p>Override the default {@link UIComponentBase#processDecodes}
