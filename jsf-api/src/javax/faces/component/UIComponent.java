@@ -104,8 +104,40 @@ import javax.faces.render.Renderer;
 
 public abstract class UIComponent implements StateHolder, SystemEventListenerHolder {
 
-    public static final String BEANINFO_KEY = "javax.faces.component.BEANINFO_KEY";
+    /**
+     * <p class="changed_added_2_0">The value of this constant is used as the key in the
+     * component attribute map, the value for which is a
+     * <code>java.beans.BeanInfo</code> implementation describing the composite
+     * component.  This <code>BeanInfo</code> is known as the 
+     * <em>composite component BeanInfo</em>.</p>
+     */
     
+    public static final String BEANINFO_KEY = "javax.faces.component.BEANINFO_KEY";
+
+    /**
+     * 
+     * <p class="changed_added_2_0">The value of this constant is used as the key
+     * in the <em>composite component BeanDescrpitor</em> for the 
+     * <code>Map&lt;PropertyDescriptor&gt;</code> that contains meta-information
+     * for the declared facets for this composite component.
+     * This map must contain an entry under the key {@link #COMPOSITE_FACET}, even
+     * if no facets were explicitly declared.  See {@link #COMPOSITE_FACET}.</p>
+     */
+    public static final String FACETS_KEY = "javax.faces.component.FACETS_KEY";
+    
+    /**
+     * 
+     * <p class="changed_added_2_0">The value of this constant is used as the key
+     * in the <code>Map</code> returned as described in {@link #FACETS_KEY}
+     * for the 
+     * <code>PropertyDescriptor</code> describing the composite component facet.
+     * The value of this constant is also used as the key in the <code>Map</code>
+     * returned from {@link #getFacets}.  In this case, it refers to the actual
+     * facet that is the {@link #UIPanel} that is the parent of the all
+     * of the components in the <code>&lt;composite:implementation&gt;</code>
+     * section of the <em>composite component PDL file</em>.</p>
+     */
+    public static final String COMPOSITE_FACET = "javax.faces.component.COMPOSITE_FACET";
     
     
     /**
