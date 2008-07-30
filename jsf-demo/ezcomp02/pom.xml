@@ -2,11 +2,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sun.faces</groupId>
-  <artifactId>jsf-ezcomp2</artifactId>
+  <artifactId>jsf-ezcomp02</artifactId>
   <packaging>war</packaging>
-  <name>jsf-ezcomp2</name>
+  <name>jsf-ezcomp02</name>
   <url>https://mojarra.dev.java.net/</url>
-  <description>Ezcomp2 sample app</description>
+  <description>Ezcomp02 sample app</description>
   <version>0.1</version>
 
   <build>
@@ -23,7 +23,7 @@
         </includes>
      </resource>
    </resources>
-    <finalName>jsf-ezcomp2</finalName>
+    <finalName>jsf-ezcomp02</finalName>
     <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
