@@ -288,5 +288,13 @@ public abstract class ResponseWriter extends Writer {
      */
     public abstract ResponseWriter cloneWithWriter(Writer writer);
 
+    /**
+     * <p class="changed_added_2_0">Enable or disable the writing capabilities
+     * of this <code>Writer</code>.  The <code>Writer</code> is enabled by default.
+     * This method may be used to temporarily ensure that no output be written
+     * the response.</p>
+     */
+    public abstract void enableWriter(boolean enable); 
+
 
 }
