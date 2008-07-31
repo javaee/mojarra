@@ -5,8 +5,10 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import com.sun.faces.util.FacesLogger;
 import java.io.IOException;
-import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
@@ -16,6 +18,10 @@ import javax.faces.render.Renderer;
  * @author edburns
  */
 public class CompositeFacetRenderer extends Renderer {
+    
+    // Log instance for this class
+    protected static final Logger logger = FacesLogger.RENDERKIT.getLogger();
+
 
     @Override
     public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
@@ -32,11 +38,17 @@ public class CompositeFacetRenderer extends Renderer {
        
        UIComponent currentCompositeComponent = component.getCurrentCompositeComponent();
        if (null != currentCompositeComponent) {
-           UIComponent facet = null;
-           if (null == (facet = currentCompositeComponent.getFacet(facetName))){
-               throw new IOException("PENDING_I18N Unable to find facet to insert facet into composite component");
+           UIComponent facet = currentCompositeComponent.getFacet(facetName);
+           if (null != facet) {
+               facet.encodeAll(context);
            }
-           facet.encodeAll(context);
+           else {
+               if (logger.isLoggable(Level.FINE)) {
+                   logger.log(Level.FINE,
+                           "Could not find facet named {0}",
+                           facetName);
+               }
+           }
        }       
     }
 

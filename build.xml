@@ -265,7 +265,45 @@
         </if>
     </target>
 
+   <target name="build.spec.snapshot" depends="prepare.build.java.net">
 
+       <property name="spec.snapshot.dir" 
+                 value="${demo.dir}/dist/spec-snapshot" />
+
+       <copy todir="${spec.snapshot.dir}" flatten="true">
+
+         <fileset dir="${javaserverfaces-spec-eg.dir}">
+
+           <include name="**/*${build.number}*.pdf" />
+
+         </fileset>
+
+       </copy>
+
+       <filter token="build.number" value="${build.number}" />
+       <filter token="spec.version" value="${spec.version}" />
+       <filter token="build.type" value="${build.type}" />
+
+       <copy filtering="true"
+             file="${basedir}/docs/build.javadocs.dist-index.html"
+             tofile="${spec.snapshot.dir}/index.html">
+       </copy>
+
+
+        <!-- Create the javadocs distribution -->
+        <unzip dest="${spec.snapshot.dir}"
+               src="${demo.dir}/dist/docs/javadocs-${impl.version}.zip" />
+        <unzip dest="${spec.snapshot.dir}"
+               src="${demo.dir}/dist/docs/renderkitdocs-${impl.version}.zip" />
+        <unzip dest="${spec.snapshot.dir}"
+               src="${demo.dir}/dist/docs/tlddocs-${impl.version}.zip" />
+
+        <zip destfile="${dist.dir}/jsf-spec-${spec.version}-${build.number}.zip">
+            <zipfileset dir="${spec.snapshot.dir}"
+                        prefix="jsf-spec-${spec.version}-${build.number}"/>
+        </zip>
+
+  </target>
 
     <target name="build.samples.zip" depends="main" description="Build the demo distribution">
 

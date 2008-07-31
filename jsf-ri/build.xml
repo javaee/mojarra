@@ -389,9 +389,18 @@
         <java fork="true" jar="${tlddoc.jar}">
             <arg line="-d ${build.dir}/tlddocs"/>
             <arg line="-windowtitle jsf-ri-${spec.version}"/>
+            <arg line="-xslt ${conf.share.dir}/tlddoc-resources"/>
+
             <arg value="${build.generate.tld.dir}/html_basic.tld"/>
             <arg value="${conf.share.dir}/jsf_core.tld"/>
+            <arg value="${conf.share.dir}/composite.tld"/>
         </java>
+        <copy todir="${build.dir}/tlddocs/">
+           <fileset dir="${basedir}/../jsf-api/doc/">
+             <include name="changed*.png" />
+           </fileset>
+        </copy>
+
     </target>
 
     <target name="compile.test" depends="prepare,compile"

@@ -120,8 +120,8 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * in the <em>composite component BeanDescrpitor</em> for the 
      * <code>Map&lt;PropertyDescriptor&gt;</code> that contains meta-information
      * for the declared facets for this composite component.
-     * This map must contain an entry under the key {@link #COMPOSITE_FACET}, even
-     * if no facets were explicitly declared.  See {@link #COMPOSITE_FACET}.</p>
+     * This map must contain an entry under the key {@link #COMPOSITE_FACET_NAME}, even
+     * if no facets were explicitly declared.  See {@link #COMPOSITE_FACET_NAME}.</p>
      */
     public static final String FACETS_KEY = "javax.faces.component.FACETS_KEY";
     
@@ -133,7 +133,7 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * <code>PropertyDescriptor</code> describing the composite component facet.
      * The value of this constant is also used as the key in the <code>Map</code>
      * returned from {@link #getFacets}.  In this case, it refers to the actual
-     * facet that is the {@link #UIPanel} that is the parent of the all
+     * facet that is the {@link javax.faces.component.UIPanel} that is the parent of the all
      * of the components in the <code>&lt;composite:implementation&gt;</code>
      * section of the <em>composite component PDL file</em>.</p>
      */
