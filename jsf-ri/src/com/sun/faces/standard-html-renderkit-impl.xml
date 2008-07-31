@@ -95,6 +95,9 @@
     <output-consuming-page-composite-children-renderer-class>
         com.sun.faces.renderkit.html_basic.ConsumingPageCompositeChildrenRenderer
     </output-consuming-page-composite-children-renderer-class>
+    <output-composite-facet-renderer-class>
+        com.sun.faces.renderkit.html_basic.CompositeFacetRenderer
+    </output-composite-facet-renderer-class>
 
     <output-stylesheet-renderer-class>
         com.sun.faces.renderkit.html_basic.StylesheetRenderer

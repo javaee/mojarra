@@ -35,6 +35,8 @@
   <composite:actionSource name="cancelEvent" />
   <composite:actionSource name="allEvents" targets="loginEvent,cancelEvent" />
 
+  <composite:facet name="header" />
+
 </composite:interface>
 
 <composite:implementation>
@@ -43,7 +45,7 @@
 
     <ui:define name="header">
 
-      <p>This is the login panel header</p>
+     <composite:insertFacet name="header" />
 
     </ui:define>
 
@@ -74,7 +76,7 @@
 
      <p>This is the login panel footer</p>
      
-     <composite:children />
+     <composite:insertChildren />
 
     </ui:define>
 

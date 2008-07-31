@@ -2526,6 +2526,31 @@ the consuming page.</p>
             </renderer-class>
         </renderer>
 
+      <renderer>
+            <description><![CDATA[<div class="changed_added_2_0">
+
+<p>Renders a facet at this particular point in the composite component PDL page.</p>
+
+      <p>Decode Behavior</p>
+
+      <ul>
+
+<p>No action is required during decode for this renderer.</p>
+
+</ul>
+
+      <p>Encode Behavior</p>
+
+
+</div>]]></description>
+
+            <component-family>javax.faces.Output</component-family>
+            <renderer-type>javax.faces.CompositeFacet</renderer-type>
+            <renderer-class>
+               <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-composite-facet-renderer-class/text())"/>
+            </renderer-class>
+        </renderer>
+
         <renderer>
             <description><![CDATA[<div class="changed_added_2_0">
 

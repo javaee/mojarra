@@ -23,7 +23,7 @@
 
   <div id="compositeComponent" class="grayBox" style="border: 1px solid #090;">
 
-    <ez:loginPanel id="loginPanel" model="#{bean}">
+    <ez:loginPanel id="loginPanelInConsumingPage" model="#{bean}">
       <f:valueChangeListener for="username"
 			     binding="#{bean.useridValueChangeListener}" />
       <f:actionListener for="loginEvent" 
@@ -34,8 +34,17 @@
 
       <f:actionListener for="allEvents" 
                         binding="#{bean.allEventsListener}" />
+      <f:facet name="header">
+         <h:panelGroup id="headerFacetInConsumingPage">
 
-      <h:outputText value="this is a child component in the consuming page" />
+          <h:outputText 
+              value="this is the header facet in the consuming page" />
+  
+         </h:panelGroup>
+      </f:facet>
+
+      <h:outputText id="childInConsumingPage"
+                    value="this is a child component in the consuming page" />
 
     </ez:loginPanel>
 

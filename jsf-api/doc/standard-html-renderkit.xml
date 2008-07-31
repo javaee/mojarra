@@ -25961,6 +25961,29 @@ the consuming page.</p>
     <renderer>
       <description><![CDATA[<div class="changed_added_2_0">
 
+<p>Renders a facet at this particular point in the composite component PDL page.</p>
+
+      <p>Decode Behavior</p>
+
+      <ul>
+
+<p>No action is required during decode for this renderer.</p>
+
+</ul>
+
+      <p>Encode Behavior</p>
+
+
+</div>]]></description>
+      <component-family>javax.faces.Output</component-family>
+      <renderer-type>javax.faces.CompositeFacet</renderer-type>
+      <renderer-class>
+        com.sun.faces.renderkit.html_basic.CompositeFacetRenderer
+    </renderer-class>
+    </renderer>
+    <renderer>
+      <description><![CDATA[<div class="changed_added_2_0">
+
 <p>Render the markup for a <code>&lt;script&gt;</code> element that
 renders the script <code>Resource</code> specified by the required
 <code>name</code> attribute and optional <code>library</code>
