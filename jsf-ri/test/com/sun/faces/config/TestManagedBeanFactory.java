@@ -913,6 +913,41 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         assertTrue(injectionBean.destroyCalled);
 
     }
+
+
+
+    /**
+     * For Issue 761.
+     */
+    public void testManagedPropertyMixedVERegresssion() throws Exception {
+
+        Map<String,Object> requestMap = getFacesContext().getExternalContext().getRequestMap();
+        requestMap.put("val", "String");
+        List<ManagedBeanInfo.ManagedProperty> properties =
+             new ArrayList<ManagedBeanInfo.ManagedProperty>(1);
+        ManagedBeanInfo.ManagedProperty property =
+             new ManagedBeanInfo.ManagedProperty("modelLabel",
+                                                 null,
+                                                 "#{'this'} is a String",
+                                                 null,
+                                                 null);
+        properties.add(property);
+        ManagedBeanInfo bean = new ManagedBeanInfo(beanName,
+                                                   beanName,
+                                                   "request",
+                                                   null,
+                                                   null,
+                                                   properties,
+                                                   null);
+        BeanManager beanManager =
+             ApplicationAssociate.getCurrentInstance().getBeanManager();
+        beanManager.register(bean);
+        testBean = (TestBean) beanManager.create(beanName, getFacesContext());
+        assertTrue("this is a String", "this is a String".equals(testBean.getModelLabel()));
+
+    }
+
+	
 	
     /************* PENDING(edburns): rewrite to exercise new edge case
      * detection.

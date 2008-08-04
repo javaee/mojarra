@@ -523,7 +523,6 @@ public abstract class BeanBuilder {
             this.expectedType = expectedType;
 
             if (ELUtils.isExpression(this.expressionString)) {
-                ELUtils.getScope(this.expressionString, segment);
                 if (segment[0] != null) {
                     if (references == null) {
                         references = new ArrayList<String>(4);
