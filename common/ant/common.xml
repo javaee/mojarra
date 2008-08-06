@@ -87,6 +87,7 @@
     <property name="impl.name" value="Mojarra"/>
     <property name="build.number" value="${DSTAMP}"/>
     <property name="build.type" value="SNAPSHOT"/>
+    <property name="mvn.spec.version" value="${spec.version}-${build.type}"/>
     <property name="impl.version.number" value="2.0.0" />
     <property name="impl.version" value="${impl.version.number}-${build.type}"/>
     <property name="full.impl.version" value="${impl.version.number} (${build.number}-${build.type})"/>
@@ -345,6 +346,36 @@
             </generateComponents>
         </sequential>
     </macrodef>
+
+   <!-- Convenience macro for invoking mvn -->
+   <macrodef name="jsf.mvn">        
+        <attribute name="pomFile"/>
+        <attribute name="mvnSpecVersion"/>
+        <attribute name="goals"/>
+        <sequential>           
+            <exec os="SunOS" dir="${basedir}" failonerror="yes" 
+                             executable="mvn">
+              <arg line="-f @{pomFile} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}" />
+            </exec>
+            <exec os="Linux" dir="${basedir}" failonerror="yes" 
+                             executable="mvn">
+              <arg line="-f @{pomFile} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}" />
+            </exec>
+            <exec os="Windows 2000" dir="${basedir}" executable="mvn.exe" 
+                             failonerror="yes">
+              <arg line="-f @{pomFile} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}" />
+            </exec>
+            <exec os="Windows XP" dir="${basedir}" executable="mvn.exe" 
+                             failonerror="yes">
+              <arg line="-f @{pomFile} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}" />
+            </exec>
+            <exec os="Mac OS X" dir="${basedir}" executable="mvn" 
+                             failonerror="yes">
+              <arg line="-f @{pomFile} -DmvnSpecVersion=@{mvnSpecVersion} @{goals}" />
+            </exec>
+        </sequential>           
+   </macrodef>        
+
 
     <!-- Change bundle target(s) -->
 
