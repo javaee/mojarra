@@ -16,12 +16,12 @@
 	OpenIDE-Module="com.sun.faces.updatecenter/2" 
 	OpenIDE-Module-Display-Category="Runtimes" 
 	OpenIDE-Module-Implementation-Version="200712201750" 
-	OpenIDE-Module-Long-Description="Updated JSF 2.0 implementation.  Current version supports EDR2.  This version replaces the default version of JSF that ships with Glassfish.  Please note that if you've upgraded JSF before (to the latest version of 1.2, for instance), you *must* uninstall that update before installing this one.  Also, Glassfish needs to be restarted *twice* for the update to take effect - and the second restart requires that you use asadmin, rather than the Admin GUI, since the Admin GUI depends on JSF.  Once the second restart is complete, Admin GUI may again be used normally." 
+	OpenIDE-Module-Long-Description="Updated JSF 2.0 implementation.  Current version supports EDR2.  This version replaces the default version of JSF that ships with Glassfish.  Please note that if you've upgraded JSF before (to the latest version of 1.2, for instance), you *must* uninstall that update before installing this one." 
 	OpenIDE-Module-Module-Dependencies="" 
 	OpenIDE-Module-Name="JSF 2.0 for GlassFish" 
 	OpenIDE-Module-Requires="" 
 	OpenIDE-Module-Short-Description="Updated JSF 2.0 implementation." 
-	OpenIDE-Module-Specification-Version="1.2" 
+	OpenIDE-Module-Specification-Version="2.0" 
 	Module-Type="ADDON_INSTALLER" Target-Container="sjsas91beta"/>
     </module>
 </module_group>
