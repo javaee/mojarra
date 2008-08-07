@@ -205,75 +205,6 @@ public abstract class UIComponentBase extends UIComponent {
         return (attributes);
 
     }
-    
-    private transient Map<String, Object> elAttrs = null;
-    
-    public Map<String, Object> getElAttrs() {
-        if (null == elAttrs) {
-            final Map<String, Object> realAttributes = getAttributes();
-            elAttrs = new Map<String, Object>() {
-
-                public void clear() {
-                    realAttributes.clear();
-                }
-
-                public boolean containsKey(Object key) {
-                    return realAttributes.containsKey(key);
-                }
-
-                public boolean containsValue(Object value) {
-                    return realAttributes.containsValue(value);
-                }
-
-                public Set<Entry<String, Object>> entrySet() {
-                    return realAttributes.entrySet();
-                }
-
-                public Object get(Object key) {
-                    Object result = realAttributes.get(key);
-
-                    if (result instanceof ValueExpression) {
-                        ValueExpression ve = (ValueExpression) result;
-                        result = ve.getValue(FacesContext.getCurrentInstance().getELContext());
-                    }
-
-                    return result;
-                }
-
-                public boolean isEmpty() {
-                    return realAttributes.isEmpty();
-                }
-
-                public Set<String> keySet() {
-                    return realAttributes.keySet();
-                }
-
-                public Object put(String key, Object value) {
-                    return realAttributes.put(key, value);
-                }
-
-                public void putAll(Map<? extends String, ? extends Object> t) {
-                    realAttributes.putAll(t);
-                }
-
-                public Object remove(Object key) {
-                    return realAttributes.remove(key);
-                }
-
-                public int size() {
-                    return realAttributes.size();
-                }
-
-                public Collection<Object> values() {
-                    return realAttributes.values();
-                }
-
-            };
-        }
-        
-        return elAttrs;
-    }
-
 
     // ---------------------------------------------------------------- Bindings
 
@@ -1840,44 +1771,57 @@ public abstract class UIComponentBase extends UIComponent {
 
         public Object get(Object keyObj) {
             String key = (String) keyObj;
+            Object result = null;
             if (key == null) {
                 throw new NullPointerException();
             }
             if (ATTRIBUTES_THAT_ARE_SET_KEY.equals(key)) {
-                return component.getAttributesThatAreSet(false);
+                result = component.getAttributesThatAreSet(false);
             }
-            PropertyDescriptor pd =
-                getPropertyDescriptor(key);
-            if (pd != null) {
-                try {
-                    Method readMethod = pd.getReadMethod();
-                    if (readMethod != null) {
-                        return (readMethod.invoke
-                                (component, EMPTY_OBJECT_ARRAY));
-                    } else {
-                        throw new IllegalArgumentException(key);
+            if (null == result) {
+                PropertyDescriptor pd =
+                        getPropertyDescriptor(key);
+                if (pd != null) {
+                    try {
+                        Method readMethod = pd.getReadMethod();
+                        if (readMethod != null) {
+                            result = (readMethod.invoke(component,
+                                    EMPTY_OBJECT_ARRAY));
+                        } else {
+                            throw new IllegalArgumentException(key);
+                        }
+                    } catch (IllegalAccessException e) {
+                        throw new FacesException(e);
+                    } catch (InvocationTargetException e) {
+                        throw new FacesException(e.getTargetException());
                     }
-                } catch (IllegalAccessException e) {
-                    throw new FacesException(e);
-                } catch (InvocationTargetException e) {
-                    throw new FacesException
-                        (e.getTargetException());
-                }
-            } else if (attributes != null) {
-                if (attributes.containsKey(key)) {
-                    return (attributes.get(key));
-                }
-            }
-            ValueExpression ve = component.getValueExpression(key);
-            if (ve != null) {
-                try {
-                    return ve.getValue(component.getFacesContext().getELContext());
-                }
-                catch (ELException e) {
-                    throw new FacesException(e);
+                } else if (attributes != null) {
+                    if (attributes.containsKey(key)) {
+                        result = (attributes.get(key));
+                        // If we have a non-null result and
+                        // this is a composite component
+                        if (null != result && attributes.containsKey(Resource.COMPONENT_RESOURCE_KEY)) {
+                            // check if the result is an expression
+                            if (result instanceof ValueExpression) {
+                                ValueExpression ve = (ValueExpression) result;
+                                result = ve.getValue(FacesContext.getCurrentInstance().getELContext());
+                            }
+                        }
+                    }
                 }
             }
-            return (null);
+            if (null == result) {
+                ValueExpression ve = component.getValueExpression(key);
+                if (ve != null) {
+                    try {
+                        result = ve.getValue(component.getFacesContext().getELContext());
+                    } catch (ELException e) {
+                        throw new FacesException(e);
+                    }
+                }
+            }
+            
+            return result;
         }
 
         public Object put(String keyValue, Object value) {

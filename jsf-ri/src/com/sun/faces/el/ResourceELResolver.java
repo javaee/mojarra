@@ -113,7 +113,7 @@ public class ResourceELResolver extends ELResolver {
                 // a resource, the "this" syntax for the library name must
                 // be supported.
                 if (null != parts[0] && parts[0].equals("this")) {
-                    UIComponent currentComponent = UIComponent.getCurrentComponent();
+                    UIComponent currentComponent = UIComponent.getCurrentCompositeComponent();
                     Resource componentResource = (Resource)
                                 currentComponent.getAttributes().get(Resource.COMPONENT_RESOURCE_KEY);
                     if (null != componentResource) {

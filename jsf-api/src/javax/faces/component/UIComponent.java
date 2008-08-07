@@ -171,7 +171,8 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
 
 
     /**
-     * <p>Return a mutable <code>Map</code> representing the attributes
+     * <p><span class="changed_modified_2_0">Return</span> a mutable 
+     * <code>Map</code> representing the attributes
      * (and properties, see below) associated wth this {@link UIComponent},
      * keyed by attribute name (which must be a String).  The returned
      * implementation must support all of the standard and optional
@@ -203,10 +204,21 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      *         <code>IllegalArgumentException</code>.</li>
      *     </ul></li>
      * </ul>
+     * 
+     * <p class="changed_added_2_0">The <code>get()</code> method of the
+     * <code>Map</code> must take the following additional action 
+     * if this component instance is a
+     * composite component instance (indicated by the presence of a 
+     * component attribute under the key given by the value of 
+     * {@link javax.faces.application.Resource#COMPONENT_RESOURCE_KEY}): 
+     * If the result to be returned from the <code>get()</code> method is a
+     * {@link ValueExpression}, call the 
+     * {@link ValueExpression#getValue(javax.el.ELContext)} method and return 
+     * the result from <code>get()</code>.  Otherwise, return the actual value
+     * from the <code>get()</code> method.
+     * </p>
      */
     public abstract Map<String, Object> getAttributes();
-    
-    public abstract Map<String, Object> getElAttrs();
     
     // ---------------------------------------------------------------- Bindings
 

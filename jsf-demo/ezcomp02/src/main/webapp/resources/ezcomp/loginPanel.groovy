@@ -29,7 +29,7 @@ public class loginPanel extends UINamingContainer {
     } 
     
     public String getFamily() {
-        return "ezcomp.LoginPanel";
+        return "javax.faces.NamingContainer";
     }
     
 }

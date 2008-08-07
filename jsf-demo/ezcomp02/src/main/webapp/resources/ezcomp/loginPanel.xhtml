@@ -48,8 +48,8 @@
 
     <ui:define name="loginEvent">
 
-      <h:commandButton id="loginEvent" value="#{compositeComponent.elAttrs.loginLabel}" 
-                 action="#{compositeComponent.elAttrs.model.loginAction}" 
+      <h:commandButton id="loginEvent" value="#{compositeComponent.attributes.loginLabel}" 
+                 action="#{compositeComponent.attributes.model.loginAction}" 
                  onkeypress="javascript: submitenter(event, 'loginButton', Login');" 
                  onclick="javascript: submitAndDisable(this, 'Login');" 
                  onfocus="javascript: if (this.disabled==0) this.className='Btn1Hov'" 
