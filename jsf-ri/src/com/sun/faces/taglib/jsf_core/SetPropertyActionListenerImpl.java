@@ -42,6 +42,7 @@ package com.sun.faces.taglib.jsf_core;
 import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.ValueExpression;
+import javax.el.ExpressionFactory;
 import javax.faces.component.StateHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
@@ -50,42 +51,76 @@ import javax.faces.event.ActionListener;
 
 public class SetPropertyActionListenerImpl implements ActionListener, StateHolder {
     
-    private ValueExpression targetExpression = null;
-    
-    private ValueExpression valueExpression = null;
+    private ValueExpression target;
+    private ValueExpression source;
+
+
+    // ------------------------------------------------------------ Constructors
     
     public SetPropertyActionListenerImpl() {}
-    
+
+
     public SetPropertyActionListenerImpl(ValueExpression target, ValueExpression value) {
-        this.targetExpression = target;
-        this.valueExpression = value;
+
+        this.target = target;
+        this.source = value;
+
     }
-    
+
+
+    // --------------------------------------------- Methods from ActionListener
+
+
     public void processAction(ActionEvent e) throws AbortProcessingException {
-        ELContext elc = FacesContext.getCurrentInstance().getELContext();
-        
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELContext elContext = facesContext.getELContext();
+
         try {
-            targetExpression.setValue(elc, valueExpression.getValue(elc));
+            Object value = source.getValue(elContext);
+            if (value != null) {
+                ExpressionFactory factory =
+                      facesContext.getApplication().getExpressionFactory();
+                value = factory.coerceToType(value, target.getType(elContext));
+            }
+            target.setValue(elContext, value);
         } catch (ELException ele) {
-            // PENDING logging
+            throw new AbortProcessingException(ele);
         }
+
+
     }
+
+
+    // ------------------------------------------------ Methods from StateHolder
+
     
-    public void setTransient(boolean newTransientValue) {}
+    public void setTransient(boolean trans) {
+    }
+
     
-    public boolean isTransient() { return false; }
+    public boolean isTransient() {
+
+        return false;
+
+    }
+
     
     public Object saveState(FacesContext context) {
+
         Object [] state = new Object[2];
-        state[0] = targetExpression;
-        state[1] = valueExpression;
+        state[0] = target;
+        state[1] = source;
         return state;
+
     }
     
     public void restoreState(FacesContext context, Object state) {
+
         Object [] stateArray = (Object []) state;
-        targetExpression = (ValueExpression) stateArray[0];
-        valueExpression = (ValueExpression) stateArray[1];
+        target = (ValueExpression) stateArray[0];
+        source = (ValueExpression) stateArray[1];
+
     }
     
 }
