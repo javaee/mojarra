@@ -128,6 +128,17 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
     /**
      * 
      * <p class="changed_added_2_0">The value of this constant is used as the key
+     * in the <em>composite component BeanDescrpitor</em> for a 
+     * <code>ValueExpression</code> that evaluates to the 
+     * <code>component-type</code> of the <em>composite component root</em>
+     * <code>UIComponent</code> for this composite component, if
+     * one was declared by the composite component author.</p>
+     */
+    public static final String COMPOSITE_COMPONENT_TYPE_KEY = "javax.faces.component.COMPOSITE_COMPONENT_TYPE";
+    
+    /**
+     * 
+     * <p class="changed_added_2_0">The value of this constant is used as the key
      * in the <code>Map</code> returned as described in {@link #FACETS_KEY}
      * for the 
      * <code>PropertyDescriptor</code> describing the composite component facet.

@@ -247,6 +247,29 @@ apply.</p>
 
                 <![CDATA[
 <div class="changed_added_2_0">
+<p>The <code>component-type</code> of the <code>UIComponent</code> that
+will serve as the <em>composite component root</em> for this composite
+component.  The declared <code>component-family</code> for this
+component must be <code>javax.faces.NamingContainer</code>.</p></div>]]>
+
+            </description>
+            <name>
+                componentType
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
+
+                <![CDATA[
+<div class="changed_added_2_0">
 <p>The name to display in a tool palette
                 containing this component.  The value of this attribute will be set as
                 the value for this property on the <em>composite
