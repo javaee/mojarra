@@ -51,8 +51,8 @@
 <body>
 <h:form>
 
-Integer Property is: <h:outputText value="#{test3.intProperty}" />. </p>
-String Property is: <h:outputText value="#{test3.stringProperty}" />. </p>
+Integer Property is: <h:outputText value="#{test3.intProperty}" />. <br>
+String Property is: <h:outputText value="#{test3.stringProperty}" />. <br>
 
 <h:commandButton id="expressionButton1" value="Convert from String To Integer">
   <f:setPropertyActionListener target="#{test3.intProperty}" value="100" />
