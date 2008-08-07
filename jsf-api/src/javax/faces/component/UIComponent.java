@@ -1015,7 +1015,7 @@ private void doFind(FacesContext context, String clientId) {
      * <code>UIComponent</code> <code>this</code> to the {@link FacesContext}
      * attribute map using the key {@link #CURRENT_COMPONENT} saving the previous
      * <code>UIComponent</code> associated with {@link #CURRENT_COMPONENT} for a
-     * subsequent call to {@link @popComponentFromEL}.</p>
+     * subsequent call to {@link #popComponentFromEL}.</p>
      *
      * <pclass="changed_added_2_0">This method and <code>popComponentFromEL()</code> form the basis for
      * the contract that enables the EL Expression "<code>#{component}</code>" to
