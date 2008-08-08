@@ -184,6 +184,7 @@
     <!-- Add our implementation specific PhaseListeners -->
     <lifecycle>
         <phase-listener>com.sun.faces.lifecycle.ELResolverInitPhaseListener</phase-listener>
+        <phase-listener>com.sun.faces.lifecycle.ProjectStagePhaseListener</phase-listener>
     </lifecycle>
 
   <!-- Configure Standard Validators -->

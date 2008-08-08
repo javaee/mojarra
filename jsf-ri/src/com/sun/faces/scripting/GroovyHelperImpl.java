@@ -36,6 +36,8 @@
 
 package com.sun.faces.scripting;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.logging.Level;
@@ -49,6 +51,12 @@ import javax.faces.context.FacesContext;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import groovy.util.GroovyScriptEngine;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Set;
+import javax.faces.FacesException;
+import javax.faces.context.ExternalContext;
 
 
 /**
@@ -68,31 +76,103 @@ class GroovyHelperImpl extends GroovyHelper {
     GroovyHelperImpl() throws Exception {
 
         FacesContext ctx = FacesContext.getCurrentInstance();
-        // only called during init - safe to cast and save.
-        URL u = ctx.getExternalContext().getResource(SCRIPT_PATH);
+        ExternalContext extContext = ctx.getExternalContext();
+        ClassLoader curLoader = Thread.currentThread().getContextClassLoader();
 
-        if (u != null) {
-
-            final GroovyScriptEngine engine =
-                  new GroovyScriptEngine(new URL[]{u},
-                                         Thread.currentThread().getContextClassLoader());
-
-            loader = AccessController.doPrivileged(
-                  new PrivilegedAction<MojarraGroovyClassLoader>() {
-                      public MojarraGroovyClassLoader run() {
-                          return new MojarraGroovyClassLoader(engine);
-                      }
-                  });
+        URL combinedRoots[] = getResourceRoots(extContext, curLoader);
+            
+        if (0 < combinedRoots.length) {
+            GroovyScriptEngine engine =
+                    new GroovyScriptEngine(combinedRoots, curLoader);
+            loader = new MojarraGroovyClassLoader(engine);
             if (LOGGER.isLoggable(Level.INFO)) {
                 LOGGER.log(Level.INFO,
-                           "Groovy support enabled.");
+                        "Groovy support enabled.");
             }
-            ctx.getExternalContext().getApplicationMap()
-                  .put("com.sun.faces.groovyhelper", this);
-
-        } else {
-            throw new UnsupportedOperationException();
+            extContext.getApplicationMap().put("com.sun.faces.groovyhelper", 
+                    this);
         }
+
+    }
+    
+    private URL[] getResourceRoots(ExternalContext extContext,
+            ClassLoader curLoader) throws IOException {
+        URL[] combinedRoots = null;
+        Enumeration<URL> classpathResourceEnumeration = 
+                curLoader.getResources("META-INF/resources/");
+        List<URL> classpathResourceList = new ArrayList<URL>();
+        while (classpathResourceEnumeration.hasMoreElements()) {
+            classpathResourceList.add(classpathResourceEnumeration.nextElement());
+        }
+        
+        // only called during init - safe to cast and save.
+        URL u = extContext.getResource(SCRIPT_PATH);
+        URL webappRoots[] = getWebappResourceRoots(extContext),
+            classpathRoots[] = new URL[classpathResourceList.size()];
+        classpathResourceList.toArray(classpathRoots);
+        
+        if (null != u ||
+            0 < webappRoots.length ||
+            0 < classpathRoots.length) {
+            combinedRoots = new URL[webappRoots.length + classpathRoots.length +
+                    (null != u ? 1 : 0) ];
+            System.arraycopy(webappRoots, 0, 
+                             combinedRoots, 0, 
+                             webappRoots.length);
+            System.arraycopy(classpathRoots, 0, 
+                             combinedRoots, webappRoots.length, 
+                             classpathRoots.length);
+            if (null != u) {
+                combinedRoots[webappRoots.length + classpathRoots.length] = u;
+            }
+        }
+        else {
+            combinedRoots = new URL[0];
+        }
+        
+        return combinedRoots;
+    }
+    
+    
+    private URL[] getWebappResourceRoots(ExternalContext extContext) {
+        URL [] result = null;
+        int size = 0, i = 0;
+        Set<String> resourceRoots = extContext.getResourcePaths("/resources/");
+        if (null != resourceRoots && !resourceRoots.isEmpty()) {
+            // Determine the size of script roots that end with "/"
+            for (String cur : resourceRoots) {
+                if (cur.endsWith("/")) {
+                    size++;
+                }
+            }
+            result = new URL[size];
+            for (String cur : resourceRoots) {
+                if (cur.endsWith("/")) {
+                    try {
+                        result[i++] = extContext.getResource(cur);
+                    } catch (MalformedURLException ex) {
+                        Logger.getLogger(GroovyHelperImpl.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+            
+        }
+        if (null == result) {
+            result = new URL[0];
+        }
+        return result;
+    }
+    
+    private URL[] getClasspathResourceRoots() {
+        URL [] result = null;
+        
+        return result;
+    }
+    
+    
+    
+    public void addURL(URL toAdd) {
+        loader.getGroovyScriptEngine().getGroovyClassLoader().addURL(toAdd);
     }
 
     // ---------------------------------------------------------- Public Methods
@@ -126,6 +206,10 @@ class GroovyHelperImpl extends GroovyHelper {
             super(new URL[0], gse.getGroovyClassLoader());
             this.gse = gse;
         }
+        
+        public GroovyScriptEngine getGroovyScriptEngine() {
+            return gse;
+        }
 
         @Override
         public Class<?> loadClass(String name) throws ClassNotFoundException {
@@ -139,7 +223,7 @@ class GroovyHelperImpl extends GroovyHelper {
                 try {
                     c = gse.loadScriptByName(name);
                 } catch (Exception e) {
-                    throw new ClassNotFoundException(name, e);
+                    throw new RuntimeException(e);
                 }
             }
             if (c == null) {

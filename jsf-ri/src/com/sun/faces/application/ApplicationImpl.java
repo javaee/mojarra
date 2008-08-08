@@ -101,6 +101,7 @@ import com.sun.faces.el.ELUtils;
 import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.el.PropertyResolverImpl;
 import com.sun.faces.el.VariableResolverImpl;
+import com.sun.faces.lifecycle.ProjectStagePhaseListener;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.ReflectionUtils;
@@ -109,6 +110,12 @@ import com.sun.faces.util.Util;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEventListenerHolder;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import javax.el.ValueExpression;
+import javax.faces.application.Resource;
 
 
 /**
@@ -463,6 +470,9 @@ public class ApplicationImpl extends Application {
             if (projectStage == null) {
                 projectStage = ProjectStage.Production;
             }
+            if (projectStage == ProjectStage.Development) {
+                java.beans.Beans.setDesignTime(true);
+            }
         }
         return projectStage;
 
@@ -786,6 +796,41 @@ public class ApplicationImpl extends Application {
 
     }
 
+    @Override
+    public UIComponent createComponent(Resource componentResource) throws FacesException {
+        UIComponent result = null;
+        FacesContext context = FacesContext.getCurrentInstance();
+        InputStream resourceInputStream = null;
+        try {
+            if (null != resourceInputStream && null == (resourceInputStream = componentResource.getInputStream())) {
+                return null;
+            }
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+            return null;
+        }
+        String className = componentResource.getResourceName();
+        int lastDot = className.lastIndexOf(".");
+        className = className.substring(0, lastDot);
+        
+        try {
+            Class componentClass = com.sun.faces.util.Util.loadClass(className, context);
+            result = (UIComponent) componentClass.newInstance();
+        } catch (IllegalAccessException ex) { 
+            LOGGER.log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+        }
+
+	// PENDING apply annotations 
+        
+        // Util.processListenerForAnnotation(result);
+        
+        return result;
+    }
+        
 
     /**
      * @see javax.faces.application.Application#createComponent(javax.faces.el.ValueBinding, javax.faces.context.FacesContext, String)

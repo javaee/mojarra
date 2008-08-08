@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:composite="http://java.sun.com/jsf/composite">
+<head>
+
+<title>Not present in rendered output</title>
+
+</head>
+
+<body>
+
+<composite:interface name="loginPanel" 
+                     displayName="Very Simple Login Panel" 
+                     preferred="true"
+                     expert="false"
+                     shortDescription="An illustration of the composite component feature">
+  <composite:attribute name="model" required="true">
+ 
+    <composite:attribute name="loginAction" required="true">
+      <composite:deferred-method>
+        <composite:method-signature>
+                    java.lang.Object action()
+        </composite:method-signature>
+      </composite:deferred-method>
+     </composite:attribute>
+
+   </composite:attribute>
+
+
+  <composite:editableValueHolder name="username" />
+  <composite:actionSource name="loginEvent" />
+  <composite:actionSource name="cancelEvent" />
+  <composite:actionSource name="allEvents" targets="loginEvent,cancelEvent" />
+
+  <composite:facet name="header" />
+
+</composite:interface>
+
+<composite:implementation>
+
+  <ui:decorate template="loginPanelTemplate.xhtml">
+
+    <ui:define name="header">
+
+     <composite:insertFacet name="header" />
+
+    </ui:define>
+
+    <ui:define name="body">
+
+      <p>
+
+         <h:inputText id="username" />
+
+      </p>
+
+      <p>
+
+	<h:commandButton id="loginEvent" value="Login" action="#{compositeComponent.attributes.model.loginAction}">
+
+	</h:commandButton>  
+
+	<h:commandButton id="cancelEvent" value="Cancel" action="cancel">
+
+	</h:commandButton>  
+
+
+      </p>
+
+    </ui:define>
+
+    <ui:define name="footer">
+
+     <p>This is the login panel footer</p>
+     
+     <composite:insertChildren />
+
+    </ui:define>
+
+  </ui:decorate>
+
+</composite:implementation>
+
+</body>
+
+</html>

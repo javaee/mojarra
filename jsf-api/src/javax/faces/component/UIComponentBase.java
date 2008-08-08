@@ -36,6 +36,7 @@
 
 package javax.faces.component;
 
+import java.util.Map.Entry;
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
@@ -71,6 +72,9 @@ import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.FactoryFinder;
+import javax.faces.application.Resource;
+import javax.faces.application.ResourceDependencies;
+import javax.faces.application.ResourceDependency;
 import javax.faces.application.ResourceHandler;
 import javax.faces.event.AfterAddToParentEvent;
 import javax.faces.event.BeforeRenderEvent;
@@ -809,7 +813,7 @@ public abstract class UIComponentBase extends UIComponent {
             throw new NullPointerException();
         }
 
-        pushComponentToEL(context);
+        pushComponentToEL(context, null);
         
         if (!isRendered()) {
             return;
@@ -1036,7 +1040,7 @@ public abstract class UIComponentBase extends UIComponent {
             return;
         }
 
-        pushComponentToEL(context);
+        pushComponentToEL(context,null);
 
         // Process all facets and children of this component
         Iterator kids = getFacetsAndChildren();
@@ -1072,7 +1076,7 @@ public abstract class UIComponentBase extends UIComponent {
             return;
         }
 
-        pushComponentToEL(context);
+        pushComponentToEL(context,null);
         
         // Process all the facets and children of this component
         Iterator kids = getFacetsAndChildren();
@@ -1098,7 +1102,7 @@ public abstract class UIComponentBase extends UIComponent {
             return;
         }
 
-        pushComponentToEL(context);
+        pushComponentToEL(context,null);
 
         // Process all facets and children of this component
         Iterator kids = getFacetsAndChildren();
@@ -1126,7 +1130,7 @@ public abstract class UIComponentBase extends UIComponent {
         Object [] stateStruct = new Object[2];
         Object [] childState = EMPTY_ARRAY;
 
-        pushComponentToEL(context);
+        pushComponentToEL(context,null);
 
         // Process this component itself
         stateStruct[MY_STATE] = saveState(context);
@@ -1151,7 +1155,7 @@ public abstract class UIComponentBase extends UIComponent {
                 }
             }
             
-            pushComponentToEL(context);
+            pushComponentToEL(context,null);
 
             // if we have facets, add them to the stateList
             if (this.getFacetCount() > 0) {
@@ -1210,7 +1214,7 @@ public abstract class UIComponentBase extends UIComponent {
                 if (currentState == null) {
                     continue;
                 }
-                pushComponentToEL(context);
+                pushComponentToEL(context,null);
                 kid.processRestoreState(context, currentState);
                 popComponentFromEL(context);
             }
@@ -1229,7 +1233,7 @@ public abstract class UIComponentBase extends UIComponent {
                     facetName = (String) facetSaveState[0];
                     facetState = facetSaveState[1];
                     facet = getFacets().get(facetName);
-                    pushComponentToEL(context);
+                    pushComponentToEL(context,null);
                     facet.processRestoreState(context, facetState);
                     popComponentFromEL(context);
                 }
@@ -1657,44 +1661,57 @@ public abstract class UIComponentBase extends UIComponent {
 
         public Object get(Object keyObj) {
             String key = (String) keyObj;
+            Object result = null;
             if (key == null) {
                 throw new NullPointerException();
             }
             if (ATTRIBUTES_THAT_ARE_SET_KEY.equals(key)) {
-                return component.getAttributesThatAreSet(false);
+                result = component.getAttributesThatAreSet(false);
             }
-            PropertyDescriptor pd =
-                getPropertyDescriptor(key);
-            if (pd != null) {
-                try {
-                    Method readMethod = pd.getReadMethod();
-                    if (readMethod != null) {
-                        return (readMethod.invoke
-                                (component, EMPTY_OBJECT_ARRAY));
-                    } else {
-                        throw new IllegalArgumentException(key);
+            if (null == result) {
+                PropertyDescriptor pd =
+                        getPropertyDescriptor(key);
+                if (pd != null) {
+                    try {
+                        Method readMethod = pd.getReadMethod();
+                        if (readMethod != null) {
+                            result = (readMethod.invoke(component,
+                                    EMPTY_OBJECT_ARRAY));
+                        } else {
+                            throw new IllegalArgumentException(key);
+                        }
+                    } catch (IllegalAccessException e) {
+                        throw new FacesException(e);
+                    } catch (InvocationTargetException e) {
+                        throw new FacesException(e.getTargetException());
                     }
-                } catch (IllegalAccessException e) {
-                    throw new FacesException(e);
-                } catch (InvocationTargetException e) {
-                    throw new FacesException
-                        (e.getTargetException());
-                }
-            } else if (attributes != null) {
-                if (attributes.containsKey(key)) {
-                    return (attributes.get(key));
-                }
-            }
-            ValueExpression ve = component.getValueExpression(key);
-            if (ve != null) {
-                try {
-                    return ve.getValue(component.getFacesContext().getELContext());
-                }
-                catch (ELException e) {
-                    throw new FacesException(e);
+                } else if (attributes != null) {
+                    if (attributes.containsKey(key)) {
+                        result = (attributes.get(key));
+                        // If we have a non-null result and
+                        // this is a composite component
+                        if (null != result && attributes.containsKey(Resource.COMPONENT_RESOURCE_KEY)) {
+                            // check if the result is an expression
+                            if (result instanceof ValueExpression) {
+                                ValueExpression ve = (ValueExpression) result;
+                                result = ve.getValue(FacesContext.getCurrentInstance().getELContext());
+                            }
+                        }
+                    }
                 }
             }
-            return (null);
+            if (null == result) {
+                ValueExpression ve = component.getValueExpression(key);
+                if (ve != null) {
+                    try {
+                        result = ve.getValue(component.getFacesContext().getELContext());
+                    } catch (ELException e) {
+                        throw new FacesException(e);
+                    }
+                }
+            }
+            
+            return result;
         }
 
         public Object put(String keyValue, Object value) {

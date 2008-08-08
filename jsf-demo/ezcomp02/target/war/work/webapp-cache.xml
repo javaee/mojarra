@@ -1,0 +1,41 @@
+<webapp-structure>
+  <registeredFiles>
+    <entry>
+      <string>currentBuild</string>
+      <path-set>
+        <pathsSet class="linked-hash-set">
+          <string>WEB-INF/composite-test.taglib.xml</string>
+          <string>WEB-INF/faces-config.xml</string>
+          <string>WEB-INF/groovy/model/Bean.groovy</string>
+          <string>WEB-INF/web.xml</string>
+          <string>index.html</string>
+          <string>index.xhtml</string>
+          <string>page2.xhtml</string>
+          <string>resources/compositeTest/foo.xhtml</string>
+          <string>resources/ezcomp/LoginProductName.png</string>
+          <string>resources/ezcomp/colorAndMedia.css</string>
+          <string>resources/ezcomp/commontaskssection.css</string>
+          <string>resources/ezcomp/componentWithBackingJavaClass.xhtml</string>
+          <string>resources/ezcomp/css_master.css</string>
+          <string>resources/ezcomp/css_ns6up.css</string>
+          <string>resources/ezcomp/dot.gif</string>
+          <string>resources/ezcomp/gradlogbot.jpg</string>
+          <string>resources/ezcomp/gradlogsides.jpg</string>
+          <string>resources/ezcomp/layout.css</string>
+          <string>resources/ezcomp/login-backimage.jpg</string>
+          <string>resources/ezcomp/loginPanel.groovy</string>
+          <string>resources/ezcomp/loginPanel.properties</string>
+          <string>resources/ezcomp/loginPanel.xhtml</string>
+          <string>resources/ezcomp/loginPanelTemplate.xhtml</string>
+          <string>resources/ezcomp/primary-enabled.gif</string>
+          <string>resources/ezcomp/primary-roll.gif</string>
+          <string>resources/ezcomp/progressBar.css</string>
+          <string>resources/ezcomp/table2.css</string>
+          <string>resources/ezcomp/typography.css</string>
+          <string>WEB-INF/classes/ezcomp/componentWithBackingJavaClass.class</string>
+          <string>WEB-INF/lib/jsf-facelets-2.0-SNAPSHOT.jar</string>
+        </pathsSet>
+      </path-set>
+    </entry>
+  </registeredFiles>
+</webapp-structure>

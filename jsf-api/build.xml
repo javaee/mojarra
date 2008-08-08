@@ -782,32 +782,6 @@ javax.faces.level=ALL
   <jsf.mvn pomFile="jsf-api-pom.xml" mvnSpecVersion="${mvn.spec.version}" goals="deploy" />
 </target>
 
-<target name="push-local-to-maven" depends="push-to-maven-prepare" description="install jsf-api to the local maven repo.">
-
-  <exec executable="mvn" os="SunOS">
-    <arg line="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar " />
-  </exec>
-  <exec executable="mvn" os="Linux">
-    <arg line="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar  " />
-  </exec>
-  <exec executable="mvn" os="Mac OS X">
-    <arg line="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar  " />
-  </exec>
-  <exec executable="mvn" os="Darwin">
-    <arg line="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar  " />
-  </exec>
-  <exec executable="mvn.bat" os="Windows 2000">
-    <arg line="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar  " />
-  </exec>
-  <exec executable="mvn.bat" os="Windows 2003">
-    <arg line="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar  " />
-  </exec>
-  <exec executable="mvn.bat" os="Windows XP">
-    <arg line="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar  " />
-  </exec>
-
-</target>
-
 <target name="diffapis">
 
   <difftrees treeA="${src.dir}" treeB="/Users/edburns/Documents/Projects/JavaEE/workareas/jsf-trunk/jsf-api/src" />
