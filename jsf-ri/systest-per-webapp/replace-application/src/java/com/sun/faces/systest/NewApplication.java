@@ -48,14 +48,12 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.faces.FacesException;
-import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.ResourceHandler;
 import javax.faces.application.ViewHandler;
 import javax.faces.application.StateManager;
 import javax.faces.application.ProjectStage;
-import javax.faces.component.ActionSource;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -66,9 +64,7 @@ import javax.faces.el.ValueBinding;
 import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionListener;
 import javax.faces.event.SystemEvent;
-import javax.faces.event.SystemEventListenerHolder;
 import javax.faces.event.SystemEventListener;
-import javax.faces.render.RenderKit;
 import javax.faces.validator.Validator;
 
 import javax.el.ELContextListener;
@@ -95,7 +91,7 @@ public class NewApplication extends Application {
 
     @Override
     public void publishEvent(Class<? extends SystemEvent> systemEventClass,
-                             SystemEventListenerHolder source) {
+                             Object source) {
         oldApp.publishEvent(systemEventClass, source);
     }
 

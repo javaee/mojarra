@@ -65,9 +65,7 @@ import javax.el.ELException;
 import javax.el.ELResolver;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
-import javax.faces.event.SystemEventListenerHolder;
 import javax.faces.validator.Validator;
-import javax.faces.event.AbortProcessingException;
 
 
 /**
@@ -1344,7 +1342,7 @@ public abstract class Application {
      * @since 2.0
      */
     public void publishEvent(Class<? extends SystemEvent> systemEventClass,
-                                      SystemEventListenerHolder source) {
+                             Object source) {
 
         if (defaultApplication != null) {
             defaultApplication.publishEvent(systemEventClass, source);
