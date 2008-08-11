@@ -179,19 +179,16 @@
 
    </target>
 
-   <target name="build.javadocs.dist" depends="prepare.build.java.net">
+   <target name="build.spec.snapshot" depends="prepare.build.java.net">
 
-       <copy todir="${demo.dir}/dist" flatten="true">
+       <property name="spec.snapshot.dir" 
+                 value="${demo.dir}/dist/spec-snapshot" />
+
+       <copy todir="${spec.snapshot.dir}" flatten="true">
 
          <fileset dir="${javaserverfaces-spec-eg.dir}">
 
            <include name="**/*${build.number}*.pdf" />
-
-         </fileset>
-
-         <fileset dir="${basedir}/docs">
-
-           <include name="**/build.javadocs.dist*.html" />
 
          </fileset>
 
@@ -203,14 +200,21 @@
 
        <copy filtering="true"
              file="${basedir}/docs/build.javadocs.dist-index.html"
-             tofile="${demo.dir}/dist/index.html">
+             tofile="${spec.snapshot.dir}/index.html">
        </copy>
 
+
         <!-- Create the javadocs distribution -->
-        <zip destfile="${dist.dir}/jsf-javadocs-${spec.version}.zip">
-            <zipfileset dir="${demo.dir}/dist"
-                        includes="index.html,javadocs/**,renderkitdocs/**,tlddocs/**,*.pdf"
-                        prefix="mojarra-${impl.version}"/>
+        <unzip dest="${spec.snapshot.dir}"
+               src="${demo.dir}/dist/docs/javadocs-${impl.version}.zip" />
+        <unzip dest="${spec.snapshot.dir}"
+               src="${demo.dir}/dist/docs/renderkitdocs-${impl.version}.zip" />
+        <unzip dest="${spec.snapshot.dir}"
+               src="${demo.dir}/dist/docs/tlddocs-${impl.version}.zip" />
+
+        <zip destfile="${dist.dir}/jsf-spec-${spec.version}-${build.number}.zip">
+            <zipfileset dir="${spec.snapshot.dir}"
+                        prefix="jsf-spec-${spec.version}-${build.number}"/>
         </zip>
 
   </target>

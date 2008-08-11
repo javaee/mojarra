@@ -58,6 +58,16 @@ import javax.faces.context.FacesContext;
  * @since 2.0
  */
 public abstract class Resource {
+    
+    /**
+     * <p class="changed_added_2_0">This constant is used as the key in the 
+     * component attribute map of a composite component to associate 
+     * the component with its <code>Resource</code> instance.  The
+     * value for this key is the actual <code>Resource</code> instance.</p>
+     * 
+     */
+    public static final String COMPONENT_RESOURCE_KEY = 
+            "javax.faces.application.Resource.ComponentResource";
 
 
     private String contentType;

@@ -983,8 +983,11 @@ public class RenderKitUtils {
 
         BufferedReader reader = null;
         try {
-            URL url = Util.getCurrentLoader(appMap)
-                 .getResource("com/sun/faces/sunjsf.js");
+            // Don't use Util.getCurrentLoader().  This JS resource should
+            // be available from the same classloader that loaded RenderKitUtils.
+            // Doing so allows us to be more OSGi friendly.
+            URL url = RenderKitUtils.class.getClassLoader()
+                  .getResource("com/sun/faces/sunjsf.js");
             if (url == null) {
                 LOGGER.severe(
                      "jsf.renderkit.util.cannot_load_js");

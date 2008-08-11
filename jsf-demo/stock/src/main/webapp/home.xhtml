@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:s="https://javaserverfaces.dev.java.net/demo/stock">
+<f:view contentType="text/html"/>
+
+<h:head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>ajaxRequest/queueEvent Example</title>
+</h:head>
+
+
+<h:body>
+
+  <h:form id="myform" prependId="false">
+    <h:panelGrid styleClass="title-panel">
+        <h:outputText value="Stock Query" styleClass="title-panel-text"/>
+        <h:outputText value="Powered By JavaServer Faces 2.0" styleClass="title-panel-subtext"/>
+    </h:panelGrid>
+
+    <h:panelGrid border="1" columns="1" styleClass="panel-input-border">
+        <h:panelGrid border="1" columns="7">
+            <h:outputText value="Symbol:"/>
+            <h:inputText id="symbol"/>
+            <h:commandButton id="search" value="Search"
+                onclick="javax.faces.Ajax.ajaxRequest(this, {execute:'symbol,search,connection',render:'stockdata'});return false;"
+                actionListener="#{bean.getStockInfo}" />
+            <h:outputText value="Proxy Host:"/>
+            <h:inputText id="proxyHost"/>
+            <h:outputText value="Proxy Port:"/>
+            <h:inputText id="proxyPort"/>
+            <h:outputText value="Streaming:"/>
+            <h:selectOneMenu id="streaming" value="Off"
+                onchange="toggleStreaming()">
+                <f:selectItem itemValue="Off" itemLabel="Off"/>
+                <f:selectItem itemValue="On" itemLabel="On"/>
+            </h:selectOneMenu>
+            <h:selectOneMenu id="connection" value="Local">
+                <f:selectItem itemValue="Local" itemLabel="Local"/>
+                <f:selectItem itemValue="Remote" itemLabel="Remote"/>
+            </h:selectOneMenu>
+        </h:panelGrid>
+    </h:panelGrid>
+
+    <s:stockTable id="stockdata" border="1" columns="8" cellspacing="5" styleClass="panel-data-border"/>
+
+  <h:outputStylesheet name="stylesheet.css" />
+
+</h:form>
+
+</h:body>
+
+</html>

@@ -435,4 +435,17 @@ public abstract class
         }
     }
 
+    /*<p class="changed_added_2_0">
+     * Convenience method to return the view state as a <code>String</code>
+     * just as it would have been written to the response.  This method should
+     * call {@link #saveView(FacesContext context)} to get the <code>Object</code>
+     * state and then capture the output from
+     * {@link #writeState(FacesContext context, Object state)}.
+     *
+     * @param context {@link FacesContext} for the current request
+     */
+    public String getViewState(FacesContext context) {
+        return null;
+    }
+
 }

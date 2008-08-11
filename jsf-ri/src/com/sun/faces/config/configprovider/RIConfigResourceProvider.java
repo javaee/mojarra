@@ -65,7 +65,11 @@ public class RIConfigResourceProvider implements ConfigurationResourceProvider {
     public List<URL> getResources(ServletContext context) {
 
         List<URL> list = new ArrayList<URL>(1);
-        list.add(Util.getCurrentLoader(this).getResource(JSF_RI_CONFIG));
+        // Don't use Util.getCurrentLoader().  This config resource should
+        // be available from the same classloader that loaded this instance.
+        // Doing so allows us to be more OSGi friendly.
+        ClassLoader loader = this.getClass().getClassLoader();
+        list.add(loader.getResource(JSF_RI_CONFIG));
         return list;
 
     }

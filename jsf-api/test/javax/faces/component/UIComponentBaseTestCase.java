@@ -163,7 +163,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         TestComponent c = new TestComponent();
         facesContext.getAttributes().clear();
         assertNull(facesContext.getAttributes().get(key));
-        c.pushComponentToEL(facesContext);
+        c.pushComponentToEL(facesContext, null);
         assertTrue(facesContext.getAttributes().get(key) == c);
         c.popComponentFromEL(facesContext);
         assertNull(facesContext.getAttributes().get(key));
@@ -171,7 +171,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         // ensure a push/pop seqeunce restores the previous component
         TestComponent c1 = new TestComponent();
         facesContext.getAttributes().put(key, c1);
-        c.pushComponentToEL(facesContext);
+        c.pushComponentToEL(facesContext, null);
         assertTrue(facesContext.getAttributes().get(key) == c);
         c.popComponentFromEL(facesContext);
         assertTrue(facesContext.getAttributes().get(key) == c1);

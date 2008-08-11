@@ -42,17 +42,29 @@ package javax.faces.component;
 
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
+import java.util.MissingResourceException;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
+import javax.faces.application.Resource;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
@@ -103,6 +115,64 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
     public static final String CURRENT_COMPONENT = "javax.faces.component.CURRENT_COMPONENT";
 
     /**
+     * The key to which the <em>composite</em> <code>UIComponent</code>
+     * currently being processed will be associated with within the
+     * {@link FacesContext} attributes map.
+     *
+     * @see javax.faces.context.FacesContext#getAttributes()
+     *
+     * @since 2.0
+     */
+    public static final String CURRENT_COMPOSITE_COMPONENT = "javax.faces.component.CURRENT_COMPOSITE_COMPONENT";
+
+    /**
+     * <p class="changed_added_2_0">The value of this constant is used as the key in the
+     * component attribute map, the value for which is a
+     * <code>java.beans.BeanInfo</code> implementation describing the composite
+     * component.  This <code>BeanInfo</code> is known as the 
+     * <em>composite component BeanInfo</em>.</p>
+     */
+    
+    public static final String BEANINFO_KEY = "javax.faces.component.BEANINFO_KEY";
+
+    /**
+     * 
+     * <p class="changed_added_2_0">The value of this constant is used as the key
+     * in the <em>composite component BeanDescrpitor</em> for the 
+     * <code>Map&lt;PropertyDescriptor&gt;</code> that contains meta-information
+     * for the declared facets for this composite component.
+     * This map must contain an entry under the key {@link #COMPOSITE_FACET_NAME}, even
+     * if no facets were explicitly declared.  See {@link #COMPOSITE_FACET_NAME}.</p>
+     */
+    public static final String FACETS_KEY = "javax.faces.component.FACETS_KEY";
+    
+    /**
+     * 
+     * <p class="changed_added_2_0">The value of this constant is used as the key
+     * in the <em>composite component BeanDescrpitor</em> for a 
+     * <code>ValueExpression</code> that evaluates to the 
+     * <code>component-type</code> of the <em>composite component root</em>
+     * <code>UIComponent</code> for this composite component, if
+     * one was declared by the composite component author.</p>
+     */
+    public static final String COMPOSITE_COMPONENT_TYPE_KEY = "javax.faces.component.COMPOSITE_COMPONENT_TYPE";
+    
+    /**
+     * 
+     * <p class="changed_added_2_0">The value of this constant is used as the key
+     * in the <code>Map</code> returned as described in {@link #FACETS_KEY}
+     * for the 
+     * <code>PropertyDescriptor</code> describing the composite component facet.
+     * The value of this constant is also used as the key in the <code>Map</code>
+     * returned from {@link #getFacets}.  In this case, it refers to the actual
+     * facet that is the {@link javax.faces.component.UIPanel} that is the parent of the all
+     * of the components in the <code>&lt;composite:implementation&gt;</code>
+     * section of the <em>composite component PDL file</em>.</p>
+     */
+    public static final String COMPOSITE_FACET_NAME = "javax.faces.component.COMPOSITE_FACET_NAME";
+    
+    
+    /**
      * This array represents the packages that can leverage the
      * <code>attributesThatAreSet</code> List for optimized attribute
      * rendering.
@@ -133,7 +203,8 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
 
 
     /**
-     * <p>Return a mutable <code>Map</code> representing the attributes
+     * <p><span class="changed_modified_2_0">Return</span> a mutable 
+     * <code>Map</code> representing the attributes
      * (and properties, see below) associated wth this {@link UIComponent},
      * keyed by attribute name (which must be a String).  The returned
      * implementation must support all of the standard and optional
@@ -165,6 +236,19 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      *         <code>IllegalArgumentException</code>.</li>
      *     </ul></li>
      * </ul>
+     * 
+     * <p class="changed_added_2_0">The <code>get()</code> method of the
+     * <code>Map</code> must take the following additional action 
+     * if this component instance is a
+     * composite component instance (indicated by the presence of a 
+     * component attribute under the key given by the value of 
+     * {@link javax.faces.application.Resource#COMPONENT_RESOURCE_KEY}): 
+     * If the result to be returned from the <code>get()</code> method is a
+     * {@link ValueExpression}, call the 
+     * {@link ValueExpression#getValue(javax.el.ELContext)} method and return 
+     * the result from <code>get()</code>.  Otherwise, return the actual value
+     * from the <code>get()</code> method.
+     * </p>
      */
     public abstract Map<String, Object> getAttributes();
 
@@ -515,8 +599,265 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * UIComponentBase#encodeChildren}.</p>
      */
     public abstract boolean getRendersChildren();
+    
+
+    
+    private transient Map<String, String> resourceBundleMap = null;
+    
+    /**
+     * <p class="changed_added_2_0">Return a <code>Map&lt;String,String&gt;</code> of the 
+     * <code>ResourceBundle</code> for this component.  A component may have a
+     * <code>ResourceBundle</code> associated with it.  This bundle may contain
+     * localized properties relating to instances of this component.
+     * The default implementation first looks for a <code>ResourceBundle</code>
+     * with a base name equal to the fully qualified class name of the 
+     * current instance.  If no such bundle is found, and the component
+     * is a composite component, a {@link Resource} is created, with the 
+     * <em>resourceName</em> being derived by taking the <em>resourceName</em>
+     * of the {@link Resource} for this composite component and replacing the
+     * file extension with ".properties".  The <em>libraryName</em> is taken
+     * directly from the {@link Resource} for this composite component.  If 
+     * the resultant {@link Resource} exists and can be found, the 
+     * <code>InputStream</code> for the resource is used to create a 
+     * <code>ResourceBundle</code>.  If either of the two previous steps for
+     * obtaining the <code>ResourceBundle</code> for this component is successful,
+     * the <code>ResourceBundle</code> is wrapped in a 
+     * <code>Map&lt;String,String&gt;</code> and returned.  Otherwise
+     * <code>Collections.EMPTY_MAP</code> is returned.</p>
+     * 
+     * 
+     */
+    public Map<String,String> getResourceBundleMap() {
+        
+        if (null == resourceBundleMap) {
+            // See if there is a ResourceBundle under the FQCN for this class
+            String className = this.getClass().getName();
+            Locale currentLocale = null;
+            FacesContext context = null;
+            UIViewRoot root = null;
+            ResourceBundle resourceBundle = null;
+            
+            // Step 1: look for a ResourceBundle under the FQCN of this instance
+            if (null != (context = FacesContext.getCurrentInstance())) {
+                if (null != (root = context.getViewRoot())) {
+                    currentLocale = root.getLocale();
+                }
+            }
+            if (null == currentLocale) {
+                currentLocale = Locale.getDefault();
+            }
+            try {
+                resourceBundle = 
+                        ResourceBundle.getBundle(className, currentLocale);
+            } catch (MissingResourceException e) {
+                // It is not an error if there is no ResourceBundle
+            }
+            
+            // Step 2: if this is a composite component, look for a 
+            // ResourceBundle as a Resource
+            if (null == resourceBundle) {
+                if (this.getAttributes().containsKey(Resource.COMPONENT_RESOURCE_KEY)) {
+                    Resource compositeComponentResource = (Resource)
+                            this.getAttributes().get(Resource.COMPONENT_RESOURCE_KEY);
+                    if (null != compositeComponentResource) {
+                        if (null != (compositeComponentResource = 
+                                findComponentResourceBundleLocaleMatch(context, 
+                                compositeComponentResource.getResourceName(), 
+                                compositeComponentResource.getLibraryName()))) {
+                            try {
+                                InputStream propertiesInputStream = compositeComponentResource.getInputStream();
+                                resourceBundle = new PropertyResourceBundle(propertiesInputStream);
+                            } catch (IOException ex) {
+                                Logger.getLogger(UIComponent.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // Step 3: if the previous steps yielded a ResourceBundle, wrap it
+            // with a Map
+            
+            if (null != resourceBundle) {
+                final ResourceBundle bundle = resourceBundle;
+                resourceBundleMap = 
+                        new Map() {
+                            // this is an immutable Map
+
+                            public String toString() {
+                                StringBuffer sb = new StringBuffer();
+                                Iterator<Map.Entry<String, Object>> entries =
+                                        this.entrySet().iterator();
+                                Map.Entry<String, Object> cur;
+                                while (entries.hasNext()) {
+                                    cur = entries.next();
+                                    sb.append(cur.getKey()).append(": ").append(cur.getValue()).append('\n');
+                                }
+
+                                return sb.toString();
+                            }
+
+                            // Do not need to implement for immutable Map
+                            public void clear() {
+                                throw new UnsupportedOperationException();
+                            }
 
 
+                            public boolean containsKey(Object key) {
+                                boolean result = false;
+                                if (null != key) {
+                                    result = (null != bundle.getObject(key.toString()));
+                                }
+                                return result;
+                            }
+
+
+                            public boolean containsValue(Object value) {
+                                Enumeration<String> keys = bundle.getKeys();
+                                boolean result = false;
+                                while (keys.hasMoreElements()) {
+                                    Object curObj = bundle.getObject(keys.nextElement());
+                                    if ((curObj == value) ||
+                                            ((null != curObj) && curObj.equals(value))) {
+                                        result = true;
+                                        break;
+                                    }
+                                }
+                                return result;
+                            }
+
+
+                            public Set<Map.Entry<String, Object>> entrySet() {
+                                HashMap<String, Object> mappings = new HashMap<String, Object>();
+                                Enumeration<String> keys = bundle.getKeys();
+                                while (keys.hasMoreElements()) {
+                                    String key = keys.nextElement();
+                                    Object value = bundle.getObject(key);
+                                    mappings.put(key, value);
+                                }
+                                return mappings.entrySet();
+                            }
+
+
+                            @Override
+                            public boolean equals(Object obj) {
+                                return !((obj == null) || !(obj instanceof Map))
+                                         && entrySet().equals(((Map) obj).entrySet());
+
+                            }
+
+
+                            public Object get(Object key) {
+                                if (null == key) {
+                                    return null;
+                                }
+                                try {
+                                    return bundle.getObject(key.toString());
+                                } catch (MissingResourceException e) {
+                                    return "???" + key + "???";
+                                }
+                            }
+
+
+                            public int hashCode() {
+                                return bundle.hashCode();
+                            }
+
+
+                            public boolean isEmpty() {
+                                Enumeration<String> keys = bundle.getKeys();
+                                return !keys.hasMoreElements();
+                            }
+
+
+                            public Set keySet() {
+                                Set<String> keySet = new HashSet<String>();
+                                Enumeration<String> keys = bundle.getKeys();
+                                while (keys.hasMoreElements()) {
+                                    keySet.add(keys.nextElement());
+                                }
+                                return keySet;
+                            }
+
+
+                            // Do not need to implement for immutable Map
+                            public Object put(Object k, Object v) {
+                                throw new UnsupportedOperationException();
+                            }
+
+
+                            // Do not need to implement for immutable Map
+                            public void putAll(Map t) {
+                                throw new UnsupportedOperationException();
+                            }
+
+
+                            // Do not need to implement for immutable Map
+                            public Object remove(Object k) {
+                                throw new UnsupportedOperationException();
+                            }
+
+
+                            public int size() {
+                                int result = 0;
+                                Enumeration<String> keys = bundle.getKeys();
+                                while (keys.hasMoreElements()) {
+                                    keys.nextElement();
+                                    result++;
+                                }
+                                return result;
+                            }
+
+
+                            public java.util.Collection values() {
+                                ArrayList<Object> result = new ArrayList<Object>();
+                                Enumeration<String> keys = bundle.getKeys();
+                                while (keys.hasMoreElements()) {
+                                    result.add(
+                                            bundle.getObject(keys.nextElement()));
+                                }
+                                return result;
+                            }
+                        };
+
+            }
+
+            if (null == resourceBundleMap) {
+                resourceBundleMap = Collections.EMPTY_MAP;
+            }
+
+        }
+        
+        return resourceBundleMap;
+    }
+    // PENDING(rlubke): This method needs to do the same current locale matching
+    // as in ResourceBundle.getBundle().  I'm sure there's a more efficient
+    // way to handle this.
+    private Resource findComponentResourceBundleLocaleMatch(FacesContext context, 
+            String resourceName, String libraryName) {
+        Resource result = null;
+        ResourceBundle resourceBundle = null;
+        int i;
+        if (-1 != (i = resourceName.lastIndexOf("."))) {
+            resourceName = resourceName.substring(0, i) +
+                    ".properties";
+            if (null != context) {
+                result = context.getApplication().getResourceHandler().
+                        createResource(resourceName, libraryName);
+                try {
+                    InputStream propertiesInputStream = result.getInputStream();
+                    resourceBundle = new PropertyResourceBundle(propertiesInputStream);
+                } catch (IOException ex) {
+                    Logger.getLogger(UIComponent.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        result = (null != resourceBundle) ? result : null;
+        
+        return result;
+    }
+    
+    
     // This is necessary for JSF components that extend from UIComponent
     // directly rather than extending from UIComponentBase.  Such components
     // may need to have implementations provided for methods that originated
@@ -901,7 +1242,7 @@ private void doFind(FacesContext context, String clientId) {
      * <code>rendered</code> property is <code>true</code>, render the
      * beginning of the current state of this {@link UIComponent} to the
      * response contained in the specified {@link FacesContext}. 
-     * Call {@link #pushComponentToEL(javax.faces.context.FacesContext)}.
+     * Call {@link #pushComponentToEL(javax.faces.context.FacesContext,javax.faces.component.UIComponent)}.
      * Call {@link javax.faces.application.Application#publishEvent}, passing
      * {@link javax.faces.event.BeforeRenderEvent}<code>.class</code> as the
      * first argument and the component instance to be rendered as the
@@ -913,7 +1254,7 @@ private void doFind(FacesContext context, String clientId) {
      * </p>
      *
      * <p class="changed_added_2_0">If our <code>rendered</code> property is
-     * <code>false</code>, call {@link #pushComponentToEL(javax.faces.context.FacesContext)}
+     * <code>false</code>, call {@link #pushComponentToEL(javax.faces.context.FacesContext,javax.faces.component.UIComponent)}
      * and return immediately.</p>
      *
      * @param context {@link FacesContext} for the response we are creating
@@ -1008,14 +1349,15 @@ private void doFind(FacesContext context, String clientId) {
     }
 
 
-    private UIComponent previouslyPushed;
+    private transient UIComponent previouslyPushed = null;
+    private transient UIComponent previouslyPushedCompositeComponent = null;
 
     /**
      * <p class="changed_added_2_0">Push the current
      * <code>UIComponent</code> <code>this</code> to the {@link FacesContext}
      * attribute map using the key {@link #CURRENT_COMPONENT} saving the previous
      * <code>UIComponent</code> associated with {@link #CURRENT_COMPONENT} for a
-     * subsequent call to {@link @popComponentFromEL}.</p>
+     * subsequent call to {@link #popComponentFromEL}.</p>
      *
      * <pclass="changed_added_2_0">This method and <code>popComponentFromEL()</code> form the basis for
      * the contract that enables the EL Expression "<code>#{component}</code>" to
@@ -1036,11 +1378,21 @@ private void doFind(FacesContext context, String clientId) {
      *
      * @since 2.0
      */
-    protected final void pushComponentToEL(FacesContext context) {
+    protected final void pushComponentToEL(FacesContext context, UIComponent component) {
 
         Map<Object,Object> contextMap = context.getAttributes();
+        if (null == component) {
+            component = this;
+        }
         if (contextMap != null) {
-            previouslyPushed = (UIComponent) contextMap.put(CURRENT_COMPONENT, this);
+            previouslyPushed = (UIComponent) contextMap.put(CURRENT_COMPONENT, component);
+            // If this is a composite component...
+            if (component.getAttributes().containsKey(Resource.COMPONENT_RESOURCE_KEY)) {
+                // make it so #{compositeComponent} resolves to this composite 
+                // component, preserving the previous value if present
+                previouslyPushedCompositeComponent = 
+                        (UIComponent) contextMap.put(CURRENT_COMPOSITE_COMPONENT, component);
+            }
         }
 
     }
@@ -1065,6 +1417,11 @@ private void doFind(FacesContext context, String clientId) {
             } else {
                 contextMap.remove(CURRENT_COMPONENT);
             }
+            
+            if (null != previouslyPushedCompositeComponent) {
+                contextMap.put(CURRENT_COMPOSITE_COMPONENT, 
+                        previouslyPushedCompositeComponent);
+            } 
         }
 
     }
@@ -1091,7 +1448,15 @@ private void doFind(FacesContext context, String clientId) {
         return (UIComponent) contextMap.get(CURRENT_COMPONENT);
 
     }
+    
+    public static UIComponent getCurrentCompositeComponent() {
 
+        FacesContext context = FacesContext.getCurrentInstance();
+        Map<Object, Object> contextMap = context.getAttributes();
+        return (UIComponent) contextMap.get(CURRENT_COMPOSITE_COMPONENT);
+
+    }
+    
     // -------------------------------------------------- Event Listener Methods
 
 

@@ -89,6 +89,16 @@
     <output-script-renderer-class>
         com.sun.faces.renderkit.html_basic.ScriptRenderer
     </output-script-renderer-class>
+    <naming-container-composite-renderer-class>
+        com.sun.faces.renderkit.html_basic.CompositeRenderer
+    </naming-container-composite-renderer-class>
+    <output-consuming-page-composite-children-renderer-class>
+        com.sun.faces.renderkit.html_basic.ConsumingPageCompositeChildrenRenderer
+    </output-consuming-page-composite-children-renderer-class>
+    <output-composite-facet-renderer-class>
+        com.sun.faces.renderkit.html_basic.CompositeFacetRenderer
+    </output-composite-facet-renderer-class>
+
     <output-stylesheet-renderer-class>
         com.sun.faces.renderkit.html_basic.StylesheetRenderer
     </output-stylesheet-renderer-class>

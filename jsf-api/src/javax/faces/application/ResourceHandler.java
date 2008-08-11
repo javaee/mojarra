@@ -271,6 +271,17 @@ public abstract class ResourceHandler {
     public abstract Resource createResource(String resourceName,
                                             String libraryName,
                                             String contentType);
+    
+    /**
+     * <p class="changed_added_2_0">Return <code>true</code> if the 
+     * resource library named by the argument <code>libraryName</code>
+     * can be found.</p>
+     *
+     * @since 2.0
+     * 
+     */
+    
+    public abstract boolean libraryExists(String libraryName);
 
 
     /**

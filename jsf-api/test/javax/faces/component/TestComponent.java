@@ -123,7 +123,7 @@ public class TestComponent extends UIComponentBase {
     }
 
     public void callPushComponent(FacesContext context) {
-        pushComponentToEL(context);
+        pushComponentToEL(context,null);
     }
 
     public void callPopComponent(FacesContext context) {

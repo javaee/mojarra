@@ -57,6 +57,7 @@
     <property name="test.dir" value="${basedir}/test"/>
     <property name="dist.dir" value="${basedir}/dist"/>
     <property name="build.dir" value="build"/>
+    <property name="target.dir" value="target"/>
     <property name="build.classes.dir" value="${build.dir}/classes"/>
     <property name="build.lib.dir" value="${build.dir}/lib"/>
     <property name="build.resources.dir" value="${build.dir}/javascript/resources/javax.faces"/>
@@ -620,8 +621,6 @@ javax.faces.level=ALL
         <jar jarfile="${build.lib.dir}/${name}.jar" update="yes">
             <metainf dir="${build.dir}/javascript"/>
         </jar>
-
-
     </target>
 
 
@@ -632,6 +631,7 @@ javax.faces.level=ALL
     -->
     <target name="clean" description="Clean build directory">
         <delete dir="${build.dir}"/>
+        <delete dir="${target.dir}"/>
         <delete dir="${api.test.results.dir}"/>
         <delete>
             <fileset dir="." includes="**/.nbattrs" defaultexcludes="no"/>
@@ -768,70 +768,19 @@ javax.faces.level=ALL
 
     </target>
 
-<target name="push-to-maven-prepare">
-  <taskdef resource="maven-repository-importer.properties">
-    <classpath>
-      <pathelement path="${maven.repository.importer.jar}" />
-    </classpath>
-  </taskdef>
+<target name="push-to-maven-prepare" depends="jars">
 
-  <!-- Create the source distribution -->
-  <mkdir dir="${dist.dir}" />
-  <jar destfile="${dist.dir}/${name}-sources-${impl.version}.zip">
-      <zipfileset dir="${basedir}"
-               includes="LICENSE.txt"/>
-      <zipfileset dir="${src.dir}"
-               excludes="**/CVS/**"/>
-      <zipfileset dir="${build.generate.dir}"
-               excludes="**/CVS/**,facesdoc/**,last-generation"/>
-  </jar>
+  <mkdir dir="${target.dir}/classes" />
+  <unjar src="${build.lib.dir}/${name}.jar" overwrite="yes" 
+         dest="${target.dir}/classes"/>
+  <jsf.mvn pomFile="jsf-api-pom.xml" mvnSpecVersion="${mvn.spec.version}" goals="install" />
 
-  <delete dir="${build.dir}/maven-repo" /><!-- clean it -->
-  <maven-repository-importer destdir="${build.dir}/maven-repo" version="${snapshot.version}">
-    <artifact jar="${build.lib.dir}/jsf-api.jar"  pom="jsf-api-pom.xml" srczip="${dist.dir}/${name}-sources-${impl.version}.zip"/>
-  </maven-repository-importer>
 </target>
 
 <target name="push-to-maven" depends="push-to-maven-prepare">
-  <!-- import to CVS-->
   <tstamp />
-  <echo>importing to CVS...</echo>
-  <cvs dest="${build.dir}/maven-repo">
-    <commandline>
-      <argument value="-d:pserver:${user.name}@cvs.dev.java.net:/cvs" />
-      <argument line="-z9 import -ko -W *.jar -kb -m" />
-      <argument value="deploying new jars to the java.net maven repository" />
-
-      <argument value="javaserverfaces-sources/repo" />
-      <argument line="deployment-to-maven-repository t${DSTAMP}${TSTAMP}" />
-    </commandline>
-  </cvs>
-</target>
-
-<target name="push-local-to-maven" depends="push-to-maven-prepare" description="install jsf-api to the local maven repo.">
-
-  <exec executable="mvn" os="SunOS">
-    <arg line="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar " />
-  </exec>
-  <exec executable="mvn" os="Linux">
-    <arg line="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar  " />
-  </exec>
-  <exec executable="mvn" os="Mac OS X">
-    <arg line="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar  " />
-  </exec>
-  <exec executable="mvn" os="Darwin">
-    <arg line="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar  " />
-  </exec>
-  <exec executable="mvn.bat" os="Windows 2000">
-    <arg line="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar  " />
-  </exec>
-  <exec executable="mvn.bat" os="Windows 2003">
-    <arg line="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar  " />
-  </exec>
-  <exec executable="mvn.bat" os="Windows XP">
-    <arg line="install:install-file -DgroupId=javax.faces -DartifactId=${artifact-id} -Dversion=${snapshot.version} -Dpackaging=jar -Dfile=${build.dir}/maven-repo/javax.faces/jars/${artifact-id}-${snapshot.version}.jar  " />
-  </exec>
-
+  <echo>deploying to maven repo</echo>
+  <jsf.mvn pomFile="jsf-api-pom.xml" mvnSpecVersion="${mvn.spec.version}" goals="deploy" />
 </target>
 
 <target name="diffapis">

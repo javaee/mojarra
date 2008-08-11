@@ -17487,6 +17487,10 @@
 <dd>javax.faces.resource.Stylesheet
 </dd>
 
+<dd>javax.faces.Composite
+</dd>
+
+
 </dl>
 
      </div>
@@ -25995,6 +25999,107 @@
       <renderer-extension>
         <renders-children>true</renders-children>
       </renderer-extension>
+    </renderer>
+    <renderer>
+      <description><![CDATA[<div class="changed_added_2_0">
+
+<p>Renders a composite component.</p>
+
+      <p>Decode Behavior</p>
+
+      <ul>
+
+<p>No action is required during decode for this renderer.</p>
+
+</ul>
+
+      <p>Encode Behavior</p>
+
+
+</div>]]></description>
+      <component-family>javax.faces.NamingContainer</component-family>
+      <renderer-type>javax.faces.Composite</renderer-type>
+      <renderer-class>
+        com.sun.faces.renderkit.html_basic.CompositeRenderer
+    </renderer-class>
+    </renderer>
+    <renderer>
+      <description><![CDATA[<div class="changed_added_2_0">
+
+<p>Renders the children of a composite component that were declared in
+the consuming page.</p>
+
+      <p>Decode Behavior</p>
+
+      <ul>
+
+<p>No action is required during decode for this renderer.</p>
+
+</ul>
+
+      <p>Encode Behavior</p>
+
+<p><code>encodeBegin()</code> and <code>encodeEnd()</code> must take no
+action for this renderer.  Due to the specification of the
+<code>&lt;composite:insertChildren&gt;</code> tag handler, the component
+passed to the <code>encodeChildern()</code> method of this renderer will
+be the component with <code>component-family</code>
+<code>javax.faces.Output</code> and <code>renderer-type</code> equal to
+the one for this renderer.  <code>encodeBegin()</code> must find the
+closest ancestor composite component in which the argument component is
+nested.  If no such component can be found, thow
+<code>IOException</code>.  Otherwise get the list of child components
+from the composite component.  For each element in that list, call
+<code>encodeAll()</code> on that element.</p>
+
+
+</div>]]></description>
+      <component-family>javax.faces.Output</component-family>
+      <renderer-type>javax.faces.ConsumingPageCompositeChildren</renderer-type>
+      <renderer-class>
+        com.sun.faces.renderkit.html_basic.ConsumingPageCompositeChildrenRenderer
+    </renderer-class>
+    </renderer>
+    <renderer>
+      <description><![CDATA[<div class="changed_added_2_0">
+
+<p>Renders a facet at this particular point in the composite component PDL page.</p>
+
+      <p>Decode Behavior</p>
+
+      <ul>
+
+<p>No action is required during decode for this renderer.</p>
+
+</ul>
+
+      <p>Encode Behavior</p>
+
+<p><code>encodeBegin()</code> and <code>encodeEnd()</code> must take no
+action for this renderer.  Due to the specification of the
+<code>&lt;composite:insertChildren&gt;</code> tag handler, the component
+passed to the <code>encodeChildern()</code> method of this renderer will
+be the component with <code>component-family</code>
+<code>javax.faces.Output</code> and <code>renderer-type</code> equal to
+the one for this renderer.  The implementation of
+<code>encodeBegin()</code>, must obtain the component attribute value
+under the key given by the value of the symbolic constant
+<code>UIComponent.FACETS_KEY</code> from the attributes map of the
+argument component.  If not found, throw <code>IOException</code>.  This
+value is referred to as "facetName" for discission.  Find the closest
+ancestor composite component in which the argument component is nested.
+If no such component can be found, thow <code>IOException</code>.
+Otherwise, get the facet whose name is "facetName".  If found call
+<code>encodeAll()</code> on the facet.</p>
+
+
+
+</div>]]></description>
+      <component-family>javax.faces.Output</component-family>
+      <renderer-type>javax.faces.CompositeFacet</renderer-type>
+      <renderer-class>
+        com.sun.faces.renderkit.html_basic.CompositeFacetRenderer
+    </renderer-class>
     </renderer>
     <renderer>
       <description><![CDATA[<div class="changed_added_2_0">

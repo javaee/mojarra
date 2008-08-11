@@ -864,7 +864,11 @@ public class WebConfiguration {
         RegisterConverterPropertyEditors(
             "com.sun.faces.registerConverterPropertyEditors",
             false
-        );
+        ),
+        EnableGroovyScripting(
+            "com.sun.faces.enableGroovyScripting",
+            false
+	);
 
         private BooleanWebContextInitParameter alternate;
 

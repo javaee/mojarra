@@ -47,11 +47,6 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
-import javax.el.ELContextListener;
-import javax.el.ELException;
-import javax.el.ELResolver;
-import javax.el.ExpressionFactory;
-import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -62,10 +57,17 @@ import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.el.ValueBinding;
 import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionListener;
+
+import javax.el.ELContextListener;
+import javax.el.ExpressionFactory;
+import javax.el.ValueExpression;
+import javax.el.ELException;
+import javax.el.ELResolver;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEventListenerHolder;
 import javax.faces.validator.Validator;
+import javax.faces.event.AbortProcessingException;
 
 
 /**
@@ -687,6 +689,42 @@ public abstract class Application {
     public abstract UIComponent createComponent(String componentType)
         throws FacesException;
 
+
+    /**
+     * <p class="changed_added_2_0">Instantiate and return a new {@link
+     * UIComponent} instance from the argument {@link Resource}.  The
+     * default implementation must support resources that resolve to
+     * source files defining <code>UIComponent</code>s authored in the
+     * <a href="http://www.jcp.org/en/jsr/detail?id=241">Groovy
+     * programming language</a>.</p>
+     *
+     * <div class="changed_added_2_0">
+
+     * <p>Before the component instance is
+     * returned, it must be inspected for the presence of a {@link
+     * javax.faces.event.ListenerFor} annotation.  If this annotation is present,
+     * the action listed in {@link javax.faces.event.ListenerFor} must be taken on
+     * the component, before it is returned from this method.</p>
+
+     * </div>
+     *
+     * @param componentResource A {@link Resource} that points to a
+     * source file that provides an implementation of a component.
+     *
+     * @throws FacesException if a {@link UIComponent} from the {@link
+     * Resource} cannot be created
+     * @throws NullPointerException if <code>componentResource</code>
+     *  is <code>null</code>
+     */
+    
+    public UIComponent createComponent(Resource componentResource) 
+            throws FacesException {
+
+        UIComponent result = null;
+        
+        return result;
+    }
+    
 
     /**
      * <p>Wrap the argument <code>componentBinding</code> in an

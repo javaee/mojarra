@@ -137,7 +137,7 @@ public class ResourceCache {
         WebConfiguration config = WebConfiguration.getInstance();
         assert (config != null);
         ServletContext sc = config.getServletContext();
-        contextName = sc.getContextPath();
+        contextName = getServletContextIdentifier(sc);
         shutdown = false;
         int checkPeriod = getCheckPeriod(config);
         if (checkPeriod >= 0) {
@@ -355,6 +355,17 @@ public class ResourceCache {
     }
 
 
+    private static String getServletContextIdentifier(ServletContext context) {
+
+        if (context.getMajorVersion() == 2 && context.getMinorVersion() < 5) {
+            return context.getServletContextName();
+        } else {
+            return context.getContextPath();
+        }
+
+    }
+
+
     // ----------------------------------------------------------- Inner Classes
 
 
@@ -434,6 +445,7 @@ public class ResourceCache {
         private Map<String,Set<String>> layout;
         private ServletContext sc;
         private String startPath;
+        private String contextPath;
 
 
         // -------------------------------------------------------- Constructors
@@ -457,6 +469,7 @@ public class ResourceCache {
             }
             this.startPath = startPath;
             this.sc = sc;
+            contextPath = getServletContextIdentifier(sc);
             layout = new HashMap<String,Set<String>>();
             createSnapshot(layout);
 
@@ -478,7 +491,7 @@ public class ResourceCache {
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.log(Level.FINE,
                                "[{0}] Change detected in webapp filesystem",
-                               new Object[] { sc.getContextPath(), startPath });
+                               new Object[] { contextPath, startPath });
                 }
                 layout = temp;
             }
@@ -494,7 +507,7 @@ public class ResourceCache {
         public String toString() {
 
             return "[WebappResourceMonitor] Monitoring->"
-                   + sc.getContextPath()
+                   + contextPath
                    + ':'
                    + startPath;
 
