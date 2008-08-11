@@ -108,18 +108,32 @@ javax.faces.Ajax.ajaxRequest = function(event, options) {
     event = event || window.event || null;
 
     // Determine the element that triggered this Ajax request..
-    var element = event.target || event.srcElement || null;
+    var source = event.target || event.srcElement || null;
 
     var utils = new javax.faces.Ajax.Utils();
-    var form = utils.getForm(element); 
+    var form = utils.getForm(source); 
     var viewState = javax.faces.Ajax.viewState(form);
 
+    // Set up additional arguments to be used in the request..
     var args = new Object();
+    if (options.execute) {
+        args["javax.faces.partial.execute"] = utils.toArray(options.execute,',').join(','); 
+    }
+    if (options.render) {
+        args["javax.faces.partial.render"] = utils.toArray(options.render,',').join(','); 
+    }
+
     utils.extend(args, options);
-    args["javax.faces.Ajax.ajaxRequest"] = "true";
+    args["javax.faces.partial.ajax"] = "true";
     args["method"] = "POST";
     args["url"] = form.action;
-    args["source"] = element;
+    // add source
+    var action = utils.$(source);
+    if (action && action.form) {
+        args[action.name] = action.value || 'x';
+    } else {
+        args[source] = source;
+    }
 
     var ajaxEngine = new javax.faces.Ajax.AjaxEngine();
     ajaxEngine.setupArguments(args);
@@ -136,11 +150,125 @@ javax.faces.Ajax.ajaxRequest = function(event, options) {
  */ 
 javax.faces.Ajax.ajaxResponse = function(request) {
 
-    //PENDING needs to be fleshed out..
+    var utils = new javax.faces.Ajax.Utils();
+    var xmlReq = request.xmlReq;
 
-    alert ("STATUS:"+request.status);
-    alert ("RES TXT:"+request.responseTxt);
-    alert ("RES XML:"+request.responseXML);
+    var xml = xmlReq.responseXML;
+    var id, content, markup, str;
 
+    var components = xml.getElementsByTagName('components')[0];
+    var render = components.getElementsByTagName('render');
+
+    for (var i = 0; i < render.length; i++) {
+        id = render[i].getAttribute('id');
+        // join the CDATA sections in the markup
+        markup = '';
+        for (var j = 0; j < render[i].firstChild.childNodes.length; j++) {
+            content = render[i].firstChild.childNodes[j];
+            markup += content.text || content.data;
+        }
+        str = utils.stripScripts(markup);
+        var src = str;
+         
+        // If our special render all markup is present..
+        if (-1 != id.indexOf("javax.faces.ViewRoot")) {
+            // if src contains <html>, trim the <html> and </html>, if present.
+            //   if src contains <head>
+            //      extract the contents of <head> and replace current document's
+            //      <head> with the contents.
+            //   if src contains <body>
+            //      extract the contents of <body> and replace the current
+            //      document's <body> with the contents.
+            //   if src does not contain <body>
+            //      replace the current document's <body> with the contents.
+            var
+                htmlStartEx = new RegExp("< *html.*>", "gi"),
+                htmlEndEx = new RegExp("< */ *html.*>", "gi"),
+                headStartEx = new RegExp("< *head.*>", "gi"),
+                headEndEx = new RegExp("< */ *head.*>", "gi"),
+                bodyStartEx = new RegExp("< *body.*>", "gi"),
+                bodyEndEx = new RegExp("< */ *body.*>", "gi"),
+                htmlStart, htmlEnd, headStart, headEnd, bodyStart, bodyEnd;
+            var srcHead = null, srcBody = null;
+            // find the current document's "body" element
+            var docBody = document.getElementsByTagName("body")[0];
+            // if src contains <html>
+            if (null != (htmlStart = htmlStartEx.exec(src))) {
+                // if src contains </html>
+                if (null != (htmlEnd = htmlEndEx.exec(src))) {
+                    src = src.substring(htmlStartEx.lastIndex, htmlEnd.index);
+                } else {
+                    src = src.substring(htmlStartEx.lastIndex);
+                }
+            }
+            // if src contains <head>
+            if (null != (headStart = headStartEx.exec(src))) {
+                // if src contains </head>
+                if (null != (headEnd = headEndEx.exec(src))) {
+                    srcHead = src.substring(headStartEx.lastIndex,
+                        headEnd.index);
+                } else {
+                    srcHead = src.substring(headStartEx.lastIndex);
+                }
+                // find the "head" element
+                var docHead = document.getElementsByTagName("head")[0];
+                if (docHead) {
+                    utils.elementReplace(docHead, "head", srcHead);
+                }
+            }       
+            // if src contains <body>
+            if (null != (bodyStart = bodyStartEx.exec(src))) {
+                // if src contains </body>
+                if (null != (bodyEnd = bodyEndEx.exec(src))) {
+                    srcBody = src.substring(bodyStartEx.lastIndex,
+                        bodyEnd.index);
+                } else {
+                    srcBody = src.substring(bodyStartEx.lastIndex);
+                }
+                result = utils.elementReplace(docBody, "body", srcBody);
+            }
+            if (!srcBody) {
+                result = utils.elementReplace(docBody, "body", src);
+            }
+        
+        } else {
+            var d = utils.$(id);
+            if (!d) {
+                alert(id + " not found");
+            }
+            var parent = d.parentNode;
+            var temp = document.createElement('div');
+            var result = null;
+            temp.id = d.id;
+            temp.innerHTML = utils.trim(str);
+
+            result = temp.firstChild;
+            parent.replaceChild(temp.firstChild,d);
+        }
+    }
+
+    // Now set the view state from the server into the DOM
+    // If there are multiple forms, make sure they all have a 
+    // viewState hidden field.
+
+    var state = state || xml.getElementsByTagName('state')[0].firstChild;
+    if (state) {
+        var stateElem = utils.$("javax.faces.ViewState");
+        if (stateElem) {
+            stateElem.value = state.text || state.data;
+        }
+        var numForms = document.forms.length;
+        var field;
+        for (var i = 0; i < numForms; i++) {
+            field = document.forms[i].elements["javax.faces.ViewState"];
+            if (typeof field == 'undefined') {
+                field = document.createElement("input");
+                field.type = "hidden";
+                field.name = "javax.faces.ViewState";
+                document.forms[i].appendChild(field);
+            }
+            field.value = state.text || state.data;
+        }
+    }
 }
 

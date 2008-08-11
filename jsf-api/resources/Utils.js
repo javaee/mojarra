@@ -100,5 +100,124 @@ javax.faces.Ajax.Utils = function() {
     this.reduce = function(toReduce) {
         return toReduce.length > 1 ? toReduce : toReduce[0];
     }
-}
 
+    this.toArray = function(s,e) {
+        var sarray;
+        if (typeof s == 'string') {
+            sarray = s.split((e)?e:' ');
+            for (var i=0; i<sarray.length; i++) {
+                sarray[i] = this.trim(sarray[i]);
+            }
+        }
+        return sarray;
+    }
+
+    this.trim = function(toTrim) {
+        var result = null;
+        if (null != toTrim) {
+            var s = toTrim.replace( /^\s+/g, "" );
+            result = s.replace( /\s+$/g, "" );
+        }
+        return result;
+    }
+
+    this.scriptFrag = '(?:<script.*?>)((\n|\r|.)*?)(?:<\/script>)';
+
+    this.stripScripts = function(src) {
+        return src.replace(new RegExp(this.scriptFrag, 'img'), '');
+    }
+
+    this.evalScripts = function(src) {
+        return this.extractScripts(src).map(function(script) { return eval(script) });
+    }
+
+    this.extractScripts = function(src) {
+        var matchAll = new RegExp(this.scriptFrag, 'img');
+        var matchOne = new RegExp(this.scriptFrag, 'im');
+        return (src.match(matchAll) || []).map(function(scriptTag) {
+            return (scriptTag.match(matchOne) || ['', ''])[1];
+        });
+    }
+
+    this.replaceElem = function(element, html) {
+        element = this.$(element);
+        if (element.outerHTML) {
+            element.outerHTML = this.stripScripts(html);
+        } else {
+            var range = element.ownerDocument.createRange();
+            range.selectNodeContents(element);
+            element.parentNode.replaceChild(
+            range.createContextualFragment(this.stripScripts(html)), element);
+        }
+        var that = this;
+        setTimeout(function(){that.evalScripts(html)}, 10);
+        return element;
+    }
+
+    this.elementReplace = function(d, tempTagName, src) {
+        var parent = d.parentNode;
+        var temp = document.createElement(tempTagName);
+        var result = null;
+        temp.id = d.id;
+    
+        // If we are creating a head element...
+        if (-1 != d.tagName.toLowerCase().indexOf("head") && d.tagName.length == 4) {
+    
+            // head replacement only appears to work on firefox.
+            if (-1 == BrowserDetect.browser.indexOf("Firefox")) {
+                return;
+            }   
+        
+            // Strip link elements from src.
+            if (-1 != src.indexOf("link")) {
+                var 
+                    linkStartEx = new RegExp("< *link.*>", "gi");
+                var linkStart;
+                while (null != (linkStart = linkStartEx.exec(src))) {
+                    src = src.substring(0, linkStart.index) +
+                        src.substring(linkStartEx.lastIndex);
+                    linkStartEx.lastIndex = 0;
+                }
+            }
+
+            // Strip style elements from src
+            if (-1 != src.indexOf("style")) {
+                var
+                    styleStartEx = new RegExp("< *style.*>", "gi"),
+                    styleEndEx = new RegExp("< */ *style.*>", "gi");
+                var styleStart, styleEnd;
+                while (null != (styleStart = styleStartEx.exec(src))) {
+                    styleEnd = styleEndEx.exec(src);
+                    src = src.substring(0, styleStart.index) +
+                        src.substring(styleStartEx.lastIndex);
+                    styleStartEx.lastIndex = 0;
+                }
+            }
+
+            temp.innerHTML = src;
+
+            // clone all the link elements...
+            var i, links, styles;
+            links = d.getElementsByTagName("link");
+            if (links) {
+                for (i = 0; i < links.length; i++) {
+                    temp.appendChild(links[i].cloneNode(true));
+                }
+            }
+            // then clone all the style elements.
+            styles = d.getElementsByTagName("style");
+            if (styles) {
+                for (i = 0; i < styles.length; i++) {
+                    temp.appendChild(styles[i].cloneNode(true));
+                }
+            }
+        } else {
+            temp.innerHTML = src;
+        }
+
+
+        result = temp
+        parent.replaceChild(temp, d);
+        return result;
+    }
+}

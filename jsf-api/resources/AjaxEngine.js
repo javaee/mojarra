@@ -70,6 +70,7 @@ javax.faces.Ajax.AjaxEngine = function() {
     req.responseXML = null;        // Response Content (XML) 
     req.status = null;             // Response Status Code From Server
     req.fromQueue = false;
+    req.que = new javax.faces.Ajax.AjaxEngine.Queue();
 
     // Get an XMLHttpRequest Handle
     req.xmlReq = javax.faces.Ajax.AjaxEngine.getTransport();
@@ -104,25 +105,39 @@ javax.faces.Ajax.AjaxEngine = function() {
         if (typeof(req.onComplete)=="function") {
             req.onComplete(req);
         }
-        if (req.xmlReq.status == undefined || req.xmlReq == 0 ||
+        if ((req.xmlReq.status == null || typeof req.xmlReq.status == 'undefined') || req.xmlReq == 0 ||
             (req.xmlReq.status >= 200 && req.xmlReq.status < 300)) { 
-            javax.faces.Ajax.ajaxResponse(req.xmlReq);
-            var queue = new javax.faces.Ajax.AjaxEngine.Queue();
-            if (!queue.isEmpty()) {
-                var nextReq = queue.dequeue();
-                if (nextReq.xmlReq.readyState == 0) {
-                    nextReq.fromQueue = true;
-                    nextReq.sendRequest();
+            javax.faces.Ajax.ajaxResponse(req);
+
+            var nextReq = req.que.getOldestElement();
+            if (nextReq == null || typeof nextReq == 'undefined') { 
+                return;
+            }
+            while ((typeof nextReq.xmlReq != 'undefined' && nextReq.xmlReq != null) && 
+                nextReq.xmlReq.readyState == 4) {
+                req.que.dequeue();
+                nextReq = req.que.getOldestElement();
+                if (nextReq == null || typeof nextReq == 'undefined') {
+                    break;
                 }
+            }
+            if (nextReq == null || typeof nextReq == 'undefined') { 
+                return;
+            }
+            if ((typeof nextReq.xmlReq != 'undefined' && nextReq.xmlReq != null) && 
+                nextReq.xmlReq.readyState == 0) {
+                nextReq.fromQueue = true;
+                nextReq.sendRequest();
             }
         } else if (typeof(req.onError)=="function") {
             req.onError(req);
         }
 
-        delete req.xmlReq['onreadystatechange'];
-        req.xmlReq = null;
+
+//        delete req.xmlReq['onreadystatechange'];
+//        req.xmlReq = null;
     };
-  
+
     /**
      * Utility method that accepts additional arguments for the AjaxEngine.
      * If an argument is passed in that matches an AjaxEngine property, the 
@@ -132,7 +147,7 @@ javax.faces.Ajax.AjaxEngine = function() {
      */
     req.setupArguments = function(args) {
         for (var i in args) {
-            if (typeof(req[i])=="undefined") {
+            if (typeof(req[i]) == 'undefined') {
                 req.parameters[i] = args[i];
             } else {
                 req[i] = args[i];
@@ -147,18 +162,17 @@ javax.faces.Ajax.AjaxEngine = function() {
     req.sendRequest = function() {
         if (req.xmlReq != null) {
             // if there is already a request on the queue waiting to be processed..
-            var queue = new javax.faces.Ajax.AjaxEngine.Queue();
-            if (!queue.isEmpty()) {
-                var nextReq = queue.dequeue();
-                if (nextReq.xmlReq.readyState == 0) {
-                    nextReq.fromQueue = true;
-                    nextReq.sendRequest();
+            // just queue this request
+            if (!req.que.isEmpty()) {
+                if (!req.fromQueue) {
+                    req.que.enqueue(req);
+                    return;
                 }
             }
-            // queue up this request..
+            // If the queue is empty, queue up this request and send
             if (!req.fromQueue) {
-                queue.enqueue(req);
-            }
+                req.que.enqueue(req);
+            } 
             // Some logic to get the real request URL
             if (req.generateUniqueUrl && req.method=="GET") {
                 req.parameters["AjaxRequestUniqueId"] = new Date().getTime() + "" + req.requestIndex;
@@ -175,7 +189,7 @@ javax.faces.Ajax.AjaxEngine = function() {
             }
             req.xmlReq.open(req.method,req.url,req.async);
             if (req.method=="POST") {
-                if (typeof(req.xmlReq.setRequestHeader)!="undefined") {
+                if (typeof(req.xmlReq.setRequestHeader) != 'undefined') {
                     req.xmlReq.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                 }
                 content = req.queryString;
@@ -288,6 +302,9 @@ javax.faces.Ajax.AjaxEngine.Queue = function() {
    */
   this.enqueue = function(element){
     queue.push(element);
+    var args = new Object();
+    args["enqueue"] = element;
+    observer.fire(args);
   }
 
   /* Dequeues an element from this Queue. The oldest element in this Queue is
@@ -315,6 +332,12 @@ javax.faces.Ajax.AjaxEngine.Queue = function() {
 
       }
     }
+    if (element != "undefined") {
+        var args = new Object();
+        args["dequeue"] = element;
+        observer.fire(args);
+    }
+
     // return the removed element
     return element;
   }
@@ -336,3 +359,50 @@ javax.faces.Ajax.AjaxEngine.Queue = function() {
 
   }
 }
+
+javax.faces.Ajax.AjaxEngine.Observer = function() {
+    this.fns = [];
+    this.subscribe = function(fn) {
+        this.fns.push(fn);
+    },
+    this.unsubscribe = function(fn) {
+        this.fns = this.fns.filter(
+            function(el) {
+                if ( el !== fn ) {
+                    return el;
+                }
+            }
+        );
+    },
+    this.fire = function(o, thisObj) {
+        var scope = thisObj || window;
+        this.fns.forEach(
+            function(el) {
+                 el.call(scope, o);
+            }
+        );
+    }
+}
+
+Array.prototype.forEach = function(fn, thisObj) {
+    var scope = thisObj || window;
+    for ( var i=0, j=this.length; i < j; ++i ) {
+        fn.call(scope, this[i], i, this);
+    }
+}
+
+Array.prototype.filter = function(fn, thisObj) {
+    var scope = thisObj || window;
+    var a = [];
+    for ( var i=0, j=this.length; i < j; ++i ) {
+        if ( !fn.call(scope, this[i], i, this) ) {
+            continue;
+        }
+        a.push(this[i]);
+    }
+    return a;
+}
+
+var observer = new javax.faces.Ajax.AjaxEngine.Observer();
+
+
