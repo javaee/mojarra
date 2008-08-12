@@ -797,11 +797,10 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      * Helper method to invoke <code>processDecodes</code> on each
      * individual component as determined by the client ids returned
      * by {@link javax.faces.context.FacesContext#getExecutePhaseClientIds}.
-     * This method returns a <code>true</code> to indicate that partial
-     * decoding was performed.
+     * This method returns  <code>true</code> to indicate that partial
+     * decoding was performed.</p>
      *
      * @param context {@link FacesContext} for the request we are processing
-     *</p>
      */
     private boolean processPartialDecodes(FacesContext context) {
         // PENDING: Process "immediate" Ajax requests..
@@ -838,6 +837,19 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
     }
 
     /**
+     * <p class="changed_added_2_0">If {@link If {@link
+     * javax.faces.context.FacesContext#isAjaxRequest} returns <code>true</code>,
+     * replace the <code>ResponseWriter</code> in the
+     * <code>FacesContext</code> with the writer used to render
+     * partial responses.  If {@link 
+     * javax.faces.context.FacesContext#isRenderNone} returns 
+     * <code>false</code>, set the response content type and the 
+     * response header.  Write out the beginning elements for the
+     * partial response.  If {@link
+     * javax.faces.context.FacesContext#isRenderAll} returns
+     * <code>true</code>, set the indicator <code>javax.faces.ViewRoot</code>
+     * in the response to indicate the client JavaScript should use
+     * the entire response.</p> 
      * <p>Override the default {@link UIComponentBase#encodeBegin}
      * behavior.  If
      * {@link #getBeforePhaseListener} returns non-<code>null</code>,
@@ -864,6 +876,12 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
         }
     }
 
+    /**
+     * <p class="changed_added_2_0">
+     * Helper method to begin writing the partial response.</p>
+     * 
+     * @param context {@link FacesContext} for the request we are processing
+     */
     private boolean encodePartialResponseBegin(FacesContext context) {
 
         ResponseWriter orig = null, writer = null;
@@ -886,7 +904,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
             // If the client has requested that subtrees be rendered,
             // prepare the partial response
 
-            if (!context.isRenderNone()) {
+             if (!context.isRenderNone()) {
     
                 // PENDING Handle Portlet Case
 
@@ -925,6 +943,19 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
         return true;
     }
 
+    /** 
+     * <p class="changed_added_2_0">
+     * Override the default {@link UIComponentBase#encodeChildren}
+     * behavior to perform partial rendering if {@link
+     * javax.faces.context.FacesContext#isAjaxRequest} returns
+     * <code>true</code> and {@link 
+     * javax.faces.context.FacesContext#isRenderAll} returns
+     * <code>false</code>.  If partial rendering was not performed, 
+     * delegate to the parent {@link
+     * javax.faces.component.UIComponentBase#encodeChildren}
+     * method.</p> 
+     */
+    @Override
     public void encodeChildren(FacesContext context) throws IOException {
         if (context.isAjaxRequest() && !context.isRenderAll() &&
             encodePartialChildren(context)) {
@@ -933,6 +964,16 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
         super.encodeChildren(context);
     }
 
+    /** 
+     * <p class="changed_added_2_0">
+     * Helper method to perform encoding for a distinct set of
+     * client identifiers as returned from {@link
+     * javax.faces.context.FacesContext#getRenderPhaseClientIds}.
+     * This method returns <code>true</code> to indicate that
+     * partial encoding was performed.</p>
+     *
+     * @param context {@link FacesContext} for the request we are processing
+     */
     private boolean encodePartialChildren(FacesContext context) {
         if (!context.isRenderNone()) {
             if (!invokeContextCallbackOnSubtrees(context,
@@ -944,7 +985,14 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
     }
 
     /**
-     * <p>Override the default {@link UIComponentBase#encodeEnd}
+     * <p class="changed_added_2_0">If {@link If {@link
+     * javax.faces.context.FacesContext#isAjaxRequest} returns
+     * <code>true</code>, write the closing content element,
+     * call {@link javax.faces.application.StateManager#getViewState}
+     * and write the view state.  If {@link
+     * javax.faces.context.FacesContext#isAjaxRequest} returns
+     * <code>flase</code>,
+     * override the default {@link UIComponentBase#encodeEnd}
      * behavior.  If {@link #getAfterPhaseListener} returns
      * non-<code>null</code>, invoke it, passing a {@link PhaseEvent}
      * for the {@link PhaseId#RENDER_RESPONSE} phase.  Any errors that
@@ -962,6 +1010,13 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
         encodePartialResponseEnd(context);
     }
 
+    /**
+     * <p class="changed_added_2_0">
+     * Helper method for writing out the ending marker elements
+     * and view state.</p>  
+     * 
+     * @param context {@link FacesContext} for the request we are processing
+     */
     private void encodePartialResponseEnd(FacesContext context) {
         try {
             ResponseWriter writer = context.getResponseWriter();
