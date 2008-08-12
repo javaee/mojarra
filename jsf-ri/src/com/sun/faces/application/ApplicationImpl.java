@@ -101,7 +101,6 @@ import com.sun.faces.el.ELUtils;
 import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.el.PropertyResolverImpl;
 import com.sun.faces.el.VariableResolverImpl;
-import com.sun.faces.lifecycle.ProjectStagePhaseListener;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.ReflectionUtils;
@@ -113,8 +112,7 @@ import javax.faces.event.SystemEventListenerHolder;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
-import javax.el.ValueExpression;
+
 import javax.faces.application.Resource;
 
 
@@ -212,11 +210,11 @@ public class ApplicationImpl extends Application {
 
 
     /**
-     * @see Application#publishEvent(Class, javax.faces.event.SystemEventListenerHolder)
+     * @see Application#publishEvent(Class
      */
     @Override
     public void publishEvent(Class<? extends SystemEvent> systemEventClass,
-                             SystemEventListenerHolder source) {
+                             Object source) {
 
         Util.notNull("systemEventClass", systemEventClass);
         Util.notNull("source", source);
@@ -1570,14 +1568,18 @@ public class ApplicationImpl extends Application {
      *  of processing the listeners.
      */
     private SystemEvent invokeComponentListenersFor(Class<? extends SystemEvent> systemEventClass,
-                                                    SystemEventListenerHolder source) {
+                                                    Object source) {
 
-        EventInfo eventInfo = compSysEventHelper.getEventInfo(systemEventClass,
-                                                              source.getClass());
-        return processListeners(source.getListenersForEventClass(systemEventClass),
-                                null,
-                                source,
-                                eventInfo);
+        if (source instanceof SystemEventListenerHolder) {
+            EventInfo eventInfo =
+                  compSysEventHelper.getEventInfo(systemEventClass,
+                                                  source.getClass());
+            return processListeners(((SystemEventListenerHolder) source).getListenersForEventClass(systemEventClass),
+                                    null,
+                                    source,
+                                    eventInfo);
+        }
+        return null;
 
     }
 
