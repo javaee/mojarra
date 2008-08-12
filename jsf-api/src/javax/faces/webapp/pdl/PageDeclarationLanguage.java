@@ -48,9 +48,22 @@ import javax.faces.context.FacesContext;
  * 
  */
 public abstract class PageDeclarationLanguage {
-    
+
+    /**
+     * RELEASE_PENDING (edburns,rogerk) documentation
+     * @param context
+     * @param componentResource
+     * @return
+     */
     public abstract BeanInfo getComponentMetadata(FacesContext context, Resource componentResource);
 
+
+    /**
+     * RELEASE_PENDING (edburns,roger) documentation
+     * @param context
+     * @param componentResource
+     * @return
+     */
     public abstract Resource getScriptComponentResource(FacesContext context,
             Resource componentResource);
 }
