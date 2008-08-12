@@ -39,46 +39,108 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
-<f:view contentType="text/html"/>
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:composite="http://java.sun.com/jsf/composite">
+<head>
 
-<h:head>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-    <title>Page2</title>
-</h:head>
+<title>Not present in rendered output</title>
 
-<h:body>
+</head>
 
-<h1>Page2</h1>
+<body>
 
-<h:form prependId="false">
+<composite:interface name="loginPanel" 
+                     displayName="Very Simple Login Panel" 
+                     preferred="true"
+                     expert="false"
+                     shortDescription="An illustration of the composite component feature">
+  <composite:attribute name="model" required="true">
+ 
+    <composite:attribute name="loginAction" required="true">
+      <composite:deferred-method>
+        <composite:method-signature>
+                    java.lang.Object action()
+        </composite:method-signature>
+      </composite:deferred-method>
+     </composite:attribute>
 
-  <p>This will be true if the groovy component was called: <h:outputText
-  value="${groovyCalled}" />.</p>
-
-  <p>This will have a value if the retargeted actionListener for
-  loginEvent was called: <h:outputText value="${loginEventCalled}"
-  />.</p>
-
-  <p>This will be true if the retargeted valueChangeListener for the
-  userid field was called: <h:outputText
-  value="${useridValueChangeListener}" />.</p>
-
-  <p>This will be true if the retargeted valueChangeListener for the
-  pin field was called: <h:outputText
-  value="${passwordValueChangeListener}" />.</p>
-
-  <p>This will be true if the retargeted valueChangeListener for 
-  allInputs was called: <h:outputText
-  value="${allInputsValueChangeListener}" />.</p>
+   </composite:attribute>
 
 
+  <composite:editableValueHolder name="username" />
+  <composite:actionSource name="loginEvent" />
+  <composite:actionSource name="cancelEvent" />
+  <composite:actionSource name="allEvents" targets="loginEvent,cancelEvent" />
 
-  <h:commandButton value="back" action="#{bean.backAction}" />
+  <composite:facet name="header" />
 
-</h:form>
+</composite:interface>
+
+<composite:implementation>
+
+<table border="1">
+
+  <thead>
+
+    <tr> 
+
+      <th>
+
+     <composite:insertFacet name="header" />
+
+      </th>
+
+    </tr>
+
+  </thead>
+
+  <tbody>
+
+    <tr>
+
+      <td>
+
+      <p>
+
+         <h:inputText id="username" />
+
+      </p>
+
+      <p>
+
+	<h:commandButton id="loginEvent" value="Login" action="#{compositeComponent.attributes.model.loginAction}">
+
+	</h:commandButton>  
+
+	<h:commandButton id="cancelEvent" value="Cancel" action="cancel">
+
+	</h:commandButton>  
 
 
-</h:body>
+      </p>
+
+      </td>
+
+    </tr>
+
+    <tr>
+
+      <td>
+
+     <p>This is the login panel footer</p>
+     
+     <composite:insertChildren />
+
+      </td>
+
+    </tr>
+
+  </tbody>
+
+</table>
+
+</composite:implementation>
+
+</body>
 
 </html>
