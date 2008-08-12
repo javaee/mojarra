@@ -66,6 +66,7 @@ import javax.el.ELResolver;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.validator.Validator;
+import javax.faces.webapp.pdl.PageDeclarationLanguage;
 
 
 /**
@@ -309,6 +310,41 @@ public abstract class Application {
 
         throw new UnsupportedOperationException();
         
+    }
+    
+    /**
+     * <p class="changed_added_2_0">Set the implementation of 
+     * {@link PageDeclarationLanguage} to be used in this application instance.
+     * </p>
+     * 
+     * @since 2.0
+     * 
+     */
+    public void setPageDeclarationLanguage(PageDeclarationLanguage pdl) {
+        if (defaultApplication != null) {
+            defaultApplication.setPageDeclarationLanguage(pdl);
+        }
+
+        throw new UnsupportedOperationException();
+        
+    }
+    
+    /**
+     * <p class="changed_modified_2_0">Return the {@link PageDeclarationLanguage}
+     * instance used for the application instance.</p>
+     * 
+     * @since 2.0
+     */
+    public PageDeclarationLanguage getPageDeclarationLanguage() {
+        if (defaultApplication != null) {
+            PageDeclarationLanguage pdl = null;
+
+            pdl = defaultApplication.getPageDeclarationLanguage();
+        
+            return pdl;
+        }
+
+        throw new UnsupportedOperationException();
     }
 
 

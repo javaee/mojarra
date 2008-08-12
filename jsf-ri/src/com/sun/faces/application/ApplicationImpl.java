@@ -49,7 +49,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -72,7 +71,6 @@ import javax.el.ELException;
 import javax.el.ELResolver;
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
-import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.render.Renderer;
 import javax.faces.application.Application;
@@ -106,6 +104,8 @@ import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.Util;
 
+import java.beans.BeanDescriptor;
+import java.beans.BeanInfo;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEventListenerHolder;
@@ -113,7 +113,10 @@ import javax.faces.event.SystemEventListenerHolder;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.util.List;
+import javax.el.ValueExpression;
 import javax.faces.application.Resource;
+import javax.faces.webapp.pdl.PageDeclarationLanguage;
 
 
 /**
@@ -164,6 +167,7 @@ public class ApplicationImpl extends Application {
     private volatile VariableResolverImpl variableResolver = null;
     private volatile ViewHandler viewHandler = null;
     private volatile ResourceHandler resourceHandler;
+    private volatile PageDeclarationLanguage pdl;
     private volatile StateManager stateManager = null;
     private volatile ArrayList<Locale> supportedLocales = null;
     private volatile Locale defaultLocale = null;
@@ -517,6 +521,18 @@ public class ApplicationImpl extends Application {
 
     }
 
+    @Override
+    public PageDeclarationLanguage getPageDeclarationLanguage() {
+        return pdl;
+    }
+
+    @Override
+    public void setPageDeclarationLanguage(PageDeclarationLanguage pdl) {
+        this.pdl = pdl;
+    }
+    
+    
+
 
     /**
      * @see javax.faces.application.Application#getResourceHandler()
@@ -796,8 +812,87 @@ public class ApplicationImpl extends Application {
 
     @Override
     public UIComponent createComponent(Resource componentResource) throws FacesException {
-        UIComponent result = null;
         FacesContext context = FacesContext.getCurrentInstance();
+        Application myApp = context.getApplication();
+        UIComponent result = null;
+        PageDeclarationLanguage myPDL = myApp.getPageDeclarationLanguage();
+        ValueExpression ve;
+        String componentType = null;
+
+        BeanInfo componentMetadata = myPDL.getComponentMetadata(context, 
+                componentResource);
+        if (null != componentMetadata){
+            BeanDescriptor componentBeanDescriptor = componentMetadata.getBeanDescriptor();
+            
+            // Step 1.  See if the composite component author explicitly
+            // gave a componentType as part of the composite component metadata
+            ve = (ValueExpression)
+                  componentBeanDescriptor.getValue(UIComponent.COMPOSITE_COMPONENT_TYPE_KEY);
+            if (null != ve) {
+                componentType = (String) ve.getValue(context.getELContext());
+                if (null != componentType && 0 < componentType.length()) {
+                    result = myApp.createComponent(componentType);
+                }
+            }
+        }
+
+
+        // Step 2. If that didn't work, if a script based resource can be 
+        // found for the componentResource,
+        // see if a component can be generated from it
+        if (null == result) {
+            Resource scriptComponentResource = myPDL.getScriptComponentResource(context, componentResource);
+
+            if (null != scriptComponentResource) {
+                result = createComponentFromScriptResource(context,
+                        scriptComponentResource);
+            }
+        }
+
+        // Step 3. Use the libraryName of the resource as the java package
+        // and use the resourceName as the class name.  See
+        // if a Java class can be loaded
+        if (null == result) {
+            String packageName = componentResource.getLibraryName();
+            String className = componentResource.getResourceName();
+            className = className.substring(0, className.lastIndexOf("."));
+            ClassLoader cl = Thread.currentThread().getContextClassLoader();
+            if (null == cl) {
+                cl = this.getClass().getClassLoader();
+            }
+            try {
+                Class clazz = cl.loadClass(packageName + "." + className);
+                result = (UIComponent) clazz.newInstance();
+            } catch (ClassNotFoundException ex) {
+                // take no action, this is not an error.
+                } catch (InstantiationException ie) {
+                throw new FacesException(ie);
+            } catch (IllegalAccessException iae) {
+                throw new FacesException(iae);
+            } catch (ClassCastException cce) {
+                throw new FacesException(cce);
+            } catch (Throwable otherwise) {
+                // take no action, not an error
+                }
+        }
+
+        // Step 4. Use javax.faces.NamingContainer as the component type
+        if (null == result) {
+            result = myApp.createComponent("javax.faces.NamingContainer");
+        }
+
+        assert (null != result);
+
+        result.setRendererType("javax.faces.Composite");
+        result.getAttributes().put(Resource.COMPONENT_RESOURCE_KEY, 
+                componentResource);
+        
+        return result;
+    }
+    
+    private UIComponent createComponentFromScriptResource(FacesContext context,
+            Resource componentResource) {
+        UIComponent result = null;
         InputStream resourceInputStream = null;
         try {
             if (null != resourceInputStream && null == (resourceInputStream = componentResource.getInputStream())) {
