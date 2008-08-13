@@ -62,7 +62,7 @@ import org.xml.sax.InputSource;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
-import javax.faces.event.ConfigurationCompleteEvent;
+import javax.faces.event.ApplicationPostConstructEvent;
 import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
@@ -252,14 +252,14 @@ public class ConfigManager {
 
 
     /**
-     * Publishes a {@link ConfigurationCompleteEvent} event for the current
+     * Publishes a {@link javax.faces.event.ApplicationPostConstructEvent} event for the current
      * {@link Application} instance.
      */
     private void publishPostConfigEvent() {
 
         FacesContext ctx = FacesContext.getCurrentInstance();
         Application app = ctx.getApplication();
-        app.publishEvent(ConfigurationCompleteEvent.class, app);
+        app.publishEvent(ApplicationPostConstructEvent.class, app);
 
     }
 

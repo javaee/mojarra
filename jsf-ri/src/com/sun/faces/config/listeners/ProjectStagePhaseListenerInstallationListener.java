@@ -6,7 +6,7 @@ import javax.faces.event.SystemEvent;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.SystemEventListener;
 import javax.faces.event.PhaseListener;
-import javax.faces.event.ConfigurationCompleteEvent;
+import javax.faces.event.ApplicationPostConstructEvent;
 import javax.faces.application.Application;
 import javax.faces.application.ProjectStage;
 import javax.faces.lifecycle.LifecycleFactory;
@@ -41,7 +41,7 @@ public class ProjectStagePhaseListenerInstallationListener
         // uninstall the listener - no need to be included during usual
         // runtime processing.
         Application application = (Application) event.getSource();
-        application.unsubscribeFromEvent(ConfigurationCompleteEvent.class,
+        application.unsubscribeFromEvent(ApplicationPostConstructEvent.class,
                                          this);        
 
     }
