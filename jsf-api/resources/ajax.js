@@ -53,6 +53,12 @@
  */
 
 /**
+  @project JSF Ajax Library 
+  @version 2.0 
+  @description  
+*/
+
+/**
  * Register with OpenAjax
  */
 if (typeof OpenAjax != "undefined" &&
@@ -84,7 +90,7 @@ if (javax.faces.Ajax == null || typeof javax.faces.Ajax == "undefined") {
  * accordance with: <a href="http://www.w3.org/TR/html401/interact/forms.html#h-17.13.2">
  * Section 17.13.2 of the HTML Specification</a>.
  * @return The encoded state for the specified form's input controls.
- * @function viewState
+ * @function javax.faces.Ajax.viewState
  */
 javax.faces.Ajax.viewState = function(form) {
 
@@ -94,7 +100,7 @@ javax.faces.Ajax.viewState = function(form) {
 }
 
 /**
- * <p><span class="changed_added_2_0">Send</span> an Ajax request
+ * <p><span class="changed_added_2_0">Send</span> an asynchronous Ajax request
  * to the server.  This function must:
  * <ul>
  * <li>Capture the element that triggered this Ajax request
@@ -105,8 +111,8 @@ javax.faces.Ajax.viewState = function(form) {
  * <li>Get the <code>form</code> view state by calling 
  * <code>javax.faces.Ajax.viewState</code> passing the 
  * <code>form</code> element as the argument.</li> 
- * <li>Determine additional arguments from the <code>options</code>
- * argument.</li>
+ * <li>Determine additional arguments (if any) from the <code>options</code>
+ * argument.  
  * <li>Set up post data arguments for the Ajax request.  The following
  * name/value pairs must be passed as post data:
  * <ul>
@@ -114,24 +120,13 @@ javax.faces.Ajax.viewState = function(form) {
  * triggered this request;</li>
  * <li><code>javax.faces.partial.ajax</code> with the value 
  * <code>true</code></li>
- * </ul>
- * </li>
- * <li>Optionally, the following arguments can be sent as post
- * data: 
+ * <li>name/value pairs from the <code>event</code> argument (if any).  The following
+ * name/value pairs may be used from the <code>event</code> object:
  * <ul>
- * <li><code>javax.faces.partial.execute</code> with the value
- * <code>true</code>.</li> 
- * <li><code>javax.faces.partial.render</code> with the value
- * <code>true</code>.</li> 
- * <li>basic <code>event</code> information:
- * <ul>
+ * <li>name/value pairs from the <code>options</code> associative array (if any)</li>
  * <li><code>target</code> - the ID of the element that triggered the event.</li>
  * <li><code>captured</code> - the ID of the element that captured the event.</li>
  * <li><code>type</code> - the type of event (ex: onkeypress)</li>
- * </ul>
- * </li>
- * <li>mouse and keyboard <code>event</code> information:
- * <ul>
  * <li><code>alt</code> - <code>true</code> if ALT key was pressed.</li>
  * <li><code>ctrl</code> - <code>true</code> if CTRL key was pressed.</li>
  * <li><code>shift</code> - <code>true</code> if SHIFT key was pressed. </li>
@@ -148,13 +143,19 @@ javax.faces.Ajax.viewState = function(form) {
  * </ul>  
  *
  * @param element The DOM element that triggered this Ajax request.
- * @param options The set of available options that can be sent as
- * request parameters to control client and/or server side 
- * request processing. This argument is optional. 
  * @param event The DOM event that triggered this Ajax request.  This
  * argument is optional.
+ * @param options The set of available options that can be sent as
+ * request parameters to control client and/or server side 
+ * request processing. Accpetable name/value pair options are:
+ * <ul>
+ * <li><code>javax.faces.partial.execute</code> with value <code>true</code>.</li>
+ * <li><code>javax.faces.partial.render</code> with value <code>true</code>.</li>
+ * </ul>
+ * This argument is optional. 
+ * @function javax.faces.Ajax.ajaxRequest
  */
-javax.faces.Ajax.ajaxRequest = function(element, options, event) {
+javax.faces.Ajax.ajaxRequest = function(element, event, options) {
 
     // Capture the element that triggered this Ajax request.
     var source = element;
@@ -165,18 +166,20 @@ javax.faces.Ajax.ajaxRequest = function(element, options, event) {
 
     // Set up additional arguments to be used in the request..
     var args = new Object();
-    if (options.execute) {
-        args["javax.faces.partial.execute"] = utils.toArray(options.execute,',').join(','); 
-        options.execute = null;
-        delete options.execute;
-    }
-    if (options.render) {
-        args["javax.faces.partial.render"] = utils.toArray(options.render,',').join(','); 
-        options.render = null;
-        delete options.render;
+    if (typeof(options) != 'undefined' && options != null) {
+        if (options.execute) {
+            args["javax.faces.partial.execute"] = utils.toArray(options.execute,',').join(','); 
+            options.execute = null;
+            delete options.execute;
+        }
+        if (options.render) {
+            args["javax.faces.partial.render"] = utils.toArray(options.render,',').join(','); 
+            options.render = null;
+            delete options.render;
+        }
+        utils.extend(args, options);
     }
 
-    utils.extend(args, options);
     args["javax.faces.partial.ajax"] = "true";
     args["method"] = "POST";
     args["url"] = form.action;
@@ -221,6 +224,7 @@ javax.faces.Ajax.ajaxRequest = function(element, options, event) {
  *
  * @param request The <code>XMLHttpRequest</code> instance that 
  * contains the status code and response message from the server.
+ * @function javax.faces.Ajax.ajaxResponse
  */ 
 javax.faces.Ajax.ajaxResponse = function(request) {
 
