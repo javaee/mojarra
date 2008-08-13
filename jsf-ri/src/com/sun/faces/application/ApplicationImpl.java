@@ -110,9 +110,6 @@ import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEventListenerHolder;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import java.util.List;
 import javax.el.ValueExpression;
 import javax.faces.application.Resource;
@@ -214,7 +211,7 @@ public class ApplicationImpl extends Application {
 
 
     /**
-     * @see Application#publishEvent(Class
+     * @see javax.faces.application.Application#publishEvent(Class, Object) 
      */
     @Override
     public void publishEvent(Class<? extends SystemEvent> systemEventClass,
@@ -521,19 +518,27 @@ public class ApplicationImpl extends Application {
 
     }
 
+
+    /**
+     * @see javax.faces.application.Application#getPageDeclarationLanguage()
+     * @return
+     */
     @Override
     public PageDeclarationLanguage getPageDeclarationLanguage() {
         return pdl;
     }
 
+
+    /**
+     * @see javax.faces.application.Application#setPageDeclarationLanguage(javax.faces.webapp.pdl.PageDeclarationLanguage)
+     * @param pdl
+     */
     @Override
     public void setPageDeclarationLanguage(PageDeclarationLanguage pdl) {
         this.pdl = pdl;
     }
     
     
-
-
     /**
      * @see javax.faces.application.Application#getResourceHandler()
      */
@@ -810,28 +815,36 @@ public class ApplicationImpl extends Application {
 
     }
 
-    @Override
-    public UIComponent createComponent(Resource componentResource) throws FacesException {
-        FacesContext context = FacesContext.getCurrentInstance();
-        Application myApp = context.getApplication();
-        UIComponent result = null;
-        PageDeclarationLanguage myPDL = myApp.getPageDeclarationLanguage();
-        ValueExpression ve;
-        String componentType = null;
 
-        BeanInfo componentMetadata = myPDL.getComponentMetadata(context, 
-                componentResource);
+    /**
+     * @see javax.faces.application.Application#createComponent(javax.faces.context.FacesContext, javax.faces.application.Resource)
+     */
+    @Override
+    public UIComponent createComponent(FacesContext context, Resource componentResource) throws FacesException {
+
+        Util.notNull("context", context);
+        Util.notNull("componentResource", componentResource);
+
+        UIComponent result = null;
+
+        // use the application defined in the FacesContext as we may be calling
+        // overriden methods
+        Application app = context.getApplication();
+
+        PageDeclarationLanguage pdl = app.getPageDeclarationLanguage();
+        BeanInfo componentMetadata = pdl.getComponentMetadata(context,
+                                                              componentResource);
         if (null != componentMetadata){
             BeanDescriptor componentBeanDescriptor = componentMetadata.getBeanDescriptor();
             
             // Step 1.  See if the composite component author explicitly
             // gave a componentType as part of the composite component metadata
-            ve = (ValueExpression)
+            ValueExpression ve = (ValueExpression)
                   componentBeanDescriptor.getValue(UIComponent.COMPOSITE_COMPONENT_TYPE_KEY);
             if (null != ve) {
-                componentType = (String) ve.getValue(context.getELContext());
+                String componentType = (String) ve.getValue(context.getELContext());
                 if (null != componentType && 0 < componentType.length()) {
-                    result = myApp.createComponent(componentType);
+                    result = app.createComponent(componentType);
                 }
             }
         }
@@ -841,7 +854,7 @@ public class ApplicationImpl extends Application {
         // found for the componentResource,
         // see if a component can be generated from it
         if (null == result) {
-            Resource scriptComponentResource = myPDL.getScriptComponentResource(context, componentResource);
+            Resource scriptComponentResource = pdl.getScriptComponentResource(context, componentResource);
 
             if (null != scriptComponentResource) {
                 result = createComponentFromScriptResource(context,
@@ -855,30 +868,36 @@ public class ApplicationImpl extends Application {
         if (null == result) {
             String packageName = componentResource.getLibraryName();
             String className = componentResource.getResourceName();
-            className = className.substring(0, className.lastIndexOf("."));
-            ClassLoader cl = Thread.currentThread().getContextClassLoader();
-            if (null == cl) {
-                cl = this.getClass().getClassLoader();
-            }
+            className = packageName + className.substring(0, className.lastIndexOf('.'));
             try {
-                Class clazz = cl.loadClass(packageName + "." + className);
+                Class<?> clazz = (Class<?>) componentMap.get(className);
+                if (clazz == null) {
+                    clazz = Util.loadClass(className, this);
+                }
+                if (!associate.isDevModeEnabled()) {
+                    componentMap.put(className, clazz);
+                }
                 result = (UIComponent) clazz.newInstance();
             } catch (ClassNotFoundException ex) {
                 // take no action, this is not an error.
-                } catch (InstantiationException ie) {
+            } catch (InstantiationException ie) {
                 throw new FacesException(ie);
             } catch (IllegalAccessException iae) {
                 throw new FacesException(iae);
             } catch (ClassCastException cce) {
                 throw new FacesException(cce);
-            } catch (Throwable otherwise) {
-                // take no action, not an error
+            } catch (Exception otherwise) {
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE,
+                               otherwise.toString(),
+                               otherwise);
                 }
+            }
         }
 
         // Step 4. Use javax.faces.NamingContainer as the component type
         if (null == result) {
-            result = myApp.createComponent("javax.faces.NamingContainer");
+            result = app.createComponent("javax.faces.NamingContainer");
         }
 
         assert (null != result);
@@ -890,39 +909,7 @@ public class ApplicationImpl extends Application {
         return result;
     }
     
-    private UIComponent createComponentFromScriptResource(FacesContext context,
-            Resource componentResource) {
-        UIComponent result = null;
-        InputStream resourceInputStream = null;
-        try {
-            if (null != resourceInputStream && null == (resourceInputStream = componentResource.getInputStream())) {
-                return null;
-            }
-        } catch (IOException ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
-            return null;
-        }
-        String className = componentResource.getResourceName();
-        int lastDot = className.lastIndexOf(".");
-        className = className.substring(0, lastDot);
-        
-        try {
-            Class componentClass = com.sun.faces.util.Util.loadClass(className, context);
-            result = (UIComponent) componentClass.newInstance();
-        } catch (IllegalAccessException ex) { 
-            LOGGER.log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
-        }
 
-	// PENDING apply annotations 
-        
-        // Util.processListenerForAnnotation(result);
-        
-        return result;
-    }
         
 
     /**
@@ -1534,6 +1521,46 @@ public class ApplicationImpl extends Application {
     }
 
 
+    // --------------------------------------------------------- Private Methods
+
+
+    private UIComponent createComponentFromScriptResource(FacesContext context,
+                                                          Resource componentResource) {
+
+        UIComponent result = null;
+
+        String className = componentResource.getResourceName();
+        int lastDot = className.lastIndexOf('.');
+        className = className.substring(0, lastDot);
+
+        try {
+
+            Class<?> componentClass = (Class<?>) componentMap.get(className);
+            if (componentClass == null) {
+                componentClass = Util.loadClass(className, this);
+            }
+            if (!associate.isDevModeEnabled()) {
+                componentMap.put(className, componentClass);
+            }
+            result = (UIComponent) componentClass.newInstance();
+        } catch (IllegalAccessException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            LOGGER.log(Level.SEVERE, null, ex);
+        }
+
+        if (result != null) {
+            associate.getAnnotationManager()
+                  .applyComponentAnnotations(context, result);
+        }
+
+        return result;
+        
+    }
+
+
     /**
      * Leveraged by {@link Application#createComponent(String)} and {@link Application#createComponent(javax.faces.context.FacesContext, String, String)}
      * This method will apply any component and render annotations that may be present.
@@ -1621,17 +1648,19 @@ public class ApplicationImpl extends Application {
                   .applyComponentAnnotations(ctx, c);
             if (rendererType != null) {
                 Renderer r =
-                      ctx.getRenderKit().getRenderer(c.getFamily(), rendererType);
+                      ctx.getRenderKit()
+                            .getRenderer(c.getFamily(), rendererType);
                 if (r != null) {
-		    c.setRendererType(rendererType);
+                    c.setRendererType(rendererType);
                     associate.getAnnotationManager()
                           .applyRendererAnnotations(ctx, r, c);
+                } else {
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.log(Level.FINE,
+                                   "Unable to create Renderer with rendererType {0} for component with component type of {1}",
+                                   new Object[] { rendererType, c.getFamily() });
+                    }
                 }
-		else {
-		    if (LOGGER.isLoggable(Level.FINE)) {
-			LOGGER.log(Level.FINE, "PENDING_I18N Unable to create Renderer with rendererType" + rendererType + " for Component with componentType " + c.getFamily());
-		    }
-		}
             }
 
         }
