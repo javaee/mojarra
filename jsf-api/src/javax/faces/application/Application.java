@@ -66,6 +66,7 @@ import javax.el.ELResolver;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.validator.Validator;
+import javax.faces.webapp.pdl.PageDeclarationLanguage;
 
 
 /**
@@ -305,6 +306,45 @@ public abstract class Application {
 
         if (defaultApplication != null) {
             defaultApplication.setResourceHandler(resourceHandler);
+        }
+
+        throw new UnsupportedOperationException();
+        
+    }
+    
+    /**
+     * <p class="changed_added_2_0">Set the implementation of 
+     * {@link PageDeclarationLanguage} to be used in this application instance.
+     * </p>
+     *
+     * RELEASE_PENDING (edburns,rogerK)
+     *   - NPE if pdl is null, correct?
+     *   - can this be changed during runtime or should it have similar
+     *     restrictions as state manager or ViewHandler?
+     * 
+     * @since 2.0
+     * 
+     */
+    public void setPageDeclarationLanguage(PageDeclarationLanguage pdl) {
+        
+        if (defaultApplication != null) {
+            defaultApplication.setPageDeclarationLanguage(pdl);
+        }
+
+        throw new UnsupportedOperationException();
+        
+    }
+    
+    /**
+     * <p class="changed_modified_2_0">Return the {@link PageDeclarationLanguage}
+     * instance used for the application instance.</p>
+     * 
+     * @since 2.0
+     */
+    public PageDeclarationLanguage getPageDeclarationLanguage() {
+
+        if (defaultApplication != null) {
+            return defaultApplication.getPageDeclarationLanguage();
         }
 
         throw new UnsupportedOperationException();
@@ -688,40 +728,7 @@ public abstract class Application {
         throws FacesException;
 
 
-    /**
-     * <p class="changed_added_2_0">Instantiate and return a new {@link
-     * UIComponent} instance from the argument {@link Resource}.  The
-     * default implementation must support resources that resolve to
-     * source files defining <code>UIComponent</code>s authored in the
-     * <a href="http://www.jcp.org/en/jsr/detail?id=241">Groovy
-     * programming language</a>.</p>
-     *
-     * <div class="changed_added_2_0">
 
-     * <p>Before the component instance is
-     * returned, it must be inspected for the presence of a {@link
-     * javax.faces.event.ListenerFor} annotation.  If this annotation is present,
-     * the action listed in {@link javax.faces.event.ListenerFor} must be taken on
-     * the component, before it is returned from this method.</p>
-
-     * </div>
-     *
-     * @param componentResource A {@link Resource} that points to a
-     * source file that provides an implementation of a component.
-     *
-     * @throws FacesException if a {@link UIComponent} from the {@link
-     * Resource} cannot be created
-     * @throws NullPointerException if <code>componentResource</code>
-     *  is <code>null</code>
-     */
-    
-    public UIComponent createComponent(Resource componentResource) 
-            throws FacesException {
-
-        UIComponent result = null;
-        
-        return result;
-    }
     
 
     /**
@@ -807,8 +814,6 @@ public abstract class Application {
 
 
     /**
-     * 
-
      * <p class="changed_added_2_0">Like {@link
      * #createComponent(ValueExpression, FacesContext, String)} except
      * the <code>Renderer</code> for the component to be returned must
@@ -825,25 +830,25 @@ public abstract class Application {
      * UIComponent#setRendererType} must be called on the newly created
      * <code>UIComponent</code> instance, passing the argument
      * <code>rendererType</code> as the argument.</p>
-
+     *
      * @param componentExpression {@link ValueExpression} representing a
      * component value expression (typically specified by the
      * <code>component</code> attribute of a custom tag)
-
+     *
      * @param context {@link FacesContext} for the current request
-
+     *
      * @param componentType Component type to create if the {@link
      * ValueExpression} does not return a component instance
-
+     *
      * @param rendererType The renderer-type of the
      * <code>Renderer</code> that will render this component.  A
      * <code>null</code> value must be accepted for this parameter.
-
+     *
      * @throws FacesException if a {@link UIComponent} cannot be created
      * @throws NullPointerException if any of the parameters
      * <code>componentExpression</code>, <code>context</code>, or
      * <code>componentType</code> are <code>null</code>
-
+     *
      * @since 2.0
      */
     public UIComponent createComponent(ValueExpression componentExpression,
@@ -879,26 +884,26 @@ public abstract class Application {
      * {@link UIComponent#setRendererType} must be called on the newly
      * created <code>UIComponent</code> instance, passing the argument
      * <code>rendererType</code> as the argument.</p>
-
+     *
      * @param context {@link FacesContext} for the current request
-
+     *
      * @param componentType Component type to create
-
+     *
      * @param rendererType The renderer-type of the
      * <code>Renderer</code> that will render this component.  A
      * <code>null</code> value must be accepted for this parameter.
-
+     *
      * @throws FacesException if a {@link UIComponent} cannot be created
-
+     *
      * @throws NullPointerException if any of the parameters
      * <code>context</code>, or <code>componentType</code> are
      * <code>null</code>
-
+     *
      * @since 2.0
      */
-     public UIComponent createComponent(FacesContext context,
-                                        String componentType,
-                                        String rendererType) {
+    public UIComponent createComponent(FacesContext context,
+                                       String componentType,
+                                       String rendererType) {
 
         if (defaultApplication != null) {
             defaultApplication.createComponent(context,
@@ -908,7 +913,57 @@ public abstract class Application {
 
         throw new UnsupportedOperationException();
 
-     }
+    }
+
+
+    /**
+     * RELEASE_PENDING (edburns,rogerk)  These docs need to be
+     *  brought inline with the current implementation
+     *
+     * <p class="changed_added_2_0">Instantiate and return a new {@link
+     * UIComponent} instance from the argument {@link Resource}.  The
+     * default implementation must support resources that resolve to
+     * source files defining <code>UIComponent</code>s authored in the
+     * <a href="http://www.jcp.org/en/jsr/detail?id=241">Groovy
+     * programming language</a>.</p>
+     *
+     * <div class="changed_added_2_0">
+
+     * <p>Before the component instance is
+     * returned, it must be inspected for the presence of a {@link
+     * javax.faces.event.ListenerFor} annotation.  If this annotation is present,
+     * the action listed in {@link javax.faces.event.ListenerFor} must be taken on
+     * the component, before it is returned from this method.</p>
+
+     * </div>
+     *
+     * @param context {@link FacesContext} for the current request
+     * @param componentResource A {@link Resource} that points to a
+     * source file that provides an implementation of a component.
+     *
+     * @throws FacesException if a {@link UIComponent} from the {@link
+     * Resource} cannot be created
+     * @throws NullPointerException if any parameter is <code>null</code>
+     *
+     * RELEASE_PENDING (edburns,roger) do we want to keep re-using this
+     * text or explain the injection/delegation?
+     *
+     * <p>A default implementation is provided that throws
+     * <code>UnsupportedOperationException</code> so that users
+     * that decorate <code>Application</code> can continue to function</p>.
+     *
+     * @since 2.0
+     */
+    public UIComponent createComponent(FacesContext context,
+                                       Resource componentResource) {
+
+        if (defaultApplication != null) {
+            return defaultApplication.createComponent(context, componentResource);
+        }
+
+        throw new UnsupportedOperationException();
+
+    }
 
 
     /**
