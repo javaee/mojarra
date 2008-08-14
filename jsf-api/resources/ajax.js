@@ -113,7 +113,7 @@ javax.faces.Ajax.viewState = function(form) {
  * <code>form</code> element as the argument.</li> 
  * <li>Determine additional arguments (if any) from the <code>options</code>
  * argument.  
- * <li>Set up post data arguments for the Ajax request.  The following
+ * <li>Collect post data arguments for the Ajax request.  The following
  * name/value pairs must be passed as post data:
  * <ul>
  * <li>The name and value of the <code>source</code> element that 
@@ -140,6 +140,9 @@ javax.faces.Ajax.viewState = function(form) {
  * </li>
  * </ul>
  * </li>
+ * <li>Join the encoded view state with the encoded set of post data arguments
+ * to form the <code>query string</code> that will be sent to the server.</li>
+ * <li>Send he request as an <code>asynchronous POST</code>.</li>
  * </ul>  
  *
  * @param element The DOM element that triggered this Ajax request.
