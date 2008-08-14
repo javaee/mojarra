@@ -837,7 +837,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
     }
 
     /**
-     * <p class="changed_added_2_0">If {@link If {@link
+     * <p class="changed_added_2_0">If {@link
      * javax.faces.context.FacesContext#isAjaxRequest} returns <code>true</code>,
      * replace the <code>ResponseWriter</code> in the
      * <code>FacesContext</code> with the writer used to render
@@ -985,7 +985,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
     }
 
     /**
-     * <p class="changed_added_2_0">If {@link If {@link
+     * <p class="changed_added_2_0">If {@link 
      * javax.faces.context.FacesContext#isAjaxRequest} returns
      * <code>true</code>, write the closing content element,
      * call {@link javax.faces.application.StateManager#getViewState}

@@ -80,6 +80,21 @@ if (javax.faces.Ajax == null || typeof javax.faces.Ajax == "undefined") {
 }
 
 /**
+ * @name javax
+ * @namespace
+ */
+
+/**
+ * @name javax.faces
+ * @namespace
+ */
+
+/**
+ * @name javax.faces.Ajax
+ * @namespace
+ */
+
+/**
  * <p><span class="changed_added_2_0">Collect</span> and encode
  * state for input controls associated with the specified
  * <code>form</code> element. 
@@ -89,7 +104,7 @@ if (javax.faces.Ajax == null || typeof javax.faces.Ajax == "undefined") {
  * Only successful controls will be collected and encoded in 
  * accordance with: <a href="http://www.w3.org/TR/html401/interact/forms.html#h-17.13.2">
  * Section 17.13.2 of the HTML Specification</a>.
- * @return The encoded state for the specified form's input controls.
+ * @returns The encoded state for the specified form's input controls.
  * @function javax.faces.Ajax.viewState
  */
 javax.faces.Ajax.viewState = function(form) {
@@ -109,21 +124,33 @@ javax.faces.Ajax.viewState = function(form) {
  * <li>Determine the <code>source</code> element's <code>form</code>
  * element.</li>
  * <li>Get the <code>form</code> view state by calling 
- * <code>javax.faces.Ajax.viewState</code> passing the 
+ * {@link javax.faces.Ajax.viewState} passing the 
  * <code>form</code> element as the argument.</li> 
- * <li>Determine additional arguments (if any) from the <code>options</code>
- * argument.  
- * <li>Collect post data arguments for the Ajax request.  The following
- * name/value pairs must be passed as post data:
+ * <li>Collect post data arguments for the Ajax request.  
+ * <ul>
+ * <li>The following name/value pairs are required post data arguments:
  * <ul>
  * <li>The name and value of the <code>source</code> element that 
  * triggered this request;</li>
  * <li><code>javax.faces.partial.ajax</code> with the value 
  * <code>true</code></li>
- * <li>name/value pairs from the <code>event</code> argument (if any).  The following
- * name/value pairs may be used from the <code>event</code> object:
+ * </ul>
+ * </li>
+ * </ul>
+ * </li>
+ * <li>Collect optional post data arguments for the Ajax request.
  * <ul>
- * <li>name/value pairs from the <code>options</code> associative array (if any)</li>
+ * <li>Determine additional arguments (if any) from the <code>options</code>
+ * argument. If <code>options.execute</code> exists, create the post data argument
+ * with the name <code>javax.faces.partial.execute</code> and the value as a 
+ * comma delimited <code>string</code> of client identifiers.  If 
+ * <code>options.render</code> exists, create the post data argument with the name
+ * <code>javax.faces.partial.render</code> and the value as a comma delimited 
+ * <code>string</code> of client identifiers.</li>  
+ * <li>Determine additional arguments (if any) from the <code>event</code>
+ * argument.  The following name/value pairs may be used from the 
+ * <code>event</code> object:
+ * <ul>
  * <li><code>target</code> - the ID of the element that triggered the event.</li>
  * <li><code>captured</code> - the ID of the element that captured the event.</li>
  * <li><code>type</code> - the type of event (ex: onkeypress)</li>
@@ -140,22 +167,35 @@ javax.faces.Ajax.viewState = function(form) {
  * </li>
  * </ul>
  * </li>
+ * <li>Encode the set of post data arguments.</li>
  * <li>Join the encoded view state with the encoded set of post data arguments
  * to form the <code>query string</code> that will be sent to the server.</li>
- * <li>Send he request as an <code>asynchronous POST</code>.</li>
+ * <li>Send the request as an <code>asynchronous POST</code> using the 
+ * <code>action</code> property of the <code>form</code> element as the 
+ * <code>url</code>.</li>
  * </ul>  
  *
  * @param element The DOM element that triggered this Ajax request.
- * @param event The DOM event that triggered this Ajax request.  This
- * argument is optional.
+ * @param event The DOM event that triggered this Ajax request.  The
+ * <code>event</code> argument is optional.
  * @param options The set of available options that can be sent as
  * request parameters to control client and/or server side 
  * request processing. Accpetable name/value pair options are:
- * <ul>
- * <li><code>javax.faces.partial.execute</code> with value <code>true</code>.</li>
- * <li><code>javax.faces.partial.render</code> with value <code>true</code>.</li>
- * </ul>
- * This argument is optional. 
+ * <table border="1">
+ * <tr>
+ * <th>name</th>
+ * <th>value</th>
+ * </tr>
+ * <tr>
+ * <td><code>execute</code></td>
+ * <td><code>comma seperated list of client identifiers</code></td>
+ * </tr>
+ * <tr>
+ * <td><code>render</code></td>
+ * <td><code>comma seperated list of client identifiers</code></td>
+ * </tr>
+ * </table>
+ * The <code>options</code> argument is optional. 
  * @function javax.faces.Ajax.ajaxRequest
  */
 javax.faces.Ajax.ajaxRequest = function(element, event, options) {
