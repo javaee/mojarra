@@ -205,7 +205,8 @@ public abstract class FacesContext {
      * there is no such request parameter, return an empty <code>List</code>.
      * These client identifiers are used to identify components that
      * will be processed during the <code>execute</code> phase of the
-     * request processing lifecycle.</p>
+     * request processing lifecycle.  The returned <code>List</code> is
+     * mutable.</p>
      */
     public List<String> getExecutePhaseClientIds() {
         if (defaultFacesContext != null) {
@@ -311,7 +312,8 @@ public abstract class FacesContext {
      * there is no such request parameter, return an empty <code>List</code>.
      * These client identifiers are used to identify components that
      * will be processed during the <code>render</code> phase of the
-     * request processing lifecycle.</p>
+     * request processing lifecycle.  The returned <code>List</code> is 
+     * mutable.</p>
      */
     public List<String> getRenderPhaseClientIds() {
         if (defaultFacesContext != null) {
