@@ -45,21 +45,21 @@ import javax.faces.application.Application;
  * configuration resources have been parsed and processed.</p>
  *
  * <p>This event is useful for listeners that need to perform custom
- * post-configuration processing without having to rely on <code>ServletContextListeners</code> 
+ * post-configuration processing without having to rely on <code>ServletContextListener</code>s 
  * which may be invoked before the JavaServer Faces runtime has started it's
  * configuration process.</p>
  *
  * @since 2.0
  */
-public class ConfigurationCompleteEvent extends SystemEvent {
+public class ApplicationPostConstructEvent extends SystemEvent {
 
     private static final long serialVersionUID = -3918703770970591309L;
 
     /**
-     * Constructs a new ConfigurationCompleteEvent for this application.
+     * Constructs a new <code>AppliationPostConstructEvent</code> for this application.
      * @param application the application that has been configured
      */
-    public ConfigurationCompleteEvent(Application application) {
+    public ApplicationPostConstructEvent(Application application) {
         super(application);
     }
 
