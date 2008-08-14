@@ -410,7 +410,8 @@ public abstract class FacesContext {
     public abstract void setResponseWriter(ResponseWriter responseWriter);
 
     /**
-     * <p>Return the {@link ResponseWriter} to which components should
+     * <p class="changed_added_2_0">Return the {@link ResponseWriter} 
+     * to which components should
      * direct their output for partial view rendering.  Within a given
      * response, components can use either the ResponseStream or the
      * ResponseWriter, but not both.</p>

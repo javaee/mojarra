@@ -1051,6 +1051,14 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
         }
     }
 
+    /**
+     * <p class="changed_added_2_0">Call {@link UIComponentBase#getRendersChildren}
+     * If {@link javax.faces.context.FacesContext#isAjaxRequest}
+     * returns <code>true</code> and it is a partial render request
+     * ({@link javax.faces.context.FacesContext#isRenderAll} returns
+     * <code>false</code>), return <code>true</code>.</p> 
+     */
+    @Override
     public boolean getRendersChildren() {
         boolean value = super.getRendersChildren();
         FacesContext context = FacesContext.getCurrentInstance();
