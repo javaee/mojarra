@@ -56,8 +56,6 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 
-import javax.servlet.http.HttpServletResponse;
-
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -112,7 +110,6 @@ import com.sun.faces.renderkit.RenderKitUtils;
      private static final String RENDER = "javax.faces.partial.render";
      private static final String RENDER_ALL = "javax.faces.partial.renderAll";
 
-     private Object originalResponse = null;
      private OnOffResponseWrapper onOffResponse = null;
 
      /**
@@ -168,11 +165,8 @@ import com.sun.faces.renderkit.RenderKitUtils;
       * @see javax.faces.context.FacesContext#enableResponseWriting()
       */
      public void enableResponseWriting(boolean enable) {
-         if (originalResponse == null) {
-             originalResponse = getExternalContext().getResponse();
-         }
          if (onOffResponse == null) {
-             onOffResponse = new OnOffResponseWrapper((HttpServletResponse)originalResponse);
+             onOffResponse = new OnOffResponseWrapper(this);
          }
          onOffResponse.setEnabled(enable);
      }
@@ -378,7 +372,6 @@ import com.sun.faces.renderkit.RenderKitUtils;
              return (emptyList.iterator());
          }
      }
-
 
      /**
       * @see FacesContext#getMessages(String)

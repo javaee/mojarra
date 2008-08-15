@@ -40,6 +40,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 
+import javax.faces.context.FacesContext;
+
 import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
@@ -52,8 +54,8 @@ import javax.servlet.http.HttpServletResponseWrapper;
 * that appears outside of the <f:view> tag to the Ajax response.</p>
 */
 public class OnOffResponseWrapper extends HttpServletResponseWrapper {
-    public OnOffResponseWrapper(HttpServletResponse orig) {
-        super(orig);
+    public OnOffResponseWrapper(FacesContext context) {
+        super((HttpServletResponse)context.getExternalContext().getResponse());
     }        
         
     private ServletOutputStream noOpServletOutputStream = null;
