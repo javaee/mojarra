@@ -701,9 +701,13 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
                     FacesEvent event = eventsForPhaseId.get(0);
                     UIComponent source = event.getComponent();
                     try {
+                        this.pushComponentToEL(context, source);
                         source.broadcast(event);
                     } catch (AbortProcessingException ignored) {
                         // A "return" here would abort remaining events too
+                    }
+                    finally {
+                        popComponentFromEL(context);
                     }
                     eventsForPhaseId.remove(0); // Stay at current position
                 }
