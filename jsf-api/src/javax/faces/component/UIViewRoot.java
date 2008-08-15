@@ -187,7 +187,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
         LOCATION_IDENTIFIER_MAP.put("body", LOCATION_IDENTIFIER_PREFIX + "BODY");        
     }
 
-    /** <p> Request scoped key to hold the original ResponseWriter between
+    /** <p> Key to hold the original ResponseWriter between
      *      encodeBegin and encodeEnd during Ajax requests.</p>
      */
     private static final String ORIGINAL_WRITER = "javax.faces.originalWriter";
@@ -778,13 +778,15 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      */
     @Override
     public void processDecodes(FacesContext context) {
+        initState();
+        notifyBefore(context, PhaseId.APPLY_REQUEST_VALUES);
+
         if (context.isAjaxRequest() && processPartialDecodes(context)) {
+            notifyAfter(context, PhaseId.APPLY_REQUEST_VALUES);
             return;
         }
 
         // If we have not done partial processing..
-        initState();
-        notifyBefore(context, PhaseId.APPLY_REQUEST_VALUES);
         try {
             if (!skipPhase) {
                 super.processDecodes(context);
@@ -869,12 +871,13 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
     @Override
     public void encodeBegin(FacesContext context) throws IOException {
 
+        initState();
+        notifyBefore(context, PhaseId.RENDER_RESPONSE);
+
         if (context.isAjaxRequest() && encodePartialResponseBegin(context)) {
             return;
         }
 
-        initState();
-        notifyBefore(context, PhaseId.RENDER_RESPONSE);
         if (!skipPhase) {
             super.encodeBegin(context);
         }
@@ -1203,12 +1206,15 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      */
     @Override
     public void processValidators(FacesContext context) {
+        initState();
+        notifyBefore(context, PhaseId.PROCESS_VALIDATIONS);
+
         if (context.isAjaxRequest() && processPartialValidators(context)) {
+            clearFacesEvents(context);
+            notifyAfter(context, PhaseId.PROCESS_VALIDATIONS);
             return;
         }
 
-        initState();
-        notifyBefore(context, PhaseId.PROCESS_VALIDATIONS);
         try {
             if (!skipPhase) {
                 super.processValidators(context);
@@ -1280,11 +1286,15 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      */
     @Override
     public void processUpdates(FacesContext context) {
-        if (context.isAjaxRequest() && processPartialUpdates(context)) {
-            return;
-        }
         initState();
         notifyBefore(context, PhaseId.UPDATE_MODEL_VALUES);
+
+        if (context.isAjaxRequest() && processPartialUpdates(context)) {
+            clearFacesEvents(context);
+            notifyAfter(context, PhaseId.UPDATE_MODEL_VALUES);
+            return;
+        }
+
         try {
             if (!skipPhase) {
                 super.processUpdates(context);
