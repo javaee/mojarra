@@ -435,7 +435,8 @@ public abstract class
         }
     }
 
-    /* <p class="changed_added_2_0">
+    /** 
+     * <p class="changed_added_2_0">
      * Convenience method to return the view state as a <code>String</code>
      * just as it would have been written to the response.  This method should
      * call {@link #saveView(FacesContext context)} to get the <code>Object</code>
