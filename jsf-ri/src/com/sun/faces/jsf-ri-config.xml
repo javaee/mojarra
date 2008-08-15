@@ -77,6 +77,9 @@
     <view-handler>
       com.sun.faces.application.ViewHandlerImpl
     </view-handler>
+    <view-handler>
+        com.sun.faces.facelets.FaceletViewHandler
+    </view-handler>
     <resource-handler>
       com.sun.faces.application.resource.ResourceHandlerImpl
     </resource-handler>
@@ -229,13 +232,41 @@
         <component-type>com.sun.faces.ext.focus</component-type>
         <component-class>com.sun.faces.ext.component.UIFocus</component-class>
     </component>
+
+    <!-- Facelets Custom Components -->
+    <!-- RELEASE_PENDING will these be needed by the spec? -->
+    <component>
+        <component-type>facelets.ui.Repeat</component-type>
+        <component-class>com.sun.faces.facelets.component.UIRepeat</component-class>
+    </component>
+    <component>
+        <component-type>facelets.ui.ComponentRef</component-type>
+        <component-class>com.sun.faces.facelets.tag.ui.ComponentRef</component-class>
+    </component>
+    <component>
+        <component-type>facelets.ui.Debug</component-type>
+        <component-class>com.sun.faces.facelets.tag.ui.UIDebug</component-class>
+    </component>
+    <component>
+        <component-type>javax.faces.Composite</component-type>
+        <component-class>com.sun.faces.facelets.tag.jsf.CompositeComponentImpl
+        </component-class>
+    </component>
     
     <!-- Add our implementation specific Renderers -->
     <render-kit>
+        <render-kit-id>HTML_BASIC</render-kit-id>
         <renderer>
             <component-family>FocusFamily</component-family>
             <renderer-type>com.sun.faces.ext.render.FocusHTMLRenderer</renderer-type>
             <renderer-class>com.sun.faces.ext.render.FocusHTMLRenderer</renderer-class>
+        </renderer>
+        <!-- Facelets Custom Renderers -->
+        <!-- RELEASE_PENDING will these be needed by the spec? -->
+        <renderer>
+            <component-family>facelets</component-family>
+            <renderer-type>facelets.ui.Repeat</renderer-type>
+            <renderer-class>com.sun.faces.facelets.component.RepeatRenderer</renderer-class>
         </renderer>
     </render-kit>
 </faces-config>

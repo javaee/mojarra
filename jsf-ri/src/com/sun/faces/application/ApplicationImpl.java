@@ -204,6 +204,9 @@ public class ApplicationImpl extends Application {
         propertyResolver = new PropertyResolverImpl();
         variableResolver = new VariableResolverImpl();
 
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        ctx.getExternalContext().getApplicationMap().put(this.getClass().getName(),
+                                                         this);
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.log(Level.FINE, "Created Application instance ");
         }

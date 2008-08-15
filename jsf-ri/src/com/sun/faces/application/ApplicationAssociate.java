@@ -49,7 +49,6 @@ import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.spi.InjectionProvider;
 import com.sun.faces.spi.InjectionProviderFactory;
 import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.FacesLogger;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 
 import javax.el.CompositeELResolver;
@@ -61,7 +60,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
 import javax.faces.application.ProjectStage;
-import javax.faces.application.Application;
 import javax.servlet.ServletContext;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -72,9 +70,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.TreeSet;
-import java.util.logging.Logger;
-import java.util.logging.Level;
-import java.lang.reflect.Field;
 
 /**
  * <p>Break out the things that are associated with the Application, but
@@ -88,8 +83,6 @@ import java.lang.reflect.Field;
  */
 
 public class ApplicationAssociate {
-
-    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
     private ApplicationImpl app = null;
 
@@ -182,19 +175,6 @@ public class ApplicationAssociate {
         groovyHelper = GroovyHelper.getCurrentInstance();
         devModeEnabled = (appImpl.getProjectStage() == ProjectStage.Development);
 
-        try {
-            Field defaultApplicationImpl = Application.class.getDeclaredField("defaultApplication");
-            defaultApplicationImpl.setAccessible(true);
-            defaultApplicationImpl.set(app, app);
-        } catch (NoSuchFieldException nsfe) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, "Unable to find private field named 'defaultApplication' in javax.faces.application.Application.");
-            }
-        } catch (Exception e) {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE, e.toString(), e);
-            }            
-        }
     }
 
     public static ApplicationAssociate getInstance(ExternalContext

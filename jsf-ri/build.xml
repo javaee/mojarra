@@ -295,20 +295,33 @@
             </fileset>
         </copy>
 
+        <!--
+            RELEASE_PENDING (rlubke,driscoll)
+            For now these are copied to the root of the jsf-impl.jar, but
+            eventually they should be in com.sun.faces per the copy statement
+            above.
+        -->
+        <copy todir="${build.classes.dir}">
+            <fileset dir="${conf.share.dir}/xhtml">
+                <include name="*.dtd"/>
+                <include name="*.ent"/>
+            </fileset>
+        </copy>
+
         <copy file="${source.dir}/com/sun/faces/sunjsf.js"
               toDir="${build.classes.dir}/META-INF/resources/jsfri/scripts"/>
         <copy file="${build.generate.tld.dir}/html_basic.tld"
-              toDir="${build.classes.dir}/META-INF"/>
-        <copy file="${conf.share.dir}/jsf_core.tld"
-              toDir="${build.classes.dir}/META-INF"/>
-        <copy file="${conf.share.dir}/jsfri_extensions.tld"
-              toDir="${build.classes.dir}/META-INF"/>
-        <copy file="${conf.share.dir}/mojarra_ext.tld"
               toDir="${build.classes.dir}/META-INF"/>
         <copy file="conf/xslt/jsf1_0-1_1toSchema.xsl"
               toDir="${build.classes.dir}/com/sun/faces"/>
         <copy file="${conf.share.dir}/com.sun.faces.spi.injectionprovider"
               toDir="${build.classes.dir}/META-INF/services"/>
+        <copy todir="${build.classes.dir}/META-INF">
+            <fileset dir="${conf.share.dir}">
+                <include name="*.tld"/>
+                <include name="*.xml"/>
+            </fileset>
+        </copy>
 
     </target>
 
@@ -459,14 +472,7 @@
          =================================================================== 
     -->
 
-    <target name="unjar.facelet" unless="no.facelets">
-        <unjar dest="${build.classes.dir}">
-            <fileset dir="${local.lib.dir}"
-                     includes="jsf-facelets-2.0-SNAPSHOT.jar"/>
-        </unjar>
-    </target>
-
-    <target name="jars" depends="compile,unjar.facelet">
+    <target name="jars" depends="compile">
 
         <copy file="${basedir}/mojarra-jsf-impl.bnd" tofile="tmp.bnd"/>
         <replace file="tmp.bnd"

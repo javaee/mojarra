@@ -45,11 +45,11 @@ import javax.faces.component.UIComponent;
 import javax.faces.event.BeforeRenderEvent;
 import javax.faces.validator.Validator;
 
-import com.sun.facelets.FaceletContext;
-import com.sun.facelets.FaceletException;
-import com.sun.facelets.tag.TagException;
-import com.sun.facelets.tag.jsf.ValidateHandler;
-import com.sun.facelets.tag.jsf.ValidatorConfig;
+import com.sun.faces.facelets.FaceletContext;
+import com.sun.faces.facelets.FaceletException;
+import com.sun.faces.facelets.tag.TagException;
+import com.sun.faces.facelets.tag.jsf.ValidateHandler;
+import com.sun.faces.facelets.tag.jsf.ValidatorConfig;
 
 /**
  * <p>A custom ValidateHandler that registers the created Validator as

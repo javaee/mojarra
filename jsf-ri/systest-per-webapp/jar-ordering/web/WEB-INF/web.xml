@@ -67,6 +67,23 @@
         <param-value>client</param-value>
     </context-param>
 
+    <!--
+        RELEASE_PENDING (rlubke,driscoll) necessary to run with initial Facelets
+        integration.  Hopefully a better solution can be found
+    -->
+    <context-param>
+        <param-name>facelets.VIEW_MAPPINGS</param-name>
+        <param-value>*.xhtml</param-value>
+    </context-param>
+    <!--
+        RELEASE_PENDING (rlubke,driscoll) necessary to run with initial Facelets
+        integration.  Hopefully a better solution can be found
+    -->
+    <context-param>
+        <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
+        <param-value>.jsp</param-value>
+    </context-param>
+
     <!-- Faces Servlet -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>

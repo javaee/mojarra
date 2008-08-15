@@ -45,7 +45,7 @@
 
   <application>
     <view-handler>
-      com.sun.facelets.FaceletViewHandler
+        com.sun.faces.facelets.FaceletViewHandler
     </view-handler>    
   </application>
 

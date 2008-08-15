@@ -42,7 +42,7 @@
               version="2.0">
 
     <application>
-        <view-handler>com.sun.facelets.FaceletViewHandler</view-handler>
+        <view-handler>com.sun.faces.facelets.FaceletViewHandler</view-handler>
     </application>
 
     <navigation-rule>

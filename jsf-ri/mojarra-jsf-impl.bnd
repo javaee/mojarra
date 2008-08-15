@@ -43,7 +43,7 @@ Implementation-Vendor-Id: com.sun
 Extension-Name: @extension.name@
 
 # BND/OSGI Properties
-Export-Package: com.sun.faces.*,com.sun.facelets.*
+Export-Package: com.sun.faces.*
 Import-Package: javax.faces.*,javax.servlet.*,javax.el.*,javax.annotation.*,javax.crypto.*,\
   javax.xml.*,org.w3c.dom.*, \
   com.sun.enterprise.*;resolution:=optional, \
