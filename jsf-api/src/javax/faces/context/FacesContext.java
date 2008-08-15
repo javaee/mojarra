@@ -42,6 +42,7 @@ package javax.faces.context;
 
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.faces.application.Application;
@@ -195,7 +196,40 @@ public abstract class FacesContext {
         throw new UnsupportedOperationException();
 
     }
+
+    /**
+     * <p class="changed_added_2_0">Return a
+     * <code>List</code> of client identifiers from the current request
+     * with the request parameter name <code>javax.faces.partial.execute</code>.
+     * If the value of the request parameter is <code>none</code>, or
+     * there is no such request parameter, return an empty <code>List</code>.
+     * These client identifiers are used to identify components that
+     * will be processed during the <code>execute</code> phase of the
+     * request processing lifecycle.  The returned <code>List</code> is
+     * mutable.</p>
+     */
+    public List<String> getExecutePhaseClientIds() {
+        if (defaultFacesContext != null) {
+            return defaultFacesContext.getExecutePhaseClientIds();
+        }
+        throw new UnsupportedOperationException();
+    }
     
+    /**
+     * <p class="changed_added_2_0">Set the <code>List</code>
+     * of client identifiers that will be used to identify components that
+     * will be processed during the <code>execute</code> phase of the
+     * request processing lifecycle.</p>
+     *
+     * @param executePhaseClientIds The <code>List</code> of client identifiers.
+     */
+    public void setExecutePhaseClientIds(List<String>executePhaseClientIds) {
+        if (defaultFacesContext != null) {
+            defaultFacesContext.setExecutePhaseClientIds(executePhaseClientIds);
+        }
+        throw new UnsupportedOperationException();
+    }
+
     /**
      * <p><span class="changed_modified_2_0">Return</span> the {@link
      * ExternalContext} instance for this <code>FacesContext</code>
@@ -270,6 +304,38 @@ public abstract class FacesContext {
      */
     public abstract RenderKit getRenderKit();
 
+    /**
+     * <p class="changed_added_2_0">Return a
+     * <code>List</code> of client identifiers from the current request
+     * with the request parameter name <code>javax.faces.partial.render</code>.
+     * If the value of the request parameter is <code>none</code>, or
+     * there is no such request parameter, return an empty <code>List</code>.
+     * These client identifiers are used to identify components that
+     * will be processed during the <code>render</code> phase of the
+     * request processing lifecycle.  The returned <code>List</code> is 
+     * mutable.</p>
+     */
+    public List<String> getRenderPhaseClientIds() {
+        if (defaultFacesContext != null) {
+            return defaultFacesContext.getRenderPhaseClientIds();
+        }
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * <p class="changed_added_2_0">Set the <code>List</code>
+     * of client identifiers that will be used to identify components that
+     * will be processed during the <code>render</code> phase of the
+     * request processing lifecycle.</p>
+     *
+     * @param renderPhaseClientIds The <code>List</code> of client identifiers.
+     */
+    public void setRenderPhaseClientIds(List<String>renderPhaseClientIds) {
+        if (defaultFacesContext != null) {
+            defaultFacesContext.setRenderPhaseClientIds(renderPhaseClientIds);
+        }
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * <p>Return <code>true</code> if the <code>renderResponse()</code>
@@ -322,7 +388,7 @@ public abstract class FacesContext {
      * <p>Return the {@link ResponseWriter} to which components should
      * direct their character-based output.  Within a given response,
      * components can use either the ResponseStream or the ResponseWriter,
-     * but not both.
+     * but not both.</p>
      *
      * @throws IllegalStateException if this method is called after
      *  this instance has been released
@@ -343,6 +409,22 @@ public abstract class FacesContext {
      */
     public abstract void setResponseWriter(ResponseWriter responseWriter);
 
+    /**
+     * <p class="changed_added_2_0">Return the {@link ResponseWriter} 
+     * to which components should
+     * direct their output for partial view rendering.  Within a given
+     * response, components can use either the ResponseStream or the
+     * ResponseWriter, but not both.</p>
+     *
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     */
+    public ResponseWriter getPartialResponseWriter() {
+        if (defaultFacesContext != null) {
+            return defaultFacesContext.getPartialResponseWriter();
+        }
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * <p><span class="changed_modified_2_0">Return</span> the root
@@ -470,6 +552,95 @@ public abstract class FacesContext {
 
         throw new UnsupportedOperationException();
 
+    }
+
+    /**
+     * <p class="changed_added_2_0">
+     * Return <code>true</code> if the request parameter
+     * <code>javax.faces.partial.Ajax</code> is present in the current
+     * request.  Otherwise, return <code>false</code>.</p>
+     */
+    public boolean isAjaxRequest() {
+        if (defaultFacesContext != null) {
+            return defaultFacesContext.isAjaxRequest();
+        }
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * <p class="changed_added_2_0">
+     * Return <code>true</code> if the request parameter
+     * <code>javax.faces.partial.execute</code> is present in the current
+     * request and the value of the parameter is <code>none</code>.
+     * Otherwise, return <code>false</code>.</p>
+     */
+    public boolean isExecuteNone() {
+        if (defaultFacesContext != null) {
+            return defaultFacesContext.isExecuteNone();
+        }
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * <p class="changed_added_2_0">
+     * Return <code>true</code> if {@link #isAjaxRequest}
+     * returns <code>true</code>, {@link #isRenderNone} returns
+     * <code>false</code> and {@link #getRenderPhaseClientIds}
+     * returns an <code>empty</code> list.
+     * Otherwise, return <code>false</code>.  This method effectively
+     * says "render everything" if <code>javax.faces.partial.render</code>
+     * is not present in the current request with the value
+     * <code>none</code>.</p>
+     */
+    public boolean isRenderAll() {
+        if (defaultFacesContext != null) {
+            return defaultFacesContext.isRenderAll();
+        }
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * <p class="changed_added_2_0">
+     * Indicate the entire view must be rendered if
+     * <code>renderAll</code> is <code>true</code>.</p>
+     *
+     * @param renderAll the value <code>true</code> indicates
+     * the entire view must be rendered.
+     */
+    public void setRenderAll(boolean renderAll) {
+        if (defaultFacesContext != null) {
+            defaultFacesContext.setRenderAll(renderAll);
+        }
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * <p class="changed_added_2_0">
+     * Return <code>true</code> if the request parameter
+     * <code>javax.faces.partial.render</code> is present in the current
+     * request and the value of the parameter is <code>none</code>.
+     * Otherwise, return <code>false</code>.</p>
+     */
+    public boolean isRenderNone() {
+        if (defaultFacesContext != null) {
+            return defaultFacesContext.isRenderNone();
+        }
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * <p class="changed_added_2_0">
+     * Allow or prevent content from being written to the underlying response.</p>
+     *
+     * @param enable The value <code>true</code> will allow content to be
+     * written to the response.  The value <code>false</code> will prevent
+     * content from being written to the response.
+     */
+    public void enableResponseWriting(boolean enable) {
+        if (defaultFacesContext != null) {
+            defaultFacesContext.enableResponseWriting(enable);
+        }
+        throw new UnsupportedOperationException();
     }
 
     /**

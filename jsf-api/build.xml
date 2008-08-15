@@ -179,7 +179,8 @@
             <filelist dir="${resources.dir}">
                 <file name="OpenAjax.js"/>
                 <file name="ajax.js"/>
-                <file name="utils.js"/>
+                <file name="AjaxEngine.js"/>
+                <file name="Utils.js"/>
             </filelist>
         </concat>
 

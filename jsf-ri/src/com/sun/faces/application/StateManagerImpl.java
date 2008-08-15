@@ -66,6 +66,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
+import javax.faces.context.ResponseWriterWrapper;
 import javax.faces.render.ResponseStateManager;
 
 import com.sun.faces.config.WebConfiguration;
@@ -104,6 +106,8 @@ public class StateManagerImpl extends StateManager {
     private boolean compressViewState;
     private Map<String,Class<?>> classMap;
     private boolean isDevelopmentMode;
+
+    private String viewState = null;
 
 
     // ------------------------------------------------------------ Constructors
@@ -349,6 +353,28 @@ public class StateManagerImpl extends StateManager {
 
     }    
 
+    public String getViewState(FacesContext context) {
+        if (viewState != null) {
+            return viewState;
+        }
+
+        ResponseWriter rw = null;
+        try {
+            rw = context.getResponseWriter();
+            FastStringWriter fw = new FastStringWriter(256);
+            StateCapture sc = new StateCapture(rw.cloneWithWriter(fw), fw);
+            context.setResponseWriter(sc);
+            Object stateObj = saveView(context);
+            writeState(context, stateObj);
+            this.viewState = sc.getState();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        finally {
+            context.setResponseWriter(rw);
+        }
+        return this.viewState;
+    }
 
     // ------------------------------------------------------- Protected Methods
 
@@ -836,6 +862,55 @@ public class StateManagerImpl extends StateManager {
             super.writeExternal(out);
             out.writeUTF(this.facetName);
 
+        }
+
+    }
+
+    private static class StateCapture extends ResponseWriterWrapper {
+
+        protected final ResponseWriter orig;
+        private Object state;
+        private FastStringWriter fw;
+        private boolean writeState;
+
+        public StateCapture(ResponseWriter orig, FastStringWriter fw) {
+            this.orig = orig;
+            this.fw = fw;
+        }
+
+        protected ResponseWriter getWrapped() {
+            return this.orig;
+        }
+
+        public void writeAttribute(String name, Object value, String property) throws IOException {
+            // if we don't do this, we are ending with the
+            // DefaultRenderkitId-value in the state hidden-input field
+            if (ResponseStateManager.VIEW_STATE_PARAM.equals(name)) {
+                writeState = true;
+            }
+            if ("value".equals(name) && writeState) {
+                this.state = value;
+                writeState = false;
+            }
+        }
+
+        public String getState() {
+            String buf = null;
+            int i,j;
+            if (null == this.state && null != (buf = fw.toString())) {
+                if (-1 != (i = buf.indexOf(ResponseStateManager.VIEW_STATE_PARAM))) {
+                    if (-1 != (i = buf.lastIndexOf("<", i))) {
+                        if (-1 != (i = buf.indexOf("value", i))) {
+                            if (-1 != (i = buf.indexOf("\"",i))) {
+                                if (-1 != (j = buf.indexOf("\"", ++i))) {
+                                    state = buf.substring(i, j);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return this.state != null ? this.state.toString() : "";
         }
 
     }
