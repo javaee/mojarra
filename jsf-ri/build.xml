@@ -53,6 +53,7 @@
 
     <!-- The base directory for compilation targets -->
     <property name="build.dir" value="build"/>
+    <property name="target.dir" value="target"/>
     <property name="build.classes.dir" value="${build.dir}/classes"/>
     <property name="build.generate.dir" value="${build.dir}/generate"/>
     <property name="build.generate.tld.dir"
@@ -329,6 +330,7 @@
             description="Clean build and distribution directories">        
         <ant antfile="build-tests.xml" target="remove.tstamp"/>
         <delete dir="${build.dir}"/>
+        <delete dir="${target.dir}"/>
         <delete dir="${dist.dir}"/>
         <delete dir="${impl.test.results.dir}"/>
         <delete>
@@ -551,44 +553,20 @@
            Temporary Testing Targets
          ===================================================================
     -->
-<target name="push-to-maven-prepare">
-  <taskdef resource="maven-repository-importer.properties">
-    <classpath>
-      <pathelement path="${maven.repository.importer.jar}" />
-    </classpath>
-  </taskdef>
 
-  <!-- Create the source distribution -->
-  <mkdir dir="${dist.dir}" />
-  <jar destfile="${dist.dir}/${name}-sources-${impl.version}.zip">
-      <zipfileset dir="${basedir}"
-               includes="LICENSE-APACHE.txt,LICENSE.TXT,THIRDPARTYLICENSEREADME.txt"/>
-      <zipfileset dir="${source.dir}"
-               excludes="**/CVS/**"/>
-      <zipfileset dir="${build.generate.dir}"
-               excludes="**/CVS/**,conf/**,last-generation"/>
-  </jar>
+<target name="push-to-maven-prepare" depends="jars">
 
-  <delete dir="${build.dir}/maven-repo" /><!-- clean it -->
-  <maven-repository-importer destdir="${build.dir}/maven-repo" version="${snapshot.version}">
-    <artifact jar="${build.dir}/lib/jsf-impl.jar"  pom="jsf-impl-pom.xml" srczip="${dist.dir}/${name}-sources-${impl.version}.zip"/>
-  </maven-repository-importer>
+  <mkdir dir="${target.dir}/classes" />
+  <unjar src="${build.dir}/lib/${name}.jar" overwrite="yes" 
+         dest="${target.dir}/classes"/>
+  <jsf.mvn pomFile="jsf-impl-pom.xml" mvnSpecVersion="${mvn.spec.version}" goals="install" />
+
 </target>
 
 <target name="push-to-maven" depends="push-to-maven-prepare">
-  <!-- import to CVS-->
   <tstamp />
-  <echo>importing to CVS...</echo>
-  <cvs dest="${build.dir}/maven-repo">
-    <commandline>
-      <argument value="-d:pserver:${user.name}@cvs.dev.java.net:/cvs" />
-      <argument line="-z9 import -ko -W *.jar -kb -m" />
-      <argument value="deploying new jars to the java.net maven repository" />
-
-      <argument value="javaserverfaces-sources/repo" />
-      <argument line="deployment-to-maven-repository t${DSTAMP}${TSTAMP}" />
-    </commandline>
-  </cvs>
+  <echo>deploying to maven repo</echo>
+  <jsf.mvn pomFile="jsf-impl-pom.xml" mvnSpecVersion="${mvn.spec.version}" goals="deploy" />
 </target>
 
    
