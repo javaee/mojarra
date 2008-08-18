@@ -80,17 +80,6 @@ public class RenderResponsePhase extends Phase {
 
     // ---------------------------------------------------------- Public Methods
 
-    public void doPhase(FacesContext context,
-                        Lifecycle lifecycle,
-                        ListIterator<PhaseListener> listeners) {
-
-        // For requests intended to produce a partial response, we need prohibit
-        // writing any content outside of the view itself (f:view).
-        if (context.isAjaxRequest()) {
-            context.enableResponseWriting(false);
-        }
-        super.doPhase(context, lifecycle, listeners);
-    }
 
     public void execute(FacesContext facesContext) throws FacesException {
 
@@ -101,6 +90,12 @@ public class RenderResponsePhase extends Phase {
             LOGGER.fine("About to render view " +
                  facesContext.getViewRoot().getViewId());
         }
+        // For requests intended to produce a partial response, we need prohibit
+        // writing any content outside of the view itself (f:view).
+        if (facesContext.isAjaxRequest()) {
+            facesContext.enableResponseWriting(false);
+        }
+        
         try {
             //Setup message display LOGGER.
             if (LOGGER.isLoggable(Level.INFO)) {
