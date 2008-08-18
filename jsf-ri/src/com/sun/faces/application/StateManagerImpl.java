@@ -92,6 +92,8 @@ public class StateManagerImpl extends StateManager {
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
     private static final String STATEMANAGED_SERIAL_ID_KEY =
           StateManagerImpl.class.getName() + ".SerialId";
+    private static final String VIEW_STATE_KEY =
+          StateManagerImpl.class.getName() + ".VIEW_STATE";
 
     private static final String LOGICAL_VIEW_MAP =
           RIConstants.FACES_PREFIX + "logicalViewMap";
@@ -106,8 +108,6 @@ public class StateManagerImpl extends StateManager {
     private boolean compressViewState;
     private Map<String,Class<?>> classMap;
     private boolean isDevelopmentMode;
-
-    private String viewState = null;
 
 
     // ------------------------------------------------------------ Constructors
@@ -351,29 +351,37 @@ public class StateManagerImpl extends StateManager {
             rsm.writeState(context, state);
         }
 
-    }    
+    }
 
+
+    /**
+     * @see StateManager#getViewState(javax.faces.context.FacesContext)
+     */
+    @Override
     public String getViewState(FacesContext context) {
-        if (viewState != null) {
-            return viewState;
+
+        String viewState = (String) context.getAttributes().get(VIEW_STATE_KEY);
+        if (viewState == null) {
+            ResponseWriter rw = null;
+            try {
+                rw = context.getResponseWriter();
+                FastStringWriter fw = new FastStringWriter(256);
+                StateCapture sc = new StateCapture(rw.cloneWithWriter(fw), fw);
+                context.setResponseWriter(sc);
+                Object stateObj = saveView(context);
+                writeState(context, stateObj);
+                viewState = sc.getState();
+                context.getAttributes().put(VIEW_STATE_KEY, viewState);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            finally {
+                context.setResponseWriter(rw);
+            }
         }
 
-        ResponseWriter rw = null;
-        try {
-            rw = context.getResponseWriter();
-            FastStringWriter fw = new FastStringWriter(256);
-            StateCapture sc = new StateCapture(rw.cloneWithWriter(fw), fw);
-            context.setResponseWriter(sc);
-            Object stateObj = saveView(context);
-            writeState(context, stateObj);
-            this.viewState = sc.getState();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        finally {
-            context.setResponseWriter(rw);
-        }
-        return this.viewState;
+        return viewState;
+
     }
 
     // ------------------------------------------------------- Protected Methods
