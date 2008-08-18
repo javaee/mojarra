@@ -226,8 +226,9 @@ public abstract class FacesContext {
     public void setExecutePhaseClientIds(List<String>executePhaseClientIds) {
         if (defaultFacesContext != null) {
             defaultFacesContext.setExecutePhaseClientIds(executePhaseClientIds);
+        } else {
+            throw new UnsupportedOperationException();
         }
-        throw new UnsupportedOperationException();
     }
 
     /**
@@ -333,8 +334,9 @@ public abstract class FacesContext {
     public void setRenderPhaseClientIds(List<String>renderPhaseClientIds) {
         if (defaultFacesContext != null) {
             defaultFacesContext.setRenderPhaseClientIds(renderPhaseClientIds);
+        } else {
+            throw new UnsupportedOperationException();
         }
-        throw new UnsupportedOperationException();
     }
 
     /**
@@ -610,8 +612,9 @@ public abstract class FacesContext {
     public void setRenderAll(boolean renderAll) {
         if (defaultFacesContext != null) {
             defaultFacesContext.setRenderAll(renderAll);
+        } else {
+            throw new UnsupportedOperationException();
         }
-        throw new UnsupportedOperationException();
     }
 
     /**
@@ -639,8 +642,9 @@ public abstract class FacesContext {
     public void enableResponseWriting(boolean enable) {
         if (defaultFacesContext != null) {
             defaultFacesContext.enableResponseWriting(enable);
+        } else {
+            throw new UnsupportedOperationException();
         }
-        throw new UnsupportedOperationException();
     }
 
     /**

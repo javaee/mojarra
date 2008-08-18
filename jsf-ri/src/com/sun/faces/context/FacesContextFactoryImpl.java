@@ -59,45 +59,7 @@ import javax.servlet.ServletResponse;
 
 public class FacesContextFactoryImpl extends FacesContextFactory {
 
-    private static final Logger LOGGER = FacesLogger.CONTEXT.getLogger();
-    private Field defaultFacesContext;
-    private Field defaultExternalContext;
-
-
-    // ------------------------------------------------------------ Constructors
-
-
-    public FacesContextFactoryImpl() {
-
-        try {
-            defaultFacesContext = FacesContext.class.getDeclaredField("defaultFacesContext");
-            defaultFacesContext.setAccessible(true);
-        } catch (NoSuchFieldException nsfe) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, "Unable to find private field named 'defaultFacesContext' in javax.faces.context.FacesContext.");
-            }
-        } catch (Exception e) {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE, e.toString(), e);
-            }
-            defaultFacesContext = null;
-        }
-
-        try {
-            defaultExternalContext = ExternalContext.class.getDeclaredField("defaultExternalContext");
-            defaultExternalContext.setAccessible(true);
-        } catch (NoSuchFieldException nsfe) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, "Unable to find private field named 'defaultExternalContext' in javax.faces.context.ExternalContext.");
-            }
-        } catch (Exception e) {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE, e.toString(), e);
-            }
-            defaultExternalContext = null;
-        }
-
-    }
+    
 
 
     // ---------------------------------------- Methods from FacesContextFactory
@@ -119,37 +81,14 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
                 MessageUtils.getExceptionMessageString(
                     MessageUtils.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
         }
-        FacesContext ctx =
-              new FacesContextImpl(
-                    new ExternalContextImpl((ServletContext) sc,
-                                            (ServletRequest) request,
-                                            (ServletResponse) response),
-                                            lifecycle);
-
-        injectDefaults(ctx, ctx.getExternalContext());        
-        return ctx;
-
+        return new FacesContextImpl(
+              new ExternalContextImpl((ServletContext) sc,
+                                      (ServletRequest) request,
+                                      (ServletResponse) response),
+              lifecycle);
+        
     }
 
-
-    // --------------------------------------------------------- Private Methods
-
-
-    private void injectDefaults(FacesContext ctx, ExternalContext extCtx) {
-
-        if (defaultFacesContext != null && defaultExternalContext != null) {
-            try {
-                defaultFacesContext.set(ctx, ctx);
-                defaultExternalContext.set(extCtx, extCtx);
-            } catch (IllegalAccessException e) {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE, e.toString(), e);
-                }
-            }
-        }
-
-    }
-    
     // The testcase for this class is TestSerlvetFacesContextFactory.java
 
 } // end of class FacesContextFactoryImpl

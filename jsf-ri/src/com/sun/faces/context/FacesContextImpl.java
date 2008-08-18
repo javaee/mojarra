@@ -83,6 +83,10 @@ import com.sun.faces.renderkit.RenderKitUtils;
      private static final String POST_BACK_MARKER =
            FacesContextImpl.class.getName() + "_POST_BACK";
 
+     // Queried by InjectionFacesContextFactory
+     private static final ThreadLocal<FacesContext> DEFAULT_FACES_CONTEXT =
+          new ThreadLocal<FacesContext>();
+
      // Log instance for this class
      private static Logger LOGGER = FacesLogger.CONTEXT.getLogger();
 
@@ -128,6 +132,7 @@ import com.sun.faces.renderkit.RenderKitUtils;
          Util.notNull("lifecycle", lifecycle);
          this.externalContext = ec;
          setCurrentInstance(this);
+         DEFAULT_FACES_CONTEXT.set(this);
          rkFactory = (RenderKitFactory)
              FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
      }
@@ -582,6 +587,10 @@ import com.sun.faces.renderkit.RenderKitUtils;
 
          // Make sure to clear our ThreadLocal instance.
          setCurrentInstance(null);
+
+         // remove our private ThreadLocal instance.
+         DEFAULT_FACES_CONTEXT.remove();
+         
      }
 
 
@@ -618,6 +627,16 @@ import com.sun.faces.renderkit.RenderKitUtils;
      public boolean getResponseComplete() {
          assertNotReleased();
          return responseComplete;
+     }
+
+
+     // --------------------------------------------------------- Public Methods
+
+
+     public static FacesContext getDefaultFacesContext() {
+
+         return DEFAULT_FACES_CONTEXT.get();
+
      }
 
 

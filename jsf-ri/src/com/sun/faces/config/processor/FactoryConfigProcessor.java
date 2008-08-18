@@ -52,6 +52,7 @@ import javax.faces.FactoryFinder;
 import java.text.MessageFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
@@ -110,6 +111,14 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
     public void process(Document[] documents)
     throws Exception {
 
+        // track how many FacesContextFactory instances are being added
+        // for this application
+        AtomicInteger facesContextFactoryCount = new AtomicInteger(0);
+
+        // trace how many ApplicationFactory instances are being added
+        // for this application
+        AtomicInteger applicationFactoryCount = new AtomicInteger(0);
+
         for (int i = 0; i < documents.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
@@ -122,13 +131,28 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
             NodeList factories = documents[i].getDocumentElement()
                  .getElementsByTagNameNS(namespace, FACTORY);
             if (factories != null && factories.getLength() > 0) {
-                processFactories(factories, namespace);
+                processFactories(factories,
+                                 namespace,
+                                 facesContextFactoryCount,
+                                 applicationFactoryCount);
             }
         }
 
+        // If there are more than one ApplicationFactory or FacesContextFactory
+        // defined, we will push our Injection factories onto the factory list
+        // so that they are the top-level factory.  This allows us to inject the
+        // default instances into the custom Application or FacesContext
+        // implementations to get around version compatibility issues.
+        // This *must* be called *before* verifyFactoriesExist() as once that
+        // is called, we can't make any changes to the Factory delegation
+        // chain.
+        wrapFactories(applicationFactoryCount.get(),
+                      facesContextFactoryCount.get());
+
         // validate that we actually have factories at this point.
-        // If we don't, there is much point in going further.
         verifyFactoriesExist();
+
+        // invoke the next config processor
         invokeNext(documents);
 
     }
@@ -136,7 +160,10 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
     // --------------------------------------------------------- Private Methods
 
 
-    private void processFactories(NodeList factories, String namespace) {
+    private void processFactories(NodeList factories,
+                                  String namespace,
+                                  AtomicInteger fcCount,
+                                  AtomicInteger appCount) {
 
         for (int i = 0, size = factories.getLength(); i < size; i++) {
             Node factory = factories.item(i);
@@ -145,12 +172,14 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
             for (int c = 0, csize = children.getLength(); c < csize; c++) {
                 Node n = children.item(c);
                 if (APPLICATION_FACTORY.equals(n.getLocalName())) {
+                    appCount.incrementAndGet();
                     setFactory(FactoryFinder.APPLICATION_FACTORY,
                                getNodeText(n));
                 } else if (LIFECYCLE_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.LIFECYCLE_FACTORY,
                                getNodeText(n));
                 } else if (FACES_CONTEXT_FACTORY.equals(n.getLocalName())) {
+                    fcCount.incrementAndGet();
                     setFactory(FactoryFinder.FACES_CONTEXT_FACTORY,
                                getNodeText(n));
                 } else if (RENDER_KIT_FACTORY.equals(n.getLocalName())) {
@@ -190,6 +219,46 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
                                            FACTORY_NAMES[i]), e);
             }
         }
+
+    }
+
+
+    private void wrapFactories(int appCount, int fcCount) {
+
+        if (appCount > 1) {
+            addInjectionApplicationFactory();
+        }
+        if (fcCount > 1) {
+            addInjectionFacesContextFactory();
+        }
+
+    }
+
+
+    /**
+     * Add the InjectionApplicationFactory as the top-level ApplicationFactory
+     * so that the default instances, provided by {@link com.sun.faces.application.ApplicationFactoryImpl}
+     * can be injected into the actual top-level FacesContext instance (that which
+     * is returned by the InjectionFacesContextFactory's delegate).
+     */
+    private void addInjectionApplicationFactory() {
+
+        FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY,
+                                 "com.sun.faces.application.InjectionApplicationFactory");
+        
+    }
+
+
+    /**
+     * Add the InjectionFacesContextFactory as the top-level FacesContextFactory
+     * so that the default instances, provided by {@link com.sun.faces.context.FacesContextFactoryImpl}
+     * can be injected into the actual top-level FacesContext instance (that which
+     * is returned by the InjectionFacesContextFactory's delegate).
+     */
+    private void addInjectionFacesContextFactory() {
+
+        FactoryFinder.setFactory(FactoryFinder.FACES_CONTEXT_FACTORY,
+                                 "com.sun.faces.context.InjectionFacesContextFactory");
 
     }
 

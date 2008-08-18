@@ -76,7 +76,7 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
 
     // Attribute Instance Variables
 
-    private Application application;
+    private volatile Application application;
 
     // Relationship Instance Variables
 
@@ -120,7 +120,7 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
      *
      * @param application The replacement {@link Application} instance
      */
-    public void setApplication(Application application) {
+    public synchronized void setApplication(Application application) {
         if (application == null) {
             String message = MessageUtils.getExceptionMessageString
                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "application");

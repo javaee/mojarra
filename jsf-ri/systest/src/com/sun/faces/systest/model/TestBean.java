@@ -454,18 +454,27 @@ public enum Color { Red, Blue, Green, Orange }
     }
 
     public String getFactoryPrintout() {
-    String result = "";
-    String [] factoryNames = {
-        FactoryFinder.APPLICATION_FACTORY,
-        FactoryFinder.FACES_CONTEXT_FACTORY,
-        FactoryFinder.LIFECYCLE_FACTORY,
-        FactoryFinder.RENDER_KIT_FACTORY
-    };
-    for (int i = 0; i < factoryNames.length; i++) {
-        result = result +
-                 FactoryFinder.getFactory(factoryNames[i]).toString() + " ";
-    }
-    return result;
+        String result = "";
+        String[] factoryNames = {
+              FactoryFinder.APPLICATION_FACTORY,
+              FactoryFinder.FACES_CONTEXT_FACTORY,
+              FactoryFinder.LIFECYCLE_FACTORY,
+              FactoryFinder.RENDER_KIT_FACTORY
+        };
+        for (int i = 0; i < factoryNames.length; i++) {
+            String tmp = FactoryFinder.getFactory(factoryNames[i]).toString();
+            if (tmp.startsWith("com.sun.faces")) {
+                int idx = tmp.lastIndexOf('.');
+                tmp = tmp.substring(idx + 1);
+                idx = tmp.indexOf('@');
+                tmp = tmp.substring(0, idx);
+                result += tmp + ' ';
+            } else {
+                result += FactoryFinder.getFactory(factoryNames[i]).toString()
+                          + ' ';
+            }
+        }
+        return result;
     }
 
     /**
