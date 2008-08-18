@@ -77,6 +77,33 @@ import javax.faces.event.PhaseId;
 
 public abstract class FacesContext {
 
+
+    /**
+     * RELEASE_PENDING (rogerk,edburns) docs
+     *
+     * @since 2.0
+     */
+    public static final String PARTIAL_RENDER_PARAM_NAME =
+          "javax.faces.partial.render";
+
+
+    /**
+     * RELEASE_PENDING (rogerk,edburns) docs
+     *
+     * @since 2.0
+     */
+    public static final String PARTIAL_EXECUTE_PARAM_NAME =
+          "javax.faces.partial.execute";
+
+
+    /**
+     * RELEASE_PENDING (rogerk,edburns) docs
+     *
+     * @since 2.0
+     */
+    public static final String NO_PARTIAL_PHASE_CLIENT_IDS = "none";
+
+
     @SuppressWarnings({"UnusedDeclaration"})
     private FacesContext defaultFacesContext;
 
@@ -200,19 +227,26 @@ public abstract class FacesContext {
     /**
      * <p class="changed_added_2_0">Return a
      * <code>List</code> of client identifiers from the current request
-     * with the request parameter name <code>javax.faces.partial.execute</code>.
-     * If the value of the request parameter is <code>none</code>, or
-     * there is no such request parameter, return an empty <code>List</code>.
+     * with the request parameter name {@link #PARTIAL_EXECUTE_PARAM_NAME}.
+     * If the value of the request parameter is {@link #NO_PARTIAL_PHASE_CLIENT_IDS},
+     * or there is no such request parameter, return an empty <code>List</code>.
      * These client identifiers are used to identify components that
      * will be processed during the <code>execute</code> phase of the
      * request processing lifecycle.  The returned <code>List</code> is
      * mutable.</p>
+     *
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     *
+     * @since 2.0
      */
     public List<String> getExecutePhaseClientIds() {
+
         if (defaultFacesContext != null) {
             return defaultFacesContext.getExecutePhaseClientIds();
         }
         throw new UnsupportedOperationException();
+
     }
     
     /**
@@ -222,13 +256,20 @@ public abstract class FacesContext {
      * request processing lifecycle.</p>
      *
      * @param executePhaseClientIds The <code>List</code> of client identifiers.
+     *
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     *
+     * @since 2.0
      */
     public void setExecutePhaseClientIds(List<String>executePhaseClientIds) {
+
         if (defaultFacesContext != null) {
             defaultFacesContext.setExecutePhaseClientIds(executePhaseClientIds);
         } else {
             throw new UnsupportedOperationException();
         }
+
     }
 
     /**
@@ -302,25 +343,35 @@ public abstract class FacesContext {
      * current {@link UIViewRoot}, if the {@link UIViewRoot} does not have a
      * specified <code>renderKitId</code>, or if there is no {@link RenderKit}
      * for the specified identifier, return <code>null</code> instead.</p>
+     *
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
      */
     public abstract RenderKit getRenderKit();
 
     /**
      * <p class="changed_added_2_0">Return a
      * <code>List</code> of client identifiers from the current request
-     * with the request parameter name <code>javax.faces.partial.render</code>.
-     * If the value of the request parameter is <code>none</code>, or
-     * there is no such request parameter, return an empty <code>List</code>.
+     * with the request parameter name {@link #PARTIAL_RENDER_PARAM_NAME}.
+     * If the value of the request parameter is {@link #NO_PARTIAL_PHASE_CLIENT_IDS},
+     * or there is no such request parameter, return an empty <code>List</code>.
      * These client identifiers are used to identify components that
      * will be processed during the <code>render</code> phase of the
      * request processing lifecycle.  The returned <code>List</code> is 
      * mutable.</p>
+     *
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     *
+     * @since 2.0
      */
     public List<String> getRenderPhaseClientIds() {
+
         if (defaultFacesContext != null) {
             return defaultFacesContext.getRenderPhaseClientIds();
         }
         throw new UnsupportedOperationException();
+
     }
 
     /**
@@ -330,13 +381,20 @@ public abstract class FacesContext {
      * request processing lifecycle.</p>
      *
      * @param renderPhaseClientIds The <code>List</code> of client identifiers.
+     *
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     *
+     * @since 2.0
      */
     public void setRenderPhaseClientIds(List<String>renderPhaseClientIds) {
+
         if (defaultFacesContext != null) {
             defaultFacesContext.setRenderPhaseClientIds(renderPhaseClientIds);
         } else {
             throw new UnsupportedOperationException();
         }
+
     }
 
     /**
@@ -420,12 +478,16 @@ public abstract class FacesContext {
      *
      * @throws IllegalStateException if this method is called after
      *  this instance has been released
+     *
+     * @since 2.0
      */
     public ResponseWriter getPartialResponseWriter() {
+
         if (defaultFacesContext != null) {
             return defaultFacesContext.getPartialResponseWriter();
         }
         throw new UnsupportedOperationException();
+
     }
 
     /**
@@ -561,26 +623,39 @@ public abstract class FacesContext {
      * Return <code>true</code> if the request parameter
      * <code>javax.faces.partial.Ajax</code> is present in the current
      * request.  Otherwise, return <code>false</code>.</p>
+     *
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     *
+     * @since 2.0
      */
     public boolean isAjaxRequest() {
+
         if (defaultFacesContext != null) {
             return defaultFacesContext.isAjaxRequest();
         }
         throw new UnsupportedOperationException();
+
     }
 
     /**
      * <p class="changed_added_2_0">
-     * Return <code>true</code> if the request parameter
-     * <code>javax.faces.partial.execute</code> is present in the current
-     * request and the value of the parameter is <code>none</code>.
-     * Otherwise, return <code>false</code>.</p>
+     * Return <code>true</code> if the request parameter {@link #PARTIAL_EXECUTE_PARAM_NAME}
+     * is present in the current request and the value of the parameter is
+     * {@link #NO_PARTIAL_PHASE_CLIENT_IDS}. Otherwise, return <code>false</code>.</p>
+     *
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     *
+     * @since 2.0
      */
     public boolean isExecuteNone() {
+
         if (defaultFacesContext != null) {
             return defaultFacesContext.isExecuteNone();
         }
         throw new UnsupportedOperationException();
+
     }
 
     /**
@@ -590,15 +665,22 @@ public abstract class FacesContext {
      * <code>false</code> and {@link #getRenderPhaseClientIds}
      * returns an <code>empty</code> list.
      * Otherwise, return <code>false</code>.  This method effectively
-     * says "render everything" if <code>javax.faces.partial.render</code>
+     * says "render everything" if {@link #PARTIAL_RENDER_PARAM_NAME}
      * is not present in the current request with the value
-     * <code>none</code>.</p>
+     * {@link #NO_PARTIAL_PHASE_CLIENT_IDS}.</p>
+     *
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     *
+     * @since 2.0
      */
     public boolean isRenderAll() {
+
         if (defaultFacesContext != null) {
             return defaultFacesContext.isRenderAll();
         }
         throw new UnsupportedOperationException();
+
     }
 
     /**
@@ -608,27 +690,41 @@ public abstract class FacesContext {
      *
      * @param renderAll the value <code>true</code> indicates
      * the entire view must be rendered.
+     *
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     *
+     * @since 2.0
      */
     public void setRenderAll(boolean renderAll) {
+
         if (defaultFacesContext != null) {
             defaultFacesContext.setRenderAll(renderAll);
         } else {
             throw new UnsupportedOperationException();
         }
+
     }
 
     /**
      * <p class="changed_added_2_0">
      * Return <code>true</code> if the request parameter
-     * <code>javax.faces.partial.render</code> is present in the current
-     * request and the value of the parameter is <code>none</code>.
+     * {@link #PARTIAL_RENDER_PARAM_NAME} is present in the current
+     * request and the value of the parameter is {@link #NO_PARTIAL_PHASE_CLIENT_IDS}.
      * Otherwise, return <code>false</code>.</p>
+     *
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     *
+     * @since 2.0
      */
     public boolean isRenderNone() {
+
         if (defaultFacesContext != null) {
             return defaultFacesContext.isRenderNone();
         }
         throw new UnsupportedOperationException();
+
     }
 
     /**
@@ -638,13 +734,20 @@ public abstract class FacesContext {
      * @param enable The value <code>true</code> will allow content to be
      * written to the response.  The value <code>false</code> will prevent
      * content from being written to the response.
+     *
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     *
+     * @since 2.0
      */
     public void enableResponseWriting(boolean enable) {
+
         if (defaultFacesContext != null) {
             defaultFacesContext.enableResponseWriting(enable);
         } else {
             throw new UnsupportedOperationException();
         }
+
     }
 
     /**
@@ -658,17 +761,25 @@ public abstract class FacesContext {
      */
     public abstract void responseComplete();
     
-    private PhaseId currentPhaseId;
-    
+
     /**
      * <p class="changed_added_2_0">Return the value last set on this
      * <code>FacesContext</code> instance when {@link #setCurrentPhaseId}
      * was called.</p>
-     * 
-
+     *
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     *
+     * @since 2.0
      */
     public PhaseId getCurrentPhaseId() {
-        return currentPhaseId;
+
+        if (defaultFacesContext != null) {
+            return defaultFacesContext.getCurrentPhaseId();
+        }
+
+        throw new UnsupportedOperationException();
+
     }
     
     /**
@@ -678,10 +789,20 @@ public abstract class FacesContext {
      * 
      * @param currentPhaseId The {@link javax.faces.event.PhaseId} for the 
      * current phase.
+     *
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     *
+     * @since 2.0
      */
-
     public void setCurrentPhaseId(PhaseId currentPhaseId) {
-        this.currentPhaseId = currentPhaseId;
+
+        if (defaultFacesContext != null) {
+            defaultFacesContext.setCurrentPhaseId(currentPhaseId);
+        } else {
+            throw new UnsupportedOperationException();
+        }
+
     }
 
     // ---------------------------------------------------------- Static Methods
