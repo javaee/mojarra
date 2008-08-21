@@ -62,8 +62,7 @@ import java.io.IOException;
  * details.</p>
  */
 
-public abstract class
-      StateManager {
+public abstract class StateManager {
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -435,18 +434,21 @@ public abstract class
         }
     }
 
-    /** 
+    /**
+     * RELEASE_PENDING (rogerk,edburns) docs
      * <p class="changed_added_2_0">
-     * Convenience method to return the view state as a <code>String</code>
-     * just as it would have been written to the response.  This method should
-     * call {@link #saveView(FacesContext context)} to get the <code>Object</code>
-     * state and then capture the output from
-     * {@link #writeState(FacesContext context, Object state)}.</p>
+     * Calls through to {@link ResponseStateManager#getViewState(javax.faces.context.FacesContext)}.
+     * </p>
      *
      * @param context {@link FacesContext} for the current request
+     *
+     * @since 2.0
      */
     public String getViewState(FacesContext context) {
-        return null;
+
+        return context.getRenderKit().getResponseStateManager()
+              .getViewState(context);
+
     }
 
 }

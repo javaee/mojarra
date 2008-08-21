@@ -293,4 +293,20 @@ public abstract class ResponseStateManager {
     }
 
 
+    /**
+     * RELEASE_PENDING (rogerk,edburns) docs
+     * <p>
+     * Return the view state as a String without any markup related to the
+     * rendering technology this ResponseStateManager supports.
+     * </p>
+     * @param context the {@link FacesContext} for the current request
+     * @return the view state for this request without any markup specifics
+     *
+     * @since 2.0
+     */
+    public String getViewState(FacesContext context) {
+        return "";
+    }
+
+
 }

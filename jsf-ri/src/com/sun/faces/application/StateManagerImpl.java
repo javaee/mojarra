@@ -87,6 +87,13 @@ import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.RIConstants;
 
+/**
+ * RELEASE_PENDING (rlubke,driscoll) IMPORTANT FOR EDR2!
+ *   - Refactor server-side state management so that ResponseStateManagerImpl
+ *     handle both server and client.
+ *   - What happens with custom renderkits after this change?
+ *
+ */
 public class StateManagerImpl extends StateManager {
 
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
