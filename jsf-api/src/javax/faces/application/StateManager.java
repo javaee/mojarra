@@ -435,9 +435,10 @@ public abstract class StateManager {
     }
 
     /**
-     * RELEASE_PENDING (rogerk,edburns) docs
      * <p class="changed_added_2_0">
-     * Calls through to {@link ResponseStateManager#getViewState(javax.faces.context.FacesContext)}.
+     * Convenience method to return the view state as a <code>String</code>.
+     * This method calls through to 
+     * {@link ResponseStateManager#getViewState(javax.faces.context.FacesContext)}.
      * </p>
      *
      * @param context {@link FacesContext} for the current request
