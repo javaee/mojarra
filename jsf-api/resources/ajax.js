@@ -393,3 +393,20 @@ javax.faces.Ajax.ajaxResponse = function(request) {
     }
 }
 
+/**
+ *
+ * <p>Return the value of <code>Application.getProjectStage()</code> for
+ * the currently running application instance.  Calling this method must
+ * not cause any network transaction to happen to the server.</p>
+ * 
+ * @function javax.faces.Ajax.getProjectStage
+ */ 
+
+javax.faces.Ajax.getProjectStage = function() {
+
+    var result = "#{facesContext.application.projectStage}";
+
+    return result;
+
+}
+
