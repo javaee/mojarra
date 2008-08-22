@@ -868,7 +868,11 @@ public class WebConfiguration {
         EnableGroovyScripting(
             "com.sun.faces.enableGroovyScripting",
             false
-	);
+        ),
+        DisableFacesPDL(
+              "javax.faces.DISABLE_FACES_PDL_VIEWHANDLER",
+              false
+        );
 
         private BooleanWebContextInitParameter alternate;
 

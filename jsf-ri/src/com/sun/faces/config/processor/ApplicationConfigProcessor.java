@@ -71,6 +71,8 @@ import com.sun.faces.el.DummyPropertyResolverImpl;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.config.ConfigurationException;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -293,20 +295,13 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
             }
         }
 
-        // take special action on the ViewHandlers that have been
-        // configured for the application.  If any of the ViewHandlers
-        // is the FaceletViewHandler, don't install the 2.0
-        // FaceletViewHandler.  Make the application behave as 1.2
-        // unless they use our ViewHandler
-        if (viewHandlers.containsKey("com.sun.facelets.FaceletViewHandler")) {
-            viewHandlers.remove("com.sun.faces.facelets.FaceletViewHandler");
-        }
-        for (Node n : viewHandlers.values()) {
-            setViewHandler(app, n);
-        }
+        processViewHandlers(app, viewHandlers);
+
         invokeNext(documents);
 
     }
+
+
 
     // --------------------------------------------------------- Private Methods
 
@@ -731,6 +726,25 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                     throw new ConfigurationException(cnfe);
                 }
             }
+        }
+    }
+
+
+    private void processViewHandlers(Application app,
+                                     LinkedHashMap<String, Node> viewHandlers) {
+        // take special action on the ViewHandlers that have been
+        // configured for the application.  If any of the ViewHandlers
+        // is the FaceletViewHandler, don't install the 2.0
+        // FaceletViewHandler.  Make the application behave as 1.2
+        // unless they use our ViewHandler
+        WebConfiguration webConfig = WebConfiguration.getInstance();
+        if (viewHandlers.containsKey("com.sun.facelets.FaceletViewHandler") ||
+            webConfig
+                  .isOptionEnabled(BooleanWebContextInitParameter.DisableFacesPDL)) {
+            viewHandlers.remove("com.sun.faces.facelets.FaceletViewHandler");
+        }
+        for (Node n : viewHandlers.values()) {
+            setViewHandler(app, n);
         }
     }
 
