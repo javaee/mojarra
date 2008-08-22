@@ -76,8 +76,8 @@ import com.sun.faces.facelets.tag.TagAttributeException;
  */
 public final class ComponentSupport {
 
-    private final static String MARK_DELETED = "com.sun.facelets.MARK_DELETED";
-    public final static String MARK_CREATED = "com.sun.facelets.MARK_ID";
+    private final static String MARK_DELETED = "com.sun.faces.facelets.MARK_DELETED";
+    public final static String MARK_CREATED = "com.sun.faces.facelets.MARK_ID";
     
     /**
      * Used in conjunction with markForDeletion where any UIComponent marked

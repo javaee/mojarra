@@ -47,6 +47,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.LinkedHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -230,7 +231,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         ApplicationAssociate associate =
               ApplicationAssociate.getInstance(
                     FacesContext.getCurrentInstance().getExternalContext());
-
+        LinkedHashMap<String,Node> viewHandlers = new LinkedHashMap<String,Node>();
         for (int i = 0; i < documents.length; i++) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
@@ -263,7 +264,10 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                             } else if (NAVIGATION_HANDLER.equals(n.getLocalName())) {
                                 setNavigationHandler(app, n);
                             } else if (VIEW_HANDLER.equals(n.getLocalName())) {
-                                setViewHandler(app, n);
+                                String viewHandler = getNodeText(n);
+                                if (viewHandler != null) {
+                                    viewHandlers.put(viewHandler, n);
+                                }
                             } else if (STATE_MANAGER.equals(n.getLocalName())) {
                                 setStateManager(app, n);
                             } else if (EL_RESOLVER.equals(n.getLocalName())) {
@@ -287,6 +291,18 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                     }
                 }
             }
+        }
+
+        // take special action on the ViewHandlers that have been
+        // configured for the application.  If any of the ViewHandlers
+        // is the FaceletViewHandler, don't install the 2.0
+        // FaceletViewHandler.  Make the application behave as 1.2
+        // unless they use our ViewHandler
+        if (viewHandlers.containsKey("com.sun.facelets.FaceletViewHandler")) {
+            viewHandlers.remove("com.sun.faces.facelets.FaceletViewHandler");
+        }
+        for (Node n : viewHandlers.values()) {
+            setViewHandler(app, n);
         }
         invokeNext(documents);
 

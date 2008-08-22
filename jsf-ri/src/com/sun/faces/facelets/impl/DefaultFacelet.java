@@ -89,7 +89,7 @@ final class DefaultFacelet extends Facelet {
 
     private static final Logger log = Logger.getLogger("facelets.facelet");
 
-    private final static String APPLIED_KEY = "com.sun.facelets.APPLIED";
+    private final static String APPLIED_KEY = "com.sun.faces.facelets.APPLIED";
 
     private final String alias;
 

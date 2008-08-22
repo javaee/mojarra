@@ -71,7 +71,7 @@ public final class ELAdaptor {
 
     private static final boolean ELSUPPORT = (FacesAPI.getVersion() >= 12);
 
-    private final static String LEGACY_ELCONTEXT_KEY = "com.sun.facelets.legacy.ELCONTEXT";
+    private final static String LEGACY_ELCONTEXT_KEY = "com.sun.faces.facelets.legacy.ELCONTEXT";
 
     public ELAdaptor() {
         super();
