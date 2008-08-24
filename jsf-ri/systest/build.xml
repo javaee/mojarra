@@ -99,6 +99,10 @@
                 <zipfileset dir="${web.dir}"/>
             </archive-elements>
         </jsf.war>
+        <mkdir dir="${build.dir}/target/jsf-systest" />
+        <unjar src="${build.dir}/jsf-systest.war" overwrite="true"
+               dest="${build.dir}/target/jsf-systest" />
+
     </target>
 
     <target name="compile" depends=""
@@ -160,5 +164,14 @@
         <undeploy.artifact artifact="${build.dir}/jsf-systest.war"
                   appName="jsf-systest"/>
     </target>
+
+    <target name="passthru"
+            description="useful for running one test">
+       
+        <ant antfile="build-tests.xml" target="test"/>
+
+        
+    </target>  
+
         
 </project>

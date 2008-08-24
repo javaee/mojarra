@@ -50,11 +50,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.StringWriter;
 import java.io.PrintWriter;
+import javax.el.MethodNotFoundException;
 
 /**
- * <p><strong>MethodExpressionActionListener</strong> is an {@link ActionListener} that
- * wraps a {@link MethodExpression}. When it receives a {@link ActionEvent}, it executes
- * a method on an object identified by the {@link MethodExpression}.</p>
+ * <p><strong><span
+ * class="changed_modified_2_0">MethodExpressionActionListener</span></strong>
+ * is an {@link ActionListener} that wraps a {@link
+ * MethodExpression}. When it receives a {@link ActionEvent}, it
+ * executes a method on an object identified by the {@link
+ * MethodExpression}.</p>
  */
 
 public class MethodExpressionActionListener implements ActionListener,
@@ -66,56 +70,121 @@ public class MethodExpressionActionListener implements ActionListener,
 
     // ------------------------------------------------------ Instance Variables
 
-    private MethodExpression methodExpression = null;
+    private MethodExpression methodExpressionOneArg = null;
+    private MethodExpression methodExpressionZeroArg = null;
     private boolean isTransient;
+    private final static Class[] ACTION_LISTENER_ZEROARG_SIG = new Class[] { };
 
     public MethodExpressionActionListener() { }
 
     /**
-     * <p>Construct a {@link ValueChangeListener} that contains a {@link MethodExpression}.</p>
+     * <p><span class="changed_modified_2_0">Construct<span
+     * class="changed_modified_2_0"> a {@link ValueChangeListener} that
+     * contains a {@link MethodExpression}.  <span
+     * class="changed_added_2_0">To accomodate method expression targets
+     * that take no arguments instead of taking an {@link ActionEvent}
+     * argument</span>, the implementation of this class must take the
+     * argument <code>methodExpressionOneArg</code>, extract its
+     * expression string, and create another
+     * <code>MethodExpression</code> whose expected param types match
+     * those of a zero argument method.  The usage requirements for both
+     * of these <code>MethodExpression</code> instances are described in
+     * {@link #processAction}.</span></p>
+     *
+     * @param methodExpressionOneArg a <code>MethodExpression</code>
+     * that points to a method that returns <code>void</code> and takes
+     * a single argument of type {@link ActionEvent}.
      */
-    public MethodExpressionActionListener(MethodExpression methodExpression) {
+    public MethodExpressionActionListener(MethodExpression methodExpressionOneArg) {
 
         super();
-        this.methodExpression = methodExpression;
+        this.methodExpressionOneArg = methodExpressionOneArg;
+        FacesContext context = FacesContext.getCurrentInstance();
+        ELContext elContext = context.getELContext();
+        this.methodExpressionZeroArg = context.getApplication().
+                getExpressionFactory().createMethodExpression(elContext, 
+                  methodExpressionOneArg.getExpressionString(), Void.class, 
+                  ACTION_LISTENER_ZEROARG_SIG);
 
     }
 
+    public MethodExpressionActionListener(MethodExpression methodExpressionOneArg,
+            MethodExpression methodExpressionZeroArg) {
+
+        super();
+        this.methodExpressionOneArg = methodExpressionOneArg;
+        this.methodExpressionZeroArg = methodExpressionZeroArg;
+
+    }
 
     // ------------------------------------------------------- Event Method
 
     /**
+     * <p><span class="changed_modified_2_0">Call</span> through to the
+     * {@link MethodExpression} passed in our constructor.  <span
+     * class="changed_added_2_0">First, try to invoke the
+     * <code>MethodExpression</code> passed to the constructor of this
+     * instance, passing the argument {@link ActionEvent} as the
+     * argument.  If a {@link MethodNotFoundException} is thrown, call
+     * to the zero argument <code>MethodExpression</code> derived from
+     * the <code>MethodExpression</code> passed to the constructor of
+     * this instance.  If that fails for any reason, throw an {@link
+     * AbortProcessingException}, including the cause of the
+     * failure.</span></p>
+     * 
      * @throws NullPointerException {@inheritDoc}     
      * @throws AbortProcessingException {@inheritDoc}     
      */
     public void processAction(ActionEvent actionEvent) throws AbortProcessingException {
 
+        boolean throwException = false;
+        Throwable cause = null;
+        Throwable thrown = null;
         if (actionEvent == null) {
             throw new NullPointerException();
         }
+        FacesContext context = FacesContext.getCurrentInstance();
+        ELContext elContext = context.getELContext();
         try {
-            FacesContext context = FacesContext.getCurrentInstance();
-            ELContext elContext = context.getELContext();
-            methodExpression.invoke(elContext, new Object[] {actionEvent});
+            methodExpressionOneArg.invoke(elContext, new Object[] {actionEvent});
+        } catch (MethodNotFoundException mnfe) {
+          if (null != methodExpressionZeroArg) {
+                try {
+                    // try to invoke a no-arg version
+                    methodExpressionZeroArg.invoke(elContext, new Object[]{});
+                }
+                catch (ELException ee) {
+                    cause = ee.getCause();
+                    thrown = ee;
+                    throwException = true;
+                }
+              
+          }
         } catch (ELException ee) {
-            Throwable eeCause = ee.getCause();
+            cause = ee.getCause();
+            thrown = ee;
+            throwException = true;
+        }
+        if (throwException) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE,
                            "severe.event.exception_invoking_processaction",
                            new Object[]{
-                                 eeCause == null ? ee.getClass().getName() : eeCause.getClass().getName(),
-                                 methodExpression.getExpressionString(),
+                                 cause == null ? thrown.getClass().getName() : cause.getClass().getName(),
+                                 methodExpressionOneArg.getExpressionString(),
                                  actionEvent.getComponent().getId()
                            });
                 StringWriter writer = new StringWriter(1024);
-                if (eeCause == null) {
-                    ee.printStackTrace(new PrintWriter(writer));
+                if (cause == null) {
+                    thrown.printStackTrace(new PrintWriter(writer));
                 } else {
-                    eeCause.printStackTrace(new PrintWriter(writer));
+                    cause.printStackTrace(new PrintWriter(writer));
                 }
                 LOGGER.severe(writer.toString());
             }
-            throw eeCause == null ? new AbortProcessingException(ee.getMessage(), ee) : new AbortProcessingException(ee.getMessage(), eeCause);
+            throw cause == null ? new AbortProcessingException(thrown.getMessage(), 
+                    thrown) : new AbortProcessingException(thrown.getMessage(), cause);
+            
         }
     }
 
@@ -123,16 +192,25 @@ public class MethodExpressionActionListener implements ActionListener,
     // ------------------------------------------------ Methods from StateHolder
 
 
+    /**
+     * <p class="changed_modified_2_0">Both {@link MethodExpression}
+     * instances described in the constructor must be saved.</p>
+     */
     public Object saveState(FacesContext context) {
 
-        return new Object[] { methodExpression };
+        return new Object[] { methodExpressionOneArg, methodExpressionZeroArg  };
 
     }
 
 
+    /**
+     * <p class="changed_modified_2_0">Both {@link MethodExpression}
+     * instances described in the constructor must be restored.</p>
+     */
     public void restoreState(FacesContext context, Object state) {
 
-        methodExpression = (MethodExpression) ((Object[]) state)[0];
+        methodExpressionOneArg = (MethodExpression) ((Object[]) state)[0];
+        methodExpressionZeroArg = (MethodExpression) ((Object[]) state)[1];
 
     }
 

@@ -558,6 +558,17 @@ public enum Color { Red, Blue, Green, Orange }
         }
         newList1.add(newValue);
    }
+   
+   public void valueChange0() {
+       FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("valueChange0Called", 
+               "true");
+   }
+   
+    public void actionListener0() {
+       FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("actionListener0Called", 
+               "true");
+   }
+
 
    public void valueChange2(ValueChangeEvent vce) {
         String newValue = vce.getNewValue().toString();

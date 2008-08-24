@@ -352,12 +352,19 @@
       </property-extension>
     </property>
     <property>
-      <description>
-          MethodExpression representing an action listener method that will be
-          notified when this component is activated by the user.  The
-          expression must evaluate to a public method that takes an
-          ActionEvent parameter, with a return type of void.
-        </description>
+      <description><![CDATA[<p>
+
+          MethodExpression representing an action listener method that
+          will be notified when this component is activated by the user.
+          The expression must evaluate to a public method that takes an
+          ActionEvent parameter, with a return type of void, <span
+          class="changed_added_2_0">or to a public method that takes no
+          arguments with a return type of void.  In the latter case, the
+          method has no way of easily knowing where the event came from,
+          but this can be useful in cases where a notification is needed
+          that "some action happened".</span>
+
+</p>]]></description>
       <display-name>Action Listener</display-name>
       <icon/>
       <property-name>actionListener</property-name>
@@ -366,6 +373,13 @@
         <method-signature>
                 void actionListener(javax.faces.event.ActionEvent)
             </method-signature>
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
+as required by 
+https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
+            <method-signature>
+                void actionListener()
+            </method-signature>
+-->
       </property-extension>
     </property>
     <property>
@@ -1290,12 +1304,20 @@
       </property-extension>
     </property>
     <property>
-      <description>
-          MethodExpression representing a value change listener method that will be
-          notified when a new value has been set for this input component.  The
-          expression must evaluate to a public method that takes a
-          ValueChangeEvent parameter, with a return type of void.
-        </description>
+      <description><![CDATA[<p>
+
+          MethodExpression representing a value change listener method
+          that will be notified when a new value has been set for this
+          input component.  The expression must evaluate to a public
+          method that takes a <code>ValueChangeEvent</code> parameter,
+          with a return type of void, <span class="changed_added_2_0">or
+          to a public method that takes no arguments with a return type
+          of void.  In the latter case, the method has no way of easily
+          knowing what the new value is, but this can be useful in cases
+          where a notification is needed that "this value
+          changed".</span>
+
+</p>]]></description>
       <display-name>Value Change Listener</display-name>
       <icon/>
       <property-name>valueChangeListener</property-name>
@@ -1304,6 +1326,13 @@
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
+as required by 
+https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
+            <method-signature>
+                void valueChange()
+            </method-signature>
+-->
       </property-extension>
     </property>
     <property>
@@ -2653,12 +2682,20 @@
       </property-extension>
     </property>
     <property>
-      <description>
-          MethodExpression representing a value change listener method that will be
-          notified when a new value has been set for this input component.  The
-          expression must evaluate to a public method that takes a
-          ValueChangeEvent parameter, with a return type of void.
-        </description>
+      <description><![CDATA[<p>
+
+          MethodExpression representing a value change listener method
+          that will be notified when a new value has been set for this
+          input component.  The expression must evaluate to a public
+          method that takes a <code>ValueChangeEvent</code> parameter,
+          with a return type of void, <span class="changed_added_2_0">or
+          to a public method that takes no arguments with a return type
+          of void.  In the latter case, the method has no way of easily
+          knowing what the new value is, but this can be useful in cases
+          where a notification is needed that "this value
+          changed".</span>
+
+</p>]]></description>
       <display-name>Value Change Listener</display-name>
       <icon/>
       <property-name>valueChangeListener</property-name>
@@ -2667,6 +2704,13 @@
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
+as required by 
+https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
+            <method-signature>
+                void valueChange()
+            </method-signature>
+-->
       </property-extension>
     </property>
     <property>
@@ -3358,12 +3402,20 @@
       </property-extension>
     </property>
     <property>
-      <description>
-          MethodExpression representing a value change listener method that will be
-          notified when a new value has been set for this input component.  The
-          expression must evaluate to a public method that takes a
-          ValueChangeEvent parameter, with a return type of void.
-        </description>
+      <description><![CDATA[<p>
+
+          MethodExpression representing a value change listener method
+          that will be notified when a new value has been set for this
+          input component.  The expression must evaluate to a public
+          method that takes a <code>ValueChangeEvent</code> parameter,
+          with a return type of void, <span class="changed_added_2_0">or
+          to a public method that takes no arguments with a return type
+          of void.  In the latter case, the method has no way of easily
+          knowing what the new value is, but this can be useful in cases
+          where a notification is needed that "this value
+          changed".</span>
+
+</p>]]></description>
       <display-name>Value Change Listener</display-name>
       <icon/>
       <property-name>valueChangeListener</property-name>
@@ -3372,6 +3424,13 @@
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
+as required by 
+https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
+            <method-signature>
+                void valueChange()
+            </method-signature>
+-->
       </property-extension>
     </property>
     <property>
@@ -3704,12 +3763,20 @@
       </property-extension>
     </property>
     <property>
-      <description>
-          MethodExpression representing a value change listener method that will be
-          notified when a new value has been set for this input component.  The
-          expression must evaluate to a public method that takes a
-          ValueChangeEvent parameter, with a return type of void.
-        </description>
+      <description><![CDATA[<p>
+
+          MethodExpression representing a value change listener method
+          that will be notified when a new value has been set for this
+          input component.  The expression must evaluate to a public
+          method that takes a <code>ValueChangeEvent</code> parameter,
+          with a return type of void, <span class="changed_added_2_0">or
+          to a public method that takes no arguments with a return type
+          of void.  In the latter case, the method has no way of easily
+          knowing what the new value is, but this can be useful in cases
+          where a notification is needed that "this value
+          changed".</span>
+
+</p>]]></description>
       <display-name>Value Change Listener</display-name>
       <icon/>
       <property-name>valueChangeListener</property-name>
@@ -3718,6 +3785,13 @@
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
+as required by 
+https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
+            <method-signature>
+                void valueChange()
+            </method-signature>
+-->
       </property-extension>
     </property>
     <property>
@@ -4287,12 +4361,19 @@
       </property-extension>
     </property>
     <property>
-      <description>
-          MethodExpression representing an action listener method that will be
-          notified when this component is activated by the user.  The
-          expression must evaluate to a public method that takes an
-          ActionEvent parameter, with a return type of void.
-        </description>
+      <description><![CDATA[<p>
+
+          MethodExpression representing an action listener method that
+          will be notified when this component is activated by the user.
+          The expression must evaluate to a public method that takes an
+          ActionEvent parameter, with a return type of void, <span
+          class="changed_added_2_0">or to a public method that takes no
+          arguments with a return type of void.  In the latter case, the
+          method has no way of easily knowing where the event came from,
+          but this can be useful in cases where a notification is needed
+          that "some action happened".</span>
+
+</p>]]></description>
       <display-name>Action Listener</display-name>
       <icon/>
       <property-name>actionListener</property-name>
@@ -4301,6 +4382,13 @@
         <method-signature>
                 void actionListener(javax.faces.event.ActionEvent)
             </method-signature>
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
+as required by 
+https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
+            <method-signature>
+                void actionListener()
+            </method-signature>
+-->
       </property-extension>
     </property>
     <property>
@@ -4869,12 +4957,19 @@
       </property-extension>
     </property>
     <property>
-      <description>
-          MethodExpression representing an action listener method that will be
-          notified when this component is activated by the user.  The
-          expression must evaluate to a public method that takes an
-          ActionEvent parameter, with a return type of void.
-        </description>
+      <description><![CDATA[<p>
+
+          MethodExpression representing an action listener method that
+          will be notified when this component is activated by the user.
+          The expression must evaluate to a public method that takes an
+          ActionEvent parameter, with a return type of void, <span
+          class="changed_added_2_0">or to a public method that takes no
+          arguments with a return type of void.  In the latter case, the
+          method has no way of easily knowing where the event came from,
+          but this can be useful in cases where a notification is needed
+          that "some action happened".</span>
+
+</p>]]></description>
       <display-name>Action Listener</display-name>
       <icon/>
       <property-name>actionListener</property-name>
@@ -4883,6 +4978,13 @@
         <method-signature>
                 void actionListener(javax.faces.event.ActionEvent)
             </method-signature>
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
+as required by 
+https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
+            <method-signature>
+                void actionListener()
+            </method-signature>
+-->
       </property-extension>
     </property>
     <property>
@@ -7165,12 +7267,20 @@
       </property-extension>
     </property>
     <property>
-      <description>
-          MethodExpression representing a value change listener method that will be
-          notified when a new value has been set for this input component.  The
-          expression must evaluate to a public method that takes a
-          ValueChangeEvent parameter, with a return type of void.
-        </description>
+      <description><![CDATA[<p>
+
+          MethodExpression representing a value change listener method
+          that will be notified when a new value has been set for this
+          input component.  The expression must evaluate to a public
+          method that takes a <code>ValueChangeEvent</code> parameter,
+          with a return type of void, <span class="changed_added_2_0">or
+          to a public method that takes no arguments with a return type
+          of void.  In the latter case, the method has no way of easily
+          knowing what the new value is, but this can be useful in cases
+          where a notification is needed that "this value
+          changed".</span>
+
+</p>]]></description>
       <display-name>Value Change Listener</display-name>
       <icon/>
       <property-name>valueChangeListener</property-name>
@@ -7179,6 +7289,13 @@
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
+as required by 
+https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
+            <method-signature>
+                void valueChange()
+            </method-signature>
+-->
       </property-extension>
     </property>
     <property>
@@ -7505,12 +7622,20 @@
       </property-extension>
     </property>
     <property>
-      <description>
-          MethodExpression representing a value change listener method that will be
-          notified when a new value has been set for this input component.  The
-          expression must evaluate to a public method that takes a
-          ValueChangeEvent parameter, with a return type of void.
-        </description>
+      <description><![CDATA[<p>
+
+          MethodExpression representing a value change listener method
+          that will be notified when a new value has been set for this
+          input component.  The expression must evaluate to a public
+          method that takes a <code>ValueChangeEvent</code> parameter,
+          with a return type of void, <span class="changed_added_2_0">or
+          to a public method that takes no arguments with a return type
+          of void.  In the latter case, the method has no way of easily
+          knowing what the new value is, but this can be useful in cases
+          where a notification is needed that "this value
+          changed".</span>
+
+</p>]]></description>
       <display-name>Value Change Listener</display-name>
       <icon/>
       <property-name>valueChangeListener</property-name>
@@ -7519,6 +7644,13 @@
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
+as required by 
+https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
+            <method-signature>
+                void valueChange()
+            </method-signature>
+-->
       </property-extension>
     </property>
     <property>
@@ -8236,12 +8368,20 @@
       </property-extension>
     </property>
     <property>
-      <description>
-          MethodExpression representing a value change listener method that will be
-          notified when a new value has been set for this input component.  The
-          expression must evaluate to a public method that takes a
-          ValueChangeEvent parameter, with a return type of void.
-        </description>
+      <description><![CDATA[<p>
+
+          MethodExpression representing a value change listener method
+          that will be notified when a new value has been set for this
+          input component.  The expression must evaluate to a public
+          method that takes a <code>ValueChangeEvent</code> parameter,
+          with a return type of void, <span class="changed_added_2_0">or
+          to a public method that takes no arguments with a return type
+          of void.  In the latter case, the method has no way of easily
+          knowing what the new value is, but this can be useful in cases
+          where a notification is needed that "this value
+          changed".</span>
+
+</p>]]></description>
       <display-name>Value Change Listener</display-name>
       <icon/>
       <property-name>valueChangeListener</property-name>
@@ -8250,6 +8390,13 @@
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
+as required by 
+https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
+            <method-signature>
+                void valueChange()
+            </method-signature>
+-->
       </property-extension>
     </property>
     <property>
@@ -8951,12 +9098,20 @@
       </property-extension>
     </property>
     <property>
-      <description>
-          MethodExpression representing a value change listener method that will be
-          notified when a new value has been set for this input component.  The
-          expression must evaluate to a public method that takes a
-          ValueChangeEvent parameter, with a return type of void.
-        </description>
+      <description><![CDATA[<p>
+
+          MethodExpression representing a value change listener method
+          that will be notified when a new value has been set for this
+          input component.  The expression must evaluate to a public
+          method that takes a <code>ValueChangeEvent</code> parameter,
+          with a return type of void, <span class="changed_added_2_0">or
+          to a public method that takes no arguments with a return type
+          of void.  In the latter case, the method has no way of easily
+          knowing what the new value is, but this can be useful in cases
+          where a notification is needed that "this value
+          changed".</span>
+
+</p>]]></description>
       <display-name>Value Change Listener</display-name>
       <icon/>
       <property-name>valueChangeListener</property-name>
@@ -8965,6 +9120,13 @@
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
+as required by 
+https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
+            <method-signature>
+                void valueChange()
+            </method-signature>
+-->
       </property-extension>
     </property>
     <property>
@@ -12857,12 +13019,20 @@
       </property-extension>
     </property>
     <property>
-      <description>
-          MethodExpression representing a value change listener method that will be
-          notified when a new value has been set for this input component.  The
-          expression must evaluate to a public method that takes a
-          ValueChangeEvent parameter, with a return type of void.
-        </description>
+      <description><![CDATA[<p>
+
+          MethodExpression representing a value change listener method
+          that will be notified when a new value has been set for this
+          input component.  The expression must evaluate to a public
+          method that takes a <code>ValueChangeEvent</code> parameter,
+          with a return type of void, <span class="changed_added_2_0">or
+          to a public method that takes no arguments with a return type
+          of void.  In the latter case, the method has no way of easily
+          knowing what the new value is, but this can be useful in cases
+          where a notification is needed that "this value
+          changed".</span>
+
+</p>]]></description>
       <display-name>Value Change Listener</display-name>
       <icon/>
       <property-name>valueChangeListener</property-name>
@@ -12871,6 +13041,13 @@
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
+as required by 
+https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
+            <method-signature>
+                void valueChange()
+            </method-signature>
+-->
       </property-extension>
     </property>
     <property>
@@ -13532,12 +13709,20 @@
       </property-extension>
     </property>
     <property>
-      <description>
-          MethodExpression representing a value change listener method that will be
-          notified when a new value has been set for this input component.  The
-          expression must evaluate to a public method that takes a
-          ValueChangeEvent parameter, with a return type of void.
-        </description>
+      <description><![CDATA[<p>
+
+          MethodExpression representing a value change listener method
+          that will be notified when a new value has been set for this
+          input component.  The expression must evaluate to a public
+          method that takes a <code>ValueChangeEvent</code> parameter,
+          with a return type of void, <span class="changed_added_2_0">or
+          to a public method that takes no arguments with a return type
+          of void.  In the latter case, the method has no way of easily
+          knowing what the new value is, but this can be useful in cases
+          where a notification is needed that "this value
+          changed".</span>
+
+</p>]]></description>
       <display-name>Value Change Listener</display-name>
       <icon/>
       <property-name>valueChangeListener</property-name>
@@ -13546,6 +13731,13 @@
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
+as required by 
+https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
+            <method-signature>
+                void valueChange()
+            </method-signature>
+-->
       </property-extension>
     </property>
     <property>
@@ -14255,12 +14447,20 @@
       </property-extension>
     </property>
     <property>
-      <description>
-          MethodExpression representing a value change listener method that will be
-          notified when a new value has been set for this input component.  The
-          expression must evaluate to a public method that takes a
-          ValueChangeEvent parameter, with a return type of void.
-        </description>
+      <description><![CDATA[<p>
+
+          MethodExpression representing a value change listener method
+          that will be notified when a new value has been set for this
+          input component.  The expression must evaluate to a public
+          method that takes a <code>ValueChangeEvent</code> parameter,
+          with a return type of void, <span class="changed_added_2_0">or
+          to a public method that takes no arguments with a return type
+          of void.  In the latter case, the method has no way of easily
+          knowing what the new value is, but this can be useful in cases
+          where a notification is needed that "this value
+          changed".</span>
+
+</p>]]></description>
       <display-name>Value Change Listener</display-name>
       <icon/>
       <property-name>valueChangeListener</property-name>
@@ -14269,6 +14469,13 @@
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
+as required by 
+https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
+            <method-signature>
+                void valueChange()
+            </method-signature>
+-->
       </property-extension>
     </property>
     <property>
@@ -14962,12 +15169,20 @@
       </property-extension>
     </property>
     <property>
-      <description>
-          MethodExpression representing a value change listener method that will be
-          notified when a new value has been set for this input component.  The
-          expression must evaluate to a public method that takes a
-          ValueChangeEvent parameter, with a return type of void.
-        </description>
+      <description><![CDATA[<p>
+
+          MethodExpression representing a value change listener method
+          that will be notified when a new value has been set for this
+          input component.  The expression must evaluate to a public
+          method that takes a <code>ValueChangeEvent</code> parameter,
+          with a return type of void, <span class="changed_added_2_0">or
+          to a public method that takes no arguments with a return type
+          of void.  In the latter case, the method has no way of easily
+          knowing what the new value is, but this can be useful in cases
+          where a notification is needed that "this value
+          changed".</span>
+
+</p>]]></description>
       <display-name>Value Change Listener</display-name>
       <icon/>
       <property-name>valueChangeListener</property-name>
@@ -14976,6 +15191,13 @@
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
+as required by 
+https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
+            <method-signature>
+                void valueChange()
+            </method-signature>
+-->
       </property-extension>
     </property>
     <property>
@@ -15659,12 +15881,20 @@
       </property-extension>
     </property>
     <property>
-      <description>
-          MethodExpression representing a value change listener method that will be
-          notified when a new value has been set for this input component.  The
-          expression must evaluate to a public method that takes a
-          ValueChangeEvent parameter, with a return type of void.
-        </description>
+      <description><![CDATA[<p>
+
+          MethodExpression representing a value change listener method
+          that will be notified when a new value has been set for this
+          input component.  The expression must evaluate to a public
+          method that takes a <code>ValueChangeEvent</code> parameter,
+          with a return type of void, <span class="changed_added_2_0">or
+          to a public method that takes no arguments with a return type
+          of void.  In the latter case, the method has no way of easily
+          knowing what the new value is, but this can be useful in cases
+          where a notification is needed that "this value
+          changed".</span>
+
+</p>]]></description>
       <display-name>Value Change Listener</display-name>
       <icon/>
       <property-name>valueChangeListener</property-name>
@@ -15673,6 +15903,13 @@
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
+as required by 
+https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
+            <method-signature>
+                void valueChange()
+            </method-signature>
+-->
       </property-extension>
     </property>
     <property>
@@ -16353,12 +16590,20 @@
       </property-extension>
     </property>
     <property>
-      <description>
-          MethodExpression representing a value change listener method that will be
-          notified when a new value has been set for this input component.  The
-          expression must evaluate to a public method that takes a
-          ValueChangeEvent parameter, with a return type of void.
-        </description>
+      <description><![CDATA[<p>
+
+          MethodExpression representing a value change listener method
+          that will be notified when a new value has been set for this
+          input component.  The expression must evaluate to a public
+          method that takes a <code>ValueChangeEvent</code> parameter,
+          with a return type of void, <span class="changed_added_2_0">or
+          to a public method that takes no arguments with a return type
+          of void.  In the latter case, the method has no way of easily
+          knowing what the new value is, but this can be useful in cases
+          where a notification is needed that "this value
+          changed".</span>
+
+</p>]]></description>
       <display-name>Value Change Listener</display-name>
       <icon/>
       <property-name>valueChangeListener</property-name>
@@ -16367,6 +16612,13 @@
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
+as required by 
+https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
+            <method-signature>
+                void valueChange()
+            </method-signature>
+-->
       </property-extension>
     </property>
     <property>
@@ -17037,12 +17289,20 @@
       </property-extension>
     </property>
     <property>
-      <description>
-          MethodExpression representing a value change listener method that will be
-          notified when a new value has been set for this input component.  The
-          expression must evaluate to a public method that takes a
-          ValueChangeEvent parameter, with a return type of void.
-        </description>
+      <description><![CDATA[<p>
+
+          MethodExpression representing a value change listener method
+          that will be notified when a new value has been set for this
+          input component.  The expression must evaluate to a public
+          method that takes a <code>ValueChangeEvent</code> parameter,
+          with a return type of void, <span class="changed_added_2_0">or
+          to a public method that takes no arguments with a return type
+          of void.  In the latter case, the method has no way of easily
+          knowing what the new value is, but this can be useful in cases
+          where a notification is needed that "this value
+          changed".</span>
+
+</p>]]></description>
       <display-name>Value Change Listener</display-name>
       <icon/>
       <property-name>valueChangeListener</property-name>
@@ -17051,6 +17311,13 @@
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
+as required by 
+https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
+            <method-signature>
+                void valueChange()
+            </method-signature>
+-->
       </property-extension>
     </property>
     <property>

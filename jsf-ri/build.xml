@@ -463,9 +463,11 @@
         <ant antfile="build-tests.xml" target="force.execute.cactus.tests"/>
     </target>   
 
-    <target name="prepare.test.webapp">
+    <target name="prepare.test.webapp" depends="init.test">
         <echo>Invoking target prepare.test.webapp</echo>
         <ant antfile="build-tests.xml" target="prepare.test.webapp"/>
+        <echo>Invoking target build.war in systest</echo>
+        <ant dir="${basedir}/systest" inheritall="false" target="build.war"/>
     </target>
 
     <!-- 
