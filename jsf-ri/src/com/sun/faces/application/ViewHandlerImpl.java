@@ -790,13 +790,12 @@ public class ViewHandlerImpl extends ViewHandler {
                                e);
                 }
             }
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("viewId after appending the context suffix " +
-                            convertedViewId);
-            }
         }
 
-        throw new FacesException("No Resource Found");
+        // unable to find any resource match that the default ViewHandler
+        // can deal with.  Return the viewId as it was passed.  There is
+        // probably another ViewHandler in the stack that will handle this.
+        return viewId;
     }
 
 
