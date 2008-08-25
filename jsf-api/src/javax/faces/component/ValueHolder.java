@@ -92,14 +92,15 @@ public interface ValueHolder {
      * class="changed_added_2_0">If the
      * <code>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</code>
      * application configuration param is set, and calling
-     * <code>toLowerCase().equals("true")</code> on a <code>String
+     * <code>toLowerCase().equals("true")</code> on a <code>String</code>
      * representation of its value returns <code>true</code>, the
      * following additional action must be taken.</p>
      *
-     * <p class="changed_modified_2_0">If
-     * <code>this.getSubmittedValue()</code> is the empty string, set
-     * <code>null</code> as the value of this <code>ValueHolder</code>
-     * instance rather than setting the empty string as the value.</p>
+     * <p style="margin-left: 2em; margin-right: 2em;"
+     * class="changed_added_2_0">If the argument <code>value</code> is
+     * the empty string, set <code>null</code> as the value of this
+     * <code>ValueHolder</code> instance rather than setting the empty
+     * string as the value.</p>
      *
      * @param value The new local value
      */
