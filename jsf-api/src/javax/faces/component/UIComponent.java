@@ -605,26 +605,36 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
     private transient Map<String, String> resourceBundleMap = null;
     
     /**
-     * <p class="changed_added_2_0">Return a <code>Map&lt;String,String&gt;</code> of the 
-     * <code>ResourceBundle</code> for this component.  A component may have a
-     * <code>ResourceBundle</code> associated with it.  This bundle may contain
-     * localized properties relating to instances of this component.
-     * The default implementation first looks for a <code>ResourceBundle</code>
-     * with a base name equal to the fully qualified class name of the 
-     * current instance.  If no such bundle is found, and the component
-     * is a composite component, a {@link Resource} is created, with the 
-     * <em>resourceName</em> being derived by taking the <em>resourceName</em>
-     * of the {@link Resource} for this composite component and replacing the
-     * file extension with ".properties".  The <em>libraryName</em> is taken
-     * directly from the {@link Resource} for this composite component.  If 
-     * the resultant {@link Resource} exists and can be found, the 
-     * <code>InputStream</code> for the resource is used to create a 
-     * <code>ResourceBundle</code>.  If either of the two previous steps for
-     * obtaining the <code>ResourceBundle</code> for this component is successful,
-     * the <code>ResourceBundle</code> is wrapped in a 
+     * <p class="changed_added_2_0">Return a
+     * <code>Map&lt;String,String&gt;</code> of the
+     * <code>ResourceBundle</code> for this component.  A component may
+     * have a <code>ResourceBundle</code> associated with it.  This
+     * bundle may contain localized properties relating to instances of
+     * this component.  The default implementation first looks for a
+     * <code>ResourceBundle</code> with a base name equal to the fully
+     * qualified class name of the current <code>UIComponent this</code>
+     * and <code>Locale</code> equal to the <code>Locale</code> of the
+     * current <code>UIViewRoot</code>.  If no such bundle is found, and
+     * the component is a composite component, let <em>resourceName</em>
+     * be the <em>resourceName</em> of the {@link Resource} for this
+     * composite component, replacing the file extension with
+     * ".properties".  Let <em>libraryName</em> be the
+     * <em>libraryName</em> of the the {@link Resource} for this
+     * composite component.  Call {@link
+     * javax.faces.application.ResourceHandler#createResource(java.lang.String,java.lang.String)},
+     * passing the derived <em>resourceName</em> and
+     * <em>libraryName</em>.  Note that this will automatically allow
+     * for the localization of the <code>ResourceBundle</code> due to
+     * the localization facility implemented in
+     * <code>createResource</code>, which is specified in section
+     * 2.6.1.3 of the spec prose document.  If the resultant {@link
+     * Resource} exists and can be found, the <code>InputStream</code>
+     * for the resource is used to create a <code>ResourceBundle</code>.
+     * If either of the two previous steps for obtaining the
+     * <code>ResourceBundle</code> for this component is successful, the
+     * <code>ResourceBundle</code> is wrapped in a
      * <code>Map&lt;String,String&gt;</code> and returned.  Otherwise
      * <code>Collections.EMPTY_MAP</code> is returned.</p>
-     * 
      * 
      */
     public Map<String,String> getResourceBundleMap() {
