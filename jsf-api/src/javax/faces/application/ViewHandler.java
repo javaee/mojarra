@@ -71,7 +71,7 @@ import javax.faces.component.UIViewRoot;
 public abstract class ViewHandler {
 
     private static Logger log = Logger.getLogger("javax.faces.application");
-    
+
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -81,7 +81,7 @@ public abstract class ViewHandler {
      * response character encoding may be stored and retrieved.</p>
      *
      */
-    public static final String CHARACTER_ENCODING_KEY = 
+    public static final String CHARACTER_ENCODING_KEY =
 	"javax.faces.request.charset";
 
 
@@ -105,8 +105,7 @@ public abstract class ViewHandler {
      * <p>The value to use for the default extension if the webapp is using
      * url extension mapping.</p>
      */
-    // PENDING(rlubke): check this in.
-    public static final String DEFAULT_SUFFIX = ".jsp";
+    public static final String DEFAULT_SUFFIX = ".xhtml .jsp";
 
 
     // ---------------------------------------------------------- Public Methods

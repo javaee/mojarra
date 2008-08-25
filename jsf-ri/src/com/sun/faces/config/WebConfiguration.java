@@ -46,6 +46,7 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import javax.faces.application.ResourceHandler;
+import javax.faces.application.ViewHandler;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.naming.Context;
@@ -606,9 +607,9 @@ public class WebConfiguration {
               "javax.faces.STATE_SAVING_METHOD",
               "server"
         ),
-        JspDefaultSuffix(
+        DefaultSuffix(
               "javax.faces.DEFAULT_SUFFIX",
-              ".jsp"
+              ViewHandler.DEFAULT_SUFFIX
         ),
         JavaxFacesConfigFiles(
               "javax.faces.CONFIG_FILES",

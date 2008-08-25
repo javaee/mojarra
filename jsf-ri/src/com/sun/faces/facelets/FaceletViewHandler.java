@@ -530,9 +530,9 @@ public class FaceletViewHandler extends ViewHandler {
     protected void buildView(FacesContext context, UIViewRoot viewToRender)
             throws IOException, FacesException {
         // setup our viewId
-        String renderedViewId = this.getRenderedViewId(context, viewToRender
-                .getViewId());
-        viewToRender.setViewId(renderedViewId);
+//        String renderedViewId = this.getRenderedViewId(context, viewToRender
+//                .getViewId());
+        viewToRender.setViewId(viewToRender.getViewId());
         // lazy initialize so we have a FacesContext to use
         if (this.faceletFactory == null) {
             this.initialize(context);
@@ -540,7 +540,7 @@ public class FaceletViewHandler extends ViewHandler {
         
 
         if (log.isLoggable(Level.FINE)) {
-            log.fine("Building View: " + renderedViewId);
+            log.fine("Building View: " + viewToRender.getViewId());
         }
 
         // grab our FaceletFactory and create a Facelet
@@ -762,9 +762,11 @@ public class FaceletViewHandler extends ViewHandler {
      */
     private boolean handledByFacelets(String viewId) {
         // If there's no extensions array or prefixes array, then
-        // just make Facelets handle everything
+        // assume defaults.  .xhtml extension is handled by
+        // the FaceletViewHandler and .jsp will be handled by
+        // the JSP view handler
         if ((extensionsArray == null) && (prefixesArray == null)) {
-            return true;
+            return (viewId.endsWith(".xhtml"));
         }
 
         if (extensionsArray != null) {

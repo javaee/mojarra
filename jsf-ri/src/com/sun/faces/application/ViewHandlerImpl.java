@@ -78,6 +78,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.net.MalformedURLException;
 
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
@@ -91,18 +92,17 @@ public class ViewHandlerImpl extends ViewHandler {
     private static final Logger logger = FacesLogger.APPLICATION.getLogger();
 
     private ApplicationAssociate associate;
-
-    /**
-     * <p>Store the value of <code>DEFAULT_SUFFIX_PARAM_NAME</code>
-     * or, if that isn't defined, the value of <code>DEFAULT_SUFFIX</code>
-     */
-    private String contextDefaultSuffix;
+    private String[] configuredExtensions;
     private int bufSize = -1;
 
     public ViewHandlerImpl() {
         if (logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE,"Created ViewHandler instance ");
         }
+        WebConfiguration config = WebConfiguration.getInstance();
+        String defaultSuffixConfig =
+              config.getOptionValue(WebConfiguration.WebContextInitParameter.DefaultSuffix);
+        configuredExtensions = Util.split(defaultSuffixConfig, " ");
     }
     
 
@@ -759,41 +759,44 @@ public class ViewHandlerImpl extends ViewHandler {
      */
     private String convertViewId(FacesContext context, String viewId) {
 
-        if (contextDefaultSuffix == null) {
-            contextDefaultSuffix =
-                  WebConfiguration
-                        .getInstance(context.getExternalContext())
-                        .getOptionValue(WebContextInitParameter.JspDefaultSuffix);
-            if (contextDefaultSuffix == null) {
-                contextDefaultSuffix = ViewHandler.DEFAULT_SUFFIX;
-            }
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("contextDefaultSuffix "
-                            + contextDefaultSuffix);
-            }
-        }
-
-        String convertedViewId = viewId;
         // if the viewId doesn't already use the above suffix,
         // replace or append.
-        if (!convertedViewId.endsWith(contextDefaultSuffix)) {
-            StringBuilder buffer = new StringBuilder(convertedViewId);
-            int extIdx = convertedViewId.lastIndexOf('.');
+        StringBuilder buffer = new StringBuilder(viewId);
+        for (String ext : configuredExtensions) {
+            if (viewId.endsWith(ext)) {
+                return viewId;
+            }
+            int extIdx = viewId.lastIndexOf('.');
             if (extIdx != -1) {
-                buffer.replace(extIdx, convertedViewId.length(),
-                               contextDefaultSuffix);
+                buffer.replace(extIdx, viewId.length(), ext);
             } else {
                 // no extension in the provided viewId, append the suffix
-                buffer.append(contextDefaultSuffix);
+                buffer.append(ext);
             }
-            convertedViewId = buffer.toString();
+            String convertedViewId = buffer.toString();
+            try {
+                if (context.getExternalContext().getResource(convertedViewId) != null) {
+                    // RELEASE_PENDING (rlubke,driscoll) cache the lookup
+                    return convertedViewId;
+                } else {
+                    // reset the buffer to check for the next extension
+                    buffer.setLength(0);
+                    buffer.append(viewId);
+                }
+            } catch (MalformedURLException e) {
+                if (logger.isLoggable(Level.SEVERE)) {
+                    logger.log(Level.SEVERE,
+                               e.toString(),
+                               e);
+                }
+            }
             if (logger.isLoggable(Level.FINE)) {
-                logger.fine( "viewId after appending the context suffix " +
-                             convertedViewId);
+                logger.fine("viewId after appending the context suffix " +
+                            convertedViewId);
             }
-
         }
-        return convertedViewId;
+
+        throw new FacesException("No Resource Found");
     }
 
 
