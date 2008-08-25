@@ -54,14 +54,15 @@ import javax.faces.component.UIViewRoot;
 
 
 /**
- * <p><strong>ViewHandler</strong> is the pluggablity mechanism for
- * allowing implementations of or applications using the JavaServer
- * Faces specification to provide their own handling of the activities
- * in the <em>Render Response</em> and <em>Restore View</em>
- * phases of the request processing lifecycle.  This allows for
- * implementations to support different response generation
- * technologies, as well as alternative strategies for saving and
- * restoring the state of each view.</p>
+ * <p><strong><span
+ * class="changed_modified_2_0">ViewHandler</span></strong> is the
+ * pluggablity mechanism for allowing implementations of or applications
+ * using the JavaServer Faces specification to provide their own
+ * handling of the activities in the <em>Render Response</em> and
+ * <em>Restore View</em> phases of the request processing lifecycle.
+ * This allows for implementations to support different response
+ * generation technologies, as well as alternative strategies for saving
+ * and restoring the state of each view.</p>
  *
  * <p>Please see {@link StateManager} for information on how the
  * <code>ViewHandler</code> interacts the {@link StateManager}. </p>
@@ -85,11 +86,16 @@ public abstract class ViewHandler {
 
 
     /**
-     * <p>Allow the web application to define an alternate suffix for
-     * pages containing JSF content.  If this init parameter is not
-     * specified, the default value is taken from the value of the
-     * constant {@link #DEFAULT_SUFFIX}.</p>
-     *
+     * <p><span class="changed_modified_2_0">Allow</span> the web
+     * application to define a <span class="changed_modified_2_0">list
+     * of alternate suffixes</span> for pages containing JSF content.
+     * <span class="changed_modified_2_0">This list is a space separated
+     * list of values of the form
+     * <i><code>.&lt;extension&gt;</code></i>.  The first physical
+     * resource whose extension matches one of the configured extensions
+     * will be the suffix used to create the view ID.</span> If this
+     * init parameter is not specified, the default value is taken from
+     * the value of the constant {@link #DEFAULT_SUFFIX}.</p>
      */
     public static final String DEFAULT_SUFFIX_PARAM_NAME = 
 	"javax.faces.DEFAULT_SUFFIX";
@@ -99,6 +105,7 @@ public abstract class ViewHandler {
      * <p>The value to use for the default extension if the webapp is using
      * url extension mapping.</p>
      */
+    // PENDING(rlubke): check this in.
     public static final String DEFAULT_SUFFIX = ".jsp";
 
 
