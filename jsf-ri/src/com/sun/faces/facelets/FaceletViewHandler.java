@@ -761,28 +761,30 @@ public class FaceletViewHandler extends ViewHandler {
      * Determine if Facelets needs to handle this request.
      */
     private boolean handledByFacelets(String viewId) {
-        // If there's no extensions array or prefixes array, then
-        // assume defaults.  .xhtml extension is handled by
-        // the FaceletViewHandler and .jsp will be handled by
-        // the JSP view handler
-        if ((extensionsArray == null) && (prefixesArray == null)) {
-            return (viewId.endsWith(".xhtml"));
-        }
+        if (viewId != null) {
+            // If there's no extensions array or prefixes array, then
+            // assume defaults.  .xhtml extension is handled by
+            // the FaceletViewHandler and .jsp will be handled by
+            // the JSP view handler
+            if ((extensionsArray == null) && (prefixesArray == null)) {
+                return (viewId.endsWith(".xhtml"));
+            }
 
-        if (extensionsArray != null) {
-            for (int i = 0; i < extensionsArray.length; i++) {
-                String extension = extensionsArray[i];
-                if (viewId.endsWith(extension)) {
-                    return true;
+            if (extensionsArray != null) {
+                for (int i = 0; i < extensionsArray.length; i++) {
+                    String extension = extensionsArray[i];
+                    if (viewId.endsWith(extension)) {
+                        return true;
+                    }
                 }
             }
-        }
 
-        if (prefixesArray != null) {
-            for (int i = 0; i < prefixesArray.length; i++) {
-                String prefix = prefixesArray[i];
-                if (viewId.startsWith(prefix)) {
-                    return true;
+            if (prefixesArray != null) {
+                for (int i = 0; i < prefixesArray.length; i++) {
+                    String prefix = prefixesArray[i];
+                    if (viewId.startsWith(prefix)) {
+                        return true;
+                    }
                 }
             }
         }
