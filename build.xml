@@ -244,22 +244,22 @@
                     </taskdef>
 
                     <javaNetUpload projectName="javaserverfaces"
-                                   toFile="/nightly/mojarra-nightly-binary.zip"
+                                   toFile="/2.0 Nightly/mojarra-${impl.version}-binary.zip"
                                    fromFile="${dist.dir}/mojarra-${impl.version}-binary.zip"
                                    fileDescription="Mojarra ${impl.version.number} nightly binary bundle."
                                    overwrite="yes"/>
 
 
                     <javaNetUpload projectName="javaserverfaces"
-                                   toFile="/nightly/mojarra-nightly-source.zip"
+                                   toFile="/2.0 Nightly/mojarra-${impl.version}-source.zip"
                                    fromFile="${dist.dir}/mojarra-${impl.version}-source.zip"
                                    fileDescription="Mojarra ${impl.version.number} nightly source bundle."
                                    overwrite="yes"/>
 
                     <javaNetUpload projectName="javaserverfaces"
-                                   toFile="/nightly/mojarra-nightly-glassfish-updater.jar"
+                                   toFile="/2.0 Nightly/mojarra-${impl.version}-glassfish-updater.jar"
                                    fromFile="${dist.dir}/mojarra-${impl.version}-glassfish-updater.jar"
-                                   fileDescription="Installer for updating an existing glassfish binary with a new Mojarra implementation. Run 'java -jar mojarra-nightly-updater.jar' and follow the instructions."
+                                   fileDescription="Installer for updating an existing glassfish binary with a new Mojarra implementation. Run 'java -jar mojarra-${impl.version}-glassfish-updater.jar' and follow the instructions."
                                    overwrite="yes"/>
                 </sequential>
             </then>
