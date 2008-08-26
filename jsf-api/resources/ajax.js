@@ -95,15 +95,15 @@ if (javax.faces.Ajax == null || typeof javax.faces.Ajax == "undefined") {
  */
 
 /**
- * <p><span class="changed_added_2_0">Collect</span> and encode
- * state for input controls associated with the specified
- * <code>form</code> element. 
+ * <p>Collect and encode state for input controls associated 
+ * with the specified <code>form</code> element.</p> 
  *
  * @param form The <code>form</code> element whose contained
  * <code>input</code> controls will be collected and encoded.
  * Only successful controls will be collected and encoded in 
  * accordance with: <a href="http://www.w3.org/TR/html401/interact/forms.html#h-17.13.2">
  * Section 17.13.2 of the HTML Specification</a>.
+ *
  * @returns The encoded state for the specified form's input controls.
  * @function javax.faces.Ajax.viewState
  */
@@ -115,8 +115,8 @@ javax.faces.Ajax.viewState = function(form) {
 }
 
 /**
- * <p><span class="changed_added_2_0">Send</span> an asynchronous Ajax request
- * to the server.  This function must:
+ * <p>Send an asynchronous Ajax request to the server.  
+ * This function must:
  * <ul>
  * <li>Capture the element that triggered this Ajax request
  * (from the <code>element</code> argument, also known as the
@@ -174,6 +174,7 @@ javax.faces.Ajax.viewState = function(form) {
  * <code>action</code> property of the <code>form</code> element as the 
  * <code>url</code>.</li>
  * </ul>  
+ * </p>
  *
  * @param element The DOM element that triggered this Ajax request.
  * @param event The DOM event that triggered this Ajax request.  The
@@ -196,6 +197,7 @@ javax.faces.Ajax.viewState = function(form) {
  * </tr>
  * </table>
  * The <code>options</code> argument is optional. 
+ *
  * @function javax.faces.Ajax.ajaxRequest
  */
 javax.faces.Ajax.ajaxRequest = function(element, event, options) {
@@ -241,9 +243,9 @@ javax.faces.Ajax.ajaxRequest = function(element, event, options) {
 } 
 
 /**
- * <p><span class="changed_added_2_0">Receive</span> an Ajax response
- * from the server.  This function must evaluate the markup returned 
- * in the <code>responseXML</code> object and update the <code>DOM</code>
+ * <p>Receive an Ajax response from the server.  
+ * This function must evaluate the markup returned in the 
+ * <code>responseXML</code> object and update the <code>DOM</code>
  * as follows:
  * <ul>
  * <li>Determine if the entire <code>DOM</code> should be replaced, or
@@ -264,9 +266,11 @@ javax.faces.Ajax.ajaxRequest = function(element, event, options) {
  * field with the identifier <code>javax.faces.viewState</code> and 
  * insert it as a child element of the <code>form</code> elements.</li> 
  * </ul>
+ * </p>
  *
  * @param request The <code>XMLHttpRequest</code> instance that 
  * contains the status code and response message from the server.
+ *
  * @function javax.faces.Ajax.ajaxResponse
  */ 
 javax.faces.Ajax.ajaxResponse = function(request) {
@@ -399,6 +403,10 @@ javax.faces.Ajax.ajaxResponse = function(request) {
  * the currently running application instance.  Calling this method must
  * not cause any network transaction to happen to the server.</p>
  * 
+ * @returns The <code>String</code> representing the current state of the 
+ * running application in a typical product development lifecycle.  Refer
+ * to <code>javax.faces.application.Application.getProjectStage</code> and
+ * <code>javax.faces.application.ProjectStage</code>.
  * @function javax.faces.Ajax.getProjectStage
  */ 
 
