@@ -659,6 +659,12 @@ public class WebConfiguration {
               "com.sun.faces.responseBufferSize",
               "1024"
         ),
+        FaceletsBufferSize(
+              "facelets.BUFFER_SIZE",
+              "1024",
+              true,
+              ResponseBufferSize
+        ),
         ClientStateWriteBufferSize(
               "com.sun.faces.clientStateWriteBufferSize",
               "8192"
@@ -690,6 +696,26 @@ public class WebConfiguration {
         DisableUnicodeEscaping(
             "com.sun.faces.disableUnicodeEscaping",
             "false"
+        ),
+        FaceletsDefaultRefreshPeriod(
+              "facelets.REFRESH_PERIOD",
+              "2"
+        ),
+        FaceletsResourceResolver(
+              "facelets.RESOURCE_RESOLVER",
+              ""
+        ),
+        FaceletsViewMappings(
+              "facelets.VIEW_MAPPINGS",
+              ""
+        ),
+        FaceletsLibraries(
+              "facelets.LIBRARIES",
+              ""
+        ),
+        FaceletsDecorators(
+              "facelets.DECORATORS",
+              ""
         );
 
 
@@ -798,6 +824,10 @@ public class WebConfiguration {
               "com.sun.faces.enableHtmlTagLibValidator",
               false
         ),
+        EnableCoreTagLibraryValidator(
+              "com.sun.faces.enableCoreTagLibValidator",
+              false
+        ),
         PreferXHTMLContentType(
               "com.sun.faces.preferXHTML",
               false
@@ -872,6 +902,10 @@ public class WebConfiguration {
         ),
         DisableFacesPDL(
               "javax.faces.DISABLE_FACES_PDL_VIEWHANDLER",
+              false
+        ),      
+        FaceletsSkipComments(
+              "facelets.SKIP_COMMENTS",
               false
         );
 

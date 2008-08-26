@@ -66,7 +66,8 @@ import javax.faces.FacesException;
  */
 public abstract class FaceletFactory {
 
-    private static ThreadLocal Instance = new ThreadLocal();
+    private static ThreadLocal<FaceletFactory> INSTANCE =
+          new ThreadLocal<FaceletFactory>();
 
     /**
      * Return a Facelet instance as specified by the file at the passed URI.
@@ -86,20 +87,30 @@ public abstract class FaceletFactory {
     
 
     /**
+     * NOT CURRENTLY USED.  However, this class may be moved to the API and
+     * the TL lookup may end up being the preferred way to get a hold of this
+     * instance.
+     *
      * Set the static instance
      * 
      * @param factory
      */
-    public static final void setInstance(FaceletFactory factory) {
-        Instance.set(factory);
+    public static void setInstance(FaceletFactory factory) {
+        if (factory == null) {
+            INSTANCE.remove();
+        } else {
+            INSTANCE.set(factory);
+        }
     }
 
     /**
-     * Get the static instance
+     * NOT CURRENTLY USED.  However, this class may be moved to the API and
+     * the TL lookup may end up being the preferred way to get a hold of this
+     * instance.
      * 
      * @return
      */
-    public static final FaceletFactory getInstance() {
-        return (FaceletFactory) Instance.get();
+    public static FaceletFactory getInstance() {
+        return INSTANCE.get();
     }
 }

@@ -284,6 +284,11 @@ public abstract class ViewHandler {
      * and passes the result, if non-<code>null</code> into the
      * {@link ExternalContext#setRequestCharacterEncoding} method.
      *
+     * RELEASE_PENDING (edburns,rogerk) Should consider calling setRequestCharacterEncoding()
+     *  *if* getRequestCharacterEncoding() returns null.  Otherwise, in certain
+     *  cases you get warnings from the container about trying to reset the
+     *  encoding.
+     *
      * @throws FacesException if a problem occurs setting the encoding,
      * such as the <code>UnsupportedEncodingException</code> thrown 
      * by the underlying Servlet or Portlet technology when the encoding is not

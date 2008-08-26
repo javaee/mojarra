@@ -121,6 +121,7 @@ public abstract class Compiler {
         log.fine("Initializing");
         try {
             TagLibraryConfig cfg = new TagLibraryConfig();
+            cfg.loadMojarraImplicit(this);
             cfg.loadImplicit(this);
             
             if (!this.createTagLibrary().containsNamespace(UILibrary.Namespace)) {

@@ -738,10 +738,8 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         // FaceletViewHandler.  Make the application behave as 1.2
         // unless they use our ViewHandler
         WebConfiguration webConfig = WebConfiguration.getInstance();
-        if (viewHandlers.containsKey("com.sun.facelets.FaceletViewHandler") ||
-            webConfig
-                  .isOptionEnabled(BooleanWebContextInitParameter.DisableFacesPDL)) {
-            viewHandlers.remove("com.sun.faces.facelets.FaceletViewHandler");
+        if (viewHandlers.containsKey("com.sun.facelets.FaceletViewHandler")) {
+            webConfig.overrideContextInitParameter(BooleanWebContextInitParameter.DisableFacesPDL, true);
         }
         for (Node n : viewHandlers.values()) {
             setViewHandler(app, n);

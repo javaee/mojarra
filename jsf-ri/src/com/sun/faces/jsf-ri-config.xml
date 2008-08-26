@@ -75,10 +75,7 @@
       com.sun.faces.application.StateManagerImpl
     </state-manager>
     <view-handler>
-      com.sun.faces.application.ViewHandlerImpl
-    </view-handler>
-    <view-handler>
-        com.sun.faces.facelets.FaceletViewHandler
+        com.sun.faces.application.view.MultiViewHandler
     </view-handler>
     <resource-handler>
       com.sun.faces.application.resource.ResourceHandlerImpl

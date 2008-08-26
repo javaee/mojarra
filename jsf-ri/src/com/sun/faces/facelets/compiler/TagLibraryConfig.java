@@ -88,6 +88,7 @@ import com.sun.faces.facelets.util.ReflectionUtil;
 public final class TagLibraryConfig {
 
     private final static String SUFFIX = ".taglib.xml";
+    private final static String MOJARRA_SUFFIX = ".taglib.mojarra.xml";
 
     protected final static Logger log = Logger.getLogger("facelets.compiler");
 
@@ -473,9 +474,23 @@ public final class TagLibraryConfig {
         return t;
     }
 
+
+
+    public void loadMojarraImplicit(Compiler compiler) throws IOException {
+        loadImplicit(compiler, MOJARRA_SUFFIX);
+    }
+
     public void loadImplicit(Compiler compiler) throws IOException {
+
+        loadImplicit(compiler, SUFFIX);
+
+    }
+
+    private static void loadImplicit(Compiler compiler, String suffix)
+    throws IOException {
+
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
-        URL[] urls = Classpath.search(cl, "META-INF/", SUFFIX);
+        URL[] urls = Classpath.search(cl, "META-INF/", suffix);
         for (int i = 0; i < urls.length; i++) {
             try {
                 compiler.addTagLibrary(create(urls[i]));
@@ -486,6 +501,7 @@ public final class TagLibraryConfig {
                 log.log(Level.SEVERE, "Error Loading Library: " + urls[i], e);
             }
         }
+
     }
 
     private static final SAXParser createSAXParser(LibraryHandler handler)

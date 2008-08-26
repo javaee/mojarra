@@ -81,10 +81,15 @@ import java.util.logging.Logger;
 import java.net.MalformedURLException;
 
 /**
- * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
+ * <p>
+ * This is the default implementation for JSF 1.2.
+ * </p>
+ * <p>
+ * While this class isn't used by the 2.0 runtime, it's kept for binary
+ * compatibility with those that extend from this class directly.
+ * </p>
  *
- * @version $Id: ViewHandlerImpl.java,v 1.115 2008/01/10 21:37:01 rlubke Exp $
- * @see javax.faces.application.ViewHandler
+ * @deprecated Refer to {@link com.sun.faces.application.view.MultiViewHandler}
  */
 public class ViewHandlerImpl extends ViewHandler {
 

@@ -145,6 +145,13 @@ public class RequestStateManager {
     public static final String RESOURCE_REQUEST =
           "com.sun.faces.RESOURCE_REQUEST";
 
+    /**
+     * Used to store the FaceletFactory as other components may need to
+     * use it during their processing. 
+     */
+    public static final String FACELET_FACTORY =
+          "com.sun.faces.FACELET_FACTORY";
+
 
     // ---------------------------------------------------------- Public Methods
 

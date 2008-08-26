@@ -519,11 +519,11 @@ public class ApplicationAssociate {
     }
 
     // This is called by ViewHandlerImpl.renderView().
-    void responseRendered() {
+    public void responseRendered() {
         responseRendered = true;
     }
 
-    boolean isResponseRendered() {
+    public boolean isResponseRendered() {
         return responseRendered;
     }
 

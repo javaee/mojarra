@@ -50,20 +50,6 @@
  */
 package com.sun.faces.facelets.tag.jsf;
 
-import com.sun.faces.facelets.Facelet;
-import com.sun.faces.facelets.FaceletContext;
-import com.sun.faces.facelets.FaceletContext;
-import com.sun.faces.facelets.FaceletException;
-import com.sun.faces.facelets.FaceletFactory;
-import com.sun.faces.facelets.FaceletViewHandler;
-import com.sun.faces.facelets.el.VariableMapperWrapper;
-import com.sun.faces.facelets.tag.TagAttribute;
-import com.sun.faces.facelets.tag.TagAttributes;
-import com.sun.faces.facelets.tag.TagException;
-import com.sun.faces.facelets.tag.composite.CompositeComponentBeanInfo;
-import com.sun.faces.facelets.tag.jsf.ComponentConfig;
-import com.sun.faces.facelets.tag.jsf.ComponentHandler;
-import java.beans.BeanDescriptor;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -71,6 +57,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.el.ELException;
 import javax.el.Expression;
 import javax.el.ExpressionFactory;
@@ -85,9 +72,17 @@ import javax.faces.context.FacesContext;
 import javax.faces.webapp.pdl.AttachedObjectHandler;
 import javax.faces.webapp.pdl.PDLUtils;
 
+import com.sun.faces.facelets.Facelet;
+import com.sun.faces.facelets.FaceletContext;
+import com.sun.faces.facelets.FaceletException;
+import com.sun.faces.facelets.FaceletFactory;
+import com.sun.faces.facelets.el.VariableMapperWrapper;
+import com.sun.faces.facelets.tag.TagAttribute;
+import com.sun.faces.facelets.tag.TagAttributes;
+import com.sun.faces.util.RequestStateManager;
+
 /**
- *
- * @author edburns
+ * RELEASE_PENDING (rlubke,driscoll) document
  */
 public class CompositeComponentTagHandler extends ComponentHandler {
     
@@ -162,8 +157,8 @@ public class CompositeComponentTagHandler extends ComponentHandler {
     private void applyCompositeComponent(FaceletContext ctx, UIComponent c) {
         Facelet f = null;
         FacesContext facesContext = ctx.getFacesContext();
-        FaceletViewHandler faceletViewHandler = (FaceletViewHandler) facesContext.getApplication().getViewHandler();
-        FaceletFactory factory = faceletViewHandler.getFaceletFactory();
+        FaceletFactory factory = (FaceletFactory)
+              RequestStateManager.get(facesContext, RequestStateManager.FACELET_FACTORY);
         VariableMapper orig = ctx.getVariableMapper();
         
         UIPanel facetComponent = null;

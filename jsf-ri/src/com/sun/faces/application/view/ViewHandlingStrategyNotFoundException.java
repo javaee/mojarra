@@ -32,49 +32,31 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
- *
- * This file incorporates work covered by the following copyright and
- * permission notice:
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 
-package com.sun.faces.facelets.compiler;
+package com.sun.faces.application.view;
 
-import java.io.IOException;
-
-import javax.el.ELException;
 import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
 
-import com.sun.faces.facelets.FaceletContext;
-import com.sun.faces.facelets.FaceletException;
-import com.sun.faces.facelets.FaceletHandler;
+/**
+ * Indicates that no {@link com.sun.faces.application.view.ViewHandlingStrategy}
+ * instances were found appropriate to a particulare view ID.
+ */
+public class ViewHandlingStrategyNotFoundException extends FacesException {
 
-public class EncodingHandler implements FaceletHandler {
+    private static final long serialVersionUID = 542553047788916981L;
 
-    private final FaceletHandler next;
-    private final String encoding;
-    
-    public EncodingHandler(FaceletHandler next, String encoding) {
-        this.next = next;
-        this.encoding = encoding;
+
+    // ------------------------------------------------------------ Constructors
+
+    /**
+     * @see javax.faces.FacesException#Exception()
+     */
+    public ViewHandlingStrategyNotFoundException() {
+
+        super();
+
     }
 
-    public void apply(FaceletContext ctx, UIComponent parent)
-            throws IOException, FacesException, FaceletException, ELException {
-        this.next.apply(ctx, parent);
-        ctx.getFacesContext().getAttributes().put("facelets.Encoding", this.encoding);
-    }
 
 }

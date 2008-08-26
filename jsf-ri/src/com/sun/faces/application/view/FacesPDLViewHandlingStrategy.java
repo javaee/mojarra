@@ -1,0 +1,713 @@
+/*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ *
+ * Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
+ *
+ * The contents of this file are subject to the terms of either the GNU
+ * General Public License Version 2 only ("GPL") or the Common Development
+ * and Distribution License("CDDL") (collectively, the "License").  You
+ * may not use this file except in compliance with the License. You can obtain
+ * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
+ * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
+ * language governing permissions and limitations under the License.
+ *
+ * When distributing the software, include this License Header Notice in each
+ * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
+ * Sun designates this particular file as subject to the "Classpath" exception
+ * as provided by Sun in the GPL Version 2 section of the License file that
+ * accompanied this code.  If applicable, add the following below the License
+ * Header, with the fields enclosed by brackets [] replaced by your own
+ * identifying information: "Portions Copyrighted [year]
+ * [name of copyright owner]"
+ *
+ * Contributor(s):
+ *
+ * If you wish your version of this file to be governed by only the CDDL or
+ * only the GPL Version 2, indicate your decision by adding "[Contributor]
+ * elects to include this software in this distribution under the [CDDL or GPL
+ * Version 2] license."  If you don't indicate a single choice of license, a
+ * recipient has the option to distribute your version of this file under
+ * either the CDDL, the GPL Version 2 or to extend the choice of license to
+ * its licensees as provided above.  However, if you add GPL Version 2 code
+ * and therefore, elected the GPL Version 2 license, then the option applies
+ * only if the new code is made subject to such option by the copyright
+ * holder.
+ */
+
+package com.sun.faces.application.view;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.net.URL;
+
+import javax.faces.FacesException;
+import javax.faces.application.ViewHandler;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
+import javax.faces.render.RenderKit;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
+
+import com.sun.faces.facelets.Facelet;
+import com.sun.faces.facelets.FaceletFactory;
+import com.sun.faces.facelets.impl.ResourceResolver;
+import com.sun.faces.facelets.impl.DefaultResourceResolver;
+import com.sun.faces.facelets.impl.DefaultFaceletFactory;
+import com.sun.faces.facelets.impl.PageDeclarationLanguageImpl;
+import com.sun.faces.facelets.compiler.Compiler;
+import com.sun.faces.facelets.compiler.TagLibraryConfig;
+import com.sun.faces.facelets.compiler.SAXCompiler;
+import com.sun.faces.facelets.tag.ui.UIDebug;
+import com.sun.faces.facelets.tag.TagLibrary;
+import com.sun.faces.facelets.tag.TagDecorator;
+import com.sun.faces.facelets.util.DevTools;
+import com.sun.faces.facelets.util.ReflectionUtil;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
+import com.sun.faces.util.RequestStateManager;
+import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
+
+/**
+ * This {@link ViewHandlingStrategy} handles Facelets/PDL-based views.
+ */
+public class FacesPDLViewHandlingStrategy extends ViewHandlingStrategy {
+
+    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
+
+    // FaceletFactory singleton for this application
+    private FaceletFactory faceletFactory;
+
+    // Array of viewId extensions that should be handled by Facelets
+    private String[] extensionsArray;
+
+    // Array of viewId prefixes that should be handled by Facelets
+    private String[] prefixesArray;
+
+
+    // ------------------------------------------------------------ Constructors
+
+
+    public FacesPDLViewHandlingStrategy() {
+
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        ctx.getApplication().setPageDeclarationLanguage(new PageDeclarationLanguageImpl());
+        initialize(ctx);
+
+    }
+
+
+    // --------------------------------------- Methods from ViewHandlingStrategy
+
+
+    /**
+     * @param viewId the view ID to check
+     * @return <code>true</code> if assuming a default configuration and the
+     *  view ID's extension is <code>.xhtml</code>  Otherwise try to match
+     *  the view ID based on the configured extendsion and prefixes.
+     *
+     * @see com.sun.faces.config.WebConfiguration.WebContextInitParameter#FaceletsViewMappings
+     */
+    public boolean handlesViewId(String viewId) {
+         if (viewId != null) {
+            // If there's no extensions array or prefixes array, then
+            // assume defaults.  .xhtml extension is handled by
+            // the FaceletViewHandler and .jsp will be handled by
+            // the JSP view handler
+            if ((extensionsArray == null) && (prefixesArray == null)) {
+                return (viewId.endsWith(".xhtml"));
+            }
+
+            if (extensionsArray != null) {
+                for (int i = 0; i < extensionsArray.length; i++) {
+                    String extension = extensionsArray[i];
+                    if (viewId.endsWith(extension)) {
+                        return true;
+                    }
+                }
+            }
+
+            if (prefixesArray != null) {
+                for (int i = 0; i < prefixesArray.length; i++) {
+                    String prefix = prefixesArray[i];
+                    if (viewId.startsWith(prefix)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
+     * @see {@link com.sun.faces.application.view.ViewHandlingStrategy#renderView(javax.faces.context.FacesContext, MultiViewHandler, javax.faces.component.UIViewRoot)}
+     */
+    public void renderView(FacesContext ctx,
+                           MultiViewHandler vh,
+                           UIViewRoot viewToRender)
+    throws IOException {
+
+        // log request
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Rendering View: " + viewToRender.getViewId());
+        }
+
+        WriteBehindStateWriter stateWriter = null;
+        try {
+            // Only build the view if this view has not yet been built.
+            if (!isViewPopulated(ctx, viewToRender)) {
+                this.buildView(ctx, viewToRender);
+            }
+
+            // setup writer and assign it to the ctx
+            ResponseWriter origWriter = ctx.getResponseWriter();
+            if (origWriter == null) {
+                origWriter = createResponseWriter(ctx);
+            }
+
+            stateWriter = new WriteBehindStateWriter(origWriter,
+                                                     ctx,
+                                                     responseBufferSize);
+
+            ResponseWriter writer = origWriter.cloneWithWriter(stateWriter);
+            ctx.setResponseWriter(writer);
+
+            // render the view to the response
+            writer.startDocument();
+            viewToRender.encodeAll(ctx);
+            writer.endDocument();
+
+            // finish writing
+            writer.close();
+
+
+            boolean writtenState = stateWriter.stateWritten();
+            // flush to origWriter
+            if (writtenState) {
+                stateWriter.flushToWriter();
+            }
+
+        } catch (FileNotFoundException fnfe) {
+            this.handleFaceletNotFound(ctx, vh, viewToRender.getViewId());
+        } catch (Exception e) {
+            this.handleRenderException(ctx, e);
+        } finally {
+            if (stateWriter != null)
+                stateWriter.release();
+        }
+
+    }
+
+
+    /**
+     * <p>
+     * If {@link UIDebug#debugRequest(javax.faces.context.FacesContext)}} is <code>true</code>,
+     * simply return a new UIViewRoot(), otherwise, call the default logic.
+     * </p>
+     * @see {@link com.sun.faces.application.view.ViewHandlingStrategy#restoreView(javax.faces.context.FacesContext, MultiViewHandler, String)}
+     */
+    @Override
+    public UIViewRoot restoreView(FacesContext ctx,
+                                  MultiViewHandler vh,
+                                  String viewId) {
+
+        if (UIDebug.debugRequest(ctx)) {
+            return new UIViewRoot();
+        }
+
+        return super.restoreView(ctx, vh, viewId);
+
+    }
+
+
+    // ------------------------------------------------------- Protected Methods
+
+
+    /**
+     * @param ctx the {@link FacesContext} for the current request
+     * @param viewToRender the {@link UIViewRoot} to check
+     * @return <code>true</code> if the {@link FacesContext} attributes map
+     *  contains a reference to the {@link UIViewRoot}'s view ID
+     */
+    protected static boolean isViewPopulated(FacesContext ctx, UIViewRoot viewToRender) {
+
+        return ctx.getAttributes().containsKey(viewToRender.getViewId());
+
+    }
+
+
+    /**
+     * <p>
+     * Flag the specified {@link UIViewRoot} as populated.
+     * </p>
+     * @param ctx the {@link FacesContext} for the current request
+     * @param viewToRender the {@link UIViewRoot} to mark as populated
+     */
+    protected static void setViewPopulated(FacesContext ctx,
+                                           UIViewRoot viewToRender) {
+
+        ctx.getAttributes().put(viewToRender.getViewId(), Boolean.TRUE);
+
+    }
+
+
+    /**
+     * Initialize the core Facelets runtime.
+     * @param ctx the {@link FacesContext} for the current request
+     */
+    protected void initialize(FacesContext ctx) {
+
+        if (this.faceletFactory == null) {
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("Initializing FacesPDLViewHandlingStrategy");
+            }
+            Compiler c = this.createCompiler();
+            this.initializeCompiler(ctx, c);
+            this.faceletFactory = this.createFaceletFactory(c);
+
+            this.initializeMappings();
+
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("Initialization Successful");
+            }
+        }
+
+    }
+
+
+    /**
+     * @param c the Compiler the FaceletFactory should use
+     * @return the FaceletFactory singletom to be used by this application
+     */
+    protected FaceletFactory createFaceletFactory(Compiler c) {
+
+        // refresh period
+        String refreshPeriod = webConfig
+              .getOptionValue(WebContextInitParameter.FaceletsDefaultRefreshPeriod);
+        long period = Long.parseLong(refreshPeriod);
+
+        // resource resolver
+        ResourceResolver resolver = new DefaultResourceResolver();
+        String resolverName = webConfig
+              .getOptionValue(WebContextInitParameter.FaceletsResourceResolver);
+        if (resolverName != null && resolverName.length() > 0) {
+            try {
+                resolver = (ResourceResolver) ReflectionUtil.forName(resolverName)
+                        .newInstance();
+            } catch (Exception e) {
+                throw new FacesException("Error Initializing ResourceResolver["
+                        + resolverName + "]", e);
+            }
+        }
+
+        // Resource.getResourceUrl(ctx,"/")
+        return new DefaultFaceletFactory(c, resolver, period);
+    }
+
+
+    /**
+     * Initialize mappings, during the first request.
+     */
+    private void initializeMappings() {
+
+        String viewMappings = webConfig
+              .getOptionValue(WebContextInitParameter.FaceletsViewMappings);
+        if ((viewMappings != null) && (viewMappings.length() > 0)) {
+            String[] mappingsArray = Util.split(viewMappings, ";");
+
+            List<String> extensionsList = new ArrayList<String>(mappingsArray.length);
+            List<String> prefixesList = new ArrayList<String>(mappingsArray.length);
+
+            for (int i = 0; i < mappingsArray.length; i++) {
+                String mapping = mappingsArray[i].trim();
+                int mappingLength = mapping.length();
+                if (mappingLength <= 1) {
+                    continue;
+                }
+
+                if (mapping.charAt(0) == '*') {
+                    extensionsList.add(mapping.substring(1));
+                } else if (mapping.charAt(mappingLength - 1) == '*') {
+                    prefixesList.add(mapping.substring(0, mappingLength - 1));
+                }
+            }
+
+            extensionsArray = new String[extensionsList.size()];
+            extensionsList.toArray(extensionsArray);
+
+            prefixesArray = new String[prefixesList.size()];
+            prefixesList.toArray(prefixesArray);
+        }
+    }
+
+
+    /**
+     * Initialize the Facelets Compiler.
+     * @param ctx the {@link FacesContext} for the current request
+     * @param c the Compiler to initialize
+     */
+    protected void initializeCompiler(FacesContext ctx, Compiler c) {
+
+        ExternalContext ext = ctx.getExternalContext();
+
+        // load libraries
+        String libParam = webConfig
+              .getOptionValue(WebContextInitParameter.FaceletsLibraries);
+        if (libParam != null) {
+            libParam = libParam.trim();
+            String[] libs = Util.split(libParam, ";");
+            URL src;
+            TagLibrary libObj;
+            for (int i = 0; i < libs.length; i++) {
+                try {
+                    src = ext.getResource(libs[i].trim());
+                    if (src == null) {
+                        throw new FileNotFoundException(libs[i]);
+                    }
+                    libObj = TagLibraryConfig.create(src);
+                    c.addTagLibrary(libObj);
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.log(Level.FINE,
+                                   "Successfully Loaded Library: {0}",
+                                   libs[i]);
+                    }
+                } catch (IOException e) {
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE,
+                                   "Error Loading Library: " + libs[i],
+                                   e);
+                    }
+                }
+            }
+        }
+
+        // load decorators
+        String decParam = webConfig
+              .getOptionValue(WebContextInitParameter.FaceletsDecorators);
+        if (decParam != null) {
+            decParam = decParam.trim();
+            String[] decs = Util.split(decParam, ";");
+            TagDecorator decObj;
+            for (int i = 0; i < decs.length; i++) {
+                try {
+                    decObj = (TagDecorator) ReflectionUtil.forName(decs[i])
+                            .newInstance();
+                    c.addTagDecorator(decObj);
+
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.log(Level.FINE,
+                                   "Successfully Loaded Decorator: {0}",
+                                   decs[i]);
+                    }
+                } catch (Exception e) {
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE,
+                                   "Error Loading Decorator: " + decs[i],
+                                   e);
+                    }
+                }
+            }
+        }
+
+        // skip params?
+        c.setTrimmingComments(
+              webConfig.isOptionEnabled(
+                    BooleanWebContextInitParameter.FaceletsSkipComments));
+
+    }
+
+
+    /**
+     * @return a new Compiler for Facelet processing.
+     */
+    protected Compiler createCompiler() {
+        return new SAXCompiler();
+    }
+
+
+    /**
+     * Build the view.
+     * @param ctx the {@link FacesContext} for the current request
+     * @param viewToRender the {@link UIViewRoot} to populate based
+     *  of the Facelet template
+     * @throws IOException if an error occurs building the view.
+     */
+    protected void buildView(FacesContext ctx, UIViewRoot viewToRender)
+    throws IOException {
+
+        viewToRender.setViewId(viewToRender.getViewId());
+
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Building View: " + viewToRender.getViewId());
+        }
+        RequestStateManager.set(ctx,
+                                RequestStateManager.FACELET_FACTORY,
+                                faceletFactory);
+        Facelet f = faceletFactory.getFacelet(viewToRender.getViewId());
+
+        // populate UIViewRoot
+        f.apply(ctx, viewToRender);
+        setViewPopulated(ctx, viewToRender);
+
+    }
+
+
+    /**
+     * @param context the {@link FacesContext} for the current request
+     * @return a {@link ResponseWriter} for processing the request
+     * @throws IOException if the writer cannot be created
+     */
+    protected ResponseWriter createResponseWriter(FacesContext context)
+    throws IOException {
+
+        ExternalContext extContext = context.getExternalContext();
+        RenderKit renderKit = context.getRenderKit();
+        // Avoid a cryptic NullPointerException when the renderkit ID
+        // is incorrectly set
+        if (renderKit == null) {
+            String id = context.getViewRoot().getRenderKitId();
+            throw new IllegalStateException(
+                  "No render kit was available for id \"" + id + "\"");
+        }
+
+        ServletResponse response = (ServletResponse) extContext.getResponse();
+
+        if (responseBufferSizeSet) {
+            // set the buffer for content
+            response.setBufferSize(responseBufferSize);
+        }
+
+
+        // get our content type
+        String contentType =
+              (String) extContext.getRequestMap().get("facelets.ContentType");
+
+        // get the encoding
+        String encoding =
+              (String) extContext.getRequestMap().get("facelets.Encoding");
+
+        // Create a dummy ResponseWriter with a bogus writer,
+        // so we can figure out what content type the ReponseWriter
+        // is really going to ask for
+        ResponseWriter writer = renderKit.createResponseWriter(NullWriter.Instance,
+                                                               contentType,
+                                                               encoding);
+
+        contentType = getResponseContentType(context, writer.getContentType());
+        encoding = getResponseEncoding(context, writer.getCharacterEncoding());
+
+        // apply them to the response
+        response.setContentType(contentType);
+        response.setCharacterEncoding(encoding);
+
+        // Now, clone with the real writer
+        writer = writer.cloneWithWriter(response.getWriter());
+
+        return writer;
+
+    }
+
+
+    /**
+     * Handles the case where rendering throws an Exception.
+     *
+     * @param context the {@link FacesContext} for the current request
+     * @param e the caught Exception
+     * @throws IOException if the custom debug content cannot be written
+     */
+    protected void handleRenderException(FacesContext context, Exception e)
+    throws IOException {
+
+        Object resp = context.getExternalContext().getResponse();
+
+        // always log
+        if (LOGGER.isLoggable(Level.SEVERE)) {
+            UIViewRoot root = context.getViewRoot();
+            StringBuffer sb = new StringBuffer(64);
+            sb.append("Error Rendering View");
+            if (root != null) {
+                sb.append('[');
+                sb.append(root.getViewId());
+                sb.append(']');
+            }
+            LOGGER.log(Level.SEVERE, sb.toString(), e);
+        }
+
+        // handle dev response
+        if (associate.isDevModeEnabled() && !context.getResponseComplete()
+            && resp instanceof HttpServletResponse) {
+            HttpServletResponse httpResp = (HttpServletResponse) resp;
+            if (!httpResp.isCommitted()) {
+                httpResp.reset();
+                httpResp.setContentType("text/html; charset=UTF-8");
+                Writer w = httpResp.getWriter();
+                DevTools.debugHtml(w, context, e);
+                w.flush();
+                context.responseComplete();
+            }
+        } else if (e instanceof RuntimeException) {
+            throw (RuntimeException) e;
+        } else if (e instanceof IOException) {
+            throw (IOException) e;
+        } else {
+            throw new FacesException(e.getMessage(), e);
+        }
+
+    }
+
+
+    /**
+     * Handles the case where a Facelet cannot be found.
+     *
+     * @param context the {@link FacesContext} for the current request
+     * @param vh the {@link ViewHandler} handling this view
+     * @param viewId the view ID that was to be mapped to a Facelet
+     * @throws IOException if an error occurs sending the 404 to the client
+     */
+    protected void handleFaceletNotFound(FacesContext context,
+                                         ViewHandler vh,
+                                         String viewId)
+    throws IOException {
+
+        String actualId = vh.getActionURL(context, viewId);
+        Object respObj = context.getExternalContext().getResponse();
+        if (respObj instanceof HttpServletResponse) {
+            HttpServletResponse respHttp = (HttpServletResponse) respObj;
+            respHttp.sendError(HttpServletResponse.SC_NOT_FOUND, actualId);
+            context.responseComplete();
+        }
+
+    }
+
+
+    /**
+     * @param context the {@link FacesContext} for the current request
+     * @param orig the original encoding
+     * @return the encoding to be used for this response
+     */
+    protected String getResponseEncoding(FacesContext context, String orig) {
+
+        String encoding = orig;
+
+        // see if we need to override the encoding
+        Map<Object,Object> ctxAttributes = context.getAttributes();
+        Map<String,Object> sessionMap =
+              context.getExternalContext().getSessionMap();
+
+        // 1. check the request attribute
+        if (ctxAttributes.containsKey("facelets.Encoding")) {
+            encoding = (String) ctxAttributes.get("facelets.Encoding");
+            if (LOGGER.isLoggable(Level.FINEST)) {
+                LOGGER.log(Level.FINEST,
+                           "Facelet specified alternate encoding {0}",
+                           encoding);
+            }
+            sessionMap.put(ViewHandler.CHARACTER_ENCODING_KEY, encoding);
+        }
+
+        // 2. get it from request
+        Object request = context.getExternalContext().getRequest();
+        if (encoding == null && request instanceof ServletRequest) {
+            encoding = ((ServletRequest) request).getCharacterEncoding();
+        }
+
+        // 3. get it from the session
+        if (encoding == null) {
+            encoding = (String) sessionMap.get(ViewHandler.CHARACTER_ENCODING_KEY);
+            if (LOGGER.isLoggable(Level.FINEST)) {
+                LOGGER.log(Level.FINEST,
+                           "Session specified alternate encoding {0}",
+                           encoding);
+            }
+        }
+
+        // 4. default it
+        if (encoding == null) {
+            encoding = "UTF-8";
+            if (LOGGER.isLoggable(Level.FINEST)) {
+                LOGGER.finest("ResponseWriter created had a null CharacterEncoding, defaulting to UTF-8");
+            }
+        }
+
+        return encoding;
+
+    }
+
+
+    /**
+     * @param context the {@link FacesContext} for the current request
+     * @param orig the original contentType
+     * @return the content type to be used for this response
+     */
+    protected String getResponseContentType(FacesContext context, String orig) {
+
+        String contentType = orig;
+
+        // see if we need to override the contentType
+        Map<Object,Object> m = context.getAttributes();
+        if (m.containsKey("facelets.ContentType")) {
+            contentType = (String) m.get("facelets.ContentType");
+            if (LOGGER.isLoggable(Level.FINEST)) {
+                LOGGER.finest("Facelet specified alternate contentType '"
+                        + contentType + "'");
+            }
+        }
+
+        // safety check
+        if (contentType == null) {
+            contentType = "text/html";
+            if (LOGGER.isLoggable(Level.FINEST)) {
+                LOGGER.finest("ResponseWriter created had a null ContentType, defaulting to text/html");
+            }
+        }
+
+        return contentType;
+
+    }
+
+
+    // ---------------------------------------------------------- Nested Classes
+
+
+    /**
+     * Simple no-op writer.
+     */
+    protected static final class NullWriter extends Writer {
+
+        static final NullWriter Instance = new NullWriter();
+
+        public void write(char[] buffer) {
+        }
+
+        public void write(char[] buffer, int off, int len) {
+        }
+
+        public void write(String str) {
+        }
+
+        public void write(int c) {
+        }
+
+        public void write(String str, int off, int len) {
+        }
+
+        public void close() {
+        }
+
+        public void flush() {
+        }
+
+    } // END NullWriter
+
+}

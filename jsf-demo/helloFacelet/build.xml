@@ -51,9 +51,6 @@
     <property name="jsf-demo.lib" value="../lib"/>
     
     <!-- downloadable jars -->
-    <property name="facelet-jarname" value="jsf-facelets-1.1.14.jar"/>
-    <property name="facelet-rep" value="http://download.java.net/maven/1/com.sun.facelets/jars/${facelet-jarname}" />
-    <property name="facelet.jar" value="${lib}/${facelet-jarname}"/>
 
     <path id="classpath">       
         <pathelement location="${jsf-api.jar}"/>
@@ -73,21 +70,7 @@
         <delete dir="${context.path}"/>
     </target>    
     
-    <target name="download-facelets">
-        <if>
-            <not>
-                <available file="${facelet.jar}" property="ignored"/>
-            </not>
-            <then>
-                <mkdir dir="${lib}"/>
-                <get src="${facelet-rep}"
-                     dest="${facelet.jar}"
-                     usetimestamp="true"/>
-            </then>
-        </if>
-    </target>
-
-    <target name="prepare" depends="init, download-facelets"
+    <target name="prepare" depends="init"
             description="Create build directories.">
         <mkdir dir="${build}/${example}/"/>
         <mkdir dir="${build}/${example}/WEB-INF"/>
@@ -124,10 +107,7 @@
                 <include name="*properties"/>
             </fileset>
         </copy>
-        <copy todir="${build}/${example}/WEB-INF/lib">
-            <fileset file="${facelet.jar}"/>
-        </copy>
-        
+     
         <jsf.war basedir="${build}"
                  archive-name="${example}"
                  webxml="${build}/${example}/WEB-INF/web.xml">

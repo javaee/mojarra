@@ -69,6 +69,7 @@ import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.webapp.pdl.AttachedObjectTarget;
 import javax.faces.application.Resource;
+import javax.faces.application.ProjectStage;
 
 /**
  *
@@ -112,7 +113,7 @@ public class InterfaceHandler extends TagHandler {
         String strValue = null;
         boolean booleanValue = false;
 
-        if (java.beans.Beans.isDesignTime()) {
+        if (ctx.getFacesContext().getApplication().getProjectStage() == ProjectStage.Development) {
 
             if (null != (attr = this.getAttribute("displayName"))) {
                 ve = attr.getValueExpression(ctx, String.class);

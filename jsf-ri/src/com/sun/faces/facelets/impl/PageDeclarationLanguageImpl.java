@@ -54,10 +54,11 @@ import com.sun.faces.facelets.Facelet;
 import com.sun.faces.facelets.FaceletContext;
 import com.sun.faces.facelets.FaceletException;
 import com.sun.faces.facelets.FaceletFactory;
-import com.sun.faces.facelets.FaceletViewHandler;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
 import com.sun.faces.facelets.tag.composite.CompositeComponentBeanInfo;
 import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
+import com.sun.faces.util.RequestStateManager;
+
 import java.beans.BeanInfo;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -74,8 +75,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.webapp.pdl.PageDeclarationLanguage;
 
 /**
- *
- * @author edburns
+ * RELEASE_PENDING (rlubke,driscoll) document
  */
 public class PageDeclarationLanguageImpl extends PageDeclarationLanguage {
     
@@ -90,8 +90,8 @@ public class PageDeclarationLanguageImpl extends PageDeclarationLanguage {
         CompositeComponentBeanInfo result = null;
         FaceletContext ctx = (FaceletContext)
                 context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
-        FaceletViewHandler faceletViewHandler = (FaceletViewHandler) context.getApplication().getViewHandler();
-        FaceletFactory factory = faceletViewHandler.getFaceletFactory();
+        FaceletFactory factory = (FaceletFactory)
+              RequestStateManager.get(context, RequestStateManager.FACELET_FACTORY);
         VariableMapper orig = ctx.getVariableMapper();
         UIComponent tmp = context.getApplication().createComponent("javax.faces.NamingContainer");
         UIPanel facetComponent = (UIPanel)

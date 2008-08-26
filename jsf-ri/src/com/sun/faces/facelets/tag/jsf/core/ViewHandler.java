@@ -130,11 +130,11 @@ public final class ViewHandler extends TagHandler {
             }
             if (this.contentType != null) {
                 String v = this.contentType.getValue(ctx);
-                ctx.getFacesContext().getExternalContext().getRequestMap().put("facelets.ContentType", v);
+                ctx.getFacesContext().getAttributes().put("facelets.ContentType", v);
             }
             if (this.encoding != null) {
                 String v = this.encoding.getValue(ctx);
-                ctx.getFacesContext().getExternalContext().getRequestMap().put("facelets.Encoding", v);
+                ctx.getFacesContext().getAttributes().put("facelets.Encoding", v);
             }
             if (this.beforePhase != null) {
                 MethodExpression m = this.beforePhase

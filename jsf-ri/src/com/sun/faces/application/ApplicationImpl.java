@@ -472,9 +472,7 @@ public class ApplicationImpl extends Application {
             if (projectStage == null) {
                 projectStage = ProjectStage.Production;
             }
-            if (projectStage == ProjectStage.Development) {
-                java.beans.Beans.setDesignTime(true);
-            }
+           
         }
         return projectStage;
 
