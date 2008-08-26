@@ -65,9 +65,9 @@ public class FacesCompositeELResolver extends CompositeELResolver {
         throws ELException {
         
         context.setPropertyResolved(false);
-        if (FacesContext.getCurrentInstance() == null) {
+        if (!facesContextPresent(context)) {
             return null;
-        }                    
+        }
         setChainType();
         Object result = super.getValue(context, base, property);
         clearChainType();
@@ -79,7 +79,7 @@ public class FacesCompositeELResolver extends CompositeELResolver {
         throws ELException {
 
         context.setPropertyResolved(false);
-        if (FacesContext.getCurrentInstance() == null) {
+        if (!facesContextPresent(context)) {
             return null;
         }
         setChainType();
@@ -93,7 +93,7 @@ public class FacesCompositeELResolver extends CompositeELResolver {
     public void setValue(ELContext context, Object base, Object property,
         Object val) throws ELException {
         context.setPropertyResolved(false);
-        if (FacesContext.getCurrentInstance() == null) {
+        if (!facesContextPresent(context)) {
             return;
         }
         setChainType();
@@ -105,7 +105,7 @@ public class FacesCompositeELResolver extends CompositeELResolver {
     public boolean isReadOnly(ELContext context, Object base, Object property) 
         throws ELException {
         context.setPropertyResolved(false);
-        if (FacesContext.getCurrentInstance() == null) {
+        if (!facesContextPresent(context)) {
             return false;
         }
         setChainType();
@@ -169,6 +169,18 @@ public class FacesCompositeELResolver extends CompositeELResolver {
     private void clearChainType() {
         RequestStateManager.remove(FacesContext.getCurrentInstance(),
                                    RequestStateManager.EL_RESOLVER_CHAIN_TYPE_NAME);
+    }
+
+    /**
+     * @param elContext current ELContext
+     * @return <code>true</code> if the FacesContext is present
+     */
+    private boolean facesContextPresent(ELContext elContext) {
+        FacesContext ctx = (FacesContext) elContext.getContext(FacesContext.class);
+        if (ctx == null) {
+            ctx = FacesContext.getCurrentInstance();
+        }
+        return (ctx != null);
     }
 
 }
