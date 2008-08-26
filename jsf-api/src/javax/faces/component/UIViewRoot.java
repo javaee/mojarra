@@ -46,6 +46,7 @@ import javax.el.MethodExpression;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
+import javax.faces.application.ProjectStage;
 import javax.faces.component.ContextCallback;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -62,12 +63,14 @@ import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.webapp.FacesServlet;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ListIterator;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.event.AfterAddToParentEvent;
@@ -1616,7 +1619,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
     public Map<String, Object> getViewMap(boolean create) {
 
         if (create && viewScope == null) {
-            viewScope = new ViewMap();
+            viewScope = new ViewMap(getFacesContext().getApplication().getProjectStage());
             getFacesContext().getApplication()
                   .publishEvent(ViewMapCreatedEvent.class, this);
         }
@@ -1781,6 +1784,22 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
 
         private static final long serialVersionUID = -1l;
 
+        private ProjectStage stage;
+
+        
+        // -------------------------------------------------------- Constructors
+
+
+        ViewMap(ProjectStage stage) {
+
+            this.stage = stage;
+
+        }
+
+
+        // ---------------------------------------------------- Methods from Map
+
+
         @Override
         public void clear() {
 
@@ -1790,6 +1809,33 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
             super.clear();
 
         }
+
+
+        @Override
+        public Object put(String key, Object value) {
+
+            if (ProjectStage.Development.equals(stage) && !(value instanceof Serializable)) {
+                LOGGER.log(Level.WARNING,
+                           "warning.component.uiviewroot_non_serializable_attribute_viewmap",
+                           new Object[] { key, value.getClass().getName() });
+            }
+            return super.put(key, value);
+
+        }
+
+
+        @Override
+        public void putAll(Map<? extends String,?> m) {
+
+            for (Map.Entry<? extends String,?> entry : m.entrySet()) {
+                String k = entry.getKey();
+                Object v = entry.getValue();
+                this.put(k, v);
+            }
+
+        }
+
+
     } // END ViewMap
 
 

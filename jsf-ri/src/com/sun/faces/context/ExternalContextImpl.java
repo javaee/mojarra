@@ -106,7 +106,8 @@ public class ExternalContextImpl extends ExternalContext {
     // ------------------------------------------------------------ Constructors
 
     
-    public ExternalContextImpl(ServletContext sc, ServletRequest request,
+    public ExternalContextImpl(ServletContext sc,
+                               ServletRequest request,
                                ServletResponse response) {
 
         // Validate the incoming parameters
@@ -227,7 +228,9 @@ public class ExternalContextImpl extends ExternalContext {
      */
     public Map<String,Object> getSessionMap() {
         if (sessionMap == null) {
-            sessionMap = new SessionMap((HttpServletRequest) request);
+            sessionMap = new SessionMap((HttpServletRequest) request,
+                                        FacesContext.getCurrentInstance()
+                                              .getApplication().getProjectStage());
         }
         return sessionMap;
     }

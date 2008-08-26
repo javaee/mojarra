@@ -46,6 +46,7 @@ import java.io.Serializable;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.faces.application.ProjectStage;
 
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
@@ -58,12 +59,14 @@ public class SessionMap extends BaseContextMap<Object> {
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
     private final HttpServletRequest request;
+    private final ProjectStage stage;
 
     // ------------------------------------------------------------ Constructors
 
 
-    public SessionMap(HttpServletRequest request) {
+    public SessionMap(HttpServletRequest request, ProjectStage stage) {
         this.request = request;
+        this.stage = stage;
     }
 
 
@@ -91,7 +94,7 @@ public class SessionMap extends BaseContextMap<Object> {
             Map.Entry entry = (Map.Entry) i.next();
             Object v = entry.getValue();
             Object k = entry.getKey();
-            if (!(v instanceof Serializable)) {
+            if (ProjectStage.Development.equals(stage) && !(v instanceof Serializable)) {
                 LOGGER.log(Level.WARNING,
                            "jsf.context.extcontext.sessionmap.nonserializable",
                            new Object[] { k, v.getClass().getName() });
@@ -116,7 +119,7 @@ public class SessionMap extends BaseContextMap<Object> {
         Util.notNull("key", key);
         HttpSession session = getSession(true);
         Object result = session.getAttribute(key);
-        if (!(value instanceof Serializable)) {
+        if (ProjectStage.Development.equals(stage) && !(value instanceof Serializable)) {
             LOGGER.log(Level.WARNING,
                        "jsf.context.extcontext.sessionmap.nonserializable",
                        new Object[]{key, value.getClass().getName()});
