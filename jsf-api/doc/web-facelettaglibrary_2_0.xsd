@@ -77,31 +77,24 @@
         </xsd:unique>
     </xsd:element>
     <xsd:complexType name="facelet-taglibType">
-        <xsd:choice>
-            <xsd:sequence>
-                <xsd:element name="library-class" 
+        <xsd:choice minOccurs="1" maxOccurs="1">
+            <xsd:element name="library-class" 
+                         type="javaee:fully-qualified-classType"/>
+            <xsd:choice minOccurs="1" maxOccurs="1">
+                <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+                    <xsd:element name="tag" 
+                                 type="javaee:facelet-taglib-tagType"/>
+                    <xsd:element name="function"
+                                 type="javaee:facelet-taglib-functionType"/>
+                    <xsd:element name="resource"
+                                 type="javaee:facelet-taglib-resourceType"/>
+                </xsd:sequence>
+                <xsd:sequence minOccurs="2" maxOccurs="2">
+                    <xsd:element name="namespace" type="javaee:string"/>
+                    <xsd:element name="composite-library-name" 
                              type="javaee:fully-qualified-classType"/>
-            </xsd:sequence>
-            <xsd:sequence>
-                <xsd:choice>
-                    <xsd:sequence>
-                        <xsd:element name="namespace" type="javaee:string"/>
-                        <xsd:choice maxOccurs="unbounded">
-                            <xsd:element name="tag" 
-                                     type="javaee:facelet-taglib-tagType"/>
-                            <xsd:element name="function"
-                                     type="javaee:facelet-taglib-functionType"/>
-                            <xsd:element name="resource"
-                                     type="javaee:facelet-taglib-resourceType"/>
-                        </xsd:choice>
-                    </xsd:sequence>
-                    <xsd:sequence>
-                        <xsd:element name="namespace" type="javaee:string"/>
-                        <xsd:element name="composite-library-name" 
-                                 type="javaee:fully-qualified-classType"/>
-                    </xsd:sequence>
-                </xsd:choice>
-            </xsd:sequence>
+                </xsd:sequence>
+            </xsd:choice>
         </xsd:choice>
         <xsd:attribute name = "id" type = "xsd:ID"/>
         <xsd:attribute name="version"
