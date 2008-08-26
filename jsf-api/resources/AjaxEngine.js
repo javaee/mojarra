@@ -107,7 +107,7 @@ javax.faces.Ajax.AjaxEngine = function() {
         }
         if ((req.xmlReq.status == null || typeof req.xmlReq.status == 'undefined') || req.xmlReq == 0 ||
             (req.xmlReq.status >= 200 && req.xmlReq.status < 300)) { 
-            javax.faces.Ajax.ajaxResponse(req);
+            javax.faces.Ajax.ajaxResponse(req.xmlReq);
 
             var nextReq = req.que.getOldestElement();
             if (nextReq == null || typeof nextReq == 'undefined') { 

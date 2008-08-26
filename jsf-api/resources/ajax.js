@@ -276,7 +276,7 @@ javax.faces.Ajax.ajaxRequest = function(element, event, options) {
 javax.faces.Ajax.ajaxResponse = function(request) {
 
     var utils = new javax.faces.Ajax.Utils();
-    var xmlReq = request.xmlReq;
+    var xmlReq = request;
 
     var xml = xmlReq.responseXML;
     var id, content, markup, str;
