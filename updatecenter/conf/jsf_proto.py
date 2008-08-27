@@ -1,13 +1,16 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 #
-# Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+# Copyright 2008 Sun Microsystems, Inc. All rights reserved.
 #
 # The contents of this file are subject to the terms of either the GNU
 # General Public License Version 2 only ("GPL") or the Common Development
 # and Distribution License("CDDL") (collectively, the "License").  You
 # may not use this file except in compliance with the License. You can obtain
 # a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
-# or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
+# or updatetool/LICENSE.txt.  See the License for the specific
 # language governing permissions and limitations under the License.
 #
 # When distributing the software, include this License Header Notice in each
@@ -32,27 +35,28 @@
 # only if the new code is made subject to such option by the copyright
 # holder.
 #
+pkg = {
+    "name" : "jsf2.0",
+    "version" : "2.0.0-080826",
+    "attributes"    : { 
+                        "description" : "JSF 2.0 EDR2 implementation",
+                        "description_long" : "Updated JSF 2.0 implementation.  \Current version supports EDR2.  This version replaces the default version \
+of JSF that ships with Glassfish." 
+                      },
 
-# Items to merge into the generated manifest
-Specification-Title: JavaServer Faces
-Specification-Version: @spec.version@
-Implementation-Title: @impl.name@
-Implementation-Version: @impl.version@
-Implementation-Vendor: Sun Microsystems, Inc.
-Implementation-Vendor-Id: com.sun
-Extension-Name: @extension.name@
+    "files"         : {
+                       "jsf2.0/LICENSE"      : {"mode" : "0444"},
+                       "jsf2.0/README"       : {"mode" : "0444"},                       
+                       },    
 
-# BND/OSGI Properties
-Export-Package: com.sun.faces.*;version=2.0
-Import-Package: javax.faces.*,javax.servlet.*,javax.el.*,javax.annotation.*,javax.crypto.*,\
-  javax.xml.*,org.w3c.dom.*, \
-  com.sun.enterprise.*;resolution:=optional, \
-  groovy.*;resolution:=optional,\
-  org.mortbay.jetty.annotations;resolution:=optional, \
-  org.mortbay.jetty.plus.annotation;resolution:=optional, \
-  org.apache.*;resolution:=optional
-Include-Resource: META-INF=build/classes/META-INF,build/classes
-Bundle-Version: @osgi.version@
-Bundle-Name: Mojarra JSF Implementation @impl.version@
-Bundle-Description: Mojarra JSF Implementation (javax.faces/@spec.version@) @impl.version@
-Bundle-SymbolicName: javax.faces.jsf-impl
+    "licenses"      : {
+                       "jsf2.0/LICENSE"      : {"license" : "JSF-LICENSE"},
+                       },    
+
+    "dirtrees"      : [
+                        "glassfish",
+                        "jsf2.0",
+                      ]
+    
+}
+

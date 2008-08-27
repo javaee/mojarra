@@ -329,6 +329,11 @@
       <ant dir="updatecenter" target="updatecenter.main"/>
     </target>
 
+    <target name="updatecenter2" depends="main">
+      <copy file="jsf-api/build/lib/jsf-api.jar" todir="updatecenter2/lib"/>
+      <copy file="jsf-ri/build/lib/jsf-impl.jar" todir="updatecenter2/lib"/>
+    </target>
+
 </project>
 
 

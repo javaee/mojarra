@@ -1,0 +1,54 @@
+<project name="mojarra-updatecenter2" default="updatecenter2.main" basedir=".">
+
+    <property file="${user.home}/build.properties"/>
+    <property file="../build.properties"/>
+
+    <import file="${jsf.build.home}/common/ant/common.xml"/>
+
+    <if>
+        <equals arg1="${build.type}" arg2=""/>
+        <then>
+            <property name="apijar" 
+                     value="jsf-api-${impl.version.number}.jar"/>
+            <property name="impljar" 
+                     value="jsf-impl-${impl.version.number}.jar"/>
+        </then>
+        <else>
+            <property name="apijar" 
+                     value="jsf-api-${impl.version.number}-${build.type}.jar"/>
+            <property name="impljar" 
+                     value="jsf-impl-${impl.version.number}-${build.type}.jar"/>
+        </else>
+    </if>
+
+    <target name="updatecenter2.main" depends="updatecenter2.dist"/>
+
+    <!-- Create the distributed artifacts -->
+    <target name="updatecenter2.dist">
+      <mkdir dir="dist/glassfish/modules/web"/>
+      <copy file="lib/jsf-api.jar" 
+            tofile="dist/glassfish/modules/${apijar}"/>
+      <copy file="lib/jsf-impl.jar" 
+            tofile="dist/glassfish/modules/web/${impljar}"/>
+      <mkdir dir="dist/jsf2.0"/>
+      <copy file="conf/LICENSE" todir="dist/jsf2.0"/>
+      <copy file="conf/README" todir="dist/jsf2.0"/>
+    </target>
+
+    <target name="updatecenter2.repo">
+        <exec command="/bin/sh bin/makepkgs" failonerror="true"/>
+    </target>
+
+    <target name="updatecenter2.clean">
+      <delete dir="build"/>
+      <delete dir="dist"/>
+      <delete dir="repo"/>
+      <delete file="conf/jsf_proto.pyc"/>
+    </target>
+
+    <target name="updatecenter2.cleanall" depends="updatecenter2.clean">
+      <delete file="lib/jsf-api.jar"/>
+      <delete file="lib/jsf-impl.jar"/>
+    </target>
+
+</project>

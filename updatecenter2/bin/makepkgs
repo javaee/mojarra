@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# set this to the location of the Updatecenter2 build
+export UCHOME=/home/driscoll/sources/updatecenter2
+
+
+# add the necessary libraries to python
+export PYTHONPATH=$UCHOME/project/tools:$UCHOME/project/build/dist/linux-i386/pkg/vendor-packages:.
+
+# create the repo
+python $UCHOME/project/tools/makepkgs.py -d `pwd`/repo  -b dist conf/jsf_proto
+
+
