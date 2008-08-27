@@ -137,7 +137,6 @@ public class MethodExpressionActionListener implements ActionListener,
      */
     public void processAction(ActionEvent actionEvent) throws AbortProcessingException {
 
-        boolean throwException = false;
         Throwable cause = null;
         Throwable thrown = null;
         if (actionEvent == null) {
@@ -156,16 +155,14 @@ public class MethodExpressionActionListener implements ActionListener,
                 catch (ELException ee) {
                     cause = ee.getCause();
                     thrown = ee;
-                    throwException = true;
                 }
               
           }
         } catch (ELException ee) {
             cause = ee.getCause();
             thrown = ee;
-            throwException = true;
         }
-        if (throwException) {
+        if (null != thrown) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE,
                            "severe.event.exception_invoking_processaction",
