@@ -199,8 +199,13 @@ javax.faces.Ajax.viewState = function(form) {
  * The <code>options</code> argument is optional. 
  *
  * @function javax.faces.Ajax.ajaxRequest
+ * @throws Exception if first required argument <code>element</code> is not specified 
  */
 javax.faces.Ajax.ajaxRequest = function(element, event, options) {
+
+    if (typeof element == 'undefined' || element == null) {
+        throw ("ajaxRequest:Required first argument has not been set");
+    }
 
     // Capture the element that triggered this Ajax request.
     var source = element;
