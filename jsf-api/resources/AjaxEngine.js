@@ -105,7 +105,7 @@ javax.faces.Ajax.AjaxEngine = function() {
         if (typeof(req.onComplete)=="function") {
             req.onComplete(req);
         }
-        if ((req.xmlReq.status == null || typeof req.xmlReq.status == 'undefined') || req.xmlReq == 0 ||
+        if ((req.xmlReq.status == null || typeof req.xmlReq.status == 'undefined') || req.xmlReq.status == 0 ||
             (req.xmlReq.status >= 200 && req.xmlReq.status < 300)) { 
             javax.faces.Ajax.ajaxResponse(req.xmlReq);
 
