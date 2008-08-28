@@ -81,15 +81,13 @@
             <xsd:element name="library-class" 
                          type="javaee:fully-qualified-classType"/>
             <xsd:choice minOccurs="1" maxOccurs="1">
-                <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+                <xsd:choice minOccurs="1" maxOccurs="unbounded">
                     <xsd:element name="tag" 
                                  type="javaee:facelet-taglib-tagType"/>
                     <xsd:element name="function"
                                  type="javaee:facelet-taglib-functionType"/>
-                    <xsd:element name="resource"
-                                 type="javaee:facelet-taglib-resourceType"/>
-                </xsd:sequence>
-                <xsd:sequence minOccurs="2" maxOccurs="2">
+                </xsd:choice>
+                <xsd:sequence minOccurs="1" maxOccurs="1">
                     <xsd:element name="namespace" type="javaee:string"/>
                     <xsd:element name="composite-library-name" 
                              type="javaee:fully-qualified-classType"/>
@@ -103,11 +101,12 @@
     </xsd:complexType>
     <xsd:complexType name="facelet-taglib-tagType">
         <xsd:sequence>
-            <xsd:element name="tag-name" type="javaee:string"/>
+            <xsd:element minOccurs="1" maxOccurs="1" 
+                         name="tag-name" type="javaee:string"/>
             <xsd:element name="handler-class"
                              type="javaee:fully-qualified-classType"
                              minOccurs="0" maxOccurs="1"/>
-            <xsd:choice minOccurs="0" maxOccurs="1">
+            <xsd:choice minOccurs="1" maxOccurs="1">
                 <xsd:element name="component"
                                  type="javaee:facelet-taglib-tag-componentType"/>
                 <xsd:element name="converter"
@@ -120,42 +119,38 @@
     </xsd:complexType>
     <xsd:complexType name="facelet-taglib-functionType">
         <xsd:sequence>
-            <xsd:element name="function-name" type="javaee:string"/>
-            <xsd:element name="function-class" 
-                             type="javaee:fully-qualified-classType"/>
-            <xsd:element name="function-signature" type="javaee:string"/>
-        </xsd:sequence>
-    </xsd:complexType>
-    <xsd:complexType name="facelet-taglib-resourceType">
-        <xsd:sequence>
-            <xsd:element name="mime-type" type="javaee:string" 
-                             minOccurs="0" maxOccurs="1"/>
-            <xsd:element name="resource-path" type="javaee:string"/>
+            <xsd:element minOccurs="1" maxOccurs="1" 
+                         name="function-name" type="javaee:string"/>
+            <xsd:element minOccurs="1" maxOccurs="1" 
+                         name="function-class" 
+                         type="javaee:fully-qualified-classType"/>
+            <xsd:element minOccurs="1" maxOccurs="1" 
+                         name="function-signature" type="javaee:string"/>
         </xsd:sequence>
     </xsd:complexType>
     <xsd:complexType name="facelet-taglib-tag-componentType">
-        <xsd:sequence>
-            <xsd:element name="component-type" type="javaee:string"/>
-            <xsd:element name="renderer-type" type="javaee:string"
-                             minOccurs="0" maxOccurs="1"/>
-            <xsd:element name="handler-class" type="javaee:fully-qualified-classType"
-                             minOccurs="0" maxOccurs="1"/>
-        </xsd:sequence>
+        <xsd:choice minOccurs="1" maxOccurs="1">
+            <xsd:element name="handler-class" type="javaee:fully-qualified-classType"/>
+            <xsd:sequence minOccurs="1" maxOccurs="1">
+                <xsd:element name="component-type" type="javaee:string"/>
+                <xsd:element name="renderer-type" type="javaee:string"/>
+            </xsd:sequence>
+        </xsd:choice>
     </xsd:complexType>
     <xsd:complexType name="facelet-taglib-tag-converterType">
         <xsd:sequence>
-            <xsd:element name="converter-id" type="javaee:string"/>
-            <xsd:element name="handler-class" 
-                             type="javaee:fully-qualified-classType"
-                             minOccurs="0" maxOccurs="1"/>
+            <xsd:element minOccurs="1" maxOccurs="1"
+                         name="converter-id" type="javaee:string"/>
+            <xsd:element minOccurs="0" maxOccurs="1" 
+                         name="handler-class" type="javaee:fully-qualified-classType"/>
         </xsd:sequence>
     </xsd:complexType>
     <xsd:complexType name="facelet-taglib-tag-validatorType">
         <xsd:sequence>
-            <xsd:element name="validator-id" type="javaee:string"/>
-            <xsd:element name="handler-class" 
-                             type="javaee:fully-qualified-classType"
-                             minOccurs="0" maxOccurs="1"/>
+            <xsd:element minOccurs="1" maxOccurs="1"
+                         name="validator-id" type="javaee:string"/>
+            <xsd:element minOccurs="0" maxOccurs="1" 
+                         name="handler-class" type="javaee:fully-qualified-classType"/>
         </xsd:sequence>
     </xsd:complexType>
     

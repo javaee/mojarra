@@ -42,6 +42,7 @@ package com.sun.faces.config;
 
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.config.configprovider.ConfigurationResourceProvider;
+import com.sun.faces.config.configprovider.FaceletTaglibResourceProvider;
 import com.sun.faces.config.configprovider.MetaInfResourceProvider;
 import com.sun.faces.config.configprovider.RIConfigResourceProvider;
 import com.sun.faces.config.configprovider.WebResourceProvider;
@@ -49,6 +50,7 @@ import com.sun.faces.config.processor.ApplicationConfigProcessor;
 import com.sun.faces.config.processor.ComponentConfigProcessor;
 import com.sun.faces.config.processor.ConfigProcessor;
 import com.sun.faces.config.processor.ConverterConfigProcessor;
+import com.sun.faces.config.processor.FaceletTaglibConfigProcessor;
 import com.sun.faces.config.processor.FactoryConfigProcessor;
 import com.sun.faces.config.processor.LifecycleConfigProcessor;
 import com.sun.faces.config.processor.ManagedBeanConfigProcessor;
@@ -107,7 +109,7 @@ public class ConfigManager {
     /**
      * <p>
      *  The list of resource providers.  By default, this contains a provider
-     *  for the RI, and two providers to satisfy the requirements of the
+     *  for the RI, and three providers to satisfy the requirements of the
      *  specification.
      * </p>
      */
@@ -156,6 +158,7 @@ public class ConfigManager {
         l.add(new RIConfigResourceProvider());
         l.add(new MetaInfResourceProvider());
         l.add(new WebResourceProvider());
+        l.add(new FaceletTaglibResourceProvider());
         RESOURCE_PROVIDERS = Collections.unmodifiableList(l);
         ConfigProcessor[] configProcessors = {
              new FactoryConfigProcessor(),
@@ -166,7 +169,8 @@ public class ConfigManager {
              new ValidatorConfigProcessor(),
              new ManagedBeanConfigProcessor(),
              new RenderKitConfigProcessor(),
-             new NavigationConfigProcessor()
+             new NavigationConfigProcessor(),
+             new FaceletTaglibConfigProcessor()
         };
         for (int i = 0; i < configProcessors.length; i++) {
             ConfigProcessor p = configProcessors[i];
@@ -456,7 +460,12 @@ public class ConfigManager {
                     if (version != null) {
                         String versionStr = version.getValue();
                         if ("2.0".equals(versionStr)) {
-                            schema = DbfFactory.FacesSchema.FACES_20;
+                            if ("facelet-taglib".equals(documentElement.getLocalName())) {
+                                schema = DbfFactory.FacesSchema.FACELET_TAGLIB_20;
+                            }
+                            else {
+                                schema = DbfFactory.FacesSchema.FACES_20;
+                            }
                         } else if ("1.2".equals(versionStr)) {
                             schema = DbfFactory.FacesSchema.FACES_12;
                         } else {

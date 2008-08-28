@@ -51,6 +51,7 @@
 
 package com.sun.faces.facelets.compiler;
 
+import com.sun.faces.config.DbfFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
@@ -159,7 +160,7 @@ public final class TagLibraryConfig {
         }
     }
 
-    private static class LibraryHandler extends DefaultHandler {
+    private static class LibraryHandler extends DbfFactory.FacesEntityResolver {
         private final String file;
 
         private final URL source;
@@ -391,17 +392,6 @@ public final class TagLibraryConfig {
             this.library = (TagLibrary) type.newInstance();
         }
 
-        public InputSource resolveEntity(String publicId, String systemId)
-                throws SAXException {
-            if ("-//Sun Microsystems, Inc.//DTD Facelet Taglib 1.0//EN"
-                    .equals(publicId)) {
-                URL url = Thread.currentThread().getContextClassLoader()
-                        .getResource("com/sun/faces/facelet-taglib_1_0.dtd");
-                return new InputSource(url.toExternalForm());
-            }
-            return null;
-        }
-
         public void characters(char[] ch, int start, int length)
                 throws SAXException {
             this.buffer.append(ch, start, length);
@@ -507,9 +497,10 @@ public final class TagLibraryConfig {
     private static final SAXParser createSAXParser(LibraryHandler handler)
             throws SAXException, ParserConfigurationException {
         SAXParserFactory factory = SAXParserFactory.newInstance();
-        factory.setNamespaceAware(false);
-        factory.setFeature("http://xml.org/sax/features/validation", true);
-        factory.setValidating(true);
+        factory.setValidating(false);
+        factory.setNamespaceAware(true);
+        
+        factory.setSchema(DbfFactory.FacesSchema.FACELET_TAGLIB_20.getSchema());
         SAXParser parser = factory.newSAXParser();
         XMLReader reader = parser.getXMLReader();
         reader.setErrorHandler(handler);

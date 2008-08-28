@@ -19,7 +19,7 @@
   <p>Describes the JSF Page Declaration Language (PDL) tag library used
   for declaring and defining the usage contract for composite UI
   Components.  When authoring a composite component, use of this tag
-  library is largely optional, though always recommend.  Declaring and
+  library is largely optional, though always recommended.  Declaring and
   defining a composite component with this taglib provides valuable
   information about the component that can be used by tools and users of
   the composite component. In most cases, a composite component can be
@@ -29,19 +29,121 @@
   PENDING: The implementation team must help discover these limits.
   </p>
 
+<h3>Terms</h3>
+
+<dl>
+
+<dt>Composite component
+</dt>
+
+<dd><p>A tree of <code>UIComponent</code> instances, rooted at a <em>top
+level component</em>, that can be thought of and used as a single
+component in a view.  The component hierarchy of this subtree is
+described in the <em>PDL page</em> for the <em>composite
+component</em>.</p>
+</dd>
+
+<dt>Composite component BeanInfo
+</dt>
+
+<dd><p>The <code>java.beans.BeanInfo</code> for a <em>composite component</em>.</p>
+</dd>
+
+<dt>Composite component BeanDescriptor
+</dt>
+
+<dd><p>The <code>java.beans.BeanDescriptor</code> for the <em>composite component BeanInfo</em>.</p>
+</dd>
+
+<dt>PDL page
+</dt>
+
+<dd><p>The XHTML page in which a <em>composite component</em> is
+declared (optional) and defined (required).</p>
+</dd>
+
+<dt>Using page 
+</dt>
+
+<dd><p>The XHTML page in which a <em>composite component</em> is
+used.</p>
+</dd>
+
+<dt>Composite component tag
+</dt>
+
+<dd><p>The tag in the <em>using page</em> that references a PDL page</p>
+</dd>
+
+<dt>Composite component renderer
+</dt>
+
+<dd><p>A new renderer in the STANDARD_HTML render kit that knows how to render composite components.</p>
+</dd>
+
+
+
+<dt>Top level component
+</dt>
+
+<dd>
+<p>In this model, the <em>PDL page</em> can be thought of as the
+composite component.  The implementation will fabricate, <strong>not
+generate</strong>, a <code>UIComponent</code> instance to serve as the
+<em>top level component</em>, the root of the composite component
+subtree.  PENDING(edburns): relocate this fact: All of the
+<code>UIComponent</code> instances in the PDL page are children of a
+special facet of the top level component.</p>
+</dd>
+
+<dt>Attached object (this term existed in JSF prior to this proposal)
+</dt>
+
+<dd><p>Any artifact that can be attached to a component (composite or
+otherwise).  Usually, this means a Facet, Converter, Validator,
+ActionListener, or ValueChangeListener.</p>
+</dd>
+
+</dl>
+
 <h2>Creating a Composite Component</h2>
 
   <p>A composite component is declared by creating a JSF PDL file inside
-  of a resource library.  (See the spec for more information about
-  resource libraries.)  A composite component must reside within a
-  resource library.  It is not possible to create a composite component
-  without putting it inside of a resource library.</p>
+  of a resource library.  (See section 2.6 of the specification prose
+  document for more information about resource libraries.)  A composite
+  component must reside within a resource library.  It is not possible
+  to create a composite component without putting it inside of a
+  resource library.</p>
 
-  <p>The default XML namespace, for use in <em>the consuming page</em>,
-  of the taglib that contains the composite component is
+  <p>The default XML namespace URI of the taglib that contains the
+  composite component, for use in <em>the using page</em>, is
   <code>http://java.sun.com/jsf/composite/&lt;composite-library-name&gt;</code>,
   where <code>&lt;composite-library-name&gt;</code> is the name of the
-  resource library.  The implementation must also support declaring the
+  resource library.  For example:</p>
+
+<pre><code>
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;<br />
+&lt;html xmlns="http://www.w3.org/1999/xhtml"<br />
+      xmlns:h="http://java.sun.com/jsf/html"<br />
+      xmlns:f="http://java.sun.com/jsf/core"<br />
+      xmlns:ui="http://java.sun.com/jsf/facelets"<br />
+      xmlns:ez="<i>http://java.sun.com/jsf/composite/<b>ezcomp</b></i>"&gt;<br />
+...<br />
+</code></pre>
+
+<p>This declares that any <code>*.xhtml</code> file in the resource
+library called <code>ezcomp</code> can be used as a regular JSF UI
+component in a page with the above namespace declaration by using the
+"<code>ez</code>" prefix.  For example, placing a file called
+<code>foo.xhtml</code> in a resource library called <code>ezcomp</code>
+would make that file accessible like this.</p>
+
+<pre><code>
+&lt;ez:foo /&gt;
+</code></pre>
+
+
+  <p>The implementation must also support declaring the
   namespace of the tag library in a JSF PDL tag library descriptor.
   This descriptor file is optional and is useful for component vendors
   that do not want to use the default XML namespace.  This version of
@@ -55,7 +157,7 @@
 &lt;/facelet-taglib&gt; <br />
 </code></pre>
 
-  <p>Components from that taglibrary may be used in a consuming page by
+  <p>Components from that taglibrary may be used in a using page by
   declaring them in the XML namespace for that page:</p>
 
 <pre><code>
@@ -64,20 +166,10 @@
       xmlns:h="http://java.sun.com/jsf/html"<br />
       xmlns:f="http://java.sun.com/jsf/core"<br />
       xmlns:ui="http://java.sun.com/jsf/facelets"<br />
-      xmlns:ez="<i>http://java.sun.com/jsf/composite/<b>ezcomp</b></i>"&gt;<br />
+      xmlns:ez="<i><b>http://domain.com/path/namespace</b></i>"&gt;<br />
 ...<br />
 </code></pre>
 
-<p>This declares that any <code>*.xhtml</code> file in the resource
-  library called <code>ezcomp</code> can be used as a regulare JSF UI
-  component in a page with the above namespace declaration by using the
-  "<code>ez</code>" prefix.  For example, placing a file called
-  <code>foo.xhtml</code> in a resource library called
-  <code>ezcomp</code> would make that file accessible like this.</p>
-
-<pre><code>
-&lt;ez:foo /&gt;
-</code></pre>
 
   <p>Below is an example of a fairly involved composite component
   declaration.  Such a declaration might appear in
@@ -409,7 +501,7 @@ component must be <code>javax.faces.NamingContainer</code>.</p></div>]]>
 <div class="changed_added_2_0">
 <p>The name of the attribute as it must appear
                 on the <em>composite component tag</em> in the
-                <em>consuming page</em>.</p></div>]]>
+                <em>using page</em>.</p></div>]]>
 
             </description>
             <name>
@@ -431,7 +523,7 @@ component must be <code>javax.faces.NamingContainer</code>.</p></div>]]>
 <div class="changed_added_2_0">
 <p>Declares that the value of the "name"
                 attribute on the <em>composite component tag</em> in the
-                <em>consuming page</em> must be equal to the
+                <em>using page</em> must be equal to the
                 <code>managed-bean-name</code> of one of the managed
                 beans declared for this application instance.</p></div>]]>
 
@@ -610,7 +702,7 @@ name given by the value of the "name" attribute. </p>
 <div class="changed_added_2_0">
 <p>The name of the attribute as it must appear
                 on the <em>composite component tag</em> in the
-                <em>consuming page</em>.</p></div>]]>
+                <em>using page</em>.</p></div>]]>
 
             </description>
             <name>
@@ -748,7 +840,7 @@ name given by the value of the "name" attribute. </p>
 <p>This element is used in the
 <code>&lt;composite:implementation&gt;</code> section.  The facet with
 the name equal to the value of the name attribute, given by the page
-author in the consuming page, will be rendered at this point in the
+author in the using page, will be rendered at this point in the
 composite component PDL page. </p>
 
 
@@ -778,7 +870,7 @@ for this key must be the evaluated value of the "name" attribute.</p>
 <div class="changed_added_2_0">
 <p>The value of the name attribute as it must appear on an
 <code>&lt;f:facet&gt;</code> tag nested within the <em>composite
-component tag</em> in the <em>consuming page</em>.</p></div>]]>
+component tag</em> in the <em>using page</em>.</p></div>]]>
 
             </description>
             <name>
@@ -804,7 +896,7 @@ component tag</em> in the <em>consuming page</em>.</p></div>]]>
 <p>This element is used in the
 <code>&lt;composite:implementation&gt;</code> section.  Any child
 components or template text within the composite component tag in the
-consuming page will be inserted into the rendered output at this point
+using page will be inserted into the rendered output at this point
 in the composite component PDL page.</p>
 
             <p>The implementation of this tag handler must insert a
@@ -923,10 +1015,10 @@ in the composite component PDL page.</p>
             <code>&lt;composite:interface&gt;</code> in which this
             element is nested exposes an implementation of
             <code>ValueHolder</code> suitable for use as the target of
-            <em>attached objects</em> in <em>the consuming page</em>.
+            <em>attached objects</em> in <em>the using page</em>.
             Any attached objects suitable for implementations of
             <code>ValueHolder</code> may be attached to the composite
-            component.  Consider this excerpt from <em>the consuming
+            component.  Consider this excerpt from <em>the using
             page</em>:
             </p>
 
@@ -952,7 +1044,7 @@ in the composite component PDL page.</p>
 <code>&lt;composite:valueHolder&gt;</code> element should cause multiple
 components within the <code>&lt;composite:implementation&gt;</code>
 section to be the targets of an <em>attached object</em> in the
-consuming page.  Assuming the same <em>consuming page</em> excerpt as
+using page.  Assuming the same <em>using page</em> excerpt as
 above, the revised <em>PDL page</em> is:</p>
 
 <div class="syntax"><div class="html4strict" style="font-family: monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;composite:interface&gt;</span></div></li>
@@ -1042,7 +1134,7 @@ lines 6 and 7 above.</p>
             <code>&lt;composite:interface&gt;</code> in which this
             element is nested exposes an implementation of
             <code>EditableValueHolder</code> suitable for use as the
-            target of <em>attached objects</em> in <em>the consuming
+            target of <em>attached objects</em> in <em>the using
             page</em>.  Any attached objects suitable for
             implementations of <code>EditableValueHolder</code> may be
             attached to the composite component.The example from <a
@@ -1119,10 +1211,10 @@ lines 6 and 7 above.</p>
             <code>&lt;composite:interface&gt;</code> in which this
             element is nested exposes an implementation of
             <code>ActionSource2</code> suitable for use as the target of
-            <em>attached objects</em> in <em>the consuming page</em>.
+            <em>attached objects</em> in <em>the using page</em>.
             Any attached objects suitable for implementations of
             <code>ActionSource2</code> may be attached to the composite
-            component.  Consider this excerpt from <em>the consuming
+            component.  Consider this excerpt from <em>the using
             page</em>:
             </p>
 

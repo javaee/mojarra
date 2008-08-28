@@ -64,6 +64,12 @@ import com.sun.faces.util.FacesLogger;
 public class DbfFactory {
 
     private static final Logger LOGGER = FacesLogger.CONFIG.getLogger();
+    
+    /**
+     * Location of the facelet-taglib 2.0 Schema
+     */
+    private static final String FACELET_TAGLIB_2_0_XSD =
+    "/com/sun/faces/web-facelettaglibrary_2_0.xsd";
 
     /**
      * Location of the Faces 2.0 Schema
@@ -83,6 +89,11 @@ public class DbfFactory {
      */
     private static final String FACES_1_1_XSD =
          "/com/sun/faces/web-facesconfig_1_1.xsd";
+
+    /**
+     * Our cached 2.0 facelet-taglib Schema object for validation
+     */
+    private static Schema FACELET_TAGLIB_20_SCHEMA;
 
     /**
      * Our cached 2.0 Schema object for validation
@@ -110,7 +121,8 @@ public class DbfFactory {
 
         FACES_20(FACES_20_SCHEMA),
         FACES_12(FACES_12_SCHEMA),
-        FACES_11(FACES_11_SCHEMA);
+        FACES_11(FACES_11_SCHEMA),
+        FACELET_TAGLIB_20(FACELET_TAGLIB_20_SCHEMA);
 
         private Schema schema;
 
@@ -183,6 +195,14 @@ public class DbfFactory {
             factory.setResourceResolver((LSResourceResolver) DbfFactory.FACES_ENTITY_RESOLVER);
             FACES_20_SCHEMA = factory.newSchema(new StreamSource(in));
 
+            url = DbfFactory.class.getResource(FACELET_TAGLIB_2_0_XSD);
+            conn = url.openConnection();
+            conn.setUseCaches(false);
+            in = conn.getInputStream();
+            factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            factory.setResourceResolver((LSResourceResolver) DbfFactory.FACES_ENTITY_RESOLVER);
+            FACELET_TAGLIB_20_SCHEMA = factory.newSchema(new StreamSource(in));
+
         } catch (Exception e) {
             throw new ConfigurationException(e);
         }
@@ -191,7 +211,7 @@ public class DbfFactory {
 
     // ----------------------------------------------------------- Inner Classes
 
-   private static class
+   public static class
          FacesEntityResolver extends DefaultHandler implements LSResourceResolver {
 
         /**
@@ -210,6 +230,10 @@ public class DbfFactory {
             {
                 "web-facesconfig_2_0.xsd",
                  FACES_2_0_XSD
+            },
+            {
+                "web-facelettaglibrary_2_0.xsd",
+                 FACELET_TAGLIB_2_0_XSD
             },
             {
                 "web-facesconfig_1_2.xsd",
