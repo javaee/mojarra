@@ -6,7 +6,7 @@
   <packaging>war</packaging>
   <name>ajax-queue</name>
   <url>https://jsf-extensions.dev.java.net/</url>
-  <description>Run time jsf-extensions: compres</description>
+  <description>Ajax Queue JSF Demo</description>
   <version>0.1</version>
 
   <scm>
