@@ -69,13 +69,13 @@ public class DbfFactory {
      * Location of the facelet-taglib 2.0 Schema
      */
     private static final String FACELET_TAGLIB_2_0_XSD =
-    "/com/sun/faces/web-facelettaglibrary_2_0.xsd";
+        "/com/sun/faces/web-facelettaglibrary_2_0.xsd";
 
     /**
      * Location of the Faces 2.0 Schema
      */
     private static final String FACES_2_0_XSD =
-          "/com/sun/faces/web-facesconfig_2_0.xsd";
+        "/com/sun/faces/web-facesconfig_2_0.xsd";
 
     /**
      * Location of the Faces 1.2 Schema
@@ -230,6 +230,10 @@ public class DbfFactory {
             {
                 "web-facesconfig_2_0.xsd",
                  FACES_2_0_XSD
+            },
+            {
+                "facelet-taglib_1_0.dtd",
+                "/com/sun/faces/facelet-taglib_1_0.dtd"
             },
             {
                 "web-facelettaglibrary_2_0.xsd",

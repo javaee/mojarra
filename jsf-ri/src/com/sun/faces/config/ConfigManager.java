@@ -158,7 +158,7 @@ public class ConfigManager {
         l.add(new RIConfigResourceProvider());
         l.add(new MetaInfResourceProvider());
         l.add(new WebResourceProvider());
-        l.add(new FaceletTaglibResourceProvider());
+//        l.add(new FaceletTaglibResourceProvider());
         RESOURCE_PROVIDERS = Collections.unmodifiableList(l);
         ConfigProcessor[] configProcessors = {
              new FactoryConfigProcessor(),
@@ -170,7 +170,7 @@ public class ConfigManager {
              new ManagedBeanConfigProcessor(),
              new RenderKitConfigProcessor(),
              new NavigationConfigProcessor(),
-             new FaceletTaglibConfigProcessor()
+ //            new FaceletTaglibConfigProcessor()
         };
         for (int i = 0; i < configProcessors.length; i++) {
             ConfigProcessor p = configProcessors[i];
