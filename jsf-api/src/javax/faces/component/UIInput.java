@@ -834,9 +834,9 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * <code>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</code>
      * context parameter value is <code>true</code> (ignoring case), and
      * <code>getSubmittedValue()</code> returns a zero-length
-     * <code>String</code> call <code>{@link #setSubmittedValue}</code>
-     * and continue processing using null as the current submitted
-     * value.</code></span></li>
+     * <code>String</code> call <code>{@link #setSubmittedValue}</code>,
+     * passing <code>null</code> as the argument and continue processing
+     * using null as the current submitted value.</code></span></li>
 
      * <p/>
 
