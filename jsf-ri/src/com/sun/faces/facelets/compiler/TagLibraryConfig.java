@@ -51,7 +51,6 @@
 
 package com.sun.faces.facelets.compiler;
 
-import com.sun.faces.config.DbfFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
@@ -82,7 +81,7 @@ import com.sun.faces.facelets.util.ReflectionUtil;
 /**
  * Handles creating a {@link com.sun.facelets.tag.TagLibrary TagLibrary} from a
  * {@link java.net.URL URL} source.
- * 
+ *
  * @author Jacob Hookom
  * @version $Id$
  */
@@ -152,7 +151,7 @@ public final class TagLibraryConfig {
             ParameterCheck.notNull("source", source);
             this.addUserTag(name, source);
         }
-        
+
         public void putFunction(String name, Method method) {
             ParameterCheck.notNull("name", name);
             ParameterCheck.notNull("method", method);
@@ -160,7 +159,7 @@ public final class TagLibraryConfig {
         }
     }
 
-    private static class LibraryHandler extends DbfFactory.FacesEntityResolver {
+    private static class LibraryHandler extends DefaultHandler {
         private final String file;
 
         private final URL source;
@@ -174,7 +173,7 @@ public final class TagLibraryConfig {
         private String tagName;
 
         private String converterId;
-        
+
         private String validatorId;
 
         private String componentClassName;
@@ -182,15 +181,15 @@ public final class TagLibraryConfig {
         private String componentType;
 
         private String rendererType;
-        
+
         private String functionName;
-        
+
         private Class handlerClass;
 
         private Class functionClass;
-        
+
         private String functionSignature;
-        
+
         private String compositeLibraryName;
 
         private String namespace;
@@ -249,9 +248,9 @@ public final class TagLibraryConfig {
                     if (this.library == null) {
                         throw new IllegalStateException("No <namespace> element");
                     }
-                    
+
                     TagLibraryImpl impl = (TagLibraryImpl) this.library;
-                    
+
                     if ("tag".equals(qName)) {
                         if (this.handlerClass != null) {
                             impl.putTagHandler(this.tagName, this.handlerClass);
@@ -277,7 +276,7 @@ public final class TagLibraryConfig {
                         }
                     }
                     else if ("converter-id".equals(qName)) {
-                        this.converterId = this.captureBuffer(); 
+                        this.converterId = this.captureBuffer();
                     }
                     else if ("converter".equals(qName)) {
                         if (this.handlerClass != null) {
@@ -293,7 +292,7 @@ public final class TagLibraryConfig {
                         this.converterId = null;
                     }
                     else if ("validator-id".equals(qName)) {
-                        this.validatorId = this.captureBuffer(); 
+                        this.validatorId = this.captureBuffer();
                     }
                     else if ("validator".equals(qName)) {
                         if (this.handlerClass != null) {
@@ -347,7 +346,7 @@ public final class TagLibraryConfig {
             }
             return factory;
         }
-        
+
         private static Method createMethod(Class type, String s) throws Exception {
             Method m = null;
             int pos = s.indexOf(' ');
@@ -379,9 +378,9 @@ public final class TagLibraryConfig {
                         } catch (NoSuchMethodException e) {
                             throw new Exception("No Function Found on type: "+type.getName()+" with signature: "+s);
                         }
-                        
+
                     }
-                            
+
                 }
             }
         }
@@ -390,6 +389,17 @@ public final class TagLibraryConfig {
             String name = this.captureBuffer();
             Class type = this.createClass(TagLibrary.class, name);
             this.library = (TagLibrary) type.newInstance();
+        }
+
+        public InputSource resolveEntity(String publicId, String systemId)
+                throws SAXException {
+            if ("-//Sun Microsystems, Inc.//DTD Facelet Taglib 1.0//EN"
+                    .equals(publicId)) {
+                URL url = Thread.currentThread().getContextClassLoader()
+                        .getResource("com/sun/faces/facelet-taglib_1_0.dtd");
+                return new InputSource(url.toExternalForm());
+            }
+            return null;
         }
 
         public void characters(char[] ch, int start, int length)
@@ -414,7 +424,7 @@ public final class TagLibraryConfig {
         }
 
         public void error(SAXParseException e) throws SAXException {
-            SAXException saxe = 
+            SAXException saxe =
                 new SAXException("Error Handling [" + this.source + "@"
                       + e.getLineNumber() + "," + e.getColumnNumber() + "]");
             saxe.initCause(e);
@@ -497,10 +507,9 @@ public final class TagLibraryConfig {
     private static final SAXParser createSAXParser(LibraryHandler handler)
             throws SAXException, ParserConfigurationException {
         SAXParserFactory factory = SAXParserFactory.newInstance();
-        factory.setValidating(false);
-        factory.setNamespaceAware(true);
-        
-        factory.setSchema(DbfFactory.FacesSchema.FACELET_TAGLIB_20.getSchema());
+        factory.setNamespaceAware(false);
+        factory.setFeature("http://xml.org/sax/features/validation", true);
+        factory.setValidating(true);
         SAXParser parser = factory.newSAXParser();
         XMLReader reader = parser.getXMLReader();
         reader.setErrorHandler(handler);
