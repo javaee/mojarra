@@ -87,7 +87,7 @@ if (!window["OpenAjax"]) {
         h.implVersion = "1.0";
         h.specVersion = "1.0";
         h.implExtraData = {};
-        var libs = {};
+        libs = {};
         h.libraries = libs;
 
         h.registerLibrary = function(prefix, nsURL, version, extra) {
