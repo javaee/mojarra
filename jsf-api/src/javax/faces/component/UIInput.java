@@ -62,43 +62,38 @@ import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
 /**
- * <p><strong>UIInput</strong> is a {@link UIComponent} that represents
- * a component that both displays output to the user (like
- * {@link UIOutput} components do) and processes request parameters on the
- * subsequent request that need to be decoded.  There are no restrictions
- * on the data type of the local value, or the object referenced by the
- * value binding expression (if any); however, individual
- * {@link javax.faces.render.Renderer}s will generally impose restrictions
- * on the type of data they know how to display.</p>
- * <p/>
- * <p>During the <em>Apply Request Values</em> phase of the request
- * processing lifecycle, the decoded value of this component, usually
- * but not necessarily a String, must be stored - but not yet converted -
- * using <code>setSubmittedValue()</code>.  If the component wishes
- * to indicate that no particular value was submitted, it can either
- * do nothing, or set the submitted value to <code>null</code>.</p>
- * <p></p>
- * <p>By default, during the <em>Process Validators</em> phase of the
- * request processing lifecycle, the submitted value will be converted
- * to a typesafe object, and, if validation succeeds, stored as a
- * local value using <code>setValue()</code>.  However, if the
- * <code>immediate</code> property is set to <code>true</code>, this
- * processing will occur instead at the end of the
- * <em>Apply Request Values</em> phase.
- * </p>
- * <p>During the <em>Render Response</em> phase of the request processing
- * lifecycle, conversion for output occurs as for {@link UIOutput}.</p>
- * <p/>
- * <p>When the <code>validate()</code> method of this {@link UIInput}
- * detects that a value change has actually occurred, and that all validations
- * have been successfully passed, it will queue a
- * {@link ValueChangeEvent}.  Later on, the <code>broadcast()</code>
- * method will ensure that this event is broadcast to all interested
- * listeners.  This event will be delivered by default in the
- * <em>Process Validators</em> phase, but can be delivered instead
- * during <em>Apply Request Values</em> if the <code>immediate</code>
- * property is set to <code>true</code>.</p>
- * <p/>
+ * <p><span class="changed_modified_2_0"><strong>UIInput</strong></span>
+ * is a {@link UIComponent} that represents a component that both
+ * displays output to the user (like {@link UIOutput} components do) and
+ * processes request parameters on the subsequent request that need to
+ * be decoded.  There are no restrictions on the data type of the local
+ * value, or the object referenced by the value binding expression (if
+ * any); however, individual {@link javax.faces.render.Renderer}s will
+ * generally impose restrictions on the type of data they know how to
+ * display.</p> <p/> <p>During the <em>Apply Request Values</em> phase
+ * of the request processing lifecycle, the decoded value of this
+ * component, usually but not necessarily a String, must be stored - but
+ * not yet converted - using <code>setSubmittedValue()</code>.  If the
+ * component wishes to indicate that no particular value was submitted,
+ * it can either do nothing, or set the submitted value to
+ * <code>null</code>.</p> <p></p> <p>By default, during the <em>Process
+ * Validators</em> phase of the request processing lifecycle, the
+ * submitted value will be converted to a typesafe object, and, if
+ * validation succeeds, stored as a local value using
+ * <code>setValue()</code>.  However, if the <code>immediate</code>
+ * property is set to <code>true</code>, this processing will occur
+ * instead at the end of the <em>Apply Request Values</em> phase.  </p>
+ * <p>During the <em>Render Response</em> phase of the request
+ * processing lifecycle, conversion for output occurs as for {@link
+ * UIOutput}.</p> <p/> <p>When the <code>validate()</code> method of
+ * this {@link UIInput} detects that a value change has actually
+ * occurred, and that all validations have been successfully passed, it
+ * will queue a {@link ValueChangeEvent}.  Later on, the
+ * <code>broadcast()</code> method will ensure that this event is
+ * broadcast to all interested listeners.  This event will be delivered
+ * by default in the <em>Process Validators</em> phase, but can be
+ * delivered instead during <em>Apply Request Values</em> if the
+ * <code>immediate</code> property is set to <code>true</code>.</p> <p/>
  * <p>By default, the <code>rendererType</code> property must be set to
  * "<code>Text</code>".  This value can be changed by calling the
  * <code>setRendererType()</code> method.</p>
@@ -822,19 +817,29 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) review docs
-     * <p>Perform the following algorithm to validate the local value of
-     * this {@link UIInput}.</p>
+     * <p><span class="changed_modified_2_0">Perform</span> the
+     * following algorithm to validate the local value of this {@link
+     * UIInput}.</p>
+
      * <ul>
-     * <li>Retrieve the submitted value with <code>getSubmittedValue()</code>.
-     * If this returns null, exit without further processing.  (This
-     * indicates that no value was submitted for this component.)</li>
+
+     * <li>Retrieve the submitted value with {@link #getSubmittedValue}.
+     * If this returns <code>null</code>, exit without further
+     * processing.  (This indicates that no value was submitted for this
+     * component.)</li>
+
      * <p/>
-     * <li>If the <code>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</code>
-     * context parameter value is <code>true</code> (ignoring case), and <code>getSubmittedValue()</code>
-     * returns a zero-length String, call <code>setSubmittedValue(null)</code>
-     * and continue processing using null as the current submitted value.</code></li>
+
+     * <li><span class="changed_modified_2_0">If the
+     * <code>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</code>
+     * context parameter value is <code>true</code> (ignoring case), and
+     * <code>getSubmittedValue()</code> returns a zero-length
+     * <code>String</code> call <code>{@link #setSubmittedValue}</code>
+     * and continue processing using null as the current submitted
+     * value.</code></span></li>
+
      * <p/>
+
      * <li> Convert the submitted value into a "local value" of the
      * appropriate data type by calling {@link #getConvertedValue}.</li>
      * <p/>
