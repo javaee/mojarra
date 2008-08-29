@@ -45,9 +45,36 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * <p class="changed_added_2_0">The presence of this annotation on a
+ * class automatically registers the class with the runtime as a {@link
+ * Validator}.  The value of the {@link #value} attribute is taken to be
+ * the <em>validator-id</em> and the fully qualified class name of the
+ * class to which this annotation is attached is taken to be the
+ * <em>validator-class</em>.  The implementation must guarantee that for
+ * each class annotated with <code>FacesValidator</code>, found with the
+ * algorithm "<em><a target="_"
+ * href="../component/FacesComponent.html#componentConfigAnnotationScanningSpecification">componentConfigAnnotationScanningSpecification</a></em>",
+ * {@link
+ * javax.faces.application.Application#addValidator(java.lang.String,java.lang.String)}
+ * is called, passing the derived <em>validator-id</em> as the first
+ * argument and the derived <em>validator-class</em> as the second
+ * argument.  The implementation must guarantee that all such calls to
+ * <code>addValidator()</code> happen during application startup time
+ * and before any requests are serviced.</p>
+ *
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface FacesValidator {
+
+    /**
+     * <p class="changed_added_2_0">The value of this annotation
+     * attribute is taken to be the <em>validator-id</em> with which
+     * instances of this class of component can be instantiated by
+     * calling {@link
+     * javax.faces.application.Application#createValidator(java.lang.String)}.</p>
+     */ 
 
     String value();
 

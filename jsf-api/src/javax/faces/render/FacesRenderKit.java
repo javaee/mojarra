@@ -40,6 +40,7 @@
 
 package javax.faces.render;
 
+import javax.faces.convert.*;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -48,87 +49,41 @@ import java.lang.annotation.Target;
 /**
  * <p class="changed_added_2_0">The presence of this annotation on a
  * class automatically registers the class with the runtime as a {@link
- * Renderer}.  The value of the {@link #renderKitId} attribute is taken
- * to be the <em>render-kit-id</em> to which an instance of this
- * <code>Renderer</code> is to be added.  There must be a public
- * zero-argument constructor on any class where this annotation appears.
- * The implementation must indicate a fatal error if such a constructor
- * does not exist and the application must not be placed in service.
- * Within that {@link RenderKit}, The value of the {@link #rendererType}
- * attribute is taken to be the <em>renderer-type</em>, and the value of
- * the {@link #componentFamily} attribute is to be taken as the
- * <em>component-family</em>.  The implementation must guarantee that
+ * RenderKit}.  The value of the {@link #value} attribute is taken to be
+ * the <em>render-kit-id</em>.  The implementation must guarantee that
  * for each class annotated with <code>FacesRenderer</code>, found with
  * the algorithm "<em><a target="_"
  * href="../component/FacesComponent.html#componentConfigAnnotationScanningSpecification">componentConfigAnnotationScanningSpecification</a></em>",
- * the following actions are taken.</p>
-
- * <div class="changed_added_2_0">
-
- * <ul>
-
- * 	  <li><p>Obtain a reference to the {@link RenderKitFactory} for
- * 	  this application.</p></li>
-
-	  <li><p>See if a <code>RenderKit</code> exists for
-	  <em>render-kit-id</em>.  If so, let that instance be
-	  <em>renderKit</em> for discussion.  If not, the implementation
-	  must indicate a fatal error if such a <code>RenderKit</code>
-	  does not exist and the application must not be placed in
-	  service.</p></li>
-
-	  <li><p>Create an instance of this class using the public
-	  zero-argument constructor.</p></li>
-
-	  <li><p>Call {@link RenderKit#addRenderer} on
-	  <em>renderKit</em>, passing <em>component-family</em> as the
-	  first argument, <em>renderer-type</em> as the second, and the
-	  newly instantiated <code>RenderKit</code> instance as the
-	  third argument.</p></li>
-
- * </ul>
-
-
- * </div>
-
+ * {@link
+ * javax.faces.render.RenderKitFactory#addRenderKit(java.lang.String,RenderKit)}
+ * is called, passing the derived <em>render-kit-id</em> as the first
+ * argument and an instance of this class as the second argument.  There
+ * must be a public zero-argument constructor on any class where this
+ * annotation appears.  The implementation must indicate a fatal error
+ * if such a constructor does not exist and the application must not be
+ * placed in service.  The implementation must guarantee that all such
+ * calls to <code>addRenderKit()</code> happen during application
+ * startup time and before any requests are serviced.  After performing
+ * the scanning algorithm, the implementation must guarantee that all
+ * classes annotated with <code>FacesRenderKit</code> have their
+ * annotations processed before any classes annotated with {@link
+ * FacesRenderer}.</p>
+ *
  */
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface FacesRenderer {
-
-
-    /**
-     * <p class="changed_added_2_0">The value of this annotation
-     * attribute is taken to be the <em>render-kit-id</em> in which an
-     * instance of this class of <code>Renderer</code> must be
-     * installed.</p>
-     */ 
-
-    String renderKitId() default RenderKitFactory.HTML_BASIC_RENDER_KIT;
-
+public @interface FacesRenderKit {
 
     /**
      * <p class="changed_added_2_0">The value of this annotation
-     * attribute is taken to be the <em>renderer-type</em> which, in
-     * combination with {@link #componentFamily} can be used to obtain a
-     * reference to an instance of this {@link Renderer} by calling
-     * {@link javax.faces.render.RenderKit#getRenderer(java.lang.String,
-     * java.lang.String)}.</p>
+     * attribute is taken to be the <em>render-kit-id</em> with which a
+     * reference to an instance of this class of <code>RenderKit</code>
+     * can be obtained by calling {@link
+     * javax.faces.render.RenderKitFactory#getRenderKit}.</p>
      */ 
 
-    String rendererType();
-
-
-    /**
-     * <p class="changed_added_2_0">The value of this annotation
-     * attribute is taken to be the <em>component-family</em> which, in
-     * combination with {@link #rendererType} can be used to obtain a
-     * reference to an instance of this {@link Renderer} by calling
-     * {@link javax.faces.render.RenderKit#getRenderer(java.lang.String,
-     * java.lang.String)}.</p>
-     */ 
-
-    String componentFamily();
+    String value();
 
 
 }

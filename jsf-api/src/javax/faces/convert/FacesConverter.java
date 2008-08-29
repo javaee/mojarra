@@ -45,9 +45,37 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * <p class="changed_added_2_0">The presence of this annotation on a
+ * class automatically registers the class with the runtime as a {@link
+ * Converter}.  The value of the {@link #value} attribute is taken to be
+ * the <em>converter-id</em> and the fully qualified class name of the
+ * class to which this annotation is attached is taken to be the
+ * <em>converter-class</em>.  The implementation must guarantee that for
+ * each class annotated with <code>FacesConverter</code>, found with the
+ * algorithm "<em><a target="_"
+ * href="../component/FacesComponent.html#componentConfigAnnotationScanningSpecification">componentConfigAnnotationScanningSpecification</a></em>",
+ * {@link
+ * javax.faces.application.Application#addConverter(java.lang.String,java.lang.String)}
+ * is called, passing the derived <em>converter-id</em> as the first
+ * argument and the derived <em>converter-class</em> as the second
+ * argument.  The implementation must guarantee that all such calls to
+ * <code>addConverter()</code> happen during application startup time
+ * and before any requests are serviced.</p>
+ *
+ */
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface FacesConverter {
+
+    /**
+     * <p class="changed_added_2_0">The value of this annotation
+     * attribute is taken to be the <em>converter-id</em> with which
+     * instances of this class of component can be instantiated by
+     * calling {@link
+     * javax.faces.application.Application#createConverter(java.lang.String)}.</p>
+     */ 
 
     String value();
 

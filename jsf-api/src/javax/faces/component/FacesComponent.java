@@ -45,9 +45,66 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * <p class="changed_added_2_0">The presence of this annotation on a
+ * class automatically registers the class with the runtime as a {@link
+ * UIComponent}.  The value of the {@link #value} attribute is taken to
+ * be the <em>component-type</em> and the fully qualified class name of
+ * the class to which this annotation is attached is taken to be the
+ * <em>component-class</em>.  The implementation must guarantee that for
+ * each class annotated with <code>FacesComponent</code>, found with the
+ * scanning algorithm described below, {@link
+ * javax.faces.application.Application#addComponent(java.lang.String,java.lang.String)}
+ * is called, passing the derived <em>component-type</em> as the first
+ * argument and the derived <em>component-class</em> as the second
+ * argument.  The implementation must guarantee that all such calls to
+ * <code>addComponent()</code> happen during application startup time
+ * and before any requests are serviced.</p>
+
+ * <div class="changed_added_2_0">
+
+ * <p><em><a
+ * name="componentConfigAnnotationScanningSpecification">Algorithm for
+ * scanning classes for component configuration annotations</a></em></p>
+
+ * <p>The following algorithm or one semantically equivalent to it must
+ * be followed to scan the classes available to the application for the
+ * presence of this and other similar annotations.  Each annotation for
+ * which this algorithm applies will specifically reference this
+ * algorithm in its javadoc.</p>
+
+ * <ul>
+
+ * <li><p>If the web deployment descriptor contains the
+ * <code>metadata-complete</code> attribute, as described in section 8.1
+ * of the Servlet 2.5 (and later) specifications, the implementation
+ * must not perform annotation scanning on any classes except for those
+ * classes provided by the implementation itself.  Otherwise, continue
+ * as follows.</p></li>
+
+ * <li><p>All classes in <code>WEB-INF/classes</code> must be scanned.</p></li>
+
+ * <li><p>For every jar in the application's <code>WEB-INF/lib</code>
+ * directory, if the jar contains a
+ * <code>META-INF/faces-config.xml</code> file (even an empty one), all
+ * classes in that jar must be scanned.</p></li>
+ *
+ * </ul>
+ *
+ * </div>
+ */ 
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface FacesComponent {
+
+    /**
+     * <p class="changed_added_2_0">The value of this annotation
+     * attribute is taken to be the <em>component-type</em> with which
+     * instances of this class of component can be instantiated by
+     * calling {@link
+     * javax.faces.application.Application#createComponent(java.lang.String)}</p>
+     */ 
 
     String value();
 
