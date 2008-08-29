@@ -43,7 +43,6 @@ package javax.faces.component;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -52,9 +51,6 @@ import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
-import javax.faces.application.ResourceDependencies;
-import javax.faces.application.ResourceDependency;
-import javax.faces.application.ResourceHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
@@ -158,6 +154,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      */
     private static final Logger LOGGER =
           Logger.getLogger("javax.faces.component", "javax.faces.LogStrings");
+
+    private Boolean emptyStringIsNull;
 
     // ------------------------------------------------------------ Constructors
 
@@ -824,12 +822,18 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
 
     /**
+     * RELEASE_PENDING (edburns,rogerk) review docs
      * <p>Perform the following algorithm to validate the local value of
      * this {@link UIInput}.</p>
      * <ul>
      * <li>Retrieve the submitted value with <code>getSubmittedValue()</code>.
      * If this returns null, exit without further processing.  (This
      * indicates that no value was submitted for this component.)</li>
+     * <p/>
+     * <li>If the <code>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</code>
+     * context parameter value is <code>true</code> (ignoring case), and <code>getSubmittedValue()</code>
+     * returns a zero-length String, call <code>setSubmittedValue(null)</code>
+     * and continue processing using null as the current submitted value.</code></li>
      * <p/>
      * <li> Convert the submitted value into a "local value" of the
      * appropriate data type by calling {@link #getConvertedValue}.</li>
@@ -863,10 +867,20 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         }
 
         // Submitted value == null means "the component was not submitted
-        // at all";  validation should not continue
+        // at all".  
         Object submittedValue = getSubmittedValue();
         if (submittedValue == null) {
             return;
+        }
+
+        // If non-null, an instanceof String, and we're configured to treat
+        // zero-length Strings as null:
+        //   call setSubmittedValue(null)
+        if ((considerEmptyStringNull(context)
+             && submittedValue instanceof String 
+             && ((String) submittedValue).length() == 0)) {
+            setSubmittedValue(null);
+            submittedValue = null;
         }
 
         Object newValue = null;
@@ -875,7 +889,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
             newValue = getConvertedValue(context, submittedValue);
         }
         catch (ConverterException ce) {
-            addConversionErrorMessage(context, ce, submittedValue);
+            addConversionErrorMessage(context, ce);
             setValid(false);
         }
 
@@ -1219,7 +1233,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-            values = new Object[9];
+            values = new Object[10];
         }
 
         values[0] = super.saveState(context);
@@ -1231,6 +1245,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         values[6] = valid;
         values[7] = immediate;
         values[8] = saveAttachedState(context, validators);
+        values[9] = emptyStringIsNull;
         return (values);
 
     }
@@ -1264,6 +1279,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                 validators = restoredValidators;
             }
         }
+
+        emptyStringIsNull = (Boolean) values[9];
 
     }
 
@@ -1305,7 +1322,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     }
 
     private void addConversionErrorMessage(FacesContext context,
-                                           ConverterException ce, Object value) {
+                                           ConverterException ce) {
         FacesMessage message;
         String converterMessageString = getConverterMessage();
         if (null != converterMessageString) {
@@ -1324,6 +1341,19 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         }
 
         context.addMessage(getClientId(context), message);
+    }
+
+
+    private boolean considerEmptyStringNull(FacesContext ctx) {
+
+        if (emptyStringIsNull == null) {
+            String val = ctx.getExternalContext()
+              .getInitParameter("javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL");
+            emptyStringIsNull = Boolean.valueOf(val);
+        }
+
+        return emptyStringIsNull;
+        
     }
 
 }

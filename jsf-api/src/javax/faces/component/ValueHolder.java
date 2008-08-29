@@ -79,31 +79,11 @@ public interface ValueHolder {
     public Object getValue();
 
 
-    /*
-     * PENDING(rlubke) I suggest calling logic from the ctor that checks
-     * the init param and caches it on the ApplicationMap.  Once the
-     * value of the pref has been discovered, I suggest caching it as a
-     * boolean ivar, which is saved as part of the UIOutput's state.
-     */
-
     /**
-     * <p><span class="changed_modified_2_0">Set</span> the value of
-     * this {@link UIComponent} (if any).  <span
-     * class="changed_added_2_0">If the
-     * <code>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</code>
-     * application configuration param is set, and calling
-     * <code>toLowerCase().equals("true")</code> on a <code>String</code>
-     * representation of its value returns <code>true</code>, the
-     * following additional action must be taken.</p>
-     *
-     * <p style="margin-left: 2em; margin-right: 2em;"
-     * class="changed_added_2_0">If the argument <code>value</code> is
-     * the empty string, set <code>null</code> as the value of this
-     * <code>ValueHolder</code> instance rather than setting the empty
-     * string as the value.</p>
-     *
-     * @param value The new local value
-     */
+      * <p>Set the value of this {@link UIComponent} (if any).</p>
+      *
+      * @param value The new local value
+      */
     public void setValue(Object value);
 
 

@@ -76,7 +76,8 @@
          This property list *must* match the one defined in the
          systest-per-webapp build-tests.xml. -->
     <property name="applications"
-              value="resource-locale-prefix,
+              value="empty-string-as-null,
+                   resource-locale-prefix,
                    nested-loadbundles,
                    replace-application,
                    replace-statemanager,  

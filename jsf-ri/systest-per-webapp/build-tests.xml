@@ -57,7 +57,8 @@
          This property list *must* match the one defined in the
          systest-per-webapp build.xml. -->
     <property name="applications"
-              value="resource-locale-prefix,
+              value="empty-string-as-null,
+                   resource-locale-prefix,
                    nested-loadbundles,
                    replace-application,
                    invalid-mapping,
@@ -84,6 +85,8 @@
     -->
 
     <!-- Property definitions to map the application to a JUnit test case -->
+    <property name="empty-string-as-null"
+              value="com/sun/faces/systest/EmptyStringAsNullTestCase.class"/>    
     <property name="resource-locale-prefix"
               value="com/sun/faces/systest/ResourceLocalePrefixTestCase.class"/>
     <property name="replace-application"

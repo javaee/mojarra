@@ -40,16 +40,10 @@
 
 package javax.faces.component;
 
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
 
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
-import javax.faces.application.ResourceDependencies;
-import javax.faces.application.ResourceDependency;
-import javax.faces.application.ResourceHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
