@@ -104,7 +104,9 @@
         <mkdir dir="${build.classes.dir}/META-INF/resources/jsfri"/>
         <mkdir dir="${build.classes.dir}/META-INF/resources/jsfri/scripts"/>
         <mkdir dir="${build.dir}/javadocs"/>
-        <mkdir dir="${build.dir}/tlddocs"/>
+        <mkdir dir="${build.dir}/pdldocs"/>
+        <mkdir dir="${build.dir}/pdldocs/jsp"/>
+        <mkdir dir="${build.dir}/pdldocs/facelets2"/>
         <mkdir dir="${build.dir}/lib"/>
         <antcall target="delete.and.remkdir.build.generate.dir" />
     </target>        
@@ -371,12 +373,12 @@
 
         <mkdir dir="${dist.dir}"/>
 
-        <antcall target="tlddocs"/>
+        <antcall target="pdldocs"/>
 
         <!-- Create the binary distribution -->
         <zip destfile="${dist.dir}/jsf-ri-${impl.version}.zip">
             <zipfileset dir="${build.dir}"
-                        includes="lib/**,tlddocs/**"
+                        includes="lib/**,pdldocs/**"
                         prefix="jsf-ri-${impl.version}"/>
         </zip>
 
@@ -400,23 +402,51 @@
 
     </target>
 
-    <target name="tlddocs">                
+    <target name="pdldocs">
+
+      <antcall target="jsp.tlddocs" />
+      <antcall target="facelets2.tlddocs" />
+
+    </target>
+
+    <target name="jsp.tlddocs">                
         <java fork="true" jar="${tlddoc.jar}">
-            <arg line="-d ${build.dir}/tlddocs"/>
-            <arg line="-windowtitle jsf-ri-${spec.version}"/>
+            <arg line="-d ${build.dir}/pdldocs/jsp"/>
+            <arg line="-windowtitle 'JSF ${spec.version} Page Decraration Language: JSP Variant'"/>
             <arg line="-xslt ${conf.share.dir}/tlddoc-resources"/>
 
             <arg value="${build.generate.tld.dir}/html_basic.tld"/>
             <arg value="${conf.share.dir}/jsf_core.tld"/>
-            <arg value="${conf.share.dir}/composite.tld"/>
         </java>
-        <copy todir="${build.dir}/tlddocs/">
+        <copy todir="${build.dir}/pdldocs/jsp">
            <fileset dir="${basedir}/../jsf-api/doc/">
              <include name="changed*.png" />
            </fileset>
         </copy>
 
     </target>
+
+    <target name="facelets2.tlddocs">                
+        <java fork="true" jar="${tlddoc.jar}">
+            <arg line="-d ${build.dir}/pdldocs/facelets2"/>
+            <arg line="-windowtitle 'JSF ${spec.version} Page Decraration Language: Facelets2 Variant'"/>
+            <arg line="-xslt ${conf.share.dir}/tlddoc-resources"/>
+
+            <arg value="${build.generate.tld.dir}/html_basic.tld"/>
+            <arg value="${conf.share.dir}/jsf_core.tld"/>
+            <arg value="${conf.share.dir}/composite.tld"/>
+            <arg value="${conf.share.dir}/ui.tld"/>
+            <arg value="${conf.share.dir}/jstl-core.tld"/>
+            <arg value="${conf.share.dir}/jstl-fn.tld"/>
+        </java>
+        <copy todir="${build.dir}/pdldocs/facelets2">
+           <fileset dir="${basedir}/../jsf-api/doc/">
+             <include name="changed*.png" />
+           </fileset>
+        </copy>
+
+    </target>
+
 
     <target name="compile.test" depends="prepare,compile"
             description="Run unit tests">
