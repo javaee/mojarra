@@ -1314,7 +1314,23 @@ public abstract class Application {
      * determination has been made.  The implementation of
      * <code>publishEvent</code> must honor the requirements stated in
      * {@link #subscribeToEvent} regarding the storage and retrieval of
-     * listener instances.</p>
+     * listener instances.  Specifically, if {@link
+     * #subscribeToEvent(Class,Class,SystemEventListener)} was called,
+     * the <code>sourceClass</code> argument must match exactly the
+     * <code>Class</code> of the <code>source</code> argument in the
+     * call to <code>publishEvent()</code>.  The implementation must not
+     * do any inheritance hierarachy inspection when looking for a match
+     * between the <code>sourceClass</code> passed to {@link
+     * #subscribeToEvent(Class,Class,SystemEventListener)} and the
+     * <code>sourceClass</code> passed to <code>publishEvent()</code> in
+     * order to find any listeners to which the event should be
+     * published.  In the case where the <code>Class</code> of the
+     * <code>source</code> argument does not match the
+     * <code>Class</code> of the <code>sourceClass</code> used when the
+     * listener was subscribed using <code>subscribeToEvent()</code>,
+     * {@link #publishEvent(Class,Class,Object)} can be used to provide
+     * the <code>Class</code> used to perform the listener lookup and
+     * match.</p>
      *
      * <div class="changed_added_2_0">
      *
@@ -1400,6 +1416,46 @@ public abstract class Application {
         }
 
     }
+
+    /**
+     * <p class="changed_added_2_0">This method functions exactly like
+     * {@link #publishEvent(Class,Object)}, except the run-time must use
+     * the argument <code>sourceBaseType</code> to find the matching
+     * listener instead of using the <code>Class</code> of the
+     * <code>source</code> argument.</p>
+     *
+     * @param systemEventClass The <code>Class</code> of event that is
+     * being published.
+     *
+     * @param sourceBaseType The <code>Class</code> of the source event
+     * that must be used to lookup the listener to which this event must
+     * be published.  If this argument is <code>null</code> the return
+     * from <code>source.getClass()</code> must be used as the
+     * <code>sourceBaseType</code>.
+
+     * @param source The source for the event of type
+     * <code>systemEventClass</code>.
+     *
+     * @throws NullPointerException if either <code>systemEventClass</code> or
+     *  <code>source</code> is <code>null</code>
+     *
+     * @since 2.0
+     */
+
+
+    public void publishEvent(Class<? extends SystemEvent> systemEventClass,
+			     Class<?> sourceBaseType,
+                             Object source) {
+
+        if (defaultApplication != null) {
+            defaultApplication.publishEvent(systemEventClass, sourceBaseType, 
+					    source);
+        } else {
+            throw new UnsupportedOperationException();
+        }
+
+    }
+
 
 
     /**
