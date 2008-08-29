@@ -1444,12 +1444,13 @@ public abstract class Application {
 
 
     public void publishEvent(Class<? extends SystemEvent> systemEventClass,
-			     Class<?> sourceBaseType,
+                             Class<?> sourceBaseType,
                              Object source) {
 
         if (defaultApplication != null) {
-            defaultApplication.publishEvent(systemEventClass, sourceBaseType, 
-					    source);
+            defaultApplication.publishEvent(systemEventClass,
+                                            sourceBaseType,
+                                            source);
         } else {
             throw new UnsupportedOperationException();
         }

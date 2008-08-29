@@ -263,7 +263,9 @@ public class ConfigManager {
 
         FacesContext ctx = FacesContext.getCurrentInstance();
         Application app = ctx.getApplication();
-        app.publishEvent(ApplicationPostConstructEvent.class, app);
+        app.publishEvent(ApplicationPostConstructEvent.class,
+                         Application.class,
+                         app);
 
     }
 

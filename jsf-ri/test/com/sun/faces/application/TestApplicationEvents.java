@@ -7,6 +7,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ComponentSystemEvent;
@@ -15,6 +16,7 @@ import javax.faces.event.FacesListener;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEventListenerHolder;
+import javax.faces.event.ApplicationPostConstructEvent;
 
 import com.sun.faces.CustomSystemEvent;
 import com.sun.faces.cactus.ServletFacesTestCase;
@@ -51,10 +53,10 @@ public class TestApplicationEvents extends ServletFacesTestCase {
 
         try {
             application.subscribeToEvent(null, UIViewRoot.class, listener);
-            assert(false);
-        } catch (NullPointerException ignored) {
+            assertTrue(false);
+        } catch (NullPointerException npe) {
         } catch (Exception e) {
-            assert(false);
+            assertTrue(false);
         }
 
         try {
@@ -62,43 +64,43 @@ public class TestApplicationEvents extends ServletFacesTestCase {
             assert(false);
         } catch (NullPointerException ignored) {
         } catch (Exception e) {
-            assert(false);
+            assertTrue(false);
         }
 
         // --------------------------------------------------------- Unsubscribe
 
         try {
             application.subscribeToEvent(null, UIViewRoot.class, listener);
-            assert(false);
+            assertTrue(false);
         } catch (NullPointerException ignored) {
         } catch (Exception e) {
-            assert(false);
+            assertTrue(false);
         }
 
         try {
             application.subscribeToEvent(TestApplicationEvents.TestSystemEvent.class, UIViewRoot.class, null);
-            assert(false);
+            assertTrue(false);
         } catch (NullPointerException ignored) {
         } catch (Exception e) {
-            assert(false);
+            assertTrue(false);
         }
 
         // ------------------------------------------------------------- Publish
 
         try {
             application.publishEvent(null, new UIViewRoot());
-            assert(false);
+            assertTrue(false);
         } catch (NullPointerException ignored) {
         } catch (Exception e) {
-            assert(false);
+            assertTrue(false);
         }
 
         try {
-            application.publishEvent(TestApplicationEvents.TestSystemEvent.class, new UIViewRoot());
-            assert(false);
+            application.publishEvent(TestApplicationEvents.TestSystemEvent.class, null);
+            assertTrue(false);
         } catch (NullPointerException ignored) {
         } catch (Exception e) {
-            assert(false);
+            assertTrue(false);
         }
         
     }
@@ -210,6 +212,33 @@ public class TestApplicationEvents extends ServletFacesTestCase {
         application.unsubscribeFromEvent(TestApplicationEvents.TestSystemEvent3.class,
                                          UIViewRoot.class,
                                          listener);
+
+        // verify subscription for source that is an Abstract type works or
+        // doesn't work depending on how the event is published.
+        TestListener abstractListener = new TestListener(Application.class);
+        application.subscribeToEvent(ApplicationPostConstructEvent.class,
+                                     Application.class,
+                                     abstractListener);
+        abstractListener.reset();
+        application.publishEvent(ApplicationPostConstructEvent.class,
+                                 Application.class,
+                                 application);
+        assertTrue(abstractListener.getPassedSource() == application);
+        assertTrue(abstractListener.getPassedSystemEvent() instanceof ApplicationPostConstructEvent);
+        assertTrue(abstractListener.getPassedSystemEvent().getSource() == application);
+
+        // verify that the event isn't published when the base type isn't
+        // provided with publish
+        abstractListener.reset();
+        application.publishEvent(ApplicationPostConstructEvent.class,
+                                 application);
+        assertTrue(abstractListener.getPassedSource() == null);
+        assertTrue(abstractListener.getPassedSystemEvent() == null);
+
+        // cleanup
+        application.unsubscribeFromEvent(ApplicationPostConstructEvent.class,
+                                         Application.class,
+                                         abstractListener);
 
     }
 

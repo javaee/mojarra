@@ -214,14 +214,41 @@ public class ApplicationImpl extends Application {
 
 
     /**
-     * @see javax.faces.application.Application#publishEvent(Class, Object) 
+     * @see javax.faces.application.Application#publishEvent(Class, Object)
      */
     @Override
     public void publishEvent(Class<? extends SystemEvent> systemEventClass,
                              Object source) {
 
+        publishEvent(systemEventClass, null, source);
+
+    }
+
+
+    /**
+     * @see javax.faces.application.Application#publishEvent(Class, Object) 
+     */
+    @Override
+    public void publishEvent(Class<? extends SystemEvent> systemEventClass,
+                             Class<?> sourceBaseType,
+                             Object source) {
+
         Util.notNull("systemEventClass", systemEventClass);
         Util.notNull("source", source);
+
+        // source is not compatible with the provided base type.
+        // Log a warning that the types are incompatible and return. 
+        if (getProjectStage() == ProjectStage.Development
+              && sourceBaseType != null
+              && !sourceBaseType.isInstance(source)) {
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.log(Level.WARNING,
+                           "jsf.application.publish.event.base_type_mismatch",
+                           new Object[] { source.getClass().getName(),
+                                          sourceBaseType.getName() });                
+            }
+            return;
+        }
 
         try {
             // The side-effect of calling invokeListenersFor
@@ -235,10 +262,14 @@ public class ApplicationImpl extends Application {
 
             // look for and invoke any listeners stored on the application
             // using source type.
-            event = invokeListenersFor(systemEventClass, event, source, true);
+            event = invokeListenersFor(systemEventClass,
+                                       event,
+                                       source,
+                                       sourceBaseType,
+                                       true);
 
             // look for and invoke any listeners not specific to the source class
-            invokeListenersFor(systemEventClass, event, source, false);
+            invokeListenersFor(systemEventClass, event, source, null, false);
         } catch (AbortProcessingException ape) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE,
@@ -246,6 +277,7 @@ public class ApplicationImpl extends Application {
                            ape);
             }
         }
+
     }
 
 
@@ -1717,11 +1749,13 @@ public class ApplicationImpl extends Application {
     private SystemEvent invokeListenersFor(Class<? extends SystemEvent> systemEventClass,
                                            SystemEvent event,
                                            Object source,
+                                           Class<?> sourceBaseType,
                                            boolean useSourceLookup)
     throws AbortProcessingException {
 
         EventInfo eventInfo = systemEventHelper.getEventInfo(systemEventClass,
                                                              source,
+                                                             sourceBaseType,
                                                              useSourceLookup);
         if (eventInfo != null) {
             Set<SystemEventListener> listeners = eventInfo.getListeners();
@@ -1808,10 +1842,15 @@ public class ApplicationImpl extends Application {
 
         public EventInfo getEventInfo(Class<? extends SystemEvent> systemEventClass,
                                       Object source,
+                                      Class<?> sourceBaseType,
                                       boolean useSourceForLookup) {
 
             Class<?> sourceClass =
-                  ((useSourceForLookup) ? source.getClass() : Void.class);
+                  ((useSourceForLookup) ?
+                       ((sourceBaseType != null)
+                                          ? sourceBaseType
+                                          : source.getClass())
+                                        : Void.class);
             return getEventInfo(systemEventClass, sourceClass);
 
         }

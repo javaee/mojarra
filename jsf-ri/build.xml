@@ -321,7 +321,9 @@
               toDir="${build.classes.dir}/META-INF/services"/>
         <copy todir="${build.classes.dir}/META-INF">
             <fileset dir="${conf.share.dir}">
-                <include name="*.tld"/>
+                <include name="jsf_core.tld"/>
+                <include name="jsfri_extensions.tld"/>
+                <include name="mojarra_ext.tld"/>
                 <include name="*.xml"/>
             </fileset>
         </copy>
