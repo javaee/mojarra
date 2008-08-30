@@ -107,7 +107,7 @@
           <center>
             <h2><xsl:value-of select="/javaee:tlds/javaee:config/javaee:doc-title"/></h2>
           </center>
-          <table BORDER="1" CELLPADDING="3" CELLSPACING="0" WIDTH="100%">
+          <table BORDER="1" CELLPADDING="3" CELLSPACING="0" CLASS="TagLibraryTable">
             <tr BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
               <td COLSPAN="2"><font SIZE="+2">
                 <b>Tag Libraries</b>
