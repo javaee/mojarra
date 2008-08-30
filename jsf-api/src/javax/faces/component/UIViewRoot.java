@@ -763,7 +763,9 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      * <code>execute</code> portion of the request processing lifecycle.
      * For each client id in the list, using <code>invokeOnComponent</code>,
      * call the respective <code>processDecodes</code> method on the component
-     * with that client id.  If {@link javax.faces.context.FacesContext#isAjaxRequest}
+     * with that client id.  Broadcast any {@link FacesEvent}s that nay have been
+     * queued after the partial processing has been completed.  If
+     * {@link javax.faces.context.FacesContext#isAjaxRequest}
      * returns <code>false</code>, perform the default <code>processDecodes</code>
      * processing.
      * </p>
@@ -785,6 +787,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
         notifyBefore(context, PhaseId.APPLY_REQUEST_VALUES);
 
         if (context.isAjaxRequest() && processPartialDecodes(context)) {
+            clearFacesEvents(context);
             notifyAfter(context, PhaseId.APPLY_REQUEST_VALUES);
             return;
         }
@@ -858,7 +861,9 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      * javax.faces.context.FacesContext#isRenderAll} returns
      * <code>true</code>, set the indicator <code>javax.faces.ViewRoot</code>
      * in the response to indicate the client JavaScript should use
-     * the entire response.</p> 
+     * the entire response.  If @link javax.faces.context.FacesContext#isAjaxRequest} 
+     * returns <code>false</code>, perform the default <code>encodeBegin</code>
+     * processing as follows.</p> 
      * <p>Override the default {@link UIComponentBase#encodeBegin}
      * behavior.  If
      * {@link #getBeforePhaseListener} returns non-<code>null</code>,
@@ -1191,7 +1196,9 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      * <code>execute</code> portion of the request processing lifecycle.
      * For each client id in the list, using <code>invokeOnComponent</code>,
      * call the respective <code>processValidators</code> method on the component
-     * with that client id.  If {@link javax.faces.context.FacesContext#isAjaxRequest}
+     * with that client id.  Broadcast any {@link FacesEvent}s that nay have been
+     * queued after the partial processing has been completed.  If
+     * {@link javax.faces.context.FacesContext#isAjaxRequest}
      * returns <code>false</code>, perform the default <code>processValidators</code>
      * processing.
      * </p>
@@ -1272,7 +1279,9 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      * <code>execute</code> portion of the request processing lifecycle.
      * For each client id in the list, using <code>invokeOnComponent</code>,
      * call the respective <code>processUpdates</code> method on the component
-     * with that client id.  If {@link javax.faces.context.FacesContext#isAjaxRequest}
+     * with that client id.  Broadcast any {@link FacesEvent}s that nay have been
+     * queued after the partial processing has been completed.  If
+     * {@link javax.faces.context.FacesContext#isAjaxRequest}
      * returns <code>false</code>, perform the default <code>processUpdates</code>
      * processing.
      * </p>
