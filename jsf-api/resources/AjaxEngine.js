@@ -100,6 +100,9 @@ javax.faces.Ajax.AjaxEngine = function() {
      * This function is called when the request/response interaction
      * is complete.  'onComplete', 'onSuccess' or 'onError' callbacks 
      * will be called if they have been registered,
+     * If the return status code is successfull, dequeue all requests
+     * from the queue that have completed.  If a request has been found 
+     * on the queue that has not been sent, send the request.
      */
     req.onCompleteCB = function() {
         if (typeof(req.onComplete)=="function") {
@@ -271,97 +274,93 @@ javax.faces.Ajax.AjaxEngine.getTransport = function() {
 javax.faces.Ajax.AjaxEngine.queue = [];
 var queue = javax.faces.Ajax.AjaxEngine.queue;
 
+/**
+ * Simple queue implementaton.
+ */
 javax.faces.Ajax.AjaxEngine.Queue = function() {
 
-  // the amount of space at the front of the queue, initialised to zero
-  var queueSpace = 0;
+    // the amount of space at the front of the queue, initialised to zero
+    var queueSpace = 0;
 
-  /* Returns the size of this Queue. The size of a Queue is equal to the number
-   * of elements that have been enqueued minus the number of elements that have
-   * been dequeued.
-   */
-  this.getSize = function(){
-
-    // return the number of elements in the queue
-    return queue.length - queueSpace;
-
-  }
-
-  /* Returns true if this Queue is empty, and false otherwise. A Queue is empty
-   * if the number of elements that have been enqueued equals the number of
-   * elements that have been dequeued.
-   */
-  this.isEmpty = function(){
-
-    // return true if the queue is empty, and false otherwise
-    return (queue.length == 0);
-
-  }
-
-  /* Enqueues the specified element in this Queue. The parameter is:
-   *
-   * element - the element to enqueue
-   */
-  this.enqueue = function(element){
-    queue.push(element);
-    var args = new Object();
-    args["enqueue"] = element;
-    observer.fire(args);
-  }
-
-  /* Dequeues an element from this Queue. The oldest element in this Queue is
-   * removed and returned. If this Queue is empty then undefined is returned.
-   */
-  this.dequeue = function(){
-
-    // initialise the element to return to be undefined
-    var element = undefined;
-
-    // check whether the queue is empty
-    if (queue.length){
-
-      // fetch the oldest element in the queue
-      element = queue[queueSpace];
-
-      // update the amount of space and check whether a shift should occur
-      if (++queueSpace * 2 >= queue.length){
-
-        // set the queue equal to the non-empty portion of the queue
-        queue = queue.slice(queueSpace);
-
-        // reset the amount of space at the front of the queue
-        queueSpace=0;
-
-      }
+    /* Returns the size of this Queue. The size of a Queue is equal to the number
+     * of elements that have been enqueued minus the number of elements that have
+     * been dequeued.
+     */
+    this.getSize = function(){
+        return queue.length - queueSpace;
     }
-    if (element != "undefined") {
+
+    /* Returns true if this Queue is empty, and false otherwise. A Queue is empty
+     * if the number of elements that have been enqueued equals the number of
+     * elements that have been dequeued.
+     */
+    this.isEmpty = function(){
+        return (queue.length == 0);
+    }
+
+    /* Enqueues the specified element in this Queue.
+     * After the element is put in the queue, an event is fired.
+     *
+     * @param element - the element to enqueue
+     */
+    this.enqueue = function(element){
+        queue.push(element);
         var args = new Object();
-        args["dequeue"] = element;
+        args["enqueue"] = element;
         observer.fire(args);
     }
 
-    // return the removed element
-    return element;
-  }
+    /* Dequeues an element from this Queue. The oldest element in this Queue is
+     * removed and returned. If this Queue is empty then undefined is returned.
+     *
+     * @returns The element that was removed rom the queue.
+     */
+    this.dequeue = function(){
+        // initialise the element to return to be undefined
+        var element = undefined;
 
-  /* Returns the oldest element in this Queue. If this Queue is empty then
-   * undefined is returned. This function returns the same value as the dequeue
-   * function, but does not remove the returned element from this Queue.
-   */
-  this.getOldestElement = function(){
+        // check whether the queue is empty
+        if (queue.length){
+            // fetch the oldest element in the queue
+            element = queue[queueSpace];
 
-    // initialise the element to return to be undefined
-    var element = undefined;
+            // update the amount of space and check whether a shift should occur
+            if (++queueSpace * 2 >= queue.length){
+                // set the queue equal to the non-empty portion of the queue
+                queue = queue.slice(queueSpace);
+                // reset the amount of space at the front of the queue
+                queueSpace=0;
+            }
+        }
+        if (element != "undefined") {
+            var args = new Object();
+            args["dequeue"] = element;
+            observer.fire(args);
+        }
 
-    // if the queue is not element then fetch the oldest element in the queue
-    if (queue.length) element = queue[queueSpace];
+        // return the removed element
+        return element;
+    }
 
-    // return the oldest element
-    return element;
+    /* Returns the oldest element in this Queue. If this Queue is empty then
+     * undefined is returned. This function returns the same value as the dequeue
+     * function, but does not remove the returned element from this Queue.
+     */
+    this.getOldestElement = function() {
+        // initialise the element to return to be undefined
+        var element = undefined;
 
-  }
+        // if the queue is not element then fetch the oldest element in the queue
+        if (queue.length) element = queue[queueSpace];
+        // return the oldest element
+        return element;
+    }
 }
 
+/**
+ * A simple pub / sub implementation used mainly for queue events.
+ * Inspired by Dustin Diaz.
+ */
 javax.faces.Ajax.AjaxEngine.Observer = function() {
     this.fns = [];
     this.subscribe = function(fn) {
@@ -385,6 +384,8 @@ javax.faces.Ajax.AjaxEngine.Observer = function() {
         );
     }
 }
+
+// Utility functions that override ..
 
 Array.prototype.forEach = function(fn, thisObj) {
     var scope = thisObj || window;
