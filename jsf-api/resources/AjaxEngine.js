@@ -104,6 +104,7 @@ javax.faces.Ajax.AjaxEngine = function() {
     req.onCompleteCB = function() {
         if (typeof(req.onComplete)=="function") {
             req.onComplete(req);
+            return;
         }
         if ((req.xmlReq.status == null || typeof req.xmlReq.status == 'undefined') || req.xmlReq.status == 0 ||
             (req.xmlReq.status >= 200 && req.xmlReq.status < 300)) { 
@@ -129,13 +130,14 @@ javax.faces.Ajax.AjaxEngine = function() {
                 nextReq.fromQueue = true;
                 nextReq.sendRequest();
             }
-        } else if (typeof(req.onError)=="function") {
-            req.onError(req);
+        } else {
+            if (typeof(req.onError)=="function") {
+                req.onError(req);
+                return;
+            }
+
+            // PENDING - ADD ERROR PROCESSING CODE HERE
         }
-
-
-//        delete req.xmlReq['onreadystatechange'];
-//        req.xmlReq = null;
     };
 
     /**
