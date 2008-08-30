@@ -191,22 +191,13 @@ would make that file accessible like this.</p>
 <li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;expert=<span class="st0">&quot;false&quot;</span></div></li>
 <li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;shortDescription=<span class="st0">&quot;An illustration of the composite component feature&quot;</span><span class="kw2">&gt;</span></span></div></li>
 <li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;<a href="attribute.html">composite:attribute</a> <span class="kw3">name</span>=<span class="st0">&quot;model&quot;</span> required=<span class="st0">&quot;true&quot;</span><span class="kw2">&gt;</span></span></div></li>
-<li class="li1"><div class="de1">&nbsp;</div></li>
-<li class="li2"><div class="de2">&nbsp; &nbsp; <span class="sc2">&lt;composite:attribute <span class="kw3">name</span>=<span class="st0">&quot;loginAction&quot;</span> required=<span class="st0">&quot;true&quot;</span><span class="kw2">&gt;</span></span></div></li>
-<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; <span class="sc2">&lt;<a href="deferred-method.html">composite:deferred-<span class="kw3">method</span></a>  </div></li>
-<li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;method-signature=<span class="st0">&quot;java.lang.Object action()&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
-<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp;<span class="sc2"><span class="kw2">&lt;</span>/composite:attribute&gt;</span></div></li>
-<li class="li2"><div class="de2">&nbsp;</div></li>
-<li class="li1"><div class="de1">&nbsp; &nbsp;<span class="sc2"><span class="kw2">&lt;</span>/composite:attribute&gt;</span></div></li>
-<li class="li2"><div class="de2">&nbsp;</div></li>
-<li class="li1"><div class="de1">&nbsp;</div></li>
-<li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;<a href="editableValueHolder.html">composite:editableValueHolder</a>  <span class="kw3">name</span>=<span class="st0">&quot;username&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
-<li class="li1"><div class="de1">&nbsp; <span class="sc2">&lt;composite:actionSource <span class="kw3">name</span>=<span class="st0">&quot;loginEvent&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
-<li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;composite:actionSource <span class="kw3">name</span>=<span class="st0">&quot;cancelEvent&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
-<li class="li1"><div class="de1">&nbsp; <span class="sc2">&lt;composite:actionSource <span class="kw3">name</span>=<span class="st0">&quot;allEvents&quot;</span> targets=<span class="st0">&quot;loginEvent,cancelEvent&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
-<li class="li2"><div class="de2">&nbsp;</div></li>
-<li class="li1"><div class="de1"><span class="sc2"><span class="kw2">&lt;</span>/composite:interface&gt;</span></div></li>
-<li class="li2"><div class="de2">&nbsp;</div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; <span class="sc2">&lt;composite:attribute <span class="kw3">name</span>=<span class="st0">&quot;loginAction&quot;</span> required=<span class="st0">&quot;true&quot;</span> method-signature=<span class="st0">&quot;java.lang.Object action()&quot;</span><span class="kw2">/ &gt;</span></span></div></li>
+<li class="li2"><div class="de2">&nbsp; <span class="sc2"><span class="kw2">&lt;</span>/composite:attribute&gt;</span></div></li>
+<li class="li1"><div class="de2">&nbsp; <span class="sc2">&lt;<a href="editableValueHolder.html">composite:editableValueHolder</a>  <span class="kw3">name</span>=<span class="st0">&quot;username&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
+<li class="li1"><div class="de2">&nbsp; <span class="sc2">&lt;composite:actionSource <span class="kw3">name</span>=<span class="st0">&quot;loginEvent&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
+<li class="li1"><div class="de1">&nbsp; <span class="sc2">&lt;composite:actionSource <span class="kw3">name</span>=<span class="st0">&quot;cancelEvent&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
+<li class="li1"><div class="de2">&nbsp; <span class="sc2">&lt;composite:actionSource <span class="kw3">name</span>=<span class="st0">&quot;allEvents&quot;</span> targets=<span class="st0">&quot;loginEvent,cancelEvent&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
+<li class="li2"><div class="de2"><span class="sc2"><span class="kw2">&lt;</span>/composite:interface&gt;</span></div></li>
 <li class="li1"><div class="de1"><span class="sc2">&lt;<a href="implementation.html">composite:implementation</a> &gt;</span></div></li>
 <li class="li2"><div class="de2">&nbsp;</div></li>
 <li class="li1"><div class="de1">&nbsp; <span class="sc2">&lt;ui:decorate template=<span class="st0">&quot;fooTemplate.xhtml&quot;</span><span class="kw2">&gt;</span></span></div></li>
@@ -490,11 +481,12 @@ component must be <code>javax.faces.NamingContainer</code>.</p></div>]]>
 
             <![CDATA[
 <div class="changed_added_2_0">
-<p>Declares an attribute that may be given to an
-            instance of the <em>composite component</em> tag for this
-            composite component.  There may be zero or many of these
-            inside of the <code>&lt;composite:interface</code>&gt;
-            section.</p>
+<p>Declares an attribute that may be given to an instance of the
+<em>composite component</em> tag for this composite component.  There
+may be zero or many of these inside of the
+<code>&lt;composite:interface</code>&gt; section.  This element may be
+nested within other <code>&lt;composite:attribute&gt;</code> elements to
+convey a usage contract that includes nested properties.</p>
 
             <p></p>
 
@@ -525,32 +517,6 @@ component must be <code>javax.faces.NamingContainer</code>.</p></div>]]>
             <deferred-value>
                 <type>
                     java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>
-        <attribute>
-            <description>
-
-                <![CDATA[
-<div class="changed_added_2_0">
-<p>If this attribute is set and its value is <code>true</code> the
-implementation must take the following action.  If
-<code>ProjectStage</code> is DEVELOPMENT, the implementation must throw
-a <code>FaceletException</code> if the named managed-bean does not exist
-in the current application.  Tools can use this attribute to discover
-property name restrictions on beans passed into composite components,
-for the purposes of exposing the values to the tool user.  </p></div>]]>
-
-            </description>
-            <name>
-                managedBean
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-value>
-                <type>
-                    boolean
                 </type>
             </deferred-value>
         </attribute>
@@ -688,6 +654,56 @@ for the purposes of exposing the values to the tool user.  </p></div>]]>
                 </type>
             </deferred-value>
         </attribute>  
+        <attribute>
+            <description>
+
+                <![CDATA[
+<div class="changed_added_2_0">
+<p>Declares that this attribute must be a <code>MethodExpression</code>
+whose method signature is described by the value of this attribute.  The
+signature must be described using fully qualified class names wherever a
+type is required.  This attribute is mutually exclusive with the "type"
+attribute.  If both attributes are present, the "method-signature"
+attribute is ignored.</p> </div>]]>
+
+            </description>
+            <name>
+                method-signature
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+
+                <![CDATA[
+<div class="changed_added_2_0">
+<p>Declares that this attribute must be a <code>ValueExpression</code>
+whose expected type is given by the value of this attribute.  If not
+specified, and no "method-signature" attribute is present,
+<code>java.lang.Object</code> is assumed.  </p> </div>]]>
+
+            </description>
+            <name>
+                type
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>  
+
   </tag>
 
   <tag>
@@ -927,101 +943,6 @@ in the composite component PDL page.</p>
         <body-content>
             JSP
         </body-content>
-  </tag>
-
-  <tag>
-        <description>
-
-            <![CDATA[
-<div class="changed_added_2_0">
-<p>Declares that the user specified value of the
-            attribute must be a <code>ValueExpression</code>.  There may
-            be zero or one of these inside of a
-            <code>&lt;composite:attribute</code>&gt; element.  If not
-            present the attribute is assumed to be a
-            <code>ValueExpression</code>.</p>
-</div>]]>
-        </description>
-        <name>
-            deferred-value
-        </name>
-        <body-content>
-            JSP
-        </body-content>
-        <attribute>
-            <description>
-
-                <![CDATA[
-<div class="changed_added_2_0">
-<p>Declares the type to which the <code>ValueExpression</code> must
-resolve.  There may be zero or one of these inside of a
-<code>&lt;composite:deferred-value</code>&gt; element.  If not
-specified, <code>java.lang.Object</code> is assumed.  </p>
-</div>]]>
-
-            </description>
-            <name>
-                type
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>  
-  </tag>
-
-  <tag>
-        <description>
-
-            <![CDATA[
-<div class="changed_added_2_0">
-<p>Declares that the user specified value of the attribute must be a
-<code>MethodExpression</code>.  There may be zero or one of these inside
-of a <code>&lt;composite:attribute</code>&gt; element.  If not present
-the the value is inferred as in JSP 2.1.</p>
-
-            <p></p>
-
-</div>]]>
-        </description>
-        <name>
-            deferred-method
-        </name>
-        <body-content>
-            JSP
-        </body-content>
-
-        <attribute>
-            <description>
-
-                <![CDATA[
-<div class="changed_added_2_0">
-<p>Declares the method signature for the method referred to by the
-<code>MethodExpression</code>.  The value of this attribute must
-describe the method signature using fully qualified class names wherever
-a type is required.  There may be zero or one of these attributes inside
-the <code>&lt;deferred-method&gt;</code> element.
-            </p>
-
-</div>]]>
-
-            </description>
-            <name>
-                method-signature
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-value>
-                <type>
-                    java.lang.String
-                </type>
-            </deferred-value>
-        </attribute>
   </tag>
 
   <tag>
