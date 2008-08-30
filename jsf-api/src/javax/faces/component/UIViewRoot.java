@@ -83,9 +83,9 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * <p><strong class="changed_modified_2_0">UIViewRoot</strong> is the
  * UIComponent that represents the root of the UIComponent tree.  This
- * component has no rendering, it just serves as the root of the
- * component tree, and as a place to hang per-view {@link
- * PhaseListener}s.</p>
+ * component renders markup as the response to Ajax requests.  It also 
+ * serves as the root of the component tree, and as a place to hang 
+ * per-view {@link PhaseListener}s.</p>
 
  * <p class="changed_modified_2_0">To enable <code>UIViewRoot</code>
  * <code>PhaseListener</code>s to be invoked on restore view, this class
