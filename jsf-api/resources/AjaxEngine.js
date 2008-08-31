@@ -69,7 +69,10 @@ javax.faces.Ajax.AjaxEngine = function() {
     req.responseTxt = null;        // Response Content (Text)
     req.responseXML = null;        // Response Content (XML) 
     req.status = null;             // Response Status Code From Server
-    req.fromQueue = false;
+    req.fromQueue = false;         // Indicates if the request was taken off the queue
+                                   // before being sent.  This prevents the request from
+                                   // entering the queue redundantly. 
+
     req.que = new javax.faces.Ajax.AjaxEngine.Queue();
 
     // Get an XMLHttpRequest Handle
