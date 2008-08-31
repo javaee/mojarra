@@ -1,5 +1,9 @@
 function process(buttonName, imageSrc) {
-    document.getElementById(buttonName).src = imageSrc;
+    var button = document.getElementById(buttonName);
+    if (!button.disabled) {
+        button.src = imageSrc;
+        button.disabled = true;
+    }
 } 
 
 // This method receives queue events
@@ -30,6 +34,9 @@ function removeCell(cellData) {
         for (var i=0; i<cells.length; i++) {
             if (cells[i].firstChild.nodeValue == cellData.nodeValue) {
                 row.deleteCell(i);
+                var button = document.getElementById(cellData.nodeValue);
+                button.disabled = false;
+                button.src = "button2.gif";
                 break;
             }
         }

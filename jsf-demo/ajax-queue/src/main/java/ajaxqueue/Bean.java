@@ -68,7 +68,5 @@ public class Bean {
             Thread.sleep(delay);
         } catch (Exception e) {
         }
-        UICommand command = (UICommand)ae.getComponent();
-        command.getAttributes().put("image","button2.gif");
     }
 }
