@@ -174,6 +174,8 @@ javax.faces.Ajax.viewState = function(form) {
  * <code>action</code> property of the <code>form</code> element as the 
  * <code>url</code>.</li>
  * </ul>  
+ * The request must be put into a queue before it is sent to ensure requests 
+ * are sent in the same order they were initiated. 
  * </p>
  *
  * @param element The DOM element that triggered this Ajax request.
