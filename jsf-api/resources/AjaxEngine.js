@@ -115,27 +115,6 @@ javax.faces.Ajax.AjaxEngine = function() {
         if ((req.xmlReq.status == null || typeof req.xmlReq.status == 'undefined') || req.xmlReq.status == 0 ||
             (req.xmlReq.status >= 200 && req.xmlReq.status < 300)) { 
             javax.faces.Ajax.ajaxResponse(req.xmlReq);
-
-            var nextReq = req.que.getOldestElement();
-            if (nextReq == null || typeof nextReq == 'undefined') { 
-                return;
-            }
-            while ((typeof nextReq.xmlReq != 'undefined' && nextReq.xmlReq != null) && 
-                nextReq.xmlReq.readyState == 4) {
-                req.que.dequeue();
-                nextReq = req.que.getOldestElement();
-                if (nextReq == null || typeof nextReq == 'undefined') {
-                    break;
-                }
-            }
-            if (nextReq == null || typeof nextReq == 'undefined') { 
-                return;
-            }
-            if ((typeof nextReq.xmlReq != 'undefined' && nextReq.xmlReq != null) && 
-                nextReq.xmlReq.readyState == 0) {
-                nextReq.fromQueue = true;
-                nextReq.sendRequest();
-            }
         } else {
             if (typeof(req.onError)=="function") {
                 req.onError(req);
@@ -143,6 +122,31 @@ javax.faces.Ajax.AjaxEngine = function() {
             }
 
             // PENDING - ADD ERROR PROCESSING CODE HERE
+        }
+
+        // Regardless of whether the request completed successfully (or not),
+        // dequeue requests that have been completed (readyState 4) and send
+        // requests that ready to be sent (readyState 0).
+
+        var nextReq = req.que.getOldestElement();
+        if (nextReq == null || typeof nextReq == 'undefined') { 
+            return;
+        }
+        while ((typeof nextReq.xmlReq != 'undefined' && nextReq.xmlReq != null) && 
+            nextReq.xmlReq.readyState == 4) {
+            req.que.dequeue();
+            nextReq = req.que.getOldestElement();
+            if (nextReq == null || typeof nextReq == 'undefined') {
+                break;
+            }
+        }
+        if (nextReq == null || typeof nextReq == 'undefined') { 
+            return;
+        }
+        if ((typeof nextReq.xmlReq != 'undefined' && nextReq.xmlReq != null) && 
+            nextReq.xmlReq.readyState == 0) {
+            nextReq.fromQueue = true;
+            nextReq.sendRequest();
         }
     };
 
