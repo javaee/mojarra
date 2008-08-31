@@ -174,8 +174,21 @@ javax.faces.Ajax.viewState = function(form) {
  * <code>action</code> property of the <code>form</code> element as the 
  * <code>url</code>.</li>
  * </ul>  
- * The request must be put into a queue before it is sent to ensure requests 
- * are sent in the same order they were initiated. 
+ * Before the request is sent it must be put into a queue to ensure requests 
+ * are sent in the same order as when they were initiated.  The behavior of the 
+ * request callback function must be as follows:
+ * <ul>
+ * <li>If the request completed successfully invoke {@link javax.faces.Ajax.ajaxResponse} 
+ * passing the <code>request</code> object.</li> 
+ * <li>If the request did not complete successfully, notify the client.</li>
+ * <li>Regardless of the outcome of the request (success or error) every request in the 
+ * queue must be handled.  Examine the status of each request in the queue starting from 
+ * the request that has been in the queue the longest.  If the status of the request is 
+ * <code>complete</code> (readyState 4), dequeue the request (remove it from the queue).  
+ * If the request has not been sent (readyState 0), send the request.  Requests that are 
+ * taken off the queue and sent should not be put back on the queue.</li>
+ * </ul>
+ *
  * </p>
  *
  * @param element The DOM element that triggered this Ajax request.
@@ -257,7 +270,7 @@ javax.faces.Ajax.ajaxRequest = function(element, event, options) {
  * <ul>
  * <li>Determine if the entire <code>DOM</code> should be replaced, or
  * if only specified sections (known as partial rendering) should be
- * updated.  The entire <code>DOM</code>must be replaced if a 
+ * updated.  The entire <code>DOM</code> must be replaced if a 
  * <code>render</code> element identifier is 
  * <code>javax.faces.viewRoot</code>.</li> 
  * <li>If partial <code>DOM</code> update is required, replace the 
