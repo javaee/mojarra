@@ -621,7 +621,7 @@ public abstract class FacesContext {
     /**
      * <p class="changed_added_2_0">
      * Return <code>true</code> if the request parameter
-     * <code>javax.faces.partial.Ajax</code> is present in the current
+     * <code>javax.faces.partial.ajax</code> is present in the current
      * request.  Otherwise, return <code>false</code>.</p>
      *
      * @throws IllegalStateException if this method is called after
