@@ -54,7 +54,7 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Set;
-
+import java.util.Collections;
 
 // Mock Object for ServletContext (Version 2.3)
 
@@ -221,7 +221,7 @@ public class MockServletContext implements ServletContext {
 
 
     public Set getResourcePaths(String path) {
-        throw new UnsupportedOperationException();
+        return Collections.emptySet();
         // PENDING(craigmcc) - Flesh out the following implementation
         /*
         if (!path.startsWith("/") || (directory == null)) {

@@ -295,9 +295,9 @@ public class MultiKeyConcurrentHashMap<K, V> {
                 HashEntry<K, V> e = getFirst(hash);
                 while (e != null) {
                     if ((e.hash == hash && key1.equals(e.key1))
-                        && (key2 != null && key2.equals(e.key2))
-                        && (key3 != null && key3.equals(e.key3))
-                        && (key4 != null && key4.equals(e.key4))) {
+                        && ((key2 == null && e.key2 == null) || (key2 != null && key2.equals(e.key2)))
+                        && ((key3 == null && e.key3 == null) || (key3 != null && key3.equals(e.key3)))
+                        && ((key4 == null && e.key4 == null) || (key4 != null && key4.equals(e.key2)))) {
                         V v = e.value;
                         if (v != null) {
                             return v;
@@ -319,9 +319,9 @@ public class MultiKeyConcurrentHashMap<K, V> {
                 HashEntry<K, V> e = getFirst(hash);
                 while (e != null) {
                     if ((e.hash == hash && key1.equals(e.key1))
-                        && (key2 != null && key2.equals(e.key2))
-                        && (key3 != null && key3.equals(e.key3))
-                        && (key4 != null && key4.equals(e.key4))) {
+                        && ((key2 == null && e.key2 == null) || (key2 != null && key2.equals(e.key2)))
+                        && ((key3 == null && e.key3 == null) || (key3 != null && key3.equals(e.key3)))
+                        && ((key4 == null && e.key4 == null) || (key4 != null && key4.equals(e.key2)))) {
                         return true;
                     }
                     e = e.next;

@@ -100,6 +100,7 @@ import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.Timer;
 import com.sun.faces.util.Util;
+import com.sun.faces.RIConstants;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -158,9 +159,9 @@ public class ConfigureListener implements ServletRequestListener,
         // Check to see if the FacesServlet is present in the
         // web.xml.   If it is, perform faces configuration as normal,
         // otherwise, simply return.
+        WebXmlProcessor webXmlProcessor = new WebXmlProcessor(context);
         if (!webConfig.isOptionEnabled(BooleanWebContextInitParameter.ForceLoadFacesConfigFiles)) {
-            WebXmlProcessor processor = new WebXmlProcessor(context);
-            if (!processor.isFacesServletPresent()) {
+            if (!webXmlProcessor.isFacesServletPresent()) {
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.log(Level.FINE,
                                "No FacesServlet found in deployment descriptor - bypassing configuration");
@@ -174,6 +175,8 @@ public class ConfigureListener implements ServletRequestListener,
                 }
             }
         }
+        context.setAttribute(RIConstants.METADATA_COMPLETE,
+                             webXmlProcessor.metadataComplete);
 
         FacesContext initContext = new InitFacesContext(context);
         ReflectionUtils.initCache(Thread.currentThread().getContextClassLoader());
@@ -645,6 +648,7 @@ public class ConfigureListener implements ServletRequestListener,
         private static final String WEB_XML_PATH = "/WEB-INF/web.xml";
 
         private boolean facesServletPresent;
+        private boolean metadataComplete;
 
 
         /**
@@ -698,7 +702,8 @@ public class ConfigureListener implements ServletRequestListener,
                 if (LOGGER.isLoggable(Level.WARNING)) {
                     LOGGER.log(Level.WARNING,
                                MessageFormat.format("Unable to process deployment descriptor for context ''{0}''",
-                                                    getServletContextIdentifier(context)));
+                                                    getServletContextIdentifier(context)),
+                               e);
                 }
                 facesServletPresent = true;
             }
@@ -726,6 +731,10 @@ public class ConfigureListener implements ServletRequestListener,
          */
         private class WebXmlHandler extends DefaultHandler {
 
+            private static final String WEBAPP = "web-app";
+            private static final String WEBAPP_VERSION_ATTR = "version";
+            private static final String WEBAPP_METADATA_COMPLETE_ATTR =
+                  "metadata-complete";
             private static final String SERVLET_CLASS = "servlet-class";
             private static final String FACES_SERVLET =
                 "javax.faces.webapp.FacesServlet";
@@ -746,6 +755,18 @@ public class ConfigureListener implements ServletRequestListener,
                                      String qName, Attributes attributes)
             throws SAXException {
 
+                if (WEBAPP.equals(localName)) {
+                    String version = attributes.getValue(WEBAPP_VERSION_ATTR);
+                    Float fVersion = Float.parseFloat(version);
+                    if (fVersion <= 2.4f) {
+                        metadataComplete = true;
+                    } else {
+                        String metaDataComplete =
+                              attributes.getValue(WEBAPP_METADATA_COMPLETE_ATTR);
+                        metadataComplete = Boolean.valueOf(metaDataComplete);
+                    }
+
+                }
                 if (!facesServletPresent) {
                     if (SERVLET_CLASS.equals(localName)) {
                         servletClassFound = true;
@@ -755,6 +776,7 @@ public class ConfigureListener implements ServletRequestListener,
                         servletClassFound = false;
                     }
                 }
+
 
             } // END startElement
 
