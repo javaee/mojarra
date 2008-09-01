@@ -79,7 +79,12 @@ public abstract class FacesContext {
 
 
     /**
-     * RELEASE_PENDING (rogerk,edburns) docs
+     * <p class="changed_added_2_0">
+     * The request parameter name whose request parameter value 
+     * is a <code>List</code> of client identifiers identifying the
+     * components that must be processed during the 
+     * <em>Render Response</em> phase of the request processing 
+     * lifecycle.</p>
      *
      * @since 2.0
      */
@@ -88,7 +93,13 @@ public abstract class FacesContext {
 
 
     /**
-     * RELEASE_PENDING (rogerk,edburns) docs
+     * <p class="changed_added_2_0">
+     * The request parameter name whose request parameter value 
+     * is a <code>List</code> of client identifiers identifying the
+     * components that must be processed during the 
+     * <em>Apply Request Values</em>, <em>Process Validations</em>,
+     * and <em>Update Model Values</em> phases of the request 
+     * processing lifecycle.</p>
      *
      * @since 2.0
      */
@@ -97,7 +108,10 @@ public abstract class FacesContext {
 
 
     /**
-     * RELEASE_PENDING (rogerk,edburns) docs
+     * <p class="changed_added_2_0">
+     * The value that when used with {@link #PARTIAL_EXECUTE_PARAM_NAME}
+     * or {@link #PARTIAL_RENDER_PARAM_NAME} indicates these phases
+     * must be skipped.</p>  
      *
      * @since 2.0
      */
