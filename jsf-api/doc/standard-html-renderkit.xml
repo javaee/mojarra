@@ -24130,7 +24130,9 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       </renderer-extension>
     </renderer>
     <renderer>
-      <description><![CDATA[<p>Render an HTML option list.</p>
+      <description><![CDATA[<p><span
+            class="changed_modified_2_0">Render</span> an HTML option
+            list.</p>
 
       <p>Decode Behavior</p>
 
@@ -24167,7 +24169,10 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       property of the <code>ExternalContext</code>.  If there is a
       <code>Map</code> entry for the "clientId" property of the
       component, pass it to the <code>setSubmittedValue()</code> method
-      of the component.</p>
+      of the component. <span class="changed_added_2_0">If the
+      <code>Map</code> does not contain an entry, call
+      <code>setSubmittedValue()</code> passing an empty
+      <code>String</code> as the argument.</span> </p>
 
       </ul>
 
