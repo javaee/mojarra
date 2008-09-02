@@ -17867,7 +17867,9 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
 
     </ul>]]></description>
     <renderer>
-      <description><![CDATA[<p>Renders an HTML "input" element.</p>
+      <description><![CDATA[<p><span
+            class="changed_modified_2_0">Renders an HTML "input"
+            element.</p>
 
       <p>Decode Behavior</p>
 
@@ -17917,6 +17919,22 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       specified, render its value as the value of the "class" attribute.
       If the user has specified an "onclick" attribute, append that
       JavaScript to any existing JavaScript before rendering.</p>
+
+      <p class="changed_added_2_0">If the component being rendered by
+      this renderer has any <code>UIParameter</code> children, each one
+      of them must be rendered using the renderer for component-family:
+      "javax.faces.Input" and renderer-type: "javax.faces.Hidden".  For
+      discussion, this is called the hiddenRenderer.  A component with
+      component-type "javax.faces.Input" must be created for local use
+      in rendering each <code>UIParameter</code> child.  The "id"
+      property of the temporary component must be set to the "name" of
+      the <code>UIParameter</code>.  The "value" property of the
+      temporary component must be set to the "value" of the
+      <code>UIParameter</code>.  For each <code>UIParameter</code>
+      child, the hiddenRenderer must have its
+      <code>encodeBegin()</code>, <code>encodeChildren()</code>, and
+      <code>encodeEnd()</code> methods called, in order, passing the
+      temporary component as the second argument.</p>
 
       </ul>
             ]]></description>
@@ -18306,15 +18324,19 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       </renderer-extension>
     </renderer>
     <renderer>
-      <description><![CDATA[<p>Render an HTML "a" anchor element that acts like a
-      form submit button when clicked.</p>
+      <description><![CDATA[<p><span
+            class="changed_modified_2_0">Render</span> an HTML "a" anchor
+            element that acts like a form submit button when
+            clicked.</p>
 
       <p>General Behaviour</p>
 
       <p>Both the encode and decode behavior require the ability to get
-      the id/name for a hidden field whose value is set by the
-      JavaScript form submit.  This name must be constructed as
-      follows:</p>
+      the id/name for a hidden field, <span
+      class="changed_added_2_0">which may be rendered in markup or which
+      may be programmatically added via client DOM manipulation</span>,
+      whose value is set by the JavaScript form submit.  This name must
+      be constructed as follows:</p>
 
       <ul>
 
@@ -18418,7 +18440,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       This must be accomplished using JavaScript that is equivalent to
       the following.</p>
 
-      <p><code>document.forms['CLIENT_ID'].target='TARGET';</p>
+      <p><code>document.forms['CLIENT_ID'].target='TARGET';</code></p>
 
       <p>Where TARGET is the value of the target attribute on the JSP
       tag.</p>
