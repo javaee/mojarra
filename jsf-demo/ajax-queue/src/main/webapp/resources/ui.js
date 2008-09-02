@@ -8,7 +8,6 @@ function process(buttonName, imageSrc) {
 
 // This method receives queue events
 function msg(data) {
-    var queuetable = document.getElementById("queuetable");
     var txt = null;
     if (typeof data.enqueue != 'undefined' || data.enqueue != null) {
         txt = document.createTextNode(data.enqueue.parameters["javax.faces.partial.execute"]);
