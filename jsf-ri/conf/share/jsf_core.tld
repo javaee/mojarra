@@ -323,14 +323,19 @@
         </attribute>
 
         <attribute>
-            <description>
-                Locale whose predefined styles for numbers
-                are used during formatting and parsing.  If
-                not specified, the Locale returned by
-                FacesContext.getViewRoot().getLocale()
-                will be used.  Expressions must evaluate to
-                a java.util.Locale.
-            </description>
+            <description><![CDATA[<p>
+
+                <span class="changed_modified_2_0">Locale</span> whose
+                predefined styles for numbers are used during formatting
+                and parsing.  If not specified, the Locale returned by
+                FacesContext.getViewRoot().getLocale() will be used.
+                Expressions must evaluate to a java.util.Locale <span
+                class="changed_modified_2_0">or a String that is valid to
+                pass as the first argument to the constructor
+                java.util.Locale(String language, String country). The
+                empty string is passed as the second argument.</span>
+
+            </p>]]></description>
             <name>locale</name>
             <deferred-value>
                 <type>java.util.Locale</type>
