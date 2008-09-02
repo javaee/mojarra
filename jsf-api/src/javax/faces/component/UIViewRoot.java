@@ -763,10 +763,14 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      * <code>execute</code> portion of the request processing lifecycle.
      * For each client id in the list, using <code>invokeOnComponent</code>,
      * call the respective <code>processDecodes</code> method on the component
-     * with that client id.  Broadcast any {@link FacesEvent}s that nay have been
+     * with that client id.  If there were no client ids specified, refer to the 
+     * <code>List</code> of client ids by calling 
+     * {@link javax.faces.context.FacesContext#getRenderPhaseClientIds}.
+     * Broadcast any {@link FacesEvent}s that nay have been
      * queued after the partial processing has been completed.  If
      * {@link javax.faces.context.FacesContext#isAjaxRequest}
-     * returns <code>false</code>, perform the default <code>processDecodes</code>
+     * returned <code>false</code>, or partial processing was not perfomed on
+     * any components, perform the default <code>processDecodes</code>
      * processing.
      * </p>
      * <p>Override the default {@link UIComponentBase#processDecodes}
@@ -823,8 +827,8 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
         invokedCallback = invokeContextCallbackOnSubtrees(context,
             new PhaseAwareContextCallback(PhaseId.APPLY_REQUEST_VALUES));
 
+        // Install the PartialResponseWriter
         ResponseWriter writer = context.getPartialResponseWriter();
-        // Install the AjaxResponseWriter
         context.setResponseWriter(writer);
 
         // PENDING: Queue Events that were specified in the Ajax Request..
