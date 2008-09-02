@@ -37,8 +37,8 @@
  * This file incorporates work covered by the following copyright and
  * permission notice:
  *
- * Copyright 2004 The Apache Software Foundation
- *
+ *      Copyright 2006-2008 OpenAjax Alliance
+ *      
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
