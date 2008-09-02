@@ -370,16 +370,19 @@ javax.faces.Ajax.ajaxResponse = function(request) {
                 } else {
                     srcBody = src.substring(bodyStartEx.lastIndex);
                 }
-                result = utils.elementReplace(docBody, "body", srcBody);
+                utils.elementReplace(docBody, "body", srcBody);
             }
             if (!srcBody) {
-                result = utils.elementReplace(docBody, "body", src);
+                utils.elementReplace(docBody, "body", src);
             }
         
         } else {
             var d = utils.$(id);
             if (!d) {
-                alert(id + " not found");
+                throw {
+                    name: 'NotFound',
+                    message: id + 'not found'
+                }
             }
             var parent = d.parentNode;
             var temp = document.createElement('div');
@@ -404,13 +407,13 @@ javax.faces.Ajax.ajaxResponse = function(request) {
         }
         var numForms = document.forms.length;
         var field;
-        for (var i = 0; i < numForms; i++) {
-            field = document.forms[i].elements["javax.faces.ViewState"];
+        for (var k = 0; k < numForms; k++) {
+            field = document.forms[k].elements["javax.faces.ViewState"];
             if (typeof field == 'undefined') {
                 field = document.createElement("input");
                 field.type = "hidden";
                 field.name = "javax.faces.ViewState";
-                document.forms[i].appendChild(field);
+                document.forms[k].appendChild(field);
             }
             field.value = state.text || state.data;
         }

@@ -84,6 +84,7 @@ javax.faces.Ajax.Utils = function() {
             }
             return document.forms[0];
         }
+        return null;
     }
 
     this.$ = function() {
@@ -139,20 +140,21 @@ javax.faces.Ajax.Utils = function() {
         });
     }
 
-    this.replaceElem = function(element, html) {
-        element = this.$(element);
-        if (element.outerHTML) {
-            element.outerHTML = this.stripScripts(html);
-        } else {
-            var range = element.ownerDocument.createRange();
-            range.selectNodeContents(element);
-            element.parentNode.replaceChild(
-            range.createContextualFragment(this.stripScripts(html)), element);
-        }
-        var that = this;
-        setTimeout(function(){that.evalScripts(html)}, 10);
-        return element;
-    }
+//  FIX:  Commented out for now, will probably remove.  - JGD 
+//    this.replaceElem = function(element, html) {
+//        element = this.$(element);
+//        if (element.outerHTML) {
+//            element.outerHTML = this.stripScripts(html);
+//        } else {
+//            var range = element.ownerDocument.createRange();
+//            range.selectNodeContents(element);
+//            element.parentNode.replaceChild(
+//            range.createContextualFragment(this.stripScripts(html)), element);
+//        }
+//        var that = this;
+//        setTimeout(function(){that.evalScripts(html)}, 10);
+//        return element;
+//    }
 
     this.elementReplace = function(d, tempTagName, src) {
         var parent = d.parentNode;
@@ -165,7 +167,7 @@ javax.faces.Ajax.Utils = function() {
     
             // head replacement only appears to work on firefox.
             if (-1 == BrowserDetect.browser.indexOf("Firefox")) {
-                return;
+                return result;
             }   
         
             // Strip link elements from src.
