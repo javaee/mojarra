@@ -42,13 +42,15 @@ package javax.faces.model;
 
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javax.faces.FacesException;
 import javax.faces.component.UIData;
 
 
 /**
- * <p><strong>DataModel</strong> is an abstraction around arbitrary data
+ * <p><span class="changed_modified_2_0"><strong>DataModel</strong></span>
+ * is an abstraction around arbitrary data
  * binding technologies that can be used to adapt a variety of data sources
  * for use by JavaServer Faces components that support per-row processing
  * for their child components (such as {@link UIData}.</p>
@@ -75,7 +77,7 @@ import javax.faces.component.UIData;
  * of when a new row index is selected.</p>
  */
 
-public abstract class DataModel {
+public abstract class DataModel implements Iterable {
 
 
     private static final DataModelListener[] EMPTY_DATA_MODEL_LISTENER =
@@ -255,6 +257,54 @@ public abstract class DataModel {
         }
 
     }
+
+    // PENDING(rlubke) check this implementation and provide tests.
+    /**
+     * <p class="changed_added_2_0">Return an <code>Iterator</code> over the 
+     * row data for this model.</p>
+     * 
+     * @since 2.0
+     * 
+     */
+    public Iterator<Object> iterator() {
+        Iterator result = null;
+        
+        result = new Iterator() {
+            
+            private boolean initialized = false;
+
+            public boolean hasNext() {
+                boolean result = false;
+                if (!initialized) {
+                    initialized = true;
+                    DataModel.this.setRowIndex(0);
+                }
+                int cur = DataModel.this.getRowIndex();
+                int last = DataModel.this.getRowCount();
+                result = (cur < last);
+                return result;
+            }
+
+            public Object next() {
+                Object result = null;
+                if (!initialized) {
+                    initialized = true;
+                    DataModel.this.setRowIndex(0);
+                }
+                int cur = DataModel.this.getRowIndex();
+                DataModel.this.setRowIndex(++cur);
+                result = DataModel.this.getRowData();
+                return result;
+            }
+
+            public void remove() {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+        };
+        
+        return result;
+    }
+    
 
 
 }
