@@ -4627,15 +4627,24 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       </property-extension>
     </property>
     <property>
-      <description>
-        Absolute or relative URL of the image
-        to be displayed for this button.  If
-        specified, this "input" element will be
-        of type "image".  Otherwise, it will be
-        of the type specified by the "type"
-        property with a label specified by the
-        "value" property.
-      </description>
+      <description><![CDATA[<p>
+        Absolute or relative URL of the
+        image to be displayed for this
+        button.  If specified, this
+        "input" element will be of type
+        "image".  Otherwise, it will be
+        of the type specified by the
+        "type" property with a label
+        specified by the "value"
+        property.  <span
+        class="changed_added_2_0">Note
+        that if the value of this
+        attribute starts with "/", the
+        rendered value for this
+        attribute will be prefixed with
+        the context-root for this
+        application.</span>
+      </p>]]></description>
       <display-name>Image URL</display-name>
       <icon/>
       <property-name>image</property-name>
@@ -17898,13 +17907,16 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <code>getResourceURL()</code> method of the
       <code>ViewHandler</code> for this application, and passing the
       result through the <code>encodeResourceURL()</code> method of the
-      <code>ExternalContext</code>.  When handling the "image"
-      attribute, the value must not be escaped.  For example,
-      <code>&</code> must not be turned into <code>&amp;amp;</code>.  If the
-      "styleClass" attribute is specified, render its value as the value
-      of the "class" attribute.  If the user has specified an "onclick"
-      attribute, append that JavaScript to any existing JavaScript before
-      rendering.</p>
+      <code>ExternalContext</code>.  <span
+      class="changed_added_2_0">Note that calling
+      <code>getResourceURL()</code> will prefix the context-root of the
+      current application if the value of the "src" attribute starts
+      with "/".</span>  When handling the "image" attribute, the value must not
+      be escaped.  For example, <code>&</code> must not be turned into
+      <code>&amp;amp;</code>.  If the "styleClass" attribute is
+      specified, render its value as the value of the "class" attribute.
+      If the user has specified an "onclick" attribute, append that
+      JavaScript to any existing JavaScript before rendering.</p>
 
       </ul>
             ]]></description>
@@ -18121,15 +18133,24 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         </attribute-extension>
       </attribute>
       <attribute>
-        <description>
-        Absolute or relative URL of the image
-        to be displayed for this button.  If
-        specified, this "input" element will be
-        of type "image".  Otherwise, it will be
-        of the type specified by the "type"
-        property with a label specified by the
-        "value" property.
-      </description>
+        <description><![CDATA[<p>
+        Absolute or relative URL of the
+        image to be displayed for this
+        button.  If specified, this
+        "input" element will be of type
+        "image".  Otherwise, it will be
+        of the type specified by the
+        "type" property with a label
+        specified by the "value"
+        property.  <span
+        class="changed_added_2_0">Note
+        that if the value of this
+        attribute starts with "/", the
+        rendered value for this
+        attribute will be prefixed with
+        the context-root for this
+        application.</span>
+      </p>]]></description>
         <display-name>Image URL</display-name>
         <icon/>
         <attribute-name>image</attribute-name>
