@@ -75,199 +75,204 @@ import java.util.zip.ZipInputStream;
  */
 public final class Classpath {
 
-	/**
-	 * 
-	 */
-	public Classpath() {
-		super();
-	}
+    /**
+     *
+     */
+    public Classpath() {
+        super();
+    }
 
-	public static URL[] search(String prefix, String suffix) throws IOException {
+    public static URL[] search(String prefix, String suffix)
+          throws IOException {
         return search(Thread.currentThread().getContextClassLoader(), prefix,
-                suffix);
-	}
+                      suffix);
+    }
 
-	public static URL[] search(ClassLoader cl, String prefix, String suffix) throws IOException {
-		Enumeration[] e = new Enumeration[] {
-				cl.getResources(prefix),
-				cl.getResources(prefix + "MANIFEST.MF")
-			};
-		Set all = new LinkedHashSet();
-		URL url;
-		URLConnection conn;
-		JarFile jarFile;
-		for (int i = 0, s = e.length; i < s; ++i) {
-			while (e[i].hasMoreElements()) {
-				url = (URL) e[i].nextElement();
-				conn = url.openConnection();
-				conn.setUseCaches(false);
-				conn.setDefaultUseCaches(false);
-				if (conn instanceof JarURLConnection) {
-					jarFile = ((JarURLConnection) conn).getJarFile();
-				} else {
-					jarFile = getAlternativeJarFile(url);
-				}
-				if (jarFile != null) {
-					searchJar(cl, all, jarFile, prefix, suffix);
-				} else {
-					boolean searchDone = searchDir(all, new File(URLDecoder.decode(url.getFile(), "UTF-8")), suffix);
-					if (!searchDone)
-					{
-						searchFromURL(all, prefix, suffix, url);
-					}
-				}
-			}
-		}
-		URL[] urlArray = (URL[]) all.toArray(new URL[all.size()]);
-		return urlArray;
-	}
+    public static URL[] search(ClassLoader cl, String prefix, String suffix)
+          throws IOException {
+        Enumeration[] e = new Enumeration[]{
+              cl.getResources(prefix),
+              cl.getResources(prefix + "MANIFEST.MF")
+        };
+        Set all = new LinkedHashSet();
+        URL url;
+        URLConnection conn;
+        JarFile jarFile;
+        for (int i = 0, s = e.length; i < s; ++i) {
+            while (e[i].hasMoreElements()) {
+                url = (URL) e[i].nextElement();
+                conn = url.openConnection();
+                conn.setUseCaches(false);
+                conn.setDefaultUseCaches(false);
+                if (conn instanceof JarURLConnection) {
+                    jarFile = ((JarURLConnection) conn).getJarFile();
+                } else {
+                    jarFile = getAlternativeJarFile(url);
+                }
+                if (jarFile != null) {
+                    searchJar(cl, all, jarFile, prefix, suffix);
+                } else {
+                    boolean searchDone =
+                          searchDir(all, new File(URLDecoder.decode(url.getFile(), "UTF-8")), suffix);
+                    if (!searchDone) {
+                        searchFromURL(all, prefix, suffix, url);
+                    }
+                }
+            }
+        }
+        URL[] urlArray = (URL[]) all.toArray(new URL[all.size()]);
+        return urlArray;
+    }
 
-    private static boolean searchDir(Set result, File file, String suffix) 
-            throws IOException {
-		if (file.exists() && file.isDirectory()) {
-			File[] fc = file.listFiles();
-			String path;
-			URL src;
-			for (int i = 0; i < fc.length; i++) {
-				path = fc[i].getAbsolutePath();
-				if (fc[i].isDirectory()) {
-					searchDir(result, fc[i], suffix);
-				} else if (path.endsWith(suffix)) {
-					// result.add(new URL("file:/" + path));
-					result.add(fc[i].toURL());
-				}
-			}
-			return true;
-		}
-		return false;
-	}
-
-    /**
-	 * Search from URL. Fall back on prefix tokens if not able to read from
-	 * original url param.
-	 * 
-	 * @param result the result urls
-	 * @param prefix the current prefix
-	 * @param suffix the suffix to match
-	 * @param url the current url to start search
-	 * @throws IOException for any error
-	 */
-	private static void searchFromURL(Set result, String prefix, String suffix,
-			URL url) throws IOException {
-		boolean done = false;
-		InputStream is = getInputStream(url);
-		if (is != null) {
-			try {
-				ZipInputStream zis;
-				if (is instanceof ZipInputStream)
-					zis = (ZipInputStream) is;
-				else
-					zis = new ZipInputStream(is);
-				try {
-					ZipEntry entry = zis.getNextEntry();
-					// initial entry should not be null
-					// if we assume this is some inner jar
-					done = (entry != null);
-					while (entry != null) {
-						String entryName = entry.getName();
-						if (entryName.endsWith(suffix)) {
-							String urlString = url.toExternalForm();
-							result.add(new URL(urlString + entryName));
-						}
-						entry = zis.getNextEntry();
-					}
-				} finally {
-					zis.close();
-				}
-			} catch (Exception ignore) {
-			}
-		}
-		if (done == false && prefix.length() > 0) {
-			// we add '/' at the end since join adds it as well
-			String urlString = url.toExternalForm() + "/";
-			String[] split = prefix.split("/");
-			prefix = join(split, true);
-			String end = join(split, false);
-			int p = urlString.lastIndexOf(end);
-			url = new URL(urlString.substring(0, p));
-			searchFromURL(result, prefix, suffix, url);
-		}
-	}
-
-	/**
-	 * Join tokens, exlude last if param equals true.
-	 * 
-	 * @param tokens
-	 *            the tokens
-	 * @param excludeLast
-	 *            do we exclude last token
-	 * @return joined tokens
-	 */
-	private static String join(String[] tokens, boolean excludeLast) {
-		StringBuffer join = new StringBuffer();
-		for (int i = 0; i < tokens.length - (excludeLast ? 1 : 0); i++)
-			join.append(tokens[i]).append("/");
-		return join.toString();
-	}
-
-	/**
-	 * Open input stream from url. Ignore any errors.
-	 * 
-	 * @param url
-	 *            the url to open
-	 * @return input stream or null if not possible
-	 */
-	private static InputStream getInputStream(URL url) {
-		try {
-			return url.openStream();
-		} catch (Throwable t) {
-			return null;
-		}
-	}
+    private static boolean searchDir(Set result, File file, String suffix)
+          throws IOException {
+        if (file.exists() && file.isDirectory()) {
+            File[] fc = file.listFiles();
+            String path;
+            URL src;
+            for (int i = 0; i < fc.length; i++) {
+                path = fc[i].getAbsolutePath();
+                if (fc[i].isDirectory()) {
+                    searchDir(result, fc[i], suffix);
+                } else if (path.endsWith(suffix)) {
+                    // result.add(new URL("file:/" + path));
+                    result.add(fc[i].toURL());
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 
     /**
-	 * For URLs to JARs that do not use JarURLConnection - allowed by the
-	 * servlet spec - attempt to produce a JarFile object all the same. Known
-	 * servlet engines that function like this include Weblogic and OC4J. This
-	 * is not a full solution, since an unpacked WAR or EAR will not have JAR
-	 * "files" as such.
-	 */
-	private static JarFile getAlternativeJarFile(URL url) throws IOException {
-		String urlFile = url.getFile();
-		// Trim off any suffix - which is prefixed by "!/" on Weblogic
-		int separatorIndex = urlFile.indexOf("!/");
+     * Search from URL. Fall back on prefix tokens if not able to read from
+     * original url param.
+     *
+     * @param result the result urls
+     * @param prefix the current prefix
+     * @param suffix the suffix to match
+     * @param url    the current url to start search
+     *
+     * @throws IOException for any error
+     */
+    private static void searchFromURL(Set result, String prefix, String suffix,
+                                      URL url) throws IOException {
+        boolean done = false;
+        InputStream is = getInputStream(url);
+        if (is != null) {
+            try {
+                ZipInputStream zis;
+                if (is instanceof ZipInputStream) {
+                    zis = (ZipInputStream) is;
+                } else {
+                    zis = new ZipInputStream(is);
+                }
+                try {
+                    ZipEntry entry = zis.getNextEntry();
+                    // initial entry should not be null
+                    // if we assume this is some inner jar
+                    done = (entry != null);
+                    while (entry != null) {
+                        String entryName = entry.getName();
+                        if (entryName.endsWith(suffix)) {
+                            String urlString = url.toExternalForm();
+                            result.add(new URL(urlString + entryName));
+                        }
+                        entry = zis.getNextEntry();
+                    }
+                } finally {
+                    zis.close();
+                }
+            } catch (Exception ignore) {
+            }
+        }
+        if (done == false && prefix.length() > 0) {
+            // we add '/' at the end since join adds it as well
+            String urlString = url.toExternalForm() + "/";
+            String[] split = prefix.split("/");
+            prefix = join(split, true);
+            String end = join(split, false);
+            int p = urlString.lastIndexOf(end);
+            url = new URL(urlString.substring(0, p));
+            searchFromURL(result, prefix, suffix, url);
+        }
+    }
 
-		// OK, didn't find that. Try the less safe "!", used on OC4J
-		if (separatorIndex == -1) {
-			separatorIndex = urlFile.indexOf('!');
-		}
+    /**
+     * Join tokens, exlude last if param equals true.
+     *
+     * @param tokens      the tokens
+     * @param excludeLast do we exclude last token
+     *
+     * @return joined tokens
+     */
+    private static String join(String[] tokens, boolean excludeLast) {
+        StringBuffer join = new StringBuffer();
+        for (int i = 0; i < tokens.length - (excludeLast ? 1 : 0); i++) {
+            join.append(tokens[i]).append("/");
+        }
+        return join.toString();
+    }
 
-		if (separatorIndex != -1) {
-			String jarFileUrl = urlFile.substring(0, separatorIndex);
-			// And trim off any "file:" prefix.
-			if (jarFileUrl.startsWith("file:")) {
-				jarFileUrl = jarFileUrl.substring("file:".length());
-			}
-			return new JarFile(jarFileUrl);
-		}
-		return null;
-	}
+    /**
+     * Open input stream from url. Ignore any errors.
+     *
+     * @param url the url to open
+     *
+     * @return input stream or null if not possible
+     */
+    private static InputStream getInputStream(URL url) {
+        try {
+            return url.openStream();
+        } catch (Throwable t) {
+            return null;
+        }
+    }
+
+    /**
+     * For URLs to JARs that do not use JarURLConnection - allowed by the servlet
+     * spec - attempt to produce a JarFile object all the same. Known servlet
+     * engines that function like this include Weblogic and OC4J. This is not a
+     * full solution, since an unpacked WAR or EAR will not have JAR "files" as
+     * such.
+     */
+    private static JarFile getAlternativeJarFile(URL url) throws IOException {
+        String urlFile = url.getFile();
+        // Trim off any suffix - which is prefixed by "!/" on Weblogic
+        int separatorIndex = urlFile.indexOf("!/");
+
+        // OK, didn't find that. Try the less safe "!", used on OC4J
+        if (separatorIndex == -1) {
+            separatorIndex = urlFile.indexOf('!');
+        }
+
+        if (separatorIndex != -1) {
+            String jarFileUrl = urlFile.substring(0, separatorIndex);
+            // And trim off any "file:" prefix.
+            if (jarFileUrl.startsWith("file:")) {
+                jarFileUrl = jarFileUrl.substring("file:".length());
+            }
+            return new JarFile(jarFileUrl);
+        }
+        return null;
+    }
 
     private static void searchJar(ClassLoader cl, Set result, JarFile file,
-            String prefix, String suffix) throws IOException {
-		Enumeration e = file.entries();
-		JarEntry entry;
-		String name;
-		while (e.hasMoreElements()) {
-			try {
-				entry = (JarEntry) e.nextElement();
-			} catch (Throwable t) {
-				continue;
-			}
-			name = entry.getName();
-			if (name.startsWith(prefix) && name.endsWith(suffix)) {
-				Enumeration e2 = cl.getResources(name);
-				while (e2.hasMoreElements()) {
+                                  String prefix, String suffix)
+          throws IOException {
+        Enumeration e = file.entries();
+        JarEntry entry;
+        String name;
+        while (e.hasMoreElements()) {
+            try {
+                entry = (JarEntry) e.nextElement();
+            } catch (Throwable t) {
+                continue;
+            }
+            name = entry.getName();
+            if (name.startsWith(prefix) && name.endsWith(suffix)) {
+                Enumeration e2 = cl.getResources(name);
+                while (e2.hasMoreElements()) {
 					result.add(e2.nextElement());
 				}
 			}
