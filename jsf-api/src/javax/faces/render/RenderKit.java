@@ -46,17 +46,19 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.context.ResponseStream;
 import java.io.Writer;
 import java.io.OutputStream;
+import java.util.Iterator;
 
 
 /**
- * <p><strong>RenderKit</strong> represents a collection of
- * {@link Renderer} instances that, together, know how to render
- * JavaServer Faces {@link UIComponent} instances for a specific
- * client.  Typically, {@link RenderKit}s are specialized for
- * some combination of client device type, markup language, and/or
- * user <code>Locale</code>.  A {@link RenderKit} also acts as
- * a Factory for associated {@link Renderer} instances, which perform the
- * actual rendering process for each component.</p>
+ * <p><span
+ * class="changed_modified_2_0"><strong>RenderKit</strong></span>
+ * represents a collection of {@link Renderer} instances that, together,
+ * know how to render JavaServer Faces {@link UIComponent} instances for
+ * a specific client.  Typically, {@link RenderKit}s are specialized for
+ * some combination of client device type, markup language, and/or user
+ * <code>Locale</code>.  A {@link RenderKit} also acts as a Factory for
+ * associated {@link Renderer} instances, which perform the actual
+ * rendering process for each component.</p>
  *
  * <p>A typical JavaServer Faces implementation will configure one or
  * more {@link RenderKit} instances at web application startup.  They
@@ -179,5 +181,38 @@ public abstract class RenderKit {
      */ 
     public abstract ResponseStream createResponseStream(OutputStream out);
 
+
+    // PENDING(rlubke) implementation
+    /**
+     * <p class="changed_added_2_0">Return an <code>Iterator</code> over
+     * the component-family entries supported by this
+     * <code>RenderKit</code> instance.</p>
+     *
+     * @since 2.0
+     *
+     */
+
+    public Iterator<String> getComponentFamilies() {
+
+        throw new UnsupportedOperationException();
+
+    }
+    
+    // PENDING(rlubke): implementation
+    /**
+     * <p class="changed_added_2_0">Return an <code>Iterator</code> over
+     * the renderer-type entries for the given component-family.</p>
+     *
+     * @param componentFamily one of the members of the
+     * <code>Iterator</code> returned by {@link #getComponentFamilies}.
+     *
+     * @since 2.0
+     */
+
+    public Iterator<String> getRendererTypes(String componentFamily) {
+
+        throw new UnsupportedOperationException();
+
+    }
 
 }
