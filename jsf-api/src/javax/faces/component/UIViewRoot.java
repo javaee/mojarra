@@ -766,19 +766,20 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      * with that client id.  If there were no client ids specified, refer to the 
      * <code>List</code> of client ids by calling 
      * {@link javax.faces.context.FacesContext#getRenderPhaseClientIds}.
-     * Broadcast any {@link FacesEvent}s that nay have been
-     * queued after the partial processing has been completed.  If
+     * Obtain an instance of a response writer that uses content type <code>text/xml</code>
+     * by calling {@link FacesContext#getPartialResponseWriter}.  Install the writer
+     * by calling {@link FacesContext#setResponseWriter}.  If
      * {@link javax.faces.context.FacesContext#isAjaxRequest}
      * returned <code>false</code>, or partial processing was not perfomed on
-     * any components, perform the default <code>processDecodes</code>
-     * processing.
+     * any components, perform <code>processDecodes</code> on all 
+     * components in the view.</p> 
      * </p>
-     * <p>Override the default {@link UIComponentBase#processDecodes}
-     * behavior to broadcast any queued events after the default
-     * processing has been completed and to clear out any events
-     * for later phases if the event processing for this phase caused {@link
-     * FacesContext#renderResponse} or {@link FacesContext#responseComplete}
-     * to be called.</p>
+     * <p class="changed_modified_2_0">Override the default 
+     * {@link UIComponentBase#processDecodes} behavior to broadcast any queued 
+     * events after the default processing or partial processing has been 
+     * completed and to clear out any events for later phases if the event 
+     * processing for this phase caused {@link FacesContext#renderResponse} 
+     * or {@link FacesContext#responseComplete} to be called.</p>
      *
      * @param context {@link FacesContext} for the request we are processing
      *
