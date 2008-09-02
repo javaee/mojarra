@@ -65,6 +65,7 @@ import javax.faces.webapp.FacesServlet;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -431,6 +432,27 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
             phaseListeners = new ArrayList<PhaseListener>();
         }
         phaseListeners.add(newPhaseListener);
+    }
+    
+    /**
+     * 
+     * <p class="changed_added_2_0">Return an unmodifiable list of the 
+     * <code>PhaseListener</code> instances attached to this 
+     * <code>UIViewRoot</code> instance.</p>
+     * @since 2.0
+     */
+    
+    public List<PhaseListener> getPhaseListeners() {
+        List<PhaseListener> result = null;
+        
+        if (null == phaseListeners) {
+            result = (List<PhaseListener>) Collections.EMPTY_LIST;
+        }
+        else {
+            result = Collections.unmodifiableList(phaseListeners);
+        }
+        
+        return result;
     }
 
     /**
