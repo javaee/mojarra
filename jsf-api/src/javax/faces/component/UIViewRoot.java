@@ -761,13 +761,14 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      * call {@link javax.faces.context.FacesContext#getExecutePhaseClientIds}.
      * This returns a list of client ids that must be processed during the
      * <code>execute</code> portion of the request processing lifecycle.
+     * If there were no client ids specified, refer to the <code>List</code> of 
+     * client ids by calling
+     * {@link javax.faces.context.FacesContext#getRenderPhaseClientIds}.
      * For each client id in the list, using <code>invokeOnComponent</code>,
      * call the respective <code>processDecodes</code> method on the component
-     * with that client id.  If there were no client ids specified, refer to the 
-     * <code>List</code> of client ids by calling 
-     * {@link javax.faces.context.FacesContext#getRenderPhaseClientIds}.
-     * Obtain an instance of a response writer that uses content type <code>text/xml</code>
-     * by calling {@link FacesContext#getPartialResponseWriter}.  Install the writer
+     * with that client id.  Obtain an instance of a response writer that uses 
+     * content type <code>text/xml</code> by calling 
+     * {@link FacesContext#getPartialResponseWriter}.  Install the writer
      * by calling {@link FacesContext#setResponseWriter}.  If
      * {@link javax.faces.context.FacesContext#isAjaxRequest}
      * returned <code>false</code>, or partial processing was not perfomed on
@@ -1199,20 +1200,26 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      * call {@link javax.faces.context.FacesContext#getExecutePhaseClientIds}.
      * This returns a list of client ids that must be processed during the
      * <code>execute</code> portion of the request processing lifecycle.
+     * If there were no client ids specified, refer to the <code>List</code> of 
+     * client ids by calling 
+     * {@link javax.faces.context.FacesContext#getRenderPhaseClientIds}.
      * For each client id in the list, using <code>invokeOnComponent</code>,
      * call the respective <code>processValidators</code> method on the component
-     * with that client id.  Broadcast any {@link FacesEvent}s that nay have been
-     * queued after the partial processing has been completed.  If
+     * with that client id.  Obtain an instance of a response writer that uses 
+     * content type <code>text/xml</code> by calling 
+     * {@link FacesContext#getPartialResponseWriter}.  Install the writer
+     * by calling {@link FacesContext#setResponseWriter}.  If
      * {@link javax.faces.context.FacesContext#isAjaxRequest}
-     * returns <code>false</code>, perform the default <code>processValidators</code>
-     * processing.
+     * returned <code>false</code>, or partial processing was not perfomed on
+     * any components, perform <code>processValidators</code> on all
+     * components in the view.</p> 
      * </p>
-     * <p>Override the default {@link UIComponentBase#processValidators}
-     * behavior to broadcast any queued events after the default
-     * processing has been completed and to clear out any events
-     * for later phases if the event processing for this phase caused {@link
-     * FacesContext#renderResponse} or {@link FacesContext#responseComplete}
-     * to be called.</p>
+     * <p class="changed_modified_2_0">Override the default 
+     * {@link UIComponentBase#processValidators} behavior to broadcast any 
+     * queued events after the default processing or partial processing has been 
+     * completed and to clear out any events for later phases if the event 
+     * processing for this phase caused {@link FacesContext#renderResponse} or 
+     * {@link FacesContext#responseComplete} to be called.</p>
      *
      * @param context {@link FacesContext} for the request we are processing
      *
