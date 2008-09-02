@@ -36,7 +36,7 @@ function removeCell(cellData) {
                 row.deleteCell(i);
                 var button = document.getElementById(cellData.nodeValue);
                 button.disabled = false;
-                button.src = "button2.gif";
+                button.src = "resources/button2.gif";
                 break;
             }
         }

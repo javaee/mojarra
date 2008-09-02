@@ -36,7 +36,6 @@
 
 package ajaxqueue;
 
-import javax.faces.component.UICommand;
 import javax.faces.event.ActionEvent;
 
 import java.util.Random;
@@ -49,15 +48,7 @@ import java.util.Random;
  *
  */
 public class Bean {
-    
-    //
-    // Relationship Instance Variables
-    //
-    
-    //
-    // Constructors
-    //
-    
+
     public Bean() {
     }
     

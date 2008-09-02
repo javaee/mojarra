@@ -35,7 +35,7 @@
  */
 
 .title-panel {
-    background-image: url(bgblack18.jpg.jsf);
+    background-image: url('bgblack18.jpg.jsf');
     height: 80px;
     width: 900px;
 }
@@ -83,11 +83,6 @@ body {
 
 .serialize-border {
     border: 4px outset red;
-}
-
-.scriptText {
-    color: red
-    font-size: 14px;
 }
 
 .queueCell {
