@@ -239,7 +239,7 @@ public class ProcessAnnotatedComponentsListener implements SystemEventListener {
     private void processWebInfClasses(FacesContext ctx,
                                       Set<String> paths,
                                       Set<String> classList) {
-        if (!paths.isEmpty()) {
+        if (paths != null && !paths.isEmpty()) {
             for (String pathElement : paths) {
                 if (pathElement.endsWith("/")) {
                     processWebInfClasses(ctx, pathElement, classList);
