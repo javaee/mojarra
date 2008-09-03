@@ -900,8 +900,8 @@ public class WebConfiguration {
             "com.sun.faces.enableGroovyScripting",
             false
         ),
-        DisableFacesPDL(
-              "javax.faces.DISABLE_FACES_PDL_VIEWHANDLER",
+        DisableFaceletJSFViewHandler(
+              "javax.faces.DISABLE_FACELET_JSF_VIEWHANDLER",
               false
         ),
         DateTimeConverterUsesSystemTimezone(

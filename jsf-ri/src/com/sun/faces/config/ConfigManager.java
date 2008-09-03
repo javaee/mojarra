@@ -41,7 +41,7 @@
 package com.sun.faces.config;
 
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ValidateFacesConfigFiles;
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFacesPDL;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler;
 import com.sun.faces.config.configprovider.ConfigurationResourceProvider;
 import com.sun.faces.config.configprovider.MetaInfFacesConfigResourceProvider;
 import com.sun.faces.config.configprovider.MojarraFacesConfigResourceProvider;
@@ -264,7 +264,7 @@ public class ConfigManager {
             try {
                 WebConfiguration webConfig = WebConfiguration.getInstance(sc);
                 boolean validating = webConfig.isOptionEnabled(ValidateFacesConfigFiles);
-                boolean isFacesPDLEnabled = !webConfig.isOptionEnabled(DisableFacesPDL);
+                boolean isFacesPDLEnabled = !webConfig.isOptionEnabled(DisableFaceletJSFViewHandler);
                 ExecutorService executor = createExecutorService();
                 FACES_CONFIG_PROCESSOR_CHAIN.process(
                       getConfigDocuments(sc,

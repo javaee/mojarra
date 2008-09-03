@@ -198,7 +198,7 @@ public class ApplicationAssociate {
         groovyHelper = GroovyHelper.getCurrentInstance();
 
         // initialize Facelets
-        if (!webConfig.isOptionEnabled(BooleanWebContextInitParameter.DisableFacesPDL)) {
+        if (!webConfig.isOptionEnabled(BooleanWebContextInitParameter.DisableFaceletJSFViewHandler)) {
             compiler = createCompiler(webConfig);
             faceletFactory = createFaceletFactory(compiler, webConfig);
             devModeEnabled = (appImpl.getProjectStage() == ProjectStage.Development);

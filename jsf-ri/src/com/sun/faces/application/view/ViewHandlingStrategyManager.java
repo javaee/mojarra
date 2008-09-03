@@ -52,7 +52,7 @@ public class ViewHandlingStrategyManager {
 
 
     /**
-     * Be default, if {@link com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter#DisableFacesPDL}
+     * Be default, if {@link com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter#DisableFaceletJSFViewHandler}
      * isn't enabled, the strategies available (in order) will be {@link FaceletViewHandlingStrategy}
      * and {@link com.sun.faces.application.view.JspViewHandlingStrategy}.  Otherwise, only the
      * {@link com.sun.faces.application.view.JspViewHandlingStrategy} will be available.
@@ -61,7 +61,7 @@ public class ViewHandlingStrategyManager {
 
         WebConfiguration webConfig = WebConfiguration.getInstance();
         boolean pdlDisabled = webConfig
-              .isOptionEnabled(WebConfiguration.BooleanWebContextInitParameter.DisableFacesPDL);
+              .isOptionEnabled(WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler);
         strategies = ((pdlDisabled)
                       ? new ViewHandlingStrategy[] { new JspViewHandlingStrategy() }
                       : new ViewHandlingStrategy[] { new FaceletViewHandlingStrategy(),
