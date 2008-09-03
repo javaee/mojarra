@@ -44,5 +44,5 @@ function removeCell(cellData) {
 
 // Set up the observer subscription
 
-observer.subscribe(msg);
+javax.faces.Ajax.AjaxEngine.Observer.subscribe(msg);
 

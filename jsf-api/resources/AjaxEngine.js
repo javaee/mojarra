@@ -319,7 +319,7 @@ javax.faces.Ajax.AjaxEngine.Queue = function() {
         queue.push(element);
         var args = new Object();
         args["enqueue"] = element;
-        observer.fire(args);
+        javax.faces.Ajax.AjaxEngine.Observer.fire(args);
     }
 
     /* Dequeues an element from this Queue. The oldest element in this Queue is
@@ -347,7 +347,7 @@ javax.faces.Ajax.AjaxEngine.Queue = function() {
         if (element != "undefined") {
             var args = new Object();
             args["dequeue"] = element;
-            observer.fire(args);
+            javax.faces.Ajax.AjaxEngine.Observer.fire(args);
         }
 
         // return the removed element
@@ -374,31 +374,35 @@ javax.faces.Ajax.AjaxEngine.Queue = function() {
  * Inspired by Dustin Diaz.
  * This will be replaced in the next rev to use OpenAjax pub/sub
  */
-javax.faces.Ajax.AjaxEngine.Observer = function() {
-    this.funcArr = [];
-    this.subscribe = function(fn) {
-        this.funcArr.push(fn);
-    },
-    this.unsubscribe = function(fn) {
-        this.fns = this.funcArr.filter(
-            function(el) {
-                if ( el !== fn ) {
-                    return el;
+if (!window["javax.faces.Ajax.AjaxEngine.Observer"]) {
+    javax.faces.Ajax.AjaxEngine.Observer = new function () {
+        this.funcArr = [];
+        this.subscribe = function(fn) {
+            this.funcArr.push(fn);
+        },
+        this.unsubscribe = function(fn) {
+            this.funcArr = this.funcArr.filter(
+                function(el) {
+                    if ( el !== fn ) {
+                        return el;
+                    }
                 }
-            }
-        );
-    },
-    this.fire = function(o, thisObj) {
-        var scope = thisObj || window;
-        this.funcArr.forEach(
-            function(el) {
-                 el.call(scope, o);
-            }
-        );
+            );
+        },
+        this.fire = function(o, thisObj) {
+            var scope = thisObj || window;
+            this.funcArr.forEach(
+                function(el) {
+                     el.call(scope, o);
+                }
+            );
+        }
     }
 }
 
+
 // Utility functions that bring Array up to 1.6, if necessary
+// Note that if JS is already at 1.6, these won't be called
 
 if (!Array.prototype.forEach) {
   Array.prototype.forEach = function(fun /*, thisp*/) {
@@ -429,8 +433,4 @@ if (!Array.prototype.filter) {
     return res;
   };
 }
-
-
-
-var observer = new javax.faces.Ajax.AjaxEngine.Observer();
 
