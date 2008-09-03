@@ -1149,11 +1149,6 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
                 writer.endElement("render");
             }
 
-            // PENDING: The core JSF spec does not dispatch events for
-            // Render Response.  We need to do it here so that events that require
-            // template text can rely on the tree including template text.
-            this.broadcastEvents(context, PhaseId.RENDER_RESPONSE);
-
             // If the client did not explicitly request that no subtrees be
             // rendered...
             if (!context.isRenderNone()) {
