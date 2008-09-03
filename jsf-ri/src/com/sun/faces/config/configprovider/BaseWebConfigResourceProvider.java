@@ -41,7 +41,6 @@ import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Set;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
