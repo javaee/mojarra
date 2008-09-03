@@ -66,6 +66,7 @@ javax.faces.Ajax.AjaxEngine = function() {
     req.method = null;             // GET or POST
     req.onComplete = null;         // Request/Response Complete Callback Handle
     req.onSuccess = null;          // Request/Response Success Callback Handle
+    req.onError = null;            // Request/Response Error Callback Handle
     req.responseTxt = null;        // Response Content (Text)
     req.responseXML = null;        // Response Content (XML) 
     req.status = null;             // Response Status Code From Server
@@ -120,9 +121,13 @@ javax.faces.Ajax.AjaxEngine = function() {
             if (typeof(req.onError)=="function") {
                 req.onError(req);
                 return;
+            } else {
+                throw {
+                    name: "ErrorResponse",
+                    message: "AjaxEngine:  reponse was an error code, onError not set"
+                }
             }
 
-            // PENDING - ADD ERROR PROCESSING CODE HERE
         }
 
         // Regardless of whether the request completed successfully (or not),
