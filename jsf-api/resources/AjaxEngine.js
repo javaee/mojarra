@@ -288,8 +288,7 @@ javax.faces.Ajax.AjaxEngine.getTransport = function() {
 javax.faces.Ajax.AjaxEngine.Queue = function() {
 
     // Create a the private queue
-    javax.faces.Ajax.AjaxEngine.queue = [];
-    var queue = javax.faces.Ajax.AjaxEngine.queue;
+    var queue = [];
 
 
     // the amount of space at the front of the queue, initialised to zero
@@ -373,6 +372,7 @@ javax.faces.Ajax.AjaxEngine.Queue = function() {
 /**
  * A simple pub / sub implementation used mainly for queue events.
  * Inspired by Dustin Diaz.
+ * This will be replaced in the next rev to use OpenAjax pub/sub
  */
 javax.faces.Ajax.AjaxEngine.Observer = function() {
     this.fns = [];
@@ -420,5 +420,4 @@ Array.prototype.filter = function(fn, thisObj) {
 }
 
 var observer = new javax.faces.Ajax.AjaxEngine.Observer();
-
 
