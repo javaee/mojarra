@@ -42,6 +42,7 @@
 
 package com.sun.faces.convert;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
@@ -63,10 +64,14 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.convert.DateTimeConverter;
 import javax.faces.convert.NumberConverter;
+import javax.servlet.ServletConfig;
 
 import com.sun.faces.cactus.JspFacesTestCase;
+import com.sun.faces.cactus.TestingUtil;
 import com.sun.faces.util.Util;
+import com.sun.faces.application.ApplicationImpl;
 import org.apache.cactus.WebRequest;
+import org.apache.cactus.server.AbstractServletContextWrapper;
 
 /**
  * Test encode and decode methods in Renderer classes.
@@ -769,6 +774,69 @@ public class TestConverters extends JspFacesTestCase {
             exceptionThrown= true;
         }
         assertTrue(exceptionThrown);
+    }
+
+    public void testDateTimeConverterGMTTimzeZone() throws Exception {
+
+        UIInput input = new UIInput();
+        DateFormat df = DateFormat.getDateTimeInstance();
+        df.setTimeZone(TimeZone.getTimeZone("GMT"));
+        Date now = new Date();
+        String formatted = df.format(now);
+        Date parsed = df.parse(formatted);
+
+        // control setup, now test the converter.
+        Application app = getFacesContext().getApplication();
+        DateTimeConverter converter = (DateTimeConverter) app.createConverter("javax.faces.DateTime");
+        converter.setType("both");
+        assertNotNull(converter);
+        assertTrue(TimeZone.getTimeZone("GMT").toString(), TimeZone.getTimeZone("GMT").equals(converter.getTimeZone()));
+        assertTrue(formatted, formatted.equals(converter.getAsString(getFacesContext(), input, parsed)));
+        assertTrue(parsed.toString(), parsed.equals(converter.getAsObject(getFacesContext(), input, formatted)));
+
+        app.addConverter(java.util.Date.class, "javax.faces.convert.DateTimeConverter");
+        converter = (DateTimeConverter) app.createConverter(java.util.Date.class);
+        converter.setType("both");
+        assertNotNull(converter);
+        assertTrue(TimeZone.getTimeZone("GMT").toString(), TimeZone.getTimeZone("GMT").equals(converter.getTimeZone()));
+        assertTrue(formatted, formatted.equals(converter.getAsString(getFacesContext(), input, parsed)));
+        assertTrue(parsed.toString(), parsed.equals(converter.getAsObject(getFacesContext(), input, formatted)));
+    }
+
+
+    public void testDateTimeConverterDefaultTimeZone() throws Exception {
+        TestingUtil.setPrivateField("passDefaultTimeZone",
+                                    ApplicationImpl.class,
+                                    application,
+                                    Boolean.TRUE);
+        TestingUtil.setPrivateField("systemTimeZone",
+                                    ApplicationImpl.class,
+                                    application,
+                                    TimeZone.getDefault());
+        UIInput input = new UIInput();
+        DateFormat df = DateFormat.getDateTimeInstance();
+        df.setTimeZone(TimeZone.getDefault());
+        Date now = new Date();
+        String formatted = df.format(now);
+        Date parsed = df.parse(formatted);
+
+        // control setup, now test the converter.
+        Application app = getFacesContext().getApplication();
+        DateTimeConverter converter = (DateTimeConverter) app.createConverter("javax.faces.DateTime");
+        converter.setType("both");
+        assertNotNull(converter);
+        assertTrue(TimeZone.getDefault().toString(), TimeZone.getDefault().equals(converter.getTimeZone()));
+        assertTrue(formatted, formatted.equals(converter.getAsString(getFacesContext(), input, parsed)));
+        assertTrue(parsed.toString(), parsed.equals(converter.getAsObject(getFacesContext(), input, formatted)));
+
+        app.addConverter(java.util.Date.class, "javax.faces.convert.DateTimeConverter");
+        converter = (DateTimeConverter) app.createConverter(java.util.Date.class);
+        converter.setType("both");
+        assertNotNull(converter);
+        assertTrue(TimeZone.getDefault().toString(), TimeZone.getDefault().equals(converter.getTimeZone()));
+        assertTrue(formatted, formatted.equals(converter.getAsString(getFacesContext(), input, parsed)));
+        assertTrue(parsed.toString(), parsed.equals(converter.getAsObject(getFacesContext(), input, formatted)));
+        
     }
 
 

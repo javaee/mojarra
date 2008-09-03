@@ -82,6 +82,7 @@ import javax.faces.application.ProjectStage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.convert.DateTimeConverter;
 import javax.faces.el.MethodBinding;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.ReferenceSyntaxException;
@@ -95,6 +96,7 @@ import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DateTimeConverterUsesSystemTimezone;
 import com.sun.faces.el.ELUtils;
 import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.el.PropertyResolverImpl;
@@ -111,6 +113,8 @@ import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEventListenerHolder;
 
 import java.util.List;
+import java.util.TimeZone;
+
 import javax.el.ValueExpression;
 import javax.faces.application.Resource;
 import javax.faces.webapp.pdl.PageDeclarationLanguage;
@@ -188,6 +192,8 @@ public class ApplicationImpl extends Application {
     private CompositeELResolver compositeELResolver = null;
     private final SystemEventHelper systemEventHelper = new SystemEventHelper();
     private final ComponentSystemEventHelper compSysEventHelper = new ComponentSystemEventHelper();
+    private boolean passDefaultTimeZone;
+    private TimeZone systemTimeZone;
 
     /**
      * Constructor
@@ -207,6 +213,11 @@ public class ApplicationImpl extends Application {
         FacesContext ctx = FacesContext.getCurrentInstance();
         ctx.getExternalContext().getApplicationMap().put(this.getClass().getName(),
                                                          this);
+        WebConfiguration webConfig = WebConfiguration.getInstance(ctx.getExternalContext());
+        passDefaultTimeZone = webConfig.isOptionEnabled(DateTimeConverterUsesSystemTimezone);
+        if (passDefaultTimeZone) {
+            systemTimeZone = TimeZone.getDefault();
+        }
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.log(Level.FINE, "Created Application instance ");
         }
@@ -1153,6 +1164,9 @@ public class ApplicationImpl extends Application {
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine(MessageFormat.format("created converter of type ''{0}''", converterId));
         }
+        if (passDefaultTimeZone && returnVal instanceof DateTimeConverter) {
+            ((DateTimeConverter) returnVal).setTimeZone(systemTimeZone);
+        }
         associate.getAnnotationManager().applyConverterAnnotations(FacesContext.getCurrentInstance(), returnVal);
         return returnVal;
     }
@@ -1171,6 +1185,10 @@ public class ApplicationImpl extends Application {
                 LOGGER.fine(MessageFormat.format("Created converter of type ''{0}''",
                                                  returnVal.getClass().getName()));
             }
+            if (passDefaultTimeZone
+                && returnVal instanceof DateTimeConverter) {
+                ((DateTimeConverter) returnVal).setTimeZone(systemTimeZone);
+            }
             associate.getAnnotationManager().applyConverterAnnotations(FacesContext.getCurrentInstance(), returnVal);
             return returnVal;
         } 
@@ -1185,6 +1203,11 @@ public class ApplicationImpl extends Application {
                    if (LOGGER.isLoggable(Level.FINE)) {
                        LOGGER.fine(MessageFormat.format("Created converter of type ''{0}''",
                                                         returnVal.getClass().getName()));
+                    }
+                    if (passDefaultTimeZone
+                        && returnVal instanceof DateTimeConverter) {
+                        ((DateTimeConverter) returnVal)
+                              .setTimeZone(systemTimeZone);
                     }
                     associate.getAnnotationManager().applyConverterAnnotations(FacesContext.getCurrentInstance(), returnVal);
                     return returnVal;
@@ -1201,10 +1224,15 @@ public class ApplicationImpl extends Application {
                     LOGGER.fine(MessageFormat.format("Created converter of type ''{0}''",
                                                      returnVal.getClass().getName()));
                 }
+                if (passDefaultTimeZone
+                    && returnVal instanceof DateTimeConverter) {
+                    ((DateTimeConverter) returnVal).setTimeZone(systemTimeZone);
+                }
                 associate.getAnnotationManager().applyConverterAnnotations(FacesContext.getCurrentInstance(), returnVal);
                 return returnVal;
             }
         }
+
         return returnVal;
     }
 

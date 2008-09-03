@@ -903,7 +903,11 @@ public class WebConfiguration {
         DisableFacesPDL(
               "javax.faces.DISABLE_FACES_PDL_VIEWHANDLER",
               false
-        ),      
+        ),
+        DateTimeConverterUsesSystemTimezone(
+              "javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE",
+              false
+        ),   
         FaceletsSkipComments(
               "facelets.SKIP_COMMENTS",
               false
