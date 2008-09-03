@@ -50,19 +50,36 @@ import javax.faces.context.FacesContext;
 public abstract class PageDeclarationLanguage {
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) documentation
-     * @param context
-     * @param componentResource
-     * @return
+     * <p class="changed_added_2_0">Return a reference to the component
+     * metadata for the composite component represented by the argument
+     * <code>resource</code>.  The default implementation must support
+     * <code>Resource</code> being a Facelet markup file that is to be
+     * interpreted as a composite component as specified in section 4.3
+     * of the spec prose document.  The default implementation must
+     * support authoring the component metadata using tags placed inside
+     * of a <code>&lt;composite:interface /&gt;</code> element, which is
+     * specified in the <a target="_"
+     * href="../../../../../pdldocs/facelets/index.html">Facelts
+     * taglibrary docs</a>.</p>
+     * @param context The <code>FacesContext</code> for this request.
+     * @param componentResource The <code>Resource</code> that represents the component.
+     * @since 2.0
      */
     public abstract BeanInfo getComponentMetadata(FacesContext context, Resource componentResource);
 
 
     /**
-     * RELEASE_PENDING (edburns,roger) documentation
-     * @param context
-     * @param componentResource
-     * @return
+     * <p class="changed_added_2_0">Take implementation specific action
+     * to discover a <code>Resource</code> given the argument
+     * <code>componentResource</code>.  The returned
+     * <code>Resource</code> if non-<code>null</code>, must point to a
+     * script file that can be turned into something that extends {@link
+     * javax.faces.component.UIComponent} and implements {@link
+     * javax.faces.component.NamingContainer}.</p>
+     *
+     * @param context The <code>FacesContext</code> for this request.
+     * @param componentResource The <code>Resource</code> that represents the component.
+     * @since 2.0
      */
     public abstract Resource getScriptComponentResource(FacesContext context,
             Resource componentResource);
