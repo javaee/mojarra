@@ -196,7 +196,7 @@ javax.faces.Ajax.viewState = function(form) {
  * <code>event</code> argument is optional.
  * @param options The set of available options that can be sent as
  * request parameters to control client and/or server side 
- * request processing. Accpetable name/value pair options are:
+ * request processing. Acceptable name/value pair options are:
  * <table border="1">
  * <tr>
  * <th>name</th>
