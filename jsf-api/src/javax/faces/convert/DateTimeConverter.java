@@ -196,7 +196,7 @@ public class DateTimeConverter implements Converter, StateHolder {
 
     /**
      * <p>Return the style to be used to format or parse dates.  If not set,
-     * the default value, <code>default<code>, is returned.</p>
+     * the default value, <code>default</code>, is returned.</p>
      */
     public String getDateStyle() {
 

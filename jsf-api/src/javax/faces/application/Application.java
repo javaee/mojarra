@@ -1002,10 +1002,22 @@ public abstract class Application {
 
 
     /**
-     * <p>Instantiate and return a new {@link Converter} instance of the
-     * class specified by a previous call to <code>addConverter()</code>
-     * for the specified converter id.  If there is no such registration
-     * for this converter id, return <code>null</code>.</p>
+     * <p><span class="changed_modified_2_0">Instantiate</span> and
+     * return a new {@link Converter} instance of the class specified by
+     * a previous call to <code>addConverter()</code> for the specified
+     * converter id.  If there is no such registration for this
+     * converter id, return <code>null</code>.</p>
+     *
+     * <p class="changed_added_2_0">If the <code>toLowerCase()</code> of
+     * the <code>String</code> represenation of the value of the
+     * "<code>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</code>"
+     * application configuration parameter is "<code>true</code>"
+     * (without the quotes) and the <code>Converter</code> instance to
+     * be returned is an instance of {@link
+     * javax.faces.convert.DateTimeConverter}, {@link
+     * javax.faces.convert.DateTimeConverter#setTimeZone} must be
+     * called, passing the return from
+     * <code>TimeZone.getDefault()</code>.</p>
      *
      * @param converterId The converter id for which to create and
      *  return a new {@link Converter} instance
@@ -1019,10 +1031,11 @@ public abstract class Application {
 
 
     /**
-     * <p>Instantiate and return a new {@link Converter} instance of the
-     * class that has registered itself as capable of performing conversions
-     * for objects of the specified type.  If no such {@link Converter} class
-     * can be identified, return <code>null</code>.</p>
+     * <p><span class="changed_modified_2_0">Instantiate</span> and return
+     * a new {@link Converter} instance of the class that has registered
+     * itself as capable of performing conversions for objects of the
+     * specified type.  If no such {@link Converter} class can be
+     * identified, return <code>null</code>.</p>
      *
      * <p>To locate an appropriate {@link Converter} class, the following
      * algorithm is performed, stopping as soon as an appropriate {@link
@@ -1042,6 +1055,17 @@ public abstract class Application {
      * using that constructor, passing the argument <code>targetClass</code> as
      * the sole argument.  Otherwise, simply use the zero-argument constructor.
      * </p>
+     *
+     * <p class="changed_added_2_0">If the <code>toLowerCase()</code> of
+     * the <code>String</code> represenation of the value of the
+     * "<code>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</code>"
+     * application configuration parameter is "<code>true</code>"
+     * (without the quotes) and the <code>Converter</code> instance to
+     * be returned is an instance of {@link
+     * javax.faces.convert.DateTimeConverter}, {@link
+     * javax.faces.convert.DateTimeConverter#setTimeZone} must be
+     * called, passing the return from
+     * <code>TimeZone.getDefault()</code>.</p>
      *
      * @param targetClass Target class for which to return a {@link Converter}
      *
