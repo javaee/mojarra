@@ -912,23 +912,89 @@ public abstract class Application {
 
 
     /**
-     * RELEASE_PENDING (edburns,rogerk)  These docs need to be
-     *  brought inline with the current implementation
-     *
      * <p class="changed_added_2_0">Instantiate and return a new {@link
-     * UIComponent} instance from the argument {@link Resource}.  The
-     * default implementation must support resources that resolve to
-     * source files defining <code>UIComponent</code>s authored in the
-     * <a href="http://www.jcp.org/en/jsr/detail?id=241">Groovy
-     * programming language</a>.</p>
+     * UIComponent} instance from the argument {@link Resource}.  An
+     * algorithm semantically equivalent to the following must be
+     * followed to instantiate the <code>UIComponent</code> to
+     * return.</p>
      *
      * <div class="changed_added_2_0">
 
-     * <p>Before the component instance is
-     * returned, it must be inspected for the presence of a {@link
-     * javax.faces.event.ListenerFor} annotation.  If this annotation is present,
-     * the action listed in {@link javax.faces.event.ListenerFor} must be taken on
-     * the component, before it is returned from this method.</p>
+     * 	<ul>
+
+	  <li><p>Obtain a reference to the {@link
+	  PageDeclarationLanguage} for this <code>Application</code>
+	  instance by calling {@link #getPageDeclarationLanguage}.
+	  </p></li>
+
+
+	  <li><p>Obtain a reference to the component metadata for this
+	  composite component by calling {@link
+	  PageDeclarationLanguage#getComponentMetadata}, passing the
+	  <code>facesContext</code> and <code>componentResource</code>
+	  arguments to this method.  This version of JSF specification
+	  uses JavaBeans as the API to the component metadata.</p></li>
+
+	  <li><p>Determine if the component author declared a
+	  <code>component-type</code> for this component instance by
+	  obtaining the <code>BeanDescriptor</code> from the component
+	  metadata and calling its <code>getValue()</code> method,
+	  passing {@link UIComponent#COMPOSITE_COMPONENT_TYPE_KEY} as
+	  the argument.  If non-<code>null</code>, the result must be a
+	  <code>ValueExpression</code> whose value is the
+	  <code>component-type</code> of the <code>UIComponent</code> to
+	  be created for this <code>Resource</code> component.  Call
+	  through to {@link #createComponent(java.lang.String)} to
+	  create the component.</p></li>
+
+	  <li><p>Otherwise, determine if a script based component for
+	  this <code>Resource</code> can be found by calling {@link
+	  PageDeclarationLanguage#getScriptComponentResource}.  If the
+	  result is non-<code>null</code>, and is a script written in
+	  one of the languages listed in 4.3 of the specification prose
+	  document, create a <code>UIComponent</code> instance from the
+	  script resource.</p></li>
+
+	  <li><p>Otherwise, let <em>library-name</em> be the return from
+	  calling {@link Resource#getLibraryName} on the argument
+	  <code>componentResource</code> and <em>resource-name</em> be
+	  the return from calling {@link Resource#getResourceName} on
+	  the argument <code>componentResource</code>.  Create a fully
+	  qualified Java class name by removing any file extension from
+	  <em>resource-name</em> and let <em>fqcn</em> be
+	  <code><em>library-name</em> + "." +
+	  <em>resource-name</em></code>. If a class with the name of
+	  <em>fqcn</em> cannot be found, take no action and continue to
+	  the next step.  If any of <code>InstantiationException</code>,
+	  <code>IllegalAccessException</code>, or
+	  <code>ClassCastException</code> are thrown, wrap the exception
+	  in a <code>FacesException</code> and re-throw it.  If any
+	  other exception is thrown, log the exception and
+	  continue to the next step.</p></li>
+
+	  <li><p>If none of the previous steps have yielded a
+	  <code>UIComponent</code> instance, call {@link
+	  #createComponent(java.lang.String)} passing
+	  "<code>javax.faces.NamingContainer</code>" as the
+	  argument.</p></li>
+
+	  <li><p>Call {@link UIComponent#setRendererType} on the
+	  <code>UIComponent</code> instance, passing
+	  "<code>javax.faces.Composite</code>" as the argument.</p></li>
+
+	  <li><p>Store the argument <code>Resource</code> in the
+	  attributes <code>Map</code> of the <code>UIComponent</code>
+	  under the key, {@link Resource#COMPONENT_RESOURCE_KEY}.
+	  </p></li>
+
+	</ul>
+
+     * <p>Before the component instance is returned, it must be
+     * inspected for the presence of a {@link
+     * javax.faces.event.ListenerFor} annotation.  If this annotation is
+     * present, the action listed in {@link
+     * javax.faces.event.ListenerFor} must be taken on the component,
+     * before it is returned from this method.</p>
 
      * </div>
      *
@@ -938,10 +1004,8 @@ public abstract class Application {
      *
      * @throws FacesException if a {@link UIComponent} from the {@link
      * Resource} cannot be created
-     * @throws NullPointerException if any parameter is <code>null</code>
-     *
-     * RELEASE_PENDING (edburns,roger) do we want to keep re-using this
-     * text or explain the injection/delegation?
+     * @throws <code>NullPointerException</code> if any parameter is
+     * <code>null</code>
      *
      * <p>A default implementation is provided that throws
      * <code>UnsupportedOperationException</code> so that users
