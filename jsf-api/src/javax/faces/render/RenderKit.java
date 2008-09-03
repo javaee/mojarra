@@ -47,6 +47,10 @@ import javax.faces.context.ResponseStream;
 import java.io.Writer;
 import java.io.OutputStream;
 import java.util.Iterator;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -182,36 +186,48 @@ public abstract class RenderKit {
     public abstract ResponseStream createResponseStream(OutputStream out);
 
 
-    // PENDING(rlubke) implementation
     /**
      * <p class="changed_added_2_0">Return an <code>Iterator</code> over
      * the component-family entries supported by this
      * <code>RenderKit</code> instance.</p>
      *
+     * <p class="changed_added_2_0">
+     * The default implementation of this method returns an empty
+     * <code>Iterator</code>
+     * </p>
+     *
      * @since 2.0
      *
      */
-
     public Iterator<String> getComponentFamilies() {
 
-        throw new UnsupportedOperationException();
+        Set<String> empty = Collections.emptySet();
+        return empty.iterator();
 
     }
     
-    // PENDING(rlubke): implementation
     /**
      * <p class="changed_added_2_0">Return an <code>Iterator</code> over
      * the renderer-type entries for the given component-family.</p>
+     *
+     * <p class="changed_added_2_0">If the specified <code>componentFamily</code>
+     * is not known to this <code>RenderKit</code> implementation, return
+     * an empty <code>Iterator</code></p>
+     *
+     * <p class="changed_added_2_0">
+     * The default implementation of this method returns an empty
+     * <code>Iterator</code>
+     * </p>
      *
      * @param componentFamily one of the members of the
      * <code>Iterator</code> returned by {@link #getComponentFamilies}.
      *
      * @since 2.0
      */
-
     public Iterator<String> getRendererTypes(String componentFamily) {
 
-        throw new UnsupportedOperationException();
+        Set<String> empty = Collections.emptySet();
+        return empty.iterator();
 
     }
 

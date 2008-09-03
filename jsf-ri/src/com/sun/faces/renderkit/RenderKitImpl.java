@@ -53,6 +53,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.sun.faces.RIConstants;
@@ -93,8 +97,8 @@ public class RenderKitImpl extends RenderKit {
      * Renderer instances themselves.
      */
 
-    private ConcurrentHashMap<String, HashMap<Object, Renderer>> rendererFamilies =
-         new ConcurrentHashMap<String, HashMap<Object, Renderer>>();
+    private ConcurrentHashMap<String, HashMap<String, Renderer>> rendererFamilies =
+         new ConcurrentHashMap<String, HashMap<String, Renderer>>();
 
     private ResponseStateManager responseStateManager =
          new ResponseStateManagerImpl();
@@ -108,8 +112,10 @@ public class RenderKitImpl extends RenderKit {
 
     }
     
-    public void addRenderer(String family, String rendererType,
+    public void addRenderer(String family,
+                            String rendererType,
                             Renderer renderer) {
+
         if (family == null) {
             String message = MessageUtils.getExceptionMessageString
                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "family");
@@ -126,9 +132,9 @@ public class RenderKitImpl extends RenderKit {
             throw new NullPointerException(message);
         }
 
-        HashMap<Object,Renderer> renderers = rendererFamilies.get(family);
+        HashMap<String,Renderer> renderers = rendererFamilies.get(family);
         if (renderers == null) {
-            renderers = new HashMap<Object,Renderer>();
+            renderers = new HashMap<String,Renderer>();
             rendererFamilies.put(family, renderers);
         }
 
@@ -152,7 +158,7 @@ public class RenderKitImpl extends RenderKit {
 
         assert(rendererFamilies != null);
 
-        HashMap<Object, Renderer> renderers = rendererFamilies.get(family);
+        HashMap<String,Renderer> renderers = rendererFamilies.get(family);
         return ((renderers != null) ? renderers.get(rendererType) : null);
 
     }
@@ -344,6 +350,35 @@ public class RenderKitImpl extends RenderKit {
             }
         };
     }
+
+
+    /**
+     * @see javax.faces.render.RenderKit#getComponentFamilies()
+     */
+    @Override
+    public Iterator<String> getComponentFamilies() {
+
+        return rendererFamilies.keySet().iterator();
+
+    }
+
+
+    /**
+     * @see javax.faces.render.RenderKit#getRendererTypes(String)  
+     */
+    @Override
+    public Iterator<String> getRendererTypes(String componentFamily) {
+
+        Map<String,Renderer> family = rendererFamilies.get(componentFamily);
+        if (family != null) {
+            return family.keySet().iterator();
+        } else {
+            Set<String> empty = Collections.emptySet();
+            return empty.iterator();
+        }
+
+    }
+
     // The test for this class is in TestRenderKit.java
 
 } // end of class RenderKitImpl

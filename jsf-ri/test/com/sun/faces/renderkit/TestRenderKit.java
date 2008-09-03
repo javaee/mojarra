@@ -46,6 +46,8 @@ import com.sun.faces.cactus.FileOutputResponseWriter;
 import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.renderkit.html_basic.FormRenderer;
 import com.sun.faces.renderkit.html_basic.TextRenderer;
+import com.sun.faces.renderkit.html_basic.HtmlBasicInputRenderer;
+import com.sun.faces.renderkit.html_basic.HiddenRenderer;
 import org.apache.cactus.ServletTestCase;
 
 import javax.faces.FactoryFinder;
@@ -60,6 +62,7 @@ import javax.servlet.ServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.Iterator;
 
 import org.apache.cactus.WebRequest;
 
@@ -371,6 +374,36 @@ public class TestRenderKit extends ServletFacesTestCase {
         // accept header
         writer = renderKit.createResponseWriter(new StringWriter(), null, "ISO-8859-1");
         assertEquals(writer.getContentType(), "text/html");
+    }
+
+    public void testGetComponentFamilies() {
+
+        RenderKitImpl rk = new RenderKitImpl();
+        Iterator empty = rk.getComponentFamilies();
+        assertNotNull(empty);
+        assertTrue(!empty.hasNext());
+
+        rk.addRenderer("family", "rendererType", new HiddenRenderer());
+        Iterator notEmpty = rk.getComponentFamilies();
+        assertNotNull(notEmpty);
+        assertTrue(notEmpty.hasNext());
+
+    }
+
+
+    public void testGetRendererTypes() {
+
+        RenderKitImpl rk = new RenderKitImpl();
+        rk.addRenderer("family", "rendererType", new HiddenRenderer());
+
+        Iterator empty = rk.getRendererTypes("non-exist");
+        assertNotNull(empty);
+        assertTrue(!empty.hasNext());
+
+        Iterator notEmpty = rk.getRendererTypes("family");
+        assertNotNull(notEmpty);
+        assertTrue(notEmpty.hasNext());
+
     }
 
 
