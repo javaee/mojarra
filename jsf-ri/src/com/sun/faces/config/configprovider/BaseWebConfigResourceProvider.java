@@ -42,6 +42,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -70,7 +71,7 @@ public abstract class BaseWebConfigResourceProvider implements ConfigurationReso
 
         WebConfiguration webConfig = WebConfiguration.getInstance(context);
         String paths = webConfig.getOptionValue(getParameter());
-        Set<URL> urls = new HashSet<URL>(6);
+        Set<URL> urls = new LinkedHashSet<URL>(6);
         if (paths != null) {
             for (String token : Util.split(paths.trim(), getSeparatorRegex())) {
                 String path = token.trim();
