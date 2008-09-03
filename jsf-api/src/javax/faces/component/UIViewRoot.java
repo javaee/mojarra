@@ -877,23 +877,8 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
     }
 
     /**
-     * <p class="changed_added_2_0">If {@link
-     * javax.faces.context.FacesContext#isAjaxRequest} returns <code>true</code>,
-     * replace the <code>ResponseWriter</code> in the
-     * <code>FacesContext</code> with the writer used to render
-     * partial responses.  If {@link 
-     * javax.faces.context.FacesContext#isRenderNone} returns 
-     * <code>false</code>, set the response content type and the 
-     * response header.  Write out the beginning elements for the
-     * partial response.  If {@link
-     * javax.faces.context.FacesContext#isRenderAll} returns
-     * <code>true</code>, set the indicator <code>javax.faces.ViewRoot</code>
-     * in the response to indicate the client JavaScript should use
-     * the entire response.  If @link javax.faces.context.FacesContext#isAjaxRequest} 
-     * returns <code>false</code>, perform the default <code>encodeBegin</code>
-     * processing as follows.</p> 
-     * <p>Override the default {@link UIComponentBase#encodeBegin}
-     * behavior.  If
+     * <p><span class="changed_added_2_0">Override</span> the default 
+     * {@link UIComponentBase#encodeBegin} behavior.  If
      * {@link #getBeforePhaseListener} returns non-<code>null</code>,
      * invoke it, passing a {@link PhaseEvent} for the {@link
      * PhaseId#RENDER_RESPONSE} phase.  If the internal list populated
@@ -903,6 +888,51 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      * that occur during invocation of any of the the beforePhase
      * listeners must be logged and swallowed.  After listeners are invoked
      * call superclass processing.</p>
+     * <p class="changed_added_2_0">If {@link
+     * javax.faces.context.FacesContext#isAjaxRequest} returns <code>true</code>,
+     * replace the <code>ResponseWriter</code> in the
+     * <code>FacesContext</code> with the writer used to render
+     * partial responses.  If {@link 
+     * javax.faces.context.FacesContext#isRenderNone} returns 
+     * <code>false</code>,  set the response content-type and headers approriately 
+     * for XML.  The encodeXXX methods must produce the response content following 
+     * this example:
+     *
+       <pre><code>
+       &lt;partial-response&gt;
+           &lt;components&gt;
+               &lt;render id="form:table"/&gt;
+                   &lt;markup&gt;&lt;![CDATA[
+                      Rendered content from component
+                   ]]&gt;&lt;/markup&gt;
+               &lt;/render&gt;
+               &lt;!-- repeat for the appropriate number of components --&gt;
+           &lt;/components&gt;
+           &lt;state&gt;&lt;![CDATA[state information for this view ]]&gt;&lt;/state&gt;
+       &lt;/partial-response&gt;
+       </code></pre>
+     *
+     * The <encodeBegin</code> method must write the beginning elements for
+     * the partial response:
+     *
+       <pre><code>
+       &lt;partial-response&gt;
+           &lt;components&gt;
+       </code></pre>
+     *
+     * If {@link
+     * javax.faces.context.FacesContext#isRenderAll} returns
+     * <code>true</code> write:  
+     *
+       <pre><code>
+              &lt;render id="javax.faces.ViewRoot"/&gt;
+                  &lt;markup&gt;&lt;![CDATA[
+       </code></pre>
+     *
+     * to indicate the client JavaScript must use the entire response.  
+     * If {@link javax.faces.context.FacesContext#isAjaxRequest} 
+     * returns <code>false</code>, perform the parent class <code>encodeBegin</code>
+     * processing.</p> 
      */
     @Override
     public void encodeBegin(FacesContext context) throws IOException {
@@ -993,7 +1023,28 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      * javax.faces.context.FacesContext#isAjaxRequest} returns
      * <code>true</code> and {@link 
      * javax.faces.context.FacesContext#isRenderAll} returns
-     * <code>false</code>.  If partial rendering was not performed, 
+     * <code>false</code>. Call 
+     * {@link javax.faces.context.FacesContext#getRenderPhaseClientIds}.
+     * This returns a list of client ids that must be processed during the
+     * <code>render</code> portion of the request processing lifecycle.
+     * For each client id in the list, using <code>invokeOnComponent</code>,
+     * all the  <code>encodeAll</code> method on the component with that 
+     * client id.  Each component's rendered markup must be wrapped 
+     * as follows:
+     *
+       <pre><code>
+               &lt;render id="form:table"/&gt;
+                   &lt;markup&gt;&lt;![CDATA[
+                     ** component rendered markup **
+                   ]]&gt;&lt;/markup&gt;
+               &lt;/render&gt;
+       </pre></code>
+     *
+     * If {@link
+     * javax.faces.context.FacesContext#isAjaxRequest} returns
+     * <code>false</code>, or {@link
+     * javax.faces.context.FacesContext#isRenderAll} returns
+     * <code>true</code> or partial rendering was not performed, 
      * delegate to the parent {@link
      * javax.faces.component.UIComponentBase#encodeChildren}
      * method.</p> 
@@ -1030,9 +1081,38 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
     /**
      * <p class="changed_added_2_0">If {@link 
      * javax.faces.context.FacesContext#isAjaxRequest} returns
-     * <code>true</code>, write the closing content element,
-     * call {@link javax.faces.application.StateManager#getViewState}
-     * and write the view state.  If {@link
+     * <code>true</code>, write the ending elements for
+     * the partial response.  If {@link
+     * javax.faces.context.FacesContext#isRenderAll} returns
+     * <code>true</code> write: 
+     *
+       <pre><code>
+                   ]]&gt;&lt;/markup&gt;
+               &lt;/render&gt;
+       </code></pre>
+     *
+     * If some component markup was rendered
+     * ({@link javax.faces.context.FacesContext#isRenderNone}
+     * returns <code>false</code>), write:
+     *  
+       <pre><code>
+           &lt;/components&gt;
+       </code></pre>
+     *
+     * Call {@link javax.faces.application.StateManager#getViewState}
+     * and write the state wrapped in markup as follows:
+     *
+       <pre><code>
+           &lt;state&gt;&lt;![CDATA[state information for this view ]]&gt;&lt;/state&gt;
+       </code></pre>
+     * 
+     * Write the ending <code>partial-response</code> element:
+     *
+       <pre><code>
+         &lt;/partial-response&gt;
+       </code></pre>
+     * 
+     * If {@link
      * javax.faces.context.FacesContext#isAjaxRequest} returns
      * <code>flase</code>,
      * override the default {@link UIComponentBase#encodeEnd}
