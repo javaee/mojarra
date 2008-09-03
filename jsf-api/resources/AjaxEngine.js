@@ -375,12 +375,12 @@ javax.faces.Ajax.AjaxEngine.Queue = function() {
  * This will be replaced in the next rev to use OpenAjax pub/sub
  */
 javax.faces.Ajax.AjaxEngine.Observer = function() {
-    this.fns = [];
+    this.funcArr = [];
     this.subscribe = function(fn) {
-        this.fns.push(fn);
+        this.funcArr.push(fn);
     },
     this.unsubscribe = function(fn) {
-        this.fns = this.fns.filter(
+        this.fns = this.funcArr.filter(
             function(el) {
                 if ( el !== fn ) {
                     return el;
@@ -390,7 +390,7 @@ javax.faces.Ajax.AjaxEngine.Observer = function() {
     },
     this.fire = function(o, thisObj) {
         var scope = thisObj || window;
-        this.fns.forEach(
+        this.funcArr.forEach(
             function(el) {
                  el.call(scope, o);
             }
@@ -398,26 +398,39 @@ javax.faces.Ajax.AjaxEngine.Observer = function() {
     }
 }
 
-// Utility functions that override ..
+// Utility functions that bring Array up to 1.6, if necessary
 
-Array.prototype.forEach = function(fn, thisObj) {
-    var scope = thisObj || window;
-    for ( var i=0, j=this.length; i < j; ++i ) {
-        fn.call(scope, this[i], i, this);
+if (!Array.prototype.forEach) {
+  Array.prototype.forEach = function(fun /*, thisp*/) {
+    var len = this.length;
+    if (typeof fun != "function") throw new TypeError();
+    var thisp = arguments[1];
+    for (var i = 0; i < len; i++)
+    {
+      if (i in this)
+        fun.call(thisp, this[i], i, this);
     }
+  };
 }
 
-Array.prototype.filter = function(fn, thisObj) {
-    var scope = thisObj || window;
-    var a = [];
-    for ( var i=0, j=this.length; i < j; ++i ) {
-        if ( !fn.call(scope, this[i], i, this) ) {
-            continue;
-        }
-        a.push(this[i]);
+if (!Array.prototype.filter) {
+  Array.prototype.filter = function(fun /*, thisp*/) {
+    var len = this.length;
+    if (typeof fun != "function") throw new TypeError();
+    var res = new Array();
+    var thisp = arguments[1];
+    for (var i = 0; i < len; i++) {
+      if (i in this) {
+        var val = this[i]; // in case fun mutates this
+        if (fun.call(thisp, val, i, this))
+          res.push(val);
+      }
     }
-    return a;
+    return res;
+  };
 }
+
+
 
 var observer = new javax.faces.Ajax.AjaxEngine.Observer();
 
