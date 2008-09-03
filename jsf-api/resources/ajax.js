@@ -389,11 +389,9 @@ javax.faces.Ajax.ajaxResponse = function(request) {
             }
             var parent = d.parentNode;
             var temp = document.createElement('div');
-            var result = null;
             temp.id = d.id;
             temp.innerHTML = utils.trim(str);
 
-            result = temp.firstChild;
             parent.replaceChild(temp.firstChild,d);
         }
     }
