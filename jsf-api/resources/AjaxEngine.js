@@ -281,13 +281,16 @@ javax.faces.Ajax.AjaxEngine.getTransport = function() {
     throw new Error('Could not create an XHR object.');
 }
 
-javax.faces.Ajax.AjaxEngine.queue = [];
-var queue = javax.faces.Ajax.AjaxEngine.queue;
 
 /**
  * Simple queue implementaton.
  */
 javax.faces.Ajax.AjaxEngine.Queue = function() {
+
+    // Create a the private queue
+    javax.faces.Ajax.AjaxEngine.queue = [];
+    var queue = javax.faces.Ajax.AjaxEngine.queue;
+
 
     // the amount of space at the front of the queue, initialised to zero
     var queueSpace = 0;
