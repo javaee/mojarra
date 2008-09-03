@@ -1,9 +1,19 @@
-function process(buttonName, imageSrc) {
+var disabledImage = 'resources/button3.gif';
+var enabledImage = 'resources/button2.gif';
+
+function buttonpush(buttonName, element, event) {
     var button = document.getElementById(buttonName);
     if (!button.disabled) {
-        button.src = imageSrc;
+        button.src = disabledImage;
         button.disabled = true;
     }
+    try {
+        javax.faces.Ajax.ajaxRequest(element, event, {execute: buttonName, render: buttonName});
+    } catch (ex) {
+        // Handle errors here
+        alert(ex);
+    }
+    return false;
 } 
 
 // This method receives queue events
@@ -35,7 +45,7 @@ function removeCell(cellData) {
                 row.deleteCell(i);
                 var button = document.getElementById(cellData.nodeValue);
                 button.disabled = false;
-                button.src = "resources/button2.gif";
+                button.src = enabledImage;
                 break;
             }
         }
