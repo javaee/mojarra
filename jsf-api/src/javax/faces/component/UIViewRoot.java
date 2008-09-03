@@ -894,7 +894,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      * <code>FacesContext</code> with the writer used to render
      * partial responses.  If {@link 
      * javax.faces.context.FacesContext#isRenderNone} returns 
-     * <code>false</code>,  set the response content-type and headers approriately 
+     * <code>false</code>,  set the response content-type and headers appropriately 
      * for XML.  The encodeXXX methods must produce the response content following 
      * this example:
      *
