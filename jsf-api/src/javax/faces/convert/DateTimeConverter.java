@@ -53,7 +53,7 @@ import java.util.TimeZone;
 
 
 /**
- * <p><span class="changed_modified_2_0">{@link Converter}</span> implementation for <code>java.util.Date</code>
+ * <p>{@link Converter} implementation for <code>java.util.Date</code>
  * values.</p>
  * <p/>
  * <p>The <code>getAsObject()</code> method parses a String into a
@@ -179,7 +179,7 @@ public class DateTimeConverter implements Converter, StateHolder {
          "javax.faces.converter.STRING";
 
 
-    private static TimeZone DEFAULT_TIME_ZONE = TimeZone.getTimeZone("GMT");
+    private static final TimeZone DEFAULT_TIME_ZONE = TimeZone.getTimeZone("GMT");
 
     // ------------------------------------------------------ Instance Variables
 
@@ -196,7 +196,7 @@ public class DateTimeConverter implements Converter, StateHolder {
 
     /**
      * <p>Return the style to be used to format or parse dates.  If not set,
-     * the default value, <code>default</code>, is returned.</p>
+     * the default value, <code>default<code>, is returned.</p>
      */
     public String getDateStyle() {
 
@@ -308,15 +308,9 @@ public class DateTimeConverter implements Converter, StateHolder {
 
 
     /**
-     * <p><span class="changed_modified_2_0">Return</span> the 
-     * <code>TimeZone</code> used to interpret a time value.
-     * If not explicitly set, the default time zone of <code>GMT</code> is
-     * returned <span class="changed_modified_2_0">unless the <code>toLowerCase()</code>
-     * of the <code>String</code> value of the 
-     * "javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE"
-     * <code>&lt;context-param&gt;</code> is equal to "<code>true</code>" (without
-     * the quotes).  In this case, the default time zone should be equal to
-     * the return from <code>TimeZone.getDefault()</code>.</span></p>
+     * <p>Return the <code>TimeZone</code> used to interpret a time value.
+     * If not explicitly set, the default time zone of <code>GMT</code>
+     * returned.</p>
      */
     public TimeZone getTimeZone() {
 
