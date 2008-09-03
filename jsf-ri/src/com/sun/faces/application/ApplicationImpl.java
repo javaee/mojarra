@@ -1637,7 +1637,8 @@ public class ApplicationImpl extends Application {
         } catch (Exception ex) {
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE,
-                        "jsf.cannot_instantiate_component_error", componentType);
+                           "jsf.cannot_instantiate_component_error",
+                           componentType);
             }
             throw new FacesException(ex);
         }
@@ -1645,7 +1646,8 @@ public class ApplicationImpl extends Application {
             Object[] params = {componentType};
             if (LOGGER.isLoggable(Level.SEVERE)) {
                     LOGGER.log(Level.SEVERE,
-                            "jsf.cannot_instantiate_component_error", params);
+                               "jsf.cannot_instantiate_component_error",
+                               params);
             }
             throw new FacesException(MessageUtils.getExceptionMessageString(
                     MessageUtils.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
