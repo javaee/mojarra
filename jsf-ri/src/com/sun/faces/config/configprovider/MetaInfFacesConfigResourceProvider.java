@@ -56,7 +56,7 @@ import java.util.TreeMap;
 /**
  *
  */
-public class MetaInfResourceProvider implements ConfigurationResourceProvider {
+public class MetaInfFacesConfigResourceProvider implements ConfigurationResourceProvider {
 
     /**
      * <p>The resource path for faces-config files included in the

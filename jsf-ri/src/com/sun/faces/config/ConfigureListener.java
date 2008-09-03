@@ -48,6 +48,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Collection;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -385,8 +386,8 @@ public class ConfigureListener implements ServletRequestListener,
     private void initConfigMonitoring(ServletContext context) {
 
         //noinspection unchecked
-        List<URL> webURLs =
-              (List<URL>) context.getAttribute("com.sun.faces.webresources");
+        Collection<URL> webURLs =
+              (Collection<URL>) context.getAttribute("com.sun.faces.webresources");
         if (isDevModeEnabled() && webURLs != null && !webURLs.isEmpty()) {
             webResourcePool.scheduleAtFixedRate(new WebConfigResourceMonitor(context, webURLs),
                                                2000,
@@ -815,7 +816,7 @@ public class ConfigureListener implements ServletRequestListener,
         // -------------------------------------------------------- Constructors
 
 
-        public WebConfigResourceMonitor(ServletContext sc, List<URL> urls) {
+        public WebConfigResourceMonitor(ServletContext sc, Collection<URL> urls) {
 
             assert (urls != null);
             this.sc = sc;

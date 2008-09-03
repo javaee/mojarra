@@ -54,7 +54,7 @@
     <!-- The base directory for compilation targets -->
     <property name="build.dir" value="build"/>
     <property name="target.dir" value="target"/>
-    <property name="build.classes.dir" value="${build.dir}/classes"/>
+   <property name="build.classes.dir" value="${build.dir}/classes"/>
     <property name="build.generate.dir" value="${build.dir}/generate"/>
     <property name="build.generate.tld.dir"
               value="${build.generate.dir}/conf/share"/>
@@ -317,6 +317,8 @@
               toDir="${build.classes.dir}/META-INF"/>
         <copy file="conf/xslt/jsf1_0-1_1toSchema.xsl"
               toDir="${build.classes.dir}/com/sun/faces"/>
+        <copy file="conf/xslt/facelets1_0-2_0toSchema.xsl"
+              toDir="${build.classes.dir}/com/sun/faces"/>
         <copy file="${conf.share.dir}/com.sun.faces.spi.injectionprovider"
               toDir="${build.classes.dir}/META-INF/services"/>
         <copy todir="${build.classes.dir}/META-INF">
@@ -324,7 +326,7 @@
                 <include name="jsf_core.tld"/>
                 <include name="jsfri_extensions.tld"/>
                 <include name="mojarra_ext.tld"/>
-                <include name="*.xml"/>
+                <include name="facelet-dev*.xml"/>
             </fileset>
         </copy>
 

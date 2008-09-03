@@ -40,23 +40,25 @@
 
 package com.sun.faces.config;
 
-import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.ValidateFacesConfigFiles;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DisableFacesPDL;
 import com.sun.faces.config.configprovider.ConfigurationResourceProvider;
-import com.sun.faces.config.configprovider.FaceletTaglibResourceProvider;
-import com.sun.faces.config.configprovider.MetaInfResourceProvider;
-import com.sun.faces.config.configprovider.RIConfigResourceProvider;
-import com.sun.faces.config.configprovider.WebResourceProvider;
+import com.sun.faces.config.configprovider.MetaInfFacesConfigResourceProvider;
+import com.sun.faces.config.configprovider.MojarraFacesConfigResourceProvider;
+import com.sun.faces.config.configprovider.WebFacesConfigResourceProvider;
+import com.sun.faces.config.configprovider.MetaInfFaceletTaglibraryConfigProvider;
+import com.sun.faces.config.configprovider.WebFaceletTaglibResourceProvider;
 import com.sun.faces.config.processor.ApplicationConfigProcessor;
 import com.sun.faces.config.processor.ComponentConfigProcessor;
 import com.sun.faces.config.processor.ConfigProcessor;
 import com.sun.faces.config.processor.ConverterConfigProcessor;
-import com.sun.faces.config.processor.FaceletTaglibConfigProcessor;
 import com.sun.faces.config.processor.FactoryConfigProcessor;
 import com.sun.faces.config.processor.LifecycleConfigProcessor;
 import com.sun.faces.config.processor.ManagedBeanConfigProcessor;
 import com.sun.faces.config.processor.NavigationConfigProcessor;
 import com.sun.faces.config.processor.RenderKitConfigProcessor;
 import com.sun.faces.config.processor.ValidatorConfigProcessor;
+import com.sun.faces.config.processor.FaceletTaglibConfigProcessor;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Timer;
 import org.w3c.dom.Document;
@@ -85,6 +87,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Collection;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
@@ -108,12 +111,21 @@ public class ConfigManager {
 
     /**
      * <p>
-     *  The list of resource providers.  By default, this contains a provider
-     *  for the RI, and three providers to satisfy the requirements of the
-     *  specification.
+     * A List of resource providers that search for faces-config documents.
+     * By default, this contains a provider for the Mojarra, and two other
+     * providers to satisfy the requirements of the specification.
      * </p>
      */
-    private static final List<ConfigurationResourceProvider> RESOURCE_PROVIDERS;
+    private static final List<ConfigurationResourceProvider> FACES_CONFIG_RESOURCE_PROVIDERS;
+
+    /**
+     * <p>
+     * A List of resource providers that search for faces-config documents.
+     * By default, this contains a provider for the Mojarra, and one other
+     * providers to satisfy the requirements of the specification.
+     * </p>
+     */
+    private static final List<ConfigurationResourceProvider> FACELET_TAGLIBRARY_RESOURCE_PROVIDERS;
 
     /**
      * <p>
@@ -145,21 +157,60 @@ public class ConfigManager {
 
     /**
      * <p>
-     *  The chain of {@link ConfigProcessor}, used to initialize JSF.
+     *  The chain of {@link ConfigProcessor} instances to processing of
+     *  faces-config documents.
      * </p>
      */
-    private static final ConfigProcessor CONFIG_PROCESSOR_CHAIN;
-    private static final String XSL = "/com/sun/faces/jsf1_0-1_1toSchema.xsl";
+    private static final ConfigProcessor FACES_CONFIG_PROCESSOR_CHAIN;
+
+
+    /**
+     * <p>
+     *  The chain of {@link ConfigProcessor} instances to processing of
+     *  facelet-taglib documents.
+     * </p>
+     */
+    private static final ConfigProcessor FACELET_TAGLIB_CONFIG_PROCESSOR_CHAIN;
+
+    /**
+     * Stylesheet to convert 1.0 and 1.1 based faces-config documents
+     * to our private 1.1 schema for validation.
+     */
+    private static final String FACES_TO_1_1_PRIVATE_XSL =
+          "/com/sun/faces/jsf1_0-1_1toSchema.xsl";
+
+    /**
+     * Stylesheet to convert 1.0 facelet-taglib documents
+     * from 1.0 to 2.0 for schema validation purposes.
+     */
+    private static final String FACELETS_TO_2_0_XSL =
+          "/com/sun/faces/facelets1_0-2_0toSchema.xsl";
+
+    private static final String FACES_CONFIG_1_X_DEFAULT_NS =
+          "http://java.sun.com/JSF/Configuration";
+
+    private static final String FACELETS_1_0_DEFAULT_NS =
+          "http://java.sun.com/JSF/Facelet";
 
 
     static {
-        List<ConfigurationResourceProvider> l =
+
+        // initialize the resource providers for faces-config documents
+        List<ConfigurationResourceProvider> facesConfigProviders =
           new ArrayList<ConfigurationResourceProvider>(3);
-        l.add(new RIConfigResourceProvider());
-        l.add(new MetaInfResourceProvider());
-        l.add(new WebResourceProvider());
-//        l.add(new FaceletTaglibResourceProvider());
-        RESOURCE_PROVIDERS = Collections.unmodifiableList(l);
+        facesConfigProviders.add(new MojarraFacesConfigResourceProvider());
+        facesConfigProviders.add(new MetaInfFacesConfigResourceProvider());
+        facesConfigProviders.add(new WebFacesConfigResourceProvider());
+        FACES_CONFIG_RESOURCE_PROVIDERS = Collections.unmodifiableList(facesConfigProviders);
+
+        // initialize the resource providers for facelet-taglib documents
+        List<ConfigurationResourceProvider> faceletTaglibProviders =
+              new ArrayList<ConfigurationResourceProvider>(3);
+        faceletTaglibProviders.add(new MetaInfFaceletTaglibraryConfigProvider());
+        faceletTaglibProviders.add(new WebFaceletTaglibResourceProvider());
+        FACELET_TAGLIBRARY_RESOURCE_PROVIDERS = Collections.unmodifiableList(faceletTaglibProviders);
+
+        // initialize the config processors for faces-config documents
         ConfigProcessor[] configProcessors = {
              new FactoryConfigProcessor(),
              new LifecycleConfigProcessor(),
@@ -170,7 +221,6 @@ public class ConfigManager {
              new ManagedBeanConfigProcessor(),
              new RenderKitConfigProcessor(),
              new NavigationConfigProcessor(),
- //            new FaceletTaglibConfigProcessor()
         };
         for (int i = 0; i < configProcessors.length; i++) {
             ConfigProcessor p = configProcessors[i];
@@ -178,7 +228,11 @@ public class ConfigManager {
                 p.setNext(configProcessors[i + 1]);
             }
         }
-        CONFIG_PROCESSOR_CHAIN = configProcessors[0];
+        FACES_CONFIG_PROCESSOR_CHAIN = configProcessors[0];
+
+        // initialize the config processor for facelet-taglib documents
+        FACELET_TAGLIB_CONFIG_PROCESSOR_CHAIN = new FaceletTaglibConfigProcessor();
+        
     }
 
 
@@ -208,7 +262,23 @@ public class ConfigManager {
         if (!hasBeenInitialized(sc)) {
             initializedContexts.add(sc);
             try {
-                CONFIG_PROCESSOR_CHAIN.process(getConfigDocuments(sc));
+                WebConfiguration webConfig = WebConfiguration.getInstance(sc);
+                boolean validating = webConfig.isOptionEnabled(ValidateFacesConfigFiles);
+                boolean isFacesPDLEnabled = !webConfig.isOptionEnabled(DisableFacesPDL);
+                ExecutorService executor = createExecutorService();
+                FACES_CONFIG_PROCESSOR_CHAIN.process(
+                      getConfigDocuments(sc,
+                                         FACES_CONFIG_RESOURCE_PROVIDERS,
+                                         executor,
+                                         validating));
+                if (isFacesPDLEnabled) {
+                    FACELET_TAGLIB_CONFIG_PROCESSOR_CHAIN.process(
+                          getConfigDocuments(sc,
+                                             FACELET_TAGLIBRARY_RESOURCE_PROVIDERS,
+                                             executor,
+                                             validating));
+                }
+                executor.shutdown();
                 publishPostConfigEvent();
             } catch (Exception e) {
                 // clear out any configured factories
@@ -248,7 +318,9 @@ public class ConfigManager {
      *  otherwise returns </code>fase</code>
      */
     public boolean hasBeenInitialized(ServletContext sc) {
+
         return (initializedContexts.contains(sc));
+
     }
 
 
@@ -273,34 +345,39 @@ public class ConfigManager {
     /**
      * <p>
      *   Obtains an array of <code>Document</code>s to be processed
-     *   by {@link ConfigManager#CONFIG_PROCESSOR_CHAIN}.
+     *   by {@link ConfigManager#FACES_CONFIG_PROCESSOR_CHAIN}.
      * </p>
      *
      * @param sc the <code>ServletContext</code> for the application to be
      *  processed
+     * @param providers <code>List</code> of <code>ConfigurationResourceProvider</code>
+     *  instances that provide the URL of the documents to parse.
+     * @param executor the <code>ExecutorService</code> used to dispatch parse
+     *  request to
+     * @param validating flag indicating whether or not the documents
+     *  should be validated
      * @return an array of <code>Document</code>s
      */
-    private static Document[] getConfigDocuments(ServletContext sc) {
+    private static Document[] getConfigDocuments(ServletContext sc,
+                                                 List<ConfigurationResourceProvider> providers,
+                                                 ExecutorService executor,
+                                                 boolean validating) {
 
-        ExecutorService executor =
-             Executors.newFixedThreadPool(NUMBER_OF_TASK_THREADS);
-
-        List<FutureTask<List<URL>>> urlTasks =
-             new ArrayList<FutureTask<List<URL>>>(RESOURCE_PROVIDERS.size());
-        for (ConfigurationResourceProvider p : RESOURCE_PROVIDERS) {
-            FutureTask<List<URL>> t =
-                 new FutureTask<List<URL>>(new URLTask(p, sc));
+        List<FutureTask<Collection<URL>>> urlTasks =
+             new ArrayList<FutureTask<Collection<URL>>>(providers.size());
+        for (ConfigurationResourceProvider p : providers) {
+            FutureTask<Collection<URL>> t =
+                 new FutureTask<Collection<URL>>(new URLTask(p, sc));
             urlTasks.add(t);
             executor.execute(t);
         }
 
         List<FutureTask<Document>> docTasks =
-             new ArrayList<FutureTask<Document>>(RESOURCE_PROVIDERS.size() << 1);
-        boolean validating = WebConfiguration.getInstance(sc)
-             .isOptionEnabled(BooleanWebContextInitParameter.ValidateFacesConfigFiles);
-        for (FutureTask<List<URL>> t : urlTasks) {
+             new ArrayList<FutureTask<Document>>(providers.size() << 1);
+
+        for (FutureTask<Collection<URL>> t : urlTasks) {
             try {
-                List<URL> l = t.get();
+                Collection<URL> l = t.get();
                 for (URL u : l) {
                     FutureTask<Document> d =
                          new FutureTask<Document>(new ParseTask(validating, u));
@@ -322,8 +399,17 @@ public class ConfigManager {
             } catch (InterruptedException ignored) { }
         }
 
-        executor.shutdown();
         return docs.toArray(new Document[docs.size()]);
+
+    }
+
+
+    /**
+     *
+     */
+    private static ExecutorService createExecutorService() {
+
+        return Executors.newFixedThreadPool(NUMBER_OF_TASK_THREADS);
 
     }
 
@@ -368,12 +454,12 @@ public class ConfigManager {
 
     /**
      * <p>
-     *  This <code>Callable</code> will be used by {@link ConfigManager#getConfigDocuments(javax.servlet.ServletContext)}.
+     *  This <code>Callable</code> will be used by {@link ConfigManager#getConfigDocuments(javax.servlet.ServletContext, java.util.List, java.util.concurrent.ExecutorService, boolean)}.
      *  It represents a single configuration resource to be parsed into a DOM.
      * </p>
      */
     private static class ParseTask implements Callable<Document> {
-        private static final String FACES_SCHEMA_DEFAULT_NS =
+        private static final String JAVAEE_SCHEMA_DEFAULT_NS =
             "http://java.sun.com/xml/ns/javaee";
         private URL documentURL;
         private DocumentBuilderFactory factory;
@@ -450,12 +536,13 @@ public class ConfigManager {
 
                 /*
                  * If the Document in question is 1.2 (i.e. it has a namespace matching
-                 * FACES_SCHEMA_DEFAULT_NS, then perform validation using the cached schema
+                 * JAVAEE_SCHEMA_DEFAULT_NS, then perform validation using the cached schema
                  * and return.  Otherwise we assume a 1.0 or 1.1 faces-config in which case
                  * we need to transform it to reference a special 1.1 schema before validating.
                  */
                 Node documentElement = ((Document) domSource.getNode()).getDocumentElement();
-                if (FACES_SCHEMA_DEFAULT_NS.equals(documentElement.getNamespaceURI())) {
+                String documentNS = documentElement.getNamespaceURI();
+                if (JAVAEE_SCHEMA_DEFAULT_NS.equals(documentNS)) {
                     Attr version = (Attr)
                             documentElement.getAttributes().getNamedItem("version");
                     DbfFactory.FacesSchema schema;
@@ -464,8 +551,7 @@ public class ConfigManager {
                         if ("2.0".equals(versionStr)) {
                             if ("facelet-taglib".equals(documentElement.getLocalName())) {
                                 schema = DbfFactory.FacesSchema.FACELET_TAGLIB_20;
-                            }
-                            else {
+                            } else {
                                 schema = DbfFactory.FacesSchema.FACES_20;
                             }
                         } else if ("1.2".equals(versionStr)) {
@@ -482,9 +568,17 @@ public class ConfigManager {
                     }
                 } else {
                     DOMResult domResult = new DOMResult();
-                    Transformer transformer = getTransformer();
+                    Transformer transformer = getTransformer(documentNS);
                     transformer.transform(domSource, domResult);
-                    DocumentBuilder builder = getBuilderForSchema(DbfFactory.FacesSchema.FACES_11);
+                    DbfFactory.FacesSchema schemaToApply;
+                    if (documentNS.equals(FACES_CONFIG_1_X_DEFAULT_NS)) {
+                        schemaToApply = DbfFactory.FacesSchema.FACES_11;
+                    } else if (documentNS.equals(FACELETS_1_0_DEFAULT_NS)) {
+                        schemaToApply = DbfFactory.FacesSchema.FACELET_TAGLIB_20;
+                    } else {
+                        throw new IllegalStateException();
+                    }
+                    DocumentBuilder builder = getBuilderForSchema(schemaToApply);
                     builder.getSchema().newValidator().validate(new DOMSource(domResult.getNode()));
                     return (Document) domResult.getNode();
                 }
@@ -505,12 +599,21 @@ public class ConfigManager {
          * @return a new Tranformer instance
          * @throws Exception if a Tranformer instance could not be created
          */
-        private static Transformer getTransformer() throws Exception {
+        private static Transformer getTransformer(String documentNS)
+        throws Exception {
 
             TransformerFactory factory = TransformerFactory.newInstance();
+            String xslToApply;
+            if (documentNS.equals(FACES_CONFIG_1_X_DEFAULT_NS)) {
+                xslToApply = FACES_TO_1_1_PRIVATE_XSL;
+            } else if (documentNS.equals(FACELETS_1_0_DEFAULT_NS)) {
+                xslToApply = FACELETS_TO_2_0_XSL;
+            } else {
+                throw new IllegalStateException();
+            }
             return factory
                  .newTransformer(new StreamSource(getInputStream(ConfigManager
-                      .class.getResource(XSL))));
+                      .class.getResource(xslToApply))));
 
         }
 
@@ -556,12 +659,12 @@ public class ConfigManager {
 
     /**
      * <p>
-     *  This <code>Callable</code> will be used by {@link ConfigManager#getConfigDocuments(javax.servlet.ServletContext)}.
+     *  This <code>Callable</code> will be used by {@link ConfigManager#getConfigDocuments(javax.servlet.ServletContext, java.util.List, java.util.concurrent.ExecutorService, boolean)}.
      *  It represents one or more URLs to configuration resources that require
      *  processing.
      * </p>
      */
-    private static class URLTask implements Callable<List<URL>> {
+    private static class URLTask implements Callable<Collection<URL>> {
 
         private ConfigurationResourceProvider provider;
         private ServletContext sc;
@@ -591,7 +694,7 @@ public class ConfigManager {
          * @throws Exception if an Exception is thrown by the underlying
          *  <code>ConfigurationResourceProvider</code> 
          */
-        public List<URL> call() throws Exception {
+        public Collection<URL> call() throws Exception {
             return provider.getResources(sc);
         }
 

@@ -45,10 +45,26 @@ import com.sun.faces.scripting.GroovyHelper;
 import com.sun.faces.application.resource.ResourceCache;
 import com.sun.faces.application.annotation.AnnotationManager;
 import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.facelets.compiler.Compiler;
+import com.sun.faces.facelets.compiler.SAXCompiler;
+import com.sun.faces.facelets.FaceletFactory;
+import com.sun.faces.facelets.tag.TagDecorator;
+import com.sun.faces.facelets.tag.composite.CompositeLibrary;
+import com.sun.faces.facelets.tag.jstl.core.JstlCoreLibrary;
+import com.sun.faces.facelets.tag.jstl.fn.JstlFnLibrary;
+import com.sun.faces.facelets.tag.ui.UILibrary;
+import com.sun.faces.facelets.tag.jsf.core.CoreLibrary;
+import com.sun.faces.facelets.tag.jsf.html.HtmlLibrary;
+import com.sun.faces.facelets.util.ReflectionUtil;
+import com.sun.faces.facelets.impl.ResourceResolver;
+import com.sun.faces.facelets.impl.DefaultResourceResolver;
+import com.sun.faces.facelets.impl.DefaultFaceletFactory;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.spi.InjectionProvider;
 import com.sun.faces.spi.InjectionProviderFactory;
 import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
+import com.sun.faces.util.FacesLogger;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 
 import javax.el.CompositeELResolver;
@@ -60,6 +76,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
 import javax.faces.application.ProjectStage;
+import javax.faces.FacesException;
 import javax.servlet.ServletContext;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -70,6 +87,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * <p>Break out the things that are associated with the Application, but
@@ -83,6 +102,8 @@ import java.util.TreeSet;
  */
 
 public class ApplicationAssociate {
+
+    private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
     private ApplicationImpl app = null;
 
@@ -142,6 +163,8 @@ public class ApplicationAssociate {
     private GroovyHelper groovyHelper;
     private AnnotationManager annotationManager;
     private boolean devModeEnabled;
+    private Compiler compiler;
+    private FaceletFactory faceletFactory;
 
     private PropertyEditorHelper propertyEditorHelper;
 
@@ -173,7 +196,13 @@ public class ApplicationAssociate {
                                            BooleanWebContextInitParameter.EnableLazyBeanValidation));
         annotationManager = new AnnotationManager();
         groovyHelper = GroovyHelper.getCurrentInstance();
-        devModeEnabled = (appImpl.getProjectStage() == ProjectStage.Development);
+
+        // initialize Facelets
+        if (!webConfig.isOptionEnabled(BooleanWebContextInitParameter.DisableFacesPDL)) {
+            compiler = createCompiler(webConfig);
+            faceletFactory = createFaceletFactory(compiler, webConfig);
+            devModeEnabled = (appImpl.getProjectStage() == ProjectStage.Development);
+        }
 
     }
 
@@ -232,6 +261,14 @@ public class ApplicationAssociate {
 
     public AnnotationManager getAnnotationManager() {
         return annotationManager;
+    }
+
+    public Compiler getCompiler() {
+        return compiler;
+    }
+
+    public FaceletFactory getFaceletFactory() {
+        return faceletFactory;
     }
 
     public static void clearInstance(ExternalContext
@@ -525,6 +562,82 @@ public class ApplicationAssociate {
 
     public boolean isResponseRendered() {
         return responseRendered;
+    }
+
+
+    protected FaceletFactory createFaceletFactory(Compiler c, WebConfiguration webConfig) {
+
+        // refresh period
+        String refreshPeriod = webConfig
+              .getOptionValue(WebConfiguration.WebContextInitParameter.FaceletsDefaultRefreshPeriod);
+        long period = Long.parseLong(refreshPeriod);
+
+        // resource resolver
+        ResourceResolver resolver = new DefaultResourceResolver();
+        String resolverName = webConfig
+              .getOptionValue(WebConfiguration.WebContextInitParameter.FaceletsResourceResolver);
+        if (resolverName != null && resolverName.length() > 0) {
+            try {
+                resolver = (ResourceResolver) ReflectionUtil.forName(resolverName)
+                        .newInstance();
+            } catch (Exception e) {
+                throw new FacesException("Error Initializing ResourceResolver["
+                        + resolverName + "]", e);
+            }
+        }
+
+        // Resource.getResourceUrl(ctx,"/")
+        return new DefaultFaceletFactory(c, resolver, period);
+
+    }
+
+
+    protected Compiler createCompiler(WebConfiguration webConfig) {
+
+        Compiler c = new SAXCompiler();
+
+        // load decorators
+        String decParam = webConfig
+              .getOptionValue(WebConfiguration.WebContextInitParameter.FaceletsDecorators);
+        if (decParam != null) {
+            decParam = decParam.trim();
+            String[] decs = Util.split(decParam, ";");
+            TagDecorator decObj;
+            for (int i = 0; i < decs.length; i++) {
+                try {
+                    decObj = (TagDecorator) ReflectionUtil.forName(decs[i])
+                          .newInstance();
+                    c.addTagDecorator(decObj);
+
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.log(Level.FINE,
+                                   "Successfully Loaded Decorator: {0}",
+                                   decs[i]);
+                    }
+                } catch (Exception e) {
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE,
+                                   "Error Loading Decorator: " + decs[i],
+                                   e);
+                    }
+                }
+            }
+        }
+
+        // skip params?
+        c.setTrimmingComments(
+              webConfig.isOptionEnabled(
+                    BooleanWebContextInitParameter.FaceletsSkipComments));
+
+        c.addTagLibrary(new CoreLibrary());
+        c.addTagLibrary(new HtmlLibrary());
+        c.addTagLibrary(new UILibrary());
+        c.addTagLibrary(new JstlCoreLibrary());
+        c.addTagLibrary(new JstlFnLibrary());
+        c.addTagLibrary(new CompositeLibrary());
+
+        return c;
+
     }
 
 

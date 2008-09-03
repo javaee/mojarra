@@ -59,7 +59,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.jar.JarEntry;
@@ -250,7 +249,7 @@ public final class Classpath {
             String jarFileUrl = urlFile.substring(0, separatorIndex);
             // And trim off any "file:" prefix.
             if (jarFileUrl.startsWith("file:")) {
-                jarFileUrl = jarFileUrl.substring("file:".length());
+                jarFileUrl = URLDecoder.decode(jarFileUrl, "UTF-8");
             }
             return new JarFile(jarFileUrl);
         }
