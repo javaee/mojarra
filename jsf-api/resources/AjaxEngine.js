@@ -74,7 +74,7 @@ javax.faces.Ajax.AjaxEngine = function() {
                                    // before being sent.  This prevents the request from
                                    // entering the queue redundantly. 
 
-    req.que = new javax.faces.Ajax.AjaxEngine.Queue();
+    req.que = javax.faces.Ajax.AjaxEngine.Queue;
 
     // Get an XMLHttpRequest Handle
     req.xmlReq = javax.faces.Ajax.AjaxEngine.getTransport();
@@ -285,9 +285,10 @@ javax.faces.Ajax.AjaxEngine.getTransport = function() {
 /**
  * Simple queue implementaton.
  */
-javax.faces.Ajax.AjaxEngine.Queue = function() {
+if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
+  javax.faces.Ajax.AjaxEngine.Queue = new function() {
 
-    // Create a the private queue
+    // Create the internal queue
     var queue = [];
 
 
@@ -367,6 +368,7 @@ javax.faces.Ajax.AjaxEngine.Queue = function() {
         // return the oldest element
         return element;
     }
+  }
 }
 
 /**
