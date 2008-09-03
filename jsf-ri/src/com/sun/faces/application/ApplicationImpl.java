@@ -949,7 +949,9 @@ public class ApplicationImpl extends Application {
         result.setRendererType("javax.faces.Composite");
         result.getAttributes().put(Resource.COMPONENT_RESOURCE_KEY, 
                 componentResource);
-        
+
+        associate.getAnnotationManager().applyComponentAnnotations(context, result);
+
         return result;
     }
     
