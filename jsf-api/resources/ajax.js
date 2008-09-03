@@ -294,6 +294,8 @@ javax.faces.Ajax.ajaxRequest = function(element, event, options) {
  * @param request The <code>XMLHttpRequest</code> instance that 
  * contains the status code and response message from the server.
  *
+ * @throws EmptyResponse error if request contains no data
+ *
  * @function javax.faces.Ajax.ajaxResponse
  */ 
 javax.faces.Ajax.ajaxResponse = function(request) {
@@ -303,6 +305,14 @@ javax.faces.Ajax.ajaxResponse = function(request) {
 
     var xml = xmlReq.responseXML;
     var id, content, markup, str;
+
+    //  FIX: We need to add more robust error handing - this error needs to be caught upstream
+    if (xml === null) {
+        throw {
+            name: 'EmptyResponse',
+            message: 'Response contains no data'
+        }
+    }
 
     var components = xml.getElementsByTagName('components')[0];
     var render = components.getElementsByTagName('render');
