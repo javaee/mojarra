@@ -122,10 +122,7 @@ javax.faces.Ajax.AjaxEngine = function() {
                 req.onError(req);
                 return;
             } else {
-                throw {
-                    name: "ErrorResponse",
-                    message: "AjaxEngine:  reponse was an error code, onError not set"
-                }
+                throw new Error("AjaxEngine:  reponse was an error code, onError not set");
             }
 
         }
