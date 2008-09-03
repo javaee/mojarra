@@ -300,19 +300,22 @@ javax.faces.Ajax.ajaxRequest = function(element, event, options) {
  */ 
 javax.faces.Ajax.ajaxResponse = function(request) {
 
+    //  FIX: We need to add more robust error handing - this error should probably be caught upstream
+    if (request == null || typeof request == 'undefined' ) {
+        throw new Error("javax.faces.Ajax.ajaxResponse: Request is null");
+    }
+
+
     var utils = new javax.faces.Ajax.Utils();
     var xmlReq = request;
 
     var xml = xmlReq.responseXML;
-    var id, content, markup, str;
-
-    //  FIX: We need to add more robust error handing - this error needs to be caught upstream
+    //  FIX: We need to add more robust error handing - this error should probably be caught upstream
     if (xml === null) {
-        throw {
-            name: 'EmptyResponse',
-            message: 'Response contains no data'
-        }
+        throw new Error("javax.faces.Ajax.ajaxResponse: Reponse contains no data");
     }
+
+    var id, content, markup, str;
 
     var components = xml.getElementsByTagName('components')[0];
     var render = components.getElementsByTagName('render');
