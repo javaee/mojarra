@@ -285,6 +285,9 @@ javax.faces.Ajax.AjaxEngine.getTransport = function() {
 /**
  * Simple queue implementaton.
  */
+
+ // RELEASE_PENDING: Need to change the format of the data payload to be flat
+ //   since the OpenAjax spec would prefer that we don't pass values by reference.
 if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
   javax.faces.Ajax.AjaxEngine.Queue = new function() {
 
@@ -320,7 +323,7 @@ if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
         queue.push(element);
         var args = new Object();
         args["enqueue"] = element;
-        javax.faces.Ajax.AjaxEngine.Observer.fire(args);
+        OpenAjax.hub.publish("javax.faces.AjaxEngine.Queue",args);
     }
 
     /* Dequeues an element from this Queue. The oldest element in this Queue is
@@ -348,7 +351,7 @@ if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
         if (element != "undefined") {
             var args = new Object();
             args["dequeue"] = element;
-            javax.faces.Ajax.AjaxEngine.Observer.fire(args);
+            OpenAjax.hub.publish("javax.faces.AjaxEngine.Queue",args);
         }
 
         // return the removed element
@@ -369,70 +372,5 @@ if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
         return element;
     }
   }
-}
-
-/**
- * A simple pub / sub implementation used mainly for queue events.
- * Inspired by Dustin Diaz.
- * This will be replaced in the next rev to use OpenAjax pub/sub
- */
-if (!window["javax.faces.Ajax.AjaxEngine.Observer"]) {
-    javax.faces.Ajax.AjaxEngine.Observer = new function () {
-        this.funcArr = [];
-        this.subscribe = function(fn) {
-            this.funcArr.push(fn);
-        },
-        this.unsubscribe = function(fn) {
-            this.funcArr = this.funcArr.filter(
-                function(el) {
-                    if ( el !== fn ) {
-                        return el;
-                    }
-                }
-            );
-        },
-        this.fire = function(o, thisObj) {
-            var scope = thisObj || window;
-            this.funcArr.forEach(
-                function(el) {
-                     el.call(scope, o);
-                }
-            );
-        }
-    }
-}
-
-
-// Utility functions that bring Array up to 1.6, if necessary
-// Note that if JS is already at 1.6, these won't be called
-
-if (!Array.prototype.forEach) {
-  Array.prototype.forEach = function(fun /*, thisp*/) {
-    var len = this.length;
-    if (typeof fun != "function") throw new TypeError();
-    var thisp = arguments[1];
-    for (var i = 0; i < len; i++)
-    {
-      if (i in this)
-        fun.call(thisp, this[i], i, this);
-    }
-  };
-}
-
-if (!Array.prototype.filter) {
-  Array.prototype.filter = function(fun /*, thisp*/) {
-    var len = this.length;
-    if (typeof fun != "function") throw new TypeError();
-    var res = new Array();
-    var thisp = arguments[1];
-    for (var i = 0; i < len; i++) {
-      if (i in this) {
-        var val = this[i]; // in case fun mutates this
-        if (fun.call(thisp, val, i, this))
-          res.push(val);
-      }
-    }
-    return res;
-  };
 }
 

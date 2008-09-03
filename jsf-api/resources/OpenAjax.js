@@ -225,22 +225,6 @@ if (!window["OpenAjax"]) {
             }
         }
 
-	// The following function is provided for automatic testing purposes.
-        // It is not expected to be deployed in run-time OpenAjax Hub implementations.
-        //h.reinit = function()
-        //{
-        //   for (var lib in OpenAjax.hub.libraries) {
-        //        delete OpenAjax.hub.libraries[lib];
-        //    }
-        //    OpenAjax.hub.registerLibrary("OpenAjax", "http://openajax.org/hub", "1.0", {});
-        //
-        //    delete OpenAjax._subscriptions;
-        //    OpenAjax._subscriptions = {c:{},s:[]};
-        //    delete OpenAjax._cleanup;
-        //    OpenAjax._cleanup = [];
-        //    OpenAjax._subIndex = 0;
-        //    OpenAjax._pubDepth = 0;
-        //}
     };
     
     // Register the OpenAjax Hub itself as a library.

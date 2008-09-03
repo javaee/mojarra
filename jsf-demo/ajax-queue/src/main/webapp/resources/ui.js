@@ -16,8 +16,7 @@ function buttonpush(buttonName, element, event) {
     return false;
 } 
 
-// This method receives queue events
-function msg(data) {
+function msg(eventName, data) {
     var txt = null;
     if (typeof data.enqueue != 'undefined' || data.enqueue != null) {
         txt = document.createTextNode(data.enqueue.parameters["javax.faces.partial.execute"]);
@@ -54,5 +53,4 @@ function removeCell(cellData) {
 
 // Set up the observer subscription
 
-javax.faces.Ajax.AjaxEngine.Observer.subscribe(msg);
-
+OpenAjax.hub.subscribe("javax.faces.AjaxEngine.Queue",msg);
