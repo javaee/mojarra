@@ -258,8 +258,8 @@ public class WebConfiguration {
             return;
         }
         boolean oldVal = booleanContextParameters.put(param, value);
-        if (LOGGER.isLoggable(Level.INFO) && oldVal != value) {
-            LOGGER.log(Level.INFO,
+        if (LOGGER.isLoggable(Level.FINE) && oldVal != value) {
+            LOGGER.log(Level.FINE,
                        "Overriding init parameter {0}.  Changing from {1} to {2}.",
                        new Object[] { param.getQualifiedName(), oldVal, value});
         }
@@ -275,8 +275,8 @@ public class WebConfiguration {
         value = value.trim();
         String oldVal = contextParameters.put(param, value);
         if (oldVal != null) {
-            if (LOGGER.isLoggable(Level.INFO) && !(oldVal.equals(value))) {
-                LOGGER.log(Level.INFO,
+            if (LOGGER.isLoggable(Level.FINE) && !(oldVal.equals(value))) {
+                LOGGER.log(Level.FINE,
                            "Overriding init parameter {0}.  Changing from {1} to {2}.",
                            new Object[]{param.getQualifiedName(),
                                         oldVal,

@@ -758,7 +758,9 @@ public class ConfigureListener implements ServletRequestListener,
 
                 if (WEBAPP.equals(localName)) {
                     String version = attributes.getValue(WEBAPP_VERSION_ATTR);
-                    Float fVersion = Float.parseFloat(version);
+                    Float fVersion = ((version == null)
+                                      ? Float.parseFloat("2.4")
+                                      : Float.parseFloat(version));
                     if (fVersion <= 2.4f) {
                         metadataComplete = true;
                     } else {
