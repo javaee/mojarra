@@ -1877,7 +1877,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
 
     // ----------------------------------------------------------- Inner Classes
 
-    private class PhaseAwareContextCallback implements ContextCallback {
+    private static class PhaseAwareContextCallback implements ContextCallback {
     
         private PhaseId curPhase = null;
         private PhaseAwareContextCallback(PhaseId curPhase) {
