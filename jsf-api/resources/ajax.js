@@ -175,7 +175,8 @@ javax.faces.Ajax.viewState = function(form) {
  * <code>url</code>.</li>
  * </ul>  
  * Before the request is sent it must be put into a queue to ensure requests 
- * are sent in the same order as when they were initiated.  The behavior of the 
+ * are sent in the same order as when they were initiated.  The request callback function
+ * must examine the queue and determine the next request to be sent.  The behavior of the 
  * request callback function must be as follows:
  * <ul>
  * <li>If the request completed successfully invoke {@link javax.faces.Ajax.ajaxResponse} 
