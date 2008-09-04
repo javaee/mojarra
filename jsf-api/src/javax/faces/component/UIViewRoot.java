@@ -1104,8 +1104,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
         if (!context.isRenderNone()) {
             if (!invokeContextCallbackOnSubtrees(context,
                 new PhaseAwareContextCallback(PhaseId.RENDER_RESPONSE))) {
-                // RELEASE_PENDING (rlubke,driscoll) clean up
-                assert(false);
+                 return false;
             }
         }
         return true;
@@ -1922,7 +1921,14 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
                             writer.endElement("markup");
                         }
                         catch (Exception ce) {
-                            // RELEASE_PENDING
+                            if (LOGGER.isLoggable(Level.SEVERE)) {
+                                LOGGER.severe(ce.toString());
+                            }
+                            if (LOGGER.isLoggable(Level.FINE)) {
+                                LOGGER.log(Level.FINE,
+                                ce.toString(),
+                                ce);
+                            }
                         }
                         writer.endElement("render");
                     }
