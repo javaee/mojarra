@@ -138,8 +138,8 @@ public abstract class Compiler {
 
     public final FaceletHandler compile(URL src, String alias)
             throws IOException, FaceletException, ELException, FacesException {
-        if (!this.initialized)
-            this.initialize();
+        //if (!this.initialized)
+        //    this.initialize();
         return this.doCompile(src, alias);
     }
 
