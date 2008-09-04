@@ -878,7 +878,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
 
         boolean invokedCallback = 
               invokeContextCallbackOnSubtrees(context,
-                                              new PhaseAwareContextCallback(PhaseId.APPLY_REQUEST_VALUES));
+                                              PhaseId.APPLY_REQUEST_VALUES);
 
         // Install the PartialResponseWriter
         ResponseWriter writer = context.getPartialResponseWriter();
@@ -1101,13 +1101,11 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      * @param context {@link FacesContext} for the request we are processing
      */
     private boolean encodePartialChildren(FacesContext context) {
-        if (!context.isRenderNone()) {
-            if (!invokeContextCallbackOnSubtrees(context,
-                new PhaseAwareContextCallback(PhaseId.RENDER_RESPONSE))) {
-                 return false;
-            }
-        }
-        return true;
+
+        return !(!context.isRenderNone()
+                 && !invokeContextCallbackOnSubtrees(context,
+                                                     PhaseId.RENDER_RESPONSE));
+
     }
 
     /**
@@ -1396,7 +1394,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
 
         boolean invokedCallback =
               invokeContextCallbackOnSubtrees(context,
-                                              new PhaseAwareContextCallback(PhaseId.PROCESS_VALIDATIONS));
+                                              PhaseId.PROCESS_VALIDATIONS);
         if (!invokedCallback) {
             return false;
         }
@@ -1481,7 +1479,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
 
         boolean invokedCallback =
               invokeContextCallbackOnSubtrees(context,
-                                              new PhaseAwareContextCallback(PhaseId.UPDATE_MODEL_VALUES));
+                                              PhaseId.UPDATE_MODEL_VALUES);
         if (!invokedCallback) {
             return false;
         }
@@ -1846,18 +1844,16 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
     // ----------------------------------------------------------- Partial Subtree Methods
 
     private boolean invokeContextCallbackOnSubtrees(FacesContext context,
-            PhaseAwareContextCallback cb) {
-        List<String> subtrees;
+                                                    PhaseId phaseId) {
 
         // If this callback is intended for RENDER_RESPONSE, use
         // getRenderPhaseClientIds().  Otherwise, use
         // getExecutePhaseClientIds().  If getExecutePhaseClientIds() is
         // empty, use getRenderPhaseClientIds().
-
-        if (cb.getPhaseId() == PhaseId.RENDER_RESPONSE) {
+        List<String> subtrees;
+        if (phaseId == PhaseId.RENDER_RESPONSE) {
             subtrees = context.getRenderPhaseClientIds();
-        }
-        else {
+        } else {
             subtrees = context.getExecutePhaseClientIds();
             if (subtrees.isEmpty()) {
                 subtrees = context.getRenderPhaseClientIds();
@@ -1866,9 +1862,12 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
 
         boolean result = false;
 
-        for (String cur : subtrees) {
-            if (invokeOnComponent(context, cur, cb)) {
-                result = true;
+        if (subtrees != null && !subtrees.isEmpty()) {
+            PhaseAwareContextCallback cb = new PhaseAwareContextCallback(phaseId);
+            for (String cur : subtrees) {
+                if (invokeOnComponent(context, cur, cb)) {
+                    result = true;
+                }
             }
         }
         return result;
@@ -1885,9 +1884,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
             this.curPhase = curPhase;
         }   
         
-        private PhaseId getPhaseId() {
-            return curPhase;
-        }   
+
         public void invokeContextCallback(FacesContext facesContext,
                                           UIComponent comp) {
             try {                         
