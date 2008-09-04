@@ -47,11 +47,9 @@ import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ProjectStage;
-import javax.faces.component.ContextCallback;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.context.ResponseWriterWrapper;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.ComponentSystemEvent;
@@ -71,7 +69,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ListIterator;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.event.AfterAddToParentEvent;
@@ -225,12 +222,13 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      * instance that we are in the <strong>AFTER</strong> restore view
      * phase.</p>
      */
-
-    public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
-	if (event.getClass().equals(AfterAddToParentEvent.class)) {
-	    notifyPhaseListeners(FacesContext.getCurrentInstance(), 
-				 PhaseId.RESTORE_VIEW, false);
-	}
+    public void processEvent(ComponentSystemEvent event)
+          throws AbortProcessingException {
+        if (AfterAddToParentEvent.class.equals(event.getClass())) {
+            notifyPhaseListeners(FacesContext.getCurrentInstance(),
+                                 PhaseId.RESTORE_VIEW,
+                                 false);
+        }
     }
     
     
@@ -244,7 +242,6 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      * no meaning between phases.  If <code>true</code>, the lifecycle
      * processing for the current phase must not take place.</p>
      */
-
     private boolean skipPhase;
 
     /**
@@ -266,6 +263,9 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
     // -------------------------------------------------------------- Properties
 
 
+    /**
+     * @see UIComponent#getFamily()
+     */
     public String getFamily() {
 
         return (COMPONENT_FAMILY);
@@ -365,8 +365,8 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
     /**
      * @return the {@link MethodExpression} that will be invoked before
      *         this view is rendered.
+     * @since 1.2
      */
-
     public MethodExpression getBeforePhaseListener() {
         return beforePhase;
     }
@@ -384,8 +384,8 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      *
      * @param newBeforePhase the {@link MethodExpression} that will be
      *                       invoked before this view is rendered.
+     * @since 1.2
      */
-
     public void setBeforePhaseListener(MethodExpression newBeforePhase) {
         beforePhase = newBeforePhase;
     }
@@ -393,8 +393,9 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
     /**
      * @return the {@link MethodExpression} that will be invoked after
      *         this view is rendered.
+     *
+     * @since 1.2
      */
-
     public MethodExpression getAfterPhaseListener() {
         return afterPhase;
     }
@@ -412,20 +413,33 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      *
      * @param newAfterPhase the {@link MethodExpression} that will be
      *                      invoked after this view is rendered.
+     *
+     * @since 1.2
      */
-
     public void setAfterPhaseListener(MethodExpression newAfterPhase) {
         afterPhase = newAfterPhase;
     }
 
     private List<PhaseListener> phaseListeners = null;
 
+    /**
+     * RELEASE_PENDING (edburns,roger;) docs
+     * @param toRemove
+     *
+     * @since 1.2
+     */
     public void removePhaseListener(PhaseListener toRemove) {
         if (null != phaseListeners) {
             phaseListeners.remove(toRemove);
         }
     }
 
+    /**
+     * RELEASE_PENDING (edburns,rogerk) docs
+     * @param newPhaseListener
+     *
+     * @since 1.2
+     */
     public void addPhaseListener(PhaseListener newPhaseListener) {
         if (null == phaseListeners) {
             //noinspection CollectionWithoutInitialCapacity
@@ -433,26 +447,28 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
         }
         phaseListeners.add(newPhaseListener);
     }
+
     
     /**
      * 
      * <p class="changed_added_2_0">Return an unmodifiable list of the 
      * <code>PhaseListener</code> instances attached to this 
      * <code>UIViewRoot</code> instance.</p>
+     *
      * @since 2.0
      */
-    
     public List<PhaseListener> getPhaseListeners() {
+
         List<PhaseListener> result = null;
-        
+
         if (null == phaseListeners) {
-            result = (List<PhaseListener>) Collections.EMPTY_LIST;
-        }
-        else {
+            result = Collections.unmodifiableList(Collections.<PhaseListener>emptyList());
+        } else {
             result = Collections.unmodifiableList(phaseListeners);
         }
         
         return result;
+
     }
 
     /**
@@ -469,7 +485,9 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      * 
      * @param context {@link FacesContext} for the current request
      * @param componentResource The {@link UIComponent} representing a 
-     * {@link javax.faces.application.Resource} instance 
+     * {@link javax.faces.application.Resource} instance
+     *
+     * @since 2.0
      */
     public void addComponentResource(FacesContext context, UIComponent componentResource) {
         addComponentResource(context, componentResource, null);
@@ -499,7 +517,9 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      * @param context {@link FacesContext} for the current request
      * @param componentResource The {@link UIComponent} representing a 
      * {@link javax.faces.application.Resource} instance 
-     * @param target The name of the facet for which the {@link UIComponent} will be added 
+     * @param target The name of the facet for which the {@link UIComponent} will be added
+     *
+     * @since 2.0
      */
     public void addComponentResource(FacesContext context, UIComponent componentResource, String target) {
         final Map<String,Object> attributes = componentResource.getAttributes();
@@ -546,6 +566,8 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      *
      * @throws NullPointerException  if <code>target</code>
      *                               is <code>null</code>
+     *
+     * @since 2.0
      */
     public List<UIComponent> getComponentResources(FacesContext context, 
                                                    String target) {
@@ -573,7 +595,9 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      * 
      * @param context {@link FacesContext} for the current request
      * @param componentResource The {@link UIComponent} representing a 
-     * {@link javax.faces.application.Resource} instance 
+     * {@link javax.faces.application.Resource} instance
+     *
+     * @since 2.0
      */
     public void removeComponentResource(FacesContext context, UIComponent componentResource) {
         removeComponentResource(context, componentResource, null);
@@ -603,7 +627,9 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      * @param context {@link FacesContext} for the current request
      * @param componentResource The {@link UIComponent} representing a 
      * {@link javax.faces.application.Resource} instance 
-     * @param target The name of the facet for which the {@link UIComponent} will be added 
+     * @param target The name of the facet for which the {@link UIComponent} will be added
+     *
+     * @since 2.0
      */
     public void removeComponentResource(FacesContext context, UIComponent componentResource, String target) {
         final Map<String,Object> attributes = componentResource.getAttributes();
@@ -841,21 +867,24 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      * decoding was performed.</p>
      *
      * @param context {@link FacesContext} for the request we are processing
+     *
+     * @since 2.0
      */
     private boolean processPartialDecodes(FacesContext context) {
-        // PENDING: Process "immediate" Ajax requests..
-        //   mark components in view as "immediate"
-        //   keep track of marked components so they can be cleared later.
+        // RELEASE_PENDING :
+        //  Process "immediate" Ajax requests..
+        //  mark components in view as "immediate"
+        //  keep track of marked components so they can be cleared later.
 
-        boolean invokedCallback = false;
-        invokedCallback = invokeContextCallbackOnSubtrees(context,
-            new PhaseAwareContextCallback(PhaseId.APPLY_REQUEST_VALUES));
+        boolean invokedCallback = 
+              invokeContextCallbackOnSubtrees(context,
+                                              new PhaseAwareContextCallback(PhaseId.APPLY_REQUEST_VALUES));
 
         // Install the PartialResponseWriter
         ResponseWriter writer = context.getPartialResponseWriter();
         context.setResponseWriter(writer);
 
-        // PENDING: Queue Events that were specified in the Ajax Request..
+        // RELEASE_PENDING: Queue Events that were specified in the Ajax Request..
 
         if (!invokedCallback) {
             return false;
@@ -863,7 +892,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
         String preViewId = context.getViewRoot().getViewId();
         broadcastEvents(context, PhaseId.APPLY_REQUEST_VALUES);
 
-        // PENDING: If a MethodExpression name was specified (with a phase)
+        // RELEASE_PENDING: If a MethodExpression name was specified (with a phase)
         //    as an Ajax request param, attempt to invoke that method here.
 
         // If the viewId has changed as a result of an event (from broadcastEvents),
@@ -957,17 +986,15 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      */
     private boolean encodePartialResponseBegin(FacesContext context) {
 
-        ResponseWriter orig = null, writer = null;
-
         try {
             // Turn on the response that has been embedded in the ViewHandler.
             context.enableResponseWriting(true);
 
             // This is an Ajax request...
             // Get the partial response writer
-            writer = context.getPartialResponseWriter();
+            ResponseWriter writer = context.getPartialResponseWriter();
             // Get and save the original writer
-            orig = context.getResponseWriter();
+            ResponseWriter orig = context.getResponseWriter();
             context.getAttributes().put(ORIGINAL_WRITER, orig);
             // Install the partial response writer
             context.setResponseWriter(writer);
@@ -979,11 +1006,14 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
 
              if (!context.isRenderNone()) {
     
-                // PENDING Handle Portlet Case
+                // RELEASE_PENDING (edburns,rogerk) it seems we need to specify
+                // a way to set response headers in a portlet/servlet independent
+                // manner
 
                 if (extContext.getResponse() instanceof HttpServletResponse) {
                     HttpServletResponse servletResponse = (HttpServletResponse)
                     extContext.getResponse();
+                    // this can be ExternalContext.setResponseContentType
                     servletResponse.setContentType("text/xml");
                     servletResponse.setHeader("Cache-Control", "no-cache");
 
@@ -1001,9 +1031,9 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
                 // with the special id of VIEW_ROOT_ID.  This is how the client
                 // JavaScript knows how to replace the entire document with
                 // this response.
-                writer.startElement("render", (UIComponent) this);
+                writer.startElement("render", this);
                 writer.writeAttribute("id", UIViewRoot.COMPONENT_TYPE, "id");
-                writer.startElement("markup", (UIComponent) this);
+                writer.startElement("markup", this);
                 writer.write("<![CDATA[");
             }
         } catch (IOException ex) {
@@ -1047,7 +1077,9 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      * <code>true</code> or partial rendering was not performed, 
      * delegate to the parent {@link
      * javax.faces.component.UIComponentBase#encodeChildren}
-     * method.</p> 
+     * method.</p>
+     *
+     * @since 2.0
      */
     @Override
     public void encodeChildren(FacesContext context) throws IOException {
@@ -1072,6 +1104,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
         if (!context.isRenderNone()) {
             if (!invokeContextCallbackOnSubtrees(context,
                 new PhaseAwareContextCallback(PhaseId.RENDER_RESPONSE))) {
+                // RELEASE_PENDING (rlubke,driscoll) clean up
                 assert(false);
             }
         }
@@ -1163,7 +1196,14 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
             writer.endElement("partial-response");
 
         } catch (IOException ioe) {
-
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.severe(ioe.toString());
+            }
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE,
+                           ioe.toString(),
+                           ioe);
+            }
         } finally {
             this.cleanupAfterView(context);
         }
@@ -1174,7 +1214,9 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      * If {@link javax.faces.context.FacesContext#isAjaxRequest}
      * returns <code>true</code> and it is a partial render request
      * ({@link javax.faces.context.FacesContext#isRenderAll} returns
-     * <code>false</code>), return <code>true</code>.</p> 
+     * <code>false</code>), return <code>true</code>.</p>
+     *
+     * @since 2.0
      */
     @Override
     public boolean getRendersChildren() {
@@ -1205,7 +1247,6 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      * @param isBefore, if true, notify beforePhase listeners.  Notify
      *                  afterPhase listeners otherwise.
      */
-
     private void notifyPhaseListeners(FacesContext context,
                                       PhaseId phaseId,
                                       boolean isBefore) {
@@ -1353,9 +1394,10 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      *</p>
      */
     private boolean processPartialValidators(FacesContext context) {
-        boolean invokedCallback = false;
-        invokedCallback = invokeContextCallbackOnSubtrees(context,
-            new PhaseAwareContextCallback(PhaseId.PROCESS_VALIDATIONS));
+
+        boolean invokedCallback =
+              invokeContextCallbackOnSubtrees(context,
+                                              new PhaseAwareContextCallback(PhaseId.PROCESS_VALIDATIONS));
         if (!invokedCallback) {
             return false;
         }
@@ -1363,7 +1405,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
         String preViewId = context.getViewRoot().getViewId();
         broadcastEvents(context, PhaseId.PROCESS_VALIDATIONS);
 
-        // PENDING: If a MethodExpression name was specified (with a phase)
+        // RELEASE_PENDING: If a MethodExpression name was specified (with a phase)
         //    as an Ajax request param, attempt to invoke that method here.
 
         // If the viewId has changed as a result of an event (from broadcastEvents),
@@ -1437,9 +1479,10 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      *</p>
      */
     private boolean processPartialUpdates(FacesContext context) {
-        boolean invokedCallback = false;
-        invokedCallback = invokeContextCallbackOnSubtrees(context,
-            new PhaseAwareContextCallback(PhaseId.UPDATE_MODEL_VALUES));
+
+        boolean invokedCallback =
+              invokeContextCallbackOnSubtrees(context,
+                                              new PhaseAwareContextCallback(PhaseId.UPDATE_MODEL_VALUES));
         if (!invokedCallback) {
             return false;
         }
@@ -1447,7 +1490,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
         String preViewId = context.getViewRoot().getViewId();
         broadcastEvents(context, PhaseId.UPDATE_MODEL_VALUES);
 
-        // PENDING: If a MethodExpression name was specified (with a phase)
+        // RELEASE_PENDING: If a MethodExpression name was specified (with a phase)
         //    as an Ajax request param, attempt to invoke that method here.
 
         // If the viewId has changed as a result of an event (from broadcastEvents),
@@ -1458,6 +1501,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
         }
 
         return true;
+
     }
 
     /**
@@ -1804,7 +1848,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
 
     private boolean invokeContextCallbackOnSubtrees(FacesContext context,
             PhaseAwareContextCallback cb) {
-        List<String> subtrees = null;
+        List<String> subtrees;
 
         // If this callback is intended for RENDER_RESPONSE, use
         // getRenderPhaseClientIds().  Otherwise, use
@@ -1851,7 +1895,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
             
                 if (curPhase == PhaseId.APPLY_REQUEST_VALUES) {
                 
-                    // PENDING handle immediate request(s)
+                    // RELEASE_PENDING handle immediate request(s)
                     // If the user requested an immediate request
                     // Make sure to set the immediate flag here.
                     
@@ -1878,7 +1922,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
                             writer.endElement("markup");
                         }
                         catch (Exception ce) {
-                            // PENDING
+                            // RELEASE_PENDING
                         }
                         writer.endElement("render");
                     }
