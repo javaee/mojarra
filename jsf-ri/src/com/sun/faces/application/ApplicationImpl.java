@@ -866,6 +866,8 @@ public class ApplicationImpl extends Application {
     @Override
     public UIComponent createComponent(FacesContext context, Resource componentResource) throws FacesException {
 
+        // RELEASE_PENDING (rlubke,driscoll) this method needs review.
+        
         Util.notNull("context", context);
         Util.notNull("componentResource", componentResource);
 
@@ -912,7 +914,7 @@ public class ApplicationImpl extends Application {
         if (null == result) {
             String packageName = componentResource.getLibraryName();
             String className = componentResource.getResourceName();
-            className = packageName + className.substring(0, className.lastIndexOf('.'));
+            className = packageName + '.' + className.substring(0, className.lastIndexOf('.'));
             try {
                 Class<?> clazz = (Class<?>) componentMap.get(className);
                 if (clazz == null) {
