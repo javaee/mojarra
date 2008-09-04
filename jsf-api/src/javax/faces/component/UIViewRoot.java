@@ -459,7 +459,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      */
     public List<PhaseListener> getPhaseListeners() {
 
-        List<PhaseListener> result = null;
+        List<PhaseListener> result;
 
         if (null == phaseListeners) {
             result = Collections.unmodifiableList(Collections.<PhaseListener>emptyList());
