@@ -44,9 +44,13 @@ import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.cactus.TestingUtil;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
+import com.sun.faces.renderkit.html_basic.HtmlResponseWriter;
+import com.sun.faces.renderkit.ServerSideStateHelper;
 
 import java.util.Map;
 import java.util.Locale;
+import java.io.StringWriter;
+
 import javax.faces.application.StateManager.SerializedView;
 
 import javax.faces.component.UIComponent;
@@ -312,22 +316,19 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         
         getFacesContext().setViewRoot(root);
         root.getAttributes().put("checkThisValue", "checkThisValue");
-        
-        SerializedView viewState = wrapper.saveSerializedView(getFacesContext());
+        getFacesContext().setResponseWriter(new HtmlResponseWriter(new StringWriter(), "text/html", "UTF-8"));
+        Object viewState = wrapper.saveView(getFacesContext());
+        wrapper.writeState(getFacesContext(), viewState);
         
         // See that the Logical View and Actual View maps are correctly created
         Map sessionMap = getFacesContext().getExternalContext().getSessionMap();
-        assertTrue(sessionMap.containsKey(RequestStateManager.LOGICAL_VIEW_MAP));
-        assertTrue(((Map)sessionMap.get(RequestStateManager.LOGICAL_VIEW_MAP)).containsKey("j_id1"));
-        
+        assertTrue(sessionMap.containsKey(ServerSideStateHelper.LOGICAL_VIEW_MAP));
+        assertTrue(((Map)sessionMap.get(ServerSideStateHelper.LOGICAL_VIEW_MAP)).containsKey("j_id1"));
+
         newRoot = wrapper.restoreView(getFacesContext(), "test", "HTML_BASIC");
         assertNotNull(newRoot);
         assertEquals(root.getAttributes().get("checkThisValue"),
                      newRoot.getAttributes().get("checkThisValue"));
-        assertNotNull(RequestStateManager.get(getFacesContext(), RequestStateManager.LOGICAL_VIEW_MAP));
-        assertEquals(RequestStateManager.get(getFacesContext(), RequestStateManager.LOGICAL_VIEW_MAP),
-                     "j_id1");
-        
         
     }
     

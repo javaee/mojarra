@@ -488,7 +488,8 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
 	    getFacesContext().setViewRoot(root);
 	}
 	catch (Throwable ioe) {
-	    fail();
+        ioe.printStackTrace();
+        fail();
 	}
 
         // make sure that the transient property is not persisted.

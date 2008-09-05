@@ -43,6 +43,7 @@
 package com.sun.faces.systest.render;
 
 import com.sun.faces.util.MessageUtils;
+import com.sun.faces.renderkit.ResponseStateManagerImpl;
 
 import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
@@ -176,7 +177,7 @@ public class CustomRenderKitImpl extends RenderKit {
 
     public synchronized ResponseStateManager getResponseStateManager() {
         if (responseStateManager == null) {
-            responseStateManager = new CustomResponseStateManagerImpl();
+            responseStateManager = new ResponseStateManagerImpl();
         }
         return responseStateManager;
     }

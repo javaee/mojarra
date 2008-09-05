@@ -123,9 +123,19 @@ public abstract class StateManager {
      *                               the same non-<code>null</code> component id
      * @deprecated this has been replaced by {@link #saveView}.  The
      *             default implementation returns <code>null</code>.
+     * RELEASE_PENDING (edburns,rogerK) default implementation does something as
+     *  the old behavior was broken and forced implementations to implement
+     *  deprecated APIs.
      */
     public SerializedView saveSerializedView(FacesContext context) {
-        return null;
+
+        Object[] state = (Object[]) saveView(context);
+        if (state != null && state.length == 2) {
+            return new SerializedView(state[0], state[1]);
+        } else {
+            return null;
+        }
+
     }
 
     /**
@@ -286,9 +296,18 @@ public abstract class StateManager {
      * @deprecated This method has been replaced by {@link
      *             #writeState(javax.faces.context.FacesContext,java.lang.Object)}.
      *             The default implementation of this method does nothing.
+     * RELEASE_PENDING (edburns,rogerK) default implementation does something as
+     *  the old behavior was broken and forced implementations to implement
+     *  deprecated APIs.
      */
     public void writeState(FacesContext context,
                            SerializedView state) throws IOException {
+
+        if (state != null) {
+            writeState(context, new Object[]{state.getStructure(),
+                                             state.getState()});
+        }
+        
     }
 
     // ------------------------------------------------- State Restoring Methods
@@ -436,9 +455,12 @@ public abstract class StateManager {
 
     /**
      * <p class="changed_added_2_0">
-     * Convenience method to return the view state as a <code>String</code>.
-     * This method calls through to 
-     * {@link ResponseStateManager#getViewState(javax.faces.context.FacesContext)}.
+     * Convenience method to return the view state as a <code>String</code> with
+     * no <code>RenderKit</code> specific markup.
+     *
+     * This default implementation of this method will call {@link #saveView(javax.faces.context.FacesContext)}
+     * and passing the result to and returning the resulting value from
+     * {@link ResponseStateManager#getViewState(javax.faces.context.FacesContext, Object)}.
      * </p>
      *
      * @param context {@link FacesContext} for the current request
@@ -447,8 +469,12 @@ public abstract class StateManager {
      */
     public String getViewState(FacesContext context) {
 
-        return context.getRenderKit().getResponseStateManager()
-              .getViewState(context);
+        Object state = saveView(context);
+        if (state != null) {
+            return context.getRenderKit().getResponseStateManager()
+                  .getViewState(context, state);
+        }
+        return null;
 
     }
 

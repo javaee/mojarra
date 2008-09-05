@@ -191,9 +191,19 @@ public abstract class ResponseStateManager {
      * @param context The {@link FacesContext} instance for the current request
      * @param state The serialized state information previously saved
      *
+     * RELEASE_PENDING (edburns,rogerK) default implementation does something as
+     *  the old behavior was broken and forced implementations to implement
+     *  deprecated APIs.
+     *
      */
     public void writeState(FacesContext context,
-			   SerializedView state) throws IOException {
+                           SerializedView state) throws IOException {
+
+        if (state != null) {
+            writeState(context, new Object[]{state.getStructure(),
+                                             state.getState()});
+        }
+        
     }
 
     /**
@@ -295,16 +305,18 @@ public abstract class ResponseStateManager {
 
     /**
      * <p>
-     * Return the state for the current view as a <code>String</code> without
-     * any markup related to the rendering technology supported by this 
-     * ResponseStateManager.
+     * Return the specified state as a <code>String</code> without any markup
+     * related to the rendering technology supported by this ResponseStateManager.
      * </p>
+     * 
      * @param context the {@link FacesContext} for the current request
+     * @param state the state from which the String version will be generated
+     *  from
      * @return the view state for this request without any markup specifics
      *
      * @since 2.0
      */
-    public String getViewState(FacesContext context) {
+    public String getViewState(FacesContext context, Object state) {
         return null;
     }
 
