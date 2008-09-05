@@ -91,6 +91,28 @@
 
     <property>
         <description>
+          CSS style class to apply to the rendered label
+          on selected options.
+        </description>
+        <display-name>Selected Label Class</display-name>
+        <icon></icon>
+        <property-name>selectedClass</property-name>
+        <property-class>java.lang.String</property-class>
+    </property>
+
+    <property>
+        <description>
+          CSS style class to apply to the rendered label
+          on unselected options.
+        </description>
+        <display-name>Unselected Label Class</display-name>
+        <icon></icon>
+        <property-name>unselectedClass</property-name>
+        <property-class>java.lang.String</property-class>
+    </property>
+
+    <property>
+        <description>
           Orientation of the options list to be created.
           Valid values are "pageDirection" (list is laid
           out vertically), or "lineDirection" (list is
