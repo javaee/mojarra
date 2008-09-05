@@ -285,22 +285,23 @@ public class FaceletTaglibConfigProcessor extends AbstractConfigProcessor {
                 }
             }
 
+            TagLibraryImpl taglibrary;
             if (compositeLibraryName != null) {
-                CompositeComponentTagLibrary taglibrary =
-                      new CompositeComponentTagLibrary(taglibNamespace,
-                                                       compositeLibraryName);
+                taglibrary = new CompositeComponentTagLibrary(taglibNamespace,
+                                                              compositeLibraryName);
                 compiler.addTagLibrary(taglibrary);
             } else {
-                TagLibraryImpl taglibrary = new TagLibraryImpl(taglibNamespace);
-                NodeList tags =
-                      documentElement.getElementsByTagNameNS(namespace, TAG);
-                processTags(documentElement, tags, taglibrary);
-                NodeList functions =
-                      documentElement
-                            .getElementsByTagNameNS(namespace, FUNCTION);
-                processFunctions(functions, taglibrary);
-                compiler.addTagLibrary(taglibrary);
+                taglibrary = new TagLibraryImpl(taglibNamespace);
+
             }
+            NodeList tags =
+                  documentElement.getElementsByTagNameNS(namespace, TAG);
+            processTags(documentElement, tags, taglibrary);
+            NodeList functions =
+                  documentElement
+                        .getElementsByTagNameNS(namespace, FUNCTION);
+            processFunctions(functions, taglibrary);
+            compiler.addTagLibrary(taglibrary);
         }
 
     }

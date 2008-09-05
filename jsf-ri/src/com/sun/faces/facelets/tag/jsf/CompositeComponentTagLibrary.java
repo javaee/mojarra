@@ -73,7 +73,7 @@ import javax.faces.context.FacesContext;
  *
  * @author edburns
  */
-public class CompositeComponentTagLibrary extends AbstractTagLibrary {
+public class CompositeComponentTagLibrary extends TagLibraryImpl {
     
     public CompositeComponentTagLibrary(String ns) {
         super(ns);
@@ -99,14 +99,6 @@ public class CompositeComponentTagLibrary extends AbstractTagLibrary {
     private String ns = null;
     private String compositeLibraryName;
 
-    public boolean containsFunction(String ns, String name) {
-        return false;
-    }
-
-    public boolean containsNamespace(String ns) {
-        return (null != ns && ns.equals(this.ns));
-    }
-
     public boolean containsTagHandler(String ns, String localName) {
         boolean result = false;
 
@@ -120,7 +112,7 @@ public class CompositeComponentTagLibrary extends AbstractTagLibrary {
             } catch (IOException ex) {
                 Logger.getLogger(CompositeComponentTagLibrary.class.getName()).log(Level.SEVERE, null, ex);
             }
-            result = null != componentStream;
+            result = (componentStream != null || super.containsTagHandler(ns, localName));
         }
         return result;
     }
@@ -141,18 +133,18 @@ public class CompositeComponentTagLibrary extends AbstractTagLibrary {
         return compositeComponentResource;
     }
 
-    public Method createFunction(String ns, String name) {
-        return null;
-    }
 
     public TagHandler createTagHandler(String ns, String localName, TagConfig tag) throws FacesException {
-        TagHandler result = null;
-        
-        ComponentConfig componentConfig = new ComponentConfigWrapper(tag,
-                CompositeComponentImpl.TYPE, null);
-        result = new CompositeComponentTagHandler(
-                getCompositeComponentResource(ns, localName),
-                componentConfig);
+
+        TagHandler result = super.createTagHandler(ns, localName, tag);
+
+        if (result == null) {
+            ComponentConfig componentConfig =
+                  new ComponentConfigWrapper(tag, CompositeComponentImpl.TYPE, null);
+            result = new CompositeComponentTagHandler(
+                  getCompositeComponentResource(ns, localName),
+                  componentConfig);
+        }
 
         return result;
     }
