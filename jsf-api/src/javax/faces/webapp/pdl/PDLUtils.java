@@ -47,24 +47,117 @@ import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 
 /**
- * RELEASE_PENDING (edburns,rogerk) docs
+ * <p class="changed_added_2_0">It is very unlikely this class will be
+ * in the final public API.  This class contains methods that handle
+ * responsibilities that would be done in a specific PDL implementation,
+ * but are common to all PDL possible PDL implementations and therefore
+ * should be offered in a resuable manner.</p>
  * 
  * @since 2.0
  */
 public class PDLUtils {
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) docs
+     * <p class="changed_added_2_0">Leverage the component metadata
+     * specified in section 4.3.2 for the purpose of re-targeting
+     * attached objects from the top level composite component to the
+     * individual {@link AttachedObjectTarget} inside the composite
+     * component.</p>
+     *
+     * <div class="changed_added_2_0">
+
+     * <p>An algorithm semantically equivalent to the following must be
+     * implemented.</p>
+
+	<ul>
+
+	  <li><p>Obtain the metadata for the composite component.
+	  Currently this entails getting the value of the {@link
+	  UIComponent#BEANINFO_KEY} component attribute, which will be
+	  an instance of <code>BeanInfo</code>.  If the metadata cannot
+	  be found, log an error message and return.</p></li>
+
+	  <li><p>Get the <code>BeanDescriptor</code> from the
+	  <code>BeanInfo</code>.</p></li>
+
+	  <li><p>Get the value of the {@link
+	  AttachedObjectTarget#ATTACHED_OBJECT_TARGETS_KEY} from the
+	  <code>BeanDescriptor</code>'s <code>getValue()</code> method.
+	  This will be a <code>List&lt;{@link
+	  AttachedObjectTarget}&gt;</code>.  Let this be
+	  <em>targetList</em>.</p></li>
+
+	  <li><p>For each <em>curHandler</em> entry in the argument
+	  <code>handlers</code></p>
+
+	<ul>
+
+	  <li><p>Let <em>forAttributeValue</em> be the return from
+	  {@link AttachedObjectHandler#getFor}.  </p></li>
+
+	  <li><p>For each <em>curTarget</em> entry in
+	  <em>targetList</em>, the first of the following items that
+	  causes a match will take this action:</p>
+
+<p style="margin-left: 3em;">For each <code>UIComponent</code> in the
+list returned from <em>curTarget.getTargets()</em>, call
+<em>curHandler.applyAttachedObject()</em>, passing the
+<code>FacesContext</code> and the <code>UIComponent</code>.</p>
+
+          <p>and cause this inner loop to terminate.</p>
+
+	<ul>
+
+	  <li><p>If <em>curHandler</em> is an instance of {@link
+	  ActionSource2AttachedObjectHandler} and <em>curTarget</em> is
+	  an instance of {@link ActionSource2AttachedObjectTarget},
+	  consider it a match.</p></li>
+
+	  <li><p>If <em>curHandler</em> is an instance of {@link
+	  EditableValueHolderAttachedObjectHandler} and <em>curTarget</em> is
+	  an instance of {@link EditableValueHolderAttachedObjectTarget},
+	  consider it a match.</p></li>
+
+	  <li><p>If <em>curHandler</em> is an instance of {@link
+	  ValueHolderAttachedObjectHandler} and <em>curTarget</em> is
+	  an instance of {@link ValueHolderAttachedObjectTarget},
+	  consider it a match.</p></li>
+
+	</ul>
+
+
+
+</li>
+
+
+	</ul>
+
+
+
+
+</li>
+
+
+
+
+	</ul>
+    
+
+     *
+     * </div>
      *
      * @param context
-     * @param topLevelComponent The UIComponent in the view to which the attached
-     * objects must be attached.  This UIComponent must have its component metadata
-     * already associated and available from via the JavaBeans API.
-     * @param handlers specified by the page author in the consuming page, 
-     * provided to this method by the PDL implementation, this is a list of 
-     * implementations of {@link AttachedObjectHandler}, each one of which 
-     * represents a relationship between an attached object and the UIComponent 
-     * to which it is attached.
+
+     * @param topLevelComponent The UIComponent in the view to which the
+     * attached objects must be attached.  This UIComponent must have
+     * its component metadata already associated and available from via
+     * the JavaBeans API.
+
+     * @param handlers specified by the page author in the consuming
+     * page, provided to this method by the PDL implementation, this is
+     * a list of implementations of {@link AttachedObjectHandler}, each
+     * one of which represents a relationship between an attached object
+     * and the UIComponent to which it is attached.
      */
     public static void retargetAttachedObjects(FacesContext context,
             UIComponent topLevelComponent,

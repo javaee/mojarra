@@ -836,7 +836,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * <code>getSubmittedValue()</code> returns a zero-length
      * <code>String</code> call <code>{@link #setSubmittedValue}</code>,
      * passing <code>null</code> as the argument and continue processing
-     * using null as the current submitted value.</code></span></li>
+     * using <code>null</code> as the current submitted
+     * value.</code></span></li>
 
      * <p/>
 

@@ -106,7 +106,7 @@
         <mkdir dir="${build.dir}/javadocs"/>
         <mkdir dir="${build.dir}/pdldocs"/>
         <mkdir dir="${build.dir}/pdldocs/jsp"/>
-        <mkdir dir="${build.dir}/pdldocs/facelets2"/>
+        <mkdir dir="${build.dir}/pdldocs/facelets"/>
         <mkdir dir="${build.dir}/lib"/>
         <antcall target="delete.and.remkdir.build.generate.dir" />
     </target>        
@@ -409,7 +409,7 @@
     <target name="pdldocs">
 
       <antcall target="jsp.tlddocs" />
-      <antcall target="facelets2.tlddocs" />
+      <antcall target="facelets.tlddocs" />
 
     </target>
 
@@ -430,10 +430,10 @@
 
     </target>
 
-    <target name="facelets2.tlddocs">                
+    <target name="facelets.tlddocs">                
         <java fork="true" jar="${tlddoc.jar}">
-            <arg line="-d ${build.dir}/pdldocs/facelets2"/>
-            <arg line="-windowtitle 'JSF ${spec.version} Page Decraration Language: Facelets2 Variant'"/>
+            <arg line="-d ${build.dir}/pdldocs/facelets"/>
+            <arg line="-windowtitle 'JSF ${spec.version} Page Decraration Language: Facelets Variant'"/>
             <arg line="-xslt ${conf.share.dir}/tlddoc-resources"/>
 
             <arg value="${build.generate.tld.dir}/html_basic.tld"/>
@@ -443,7 +443,7 @@
             <arg value="${conf.share.dir}/jstl-core.tld"/>
             <arg value="${conf.share.dir}/jstl-fn.tld"/>
         </java>
-        <copy todir="${build.dir}/pdldocs/facelets2">
+        <copy todir="${build.dir}/pdldocs/facelets">
            <fileset dir="${basedir}/../jsf-api/doc/">
              <include name="changed*.png" />
            </fileset>

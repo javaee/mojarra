@@ -280,9 +280,10 @@ public abstract class ViewHandler {
      * for performing any per-request initialization necessary to the operation
      * of the lifycecle.</p>
      *
-     * <p>The default implementation calls {@link #calculateCharacterEncoding}
-     * and passes the result, if non-<code>null</code> into the
-     * {@link ExternalContext#setRequestCharacterEncoding} method.
+     * <p>The default implementation calls {@link
+     * #calculateCharacterEncoding} and passes the result, if
+     * non-<code>null</code>, into the {@link
+     * ExternalContext#setRequestCharacterEncoding} method.
      *
      * RELEASE_PENDING (edburns,rogerk) Should consider calling setRequestCharacterEncoding()
      *  *if* getRequestCharacterEncoding() returns null.  Otherwise, in certain

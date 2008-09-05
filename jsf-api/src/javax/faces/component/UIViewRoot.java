@@ -363,6 +363,9 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
     private MethodExpression afterPhase = null;
 
     /**
+     * <p>Return the {@link MethodExpression} that will be invoked
+     * before this view is rendered.</p>
+     *
      * @return the {@link MethodExpression} that will be invoked before
      *         this view is rendered.
      * @since 1.2
@@ -391,6 +394,9 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
     }
 
     /**
+     * <p>Return the {@link MethodExpression} that will be invoked after
+     * this view is rendered.</p>
+     *
      * @return the {@link MethodExpression} that will be invoked after
      *         this view is rendered.
      *
@@ -423,9 +429,9 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
     private List<PhaseListener> phaseListeners = null;
 
     /**
-     * <p>Remove the specified {@link javax.faces.event.PhaseListener}
-     * from the set of listeners for this component.</p>
-     * @param toRemove
+     * <p>If the argument <code>toRemove</code> is in the list of {@link
+     * PhaseListener}s for this instance, it must be removed.</p>
+     * @param toRemove the {@link PhaseListener} to remove.
      *
      * @since 1.2
      */
@@ -436,10 +442,10 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
     }
 
     /**
-     * <p>Add the specified {@link javax.faces.event.PhaseListener} 
-     * to the set of listeners for this component.</p>
+     * <p>Add the argument <code>newPhaseListener</code> to the list of
+     * {@link PhaseListener}s on this <code>UIViewRoot</code>.</p>
      *
-     * @param newPhaseListener
+     * @param newPhaseListener the {@link PhaseListener} to add
      *
      * @since 1.2
      */

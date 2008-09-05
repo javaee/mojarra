@@ -40,14 +40,15 @@ package javax.faces.event;
 import javax.faces.application.Application;
 
 /**
- * RELEASE_PENDING (edburns,rogerk) review docs
- * <p>This event will be published by the runtime after all
- * configuration resources have been parsed and processed.</p>
+ * <p class="changed_added_2_0">This event must be published by the
+ * runtime after all configuration resources have been parsed and
+ * processed.</p>
  *
- * <p>This event is useful for listeners that need to perform custom
- * post-configuration processing without having to rely on <code>ServletContextListener</code>s 
- * which may be invoked before the JavaServer Faces runtime has started it's
- * configuration process.</p>
+ * <p class="changed_added_2_0">This event is useful for listeners that
+ * need to perform custom post-configuration processing without having
+ * to rely on <code>ServletContextListener</code>s which may be invoked
+ * before the JavaServer Faces runtime has started it's configuration
+ * process.</p>
  *
  * @since 2.0
  */
@@ -56,8 +57,11 @@ public class ApplicationPostConstructEvent extends SystemEvent {
     private static final long serialVersionUID = -3918703770970591309L;
 
     /**
-     * Constructs a new <code>AppliationPostConstructEvent</code> for this application.
+     * <p class="changed_added_2_0">Constructs a new
+     * <code>AppliationPostConstructEvent</code> for this
+     * application.</p>
      * @param application the application that has been configured
+     * @since 2.0
      */
     public ApplicationPostConstructEvent(Application application) {
         super(application);

@@ -41,8 +41,23 @@ import javax.faces.application.Resource;
 import javax.faces.context.FacesContext;
 
 /**
- * <p class="changed_added_2_0">The contract that a page declaration language
- * must implement to interact with the JSF runtime.</p>
+ * <p class="changed_added_2_0">The contract that a page declaration
+ * language must implement to interact with the JSF runtime.
+ * PENDING(edburns): more work needs to be done on this, including:</p>
+ *
+ * 	<ul>
+
+	  <li><p>Make it fit the needs so the runtime can interact with
+	  the PDL only thru this contract.  We'll need to add methods to
+	  make this happen.  We'll need to provide JSP and Facelets
+	  implementations for this.</p></li>
+
+	  <li><p>add a <code>&lt;page-declaration-language&gt;</code>
+	  element to faces-config, and add 287-style annotation as well.
+	  </p></li>
+
+	</ul>
+
  * 
  * @since 2.0
  * 
@@ -61,6 +76,9 @@ public abstract class PageDeclarationLanguage {
      * specified in the <a target="_"
      * href="../../../../../pdldocs/facelets/index.html">Facelts
      * taglibrary docs</a>.</p>
+     *
+     * <p class="changed_added_2_0">This method is called from {@link javax.faces.application.Application#createComponent(FacesContext, Resource)}.</p>
+     * 
      * @param context The <code>FacesContext</code> for this request.
      * @param componentResource The <code>Resource</code> that represents the component.
      * @since 2.0
@@ -76,6 +94,8 @@ public abstract class PageDeclarationLanguage {
      * script file that can be turned into something that extends {@link
      * javax.faces.component.UIComponent} and implements {@link
      * javax.faces.component.NamingContainer}.</p>
+     *
+     * <p class="changed_added_2_0">This method is called from {@link javax.faces.application.Application#createComponent(FacesContext, Resource)}.</p>
      *
      * @param context The <code>FacesContext</code> for this request.
      * @param componentResource The <code>Resource</code> that represents the component.

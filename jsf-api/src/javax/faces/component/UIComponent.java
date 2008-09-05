@@ -105,8 +105,9 @@ import javax.faces.render.Renderer;
 public abstract class UIComponent implements StateHolder, SystemEventListenerHolder {
 
     /**
-     * The key to which the <code>UIComponent</code> currently being processed will
-     * be associated with within the {@link FacesContext} attributes map.
+     * <p class="changed_added_2_0">The key to which the
+     * <code>UIComponent</code> currently being processed will be
+     * associated with within the {@link FacesContext} attributes map.</p>
      *
      * @see javax.faces.context.FacesContext#getAttributes()
      *
@@ -115,9 +116,10 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
     public static final String CURRENT_COMPONENT = "javax.faces.component.CURRENT_COMPONENT";
 
     /**
-     * The key to which the <em>composite</em> <code>UIComponent</code>
-     * currently being processed will be associated with within the
-     * {@link FacesContext} attributes map.
+     * <p class="changed_added_2_0">The key to which the
+     * <em>composite</em> <code>UIComponent</code> currently being
+     * processed will be associated with within the {@link FacesContext}
+     * attributes map.</p>
      *
      * @see javax.faces.context.FacesContext#getAttributes()
      *
@@ -845,8 +847,8 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
         
         return resourceBundleMap;
     }
-    // PENDING(rlubke): This method needs to do the same current locale matching
-    // as in ResourceBundle.getBundle().  I'm sure there's a more efficient
+
+    // PENDING(rlubke): I'm sure there's a more efficient
     // way to handle this.
     private Resource findComponentResourceBundleLocaleMatch(FacesContext context, 
             String resourceName, String libraryName) {
@@ -1133,12 +1135,12 @@ private void doFind(FacesContext context, String clientId) {
 
 
     /**
-     * <p><span class="changed_modified_2_0">Return</span> a mutable
-     * <code>Map</code> representing the facet {@link UIComponent}s
-     * associated with this {@link UIComponent}, keyed by facet name
-     * (which must be a String).  The returned implementation must
-     * support all of the standard and optional <code>Map</code>
-     * methods, plus support the following additional requirements:</p>
+     * <p>Return a mutable <code>Map</code> representing the facet
+     * {@link UIComponent}s associated with this {@link UIComponent},
+     * keyed by facet name (which must be a String).  The returned
+     * implementation must support all of the standard and optional
+     * <code>Map</code> methods, plus support the following additional
+     * requirements:</p>
 
      * <ul>
      * <li>The <code>Map</code> implementation must implement
@@ -1252,7 +1254,6 @@ private void doFind(FacesContext context, String clientId) {
 
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) review docs
      * <p><span class="changed_modified_2_0">If</span> our
      * <code>rendered</code> property is <code>true</code>, render the
      * beginning of the current state of this {@link UIComponent} to the
@@ -1307,7 +1308,6 @@ private void doFind(FacesContext context, String clientId) {
 
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) review docs
      * <p><span class="changed_modified_2_0">If</span> our
      * <code>rendered</code> property is <code>true</code>, render the
      * ending of the current state of this {@link UIComponent}.</p>
@@ -1318,7 +1318,7 @@ private void doFind(FacesContext context, String clientId) {
      *
      * <p class="changed_added_2_0">Call {@link
      * UIComponent#popComponentFromEL}. before returning regardless of the value
-     *  of the <code>rendered</p> property.
+     *  of the <code>rendered</code> property.</p>
      *
      * @param context {@link FacesContext} for the response we are creating
      *
@@ -1613,10 +1613,10 @@ private void doFind(FacesContext context, String clientId) {
     }
 
     /**
-     * <p class="changed_added_2_0">Remove the listener instance *
-     *     referenced by argument <code>componentListener</code> as a *
+     * <p class="changed_added_2_0">Remove the listener instance
+     *     referenced by argument <code>componentListener</code> as a
      *     listener for events of type <code>eventClass</code>
-     *     originating * from this specific instance of
+     *     originating from this specific instance of
      *     <code>UIComponent</code>.  When doing the comparison to
      *     determine if an existing listener is equal to the argument
      *     <code>componentListener</code> (and thus must be removed),

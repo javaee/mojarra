@@ -269,6 +269,13 @@ public abstract class Application {
      * <p>In all of the above cases, the runtime must employ the
      * decorator pattern as for every other pluggable artifact in
      * JSF.</p>
+
+     * <p class="changed_added_2_0">A default implementation is provided
+     * that throws <code>UnsupportedOperationException</code> so that
+     * users that decorate <code>Application</code> can continue to
+     * function</p>.
+
+
      * </div>
      * @since 2.0
      */
@@ -312,6 +319,12 @@ public abstract class Application {
      * <p class="changed_added_2_0">Set the implementation of 
      * {@link PageDeclarationLanguage} to be used in this application instance.
      * </p>
+
+     * <p class="changed_added_2_0">A default implementation is provided
+     * that throws <code>UnsupportedOperationException</code> so that
+     * users that decorate <code>Application</code> can continue to
+     * function</p>.
+
      *
      * RELEASE_PENDING (edburns,rogerK)
      *   - NPE if pdl is null, correct?
@@ -332,8 +345,14 @@ public abstract class Application {
     }
     
     /**
-     * <p class="changed_modified_2_0">Return the {@link PageDeclarationLanguage}
-     * instance used for the application instance.</p>
+     * <p class="changed_added_2_0">Return the {@link
+     * PageDeclarationLanguage} instance used for the application
+     * instance.</p>
+
+     * <p class="changed_added_2_0">A default implementation is provided
+     * that throws <code>UnsupportedOperationException</code> so that
+     * users that decorate <code>Application</code> can continue to
+     * function</p>.
      * 
      * @since 2.0
      */
@@ -465,6 +484,12 @@ public abstract class Application {
      * return it.</p>
      *
      * </ul>
+
+     * <p class="changed_added_2_0">A default implementation is provided
+     * that throws <code>UnsupportedOperationException</code> so that
+     * users that decorate <code>Application</code> can continue to
+     * function</p>.
+
      * </div>
      *
      * @since 2.0
@@ -825,6 +850,12 @@ public abstract class Application {
      * UIComponent#setRendererType} must be called on the newly created
      * <code>UIComponent</code> instance, passing the argument
      * <code>rendererType</code> as the argument.</p>
+
+     * <p class="changed_added_2_0">A default implementation is provided
+     * that throws <code>UnsupportedOperationException</code> so that
+     * users that decorate <code>Application</code> can continue to
+     * function</p>.
+
      *
      * @param componentExpression {@link ValueExpression} representing a
      * component value expression (typically specified by the
@@ -879,6 +910,12 @@ public abstract class Application {
      * {@link UIComponent#setRendererType} must be called on the newly
      * created <code>UIComponent</code> instance, passing the argument
      * <code>rendererType</code> as the argument.</p>
+
+     * <p class="changed_added_2_0">A default implementation is provided
+     * that throws <code>UnsupportedOperationException</code> so that
+     * users that decorate <code>Application</code> can continue to
+     * function</p>.
+
      *
      * @param context {@link FacesContext} for the current request
      *
@@ -996,6 +1033,10 @@ public abstract class Application {
      * javax.faces.event.ListenerFor} must be taken on the component,
      * before it is returned from this method.</p>
 
+     * <p>A default implementation is provided that throws
+     * <code>UnsupportedOperationException</code> so that users
+     * that decorate <code>Application</code> can continue to function</p>.
+     *
      * </div>
      *
      * @param context {@link FacesContext} for the current request
@@ -1006,10 +1047,6 @@ public abstract class Application {
      * Resource} cannot be created
      * @throws <code>NullPointerException</code> if any parameter is
      * <code>null</code>
-     *
-     * <p>A default implementation is provided that throws
-     * <code>UnsupportedOperationException</code> so that users
-     * that decorate <code>Application</code> can continue to function</p>.
      *
      * @since 2.0
      */
@@ -1482,6 +1519,12 @@ public abstract class Application {
      * passing the listener instance.  </p></li>
      *
      * </ul>
+
+     * <p class="changed_added_2_0">A default implementation is provided
+     * that throws <code>UnsupportedOperationException</code> so that
+     * users that decorate <code>Application</code> can continue to
+     * function</p>.
+
      * </div>
      *
      * @param systemEventClass The <code>Class</code> of event that is
@@ -1511,6 +1554,12 @@ public abstract class Application {
      * the argument <code>sourceBaseType</code> to find the matching
      * listener instead of using the <code>Class</code> of the
      * <code>source</code> argument.</p>
+
+     * <p class="changed_added_2_0">A default implementation is provided
+     * that throws <code>UnsupportedOperationException</code> so that
+     * users that decorate <code>Application</code> can continue to
+     * function</p>.
+
      *
      * @param systemEventClass The <code>Class</code> of event that is
      * being published.
