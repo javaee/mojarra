@@ -357,6 +357,9 @@ public abstract class ViewHandler {
      * {@link StateManager#writeState}, or noting where state information
      * should later be written.</p>
      *
+     * RELEASE_PENDING (edburns,roger) We should probably note that this
+     *  option is currently a no-op when dealing with AJAX requests.
+     *
      * @param context {@link FacesContext} for the current request
      *
      * @throws IOException if an input/output error occurs
