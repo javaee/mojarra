@@ -357,9 +357,9 @@ public abstract class ViewHandler {
      * {@link StateManager#writeState}, or noting where state information
      * should later be written.</p>
      *
-     * <p class="changed_added_2_0">This method must do nothing if we are responding 
-     * to an <code>Ajax</code> request.  For <code>Ajax</code> requests, the 
-     * state is obtained by calling
+     * <p class="changed_added_2_0">This method must do nothing if the current
+     * request is an <code>Ajax</code> request.  When responding to 
+     * <code>Ajax</code> requests, the state is obtained by calling
      * {@link StateManager#getViewState(javax.faces.context.FacesContext, Object)}
      * and then written into the <code>Ajax</code> response during final
      * encoding 
