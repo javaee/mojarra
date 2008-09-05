@@ -1458,7 +1458,15 @@ private void doFind(FacesContext context, String clientId) {
         return (UIComponent) contextMap.get(CURRENT_COMPONENT);
 
     }
-    
+
+
+    /**
+     * RELEASE_PENDING (edburns,rogerk) docs
+     * RELEASE_PENDING (eburns,rogerk) Consider adding FacesContext argument
+     * to getCurrentComponent().  There is no need to call this from the EL
+     * since we have the 'component' implicit object. 
+     * @return
+     */
     public static UIComponent getCurrentCompositeComponent() {
 
         FacesContext context = FacesContext.getCurrentInstance();
