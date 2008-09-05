@@ -423,7 +423,8 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
     private List<PhaseListener> phaseListeners = null;
 
     /**
-     * RELEASE_PENDING (edburns,roger;) docs
+     * <p>Remove the specified {@link javax.faces.event.PhaseListener}
+     * from the set of listeners for this component.</p>
      * @param toRemove
      *
      * @since 1.2
@@ -435,7 +436,9 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
     }
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) docs
+     * <p>Add the specified {@link javax.faces.event.PhaseListener} 
+     * to the set of listeners for this component.</p>
+     *
      * @param newPhaseListener
      *
      * @since 1.2
