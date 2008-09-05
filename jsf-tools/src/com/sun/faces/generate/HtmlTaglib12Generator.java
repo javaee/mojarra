@@ -759,11 +759,10 @@ public class HtmlTaglib12Generator extends AbstractGenerator {
                  rendererIter.hasNext(); ) {
 
                 renderer = rendererIter.next();
-                String rendererType = renderer.getRendererType();
-                if (rendererType.contains("javax.faces.resource")) {
+                if (renderer.isIgnoreForJsp()) {
                     continue;
                 }
-
+                String rendererType = renderer.getRendererType();
                 tagClassName = GeneratorUtil.makeTagClassName(
                          GeneratorUtil.stripJavaxFacesPrefix(componentFamily),
                          GeneratorUtil.stripJavaxFacesPrefix(rendererType));

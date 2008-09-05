@@ -352,7 +352,9 @@ public class FacesConfigRuleSet extends RuleSetBase {
             digester.addCallMethod
                 ("faces-config/render-kit/renderer/renderer-extension/exclude-attributes",
                  "setExcludeAttributes", 0);
-
+            digester.addCallMethod
+                  ("faces-config/render-kit/renderer/renderer-extension/jsp-ignore",
+                   "setIgnoreForJsp", 0, new String[] { "java.lang.Boolean" });
             digester.addCallMethod
                 ("faces-config/render-kit/renderer/renderer-extension/tag-name",
                 "setTagName", 0);

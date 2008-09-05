@@ -26402,6 +26402,9 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <renderer-class>
         com.sun.faces.renderkit.html_basic.CompositeRenderer
     </renderer-class>
+      <renderer-extension>
+        <jsp-ignore>true</jsp-ignore>
+      </renderer-extension>
     </renderer>
     <renderer>
       <description><![CDATA[<div class="changed_added_2_0">
@@ -26439,6 +26442,9 @@ from the composite component.  For each element in that list, call
       <renderer-class>
         com.sun.faces.renderkit.html_basic.ConsumingPageCompositeChildrenRenderer
     </renderer-class>
+      <renderer-extension>
+        <jsp-ignore>true</jsp-ignore>
+      </renderer-extension>
     </renderer>
     <renderer>
       <description><![CDATA[<div class="changed_added_2_0">
@@ -26480,6 +26486,9 @@ Otherwise, get the facet whose name is "facetName".  If found call
       <renderer-class>
         com.sun.faces.renderkit.html_basic.CompositeFacetRenderer
     </renderer-class>
+      <renderer-extension>
+        <jsp-ignore>true</jsp-ignore>
+      </renderer-extension>
     </renderer>
     <renderer>
       <description><![CDATA[<div class="changed_added_2_0">
@@ -26612,6 +26621,9 @@ href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(
         </attribute-extension>
       </attribute>
 
+      <renderer-extension>
+        <jsp-ignore>true</jsp-ignore>
+      </renderer-extension>
     </renderer>
     <renderer>
       <description><![CDATA[<div class="changed_added_2_0">
@@ -26700,6 +26712,9 @@ the literal string "<code>head</code>" as the last argument.</p>
         </attribute-extension>
       </attribute>
 
+      <renderer-extension>
+        <jsp-ignore>true</jsp-ignore>
+      </renderer-extension>
     </renderer>
     <renderer>
       <description><![CDATA[<div class="changed_added_2_0">

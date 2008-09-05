@@ -151,10 +151,10 @@ public class JspTLD21Generator extends JspTLDGenerator {
                  rendererIter.hasNext();) {
 
                 RendererBean renderer = rendererIter.next();
-                String rendererType = renderer.getRendererType();
-                if (rendererType.contains("javax.faces.resource")) {
+                if (renderer.isIgnoreForJsp()) {
                     continue;
                 }
+                String rendererType = renderer.getRendererType();
                 writer.startElement("tag");
 
                 DescriptionBean description = renderer.getDescription("");

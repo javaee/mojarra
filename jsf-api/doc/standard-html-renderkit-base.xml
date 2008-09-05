@@ -2587,6 +2587,9 @@
             <renderer-class>
                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/naming-container-composite-renderer-class/text())"/>
             </renderer-class>
+            <renderer-extension>
+                <jsp-ignore>true</jsp-ignore>
+            </renderer-extension>
         </renderer>
 
       <renderer>
@@ -2626,6 +2629,9 @@ from the composite component.  For each element in that list, call
             <renderer-class>
                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-consuming-page-composite-children-renderer-class/text())"/>
             </renderer-class>
+            <renderer-extension>
+               <jsp-ignore>true</jsp-ignore>
+            </renderer-extension>
         </renderer>
 
       <renderer>
@@ -2669,6 +2675,9 @@ Otherwise, get the facet whose name is "facetName".  If found call
             <renderer-class>
                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-composite-facet-renderer-class/text())"/>
             </renderer-class>
+            <renderer-extension>
+               <jsp-ignore>true</jsp-ignore>
+            </renderer-extension>
         </renderer>
 
         <renderer>
@@ -2768,6 +2777,9 @@ href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(
                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-script-renderer-class/text())"/>
             </renderer-class>
             <xi:include href="output-resource-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <renderer-extension>
+                <jsp-ignore>true</jsp-ignore>
+            </renderer-extension>            
         </renderer>
 
         <renderer>
@@ -2823,6 +2835,9 @@ the literal string "<code>head</code>" as the last argument.</p>
                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-stylesheet-renderer-class/text())"/>
             </renderer-class>
             <xi:include href="output-resource-attrs.xml" xpointer="xpointer(/root/*)"/>
+            <renderer-extension>
+                <jsp-ignore>true</jsp-ignore>
+            </renderer-extension>
         </renderer>
 
         <renderer>
