@@ -40,11 +40,19 @@
 
 package com.sun.faces.taglib.jsf_core;
 
+import java.util.Arrays;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.MessageUtils;
 
 import javax.el.ELContext;
 import javax.el.ValueExpression;
 import javax.el.ExpressionFactory;
+
+import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.NumberConverter;
@@ -63,6 +71,9 @@ public class ConvertNumberTag extends AbstractConverterTag {
 
     private static final long serialVersionUID = -2710405278792415110L;
     private static ValueExpression CONVERTER_ID_EXPR = null;
+    
+    private static final Logger LOGGER = FacesLogger.TAGLIB.getLogger();
+
 
     //
     // Instance Variables
@@ -356,21 +367,70 @@ public class ConvertNumberTag extends AbstractConverterTag {
                                            elContext)).intValue();
             }
         }
+        
+        // RELEASE_PENDING - this code duplicates code in ConvertDateTimeTag
+        // it's complex enough that we should consolidate it
         if (localeExpression != null) {
             if (localeExpression.isLiteralText()) {
-                locale = new Locale(localeExpression.getExpressionString(),
-                    "");
+                locale = getLocale(localeExpression.getExpressionString());
             } else {
-                Locale loc = (Locale)
-                ELUtils.evaluateValueExpression(localeExpression,
-                    elContext);
+                Object loc = ELUtils.evaluateValueExpression(localeExpression,
+                                                          elContext);
                 if (loc != null) {
-                    locale = loc;
+                    if (loc instanceof String) {
+                        locale = getLocale((String) loc);
+                    } else if (loc instanceof Locale) {
+                        locale = (Locale) loc;
+                    } else {
+                        Object[] params = {
+                            "locale",
+                            "java.lang.String or java.util.Locale",
+                            loc.getClass().getName()
+                        };
+                        if (LOGGER.isLoggable(Level.SEVERE)) {
+                            LOGGER.log(Level.SEVERE,
+                                       "jsf.core.tags.eval_result_not_expected_type",
+                                       params);
+                        }
+                        throw new FacesException(
+                            MessageUtils.getExceptionMessageString(
+                                MessageUtils.EVAL_ATTR_UNEXPECTED_TYPE, params));
+                    }
                 } else {
                     locale = facesContext.getViewRoot().getLocale();
                 }
             }
         }
+
     }
 
+    
+    // RELEASE_PENDING - this duplicates code in ConvertDateTimeTag - we
+    // should move this code up into AbstractConverterTag
+    protected static Locale getLocale(String string) {
+        if (string == null) {
+            return Locale.getDefault();
+        }
+
+        if (string.length() > 2) {
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.log(Level.WARNING,
+                           "jsf.core.taglib.convertnumber.invalid_local_value",
+                           string);
+            }
+        } else {
+            String[] langs = Locale.getISOLanguages();
+            Arrays.sort(langs);
+            if (Arrays.binarySearch(langs, string) < 0) {
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.log(Level.WARNING,
+                               "jsf.core.taglib.convertnumber.invalid_language",
+                               string);
+            }
+        }
+    }
+
+        return new Locale(string, "");
+    }
+    
 } // end of class ConvertNumberTag

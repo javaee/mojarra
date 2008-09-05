@@ -100,6 +100,15 @@
                                        locale="#{requestScope.localeObjectAU}"
                                        timeZone="#{requestScope.timeZoneStringAU}"/>
                 </h:outputText>
+                <h:outputText id="outputNumber1" value="10000">
+                    <f:convertNumber locale="de"/>
+                </h:outputText>
+                <h:outputText id="outputNumber2" value="10000">
+                    <f:convertNumber locale="#{requestScope.localeString}" />
+                </h:outputText>
+                <h:outputText id="outputNumber3" value="10000">
+                    <f:convertNumber locale="#{requestScope.localeObject}" />
+                </h:outputText>
             </f:view>
         </body>
     </html>

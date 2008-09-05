@@ -338,7 +338,7 @@
             </p>]]></description>
             <name>locale</name>
             <deferred-value>
-                <type>java.util.Locale</type>
+                <type>java.lang.Object</type>
             </deferred-value>
         </attribute>
 
