@@ -131,34 +131,36 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * <code>java.beans.BeanInfo</code> implementation describing the composite
      * component.  This <code>BeanInfo</code> is known as the 
      * <em>composite component BeanInfo</em>.</p>
+     *
+     * @since 2.0
      */
-    
     public static final String BEANINFO_KEY = "javax.faces.component.BEANINFO_KEY";
 
     /**
-     * 
      * <p class="changed_added_2_0">The value of this constant is used as the key
      * in the <em>composite component BeanDescrpitor</em> for the 
      * <code>Map&lt;PropertyDescriptor&gt;</code> that contains meta-information
      * for the declared facets for this composite component.
      * This map must contain an entry under the key {@link #COMPOSITE_FACET_NAME}, even
      * if no facets were explicitly declared.  See {@link #COMPOSITE_FACET_NAME}.</p>
+     *
+     * @since 2.0
      */
     public static final String FACETS_KEY = "javax.faces.component.FACETS_KEY";
     
     /**
-     * 
      * <p class="changed_added_2_0">The value of this constant is used as the key
      * in the <em>composite component BeanDescrpitor</em> for a 
      * <code>ValueExpression</code> that evaluates to the 
      * <code>component-type</code> of the <em>composite component root</em>
      * <code>UIComponent</code> for this composite component, if
      * one was declared by the composite component author.</p>
+     *
+     * @since 2.0
      */
     public static final String COMPOSITE_COMPONENT_TYPE_KEY = "javax.faces.component.COMPOSITE_COMPONENT_TYPE";
     
     /**
-     * 
      * <p class="changed_added_2_0">The value of this constant is used as the key
      * in the <code>Map</code> returned as described in {@link #FACETS_KEY}
      * for the 
@@ -168,6 +170,8 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * facet that is the {@link javax.faces.component.UIPanel} that is the parent of the all
      * of the components in the <code>&lt;composite:implementation&gt;</code>
      * section of the <em>composite component PDL file</em>.</p>
+     *
+     * @since 2.0
      */
     public static final String COMPOSITE_FACET_NAME = "javax.faces.component.COMPOSITE_FACET_NAME";
     
@@ -602,7 +606,7 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
     
 
     
-    private transient Map<String, String> resourceBundleMap = null;
+    private Map<String, String> resourceBundleMap = null;
     
     /**
      * <p class="changed_added_2_0">Return a
@@ -635,7 +639,8 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * <code>ResourceBundle</code> is wrapped in a
      * <code>Map&lt;String,String&gt;</code> and returned.  Otherwise
      * <code>Collections.EMPTY_MAP</code> is returned.</p>
-     * 
+     *
+     * @since 2.0
      */
     public Map<String,String> getResourceBundleMap() {
         
@@ -1338,7 +1343,6 @@ private void doFind(FacesContext context, String clientId) {
      * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-
     public void encodeAll(FacesContext context) throws IOException {
 
         if (!isRendered()) {
@@ -1449,7 +1453,9 @@ private void doFind(FacesContext context, String clientId) {
      * <code>UIComponent</code></p>
      * RELEASE_PENDING (eburns,rogerk) Consider adding FacesContext argument
      * to getCurrentComponent().  There is no need to call this from the EL
-     * since we have the 'component' implicit object.  
+     * since we have the 'component' implicit object.
+     *
+     * @since 2.0
      */
     public static UIComponent getCurrentComponent() {
 
@@ -1466,6 +1472,8 @@ private void doFind(FacesContext context, String clientId) {
      * to getCurrentComponent().  There is no need to call this from the EL
      * since we have the 'component' implicit object. 
      * @return
+     *
+     * @since 2.0
      */
     public static UIComponent getCurrentCompositeComponent() {
 
@@ -1582,6 +1590,8 @@ private void doFind(FacesContext context, String clientId) {
      *
      * @throws <code>NullPointerException</code> if any of the
      * arguments are <code>null</code>.
+     *
+     * @since 2.0
      */
     public void subscribeToEvent(Class<? extends SystemEvent> eventClass,
                                  ComponentSystemEventListener componentListener) {
@@ -1624,7 +1634,8 @@ private void doFind(FacesContext context, String clientId) {
      *
      * @throws <code>NullPointerException</code> if any of the
      * arguments are <code>null</code>.
-
+     *
+     * @since 2.0
      */
     public void unsubscribeFromEvent(Class<? extends SystemEvent> eventClass,
                                      ComponentSystemEventListener componentListener) {
@@ -1652,10 +1663,11 @@ private void doFind(FacesContext context, String clientId) {
      * <code>SystemEventListener</code> instances registered on this
      * <code>UIComponent</code> instance that are interested in events
      * of type <code>eventClass</code>.</p>
-
+     *
      * @param eventClass the <code>Class</code> of event for which the
      * listeners must be returned.
-
+     *
+     * @since 2.0
      */
     public List<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> eventClass) {
 
