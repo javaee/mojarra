@@ -641,6 +641,10 @@ javax.faces.level=ALL
         <delete file="${basedir}/test/javax/faces/mock/MockPageContext.java"/>
         <delete dir="${dist.dir}"/>
         <delete dir="${tools.dir}/build"/>
+        <!-- delete extraneous generated doc files, if necessary -->
+        <delete>
+            <fileset dir="doc" includes="*-attrs.xml"/>
+        </delete>
     </target>
 
 
