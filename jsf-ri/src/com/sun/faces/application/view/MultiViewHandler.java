@@ -317,11 +317,7 @@ public class MultiViewHandler extends ViewHandler {
      */
     public void writeState(FacesContext context) throws IOException {
 
-          Util.notNull("context", context);
-        // RELEASE_PENDING (rogerk,edburns) May want to document this
-        // the fact that writeState does nothing on an AJAX request
-        // as the view state is updated using the result of
-        // StateManager.getViewState().  See impl issue 771.
+        Util.notNull("context", context);
         if (!context.isAjaxRequest()) {
             if (logger.isLoggable(Level.FINE)) {
                 logger.fine("Begin writing marker for viewId " +
