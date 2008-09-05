@@ -42,6 +42,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.net.MalformedURLException;
 
 import javax.faces.FacesException;
 import javax.faces.application.ViewHandler;
@@ -54,7 +55,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
@@ -73,11 +73,7 @@ public class MultiViewHandler extends ViewHandler {
      */
     protected ViewHandlingStrategyManager viewHandlingStrategy;
 
-    /**
-     * <p>Store the value of <code>DEFAULT_SUFFIX_PARAM_NAME</code>
-     * or, if that isn't defined, the value of <code>DEFAULT_SUFFIX</code>
-     */
-    private String contextDefaultSuffix;
+    private String[] configuredExtensions;
 
 
     // ------------------------------------------------------------ Constructors
@@ -86,6 +82,10 @@ public class MultiViewHandler extends ViewHandler {
     public MultiViewHandler() {
 
         viewHandlingStrategy = new ViewHandlingStrategyManager();
+        WebConfiguration config = WebConfiguration.getInstance();
+        String defaultSuffixConfig =
+              config.getOptionValue(WebConfiguration.WebContextInitParameter.DefaultSuffix);
+        configuredExtensions = Util.split(defaultSuffixConfig, " ");
 
     }
 
@@ -610,41 +610,43 @@ public class MultiViewHandler extends ViewHandler {
      */
     protected String convertViewId(FacesContext context, String viewId) {
 
-        if (contextDefaultSuffix == null) {
-            contextDefaultSuffix =
-                  WebConfiguration
-                        .getInstance(context.getExternalContext())
-                        .getOptionValue(WebContextInitParameter.DefaultSuffix);
-            if (contextDefaultSuffix == null) {
-                contextDefaultSuffix = ViewHandler.DEFAULT_SUFFIX;
-            }
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("contextDefaultSuffix "
-                            + contextDefaultSuffix);
-            }
-        }
-
-        String convertedViewId = viewId;
         // if the viewId doesn't already use the above suffix,
         // replace or append.
-        if (!convertedViewId.endsWith(contextDefaultSuffix)) {
-            StringBuilder buffer = new StringBuilder(convertedViewId);
-            int extIdx = convertedViewId.lastIndexOf('.');
+        StringBuilder buffer = new StringBuilder(viewId);
+        for (String ext : configuredExtensions) {
+            if (viewId.endsWith(ext)) {
+                return viewId;
+            }
+            int extIdx = viewId.lastIndexOf('.');
             if (extIdx != -1) {
-                buffer.replace(extIdx, convertedViewId.length(),
-                               contextDefaultSuffix);
+                buffer.replace(extIdx, viewId.length(), ext);
             } else {
                 // no extension in the provided viewId, append the suffix
-                buffer.append(contextDefaultSuffix);
+                buffer.append(ext);
             }
-            convertedViewId = buffer.toString();
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine( "viewId after appending the context suffix " +
-                             convertedViewId);
+            String convertedViewId = buffer.toString();
+            try {
+                if (context.getExternalContext().getResource(convertedViewId) != null) {
+                    // RELEASE_PENDING (rlubke,driscoll) cache the lookup
+                    return convertedViewId;
+                } else {
+                    // reset the buffer to check for the next extension
+                    buffer.setLength(0);
+                    buffer.append(viewId);
+                }
+            } catch (MalformedURLException e) {
+                if (logger.isLoggable(Level.SEVERE)) {
+                    logger.log(Level.SEVERE,
+                               e.toString(),
+                               e);
+                }
             }
-
         }
-        return convertedViewId;
+
+        // unable to find any resource match that the default ViewHandler
+        // can deal with.  Return the viewId as it was passed.  There is
+        // probably another ViewHandler in the stack that will handle this.
+        return viewId;
 
     }
 
