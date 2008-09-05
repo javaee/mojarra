@@ -1467,15 +1467,16 @@ private void doFind(FacesContext context, String clientId) {
 
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) docs
-     * RELEASE_PENDING (eburns,rogerk) Consider adding FacesContext argument
-     * to getCurrentComponent().  There is no need to call this from the EL
-     * since we have the 'component' implicit object. 
-     * @return
+     * <p class="changed_added_2_0">Return the closest ancestor
+     * component, relative to the component returned from {@link
+     * #getCurrentComponent}, that is a composite component, or
+     * <code>null</code> if no such component exists.</p>
      *
      * @since 2.0
      */
     public static UIComponent getCurrentCompositeComponent() {
+	// RELEASE_PENDING (edburns,rogerk) docs
+	// RELEASE_PENDING (eburns,rogerk) Consider adding FacesContext argument
 
         FacesContext context = FacesContext.getCurrentInstance();
         Map<Object, Object> contextMap = context.getAttributes();
