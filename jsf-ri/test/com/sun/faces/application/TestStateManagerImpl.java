@@ -40,18 +40,10 @@
  */
 
 package com.sun.faces.application;
-import com.sun.faces.cactus.ServletFacesTestCase;
-import com.sun.faces.cactus.TestingUtil;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.RequestStateManager;
-import com.sun.faces.renderkit.html_basic.HtmlResponseWriter;
-import com.sun.faces.renderkit.ServerSideStateHelper;
 
-import java.util.Map;
-import java.util.Locale;
 import java.io.StringWriter;
-
-import javax.faces.application.StateManager.SerializedView;
+import java.util.Locale;
+import java.util.Map;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIGraphic;
@@ -59,7 +51,11 @@ import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
+
+import com.sun.faces.cactus.ServletFacesTestCase;
+import com.sun.faces.renderkit.ServerSideStateHelper;
+import com.sun.faces.renderkit.html_basic.HtmlResponseWriter;
+import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
 
 
@@ -83,47 +79,36 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         super(name);
     }
     
-    //
-    // Test Methods
-    //
+    // ------------------------------------------------------------ Test Methods
+
+
     
     // Verify saveSerializedView() throws IllegalStateException
     // if duplicate component id's are detected on non-transient 
     // components.
-    public void testDuplicateIdDetectionServer() throws Exception {
+    public void testDuplicateIdDetection() throws Exception {
 
         FacesContext context = getFacesContext();
-        UIViewRoot root = null;
 
-        UIComponent comp1 = null;
-
-        UIComponent comp2 = null;
-
-        UIComponent comp3 = null;
-
-        UIComponent facet1 = null;
-
-        UIComponent facet2 = null;
-        
         // construct a view
-        root = Util.getViewHandler(getFacesContext()).createView(context, null); 
+        UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(context, null);
         root.setViewId("/test");
         root.setId("root");
         root.setLocale(Locale.US);
 
-        comp1 = new UIInput();
+        UIComponent comp1 = new UIInput();
         comp1.setId("comp1");
 
-        comp2 = new UIOutput();
+        UIComponent comp2 = new UIOutput();
         comp2.setId("comp2");
 
-        comp3 = new UIGraphic();
+        UIComponent comp3 = new UIGraphic();
         comp3.setId("comp3");
 
-        facet1 = new UIOutput();
+        UIComponent facet1 = new UIOutput();
         facet1.setId("comp4");
 
-        facet2 = new UIOutput();
+        UIComponent facet2 = new UIOutput();
         facet2.setId("comp2");
 
         comp2.getFacets().put("facet1", facet1);
@@ -133,11 +118,6 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         root.getChildren().add(comp2);
         root.getChildren().add(comp3);
 
-        HttpSession session =
-            (HttpSession) context.getExternalContext().getSession(false);
-        session.setAttribute("/test", root);
-
-
         context.setViewRoot(root);
 
         StateManagerImpl stateManager = (StateManagerImpl) context.getApplication()
@@ -145,12 +125,11 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
 
         boolean exceptionThrown = false;
         try {
-            stateManager.saveSerializedView(context);
+            stateManager.saveView(context);
         } catch (IllegalStateException ise) {
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
-        
         
         // multiple componentns with a null ID should not
         // trigger an exception
@@ -182,13 +161,11 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         root.getChildren().add(comp2);
         root.getChildren().add(comp3);
 
-        session.setAttribute("/test", root);
-
         context.setViewRoot(root);
 
         exceptionThrown = false;
         try {
-            stateManager.saveSerializedView(context);
+            stateManager.saveView(context);
         } catch (IllegalStateException ise) {
             exceptionThrown = true;
         }
@@ -226,13 +203,11 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         root.getChildren().add(comp2);
         root.getChildren().add(comp3);
 
-        session.setAttribute("/test", root);
-
         context.setViewRoot(root);
 
         exceptionThrown = false;
         try {
-            stateManager.saveSerializedView(context);
+            stateManager.saveView(context);
         } catch (IllegalStateException ise) {
             exceptionThrown = true;
         }
@@ -240,28 +215,7 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
     }
 
 
-    public void testDuplicateIdDetectionClient() throws Exception {
-        StateManagerImpl wrapper =
-            new StateManagerImpl() {
-                public boolean isSavingStateInClient(FacesContext context) {
-                    return true;
-                }
-            };
-        getFacesContext().getApplication().setStateManager(wrapper);
-        testDuplicateIdDetectionServer();
-    }
 
-    public static void resetStateManagerRequestIdSerialNumber(FacesContext context) {
-	//((StateManagerImpl) Util.getStateManager(context)).requestIdSerial = 0;
-        StateManagerImpl stateManager = 
-              ((StateManagerImpl) Util.getStateManager(context));
-        TestingUtil.setPrivateField("reqeustIdSerial",
-                                    Integer.TYPE,
-                                    stateManager,
-                                    0);
-        
-	
-    }
     
     public void beginMultiWindowSaveServer(WebRequest theRequest) {
         theRequest.addParameter("javax.faces.ViewState", "j_id1:j_id2");
@@ -274,38 +228,26 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
                     return false;
                 }
             };
-        getFacesContext().getApplication().setStateManager(wrapper);
-        
-        // build the tree
-        
-        UIViewRoot root, newRoot = null;
 
-        UIComponent comp1 = null;
-
-        UIComponent comp2 = null;
-
-        UIComponent comp3 = null;
-
-        UIComponent facet1 = null;
-
-        UIComponent facet2 = null;
+        FacesContext ctx = getFacesContext();
+        ctx.getApplication().setStateManager(wrapper);
         
         // construct a view
-        root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null); 
+        UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(ctx, null);
         root.setViewId("/test");
         root.setId("root");
         root.setLocale(Locale.US);
 
-        comp1 = new UIInput();
+        UIComponent comp1 = new UIInput();
         comp1.setId("comp1");
 
-        comp2 = new UIOutput();
+        UIComponent comp2 = new UIOutput();
         comp2.setId("comp2");
 
-        comp3 = new UIGraphic();
+        UIComponent comp3 = new UIGraphic();
         comp3.setId("comp3");
 
-        facet1 = new UIOutput();
+        UIComponent facet1 = new UIOutput();
         facet1.setId("comp4");
 
         comp2.getFacets().put("facet1", facet1);
@@ -313,23 +255,25 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         root.getChildren().add(comp1);
         root.getChildren().add(comp2);
         root.getChildren().add(comp3);
-        
-        getFacesContext().setViewRoot(root);
+
+        ctx.setViewRoot(root);
         root.getAttributes().put("checkThisValue", "checkThisValue");
         getFacesContext().setResponseWriter(new HtmlResponseWriter(new StringWriter(), "text/html", "UTF-8"));
         Object viewState = wrapper.saveView(getFacesContext());
         wrapper.writeState(getFacesContext(), viewState);
         
         // See that the Logical View and Actual View maps are correctly created
-        Map sessionMap = getFacesContext().getExternalContext().getSessionMap();
+        Map sessionMap = ctx.getExternalContext().getSessionMap();
         assertTrue(sessionMap.containsKey(ServerSideStateHelper.LOGICAL_VIEW_MAP));
         assertTrue(((Map)sessionMap.get(ServerSideStateHelper.LOGICAL_VIEW_MAP)).containsKey("j_id1"));
 
-        newRoot = wrapper.restoreView(getFacesContext(), "test", "HTML_BASIC");
+        UIViewRoot newRoot = wrapper.restoreView(ctx, "test", "HTML_BASIC");
         assertNotNull(newRoot);
         assertEquals(root.getAttributes().get("checkThisValue"),
                      newRoot.getAttributes().get("checkThisValue"));
         
     }
-    
+
+
+
 }

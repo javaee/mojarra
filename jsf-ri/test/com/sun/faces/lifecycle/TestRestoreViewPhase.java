@@ -42,6 +42,7 @@ package com.sun.faces.lifecycle;
 
 import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.util.Util;
+import com.sun.faces.renderkit.ServerSideStateHelper;
 
 import org.apache.cactus.WebRequest;
 
@@ -147,7 +148,7 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
 
 	// here we do what the StateManager does to save the state in
 	// the server.
-	Util.getStateManager(context).saveSerializedView(context);
+	Util.getStateManager(context).saveView(context);
 	//context.setViewRoot(null);
 
         Phase restoreView = new RestoreViewPhase();
@@ -162,8 +163,8 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
                    !(getFacesContext().getResponseComplete()));
 
         assertTrue(null != getFacesContext().getViewRoot());
-        assertTrue(RenderKitFactory.HTML_BASIC_RENDER_KIT ==
-                   getFacesContext().getViewRoot().getRenderKitId());
+        assertTrue(RenderKitFactory.HTML_BASIC_RENDER_KIT.equals(getFacesContext()
+              .getViewRoot().getRenderKitId()));
 
         assertTrue(locale == getFacesContext().getViewRoot().getLocale());
 
@@ -211,7 +212,7 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
 
 	// here we do what the StateManager does to save the state in
 	// the server.
-	Util.getStateManager(context).saveSerializedView(context);
+	Util.getStateManager(context).saveView(context);
 	//context.setViewRoot(null);
 
         Phase restoreView = new RestoreViewPhase();
@@ -246,8 +247,8 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
 
 	// here we do what the StateManager does to save the state in
 	// the server.
-	com.sun.faces.application.TestStateManagerImpl.resetStateManagerRequestIdSerialNumber(context);
-	Util.getStateManager(context).saveSerializedView(context);
+	context.getExternalContext().getSessionMap().remove(ServerSideStateHelper.STATEMANAGED_SERIAL_ID_KEY);
+	Util.getStateManager(context).saveView(context);
 	//context.setViewRoot(null);
 
         restoreView = new RestoreViewPhase();
@@ -294,7 +295,7 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
                                                                                                                         
         // here we do what the StateManager does to save the state in
         // the server.
-        Util.getStateManager(context).saveSerializedView(context);
+        Util.getStateManager(context).saveView(context);
         //context.setViewRoot(null);
                                                                                                                         
         // invalidate the session before we attempt to restore
