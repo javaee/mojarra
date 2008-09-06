@@ -252,17 +252,6 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         ResponseWriter writer = context.getResponseWriter();
         assert (writer != null);
 
-        // disable the check box if the attribute is set.
-        boolean componentDisabled = Util.componentIsDisabled(component);
-
-        String labelClass;
-        if (componentDisabled || curItem.isDisabled()) {
-            labelClass = (String) component.
-                  getAttributes().get("disabledClass");
-        } else {
-            labelClass = (String) component.
-                  getAttributes().get("enabledClass");
-        }
         if (alignVertical) {
             writer.writeText("\t", component, null);
             writer.startElement("tr", component);
@@ -320,10 +309,40 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         writer.endElement("input");
         writer.startElement("label", component);
         writer.writeAttribute("for", idString, "for");
-        // if enabledClass or disabledClass attributes are specified, apply
-        // it on the label.
+
+        // disable the check box if the attribute is set.
+        boolean componentDisabled = Util.componentIsDisabled(component);
+
+        // Set up the label's class, if appropriate
+        StringBuilder labelClass = new StringBuilder();
+        String style;
+        // If disabledClass or enabledClass set, add it to the label's class
+        if (componentDisabled || curItem.isDisabled()) {
+            style = (String) component.
+                  getAttributes().get("disabledClass");
+        } else {  // enabled
+            style = (String) component.
+                  getAttributes().get("enabledClass");
+        }
+        if (style != null) {
+            labelClass.append(style);
+        }
+        // If selectedClass or unselectedClass set, add it to the label's class
+        if (isSelected(context, itemValue, valuesArray)) {
+            style = (String) component.
+                  getAttributes().get("selectedClass");
+        } else { // not selected
+            style = (String) component.
+                  getAttributes().get("unselectedClass");
+        }
+        if (style != null) {
+            if (labelClass.length() > 0) {
+                labelClass.append(' ');
+            }
+            labelClass.append(style);
+        }
         if (labelClass != null) {
-            writer.writeAttribute("class", labelClass, "labelClass");
+            writer.writeAttribute("class", labelClass.toString(), "labelClass");
         }
         String itemLabel = curItem.getLabel();
         if (itemLabel != null) {
@@ -337,6 +356,11 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             } else {
                 writer.writeText(itemLabel, component, "label");
             }
+        }
+        if (isSelected(context, itemValue, valuesArray)) {
+            
+        } else { // not selected
+            
         }
         writer.endElement("label");
         writer.endElement("td");

@@ -855,6 +855,21 @@
               recordGolden="${local.golden.path}/taglib/attributeTest.txt"
               golden="${golden.path}/taglib/attributeTest.txt"/>
 
+        <jsf.tester
+              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+              request="${context.path}/faces/standard/selectmany02.jsp"
+              recordGolden="${local.golden.path}/standard/selectmany02.txt"
+              golden="${golden.path}/standard/selectmany02.txt"/>
+        <jsf.tester
+              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+              request="${context.path}/faces/standard/selectmany03.jsp"
+              recordGolden="${local.golden.path}/standard/selectmany03.txt"
+              golden="${golden.path}/standard/selectmany03.txt"/>              
+        <jsf.tester
+              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+              request="${context.path}/faces/standard/selectmany04.jsp"
+              recordGolden="${local.golden.path}/standard/selectmany04.txt"
+              golden="${golden.path}/standard/selectmany04.txt"/>
     </target>
 
     <target name="test.verbatim"

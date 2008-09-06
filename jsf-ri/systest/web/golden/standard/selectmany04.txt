@@ -1,0 +1,12 @@
+<table>
+	<tr>
+<td>
+<input name="j_id_id11" id="j_id_id11:0" value="1" type="checkbox" checked="checked" /><label for="j_id_id11:0" class="six eight"> Open</label></td>
+<td>
+<input name="j_id_id11" id="j_id_id11:1" value="2" type="checkbox" checked="checked" disabled="disabled" /><label for="j_id_id11:1" class="seven eight"> Submitted</label></td>
+<td>
+<input name="j_id_id11" id="j_id_id11:2" value="3" type="checkbox" /><label for="j_id_id11:2" class="six nine"> Accepted</label></td>
+<td>
+<input name="j_id_id11" id="j_id_id11:3" value="4" type="checkbox" disabled="disabled" /><label for="j_id_id11:3" class="seven nine"> Rejected</label></td>
+	</tr>
+</table>
