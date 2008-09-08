@@ -101,8 +101,10 @@ public class PDLUtils {
 
 <p style="margin-left: 3em;">For each <code>UIComponent</code> in the
 list returned from <em>curTarget.getTargets()</em>, call
-<em>curHandler.applyAttachedObject()</em>, passing the
-<code>FacesContext</code> and the <code>UIComponent</code>.</p>
+<em>curHandler.<a
+href="AttachedObjectHandler.html#applyAttachedObject">applyAttachedObject()</></em>,
+passing the <code>FacesContext</code> and the
+<code>UIComponent</code>.</p>
 
           <p>and cause this inner loop to terminate.</p>
 
