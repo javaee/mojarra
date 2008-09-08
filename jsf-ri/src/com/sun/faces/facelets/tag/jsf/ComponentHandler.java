@@ -65,16 +65,13 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
 
 import com.sun.faces.facelets.FaceletContext;
-import com.sun.faces.facelets.el.LegacyValueBinding;
 import com.sun.faces.facelets.tag.MetaTagHandler;
 import com.sun.faces.facelets.tag.TagAttribute;
 import com.sun.faces.facelets.tag.TagException;
 import com.sun.faces.facelets.tag.MetaRuleset;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
-import com.sun.faces.facelets.util.FacesAPI;
 
 /**
  * Implementation of the tag logic used in the JSF specification. This is your
@@ -243,25 +240,11 @@ public class ComponentHandler extends MetaTagHandler {
         Application app = faces.getApplication();
         if (this.binding != null) {
             ValueExpression ve = this.binding.getValueExpression(ctx,
-                    Object.class);
-            if (FacesAPI.getVersion() >= 12) {
-                c = app.createComponent(ve, faces, this.componentType, this.rendererType);
-                if (c != null) {
-                    // Make sure the component supports 1.2
-                    if (FacesAPI.getComponentVersion(c) >= 12) {
-                        c.setValueExpression("binding", ve);
-                    } else {
-                        ValueBinding vb = new LegacyValueBinding(ve);
-                        c.setValueBinding("binding", vb);
-                    }
-
-                }
-            } else {
-                ValueBinding vb = new LegacyValueBinding(ve);
-                c = app.createComponent(vb, faces, this.componentType);
-                if (c != null) {
-                    c.setValueBinding("binding", vb);
-                }
+                                                                 Object.class);
+            c = app.createComponent(ve, faces, this.componentType, this.rendererType);
+            if (c != null) {
+                // Make sure the component supports 1.2
+                c.setValueExpression("bindine", ve);
             }
         } else {
             c = app.createComponent(faces, this.componentType, this.rendererType);

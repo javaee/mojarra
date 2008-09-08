@@ -61,7 +61,6 @@ import com.sun.faces.facelets.tag.TagAttribute;
 import com.sun.faces.facelets.tag.Metadata;
 import com.sun.faces.facelets.tag.MetaRule;
 import com.sun.faces.facelets.tag.MetadataTarget;
-import com.sun.faces.facelets.util.FacesAPI;
 
 /**
  * 
@@ -165,11 +164,7 @@ final class ValueHolderRule extends MetaRule {
                 if (attribute.isLiteral()) {
                     return new LiteralConverterMetadata(attribute.getValue());
                 } else {
-                    if (FacesAPI.getComponentVersion(meta.getTargetClass()) >= 12) {
-                        return new DynamicConverterMetadata2(attribute);
-                    } else {
-                        return new DynamicConverterMetadata(attribute);
-                    }
+                    return new DynamicConverterMetadata2(attribute);
                 }
             }
 
@@ -177,11 +172,7 @@ final class ValueHolderRule extends MetaRule {
                 if (attribute.isLiteral()) {
                     return new LiteralValueMetadata(attribute.getValue());
                 } else {
-                    if (FacesAPI.getComponentVersion(meta.getTargetClass()) >= 12) {
-                        return new DynamicValueExpressionMetadata(attribute);
-                    } else {
-                        return new DynamicValueBindingMetadata(attribute);
-                    }
+                    return new DynamicValueExpressionMetadata(attribute);
                 }
             }
         }

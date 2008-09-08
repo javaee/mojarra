@@ -81,8 +81,6 @@ import javax.faces.model.ResultSetDataModel;
 import javax.faces.model.ScalarDataModel;
 import javax.faces.render.Renderer;
 
-import com.sun.faces.facelets.tag.jsf.ComponentSupport;
-import com.sun.faces.facelets.util.FacesAPI;
 
 public class UIRepeat extends UIComponentBase implements NamingContainer {
 
@@ -420,11 +418,7 @@ public class UIRepeat extends UIComponentBase implements NamingContainer {
                                     .equals(phase)) {
                                 c.processUpdates(faces);
                             } else if (PhaseId.RENDER_RESPONSE.equals(phase)) {
-                                if (FacesAPI.getVersion() >= 12) {
-                                    c.encodeAll(faces);
-                                } else {
-                                    ComponentSupport.encodeRecursive(faces, c);
-                                }
+                                c.encodeAll(faces);
                             }
                         }
                     }

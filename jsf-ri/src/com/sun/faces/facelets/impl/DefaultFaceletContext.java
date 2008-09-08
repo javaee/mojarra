@@ -56,7 +56,6 @@ import com.sun.faces.facelets.FaceletException;
 import com.sun.faces.facelets.TemplateClient;
 import com.sun.faces.facelets.Facelet;
 import com.sun.faces.facelets.el.DefaultVariableMapper;
-import com.sun.faces.facelets.el.ELAdaptor;
 
 import javax.el.*;
 import javax.faces.FacesException;
@@ -115,7 +114,7 @@ final class DefaultFaceletContext extends FaceletContext {
     }
 
     public DefaultFaceletContext(FacesContext faces, DefaultFacelet facelet) {
-        this.ctx = ELAdaptor.getELContext(faces);
+        this.ctx = faces.getELContext();
         this.ids = new HashMap<String,Integer>();
         this.prefixes = new HashMap<Integer,Integer>();
         this.clients = new ArrayList<TemplateManager>(5);

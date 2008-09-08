@@ -62,7 +62,6 @@ import com.sun.faces.facelets.tag.TagAttribute;
 import com.sun.faces.facelets.tag.Metadata;
 import com.sun.faces.facelets.tag.MetaRule;
 import com.sun.faces.facelets.tag.MetadataTarget;
-import com.sun.faces.facelets.util.FacesAPI;
 
 /**
  * 
@@ -151,11 +150,8 @@ final class ActionSourceRule extends MetaRule {
             MetadataTarget meta) {
         if (meta.isTargetInstanceOf(ActionSource.class)) {
 
-            boolean elSupport = FacesAPI.getComponentVersion(meta
-                    .getTargetClass()) >= 12;
-
             if ("action".equals(name)) {
-                if (elSupport && meta.isTargetInstanceOf(ActionSource2.class)) {
+                if (meta.isTargetInstanceOf(ActionSource2.class)) {
                     return new ActionMapper2(attribute);
                 } else {
                     return new ActionMapper(attribute);
@@ -163,7 +159,7 @@ final class ActionSourceRule extends MetaRule {
             }
 
             if ("actionListener".equals(name)) {
-                if (elSupport && meta.isTargetInstanceOf(ActionSource2.class)) {
+                if (meta.isTargetInstanceOf(ActionSource2.class)) {
                     return new ActionListenerMapper2(attribute);
                 } else {
                     return new ActionListenerMapper(attribute);

@@ -73,7 +73,6 @@ import com.sun.faces.facelets.tag.TagDecorator;
 import com.sun.faces.facelets.tag.TagLibrary;
 import com.sun.faces.facelets.tag.ui.UILibrary;
 import com.sun.faces.facelets.util.ParameterCheck;
-import com.sun.faces.facelets.util.FacesAPI;
 import com.sun.faces.facelets.util.ReflectionUtil;
 
 /**
@@ -164,7 +163,7 @@ public abstract class Compiler {
     public final ExpressionFactory createExpressionFactory() {
         ExpressionFactory el = null;
         el = (ExpressionFactory) this.featureInstance(EXPRESSION_FACTORY);
-        if (el == null && FacesAPI.getVersion() >= 12) {
+        if (el == null) {
             try {
                 el = FacesContext.getCurrentInstance().getApplication()
                         .getExpressionFactory();

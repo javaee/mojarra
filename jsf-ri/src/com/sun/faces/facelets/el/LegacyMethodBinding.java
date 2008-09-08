@@ -86,7 +86,7 @@ public final class LegacyMethodBinding extends
     public Class getType(FacesContext context)
             throws MethodNotFoundException {
         try {
-            return m.getMethodInfo(ELAdaptor.getELContext(context)).getReturnType();
+            return m.getMethodInfo(context.getELContext()).getReturnType();
         } catch (javax.el.MethodNotFoundException e) {
             throw new MethodNotFoundException(e.getMessage(), e.getCause());
         } catch (ELException e) {
@@ -103,7 +103,7 @@ public final class LegacyMethodBinding extends
     public Object invoke(FacesContext context, Object[] params)
             throws EvaluationException, MethodNotFoundException {
         try {
-            return m.invoke(ELAdaptor.getELContext(context), params);
+            return m.invoke(context.getELContext(), params);
         } catch (javax.el.MethodNotFoundException e) {
             throw new MethodNotFoundException(e.getMessage(), e.getCause());
         } catch (ELException e) {

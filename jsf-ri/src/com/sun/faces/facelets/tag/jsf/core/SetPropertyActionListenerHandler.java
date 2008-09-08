@@ -76,7 +76,6 @@ import com.sun.faces.facelets.tag.TagConfig;
 import com.sun.faces.facelets.tag.TagException;
 import com.sun.faces.facelets.tag.TagHandler;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
-import com.sun.faces.facelets.util.FacesAPI;
 
 public class SetPropertyActionListenerHandler extends TagHandler {
 
@@ -102,7 +101,7 @@ public class SetPropertyActionListenerHandler extends TagHandler {
 
                 ActionListener listener;
 
-                if (FacesAPI.getVersion() >= 12 && src instanceof ActionSource2) {
+                if (src instanceof ActionSource2) {
                     listener = new SetPropertyListener(valueExpr, targetExpr);
                 } else {
                     listener = new LegacySetPropertyListener(

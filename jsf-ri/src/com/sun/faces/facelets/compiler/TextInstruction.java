@@ -61,7 +61,6 @@ import javax.el.ExpressionFactory;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import com.sun.faces.facelets.el.ELAdaptor;
 import com.sun.faces.facelets.el.ELText;
 
 final class TextInstruction implements Instruction {
@@ -77,7 +76,7 @@ final class TextInstruction implements Instruction {
     public void write(FacesContext context) throws IOException {
         ResponseWriter out = context.getResponseWriter();
         try {
-            ELContext elContext = ELAdaptor.getELContext(context);
+            ELContext elContext = context.getELContext();
             txt.writeText(out, elContext);
             //out.writeText(txt.toString(elContext), null);
         } catch (ELException e) {

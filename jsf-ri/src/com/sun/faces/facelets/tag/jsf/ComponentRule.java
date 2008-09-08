@@ -62,7 +62,6 @@ import com.sun.faces.facelets.tag.TagAttribute;
 import com.sun.faces.facelets.tag.Metadata;
 import com.sun.faces.facelets.tag.MetaRule;
 import com.sun.faces.facelets.tag.MetadataTarget;
-import com.sun.faces.facelets.util.FacesAPI;
 
 /**
  * 
@@ -149,11 +148,7 @@ final class ComponentRule extends MetaRule {
                 if (type == null) {
                     type = Object.class;
                 }
-                if (FacesAPI.getComponentVersion(meta.getTargetClass()) >= 12) {
-                    return new ValueExpressionMetadata(name, type, attribute);
-                } else {
-                    return new ValueBindingMetadata(name, type, attribute);
-                }
+                return new ValueExpressionMetadata(name, type, attribute);
             } else if (meta.getWriteMethod(name) == null) {
 
                 // this was an attribute literal, but not property

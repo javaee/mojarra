@@ -64,7 +64,6 @@ import com.sun.faces.facelets.tag.TagAttribute;
 import com.sun.faces.facelets.tag.Metadata;
 import com.sun.faces.facelets.tag.MetaRule;
 import com.sun.faces.facelets.tag.MetadataTarget;
-import com.sun.faces.facelets.util.FacesAPI;
 
 /**
  * 
@@ -156,25 +155,16 @@ public final class EditableValueHolderRule extends MetaRule {
 
         if (meta.isTargetInstanceOf(EditableValueHolder.class)) {
 
-            boolean elSupport = FacesAPI.getComponentVersion(meta
-                    .getTargetClass()) >= 12;
-
             if ("validator".equals(name)) {
                 if (attribute.isLiteral()) {
                     return new LiteralValidatorMetadata(attribute.getValue());
-                } else if (elSupport) {
-                    return new ValidatorExpressionMetadata(attribute);
                 } else {
-                    return new ValidatorBindingMetadata(attribute);
+                    return new ValidatorExpressionMetadata(attribute);
                 }
             }
 
             if ("valueChangeListener".equals(name)) {
-                if (elSupport) {
-                    return new ValueChangedExpressionMetadata(attribute);
-                } else {
-                    return new ValueChangedBindingMetadata(attribute);
-                }
+                return new ValueChangedExpressionMetadata(attribute);
             }
 
         }

@@ -60,8 +60,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 
-import com.sun.faces.facelets.tag.jsf.ComponentSupport;
-import com.sun.faces.facelets.util.FacesAPI;
 
 public class RepeatRenderer extends Renderer {
 
@@ -97,11 +95,7 @@ public class RepeatRenderer extends Renderer {
             UIComponent c;
             while (itr.hasNext()) {
                 c = (UIComponent) itr.next();
-                if (FacesAPI.getVersion() >= 12) {
-                    c.encodeAll(context);
-                } else {
-                    ComponentSupport.encodeRecursive(context, c);
-                }
+                c.encodeAll(context);
             }
             
             if (tag != null) {

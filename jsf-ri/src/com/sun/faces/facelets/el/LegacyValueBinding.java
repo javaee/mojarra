@@ -88,7 +88,7 @@ public final class LegacyValueBinding extends ValueBinding implements Externaliz
 
     public Object getValue(FacesContext context) throws EvaluationException,
             PropertyNotFoundException {
-        ELContext ctx = ELAdaptor.getELContext(context);
+        ELContext ctx = context.getELContext();
         try {
             return this.delegate.getValue(ctx);
         } catch (javax.el.PropertyNotFoundException e) {
@@ -100,7 +100,7 @@ public final class LegacyValueBinding extends ValueBinding implements Externaliz
 
     public void setValue(FacesContext context, Object value)
             throws EvaluationException, PropertyNotFoundException {
-        ELContext ctx = ELAdaptor.getELContext(context);
+        ELContext ctx = context.getELContext();
         try {
             this.delegate.setValue(ctx, value);
         } catch (PropertyNotWritableException e) {
@@ -114,7 +114,7 @@ public final class LegacyValueBinding extends ValueBinding implements Externaliz
 
     public boolean isReadOnly(FacesContext context) throws EvaluationException,
             PropertyNotFoundException {
-        ELContext ctx = ELAdaptor.getELContext(context);
+        ELContext ctx = context.getELContext();
         try {
             return this.delegate.isReadOnly(ctx);
         } catch (javax.el.PropertyNotFoundException e) {
@@ -126,7 +126,7 @@ public final class LegacyValueBinding extends ValueBinding implements Externaliz
 
     public Class getType(FacesContext context) throws EvaluationException,
             PropertyNotFoundException {
-        ELContext ctx = ELAdaptor.getELContext(context);
+        ELContext ctx = context.getELContext();
         try {
             return this.delegate.getType(ctx);
         } catch (javax.el.PropertyNotFoundException e) {

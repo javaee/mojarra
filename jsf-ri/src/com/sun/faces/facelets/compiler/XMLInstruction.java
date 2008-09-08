@@ -58,7 +58,6 @@ import javax.el.ExpressionFactory;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import com.sun.faces.facelets.el.ELAdaptor;
 import com.sun.faces.facelets.el.ELText;
 
 public class XMLInstruction implements Instruction {
@@ -74,7 +73,7 @@ public class XMLInstruction implements Instruction {
     public void write(FacesContext context) throws IOException {
         ResponseWriter rw = context.getResponseWriter();
         rw.writeText(STOP, 0, 0); // hack to get closing elements
-        this.text.write(rw, ELAdaptor.getELContext(context));
+        this.text.write(rw, context.getELContext());
     }
 
     public Instruction apply(ExpressionFactory factory, ELContext ctx) {

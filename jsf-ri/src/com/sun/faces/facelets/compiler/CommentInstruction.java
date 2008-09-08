@@ -52,15 +52,12 @@
 package com.sun.faces.facelets.compiler;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 
 import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
 
-import com.sun.faces.facelets.el.ELAdaptor;
 import com.sun.faces.facelets.el.ELText;
 
 final class CommentInstruction implements Instruction {
@@ -71,7 +68,7 @@ final class CommentInstruction implements Instruction {
     }
 
     public void write(FacesContext context) throws IOException {
-        ELContext elContext = ELAdaptor.getELContext(context);
+        ELContext elContext = context.getELContext();
         context.getResponseWriter().writeComment(this.text.toString(elContext));
     }
 
