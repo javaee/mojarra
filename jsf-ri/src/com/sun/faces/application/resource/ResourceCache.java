@@ -139,12 +139,12 @@ public class ResourceCache {
         ServletContext sc = config.getServletContext();
         contextName = getServletContextIdentifier(sc);
         shutdown = false;
-        int checkPeriod = getCheckPeriod(config);
+        long checkPeriod = getCheckPeriod(config);
         if (checkPeriod >= 0) {
             resourceCache = new MultiKeyConcurrentHashMap<String,ResourceInfo>(30);
         }
         if (checkPeriod >= 1) {
-            initExecutor((checkPeriod * 1000 * 60));
+            initExecutor((checkPeriod * 1000L * 60L));
             initMonitors(sc);
         }
         ApplicationAssociate associate = ApplicationAssociate.getInstance(sc);
@@ -287,13 +287,13 @@ public class ResourceCache {
     }
 
 
-    private int getCheckPeriod(WebConfiguration webConfig) {
+    private Long getCheckPeriod(WebConfiguration webConfig) {
 
         String val = webConfig.getOptionValue(WebContextInitParameter.ResourceUpdateCheckPeriod);
         try {
-            return Integer.parseInt(val);
+            return Long.parseLong(val);
         } catch (NumberFormatException nfe) {
-            return Integer.parseInt(WebContextInitParameter.ResourceUpdateCheckPeriod.getDefaultValue());
+            return Long.parseLong(WebContextInitParameter.ResourceUpdateCheckPeriod.getDefaultValue());
         }
 
     }

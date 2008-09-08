@@ -117,7 +117,7 @@ public class ResourceImpl extends Resource {
      */
     public InputStream getInputStream() throws IOException {
         FacesContext ctx = FacesContext.getCurrentInstance();
-        InputStream result = null;
+        InputStream result;
         if (isEvaluateExpressions()) {
             result = getExpressionEvaluatingInputStream(ctx);
         } else {
@@ -127,15 +127,15 @@ public class ResourceImpl extends Resource {
     }
     
     private InputStream getExpressionEvaluatingInputStream(final FacesContext context)
-            throws IOException {
-        InputStream result = null;
+    throws IOException {
+
+        InputStream result;
         final InputStream inner = resourceInfo.getHelper().getInputStream(resourceInfo, 
                 context);
         result = new InputStream() {
 
             // Premature optimization is the root of all evil.  Blah blah.
             private List<Integer> buf = new ArrayList<Integer>(1024);
-            boolean readingExpression = false;
             boolean failedExpressionTest = false;
             boolean writingExpression = false;
 
@@ -159,24 +159,12 @@ public class ResourceImpl extends Resource {
                 return buf;
             }
 
-            public void setBuf(List<Integer> buf) {
-                this.buf = buf;
-            }
-
-            public boolean isReadingExpression() {
-                return readingExpression;
-            }
-
-            public void setReadingExpression(boolean readingExpression) {
-                this.readingExpression = readingExpression;
-            }
-            
             private int nextRead = -1;
                     
             @Override
             public int read() throws IOException {
-                int i = 0;
-                char c = 0;
+                int i;
+                char c;
                 
                 if (isFailedExpressionTest()) {
                     i = nextRead;
@@ -224,9 +212,8 @@ public class ResourceImpl extends Resource {
             }
             
             private void readExpressionIntoBufferAndEvaluateIntoBuffer() throws IOException {
-                assert(isReadingExpression());
-                int i = 0;
-                char c = 0;
+                int i;
+                char c;
                 do {
                     i = inner.read();
                     c = (char) i;
@@ -248,9 +235,8 @@ public class ResourceImpl extends Resource {
             private void evaluateExpressionIntoBuffer() {
                 List<Integer> buf = getBuf();
                 char chars[] = new char[buf.size()];
-                int i = 0, length = 0;
-                for (int cur : buf) {
-                    chars[i++] = (char) cur;
+                for (int i = 0, len = buf.size(); i < len; i++) {
+                    chars[i] = (char) (int) buf.get(i);
                 }
                 String expressionBody = new String(chars);
                 int colon;
@@ -293,16 +279,9 @@ public class ResourceImpl extends Resource {
                         createValueExpression(elContext, "#{" + expressionBody +
                         "}", String.class);
                 Object value = ve.getValue(elContext);
-                String expressionResult = null;
-                if (null != value) {
-                    expressionResult = value.toString();
-                }
-                else {
-                    expressionResult = "";
-                }
+                String expressionResult = ((value != null) ? value.toString() : "");
                 buf.clear();
-                length = expressionResult.length();
-                for (i = 0; i < length; i++) {
+                for (int i = 0, len = expressionResult.length(); i < len; i++) {
                     buf.add((int) expressionResult.charAt(i));
                 }
             }
@@ -316,21 +295,17 @@ public class ResourceImpl extends Resource {
         };
         
         return result;
-    };
+    }
 
     /* PENDING(edburns): really, this should be a public proprty on Resource.
      */
     
     private boolean isEvaluateExpressions() {
-        boolean result = false;
-        String contentType = null;
-        
-        result = ((null != (contentType = this.getContentType())) &&
-                  (contentType.equals("text/css") ||
-                   contentType.equals("text/javascript") ||
-                   contentType.equals("application/x-javascript")));
-        
-        return result;
+        String contentType = getContentType();
+
+        return ("text/css".equals(contentType)
+                || "text/javascript".equals(contentType)
+                || "application/x-javascript".equals(contentType));
     }
 
 

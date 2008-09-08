@@ -54,6 +54,7 @@ package com.sun.faces.facelets.impl;
 import com.sun.faces.facelets.FaceletContext;
 import com.sun.faces.facelets.FaceletException;
 import com.sun.faces.facelets.TemplateClient;
+import com.sun.faces.facelets.Facelet;
 import com.sun.faces.facelets.el.DefaultVariableMapper;
 import com.sun.faces.facelets.el.ELAdaptor;
 
@@ -69,7 +70,7 @@ import java.util.*;
  * Default FaceletContext implementation.
  * 
  * A single FaceletContext is used for all Facelets involved in an invocation of
- * {@link com.sun.facelets.Facelet#apply(FacesContext, UIComponent) Facelet#apply(FacesContext, UIComponent)}.
+ * {@link com.sun.faces.facelets.Facelet#apply(FacesContext, UIComponent) Facelet#apply(FacesContext, UIComponent)}.
  * This means that included Facelets are treated the same as the JSP include
  * directive.
  * 
@@ -84,17 +85,16 @@ final class DefaultFaceletContext extends FaceletContext {
     private final ELContext ctx;
 
     private final DefaultFacelet facelet;
-    private final List faceletHierarchy;
+    private final List<Facelet> faceletHierarchy;
 
     private VariableMapper varMapper;
 
     private FunctionMapper fnMapper;
 
-	private final Map ids;
-    private final Map prefixes;
+    private final Map<String,Integer> ids;
+    private final Map<Integer,Integer> prefixes;
     private String prefix;
-    //TODO: change to StringBuilder when JDK1.5 support is available in Facelets
-    private final StringBuffer uniqueIdBuilder=new StringBuffer(30);
+    private final StringBuilder uniqueIdBuilder=new StringBuilder(30);
 
 
     public DefaultFaceletContext(DefaultFaceletContext ctx,
@@ -106,7 +106,7 @@ final class DefaultFaceletContext extends FaceletContext {
         this.ids = ctx.ids;
         this.prefixes = ctx.prefixes;
         this.varMapper = ctx.varMapper;
-        this.faceletHierarchy = new ArrayList(ctx.faceletHierarchy.size()+1);
+        this.faceletHierarchy = new ArrayList<Facelet>(ctx.faceletHierarchy.size()+1);
         this.faceletHierarchy.addAll(ctx.faceletHierarchy);
         this.faceletHierarchy.add(facelet);
         this.facelet=facelet;
@@ -116,11 +116,11 @@ final class DefaultFaceletContext extends FaceletContext {
 
     public DefaultFaceletContext(FacesContext faces, DefaultFacelet facelet) {
         this.ctx = ELAdaptor.getELContext(faces);
-        this.ids = new HashMap();
-        this.prefixes = new HashMap();
-        this.clients = new ArrayList(5);
+        this.ids = new HashMap<String,Integer>();
+        this.prefixes = new HashMap<Integer,Integer>();
+        this.clients = new ArrayList<TemplateManager>(5);
         this.faces = faces;
-        this.faceletHierarchy = new ArrayList(1);
+        this.faceletHierarchy = new ArrayList<Facelet>(1);
         this.faceletHierarchy.add(facelet);
         this.facelet = facelet;
         this.varMapper = this.ctx.getVariableMapper();
@@ -225,28 +225,27 @@ final class DefaultFaceletContext extends FaceletContext {
     public String generateUniqueId(String base) {
 
         if(prefix==null) {
-            //TODO: change to StringBuilder when JDK1.5 support is available
-            StringBuffer builder = new StringBuffer(faceletHierarchy.size()*30);
+            StringBuilder builder = new StringBuilder(faceletHierarchy.size()*30);
             for(int i=0; i< faceletHierarchy.size(); i++) {
                 DefaultFacelet facelet = (DefaultFacelet) faceletHierarchy.get(i);
                 builder.append(facelet.getAlias());
             }
-            Integer prefixInt = new Integer(builder.toString().hashCode());
+            Integer prefixInt = builder.toString().hashCode();
 
-            Integer cnt = (Integer) prefixes.get(prefixInt);
+            Integer cnt = prefixes.get(prefixInt);
             if(cnt==null) {
-                this.prefixes.put(prefixInt,new Integer(0));
+                this.prefixes.put(prefixInt, 0);
                 prefix = prefixInt.toString();
             } else {
                 int i=cnt.intValue()+1;
-                this.prefixes.put(prefixInt,new Integer(i));
-                prefix = prefixInt+"_"+i;
+                this.prefixes.put(prefixInt, i);
+                prefix = prefixInt + "_" +i;
             }
         }
 
-        Integer cnt = (Integer) this.ids.get(base);
+        Integer cnt = this.ids.get(base);
         if (cnt == null) {
-            this.ids.put(base, new Integer(0));
+            this.ids.put(base, 0);
             uniqueIdBuilder.delete(0,uniqueIdBuilder.length());
             uniqueIdBuilder.append(prefix);
             uniqueIdBuilder.append("_");
@@ -254,7 +253,7 @@ final class DefaultFaceletContext extends FaceletContext {
             return uniqueIdBuilder.toString();
         } else {
             int i = cnt.intValue() + 1;
-            this.ids.put(base, new Integer(i));
+            this.ids.put(base, i);
             uniqueIdBuilder.delete(0,uniqueIdBuilder.length());
             uniqueIdBuilder.append(prefix);
             uniqueIdBuilder.append("_");
@@ -313,14 +312,13 @@ final class DefaultFaceletContext extends FaceletContext {
         return this.ctx.getELResolver();
     }
 
-    private final List clients;
+    private final List<TemplateManager> clients;
 
     public void popClient(TemplateClient client) {
         if (!this.clients.isEmpty()) {
-            Iterator itr = this.clients.iterator();
-            while (itr.hasNext()) {
-                if (itr.next().equals(client)) {
-                    itr.remove();
+            for (TemplateManager c : clients) {
+                if (c.managesClient(client)) {
+                    clients.remove(client);
                     return;
                 }
             }
@@ -342,8 +340,9 @@ final class DefaultFaceletContext extends FaceletContext {
         TemplateManager client;
 
         for (int i = 0, size = this.clients.size(); i < size && !found; i++) {
-            client = ((TemplateManager) this.clients.get(i));
-            if (client.equals(this.facelet))
+            client = this.clients.get(i);
+            //noinspection EqualsBetweenInconvertibleTypes
+            if (client.managesFacelet(this.facelet))
                 continue;            
             found = client.apply(this, parent, name);            
         }
@@ -358,7 +357,7 @@ final class DefaultFaceletContext extends FaceletContext {
         
         private final boolean root;
 
-        private final Set names = new HashSet();
+        private final Set<String> names = new HashSet<String>();
 
         public TemplateManager(DefaultFacelet owner, TemplateClient target, boolean root) {
             this.owner = owner;
@@ -374,31 +373,40 @@ final class DefaultFaceletContext extends FaceletContext {
                 return false;
             } else {
                 this.names.add(testName);
-                boolean found = false;
-                found = this.target.apply(new DefaultFaceletContext(
+                boolean found = this.target.apply(new DefaultFaceletContext(
                         (DefaultFaceletContext) ctx, this.owner), parent, name);
                 this.names.remove(testName);
                 return found;
             }
         }
 
-        public boolean equals(Object o) {
+        public boolean managesClient(TemplateClient client) {
+            return (client == this.target);
+        }
+
+
+        public boolean managesFacelet(DefaultFacelet facelet) {
+            return (this.owner == facelet);
+        }
+
+        //@Override
+       // public boolean equals(Object o) {
             // System.out.println(this.owner.getAlias() + " == " +
             // ((DefaultFacelet) o).getAlias());
-            return this.owner == o || this.target == o;
-        }
-        
+        //    return this.owner == o || this.target == o;
+        //}
+
         public boolean isRoot() {
-        	return this.root;
+            return this.root;
         }
     }
-    
 
-	public boolean isPropertyResolved() {
-		return this.ctx.isPropertyResolved();
-	}
 
-	public void setPropertyResolved(boolean resolved) {
-		this.ctx.setPropertyResolved(resolved);
-	}
+    public boolean isPropertyResolved() {
+        return this.ctx.isPropertyResolved();
+    }
+
+    public void setPropertyResolved(boolean resolved) {
+        this.ctx.setPropertyResolved(resolved);
+    }
 }
