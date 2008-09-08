@@ -69,7 +69,7 @@ import com.sun.faces.facelets.FaceletException;
 import com.sun.faces.facelets.FaceletFactory;
 import com.sun.faces.facelets.FaceletHandler;
 import com.sun.faces.facelets.compiler.Compiler;
-import com.sun.faces.facelets.util.ParameterCheck;
+import com.sun.faces.util.Util;
 
 /**
  * Default FaceletFactory implementation.
@@ -101,8 +101,8 @@ public final class DefaultFaceletFactory extends FaceletFactory {
 
     public DefaultFaceletFactory(Compiler compiler, ResourceResolver resolver,
                                  long refreshPeriod) {
-        ParameterCheck.notNull("compiler", compiler);
-        ParameterCheck.notNull("resolver", resolver);
+        Util.notNull("compiler", compiler);
+        Util.notNull("resolver", resolver);
         this.compiler = compiler;
         this.facelets = new HashMap();
         this.relativeLocations = new HashMap();
@@ -178,7 +178,7 @@ public final class DefaultFaceletFactory extends FaceletFactory {
      */
     public Facelet getFacelet(URL url) throws IOException, FaceletException,
                                               FacesException, ELException {
-        ParameterCheck.notNull("url", url);
+        Util.notNull("url", url);
         String key = url.toString();
         DefaultFacelet f = (DefaultFacelet) this.facelets.get(key);
         if (f == null || this.needsToBeRefreshed(f)) {
