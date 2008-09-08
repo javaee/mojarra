@@ -275,6 +275,7 @@ public class ConfigManager {
                     // if not explicitly disabled, make a sanity check against
                     // /WEB-INF/faces-config.xml
                     isFacesPDLEnabled = isFacesApp20(facesDocuments[facesDocuments.length - 1]);
+                    webConfig.overrideContextInitParameter(DisableFaceletJSFViewHandler, true);
                 }
                 FACES_CONFIG_PROCESSOR_CHAIN.process(
                       getConfigDocuments(sc,
