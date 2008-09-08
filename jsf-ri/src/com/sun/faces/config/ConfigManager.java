@@ -461,7 +461,8 @@ public class ConfigManager {
 
     private boolean isFacesApp20(Document document) {
 
-        if (document.getDocumentURI().contains("/WEB-INF/faces-config.xml")) {
+        String url = document.getDocumentURI();
+        if (url != null && url.contains("/WEB-INF/faces-config.xml")) {
             String version = document.getDocumentElement()
                   .getAttributeNS(document.getNamespaceURI(), "version");
             if (version != null) {
