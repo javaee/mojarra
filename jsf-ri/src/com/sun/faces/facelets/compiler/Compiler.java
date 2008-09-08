@@ -57,7 +57,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.el.ELException;
@@ -71,7 +70,6 @@ import com.sun.faces.facelets.tag.CompositeTagDecorator;
 import com.sun.faces.facelets.tag.CompositeTagLibrary;
 import com.sun.faces.facelets.tag.TagDecorator;
 import com.sun.faces.facelets.tag.TagLibrary;
-import com.sun.faces.facelets.tag.ui.UILibrary;
 import com.sun.faces.facelets.util.ReflectionUtil;
 import com.sun.faces.util.Util;
 
@@ -105,34 +103,12 @@ public abstract class Compiler {
 
     private final Map features = new HashMap();
 
-    private boolean initialized = false;
 
     /**
      * 
      */
     public Compiler() {
         
-    }
-
-    private synchronized void initialize() {
-        if (this.initialized)
-            return;
-        log.fine("Initializing");
-        try {
-            TagLibraryConfig cfg = new TagLibraryConfig();
-            cfg.loadMojarraImplicit(this);
-            cfg.loadImplicit(this);
-            
-            if (!this.createTagLibrary().containsNamespace(UILibrary.Namespace)) {
-                log.severe("Missing Built-in Tag Libraries! Make sure they are included within the META-INF directory of Facelets' Jar");
-            }
-            
-        } catch (IOException e) {
-            log.log(Level.SEVERE, "Compiler Initialization Error", e);
-        } finally {
-            this.initialized = true;
-        }
-        log.fine("Initialization Successful");
     }
 
     public final FaceletHandler compile(URL src, String alias)

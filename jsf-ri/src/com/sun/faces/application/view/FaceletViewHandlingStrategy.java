@@ -44,7 +44,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.net.URL;
 
 import javax.faces.FacesException;
 import javax.faces.application.ViewHandler;
@@ -59,23 +58,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.sun.faces.facelets.Facelet;
 import com.sun.faces.facelets.FaceletFactory;
-import com.sun.faces.facelets.impl.ResourceResolver;
-import com.sun.faces.facelets.impl.DefaultResourceResolver;
-import com.sun.faces.facelets.impl.DefaultFaceletFactory;
 import com.sun.faces.facelets.impl.PageDeclarationLanguageImpl;
 import com.sun.faces.facelets.compiler.Compiler;
-import com.sun.faces.facelets.compiler.TagLibraryConfig;
 import com.sun.faces.facelets.compiler.SAXCompiler;
 import com.sun.faces.facelets.tag.ui.UIDebug;
-import com.sun.faces.facelets.tag.TagLibrary;
-import com.sun.faces.facelets.tag.TagDecorator;
 import com.sun.faces.facelets.util.DevTools;
-import com.sun.faces.facelets.util.ReflectionUtil;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
-import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.application.ApplicationAssociate;
 
 /**
@@ -315,83 +306,6 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             prefixesList.toArray(prefixesArray);
         }
     }
-
-
-    /**
-     * Initialize the Facelets Compiler.
-     * @param ctx the {@link FacesContext} for the current request
-     * @param c the Compiler to initialize
-     */
-    protected void initializeCompiler(FacesContext ctx, Compiler c) {
-
-        ExternalContext ext = ctx.getExternalContext();
-
-        // load libraries
-        String libParam = webConfig
-              .getOptionValue(WebContextInitParameter.FaceletsLibraries);
-        if (libParam != null) {
-            libParam = libParam.trim();
-            String[] libs = Util.split(libParam, ";");
-            URL src;
-            TagLibrary libObj;
-            for (int i = 0; i < libs.length; i++) {
-                try {
-                    src = ext.getResource(libs[i].trim());
-                    if (src == null) {
-                        throw new FileNotFoundException(libs[i]);
-                    }
-                    libObj = TagLibraryConfig.create(src);
-                    c.addTagLibrary(libObj);
-                    if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.log(Level.FINE,
-                                   "Successfully Loaded Library: {0}",
-                                   libs[i]);
-                    }
-                } catch (IOException e) {
-                    if (LOGGER.isLoggable(Level.SEVERE)) {
-                        LOGGER.log(Level.SEVERE,
-                                   "Error Loading Library: " + libs[i],
-                                   e);
-                    }
-                }
-            }
-        }
-
-        // load decorators
-        String decParam = webConfig
-              .getOptionValue(WebContextInitParameter.FaceletsDecorators);
-        if (decParam != null) {
-            decParam = decParam.trim();
-            String[] decs = Util.split(decParam, ";");
-            TagDecorator decObj;
-            for (int i = 0; i < decs.length; i++) {
-                try {
-                    decObj = (TagDecorator) ReflectionUtil.forName(decs[i])
-                            .newInstance();
-                    c.addTagDecorator(decObj);
-
-                    if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.log(Level.FINE,
-                                   "Successfully Loaded Decorator: {0}",
-                                   decs[i]);
-                    }
-                } catch (Exception e) {
-                    if (LOGGER.isLoggable(Level.SEVERE)) {
-                        LOGGER.log(Level.SEVERE,
-                                   "Error Loading Decorator: " + decs[i],
-                                   e);
-                    }
-                }
-            }
-        }
-
-        // skip params?
-        c.setTrimmingComments(
-              webConfig.isOptionEnabled(
-                    BooleanWebContextInitParameter.FaceletsSkipComments));
-
-    }
-
 
     /**
      * @return a new Compiler for Facelet processing.
