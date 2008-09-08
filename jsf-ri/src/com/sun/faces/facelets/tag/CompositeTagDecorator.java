@@ -51,7 +51,7 @@
 
 package com.sun.faces.facelets.tag;
 
-import com.sun.faces.facelets.util.ParameterCheck;
+import com.sun.faces.util.Util;
 
 /**
  * A TagDecorator that is composed of 1 or more TagDecorator instances. It uses
@@ -66,7 +66,7 @@ public final class CompositeTagDecorator implements TagDecorator {
     private final TagDecorator[] decorators;
 
     public CompositeTagDecorator(TagDecorator[] decorators) {
-        ParameterCheck.notNull("decorators", decorators);
+        Util.notNull("decorators", decorators);
         this.decorators = decorators;
     }
 

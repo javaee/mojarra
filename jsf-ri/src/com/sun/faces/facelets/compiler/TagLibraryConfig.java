@@ -74,9 +74,9 @@ import com.sun.faces.facelets.tag.AbstractTagLibrary;
 import com.sun.faces.facelets.tag.TagHandler;
 import com.sun.faces.facelets.tag.TagLibrary;
 import com.sun.faces.facelets.tag.jsf.CompositeComponentTagLibrary;
-import com.sun.faces.facelets.util.ParameterCheck;
 import com.sun.faces.facelets.util.Classpath;
 import com.sun.faces.facelets.util.ReflectionUtil;
+import com.sun.faces.util.Util;
 
 /**
  * Handles creating a {@link com.sun.faces.facelets.tag.TagLibrary TagLibrary} from a
@@ -98,63 +98,63 @@ public final class TagLibraryConfig {
         }
 
         public void putConverter(String name, String id) {
-            ParameterCheck.notNull("name", name);
-            ParameterCheck.notNull("id", id);
+            Util.notNull("name", name);
+            Util.notNull("id", id);
             this.addConverter(name, id);
         }
 
         public void putConverter(String name, String id, Class handlerClass) {
-            ParameterCheck.notNull("name", name);
-            ParameterCheck.notNull("id", id);
-            ParameterCheck.notNull("handlerClass", handlerClass);
+            Util.notNull("name", name);
+            Util.notNull("id", id);
+            Util.notNull("handlerClass", handlerClass);
             this.addConverter(name, id, handlerClass);
         }
 
 
         public void putValidator(String name, String id) {
-            ParameterCheck.notNull("name", name);
-            ParameterCheck.notNull("id", id);
+            Util.notNull("name", name);
+            Util.notNull("id", id);
             this.addValidator(name, id);
         }
 
         public void putValidator(String name, String id, Class handlerClass) {
-            ParameterCheck.notNull("name", name);
-            ParameterCheck.notNull("id", id);
-            ParameterCheck.notNull("handlerClass", handlerClass);
+            Util.notNull("name", name);
+            Util.notNull("id", id);
+            Util.notNull("handlerClass", handlerClass);
             this.addValidator(name, id, handlerClass);
         }
 
         public void putTagHandler(String name, Class type) {
-            ParameterCheck.notNull("name", name);
-            ParameterCheck.notNull("type", type);
+            Util.notNull("name", name);
+            Util.notNull("type", type);
             this.addTagHandler(name, type);
         }
 
         public void putComponent(String name, String componentType,
                 String rendererType) {
-            ParameterCheck.notNull("name", name);
-            ParameterCheck.notNull("componentType", componentType);
+            Util.notNull("name", name);
+            Util.notNull("componentType", componentType);
             this.addComponent(name, componentType, rendererType);
         }
 
         public void putComponent(String name, String componentType,
                 String rendererType, Class handlerClass) {
-            ParameterCheck.notNull("name", name);
-            ParameterCheck.notNull("componentType", componentType);
-            ParameterCheck.notNull("handlerClass", handlerClass);
+            Util.notNull("name", name);
+            Util.notNull("componentType", componentType);
+            Util.notNull("handlerClass", handlerClass);
             this.addComponent(name, componentType, rendererType, handlerClass);
         }
 
 
         public void putUserTag(String name, URL source) {
-            ParameterCheck.notNull("name", name);
-            ParameterCheck.notNull("source", source);
+            Util.notNull("name", name);
+            Util.notNull("source", source);
             this.addUserTag(name, source);
         }
 
         public void putFunction(String name, Method method) {
-            ParameterCheck.notNull("name", name);
-            ParameterCheck.notNull("method", method);
+            Util.notNull("name", name);
+            Util.notNull("method", method);
             this.addFunction(name, method);
         }
     }

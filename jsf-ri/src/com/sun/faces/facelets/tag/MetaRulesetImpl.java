@@ -62,7 +62,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.sun.faces.facelets.FaceletContext;
-import com.sun.faces.facelets.util.ParameterCheck;
+import com.sun.faces.util.Util;
 
 /**
  * 
@@ -104,14 +104,14 @@ final class MetaRulesetImpl extends MetaRuleset {
     }
 
     public MetaRuleset ignore(String attribute) {
-        ParameterCheck.notNull("attribute", attribute);
+        Util.notNull("attribute", attribute);
         this.attributes.remove(attribute);
         return this;
     }
 
     public MetaRuleset alias(String attribute, String property) {
-        ParameterCheck.notNull("attribute", attribute);
-        ParameterCheck.notNull("property", property);
+        Util.notNull("attribute", attribute);
+        Util.notNull("property", property);
         TagAttribute attr = (TagAttribute) this.attributes.remove(attribute);
         if (attr != null) {
             this.attributes.put(property, attr);
@@ -120,7 +120,7 @@ final class MetaRulesetImpl extends MetaRuleset {
     }
 
     public MetaRuleset add(Metadata mapper) {
-        ParameterCheck.notNull("mapper", mapper);
+        Util.notNull("mapper", mapper);
         if (!this.mappers.contains(mapper)) {
             this.mappers.add(mapper);
         }
@@ -128,7 +128,7 @@ final class MetaRulesetImpl extends MetaRuleset {
     }
 
     public MetaRuleset addRule(MetaRule rule) {
-        ParameterCheck.notNull("rule", rule);
+        Util.notNull("rule", rule);
         this.rules.add(rule);
         return this;
     }

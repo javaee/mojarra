@@ -72,8 +72,8 @@ import com.sun.faces.facelets.tag.CompositeTagLibrary;
 import com.sun.faces.facelets.tag.TagDecorator;
 import com.sun.faces.facelets.tag.TagLibrary;
 import com.sun.faces.facelets.tag.ui.UILibrary;
-import com.sun.faces.facelets.util.ParameterCheck;
 import com.sun.faces.facelets.util.ReflectionUtil;
+import com.sun.faces.util.Util;
 
 /**
  * A Compiler instance may handle compiling multiple sources
@@ -154,7 +154,7 @@ public abstract class Compiler {
     }
 
     public final void addTagDecorator(TagDecorator decorator) {
-        ParameterCheck.notNull("decorator", decorator);
+        Util.notNull("decorator", decorator);
         if (!this.decorators.contains(decorator)) {
             this.decorators.add(decorator);
         }
@@ -204,7 +204,7 @@ public abstract class Compiler {
     }
 
     public final void addTagLibrary(TagLibrary library) {
-        ParameterCheck.notNull("library", library);
+        Util.notNull("library", library);
         if (!this.libraries.contains(library)) {
             this.libraries.add(library);
         }

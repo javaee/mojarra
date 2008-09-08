@@ -56,7 +56,8 @@ import java.lang.reflect.Method;
 
 import javax.faces.FacesException;
 
-import com.sun.faces.facelets.util.ParameterCheck;
+import com.sun.faces.util.Util;
+
 import java.util.HashMap;
 import java.util.Map;
 import javax.faces.application.FacesMessage;
@@ -76,7 +77,7 @@ public final class CompositeTagLibrary implements TagLibrary {
     private TagLibrary[] libraries;
 
     public CompositeTagLibrary(TagLibrary[] libraries) {
-        ParameterCheck.notNull("libraries", libraries);
+        Util.notNull("libraries", libraries);
         this.libraries = libraries;
     }
 

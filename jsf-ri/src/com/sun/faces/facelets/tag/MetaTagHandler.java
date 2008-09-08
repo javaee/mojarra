@@ -52,7 +52,7 @@
 package com.sun.faces.facelets.tag;
 
 import com.sun.faces.facelets.FaceletContext;
-import com.sun.faces.facelets.util.ParameterCheck;
+import com.sun.faces.util.Util;
 
 /**
  * A base tag for wiring state to an object instance based on rules populated at
@@ -78,7 +78,7 @@ public abstract class MetaTagHandler extends TagHandler {
      * @return
      */
     protected MetaRuleset createMetaRuleset(Class type) {
-        ParameterCheck.notNull("type", type);
+        Util.notNull("type", type);
         return new MetaRulesetImpl(this.tag, type);
     }
 

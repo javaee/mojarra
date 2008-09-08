@@ -229,13 +229,10 @@ public class Util extends Object {
      */
 
     public static Locale
-          getLocaleFromContextOrComponent(FacesContext context,
-                                          UIComponent component) {
+    getLocaleFromContextOrComponent(FacesContext context,
+                                    UIComponent component) {
         Locale result = null;
         String bundleName = null, bundleAttr = "bundle";
-
-//	ParameterCheck.nonNull(context);
-//	ParameterCheck.nonNull(component);
 
         // verify our component has the proper attributes for bundle.
         if (null !=
@@ -246,7 +243,6 @@ public class Util extends Object {
                   (javax.servlet.jsp.jstl.fmt.LocalizationContext)
                         (Util.getValueBinding(bundleName)).getValue(context))) {
                 result = locCtx.getLocale();
-//		Assert.assert_it(null != result);
             }
         }
         if (null == result) {
