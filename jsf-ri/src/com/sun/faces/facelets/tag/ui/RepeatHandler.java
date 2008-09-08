@@ -60,10 +60,8 @@ import java.util.Set;
 import javax.faces.component.UIComponent;
 
 import com.sun.faces.facelets.FaceletContext;
-import com.sun.faces.facelets.tag.MetaRule;
 import com.sun.faces.facelets.tag.MetaRuleset;
 import com.sun.faces.facelets.tag.Metadata;
-import com.sun.faces.facelets.tag.MetadataTarget;
 import com.sun.faces.facelets.tag.TagAttribute;
 import com.sun.faces.facelets.tag.jsf.ComponentConfig;
 import com.sun.faces.facelets.tag.jsf.ComponentHandler;

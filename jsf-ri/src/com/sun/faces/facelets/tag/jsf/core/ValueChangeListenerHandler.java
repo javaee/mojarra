@@ -89,19 +89,20 @@ import javax.faces.webapp.pdl.EditableValueHolderAttachedObjectHandler;
  */
 public final class ValueChangeListenerHandler extends TagHandler implements EditableValueHolderAttachedObjectHandler {
 
-	private static class LazyValueChangeListener implements
-			ValueChangeListener, Serializable {
+    private static class LazyValueChangeListener implements
+                                                 ValueChangeListener,
+                                                 Serializable {
 
         private static final long serialVersionUID = 7613811124326963180L;
 
         private final String type;
 
-		private final ValueExpression binding;
+        private final ValueExpression binding;
 
         public LazyValueChangeListener(String type, ValueExpression binding) {
-			this.type = type;
-			this.binding = binding;
-		}
+            this.type = type;
+            this.binding = binding;
+        }
 
         public void processValueChange(ValueChangeEvent event)
               throws AbortProcessingException {
@@ -135,37 +136,36 @@ public final class ValueChangeListenerHandler extends TagHandler implements Edit
 
     private final TagAttribute binding;
 
-	private final String listenerType;
+    private final String listenerType;
 
-	public ValueChangeListenerHandler(TagConfig config) {
-		super(config);
-		this.binding = this.getAttribute("binding");
+    public ValueChangeListenerHandler(TagConfig config) {
+        super(config);
+        this.binding = this.getAttribute("binding");
         TagAttribute type = this.getAttribute("type");
-		if (type != null) {
-			if (!type.isLiteral()) {
-				throw new TagAttributeException(type,
-						"Must be a literal class name of type ValueChangeListener");
-			} else {
-				// test it out
-				try {
-					ReflectionUtil.forName(type.getValue());
-				} catch (ClassNotFoundException e) {
-					throw new TagAttributeException(type,
-							"Couldn't qualify ValueChangeListener", e);
-				}
-			}
-			this.listenerType = type.getValue();
-		} else {
-			this.listenerType = null;
-		}
-	}
+        if (type != null) {
+            if (!type.isLiteral()) {
+                throw new TagAttributeException(type,
+                                                "Must be a literal class name of type ValueChangeListener");
+            } else {
+                // test it out
+                try {
+                    ReflectionUtil.forName(type.getValue());
+                } catch (ClassNotFoundException e) {
+                    throw new TagAttributeException(type,
+                                                    "Couldn't qualify ValueChangeListener", e);
+                }
+            }
+            this.listenerType = type.getValue();
+        } else {
+            this.listenerType = null;
+        }
+    }
 
-	/**
-	 * See taglib documentation.
-	 * 
-	 * @see com.sun.facelets.FaceletHandler#apply(com.sun.facelets.FaceletContext,
-	 *      javax.faces.component.UIComponent)
-	 */
+    /**
+     * See taglib documentation.
+     *
+     * @see com.sun.faces.facelets.FaceletHandler#apply(com.sun.faces.facelets.FaceletContext, javax.faces.component.UIComponent)
+     */
     public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException, FacesException, FaceletException, ELException {
         // only process if it's been created

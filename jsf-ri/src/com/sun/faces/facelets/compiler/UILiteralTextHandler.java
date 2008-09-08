@@ -60,8 +60,6 @@ import javax.faces.FacesException;
 
 import com.sun.faces.facelets.FaceletContext;
 import com.sun.faces.facelets.FaceletException;
-import com.sun.faces.facelets.FaceletHandler;
-import com.sun.faces.facelets.tag.TextHandler;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 
 final class UILiteralTextHandler extends AbstractUIHandler {

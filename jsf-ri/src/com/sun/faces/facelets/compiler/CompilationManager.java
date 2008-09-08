@@ -76,7 +76,7 @@ import com.sun.faces.facelets.tag.ui.UILibrary;
  * Compilation unit for managing the creation of a single FaceletHandler based
  * on events from an XML parser.
  * 
- * @see com.sun.facelets.compiler.Compiler
+ * @see {@link com.sun.faces.facelets.compiler.Compiler}
  * 
  * @author Jacob Hookom
  * @version $Id$

@@ -58,8 +58,8 @@ import java.lang.reflect.Method;
  * Information used with MetaRule for determining how and what Metadata should
  * be wired.
  *
- * @see com.sun.facelets.tag.MetaRule
- * @see com.sun.facelets.tag.Metadata
+ * @see com.sun.faces.facelets.tag.MetaRule
+ * @see com.sun.faces.facelets.tag.Metadata
  * @author Jacob Hookom
  * @version $Id$
  */

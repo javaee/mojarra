@@ -52,7 +52,6 @@
 package com.sun.faces.facelets.compiler;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.io.Writer;
 
 import javax.el.ELException;
@@ -61,9 +60,7 @@ import javax.faces.component.UIComponent;
 
 import com.sun.faces.facelets.FaceletContext;
 import com.sun.faces.facelets.FaceletException;
-import com.sun.faces.facelets.FaceletHandler;
 import com.sun.faces.facelets.el.ELText;
-import com.sun.faces.facelets.tag.TextHandler;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.facelets.util.FastWriter;
 

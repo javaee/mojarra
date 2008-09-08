@@ -308,7 +308,7 @@ public class ELText {
     /**
      * Factory method for creating an unvalidated ELText instance. NOTE: All
      * expressions in the passed String are treated as
-     * {@link com.sun.facelets.el.LiteralValueExpression LiteralValueExpressions}.
+     * {@link com.sun.faces.facelets.el.ELText.LiteralValueExpression}
      * 
      * @param in
      *            String to parse

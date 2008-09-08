@@ -120,8 +120,7 @@ final class DefaultFacelet extends Facelet {
     }
 
     /**
-     * @see com.sun.facelets.Facelet#apply(javax.faces.context.FacesContext,
-     *      javax.faces.component.UIComponent)
+     * @see com.sun.faces.facelets.Facelet#apply(javax.faces.context.FacesContext, javax.faces.component.UIComponent)
      */
     public void apply(FacesContext facesContext, UIComponent parent)
             throws IOException, FacesException, FaceletException, ELException {
@@ -290,7 +289,7 @@ final class DefaultFacelet extends Facelet {
      * Used for delegation by the DefaultFaceletContext. First pulls the URL
      * from {@link #getRelativePath(String) getRelativePath(String)}, then
      * calls
-     * {@link #include(FaceletContext, UIComponent, URL) include(FaceletContext, UIComponent, URL)}.
+     * {@link #include(DefaultFaceletContext, javax.faces.component.UIComponent, String)}.
      * 
      * @see FaceletContext#includeFacelet(UIComponent, String)
      * @param ctx

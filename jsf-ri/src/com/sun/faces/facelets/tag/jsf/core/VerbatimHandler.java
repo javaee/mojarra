@@ -51,10 +51,8 @@
 
 package com.sun.faces.facelets.tag.jsf.core;
 
-import java.io.IOException;
 import java.util.Iterator;
 
-import javax.el.ELException;
 import javax.faces.component.UIComponent;
 
 import com.sun.faces.facelets.FaceletContext;

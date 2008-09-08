@@ -67,7 +67,6 @@ import com.sun.faces.facelets.tag.TagAttribute;
 import com.sun.faces.facelets.tag.TagConfig;
 import com.sun.faces.facelets.tag.TagException;
 import com.sun.faces.facelets.tag.MetaRuleset;
-import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
 import javax.faces.application.Resource;
 import javax.faces.context.FacesContext;
 import javax.faces.webapp.pdl.EditableValueHolderAttachedObjectHandler;
@@ -106,8 +105,7 @@ public class ValidateHandler extends MetaTagHandler implements EditableValueHold
     /**
      * TODO
      * 
-     * @see com.sun.facelets.FaceletHandler#apply(com.sun.facelets.FaceletContext,
-     *      javax.faces.component.UIComponent)
+     * @see com.sun.faces.facelets.FaceletHandler#apply(com.sun.faces.facelets.FaceletContext, javax.faces.component.UIComponent)
      */
     public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException, FacesException, FaceletException, ELException {

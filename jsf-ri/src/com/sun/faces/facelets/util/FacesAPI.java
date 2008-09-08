@@ -53,7 +53,6 @@ package com.sun.faces.facelets.util;
 
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIComponentBase;
 
 public final class FacesAPI {
 

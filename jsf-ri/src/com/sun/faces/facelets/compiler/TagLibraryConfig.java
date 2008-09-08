@@ -79,7 +79,7 @@ import com.sun.faces.facelets.util.Classpath;
 import com.sun.faces.facelets.util.ReflectionUtil;
 
 /**
- * Handles creating a {@link com.sun.facelets.tag.TagLibrary TagLibrary} from a
+ * Handles creating a {@link com.sun.faces.facelets.tag.TagLibrary TagLibrary} from a
  * {@link java.net.URL URL} source.
  *
  * @author Jacob Hookom

@@ -51,7 +51,6 @@
 
 package com.sun.faces.facelets.tag.jsf.core;
 
-import javax.faces.component.UIOutput;
 import javax.faces.component.UIParameter;
 import javax.faces.component.UISelectItem;
 import javax.faces.component.UISelectItems;

@@ -60,10 +60,7 @@ import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 
-/**
- *
- * @author edburns
- */
+
 public class DeferredMethodHandler extends TagHandler {
 
     public DeferredMethodHandler(TagConfig config) {

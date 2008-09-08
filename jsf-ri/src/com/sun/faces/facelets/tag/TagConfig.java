@@ -57,7 +57,7 @@ import com.sun.faces.facelets.FaceletHandler;
  * Passed to the constructor of TagHandler, it defines the document definition
  * of the handler we are instantiating
  * 
- * @see com.sun.facelets.tag.TagHandler
+ * @see com.sun.faces.facelets.tag.TagHandler
  * @author Jacob Hookom
  * @version $Id$
  */

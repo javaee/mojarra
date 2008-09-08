@@ -53,10 +53,6 @@ package com.sun.faces.facelets.tag.composite;
 
 import com.sun.faces.facelets.tag.TagConfig;
 
-/**
- *
- * @author edburns
- */
 public class ActionSource2AttachedObjectTargetHandler extends AttachedObjectTargetHandler {
     
     public ActionSource2AttachedObjectTargetHandler(TagConfig config) {

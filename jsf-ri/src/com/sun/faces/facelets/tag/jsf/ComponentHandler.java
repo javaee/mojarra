@@ -56,40 +56,22 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.el.ELException;
-import javax.el.MethodExpression;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
-import javax.faces.render.Renderer;
 import javax.faces.application.Application;
 import javax.faces.component.ActionSource;
-import javax.faces.component.ActionSource2;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
 import javax.faces.el.ValueBinding;
-import javax.faces.event.ActionEvent;
-import javax.faces.event.MethodExpressionActionListener;
-import javax.faces.event.MethodExpressionValueChangeListener;
-import javax.faces.event.ValueChangeEvent;
-import javax.faces.event.ComponentSystemEventListener;
-import javax.faces.event.ListenerFor;
-import javax.faces.event.SystemEvent;
-import javax.faces.event.SystemEventListener;
-import javax.faces.event.ListenersFor;
-import javax.faces.validator.MethodExpressionValidator;
 
 import com.sun.faces.facelets.FaceletContext;
-import com.sun.faces.facelets.el.ELAdaptor;
-import com.sun.faces.facelets.el.LegacyMethodBinding;
 import com.sun.faces.facelets.el.LegacyValueBinding;
 import com.sun.faces.facelets.tag.MetaTagHandler;
 import com.sun.faces.facelets.tag.TagAttribute;
-import com.sun.faces.facelets.tag.Metadata;
 import com.sun.faces.facelets.tag.TagException;
-import com.sun.faces.facelets.tag.TagHandler;
 import com.sun.faces.facelets.tag.MetaRuleset;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
 import com.sun.faces.facelets.util.FacesAPI;
@@ -130,13 +112,13 @@ public class ComponentHandler extends MetaTagHandler {
      * {@link #getId(FaceletContext) getId(FaceletContext)}.</li>
      * <li>Search the parent for an existing UIComponent of the id we just
      * grabbed</li>
-     * <li>If found, {@link #markForDeletion(UIComponent) mark} its children
-     * for deletion.</li>
+     * <li>If found, {@link com.sun.faces.facelets.tag.jsf.ComponentSupport#markForDeletion(javax.faces.component.UIComponent) mark}
+     * its children for deletion.</li>
      * <li>If <i>not</i> found, call
      * {@link #createComponent(FaceletContext) createComponent}.
      * <ol>
      * <li>Only here do we apply
-     * {@link ObjectHandler#setAttributes(FaceletContext, Object) attributes}</li>
+     * {@link com.sun.faces.facelets.tag.MetaTagHandler#setAttributes(FaceletContext, Object)}</li>
      * <li>Set the UIComponent's id</li>
      * <li>Set the RendererType of this instance</li>
      * </ol>
@@ -145,11 +127,10 @@ public class ComponentHandler extends MetaTagHandler {
      * created/found.</li>
      * <li>Now add the UIComponent to the passed parent</li>
      * <li>Lastly, if the UIComponent already existed (found), then
-     * {@link #finalizeForDeletion(UIComponent) finalize} for deletion.</li>
+     * {@link ComponentSupport#finalizeForDeletion(UIComponent) finalize} for deletion.</li>
      * </ol>
      * 
-     * @see com.sun.facelets.FaceletHandler#apply(com.sun.facelets.FaceletContext,
-     *      javax.faces.component.UIComponent)
+     * @see com.sun.faces.facelets.FaceletHandler#apply(com.sun.faces.facelets.FaceletContext, javax.faces.component.UIComponent)
      * 
      * @throws TagException
      *             if the UIComponent parent is null

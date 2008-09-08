@@ -83,7 +83,7 @@ import com.sun.faces.facelets.tag.TagAttributes;
 /**
  * Compiler implementation that uses SAX
  * 
- * @see com.sun.facelets.compiler.Compiler
+ * @see {@link com.sun.faces.facelets.compiler.Compiler}
  * 
  * @author Jacob Hookom
  * @version $Id$

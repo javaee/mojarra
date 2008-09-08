@@ -82,7 +82,7 @@ public final class ValidateDelegateHandler extends ValidateHandler {
      * Application.
      * 
      * @see javax.faces.application.Application#createValidator(java.lang.String)
-     * @see com.sun.facelets.tag.jsf.ValidateHandler#createValidator(com.sun.facelets.FaceletContext)
+     * @see com.sun.faces.facelets.tag.jsf.ValidateHandler#createValidator(com.sun.faces.facelets.FaceletContext)
      */
     protected Validator createValidator(FaceletContext ctx) {
         return ctx.getFacesContext().getApplication().createValidator(

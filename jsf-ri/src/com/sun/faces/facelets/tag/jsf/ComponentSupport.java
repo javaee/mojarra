@@ -52,9 +52,7 @@
 package com.sun.faces.facelets.tag.jsf;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -65,7 +63,6 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.facelets.FaceletContext;
-import com.sun.faces.facelets.FaceletHandler;
 import com.sun.faces.facelets.tag.TagAttribute;
 import com.sun.faces.facelets.tag.TagAttributeException;
 
@@ -148,16 +145,16 @@ public final class ComponentSupport {
      * @return
      */
     public static final UIComponent findChildByTagId(UIComponent parent, String id) {
-    	Iterator itr = parent.getFacetsAndChildren();
-    	UIComponent c = null;
-    	String cid = null;
-    	while (itr.hasNext()) {
-    		c = (UIComponent) itr.next();
-    		cid = (String) c.getAttributes().get(MARK_CREATED);
-    		if (id.equals(cid)) {
-    			return c;
-    		}
-    	}
+        Iterator itr = parent.getFacetsAndChildren();
+        UIComponent c = null;
+        String cid = null;
+        while (itr.hasNext()) {
+            c = (UIComponent) itr.next();
+            cid = (String) c.getAttributes().get(MARK_CREATED);
+            if (id.equals(cid)) {
+                return c;
+            }
+        }
 //        int sz = parent.getChildCount();
 //        if (sz > 0) {
 //            UIComponent c = null;

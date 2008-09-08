@@ -55,8 +55,8 @@ package com.sun.faces.facelets.tag;
  * An object that represents the Location of a Tag or TagAttribute in a Facelet
  * file.
  * 
- * @see com.sun.facelets.tag.Tag
- * @see com.sun.facelets.tag.TagAttribute
+ * @see com.sun.faces.facelets.tag.Tag
+ * @see com.sun.faces.facelets.tag.TagAttribute
  * @author Jacob Hookom
  * @version $Id$
  */

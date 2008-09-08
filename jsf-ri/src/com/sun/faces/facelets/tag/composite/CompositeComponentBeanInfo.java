@@ -58,10 +58,7 @@ import java.beans.SimpleBeanInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author edburns
- */
+
 public class CompositeComponentBeanInfo extends SimpleBeanInfo implements BeanInfo {
 
     private BeanDescriptor descriptor = null;

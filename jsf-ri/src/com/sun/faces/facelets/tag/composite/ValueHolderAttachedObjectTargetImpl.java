@@ -53,10 +53,6 @@ package com.sun.faces.facelets.tag.composite;
 
 import javax.faces.webapp.pdl.ValueHolderAttachedObjectTarget;
 
-/**
- *
- * @author edburns
- */
 public class ValueHolderAttachedObjectTargetImpl extends AttachedObjectTargetImpl implements ValueHolderAttachedObjectTarget {
 
 }

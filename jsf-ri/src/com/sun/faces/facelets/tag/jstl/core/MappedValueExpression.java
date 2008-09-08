@@ -62,30 +62,30 @@ import javax.el.ValueExpression;
  * @version $Id$
  */
 public final class MappedValueExpression extends ValueExpression {
-	
-	private final static class Entry implements Map.Entry, Serializable {
-		
-		private final Map src;
-		private final Object key;
-		
-		public Entry(Map src, Object key) {
-			this.src = src;
-			this.key = key;
-		}
 
-		public Object getKey() {
-			return key;
-		}
+    private final static class Entry implements Map.Entry, Serializable {
 
-		public Object getValue() {
-			return src.get(key);
-		}
+        private final Map src;
+        private final Object key;
 
-		public Object setValue(Object value) {
-			return src.put(key, value);
-		}
-		
-	}
+        public Entry(Map src, Object key) {
+            this.src = src;
+            this.key = key;
+        }
+
+        public Object getKey() {
+            return key;
+        }
+
+        public Object getValue() {
+            return src.get(key);
+        }
+
+        public Object setValue(Object value) {
+            return src.put(key, value);
+        }
+
+    }
 
     /**
      * 

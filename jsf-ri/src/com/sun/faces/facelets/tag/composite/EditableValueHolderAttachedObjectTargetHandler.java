@@ -53,10 +53,7 @@ package com.sun.faces.facelets.tag.composite;
 
 import com.sun.faces.facelets.tag.TagConfig;
 
-/**
- *
- * @author edburns
- */
+
 public class EditableValueHolderAttachedObjectTargetHandler extends AttachedObjectTargetHandler {
     
     public EditableValueHolderAttachedObjectTargetHandler(TagConfig config) {

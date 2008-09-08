@@ -107,7 +107,7 @@ public final class ConvertDateTimeHandler extends ConvertHandler {
      * Returns a new DateTimeConverter
      * 
      * @see DateTimeConverter
-     * @see com.sun.facelets.tag.jsf.ConvertHandler#createConverter(com.sun.facelets.FaceletContext)
+     * @see com.sun.faces.facelets.tag.jsf.ConvertHandler#createConverter(com.sun.faces.facelets.FaceletContext)
      */
     protected Converter createConverter(FaceletContext ctx)
             throws FacesException, ELException, FaceletException {
@@ -118,8 +118,7 @@ public final class ConvertDateTimeHandler extends ConvertHandler {
     /**
      * Implements tag spec, see taglib documentation.
      * 
-     * @see com.sun.facelets.tag.ObjectHandler#setAttributes(com.sun.facelets.FaceletContext,
-     *      java.lang.Object)
+     * @see com.sun.faces.facelets.tag.MetaTagHandler#setAttributes(com.sun.faces.facelets.FaceletContext, Object)
      */
     protected void setAttributes(FaceletContext ctx, Object obj) {
         DateTimeConverter c = (DateTimeConverter) obj;

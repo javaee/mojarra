@@ -56,7 +56,6 @@ import java.io.IOException;
 import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIComponentBase;
 
 import com.sun.faces.facelets.FaceletContext;
 import com.sun.faces.facelets.FaceletException;
@@ -70,37 +69,37 @@ import com.sun.faces.facelets.tag.TagHandler;
  * UIComponent custom action. <p/> See <a target="_new"
  * href="http://java.sun.com/j2ee/javaserverfaces/1.1_01/docs/tlddocs/f/facet.html">tag
  * documentation</a>.
- * 
+ *
  * @author Jacob Hookom
  * @version $Id$
  */
 public final class FacetHandler extends TagHandler {
 
-	public static final String KEY = "facelets.FACET_NAME";
+    public static final String KEY = "facelets.FACET_NAME";
 
-	protected final TagAttribute name;
+    protected final TagAttribute name;
 
-	public FacetHandler(TagConfig config) {
-		super(config);
-		this.name = this.getRequiredAttribute("name");
-	}
+    public FacetHandler(TagConfig config) {
+        super(config);
+        this.name = this.getRequiredAttribute("name");
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.sun.facelets.FaceletHandler#apply(com.sun.facelets.FaceletContext,
-	 *      javax.faces.component.UIComponent)
-	 */
-	public void apply(FaceletContext ctx, UIComponent parent)
-			throws IOException, FacesException, FaceletException, ELException {
-		if (parent == null) {
-			throw new TagException(this.tag, "Parent UIComponent was null");
-		}
-		parent.getAttributes().put(KEY, this.name.getValue(ctx));
-		try {
-			this.nextHandler.apply(ctx, parent);
-		} finally {
-			parent.getAttributes().remove(KEY);
-		}
-	}
+    /*
+      * (non-Javadoc)
+      *
+      * @see com.sun.facelets.FaceletHandler#apply(com.sun.facelets.FaceletContext,
+      *      javax.faces.component.UIComponent)
+      */
+    public void apply(FaceletContext ctx, UIComponent parent)
+          throws IOException, FacesException, FaceletException, ELException {
+        if (parent == null) {
+            throw new TagException(this.tag, "Parent UIComponent was null");
+        }
+        parent.getAttributes().put(KEY, this.name.getValue(ctx));
+        try {
+            this.nextHandler.apply(ctx, parent);
+        } finally {
+            parent.getAttributes().remove(KEY);
+        }
+    }
 }

@@ -60,10 +60,7 @@ import java.util.Map;
 
 import javax.el.ELException;
 import javax.faces.FacesException;
-import javax.faces.convert.Converter;
-import javax.faces.validator.Validator;
 
-import com.sun.faces.facelets.FaceletContext;
 import com.sun.faces.facelets.FaceletException;
 import com.sun.faces.facelets.FaceletHandler;
 import com.sun.faces.facelets.tag.jsf.ComponentConfig;
@@ -217,9 +214,6 @@ public abstract class AbstractTagLibrary implements TagLibrary {
 
         protected final String renderType;
 
-        /**
-         * @param handlerType
-         */
         public ComponentHandlerFactory(String componentType, String renderType) {
             this.componentType = componentType;
             this.renderType = renderType;
@@ -246,9 +240,6 @@ public abstract class AbstractTagLibrary implements TagLibrary {
 
         protected final Constructor constructor;
 
-        /**
-         * @param handlerType
-         */
         public UserComponentHandlerFactory(String componentType,
                 String renderType, Class type) {
             this.componentType = componentType;
@@ -414,7 +405,7 @@ public abstract class AbstractTagLibrary implements TagLibrary {
      * aliased by the tag name. The Facelet will be compiled with the specified
      * HandlerType (which must extend AbstractComponentHandler).
      * 
-     * @see AbstractComponentHandler
+     * @see ComponentHandler
      * @param name
      *            name to use, "foo" would be &lt;my:foo />
      * @param componentType

@@ -56,7 +56,7 @@ import com.sun.faces.facelets.tag.TagConfig;
 /**
  * Used in creating ValidateHandler's and all implementations.
  * 
- * @see com.sun.facelets.tag.jsf.ValidateHandler
+ * @see com.sun.faces.facelets.tag.jsf.ValidateHandler
  * @author Jacob Hookom
  * @version $Id$
  */

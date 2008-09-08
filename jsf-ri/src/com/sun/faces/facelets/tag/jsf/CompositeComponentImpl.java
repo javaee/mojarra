@@ -51,14 +51,9 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
-import javax.faces.application.Resource;
 import javax.faces.component.UINamingContainer;
-import javax.faces.context.FacesContext;
 
-/**
- *
- * @author edburns
- */
+
 public class CompositeComponentImpl extends UINamingContainer {
     
     public static final String TYPE = "javax.faces.NamingContainer";

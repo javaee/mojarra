@@ -60,10 +60,6 @@ import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 
-/**
- *
- * @author edburns
- */
 public class TypeHandler extends TagHandler {
 
     public TypeHandler(TagConfig config) {

@@ -89,7 +89,7 @@ public final class ConvertNumberHandler extends ConvertHandler {
      * Returns a new NumberConverter
      * 
      * @see NumberConverter
-     * @see com.sun.facelets.tag.jsf.ConverterHandler#createConverter(com.sun.facelets.FaceletContext)
+     * @see com.sun.faces.facelets.tag.jsf.ConvertHandler#createConverter(com.sun.faces.facelets.FaceletContext)
      */
     protected Converter createConverter(FaceletContext ctx)
             throws FacesException, ELException, FaceletException {

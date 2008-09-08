@@ -60,8 +60,8 @@ import java.util.Set;
 /**
  * A set of TagAttributes, usually representing all attributes on a Tag.
  * 
- * @see com.sun.facelets.tag.Tag
- * @see com.sun.facelets.tag.TagAttribute
+ * @see com.sun.faces.facelets.tag.Tag
+ * @see com.sun.faces.facelets.tag.TagAttribute
  * @author Jacob Hookom
  * @version $Id$
  */

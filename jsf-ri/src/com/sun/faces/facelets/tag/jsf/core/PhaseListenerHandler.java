@@ -77,19 +77,19 @@ import com.sun.faces.facelets.util.ReflectionUtil;
 
 public class PhaseListenerHandler extends TagHandler {
 
-	private final static class LazyPhaseListener implements PhaseListener,
-			Serializable {
+    private final static class LazyPhaseListener implements PhaseListener,
+                                                            Serializable {
 
         private static final long serialVersionUID = -6496143057319213401L;
 
         private final String type;
 
-		private final ValueExpression binding;
+        private final ValueExpression binding;
 
         public LazyPhaseListener(String type, ValueExpression binding) {
-			this.type = type;
-			this.binding = binding;
-		}
+            this.type = type;
+            this.binding = binding;
+        }
 
         private PhaseListener getInstance() {
             PhaseListener instance = null;
@@ -116,69 +116,69 @@ public class PhaseListenerHandler extends TagHandler {
             return instance;
         }
 
-		public void afterPhase(PhaseEvent event) {
-			PhaseListener pl = this.getInstance();
-			if (pl != null) {
-				pl.afterPhase(event);
-			}
-		}
+        public void afterPhase(PhaseEvent event) {
+            PhaseListener pl = this.getInstance();
+            if (pl != null) {
+                pl.afterPhase(event);
+            }
+        }
 
-		public void beforePhase(PhaseEvent event) {
-			PhaseListener pl = this.getInstance();
-			if (pl != null) {
-				pl.beforePhase(event);
-			}
-		}
+        public void beforePhase(PhaseEvent event) {
+            PhaseListener pl = this.getInstance();
+            if (pl != null) {
+                pl.beforePhase(event);
+            }
+        }
 
-		public PhaseId getPhaseId() {
-			PhaseListener pl = this.getInstance();
-			return (pl != null) ? pl.getPhaseId() : PhaseId.ANY_PHASE;
-		}
+        public PhaseId getPhaseId() {
+            PhaseListener pl = this.getInstance();
+            return (pl != null) ? pl.getPhaseId() : PhaseId.ANY_PHASE;
+        }
 
-	}
+    }
 
     private final TagAttribute binding;
 
-	private final String listenerType;
+    private final String listenerType;
 
-	public PhaseListenerHandler(TagConfig config) {
-		super(config);
+    public PhaseListenerHandler(TagConfig config) {
+        super(config);
         TagAttribute type = this.getAttribute("type");
-		this.binding = this.getAttribute("binding");
-		if (type != null) {
-			if (!type.isLiteral()) {
-				throw new TagAttributeException(type,
-						"Must be a literal class name of type PhaseListener");
-			} else {
-				// test it out
-				try {
-					ReflectionUtil.forName(type.getValue());
-				} catch (ClassNotFoundException e) {
-					throw new TagAttributeException(type,
-							"Couldn't qualify PhaseListener", e);
-				}
-			}
-			this.listenerType = type.getValue();
-		} else {
-			this.listenerType = null;
-		}
-	}
+        this.binding = this.getAttribute("binding");
+        if (type != null) {
+            if (!type.isLiteral()) {
+                throw new TagAttributeException(type,
+                                                "Must be a literal class name of type PhaseListener");
+            } else {
+                // test it out
+                try {
+                    ReflectionUtil.forName(type.getValue());
+                } catch (ClassNotFoundException e) {
+                    throw new TagAttributeException(type,
+                                                    "Couldn't qualify PhaseListener", e);
+                }
+            }
+            this.listenerType = type.getValue();
+        } else {
+            this.listenerType = null;
+        }
+    }
 
-	public void apply(FaceletContext ctx, UIComponent parent)
-			throws IOException, FacesException, FaceletException, ELException {
-		if (ComponentSupport.isNew(parent)) {
-			UIViewRoot root = ComponentSupport.getViewRoot(ctx, parent);
-			if (root == null) {
-				throw new TagException(this.tag, "UIViewRoot not available");
-			}
-			ValueExpression b = null;
-			if (this.binding != null) {
-				b = this.binding.getValueExpression(ctx, PhaseListener.class);
-			}
+    public void apply(FaceletContext ctx, UIComponent parent)
+          throws IOException, FacesException, FaceletException, ELException {
+        if (ComponentSupport.isNew(parent)) {
+            UIViewRoot root = ComponentSupport.getViewRoot(ctx, parent);
+            if (root == null) {
+                throw new TagException(this.tag, "UIViewRoot not available");
+            }
+            ValueExpression b = null;
+            if (this.binding != null) {
+                b = this.binding.getValueExpression(ctx, PhaseListener.class);
+            }
 
-			PhaseListener pl = new LazyPhaseListener(this.listenerType, b);
+            PhaseListener pl = new LazyPhaseListener(this.listenerType, b);
 
-			root.addPhaseListener(pl);
-		}
-	}
+            root.addPhaseListener(pl);
+        }
+    }
 }

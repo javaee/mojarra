@@ -52,23 +52,13 @@
 package com.sun.faces.facelets.tag.composite;
 
 import com.sun.faces.facelets.FaceletContext;
-import com.sun.faces.facelets.FaceletException;
 import com.sun.faces.facelets.tag.TagAttribute;
 import com.sun.faces.facelets.tag.jsf.ComponentConfig;
 import com.sun.faces.facelets.tag.jsf.ComponentHandler;
-import com.sun.faces.facelets.tag.jsf.ComponentSupport;
-import java.io.IOException;
-import javax.el.ELException;
 import javax.el.ValueExpression;
-import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIOutput;
-import javax.faces.context.FacesContext;
 
-/**
- *
- * @author edburns
- */
+
 public class InsertFacetHandler extends ComponentHandler {
 
     private TagAttribute name = null;

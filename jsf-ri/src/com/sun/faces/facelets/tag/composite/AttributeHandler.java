@@ -67,10 +67,7 @@ import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 
-/**
- *
- * @author edburns
- */
+
 public class AttributeHandler extends TagHandler {
     
     private TagAttribute name = null;

@@ -55,7 +55,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIComponentBase;
 
 import com.sun.faces.facelets.FaceletContext;
 import com.sun.faces.facelets.el.LegacyValueBinding;

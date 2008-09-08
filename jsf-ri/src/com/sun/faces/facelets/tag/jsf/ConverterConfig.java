@@ -56,7 +56,7 @@ import com.sun.faces.facelets.tag.TagConfig;
 /**
  * Used in creating ConvertHandler's and all implementations.
  * 
- * @see com.sun.facelets.tag.jsf.ConvertHandler
+ * @see com.sun.faces.facelets.tag.jsf.ConvertHandler
  * @author Jacob Hookom
  * @version $Id$
  */

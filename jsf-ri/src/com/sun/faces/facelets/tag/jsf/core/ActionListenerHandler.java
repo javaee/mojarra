@@ -74,6 +74,7 @@ import com.sun.faces.facelets.tag.TagHandler;
 import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.facelets.util.ReflectionUtil;
+
 import javax.faces.application.Resource;
 import javax.faces.webapp.pdl.ActionSource2AttachedObjectHandler;
 
@@ -82,26 +83,28 @@ import javax.faces.webapp.pdl.ActionSource2AttachedObjectHandler;
  * closest parent UIComponent custom action. <p/> See <a target="_new"
  * href="http://java.sun.com/j2ee/javaserverfaces/1.1_01/docs/tlddocs/f/actionListener.html">tag
  * documentation</a>.
- * 
- * @see javax.faces.event.ActionListener
- * @see javax.faces.component.ActionSource
+ *
  * @author Jacob Hookom
  * @version $Id$
+ * @see javax.faces.event.ActionListener
+ * @see javax.faces.component.ActionSource
  */
-public final class ActionListenerHandler extends TagHandler implements ActionSource2AttachedObjectHandler {
-	
-	private final static class LazyActionListener implements ActionListener, Serializable {
+public final class ActionListenerHandler extends TagHandler
+      implements ActionSource2AttachedObjectHandler {
+
+    private final static class LazyActionListener
+          implements ActionListener, Serializable {
 
         private static final long serialVersionUID = -9202120013153262119L;
-        
+
         private final String type;
-		private final ValueExpression binding;
+        private final ValueExpression binding;
 
 
         public LazyActionListener(String type, ValueExpression binding) {
-			this.type = type;
-			this.binding = binding;
-		}
+            this.type = type;
+            this.binding = binding;
+        }
 
         public void processAction(ActionEvent event)
               throws AbortProcessingException {
@@ -135,7 +138,7 @@ public final class ActionListenerHandler extends TagHandler implements ActionSou
 
     private final TagAttribute binding;
 
-	private final String listenerType;
+    private final String listenerType;
 
     /**
      * @param config
@@ -145,22 +148,22 @@ public final class ActionListenerHandler extends TagHandler implements ActionSou
         this.binding = this.getAttribute("binding");
         TagAttribute type = this.getAttribute("type");
         if (type != null) {
-			if (!type.isLiteral()) {
-				throw new TagAttributeException(type,
-						"Must be a literal class name of type ActionListener");
-			} else {
-				// test it out
-				try {
-					ReflectionUtil.forName(type.getValue());
-				} catch (ClassNotFoundException e) {
-					throw new TagAttributeException(type,
-							"Couldn't qualify ActionListener", e);
-				}
-			}
-			this.listenerType = type.getValue();
-		} else {
-			this.listenerType = null;
-		}
+            if (!type.isLiteral()) {
+                throw new TagAttributeException(type,
+                                                "Must be a literal class name of type ActionListener");
+            } else {
+                // test it out
+                try {
+                    ReflectionUtil.forName(type.getValue());
+                } catch (ClassNotFoundException e) {
+                    throw new TagAttributeException(type,
+                                                    "Couldn't qualify ActionListener", e);
+                }
+            }
+            this.listenerType = type.getValue();
+        } else {
+            this.listenerType = null;
+        }
     }
 
     /*
@@ -170,30 +173,34 @@ public final class ActionListenerHandler extends TagHandler implements ActionSou
      *      javax.faces.component.UIComponent)
      */
     public void apply(FaceletContext ctx, UIComponent parent)
-            throws IOException, FacesException, FaceletException, ELException {
+          throws IOException, FacesException, FaceletException, ELException {
         if (null == parent || !(ComponentSupport.isNew(parent))) {
             return;
         }
         if (parent instanceof ActionSource) {
             applyAttachedObject(ctx.getFacesContext(), parent);
-        } else if (parent.getAttributes().containsKey(Resource.COMPONENT_RESOURCE_KEY)) {
+        } else if (parent.getAttributes()
+              .containsKey(Resource.COMPONENT_RESOURCE_KEY)) {
             if (null == getFor()) {
                 // PENDING(): I18N
                 throw new TagException(this.tag,
-                        "actionListener tags nested within composite components must have a non-null \"for\" attribute");
+                                       "actionListener tags nested within composite components must have a non-null \"for\" attribute");
             }
             // Allow the composite component to know about the target
             // component.
-            CompositeComponentTagHandler.getAttachedObjectHandlers(parent).add(this);
+            CompositeComponentTagHandler.getAttachedObjectHandlers(parent)
+                  .add(this);
 
         } else {
             throw new TagException(this.tag,
-                    "Parent is not of type ActionSource, type is: " + parent);
+                                   "Parent is not of type ActionSource, type is: "
+                                   + parent);
         }
     }
-    
+
     public void applyAttachedObject(FacesContext context, UIComponent parent) {
-        FaceletContext ctx = (FaceletContext) context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
+        FaceletContext ctx = (FaceletContext) context.getAttributes()
+              .get(FaceletContext.FACELET_CONTEXT_KEY);
         ActionSource as = (ActionSource) parent;
         ValueExpression b = null;
         if (this.binding != null) {
@@ -202,8 +209,8 @@ public final class ActionListenerHandler extends TagHandler implements ActionSou
         ActionListener listener = new LazyActionListener(this.listenerType, b);
         as.addActionListener(listener);
     }
-    
-    
+
+
     public String getFor() {
         String result = null;
         TagAttribute attr = this.getAttribute("for");
@@ -212,7 +219,7 @@ public final class ActionListenerHandler extends TagHandler implements ActionSou
             result = attr.getValue();
         }
         return result;
-        
+
     }
-        
+
 }

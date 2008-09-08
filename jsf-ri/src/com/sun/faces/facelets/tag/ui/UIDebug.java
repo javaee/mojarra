@@ -56,7 +56,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
@@ -132,7 +131,7 @@ public final class UIDebug extends UIComponentBase {
         Map debugs = (Map) session.get(KEY);
         if (debugs == null) {
             debugs = new LinkedHashMap() {
-                protected boolean removeEldestEntry(Entry eldest) {
+                protected boolean removeEldestEntry(Map.Entry eldest) {
                     return (this.size() > 5);
                 }
             };

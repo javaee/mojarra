@@ -61,13 +61,8 @@ import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 
-/**
- *
- * @author edburns
- */
-public class ImplementationHandler extends TagHandler {
 
-    private static final Logger log = Logger.getLogger("facelets.tag.composite");
+public class ImplementationHandler extends TagHandler {
 
     public final static String Name = "implementation";
 

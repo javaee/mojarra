@@ -71,13 +71,7 @@ import javax.faces.webapp.pdl.AttachedObjectTarget;
 import javax.faces.application.Resource;
 import javax.faces.application.ProjectStage;
 
-/**
- *
- * @author edburns
- */
 public class InterfaceHandler extends TagHandler {
-
-    private static final Logger log = Logger.getLogger("facelets.tag.composite");
 
     public final static String Name = "interface";
 

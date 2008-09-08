@@ -56,10 +56,7 @@ import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.webapp.pdl.AttachedObjectTarget;
 
-/**
- *
- * @author edburns
- */
+
 public class AttachedObjectTargetImpl implements AttachedObjectTarget {
 
     private String name = null;

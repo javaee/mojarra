@@ -51,28 +51,17 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
-import com.sun.faces.facelets.tag.composite.*;
 import com.sun.faces.facelets.tag.*;
-import com.sun.faces.facelets.tag.jsf.ComponentConfig;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.FacesException;
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 
-/**
- *
- * @author edburns
- */
 public class CompositeComponentTagLibrary extends TagLibraryImpl {
     
     public CompositeComponentTagLibrary(String ns) {

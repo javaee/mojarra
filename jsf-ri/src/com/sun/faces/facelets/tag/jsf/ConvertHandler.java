@@ -68,7 +68,6 @@ import com.sun.faces.facelets.tag.TagAttribute;
 import com.sun.faces.facelets.tag.TagConfig;
 import com.sun.faces.facelets.tag.TagException;
 import com.sun.faces.facelets.tag.MetaRuleset;
-import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
 import javax.faces.application.Resource;
 import javax.faces.webapp.pdl.ValueHolderAttachedObjectHandler;
 
@@ -115,7 +114,7 @@ public class ConvertHandler extends MetaTagHandler implements ValueHolderAttache
      * <li>Otherwise, call
      * {@link #createConverter(FaceletContext) createConverter}.</li>
      * <li>Call
-     * {@link ObjectHandler#setAttributes(FaceletContext, Object) setAttributes}
+     * {@link com.sun.faces.facelets.tag.MetaTagHandler#setAttributes(FaceletContext, Object) setAttributes}
      * on Converter instance.</li>
      * <li>Set the Converter on the ValueHolder</li>
      * <li>If the ValueHolder has a localValue, convert it and set the value</li>
@@ -124,8 +123,7 @@ public class ConvertHandler extends MetaTagHandler implements ValueHolderAttache
      * @see ValueHolder
      * @see Converter
      * @see #createConverter(FaceletContext)
-     * @see com.sun.facelets.FaceletHandler#apply(com.sun.facelets.FaceletContext,
-     *      javax.faces.component.UIComponent)
+     * @see com.sun.faces.facelets.FaceletHandler#apply(com.sun.faces.facelets.FaceletContext, javax.faces.component.UIComponent)
      */
     public final void apply(FaceletContext ctx, UIComponent parent)
             throws IOException, FacesException, FaceletException, ELException {

@@ -53,10 +53,7 @@ package com.sun.faces.facelets.tag.composite;
 
 import javax.faces.webapp.pdl.EditableValueHolderAttachedObjectTarget;
 
-/**
- *
- * @author edburns
- */
+
 public class EditableValueHolderAttachedObjectTargetImpl extends AttachedObjectTargetImpl implements EditableValueHolderAttachedObjectTarget {
 
 }

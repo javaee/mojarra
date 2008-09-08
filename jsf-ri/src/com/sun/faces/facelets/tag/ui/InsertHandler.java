@@ -59,7 +59,6 @@ import javax.faces.component.UIComponent;
 
 import com.sun.faces.facelets.FaceletContext;
 import com.sun.faces.facelets.FaceletException;
-import com.sun.faces.facelets.FaceletHandler;
 import com.sun.faces.facelets.TemplateClient;
 import com.sun.faces.facelets.tag.TagAttribute;
 import com.sun.faces.facelets.tag.TagAttributeException;

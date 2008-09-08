@@ -54,8 +54,8 @@ package com.sun.faces.facelets.tag;
 /**
  * A potential rule for Metadata on the passed MetadataTarget
  * 
- * @see com.sun.facelets.tag.Metadata
- * @see com.sun.facelets.tag.MetadataTarget
+ * @see com.sun.faces.facelets.tag.Metadata
+ * @see com.sun.faces.facelets.tag.MetadataTarget
  * @author Jacob Hookom
  * @version $Id$
  */

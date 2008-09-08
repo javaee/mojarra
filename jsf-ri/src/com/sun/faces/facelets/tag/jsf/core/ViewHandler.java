@@ -52,7 +52,6 @@
 package com.sun.faces.facelets.tag.jsf.core;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 
 import javax.el.ELException;
 import javax.el.MethodExpression;
@@ -113,8 +112,7 @@ public final class ViewHandler extends TagHandler {
     /**
      * See taglib documentation.
      * 
-     * @see com.sun.facelets.FaceletHandler#apply(com.sun.facelets.FaceletContext,
-     *      javax.faces.component.UIComponent)
+     * @see com.sun.faces.facelets.FaceletHandler#apply(com.sun.faces.facelets.FaceletContext, javax.faces.component.UIComponent)
      */
     public void apply(FaceletContext ctx, UIComponent parent)
             throws IOException, FacesException, FaceletException, ELException {

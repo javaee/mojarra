@@ -66,13 +66,9 @@ import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.webapp.pdl.AttachedObjectTarget;
 
-/**
- *
- * @author edburns
- */
+
 public abstract class AttachedObjectTargetHandler extends TagHandler {
     
     private TagAttribute name = null;
