@@ -264,25 +264,25 @@ public class ConfigManager {
             try {
                 WebConfiguration webConfig = WebConfiguration.getInstance(sc);
                 boolean validating = webConfig.isOptionEnabled(ValidateFacesConfigFiles);
-                boolean isFacesPDLEnabled = !webConfig.isOptionEnabled(DisableFaceletJSFViewHandler);
+                boolean isFacesPDLDisabled = webConfig.isOptionEnabled(DisableFaceletJSFViewHandler);
                 ExecutorService executor = createExecutorService();
                 Document[] facesDocuments =
                       getConfigDocuments(sc,
                                          FACES_CONFIG_RESOURCE_PROVIDERS,
                                          executor,
                                          validating);
-                if (isFacesPDLEnabled) {
+                if (isFacesPDLDisabled) {
                     // if not explicitly disabled, make a sanity check against
                     // /WEB-INF/faces-config.xml
-                    isFacesPDLEnabled = isFacesApp20(facesDocuments[facesDocuments.length - 1]);
-                    webConfig.overrideContextInitParameter(DisableFaceletJSFViewHandler, true);
+                    isFacesPDLDisabled = isFacesApp20(facesDocuments[facesDocuments.length - 1]);
+                    webConfig.overrideContextInitParameter(DisableFaceletJSFViewHandler, isFacesPDLDisabled);
                 }
                 FACES_CONFIG_PROCESSOR_CHAIN.process(
                       getConfigDocuments(sc,
                                          FACES_CONFIG_RESOURCE_PROVIDERS,
                                          executor,
                                          validating));
-                if (isFacesPDLEnabled) {
+                if (!isFacesPDLDisabled) {
                     FACELET_TAGLIB_CONFIG_PROCESSOR_CHAIN.process(
                           getConfigDocuments(sc,
                                              FACELET_TAGLIBRARY_RESOURCE_PROVIDERS,
