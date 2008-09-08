@@ -105,18 +105,14 @@ public abstract class AttachedObjectTargetHandler extends TagHandler {
             throw new TagException(this.tag, "Error: I have an EditableValueHolder tag, but no enclosing composite component");
         }
 
-        FacesContext context = ctx.getFacesContext();
         List<AttachedObjectTarget> targetList = (List<AttachedObjectTarget>)
                 componentDescriptor.getValue(AttachedObjectTarget.ATTACHED_OBJECT_TARGETS_KEY);
         AttachedObjectTargetImpl target = newAttachedObjectTargetImpl();
         targetList.add(target);
         target.setComponent(parent);
         
-        ValueExpression ve = null;
-        String strValue = null;
-
-        ve = name.getValueExpression(ctx, String.class);
-        strValue = (String) ve.getValue(ctx);
+        ValueExpression ve = name.getValueExpression(ctx, String.class);
+        String strValue = (String) ve.getValue(ctx);
         if (null != strValue) {
             target.setName(strValue);
         }

@@ -70,6 +70,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 /**
  * @author Jacob Hookom
@@ -97,7 +98,11 @@ public final class ForEachHandler extends TagHandler {
         }
 
         public Object next() {
-            return Array.get(this.array, this.i++);
+            try {
+                return Array.get(this.array, this.i++);
+            } catch (ArrayIndexOutOfBoundsException ioob) {
+                throw new NoSuchElementException();
+            }
         }
 
         public void remove() {
@@ -146,9 +151,9 @@ public final class ForEachHandler extends TagHandler {
         int s = this.getBegin(ctx);
         int e = this.getEnd(ctx);
         int m = this.getStep(ctx);
-        Integer sO = this.begin != null ? new Integer(s) : null;
-        Integer eO = this.end != null ? new Integer(e) : null;
-        Integer mO = this.step != null ? new Integer(m) : null;
+        Integer sO = this.begin != null ? s : null;
+        Integer eO = this.end != null ? e : null;
+        Integer mO = this.step != null ? m : null;
         
         boolean t = this.getTransient(ctx);
         Object src = null;

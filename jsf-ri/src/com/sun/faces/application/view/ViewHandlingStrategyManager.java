@@ -105,7 +105,7 @@ public class ViewHandlingStrategyManager {
      */
     public ViewHandlingStrategy[] getViewHandlingStrategies() {
 
-        return strategies;
+        return strategies.clone();
 
     }
 
@@ -117,7 +117,7 @@ public class ViewHandlingStrategyManager {
      */
     public synchronized void setViewHandlingStrategies(ViewHandlingStrategy[] stratagies) {
 
-        this.strategies = stratagies;
+        this.strategies = stratagies.clone();
         
     }
 

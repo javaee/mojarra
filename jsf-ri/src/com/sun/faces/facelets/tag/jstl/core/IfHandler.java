@@ -85,7 +85,7 @@ public final class IfHandler extends TagHandler {
             throws IOException, FacesException, ELException {
         boolean b = this.test.getBoolean(ctx);
         if (this.var != null) {
-            ctx.setAttribute(var.getValue(ctx), new Boolean(b));
+            ctx.setAttribute(var.getValue(ctx), b);
         }
         if (b) {
             this.nextHandler.apply(ctx, parent);

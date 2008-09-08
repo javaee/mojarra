@@ -112,7 +112,7 @@ public final class InsertHandler extends TagHandler implements TemplateClient {
     }
 
     public boolean apply(FaceletContext ctx, UIComponent parent, String name) throws IOException, FacesException, FaceletException, ELException {
-        if (this.name == name || this.name != null && this.name.equals(name)) {
+        if (this.name != null && this.name.equals(name)) {
             this.nextHandler.apply(ctx, parent);
             return true;
         }

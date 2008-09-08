@@ -567,7 +567,7 @@ public class UIRepeat extends UIComponentBase implements NamingContainer {
 
     }
 
-    private final class IndexedEvent extends FacesEvent {
+    private static final class IndexedEvent extends FacesEvent {
 
         private final FacesEvent target;
 
@@ -651,8 +651,8 @@ public class UIRepeat extends UIComponentBase implements NamingContainer {
         Object[] state = new Object[6];
         state[0] = super.saveState(faces);
         state[1] = this.childState;
-        state[2] = new Integer(this.offset);
-        state[3] = new Integer(this.size);
+        state[2] = this.offset;
+        state[3] = this.size;
         state[4] = this.var;
         state[5] = this.value;
         return state;

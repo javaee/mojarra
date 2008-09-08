@@ -61,7 +61,6 @@ import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import javax.el.ELException;
 import javax.el.ValueExpression;
@@ -93,20 +92,17 @@ public class AttributeHandler extends TagHandler {
         }
         
         Map<String, Object> componentAttrs = parent.getAttributes();
-        ValueExpression ve = null;
-        String strValue = null;
         boolean booleanValue = false;
 
         CompositeComponentBeanInfo componentBeanInfo = (CompositeComponentBeanInfo)
                 componentAttrs.get(UIComponent.BEANINFO_KEY);
 
-        List<PropertyDescriptor> attributes = componentBeanInfo.getPropertyDescriptorsList();
         PropertyDescriptor propertyDescriptor = null;
         TagAttribute attr = null;
 
         // Get the value of required the name propertyDescriptor
-        ve = name.getValueExpression(ctx, String.class);
-        strValue = (String) ve.getValue(ctx);
+        ValueExpression ve = name.getValueExpression(ctx, String.class);
+        String strValue = (String) ve.getValue(ctx);
         try {
             propertyDescriptor = new PropertyDescriptor(strValue, null, null);
         } catch (IntrospectionException ex) {

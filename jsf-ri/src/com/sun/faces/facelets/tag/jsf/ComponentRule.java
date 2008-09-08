@@ -72,7 +72,7 @@ import com.sun.faces.facelets.util.FacesAPI;
  */
 final class ComponentRule extends MetaRule {
 
-    final class LiteralAttributeMetadata extends Metadata {
+    final static class LiteralAttributeMetadata extends Metadata {
 
         private final String name;
         private final String value;

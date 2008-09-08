@@ -67,7 +67,6 @@ import javax.faces.FacesException;
 import javax.faces.application.Resource;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.webapp.pdl.AttachedObjectHandler;
 import javax.faces.webapp.pdl.PDLUtils;
@@ -144,7 +143,6 @@ public class CompositeComponentTagHandler extends ComponentHandler {
         // for this tag to get applied
         super.applyNextHandler(ctx, c);
         // Apply the facelet for this composite component
-        ExternalContext extContext = ctx.getFacesContext().getExternalContext();
         applyCompositeComponent(ctx, c);
         // Allow any PDL declared attached objects to be retargeted
         if (ComponentSupport.isNew(c)) {

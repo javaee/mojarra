@@ -57,12 +57,11 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
 public class ReflectionUtil {
-	protected static final String[] EMPTY_STRING = new String[0];
 
-    protected static final String[] PRIMITIVE_NAMES = new String[] { "boolean",
+    private static final String[] PRIMITIVE_NAMES = new String[] { "boolean",
             "byte", "char", "double", "float", "int", "long", "short", "void" };
 
-    protected static final Class[] PRIMITIVES = new Class[] { boolean.class,
+    private static final Class[] PRIMITIVES = new Class[] { boolean.class,
             byte.class, char.class, double.class, float.class, int.class,
             long.class, short.class, Void.TYPE };
 

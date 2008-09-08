@@ -82,7 +82,6 @@ class ClassFile {
     AttributeInfo       attributes[];
      */
 
-    boolean isValidClass = false;
     ByteBuffer header;
     ConstantPoolInfo constantPoolInfo = new ConstantPoolInfo();
 

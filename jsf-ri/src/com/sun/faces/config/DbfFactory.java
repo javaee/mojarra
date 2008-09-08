@@ -211,8 +211,7 @@ public class DbfFactory {
 
     // ----------------------------------------------------------- Inner Classes
 
-   public static class
-         FacesEntityResolver extends DefaultHandler implements LSResourceResolver {
+   private static class FacesEntityResolver extends DefaultHandler implements LSResourceResolver {
 
         /**
          * <p>Contains associations between grammar name and the physical

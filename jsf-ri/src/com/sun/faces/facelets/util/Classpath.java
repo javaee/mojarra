@@ -159,33 +159,30 @@ public final class Classpath {
         boolean done = false;
         InputStream is = getInputStream(url);
         if (is != null) {
+            ZipInputStream zis;
+            if (is instanceof ZipInputStream) {
+                zis = (ZipInputStream) is;
+            } else {
+                zis = new ZipInputStream(is);
+            }
             try {
-                ZipInputStream zis;
-                if (is instanceof ZipInputStream) {
-                    zis = (ZipInputStream) is;
-                } else {
-                    zis = new ZipInputStream(is);
-                }
-                try {
-                    ZipEntry entry = zis.getNextEntry();
-                    // initial entry should not be null
-                    // if we assume this is some inner jar
-                    done = (entry != null);
-                    while (entry != null) {
-                        String entryName = entry.getName();
-                        if (entryName.endsWith(suffix)) {
-                            String urlString = url.toExternalForm();
-                            result.add(new URL(urlString + entryName));
-                        }
-                        entry = zis.getNextEntry();
+                ZipEntry entry = zis.getNextEntry();
+                // initial entry should not be null
+                // if we assume this is some inner jar
+                done = (entry != null);
+                while (entry != null) {
+                    String entryName = entry.getName();
+                    if (entryName.endsWith(suffix)) {
+                        String urlString = url.toExternalForm();
+                        result.add(new URL(urlString + entryName));
                     }
-                } finally {
-                    zis.close();
+                    entry = zis.getNextEntry();
                 }
-            } catch (Exception ignore) {
+            } finally {
+                zis.close();
             }
         }
-        if (done == false && prefix.length() > 0) {
+        if (!done && prefix.length() > 0) {
             // we add '/' at the end since join adds it as well
             String urlString = url.toExternalForm() + "/";
             String[] split = prefix.split("/");
