@@ -266,6 +266,16 @@ public class ConfigManager {
                 boolean validating = webConfig.isOptionEnabled(ValidateFacesConfigFiles);
                 boolean isFacesPDLEnabled = !webConfig.isOptionEnabled(DisableFaceletJSFViewHandler);
                 ExecutorService executor = createExecutorService();
+                Document[] facesDocuments =
+                      getConfigDocuments(sc,
+                                         FACES_CONFIG_RESOURCE_PROVIDERS,
+                                         executor,
+                                         validating);
+                if (isFacesPDLEnabled) {
+                    // if not explicitly disabled, make a sanity check against
+                    // /WEB-INF/faces-config.xml
+                    isFacesPDLEnabled = isFacesApp20(facesDocuments[facesDocuments.length - 1]);
+                }
                 FACES_CONFIG_PROCESSOR_CHAIN.process(
                       getConfigDocuments(sc,
                                          FACES_CONFIG_RESOURCE_PROVIDERS,
@@ -446,6 +456,23 @@ public class ConfigManager {
                            ignored);
             }
         }
+    }
+
+
+    private boolean isFacesApp20(Document document) {
+
+        if (document.getDocumentURI().contains("/WEB-INF/faces-config.xml")) {
+            String version = document.getDocumentElement()
+                  .getAttributeNS(document.getNamespaceURI(), "version");
+            if (version != null) {
+                Double v = Double.parseDouble(version);
+                Double twoOh = 2.0d;
+                return !(v.compareTo(twoOh) < 0);
+            }
+        }
+
+        return true;  // no faces-config.xml or version so assume 2.0
+
     }
 
 
