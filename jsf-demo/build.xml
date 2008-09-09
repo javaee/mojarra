@@ -128,6 +128,10 @@
               file="${basedir}/ajax-request/build/ajax-request.war"/>
         <copy todir="${dist.home}/samples"
               file="${basedir}/ajax-queue/build/ajax-queue.war"/>
+        <copy todir="${dist.home}/samples"
+              file="${basedir}/ezcomp00/build/ezcomp00.war"/>
+        <copy todir="${dist.home}/samples"
+              file="${basedir}/ezcomp01/build/ezcomp01.war"/>
               
         <!-- Not including these old demos in the distribution 
 
@@ -159,6 +163,12 @@
          </copy>
          <copy todir="${dist.home}/samples/ajax-queue" includeEmptyDirs="false">
             <fileset dir="${basedir}/ajax-queue" excludes="build.xml"/>
+         </copy>
+         <copy todir="${dist.home}/samples/ezcomp00" includeEmptyDirs="false">
+            <fileset dir="${basedir}/ezcomp00" excludes="build.xml"/>
+         </copy>
+         <copy todir="${dist.home}/samples/ezcomp01" includeEmptyDirs="false">
+            <fileset dir="${basedir}/ezcomp01" excludes="build.xml"/>
          </copy>
          
         <!-- Not including these old demos in the distribution 
@@ -328,6 +338,8 @@
         <ant dir="${basedir}/guessNumber2.0" inheritAll="false" />
         <ant dir="${basedir}/ajax-request" inheritAll="false" />
         <ant dir="${basedir}/ajax-queue" inheritAll="false" />
+        <ant dir="${basedir}/ezcomp00" inheritAll="false" />
+        <ant dir="${basedir}/ezcomp01" inheritAll="false" />
         <ant dir="${basedir}/standard" inheritAll="false" />
         <ant dir="${basedir}/test/mappingDemo" inheritAll="false" />
         <ant dir="${basedir}/renderkits" inheritAll="false"/>
