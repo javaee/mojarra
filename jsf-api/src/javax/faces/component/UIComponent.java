@@ -1596,6 +1596,14 @@ private void doFind(FacesContext context, String clientId) {
      */
     public void subscribeToEvent(Class<? extends SystemEvent> eventClass,
                                  ComponentSystemEventListener componentListener) {
+
+        if (eventClass == null) {
+            throw new NullPointerException();
+        }
+        if (componentListener == null) {
+            throw new NullPointerException();
+        }
+
         if (null == listenersByEventClass) {
             listenersByEventClass = new HashMap<Class<? extends SystemEvent>,
                                                 List<SystemEventListener>>(3, 1.0f);
@@ -1611,6 +1619,7 @@ private void doFind(FacesContext context, String clientId) {
         if (!listenersForEventClass.contains(facesLifecycleListener)) {
             listenersForEventClass.add(facesLifecycleListener);
         }
+
     }
 
     /**
@@ -1640,6 +1649,14 @@ private void doFind(FacesContext context, String clientId) {
      */
     public void unsubscribeFromEvent(Class<? extends SystemEvent> eventClass,
                                      ComponentSystemEventListener componentListener) {
+
+        if (eventClass == null) {
+            throw new NullPointerException();
+        }
+        if (componentListener == null) {
+            throw new NullPointerException();
+        }
+
         List<SystemEventListener> listeners = getListenersForEventClass(eventClass);
         if (listeners != null && !listeners.isEmpty()) {
             for (Iterator<SystemEventListener> i = listeners.iterator(); i.hasNext();) {
@@ -1672,6 +1689,11 @@ private void doFind(FacesContext context, String clientId) {
      */
     public List<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> eventClass) {
 
+        // RELEASE_PENDING (edburns,rogerk) NPE for a null event class or just
+        //   return null?
+        if (eventClass == null) {
+            return null;
+        }
         List<SystemEventListener> result = null;
         if (listenersByEventClass != null) {
             result = listenersByEventClass.get(eventClass);
