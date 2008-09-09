@@ -70,7 +70,7 @@
 
     <property>
         <description>
-          Flag indicating whether the summary portion of displayed messages
+          Flag indicating whether the detail portion of displayed messages
           should be included.  Default value is "true".
         </description>
         <display-name>Show Detail</display-name>
