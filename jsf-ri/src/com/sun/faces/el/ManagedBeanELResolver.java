@@ -114,7 +114,7 @@ public class ManagedBeanELResolver extends ELResolver {
             throw new PropertyNotFoundException(message);
         }
 
-        // The spec states that nothing ManagedBeanELResolver should
+        // The spec states that theManagedBeanELResolver should
         // do nothing in setValue() so that the BeanELResolver can do its
         // thing, however, in 1.1, calling setValue() for a reference
         // that happened to be a managed bean cause the bean to be created
