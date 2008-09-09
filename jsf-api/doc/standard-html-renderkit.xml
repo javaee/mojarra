@@ -1526,7 +1526,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </property>
     <property>
       <description>
-          Flag indicating whether the summary portion of displayed messages
+          Flag indicating whether the detail portion of displayed messages
           should be included.  Default value is "true".
         </description>
       <display-name>Show Detail</display-name>
@@ -9682,7 +9682,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </property>
     <property>
       <description>
-          Flag indicating whether the summary portion of displayed messages
+          Flag indicating whether the detail portion of displayed messages
           should be included.  Default value is "true".
         </description>
       <display-name>Show Detail</display-name>
