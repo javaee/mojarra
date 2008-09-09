@@ -1292,11 +1292,9 @@ private void doFind(FacesContext context, String clientId) {
      * the actual encoding will be delegated to
      * {@link Renderer#encodeChildren(FacesContext, UIComponent)}.
      * <span class="changed_modified_2_0">If no {@link Renderer} is associated
-     * with this {@link UIComponent}, delegate the rendering to
+     * with this {@link UIComponent}, iterate over each of the children of this
+     * component and call 
      * {@link #encodeAll(javax.faces.context.FacesContext)}.</span></p>
-     *
-     * RELEASE_PENDING (edburns,rogerk) review the above modifications.  See
-     * spec public issue 169.
      *
      * @param context {@link FacesContext} for the response we are creating
      *
