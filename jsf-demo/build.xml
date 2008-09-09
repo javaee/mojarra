@@ -92,6 +92,8 @@
 
         <ant target="clean" dir="guessNumber"/>
         <ant target="clean" dir="guessNumber2.0"/>
+        <ant target="clean" dir="ajax-request"/>
+        <ant target="clean" dir="ajax-queue"/>
         <ant target="clean" dir="helloDuke"/>
         <ant target="clean" dir="components"/>
         <ant target="clean" dir="carstore"/>       
@@ -122,7 +124,11 @@
 
         <copy todir="${dist.home}/samples"
               file="${basedir}/guessNumber2.0/build/jsf-guessNumber2.0.war"/>
-
+        <copy todir="${dist.home}/samples"
+              file="${basedir}/ajax-request/build/ajax-request.war"/>
+        <copy todir="${dist.home}/samples"
+              file="${basedir}/ajax-queue/build/ajax-queue.war"/>
+              
         <!-- Not including these old demos in the distribution 
 
         <copy todir="${dist.home}/samples"
@@ -148,6 +154,13 @@
          <copy todir="${dist.home}/samples/guessNumber2.0" includeEmptyDirs="false">
             <fileset dir="${basedir}/guessNumber2.0" excludes="build.xml"/>
          </copy>
+         <copy todir="${dist.home}/samples/ajax-request" includeEmptyDirs="false">
+            <fileset dir="${basedir}/ajax-request" excludes="build.xml"/>
+         </copy>
+         <copy todir="${dist.home}/samples/ajax-queue" includeEmptyDirs="false">
+            <fileset dir="${basedir}/ajax-queue" excludes="build.xml"/>
+         </copy>
+         
         <!-- Not including these old demos in the distribution 
 
         <copy todir="${dist.home}/samples/guessNumber" includeEmptyDirs="false">
@@ -313,6 +326,8 @@
         <ant dir="${basedir}/helloDuke" inheritAll="false" />
         <ant dir="${basedir}/guessNumber" inheritAll="false" />
         <ant dir="${basedir}/guessNumber2.0" inheritAll="false" />
+        <ant dir="${basedir}/ajax-request" inheritAll="false" />
+        <ant dir="${basedir}/ajax-queue" inheritAll="false" />
         <ant dir="${basedir}/standard" inheritAll="false" />
         <ant dir="${basedir}/test/mappingDemo" inheritAll="false" />
         <ant dir="${basedir}/renderkits" inheritAll="false"/>
