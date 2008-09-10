@@ -1453,15 +1453,18 @@ private void doFind(FacesContext context, String clientId) {
      * <p class="changed_added_2_0">This method must return
      * <code>null</code> if there is no currently processing
      * <code>UIComponent</code></p>
-     * RELEASE_PENDING (eburns,rogerk) Consider adding FacesContext argument
-     * to getCurrentComponent().  There is no need to call this from the EL
-     * since we have the 'component' implicit object.
+     *
+     * @param context {@link FacesContext} for the request we are processing
+     *
+     * @throws NullPointerException if <code>context</code>
+     *  is <code>null</code>
      *
      * @since 2.0
      */
-    public static UIComponent getCurrentComponent() {
-
-        FacesContext context = FacesContext.getCurrentInstance();
+    public static UIComponent getCurrentComponent(FacesContext context) {
+        if (context == null) {
+            throw new NullPointerException();
+        }
         Map<Object, Object> contextMap = context.getAttributes();
         return (UIComponent) contextMap.get(CURRENT_COMPONENT);
 
@@ -1474,13 +1477,18 @@ private void doFind(FacesContext context, String clientId) {
      * #getCurrentComponent}, that is a composite component, or
      * <code>null</code> if no such component exists.</p>
      *
+     * @param context {@link FacesContext} for the request we are processing
+     * 
+     * @throws NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     *
      * @since 2.0
      */
-    public static UIComponent getCurrentCompositeComponent() {
-	// RELEASE_PENDING (edburns,rogerk) docs
-	// RELEASE_PENDING (eburns,rogerk) Consider adding FacesContext argument
+    public static UIComponent getCurrentCompositeComponent(FacesContext context) {
+        if (context == null) {
+            throw new NullPointerException();
+        }
 
-        FacesContext context = FacesContext.getCurrentInstance();
         Map<Object, Object> contextMap = context.getAttributes();
         return (UIComponent) contextMap.get(CURRENT_COMPOSITE_COMPONENT);
 
