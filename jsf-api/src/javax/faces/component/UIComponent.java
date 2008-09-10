@@ -140,7 +140,7 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
 
     /**
      * <p class="changed_added_2_0">The value of this constant is used as the key
-     * in the <em>composite component BeanDescrpitor</em> for the 
+     * in the <em>composite component BeanDescriptor</em> for the 
      * <code>Map&lt;PropertyDescriptor&gt;</code> that contains meta-information
      * for the declared facets for this composite component.
      * This map must contain an entry under the key {@link #COMPOSITE_FACET_NAME}, even
@@ -152,7 +152,7 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
     
     /**
      * <p class="changed_added_2_0">The value of this constant is used as the key
-     * in the <em>composite component BeanDescrpitor</em> for a 
+     * in the <em>composite component BeanDescriptor</em> for a 
      * <code>ValueExpression</code> that evaluates to the 
      * <code>component-type</code> of the <em>composite component root</em>
      * <code>UIComponent</code> for this composite component, if
@@ -1342,6 +1342,10 @@ private void doFind(FacesContext context, String clientId) {
      *  is <code>null</code>
      */
     public void encodeAll(FacesContext context) throws IOException {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
 
         if (!isRendered()) {
             return;
