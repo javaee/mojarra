@@ -965,8 +965,8 @@ public abstract class Application {
 	  </p></li>
 
 
-	  <li><p>Obtain a reference to the component metadata for this
-	  composite component by calling {@link
+	  <li><p>Obtain a reference to the <em>composite component
+	  metadata</em> for this composite component by calling {@link
 	  PageDeclarationLanguage#getComponentMetadata}, passing the
 	  <code>facesContext</code> and <code>componentResource</code>
 	  arguments to this method.  This version of JSF specification
@@ -1019,10 +1019,23 @@ public abstract class Application {
 	  <code>UIComponent</code> instance, passing
 	  "<code>javax.faces.Composite</code>" as the argument.</p></li>
 
-	  <li><p>Store the argument <code>Resource</code> in the
+	  <li>
+
+          <p>Store the argument <code>Resource</code> in the
 	  attributes <code>Map</code> of the <code>UIComponent</code>
 	  under the key, {@link Resource#COMPONENT_RESOURCE_KEY}.
-	  </p></li>
+	  </p>
+
+          </li>
+
+	  <li>
+
+          <p>Store <em>composite component metadata</em> in the
+	  attributes <code>Map</code> of the <code>UIComponent</code>
+	  under the key, {@link UIComponent#BEANINFO_KEY}.
+	  </p>
+
+          </li>
 
 	</ul>
 
@@ -1035,7 +1048,7 @@ public abstract class Application {
 
      * <p>A default implementation is provided that throws
      * <code>UnsupportedOperationException</code> so that users
-     * that decorate <code>Application</code> can continue to function</p>.
+     * that decorate <code>Application</code> can continue to function.</p>
      *
      * </div>
      *

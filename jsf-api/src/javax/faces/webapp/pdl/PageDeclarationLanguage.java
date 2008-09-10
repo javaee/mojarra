@@ -67,17 +67,162 @@ public abstract class PageDeclarationLanguage {
     /**
      * <p class="changed_added_2_0">Return a reference to the component
      * metadata for the composite component represented by the argument
-     * <code>resource</code>.  The default implementation must support
-     * <code>Resource</code> being a Facelet markup file that is to be
-     * interpreted as a composite component as specified in section 4.3
-     * of the spec prose document.  The default implementation must
-     * support authoring the component metadata using tags placed inside
-     * of a <code>&lt;composite:interface /&gt;</code> element, which is
-     * specified in the <a target="_"
-     * href="../../../../../pdldocs/facelets/index.html">Facelts
+     * <code>componentResource</code>.  The default implementation must
+     * support <code>Resource</code> being a Facelet markup file that is
+     * to be interpreted as a composite component as specified in
+     * section 4.3 of the spec prose document.  The default
+     * implementation must support authoring the component metadata
+     * using tags placed inside of a <code>&lt;composite:interface
+     * /&gt;</code> element, which is specified in the <a target="_"
+     * href="../../../../../pdldocs/facelets/index.html">Facelets
      * taglibrary docs</a>.</p>
      *
-     * <p class="changed_added_2_0">This method is called from {@link javax.faces.application.Application#createComponent(FacesContext, Resource)}.</p>
+     * <div class="changed_added_2_0">
+
+     * <p>In the current version of the specification, the <em>composite
+     * component metadata</em> is exposed using the JavaBeans API.</p>
+
+     * <p>In the current version of the specification, only composite
+     * components have component metadata.  <em>Composite component
+     * metadata</em> currently consists of the following
+     * information:</p>
+
+     * 	<ul>
+
+	  <li><p>The <em>composite component <em>BeanInfo</em></em>,
+	  returned from this method.</p>
+
+          <p>This <code>BeanInfo</code> instance must be exposed in the
+          component attributes <code>Map</code> under the key {@link
+          javax.faces.component.UIComponent#BEANINFO_KEY}.  The caller
+          of this method is responsible for ensuring this entry is
+          placed in the component attributes <code>Map</code> for any
+          instance of any composite component in the view.</p>
+
+          </li>
+
+	  <li><p>The {@link Resource} from which the composite component
+	  was created.</p>
+
+          <p>This <code>Resource</code> instance must be exposed in the
+          component attributes <code>Map</code> under the key {@link
+          Resource#COMPONENT_RESOURCE_KEY}.  The caller of this method
+          is responsible for ensuring this entry is placed in the
+          component attributes <code>Map</code> for any instance of any
+          composite component in the view.</p>
+
+          </li>
+
+
+	  <li><p>The <em>composite component
+	  <code>BeanDescriptor</code></em></p>
+
+          <p>This <code>BeanDescriptor</code> must be available by
+          calling <code>getBeanDescriptor()</code> on the <em>composite
+          component <code>BeanInfo</code></em>.</p>
+
+          <p>The <em>composite component
+          <code>BeanDescriptor</code></em> exposes the following
+          information.</p>
+
+<ul>
+
+	  <li><p>The list of exposed {@link AttachedObjectTarget}s to
+	  which the page author can attach things such as listeners,
+	  converters, or validators.</p>
+
+          <p>The PDL implementation must populate the <em>composite
+          component metadata</em> with a
+          <code>List&lt;AttachedObjectTarget&gt;</code> that includes
+          all of the inner components exposed by the composite component
+          author for use by the page author.</p>
+
+          <p>This <code>List</code>
+          must be exposed in the value set of the <em>composite
+          component <code>BeanDescriptor</code></em> under the key
+          {@link AttachedObjectTarget#ATTACHED_OBJECT_TARGETS_KEY}.</p>
+
+         </li>
+
+	  <li><p>A <code>ValueExpression</code> that evaluates to the
+	  component type of the composite component.  By default this is
+	  "javax.faces.NamingContainer" but the composite component page
+	  author can change this, or provide a script-based
+	  <code>UIComponent</code> implementation that is required to
+	  implement {@link javax.faces.component.NamingContainer}.</p>
+
+          <p>This <code>ValueExpression</code> must be exposed in the
+          value set of the <em>composite component
+          <code>BeanDescriptor</code></em> under the key {@link
+          javax.faces.component.UIComponent#COMPOSITE_COMPONENT_TYPE_KEY}.</p>
+
+          </li>
+
+	  <li><p>A <code>Map&lt;String, PropertyDescriptor&gt;</code>
+	  representing the facets declared by the <em>composite
+	  component author</em> for use by the <em>page author</em>.  
+	  </p>
+
+          <p>This <code>Map</code> must be exposed in the
+          value set of the <em>composite component
+          <code>BeanDescriptor</code></em> under the key {@link
+          javax.faces.component.UIComponent#FACETS_KEY}.</p>
+
+          </li>
+
+	  <li><p>The "name" "displayName" "preferred" and "expert"
+	  attributes of the <code>&lt;composite:interface/ &gt;</code>
+	  are exposed using the corresponding methods on the
+	  <em>composite component <code>BeanDescriptor</code></em>. Any
+	  additional attributes on <code>&lt;composite:interface/
+	  &gt;</code> are exposed as attributes accessible from the
+	  <code>getValue()</code> and <code>attributeNames()</code>
+	  methods on <code>PropertyDescriptor</code>. The return type
+	  from <code>getValue()</code> must be a <code>Expression</code>
+	  for such attributes.</p></li>
+
+
+
+</ul>
+          </li>
+
+	  <li><p>Any attributes declared by the <em>composite component
+	  author</em> using <code>&lt;composite:attribute/ &gt;</code>
+	  elements must be exposed in the array of
+	  <code>PropertyDescriptor</code>s returned from
+	  <code>getPropertyDescriptors()</code> on the <em>composite
+	  component BeanInfo</em>.</p>
+
+
+          <p>For each such attribute, for any <code>String</code> or
+          <code>boolean</code> valued JavaBeans properties on the
+          interface <code>PropertyDescriptor</code> (and its
+          superinterfaces) that are also given as attributes on a
+          <code>&lt;composite:attribute/ &gt;</code> element, those
+          properties must be exposed as properties on the
+          <code>PropertyDescriptor</code> for that markup element. Any
+          additional attributes on <code>&lt;composite:attribute/
+          &gt;</code> are exposed as attributes accessible from the
+          <code>getValue()</code> and <code>attributeNames()</code>
+          methods on <code>PropertyDescriptor</code>. The return type
+          from <code>getValue()</code> must be a
+          <code>Expression</code>.</p>
+
+          </li>
+
+
+
+
+	</ul>
+
+
+     * <p>This method is called from {@link
+     * javax.faces.application.Application#createComponent(FacesContext,
+     * Resource)} as a result of the PDL implementation encountering a
+     * composite component within a view.</p>
+     *
+     *
+     * </div>
      * 
      * @param context The <code>FacesContext</code> for this request.
      * @param componentResource The <code>Resource</code> that represents the component.

@@ -59,6 +59,7 @@ import com.sun.faces.facelets.tag.composite.CompositeComponentBeanInfo;
 import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
 import com.sun.faces.util.RequestStateManager;
 
+import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -98,6 +99,8 @@ public class PageDeclarationLanguageImpl extends PageDeclarationLanguage {
                 context.getApplication().createComponent("javax.faces.Panel");
         facetComponent.setRendererType("javax.faces.Group");
         tmp.getFacets().put(UIComponent.COMPOSITE_FACET_NAME, facetComponent);
+        // We have to put the resource in here just so the classes that eventually
+        // get called by facelets have access to it.
         tmp.getAttributes().put(Resource.COMPONENT_RESOURCE_KEY, 
                 compositeComponentResource);
         

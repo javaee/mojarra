@@ -951,6 +951,8 @@ public class ApplicationImpl extends Application {
         result.setRendererType("javax.faces.Composite");
         result.getAttributes().put(Resource.COMPONENT_RESOURCE_KEY, 
                 componentResource);
+        result.getAttributes().put(UIComponent.BEANINFO_KEY, 
+                componentMetadata);
 
         associate.getAnnotationManager().applyComponentAnnotations(context, result);
 

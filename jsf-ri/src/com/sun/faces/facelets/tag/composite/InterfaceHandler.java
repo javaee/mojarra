@@ -97,75 +97,79 @@ public class InterfaceHandler extends TagHandler {
         // the real implementation will check if there is a cached beaninfo somewhere first
 	Map<String, Object> attrs = parent.getAttributes();
 
-        CompositeComponentBeanInfo componentBeanInfo = 
-                new CompositeComponentBeanInfo();
-        attrs.put(UIComponent.BEANINFO_KEY, componentBeanInfo);
-        BeanDescriptor componentDescriptor = new BeanDescriptor(parent.getClass());
-        componentBeanInfo.setBeanDescriptor(componentDescriptor);
-        TagAttribute attr = null;
-        ValueExpression ve = null;
-        String strValue = null;
-        boolean booleanValue = false;
-
-        if (ctx.getFacesContext().getApplication().getProjectStage() == ProjectStage.Development) {
-
-            if (null != (attr = this.getAttribute("displayName"))) {
-                ve = attr.getValueExpression(ctx, String.class);
-                strValue = (String) ve.getValue(ctx);
-                if (null != strValue) {
-                    componentDescriptor.setDisplayName(strValue);
-                }
-            }
-            if (null != (attr = this.getAttribute("expert"))) {
-                ve = attr.getValueExpression(ctx, Boolean.class);
-                booleanValue = ((Boolean)ve.getValue(ctx)).booleanValue();
-                componentDescriptor.setExpert(booleanValue);
-            }
-            if (null != (attr = this.getAttribute("hidden"))) {
-                ve = attr.getValueExpression(ctx, Boolean.class);
-                booleanValue = ((Boolean)ve.getValue(ctx)).booleanValue();
-                componentDescriptor.setHidden(booleanValue);
-            }
-            if (null != (attr = this.getAttribute("name"))) {
-                ve = attr.getValueExpression(ctx, String.class);
-                strValue = (String) ve.getValue(ctx);
-                if (null != strValue) {
-                    componentDescriptor.setName(strValue);
-                }
-            }
-            if (null != (attr = this.getAttribute("preferred"))) {
-                ve = attr.getValueExpression(ctx, Boolean.class);
-                booleanValue = ((Boolean)ve.getValue(ctx)).booleanValue();
-                componentDescriptor.setPreferred(booleanValue);
-            }
-            if (null != (attr = this.getAttribute("shortDescription"))) {
-                ve = attr.getValueExpression(ctx, String.class);
-                strValue = (String) ve.getValue(ctx);
-                if (null != strValue) {
-                    componentDescriptor.setShortDescription(strValue);
-                }
-            }
-        }
-        if (null != (attr = this.getAttribute("componentType"))) {
-            ve = attr.getValueExpression(ctx, String.class);
-            componentDescriptor.setValue(UIComponent.COMPOSITE_COMPONENT_TYPE_KEY, ve);
-        }
+        CompositeComponentBeanInfo componentBeanInfo = null;
         
-        List<AttachedObjectTarget> targetList = (List<AttachedObjectTarget>)
-                componentDescriptor.getValue(AttachedObjectTarget.ATTACHED_OBJECT_TARGETS_KEY);
-        if (null == targetList) {
-            targetList = new ArrayList<AttachedObjectTarget>();
-            componentDescriptor.setValue(AttachedObjectTarget.ATTACHED_OBJECT_TARGETS_KEY,
-                    targetList);
-        }
+        if (null == (componentBeanInfo = (CompositeComponentBeanInfo)
+                     attrs.get(UIComponent.BEANINFO_KEY))) {
+            componentBeanInfo = new CompositeComponentBeanInfo();
+            attrs.put(UIComponent.BEANINFO_KEY, componentBeanInfo);
+            BeanDescriptor componentDescriptor = new BeanDescriptor(parent.getClass());
+            // PENDING(edburns): Make sure attributeNames() returns the right content
+            // per the javadocs for PageDeclarationLanguage.getComponentMetadata()
+            componentBeanInfo.setBeanDescriptor(componentDescriptor);
+            TagAttribute attr = null;
+            ValueExpression ve = null;
+            String strValue = null;
+            boolean booleanValue = false;
 
-	Resource componentResource = 
-	    (Resource) attrs.get(Resource.COMPONENT_RESOURCE_KEY);
-	if (null == componentResource) {
-	    throw new NullPointerException("Unable to find Resource for composite component");
-	}
-	attrs.put(Resource.COMPONENT_RESOURCE_KEY, componentResource);
-        
+            if (ctx.getFacesContext().getApplication().getProjectStage() == ProjectStage.Development) {
+
+                if (null != (attr = this.getAttribute("displayName"))) {
+                    ve = attr.getValueExpression(ctx, String.class);
+                    strValue = (String) ve.getValue(ctx);
+                    if (null != strValue) {
+                        componentDescriptor.setDisplayName(strValue);
+                    }
+                }
+                if (null != (attr = this.getAttribute("expert"))) {
+                    ve = attr.getValueExpression(ctx, Boolean.class);
+                    booleanValue = ((Boolean) ve.getValue(ctx)).booleanValue();
+                    componentDescriptor.setExpert(booleanValue);
+                }
+                if (null != (attr = this.getAttribute("hidden"))) {
+                    ve = attr.getValueExpression(ctx, Boolean.class);
+                    booleanValue = ((Boolean) ve.getValue(ctx)).booleanValue();
+                    componentDescriptor.setHidden(booleanValue);
+                }
+                if (null != (attr = this.getAttribute("name"))) {
+                    ve = attr.getValueExpression(ctx, String.class);
+                    strValue = (String) ve.getValue(ctx);
+                    if (null != strValue) {
+                        componentDescriptor.setName(strValue);
+                    }
+                }
+                if (null != (attr = this.getAttribute("preferred"))) {
+                    ve = attr.getValueExpression(ctx, Boolean.class);
+                    booleanValue = ((Boolean) ve.getValue(ctx)).booleanValue();
+                    componentDescriptor.setPreferred(booleanValue);
+                }
+                if (null != (attr = this.getAttribute("shortDescription"))) {
+                    ve = attr.getValueExpression(ctx, String.class);
+                    strValue = (String) ve.getValue(ctx);
+                    if (null != strValue) {
+                        componentDescriptor.setShortDescription(strValue);
+                    }
+                }
+            }
+            if (null != (attr = this.getAttribute("componentType"))) {
+                ve = attr.getValueExpression(ctx, String.class);
+                componentDescriptor.setValue(UIComponent.COMPOSITE_COMPONENT_TYPE_KEY, ve);
+            }
+
+            List<AttachedObjectTarget> targetList = (List<AttachedObjectTarget>)
+              componentDescriptor.getValue(AttachedObjectTarget.ATTACHED_OBJECT_TARGETS_KEY);
+            if (null == targetList) {
+                targetList = new ArrayList<AttachedObjectTarget>();
+                componentDescriptor.setValue(AttachedObjectTarget.ATTACHED_OBJECT_TARGETS_KEY,
+                        targetList);
+            }
+
+            Resource componentResource =
+                    (Resource) attrs.get(Resource.COMPONENT_RESOURCE_KEY);
+            if (null == componentResource) {
+                throw new NullPointerException("Unable to find Resource for composite component");
+            }
+        }
     }
 
 }

@@ -62,7 +62,9 @@ public class PDLUtils {
      * specified in section 4.3.2 for the purpose of re-targeting
      * attached objects from the top level composite component to the
      * individual {@link AttachedObjectTarget} inside the composite
-     * component.</p>
+     * component.  This method must be called by the PDL implementation
+     * when creating the <code>UIComponent</code> tree when a composite
+     * component usage is encountered.</p>
      *
      * <div class="changed_added_2_0">
 

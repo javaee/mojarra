@@ -41,28 +41,28 @@ import java.util.List;
 import javax.faces.component.UIComponent;
 
 /**
- * <p class="changed_modified_2_0">Within the declaration of a
+ * <p class="changed_added_2_0">Within the declaration of a
  * <em>composite component</em>, an <code>AttachedObjectTarget</code>
  * allows the <em>composite component author</em> to expose the
  * semantics of an inner component to the <em>page author</em> without
  * exposing the rendering or implementation details of the <em>inner
- * component</em>.  The PDL implementation must populate the
- * <em>composite component metadata</em> with a
- * <code>List&lt;AttachedObjectTarget&gt;</code> that includes all of
- * the inner components exposed by the composite component author for
- * use by the page author.  This <code>List</code> must be exposed in
- * the value set of the <em>composite component
- * <code>BeanDescriptor</code></em> under the key {@link
- * #ATTACHED_OBJECT_TARGETS_KEY}.</p>
+ * component</em>.  For a composite component, the list of declared
+ * <code>AttachedObjectTargets</code> is part of the component metadata
+ * for the composite component.  This list is populated by the PDL's
+ * implementation of {@link
+ * PageDeclarationLanguage#getComponentMetadata}.</p>
 
  * <div class="changed_added_2_0">
  *
- * <p>The {@link PDLUtils#retargetAttachedObjects} method is passed a
- * <code>List&lt;{@link AttachedObjectHandler}&gt;</code> representing
- * the attached objects the page author wishes to attach to the
- * composite component.  <code>retargetAttachedObjects</code> gets the
- * <code>List&lt;AttachedObjectTarget&gt;</code> representing the inner
- * components exposed by the composite component author from the
+ * <p>Usage:</p>
+ *
+ * <p>During construction of the <code>UIComponent</code> tree, the PDL
+ * implementation must call {@link PDLUtils#retargetAttachedObjects}
+ * passing a <code>List&lt;{@link AttachedObjectHandler}&gt;</code>
+ * representing the attached objects the page author wishes to attach to
+ * the composite component.  <code>retargetAttachedObjects</code> gets
+ * the <code>List&lt;AttachedObjectTarget&gt;</code> representing the
+ * inner components exposed by the composite component author from the
  * <em>composite component metadata</em> and matches up the attached
  * objects provided by the page author with the attached object targets
  * provided by the composite component author.</p>
