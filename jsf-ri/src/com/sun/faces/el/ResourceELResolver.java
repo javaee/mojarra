@@ -46,6 +46,7 @@ import javax.el.ELResolver;
 import javax.el.PropertyNotFoundException;
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
+import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
@@ -113,7 +114,8 @@ public class ResourceELResolver extends ELResolver {
                 // a resource, the "this" syntax for the library name must
                 // be supported.
                 if (null != parts[0] && parts[0].equals("this")) {
-                    UIComponent currentComponent = UIComponent.getCurrentCompositeComponent();
+                    FacesContext facesContext = FacesContext.getCurrentInstance();
+                    UIComponent currentComponent = UIComponent.getCurrentCompositeComponent(facesContext);
                     Resource componentResource = (Resource)
                                 currentComponent.getAttributes().get(Resource.COMPONENT_RESOURCE_KEY);
                     if (null != componentResource) {

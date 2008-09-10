@@ -60,7 +60,7 @@ public class ConsumingPageCompositeChildrenRenderer extends Renderer {
 
     @Override
     public void encodeChildren(FacesContext context, UIComponent component) throws IOException {
-       UIComponent currentCompositeComponent = UIComponent.getCurrentCompositeComponent();
+       UIComponent currentCompositeComponent = UIComponent.getCurrentCompositeComponent(context);
        if (null != currentCompositeComponent) {
 
            // It must be true that each of the children of the composite 
