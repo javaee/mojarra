@@ -58,7 +58,7 @@ import javax.faces.component.UIComponent;
  * <div class="changed_added_2_0">
  *
  * <p>The {@link PDLUtils#retargetAttachedObjects} method is passed a
- * <code>List&lt;{@link AttachedObjectHandler&gt;</code> representing
+ * <code>List&lt;{@link AttachedObjectHandler}&gt;</code> representing
  * the attached objects the page author wishes to attach to the
  * composite component.  <code>retargetAttachedObjects</code> gets the
  * <code>List&lt;AttachedObjectTarget&gt;</code> representing the inner

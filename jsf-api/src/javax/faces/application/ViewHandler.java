@@ -360,10 +360,10 @@ public abstract class ViewHandler {
      * <p class="changed_added_2_0">This method must do nothing if the current
      * request is an <code>Ajax</code> request.  When responding to 
      * <code>Ajax</code> requests, the state is obtained by calling
-     * {@link StateManager#getViewState(javax.faces.context.FacesContext, Object)}
+     * {@link StateManager#getViewState}
      * and then written into the <code>Ajax</code> response during final
      * encoding 
-     * ({@link javax.faces.component.UIViewRoot.encodeEnd(javax.faces.context.FacesContext)}. 
+     * ({@link javax.faces.component.UIViewRoot#encodeEnd}. 
      * </p>
      *
      * @param context {@link FacesContext} for the current request
