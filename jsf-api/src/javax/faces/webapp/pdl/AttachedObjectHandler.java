@@ -41,23 +41,35 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 /**
- * RELEASE_PENDING (edburns,roger) docs
+ * <p class="changed_added_2_0">The abstract base interface for a
+ * handler representing an <em>attached object</em> in a PDL page.
+ * Subinterfaces are provided for the common attached objects that
+ * expose {@link javax.faces.convert.Converter}s, {@link
+ * javax.faces.validator.Validator}s, {@link
+ * javax.faces.event.ValueChangeListener}s, and {@link
+ * javax.faces.event.ActionListener}s for use by <em>page
+ * authors</em>.</p>
  *
  * @since 2.0
  */
 public interface AttachedObjectHandler {
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) docs
-     * @param context
-     * @param parent
+     * <p class="changed_added_2_0">Take the argument
+     * <code>parent</code> and apply this attached object to it.  The
+     * action taken varies with class that implements one of the
+     * subinterfaces of this interface.</p>
+     * @param context The <code>FacesContext</code> for this request
+     * @param parent The <code>UIComponent</code> to which this
+     * particular attached object must be applied.
      */
     public void applyAttachedObject(FacesContext context, UIComponent parent);
 
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) docs
-     * @return
+     * <p class="changed_added_2_0">Return the value of the "for"
+     * attribute specified by the <em>page author</em> on the tag for
+     * this <code>AttachedObjectHandler</code>.</p>
      */
     public String getFor();
 

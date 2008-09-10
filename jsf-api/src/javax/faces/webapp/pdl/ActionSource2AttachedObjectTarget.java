@@ -38,7 +38,8 @@ package javax.faces.webapp.pdl;
 
 /**
  * <p class="changed_added_2_0">A marker interface for PDL tags that
- * represent</p>
+ * represent <code>&lt;composite:actionSource/&gt;</code> for use by the
+ * <em>composite component page author</em>.</p>
  *
  * @since 2.0
  */

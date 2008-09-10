@@ -38,7 +38,9 @@
 package javax.faces.webapp.pdl;
 
 /**
- * RELEASE_PENDING (edburns,rogerk) docs
+ * <p class="changed_added_2_0">A marker interface for PDL tags that
+ * represent <code>&lt;composite:valueHolder/&gt;</code> for use by the
+ * <em>composite component page author</em>.</p>
  *
  * @since 2.0
  */

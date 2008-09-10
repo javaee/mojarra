@@ -46,26 +46,11 @@ import javax.faces.component.UIComponent;
  * allows the <em>composite component author</em> to expose the
  * semantics of an inner component to the <em>page author</em> without
  * exposing the rendering or implementation details of the <em>inner
- * component</em>.  For a composite component, the list of declared
- * <code>AttachedObjectTargets</code> is part of the component metadata
- * for the composite component.  This list is populated by the PDL's
- * implementation of {@link
- * PageDeclarationLanguage#getComponentMetadata}.</p>
+ * component</em>.  See {@link
+ * PageDeclarationLanguage#getComponentMetadata} for the context in
+ * which implementations of this interface are used.</p>
 
  * <div class="changed_added_2_0">
- *
- * <p>Usage:</p>
- *
- * <p>During construction of the <code>UIComponent</code> tree, the PDL
- * implementation must call {@link PDLUtils#retargetAttachedObjects}
- * passing a <code>List&lt;{@link AttachedObjectHandler}&gt;</code>
- * representing the attached objects the page author wishes to attach to
- * the composite component.  <code>retargetAttachedObjects</code> gets
- * the <code>List&lt;AttachedObjectTarget&gt;</code> representing the
- * inner components exposed by the composite component author from the
- * <em>composite component metadata</em> and matches up the attached
- * objects provided by the page author with the attached object targets
- * provided by the composite component author.</p>
 
  * <p>Subinterfaces are provided for the common behavioral interfaces:
  * {@link javax.faces.component.ValueHolder}, {@link
@@ -81,22 +66,33 @@ import javax.faces.component.UIComponent;
 public interface AttachedObjectTarget {
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) docs
+     * <p class="changed_added_2_0">The key in the value set of the
+     * <em>composite component <code>BeanDescriptor</code></em>, the
+     * value for which is a
+     * <code>List&lt;AttachedObjectTarget&gt;</code>.</p>
      */
     public static final String ATTACHED_OBJECT_TARGETS_KEY =
             "javax.faces.webapp.pdl.AttachedObjectTargets";
 
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) docs
-     * @return
+     * <p class="changed_added_2_0">Returns the
+     * <code>List&lt;UIComponent&gt;</code> that this
+     * <code>AttachedObjectTarget</code> exposes.  Each <em>attached
+     * object</em> exposed by the <em>composite component author</em>
+     * may point at multiple <code>UIComponent</code> instances within
+     * the composite component.  This method is used by the {@link
+     * PDLUtils#retargetAttachedObjects} method to take the appropriate
+     * action on the attached object.</p>
      */
     public List<UIComponent> getTargets();
 
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) docs
-     * @return
+     * <p class="changed_added_2_0">Returns the name by which this
+     * attached object target is exposed to the <em>page
+     * author</em>.</p>
+     * 
      */
     public String getName();
            

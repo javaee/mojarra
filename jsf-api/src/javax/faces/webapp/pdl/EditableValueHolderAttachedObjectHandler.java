@@ -38,7 +38,13 @@
 package javax.faces.webapp.pdl;
 
 /**
- * RELEASE_PENDING (edburns,rogerk) docs
+ * <p class="changed_added_2_0">A PDL handler that exposes {@link
+ * javax.faces.validator.Validator} or {@link
+ * javax.faces.event.ValueChangeListener} to a <em>page author</em>.
+ * The default implementation of Facelets must provide an implemention
+ * of this in the handler for the <code>&lt;f:validator&gt;</code> (and
+ * any tags for any of the standard validators) and
+ * <code>&lt;f:valueChangeListener&gt;</code> tags.</p>
  *
  * @since 2.0
  */

@@ -37,7 +37,11 @@
 package javax.faces.webapp.pdl;
 
 /**
- * RELEASE_PENDING (edburns,rogerk) docs
+ * <p class="changed_added_2_0">A PDL handler that exposes {@link
+ * javax.faces.event.ActionListener} to a <em>page author</em>.  The
+ * default implementation of Facelets must provide an implemention of
+ * this in the handler for the <code>&lt;f:actionListener&gt;</code>
+ * tag.</p>
  *
  * @since 2.0
  */
