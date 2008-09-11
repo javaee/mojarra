@@ -2584,6 +2584,16 @@
 
       <p>Encode Behavior</p>
 
+	<ul>
+
+           <p>Ask the argument <code>UIComponent</code> for its facet
+           under the key <code>UIComponent.COMPOSITE_FACET_NAME</code>.
+           Such a facet must exist.  Call the <code>encodeAll()</code>
+           method on this facet.</p>
+
+	</ul>
+
+
 
 </div>]]></description>
 
