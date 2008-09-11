@@ -159,6 +159,24 @@ a[href^="composite"] { cursor: url(changed_added_2_0_cursor.png), pointer;
                  border-left-width:thin; border-right:none;
                  border-top:none; border-bottom:none; border-color:green }
 
+a[href^="ui"] { cursor: url(changed_added_2_0_cursor.png), pointer;
+                 background: url(changed_added_2_0.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:green }
+
+a[href^="c"] { cursor: url(changed_added_2_0_cursor.png), pointer;
+                 background: url(changed_added_2_0.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:green }
+
+a[href^="fn"] { cursor: url(changed_added_2_0_cursor.png), pointer;
+                 background: url(changed_added_2_0.png); 
+                 padding-left:0.2em; border-left:solid;
+                 border-left-width:thin; border-right:none;
+                 border-top:none; border-bottom:none; border-color:green }
+
 code { font-size:12px;width:98%;}
 
 .codeedit {	font-size:12px;width:98%;}

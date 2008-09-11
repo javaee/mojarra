@@ -11,16 +11,6 @@
   <short-name>c</short-name>
   <uri>http://java.sun.com/jsp/jstl/core</uri>
 
-  <validator>
-    <description>
-        Compatibility library for JSTL tags in Facelets2.  Provides core
-        validation features for JSTL tags.
-    </description>
-    <validator-class>
-        org.apache.taglibs.standard.tlv.JstlCoreTLV
-    </validator-class>
-  </validator>
-
   <tag>
     <description>
         Catches any Throwable that occurs in its body and optionally
