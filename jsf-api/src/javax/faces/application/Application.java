@@ -777,11 +777,12 @@ public abstract class Application {
 	throws FacesException;
 
     /**
-     * <p>Call the <code>getValue()</code> method on the specified
-     * {@link ValueExpression}.  If it returns a {@link
-     * UIComponent} instance, return it as the value of this method.  If
-     * it does not, instantiate a new {@link UIComponent} instance of
-     * the specified component type, pass the new component to the
+     * <p><span class="changed_modified_2_0">Call</span> the
+     * <code>getValue()</code> method on the specified {@link
+     * ValueExpression}.  If it returns a {@link UIComponent} instance,
+     * return it as the value of this method.  If it does not,
+     * instantiate a new {@link UIComponent} instance of the specified
+     * component type, pass the new component to the
      * <code>setValue()</code> method of the specified {@link
      * ValueExpression}, and return it.</p>
      *
@@ -813,7 +814,7 @@ public abstract class Application {
      *
      * <p>A default implementation is provided that throws 
      * <code>UnsupportedOperationException</code> so that users
-     * that decorate <code>Application</code> can continue to function</p>.
+     * that decorate <code>Application</code> can continue to function.</p>
      * 
      * @since 1.2
      */
