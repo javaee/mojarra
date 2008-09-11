@@ -118,12 +118,12 @@
           to the columns of this table.  A space separated list of
           classes may also be specified for any individual column.  If
           the number of elements in this list is less than the number of
-          columns specified in the "columns" attribute, no "class"
+          actual column children of the UIData, no "class"
           attribute is output for each column greater than the number of
           elements in the list.  If the number of elements in the list
-          is greater than the number of columns specified in the
-          "columns" attribute, the elements at the posisiton in the list
-          after the value of the "columns" attribute are ignored.
+          is greater than the number of actual column children of the
+          UIData, the elements at the posisiton in the list
+          after the last column are ignored.
         </description>
         <display-name>Column CSS Classes</display-name>
         <icon></icon>

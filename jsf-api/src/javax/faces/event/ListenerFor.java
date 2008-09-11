@@ -32,8 +32,6 @@ import java.lang.annotation.Target;
 
  * <ul>
 
-	  <li>
-
           <li><p> If this annotation is not present on the class in
           question, no action must be taken.  </p></li>
 
