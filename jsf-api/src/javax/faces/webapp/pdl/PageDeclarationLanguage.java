@@ -67,13 +67,17 @@ public abstract class PageDeclarationLanguage {
     /**
      * <p class="changed_added_2_0">Return a reference to the component
      * metadata for the composite component represented by the argument
-     * <code>componentResource</code>.  The default implementation must
-     * support <code>Resource</code> being a Facelet markup file that is
-     * to be interpreted as a composite component as specified in
-     * section 4.3 of the spec prose document.  The default
-     * implementation must support authoring the component metadata
-     * using tags placed inside of a <code>&lt;composite:interface
-     * /&gt;</code> element, which is specified in the <a target="_"
+     * <code>componentResource</code>.  The implementation may share and
+     * pool what it ends up returning from this method to improve
+     * performance.  The implementation must ensure that no per
+     * component-instance information is included in the return.  The
+     * default implementation must support <code>Resource</code> being a
+     * Facelet markup file that is to be interpreted as a composite
+     * component as specified in section 4.3 of the spec prose document.
+     * The default implementation must support authoring the component
+     * metadata using tags placed inside of a
+     * <code>&lt;composite:interface /&gt;</code> element, which is
+     * specified in the <a target="_"
      * href="../../../../../pdldocs/facelets/index.html">Facelets
      * taglibrary docs</a>.</p>
      *
