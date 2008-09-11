@@ -2881,6 +2881,9 @@ the literal string "<code>head</code>" as the last argument.</p>
             <renderer-class>
                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-head-renderer-class/text())"/>
             </renderer-class>
+            <renderer-extension>
+                <jsp-ignore>true</jsp-ignore>
+            </renderer-extension>
         </renderer>
 
         <renderer>
@@ -2919,6 +2922,9 @@ the literal string "<code>head</code>" as the last argument.</p>
             <renderer-class>
                <xi:include href="standard-html-renderkit-impl.xml" xpointer="xpointer(/root/output-body-renderer-class/text())"/>
             </renderer-class>
+            <renderer-extension>
+                <jsp-ignore>true</jsp-ignore>
+            </renderer-extension>
         </renderer>
 
 
