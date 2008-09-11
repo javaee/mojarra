@@ -51,6 +51,7 @@ import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Stack;
+import java.util.Arrays;
 
 import com.sun.faces.config.beans.FacesConfigBean;
 import com.sun.faces.config.beans.RendererBean;
@@ -177,7 +178,9 @@ public abstract class JspTLDGenerator implements Generator {
         if (componentFamily == null) {
             return null;
         }
-
+        if (rendererType.startsWith("resource.")) {
+            rendererType = rendererType.split("\\.")[1];
+        }
         String tagName =
             Character.toLowerCase(componentFamily.charAt(0)) +
             componentFamily.substring(1);

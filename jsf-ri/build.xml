@@ -430,13 +430,34 @@
 
     </target>
 
-    <target name="facelets.tlddocs">                
+    <target name="facelets.tlddocs">
+        <taskdef name="generateFaceletsTld"
+                 classname="com.sun.faces.ant.FaceletsTLDGenTask">
+            <classpath>
+                <pathelement location="${tools.dir}/build/classes"/>
+            </classpath>
+        </taskdef>
+
+        <generateFaceletsTld
+              generatorConfig="${tools.dir}/conf/FaceletsHtmlBasicTaglib21.properties"
+              facesConfig="${standard.renderkit.xml}"
+              fork="true">
+            <classpath>
+                <path refid="impl.compile.classpath"/>
+                <pathelement location="${tools.dir}/build/classes"/>
+            </classpath>
+            <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>
+            <jvmarg line="${debug.jvm.args}"/>
+            <assertions>
+                <enable/>
+            </assertions>
+        </generateFaceletsTld>
         <java fork="true" jar="${tlddoc.jar}">
             <arg line="-d ${build.dir}/pdldocs/facelets"/>
             <arg line="-windowtitle 'JSF ${spec.version} Page Decraration Language: Facelets Variant'"/>
             <arg line="-xslt ${conf.share.dir}/tlddoc-resources"/>
 
-            <arg value="${build.generate.tld.dir}/html_basic.tld"/>
+            <arg value="${build.generate.tld.dir}/facelets_html_basic.tld"/>
             <arg value="${conf.share.dir}/jsf_core.tld"/>
             <arg value="${conf.share.dir}/composite.tld"/>
             <arg value="${conf.share.dir}/ui.tld"/>
