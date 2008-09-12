@@ -43,6 +43,7 @@
 package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -54,6 +55,7 @@ import javax.faces.event.ActionEvent;
 
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.RIConstants;
 
 /**
  * <B>ButtonRenderer</B> is a class that renders the current value of
@@ -113,6 +115,25 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         if (value != null) {
             label = value.toString();
         }
+        
+        /*
+         * If we have any parameters, and the button type is submit, then
+         * render Javascript to use later.
+         */
+        Param params[] = getParamList(component);
+        if (!Arrays.equals(params,EMPTY_PARAMS) 
+                && type.equals("submit")) {
+            if (!RenderKitUtils.hasScriptBeenRendered(context)) {
+                RenderKitUtils
+                      .renderFormInitScript(
+                            context.getResponseWriter(),
+                            context);
+                RenderKitUtils.setScriptAsRendered(context);
+            }
+        }
+        
+
+        
         String imageSrc = (String) component.getAttributes().get("image");
         writer.startElement("input", component);
         writeIdAttributeIfNecessary(context, writer, component);
@@ -137,6 +158,17 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         if (styleClass != null && styleClass.length() > 0) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
+
+        /*
+         * If we have any parameters, and the button type is submit, then
+         * use Javascript to add these parameters in onclick,
+         * just like CommandLink.
+         */
+        if (!Arrays.equals(params,EMPTY_PARAMS) 
+                && type.equals("submit")) {
+            renderOnClick(context, component);
+        }
+        
         writer.endElement("input");        
 
     }
@@ -146,7 +178,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
           throws IOException {
 
         rendererParamsNotNull(context, component);
-        
+
     }
 
     // --------------------------------------------------------- Private Methods
@@ -231,5 +263,55 @@ public class ButtonRenderer extends HtmlBasicRenderer {
 
     }
 
+    /*
+     * Render the necessary Javascript for the button.
+     * Note that much of this code is shared with CommandLinkRenderer.renderAsActive
+     * TODO: Consolidate this code into a utility method, if possible.
+     */
+    private void renderOnClick(FacesContext context, UIComponent command)
+          throws IOException {
 
+        ResponseWriter writer = context.getResponseWriter();
+        assert(writer != null);
+        String formClientId = RenderKitUtils.getFormClientId(command, context);
+        if (formClientId == null) {
+            return;
+        }
+
+        String userOnclick = (String) command.getAttributes().get("onclick");
+        StringBuffer sb = new StringBuffer(128);
+        boolean userSpecifiedOnclick =
+              (userOnclick != null && !"".equals(userOnclick));
+
+        // if user specified their own onclick value, we are going to
+        // wrap their js and the injected js each in a function and
+        // execute them in a choose statement, if the user didn't specify
+        // an onclick, the original logic executes unaffected
+        if (userSpecifiedOnclick) {
+            sb.append("var a=function(){");
+            userOnclick = userOnclick.trim();
+            sb.append(userOnclick);
+            if (userOnclick.charAt(userOnclick.length() - 1) != ';') {
+                sb.append(';');
+            }
+            sb.append("};var b=function(){");
+        }
+
+        Param[] params = getParamList(command);
+        String commandClientId = command.getClientId(context);
+
+        sb.append(RenderKitUtils.getCommandOnClickScript(formClientId,
+                                                          commandClientId,
+                                                          "",
+                                                          params));
+
+        // we need to finish wrapping the injected js then
+        if (userSpecifiedOnclick) {
+            sb.append("};return (a()==false) ? false : b();");
+        }
+        
+        writer.writeAttribute("onclick", sb.toString(), "onclick");
+        writer.flush();
+    }
+      
 } // end of class ButtonRenderer

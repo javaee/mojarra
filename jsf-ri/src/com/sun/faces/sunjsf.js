@@ -82,7 +82,7 @@ function apf(f, pvp) {
 };
 
 /*
- * This is called by the JSF command link.  It provides
+ * This is called by command link and command button.  It provides
  * the form it is nested in, the parameters that need to be
  * added and finally, the target of the action.  This function
  * will delete any parameters added <em>after</em> the form

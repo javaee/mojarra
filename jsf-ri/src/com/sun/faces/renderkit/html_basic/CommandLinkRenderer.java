@@ -98,6 +98,8 @@ import com.sun.faces.util.MessageUtils;
  * };
  * </script>
  *
+ * This code can be found in jsf-ri/src/com/sun/faces/sunjsf.js
+ *
  *  And an onclick function that looks somewhat like this:
  *  <a href="#" onclick="
  * if (typeof jsfcljs == 'function') {
@@ -163,7 +165,7 @@ public class CommandLinkRenderer extends LinkRenderer {
         boolean componentDisabled =
               Boolean.TRUE.equals(component.getAttributes().get("disabled"));
 
-        String formClientId = getFormClientId(component, context);
+        String formClientId = RenderKitUtils.getFormClientId(component, context);
         if (formClientId == null) {
             if (logger.isLoggable(Level.WARNING)) {
                 logger.log(Level.WARNING,
@@ -175,12 +177,12 @@ public class CommandLinkRenderer extends LinkRenderer {
         if (componentDisabled || formClientId == null) {
             renderAsDisabled(context, component);
         } else {
-            if (!hasScriptBeenRendered(context)) {
+            if (!RenderKitUtils.hasScriptBeenRendered(context)) {
                 RenderKitUtils
                       .renderFormInitScript(
                             context.getResponseWriter(),
                             context);
-                setScriptAsRendered(context);
+                RenderKitUtils.setScriptAsRendered(context);
             }
             renderAsActive(context, component);
         }
@@ -219,7 +221,7 @@ public class CommandLinkRenderer extends LinkRenderer {
 
         ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
-        String formClientId = getFormClientId(component, context);
+        String formClientId = RenderKitUtils.getFormClientId(component, context);
         if (formClientId == null) {
             writer.write(MessageUtils.getExceptionMessageString(
                   MessageUtils.COMMAND_LINK_NO_FORM_MESSAGE_ID));
@@ -259,20 +261,24 @@ public class CommandLinkRenderer extends LinkRenderer {
                                       String target,
                                       Param[] params) {
 
-        return RenderKitUtils.getCommandLinkOnClickScript(formClientId,
+        return RenderKitUtils.getCommandOnClickScript(formClientId,
                                                           commandClientId,
                                                           target,
                                                           params);
 
     }
 
-
+    /*
+     * Render the necessary Javascript for the link.
+     * Note that much of this code is shared with CommandButtonRenderer.renderOnClick
+     * TODO: Consolidate this code into a utility method, if possible.
+     */
     protected void renderAsActive(FacesContext context, UIComponent command)
           throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
-        String formClientId = getFormClientId(command, context);
+        String formClientId = RenderKitUtils.getFormClientId(command, context);
         if (formClientId == null) {
             return;
         }
@@ -337,71 +343,6 @@ public class CommandLinkRenderer extends LinkRenderer {
     }
 
     // --------------------------------------------------------- Private Methods
-
-
-    /**
-     * @param context the <code>FacesContext</code> for the current request
-     *
-     * @return <code>true</code> If the <code>add/remove</code> javascript
-     *         has been rendered, otherwise <code>false</code>
-     */
-    private static boolean hasScriptBeenRendered(FacesContext context) {
-
-        return (context.getAttributes()
-              .get(SCRIPT_STATE) != null);
-
-    }
-
-
-    /**
-     * <p>Set a flag to indicate that the <code>add/remove</code> javascript
-     * has been rendered for the current form.
-     *
-     * @param context the <code>FacesContext</code> of the current request
-     */
-    private static void setScriptAsRendered(FacesContext context) {
-
-        context.getAttributes()
-              .put(SCRIPT_STATE, Boolean.TRUE);
-
-    }
-
-
-    /**
-     * <p>Utility method to return the client ID of the parent form.</p>
-     *
-     * @param component typically a command component
-     * @param context   the <code>FacesContext</code> for the current request
-     *
-     * @return the client ID of the parent form, if any
-     */
-    private static String getFormClientId(UIComponent component,
-                                   FacesContext context) {
-
-        UIForm form = getMyForm(component);
-        if (form != null) {
-            return form.getClientId(context);
-        }
-
-        return null;
-
-    }
-
-
-    private static UIForm getMyForm(UIComponent component) {
-
-        UIComponent parent = component.getParent();
-        while (parent != null) {
-            if (parent instanceof UIForm) {
-                break;
-            }
-            parent = parent.getParent();
-        }       
-
-        return (UIForm) parent;
-
-    }
-
 
     private static boolean wasClicked(FacesContext context,
                                       UIComponent component) {

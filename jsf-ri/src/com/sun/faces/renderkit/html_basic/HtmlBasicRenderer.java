@@ -78,7 +78,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
     // Log instance for this class
     protected static final Logger logger = FacesLogger.RENDERKIT.getLogger();
 
-    private static final Param[] EMPTY_PARAMS = new Param[0];
+    protected static final Param[] EMPTY_PARAMS = new Param[0];
 
     // ------------------------------------------------------------ Constructors
 

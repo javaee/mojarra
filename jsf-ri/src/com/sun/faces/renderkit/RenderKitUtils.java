@@ -79,6 +79,7 @@ import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
+import javax.faces.component.UIForm;
 
 /**
  * <p>A set of utilities for use in {@link RenderKit}s.</p>
@@ -180,6 +181,9 @@ public class RenderKitUtils {
     protected static final Logger LOGGER = FacesLogger.RENDERKIT.getLogger();
 
 
+    private static final String SCRIPT_STATE = 
+            RIConstants.FACES_PREFIX + "scriptState";
+    
     // ------------------------------------------------------------ Constructors
 
 
@@ -887,7 +891,7 @@ public class RenderKitUtils {
      * @return the default <code>onclick</code> JavaScript for the default
      *  command link component
      */
-    public static String getCommandLinkOnClickScript(String formClientId,
+    public static String getCommandOnClickScript(String formClientId,
                                                      String commandClientId,
                                                      String target,
                                                      Param[] params) {
@@ -1037,4 +1041,58 @@ public class RenderKitUtils {
         }
     }
 
+   /**
+     * <p>Utility method to return the client ID of the parent form.</p>
+     *
+     * @param component typically a command component
+     * @param context   the <code>FacesContext</code> for the current request
+     *
+     * @return the client ID of the parent form, if any
+     */
+    public static String getFormClientId(UIComponent component,
+                                   FacesContext context) {
+
+        UIComponent parent = component.getParent();
+        while (parent != null) {
+            if (parent instanceof UIForm) {
+                break;
+            }
+            parent = parent.getParent();
+        }
+        
+        UIForm form = (UIForm) parent;
+        if (form != null) {
+            return form.getClientId(context);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param context the <code>FacesContext</code> for the current request
+     *
+     * @return <code>true</code> If the <code>add/remove</code> javascript
+     *         has been rendered, otherwise <code>false</code>
+     */
+    public static boolean hasScriptBeenRendered(FacesContext context) {
+
+        return (context.getAttributes()
+              .get(SCRIPT_STATE) != null);
+
+    }
+
+
+    /**
+     * <p>Set a flag to indicate that the <code>add/remove</code> javascript
+     * has been rendered for the current form.
+     *
+     * @param context the <code>FacesContext</code> of the current request
+     */
+    public static void setScriptAsRendered(FacesContext context) {
+
+        context.getAttributes()
+              .put(SCRIPT_STATE, Boolean.TRUE);
+
+    }
+    
 } // END RenderKitUtils

@@ -842,6 +842,12 @@
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
               recordGolden="${local.golden.path}/taglib/commandButton_test.txt"/>
 
+        <jsf.tester
+              request="${context.path}/faces/taglib/commandButton_param_test.jsp"
+              golden="${golden.path}/taglib/commandButton_param_test.txt"
+              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+              recordGolden="${local.golden.path}/taglib/commandButton_param_test.txt"/>
+
         <echo message="Testing commandLink..."/>
         <jsf.tester
               request="${context.path}/faces/taglib/commandLink_test.jsp"
