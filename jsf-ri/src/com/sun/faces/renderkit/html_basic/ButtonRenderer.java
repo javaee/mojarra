@@ -266,7 +266,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
     /*
      * Render the necessary Javascript for the button.
      * Note that much of this code is shared with CommandLinkRenderer.renderAsActive
-     * TODO: Consolidate this code into a utility method, if possible.
+     * RELEASE_PENDING: Consolidate this code into a utility method, if possible.
      */
     private void renderOnClick(FacesContext context, UIComponent command)
           throws IOException {
