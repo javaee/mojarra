@@ -823,7 +823,8 @@
                    test-results-dir="${impl.test.results.dir}">
             <tests>
                 <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/systest/SelectOneManyEnumTestCase.class"/>
+                         includes="com/sun/faces/systest/SelectOneManyEnumTestCase.class,
+                                   com/sun/faces/systest/DataTableTestCase.class"/>
             </tests>
         </jsf.junit>  
     </target>

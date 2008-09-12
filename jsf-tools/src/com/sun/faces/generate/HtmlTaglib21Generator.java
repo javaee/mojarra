@@ -243,7 +243,7 @@ public class HtmlTaglib21Generator extends HtmlTaglib12Generator {
                                  ivar + ");\n");
                 }
                 writer.outdent();
-                writer.fwrite("}\n\n");
+                writer.fwrite("}\n");
             } else if (property.isMethodExpressionEnabled()) {
                 if ("action".equals(ivar)) {
                     writer.fwrite("if (" + ivar + " != null) {\n");
@@ -266,7 +266,11 @@ public class HtmlTaglib21Generator extends HtmlTaglib12Generator {
                     writer.fwrite("}\n");
                 }
             } else {
+                writer.fwrite("if (" + ivar + " != null) {\n");
+                writer.indent();
                 writer.fwrite(comp + ".set" + capPropName + "(" + ivar + ");\n");
+                writer.outdent();
+                writer.fwrite("}\n");
             }
         }
 

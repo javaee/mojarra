@@ -584,6 +584,12 @@
        <managed-bean-scope>none</managed-bean-scope>
      </managed-bean>
 
+    <managed-bean>
+        <managed-bean-name>customDataTable</managed-bean-name>
+        <managed-bean-class>com.sun.faces.systest.model.CustomDatatableBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+
   <navigation-rule>
     <from-view-id>*</from-view-id>
     <navigation-case>
