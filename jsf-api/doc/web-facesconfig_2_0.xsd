@@ -1304,9 +1304,6 @@
                     and store the instance within the application scope when the
                     application starts.
 
-                    The instantiation and storing of the instance must happen
-                    before any requests are serviced.
-
                     If eager is unspecified or is false, the default "lazy"
                     instantiation and scoped storage of the managed bean
                     will occur.
