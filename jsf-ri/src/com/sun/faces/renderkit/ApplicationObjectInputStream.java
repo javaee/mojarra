@@ -44,6 +44,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectStreamClass;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -53,6 +55,22 @@ import java.io.ObjectStreamClass;
  * classloader has no access to application objects).
  */
 public class ApplicationObjectInputStream extends ObjectInputStream {
+
+    // Taken from ObjectInputStream to resolve primitive types
+    private static final Map<String,Class<?>> PRIMITIVE_CLASSES =
+          new HashMap<String,Class<?>>(9, 1.0F);
+
+    static {
+        PRIMITIVE_CLASSES.put("boolean", boolean.class);
+        PRIMITIVE_CLASSES.put("byte", byte.class);
+        PRIMITIVE_CLASSES.put("char", char.class);
+        PRIMITIVE_CLASSES.put("short", short.class);
+        PRIMITIVE_CLASSES.put("int", int.class);
+        PRIMITIVE_CLASSES.put("long", long.class);
+        PRIMITIVE_CLASSES.put("float", float.class);
+        PRIMITIVE_CLASSES.put("double", double.class);
+        PRIMITIVE_CLASSES.put("void", void.class);
+    }
    
     public ApplicationObjectInputStream() throws IOException, 
             SecurityException {
@@ -63,16 +81,28 @@ public class ApplicationObjectInputStream extends ObjectInputStream {
         super(in);
     } 
 
-    protected Class<?> resolveClass(ObjectStreamClass desc) throws IOException, 
-            ClassNotFoundException {
+    protected Class<?> resolveClass(ObjectStreamClass desc)
+    throws IOException, ClassNotFoundException {
+        
         // When the container is about to call code associated with a 
         // particular web application, it sets the context classloader to the 
         // web app class loader. We make use of that here to locate any classes 
         // that the UIComponent may hold references to.  This won't cause a 
         // problem to locate classes in the system class loader because 
-        // class loaders can look up the chain and not down the chain. 
-        return Class.forName(desc.getName(),true, 
-                Thread.currentThread().getContextClassLoader());
+        // class loaders can look up the chain and not down the chain.
+        String name = desc.getName();
+        try {
+            return Class.forName(name,
+                                 true,
+                                 Thread.currentThread().getContextClassLoader());
+        } catch (ClassNotFoundException cnfe) {
+            Class<?> c = PRIMITIVE_CLASSES.get(name);
+            if (c != null) {
+                return c;
+            }
+            throw cnfe;
+        }
+
     }
 } 
     
