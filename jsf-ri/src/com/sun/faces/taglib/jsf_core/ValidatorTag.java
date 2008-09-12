@@ -46,7 +46,6 @@ import javax.el.ValueExpression;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.ConverterException;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 import javax.servlet.jsp.JspException;
@@ -165,7 +164,7 @@ public class ValidatorTag extends AbstractValidatorTag {
             if (instance != null) {
                 instance.validate(context, component, value);
             } else {
-                throw new ConverterException(
+                throw new ValidatorException(
                      MessageUtils.getExceptionMessage(
                           MessageUtils.CANNOT_VALIDATE_ID,
                           validatorId != null ? validatorId.getExpressionString() : "",
