@@ -49,7 +49,7 @@
 
     <property name="dependency.base.dir" value="${jsf.build.home}/dependencies"/>
     <property name="dependency.jar.dir" value="${dependency.base.dir}/jars"/>
-	
+    
     <property name="junit.version" value="3.8.1"/>
     <property name="htmlunit.version" value="1.10"/>
     <property name="cactus.version" value="13-1.7.1"/>
@@ -62,9 +62,9 @@
     <property name="portlet.api.version" value="1.0"/>
     <property name="groovy.version" value="1.5.5"/>
     <property name="maven.repository.importer.version" value="1.2"/>
-	
+
     <property name="maven2.mirror" value="http://mirrors.ibiblio.org/pub/mirrors/maven2"/>
-	<property name="java.net.maven" value="https://maven-repository.dev.java.net/nonav/repository/"/>
+    <property name="java.net.maven" value="https://maven-repository.dev.java.net/nonav/repository/"/>
     <property name="codehaus.maven" value="http://repository.codehaus.org"/>
     <property name="download.java.net" value="http://download.java.net/javaee5/external/shared"/>
 
@@ -100,7 +100,7 @@
 
     <target name="update" description="Download project dependencies">
         <mkdir dir="${dependency.base.dir}/downloads"/>
-    	<mkdir dir="${dependency.jar.dir}" />
+        <mkdir dir="${dependency.jar.dir}" />
 
         <!-- setup the proxy if necessary -->
         <if>
@@ -127,10 +127,10 @@
         </if>
 
         <!-- HTMLUNIT -->
-    	<!--
-    	This one needs a ton of extras, so we have to do this one like this or
-    	add a bunch more deps.  Maybe another day... :)
-    	-->
+        <!--
+        This one needs a ton of extras, so we have to do this one like this or
+        add a bunch more deps.  Maybe another day... :)
+        -->
         <if>
             <not>
                 <available file="${htmlunit.home}" property="ignored"/>
@@ -451,7 +451,7 @@ java -Xmx256m -jar ${dependency.base.dir}/${glassfish.installer.jar}${fl.os}.jar
             </and>
         </condition>
         <condition property="dl.os" value="WINNT">
-	    <os family="winnt"/>
+            <os family="winnt"/>
         </condition>
         <condition property="dl.os" value="Darwin">
             <os name="Mac OS X"/>
