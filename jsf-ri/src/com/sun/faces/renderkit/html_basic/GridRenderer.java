@@ -110,6 +110,7 @@ public class GridRenderer extends BaseTableRenderer {
         renderTableBodyStart(component, writer);
         for (Iterator<UIComponent> kids = getChildren(component);
              kids.hasNext();) {
+
             UIComponent child = kids.next();
             if (!child.isRendered()) {
                 continue;
@@ -121,7 +122,7 @@ public class GridRenderer extends BaseTableRenderer {
                 }
                 renderRowStart(component, writer);
                 open = true;
-                info.columnStyleCounter = 0;
+                info.newRow();
             }
             renderRow(context, component, child, writer);
             i++;
@@ -170,9 +171,10 @@ public class GridRenderer extends BaseTableRenderer {
 
         TableMetaInfo info = getMetaInfo(table);
         writer.startElement("td", table);
-        if (info.columnClasses.length > 0) {
+        String columnClass = info.getCurrentColumnClass();
+        if (columnClass != null) {
             writer.writeAttribute("class",
-                                  info.getCurrentColumnClass(),
+                                  columnClass,
                                   "columns");
         }
         encodeRecursive(context, child);

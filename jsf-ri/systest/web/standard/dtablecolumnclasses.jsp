@@ -56,6 +56,15 @@
         .b4 {
             background-color: burlywood;
         }
+        .b5 {
+            background-color: darkolivegreen;
+        }
+        .b6 {
+            background-color: darkviolet;
+        }
+        .b7 {
+            background-color: skyblue;
+        }
     </style>
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
@@ -64,6 +73,7 @@
     <%
         List<String[]> list = new ArrayList<String[]>(1);
         list.add(new String[]{"c1", "c2", "c3", "c4", "c5", "c6"});
+        list.add(new String[]{"c1_1", "c2_1", "c3_1", "c4_1", "c5_1", "c6_1"});
         request.setAttribute("list", list);
     %>
 </head>
@@ -159,6 +169,28 @@
     </h:dataTable>
     <h:dataTable value="#{requestScope.list}"
                  var="row">
+        <h:column>
+            <h:outputText value="#{row[0]}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{row[1]}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{row[2]}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{row[3]}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{row[4]}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{row[5]}"/>
+        </h:column>
+    </h:dataTable>
+     <h:dataTable value="#{requestScope.list}"
+                 var="row"
+                 columnClasses="b1,b2,b3,b4,b5,b6,b7">
         <h:column>
             <h:outputText value="#{row[0]}"/>
         </h:column>

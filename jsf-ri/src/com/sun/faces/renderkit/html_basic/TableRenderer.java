@@ -340,8 +340,8 @@ public class TableRenderer extends BaseTableRenderer {
                              ResponseWriter writer) throws IOException {
 
         // Iterate over the child UIColumn components for each row
-        int columnStyleIdx = 0;
         TableMetaInfo info = getMetaInfo(table);
+        info.newRow();
         for (UIColumn column : info.columns) {
 
             // Render the beginning of this cell
@@ -352,14 +352,12 @@ public class TableRenderer extends BaseTableRenderer {
             } else {
                 writer.startElement("td", column);
             }
-            
-            if (info.columnClasses.length > 0) {
+
+            String columnClass = info.getCurrentColumnClass();
+            if (columnClass != null) {
                 writer.writeAttribute("class",
-                                      info.columnClasses[columnStyleIdx++],
+                                      columnClass,
                                       "columnClasses");
-                if (columnStyleIdx >= info.columnClasses.length) {
-                    columnStyleIdx = 0;
-                }
             }
 
             // Render the contents of this cell by iterating over

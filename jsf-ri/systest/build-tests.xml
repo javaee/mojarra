@@ -817,6 +817,9 @@
         <jsf.tester
             request="${context.path}/faces/standard/dtablecolumnclasses.jsp"
             golden="${golden.path}/standard/dtablecolumnclasses.txt"/>
+        <jsf.tester
+            request="${context.path}/faces/standard/pgridcolumnclasses.jsp"
+            golden="${golden.path}/standard/pgridcolumnclasses.txt"/>
         
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"

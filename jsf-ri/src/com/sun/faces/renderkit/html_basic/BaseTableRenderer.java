@@ -296,6 +296,7 @@ public abstract class BaseTableRenderer extends HtmlBasicRenderer {
         public final List<UIColumn> columns;
         public final boolean hasHeaderFacets;
         public final boolean hasFooterFacets;
+        public final int columnCount;
         public int columnStyleCounter;
         public int rowStyleCounter;
 
@@ -307,12 +308,23 @@ public abstract class BaseTableRenderer extends HtmlBasicRenderer {
             rowClasses = getRowClasses(table);
             columnClasses = getColumnClasses(table);
             columns = getColumns(table);
+            columnCount = columns.size();
             hasHeaderFacets = hasFacet("header", columns);
             hasFooterFacets = hasFacet("footer", columns);
         }
 
 
         // ------------------------------------------------------ Public Methods
+
+
+        /**
+         * Reset the counter used to apply column styles.
+         */
+        public void newRow() {
+
+            columnStyleCounter = 0;
+
+        }
 
 
         /**
@@ -323,11 +335,14 @@ public abstract class BaseTableRenderer extends HtmlBasicRenderer {
          * @return the current style
          */
         public String getCurrentColumnClass() {
-            String style = columnClasses[columnStyleCounter++];
-            if (columnStyleCounter >= columnClasses.length) {
-                columnStyleCounter = 0;
+
+            String style = null;
+            if (columnStyleCounter < columnClasses.length
+                 && columnStyleCounter <= columnCount) {
+                style = columnClasses[columnStyleCounter++];
             }
             return style;
+
         }
 
 
