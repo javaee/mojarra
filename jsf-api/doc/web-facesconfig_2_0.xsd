@@ -230,10 +230,41 @@
                          minOccurs="0"
                          maxOccurs="unbounded"/>
         </xsd:choice>
-            <xsd:attribute name = "id" type = "xsd:ID"/>
-            <xsd:attribute name="version"
-                type="javaee:faces-config-versionType"
-                use="required"/>
+        <xsd:attribute name="metadata-complete"
+                       type="xsd:boolean"
+                       use="optional">
+            <xsd:annotation>
+                <xsd:documentation>
+                    
+                    RELEASE_PENDING (edburns,rogerk) Please review...
+                    
+                    The metadata-complete attribute defines whether this
+                    JavaServer Faces application is complete, or whether
+                    the class files available to this module and packaged with
+                    this application should be examined for annotations
+                    that specify configuration information.
+
+                    If metadata-complete is set to "true", the JavaServer Faces
+                    runtime must ignore any annotations that specify configuration
+                    information, which might be present in the class files
+                    of the application.
+
+                    If metadata-complete is not specified or is set to
+                    "false", the JavaServer Faces runtime must examine the class
+                    files of the application for annotations, as specified by
+                    the specification.
+
+                    It should be noted that this will have no impact on
+                    runtime annotations such as @ResourceDependency or
+                    @ListenerFor.
+
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="id" type="xsd:ID"/>
+        <xsd:attribute name="version"
+                       type="javaee:faces-config-versionType"
+                       use="required"/>
     </xsd:complexType>
 
     <!-- **************************************************** -->
@@ -1259,6 +1290,30 @@
                          minOccurs="0"
                          maxOccurs="unbounded"/>
         </xsd:sequence>
+        <xsd:attribute name="eager"
+                       type="xsd:boolean"
+                       use="optional">
+            <xsd:annotation>
+                <xsd:documentation>
+
+                    RELEASE_PENDING (edburns,rogerk) Please review...
+
+                    This attribute is only considered when associated with
+                    an application-scoped managed bean. If the value of the eager
+                    attribute is true the runtime must instantiate this class
+                    and store the instance within the application scope when the
+                    application starts.
+
+                    The instantiation and storing of the instance must happen
+                    before any requests are serviced.
+
+                    If eager is unspecified or is false, the default "lazy"
+                    instantiation and scoped storage of the managed bean
+                    will occur.
+
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
         <xsd:attribute name="id" type="xsd:ID"/>
     </xsd:complexType>
 
