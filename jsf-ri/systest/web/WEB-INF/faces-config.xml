@@ -250,6 +250,37 @@
     </managed-property>
   </managed-bean>
 
+    <managed-bean>
+        <managed-bean-name>eagerApp1</managed-bean-name>
+        <managed-bean-class>java.util.Date</managed-bean-class>
+        <managed-bean-scope>application</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean eager="true">
+        <managed-bean-name>eagerApp2</managed-bean-name>
+        <managed-bean-class>java.util.Date</managed-bean-class>
+        <managed-bean-scope>application</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean eager="false">
+        <managed-bean-name>eagerApp3</managed-bean-name>
+        <managed-bean-class>java.util.Date</managed-bean-class>
+        <managed-bean-scope>application</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean eager="true">
+        <managed-bean-name>eagerSes1</managed-bean-name>
+        <managed-bean-class>java.util.Date</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean eager="true">
+        <managed-bean-name>eagerReq1</managed-bean-name>
+        <managed-bean-class>java.util.Date</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+
+
    <!-- validator -->
   <validator>
     <description>TestValidator Description</description>

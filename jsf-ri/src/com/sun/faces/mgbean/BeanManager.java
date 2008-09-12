@@ -120,6 +120,11 @@ public class BeanManager {
         } else {
             addBean(beanInfo.getName(), new ManagedBeanBuilder(beanInfo));
         }
+
+        if (beanInfo.isEager()) {
+            create(beanInfo.getName(), FacesContext.getCurrentInstance());
+        }
+
     }
 
 

@@ -45,9 +45,11 @@ import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.mgbean.ManagedBeanInfo;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.TypedCollections;
+import com.sun.faces.el.ELUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.NamedNodeMap;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -213,6 +215,14 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
          "list-entries";
 
 
+    /**
+     * <p>
+     *  <code>eager</code> attribute defined in the managed-bean element.
+     * </p>
+     */
+    private static final String EAGER_ATTRIBUTE = "eager";
+
+
     private static final String DEFAULT_SCOPE = "request";
 
 
@@ -316,11 +326,12 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
             }
         }
 
-
-
         beanManager.register(new ManagedBeanInfo(beanName,
                                                  beanClass,
                                                  beanScope,
+                                                 isEager(managedBean,
+                                                         beanName,
+                                                         beanScope),
                                                  mapEntry,
                                                  listEntry,
                                                  properties,
@@ -485,6 +496,28 @@ public class ManagedBeanConfigProcessor extends AbstractConfigProcessor {
         }
 
         return null;
+    }
+
+
+    private boolean isEager(Node managedBean, String beanName, String scope) {
+
+        NamedNodeMap attributes = managedBean.getAttributes();
+        Node eagerNode = attributes.getNamedItem(EAGER_ATTRIBUTE);
+        boolean eager = false;
+        if (eagerNode != null) {
+            eager = Boolean.valueOf(getNodeText(eagerNode));
+            if (eager && (scope == null || !ELUtils.Scope.APPLICATION.toString().equals(scope))) {
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.log(Level.WARNING,
+                               "Eager managed bean instantiation is allowable for application scoped beans only.  Managed bean \"{0}\" is configured as eager, but the scope \"{1}\" is invalid.",
+                               new Object[]{beanName, scope});
+                }
+                eager = false;
+            }
+        }
+
+        return eager;
+
     }
    
 

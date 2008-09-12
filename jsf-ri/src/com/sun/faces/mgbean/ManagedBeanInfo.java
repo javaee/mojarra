@@ -43,6 +43,8 @@ package com.sun.faces.mgbean;
 import java.util.List;
 import java.util.Map;
 
+import com.sun.faces.el.ELUtils;
+
 /**
  * This class represents the parsed metadata for a <code>managed-bean</code>
  * entry within a faces-config.xml.
@@ -54,10 +56,15 @@ public class ManagedBeanInfo {
     private String name;
     private String className;
     private String beanScope;
+    boolean eager;
     private ManagedBeanInfo.MapEntry mapEntry;
     private ManagedBeanInfo.ListEntry listEntry;
     private List<ManagedBeanInfo.ManagedProperty> managedProperties;
     private Map<String,String> descriptions;
+
+
+    // ------------------------------------------------------------ Constructors
+
 
     public ManagedBeanInfo(String name,
                            String className,
@@ -67,15 +74,45 @@ public class ManagedBeanInfo {
                            List<ManagedBeanInfo.ManagedProperty> managedProperties,
                            Map<String,String> descriptions) {
 
+        this(name,
+             className,
+             beanScope,
+             false,
+             mapEntry,
+             listEntry,
+             managedProperties,
+             descriptions);
+
+    }
+
+
+    public ManagedBeanInfo(String name,
+                           String className,
+                           String beanScope,
+                           boolean eager,
+                           ManagedBeanInfo.MapEntry mapEntry,
+                           ManagedBeanInfo.ListEntry listEntry,
+                           List<ManagedBeanInfo.ManagedProperty> managedProperties,
+                           Map<String,String> descriptions) {
+
         this.name = name;
         this.className = className;
         this.beanScope = beanScope;
+        this.eager = eager;
         this.mapEntry = mapEntry;
         this.listEntry = listEntry;
         this.managedProperties = managedProperties;
         this.descriptions = descriptions;
 
+        if (eager && !ELUtils.Scope.APPLICATION.toString().equals(beanScope)) {
+            this.eager = false;
+        }
+        
     }
+
+
+    // ---------------------------------------------------------- Public Methods
+
 
     public String getName() {
         return name;
@@ -87,6 +124,10 @@ public class ManagedBeanInfo {
 
     public String getScope() {
         return beanScope;
+    }
+
+    public boolean isEager() {
+        return eager;
     }
 
     public boolean hasMapEntry() {
@@ -117,6 +158,7 @@ public class ManagedBeanInfo {
         return descriptions;
     }
 
+    
     // ----------------------------------------------------------- Inner Classes
 
 

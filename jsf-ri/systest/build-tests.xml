@@ -482,6 +482,11 @@
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
               recordGolden="${local.golden.path}/resourceInjection01.txt"
               />
+
+         <jsf.tester
+              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+              request="${context.path}/faces/eagerbean.jsp"
+              status="200"/>
         
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
