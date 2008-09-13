@@ -81,7 +81,7 @@
 <f:view>
     <h:dataTable value="#{requestScope.list}"
                  var="row"
-                 columnClasses="b1,b2">
+                 columnClasses=",b1,b2">
         <h:column>
             <h:outputText value="#{row[0]}"/>
         </h:column>
@@ -103,7 +103,7 @@
     </h:dataTable>
     <h:dataTable value="#{requestScope.list}"
                  var="row"
-                 columnClasses="b1,b2,b3,b4">
+                 columnClasses="b1,b2,b3,b4,">
         <h:column>
             <h:outputText value="#{row[0]}"/>
         </h:column>

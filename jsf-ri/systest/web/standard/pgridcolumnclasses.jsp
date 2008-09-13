@@ -74,7 +74,7 @@
 <body>
 <f:view>
 <h:panelGrid columns="6"
-             columnClasses="b1,b2">
+             columnClasses=",b1,b2">
     <h:outputText value="c1"/>
     <h:outputText value="c2"/>
     <h:outputText value="c3"/>
@@ -90,7 +90,7 @@
     <h:outputText value="c6_1"/>
 </h:panelGrid>
 <h:panelGrid columns="6"
-             columnClasses="b1,b2,b3,b4">
+             columnClasses="b1,b2,b3,b4,">
     <h:outputText value="c1"/>
     <h:outputText value="c2"/>
     <h:outputText value="c3"/>
