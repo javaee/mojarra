@@ -102,7 +102,6 @@ public class ManagedBeanConfigHandler implements ConfigAnnotationHandler {
 
     /**
      * @see com.sun.faces.application.annotation.ConfigAnnotationHandler#push(javax.faces.context.FacesContext)
-     * @param ctx
      */
     public void push(FacesContext ctx) {
 

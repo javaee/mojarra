@@ -69,12 +69,19 @@ public class ValidatorConfigHandler implements ConfigAnnotationHandler {
     // ------------------------------------- Methods from ComponentConfigHandler
 
 
+    /**
+     * @see com.sun.faces.application.annotation.ConfigAnnotationHandler#getHandledAnnotations()
+     */
     public Collection<Class<? extends Annotation>> getHandledAnnotations() {
 
         return HANDLES;
 
     }
 
+
+    /**
+     * @see com.sun.faces.application.annotation.ConfigAnnotationHandler#collect(Class, java.lang.annotation.Annotation)
+     */
     public void collect(Class<?> target, Annotation annotation) {
 
         if (validators == null) {
@@ -84,6 +91,10 @@ public class ValidatorConfigHandler implements ConfigAnnotationHandler {
 
     }
 
+
+    /**
+     * @see com.sun.faces.application.annotation.ConfigAnnotationHandler#push(javax.faces.context.FacesContext)
+     */
     public void push(FacesContext ctx) {
 
         if (validators != null) {
