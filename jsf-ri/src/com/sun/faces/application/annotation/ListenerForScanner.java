@@ -23,7 +23,7 @@ class ListenerForScanner implements Scanner {
     }
 
 
-    public AnnotationHandler scan(Class<?> clazz) {
+    public RuntimeAnnotationHandler scan(Class<?> clazz) {
 
         Util.notNull("clazz", clazz);
 

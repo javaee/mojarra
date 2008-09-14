@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Collection;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,6 +23,7 @@ import javax.faces.render.Renderer;
 import javax.faces.validator.Validator;
 
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.Util;
 
 /**
  * This class represents the central point for annotation handling within a
@@ -85,7 +87,7 @@ public class AnnotationManager {
     /**
      * The backing cache for all annotation metadata.
      */
-    private ConcurrentMap<Class<?>,Future<Map<Class<? extends Annotation>,AnnotationHandler>>> cache;
+    private ConcurrentMap<Class<?>,Future<Map<Class<? extends Annotation>, RuntimeAnnotationHandler>>> cache;
 
 
     // ------------------------------------------------------------ Constructors
@@ -96,13 +98,53 @@ public class AnnotationManager {
      */
     public AnnotationManager() {
 
-        cache = new ConcurrentHashMap<Class<?>,Future<Map<Class<? extends Annotation>,AnnotationHandler>>>(40, .75f, 32);
+        cache = new ConcurrentHashMap<Class<?>,Future<Map<Class<? extends Annotation>, RuntimeAnnotationHandler>>>(40, .75f, 32);
 
     }
 
 
 
     // ---------------------------------------------------------- Public Methods
+
+
+    /**
+     * <p>
+     * Apply the configuration metadata contained with in the <code>Collection</code>
+     * of annotated classes.
+     * </p>
+     *
+     * @param ctx FacesContext available during application initialization
+     * @param annotatedClasses <code>Collection</code> of class names known
+     *  to contain one or more Faces configuration annotations
+     */
+    public void applyConfigAnntations(FacesContext ctx, Collection<String> annotatedClasses) {
+
+        if (!annotatedClasses.isEmpty()) {
+            Map<Class<? extends Annotation>, ConfigAnnotationHandler> handlers =
+                  getConfigAnnotationHandlers();
+            for (String className : annotatedClasses) {
+                try {
+                    Class<?> c = Util.loadClass(className, this);
+                    Annotation[] annotations = c.getAnnotations();
+                    for (Annotation annotation : annotations) {
+                        ConfigAnnotationHandler handler =
+                              handlers.get(annotation.annotationType());
+                        if (handler != null) {
+                            handler.collect(c, annotation);
+                        }
+                    }
+                } catch (ClassNotFoundException cnfe) {
+                    throw new FacesException(cnfe);
+                }
+            }
+
+            // metadata collected, now push the configuration to the system
+            for (ConfigAnnotationHandler handler : handlers.values()) {
+                handler.push(ctx);
+            }
+        }
+        
+    }
 
 
     /**
@@ -159,21 +201,50 @@ public class AnnotationManager {
 
 
     /**
+     * @return a new <code>Map</code> which maps the types of annotations to
+     *  a specific <code>ConfigAnnotationHandler</code>.  Note that each invocation
+     *  of this method constructs a new <code>Map</code> with new
+     *  <code>ConfigAnnotationhandler</code> instances as they are not thread
+     *  safe.
+     */
+    private Map<Class<? extends Annotation>,ConfigAnnotationHandler> getConfigAnnotationHandlers() {
+
+        ConfigAnnotationHandler[] handlers = {
+              new ComponentConfigHandler(),
+              new ConverterConfigHandler(),
+              new ValidatorConfigHandler(),
+              new RenderKitConfigHandler()
+        };
+        Map<Class<? extends Annotation>,ConfigAnnotationHandler> handlerMap =
+              new HashMap<Class<? extends Annotation>,ConfigAnnotationHandler>();
+        for (ConfigAnnotationHandler handler : handlers) {
+            Collection<Class<? extends Annotation>> handledClasses = handler.getHandledAnnotations();
+            for (Class<? extends Annotation> handled : handledClasses) {
+                handlerMap.put(handled, handler);
+            }
+        }
+
+        return handlerMap;
+
+    }
+    
+
+    /**
      * Apply all annotations associated with <code>targetClass</code>
      *
      * @param ctx the {@link javax.faces.context.FacesContext} for the current request
      * @param targetClass class of the <code>processingTarget</code>
      * @param processingTarget the type of component that is being processed
-     * @param params one or more parameters to be passed to each {@link com.sun.faces.application.annotation.AnnotationHandler}
+     * @param params one or more parameters to be passed to each {@link RuntimeAnnotationHandler}
      */
     private void applyAnnotations(FacesContext ctx,
                                   Class<?> targetClass,
                                   ProcessingTarget processingTarget,
                                   Object... params) {
 
-        Map<Class<? extends Annotation>,AnnotationHandler> map = getHandlerMap(targetClass, processingTarget);
+        Map<Class<? extends Annotation>, RuntimeAnnotationHandler> map = getHandlerMap(targetClass, processingTarget);
         if (map != null && !map.isEmpty()) {
-            for (AnnotationHandler handler : map.values()) {
+            for (RuntimeAnnotationHandler handler : map.values()) {
                 handler.apply(ctx, params);
             }
         }
@@ -188,17 +259,17 @@ public class AnnotationManager {
      * @return a Map keyed by Annotation class with an AnnotationHandler as the
      *  value
      */
-    private Map<Class<? extends Annotation>, AnnotationHandler> getHandlerMap(Class<?> targetClass,
+    private Map<Class<? extends Annotation>, RuntimeAnnotationHandler> getHandlerMap(Class<?> targetClass,
                                                                               ProcessingTarget processingTarget) {
 
         while (true) {
-            Future<Map<Class<? extends Annotation>, AnnotationHandler>> f =
+            Future<Map<Class<? extends Annotation>, RuntimeAnnotationHandler>> f =
                   cache.get(targetClass);
             if (f == null) {
                 ProcessAnnotationsTask t =
                       new ProcessAnnotationsTask(targetClass, processingTarget.scanners);
-                FutureTask<Map<Class<? extends Annotation>, AnnotationHandler>> ft =
-                      new FutureTask<Map<Class<? extends Annotation>, AnnotationHandler>>(t);
+                FutureTask<Map<Class<? extends Annotation>, RuntimeAnnotationHandler>> ft =
+                      new FutureTask<Map<Class<? extends Annotation>, RuntimeAnnotationHandler>>(t);
                 f = cache.putIfAbsent(targetClass, ft);
                 if (f == null) {
                     f = ft;
@@ -238,10 +309,10 @@ public class AnnotationManager {
      * <code>AnnotationHandler</code> for that type.
      */
     private static final class ProcessAnnotationsTask
-          implements Callable<Map<Class<? extends Annotation>, AnnotationHandler>> {
+          implements Callable<Map<Class<? extends Annotation>, RuntimeAnnotationHandler>> {
 
         @SuppressWarnings({"unchecked"})
-        private static final Map<Class<? extends Annotation>,AnnotationHandler> EMPTY =
+        private static final Map<Class<? extends Annotation>, RuntimeAnnotationHandler> EMPTY =
               Collections.EMPTY_MAP;
         private Class<?> clazz;
         private Scanner[] scanners;
@@ -262,14 +333,14 @@ public class AnnotationManager {
         // ------------------------------------------------------ Public Methods
 
 
-        public Map<Class<? extends Annotation>,AnnotationHandler> call() throws Exception {
+        public Map<Class<? extends Annotation>, RuntimeAnnotationHandler> call() throws Exception {
 
-            Map<Class<? extends Annotation>,AnnotationHandler> map = null;
+            Map<Class<? extends Annotation>, RuntimeAnnotationHandler> map = null;
             for (Scanner scanner : scanners) {
-                AnnotationHandler handler = scanner.scan(clazz);
+                RuntimeAnnotationHandler handler = scanner.scan(clazz);
                 if (handler != null) {
                     if (map == null) {
-                        map = new HashMap<Class<? extends Annotation>,AnnotationHandler>(2, 1.0f);
+                        map = new HashMap<Class<? extends Annotation>, RuntimeAnnotationHandler>(2, 1.0f);
                     }
                     map.put(scanner.getAnnotation(), handler);
                 }

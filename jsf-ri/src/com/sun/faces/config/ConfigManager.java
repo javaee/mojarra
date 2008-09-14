@@ -61,6 +61,8 @@ import com.sun.faces.config.processor.ValidatorConfigProcessor;
 import com.sun.faces.config.processor.FaceletTaglibConfigProcessor;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Timer;
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.application.annotation.AnnotationManager;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -88,12 +90,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Collection;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.w3c.dom.Attr;
@@ -266,6 +270,11 @@ public class ConfigManager {
                 boolean validating = webConfig.isOptionEnabled(ValidateFacesConfigFiles);
                 boolean isFacesPDLDisabled = webConfig.isOptionEnabled(DisableFaceletJSFViewHandler);
                 ExecutorService executor = createExecutorService();
+
+                // execut the Task responsible for finding annotation classes
+                Future<Set<String>> annotationScan =
+                      executor.submit(new AnnotationScanTask(sc));
+
                 Document[] facesDocuments =
                       getConfigDocuments(sc,
                                          FACES_CONFIG_RESOURCE_PROVIDERS,
@@ -289,6 +298,9 @@ public class ConfigManager {
                                              executor,
                                              validating));
                 }
+
+                processAnnotatedClasses(sc, annotationScan.get());
+
                 executor.shutdown();
                 publishPostConfigEvent();
             } catch (Exception e) {
@@ -337,6 +349,19 @@ public class ConfigManager {
 
     // --------------------------------------------------------- Private Methods
 
+
+    private void processAnnotatedClasses(ServletContext sc, Set<String> annotatedClasses) {
+
+        if (!annotatedClasses.isEmpty()) {
+            ApplicationAssociate associate = ApplicationAssociate.getInstance(sc);
+            if (associate != null) {
+                AnnotationManager manager = associate.getAnnotationManager();
+                manager.applyConfigAnntations(FacesContext.getCurrentInstance(),
+                                              annotatedClasses);
+            }
+        }
+
+    }
 
     /**
      * Publishes a {@link javax.faces.event.ApplicationPostConstructEvent} event for the current
@@ -479,6 +504,39 @@ public class ConfigManager {
 
 
     // ----------------------------------------------------------- Inner Classes
+
+
+    /**
+     * Scans the class files within a web application returning a <code>Set</code>
+     * of classes that have been annotated with a standard Faces annotation.
+     */
+    private static class AnnotationScanTask implements Callable<Set<String>> {
+
+        private ServletContext sc;
+
+
+        // -------------------------------------------------------- Constructors
+
+
+        public AnnotationScanTask(ServletContext sc) {
+
+            this.sc = sc;
+
+        }
+
+
+        // ----------------------------------------------- Methods from Callable
+
+
+        public Set<String> call() throws Exception {
+
+            AnnotationScanner scanner = new AnnotationScanner(sc);
+            return scanner.getAnnotatedClasses();
+
+        }
+
+
+    } // END AnnotationScanTask
 
 
     /**

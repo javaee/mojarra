@@ -8,9 +8,9 @@ import javax.faces.component.UIComponent;
 import javax.faces.event.SystemEventListener;
 
 /**
- * {@link AnnotationHandler} responsible for processing {@link ListenerFor} annotations.
+ * {@link RuntimeAnnotationHandler} responsible for processing {@link ListenerFor} annotations.
  */
-class ListenerForHandler implements AnnotationHandler {
+class ListenerForHandler implements RuntimeAnnotationHandler {
 
     private ListenerFor[] listenersFor;
 

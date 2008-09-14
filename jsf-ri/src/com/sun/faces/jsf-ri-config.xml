@@ -91,17 +91,6 @@
             javax.faces.application.Application
         </source-class>
     </system-event-listener>
-    <system-event-listener>
-        <system-event-listener-class>
-            com.sun.faces.config.listeners.ProcessAnnotatedComponentsListener
-        </system-event-listener-class>
-        <system-event-class>
-            javax.faces.event.ApplicationPostConstructEvent
-        </system-event-class>
-        <source-class>
-            javax.faces.application.Application
-        </source-class>
-    </system-event-listener>
   </application>
 
 

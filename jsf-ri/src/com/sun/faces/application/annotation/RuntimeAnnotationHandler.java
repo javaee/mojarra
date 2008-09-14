@@ -7,7 +7,7 @@ import javax.faces.component.UIComponent;
  * Implementations of this class provide basic caching and processing of
  * of {@link java.lang.annotation.Annotation} instances.
  */
-interface AnnotationHandler {
+interface RuntimeAnnotationHandler {
 
     /**
      * <p>Apply the {@link java.lang.annotation.Annotation}(s). The act

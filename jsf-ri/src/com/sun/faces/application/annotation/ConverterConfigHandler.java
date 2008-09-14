@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -33,64 +33,66 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.sun.faces.config.listeners;
 
-import java.util.Set;
-import java.util.HashSet;
+package com.sun.faces.application.annotation;
+
+import java.lang.annotation.Annotation;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+
+import javax.faces.context.FacesContext;
+import javax.faces.application.Application;
+import javax.faces.convert.FacesConverter;
 
 /**
- * This class scans for the following annotation types:
- * <ul>
- *  <li>javax.faces.component.FacesComponent</li>
- *  <li>javax.faces.convert.FacesConverter</li>
- *  <li>javax.faces.validator.FacesValidator</li>
- *  <li>javax.faces.render.FacesRenderkit</li>
- *  <li>javax.faces.render.FacesRenderer</li>
- * </ul>
+ * <p>
+ * <code>ConfigAnnotationHandler</code> for {@link FacesConverter} annotated
+ * classes.
+ * </p>
  */
-class FacesAnnotationScanner {
+public class ConverterConfigHandler implements ConfigAnnotationHandler {
 
-    private Set<String> annotations=null;
-
-
-    // ------------------------------------------------------------ Constructors
-
-
-    public FacesAnnotationScanner() {
-
-        init();
-        
+    private static final Collection<Class<? extends Annotation>> HANDLES;
+    static {
+        Collection<Class<? extends Annotation>> handles =
+              new ArrayList<Class<? extends Annotation>>(1);
+        handles.add(FacesConverter.class);
+        HANDLES = Collections.unmodifiableCollection(handles);
     }
 
+    private Map<String,String> converters;
 
-    // ------------------------------------ Methods from CustomAnnotationScanner
+
+    // ------------------------------------- Methods from ComponentConfigHandler
 
 
-    /**
-     * Test if the passed constant pool string is a reference to 
-     * a Type.TYPE annotation of a J2EE component
-     *
-     * @String the constant pool info string 
-     * @return true if it is a J2EE annotation reference
-     */
-    public boolean isAnnotation(String value) {
+    public Collection<Class<? extends Annotation>> getHandledAnnotations() {
 
-        return annotations.contains(value);
+        return HANDLES;
 
     }
 
+    public void collect(Class<?> target, Annotation annotation) {
 
-    // --------------------------------------------------------- Private Methods
-
-
-    private void init() {
-
-        annotations = new HashSet<String>(5);
-        annotations.add("Ljavax/faces/component/FacesComponent;");
-        annotations.add("Ljavax/faces/convert/FacesConverter;");
-        annotations.add("Ljavax/faces/validator/FacesValidator;");
-        annotations.add("Ljavax/faces/render/FacesRenderKit;");
-        annotations.add("Ljavax/faces/render/FacesRenderer;");
+        if (converters == null) {
+            converters = new HashMap<String,String>();
+        }
+        converters.put(((FacesConverter) annotation).value(), target.getName());
 
     }
+
+    public void push(FacesContext ctx) {
+
+        if (converters != null) {
+            Application app = ctx.getApplication();
+            for (Map.Entry<String, String> entry : converters.entrySet()) {
+                app.addConverter(entry.getKey(), entry.getValue());
+            }
+        }
+
+    }
+
 }

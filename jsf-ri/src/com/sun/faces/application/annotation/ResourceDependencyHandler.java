@@ -12,9 +12,9 @@ import javax.faces.context.FacesContext;
 import com.sun.faces.el.ELUtils;
 
 /**
- * {@link AnnotationHandler} responsible for processing {@link ResourceDependency} annotations.
+ * {@link RuntimeAnnotationHandler} responsible for processing {@link ResourceDependency} annotations.
  */
-class ResourceDependencyHandler implements AnnotationHandler {
+class ResourceDependencyHandler implements RuntimeAnnotationHandler {
 
     private ResourceDependency[] dependencies;
     private Map<ResourceDependency,Expressions> expressionsMap;
