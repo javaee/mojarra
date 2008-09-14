@@ -56,6 +56,7 @@ import java.util.logging.Logger;
 
 import javax.el.CompositeELResolver;
 import javax.el.ExpressionFactory;
+import javax.el.ELContext;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.Application;
@@ -91,6 +92,7 @@ import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.el.ELContextListenerImpl;
 import com.sun.faces.el.ELUtils;
 import com.sun.faces.el.FacesCompositeELResolver;
+import com.sun.faces.el.ELContextImpl;
 import com.sun.faces.scripting.GroovyHelper;
 import com.sun.faces.scripting.GroovyHelperFactory;
 import com.sun.faces.mgbean.BeanBuilder;
@@ -179,7 +181,7 @@ public class ConfigureListener implements ServletRequestListener,
         context.setAttribute(RIConstants.METADATA_COMPLETE,
                              webXmlProcessor.metadataComplete);
 
-        FacesContext initContext = new InitFacesContext(context);
+        InitFacesContext initContext = new InitFacesContext(context);
         ReflectionUtils.initCache(Thread.currentThread().getContextClassLoader());
 
         try {
@@ -220,18 +222,29 @@ public class ConfigureListener implements ServletRequestListener,
                 }               
             }
             registerELResolverAndListenerWithJsp(context, false);
+            ELContext elctx = new ELContextImpl(initContext.getApplication().getELResolver());
+            elctx.putContext(FacesContext.class, initContext);
+            initContext.setELContext(elctx);
             ApplicationAssociate associate =
                  ApplicationAssociate.getInstance(context);
             if (associate != null) {
                 associate.setContextName(getServletContextIdentifier(context));
+                BeanManager manager = associate.getBeanManager();
+                List<String> eagerBeans = manager.getEagerBeanNames();
+                if (!eagerBeans.isEmpty()) {
+                    for (String name : eagerBeans) {
+                        manager.create(name, initContext);
+                    }
+                }
             }
             RenderKitUtils.loadSunJsfJs(initContext.getExternalContext());
-            
-            FacesContext facesContext = FacesContext.getCurrentInstance();
-            facesContext.getApplication().subscribeToEvent(ViewMapCreatedEvent.class, 
-                    UIViewRoot.class, webAppListener);
-            facesContext.getApplication().subscribeToEvent(ViewMapDestroyedEvent.class, 
-                    UIViewRoot.class, webAppListener);
+            Application app = initContext.getApplication();
+            app.subscribeToEvent(ViewMapCreatedEvent.class,
+                                 UIViewRoot.class,
+                                 webAppListener);
+            app.subscribeToEvent(ViewMapDestroyedEvent.class,
+                                 UIViewRoot.class,
+                                 webAppListener);
             
             
         } finally {

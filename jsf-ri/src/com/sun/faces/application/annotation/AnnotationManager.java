@@ -213,7 +213,8 @@ public class AnnotationManager {
               new ComponentConfigHandler(),
               new ConverterConfigHandler(),
               new ValidatorConfigHandler(),
-              new RenderKitConfigHandler()
+              new RenderKitConfigHandler(),
+              new ManagedBeanConfigHandler()
         };
         Map<Class<? extends Annotation>,ConfigAnnotationHandler> handlerMap =
               new HashMap<Class<? extends Annotation>,ConfigAnnotationHandler>();

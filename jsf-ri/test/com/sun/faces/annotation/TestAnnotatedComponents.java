@@ -36,6 +36,8 @@
 
 package com.sun.faces.annotation;
 
+import java.util.List;
+
 import javax.faces.context.FacesContext;
 import javax.faces.application.Application;
 import javax.faces.render.RenderKitFactory;
@@ -47,6 +49,10 @@ import javax.faces.convert.Converter;
 import javax.faces.component.UIComponent;
 
 import com.sun.faces.cactus.ServletFacesTestCase;
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.mgbean.BeanManager;
+import com.sun.faces.mgbean.ManagedBeanInfo;
+import com.sun.faces.mgbean.BeanBuilder;
 
 
 public class TestAnnotatedComponents extends ServletFacesTestCase {
@@ -94,7 +100,87 @@ public class TestAnnotatedComponents extends ServletFacesTestCase {
         Renderer r = rk.getRenderer("AnnotatedRenderer", "AnnotatedRenderer");
         assertNotNull(r);
         assertTrue(r instanceof AnnotatedRenderer);
-        
+
+        // validate class annotated with @ManagedBean
+        ApplicationAssociate associate =
+              ApplicationAssociate.getInstance(ctx.getExternalContext());
+        BeanManager manager = associate.getBeanManager();
+        BeanBuilder bean1 = manager.getBuilder("annotatedBean");
+        assertNotNull(bean1);
+        ManagedBeanInfo bean1Info = bean1.getManagedBeanInfo();
+        assertEquals("annotatedBean", "annotatedBean", bean1Info.getName());
+        assertEquals("request", "request", bean1Info.getScope());
+        assertFalse(bean1Info.isEager());
+        List<ManagedBeanInfo.ManagedProperty> managedProperties = bean1Info.getManagedProperties();
+        assertNotNull(managedProperties);
+        assertTrue(managedProperties.size() == 2);
+        ManagedBeanInfo.ManagedProperty p1 = managedProperties.get(0);
+        assertEquals("silly", "silly", p1.getPropertyName());
+        assertEquals(String.class.getName(), String.class.getName(), p1.getPropertyClass());
+        assertEquals("#{requestScope.name}", "#{requestScope.name}", p1.getPropertyValue());
+        ManagedBeanInfo.ManagedProperty p2 = managedProperties.get(1);
+        assertEquals("age", "age", p2.getPropertyName());
+        assertEquals(Integer.TYPE.getName(), Integer.TYPE.getName(), p2.getPropertyClass());
+        assertEquals("#{requestScope.age}", "#{requestScope.age}", p2.getPropertyValue());
+        request.setAttribute("name", "Bill");
+        request.setAttribute("age", 33);
+        AnnotatedBean bean1Instance = (AnnotatedBean) manager.create("annotatedBean", ctx);
+        assertEquals("Bill", "Bill", bean1Instance.getSilly());
+        assertEquals(33, 33, bean1Instance.getAge());
+        assertNotNull(request.getAttribute("annotatedBean"));
+        request.removeAttribute("annotatedBean");
+
+        // validate class annotated with @ManagedBeans
+        BeanBuilder bean2 = manager.getBuilder("annotatedBean2");
+        assertNotNull(bean2);
+        ManagedBeanInfo bean2Info = bean2.getManagedBeanInfo();
+        assertEquals("annotatedBean2", "annotatedBean2", bean2Info.getName());
+        assertEquals("request", "request", bean2Info.getScope());
+        assertFalse(bean2Info.isEager());
+        managedProperties = bean2Info.getManagedProperties();
+        assertNotNull(managedProperties);
+        assertTrue(managedProperties.size() == 2);
+        p1 = managedProperties.get(0);
+        assertEquals("silly", "silly", p1.getPropertyName());
+        assertEquals(String.class.getName(), String.class.getName(), p1.getPropertyClass());
+        assertEquals("#{applicationScope.name}", "#{applicationScope.name}", p1.getPropertyValue());
+        p2 = managedProperties.get(1);
+        assertEquals("age", "age", p2.getPropertyName());
+        assertEquals(Integer.TYPE.getName(), Integer.TYPE.getName(), p2.getPropertyClass());
+        assertEquals("#{applicationScope.age}", "#{applicationScope.age}", p2.getPropertyValue());
+        ctx.getExternalContext().getApplicationMap().put("name", "Bill");
+        ctx.getExternalContext().getApplicationMap().put("age", 33);
+        AnnotatedBeans bean2Instance = (AnnotatedBeans) manager.create("annotatedBean2", ctx);
+        assertEquals("Bill", "Bill", bean2Instance.getSilly());
+        assertEquals(33, 33, bean2Instance.getAge());
+        assertNotNull(request.getAttribute("annotatedBean2"));
+        request.removeAttribute("annotatedBean2");
+
+        BeanBuilder bean3 = manager.getBuilder("annotatedBean3");
+        assertNotNull(bean3);
+        ManagedBeanInfo bean3Info = bean3.getManagedBeanInfo();
+        assertEquals("annotatedBean3", "annotatedBean3", bean3Info.getName());
+        assertEquals("application", "application", bean3Info.getScope());
+        assertTrue(bean3Info.isEager());
+        managedProperties = bean3Info.getManagedProperties();
+        assertNotNull(managedProperties);
+        assertTrue(managedProperties.size() == 2);
+        p1 = managedProperties.get(0);
+        assertEquals("silly", "silly", p1.getPropertyName());
+        assertEquals(String.class.getName(), String.class.getName(), p1.getPropertyClass());
+        assertEquals("#{applicationScope.name}", "#{applicationScope.name}", p1.getPropertyValue());
+        p2 = managedProperties.get(1);
+        assertEquals("age", "age", p2.getPropertyName());
+        assertEquals(Integer.TYPE.getName(), Integer.TYPE.getName(), p2.getPropertyClass());
+        assertEquals("#{applicationtScope.age}", "#{applicationScope.age}", p2.getPropertyValue());
+        ctx.getExternalContext().getApplicationMap().put("name", "Bob");
+        ctx.getExternalContext().getApplicationMap().put("age", 35);
+        AnnotatedBeans bean3Instance = (AnnotatedBeans) manager.create("annotatedBean3", ctx);
+        assertEquals("Bob", "Bob", bean3Instance.getSilly());
+        assertEquals(35, 35, bean3Instance.getAge());
+        assertNotNull(ctx.getExternalContext().getApplicationMap().get("annotatedBean3"));
+        ctx.getExternalContext().getApplicationMap().remove("annoatedBean3");
+
     }
 
      public void testAnnotatedComponentsWebInfLib() throws Exception {

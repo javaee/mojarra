@@ -158,6 +158,22 @@ public class ManagedBeanInfo {
         return descriptions;
     }
 
+    public ManagedBeanInfo clone(String name,
+                                 String scope,
+                                 boolean eager,
+                                 ManagedBeanInfo source) {
+
+        return new ManagedBeanInfo(name,
+                                   source.className,
+                                   scope,
+                                   eager,
+                                   source.mapEntry,
+                                   source.listEntry,
+                                   source.managedProperties,
+                                   source.descriptions);
+
+    }
+
     
     // ----------------------------------------------------------- Inner Classes
 

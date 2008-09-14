@@ -69,6 +69,7 @@ public class BeanManager {
     private InjectionProvider injectionProvider;
     private boolean configPreprocessed;
     private boolean lazyBeanValidation;
+    private List<String> eagerBeans = new ArrayList<String>(4);
 
     // ------------------------------------------------------------ Constructors
 
@@ -96,16 +97,19 @@ public class BeanManager {
 
 
     public void register(ManagedBeanInfo beanInfo) {
+        BeanBuilder builder;
         if (beanInfo.hasListEntry()) {
             if (beanInfo.hasMapEntry() || beanInfo.hasManagedProperties()) {
                 String message =
                      MessageUtils.getExceptionMessageString(
                           MessageUtils.MANAGED_BEAN_AS_LIST_CONFIG_ERROR_ID,
                           beanInfo.getName());
-                addBean(beanInfo.getName(), new ErrorBean(beanInfo, message));
+                builder = new ErrorBean(beanInfo, message);
+                //addBean(beanInfo.getName(), new ErrorBean(beanInfo, message));
             } else {
-                addBean(beanInfo.getName(),
-                        new ManagedListBeanBuilder(beanInfo));
+                builder = new ManagedListBeanBuilder(beanInfo);
+                //addBean(beanInfo.getName(),
+                //        new ManagedListBeanBuilder(beanInfo));
             }
         } else if (beanInfo.hasMapEntry()) {
             if (beanInfo.hasManagedProperties()) {
@@ -113,17 +117,28 @@ public class BeanManager {
                      MessageUtils.getExceptionMessageString(
                           MessageUtils.MANAGED_BEAN_AS_MAP_CONFIG_ERROR_ID,
                           beanInfo.getName());
-                addBean(beanInfo.getName(), new ErrorBean(beanInfo, message));
+                builder = new ErrorBean(beanInfo, message);
+                //addBean(beanInfo.getName(), new ErrorBean(beanInfo, message));
             } else {
-                addBean(beanInfo.getName(), new ManagedMapBeanBuilder(beanInfo));
+                builder = new ManagedMapBeanBuilder(beanInfo);
+                //addBean(beanInfo.getName(), new ManagedMapBeanBuilder(beanInfo));
             }
         } else {
-            addBean(beanInfo.getName(), new ManagedBeanBuilder(beanInfo));
+            builder = new ManagedBeanBuilder(beanInfo);
+            //addBean(beanInfo.getName(), new ManagedBeanBuilder(beanInfo));
         }
 
+        addBean(beanInfo.getName(), builder);
         if (beanInfo.isEager()) {
-            create(beanInfo.getName(), FacesContext.getCurrentInstance());
+            eagerBeans.add(beanInfo.getName());
         }
+
+    }
+
+    
+    public List<String> getEagerBeanNames() {
+
+        return eagerBeans;
 
     }
 

@@ -71,6 +71,19 @@ class InitFacesContext extends FacesContext {
     private UIViewRoot viewRoot;
     private FacesContext orig;
     private Map<Object,Object> attributes;
+    private ELContext elContext = new ELContext() {
+        public ELResolver getELResolver() {
+            return null;
+        }
+
+        public FunctionMapper getFunctionMapper() {
+            return null;
+        }
+
+        public VariableMapper getVariableMapper() {
+            return null;
+        }
+    };
 
     public InitFacesContext(ServletContext sc) {
         ec = new ServletContextAdapter(sc);
@@ -164,19 +177,11 @@ class InitFacesContext extends FacesContext {
 
     @Override
     public ELContext getELContext() {
-        return new ELContext() {
-            public ELResolver getELResolver() {
-                return null;
-            }
+       return elContext;
+    }
 
-            public FunctionMapper getFunctionMapper() {
-                return null;
-            }
-
-            public VariableMapper getVariableMapper() {
-                return null;
-            }
-        };
+    public void setELContext(ELContext elContext) {
+        this.elContext = elContext;        
     }
 
     private static class ServletContextAdapter extends ExternalContext {

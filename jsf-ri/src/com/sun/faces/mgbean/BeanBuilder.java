@@ -168,6 +168,12 @@ public abstract class BeanBuilder {
 
     }
 
+    public ManagedBeanInfo getManagedBeanInfo() {
+
+        return beanInfo;
+        
+    }
+
     
     // ------------------------------------------------------- Protected Methods
 
