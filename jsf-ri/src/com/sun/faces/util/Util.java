@@ -525,17 +525,7 @@ public class Util {
             pattern = Pattern.compile(regex);
             patternCache.put(regex, pattern);
         }
-        String[] v = pattern.split(toSplit, 0);
-        // post-processing needed as if the input starts with the
-        // delimiter, then an emtpy element is present at the
-        // first position of the returned array.
-        if (v.length > 0 && v[0].length() == 0) {
-            String[] v2 = new String[v.length - 1];
-            System.arraycopy(v, 1, v2, 0, (v.length - 1));
-            v = v2;
-        }
-        return v;
-        
+        return  pattern.split(toSplit, 0);
     }
 
 

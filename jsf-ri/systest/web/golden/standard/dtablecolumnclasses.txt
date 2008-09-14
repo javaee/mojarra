@@ -159,6 +159,46 @@
 </tr>
 </tbody>
 </table>
+<table>
+<tbody>
+<tr>
+<td class="b1">c1</td>
+<td class="b2">c2</td>
+<td class="b3">c3</td>
+<td class="b4">c4</td>
+<td>c5</td>
+<td>c6</td>
+</tr>
+<tr>
+<td class="b1">c1_1</td>
+<td class="b2">c2_1</td>
+<td class="b3">c3_1</td>
+<td class="b4">c4_1</td>
+<td>c5_1</td>
+<td>c6_1</td>
+</tr>
+</tbody>
+</table>
+<table>
+<tbody>
+<tr>
+<td>c1</td>
+<td class="b2">c2</td>
+<td>c3</td>
+<td>c4</td>
+<td class="b4">c5</td>
+<td class="b5">c6</td>
+</tr>
+<tr>
+<td>c1_1</td>
+<td class="b2">c2_1</td>
+<td>c3_1</td>
+<td>c4_1</td>
+<td class="b4">c5_1</td>
+<td class="b5">c6_1</td>
+</tr>
+</tbody>
+</table>
 
 </body>
 </html>

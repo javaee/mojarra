@@ -81,7 +81,7 @@
 <f:view>
     <h:dataTable value="#{requestScope.list}"
                  var="row"
-                 columnClasses=",b1,b2">
+                 columnClasses="b1,b2">
         <h:column>
             <h:outputText value="#{row[0]}"/>
         </h:column>
@@ -191,6 +191,50 @@
      <h:dataTable value="#{requestScope.list}"
                  var="row"
                  columnClasses="b1,b2,b3,b4,b5,b6,b7">
+        <h:column>
+            <h:outputText value="#{row[0]}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{row[1]}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{row[2]}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{row[3]}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{row[4]}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{row[5]}"/>
+        </h:column>
+    </h:dataTable>
+    <h:dataTable value="#{requestScope.list}"
+                 var="row"
+                 columnClasses="b1,b2,b3,b4,">
+        <h:column>
+            <h:outputText value="#{row[0]}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{row[1]}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{row[2]}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{row[3]}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{row[4]}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{row[5]}"/>
+        </h:column>
+    </h:dataTable>
+<h:dataTable value="#{requestScope.list}"
+                 var="row"
+                 columnClasses=",b2,,,b4,b5,b6">
         <h:column>
             <h:outputText value="#{row[0]}"/>
         </h:column>
