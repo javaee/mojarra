@@ -280,10 +280,10 @@ public class ConfigManager {
                                          FACES_CONFIG_RESOURCE_PROVIDERS,
                                          executor,
                                          validating);
-                if (isFacesPDLDisabled) {
+                if (!isFacesPDLDisabled) {
                     // if not explicitly disabled, make a sanity check against
                     // /WEB-INF/faces-config.xml
-                    isFacesPDLDisabled = isFacesApp20(facesDocuments[facesDocuments.length - 1]);
+                    isFacesPDLDisabled = !isFacesApp20(facesDocuments[facesDocuments.length - 1]);
                     webConfig.overrideContextInitParameter(DisableFaceletJSFViewHandler, isFacesPDLDisabled);
                 }
                 FACES_CONFIG_PROCESSOR_CHAIN.process(
