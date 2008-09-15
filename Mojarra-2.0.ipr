@@ -9,14 +9,14 @@
       <maximumHeapSize value="128" />
       <properties />
     </buildFile>
-    <buildFile url="file://$PROJECT_DIR$/jsf-ri/build.xml">
+    <buildFile url="file://$PROJECT_DIR$/jsf-api/build.xml">
       <additionalClassPath />
       <antReference projectDefault="true" />
       <customJdkName value="" />
       <maximumHeapSize value="128" />
       <properties />
     </buildFile>
-    <buildFile url="file://$PROJECT_DIR$/jsf-api/build.xml">
+    <buildFile url="file://$PROJECT_DIR$/jsf-ri/build.xml">
       <additionalClassPath />
       <antReference projectDefault="true" />
       <customJdkName value="" />
@@ -34,6 +34,21 @@
   <component name="BuildJarProjectSettings">
     <option name="BUILD_JARS_ON_MAKE" value="false" />
   </component>
+  <component name="CCaseConfig">
+    <option name="checkoutReserved" value="false" />
+    <option name="markExternalChangeAsUpToDate" value="true" />
+    <option name="checkInUseHijack" value="true" />
+    <option name="useUcmModel" value="true" />
+    <option name="isOffline" value="false" />
+    <option name="synchOutside" value="false" />
+    <option name="isHistoryResticted" value="true" />
+    <option name="useIdenticalSwitch" value="true" />
+    <option name="synchActivitiesOnRefresh" value="true" />
+    <option name="lastScr" value="" />
+    <option name="scrTextFileName" value="" />
+    <option name="historyRevisionsNumber" value="4" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CodeStyleProjectProfileManger">
     <option name="PROJECT_PROFILE" />
     <option name="USE_PROJECT_LEVEL_SETTINGS" value="false" />
@@ -69,6 +84,49 @@
     <option name="CLEAR_OUTPUT_DIRECTORY" value="false" />
     <option name="ASSERT_NOT_NULL" value="true" />
   </component>
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+    <option name="REVERSE_PATCH" value="false" />
+  </component>
+  <component name="DaemonCodeAnalyzer">
+    <disable_hints />
+  </component>
+  <component name="DebuggerManager">
+    <breakpoint_any>
+      <breakpoint>
+        <option name="NOTIFY_CAUGHT" value="true" />
+        <option name="NOTIFY_UNCAUGHT" value="true" />
+        <option name="ENABLED" value="false" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint>
+        <option name="NOTIFY_CAUGHT" value="true" />
+        <option name="NOTIFY_UNCAUGHT" value="true" />
+        <option name="ENABLED" value="false" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+    </breakpoint_any>
+    <breakpoint_rules />
+    <ui_properties />
+  </component>
   <component name="DependenciesAnalyzeManager">
     <option name="myForwardDirection" value="false" />
   </component>
@@ -102,10 +160,19 @@
       <SplitterProportionsDataImpl />
     </option>
   </component>
+  <component name="ErrorTreeViewConfiguration">
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
+    <option name="HIDE_WARNINGS" value="false" />
+  </component>
   <component name="ExportToHTMLSettings">
     <option name="PRINT_LINE_NUMBERS" value="false" />
     <option name="OPEN_IN_BROWSER" value="false" />
     <option name="OUTPUT_DIRECTORY" />
+  </component>
+  <component name="FindManager">
+    <FindUsagesManager>
+      <setting name="OPEN_NEW_TAB" value="false" />
+    </FindUsagesManager>
   </component>
   <component name="GlobalLibrariesConfigurable.UI">
     <option name="proportions">
@@ -117,6 +184,11 @@
         </option>
       </SplitterProportionsDataImpl>
     </option>
+  </component>
+  <component name="HierarchyBrowserManager">
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
+    <option name="SORT_ALPHABETICALLY" value="false" />
+    <option name="HIDE_CLASSES_WHERE_METHOD_NOT_IMPLEMENTED" value="false" />
   </component>
   <component name="IdProvider" IDEtalkID="4342FAA4DD1D2DF02C7B099BD6601547" />
   <component name="InspectionProjectProfileManager">
@@ -163,38 +235,38 @@
           <option name="myAdditionalJavadocTags" value="" />
         </inspection_tool>
         <inspection_tool class="CaughtExceptionImmediatelyRethrown" level="WARNING" enabled="false" />
-        <inspection_tool class="ComparatorNotSerializable" level="REVIEW" enabled="true" />
-        <inspection_tool class="ExternalizableWithSerializationMethods" level="REVIEW" enabled="true" />
-        <inspection_tool class="ReadObjectInitialization" level="REVIEW" enabled="true" />
-        <inspection_tool class="NonSerializableWithSerializationMethods" level="REVIEW" enabled="true" />
-        <inspection_tool class="NonSerializableWithSerialVersionUIDField" level="REVIEW" enabled="true" />
-        <inspection_tool class="NonSerializableFieldInSerializableClass" level="REVIEW" enabled="true">
+        <inspection_tool class="ComparatorNotSerializable" level="WARNING" enabled="true" />
+        <inspection_tool class="ExternalizableWithSerializationMethods" level="WARNING" enabled="true" />
+        <inspection_tool class="ReadObjectInitialization" level="WARNING" enabled="true" />
+        <inspection_tool class="NonSerializableWithSerializationMethods" level="WARNING" enabled="true" />
+        <inspection_tool class="NonSerializableWithSerialVersionUIDField" level="WARNING" enabled="true" />
+        <inspection_tool class="NonSerializableFieldInSerializableClass" level="WARNING" enabled="true">
           <option name="superClassString" value="java.awt.Component" />
         </inspection_tool>
-        <inspection_tool class="NonSerializableObjectBoundToHttpSession" level="REVIEW" enabled="true" />
-        <inspection_tool class="NonSerializableObjectPassedToObjectStream" level="REVIEW" enabled="true" />
-        <inspection_tool class="ReadObjectAndWriteObjectPrivate" level="REVIEW" enabled="true" />
-        <inspection_tool class="ReadResolveAndWriteReplaceProtected" level="REVIEW" enabled="true" />
-        <inspection_tool class="SerializableWithUnconstructableAncestor" level="REVIEW" enabled="true" />
-        <inspection_tool class="SerializableHasSerializationMethods" level="REVIEW" enabled="false">
+        <inspection_tool class="NonSerializableObjectBoundToHttpSession" level="WARNING" enabled="true" />
+        <inspection_tool class="NonSerializableObjectPassedToObjectStream" level="WARNING" enabled="true" />
+        <inspection_tool class="ReadObjectAndWriteObjectPrivate" level="WARNING" enabled="true" />
+        <inspection_tool class="ReadResolveAndWriteReplaceProtected" level="WARNING" enabled="true" />
+        <inspection_tool class="SerializableWithUnconstructableAncestor" level="WARNING" enabled="true" />
+        <inspection_tool class="SerializableHasSerializationMethods" level="WARNING" enabled="false">
           <option name="superClassString" value="java.awt.Component" />
         </inspection_tool>
-        <inspection_tool class="SerializableHasSerialVersionUIDField" level="REVIEW" enabled="true">
+        <inspection_tool class="SerializableHasSerialVersionUIDField" level="WARNING" enabled="true">
           <option name="superClassString" value="java.awt.Component" />
         </inspection_tool>
-        <inspection_tool class="SerializableInnerClassWithNonSerializableOuterClass" level="REVIEW" enabled="true">
+        <inspection_tool class="SerializableInnerClassWithNonSerializableOuterClass" level="WARNING" enabled="true">
           <option name="superClassString" value="java.awt.Component" />
         </inspection_tool>
-        <inspection_tool class="SerializableInnerClassHasSerialVersionUIDField" level="REVIEW" enabled="true">
+        <inspection_tool class="SerializableInnerClassHasSerialVersionUIDField" level="WARNING" enabled="true">
           <option name="superClassString" value="java.awt.Component" />
         </inspection_tool>
-        <inspection_tool class="SerialPersistentFieldsWithWrongSignature" level="REVIEW" enabled="true" />
-        <inspection_tool class="SerialVersionUIDNotStaticFinal" level="REVIEW" enabled="true" />
-        <inspection_tool class="TransientFieldInNonSerializableClass" level="REVIEW" enabled="true" />
-        <inspection_tool class="TransientFieldNotInitialized" level="REVIEW" enabled="true" />
+        <inspection_tool class="SerialPersistentFieldsWithWrongSignature" level="WARNING" enabled="true" />
+        <inspection_tool class="SerialVersionUIDNotStaticFinal" level="WARNING" enabled="true" />
+        <inspection_tool class="TransientFieldInNonSerializableClass" level="WARNING" enabled="true" />
+        <inspection_tool class="TransientFieldNotInitialized" level="WARNING" enabled="true" />
         <inspection_tool class="FacesModelInspection" level="ERROR" enabled="false" />
         <inspection_tool class="UnusedMessageFormatParameter" level="WARNING" enabled="false" />
-        <inspection_tool class="Deprecation" level="DEPRECATION" enabled="true" />
+        <inspection_tool class="Deprecation" level="WARNING" enabled="true" />
         <inspection_tool class="SuspiciousMethodCalls" level="WARNING" enabled="false">
           <option name="REPORT_CONVERTIBLE_METHOD_CALLS" value="true" />
         </inspection_tool>
@@ -246,6 +318,10 @@
     <option name="GENERATE_NO_WARNINGS" value="false" />
     <option name="IS_EMACS_ERRORS_MODE" value="true" />
     <option name="ADDITIONAL_OPTIONS_STRING" value="" />
+  </component>
+  <component name="ModuleEditorState">
+    <option name="LAST_EDITED_MODULE_NAME" />
+    <option name="LAST_EDITED_TAB_NAME" />
   </component>
   <component name="ModuleStructureConfigurable.UI">
     <option name="proportions">
@@ -380,6 +456,16 @@
     </group>
   </component>
   <component name="ProjectFileVersion" converted="true" />
+  <component name="ProjectLevelVcsManager">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
   <component name="ProjectLibrariesConfigurable.UI">
     <option name="proportions">
       <SplitterProportionsDataImpl>
@@ -393,10 +479,15 @@
   </component>
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/mojarra-core/mojarra-core.iml" filepath="$PROJECT_DIR$/mojarra-core/mojarra-core.iml" />
-      <module fileurl="file://$PROJECT_DIR$/updatecenter/updatecenter.iml" filepath="$PROJECT_DIR$/updatecenter/updatecenter.iml" />
-      <module fileurl="file://$PROJECT_DIR$/updatecenter2/updatecenter2.iml" filepath="$PROJECT_DIR$/updatecenter2/updatecenter2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jsf-api/api.iml" filepath="$PROJECT_DIR$/jsf-api/api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jsf-demo/demo.iml" filepath="$PROJECT_DIR$/jsf-demo/demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jsf-ri/impl.iml" filepath="$PROJECT_DIR$/jsf-ri/impl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jsf-tools/tools.iml" filepath="$PROJECT_DIR$/jsf-tools/tools.iml" />
     </modules>
+  </component>
+  <component name="ProjectReloadState">
+    <option name="STATE" value="0" />
   </component>
   <component name="ProjectRootConfigurable.UI">
     <option name="proportions">
@@ -418,6 +509,28 @@
     <option name="sideProportion" value="0.2" />
     <option name="lastEditedConfigurable" value="Modules" />
   </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1" splitterProportion="0.5">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <showStructure />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+    </navigator>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="GoToFile.includeJavaFiles" value="false" />
+    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
+    <property name="MemberChooser.sorted" value="false" />
+    <property name="MemberChooser.showClasses" value="true" />
+    <property name="GoToClass.includeLibraries" value="false" />
+    <property name="MemberChooser.copyJavadoc" value="false" />
+  </component>
   <component name="ResourceManagerContainer">
     <option name="myResourceBundles">
       <value>
@@ -431,6 +544,64 @@
     <option name="GENERATE_NO_WARNINGS" value="false" />
     <option name="GENERATE_IIOP_STUBS" value="false" />
     <option name="ADDITIONAL_OPTIONS_STRING" value="" />
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+    </configuration>
+    <configuration default="true" type="Remote" factoryName="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" value="javadebug" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit" enabled="false" merge="false">
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="ADDITIONAL_CLASS_PATH" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="wholeProject" />
+      </option>
+      <envs />
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application" enabled="false" merge="false">
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+    </configuration>
+    <list size="0" />
+    <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
+      <Host>localhost</Host>
+      <Port>5050</Port>
+    </configuration>
   </component>
   <component name="ScopeChooserConfigurable.UI">
     <option name="proportions">
@@ -448,18 +619,46 @@
     <option name="LOCK_ON_CHECKOUT" value="false" />
     <option name="UNLOCK_ON_CHECKIN" value="false" />
   </component>
+  <component name="StructureViewFactory">
+    <option name="AUTOSCROLL_MODE" value="true" />
+    <option name="AUTOSCROLL_FROM_SOURCE" value="false" />
+    <option name="ACTIVE_ACTIONS" value="" />
+  </component>
   <component name="SvnBranchConfigurationManager">
     <option name="myVersion" value="123" />
   </component>
+  <component name="SvnConfiguration">
+    <option name="USER" value="" />
+    <option name="PASSWORD" value="" />
+    <option name="LAST_MERGED_REVISION" />
+    <option name="UPDATE_RUN_STATUS" value="false" />
+    <option name="UPDATE_RECURSIVELY" value="true" />
+    <option name="MERGE_DRY_RUN" value="false" />
+    <option name="UPDATE_LOCK_ON_DEMAND" value="false" />
+    <myIsUseDefaultProxy>true</myIsUseDefaultProxy>
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="default-changelist">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="false" />
+    </todo-panel>
+  </component>
   <component name="VcsDirectoryMappings">
-    <mapping directory="" vcs="" />
-    <mapping directory="$PROJECT_DIR$/common" vcs="svn" />
-    <mapping directory="$PROJECT_DIR$/jsf-api" vcs="svn" />
-    <mapping directory="$PROJECT_DIR$/jsf-demo" vcs="svn" />
-    <mapping directory="$PROJECT_DIR$/jsf-ri" vcs="svn" />
-    <mapping directory="$PROJECT_DIR$/jsf-tools" vcs="svn" />
-    <mapping directory="$PROJECT_DIR$/updatecenter" vcs="svn" />
-    <mapping directory="$PROJECT_DIR$/updatecenter2" vcs="svn" />
+    <mapping directory="" vcs="svn" />
   </component>
   <component name="VssConfiguration">
     <option name="CLIENT_PATH" value="" />
@@ -508,26 +707,24 @@
     </option>
   </component>
   <component name="libraryTable">
-    <library name="build">
+    <library name="mojarra-build">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/dependencies/jars/jsr250-api-1.0.jar!/" />
-        <root url="jar://$PROJECT_DIR$/dependencies/jars/groovy-all-1.5.5.jar!/" />
-        <root url="jar://$PROJECT_DIR$/dependencies/jars/servlet-api-2.5.jar!/" />
-        <root url="jar://$PROJECT_DIR$/dependencies/jars/com-sun-commons-digester.jar!/" />
-        <root url="jar://$PROJECT_DIR$/dependencies/jars/com-sun-commons-logging-api.jar!/" />
-        <root url="jar://$PROJECT_DIR$/dependencies/jars/com-sun-commons-collections.jar!/" />
-        <root url="jar://$PROJECT_DIR$/dependencies/jars/jstl-1.2.jar!/" />
-        <root url="jar://$PROJECT_DIR$/dependencies/jars/jsp-api-2.1.jar!/" />
-        <root url="jar://$PROJECT_DIR$/dependencies/jars/junit-3.8.1.jar!/" />
-        <root url="jar://$PROJECT_DIR$/dependencies/jars/com-sun-commons-beanutils.jar!/" />
-        <root url="jar://$PROJECT_DIR$/dependencies/jakarta-cactus-13-1.7.1/lib/cactus-1.7.1.jar!/" />
-        <root url="jar://$PROJECT_DIR$/dependencies/htmlunit-1.10/lib/htmlunit-1.10.jar!/" />
         <root url="jar://$PROJECT_DIR$/dependencies/apache-tomcat-6.0.13/lib/catalina.jar!/" />
-        <root url="file://$PROJECT_DIR$/dependencies/glassfish" />
-        <root url="jar://$PROJECT_DIR$/common/lib/ant-contrib.jar!/" />
+        <root url="jar://$PROJECT_DIR$/dependencies/glassfish/lib/appserv-rt.jar!/" />
+        <root url="jar://$PROJECT_DIR$/dependencies/jetty-6.1.4rc0/lib/annotations/jetty-annotations-6.1.4rc0.jar!/" />
         <root url="jar://$PROJECT_DIR$/lib/jsf-extensions-test-time.jar!/" />
         <root url="jar://$PROJECT_DIR$/lib/cactus-1.7.1-javaee5.jar!/" />
-        <root url="jar://$PROJECT_DIR$/dependencies/jetty-6.1.4rc0/lib/annotations/jetty-annotations-6.1.4rc0.jar!/" />
+        <root url="jar://$PROJECT_DIR$/common/lib/ant-contrib.jar!/" />
+        <root url="jar://$PROJECT_DIR$/dependencies/jars/jsp-api-2.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/dependencies/jars/jstl-1.2.jar!/" />
+        <root url="jar://$PROJECT_DIR$/dependencies/jars/com-sun-commons-collections.jar!/" />
+        <root url="jar://$PROJECT_DIR$/dependencies/jars/com-sun-commons-beanutils.jar!/" />
+        <root url="jar://$PROJECT_DIR$/dependencies/jars/jsr250-api-1.0.jar!/" />
+        <root url="jar://$PROJECT_DIR$/dependencies/jars/servlet-api-2.5.jar!/" />
+        <root url="jar://$PROJECT_DIR$/dependencies/jars/junit-3.8.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/dependencies/jars/com-sun-commons-logging-api.jar!/" />
+        <root url="jar://$PROJECT_DIR$/dependencies/jars/com-sun-commons-digester.jar!/" />
+        <root url="jar://$PROJECT_DIR$/dependencies/jars/groovy-all-1.5.5.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
