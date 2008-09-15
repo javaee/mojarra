@@ -163,6 +163,12 @@ public class HtmlUtils {
                                             buffIndex,
                                             buffLength,
                                             AMP_CHARS);
+                } else if (ch == '"') {
+                     nextIndex = addToBuffer(out,
+                                             buff,
+                                             buffIndex,
+                                             buffLength,
+                                             QUOT_CHARS);
                 } else {
                     nextIndex = addToBuffer(out, buff, buffIndex,
                                             buffLength, ch);
