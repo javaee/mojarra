@@ -577,8 +577,20 @@ public class ConfigManager {
 
         public Set<String> call() throws Exception {
 
+            Timer t = Timer.getInstance();
+            if (t != null) {
+                t.startTiming();
+            }
+
             AnnotationScanner scanner = new AnnotationScanner(sc);
-            return scanner.getAnnotatedClasses();
+            Set<String> annotatedClasses = scanner.getAnnotatedClasses();
+
+            if (t != null) {
+                t.stopTiming();
+                t.logResult("Configuration annotation scan found " + annotatedClasses.size() + " classes");
+            }
+
+            return annotatedClasses;
 
         }
 
