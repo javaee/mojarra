@@ -268,7 +268,6 @@ public class ConfigManager {
             try {
                 WebConfiguration webConfig = WebConfiguration.getInstance(sc);
                 boolean validating = webConfig.isOptionEnabled(ValidateFacesConfigFiles);
-                boolean isFacesPDLDisabled = webConfig.isOptionEnabled(DisableFaceletJSFViewHandler);
                 ExecutorService executor = createExecutorService();
 
                 // execut the Task responsible for finding annotation classes
@@ -280,18 +279,16 @@ public class ConfigManager {
                                          FACES_CONFIG_RESOURCE_PROVIDERS,
                                          executor,
                                          validating);
-                if (!isFacesPDLDisabled) {
-                    // if not explicitly disabled, make a sanity check against
-                    // /WEB-INF/faces-config.xml
-                    isFacesPDLDisabled = !isFacesApp20(facesDocuments[facesDocuments.length - 1]);
-                    webConfig.overrideContextInitParameter(DisableFaceletJSFViewHandler, isFacesPDLDisabled);
-                }
+                
+                boolean isFaceletsDisabled =
+                      isFaceletsDisabled(webConfig, facesDocuments[ facesDocuments.length - 1]);
+
                 FACES_CONFIG_PROCESSOR_CHAIN.process(
                       getConfigDocuments(sc,
                                          FACES_CONFIG_RESOURCE_PROVIDERS,
                                          executor,
                                          validating));
-                if (!isFacesPDLDisabled) {
+                if (!isFaceletsDisabled) {
                     FACELET_TAGLIB_CONFIG_PROCESSOR_CHAIN.process(
                           getConfigDocuments(sc,
                                              FACELET_TAGLIBRARY_RESOURCE_PROVIDERS,
@@ -350,6 +347,48 @@ public class ConfigManager {
     // --------------------------------------------------------- Private Methods
 
 
+    /**
+     * <p>
+     * Utility method to check if JSF 2.0 Facelets should be disabled.
+     * If it's not explicitly disabled by the context init parameter, then
+     * check the version of the WEB-INF/faces-config.xml document.  If the version
+     * is less than 2.0, then override the default value for the context init
+     * parameter so that other parts of the system that use that config option
+     * will know it has been disabled.
+     * </p>
+     *
+     * <p>
+     * NOTE:  Since this method overrides a configuration value, it should
+     * be called before *any* document parsing is performed the configuration
+     * value may be queried by the <code>ConfigParser</code>s.
+     * </p>
+     *
+     * @param webconfig configuration for this application
+     * @param webinfFacesConfig the document representing WEB-INF/faces-config.xml
+     * @return <code>true</code> if Facelets should be disabled
+     */
+    private boolean isFaceletsDisabled(WebConfiguration webconfig,
+                                  Document webinfFacesConfig) {
+
+        boolean isFaceletsDisabled = webconfig.isOptionEnabled(DisableFaceletJSFViewHandler);
+        if (!isFaceletsDisabled) {
+            // if not explicitly disabled, make a sanity check against
+            // /WEB-INF/faces-config.xml
+            isFaceletsDisabled = !isFacesApp20(webinfFacesConfig);
+            webconfig.overrideContextInitParameter(DisableFaceletJSFViewHandler, isFaceletsDisabled);
+        }
+        return isFaceletsDisabled;
+
+    }
+
+
+    /**
+     * Call through to {@link AnnotationManager#applyConfigAnntations(javax.faces.context.FacesContext, java.util.Collection)}
+     * if any annotated classes are found.
+     * @param sc the <code>ServletContext</code> for this application
+     * @param annotatedClasses <code>Set</code> of classes annotated with Faces
+     *  configration annotations
+     */
     private void processAnnotatedClasses(ServletContext sc, Set<String> annotatedClasses) {
 
         if (!annotatedClasses.isEmpty()) {
@@ -362,6 +401,7 @@ public class ConfigManager {
         }
 
     }
+
 
     /**
      * Publishes a {@link javax.faces.event.ApplicationPostConstructEvent} event for the current
@@ -441,7 +481,8 @@ public class ConfigManager {
 
 
     /**
-     *
+     * Create a new <code>ExecutorService</code> with
+     * {@link #NUMBER_OF_TASK_THREADS} threads.
      */
     private static ExecutorService createExecutorService() {
 
@@ -485,6 +526,12 @@ public class ConfigManager {
     }
 
 
+    /**
+     *
+     * @param document document representing <code>WEB-INF/faces-config.xml</code>
+     * @return <code>true</code> if the faces-config.xml is versioned at 2.0,
+     *  no version can be determined, or there is no <code>WEB-INF/faces-config.xml</code>
+     */
     private boolean isFacesApp20(Document document) {
 
         String url = document.getDocumentURI();
