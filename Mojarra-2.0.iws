@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project relativePaths="false" version="4">
+  <component name="CCaseConfig">
+    <option name="checkoutReserved" value="false" />
+    <option name="markExternalChangeAsUpToDate" value="true" />
+    <option name="checkInUseHijack" value="true" />
+    <option name="useUcmModel" value="true" />
+    <option name="isOffline" value="false" />
+    <option name="synchOutside" value="false" />
+    <option name="isHistoryResticted" value="true" />
+    <option name="useIdenticalSwitch" value="true" />
+    <option name="synchActivitiesOnRefresh" value="true" />
+    <option name="lastScr" value="" />
+    <option name="scrTextFileName" value="" />
+    <option name="historyRevisionsNumber" value="4" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" name="Default" comment="" />
+    <ignored path="Mojarra-2.0.iws" />
+    <ignored path=".idea/workspace.xml" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+    <option name="REVERSE_PATCH" value="false" />
+  </component>
+  <component name="DaemonCodeAnalyzer">
+    <disable_hints />
+  </component>
+  <component name="DebuggerManager">
+    <breakpoint_any>
+      <breakpoint>
+        <option name="NOTIFY_CAUGHT" value="true" />
+        <option name="NOTIFY_UNCAUGHT" value="true" />
+        <option name="ENABLED" value="false" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint>
+        <option name="NOTIFY_CAUGHT" value="true" />
+        <option name="NOTIFY_UNCAUGHT" value="true" />
+        <option name="ENABLED" value="false" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+    </breakpoint_any>
+    <breakpoint_rules />
+    <ui_properties />
+  </component>
+  <component name="ErrorTreeViewConfiguration">
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
+    <option name="HIDE_WARNINGS" value="false" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="Mojarra-2.0" />
+  </component>
+  <component name="FindManager">
+    <FindUsagesManager>
+      <setting name="OPEN_NEW_TAB" value="false" />
+    </FindUsagesManager>
+  </component>
+  <component name="HierarchyBrowserManager">
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
+    <option name="SORT_ALPHABETICALLY" value="false" />
+    <option name="HIDE_CLASSES_WHERE_METHOD_NOT_IMPLEMENTED" value="false" />
+  </component>
+  <component name="ModuleEditorState">
+    <option name="LAST_EDITED_MODULE_NAME" />
+    <option name="LAST_EDITED_TAB_NAME" />
+  </component>
+  <component name="ProjectLevelVcsManager">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectPane">
+    <subPane>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Mojarra-2.0" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Mojarra-2.0" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="mojarra-core" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Mojarra-2.0" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="mojarra-core" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="PsiDirectory:/files/jsf/mojarra-2.0/jsf-ri" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+      </PATH>
+    </subPane>
+  </component>
+  <component name="ProjectReloadState">
+    <option name="STATE" value="0" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="0.16666667" version="1" splitterProportion="0.5">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <showStructure ProjectPane="false" />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+    </navigator>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="MemberChooser.sorted" value="false" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web39" value="/tmp/webExplodedDir53471tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web37" value="/tmp/webExplodedDir53477tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web38" value="/tmp/webExplodedDir53466tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web35" value="/tmp/webExplodedDir53464tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web36" value="/tmp/webExplodedDir53465tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web33" value="/tmp/webExplodedDir53479tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web34" value="/tmp/webExplodedDir53478tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web31" value="/tmp/webExplodedDir53462tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web32" value="/tmp/webExplodedDir53463tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web30" value="/tmp/webExplodedDir53486tmp" />
+    <property name="GoToClass.includeLibraries" value="false" />
+    <property name="GoToFile.includeJavaFiles" value="false" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web29" value="/tmp/webExplodedDir53474tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web28" value="/tmp/webExplodedDir53473tmp" />
+    <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web61" value="/tmp/webExplodedDir53506tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web24" value="/tmp/webExplodedDir53493tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web60" value="/tmp/webExplodedDir53505tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web25" value="/tmp/webExplodedDir53480tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web63" value="/tmp/webExplodedDir53508tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web26" value="/tmp/webExplodedDir53461tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web62" value="/tmp/webExplodedDir53507tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web27" value="/tmp/webExplodedDir53484tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web20" value="/tmp/webExplodedDir53459tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web21" value="/tmp/webExplodedDir53460tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web22" value="/tmp/webExplodedDir53488tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web23" value="/tmp/webExplodedDir53475tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web19" value="/tmp/webExplodedDir53483tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web18" value="/tmp/webExplodedDir53490tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web17" value="/tmp/webExplodedDir53458tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web11" value="/tmp/webExplodedDir53491tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web12" value="/tmp/webExplodedDir53492tmp" />
+    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web10" value="/tmp/webExplodedDir53476tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web15" value="/tmp/webExplodedDir53485tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web16" value="/tmp/webExplodedDir53482tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web50" value="/tmp/webExplodedDir53500tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web13" value="/tmp/webExplodedDir53489tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web14" value="/tmp/webExplodedDir53487tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web53" value="/tmp/webExplodedDir53501tmp" />
+    <property name="MemberChooser.showClasses" value="true" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web59" value="/tmp/webExplodedDir53504tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web58" value="/tmp/webExplodedDir53503tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web57" value="/tmp/webExplodedDir53502tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web" value="/tmp/webExplodedDir53451tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web6" value="/tmp/webExplodedDir53457tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web7" value="/tmp/webExplodedDir53481tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web8" value="/tmp/webExplodedDir53455tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web9" value="/tmp/webExplodedDir53456tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web2" value="/tmp/webExplodedDir53494tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web3" value="/tmp/webExplodedDir53452tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web41" value="/tmp/webExplodedDir53468tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web4" value="/tmp/webExplodedDir53453tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web40" value="/tmp/webExplodedDir53467tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web5" value="/tmp/webExplodedDir53454tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web43" value="/tmp/webExplodedDir53470tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web42" value="/tmp/webExplodedDir53469tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web45" value="/tmp/webExplodedDir53495tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web44" value="/tmp/webExplodedDir53472tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web47" value="/tmp/webExplodedDir53497tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web46" value="/tmp/webExplodedDir53496tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web49" value="/tmp/webExplodedDir53499tmp" />
+    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_mojarra-core/web/Web48" value="/tmp/webExplodedDir53498tmp" />
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="JUnit" factoryName="JUnit" enabled="false" merge="false">
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="ADDITIONAL_CLASS_PATH" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="wholeProject" />
+      </option>
+      <envs />
+    </configuration>
+    <configuration default="true" type="Remote" factoryName="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" value="javadebug" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application" enabled="false" merge="false">
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+    </configuration>
+    <list size="0" />
+    <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
+      <Host>localhost</Host>
+      <Port>5050</Port>
+    </configuration>
+  </component>
+  <component name="StructureViewFactory">
+    <option name="AUTOSCROLL_MODE" value="true" />
+    <option name="AUTOSCROLL_FROM_SOURCE" value="false" />
+    <option name="ACTIVE_ACTIONS" value="" />
+  </component>
+  <component name="SvnConfiguration">
+    <option name="USER" value="" />
+    <option name="PASSWORD" value="" />
+    <option name="LAST_MERGED_REVISION" />
+    <option name="UPDATE_RUN_STATUS" value="false" />
+    <option name="UPDATE_RECURSIVELY" value="true" />
+    <option name="MERGE_DRY_RUN" value="false" />
+    <option name="UPDATE_LOCK_ON_DEMAND" value="false" />
+    <configuration useDefault="true">/home/rlubke/.subversion</configuration>
+    <myIsUseDefaultProxy>true</myIsUseDefaultProxy>
+  </component>
+  <component name="TodoView" selected-index="0">
+    <todo-panel id="selected-file">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="default-changelist">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="false" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="26" width="1920" height="1148" extended-state="0" />
+    <editor active="false" />
+    <layout>
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32932934" order="-1" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="-1" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24973147" order="1" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="1" />
+      <window_info id="Tasks" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32932934" order="-1" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" order="3" />
+      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32932934" order="-1" />
+      <window_info id="UML Diagrams" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.33" order="-1" />
+      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="-1" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="-1" />
+      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32932934" order="-1" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="7" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="1" />
+      <window_info id="Maven projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="-1" />
+      <window_info id="Module Dependencies" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="-1" />
+      <window_info id="ScratchPad" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="-1" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24973147" order="0" />
+      <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="-1" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="2" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" order="6" />
+      <window_info id="Duplicates" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="-1" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="2" />
+      <window_info id="Graphical Navigator" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.33" order="-1" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="5" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" order="0" />
+      <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="2" />
+      <window_info id="EJB" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" order="4" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" order="0" />
+    </layout>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="true" />
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="PERFORM_UPDATE_IN_BACKGROUND" value="false" />
+    <option name="PERFORM_COMMIT_IN_BACKGROUND" value="false" />
+    <option name="PERFORM_EDIT_IN_BACKGROUND" value="true" />
+    <option name="PERFORM_ADD_REMOVE_IN_BACKGROUND" value="true" />
+    <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
+    <option name="LAST_COMMIT_MESSAGE" />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="REFORMAT_BEFORE_FILE_COMMIT" value="false" />
+    <option name="FILE_HISTORY_DIALOG_COMMENTS_SPLITTER_PROPORTION" value="0.8" />
+    <option name="FILE_HISTORY_DIALOG_SPLITTER_PROPORTION" value="0.5" />
+    <option name="ACTIVE_VCS_NAME" />
+    <option name="UPDATE_GROUP_BY_PACKAGES" value="false" />
+    <option name="UPDATE_GROUP_BY_CHANGELIST" value="false" />
+    <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
+    <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
+  </component>
+  <component name="antWorkspaceConfiguration">
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
+    <option name="FILTER_TARGETS" value="true" />
+    <buildFile url="file://$PROJECT_DIR$/build.xml">
+      <antCommandLine value="" />
+      <runInBackground value="true" />
+      <targetFilters>
+        <filter targetName="build.as.updater.jars" isVisible="false" />
+        <filter targetName="build.java.net" isVisible="false" />
+        <filter targetName="build.samples.zip" isVisible="false" />
+        <filter targetName="build.spec.snapshot" isVisible="false" />
+        <filter targetName="cb" isVisible="true" />
+        <filter targetName="clean" isVisible="true" />
+        <filter targetName="jsf.source" isVisible="false" />
+        <filter targetName="main" isVisible="true" />
+        <filter targetName="nightly" isVisible="false" />
+        <filter targetName="prepare.build.java.net" isVisible="false" />
+        <filter targetName="test" isVisible="false" />
+        <filter targetName="test.with.container.refresh" isVisible="true" />
+        <filter targetName="updatecenter" isVisible="false" />
+        <filter targetName="updatecenter2" isVisible="false" />
+      </targetFilters>
+      <treeView value="true" />
+      <verbose value="true" />
+      <viewClosedWhenNoErrors value="false" />
+    </buildFile>
+    <buildFile url="file://$PROJECT_DIR$/jsf-ri/build.xml">
+      <antCommandLine value="" />
+      <runInBackground value="true" />
+      <targetFilters>
+        <filter targetName="all" isVisible="true" />
+        <filter targetName="cb" isVisible="true" />
+        <filter targetName="check.taglib.generation.necessity" isVisible="false" />
+        <filter targetName="clean" isVisible="true" />
+        <filter targetName="compile" isVisible="true" />
+        <filter targetName="compile.test" isVisible="true" />
+        <filter targetName="copy.template.sources" isVisible="true" />
+        <filter targetName="create.runtime.config" isVisible="false" />
+        <filter targetName="delete.and.remkdir.build.generate.dir" isVisible="false" />
+        <filter targetName="dist" isVisible="true" />
+        <filter targetName="facelets.tlddocs" isVisible="false" />
+        <filter targetName="force.run.cactus.test" isVisible="true" />
+        <filter targetName="generate" isVisible="false" />
+        <filter targetName="init" isVisible="true" />
+        <filter targetName="init.test" isVisible="false" />
+        <filter targetName="jars" isVisible="false" />
+        <filter targetName="jsp.tlddocs" isVisible="false" />
+        <filter targetName="main" isVisible="false" />
+        <filter targetName="pdldocs" isVisible="true" />
+        <filter targetName="prepare" isVisible="true" />
+        <filter targetName="prepare.test.webapp" isVisible="false" />
+        <filter targetName="push-to-maven" isVisible="false" />
+        <filter targetName="push-to-maven-prepare" isVisible="false" />
+        <filter targetName="ri.source" isVisible="false" />
+        <filter targetName="run.cactus.test" isVisible="true" />
+        <filter targetName="run.junit.test" isVisible="true" />
+        <filter targetName="run.systest" isVisible="true" />
+        <filter targetName="run.systest-per-webapp" isVisible="true" />
+        <filter targetName="test" isVisible="true" />
+      </targetFilters>
+      <treeView value="true" />
+      <verbose value="true" />
+      <viewClosedWhenNoErrors value="false" />
+    </buildFile>
+    <buildFile url="file://$PROJECT_DIR$/jsf-api/build.xml">
+      <antCommandLine value="" />
+      <runInBackground value="true" />
+      <targetFilters>
+        <filter targetName="allclean" isVisible="false" />
+        <filter targetName="attributes" isVisible="true" />
+        <filter targetName="build" isVisible="false" />
+        <filter targetName="build.test.dir" isVisible="false" />
+        <filter targetName="cb" isVisible="true" />
+        <filter targetName="check.generation.necessity" isVisible="false" />
+        <filter targetName="clean" isVisible="true" />
+        <filter targetName="compile" isVisible="false" />
+        <filter targetName="copy.template.sources" isVisible="false" />
+        <filter targetName="create.standard.xml" isVisible="true" />
+        <filter targetName="diffapis" isVisible="false" />
+        <filter targetName="dist" isVisible="true" />
+        <filter targetName="edburns" isVisible="false" />
+        <filter targetName="facesdoc" isVisible="true" />
+        <filter targetName="generate" isVisible="false" />
+        <filter targetName="generate.javadocs" isVisible="false" />
+        <filter targetName="jars" isVisible="false" />
+        <filter targetName="javadoc_check" isVisible="false" />
+        <filter targetName="javadocs" isVisible="true" />
+        <filter targetName="main" isVisible="true" />
+        <filter targetName="prepare" isVisible="false" />
+        <filter targetName="prepare.test" isVisible="false" />
+        <filter targetName="push-to-maven" isVisible="false" />
+        <filter targetName="push-to-maven-prepare" isVisible="false" />
+        <filter targetName="test" isVisible="true" />
+        <filter targetName="test.component" isVisible="false" />
+        <filter targetName="test.FactoryFinder" isVisible="false" />
+        <filter targetName="test.FactoryFinder2" isVisible="false" />
+        <filter targetName="test.mock" isVisible="false" />
+        <filter targetName="test.model" isVisible="false" />
+        <filter targetName="test.PhaseId" isVisible="false" />
+        <filter targetName="test.validator" isVisible="false" />
+        <filter targetName="test.webapp" isVisible="false" />
+        <filter targetName="tools.javac" isVisible="false" />
+      </targetFilters>
+      <treeView value="true" />
+      <verbose value="true" />
+      <viewClosedWhenNoErrors value="false" />
+    </buildFile>
+    <buildFile url="file://$PROJECT_DIR$/jsf-demo/build.xml">
+      <antCommandLine value="" />
+      <runInBackground value="true" />
+      <targetFilters>
+        <filter targetName="api.javadocs" isVisible="false" />
+        <filter targetName="cb" isVisible="false" />
+        <filter targetName="clean" isVisible="true" />
+        <filter targetName="copyDemoSource" isVisible="false" />
+        <filter targetName="copydocs" isVisible="false" />
+        <filter targetName="copyJars" isVisible="false" />
+        <filter targetName="dist" isVisible="false" />
+        <filter targetName="dist.binary" isVisible="false" />
+        <filter targetName="main" isVisible="true" />
+        <filter targetName="prepare.build" isVisible="false" />
+        <filter targetName="prepare.dist" isVisible="false" />
+        <filter targetName="ri.pdldocs" isVisible="false" />
+        <filter targetName="run.test" isVisible="false" />
+        <filter targetName="test" isVisible="true" />
+      </targetFilters>
+      <treeView value="true" />
+      <verbose value="true" />
+      <viewClosedWhenNoErrors value="false" />
+    </buildFile>
+  </component>
+  <component name="org.intellij.scratchpad.ScratchPadProjectComponent">
+    <ScratchPad>
+      <Name>Default</Name>
+      <Contents xml:space="preserve"></Contents>
+    </ScratchPad>
+  </component>
+</project>
+
