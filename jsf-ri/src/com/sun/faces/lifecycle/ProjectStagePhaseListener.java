@@ -46,8 +46,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIMessage;
 import javax.faces.component.UIMessages;
-import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIOutput;
 import javax.faces.component.html.HtmlMessage;
 import javax.faces.component.html.HtmlMessages;
 import javax.faces.component.html.HtmlCommandButton;
@@ -188,30 +188,28 @@ public class ProjectStagePhaseListener implements PhaseListener {
 
         Application app = context.getApplication();
         UIViewRoot root = context.getViewRoot();
-        // Add a component to style the error messages
-        UIOutput messagesStyle =
-              (UIOutput) app.createComponent("javax.faces.Output");
-        messagesStyle.setTransient(true);
-        messagesStyle.setRendererType("javax.faces.Text");
-        Map<String, Object> attrs = messagesStyle.getAttributes();
-        attrs.put("escape", false);
-        messagesStyle
-                  .setValue("<style type=\"text/css\">.ProjectStageDevelopment { font-family: \'Trebuchet MS\', Verdana, Arial, Sans-Serif; font-size: small; color: #339; }</style>");
-        root.addComponentResource(context, messagesStyle, "head");
 
+        UIComponent panel = app.createComponent("javax.faces.Panel");
+        panel.setRendererType("javax.faces.Grid");
+        UIOutput output = (UIOutput) app.createComponent("javax.faces.Output");
+        output.setValue("ProjectStage[Development]: Messages - Add your own message handling to prevent this from appearing.");
+        output.getAttributes().put("style", "color: red");
+        panel.getAttributes().put("columns", 1);
+        panel.getFacets().put("caption", output);
         // Add a component to hold the messages
         UIComponent messages = app.createComponent("javax.faces.Messages");
         messages.setTransient(true);
-        attrs = messages.getAttributes();
+        Map<String,Object> attrs = messages.getAttributes();
         attrs.put("style", "");
         attrs.put("layout", "table");
         attrs.put("title", "Development Mode Messages");
-        attrs.put("styleClass", "ProjectStageDevelopment");
+        attrs.put("style", "font-family: \'Trebuchet MS\', Verdana, Arial, Sans-Serif; font-size: small; color: #339;");
         attrs.put("tooltip", Boolean.TRUE);
         messages.setRendererType("javax.faces.Messages");
         // RELEASE_PENDING (edburns,rlubke) this won't work if people aren't
         // using the body tag.
-        root.addComponentResource(context, messages, "body");
+        panel.getChildren().add(messages);
+        root.addComponentResource(context, panel, "body");
 
     }
 
