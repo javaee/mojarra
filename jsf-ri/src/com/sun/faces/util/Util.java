@@ -470,28 +470,6 @@ public class Util {
         return result;
     }
 
-    public static boolean prefixViewTraversal(FacesContext context,
-                                              UIComponent root,
-                                              TreeTraversalCallback action)
-    throws FacesException {
-        boolean keepGoing;
-        if (keepGoing = action.takeActionOnNode(context, root)) {
-            Iterator<UIComponent> kids = root.getFacetsAndChildren();
-            while (kids.hasNext() && keepGoing) {
-                keepGoing = prefixViewTraversal(context,
-                                                kids.next(),
-                                                action);
-            }
-        }
-        return keepGoing;
-    }
-
-
-    public static interface TreeTraversalCallback {
-	public boolean takeActionOnNode(FacesContext context, 
-					UIComponent curNode) throws FacesException;
-    }
-    
     public static FeatureDescriptor getFeatureDescriptor(String name, String
         displayName, String desc, boolean expert, boolean hidden, 
         boolean preferred, Object type, Boolean designTime) {

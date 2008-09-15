@@ -223,6 +223,25 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     }
 
 
+    @Override
+    public UIViewRoot createView(FacesContext ctx,
+                                 MultiViewHandler vh,
+                                 String viewId) {
+
+        UIViewRoot root = super.createView(ctx, vh, viewId);
+        ctx.setViewRoot(root);
+        if (root != null) {
+            try {
+                buildView(ctx, root);
+            } catch (IOException ioe) {
+                throw new FacesException(ioe);
+            }
+        }
+
+        return root;
+        
+    }
+
     // ------------------------------------------------------- Protected Methods
 
 

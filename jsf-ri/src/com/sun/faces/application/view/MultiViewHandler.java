@@ -156,94 +156,18 @@ public class MultiViewHandler extends ViewHandler {
 
     /**
      * <p>
-     * This code is currently common to all {@link ViewHandlingStrategy} instances.
+     * Call {@link com.sun.faces.application.view.ViewHandlingStrategy#createView(javax.faces.context.FacesContext, MultiViewHandler, String)}.
      * </p>
      *
-     * @see ViewHandler#createView(javax.faces.context.FacesContext, String)
+     * @see ViewHandler#restoreView(javax.faces.context.FacesContext, String)
      */
     public UIViewRoot createView(FacesContext context, String viewId) {
 
         Util.notNull("context", context);
 
-        UIViewRoot result = (UIViewRoot)
-                context.getApplication().createComponent(UIViewRoot.COMPONENT_TYPE);
-
-        if (viewId != null) {
-            String mapping = Util.getFacesMapping(context);
-
-            if (mapping != null) {
-                if (!Util.isPrefixMapped(mapping)) {
-                   viewId = convertViewId(context, viewId);
-                } else {
-                    viewId = normalizeRequestURI(viewId, mapping);
-                    if (viewId.equals(mapping)) {
-                        // The request was to the FacesServlet only - no
-                        // path info
-                        // on some containers this causes a recursion in the
-                        // RequestDispatcher and the request appears to hang.
-                        // If this is detected, return status 404
-                        send404Error(context);
-                    }
-                }
-            }
-
-            result.setViewId(viewId);
-        }
-
-        Locale locale = null;
-        String renderKitId = null;
-
-        // use the locale from the previous view if is was one which will be
-        // the case if this is called from NavigationHandler. There wouldn't be
-        // one for the initial case.
-        if (context.getViewRoot() != null) {
-            locale = context.getViewRoot().getLocale();
-            renderKitId = context.getViewRoot().getRenderKitId();
-        }
-
-        if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, "Created new view for " + viewId);
-        }
-        // PENDING(): not sure if we should set the RenderKitId here.
-        // The UIViewRoot ctor sets the renderKitId to the default
-        // one.
-        // if there was no locale from the previous view, calculate the locale
-        // for this view.
-        if (locale == null) {
-            locale =
-                context.getApplication().getViewHandler().calculateLocale(
-                    context);
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("Locale for this view as determined by calculateLocale "
-                            + locale.toString());
-            }
-        } else {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("Using locale from previous view "
-                            + locale.toString());
-            }
-        }
-
-        if (renderKitId == null) {
-            renderKitId =
-                context.getApplication().getViewHandler().calculateRenderKitId(
-                    context);
-           if (logger.isLoggable(Level.FINE)) {
-               logger.fine(
-               "RenderKitId for this view as determined by calculateRenderKitId "
-               + renderKitId);
-            }
-        } else {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("Using renderKitId from previous view "
-                            + renderKitId);
-            }
-        }
-
-        result.setLocale(locale);
-        result.setRenderKitId(renderKitId);
-
-        return result;
+        return viewHandlingStrategy.getStrategy(viewId).createView(context,
+                                                                   this,
+                                                                   viewId);
     }
 
 
@@ -417,6 +341,105 @@ public class MultiViewHandler extends ViewHandler {
 
 
     // ---------------------------------------------------------- Public Methods
+
+
+   /**
+     * <p>
+     * Called by {@link com.sun.faces.application.view.ViewHandlingStrategy#createView(javax.faces.context.FacesContext, MultiViewHandler, String)}
+     * if the {@link ViewHandlingStrategy} implementation doesn't require custom
+     * behavior when restoring the view.
+     * </p>
+     *
+     * @param ctx the {@link FacesContext} for the current request
+     * @param viewId the view ID
+     * @return a new {@link UIViewRoot}
+     *
+     * @see ViewHandler#createView(javax.faces.context.FacesContext, String)
+     */
+    public UIViewRoot createViewPrivate(FacesContext ctx, String viewId) {
+
+        Util.notNull("context", ctx);
+
+        UIViewRoot result = (UIViewRoot)
+              ctx.getApplication()
+                    .createComponent(UIViewRoot.COMPONENT_TYPE);
+
+        if (viewId != null) {
+            String mapping = Util.getFacesMapping(ctx);
+
+            if (mapping != null) {
+                if (!Util.isPrefixMapped(mapping)) {
+                    viewId = convertViewId(ctx, viewId);
+                } else {
+                    viewId = normalizeRequestURI(viewId, mapping);
+                    if (viewId.equals(mapping)) {
+                        // The request was to the FacesServlet only - no
+                        // path info
+                        // on some containers this causes a recursion in the
+                        // RequestDispatcher and the request appears to hang.
+                        // If this is detected, return status 404
+                        send404Error(ctx);
+                    }
+                }
+            }
+
+            result.setViewId(viewId);
+        }
+
+        Locale locale = null;
+        String renderKitId = null;
+
+        // use the locale from the previous view if is was one which will be
+        // the case if this is called from NavigationHandler. There wouldn't be
+        // one for the initial case.
+        if (ctx.getViewRoot() != null) {
+            locale = ctx.getViewRoot().getLocale();
+            renderKitId = ctx.getViewRoot().getRenderKitId();
+        }
+
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "Created new view for " + viewId);
+        }
+        // PENDING(): not sure if we should set the RenderKitId here.
+        // The UIViewRoot ctor sets the renderKitId to the default
+        // one.
+        // if there was no locale from the previous view, calculate the locale
+        // for this view.
+        if (locale == null) {
+            locale = ctx.getApplication().getViewHandler().calculateLocale(ctx);
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine(
+                      "Locale for this view as determined by calculateLocale "
+                      + locale.toString());
+            }
+        } else {
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine("Using locale from previous view "
+                            + locale.toString());
+            }
+        }
+
+        if (renderKitId == null) {
+            renderKitId =
+                  ctx.getApplication().getViewHandler()
+                        .calculateRenderKitId(ctx);
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine(
+                      "RenderKitId for this view as determined by calculateRenderKitId "
+                      + renderKitId);
+            }
+        } else {
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine("Using renderKitId from previous view "
+                            + renderKitId);
+            }
+        }
+
+        result.setLocale(locale);
+        result.setRenderKitId(renderKitId);
+
+        return result;
+    }
 
 
     /**

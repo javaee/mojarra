@@ -194,7 +194,8 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {MessageUtils.VERIFIER_CLASS_NOT_FOUND_ID, "2"},
         {MessageUtils.VERIFIER_CTOR_NOT_PUBLIC_ID, "2"},
         {MessageUtils.VERIFIER_NO_DEF_CTOR_ID, "2"},
-        {MessageUtils.VERIFIER_WRONG_TYPE_ID, "3"}
+        {MessageUtils.VERIFIER_WRONG_TYPE_ID, "3"},
+        {MessageUtils.COMMAND_NOT_NESTED_WITHIN_FORM_ID, "0"}
     };
 
 // Attribute Instance Variables

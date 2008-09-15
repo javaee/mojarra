@@ -40,7 +40,6 @@ import java.io.IOException;
 
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
-import javax.faces.application.ViewHandler;
 
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.application.ApplicationAssociate;
@@ -118,7 +117,7 @@ public abstract class ViewHandlingStrategy {
      * @param vh the {@link MultiViewHandler} that is calling this
      *  <code>ViewHandlingStrategy</code>
      * @param viewId the view ID to restore
-     * @return
+     * @return thew restored {@link UIViewRoot}
      */
     public UIViewRoot restoreView(FacesContext ctx,
                                   MultiViewHandler vh,
@@ -126,6 +125,24 @@ public abstract class ViewHandlingStrategy {
 
         return vh.restoreViewPrivate(ctx, viewId);
         
+    }
+
+    
+    /**
+     * Create a new UIViewRoot using the specified viewId.
+     *
+     * @param ctx the {@link FacesContext} for the current request
+     * @param vh the {@link MultiViewHandler} that is calling this
+     *  <code>ViewHandlingStrategy</code>
+     * @param viewId the view ID to restore
+     * @return a new {@link UIViewRoot}
+     */
+    public UIViewRoot createView(FacesContext ctx,
+                                 MultiViewHandler vh,
+                                 String viewId) {
+
+        return vh.createViewPrivate(ctx, viewId);
+
     }
 
 }
