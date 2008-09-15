@@ -835,7 +835,7 @@ public class HtmlResponseWriter extends ResponseWriter {
             ensureTextBufferCapacity(val);
             HtmlUtils.writeText(writer,
                                 escapeUnicode,
-					            escapeIso,
+                                escapeIso,
                                 buffer,
                                 val,
                                 textBuffer);
