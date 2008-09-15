@@ -61,7 +61,6 @@ import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
-import java.util.Map;
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
@@ -88,14 +87,8 @@ public class AttributeHandler extends TagHandler {
             return;
         }
         
-        Map<String, Object> componentAttrs = parent.getAttributes();
-        boolean booleanValue = false;
-
-        CompositeComponentBeanInfo componentBeanInfo = (CompositeComponentBeanInfo)
-                componentAttrs.get(UIComponent.BEANINFO_KEY);
-
-        PropertyDescriptor propertyDescriptor = null;
-        TagAttribute attr = null;
+        PropertyDescriptor propertyDescriptor;
+        TagAttribute attr;
 
         // Get the value of required the name propertyDescriptor
         ValueExpression ve = name.getValueExpression(ctx, String.class);
@@ -120,18 +113,15 @@ public class AttributeHandler extends TagHandler {
         }
         if (null != (attr = this.getAttribute("expert"))) {
             ve = attr.getValueExpression(ctx, Boolean.class);
-            booleanValue = ((Boolean) ve.getValue(ctx)).booleanValue();
-            propertyDescriptor.setExpert(booleanValue);
+            propertyDescriptor.setExpert((Boolean) ve.getValue(ctx));
         }
         if (null != (attr = this.getAttribute("hidden"))) {
             ve = attr.getValueExpression(ctx, Boolean.class);
-            booleanValue = ((Boolean) ve.getValue(ctx)).booleanValue();
-            propertyDescriptor.setHidden(booleanValue);
+            propertyDescriptor.setHidden((Boolean) ve.getValue(ctx));
         }
         if (null != (attr = this.getAttribute("preferred"))) {
             ve = attr.getValueExpression(ctx, Boolean.class);
-            booleanValue = ((Boolean) ve.getValue(ctx)).booleanValue();
-            propertyDescriptor.setPreferred(booleanValue);
+            propertyDescriptor.setPreferred((Boolean) ve.getValue(ctx));
         }
         if (null != (attr = this.getAttribute("shortDescription"))) {
             ve = attr.getValueExpression(ctx, String.class);

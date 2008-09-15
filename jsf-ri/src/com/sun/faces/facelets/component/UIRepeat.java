@@ -99,7 +99,7 @@ public class UIRepeat extends UIComponentBase implements NamingContainer {
     // variables
     private String var;
 
-    private String varStatus;
+    //private String varStatus;
 
     private int index = -1;
 

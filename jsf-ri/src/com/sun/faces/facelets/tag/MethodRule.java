@@ -81,7 +81,7 @@ public final class MethodRule extends MetaRule {
 
     public Metadata applyRule(String name, TagAttribute attribute,
             MetadataTarget meta) {
-        if (false == name.equals(this.methodName))
+        if (!name.equals(this.methodName))
             return null;
 
         if (MethodBinding.class.equals(meta.getPropertyType(name))) {
@@ -101,7 +101,7 @@ public final class MethodRule extends MetaRule {
         return null;
     }
 
-    private class MethodBindingMetadata extends Metadata {
+    private static class MethodBindingMetadata extends Metadata {
         private final Method _method;
 
         private final TagAttribute _attribute;
@@ -123,8 +123,7 @@ public final class MethodRule extends MetaRule {
                     _returnType, _paramList);
 
             try {
-                _method.invoke(instance,
-                        new Object[] { new LegacyMethodBinding(expr) });
+                _method.invoke(instance, new LegacyMethodBinding(expr) );
             } catch (InvocationTargetException e) {
                 throw new TagAttributeException(_attribute, e.getCause());
             } catch (Exception e) {
@@ -133,7 +132,7 @@ public final class MethodRule extends MetaRule {
         }
     }
 
-    private class MethodExpressionMetadata extends Metadata {
+    private static class MethodExpressionMetadata extends Metadata {
         private final Method _method;
 
         private final TagAttribute _attribute;
@@ -155,7 +154,7 @@ public final class MethodRule extends MetaRule {
                     _returnType, _paramList);
 
             try {
-                _method.invoke(instance, new Object[] { expr });
+                _method.invoke(instance, expr );
             } catch (InvocationTargetException e) {
                 throw new TagAttributeException(_attribute, e.getCause());
             } catch (Exception e) {
