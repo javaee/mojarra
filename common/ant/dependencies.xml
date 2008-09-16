@@ -177,7 +177,7 @@
         <!-- JSDOC -->
         <if>
             <not>
-                <available file="${jsdoc.jar}" property="ignored"/>
+                <available file="${jsdoc.home}" property="ignored"/>
             </not>
             <then>
                 <get src="http://jsdoc-toolkit.googlecode.com/files/jsdoc_toolkit-${jsdoc.version}.zip"
