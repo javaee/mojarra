@@ -59,7 +59,7 @@
     <property name="build.generate.tld.dir"
               value="${build.generate.dir}/conf/share"/>
 
-    <!-- The base directory for binary dependency libs under local version 
+    <!-- The base directory for binary dependency libs under local version
          control -->
     <property name="local.lib.dir"
               value="${basedir}/../lib"/>
@@ -72,15 +72,15 @@
 
     <!-- The base directory for component tests -->
     <property name="test.dir" value="${basedir}/test"/>
-    
+
     <!-- Misc -->
     <property name="conf.share.dir" value="${basedir}/conf/share"/>
     <property name="name" value="jsf-impl"/>
-    
+
     <path id="impl.compile.classpath">
         <pathelement location="${jsf-api.jar}"/>
         <path refid="sun.commons.classpath"/>
-        <path refid="compile.classpath"/> 
+        <path refid="compile.classpath"/>
         <pathelement location="${tools.dir}/build/classes"/>
     </path>
 
@@ -97,21 +97,18 @@
             description="Prepare build directory">
         <mkdir dir="${build.dir}"/>
         <mkdir dir="${build.generate.dir}"/>
-        <mkdir dir="${build.generate.tld.dir}"/>        
+        <mkdir dir="${build.generate.tld.dir}"/>
         <mkdir dir="${build.classes.dir}"/>
-        <mkdir dir="${build.classes.dir}/META-INF"/>
-        <mkdir dir="${build.classes.dir}/META-INF/resources"/>
-        <mkdir dir="${build.classes.dir}/META-INF/resources/jsfri"/>
         <mkdir dir="${build.classes.dir}/META-INF/resources/jsfri/scripts"/>
+        <mkdir dir="${build.classes.dir}/com/sun/faces/xhtml"/>
         <mkdir dir="${build.dir}/javadocs"/>
-        <mkdir dir="${build.dir}/pdldocs"/>
         <mkdir dir="${build.dir}/pdldocs/jsp"/>
         <mkdir dir="${build.dir}/pdldocs/facelets"/>
         <mkdir dir="${build.dir}/lib"/>
         <antcall target="delete.and.remkdir.build.generate.dir" />
-    </target>        
+    </target>
 
-    <target name="delete.and.remkdir.build.generate.dir" 
+    <target name="delete.and.remkdir.build.generate.dir"
             unless="skip.delete.generate">
         <delete dir="${build.generate.dir}"/>
         <mkdir dir="${build.generate.dir}"/>
@@ -173,7 +170,7 @@
 
     <target name="generate"
             depends="check.taglib.generation.necessity"
-            unless="skip.taglib.generation">        
+            unless="skip.taglib.generation">
         <path id="ant.classpath">
             <pathelement location="${myenv.ANT_HOME}/lib/ant.jar"/>
         </path>
@@ -183,7 +180,7 @@
                 <include name="TAG-*"/>
             </fileset>
         </copy>
-        
+
         <mkdir dir="${tools.dir}/build/classes"/>
         <jsf.javac srcdir="${tools.dir}/src"
                destdir="${tools.dir}/build/classes">
@@ -194,7 +191,7 @@
         </jsf.javac>
         <copy todir="${tools.dir}/build/classes">
             <fileset dir="${tools.dir}/src"
-                     includes="**/*.properties"/>            
+                     includes="**/*.properties"/>
         </copy>
         <copy todir="${tools.dir}/build/classes">
             <fileset dir="${impl.dir}/src"
@@ -222,7 +219,7 @@
               facesConfig="${standard.renderkit.xml}"
               fork="true">
             <classpath>
-                <path refid="impl.compile.classpath"/>                
+                <path refid="impl.compile.classpath"/>
                 <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
             <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>
@@ -243,7 +240,7 @@
             <jvmarg line="${debug.jvm.args}"/>
             <assertions>
                 <enable/>
-            </assertions>    
+            </assertions>
         </generateAttrManager>
         <!--
         <copy todir="${build.generate.dir}">
@@ -255,13 +252,13 @@
                 <include name="com/sun/faces/config/rules/*.java"/>
                 <include name="com/sun/faces/util/*.java"/>
             </fileset>
-           
+
         </copy>
         -->
 
 
         <touch file="${build.generate.dir}/last-taglib-generation"/>
-        
+
         <antcall target="create.runtime.config"/>
 
     </target>
@@ -275,14 +272,14 @@
                    excludes="**/ManagedBeanFactoryImpl.java">
             <classpath>
                 <path refid="impl.compile.classpath"/>
-            </classpath>            
+            </classpath>
         </jsf.javac>
 
         <copy todir="${build.classes.dir}">
             <fileset dir="${source.dir}" includes="**/*.properties,**/*.js,**/*.xsd"/>
             <!--<fileset dir="${tools.dir}/src" includes="**/*.properties"/>-->
         </copy>
-        
+
         <!-- Massage the version number into LogStrings.properties -->
         <replace dir="${build.classes.dir}/com/sun/faces/"
                  token="|version.string|"
@@ -304,7 +301,7 @@
             eventually they should be in com.sun.faces per the copy statement
             above.
         -->
-        <copy todir="${build.classes.dir}">
+        <copy todir="${build.classes.dir}/com/sun/faces/xhtml">
             <fileset dir="${conf.share.dir}/xhtml">
                 <include name="*.dtd"/>
                 <include name="*.ent"/>
@@ -333,7 +330,7 @@
     </target>
 
     <target name="clean"
-            description="Clean build and distribution directories">        
+            description="Clean build and distribution directories">
         <ant antfile="build-tests.xml" target="remove.tstamp"/>
         <delete dir="${build.dir}"/>
         <delete dir="${target.dir}"/>
@@ -344,10 +341,10 @@
             <fileset dir="." includes="**/.nbattrs" defaultexcludes="no"/>
         </delete>
         <delete file="jsf-${impl.version}.zip"/>
-        <delete file="jsf-${impl.version}_src.zip"/>               
-        <ant dir="${basedir}/systest" inheritall="false" target="clean"/>        
+        <delete file="jsf-${impl.version}_src.zip"/>
+        <ant dir="${basedir}/systest" inheritall="false" target="clean"/>
         <ant dir="${basedir}/systest-per-webapp" inheritall="false"
-             target="clean"/>     
+             target="clean"/>
          <delete dir="${tools.dir}/build"/>
     </target>
 
@@ -373,7 +370,7 @@
     </target>
 
 
-    <target name="dist" depends="jars" description="Build distribution files">      
+    <target name="dist" depends="jars" description="Build distribution files">
 
         <mkdir dir="${dist.dir}"/>
 
@@ -400,7 +397,7 @@
                         prefix="jsf-ri-src-${impl.version}/test"/>
             <zipfileset dir="${basedir}/systest"
                         excludes="**/CVS/**"
-                        prefix="jsf-ri-src-${impl.version}/systest"/>            
+                        prefix="jsf-ri-src-${impl.version}/systest"/>
         </zip>
         <antcall target="ri.source"/>
 
@@ -413,7 +410,7 @@
 
     </target>
 
-    <target name="jsp.tlddocs">                
+    <target name="jsp.tlddocs">
         <java fork="true" jar="${tlddoc.jar}">
             <arg line="-d ${build.dir}/pdldocs/jsp"/>
             <arg line="-windowtitle 'JSF ${spec.version} Page Decraration Language: JSP Variant'"/>
