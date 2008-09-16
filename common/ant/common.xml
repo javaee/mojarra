@@ -84,11 +84,11 @@
 
     <!-- Version -->
     <property name="spec.version" value="2.0"/>
+    <property name="patch.version" value="0"/>
     <property name="impl.name" value="Mojarra"/>
     <property name="build.number" value="${DSTAMP}"/>
     <property name="build.type" value="SNAPSHOT"/>
-    <property name="mvn.spec.version" value="${spec.version}-${build.type}"/>
-    <property name="impl.version.number" value="2.0.0" />
+    <property name="impl.version.number" value="${spec.version}.${patch.version}" />
     <property name="impl.version" value="${impl.version.number}-${build.type}"/>
     <property name="full.impl.version" value="${impl.version.number} (${build.number}-${build.type})"/>
     <property name="snapshot.version" value="${impl.version.number}-SNAPSHOT"/>

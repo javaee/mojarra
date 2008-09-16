@@ -777,14 +777,14 @@ javax.faces.level=ALL
   <mkdir dir="${target.dir}/classes" />
   <unjar src="${build.lib.dir}/${name}.jar" overwrite="yes" 
          dest="${target.dir}/classes"/>
-  <jsf.mvn pomFile="jsf-api-pom.xml" mvnSpecVersion="${mvn.spec.version}" goals="install" />
+  <jsf.mvn pomFile="jsf-api-pom.xml" mvnSpecVersion="${impl.version}" goals="install" />
 
 </target>
 
 <target name="push-to-maven" depends="push-to-maven-prepare">
   <tstamp />
   <echo>deploying to maven repo</echo>
-  <jsf.mvn pomFile="jsf-api-pom.xml" mvnSpecVersion="${mvn.spec.version}" goals="deploy" />
+  <jsf.mvn pomFile="jsf-api-pom.xml" mvnSpecVersion="${impl.version}" goals="deploy" />
 </target>
 
 <target name="diffapis">
