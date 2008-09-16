@@ -44,9 +44,7 @@ package com.sun.faces.application;
 
 import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.util.Util;
-import com.sun.org.apache.commons.digester.CallMethodRule;
-import com.sun.org.apache.commons.digester.CallParamRule;
-import com.sun.org.apache.commons.digester.Digester;
+import com.sun.faces.config.DbfFactory;
 
 import javax.faces.FactoryFinder;
 import javax.faces.event.SystemEventListener;
@@ -58,9 +56,15 @@ import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
-import java.io.InputStream;
 import java.util.*;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
+import org.w3c.dom.NamedNodeMap;
 
 /**
  * This class test the <code>NavigationHandlerImpl</code> functionality.
@@ -89,7 +93,6 @@ public class TestNavigationHandler extends ServletFacesTestCase {
 // Instance Variables
 //
     private List testResultList = null;
-    protected Digester digester = null;
 
 // Attribute Instance Variables
 
@@ -128,42 +131,32 @@ public class TestNavigationHandler extends ServletFacesTestCase {
     }
 
 
-    private void loadTestResultList() {
-        Digester digester = new Digester();
-        digester.setUseContextClassLoader(true);
-        try {
-            digester.setValidating(false);
-        } catch (Throwable t) {
-            System.out.println("Error creating Digester instance...");
-            assertTrue(false);
+    private void loadTestResultList() throws Exception {
+
+        DocumentBuilderFactory f = DbfFactory.getFactory();
+        f.setNamespaceAware(false);
+        f.setValidating(false);
+        DocumentBuilder builder = f.newDocumentBuilder();
+
+        Document d = builder.parse(config.getServletContext().getResourceAsStream("/WEB-INF/navigation-cases.xml"));
+        NodeList navigationRules = d.getDocumentElement()
+              .getElementsByTagName("test");
+        for (int i = 0; i < navigationRules.getLength(); i++) {
+            Node test = navigationRules.item(i);
+            NamedNodeMap attributes = test.getAttributes();
+            Node fromViewId = attributes.getNamedItem("fromViewId");
+            Node fromAction = attributes.getNamedItem("fromAction");
+            Node fromOutput = attributes.getNamedItem("fromOutcome");
+            Node toViewId = attributes.getNamedItem("toViewId");
+            createAndAccrueTestResult(((fromViewId != null) ? fromViewId.getTextContent().trim() : null),
+                                      ((fromAction != null) ? fromAction.getTextContent().trim() : null),
+                                      ((fromOutput != null) ? fromOutput.getTextContent().trim() : null),
+                                      ((toViewId != null) ? toViewId.getTextContent().trim() : null));
         }
 
-        digester.addRule("*/test",
-                         new CallMethodRule("createAndAccrueTestResult", 4));
-        digester.addRule("*/test", new CallParamRule(0, "fromViewId"));
-        digester.addRule("*/test", new CallParamRule(1, "fromAction"));
-        digester.addRule("*/test", new CallParamRule(2, "fromOutcome"));
-        digester.addRule("*/test", new CallParamRule(3, "toViewId"));
-
-        String fileName = "/WEB-INF/navigation-cases.xml";
-        InputStream input = null;
-        try {
-            input = config.getServletContext().getResourceAsStream(fileName);
-        } catch (Throwable t) {
-            System.out.println("Error Opening File:" + fileName);
-            assertTrue(false);
-        }
-        try {
-            digester.push(this);
-            digester.parse(input);
-        } catch (Throwable t) {
-            if (null != t) {
-                t.printStackTrace();
-            }
-            System.out.println("Unable to parse file:" + t.getMessage());
-            assertTrue(false);
-        }
     }
+
+
 
 
     public void createAndAccrueTestResult(String fromViewId, String fromAction,
@@ -187,7 +180,11 @@ public class TestNavigationHandler extends ServletFacesTestCase {
         application.subscribeToEvent(ViewMapDestroyedEvent.class,
                                      UIViewRoot.class,
                                      listener);
-        loadTestResultList();
+        try {
+            loadTestResultList();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         NavigationHandlerImpl navHandler = (NavigationHandlerImpl) application.getNavigationHandler();
         FacesContext context = getFacesContext();
 

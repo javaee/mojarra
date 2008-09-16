@@ -94,8 +94,6 @@
 package com.sun.faces.systest.ant;
 
 
-import com.sun.org.apache.commons.logging.Log;
-import com.sun.org.apache.commons.logging.LogFactory;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
@@ -115,6 +113,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 
 /**
@@ -197,7 +197,7 @@ public class SystestClient extends Task {
     /**
      * The <code>Log</code> instance for this class.
      */
-    protected static final Log log = LogFactory.getLog(SystestClient.class);
+    protected static final Logger log = Logger.getLogger("Systest");
 
 
     /**
@@ -628,8 +628,8 @@ public class SystestClient extends Task {
         try {
 
             // Configure an HttpURLConnection for this request
-            if (log.isDebugEnabled()) {
-                log.debug("Configuring HttpURLConnection for this request");
+            if (log.isLoggable(Level.FINE)) {
+                log.fine("Configuring HttpURLConnection for this request");
             }
             URL url = new URL("http", host, port, request);
             conn = (HttpURLConnection) url.openConnection();
@@ -639,8 +639,8 @@ public class SystestClient extends Task {
                 conn.setDoOutput(true);
                 conn.setRequestProperty("Content-Length",
                                         "" + inContent.length());
-                if (log.isTraceEnabled()) {
-                    log.trace("INPH: Content-Length: " + inContent.length());
+                if (log.isLoggable(Level.FINE)) {
+                    log.fine("INPH: Content-Length: " + inContent.length());
                 }
             } else {
                 conn.setDoOutput(false);
@@ -650,13 +650,13 @@ public class SystestClient extends Task {
             if (joinSession && (sessionId != null)) {
                 conn.setRequestProperty("Cookie",
                                         "JSESSIONID=" + sessionId);
-                if (log.isTraceEnabled()) {
-                    log.trace("INPH: Cookie: JSESSIONID=" + sessionId);
+                if (log.isLoggable(Level.FINE)) {
+                    log.fine("INPH: Cookie: JSESSIONID=" + sessionId);
                 }
             }
 
-            if (this.redirect && log.isTraceEnabled()) {
-                log.trace("FLAG: setInstanceFollowRedirects(" +
+            if (this.redirect && log.isLoggable(Level.FINE)) {
+                log.fine("FLAG: setInstanceFollowRedirects(" +
                           this.redirect + ")");
             }
             conn.setInstanceFollowRedirects(this.redirect);
@@ -679,8 +679,8 @@ public class SystestClient extends Task {
                     String name = header.substring(0, colon).trim();
                     String value = header.substring(colon + 1).trim();
                     conn.setRequestProperty(name, value);
-                    if (log.isTraceEnabled()) {
-                        log.trace("INPH: " + name + ": " + value);
+                    if (log.isLoggable(Level.FINE)) {
+                        log.fine("INPH: " + name + ": " + value);
                     }
                 }
             }
@@ -688,8 +688,8 @@ public class SystestClient extends Task {
             // Connect to the server and send our output if necessary
             conn.connect();
             if (inContent != null) {
-                if (log.isTraceEnabled()) {
-                    log.trace("INPD: " + inContent);
+                if (log.isLoggable(Level.FINE)) {
+                    log.fine("INPD: " + inContent);
                 }
                 OutputStream os = conn.getOutputStream();
                 for (int i = 0, length = inContent.length(); i < length; i++)
@@ -722,8 +722,8 @@ public class SystestClient extends Task {
             is.close();
 
             // Dump out the response stuff
-            if (log.isTraceEnabled()) {
-                log.trace("RESP: " + conn.getResponseCode() + " " +
+            if (log.isLoggable(Level.FINE)) {
+                log.fine("RESP: " + conn.getResponseCode() + " " +
                           conn.getResponseMessage());
             }
             for (int i = 1; i < 1000; i++) {
@@ -731,17 +731,17 @@ public class SystestClient extends Task {
                 String value = conn.getHeaderField(i);
                 if ((name == null) || (value == null))
                     break;
-                if (log.isTraceEnabled()) {
-                    log.trace("HEAD: " + name + ": " + value);
+                if (log.isLoggable(Level.FINE)) {
+                    log.fine("HEAD: " + name + ": " + value);
                 }
                 save(name, value);
                 if ("Set-Cookie".equals(name))
                     parseSession(value);
             }
-            if (log.isTraceEnabled()) {
-                log.trace("DATA: " + outData);
+            if (log.isLoggable(Level.FINE)) {
+                log.fine("DATA: " + outData);
                 if (outText.length() > 2) {
-                    log.trace("TEXT: " + outText);
+                    log.fine("TEXT: " + outText);
                 }
             }
 
@@ -828,8 +828,8 @@ public class SystestClient extends Task {
         // Construct a summary of the request we will be sending
         String command = method + " " + request + " " + protocol;
         String summary = "[" + command + "]";
-        if (log.isDebugEnabled()) {
-            log.debug("RQST: " + summary);
+        if (log.isLoggable(Level.FINE)) {
+            log.fine("RQST: " + summary);
         }
         boolean success = true;
         String result = null;
@@ -852,8 +852,8 @@ public class SystestClient extends Task {
             // Send the command and content length header (if any)
             pw.print(command + "\r\n");
             if (inContent != null) {
-                if (log.isTraceEnabled()) {
-                    log.trace("INPH: " + "Content-Length: " +
+                if (log.isLoggable(Level.FINE)) {
+                    log.fine("INPH: " + "Content-Length: " +
                               inContent.length());
                 }
                 pw.print("Content-Length: " + inContent.length() + "\r\n");
@@ -862,8 +862,8 @@ public class SystestClient extends Task {
             // Send the session id cookie (if any)
             if (joinSession && (sessionId != null)) {
                 pw.println("Cookie: JSESSIONID=" + sessionId);
-                if (log.isTraceEnabled()) {
-                    log.trace("INPH: Cookie: JSESSIONID=" +
+                if (log.isLoggable(Level.FINE)) {
+                    log.fine("INPH: Cookie: JSESSIONID=" +
                               sessionId);
                 }
             }
@@ -886,8 +886,8 @@ public class SystestClient extends Task {
                         break;
                     String name = header.substring(0, colon).trim();
                     String value = header.substring(colon + 1).trim();
-                    if (log.isTraceEnabled()) {
-                        log.trace("INPH: " + name + ": " + value);
+                    if (log.isLoggable(Level.FINE)) {
+                        log.fine("INPH: " + name + ": " + value);
                     }
                     pw.print(name + ": " + value + "\r\n");
                 }
@@ -896,8 +896,8 @@ public class SystestClient extends Task {
 
             // Send our content (if any)
             if (inContent != null) {
-                if (log.isTraceEnabled()) {
-                    log.trace("INPD: " + inContent);
+                if (log.isLoggable(Level.FINE)) {
+                    log.fine("INPD: " + inContent);
                 }
                 for (int i = 0, length = inContent.length(); i < length; i++)
                     pw.print(inContent.charAt(i));
@@ -911,8 +911,8 @@ public class SystestClient extends Task {
                 outMessage = "NO RESPONSE";
             } else {
                 line = line.trim();
-                if (log.isTraceEnabled()) {
-                    log.trace("RESP: " + line);
+                if (log.isLoggable(Level.FINE)) {
+                    log.fine("RESP: " + line);
                 }
                 int space = line.indexOf(" ");
                 if (space >= 0) {
@@ -932,8 +932,8 @@ public class SystestClient extends Task {
                     outMessage = "NUMBER FORMAT EXCEPTION";
                 }
             }
-            if (log.isTraceEnabled()) {
-                log.trace("STAT: " + outStatus + " MESG: " + outMessage);
+            if (log.isLoggable(Level.FINE)) {
+                log.fine("STAT: " + outStatus + " MESG: " + outMessage);
             }
 
             // Read the response headers (if any)
@@ -945,14 +945,14 @@ public class SystestClient extends Task {
                     break;
                 int colon = line.indexOf(":");
                 if (colon < 0) {
-                    if (log.isTraceEnabled()) {
-                        log.trace("????: " + line);
+                    if (log.isLoggable(Level.FINE)) {
+                        log.fine("????: " + line);
                     }
                 } else {
                     headerName = line.substring(0, colon).trim();
                     headerValue = line.substring(colon + 1).trim();
-                    if (log.isTraceEnabled()) {
-                        log.trace("HEAD: " + headerName + ": " +
+                    if (log.isLoggable(Level.FINE)) {
+                        log.fine("HEAD: " + headerName + ": " +
                                   headerValue);
                     }
                     save(headerName, headerValue);
@@ -982,10 +982,10 @@ public class SystestClient extends Task {
                 lines++;
             }
             is.close();
-            if (log.isTraceEnabled()) {
-                log.trace("DATA: " + outData);
+            if (log.isLoggable(Level.FINE)) {
+                log.fine("DATA: " + outData);
                 if (outText.length() > 2) {
-                    log.trace("TEXT: " + outText);
+                    log.fine("TEXT: " + outText);
                 }
             }
 
@@ -1089,8 +1089,8 @@ public class SystestClient extends Task {
         if (semi >= 0) {
             value = value.substring(0, semi);
         }
-        if (log.isTraceEnabled()) {
-            log.trace("S ID: " + value);
+        if (log.isLoggable(Level.FINE)) {
+            log.fine("S ID: " + value);
         }
         sessionId = value;
 

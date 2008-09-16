@@ -46,8 +46,6 @@ import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
-import com.sun.org.apache.commons.logging.Log;
-import com.sun.org.apache.commons.logging.LogFactory;
 
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UICommand;
@@ -80,7 +78,6 @@ public class ButtonRenderer extends Renderer {
     // Protected Constants
     //
     // Log instance for this class
-    protected static Log log = LogFactory.getLog(ButtonRenderer.class);
 
     //
     // Class Variables
@@ -120,17 +117,10 @@ public class ButtonRenderer extends Renderer {
             throw new NullPointerException(
                 MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
-        if (log.isTraceEnabled()) {
-            log.trace("Begin decoding component " + component.getId());
-        }
-        
+
         // If the component is disabled, do not change the value of the
         // component, since its state cannot be changed.
         if (Util.componentIsDisabledOrReadonly(component)) {
-            if (log.isTraceEnabled()) {
-                log.trace("No decoding necessary since the component " +
-                          component.getId() + " is disabled");
-            }
             return;
         } 
 
@@ -158,13 +148,7 @@ public class ButtonRenderer extends Renderer {
         ActionEvent actionEvent = new ActionEvent(component);
         component.queueEvent(actionEvent);
 
-        if (log.isDebugEnabled()) {
-            log.debug("This command resulted in form submission " +
-                      " ActionEvent queued " + actionEvent);
-        }
-        if (log.isTraceEnabled()) {
-            log.trace("End decoding component " + component.getId());
-        }
+
         return;
     }
 
@@ -179,16 +163,9 @@ public class ButtonRenderer extends Renderer {
             throw new NullPointerException(
                 MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
-        if (log.isTraceEnabled()) {
-            log.trace("Begin encoding component " + component.getId());
-        }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
-            if (log.isTraceEnabled()) {
-                log.trace("End encoding component " + component.getId() +
-                          " since rendered attribute is set to false ");
-            }
             return;
         }
         
@@ -257,9 +234,6 @@ public class ButtonRenderer extends Renderer {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
         writer.endElement("input");
-        if (log.isTraceEnabled()) {
-            log.trace("End encoding component " + component.getId());
-        }
     }
 
     public void encodeEnd(FacesContext context, UIComponent component)
@@ -302,9 +276,6 @@ public class ButtonRenderer extends Renderer {
                 writer.writeAttribute("id", component.getClientId(context),
                                       "id");
             } catch (IOException e) {
-                if (log.isDebugEnabled()) {                   
-                    log.debug("Can't write ID attribute" + e.getMessage());
-                }
             }
         }
     }

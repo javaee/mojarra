@@ -56,8 +56,6 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import com.sun.faces.util.Util;
-import com.sun.org.apache.commons.logging.Log;
-import com.sun.org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -69,8 +67,6 @@ public class CustomResponseStateManagerImpl extends ResponseStateManager {
     //
     // Protected Constants
     //
-    protected static Log log =
-        LogFactory.getLog(CustomResponseStateManagerImpl.class);
     private static final String FACES_VIEW_STATE =
         "com.sun.faces.FACES_VIEW_STATE";
     
@@ -161,9 +157,6 @@ public class CustomResponseStateManagerImpl extends ResponseStateManager {
                  byte[] bytes = Base64.decode(viewString.getBytes());
 		bis = new ByteArrayInputStream(bytes);
 		if (isCompressStateSet(context)) {
-		    if (log.isDebugEnabled()) {
-			log.debug("Deflating state before restoring..");
-		    }
 		    gis = new GZIPInputStream(bis);
 		    ois = new ObjectInputStream(gis);
 		} else {
@@ -182,11 +175,8 @@ public class CustomResponseStateManagerImpl extends ResponseStateManager {
 		}
 		ois.close();
 	    } catch (java.io.OptionalDataException ode) {
-		log.error(ode.getMessage(), ode);
 	    } catch (java.lang.ClassNotFoundException cnfe) {
-            log.error(cnfe.getMessage(), cnfe);
 	    } catch (java.io.IOException iox) {
-		log.error(iox.getMessage(), iox);
 	    }
 	}
 	else {
@@ -222,9 +212,6 @@ public class CustomResponseStateManagerImpl extends ResponseStateManager {
 	    
 	    ByteArrayOutputStream bos = new ByteArrayOutputStream();
 	    if (compress) {
-		if (log.isDebugEnabled()) {
-		    log.debug("Compressing state before saving..");
-		}
 		zos = new GZIPOutputStream(bos);
 		oos = new ObjectOutputStream(zos);
 	    } else {

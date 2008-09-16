@@ -47,8 +47,6 @@ import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.util.MessageUtils;
 
-import com.sun.org.apache.commons.logging.Log;
-import com.sun.org.apache.commons.logging.LogFactory;
 
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
@@ -82,7 +80,6 @@ public class FormRenderer extends Renderer {
     // Protected Constants
     //
     // Log instance for this class
-    protected static Log log = LogFactory.getLog(FormRenderer.class);
     //
     // Class Variables
     //
@@ -121,18 +118,12 @@ public class FormRenderer extends Renderer {
         // the indicator accordingly..
         //
         String clientId = component.getClientId(context);
-        if (log.isTraceEnabled()) {
-            log.trace("Begin decoding component " + component.getId());
-        }
         Map requestParameterMap = context.getExternalContext()
             .getRequestParameterMap();
         if (requestParameterMap.containsKey(clientId)) {
             ((UIForm) component).setSubmitted(true);
         } else {
             ((UIForm) component).setSubmitted(false);
-        }
-        if (log.isTraceEnabled()) {
-            log.trace("End decoding component " + component.getId());
         }
     }
 
@@ -149,18 +140,9 @@ public class FormRenderer extends Renderer {
             throw new NullPointerException(
                 MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
-        if (log.isTraceEnabled()) {
-            log.trace("Begin encoding component " +
-                      component.getId());
-        }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
-            if (log.isTraceEnabled()) {
-                log.trace("End encoding component " +
-                          component.getId() + " since " +
-                          "rendered attribute is set to false ");
-            }
             return;
         }
         ResponseWriter writer = context.getResponseWriter();
@@ -226,11 +208,6 @@ public class FormRenderer extends Renderer {
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
-            if (log.isTraceEnabled()) {
-                log.trace("End encoding component " +
-                          component.getId() + " since " +
-                          "rendered attribute is set to false ");
-            }
             return;
         }
 
@@ -252,9 +229,6 @@ public class FormRenderer extends Renderer {
 
         renderNeededHiddenFields(context, component);
         writer.endElement("form");
-        if (log.isTraceEnabled()) {
-            log.trace("End encoding component " + component.getId());
-        }
         
         Map requestMap = context.getExternalContext().getRequestMap();
         String formClientId = (String)requestMap.put(FORM_CLIENT_ID_ATTR, null);

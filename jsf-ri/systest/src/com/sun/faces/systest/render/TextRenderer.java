@@ -60,8 +60,7 @@ import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.util.MessageFactory;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
-import com.sun.org.apache.commons.logging.Log;
-import com.sun.org.apache.commons.logging.LogFactory;
+
 
 /**
  * <B>TextRenderer</B> is a class that renders the current value of
@@ -80,7 +79,6 @@ public class TextRenderer extends Renderer {
     // Protected Constants
     //
     // Log instance for this class
-    protected static Log log = LogFactory.getLog(ButtonRenderer.class);
 
     //
     // Class Variables
@@ -143,18 +141,10 @@ public class TextRenderer extends Renderer {
                 MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
 
-        if (log.isTraceEnabled()) {
-            log.trace("Begin encoding component " + component.getId());
-        }
 
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
-            if (log.isTraceEnabled()) {
-                log.trace("End encoding component " + component.getId() +
-                          " since " +
-                          "rendered attribute is set to false ");
-            }
             return;
         }
 
@@ -162,9 +152,6 @@ public class TextRenderer extends Renderer {
         assert (writer != null);
 
         currentValue = getCurrentValue(context, component);
-        if (log.isTraceEnabled()) {
-            log.trace("Value to be rendered " + currentValue);
-        }
         getEndTextToRender(context, component, currentValue);
     }
 
@@ -279,9 +266,6 @@ public class TextRenderer extends Renderer {
     protected Object getValue(UIComponent component) {
         if (component instanceof ValueHolder) {
             Object value = ((ValueHolder) component).getValue();
-            if (log.isDebugEnabled()) {
-                log.debug("component.getValue() returned " + value);
-            }
             return value;
         }
 
@@ -368,9 +352,6 @@ public class TextRenderer extends Renderer {
                 writer.writeAttribute("id", component.getClientId(context),
                                       "id");
             } catch (IOException e) {
-                if (log.isDebugEnabled()) {
-                    log.debug("Can't write ID attribute" + e.getMessage());
-                }
             }
         }
     }
