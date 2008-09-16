@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module relativePaths="true" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
-    <facet type="web" name="Web" implicit="true">
+    <facet type="web" name="replace-variableresolver">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -21,17 +21,31 @@
           <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
         </building>
         <packaging>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
           <containerElement type="module" name="impl">
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/classes" />
           </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
         </packaging>
       </configuration>
-      <facet type="jsf" name="JSF" implicit="true">
-        <configuration />
-      </facet>
     </facet>
-    <facet type="web" name="Web2" implicit="true">
+    <facet type="web" name="view-expired">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/view-expired/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -51,14 +65,31 @@
           <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
         </building>
         <packaging>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
           <containerElement type="module" name="impl">
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/classes" />
           </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="Web3" implicit="true">
+    <facet type="web" name="command-link-redirect">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/command-link-redirect/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -78,14 +109,31 @@
           <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
         </building>
         <packaging>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
           <containerElement type="module" name="impl">
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/classes" />
           </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="Web4" implicit="true">
+    <facet type="web" name="command-link-back-button">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/command-link-back-button/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -105,14 +153,31 @@
           <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
         </building>
         <packaging>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
           <containerElement type="module" name="impl">
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/classes" />
           </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="Web5" implicit="true">
+    <facet type="web" name="resource-locale-prefix">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -132,14 +197,31 @@
           <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
         </building>
         <packaging>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
           <containerElement type="module" name="impl">
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/classes" />
           </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="Web6" implicit="true">
+    <facet type="web" name="never-unwrap-exceptions">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -159,14 +241,31 @@
           <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
         </building>
         <packaging>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
           <containerElement type="module" name="impl">
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/classes" />
           </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="Web7" implicit="true">
+    <facet type="web" name="jar-ordering">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -186,14 +285,31 @@
           <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
         </building>
         <packaging>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
           <containerElement type="module" name="impl">
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/classes" />
           </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="Web8" implicit="true">
+    <facet type="web" name="replace-statemanager">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -213,14 +329,31 @@
           <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
         </building>
         <packaging>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
           <containerElement type="module" name="impl">
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/classes" />
           </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="Web9" implicit="true">
+    <facet type="web" name="wcag-datatable">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -240,14 +373,31 @@
           <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
         </building>
         <packaging>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
           <containerElement type="module" name="impl">
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/classes" />
           </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="Web10" implicit="true">
+    <facet type="web" name="string-converter">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/string-converter/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -267,14 +417,31 @@
           <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
         </building>
         <packaging>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
           <containerElement type="module" name="impl">
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/classes" />
           </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="Web11" implicit="true">
+    <facet type="web" name="replace-application">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/replace-application/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -294,14 +461,31 @@
           <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
         </building>
         <packaging>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
           <containerElement type="module" name="impl">
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/classes" />
           </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="Web12" implicit="true">
+    <facet type="web" name="converter-property-editor">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -321,14 +505,31 @@
           <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
         </building>
         <packaging>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
           <containerElement type="module" name="impl">
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/classes" />
           </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="Web13" implicit="true">
+    <facet type="web" name="replace-lifecycle">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -348,14 +549,31 @@
           <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
         </building>
         <packaging>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
           <containerElement type="module" name="impl">
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/classes" />
           </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="Web14" implicit="true">
+    <facet type="web" name="write-attribute-script-disabled">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -375,14 +593,31 @@
           <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
         </building>
         <packaging>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
           <containerElement type="module" name="impl">
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/classes" />
           </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="Web15" implicit="true">
+    <facet type="web" name="el-performance">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/el-performance/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -402,14 +637,31 @@
           <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
         </building>
         <packaging>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
           <containerElement type="module" name="impl">
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/classes" />
           </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="Web16" implicit="true">
+    <facet type="web" name="write-attribute-script-enabled">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -429,14 +681,31 @@
           <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
         </building>
         <packaging>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
           <containerElement type="module" name="impl">
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/classes" />
           </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="Web17" implicit="true">
+    <facet type="web" name="empty-string-as-null">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -456,14 +725,31 @@
           <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
         </building>
         <packaging>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
           <containerElement type="module" name="impl">
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/classes" />
           </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="Web18" implicit="true">
+    <facet type="web" name="late-bindings">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -483,14 +769,31 @@
           <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
         </building>
         <packaging>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
           <containerElement type="module" name="impl">
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/classes" />
           </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="Web19" implicit="true">
+    <facet type="web" name="invalid-mapping">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -510,14 +813,31 @@
           <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
         </building>
         <packaging>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
           <containerElement type="module" name="impl">
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/classes" />
           </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="Web20" implicit="true">
+    <facet type="web" name="disable-unicode-escaping">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -537,14 +857,31 @@
           <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
         </building>
         <packaging>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
           <containerElement type="module" name="impl">
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/classes" />
           </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="Web21" implicit="true">
+    <facet type="web" name="core-tags">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/core-tags/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -564,14 +901,31 @@
           <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
         </building>
         <packaging>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
           <containerElement type="module" name="impl">
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/classes" />
           </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="Web22" implicit="true">
+    <facet type="web" name="nested-loadbundles">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -591,14 +945,31 @@
           <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
         </building>
         <packaging>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
           <containerElement type="module" name="impl">
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/classes" />
           </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="Web23" implicit="true">
+    <facet type="web" name="nested-datatables">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -618,14 +989,31 @@
           <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
         </building>
         <packaging>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
           <containerElement type="module" name="impl">
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/classes" />
           </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="Web24" implicit="true">
+    <facet type="web" name="property-resolver-jsp">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -645,14 +1033,31 @@
           <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
         </building>
         <packaging>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
           <containerElement type="module" name="impl">
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/classes" />
           </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="Web25" implicit="true">
+    <facet type="web" name="cactus-test">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/conf/test/web.xml" optional="false" version="2.5" />
@@ -672,14 +1077,31 @@
           <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
         </building>
         <packaging>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
           <containerElement type="module" name="impl">
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/classes" />
           </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
+          </containerElement>
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="Web26" implicit="true">
+    <facet type="web" name="systest">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/systest/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -699,9 +1121,26 @@
           <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
         </building>
         <packaging>
+          <containerElement type="module" name="api">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
           <containerElement type="module" name="impl">
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="module" name="tools">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="/WEB-INF/classes" />
+          </containerElement>
+          <containerElement type="library" name="mojarra-build" level="project">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+          </containerElement>
+          <containerElement type="library" level="module">
+            <attribute name="method" value="0" />
+            <attribute name="URI" value="&lt;N/A&gt;" />
+            <url>jar://$APPLICATION_HOME_DIR$/lib/javaee.jar!/</url>
           </containerElement>
         </packaging>
       </configuration>

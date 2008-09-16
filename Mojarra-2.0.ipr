@@ -169,6 +169,80 @@
     <option name="OPEN_IN_BROWSER" value="false" />
     <option name="OUTPUT_DIRECTORY" />
   </component>
+  <component name="FacetAutodetectingManager">
+    <autodetection-disabled>
+      <facet-type id="web">
+        <modules>
+          <module name="demo">
+            <files>
+              <file url="file://$PROJECT_DIR$/jsf-demo/ajax-queue/target/ajax-queue/WEB-INF/web.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-demo/ajax-request/target/ajax-request/WEB-INF/web.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-demo/ezcomp02/target/jsf-ezcomp02/WEB-INF/web.xml" />
+            </files>
+          </module>
+        </modules>
+      </facet-type>
+      <facet-type id="jsf">
+        <modules>
+          <module name="demo">
+            <files>
+              <file url="file://$PROJECT_DIR$/jsf-demo/ajax-queue/src/main/webapp/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-demo/ajax-queue/target/ajax-queue/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-demo/ajax-request/src/main/webapp/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-demo/ajax-request/target/ajax-request/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-demo/carstore/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-demo/characterCombat/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-demo/components/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-demo/ezcomp00/src/main/webapp/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-demo/ezcomp01/src/main/webapp/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-demo/ezcomp02/src/main/webapp/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-demo/ezcomp02/target/jsf-ezcomp02/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-demo/ezcomp03/src/main/webapp/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-demo/guessNumber/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-demo/guessNumber2.0/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-demo/head-body/src/main/webapp/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-demo/helloDuke/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-demo/helloFacelet/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-demo/j2meDemo/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-demo/mojarra_ext/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-demo/nonjsp/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-demo/renderkits/src/conf/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-demo/standard/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-demo/stock/src/main/webapp/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-demo/test/mappingDemo/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-demo/webtier-sample/web/WEB-INF/faces-config.xml" />
+            </files>
+          </module>
+          <module name="impl">
+            <files>
+              <file url="file://$PROJECT_DIR$/jsf-ri/conf/basic/META-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-ri/systest-per-webapp/command-link-back-button/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-ri/systest-per-webapp/command-link-redirect/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-ri/systest-per-webapp/converter-property-editor/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-ri/systest-per-webapp/disable-unicode-escaping/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-ri/systest-per-webapp/el-performance/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-ri/systest-per-webapp/empty-string-as-null/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-ri/systest-per-webapp/late-bindings/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-ri/systest-per-webapp/nested-datatables/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-ri/systest-per-webapp/nested-loadbundles/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-ri/systest-per-webapp/never-unwrap-exceptions/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-ri/systest-per-webapp/property-resolver-jsp/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-ri/systest-per-webapp/replace-application/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-ri/systest-per-webapp/replace-lifecycle/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-ri/systest-per-webapp/replace-statemanager/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-ri/systest-per-webapp/replace-variableresolver/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-ri/systest-per-webapp/resource-locale-prefix/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-ri/systest-per-webapp/string-converter/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-ri/systest-per-webapp/wcag-datatable/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-ri/systest-per-webapp/write-attribute-script-disabled/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-ri/systest-per-webapp/write-attribute-script-enabled/web/WEB-INF/faces-config.xml" />
+              <file url="file://$PROJECT_DIR$/jsf-ri/systest/web/WEB-INF/faces-config.xml" />
+            </files>
+          </module>
+        </modules>
+      </facet-type>
+    </autodetection-disabled>
+  </component>
   <component name="FindManager">
     <FindUsagesManager>
       <setting name="OPEN_NEW_TAB" value="false" />
