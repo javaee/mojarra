@@ -110,7 +110,13 @@ public class ClasspathResourceHelper extends ResourceHelper {
     throws IOException {
 
         ClassLoader loader = Util.getCurrentLoader(this.getClass());
-        return loader.getResourceAsStream(resource.getPath());
+        String path = resource.getPath();
+        InputStream in = loader.getResourceAsStream(path);
+        if (in == null) {
+            // try using this class' loader (necessary when running in OSGi)
+            in = this.getClass().getClassLoader().getResourceAsStream(path);
+        }
+        return in;
 
     }
 
@@ -121,7 +127,12 @@ public class ClasspathResourceHelper extends ResourceHelper {
     public URL getURL(ResourceInfo resource, FacesContext ctx) {
 
         ClassLoader loader = Util.getCurrentLoader(this.getClass());
-        return loader.getResource(resource.getPath());
+        URL url = loader.getResource(resource.getPath());
+        if (url == null) {
+            // try using this class' loader (necessary when running in OSGi)
+            url = this.getClass().getClassLoader().getResource(resource.getPath());
+        }
+        return url;
 
     }
 
@@ -147,7 +158,11 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
         URL basePathURL = loader.getResource(basePath);
         if (basePathURL == null) {
-            return null;
+            // try using this class' loader (necessary when running in OSGi)
+            basePathURL = this.getClass().getClassLoader().getResource(basePath);
+            if (basePathURL == null) {
+                return null;
+            }
         }
 
         try {
@@ -191,7 +206,11 @@ public class ClasspathResourceHelper extends ResourceHelper {
 
         URL basePathURL = loader.getResource(basePath);
         if (basePathURL == null) {
-            return null;
+            // try using this class' loader (necessary when running in OSGi)
+            basePathURL = this.getClass().getClassLoader().getResource(basePath);
+            if (basePathURL == null) {
+                return null;
+            }
         }
 
         ResourceInfo value;
