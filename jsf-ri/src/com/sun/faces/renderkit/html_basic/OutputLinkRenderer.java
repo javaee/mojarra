@@ -54,6 +54,8 @@ import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.Util;
 
+import java.net.URLEncoder;
+
 
 /**
  * <B>OutputLinkRenderer</B> is a class ...
@@ -209,10 +211,10 @@ public class OutputLinkRenderer extends LinkRenderer {
             if (pn != null && pn.length() != 0) {
                 String pv = paramList[i].value;
                 sb.append((paramWritten) ? '&' : '?');              
-                sb.append(pn);
+                sb.append(URLEncoder.encode(pn,"UTF-8"));
                 sb.append('=');
                 if (pv != null && pv.length() != 0) {
-                    sb.append(pv);
+                    sb.append(URLEncoder.encode(pv, "UTF-8"));
                 }                
                 paramWritten = true;
             }
