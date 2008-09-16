@@ -182,14 +182,13 @@ public final class SAXCompiler extends Compiler {
 
         public InputSource resolveEntity(String publicId, String systemId)
                 throws SAXException {
-            String dtd = "default.dtd";
+            String dtd = "com/sun/faces/xhtml/default.dtd";
             /*if ("-//W3C//DTD XHTML 1.0 Transitional//EN".equals(publicId)) {
                 dtd = "xhtml1-transitional.dtd";
             } else if (systemId != null && systemId.startsWith("file:/")) {
                 return new InputSource(systemId);
             }*/
-            URL url = Thread.currentThread().getContextClassLoader()
-                    .getResource(dtd);
+            URL url = this.getClass().getClassLoader().getResource(dtd);
             return new InputSource(url.toString());
         }
 
