@@ -136,15 +136,8 @@
                 <container.stop/>
             </then>
         </if>
-        <jar jarfile="${container.home}/modules/javax.javaee-10.0-tp-2-SNAPSHOT.jar"
-             update="yes">
-            <zipfileset src="${api.dir}/build/lib/jsf-api.jar"/>
-        </jar>
-        <jar jarfile="${container.home}/modules/web/jsf-connector-10.0-tp-2-SNAPSHOT.jar"
-             update="yes">
-            <zipfileset src="${impl.dir}/build/lib/jsf-impl.jar"
-                        excludes="**/com.sun.faces.spi.injectionprovider"/>
-        </jar>
+        <copy file="${api.dir}/build/lib/jsf-api.jar" toFile="${container.home}/modules/jsf-api-${impl.version.number}.jar"/>
+        <copy file="${impl.dir}/build/lib/jsf-impl.jar" toFile="${container.home}/modules/jsf-impl-${impl.version.number}.jar"/>
         <if>
             <os family="windows"/>
             <then>
