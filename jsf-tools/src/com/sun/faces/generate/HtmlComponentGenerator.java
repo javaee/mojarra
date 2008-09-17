@@ -490,8 +490,8 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         writer.fwrite("private void handleAttribute(String name, Object value) {\n");
         writer.indent();
         writer.fwrite("List<String> setAttributes = null;\n");
-        writer.fwrite("String pkg = this.getClass().getPackage().getName();\n");
-        writer.fwrite("if (Arrays.binarySearch(OPTIMIZED_PACKAGES, pkg) >= 0) {\n");
+        writer.fwrite("Package pkg = this.getClass().getPackage();\n");
+        writer.fwrite("if ((pkg != null) && Arrays.binarySearch(OPTIMIZED_PACKAGES, pkg.getName()) >= 0) {\n");
         writer.indent();
         writer.fwrite("setAttributes = (List<String>) this.getAttributes().get(\"javax.faces.component.UIComponentBase.attributesThatAreSet\");\n");
         writer.fwrite("if (setAttributes == null) {\n");
