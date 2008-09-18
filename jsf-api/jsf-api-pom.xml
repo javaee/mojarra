@@ -164,7 +164,7 @@
             <roles>
                 <role>project-owner</role>
             </roles>
-            <timezome>-9</timezome>
+            <timezone>-9</timezone>
         </developer>
     </developers>
     <contributors>
