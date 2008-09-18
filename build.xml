@@ -48,7 +48,7 @@
     <import file="${jsf.build.home}/common/ant/common.xml"/>
     <property name="tasks.home" value="${myenv.TASKS_HOME}"/>
     <property name="dist.dir" value="${basedir}/dist"/>
-    <property name="javaserverfaces-spec-eg.dir" value="${basedir}/../../javaserverfaces-spec-eg"/>
+    <property name="javaserverfaces-spec-eg.dir" value="${basedir}/../javaserverfaces-spec-eg"/>
 
 
     <property name="LICENSEFILE"
