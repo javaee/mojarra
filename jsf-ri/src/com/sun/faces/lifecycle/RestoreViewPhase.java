@@ -62,7 +62,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
-import com.sun.faces.util.DebugUtil;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
@@ -211,12 +210,6 @@ public class RestoreViewPhase extends Phase {
         }
         assert(null != viewRoot);
         
-
-        if (isPostBack && LOGGER.isLoggable(Level.FINEST)) {
-            LOGGER.log(Level.FINEST, "+=+=+=+=+=+= Restored View Printout for " + viewId);
-            DebugUtil.printTree(viewRoot, LOGGER, Level.FINEST);
-        }
-
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Exiting RestoreViewPhase");
         }

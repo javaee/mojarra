@@ -159,10 +159,6 @@ public class ViewHandlerImpl extends ViewHandler {
             logger.log(Level.FINE, "Completed building view for : \n" +
                     viewToRender.getViewId());
         }
-        if (logger.isLoggable(Level.FINEST)) {
-            logger.log(Level.FINEST, "+=+=+=+=+=+= Printout for " + viewToRender.getViewId() + " about to render.");
-            DebugUtil.printTree(viewToRender, logger, Level.FINEST);
-        }
 
         // set up the ResponseWriter
 

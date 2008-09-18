@@ -62,6 +62,7 @@ import java.util.logging.Logger;
 import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.RequestStateManager;
+import com.sun.faces.util.DebugUtil;
 
 
 /**
@@ -150,6 +151,12 @@ public class RenderResponsePhase extends Phase {
         } catch (IOException e) {
             throw new FacesException(e.getMessage(), e);
         }
+
+        if (LOGGER.isLoggable(Level.FINEST)) {
+            LOGGER.log(Level.FINEST, "+=+=+=+=+=+= View structure printout for " + facesContext.getViewRoot().getViewId());
+            DebugUtil.printTree(facesContext.getViewRoot(), LOGGER, Level.FINEST);
+        }
+
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Exiting RenderResponsePhase");
         }

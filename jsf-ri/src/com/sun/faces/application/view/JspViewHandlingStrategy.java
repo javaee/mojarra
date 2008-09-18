@@ -54,7 +54,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.jstl.core.Config;
 
 import com.sun.faces.application.ViewHandlerResponseWrapper;
-import com.sun.faces.util.DebugUtil;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.RequestStateManager;
@@ -116,12 +115,6 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.log(Level.FINE, "Completed building view for : \n" +
                                    viewToRender.getViewId());
-        }
-        if (LOGGER.isLoggable(Level.FINEST)) {
-            LOGGER.log(Level.FINEST, "+=+=+=+=+=+= Printout for "
-                                     + viewToRender.getViewId()
-                                     + " about to render.");
-            DebugUtil.printTree(viewToRender, LOGGER, Level.FINEST);
         }
 
         // set up the ResponseWriter
