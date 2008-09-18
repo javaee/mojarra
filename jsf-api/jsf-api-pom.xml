@@ -40,7 +40,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.sun.faces</groupId>
     <artifactId>mojarra-jsf-api</artifactId>
-    <version>${impl.version}</version>
+    <version>${mvnSpecVersion}</version>
     <packaging>jar</packaging>
     <name>
         Sun's implementation of the JSF 2.0 specification API.
