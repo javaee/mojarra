@@ -1,0 +1,361 @@
+ /*
+ * $Id: PartialContextImpl.java,v 1.93.2.4 2008/04/09 08:59:06 edburns Exp $
+ */
+
+/*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ * 
+ * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ * 
+ * The contents of this file are subject to the terms of either the GNU
+ * General Public License Version 2 only ("GPL") or the Common Development
+ * and Distribution License("CDDL") (collectively, the "License").  You
+ * may not use this file except in compliance with the License. You can obtain
+ * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
+ * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
+ * language governing permissions and limitations under the License.
+ * 
+ * When distributing the software, include this License Header Notice in each
+ * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
+ * Sun designates this particular file as subject to the "Classpath" exception
+ * as provided by Sun in the GPL Version 2 section of the License file that
+ * accompanied this code.  If applicable, add the following below the License
+ * Header, with the fields enclosed by brackets [] replaced by your own
+ * identifying information: "Portions Copyrighted [year]
+ * [name of copyright owner]"
+ * 
+ * Contributor(s):
+ * 
+ * If you wish your version of this file to be governed by only the CDDL or
+ * only the GPL Version 2, indicate your decision by adding "[Contributor]
+ * elects to include this software in this distribution under the [CDDL or GPL
+ * Version 2] license."  If you don't indicate a single choice of license, a
+ * recipient has the option to distribute your version of this file under
+ * either the CDDL, the GPL Version 2 or to extend the choice of license to
+ * its licensees as provided above.  However, if you add GPL Version 2 code
+ * and therefore, elected the GPL Version 2 license, then the option applies
+ * only if the new code is made subject to such option by the copyright
+ * holder.
+ */
+
+package com.sun.faces.context;
+
+import javax.el.ELContext;
+import javax.faces.FactoryFinder;
+import javax.faces.event.PhaseId;
+import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
+import javax.faces.application.FacesMessage;
+import javax.faces.application.ViewHandler;
+import javax.faces.application.FacesMessage.Severity;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.PartialContext;
+import javax.faces.context.ResponseStream;
+import javax.faces.context.ResponseWriter;
+import javax.faces.lifecycle.Lifecycle;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
+import javax.servlet.http.HttpServletResponse;
+
+import java.io.Writer;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.NoSuchElementException;
+import java.util.HashMap;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.sun.faces.el.ELContextImpl;
+import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.OnOffResponseWrapper;
+import com.sun.faces.util.RequestStateManager;
+import com.sun.faces.util.Util;
+import com.sun.faces.renderkit.RenderKitUtils;
+
+public class PartialContextImpl extends PartialContext {
+
+    // Log instance for this class
+    private static Logger LOGGER = FacesLogger.CONTEXT.getLogger();
+
+    private boolean released;
+
+    // BE SURE TO ADD NEW IVARS TO THE RELEASE METHOD
+    private ResponseWriter partialResponseWriter = null;
+    private Map<Object,Object> attributes;
+    private List<String> executePhaseClientIds;
+    private List<String> renderPhaseClientIds;
+    private OnOffResponseWrapper onOffResponse = null;
+    private Boolean ajaxRequest;
+    private Boolean partialRequest;
+    private Boolean renderAll;
+
+    // ----------------------------------------------------------- Constructors
+
+
+    public PartialContextImpl() {
+    }
+
+
+    // ---------------------------------------------- Methods from PartialContext
+
+    /**
+     * @see javax.faces.context.PartialContext#enableResponseWriting(boolean) 
+     */
+    @Override
+    public void enableResponseWriting(boolean enable) {
+
+        assertNotReleased();
+        if (onOffResponse == null) {
+            onOffResponse = new OnOffResponseWrapper(this);
+        }
+        onOffResponse.setEnabled(enable);
+        
+    }
+
+
+    /**
+     * @see javax.faces.context.PartialContext#isAjaxRequest()
+     */
+    @Override
+    public boolean isAjaxRequest() {
+
+        assertNotReleased();
+        if (ajaxRequest == null) {
+            ajaxRequest = getExternalContext().getRequestParameterMap()
+                  .containsKey("javax.faces.partial.ajax");
+        }
+        return ajaxRequest;
+
+    }
+
+    /**
+     * @see javax.faces.context.PartialContext#isPartialRequest()
+     */
+    @Override
+    public boolean isPartialRequest() {
+
+        assertNotReleased();
+        if (partialRequest == null) {
+            partialRequest = getExternalContext().getRequestParameterMap()
+                  .containsKey("javax.faces.partial");
+        }
+        return partialRequest;
+
+    }
+
+    /**
+     * @see javax.faces.context.PartialContext#isExecuteNone()
+     */
+    @Override
+    public boolean isExecuteNone() {
+
+        assertNotReleased();
+        String execute = getExternalContext().getRequestParameterMap()
+              .get(PARTIAL_EXECUTE_PARAM_NAME);
+        return (NO_PARTIAL_PHASE_CLIENT_IDS.equals(execute));
+
+    }
+
+
+    /**
+     * @see javax.faces.context.PartialContext#isRenderAll()
+     */
+    @Override
+    public boolean isRenderAll() {
+
+        assertNotReleased();
+        if (renderAll == null) {
+            renderAll = (isAjaxRequest()
+                           && !isRenderNone()
+                           && getRenderPhaseClientIds().isEmpty());
+        }
+
+        return renderAll;
+
+    }
+
+     
+    /**
+     * @see javax.faces.context.PartialContext#setRenderAll(boolean) 
+     */
+    @Override
+    public void setRenderAll(boolean renderAll) {
+
+        this.renderAll = renderAll;
+
+    }
+
+
+    /**
+     * @see javax.faces.context.PartialContext#isRenderNone()
+     */
+    @Override
+    public boolean isRenderNone() {
+
+        assertNotReleased();
+        String execute = getExternalContext().getRequestParameterMap()
+            .get(PARTIAL_RENDER_PARAM_NAME);
+        return (NO_PARTIAL_PHASE_CLIENT_IDS.equals(execute));
+
+    }
+
+
+    @Override
+    public Map<Object,Object> getAttributes() {
+        
+        assertNotReleased();
+        if (attributes == null) {
+            attributes = new HashMap<Object,Object>();
+        }
+        return attributes;
+
+    }
+
+    /**
+     * @see javax.faces.context.PartialContext#getExecutePhaseClientIds()
+     */
+    @Override
+    public List<String> getExecutePhaseClientIds() {
+
+        assertNotReleased();
+        if (executePhaseClientIds != null) {
+            return executePhaseClientIds;
+        }
+        executePhaseClientIds = populatePhaseClientIds(PARTIAL_EXECUTE_PARAM_NAME);
+        return executePhaseClientIds;
+
+    }
+
+
+    /**
+     * @see javax.faces.context.PartialContext#setExecutePhaseClientIds(java.util.List)
+     */
+    @Override
+    public void setExecutePhaseClientIds(List<String>executePhaseClientIds) {
+
+        assertNotReleased();
+        this.executePhaseClientIds = executePhaseClientIds;
+
+    }
+
+    /**
+     * @see javax.faces.context.PartialContext#getRenderPhaseClientIds()
+     */
+    @Override
+    public List<String> getRenderPhaseClientIds() {
+
+        assertNotReleased();
+        if (renderPhaseClientIds != null) {
+            return renderPhaseClientIds;
+        }
+        renderPhaseClientIds = populatePhaseClientIds(PARTIAL_RENDER_PARAM_NAME);
+        return renderPhaseClientIds;
+
+    }
+
+
+    /**
+     * @see javax.faces.context.PartialContext#setRenderPhaseClientIds(java.util.List)
+     */
+    @Override
+    public void setRenderPhaseClientIds(List<String>renderPhaseClientIds) {
+
+        assertNotReleased();
+        this.renderPhaseClientIds = renderPhaseClientIds;
+
+    }
+
+    /**
+     * @see javax.faces.context.PartialContext#getPartialResponseWriter()
+     */
+    @Override
+    public ResponseWriter getPartialResponseWriter() {
+        assertNotReleased();
+        if (partialResponseWriter == null) {
+            partialResponseWriter = createPartialResponseWriter();
+        }
+        return partialResponseWriter;
+    }
+
+    /**
+     * @see javax.faces.context.PartialContext#release()
+     */
+    public void release() {
+        
+        RequestStateManager.remove(this, RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
+        released = true;
+        ajaxRequest = null;
+        partialRequest = null;
+        renderAll = null;
+        partialResponseWriter = null;
+        executePhaseClientIds = null;
+        renderPhaseClientIds = null;
+        onOffResponse = null;
+        if (attributes != null) {
+            attributes.clear();
+            attributes = null;
+        }
+         
+    }
+
+
+    // -------------------------------------------------------- Private Methods
+
+
+
+    private List<String> populatePhaseClientIds(String parameterName) {
+
+        Map<String,String> requestParamMap =
+              getExternalContext().getRequestParameterMap();
+
+        String param = requestParamMap.get(parameterName);
+        if (param == null || NO_PARTIAL_PHASE_CLIENT_IDS.equals(param)) {
+            return Collections.emptyList();
+        } else {
+            String[] pcs = Util.split(param, ",[ \t]*");
+            return ((pcs != null && pcs.length != 0)
+                    ? new ArrayList<String>(Arrays.asList(pcs))
+                    : Collections.<String>emptyList());
+        }
+        
+    }
+
+
+    private ResponseWriter createPartialResponseWriter() {
+
+        PartialContext ctx = PartialContext.getCurrentInstance();
+        ExternalContext extContext = ctx.getExternalContext();
+        HttpServletResponse response = (HttpServletResponse)
+              extContext.getResponse();
+        String encoding = extContext.getRequestCharacterEncoding();
+        response.setCharacterEncoding(encoding);
+        Writer out = null;
+        try {
+            out = response.getWriter();
+        } catch (IOException ioe) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE,
+                           ioe.toString(),
+                           ioe);
+            }
+        }
+
+        if (out != null) {
+            responseWriter =
+                  ctx.getRenderKit().createResponseWriter(out,
+                                                          "text/xml",
+                                                          encoding);
+        }
+        return responseWriter;
+
+    }
+
+} // end of class PartialContextImpl
