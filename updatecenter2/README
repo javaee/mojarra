@@ -7,6 +7,7 @@ svn svn checkout https://updatecenter2.dev.java.net/svn/updatecenter2/trunk upda
 
 Then you'll need to build it...
 
+cd {whereever updatecenter2 is}/project
 ant all
 
 Lots of output, look for success message.
@@ -17,6 +18,20 @@ Lots of output, look for success message.
 
 Next edit bin/makepkgs, and add UCHOME to point to the location of the 
 updatecenter2 codebase.
+
+
+Now, build the repository files:
+(only works on linux, you'll need to either do it manually on windows or 
+update the build.xml file - if you do, check in the changes! Also, note 
+that you need python installed.) 
+
+cd {mojarra-sources-home}
+ant updatecenter2
+cd updatecenter2
+ant updatecenter2.main
+ant updatecenter2.repo
+
+This will create a repository with the latest SNAPSHOT file.
 
 To test:
 

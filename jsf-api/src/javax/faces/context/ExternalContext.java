@@ -433,6 +433,36 @@ public abstract class ExternalContext {
      */
     public abstract Object getContext();
 
+    /**
+     * 
+     * <p class="changed_added_2_0">Return the name of the container
+     * context for this application.  </p>
+     *
+     * <p class="changed_added_2_0">Return the result of calling
+     * <code>getServletContextName()</code> on the
+     * <code>ServletContext</code> instance for this application.  It is
+     * valid to call this method during application startup.</p>
+     *
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided for
+     * the sole purpose of not breaking existing applications that
+     * extend this class.</p>
+     *
+     *
+     */
+
+    public String getContextName() {
+
+        if (defaultExternalContext != null) {
+            return defaultExternalContext.getContextName();
+        }
+
+        throw new UnsupportedOperationException();
+        
+    }
+
+
+
 
     /**
      * <p><span class="changed_modified_2_0">Return</span> the value of
@@ -924,6 +954,30 @@ public abstract class ExternalContext {
         throw new UnsupportedOperationException();
 
     }
+
+    /**
+     * <p class="changed_added_2_0">Return the result
+     * of calling <code>getContentLenth()</code> on the
+     * <code>ServletRequest</code> instance for this request.</p>
+     *
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided for
+     * the sole purpose of not breaking existing applications that
+     * extend this class.</p>
+     *
+     * @since 2.0
+     */
+
+    public int getRequestContentLength() {
+
+        if (defaultExternalContext != null) {
+            return defaultExternalContext.getRequestContentLength();
+        }
+
+        throw new UnsupportedOperationException();
+        
+    }
+
 
     /**
      *

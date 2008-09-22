@@ -54,11 +54,13 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
+import java.lang.Object;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.AbstractCollection;
 import java.util.AbstractSet;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -73,9 +75,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Resource;
-import javax.faces.application.ResourceDependencies;
-import javax.faces.application.ResourceDependency;
-import javax.faces.application.ResourceHandler;
 import javax.faces.event.AfterAddToParentEvent;
 import javax.faces.event.BeforeRenderEvent;
 import javax.faces.event.PhaseId;
@@ -1373,21 +1372,22 @@ public abstract class UIComponentBase extends UIComponent {
 
     /**
      *
-     * <p>This method is called by {@link UIComponent} subclasses that
-     * want to save one or more attached objects.  It is a convenience
-     * method that does the work of saving attached objects that may or
-     * may not implement the {@link StateHolder} interface.  Using this
-     * method implies the use of {@link #restoreAttachedState} to restore
-     * the attached objects.</p>
+     * <p class="changed_modified_2_0">This method is called by {@link
+     * UIComponent} subclasses that want to save one or more attached
+     * objects.  It is a convenience method that does the work of saving
+     * attached objects that may or may not implement the {@link
+     * StateHolder} interface.  Using this method implies the use of
+     * {@link #restoreAttachedState} to restore the attached
+     * objects.</p>
      *
-     * <p>This method supports saving  attached objects of the following
-     * type: <code>Object</code>s,
-     * <code>null</code> values, and <code>Lists</code> of these
-     * objects.  If any contained objects are not <code>Lists</code>
-     * and do not implement {@link StateHolder}, they must have
-     * zero-argument public constructors.  The exact structure of the
-     * returned object is undefined and opaque, but will be serializable.
-     * </p>
+     * <p>This method supports saving attached objects of the following
+     * type: <code>Object</code>s, <code>null</code> values, and <code
+     * class="changed_modified_2_0">Collection</code>s of these objects.
+     * If any contained objects are not <code
+     * class="changed_modified_2_0">Collection</code>s and do not
+     * implement {@link StateHolder}, they must have zero-argument
+     * public constructors.  The exact structure of the returned object
+     * is undefined and opaque, but will be serializable.  </p>
      *
      * @param context the {@link FacesContext} for this request.
      *
@@ -1410,10 +1410,11 @@ public abstract class UIComponentBase extends UIComponent {
         }
         Object result;
 
-        if (attachedObject instanceof List) {
-            List attachedList = (List) attachedObject;
-            List<StateHolderSaver> resultList = new ArrayList<StateHolderSaver>(attachedList.size());
-            Iterator listIter = attachedList.iterator();
+        if (attachedObject instanceof Collection) {
+            Collection attachedCollection = (Collection) attachedObject;
+            List<StateHolderSaver> resultList = new ArrayList<StateHolderSaver>(attachedCollection.size() + 1);
+            resultList.add(new StateHolderSaver(context, attachedCollection.getClass()));
+            Iterator listIter = attachedCollection.iterator();
 	    Object cur;
             while (listIter.hasNext()) {
 		if (null != (cur = listIter.next())) {
@@ -1463,16 +1464,25 @@ public abstract class UIComponentBase extends UIComponent {
         Object result;
 
         if (stateObj instanceof List) {
-            List stateList = (List) stateObj;
-            List<Object> retList = new ArrayList<Object>(stateList.size());
+            List<StateHolderSaver> stateList = (List<StateHolderSaver>) stateObj;
+            Collection<Object> retCollection = null;
+            StateHolderSaver collectionSaver = stateList.remove(0);
+            Class collectionClass = (Class) collectionSaver.restore(context);
+            try {
+                retCollection = (Collection<Object>) collectionClass.newInstance();
+            }
+            catch (Exception e) {
+                throw new IllegalStateException("Unknown object type");
+            }
+            
             for (Object item : stateList) {
                 try {
-                    retList.add(((StateHolderSaver) item).restore(context));
+                    retCollection.add(((StateHolderSaver) item).restore(context));
                 } catch (ClassCastException cce) {
                     throw new IllegalStateException("Unknown object type");
                 }
             }
-            result = retList;
+            result = retCollection;
         } else if (stateObj instanceof StateHolderSaver) {
             StateHolderSaver saver = (StateHolderSaver) stateObj;
             result = saver.restore(context);
