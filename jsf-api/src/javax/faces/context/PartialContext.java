@@ -40,21 +40,8 @@
 
 package javax.faces.context;
 
-
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import javax.faces.application.Application;
-import javax.faces.application.FacesMessage;
-import javax.faces.application.FacesMessage.Severity;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.render.RenderKit;
-
-import javax.el.ELContext;
-import javax.faces.event.PhaseId;
-
 
 /**
  * <p><strong class="changed_added_2_0">PartialContext</strong>

@@ -40,45 +40,25 @@
 
 package com.sun.faces.context;
 
-import javax.el.ELContext;
-import javax.faces.FactoryFinder;
-import javax.faces.event.PhaseId;
-import javax.faces.application.Application;
-import javax.faces.application.ApplicationFactory;
-import javax.faces.application.FacesMessage;
-import javax.faces.application.ViewHandler;
-import javax.faces.application.FacesMessage.Severity;
-import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.PartialContext;
-import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
-import javax.faces.lifecycle.Lifecycle;
-import javax.faces.render.RenderKit;
-import javax.faces.render.RenderKitFactory;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.Writer;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.NoSuchElementException;
 import java.util.HashMap;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sun.faces.el.ELContextImpl;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.OnOffResponseWrapper;
-import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.util.Util;
-import com.sun.faces.renderkit.RenderKitUtils;
 
 public class PartialContextImpl extends PartialContext {
 
@@ -290,7 +270,6 @@ public class PartialContextImpl extends PartialContext {
      */
     public void release() {
         
-        RequestStateManager.remove(this, RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
         released = true;
         ajaxRequest = null;
         partialRequest = null;
