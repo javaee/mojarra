@@ -329,6 +329,54 @@ public abstract class FacesContext {
      */
     public abstract Iterator<FacesMessage> getMessages();
 
+    /**
+     * <p class="changed_added_2_0">Like {@link getMessages}, but
+     * returns a <code>List&lt;FacesMessage&gt;</code>,
+     * enabling use from EL expressions.</p>
+     *
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided
+     * for the sole purpose of not breaking existing applications that extend
+     * this class.</p>
+     *
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     * @since 2.0
+     */ 
+
+    public List<FacesMessage> getMessageList() {
+        if (defaultFacesContext != null) {
+            return defaultFacesContext.getMessageList();
+        }
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * <p class="changed_added_2_0">Like {@link
+     * getMessages(java.lang.String)}, but returns a
+     * <code>List&lt;FacesMessage&gt;</code> of messages for the
+     * component with client id matching argument
+     * <code>clientId</code>.</p>
+     *
+     * <p>The default implementation throws
+     * <code>UnsupportedOperationException</code> and is provided
+     * for the sole purpose of not breaking existing applications that extend
+     * this class.</p>
+     *
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     * @since 2.0
+     */ 
+
+    public List<FacesMessage> getMessageList(String clientId) {
+        if (defaultFacesContext != null) {
+            return defaultFacesContext.getMessageList(clientId);
+        }
+        throw new UnsupportedOperationException();
+    }
+
+
+
 
     /**
      * <p>Return an <code>Iterator</code> over the {@link javax.faces.application.FacesMessage}s that

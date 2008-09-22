@@ -127,6 +127,17 @@ class InitFacesContext extends FacesContext {
         return getMessages();
     }
 
+    public List<FacesMessage> getMessageList() {
+	return Collections.EMPTY_LIST;
+    }
+
+
+    public List<FacesMessage> getMessageList(String clientId) {
+	return Collections.EMPTY_LIST;
+    }
+
+
+
     public RenderKit getRenderKit() {
         return null;
     }
@@ -231,6 +242,12 @@ class InitFacesContext extends FacesContext {
             return servletContext;
         }
 
+	public String getContextName() { 
+	    return servletContext.getServletContextName();
+	}
+
+	
+
         public String getInitParameter(String name) {
             return servletContext.getInitParameter(name);
         }
@@ -320,6 +337,10 @@ class InitFacesContext extends FacesContext {
         public String getResponseContentType() {
             return null;
         }
+
+	public int getRequestContentLength() {
+	    return -1;
+	}
 
         public URL getResource(String path) throws MalformedURLException {
             return servletContext.getResource(path);

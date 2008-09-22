@@ -369,6 +369,42 @@ import com.sun.faces.renderkit.RenderKitUtils;
          return result;
      }
 
+    public List<FacesMessage> getMessageList() {
+	List<FacesMessage> results = null;
+        if (null == componentMessageLists) {
+            results = Collections.EMPTY_LIST;
+        } else {
+            results = new ArrayList<FacesMessage>();
+            Iterator clientIds = componentMessageLists.keySet().iterator();
+            while (clientIds.hasNext()) {
+                String clientId = (String) clientIds.next();
+                results.addAll((List<FacesMessage>) componentMessageLists.get(clientId));
+            }
+        }
+
+	// RELEASE_PENDING(rlubke): Make sure that this list is correctly
+	// modifyable.
+
+	return results;
+    }
+
+    public List<FacesMessage> getMessageList(String clientId) {
+        List<FacesMessage> result = null;
+        if (null == componentMessageLists) {
+            result = Collections.EMPTY_LIST;
+        } else {
+            componentMessageLists.get(clientId);
+            if (result == null) {
+                result = Collections.EMPTY_LIST;
+            }
+        }
+
+	// RELEASE_PENDING(rlubke): Make sure that this list is correctly
+	// modifyable.
+
+	return result;
+    }
+
 
      /**
       * @see javax.faces.context.FacesContext#getMessages()
@@ -380,7 +416,7 @@ import com.sun.faces.renderkit.RenderKitUtils;
              return (emptyList.iterator());
          }
 
-         //Clear set of clientIds from pending display messages list.
+         //Clear set of clientIds from pending display messages result.
          if (RequestStateManager.containsKey(this, RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED)) {
             Set pendingClientIds = (Set)
                    RequestStateManager.get(this, RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
@@ -401,7 +437,7 @@ import com.sun.faces.renderkit.RenderKitUtils;
      public Iterator<FacesMessage> getMessages(String clientId) {
          assertNotReleased();
 
-         //remove client id from pending display messages list.
+         //remove client id from pending display messages result.
          Set pendingClientIds = (Set)
               RequestStateManager.get(this, RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
          if (pendingClientIds != null && !pendingClientIds.isEmpty()) {

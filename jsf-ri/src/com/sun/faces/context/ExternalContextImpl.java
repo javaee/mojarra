@@ -153,6 +153,14 @@ public class ExternalContextImpl extends ExternalContext {
         return this.servletContext;
     }
 
+    /**
+     * @see javax.faces.context.ExternalContext#getContextName()
+     */
+    public String getContextName() { 
+	return this.servletContext.getServletContextName();
+    }
+
+
 
     /**
      * @see javax.faces.context.ExternalContext#getRequest()
@@ -414,6 +422,15 @@ public class ExternalContextImpl extends ExternalContext {
     public String getRequestContentType() {
         return (request.getContentType());
     }
+
+    /**
+     * @see javax.faces.context.ExternalContext#getRequestContentLength()
+     */
+    @Override
+    public int getRequestContentLength() {
+        return (request.getContentLength());
+    }
+
 
 
     /**

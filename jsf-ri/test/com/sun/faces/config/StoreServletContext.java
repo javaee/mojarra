@@ -125,6 +125,11 @@ public class StoreServletContext extends Object {
             return servletContext;
         }
 
+	public String getContextName() {
+	    return servletContext.getServletContextName();
+	}
+
+
         public String getInitParameter(String name) {
             return null;
         }
@@ -221,6 +226,10 @@ public class StoreServletContext extends Object {
         public String getRequestContentType() {
             return null;
         }
+
+	public int getRequestContentLength() {
+	    return -1;
+	}
 
         public String getResponseContentType() {
             return null;
