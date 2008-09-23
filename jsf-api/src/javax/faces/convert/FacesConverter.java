@@ -49,15 +49,22 @@ import java.lang.annotation.Target;
  * <p class="changed_added_2_0">The presence of this annotation on a
  * class automatically registers the class with the runtime as a {@link
  * Converter}.  The value of the {@link #value} attribute is taken to be
- * the <em>converter-id</em> and the fully qualified class name of the
- * class to which this annotation is attached is taken to be the
- * <em>converter-class</em>.  The implementation must guarantee that for
- * each class annotated with <code>FacesConverter</code>, found with the
- * algorithm "<em><a target="_"
+ * <em>converter-id</em>, the value of the {@link #forClass} attribute
+ * is taken to be <em>converter-for-class</em> and the fully qualified
+ * class name of the class to which this annotation is attached is taken
+ * to be the <em>converter-class</em>.  The implementation must
+ * guarantee that for each class annotated with
+ * <code>FacesConverter</code>, found with the algorithm "<em><a
+ * target="_"
  * href="../component/FacesComponent.html#componentConfigAnnotationScanningSpecification">componentConfigAnnotationScanningSpecification</a></em>",
- * {@link
+ * the proper variant of <code>Application.addConverter()</code> is
+ * called.  If <em>converter-id</em> is not the empty string, {@link
  * javax.faces.application.Application#addConverter(java.lang.String,java.lang.String)}
  * is called, passing the derived <em>converter-id</em> as the first
+ * argument and the derived <em>converter-class</em> as the second
+ * argument.  If <em>converter-id</em> is the empty string, {@link
+ * javax.faces.application.Application#addConverter(java.lang.Class,java.lang.String)}
+ * is called, passing the <em>converter-for-class</em> as the first
  * argument and the derived <em>converter-class</em> as the second
  * argument.  The implementation must guarantee that all such calls to
  * <code>addConverter()</code> happen during application startup time
@@ -72,12 +79,22 @@ public @interface FacesConverter {
     /**
      * <p class="changed_added_2_0">The value of this annotation
      * attribute is taken to be the <em>converter-id</em> with which
-     * instances of this class of component can be instantiated by
+     * instances of this class of converter can be instantiated by
      * calling {@link
      * javax.faces.application.Application#createConverter(java.lang.String)}.</p>
      */ 
 
-    String value();
+    String value() default "";
+
+    /**
+     * <p class="changed_added_2_0">The value of this annotation
+     * attribute is taken to be the <em>converter-for-class</em> with
+     * which instances of this class of converter can be instantiated by
+     * calling {@link
+     * javax.faces.application.Application#createConverter(java.lang.Class)}.</p>
+     */ 
+
+    Class forClass() default Object.class;
 
 
 }
