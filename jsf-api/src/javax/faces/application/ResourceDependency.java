@@ -114,11 +114,10 @@ public @interface ResourceDependency {
      * javax.faces.component.UIViewRoot#addComponentResource(javax.faces.context.FacesContext,
      * javax.faces.component.UIComponent, java.lang.String)}.  If this
      * attribute is specified, {@link
-     * javax.faces.component.UIViewRoot#addComponentResource(javax.faces.context.FacesContext,
-     * * javax.faces.component.UIComponent)} must be called instead, as
-     * described above.  It is valid to have EL Expressions in the value
-     * of this attribute, as long as the expression resolves to an
-     * instance of the expected type.</p>
+     * javax.faces.component.UIViewRoot#addComponentResource(javax.faces.context.FacesContext,javax.faces.component.UIComponent)}
+     * must be called instead, as described above.  It is valid to have
+     * EL Expressions in the value of this attribute, as long as the
+     * expression resolves to an instance of the expected type.</p>
      */
     public String target() default "";
 
