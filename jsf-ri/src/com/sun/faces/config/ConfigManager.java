@@ -63,6 +63,7 @@ import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Timer;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.application.annotation.AnnotationManager;
+import javax.faces.context.ExternalContext;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -100,6 +101,7 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.application.FacesAnnotationHandler;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Node;
 
@@ -251,6 +253,41 @@ public class ConfigManager {
         return CONFIG_MANAGER;
 
     }
+    
+    public static FacesAnnotationHandler createAnnotationHandler() {
+        FacesAnnotationHandler result = null;
+        
+        result = new javax.faces.application.FacesAnnotationHandler() {
+
+            @Override
+            public Set<String> getClassNamesWithFacesAnnotations(ExternalContext extContext) {
+                Set<String> result = null;
+                ExecutorService executor = createExecutorService();
+
+                // execut the Task responsible for finding annotation classes
+                Future<Set<String>> annotationScan =
+                      executor.submit(new AnnotationScanTask((ServletContext) extContext.getContext()));
+                try {
+
+                    result = annotationScan.get();
+                } catch (InterruptedException ex) {
+                    LOGGER.log(Level.SEVERE, null, ex);
+                } catch (ExecutionException ex) {
+                    LOGGER.log(Level.SEVERE, null, ex);
+                }
+                executor.shutdown();
+                return result;
+            }
+
+            @Override
+            public void processAnnotatedClasses(ExternalContext extContext, 
+                    Set<String> fqcns) {
+                ConfigManager.processAnnotatedClasses((ServletContext)extContext.getContext(), fqcns);
+            }
+        };
+        
+        return result;
+    }
 
 
     /**
@@ -269,10 +306,6 @@ public class ConfigManager {
                 WebConfiguration webConfig = WebConfiguration.getInstance(sc);
                 boolean validating = webConfig.isOptionEnabled(ValidateFacesConfigFiles);
                 ExecutorService executor = createExecutorService();
-
-                // execut the Task responsible for finding annotation classes
-                Future<Set<String>> annotationScan =
-                      executor.submit(new AnnotationScanTask(sc));
 
                 Document[] facesDocuments =
                       getConfigDocuments(sc,
@@ -296,9 +329,8 @@ public class ConfigManager {
                                              validating));
                 }
 
-                processAnnotatedClasses(sc, annotationScan.get());
-
                 executor.shutdown();
+
                 publishPostConfigEvent();
             } catch (Exception e) {
                 // clear out any configured factories
@@ -389,7 +421,7 @@ public class ConfigManager {
      * @param annotatedClasses <code>Set</code> of classes annotated with Faces
      *  configration annotations
      */
-    private void processAnnotatedClasses(ServletContext sc, Set<String> annotatedClasses) {
+    private static void processAnnotatedClasses(ServletContext sc, Set<String> annotatedClasses) {
 
         if (!annotatedClasses.isEmpty()) {
             ApplicationAssociate associate = ApplicationAssociate.getInstance(sc);
