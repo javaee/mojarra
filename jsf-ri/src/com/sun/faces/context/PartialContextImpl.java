@@ -310,7 +310,7 @@ public class PartialContextImpl extends PartialContext {
 
     private ResponseWriter createPartialResponseWriter() {
 
-        PartialContext ctx = PartialContext.getCurrentInstance();
+        FacesContext ctx = FacesContext.getCurrentInstance();
         ExternalContext extContext = ctx.getExternalContext();
         HttpServletResponse response = (HttpServletResponse)
               extContext.getResponse();
