@@ -87,6 +87,9 @@ public class TestAnnotatedComponents extends ServletFacesTestCase {
         assertNotNull(cv);
         assertTrue(cv instanceof AnnotatedConverter);
 
+        cv = app.createConverter(java.lang.CharSequence.class);
+        assertNotNull(cv);
+        assertTrue(cv instanceof AnnotatedConverterForClass);
 
         Validator v = app.createValidator("AnnotatedValidator");
         assertNotNull(v);

@@ -63,7 +63,7 @@ public class ConverterConfigHandler implements ConfigAnnotationHandler {
         HANDLES = Collections.unmodifiableCollection(handles);
     }
 
-    private Map<String,String> converters;
+    private Map<Object,String> converters;
 
 
     // ------------------------------------- Methods from ComponentConfigHandler
@@ -85,9 +85,16 @@ public class ConverterConfigHandler implements ConfigAnnotationHandler {
     public void collect(Class<?> target, Annotation annotation) {
 
         if (converters == null) {
-            converters = new HashMap<String,String>();
+            converters = new HashMap<Object,String>();
         }
-        converters.put(((FacesConverter) annotation).value(), target.getName());
+        Object key = null;
+        FacesConverter converterAnnotation = (FacesConverter) annotation;
+        if (0 == converterAnnotation.value().length()) {
+            key = converterAnnotation.forClass();
+        } else {
+            key = converterAnnotation.value();
+        }
+        converters.put(key, target.getName());
 
     }
 
@@ -99,8 +106,12 @@ public class ConverterConfigHandler implements ConfigAnnotationHandler {
 
         if (converters != null) {
             Application app = ctx.getApplication();
-            for (Map.Entry<String, String> entry : converters.entrySet()) {
-                app.addConverter(entry.getKey(), entry.getValue());
+            for (Map.Entry<Object, String> entry : converters.entrySet()) {
+                if (entry.getKey() instanceof Class) {
+                    app.addConverter((Class) entry.getKey(), entry.getValue());
+                } else {
+                    app.addConverter((String) entry.getKey(), entry.getValue());
+                }
             }
         }
 
