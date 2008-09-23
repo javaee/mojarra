@@ -330,7 +330,7 @@ public abstract class FacesContext {
     public abstract Iterator<FacesMessage> getMessages();
 
     /**
-     * <p class="changed_added_2_0">Like {@link getMessages}, but
+     * <p class="changed_added_2_0">Like {@link #getMessages}, but
      * returns a <code>List&lt;FacesMessage&gt;</code>,
      * enabling use from EL expressions.</p>
      *
@@ -353,7 +353,7 @@ public abstract class FacesContext {
 
     /**
      * <p class="changed_added_2_0">Like {@link
-     * getMessages(java.lang.String)}, but returns a
+     * #getMessages(java.lang.String)}, but returns a
      * <code>List&lt;FacesMessage&gt;</code> of messages for the
      * component with client id matching argument
      * <code>clientId</code>.</p>
