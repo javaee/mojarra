@@ -2126,7 +2126,7 @@ public abstract class UIComponentBase extends UIComponent {
 
         public ChildrenListIterator(ChildrenList list, int index) {
             this.list = list;
-            if ((index < 0) || (index >= list.size())) {
+            if ((index < 0) || (index > list.size())) {
                 throw new IndexOutOfBoundsException(String.valueOf(index));
             } else {
                 this.index = index;

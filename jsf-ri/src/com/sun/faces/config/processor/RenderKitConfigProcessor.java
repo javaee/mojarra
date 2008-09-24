@@ -52,13 +52,11 @@ import javax.faces.FactoryFinder;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.Renderer;
-import javax.xml.xpath.XPathExpressionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.text.MessageFormat;
 
@@ -117,29 +115,30 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
     public void process(Document[] documents)
     throws Exception {
 
-        Map<String,Map<String,List<Node>>> renderers =
-              new LinkedHashMap<String,Map<String,List<Node>>>();
+        Map<String,Map<Document,List<Node>>> renderers =
+              new LinkedHashMap<String,Map<Document,List<Node>>>();
         RenderKitFactory rkf = (RenderKitFactory)
              FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         for (int i = 0; i < documents.length; i++) {
+            Document document = documents[i];
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
                            MessageFormat.format(
                                 "Processing render-kit elements for document: ''{0}''",
-                                documents[i].getDocumentURI()));
+                                document.getDocumentURI()));
             }
-            String namespace = documents[i].getDocumentElement()
+            String namespace = document.getDocumentElement()
                  .getNamespaceURI();
-            NodeList renderkits = documents[i].getDocumentElement()
+            NodeList renderkits = document.getDocumentElement()
                  .getElementsByTagNameNS(namespace, RENDERKIT);
 
             if (renderkits != null && renderkits.getLength() > 0) {
-                addRenderKits(renderkits, namespace, renderers, rkf);
+                addRenderKits(renderkits, document, renderers, rkf);
             }
         }
 
         // now add the accumulated renderers to the RenderKits
-        for (Map.Entry<String,Map<String,List<Node>>> entry : renderers.entrySet()) {
+        for (Map.Entry<String,Map<Document,List<Node>>> entry : renderers.entrySet()) {
             RenderKit rk = rkf.getRenderKit(null, entry.getKey());
             if (rk == null) {
                 throw new ConfigurationException(
@@ -148,8 +147,8 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
                             entry.getKey()));
             }
             
-            for (Map.Entry<String,List<Node>> renderEntry : entry.getValue().entrySet()) {
-                addRenderers(rk, renderEntry.getValue(), renderEntry.getKey());
+            for (Map.Entry<Document,List<Node>> renderEntry : entry.getValue().entrySet()) {
+                addRenderers(rk, renderEntry.getKey(), renderEntry.getValue());
             }
         }
         invokeNext(documents);
@@ -161,11 +160,12 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
 
 
     private void addRenderKits(NodeList renderKits,
-                               String namespace,
-                               Map<String,Map<String,List<Node>>> renderers,
-                               RenderKitFactory rkf)
-    throws XPathExpressionException {
+                               Document owningDocument,
+                               Map<String,Map<Document,List<Node>>> renderers,
+                               RenderKitFactory rkf) {
 
+        String namespace = owningDocument.getDocumentElement()
+                 .getNamespaceURI();
         for (int i = 0, size = renderKits.getLength(); i < size; i++) {
             Node renderKit = renderKits.item(i);
             NodeList children = ((Element) renderKit)
@@ -201,17 +201,17 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
                 }
                 rkf.addRenderKit(rkId, rk);
             }
-            Map<String,List<Node>> existingRenderers = renderers.get(rkId);
+            Map<Document,List<Node>> existingRenderers = renderers.get(rkId);
             if (existingRenderers != null) {
-                List<Node> list = existingRenderers.get(namespace);
+                List<Node> list = existingRenderers.get(owningDocument);
                 if (list != null) {
                     list.addAll(renderersList);
                 } else {
-                    existingRenderers.put(namespace, renderersList);
+                    existingRenderers.put(owningDocument, renderersList);
                 }
             } else {
-                existingRenderers = new HashMap<String,List<Node>>();
-                existingRenderers.put(namespace, renderersList);
+                existingRenderers = new LinkedHashMap<Document,List<Node>>();
+                existingRenderers.put(owningDocument, renderersList);
             }
             renderers.put(rkId, existingRenderers);
         }
@@ -220,10 +220,11 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
 
 
     private void addRenderers(RenderKit renderKit,
-                              List<Node> renderers,
-                              String namespace)
-    throws XPathExpressionException {
+                              Document owningDocument,
+                              List<Node> renderers) {
 
+        String namespace = owningDocument.getDocumentElement()
+                 .getNamespaceURI();
         for (Node renderer : renderers) {
             NodeList children = ((Element) renderer)
                  .getElementsByTagNameNS(namespace, "*");
