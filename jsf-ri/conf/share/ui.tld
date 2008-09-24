@@ -104,7 +104,7 @@
   <p>
 	At runtime, JSF synthesizes the two previous XHTML pages to create a single JSF view by inserting the
 	pieces defined in the composition into the template (that template is layout.xhtml, which is the first 
-	listing above). JSF also ignores everything outside of the <code>composition</code> tag so that we don't 
+	listing above). JSF also disregards everything outside of the <code>composition</code> tag so that we don't 
 	wind up with two <code>body</code> elements in the view. Also, note that we use the <code>ui:include</code> 
 	tag on line 14 to include content (which happens to be a table) from another XHTML page, so that we can reuse 
 	that table in other views.
@@ -176,11 +176,15 @@
             <![CDATA[
 <div class="changed_added_2_0">
   <p>
-	This tag is the same as the <code>composition</code>, except that JSF inserts a
-	new component into the component tree as the root of all the child components
-	contained within the body of the <code>component</code> tag.
+	This tag is the same as the <code>ui:composition</code>, except for two things:
+    JSF creates a component and adds it directly to the tree, and there's no associated
+    template.
   </p>
 
+  <p>
+	Use this tag to create a component and specify a filename for the
+	component as either the source of a <code>ui:include</code>, or the source of a Facelets tag.
+  </p>
 </div>
 ]]>
         </description>
@@ -249,7 +253,7 @@
 <div class="changed_added_2_0">
   <p>
 	Defines a composition that optionally uses a template, as outlined in the description of the ui tag library. Multiple
-	compositions can use the same template, thus encapsulating and reusing layout. JSF ignores everything outside of the
+	compositions can use the same template, thus encapsulating and reusing layout. JSF disregards everything outside of the
 	composition, which lets developers embed compositions in well-formed XHTML pages that can be viewed in an XHTML viewer,
 	such as Dreamweaver or a browser, without including extraneous elements such as <code>head</code> and <code>body</code>.
   </p>
@@ -263,7 +267,7 @@
 <li class="li2"><div class="de2">&nbsp;</div></li>
 <li class="li1"><div class="de1">&nbsp; <span class="sc3"><span class="re1">&lt;body<span class="re2">&gt;</span></span></span></div></li>
 <li class="li2"><div class="de2">&nbsp;</div></li>
-<li class="li1"><div class="de1">&nbsp; &nbsp; THIS LINE, AND EVERYTHING ABOVE IT IS IGNORED BY JSF</div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; THIS LINE, AND EVERYTHING ABOVE IT IS DISREGARDED BY JSF</div></li>
 <li class="li2"><div class="de2">&nbsp; &nbsp; <span class="sc3"><span class="re1">&lt;ui</span>:composition <span class="re0">template</span>=<span class="st0">&quot;/layout.xhtml&quot;</span><span class="re2">&gt;</span></span></div></li>
 
 <li class="li1"><div class="de1">&nbsp;</div></li>
@@ -277,7 +281,7 @@
 <li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; <span class="sc3"><span class="re1">&lt;/ui</span>:define<span class="re2">&gt;</span></span></div></li>
 <li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</div></li>
 <li class="li1"><div class="de1">&nbsp; &nbsp; <span class="sc3"><span class="re1">&lt;/ui</span>:composition<span class="re2">&gt;</span></span></div></li>
-<li class="li2"><div class="de2">&nbsp; &nbsp; THIS LINE, AND EVERYTHING BELOW IT IS IGNORED BY JSF</div></li>
+<li class="li2"><div class="de2">&nbsp; &nbsp; THIS LINE, AND EVERYTHING BELOW IT IS DISREGARDED BY JSF</div></li>
 
 <li class="li1"><div class="de1">&nbsp;</div></li>
 <li class="li2"><div class="de2">&nbsp; <span class="sc3"><span class="re1">&lt;/body<span class="re2">&gt;</span></span></span></div></li>
@@ -337,6 +341,11 @@
 	where ? represents the key specified as the value of the <code>hotkey</code> attribute.
   </p>
 
+  <p>
+	You can use the <code>rendered</code> attribute to control whether the debug component is rendered.
+	Using an EL expression as the value for the <code>rendered</code> attribute lets you control whether
+	debug output is enabled for multiple views based on a single bean property.
+  </p>
 </div>
 ]]>
         </description>
@@ -353,7 +362,7 @@
 <div class="changed_added_2_0">
   <p>
 	Defines a single character, that, pressed in conjunction with CTRL and SHIFT, will display the JSF debug window.
-	By default, the hotkey is 'd'.
+	By default, the hotkey is 'd'. <em>The value for the hotkey attribute cannot be an EL expression.</em>
   </p>
 
 </div>]]>
@@ -363,6 +372,27 @@
               hotkey
             </name>
             <required>
+				false
+            </required>
+        </attribute>
+
+        <attribute>
+            <description>
+
+                <![CDATA[
+<div class="changed_added_2_0">
+  <p>
+	Controls whether the debug component is rendered. Valid values for this attribute are either the strings "true" or "false" or an EL expression that evaluates to either "true" or "false".<p>If this attribute's value is "false" or the value is an EL expression that evaluates to "false", the debug component is not rendered in the page, the hotkey attribute is disregarded, and users cannot open the debugging information window with a hotkey.</p>
+  </p>
+
+</div>]]>
+
+            </description>
+            <name>
+              rendered
+            </name>
+            <required>
+				false
             </required>
             <deferred-value>
                 <type>
@@ -380,9 +410,10 @@
             <![CDATA[
 <div class="changed_added_2_0">
 
-<p>PENDING specification.  In the meantime, please see <a
-href="https://facelets.dev.java.net/nonav/docs/dev/docbook.html#template-define">the
-facelets documentation</a>.</p>
+<p>The <code>define</code> tag defines content that is inserted into a page by a template. The <code>define</code> tag can be used inside <code>ui:composition</code>, <code>ui:component</code>, <code>ui:decorate</code>, and <code>ui:fragment</code> tags.</p>
+
+<p>Content defined by the <code>define</code> tag can be inserted into a page by using <code>ui:insert</code>.
+</p>
 
 </div>
 ]]>
@@ -399,13 +430,15 @@ facelets documentation</a>.</p>
                 <![CDATA[
 <div class="changed_added_2_0">
 
-
+<p>Assigns a name to the content inside a <code>define</code> tag. That name is used by corresponding <code>ui:insert</code> tags in a template that insert the named content into a page.</p>
 </div>]]>
 
             </description>
             <name>
+				name
             </name>
             <required>
+				true
             </required>
             <deferred-value>
                 <type>
@@ -422,10 +455,27 @@ facelets documentation</a>.</p>
             <![CDATA[
 <div class="changed_added_2_0">
 
-<p>PENDING specification.  In the meantime, please see <a
-href="https://facelets.dev.java.net/nonav/docs/dev/docbook.html#templating-decorate">the
-facelets documentation</a>.</p>
+<p>
+	The <code>decorate</code> tag is identical to the <code>composition</code> tag, except that <code>ui:decorate</code>, unlike <code>ui:composition</code>, does not disregard all content outside of the tag. The <code>decorate</code> is useful when you want to decorate some content in a page, for example, you might want to decorate a list of items, like this:
+	
+<div class="syntax"><div class="html4strict" style="font-family: monospace;"><ol><li class="li1"><div class="de1">
+	
+<span class="sc2">&lt;ui:decorate template=<span class="st0">&quot;/layout.xhtml&quot;</span><span class="kw2">&gt;</span></span></div></li>
+<li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;ui:define <span class="kw3">name</span>=<span class="st0">&quot;listHeading&quot;</span><span class="kw2">&gt;</span></span></div></li>
 
+<li class="li1"><div class="de1">&nbsp; &nbsp; <span class="sc2">&lt;ui:include <span class="kw3">src</span>="shared/listHeading.xhtml"/<span class="kw2">&gt;</span></span></div></li>
+<li class="li2"><div class="de2">&nbsp; <span class="sc2"><span class="kw2">&lt;</span>/ui:define&gt;</span></div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; </div></li>
+<li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;c:forEach items="#<span class="br0">&#123;</span>items<span class="br0">&#125;"</span> var="item"<span class="kw2">&gt;</span></span></div></li>
+
+<li class="li1"><div class="de1">&nbsp; &nbsp; ...</div></li>
+<li class="li2"><div class="de2">&nbsp; <span class="sc2"><span class="kw2">&lt;</span>/c:forEach&gt;</span></div></li>
+<li class="li1"><div class="de1">&nbsp; ...</div></li>
+<li class="li2"><div class="de2"><span class="sc2"><span class="kw2">&lt;</span>/ui:decorate&gt;</span> </div></li></ol></div></div>
+</p>
+
+Because JSF does not disregard everything outside of the <code>ui:decorate</code> tag, <code>ui:decorate</code> can
+be used to decorate pieces of a page.
 
 </div>
 ]]>
@@ -441,14 +491,16 @@ facelets documentation</a>.</p>
 
                 <![CDATA[
 <div class="changed_added_2_0">
-
+A URI that points to a template, also known as a layout, that inserts pieces of the page defined in the decorator.
 
 </div>]]>
 
             </description>
             <name>
+				template
             </name>
             <required>
+				false
             </required>
             <deferred-value>
                 <type>
@@ -466,12 +518,7 @@ facelets documentation</a>.</p>
 
             <![CDATA[
 <div class="changed_added_2_0">
-
-<p>PENDING specification.  In the meantime, please see <a
-href="https://facelets.dev.java.net/nonav/docs/dev/docbook.html#template-fragment">the
-facelets documentation</a>.</p>
-
-
+<p>The <code>fragment</code> tag is identical to the <code>component</code> tag, except that <code>ui:fragment</code>, unlike <code>ui:component</code>, JSF does not disregard all content outside of the tag.</p>
 </div>
 ]]>
         </description>
@@ -486,14 +533,39 @@ facelets documentation</a>.</p>
 
                 <![CDATA[
 <div class="changed_added_2_0">
-
-
+The identifier of the component that JSF inserts into the component tree. If an identifier is
+not explicitly specified by the page author, JSF will assign an identifier based on the algorithm
+that it uses for all components.
 </div>]]>
 
             </description>
             <name>
+              id
             </name>
             <required>
+	          false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+
+                <![CDATA[
+<div class="changed_added_2_0">
+Binds the component to a backing bean property, as specified in the JSF specification.
+</div>]]>
+
+            </description>
+            <name>
+              binding
+            </name>
+            <required>
+	          false
             </required>
             <deferred-value>
                 <type>
@@ -511,10 +583,16 @@ facelets documentation</a>.</p>
 
             <![CDATA[
 <div class="changed_added_2_0">
-<p>PENDING specification.  In the meantime, please see <a
-href="https://facelets.dev.java.net/nonav/docs/dev/docbook.html#template-include">the
-facelets documentation</a>.</p>
-
+<p>Use this tag&#8212which is very similar to JSP's <code>jsp:include</code>&#8212to encapsulate and reuse content among
+multiple XHTML pages. There are three things this tag can include: plain XHTML, and XHTML pages that have either a <code>composition</code> tag or a <code>component</code> tag.
+</p>
+<p>You supply a filename, through <code>ui:include</code>'s <code>src</code> attribute for JSF to include. That
+filename is relative to the XHTML file that was rendered as a result of the last request. So, for example, if JSF loaded
+the view <code>login.xhtml</code>, and that file included <code>pageDecorations/header.xhtml</code>, and <code>
+pageDecorations/header.xhtml</code> included <code>companyLogo.xhtml</code>, then <code>companyLogo.xhtml</code> will
+not be found if it's in the <code>pageDecorations</code> directory, because <code>companyLogo.xhtml</code> has to be
+in the same directory as <code>login.xhtml</code>.
+</p>
 
 </div>
 ]]>
@@ -530,14 +608,15 @@ facelets documentation</a>.</p>
 
                 <![CDATA[
 <div class="changed_added_2_0">
-
-
+The filename of an XHTML page to include. The filename is relative to the XHTML page that was originally loaded.
 </div>]]>
 
             </description>
             <name>
+				src
             </name>
             <required>
+				true
             </required>
             <deferred-value>
                 <type>
@@ -553,11 +632,7 @@ facelets documentation</a>.</p>
 
             <![CDATA[
 <div class="changed_added_2_0">
-<p>PENDING specification.  In the meantime, please see <a
-href="https://facelets.dev.java.net/nonav/docs/dev/docbook.html#template-insert">the
-facelets documentation</a>.</p>
-
-
+<p>Inserts content into a template. That content is defined&#8212with the <code>ui:define</code> tag&#8212 in either a <code>ui:composition</code>, <code>ui:component</code>, <code>ui:decorate</code>, or <code>ui:fragment</code>.</p>
 </div>
 ]]>
         </description>
@@ -595,11 +670,9 @@ facelets documentation</a>.</p>
 
             <![CDATA[
 <div class="changed_added_2_0">
-<p>PENDING specification.  In the meantime, please see <a
-href="https://facelets.dev.java.net/nonav/docs/dev/docbook.html#template-param">the
-facelets documentation</a>.</p>
-
-
+<p>Use this tag to pass parameters to an included file (using <code>ui:include</code>), or a template
+(linked to either a composition or decorator). Embed <code>ui:param</code> tags in either <code>ui:include</code>,
+<code>ui:composition</code>, or <code>ui:decorate</code> to pass the parameters.
 </div>
 ]]>
         </description>
@@ -614,12 +687,33 @@ facelets documentation</a>.</p>
 
                 <![CDATA[
 <div class="changed_added_2_0">
-
-
+The name of the parameter.
 </div>]]>
 
             </description>
             <name>
+				name
+            </name>
+            <required>
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+
+                <![CDATA[
+<div class="changed_added_2_0">
+The value of the parameter. Notice that this attribute's value can be an EL expression, which
+means that you can pass objects to either an included file or a template.
+</div>]]>
+            </description>
+            <name>
+				name
             </name>
             <required>
             </required>
@@ -639,11 +733,11 @@ facelets documentation</a>.</p>
 
             <![CDATA[
 <div class="changed_added_2_0">
-<p>PENDING specification.  In the meantime, please see <a
-href="https://facelets.dev.java.net/nonav/docs/dev/docbook.html#template-repeat">the
-facelets documentation</a>.</p>
-
-
+	
+<p>Use this tag as an alternative to <code>h:dataTable</code> or <code>c:forEach</code>, especially when
+you are using the <code>jsfc</code> feature of Facelets. You can specify this component as the
+value of the <code>jsfc</code> attribute, like this: &lt;div... jsfc="ui:repeat" value="#{contacts}" var="contact"&gt;...
+</p>
 </div>
 ]]>
         </description>
@@ -664,8 +758,53 @@ facelets documentation</a>.</p>
 
             </description>
             <name>
+				The name of a collection of items that this tag iterates over. That collection can also map or an array.
+				If the collection is null, this tag does nothing.
             </name>
             <required>
+				true
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+
+  </tag>
+
+    <tag>
+        <description>
+
+            <![CDATA[
+<div class="changed_added_2_0">
+<p>Remove content from a page. This tag is often used in conjunction with the <code>jsfc</code> feature of Facelets,
+to wrap additional markup. When Facelets removes markup from a page by substituting markup items that have
+a <code>jsfc</code> attribute with the specified component, Facelets also removes anything in the page that
+is contained in a <code>ui:remove</code> tag.</p>
+</div>
+]]>
+        </description>
+        <name>
+          remove
+        </name>
+        <body-content>
+            JSP
+        </body-content>
+        <attribute>
+            <description>
+
+                <![CDATA[
+<div class="changed_added_2_0">
+
+
+</div>]]>
+
+            </description>
+            <name>
+            </name>
+            <required>
+	
             </required>
             <deferred-value>
                 <type>
