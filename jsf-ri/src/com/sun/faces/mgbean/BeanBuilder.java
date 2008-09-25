@@ -529,15 +529,22 @@ public abstract class BeanBuilder {
             this.expectedType = expectedType;
 
             if (ELUtils.isExpression(this.expressionString)) {
-                if (segment[0] != null) {
-                    if (references == null) {
-                        references = new ArrayList<String>(4);
-                    }
-                    if (!references.contains(segment[0])) {
-                        references.add(segment[0]);
+                List<String> expressions = ELUtils.getExpressionsFromString(this.expressionString);
+                if (!expressions.isEmpty()) {
+                    for (String expression : expressions) {
+                        ELUtils.getScope(expression, segment);
+                        if (segment[0] != null) {
+                            if (references == null) {
+                                references = new ArrayList<String>(4);
+                            }
+                            if (!references.contains(segment[0])) {
+                                references.add(segment[0]);
+                            }
+                        }
+                        segment[0] = null;
                     }
                 }
-                ELUtils.Scope expressionScope = ELUtils.getScopeForExpression(this.expressionString);
+                ELUtils.Scope expressionScope = ELUtils.getNarrowestScopeFromExpression(this.expressionString);
                 if (expressionScope != null) {
                     // expression scope isn't null which means we have enough
                     // information to statically validate.
