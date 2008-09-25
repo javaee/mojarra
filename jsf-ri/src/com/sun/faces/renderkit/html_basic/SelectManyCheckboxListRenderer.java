@@ -286,7 +286,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                                 RequestStateManager.TARGET_COMPONENT_ATTRIBUTE_NAME,
                                 component);
 
-        if (isSelected(context, itemValue, valuesArray)) {
+        if (isSelected(context, component, itemValue, valuesArray, converter)) {
             writer.writeAttribute(getSelectedTextString(), Boolean.TRUE, null);
         }
 
