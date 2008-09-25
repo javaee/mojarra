@@ -247,12 +247,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
 
         writer.indent();
 
-        writer.fwrite("private static final String[] OPTIMIZED_PACKAGES = {\n");
-        writer.indent();
-        writer.fwrite("\"javax.faces.component\",\n");
-        writer.fwrite("\"javax.faces.component.html\"\n");
-        writer.outdent();
-        writer.fwrite("};\n\n");
+        writer.fwrite("private static final String OPTIMIZED_PACKAGE = \"javax.faces.component.\";\n\n");
 
         // Generate the constructor
 
@@ -490,8 +485,8 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         writer.fwrite("private void handleAttribute(String name, Object value) {\n");
         writer.indent();
         writer.fwrite("List<String> setAttributes = null;\n");
-        writer.fwrite("Package pkg = this.getClass().getPackage();\n");
-        writer.fwrite("if ((pkg != null) && Arrays.binarySearch(OPTIMIZED_PACKAGES, pkg.getName()) >= 0) {\n");
+        writer.fwrite("String cname = this.getClass().getName();\n");
+        writer.fwrite("if (cname != null && cname.startsWith(OPTIMIZED_PACKAGE)) {\n");
         writer.indent();
         writer.fwrite("setAttributes = (List<String>) this.getAttributes().get(\"javax.faces.component.UIComponentBase.attributesThatAreSet\");\n");
         writer.fwrite("if (setAttributes == null) {\n");

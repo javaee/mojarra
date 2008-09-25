@@ -177,23 +177,13 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      */
     public static final String COMPOSITE_FACET_NAME = "javax.faces.component.COMPOSITE_FACET_NAME";
     
-    
-    /**
-     * This array represents the packages that can leverage the
-     * <code>attributesThatAreSet</code> List for optimized attribute
-     * rendering.
-     *
-     * Hopefully JSF 2.0 will remove the need for this.
-     */
-    private static final String[] OPTIMIZED_PACKAGES = {
-          "javax.faces.component",
-          "javax.faces.component.html"
-    };
 
-    static {
-        // Sort the array for use with Arrays.binarySearch()
-        Arrays.sort(OPTIMIZED_PACKAGES);
-    }
+    /**
+     * Components within this base package are considered optimizable
+     * with respect to attributes processing.
+     */
+    private static final String OPTIMIZED_PACKAGE = "javax.faces.component.";
+
 
     /**
      * List of attributes that have been set on the component (this
@@ -1912,14 +1902,14 @@ private void doFind(FacesContext context, String clientId) {
      */
     List<String> getAttributesThatAreSet(boolean create) {
 
-        Package p = this.getClass().getPackage();
-        if (p != null) {
-            if (create && Arrays.binarySearch(OPTIMIZED_PACKAGES, p.getName()) >= 0) {
-                if (attributesThatAreSet == null) {
-                    attributesThatAreSet = new ArrayList<String>(6);
-                }
+
+        String name = this.getClass().getName();
+        if (name != null && name.startsWith(OPTIMIZED_PACKAGE)) {
+            if (create && attributesThatAreSet == null) {
+                attributesThatAreSet = new ArrayList<String>(6);
             }
         }
+
         return attributesThatAreSet;
         
     }
