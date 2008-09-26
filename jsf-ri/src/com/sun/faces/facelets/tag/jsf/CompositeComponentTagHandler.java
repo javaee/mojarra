@@ -146,8 +146,10 @@ public class CompositeComponentTagHandler extends ComponentHandler {
         applyCompositeComponent(ctx, c);
         // Allow any PDL declared attached objects to be retargeted
         if (ComponentSupport.isNew(c)) {
-            PDLUtils.retargetAttachedObjects(ctx.getFacesContext(), c,
+            FacesContext context = ctx.getFacesContext();
+            PDLUtils.retargetAttachedObjects(context, c,
                     getAttachedObjectHandlers(c, false));
+            PDLUtils.retargetMethodExpressions(context, c);
         }
 
     }
