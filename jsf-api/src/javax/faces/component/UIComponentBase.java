@@ -1697,16 +1697,7 @@ public abstract class UIComponentBase extends UIComponent {
                     }
                 } else if (attributes != null) {
                     if (attributes.containsKey(key)) {
-                        result = (attributes.get(key));
-                        // If we have a non-null result and
-                        // this is a composite component
-                        if (null != result && attributes.containsKey(Resource.COMPONENT_RESOURCE_KEY)) {
-                            // check if the result is an expression
-                            if (result instanceof ValueExpression) {
-                                ValueExpression ve = (ValueExpression) result;
-                                result = ve.getValue(FacesContext.getCurrentInstance().getELContext());
-                            }
-                        }
+                        result = attributes.get(key);
                     }
                 }
             }
