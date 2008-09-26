@@ -61,6 +61,8 @@ import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
@@ -89,12 +91,30 @@ public class AttributeHandler extends TagHandler {
         
         PropertyDescriptor propertyDescriptor;
         TagAttribute attr;
+        CompositeComponentBeanInfo componentBeanInfo = null;
+	Map<String, Object> attrs = parent.getAttributes();
+        
+        componentBeanInfo = (CompositeComponentBeanInfo) attrs.get(UIComponent.BEANINFO_KEY);
+        assert(null != componentBeanInfo);
+        List<PropertyDescriptor> declaredAttributes = 
+                componentBeanInfo.getPropertyDescriptorsList();
 
         // Get the value of required the name propertyDescriptor
         ValueExpression ve = name.getValueExpression(ctx, String.class);
         String strValue = (String) ve.getValue(ctx);
+
+        // Search the propertyDescriptors for one for this attribute
+        for (PropertyDescriptor cur: declaredAttributes) {
+            if (strValue.endsWith(cur.getName())) {
+                // If we have a match, no need to waste time
+                // duplicating and replacing it.
+                return;
+            }
+        }
+        
         try {
             propertyDescriptor = new PropertyDescriptor(strValue, null, null);
+            declaredAttributes.add(propertyDescriptor);
         } catch (IntrospectionException ex) {
             throw new  TagException(tag, "Unable to create property descriptor for property " + strValue, ex);
         }
