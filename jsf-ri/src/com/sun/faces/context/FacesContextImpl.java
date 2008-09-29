@@ -97,7 +97,7 @@ import com.sun.faces.renderkit.RenderKitUtils;
      // BE SURE TO ADD NEW IVARS TO THE RELEASE METHOD
      private ResponseStream responseStream = null;
      private ResponseWriter responseWriter = null;
-     private PartialContext partialContext = null;
+     private ResponseWriter partialResponseWriter = null;
      private ExternalContext externalContext = null;
      private Application application = null;
      private UIViewRoot viewRoot = null;
@@ -109,6 +109,11 @@ import com.sun.faces.renderkit.RenderKitUtils;
      private boolean renderResponse = false;
      private boolean responseComplete = false;
      private Map<Object,Object> attributes;
+     private List<String> executePhaseClientIds;
+     private List<String> renderPhaseClientIds;
+     private OnOffResponseWrapper onOffResponse = null;
+     private Boolean ajaxRequest;
+     private Boolean renderAll;
      private PhaseId currentPhaseId;
 
      /**
@@ -161,6 +166,95 @@ import com.sun.faces.renderkit.RenderKitUtils;
          return application;
      }
 
+
+     /**
+      * @see javax.faces.context.FacesContext#enableResponseWriting(boolean) 
+      */
+     @Override
+     public void enableResponseWriting(boolean enable) {
+
+         assertNotReleased();
+         if (onOffResponse == null) {
+             onOffResponse = new OnOffResponseWrapper(this);
+         }
+         onOffResponse.setEnabled(enable);
+         
+     }
+
+
+     /**
+      * @see javax.faces.context.FacesContext#isAjaxRequest()
+      */
+     @Override
+     public boolean isAjaxRequest() {
+
+         assertNotReleased();
+         if (ajaxRequest == null) {
+             ajaxRequest = getExternalContext().getRequestParameterMap()
+                   .containsKey("javax.faces.partial.ajax");
+         }
+         return ajaxRequest;
+
+     }
+
+
+     /**
+      * @see javax.faces.context.FacesContext#isExecuteNone()
+      */
+     @Override
+     public boolean isExecuteNone() {
+
+         assertNotReleased();
+         String execute = getExternalContext().getRequestParameterMap()
+               .get(PARTIAL_EXECUTE_PARAM_NAME);
+         return (NO_PARTIAL_PHASE_CLIENT_IDS.equals(execute));
+
+     }
+
+
+     /**
+      * @see javax.faces.context.FacesContext#isRenderAll()
+      */
+     @Override
+     public boolean isRenderAll() {
+
+         assertNotReleased();
+         if (renderAll == null) {
+             renderAll = (isAjaxRequest()
+                            && !isRenderNone()
+                            && getRenderPhaseClientIds().isEmpty());
+         }
+
+         return renderAll;
+
+     }
+
+     
+     /**
+      * @see javax.faces.context.FacesContext#setRenderAll(boolean) 
+      */
+     @Override
+     public void setRenderAll(boolean renderAll) {
+
+        this.renderAll = renderAll;
+
+     }
+
+
+     /**
+      * @see javax.faces.context.FacesContext#isRenderNone()
+      */
+     @Override
+     public boolean isRenderNone() {
+
+        assertNotReleased();
+         String execute = getExternalContext().getRequestParameterMap()
+               .get(PARTIAL_RENDER_PARAM_NAME);
+        return (NO_PARTIAL_PHASE_CLIENT_IDS.equals(execute));
+
+     }
+
+
     @Override
     public boolean isPostback() {
 
@@ -212,6 +306,35 @@ import com.sun.faces.renderkit.RenderKitUtils;
          }
          return elContext;
      }
+
+
+     /**
+      * @see javax.faces.context.FacesContext#getExecutePhaseClientIds()
+      */
+     @Override
+     public List<String> getExecutePhaseClientIds() {
+
+         assertNotReleased();
+         if (executePhaseClientIds != null) {
+             return executePhaseClientIds;
+         }
+         executePhaseClientIds = populatePhaseClientIds(PARTIAL_EXECUTE_PARAM_NAME);
+         return executePhaseClientIds;
+
+     }
+
+
+     /**
+      * @see javax.faces.context.FacesContext#setExecutePhaseClientIds(java.util.List)
+      */
+     @Override
+     public void setExecutePhaseClientIds(List<String>executePhaseClientIds) {
+
+         assertNotReleased();
+         this.executePhaseClientIds = executePhaseClientIds;
+
+     }
+
 
      /**
       * @see javax.faces.context.FacesContext#getClientIdsWithMessages()
@@ -336,6 +459,35 @@ import com.sun.faces.renderkit.RenderKitUtils;
          return (list.iterator());
      }
 
+
+     /**
+      * @see javax.faces.context.FacesContext#getRenderPhaseClientIds()
+      */
+     @Override
+     public List<String> getRenderPhaseClientIds() {
+
+         assertNotReleased();
+         if (renderPhaseClientIds != null) {
+             return renderPhaseClientIds;
+         }
+         renderPhaseClientIds = populatePhaseClientIds(PARTIAL_RENDER_PARAM_NAME);
+         return renderPhaseClientIds;
+
+     }
+
+
+     /**
+      * @see javax.faces.context.FacesContext#setRenderPhaseClientIds(java.util.List)
+      */
+     @Override
+     public void setRenderPhaseClientIds(List<String>renderPhaseClientIds) {
+
+         assertNotReleased();
+         this.renderPhaseClientIds = renderPhaseClientIds;
+
+     }
+
+
      /**
       * @see javax.faces.context.FacesContext#getRenderKit()
       */
@@ -426,15 +578,15 @@ import com.sun.faces.renderkit.RenderKitUtils;
      }
 
      /**
-      * @see javax.faces.context.FacesContext#getPartialContext()
+      * @see javax.faces.context.FacesContext#getPartialResponseWriter()
       */
      @Override
-     public PartialContext getPartialContext() {
+     public ResponseWriter getPartialResponseWriter() {
          assertNotReleased();
-         if (partialContext == null) {
-             partialContext = new PartialContext();
+         if (partialResponseWriter == null) {
+             partialResponseWriter = createPartialResponseWriter();
          }
-         return partialContext;
+         return partialResponseWriter;
      }
 
      /**
@@ -499,14 +651,18 @@ import com.sun.faces.renderkit.RenderKitUtils;
 
          released = true;
          externalContext = null;
-         partialContext.release();
-         partialContext = null;
          responseStream = null;
          responseWriter = null;
          componentMessageLists = null;
          renderResponse = false;
          responseComplete = false;
          viewRoot = null;
+         ajaxRequest = null;
+         renderAll = null;
+         partialResponseWriter = null;
+         executePhaseClientIds = null;
+         renderPhaseClientIds = null;
+         onOffResponse = null;
          maxSeverity = null;
          application = null;
          currentPhaseId = null;
@@ -585,6 +741,54 @@ import com.sun.faces.renderkit.RenderKitUtils;
          if (released) {
              throw new IllegalStateException();
          }
+     }
+
+
+     private List<String> populatePhaseClientIds(String parameterName) {
+
+         Map<String,String> requestParamMap =
+               getExternalContext().getRequestParameterMap();
+
+         String param = requestParamMap.get(parameterName);
+         if (param == null || NO_PARTIAL_PHASE_CLIENT_IDS.equals(param)) {
+             return Collections.emptyList();
+         } else {
+             String[] pcs = Util.split(param, ",[ \t]*");
+             return ((pcs != null && pcs.length != 0)
+                     ? new ArrayList<String>(Arrays.asList(pcs))
+                     : Collections.<String>emptyList());
+         }
+         
+     }
+
+
+     private ResponseWriter createPartialResponseWriter() {
+
+         FacesContext ctx = FacesContext.getCurrentInstance();
+         ExternalContext extContext = ctx.getExternalContext();
+         HttpServletResponse response = (HttpServletResponse)
+               extContext.getResponse();
+         String encoding = extContext.getRequestCharacterEncoding();
+         response.setCharacterEncoding(encoding);
+         Writer out = null;
+         try {
+             out = response.getWriter();
+         } catch (IOException ioe) {
+             if (LOGGER.isLoggable(Level.SEVERE)) {
+                 LOGGER.log(Level.SEVERE,
+                            ioe.toString(),
+                            ioe);
+             }
+         }
+
+         if (out != null) {
+             responseWriter =
+                   ctx.getRenderKit().createResponseWriter(out,
+                                                           "text/xml",
+                                                           encoding);
+         }
+         return responseWriter;
+
      }
 
      // ---------------------------------------------------------- Inner Classes

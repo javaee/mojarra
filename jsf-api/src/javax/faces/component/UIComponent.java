@@ -45,6 +45,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -54,6 +55,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import java.util.Map.Entry;
 import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
@@ -177,23 +179,13 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      */
     public static final String COMPOSITE_FACET_NAME = "javax.faces.component.COMPOSITE_FACET_NAME";
     
-    
-    /**
-     * This array represents the packages that can leverage the
-     * <code>attributesThatAreSet</code> List for optimized attribute
-     * rendering.
-     *
-     * Hopefully JSF 2.0 will remove the need for this.
-     */
-    private static final String[] OPTIMIZED_PACKAGES = {
-          "javax.faces.component",
-          "javax.faces.component.html"
-    };
 
-    static {
-        // Sort the array for use with Arrays.binarySearch()
-        Arrays.sort(OPTIMIZED_PACKAGES);
-    }
+    /**
+     * Components within this base package are considered optimizable
+     * with respect to attributes processing.
+     */
+    private static final String OPTIMIZED_PACKAGE = "javax.faces.component.";
+
 
     /**
      * List of attributes that have been set on the component (this
@@ -209,7 +201,7 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
 
 
     /**
-     * <p><span class="changed_modified_2_0">Return</span> a mutable 
+     * <p>Return a mutable 
      * <code>Map</code> representing the attributes
      * (and properties, see below) associated wth this {@link UIComponent},
      * keyed by attribute name (which must be a String).  The returned
@@ -243,20 +235,87 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      *     </ul></li>
      * </ul>
      * 
-     * <p class="changed_added_2_0">The <code>get()</code> method of the
-     * <code>Map</code> must take the following additional action 
-     * if this component instance is a
-     * composite component instance (indicated by the presence of a 
-     * component attribute under the key given by the value of 
-     * {@link javax.faces.application.Resource#COMPONENT_RESOURCE_KEY}): 
-     * If the result to be returned from the <code>get()</code> method is a
-     * {@link ValueExpression}, call the 
-     * {@link ValueExpression#getValue(javax.el.ELContext)} method and return 
-     * the result from <code>get()</code>.  Otherwise, return the actual value
-     * from the <code>get()</code> method.
-     * </p>
      */
     public abstract Map<String, Object> getAttributes();
+    
+    
+    private transient Map<String, Object> valueExpressionEvaluatingAttrsMap;
+    
+    /** 
+     * <p class="changed_added_2_0">Like {@link #getAttributes}, except
+     * that the <code>get()</code> implementation must call
+     * <code>getValue()</code> on any result whose type is
+     * <code>ValueExpression</code> and return the evaluated result.
+     * </p>
+     * 
+     * @since 2.0
+     */
+    public Map<String, Object> getAttrs() {
+        
+        if (null == valueExpressionEvaluatingAttrsMap) {
+            valueExpressionEvaluatingAttrsMap = new Map<String, Object>() {
+                
+                private Map<String, Object> attrs = UIComponent.this.getAttributes();
+
+                public void clear() {
+		    attrs.clear();
+                }
+
+                public boolean containsKey(Object key) {
+		    return attrs.containsKey(key);
+                }
+
+                public boolean containsValue(Object value) {
+		    return attrs.containsValue(value);
+                }
+
+                public Set<Entry<String, Object>> entrySet() {
+		    return attrs.entrySet();
+                }
+
+                public Object get(Object key) {
+		    Object result = attrs.get(key);
+                    // check if the result is an expression
+                    if (result instanceof ValueExpression) {
+                        ValueExpression ve = (ValueExpression) result;
+                        result = ve.getValue(FacesContext.getCurrentInstance().getELContext());
+                    }
+                    return result;
+                }
+
+                public boolean isEmpty() {
+		    return attrs.isEmpty();
+                }
+
+                public Set<String> keySet() {
+		    return attrs.keySet();
+                }
+
+                public Object put(String key, Object value) {
+		    return attrs.put(key, value);
+                }
+
+                public void putAll(Map<? extends String, ? extends Object> t) {
+		    attrs.putAll(t);
+                }
+
+                public Object remove(Object key) {
+		    return attrs.remove(key);
+                }
+
+                public int size() {
+		    return attrs.size();
+                }
+
+                public Collection<Object> values() {
+		    return attrs.values();
+                }
+                
+            };
+        }
+        
+        return valueExpressionEvaluatingAttrsMap;
+    }
 
 
     // ---------------------------------------------------------------- Bindings
@@ -1912,14 +1971,14 @@ private void doFind(FacesContext context, String clientId) {
      */
     List<String> getAttributesThatAreSet(boolean create) {
 
-        Package p = this.getClass().getPackage();
-        if (p != null) {
-            if (create && Arrays.binarySearch(OPTIMIZED_PACKAGES, p.getName()) >= 0) {
-                if (attributesThatAreSet == null) {
-                    attributesThatAreSet = new ArrayList<String>(6);
-                }
+
+        String name = this.getClass().getName();
+        if (name != null && name.startsWith(OPTIMIZED_PACKAGE)) {
+            if (create && attributesThatAreSet == null) {
+                attributesThatAreSet = new ArrayList<String>(6);
             }
         }
+
         return attributesThatAreSet;
         
     }

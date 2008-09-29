@@ -149,7 +149,7 @@ public class RenderKitUtils {
 
 
     /**
-     * This array represents the packages that can leverage the
+     * This represents the base package that can leverage the
      * <code>attributesThatAreSet</code> List for optimized attribute
      * rendering.
      *
@@ -158,14 +158,7 @@ public class RenderKitUtils {
      *
      * Hopefully JSF 2.0 will remove the need for this.
      */
-    private static final String[] OPTIMIZED_PACKAGES = {
-          "javax.faces.component",
-          "javax.faces.component.html"
-    };
-    static {
-        // Sort the array for use with Arrays.binarySearch()
-        Arrays.sort(OPTIMIZED_PACKAGES);
-    }
+    private static final String OPTIMIZED_PACKAGE = "javax.faces.component.";
 
 
     /**
@@ -520,8 +513,8 @@ public class RenderKitUtils {
      */
     private static boolean canBeOptimized(UIComponent component) {
 
-        Package p = component.getClass().getPackage();
-        return ((p != null) && (Arrays.binarySearch(OPTIMIZED_PACKAGES, p.getName()) >= 0));       
+        String name = component.getClass().getName();
+        return (name != null && name.startsWith(OPTIMIZED_PACKAGE));
 
     }
 

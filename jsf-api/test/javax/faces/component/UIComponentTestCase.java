@@ -600,6 +600,31 @@ public class UIComponentTestCase extends TestCase {
         assertEquals(comp2, (UIComponent) kids.previous());
         assertEquals(comp1, (UIComponent) kids.previous());
 
+        // Test IOB exception for list iterator
+        component.getChildren().clear();
+        component.getChildren().addAll(comps);
+        try {
+            component.getChildren().listIterator(-1);
+            fail("Should throw IndexOutOfBoundsException on index -1");
+        } catch (IndexOutOfBoundsException e) {
+            ;//Expected result
+        }
+
+        try {
+            component.getChildren().listIterator(component.getChildren().size()+1);
+            fail("Should throw IndexOutOfBoundsException on index = size() + 1");
+        } catch (IndexOutOfBoundsException e) {
+            ;//Expected result
+        }
+
+        //Iterate with list iterator in reverse order
+        int i = component.getChildren().size() - 1;
+        for (ListIterator<UIComponent> li = component.getChildren().listIterator(
+                component.getChildren().size()); li.hasPrevious();) {
+
+            assertEquals(comps.get(i--),li.previous());    
+        }
+
     }
 
 

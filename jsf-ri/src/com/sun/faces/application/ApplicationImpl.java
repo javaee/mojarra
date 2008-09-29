@@ -93,6 +93,7 @@ import javax.faces.event.ActionListener;
 import javax.faces.validator.Validator;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.config.ConfigManager;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
@@ -116,6 +117,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 import javax.el.ValueExpression;
+import javax.faces.application.FacesAnnotationHandler;
 import javax.faces.application.Resource;
 import javax.faces.webapp.pdl.PageDeclarationLanguage;
 
@@ -163,6 +165,7 @@ public class ApplicationImpl extends Application {
     private ProjectStage projectStage;
 
     private volatile ActionListener actionListener = null;
+    private volatile FacesAnnotationHandler annotationHandler = null;
     private volatile NavigationHandler navigationHandler = null;
     private volatile PropertyResolverImpl propertyResolver = null;
     private volatile VariableResolverImpl variableResolver = null;
@@ -532,6 +535,25 @@ public class ApplicationImpl extends Application {
     public ActionListener getActionListener() {
         return actionListener;
     }
+    
+    /*
+     * RELEASE_PENDING(rlubke) note that my implementation doesn't rely on
+     * jsf-ri-config.xml to install the default implementation.  It could, and 
+     * maybe it should.  It's up to you.
+     */
+    @Override
+    public FacesAnnotationHandler getFacesAnnotationHandler() {
+        if (null == annotationHandler) {
+            annotationHandler = ConfigManager.createAnnotationHandler();
+        }
+        return annotationHandler;
+    }
+
+    @Override
+    public void setFacesAnnotationHandler(FacesAnnotationHandler newHandler) {
+        annotationHandler = newHandler;
+    }
+    
 
 
     /**

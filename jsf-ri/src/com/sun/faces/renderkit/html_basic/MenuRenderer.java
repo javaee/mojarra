@@ -55,11 +55,11 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Collections;
 import java.util.logging.Level;
 
 import javax.el.ELException;
 import javax.el.ValueExpression;
+import javax.el.ExpressionFactory;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectMany;
 import javax.faces.component.UISelectOne;
@@ -498,7 +498,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             itemValue = curItem.getValue();
         }
 
-        if (isSelected(context, itemValue, valuesArray)) {
+        if (isSelected(context, component, itemValue, valuesArray, converter)) {
             writer.writeAttribute("selected", true, "selected");
         }
 
@@ -672,9 +672,14 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
 
     protected boolean isSelected(FacesContext context,
+                                 UIComponent component,
                                  Object itemValue,
-                                 Object valueArray) {
+                                 Object valueArray,
+                                 Converter converter) {
 
+        if (itemValue == null && valueArray == null) {
+            return true;
+        }
         if (null != valueArray) {
             if (!valueArray.getClass().isArray()) {
                 logger.warning("valueArray is not an array, the actual type is " +
@@ -684,31 +689,30 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             int len = Array.getLength(valueArray);
             for (int i = 0; i < len; i++) {
                 Object value = Array.get(valueArray, i);
-                if (value == null) {
-                    if (itemValue == null) {
-                        return true;
-                    }
+                if (value == null && itemValue == null) {
+                    return true;
                 } else {
-                    Object newValue;
-                    if (value.getClass().isInstance(itemValue)) {
-                        newValue = itemValue;
+                    if ((value == null) ^ (itemValue == null)) {
+                        continue;
+                    }
+                    Object compareValue;
+                    if (converter == null) {
+                        compareValue = coerceToModelType(context,
+                                                        itemValue,
+                                                        value.getClass());
                     } else {
-                        try {
-                            newValue =
-                                  context.getApplication()
-                                        .getExpressionFactory().
-                                        coerceToType(itemValue, value.getClass());
-                        } catch (ELException ele) {
-                            newValue = itemValue;
-                        } catch (IllegalArgumentException iae) {
-                            // If coerceToType fails, per the docs it should throw
-                            // an ELException, however, GF 9.0 and 9.0u1 will throw
-                            // an IllegalArgumentException instead (see GF issue 1527).
-                            newValue = itemValue;
+                        compareValue = itemValue;
+                        if (compareValue instanceof String && !(value instanceof String)) {
+                            // type mismatch between the time and the value we're
+                            // comparing.  Invoke the Converter.
+                            compareValue = converter.getAsObject(context,
+                                                                component,
+                                                                (String) compareValue);
                         }
                     }
-                    if (value.equals(newValue)) {
-                        return true;
+
+                    if (value.equals(compareValue)) {
+                        return (true);
                     }
                 }
             }
@@ -828,6 +832,27 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         renderOptions(context, component, items);
 
         writer.endElement("select");
+
+    }
+
+    protected Object coerceToModelType(FacesContext ctx,
+                                       Object value,
+                                       Class itemValueType) {
+
+        Object newValue;
+        try {
+            ExpressionFactory ef = ctx.getApplication().getExpressionFactory();
+            newValue = ef.coerceToType(value, itemValueType);
+        } catch (ELException ele) {
+            newValue = value;
+        } catch (IllegalArgumentException iae) {
+            // If coerceToType fails, per the docs it should throw
+            // an ELException, however, GF 9.0 and 9.0u1 will throw
+            // an IllegalArgumentException instead (see GF issue 1527).
+            newValue = value;
+        }
+
+        return newValue;
 
     }
 

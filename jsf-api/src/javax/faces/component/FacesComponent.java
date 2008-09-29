@@ -75,12 +75,12 @@ import java.lang.annotation.Target;
 
  * <ul>
 
- * <li><p>If the web deployment descriptor contains the
- * <code>metadata-complete</code> attribute, as described in section 8.1
- * of the Servlet 2.5 (and later) specifications, the implementation
- * must not perform annotation scanning on any classes except for those
- * classes provided by the implementation itself.  Otherwise, continue
- * as follows.</p></li>
+ * <li><p>If the <code>&lt;faces-config&gt;</code> element in the
+ * <code>WEB-INF/faces-config.xml</code> file contains
+ * <code>metadata-complete</code> attribute whose value is
+ * <code>"true"</code>, the implementation must not perform annotation
+ * scanning on any classes except for those classes provided by the
+ * implementation itself.  Otherwise, continue as follows.</p></li>
 
  * <li><p>All classes in <code>WEB-INF/classes</code> must be scanned.</p></li>
 

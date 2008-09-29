@@ -286,7 +286,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                                 RequestStateManager.TARGET_COMPONENT_ATTRIBUTE_NAME,
                                 component);
 
-        if (isSelected(context, itemValue, valuesArray)) {
+        if (isSelected(context, component, itemValue, valuesArray, converter)) {
             writer.writeAttribute(getSelectedTextString(), Boolean.TRUE, null);
         }
 
@@ -328,7 +328,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             labelClass.append(style);
         }
         // If selectedClass or unselectedClass set, add it to the label's class
-        if (isSelected(context, itemValue, valuesArray)) {
+        if (isSelected(context, component, itemValue, valuesArray, converter)) {
             style = (String) component.
                   getAttributes().get("selectedClass");
         } else { // not selected
@@ -357,7 +357,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                 writer.writeText(itemLabel, component, "label");
             }
         }
-        if (isSelected(context, itemValue, valuesArray)) {
+        if (isSelected(context, component, itemValue, valuesArray, converter)) {
             
         } else { // not selected
             

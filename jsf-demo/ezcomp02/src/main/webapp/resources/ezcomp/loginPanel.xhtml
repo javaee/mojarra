@@ -59,6 +59,8 @@
   <composite:attribute name="pinLabel" default="PIN" />
   <composite:attribute name="loginLabel" default="Login" />
   <composite:attribute name="model" required="true"/>
+  <composite:attribute name="action" method-signature="java.lang.Object action()" applyTo="loginEvent"/>
+
 
   <composite:editableValueHolder name="usernameInput" />
   <composite:editableValueHolder name="pinInput" />
@@ -85,8 +87,7 @@
 
     <ui:define name="loginEvent">
 
-      <h:commandButton id="loginEvent" value="#{compositeComponent.attributes.loginLabel}" 
-                 action="#{compositeComponent.attributes.model.loginAction}" 
+      <h:commandButton id="loginEvent" value="#{compositeComponent.attrs.loginLabel}" 
                  onkeypress="javascript: submitenter(event, 'loginButton', Login');" 
                  onclick="javascript: submitAndDisable(this, 'Login');" 
                  onfocus="javascript: if (this.disabled==0) this.className='Btn1Hov'" 
@@ -95,8 +96,9 @@
                  onmouseover="javascript: if (this.disabled==0) this.className='Btn1Hov'" 
                  tabindex="3" 
                  title="Log In to Sun Java System Application Server" 
-                 class="Btn1"
-                       />
+                 class="Btn1">
+      </h:commandButton>
+
 
     </ui:define>
 

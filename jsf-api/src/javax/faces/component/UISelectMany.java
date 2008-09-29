@@ -44,14 +44,11 @@ package javax.faces.component;
 import java.lang.reflect.Array;
 import java.util.Iterator;
 import java.util.List;
-import java.util.NoSuchElementException;
 import javax.el.ValueExpression;
-import javax.el.ELException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
-import javax.faces.model.SelectItem;
-import javax.faces.model.SelectItemGroup;
+import javax.faces.convert.Converter;
 
 
 /**
@@ -452,23 +449,25 @@ public class UISelectMany extends UIInput {
         if (!isValid() || (value == null)) {
             return;
         }
-	
+
         // Ensure that the values match one of the available options
         // Don't arrays cast to "Object[]", as we may now be using an array
         // of primitives
         boolean isList = (value instanceof List);
         int length = isList ? ((List) value).size() : Array.getLength(value);
         boolean found = true;
+        Converter converter = getConverter();
+        FacesContext ctx = getFacesContext();
         for (int i = 0; i < length; i++) {
             Iterator items = new SelectItemsIterator(this);
             Object indexValue = isList ?
                 ((List) value).get(i) : Array.get(value, i);
-            found = matchValue(indexValue, items);
+            found = SelectUtils.matchValue(ctx, this, indexValue, items, converter);
             if (!found) {
                 break;
             }
         }
-	
+
         // Enqueue an error message if an invalid value was specified
         if (!found) {
             FacesMessage message =
@@ -478,82 +477,5 @@ public class UISelectMany extends UIInput {
             setValid(false);
         }
     }
-
-
-    // --------------------------------------------------------- Private Methods
-
-
-    /**
-     * <p>Return <code>true</code> if the specified value matches one of the
-     * available options, performing a recursive search if if a
-     * {@link SelectItemGroup} instance is detected.</p>
-     *
-     * @param value {@link UIComponent} value to be tested
-     * @param items Iterator over the {@link SelectItem}s to be checked
-     */
-    private boolean matchValue(Object value, Iterator items) {
-
-        while (items.hasNext()) {
-            SelectItem item = (SelectItem) items.next();
-            if (item instanceof SelectItemGroup) {
-                SelectItem subitems[] =
-                    ((SelectItemGroup) item).getSelectItems();
-                if ((subitems != null) && (subitems.length > 0)) {
-                    if (matchValue(value, new ArrayIterator(subitems))) {
-                        return (true);
-                    }
-                }
-            } else {
-                //Coerce the item value type before comparing values.
-                Class type = value.getClass();
-                Object newValue;
-                try {
-                    newValue = getFacesContext().getApplication().
-                        getExpressionFactory().coerceToType(item.getValue(), type);
-                } catch (ELException ele) {
-                    newValue = item.getValue();
-                } catch (IllegalArgumentException iae) {
-                    // If coerceToType fails, per the docs it should throw
-                    // an ELException, however, GF 9.0 and 9.0u1 will throw
-                    // an IllegalArgumentException instead (see GF issue 1527).
-                    newValue = item.getValue();
-                }
-                
-                if (value.equals(newValue)) {
-                    return (true);
-                }
-            }
-        }
-        return (false);
-
-    }
-
-
-    static class ArrayIterator implements Iterator {
-
-        public ArrayIterator(Object items[]) {
-            this.items = items;
-        }
-
-        private Object items[];
-        private int index = 0;
-
-        public boolean hasNext() {
-            return (index < items.length);
-        }
-
-        public Object next() {
-            try {
-                return (items[index++]);
-            } catch (IndexOutOfBoundsException e) {
-                throw new NoSuchElementException();
-            }
-        }
-
-        public void remove() {
-            throw new UnsupportedOperationException();
-        }
-    }
-
 
 }

@@ -236,13 +236,18 @@
             <xsd:annotation>
                 <xsd:documentation>
                     
-                    RELEASE_PENDING (edburns,rogerk) Please review...
-                    
                     The metadata-complete attribute defines whether this
                     JavaServer Faces application is complete, or whether
                     the class files available to this module and packaged with
                     this application should be examined for annotations
                     that specify configuration information.
+                    
+                    This attribute is only inspected on the application 
+                    configuration resource file located at "WEB-INF/faces-config.xml".
+                    The presence of this attribute on any application configuration
+                    resource other than the one located at "WEB-INF/faces-config.xml",
+                    including any files named using the javax.faces.CONFIG_FILES
+                    attribute, must be ignored.
 
                     If metadata-complete is set to "true", the JavaServer Faces
                     runtime must ignore any annotations that specify configuration
@@ -254,7 +259,7 @@
                     files of the application for annotations, as specified by
                     the specification.
 
-                    It should be noted that this will have no impact on
+                    The value of this attribute will have no impact on
                     runtime annotations such as @ResourceDependency or
                     @ListenerFor.
 
@@ -315,6 +320,20 @@
                             ActionListener implementation class that will be 
                             called during the Invoke Application phase of the 
                             request processing lifecycle.
+                            
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="annotation-handler"
+                         type="javaee:fully-qualified-classType">
+                <xsd:annotation>
+                    <xsd:documentation>
+                            
+                            The "annotation-handler" element contains the fully 
+                            qualified class name of the concrete 
+                            FacesAnnotationHandler implementation that will
+                            be used to discover and scan for the annotations
+                            supported by JavaServer Faces.
                             
                     </xsd:documentation>
                 </xsd:annotation>

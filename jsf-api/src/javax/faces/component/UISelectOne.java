@@ -41,14 +41,8 @@
 package javax.faces.component;
 
 
-import javax.el.ELException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
-import javax.faces.model.SelectItemGroup;
-
-import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 
 /**
@@ -147,7 +141,11 @@ public class UISelectOne extends UIInput {
         }
 
         // Ensure that the value matches one of the available options
-        boolean found = matchValue(value, new SelectItemsIterator(this));
+        boolean found = SelectUtils.matchValue(getFacesContext(),
+                                               this,
+                                               value,
+                                               new SelectItemsIterator(this),
+                                               getConverter());
 
         // Enqueue an error message if an invalid value was specified
         if (!found) {
@@ -158,81 +156,5 @@ public class UISelectOne extends UIInput {
             setValid(false);
         }
     }
-
-
-    // --------------------------------------------------------- Private Methods
-
-
-    /**
-     * <p>Return <code>true</code> if the specified value matches one of the
-     * available options, performing a recursive search if if a
-     * {@link SelectItemGroup} instance is detected.</p>
-     *
-     * @param value {@link UIComponent} value to be tested
-     * @param items Iterator over the {@link SelectItem}s to be checked
-     */
-    private boolean matchValue(Object value, Iterator items) {
-
-        while (items.hasNext()) {
-            SelectItem item = (SelectItem) items.next();
-            if (item instanceof SelectItemGroup) {
-                SelectItem subitems[] =
-                    ((SelectItemGroup) item).getSelectItems();
-                if ((subitems != null) && (subitems.length > 0)) {
-                    if (matchValue(value, new ArrayIterator(subitems))) {
-                        return (true);
-                    }
-                }
-            } else {
-                //Coerce the item value type before comparing values.
-                Class type = value.getClass();
-                Object newValue;
-                try {
-                    newValue = getFacesContext().getApplication().
-                        getExpressionFactory().coerceToType(item.getValue(), type);
-                } catch (ELException ele) {
-                    newValue = item.getValue();
-                } catch (IllegalArgumentException iae) {
-                    // If coerceToType fails, per the docs it should throw
-                    // an ELException, however, GF 9.0 and 9.0u1 will throw
-                    // an IllegalArgumentException instead (see GF issue 1527).                    
-                    newValue = item.getValue();
-                }
-                if (value.equals(newValue)) {
-                    return (true);
-                }
-            }
-        }
-        return (false);
-
-    }
-
-
-    static class ArrayIterator implements Iterator {
-
-        public ArrayIterator(Object items[]) {
-            this.items = items;
-        }
-
-        private Object items[];
-        private int index = 0;
-
-        public boolean hasNext() {
-            return (index < items.length);
-        }
-
-        public Object next() {
-            try {
-                return (items[index++]);
-            } catch (IndexOutOfBoundsException e) {
-                throw new NoSuchElementException();
-            }
-        }
-
-        public void remove() {
-            throw new UnsupportedOperationException();
-        }
-    }
-
 
 }
