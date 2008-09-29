@@ -244,7 +244,7 @@ public class ComponentHandler extends MetaTagHandler {
             c = app.createComponent(ve, faces, this.componentType, this.rendererType);
             if (c != null) {
                 // Make sure the component supports 1.2
-                c.setValueExpression("bindine", ve);
+                c.setValueExpression("binding", ve);
             }
         } else {
             c = app.createComponent(faces, this.componentType, this.rendererType);
