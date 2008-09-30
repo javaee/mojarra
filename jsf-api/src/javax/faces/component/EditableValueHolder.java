@@ -66,6 +66,14 @@ public interface EditableValueHolder extends ValueHolder {
     public Object getSubmittedValue();
 
     /**
+     * <p class="changed_added_2_0">Convenience method to reset this
+     * component's value to the un-initialized state.</p>
+     */
+
+    public void resetValue();
+
+
+    /**
      * <p>Set the submittedValue value of this component.
      * This method should only be used by the <code>decode()</code> and
      * <code>validate()</code> method of this component, or

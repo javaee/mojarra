@@ -510,17 +510,26 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      * RenderKit. </p>
      *
      * <div class="changed_added_2_0">
-     * <p>
-     * The <code>component</code> must be added using the following algorithm:
+
+     * <p> The <code>component</code> must be added using the following
+     * algorithm:</p>
+
      * <ul>
-     * <li>If the <code>target</code> argument is <code>null</code>, look for a <code>target</code>
-     * attribute on the <code>component</code>.<br>
-     * If there is no <code>target</code> attribute, set <code>target</code> to be the default value <code>head</code></li>
-     * <li>Call {@link #getComponentResources} to obtain the child list for the
-     * given target.</li>
-     * <li>Add the <code>component</code> resource to the list.</li>
+
+     * <li><p>If the <code>target</code> argument is <code>null</code>,
+     * look for a <code>target</code> attribute on the
+     * <code>component</code>.  If there is no <code>target</code>
+     * attribute, set <code>target</code> to be the default value
+     * <code>head</code></p></li>
+
+     * <li><p>Call {@link #getComponentResources} to obtain the child
+     * list for the given target.</p></li>
+
+     * <li><p>Add the <code>component</code> resource to the
+     * list.</p></li>
+
      * </ul>
-     * </p>
+
      * </div>
      *  
      * @param context {@link FacesContext} for the current request

@@ -376,6 +376,27 @@ public class TestRenderKit extends ServletFacesTestCase {
         assertEquals(writer.getContentType(), "text/html");
     }
 
+    // Added for issue 807
+    public void beginCreateResponseWriter6(WebRequest theRequest) {
+        theRequest.addHeader("Accept", "text/");
+    }
+
+    public void testCreateResponseWriter6() throws Exception {
+        RenderKitFactory renderKitFactory = (RenderKitFactory)
+              FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        RenderKit renderKit = renderKitFactory.getRenderKit(getFacesContext(),
+                                                            RenderKitFactory.HTML_BASIC_RENDER_KIT);
+        ResponseWriter writer = null;
+
+        // see that the proper content type is picked up based on the
+        // accept header
+        writer = renderKit
+              .createResponseWriter(new StringWriter(), null, "ISO-8859-1");
+        assertEquals(writer.getContentType(), "text/html");
+    }
+
+
+
     public void testGetComponentFamilies() {
 
         RenderKitImpl rk = new RenderKitImpl();
