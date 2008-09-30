@@ -41,6 +41,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 
+import javax.faces.FacesWrapper;
 import javax.faces.context.FacesContext;
 
 /**
@@ -60,12 +61,12 @@ import javax.faces.context.FacesContext;
  *
  * @since 2.0
  */
-public abstract class ResourceWrapper extends Resource {
+public abstract class ResourceWrapper extends Resource implements FacesWrapper<Resource> {
 
     /**
      * @return the instance that we are wrapping.
      */ 
-    protected abstract Resource getWrapped();
+    public abstract Resource getWrapped();
 
 
     // --------------------------------------------------- Methods from Resource

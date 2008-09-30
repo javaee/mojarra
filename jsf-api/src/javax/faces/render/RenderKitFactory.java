@@ -42,11 +42,13 @@ package javax.faces.render;
 
 
 import java.util.Iterator;
+import javax.faces.FacesWrapper;
 import javax.faces.context.FacesContext;
 
 
 /**
- * <p><strong>RenderKitFactory</strong> is a factory object that registers
+ * <p><strong class="changed_modified_2_0">RenderKitFactory</strong> is a 
+ * factory object that registers
  * and returns {@link RenderKit} instances.  Implementations of
  * JavaServer Faces must provide at least a default implementation of
  * {@link RenderKit}.  Advanced implementations (or external third party
@@ -63,9 +65,21 @@ import javax.faces.context.FacesContext;
  * </pre>
  */
 
-public abstract class RenderKitFactory {
+public abstract class RenderKitFactory implements FacesWrapper<RenderKitFactory> {
+    
+    /**
+     * <p class="changed_added_2_0">If this factory has been decorated, the 
+     * implementation doing the decorating may override this method to provide
+     * access to the implementation being wrapped.  A default implementation
+     * is provided that returns <code>null</code>.</p>
+     * 
+     * @since 2.0
+     */
 
-
+    public RenderKitFactory getWrapped() {
+        return null;
+    }
+    
     /**
      * <p>The render kit identifier of the default {@link RenderKit} instance
      * for this JavaServer Faces implementation.</p>

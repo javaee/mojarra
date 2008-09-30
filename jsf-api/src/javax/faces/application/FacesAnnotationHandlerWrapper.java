@@ -37,6 +37,7 @@
 package javax.faces.application;
 
 import java.util.Set;
+import javax.faces.FacesWrapper;
 import javax.faces.context.ExternalContext;
 
 /**
@@ -56,12 +57,12 @@ import javax.faces.context.ExternalContext;
  *
  * @since 2.0
  */
-public abstract class FacesAnnotationHandlerWrapper extends FacesAnnotationHandler {
+public abstract class FacesAnnotationHandlerWrapper extends FacesAnnotationHandler implements FacesWrapper<FacesAnnotationHandler> {
 
     /**
      * @return the instance that we are wrapping.
      */ 
-    protected abstract FacesAnnotationHandler getWrapped();
+    public abstract FacesAnnotationHandler getWrapped();
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method

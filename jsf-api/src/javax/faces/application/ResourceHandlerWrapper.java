@@ -38,6 +38,7 @@ package javax.faces.application;
 
 import java.io.IOException;
 
+import javax.faces.FacesWrapper;
 import javax.faces.context.FacesContext;
 
 /**
@@ -56,12 +57,12 @@ import javax.faces.context.FacesContext;
  *
  * @since 2.0
  */
-public abstract class ResourceHandlerWrapper extends ResourceHandler {
+public abstract class ResourceHandlerWrapper extends ResourceHandler implements FacesWrapper<ResourceHandler> {
 
     /**
      * @return the instance that we are wrapping.
      */ 
-    protected abstract ResourceHandler getWrapped();
+    public abstract ResourceHandler getWrapped();
 
 
     // -------------------------------------------- Methods from ResourceHandler

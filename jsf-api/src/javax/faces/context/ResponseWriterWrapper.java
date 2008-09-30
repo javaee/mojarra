@@ -44,6 +44,7 @@ import javax.faces.component.UIComponent;
 
 import java.io.IOException;
 import java.io.Writer;
+import javax.faces.FacesWrapper;
 
 /**
  * <p>Provides a simple implementation of {@link ResponseWriter} that
@@ -57,14 +58,14 @@ import java.io.Writer;
  *
  * @since 1.2
  */
-public abstract class ResponseWriterWrapper extends ResponseWriter {
+public abstract class ResponseWriterWrapper extends ResponseWriter implements FacesWrapper<ResponseWriter> {
 
 
     /**
      * @return the instance that we are wrapping.
      */ 
 
-    abstract protected ResponseWriter getWrapped();
+    public abstract ResponseWriter getWrapped();
 
     // -------------------------- Methods from javax.faces.contxt.ResponseWriter
 

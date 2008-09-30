@@ -46,6 +46,7 @@ import javax.faces.FacesException;
 
 import java.util.Locale;
 import java.io.IOException;
+import javax.faces.FacesWrapper;
 
 /**
  * <p>Provides a simple implementation of {@link ViewHandler} that can
@@ -59,14 +60,14 @@ import java.io.IOException;
  *
  * @since 1.2
  */
-public abstract class ViewHandlerWrapper extends ViewHandler {
+public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWrapper<ViewHandler> {
 
 
     /**
      * @return the instance that we are wrapping.
      */ 
 
-    abstract protected ViewHandler getWrapped();
+    public abstract ViewHandler getWrapped();
 
 
     // ------------------------ Methods from javax.faces.application.ViewHandler

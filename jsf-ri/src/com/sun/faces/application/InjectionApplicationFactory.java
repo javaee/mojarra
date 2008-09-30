@@ -47,6 +47,7 @@ import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
+import javax.faces.FacesWrapper;
 
 /**
  * This {@link javax.faces.application.ApplicationFactory} is responsible for injecting the
@@ -55,7 +56,7 @@ import com.sun.faces.util.Util;
  * compatibility as the API evolves without having the API rely on implementation
  * specific details.
  */
-public class InjectionApplicationFactory extends ApplicationFactory {
+public class InjectionApplicationFactory extends ApplicationFactory implements FacesWrapper<ApplicationFactory> {
 
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
@@ -109,6 +110,7 @@ public class InjectionApplicationFactory extends ApplicationFactory {
     // ---------------------------------------------------------- Public Methods
 
 
+    @Override
     public ApplicationFactory getWrapped() {
 
         return delegate;

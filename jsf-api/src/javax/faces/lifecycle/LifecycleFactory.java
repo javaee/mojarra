@@ -41,6 +41,7 @@
 package javax.faces.lifecycle;
 
 import java.util.Iterator;
+import javax.faces.FacesWrapper;
 
 
 /**
@@ -61,7 +62,22 @@ import java.util.Iterator;
  * </pre>
  */
 
-public abstract class LifecycleFactory {
+public abstract class LifecycleFactory implements FacesWrapper<LifecycleFactory> {
+    
+    
+    /**
+     * <p class="changed_added_2_0">If this factory has been decorated, the 
+     * implementation doing the decorating may override this method to provide
+     * access to the implementation being wrapped.  A default implementation
+     * is provided that returns <code>null</code>.</p>
+     * 
+     * @since 2.0
+     */
+
+    public LifecycleFactory getWrapped() {
+        return null;
+    }
+    
 
 
     /**

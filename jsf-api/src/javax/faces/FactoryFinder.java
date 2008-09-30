@@ -70,45 +70,36 @@ import java.net.URLConnection;
 
 
 /**
- * <p><strong>FactoryFinder</strong> implements the standard discovery
- * algorithm for all factory objects specified in the JavaServer Faces
- * APIs.  For a given factory class name, a corresponding implementation
- * class is searched for based on the following algorithm.  Items are
- * listed in order of decreasing search precedence:</p> <ul>
- * <p/>
- * <li>If the JavaServer Faces configuration file bundled into the
- * <code>WEB-INF</code> directory of the webapp contains a
- * <code>factory</code> entry of the given factory class name, that
- * factory is used.</li>
- * <p/>
- * <li>If the JavaServer Faces configuration files named by the
- * <code>javax.faces.CONFIG_FILES</code>
- * <code>ServletContext</code> init parameter contain any
- * <code>factory</code> entries of the given factory class name, those
- * factories are used, with the last one taking precedence.</li>
- * <p/>
- * <li>If there are any JavaServer Faces configuration files bundled
- * into the <code>META-INF</code> directory of any jars on the
- * <code>ServletContext</code>'s resource paths, the
+ * <p><strong class="changed_modified_2_0">FactoryFinder</strong>
+ * implements the standard discovery algorithm for all factory objects
+ * specified in the JavaServer Faces APIs.  For a given factory class
+ * name, a corresponding implementation class is searched for based on
+ * the following algorithm.  Items are listed in order of decreasing
+ * search precedence:</p> <ul> <p/> <li>If the JavaServer Faces
+ * configuration file bundled into the <code>WEB-INF</code> directory of
+ * the webapp contains a <code>factory</code> entry of the given factory
+ * class name, that factory is used.</li> <p/> <li>If the JavaServer
+ * Faces configuration files named by the
+ * <code>javax.faces.CONFIG_FILES</code> <code>ServletContext</code>
+ * init parameter contain any <code>factory</code> entries of the given
+ * factory class name, those factories are used, with the last one
+ * taking precedence.</li> <p/> <li>If there are any JavaServer Faces
+ * configuration files bundled into the <code>META-INF</code> directory
+ * of any jars on the <code>ServletContext</code>'s resource paths, the
  * <code>factory</code> entries of the given factory class name in those
- * files are used, with the last one taking precedence.</li>
- * <p/>
- * <li>If a <code>META-INF/services/{factory-class-name}</code> resource
- * is visible to the web application class loader for the calling
+ * files are used, with the last one taking precedence.</li> <p/> <li>If
+ * a <code>META-INF/services/{factory-class-name}</code> resource is
+ * visible to the web application class loader for the calling
  * application (typically as a result of being present in the manifest
  * of a JAR file), its first line is read and assumed to be the name of
- * the factory implementation class to use.</li>
- * <p/>
- * <li>If none of the above steps yield a match, the JavaServer Faces
- * implementation specific class is used.</li>
- * <p/>
- * </ul>
- * <p/>
- * <p>If any of the factories found on any of the steps above happen to
- * have a one-argument constructor, with argument the type being the
- * abstract factory class, that constructor is invoked, and the previous
- * match is passed to the constructor.  For example, say the container
- * vendor provided an implementation of {@link
+ * the factory implementation class to use.</li> <p/> <li>If none of the
+ * above steps yield a match, the JavaServer Faces implementation
+ * specific class is used.</li> <p/> </ul> <p/> <p>If any of the
+ * factories found on any of the steps above happen to have a
+ * one-argument constructor, with argument the type being the abstract
+ * factory class, that constructor is invoked, and the previous match is
+ * passed to the constructor.  For example, say the container vendor
+ * provided an implementation of {@link
  * javax.faces.context.FacesContextFactory}, and identified it in
  * <code>META-INF/services/javax.faces.context.FacesContextFactory</code>
  * in a jar on the webapp ClassLoader.  Also say this implementation
@@ -117,19 +108,17 @@ import java.net.URLConnection;
  * <code>FactoryFinder</code> system would call that one-argument
  * constructor, passing the implementation of
  * <code>FacesContextFactory</code> provided by the JavaServer Faces
- * implementation.</p>
- * <p/>
- * <p>If a Factory implementation does not provide a proper one-argument
- * constructor, it must provide a zero-arguments constructor in order to
- * be successfully instantiated.</p>
- * <p/>
- * <p>Once the name of the factory implementation class is located, the
- * web application class loader for the calling application is requested
- * to load this class, and a corresponding instance of the class will be
- * created.  A side effect of this rule is that each web application will
- * receive its own instance of each factory class, whether the JavaServer
- * Faces implementation is included within the web application or is made
- * visible through the container's facilities for shared libraries.</p>
+ * implementation.</p> <p/> <p>If a Factory implementation does not
+ * provide a proper one-argument constructor, it must provide a
+ * zero-arguments constructor in order to be successfully
+ * instantiated.</p> <p/> <p>Once the name of the factory implementation
+ * class is located, the web application class loader for the calling
+ * application is requested to load this class, and a corresponding
+ * instance of the class will be created.  A side effect of this rule is
+ * that each web application will receive its own instance of each
+ * factory class, whether the JavaServer Faces implementation is
+ * included within the web application or is made visible through the
+ * container's facilities for shared libraries.</p>
  */
 
 public final class FactoryFinder {
@@ -206,10 +195,18 @@ public final class FactoryFinder {
 
 
     /**
-     * <p>Create (if necessary) and return a per-web-application instance of
-     * the appropriate implementation class for the specified JavaServer Faces
-     * factory class, based on the discovery algorithm described in the
-     * class description.</p>
+     * <p><span class="changed_modified_2_0">Create</span> (if
+     * necessary) and return a per-web-application instance of the
+     * appropriate implementation class for the specified JavaServer
+     * Faces factory class, based on the discovery algorithm described
+     * in the class description.</p>
+     *
+     * <p class="changed_added_2_0">The standard factories and wrappers
+     * in JSF all implement the interface {@link FacesWrapper}.  If the
+     * returned <code>Object</code> is an implementation of one of the
+     * standard factories, it must be legal to cast it to an instance of
+     * <code>FacesWrapper</code> and call {@link
+     * FacesWrapper#getWrapped} on the instance.</p>
      *
      * @param factoryName Fully qualified name of the JavaServer Faces factory
      *                    for which an implementation instance is requested
