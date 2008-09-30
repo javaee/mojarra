@@ -675,8 +675,17 @@ public class RenderKitUtils {
             // now split type and subtype
             if (typeSubType.indexOf(CONTENT_TYPE_SUBTYPE_DELIMITER) >= 0) {
                 String[] typeSubTypeParts = Util.split(typeSubType.toString(), CONTENT_TYPE_SUBTYPE_DELIMITER);
-                type = typeSubTypeParts[0].trim();
-                subtype = typeSubTypeParts[1].trim();
+                // Apparently there are user-agents that send invalid
+                // Accept headers containing no subtype (i.e. text/).
+                // For those cases, assume "*" for the subtype.
+                if (typeSubTypeParts.length == 1) {
+                    type = typeSubTypeParts[0].trim();
+                    subtype = "*";
+                } else {
+                    type = typeSubTypeParts[0].trim();
+                    subtype = typeSubTypeParts[1].trim();
+                }
+
             } else {
                 type = typeSubType.toString();
                 subtype = "";
