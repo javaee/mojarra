@@ -8,6 +8,8 @@ export UCHOME=/home/driscoll/sources/updatecenter2
 export PYTHONPATH=$UCHOME/project/tools:$UCHOME/project/build/dist/linux-i386/pkg/vendor-packages:.
 
 # create the repo
-python $UCHOME/project/tools/makepkgs.py -d `pwd`/repo  -b dist conf/jsf_proto
+#python $UCHOME/project/tools/makepkgs.py -s file://`pwd`/repo -b dist conf/jsf_proto.py
 
+# Or, optionally, put the repo files into some repository
+python $UCHOME/project/tools/makepkgs.py -s http://localhost:10000 -b dist conf/jsf_proto.py
 

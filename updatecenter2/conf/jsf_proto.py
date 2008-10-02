@@ -35,28 +35,32 @@
 # only if the new code is made subject to such option by the copyright
 # holder.
 #
+# RELEASE_PENDING: version number needs to be updated to a correct version
 pkg = {
-    "name" : "jsf2.0",
-    "version" : "2.0.0-080826",
+    "name"          : "glassfish-jsf",
+    "version"       : "5.0",
+    "depends"       : {
+                       "pkg:/glassfish-jsf@5" : {"type" : "incorporate"}
+                      },
     "attributes"    : { 
                         "description" : "JSF 2.0 EDR2 implementation",
-                        "description_long" : "Updated JSF 2.0 implementation.  \Current version supports EDR2.  This version replaces the default version \
+                        "description_long" : "Updated JSF 2.0 implementation.  \
+Current version supports EDR2.  This version replaces the default version \
 of JSF that ships with Glassfish." 
                       },
 
     "files"         : {
-                       "jsf2.0/LICENSE"      : {"mode" : "0444"},
-                       "jsf2.0/README"       : {"mode" : "0444"},                       
-                       },    
+                       "jsf2.0/LICENSE"      : {"mode" : "0644"},
+                       "jsf2.0/README"       : {"mode" : "0644"},
+                       },
 
     "licenses"      : {
                        "jsf2.0/LICENSE"      : {"license" : "JSF-LICENSE"},
-                       },    
+                       },
 
     "dirtrees"      : [
                         "glassfish",
                         "jsf2.0",
                       ]
-    
 }
 
