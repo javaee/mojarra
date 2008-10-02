@@ -1,8 +1,4 @@
 /*
- * $Id: ApplicationFactory.java,v 1.8 2007/04/27 22:00:02 ofung Exp $
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
  * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
@@ -38,59 +34,23 @@
  * holder.
  */
 
-package javax.faces.application;
-
-import javax.faces.FacesWrapper;
-
+package javax.faces;
 
 /**
- * <p><strong class="changed_modified_2_0">ApplicationFactory</strong> is a 
- * factory object that creates
- * (if needed) and returns {@link Application} instances.  Implementations of
- * JavaServer Faces must provide at least a default implementation of
- * {@link Application}.</p>
- *
- * <p>There must be one {@link ApplicationFactory} instance per web
- * application that is utilizing JavaServer Faces.  This instance can be
- * acquired, in a portable manner, by calling:</p>
- * <pre>
- *   ApplicationFactory factory = (ApplicationFactory)
- *    FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
- * </pre>
+ * <p class="changed_added_2_0">Any wrapper class in JSF that must provide
+ * access to the object it wraps must implement this interface.</p>
+ * 
+ * @since 2.0
  */
-
-public abstract class ApplicationFactory implements FacesWrapper<ApplicationFactory> {
-
-
+public interface FacesWrapper<T> {
+    
     /**
-     * <p class="changed_added_2_0">If this factory has been decorated, the 
-     * implementation doing the decorating may override this method to provide
-     * access to the implementation being wrapped.  A default implementation
-     * is provided that returns <code>null</code>.</p>
+     * <p class="changed_added_2_0">A class that implements this
+     * interface uses this method to return an instance of the class
+     * being wrapped.</p>
      * 
      * @since 2.0
      */
-    public ApplicationFactory getWrapped() {
-        return null;
-    }
-    
-    /**
-     * <p>Create (if needed) and return an {@link Application} instance
-     * for this web application.</p>
-     */
-    public abstract Application getApplication();
-
-
-    /**
-     * <p>Replace the {@link Application} instance that will be
-     * returned for this web application.</p>
-     *
-     * @throws NullPointerException if <code>application</code>
-     *  is <code>null</code>.
-
-     * @param application The replacement {@link Application} instance
-     */
-    public abstract void setApplication(Application application);
-
+    public T getWrapped();
 
 }

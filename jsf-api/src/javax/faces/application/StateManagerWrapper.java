@@ -44,6 +44,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.component.UIViewRoot;
 
 import java.io.IOException;
+import javax.faces.FacesWrapper;
 
 /**
  * <p>Provides a simple implementation of {@link StateManager} that can
@@ -57,13 +58,13 @@ import java.io.IOException;
  *
  * @since 1.2
  */
-public abstract class StateManagerWrapper extends StateManager {
+public abstract class StateManagerWrapper extends StateManager implements FacesWrapper<StateManager> {
 
     /**
      * @return the instance that we are wrapping.
      */ 
 
-    abstract protected StateManager getWrapped();
+    public abstract StateManager getWrapped();
 
     // ----------------------- Methods from javax.faces.application.StateManager
 

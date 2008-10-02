@@ -49,6 +49,7 @@ import javax.faces.FacesException;
 
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
+import javax.faces.FacesWrapper;
 
 /**
  * This {@link FacesContextFactory} is responsible for injecting the
@@ -58,7 +59,7 @@ import com.sun.faces.util.Util;
  * compatibility as the API evolves without having the API rely on implementation
  * specific details.  
  */
-public class InjectionFacesContextFactory extends FacesContextFactory {
+public class InjectionFacesContextFactory extends FacesContextFactory implements FacesWrapper<FacesContextFactory> {
 
     private static final Logger LOGGER = FacesLogger.CONTEXT.getLogger();
     private FacesContextFactory delegate;
@@ -133,6 +134,7 @@ public class InjectionFacesContextFactory extends FacesContextFactory {
     // ---------------------------------------------------------- Public Methods
 
 
+    @Override
     public FacesContextFactory getWrapped() {
 
         return delegate;

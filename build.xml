@@ -87,7 +87,8 @@
         <delete dir="${dist.dir}"/>
         <call.modules target="clean"/>        
         <ant dir="jsf-demo" target="clean" />
-        <ant dir="updatecenter" target="updatecenter.cleanall" />
+        <ant dir="updatecenter" target="updatecenter.clean" />
+        <ant dir="updatecenter2" target="updatecenter2.clean" />
     </target>  
     
     <target name="main" description="Build Mojarra">
