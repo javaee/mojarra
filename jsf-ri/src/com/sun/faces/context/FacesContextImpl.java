@@ -170,7 +170,7 @@ import com.sun.faces.renderkit.RenderKitUtils;
         if (null != partialViewContext) {
             return partialViewContext;
         }
-        partialViewContext = new PartialViewContext();
+        partialViewContext = new PartialViewContextImpl();
         return partialViewContext;
     }
 

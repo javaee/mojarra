@@ -41,6 +41,7 @@
 package com.sun.faces.context;
 
 import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.faces.context.PartialViewContext;
 import javax.faces.context.ResponseWriter;
 import javax.servlet.http.HttpServletResponse;
@@ -94,7 +95,7 @@ public class PartialViewContextImpl extends PartialViewContext {
 
         assertNotReleased();
         if (onOffResponse == null) {
-            onOffResponse = new OnOffResponseWrapper(this);
+            onOffResponse = new OnOffResponseWrapper(FacesContext.getCurrentInstance());
         }
         onOffResponse.setEnabled(enable);
         
@@ -328,7 +329,7 @@ public class PartialViewContextImpl extends PartialViewContext {
         }
 
         if (out != null) {
-            responseWriter =
+            ResponseWriter responseWriter =
                   ctx.getRenderKit().createResponseWriter(out,
                                                           "text/xml",
                                                           encoding);
@@ -336,5 +337,13 @@ public class PartialViewContextImpl extends PartialViewContext {
         return responseWriter;
 
     }
+
+    @SuppressWarnings({"FinalPrivateMethod"})
+    private final void assertNotReleased() {
+        if (released) {
+            throw new IllegalStateException();
+        }
+    }
+
 
 } // end of class PartialViewContextImpl
