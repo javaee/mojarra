@@ -165,7 +165,7 @@ import com.sun.faces.renderkit.RenderKitUtils;
     /**
      * @see javax.faces.context.getPartialViewContext()
      */
-    public PartialViewContext getPartialViewcontext() {
+    public PartialViewContext getPartialViewContext() {
         assertNotReleased();
         if (null != partialViewContext) {
             return partialViewContext;

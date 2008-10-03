@@ -49,6 +49,7 @@ import javax.faces.FactoryFinder;
 import javax.faces.application.ProjectStage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.context.PartialViewContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
@@ -1013,7 +1014,6 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
         PartialViewContext partialViewContext) {
 
         try {
-            PartialViewContext partialViewContext = context.getPartialViewContext();
             // Turn on the response that has been embedded in the ViewHandler.
             partialViewContext.enableResponseWriting(true);
 
@@ -1399,7 +1399,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
         initState();
         notifyBefore(context, PhaseId.PROCESS_VALIDATIONS);
 
-        PartialViewContext = cohtext.getPartialViewContext();
+        PartialViewContext partialViewContext = context.getPartialViewContext();
         if (partialViewContext.isAjaxRequest() && 
             processPartialValidators(context, partialViewContext)) {
             clearFacesEvents(context);
@@ -1489,7 +1489,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
         initState();
         notifyBefore(context, PhaseId.UPDATE_MODEL_VALUES);
 
-        PartialViewContext = cohtext.getPartialViewContext();
+        PartialViewContext partialViewContext = context.getPartialViewContext();
         if (partialViewContext.isAjaxRequest() && 
             processPartialUpdates(context, partialViewContext)) {
             clearFacesEvents(context);

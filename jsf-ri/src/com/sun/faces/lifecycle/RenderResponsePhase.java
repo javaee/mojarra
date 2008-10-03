@@ -46,6 +46,7 @@ package com.sun.faces.lifecycle;
 import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.context.PartialViewContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
@@ -93,8 +94,9 @@ public class RenderResponsePhase extends Phase {
         }
         // For requests intended to produce a partial response, we need prohibit
         // writing any content outside of the view itself (f:view).
-        if (facesContext.isAjaxRequest()) {
-            facesContext.enableResponseWriting(false);
+        PartialViewContext partialViewContext = facesContext.getPartialViewContext();
+        if (partialViewContext.isAjaxRequest()) {
+            partialViewContext.enableResponseWriting(false);
         }
         
         try {

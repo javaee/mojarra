@@ -110,25 +110,11 @@ public class PartialViewContextImpl extends PartialViewContext {
 
         assertNotReleased();
         if (ajaxRequest == null) {
-            ajaxRequest = getExternalContext().getRequestParameterMap()
+            ajaxRequest = FacesContext.getCurrentInstance().
+                getExternalContext().getRequestParameterMap()
                   .containsKey("javax.faces.partial.ajax");
         }
         return ajaxRequest;
-
-    }
-
-    /**
-     * @see javax.faces.context.PartialViewContext#isPartialRequest()
-     */
-    @Override
-    public boolean isPartialRequest() {
-
-        assertNotReleased();
-        if (partialRequest == null) {
-            partialRequest = getExternalContext().getRequestParameterMap()
-                  .containsKey("javax.faces.partial");
-        }
-        return partialRequest;
 
     }
 
@@ -139,7 +125,8 @@ public class PartialViewContextImpl extends PartialViewContext {
     public boolean isExecuteNone() {
 
         assertNotReleased();
-        String execute = getExternalContext().getRequestParameterMap()
+        String execute = FacesContext.getCurrentInstance().
+            getExternalContext().getRequestParameterMap()
               .get(PARTIAL_EXECUTE_PARAM_NAME);
         return (NO_PARTIAL_PHASE_CLIENT_IDS.equals(execute));
 
@@ -182,7 +169,8 @@ public class PartialViewContextImpl extends PartialViewContext {
     public boolean isRenderNone() {
 
         assertNotReleased();
-        String execute = getExternalContext().getRequestParameterMap()
+        String execute = FacesContext.getCurrentInstance().
+            getExternalContext().getRequestParameterMap()
             .get(PARTIAL_RENDER_PARAM_NAME);
         return (NO_PARTIAL_PHASE_CLIENT_IDS.equals(execute));
 
@@ -294,6 +282,7 @@ public class PartialViewContextImpl extends PartialViewContext {
     private List<String> populatePhaseClientIds(String parameterName) {
 
         Map<String,String> requestParamMap =
+              FacesContext.getCurrentInstance().
               getExternalContext().getRequestParameterMap();
 
         String param = requestParamMap.get(parameterName);
@@ -317,6 +306,7 @@ public class PartialViewContextImpl extends PartialViewContext {
               extContext.getResponse();
         String encoding = extContext.getRequestCharacterEncoding();
         response.setCharacterEncoding(encoding);
+        ResponseWriter responseWriter = null;
         Writer out = null;
         try {
             out = response.getWriter();
@@ -329,13 +319,11 @@ public class PartialViewContextImpl extends PartialViewContext {
         }
 
         if (out != null) {
-            ResponseWriter responseWriter =
-                  ctx.getRenderKit().createResponseWriter(out,
-                                                          "text/xml",
-                                                          encoding);
+            responseWriter =
+                ctx.getRenderKit().createResponseWriter(out,
+                "text/xml", encoding);
         }
         return responseWriter;
-
     }
 
     @SuppressWarnings({"FinalPrivateMethod"})
