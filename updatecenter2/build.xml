@@ -9,8 +9,6 @@
             tofile="dist/glassfish/modules/jsf-api.jar"/>
       <copy file="lib/jsf-impl.jar" 
             tofile="dist/glassfish/modules/web/jsf-impl.jar"/>
-      <copy file="lib/jsf-connector.jar"
-            tofile="dist/glassfish/modules/web/jsf-connector.jar"/>
       <mkdir dir="dist/jsf2.0"/>
       <copy file="conf/LICENSE" todir="dist/jsf2.0"/>
       <copy file="conf/README" todir="dist/jsf2.0"/>

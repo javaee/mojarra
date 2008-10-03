@@ -10,6 +10,9 @@ export PYTHONPATH=$UCHOME/project/tools:$UCHOME/project/build/dist/linux-i386/pk
 # create the repo
 #python $UCHOME/project/tools/makepkgs.py -s file://`pwd`/repo -b dist conf/jsf_proto.py
 
-# Or, optionally, put the repo files into some repository
+# Or, optionally, put the repo files into a local repository
 python $UCHOME/project/tools/makepkgs.py -s http://localhost:10000 -b dist conf/jsf_proto.py
+
+# Or, optionally, put the repo files into the dev test repository
+#python $UCHOME/project/tools/makepkgs.py -s http://eflat.sfbay.sun.com:10000 -b dist conf/jsf_proto.py
 
