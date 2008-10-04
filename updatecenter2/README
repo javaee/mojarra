@@ -14,12 +14,11 @@ Lots of output, look for success message.
 
 (or you could just build it in Netbeans - it comes with a project definition)
 
-add the pkg/pkg/bin directory to your $PATH - you'll need the pkg and pkg.depotd files for testing
+add the pkg/pkg/bin directory to your $PATH - you'll need the 
+pkg and pkg.depotd files for testing
 
-
-
-Next, in the Mojarra codebase edit the udpatecenter2/bin/makepkgs, and add UCHOME to point to the
-location of the updatecenter2 codebase.
+Next, in the Mojarra codebase edit the udpatecenter2/bin/makepkgs, and 
+add UCHOME to point to the location of the updatecenter2 codebase.
 
 
 Now, build the repository files:
