@@ -42,10 +42,12 @@ pkg = {
                        "pkg:/glassfish-jsf@2.0" : {"type" : "incorporate"}
                       },
     "attributes"    : { 
-                        "description" : "JSF 2.0 EDR2 implementation",
-                        "description_long" : "Updated JSF 2.0 implementation.  \
+                        "pkg.summary" : "JSF 2.0 EDR2 implementation",
+                        "pkg.description" : "Updated JSF 2.0 implementation.  \
 Current version supports EDR2.  This version replaces the default version \
-of JSF that ships with Glassfish.  This software is beta quality, please see release notes." 
+of JSF that ships with Glassfish.  This software is beta quality, please \
+see release notes.",
+                        "info.classification" : "Application Servers"
                       },
 
     "files"         : {
