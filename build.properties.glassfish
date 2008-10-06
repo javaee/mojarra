@@ -102,6 +102,13 @@ glassfish.admin.port=4848
 glassfish.domain=domain1
 
 # --------------------------------------------------
+# Directory for pkg tools, downloaded from
+# http://wiki.updatecenter.java.net/Wiki.jsp?page=Download
+# Used for updatecenter2
+# --------------------------------------------------
+pkg.dir=/home/driscoll/pkg/pkg
+
+# --------------------------------------------------
 #    Compilation flags
 # --------------------------------------------------
 compile.deprecation=off

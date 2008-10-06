@@ -1,18 +1,10 @@
 
 To build this updatecenter2 code, you first need to download the 
-updatecenter2 code from :
+updatecenter2 tool from :
 
-svn svn checkout https://updatecenter2.dev.java.net/svn/updatecenter2/trunk updatecenter2 --username username
+http://wiki.updatecenter.java.net/Wiki.jsp?page=Download
 
-
-Then you'll need to build it...
-
-cd {whereever updatecenter2 is}/project
-ant all
-
-Lots of output, look for success message.
-
-(or you could just build it in Netbeans - it comes with a project definition)
+Install it in some well defined path
 
 add the pkg/pkg/bin directory to your $PATH - you'll need the 
 pkg and pkg.depotd files for testing
