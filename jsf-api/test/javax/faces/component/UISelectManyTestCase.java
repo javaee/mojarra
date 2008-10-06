@@ -56,6 +56,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Collection;
 
 
 /**
@@ -264,6 +265,109 @@ public class UISelectManyTestCase extends UIInputTestCase {
         selectMany.setValid(true);
         selectMany.setSubmittedValue(new Object[] { "bar", "bop"});
         selectMany.setRendererType(null); // We don't have any renderers
+        selectMany.validate(facesContext);
+        assertTrue(!selectMany.isValid());
+
+    }
+
+
+    // Test validation of component with UISelectItems pointing to Set and the
+    // value of the component is Set
+    public void testValidation3() throws Exception {
+
+        Set<SelectItem> items = new HashSet<SelectItem>();
+        items.add(new SelectItem("foo"));
+        items.add(new SelectItem("bar"));
+        items.add(new SelectItem("baz"));
+        Set<String> submittedValues = new HashSet<String>();
+        submittedValues.add("bar");
+        submittedValues.add("baz");
+        Set<String> invalidValues = new HashSet<String>();
+        invalidValues.add("bar");
+        invalidValues.add("car");
+        testValidateWithCollection(items,
+                                   submittedValues,
+                                   invalidValues);
+
+    }
+
+    // Test validation of component with UISelectItems pointing to List
+    public void testValidation4() throws Exception {
+
+        List<SelectItem> items = new ArrayList<SelectItem>();
+        items.add(new SelectItem("foo"));
+        items.add(new SelectItem("bar"));
+        items.add(new SelectItem("baz"));
+        List<String> submittedValues = new ArrayList<String>();
+        submittedValues.add("bar");
+        submittedValues.add("baz");
+        ArrayList<String> invalidValues = new ArrayList<String>();
+        invalidValues.add("bar");
+        invalidValues.add("car");
+        testValidateWithCollection(items,
+                                   submittedValues,
+                                   invalidValues);
+
+    }
+
+
+    // Test validation of component with UISelectItems pointing to an Array
+    public void testValidation5() throws Exception {
+
+        // Put our component under test in a tree under a UIViewRoot
+        UIViewRoot root = facesContext.getApplication().getViewHandler()
+              .createView(facesContext, null);
+        root.getChildren().add(component);
+
+        // Add valid options to the component under test
+        SelectItem[] itemsArray = {
+              new SelectItem("foo"),
+              new SelectItem("bar"),
+              new SelectItem("baz")
+        };
+        UISelectItems items = new UISelectItems();
+        items.setValue(itemsArray);
+        UISelectMany selectMany = (UISelectMany) component;
+        selectMany.getChildren().add(items);
+
+        selectMany.setValid(true);
+        selectMany.setSubmittedValue(new String[] { "bar", "baz" });
+        selectMany.validate(facesContext);
+        assertTrue(selectMany.isValid());
+
+        // Validate one value on the list and one not on the list
+        selectMany.setValid(true);
+        selectMany.setSubmittedValue(new String[] { "bar", "car" });
+        selectMany.setRendererType(null); // We don't have any renderers
+        selectMany.validate(facesContext);
+        assertTrue(!selectMany.isValid());
+
+    }
+
+
+
+    private void testValidateWithCollection(Collection<SelectItem> selectItems,
+                                            Object validValues,
+                                            Object invalidValues)
+    throws Exception {
+
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        root.getChildren().add(component);
+
+        UISelectItems itemsComponent = new UISelectItems();
+        itemsComponent.setValue(selectItems);
+        UISelectMany selectMany = (UISelectMany) component;
+        selectMany.setRendererType(null);
+        selectMany.getChildren().add(itemsComponent);
+
+        selectMany.setValue(true);
+        selectMany.setSubmittedValue(validValues);
+        selectMany.validate(facesContext);
+        assertTrue(selectMany.isValid());
+        selectMany.updateModel(facesContext);
+
+        selectMany.setValid(true);
+        selectMany.setSubmittedValue(invalidValues);
         selectMany.validate(facesContext);
         assertTrue(!selectMany.isValid());
 

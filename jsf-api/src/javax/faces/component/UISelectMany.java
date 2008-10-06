@@ -42,8 +42,11 @@ package javax.faces.component;
 
 
 import java.lang.reflect.Array;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
+
 import javax.el.ValueExpression;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -52,12 +55,13 @@ import javax.faces.convert.Converter;
 
 
 /**
- * <p><strong>UISelectMany</strong> is a {@link UIComponent} that represents
- * the user's choice of a zero or more items from among a discrete set of
- * available options.  The user can modify the selected values.  Optionally,
- * the component can be preconfigured with zero or more currently selected
- * items, by storing them as an array in the <code>value</code> property of
- * the component.</p>
+ * <p><strong class="changed_modified_2_0">UISelectMany</strong> is a
+ * {@link UIComponent} that represents the user's choice of a zero or
+ * more items from among a discrete set of available options.  The user
+ * can modify the selected values.  Optionally, the component can be
+ * preconfigured with zero or more currently selected items, by storing
+ * them as an array in the <code>value</code> property of the
+ * component.</p>
  *
  * <p>This component is generally rendered as a select box or a group of
  * checkboxes.</p>
@@ -87,8 +91,10 @@ import javax.faces.convert.Converter;
  * <li>An array of objects (such as <code>Integer[]</code> or
  *     <code>String[]</code>).  Look up the registered by-class
  *     {@link javax.faces.convert.Converter} for the underlying element type.</li>
- * <li>A <code>java.util.List</code>.  Assume that the element type is
- *     <code>java.lang.String</code>, so no conversion is required.</li>
+ * <li>A <span
+ * class="changed_modified_2_0"><code>java.util.Collection</code></span>.
+ * Assume that the element type is <code>java.lang.String</code>, so no
+ * conversion is required.</li>
  * </ul>
  *
  * <p>If for any reason a <code>Converter</code> cannot be found, assume
@@ -98,9 +104,9 @@ import javax.faces.convert.Converter;
  *
  * <p>Use the selected {@link javax.faces.convert.Converter} (if any) to convert each element in the
  * values array or list from the request to the proper type.  If the component
- * has a {@link ValueBinding} for <code>value</code>, create an array
+ * has a <code>ValueExpression</code> for <code>value</code>, create an array
  * of the expected type to hold the converted values.  If the component
- * does not have a {@link ValueBinding} for <code>value</code>, create
+ * does not have a <code>ValueExpression</code> for <code>value</code>, create
  * an array of type <code>Object</code>.  Store the created array
  * as the local value of the component, set the component's <code>valid</code>
  * state to <code>true</code> and return.</p>
@@ -434,6 +440,11 @@ public class UISelectMany extends UIInput {
      * equal to any of the options,  enqueue an error message
      * and set the <code>valid</code> property to <code>false</code>.</p>
      *
+     * <p class="changed_modified_2_0">This method must explicitly
+     * support a value argument that is a single value or a value
+     * argument that is a <code>Collection</code> or Array of
+     * values.</p>
+     *
      * @param context The {@link FacesContext} for the current request
      *
      * @param value The converted value to test for membership.
@@ -453,29 +464,88 @@ public class UISelectMany extends UIInput {
         // Ensure that the values match one of the available options
         // Don't arrays cast to "Object[]", as we may now be using an array
         // of primitives
-        boolean isList = (value instanceof List);
-        int length = isList ? ((List) value).size() : Array.getLength(value);
-        boolean found = true;
         Converter converter = getConverter();
         FacesContext ctx = getFacesContext();
-        for (int i = 0; i < length; i++) {
+        for (Iterator i = getValuesIterator(value); i.hasNext(); ) {
             Iterator items = new SelectItemsIterator(this);
-            Object indexValue = isList ?
-                ((List) value).get(i) : Array.get(value, i);
-            found = SelectUtils.matchValue(ctx, this, indexValue, items, converter);
-            if (!found) {
-                break;
+            Object currentValue = i.next();
+            if (!SelectUtils.matchValue(ctx, this, currentValue, items, converter)) {
+                // Enqueue an error message if an invalid value was specified
+                FacesMessage message =
+                      MessageFactory.getMessage(context,
+                                                INVALID_MESSAGE_ID,
+                                                MessageFactory.getLabel(context, this));
+                context.addMessage(getClientId(context), message);
+                setValid(false);
+                return;
             }
         }
 
-        // Enqueue an error message if an invalid value was specified
-        if (!found) {
-            FacesMessage message =
-                MessageFactory.getMessage(context, INVALID_MESSAGE_ID,
-                     MessageFactory.getLabel(context, this));
-            context.addMessage(getClientId(context), message);
-            setValid(false);
-        }
     }
 
+
+    // --------------------------------------------------------- Private Methods
+
+
+    private Iterator getValuesIterator(Object value) {
+
+        if (value instanceof Collection) {
+            return ((Collection) value).iterator();
+        } else {
+            return (new ArrayIterator(value));
+        }
+
+    }
+
+
+    // ---------------------------------------------------------- Nested Classes
+
+
+    /**
+     * Exposes an Array as an Iterator.
+     */
+    private static final class ArrayIterator implements Iterator {
+
+        private int length;
+        private int idx = 0;
+        private Object value;
+
+
+        // -------------------------------------------------------- Constructors
+
+
+        ArrayIterator(Object value) {
+
+            this.value = value;
+            length = Array.getLength(value);
+
+        }
+
+
+        // ------------------------------------------------------------ Iterator
+
+
+        public boolean hasNext() {
+            return (idx < length);
+        }
+
+
+        public Object next() {
+
+            if (idx >= length) {
+                throw new NoSuchElementException();
+            } else {
+                return Array.get(value, idx++);
+            }
+            
+        }
+
+
+        public void remove() {
+
+            throw new UnsupportedOperationException();
+
+        }
+
+    }
 }
