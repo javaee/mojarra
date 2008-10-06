@@ -6,6 +6,8 @@ http://wiki.updatecenter.java.net/Wiki.jsp?page=Download
 
 Install it in some well defined path
 
+Add the location to your build.properties file in the pkg.dir value.
+
 add the pkg/pkg/bin directory to your $PATH - you'll need the 
 pkg and pkg.depotd files for testing
 
