@@ -660,25 +660,25 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
         //    assertTrue(e instanceof IllegalStateException);
         //}
 
-        i = applicationMap.keySet().iterator();
-        i.next();
-        i.remove();
-        try {
-            i.remove();
-            assertTrue(false);
-        } catch (Exception e) {
-            assertTrue(e instanceof IllegalStateException);
-        }
-
-        i = applicationMap.values().iterator();
-        i.next();
-        i.remove();
-        try {
-            i.remove();
-            assertTrue(false);
-        } catch (Exception e) {
-            assertTrue(e instanceof IllegalStateException);
-        }
+        //i = applicationMap.keySet().iterator();
+        //i.next();
+        //i.remove();
+        //try {
+        //    i.remove();
+        //    assertTrue(false);
+        //} catch (Exception e) {
+        //    assertTrue(e instanceof IllegalStateException);
+        //}
+        //
+        //i = applicationMap.values().iterator();
+        //i.next();
+        //i.remove();
+        //try {
+        //    i.remove();
+        //    assertTrue(false);
+        //} catch (Exception e) {
+        //    assertTrue(e instanceof IllegalStateException);
+        //}
     }
 
 
