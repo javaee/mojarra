@@ -44,8 +44,6 @@ package javax.faces.component;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -55,7 +53,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import java.util.Map.Entry;
 import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
@@ -239,85 +236,6 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
     public abstract Map<String, Object> getAttributes();
     
     
-    private transient Map<String, Object> valueExpressionEvaluatingAttrsMap;
-    
-    /** 
-     * <p class="changed_added_2_0">Like {@link #getAttributes}, except
-     * that the <code>get()</code> implementation must call
-     * <code>getValue()</code> on any result whose type is
-     * <code>ValueExpression</code> and return the evaluated result.
-     * </p>
-     * 
-     * @since 2.0
-     */
-    public Map<String, Object> getAttrs() {
-        
-        if (null == valueExpressionEvaluatingAttrsMap) {
-            valueExpressionEvaluatingAttrsMap = new Map<String, Object>() {
-                
-                private Map<String, Object> attrs = UIComponent.this.getAttributes();
-
-                public void clear() {
-		    attrs.clear();
-                }
-
-                public boolean containsKey(Object key) {
-		    return attrs.containsKey(key);
-                }
-
-                public boolean containsValue(Object value) {
-		    return attrs.containsValue(value);
-                }
-
-                public Set<Entry<String, Object>> entrySet() {
-		    return attrs.entrySet();
-                }
-
-                public Object get(Object key) {
-		    Object result = attrs.get(key);
-                    // check if the result is an expression
-                    if (result instanceof ValueExpression) {
-                        ValueExpression ve = (ValueExpression) result;
-                        result = ve.getValue(FacesContext.getCurrentInstance().getELContext());
-                    }
-                    return result;
-                }
-
-                public boolean isEmpty() {
-		    return attrs.isEmpty();
-                }
-
-                public Set<String> keySet() {
-		    return attrs.keySet();
-                }
-
-                public Object put(String key, Object value) {
-		    return attrs.put(key, value);
-                }
-
-                public void putAll(Map<? extends String, ? extends Object> t) {
-		    attrs.putAll(t);
-                }
-
-                public Object remove(Object key) {
-		    return attrs.remove(key);
-                }
-
-                public int size() {
-		    return attrs.size();
-                }
-
-                public Collection<Object> values() {
-		    return attrs.values();
-                }
-                
-            };
-        }
-        
-        return valueExpressionEvaluatingAttrsMap;
-    }
-
-
     // ---------------------------------------------------------------- Bindings
 
 
@@ -1424,8 +1342,8 @@ private void doFind(FacesContext context, String clientId) {
     }
 
 
-    private transient UIComponent previouslyPushed = null;
-    private transient UIComponent previouslyPushedCompositeComponent = null;
+    private UIComponent previouslyPushed = null;
+    private UIComponent previouslyPushedCompositeComponent = null;
 
     /**
      * <p class="changed_added_2_0">Push the current

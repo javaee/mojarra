@@ -128,6 +128,10 @@ public class ELUtils {
     public static final ResourceELResolver RESOURCE_RESOLVER =
           new ResourceELResolver();
 
+    public static final CompositeComponentAttributesELResolver COMPOSITE_COMPONENT_ATTRIBUTES_EL_RESOLVER =
+          new CompositeComponentAttributesELResolver();
+
+
 
     // ------------------------------------------------------------ Constructors
 
@@ -163,6 +167,7 @@ public class ELUtils {
         }
 
         composite.add(IMPLICIT_RESOLVER);
+        composite.add(COMPOSITE_COMPONENT_ATTRIBUTES_EL_RESOLVER);
         addELResolvers(composite, associate.getELResolversFromFacesConfig());
         addVariableResolvers(composite, associate);
         addPropertyResolvers(composite, associate);
