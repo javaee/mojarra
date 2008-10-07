@@ -10,11 +10,11 @@ export UCHOME=$1
 export PYTHONPATH=$UCHOME/vendor-packages:.
 
 # create the repo
-python $UCHOME/bin/makepkgs.py -s file://`pwd`/repo -b dist conf/jsf_proto.py
+#python $UCHOME/bin/makepkgs.py -s file://`pwd`/repo -b dist conf/jsf_proto.py
 
 # Or, optionally, put the repo files into a local repository
 #python $UCHOME/bin/makepkgs.py -s http://localhost:10000 -b dist conf/jsf_proto.py
 
 # Or, optionally, put the repo files into the dev test repository
-#python $UCHOME/bin/makepkgs.py -s http://eflat.sfbay.sun.com:10000 -b dist conf/jsf_proto.py
+python $UCHOME/bin/makepkgs.py -s http://eflat.sfbay.sun.com:10000 -b dist conf/jsf_proto.py
 
