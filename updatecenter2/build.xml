@@ -1,52 +1,39 @@
-<project name="mojarra-updatecenter2" default="updatecenter2.main" basedir=".">
+<project name="mojarra-updatecenter2" default="main" basedir=".">
+
 
     <property file="${user.home}/build.properties"/>
     <property file="../build.properties"/>
 
     <import file="${jsf.build.home}/common/ant/common.xml"/>
 
-    <if>
-        <equals arg1="${build.type}" arg2=""/>
-        <then>
-            <property name="apijar" 
-                     value="jsf-api-${impl.version.number}.jar"/>
-            <property name="impljar" 
-                     value="jsf-impl-${impl.version.number}.jar"/>
-        </then>
-        <else>
-            <property name="apijar" 
-                     value="jsf-api-${impl.version.number}-${build.type}.jar"/>
-            <property name="impljar" 
-                     value="jsf-impl-${impl.version.number}-${build.type}.jar"/>
-        </else>
-    </if>
-
-    <target name="updatecenter2.main" depends="updatecenter2.dist"/>
+    <target name="main" depends="repo"/>
 
     <!-- Create the distributed artifacts -->
-    <target name="updatecenter2.dist">
+    <target name="dist">
       <mkdir dir="dist/glassfish/modules/web"/>
       <copy file="lib/jsf-api.jar" 
-            tofile="dist/glassfish/modules/${apijar}"/>
+            tofile="dist/glassfish/modules/jsf-api.jar"/>
       <copy file="lib/jsf-impl.jar" 
-            tofile="dist/glassfish/modules/web/${impljar}"/>
+            tofile="dist/glassfish/modules/web/jsf-impl.jar"/>
       <mkdir dir="dist/jsf2.0"/>
       <copy file="conf/LICENSE" todir="dist/jsf2.0"/>
       <copy file="conf/README" todir="dist/jsf2.0"/>
     </target>
 
-    <target name="updatecenter2.repo">
-        <exec command="/bin/sh bin/makepkgs" failonerror="true"/>
+    <target name="repo" depends="dist">
+        <exec command="/bin/sh bin/makepkgs ${pkg.dir}" failonerror="true"/>
     </target>
 
-    <target name="updatecenter2.clean">
+    <target name="updatecenter2.clean" depends="cleanall"/>
+
+    <target name="clean">
       <delete dir="build"/>
       <delete dir="dist"/>
       <delete dir="repo"/>
       <delete file="conf/jsf_proto.pyc"/>
     </target>
 
-    <target name="updatecenter2.cleanall" depends="updatecenter2.clean">
+    <target name="cleanall" depends="clean">
       <delete file="lib/jsf-api.jar"/>
       <delete file="lib/jsf-impl.jar"/>
     </target>

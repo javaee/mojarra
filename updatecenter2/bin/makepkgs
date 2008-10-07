@@ -1,13 +1,20 @@
 #!/bin/sh
 
-# set this to the location of the Updatecenter2 build
-export UCHOME=/home/driscoll/sources/updatecenter2
+# Remember to set pkg.dir in build.properties!  
+# This value is passed to this program as $1
 
+# set this to the location of the Updatecenter2 tools
+export UCHOME=$1
 
 # add the necessary libraries to python
-export PYTHONPATH=$UCHOME/project/tools:$UCHOME/project/build/dist/linux-i386/pkg/vendor-packages:.
+export PYTHONPATH=$UCHOME/vendor-packages:.
 
 # create the repo
-python $UCHOME/project/tools/makepkgs.py -d `pwd`/repo  -b dist conf/jsf_proto
+python $UCHOME/bin/makepkgs.py -s file://`pwd`/repo -b dist conf/jsf_proto.py
 
+# Or, optionally, put the repo files into a local repository
+#python $UCHOME/bin/makepkgs.py -s http://localhost:10000 -b dist conf/jsf_proto.py
+
+# Or, optionally, put the repo files into the dev test repository
+#python $UCHOME/bin/makepkgs.py -s http://eflat.sfbay.sun.com:10000 -b dist conf/jsf_proto.py
 
