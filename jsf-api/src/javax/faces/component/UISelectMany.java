@@ -131,14 +131,14 @@ import javax.faces.convert.Converter;
 
  * <ul>
 
- * <li><p>Ask the component for its attribute
- * under the key "<code>collectionType</code>", without the quotes.  If
- * there is a value for that key, the value must be a String that is a
- * fully qualified Java class name, or a <code>Class</code> object, or a
+ * <li><p>Ask the component for its attribute under the key
+ * "<code>collectionType</code>", without the quotes.  If there is a
+ * value for that key, the value must be a String that is a fully
+ * qualified Java class name, or a <code>Class</code> object, or a
  * <code>ValueExpression</code> that evaluates to a String or a
  * <code>Class</code>.  In all cases, the value serves to identify the
- * type of the objects stored in the <code>Collection</code>.  For
- * discussion, this is called <em>collectionType</em>.  Let
+ * concrete type of the class that implements <code>Collection</code>.
+ * For discussion, this is called <em>collectionType</em>.  Let
  * <em>targetForConvertedValues</em> be a new instance of
  * <code>Collection</code> implemented by the concrete class specified
  * in <em>collectionType</em>.  If, <em>collectionType</em> can not be
