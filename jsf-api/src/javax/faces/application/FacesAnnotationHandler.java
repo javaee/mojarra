@@ -41,7 +41,7 @@
 package javax.faces.application;
 
 import java.util.Set;
-import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 
 /**
  * <p class="changed_added_2_0"><strong>FacesAnnotationHandler</strong>
@@ -52,17 +52,17 @@ import javax.faces.context.ExternalContext;
  *
  * <div class="changed_added_2_0"> 
  *
- * 	<ul>
-
-	  <li><p>Call {@link #getClassNamesWithFacesAnnotations}, passing
-	  the startup time {@link ExternalContext}.</p></li>
-
-	  <li><p>Call {@link #processAnnotatedClasses}, passing the
-	  startup time <code>ExternalContext</code> and the result from
-	  the previous step.</p></li>
-
-	</ul>
-
+ *  <ul>
+ *
+ *     <li><p>Call {@link #getClassNamesWithFacesAnnotations}, passing
+ *     the startup time {@link FacesContext}.</p></li>
+ *
+ *     <li><p>Call {@link #processAnnotatedClasses}, passing the
+ *     startup time <code>FacesContext</code> and the result from
+ *     the previous step.</p></li>
+ *
+ *   </ul>
+ *
  * <p>If the <code>&lt;faces-config&gt;</code> element of the
  * application configuration resource file located at
  * <code>WEB-INF/faces-config.xml</code> contains a
@@ -85,10 +85,10 @@ import javax.faces.context.ExternalContext;
  * <code>&lt;navigation-handler /&gt;</code> are processed
  * <em>after</em> the "startup time annotation processing algorithm" is
  * executed.</p>
-
+ *
  * <p>The runtime must employ the decorator pattern as for every other
  * pluggable artifact in JSF.</p>
-
+ *
  * </div>
  *
  * @since 2.0
@@ -100,13 +100,12 @@ public abstract class FacesAnnotationHandler {
      * string is a fully qualified java class name that must be
      * inspected for the presence of startup time annotations.</p>
      *
-     * @param extContext the startup time <code>ExternalContext</code>
+     * @param context the startup time <code>FacesContext</code>
      * for this application.
      *
      * @since 2.0
      */
-    
-    public abstract Set<String> getClassNamesWithFacesAnnotations(ExternalContext extContext);
+    public abstract Set<String> getClassNamesWithFacesAnnotations(FacesContext context);
     
     /**
      * <p class="changed_added_2_0">Given the set of strings obtained
@@ -114,7 +113,7 @@ public abstract class FacesAnnotationHandler {
      * class to look for and handle startup time annotations as
      * described in the javadoc for each annotation.</p>
      *
-     * @param extContext the startup time <code>ExternalContext</code>
+     * @param context the startup time <code>FacesContext</code>
      * for this application.
 
      * @param annotatedClassnames the <code>Set&lt;String&gt;</code>
@@ -122,9 +121,8 @@ public abstract class FacesAnnotationHandler {
      *
      * @since 2.0
      */
-
-    public abstract void processAnnotatedClasses(ExternalContext extContext, 
-            Set<String> annotatedClassnames);
+    public abstract void processAnnotatedClasses(FacesContext context,
+                                                 Set<String> annotatedClassnames);
 
 
 }

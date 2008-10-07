@@ -80,6 +80,9 @@
     <resource-handler>
       com.sun.faces.application.resource.ResourceHandlerImpl
     </resource-handler>
+    <annotation-handler>
+      com.sun.faces.application.annotation.AnnotationHandler
+    </annotation-handler>
     <system-event-listener>
         <system-event-listener-class>
             com.sun.faces.config.listeners.ProjectStagePhaseListenerInstallationListener

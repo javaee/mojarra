@@ -57,6 +57,7 @@ import javax.faces.application.NavigationHandler;
 import javax.faces.application.ResourceHandler;
 import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
+import javax.faces.application.FacesAnnotationHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
@@ -73,9 +74,6 @@ import com.sun.faces.util.Util;
 import com.sun.faces.config.ConfigurationException;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
-import javax.faces.application.FacesAnnotationHandler;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.ExternalContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -138,6 +136,12 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
      */
     private static final String RESOURCE_HANDLER
          = "resource-handler";
+
+    /**
+     * <code>/faces-config/application/annotation-handler</code>
+     */
+    private static final String ANNOTATION_HANDLER =
+          "annotation-handler";
 
     /**
      * <code>/faces-config/application/el-resolver</code>
@@ -291,6 +295,8 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                                 setResourceHandler(app, n);
                             } else if (SYSTEM_EVENT_LISTENER.equals(n.getLocalName())) {
                                 addSystemEventListener(app, n);
+                            } else if (ANNOTATION_HANDLER.equals(n.getLocalName())) {
+                                setAnnotationHandler(app, n);
                             }
                         }
                     }
@@ -300,19 +306,8 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
 
         processViewHandlers(app, viewHandlers);
         
-        processAnnotations(app);
-
         invokeNext(documents);
 
-    }
-
-    private void processAnnotations(Application app) {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        FacesAnnotationHandler annotationHandler = app.getFacesAnnotationHandler();
-        ExternalContext extContext = facesContext.getExternalContext();
-
-        Set<String> fqcns = annotationHandler.getClassNamesWithFacesAnnotations(extContext);
-        annotationHandler.processAnnotatedClasses(extContext, fqcns);
     }
 
 
@@ -761,6 +756,29 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         }
         for (Node n : viewHandlers.values()) {
             setViewHandler(app, n);
+        }
+    }
+
+
+    private void setAnnotationHandler(Application application, Node annotationHandler) {
+
+        if (annotationHandler != null) {
+            String handler = getNodeText(annotationHandler);
+            if (handler != null) {
+                Object instance = createInstance(handler,
+                                                 FacesAnnotationHandler.class,
+                                                 application.getResourceHandler(),
+                                                 annotationHandler);
+                if (instance != null) {
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.log(Level.FINE,
+                                   MessageFormat.format(
+                                        "Calling Application.setAnnotationHandler({0})",
+                                        handler));
+                    }
+                    application.setFacesAnnotationHandler((FacesAnnotationHandler) instance);
+                }
+            }
         }
     }
 

@@ -38,7 +38,7 @@ package javax.faces.application;
 
 import java.util.Set;
 import javax.faces.FacesWrapper;
-import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 
 /**
  * <p class="changed_added_2_0">Provides a simple implementation of
@@ -57,12 +57,17 @@ import javax.faces.context.ExternalContext;
  *
  * @since 2.0
  */
-public abstract class FacesAnnotationHandlerWrapper extends FacesAnnotationHandler implements FacesWrapper<FacesAnnotationHandler> {
+public abstract class FacesAnnotationHandlerWrapper
+      extends FacesAnnotationHandler
+      implements FacesWrapper<FacesAnnotationHandler> {
 
     /**
      * @return the instance that we are wrapping.
-     */ 
+     */
     public abstract FacesAnnotationHandler getWrapped();
+
+
+    // ------------------------------------- Methods from FacesAnnotationHandler
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
@@ -70,10 +75,11 @@ public abstract class FacesAnnotationHandlerWrapper extends FacesAnnotationHandl
      * FacesAnnotationHandler#getClassNamesWithFacesAnnotations}
      * on the wrapped {@link FacesAnnotationHandler} object.</p>
      */
-
     @Override
-    public Set<String> getClassNamesWithFacesAnnotations(ExternalContext extContext) {
-        return getWrapped().getClassNamesWithFacesAnnotations(extContext);
+    public Set<String> getClassNamesWithFacesAnnotations(FacesContext context) {
+
+        return getWrapped().getClassNamesWithFacesAnnotations(context);
+
     }
 
    /**
@@ -82,12 +88,15 @@ public abstract class FacesAnnotationHandlerWrapper extends FacesAnnotationHandl
      * on the wrapped {@link FacesAnnotationHandler} object.</p>
      */
     @Override
-    public void processAnnotatedClasses(ExternalContext extContext, Set<String> annotatedClasses) {
-        getWrapped().processAnnotatedClasses(extContext, annotatedClasses);
+    public void processAnnotatedClasses(FacesContext context,
+                                        Set<String> annotatedClasses) {
+
+        getWrapped().processAnnotatedClasses(context, annotatedClasses);
+
     }
 
 
-    // -------------------------------------------- Methods from FacesAnnotationHandler
 
-    
+
+
 }

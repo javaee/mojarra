@@ -535,25 +535,29 @@ public class ApplicationImpl extends Application {
     public ActionListener getActionListener() {
         return actionListener;
     }
-    
-    /*
-     * RELEASE_PENDING(rlubke) note that my implementation doesn't rely on
-     * jsf-ri-config.xml to install the default implementation.  It could, and 
-     * maybe it should.  It's up to you.
+
+
+    /**
+     * @see javax.faces.application.Application#getFacesAnnotationHandler()
+     * @return
      */
     @Override
     public FacesAnnotationHandler getFacesAnnotationHandler() {
-        if (null == annotationHandler) {
-            annotationHandler = ConfigManager.createAnnotationHandler();
-        }
+
         return annotationHandler;
+
     }
 
+
+    /**
+     * @see javax.faces.application.Application#setFacesAnnotationHandler(javax.faces.application.FacesAnnotationHandler)
+     */
     @Override
-    public void setFacesAnnotationHandler(FacesAnnotationHandler newHandler) {
+    public synchronized void setFacesAnnotationHandler(FacesAnnotationHandler newHandler) {
+
         annotationHandler = newHandler;
+        
     }
-    
 
 
     /**

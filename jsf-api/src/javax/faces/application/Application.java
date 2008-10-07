@@ -173,14 +173,12 @@ public abstract class Application {
      */
     
     public FacesAnnotationHandler getFacesAnnotationHandler() {
-        FacesAnnotationHandler result = null;
+
         if (defaultApplication != null) {
-            result = defaultApplication.getFacesAnnotationHandler();
-        } else {
-            throw new UnsupportedOperationException();
+            return defaultApplication.getFacesAnnotationHandler();
         }
+        throw new UnsupportedOperationException();
         
-        return result;
     }
 
     /**
