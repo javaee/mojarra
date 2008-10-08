@@ -30,6 +30,13 @@
       <maximumHeapSize value="128" />
       <properties />
     </buildFile>
+    <buildFile url="file://$PROJECT_DIR$/updatecenter2/build.xml">
+      <additionalClassPath />
+      <antReference projectDefault="true" />
+      <customJdkName value="" />
+      <maximumHeapSize value="128" />
+      <properties />
+    </buildFile>
   </component>
   <component name="BuildJarProjectSettings">
     <option name="BUILD_JARS_ON_MAKE" value="false" />
@@ -550,6 +557,7 @@
       <module fileurl="file://$PROJECT_DIR$/jsf-demo/demo.iml" filepath="$PROJECT_DIR$/jsf-demo/demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/jsf-ri/impl.iml" filepath="$PROJECT_DIR$/jsf-ri/impl.iml" />
       <module fileurl="file://$PROJECT_DIR$/jsf-tools/tools.iml" filepath="$PROJECT_DIR$/jsf-tools/tools.iml" />
+      <module fileurl="file://$PROJECT_DIR$/updatecenter2/updatecenter2.iml" filepath="$PROJECT_DIR$/updatecenter2/updatecenter2.iml" />
     </modules>
   </component>
   <component name="ProjectReloadState">
