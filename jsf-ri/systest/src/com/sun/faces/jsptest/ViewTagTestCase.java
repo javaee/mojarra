@@ -66,7 +66,6 @@ import java.util.ResourceBundle;
 
 public class ViewTagTestCase extends AbstractTestCase {
 
-
     // ------------------------------------------------------------ Constructors
 
 
@@ -79,9 +78,7 @@ public class ViewTagTestCase extends AbstractTestCase {
         super(name);
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
 
     // ---------------------------------------------------- Overall Test Methods
 
@@ -109,7 +106,6 @@ public class ViewTagTestCase extends AbstractTestCase {
         super.tearDown();
     }
 
-
     // ------------------------------------------------- Individual Test Methods
 
 
@@ -123,23 +119,23 @@ public class ViewTagTestCase extends AbstractTestCase {
         page = getPage("/faces/viewLocale.jsp");
         form = getFormById(page, "form");
         submit = (HtmlSubmitInput)
-            form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
-                                "button");
+                form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
+                        "button");
 
         // press the button
-        page = (HtmlPage) submit.click();        
+        page = (HtmlPage) submit.click();
         assertTrue(-1 != page.asText().indexOf("Erreur"));
 
     }
-    
+
     public void testReplaceViewRoot() throws Exception {
         HtmlPage page;
         HtmlAnchor link;
-        
+
         page = getPage("/faces/replaceViewRoot.jsp");
         link = page.getAnchorByName("examine");
         page = (HtmlPage) link.click();
         assertTrue(-1 != page.asText().indexOf("Replaced ViewRoot is com.sun.faces.systest.model.ViewRootExtension"));
-        
+
     }
 }

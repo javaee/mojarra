@@ -63,7 +63,6 @@ import javax.faces.component.NamingContainer;
 
 public class InvalidateSessionTestCase extends AbstractTestCase {
 
-
     // ------------------------------------------------------------ Constructors
 
 
@@ -76,9 +75,7 @@ public class InvalidateSessionTestCase extends AbstractTestCase {
         super(name);
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
 
     // ---------------------------------------------------- Overall Test Methods
 
@@ -106,7 +103,6 @@ public class InvalidateSessionTestCase extends AbstractTestCase {
         super.tearDown();
     }
 
-
     // ------------------------------------------------- Individual Test Methods
 
 
@@ -120,13 +116,13 @@ public class InvalidateSessionTestCase extends AbstractTestCase {
         page = getPage("/faces/session-invalidator.jsp");
         form = getFormById(page, "form");
         submit = (HtmlSubmitInput)
-            form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
-                                "button1");
+                form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
+                        "button1");
 
         // press button1
         page = (HtmlPage) submit.click();
         assertEquals("Test with action that invalidates a session.",
-                     page.getTitleText());
+                page.getTitleText());
     }
 
 

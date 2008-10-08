@@ -63,7 +63,6 @@ import javax.faces.component.NamingContainer;
 
 public class ListenerTestCase extends AbstractTestCase {
 
-
     // ------------------------------------------------------------ Constructors
 
 
@@ -76,9 +75,7 @@ public class ListenerTestCase extends AbstractTestCase {
         super(name);
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
 
     // ---------------------------------------------------- Overall Test Methods
 
@@ -92,60 +89,60 @@ public class ListenerTestCase extends AbstractTestCase {
 
     // ------------------------------------------------- Individual Test Methods
     public void testListener() throws Exception {
-	HtmlPage page = getPage("/faces/listener.jsp");
-	List list;
-	list = getAllElementsOfGivenClass(page, null, 
-					  HtmlTextInput.class); 
+        HtmlPage page = getPage("/faces/listener.jsp");
+        List list;
+        list = getAllElementsOfGivenClass(page, null,
+                HtmlTextInput.class);
 
-	// set the initial value to be 1 for all input fields
-	((HtmlTextInput)list.get(0)).setValueAttribute("1");
-	((HtmlTextInput)list.get(1)).setValueAttribute("1");
-	((HtmlTextInput)list.get(2)).setValueAttribute("1");
-	((HtmlTextInput)list.get(3)).setValueAttribute("1");
+        // set the initial value to be 1 for all input fields
+        ((HtmlTextInput) list.get(0)).setValueAttribute("1");
+        ((HtmlTextInput) list.get(1)).setValueAttribute("1");
+        ((HtmlTextInput) list.get(2)).setValueAttribute("1");
+        ((HtmlTextInput) list.get(3)).setValueAttribute("1");
 
-	list = getAllElementsOfGivenClass(page, null, 
-					  HtmlSubmitInput.class); 
-	HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
-	page = (HtmlPage) button.click();
-	assertTrue(-1 != page.asText().indexOf("text1 value was changed"));
+        list = getAllElementsOfGivenClass(page, null,
+                HtmlSubmitInput.class);
+        HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
+        page = (HtmlPage) button.click();
+        assertTrue(-1 != page.asText().indexOf("text1 value was changed"));
 
-	assertTrue(-1 != page.asText().indexOf("text2 value was changed"));
+        assertTrue(-1 != page.asText().indexOf("text2 value was changed"));
 
-	assertTrue(-1 != page.asText().indexOf("text3 value was changed"));
+        assertTrue(-1 != page.asText().indexOf("text3 value was changed"));
 
-	assertTrue(-1 != page.asText().indexOf("text4 value was changed"));
+        assertTrue(-1 != page.asText().indexOf("text4 value was changed"));
 
-	// re-submit the form, make sure no valueChangeEvents are fired
-	list = getAllElementsOfGivenClass(page, null, 
-					  HtmlSubmitInput.class); 
-	button = (HtmlSubmitInput) list.get(0);
-	page = (HtmlPage) button.click();
-	
-	assertTrue(-1 == page.asText().indexOf("text1 value was changed"));
-	assertTrue(-1 == page.asText().indexOf("text2 value was changed"));
-	assertTrue(-1 == page.asText().indexOf("text3 value was changed"));
-	assertTrue(-1 == page.asText().indexOf("text4 value was changed"));
+        // re-submit the form, make sure no valueChangeEvents are fired
+        list = getAllElementsOfGivenClass(page, null,
+                HtmlSubmitInput.class);
+        button = (HtmlSubmitInput) list.get(0);
+        page = (HtmlPage) button.click();
 
-	list = getAllElementsOfGivenClass(page, null, 
-					  HtmlSubmitInput.class); 
-	button = (HtmlSubmitInput) list.get(0);
-	page = (HtmlPage) button.click();
-	
-	assertTrue(-1 != page.asText().indexOf("button1 was pressed"));
+        assertTrue(-1 == page.asText().indexOf("text1 value was changed"));
+        assertTrue(-1 == page.asText().indexOf("text2 value was changed"));
+        assertTrue(-1 == page.asText().indexOf("text3 value was changed"));
+        assertTrue(-1 == page.asText().indexOf("text4 value was changed"));
 
-	button = (HtmlSubmitInput) list.get(1);
-	page = (HtmlPage) button.click();
-	
-	assertTrue(-1 != page.asText().indexOf("button2 was pressed"));
+        list = getAllElementsOfGivenClass(page, null,
+                HtmlSubmitInput.class);
+        button = (HtmlSubmitInput) list.get(0);
+        page = (HtmlPage) button.click();
 
-	button = (HtmlSubmitInput) list.get(2);
-	page = (HtmlPage) button.click();
+        assertTrue(-1 != page.asText().indexOf("button1 was pressed"));
 
-	assertTrue(-1 != page.asText().indexOf("button3 was pressed"));
+        button = (HtmlSubmitInput) list.get(1);
+        page = (HtmlPage) button.click();
 
-	button = (HtmlSubmitInput) list.get(3);
-	page = (HtmlPage) button.click();
+        assertTrue(-1 != page.asText().indexOf("button2 was pressed"));
 
-	assertTrue(-1 != page.asText().indexOf("button4 was pressed"));
+        button = (HtmlSubmitInput) list.get(2);
+        page = (HtmlPage) button.click();
+
+        assertTrue(-1 != page.asText().indexOf("button3 was pressed"));
+
+        button = (HtmlSubmitInput) list.get(3);
+        page = (HtmlPage) button.click();
+
+        assertTrue(-1 != page.asText().indexOf("button4 was pressed"));
     }
 }

@@ -65,7 +65,6 @@ import javax.faces.component.NamingContainer;
 
 public class ForEachTestCase extends AbstractTestCase {
 
-
     // ------------------------------------------------------------ Constructors
 
 
@@ -78,9 +77,7 @@ public class ForEachTestCase extends AbstractTestCase {
         super(name);
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
 
     // ---------------------------------------------------- Overall Test Methods
 
@@ -94,68 +91,68 @@ public class ForEachTestCase extends AbstractTestCase {
 
     // ------------------------------------------------- Individual Test Methods
     public void testForEach() throws Exception {
-	HtmlPage page = getPage("/faces/forEach01.jsp");
-        
+        HtmlPage page = getPage("/faces/forEach01.jsp");
+
         // Make sure values are displayed properly for the initial request 
         //assert outputText values are as expected
         assertTrue(-1 != page.asText().indexOf("output1"));
-	assertTrue(-1 != page.asText().indexOf("output2"));
-	assertTrue(-1 != page.asText().indexOf("output3"));
-        
-        //assert inputText without "id" values are as expected
-        assertTrue(-1 != page.asText().indexOf("inputText1=input1"));
-	assertTrue(-1 != page.asText().indexOf("inputText2=input2"));
-	assertTrue(-1 != page.asText().indexOf("inputText3=input3"));
-        
-        //assert inputText with "id" values are as expected
-        assertTrue(-1 != page.asText().indexOf("inputid1"));
-	assertTrue(-1 != page.asText().indexOf("inputid2"));
-	assertTrue(-1 != page.asText().indexOf("inputid3"));
-        
-        // Assign new values to input fields, submit the form.
-	List list;
-	list = getAllElementsOfGivenClass(page, null, 
-					  HtmlTextInput.class); 
-        
-	((HtmlTextInput)list.get(0)).setValueAttribute("newValue1");
-	((HtmlTextInput)list.get(1)).setValueAttribute("newValue2");
-	((HtmlTextInput)list.get(2)).setValueAttribute("newValue3");
-        
-        ((HtmlTextInput)list.get(3)).setValueAttribute("newValueid1");
-	((HtmlTextInput)list.get(4)).setValueAttribute("newValueid2");
-	((HtmlTextInput)list.get(5)).setValueAttribute("newValueid3");
+        assertTrue(-1 != page.asText().indexOf("output2"));
+        assertTrue(-1 != page.asText().indexOf("output3"));
 
-	list = getAllElementsOfGivenClass(page, null, 
-					  HtmlSubmitInput.class); 
-	HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
-	page = (HtmlPage) button.click();
-        
-        // make sure the values are as expected on post back.
-	 assertTrue(-1 != page.asText().indexOf("output1"));
-	assertTrue(-1 != page.asText().indexOf("output2"));
-	assertTrue(-1 != page.asText().indexOf("output3"));
-        
         //assert inputText without "id" values are as expected
         assertTrue(-1 != page.asText().indexOf("inputText1=input1"));
-	assertTrue(-1 != page.asText().indexOf("inputText2=input2"));
-	assertTrue(-1 != page.asText().indexOf("inputText3=input3"));
-        
-        assertTrue(-1 != page.asText().indexOf("newValue1"));
-	assertTrue(-1 != page.asText().indexOf("newValue2"));
-	assertTrue(-1 != page.asText().indexOf("newValue3"));
-        
+        assertTrue(-1 != page.asText().indexOf("inputText2=input2"));
+        assertTrue(-1 != page.asText().indexOf("inputText3=input3"));
+
         //assert inputText with "id" values are as expected
         assertTrue(-1 != page.asText().indexOf("inputid1"));
-	assertTrue(-1 != page.asText().indexOf("inputid2"));
-	assertTrue(-1 != page.asText().indexOf("inputid3"));
-        
+        assertTrue(-1 != page.asText().indexOf("inputid2"));
+        assertTrue(-1 != page.asText().indexOf("inputid3"));
+
+        // Assign new values to input fields, submit the form.
+        List list;
+        list = getAllElementsOfGivenClass(page, null,
+                HtmlTextInput.class);
+
+        ((HtmlTextInput) list.get(0)).setValueAttribute("newValue1");
+        ((HtmlTextInput) list.get(1)).setValueAttribute("newValue2");
+        ((HtmlTextInput) list.get(2)).setValueAttribute("newValue3");
+
+        ((HtmlTextInput) list.get(3)).setValueAttribute("newValueid1");
+        ((HtmlTextInput) list.get(4)).setValueAttribute("newValueid2");
+        ((HtmlTextInput) list.get(5)).setValueAttribute("newValueid3");
+
+        list = getAllElementsOfGivenClass(page, null,
+                HtmlSubmitInput.class);
+        HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
+        page = (HtmlPage) button.click();
+
+        // make sure the values are as expected on post back.
+        assertTrue(-1 != page.asText().indexOf("output1"));
+        assertTrue(-1 != page.asText().indexOf("output2"));
+        assertTrue(-1 != page.asText().indexOf("output3"));
+
+        //assert inputText without "id" values are as expected
+        assertTrue(-1 != page.asText().indexOf("inputText1=input1"));
+        assertTrue(-1 != page.asText().indexOf("inputText2=input2"));
+        assertTrue(-1 != page.asText().indexOf("inputText3=input3"));
+
+        assertTrue(-1 != page.asText().indexOf("newValue1"));
+        assertTrue(-1 != page.asText().indexOf("newValue2"));
+        assertTrue(-1 != page.asText().indexOf("newValue3"));
+
+        //assert inputText with "id" values are as expected
+        assertTrue(-1 != page.asText().indexOf("inputid1"));
+        assertTrue(-1 != page.asText().indexOf("inputid2"));
+        assertTrue(-1 != page.asText().indexOf("inputid3"));
+
         assertTrue(-1 != page.asText().indexOf("newValueid1"));
-	assertTrue(-1 != page.asText().indexOf("newValueid2"));
-	assertTrue(-1 != page.asText().indexOf("newValueid3"));
+        assertTrue(-1 != page.asText().indexOf("newValueid2"));
+        assertTrue(-1 != page.asText().indexOf("newValueid3"));
     }
 
     public void testForEachIssue714() throws Exception {
-        
+
         HtmlPage page = getPage("/faces/forEach04.jsp");
         List<HtmlSpan> spans = new ArrayList<HtmlSpan>(2);
         getAllElementsOfGivenClass(page, spans, HtmlSpan.class);

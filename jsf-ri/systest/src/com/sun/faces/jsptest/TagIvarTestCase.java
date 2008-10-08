@@ -64,7 +64,6 @@ import java.util.ResourceBundle;
 
 public class TagIvarTestCase extends AbstractTestCase {
 
-
     // ------------------------------------------------------------ Constructors
 
 
@@ -77,9 +76,7 @@ public class TagIvarTestCase extends AbstractTestCase {
         super(name);
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
 
     // ---------------------------------------------------- Overall Test Methods
 
@@ -107,18 +104,17 @@ public class TagIvarTestCase extends AbstractTestCase {
         super.tearDown();
     }
 
-
     // ------------------------------------------------- Individual Test Methods
 
 
     public void testLocaleOnTagIvar() throws Exception {
         HtmlPage page;
 
-	// ignore the exception intentionally thrown by the first page.
-	client.setThrowExceptionOnFailingStatusCode(false);
+        // ignore the exception intentionally thrown by the first page.
+        client.setThrowExceptionOnFailingStatusCode(false);
         page = getPage("/faces/tag-ivars1.jsp");
 
-	client.setThrowExceptionOnFailingStatusCode(true);
+        client.setThrowExceptionOnFailingStatusCode(true);
         page = getPage("/faces/tag-ivars2.jsp");
 
     }

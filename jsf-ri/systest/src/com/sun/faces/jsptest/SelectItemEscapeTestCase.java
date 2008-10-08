@@ -68,7 +68,6 @@ import javax.faces.component.NamingContainer;
 
 public class SelectItemEscapeTestCase extends AbstractTestCase {
 
-
     // ------------------------------------------------------------ Constructors
 
 
@@ -81,9 +80,7 @@ public class SelectItemEscapeTestCase extends AbstractTestCase {
         super(name);
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
 
     // ---------------------------------------------------- Overall Test Methods
 
@@ -111,36 +108,32 @@ public class SelectItemEscapeTestCase extends AbstractTestCase {
         super.tearDown();
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
-
 
     // ------------------------------------------------- Individual Test Methods
 
     /**
-     *
      * <p>Verify that the required validator works for SelectOne</p>
      */
 
     public void testSelectOneNoValue() throws Exception {
-	HtmlPage page = getPage("/faces/selectItemEscape.jsp");
+        HtmlPage page = getPage("/faces/selectItemEscape.jsp");
 
-	assertTrue(-1 != page.asText().indexOf("menu1_Wayne &lt;Gretzky&gt;"));
+        assertTrue(-1 != page.asText().indexOf("menu1_Wayne &lt;Gretzky&gt;"));
         assertTrue(-1 != page.asText().indexOf("menu1_Bobby +Orr+"));
         assertTrue(-1 != page.asText().indexOf("menu1_Brad &amp;{Park}"));
         assertTrue(-1 != page.asText().indexOf("menu1_Brad &amp;{Park}"));
 
-	assertTrue(-1 != page.asText().indexOf("menu2_Wayne &lt;Gretzky&gt;"));
+        assertTrue(-1 != page.asText().indexOf("menu2_Wayne &lt;Gretzky&gt;"));
         assertTrue(-1 != page.asText().indexOf("menu2_Bobby +Orr+"));
         assertTrue(-1 != page.asText().indexOf("menu2_Brad &amp;{Park}"));
         assertTrue(-1 != page.asText().indexOf("menu2_Brad &amp;{Park}"));
 
-	assertTrue(-1 != page.asText().indexOf("menu3_Wayne <Gretzky>"));
-	assertTrue(-1 != page.asText().indexOf("menu3_Bobby +Orr+"));
-	assertTrue(-1 != page.asText().indexOf("menu3_Brad &{Park}"));
-	assertTrue(-1 != page.asText().indexOf("menu3_Gordie &Howe&"));
-	
+        assertTrue(-1 != page.asText().indexOf("menu3_Wayne <Gretzky>"));
+        assertTrue(-1 != page.asText().indexOf("menu3_Bobby +Orr+"));
+        assertTrue(-1 != page.asText().indexOf("menu3_Brad &{Park}"));
+        assertTrue(-1 != page.asText().indexOf("menu3_Gordie &Howe&"));
+
     }
 
 }

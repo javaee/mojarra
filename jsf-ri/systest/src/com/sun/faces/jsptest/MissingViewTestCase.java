@@ -69,7 +69,6 @@ import javax.faces.component.NamingContainer;
 
 public class MissingViewTestCase extends AbstractTestCase {
 
-
     // ------------------------------------------------------------ Constructors
 
 
@@ -82,9 +81,7 @@ public class MissingViewTestCase extends AbstractTestCase {
         super(name);
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
 
     // ---------------------------------------------------- Overall Test Methods
 
@@ -112,19 +109,16 @@ public class MissingViewTestCase extends AbstractTestCase {
         super.tearDown();
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
-
 
     // ------------------------------------------------- Individual Test Methods
 
     public void testMissingView() throws Exception {
-	client.setThrowExceptionOnFailingStatusCode(false);
-	HtmlPage page = getPage("/faces/jsp/missing-view.jsp");
-	assertTrue(-1 != page.asText().indexOf("UIViewRoot"));
-	assertTrue(-1 != page.asText().indexOf("UIForm"));
-	
+        client.setThrowExceptionOnFailingStatusCode(false);
+        HtmlPage page = getPage("/faces/jsp/missing-view.jsp");
+        assertTrue(-1 != page.asText().indexOf("UIViewRoot"));
+        assertTrue(-1 != page.asText().indexOf("UIForm"));
+
     }
 
 }

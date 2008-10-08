@@ -57,7 +57,6 @@ import junit.framework.TestSuite;
 
 public class JspIntegrationTestCase extends AbstractTestCase {
 
-
     // ------------------------------------------------------------ Constructors
 
 
@@ -70,9 +69,7 @@ public class JspIntegrationTestCase extends AbstractTestCase {
         super(name);
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
 
     // ---------------------------------------------------- Overall Test Methods
 
@@ -100,55 +97,53 @@ public class JspIntegrationTestCase extends AbstractTestCase {
         super.tearDown();
     }
 
-
     // ------------------------------------------------- Individual Test Methods
 
-
     // Test dynamically adding and removing components
+
     public void testJspDynamic01() throws Exception {
 
         // Check with children that have explicit ids
         checkJspDynamic00();
         checkJspDynamic01("",
-                          "[A]{ } [Z]");
+                "[A]{ } [Z]");
         checkJspDynamic01("?mode=create&id=C1&value=[1]&javax.faces.ViewState=j_id2:j_id3",
-                          "[A]{ [1] } [Z]");
+                "[A]{ [1] } [Z]");
         checkJspDynamic01("?mode=create&id=C2&value=[2]&javax.faces.ViewState=j_id2:j_id4",
-                          "[A]{ [1] [2] } [Z]");
+                "[A]{ [1] [2] } [Z]");
         checkJspDynamic01("?mode=create&id=C3&value=[3]&javax.faces.ViewState=j_id2:j_id5",
-                          "[A]{ [1] [2] [3] } [Z]");
+                "[A]{ [1] [2] [3] } [Z]");
         checkJspDynamic01("?mode=delete&id=C2&javax.faces.ViewState=j_id2:j_id6",
-                          "[A]{ [1] [3] } [Z]");
+                "[A]{ [1] [3] } [Z]");
 
         checkJspDynamic00();
         client = new WebClient();
         checkJspDynamic01("",
-                          "[A]{ } [Z]");
+                "[A]{ } [Z]");
 
         // Check with children that do not have ids
-	/********** PENDING(edburns): pending resolution of 5040235
-        checkJspDynamic00();
-        checkJspDynamic01("",
-                          "[A] { } [Z]");
-        checkJspDynamic01("?mode=create&value=[1]",
-                          "[A] { [1] } [Z]");
-        checkJspDynamic01("?mode=create&value=[2]",
-                          "[A] { [1] [2] } [Z]");
-        checkJspDynamic01("?mode=create&value=[3]",
-                          "[A] { [1] [2] [3] } [Z]");
-	**************/
+        /********** PENDING(edburns): pending resolution of 5040235
+         checkJspDynamic00();
+         checkJspDynamic01("",
+         "[A] { } [Z]");
+         checkJspDynamic01("?mode=create&value=[1]",
+         "[A] { [1] } [Z]");
+         checkJspDynamic01("?mode=create&value=[2]",
+         "[A] { [1] [2] } [Z]");
+         checkJspDynamic01("?mode=create&value=[3]",
+         "[A] { [1] [2] [3] } [Z]");
+         **************/
         checkJspDynamic00();
         client = new WebClient();
         checkJspDynamic01("",
-                          "[A]{ } [Z]");
+                "[A]{ } [Z]");
     }
-
 
     // NOTE:  testJspIncludeXX tests are analogous to testJstlImportXX
     // tests, but exercise <jsp:include> instead of <c:import>.
 
-
     // Test importing JSPs with literal text
+
     public void testJspInclude01() throws Exception {
 
         checkJspInclude00();
@@ -263,30 +258,29 @@ public class JspIntegrationTestCase extends AbstractTestCase {
 
     }
 
-
     // --------------------------------------------------------- Private Methods
 
-
     // Check the reset page to force a new component tree
+
     private void checkJspDynamic00() throws Exception {
 
         HtmlPage page = getPage("/faces/jsp/jsp-dynamic-00.jsp");
         assertEquals("Correct page title",
-                     "jsp-dynamic-00", page.getTitleText());
+                "jsp-dynamic-00", page.getTitleText());
 
     }
 
 
     // Check the result of requesting the specified page
     private void checkJspDynamic01(String query, String result)
-        throws Exception {
+            throws Exception {
 
         HtmlPage page = getPage("/faces/jsp/jsp-dynamic-01.jsp" + query);
         assertEquals("Correct page title",
-                     "jsp-dynamic-01", page.getTitleText());
-	String bodyText = getBodyText(page);
+                "jsp-dynamic-01", page.getTitleText());
+        String bodyText = getBodyText(page);
         assertTrue("Correct body element",
-                     -1 != bodyText.indexOf(result));
+                -1 != bodyText.indexOf(result));
 
     }
 
@@ -296,7 +290,7 @@ public class JspIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jsp-include-00.jsp");
         assertEquals("Correct page title",
-                     "jsp-include-00", page.getTitleText());
+                "jsp-include-00", page.getTitleText());
 
     }
 
@@ -306,9 +300,9 @@ public class JspIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jsp-include-01.jsp");
         assertEquals("Correct page title",
-                     "jsp-include-01", page.getTitleText());
+                "jsp-include-01", page.getTitleText());
         assertEquals("Correct body element",
-                     "[A] [B] [C] [D] [E]", getBodyText(page));
+                "[A] [B] [C] [D] [E]", getBodyText(page));
 
     }
 
@@ -318,9 +312,9 @@ public class JspIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jsp-include-02.jsp");
         assertEquals("Correct page title",
-                     "jsp-include-02", page.getTitleText());
+                "jsp-include-02", page.getTitleText());
         assertEquals("Correct body element",
-                     "[A][B][C][D][E]", getBodyText(page));
+                "[A][B][C][D][E]", getBodyText(page));
 
     }
 
@@ -328,12 +322,11 @@ public class JspIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jsp-include-03.jsp");
         assertEquals("Correct page title",
-                     "jsp-include-03", page.getTitleText());
+                "jsp-include-03", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1][2c][2x][3]", getBodyText(page));
+                "[1][2c][2x][3]", getBodyText(page));
 
     }
-
 
 
     // Check selective imports with simple components (explicit ids)
@@ -341,9 +334,9 @@ public class JspIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jsp-include-03.jsp?choose=a&javax.faces.ViewState=j_id2:j_id3");
         assertEquals("Correct page title",
-                     "jsp-include-03", page.getTitleText());
+                "jsp-include-03", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1][2a][2z][3]", getBodyText(page));
+                "[1][2a][2z][3]", getBodyText(page));
 
     }
 
@@ -353,9 +346,9 @@ public class JspIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jsp-include-03.jsp?choose=b&javax.faces.ViewState=j_id2:j_id3");
         assertEquals("Correct page title",
-                     "jsp-include-03", page.getTitleText());
+                "jsp-include-03", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1][2b][2y][3]", getBodyText(page));
+                "[1][2b][2y][3]", getBodyText(page));
 
     }
 
@@ -365,9 +358,9 @@ public class JspIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jsp-include-03.jsp?choose=c&javax.faces.ViewState=j_id2:j_id3");
         assertEquals("Correct page title",
-                     "jsp-include-03", page.getTitleText());
+                "jsp-include-03", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1][2c][2x][3]", getBodyText(page));
+                "[1][2c][2x][3]", getBodyText(page));
 
     }
 
@@ -375,12 +368,11 @@ public class JspIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jsp-include-04.jsp");
         assertEquals("Correct page title",
-                     "jsp-include-04", page.getTitleText());
+                "jsp-include-04", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1][2c][2x][3]", getBodyText(page));
+                "[1][2c][2x][3]", getBodyText(page));
 
     }
-
 
 
     // Check selective imports with simple components (naming container)
@@ -388,9 +380,9 @@ public class JspIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jsp-include-04.jsp?choose=a&javax.faces.ViewState=j_id2:j_id3");
         assertEquals("Correct page title",
-                     "jsp-include-04", page.getTitleText());
+                "jsp-include-04", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1][2a][2z][3]", getBodyText(page));
+                "[1][2a][2z][3]", getBodyText(page));
 
     }
 
@@ -400,9 +392,9 @@ public class JspIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jsp-include-04.jsp?choose=b&javax.faces.ViewState=j_id2:j_id3");
         assertEquals("Correct page title",
-                     "jsp-include-04", page.getTitleText());
+                "jsp-include-04", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1][2b][2y][3]", getBodyText(page));
+                "[1][2b][2y][3]", getBodyText(page));
 
     }
 
@@ -412,9 +404,9 @@ public class JspIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jsp-include-04.jsp?choose=c&javax.faces.ViewState=j_id2:j_id3");
         assertEquals("Correct page title",
-                     "jsp-include-04", page.getTitleText());
+                "jsp-include-04", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1][2c][2x][3]", getBodyText(page));
+                "[1][2c][2x][3]", getBodyText(page));
 
     }
 

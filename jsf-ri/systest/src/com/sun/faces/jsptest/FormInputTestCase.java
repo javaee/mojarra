@@ -62,7 +62,6 @@ import javax.faces.component.NamingContainer;
 
 public class FormInputTestCase extends AbstractTestCase {
 
-
     // ------------------------------------------------------------ Constructors
 
 
@@ -75,9 +74,7 @@ public class FormInputTestCase extends AbstractTestCase {
         super(name);
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
 
     // ---------------------------------------------------- Overall Test Methods
 
@@ -105,38 +102,36 @@ public class FormInputTestCase extends AbstractTestCase {
         super.tearDown();
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
 
     // ---------- form-input-02.jsp values ----------
 
     private String formInput02_name = "formInput02_form";
 
     private String formInput02_names[] =
-        {
-            "booleanProperty", "byteProperty", "doubleProperty", "floatProperty",
-            "intProperty", "longProperty", "shortProperty", "stringProperty"
-        };
+            {
+                    "booleanProperty", "byteProperty", "doubleProperty", "floatProperty",
+                    "intProperty", "longProperty", "shortProperty", "stringProperty"
+            };
 
     private String formInput02_pristine[] =
-        {
-            "true", "12", "123.45", "12.34",
-            "123", "12345", "1234", "This is a String property"
-        };
+            {
+                    "true", "12", "123.45", "12.34",
+                    "123", "12345", "1234", "This is a String property"
+            };
 
     private String formInput02_updated[] =
-        {
-            "false", "21", "543.21", "43.21",
-            "321", "54321", "4321", "This was a String property"
-        };
+            {
+                    "false", "21", "543.21", "43.21",
+                    "321", "54321", "4321", "This was a String property"
+            };
 
     // ------------------------------------------------- Individual Test Methods
-
 
     // ---------- form-input-02.jsp tests ----------
 
     // Request a pristine copy of the form a couple of times
+
     public void testFormInput02_pristine() throws Exception {
 
         checkFormInput00();
@@ -157,9 +152,9 @@ public class FormInputTestCase extends AbstractTestCase {
         HtmlForm form = getFormById(page, formInput02_name);
         assertNotNull("form exists", form);
         HtmlSubmitInput submit = (HtmlSubmitInput)
-            form.getInputByName(formInput02_name +
-                                NamingContainer.SEPARATOR_CHAR +
-                                "submit");
+                form.getInputByName(formInput02_name +
+                        NamingContainer.SEPARATOR_CHAR +
+                        "submit");
         page = (HtmlPage) submit.click();
         checkFormInput02(page, formInput02_pristine);
 
@@ -176,32 +171,31 @@ public class FormInputTestCase extends AbstractTestCase {
         assertNotNull("form exists", form);
         for (int i = 0; i < formInput02_names.length; i++) {
             HtmlTextInput input = (HtmlTextInput)
-                form.getInputByName(formInput02_name +
-                                    NamingContainer.SEPARATOR_CHAR +
-                                    formInput02_names[i]);
+                    form.getInputByName(formInput02_name +
+                            NamingContainer.SEPARATOR_CHAR +
+                            formInput02_names[i]);
             assertNotNull("field '" + formInput02_names[i] + "' exists", input);
             input.setValueAttribute(formInput02_updated[i]);
         }
         HtmlSubmitInput submit = (HtmlSubmitInput)
-            form.getInputByName(formInput02_name +
-                                NamingContainer.SEPARATOR_CHAR +
-                                "submit");
+                form.getInputByName(formInput02_name +
+                        NamingContainer.SEPARATOR_CHAR +
+                        "submit");
         page = (HtmlPage) submit.click();
         checkFormInput02(page, formInput02_updated);
         checkFormInput01();
 
     }
 
-
     // --------------------------------------------------------- Private Methods
 
-
     // Check the reset page to force a new component tree
+
     private void checkFormInput00() throws Exception {
 
         HtmlPage page = getPage("/faces/jsp/form-input-00.jsp");
         assertEquals("Correct page title",
-                     "form-input-00", page.getTitleText());
+                "form-input-00", page.getTitleText());
 
     }
 
@@ -218,7 +212,7 @@ public class FormInputTestCase extends AbstractTestCase {
     private void checkFormInput01(HtmlPage page) {
 
         assertEquals("Correct page title",
-                     "form-input-01", page.getTitleText());
+                "form-input-01", page.getTitleText());
 
     }
 
@@ -228,17 +222,17 @@ public class FormInputTestCase extends AbstractTestCase {
 
 
         assertEquals("Correct page title",
-                     "form-input-02", page.getTitleText());
+                "form-input-02", page.getTitleText());
         HtmlForm form = getFormById(page, formInput02_name);
         assertNotNull("form exists", form);
         for (int i = 0; i < expected.length; i++) {
             HtmlTextInput input = (HtmlTextInput)
-                form.getInputByName(formInput02_name +
-                                    NamingContainer.SEPARATOR_CHAR +
-                                    formInput02_names[i]);
+                    form.getInputByName(formInput02_name +
+                            NamingContainer.SEPARATOR_CHAR +
+                            formInput02_names[i]);
             assertNotNull("field '" + formInput02_names[i] + "' exists", input);
             assertEquals("field '" + formInput02_names[i] + "' value",
-                         expected[i], input.getValueAttribute());
+                    expected[i], input.getValueAttribute());
         }
 
     }

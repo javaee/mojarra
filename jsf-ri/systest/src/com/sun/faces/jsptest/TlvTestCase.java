@@ -68,7 +68,6 @@ import javax.faces.component.NamingContainer;
 
 public class TlvTestCase extends AbstractTestCase {
 
-
     // ------------------------------------------------------------ Constructors
 
 
@@ -81,9 +80,7 @@ public class TlvTestCase extends AbstractTestCase {
         super(name);
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
 
     // ---------------------------------------------------- Overall Test Methods
 
@@ -111,24 +108,20 @@ public class TlvTestCase extends AbstractTestCase {
         super.tearDown();
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
-
 
     // ------------------------------------------------- Individual Test Methods
 
     /**
-     *
      * <p>Verify that the required validator works for SelectOne</p>
      */
 
     public void testButtonWithBinding() throws Exception {
-	HtmlPage page = getPage("/faces/jsp/tlvTest01.jsp");
-	List list = getAllElementsOfGivenClass(page, null, 
-					       HtmlSubmitInput.class); 
-	HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
-	assertEquals("button label", button.asText());
+        HtmlPage page = getPage("/faces/jsp/tlvTest01.jsp");
+        List list = getAllElementsOfGivenClass(page, null,
+                HtmlSubmitInput.class);
+        HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
+        assertEquals("button label", button.asText());
     }
 
 

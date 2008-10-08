@@ -69,7 +69,6 @@ import javax.faces.component.NamingContainer;
 
 public class FormElTestCase extends AbstractTestCase {
 
-
     // ------------------------------------------------------------ Constructors
 
 
@@ -82,9 +81,7 @@ public class FormElTestCase extends AbstractTestCase {
         super(name);
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
 
     // ---------------------------------------------------- Overall Test Methods
 
@@ -112,10 +109,7 @@ public class FormElTestCase extends AbstractTestCase {
         super.tearDown();
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
-
 
     // ------------------------------------------------- Individual Test Methods
 
@@ -123,10 +117,10 @@ public class FormElTestCase extends AbstractTestCase {
         client.setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = getPage("/faces/jsp/formEl.jsp");
         List forms = page.getForms();
-        assertEquals("multipart/form-data", ((HtmlForm)forms.get(0)).getEnctypeAttribute());
-        assertEquals("application/x-www-form-urlencoded", ((HtmlForm)forms.get(1)).getEnctypeAttribute());
-        assertEquals("hi", ((HtmlForm)forms.get(2)).getEnctypeAttribute());
-        assertEquals("multipart/form-data", ((HtmlForm)forms.get(3)).getEnctypeAttribute());
+        assertEquals("multipart/form-data", ((HtmlForm) forms.get(0)).getEnctypeAttribute());
+        assertEquals("application/x-www-form-urlencoded", ((HtmlForm) forms.get(1)).getEnctypeAttribute());
+        assertEquals("hi", ((HtmlForm) forms.get(2)).getEnctypeAttribute());
+        assertEquals("multipart/form-data", ((HtmlForm) forms.get(3)).getEnctypeAttribute());
     }
 
 }
