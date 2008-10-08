@@ -526,6 +526,15 @@
               request="${context.path}/faces/message04.jsp"
               outContent="/message04.jsp PASSED"/>
 
+         <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/jsptest/NavigationTestCase.class"/>
+            </tests>
+        </jsf.junit>
+
     </target>
 
     <target name="test.navigation"
