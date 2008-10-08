@@ -531,7 +531,7 @@
                    test-results-dir="${impl.test.results.dir}">
             <tests>
                 <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/jsptest/NavigationTestCase.class"/>
+                         includes="com/sun/faces/jsptest/MessagesTestCase.class"/>
             </tests>
         </jsf.junit>
 
