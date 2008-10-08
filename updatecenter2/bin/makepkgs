@@ -9,12 +9,18 @@ export UCHOME=$1
 # add the necessary libraries to python
 export PYTHONPATH=$UCHOME/vendor-packages:.
 
+# execute the bundled python
+export PYTHONBIN=$UCHOME/python2.4-minimal/bin/python
+
 # create the repo
-#python $UCHOME/bin/makepkgs.py -s file://`pwd`/repo -b dist conf/jsf_proto.py
+# new version 
+#$PYTHONBIN $UCHOME/bin/makepkgs.py -s file://`pwd`/repo -b dist conf/jsf_proto.py
+# old version
+#$PYTHONBIN $UCHOME/bin/makepkgs.py -d `pwd`/repo -b dist conf/jsf_proto.py
 
 # Or, optionally, put the repo files into a local repository
-#python $UCHOME/bin/makepkgs.py -s http://localhost:10000 -b dist conf/jsf_proto.py
+#$PYTHONBIN $UCHOME/bin/makepkgs.py -s http://localhost:10000 -b dist conf/jsf_proto.py
 
 # Or, optionally, put the repo files into the dev test repository
-python $UCHOME/bin/makepkgs.py -s http://eflat.sfbay.sun.com:10000 -b dist conf/jsf_proto.py
+$PYTHONBIN $UCHOME/bin/makepkgs.py -s http://eflat.sfbay.sun.com:10000 -b dist conf/jsf_proto.py
 
