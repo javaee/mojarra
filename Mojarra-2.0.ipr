@@ -567,7 +567,7 @@
     </option>
     <option name="lastEditedConfigurable" value="Project 'Default (Template) Project'" />
   </component>
-  <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="true" project-jdk-name="1.5.0_15" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="true" project-jdk-name="1.5" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="ProjectStructureConfigurable.UI">
@@ -791,6 +791,7 @@
         <root url="jar://$PROJECT_DIR$/dependencies/jars/com-sun-commons-logging-api.jar!/" />
         <root url="jar://$PROJECT_DIR$/dependencies/jars/com-sun-commons-digester.jar!/" />
         <root url="jar://$PROJECT_DIR$/dependencies/jars/groovy-all-1.5.5.jar!/" />
+        <root url="jar://$PROJECT_DIR$/dependencies/htmlunit-1.10/lib/htmlunit-1.10.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
