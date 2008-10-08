@@ -1145,7 +1145,7 @@ public abstract class Application {
      * @throws NullPointerException if <code>targetClass</code>
      *  or <code>converterClass</code> is <code>null</code>
      */
-    public abstract void addConverter(Class targetClass,
+    public abstract void addConverter(Class<?> targetClass,
                                       String converterClass);
 
 
@@ -1222,7 +1222,7 @@ public abstract class Application {
      * @throws NullPointerException if <code>targetClass</code>
      *  is <code>null</code>
      */
-    public abstract Converter createConverter(Class targetClass);
+    public abstract Converter createConverter(Class<?> targetClass);
 
 
     /**
@@ -1237,7 +1237,7 @@ public abstract class Application {
      * instances for which {@link Converter} classes have been explicitly
      * registered.</p>
      */
-    public abstract Iterator<Class> getConverterTypes();
+    public abstract Iterator<Class<?>> getConverterTypes();
 
     /**
      * <p>Return the {@link ExpressionFactory} instance for this
@@ -1280,9 +1280,9 @@ public abstract class Application {
      *
      */
 
-    public Object evaluateExpressionGet(FacesContext context,
-                                        String expression,
-                                        Class expectedType) throws ELException {
+    public <T> T evaluateExpressionGet(FacesContext context,
+                                       String expression,
+                                       Class<? extends T> expectedType) throws ELException {
 
         if (defaultApplication != null) {
             return defaultApplication.evaluateExpressionGet(context,
@@ -1315,7 +1315,7 @@ public abstract class Application {
      * ExpressionFactory#createMethodExpression}.
      */
     public abstract MethodBinding createMethodBinding(String ref,
-                                                      Class params[])
+                                                      Class<?> params[])
         throws ReferenceSyntaxException;
 
 
@@ -1685,7 +1685,7 @@ public abstract class Application {
      * @since 2.0
      */
     public void subscribeToEvent(Class<? extends SystemEvent> systemEventClass,
-                                 Class sourceClass,
+                                 Class<?> sourceClass,
                                  SystemEventListener listener) {
 
         if (defaultApplication != null) {
@@ -1763,7 +1763,7 @@ public abstract class Application {
      * @since 2.0
      */
     public void unsubscribeFromEvent(Class<? extends SystemEvent> systemEventClass,
-                                     Class sourceClass,
+                                     Class<?> sourceClass,
                                      SystemEventListener listener) {
 
         if (defaultApplication != null) {

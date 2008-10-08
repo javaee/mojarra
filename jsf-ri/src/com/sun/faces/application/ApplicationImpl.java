@@ -93,7 +93,6 @@ import javax.faces.event.ActionListener;
 import javax.faces.validator.Validator;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.config.ConfigManager;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
@@ -186,7 +185,7 @@ public class ApplicationImpl extends Application {
     //
     private Map<String,Object> componentMap = null;
     private Map<String,Object> converterIdMap = null;
-    private Map<Class,Object> converterTypeMap = null;
+    private Map<Class<?>,Object> converterTypeMap = null;
     private Map<String,Object> validatorMap = null;
     private volatile String messageBundle = null;
 
@@ -206,7 +205,7 @@ public class ApplicationImpl extends Application {
         associate = new ApplicationAssociate(this);
         componentMap = new ConcurrentHashMap<String, Object>();
         converterIdMap = new ConcurrentHashMap<String, Object>();
-        converterTypeMap = new ConcurrentHashMap<Class, Object>();
+        converterTypeMap = new ConcurrentHashMap<Class<?>, Object>();
         validatorMap = new ConcurrentHashMap<String, Object>();
         elContextListeners = new CopyOnWriteArrayList<ELContextListener>();
         navigationHandler = new NavigationHandlerImpl(associate);
@@ -300,7 +299,7 @@ public class ApplicationImpl extends Application {
      */
     @Override
     public void subscribeToEvent(Class<? extends SystemEvent> systemEventClass,
-                                 Class sourceClass,
+                                 Class<?> sourceClass,
                                  SystemEventListener listener) {
 
         Util.notNull("systemEventClass", systemEventClass);
@@ -330,7 +329,7 @@ public class ApplicationImpl extends Application {
      */
     @Override
     public void unsubscribeFromEvent(Class<? extends SystemEvent> systemEventClass,
-                                     Class sourceClass,
+                                     Class<?> sourceClass,
                                      SystemEventListener listener) {
 
         Util.notNull("systemEventClass", systemEventClass);
@@ -405,12 +404,15 @@ public class ApplicationImpl extends Application {
      * @see javax.faces.application.Application#evaluateExpressionGet(javax.faces.context.FacesContext, String, Class)
      */
     @Override
-    public Object evaluateExpressionGet(FacesContext context, 
-        String expression, Class expectedType) throws ELException {
+    public <T> T evaluateExpressionGet(FacesContext context,
+                                       String expression,
+                                       Class<? extends T> expectedType) throws ELException {
         ValueExpression ve = 
           getExpressionFactory().createValueExpression(context.getELContext(), 
-                expression,expectedType);     
-        return (ve.getValue(context.getELContext()));
+                                                       expression,
+                                                       expectedType);
+        //noinspection unchecked
+        return (T)(ve.getValue(context.getELContext()));
     }
 
 
@@ -765,7 +767,7 @@ public class ApplicationImpl extends Application {
      * @see javax.faces.application.Application#createMethodBinding(String, Class[])
      */
     @SuppressWarnings("deprecation")
-    public MethodBinding createMethodBinding(String ref, Class params[]) {
+    public MethodBinding createMethodBinding(String ref, Class<?> params[]) {
 
         Util.notNull("ref", ref);
 
@@ -1106,7 +1108,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#addConverter(Class, String)
      */
-    public void addConverter(Class targetClass, String converterClass) {
+    public void addConverter(Class<?> targetClass, String converterClass) {
 
         Util.notNull("targetClass", targetClass);
         Util.notNull("converterClass", converterClass);
@@ -1147,7 +1149,7 @@ public class ApplicationImpl extends Application {
      *  may not be created
      */
     
-    private void addPropertyEditorIfNecessary(Class targetClass) {
+    private void addPropertyEditorIfNecessary(Class<?> targetClass) {
         WebConfiguration webConfig = WebConfiguration.getInstance();
         if (!webConfig
               .isOptionEnabled(BooleanWebContextInitParameter.RegisterConverterPropertyEditors)) {
@@ -1168,7 +1170,7 @@ public class ApplicationImpl extends Application {
                 return;
             }
         }
-        Class editorClass = ConverterPropertyEditorFactory.getDefaultInstance().definePropertyEditorClassFor(targetClass);
+        Class<?> editorClass = ConverterPropertyEditorFactory.getDefaultInstance().definePropertyEditorClassFor(targetClass);
         if (editorClass != null) {
             PropertyEditorManager.registerEditor(targetClass, editorClass);
         } else {
@@ -1207,7 +1209,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#createConverter(Class)
      */
-    public Converter createConverter(Class targetClass) {
+    public Converter createConverter(Class<?> targetClass) {
 
         Util.notNull("targetClass", targetClass);
         Converter returnVal = (Converter) newConverter(targetClass,
@@ -1227,7 +1229,7 @@ public class ApplicationImpl extends Application {
 
         //Search for converters registered to interfaces implemented by
         //targetClass
-        Class[] interfaces = targetClass.getInterfaces();
+        Class<?>[] interfaces = targetClass.getInterfaces();
         if (interfaces != null) {
             for (int i = 0; i < interfaces.length; i++) {
                 returnVal = createConverterBasedOnClass(interfaces[i], targetClass);
@@ -1248,7 +1250,7 @@ public class ApplicationImpl extends Application {
         }
 
         //Search for converters registered to superclasses of targetClass
-        Class superclass = targetClass.getSuperclass();
+        Class<?> superclass = targetClass.getSuperclass();
         if (superclass != null) {
             returnVal = createConverterBasedOnClass(superclass, targetClass);
             if (returnVal != null) {
@@ -1268,8 +1270,8 @@ public class ApplicationImpl extends Application {
         return returnVal;
     }
 
-    protected Converter createConverterBasedOnClass(Class targetClass, 
-            Class baseClass) {
+    protected Converter createConverterBasedOnClass(Class<?> targetClass,
+            Class<?> baseClass) {
         
         Converter returnVal = (Converter) newConverter(targetClass,
                 converterTypeMap, baseClass);
@@ -1283,7 +1285,7 @@ public class ApplicationImpl extends Application {
 
         //Search for converters registered to interfaces implemented by
         //targetClass
-        Class[] interfaces = targetClass.getInterfaces();
+        Class<?>[] interfaces = targetClass.getInterfaces();
         if (interfaces != null) {
             for (int i = 0; i < interfaces.length; i++) {
                 returnVal = createConverterBasedOnClass(interfaces[i], null);
@@ -1298,7 +1300,7 @@ public class ApplicationImpl extends Application {
         }
 
         //Search for converters registered to superclasses of targetClass
-        Class superclass = targetClass.getSuperclass();
+        Class<?> superclass = targetClass.getSuperclass();
         if (superclass != null) {
             returnVal = createConverterBasedOnClass(superclass, null);
             if (returnVal != null) {
@@ -1326,7 +1328,7 @@ public class ApplicationImpl extends Application {
     /**
      * @see javax.faces.application.Application#getConverterTypes()
      */
-    public Iterator<Class> getConverterTypes() {
+    public Iterator<Class<?>> getConverterTypes() {
                 
         return converterTypeMap.keySet().iterator();
         
@@ -1505,7 +1507,7 @@ public class ApplicationImpl extends Application {
         assert (key != null && map != null);
 
         Object result;
-        Class clazz;
+        Class<?> clazz;
         Object value;
 
         value = map.get(key);
@@ -1560,11 +1562,11 @@ public class ApplicationImpl extends Application {
      * @param targetClass the target class for the single argument ctor
      * @return The new object instance.
      */
-    protected Object newConverter(Class key, Map<Class,Object> map, Class targetClass) {
+    protected Object newConverter(Class<?> key, Map<Class<?>,Object> map, Class<?> targetClass) {
         assert (key != null && map != null);
 
         Object result = null;
-        Class clazz;
+        Class<?> clazz;
         Object value;
 
         value = map.get(key);

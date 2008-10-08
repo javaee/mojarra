@@ -46,6 +46,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.List;
+import java.util.Date;
+import java.util.ArrayList;
 
 import javax.el.ELException;
 import javax.el.ValueExpression;
@@ -64,6 +66,7 @@ import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ExternalContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.IntegerConverter;
 import javax.faces.el.PropertyResolver;
@@ -733,6 +736,24 @@ public class TestApplicationImpl extends JspFacesTestCase {
         c3.reset();
         c3.encodeAll(getFacesContext());
         assertTrue(c3.getEvent() instanceof BeforeRenderEvent);
+
+    }
+
+
+    public void testEvaluateExpressionGet() {
+
+        FacesContext ctx = getFacesContext();
+        ExternalContext extCtx = ctx.getExternalContext();
+        Application app = getFacesContext().getApplication();
+
+        extCtx.getRequestMap().put("date", new Date());
+        Date d = app.evaluateExpressionGet(ctx, "#{requestScope.date}", Date.class);
+        assertNotNull(d);
+        extCtx.getRequestMap().put("list", new ArrayList());
+        List l = app.evaluateExpressionGet(ctx, "#{requestScope.list}", List.class);
+        assertNotNull(l);
+        Object o = app.evaluateExpressionGet(ctx, "#{requestScope.list}", Object.class);
+        assertNotNull(o);
 
     }
 

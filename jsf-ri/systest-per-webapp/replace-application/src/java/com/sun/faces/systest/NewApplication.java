@@ -97,7 +97,7 @@ public class NewApplication extends Application {
 
     @Override
     public void subscribeToEvent(Class<? extends SystemEvent> systemEventClass,
-                                 Class sourceClass,
+                                 Class<?> sourceClass,
                                  SystemEventListener listener) {
         oldApp.subscribeToEvent(systemEventClass, sourceClass, listener);
     }
@@ -110,7 +110,7 @@ public class NewApplication extends Application {
 
     @Override
     public void unsubscribeFromEvent(Class<? extends SystemEvent> systemEventClass,
-                                     Class sourceClass,
+                                     Class<?> sourceClass,
                                      SystemEventListener listener) {
         oldApp.unsubscribeFromEvent(systemEventClass,
                                     sourceClass,
