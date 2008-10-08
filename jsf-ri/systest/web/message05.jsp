@@ -39,7 +39,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 <%@ page contentType="text/html" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
 
@@ -64,8 +64,7 @@ Enter a non-number string here:
 <p><h:outputText value="#{facesContext.messageList} "/></p>
 
 <p>Here's the same using c:forEach with the new
-FacesContext.getMessageList() method. PENDING: why doesn't this
-work?</p>
+FacesContext.getMessageList() method.</p>
 
 <table border="1">
 
@@ -80,6 +79,8 @@ work?</p>
   </tr>
 
 </c:forEach>
+
+</table>
 
 <p><h:commandButton id="reload" value="Reload" /></p>
 
