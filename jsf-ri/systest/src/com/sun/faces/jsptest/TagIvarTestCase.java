@@ -41,21 +41,10 @@
 package com.sun.faces.jsptest;
 
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 
 /**

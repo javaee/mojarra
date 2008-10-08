@@ -40,18 +40,12 @@
 
 package com.sun.faces.jsptest;
 
-import java.util.List;
-
+import com.gargoylesoftware.htmlunit.html.*;
 import com.sun.faces.htmlunit.AbstractTestCase;
-
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSpan;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import com.gargoylesoftware.htmlunit.html.HtmlUnorderedList;
-import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
 import junit.framework.Test;
 import junit.framework.TestSuite;
+
+import java.util.List;
 
 /**
  * <p>Test that invalid values don't cause valueChangeEvents to occur.</p>

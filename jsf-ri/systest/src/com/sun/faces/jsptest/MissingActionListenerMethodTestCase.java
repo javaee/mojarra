@@ -41,13 +41,12 @@
 package com.sun.faces.jsptest;
 
 
-import junit.framework.Assert;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
+import junit.framework.Assert;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 
 /**

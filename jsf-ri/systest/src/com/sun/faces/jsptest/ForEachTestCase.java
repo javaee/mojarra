@@ -40,24 +40,16 @@
 
 package com.sun.faces.jsptest;
 
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import java.util.List;
 import java.util.ArrayList;
-
-import javax.faces.component.NamingContainer;
+import java.util.List;
 
 /**
  * <p>Test that invalid values don't cause valueChangeEvents to occur.</p>

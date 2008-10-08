@@ -36,21 +36,12 @@
 
 package com.sun.faces.jsptest;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
+import com.gargoylesoftware.htmlunit.html.*;
+import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSpan;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import java.util.*;
 
 /**
  * <p>

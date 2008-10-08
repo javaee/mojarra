@@ -40,14 +40,14 @@
 
 package com.sun.faces.jsptest;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**

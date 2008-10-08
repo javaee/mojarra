@@ -40,13 +40,13 @@
 
 package com.sun.faces.jsptest;
 
-import java.util.List;
-
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
+
+import java.util.List;
 
 /**
  * <p>Verify expected behavior when command link is not enclosed by a form</p>

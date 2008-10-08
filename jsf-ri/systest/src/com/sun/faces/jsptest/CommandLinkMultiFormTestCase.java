@@ -41,22 +41,12 @@
 package com.sun.faces.jsptest;
 
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlHiddenInput;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import com.gargoylesoftware.htmlunit.html.*;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import java.util.List;
-
-import javax.faces.component.NamingContainer;
 
 
 /**
@@ -92,6 +82,7 @@ public class CommandLinkMultiFormTestCase extends AbstractTestCase {
 
     /**
      * Return the tests included in this test suite.
+     * @return Tests included in suite
      */
     public static Test suite() {
         return (new TestSuite(CommandLinkMultiFormTestCase.class));
