@@ -122,6 +122,18 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
     // Tests for methods added in 2.0
 
 
+    public void beginGetRequestContentLength(WebRequest req) {
+        req.addParameter("foo", "bar", WebRequest.POST_METHOD);
+    }
+
+    public void testGetRequestContentLength() {
+
+        ExternalContext ctx = getFacesContext().getExternalContext();
+        assertEquals(Integer.valueOf(ctx.getRequestContentLength()), Integer.valueOf(7));
+        
+    }
+
+
     public void testAddResponseCookie() {
 
         ExternalContext ctx = getFacesContext().getExternalContext();

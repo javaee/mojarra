@@ -68,6 +68,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.Map;
+import java.util.Collections;
 
 import org.apache.cactus.WebRequest;
 
@@ -396,6 +397,47 @@ public class TestFacesContextImpl extends ServletFacesTestCase {
         for (int i = 0, size = controlList.size(); i < size; i++) {
             assertTrue(controlList.get(i).equals(it.next()));
         }
+        
+    }
+
+    public void testGetMessageList() {
+
+        FacesContext ctx = getFacesContext();
+        FacesMessage msg1 = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "");
+        FacesMessage msg2 = new FacesMessage(FacesMessage.SEVERITY_WARN, "", "");
+        FacesMessage msg3 = new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "");
+        FacesMessage msg4 = new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "");
+
+        ctx.addMessage(null, msg1);
+        ctx.addMessage("id1", msg2);
+        ctx.addMessage("id2", msg3);
+        ctx.addMessage("id2", msg4);
+
+        Class unmodifiableType = Collections.unmodifiableList(Collections.emptyList()).getClass();
+
+        List list = ctx.getMessageList(null);
+        assertTrue(list.size() == 1);
+        assertTrue(unmodifiableType.isInstance(list));
+        assertTrue(msg1.equals(list.get(0)));
+
+        list = ctx.getMessageList("id1");
+        assertTrue(list.size() == 1);
+        assertTrue(unmodifiableType.isInstance(list));
+        assertTrue(msg2.equals(list.get(0)));
+
+        list = ctx.getMessageList("id2");
+        assertTrue(list.size() == 2);
+        assertTrue(unmodifiableType.isInstance(list));
+        assertTrue(msg3.equals(list.get(0)));
+        assertTrue(msg4.equals(list.get(1)));
+
+        list = ctx.getMessageList();
+        assertTrue(list.size() == 4);
+        assertTrue(unmodifiableType.isInstance(list));
+        assertTrue(list.contains(msg1));
+        assertTrue(list.contains(msg2));
+        assertTrue(list.contains(msg3));
+        assertTrue(list.contains(msg4));
         
     }
 

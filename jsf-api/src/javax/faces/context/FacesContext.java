@@ -339,8 +339,12 @@ public abstract class FacesContext {
      * for the sole purpose of not breaking existing applications that extend
      * this class.</p>
      *
+     * @return an immutable <code>List</code> which is effectively a snapshot
+     *  of the messages present at the time of invocation.
+     *
      * @throws IllegalStateException if this method is called after
      *  this instance has been released
+     *
      * @since 2.0
      */ 
 
@@ -363,8 +367,12 @@ public abstract class FacesContext {
      * for the sole purpose of not breaking existing applications that extend
      * this class.</p>
      *
+     * @return an immutable <code>List</code> which is effectively a snapshot
+     *  of the messages present at the time of invocation.
+     *
      * @throws IllegalStateException if this method is called after
      *  this instance has been released
+     *
      * @since 2.0
      */ 
 
