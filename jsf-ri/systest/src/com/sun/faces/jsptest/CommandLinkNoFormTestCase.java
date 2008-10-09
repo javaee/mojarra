@@ -40,20 +40,19 @@
 
 package com.sun.faces.jsptest;
 
-import java.util.List;
-
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import java.util.List;
+
 /**
  * <p>Verify expected behavior when command link is not enclosed by a form</p>
  */
 
 public class CommandLinkNoFormTestCase extends AbstractTestCase {
-
 
     // ------------------------------------------------------------ Constructors
 
@@ -67,9 +66,7 @@ public class CommandLinkNoFormTestCase extends AbstractTestCase {
         super(name);
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
 
     // ---------------------------------------------------- Overall Test Methods
 
@@ -97,27 +94,24 @@ public class CommandLinkNoFormTestCase extends AbstractTestCase {
         super.tearDown();
     }
 
-
     // ------------------------------------------------------ Instance Variables
 
-
-
-    // ------------------------------------------------- Individual Test Methods    
+    // ------------------------------------------------- Individual Test Methods
 
     public void testRenderedClinkWithNoForm() throws Exception {
         String noFormString =
-              ": This link is disabled as it is not nested within a JSF form.";
+                ": This link is disabled as it is not nested within a JSF form.";
         HtmlPage page = getPage("/faces/standard/clinknoform.jsp");
         List list = getAllElementsOfGivenClass(page, null,
-                                               HtmlSpan.class);
-        
+                HtmlSpan.class);
+
         HtmlSpan p = (HtmlSpan) list.get(0);
         assertEquals("Link1" + noFormString, p.asText());
         p = (HtmlSpan) list.get(1);
         assertEquals("Link2" + noFormString, p.asText());
         p = (HtmlSpan) list.get(2);
-        assertEquals("Click me once and click me twice" + 
-                     noFormString, p.asText());        
+        assertEquals("Click me once and click me twice" +
+                noFormString, p.asText());
     }
 
 

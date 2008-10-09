@@ -153,13 +153,39 @@ public class ExternalContextImpl extends ExternalContext {
         return this.servletContext;
     }
 
+
     /**
      * @see javax.faces.context.ExternalContext#getContextName()
      */
-    public String getContextName() { 
-	return this.servletContext.getServletContextName();
+    public String getContextName() {
+
+        if (servletContext.getMajorVersion() >= 3
+            || (servletContext.getMajorVersion() == 2
+                && servletContext.getMinorVersion() == 5)) {
+            return this.servletContext.getServletContextName();
+        } else {
+            // for servlet 2.4 support
+            return servletContext.getServletContextName();
+        }
+        
     }
 
+
+    /**
+     * @see javax.faces.context.ExternalContext#getContextName()
+     */
+    public String getContextName() {
+
+        if (servletContext.getMajorVersion() >= 3
+            || (servletContext.getMajorVersion() == 2
+                && servletContext.getMinorVersion() == 5)) {
+            return this.servletContext.getServletContextName();
+        } else {
+            // for servlet 2.4 support
+            return servletContext.getServletContextName();
+        }
+        
+    }
 
 
     /**
@@ -423,6 +449,7 @@ public class ExternalContextImpl extends ExternalContext {
         return (request.getContentType());
     }
 
+
     /**
      * @see javax.faces.context.ExternalContext#getRequestContentLength()
      */
@@ -431,6 +458,14 @@ public class ExternalContextImpl extends ExternalContext {
         return (request.getContentLength());
     }
 
+
+    /**
+     * @see javax.faces.context.ExternalContext#getRequestContentLength()
+     */
+    @Override
+    public int getRequestContentLength() {
+        return (request.getContentLength());
+    }
 
 
     /**

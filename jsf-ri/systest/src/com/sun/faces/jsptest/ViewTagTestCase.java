@@ -41,23 +41,12 @@
 package com.sun.faces.jsptest;
 
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
-import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
+import com.gargoylesoftware.htmlunit.html.*;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import javax.faces.component.NamingContainer;
-
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 
 /**
@@ -65,7 +54,6 @@ import java.util.ResourceBundle;
  */
 
 public class ViewTagTestCase extends AbstractTestCase {
-
 
     // ------------------------------------------------------------ Constructors
 
@@ -79,9 +67,7 @@ public class ViewTagTestCase extends AbstractTestCase {
         super(name);
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
 
     // ---------------------------------------------------- Overall Test Methods
 
@@ -109,7 +95,6 @@ public class ViewTagTestCase extends AbstractTestCase {
         super.tearDown();
     }
 
-
     // ------------------------------------------------- Individual Test Methods
 
 
@@ -123,23 +108,23 @@ public class ViewTagTestCase extends AbstractTestCase {
         page = getPage("/faces/viewLocale.jsp");
         form = getFormById(page, "form");
         submit = (HtmlSubmitInput)
-            form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
-                                "button");
+                form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
+                        "button");
 
         // press the button
-        page = (HtmlPage) submit.click();        
+        page = (HtmlPage) submit.click();
         assertTrue(-1 != page.asText().indexOf("Erreur"));
 
     }
-    
+
     public void testReplaceViewRoot() throws Exception {
         HtmlPage page;
         HtmlAnchor link;
-        
+
         page = getPage("/faces/replaceViewRoot.jsp");
         link = page.getAnchorByName("examine");
         page = (HtmlPage) link.click();
         assertTrue(-1 != page.asText().indexOf("Replaced ViewRoot is com.sun.faces.systest.model.ViewRootExtension"));
-        
+
     }
 }

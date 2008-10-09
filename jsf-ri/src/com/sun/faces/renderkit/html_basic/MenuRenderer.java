@@ -49,12 +49,20 @@ package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.Queue;
+import java.util.LinkedList;
 import java.util.logging.Level;
 
 import javax.el.ELException;
@@ -70,6 +78,7 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
+import javax.faces.FacesException;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.renderkit.AttributeManager;
@@ -77,6 +86,7 @@ import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
+import com.sun.faces.util.ReflectionUtils;
 
 /**
  * <B>MenuRenderer</B> is a class that renders the current value of
@@ -111,7 +121,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             Class modelType = valueExpression.getType(context.getELContext());
             // Does the valueExpression resolve properly to something with
             // a type?
-            if(modelType != null) {
+            if (modelType != null) {
                 result = convertSelectManyValuesForModel(context,
                                                          uiSelectMany,
                                                          modelType,
@@ -315,30 +325,69 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                                                      UISelectMany uiSelectMany,
                                                      Class modelType,
                                                      String[] newValues) {
-        Object result = null;
+
         if (modelType.isArray()) {
-            result = convertSelectManyValues(context,
-                                             uiSelectMany,
-                                             modelType,
-                                             newValues);
-        } else if (List.class.isAssignableFrom(modelType)) {
+            return convertSelectManyValues(context,
+                                           uiSelectMany,
+                                           modelType,
+                                           newValues);
+        } else if (Collection.class.isAssignableFrom(modelType)) {
             Object[] values = (Object[]) convertSelectManyValues(context,
                                                                  uiSelectMany,
                                                                  Object[].class,
                                                                  newValues);
-            // perform a manual copy as the Array returned from
-            // Arrays.asList() isn't mutable.  It seems a waste
-            // to also call Collections.addAll(Arrays.asList())
-            List<Object> l = new ArrayList<Object>(values.length);
+
+            Collection targetCollection = null;
+
+            // see if the collectionType hint is available, if so, use that
+            Object collectionTypeHint = uiSelectMany.getAttributes().get("collectionType");
+            if (collectionTypeHint != null) {
+                targetCollection = createCollectionFromHint(collectionTypeHint);
+            } else {
+                // try to get a new Collection to store the values based
+                // by trying to create a clone
+                Collection currentValue = (Collection) uiSelectMany.getValue();
+                if (currentValue != null) {
+                    targetCollection = cloneValue(currentValue);
+                }
+
+                // No cloned instance so if the modelType happens to represent a
+                // concrete type (probably not the norm) try to reflect a
+                // no-argument constructor and invoke if available.
+                if (targetCollection == null) {
+                    //noinspection unchecked
+                    targetCollection =
+                          createCollection(currentValue, modelType);
+                }
+
+                // No suitable instance to work with, make our best guess
+                // based on the type.
+                if (targetCollection == null) {
+                    //noinspection unchecked
+                    targetCollection = bestGuess(modelType, values.length);
+                }
+            }
+
             //noinspection ManualArrayToCollectionCopy
             for (Object v : values) {
-                l.add(v);
+                //noinspection unchecked
+                targetCollection.add(v);
             }
-            result = l;
+
+            return targetCollection;
+        } else if (Object.class.equals(modelType)) {
+            return convertSelectManyValues(context,
+                                           uiSelectMany,
+                                           Object[].class,
+                                           newValues);
+        } else {
+            throw new FacesException("Target model Type is no a Collection or Array");
         }
-        return result;
+        
     }
-    
+
+
+
 
     protected Object convertSelectManyValues(FacesContext context,
                                              UISelectMany uiSelectMany,
@@ -544,23 +593,6 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     }
 
 
-    @Deprecated
-    protected void renderOption(FacesContext context,
-                                UIComponent component,
-                                Converter converter,
-                                SelectItem curItem)
-    throws IOException {
-
-        this.renderOption(context,
-                          component,
-                          converter,
-                          curItem,
-                          getCurrentSelectedValues(component),
-                          getSubmittedSelectedValues(component));
-
-    }
-
-
     protected void writeDefaultSize(ResponseWriter writer, int itemCount)
           throws IOException {
 
@@ -620,17 +652,6 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             return " multiple ";
         }
         return "";
-
-    }
-
-
-    @Deprecated
-    protected int getOptionNumber(FacesContext context,
-                                  UIComponent component,
-                                  List<SelectItem> selectItems) {
-
-
-       return getOptionNumber(selectItems);
 
     }
 
@@ -853,6 +874,146 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         }
 
         return newValue;
+
+    }
+
+
+    /**
+     * @param collection a Collection instance
+     *
+     * @return a new <code>Collection</code> instance or null if the instance
+     *         cannot be created
+     */
+    protected Collection createCollection(Collection collection,
+                                          Class<? extends Collection> fallBackType) {
+
+        Class<? extends Collection> lookupClass =
+              ((collection != null) ? collection.getClass() : fallBackType);
+
+        if (!lookupClass.isInterface()
+             && !Modifier.isAbstract(lookupClass.getModifiers())) {
+            try {
+                return lookupClass.newInstance();
+            } catch (Exception e) {
+                if (logger.isLoggable(Level.SEVERE)) {
+                    logger.log(Level.SEVERE,
+                               "Unable to create new Collection instance for type "
+                               + lookupClass.getName(),
+                               e);
+                }
+            }
+        }
+
+        return null;
+
+    }
+
+
+    /**
+     * <p>
+     * Utility method to invoke the the <code>clone</code> method on the provided
+     * value.
+     * </p>
+     *
+     * @param value the value to clone
+     * @return the result of invoking <code>clone()</code> or <code>null</code>
+     *  if the value could not be cloned or does not implement the
+     *  {@link Cloneable} interface
+     */
+    protected Collection cloneValue(Object value) {
+
+        if (value instanceof Cloneable) {
+            // even though Clonable marks an instance of a Class as being
+            // safe to call .clone(), .clone() by default is protected.
+            // The Collection classes that do implement Clonable do so at variable
+            // locations within the class hierarchy, so we're stuck having to
+            // use reflection.
+            Method clone =
+                  ReflectionUtils.lookupMethod(value.getClass(), "clone");
+            if (clone != null) {
+                try {
+                    Collection c = (Collection) clone.invoke(value);
+                    c.clear();
+                    return c;
+                } catch (Exception e) {
+                    if (logger.isLoggable(Level.SEVERE)) {
+                        logger.log(Level.SEVERE,
+                                   "Unable to clone collection type: {0}",
+                                   value.getClass().getName());
+                        logger.log(Level.SEVERE, e.toString(), e);
+                    }
+                }
+            } else {
+                // no public clone method
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.log(Level.FINE,
+                               "Type {0} implements Cloneable, but has no public clone method.",
+                               value.getClass().getName());
+                }
+            }
+        }
+
+        return null;
+
+    }
+
+
+    /**
+     * @param type the target model type
+     * @param initialSize the initial size of the <code>Collection</code>
+     * @return a <code>Collection</code> instance that best matches
+     *  <code>type</code>
+     */
+    protected Collection bestGuess(Class<? extends Collection> type,
+                                   int initialSize) {
+
+        if (SortedSet.class.isAssignableFrom(type)) {
+            return new TreeSet();
+        } else if (Queue.class.isAssignableFrom(type)) {
+           return new LinkedList(); 
+        } else if (Set.class.isAssignableFrom(type)) {
+            return new HashSet(initialSize);
+        } else {
+            // this covers the where type is List or Collection
+            return new ArrayList(initialSize);
+        }
+
+    }
+
+
+    /**
+     * <p>
+     * Create a collection from the provided hint.
+     * @param collectionTypeHint the Collection type as either a String or Class
+     * @return a new Collection instance
+     */
+    protected Collection createCollectionFromHint(Object collectionTypeHint) {
+
+        Class<? extends Collection> collectionType;
+        if (collectionTypeHint instanceof Class) {
+            //noinspection unchecked
+            collectionType = (Class<? extends Collection>) collectionTypeHint;
+        } else if (collectionTypeHint instanceof String) {
+            try {
+                //noinspection unchecked
+                collectionType = Util.loadClass((String) collectionTypeHint,
+                                                this);
+            } catch (ClassNotFoundException cnfe) {
+                throw new FacesException(cnfe);
+            }
+        } else {
+            // RELEASE_PENDING (i18n)
+            throw new FacesException(
+                  "'collectionType' should resolve to type String or Class.  Found: "
+                  + collectionTypeHint.getClass().getName());
+        }
+
+        Collection c = createCollection(null, collectionType);
+        if (c == null) {
+            // RELEASE_PENDING (i18n)
+            throw new FacesException("Unable to create collection type " + collectionType);
+        }
+        return c;
 
     }
 

@@ -2222,6 +2222,11 @@
         <code>String</code> array and call
         <code>setSubmittedValue()</code> with it.</p>
 
+        <p class="changed_modified_2_0">Please check the javadoc for <a
+        href="../../javadocs/javax/faces/component/UISelectMany.html#getConvertedvalue">UISelectMany.getConvertedValue()</a>
+        for additional requirements for renderers that render this kind
+        of component.</p>
+
       </ul>
 
       <p><a name="decodeOne">Decode Behavior for

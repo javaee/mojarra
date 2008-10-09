@@ -42,8 +42,11 @@ package javax.faces.component;
 
 
 import java.lang.reflect.Array;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
+
 import javax.el.ValueExpression;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -52,11 +55,13 @@ import javax.faces.convert.Converter;
 
 
 /**
- * <p><strong>UISelectMany</strong> is a {@link UIComponent} that represents
- * the user's choice of a zero or more items from among a discrete set of
- * available options.  The user can modify the selected values.  Optionally,
- * the component can be preconfigured with zero or more currently selected
- * items, by storing them as an array in the <code>value</code> property of
+ * <p><strong class="changed_modified_2_0">UISelectMany</strong> is a
+ * {@link UIComponent} that represents the user's choice of a zero or
+ * more items from among a discrete set of available options.  The user
+ * can modify the selected values.  Optionally, the component can be
+ * preconfigured with zero or more currently selected items, by storing
+ * them as an array <span class="changed_modified_2_0">or
+ * <code>Collection</code></span> in the <code>value</code> property of
  * the component.</p>
  *
  * <p>This component is generally rendered as a select box or a group of
@@ -67,7 +72,8 @@ import javax.faces.convert.Converter;
  * calling the <code>setRendererType()</code> method.</p>
  *
  * <p>The {@link javax.faces.render.Renderer} for this component must
- * perform the following logic on <code>getConvertedValue()</code>:</p>
+ * perform the following logic on <a
+ * name="#getConvertedValue"><code>getConvertedValue()</code></a>:</p>
  *
  * <ul>
  *
@@ -81,30 +87,146 @@ import javax.faces.convert.Converter;
  * (if any).  The {@link ValueExpression} must point to something that
  * is:</p>
  *
- * <ul>
- * <li>An array of primitives (such as <code>int[]</code>).  Look up the
- *     registered by-class {@link javax.faces.convert.Converter} for this primitive type.</li>
- * <li>An array of objects (such as <code>Integer[]</code> or
- *     <code>String[]</code>).  Look up the registered by-class
- *     {@link javax.faces.convert.Converter} for the underlying element type.</li>
- * <li>A <code>java.util.List</code>.  Assume that the element type is
- *     <code>java.lang.String</code>, so no conversion is required.</li>
+ * <ul> <li><p>An array of primitives (such as <code>int[]</code>).
+ * Look up the registered by-class {@link javax.faces.convert.Converter}
+ * for this primitive type.</p></li> 
+
+ * <li><p>An array of objects (such as <code>Integer[]</code> or
+ * <code>String[]</code>).  Look up the registered by-class {@link
+ * javax.faces.convert.Converter} for the underlying element
+ * type.</p></li> 
+
+ * <li class="changed_modified_2_0"><p>A <code>java.util.Collection</code>.
+ * Do not convert the values.</p></li>
+
  * </ul>
  *
  * <p>If for any reason a <code>Converter</code> cannot be found, assume
  * the type to be a String array.</p>
- *
+
  * </ul>
- *
- * <p>Use the selected {@link javax.faces.convert.Converter} (if any) to convert each element in the
- * values array or list from the request to the proper type.  If the component
- * has a {@link ValueBinding} for <code>value</code>, create an array
- * of the expected type to hold the converted values.  If the component
- * does not have a {@link ValueBinding} for <code>value</code>, create
- * an array of type <code>Object</code>.  Store the created array
- * as the local value of the component, set the component's <code>valid</code>
- * state to <code>true</code> and return.</p>
- *
+
+ * <p>Use the selected {@link javax.faces.convert.Converter} (if any) to
+ * convert each element in the values array from the request to the
+ * proper type, <span class="changed_modified_2_0">and store the result of
+ * each conversion in a data structure, called
+ * <em>targetForConvertedValues</em> for discussion.  Create
+ * <em>targetForConvertedValues</em> using the following
+ * algorithm.</span></p>
+
+ * <div class="changed_modified_2_0">
+
+ * <ul>
+
+ * <li><p>If the component has a <code>ValueExpression</code> for
+ * <code>value</code> and the type of the expression is an array, let
+ * <em>targetForConvertedValues</em> be a new array of the expected
+ * type.</p></li>
+
+
+ * <li><p>If the component has a <code>ValueExpression</code> for
+ * <code>value</code>, let <em>modelType</em> be the type of the value
+ * expression.  If <em>modelType</em> is a <code>Collection</code>, do
+ * the following to arrive at <em>targetForConvertedValues</em>:</p>
+
+ * <ul>
+
+ * <li><p>Ask the component for its attribute under the key
+ * "<code>collectionType</code>", without the quotes.  If there is a
+ * value for that key, the value must be a String that is a fully
+ * qualified Java class name, or a <code>Class</code> object, or a
+ * <code>ValueExpression</code> that evaluates to a String or a
+ * <code>Class</code>.  In all cases, the value serves to identify the
+ * concrete type of the class that implements <code>Collection</code>.
+ * For discussion, this is called <em>collectionType</em>.  Let
+ * <em>targetForConvertedValues</em> be a new instance of
+ * <code>Collection</code> implemented by the concrete class specified
+ * in <em>collectionType</em>.  If, <em>collectionType</em> can not be
+ * discovered, or an instance of <code>Collection</code> implemented by
+ * the concrete class specified in <em>collectionType</em> cannot be
+ * created, throw a {@link javax.faces.FacesException} with a correctly
+ * localized error message.  Note that <code>FacesException</code> is
+ * thrown instead of <code>ConverterException</code> because this case
+ * would only arise from developer error, rather than end-user
+ * error.</p></li>
+
+ * <li><p>If there is no "<code>collectionType</code>" attribute, call
+ * <code>getValue()</code> on the component.  The result will implement
+ * <code>Collection</code>.  If the result also implements
+ * <code>Cloneable</code>, let <em>targetForConvertedValues</em> be the
+ * result of calling its <code>clone()</code> method, then calling
+ * <code>clear()</code> on the cloned <code>Collection</code>.  If
+ * unable to clone the value for any reason, log a message and proceed
+ * to the next step.</p></li>
+
+ * <li><p>If <em>modelType</em> is a concrete class, let
+ * <em>targetForConvertedValues</em> be a new instance of that class.
+ * Otherwise, the concrete type for <em>targetForConvertedValues</em> is
+ * taken from the following table.  All classes are in the
+ * <code>java.util</code> package.  All collections must be created with
+ * an initial capacity equal to the length of the values array from the
+ * request.</p>
+
+ * <table border="1">
+
+ * <tr>
+
+ * <th>If <em>modelType</em> is an instance of</th>
+ 
+ * <th>then <em>targetForConvertedValues</em> must be an instance
+ * of</th>
+
+ * </tr>
+
+ * <tr>
+
+ * <td><code>SortedSet</code></td>
+
+ * <td><code>TreeSet</code></td>
+
+ * </tr>
+
+ * <tr>
+
+ * <td><code>Queue</code></td>
+
+ * <td><code>LinkedList</code></td>
+
+ * </tr>
+
+ * <tr>
+
+ * <td><code>Set</code></td>
+
+ * <td><code>HashSet</code></td>
+
+ * </tr>
+
+ * <tr>
+
+ * <td>anything else</td>
+
+ * <td><code>ArrayList</code></td>
+
+ * </tr>
+
+ * </table>
+
+ * </li>
+
+ * </ul>
+
+ * <li><p>If the component does not have a <code>ValueExpression</code>
+ * for <code>value</code>, let <em>targetForConvertedValues</em> be an
+ * array of type <code>Object</code>.</p>
+
+ * </ul>
+
+ * </div>
+
+ * <p>Return <em>targetForConvertedValues</em> after populating it with
+ * the converted values.</p>
+
  * </ul>
  *
  */
@@ -434,6 +556,11 @@ public class UISelectMany extends UIInput {
      * equal to any of the options,  enqueue an error message
      * and set the <code>valid</code> property to <code>false</code>.</p>
      *
+     * <p class="changed_modified_2_0">This method must explicitly
+     * support a value argument that is a single value or a value
+     * argument that is a <code>Collection</code> or Array of
+     * values.</p>
+     *
      * @param context The {@link FacesContext} for the current request
      *
      * @param value The converted value to test for membership.
@@ -453,29 +580,88 @@ public class UISelectMany extends UIInput {
         // Ensure that the values match one of the available options
         // Don't arrays cast to "Object[]", as we may now be using an array
         // of primitives
-        boolean isList = (value instanceof List);
-        int length = isList ? ((List) value).size() : Array.getLength(value);
-        boolean found = true;
         Converter converter = getConverter();
         FacesContext ctx = getFacesContext();
-        for (int i = 0; i < length; i++) {
+        for (Iterator i = getValuesIterator(value); i.hasNext(); ) {
             Iterator items = new SelectItemsIterator(this);
-            Object indexValue = isList ?
-                ((List) value).get(i) : Array.get(value, i);
-            found = SelectUtils.matchValue(ctx, this, indexValue, items, converter);
-            if (!found) {
-                break;
+            Object currentValue = i.next();
+            if (!SelectUtils.matchValue(ctx, this, currentValue, items, converter)) {
+                // Enqueue an error message if an invalid value was specified
+                FacesMessage message =
+                      MessageFactory.getMessage(context,
+                                                INVALID_MESSAGE_ID,
+                                                MessageFactory.getLabel(context, this));
+                context.addMessage(getClientId(context), message);
+                setValid(false);
+                return;
             }
         }
 
-        // Enqueue an error message if an invalid value was specified
-        if (!found) {
-            FacesMessage message =
-                MessageFactory.getMessage(context, INVALID_MESSAGE_ID,
-                     MessageFactory.getLabel(context, this));
-            context.addMessage(getClientId(context), message);
-            setValid(false);
-        }
     }
 
+
+    // --------------------------------------------------------- Private Methods
+
+
+    private Iterator getValuesIterator(Object value) {
+
+        if (value instanceof Collection) {
+            return ((Collection) value).iterator();
+        } else {
+            return (new ArrayIterator(value));
+        }
+
+    }
+
+
+    // ---------------------------------------------------------- Nested Classes
+
+
+    /**
+     * Exposes an Array as an Iterator.
+     */
+    private static final class ArrayIterator implements Iterator {
+
+        private int length;
+        private int idx = 0;
+        private Object value;
+
+
+        // -------------------------------------------------------- Constructors
+
+
+        ArrayIterator(Object value) {
+
+            this.value = value;
+            length = Array.getLength(value);
+
+        }
+
+
+        // ------------------------------------------------------------ Iterator
+
+
+        public boolean hasNext() {
+            return (idx < length);
+        }
+
+
+        public Object next() {
+
+            if (idx >= length) {
+                throw new NoSuchElementException();
+            } else {
+                return Array.get(value, idx++);
+            }
+            
+        }
+
+
+        public void remove() {
+
+            throw new UnsupportedOperationException();
+
+        }
+
+    }
 }

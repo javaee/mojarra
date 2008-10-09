@@ -260,41 +260,46 @@ import com.sun.faces.renderkit.RenderKitUtils;
          return result;
      }
 
-    public List<FacesMessage> getMessageList() {
-	List<FacesMessage> results = null;
-        if (null == componentMessageLists) {
-            results = Collections.EMPTY_LIST;
-        } else {
-            results = new ArrayList<FacesMessage>();
-            Iterator clientIds = componentMessageLists.keySet().iterator();
-            while (clientIds.hasNext()) {
-                String clientId = (String) clientIds.next();
-                results.addAll((List<FacesMessage>) componentMessageLists.get(clientId));
-            }
-        }
 
-	// RELEASE_PENDING(rlubke): Make sure that this list is correctly
-	// modifyable.
+     /**
+      * @see javax.faces.context.FacesContext#getMessageList()
+      */
+     @Override
+     public List<FacesMessage> getMessageList() {
 
-	return results;
-    }
+         assertNotReleased();
 
-    public List<FacesMessage> getMessageList(String clientId) {
-        List<FacesMessage> result = null;
-        if (null == componentMessageLists) {
-            result = Collections.EMPTY_LIST;
-        } else {
-            componentMessageLists.get(clientId);
-            if (result == null) {
-                result = Collections.EMPTY_LIST;
-            }
-        }
+         if (null == componentMessageLists) {
+             return Collections.unmodifiableList(Collections.<FacesMessage>emptyList());
+         } else {
+             List<FacesMessage> messages = new ArrayList<FacesMessage>();
+             for (List<FacesMessage> list : componentMessageLists.values()) {
+                 messages.addAll(list);
+             }
+             return Collections.unmodifiableList(messages);
+         }
 
-	// RELEASE_PENDING(rlubke): Make sure that this list is correctly
-	// modifyable.
+     }
 
-	return result;
-    }
+
+     /**
+      * @see javax.faces.context.FacesContext#getMessageList(String)
+      */
+     @Override
+     public List<FacesMessage> getMessageList(String clientId) {
+
+         assertNotReleased();
+
+         if (null == componentMessageLists) {
+             return Collections.unmodifiableList(Collections.<FacesMessage>emptyList());
+         } else {
+             List<FacesMessage> list = componentMessageLists.get(clientId);
+             return Collections.unmodifiableList((list != null)
+                                                 ? list
+                                                 : Collections.<FacesMessage>emptyList());
+         }
+
+     }
 
 
      /**

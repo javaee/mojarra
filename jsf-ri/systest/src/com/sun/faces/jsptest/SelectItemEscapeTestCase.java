@@ -41,25 +41,10 @@
 package com.sun.faces.jsptest;
 
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
-import com.gargoylesoftware.htmlunit.html.HtmlSelect;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import java.util.List;
-import java.util.Random;
-import java.util.ResourceBundle;
-
-import javax.faces.component.NamingContainer;
 
 
 /**
@@ -67,7 +52,6 @@ import javax.faces.component.NamingContainer;
  */
 
 public class SelectItemEscapeTestCase extends AbstractTestCase {
-
 
     // ------------------------------------------------------------ Constructors
 
@@ -81,9 +65,7 @@ public class SelectItemEscapeTestCase extends AbstractTestCase {
         super(name);
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
 
     // ---------------------------------------------------- Overall Test Methods
 
@@ -111,36 +93,32 @@ public class SelectItemEscapeTestCase extends AbstractTestCase {
         super.tearDown();
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
-
 
     // ------------------------------------------------- Individual Test Methods
 
     /**
-     *
      * <p>Verify that the required validator works for SelectOne</p>
      */
 
     public void testSelectOneNoValue() throws Exception {
-	HtmlPage page = getPage("/faces/selectItemEscape.jsp");
+        HtmlPage page = getPage("/faces/selectItemEscape.jsp");
 
-	assertTrue(-1 != page.asText().indexOf("menu1_Wayne &lt;Gretzky&gt;"));
+        assertTrue(-1 != page.asText().indexOf("menu1_Wayne &lt;Gretzky&gt;"));
         assertTrue(-1 != page.asText().indexOf("menu1_Bobby +Orr+"));
         assertTrue(-1 != page.asText().indexOf("menu1_Brad &amp;{Park}"));
         assertTrue(-1 != page.asText().indexOf("menu1_Brad &amp;{Park}"));
 
-	assertTrue(-1 != page.asText().indexOf("menu2_Wayne &lt;Gretzky&gt;"));
+        assertTrue(-1 != page.asText().indexOf("menu2_Wayne &lt;Gretzky&gt;"));
         assertTrue(-1 != page.asText().indexOf("menu2_Bobby +Orr+"));
         assertTrue(-1 != page.asText().indexOf("menu2_Brad &amp;{Park}"));
         assertTrue(-1 != page.asText().indexOf("menu2_Brad &amp;{Park}"));
 
-	assertTrue(-1 != page.asText().indexOf("menu3_Wayne <Gretzky>"));
-	assertTrue(-1 != page.asText().indexOf("menu3_Bobby +Orr+"));
-	assertTrue(-1 != page.asText().indexOf("menu3_Brad &{Park}"));
-	assertTrue(-1 != page.asText().indexOf("menu3_Gordie &Howe&"));
-	
+        assertTrue(-1 != page.asText().indexOf("menu3_Wayne <Gretzky>"));
+        assertTrue(-1 != page.asText().indexOf("menu3_Bobby +Orr+"));
+        assertTrue(-1 != page.asText().indexOf("menu3_Brad &{Park}"));
+        assertTrue(-1 != page.asText().indexOf("menu3_Gordie &Howe&"));
+
     }
 
 }

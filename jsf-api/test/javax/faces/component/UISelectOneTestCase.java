@@ -53,6 +53,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Collection;
 
 
 /**
@@ -188,6 +191,92 @@ public class UISelectOneTestCase extends UIInputTestCase {
         selectOne.setValid(true);
         selectOne.setSubmittedValue("car");
         selectOne.setRendererType(null); // We don't have any renderers
+        selectOne.validate(facesContext);
+        assertTrue(!selectOne.isValid());
+
+    }
+
+
+    // Test validation of component with UISelectItems pointing to Set
+    public void testValidation3() throws Exception {
+
+        Set<SelectItem> items = new HashSet<SelectItem>();
+        items.add(new SelectItem("foo"));
+        items.add(new SelectItem("bar"));
+        items.add(new SelectItem("baz"));
+
+        testValidateWithCollection(items, "bar", "car");
+        
+    }
+
+    // Test validation of component with UISelectItems pointing to List
+    public void testValidation4() throws Exception {
+
+        List<SelectItem> items = new ArrayList<SelectItem>();
+        items.add(new SelectItem("foo"));
+        items.add(new SelectItem("bar"));
+        items.add(new SelectItem("baz"));
+
+        testValidateWithCollection(items, "bar", "car");
+
+    }
+
+
+    // Test validation of component with UISelectItems pointing to an Array
+    public void testValidation5() throws Exception {
+
+         // Put our component under test in a tree under a UIViewRoot
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        root.getChildren().add(component);
+
+        // Add valid options to the component under test
+        SelectItem[] itemsArray = {
+              new SelectItem("foo"),
+              new SelectItem("bar"),
+              new SelectItem("baz")
+        };
+        UISelectItems items = new UISelectItems();
+        items.setValue(itemsArray);
+        UISelectOne selectOne = (UISelectOne) component;
+        selectOne.getChildren().add(items);
+
+        selectOne.setValid(true);
+        selectOne.setSubmittedValue("foo");
+        selectOne.validate(facesContext);
+        assertTrue(selectOne.isValid());
+
+        // Validate one value on the list and one not on the list
+        selectOne.setValid(true);
+        selectOne.setSubmittedValue("car");
+        selectOne.setRendererType(null); // We don't have any renderers
+        selectOne.validate(facesContext);
+        assertTrue(!selectOne.isValid());
+
+    }
+
+
+    private void testValidateWithCollection(Collection<SelectItem> selectItems,
+                                            String validValue,
+                                            String invalidValue)
+    throws Exception {
+
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        root.getChildren().add(component);
+
+        UISelectItems itemsComponent = new UISelectItems();
+        itemsComponent.setValue(selectItems);
+        UISelectOne selectOne = (UISelectOne) component;
+        selectOne.setRendererType(null);
+        selectOne.getChildren().add(itemsComponent);
+
+        selectOne.setValue(true);
+        selectOne.setSubmittedValue(validValue);
+        selectOne.validate(facesContext);
+        assertTrue(selectOne.isValid());
+        selectOne.updateModel(facesContext);
+
+        selectOne.setValid(true);
+        selectOne.setSubmittedValue(invalidValue);
         selectOne.validate(facesContext);
         assertTrue(!selectOne.isValid());
 

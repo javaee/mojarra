@@ -41,25 +41,10 @@
 package com.sun.faces.jsptest;
 
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
-import com.gargoylesoftware.htmlunit.html.HtmlSelect;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import java.util.List;
-import java.util.Random;
-import java.util.ResourceBundle;
-
-import javax.faces.component.NamingContainer;
 
 
 /**
@@ -68,7 +53,6 @@ import javax.faces.component.NamingContainer;
  */
 
 public class PrependIdTestCase extends AbstractTestCase {
-
 
     // ------------------------------------------------------------ Constructors
 
@@ -82,9 +66,7 @@ public class PrependIdTestCase extends AbstractTestCase {
         super(name);
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
 
     // ---------------------------------------------------- Overall Test Methods
 
@@ -112,37 +94,34 @@ public class PrependIdTestCase extends AbstractTestCase {
         super.tearDown();
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
-
 
     // ------------------------------------------------- Individual Test Methods
 
     public void testMissingView() throws Exception {
-	client.setThrowExceptionOnFailingStatusCode(false);
-	HtmlPage page = getPage("/faces/jsp/prependId.jsp");
+        client.setThrowExceptionOnFailingStatusCode(false);
+        HtmlPage page = getPage("/faces/jsp/prependId.jsp");
         String pageText = page.asXml();
         // Literal ids with prependId literal
         assertTrue(-1 != pageText.indexOf("span id=\"case1prependIdFalse\""));
         assertTrue(-1 != pageText.indexOf("span id=\"form2:case1prependIdTrue\""));
         assertTrue(-1 != pageText.indexOf("span id=\"form3:case1prependIdUnspecified\""));
-	
+
         // Literal ids with prependId from expression
         assertTrue(-1 != pageText.indexOf("span id=\"case2prependIdFalse\""));
         assertTrue(-1 != pageText.indexOf("span id=\"form5:case2prependIdTrue\""));
         assertTrue(-1 != pageText.indexOf("span id=\"form6:case2prependIdUnspecified\""));
-        
+
         // Auto-generated ids with prependId literal
-	assertTrue(-1 != pageText.indexOf("input value=\"prependIdFalse\" type=\"text\" name=\"j_id_id54\""));
+        assertTrue(-1 != pageText.indexOf("input value=\"prependIdFalse\" type=\"text\" name=\"j_id_id54\""));
         assertTrue(-1 != pageText.indexOf("input value=\"prependIdTrue\" type=\"text\" name=\"j_id_id57:j_id_id59\""));
         assertTrue(-1 != pageText.indexOf("input value=\"prependIdUnspecified\" type=\"text\" name=\"j_id_id62:j_id_id64\""));
-        
+
         // Auto-generated ids with prependId from expression
         assertTrue(-1 != pageText.indexOf("input value=\"prependIdFalse\" type=\"text\" name=\"j_id_id71\""));
         assertTrue(-1 != pageText.indexOf("input value=\"prependIdTrue\" type=\"text\" name=\"j_id_id74:j_id_id76\""));
         assertTrue(-1 != pageText.indexOf("input value=\"prependIdUnspecified\" type=\"text\" name=\"j_id_id79:j_id_id81\""));
-       
+
     }
 
 }

@@ -36,21 +36,12 @@
 
 package com.sun.faces.jsptest;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
+import com.gargoylesoftware.htmlunit.html.*;
+import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSpan;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import com.sun.faces.htmlunit.AbstractTestCase;
+import java.util.*;
 
 /**
  * <p>
@@ -65,11 +56,10 @@ public class IdRefTestCase extends AbstractTestCase {
     // Constructors
 
     /**
-         * Construct a new instance of this test case.
-         *
-         * @param name
-         *                Name of the test case
-         */
+     * Construct a new instance of this test case.
+     *
+     * @param name Name of the test case
+     */
     public IdRefTestCase(String name) {
         super(name);
     }
@@ -78,20 +68,20 @@ public class IdRefTestCase extends AbstractTestCase {
     // Overall Test Methods
 
     /**
-         * Return the tests included in this test suite.
-         */
+     * Return the tests included in this test suite.
+     */
     public static Test suite() {
         return (new TestSuite(IdRefTestCase.class));
     }
 
     private Map mapElementsByAttribute(HtmlElement docElem, String tagName,
-            String attName, String filterAtt, String filterValue) {
+                                       String attName, String filterAtt, String filterValue) {
         Map elems = new TreeMap();
         List tags = docElem.getHtmlElementsByTagName(tagName);
         for (Iterator tagIt = tags.iterator(); tagIt.hasNext();) {
             HtmlElement tag = (HtmlElement) tagIt.next();
             if (filterAtt != null && filterValue != null &&
-                !filterValue.equals(tag.getAttributeValue(filterAtt))) {
+                    !filterValue.equals(tag.getAttributeValue(filterAtt))) {
                 continue;
             }
             String attValue = tag.getAttributeValue(attName);
@@ -138,8 +128,8 @@ public class IdRefTestCase extends AbstractTestCase {
 
         // assign new values to input fields, submit the form.
         String idPrefix = "myform:input";
-        String[] testIds = new String[] { idPrefix + "Int1", idPrefix + "Id1",
-                idPrefix + "Id2j_id_1", idPrefix + "Id3j_id_2" };
+        String[] testIds = new String[]{idPrefix + "Int1", idPrefix + "Id1",
+                idPrefix + "Id2j_id_1", idPrefix + "Id3j_id_2"};
         for (int i = 0; i < testIds.length; ++i) {
             HtmlTextInput input = (HtmlTextInput) inputTagsById.get(testIds[i]);
             input.setValueAttribute("");
@@ -158,15 +148,15 @@ public class IdRefTestCase extends AbstractTestCase {
         assertTrue("All cleared inputs have messages", messageMap.keySet()
                 .containsAll(Arrays.asList(testIds)));
     }
-    
+
     public void testIncludedLoopIdRefs() throws Exception {
         HtmlPage page = getPage("/faces/forEach03.jsp");
         Map inputTagsById = mapElementsByAttribute(page.getDocumentElement(),
                 "input", "id", "type", "text");
         String[] testIds = {
-              "myform:inputId11",
-              "myform:inputId11j_id_1",
-              "myform:inputId11j_id_2"
+                "myform:inputId11",
+                "myform:inputId11j_id_1",
+                "myform:inputId11j_id_2"
         };
         for (int i = 0; i < testIds.length; i++) {
             HtmlTextInput input = (HtmlTextInput) inputTagsById.get(testIds[i]);
@@ -184,19 +174,19 @@ public class IdRefTestCase extends AbstractTestCase {
         assertTrue("All cleared inputs have messages", messageMap.keySet()
                 .containsAll(Arrays.asList(testIds)));
     }
-    
+
     public void testIncludeNoLoopIdRef() throws Exception {
-         HtmlPage page = getPage("/faces/forEach03.jsp");
+        HtmlPage page = getPage("/faces/forEach03.jsp");
         Map inputTagsById = mapElementsByAttribute(page.getDocumentElement(),
                 "input", "id", "type", "text");
         String[] testIds = {
-              "myform:Short11",              
+                "myform:Short11",
         };
         for (int i = 0; i < testIds.length; i++) {
             HtmlTextInput input = (HtmlTextInput) inputTagsById.get(testIds[i]);
             input.setValueAttribute("");
         }
-         List list = getAllElementsOfGivenClass(page, null,
+        List list = getAllElementsOfGivenClass(page, null,
                 HtmlSubmitInput.class);
         HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
         page = (HtmlPage) button.click();

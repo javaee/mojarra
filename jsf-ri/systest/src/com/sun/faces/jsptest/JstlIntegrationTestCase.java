@@ -41,16 +41,11 @@
 package com.sun.faces.jsptest;
 
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import javax.faces.component.NamingContainer;
@@ -61,7 +56,6 @@ import javax.faces.component.NamingContainer;
  */
 
 public class JstlIntegrationTestCase extends AbstractTestCase {
-
 
     // ------------------------------------------------------------ Constructors
 
@@ -75,29 +69,26 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
         super(name);
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
 
     // ---------- jstl-foreach-01.jsp values ----------
 
     private String jstlForEach01_name = "jstlForeach01_form";
 
     private String jstlForEach01_names[] =
-        {"arrayProp0", "arrayProp1", "arrayProp2", "arrayProp3", "arrayProp4"};
+            {"arrayProp0", "arrayProp1", "arrayProp2", "arrayProp3", "arrayProp4"};
 
     private String jstlForEach01_pristine[] =
-        {
-            "First String", "Second String", "Third String", "Fourth String",
-            "Fifth String"
-        };
+            {
+                    "First String", "Second String", "Third String", "Fourth String",
+                    "Fifth String"
+            };
 
     private String jstlForEach01_updated[] =
-        {
-            "New First String", "Second String", "Third String", "New Fourth String",
-            "Fifth String"
-        };
-
+            {
+                    "New First String", "Second String", "Third String", "New Fourth String",
+                    "Fifth String"
+            };
 
     // ---------------------------------------------------- Overall Test Methods
 
@@ -125,7 +116,6 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
         super.tearDown();
     }
 
-
     // ------------------------------------------------- Individual Test Methods
 
     public void testEmpty() {
@@ -135,10 +125,10 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
     /**
      * ******************* PENDING(): re-enable these when we figure
      * out how to do c:forEach.
-     *
+     * <p/>
      * // Components Inside Choose (Explicit Identifiers)
      * public void testJstlChoose01() throws Exception {
-     *
+     * <p/>
      * // Check each individual case multiple times
      * checkJstlChoose00();
      * checkJstlChoose01a();
@@ -152,31 +142,31 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
      * checkJstlChoose01c();
      * checkJstlChoose01c();
      * checkJstlChoose01c();
-     *
+     * <p/>
      * // Check cases in ascending order
      * checkJstlChoose00();
      * checkJstlChoose01a();
      * checkJstlChoose01b();
      * checkJstlChoose01c();
-     *
+     * <p/>
      * // Check cases in descending order
      * checkJstlChoose00();
      * checkJstlChoose01c();
      * checkJstlChoose01b();
      * checkJstlChoose01a();
-     *
+     * <p/>
      * // Check cases in random order
      * checkJstlChoose00();
      * checkJstlChoose01b();
      * checkJstlChoose01a();
      * checkJstlChoose01c();
-     *
+     * <p/>
      * }
-     *
-     *
+     * <p/>
+     * <p/>
      * // Components Inside Choose (In Naming Container)
      * public void testJstlChoose02() throws Exception {
-     *
+     * <p/>
      * // Check each individual case multiple times
      * checkJstlChoose00();
      * checkJstlChoose02a();
@@ -190,43 +180,43 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
      * checkJstlChoose02c();
      * checkJstlChoose02c();
      * checkJstlChoose02c();
-     *
+     * <p/>
      * // Check cases in ascending order
      * checkJstlChoose00();
      * checkJstlChoose02a();
      * checkJstlChoose02b();
      * checkJstlChoose02c();
-     *
+     * <p/>
      * // Check cases in descending order
      * checkJstlChoose00();
      * checkJstlChoose02c();
      * checkJstlChoose02b();
      * checkJstlChoose02a();
-     *
+     * <p/>
      * // Check cases in random order
      * checkJstlChoose00();
      * checkJstlChoose02b();
      * checkJstlChoose02a();
      * checkJstlChoose02c();
-     *
+     * <p/>
      * }
-     *
-     *
+     * <p/>
+     * <p/>
      * // Form with fields rendered inside a <c:forEach> - pristine
      * public void testJstForEach01_pristine() throws Exception {
-     *
+     * <p/>
      * checkJstlForEach00();
      * checkJstlForEach01(getJstlForEach01(), jstlForEach01_pristine);
      * checkJstlForEach00();
      * checkJstlForEach01(getJstlForEach01(), jstlForEach01_pristine);
      * checkJstlForEach00();
-     *
+     * <p/>
      * }
-     *
-     *
+     * <p/>
+     * <p/>
      * // Form with fields rendered inside a <c:forEach> - submit unchanged
      * public void testJstForEach01_submit01() throws Exception {
-     *
+     * <p/>
      * checkJstlForEach00();
      * HtmlPage page = getJstlForEach01();
      * checkJstlForEach01(page, jstlForEach01_pristine);
@@ -239,13 +229,13 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
      * page = (HtmlPage) submit.click();
      * checkJstlForEach01(page, jstlForEach01_pristine);
      * checkJstlForEach00();
-     *
+     * <p/>
      * }
-     *
-     *
+     * <p/>
+     * <p/>
      * // Form with fields rendered inside a <c:forEach> - submit modified
      * public void testJstForEach01_submit02() throws Exception {
-     *
+     * <p/>
      * checkJstlForEach00();
      * HtmlPage page = getJstlForEach01();
      * checkJstlForEach01(page, jstlForEach01_pristine);
@@ -265,47 +255,47 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
      * page = (HtmlPage) submit.click();
      * checkJstlForEach01(page, jstlForEach01_updated);
      * checkJstlForEach00();
-     *
+     * <p/>
      * }
-     *
-     *
+     * <p/>
+     * <p/>
      * // Components Inside Conditional
      * public void testJstlIf01() throws Exception {
-     *
+     * <p/>
      * // Check the "true" case multiple times in a row
      * checkJstlIf00();
      * checkJstlIf01a();
      * checkJstlIf01a();
      * checkJstlIf01a();
      * checkJstlIf01a();
-     *
+     * <p/>
      * // Check the "false case multiple times in a row
      * checkJstlIf00();
      * checkJstlIf01b();
      * checkJstlIf01b();
      * checkJstlIf01b();
      * checkJstlIf01b();
-     *
+     * <p/>
      * // Check alternating access to the same page (first pattern)
      * checkJstlIf00();
      * checkJstlIf01a();
      * checkJstlIf01b();
      * checkJstlIf01a();
      * checkJstlIf01b();
-     *
+     * <p/>
      * // Check alternating access to the same page (second pattern)
      * checkJstlIf00();
      * checkJstlIf01b();
      * checkJstlIf01a();
      * checkJstlIf01b();
      * checkJstlIf01a();
-     *
+     * <p/>
      * }
-     *
-     *
+     * <p/>
+     * <p/>
      * // Components and facets inside conditional
      * public void testJstlIf02() throws Exception {
-     *
+     * <p/>
      * // Check each style sequentially
      * checkJstlIf00();
      * checkJstlIf02a();
@@ -327,7 +317,7 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
      * checkJstlIf02e();
      * checkJstlIf02e();
      * checkJstlIf02e();
-     *
+     * <p/>
      * // Check each style in ascending order
      * checkJstlIf00();
      * checkJstlIf02a();
@@ -335,7 +325,7 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
      * checkJstlIf02c();
      * checkJstlIf02d();
      * checkJstlIf02e();
-     *
+     * <p/>
      * // Check each style in descending order
      * checkJstlIf00();
      * checkJstlIf02e();
@@ -343,7 +333,7 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
      * checkJstlIf02c();
      * checkJstlIf02b();
      * checkJstlIf02a();
-     *
+     * <p/>
      * // Check each style in a more random order
      * checkJstlIf00();
      * checkJstlIf02c();
@@ -351,109 +341,109 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
      * checkJstlIf02a();
      * checkJstlIf02d();
      * checkJstlIf02b();
-     *
+     * <p/>
      * }
-     *
-     *
+     * <p/>
+     * <p/>
      * // Component and Template Text Inside Conditional
      * public void testJstlIf03() throws Exception {
-     *
+     * <p/>
      * // Check the "true" case multiple times in a row
      * checkJstlIf00();
      * checkJstlIf03a();
      * checkJstlIf03a();
      * checkJstlIf03a();
      * checkJstlIf03a();
-     *
+     * <p/>
      * // Check the "false case multiple times in a row
      * checkJstlIf00();
      * checkJstlIf03b();
      * checkJstlIf03b();
      * checkJstlIf03b();
      * checkJstlIf03b();
-     *
+     * <p/>
      * // Check alternating access to the same page (first pattern)
      * checkJstlIf00();
      * checkJstlIf03a();
      * checkJstlIf03b();
      * checkJstlIf03a();
      * checkJstlIf03b();
-     *
+     * <p/>
      * // Check alternating access to the same page (second pattern)
      * checkJstlIf00();
      * checkJstlIf03b();
      * checkJstlIf03a();
      * checkJstlIf03b();
      * checkJstlIf03a();
-     *
+     * <p/>
      * }
-     *
-     *
+     * <p/>
+     * <p/>
      * // Renders-Child Component Inside Conditional (no nested template text) (
      * public void testJstlIf04() throws Exception {
-     *
+     * <p/>
      * // Check the "true" case multiple times in a row
      * checkJstlIf00();
      * checkJstlIf04a();
      * checkJstlIf04a();
      * checkJstlIf04a();
      * checkJstlIf04a();
-     *
+     * <p/>
      * // Check the "false case multiple times in a row
      * checkJstlIf00();
      * checkJstlIf04b();
      * checkJstlIf04b();
      * checkJstlIf04b();
      * checkJstlIf04b();
-     *
+     * <p/>
      * // Check alternating access to the same page (first pattern)
      * checkJstlIf00();
      * checkJstlIf04a();
      * checkJstlIf04b();
      * checkJstlIf04a();
      * checkJstlIf04b();
-     *
+     * <p/>
      * // Check alternating access to the same page (second pattern)
      * checkJstlIf00();
      * checkJstlIf04b();
      * checkJstlIf04a();
      * checkJstlIf04b();
      * checkJstlIf04a();
-     *
+     * <p/>
      * }
-     *
-     *
+     * <p/>
+     * <p/>
      * // Test importing JSPs with literal text
      * public void testJstlImport01() throws Exception {
-     *
+     * <p/>
      * checkJstlImport00();
      * checkJstlImport01();
      * checkJstlImport01();
-     *
+     * <p/>
      * checkJstlImport00();
      * checkJstlImport01();
      * checkJstlImport01();
-     *
+     * <p/>
      * }
-     *
-     *
+     * <p/>
+     * <p/>
      * // Test importing JSPs with simple components
      * public void testJstlImport02() throws Exception {
-     *
+     * <p/>
      * checkJstlImport00();
      * checkJstlImport02();
      * checkJstlImport02();
-     *
+     * <p/>
      * checkJstlImport00();
      * checkJstlImport02();
      * checkJstlImport02();
-     *
+     * <p/>
      * }
-     *
-     *
+     * <p/>
+     * <p/>
      * // Test selectively importing JSPs with simple components (explicit ids)
      * public void testJstlImport03() throws Exception {
-     *
+     * <p/>
      * // Check each individual case multiple times
      * checkJstlImport00();
      * checkJstlImport03a();
@@ -467,31 +457,31 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
      * checkJstlImport03c();
      * checkJstlImport03c();
      * checkJstlImport03c();
-     *
+     * <p/>
      * // Check cases in ascending order
      * checkJstlImport00();
      * checkJstlImport03a();
      * checkJstlImport03b();
      * checkJstlImport03c();
-     *
+     * <p/>
      * // Check cases in descending order
      * checkJstlImport00();
      * checkJstlImport03c();
      * checkJstlImport03b();
      * checkJstlImport03a();
-     *
+     * <p/>
      * // Check cases in random order
      * checkJstlImport00();
      * checkJstlImport03b();
      * checkJstlImport03a();
      * checkJstlImport03c();
-     *
+     * <p/>
      * }
-     *
-     *
+     * <p/>
+     * <p/>
      * // Test selectively importing JSPs with simple components (naming container)
      * public void testJstlImport04() throws Exception {
-     *
+     * <p/>
      * // Check each individual case multiple times
      * checkJstlImport00();
      * checkJstlImport04a();
@@ -505,40 +495,39 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
      * checkJstlImport04c();
      * checkJstlImport04c();
      * checkJstlImport04c();
-     *
+     * <p/>
      * // Check cases in ascending order
      * checkJstlImport00();
      * checkJstlImport04a();
      * checkJstlImport04b();
      * checkJstlImport04c();
-     *
+     * <p/>
      * // Check cases in descending order
      * checkJstlImport00();
      * checkJstlImport04c();
      * checkJstlImport04b();
      * checkJstlImport04a();
-     *
+     * <p/>
      * // Check cases in random order
      * checkJstlImport00();
      * checkJstlImport04b();
      * checkJstlImport04a();
      * checkJstlImport04c();
-     *
+     * <p/>
      * }
-     *
-     *
+     * <p/>
+     * <p/>
      * **************************************
      */
 
     // --------------------------------------------------------- Private Methods
-
 
     // Check the reset page to force a new component tree
     private void checkJstlChoose00() throws Exception {
 
         HtmlPage page = getPage("/faces/jsp/jstl-choose-00.jsp");
         assertEquals("Correct page title",
-                     "jstl-choose-00", page.getTitleText());
+                "jstl-choose-00", page.getTitleText());
 
     }
 
@@ -548,9 +537,9 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jstl-choose-01.jsp?choose=a");
         assertEquals("Correct page title",
-                     "jstl-choose-01", page.getTitleText());
+                "jstl-choose-01", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1] [2a] [2z] [3]", getBodyText(page));
+                "[1] [2a] [2z] [3]", getBodyText(page));
 
     }
 
@@ -560,9 +549,9 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jstl-choose-01.jsp?choose=b");
         assertEquals("Correct page title",
-                     "jstl-choose-01", page.getTitleText());
+                "jstl-choose-01", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1] [2b] [2y] [3]", getBodyText(page));
+                "[1] [2b] [2y] [3]", getBodyText(page));
 
     }
 
@@ -572,9 +561,9 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jstl-choose-01.jsp?choose=c");
         assertEquals("Correct page title",
-                     "jstl-choose-01", page.getTitleText());
+                "jstl-choose-01", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1] [2c] [2x] [3]", getBodyText(page));
+                "[1] [2c] [2x] [3]", getBodyText(page));
 
     }
 
@@ -584,9 +573,9 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jstl-choose-02.jsp?choose=a");
         assertEquals("Correct page title",
-                     "jstl-choose-02", page.getTitleText());
+                "jstl-choose-02", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1] [2a] [2z] [3]", getBodyText(page));
+                "[1] [2a] [2z] [3]", getBodyText(page));
 
     }
 
@@ -596,9 +585,9 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jstl-choose-02.jsp?choose=b");
         assertEquals("Correct page title",
-                     "jstl-choose-02", page.getTitleText());
+                "jstl-choose-02", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1] [2b] [2y] [3]", getBodyText(page));
+                "[1] [2b] [2y] [3]", getBodyText(page));
 
     }
 
@@ -608,9 +597,9 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jstl-choose-02.jsp?choose=c");
         assertEquals("Correct page title",
-                     "jstl-choose-02", page.getTitleText());
+                "jstl-choose-02", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1] [2c] [2x] [3]", getBodyText(page));
+                "[1] [2c] [2x] [3]", getBodyText(page));
 
     }
 
@@ -620,7 +609,7 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jstl-foreach-00.jsp");
         assertEquals("Correct page title",
-                     "jstl-foreach-00", page.getTitleText());
+                "jstl-foreach-00", page.getTitleText());
 
     }
 
@@ -630,18 +619,18 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
 
 
         assertEquals("Correct page title",
-                     "jstl-foreach-01", page.getTitleText());
+                "jstl-foreach-01", page.getTitleText());
         HtmlForm form = getFormById(page, jstlForEach01_name);
         assertNotNull("form exists", form);
         for (int i = 0; i < expected.length; i++) {
             HtmlTextInput input = (HtmlTextInput)
-                form.getInputByName(jstlForEach01_name +
-                                    NamingContainer.SEPARATOR_CHAR +
-                                    jstlForEach01_names[i]);
+                    form.getInputByName(jstlForEach01_name +
+                            NamingContainer.SEPARATOR_CHAR +
+                            jstlForEach01_names[i]);
             assertNotNull("field '" + jstlForEach01_names[i] + "' exists",
-                          input);
+                    input);
             assertEquals("field '" + jstlForEach01_names[i] + "' value",
-                         expected[i], input.getValueAttribute());
+                    expected[i], input.getValueAttribute());
         }
 
     }
@@ -652,7 +641,7 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jstl-if-00.jsp");
         assertEquals("Correct page title",
-                     "jstl-if-00", page.getTitleText());
+                "jstl-if-00", page.getTitleText());
 
     }
 
@@ -662,9 +651,9 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jstl-if-01.jsp?cond=true");
         assertEquals("Correct page title",
-                     "jstl-if-01", page.getTitleText());
+                "jstl-if-01", page.getTitleText());
         assertEquals("Correct body element",
-                     "[First] [Second] [Third]", getBodyText(page));
+                "[First] [Second] [Third]", getBodyText(page));
 
     }
 
@@ -674,9 +663,9 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jstl-if-01.jsp?cond=false");
         assertEquals("Correct page title",
-                     "jstl-if-01", page.getTitleText());
+                "jstl-if-01", page.getTitleText());
         assertEquals("Correct body element",
-                     "[First] [Third]", getBodyText(page));
+                "[First] [Third]", getBodyText(page));
 
     }
 
@@ -685,13 +674,13 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
     private void checkJstlIf02a() throws Exception {
 
         HtmlPage page = getPage
-            (
-                "/faces/jsp/jstl-if-02.jsp?component=true&header=true&footer=true");
+                (
+                        "/faces/jsp/jstl-if-02.jsp?component=true&header=true&footer=true");
         assertEquals("Correct page title",
-                     "jstl-if-02", page.getTitleText());
+                "jstl-if-02", page.getTitleText());
         assertEquals("Correct body element",
-                     "[First] [Header] [Second] [Footer] [Third]",
-                     getBodyText(page));
+                "[First] [Header] [Second] [Footer] [Third]",
+                getBodyText(page));
 
     }
 
@@ -700,13 +689,13 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
     private void checkJstlIf02b() throws Exception {
 
         HtmlPage page = getPage
-            (
-                "/faces/jsp/jstl-if-02.jsp?component=true&header=true&footer=false");
+                (
+                        "/faces/jsp/jstl-if-02.jsp?component=true&header=true&footer=false");
         assertEquals("Correct page title",
-                     "jstl-if-02", page.getTitleText());
+                "jstl-if-02", page.getTitleText());
         assertEquals("Correct body element",
-                     "[First] [Header] [Second] [] [Third]",
-                     getBodyText(page));
+                "[First] [Header] [Second] [] [Third]",
+                getBodyText(page));
 
     }
 
@@ -715,13 +704,13 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
     private void checkJstlIf02c() throws Exception {
 
         HtmlPage page = getPage
-            (
-                "/faces/jsp/jstl-if-02.jsp?component=true&header=false&footer=true");
+                (
+                        "/faces/jsp/jstl-if-02.jsp?component=true&header=false&footer=true");
         assertEquals("Correct page title",
-                     "jstl-if-02", page.getTitleText());
+                "jstl-if-02", page.getTitleText());
         assertEquals("Correct body element",
-                     "[First] [] [Second] [Footer] [Third]",
-                     getBodyText(page));
+                "[First] [] [Second] [Footer] [Third]",
+                getBodyText(page));
 
     }
 
@@ -730,13 +719,13 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
     private void checkJstlIf02d() throws Exception {
 
         HtmlPage page = getPage
-            (
-                "/faces/jsp/jstl-if-02.jsp?component=true&header=false&footer=false");
+                (
+                        "/faces/jsp/jstl-if-02.jsp?component=true&header=false&footer=false");
         assertEquals("Correct page title",
-                     "jstl-if-02", page.getTitleText());
+                "jstl-if-02", page.getTitleText());
         assertEquals("Correct body element",
-                     "[First] [] [Second] [] [Third]",
-                     getBodyText(page));
+                "[First] [] [Second] [] [Third]",
+                getBodyText(page));
 
     }
 
@@ -745,13 +734,13 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
     private void checkJstlIf02e() throws Exception {
 
         HtmlPage page = getPage
-            (
-                "/faces/jsp/jstl-if-02.jsp?component=false&header=true&footer=true");
+                (
+                        "/faces/jsp/jstl-if-02.jsp?component=false&header=true&footer=true");
         assertEquals("Correct page title",
-                     "jstl-if-02", page.getTitleText());
+                "jstl-if-02", page.getTitleText());
         assertEquals("Correct body element",
-                     "[First] [Third]",
-                     getBodyText(page));
+                "[First] [Third]",
+                getBodyText(page));
 
     }
 
@@ -761,9 +750,9 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jstl-if-03.jsp?cond=true");
         assertEquals("Correct page title",
-                     "jstl-if-03", page.getTitleText());
+                "jstl-if-03", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1] [2] [3] [4] [5]", getBodyText(page));
+                "[1] [2] [3] [4] [5]", getBodyText(page));
 
     }
 
@@ -773,9 +762,9 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jstl-if-03.jsp?cond=false");
         assertEquals("Correct page title",
-                     "jstl-if-03", page.getTitleText());
+                "jstl-if-03", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1] [5]", getBodyText(page));
+                "[1] [5]", getBodyText(page));
 
     }
 
@@ -785,10 +774,10 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jstl-if-04.jsp?cond=true");
         assertEquals("Correct page title",
-                     "jstl-if-04", page.getTitleText());
+                "jstl-if-04", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1] [2] [3] { [4a] [4b] [4c] } [5] [6] [7]",
-                     getBodyText(page));
+                "[1] [2] [3] { [4a] [4b] [4c] } [5] [6] [7]",
+                getBodyText(page));
 
     }
 
@@ -798,9 +787,9 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jstl-if-04.jsp?cond=false");
         assertEquals("Correct page title",
-                     "jstl-if-04", page.getTitleText());
+                "jstl-if-04", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1] [7]", getBodyText(page));
+                "[1] [7]", getBodyText(page));
 
     }
 
@@ -810,7 +799,7 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jstl-import-00.jsp");
         assertEquals("Correct page title",
-                     "jstl-import-00", page.getTitleText());
+                "jstl-import-00", page.getTitleText());
 
     }
 
@@ -820,9 +809,9 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jstl-import-01.jsp");
         assertEquals("Correct page title",
-                     "jstl-import-01", page.getTitleText());
+                "jstl-import-01", page.getTitleText());
         assertEquals("Correct body element",
-                     "[A] [B] [C] [D] [E]", getBodyText(page));
+                "[A] [B] [C] [D] [E]", getBodyText(page));
 
     }
 
@@ -832,9 +821,9 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jstl-import-02.jsp");
         assertEquals("Correct page title",
-                     "jstl-import-02", page.getTitleText());
+                "jstl-import-02", page.getTitleText());
         assertEquals("Correct body element",
-                     "[A] [B] [C] [D] [E]", getBodyText(page));
+                "[A] [B] [C] [D] [E]", getBodyText(page));
 
     }
 
@@ -844,9 +833,9 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jstl-import-03.jsp?choose=a");
         assertEquals("Correct page title",
-                     "jstl-import-03", page.getTitleText());
+                "jstl-import-03", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1] [2a][2z] [3]", getBodyText(page));
+                "[1] [2a][2z] [3]", getBodyText(page));
 
     }
 
@@ -856,9 +845,9 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jstl-import-03.jsp?choose=b");
         assertEquals("Correct page title",
-                     "jstl-import-03", page.getTitleText());
+                "jstl-import-03", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1] [2b][2y] [3]", getBodyText(page));
+                "[1] [2b][2y] [3]", getBodyText(page));
 
     }
 
@@ -868,9 +857,9 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jstl-import-03.jsp?choose=c");
         assertEquals("Correct page title",
-                     "jstl-import-03", page.getTitleText());
+                "jstl-import-03", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1] [2c][2x] [3]", getBodyText(page));
+                "[1] [2c][2x] [3]", getBodyText(page));
 
     }
 
@@ -880,9 +869,9 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jstl-import-04.jsp?choose=a");
         assertEquals("Correct page title",
-                     "jstl-import-04", page.getTitleText());
+                "jstl-import-04", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1] [2a][2z] [3]", getBodyText(page));
+                "[1] [2a][2z] [3]", getBodyText(page));
 
     }
 
@@ -892,9 +881,9 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jstl-import-04.jsp?choose=b");
         assertEquals("Correct page title",
-                     "jstl-import-04", page.getTitleText());
+                "jstl-import-04", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1] [2b][2y] [3]", getBodyText(page));
+                "[1] [2b][2y] [3]", getBodyText(page));
 
     }
 
@@ -904,9 +893,9 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/jsp/jstl-import-04.jsp?choose=c");
         assertEquals("Correct page title",
-                     "jstl-import-04", page.getTitleText());
+                "jstl-import-04", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1] [2c][2x] [3]", getBodyText(page));
+                "[1] [2c][2x] [3]", getBodyText(page));
 
     }
 

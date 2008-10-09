@@ -1,25 +1,18 @@
 
 To build this updatecenter2 code, you first need to download the 
-updatecenter2 code from :
+updatecenter2 tool from :
 
-svn svn checkout https://updatecenter2.dev.java.net/svn/updatecenter2/trunk updatecenter2 --username username
+http://wiki.updatecenter.java.net/Wiki.jsp?page=Download
 
+Install it in some well defined path
 
-Then you'll need to build it...
+Add the location to your build.properties file in the pkg.dir value.
 
-cd {whereever updatecenter2 is}/project
-ant all
+add the pkg/pkg/bin directory to your $PATH - you'll need the 
+pkg and pkg.depotd files for testing
 
-Lots of output, look for success message.
-
-(or you could just build it in Netbeans - it comes with a project definition)
-
-add the pkg/pkg/bin directory to your $PATH - you'll need the pkg and pkg.depotd files for testing
-
-
-
-Next, in the Mojarra codebase edit the udpatecenter2/bin/makepkgs, and add UCHOME to point to the
-location of the updatecenter2 codebase.
+Next, in the Mojarra codebase edit the udpatecenter2/bin/makepkgs, and 
+add UCHOME to point to the location of the updatecenter2 codebase.
 
 
 Now, build the repository files:

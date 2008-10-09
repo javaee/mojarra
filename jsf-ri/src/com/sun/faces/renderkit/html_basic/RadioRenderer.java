@@ -57,6 +57,8 @@ import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
+import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * <B>ReadoRenderer</B> is a class that renders the current value of
@@ -100,6 +102,20 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
         Class type = String.class;
         if (curValue != null) {
             type = curValue.getClass();
+            if (type.isArray()) {
+                curValue = ((Object [])curValue)[0];
+                if (null != curValue) {
+                    type = curValue.getClass();
+                }
+            } else if (Collection.class.isAssignableFrom(type)) {
+                Iterator valueIter = ((Collection)curValue).iterator();
+                if (null != valueIter && valueIter.hasNext()) {
+                    curValue = valueIter.next();
+                    if (null != curValue) {
+                        type = curValue.getClass();
+                    }
+                }
+            }
         }
         Object itemValue = curItem.getValue();
         RequestStateManager.set(context,

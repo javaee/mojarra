@@ -41,25 +41,10 @@
 package com.sun.faces.jsptest;
 
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
-import com.gargoylesoftware.htmlunit.html.HtmlSelect;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import java.util.List;
-import java.util.Random;
-import java.util.ResourceBundle;
-
-import javax.faces.component.NamingContainer;
 
 
 /**
@@ -68,7 +53,6 @@ import javax.faces.component.NamingContainer;
  */
 
 public class MissingViewTestCase extends AbstractTestCase {
-
 
     // ------------------------------------------------------------ Constructors
 
@@ -82,9 +66,7 @@ public class MissingViewTestCase extends AbstractTestCase {
         super(name);
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
 
     // ---------------------------------------------------- Overall Test Methods
 
@@ -112,19 +94,16 @@ public class MissingViewTestCase extends AbstractTestCase {
         super.tearDown();
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
-
 
     // ------------------------------------------------- Individual Test Methods
 
     public void testMissingView() throws Exception {
-	client.setThrowExceptionOnFailingStatusCode(false);
-	HtmlPage page = getPage("/faces/jsp/missing-view.jsp");
-	assertTrue(-1 != page.asText().indexOf("UIViewRoot"));
-	assertTrue(-1 != page.asText().indexOf("UIForm"));
-	
+        client.setThrowExceptionOnFailingStatusCode(false);
+        HtmlPage page = getPage("/faces/jsp/missing-view.jsp");
+        assertTrue(-1 != page.asText().indexOf("UIViewRoot"));
+        assertTrue(-1 != page.asText().indexOf("UIForm"));
+
     }
 
 }

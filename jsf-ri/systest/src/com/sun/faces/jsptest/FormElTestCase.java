@@ -41,25 +41,13 @@
 package com.sun.faces.jsptest;
 
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
-import com.gargoylesoftware.htmlunit.html.HtmlSelect;
-import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import java.util.List;
-import java.util.Random;
-import java.util.ResourceBundle;
-
-import javax.faces.component.NamingContainer;
 
 
 /**
@@ -68,7 +56,6 @@ import javax.faces.component.NamingContainer;
  */
 
 public class FormElTestCase extends AbstractTestCase {
-
 
     // ------------------------------------------------------------ Constructors
 
@@ -82,9 +69,7 @@ public class FormElTestCase extends AbstractTestCase {
         super(name);
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
 
     // ---------------------------------------------------- Overall Test Methods
 
@@ -112,10 +97,7 @@ public class FormElTestCase extends AbstractTestCase {
         super.tearDown();
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
-
 
     // ------------------------------------------------- Individual Test Methods
 
@@ -123,10 +105,10 @@ public class FormElTestCase extends AbstractTestCase {
         client.setThrowExceptionOnFailingStatusCode(false);
         HtmlPage page = getPage("/faces/jsp/formEl.jsp");
         List forms = page.getForms();
-        assertEquals("multipart/form-data", ((HtmlForm)forms.get(0)).getEnctypeAttribute());
-        assertEquals("application/x-www-form-urlencoded", ((HtmlForm)forms.get(1)).getEnctypeAttribute());
-        assertEquals("hi", ((HtmlForm)forms.get(2)).getEnctypeAttribute());
-        assertEquals("multipart/form-data", ((HtmlForm)forms.get(3)).getEnctypeAttribute());
+        assertEquals("multipart/form-data", ((HtmlForm) forms.get(0)).getEnctypeAttribute());
+        assertEquals("application/x-www-form-urlencoded", ((HtmlForm) forms.get(1)).getEnctypeAttribute());
+        assertEquals("hi", ((HtmlForm) forms.get(2)).getEnctypeAttribute());
+        assertEquals("multipart/form-data", ((HtmlForm) forms.get(3)).getEnctypeAttribute());
     }
 
 }

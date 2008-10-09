@@ -57,8 +57,8 @@ http.proxy.port=
 #      to the container.xml file in 
 #      ${jsf.build.home}/common/ant/${container.name}
 #   
-#     See ${jsf.build.home}/common/ant/template/README
-#     for details on these files
+#  use glassfish for a v2 version and
+#  use glassfishV3 for a v3 version
 # --------------------------------------------------
 container.name=glassfish
 
@@ -100,6 +100,13 @@ glassfish.password.file=${container.home}/password.txt
 glassfish.admin.host=${container.host}
 glassfish.admin.port=4848
 glassfish.domain=domain1
+
+# --------------------------------------------------
+# Directory for pkg tools, downloaded from
+# http://wiki.updatecenter.java.net/Wiki.jsp?page=Download
+# Used for updatecenter2
+# --------------------------------------------------
+pkg.dir=/home/driscoll/pkg/pkg
 
 # --------------------------------------------------
 #    Compilation flags

@@ -41,13 +41,9 @@
 package com.sun.faces.jsptest;
 
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 
@@ -56,7 +52,6 @@ import junit.framework.TestSuite;
  */
 
 public class LocaleTestCase extends AbstractTestCase {
-
 
     // ------------------------------------------------------------ Constructors
 
@@ -70,9 +65,7 @@ public class LocaleTestCase extends AbstractTestCase {
         super(name);
     }
 
-
     // ------------------------------------------------------ Instance Variables
-
 
     // ---------------------------------------------------- Overall Test Methods
 
@@ -100,20 +93,19 @@ public class LocaleTestCase extends AbstractTestCase {
         super.tearDown();
     }
 
-
     // ------------------------------------------------- Individual Test Methods
 
-
     // Test dynamically adding and removing components
+
     public void testLocaleAndEncoding() throws Exception {
         client.addRequestHeader("Content-Type",
-                                "text/html; charset=ISO-8859-4");
+                "text/html; charset=ISO-8859-4");
         HtmlPage page = getPage("/faces/renderkit02A.jsp");
         // PENDING(edburns): when you figure out why the encoding
         // doesn't get passed through, fix this.
         boolean correct =
-            page.getPageEncoding().equals("ISO-8859-1") ||
-            page.getPageEncoding().equals("ISO-8859-4");
+                page.getPageEncoding().equals("ISO-8859-1") ||
+                        page.getPageEncoding().equals("ISO-8859-4");
         assertTrue("Encoding not as expected", correct);
     }
 
