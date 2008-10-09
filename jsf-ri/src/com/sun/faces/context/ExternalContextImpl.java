@@ -172,23 +172,6 @@ public class ExternalContextImpl extends ExternalContext {
 
 
     /**
-     * @see javax.faces.context.ExternalContext#getContextName()
-     */
-    public String getContextName() {
-
-        if (servletContext.getMajorVersion() >= 3
-            || (servletContext.getMajorVersion() == 2
-                && servletContext.getMinorVersion() == 5)) {
-            return this.servletContext.getServletContextName();
-        } else {
-            // for servlet 2.4 support
-            return servletContext.getServletContextName();
-        }
-        
-    }
-
-
-    /**
      * @see javax.faces.context.ExternalContext#getRequest()
      */
     public Object getRequest() {
@@ -447,15 +430,6 @@ public class ExternalContextImpl extends ExternalContext {
     @Override
     public String getRequestContentType() {
         return (request.getContentType());
-    }
-
-
-    /**
-     * @see javax.faces.context.ExternalContext#getRequestContentLength()
-     */
-    @Override
-    public int getRequestContentLength() {
-        return (request.getContentLength());
     }
 
 
