@@ -45,6 +45,8 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.lang.annotation.Inherited;
+
 /**
  * <p class="changed_added_2_0">Container annotation to specify multiple
  * {@link ManagedBean} annotations on a single class.  Example:</p>
@@ -71,6 +73,7 @@ import java.lang.annotation.Target;
 
 @Retention(value= RetentionPolicy.RUNTIME)
 @Target(value= ElementType.TYPE)
+@Inherited
 public @interface ManagedBeans {
 
     ManagedBean[] value();
