@@ -4,13 +4,16 @@
 # This value is passed to this program as $1
 
 # set this to the location of the Updatecenter2 tools
-export UCHOME=$1
+UCHOME=$1
+export UCHOME
 
 # add the necessary libraries to python
-export PYTHONPATH=$UCHOME/vendor-packages:.
+PYTHONPATH=$UCHOME/vendor-packages:.
+export PYTHONPATH
 
 # execute the bundled python
-export PYTHONBIN=$UCHOME/python2.4-minimal/bin/python
+PYTHONBIN=$UCHOME/python2.4-minimal/bin/python
+export PYTHONBIN
 
 # create the repo
 # new version 
