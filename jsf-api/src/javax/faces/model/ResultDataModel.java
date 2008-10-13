@@ -52,7 +52,7 @@ import javax.servlet.jsp.jstl.sql.Result;
  * representing the results of executing an SQL query via JSTL tags.</p>
  */
 
-public class ResultDataModel extends DataModel {
+public class ResultDataModel extends DataModel<SortedMap<String,Object>> {
 
 
     // ------------------------------------------------------------ Constructors
@@ -158,14 +158,15 @@ public class ResultDataModel extends DataModel {
      * @throws IllegalArgumentException if now row data is available
      *  at the currently specified row index
      */
-    public Object getRowData() {
+    public SortedMap<String,Object> getRowData() {
 
         if (result == null) {
 	    return (null);
         } else if (!isRowAvailable()) {
             throw new NoRowAvailableException();
         } else {
-            return (rows[index]);
+            //noinspection unchecked
+            return ((SortedMap<String,Object>)rows[index]);
         }
 
     }
@@ -197,7 +198,7 @@ public class ResultDataModel extends DataModel {
 	}
 	DataModelListener [] listeners = getDataModelListeners();
         if ((old != index) && (listeners != null)) {
-            Object rowData = null;
+            SortedMap<String,Object> rowData = null;
             if (isRowAvailable()) {
                 rowData = getRowData();
             }

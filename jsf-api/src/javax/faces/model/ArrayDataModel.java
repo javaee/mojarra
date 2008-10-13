@@ -49,7 +49,7 @@ import javax.faces.FacesException;
  * {@link DataModel} that wraps an array of Java objects.</p>
  */
 
-public class ArrayDataModel extends DataModel {
+public class ArrayDataModel<E> extends DataModel<E> {
 
 
     // ------------------------------------------------------------ Constructors
@@ -72,7 +72,7 @@ public class ArrayDataModel extends DataModel {
      *
      * @param array Array to be wrapped (if any)
      */
-    public ArrayDataModel(Object array[]) {
+    public ArrayDataModel(E[] array) {
 
         super();
         setWrappedData(array);
@@ -141,14 +141,15 @@ public class ArrayDataModel extends DataModel {
      * @throws IllegalArgumentException if now row data is available
      *  at the currently specified row index
      */
-    public Object getRowData() {
+    @SuppressWarnings({"unchecked"})
+    public E getRowData() {
 
         if (array == null) {
 	    return (null);
         } else if (!isRowAvailable()) {
             throw new NoRowAvailableException();
         } else {
-            return (array[index]);
+            return ((E) array[index]);
         }
 
     }

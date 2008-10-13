@@ -41,11 +41,6 @@
 package javax.faces.model;
 
 
-import javax.faces.context.FacesContext;
-import javax.faces.model.DataModel;
-import javax.faces.model.DataModelEvent;
-import javax.faces.model.DataModelListener;
-import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -84,7 +79,7 @@ public class ScalarDataModelTestCase extends DataModelTestCaseBase {
         beans = new TestBean[1];
         beans[0] = new TestBean();
         configure();
-        model = new ScalarDataModel(beans[0]);
+        model = new ScalarDataModel<TestBean>(beans[0]);
         super.setUp();
 
     }

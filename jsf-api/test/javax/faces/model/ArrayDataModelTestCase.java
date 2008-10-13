@@ -41,11 +41,6 @@
 package javax.faces.model;
 
 
-import javax.faces.context.FacesContext;
-import javax.faces.model.DataModel;
-import javax.faces.model.DataModelEvent;
-import javax.faces.model.DataModelListener;
-import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -86,7 +81,7 @@ public class ArrayDataModelTestCase extends DataModelTestCaseBase {
             beans[i] = new TestBean();
         }
         configure();
-        model = new ArrayDataModel(beans);
+        model = new ArrayDataModel<TestBean>(beans);
         super.setUp();
 
     }

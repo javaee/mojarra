@@ -44,6 +44,8 @@ package javax.faces.model;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
+
 import javax.faces.FacesException;
 import javax.faces.component.UIData;
 
@@ -77,7 +79,7 @@ import javax.faces.component.UIData;
  * of when a new row index is selected.</p>
  */
 
-public abstract class DataModel implements Iterable {
+public abstract class DataModel<E> implements Iterable<E> {
 
 
     private static final DataModelListener[] EMPTY_DATA_MODEL_LISTENER =
@@ -115,7 +117,7 @@ public abstract class DataModel implements Iterable {
      * @throws IllegalArgumentException if now row data is available
      *  at the currently specified row index
      */
-    public abstract Object getRowData();
+    public abstract E getRowData();
 
 
     /**
@@ -258,53 +260,78 @@ public abstract class DataModel implements Iterable {
 
     }
 
-    // PENDING(rlubke) check this implementation and provide tests.
     /**
-     * <p class="changed_added_2_0">Return an <code>Iterator</code> over the 
+     * <p class="changed_added_2_0">Return a read-only <code>Iterator</code> over the
      * row data for this model.</p>
      * 
      * @since 2.0
-     * 
      */
-    public Iterator<Object> iterator() {
-        Iterator result = null;
+    public Iterator<E> iterator() {
+
+        return new DataModelIterator<E>(this);
         
-        result = new Iterator() {
-            
-            private boolean initialized = false;
-
-            public boolean hasNext() {
-                boolean result = false;
-                if (!initialized) {
-                    initialized = true;
-                    DataModel.this.setRowIndex(0);
-                }
-                int cur = DataModel.this.getRowIndex();
-                int last = DataModel.this.getRowCount();
-                result = (cur < last);
-                return result;
-            }
-
-            public Object next() {
-                Object result = null;
-                if (!initialized) {
-                    initialized = true;
-                    DataModel.this.setRowIndex(0);
-                }
-                int cur = DataModel.this.getRowIndex();
-                DataModel.this.setRowIndex(++cur);
-                result = DataModel.this.getRowData();
-                return result;
-            }
-
-            public void remove() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-        };
-        
-        return result;
     }
     
 
+    // ---------------------------------------------------------- Nested Classes
+
+
+    @SuppressWarnings({"unchecked"})
+    private static final class DataModelIterator<T> implements Iterator<T> {
+
+        private DataModel<T> model;
+        private int index;
+
+        
+        // -------------------------------------------------------- Constructors
+
+
+        DataModelIterator(DataModel<T> model) {
+
+            this.model = model;
+            this.model.setRowIndex(index);
+
+        }
+
+
+        // ----------------------------------------------- Methods from Iterator
+
+
+        /**
+         * @see java.util.Iterator#hasNext()
+         */
+        public boolean hasNext() {
+
+            return model.isRowAvailable();
+
+        }
+
+
+        /**
+         * @see java.util.Iterator#next()
+         */
+        public T next() {
+
+            if (!model.isRowAvailable()) {
+                throw new NoSuchElementException();
+            }
+            Object o = model.getRowData();
+            model.setRowIndex(++index);
+            return (T) o;
+
+        }
+
+
+        /**
+         * Unsupported.
+         * @see java.util.Iterator#remove()
+         */
+        public void remove() {
+
+            throw new UnsupportedOperationException();
+
+        }
+
+    } // END DataModelIterator
 
 }
