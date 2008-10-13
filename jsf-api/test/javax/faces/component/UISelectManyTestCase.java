@@ -57,6 +57,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Collection;
+import java.util.Collections;
 
 
 /**
@@ -344,6 +345,24 @@ public class UISelectManyTestCase extends UIInputTestCase {
 
     }
 
+
+    public void testEmptySelectItems() {
+
+        UIViewRoot root = facesContext.getApplication().getViewHandler()
+              .createView(facesContext, null);
+        root.getChildren().add(component);
+
+        UISelectItems items = new UISelectItems();
+        items.setValue(Collections.emptyList());
+        UISelectMany selectMany = (UISelectMany) component;
+        selectMany.getChildren().add(items);
+
+        selectMany.setValue(true);
+        selectMany.setSubmittedValue(new String[] { "bar" });
+        selectMany.validate(facesContext);
+        assertTrue(!selectMany.isValid());
+
+    }
 
 
     private void testValidateWithCollection(Collection<SelectItem> selectItems,
