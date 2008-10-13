@@ -24212,6 +24212,23 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+
+      <attribute>
+        <description><![CDATA[<p class="changed_modified_2_0"> Optional
+        attribute that is a literal string that is the fully qualified
+        class name of a concrete class that implements
+        <code>java.util.Collection</code>, or an EL expression that
+        evaluates to either 1. such a String, or 2. the
+        <code>Class</code> object itself. </p>]]></description>
+        <display-name>Collection Type</display-name>
+        <icon/>
+        <attribute-name>collectionType</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <required>false</required>
+        </attribute-extension>
+      </attribute>
+
       <renderer-extension>
         <renders-children>true</renders-children>
       </renderer-extension>
@@ -24707,12 +24724,31 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-class>int</attribute-class>
       </attribute>
 
+
+      <attribute>
+        <description><![CDATA[<p class="changed_modified_2_0"> Optional
+        attribute that is a literal string that is the fully qualified
+        class name of a concrete class that implements
+        <code>java.util.Collection</code>, or an EL expression that
+        evaluates to either 1. such a String, or 2. the
+        <code>Class</code> object itself. </p>]]></description>
+        <display-name>Collection Type</display-name>
+        <icon/>
+        <attribute-name>collectionType</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <required>false</required>
+        </attribute-extension>
+      </attribute>
+
       <renderer-extension>
         <renders-children>true</renders-children>
       </renderer-extension>
     </renderer>
     <renderer>
-      <description><![CDATA[<p>Render an HTML option list.</p>
+      <description><![CDATA[<p><span
+            class="changed_modified_2_0">Render</span> an HTML option
+            list.</p>
 
       <p><a name="decode">Decode Behavior</a></p>
 
@@ -25091,6 +25127,23 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <icon/>
         <attribute-name>enabledClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+
+      <attribute>
+        <description><![CDATA[<p class="changed_modified_2_0"> Optional
+        attribute that is a literal string that is the fully qualified
+        class name of a concrete class that implements
+        <code>java.util.Collection</code>, or an EL expression that
+        evaluates to either 1. such a String, or 2. the
+        <code>Class</code> object itself. </p>]]></description>
+        <display-name>Collection Type</display-name>
+        <icon/>
+        <attribute-name>collectionType</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <required>false</required>
+        </attribute-extension>
       </attribute>
 
       <renderer-extension>
