@@ -29,5 +29,5 @@ export PYTHONBIN
 #$PYTHONBIN $UCHOME/bin/makepkgs.py -s http://localhost:10000 -b dist conf/jsf_proto.py
 
 # Or, optionally, put the repo files into the dev test repository
-$PYTHONBIN $UCHOME/bin/makepkgs.py -s http://eflat.sfbay.sun.com:10000 -b dist conf/jsf_proto.py
+$PYTHONBIN $UCHOME/bin/makepkgs.py -s http://eflat.sfbay.sun.com:40000 -b dist conf/jsf_proto.py
 
