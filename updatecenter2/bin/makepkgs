@@ -7,6 +7,10 @@
 UCHOME=$1
 export UCHOME
 
+# add OpenSSL path for Solaris
+LD_LIBRARY_PATH=$UCHOME/python2.4-minimal/lib
+export LD_LIBRARY_PATH 
+
 # add the necessary libraries to python
 PYTHONPATH=$UCHOME/vendor-packages:.
 export PYTHONPATH
