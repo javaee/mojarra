@@ -449,7 +449,7 @@ public class ClientSideStateHelper extends StateHelper {
         @Override
         public void write(int c) throws IOException {
 
-            sb.append(c);
+            sb.append((char) c);
 
         }
 

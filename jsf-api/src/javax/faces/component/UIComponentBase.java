@@ -78,6 +78,8 @@ import javax.faces.application.Resource;
 import javax.faces.event.AfterAddToParentEvent;
 import javax.faces.event.BeforeRenderEvent;
 import javax.faces.event.PhaseId;
+import javax.faces.event.SystemEvent;
+import javax.faces.event.SystemEventListener;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.ResponseStateManager;
@@ -1289,7 +1291,7 @@ public abstract class UIComponentBase extends UIComponent {
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-             values = new Object[9];
+             values = new Object[10];
         }
 
         if (attributes != null) {
@@ -1306,6 +1308,7 @@ public abstract class UIComponentBase extends UIComponent {
         values[6] = rendererType;
         values[7] = saveAttachedState(context, listeners);
         values[8] = attributesThatAreSet;
+        values[9] = saveSystemEventListeners(context);
         assert(!transientFlag);
 
         return (values);
@@ -1341,6 +1344,12 @@ public abstract class UIComponentBase extends UIComponent {
             else {
                 listeners = restoredListeners;
             }
+        }
+        Map m = restoreSystemEventListeners(context, values[9]);
+        if (listenersByEventClass != null) {
+            listenersByEventClass.putAll(m);
+        } else {
+            listenersByEventClass = m;
         }
         //noinspection unchecked
         attributesThatAreSet = (List<String>) values[8];
@@ -1472,6 +1481,9 @@ public abstract class UIComponentBase extends UIComponent {
                 retCollection = (Collection<Object>) collectionClass.newInstance();
             }
             catch (Exception e) {
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE, e.toString(), e);
+                }
                 throw new IllegalStateException("Unknown object type");
             }
             
@@ -1479,6 +1491,9 @@ public abstract class UIComponentBase extends UIComponent {
                 try {
                     retCollection.add(((StateHolderSaver) item).restore(context));
                 } catch (ClassCastException cce) {
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE, cce.toString(), cce);
+                    }
                     throw new IllegalStateException("Unknown object type");
                 }
             }
@@ -1529,6 +1544,46 @@ public abstract class UIComponentBase extends UIComponent {
         return (values);
 
     }
+
+    private Object saveSystemEventListeners(FacesContext ctx) {
+
+        if (listenersByEventClass == null) {
+            return null;
+        }
+
+        int size = listenersByEventClass.size();
+        Object listeners[][] = new Object[size][2];
+        int idx = 0;
+        for (Entry<Class<? extends SystemEvent>, List<SystemEventListener>> e : listenersByEventClass.entrySet()) {
+            Object[] target = listeners[idx++];
+            target[0] = e.getKey();
+            target[1] = saveAttachedState(ctx, e.getValue());
+        }
+
+        return listeners;
+
+    }
+
+
+    private Map<Class<? extends SystemEvent>,List<SystemEventListener>> restoreSystemEventListeners(FacesContext ctx, Object state) {
+
+        if (state == null) {
+            return null;
+        }
+
+        Object[][] listeners = (Object[][]) state;
+        Map<Class<? extends SystemEvent>, List<SystemEventListener>> m =
+              new HashMap<Class<? extends SystemEvent>, List<SystemEventListener>>(listeners.length, 1.0f);
+        for (int i = 0, len = listeners.length; i < len; i++) {
+            Object[] source = listeners[i];
+            m.put((Class<? extends SystemEvent>) source[0],
+                  (List<SystemEventListener>) restoreAttachedState(ctx, source[1]));
+        }
+
+        return m;
+    }
+
+
 
 
     Map<String,PropertyDescriptor> getDescriptorMap() {

@@ -62,6 +62,8 @@ import com.sun.faces.mock.MockValueBinding;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+import java.util.Collections;
+import java.util.Arrays;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponentTestCase;
@@ -74,6 +76,10 @@ import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.AfterAddToParentEvent;
 import javax.faces.event.BeforeRenderEvent;
+import javax.faces.event.ComponentSystemEventListener;
+import javax.faces.event.ComponentSystemEvent;
+import javax.faces.event.ViewMapCreatedEvent;
+import javax.faces.event.ViewMapDestroyedEvent;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -366,7 +372,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
         // Set up the components we will need
         UIComponent parent = new TestComponent("root");
-	UIComponent preSave = createComponent();
+        UIComponent preSave = createComponent();
         UIComponent facet1 = createComponent();
         facet1.setId("facet1");
         preSave.getFacets().put("facet1 key", facet1);
@@ -382,8 +388,22 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         assertNotNull(state);
         postSave.restoreState(facesContext, state);
         checkComponents(preSave, postSave);
-	checkValueBindings(preSave, postSave);
+        checkValueBindings(preSave, postSave);
+        checkComponentListeners(preSave, postSave);
+    }
 
+
+    public void testStateHolder2() throws Exception {
+
+        UIComponent c = new UIComponentListener();
+        c.subscribeToEvent(AfterAddToParentEvent.class, (ComponentSystemEventListener) c);
+        Object state = c.saveState(facesContext);
+        c = new UIComponentListener();
+        c.pushComponentToEL(facesContext, c);
+        c.restoreState(facesContext, state);
+        c.popComponentFromEL(facesContext);
+        assertTrue(c.getListenersForEventClass(AfterAddToParentEvent.class).size() == 1);
+        
     }
 
 
@@ -893,6 +913,19 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     }
 
 
+    protected void checkComponentListeners(UIComponent control, UIComponent toValidate) {
+
+        List<SystemEventListener> lc = control.getListenersForEventClass(AfterAddToParentEvent.class);
+        List<SystemEventListener> tvl = toValidate.getListenersForEventClass(AfterAddToParentEvent.class);
+        List<SystemEventListener> lc2 = control.getListenersForEventClass(ViewMapCreatedEvent.class);
+        List<SystemEventListener> tvl2 = toValidate.getListenersForEventClass(ViewMapCreatedEvent.class);
+
+        assertTrue(Arrays.equals(lc.toArray(), tvl.toArray()));
+        assertTrue(Arrays.equals(lc2.toArray(), tvl2.toArray()));
+
+    }
+
+
     // Create a pristine component of the type to be used in state holder tests
     protected UIComponent createComponent() {
         return (new TestComponent());
@@ -909,10 +942,16 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         component.setRendered(false);
         component.setRendererType(null); // Since we have no renderers
 
-	component.setValueBinding("baz",
-				  application.createValueBinding("baz.value"));
-	component.setValueBinding("bop",
-				  application.createValueBinding("bop.value"));
+        component.setValueBinding("baz",
+                                  application.createValueBinding("baz.value"));
+        component.setValueBinding("bop",
+                                  application.createValueBinding("bop.value"));
+        component.subscribeToEvent(AfterAddToParentEvent.class,
+                                   new ComponentListener());
+        component.subscribeToEvent(AfterAddToParentEvent.class,
+                                   new ComponentListener());
+        component.subscribeToEvent(ViewMapCreatedEvent.class,
+                                   new ComponentListener());
 
     }
 
@@ -1439,6 +1478,28 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         public void reset() {
             event = null;
         }
+    }
+
+
+    public static final class ComponentListener implements ComponentSystemEventListener {
+
+        public void processEvent(ComponentSystemEvent event)
+        throws AbortProcessingException {
+
+        }
+    }
+
+
+    public static final class UIComponentListener extends UIComponentBase implements ComponentSystemEventListener {
+
+        public String getFamily() {
+            return "family";
+        }
+
+        public void processEvent(ComponentSystemEvent event)
+        throws AbortProcessingException {
+        }
+
     }
 
 }

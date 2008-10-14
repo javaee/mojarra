@@ -63,6 +63,7 @@ import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
+import javax.faces.FacesWrapper;
 import javax.faces.application.Resource;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
@@ -1644,15 +1645,15 @@ private void doFind(FacesContext context, String clientId) {
             throw new NullPointerException();
         }
 
-        List<SystemEventListener> listeners = getListenersForEventClass(eventClass);
+        List<SystemEventListener> listeners =
+              getListenersForEventClass(eventClass);
         if (listeners != null && !listeners.isEmpty()) {
             for (Iterator<SystemEventListener> i = listeners.iterator(); i.hasNext();) {
                 SystemEventListener item = i.next();
-                // order of the equals operation is important here
-                // it must called against 'item' to ensure the proper
-                // equals method is invoked, otherwise the componentListener will
-                // not be removed
-                if (item.equals(componentListener)) {
+                ComponentSystemEventListenerAdapter csla =
+                      (ComponentSystemEventListenerAdapter) item;
+                ComponentSystemEventListener l = csla.getWrapped();
+                if (l.equals(componentListener)) {
                     i.remove();
                     break;
                 }
@@ -1661,7 +1662,7 @@ private void doFind(FacesContext context, String clientId) {
 
     }
 
-    private Map<Class<? extends SystemEvent>, List<SystemEventListener>> listenersByEventClass;
+    Map<Class<? extends SystemEvent>, List<SystemEventListener>> listenersByEventClass;
 
     /**
      * <p class="changed_added_2_0">Return the
@@ -1902,14 +1903,21 @@ private void doFind(FacesContext context, String clientId) {
     }
 
 
-    private static final class ComponentSystemEventListenerAdapter
-       implements SystemEventListener {
+    static final class ComponentSystemEventListenerAdapter
+       implements SystemEventListener, StateHolder, FacesWrapper<ComponentSystemEventListener> {
 
         ComponentSystemEventListener wrapped;
         Class<?> instanceClass;
 
 
         // -------------------------------------------------------- Constructors
+
+
+        ComponentSystemEventListenerAdapter() {
+
+            // necessary for state saving
+
+        }
 
 
         ComponentSystemEventListenerAdapter(ComponentSystemEventListener wrapped,
@@ -1938,24 +1946,79 @@ private void doFind(FacesContext context, String clientId) {
         }
 
 
+        // -------------------------------------------- Methods from StateHolder
+
+        public Object saveState(FacesContext context) {
+
+            return new Object[] {
+                  ((wrapped instanceof UIComponent) ? null : new StateHolderSaver(context, wrapped)),
+                  instanceClass
+            };
+
+        }
+
+
+        public void restoreState(FacesContext context, Object state) {
+
+            if (state == null) {
+                return;
+            }
+            Object[] s = (Object[]) state;
+            Object listener = s[0];
+            wrapped = (ComponentSystemEventListener) ((listener == null)
+                                                      ? UIComponent .getCurrentComponent(context)
+                                                      : ((StateHolderSaver) listener).restore(context));
+            instanceClass = (Class<?>) s[1];
+            
+        }
+
+
+        public boolean isTransient() {
+
+            return false;
+
+        }
+
+
+        public void setTransient(boolean newTransientValue) {
+
+            // no-op
+
+        }
+
+
+        // ------------------------------------------- Methods from FacesWrapper
+
+
+        public ComponentSystemEventListener getWrapped() {
+
+            return wrapped;
+
+        }
+
+
         // ------------------------------------------------------ Public Methods
 
 
         @Override
         public int hashCode() {
-            return wrapped.hashCode();
-        }
 
+            return (wrapped.hashCode() ^ instanceClass.hashCode());
+
+        }
 
         @Override
         public boolean equals(Object obj) {
 
-            return !(obj == null
-                     || !(obj instanceof ComponentSystemEventListener))
-                   && wrapped.equals(obj);
-
+            if (!(obj instanceof ComponentSystemEventListenerAdapter)) {
+                return false;
+            }
+            ComponentSystemEventListenerAdapter in =
+                  (ComponentSystemEventListenerAdapter) obj;
+            return (wrapped.getClass().equals(in.wrapped.getClass())
+                    && instanceClass.equals(in.instanceClass));
+            
         }
-
     } // END ComponentSystemEventListenerAdapter
 
 }

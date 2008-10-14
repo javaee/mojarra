@@ -53,7 +53,6 @@ import javax.faces.context.PartialViewContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
-import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
@@ -85,7 +84,8 @@ import javax.servlet.http.HttpServletResponse;
  * component renders markup as the response to Ajax requests.  It also 
  * serves as the root of the component tree, and as a place to hang 
  * per-view {@link PhaseListener}s.</p>
-
+ *
+ * RELEASE_PENDING (edburns,rogerk) the following block is no longer true.
  * <p class="changed_modified_2_0">To enable <code>UIViewRoot</code>
  * <code>PhaseListener</code>s to be invoked on restore view, this class
  * implements {@link ComponentSystemEventListener}.  The restore view
@@ -156,7 +156,7 @@ import javax.servlet.http.HttpServletResponse;
  * </ul>
  */
 
-public class UIViewRoot extends UIComponentBase implements ComponentSystemEventListener {
+public class UIViewRoot extends UIComponentBase {
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -210,29 +210,6 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
         pushComponentToEL(context,null);
 
     }
-
-    /**
-     * <p class="changed_added_2_0">Cause any <code>UIViewRoot</code>
-     * {@link PhaseListener}s installed on this instance to be notified
-     * of the restore view phase.  The default implementation compares
-     * the argument <code>event</code>'s <code>getClass()</code> with
-     * {@link AfterAddToParentEvent}<code>.class</code> using
-     * <code>equals()</code>.  If and only if the comparison is
-     * <code>true</code>, the default implementation must notify any
-     * <code>UIViewRoot</code> {@link PhaseListener}s installed on this
-     * instance that we are in the <strong>AFTER</strong> restore view
-     * phase.</p>
-     */
-    public void processEvent(ComponentSystemEvent event)
-          throws AbortProcessingException {
-        if (AfterAddToParentEvent.class.equals(event.getClass())) {
-            notifyPhaseListeners(FacesContext.getCurrentInstance(),
-                                 PhaseId.RESTORE_VIEW,
-                                 false);
-        }
-    }
-    
-    
 
     // ------------------------------------------------------ Instance Variables
 
@@ -822,6 +799,26 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
         }
     }
 
+
+    /**
+     * RELEASE_PENDING (edburns,rogerk) document
+     * @param context
+     * @param state
+     */
+    @Override
+    public void processRestoreState(FacesContext context, Object state) {
+
+        initState();
+        try {
+            super.processRestoreState(context, state);
+        } finally {
+            clearFacesEvents(context);
+            notifyAfter(context, PhaseId.RESTORE_VIEW);
+        }
+
+    }
+    
+
     /**
      * <p class="changed_added_2_0">If {@link
      * javax.faces.context.PartialViewContext#isAjaxRequest} returns <code>true</code>,
@@ -972,7 +969,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
        </code></pre>
      *
      * If {@link
-     * javax.faces.cntext.PartialViewContext#isRenderAll} returns
+     * javax.faces.context.PartialViewContext#isRenderAll} returns
      * <code>true</code> write:  
      *
        <pre><code>
@@ -1122,7 +1119,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      * <p class="changed_added_2_0">
      * Helper method to perform encoding for a distinct set of
      * client identifiers as returned from {@link
-     * javax.faces.context.FacesContext#getRenderPhaseClientIds}.
+     * javax.faces.context.PartialViewContext#getRenderPhaseClientIds}.
      * This method returns <code>true</code> to indicate that
      * partial encoding was performed.</p>
      *
@@ -1422,12 +1419,12 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      * <p class="changed_added_2_0">
      * Helper method to invoke <code>processValidators</code> on each
      * individual component as determined by the client ids returned
-     * by {@link javax.faces.context.FacesContext#getExecutePhaseClientIds}.
+     * by {@link javax.faces.context.PartialViewContext#getExecutePhaseClientIds}.
      * This method returns a <code>true</code> to indicate that partial
      * validation was performed.
      *
      * @param context {@link FacesContext} for the request we are processing
-     * @param partialViewContext {@link partialViewContext} for the request we 
+     * @param partialViewContext {@link PartialViewContext} for the request we
      * are processing
      *</p>
      */
@@ -1512,7 +1509,7 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
      * <p class="changed_added_2_0">
      * Helper method to invoke <code>processUpdates</code> on each
      * individual component as determined by the client ids returned
-     * by {@link javax.faces.context.FacesContext#getExecutePhaseClientIds}.
+     * by {@link javax.faces.context.PartialViewContext#getExecutePhaseClientIds}.
      * This method returns a <code>true</code> to indicate that partial
      * updating was performed.
      *
