@@ -199,15 +199,12 @@ public class UIViewRoot extends UIComponentBase {
 
     /**
      * <p>Create a new {@link UIViewRoot} instance with default property
-     * values.  The default implementation must call 
-     * {@link UIComponentBase#pushComponentToEL}.</p>
+     * values.</p>
      */
     public UIViewRoot() {
 
         super();
         setRendererType(null);
-        FacesContext context = FacesContext.getCurrentInstance();
-        pushComponentToEL(context,null);
 
     }
 

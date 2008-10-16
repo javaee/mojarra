@@ -57,7 +57,7 @@ public class AnnotatedBeans {
         return name;
     }
 
-    @ManagedProperty(name="age",value="#{applicationScope.age}")
+    @ManagedProperty(value="#{applicationScope.age}")
     private int age;
 
     public int getAge() {

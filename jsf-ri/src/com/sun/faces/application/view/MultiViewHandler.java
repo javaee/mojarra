@@ -331,7 +331,7 @@ public class MultiViewHandler extends ViewHandler {
     public String getResourceURL(FacesContext context, String path) {
 
         ExternalContext extContext = context.getExternalContext();
-        if (path.charAt(0) == '/' && !path.startsWith(extContext.getRequestContextPath())) {
+        if (path.charAt(0) == '/') {
             return (extContext.getRequestContextPath() + path);
         } else {
             return path;
