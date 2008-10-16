@@ -155,7 +155,7 @@ import javax.servlet.http.HttpServletResponse;
  * </ul>
  */
 
-public class UIViewRoot extends UIComponentBase implements ComponentSystemEventListener {
+public class UIViewRoot extends UIComponentBase {
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -198,40 +198,15 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
 
     /**
      * <p>Create a new {@link UIViewRoot} instance with default property
-     * values.  The default implementation must call 
-     * {@link UIComponentBase#pushComponentToEL}.</p>
+     * values.</p>
      */
     public UIViewRoot() {
 
         super();
         setRendererType(null);
-        FacesContext context = FacesContext.getCurrentInstance();
-        pushComponentToEL(context,null);
 
     }
 
-    /**
-     * <p class="changed_added_2_0">Cause any <code>UIViewRoot</code>
-     * {@link PhaseListener}s installed on this instance to be notified
-     * of the restore view phase.  The default implementation compares
-     * the argument <code>event</code>'s <code>getClass()</code> with
-     * {@link AfterAddToParentEvent}<code>.class</code> using
-     * <code>equals()</code>.  If and only if the comparison is
-     * <code>true</code>, the default implementation must notify any
-     * <code>UIViewRoot</code> {@link PhaseListener}s installed on this
-     * instance that we are in the <strong>AFTER</strong> restore view
-     * phase.</p>
-     */
-    public void processEvent(ComponentSystemEvent event)
-          throws AbortProcessingException {
-        if (AfterAddToParentEvent.class.equals(event.getClass())) {
-            notifyPhaseListeners(FacesContext.getCurrentInstance(),
-                                 PhaseId.RESTORE_VIEW,
-                                 false);
-        }
-    }
-    
-    
 
     // ------------------------------------------------------ Instance Variables
 
@@ -810,6 +785,19 @@ public class UIViewRoot extends UIComponentBase implements ComponentSystemEventL
         if (null != afterPhase || null != phaseListenerIterator) {
             notifyPhaseListeners(context, phaseId, false);
         }
+    }
+
+    @Override
+    public void processRestoreState(FacesContext context, Object state) {
+
+        initState();
+        try {
+            super.processRestoreState(context, state);
+        } finally {
+            clearFacesEvents(context);
+            notifyAfter(context, PhaseId.RESTORE_VIEW);
+        }
+        
     }
 
     /**

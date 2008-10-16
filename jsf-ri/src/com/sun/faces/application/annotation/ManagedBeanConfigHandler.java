@@ -164,8 +164,9 @@ public class ManagedBeanConfigHandler implements ConfigAnnotationHandler {
                     if (properties == null) {
                         properties = new ArrayList<ManagedBeanInfo.ManagedProperty>();
                     }
+                    String n = property.name();
                     ManagedBeanInfo.ManagedProperty propertyInfo =
-                          new ManagedBeanInfo.ManagedProperty(property.name(),
+                          new ManagedBeanInfo.ManagedProperty(((n != null && n.length() != 0) ? n : field.getName()),
                                                               field.getType().getName(),
                                                               property.value(),
                                                               null,

@@ -97,15 +97,13 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
                     context.setPropertyResolved(true);
                     return extCtx.getApplicationMap();
                 case COMPONENT:
-                    context.setPropertyResolved(true);
-                    // Leverage the fact that the UIComponent is stored within
-                    // the FacesContext attributes map under a well known key
-                    // instead of calling FacesContext.getCurrentComponent() to
-                    // avoid an additional ThreadLocal lookup.
-                    return facesContext.getAttributes().get(UIComponent.CURRENT_COMPONENT);
+                    Object c = facesContext.getAttributes().get(UIComponent.CURRENT_COMPONENT);
+                    context.setPropertyResolved(c != null);
+                    return c;
                 case COMPOSITE_COMPONENT:
-                    context.setPropertyResolved(true);
-                    return facesContext.getAttributes().get(UIComponent.CURRENT_COMPOSITE_COMPONENT);
+                    Object cc = facesContext.getAttributes().get(UIComponent.CURRENT_COMPOSITE_COMPONENT);
+                    context.setPropertyResolved(cc != null);
+                    return cc;
                 case COOKIE:
                     context.setPropertyResolved(true);
                     return extCtx.getRequestCookieMap();

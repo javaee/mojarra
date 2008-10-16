@@ -202,7 +202,6 @@ public class RestoreViewPhase extends Phase {
             // if that fails, create one
             viewRoot = (Util.getViewHandler(facesContext)).
                   createView(facesContext, viewId);
-            viewRoot.subscribeToEvent(AfterAddToParentEvent.class, viewRoot);
             facesContext.setViewRoot(viewRoot);
             facesContext.renderResponse();
             facesContext.getApplication().publishEvent(AfterAddToParentEvent.class,
