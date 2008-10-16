@@ -49,7 +49,7 @@
         Array Values
     </p>
     <h:selectManyListbox id="array" value="#{select05.arrayValues}">
-        <f:selectItems value="#{select05.possibleValues}"/>
+        <f:selectItems value="#{select05.hobbitCollection}"/>
     </h:selectManyListbox>
 
     <p>
@@ -83,10 +83,23 @@
     <!-- ///////////////////////////////////////////////////////////// -->
 
     <p>
-        Initially Non-Null List Values
+        Initially Non-Null List Values/Collection non-select item
     </p>
     <h:selectManyListbox id="ilist" value="#{select05.initialListValues}">
-        <f:selectItems value="#{select05.possibleValues}"/>
+        <f:selectItems value="#{select05.hobbitCollection}"
+                       var="hobbit"
+                       itemLabel="#{hobbit.name}"
+                       itemDescription="#{hobbit.bio}"/>
+    </h:selectManyListbox>
+
+    <p>
+        Initially Non-Null List Values/DataModel non-select item
+    </p>
+    <h:selectManyListbox id="ilist2" value="#{select05.initialListValues}">
+        <f:selectItems value="#{select05.hobbitDataModel}"
+                       var="hobbit"
+                       itemLabel="#{hobbit.name}"
+                       itemDescription="#{hobbit.bio}"/>
     </h:selectManyListbox>
 
     <p>

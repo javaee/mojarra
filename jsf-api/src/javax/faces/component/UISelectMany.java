@@ -581,11 +581,14 @@ public class UISelectMany extends UIInput {
         // Don't arrays cast to "Object[]", as we may now be using an array
         // of primitives
         Converter converter = getConverter();
-        FacesContext ctx = getFacesContext();
         for (Iterator i = getValuesIterator(value); i.hasNext(); ) {
-            Iterator items = new SelectItemsIterator(this);
+            Iterator items = new SelectItemsIterator(context, this);
             Object currentValue = i.next();
-            if (!SelectUtils.matchValue(ctx, this, currentValue, items, converter)) {
+            if (!SelectUtils.matchValue(context,
+                                        this,
+                                        currentValue,
+                                        items,
+                                        converter)) {
                 // Enqueue an error message if an invalid value was specified
                 FacesMessage message =
                       MessageFactory.getMessage(context,

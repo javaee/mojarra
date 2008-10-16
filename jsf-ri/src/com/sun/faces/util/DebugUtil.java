@@ -48,7 +48,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Iterator;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -193,7 +192,7 @@ public class DebugUtil {
         indentPrintln(out, "type:" + root.getClass().getName());
 
         if (root instanceof javax.faces.component.UISelectOne) {
-            List<SelectItem> items = null;
+            Iterator<SelectItem> items = null;
             try {
                 items = RenderKitUtils.getSelectItems(FacesContext.getCurrentInstance(),
                                                       root);
@@ -203,17 +202,16 @@ public class DebugUtil {
             }
             if (items != null) {
                 indentPrintln(out, " {");
-                if (!items.isEmpty()) {
-                    for (SelectItem curItem : items) {
-                        indentPrintln(out, "\t value = "
-                                           + curItem.getValue()
-                                           +
-                                           ", label = "
-                                           + curItem.getLabel()
-                                           + ", description = "
-                                           +
-                                           curItem.getDescription());
-                    }
+                while (items.hasNext()) {
+                    SelectItem curItem = items.next();
+                    indentPrintln(out, "\t value = "
+                                       + curItem.getValue()
+                                       +
+                                       ", label = "
+                                       + curItem.getLabel()
+                                       + ", description = "
+                                       +
+                                       curItem.getDescription());
                 }
                 indentPrintln(out, " }");
             }

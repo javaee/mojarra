@@ -42,7 +42,6 @@
 
 package com.sun.faces.util;
 
-import com.sun.faces.RIConstants;
 import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
@@ -51,12 +50,15 @@ import javax.faces.FactoryFinder;
 import javax.faces.component.UIInput;
 import javax.faces.component.UISelectItems;
 import javax.faces.component.UISelectOne;
+import javax.faces.component.UISelectMany;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.context.ResponseWriter;
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
-import javax.servlet.ServletContext;
+import javax.el.ValueExpression;
+import javax.el.ExpressionFactory;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -65,36 +67,19 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TreeSet;
+import java.util.List;
+import java.util.Arrays;
 
 /**
- * <B>TestUtil</B> is a class ...
- * <p/>
- * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: TestUtil.java,v 1.37 2007/12/19 17:43:49 rlubke Exp $
+ * Currently tests RenderKitUtils.
  */
 
 public class TestUtil extends ServletFacesTestCase {
 
-//
-// Protected Constants
-//
 
-//
-// Class Variables
-//
+    // -------------------------------------------------------------- Test Setup
 
-//
-// Instance Variables
-//
-
-// Attribute Instance Variables
-
-// Relationship Instance Variables
-
-//
-// Constructors and Initializers    
-//
 
     public TestUtil() {
         super("TestUtil");
@@ -105,14 +90,10 @@ public class TestUtil extends ServletFacesTestCase {
         super(name);
     }
 
-//
-// Class methods
-//
 
-//
-// General Methods
-//
+    // ------------------------------------------------------------ Test Methods
 
+    
     public void testRenderPassthruAttributes() {
         try {
             RenderKitFactory renderKitFactory = (RenderKitFactory)
@@ -268,25 +249,159 @@ public class TestUtil extends ServletFacesTestCase {
         UISelectOne selectOne = new UISelectOne();
         selectOne.getChildren().add(items);
         Iterator iterator = RenderKitUtils.getSelectItems(getFacesContext(),
-                                                          selectOne).iterator();
+                                                          selectOne);
         assertTrue(item1.equals(iterator.next()));
         assertTrue(item2.equals(iterator.next()));
 
         items.setValue(itemsCollection);
         iterator = RenderKitUtils.getSelectItems(getFacesContext(),
-                                                 selectOne).iterator();
+                                                 selectOne);
         assertTrue(item1.equals(iterator.next()));
         assertTrue(item2.equals(iterator.next()));
 
         items.setValue(selectItemMap);
         iterator = RenderKitUtils.getSelectItems(getFacesContext(),
-                                                 selectOne).iterator();
+                                                 selectOne);
         SelectItem i = (SelectItem) iterator.next();
         assertTrue(item1.getLabel().equals(i.getLabel()) 
                     && item1.getValue().equals(i.getValue()));
         i = (SelectItem) iterator.next();
         assertTrue(item2.getLabel().equals(i.getLabel()) 
                     && item2.getValue().equals(i.getValue()));
+    }
+
+
+    public void testGetSelectItemsFromCollection() {
+
+        UISelectMany many = new UISelectMany();
+        UISelectItems items = new UISelectItems();
+        FacesContext ctx = getFacesContext();
+        items.getAttributes().put("var", "item");
+        items.setValueExpression("itemValue",
+                                 createValueExpression(ctx,
+                                                       "#{item.id}",
+                                                       Integer.TYPE));
+        items.setValueExpression("itemLabel",
+                                 createValueExpression(ctx,
+                                                       "#{item.label}",
+                                                       String.class));
+        items.setValueExpression("itemDescription",
+                                 createValueExpression(ctx,
+                                                       "#{item.description}",
+                                                       String.class));
+        items.setValueExpression("itemEscaped",
+                                 createValueExpression(ctx,
+                                                       "#{item.escaped}",
+                                                       Boolean.TYPE));
+        items.setValueExpression("itemDisabled",
+                                 createValueExpression(ctx,
+                                                       "#{item.disabled}",
+                                                       Boolean.TYPE));
+        many.getChildren().add(items);
+        Collection<ModelObject> c = new TreeSet<ModelObject>();
+        ModelObject[] models = {
+            new ModelObject(1, "item1", "Item One", false, false),
+            new ModelObject(2, "item2", "Item Two", true, false),
+            new ModelObject(3, "item3", "Item Three", false, true)
+        };
+
+        c.addAll(Arrays.asList(models));
+
+        items.setValue(c);
+
+
+        Iterator<SelectItem> selectItems = RenderKitUtils.getSelectItems(ctx, many);
+        int idx = 0;
+        while (selectItems.hasNext()) {
+            compare(models[idx], selectItems.next());
+            idx++;
+        }
+
+    }
+
+    // --------------------------------------------------------- Private Methods
+
+    private void compare(ModelObject model, SelectItem item) {
+
+        assertEquals(model.getId(), item.getValue());
+        assertEquals(model.getLabel(), item.getLabel());
+        assertEquals(model.getDescription(), item.getDescription());
+        assertEquals(model.isEscaped(), item.isEscape());
+        assertEquals(model.isDisabled(), item.isDisabled());
+
+    }
+
+
+    private ValueExpression createValueExpression(FacesContext ctx,
+                                                  String expression,
+                                                  Class<?> expectedType) {
+
+        ExpressionFactory factory = ctx.getApplication().getExpressionFactory();
+        return (factory.createValueExpression(ctx.getELContext(),
+                                              expression,
+                                              expectedType));
+    }
+
+
+    // ---------------------------------------------------------- Nested Classes
+
+
+    public static class ModelObject implements Comparable {
+
+        private int id;
+        private String label;
+        private String description;
+        private boolean disabled;
+        private boolean escaped;
+
+        public ModelObject(int id,
+                           String label,
+                           String description,
+                           boolean disabled,
+                           boolean escaped) {
+
+            this.id = id;
+            this.label = label;
+            this.description = description;
+            this.disabled = disabled;
+            this.escaped = escaped;
+
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public String getLabel() {
+            return label;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public boolean isDisabled() {
+            return disabled;
+        }
+
+        public boolean isEscaped() {
+            return escaped;
+        }
+
+
+        // --------------------------------------------- Methods from Comparable
+
+
+        public int compareTo(Object o) {
+            ModelObject provided = (ModelObject) o;
+            if (this.id < provided.id) {
+                return -1;
+            }
+            if (this.id == provided.id) {
+                return 0;
+            }
+            return 1;
+        }
     }
    
 

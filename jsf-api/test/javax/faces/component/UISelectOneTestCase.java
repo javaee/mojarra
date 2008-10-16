@@ -284,25 +284,6 @@ public class UISelectOneTestCase extends UIInputTestCase {
     }
 
 
-    public void testEmptySelectItems() {
-
-        UIViewRoot root = facesContext.getApplication().getViewHandler()
-              .createView(facesContext, null);
-        root.getChildren().add(component);
-
-        UISelectItems items = new UISelectItems();
-        items.setValue(Collections.emptyList());
-        UISelectOne selectMany = (UISelectOne) component;
-        selectMany.getChildren().add(items);
-
-        selectMany.setValue(true);
-        selectMany.setSubmittedValue(new String[] { "bar" });
-        selectMany.validate(facesContext);
-        assertTrue(!selectMany.isValid());
-
-    }
-
-
     private String legalValues[] =
     { "A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3" };
 
@@ -413,7 +394,7 @@ public class UISelectOneTestCase extends UIInputTestCase {
         param.setName("param");
         param.setValue("paramValue");
         selectOne.getChildren().add(param);
-        Iterator iter = new SelectItemsIterator(selectOne);
+        Iterator iter = new SelectItemsIterator(facesContext, selectOne);
         while (iter.hasNext()) {
             Object object = iter.next();
             assertTrue(object instanceof javax.faces.model.SelectItem);
@@ -426,7 +407,7 @@ public class UISelectOneTestCase extends UIInputTestCase {
         selectOne.getChildren().add(new UISelectItemSub("gretsky", null, null));
         selectOne.getChildren().add(param);
         selectOne.getChildren().add(new UISelectItemSub("howe", null, null));
-        iter = new SelectItemsIterator(selectOne);
+        iter = new SelectItemsIterator(facesContext, selectOne);
         while (iter.hasNext()) {
             Object object = iter.next();
             assertTrue(object instanceof javax.faces.model.SelectItem);

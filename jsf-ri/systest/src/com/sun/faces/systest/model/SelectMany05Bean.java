@@ -47,9 +47,12 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Vector;
 import java.util.LinkedList;
+import java.util.Arrays;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import javax.faces.model.SelectItem;
+import javax.faces.model.DataModel;
+import javax.faces.model.ListDataModel;
 import javax.faces.FacesException;
 
 
@@ -68,16 +71,26 @@ public class SelectMany05Bean {
     private Collection<String> collectionFromHintValues;
     private Collection<String> collectionFromHintValues2;
     private Object someValues;
+    private Collection<HobbitBean> hobbitCollection;
+    private DataModel<HobbitBean> hobbitDataModel;
 
     // ------------------------------------------------------------ Constructors
 
     public SelectMany05Bean() {
 
+        HobbitBean[] hobbits = {
+              new HobbitBean("Bilbo", "Ring Finder"),
+              new HobbitBean("Frodo", "Ring Bearer"),
+              new HobbitBean("Merry", "Trouble Maker"),
+              new HobbitBean("Pippin", "Trouble Maker")
+        };
+
         Set<SelectItem> items = new LinkedHashSet<SelectItem>();
-        items.add(new SelectItem("Bilbo"));
-        items.add(new SelectItem("Frodo"));
-        items.add(new SelectItem("Merry"));
-        items.add(new SelectItem("Pippin"));
+        for (HobbitBean hobbit : hobbits) {
+            items.add(new SelectItem(hobbit.getName()));
+        }
+        hobbitCollection = new TreeSet<HobbitBean>();
+        hobbitCollection.addAll(Arrays.asList(hobbits));
         possibleValues = Collections.unmodifiableSet(items);
         initialSortedSetValues = new TreeSet<String>(Collections.reverseOrder());
         initialSortedSetValues.add("Pippin");
@@ -91,12 +104,21 @@ public class SelectMany05Bean {
         initialListValues.add("Bilbo");
         initialListValues.add("Pippin");
         initialListValues.add("Merry");
+        hobbitDataModel = new ListDataModel<HobbitBean>(new ArrayList<HobbitBean>(Arrays.asList(hobbits)));
 
     }
 
 
     // ---------------------------------------------------------- Public Methods
 
+
+    public Collection<HobbitBean> getHobbitCollection() {
+        return hobbitCollection;
+    }
+
+    public DataModel<HobbitBean> getHobbitDataModel() {
+        return hobbitDataModel;
+    }
 
     public Set<String> getSetValues() {
         return setValues;
@@ -248,5 +270,45 @@ public class SelectMany05Bean {
             throw new FacesException("[someValues] Error: Expected value to be an array type");
         }
         this.someValues = someValues;
+    }
+
+
+    // ---------------------------------------------------------- Nested Classes
+
+
+    public static final class HobbitBean implements Comparable {
+
+        private String name;
+        private String bio;
+
+
+        // -------------------------------------------------------- Constructors
+
+
+        public HobbitBean(String name, String bio) {
+            this.name = name;
+            this.bio = bio;
+        }
+
+
+        public String getName() {
+            return name;
+        }
+
+        public String getBio() {
+            return bio;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+
+        // --------------------------------------------- Methods from Comparable
+
+
+        public int compareTo(Object o) {
+            return name.compareTo(((HobbitBean) o).name);
+        }
     }
 }
