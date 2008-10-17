@@ -799,9 +799,23 @@ public class UIViewRoot extends UIComponentBase {
 
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) document
-     * @param context
-     * @param state
+     * <p class="changed_added_2_0">The default implementation must call
+     * {@link UIComponentBase#processRestoreState} from within a
+     * <code>try</code> block.  The <code>try</code> block must have a
+     * <code>finally</code> block that ensures that no {@link
+     * FacesEvent}s remain in the event queue, that any
+     * <code>PhaseListener</code>s in {@link #getPhaseListeners} are
+     * invoked as appropriate, and that the <code>this.{@link
+     * #UIComponent#doTreeTraversal} is called, passing a {@link
+     * ContextCallback} that takes the following action: call the {@link
+     * UIComponent#processEvent} method of the current component. The
+     * argument <code>event</code> must be an instance of {@link
+     * javax.faces.event.AfterRestoreViewEvent} whose
+     * <code>component</code> property is the current component in the
+     * traversal.</code></p>
+     * @param context the <code>FacesContext</code> for this requets
+     * @param state the opaque state object obtained from the {@link
+     * javax.faces.application.StateManager}
      */
     @Override
     public void processRestoreState(FacesContext context, Object state) {
