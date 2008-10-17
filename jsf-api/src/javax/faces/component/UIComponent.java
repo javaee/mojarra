@@ -68,6 +68,7 @@ import javax.faces.application.Resource;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
+import javax.faces.event.AfterRestoreStateEvent;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.FacesEvent;
@@ -102,8 +103,9 @@ import javax.faces.render.Renderer;
 
  */
 
-public abstract class UIComponent implements StateHolder, SystemEventListenerHolder {
-
+public abstract class UIComponent implements StateHolder, SystemEventListenerHolder, 
+        ComponentSystemEventListener {
+    
     /**
      * <p class="changed_added_2_0">The key to which the
      * <code>UIComponent</code> currently being processed will be
@@ -1229,6 +1231,33 @@ private void doFind(FacesContext context, String clientId) {
      *  is <code>null</code>
      */
     public abstract void decode(FacesContext context);
+    
+    /**
+     * <p class="changed_added_2_0">Perform a tree traversal starting at
+     * this node in the tree.  The default implementation must call
+     * {@link ContextCallback#invokeContextCallBack} on the argument
+     * <code>nodeCallback</code> before traversing the children.  The
+     * traversal may be aborted by throwing an {@link
+     * javax.faces.event.AbortProcessingException} from this method.</p>
+     *
+     * @param context the <code>FacesContext</code> for this request
+     * @param nodeCallback the <code>ContextCallback</code> instance
+     * whose <code>invokeContextCallback</code> method will be called
+     * for each node encountered.
+     * @since 2.0
+     */
+    public void doTreeTraversal(FacesContext context, 
+				ContextCallback nodeCallback) {
+	nodeCallback.invokeContextCallback(context, this);
+
+	Iterator<UIComponent> it = this.getFacetsAndChildren();
+	
+	while(it.hasNext()) {
+	    it.next().doTreeTraversal(context, nodeCallback);
+	}
+        
+    }
+    
 
 
     /**
@@ -1760,6 +1789,32 @@ private void doFind(FacesContext context, String clientId) {
      *  is <code>null</code>
      */
     public abstract void processDecodes(FacesContext context);
+
+    /**
+     * <p class="changed_added_2_0">The default implementation performs
+     * the following action.  If the argument <code>event</code> is an
+     * instance of {@link AfterRestoreStateEvent}, call
+     * <code>this.</code>{@link #getValueExpression} passing the literal
+     * string &#8220;binding&#8221;, without the quotes, as the
+     * argument.  If the result is non-<code>null</code>, set the value
+     * of the <code>ValueExpression</code> to be <code>this</code>.</p>
+     */ 
+
+    public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
+        if (event instanceof AfterRestoreStateEvent) {
+	    assert(this == event.getComponent());
+            // if this component has a component value reference expression,
+            // make sure to populate the ValueExpression for it.
+            ValueExpression valueExpression;
+            if (null != (valueExpression = this.getValueExpression("binding"))) {
+                valueExpression.setValue(FacesContext.getCurrentInstance().getELContext(), 
+                        this);
+            }
+
+        }
+    }
+    
+    
 
 
     /**

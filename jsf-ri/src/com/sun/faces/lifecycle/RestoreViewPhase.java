@@ -48,7 +48,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.ViewExpiredException;
 import javax.faces.application.ViewHandler;
@@ -66,6 +65,7 @@ import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import javax.faces.event.AfterAddToParentEvent;
+import javax.faces.event.AfterRestoreStateEvent;
 
 /**
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
@@ -129,7 +129,6 @@ public class RestoreViewPhase extends Phase {
             }
             facesContext.getViewRoot().setLocale(
                  facesContext.getExternalContext().getRequestLocale());
-            doPerComponentActions(facesContext, viewRoot);
             if (!facesContext.isPostback()) {
                 facesContext.renderResponse();
             }
@@ -190,7 +189,6 @@ public class RestoreViewPhase extends Phase {
             }
 
             facesContext.setViewRoot(viewRoot);
-            doPerComponentActions(facesContext, viewRoot);
 
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.fine("Postback: Restored view for " + viewId);
@@ -215,32 +213,6 @@ public class RestoreViewPhase extends Phase {
 
     }
 
-
-    // ------------------------------------------------------- Protected Methods
-
-
-    /**
-     * <p>Do any per-component actions necessary during reconstitute</p>
-     * @param context the <code>FacesContext</code> for the current request
-     * @param uic the <code>UIComponent</code> to process the
-     *  <code>binding</code> attribute
-     */
-    protected void doPerComponentActions(FacesContext context,
-                                         UIComponent uic) {
-
-        // if this component has a component value reference expression,
-        // make sure to populate the ValueExpression for it.
-        ValueExpression valueExpression;
-        if (null != (valueExpression = uic.getValueExpression("binding"))) {
-            valueExpression.setValue(context.getELContext(), uic);
-        }
-
-        for (Iterator<UIComponent> kids =  uic.getFacetsAndChildren();
-             kids.hasNext(); ) {
-            doPerComponentActions(context, kids.next());
-        }
-
-    }
 
     // --------------------------------------------------------- Private Methods
 
