@@ -52,6 +52,10 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.NotSerializableException;
+import java.io.ObjectOutputStream;
 
 import javax.faces.FacesException;
 
@@ -65,7 +69,7 @@ import javax.faces.FacesException;
  * specified <code>ResultSet</code> <strong>MUST</strong> be updatable.</p>
  */
 
-public class ResultSetDataModel extends DataModel {
+public class ResultSetDataModel extends DataModel<Map<String,Object>> {
 
 
     // ------------------------------------------------------------ Constructors
@@ -218,7 +222,7 @@ public class ResultSetDataModel extends DataModel {
      * @throws IllegalArgumentException if now row data is available
      *  at the currently specified row index
      */ 
-    public Object getRowData() {
+    public Map<String,Object> getRowData() {
 
         if (resultSet == null) {
 	    return (null);
@@ -227,7 +231,7 @@ public class ResultSetDataModel extends DataModel {
         }
         try {
             getMetaData();
-            return (new ResultSetMap(String.CASE_INSENSITIVE_ORDER));
+            return (new ResultSetMap(this, String.CASE_INSENSITIVE_ORDER));
         } catch (SQLException e) {
             throw new FacesException(e);
         }
@@ -359,16 +363,23 @@ public class ResultSetDataModel extends DataModel {
     // Private implementation of Map that delegates column get and put
     // operations to the underlying ResultSet, after setting the required
     // row index
-    private class ResultSetMap extends TreeMap<String,Object> {
+    // NOT SERIALIZABLE
+    @SuppressWarnings({"serial"})
+    private static class ResultSetMap extends TreeMap<String,Object> {
 
-        public ResultSetMap(Comparator<String> comparator) throws SQLException {
+        private ResultSetDataModel model;
+
+        public ResultSetMap(ResultSetDataModel model,
+                            Comparator<String> comparator) throws SQLException {
+
             super(comparator);
-            index = ResultSetDataModel.this.index;
-            resultSet.absolute(index + 1);
-            int n = metadata.getColumnCount();
+            this.model = model;
+            index = model.index;
+            model.resultSet.absolute(index + 1);
+            int n = model.metadata.getColumnCount();
             for (int i = 1; i <= n; i++) {
-                super.put(metadata.getColumnName(i),
-                          metadata.getColumnName(i));
+                super.put(model.metadata.getColumnName(i),
+                          model.metadata.getColumnName(i));
             }
         }
 
@@ -406,8 +417,8 @@ public class ResultSetDataModel extends DataModel {
                 return (null);
             }
             try {
-                resultSet.absolute(index + 1);
-                return (resultSet.getObject((String) realKey(key)));
+                model.resultSet.absolute(index + 1);
+                return (model.resultSet.getObject((String) realKey(key)));
             } catch (SQLException e) {
                 throw new FacesException(e);
             }
@@ -423,16 +434,16 @@ public class ResultSetDataModel extends DataModel {
             }
             
             try {
-                resultSet.absolute(index + 1);
-                Object previous = resultSet.getObject((String) realKey(key));
+                model.resultSet.absolute(index + 1);
+                Object previous = model.resultSet.getObject((String) realKey(key));
                 if ((previous == null) && (value == null)) {
                     return (previous);
                 } else if ((previous != null) && (value != null) &&
                            previous.equals(value)) {
                     return (previous);
                 }
-                resultSet.updateObject((String) realKey(key), value);
-                ResultSetDataModel.this.updated();
+                model.resultSet.updateObject((String) realKey(key), value);
+                model.updated();
                 return (previous);
             } catch (SQLException e) {
                 throw new FacesException(e);
@@ -460,6 +471,14 @@ public class ResultSetDataModel extends DataModel {
 
         Iterator<String> realKeys() {
             return (super.keySet().iterator());
+        }
+
+        private void writeObject(ObjectOutputStream out) throws IOException {
+            throw new NotSerializableException();
+        }
+
+        private void readObject(ObjectInputStream in) throws IOException {
+            throw new NotSerializableException();
         }
 
     }

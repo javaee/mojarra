@@ -161,6 +161,7 @@ public abstract class FacesContext {
             return defaultFacesContext.getPartialViewContext();
         }
         throw new UnsupportedOperationException();
+
     }
 
 
@@ -220,6 +221,7 @@ public abstract class FacesContext {
         throw new UnsupportedOperationException();
 
     }
+    
 
     /**
      * <p><span class="changed_modified_2_0">Return</span> the {@link

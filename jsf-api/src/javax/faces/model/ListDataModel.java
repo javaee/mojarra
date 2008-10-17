@@ -50,7 +50,7 @@ import javax.faces.FacesException;
  * {@link DataModel} that wraps an <code>List</code> of Java objects.</p>
  */
 
-public class ListDataModel extends DataModel {
+public class ListDataModel<E> extends DataModel<E> {
 
 
     // ------------------------------------------------------------ Constructors
@@ -73,7 +73,7 @@ public class ListDataModel extends DataModel {
      *
      * @param list List to be wrapped (if any)
      */
-    public ListDataModel(List list) {
+    public ListDataModel(List<E> list) {
 
         super();
         setWrappedData(list);
@@ -142,14 +142,14 @@ public class ListDataModel extends DataModel {
      * @throws IllegalArgumentException if now row data is available
      *  at the currently specified row index
      */
-    public Object getRowData() {
+    public E getRowData() {
 
         if (list == null) {
 	    return (null);
         } else if (!isRowAvailable()) {
             throw new NoRowAvailableException();
         } else {
-            return (list.get(index));
+            return ((E) list.get(index));
         }
 
     }

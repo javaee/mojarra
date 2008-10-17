@@ -102,9 +102,6 @@ public abstract class PartialViewContext {
     public static final String NO_PARTIAL_PHASE_CLIENT_IDS = "none";
 
 
-    @SuppressWarnings({"UnusedDeclaration"})
-    private PartialViewContext defaultPartialViewContext;
-
     // -------------------------------------------------------------- Properties
     
     /**

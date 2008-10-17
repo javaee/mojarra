@@ -41,15 +41,14 @@
 package javax.faces.model;
 
 
+import java.util.Iterator;
 import java.util.Map;
-import javax.faces.context.FacesContext;
-import javax.faces.model.DataModel;
-import javax.faces.model.DataModelEvent;
-import javax.faces.model.DataModelListener;
-import junit.framework.TestCase;
+import java.util.NoSuchElementException;
+import java.lang.reflect.Method;
+
 import junit.framework.Test;
+import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import com.sun.org.apache.commons.beanutils.PropertyUtils;
 
 
 /**
@@ -143,14 +142,14 @@ public abstract class DataModelTestCaseBase extends TestCase {
             model.addDataModelListener(null);
             fail("Should have thrown NullPointerException");
         } catch (NullPointerException e) {
-            ; // Expected result
+            // Expected result
         }
 
         try {
             model.removeDataModelListener(null);
             fail("Should have thrown NullPointerException");
         } catch (NullPointerException e) {
-            ; // Expected result
+            // Expected result
         }
 
 
@@ -168,7 +167,7 @@ public abstract class DataModelTestCaseBase extends TestCase {
         int n = model.getRowCount();
         for (int i = 0; i < n; i++) {
             checkRow(i);
-            sb.append("/" + i);
+            sb.append("/").append(i);
         }
         assertEquals(sb.toString(), TestListener.trace());
 
@@ -186,7 +185,7 @@ public abstract class DataModelTestCaseBase extends TestCase {
         int n = model.getRowCount();
         for (int i = (n - 1); i >= 0; i--) {
             checkRow(i);
-            sb.append("/" + i);
+            sb.append("/").append(i);
         }
         assertEquals(sb.toString(), TestListener.trace());
 
@@ -279,25 +278,24 @@ public abstract class DataModelTestCaseBase extends TestCase {
                              bean.getBooleanProperty() ?
                              Boolean.TRUE : Boolean.FALSE);
         } else {
-            PropertyUtils.setSimpleProperty(data, "booleanProperty",
-                                            bean.getBooleanProperty() ?
-                                            Boolean.TRUE : Boolean.FALSE);
+            Method m = data.getClass().getMethod("setBooleanProperty", Boolean.TYPE);
+            m.invoke(data, bean.getBooleanProperty() ? Boolean.TRUE : Boolean.FALSE);
         }
         bean.setIntProperty(bean.getIntProperty() + 5);
         if (data instanceof Map) {
             ((Map) data).put("intProperty",
-                             new Integer(bean.getIntProperty()));
+                             bean.getIntProperty());
         } else {
-            PropertyUtils.setSimpleProperty(data, "intProperty",
-                                            new Integer(bean.getIntProperty()));
+            Method m = data.getClass().getMethod("setIntProperty", Integer.TYPE);
+            m.invoke(data, bean.getIntProperty());
         }
         bean.setStringProperty(bean.getStringProperty() + "XYZ");
         if (data instanceof Map) {
             ((Map) data).put("stringProperty",
                              bean.getStringProperty() + "XYZ");
         } else {
-            PropertyUtils.setSimpleProperty(data, "stringProperty",
-                                            bean.getStringProperty());
+            Method m = data.getClass().getMethod("setStringProperty", String.class);
+            m.invoke(data, bean.getStringProperty());
         }
 
         // Ensure that all the modifications flowed through to beans[0]
@@ -335,7 +333,31 @@ public abstract class DataModelTestCaseBase extends TestCase {
             model.setRowIndex(-2);
             fail("Should have thrown IllegalArgumentException");
         } catch (IllegalArgumentException e) {
-            ; // Expected result
+            // Expected result
+        }
+
+    }
+
+    public void testIterator() {
+
+        Iterator iterator = model.iterator();
+        if (!(model instanceof ScalarDataModel)) {
+            for (int i = 0; i < 5; i++) {
+                System.out.println("Index: " + i);
+                assertTrue(iterator.hasNext());
+                assertNotNull(iterator.next());
+            }
+        } else {
+            assertTrue(iterator.hasNext());
+            assertNotNull(iterator.next());
+        }
+
+        assertTrue(!iterator.hasNext());
+        try {
+            iterator.next();
+            assertTrue(false);
+        } catch (NoSuchElementException nsee) {
+            // expected
         }
 
     }

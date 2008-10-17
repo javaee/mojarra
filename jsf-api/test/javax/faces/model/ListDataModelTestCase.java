@@ -43,11 +43,7 @@ package javax.faces.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.faces.context.FacesContext;
-import javax.faces.model.DataModel;
-import javax.faces.model.DataModelEvent;
-import javax.faces.model.DataModelListener;
-import junit.framework.TestCase;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -83,13 +79,13 @@ public class ListDataModelTestCase extends DataModelTestCaseBase {
     // Set up instance variables required by this test case.
     public void setUp() throws Exception {
 
-        List list = new ArrayList();
+        List<TestBean> list = new ArrayList<TestBean>();
         for (int i = 0; i < 5; i++) {
             list.add(new TestBean());
         }
-        beans = (TestBean[]) list.toArray(new TestBean[5]);
+        beans = list.toArray(new TestBean[5]);
         configure();
-        model = new ListDataModel(list);
+        model = new ListDataModel<TestBean>(list);
         super.setUp();
 
     }

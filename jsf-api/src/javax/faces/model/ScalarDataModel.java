@@ -49,7 +49,7 @@ import javax.faces.FacesException;
  * {@link DataModel} that wraps an individual Java object.</p>
  */
 
-public class ScalarDataModel extends DataModel {
+public class ScalarDataModel<E> extends DataModel<E> {
 
 
     // ------------------------------------------------------------ Constructors
@@ -72,7 +72,7 @@ public class ScalarDataModel extends DataModel {
      *
      * @param scalar Scalar to be wrapped (if any)
      */
-    public ScalarDataModel(Object scalar) {
+    public ScalarDataModel(E scalar) {
 
         super();
         setWrappedData(scalar);
@@ -88,7 +88,7 @@ public class ScalarDataModel extends DataModel {
 
 
     // The scalar we are wrapping
-    private Object scalar;
+    private E scalar;
 
 
     // -------------------------------------------------------------- Properties
@@ -138,13 +138,14 @@ public class ScalarDataModel extends DataModel {
      * @throws IllegalArgumentException if now row data is available
      *  at the currently specified row index
      */
-    public Object getRowData() {
+    public E getRowData() {
 
         if (scalar == null) {
 	    return (null);
         } else if (!isRowAvailable()) {
             throw new NoRowAvailableException();
         } else {
+            //noinspection unchecked
             return (scalar);
         }
 
@@ -210,7 +211,7 @@ public class ScalarDataModel extends DataModel {
             scalar = null;
             setRowIndex(-1);
         } else {
-            scalar = data;
+            scalar = (E) data;
             index = -1;
             setRowIndex(0);
         }

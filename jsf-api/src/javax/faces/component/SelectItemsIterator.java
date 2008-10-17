@@ -73,6 +73,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
     public SelectItemsIterator(UIComponent parent) {
 
         kids = parent.getChildren().listIterator();
+        initializeItems();
 
     }
 
@@ -84,13 +85,19 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
      * <p>Iterator over the SelectItem elements pointed at by a
      * <code>UISelectItems</code> component, or <code>null</code>.</p>
      */
-    private Iterator<SelectItem> items = null;
+    private Iterator<SelectItem> items;
 
 
     /**
      * <p>Iterator over the children of the parent component.</p>
      */
-    private ListIterator<UIComponent> kids = null;
+    private ListIterator<UIComponent> kids;
+
+
+    /**
+     * 
+     */
+    private SingleElementIterator singleItemIterator;
 
 
     // -------------------------------------------------------- Iterator Methods
@@ -132,6 +139,27 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
         if (items != null) {
             return (items.next());
         }
+        initializeItems();
+        return next();
+
+    }
+
+
+    /**
+     * <p>Throw UnsupportedOperationException.</p>
+     */
+    public void remove() {
+
+        throw new UnsupportedOperationException();
+
+    }
+
+
+    // --------------------------------------------------------- Private Methods
+
+
+    private void initializeItems() {
+
         UIComponent kid = (UIComponent) findNextValidChild();
         if (kid instanceof UISelectItem) {
             UISelectItem ui = (UISelectItem) kid;
@@ -140,21 +168,21 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
                 item = new SelectItem(ui.getItemValue(),
                                       ui.getItemLabel(),
                                       ui.getItemDescription(),
-                                      ui.isItemDisabled(), 
+                                      ui.isItemDisabled(),
                                       ui.isItemEscaped());
             }
-            return (item);
+            updateSingeItemIterator(item);
+            items = singleItemIterator;
         } else if (kid instanceof UISelectItems) {
             UISelectItems ui = (UISelectItems) kid;
             Object value = ui.getValue();
             if (value instanceof SelectItem) {
-                return ((SelectItem)value);
+                updateSingeItemIterator((SelectItem) value);
+                items = singleItemIterator;
             } else if (value instanceof SelectItem[]) {
                 items = Arrays.asList((SelectItem[]) value).iterator();
-                return (next());
               } else if (value instanceof Collection) {
                 items = ((Collection) value).iterator();
-                return (next());
             } else if (value instanceof Map) {
                 List<SelectItem> list = new ArrayList<SelectItem>(((Map) value).size());
                 for (Iterator keys = ((Map) value).keySet().iterator();
@@ -174,27 +202,15 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
                 }
 
                 items = list.iterator();
-                return (next());
             } else {
                 throw new IllegalArgumentException();
             }
-        } else {
-            throw new NoSuchElementException();
-        }
-
-    }
-
-
-    /**
-     * <p>Throw UnsupportedOperationException.</p>
-     */
-    public void remove() {
-
-        throw new UnsupportedOperationException();
+        } 
 
     }
 
     private Object findNextValidChild() {
+
         if (kids.hasNext()) {
             Object next = kids.next();
             while (kids.hasNext() && !(next instanceof UISelectItem || next instanceof UISelectItems)) {
@@ -205,5 +221,48 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
             }
         }
         return null;
+
+    }
+
+
+    private void updateSingeItemIterator(SelectItem item) {
+
+        if (singleItemIterator == null) {
+            singleItemIterator = new SingleElementIterator();
+        }
+        singleItemIterator.updateItem(item);
+
+    }
+
+
+    // ---------------------------------------------------------- Nested Classes
+
+
+    private static final class SingleElementIterator implements Iterator<SelectItem> {
+
+        private SelectItem item;
+        private boolean nextCalled;
+
+        public boolean hasNext() {
+            return !nextCalled;
+        }
+
+        public SelectItem next() {
+            if (nextCalled) {
+                throw new NoSuchElementException();
+            }
+            nextCalled = true;
+            return item;
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+
+        public void updateItem(SelectItem item) {
+            this.item = item;
+            nextCalled = false;
+        }
+
     }
 }

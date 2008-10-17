@@ -75,7 +75,6 @@ public class PartialViewContextImpl extends PartialViewContext {
     private List<String> renderPhaseClientIds;
     private OnOffResponseWrapper onOffResponse = null;
     private Boolean ajaxRequest;
-    private Boolean partialRequest;
     private Boolean renderAll;
 
     // ----------------------------------------------------------- Constructors
@@ -261,7 +260,6 @@ public class PartialViewContextImpl extends PartialViewContext {
         
         released = true;
         ajaxRequest = null;
-        partialRequest = null;
         renderAll = null;
         partialResponseWriter = null;
         executePhaseClientIds = null;

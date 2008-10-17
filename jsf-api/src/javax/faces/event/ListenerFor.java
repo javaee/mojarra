@@ -9,6 +9,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.lang.annotation.Inherited;
 
 /**
  * <p class="changed_added_2_0">Classes tagged with this annotation are
@@ -119,13 +120,16 @@ import java.lang.annotation.Target;
 
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target(value=ElementType.TYPE)
+@Inherited
 public @interface ListenerFor {
 
     /**
      * <p class="changed_added_2_0">The kind of system event for which
      * this class will be installed as a listener.  The implementation
      * only supports exact matches on the <code>Class</code> and must
-     * not honor subclass relationships.</p>
+     * not honor subclass relationships.  It is valid to have EL
+     * Expressions in the value of this attribute, as long as the
+     * expression resolves to an instance of the expected type.</p>
      */
 
     public Class<? extends SystemEvent> systemEventClass();
@@ -134,7 +138,9 @@ public @interface ListenerFor {
     /**
      * <p class="changed_added_2_0">The kind of object that emits events
      * of the type given by the value of the {@link #systemEventClass}
-     * attribute.</p>
+     * attribute.  It is valid to have EL Expressions in the value of
+     * this attribute, as long as the expression resolves to an instance
+     * of the expected type.</p>
      */ 
     public Class sourceClass() default Void.class;
 
