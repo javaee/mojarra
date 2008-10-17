@@ -65,6 +65,7 @@ import java.util.ResourceBundle;
 import javax.faces.FacesException;
 
 import javax.faces.application.Application;
+import javax.faces.application.ApplicationWrapper;
 
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.ResourceHandler;
@@ -100,11 +101,15 @@ import javax.el.ExpressionFactory;
 import javax.el.ELException;
 import javax.el.ELResolver;
 
-public class NewApplication extends Application {
+public class NewApplication extends ApplicationWrapper {
 
     
 
     private Application oldApp = null;
+
+    public Application getWrapped() {
+	return oldApp;
+    }
 
 
 

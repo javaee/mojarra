@@ -758,6 +758,65 @@
             </deferred-value>
         </attribute>
 
+        <attribute>
+            <description>
+                RELEASE_PENDING (edburns, rogerk) documentation
+            </description>
+            <name>var</name>
+            <type>java.lang.String</type>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>
+                RELEASE_PENDING (edburns, rogerk) documentation
+            </description>
+            <name>itemValue</name>
+            <deferred-value>
+                <type>java.lang.Object</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                RELEASE_PENDING (edburns, rogerk) documentation
+            </description>
+            <name>itemLabel</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                RELEASE_PENDING (edburns, rogerk) documentation
+            </description>
+            <name>itemDescription</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                RELEASE_PENDING (edburns, rogerk) documentation
+            </description>
+            <name>itemDisabled</name>
+            <deferred-value>
+                <type>java.lang.Boolean</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                RELEASE_PENDING (edburns, rogerk) documentation
+            </description>
+            <name>itemLabelEscaped</name>
+            <deferred-value>
+                <type>java.lang.Boolean</type>
+            </deferred-value>
+        </attribute>
     </tag>
 
     <tag>

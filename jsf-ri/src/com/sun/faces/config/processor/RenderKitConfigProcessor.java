@@ -59,6 +59,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.text.MessageFormat;
+import javax.faces.context.FacesContext;
 
 /**
  * <p>
@@ -191,7 +192,9 @@ public class RenderKitConfigProcessor extends AbstractConfigProcessor {
 
             RenderKit rk = rkf.getRenderKit(null, rkId);
             if (rk == null && rkClass != null) {
-                rk = (RenderKit) createInstance(rkClass, RenderKit.class, null, renderKit);
+                RenderKit previous = rkf.getRenderKit(FacesContext.getCurrentInstance(), 
+                        rkId);
+                rk = (RenderKit) createInstance(rkClass, RenderKit.class, previous, renderKit);
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.log(Level.FINE,
                                MessageFormat.format(

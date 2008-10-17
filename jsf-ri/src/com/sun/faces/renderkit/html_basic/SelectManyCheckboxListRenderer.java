@@ -48,7 +48,7 @@
 package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Iterator;
 
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
@@ -111,66 +111,66 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
 
         renderBeginText(component, border, alignVertical, context, true);
 
-        List<SelectItem> items = RenderKitUtils.getSelectItems(context, component);
+        Iterator<SelectItem> items =
+              RenderKitUtils.getSelectItems(context, component);
 
-        if (!items.isEmpty()) {
-            Object currentSelections = getCurrentSelectedValues(component);
-            Object[] submittedValues = getSubmittedSelectedValues(component);
-            int idx = -1;
-            for (SelectItem curItem : items) {
-                idx++;
-                // If we come across a group of options, render them as a nested
-                // table.
-                if (curItem instanceof SelectItemGroup) {
-                    // write out the label for the group.
-                    if (curItem.getLabel() != null) {
-                        if (alignVertical) {
-                            writer.startElement("tr", component);
-                        }
-                        writer.startElement("td", component);
-                        writer.writeText(curItem.getLabel(), component, "label");
-                        writer.endElement("td");
-                        if (alignVertical) {
-                            writer.endElement("tr");
-                        }
-
-                    }
+        Object currentSelections = getCurrentSelectedValues(component);
+        Object[] submittedValues = getSubmittedSelectedValues(component);
+        int idx = -1;
+        while (items.hasNext()) {
+            SelectItem curItem = items.next();
+            idx++;
+            // If we come across a group of options, render them as a nested
+            // table.
+            if (curItem instanceof SelectItemGroup) {
+                // write out the label for the group.
+                if (curItem.getLabel() != null) {
                     if (alignVertical) {
                         writer.startElement("tr", component);
                     }
                     writer.startElement("td", component);
-                    writer.writeText("\n", component, null);
-                    renderBeginText(component, 0, alignVertical,
-                                    context, false);
-                    // render options of this group.
-                    SelectItem[] itemsArray =
-                          ((SelectItemGroup) curItem).getSelectItems();
-                    for (int i = 0; i < itemsArray.length; ++i) {
-                        renderOption(context,
-                                     component,
-                                     converter,
-                                     itemsArray[i],
-                                     currentSelections,
-                                     submittedValues,
-                                     alignVertical,
-                                     i);
-                    }
-                    renderEndText(component, alignVertical, context);
+                    writer.writeText(curItem.getLabel(), component, "label");
                     writer.endElement("td");
                     if (alignVertical) {
                         writer.endElement("tr");
-                        writer.writeText("\n", component, null);
                     }
-                } else {
+
+                }
+                if (alignVertical) {
+                    writer.startElement("tr", component);
+                }
+                writer.startElement("td", component);
+                writer.writeText("\n", component, null);
+                renderBeginText(component, 0, alignVertical,
+                                context, false);
+                // render options of this group.
+                SelectItem[] itemsArray =
+                      ((SelectItemGroup) curItem).getSelectItems();
+                for (int i = 0; i < itemsArray.length; ++i) {
                     renderOption(context,
                                  component,
                                  converter,
-                                 curItem,
+                                 itemsArray[i],
                                  currentSelections,
                                  submittedValues,
                                  alignVertical,
-                                 idx);
+                                 i);
                 }
+                renderEndText(component, alignVertical, context);
+                writer.endElement("td");
+                if (alignVertical) {
+                    writer.endElement("tr");
+                    writer.writeText("\n", component, null);
+                }
+            } else {
+                renderOption(context,
+                             component,
+                             converter,
+                             curItem,
+                             currentSelections,
+                             submittedValues,
+                             alignVertical,
+                             idx);
             }
         }
 

@@ -52,71 +52,100 @@ import javax.faces.webapp.UIComponentELTag;
 
 public class SelectItemsTag extends UIComponentELTag {
 
-    //
-    // Protected Constants
-    //
-
-    //
-    // Class Variables
-    //
-
-    //
-    // Instance Variables
-    //
     private ValueExpression value;
+    private String var;
+    private ValueExpression itemValue;
+    private ValueExpression itemLabel;
+    private ValueExpression itemDescription;
+    private ValueExpression itemDisabled;
+    private ValueExpression itemLabelEscaped;
+    
 
-    // Attribute Instance Variables
+    // ---------------------------------------------------------- Tag Attributes
 
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Initializers    
-    //
-
-    public SelectItemsTag() {
-        super();
-    }
-
-    //
-    // Class methods
-    //
-
-    // 
-    // Accessors
-    //
 
     public void setValue(ValueExpression value) {
         this.value = value;
     }
 
+    public void setVar(String var) {
+        this.var = var;
+    }
 
-    //
-    // General Methods
-    //
+    public void setItemValue(ValueExpression itemValue) {
+        this.itemValue = itemValue;
+    }
+
+    public void setItemLabel(ValueExpression itemLabel) {
+        this.itemLabel = itemLabel;
+    }
+
+    public void setItemDescription(ValueExpression itemDescription) {
+        this.itemDescription = itemDescription;
+    }
+
+    public void setItemDisabled(ValueExpression itemDisabled) {
+        this.itemDisabled = itemDisabled;
+    }
+
+    public void setItemLabelEscaped(ValueExpression itemLabelEscaped) {
+        this.itemLabelEscaped = itemLabelEscaped;
+    }
+
+    
+    // ----------------------------------------- Methods from UIComponentTagBase
+
+
+    /**
+     * @see javax.faces.webapp.UIComponentELTag#getRendererType()
+     */
     public String getRendererType() {
         return null;
     }
 
 
+    /**
+     * @see javax.faces.webapp.UIComponentELTag#getComponentType()
+     * @see javax.faces.component.UISelectItems#COMPONENT_TYPE
+     */
     public String getComponentType() {
-        return "javax.faces.SelectItems";
+        return UISelectItems.COMPONENT_TYPE;
     }
 
 
-    //
-    // Methods from BaseComponentTag
-    //
+    // ------------------------------------------- Methods from UIComponentELTag
+
+
+    /**
+     * @see javax.faces.webapp.UIComponentELTag#setProperties(javax.faces.component.UIComponent)
+     * @param component
+     */
+    @Override
     protected void setProperties(UIComponent component) {
         super.setProperties(component);
-        
-        if (null != value) {
-            if (!value.isLiteralText()) {
-                component.setValueExpression("value", value);
-            } else {
-                ((UISelectItems) component).setValue(
-                    value.getExpressionString());
-            }
+
+        if (value != null) {
+            component.setValueExpression("value", value);
         }
+        if (var != null) {
+            component.getAttributes().put("var", var);
+        }
+        if (itemValue != null) {
+            component.setValueExpression("itemValue", value);
+        }
+        if (itemLabel != null) {
+            component.setValueExpression("itemLabel", itemLabel);
+        }
+        if (itemDescription != null) {
+            component.setValueExpression("itemDescription", itemDescription);
+        }
+        if (itemDisabled != null) {
+            component.setValueExpression("itemDisabled", itemDisabled);
+        }
+        if (itemLabelEscaped != null) {
+            component.setValueExpression("itemLabelEscaped", itemLabelEscaped);
+        }
+
     }
 
 } // end of class SelectItemsTag

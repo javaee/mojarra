@@ -144,7 +144,7 @@ public class UISelectOne extends UIInput {
         boolean found = SelectUtils.matchValue(getFacesContext(),
                                                this,
                                                value,
-                                               new SelectItemsIterator(this),
+                                               new SelectItemsIterator(context, this),
                                                getConverter());
 
         // Enqueue an error message if an invalid value was specified

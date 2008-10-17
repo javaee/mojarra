@@ -64,6 +64,11 @@ import java.util.Map;
 import java.util.Iterator;
 
 
+
+// ------------------------------------------------------------- Private Classes
+
+
+// Private class to represent saved state information
 /**
  * <p><strong>UIData</strong> is a {@link UIComponent} that supports data
  * binding to a collection of data objects represented by a {@link DataModel}
@@ -950,6 +955,75 @@ public class UIData extends UIComponentBase
 
     }
 
+    @Override
+    public void doTreeTraversal(FacesContext context, ContextCallback contextCallback) {
+        /******* PENDING(edburns) this is disabled until we fix UIData StateSaving
+        processFacets(context, contextCallback);
+        processColumnFacets(context, contextCallback);
+        processColumnChildren(context, contextCallback);
+        ***********/
+    }
+
+    private void processFacets(FacesContext context, ContextCallback contextCallback) {
+        Iterator<UIComponent> it = getFacets().values().iterator();
+
+        while (it.hasNext()) {
+            it.next().doTreeTraversal(context, contextCallback);
+        }
+    }
+
+    private void processColumnFacets(FacesContext context, 
+            ContextCallback contextCallback) {
+        Iterator<UIComponent> childIter = getChildren().iterator();
+
+        while (childIter.hasNext()) {
+            UIComponent child = childIter.next();
+            if (child instanceof UIColumn) {
+                if (!child.isRendered()) {
+                    continue;
+                }
+
+                Iterator<UIComponent> facetsIter = child.getFacets().values().iterator();
+                while (facetsIter.hasNext()) {
+                    facetsIter.next().doTreeTraversal(context, contextCallback);
+                }
+            }
+        }
+    }
+
+    private void processColumnChildren(FacesContext context,
+            ContextCallback contextCallback) {
+        int first = getFirst();
+        int rows = getRows();
+        int last;
+        if (rows == 0) {
+            last = getRowCount();
+        }
+        else {
+            last = first + rows;
+        }
+        for (int rowIndex = first; last==-1 || rowIndex < last; rowIndex++) {
+            setRowIndex(rowIndex);
+
+            if (!isRowAvailable())
+                break;
+
+            Iterator<UIComponent> it = getChildren().iterator();
+
+            while ( it.hasNext()) {
+                UIComponent child = it.next();
+                if (child instanceof UIColumn) {
+                    if (!child.isRendered()) {
+                        continue;
+                    }
+                    Iterator<UIComponent> columnChildIter = child.getChildren().iterator();
+                    while ( columnChildIter.hasNext()) {
+                        columnChildIter.next().doTreeTraversal(context, contextCallback);
+                    }
+                }
+            }
+        }
+    }
 
     /**
      * <p>In addition to the default behavior, ensure that any saved per-row
@@ -1463,11 +1537,6 @@ public class UIData extends UIComponentBase
     }
 
 }
-
-// ------------------------------------------------------------- Private Classes
-
-
-// Private class to represent saved state information
 @SuppressWarnings({"SerializableHasSerializationMethods",
       "NonSerializableFieldInSerializableClass"})
 class SavedState implements Serializable {

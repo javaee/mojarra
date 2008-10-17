@@ -81,6 +81,7 @@ import javax.faces.model.SelectItemGroup;
 import javax.faces.FacesException;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.MessageUtils;
@@ -743,9 +744,9 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     }
 
 
-    protected void renderOptions(FacesContext context,
-                                 UIComponent component,
-                                 List<SelectItem> items)
+    protected int renderOptions(FacesContext context,
+                                UIComponent component,
+                                Iterator<SelectItem> items)
     throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
@@ -755,50 +756,53 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         if(component instanceof ValueHolder) {
             converter = ((ValueHolder)component).getConverter();
         }
-
-        if (!items.isEmpty()) {
-            Object currentSelections = getCurrentSelectedValues(component);
-            Object[] submittedValues = getSubmittedSelectedValues(component);
-            RequestStateManager.set(context,
+        int count = 0;
+        Object currentSelections = getCurrentSelectedValues(component);
+        Object[] submittedValues = getSubmittedSelectedValues(component);
+        RequestStateManager.set(context,
                                 RequestStateManager.TARGET_COMPONENT_ATTRIBUTE_NAME,
                                 component);
-            for (SelectItem item : items) {
-                if (item instanceof SelectItemGroup) {
-                    // render OPTGROUP
-                    writer.startElement("optgroup", component);
-                    writer.writeAttribute("label", item.getLabel(), "label");
+        while (items.hasNext()) {
+            SelectItem item = items.next();
+            count++;
+            if (item instanceof SelectItemGroup) {
+                // render OPTGROUP
+                writer.startElement("optgroup", component);
+                writer.writeAttribute("label", item.getLabel(), "label");
 
-                    // if the component is disabled, "disabled" attribute would be rendered
-                    // on "select" tag, so don't render "disabled" on every option.
-                    boolean componentDisabled =
-                          Boolean.TRUE.equals(component.getAttributes().get("disabled"));
-                    if ((!componentDisabled) && item.isDisabled()) {
-                        writer.writeAttribute("disabled", true, "disabled");
-                    }
+                // if the component is disabled, "disabled" attribute would be rendered
+                // on "select" tag, so don't render "disabled" on every option.
+                boolean componentDisabled =
+                      Boolean.TRUE
+                            .equals(component.getAttributes().get("disabled"));
+                if ((!componentDisabled) && item.isDisabled()) {
+                    writer.writeAttribute("disabled", true, "disabled");
+                }
 
-
-                    // render options of this group.
-                    SelectItem[] itemsArray =
-                          ((SelectItemGroup) item).getSelectItems();
-                    for (int i = 0; i < itemsArray.length; ++i) {
-                        renderOption(context,
-                                     component,
-                                     converter,
-                                     itemsArray[i],
-                                     currentSelections,
-                                     submittedValues);
-                    }
-                    writer.endElement("optgroup");
-                } else {
+                // render options of this group.
+                SelectItem[] itemsArray =
+                      ((SelectItemGroup) item).getSelectItems();
+                for (int i = 0; i < itemsArray.length; ++i) {
                     renderOption(context,
                                  component,
                                  converter,
-                                 item,
+                                 itemsArray[i],
                                  currentSelections,
                                  submittedValues);
                 }
+                count += itemsArray.length;
+                writer.endElement("optgroup");
+            } else {
+                renderOption(context,
+                             component,
+                             converter,
+                             item,
+                             currentSelections,
+                             submittedValues);
             }
         }
+
+        return count;
 
     }
 
@@ -832,15 +836,18 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         // Determine how many option(s) we need to render, and update
         // the component's "size" attribute accordingly;  The "size"
         // attribute will be rendered as one of the "pass thru" attributes
-        List<SelectItem> items = RenderKitUtils.getSelectItems(context, component);
-        int itemCount = getOptionNumber(items);
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("Rendering " + itemCount + " options");
-        }
+        Iterator<SelectItem> items = RenderKitUtils.getSelectItems(context, component);
+
+        // render the options to a buffer now so that we can determine
+        // the size
+        FastStringWriter bufferedWriter = new FastStringWriter(128);
+        context.setResponseWriter(writer.cloneWithWriter(bufferedWriter));
+        int count = renderOptions(context, component, items);
+        context.setResponseWriter(writer);
         // If "size" is *not* set explicitly, we have to default it correctly
         Integer size = (Integer) component.getAttributes().get("size");
         if (size == null || size == Integer.MIN_VALUE) {
-            size = itemCount;
+            size = count;
         }
         writeDefaultSize(writer, size);
 
@@ -849,8 +856,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                                                 ATTRIBUTES);
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer,
                                                          component);
-        // Now, render the "options" portion...
-        renderOptions(context, component, items);
+        // Now, write the buffered option content
+        writer.write(bufferedWriter.toString());
 
         writer.endElement("select");
 

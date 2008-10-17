@@ -48,6 +48,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.el.ValueBinding;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
+import javax.faces.model.ListDataModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,6 +59,7 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.NoSuchElementException;
 
 
 /**
@@ -152,7 +154,6 @@ public class UISelectManyTestCase extends UIInputTestCase {
     public void testPropertiesInvalid() throws Exception {
 
         super.testPropertiesInvalid();
-        UISelectMany selectMany = (UISelectMany) component;
 
     }
 
@@ -247,7 +248,7 @@ public class UISelectManyTestCase extends UIInputTestCase {
         root.getChildren().add(component);
 
         // Add valid options to the component under test
-        Map map = new HashMap();
+        Map<String,String> map = new HashMap<String,String>();
         map.put("key_foo", "foo");
         map.put("key_bar", "bar");
         map.put("key_baz", "baz");
@@ -340,25 +341,6 @@ public class UISelectManyTestCase extends UIInputTestCase {
         selectMany.setValid(true);
         selectMany.setSubmittedValue(new String[] { "bar", "car" });
         selectMany.setRendererType(null); // We don't have any renderers
-        selectMany.validate(facesContext);
-        assertTrue(!selectMany.isValid());
-
-    }
-
-
-    public void testEmptySelectItems() {
-
-        UIViewRoot root = facesContext.getApplication().getViewHandler()
-              .createView(facesContext, null);
-        root.getChildren().add(component);
-
-        UISelectItems items = new UISelectItems();
-        items.setValue(Collections.emptyList());
-        UISelectMany selectMany = (UISelectMany) component;
-        selectMany.getChildren().add(items);
-
-        selectMany.setValue(true);
-        selectMany.setSubmittedValue(new String[] { "bar" });
         selectMany.validate(facesContext);
         assertTrue(!selectMany.isValid());
 
@@ -551,7 +533,7 @@ public class UISelectManyTestCase extends UIInputTestCase {
         param.setValue("paramValue");
         selectMany.getChildren().add(param);
         selectMany.getChildren().add(new UISelectItemSub("esposito", null, null));
-        Iterator iter = new SelectItemsIterator(selectMany);
+        Iterator<SelectItem> iter = new SelectItemsIterator(facesContext, selectMany);
         while (iter.hasNext()) {
             Object object = iter.next();
             assertTrue(object instanceof javax.faces.model.SelectItem);
@@ -564,13 +546,95 @@ public class UISelectManyTestCase extends UIInputTestCase {
         selectMany.getChildren().add(new UISelectItemSub("gretsky", null, null));
         selectMany.getChildren().add(param);
         selectMany.getChildren().add(new UISelectItemSub("howe", null, null));
-        iter = new SelectItemsIterator(selectMany);
+        iter = new SelectItemsIterator(facesContext, selectMany);
         while (iter.hasNext()) {
             Object object = iter.next();
             assertTrue(object instanceof javax.faces.model.SelectItem);
             assertTrue((((SelectItem)object).getValue().equals("gretsky")) ||
                 (((SelectItem)object).getValue().equals("howe")));
         }
+
+        // sub test 3: Empty collection
+        selectMany = new UISelectMany();
+        UISelectItems items = new UISelectItems();
+        items.setValue(Collections.emptyList());
+        selectMany.getChildren().add(items);
+        iter = new SelectItemsIterator(facesContext, selectMany);
+        assertTrue(!iter.hasNext());
+        try {
+            iter.next();
+            assertTrue(false);
+        } catch (NoSuchElementException nsee) {
+            // expected
+        }
+
+
+        // sub test 4: items exposed as generic collection of non-SelectItem
+        //             instances
+        Collection<Integer> cItems = new ArrayList<Integer>(5);
+        Collections.addAll(cItems, 0, 1, 2, 3, 4);
+        selectMany = new UISelectMany();
+        items = new UISelectItems();
+        items.setValue(cItems);
+        selectMany.getChildren().add(items);
+        iter = new SelectItemsIterator(facesContext, selectMany);
+        SelectItem previous = null;
+        for (int i = 0, len = cItems.size(); i < len; i++) {
+            assertTrue(iter.hasNext());
+            SelectItem item = iter.next();
+            assertNotNull(item);
+            assertEquals(i, item.getValue());
+            assertEquals(Integer.toString(i), item.getLabel());
+            assertNull(item.getDescription());
+            assertFalse(item.isDisabled());
+            assertFalse(item.isEscape());
+            if (previous != null) {
+                // using fly-weight pattern make sure we use the same
+                // instance through out the iteration
+                assertTrue(item == previous);
+            }
+            previous = item;
+        }
+        assertFalse(iter.hasNext());
+        try {
+            iter.next();
+            assertTrue(false);
+        } catch (NoSuchElementException nsee) {
+            // expected
+        }
+
+        // sub-test 5: DataModel providing the instances to produce
+        //             SelectItems from
+        selectMany = new UISelectMany();
+        items = new UISelectItems();
+        items.setValue(new ListDataModel<Integer>((List<Integer>) cItems));
+        selectMany.getChildren().add(items);
+        iter = new SelectItemsIterator(facesContext, selectMany);
+        previous = null;
+        for (int i = 0, len = cItems.size(); i < len; i++) {
+            assertTrue(iter.hasNext());
+            SelectItem item = iter.next();
+            assertNotNull(item);
+            assertEquals(i, item.getValue());
+            assertEquals(Integer.toString(i), item.getLabel());
+            assertNull(item.getDescription());
+            assertFalse(item.isDisabled());
+            assertFalse(item.isEscape());
+            if (previous != null) {
+                // using fly-weight pattern make sure we use the same
+                // instance through out the iteration
+                assertTrue(item == previous);
+            }
+            previous = item;
+        }
+        assertFalse(iter.hasNext());
+        try {
+            iter.next();
+            assertTrue(false);
+        } catch (NoSuchElementException nsee) {
+            // expected
+        }
+
 
     }
 
@@ -613,6 +677,7 @@ public class UISelectManyTestCase extends UIInputTestCase {
               subgroup,
               new SelectItem("B2"),
               new SelectItem("B3") });
+        
         options.add(group);
         options.add(new SelectItem("A2"));
         options.add(new SelectItem("A3"));
@@ -627,7 +692,7 @@ public class UISelectManyTestCase extends UIInputTestCase {
             { new SelectItem("C1"),
               new SelectItem("C2"),
               new SelectItem("C3") });
-        Set options = new HashSet();
+        Set<SelectItem> options = new HashSet<SelectItem>();
         options.add(new SelectItem("A1"));
         group = new SelectItemGroup("Group B");
         group.setSelectItems(new SelectItem[]

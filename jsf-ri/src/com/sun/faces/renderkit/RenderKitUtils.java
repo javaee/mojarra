@@ -45,12 +45,11 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.math.BigDecimal;
@@ -61,7 +60,6 @@ import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentBase;
-import javax.faces.component.UISelectItem;
 import javax.faces.component.UISelectItems;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -76,10 +74,11 @@ import com.sun.faces.config.WebConfiguration;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.renderkit.html_basic.HtmlBasicRenderer.Param;
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
 import javax.faces.component.UIForm;
+import javax.el.ValueExpression;
+import javax.el.ELContext;
 
 /**
  * <p>A set of utilities for use in {@link RenderKit}s.</p>
@@ -261,87 +260,16 @@ public class RenderKitUtils {
      *                                  is <code>null</code>
      * @return a List of the select items for the specified component
      */
-    public static List<SelectItem> getSelectItems(FacesContext context,
-                                                  UIComponent component) {
+    public static Iterator<SelectItem> getSelectItems(FacesContext context,
+                                                     UIComponent component) {
 
-        if (context == null) {
-            throw new IllegalArgumentException(
-                MessageUtils.getExceptionMessageString(
-                    MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
-        }
+        Util.notNull("context", context);
+        Util.notNull("component", component);
 
-        ArrayList<SelectItem> list = new ArrayList<SelectItem>();
-        for (UIComponent kid : component.getChildren()) {
-            if (kid instanceof UISelectItem) {
-                UISelectItem item = (UISelectItem) kid;
-                Object value = item.getValue();
-
-                if (value == null) {
-                    list.add(new SelectItem(item.getItemValue(),
-                                            item.getItemLabel(),
-                                            item.getItemDescription(),
-                                            item.isItemDisabled(),
-                                            item.isItemEscaped()));
-                } else if (value instanceof SelectItem) {
-                    list.add((SelectItem) value);
-                } else {
-                    throw new IllegalArgumentException(
-                        MessageUtils.getExceptionMessageString(
-                            MessageUtils.VALUE_NOT_SELECT_ITEM_ID,
-                            component.getId(),
-                            value.getClass().getName()));
-                }
-            } else if (kid instanceof UISelectItems) {
-                Object value = ((UISelectItems) kid).getValue();
-                if (value instanceof SelectItem) {
-                    list.add((SelectItem) value);
-                } else if (value instanceof SelectItem[]) {
-                    SelectItem[] items = (SelectItem[]) value;
-                    // we manually copy the elements so that the list is
-                    // modifiable.  Arrays.asList() returns a non-mutable
-                    // list.
-                    //noinspection ManualArrayToCollectionCopy
-                    for (SelectItem item : items) {
-                        list.add(item);
-                    }
-                } else if (value instanceof Collection) {
-                    for (Object element : ((Collection) value)) {
-                        if (SelectItem.class.isInstance(element)) {
-                            list.add((SelectItem) element);
-                        } else {
-                            throw new IllegalArgumentException(
-                                  MessageUtils.getExceptionMessageString(
-                                        MessageUtils.VALUE_NOT_SELECT_ITEM_ID,
-                                        component.getId(),
-                                        value.getClass().getName()));
-                        }
-                    }
-                } else if (value instanceof Map) {
-                    Map optionMap = (Map) value;
-                    for (Object o : optionMap.entrySet()) {
-                        Entry entry = (Entry) o;
-                        Object key = entry.getKey();
-                        Object val = entry.getValue();
-                        if (key == null || val == null) {
-                            continue;
-                        }
-                        list.add(new SelectItem(val,
-                                                key.toString()));
-                    }
-                } else {
-                    throw new IllegalArgumentException(
-                          MessageUtils.getExceptionMessageString(
-                            MessageUtils.CHILD_NOT_OF_EXPECTED_TYPE_ID,
-                            "UISelectItem/UISelectItems",
-                            component.getFamily(),
-                            component.getId(),
-                            value != null ? value.getClass().getName() : "null"));
-                }
-            }
-        }
-        return (list);
-
+        return new SelectItemsIterator(context, component);
+        
     }
+
 
 
     /**
@@ -503,6 +431,104 @@ public class RenderKitUtils {
 
 
     // --------------------------------------------------------- Private Methods
+
+
+    /**
+     * <p>
+     * Fill <code>destination</code> with the <code>SelectItem</code> instances from
+     * <code>source</code>
+     * </p>
+     * @param destination the destination <code>List</code>
+     * @param source the source array
+     */
+    private static void fill(List<SelectItem> destination, SelectItem[] source) {
+
+        // we manually copy the elements so that the list is
+        // modifiable.  Arrays.asList() returns a non-mutable
+        // list.
+        //noinspection ManualArrayToCollectionCopy
+        for (SelectItem item : source) {
+            destination.add(item);
+        }
+
+    }
+
+
+    /**
+     * <p>
+     * Fill <code>destination</code> by creating <code>SelectItem</code>
+     * instances from the key/value pairs from <code>source</code>
+     * @param destination the destination <code>List</code>
+     * @param source the source <code>Map</code>
+     */
+    private static void fill(List<SelectItem> destination,
+                             Map<Object, Object> source) {
+
+        for (Map.Entry entry : source.entrySet()) {
+            Object key = entry.getKey();
+            Object val = entry.getValue();
+            if (val == null) {
+                val = key.toString();
+            }
+            if (key == null) {
+                continue;
+            }
+            destination.add(new SelectItem(val, key.toString()));
+        }
+
+    }
+
+
+    private static void fill(FacesContext ctx,
+                             List<SelectItem> destination,
+                             Collection<?> source,
+                             UISelectItems selectItems) {
+
+        Map<String,Object> attributes = selectItems.getAttributes();
+        Map<String,Object> requestMap = ctx.getExternalContext().getRequestMap();
+        String var = (String) attributes.get("var");
+        ValueExpression itemValue =
+              selectItems.getValueExpression("itemValue");
+        ValueExpression itemLabel =
+              selectItems.getValueExpression("itemLabel");
+        ValueExpression itemDescription =
+              selectItems.getValueExpression("itemDescription");
+        ValueExpression itemEscaped =
+              selectItems.getValueExpression("itemEscaped");
+        ValueExpression itemDisabled =
+              selectItems.getValueExpression("itemDisabled");
+        for (Object o : source) {
+            if (o instanceof SelectItem) {
+                destination.add((SelectItem) o);
+            } else {
+                Object originalVar = null;
+                if (var != null) {
+                    originalVar = requestMap.put(var, o);
+                }
+                try {
+                    ELContext elContext = ctx.getELContext();
+                    destination
+                          .add(new SelectItem(((itemValue != null) ? itemValue.getValue(elContext) : o),
+                                              ((itemLabel != null)
+                                               ? (String) itemLabel.getValue(elContext)
+                                               : o.toString()),
+                                              ((itemDescription != null)
+                                               ? (String) itemDescription.getValue(elContext)
+                                               : null),
+                                              ((itemDisabled != null)
+                                               ? (Boolean) itemDisabled.getValue(elContext)
+                                               : false),
+                                              ((itemEscaped != null)
+                                               ? (Boolean) itemEscaped.getValue(elContext)
+                                               : false)));
+                } finally {
+                    if (var != null) {
+                        requestMap.put(var, originalVar);
+                    }
+                }
+            }
+        }
+    }
 
 
     /**
@@ -1096,5 +1122,11 @@ public class RenderKitUtils {
               .put(SCRIPT_STATE, Boolean.TRUE);
 
     }
+
+
+    // ---------------------------------------------------------- Nested Classes
+
+
+    
     
 } // END RenderKitUtils

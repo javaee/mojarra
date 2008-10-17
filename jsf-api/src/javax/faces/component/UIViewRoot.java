@@ -72,6 +72,7 @@ import java.util.ListIterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.event.AfterAddToParentEvent;
+import javax.faces.event.AfterRestoreStateEvent;
 import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.ViewMapCreatedEvent;
 import javax.faces.event.ViewMapDestroyedEvent;
@@ -199,15 +200,12 @@ public class UIViewRoot extends UIComponentBase {
 
     /**
      * <p>Create a new {@link UIViewRoot} instance with default property
-     * values.  The default implementation must call 
-     * {@link UIComponentBase#pushComponentToEL}.</p>
+     * values.</p>
      */
     public UIViewRoot() {
 
         super();
         setRendererType(null);
-        FacesContext context = FacesContext.getCurrentInstance();
-        pushComponentToEL(context,null);
 
     }
 
@@ -814,6 +812,18 @@ public class UIViewRoot extends UIComponentBase {
         } finally {
             clearFacesEvents(context);
             notifyAfter(context, PhaseId.RESTORE_VIEW);
+            final AfterRestoreStateEvent event = new AfterRestoreStateEvent(this);
+            try {
+                this.doTreeTraversal(context, new ContextCallback() {
+
+                    public void invokeContextCallback(FacesContext context, UIComponent target) {
+                        event.setComponent(target);
+                        target.processEvent(event);
+                    }
+                });
+            } catch (AbortProcessingException e) {
+                
+            }
         }
 
     }
