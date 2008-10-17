@@ -128,8 +128,9 @@
     <p>
         Initially Null Collection Values using f:attribute hint (java.lang.String)
     </p>
-    <h:selectManyListbox id="hintString" value="#{select05.collectionFromHintValues}">
-        <f:attribute name="collectionType" value="java.util.LinkedList"/>
+    <h:selectManyListbox id="hintString"
+                         value="#{select05.collectionFromHintValues}"
+                         collectionType="java.util.LinkedList">
         <f:selectItems value="#{select05.possibleValues}"/>
     </h:selectManyListbox>
 
