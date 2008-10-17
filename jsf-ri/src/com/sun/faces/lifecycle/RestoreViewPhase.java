@@ -64,6 +64,8 @@ import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import javax.faces.component.ContextCallback;
+import javax.faces.event.AbortProcessingException;
 import javax.faces.event.AfterAddToParentEvent;
 import javax.faces.event.AfterRestoreStateEvent;
 
@@ -129,6 +131,23 @@ public class RestoreViewPhase extends Phase {
             }
             facesContext.getViewRoot().setLocale(
                  facesContext.getExternalContext().getRequestLocale());
+            
+            // do per-component actions
+            UIViewRoot root = facesContext.getViewRoot();
+            final AfterRestoreStateEvent event = new AfterRestoreStateEvent(root);
+            try {
+                root.doTreeTraversal(facesContext, new ContextCallback() {
+
+                    public void invokeContextCallback(FacesContext context, UIComponent target) {
+                        event.setComponent(target);
+                        target.processEvent(event);
+                    }
+                });
+            } catch (AbortProcessingException e) {
+                
+            }
+            
+            
             if (!facesContext.isPostback()) {
                 facesContext.renderResponse();
             }
