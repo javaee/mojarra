@@ -38,7 +38,7 @@
  * holder.
  */
 
-package com.sun.faces.ext.validator;
+package javax.faces.validator;
 
 
 import javax.faces.component.UIInput;

@@ -39,9 +39,9 @@
  */
 
 
-package com.sun.faces.ext.taglib;
+package com.sun.faces.taglib.jsf_core;
 
-import com.sun.faces.ext.validator.RegexValidator;
+import javax.faces.validator.RegexValidator;
 import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
@@ -54,7 +54,7 @@ import javax.el.ValueExpression;
  * property - this will be used to validate against.
  * @author driscoll
  */
-public class RegexValidatorTag extends ValidatorELTag {
+public class RegexValidatorTag extends AbstractValidatorTag {
 
     private ValueExpression regex;
 
@@ -71,7 +71,7 @@ public class RegexValidatorTag extends ValidatorELTag {
         
         Application app = FacesContext.getCurrentInstance().getApplication();
         RegexValidator validator =
-                (RegexValidator) app.createValidator("com.sun.faces.ext.validator.RegexValidator");
+                (RegexValidator) app.createValidator("javax.faces.RegularExpression");
         validator.setPattern(regex);
         return validator;
     }
