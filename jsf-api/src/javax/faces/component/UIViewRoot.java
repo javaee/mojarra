@@ -680,12 +680,21 @@ public class UIViewRoot extends UIComponentBase {
 
 
     /**
-     * <p>Broadcast any events that have been queued.</p>
+     * <p class="changed_added_2_0">Broadcast any events that have been
+     * queued.  First broadcast events that have been queued for {@link
+     * PhaseId#ANY_PHASE}.  Then broadcast ane events that have been
+     * queued for the current phase.  In both cases, {@link
+     * UIComponent#pushComponentToEL} must be called before the event is
+     * broadcast, and {@link UIComponent#popComponentFromEL} must be
+     * called after the return from the broadcast, even in the case of
+     * an exception.</p>
      *
      * @param context {@link FacesContext} for the current request
      * @param phaseId {@link PhaseId} of the current phase
+
+     * @since 2.0
      */
-    private void broadcastEvents(FacesContext context, PhaseId phaseId) {
+    public void broadcastEvents(FacesContext context, PhaseId phaseId) {
 
         if (null == events) {
             // no events have been queued
@@ -769,7 +778,7 @@ public class UIViewRoot extends UIComponentBase {
                   !events.get(phaseId.getOrdinal()).isEmpty();
 
         } while (hasMoreAnyPhaseEvents || hasMoreCurrentPhaseEvents);
-
+	
     }
 
     // ------------------------------------------------ Lifecycle Phase Handlers
