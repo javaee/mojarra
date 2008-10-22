@@ -96,9 +96,6 @@ public class RIConstants {
           FACES_PREFIX + "DefaultLifecycle";
     public static final String DEFAULT_STATEMANAGER =
           FACES_PREFIX + "DefaultStateManager";
-    public static final String METADATA_COMPLETE =
-          FACES_PREFIX + "METADATA_COMPLETE";
-
 
     private RIConstants() {
 

@@ -39,11 +39,18 @@ package com.sun.faces.application.annotation;
 import java.util.Set;
 import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.Future;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
 import javax.faces.application.FacesAnnotationHandler;
+import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
+import javax.faces.event.SystemEventListener;
+import javax.faces.event.SystemEvent;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ApplicationPostConstructEvent;
+import javax.faces.FacesException;
 
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.util.FacesLogger;
@@ -56,7 +63,7 @@ import com.sun.faces.util.FacesLogger;
  * by {@link com.sun.faces.config.ConfigManager}.
  * </p>
  */
-public class AnnotationHandler extends FacesAnnotationHandler {
+public class AnnotationHandler extends FacesAnnotationHandler implements SystemEventListener {
 
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
@@ -64,8 +71,8 @@ public class AnnotationHandler extends FacesAnnotationHandler {
      * Key under which a Set of annotated classes names will be stored within
      * the <code>ServletContext</code>.
      */
-    public static final String ANNOTATED_CLASSNAMES_KEY =
-          AnnotationHandler.class.getName() + "_ANNOTATED_CLASSED";
+    public static final String ANNOTATIONS_SCAN_TASK_KEY =
+          AnnotationHandler.class.getName() + "_ANNOTATION_SCAN_TASK";
 
     /**
      * <p>
@@ -73,6 +80,34 @@ public class AnnotationHandler extends FacesAnnotationHandler {
      * </p>
      */
     private Set<String> annotatedClasses;
+
+
+    /**
+     * Flag indicating the application has been initialized.  When this flag
+     * is <code>true</code>, calls to {@link #processAnnotatedClasses(javax.faces.context.FacesContext, java.util.Set)}
+     * will be ignored.
+     */
+    private boolean applicationInitialized;
+
+
+    /**
+     * The <code>Application</code> instance for this web application.
+     */
+    private Application application;
+
+
+    // ------------------------------------------------------------ Constructors
+
+
+    public AnnotationHandler() {
+
+        application = FacesContext.getCurrentInstance().getApplication();
+        application.subscribeToEvent(ApplicationPostConstructEvent.class,
+                                     Application.class,
+                                     this);
+
+    }
+
 
 
     // ------------------------------------- Methods from FacesAnnotationHandler
@@ -97,17 +132,58 @@ public class AnnotationHandler extends FacesAnnotationHandler {
     public void processAnnotatedClasses(FacesContext context,
                                         Set<String> annotatedClassnames) {
 
-        ApplicationAssociate associate =
-              ApplicationAssociate.getInstance(context.getExternalContext());
-        if (associate != null) {
-            AnnotationManager manager = associate.getAnnotationManager();
-            assert (manager != null);
-            manager.applyConfigAnntations(context, annotatedClassnames);
+        if (!applicationInitialized) {
+            if (annotatedClassnames == null || !annotatedClassnames.isEmpty()) {
+                ApplicationAssociate associate =
+                      ApplicationAssociate
+                            .getInstance(context.getExternalContext());
+                if (associate != null) {
+                    AnnotationManager manager =
+                          associate.getAnnotationManager();
+                    assert (manager != null);
+                    manager.applyConfigAnntations(context, annotatedClassnames);
+                } else {
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.fine("No ApplicationAssociate available.");
+                    }
+                }
+            } else {
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine("No JSF annotated artifacts provided.");
+                }
+            }
         } else {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.fine("No ApplicationAssociate available.");
+            // PENDING i18n
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.warning("Application has been initialized.  Calls to AnnotationHandler.processAnnotatedClasses() will be ignored.");
             }
         }
+
+    }
+
+
+    // ---------------------------------------- Methods from SystemEventListener
+
+
+    /**
+     * @see javax.faces.event.SystemEventListener#processEvent(javax.faces.event.SystemEvent)
+     */
+    public void processEvent(SystemEvent event) throws AbortProcessingException {
+
+        applicationInitialized = true;
+        application.unsubscribeFromEvent(ApplicationPostConstructEvent.class,
+                                         Application.class,
+                                         this);
+        
+    }
+
+
+    /**
+     * @see javax.faces.event.SystemEventListener#isListenerForSource(Object)
+     */
+    public boolean isListenerForSource(Object source) {
+
+        return (source instanceof Application);
 
     }
 
@@ -119,8 +195,12 @@ public class AnnotationHandler extends FacesAnnotationHandler {
 
         Map<String,Object> appMap = ctx.getExternalContext().getApplicationMap();
         //noinspection unchecked
-        Set<String> classes = (Set<String>) appMap.remove(ANNOTATED_CLASSNAMES_KEY);
-        return ((classes != null) ? classes : Collections.<String>emptySet());
+        Future<Set<String>> scanTask = (Future<Set<String>>) appMap.remove(ANNOTATIONS_SCAN_TASK_KEY);
+        try {
+        return ((scanTask != null) ? scanTask.get() : Collections.<String>emptySet());
+        } catch (Exception e) {
+            throw new FacesException(e);
+        }
 
     }
     

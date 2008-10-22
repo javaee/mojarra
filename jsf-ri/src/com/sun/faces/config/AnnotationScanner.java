@@ -129,16 +129,6 @@ public class AnnotationScanner {
      */
     public Set<String> getAnnotatedClasses() {
 
-        // if the web application has been marked as 'metadata-complete'
-        // do not process annotations
-        if (Boolean.TRUE.equals(sc.getAttribute(RIConstants.METADATA_COMPLETE))) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.fine("Application considered metadata-complete.  Configuration annotations will not be processed");
-            }
-            return Collections.emptySet();
-        }
-
-
         Set<String> classList = new HashSet<String>();
 
         processWebInfClasses(sc, classList);
