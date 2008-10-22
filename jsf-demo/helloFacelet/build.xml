@@ -34,7 +34,7 @@
  holder.
 -->
 
-<project name="facelet-guessNumber" default="build" basedir=".">
+<project name="helloFacelet" default="build" basedir=".">
    
 
     <property file="${user.home}/build.properties"/> 
