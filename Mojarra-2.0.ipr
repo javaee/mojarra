@@ -144,6 +144,7 @@
     <option name="ADDITIONAL_OPTIONS_STRING" value="" />
     <option name="MAXIMUM_HEAP_SIZE" value="128" />
   </component>
+  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false" />
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
   </component>
@@ -235,11 +236,6 @@
       </facet-type>
     </autodetection-disabled>
   </component>
-  <component name="FindManager">
-    <FindUsagesManager>
-      <setting name="OPEN_NEW_TAB" value="false" />
-    </FindUsagesManager>
-  </component>
   <component name="GlobalLibrariesConfigurable.UI">
     <option name="proportions">
       <SplitterProportionsDataImpl>
@@ -330,7 +326,6 @@
         <inspection_tool class="SerialVersionUIDNotStaticFinal" level="WARNING" enabled="true" />
         <inspection_tool class="TransientFieldInNonSerializableClass" level="WARNING" enabled="true" />
         <inspection_tool class="TransientFieldNotInitialized" level="WARNING" enabled="true" />
-        <inspection_tool class="FacesModelInspection" level="ERROR" enabled="false" />
         <inspection_tool class="UnusedMessageFormatParameter" level="WARNING" enabled="false" />
         <inspection_tool class="Deprecation" level="WARNING" enabled="true" />
         <inspection_tool class="SuspiciousMethodCalls" level="WARNING" enabled="false">
@@ -521,6 +516,9 @@
       </item>
     </group>
   </component>
+  <component name="ProjectDetails">
+    <option name="projectName" value="Mojarra-2.0" />
+  </component>
   <component name="ProjectFileVersion" converted="true" />
   <component name="ProjectLevelVcsManager">
     <OptionsSetting value="true" id="Add" />
@@ -568,7 +566,7 @@
     </option>
     <option name="lastEditedConfigurable" value="Project 'Default (Template) Project'" />
   </component>
-  <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="true" project-jdk-name="1.5" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" assert-keyword="true" jdk-15="true" project-jdk-name="1.5" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="ProjectStructureConfigurable.UI">
@@ -589,14 +587,6 @@
       <autoscrollFromSource />
       <sortByType />
     </navigator>
-  </component>
-  <component name="PropertiesComponent">
-    <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
-    <property name="MemberChooser.sorted" value="false" />
-    <property name="MemberChooser.showClasses" value="true" />
-    <property name="GoToClass.includeLibraries" value="false" />
-    <property name="MemberChooser.copyJavadoc" value="false" />
   </component>
   <component name="ResourceManagerContainer">
     <option name="myResourceBundles">
@@ -692,7 +682,135 @@
     <option name="ACTIVE_ACTIONS" value="" />
   </component>
   <component name="SvnBranchConfigurationManager">
-    <option name="myVersion" value="123" />
+    <option name="myConfigurationMap">
+      <map>
+        <entry key="$PROJECT_DIR$">
+          <value>
+            <SvnBranchConfiguration>
+              <option name="branchMap">
+                <map>
+                  <entry key="https://mojarra.dev.java.net/svn/mojarra/branches">
+                    <value>
+                      <list>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1224597241668" />
+                          <option name="revision" value="5570" />
+                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/branches/AJAX_PFD_BRANCH" />
+                        </SvnBranchItem>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1224191764940" />
+                          <option name="revision" value="5553" />
+                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/branches/JSF2_0_EDR2_BRANCH" />
+                        </SvnBranchItem>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1218822794300" />
+                          <option name="revision" value="5184" />
+                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/branches/AJAX_293_BRANCH" />
+                        </SvnBranchItem>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1218130455985" />
+                          <option name="revision" value="5142" />
+                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/branches/EZCOMP_ITERATION_4" />
+                        </SvnBranchItem>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1212451663064" />
+                          <option name="revision" value="4848" />
+                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/branches/EZCOMP_JAVAONE_2008" />
+                        </SvnBranchItem>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1209737223597" />
+                          <option name="revision" value="4812" />
+                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/branches/AJAX_JAVAONE_2008" />
+                        </SvnBranchItem>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1209670597105" />
+                          <option name="revision" value="4804" />
+                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/branches/AJAX_298_JAVAONE_2008" />
+                        </SvnBranchItem>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1193247640744" />
+                          <option name="revision" value="1" />
+                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/branches/README" />
+                        </SvnBranchItem>
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="https://mojarra.dev.java.net/svn/mojarra/tags">
+                    <value>
+                      <list>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1224191999201" />
+                          <option name="revision" value="5554" />
+                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/tags/JSF_2_0_0_EDR2_B03" />
+                        </SvnBranchItem>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1224102420158" />
+                          <option name="revision" value="5550" />
+                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/tags/2.0.0-B02-EDR2" />
+                        </SvnBranchItem>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1218826456380" />
+                          <option name="revision" value="5188" />
+                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/tags/PRE_FACELETS_INTEGRATION" />
+                        </SvnBranchItem>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1218825591112" />
+                          <option name="revision" value="5186" />
+                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/tags/trunk_before_AJAX_293_BRANCH_20080815" />
+                        </SvnBranchItem>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1218131352012" />
+                          <option name="revision" value="5144" />
+                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/tags/trunk_before_EZCOMP_ITERATION_4_SNAPSHOT_20080807" />
+                        </SvnBranchItem>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1218130780916" />
+                          <option name="revision" value="5143" />
+                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/tags/EZCOMP_ITERATION_4_SNAPSHOT_20080807" />
+                        </SvnBranchItem>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1217422209783" />
+                          <option name="revision" value="5102" />
+                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/tags/EZCOMP_ITERATION_4_SNAPSHOT_20080730" />
+                        </SvnBranchItem>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1214331443105" />
+                          <option name="revision" value="4994" />
+                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/tags/2.0.0-B01-EDR1" />
+                        </SvnBranchItem>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1212004716496" />
+                          <option name="revision" value="4832" />
+                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/tags/EZCOMP_JAVAONE_20080528" />
+                        </SvnBranchItem>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1211331942963" />
+                          <option name="revision" value="4829" />
+                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/tags/EZCOMP_JAVAONE_20080520" />
+                        </SvnBranchItem>
+                        <SvnBranchItem>
+                          <option name="creationDateMillis" value="1193247640744" />
+                          <option name="revision" value="1" />
+                          <option name="url" value="https://mojarra.dev.java.net/svn/mojarra/tags/README" />
+                        </SvnBranchItem>
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+              <option name="branchUrls">
+                <list>
+                  <option value="https://mojarra.dev.java.net/svn/mojarra/branches" />
+                  <option value="https://mojarra.dev.java.net/svn/mojarra/tags" />
+                </list>
+              </option>
+              <option name="trunkUrl" value="https://mojarra.dev.java.net/svn/mojarra/trunk" />
+            </SvnBranchConfiguration>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="myVersion" value="124" />
   </component>
   <component name="SvnConfiguration">
     <option name="USER" value="" />

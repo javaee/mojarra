@@ -17,7 +17,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="mojarra-build" level="project" />
     <orderEntry type="module" module-name="tools" exported="" />
-    <orderEntryProperties />
   </component>
 </module>
 
