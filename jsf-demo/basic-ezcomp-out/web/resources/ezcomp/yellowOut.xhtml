@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:composite="http://java.sun.com/jsf/composite">
+<h:head>
+
+<title>This will not be present in rendered output</title>
+
+</h:head>
+
+<h:body>
+
+<composite:interface name="yellowOut"
+                     displayName="Very Basic Output Component"
+                     preferred="true"
+                     expert="false"
+                     shortDescription="A basic example of the composite component feature">
+    <composite:attribute name="value" required="false"/>    
+</composite:interface>
+
+<composite:implementation>
+    <h:outputText value="#{compositeComponent.attrs.value}" style="background-color: yellow"/>
+</composite:implementation>
+
+</h:body>
+
+</html>
