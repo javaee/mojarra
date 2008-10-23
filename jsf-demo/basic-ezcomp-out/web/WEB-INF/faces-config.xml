@@ -43,33 +43,4 @@
               xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
               version="2.0">
 
-  <managed-bean>
-    <managed-bean-name>basicezcomp</managed-bean-name>
-    <managed-bean-class>
-      basicezcomp.Bean
-    </managed-bean-class>
-    <managed-bean-scope>request</managed-bean-scope>
-  </managed-bean>
-
-    <!--
-    <navigation-rule>
-        <from-view-id>/index.xhtml</from-view-id>
-        <navigation-case>
-            <from-outcome>login</from-outcome>
-            <to-view-id>/page2.xhtml</to-view-id>
-        </navigation-case>
-        <navigation-case>
-            <from-outcome>cancel</from-outcome>
-            <to-view-id>/page2.xhtml</to-view-id>
-        </navigation-case>
-    </navigation-rule>
-
-    <navigation-rule>
-        <from-view-id>/page2.xhtml</from-view-id>
-        <navigation-case>
-            <from-outcome>back</from-outcome>
-            <to-view-id>/index.xhtml</to-view-id>
-        </navigation-case>
-    </navigation-rule>
-        -->
 </faces-config>
