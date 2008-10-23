@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:ez="http://java.sun.com/jsf/composite/ezcomp">
+<h:head>
+<title>The Simplest EZComp Demo That Could Possibly Work (Output)</title>
+<style type="text/css">
+.grayBox { padding: 8px; margin: 10px 0; border: 1px solid #CCC; background-color: #f9f9f9;  }
+</style>
+
+</h:head>
+
+<h:body>
+
+<h2>Basic Composite Component - Input</h2>
+
+<h:form>
+    <div id="compositeComponent" class="grayBox" style="border: 1px solid #090;">
+        Enter text: <ez:yellowIn value="#{ezcompin.value}"/>
+    </div>
+<p>
+    <h:commandButton value="reload" />
+    <h:commandButton id="submit" action="success" value="Submit" type="submit" />
+</p>
+    <h:messages/>
+</h:form>
+
+
+</h:body>
+
+</html>
