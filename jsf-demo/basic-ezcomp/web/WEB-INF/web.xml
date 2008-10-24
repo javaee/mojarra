@@ -63,12 +63,6 @@
         <param-value>/WEB-INF/ezcomp-taglib.xml</param-value>
     </context-param>
 
-    <context-param>
-        <param-name>facelets.VIEW_MAPPINGS</param-name>
-        <param-value>*.jsf</param-value>
-    </context-param>
-
-
     <!-- Servlet Definitions/Mappings -->
 
     <servlet>
