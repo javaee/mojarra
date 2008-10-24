@@ -1,8 +1,8 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
+ * 
  * Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
- *
+ * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -10,7 +10,7 @@
  * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
  * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- *
+ * 
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
  * Sun designates this particular file as subject to the "Classpath" exception
@@ -19,9 +19,9 @@
  * Header, with the fields enclosed by brackets [] replaced by your own
  * identifying information: "Portions Copyrighted [year]
  * [name of copyright owner]"
- *
+ * 
  * Contributor(s):
- *
+ * 
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
  * elects to include this software in this distribution under the [CDDL or GPL
@@ -34,24 +34,58 @@
  * holder.
  */
 
-package ezcompin;
+package ezcomp;
 
-public class Bean  {
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-    public Bean() {
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+
+/**
+ * EL Functions.
+ */
+public class Functions {
+
+    private static final Logger LOGGER = Logger.getLogger(Functions.class.getName());
+
+
+    // ---------------------------------------------------------- Public Methods
+
+
+    /**
+     * <p>
+     * Write the file content to the current ResponseWriter.
+     * </p>
+     *
+     * @param ctx the <code>FacesContext</code> for the current request
+     * @param file the file to display
+     */
+    public static void writeSource(FacesContext ctx, String file) {
+
+        // PENDING - add logic to colorize key works/XML elements?
+        
+        ExternalContext extCtx = ctx.getExternalContext();
+        Reader r = new InputStreamReader(extCtx.getResourceAsStream(file));
+        StringWriter w = new StringWriter();
+        int len = 512;
+        char[] buf = new char[len];
+        try {
+            for (int i = r.read(buf, 0, len); i != -1; i = r.read(buf, 0, len)) {
+                w.write(buf, 0, i);
+            }
+            ctx.getResponseWriter().writeText(w.toString(), null);
+        } catch (IOException ioe) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE,
+                           ioe.toString(),
+                           ioe);
+            }
+        }
+        
     }
-
-    private String value = "Hello World!";
-
-    public void setValue(String value) {
-        System.out.println("setting value to: "+value);
-        this.value = value;
-    }
-
-    public String getValue() {
-        System.out.println("getting value of:"+value);
-        return value;
-    }
-
-
 }

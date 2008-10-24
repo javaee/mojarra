@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xml:lang="en" lang="en">
+  <head>
+    <title>JavaServer Faces 2.0 Composite Component Demo</title>
+  </head>
+  <body>
+    <table border="1" cellpadding="1">
+        <thead>
+            <tr>
+                <td>Demo Name</td>
+                <td>Related Source Files</td>
+                <td>Execute</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Simple Out</td>
+                <td>
+                    <h:panelGrid columns="2" border="0">
+
+                        <h:outputText value="Consuming Page:&nbsp;"/>
+                        <h:outputLink value="displaysource.jsf">
+                            <h:outputText value="/out.xhtml"/>
+                            <f:param name="file" value="/out.xhtml"/>
+                        </h:outputLink>
+
+
+                        <h:outputText value="Composite Component:&nbsp;"/>
+                        <h:outputLink value="displaysource.jsf">
+                            <h:outputText value="/resources/simpleout/out.xhtml"/>
+                            <f:param name="file" value="/resources/simpleout/out.xhtml"/>
+                        </h:outputLink>
+
+                    </h:panelGrid>
+                </td>
+                <td align="center">
+                    <h:outputLink value="out.jsf">
+                        <h:graphicImage style="border:none;"
+                                        alt="Execute"
+                                        name="images/execute.gif"/>
+                    </h:outputLink>
+                </td>
+            </tr>
+            <tr>
+                <td>Simple In/Out</td>
+                <td>
+                    <h:panelGrid columns="2" border="0">
+
+                        <h:outputText value="Consuming Page:&nbsp;"/>
+                        <h:outputLink value="displaysource.jsf">
+                            <h:outputText value="/inout.xhtml"/>
+                            <f:param name="file" value="/inout.xhtml"/>
+                        </h:outputLink>
+
+                        <h:outputText value="Composite Component:&nbsp;"/>
+                        <h:outputLink value="displaysource.jsf">
+                            <h:outputText value="/resources/simpleinout/inout.xhtml"/>
+                            <f:param name="file" value="resources/simpleinout/inout.xhtml"/>
+                        </h:outputLink>
+                        
+                        <h:outputText value="Managed Bean:&nbsp;"/>
+                        <h:outputLink value="displaysource.jsf">
+                            <h:outputText value="/WEB-INF/classes/ezcomp/InOutBean.java"/>
+                            <f:param name="file" value="/WEB-INF/classes/ezcomp/InOutBean.java"/>
+                        </h:outputLink>
+
+                    </h:panelGrid>
+                </td>
+                <td align="center">
+                    <h:outputLink value="inout.jsf">
+                        <h:graphicImage style="border:none"
+                                        alt="Execute"
+                                        name="images/execute.gif"/>
+                    </h:outputLink>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+  </body>
+</html>

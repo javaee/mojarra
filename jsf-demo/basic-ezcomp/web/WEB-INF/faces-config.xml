@@ -3,7 +3,7 @@
 <!--
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  
- Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
  
  The contents of this file are subject to the terms of either the GNU
  General Public License Version 2 only ("GPL") or the Common Development
@@ -43,27 +43,22 @@
               xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
               version="2.0">
 
-  <managed-bean>
-    <managed-bean-name>ezcompin</managed-bean-name>
-    <managed-bean-class>
-      ezcompin.Bean
-    </managed-bean-class>
-    <managed-bean-scope>session</managed-bean-scope>
-  </managed-bean>
 
+    <!-- Navigation rules for "inout" -->
     <navigation-rule>
-        <from-view-id>/index.xhtml</from-view-id>
+        <from-view-id>/inout.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>success</from-outcome>
-            <to-view-id>/page2.xhtml</to-view-id>
+            <to-view-id>/inout2.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
 
     <navigation-rule>
-        <from-view-id>/page2.xhtml</from-view-id>
+        <from-view-id>/inout2.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>back</from-outcome>
-            <to-view-id>/index.xhtml</to-view-id>
+            <to-view-id>/inout.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
+
 </faces-config>
