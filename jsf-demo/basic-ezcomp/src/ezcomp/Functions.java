@@ -67,7 +67,7 @@ public class Functions {
      */
     public static void writeSource(FacesContext ctx, String file) {
 
-        // PENDING - add logic to colorize key works/XML elements?
+        // PENDING - add logic to colorize key words/XML elements?
         
         ExternalContext extCtx = ctx.getExternalContext();
         Reader r = new InputStreamReader(extCtx.getResourceAsStream(file));
