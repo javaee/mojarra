@@ -218,13 +218,13 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
         if (topMap == null) {
             topMap = new HashMap<UIComponent,Map<String,Object>>();
             ctxAttributes.put(EVAL_MAP_KEY, topMap);
-            evalMap = new ExpressionEvalMap(c.getAttributes());
+            evalMap = new ExpressionEvalMap(ctx, c.getAttributes());
             topMap.put(c, evalMap);
         }
         if (evalMap == null) {
             evalMap = topMap.get(c);
             if (evalMap == null) {
-                evalMap = new ExpressionEvalMap(c.getAttributes());
+                evalMap = new ExpressionEvalMap(ctx, c.getAttributes());
                 topMap.put(c, evalMap);
             }
         }
@@ -243,14 +243,16 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
     private static final class ExpressionEvalMap implements Map<String,Object> {
 
         private Map<String,Object> attributesMap;
+        private FacesContext ctx;
 
 
         // -------------------------------------------------------- Constructors
 
 
-        ExpressionEvalMap(Map<String,Object> attributesMap) {
+        ExpressionEvalMap(FacesContext ctx, Map<String,Object> attributesMap) {
 
             this.attributesMap = attributesMap;
+            this.ctx = ctx;
 
         }
 
@@ -277,13 +279,19 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
         public Object get(Object key) {
             Object v = attributesMap.get(key);
             if (v != null && v instanceof ValueExpression) {
-                return (((ValueExpression) v).getValue(FacesContext.getCurrentInstance().getELContext()));
+                return (((ValueExpression) v).getValue(ctx.getELContext()));
             }
             return v;
         }
 
         public Object put(String key, Object value) {
-            return attributesMap.put(key, value);
+            Object v = attributesMap.get(key);
+            if (v != null && v instanceof ValueExpression) {
+                ((ValueExpression) v).setValue(ctx.getELContext(), value);
+                return null;
+            } else {
+                return attributesMap.put(key, value);
+            }
         }
 
         public Object remove(Object key) {
