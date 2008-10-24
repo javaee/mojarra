@@ -661,11 +661,9 @@ public class MultiViewHandler extends ViewHandler {
             }
         }
 
-        // unable to find any resource match that the default ViewHandler
-        // can deal with.  Return the viewId as it was passed.  There is
-        // probably another ViewHandler in the stack that will handle this.
-        return viewId;
-
+        // unable to find any physical resource match.
+        send404Error(context);
+        return null;
     }
 
 
