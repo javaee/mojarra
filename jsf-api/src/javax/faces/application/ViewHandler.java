@@ -62,7 +62,9 @@ import javax.faces.component.UIViewRoot;
  * <em>Restore View</em> phases of the request processing lifecycle.
  * This allows for implementations to support different response
  * generation technologies, as well as alternative strategies for saving
- * and restoring the state of each view.</p>
+ * and restoring the state of each view.  <span class="changed_added_2_0">An
+ * implementation
+ * of this class must be thread-safe.</span></p>
  *
  * <p>Please see {@link StateManager} for information on how the
  * <code>ViewHandler</code> interacts the {@link StateManager}. </p>
