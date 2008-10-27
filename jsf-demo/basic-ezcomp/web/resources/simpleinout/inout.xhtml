@@ -43,13 +43,13 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:composite="http://java.sun.com/jsf/composite">
-<h:head>
+<head>
 
 <title>This will not be present in rendered output</title>
 
-</h:head>
+</head>
 
-<h:body>
+<body>
 
 <composite:interface name="yellowIn"
                      displayName="Very Basic Input Component"
@@ -63,6 +63,6 @@
     <h:inputText id="yellowInput" value="#{compositeComponent.attrs.value}" style="background-color: yellow"/>
 </composite:implementation>
 
-</h:body>
+</body>
 
 </html>
