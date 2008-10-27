@@ -1083,6 +1083,45 @@
 
     </tag>
 
+    <tag>
+        <name>validateRegex</name>
+        <description><![CDATA[<p>
+
+                <span class="changed_added_2_0">
+            A validator that uses the pattern attribute to validate the
+            wrapping component.  The entire pattern is matched against
+            the String value of the component.  If it matches, it's
+            valid.
+  
+         </p>]]>
+        </description>
+        <tag-class>com.sun.faces.taglib.jsf_core.RegexValidatorTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>pattern</name>
+            <description>
+                A regular expression pattern.  Remember that, like in
+                all Java strings, backslash must be escaped with another
+                backslash.  Additionally, to use #{ in a regex, it must
+                also be escaped, since it will otherwise be interpreted
+                as an EL expression.
+            </description>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <description>
+                A ValueExpression that evaluates to an instance of
+                RegexpValidator.
+            </description>
+            <name>binding</name>
+            <deferred-value>
+                <type>javax.faces.validator.RegexpValidator</type>
+            </deferred-value>
+        </attribute>
+    </tag>
 
     <tag>
         <description>

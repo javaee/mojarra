@@ -69,7 +69,7 @@
 
     <target name="prepare" depends="init"
             description="Create build directories.">
-        <mkdir dir="${build}${example}/"/>
+        <mkdir dir="${build}/${example}/"/>
         <mkdir dir="${build}/${example}/WEB-INF"/>
         <mkdir dir="${build}/${example}/WEB-INF/classes"/>
         <mkdir dir="${build}/${example}/WEB-INF/lib"/>

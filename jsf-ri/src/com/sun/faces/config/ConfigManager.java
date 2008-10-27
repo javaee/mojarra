@@ -61,8 +61,6 @@ import com.sun.faces.config.processor.ValidatorConfigProcessor;
 import com.sun.faces.config.processor.FaceletTaglibConfigProcessor;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Timer;
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.application.annotation.AnnotationManager;
 import com.sun.faces.application.annotation.AnnotationHandler;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -71,7 +69,6 @@ import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.event.ApplicationPostConstructEvent;
 import javax.faces.application.Application;
-import javax.faces.application.FacesAnnotationHandler;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import javax.xml.parsers.DocumentBuilder;
@@ -272,18 +269,22 @@ public class ConfigManager {
                 boolean validating = webConfig.isOptionEnabled(ValidateFacesConfigFiles);
                 ExecutorService executor = createExecutorService();
 
-                // execut the Task responsible for finding annotation classes
-                Future<Set<String>> annotationScan =
-                      executor.submit(new AnnotationScanTask(sc));
-
                 Document[] facesDocuments =
                       getConfigDocuments(sc,
                                          FACES_CONFIG_RESOURCE_PROVIDERS,
                                          executor,
                                          validating);
 
+                Document webinfFacesConfig =
+                      facesDocuments[facesDocuments.length - 1];
                 boolean isFaceletsDisabled =
-                      isFaceletsDisabled(webConfig, facesDocuments[ facesDocuments.length - 1]);
+                      isFaceletsDisabled(webConfig, webinfFacesConfig);
+                if (!isMetadataComplete(webinfFacesConfig)) {
+                    // execute the Task responsible for finding annotation classes
+                    Future<Set<String>> annotationScan =
+                          executor.submit(new AnnotationScanTask(sc));
+                    pushTaskToContext(sc, annotationScan);
+                }
 
                 FACES_CONFIG_PROCESSOR_CHAIN.process(
                       getConfigDocuments(sc,
@@ -297,8 +298,6 @@ public class ConfigManager {
                                              executor,
                                              validating));
                 }
-
-                processAnnotatedClasses(sc, annotationScan.get());
 
                 executor.shutdown();
                 publishPostConfigEvent();
@@ -385,22 +384,38 @@ public class ConfigManager {
 
 
     /**
-     * Call through to {@link FacesAnnotationHandler#processAnnotatedClasses(javax.faces.context.FacesContext, java.util.Set)}
-     * to configure artifacts associated with the discovered annotations.
-     *  configration annotations
+     * @param webinfFacesConfig the <code>Document</code> representing
+     *  <code>WEB-INF/faces-config.xml</code>
+     * @return <code>true</code> if the document is versioned at 2.0 and
+     *  the <code>metadata-complete</code> attribute is specified with a value
+     *  of <code>true</code> otherwise return <code>false</code>
      */
-    private void processAnnotatedClasses(ServletContext sc,
-                                         Set<String> annotatedClasses) {
+    private boolean isMetadataComplete(Document webinfFacesConfig) {
 
-        // push annotatedClasses to the provided ServletContext before invoking
-        // the FacesAnnotationHandler so that the default FacesAnnotationHandler
-        // has access to the results.
-        sc.setAttribute(AnnotationHandler.ANNOTATED_CLASSNAMES_KEY,
-                        annotatedClasses);
-        FacesContext ctx = FacesContext.getCurrentInstance();
-        Application app = ctx.getApplication();
-        FacesAnnotationHandler handler = app.getFacesAnnotationHandler();
-        handler.processAnnotatedClasses(ctx, handler.getClassNamesWithFacesAnnotations(ctx));
+        if (isWebinfFacesConfig(webinfFacesConfig)) {
+            if (isFacesApp20(webinfFacesConfig)) {
+                            String metadataComplete = webinfFacesConfig.getDocumentElement()
+                  .getAttributeNS(webinfFacesConfig.getNamespaceURI(), "metadata-complete");
+                return ((metadataComplete) != null ? Boolean.valueOf(metadataComplete) : false);
+            } else {
+                // not a 2.0 application, so annotation processing will not occur
+                return true;
+            }
+        }
+
+        // no faces-config.xml so assume it's not metadata-complete; process annotations
+        return false;
+
+    }
+
+
+    /**
+     * Push the provided <code>Future</code> to the specified <code>ServletContext</code>.
+     */
+    private void pushTaskToContext(ServletContext sc,
+                                   Future<Set<String>> scanTask) {
+
+        sc.setAttribute(AnnotationHandler.ANNOTATIONS_SCAN_TASK_KEY, scanTask);
 
     }
 
@@ -536,8 +551,7 @@ public class ConfigManager {
      */
     private boolean isFacesApp20(Document document) {
 
-        String url = document.getDocumentURI();
-        if (url != null && url.contains("/WEB-INF/faces-config.xml")) {
+        if (isWebinfFacesConfig(document)) {
             String version = document.getDocumentElement()
                   .getAttributeNS(document.getNamespaceURI(), "version");
             if (version != null) {
@@ -548,6 +562,19 @@ public class ConfigManager {
         }
 
         return true;  // no faces-config.xml or version so assume 2.0
+
+    }
+
+
+    /**
+     * @param document the <code>Document</code> to inspect
+     * @return <code>true</code> if the document represents the
+     *  <code>/WEB-INF/faces-config.xml</code>
+     */
+    private boolean isWebinfFacesConfig(Document document) {
+
+        String url = document.getDocumentURI();
+        return (url != null && url.contains("/WEB-INF/faces-config.xml"));
 
     }
 

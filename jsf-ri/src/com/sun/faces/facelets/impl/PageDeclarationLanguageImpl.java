@@ -118,14 +118,12 @@ public class PageDeclarationLanguageImpl extends PageDeclarationLanguage {
             };
             ctx.setVariableMapper(wrapper);
             f.apply(context, facetComponent);
-        } catch (IOException ex) {
-            Logger.getLogger(CompositeComponentTagHandler.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (FaceletException ex) {
-            Logger.getLogger(CompositeComponentTagHandler.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (FacesException ex) {
-            Logger.getLogger(CompositeComponentTagHandler.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ELException ex) {
-            Logger.getLogger(CompositeComponentTagHandler.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            if (e instanceof FacesException) {
+                throw (FacesException) e;
+            } else {
+                throw new FacesException(e);
+            }
         }
         finally {
             ctx.setVariableMapper(orig);

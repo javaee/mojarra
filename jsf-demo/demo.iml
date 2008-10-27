@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module relativePaths="true" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
-    <facet type="web" name="templateDemo" implicit="true">
+    <facet type="Groovy" name="Groovy">
+      <configuration />
+    </facet>
+    <facet type="web" name="templateDemo">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/templateDemo/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -153,7 +156,7 @@
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="j2meDemo" implicit="true">
+    <facet type="web" name="j2meDemo">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/j2meDemo/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -461,10 +464,7 @@
         </packaging>
       </configuration>
     </facet>
-    <facet type="Groovy" name="Groovy">
-      <configuration />
-    </facet>
-    <facet type="web" name="ezcomp02" implicit="true">
+    <facet type="web" name="ezcomp02">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/ezcomp02/src/main/webapp/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -772,7 +772,7 @@
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="nonjsp" implicit="true">
+    <facet type="web" name="nonjsp">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/nonjsp/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -1236,7 +1236,7 @@
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="helloDuke" implicit="true">
+    <facet type="web" name="helloDuke">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/helloDuke/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -1544,7 +1544,7 @@
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="helloFacelet" implicit="true">
+    <facet type="web" name="helloFacelet">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/helloFacelet/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -1696,7 +1696,7 @@
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="carstore" implicit="true">
+    <facet type="web" name="carstore">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/carstore/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -1848,7 +1848,7 @@
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="ajax-queue" implicit="true">
+    <facet type="web" name="ajax-queue">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/ajax-queue/src/main/webapp/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -2000,7 +2000,7 @@
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="ezcomp00" implicit="true">
+    <facet type="web" name="ezcomp00">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/ezcomp00/src/main/webapp/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -2152,7 +2152,7 @@
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="ezcomp01" implicit="true">
+    <facet type="web" name="ezcomp01">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/ezcomp01/src/main/webapp/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -2304,7 +2304,7 @@
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="stock" implicit="true">
+    <facet type="web" name="stock">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/stock/src/main/webapp/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -2456,7 +2456,7 @@
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="ezcomp03" implicit="true">
+    <facet type="web" name="ezcomp03">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/ezcomp03/src/main/webapp/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -2608,7 +2608,7 @@
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="renderkits" implicit="true">
+    <facet type="web" name="renderkits">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/renderkits/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -2760,7 +2760,7 @@
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="components" implicit="true">
+    <facet type="web" name="components">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/components/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -2912,7 +2912,7 @@
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="standard" implicit="true">
+    <facet type="web" name="standard">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/standard/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -3064,7 +3064,7 @@
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="webtier-sample" implicit="true">
+    <facet type="web" name="webtier-sample">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/webtier-sample/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -3216,7 +3216,7 @@
         </packaging>
       </configuration>
     </facet>
-    <facet type="web" name="mojarra_ext" implicit="true">
+    <facet type="web" name="mojarra_ext">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/mojarra_ext/web/WEB-INF/web.xml" optional="false" version="2.5" />
@@ -3409,7 +3409,6 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="impl" exported="" />
-    <orderEntryProperties />
   </component>
 </module>
 

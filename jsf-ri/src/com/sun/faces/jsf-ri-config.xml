@@ -216,12 +216,12 @@
     <validator-id>javax.faces.LongRange</validator-id>
     <validator-class>javax.faces.validator.LongRangeValidator</validator-class>
   </validator>
+  <validator>
+      <validator-id>javax.faces.RegularExpression</validator-id>
+      <validator-class>javax.faces.validator.RegexValidator</validator-class>
+  </validator>
 
   <!-- Add our implementation specific Validators -->
-  <validator>
-      <validator-id>com.sun.faces.ext.validator.RegexValidator</validator-id>
-      <validator-class>com.sun.faces.ext.validator.RegexValidator</validator-class>
-  </validator>
   <validator>
       <validator-id>com.sun.faces.ext.validator.CreditCardValidator</validator-id>
       <validator-class>com.sun.faces.ext.validator.CreditCardValidator</validator-class>

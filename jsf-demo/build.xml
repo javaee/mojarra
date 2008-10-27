@@ -92,6 +92,7 @@
 
         <ant target="clean" dir="guessNumber"/>
         <ant target="clean" dir="guessNumber2.0"/>
+        <ant target="clean" dir="basic-ezcomp"/>
         <ant target="clean" dir="ajax-request"/>
         <ant target="clean" dir="ajax-queue"/>
         <ant target="clean" dir="helloDuke"/>
@@ -122,6 +123,8 @@
         <echo>Build the demos from the jsf-demo repository</echo>
         <echo>copy the sample war files to the zip area</echo>
 
+        <copy todir="${dist.home}/samples"
+              file="${basedir}/basic-ezcomp/build/basic-ezcomp.war"/>
         <copy todir="${dist.home}/samples"
               file="${basedir}/guessNumber2.0/build/jsf-guessNumber2.0.war"/>
         <copy todir="${dist.home}/samples"
@@ -155,6 +158,9 @@
 
     <target name="copyDemoSource" depends="copyJars">
         <echo>copy the necessary samples</echo>
+         <copy todir="${dist.home}/samples/basic-ezcomp" includeEmptyDirs="false">
+            <fileset dir="${basedir}/basic-ezcomp" excludes="build.xml"/>
+         </copy>
          <copy todir="${dist.home}/samples/guessNumber2.0" includeEmptyDirs="false">
             <fileset dir="${basedir}/guessNumber2.0" excludes="build.xml"/>
          </copy>
@@ -336,6 +342,7 @@
         <ant dir="${basedir}/helloDuke" inheritAll="false" />
         <ant dir="${basedir}/guessNumber" inheritAll="false" />
         <ant dir="${basedir}/guessNumber2.0" inheritAll="false" />
+        <ant dir="${basedir}/basic-ezcomp" inheritAll="false" />
         <ant dir="${basedir}/ajax-request" inheritAll="false" />
         <ant dir="${basedir}/ajax-queue" inheritAll="false" />
         <ant dir="${basedir}/ezcomp00" inheritAll="false" />

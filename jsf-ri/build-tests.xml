@@ -347,8 +347,6 @@
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.el.TestMethodExpressionImpl"/>   
                 <test todir="${impl.test.results.dir}"
-                      name="com.sun.faces.ext.validator.RegexValidatorTestCase"/>
-                <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.lifecycle.TestApplyRequestValuesPhase"/>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.lifecycle.TestInvokeApplicationPhase"/>

@@ -49,7 +49,7 @@
             component.  The entire pattern is matched against the String value
             of the component.  If it matches, it's valid.
         </description>
-        <tag-class>com.sun.faces.ext.taglib.RegexValidatorTag</tag-class>
+        <tag-class>com.sun.faces.taglib.jsf_core.RegexValidatorTag</tag-class>
         <body-content>empty</body-content>
         <attribute>
             <name>pattern</name>

@@ -1,11 +1,7 @@
 /*
- * $Id: RegexValidatorTag.java,v 1.2 2008/04/01 22:31:22 driscoll Exp $
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,41 +34,58 @@
  * holder.
  */
 
+package ezcomp;
 
-package com.sun.faces.ext.taglib;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import com.sun.faces.ext.validator.RegexValidator;
-import javax.faces.application.Application;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.validator.Validator;
-import javax.faces.webapp.ValidatorELTag;
-import javax.el.ValueExpression;
-
 
 /**
- * Tag for the Regular Expression Validator.  Can accept a regex pattern as a
- * property - this will be used to validate against.
- * @author driscoll
+ * EL Functions.
  */
-public class RegexValidatorTag extends ValidatorELTag {
+public class Functions {
 
-    private ValueExpression regex;
+    private static final Logger LOGGER = Logger.getLogger(Functions.class.getName());
+
+
+    // ---------------------------------------------------------- Public Methods
+
 
     /**
-     * Set the Regular Expression to use for validation.
-     * @param pattern A regular expression - needs to be escaped, @see java.util.regex .
+     * <p>
+     * Write the file content to the current ResponseWriter.
+     * </p>
+     *
+     * @param ctx the <code>FacesContext</code> for the current request
+     * @param file the file to display
      */
-    public void setPattern(ValueExpression pattern) {
-        this.regex = pattern;
-    }
+    public static void writeSource(FacesContext ctx, String file) {
 
-    @Override
-    protected Validator createValidator() {
+        // PENDING - add logic to colorize key words/XML elements?
         
-        Application app = FacesContext.getCurrentInstance().getApplication();
-        RegexValidator validator =
-                (RegexValidator) app.createValidator("com.sun.faces.ext.validator.RegexValidator");
-        validator.setPattern(regex);
-        return validator;
+        ExternalContext extCtx = ctx.getExternalContext();
+        Reader r = new InputStreamReader(extCtx.getResourceAsStream(file));
+        StringWriter w = new StringWriter();
+        int len = 512;
+        char[] buf = new char[len];
+        try {
+            for (int i = r.read(buf, 0, len); i != -1; i = r.read(buf, 0, len)) {
+                w.write(buf, 0, i);
+            }
+            ctx.getResponseWriter().writeText(w.toString(), null);
+        } catch (IOException ioe) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE,
+                           ioe.toString(),
+                           ioe);
+            }
+        }
+        
     }
 }

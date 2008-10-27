@@ -680,12 +680,21 @@ public class UIViewRoot extends UIComponentBase {
 
 
     /**
-     * <p>Broadcast any events that have been queued.</p>
+     * <p class="changed_added_2_0">Broadcast any events that have been
+     * queued.  First broadcast events that have been queued for {@link
+     * PhaseId#ANY_PHASE}.  Then broadcast ane events that have been
+     * queued for the current phase.  In both cases, {@link
+     * UIComponent#pushComponentToEL} must be called before the event is
+     * broadcast, and {@link UIComponent#popComponentFromEL} must be
+     * called after the return from the broadcast, even in the case of
+     * an exception.</p>
      *
      * @param context {@link FacesContext} for the current request
      * @param phaseId {@link PhaseId} of the current phase
+
+     * @since 2.0
      */
-    private void broadcastEvents(FacesContext context, PhaseId phaseId) {
+    public void broadcastEvents(FacesContext context, PhaseId phaseId) {
 
         if (null == events) {
             // no events have been queued
@@ -769,7 +778,7 @@ public class UIViewRoot extends UIComponentBase {
                   !events.get(phaseId.getOrdinal()).isEmpty();
 
         } while (hasMoreAnyPhaseEvents || hasMoreCurrentPhaseEvents);
-
+	
     }
 
     // ------------------------------------------------ Lifecycle Phase Handlers
@@ -799,9 +808,23 @@ public class UIViewRoot extends UIComponentBase {
 
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) document
-     * @param context
-     * @param state
+     * <p class="changed_added_2_0">The default implementation must call
+     * {@link UIComponentBase#processRestoreState} from within a
+     * <code>try</code> block.  The <code>try</code> block must have a
+     * <code>finally</code> block that ensures that no {@link
+     * FacesEvent}s remain in the event queue, that any
+     * <code>PhaseListener</code>s in {@link #getPhaseListeners} are
+     * invoked as appropriate, and that the <code>this.{@link
+     * #UIComponent#doTreeTraversal} is called, passing a {@link
+     * ContextCallback} that takes the following action: call the {@link
+     * UIComponent#processEvent} method of the current component. The
+     * argument <code>event</code> must be an instance of {@link
+     * javax.faces.event.AfterRestoreViewEvent} whose
+     * <code>component</code> property is the current component in the
+     * traversal.</code></p>
+     * @param context the <code>FacesContext</code> for this requets
+     * @param state the opaque state object obtained from the {@link
+     * javax.faces.application.StateManager}
      */
     @Override
     public void processRestoreState(FacesContext context, Object state) {

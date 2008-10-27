@@ -1,0 +1,33 @@
+
+For testing the build with v2, simply run 
+
+update build.properties to point to the correct directory
+container.name=glassfish
+container.home=/glassfish/home/directory
+make sure that password.txt is found in container.home
+ant test.with.container.refresh
+-or-
+start glassfish (asadmin start-domain)
+ant main container.deploy # make sure that you'll actually test the changes
+ant test
+
+For testing the build with v3:
+Quicklook tests:
+ant main container.deploy
+checkout v3
+cd tests/quicklook
+mvn -Dglassfish.home=/home/glassfish/dir test
+
+JSF tests:
+Be sure to install glassfish with a password on admin
+make sure that password.txt is found in container.home
+container.name=glassfishV3
+container.home=/glassfish/home/directory
+home may be one level down in standard distro (glassfish/glassfish)
+ant test.with.container.refresh
+-or-
+start glassfish (asadmin start-domain)
+ant main container.deploy # make sure that you'll actually test the changes
+ant test
+
+

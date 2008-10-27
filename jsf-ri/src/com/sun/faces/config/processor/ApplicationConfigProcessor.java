@@ -305,7 +305,14 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
         }
 
         processViewHandlers(app, viewHandlers);
-        
+
+        // all application level artifacts are in place, process any annotated
+        // components that have been found
+        FacesAnnotationHandler handler = getApplication().getFacesAnnotationHandler();
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        handler.processAnnotatedClasses(ctx, handler.getClassNamesWithFacesAnnotations(ctx));
+
+        // continue processing...
         invokeNext(documents);
 
     }

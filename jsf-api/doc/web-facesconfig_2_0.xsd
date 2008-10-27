@@ -235,7 +235,7 @@
                        use="optional">
             <xsd:annotation>
                 <xsd:documentation>
-                    
+
                     The metadata-complete attribute defines whether this
                     JavaServer Faces application is complete, or whether
                     the class files available to this module and packaged with
@@ -258,6 +258,9 @@
                     "false", the JavaServer Faces runtime must examine the class
                     files of the application for annotations, as specified by
                     the specification.
+
+                    If "WEB-INF/faces-config.xml" is not present, the JavaServer
+                    Faces runtime will assume metadata-complete to be "false".
 
                     The value of this attribute will have no impact on
                     runtime annotations such as @ResourceDependency or
