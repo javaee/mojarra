@@ -42,6 +42,9 @@ import java.io.Serializable;
 
 import javax.faces.model.ManagedBean;
 
+/**
+ * Managed Bean for the inout composite component demo.
+ */
 @ManagedBean(name = "inout", scope = "session")
 public class InOutBean implements Serializable {
 

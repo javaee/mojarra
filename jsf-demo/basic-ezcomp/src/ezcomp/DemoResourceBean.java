@@ -52,20 +52,31 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 
 /**
- * Created by IntelliJ IDEA. User: rlubke Date: Oct 27, 2008 Time: 12:22:33 AM
- * To change this template use File | Settings | File Templates.
+ * This bean is responsible for building the metadata used in generating the
+ * demo index page.
  */
 @ManagedBean(name = "demoBean", scope = "application", eager = true)
 public class DemoResourceBean {
 
+    /**
+     * The path and filename to the demo metadata descriptor.
+     */
     private static final String DEMO_DESCRIPTOR = "/WEB-INF/demo.xml";
 
-    private ArrayList<DemoBean> demoBeans;
+
+    /**
+     * List of <code>DemoBean</code>s for this application instance.
+     */
+    private List<DemoBean> demoBeans;
 
 
     // ---------------------------------------------------------- Public Methods
 
 
+    /**
+     * @return a <code>Collection</code> of <code>DemoBeans</code> for this
+     *  application.
+     */
     public Collection<DemoBean> getDemoBeans() {
 
         return demoBeans;
@@ -76,6 +87,10 @@ public class DemoResourceBean {
     // --------------------------------------------------------- Private Methods
 
 
+    /**
+     * @return a non-validating, non-namespace aware <code>DocumentBuilder</code>
+     * @throws Exception if the DocumentBuilder cannot be obtained
+     */
     private DocumentBuilder getBuilder() throws Exception {
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -86,6 +101,11 @@ public class DemoResourceBean {
     }
 
 
+    /**
+     * @return the <code>Document</code> based off the content found within
+     *  {@link #DEMO_DESCRIPTOR}
+     * @throws Exception if an error occurs parsing {@link #DEMO_DESCRIPTOR}
+     */
     private Document getDemoMetadata() throws Exception {
 
         FacesContext ctx = FacesContext.getCurrentInstance();
@@ -95,13 +115,24 @@ public class DemoResourceBean {
     }
 
 
+    /**
+     * <p>
+     * This method is responsible for constructing the <code>DemoBean</code>
+     * instances based on the parsed content of {@link #DEMO_DESCRIPTOR}.
+     * </p>
+     * <p>
+     * This method will be called by the JSF managed bean facility before the
+     * bean is automatically pushed to the application scope when the
+     * application starts.
+     * </p>
+     */
     @SuppressWarnings({"UnusedDeclaration"})
     @PostConstruct
     private void buildDemoMetaData()  {
 
         try {
             Document d = getDemoMetadata();
-            demoBeans = new ArrayList<DemoBean>();
+            ArrayList<DemoBean> beans = new ArrayList<DemoBean>();
             NodeList demoElements = d.getElementsByTagName("demo");
             for (int i = 0, len = demoElements.getLength(); i < len; i++) {
                 DemoBean b = processDemo(demoElements.item(i));
@@ -109,7 +140,8 @@ public class DemoResourceBean {
                     demoBeans.add(b);
                 }
             }
-            demoBeans.trimToSize();
+            beans.trimToSize();
+            demoBeans = beans;
         } catch (Exception e) {
             throw new FacesException("Unable to initialize demo", e);
         }
@@ -117,6 +149,11 @@ public class DemoResourceBean {
     }
 
 
+    /**
+     * @param demoNode node representing the &lt;demo&gt; element.
+     * @return a new <code>DemoBean</code> instance based off the provided
+     *  <code>Node</code> and it's children.
+     */
     private DemoBean processDemo(Node demoNode) {
 
         NodeList children = demoNode.getChildNodes();
@@ -145,9 +182,15 @@ public class DemoResourceBean {
             return new DemoBean(name, page, sourceInfo);
         }
         return null;
+
     }
 
 
+    /**
+     * @param sourceInfo node representing the &lt;sources&gt; element.
+     * @return a new <code>DemoSourceInfo</code> instance based off the provided
+     *  <code>Node</code> and it's children.
+     */
     private DemoSourceInfo createDemoSourceInfo(Node sourceInfo) {
 
         NodeList children = sourceInfo.getChildNodes();
@@ -170,6 +213,10 @@ public class DemoResourceBean {
     }
 
 
+    /**
+     * @param node target <code>Node</code>
+     * @return the textual value of the <code>Node</code>
+     */
     private String getNodeText(Node node) {
 
         String res = null;
