@@ -40,8 +40,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
+import java.io.BufferedReader;
+import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.text.NumberFormat;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -70,13 +73,19 @@ public class Functions {
         // PENDING - add logic to colorize key words/XML elements?
         
         ExternalContext extCtx = ctx.getExternalContext();
-        Reader r = new InputStreamReader(extCtx.getResourceAsStream(file));
+        BufferedReader r =
+              new BufferedReader(
+                    new InputStreamReader(extCtx.getResourceAsStream(file)));
         StringWriter w = new StringWriter();
-        int len = 512;
-        char[] buf = new char[len];
+        PrintWriter pw = new PrintWriter(w);
+
         try {
-            for (int i = r.read(buf, 0, len); i != -1; i = r.read(buf, 0, len)) {
-                w.write(buf, 0, i);
+            int lineNumber = 1;
+            for (String s = r.readLine(); s != null; s = r.readLine()) {
+                pw.format("%3s", Integer.toString(lineNumber++));
+                pw.write(": ");
+                pw.write(s);
+                pw.write('\n');
             }
             ctx.getResponseWriter().writeText(w.toString(), null);
         } catch (IOException ioe) {
