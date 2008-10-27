@@ -137,7 +137,7 @@ public class DemoResourceBean {
             for (int i = 0, len = demoElements.getLength(); i < len; i++) {
                 DemoBean b = processDemo(demoElements.item(i));
                 if (b != null) {
-                    demoBeans.add(b);
+                    beans.add(b);
                 }
             }
             beans.trimToSize();
