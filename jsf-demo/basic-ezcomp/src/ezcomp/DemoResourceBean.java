@@ -159,7 +159,7 @@ public class DemoResourceBean {
         NodeList children = demoNode.getChildNodes();
         String name = null;
         String page = null;
-        List<DemoSourceInfo> sourceInfo = new ArrayList<DemoSourceInfo>();
+        ArrayList<DemoSourceInfo> sourceInfo = new ArrayList<DemoSourceInfo>();
         for (int i = 0, len = children.getLength(); i < len; i++) {
             Node n = children.item(i);
             if ("name".equals(n.getNodeName())) {
@@ -177,6 +177,8 @@ public class DemoResourceBean {
                 }
             }
         }
+
+        sourceInfo.trimToSize();
 
         if (name != null && page != null && !sourceInfo.isEmpty()) {
             return new DemoBean(name, page, sourceInfo);
