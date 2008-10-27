@@ -85,6 +85,7 @@
         <copy todir="${build}/${example}/WEB-INF">
             <fileset dir="web/WEB-INF">
                 <include name="*.xml"/>
+                <include name="*.xhtml"/>
             </fileset>
         </copy>
         <copy todir="${build}/${example}/WEB-INF/classes">

@@ -121,11 +121,14 @@ public class DemoResourceBean {
 
         NodeList children = demoNode.getChildNodes();
         String name = null;
+        String page = null;
         List<DemoSourceInfo> sourceInfo = new ArrayList<DemoSourceInfo>();
         for (int i = 0, len = children.getLength(); i < len; i++) {
             Node n = children.item(i);
             if ("name".equals(n.getNodeName())) {
                 name = getNodeText(n);
+            } else if ("page".equals(n.getNodeName())) {
+                page = getNodeText(n);
             } else if ("sources".equals(n.getNodeName())) {
                 NodeList sources = n.getChildNodes();
                 for (int j = 0, jlen = sources.getLength(); j < jlen; j++) {
@@ -138,8 +141,8 @@ public class DemoResourceBean {
             }
         }
 
-        if (name != null && !sourceInfo.isEmpty()) {
-            return new DemoBean(name, sourceInfo);
+        if (name != null && page != null && !sourceInfo.isEmpty()) {
+            return new DemoBean(name, page, sourceInfo);
         }
         return null;
     }
@@ -189,11 +192,13 @@ public class DemoResourceBean {
 
         private List<DemoSourceInfo> sourceInfo;
         private String demoName;
+        private String page;
 
 
-        DemoBean(String demoName, List<DemoSourceInfo> sourceInfo) {
+        DemoBean(String demoName, String page, List<DemoSourceInfo> sourceInfo) {
 
             this.demoName = demoName;
+            this.page = page;
             this.sourceInfo = sourceInfo;
 
         }
@@ -206,6 +211,13 @@ public class DemoResourceBean {
 
             return demoName;
 
+        }
+
+
+        public String getPage() {
+
+            return page;
+            
         }
 
 

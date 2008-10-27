@@ -42,34 +42,29 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:ez="http://java.sun.com/jsf/composite/simpleout">
-<h:head>
-    <title>Basic Composite Component - Output</title>
-    <style type="text/css">
-        .grayBox {
-            padding: 8px;
-            margin: 10px 0;
-            border: 1px solid #CCC;
-            background-color: #f9f9f9;
-        }
-    </style>
+<head>
+    <title>Should Be Ignored</title>
+</head>
+<body>
 
-</h:head>
+<ui:composition template="/WEB-INF/demotemplate.xhtml">
+    <ui:param name="title" value="Basic Composite Component - Output"/>
+    <ui:define name="content">
 
-<h:body>
+        <h2>${title}</h2>
 
-    <h2>Basic Composite Component - Input/Output</h2>
+        <h:form>
 
-    <h:form>
+            <div id="compositeComponent" class="grayBox" style="border: 1px solid #090;">
+                <ez:out value="Test Value"/>
+            </div>
 
-        <div id="compositeComponent" class="grayBox"
-             style="border: 1px solid #090;">
-            <ez:out value="Test Value"/>
-        </div>
+            <p><h:commandButton value="reload"/></p>
+            <h:messages/>
+        </h:form>
 
-        <p><h:commandButton value="reload"/></p>
-        <h:messages/>
-    </h:form>
+    </ui:define>
+</ui:composition>
 
-</h:body>
-
+</body>
 </html>

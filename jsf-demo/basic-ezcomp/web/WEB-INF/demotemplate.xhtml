@@ -39,28 +39,19 @@
 <!DOCTYPE html
       PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
-      xmlns:h="http://java.sun.com/jsf/html"
+<html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
-<head>
-    <title>Should Be Ignored</title>
-</head>
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xml:lang="en" lang="en">
+<h:head>
+    <h:outputStylesheet name="css/styles.css"/>
+    <title>${title}</title>
+</h:head>
+
 <body>
-
-<ui:composition template="/WEB-INF/demotemplate.xhtml">
-    <ui:param name="title" value="Basic Composite Component - Input/Output"/>
-    <ui:define name="content">
-        <h:form>
-            You Said: <h:outputText value="#{inout.value}"/>
-
-            <p><h:commandButton id="back" action="back" value="Go Back"
-                                type="submit"/>
-            </p>
-            <h:messages/>
-        </h:form>
-    </ui:define>
-</ui:composition>
-
+<div id="container">
+    <ui:insert name="content"/>
+</div>
 </body>
 </html>

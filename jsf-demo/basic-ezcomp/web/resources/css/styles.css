@@ -61,3 +61,10 @@
     color: #669;
     padding: 6px 8px;
 }
+
+.grayBox {
+    padding: 8px;
+    margin: 10px 0;
+    border: 1px solid #CCC;
+    background-color: #f9f9f9;
+}

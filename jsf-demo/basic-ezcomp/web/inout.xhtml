@@ -42,37 +42,29 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:ez="http://java.sun.com/jsf/composite/simpleinout">
-<h:head>
-    <title>Basic Composite Component - Input/Output</title>
-    <style type="text/css">
-        .grayBox {
-            padding: 8px;
-            margin: 10px 0;
-            border: 1px solid #CCC;
-            background-color: #f9f9f9;
-        }
-    </style>
+<head>
+    <title>Should Be Ignored</title>
+</head>
+<body>
+<ui:composition template="/WEB-INF/demotemplate.xhtml">
+    <ui:param name="title" value="Basic Composite Component - Input/Output"/>
+    <ui:define name="content">
+        <h2>${title}</h2>
 
-</h:head>
+        <h:form>
+            <div id="compositeComponent" class="grayBox"
+                 style="border: 1px solid #090;">
+                Enter text: <ez:inout value="#{inout.value}"/>
+            </div>
+            <p>
+                <h:commandButton value="reload"/>
+                <h:commandButton id="submit" action="success" value="Submit"
+                                 type="submit"/>
+            </p>
+            <h:messages/>
+        </h:form>
+    </ui:define>
+</ui:composition>
 
-<h:body>
-
-    <h2>Basic Composite Component - Input/Output</h2>
-
-    <h:form>
-        <div id="compositeComponent" class="grayBox"
-             style="border: 1px solid #090;">
-            Enter text: <ez:inout value="#{inout.value}"/>
-        </div>
-        <p>
-            <h:commandButton value="reload"/>
-            <h:commandButton id="submit" action="success" value="Submit"
-                             type="submit"/>
-        </p>
-        <h:messages/>
-    </h:form>
-
-
-</h:body>
-
+</body>
 </html>

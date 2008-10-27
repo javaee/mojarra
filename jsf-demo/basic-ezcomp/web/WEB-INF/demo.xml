@@ -41,6 +41,7 @@
 
     <demo>
         <name>Simple Out</name>
+        <page>out.jsf</page>
         <sources>
             <source>
                 <label>Consuming Page</label>
@@ -57,6 +58,7 @@
 
     <demo>
         <name>Simple In/Out</name>
+        <page>inout.jsf</page>
         <sources>
             <source>
                 <label>Consuming Page</label>
