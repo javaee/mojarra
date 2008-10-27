@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -37,87 +36,65 @@
 
 -->
 <!DOCTYPE html
-     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
       xml:lang="en" lang="en">
-  <head>
+<h:head>
+    <h:outputStylesheet name="css/styles.css"/>
     <title>JavaServer Faces 2.0 Composite Component Demo</title>
-  </head>
-  <body>
-    <table border="1" cellpadding="1">
+</h:head>
+
+<body>
+<div id="container">
+    <table id="demo-table" border="1" cellpadding="1">
+        <caption>
+            Javaserver Faces 2.0 Composite Component Demo
+        </caption>
         <thead>
             <tr>
-                <td>Demo Name</td>
-                <td>Related Source Files</td>
-                <td>Execute</td>
+                <th>Demo Name</th>
+                <th>Related Source Files</th>
+                <th>Execute</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>Simple Out</td>
-                <td>
-                    <h:panelGrid columns="2" border="0">
-
-                        <h:outputText value="Consuming Page:&nbsp;"/>
-                        <h:outputLink value="displaysource.jsf">
-                            <h:outputText value="/out.xhtml"/>
-                            <f:param name="file" value="/out.xhtml"/>
+            <ui:repeat var="demo" value="#{demoBean.demoBeans}">
+                <tr>
+                    <td>
+                        <h:outputText value="#{demo.demoName}"/>
+                    </td>
+                    <td>
+                        <table>
+                            <ui:repeat var="sourceInfo" value="#{demo.sourceInfo}">
+                            <tr>
+                                    <td>
+                                        <h:outputText value="#{sourceInfo.label}:&nbsp;"/>
+                                    </td>
+                                    <td>
+                                        <h:outputLink value="displaysource.jsf">
+                                            <h:outputText value="#{sourceInfo.sourceFilePath}"/>
+                                            <f:param name="file" value="#{sourceInfo.sourceFilePath}"/>
+                                        </h:outputLink>
+                                    </td>
+                                </tr>
+                            </ui:repeat>
+                        </table>
+                    </td>
+                    <td align="center">
+                        <h:outputLink value="inout.jsf">
+                            <h:graphicImage style="border:none"
+                                            alt="Execute"
+                                            name="images/execute.gif"/>
                         </h:outputLink>
-
-
-                        <h:outputText value="Composite Component:&nbsp;"/>
-                        <h:outputLink value="displaysource.jsf">
-                            <h:outputText value="/resources/simpleout/out.xhtml"/>
-                            <f:param name="file" value="/resources/simpleout/out.xhtml"/>
-                        </h:outputLink>
-
-                    </h:panelGrid>
-                </td>
-                <td align="center">
-                    <h:outputLink value="out.jsf">
-                        <h:graphicImage style="border:none;"
-                                        alt="Execute"
-                                        name="images/execute.gif"/>
-                    </h:outputLink>
-                </td>
-            </tr>
-            <tr>
-                <td>Simple In/Out</td>
-                <td>
-                    <h:panelGrid columns="2" border="0">
-
-                        <h:outputText value="Consuming Page:&nbsp;"/>
-                        <h:outputLink value="displaysource.jsf">
-                            <h:outputText value="/inout.xhtml"/>
-                            <f:param name="file" value="/inout.xhtml"/>
-                        </h:outputLink>
-
-                        <h:outputText value="Composite Component:&nbsp;"/>
-                        <h:outputLink value="displaysource.jsf">
-                            <h:outputText value="/resources/simpleinout/inout.xhtml"/>
-                            <f:param name="file" value="resources/simpleinout/inout.xhtml"/>
-                        </h:outputLink>
-                        
-                        <h:outputText value="Managed Bean:&nbsp;"/>
-                        <h:outputLink value="displaysource.jsf">
-                            <h:outputText value="/WEB-INF/classes/ezcomp/InOutBean.java"/>
-                            <f:param name="file" value="/WEB-INF/classes/ezcomp/InOutBean.java"/>
-                        </h:outputLink>
-
-                    </h:panelGrid>
-                </td>
-                <td align="center">
-                    <h:outputLink value="inout.jsf">
-                        <h:graphicImage style="border:none"
-                                        alt="Execute"
-                                        name="images/execute.gif"/>
-                    </h:outputLink>
-                </td>
-            </tr>
+                    </td>
+                </tr>
+            </ui:repeat>
         </tbody>
     </table>
-  </body>
+</div>
+</body>
 </html>
