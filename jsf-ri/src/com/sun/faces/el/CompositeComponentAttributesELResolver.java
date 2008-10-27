@@ -102,7 +102,7 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
            && property != null
            && COMPOSITE_COMPONENT_ATTRIBUTES_NAME.equals(property.toString())) {
             UIComponent c = (UIComponent) base;
-            // ensure we're dealing with a composit component...
+            // ensure we're dealing with a composit component...    
             if (c.getAttributes().get(Resource.COMPONENT_RESOURCE_KEY) != null) {
                 context.setPropertyResolved(true);
                 FacesContext ctx = (FacesContext) context.getContext(FacesContext.class);
