@@ -159,7 +159,7 @@
     <target name="copyDemoSource" depends="copyJars">
         <echo>copy the necessary samples</echo>
          <copy todir="${dist.home}/samples/basic-ezcomp" includeEmptyDirs="false">
-            <fileset dir="${basedir}/basic-excomp" excludes="build.xml"/>
+            <fileset dir="${basedir}/basic-ezcomp" excludes="build.xml"/>
          </copy>
          <copy todir="${dist.home}/samples/guessNumber2.0" includeEmptyDirs="false">
             <fileset dir="${basedir}/guessNumber2.0" excludes="build.xml"/>
