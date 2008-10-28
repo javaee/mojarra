@@ -44,15 +44,18 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
+import java.text.MessageFormat;
 
 import javax.faces.model.ManagedBean;
 import javax.faces.model.ManagedBeans;
 import javax.faces.model.ManagedProperty;
 import javax.faces.context.FacesContext;
+import javax.faces.FacesException;
 
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.mgbean.ManagedBeanInfo;
+import com.sun.faces.el.ELUtils;
 
 /**
  * <p>
@@ -134,6 +137,7 @@ public class ManagedBeanConfigHandler implements ConfigAnnotationHandler {
                 manager.register(info);
                 for (int i = 1; i < beans.length; i++) {
                     ManagedBean managedBean = beans[i];
+
                     manager.register(info.clone(managedBean.name(),
                                                 managedBean.scope(),
                                                 managedBean.eager(),
@@ -154,6 +158,13 @@ public class ManagedBeanConfigHandler implements ConfigAnnotationHandler {
         String name = metadata.name();
         String scope = metadata.scope();
         boolean eager = metadata.eager();
+
+        if (!ELUtils.isScopeValid(scope)) {
+            // RELEASE_PENDING (i18n)
+            throw new FacesException(
+                  MessageFormat.format("ManagedBean annotation scope {0} on class {1} is invalid.  It must be one of 'request', 'session', 'application', or 'none'",
+                                       scope, annotatedClass.getName()));
+        }
 
         Field[] fields = annotatedClass.getDeclaredFields();
         List<ManagedBeanInfo.ManagedProperty> properties = null;
