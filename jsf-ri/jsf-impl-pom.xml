@@ -39,12 +39,30 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.sun.faces</groupId>
-    <artifactId>mojarra-jsf-impl</artifactId>
-    <version>${impl.version}</version>
+    <artifactId>jsf-impl</artifactId>
+    <version>2.0.0-b04</version>
     <description>
         Sun's implementation of the JSF 2.0 specification.
     </description>
     <url>http://java.sun.com/javaee/javaserverfaces/</url>
+    <distributionManagement>
+        <repository>
+            <id>java.net-m2-repository</id>
+            <url>java-net:/maven2-repository/trunk/www/repository/</url>
+        </repository>
+    </distributionManagement>
+    <build>
+        <defaultGoal>install</defaultGoal>
+
+        <extensions>
+            <extension>
+                <groupId>org.jvnet.wagon-svn</groupId>
+                <artifactId>wagon-svn</artifactId>
+                <version>1.8</version>
+            </extension>
+        </extensions>
+
+    </build>
     <issueManagement>
         <system>issueZilla</system>
         <url>
