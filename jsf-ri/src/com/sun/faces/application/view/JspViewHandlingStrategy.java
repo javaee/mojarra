@@ -49,15 +49,14 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.jstl.core.Config;
 
 import com.sun.faces.application.ViewHandlerResponseWrapper;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.RequestStateManager;
-import com.sun.faces.util.Util;
 
 /**
  * This {@link ViewHandlingStrategy} handles JSP-based views.
@@ -98,19 +97,8 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
         }
 
         ExternalContext extContext = ctx.getExternalContext();
-        HttpServletRequest request = (HttpServletRequest) extContext.getRequest();
-        HttpServletResponse response = (HttpServletResponse) extContext.getResponse();
-
-        // RELEASE_PENDING this is temporary
-        String viewId = viewToRender.getViewId();
-        String mapping = Util.getFacesMapping(ctx);
-        if (!Util.isPrefixMapped(mapping)) {
-            if (viewId.endsWith(mapping)) {
-                response.sendError(404);
-                ctx.responseComplete();
-                return;
-            }
-        }
+        ServletRequest request = (ServletRequest) extContext.getRequest();
+        ServletResponse response = (ServletResponse) extContext.getResponse();
        
         try {
             if (executePageToBuildView(ctx, viewToRender)) {
