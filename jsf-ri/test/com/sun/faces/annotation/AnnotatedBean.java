@@ -39,7 +39,7 @@ package com.sun.faces.annotation;
 import javax.faces.model.ManagedBean;
 import javax.faces.model.ManagedProperty;
 
-@ManagedBean(name="annotatedBean",scope ="request")
+@ManagedBean(scope ="request")
 public class AnnotatedBean {
 
     @ManagedProperty(name="silly",value="#{requestScope.name}")

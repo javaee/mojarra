@@ -108,10 +108,10 @@ public class TestAnnotatedComponents extends ServletFacesTestCase {
         ApplicationAssociate associate =
               ApplicationAssociate.getInstance(ctx.getExternalContext());
         BeanManager manager = associate.getBeanManager();
-        BeanBuilder bean1 = manager.getBuilder("annotatedBean");
+        BeanBuilder bean1 = manager.getBuilder("AnnotatedBean");
         assertNotNull(bean1);
         ManagedBeanInfo bean1Info = bean1.getManagedBeanInfo();
-        assertEquals("annotatedBean", "annotatedBean", bean1Info.getName());
+        assertEquals("AnnotatedBean", "AnnotatedBean", bean1Info.getName());
         assertEquals("request", "request", bean1Info.getScope());
         assertFalse(bean1Info.isEager());
         List<ManagedBeanInfo.ManagedProperty> managedProperties = bean1Info.getManagedProperties();
@@ -127,11 +127,11 @@ public class TestAnnotatedComponents extends ServletFacesTestCase {
         assertEquals("#{requestScope.age}", "#{requestScope.age}", p2.getPropertyValue());
         request.setAttribute("name", "Bill");
         request.setAttribute("age", 33);
-        AnnotatedBean bean1Instance = (AnnotatedBean) manager.create("annotatedBean", ctx);
+        AnnotatedBean bean1Instance = (AnnotatedBean) manager.create("AnnotatedBean", ctx);
         assertEquals("Bill", "Bill", bean1Instance.getSilly());
         assertEquals(33, 33, bean1Instance.getAge());
-        assertNotNull(request.getAttribute("annotatedBean"));
-        request.removeAttribute("annotatedBean");
+        assertNotNull(request.getAttribute("AnnotatedBean"));
+        request.removeAttribute("AnnotatedBean");
 
         // validate class annotated with @ManagedBeans
         BeanBuilder bean2 = manager.getBuilder("annotatedBean2");

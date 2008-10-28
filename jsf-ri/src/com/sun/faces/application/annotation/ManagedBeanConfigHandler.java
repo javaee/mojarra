@@ -166,6 +166,11 @@ public class ManagedBeanConfigHandler implements ConfigAnnotationHandler {
                                        scope, annotatedClass.getName()));
         }
 
+        if (name.length() == 0) {
+            String t = annotatedClass.getName();
+            name = t.substring(t.lastIndexOf('.') + 1); 
+        }
+
         Field[] fields = annotatedClass.getDeclaredFields();
         List<ManagedBeanInfo.ManagedProperty> properties = null;
         if (fields.length > 0) {
