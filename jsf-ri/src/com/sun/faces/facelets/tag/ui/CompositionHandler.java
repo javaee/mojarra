@@ -52,6 +52,7 @@
 package com.sun.faces.facelets.tag.ui;
 
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -147,6 +148,11 @@ public final class CompositionHandler extends TagHandler implements
             ctx.extendClient(this);
             try {
                 ctx.includeFacelet(parent, this.template.getValue(ctx));
+            } catch (FileNotFoundException fnfe) {
+                if (log.isLoggable(Level.FINE)) {
+                    log.log(Level.FINE, fnfe.toString(), fnfe);
+                }
+                throw new FileNotFoundException("template not found: " + template.toString());
             } finally {
                 ctx.popClient(this);
                 ctx.setVariableMapper(orig);

@@ -44,6 +44,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.text.MessageFormat;
 
 import javax.faces.FacesException;
 import javax.faces.application.ViewHandler;
@@ -191,7 +192,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             }
 
         } catch (FileNotFoundException fnfe) {
-            this.handleFaceletNotFound(ctx, vh, viewToRender.getViewId());
+            this.handleFaceletNotFound(ctx,
+                                       vh,
+                                       viewToRender.getViewId(),
+                                       fnfe.getMessage());
         } catch (Exception e) {
             this.handleRenderException(ctx, e);
         } finally {
@@ -476,18 +480,22 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      * @param context the {@link FacesContext} for the current request
      * @param vh the {@link ViewHandler} handling this view
      * @param viewId the view ID that was to be mapped to a Facelet
+     * @param message optional message to include in the 404
      * @throws IOException if an error occurs sending the 404 to the client
      */
     protected void handleFaceletNotFound(FacesContext context,
                                          ViewHandler vh,
-                                         String viewId)
+                                         String viewId,
+                                         String message)
     throws IOException {
 
         String actualId = vh.getActionURL(context, viewId);
         Object respObj = context.getExternalContext().getResponse();
         if (respObj instanceof HttpServletResponse) {
             HttpServletResponse respHttp = (HttpServletResponse) respObj;
-            respHttp.sendError(HttpServletResponse.SC_NOT_FOUND, actualId);
+            respHttp.sendError(HttpServletResponse.SC_NOT_FOUND, ((message != null)
+                                                                  ? (actualId + ": " + message)
+                                                                  : actualId));
             context.responseComplete();
         }
 
