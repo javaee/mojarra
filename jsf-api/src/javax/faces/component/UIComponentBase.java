@@ -1421,18 +1421,18 @@ public abstract class UIComponentBase extends UIComponent {
 
         if (attachedObject instanceof Collection) {
             Collection attachedCollection = (Collection) attachedObject;
-            List<StateHolderSaver> resultList = new ArrayList<StateHolderSaver>(attachedCollection.size() + 1);
+            List<StateHolderSaver> resultList =
+                  new ArrayList<StateHolderSaver>(attachedCollection.size() + 1);
             resultList.add(new StateHolderSaver(context, attachedCollection.getClass()));
             Iterator listIter = attachedCollection.iterator();
-	    Object cur;
+            Object cur;
             while (listIter.hasNext()) {
-		if (null != (cur = listIter.next())) {
-		    resultList.add(new StateHolderSaver(context, cur));
-		}
+                if (null != (cur = listIter.next())) {
+                    resultList.add(new StateHolderSaver(context, cur));
+                }
             }
             result = resultList;
-        }
-        else {
+        } else {
             result = new StateHolderSaver(context, attachedObject);
         }
 
