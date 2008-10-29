@@ -41,11 +41,14 @@ import java.util.logging.Level;
 import java.io.Serializable;
 
 import javax.faces.model.ManagedBean;
+import javax.faces.model.SessionScoped;
 
 /**
  * Managed Bean for the inout composite component demo.
  */
-@ManagedBean(name = "inout", scope = "session")
+
+@ManagedBean(name = "inout")
+@SessionScoped
 public class InOutBean implements Serializable {
 
     private static final long serialVersionUID = -5980327949241062555L;
