@@ -61,7 +61,7 @@ import java.lang.annotation.Inherited;
  * <em>component-family</em>.  The implementation must guarantee that
  * for each class annotated with <code>FacesRenderer</code>, found with
  * the algorithm "<em><a target="_"
- * href="../component/FacesComponent.html#componentConfigAnnotationScanningSpecification">componentConfigAnnotationScanningSpecification</a></em>",
+ * href="../application/FacesAnnotationHandler.html#configAnnotationScanningSpecification">configAnnotationScanningSpecification</a></em>",
  * the following actions are taken.</p>
 
  * <div class="changed_added_2_0">

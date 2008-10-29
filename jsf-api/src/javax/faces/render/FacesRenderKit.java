@@ -54,7 +54,7 @@ import java.lang.annotation.Inherited;
  * the <em>render-kit-id</em>.  The implementation must guarantee that
  * for each class annotated with <code>FacesRenderer</code>, found with
  * the algorithm "<em><a target="_"
- * href="../component/FacesComponent.html#componentConfigAnnotationScanningSpecification">componentConfigAnnotationScanningSpecification</a></em>",
+ * href="../application/FacesAnnotationHandler.html#configAnnotationScanningSpecification">configAnnotationScanningSpecification</a></em>",
  * {@link
  * javax.faces.render.RenderKitFactory#addRenderKit(java.lang.String,RenderKit)}
  * is called, passing the derived <em>render-kit-id</em> as the first

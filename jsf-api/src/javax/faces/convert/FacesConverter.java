@@ -57,7 +57,7 @@ import java.lang.annotation.Inherited;
  * guarantee that for each class annotated with
  * <code>FacesConverter</code>, found with the algorithm "<em><a
  * target="_"
- * href="../component/FacesComponent.html#componentConfigAnnotationScanningSpecification">componentConfigAnnotationScanningSpecification</a></em>",
+ * href="../application/FacesAnnotationHandler.html#configAnnotationScanningSpecification">configAnnotationScanningSpecification</a></em>",
  * the proper variant of <code>Application.addConverter()</code> is
  * called.  If <em>converter-id</em> is not the empty string, {@link
  * javax.faces.application.Application#addConverter(java.lang.String,java.lang.String)}

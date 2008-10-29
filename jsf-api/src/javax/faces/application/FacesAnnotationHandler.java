@@ -78,16 +78,42 @@ import javax.faces.context.FacesContext;
  * possible point this algorithm can be executed is after all of the
  * <code>&lt;application&gt;</code> elements from all of the application
  * configuration resources have been processed.  The implementation must
- * guarantee that the application configuration resources elements for
- * <code>&lt;component /&gt;</code>, <code>&lt;converter /&gt;</code>,
- * <code>&lt;validator /&gt;</code>, <code>&lt;managed-bean
- * /&gt;</code>, <code>&lt;render-kit /&gt;</code>, and
- * <code>&lt;navigation-handler /&gt;</code> are processed
- * <em>after</em> the "startup time annotation processing algorithm" is
- * executed.</p>
+ * guarantee that any conflicts between a constituent of the application
+ * configuration resources and a constituent of the processed
+ * annotations are resolved to favor the constituent in the application
+ * configuration resources.</p>
  *
  * <p>The runtime must employ the decorator pattern as for every other
  * pluggable artifact in JSF.</p>
+
+ * <p><em><a name="configAnnotationScanningSpecification">Algorithm for
+ * scanning classes for configuration annotations</a></em></p>
+
+ * <p>The following algorithm or one semantically equivalent to it must
+ * be followed to scan the classes available to the application for the
+ * presence of annotations that take the place of elements in the
+ * application configuration resources.  Each annotation for which this
+ * algorithm applies will specifically reference this algorithm in its
+ * javadoc.</p>
+
+ * <ul>
+
+ * <li><p>If the <code>&lt;faces-config&gt;</code> element in the
+ * <code>WEB-INF/faces-config.xml</code> file contains
+ * <code>metadata-complete</code> attribute whose value is
+ * <code>"true"</code>, the implementation must not perform annotation
+ * scanning on any classes except for those classes provided by the
+ * implementation itself.  Otherwise, continue as follows.</p></li>
+
+ * <li><p>All classes in <code>WEB-INF/classes</code> must be scanned.</p></li>
+
+ * <li><p>For every jar in the application's <code>WEB-INF/lib</code>
+ * directory, if the jar contains a
+ * <code>META-INF/faces-config.xml</code> file (even an empty one), all
+ * classes in that jar must be scanned.</p></li>
+ *
+ * </ul>
+
  *
  * </div>
  *
