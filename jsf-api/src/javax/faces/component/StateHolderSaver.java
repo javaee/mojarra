@@ -55,20 +55,20 @@ class StateHolderSaver implements Serializable {
     private Serializable savedState = null;
 
     public StateHolderSaver(FacesContext context, Object toSave) {
-	className = toSave.getClass().getName();
-	
+        className = toSave.getClass().getName();
+
         if (toSave instanceof StateHolder) {
             // do not save an attached object that is marked transient.
-            if (!((StateHolder)toSave).isTransient()) {
-                savedState = (Serializable) ((StateHolder)toSave).saveState(context);
+            if (!((StateHolder) toSave).isTransient()) {
+                savedState =
+                      (Serializable) ((StateHolder) toSave).saveState(context);
             } else {
                 className = null;
             }
+        } else if (toSave instanceof Serializable) {
+            savedState = (Serializable) toSave;
+            className = null;
         }
-	else if (toSave instanceof Serializable) {
-	    savedState = (Serializable) toSave;
-	    className = null;
-	}
     }
 
     /**
@@ -80,25 +80,25 @@ class StateHolderSaver implements Serializable {
         Object result = null;
         Class toRestoreClass;
 
-	// if the Object to save implemented Serializable but not
-	// StateHolder
-	if (null == className && null != savedState) {
-	    return savedState;
-	}
+        // if the Object to save implemented Serializable but not
+        // StateHolder
+        if (null == className && null != savedState) {
+            return savedState;
+        }
 
-	// if the Object to save did not implement Serializable or
-	// StateHolder
-        if ( className == null) {
+        // if the Object to save did not implement Serializable or
+        // StateHolder
+        if (className == null) {
             return null;
         }
 
-	// else the object to save did implement StateHolder
-        
+        // else the object to save did implement StateHolder
+
         try {
             toRestoreClass = loadClass(className, this);
         }
         catch (ClassNotFoundException e) {
-	    throw new IllegalStateException(e.getMessage());
+            throw new IllegalStateException(e.getMessage());
         }
 
         if (null != toRestoreClass) {
@@ -114,10 +114,10 @@ class StateHolderSaver implements Serializable {
         }
 
         if (null != result && null != savedState &&
-	    result instanceof StateHolder) {
-	    // don't need to check transient, since that was done on
-	    // the saving side.
-	    ((StateHolder)result).restoreState(context, savedState);
+            result instanceof StateHolder) {
+            // don't need to check transient, since that was done on
+            // the saving side.
+            ((StateHolder) result).restoreState(context, savedState);
         }
         return result;
     }
