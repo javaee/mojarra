@@ -48,7 +48,7 @@
 </head>
 <body>   <!-- template="/WEB-INF/demotemplate.xhtml" -->
 <ui:composition  template="/WEB-INF/demotemplate.xhtml" >
-    <ui:param name="title" value="JavaServer Faces 2.0 Composite Component Demo"/>
+    <ui:param name="title" value="JavaServer Faces 2.0 Basic Ajax Demo"/>
     <ui:define name="content">
         <table id="demo-table" border="1" cellpadding="1">
             <caption>
@@ -62,7 +62,7 @@
                 </tr>
             </thead>
             <tbody>
-                <ui:repeat var="demo" value="#{ajaxDemoBean.demoBeans}">
+                <ui:repeat var="demo" value="#{demoBean.demoBeans}">
                     <tr>
                         <td>
                             <h:outputText value="#{demo.demoName}"/>
