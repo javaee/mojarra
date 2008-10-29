@@ -1,5 +1,8 @@
 package basicajax;
 
+import javax.faces.model.ManagedBean;
+
+@ManagedBean(name = "echo", scope = "session")
 public class Echo {
     String str = "marco";
 
