@@ -138,7 +138,7 @@ public class TestAnnotatedComponents extends ServletFacesTestCase {
         assertNotNull(bean2);
         ManagedBeanInfo bean2Info = bean2.getManagedBeanInfo();
         assertEquals("annotatedBean2", "annotatedBean2", bean2Info.getName());
-        assertEquals("request", "request", bean2Info.getScope());
+        assertEquals("application", "application", bean2Info.getScope());
         assertFalse(bean2Info.isEager());
         managedProperties = bean2Info.getManagedProperties();
         assertNotNull(managedProperties);
@@ -156,8 +156,8 @@ public class TestAnnotatedComponents extends ServletFacesTestCase {
         AnnotatedBeans bean2Instance = (AnnotatedBeans) manager.create("annotatedBean2", ctx);
         assertEquals("Bill", "Bill", bean2Instance.getSilly());
         assertEquals(33, 33, bean2Instance.getAge());
-        assertNotNull(request.getAttribute("annotatedBean2"));
-        request.removeAttribute("annotatedBean2");
+        assertNotNull(ctx.getExternalContext().getApplicationMap().get("annotatedBean2"));
+        ctx.getExternalContext().getApplicationMap().remove("annotatedBean2");
 
         BeanBuilder bean3 = manager.getBuilder("annotatedBean3");
         assertNotNull(bean3);

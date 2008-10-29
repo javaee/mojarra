@@ -36,14 +36,16 @@
 
 package com.sun.faces.annotation;
 
-import javax.faces.model.ManagedProperty;
+import javax.faces.model.ApplicationScoped;
 import javax.faces.model.ManagedBean;
 import javax.faces.model.ManagedBeans;
+import javax.faces.model.ManagedProperty;
 
 @ManagedBeans({
-    @ManagedBean(name="annotatedBean2",scope="request"),
-    @ManagedBean(name="annotatedBean3",scope="application",eager=true)
+    @ManagedBean(name="annotatedBean2"),
+    @ManagedBean(name="annotatedBean3",eager=true)
 })
+@ApplicationScoped
 public class AnnotatedBeans {
 
     @ManagedProperty(name="silly",value="#{applicationScope.name}")

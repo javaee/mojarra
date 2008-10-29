@@ -2,7 +2,8 @@ package basicajax;
 
 import javax.faces.model.ManagedBean;
 
-@ManagedBean(name = "echo", scope = "session")
+@ManagedBean(name = "echo")
+@SessionScoped
 public class Echo {
     String str = "marco";
 

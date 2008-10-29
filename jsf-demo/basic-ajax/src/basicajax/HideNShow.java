@@ -3,7 +3,8 @@ package basicajax;
 import javax.faces.model.ManagedBean;
 import javax.faces.event.ActionEvent;
 
-@ManagedBean(name = "hidenshow", scope = "session")
+@ManagedBean(name = "hidenshow")
+@SessionScoped
 public class HideNShow {
     Boolean render = false;
 

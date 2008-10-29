@@ -38,7 +38,8 @@ package basicajax;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.ManagedBean;
 
-@ManagedBean(name = "count", scope = "session")
+@ManagedBean(name = "count")
+@SessionScoped
 public class Count {
     Integer count = 0;
 

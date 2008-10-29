@@ -38,8 +38,10 @@ package com.sun.faces.annotation;
 
 import javax.faces.model.ManagedBean;
 import javax.faces.model.ManagedProperty;
+import javax.faces.model.RequestScoped;
 
-@ManagedBean(scope ="request")
+@ManagedBean
+@RequestScoped
 public class AnnotatedBean {
 
     @ManagedProperty(name="silly",value="#{requestScope.name}")

@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.model.ManagedBean;
+import javax.faces.model.ApplicationScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
 import javax.annotation.PostConstruct;
@@ -55,7 +56,8 @@ import org.w3c.dom.Node;
  * This bean is responsible for building the metadata used in generating the
  * demo index page.
  */
-@ManagedBean(name = "demoBean", scope = "application", eager = true)
+@ManagedBean(name = "demoBean",eager = true)
+@ApplicationScoped
 public class DemoResourceBean {
 
     /**

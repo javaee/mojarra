@@ -44,18 +44,19 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
-import java.text.MessageFormat;
 
 import javax.faces.model.ManagedBean;
 import javax.faces.model.ManagedBeans;
 import javax.faces.model.ManagedProperty;
+import javax.faces.model.RequestScoped;
+import javax.faces.model.SessionScoped;
+import javax.faces.model.ApplicationScoped;
+import javax.faces.model.UnScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.FacesException;
 
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.mgbean.BeanManager;
 import com.sun.faces.mgbean.ManagedBeanInfo;
-import com.sun.faces.el.ELUtils;
 
 /**
  * <p>
@@ -64,6 +65,13 @@ import com.sun.faces.el.ELUtils;
  * </p>
  */
 public class ManagedBeanConfigHandler implements ConfigAnnotationHandler {
+
+    private static final Class<?>[] SCOPES = {
+          RequestScoped.class,
+          SessionScoped.class,
+          ApplicationScoped.class,
+          UnScoped.class
+    };
 
     private static final Collection<Class<? extends Annotation>> HANDLES;
     static {
@@ -139,7 +147,7 @@ public class ManagedBeanConfigHandler implements ConfigAnnotationHandler {
                     ManagedBean managedBean = beans[i];
 
                     manager.register(info.clone(managedBean.name(),
-                                                managedBean.scope(),
+                                                info.getScope(),
                                                 managedBean.eager(),
                                                 info));
                 }
@@ -155,22 +163,10 @@ public class ManagedBeanConfigHandler implements ConfigAnnotationHandler {
     private ManagedBeanInfo getBeanInfo(Class<?> annotatedClass,
                                         ManagedBean metadata) {
 
-        String name = metadata.name();
-        String scope = metadata.scope();
+        String name = getName(metadata, annotatedClass);
+        String scope = getScope(annotatedClass);
         boolean eager = metadata.eager();
-
-        if (!ELUtils.isScopeValid(scope)) {
-            // RELEASE_PENDING (i18n)
-            throw new FacesException(
-                  MessageFormat.format("ManagedBean annotation scope {0} on class {1} is invalid.  It must be one of 'request', 'session', 'application', or 'none'",
-                                       scope, annotatedClass.getName()));
-        }
-
-        if (name.length() == 0) {
-            String t = annotatedClass.getName();
-            name = t.substring(t.lastIndexOf('.') + 1); 
-        }
-
+        
         Field[] fields = annotatedClass.getDeclaredFields();
         List<ManagedBeanInfo.ManagedProperty> properties = null;
         if (fields.length > 0) {
@@ -200,6 +196,43 @@ public class ManagedBeanConfigHandler implements ConfigAnnotationHandler {
                                    null,
                                    properties,
                                    null);
+
+    }
+
+
+    private String getScope(Class<?> annotatedClass) {
+
+        for (Class<?> scope : SCOPES) {
+            //noinspection unchecked
+            Annotation a = annotatedClass.getAnnotation((Class<? extends Annotation>) scope);
+            if (a != null) {
+                if (a instanceof RequestScoped) {
+                    return "request";
+                } else if (a instanceof SessionScoped) {
+                    return "session";
+                } else if (a instanceof ApplicationScoped) {
+                    return "application";
+                } else if (a instanceof UnScoped) {
+                    return "none";
+                }
+            }
+        }
+
+        return "request";
+
+    }
+
+
+    private String getName(ManagedBean managedBean, Class<?> annotatedClass) {
+
+        String name = managedBean.name();
+
+        if (name.length() == 0) {
+            String t = annotatedClass.getName();
+            name = t.substring(t.lastIndexOf('.') + 1);
+        }
+
+        return name;
 
     }
 

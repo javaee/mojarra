@@ -55,7 +55,8 @@ import org.w3c.dom.Node;
  * This bean is responsible for building the metadata used in generating the
  * demo index page.
  */
-@ManagedBean(name = "demoBean", scope = "application", eager = true)
+@ManagedBean(name = "demoBean", eager = true)
+@ApplicationScoped
 public class DemoResourceBean {
 
     /**
