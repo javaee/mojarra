@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.model.ManagedBean;
+import javax.faces.model.ApplicationScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
 import javax.annotation.PostConstruct;

@@ -1,6 +1,7 @@
 package basicajax;
 
 import javax.faces.model.ManagedBean;
+import javax.faces.model.SessionScoped;
 import javax.faces.event.ActionEvent;
 
 @ManagedBean(name = "hidenshow")

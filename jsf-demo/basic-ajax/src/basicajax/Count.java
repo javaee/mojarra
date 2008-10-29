@@ -37,6 +37,7 @@ package basicajax;
 
 import javax.faces.event.ActionEvent;
 import javax.faces.model.ManagedBean;
+import javax.faces.model.SessionScoped;
 
 @ManagedBean(name = "count")
 @SessionScoped
