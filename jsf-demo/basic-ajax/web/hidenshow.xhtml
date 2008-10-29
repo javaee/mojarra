@@ -51,14 +51,16 @@
         <h:outputScript name="ajax.js" library="javax.faces" target="head"/>
         <h:outputStylesheet name="stylesheet.css"/>
 
+        <h2>Show / Hide based on backing bean</h2>
         <h:panelGroup id="pg1">
         <h:outputText id="out1" value="Show" rendered="#{hidenshow.render}"/>
         </h:panelGroup>
         <br/>
-        <h:commandButton id="button1" value="Show Hidden"
+        <h:commandButton id="button1" value="Show/Hide"
                          onclick="javax.faces.Ajax.ajaxRequest(this, event, {execute: 'button1', render: 'pg1'}); return false;"
                          actionListener="#{hidenshow.toggle}"/>
         <br/>
+        <h:outputText value="Reload entire page: "/>
         <h:commandButton id="reload" value="reload"/>
         <h:messages/>
     </h:form>
