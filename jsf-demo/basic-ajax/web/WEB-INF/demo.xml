@@ -1,3 +1,4 @@
+<?xml version='1.0' encoding='UTF-8'?>
 <!--
 
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -35,8 +36,43 @@
  holder.
 
 -->
-<html>
-<head>
-<meta http-equiv="Refresh" content="0;url=home.jsf">
-</head>
-</html>
+
+<demo-info>
+
+    <demo>
+        <name>In Page Counter</name>
+        <page>countinpage.jsf</page>
+        <sources>
+            <source>
+                <label>JSF Page</label>
+                <path>/countinpage.xhtml</path>
+            </source>
+            <source>
+                <label>Backing Javascript</label>
+                <path>/resources/ui-countinpage.js</path>
+            </source>
+        </sources>
+    </demo>
+
+    <!-- =================================================================== -->
+
+    <demo>
+        <name>Simple JSF Ajax Count Page</name>
+        <page>count.jsf</page>
+        <sources>
+            <source>
+                <label>JSF Page</label>
+                <path>/count.xhtml</path>
+            </source>
+            <source>
+                <label>Backing Javascript</label>
+                <path>/resources/ui-count.js</path>
+            </source>
+            <source>
+                <label>Managed Bean</label>
+                <path>/WEB-INF/classes/basicajax/Count.java</path>
+            </source>
+        </sources>
+    </demo>
+
+</demo-info>

@@ -85,9 +85,12 @@
         </jsf.javac>
         <copy todir="${build}/${example}/WEB-INF">
             <fileset dir="web/WEB-INF">
-                <include name="web.xml"/>
-                <include name="faces-config.xml"/>
+                <include name="*.xml"/>
+                <include name="*.xhtml"/>
             </fileset>
+        </copy>
+        <copy todir="${build}/${example}/WEB-INF/classes">
+            <fileset dir="src"/>
         </copy>
 
         <copy todir="${build}/${example}/">

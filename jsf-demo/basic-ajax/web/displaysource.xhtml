@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -35,8 +36,23 @@
  holder.
 
 -->
-<html>
+<!DOCTYPE html
+      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:d="https://javaserverfaces.dev.java.net/demo/basic-ajax"
+      xml:lang="en" lang="en">
 <head>
-<meta http-equiv="Refresh" content="0;url=home.jsf">
+    <title>Source: #{param.file}</title>
 </head>
+<body>
+    <h3>Source code for:&nbsp; #{param.file}</h3>
+
+    <hr/>
+
+    <pre>
+#{d:writeSource(facesContext, param.file)}
+    </pre>
+
+</body>
 </html>
