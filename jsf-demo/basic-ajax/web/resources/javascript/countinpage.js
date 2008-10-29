@@ -35,7 +35,7 @@
 */
 // Javascript for Basic Ajax Count in Page Example
 
-var count = 0;
+var count = 1;
 function buttonpush() {
     var cell = document.getElementById("out1");
     cell.innerHTML = count++;
