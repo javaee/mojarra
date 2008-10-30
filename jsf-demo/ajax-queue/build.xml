@@ -52,17 +52,8 @@
         <path refid="compile.classpath"/>
     </path>
     
-    <target name="init" depends="check.changes">
+    <target name="init">
         <tstamp/>
-    </target>
-
-    <target name="check.changes">
-        <uptodate property="skip.build"
-                  targetfile="${build}/last-build">
-            <srcfiles dir="${basedir}">
-                <include name="src/**/*.*"/>
-            </srcfiles>
-        </uptodate>
     </target>
 
     <target name="clean">
@@ -77,7 +68,7 @@
     </target>
 
 
-    <target name="build" unless="skip.build" depends="prepare"
+    <target name="build" depends="prepare"
             description="Compile Java files and copy static files.">
         <touch file="${build}/last-build"/>
         <jsf.javac srcdir="src/main/java"
