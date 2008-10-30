@@ -35,9 +35,9 @@
 */
 // Javascript for Basic Ajax Example
 
-function buttonpush(target, element, event) {
+function buttonpush(target, exec, element, event) {
     try {
-        javax.faces.Ajax.ajaxRequest(element, event, {execute: element.id, render: target});
+        javax.faces.Ajax.ajaxRequest(element, event, {execute: exec, render: target});
     } catch (ex) {
         // Handle errors here
         alert(ex);

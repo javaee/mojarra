@@ -92,4 +92,25 @@
         </sources>
     </demo>
 
+    <!-- =================================================================== -->
+
+    <demo>
+        <name>First Echo Demo</name>
+        <page>echo1.jsf</page>
+        <sources>
+            <source>
+                <label>JSF Page</label>
+                <path>/echo1.xhtml</path>
+            </source>
+            <source>
+                <label>Backing Javascript</label>
+                <path>/resources/javascript/echo1.js</path>
+            </source>
+            <source>
+                <label>Managed Bean</label>
+                <path>/WEB-INF/classes/basicajax/Echo.java</path>
+            </source>
+        </sources>
+    </demo>
+
 </demo-info>

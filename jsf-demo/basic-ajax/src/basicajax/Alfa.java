@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Random;
 
 
-@ManagedBean(name = "count")
+@ManagedBean(name = "alfa")
 @SessionScoped
 public class Alfa {
 
