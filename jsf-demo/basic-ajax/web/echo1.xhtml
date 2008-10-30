@@ -49,7 +49,7 @@
 <h:body>
     <h:form id="form1">    <!-- Note that unlike previous examples, prependid='true' -->
         <h:outputScript name="ajax.js" library="javax.faces" target="head"/>
-        <h:outputScript name="javascript/count.js" target="head"/>
+        <h:outputScript name="javascript/echo1.js" target="head"/>
         <h:outputStylesheet name="stylesheet.css"/>
 
         Output: <h:outputText id="out1" value="#{echo.str}"/>
@@ -60,9 +60,9 @@
         <h:commandButton id="button1" value="Echo"
                          onclick="return buttonpush('form1:out1,form1:in1', 'form1:button1,form1:in1', this, event);"/>
         <br/>
-        <!-- Resets the string, doesn't refresh the page -->
+        <!-- Resets the string, refreshes the form, but not the page -->
         <h:commandButton id="reset" value="reset"
-                            onclick="javax.faces.Ajax.ajaxRequest(this, event, {execute:'reset'}); return false;"
+                            onclick="return resetpush(this, event);"
                             actionListener="#{echo.reset}"/>
         <!-- Reloads the page, doesn't reset the string -->
         <h:commandButton id="reload" value="reload"/>
