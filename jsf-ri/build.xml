@@ -633,6 +633,10 @@
   <jsf.mvn pomFile="jsf-impl-pom.xml" mvnSpecVersion="${impl.version}" goals="deploy" />
 </target>
 
+<!-- scratch
+
+ant -emacs -Dbuild.generate.tld.dir=/Users/edburns/Projects/JavaEE/workareas/mojarra-HEAD/jsf-ri/build/generate/conf/share -Dbuild.dir=/Users/edburns/Projects/JavaEE/workareas/mojarra-HEAD/dist/jsf-spec-2.0-20081030 facelets.tlddocs
    
+-->
     
 </project>

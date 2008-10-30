@@ -205,16 +205,107 @@ apply.</p>
 
             <![CDATA[
 <div class="changed_added_2_0">
-<p>This element declares the usage contract for a
-            composite component.  If not present in a <em>PDL page</em>,
-            the contract will be inferred as described in the
-            specification.  There must be zero or one of these elements
-            in a composite component PDL file.  If a
-            <code>&lt;composite:interface&gt;</code> element does
-            appear, there must be an accompanying
+
+            <p>This element declares the usage contract for a composite
+            component.  Optionally, and at the component author's
+            discretion, this contract exposes the features of one or
+            more inner components to the page author.  The page author
+            can work with the composite component as a single component
+            whose feature set is the union of the features declared in
+            the usage contract.</p>
+
+            <p>For example, consider a composite component that
+            implements the functionality of a "login panel".  Such a
+            component would likely have two text fields and one button.
+            The user of such a component might like to do one or more of
+            the following.</p>
+
+            <ul>
+
+	  <li><p>Be able to listen for the <code>ActionEvent</code>
+            on the button.</p>
+
+           <p>In this case, a
+            <code>&lt;composite:actionSource&gt;</code> element is
+            included in the usage contract that refers to the inner
+            button in the <code>&lt;composite:implementation&gt;</code>
+            section.</p>
+
+          </li>
+
+	  <li><p>Provide an "action" to invoke when the button is pressed.
+	  </p>
+
+           <p>In this case, a
+            <code>&lt;composite:attribute&gt;</code> element is included
+            in the usage contract that refers to the inner button in the
+            <code>&lt;composite:implementation&gt;</code> section and
+            declares the proper method signature for an "action".</p>
+
+</li>
+
+	  <li><p>Provide parameters to the composite component for
+	  labels and other rendering specific aspects of the composite
+	  component.</p>
+
+          <p>In this case, one or more
+          <code>&lt;composite:attribute&gt;</code> elements are included
+          in the usage contract and those parameters are referred to in
+          the <code>&lt;composite:implementation&gt;</code> section
+          using EL expressions like
+          <code>#{compositeComponent.attrs.usernameLabel}</code>,
+          assuming <code>usernameLabel</code> is the <code>name</code>
+          of one of the <code>&lt;composite:attribute&gt;</code>
+          elements in the usage contract.</p>
+
+          </li>
+
+
+	  <li><p>Add <code>ValueChangeListener</code>s,
+	  <code>Converter</code>s, or <code>Validator</code>s to either
+	  or both text fields.
+	  </p>
+
+           <p>In this case, a
+           <code>&lt;composite:editableValueHolder&gt;</code> element is
+           included in the usage contract that refers to the inner text
+           field in the <code>&lt;composite:implementation&gt;</code>
+           section.  In the case of wanting to enable only adding a
+           <code>Converter</code> (and not a
+           <code>ValueChangeListener</code> or <code>Validator</code>, a
+           <code>&lt;composite:valueHolder&gt;</code> element would be
+           used.</p>
+
+            </li>
+
+	  <li><p>Add facet children to the login panel.</p>
+
+          <p>In this case, a <code>&lt;composite:facet&gt;</code>
+          element is included in the usage contract that refers to the
+          inner <code>&lt;composite:insertFacet&gt;</code> element in
+          the <code>&lt;composite:implementation&gt;</code> section.
+          </p>
+
+           </li>
+
+
+            </ul>
+
+            <p>For each of the behaviorial interfaces in Section 3.2 of
+            the specification, there is a tag in the
+            <code>composite:</code> library to nest inside of the
+            <code>&lt;composite:interface&gt;</code> section.
+            </p>
+
+
+            <p>If the <code>&lt;composite:interface&gt;</code> section
+            is not present in a <em>PDL page</em>, the contract will be
+            inferred as described in the specification.  There must be
+            zero or one of these elements in a composite component PDL
+            file.  If a <code>&lt;composite:interface&gt;</code> element
+            does appear, there must be an accompanying
             <code>&lt;composite-implementation&gt;</code> element in the
             same PDL file.  </p>
-
 
 </div>
 ]]>
@@ -399,6 +490,10 @@ may be zero or many of these inside of the
 <code>&lt;composite:interface</code>&gt; section.  This element may be
 nested within other <code>&lt;composite:attribute&gt;</code> elements to
 convey a usage contract that includes nested properties.</p>
+
+<p>Please see <code>&lt;<a
+href="interface.html">composite:interface</a>&gt;</code> for a usage
+example.</p>
 
             <p></p>
 
@@ -627,7 +722,10 @@ specified, and no "method-signature" attribute is present,
 <p>Declares that this composite component supports a facet with the
 name given by the value of the "name" attribute. </p>
 
-            <p></p>
+<p>Please see <code>&lt;<a
+href="interface.html">composite:interface</a>&gt;</code> for a usage
+example.</p>
+
 
 </div>]]>
         </description>
@@ -916,6 +1014,10 @@ list of ids of components within the
 "targets" refers to the <code>&lt;h:inputText&gt;</code> components on
 lines 6 and 7 above.</p>
 
+<p>Please see <code>&lt;<a
+href="interface.html">composite:interface</a>&gt;</code> for a usage
+example.</p>
+
 </div>]]>
         </description>
         <name>
@@ -993,6 +1095,11 @@ lines 6 and 7 above.</p>
             href="valueHolder.html"><code>&lt;composite:valueHolder&gt;</code></a>
             still applies.
             </p>
+
+<p>Please see <code>&lt;<a
+href="interface.html">composite:interface</a>&gt;</code> for a usage
+example.</p>
+
 </div>]]>
         </description>
         <name>
@@ -1097,6 +1204,11 @@ refer to the <em>attached objects</em> declared on lines 2, 3 and 4 below.</p>
 href="valueHolder.html"><code>&lt;composite:valueHolder&gt;</code></a>
 also applies in the case of
 <code>&lt;composite:actionSource&gt;</code>.</p>
+
+<p>Please see <code>&lt;<a
+href="interface.html">composite:interface</a>&gt;</code> for a usage
+example.</p>
+
 
 </div>]]>
         </description>
