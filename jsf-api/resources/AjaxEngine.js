@@ -78,11 +78,11 @@ javax.faces.Ajax.AjaxEngine = function() {
 
     // Get an XMLHttpRequest Handle
     req.xmlReq = javax.faces.Ajax.AjaxEngine.getTransport();
-    if (req.xmlReq == null) { return null; }
+    if (req.xmlReq === null) { return null; }
 
     // Set up request/response state callbacks
     req.xmlReq.onreadystatechange = function() {
-        if (req==null || req.xmlReq==null) { return; }
+        if (req === null || req.xmlReq === null) { return; }
         if (req.xmlReq.readyState==1) { req.onOpenCB(req); }      // open has been called
         if (req.xmlReq.readyState==2) { req.onSendCB(req); }      // send has been called
         if (req.xmlReq.readyState==3) { req.onReceivingCB(req); } // data in process of being received from the server
@@ -109,16 +109,17 @@ javax.faces.Ajax.AjaxEngine = function() {
      * on the queue that has not been sent, send the request.
      */
     req.onCompleteCB = function() {
-        if (typeof(req.onComplete)=="function") {
+        if (typeof req.onComplete == "function") {
             req.onComplete(req);
             return;
         }
-        if ((req.xmlReq.status == null || typeof req.xmlReq.status == 'undefined')
-            || req.xmlReq.status == 0 ||
-            (req.xmlReq.status >= 200 && req.xmlReq.status < 300)) { 
+        if ((req.xmlReq.status === null ||
+              typeof req.xmlReq.status == 'undefined') ||
+              req.xmlReq.status === 0 ||
+              (req.xmlReq.status >= 200 && req.xmlReq.status < 300)) {
             javax.faces.Ajax.ajaxResponse(req.xmlReq);
         } else {
-            if (typeof(req.onError)=="function") {
+            if (typeof req.onError == "function") {
                 req.onError(req);
                 return;
             } else {
@@ -132,22 +133,22 @@ javax.faces.Ajax.AjaxEngine = function() {
         // requests that ready to be sent (readyState 0).
 
         var nextReq = req.que.getOldestElement();
-        if (nextReq == null || typeof nextReq == 'undefined') { 
+        if (nextReq === null || typeof nextReq == 'undefined') { 
             return;
         }
-        while ((typeof nextReq.xmlReq != 'undefined' && nextReq.xmlReq != null) && 
+        while ((typeof nextReq.xmlReq != 'undefined' && nextReq.xmlReq !== null) && 
             nextReq.xmlReq.readyState == 4) {
             req.que.dequeue();
             nextReq = req.que.getOldestElement();
-            if (nextReq == null || typeof nextReq == 'undefined') {
+            if (nextReq === null || typeof nextReq == 'undefined') {
                 break;
             }
         }
-        if (nextReq == null || typeof nextReq == 'undefined') { 
+        if (nextReq === null || typeof nextReq == 'undefined') { 
             return;
         }
-        if ((typeof nextReq.xmlReq != 'undefined' && nextReq.xmlReq != null) && 
-            nextReq.xmlReq.readyState == 0) {
+        if ((typeof nextReq.xmlReq != 'undefined' && nextReq.xmlReq !== null) && 
+            nextReq.xmlReq.readyState === 0) {
             nextReq.fromQueue = true;
             nextReq.sendRequest();
         }
@@ -162,7 +163,7 @@ javax.faces.Ajax.AjaxEngine = function() {
      */
     req.setupArguments = function(args) {
         for (var i in args) {
-            if (typeof(req[i]) == 'undefined') {
+            if (typeof req[i]  == 'undefined') {
                 req.parameters[i] = args[i];
             } else {
                 req[i] = args[i];
@@ -175,7 +176,7 @@ javax.faces.Ajax.AjaxEngine = function() {
      * (GET or POST) and sends the request using the specified url.
      */ 
     req.sendRequest = function() {
-        if (req.xmlReq != null) {
+        if (req.xmlReq !== null) {
             // if there is already a request on the queue waiting to be processed..
             // just queue this request
             if (!req.que.isEmpty()) {
@@ -204,7 +205,7 @@ javax.faces.Ajax.AjaxEngine = function() {
             }
             req.xmlReq.open(req.method,req.url,req.async);
             if (req.method=="POST") {
-                if (typeof(req.xmlReq.setRequestHeader) != 'undefined') {
+                if (typeof req.xmlReq.setRequestHeader != 'undefined') {
                     req.xmlReq.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                 }
                 content = req.queryString;
@@ -279,7 +280,7 @@ javax.faces.Ajax.AjaxEngine.getTransport = function() {
       return returnVal;
     }
     throw new Error('Could not create an XHR object.');
-}
+};
 
 
 /**
@@ -289,7 +290,7 @@ javax.faces.Ajax.AjaxEngine.getTransport = function() {
  // RELEASE_PENDING: Need to change the format of the data payload to be flat
  //   since the OpenAjax spec would prefer that we don't pass values by reference.
 if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
-  javax.faces.Ajax.AjaxEngine.Queue = new function() {
+  javax.faces.Ajax.AjaxEngine.Queue = function() {
 
     // Create the internal queue
     var queue = [];
@@ -302,36 +303,36 @@ if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
      * of elements that have been enqueued minus the number of elements that have
      * been dequeued.
      */
-    this.getSize = function(){
+    this.getSize = function() {
         return queue.length - queueSpace;
-    }
+    };
 
     /* Returns true if this Queue is empty, and false otherwise. A Queue is empty
      * if the number of elements that have been enqueued equals the number of
      * elements that have been dequeued.
      */
-    this.isEmpty = function(){
-        return (queue.length == 0);
-    }
+    this.isEmpty = function() {
+        return (queue.length === 0);
+    };
 
     /* Enqueues the specified element in this Queue.
      * After the element is put in the queue, an event is fired.
      *
      * @param element - the element to enqueue
      */
-    this.enqueue = function(element){
+    this.enqueue = function(element) {
         queue.push(element);
         var args = new Object();
         args["enqueue"] = element;
         OpenAjax.hub.publish("javax.faces.AjaxEngine.Queue",args);
-    }
+    };
 
     /* Dequeues an element from this Queue. The oldest element in this Queue is
      * removed and returned. If this Queue is empty then undefined is returned.
      *
      * @returns The element that was removed rom the queue.
      */
-    this.dequeue = function(){
+    this.dequeue = function() {
         // initialise the element to return to be undefined
         var element = undefined;
 
@@ -356,7 +357,7 @@ if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
 
         // return the removed element
         return element;
-    }
+    };
 
     /* Returns the oldest element in this Queue. If this Queue is empty then
      * undefined is returned. This function returns the same value as the dequeue
@@ -367,10 +368,12 @@ if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
         var element = undefined;
 
         // if the queue is not element then fetch the oldest element in the queue
-        if (queue.length) element = queue[queueSpace];
+        if (queue.length) {
+            element = queue[queueSpace];
+        }
         // return the oldest element
         return element;
-    }
-  }
+    };
+  };
 }
 

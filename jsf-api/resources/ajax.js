@@ -69,13 +69,13 @@ if (typeof OpenAjax != "undefined" &&
 /**
  * Create our top level namespace - javax.faces.Ajax
  */
-if (javax == null || typeof javax == "undefined") {
+if (javax === null || typeof javax == "undefined") {
     var javax = new Object();
 }
-if (javax.faces == null || typeof javax.faces == "undefined") {
+if (javax.faces === null || typeof javax.faces == "undefined") {
     javax["faces"] = new Object();
 }
-if (javax.faces.Ajax == null || typeof javax.faces.Ajax == "undefined") {
+if (javax.faces.Ajax === null || typeof javax.faces.Ajax == "undefined") {
     javax.faces["Ajax"] = new Object();
 }
 
@@ -112,7 +112,7 @@ javax.faces.Ajax.viewState = function(form) {
     var viewState = javax.faces.Ajax.AjaxEngine.serializeForm(form);
     return viewState;
 
-}
+};
 
 /**
  * <p>Send an asynchronous Ajax request to the server.  
@@ -219,11 +219,11 @@ javax.faces.Ajax.viewState = function(form) {
  */
 javax.faces.Ajax.ajaxRequest = function(element, event, options) {
 
-    if (typeof element == 'undefined' || element == null) {
+    if (typeof element == 'undefined' || element === null) {
         throw {
                     name: 'ArgNotSet',
                     message: "ajaxRequest:Required first argument has not been set"
-                }
+                };
     }
 
     // Capture the element that triggered this Ajax request.
@@ -235,7 +235,7 @@ javax.faces.Ajax.ajaxRequest = function(element, event, options) {
 
     // Set up additional arguments to be used in the request..
     var args = new Object();
-    if (typeof(options) != 'undefined' && options != null) {
+    if (typeof(options) != 'undefined' && options !== null) {
         if (options.execute) {
             args["javax.faces.partial.execute"] = utils.toArray(options.execute,',').join(','); 
             options.execute = null;
@@ -264,7 +264,7 @@ javax.faces.Ajax.ajaxRequest = function(element, event, options) {
     ajaxEngine.setupArguments(args);
     ajaxEngine.queryString = viewState;
     ajaxEngine.sendRequest();
-} 
+}; 
 
 /**
  * <p>Receive an Ajax response from the server.  
@@ -302,7 +302,7 @@ javax.faces.Ajax.ajaxRequest = function(element, event, options) {
 javax.faces.Ajax.ajaxResponse = function(request) {
 
     //  RELEASE_PENDING: We need to add more robust error handing - this error should probably be caught upstream
-    if (request == null || typeof request == 'undefined' ) {
+    if (request === null || typeof request == 'undefined' ) {
         throw new Error("javax.faces.Ajax.ajaxResponse: Request is null");
     }
 
@@ -355,18 +355,18 @@ javax.faces.Ajax.ajaxResponse = function(request) {
             // find the current document's "body" element
             var docBody = document.getElementsByTagName("body")[0];
             // if src contains <html>
-            if (null != (htmlStart = htmlStartEx.exec(src))) {
+            if (null !== (htmlStart = htmlStartEx.exec(src))) {
                 // if src contains </html>
-                if (null != (htmlEnd = htmlEndEx.exec(src))) {
+                if (null !== (htmlEnd = htmlEndEx.exec(src))) {
                     src = src.substring(htmlStartEx.lastIndex, htmlEnd.index);
                 } else {
                     src = src.substring(htmlStartEx.lastIndex);
                 }
             }
             // if src contains <head>
-            if (null != (headStart = headStartEx.exec(src))) {
+            if (null !== (headStart = headStartEx.exec(src))) {
                 // if src contains </head>
-                if (null != (headEnd = headEndEx.exec(src))) {
+                if (null !== (headEnd = headEndEx.exec(src))) {
                     srcHead = src.substring(headStartEx.lastIndex,
                         headEnd.index);
                 } else {
@@ -379,9 +379,9 @@ javax.faces.Ajax.ajaxResponse = function(request) {
                 }
             }       
             // if src contains <body>
-            if (null != (bodyStart = bodyStartEx.exec(src))) {
+            if (null !== (bodyStart = bodyStartEx.exec(src))) {
                 // if src contains </body>
-                if (null != (bodyEnd = bodyEndEx.exec(src))) {
+                if (null !== (bodyEnd = bodyEndEx.exec(src))) {
                     srcBody = src.substring(bodyStartEx.lastIndex,
                         bodyEnd.index);
                 } else {
@@ -399,7 +399,7 @@ javax.faces.Ajax.ajaxResponse = function(request) {
                 throw {
                     name: 'NotFound',
                     message: id + 'not found'
-                }
+                };
             }
             var parent = d.parentNode;
             var temp = document.createElement('div');
@@ -433,7 +433,7 @@ javax.faces.Ajax.ajaxResponse = function(request) {
             field.value = state.text || state.data;
         }
     }
-}
+};
 
 /**
  *
@@ -454,5 +454,5 @@ javax.faces.Ajax.getProjectStage = function() {
 
     return result;
 
-}
+};
 

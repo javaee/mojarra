@@ -60,47 +60,52 @@ javax.faces.Ajax.Utils = function() {
     this.createClass = function() {
         return function() {
             this.initialize.apply(this, arguments);
-        }
-    }
+        };
+    };
 
     this.extend = function(destination, source) {
         for (var property in source) {
             destination[property] = source[property];
         }
         return destination;
-    }
+    };
 
     this.getForm = function(element) {
         if (element) {
             var form = this.$(element);
             while (form && form.tagName && form.tagName.toLowerCase() != 'form') {
-                if (form.form) return form.form;
+                if (form.form) {
+                    return form.form;
+                }
                 if (form.parentNode) {
                         form = form.parentNode;
                 } else {
                     form = null;
                 }
-                if (form) return form;
+                if (form) {
+                    return form;
+                }
             }
             return document.forms[0];
         }
         return null;
-    }
+    };
 
     this.$ = function() {
         var results = [], element;
         for (var i = 0; i < arguments.length; i++) {
             element = arguments[i];
-            if (typeof element == 'string')
+            if (typeof element == 'string') {
                 element = document.getElementById(element);
+            }
             results.push(element);
         }
         return this.reduce(results);
-    }
+    };
 
     this.reduce = function(toReduce) {
         return toReduce.length > 1 ? toReduce : toReduce[0];
-    }
+    };
 
     this.toArray = function(s,e) {
         var sarray;
@@ -111,26 +116,26 @@ javax.faces.Ajax.Utils = function() {
             }
         }
         return sarray;
-    }
+    };
 
     this.trim = function(toTrim) {
         var result = null;
-        if (null != toTrim) {
+        if (null !== toTrim) {
             var s = toTrim.replace( /^\s+/g, "" );
             result = s.replace( /\s+$/g, "" );
         }
         return result;
-    }
+    };
 
     this.scriptFrag = '(?:<script.*?>)((\n|\r|.)*?)(?:<\/script>)';
 
     this.stripScripts = function(src) {
         return src.replace(new RegExp(this.scriptFrag, 'img'), '');
-    }
+    };
 
     this.evalScripts = function(src) {
-        return this.extractScripts(src).map(function(script) { return eval(script) });
-    }
+        return this.extractScripts(src).map(function(script) { return eval(script); });
+    };
 
     this.extractScripts = function(src) {
         var matchAll = new RegExp(this.scriptFrag, 'img');
@@ -138,7 +143,7 @@ javax.faces.Ajax.Utils = function() {
         return (src.match(matchAll) || []).map(function(scriptTag) {
             return (scriptTag.match(matchOne) || ['', ''])[1];
         });
-    }
+    };
 
 this.elementReplace = function(d, tempTagName, src) {
         var parent = d.parentNode;
@@ -159,7 +164,7 @@ this.elementReplace = function(d, tempTagName, src) {
                 var 
                     linkStartEx = new RegExp("< *link.*>", "gi");
                 var linkStart;
-                while (null != (linkStart = linkStartEx.exec(src))) {
+                while (null !== (linkStart = linkStartEx.exec(src))) {
                     src = src.substring(0, linkStart.index) +
                         src.substring(linkStartEx.lastIndex);
                     linkStartEx.lastIndex = 0;
@@ -172,7 +177,7 @@ this.elementReplace = function(d, tempTagName, src) {
                     styleStartEx = new RegExp("< *style.*>", "gi"),
                     styleEndEx = new RegExp("< */ *style.*>", "gi");
                 var styleStart, styleEnd;
-                while (null != (styleStart = styleStartEx.exec(src))) {
+                while (null !== (styleStart = styleStartEx.exec(src))) {
                     styleEnd = styleEndEx.exec(src);
                     src = src.substring(0, styleStart.index) +
                         src.substring(styleStartEx.lastIndex);
@@ -205,5 +210,5 @@ this.elementReplace = function(d, tempTagName, src) {
         result = temp
         parent.replaceChild(temp, d);
         return result;
-    }
-}
+    };
+};
