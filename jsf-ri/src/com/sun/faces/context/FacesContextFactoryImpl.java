@@ -40,18 +40,15 @@
 
 package com.sun.faces.context;
 
-import java.lang.reflect.Field;
-import java.util.logging.Logger;
-import java.util.logging.Level;
 
 import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.FacesLogger;
 
 import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
+import javax.faces.context.ExceptionHandlerFactory;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
-import javax.faces.context.ExternalContext;
 import javax.faces.lifecycle.Lifecycle;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
@@ -61,6 +58,7 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
 
     
 
+    private ExceptionHandlerFactory exceptionHandlerFactory;
 
     // ---------------------------------------- Methods from FacesContextFactory
 
@@ -81,11 +79,19 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
                 MessageUtils.getExceptionMessageString(
                     MessageUtils.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
         }
-        return new FacesContextImpl(
+        FacesContext result = new FacesContextImpl(
               new ExternalContextImpl((ServletContext) sc,
                                       (ServletRequest) request,
                                       (ServletResponse) response),
               lifecycle);
+        
+        if (null == exceptionHandlerFactory) {
+            exceptionHandlerFactory = (ExceptionHandlerFactory)
+                    FactoryFinder.getFactory(FactoryFinder.EXCEPTION_HANDLER_FACTORY);
+        }
+        result.setExceptionHandler(exceptionHandlerFactory.getExceptionHandler());
+        
+        return result;
         
     }
 

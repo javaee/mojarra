@@ -81,6 +81,11 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
     private static final String DISCOVERY_HANDLER_FACTORY = "discovery-handler-factory";
 
     /**
+     * <code>/faces-config/factory/exception-handler-factory</code>
+     */
+    private static final String EXCEPTION_HANDLER_FACTORY = "exception-handler-factory";
+
+    /**
      * <code>/faces-config/factory/faces-context-factory</code>
      */
     private static final String FACES_CONTEXT_FACTORY = "faces-context-factory";
@@ -187,7 +192,10 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
                 } else if (DISCOVERY_HANDLER_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.DISCOVERY_HANDLER_FACTORY,
                                getNodeText(n));
-                }else if (LIFECYCLE_FACTORY.equals(n.getLocalName())) {
+                } else if (EXCEPTION_HANDLER_FACTORY.equals(n.getLocalName())) {
+                    setFactory(FactoryFinder.EXCEPTION_HANDLER_FACTORY,
+                               getNodeText(n));
+                } else if (LIFECYCLE_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.LIFECYCLE_FACTORY,
                                getNodeText(n));
                 } else if (FACES_CONTEXT_FACTORY.equals(n.getLocalName())) {
