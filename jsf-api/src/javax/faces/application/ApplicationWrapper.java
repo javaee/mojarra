@@ -164,11 +164,6 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
     }
 
     @Override
-    public DiscoveryHandler getFacesAnnotationHandler() {
-        return getWrapped().getFacesAnnotationHandler();
-    }
-
-    @Override
     public PageDeclarationLanguage getPageDeclarationLanguage() {
         return getWrapped().getPageDeclarationLanguage();
     }
@@ -201,11 +196,6 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
     @Override
     public void removeELContextListener(ELContextListener listener) {
         getWrapped().removeELContextListener(listener);
-    }
-
-    @Override
-    public void setFacesAnnotationHandler(DiscoveryHandler newHandler) {
-        getWrapped().setFacesAnnotationHandler(newHandler);
     }
 
     @Override

@@ -157,6 +157,12 @@ public final class FactoryFinder {
     public final static String APPLICATION_FACTORY =
          "javax.faces.application.ApplicationFactory";
 
+    /**
+     * <p>The property name for the {@link
+     * javax.faces.application.DiscoveryHandlerFactory} class name.</p>
+     */
+    public final static String DISCOVERY_HANDLER_FACTORY =
+         "javax.faces.application.DiscoveryHandlerFactory";
 
     /**
      * <p>The property name for the
@@ -193,6 +199,7 @@ public final class FactoryFinder {
      */
     private static final String[] FACTORY_NAMES = {
          APPLICATION_FACTORY,
+         DISCOVERY_HANDLER_FACTORY,
          FACES_CONTEXT_FACTORY,
          LIFECYCLE_FACTORY,
          RENDER_KIT_FACTORY

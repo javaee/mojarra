@@ -327,20 +327,6 @@
                     </xsd:documentation>
                 </xsd:annotation>
             </xsd:element>
-            <xsd:element name="discovery-handler"
-                         type="javaee:fully-qualified-classType">
-                <xsd:annotation>
-                    <xsd:documentation>
-                            
-                            The "annotation-handler" element contains the fully 
-                            qualified class name of the concrete 
-                            FacesAnnotationHandler implementation that will
-                            be used to discover and scan for the annotations
-                            supported by JavaServer Faces.
-                            
-                    </xsd:documentation>
-                </xsd:annotation>
-            </xsd:element>
             <xsd:element name="default-render-kit-id"
                          type="javaee:string">
                 <xsd:annotation>
@@ -588,6 +574,21 @@
                         ApplicationFactory implementation class that will 
                         be called when 
                         FactoryFinder.getFactory(APPLICATION_FACTORY) is
+                        called.
+                            
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="discovery-handler-factory"
+                         type="javaee:fully-qualified-classType">
+                <xsd:annotation>
+                    <xsd:documentation>
+                            
+                        The "discovery-handler-factory" element contains the 
+                        fully qualified class name of the concrete 
+                        DiscoveryHandler implementation class that will 
+                        be called when 
+                        FactoryFinder.getFactory(DISOVERY_HANDLER_FACTORY) is
                         called.
                             
                     </xsd:documentation>

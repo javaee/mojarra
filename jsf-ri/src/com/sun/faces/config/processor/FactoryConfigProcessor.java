@@ -76,6 +76,11 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
     private static final String APPLICATION_FACTORY = "application-factory";
 
     /**
+     * <code>/faces-config/factory/discovery-handler-factory</code>
+     */
+    private static final String DISCOVERY_HANDLER_FACTORY = "discovery-handler-factory";
+
+    /**
      * <code>/faces-config/factory/faces-context-factory</code>
      */
     private static final String FACES_CONTEXT_FACTORY = "faces-context-factory";
@@ -96,6 +101,7 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
      */
     private static final String[] FACTORY_NAMES = {
           FactoryFinder.APPLICATION_FACTORY,
+          FactoryFinder.DISCOVERY_HANDLER_FACTORY,
           FactoryFinder.FACES_CONTEXT_FACTORY,
           FactoryFinder.LIFECYCLE_FACTORY,
           FactoryFinder.RENDER_KIT_FACTORY
@@ -148,6 +154,9 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
         // chain.
         wrapFactories(applicationFactoryCount.get(),
                       facesContextFactoryCount.get());
+        
+        // PENDING(rlubke): Not sure if DiscoveryHandlerFactory should get the
+        // wrapFactories treatment.  Currently it does not.
 
         // validate that we actually have factories at this point.
         verifyFactoriesExist();
@@ -175,7 +184,10 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
                     appCount.incrementAndGet();
                     setFactory(FactoryFinder.APPLICATION_FACTORY,
                                getNodeText(n));
-                } else if (LIFECYCLE_FACTORY.equals(n.getLocalName())) {
+                } else if (DISCOVERY_HANDLER_FACTORY.equals(n.getLocalName())) {
+                    setFactory(FactoryFinder.DISCOVERY_HANDLER_FACTORY,
+                               getNodeText(n));
+                }else if (LIFECYCLE_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.LIFECYCLE_FACTORY,
                                getNodeText(n));
                 } else if (FACES_CONTEXT_FACTORY.equals(n.getLocalName())) {

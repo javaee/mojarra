@@ -540,29 +540,6 @@ public class ApplicationImpl extends Application {
 
 
     /**
-     * @see javax.faces.application.Application#getFacesAnnotationHandler()
-     * @return
-     */
-    @Override
-    public DiscoveryHandler getFacesAnnotationHandler() {
-
-        return annotationHandler;
-
-    }
-
-
-    /**
-     * @see javax.faces.application.Application#setFacesAnnotationHandler(javax.faces.application.DiscoveryHandler)
-     */
-    @Override
-    public synchronized void setFacesAnnotationHandler(DiscoveryHandler newHandler) {
-
-        annotationHandler = newHandler;
-        
-    }
-
-
-    /**
      * @see javax.faces.application.Application#getViewHandler()
      */
     public ViewHandler getViewHandler() {
