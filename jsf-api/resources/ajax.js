@@ -69,13 +69,13 @@ if (typeof OpenAjax != "undefined" &&
 /**
  * Create our top level namespace - javax.faces.Ajax
  */
-if (javax === null || typeof javax == "undefined") {
+if (javax == null || typeof javax == "undefined") {
     var javax = new Object();
 }
-if (javax.faces === null || typeof javax.faces == "undefined") {
+if (javax.faces == null || typeof javax.faces == "undefined") {
     javax["faces"] = new Object();
 }
-if (javax.faces.Ajax === null || typeof javax.faces.Ajax == "undefined") {
+if (javax.faces.Ajax == null || typeof javax.faces.Ajax == "undefined") {
     javax.faces["Ajax"] = new Object();
 }
 
@@ -95,12 +95,12 @@ if (javax.faces.Ajax === null || typeof javax.faces.Ajax == "undefined") {
  */
 
 /**
- * <p>Collect and encode state for input controls associated 
- * with the specified <code>form</code> element.</p> 
+ * <p>Collect and encode state for input controls associated
+ * with the specified <code>form</code> element.</p>
  *
  * @param form The <code>form</code> element whose contained
  * <code>input</code> controls will be collected and encoded.
- * Only successful controls will be collected and encoded in 
+ * Only successful controls will be collected and encoded in
  * accordance with: <a href="http://www.w3.org/TR/html401/interact/forms.html#h-17.13.2">
  * Section 17.13.2 of the HTML Specification</a>.
  *
@@ -112,10 +112,10 @@ javax.faces.Ajax.viewState = function(form) {
     var viewState = javax.faces.Ajax.AjaxEngine.serializeForm(form);
     return viewState;
 
-};
+}
 
 /**
- * <p>Send an asynchronous Ajax request to the server.  
+ * <p>Send an asynchronous Ajax request to the server.
  * This function must:
  * <ul>
  * <li>Capture the element that triggered this Ajax request
@@ -123,16 +123,16 @@ javax.faces.Ajax.viewState = function(form) {
  * <code>source</code> element.</li>
  * <li>Determine the <code>source</code> element's <code>form</code>
  * element.</li>
- * <li>Get the <code>form</code> view state by calling 
- * {@link javax.faces.Ajax.viewState} passing the 
- * <code>form</code> element as the argument.</li> 
- * <li>Collect post data arguments for the Ajax request.  
+ * <li>Get the <code>form</code> view state by calling
+ * {@link javax.faces.Ajax.viewState} passing the
+ * <code>form</code> element as the argument.</li>
+ * <li>Collect post data arguments for the Ajax request.
  * <ul>
  * <li>The following name/value pairs are required post data arguments:
  * <ul>
- * <li>The name and value of the <code>source</code> element that 
+ * <li>The name and value of the <code>source</code> element that
  * triggered this request;</li>
- * <li><code>javax.faces.partial.ajax</code> with the value 
+ * <li><code>javax.faces.partial.ajax</code> with the value
  * <code>true</code></li>
  * </ul>
  * </li>
@@ -142,13 +142,13 @@ javax.faces.Ajax.viewState = function(form) {
  * <ul>
  * <li>Determine additional arguments (if any) from the <code>options</code>
  * argument. If <code>options.execute</code> exists, create the post data argument
- * with the name <code>javax.faces.partial.execute</code> and the value as a 
- * comma delimited <code>string</code> of client identifiers.  If 
+ * with the name <code>javax.faces.partial.execute</code> and the value as a
+ * comma delimited <code>string</code> of client identifiers.  If
  * <code>options.render</code> exists, create the post data argument with the name
- * <code>javax.faces.partial.render</code> and the value as a comma delimited 
- * <code>string</code> of client identifiers.</li>  
+ * <code>javax.faces.partial.render</code> and the value as a comma delimited
+ * <code>string</code> of client identifiers.</li>
  * <li>Determine additional arguments (if any) from the <code>event</code>
- * argument.  The following name/value pairs may be used from the 
+ * argument.  The following name/value pairs may be used from the
  * <code>event</code> object:
  * <ul>
  * <li><code>target</code> - the ID of the element that triggered the event.</li>
@@ -158,11 +158,11 @@ javax.faces.Ajax.viewState = function(form) {
  * <li><code>ctrl</code> - <code>true</code> if CTRL key was pressed.</li>
  * <li><code>shift</code> - <code>true</code> if SHIFT key was pressed. </li>
  * <li><code>meta</code> - <code>true</code> if META key was pressed. </li>
- * <li><code>right</code> - <code>true</code> if right mouse button  
+ * <li><code>right</code> - <code>true</code> if right mouse button
  * was pressed. </li>
- * <li><code>left</code> - <code>true</code> if left mouse button  
+ * <li><code>left</code> - <code>true</code> if left mouse button
  * was pressed. </li>
- * <li><code>keycode</code> - the key code. 
+ * <li><code>keycode</code> - the key code.
  * </ul>
  * </li>
  * </ul>
@@ -170,23 +170,23 @@ javax.faces.Ajax.viewState = function(form) {
  * <li>Encode the set of post data arguments.</li>
  * <li>Join the encoded view state with the encoded set of post data arguments
  * to form the <code>query string</code> that will be sent to the server.</li>
- * <li>Send the request as an <code>asynchronous POST</code> using the 
- * <code>action</code> property of the <code>form</code> element as the 
+ * <li>Send the request as an <code>asynchronous POST</code> using the
+ * <code>action</code> property of the <code>form</code> element as the
  * <code>url</code>.</li>
- * </ul>  
+ * </ul>
  * Before the request is sent it must be put into a queue to ensure requests 
  * are sent in the same order as when they were initiated.  The request callback function
- * must examine the queue and determine the next request to be sent.  The behavior of the 
+ * must examine the queue and determine the next request to be sent.  The behavior of the
  * request callback function must be as follows:
  * <ul>
- * <li>If the request completed successfully invoke {@link javax.faces.Ajax.ajaxResponse} 
- * passing the <code>request</code> object.</li> 
+ * <li>If the request completed successfully invoke {@link javax.faces.Ajax.ajaxResponse}
+ * passing the <code>request</code> object.</li>
  * <li>If the request did not complete successfully, notify the client.</li>
- * <li>Regardless of the outcome of the request (success or error) every request in the 
- * queue must be handled.  Examine the status of each request in the queue starting from 
- * the request that has been in the queue the longest.  If the status of the request is 
- * <code>complete</code> (readyState 4), dequeue the request (remove it from the queue).  
- * If the request has not been sent (readyState 0), send the request.  Requests that are 
+ * <li>Regardless of the outcome of the request (success or error) every request in the
+ * queue must be handled.  Examine the status of each request in the queue starting from
+ * the request that has been in the queue the longest.  If the status of the request is
+ * <code>complete</code> (readyState 4), dequeue the request (remove it from the queue).
+ * If the request has not been sent (readyState 0), send the request.  Requests that are
  * taken off the queue and sent should not be put back on the queue.</li>
  * </ul>
  *
@@ -196,7 +196,7 @@ javax.faces.Ajax.viewState = function(form) {
  * @param event The DOM event that triggered this Ajax request.  The
  * <code>event</code> argument is optional.
  * @param options The set of available options that can be sent as
- * request parameters to control client and/or server side 
+ * request parameters to control client and/or server side
  * request processing. Acceptable name/value pair options are:
  * <table border="1">
  * <tr>
@@ -212,37 +212,37 @@ javax.faces.Ajax.viewState = function(form) {
  * <td><code>comma seperated list of client identifiers</code></td>
  * </tr>
  * </table>
- * The <code>options</code> argument is optional. 
+ * The <code>options</code> argument is optional.
  *
  * @function javax.faces.Ajax.ajaxRequest
  * @throws ArgNotSet Error if first required argument <code>element</code> is not specified
  */
 javax.faces.Ajax.ajaxRequest = function(element, event, options) {
 
-    if (typeof element == 'undefined' || element === null) {
+    if (typeof element == 'undefined' || element == null) {
         throw {
                     name: 'ArgNotSet',
                     message: "ajaxRequest:Required first argument has not been set"
-                };
+                }
     }
 
     // Capture the element that triggered this Ajax request.
     var source = element;
 
     var utils = new javax.faces.Ajax.Utils();
-    var form = utils.getForm(source); 
+    var form = utils.getForm(source);
     var viewState = javax.faces.Ajax.viewState(form);
 
     // Set up additional arguments to be used in the request..
     var args = new Object();
-    if (typeof(options) != 'undefined' && options !== null) {
+    if (typeof(options) != 'undefined' && options != null) {
         if (options.execute) {
-            args["javax.faces.partial.execute"] = utils.toArray(options.execute,',').join(','); 
+            args["javax.faces.partial.execute"] = utils.toArray(options.execute,',').join(',');
             options.execute = null;
             delete options.execute;
         }
         if (options.render) {
-            args["javax.faces.partial.render"] = utils.toArray(options.render,',').join(','); 
+            args["javax.faces.partial.render"] = utils.toArray(options.render,',').join(',');
             options.render = null;
             delete options.render;
         }
@@ -264,20 +264,20 @@ javax.faces.Ajax.ajaxRequest = function(element, event, options) {
     ajaxEngine.setupArguments(args);
     ajaxEngine.queryString = viewState;
     ajaxEngine.sendRequest();
-}; 
+}
 
 /**
- * <p>Receive an Ajax response from the server.  
- * This function must evaluate the markup returned in the 
+ * <p>Receive an Ajax response from the server.
+ * This function must evaluate the markup returned in the
  * <code>responseXML</code> object and update the <code>DOM</code>
  * as follows:
  * <ul>
  * <li>Determine if the entire <code>DOM</code> should be replaced, or
  * if only specified sections (known as partial rendering) should be
- * updated.  The entire <code>DOM</code> must be replaced if a 
- * <code>render</code> element identifier is 
- * <code>javax.faces.viewRoot</code>.</li> 
- * <li>If partial <code>DOM</code> update is required, replace the 
+ * updated.  The entire <code>DOM</code> must be replaced if a
+ * <code>render</code> element identifier is
+ * <code>javax.faces.viewRoot</code>.</li>
+ * <li>If partial <code>DOM</code> update is required, replace the
  * <code>DOM</code> markup whose identifier matches the corresponding
  * <code>render</code> identifier.</li>
  * <li>Capture the view state sent in the response and insert it into
@@ -285,24 +285,24 @@ javax.faces.Ajax.ajaxRequest = function(element, event, options) {
  * identifier <code>javax.faces.viewState</code>.  Look for all the
  * <code>form</code> elements in the <code>DOM</code>, and for each
  * <code>form</code> element, determine if a <code>javax.faces.viewState</code>
- * field exists.  If it does, replace it with the view state from the 
+ * field exists.  If it does, replace it with the view state from the
  * response.  If it does not exist, create a <code>hidden input</code>
- * field with the identifier <code>javax.faces.viewState</code> and 
- * insert it as a child element of the <code>form</code> elements.</li> 
+ * field with the identifier <code>javax.faces.viewState</code> and
+ * insert it as a child element of the <code>form</code> elements.</li>
  * </ul>
  * </p>
  *
- * @param request The <code>XMLHttpRequest</code> instance that 
+ * @param request The <code>XMLHttpRequest</code> instance that
  * contains the status code and response message from the server.
  *
  * @throws EmptyResponse error if request contains no data
  *
  * @function javax.faces.Ajax.ajaxResponse
- */ 
+ */
 javax.faces.Ajax.ajaxResponse = function(request) {
 
     //  RELEASE_PENDING: We need to add more robust error handing - this error should probably be caught upstream
-    if (request === null || typeof request == 'undefined' ) {
+    if (request == null || typeof request == 'undefined' ) {
         throw new Error("javax.faces.Ajax.ajaxResponse: Request is null");
     }
 
@@ -331,7 +331,7 @@ javax.faces.Ajax.ajaxResponse = function(request) {
         }
         str = utils.stripScripts(markup);
         var src = str;
-         
+
         // If our special render all markup is present..
         if (-1 != id.indexOf("javax.faces.ViewRoot")) {
             // if src contains <html>, trim the <html> and </html>, if present.
@@ -355,18 +355,18 @@ javax.faces.Ajax.ajaxResponse = function(request) {
             // find the current document's "body" element
             var docBody = document.getElementsByTagName("body")[0];
             // if src contains <html>
-            if (null !== (htmlStart = htmlStartEx.exec(src))) {
+            if (null != (htmlStart = htmlStartEx.exec(src))) {
                 // if src contains </html>
-                if (null !== (htmlEnd = htmlEndEx.exec(src))) {
+                if (null != (htmlEnd = htmlEndEx.exec(src))) {
                     src = src.substring(htmlStartEx.lastIndex, htmlEnd.index);
                 } else {
                     src = src.substring(htmlStartEx.lastIndex);
                 }
             }
             // if src contains <head>
-            if (null !== (headStart = headStartEx.exec(src))) {
+            if (null != (headStart = headStartEx.exec(src))) {
                 // if src contains </head>
-                if (null !== (headEnd = headEndEx.exec(src))) {
+                if (null != (headEnd = headEndEx.exec(src))) {
                     srcHead = src.substring(headStartEx.lastIndex,
                         headEnd.index);
                 } else {
@@ -377,11 +377,11 @@ javax.faces.Ajax.ajaxResponse = function(request) {
                 if (docHead) {
                     utils.elementReplace(docHead, "head", srcHead);
                 }
-            }       
+            }
             // if src contains <body>
-            if (null !== (bodyStart = bodyStartEx.exec(src))) {
+            if (null != (bodyStart = bodyStartEx.exec(src))) {
                 // if src contains </body>
-                if (null !== (bodyEnd = bodyEndEx.exec(src))) {
+                if (null != (bodyEnd = bodyEndEx.exec(src))) {
                     srcBody = src.substring(bodyStartEx.lastIndex,
                         bodyEnd.index);
                 } else {
@@ -392,14 +392,14 @@ javax.faces.Ajax.ajaxResponse = function(request) {
             if (!srcBody) {
                 utils.elementReplace(docBody, "body", src);
             }
-        
+
         } else {
             var d = utils.$(id);
             if (!d) {
                 throw {
                     name: 'NotFound',
                     message: id + 'not found'
-                };
+                }
             }
             var parent = d.parentNode;
             var temp = document.createElement('div');
@@ -411,7 +411,7 @@ javax.faces.Ajax.ajaxResponse = function(request) {
     }
 
     // Now set the view state from the server into the DOM
-    // If there are multiple forms, make sure they all have a 
+    // If there are multiple forms, make sure they all have a
     // viewState hidden field.
 
     var state = state || xml.getElementsByTagName('state')[0].firstChild;
@@ -433,20 +433,20 @@ javax.faces.Ajax.ajaxResponse = function(request) {
             field.value = state.text || state.data;
         }
     }
-};
+}
 
 /**
  *
  * <p>Return the value of <code>Application.getProjectStage()</code> for
  * the currently running application instance.  Calling this method must
  * not cause any network transaction to happen to the server.</p>
- * 
- * @returns The <code>String</code> representing the current state of the 
+ *
+ * @returns The <code>String</code> representing the current state of the
  * running application in a typical product development lifecycle.  Refer
  * to <code>javax.faces.application.Application.getProjectStage</code> and
  * <code>javax.faces.application.ProjectStage</code>.
  * @function javax.faces.Ajax.getProjectStage
- */ 
+ */
 
 javax.faces.Ajax.getProjectStage = function() {
 
@@ -454,5 +454,5 @@ javax.faces.Ajax.getProjectStage = function() {
 
     return result;
 
-};
+}
 
