@@ -102,10 +102,10 @@ javax.faces.Ajax.AjaxEngine = function() {
 
     /**
      * This function is called when the request/response interaction
-     * is complete.  'onComplete', 'onSuccess' or 'onError' callbacks 
+     * is complete.  'onComplete', 'onSuccess' or 'onError' callbacks
      * will be called if they have been registered,
      * If the return status code is successfull, dequeue all requests
-     * from the queue that have completed.  If a request has been found 
+     * from the queue that have completed.  If a request has been found
      * on the queue that has not been sent, send the request.
      */
     req.onCompleteCB = function() {
@@ -115,7 +115,7 @@ javax.faces.Ajax.AjaxEngine = function() {
         }
         if ((req.xmlReq.status == null || typeof req.xmlReq.status == 'undefined')
             || req.xmlReq.status == 0 ||
-            (req.xmlReq.status >= 200 && req.xmlReq.status < 300)) { 
+            (req.xmlReq.status >= 200 && req.xmlReq.status < 300)) {
             javax.faces.Ajax.ajaxResponse(req.xmlReq);
         } else {
             if (typeof(req.onError)=="function") {
@@ -132,10 +132,10 @@ javax.faces.Ajax.AjaxEngine = function() {
         // requests that ready to be sent (readyState 0).
 
         var nextReq = req.que.getOldestElement();
-        if (nextReq == null || typeof nextReq == 'undefined') { 
+        if (nextReq == null || typeof nextReq == 'undefined') {
             return;
         }
-        while ((typeof nextReq.xmlReq != 'undefined' && nextReq.xmlReq != null) && 
+        while ((typeof nextReq.xmlReq != 'undefined' && nextReq.xmlReq != null) &&
             nextReq.xmlReq.readyState == 4) {
             req.que.dequeue();
             nextReq = req.que.getOldestElement();
@@ -143,10 +143,10 @@ javax.faces.Ajax.AjaxEngine = function() {
                 break;
             }
         }
-        if (nextReq == null || typeof nextReq == 'undefined') { 
+        if (nextReq == null || typeof nextReq == 'undefined') {
             return;
         }
-        if ((typeof nextReq.xmlReq != 'undefined' && nextReq.xmlReq != null) && 
+        if ((typeof nextReq.xmlReq != 'undefined' && nextReq.xmlReq != null) &&
             nextReq.xmlReq.readyState == 0) {
             nextReq.fromQueue = true;
             nextReq.sendRequest();
@@ -155,9 +155,9 @@ javax.faces.Ajax.AjaxEngine = function() {
 
     /**
      * Utility method that accepts additional arguments for the AjaxEngine.
-     * If an argument is passed in that matches an AjaxEngine property, the 
-     * argument value becomes the value of the AjaxEngine property.  
-     * Arguments that don't match AjaxEngine properties are added as 
+     * If an argument is passed in that matches an AjaxEngine property, the
+     * argument value becomes the value of the AjaxEngine property.
+     * Arguments that don't match AjaxEngine properties are added as
      * request parameters.
      */
     req.setupArguments = function(args) {
@@ -173,7 +173,7 @@ javax.faces.Ajax.AjaxEngine = function() {
     /**
      * This function does final encoding of parameters, determines the request method
      * (GET or POST) and sends the request using the specified url.
-     */ 
+     */
     req.sendRequest = function() {
         if (req.xmlReq != null) {
             // if there is already a request on the queue waiting to be processed..
@@ -187,7 +187,7 @@ javax.faces.Ajax.AjaxEngine = function() {
             // If the queue is empty, queue up this request and send
             if (!req.fromQueue) {
                 req.que.enqueue(req);
-            } 
+            }
             // Some logic to get the real request URL
             if (req.generateUniqueUrl && req.method=="GET") {
                 req.parameters["AjaxRequestUniqueId"] = new Date().getTime() + "" + req.requestIndex;

@@ -175,8 +175,7 @@ public class CompositeComponentAttributesELResolver extends ELResolver {
                                                              Object base) {
 
         Util.notNull("context", context);
-        Collection<FeatureDescriptor> descriptor = Collections.emptyList();
-        return descriptor.iterator();
+        return null;
 
     }
 

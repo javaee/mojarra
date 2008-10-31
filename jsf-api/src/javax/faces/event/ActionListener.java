@@ -45,7 +45,10 @@ import javax.faces.component.UIComponent;
 
 
 /**
- * <p>A listener interface for receiving {@link ActionEvent}s.  A class that
+ * <p><span class="changed_modified_2_0">A</span> listener interface for 
+ * receiving {@link ActionEvent}s.  <span class="changed_added_2_0">An
+ * implementation
+ * of this interface must be thread-safe.</span>  A class that
  * is interested in receiving such events implements this interface, and then
  * registers itself with the source {@link UIComponent} of interest, by
  * calling <code>addActionListener()</code>.</p>

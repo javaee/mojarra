@@ -87,6 +87,16 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
     // ------------------------------------------------------------ Test Methods
 
 
+    public void testAjaxIsAvailable() {
+
+        ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
+        assertTrue(handler != null);
+        assertTrue(handler instanceof ResourceHandlerImpl);
+
+        assertNotNull(handler.createResource("ajax.js", "javax.faces"));        
+    }
+
+
     public void testCreateResource() throws Exception {
 
         ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();

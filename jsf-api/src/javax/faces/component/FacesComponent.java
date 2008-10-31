@@ -55,7 +55,8 @@ import java.lang.annotation.Inherited;
  * the class to which this annotation is attached is taken to be the
  * <em>component-class</em>.  The implementation must guarantee that for
  * each class annotated with <code>FacesComponent</code>, found with the
- * scanning algorithm described below, {@link
+ * scanning algorithm at "<em><a target="_"
+ * href="../application/FacesAnnotationHandler.html#configAnnotationScanningSpecification">configAnnotationScanningSpecification</a></em>", {@link
  * javax.faces.application.Application#addComponent(java.lang.String,java.lang.String)}
  * is called, passing the derived <em>component-type</em> as the first
  * argument and the derived <em>component-class</em> as the second
@@ -63,37 +64,6 @@ import java.lang.annotation.Inherited;
  * <code>addComponent()</code> happen during application startup time
  * and before any requests are serviced.</p>
 
- * <div class="changed_added_2_0">
-
- * <p><em><a
- * name="componentConfigAnnotationScanningSpecification">Algorithm for
- * scanning classes for component configuration annotations</a></em></p>
-
- * <p>The following algorithm or one semantically equivalent to it must
- * be followed to scan the classes available to the application for the
- * presence of this and other similar annotations.  Each annotation for
- * which this algorithm applies will specifically reference this
- * algorithm in its javadoc.</p>
-
- * <ul>
-
- * <li><p>If the <code>&lt;faces-config&gt;</code> element in the
- * <code>WEB-INF/faces-config.xml</code> file contains
- * <code>metadata-complete</code> attribute whose value is
- * <code>"true"</code>, the implementation must not perform annotation
- * scanning on any classes except for those classes provided by the
- * implementation itself.  Otherwise, continue as follows.</p></li>
-
- * <li><p>All classes in <code>WEB-INF/classes</code> must be scanned.</p></li>
-
- * <li><p>For every jar in the application's <code>WEB-INF/lib</code>
- * directory, if the jar contains a
- * <code>META-INF/faces-config.xml</code> file (even an empty one), all
- * classes in that jar must be scanned.</p></li>
- *
- * </ul>
- *
- * </div>
  */ 
 
 @Retention(RetentionPolicy.RUNTIME)

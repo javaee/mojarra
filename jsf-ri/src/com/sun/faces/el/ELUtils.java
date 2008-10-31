@@ -733,5 +733,18 @@ public class ELUtils {
 
     }
 
+
+    public static boolean isScopeValid(String scopeName) {
+        if (scopeName == null) {
+            return false;
+        }
+        for (Scope scope : Scope.values()) {
+            if (scopeName.equals(scope.toString())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     
 }

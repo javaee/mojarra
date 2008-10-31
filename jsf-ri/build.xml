@@ -295,6 +295,16 @@
             </fileset>
         </copy>
 
+        <!-- OSGi/V3 HACK ! TEMPORARY -->
+        <concat destfile="${build.classes.dir}/META-INF/resources/javax.faces/ajax.js" append="yes" fixlastline="yes">
+            <filelist dir="${api.dir}/resources">
+                <file name="OpenAjax.js"/>
+                <file name="ajax.js"/>
+                <file name="AjaxEngine.js"/>
+                <file name="Utils.js"/>
+            </filelist>
+        </concat>
+
         <!--
             RELEASE_PENDING (rlubke,driscoll)
             For now these are copied to the root of the jsf-impl.jar, but
@@ -316,8 +326,11 @@
               toDir="${build.classes.dir}/com/sun/faces"/>
         <copy file="conf/xslt/facelets1_0-2_0toSchema.xsl"
               toDir="${build.classes.dir}/com/sun/faces"/>
-        <copy file="${conf.share.dir}/com.sun.faces.spi.injectionprovider"
-              toDir="${build.classes.dir}/META-INF/services"/>
+        <copy toDir="${build.classes.dir}/META-INF/services">
+          <fileset dir="${conf.share.dir}/services">
+             <include name="*" />
+          </fileset>
+        </copy>
         <copy todir="${build.classes.dir}/META-INF">
             <fileset dir="${conf.share.dir}">
                 <include name="jsf_core.tld"/>
@@ -613,16 +626,20 @@
   <mkdir dir="${target.dir}/classes" />
   <unjar src="${build.dir}/lib/${name}.jar" overwrite="yes" 
          dest="${target.dir}/classes"/>
-  <jsf.mvn pomFile="jsf-impl-pom.xml" mvnSpecVersion="${mvn.spec.version}" goals="install" />
+  <jsf.mvn pomFile="jsf-impl-pom.xml" mvnSpecVersion="${impl.version}" goals="install" />
 
 </target>
 
 <target name="push-to-maven" depends="push-to-maven-prepare">
   <tstamp />
   <echo>deploying to maven repo</echo>
-  <jsf.mvn pomFile="jsf-impl-pom.xml" mvnSpecVersion="${mvn.spec.version}" goals="deploy" />
+  <jsf.mvn pomFile="jsf-impl-pom.xml" mvnSpecVersion="${impl.version}" goals="deploy" />
 </target>
 
+<!-- scratch
+
+ant -emacs -Dbuild.generate.tld.dir=/Users/edburns/Projects/JavaEE/workareas/mojarra-HEAD/jsf-ri/build/generate/conf/share -Dbuild.dir=/Users/edburns/Projects/JavaEE/workareas/mojarra-HEAD/dist/jsf-spec-2.0-20081030 facelets.tlddocs
    
+-->
     
 </project>

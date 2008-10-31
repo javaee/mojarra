@@ -157,8 +157,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
         if (isResourceRequest == null) {
             String resourceId = normalizeResourceRequest(context);
             isResourceRequest = (resourceId != null
-                                 ? resourceId
-                  .startsWith(ResourceHandler.RESOURCE_IDENTIFIER)
+                                 ? resourceId.startsWith(RESOURCE_IDENTIFIER)
                                  : Boolean.FALSE);
             RequestStateManager.set(context,
                                     RequestStateManager.RESOURCE_REQUEST,
@@ -214,7 +213,7 @@ public class ResourceHandlerImpl extends ResourceHandler {
         }
 
         assert (null != resourceId);
-        assert (resourceId.startsWith(ResourceHandler.RESOURCE_IDENTIFIER));
+        assert (resourceId.startsWith(RESOURCE_IDENTIFIER));
 
         Resource resource = null;
         String resourceName = null;

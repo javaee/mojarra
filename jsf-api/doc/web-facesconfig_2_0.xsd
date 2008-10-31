@@ -327,20 +327,6 @@
                     </xsd:documentation>
                 </xsd:annotation>
             </xsd:element>
-            <xsd:element name="annotation-handler"
-                         type="javaee:fully-qualified-classType">
-                <xsd:annotation>
-                    <xsd:documentation>
-                            
-                            The "annotation-handler" element contains the fully 
-                            qualified class name of the concrete 
-                            FacesAnnotationHandler implementation that will
-                            be used to discover and scan for the annotations
-                            supported by JavaServer Faces.
-                            
-                    </xsd:documentation>
-                </xsd:annotation>
-            </xsd:element>
             <xsd:element name="default-render-kit-id"
                          type="javaee:string">
                 <xsd:annotation>

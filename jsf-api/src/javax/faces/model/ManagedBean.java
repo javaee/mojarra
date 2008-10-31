@@ -66,11 +66,16 @@ import java.lang.annotation.Inherited;
  * <em>name</em> attribute on the annotation, the
  * <em>managed-bean-name</em> is taken to be <code>Bean</code>.  The
  * fully qualified class name of the class to which this annotation is
- * attached is taken to be the <em>managed-bean-class</em>.  The value
- * of the {@link #scope} attribute, if specified, is taken to be the
- * <em>managed-bean-scope</em> in which this bean is placed once
- * instantiated.  If <em>managed-bean-scope</em> is not specified,
- * "none" is assumed.  If the value of the {@link #eager} attribute is
+ * attached is taken to be the <em>managed-bean-class</em>.</p>
+ *
+ * // RELEASE_PENDING (edburns,rogerk) docs
+ * <p>The scope of the managed bean declared using one of {@link RequestScoped},
+ * {@link SessionScoped}, {@link ApplicationScoped}, or {@link UnScoped} annotations.
+ * If the scope annotations are omitted, the bean is assumed to be <code>request</code>
+ * scoped.</p>
+ *
+ * <p>
+ * If the value of the {@link #eager} attribute is
  * <code>true</code>, the runtime must instantiate this class when the
  * application starts.  In this case, <em>managed-bean-scope</em> is
  * ignored if its value is "none", "request", or "session", or is
@@ -109,11 +114,6 @@ public @interface ManagedBean {
 
     String name() default "";
 
-    /** <p class="changed_added_2_0">Taken to be the
-     * <code>managed-bean-scope</code>.  See class documentation for
-     * details.</p>
-     */
-    String scope() default "none";
 
     /** <p class="changed_added_2_0">Taken to be the value of the
      * <code>eager</code> attribute of the <code>managed-bean</code>.

@@ -524,7 +524,9 @@ public class UIViewRoot extends UIComponentBase {
         if (target == null) {
             target = "head";
         }
-        List<UIComponent> facetChildren = getComponentResources(context, target);
+        List<UIComponent> facetChildren = getComponentResources(context,
+                                                                target,
+                                                                true);
         // add the resource to the facet
         facetChildren.add(componentResource);
     }
@@ -558,6 +560,10 @@ public class UIViewRoot extends UIComponentBase {
      * name <code>target</code>.  If no children are found for the facet, return
      * <code>Collections.emptyList()</code>.
      *
+     * RELEASE_PENDING (edburns,rogerk) why an NPE for target and not context?
+     *   Also, should the List returned by unmodifiable>?
+     *   Exception thrown should be reviewed for related add/remove methods
+     *
      * @throws NullPointerException  if <code>target</code>
      *                               is <code>null</code>
      *
@@ -568,15 +574,15 @@ public class UIViewRoot extends UIComponentBase {
         if (target == null) {
             throw new NullPointerException();
         }
-        String location = getIdentifier(target);
-        UIComponent facet = getFacet(location);
-        if (facet == null) {
-            facet = context.getApplication().createComponent("javax.faces.Panel");
-            facet.setId(location);
-            getFacets().put(location, facet);
-        }
-        
-        return facet.getChildren();
+
+        List<UIComponent> resources = getComponentResources(context,
+                                                            target,
+                                                            false);
+
+        return ((resources != null)
+                ? resources
+                : Collections.<UIComponent>emptyList());
+
     }
     
     /**
@@ -626,6 +632,7 @@ public class UIViewRoot extends UIComponentBase {
      * @since 2.0
      */
     public void removeComponentResource(FacesContext context, UIComponent componentResource, String target) {
+
         final Map<String,Object> attributes = componentResource.getAttributes();
         // look for a target in the component attribute set if arg is not set.
         if (target == null) {
@@ -634,9 +641,13 @@ public class UIViewRoot extends UIComponentBase {
         if (target == null) {
             target = "head";
         }
-        List<UIComponent> facetChildren = getComponentResources(context, target);
-        // add the resource to the facet
-        facetChildren.remove(componentResource);
+        List<UIComponent> facetChildren = getComponentResources(context,
+                                                                target,
+                                                                false);
+        if (facetChildren != null) {
+            facetChildren.remove(componentResource);
+        }
+
     }
 
     /**
@@ -815,11 +826,11 @@ public class UIViewRoot extends UIComponentBase {
      * FacesEvent}s remain in the event queue, that any
      * <code>PhaseListener</code>s in {@link #getPhaseListeners} are
      * invoked as appropriate, and that the <code>this.{@link
-     * #UIComponent#doTreeTraversal} is called, passing a {@link
+     * UIComponent#doTreeTraversal} is called, passing a {@link
      * ContextCallback} that takes the following action: call the {@link
      * UIComponent#processEvent} method of the current component. The
      * argument <code>event</code> must be an instance of {@link
-     * javax.faces.event.AfterRestoreViewEvent} whose
+     * javax.faces.event.AfterRestoreStateEvent} whose
      * <code>component</code> property is the current component in the
      * traversal.</code></p>
      * @param context the <code>FacesContext</code> for this requets
@@ -845,7 +856,9 @@ public class UIViewRoot extends UIComponentBase {
                     }
                 });
             } catch (AbortProcessingException e) {
-                
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE, e.toString(), e);
+                }
             }
         }
 
@@ -1089,7 +1102,7 @@ public class UIViewRoot extends UIComponentBase {
                 // JavaScript knows how to replace the entire document with
                 // this response.
                 writer.startElement("render", this);
-                writer.writeAttribute("id", UIViewRoot.COMPONENT_TYPE, "id");
+                writer.writeAttribute("id", COMPONENT_TYPE, "id");
                 writer.startElement("markup", this);
                 writer.write("<![CDATA[");
             }
@@ -1908,7 +1921,11 @@ public class UIViewRoot extends UIComponentBase {
     }
 
 
+    // --------------------------------------------------------- Private Methods
+
+
     private static String getIdentifier(String target) {
+
         // check map
         String id = LOCATION_IDENTIFIER_MAP.get(target);
         if (id == null) {
@@ -1916,9 +1933,26 @@ public class UIViewRoot extends UIComponentBase {
             LOCATION_IDENTIFIER_MAP.put(target, id);
         }
         return id;
+
     }
 
-    // ----------------------------------------------------------- Partial Subtree Methods
+
+    public List<UIComponent> getComponentResources(FacesContext context,
+                                                   String target,
+                                                   boolean create) {
+
+        String location = getIdentifier(target);
+        UIComponent facet = getFacet(location);
+        if (facet == null && create) {
+            facet = context.getApplication().createComponent("javax.faces.Panel");
+            facet.setId(location);
+            getFacets().put(location, facet);
+        }
+
+        return ((facet != null) ? facet.getChildren() : null);
+
+    }
+
 
     private boolean invokeContextCallbackOnSubtrees(FacesContext context,
         PartialViewContext partialViewContext, PhaseId phaseId) {
@@ -1951,8 +1985,8 @@ public class UIViewRoot extends UIComponentBase {
     }
 
 
-
     // ----------------------------------------------------------- Inner Classes
+
 
     private static class PhaseAwareContextCallback implements ContextCallback {
     

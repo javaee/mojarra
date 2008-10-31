@@ -165,40 +165,6 @@ public abstract class Application {
     public abstract void setActionListener(ActionListener listener);
 
     /**
-     * <p class="changed_added_2_0">Return the default
-     * <code>FacesAnnotation</code> handler used to scan for and process
-     * startup time annotations.</p>
-     * 
-     * @since 2.0
-     */
-    
-    public FacesAnnotationHandler getFacesAnnotationHandler() {
-
-        if (defaultApplication != null) {
-            return defaultApplication.getFacesAnnotationHandler();
-        }
-        throw new UnsupportedOperationException();
-        
-    }
-
-    /**
-     * <p class="changed_added_2_0">Set the default
-     * <code>FacesAnnotation</code> handler used to scan for and process
-     * startup time annotations.</p>
-     * 
-     * @since 2.0
-     */
-    public void setFacesAnnotationHandler(FacesAnnotationHandler newHandler) {
-        if (defaultApplication != null) {
-            defaultApplication.setFacesAnnotationHandler(newHandler);
-        } else {
-            throw new UnsupportedOperationException();
-        }
-        
-    }
-
-
-    /**
      * <p>Return the default <code>Locale</code> for this application.  If
      * not explicitly set, <code>null</code> is returned.</p>
      */ 

@@ -51,8 +51,11 @@ import java.io.IOException;
 
 
 /**
- * <p><strong>StateManager</strong> directs the process of saving and
- * restoring the view between requests.  The {@link StateManager}
+ * <p><strong class="changed_modified_2_0">StateManager</strong> directs the 
+ * process of saving and
+ * restoring the view between requests.  <span class="changed_added_2_0">An
+ * implementation
+ * of this class must be thread-safe.</span>  The {@link StateManager}
  * instance for an application is retrieved from the {@link Application}
  * instance, and thus cannot know any details of the markup language
  * created by the {@link RenderKit} being used to render a view.  The

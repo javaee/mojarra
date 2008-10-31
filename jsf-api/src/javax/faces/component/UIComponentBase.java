@@ -61,7 +61,6 @@ import java.util.AbstractCollection;
 import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -74,7 +73,6 @@ import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.FactoryFinder;
-import javax.faces.application.Resource;
 import javax.faces.event.AfterAddToParentEvent;
 import javax.faces.event.BeforeRenderEvent;
 import javax.faces.event.PhaseId;
@@ -1421,18 +1419,18 @@ public abstract class UIComponentBase extends UIComponent {
 
         if (attachedObject instanceof Collection) {
             Collection attachedCollection = (Collection) attachedObject;
-            List<StateHolderSaver> resultList = new ArrayList<StateHolderSaver>(attachedCollection.size() + 1);
+            List<StateHolderSaver> resultList =
+                  new ArrayList<StateHolderSaver>(attachedCollection.size() + 1);
             resultList.add(new StateHolderSaver(context, attachedCollection.getClass()));
             Iterator listIter = attachedCollection.iterator();
-	    Object cur;
+            Object cur;
             while (listIter.hasNext()) {
-		if (null != (cur = listIter.next())) {
-		    resultList.add(new StateHolderSaver(context, cur));
-		}
+                if (null != (cur = listIter.next())) {
+                    resultList.add(new StateHolderSaver(context, cur));
+                }
             }
             result = resultList;
-        }
-        else {
+        } else {
             result = new StateHolderSaver(context, attachedObject);
         }
 

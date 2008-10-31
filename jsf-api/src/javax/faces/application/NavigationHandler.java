@@ -45,7 +45,8 @@ import javax.faces.context.FacesContext;
 
 
 /**
- * <p>A <strong>NavigationHandler</strong> is passed the outcome string
+ * <p><span class="changed_modified_2_0">A</a> 
+ * <strong>NavigationHandler</strong> is passed the outcome string
  * returned by an application action invoked for this application, and will
  * use this (along with related state information) to choose the view to
  * be displayed next.</p>
@@ -53,6 +54,8 @@ import javax.faces.context.FacesContext;
  * <p>A default implementation of <code>NavigationHandler</code> must be
  * provided by the JSF implementation, which will be utilized unless
  * <code>setNavigationHandler()</code> is called to establish a different one.
+ * <span class="changed_added_2_0">An implementation
+ * of this class must be thread-safe.</span>
  * This default instance will compare the view identifier of the current
  * view, the specified action binding, and the specified outcome against
  * any navigation rules provided in <code>faces-config.xml</code> file(s).

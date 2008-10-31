@@ -145,18 +145,18 @@ this.elementReplace = function(d, tempTagName, src) {
         var temp = document.createElement(tempTagName);
         var result = null;
         temp.id = d.id;
-    
+
         // If we are creating a head element...
         if (-1 != d.tagName.toLowerCase().indexOf("head") && d.tagName.length == 4) {
-    
+
             // head replacement only appears to work on firefox.
             if (-1 == BrowserDetect.browser.indexOf("Firefox")) {
                 return result;
-            }   
-        
+            }
+
             // Strip link elements from src.
             if (-1 != src.indexOf("link")) {
-                var 
+                var
                     linkStartEx = new RegExp("< *link.*>", "gi");
                 var linkStart;
                 while (null != (linkStart = linkStartEx.exec(src))) {

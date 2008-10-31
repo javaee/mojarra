@@ -72,6 +72,8 @@ import com.sun.faces.facelets.tag.TagAttribute;
 import com.sun.faces.facelets.tag.TagException;
 import com.sun.faces.facelets.tag.MetaRuleset;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
+import java.util.Map;
+import javax.faces.event.InitialStateEvent;
 
 /**
  * Implementation of the tag logic used in the JSF specification. This is your
@@ -198,6 +200,7 @@ public class ComponentHandler extends MetaTagHandler {
             }
         }
         
+        c.processEvent(getInitialStateEvent(ctx.getFacesContext(), c));
         this.onComponentPopulated(ctx, c, parent);
 
         // add to the tree afterwards
@@ -208,6 +211,23 @@ public class ComponentHandler extends MetaTagHandler {
         } else {
         	parent.getFacets().put(facetName, c);
         }
+    }
+    
+    private static final String INITIAL_STATE_EVENT_KEY = "facelets.tag.InitialStateEvent";
+    
+    private static InitialStateEvent getInitialStateEvent(FacesContext context,
+            UIComponent source) {
+        InitialStateEvent ise = null;
+        Map<Object,Object> attrs = context.getAttributes();
+        if (null == (ise = (InitialStateEvent) attrs.get(INITIAL_STATE_EVENT_KEY))) {
+            ise = new InitialStateEvent(source);
+            attrs.put(INITIAL_STATE_EVENT_KEY, ise);
+        }
+        else {
+            ise.setComponent(source);
+        }
+
+        return ise;
     }
     
     /**

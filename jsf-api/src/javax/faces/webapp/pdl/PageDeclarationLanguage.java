@@ -42,7 +42,9 @@ import javax.faces.context.FacesContext;
 
 /**
  * <p class="changed_added_2_0">The contract that a page declaration
- * language must implement to interact with the JSF runtime.
+ * language must implement to interact with the JSF runtime. 
+ * An implementation
+ * of this class must be thread-safe.
  * PENDING(edburns): more work needs to be done on this, including:</p>
  *
  * 	<ul>

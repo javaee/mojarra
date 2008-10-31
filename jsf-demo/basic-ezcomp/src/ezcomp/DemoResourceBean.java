@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.model.ManagedBean;
+import javax.faces.model.ApplicationScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
 import javax.annotation.PostConstruct;
@@ -55,7 +56,8 @@ import org.w3c.dom.Node;
  * This bean is responsible for building the metadata used in generating the
  * demo index page.
  */
-@ManagedBean(name = "demoBean", scope = "application", eager = true)
+@ManagedBean(name = "demoBean",eager = true)
+@ApplicationScoped
 public class DemoResourceBean {
 
     /**
@@ -137,7 +139,7 @@ public class DemoResourceBean {
             for (int i = 0, len = demoElements.getLength(); i < len; i++) {
                 DemoBean b = processDemo(demoElements.item(i));
                 if (b != null) {
-                    demoBeans.add(b);
+                    beans.add(b);
                 }
             }
             beans.trimToSize();
@@ -159,7 +161,7 @@ public class DemoResourceBean {
         NodeList children = demoNode.getChildNodes();
         String name = null;
         String page = null;
-        List<DemoSourceInfo> sourceInfo = new ArrayList<DemoSourceInfo>();
+        ArrayList<DemoSourceInfo> sourceInfo = new ArrayList<DemoSourceInfo>();
         for (int i = 0, len = children.getLength(); i < len; i++) {
             Node n = children.item(i);
             if ("name".equals(n.getNodeName())) {
@@ -177,6 +179,8 @@ public class DemoResourceBean {
                 }
             }
         }
+
+        sourceInfo.trimToSize();
 
         if (name != null && page != null && !sourceInfo.isEmpty()) {
             return new DemoBean(name, page, sourceInfo);
