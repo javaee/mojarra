@@ -36,6 +36,7 @@
 
 package com.sun.faces.application.annotation;
 
+import java.net.URL;
 import java.util.Set;
 import java.util.Collections;
 import java.util.Map;
@@ -161,7 +162,11 @@ public class AnnotationHandler extends DiscoveryHandler implements SystemEventLi
 
     }
 
-
+    @Override
+    public Set<URL> getResourcePaths(String path) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
     // ---------------------------------------- Methods from SystemEventListener
 
 

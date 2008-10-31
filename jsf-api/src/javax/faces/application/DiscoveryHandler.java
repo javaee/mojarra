@@ -40,6 +40,7 @@
 
 package javax.faces.application;
 
+import java.net.URL;
 import java.util.Set;
 import javax.faces.context.FacesContext;
 
@@ -68,6 +69,9 @@ import javax.faces.context.FacesContext;
  *
  * <p><strong><a name="startupTimeAnnotationProcessingAlgorithm">Startup
  * Time Annotation Processing Algorithm</a></strong></p>
+ *
+ * <p>At application startup time, the runtime must use the following
+ * algorithm to cause the annotations to be processed.</p>
  * 
  *  <ul>
 
@@ -81,6 +85,25 @@ import javax.faces.context.FacesContext;
  *     the previous step.</p></li>
  *
  *   </ul>
+
+ * <p><strong><a name="classpathScanningAlgorithm">Algorithm for
+ * scanning the classpath for resources</a></strong></p>
+
+ * <p>At application startup time, the runtime must use the following
+ * algorithm to discover all the application configuration resource
+ * files available on the classpath.  See spec prose document section
+ * &#8220;11.4.2 Application Startup Behavior&#8221; for details.</p>
+ * 
+ * 	<ul>
+
+	  <li><p>Call {@link #getResourcePaths}, passing
+	  &#8220;<code>META-INF/faces-config</code>&#8221; and process
+	  the resulting <code>Set</code> as described in spec section
+	  &#8220;11.4.6 Ordering of Artifacts&#8221;</p></li>
+
+	</ul>
+
+
 
  * </ul>
  *
@@ -165,6 +188,20 @@ public abstract class DiscoveryHandler {
      */
     public abstract void processAnnotatedClasses(FacesContext context,
                                                  Set<String> annotatedClassnames);
+    
+    /**
+     * <p>Return a <code>Set</code> of <code>URL</code> instances for
+     * all classpath resources whose resource path starts withthe
+     * specified argument.  Like {@link
+     * javax.faces.context.ExternalContext#getResourcePaths} except that
+     * the search space is the Web Application <code>ClassLoader</code>
+     * rather than the Web Application resources.</p>
+     *
+     * @param Partial path used to match resources
+     *
+     * @since 2.0
+     */
+    public abstract Set<URL> getResourcePaths(String path);
 
 
 }

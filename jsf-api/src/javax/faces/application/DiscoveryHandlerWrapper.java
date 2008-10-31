@@ -36,6 +36,7 @@
 
 package javax.faces.application;
 
+import java.net.URL;
 import java.util.Set;
 import javax.faces.FacesWrapper;
 import javax.faces.context.FacesContext;
@@ -95,6 +96,17 @@ public abstract class DiscoveryHandlerWrapper
 
     }
 
+   /**
+     * <p class="changed_added_2_0">The default behavior of this method
+     * is to call {@link DiscoveryHandler#getResourcePaths}
+     * on the wrapped {@link DiscoveryHandler} object.</p>
+     */
+    @Override
+    public Set<URL> getResourcePaths(String path) {
+        return getWrapped().getResourcePaths(path);
+    }
+
+    
 
 
 
