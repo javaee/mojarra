@@ -53,10 +53,10 @@
  */
 
 /**
-  @project JSF Ajax Library 
-  @version 2.0 
-  @description  
-*/
+ @project JSF Ajax Library
+ @version 2.0
+ @description
+ */
 
 /**
  * Register with OpenAjax
@@ -221,9 +221,9 @@ javax.faces.Ajax.ajaxRequest = function(element, event, options) {
 
     if (typeof element == 'undefined' || element == null) {
         throw {
-                    name: 'ArgNotSet',
-                    message: "ajaxRequest:Required first argument has not been set"
-                }
+            name: 'ArgNotSet',
+            message: "ajaxRequest:Required first argument has not been set"
+        }
     }
 
     // Capture the element that triggered this Ajax request.
@@ -237,12 +237,12 @@ javax.faces.Ajax.ajaxRequest = function(element, event, options) {
     var args = new Object();
     if (typeof(options) != 'undefined' && options != null) {
         if (options.execute) {
-            args["javax.faces.partial.execute"] = utils.toArray(options.execute,',').join(',');
+            args["javax.faces.partial.execute"] = utils.toArray(options.execute, ',').join(',');
             options.execute = null;
             delete options.execute;
         }
         if (options.render) {
-            args["javax.faces.partial.render"] = utils.toArray(options.render,',').join(',');
+            args["javax.faces.partial.render"] = utils.toArray(options.render, ',').join(',');
             options.render = null;
             delete options.render;
         }
@@ -302,7 +302,7 @@ javax.faces.Ajax.ajaxRequest = function(element, event, options) {
 javax.faces.Ajax.ajaxResponse = function(request) {
 
     //  RELEASE_PENDING: We need to add more robust error handing - this error should probably be caught upstream
-    if (request == null || typeof request == 'undefined' ) {
+    if (request == null || typeof request == 'undefined') {
         throw new Error("javax.faces.Ajax.ajaxResponse: Request is null");
     }
 
@@ -344,13 +344,13 @@ javax.faces.Ajax.ajaxResponse = function(request) {
             //   if src does not contain <body>
             //      replace the current document's <body> with the contents.
             var
-                htmlStartEx = new RegExp("< *html.*>", "gi"),
-                htmlEndEx = new RegExp("< */ *html.*>", "gi"),
-                headStartEx = new RegExp("< *head.*>", "gi"),
-                headEndEx = new RegExp("< */ *head.*>", "gi"),
-                bodyStartEx = new RegExp("< *body.*>", "gi"),
-                bodyEndEx = new RegExp("< */ *body.*>", "gi"),
-                htmlStart, htmlEnd, headStart, headEnd, bodyStart, bodyEnd;
+                    htmlStartEx = new RegExp("< *html.*>", "gi"),
+                    htmlEndEx = new RegExp("< */ *html.*>", "gi"),
+                    headStartEx = new RegExp("< *head.*>", "gi"),
+                    headEndEx = new RegExp("< */ *head.*>", "gi"),
+                    bodyStartEx = new RegExp("< *body.*>", "gi"),
+                    bodyEndEx = new RegExp("< */ *body.*>", "gi"),
+                    htmlStart, htmlEnd, headStart, headEnd, bodyStart, bodyEnd;
             var srcHead = null, srcBody = null;
             // find the current document's "body" element
             var docBody = document.getElementsByTagName("body")[0];
@@ -368,7 +368,7 @@ javax.faces.Ajax.ajaxResponse = function(request) {
                 // if src contains </head>
                 if (null != (headEnd = headEndEx.exec(src))) {
                     srcHead = src.substring(headStartEx.lastIndex,
-                        headEnd.index);
+                            headEnd.index);
                 } else {
                     srcHead = src.substring(headStartEx.lastIndex);
                 }
@@ -383,7 +383,7 @@ javax.faces.Ajax.ajaxResponse = function(request) {
                 // if src contains </body>
                 if (null != (bodyEnd = bodyEndEx.exec(src))) {
                     srcBody = src.substring(bodyStartEx.lastIndex,
-                        bodyEnd.index);
+                            bodyEnd.index);
                 } else {
                     srcBody = src.substring(bodyStartEx.lastIndex);
                 }
@@ -406,7 +406,7 @@ javax.faces.Ajax.ajaxResponse = function(request) {
             temp.id = d.id;
             temp.innerHTML = utils.trim(str);
 
-            parent.replaceChild(temp.firstChild,d);
+            parent.replaceChild(temp.firstChild, d);
         }
     }
 

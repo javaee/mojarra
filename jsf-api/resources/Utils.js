@@ -76,7 +76,7 @@ javax.faces.Ajax.Utils = function() {
             while (form && form.tagName && form.tagName.toLowerCase() != 'form') {
                 if (form.form) return form.form;
                 if (form.parentNode) {
-                        form = form.parentNode;
+                    form = form.parentNode;
                 } else {
                     form = null;
                 }
@@ -102,11 +102,11 @@ javax.faces.Ajax.Utils = function() {
         return toReduce.length > 1 ? toReduce : toReduce[0];
     }
 
-    this.toArray = function(s,e) {
+    this.toArray = function(s, e) {
         var sarray;
         if (typeof s == 'string') {
-            sarray = s.split((e)?e:' ');
-            for (var i=0; i<sarray.length; i++) {
+            sarray = s.split((e) ? e : ' ');
+            for (var i = 0; i < sarray.length; i++) {
                 sarray[i] = this.trim(sarray[i]);
             }
         }
@@ -116,8 +116,8 @@ javax.faces.Ajax.Utils = function() {
     this.trim = function(toTrim) {
         var result = null;
         if (null != toTrim) {
-            var s = toTrim.replace( /^\s+/g, "" );
-            result = s.replace( /\s+$/g, "" );
+            var s = toTrim.replace(/^\s+/g, "");
+            result = s.replace(/\s+$/g, "");
         }
         return result;
     }
@@ -129,7 +129,9 @@ javax.faces.Ajax.Utils = function() {
     }
 
     this.evalScripts = function(src) {
-        return this.extractScripts(src).map(function(script) { return eval(script) });
+        return this.extractScripts(src).map(function(script) {
+            return eval(script)
+        });
     }
 
     this.extractScripts = function(src) {
@@ -140,7 +142,7 @@ javax.faces.Ajax.Utils = function() {
         });
     }
 
-this.elementReplace = function(d, tempTagName, src) {
+    this.elementReplace = function(d, tempTagName, src) {
         var parent = d.parentNode;
         var temp = document.createElement(tempTagName);
         var result = null;
@@ -149,6 +151,8 @@ this.elementReplace = function(d, tempTagName, src) {
         // If we are creating a head element...
         if (-1 != d.tagName.toLowerCase().indexOf("head") && d.tagName.length == 4) {
 
+            // RELEASE_PENDING: Browser detection is considered bad form.
+            // Update this section to provide a smarter fallback.
             // head replacement only appears to work on firefox.
             if (-1 == BrowserDetect.browser.indexOf("Firefox")) {
                 return result;
@@ -157,11 +161,11 @@ this.elementReplace = function(d, tempTagName, src) {
             // Strip link elements from src.
             if (-1 != src.indexOf("link")) {
                 var
-                    linkStartEx = new RegExp("< *link.*>", "gi");
+                        linkStartEx = new RegExp("< *link.*>", "gi");
                 var linkStart;
                 while (null != (linkStart = linkStartEx.exec(src))) {
                     src = src.substring(0, linkStart.index) +
-                        src.substring(linkStartEx.lastIndex);
+                          src.substring(linkStartEx.lastIndex);
                     linkStartEx.lastIndex = 0;
                 }
             }
@@ -169,13 +173,13 @@ this.elementReplace = function(d, tempTagName, src) {
             // Strip style elements from src
             if (-1 != src.indexOf("style")) {
                 var
-                    styleStartEx = new RegExp("< *style.*>", "gi"),
-                    styleEndEx = new RegExp("< */ *style.*>", "gi");
+                        styleStartEx = new RegExp("< *style.*>", "gi"),
+                        styleEndEx = new RegExp("< */ *style.*>", "gi");
                 var styleStart, styleEnd;
                 while (null != (styleStart = styleStartEx.exec(src))) {
                     styleEnd = styleEndEx.exec(src);
                     src = src.substring(0, styleStart.index) +
-                        src.substring(styleStartEx.lastIndex);
+                          src.substring(styleStartEx.lastIndex);
                     styleStartEx.lastIndex = 0;
                 }
             }
