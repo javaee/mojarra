@@ -49,7 +49,12 @@ import javax.faces.lifecycle.Lifecycle;
 /**
  * <p><strong class="changed_added_2_0">DiscoveryHandlerFactory</strong>
  * is a factory object that creates (if needed) and returns a {@link
- * DiscoveryHandler} instance.</p>
+ * DiscoveryHandler} instance.  Due to the fundamental nature of the
+ * features provided by {@link DiscoveryFactory}, it is not possible
+ * to declare it in the application configuration resources.  Therefore,
+ * the <code>META-INF/services/DiscoveryHandlerFactory</code> mechanism
+ * specified in {@link javax.faces.FactoryFinder} must be implemented by the 
+ * runtime for this class.</p>
 
  * <div class="changed_added_2_0">
  *

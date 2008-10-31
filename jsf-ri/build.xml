@@ -326,8 +326,11 @@
               toDir="${build.classes.dir}/com/sun/faces"/>
         <copy file="conf/xslt/facelets1_0-2_0toSchema.xsl"
               toDir="${build.classes.dir}/com/sun/faces"/>
-        <copy file="${conf.share.dir}/com.sun.faces.spi.injectionprovider"
-              toDir="${build.classes.dir}/META-INF/services"/>
+        <copy toDir="${build.classes.dir}/META-INF/services">
+          <fileset dir="${conf.share.dir}/services">
+             <include name="*" />
+          </fileset>
+        </copy>
         <copy todir="${build.classes.dir}/META-INF">
             <fileset dir="${conf.share.dir}">
                 <include name="jsf_core.tld"/>

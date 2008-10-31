@@ -50,9 +50,6 @@
     <application-factory>
       com.sun.faces.application.ApplicationFactoryImpl
     </application-factory>
-    <discovery-handler-factory>
-      com.sun.faces.application.DiscoveryHandlerFactoryImpl
-    </discovery-handler-factory>
     <faces-context-factory>
       com.sun.faces.context.FacesContextFactoryImpl
     </faces-context-factory>
