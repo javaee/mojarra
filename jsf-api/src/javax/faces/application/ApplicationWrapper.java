@@ -164,7 +164,7 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
     }
 
     @Override
-    public FacesAnnotationHandler getFacesAnnotationHandler() {
+    public DiscoveryHandler getFacesAnnotationHandler() {
         return getWrapped().getFacesAnnotationHandler();
     }
 
@@ -204,7 +204,7 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
     }
 
     @Override
-    public void setFacesAnnotationHandler(FacesAnnotationHandler newHandler) {
+    public void setFacesAnnotationHandler(DiscoveryHandler newHandler) {
         getWrapped().setFacesAnnotationHandler(newHandler);
     }
 

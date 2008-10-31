@@ -43,7 +43,7 @@ import java.util.concurrent.Future;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
-import javax.faces.application.FacesAnnotationHandler;
+import javax.faces.application.DiscoveryHandler;
 import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
 import javax.faces.event.SystemEventListener;
@@ -57,13 +57,13 @@ import com.sun.faces.util.FacesLogger;
 
 /**
  * <p>
- * Default implementation of {@link FacesAnnotationHandler}.  Note that this
+ * Default implementation of {@link DiscoveryHandler}.  Note that this
  * implementation does not perform any search for annotated classes, but instead
  * relies on the scan results being pushed to the <code>ServletContext</code>
  * by {@link com.sun.faces.config.ConfigManager}.
  * </p>
  */
-public class AnnotationHandler extends FacesAnnotationHandler implements SystemEventListener {
+public class AnnotationHandler extends DiscoveryHandler implements SystemEventListener {
 
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
@@ -110,11 +110,11 @@ public class AnnotationHandler extends FacesAnnotationHandler implements SystemE
 
 
 
-    // ------------------------------------- Methods from FacesAnnotationHandler
+    // ------------------------------------- Methods from DiscoveryHandler
 
 
     /**
-     * @see javax.faces.application.FacesAnnotationHandler#getClassNamesWithFacesAnnotations(javax.faces.context.FacesContext)
+     * @see javax.faces.application.DiscoveryHandler#getClassNamesWithFacesAnnotations(javax.faces.context.FacesContext)
      */
     public Set<String> getClassNamesWithFacesAnnotations(FacesContext context) {
 
@@ -127,7 +127,7 @@ public class AnnotationHandler extends FacesAnnotationHandler implements SystemE
 
 
     /**
-     * @see javax.faces.application.FacesAnnotationHandler#processAnnotatedClasses(javax.faces.context.FacesContext, java.util.Set)
+     * @see javax.faces.application.DiscoveryHandler#processAnnotatedClasses(javax.faces.context.FacesContext, java.util.Set)
      */
     public void processAnnotatedClasses(FacesContext context,
                                         Set<String> annotatedClassnames) {

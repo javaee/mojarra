@@ -42,11 +42,11 @@ import javax.faces.context.FacesContext;
 
 /**
  * <p class="changed_added_2_0">Provides a simple implementation of
- * {@link FacesAnnotationHandler} that can be subclassed by developers
+ * {@link DiscoveryHandler} that can be subclassed by developers
  * wishing to provide specialized behavior to an existing {@link
- * FacesAnnotationHandler} instance.  The default implementation of all
+ * DiscoveryHandler} instance.  The default implementation of all
  * methods is to call through to the wrapped {@link
- * FacesAnnotationHandler}.</p>
+ * DiscoveryHandler}.</p>
  *
  * <div class="changed_added_2_0">
  *
@@ -57,23 +57,23 @@ import javax.faces.context.FacesContext;
  *
  * @since 2.0
  */
-public abstract class FacesAnnotationHandlerWrapper
-      extends FacesAnnotationHandler
-      implements FacesWrapper<FacesAnnotationHandler> {
+public abstract class DiscoveryHandlerWrapper
+      extends DiscoveryHandler
+      implements FacesWrapper<DiscoveryHandler> {
 
     /**
      * @return the instance that we are wrapping.
      */
-    public abstract FacesAnnotationHandler getWrapped();
+    public abstract DiscoveryHandler getWrapped();
 
 
-    // ------------------------------------- Methods from FacesAnnotationHandler
+    // ------------------------------------- Methods from DiscoveryHandler
 
     /**
      * <p class="changed_added_2_0">The default behavior of this method
      * is to call {@link
-     * FacesAnnotationHandler#getClassNamesWithFacesAnnotations}
-     * on the wrapped {@link FacesAnnotationHandler} object.</p>
+     * DiscoveryHandler#getClassNamesWithFacesAnnotations}
+     * on the wrapped {@link DiscoveryHandler} object.</p>
      */
     @Override
     public Set<String> getClassNamesWithFacesAnnotations(FacesContext context) {
@@ -84,8 +84,8 @@ public abstract class FacesAnnotationHandlerWrapper
 
    /**
      * <p class="changed_added_2_0">The default behavior of this method
-     * is to call {@link FacesAnnotationHandler#processAnnotatedClasses}
-     * on the wrapped {@link FacesAnnotationHandler} object.</p>
+     * is to call {@link DiscoveryHandler#processAnnotatedClasses}
+     * on the wrapped {@link DiscoveryHandler} object.</p>
      */
     @Override
     public void processAnnotatedClasses(FacesContext context,

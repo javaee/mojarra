@@ -57,7 +57,7 @@ import javax.faces.application.NavigationHandler;
 import javax.faces.application.ResourceHandler;
 import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
-import javax.faces.application.FacesAnnotationHandler;
+import javax.faces.application.DiscoveryHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
@@ -138,10 +138,10 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
          = "resource-handler";
 
     /**
-     * <code>/faces-config/application/annotation-handler</code>
+     * <code>/faces-config/application/discovery-handler</code>
      */
-    private static final String ANNOTATION_HANDLER =
-          "annotation-handler";
+    private static final String DISCOVERY_HANDLER =
+          "discovery-handler";
 
     /**
      * <code>/faces-config/application/el-resolver</code>
@@ -295,7 +295,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                                 setResourceHandler(app, n);
                             } else if (SYSTEM_EVENT_LISTENER.equals(n.getLocalName())) {
                                 addSystemEventListener(app, n);
-                            } else if (ANNOTATION_HANDLER.equals(n.getLocalName())) {
+                            } else if (DISCOVERY_HANDLER.equals(n.getLocalName())) {
                                 setAnnotationHandler(app, n);
                             }
                         }
@@ -308,7 +308,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
 
         // all application level artifacts are in place, process any annotated
         // components that have been found
-        FacesAnnotationHandler handler = getApplication().getFacesAnnotationHandler();
+        DiscoveryHandler handler = getApplication().getFacesAnnotationHandler();
         FacesContext ctx = FacesContext.getCurrentInstance();
         handler.processAnnotatedClasses(ctx, handler.getClassNamesWithFacesAnnotations(ctx));
 
@@ -773,7 +773,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
             String handler = getNodeText(annotationHandler);
             if (handler != null) {
                 Object instance = createInstance(handler,
-                                                 FacesAnnotationHandler.class,
+                                                 DiscoveryHandler.class,
                                                  application.getResourceHandler(),
                                                  annotationHandler);
                 if (instance != null) {
@@ -783,7 +783,7 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                                         "Calling Application.setAnnotationHandler({0})",
                                         handler));
                     }
-                    application.setFacesAnnotationHandler((FacesAnnotationHandler) instance);
+                    application.setFacesAnnotationHandler((DiscoveryHandler) instance);
                 }
             }
         }

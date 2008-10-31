@@ -116,7 +116,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 import javax.el.ValueExpression;
-import javax.faces.application.FacesAnnotationHandler;
+import javax.faces.application.DiscoveryHandler;
 import javax.faces.application.Resource;
 import javax.faces.webapp.pdl.PageDeclarationLanguage;
 
@@ -164,7 +164,7 @@ public class ApplicationImpl extends Application {
     private ProjectStage projectStage;
 
     private volatile ActionListener actionListener = null;
-    private volatile FacesAnnotationHandler annotationHandler = null;
+    private volatile DiscoveryHandler annotationHandler = null;
     private volatile NavigationHandler navigationHandler = null;
     private volatile PropertyResolverImpl propertyResolver = null;
     private volatile VariableResolverImpl variableResolver = null;
@@ -544,7 +544,7 @@ public class ApplicationImpl extends Application {
      * @return
      */
     @Override
-    public FacesAnnotationHandler getFacesAnnotationHandler() {
+    public DiscoveryHandler getFacesAnnotationHandler() {
 
         return annotationHandler;
 
@@ -552,10 +552,10 @@ public class ApplicationImpl extends Application {
 
 
     /**
-     * @see javax.faces.application.Application#setFacesAnnotationHandler(javax.faces.application.FacesAnnotationHandler)
+     * @see javax.faces.application.Application#setFacesAnnotationHandler(javax.faces.application.DiscoveryHandler)
      */
     @Override
-    public synchronized void setFacesAnnotationHandler(FacesAnnotationHandler newHandler) {
+    public synchronized void setFacesAnnotationHandler(DiscoveryHandler newHandler) {
 
         annotationHandler = newHandler;
         

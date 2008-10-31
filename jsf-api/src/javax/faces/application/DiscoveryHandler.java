@@ -44,88 +44,95 @@ import java.util.Set;
 import javax.faces.context.FacesContext;
 
 /**
- * <p class="changed_added_2_0"><strong>FacesAnnotationHandler</strong>
- * is the run-time API by which all the startup time annotations defined
- * in JavaServer Faces are discovered and processed.  For discussion,
- * the following algorithm is called the "startup time annotation
- * processing algorithm".</p>
+ * <p class="changed_added_2_0"><strong>DiscoveryHandler</strong> is the
+ * run-time API by which non-container-compatible discovery is
+ * performed.  This includes:</p>
  *
  * <div class="changed_added_2_0"> 
+
+ * <ul>
  *
+ * <li><p>discovery and processing of all the startup time annotations
+ * defined in JavaServer Faces.</p></li>
+ *
+ * <li><p>discovery of resources on the classpath.</p></li>
+ *
+ * </ul>
+ *
+ * <p><strong>Usage</strong></p>
+ *
+ * <ul>
+ *
+ * <p>The specification for the usage of this class in the context of
+ * each of the above features follows.</p>
+ *
+ * <p><strong><a name="startupTimeAnnotationProcessingAlgorithm">Startup
+ * Time Annotation Processing Algorithm</a></strong></p>
+ * 
  *  <ul>
- *
+
  *     <li><p>Call {@link #getClassNamesWithFacesAnnotations}, passing
- *     the startup time {@link FacesContext}.</p></li>
+ *     the startup time {@link FacesContext}.</p>
+
+ *     </li>
  *
  *     <li><p>Call {@link #processAnnotatedClasses}, passing the
  *     startup time <code>FacesContext</code> and the result from
  *     the previous step.</p></li>
  *
  *   </ul>
- *
- * <p>If the <code>&lt;faces-config&gt;</code> element of the
- * application configuration resource file located at
- * <code>WEB-INF/faces-config.xml</code> contains a
- * <code>metadata-complete</code> attribute whose value is "true", the
- * "startup time annotation processing algorithm" must not be called.
- * Otherwise, the implementation must cause the "startup time annotation
- * processing algorithm" to be executed as early as possible at
- * application startup time.  Because the
- * <code>FacesAnnotationHandler</code> is maintained as a decoratable
- * singleton on the {@link Application} instance, and is installed into
- * the runtime by nesting an <code>&lt;annotation-handler /&gt;</code>
- * element within the application configuration resources, the earliest
- * possible point this algorithm can be executed is after all of the
- * <code>&lt;application&gt;</code> elements from all of the application
- * configuration resources have been processed.  The implementation must
- * guarantee that any conflicts between a constituent of the application
- * configuration resources and a constituent of the processed
- * annotations are resolved to favor the constituent in the application
- * configuration resources.</p>
+
+ * </ul>
  *
  * <p>The runtime must employ the decorator pattern as for every other
  * pluggable artifact in JSF.</p>
-
- * <p><em><a name="configAnnotationScanningSpecification">Algorithm for
- * scanning classes for configuration annotations</a></em></p>
-
- * <p>The following algorithm or one semantically equivalent to it must
- * be followed to scan the classes available to the application for the
- * presence of annotations that take the place of elements in the
- * application configuration resources.  Each annotation for which this
- * algorithm applies will specifically reference this algorithm in its
- * javadoc.</p>
-
- * <ul>
-
- * <li><p>If the <code>&lt;faces-config&gt;</code> element in the
- * <code>WEB-INF/faces-config.xml</code> file contains
- * <code>metadata-complete</code> attribute whose value is
- * <code>"true"</code>, the implementation must not perform annotation
- * scanning on any classes except for those classes provided by the
- * implementation itself.  Otherwise, continue as follows.</p></li>
-
- * <li><p>All classes in <code>WEB-INF/classes</code> must be scanned.</p></li>
-
- * <li><p>For every jar in the application's <code>WEB-INF/lib</code>
- * directory, if the jar contains a
- * <code>META-INF/faces-config.xml</code> file (even an empty one), all
- * classes in that jar must be scanned.</p></li>
- *
- * </ul>
 
  *
  * </div>
  *
  * @since 2.0
  */
-public abstract class FacesAnnotationHandler {
+public abstract class DiscoveryHandler {
 
     /**
      * <p class="changed_added_2_0">Return a set of strings where each
      * string is a fully qualified java class name that must be
      * inspected for the presence of startup time annotations.</p>
      *
+     * <div class="changed_added_2_0">
+
+     * <p><strong><a name="configAnnotationScanningSpecification">Algorithm for
+     * scanning classes for configuration annotations</a></strong></p>
+     
+     * <p>The following algorithm or one semantically equivalent to it must
+     * be followed to scan the classes available to the application for the
+     * presence of annotations that take the place of elements in the
+     * application configuration resources.  Each annotation for which this
+     * algorithm applies will specifically reference this algorithm in its
+     * javadoc.</p>
+     
+     * <ul>
+     
+     * <li><p>If the <code>&lt;faces-config&gt;</code> element in the
+     * <code>WEB-INF/faces-config.xml</code> file contains
+     * <code>metadata-complete</code> attribute whose value is
+     * <code>"true"</code>, the implementation must not perform annotation
+     * scanning on any classes except for those classes provided by the
+     * implementation itself.  Otherwise, continue as follows.</p></li>
+     
+     * <li><p>All classes in <code>WEB-INF/classes</code> must be
+     * scanned.</p></li>
+     
+     * <li><p>For every jar in the application's <code>WEB-INF/lib</code>
+     * directory, if the jar contains a
+     * <code>META-INF/faces-config.xml</code> file (even an empty one), all
+     * classes in that jar must be scanned.</p></li>
+     *
+     
+     * </ul>
+
+     * </div>
+
      * @param context the startup time <code>FacesContext</code>
      * for this application.
      *
@@ -138,7 +145,16 @@ public abstract class FacesAnnotationHandler {
      * from {@link #getClassNamesWithFacesAnnotations}, process each
      * class to look for and handle startup time annotations as
      * described in the javadoc for each annotation.</p>
+     
+     * <div class="changed_added_2_0">
+
+     * <p>The implementation must guarantee that any conflicts between a
+     * constituent of the application configuration resources and a
+     * constituent of the processed annotations are resolved to favor
+     * the constituent in the application configuration resources.</p>
      *
+     * </div>
+
      * @param context the startup time <code>FacesContext</code>
      * for this application.
 

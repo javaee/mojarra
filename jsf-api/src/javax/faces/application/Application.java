@@ -172,7 +172,7 @@ public abstract class Application {
      * @since 2.0
      */
     
-    public FacesAnnotationHandler getFacesAnnotationHandler() {
+    public DiscoveryHandler getFacesAnnotationHandler() {
 
         if (defaultApplication != null) {
             return defaultApplication.getFacesAnnotationHandler();
@@ -188,7 +188,7 @@ public abstract class Application {
      * 
      * @since 2.0
      */
-    public void setFacesAnnotationHandler(FacesAnnotationHandler newHandler) {
+    public void setFacesAnnotationHandler(DiscoveryHandler newHandler) {
         if (defaultApplication != null) {
             defaultApplication.setFacesAnnotationHandler(newHandler);
         } else {

@@ -327,7 +327,7 @@
                     </xsd:documentation>
                 </xsd:annotation>
             </xsd:element>
-            <xsd:element name="annotation-handler"
+            <xsd:element name="discovery-handler"
                          type="javaee:fully-qualified-classType">
                 <xsd:annotation>
                     <xsd:documentation>
