@@ -52,5 +52,5 @@ function removeCell(cellData) {
 }
 
 // Set up the observer subscription
-
-OpenAjax.hub.subscribe("javax.faces.AjaxEngine.Queue",msg);
+// RELEASE_PENDING change the ** to the actual queue to watch
+OpenAjax.hub.subscribe("javax.faces.AjaxEngine.Queue.**",msg);

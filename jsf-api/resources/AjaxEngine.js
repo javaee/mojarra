@@ -340,10 +340,22 @@ if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
          * @param element - the element to enqueue
          */
         this.enqueue = function(element) {
+
+            // Convert the parameters to an array of dot-separated strings
+            var execParam = element.parameters["javax.faces.partial.execute"];
+            var execArray = execParam.replace(' ','').replace(':','.').split(',');
+
+            // Queue the request
             queue.push(element);
+
+            // Send the message that the request is enqueued
             var args = new Object();
             args["enqueue"] = element;
-            OpenAjax.hub.publish("javax.faces.AjaxEngine.Queue", args);
+            // loop through all exec values (converted to dot-notation),
+            //  trimming spaces first
+            for (var exec in execArray) {
+                OpenAjax.hub.publish("javax.faces.AjaxEngine.Queue."+execArray[exec], args);
+            }
         }
 
         /* Dequeues an element from this Queue. The oldest element in this Queue is
@@ -369,9 +381,19 @@ if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
                 }
             }
             if (element != "undefined") {
+                // Convert the parameters to an array of dot-separated strings
+                var execParam = element.parameters["javax.faces.partial.execute"];
+                var execArray = execParam.replace(' ','').replace(':','.').split(',');
+
+
                 var args = new Object();
                 args["dequeue"] = element;
-                OpenAjax.hub.publish("javax.faces.AjaxEngine.Queue", args);
+
+                // loop through all exec values (converted to dot-notation),
+                //  trimming spaces first
+                for (var exec in execArray) {
+                    OpenAjax.hub.publish("javax.faces.AjaxEngine.Queue."+execArray[exec], args);
+                }
             }
 
             // return the removed element
