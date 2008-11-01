@@ -109,8 +109,7 @@ if (javax.faces.Ajax == null || typeof javax.faces.Ajax == "undefined") {
  */
 javax.faces.Ajax.viewState = function(form) {
 
-    var viewState = javax.faces.Ajax.AjaxEngine.serializeForm(form);
-    return viewState;
+    return javax.faces.Ajax.AjaxEngine.serializeForm(form);
 
 }
 
@@ -450,9 +449,7 @@ javax.faces.Ajax.ajaxResponse = function(request) {
 
 javax.faces.Ajax.getProjectStage = function() {
 
-    var result = "#{facesContext.application.projectStage}";
-
-    return result;
+    return "#{facesContext.application.projectStage}";
 
 }
 
