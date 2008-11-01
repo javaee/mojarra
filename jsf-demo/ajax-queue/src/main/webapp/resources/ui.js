@@ -18,10 +18,10 @@ function buttonpush(buttonName, element, event) {
 
 function msg(eventName, data) {
     var txt = null;
-    if (typeof data.enqueue != 'undefined' || data.enqueue != null) {
+    if (typeof data.enqueue !== 'undefined' || data.enqueue !== null) {
         txt = document.createTextNode(data.enqueue.parameters["javax.faces.partial.execute"]);
         addCell(txt);
-    } else if (typeof data.dequeue != 'undefined' || data.dequeue != null) {
+    } else if (typeof data.dequeue !== 'undefined' || data.dequeue !== null) {
         txt = document.createTextNode(data.dequeue.parameters["javax.faces.partial.execute"]);
         removeCell(txt);
     }
