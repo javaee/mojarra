@@ -17,11 +17,12 @@ function buttonpush(buttonName, element, event) {
 } 
 
 function msg(eventName, data) {
+    alert(eventName);
     var txt = null;
-    if (typeof data.enqueue !== 'undefined' || data.enqueue !== null) {
+    if (typeof data.enqueue != 'undefined' || data.enqueue != null) {
         txt = document.createTextNode(data.enqueue.parameters["javax.faces.partial.execute"]);
         addCell(txt);
-    } else if (typeof data.dequeue !== 'undefined' || data.dequeue !== null) {
+    } else if (typeof data.dequeue != 'undefined' || data.dequeue != null) {
         txt = document.createTextNode(data.dequeue.parameters["javax.faces.partial.execute"]);
         removeCell(txt);
     }
@@ -51,6 +52,11 @@ function removeCell(cellData) {
     }
 }
 
+function errorMsg(eventName, data) {
+    alert("Name: "+eventName+" Error Status: "+data['error_status']);
+}
+
 // Set up the observer subscription
 
-OpenAjax.hub.subscribe("javax.faces.AjaxEngine.Queue",msg);
+OpenAjax.hub.subscribe("javax.faces.AjaxEngine.Queue.**",msg);
+OpenAjax.hub.subscribe("javax.faces.AjaxEngine.sendError.**",errorMsg);

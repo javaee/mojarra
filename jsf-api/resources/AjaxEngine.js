@@ -57,6 +57,7 @@
  */
 javax.faces.Ajax.AjaxEngine = function() {
 
+
     var req = new Object();        // Request Object
     req.url = null;                // Request URL
     req.xmlReq = null;             // XMLHttpRequest Object
@@ -68,7 +69,7 @@ javax.faces.Ajax.AjaxEngine = function() {
     req.onSuccess = null;          // Request/Response Success Callback Handle
     req.onError = null;            // Request/Response Error Callback Handle
     req.responseTxt = null;        // Response Content (Text)
-    req.responseXML = null;        // Response Content (XML) 
+    req.responseXML = null;        // Response Content (XML)
     req.status = null;             // Response Status Code From Server
     req.fromQueue = false;         // Indicates if the request was taken off the queue
                                    // before being sent.  This prevents the request from
@@ -130,11 +131,13 @@ javax.faces.Ajax.AjaxEngine = function() {
             (req.xmlReq.status >= 200 && req.xmlReq.status < 300)) {
             javax.faces.Ajax.ajaxResponse(req.xmlReq);
         } else {
+            alert("web error "+req.xmlReq.status);
             if (typeof(req.onError) == "function") {
                 req.onError(req);
                 return;
             } else {
-                throw new Error("AjaxEngine:  reponse was an error code, onError not set");
+                var status = "Web Return Status: "+req.xmlReq.status;
+                javax.faces.Ajax.AjaxEngine.sendError(status,req);
             }
 
         }
@@ -365,7 +368,7 @@ if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
          *
          * @returns The element that was removed rom the queue.
          */
-        this.dequeue = function() {
+        this.dequeue = function dequeue() {
             // initialise the element to return to be undefined
             var element = undefined;
 
@@ -406,7 +409,7 @@ if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
      * undefined is returned. This function returns the same value as the dequeue
      * function, but does not remove the returned element from this Queue.
      */
-    this.getOldestElement = function() {
+    this.getOldestElement = function getOldestElement() {
         // initialise the element to return to be undefined
         var element = undefined;
 
@@ -418,9 +421,31 @@ if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
   };
 }
 
-
+/**
+ * Send an error to the user via an OpenAjax message.
+ * @param status Status code of the error
+ * @param element object which caused the error
+ */
 javax.faces.Ajax.AjaxEngine.sendError = function(status, element) {
 
+    if (status === 'undefined' || element === 'undefined') {
+        throw new Error("AjaxEngine.sendError:  undefined value passed as argument");
+    }
 
+    var utils = new javax.faces.Ajax.Utils();
+
+    var execParam = element.parameters["javax.faces.partial.execute"];
+    var execArray = execParam.replace(' ','').replace(':','.').split(',');
+
+
+    var args = {};
+    args["error"] = element;
+    args["error_status"] = status;
+
+    // loop through all exec values (converted to dot-notation),
+    //  trimming spaces first
+    for (var exec in execArray) {
+        OpenAjax.hub.publish("javax.faces.AjaxEngine.sendError."+execArray[exec], args);
+    }
 
 };
