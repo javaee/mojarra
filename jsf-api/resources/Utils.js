@@ -60,32 +60,36 @@ javax.faces.Ajax.Utils = function() {
     this.createClass = function() {
         return function() {
             this.initialize.apply(this, arguments);
-        }
-    }
+        };
+    };
 
     this.extend = function(destination, source) {
         for (var property in source) {
             destination[property] = source[property];
         }
         return destination;
-    }
+    };
 
     this.getForm = function(element) {
         if (element) {
             var form = this.$(element);
             while (form && form.tagName && form.tagName.toLowerCase() != 'form') {
-                if (form.form) return form.form;
+                if (form.form) {
+                    return form.form;
+                }
                 if (form.parentNode) {
                         form = form.parentNode;
                 } else {
                     form = null;
                 }
-                if (form) return form;
+                if (form) {
+                    return form;
+                }
             }
             return document.forms[0];
         }
         return null;
-    }
+    };
 
     this.$ = function() {
         var results = [], element;
@@ -96,11 +100,11 @@ javax.faces.Ajax.Utils = function() {
             results.push(element);
         }
         return this.reduce(results);
-    }
+    };
 
     this.reduce = function(toReduce) {
         return toReduce.length > 1 ? toReduce : toReduce[0];
-    }
+    };
 
     this.toArray = function(s,e) {
         var sarray;
@@ -111,7 +115,7 @@ javax.faces.Ajax.Utils = function() {
             }
         }
         return sarray;
-    }
+    };
 
     this.trim = function(toTrim) {
         var result = null;
@@ -120,17 +124,17 @@ javax.faces.Ajax.Utils = function() {
             result = s.replace( /\s+$/g, "" );
         }
         return result;
-    }
+    };
 
     this.scriptFrag = '(?:<script.*?>)((\n|\r|.)*?)(?:<\/script>)';
 
     this.stripScripts = function(src) {
         return src.replace(new RegExp(this.scriptFrag, 'img'), '');
-    }
+    };
 
     this.evalScripts = function(src) {
         return this.extractScripts(src).map(function(script) { return eval(script) });
-    }
+    };
 
     this.extractScripts = function(src) {
         var matchAll = new RegExp(this.scriptFrag, 'img');
@@ -138,7 +142,7 @@ javax.faces.Ajax.Utils = function() {
         return (src.match(matchAll) || []).map(function(scriptTag) {
             return (scriptTag.match(matchOne) || ['', ''])[1];
         });
-    }
+    };
 
 this.elementReplace = function(d, tempTagName, src) {
         var parent = d.parentNode;
@@ -201,9 +205,40 @@ this.elementReplace = function(d, tempTagName, src) {
             temp.innerHTML = src;
         }
 
-
         result = temp
         parent.replaceChild(temp, d);
         return result;
-    }
-}
+    };
+
+    // Copy the direct properties of an object to another, new object
+    // Do not copy functions or inherited properties
+    this.deepObjCopy = function deepObjCopy(dupeObj) {
+        var retObj = {};
+        if (dupeObj === null) {
+            return null;
+        }
+        if (typeof dupeObj === 'object') {
+            if (typeof dupeObj.length !== 'undefined') {
+                retObj = [];
+            }
+            for (var objInd in dupeObj) {
+                if (dupeObj.hasOwnProperty(objInd)) {
+                    if (typeof dupeObj[objInd] === 'object') {
+                        retObj[objInd] = deepObjCopy(dupeObj[objInd]);
+                    } else if (typeof dupeObj[objInd] === 'string') {
+                        retObj[objInd] = dupeObj[objInd];
+                    } else if (typeof dupeObj[objInd] === 'number') {
+                        retObj[objInd] = dupeObj[objInd];
+                    } else if (typeof dupeObj[objInd] === 'boolean') {
+                        if (dupeObj[objInd] === true) {
+                            retObj[objInd] = true;
+                        } else {
+                            retObj[objInd] = false
+                        }
+                    } // else igore functions
+                }
+            }
+        }
+        return retObj;
+    };
+};

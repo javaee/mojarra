@@ -53,30 +53,30 @@
  */
 
 /**
-  @project JSF Ajax Library 
-  @version 2.0 
-  @description  
+  @project JSF Ajax Library
+  @version 2.0
+  @description
 */
 
 /**
  * Register with OpenAjax
  */
-if (typeof OpenAjax != "undefined" &&
-    typeof OpenAjax.hub.registerLibrary != "undefined") {
+if (typeof OpenAjax !== "undefined" &&
+    typeof OpenAjax.hub.registerLibrary !== "undefined") {
     OpenAjax.hub.registerLibrary("javax", "www.sun.com", "1.0", null);
 }
 
 /**
  * Create our top level namespace - javax.faces.Ajax
  */
-if (javax == null || typeof javax == "undefined") {
-    var javax = new Object();
+if (javax === null || typeof javax === "undefined") {
+    var javax = {};
 }
-if (javax.faces == null || typeof javax.faces == "undefined") {
-    javax["faces"] = new Object();
+if (javax.faces === null || typeof javax.faces === "undefined") {
+    javax["faces"] = {};
 }
-if (javax.faces.Ajax == null || typeof javax.faces.Ajax == "undefined") {
-    javax.faces["Ajax"] = new Object();
+if (javax.faces.Ajax === null || typeof javax.faces.Ajax === "undefined") {
+    javax.faces["Ajax"] ={};
 }
 
 /**
@@ -108,9 +108,7 @@ if (javax.faces.Ajax == null || typeof javax.faces.Ajax == "undefined") {
  * @function javax.faces.Ajax.viewState
  */
 javax.faces.Ajax.viewState = function(form) {
-
     return javax.faces.Ajax.AjaxEngine.serializeForm(form);
-
 }
 
 /**
@@ -173,7 +171,7 @@ javax.faces.Ajax.viewState = function(form) {
  * <code>action</code> property of the <code>form</code> element as the
  * <code>url</code>.</li>
  * </ul>
- * Before the request is sent it must be put into a queue to ensure requests 
+ * Before the request is sent it must be put into a queue to ensure requests
  * are sent in the same order as when they were initiated.  The request callback function
  * must examine the queue and determine the next request to be sent.  The behavior of the
  * request callback function must be as follows:
@@ -218,11 +216,11 @@ javax.faces.Ajax.viewState = function(form) {
  */
 javax.faces.Ajax.ajaxRequest = function(element, event, options) {
 
-    if (typeof element == 'undefined' || element == null) {
+    if (typeof element === 'undefined' || element === null) {
         throw {
-                    name: 'ArgNotSet',
-                    message: "ajaxRequest:Required first argument has not been set"
-                }
+            name: 'ArgNotSet',
+            message: "ajaxRequest: Required first argument has not been set"
+        }
     }
 
     // Capture the element that triggered this Ajax request.
@@ -236,12 +234,12 @@ javax.faces.Ajax.ajaxRequest = function(element, event, options) {
     var args = new Object();
     if (typeof(options) != 'undefined' && options != null) {
         if (options.execute) {
-            args["javax.faces.partial.execute"] = utils.toArray(options.execute,',').join(',');
+            args["javax.faces.partial.execute"] = utils.toArray(options.execute, ',').join(',');
             options.execute = null;
             delete options.execute;
         }
         if (options.render) {
-            args["javax.faces.partial.render"] = utils.toArray(options.render,',').join(',');
+            args["javax.faces.partial.render"] = utils.toArray(options.render, ',').join(',');
             options.render = null;
             delete options.render;
         }
@@ -301,10 +299,9 @@ javax.faces.Ajax.ajaxRequest = function(element, event, options) {
 javax.faces.Ajax.ajaxResponse = function(request) {
 
     //  RELEASE_PENDING: We need to add more robust error handing - this error should probably be caught upstream
-    if (request == null || typeof request == 'undefined' ) {
+    if (request === null || typeof request === 'undefined') {
         throw new Error("javax.faces.Ajax.ajaxResponse: Request is null");
     }
-
 
     var utils = new javax.faces.Ajax.Utils();
     var xmlReq = request;
@@ -448,8 +445,6 @@ javax.faces.Ajax.ajaxResponse = function(request) {
  */
 
 javax.faces.Ajax.getProjectStage = function() {
-
     return "#{facesContext.application.projectStage}";
-
 }
 
