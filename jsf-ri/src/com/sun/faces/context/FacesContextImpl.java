@@ -42,6 +42,7 @@ package com.sun.faces.context;
 
 import javax.el.ELContext;
 import javax.faces.FactoryFinder;
+import javax.faces.context.ExceptionHandler;
 import javax.faces.event.PhaseId;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
@@ -111,6 +112,7 @@ import com.sun.faces.renderkit.RenderKitUtils;
      private Map<Object,Object> attributes;
      private PhaseId currentPhaseId;
      private PartialViewContext partialViewContext = null;
+     private ExceptionHandler exceptionHandler = null;
 
      /**
       * Store mapping of clientId to ArrayList of FacesMessage
@@ -161,6 +163,16 @@ import com.sun.faces.renderkit.RenderKitUtils;
          assert (null != application);
          return application;
      }
+
+    @Override
+    public ExceptionHandler getExceptionHandler() {
+        return exceptionHandler;
+    }
+
+    @Override
+    public void setExceptionHandler(ExceptionHandler exceptionHandler) {
+        this.exceptionHandler = exceptionHandler;
+    }
 
     /**
      * @see javax.faces.context.getPartialViewContext()

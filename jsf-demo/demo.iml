@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module relativePaths="true" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
-    <facet type="Groovy" name="Groovy">
-      <configuration />
-    </facet>
     <facet type="web" name="templateDemo">
       <configuration>
         <descriptors>
@@ -12,6 +9,31 @@
         <webroots>
           <root url="file://$MODULE_DIR$/templateDemo/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -164,6 +186,31 @@
         <webroots>
           <root url="file://$MODULE_DIR$/j2meDemo/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -316,6 +363,31 @@
         <webroots>
           <root url="file://$MODULE_DIR$/ajax-request/src/main/webapp" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -472,6 +544,31 @@
         <webroots>
           <root url="file://$MODULE_DIR$/ezcomp02/src/main/webapp" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -624,6 +721,31 @@
         <webroots>
           <root url="file://$MODULE_DIR$/head-body/src/main/webapp" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -780,6 +902,31 @@
         <webroots>
           <root url="file://$MODULE_DIR$/nonjsp/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -932,6 +1079,31 @@
         <webroots>
           <root url="file://$MODULE_DIR$/guessNumber2.0/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -1088,6 +1260,31 @@
         <webroots>
           <root url="file://$MODULE_DIR$/guessNumber/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -1244,6 +1441,31 @@
         <webroots>
           <root url="file://$MODULE_DIR$/helloDuke/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -1396,6 +1618,31 @@
         <webroots>
           <root url="file://$MODULE_DIR$/characterCombat/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -1552,6 +1799,31 @@
         <webroots>
           <root url="file://$MODULE_DIR$/helloFacelet/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -1704,6 +1976,31 @@
         <webroots>
           <root url="file://$MODULE_DIR$/carstore/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -1856,6 +2153,31 @@
         <webroots>
           <root url="file://$MODULE_DIR$/ajax-queue/src/main/webapp" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -2008,6 +2330,31 @@
         <webroots>
           <root url="file://$MODULE_DIR$/ezcomp00/src/main/webapp" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -2160,6 +2507,31 @@
         <webroots>
           <root url="file://$MODULE_DIR$/ezcomp01/src/main/webapp" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -2312,6 +2684,31 @@
         <webroots>
           <root url="file://$MODULE_DIR$/stock/src/main/webapp" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -2464,6 +2861,31 @@
         <webroots>
           <root url="file://$MODULE_DIR$/ezcomp03/src/main/webapp" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -2616,6 +3038,31 @@
         <webroots>
           <root url="file://$MODULE_DIR$/renderkits/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -2768,6 +3215,31 @@
         <webroots>
           <root url="file://$MODULE_DIR$/components/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -2920,6 +3392,31 @@
         <webroots>
           <root url="file://$MODULE_DIR$/standard/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -3072,6 +3569,31 @@
         <webroots>
           <root url="file://$MODULE_DIR$/webtier-sample/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -3224,6 +3746,31 @@
         <webroots>
           <root url="file://$MODULE_DIR$/mojarra_ext/web" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/ajax-queue/src/main/java" />
+          <root url="file://$MODULE_DIR$/ajax-request/src/main/java" />
+          <root url="file://$MODULE_DIR$/carstore/src/java" />
+          <root url="file://$MODULE_DIR$/characterCombat/src" />
+          <root url="file://$MODULE_DIR$/components/src/java" />
+          <root url="file://$MODULE_DIR$/ezcomp00/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp01/src/main/java" />
+          <root url="file://$MODULE_DIR$/ezcomp02/src/main/java" />
+          <root url="file://$MODULE_DIR$/guessNumber/src/java" />
+          <root url="file://$MODULE_DIR$/guessNumber2.0/src/java" />
+          <root url="file://$MODULE_DIR$/head-body/src/main/java" />
+          <root url="file://$MODULE_DIR$/helloDuke/src" />
+          <root url="file://$MODULE_DIR$/helloFacelet/src" />
+          <root url="file://$MODULE_DIR$/j2meDemo/midlet" />
+          <root url="file://$MODULE_DIR$/j2meDemo/src/java" />
+          <root url="file://$MODULE_DIR$/mojarra_ext/src/java" />
+          <root url="file://$MODULE_DIR$/nonjsp/src/java" />
+          <root url="file://$MODULE_DIR$/renderkits/src/java" />
+          <root url="file://$MODULE_DIR$/standard/src" />
+          <root url="file://$MODULE_DIR$/stock/src/main/java" />
+          <root url="file://$MODULE_DIR$/test/mappingDemo/src" />
+          <root url="file://$MODULE_DIR$/test/tests" />
+          <root url="file://$MODULE_DIR$/webtier-sample/src/java" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
@@ -3374,6 +3921,9 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/ajax-queue/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/ajax-request/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/basic-ajax-edit/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/basic-ajax/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/basic-ezcomp/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/carstore/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/characterCombat/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/components/src/java" isTestSource="false" />
@@ -3395,6 +3945,8 @@
       <sourceFolder url="file://$MODULE_DIR$/test/mappingDemo/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test/tests" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/webtier-sample/src/java" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/basic-ajax-edit/build" />
+      <excludeFolder url="file://$MODULE_DIR$/basic-ajax/build" />
     </content>
     <orderEntry type="library" name="GROOVY" level="application" />
     <orderEntry type="inheritedJdk" />
@@ -3409,6 +3961,7 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="impl" exported="" />
+    <orderEntryProperties />
   </component>
 </module>
 

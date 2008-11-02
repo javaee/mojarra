@@ -222,6 +222,22 @@ public abstract class FacesContext {
 
     }
     
+    public ExceptionHandler getExceptionHandler() {
+        if (defaultFacesContext != null) {
+            return defaultFacesContext.getExceptionHandler();
+        }
+
+        throw new UnsupportedOperationException();
+    }
+    
+    public void setExceptionHandler(ExceptionHandler exceptionHandler) {
+        if (defaultFacesContext != null) {
+            defaultFacesContext.setExceptionHandler(exceptionHandler);
+        }
+
+        throw new UnsupportedOperationException();
+        
+    }
 
     /**
      * <p><span class="changed_modified_2_0">Return</span> the {@link

@@ -226,7 +226,7 @@ if (!window["OpenAjax"]) {
         }
 
     };
-
+    
     // Register the OpenAjax Hub itself as a library.
     OpenAjax.hub.registerLibrary("OpenAjax", "http://openajax.org/hub", "1.0", {});
 
