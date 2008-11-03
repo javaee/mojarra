@@ -65,9 +65,6 @@ javax.faces.Ajax.AjaxEngine = function() {
     req.parameters = new Object(); // Parameters For GET or POST
     req.queryString = null;        // Encoded Data For GET or POST
     req.method = null;             // GET or POST
-    req.onComplete = null;         // Request/Response Complete Callback Handle
-    req.onSuccess = null;          // Request/Response Success Callback Handle
-    req.onError = null;            // Request/Response Error Callback Handle
     req.responseTxt = null;        // Response Content (Text)
     req.responseXML = null;        // Response Content (XML)
     req.status = null;             // Response Status Code From Server
@@ -85,32 +82,9 @@ javax.faces.Ajax.AjaxEngine = function() {
 
     // Set up request/response state callbacks
     req.xmlReq.onreadystatechange = function() {
-        if (req == null || req.xmlReq == null) {
-            return;
+        if (req.xmlReq.readyState === 4) {
+            req.onComplete(req);
         }
-        if (req.xmlReq.readyState == 1) {
-            req.onOpenCB(req);
-        }      // open has been called
-        if (req.xmlReq.readyState == 2) {
-            req.onSendCB(req);
-        }      // send has been called
-        if (req.xmlReq.readyState == 3) {
-            req.onReceivingCB(req);
-        } // data in process of being received from the server
-        if (req.xmlReq.readyState == 4) {
-            req.onCompleteCB(req);
-        }  // response from server has arrived
-    };
-
-    // State Callback Functions
-
-    req.onOpenCB = function() {
-    };
-
-    req.onSendCB = function() {
-    };
-
-    req.onReceivingCB = function() {
     };
 
     /**
@@ -121,25 +95,12 @@ javax.faces.Ajax.AjaxEngine = function() {
      * from the queue that have completed.  If a request has been found
      * on the queue that has not been sent, send the request.
      */
-    req.onCompleteCB = function() {
-        if (typeof(req.onComplete) == "function") {
-            req.onComplete(req);
-            return;
-        }
-        if ((req.xmlReq.status == null || typeof req.xmlReq.status == 'undefined')
-                || req.xmlReq.status == 0 ||
-            (req.xmlReq.status >= 200 && req.xmlReq.status < 300)) {
+    req.onComplete = function onComplete() {
+        var status = req.xmlReq.status;
+        if ((status !== null && typeof status !== 'undefined' && status !== 0) && (status >= 200 && status < 300)) {
             javax.faces.Ajax.ajaxResponse(req.xmlReq);
         } else {
-            alert("web error "+req.xmlReq.status);
-            if (typeof(req.onError) == "function") {
-                req.onError(req);
-                return;
-            } else {
-                var status = "Web Return Status: "+req.xmlReq.status;
-                javax.faces.Ajax.AjaxEngine.sendError(status,req);
-            }
-
+            javax.faces.Ajax.AjaxEngine.sendError("Web Return Status: "+status,req);
         }
 
         // Regardless of whether the request completed successfully (or not),
