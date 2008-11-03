@@ -65,7 +65,7 @@ public class TestResourceManager extends ServletFacesTestCase {
 
     @Override public void setUp() {
         super.setUp();
-        manager = new ResourceManager();
+        manager = new ResourceManager(null);
     }
 
 
@@ -332,7 +332,7 @@ public class TestResourceManager extends ServletFacesTestCase {
         WebConfiguration config = WebConfiguration.getInstance();
         config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.CompressableMimeTypes, "image/gif,text/css");
         // create a new ResourceManager so that the mime type configuration is picked up
-        ResourceManager manager = new ResourceManager();
+        ResourceManager manager = new ResourceManager(null);
         ResourceInfo resource = manager.findResource("nvLibrary", "images/duke-nv.gif", "image/gif", getFacesContext());
         assertTrue(resource != null);
         assertTrue(resource.isCompressable());

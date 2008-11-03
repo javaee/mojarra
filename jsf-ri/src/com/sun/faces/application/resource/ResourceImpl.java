@@ -38,6 +38,9 @@ package com.sun.faces.application.resource;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Externalizable;
+import java.io.ObjectOutput;
+import java.io.ObjectInput;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
@@ -51,8 +54,9 @@ import java.util.Collections;
 import javax.faces.application.Resource;
 import javax.faces.context.FacesContext;
 
-import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.Util;
+import com.sun.faces.application.ApplicationAssociate;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.el.ELContext;
@@ -67,7 +71,7 @@ import javax.faces.application.ResourceHandler;
  * are cached by the ResourceManager to reduce the time spent scanning
  * for resources.
  */
-public class ResourceImpl extends Resource {
+public class ResourceImpl extends Resource implements Externalizable {
 
     /* HTTP Date format required by the HTTP/1.1 RFC */
     private static final String RFC1123_DATE_PATTERN =
@@ -75,36 +79,55 @@ public class ResourceImpl extends Resource {
 
     private static final TimeZone GMT = TimeZone.getTimeZone("GMT");
 
-    /* The ResourceHandler implementation */
-    private ResourceHandlerImpl owner;
 
     /* The meta data on the resource */
-    private ResourceInfo resourceInfo;
+    private transient ResourceInfo resourceInfo;
 
     /*
      * Response headers that need to be added by the ResourceManager
      * implementation.
      */
-    private Map<String,String> responseHeaders;
+    private transient Map<String,String> responseHeaders;
+
+    
+    /**
+     * Time when this application was started.  This is used to generate
+     * expiration headers.
+     */
+    private long initialTime;
+
+
+    /**
+     * Lifespan of this resource for caching purposes.
+     */
+    private long maxAge;
 
 
     // ------------------------------------------------------------ Constructors
 
 
     /**
+     * Necessary for serailization.
+     */
+    public ResourceImpl() { }
+
+
+    /**
      * Creates a new instance of ResourceBase
      */
-    public ResourceImpl(ResourceHandlerImpl owner,
-                        ResourceInfo resourceInfo,
-                        String contentType) {
+    public ResourceImpl(ResourceInfo resourceInfo,
+                        String contentType,
+                        long initialTime,
+                        long maxAge) {
 
-        this.owner = owner;
         this.resourceInfo = resourceInfo;
         super.setResourceName(resourceInfo.getName());
         super.setLibraryName(resourceInfo.getLibraryInfo() != null
                              ? resourceInfo.getLibraryInfo().getName()
                              : null);
         super.setContentType(contentType);
+        this.initialTime = initialTime;
+        this.maxAge = maxAge;
 
     }
 
@@ -336,10 +359,7 @@ public class ResourceImpl extends Resource {
             if (responseHeaders == null)
             responseHeaders = new HashMap<String, String>(6, 1.0f);
 
-            long expiresTime = new Date().getTime() +
-                               Long.parseLong(owner
-                                     .getWebConfig().getOptionValue(
-                                     WebConfiguration.WebContextInitParameter.DefaultResourceMaxAge));
+            long expiresTime = new Date().getTime() + maxAge;
             SimpleDateFormat format =
                   new SimpleDateFormat(RFC1123_DATE_PATTERN, Locale.US);
             format.setTimeZone(GMT);
@@ -355,7 +375,7 @@ public class ResourceImpl extends Resource {
                 long lastModified = conn.getLastModified();
                 long contentLength = conn.getContentLength();
                 if (lastModified == 0) {
-                    lastModified = owner.getCreationTime();
+                    lastModified = initialTime;
                 }
                 responseHeaders.put("Last-Modified", format.format(new Date(lastModified)));
                 if (lastModified != 0 && contentLength != -1) {
@@ -434,11 +454,38 @@ public class ResourceImpl extends Resource {
               context.getExternalContext().getRequestHeaderMap();
         return ((!requestHeaders.containsKey("If-Modified-Since"))
                 || (resourceInfo.getHelper()
-                      .getLastModified(resourceInfo, context) > owner
-                      .getCreationTime()));
+                      .getLastModified(resourceInfo, context) > initialTime));
 
     }
 
+
+    // --------------------------------------------- Methods from Externalizable
+    public void writeExternal(ObjectOutput out) throws IOException {
+
+        out.writeObject(getResourceName());
+        out.writeObject(getLibraryName());
+        out.writeObject(getContentType());
+        out.writeLong(initialTime);
+        out.writeLong(maxAge);
+
+    }
+
+    public void readExternal(ObjectInput in)
+    throws IOException, ClassNotFoundException {
+
+        setResourceName((String) in.readObject());
+        setLibraryName((String) in.readObject());
+        setContentType((String) in.readObject());
+        initialTime = in.readLong();
+        maxAge = in.readLong();
+
+        ResourceManager manager =
+              ApplicationAssociate.getCurrentInstance().getResourceManager();
+        resourceInfo = manager.findResource(getLibraryName(),
+                                            getResourceName(),
+                                            getContentType(),
+                                            FacesContext.getCurrentInstance());
+    }
 
     // --------------------------------------------------------- Private Methods
 

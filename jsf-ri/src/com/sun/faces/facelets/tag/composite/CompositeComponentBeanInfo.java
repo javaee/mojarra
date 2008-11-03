@@ -57,12 +57,16 @@ import java.beans.PropertyDescriptor;
 import java.beans.SimpleBeanInfo;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.Externalizable;
+import java.io.ObjectOutput;
+import java.io.IOException;
+import java.io.ObjectInput;
 
 
-public class CompositeComponentBeanInfo extends SimpleBeanInfo implements BeanInfo {
+public class CompositeComponentBeanInfo extends SimpleBeanInfo implements BeanInfo, Externalizable {
 
     private BeanDescriptor descriptor = null;
-    
+
     @Override
     public BeanDescriptor getBeanDescriptor() {
         return descriptor;
@@ -88,6 +92,22 @@ public class CompositeComponentBeanInfo extends SimpleBeanInfo implements BeanIn
         }
         return propertyDescriptors;
     }
+
+
+    // ----------------------------------------------Methods From Externalizable
+
+
+    public void writeExternal(ObjectOutput out) throws IOException {
+
+        out.writeObject(descriptor.getBeanClass());
+
+    }
+
     
-    
+    public void readExternal(ObjectInput in)
+    throws IOException, ClassNotFoundException {
+
+        descriptor = new BeanDescriptor((Class) in.readObject());
+
+    }
 }

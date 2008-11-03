@@ -47,7 +47,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import javax.faces.application.Application;
 import javax.faces.application.ProjectStage;
 import javax.faces.application.ResourceHandler;
 import javax.faces.context.FacesContext;
@@ -111,12 +110,9 @@ public class ResourceManager {
      * {@link ProjectStage} is {@link ProjectStage#Development} caching or
      * {@link ResourceInfo} instances will not occur.
      */
-    public ResourceManager() {
+    public ResourceManager(ResourceCache cache) {
 
-        Application app = FacesContext.getCurrentInstance().getApplication();
-        if (app.getProjectStage() != ProjectStage.Development) {
-            cache = new ResourceCache(); 
-        }
+        this.cache = cache;
         initCompressableTypes();
 
     }

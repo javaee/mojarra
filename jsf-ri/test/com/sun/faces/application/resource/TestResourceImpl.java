@@ -39,6 +39,9 @@ package com.sun.faces.application.resource;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ObjectInputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Arrays;
@@ -353,7 +356,53 @@ public class TestResourceImpl extends ServletFacesTestCase {
     }
 
 
+    public void testResourceImplSerialization() throws Exception {
+
+        ResourceHandler handler = getFacesContext().getApplication().getResourceHandler();
+        assertTrue(handler != null);
+
+        Resource resource = handler.createResource("duke-nv.gif");
+        byte[] serializedBytes = serialize(resource);
+        resource = (Resource) deserialize(serializedBytes);
+        assertNotNull(resource);
+        assertNull(resource.getLibraryName());
+        assertEquals("duke-nv.gif", "duke-nv.gif", resource.getResourceName());
+        assertEquals("image/gif", "image/gif", resource.getContentType());
+
+
+        resource = handler.createResource("duke-nv.gif", "nvLibrary");
+        serializedBytes = serialize(resource);
+        resource = (Resource) deserialize(serializedBytes);
+        assertNotNull(resource);
+        assertEquals("nvLibrary", "nvLibrary", resource.getLibraryName());
+        assertEquals("duke-nv.gif", "duke-nv.gif", resource.getResourceName());
+        assertEquals("image/gif", "image/gif", resource.getContentType());
+
+    }
+
+
     // ---------------------------------------------------------- Helper Methods
+
+
+    private byte[] serialize(Object object) throws Exception {
+
+        ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
+        ObjectOutputStream oout = new ObjectOutputStream(bytesOut);
+        oout.writeObject(object);
+        oout.flush();
+        oout.close();
+        return bytesOut.toByteArray();
+
+    }
+
+
+    private Object deserialize(byte[] bytes) throws Exception {
+
+        ByteArrayInputStream bytesIn = new ByteArrayInputStream(bytes);
+        ObjectInputStream in = new ObjectInputStream(bytesIn);
+        return in.readObject();
+
+    }
 
 
     private byte[] getBytes(URL url) throws Exception {
