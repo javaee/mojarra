@@ -55,7 +55,7 @@ function errorMsg(eventName, data) {
     alert("Name: "+eventName+" Error Status: "+data['error_status']);
 }
 
-// Set up the observer subscription
+// Set up the observer subscriptions
 
 OpenAjax.hub.subscribe("javax.faces.AjaxEngine.Queue.**",msg);
 OpenAjax.hub.subscribe("javax.faces.AjaxEngine.sendError.**",errorMsg);
