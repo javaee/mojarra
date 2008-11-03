@@ -17,7 +17,6 @@ function buttonpush(buttonName, element, event) {
 } 
 
 function msg(eventName, data) {
-    alert(eventName);
     var txt = null;
     if (typeof data.enqueue != 'undefined' || data.enqueue != null) {
         txt = document.createTextNode(data.enqueue.parameters["javax.faces.partial.execute"]);
