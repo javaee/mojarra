@@ -314,7 +314,7 @@ if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
 
             // Send the message that the request is enqueued
             var args = new Object();
-            args["enqueue"] = element;
+            args["enqueue"] = utils.deepObjCopy(element);
             // loop through all exec values (converted to dot-notation),
             //  trimming spaces first
             for (var exec in execArray) {
@@ -353,7 +353,7 @@ if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
 
 
                 var args = new Object();
-                args["dequeue"] = element;
+                args["dequeue"] = utils.deepObjCopy(element);
 
                 // loop through all exec values (converted to dot-notation),
                 //  trimming spaces first
@@ -400,7 +400,7 @@ javax.faces.Ajax.AjaxEngine.sendError = function(status, element) {
 
 
     var args = {};
-    args["error"] = element;
+    args["error"] = utils.deepObjCopy(element);
     args["error_status"] = status;
 
     // loop through all exec values (converted to dot-notation),
