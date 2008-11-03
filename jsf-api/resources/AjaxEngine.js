@@ -58,11 +58,11 @@
 javax.faces.Ajax.AjaxEngine = function() {
 
 
-    var req = new Object();        // Request Object
+    var req = {};        // Request Object
     req.url = null;                // Request URL
     req.xmlReq = null;             // XMLHttpRequest Object
     req.async = true;              // Default - Asynchronous
-    req.parameters = new Object(); // Parameters For GET or POST
+    req.parameters = {}; // Parameters For GET or POST
     req.queryString = null;        // Encoded Data For GET or POST
     req.method = null;             // GET or POST
     req.responseTxt = null;        // Response Content (Text)
@@ -76,7 +76,7 @@ javax.faces.Ajax.AjaxEngine = function() {
 
     // Get an XMLHttpRequest Handle
     req.xmlReq = javax.faces.Ajax.AjaxEngine.getTransport();
-    if (req.xmlReq == null) {
+    if (req.xmlReq === null) {
         return null;
     }
 
@@ -108,22 +108,22 @@ javax.faces.Ajax.AjaxEngine = function() {
         // requests that ready to be sent (readyState 0).
 
         var nextReq = req.que.getOldestElement();
-        if (nextReq == null || typeof nextReq == 'undefined') {
+        if (nextReq === null || typeof nextReq === 'undefined') {
             return;
         }
-        while ((typeof nextReq.xmlReq != 'undefined' && nextReq.xmlReq != null) &&
-               nextReq.xmlReq.readyState == 4) {
+        while ((typeof nextReq.xmlReq !== 'undefined' && nextReq.xmlReq !== null) &&
+               nextReq.xmlReq.readyState === 4) {
             req.que.dequeue();
             nextReq = req.que.getOldestElement();
-            if (nextReq == null || typeof nextReq == 'undefined') {
+            if (nextReq === null || typeof nextReq === 'undefined') {
                 break;
             }
         }
-        if (nextReq == null || typeof nextReq == 'undefined') {
+        if (nextReq === null || typeof nextReq === 'undefined') {
             return;
         }
-        if ((typeof nextReq.xmlReq != 'undefined' && nextReq.xmlReq != null) &&
-            nextReq.xmlReq.readyState == 0) {
+        if ((typeof nextReq.xmlReq !== 'undefined' && nextReq.xmlReq !== null) &&
+            nextReq.xmlReq.readyState === 0) {
             nextReq.fromQueue = true;
             nextReq.sendRequest();
         }
@@ -138,7 +138,7 @@ javax.faces.Ajax.AjaxEngine = function() {
      */
     req.setupArguments = function(args) {
         for (var i in args) {
-            if (typeof(req[i]) == 'undefined') {
+            if (typeof req[i] === 'undefined') {
                 req.parameters[i] = args[i];
             } else {
                 req[i] = args[i];
@@ -151,7 +151,7 @@ javax.faces.Ajax.AjaxEngine = function() {
      * (GET or POST) and sends the request using the specified url.
      */
     req.sendRequest = function() {
-        if (req.xmlReq != null) {
+        if (req.xmlReq !== null) {
             // if there is already a request on the queue waiting to be processed..
             // just queue this request
             if (!req.que.isEmpty()) {
@@ -175,14 +175,14 @@ javax.faces.Ajax.AjaxEngine = function() {
                 }
                 req.queryString += encodeURIComponent(i) + "=" + encodeURIComponent(req.parameters[i]);
             }
-            if (req.method == "GET") {
+            if (req.method === "GET") {
                 if (req.queryString.length > 0) {
                     req.url += ((req.url.indexOf("?") > -1) ? "&" : "?") + req.queryString;
                 }
             }
             req.xmlReq.open(req.method, req.url, req.async);
-            if (req.method == "POST") {
-                if (typeof(req.xmlReq.setRequestHeader) != 'undefined') {
+            if (req.method === "POST") {
+                if (typeof req.xmlReq.setRequestHeader !== 'undefined') {
                     req.xmlReq.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                 }
                 content = req.queryString;
@@ -263,7 +263,7 @@ javax.faces.Ajax.AjaxEngine.getTransport = function() {
         return returnVal;
     }
     throw new Error('Could not create an XHR object.');
-}
+};
 
 
 /**
@@ -288,15 +288,15 @@ if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
          */
         this.getSize = function getSize() {
             return queue.length - queueSpace;
-        }
+        };
 
         /* Returns true if this Queue is empty, and false otherwise. A Queue is empty
          * if the number of elements that have been enqueued equals the number of
          * elements that have been dequeued.
          */
         this.isEmpty = function isEmpty() {
-            return (queue.length == 0);
-        }
+            return (queue.length === 0);
+        };
 
         /* Enqueues the specified element in this Queue.
          * After the element is put in the queue, an event is fired.
@@ -313,14 +313,14 @@ if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
             queue.push(element);
 
             // Send the message that the request is enqueued
-            var args = new Object();
+            var args = {};
             args["enqueue"] = utils.deepObjCopy(element);
             // loop through all exec values (converted to dot-notation),
             //  trimming spaces first
             for (var exec in execArray) {
                 OpenAjax.hub.publish("javax.faces.AjaxEngine.Queue."+execArray[exec], args);
             }
-        }
+        };
 
 
 
@@ -352,7 +352,7 @@ if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
                 var execArray = execParam.replace(' ','').replace(':','.').split(',');
 
 
-                var args = new Object();
+                var args = {};
                 args["dequeue"] = utils.deepObjCopy(element);
 
                 // loop through all exec values (converted to dot-notation),
@@ -364,7 +364,7 @@ if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
 
             // return the removed element
             return element;
-        }
+        };
 
     /* Returns the oldest element in this Queue. If this Queue is empty then
      * undefined is returned. This function returns the same value as the dequeue
@@ -375,11 +375,13 @@ if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
         var element = undefined;
 
         // if the queue is not element then fetch the oldest element in the queue
-        if (queue.length) element = queue[queueSpace];
+        if (queue.length) {
+            element = queue[queueSpace];
+        }
         // return the oldest element
         return element;
     };
-  };
+  }();
 }
 
 /**
@@ -400,8 +402,8 @@ javax.faces.Ajax.AjaxEngine.sendError = function(status, element) {
 
 
     var args = {};
-    args["error"] = utils.deepObjCopy(element);
-    args["error_status"] = status;
+    args.error = utils.deepObjCopy(element);
+    args.error_status = status;
 
     // loop through all exec values (converted to dot-notation),
     //  trimming spaces first
