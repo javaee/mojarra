@@ -36,78 +36,14 @@
 
 package javax.faces.event;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.faces.component.UIComponent;
-import org.apache.taglibs.standard.tag.common.core.SetSupport;
-
 
 /**
 * Metadata passed to the exception handler
 */
 public class ExceptionEvent extends SystemEvent {
     
-    public ExceptionEvent(Exception e) {
+    public ExceptionEvent(ExceptionEventContext e) {
         super(e);
-    }
-    
-    public ExceptionEvent(Exception e, UIComponent component, PhaseId phaseId) {
-        super(e);
-        setComponent(component);
-        setPhaseId(phaseId);
-    }
-    
-    /**
-     * The exception that was thrown
-     */
-    public Exception getException() {
-        return (Exception) this.getSource();
-    }
-
-    public void setException(Exception exception) {
-        this.source = exception;
-    }
-
-
-    private UIComponent component;
-    
-    /**
-     * The UIComponent which was being processed when the exception was thrown. If none/undetermined, null
-     */
-    public UIComponent getComponent() {
-        return this.component;
-    }
-    
-    public void setComponent(UIComponent component) {
-        this.component = component;
-    }
-
-    private PhaseId phaseId;
-
-    /**
-     * The phase in which the exception occured
-     */
-    public PhaseId getPhaseId() {
-        return this.phaseId;
-    }
-    
-    public void setPhaseId(PhaseId phaseId) {
-        this.phaseId = phaseId;
-    }
-
-
-    private Map<Object, Object> attributes;
-    
-    /**
-     * User defined meta-data about the exception handled
-     */
- 
-    public Map<Object, Object> getAttributes() {
-        if (null == attributes) {
-            attributes = new HashMap<Object,Object>();
-        }
-        return attributes;
     }
 
 }

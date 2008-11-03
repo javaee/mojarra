@@ -221,6 +221,11 @@ public abstract class FacesContext {
         throw new UnsupportedOperationException();
 
     }
+
+    /**
+     * <p class="changed_added_2_0">Return the {@link ExceptionHandler}
+     * for this request.</p>
+     */ 
     
     public ExceptionHandler getExceptionHandler() {
         if (defaultFacesContext != null) {
@@ -230,6 +235,13 @@ public abstract class FacesContext {
         throw new UnsupportedOperationException();
     }
     
+    /**
+     * <p class="changed_added_2_0">Set the {@link ExceptionHandler} for
+     * this request.</p>
+     *
+     * @param exceptionHandler the <code>ExceptionHandler</code> for
+     * this request.
+     */ 
     public void setExceptionHandler(ExceptionHandler exceptionHandler) {
         if (defaultFacesContext != null) {
             defaultFacesContext.setExceptionHandler(exceptionHandler);

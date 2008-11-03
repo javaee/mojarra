@@ -36,11 +36,13 @@
 
 package javax.faces.context;
 
+import java.util.List;
 import javax.faces.FacesException;
 import javax.faces.FacesWrapper;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ExceptionEvent;
 import javax.faces.event.SystemEvent;
+import javax.faces.event.SystemEventListener;
 
 /**
  *
@@ -68,10 +70,22 @@ public abstract class ExceptionHandlerWrapper extends ExceptionHandler implement
         return getWrapped().isListenerForSource(arg0);
     }
 
+    @Override
     public void processEvent(SystemEvent arg0) throws AbortProcessingException {
         getWrapped().processEvent(arg0);
     }
 
+    @Override
+    public Throwable getRootCause(Throwable t) {
+        return getWrapped().getRootCause(t);
+    }
+
+    @Override
+    public Iterable<ExceptionEvent> getUnhandledExceptionEvents() {
+        return getWrapped().getUnhandledExceptionEvents();
+    }
+    
+    
 
     public abstract ExceptionHandler getWrapped();
     

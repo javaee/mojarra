@@ -89,7 +89,7 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
             exceptionHandlerFactory = (ExceptionHandlerFactory)
                     FactoryFinder.getFactory(FactoryFinder.EXCEPTION_HANDLER_FACTORY);
         }
-        result.setExceptionHandler(exceptionHandlerFactory.getExceptionHandler());
+        result.setExceptionHandler(exceptionHandlerFactory.getExceptionHandler(result));
         
         return result;
         

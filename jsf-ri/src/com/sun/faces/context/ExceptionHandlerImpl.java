@@ -36,11 +36,13 @@
 
 package com.sun.faces.context;
 
+import java.util.List;
 import javax.faces.FacesException;
 import javax.faces.context.ExceptionHandler;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ExceptionEvent;
 import javax.faces.event.SystemEvent;
+import javax.faces.event.SystemEventListener;
 
 /**
  *
@@ -72,6 +74,18 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
     public void processEvent(SystemEvent arg0) throws AbortProcessingException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @Override
+    public Throwable getRootCause(Throwable t) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Iterable<ExceptionEvent> getUnhandledExceptionEvents() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
     
+    
+
 
 }

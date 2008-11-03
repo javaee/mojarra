@@ -38,13 +38,48 @@ package javax.faces.context;
 
 import javax.faces.FacesWrapper;
 
+/**
+ * <p class="changed_added_2_0"><strong>ExceptionHandlerFactory</strong>
+ * is a factory object that creates (if needed) and returns a new {@link
+ * ExceptionHandler} instance.</p>
+ *
+ * <div class="changed_added_2_0">
+
+ * <p>There must be one <code>ExceptionHandlerFactory</code> instance per web
+ * application that is utilizing JavaServer Faces.  This instance can be
+ * acquired, in a portable manner, by calling:</p>
+ *
+ * <pre><code>
+ *   ExceptionHandlerFactory factory = (ExceptionHandlerFactory)
+ *    FactoryFinder.getFactory(FactoryFinder.EXCEPTION_HANDLER_FACTORY);
+ * </code></pre>
+ *
+
+ * </div>
+ */
+
 public abstract class ExceptionHandlerFactory implements FacesWrapper<ExceptionHandlerFactory> {
+
+    /**
+     * <p class="changed_added_2_0">If this factory has been decorated, the 
+     * implementation doing the decorating may override this method to provide
+     * access to the implementation being wrapped.  A default implementation
+     * is provided that returns <code>null</code>.</p>
+     * 
+     * @since 2.0
+     */
 
     public ExceptionHandlerFactory getWrapped() {
         return null;
     }
 
-    public abstract ExceptionHandler getExceptionHandler();
+    /**
+     * <p class="changed_added_2_0">Create (if needed) and return an
+     * {@link ExceptionHandler} instance for this {@link FacesContext}.
+     * A new <code>ExceptionHandler</code> instance must be created for
+     * each <code>FacesContext</code> instance.</p>
+     */
+    public abstract ExceptionHandler getExceptionHandler(FacesContext context);
     
 
 }
