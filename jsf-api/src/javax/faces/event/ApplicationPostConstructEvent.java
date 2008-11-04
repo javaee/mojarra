@@ -63,9 +63,19 @@ public class ApplicationPostConstructEvent extends SystemEvent {
      * @param application the application that has been configured
      * @since 2.0
      */
+
     public ApplicationPostConstructEvent(Application application) {
         super(application);
     }
 
+    /**
+     * <p class="changed_added_2_0">The source {@link Application} that sent this event.</p>
+     * 
+     * @since 2.0
+     */
+
+    public Application getApplication() {
+        return (Application) getSource();
+    }
     
 }

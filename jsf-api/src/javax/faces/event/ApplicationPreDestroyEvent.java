@@ -29,5 +29,15 @@ public class ApplicationPreDestroyEvent extends SystemEvent {
     public ApplicationPreDestroyEvent(Application application) {
         super(application); 
     }
+    
+    /**
+     * <p class="changed_added_2_0">The source {@link Application} that sent this event.</p>
+     * 
+     * @since 2.0
+     */
 
+    public Application getApplication() {
+        return (Application) getSource();
+    }
+    
 }

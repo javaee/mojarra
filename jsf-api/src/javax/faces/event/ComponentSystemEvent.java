@@ -31,6 +31,8 @@ public abstract class ComponentSystemEvent extends SystemEvent {
      * passed to the superclass constructor.
      *
      * @throws <code>NullPointerException</code> if the argument is <code>null</code>.
+     * 
+     * @since 2.0
      */
     public ComponentSystemEvent(UIComponent component) {
         super(component);
@@ -41,7 +43,9 @@ public abstract class ComponentSystemEvent extends SystemEvent {
 
 
     /**
-     * @return the source {@link UIComponent} that sent this event.
+     * <p class="changed_added_2_0">the source {@link UIComponent} that sent this event.</p>
+     * 
+     * @since 2.0
      */
     public UIComponent getComponent() {
 
