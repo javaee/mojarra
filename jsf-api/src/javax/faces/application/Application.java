@@ -844,9 +844,10 @@ public abstract class Application {
      * calling {@link FacesContext#getRenderKit} and calling {@link
      * javax.faces.render.RenderKit#getRenderer} on the result, passing
      * the argument <code>componentType</code> as the first argument and
-     * the argument <code>rendererType</code> as the second argument.
-     * If no such <code>Renderer</code> can be found, a message must be
-     * logged with a helpful error message.  Otherwise, {@link
+     * the result of calling {@link UIComponent#getFamily} on the newly
+     * created component as the second argument.  If no such
+     * <code>Renderer</code> can be found, a message must be logged with
+     * a helpful error message.  Otherwise, {@link
      * UIComponent#setRendererType} must be called on the newly created
      * <code>UIComponent</code> instance, passing the argument
      * <code>rendererType</code> as the argument.</p>
@@ -854,7 +855,7 @@ public abstract class Application {
      * <p class="changed_added_2_0">A default implementation is provided
      * that throws <code>UnsupportedOperationException</code> so that
      * users that decorate <code>Application</code> can continue to
-     * function</p>.
+     * function.</p>
 
      *
      * @param componentExpression {@link ValueExpression} representing a
@@ -904,11 +905,12 @@ public abstract class Application {
      * obtained by calling {@link FacesContext#getRenderKit} and calling
      * {@link javax.faces.render.RenderKit#getRenderer} on the result,
      * passing the argument <code>componentType</code> as the first
-     * argument and the argument <code>rendererType</code> as the second
-     * argument.  If no such <code>Renderer</code> can be found, a
-     * message must be logged with a helpful error message.  Otherwise,
-     * {@link UIComponent#setRendererType} must be called on the newly
-     * created <code>UIComponent</code> instance, passing the argument
+     * argument and the result of calling {@link UIComponent#getFamily}
+     * on the newly created component as the second argument.  If no
+     * such <code>Renderer</code> can be found, a message must be logged
+     * with a helpful error message.  Otherwise, {@link
+     * UIComponent#setRendererType} must be called on the newly created
+     * <code>UIComponent</code> instance, passing the argument
      * <code>rendererType</code> as the argument.</p>
 
      * <p class="changed_added_2_0">A default implementation is provided
