@@ -1669,20 +1669,27 @@ public abstract class Application {
 
     /**
      * <p class="changed_added_2_0">Install the listener instance
-     * referenced by argument <code>listener</code> into application
-     * as a listener for events of type
-     * <code>systemEventClass</code>.  The default implementation simply calls
-     * through to {@link #subscribeToEvent(Class, Class, javax.faces.event.SystemEventListener)}
-     * passing <code>null</code> as the <code>sourceClass</code> argument</p>
+     * referenced by argument <code>listener</code> into application as
+     * a listener for events of type <code>systemEventClass</code>.  The
+     * default implementation simply calls through to {@link
+     * #subscribeToEvent(Class, Class,
+     * javax.faces.event.SystemEventListener)} passing <code>null</code>
+     * as the <code>sourceClass</code> argument</p>
      *
+     * <p class="changed_added_2_0">A default implementation is provided
+     * that throws <code>UnsupportedOperationException</code> so that
+     * users that decorate <code>Application</code> can continue to
+     * function</p>.
+
      * @param systemEventClass the <code>Class</code> of event for which
-     * <code>listener</code> must be fired.
-     *
+     * <code>listener</code> must be fired.</p>
+
      * @param listener the implementation of {@link
      * javax.faces.event.SystemEventListener} whose {@link
-     * javax.faces.event.SystemEventListener#processEvent} method must be called when
-     * events of type <code>systemEventClass</code> are fired.
-     *
+     * javax.faces.event.SystemEventListener#processEvent} method must
+     * be called when events of type <code>systemEventClass</code> are
+     * fired.
+
      * @throws <code>NullPointerException</code> if any combination of
      * <code>systemEventClass</code>, or <code>listener</code> are
      * <code>null</code>.
