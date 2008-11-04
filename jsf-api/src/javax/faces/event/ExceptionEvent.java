@@ -38,12 +38,33 @@ package javax.faces.event;
 
 
 /**
-* Metadata passed to the exception handler
-*/
+ * <p class="changed_added_2_0">The system event facility will create an
+ * instance of this class whenever {@link
+ * javax.faces.application.Application#publishEvent} is called with
+ * <code>ExceptionEvent.class</code> as <code>systemEventClass</code>
+ * argument.  In this case, an instance of {@link ExceptionEventContext}
+ * is be passed as the <code>source</code> argument.  The specification
+ * for <code>publishEvent()</code>, requires the instantiation of the
+ * <code>systemEventClass</code> argument, passing the
+ * <code>source</code> argument to the constructor.</p>
+ *
+ * @since 2.0
+ */
 public class ExceptionEvent extends SystemEvent {
     
-    public ExceptionEvent(ExceptionEventContext e) {
-        super(e);
+    /**
+     * <p class="changed_added_2_0">Instantiate a new
+     * <code>ExceptionEvent</code> that indicates the argument
+     * <code>ExceptionEventContext</code> occurred.</p>
+     *
+     * @param eventContext the <code>ExceptionEventContext</code> that
+     * contextualizes this <code>ExceptionEvent</code>.
+     *
+     * @since 2.0
+     */
+
+    public ExceptionEvent(ExceptionEventContext eventContext) {
+        super(eventContext);
     }
 
 }
