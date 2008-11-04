@@ -42,7 +42,6 @@
     <title>commandButton_param_test.jsp</title>
 </head>
 <body>
-    
     <f:loadBundle basename="com.sun.faces.systest.resources.Resources" 
         var="messageBundle"/>
     <f:view locale="en_US">
@@ -59,6 +58,11 @@
         <h:commandButton id="button03" action="next" value="Label">
           <h:outputText value="Test Link"/>
           <f:param name="testname2" value="#{test1.stringProperty}"/>
+        </h:commandButton>
+        <p/>
+        <h:commandButton id="button04" action="next" value="Label" onclick="hello();">
+          <h:outputText value="Test Link"/>
+          <f:param name="testname" value="testval"/>
         </h:commandButton>
       </h:form>
     </f:view>

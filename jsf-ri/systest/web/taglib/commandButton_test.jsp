@@ -52,6 +52,7 @@
         <h:commandButton id="button03" type="submit" value="#{messageBundle.button_key}"/>
         <h:commandButton id="button04" type="reset" image="duke.gif" value="FAIL"/>
         <h:commandButton id="button05" type="submit" image="#{messageBundle.image_key}"/>
+        <h:commandButton id="button06" type="submit" image="My Label" onclick="hello();"/>
       </h:form>
     </f:view>
 </body>
