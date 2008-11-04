@@ -60,6 +60,8 @@
 <composite:implementation>
     <h:outputScript name="ajax.js" library="javax.faces" target="head"/>
     <script type="text/javascript">
+        // Set inital value in case we cancel
+        var savedValue = "#{compositeComponent.attrs.value}";
         function toggle(elementon, elementoff) {
             elementon.style.display = "inline";
             elementoff.style.display = "none";
@@ -71,17 +73,27 @@
                 var exec = element.id+','+input.id;
                 var rend = input.id+','+link.id;
                 javax.faces.Ajax.ajaxRequest(element, event, {execute: exec, render: rend});
+                savedValue = input.value;
             } catch (ex) {
                 // Handle errors here
                 alert(ex);
             }
             return false;
         }
+        function cancelButton(element) {
+            var input = element.parentNode.firstChild;
+            input.value = savedValue;
+            return false;
+        }
+        function linkClick(element) {
+            element.parentNode.nextSibling.firstChild.focus();
+            return false;
+        }
     </script>
     <h:outputStylesheet name="editText/styles.css"/>
     <h:panelGroup id="edit1">
         <h:outputLink id="editLink" title="Click to edit" styleClass="editLink"
-                      onclick="toggle(this.parentNode.nextSibling, this.parentNode); return false;"
+                      onclick="toggle(this.parentNode.nextSibling, this.parentNode); return linkClick(this);"
                 >#{compositeComponent.attrs.value}</h:outputLink>
     </h:panelGroup>
     <h:panelGroup id="edit2" style="display:none;">
@@ -89,7 +101,7 @@
         <h:commandButton value="Submit" id="submit"
                          onclick="toggle(this.parentNode.previousSibling, this.parentNode);return submitButton(this, event);"/>
         <h:commandButton value="Cancel" id="cancel"
-                         onclick="toggle(this.parentNode.previousSibling, this.parentNode); return false;"/>
+                         onclick="toggle(this.parentNode.previousSibling, this.parentNode); return cancelButton(this);"/>
     </h:panelGroup>
 </composite:implementation>
 
