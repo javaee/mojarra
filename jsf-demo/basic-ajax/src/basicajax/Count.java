@@ -45,15 +45,14 @@ public class Count {
     Integer count = 0;
 
     public Integer getCount() {
-        return count;
+        return count++;
     }
-
-    public void process(ActionEvent ae) {
-        count++;
-    }
+//
+//    public void process(ActionEvent ae) {
+//        count++;
+//    }
 
     public void reset(ActionEvent ae) {
         count = 0;
     }
-
 }
