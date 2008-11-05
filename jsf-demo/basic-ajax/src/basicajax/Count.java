@@ -50,12 +50,10 @@ public class Count {
 
     public void process(ActionEvent ae) {
         count++;
-        System.out.println("Processing: Count is now: "+count);
     }
 
     public void reset(ActionEvent ae) {
         count = 0;
-        System.out.println("Resetting: Count is now: "+count);
     }
 
 }
