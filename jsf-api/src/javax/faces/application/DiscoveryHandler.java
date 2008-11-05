@@ -197,7 +197,7 @@ public abstract class DiscoveryHandler {
      * the search space is the Web Application <code>ClassLoader</code>
      * rather than the Web Application resources.</p>
      *
-     * @param Partial path used to match resources
+     * @param path used to match resources
      *
      * @since 2.0
      */

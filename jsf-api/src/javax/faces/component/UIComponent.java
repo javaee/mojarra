@@ -1235,7 +1235,7 @@ private void doFind(FacesContext context, String clientId) {
     /**
      * <p class="changed_added_2_0">Perform a tree traversal starting at
      * this node in the tree.  The default implementation must call
-     * {@link ContextCallback#invokeContextCallBack} on the argument
+     * {@link ContextCallback#invokeContextCallback} on the argument
      * <code>nodeCallback</code> before traversing the children.  The
      * traversal may be aborted by throwing an {@link
      * javax.faces.event.AbortProcessingException} from this method.</p>
