@@ -67,13 +67,13 @@ import java.lang.annotation.Inherited;
  * <em>managed-bean-name</em> is taken to be <code>Bean</code>.  The
  * fully qualified class name of the class to which this annotation is
  * attached is taken to be the <em>managed-bean-class</em>.</p>
- *
- * // RELEASE_PENDING (edburns,rogerk) docs
- * <p>The scope of the managed bean declared using one of {@link RequestScoped},
- * {@link SessionScoped}, {@link ApplicationScoped}, or {@link UnScoped} annotations.
- * If the scope annotations are omitted, the bean is assumed to be <code>request</code>
- * scoped.</p>
- *
+
+ * <p>The scope of the managed bean is declared using one of {@link
+ * NoneScoped}, {@link RequestScoped}, {@link ViewScoped}, {@link
+ * SessionScoped}, {@link ApplicationScoped} annotations.  If the scope
+ * annotations are omitted, the bean must be handled as if the {@link
+ * RequestScoped} annotation is present.</p>
+
  * <p>
  * If the value of the {@link #eager} attribute is
  * <code>true</code>, the runtime must instantiate this class when the
