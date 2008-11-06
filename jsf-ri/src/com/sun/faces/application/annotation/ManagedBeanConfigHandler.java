@@ -49,9 +49,10 @@ import javax.faces.model.ManagedBean;
 import javax.faces.model.ManagedBeans;
 import javax.faces.model.ManagedProperty;
 import javax.faces.model.RequestScoped;
+import javax.faces.model.ViewScoped;
 import javax.faces.model.SessionScoped;
 import javax.faces.model.ApplicationScoped;
-import javax.faces.model.UnScoped;
+import javax.faces.model.NoneScoped;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.application.ApplicationAssociate;
@@ -68,9 +69,10 @@ public class ManagedBeanConfigHandler implements ConfigAnnotationHandler {
 
     private static final Class<?>[] SCOPES = {
           RequestScoped.class,
+          ViewScoped.class,
           SessionScoped.class,
           ApplicationScoped.class,
-          UnScoped.class
+          NoneScoped.class
     };
 
     private static final Collection<Class<? extends Annotation>> HANDLES;
@@ -208,11 +210,13 @@ public class ManagedBeanConfigHandler implements ConfigAnnotationHandler {
             if (a != null) {
                 if (a instanceof RequestScoped) {
                     return "request";
-                } else if (a instanceof SessionScoped) {
+                } else if (a instanceof ViewScoped) {
+                    return "view";
+                } if (a instanceof SessionScoped) {
                     return "session";
                 } else if (a instanceof ApplicationScoped) {
                     return "application";
-                } else if (a instanceof UnScoped) {
+                } else if (a instanceof NoneScoped) {
                     return "none";
                 }
             }
