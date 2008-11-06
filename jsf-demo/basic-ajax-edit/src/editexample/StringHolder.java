@@ -7,7 +7,7 @@ import javax.faces.model.SessionScoped;
 @SessionScoped
 public class StringHolder {
 
-    String str = "Text Edit Magic";
+    private String str = "Text Edit Magic";
 
     public void setStr(String str) {
         this.str = str;
