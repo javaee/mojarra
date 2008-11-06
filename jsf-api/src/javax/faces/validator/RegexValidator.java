@@ -82,7 +82,7 @@ public class RegexValidator implements Validator, StateHolder {
      */
 
     public ValueExpression getPattern() {
-	return this.regex;
+        return this.regex;
     }
 
     /**
@@ -99,8 +99,9 @@ public class RegexValidator implements Validator, StateHolder {
      * @throws ValidatorException   {@inheritDoc}
 
      */
-    public void validate(FacesContext context, UIComponent component, 
-			 Object value) {
+    public void validate(FacesContext context,
+                         UIComponent component,
+                         Object value) {
 
         FacesMessage fmsg;
 
@@ -165,7 +166,7 @@ public class RegexValidator implements Validator, StateHolder {
 
         Object values[] = new Object[2];
         values[0] = (null != regex) ? regex.getExpressionString() : null;
-        values[1] = regex.getType(context.getELContext());
+        values[1] = String.class;
         
         return (values);
 
@@ -175,7 +176,7 @@ public class RegexValidator implements Validator, StateHolder {
     public void restoreState(FacesContext context, Object state) {
 
         Object values[] = (Object[]) state;
-        if (null != values[0] && null != values[1]) {
+        if (null != values[0]) {
             regex = context.getApplication().getExpressionFactory().
                     createValueExpression(context.getELContext(), 
                     (String) values[0], (Class) values[1]);
