@@ -1,5 +1,4 @@
-<!--
-
+/*
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
  Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
@@ -33,23 +32,64 @@
  and therefore, elected the GPL Version 2 license, then the option applies
  only if the new code is made subject to such option by the copyright
  holder.
+*/
 
--->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ez="http://java.sun.com/jsf/composite/editText">
-<h:head>
-    <title>Editable Text Example</title>
-</h:head>
-<h:body>
-        <h1>Editable Text Example</h1>
-        <h:form id="form1">
-                <ez:editText id="editText1" value="#{stringholder.str}"/>
-            <br/>
-                <h:commandButton value="reload"/>
-            <h:messages/>
-        </h:form>
-</h:body>
-</html>
+if (!window["edittextdemo"]) {
+    var edittextdemo = {};
+}
+function init(componentID, initialValue) {
+    edittextdemo[componentID] = initialValue;
+}
+function toggle(idOn, idOff) {
+    try {
+        var elementon = document.getElementById(idOn);
+        var elementoff = document.getElementById(idOff);
+        elementon.style.display = "inline";
+        elementoff.style.display = "none";
+    } catch (ex) {
+        alert(ex);
+    }
+}
+function submitButton(componentID, event) {
+    try {
+        var edit1 = componentID + ':edit1';
+        var edit2 = componentID + ':edit2';
+        toggle(edit1, edit2);
+
+        var link = componentID + ':editLink';
+        var input = componentID + ':editInput';
+        var subButton = componentID + ':submit';
+        var exec = subButton + ',' + input;
+        var rend = input + ',' + link;
+        javax.faces.Ajax.ajaxRequest(document.getElementById(subButton), event, {execute: exec, render: rend});
+        edittextdemo[componentID] = document.getElementById(input).value;
+    } catch (ex) {
+        // Handle errors here
+        alert(ex);
+    }
+    return false;
+}
+function cancelButton(componentID) {
+    try {
+        var edit1 = componentID + ':edit1';
+        var edit2 = componentID + ':edit2';
+        toggle(edit1, edit2);
+        var input = componentID + ':editInput';
+        document.getElementById(input).value = edittextdemo[componentID];
+    } catch (ex) {
+        alert(ex);
+    }
+    return false;
+}
+function linkClick(componentID) {
+    try {
+        var edit1 = componentID + ':edit1';
+        var edit2 = componentID + ':edit2';
+        var link = componentID + ':editLink';
+        toggle(edit2, edit1);
+        document.getElementById(link).focus();
+    } catch (ex) {
+        alert(ex);
+    }
+    return false;
+}

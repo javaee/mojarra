@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -59,37 +58,22 @@
 
 <composite:implementation>
     <h:outputScript name="ajax.js" library="javax.faces" target="head"/>
+    <h:outputScript name="editText/editText.js" target="head" />
     <script type="text/javascript">
-        function toggle(elementon, elementoff) {
-            elementon.style.display = "inline";
-            elementoff.style.display = "none";
-        }
-        function submitButton(element, event) {
-            try {
-                var link = element.parentNode.previousSibling.firstChild;
-                var input = element.parentNode.firstChild;
-                var exec = element.id+','+input.id;
-                var rend = input.id+','+link.id;
-                javax.faces.Ajax.ajaxRequest(element, event, {execute: exec, render: rend});
-            } catch (ex) {
-                // Handle errors here
-                alert(ex);
-            }
-            return false;
-        }
+        init("#{compositeComponent.clientId}", "#{compositeComponent.attrs.value}");
     </script>
     <h:outputStylesheet name="editText/styles.css"/>
     <h:panelGroup id="edit1">
         <h:outputLink id="editLink" title="Click to edit" styleClass="editLink"
-                      onclick="toggle(this.parentNode.nextSibling, this.parentNode); return false;"
+                      onclick="return linkClick('#{compositeComponent.clientId}');"
                 >#{compositeComponent.attrs.value}</h:outputLink>
     </h:panelGroup>
     <h:panelGroup id="edit2" style="display:none;">
         <h:inputText id="editInput" value="#{compositeComponent.attrs.value}" styleClass="editInput"/>
         <h:commandButton value="Submit" id="submit"
-                         onclick="toggle(this.parentNode.previousSibling, this.parentNode);return submitButton(this, event);"/>
+                         onclick="return submitButton('#{compositeComponent.clientId}', event);"/>
         <h:commandButton value="Cancel" id="cancel"
-                         onclick="toggle(this.parentNode.previousSibling, this.parentNode); return false;"/>
+                         onclick="return cancelButton('#{compositeComponent.clientId}');"/>
     </h:panelGroup>
 </composite:implementation>
 
