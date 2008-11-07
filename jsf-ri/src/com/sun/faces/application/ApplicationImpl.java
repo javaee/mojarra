@@ -902,14 +902,14 @@ public class ApplicationImpl extends Application {
 
 
         // Step 2. If that didn't work, if a script based resource can be 
-        // found for the componentResource,
+        // found for the scriptComponentResource,
         // see if a component can be generated from it
         if (null == result) {
             Resource scriptComponentResource = pdl.getScriptComponentResource(context, componentResource);
 
             if (null != scriptComponentResource) {
                 result = createComponentFromScriptResource(context,
-                        scriptComponentResource);
+                        scriptComponentResource, componentResource);
             }
         }
 
@@ -1595,13 +1595,16 @@ public class ApplicationImpl extends Application {
 
     // --------------------------------------------------------- Private Methods
 
+    public static final String THIS_LIBRARY = 
+            "com.sun.faces.composite.this.library";
 
     private UIComponent createComponentFromScriptResource(FacesContext context,
+                                                          Resource scriptComponentResource,
                                                           Resource componentResource) {
 
         UIComponent result = null;
 
-        String className = componentResource.getResourceName();
+        String className = scriptComponentResource.getResourceName();
         int lastDot = className.lastIndexOf('.');
         className = className.substring(0, lastDot);
 
@@ -1624,8 +1627,20 @@ public class ApplicationImpl extends Application {
         }
 
         if (result != null) {
-            associate.getAnnotationManager()
-                  .applyComponentAnnotations(context, result);
+            // Make sure the resource is there for the annotation processor.
+            result.getAttributes().put(Resource.COMPONENT_RESOURCE_KEY, 
+                componentResource);
+            // In case there are any "this" references, 
+            // make sure they can be resolved.
+            context.getAttributes().put(THIS_LIBRARY,
+                    componentResource.getLibraryName());
+            try {
+                associate.getAnnotationManager()
+                        .applyComponentAnnotations(context, result);
+            }
+            finally {
+                context.getAttributes().remove(THIS_LIBRARY);
+            }
         }
 
         return result;
