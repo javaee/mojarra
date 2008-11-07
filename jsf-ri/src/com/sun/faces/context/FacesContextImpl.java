@@ -1,6 +1,6 @@
- /*
- * $Id: FacesContextImpl.java,v 1.93.2.4 2008/04/09 08:59:06 edburns Exp $
- */
+/*
+* $Id: FacesContextImpl.java,v 1.93.2.4 2008/04/09 08:59:06 edburns Exp $
+*/
 
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -82,87 +82,85 @@ import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.util.Util;
 import com.sun.faces.renderkit.RenderKitUtils;
 
- public class FacesContextImpl extends FacesContext {
+public class FacesContextImpl extends FacesContext {
 
-     private static final String POST_BACK_MARKER =
-           FacesContextImpl.class.getName() + "_POST_BACK";
+    private static final String POST_BACK_MARKER =
+          FacesContextImpl.class.getName() + "_POST_BACK";
 
-     // Queried by InjectionFacesContextFactory
-     private static final ThreadLocal<FacesContext> DEFAULT_FACES_CONTEXT =
+    // Queried by InjectionFacesContextFactory
+    private static final ThreadLocal<FacesContext> DEFAULT_FACES_CONTEXT =
           new ThreadLocal<FacesContext>();
 
-     // Log instance for this class
-     private static Logger LOGGER = FacesLogger.CONTEXT.getLogger();
+    // Log instance for this class
+    private static Logger LOGGER = FacesLogger.CONTEXT.getLogger();
 
-     private boolean released;
+    private boolean released;
 
-     // BE SURE TO ADD NEW IVARS TO THE RELEASE METHOD
-     private ResponseStream responseStream = null;
-     private ResponseWriter responseWriter = null;
-     private ExternalContext externalContext = null;
-     private Application application = null;
-     private UIViewRoot viewRoot = null;
-     private ELContext elContext = null;
-     private RenderKitFactory rkFactory;
-     private RenderKit lastRk;
-     private String lastRkId;
-     private Severity maxSeverity;
-     private boolean renderResponse = false;
-     private boolean responseComplete = false;
-     private Map<Object,Object> attributes;
-     private PhaseId currentPhaseId;
-     private PartialViewContext partialViewContext = null;
-     private ExceptionHandler exceptionHandler = null;
+    // BE SURE TO ADD NEW IVARS TO THE RELEASE METHOD
+    private ResponseStream responseStream = null;
+    private ResponseWriter responseWriter = null;
+    private ExternalContext externalContext = null;
+    private Application application = null;
+    private UIViewRoot viewRoot = null;
+    private ELContext elContext = null;
+    private RenderKitFactory rkFactory;
+    private RenderKit lastRk;
+    private String lastRkId;
+    private Severity maxSeverity;
+    private boolean renderResponse = false;
+    private boolean responseComplete = false;
+    private Map<Object, Object> attributes;
+    private PhaseId currentPhaseId;
+    private PartialViewContext partialViewContext = null;
+    private ExceptionHandler exceptionHandler = null;
 
-     /**
-      * Store mapping of clientId to ArrayList of FacesMessage
-      * instances.  The null key is used to represent FacesMessage instances
-      * that are not associated with a clientId instance.
-      */
-     private Map<String,List<FacesMessage>> componentMessageLists;
+    /**
+     * Store mapping of clientId to ArrayList of FacesMessage instances.  The
+     * null key is used to represent FacesMessage instances that are not
+     * associated with a clientId instance.
+     */
+    private Map<String, List<FacesMessage>> componentMessageLists;
 
-
-     // ----------------------------------------------------------- Constructors
-
-
-     public FacesContextImpl(ExternalContext ec, Lifecycle lifecycle) {
-         Util.notNull("ec", ec);
-         Util.notNull("lifecycle", lifecycle);
-         this.externalContext = ec;
-         setCurrentInstance(this);
-         DEFAULT_FACES_CONTEXT.set(this);
-         rkFactory = (RenderKitFactory)
-             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-     }
+    // ----------------------------------------------------------- Constructors
 
 
-     // ---------------------------------------------- Methods from FacesContext
+    public FacesContextImpl(ExternalContext ec, Lifecycle lifecycle) {
+        Util.notNull("ec", ec);
+        Util.notNull("lifecycle", lifecycle);
+        this.externalContext = ec;
+        setCurrentInstance(this);
+        DEFAULT_FACES_CONTEXT.set(this);
+        rkFactory = (RenderKitFactory)
+              FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+    }
+
+    // ---------------------------------------------- Methods from FacesContext
 
 
-     /**
-      * @see javax.faces.context.FacesContext#getExternalContext()
-      */
-     public ExternalContext getExternalContext() {
-         assertNotReleased();
-         return externalContext;
-     }
+    /**
+     * @see javax.faces.context.FacesContext#getExternalContext()
+     */
+    public ExternalContext getExternalContext() {
+        assertNotReleased();
+        return externalContext;
+    }
 
 
-     /**
-      * @see javax.faces.context.FacesContext#getApplication()
-      */
-     public Application getApplication() {
-         assertNotReleased();
-         if (null != application) {
-             return application;
-         }
-         ApplicationFactory aFactory =
-             (ApplicationFactory) FactoryFinder.getFactory(
-                 FactoryFinder.APPLICATION_FACTORY);
-         application = aFactory.getApplication();
-         assert (null != application);
-         return application;
-     }
+    /**
+     * @see javax.faces.context.FacesContext#getApplication()
+     */
+    public Application getApplication() {
+        assertNotReleased();
+        if (null != application) {
+            return application;
+        }
+        ApplicationFactory aFactory =
+              (ApplicationFactory) FactoryFinder.getFactory(
+                    FactoryFinder.APPLICATION_FACTORY);
+        application = aFactory.getApplication();
+        assert (null != application);
+        return application;
+    }
 
     @Override
     public ExceptionHandler getExceptionHandler() {
@@ -199,7 +197,8 @@ import com.sun.faces.renderkit.RenderKitUtils;
                 // ViewRoot hasn't been set yet, so calculate the RK
                 ViewHandler vh = this.getApplication().getViewHandler();
                 String rkId = vh.calculateRenderKitId(this);
-                postback = RenderKitUtils.getResponseStateManager(this, rkId).isPostback(this);
+                postback = RenderKitUtils.getResponseStateManager(this, rkId)
+                      .isPostback(this);
             }
             this.getAttributes().put(POST_BACK_MARKER, postback);
         }
@@ -209,482 +208,481 @@ import com.sun.faces.renderkit.RenderKitUtils;
     }
 
 
-     @Override
-    public Map<Object,Object> getAttributes() {
-        
+    @Override
+    public Map<Object, Object> getAttributes() {
+
         assertNotReleased();
         if (attributes == null) {
-            attributes = new HashMap<Object,Object>();
+            attributes = new HashMap<Object, Object>();
         }
         return attributes;
 
     }
 
 
-     /**
-      * @see javax.faces.context.FacesContext#getELContext()
-      */
-     @Override
-     public ELContext getELContext() {
-         assertNotReleased();
-         if (elContext == null) {
-             elContext = new ELContextImpl(getApplication().getELResolver());
-             elContext.putContext(FacesContext.class, this);
-             UIViewRoot root = this.getViewRoot();
-             if (null != root) {
-                 elContext.setLocale(root.getLocale());
-             }
-         }
-         return elContext;
-     }
+    /**
+     * @see javax.faces.context.FacesContext#getELContext()
+     */
+    @Override
+    public ELContext getELContext() {
+        assertNotReleased();
+        if (elContext == null) {
+            elContext = new ELContextImpl(getApplication().getELResolver());
+            elContext.putContext(FacesContext.class, this);
+            UIViewRoot root = this.getViewRoot();
+            if (null != root) {
+                elContext.setLocale(root.getLocale());
+            }
+        }
+        return elContext;
+    }
 
 
-     /**
-      * @see javax.faces.context.FacesContext#getClientIdsWithMessages()
-      */
-     public Iterator<String> getClientIdsWithMessages() {
-         assertNotReleased();
-         return ((componentMessageLists == null)
-                 ? Collections.<String>emptyList().iterator()
-                 : componentMessageLists.keySet().iterator());
-     }
+    /**
+     * @see javax.faces.context.FacesContext#getClientIdsWithMessages()
+     */
+    public Iterator<String> getClientIdsWithMessages() {
+        assertNotReleased();
+        return ((componentMessageLists == null)
+                ? Collections.<String>emptyList().iterator()
+                : componentMessageLists.keySet().iterator());
+    }
 
 
-     /**
-      * @see javax.faces.context.FacesContext#getMaximumSeverity()
-      */
-     public Severity getMaximumSeverity() {
-         assertNotReleased();
-         Severity result = null;
-         if (componentMessageLists != null && !(componentMessageLists.isEmpty())) {
-             for (Iterator<FacesMessage> i =
-                   new ComponentMessagesIterator(componentMessageLists);
-                  i.hasNext();) {
-                 Severity severity = i.next().getSeverity();
-                 if (result == null || severity.compareTo(result) > 0) {
-                     result = severity;
-                 }
-                 if (result == FacesMessage.SEVERITY_FATAL) {
-                     break;
-                 }
-             }
-         }
-         return result;
-     }
+    /**
+     * @see javax.faces.context.FacesContext#getMaximumSeverity()
+     */
+    public Severity getMaximumSeverity() {
+        assertNotReleased();
+        Severity result = null;
+        if (componentMessageLists != null
+            && !(componentMessageLists.isEmpty())) {
+            for (Iterator<FacesMessage> i =
+                  new ComponentMessagesIterator(componentMessageLists);
+                 i.hasNext();) {
+                Severity severity = i.next().getSeverity();
+                if (result == null || severity.compareTo(result) > 0) {
+                    result = severity;
+                }
+                if (result == FacesMessage.SEVERITY_FATAL) {
+                    break;
+                }
+            }
+        }
+        return result;
+    }
 
 
-     /**
-      * @see javax.faces.context.FacesContext#getMessageList()
-      */
-     @Override
-     public List<FacesMessage> getMessageList() {
+    /**
+     * @see javax.faces.context.FacesContext#getMessageList()
+     */
+    @Override
+    public List<FacesMessage> getMessageList() {
 
-         assertNotReleased();
+        assertNotReleased();
 
-         if (null == componentMessageLists) {
-             return Collections.unmodifiableList(Collections.<FacesMessage>emptyList());
-         } else {
-             List<FacesMessage> messages = new ArrayList<FacesMessage>();
-             for (List<FacesMessage> list : componentMessageLists.values()) {
-                 messages.addAll(list);
-             }
-             return Collections.unmodifiableList(messages);
-         }
+        if (null == componentMessageLists) {
+            return Collections
+                  .unmodifiableList(Collections.<FacesMessage>emptyList());
+        } else {
+            List<FacesMessage> messages = new ArrayList<FacesMessage>();
+            for (List<FacesMessage> list : componentMessageLists.values()) {
+                messages.addAll(list);
+            }
+            return Collections.unmodifiableList(messages);
+        }
 
-     }
-
-
-     /**
-      * @see javax.faces.context.FacesContext#getMessageList(String)
-      */
-     @Override
-     public List<FacesMessage> getMessageList(String clientId) {
-
-         assertNotReleased();
-
-         if (null == componentMessageLists) {
-             return Collections.unmodifiableList(Collections.<FacesMessage>emptyList());
-         } else {
-             List<FacesMessage> list = componentMessageLists.get(clientId);
-             return Collections.unmodifiableList((list != null)
-                                                 ? list
-                                                 : Collections.<FacesMessage>emptyList());
-         }
-
-     }
+    }
 
 
-     /**
-      * @see javax.faces.context.FacesContext#getMessages()
-      */
-     public Iterator<FacesMessage> getMessages() {
-         assertNotReleased();
-         if (null == componentMessageLists) {
-             List<FacesMessage> emptyList = Collections.emptyList();
-             return (emptyList.iterator());
-         }
+    /**
+     * @see javax.faces.context.FacesContext#getMessageList(String)
+     */
+    @Override
+    public List<FacesMessage> getMessageList(String clientId) {
 
-         //Clear set of clientIds from pending display messages result.
-         if (RequestStateManager.containsKey(this, RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED)) {
+        assertNotReleased();
+
+        if (null == componentMessageLists) {
+            return Collections
+                  .unmodifiableList(Collections.<FacesMessage>emptyList());
+        } else {
+            List<FacesMessage> list = componentMessageLists.get(clientId);
+            return Collections.unmodifiableList((list != null)
+                                                ? list
+                                                : Collections.<FacesMessage>emptyList());
+        }
+
+    }
+
+
+    /**
+     * @see javax.faces.context.FacesContext#getMessages()
+     */
+    public Iterator<FacesMessage> getMessages() {
+        assertNotReleased();
+        if (null == componentMessageLists) {
+            List<FacesMessage> emptyList = Collections.emptyList();
+            return (emptyList.iterator());
+        }
+
+        //Clear set of clientIds from pending display messages result.
+        if (RequestStateManager.containsKey(this, RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED)) {
             Set pendingClientIds = (Set)
-                   RequestStateManager.get(this, RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
+                  RequestStateManager.get(this, RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
             pendingClientIds.clear();
-         }
+        }
 
-         if (componentMessageLists.size() > 0) {
-             return new ComponentMessagesIterator(componentMessageLists);
-         } else {
-             List<FacesMessage> emptyList = Collections.emptyList();
-             return (emptyList.iterator());
-         }
-     }
+        if (componentMessageLists.size() > 0) {
+            return new ComponentMessagesIterator(componentMessageLists);
+        } else {
+            List<FacesMessage> emptyList = Collections.emptyList();
+            return (emptyList.iterator());
+        }
+    }
 
-     /**
-      * @see FacesContext#getMessages(String)
-      */
-     public Iterator<FacesMessage> getMessages(String clientId) {
-         assertNotReleased();
+    /**
+     * @see FacesContext#getMessages(String)
+     */
+    public Iterator<FacesMessage> getMessages(String clientId) {
+        assertNotReleased();
 
-         //remove client id from pending display messages result.
-         Set pendingClientIds = (Set)
+        //remove client id from pending display messages result.
+        Set pendingClientIds = (Set)
               RequestStateManager.get(this, RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
-         if (pendingClientIds != null && !pendingClientIds.isEmpty()) {
+        if (pendingClientIds != null && !pendingClientIds.isEmpty()) {
             pendingClientIds.remove(clientId);
-         }
+        }
 
-         // If no messages have been enqueued at all,
-         // return an empty List Iterator
-         if (null == componentMessageLists) {
-             List<FacesMessage> emptyList = Collections.emptyList();
-             return (emptyList.iterator());
-         }
+        // If no messages have been enqueued at all,
+        // return an empty List Iterator
+        if (null == componentMessageLists) {
+            List<FacesMessage> emptyList = Collections.emptyList();
+            return (emptyList.iterator());
+        }
 
-         List<FacesMessage> list = componentMessageLists.get(clientId);
-         if (list == null) {
-             List<FacesMessage> emptyList = Collections.emptyList();
-             return (emptyList.iterator());
-         }
-         return (list.iterator());
-     }
-
-
-     /**
-      * @see javax.faces.context.FacesContext#getRenderKit()
-      */
-     public RenderKit getRenderKit() {
-         assertNotReleased();
-         UIViewRoot vr = getViewRoot();
-         if (vr == null) {
-             return (null);
-         }
-         String renderKitId = vr.getRenderKitId();
-
-         if (renderKitId == null) {
-             return null;
-         }
-
-         if (renderKitId.equals(lastRkId)) {
-             return lastRk;
-         } else {
-             lastRk = rkFactory.getRenderKit(this, renderKitId);
-             lastRkId = renderKitId;
-             return lastRk;
-         }
-     }
+        List<FacesMessage> list = componentMessageLists.get(clientId);
+        if (list == null) {
+            List<FacesMessage> emptyList = Collections.emptyList();
+            return (emptyList.iterator());
+        }
+        return (list.iterator());
+    }
 
 
-     /**
-      * @see javax.faces.context.FacesContext#getResponseStream()
-      */
-     public ResponseStream getResponseStream() {
-         assertNotReleased();
-         return responseStream;
-     }
+    /**
+     * @see javax.faces.context.FacesContext#getRenderKit()
+     */
+    public RenderKit getRenderKit() {
+        assertNotReleased();
+        UIViewRoot vr = getViewRoot();
+        if (vr == null) {
+            return (null);
+        }
+        String renderKitId = vr.getRenderKitId();
+
+        if (renderKitId == null) {
+            return null;
+        }
+
+        if (renderKitId.equals(lastRkId)) {
+            return lastRk;
+        } else {
+            lastRk = rkFactory.getRenderKit(this, renderKitId);
+            lastRkId = renderKitId;
+            return lastRk;
+        }
+    }
 
 
-     /**
-      * @see FacesContext#setResponseStream(javax.faces.context.ResponseStream)
-      */
-     public void setResponseStream(ResponseStream responseStream) {
-         assertNotReleased();
-         Util.notNull("responseStrean", responseStream);
-         this.responseStream = responseStream;
-     }
+    /**
+     * @see javax.faces.context.FacesContext#getResponseStream()
+     */
+    public ResponseStream getResponseStream() {
+        assertNotReleased();
+        return responseStream;
+    }
 
 
-     /**
-      * @see javax.faces.context.FacesContext#getViewRoot()
-      */
-     public UIViewRoot getViewRoot() {
-         assertNotReleased();
-         return viewRoot;
-     }
+    /**
+     * @see FacesContext#setResponseStream(javax.faces.context.ResponseStream)
+     */
+    public void setResponseStream(ResponseStream responseStream) {
+        assertNotReleased();
+        Util.notNull("responseStrean", responseStream);
+        this.responseStream = responseStream;
+    }
 
 
-     /**
-      * @see FacesContext#setViewRoot(javax.faces.component.UIViewRoot)
-      */
-     public void setViewRoot(UIViewRoot root) {
-         assertNotReleased();
-         Util.notNull("root", root);
+    /**
+     * @see javax.faces.context.FacesContext#getViewRoot()
+     */
+    public UIViewRoot getViewRoot() {
+        assertNotReleased();
+        return viewRoot;
+    }
 
-         if (viewRoot != null && !viewRoot.equals(root)) {
-             Map<String,Object> viewMap = viewRoot.getViewMap(false);
-             if (viewMap != null) {
+
+    /**
+     * @see FacesContext#setViewRoot(javax.faces.component.UIViewRoot)
+     */
+    public void setViewRoot(UIViewRoot root) {
+        assertNotReleased();
+        Util.notNull("root", root);
+
+        if (viewRoot != null && !viewRoot.equals(root)) {
+            Map<String, Object> viewMap = viewRoot.getViewMap(false);
+            if (viewMap != null) {
                 viewRoot.getViewMap().clear();
-             }
-         }
-
-         viewRoot = root;
-     }
-
-
-     /**
-      * @see javax.faces.context.FacesContext#getResponseWriter()
-      */
-     public ResponseWriter getResponseWriter() {
-         assertNotReleased();
-         return responseWriter;
-     }
-
-
-     /**
-      * @see FacesContext#setResponseWriter(javax.faces.context.ResponseWriter)
-      */
-     public void setResponseWriter(ResponseWriter responseWriter) {
-         assertNotReleased();
-         Util.notNull("responseWriter", responseWriter);
-         this.responseWriter = responseWriter;
-     }
-
-     /**
-      * @see FacesContext#addMessage(String, javax.faces.application.FacesMessage)
-      */
-     public void addMessage(String clientId, FacesMessage message) {
-         assertNotReleased();
-         // Validate our preconditions
-         Util.notNull("message", message);
-
-         if (maxSeverity == null) {
-             maxSeverity = message.getSeverity();
-         } else {
-             Severity sev = message.getSeverity();
-             if (sev.getOrdinal() > maxSeverity.getOrdinal()) {
-                 maxSeverity = sev;
-             }
-         }
-
-         if (componentMessageLists == null) {
-             componentMessageLists = new LinkedHashMap<String,List<FacesMessage>>();
-         }
-
-         // Add this message to our internal queue
-         List<FacesMessage> list = componentMessageLists.get(clientId);
-         if (list == null) {
-             list = new ArrayList<FacesMessage>();
-             componentMessageLists.put(clientId, list);
-         }
-         list.add(message);
-         if (LOGGER.isLoggable(Level.FINE)) {
-             LOGGER.fine("Adding Message[sourceId=" +
-                         (clientId != null ? clientId : "<<NONE>>") +
-                         ",summary=" + message.getSummary() + ")");
-         }
-
-     }
-
-
-     @Override
-     public PhaseId getCurrentPhaseId() {
-
-         assertNotReleased();
-         return currentPhaseId;
-
-     }
-
-     @Override
-     public void setCurrentPhaseId(PhaseId currentPhaseId) {
-
-         assertNotReleased();
-         this.currentPhaseId = currentPhaseId;
-         
-     }
-
-     /**
-      * @see javax.faces.context.FacesContext#release()
-      */
-     public void release() {
-        
-         RequestStateManager.remove(this, RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
-
-         released = true;
-         externalContext = null;
-         responseStream = null;
-         responseWriter = null;
-         componentMessageLists = null;
-         renderResponse = false;
-         responseComplete = false;
-         viewRoot = null;
-         maxSeverity = null;
-         application = null;
-         currentPhaseId = null;
-         if (attributes != null) {
-             attributes.clear();
-             attributes = null;
-         }
-         
-         // PENDING(edburns): write testcase that verifies that release
-         // actually works.  This will be important to keep working as
-         // ivars are added and removed on this class over time.
+            }
+        }
+
+        viewRoot = root;
+    }
+
+
+    /**
+     * @see javax.faces.context.FacesContext#getResponseWriter()
+     */
+    public ResponseWriter getResponseWriter() {
+        assertNotReleased();
+        return responseWriter;
+    }
+
+
+    /**
+     * @see FacesContext#setResponseWriter(javax.faces.context.ResponseWriter)
+     */
+    public void setResponseWriter(ResponseWriter responseWriter) {
+        assertNotReleased();
+        Util.notNull("responseWriter", responseWriter);
+        this.responseWriter = responseWriter;
+    }
+
+    /**
+     * @see FacesContext#addMessage(String, javax.faces.application.FacesMessage)
+     */
+    public void addMessage(String clientId, FacesMessage message) {
+        assertNotReleased();
+        // Validate our preconditions
+        Util.notNull("message", message);
+
+        if (maxSeverity == null) {
+            maxSeverity = message.getSeverity();
+        } else {
+            Severity sev = message.getSeverity();
+            if (sev.getOrdinal() > maxSeverity.getOrdinal()) {
+                maxSeverity = sev;
+            }
+        }
+
+        if (componentMessageLists == null) {
+            componentMessageLists =
+                  new LinkedHashMap<String, List<FacesMessage>>();
+        }
+
+        // Add this message to our internal queue
+        List<FacesMessage> list = componentMessageLists.get(clientId);
+        if (list == null) {
+            list = new ArrayList<FacesMessage>();
+            componentMessageLists.put(clientId, list);
+        }
+        list.add(message);
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Adding Message[sourceId=" +
+                        (clientId != null ? clientId : "<<NONE>>") +
+                        ",summary=" + message.getSummary() + ")");
+        }
+
+    }
+
+
+    @Override
+    public PhaseId getCurrentPhaseId() {
+
+        assertNotReleased();
+        return currentPhaseId;
+
+    }
+
+    @Override
+    public void setCurrentPhaseId(PhaseId currentPhaseId) {
+
+        assertNotReleased();
+        this.currentPhaseId = currentPhaseId;
+
+    }
+
+    /**
+     * @see javax.faces.context.FacesContext#release()
+     */
+    public void release() {
+
+        RequestStateManager
+              .remove(this, RequestStateManager.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
+
+        released = true;
+        externalContext = null;
+        responseStream = null;
+        responseWriter = null;
+        componentMessageLists = null;
+        renderResponse = false;
+        responseComplete = false;
+        viewRoot = null;
+        maxSeverity = null;
+        application = null;
+        currentPhaseId = null;
+        if (attributes != null) {
+            attributes.clear();
+            attributes = null;
+        }
 
-         // Make sure to clear our ThreadLocal instance.
-         setCurrentInstance(null);
+        // PENDING(edburns): write testcase that verifies that release
+        // actually works.  This will be important to keep working as
+        // ivars are added and removed on this class over time.
 
-         // remove our private ThreadLocal instance.
-         DEFAULT_FACES_CONTEXT.remove();
-         
-     }
+        // Make sure to clear our ThreadLocal instance.
+        setCurrentInstance(null);
 
+        // remove our private ThreadLocal instance.
+        DEFAULT_FACES_CONTEXT.remove();
 
-     /**
-      * @see javax.faces.context.FacesContext#renderResponse()
-      */
-     public void renderResponse() {
-         assertNotReleased();
-         renderResponse = true;
-     }
+    }
 
 
-     /**
-      * @see javax.faces.context.FacesContext#responseComplete()
-      */
-     public void responseComplete() {
-         assertNotReleased();
-         responseComplete = true;
-     }
+    /**
+     * @see javax.faces.context.FacesContext#renderResponse()
+     */
+    public void renderResponse() {
+        assertNotReleased();
+        renderResponse = true;
+    }
 
 
-     /**
-      * @see javax.faces.context.FacesContext#getRenderResponse()
-      */
-     public boolean getRenderResponse() {
-         assertNotReleased();
-         return renderResponse;
-     }
+    /**
+     * @see javax.faces.context.FacesContext#responseComplete()
+     */
+    public void responseComplete() {
+        assertNotReleased();
+        responseComplete = true;
+    }
 
 
-     /**
-      * @see javax.faces.context.FacesContext#getResponseComplete()
-      */
-     public boolean getResponseComplete() {
-         assertNotReleased();
-         return responseComplete;
-     }
+    /**
+     * @see javax.faces.context.FacesContext#getRenderResponse()
+     */
+    public boolean getRenderResponse() {
+        assertNotReleased();
+        return renderResponse;
+    }
 
 
-     // --------------------------------------------------------- Public Methods
+    /**
+     * @see javax.faces.context.FacesContext#getResponseComplete()
+     */
+    public boolean getResponseComplete() {
+        assertNotReleased();
+        return responseComplete;
+    }
 
+    // --------------------------------------------------------- Public Methods
 
-     public static FacesContext getDefaultFacesContext() {
 
-         return DEFAULT_FACES_CONTEXT.get();
+    public static FacesContext getDefaultFacesContext() {
 
-     }
+        return DEFAULT_FACES_CONTEXT.get();
 
+    }
 
-     // -------------------------------------------------------- Private Methods
+    // -------------------------------------------------------- Private Methods
 
+    // RELEASE_PENDING (rlubke,driscoll) profile to see if this actually
+    // gets inlined after we made it final
 
+    @SuppressWarnings({"FinalPrivateMethod"})
+    private final void assertNotReleased() {
+        if (released) {
+            throw new IllegalStateException();
+        }
+    }
 
-     // RELEASE_PENDING (rlubke,driscoll) profile to see if this actually
-     // gets inlined after we made it final
-     @SuppressWarnings({"FinalPrivateMethod"})
-     private final void assertNotReleased() {
-         if (released) {
-             throw new IllegalStateException();
-         }
-     }
+    // ---------------------------------------------------------- Inner Classes
 
 
-     // ---------------------------------------------------------- Inner Classes
+    private static final class ComponentMessagesIterator
+          implements Iterator<FacesMessage> {
 
 
-     private static final class ComponentMessagesIterator
-           implements Iterator<FacesMessage> {
+        private Map<String, List<FacesMessage>> messages;
+        private int outerIndex = -1;
+        private int messagesSize;
+        private Iterator<FacesMessage> inner;
+        private Iterator<String> keys;
 
+        // ------------------------------------------------------- Constructors
 
-         private Map<String, List<FacesMessage>> messages;
-         private int outerIndex = -1;
-         private int messagesSize;
-         private Iterator<FacesMessage> inner;
-         private Iterator<String> keys;
 
+        ComponentMessagesIterator(Map<String, List<FacesMessage>> messages) {
 
-         // ------------------------------------------------------- Constructors
+            this.messages = messages;
+            messagesSize = messages.size();
+            keys = messages.keySet().iterator();
 
+        }
 
-         ComponentMessagesIterator(Map<String, List<FacesMessage>> messages) {
+        // ---------------------------------------------- Methods from Iterator
 
-             this.messages = messages;
-             messagesSize = messages.size();
-             keys = messages.keySet().iterator();
 
-         }
+        public boolean hasNext() {
 
+            if (outerIndex == -1) {
+                // pop our first List, if any;
+                outerIndex++;
+                inner = messages.get(keys.next()).iterator();
 
-         // ---------------------------------------------- Methods from Iterator
+            }
+            while (!inner.hasNext()) {
+                outerIndex++;
+                if ((outerIndex) < messagesSize) {
+                    inner = messages.get(keys.next()).iterator();
+                } else {
+                    return false;
+                }
+            }
+            return inner.hasNext();
 
+        }
 
-         public boolean hasNext() {
+        public FacesMessage next() {
 
-             if (outerIndex == -1) {
-                 // pop our first List, if any;
-                 outerIndex++;
-                 inner = messages.get(keys.next()).iterator();
+            if (outerIndex >= messagesSize) {
+                throw new NoSuchElementException();
+            }
+            if (inner != null && inner.hasNext()) {
+                return inner.next();
+            } else {
+                // call this.hasNext() to properly initialize/position 'inner'
+                if (!this.hasNext()) {
+                    throw new NoSuchElementException();
+                } else {
+                    return inner.next();
+                }
+            }
 
-             }
-             while (!inner.hasNext()) {
-                 outerIndex++;
-                 if ((outerIndex) < messagesSize) {
-                     inner = messages.get(keys.next()).iterator();
-                 } else {
-                     return false;
-                 }
-             }
-             return inner.hasNext();
+        }
 
-         }
+        public void remove() {
 
-         public FacesMessage next() {
+            if (outerIndex == -1) {
+                throw new IllegalStateException();
+            }
+            inner.remove();
 
-             if (outerIndex >= messagesSize) {
-                 throw new NoSuchElementException();
-             }
-             if (inner != null && inner.hasNext()) {
-                 return inner.next();
-             } else {
-                 // call this.hasNext() to properly initialize/position 'inner'
-                 if (!this.hasNext()) {
-                     throw new NoSuchElementException();
-                 } else {
-                     return inner.next();
-                 }
-             }
+        }
 
-         }
+    } // END ComponentMessagesIterator
 
-         public void remove() {
+    // The testcase for this class is TestFacesContextImpl.java
+    // The testcase for this class is TestFacesContextImpl_Model.java
 
-             if (outerIndex == -1) {
-                 throw new IllegalStateException();
-             }
-             inner.remove();
-
-         }
-
-     } // END ComponentMessagesIterator
-
-     // The testcase for this class is TestFacesContextImpl.java
-     // The testcase for this class is TestFacesContextImpl_Model.java
-
- } // end of class FacesContextImpl
+} // end of class FacesContextImpl
