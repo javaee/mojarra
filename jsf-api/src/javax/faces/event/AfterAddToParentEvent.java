@@ -15,9 +15,12 @@ import javax.faces.component.UIComponent;
  * ComponentSystemEventListener#processEvent}, the listener
  * implementation may assume that the <code>source</code> of this event
  * instance is the {@link UIComponent} instance that was just added to
- * its parent and that it is safe to call {@link UIComponent#getParent},
- * {@link UIComponent#getClientId}, and other methods that depend upon
- * the component instance being added into the view.</p>
+ * its parent.  If the newly added component has a &#8220;parent
+ * chain&#8221; of <code>getParent()</code> invocations that leads all
+ * the way up to a <code>UIViewRoot</code>, it is safe to call {@link
+ * UIComponent#getParent}, {@link UIComponent#getClientId}, and other
+ * methods that depend upon the component instance being added into the
+ * view.</p>
  *
  * <div class="changed_added_2_0">
  *
