@@ -43,6 +43,7 @@ package com.sun.faces.application;
 import com.sun.faces.RIConstants;
 import com.sun.faces.scripting.GroovyHelper;
 import com.sun.faces.application.resource.ResourceCache;
+import com.sun.faces.application.resource.ResourceManager;
 import com.sun.faces.application.annotation.AnnotationManager;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.facelets.compiler.Compiler;
@@ -165,6 +166,7 @@ public class ApplicationAssociate {
     private boolean devModeEnabled;
     private Compiler compiler;
     private FaceletFactory faceletFactory;
+    private ResourceManager resourceManager;
 
     private PropertyEditorHelper propertyEditorHelper;
 
@@ -195,6 +197,7 @@ public class ApplicationAssociate {
                                       webConfig.isOptionEnabled(
                                            BooleanWebContextInitParameter.EnableLazyBeanValidation));
         annotationManager = new AnnotationManager();
+
         groovyHelper = GroovyHelper.getCurrentInstance();
 
         // initialize Facelets
@@ -204,6 +207,11 @@ public class ApplicationAssociate {
             devModeEnabled = (appImpl.getProjectStage() == ProjectStage.Development);
         }
 
+        if (devModeEnabled) {
+            resourceCache = new ResourceCache();
+        }
+        resourceManager = new ResourceManager(resourceCache);
+        
     }
 
     public static ApplicationAssociate getInstance(ExternalContext
@@ -251,12 +259,17 @@ public class ApplicationAssociate {
 
     }
 
-    public ResourceCache getResourceCache() {
-        return resourceCache;
+
+    public ResourceManager getResourceManager() {
+        return resourceManager;
     }
 
-    public void setResourceCache(ResourceCache resourceCache) {
-        this.resourceCache = resourceCache;
+    public void setResourceManager(ResourceManager resourceManager) {
+        this.resourceManager = resourceManager;
+    }
+
+    public ResourceCache getResourceCache() {
+        return resourceCache;
     }
 
     public AnnotationManager getAnnotationManager() {

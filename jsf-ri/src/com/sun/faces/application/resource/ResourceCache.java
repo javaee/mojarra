@@ -60,7 +60,6 @@ import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.MultiKeyConcurrentHashMap;
-import com.sun.faces.application.ApplicationAssociate;
 
 /**
  * <p>
@@ -147,8 +146,6 @@ public class ResourceCache {
             initExecutor((checkPeriod * 1000L * 60L));
             initMonitors(sc);
         }
-        ApplicationAssociate associate = ApplicationAssociate.getInstance(sc);
-        associate.setResourceCache(this);
 
     }
 

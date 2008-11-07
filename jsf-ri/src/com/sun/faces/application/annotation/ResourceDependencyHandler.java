@@ -10,6 +10,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.el.ELUtils;
+import javax.faces.application.Resource;
 
 /**
  * {@link RuntimeAnnotationHandler} responsible for processing {@link ResourceDependency} annotations.
@@ -26,12 +27,21 @@ class ResourceDependencyHandler implements RuntimeAnnotationHandler {
     public ResourceDependencyHandler(ResourceDependency[] dependencies) {
 
         this.dependencies = dependencies;
+        Map<Object, Object> attrs = FacesContext.getCurrentInstance().getAttributes();
         expressionsMap = new HashMap<ResourceDependency,Expressions>(dependencies.length, 1.0f);
         for (ResourceDependency dep : dependencies) {
             Expressions exprs = new Expressions();
             exprs.name = dep.name();
             String lib = dep.library();
             if (lib.length() > 0) {
+                // Take special action to resolve the "this" library name
+                if ("this".equals(lib)) {
+                    String thisLibrary = (String)
+                            attrs.get(com.sun.faces.application.ApplicationImpl.THIS_LIBRARY);
+                    assert(null != thisLibrary);
+                    lib = thisLibrary;
+                }
+
                 exprs.library = lib;
             }
             String tgt = dep.target();

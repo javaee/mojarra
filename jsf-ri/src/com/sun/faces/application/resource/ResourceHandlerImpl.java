@@ -58,10 +58,13 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
 
 import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.DefaultResourceMaxAge;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ResourceExcludes;
+import static com.sun.faces.config.WebConfiguration.WebContextInitParameter.ResourceBufferSize;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
+import com.sun.faces.application.ApplicationAssociate;
 
 /**
  * This is the default implementation of {@link ResourceHandler}.
@@ -71,9 +74,10 @@ public class ResourceHandlerImpl extends ResourceHandler {
     // Log instance for this class
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
 
-    ResourceManager manager = new ResourceManager();
+    ResourceManager manager;
     List<Pattern> excludePatterns;
     private long creationTime;
+    private long maxAge;
     private WebConfiguration webconfig;
 
     // ------------------------------------------------------------ Constructors
@@ -86,7 +90,10 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
         creationTime = System.currentTimeMillis();
         webconfig = WebConfiguration.getInstance();
+        ExternalContext extContext = FacesContext.getCurrentInstance().getExternalContext();
+        manager = ApplicationAssociate.getInstance(extContext).getResourceManager();
         initExclusions();
+        initMaxAge();
 
     }
 
@@ -133,7 +140,9 @@ public class ResourceHandlerImpl extends ResourceHandler {
                                                  resourceName,
                                                  ctype,
                                                  FacesContext.getCurrentInstance());
-        return ((info != null) ? new ResourceImpl(this, info, ctype) : null);
+        return ((info != null)
+                ? new ResourceImpl(info, ctype, creationTime, maxAge)
+                : null);
 
     }
 
@@ -446,13 +455,19 @@ public class ResourceHandlerImpl extends ResourceHandler {
     private void initExclusions() {
 
         String excludesParam = webconfig
-              .getOptionValue(WebContextInitParameter.ResourceExcludes);
+              .getOptionValue(ResourceExcludes);
         String[] patterns = Util.split(excludesParam, " ");
         excludePatterns = new ArrayList<Pattern>(patterns.length);
         for (String pattern : patterns) {
             excludePatterns.add(Pattern.compile(".*\\" + pattern));
         }
         
+    }
+
+    private void initMaxAge() {
+
+        maxAge = Long.parseLong(webconfig.getOptionValue(DefaultResourceMaxAge));
+
     }
 
 
@@ -470,18 +485,18 @@ public class ResourceHandlerImpl extends ResourceHandler {
 
         int size;
         try {
-            size = Integer.parseInt(webconfig.getOptionValue(WebContextInitParameter.ResourceBufferSize));
+            size = Integer.parseInt(webconfig.getOptionValue(ResourceBufferSize));
         } catch (NumberFormatException nfe) {
             if (LOGGER.isLoggable(Level.WARNING)) {
                 LOGGER.log(Level.WARNING,
                            "jsf.application.resource.invalid_resource_buffer_size",
                            new Object[] {
-                               webconfig.getOptionValue(WebContextInitParameter.ResourceBufferSize),
-                               WebContextInitParameter.ResourceBufferSize.getQualifiedName(),
-                               WebContextInitParameter.ResourceBufferSize.getDefaultValue()
+                               webconfig.getOptionValue(ResourceBufferSize),
+                               ResourceBufferSize.getQualifiedName(),
+                               ResourceBufferSize.getDefaultValue()
                            });
             }
-            size = Integer.parseInt(WebContextInitParameter.ResourceBufferSize.getDefaultValue());
+            size = Integer.parseInt(ResourceBufferSize.getDefaultValue());
         }
         return ByteBuffer.allocate(size);
 
