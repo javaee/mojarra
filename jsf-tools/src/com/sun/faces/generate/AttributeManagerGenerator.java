@@ -243,11 +243,6 @@ public class AttributeManagerGenerator extends AbstractGenerator {
                 boolean attributeWritten = false;
                 for (int ii = 0, llen = props.length; ii < llen; ii++) {
                     PropertyBean aBean = props[ii];
-                    // The RI doesn't use any JS for the command button, so
-                    // treat
-                    if (key.contains("Button") && "onclick".equals(aBean.getPropertyName())) {
-                        aBean.setPassThrough(true);
-                    }
                     if (aBean.isPassThrough()) {
                         if ((key.contains("Radio") || "SelectManyCheckbox".equals(key))
                             && ("style".equals(aBean.getPropertyName())
