@@ -58,6 +58,29 @@ import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import java.awt.event.ActionEvent;
+import java.beans.BeanDescriptor;
+import java.beans.BeanInfo;
+import java.beans.PropertyDescriptor;
+import java.util.List;
+import javax.el.ExpressionFactory;
+import javax.el.MethodExpression;
+import javax.el.ValueExpression;
+import javax.faces.component.ActionSource2;
+import javax.faces.component.EditableValueHolder;
+import javax.faces.component.UIComponent;
+import javax.faces.event.MethodExpressionActionListener;
+import javax.faces.event.MethodExpressionValueChangeListener;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.validator.MethodExpressionValidator;
+import javax.faces.webapp.pdl.ActionSource2AttachedObjectHandler;
+import javax.faces.webapp.pdl.ActionSource2AttachedObjectTarget;
+import javax.faces.webapp.pdl.AttachedObjectHandler;
+import javax.faces.webapp.pdl.AttachedObjectTarget;
+import javax.faces.webapp.pdl.EditableValueHolderAttachedObjectHandler;
+import javax.faces.webapp.pdl.EditableValueHolderAttachedObjectTarget;
+import javax.faces.webapp.pdl.ValueHolderAttachedObjectHandler;
+import javax.faces.webapp.pdl.ValueHolderAttachedObjectTarget;
 
 /**
  * This {@link ViewHandler} implementation handles both JSP-based and
@@ -152,8 +175,206 @@ public class MultiViewHandler extends ViewHandler {
                                                                     viewId);
 
     }
+    
+    @Override
+    public void retargetAttachedObjects(FacesContext context,
+            UIComponent topLevelComponent,
+            List<AttachedObjectHandler> handlers) {
+        
+        BeanInfo componentBeanInfo = (BeanInfo) 
+                topLevelComponent.getAttributes().get(UIComponent.BEANINFO_KEY);
+        // PENDING(edburns): log error message if componentBeanInfo is null;
+        if (null == componentBeanInfo) {
+            return;
+        }
+        BeanDescriptor componentDescriptor = componentBeanInfo.getBeanDescriptor();
+        // There is an entry in targetList for each attached object in the 
+        // <composite:interface> section of the composite component.
+        List<AttachedObjectTarget> targetList = (List<AttachedObjectTarget>)
+                componentDescriptor.getValue(AttachedObjectTarget.ATTACHED_OBJECT_TARGETS_KEY);
+        // Each entry in targetList will vend one or more UIComponent instances
+        // that is to serve as the target of an attached object in the consuming
+        // page.
+        List<UIComponent> targetComponents = null;
+        String forAttributeValue, curTargetName, handlerTagId, componentTagId;
+        boolean foundMatch = false;
+        
+        // For each of the attached object handlers...
+        for (AttachedObjectHandler curHandler : handlers) {
+            // Get the name given to this attached object by the page author
+            // in the consuming page.
+            forAttributeValue = curHandler.getFor();
+            // For each of the attached objects in the <composite:interface> section
+            // of this composite component...
+            foundMatch = false;
+            for (AttachedObjectTarget curTarget : targetList) {
+                if (foundMatch) {
+                    break;
+                }
+                // Get the name given to this attached object target by the
+                // composite component author
+                curTargetName = curTarget.getName();
+                targetComponents = curTarget.getTargets();
 
+                if (curHandler instanceof ActionSource2AttachedObjectHandler &&
+                    curTarget instanceof ActionSource2AttachedObjectTarget) {
+                    if (forAttributeValue.equals(curTargetName)) {
+                        for (UIComponent curTargetComponent : targetComponents) {
+                            curHandler.applyAttachedObject(context, curTargetComponent);
+                            foundMatch = true;
+                        }
+                    }
+                }
+                else if (curHandler instanceof EditableValueHolderAttachedObjectHandler &&
+                         curTarget instanceof EditableValueHolderAttachedObjectTarget) {
+                    if (forAttributeValue.equals(curTargetName)) {
+                        for (UIComponent curTargetComponent : targetComponents) {
+                            curHandler.applyAttachedObject(context, curTargetComponent);
+                            foundMatch = true;
+                        }
+                    }
+                }
+                else if (curHandler instanceof ValueHolderAttachedObjectHandler &&
+                         curTarget instanceof ValueHolderAttachedObjectTarget) {
+                    if (forAttributeValue.equals(curTargetName)) {
+                        for (UIComponent curTargetComponent : targetComponents) {
+                            curHandler.applyAttachedObject(context, curTargetComponent);
+                            foundMatch = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
 
+    @Override
+    public void retargetMethodExpressions(FacesContext context,
+            UIComponent topLevelComponent) {
+        BeanInfo componentBeanInfo = (BeanInfo) 
+                topLevelComponent.getAttributes().get(UIComponent.BEANINFO_KEY);
+        // PENDING(edburns): log error message if componentBeanInfo is null;
+        if (null == componentBeanInfo) {
+            return;
+        }
+        PropertyDescriptor attributes[] = componentBeanInfo.getPropertyDescriptors();
+        String applyTo = null, strValue = null;
+        UIComponent target = null;
+        ExpressionFactory expressionFactory = null;
+        ValueExpression valueExpression = null;
+        MethodExpression toApply = null;
+        Class expectedReturnType = null;
+        Class expectedParameters[] = null;
+        boolean logError = false;
+        
+        for (PropertyDescriptor cur : attributes){
+	    // If the current attribute represents a ValueExpression
+	    if (null != (valueExpression = (ValueExpression) cur.getValue("type"))) {
+		// take no action on this attribute.
+		continue;
+	    }
+            // If the current attribute representes a MethodExpression
+            if (null != (valueExpression = (ValueExpression) cur.getValue("method-signature"))) {
+                strValue = (String) valueExpression.getValue(context.getELContext());
+                if (null != strValue) {
+                
+                    // This is the name of the attribute on the top level component,
+                    // and on the inner component.
+                    logError = false;
+                    if (null != (valueExpression = (ValueExpression) cur.getValue("applyTo"))) {
+                        applyTo = (String) valueExpression.getValue(context.getELContext());
+                        if (null == applyTo) {
+                            logError = true;
+                        }
+                    }
+                    
+                    if (logError) {
+                        // PENDING error message in page?
+                        logger.severe("Unable to retarget MethodExpression.  " +
+                                "Please specify \"applyTo\" attribute on <composite:attribute />");
+                        continue;
+                    }
+                    
+                    // This is the inner component to which the attribute should 
+                    // be applied
+                    target = topLevelComponent.findComponent(applyTo);
+                    if (null == applyTo) {
+                        // PENDING error message in page?
+                        logger.severe("Unable to retarget MethodExpression.  " +
+                                "Unable to find inner component with id " + 
+                                applyTo + ".");
+                        continue;
+                    }
+
+                    strValue = cur.getName();
+
+                    // Find the attribute on the top level component
+                    valueExpression = (ValueExpression) topLevelComponent.getAttributes().
+                            get(strValue);
+                    if (null == valueExpression) {
+                        // PENDING error message in page?
+                        logger.severe("Unable to find attribute with name \"" + strValue +
+				      "\" in top level component in consuming page.  " +
+				      "Page author error.");
+                        continue;
+                    }
+
+                    // lazily initialize this local variable
+                    if (null == expressionFactory) {
+                        expressionFactory = context.getApplication().getExpressionFactory();
+                    }
+
+                    // If the attribute is one of the pre-defined 
+                    // MethodExpression attributes
+                    if (strValue.equals("action")) {
+                        expectedReturnType = Object.class;
+                        expectedParameters = new Class[]{};
+                        toApply = expressionFactory.createMethodExpression(context.getELContext(),
+                                valueExpression.getExpressionString(),
+                                expectedReturnType, expectedParameters);
+                        ((ActionSource2) target).setActionExpression(toApply);
+                    } else if (strValue.equals("actionListener")) {
+                        expectedReturnType = Void.TYPE;
+                        expectedParameters = new Class[]{
+                                    ActionEvent.class
+                                };
+                        toApply = expressionFactory.createMethodExpression(context.getELContext(),
+                                valueExpression.getExpressionString(),
+                                expectedReturnType, expectedParameters);
+                        ((ActionSource2) target).addActionListener(new MethodExpressionActionListener(toApply));
+                    } else if (strValue.equals("validator")) {
+                        expectedReturnType = Void.TYPE;
+                        expectedParameters = new Class[]{
+                                    FacesContext.class,
+                                    UIComponent.class,
+                                    Object.class
+                                };
+                        toApply = expressionFactory.createMethodExpression(context.getELContext(),
+                                valueExpression.getExpressionString(),
+                                expectedReturnType, expectedParameters);
+                        ((EditableValueHolder) target).addValidator(new MethodExpressionValidator(toApply));
+                    } else if (strValue.equals("valueChangeListener")) {
+                        expectedReturnType = Void.TYPE;
+                        expectedParameters = new Class[]{
+                                    ValueChangeEvent.class
+                                };
+                        toApply = expressionFactory.createMethodExpression(context.getELContext(),
+                                valueExpression.getExpressionString(),
+                                expectedReturnType, expectedParameters);
+                        ((EditableValueHolder) target).addValueChangeListener(new MethodExpressionValueChangeListener(toApply));
+                    } else {
+                        // If the attribute is not one of the pre-defined 
+                        // MethodExpression attributes, look it up reflectively,
+                        // assuming there is a setter of type MethodExpression
+
+                    }
+                }
+            }
+            
+        }
+        
+    }
+    
+    
     /**
      * <p>
      * Call {@link com.sun.faces.application.view.ViewHandlingStrategy#createView(javax.faces.context.FacesContext, MultiViewHandler, String)}.

@@ -43,13 +43,23 @@ package javax.faces.application;
 import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIViewRoot;
+import javax.faces.webapp.pdl.ActionSource2AttachedObjectHandler;
+import javax.faces.webapp.pdl.ActionSource2AttachedObjectTarget;
+import javax.faces.webapp.pdl.AttachedObjectHandler;
+import javax.faces.webapp.pdl.AttachedObjectTarget;
+import javax.faces.webapp.pdl.EditableValueHolderAttachedObjectHandler;
+import javax.faces.webapp.pdl.EditableValueHolderAttachedObjectTarget;
+import javax.faces.webapp.pdl.ValueHolderAttachedObjectHandler;
+import javax.faces.webapp.pdl.ValueHolderAttachedObjectTarget;
 
 
 
@@ -353,6 +363,238 @@ public abstract class ViewHandler {
     public abstract UIViewRoot restoreView(FacesContext context, String viewId);
 
 
+
+    /**
+     * <p class="changed_added_2_0">Leverage the component metadata
+     * specified in section 4.3.2 for the purpose of re-targeting
+     * attached objects from the top level composite component to the
+     * individual {@link AttachedObjectTarget} inside the composite
+     * component.  This method must be called by the PDL implementation
+     * when creating the <code>UIComponent</code> tree when a composite
+     * component usage is encountered.</p>
+     *
+     * <div class="changed_added_2_0">
+
+     * <p>An algorithm semantically equivalent to the following must be
+     * implemented.</p>
+
+	<ul>
+
+	  <li><p>Obtain the metadata for the composite component.
+	  Currently this entails getting the value of the {@link
+	  UIComponent#BEANINFO_KEY} component attribute, which will be
+	  an instance of <code>BeanInfo</code>.  If the metadata cannot
+	  be found, log an error message and return.</p></li>
+
+	  <li><p>Get the <code>BeanDescriptor</code> from the
+	  <code>BeanInfo</code>.</p></li>
+
+	  <li><p>Get the value of the {@link
+	  AttachedObjectTarget#ATTACHED_OBJECT_TARGETS_KEY} from the
+	  <code>BeanDescriptor</code>'s <code>getValue()</code> method.
+	  This will be a <code>List&lt;{@link
+	  AttachedObjectTarget}&gt;</code>.  Let this be
+	  <em>targetList</em>.</p></li>
+
+	  <li><p>For each <em>curHandler</em> entry in the argument
+	  <code>handlers</code></p>
+
+	<ul>
+
+	  <li><p>Let <em>forAttributeValue</em> be the return from
+	  {@link AttachedObjectHandler#getFor}.  </p></li>
+
+	  <li><p>For each <em>curTarget</em> entry in
+	  <em>targetList</em>, the first of the following items that
+	  causes a match will take this action:</p>
+
+<p style="margin-left: 3em;">For each <code>UIComponent</code> in the
+list returned from <em>curTarget.getTargets()</em>, call
+<em>curHandler.<a
+href="AttachedObjectHandler.html#applyAttachedObject">applyAttachedObject()</></em>,
+passing the <code>FacesContext</code> and the
+<code>UIComponent</code>.</p>
+
+          <p>and cause this inner loop to terminate.</p>
+
+	<ul>
+
+	  <li><p>If <em>curHandler</em> is an instance of {@link
+	  ActionSource2AttachedObjectHandler} and <em>curTarget</em> is
+	  an instance of {@link ActionSource2AttachedObjectTarget},
+	  consider it a match.</p></li>
+
+	  <li><p>If <em>curHandler</em> is an instance of {@link
+	  EditableValueHolderAttachedObjectHandler} and <em>curTarget</em> is
+	  an instance of {@link EditableValueHolderAttachedObjectTarget},
+	  consider it a match.</p></li>
+
+	  <li><p>If <em>curHandler</em> is an instance of {@link
+	  ValueHolderAttachedObjectHandler} and <em>curTarget</em> is
+	  an instance of {@link ValueHolderAttachedObjectTarget},
+	  consider it a match.</p></li>
+
+	</ul>
+
+
+
+</li>
+
+
+	</ul>
+
+
+
+
+</li>
+
+
+
+
+	</ul>
+    
+     * <p>An implementation is provided that will throw
+     * <code>UnsupportedOperationException</code>.  A Faces implementation
+     * compliant with version 2.0 and beyond of the specification must 
+     * override this method.</p>
+
+     * </div>
+     *
+     * @param context the FacesContext for this request.
+
+     * @param topLevelComponent The UIComponent in the view to which the
+     * attached objects must be attached.  This UIComponent must have
+     * its component metadata already associated and available from via
+     * the JavaBeans API.
+
+     * @param handlers specified by the page author in the consuming
+     * page, provided to this method by the PDL implementation, this is
+     * a list of implementations of {@link AttachedObjectHandler}, each
+     * one of which represents a relationship between an attached object
+     * and the UIComponent to which it is attached.
+     */
+    public void retargetAttachedObjects(FacesContext context,
+            UIComponent topLevelComponent,
+            List<AttachedObjectHandler> handlers)  {
+        throw new UnsupportedOperationException();
+    }
+    
+
+    /**
+     * <p class="changed_added_2_0">Leverage the component metadata
+     * specified in section 4.3.2 for the purpose of re-targeting any
+     * method expressions from the top level component to the
+     * appropriate inner component.  For each attribute that is a
+     * <code>MethodExpression</code> (as indicated by the presence of a
+     * "<code>method-signature</code>" attribute and the absence of a
+     * "<code>type</code>" attribute), the following action must be
+     * taken:</p>
+
+     * <div class="changed_added_2_0">
+     *
+     * 	<ul>
+
+	  <li><p>Get the value of the <em>applyTo</em> attribute.  If
+	  not found, log an error and continue to the next
+	  attribute.</p></li>
+
+	  <li><p>Find the inner component of the
+	  <em>topLevelComponent</em> with the id equal to
+	  <em>applyTo</em>.  For discussion, this component is called
+	  <em>target</em>.  If not found, log and error and continue to
+	  the next attribute.</p></li>
+
+	  <li><p>For discussion the declared name of the attribute is
+	  called <em>name</em>.</p></li>
+
+	  <li><p>In the attributes map of the
+	  <em>topLevelComponent</em>, look up the entry under the key
+	  <em>name</em>.  Assume the result is a
+	  <code>ValueExpression</code>.  For discussion, this is
+	  <em>attributeValueExpression</em>.  If not found, log an error
+	  and continue to the next attribute.</p></li>
+
+	  <li><p>If <em>name</em> is equal to the string "action", or
+	  "actionListener" without the quotes, assume <em>target</em> is
+	  an {@link javax.faces.component.ActionSource2}.</p></li>
+
+	  <li><p>If <em>name</em> is equal to the string "validator", or
+	  "valueChangeListener" without the quotes, assume
+	  <em>target</em> is an {@link
+	  javax.faces.component.EditableValueHolder}.</p></li>
+
+	  <li><p>Call <code>getExpressionString()</code> on the
+	  <em>attributeValueExpression</em> and use that string to
+	  create a <code>MethodExpression</code> of the appropriate
+	  signature for <em>name</em>.</p></li>
+
+	  <li><p>If <em>name</em> is not equal to any of the previously
+	  listed strings, call <code>getExpressionString()</code> on the
+	  <em>attributeValueExpression</em> and use that string to
+	  create a <code>MethodExpression</code> where the signature is
+	  created based on the value of the
+	  "<code>method-signature</code>" attribute of the
+	  <code>&lt;composite:attribute /&gt;</code> tag.</p></li>
+
+	  <li><p>Let the resultant <code>MethodExpression</code> be
+	  called <em>attributeMethodExpression</em> for discussion.
+	  </p></li>
+
+	  <li><p>If <em>name</em> is equal to the string "action"
+	  without the quotes, call {@link
+	  ActionSource2#setActionExpression} on <em>target</em>, passing
+	  <em>attributeMethodExpression</em>.</p></li>
+
+	  <li><p>If <em>name</em> is equal to the string
+	  "actionListener" without the quotes, call {@link
+	  javax.faces.component.ActionSource#addActionListener} on
+	  <em>target</em>, passing <em>attributeMethodExpression</em>
+	  wrapped in a {@link MethodExpressionActionListener}.</p></li>
+
+	  <li><p>If <em>name</em> is equal to the string
+	  "validator" without the quotes, call {@link
+	  EditableValueHolder#addValidator} on <em>target</em>, passing
+	  <em>attributeMethodExpression</em> wrapped in a {@link
+	  MethodExpressionValidator}.</p></li>
+
+	  <li><p>If <em>name</em> is equal to the string
+	  "valueChangeListener" without the quotes, call {@link
+	  EditableValueHolder#addValueChangeListener} on <em>target</em>, passing
+	  <em>attributeMethodExpression</em> wrapped in a {@link
+	  MethodExpressionValueChangeListener}.</p></li>
+
+	  <li><p>Otherwise, look for a JavaBeans setter that matches
+	  <em>name</em> and assume it takes a
+	  <code>MethodExpression</code>, passing
+	  <em>attributeMethodExpression</em> as that expression.  If
+	  such a setter does not exist, or does not take a
+	  <code>MethodExpression</code>, log an error and continue to
+	  the next attribute.</p></li>
+
+	</ul>
+     * 
+     * <p>An implementation is provided that will throw
+     * <code>UnsupportedOperationException</code>.  A Faces implementation
+     * compliant with version 2.0 and beyond of the specification must 
+     * override this method.</p>
+
+     * </div>
+     *
+     * @param context the FacesContext for this request.
+
+     * @param topLevelComponent The UIComponent in the view to which the
+     * attached objects must be attached.  This UIComponent must have
+     * its component metadata already associated and available from via
+     * the JavaBeans API.
+
+     * @since 2.0
+     */
+    
+    public void retargetMethodExpressions(FacesContext context,
+            UIComponent topLevelComponent) {
+        throw new UnsupportedOperationException();
+    }
+    
     /**
      * <p>Take any appropriate action to either immediately
      * write out the current state information (by calling
