@@ -844,9 +844,10 @@ public abstract class Application {
      * calling {@link FacesContext#getRenderKit} and calling {@link
      * javax.faces.render.RenderKit#getRenderer} on the result, passing
      * the argument <code>componentType</code> as the first argument and
-     * the argument <code>rendererType</code> as the second argument.
-     * If no such <code>Renderer</code> can be found, a message must be
-     * logged with a helpful error message.  Otherwise, {@link
+     * the result of calling {@link UIComponent#getFamily} on the newly
+     * created component as the second argument.  If no such
+     * <code>Renderer</code> can be found, a message must be logged with
+     * a helpful error message.  Otherwise, {@link
      * UIComponent#setRendererType} must be called on the newly created
      * <code>UIComponent</code> instance, passing the argument
      * <code>rendererType</code> as the argument.</p>
@@ -854,7 +855,7 @@ public abstract class Application {
      * <p class="changed_added_2_0">A default implementation is provided
      * that throws <code>UnsupportedOperationException</code> so that
      * users that decorate <code>Application</code> can continue to
-     * function</p>.
+     * function.</p>
 
      *
      * @param componentExpression {@link ValueExpression} representing a
@@ -904,11 +905,12 @@ public abstract class Application {
      * obtained by calling {@link FacesContext#getRenderKit} and calling
      * {@link javax.faces.render.RenderKit#getRenderer} on the result,
      * passing the argument <code>componentType</code> as the first
-     * argument and the argument <code>rendererType</code> as the second
-     * argument.  If no such <code>Renderer</code> can be found, a
-     * message must be logged with a helpful error message.  Otherwise,
-     * {@link UIComponent#setRendererType} must be called on the newly
-     * created <code>UIComponent</code> instance, passing the argument
+     * argument and the result of calling {@link UIComponent#getFamily}
+     * on the newly created component as the second argument.  If no
+     * such <code>Renderer</code> can be found, a message must be logged
+     * with a helpful error message.  Otherwise, {@link
+     * UIComponent#setRendererType} must be called on the newly created
+     * <code>UIComponent</code> instance, passing the argument
      * <code>rendererType</code> as the argument.</p>
 
      * <p class="changed_added_2_0">A default implementation is provided
@@ -1667,20 +1669,27 @@ public abstract class Application {
 
     /**
      * <p class="changed_added_2_0">Install the listener instance
-     * referenced by argument <code>listener</code> into application
-     * as a listener for events of type
-     * <code>systemEventClass</code>.  The default implementation simply calls
-     * through to {@link #subscribeToEvent(Class, Class, javax.faces.event.SystemEventListener)}
-     * passing <code>null</code> as the <code>sourceClass</code> argument</p>
+     * referenced by argument <code>listener</code> into application as
+     * a listener for events of type <code>systemEventClass</code>.  The
+     * default implementation simply calls through to {@link
+     * #subscribeToEvent(Class, Class,
+     * javax.faces.event.SystemEventListener)} passing <code>null</code>
+     * as the <code>sourceClass</code> argument</p>
      *
+     * <p class="changed_added_2_0">A default implementation is provided
+     * that throws <code>UnsupportedOperationException</code> so that
+     * users that decorate <code>Application</code> can continue to
+     * function</p>.
+
      * @param systemEventClass the <code>Class</code> of event for which
-     * <code>listener</code> must be fired.
-     *
+     * <code>listener</code> must be fired.</p>
+
      * @param listener the implementation of {@link
      * javax.faces.event.SystemEventListener} whose {@link
-     * javax.faces.event.SystemEventListener#processEvent} method must be called when
-     * events of type <code>systemEventClass</code> are fired.
-     *
+     * javax.faces.event.SystemEventListener#processEvent} method must
+     * be called when events of type <code>systemEventClass</code> are
+     * fired.
+
      * @throws <code>NullPointerException</code> if any combination of
      * <code>systemEventClass</code>, or <code>listener</code> are
      * <code>null</code>.
