@@ -265,13 +265,14 @@ public class MultiViewHandler extends ViewHandler {
         Class expectedReturnType = null;
         Class expectedParameters[] = null;
         boolean logError = false;
-        
-        for (PropertyDescriptor cur : attributes){
-	    // If the current attribute represents a ValueExpression
-	    if (null != (valueExpression = (ValueExpression) cur.getValue("type"))) {
-		// take no action on this attribute.
-		continue;
-	    }
+
+        for (PropertyDescriptor cur : attributes) {
+            // If the current attribute represents a ValueExpression
+            if (null != (valueExpression =
+                  (ValueExpression) cur.getValue("type"))) {
+                // take no action on this attribute.
+                continue;
+            }
             // If the current attribute representes a MethodExpression
             if (null != (valueExpression = (ValueExpression) cur.getValue("method-signature"))) {
                 strValue = (String) valueExpression.getValue(context.getELContext());
@@ -312,9 +313,10 @@ public class MultiViewHandler extends ViewHandler {
                             get(strValue);
                     if (null == valueExpression) {
                         // PENDING error message in page?
-                        logger.severe("Unable to find attribute with name \"" + strValue +
-				      "\" in top level component in consuming page.  " +
-				      "Page author error.");
+                        logger.severe("Unable to find attribute with name \""
+                                      + strValue
+                                      + "\" in top level component in consuming page.  "
+                                      + "Page author error.");
                         continue;
                     }
 
