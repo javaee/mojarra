@@ -408,6 +408,22 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
     }
 
     // -------------------------------------------------------------- Properties
+    
+    /**
+     * <p class="changed_added_2_0">Enable EL to access the <code>clientId</code>
+     * of a component.  This is particularly useful in combination with the 
+     * <code>component</code> and <code>compositeComponent</code> implicit
+     * objects.  A default implementation is provided that simply calls
+     * {@link FacesContext#getCurrentInstance} and then calls through to
+     * {@link #getClientId(FacesContext)}.</p>
+     * 
+     * @since 2.0
+     */
+    
+    public String getClientId() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        return getClientId(context);
+    }
 
 
     /**
@@ -1235,7 +1251,7 @@ private void doFind(FacesContext context, String clientId) {
     /**
      * <p class="changed_added_2_0">Perform a tree traversal starting at
      * this node in the tree.  The default implementation must call
-     * {@link ContextCallback#invokeContextCallBack} on the argument
+     * {@link ContextCallback#invokeContextCallback} on the argument
      * <code>nodeCallback</code> before traversing the children.  The
      * traversal may be aborted by throwing an {@link
      * javax.faces.event.AbortProcessingException} from this method.</p>
@@ -1323,7 +1339,12 @@ private void doFind(FacesContext context, String clientId) {
      *
      * <p class="changed_added_2_0">Call {@link
      * UIComponent#popComponentFromEL}. before returning regardless of the value
-     *  of the <code>rendered</code> property.</p>
+     *  of the <code>rendered</code> property.  Call 
+     * {@link javax.faces.application.Application#publishEvent}, passing
+     * {@link javax.faces.event.AfterRenderEvent}<code>.class</code> as the
+     * first argument and the component instance that was rendered as the
+     * second argument.</p></li>
+
      *
      * @param context {@link FacesContext} for the response we are creating
      *
