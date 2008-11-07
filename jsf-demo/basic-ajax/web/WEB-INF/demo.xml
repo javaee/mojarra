@@ -65,10 +65,6 @@
                 <path>/count.xhtml</path>
             </source>
             <source>
-                <label>Backing Javascript</label>
-                <path>/resources/javascript/count.js</path>
-            </source>
-            <source>
                 <label>Managed Bean</label>
                 <path>/WEB-INF/classes/basicajax/Count.java</path>
             </source>
