@@ -40,6 +40,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Collections;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
@@ -62,24 +64,29 @@ public class ExceptionEventContext implements SystemEventListenerHolder {
      * key in the <code>Map</code> returned from {@link #getAttributes}
      * indicates the event occurred during the &#8220;before
      * phase&#8221; part of the current lifecycle phase.</p>
-     *
-     * @since 2.0
      */
-    
-    public static final String IN_BEFORE_PHASE_KEY = "javax.faces.event.ExceptionEventContext.IN_BEFORE_PHASE";
+    public static final String IN_BEFORE_PHASE_KEY =
+          ExceptionEventContext.class.getName() + ".IN_BEFORE_PHASE";
     
     /**
      * <p class="changed_added_2_0">The presence of an entry under this
      * key in the <code>Map</code> returned from {@link #getAttributes}
      * indicates the event occurred during the &#8220;after
      * phase&#8221; part of the current lifecycle phase.</p>
-     *
-     * @since 2.0
      */
+    public static final String IN_AFTER_PHASE_KEY =
+          ExceptionEventContext.class.getName() + ".IN_AFTER_PHASE";
+
+    private FacesContext context;
+    private Throwable thrown;
+    private UIComponent component;
+    private PhaseId phaseId;
+    private Map<Object, Object> attributes;
+    private List<SystemEventListener> listener;
+
     
-    public static final String IN_AFTER_PHASE_KEY = "javax.faces.event.ExceptionEventContext.IN_AFTER_PHASE";
-    
-    Throwable thrown;
+    // ------------------------------------------------------------ Constructors
+
 
     /**
      * <p class="changed_added_2_0">Instantiate a new
@@ -88,13 +95,31 @@ public class ExceptionEventContext implements SystemEventListenerHolder {
      *
      * @param thrown the <code>Throwable</code> that is the context for
      * this <code>ExceptionEventContext</code> instance.
-     *
-     * @since 2.0
      */
-    
-    public ExceptionEventContext(Throwable thrown) {
-        setException(thrown);
-    } 
+    public ExceptionEventContext(FacesContext context, Throwable thrown) {
+
+        this(context, thrown, null, null);
+
+    }
+
+
+    /**
+     * <p class="changed_added_2_0">Instantiate a new
+     * <code>ExceptionEventContext</code> that indicates the argument
+     * <code>Throwable</code> just occurred, relevant to the argument
+     * <code>component</code>.
+     *
+     * @param context
+     * @param thrown
+     * @param component
+     */
+    public ExceptionEventContext(FacesContext context,
+                                 Throwable thrown,
+                                 UIComponent component) {
+
+        this (context, thrown, component, null);
+
+    }
             
     /**
      * <p class="changed_added_2_0">Instantiate a new
@@ -111,127 +136,102 @@ public class ExceptionEventContext implements SystemEventListenerHolder {
      *
      * @param phaseId the <code>PhaseId</code> at the time this
      * <code>ExeceptionEventContext</code> is created.
-
-     * @since 2.0
      */
-    
-    public ExceptionEventContext(Throwable thrown, UIComponent component, 
-				 PhaseId phaseId) {
-        setException(thrown);
-        setComponent(component);
-        setPhaseId(phaseId);
+    public ExceptionEventContext(FacesContext context,
+                                 Throwable thrown,
+                                 UIComponent component,
+                                 PhaseId phaseId) {
+
+        this.context = context;
+        this.thrown = thrown;
+        this.component = component;
+        this.phaseId = ((phaseId == null)
+                           ? context.getCurrentPhaseId()
+                           : phaseId);
+
     }
-    
+
+
+    // ---------------------------------------------------------- Public Methods
+
+
+    /**
+     * <p class="changed_added_2_0"></p>
+     * @return the {@link FacesContext} used to create this
+     *  <code>ExceptionEventContext</code> instance.
+     */
+    public FacesContext getContext() {
+
+        return context;
+
+    }
+
     /**
      * <p class="changed_added_2_0">Return the <code>exception</code>
      * property.</p>
-     *
-     * @since 2.0
      */
-
     public Throwable getException() {
+
         return thrown;
-    }
-    
-    /**
-     * <p class="changed_added_2_0">Set the <code>exception</code>
-     * property.</p>
-     *
-     * @since 2.0
-     */
 
-    public void setException(Throwable exception) {
-        this.thrown = exception;
     }
 
-
-    private UIComponent component;
     
     /**
      * <p class="changed_added_2_0">Return the <code>UIComponent</code>
      * which was being processed when the exception was thrown. If none
      * or not available, this will be <code>null</code>.</p>
-     *
-     * @since 2.0
      */
-
     public UIComponent getComponent() {
+
         return this.component;
-    }
-    
-    /**
-     * <p class="changed_added_2_0">Set the <code>UIComponent</code>
-     * which was being processed when the exception was thrown.</p>
-     *
-     * @since 2.0
-     */
 
-    public void setComponent(UIComponent component) {
-        this.component = component;
     }
 
-    private PhaseId phaseId;
 
     /**
      * <p class="changed_added_2_0">Return the <code>PhaseId</code>
      * which was being processed when the exception was thrown. If none
      * or not available, this will be <code>null</code>.</p>
-     *
-     * @since 2.0
      */
-
     public PhaseId getPhaseId() {
+
         return this.phaseId;
-    }
-    
-    /**
-     * <p class="changed_added_2_0">Set the <code>PhaseId</code> which
-     * was being processed when the exception was thrown. If none or not
-     * available, this will be <code>null</code>.</p>
-     *
-     * @since 2.0
-     */
 
-    public void setPhaseId(PhaseId phaseId) {
-        this.phaseId = phaseId;
     }
 
 
-    private Map<Object, Object> attributes;
-    
     /**
      * <p class="changed_added_2_0">A <code>Map</code> of attributes
      * relevant to the context of this <code>ExceptionEvent</code>.</p>
-     *
-     * @since 2.0
      */
- 
     public Map<Object, Object> getAttributes() {
+
         if (null == attributes) {
             attributes = new HashMap<Object,Object>();
         }
         return attributes;
+
     }
-    
-    private List<SystemEventListener> listener;
+
 
     /**
      * <p class="changed_added_2_0">Return a <code>List</code> that
      * contains a single entry, the {@link
      * javax.faces.context.ExceptionHandler} for the current
      * request.</p>
-     *
-     * @since 2.0
      */
-
     public List<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> facesEventClass) {
+
         if (null == listener) {
-            listener = new ArrayList<SystemEventListener>(1);
-            listener.add(FacesContext.getCurrentInstance().getExceptionHandler());
+            List<SystemEventListener> list = new ArrayList<SystemEventListener>(1);
+            list.add(context.getExceptionHandler());
+            listener = Collections.unmodifiableList(list);
         }
         return listener;
+
     }
-    
-    
+
+
 
 }

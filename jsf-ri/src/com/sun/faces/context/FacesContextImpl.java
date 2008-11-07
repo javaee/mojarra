@@ -58,10 +58,7 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
-import javax.servlet.http.HttpServletResponse;
 
-import java.io.Writer;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -71,13 +68,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.NoSuchElementException;
 import java.util.HashMap;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.sun.faces.el.ELContextImpl;
 import com.sun.faces.util.FacesLogger;
-import com.sun.faces.util.OnOffResponseWrapper;
 import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.util.Util;
 import com.sun.faces.renderkit.RenderKitUtils;
@@ -134,6 +129,7 @@ public class FacesContextImpl extends FacesContext {
               FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
     }
 
+
     // ---------------------------------------------- Methods from FacesContext
 
 
@@ -162,18 +158,27 @@ public class FacesContextImpl extends FacesContext {
         return application;
     }
 
+
+    /**
+     * @see javax.faces.context.FacesContext#getExceptionHandler()
+     */
     @Override
     public ExceptionHandler getExceptionHandler() {
         return exceptionHandler;
     }
 
+
+    /**
+     * @see javax.faces.context.FacesContext#setExceptionHandler(javax.faces.context.ExceptionHandler)
+     */
     @Override
     public void setExceptionHandler(ExceptionHandler exceptionHandler) {
         this.exceptionHandler = exceptionHandler;
     }
 
+
     /**
-     * @see javax.faces.context.getPartialViewContext()
+     * @see javax.faces.context.FacesContext#getPartialViewContext()
      */
     public PartialViewContext getPartialViewContext() {
         assertNotReleased();
@@ -184,6 +189,10 @@ public class FacesContextImpl extends FacesContext {
         return partialViewContext;
     }
 
+
+    /**
+     * @see javax.faces.context.FacesContext#isPostback()
+     */
     @Override
     public boolean isPostback() {
 
@@ -208,6 +217,9 @@ public class FacesContextImpl extends FacesContext {
     }
 
 
+    /**
+     * @see javax.faces.context.FacesContext#getAttributes()
+     */
     @Override
     public Map<Object, Object> getAttributes() {
 
@@ -497,6 +509,9 @@ public class FacesContextImpl extends FacesContext {
     }
 
 
+    /**
+     * @see javax.faces.context.FacesContext#getCurrentPhaseId()
+     */
     @Override
     public PhaseId getCurrentPhaseId() {
 
@@ -505,6 +520,10 @@ public class FacesContextImpl extends FacesContext {
 
     }
 
+
+    /**
+     * @see javax.faces.context.FacesContext#setCurrentPhaseId(javax.faces.event.PhaseId)
+     */
     @Override
     public void setCurrentPhaseId(PhaseId currentPhaseId) {
 
@@ -512,6 +531,7 @@ public class FacesContextImpl extends FacesContext {
         this.currentPhaseId = currentPhaseId;
 
     }
+
 
     /**
      * @see javax.faces.context.FacesContext#release()
@@ -536,6 +556,12 @@ public class FacesContextImpl extends FacesContext {
             attributes.clear();
             attributes = null;
         }
+        partialViewContext = null;
+        exceptionHandler = null;
+        elContext = null;
+        rkFactory = null;
+        lastRk = null;
+        lastRkId = null;
 
         // PENDING(edburns): write testcase that verifies that release
         // actually works.  This will be important to keep working as
