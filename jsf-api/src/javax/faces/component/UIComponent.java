@@ -408,6 +408,22 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
     }
 
     // -------------------------------------------------------------- Properties
+    
+    /**
+     * <p class="changed_added_2_0">Enable EL to access the <code>clientId</code>
+     * of a component.  This is particularly useful in combination with the 
+     * <code>component</code> and <code>compositeComponent</code> implicit
+     * objects.  A default implementation is provided that simply calls
+     * {@link FacesContext#getCurrentInstance} and then calls through to
+     * {@link #getClientId(FacesContext)}.</p>
+     * 
+     * @since 2.0
+     */
+    
+    public String getClientId() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        return getClientId(context);
+    }
 
 
     /**
