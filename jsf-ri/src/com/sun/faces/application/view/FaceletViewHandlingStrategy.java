@@ -44,7 +44,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.text.MessageFormat;
 
 import javax.faces.FacesException;
 import javax.faces.application.ViewHandler;
@@ -59,7 +58,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.sun.faces.facelets.Facelet;
 import com.sun.faces.facelets.FaceletFactory;
-import com.sun.faces.facelets.impl.PageDeclarationLanguageImpl;
 import com.sun.faces.facelets.compiler.Compiler;
 import com.sun.faces.facelets.compiler.SAXCompiler;
 import com.sun.faces.facelets.tag.ui.UIDebug;
@@ -93,7 +91,6 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     public FaceletViewHandlingStrategy() {
 
         FacesContext ctx = FacesContext.getCurrentInstance();
-        ctx.getApplication().setPageDeclarationLanguage(new PageDeclarationLanguageImpl());
         initialize();
 
     }

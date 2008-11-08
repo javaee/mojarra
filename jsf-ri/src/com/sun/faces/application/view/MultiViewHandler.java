@@ -51,10 +51,12 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.ResponseStateManager;
+import javax.faces.webapp.pdl.PageDeclarationLanguage;
 import javax.servlet.http.HttpServletResponse;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.facelets.impl.PageDeclarationLanguageImpl;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
@@ -95,6 +97,7 @@ public class MultiViewHandler extends ViewHandler {
      * The {@link ViewHandlingStrategy} instances used by this {@link ViewHandler}.
      */
     protected ViewHandlingStrategyManager viewHandlingStrategy;
+    private PageDeclarationLanguage pdl;
 
     private String[] configuredExtensions;
 
@@ -561,6 +564,25 @@ public class MultiViewHandler extends ViewHandler {
         }
 
     }
+    
+    /*
+     * PENDING(edburns): This is temporary for Public Review Draft.
+     * Really, I think the way to go is to change PageDeclarationLanguage to
+     * to take on all of the mantle of ViewHandlingStrategy, do away with
+     * ViewHandlingStrategy, provide a factory for PageDeclarationLanguage
+     * and specify that the runtime must have a PDL impl for both JSP
+     * and Facelets.
+     */ 
+
+    @Override
+    public PageDeclarationLanguage getPageDeclarationLanguage() {
+        if (null == pdl) {
+            pdl = new PageDeclarationLanguageImpl();
+        }
+        return pdl;
+    }
+    
+    
 
 
     // ---------------------------------------------------------- Public Methods
