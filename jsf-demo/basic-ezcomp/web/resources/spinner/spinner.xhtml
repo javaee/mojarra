@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -36,64 +36,34 @@
  holder.
 
 -->
-
-<demo-info>
-
-    <demo>
-        <name>Simple Out</name>
-        <page>out.jsf</page>
-        <sources>
-            <source>
-                <label>Consuming Page</label>
-                <path>/out.xhtml</path>
-            </source>
-            <source>
-                <label>Composite Component</label>
-                <path>/resources/simpleout/out.xhtml</path>
-            </source>
-        </sources>
-    </demo>
-
-    <!-- =================================================================== -->
-
-    <demo>
-        <name>Simple In/Out</name>
-        <page>inout.jsf</page>
-        <sources>
-            <source>
-                <label>Consuming Page</label>
-                <path>/inout.xhtml</path>
-            </source>
-            <source>
-                <label>Composite Component</label>
-                <path>/resources/simpleinout/inout.xhtml</path>
-            </source>
-            <source>
-                <label>Managed Bean</label>
-                <path>/WEB-INF/classes/ezcomp/InOutBean.java</path>
-            </source>
-        </sources>
-    </demo>
-
-        <!-- =================================================================== -->
-
-    <demo>
-        <name>Spinner Component</name>
-        <page>spinner.jsf</page>
-        <sources>
-            <source>
-                <label>Consuming Page</label>
-                <path>/spinner.xhtml</path>
-            </source>
-            <source>
-                <label>Composite Component</label>
-                <path>/resources/spinner/spinner.xhtml</path>
-            </source>
-            <source>
-                <label>Managed Bean</label>
-                <path>/WEB-INF/classes/ezcomp/NumberHolder.java</path>
-            </source>
-        </sources>
-    </demo>
-
-</demo-info>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite">
+<head/>
+<body>
+<composite:interface> 
+    <composite:attribute name="value" required="true" type="String"/>
+    <composite:attribute name="increment" required="false" type="Integer"/>
+</composite:interface>
+<composite:implementation>
+    <script type="text/javascript">
+        function changeNumber(amount) {
+            var increment = Number("#{compositeComponent.attrs.increment}");
+            if (isNaN(increment) || increment == 0 ) {
+                increment = 1;
+            }
+            var entry = document.getElementById("#{compositeComponent.clientId}"+":"+"number");
+            entry.value = Number(entry.value) + (amount * increment);
+            return false;
+        }
+    </script>
+    <h:inputText id="number" value="#{compositeComponent.attrs.value}"/>
+    <h:commandButton id="bigback" value="&lt;&lt;" onclick="return changeNumber(-10);"/>
+    <h:commandButton id="back" value="&lt;" onclick="return changeNumber(-1);"/>
+    <h:commandButton id="forward" value="&gt;" onclick="return changeNumber(1);"/>
+    <h:commandButton id="bigforward" value="&gt;&gt;" onclick="return changeNumber(10);"/>
+</composite:implementation>
+</body>
+</html>

@@ -1,4 +1,3 @@
-<?xml version='1.0' encoding='UTF-8'?>
 <!--
 
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -36,64 +35,24 @@
  holder.
 
 -->
-
-<demo-info>
-
-    <demo>
-        <name>Simple Out</name>
-        <page>out.jsf</page>
-        <sources>
-            <source>
-                <label>Consuming Page</label>
-                <path>/out.xhtml</path>
-            </source>
-            <source>
-                <label>Composite Component</label>
-                <path>/resources/simpleout/out.xhtml</path>
-            </source>
-        </sources>
-    </demo>
-
-    <!-- =================================================================== -->
-
-    <demo>
-        <name>Simple In/Out</name>
-        <page>inout.jsf</page>
-        <sources>
-            <source>
-                <label>Consuming Page</label>
-                <path>/inout.xhtml</path>
-            </source>
-            <source>
-                <label>Composite Component</label>
-                <path>/resources/simpleinout/inout.xhtml</path>
-            </source>
-            <source>
-                <label>Managed Bean</label>
-                <path>/WEB-INF/classes/ezcomp/InOutBean.java</path>
-            </source>
-        </sources>
-    </demo>
-
-        <!-- =================================================================== -->
-
-    <demo>
-        <name>Spinner Component</name>
-        <page>spinner.jsf</page>
-        <sources>
-            <source>
-                <label>Consuming Page</label>
-                <path>/spinner.xhtml</path>
-            </source>
-            <source>
-                <label>Composite Component</label>
-                <path>/resources/spinner/spinner.xhtml</path>
-            </source>
-            <source>
-                <label>Managed Bean</label>
-                <path>/WEB-INF/classes/ezcomp/NumberHolder.java</path>
-            </source>
-        </sources>
-    </demo>
-
-</demo-info>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ez="http://java.sun.com/jsf/composite/spinner">
+<h:head>
+    <title>Spinner Example</title>
+</h:head>
+<h:body><h1>Spinner Example</h1>
+        <h:form id="form1" prependId="false">
+            <ez:spinner value="#{number.number}" increment="10"/>
+            <br/>
+            <h:outputText value="Last number submitted: #{number.number}" />
+                <!-- <ez:switchlist id="editText1" value="#{stringholder.str}"/> -->
+            <br/>
+                <h:commandButton value="reload" type="submit"/>
+            <h:messages/>
+        </h:form>
+</h:body>
+</html>
