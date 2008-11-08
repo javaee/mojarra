@@ -51,14 +51,15 @@
 
 package com.sun.faces.facelets.tag.ui;
 
+import com.sun.faces.facelets.FaceletContextImplBase;
 import java.io.IOException;
 
 import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 
-import com.sun.faces.facelets.FaceletContext;
-import com.sun.faces.facelets.FaceletException;
+import javax.faces.webapp.pdl.facelets.FaceletContext;
+import javax.faces.webapp.pdl.facelets.FaceletException;
 import com.sun.faces.facelets.TemplateClient;
 import com.sun.faces.facelets.tag.TagAttribute;
 import com.sun.faces.facelets.tag.TagAttributeException;
@@ -95,8 +96,9 @@ public final class InsertHandler extends TagHandler implements TemplateClient {
      * @see com.sun.facelets.FaceletHandler#apply(com.sun.facelets.FaceletContext,
      *      javax.faces.component.UIComponent)
      */
-    public void apply(FaceletContext ctx, UIComponent parent)
+    public void apply(FaceletContext ctxObj, UIComponent parent)
             throws IOException, FacesException, FaceletException, ELException {
+        FaceletContextImplBase ctx = (FaceletContextImplBase) ctxObj;
         
         ctx.extendClient(this);
         boolean found = false;
