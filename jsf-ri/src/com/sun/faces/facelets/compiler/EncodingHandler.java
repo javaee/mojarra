@@ -57,9 +57,9 @@ import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 
-import com.sun.faces.facelets.FaceletContext;
-import com.sun.faces.facelets.FaceletException;
-import com.sun.faces.facelets.FaceletHandler;
+import javax.faces.webapp.pdl.facelets.FaceletContext;
+import javax.faces.webapp.pdl.facelets.FaceletException;
+import javax.faces.webapp.pdl.facelets.FaceletHandler;
 
 public class EncodingHandler implements FaceletHandler {
 

@@ -65,8 +65,8 @@ import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 
-import com.sun.faces.facelets.FaceletContext;
-import com.sun.faces.facelets.FaceletException;
+import javax.faces.webapp.pdl.facelets.FaceletContext;
+import javax.faces.webapp.pdl.facelets.FaceletException;
 import com.sun.faces.facelets.tag.TagAttribute;
 import com.sun.faces.facelets.tag.TagAttributeException;
 import com.sun.faces.facelets.tag.TagConfig;

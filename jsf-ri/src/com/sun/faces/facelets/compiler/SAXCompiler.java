@@ -73,8 +73,8 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.sun.faces.facelets.FaceletException;
-import com.sun.faces.facelets.FaceletHandler;
+import javax.faces.webapp.pdl.facelets.FaceletException;
+import javax.faces.webapp.pdl.facelets.FaceletHandler;
 import com.sun.faces.facelets.tag.Location;
 import com.sun.faces.facelets.tag.Tag;
 import com.sun.faces.facelets.tag.TagAttribute;

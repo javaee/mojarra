@@ -49,15 +49,15 @@
  * limitations under the License.
  */
 
-package com.sun.faces.facelets;
+package javax.faces.webapp.pdl.facelets;
 
 import javax.faces.FacesException;
 
 /**
- * An Exception from Facelet implementation
+ * <p class="changed_added_2_0">An Exception from Facelet
+ * implementation</p>
  * 
- * @author Jacob Hookom
- * @version $Id$
+ * @since 2.0
  */
 public class FaceletException extends FacesException {
 

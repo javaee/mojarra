@@ -72,8 +72,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.webapp.pdl.AttachedObjectHandler;
 
 import com.sun.faces.facelets.Facelet;
-import com.sun.faces.facelets.FaceletContext;
-import com.sun.faces.facelets.FaceletException;
+import javax.faces.webapp.pdl.facelets.FaceletContext;
+import javax.faces.webapp.pdl.facelets.FaceletException;
 import com.sun.faces.facelets.FaceletFactory;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
 import com.sun.faces.facelets.tag.TagAttribute;

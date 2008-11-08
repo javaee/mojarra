@@ -51,6 +51,7 @@
 
 package com.sun.faces.facelets.tag.ui;
 
+import com.sun.faces.facelets.FaceletContextImplBase;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -66,8 +67,8 @@ import javax.el.VariableMapper;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 
-import com.sun.faces.facelets.FaceletContext;
-import com.sun.faces.facelets.FaceletException;
+import javax.faces.webapp.pdl.facelets.FaceletContext;
+import javax.faces.webapp.pdl.facelets.FaceletException;
 import com.sun.faces.facelets.TemplateClient;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
 import com.sun.faces.facelets.tag.TagAttribute;
@@ -133,8 +134,10 @@ public final class CompositionHandler extends TagHandler implements
      * @see com.sun.facelets.FaceletHandler#apply(com.sun.facelets.FaceletContext,
      *      javax.faces.component.UIComponent)
      */
-    public void apply(FaceletContext ctx, UIComponent parent)
+    public void apply(FaceletContext ctxObj, UIComponent parent)
             throws IOException, FacesException, FaceletException, ELException {
+        FaceletContextImplBase ctx = (FaceletContextImplBase) ctxObj;
+
         if (this.template != null) {
             VariableMapper orig = ctx.getVariableMapper();
             if (this.params != null) {

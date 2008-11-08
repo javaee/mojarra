@@ -56,7 +56,7 @@ import java.lang.reflect.Method;
 import javax.el.MethodExpression;
 import javax.faces.el.MethodBinding;
 
-import com.sun.faces.facelets.FaceletContext;
+import javax.faces.webapp.pdl.facelets.FaceletContext;
 import com.sun.faces.facelets.el.LegacyMethodBinding;
 
 /**

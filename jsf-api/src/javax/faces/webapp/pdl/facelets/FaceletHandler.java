@@ -49,7 +49,7 @@
  * limitations under the License.
  */
 
-package com.sun.faces.facelets.tag;
+package javax.faces.webapp.pdl.facelets;
 
 import java.io.IOException;
 
@@ -57,35 +57,33 @@ import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 
-import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.FaceletException;
-import javax.faces.webapp.pdl.facelets.FaceletHandler;
-
 /**
- * A FaceletHandler that is derived of 1 or more, inner FaceletHandlers. This
- * class would be found if the next FaceletHandler is structually, a body
- * with multiple child elements as defined in XML.
- * 
- * @author Jacob Hookom
- * @version $Id$
+ * <p class="changed_added_2_0">A participant in UIComponent tree
+ * building.</p>
+ *
+ * @since 2.0
  */
-public final class CompositeFaceletHandler implements FaceletHandler {
+public interface FaceletHandler {
 
-    private final FaceletHandler[] children;
-    private final int len;
-    
-    public CompositeFaceletHandler(FaceletHandler[] children) {
-        this.children = children;
-        this.len = children.length;
-    }
-    
-    public void apply(FaceletContext ctx, UIComponent parent) throws IOException, FacesException, FaceletException, ELException {
-        for (int i = 0; i < len; i++) {
-            this.children[i].apply(ctx, parent);
-        }
-    }
-    
-    public FaceletHandler[] getHandlers() {
-        return this.children;
-    }
+    /**
+     * <p class="changed_added_2_0">Process changes on a particular
+     * UIComponent</p>
+     * 
+     * @param ctx the current FaceletContext instance for this execution
+     * @param parent the parent UIComponent to operate upon
+
+     * @throws IOException if unable to load <code>relativePath</code>
+
+     * @throws FaceletException if unable to parse the markup loaded from <code>relativePath</code>
+
+     * @throws FacesException if unable to create child <code>UIComponent</code> instances
+
+     * @throws ELException if any of the expressions in the markup
+     * loaded from <code>relativePath</code> fail
+
+     * @since 2.0
+
+     */
+    public void apply(FaceletContext ctx, UIComponent parent)
+            throws IOException, FacesException, FaceletException, ELException;
 }

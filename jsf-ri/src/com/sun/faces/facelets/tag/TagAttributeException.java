@@ -51,7 +51,7 @@
 
 package com.sun.faces.facelets.tag;
 
-import com.sun.faces.facelets.FaceletException;
+import javax.faces.webapp.pdl.facelets.FaceletException;
 
 /**
  * An Exception caused by a TagAttribute

@@ -56,7 +56,7 @@ import java.util.logging.Logger;
 
 import javax.faces.component.UIComponent;
 
-import com.sun.faces.facelets.FaceletContext;
+import javax.faces.webapp.pdl.facelets.FaceletContext;
 import com.sun.faces.facelets.el.LegacyValueBinding;
 import com.sun.faces.facelets.tag.TagAttribute;
 import com.sun.faces.facelets.tag.Metadata;

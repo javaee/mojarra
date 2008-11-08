@@ -50,7 +50,7 @@
  */
 package com.sun.faces.facelets.tag;
 
-import com.sun.faces.facelets.FaceletContext;
+import javax.faces.webapp.pdl.facelets.FaceletContext;
 
 /**
  * A mixin' interface that allows other code to identify FaceletHandlers

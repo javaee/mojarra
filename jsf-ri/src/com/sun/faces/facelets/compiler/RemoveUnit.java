@@ -51,7 +51,7 @@
 
 package com.sun.faces.facelets.compiler;
 
-import com.sun.faces.facelets.FaceletHandler;
+import javax.faces.webapp.pdl.facelets.FaceletHandler;
 
 /**
  * 

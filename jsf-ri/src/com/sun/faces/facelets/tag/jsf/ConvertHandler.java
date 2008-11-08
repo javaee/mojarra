@@ -61,8 +61,8 @@ import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
-import com.sun.faces.facelets.FaceletContext;
-import com.sun.faces.facelets.FaceletException;
+import javax.faces.webapp.pdl.facelets.FaceletContext;
+import javax.faces.webapp.pdl.facelets.FaceletException;
 import com.sun.faces.facelets.tag.MetaTagHandler;
 import com.sun.faces.facelets.tag.TagAttribute;
 import com.sun.faces.facelets.tag.TagConfig;

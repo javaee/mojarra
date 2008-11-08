@@ -51,6 +51,7 @@
 
 package com.sun.faces.facelets;
 
+import javax.faces.webapp.pdl.facelets.FaceletException;
 import java.io.IOException;
 
 import java.net.URL;

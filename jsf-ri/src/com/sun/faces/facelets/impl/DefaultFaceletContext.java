@@ -51,10 +51,11 @@
 
 package com.sun.faces.facelets.impl;
 
-import com.sun.faces.facelets.FaceletContext;
-import com.sun.faces.facelets.FaceletException;
+import javax.faces.webapp.pdl.facelets.FaceletContext;
+import javax.faces.webapp.pdl.facelets.FaceletException;
 import com.sun.faces.facelets.TemplateClient;
 import com.sun.faces.facelets.Facelet;
+import com.sun.faces.facelets.FaceletContextImplBase;
 import com.sun.faces.facelets.el.DefaultVariableMapper;
 
 import javax.el.*;
@@ -77,7 +78,7 @@ import java.util.*;
  * @version $Id: DefaultFaceletContext.java,v 1.4.4.3 2006/03/25 01:01:53 jhook
  *          Exp $
  */
-final class DefaultFaceletContext extends FaceletContext {
+final class DefaultFaceletContext extends FaceletContextImplBase {
 
     private final FacesContext faces;
 

@@ -54,7 +54,7 @@ package com.sun.faces.facelets.tag;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import com.sun.faces.facelets.FaceletContext;
+import javax.faces.webapp.pdl.facelets.FaceletContext;
 
 /**
  * 

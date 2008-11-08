@@ -49,7 +49,7 @@
  * limitations under the License.
  */
 
-package com.sun.faces.facelets;
+package javax.faces.webapp.pdl.facelets;
 
 import java.io.IOException;
 import java.net.URL;
@@ -64,10 +64,10 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 /**
- * Context representative of a single request from a Facelet
- * 
- * @author Jacob Hookom
- * @version $Id$
+ * <p class="changed_added_2_0">Context representative of a single
+ * request from a Facelet</p>
+ *
+ * @since 2.0
  */
 public abstract class FaceletContext extends ELContext {
     
@@ -77,114 +77,119 @@ public abstract class FaceletContext extends ELContext {
             "com.sun.faces.facelets.FACELET_CONTEXT";
 
     /**
-     * The current FacesContext bound to this "request"
+     * <p class="changed_added_2_0">The current FacesContext bound to
+     * this "request".  Must not be <code>null</code>.</p>
      * 
-     * @return cannot be null
+     * @since 2.0
      */
     public abstract FacesContext getFacesContext();
 
     /**
-     * Generate a unique ID for the passed String
+     * <p class="changed_added_2_0">Generate a unique ID for the passed
+     * String</p>
      * 
-     * @param base
-     * @return a unique ID given the passed base
+     * @param base the string from which to generate the ID.
+     *
+     * @since 2.0
      */
     public abstract String generateUniqueId(String base);
 
     /**
-     * The ExpressionFactory to use within the Facelet this context is executing
-     * upon.
+     * <p class="changed_added_2_0">The ExpressionFactory to use within
+     * the Facelet this context is executing upon.  Must not be
+     * <code>null</code>.</p>
      * 
-     * @return cannot be null
+     * @since 2.0
      */
+
     public abstract ExpressionFactory getExpressionFactory();
 
     /**
-     * Set the VariableMapper to use in EL evaluation/creation
+     * <p class="changed_added_2_0">Set the VariableMapper to use in EL
+     * evaluation/creation.</p>
      * 
-     * @param varMapper
+     * @param varMapper the new <code>VariableMapper</code>
+     *
+     * @since 2.0
      */
     public abstract void setVariableMapper(VariableMapper varMapper);
 
     /**
-     * Set the FunctionMapper to use in EL evaluation/creation
+     * <p class="changed_added_2_0">Set the FunctionMapper to use in EL
+     * evaluation/creation.</p>
      * 
-     * @param fnMapper
+     * @param fnMapper the new <code>FunctionMapper</code>
+     *
+     * @since 2.0
      */
     public abstract void setFunctionMapper(FunctionMapper fnMapper);
 
     /**
-     * Support method which is backed by the current VariableMapper
+     * <p class="changed_added_2_0">Support method which is backed by
+     * the current VariableMapper.</p>
      * 
-     * @param name
-     * @param value
+     * @param name the name of the attribute
+     * @param value the value of the attribute
+     *
+     * @since 2.0
      */
     public abstract void setAttribute(String name, Object value);
 
     /**
-     * Support method which is backed by the current VariableMapper
+     * <p class="changed_added_2_0">Return an attribute set by a
+     * previous call to {@link #setAttribute}.  Support method which is
+     * backed by the current VariableMapper</p>
      * 
-     * @param name
-     * @return an Object specified for that name
+     * @param name the name of the attribute to return.
+     * @since 2.0
      */
     public abstract Object getAttribute(String name);
 
     /**
-     * Include another Facelet defined at some path, relative to the executing
-     * context, not the current Facelet (same as include directive in JSP)
+     * <p class="changed_added_2_0">Include another Facelet defined at
+     * some path, relative to the executing context, not the current
+     * Facelet (same as include directive in JSP)</p>
      * 
-     * @param parent
-     * @param relativePath
-     * @throws IOException
-     * @throws FaceletException
-     * @throws FacesException
-     * @throws ELException
+     * @param parent the <code>UIComponent</code> that will be the
+     * parent of any components in the included facelet.
+     * @param relativePath the path of the resource containing the
+     * facelet markup, relative to the current markup
+
+     * @throws IOException if unable to load <code>relativePath</code>
+
+     * @throws FaceletException if unable to parse the markup loaded from <code>relativePath</code>
+
+     * @throws FacesException if unable to create child <code>UIComponent</code> instances
+
+     * @throws ELException if any of the expressions in the markup
+     * loaded from <code>relativePath</code> fail
+     *
+     * @since 2.0
      */
     public abstract void includeFacelet(UIComponent parent, String relativePath)
             throws IOException, FaceletException, FacesException, ELException;
 
     /**
-     * Include another Facelet defined at some path, absolute to this
-     * ClassLoader/OS
+     * <p class="changed_added_2_0">Include another Facelet defined at
+     * some path, absolute to this ClassLoader/OS</p>
      * 
-     * @param parent
-     * @param absolutePath
-     * @throws IOException
-     * @throws FaceletException
-     * @throws FacesException
-     * @throws ELException
+     * @param parent the <code>UIComponent</code> that will be the
+     * parent of any components in the included facelet.
+
+     * @param absolutePath the absolute path to the resource containing
+     * the facelet markup
+
+     * @throws IOException if unable to load <code>relativePath</code>
+
+     * @throws FaceletException if unable to parse the markup loaded from <code>relativePath</code>
+
+     * @throws FacesException if unable to create child <code>UIComponent</code> instances
+
+     * @throws ELException if any of the expressions in the markup
+     * loaded from <code>relativePath</code> fail
+
      */
     public abstract void includeFacelet(UIComponent parent, URL absolutePath)
             throws IOException, FaceletException, FacesException, ELException;
-    
-    /**
-     * Push the passed TemplateClient onto the stack for Definition Resolution
-     * @param client
-     * @see TemplateClient
-     */
-    public abstract void pushClient(TemplateClient client);
-    
-    /**
-     * Pop the last added TemplateClient
-     * @see TemplateClient
-     */
-    public abstract void popClient(TemplateClient client);
-    
-    
-    public abstract void extendClient(TemplateClient client);
-    
-    /**
-     * This method will walk through the TemplateClient stack to resolve and
-     * apply the definition for the passed name.
-     * If it's been resolved and applied, this method will return true.
-     * 
-     * @param parent the UIComponent to apply to
-     * @param name name or null of the definition you want to apply
-     * @return true if successfully applied, otherwise false
-     * @throws IOException
-     * @throws FaceletException
-     * @throws FacesException
-     * @throws ELException
-     */
-    public abstract boolean includeDefinition(UIComponent parent, String name) throws IOException, FaceletException, FacesException, ELException ;
+
 }

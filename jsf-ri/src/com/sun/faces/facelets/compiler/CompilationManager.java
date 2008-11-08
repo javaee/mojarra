@@ -57,7 +57,7 @@ import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sun.faces.facelets.FaceletHandler;
+import javax.faces.webapp.pdl.facelets.FaceletHandler;
 import com.sun.faces.facelets.tag.Tag;
 import com.sun.faces.facelets.tag.TagAttribute;
 import com.sun.faces.facelets.tag.TagAttributeException;
