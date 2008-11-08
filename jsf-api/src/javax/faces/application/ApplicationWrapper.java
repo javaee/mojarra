@@ -164,11 +164,6 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
     }
 
     @Override
-    public PageDeclarationLanguage getPageDeclarationLanguage() {
-        return getWrapped().getPageDeclarationLanguage();
-    }
-
-    @Override
     public ProjectStage getProjectStage() {
         return getWrapped().getProjectStage();
     }
@@ -196,11 +191,6 @@ public abstract class ApplicationWrapper extends Application implements FacesWra
     @Override
     public void removeELContextListener(ELContextListener listener) {
         getWrapped().removeELContextListener(listener);
-    }
-
-    @Override
-    public void setPageDeclarationLanguage(PageDeclarationLanguage pdl) {
-        getWrapped().setPageDeclarationLanguage(pdl);
     }
 
     @Override

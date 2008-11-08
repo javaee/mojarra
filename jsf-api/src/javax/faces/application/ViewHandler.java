@@ -48,16 +48,22 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.FacesException;
+import javax.faces.component.ActionSource2;
+import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIViewRoot;
+import javax.faces.event.MethodExpressionActionListener;
+import javax.faces.event.MethodExpressionValueChangeListener;
+import javax.faces.validator.MethodExpressionValidator;
 import javax.faces.webapp.pdl.ActionSource2AttachedObjectHandler;
 import javax.faces.webapp.pdl.ActionSource2AttachedObjectTarget;
 import javax.faces.webapp.pdl.AttachedObjectHandler;
 import javax.faces.webapp.pdl.AttachedObjectTarget;
 import javax.faces.webapp.pdl.EditableValueHolderAttachedObjectHandler;
 import javax.faces.webapp.pdl.EditableValueHolderAttachedObjectTarget;
+import javax.faces.webapp.pdl.PageDeclarationLanguage;
 import javax.faces.webapp.pdl.ValueHolderAttachedObjectHandler;
 import javax.faces.webapp.pdl.ValueHolderAttachedObjectTarget;
 
@@ -281,7 +287,24 @@ public abstract class ViewHandler {
      *  <code>path</code> is <code>null</code>.
      */
     public abstract String getResourceURL(FacesContext context, String path);
-    
+
+    /**
+     * <p class="changed_added_2_0">Return the {@link
+     * PageDeclarationLanguage} instance used for this <code>ViewHandler</code>
+     * instance.</p>
+     * 
+     * <p>An implementation is provided that will throw
+     * <code>UnsupportedOperationException</code>.  A Faces implementation
+     * compliant with version 2.0 and beyond of the specification must 
+     * override this method.</p>
+     * 
+
+     * @since 2.0
+     */
+    public PageDeclarationLanguage getPageDeclarationLanguage() {
+        throw new UnsupportedOperationException();
+    }
+
     /**
      *
      * <p>Initialize the view for the request processing lifecycle.</p>

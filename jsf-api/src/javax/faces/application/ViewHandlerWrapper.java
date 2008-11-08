@@ -50,6 +50,7 @@ import java.util.Locale;
 import java.io.IOException;
 import javax.faces.FacesWrapper;
 import javax.faces.webapp.pdl.AttachedObjectHandler;
+import javax.faces.webapp.pdl.PageDeclarationLanguage;
 
 /**
  * <p>Provides a simple implementation of {@link ViewHandler} that can
@@ -165,6 +166,20 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
 
         return getWrapped().getResourceURL(context, path);
     }
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ViewHandler#getPageDeclarationLanguage}
+     * on the wrapped {@link ViewHandler} object.</p>
+     *
+     * @since 2.0
+     */
+    @Override
+    public PageDeclarationLanguage getPageDeclarationLanguage() {
+        return getWrapped().getPageDeclarationLanguage();
+    }
+    
+    
     
     /**
      * <p>The default behavior of this method is to
