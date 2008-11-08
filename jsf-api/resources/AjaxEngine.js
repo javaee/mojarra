@@ -58,11 +58,11 @@
 javax.faces.Ajax.AjaxEngine = function() {
 
 
-    var req = {};        // Request Object
+    var req = {};                  // Request Object
     req.url = null;                // Request URL
     req.xmlReq = null;             // XMLHttpRequest Object
     req.async = true;              // Default - Asynchronous
-    req.parameters = {}; // Parameters For GET or POST
+    req.parameters = {};           // Parameters For GET or POST
     req.queryString = null;        // Encoded Data For GET or POST
     req.method = null;             // GET or POST
     req.responseTxt = null;        // Response Content (Text)

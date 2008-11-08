@@ -73,7 +73,7 @@ javax.faces.Ajax.Utils = function() {
     this.getForm = function(element) {
         if (element) {
             var form = this.$(element);
-            while (form && form.tagName && form.tagName.toLowerCase() != 'form') {
+            while (form && form.tagName && form.tagName.toLowerCase() !== 'form') {
                 if (form.form) {
                     return form.form;
                 }
@@ -205,7 +205,7 @@ this.elementReplace = function(d, tempTagName, src) {
             temp.innerHTML = src;
         }
 
-        result = temp
+        result = temp;
         parent.replaceChild(temp, d);
         return result;
     };
@@ -233,7 +233,7 @@ this.elementReplace = function(d, tempTagName, src) {
                         if (dupeObj[objInd] === true) {
                             retObj[objInd] = true;
                         } else {
-                            retObj[objInd] = false
+                            retObj[objInd] = false;
                         }
                     } // else igore functions
                 }
