@@ -59,8 +59,8 @@ import java.io.IOException;
 import javax.el.ELException;
 import javax.faces.FacesException;
 
-import com.sun.faces.facelets.FaceletContext;
-import com.sun.faces.facelets.FaceletException;
+import javax.faces.webapp.pdl.facelets.FaceletContext;
+import javax.faces.webapp.pdl.facelets.FaceletException;
 import com.sun.faces.facelets.tag.TagHandler;
 
 /**
