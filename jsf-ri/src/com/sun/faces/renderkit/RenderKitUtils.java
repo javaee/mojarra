@@ -58,6 +58,9 @@ import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
+import javax.faces.component.ActionSource;
+import javax.faces.component.AjaxRequest;
+import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentBase;
 import javax.faces.component.UISelectItems;
@@ -327,6 +330,71 @@ public class RenderKitUtils {
         }
     }
 
+    public static String buildAjaxCommand(AjaxRequest ajaxRequest) {
+        final String AJAX_REQUEST = "javax.faces.Ajax.ajaxRequest";
+        String ajaxCommand = AJAX_REQUEST + "(this, event";
+        if (ajaxRequest.getExecute() != null ||
+            ajaxRequest.getRender() != null) {
+            ajaxCommand += ", {";
+            if (ajaxRequest.getExecute() != null) {
+                String executeValues = ajaxRequest.getExecute().replace(' ', ',');
+                ajaxCommand += "execute:'" + executeValues + "'";
+                if (ajaxRequest.getRender() != null) {
+                    String renderValues = ajaxRequest.getRender().replace(' ', ',');
+                    ajaxCommand += ",render:'" + renderValues + "'";
+                }
+            } else if (ajaxRequest.getRender() != null) {
+                String renderValues = ajaxRequest.getRender().replace(' ', ',');
+                ajaxCommand += "render:'" + renderValues + "'";
+            }
+            ajaxCommand += "}";
+        }
+        ajaxCommand += "); return false;";
+        return ajaxCommand;
+    }
+
+    public static void renderAjaxCommand(ResponseWriter writer, UIComponent component) 
+        throws IOException {
+        AjaxRequest ajaxRequest = (AjaxRequest)component.getAttributes().get(AjaxRequest.AJAX_REQUEST);
+        if (null == ajaxRequest) {
+            return;
+        }
+        String event = null;
+        if (component instanceof EditableValueHolder) {
+            event = "onchange";
+        } else if (component instanceof ActionSource) {
+            event = "onclick";
+        }
+
+        String ajaxCommand = buildAjaxCommand(ajaxRequest);
+
+        StringBuffer sb = new StringBuffer(128);
+        String userEvent = (String) component.getAttributes().get(event);
+        boolean userSpecifiedEvent = (userEvent != null && !"".equals(userEvent));
+
+        // if user specified their own event value, we are going to
+        // wrap their js and the injected js each in a function and
+        // execute them in a choose statement, if the user didn't specify
+        // an event, the original logic executes unaffected
+        if (userSpecifiedEvent) {
+            sb.append("var a=function(){");
+            userEvent = userEvent.trim();
+            sb.append(userEvent);
+            if (userEvent.charAt(userEvent.length() - 1) != ';') {
+                sb.append(';');
+            }
+            sb.append("};var b=function(){");
+        }
+
+        sb.append(ajaxCommand);
+
+        // we need to finish wrapping the injected js then
+        if (userSpecifiedEvent) {
+            sb.append("};return (a()==false) ? false : b();");
+        }
+
+        writer.writeAttribute(event, sb.toString(), event);
+    }
 
     public static String prefixAttribute(final String attrName,
                                          final ResponseWriter writer) {

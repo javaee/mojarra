@@ -170,7 +170,6 @@ public class ApplicationImpl extends Application {
     private volatile VariableResolverImpl variableResolver = null;
     private volatile ViewHandler viewHandler = null;
     private volatile ResourceHandler resourceHandler;
-    private volatile PageDeclarationLanguage pdl;
     private volatile StateManager stateManager = null;
     private volatile ArrayList<Locale> supportedLocales = null;
     private volatile Locale defaultLocale = null;
@@ -567,27 +566,6 @@ public class ApplicationImpl extends Application {
 
     }
 
-
-    /**
-     * @see javax.faces.application.Application#getPageDeclarationLanguage()
-     * @return
-     */
-    @Override
-    public PageDeclarationLanguage getPageDeclarationLanguage() {
-        return pdl;
-    }
-
-
-    /**
-     * @see javax.faces.application.Application#setPageDeclarationLanguage(javax.faces.webapp.pdl.PageDeclarationLanguage)
-     * @param pdl
-     */
-    @Override
-    public void setPageDeclarationLanguage(PageDeclarationLanguage pdl) {
-        this.pdl = pdl;
-    }
-    
-    
     /**
      * @see javax.faces.application.Application#getResourceHandler()
      */
@@ -882,7 +860,7 @@ public class ApplicationImpl extends Application {
         // overriden methods
         Application app = context.getApplication();
 
-        PageDeclarationLanguage pdl = app.getPageDeclarationLanguage();
+        PageDeclarationLanguage pdl = app.getViewHandler().getPageDeclarationLanguage();
         BeanInfo componentMetadata = pdl.getComponentMetadata(context,
                                                               componentResource);
         if (null != componentMetadata){

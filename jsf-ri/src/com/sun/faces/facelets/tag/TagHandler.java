@@ -55,7 +55,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.sun.faces.facelets.FaceletHandler;
+import javax.faces.webapp.pdl.facelets.FaceletHandler;
 
 /**
  * Foundation class for FaceletHandlers associated with markup in a Facelet

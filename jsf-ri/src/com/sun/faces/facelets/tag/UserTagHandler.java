@@ -51,6 +51,7 @@
 
 package com.sun.faces.facelets.tag;
 
+import com.sun.faces.facelets.FaceletContextImplBase;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
@@ -63,8 +64,8 @@ import javax.el.VariableMapper;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 
-import com.sun.faces.facelets.FaceletContext;
-import com.sun.faces.facelets.FaceletException;
+import javax.faces.webapp.pdl.facelets.FaceletContext;
+import javax.faces.webapp.pdl.facelets.FaceletException;
 import com.sun.faces.facelets.TemplateClient;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
 import com.sun.faces.facelets.tag.ui.DefineHandler;
@@ -114,8 +115,9 @@ final class UserTagHandler extends TagHandler implements TemplateClient {
      * @see VariableMapper
      * @see com.sun.faces.facelets.FaceletHandler#apply(com.sun.faces.facelets.FaceletContext, javax.faces.component.UIComponent)
      */
-    public void apply(FaceletContext ctx, UIComponent parent)
+    public void apply(FaceletContext ctxObj, UIComponent parent)
             throws IOException, FacesException, FaceletException, ELException {
+        FaceletContextImplBase ctx = (FaceletContextImplBase) ctxObj;
         VariableMapper orig = ctx.getVariableMapper();
         
         // setup a variable map

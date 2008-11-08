@@ -127,6 +127,9 @@ public class TextRenderer extends HtmlBasicInputRenderer {
                                                     INPUT_ATTRIBUTES);
             RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
+            RenderKitUtils.renderAjaxCommand(writer, component);
+
+
             writer.endElement("input");
 
         } else if (isOutput = (component instanceof UIOutput)) {

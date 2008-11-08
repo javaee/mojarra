@@ -56,7 +56,7 @@ import javax.faces.component.ActionSource2;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.MethodExpressionActionListener;
 
-import com.sun.faces.facelets.FaceletContext;
+import javax.faces.webapp.pdl.facelets.FaceletContext;
 import com.sun.faces.facelets.el.LegacyMethodBinding;
 import com.sun.faces.facelets.tag.TagAttribute;
 import com.sun.faces.facelets.tag.Metadata;

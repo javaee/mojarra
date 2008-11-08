@@ -51,7 +51,7 @@
 
 package com.sun.faces.facelets.tag;
 
-import com.sun.faces.facelets.FaceletContext;
+import javax.faces.webapp.pdl.facelets.FaceletContext;
 
 /**
  * External information on how to wire dynamic or literal state to the

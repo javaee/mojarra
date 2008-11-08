@@ -51,7 +51,7 @@
 
 package com.sun.faces.facelets.tag;
 
-import com.sun.faces.facelets.FaceletHandler;
+import javax.faces.webapp.pdl.facelets.FaceletHandler;
 
 /**
  * Passed to the constructor of TagHandler, it defines the document definition

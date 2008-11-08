@@ -61,8 +61,8 @@ import java.util.Map;
 import javax.el.ELException;
 import javax.faces.FacesException;
 
-import com.sun.faces.facelets.FaceletException;
-import com.sun.faces.facelets.FaceletHandler;
+import javax.faces.webapp.pdl.facelets.FaceletException;
+import javax.faces.webapp.pdl.facelets.FaceletHandler;
 import com.sun.faces.facelets.tag.jsf.ComponentConfig;
 import com.sun.faces.facelets.tag.jsf.ComponentHandler;
 import com.sun.faces.facelets.tag.jsf.ConvertHandler;
