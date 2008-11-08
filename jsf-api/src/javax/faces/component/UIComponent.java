@@ -1339,12 +1339,7 @@ private void doFind(FacesContext context, String clientId) {
      *
      * <p class="changed_added_2_0">Call {@link
      * UIComponent#popComponentFromEL}. before returning regardless of the value
-     *  of the <code>rendered</code> property.  Call 
-     * {@link javax.faces.application.Application#publishEvent}, passing
-     * {@link javax.faces.event.AfterRenderEvent}<code>.class</code> as the
-     * first argument and the component instance that was rendered as the
-     * second argument.</p></li>
-
+     *  of the <code>rendered</code> property.</p>
      *
      * @param context {@link FacesContext} for the response we are creating
      *

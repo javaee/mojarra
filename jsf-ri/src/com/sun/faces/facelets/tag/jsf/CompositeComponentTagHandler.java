@@ -65,11 +65,11 @@ import javax.el.ValueExpression;
 import javax.el.VariableMapper;
 import javax.faces.FacesException;
 import javax.faces.application.Resource;
+import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
 import javax.faces.context.FacesContext;
 import javax.faces.webapp.pdl.AttachedObjectHandler;
-import javax.faces.webapp.pdl.PDLUtils;
 
 import com.sun.faces.facelets.Facelet;
 import com.sun.faces.facelets.FaceletContext;
@@ -79,6 +79,7 @@ import com.sun.faces.facelets.el.VariableMapperWrapper;
 import com.sun.faces.facelets.tag.TagAttribute;
 import com.sun.faces.facelets.tag.TagAttributes;
 import com.sun.faces.util.RequestStateManager;
+import javax.faces.application.ViewHandler;
 
 /**
  * RELEASE_PENDING (rlubke,driscoll) document
@@ -147,9 +148,10 @@ public class CompositeComponentTagHandler extends ComponentHandler {
         // Allow any PDL declared attached objects to be retargeted
         if (ComponentSupport.isNew(c)) {
             FacesContext context = ctx.getFacesContext();
-            PDLUtils.retargetAttachedObjects(context, c,
+            ViewHandler viewHandler = context.getApplication().getViewHandler();
+            viewHandler.retargetAttachedObjects(context, c,
                     getAttachedObjectHandlers(c, false));
-            PDLUtils.retargetMethodExpressions(context, c);
+            viewHandler.retargetMethodExpressions(context, c);
         }
 
     }

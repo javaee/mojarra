@@ -36,8 +36,10 @@
 
 package com.sun.faces.context;
 
+import java.util.Map;
 import javax.faces.context.ExceptionHandler;
 import javax.faces.context.ExceptionHandlerFactory;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -45,12 +47,16 @@ import javax.faces.context.ExceptionHandlerFactory;
  */
 public class ExceptionHandlerFactoryImpl extends ExceptionHandlerFactory {
 
-    private ExceptionHandler exceptionHandler;
+    private static final String FACES_CONTEXT_ATTR_NAME = "com.sun.faces.context.ExceptionHandlerImpl";
 
     @Override
-    public ExceptionHandler getExceptionHandler() {
-        if (null == exceptionHandler) {
+    public ExceptionHandler getExceptionHandler(FacesContext context) {
+        ExceptionHandler exceptionHandler = null;
+        Map<Object, Object> attrs = context.getAttributes();
+        if (null == (exceptionHandler = 
+                     (ExceptionHandler)attrs.get(FACES_CONTEXT_ATTR_NAME))) {
             exceptionHandler = new ExceptionHandlerImpl();
+            attrs.put(FACES_CONTEXT_ATTR_NAME, exceptionHandler);
         }
         return exceptionHandler;
     }

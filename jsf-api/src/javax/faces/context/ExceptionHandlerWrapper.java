@@ -43,38 +43,104 @@ import javax.faces.event.ExceptionEvent;
 import javax.faces.event.SystemEvent;
 
 /**
+ * RELEASE_PENDING (edburns,rogerk) Review all docs
+ * /**
+ * <p>Provides a simple implementation of {@link ExceptionHandler} that can
+ * be subclassed by developers wishing to provide specialized behavior
+ * to an existing {@link ExceptionHandler} instance.  The default
+ * implementation of all methods is to call through to the wrapped
+ * {@link ExceptionHandler} instance.</p>
  *
- * @author edburns
+ * <p>Usage: extend this class and override {@link #getWrapped} to
+ * return the instance we are wrapping.</p>
+ *
+ * @since 2.0
  */
 public abstract class ExceptionHandlerWrapper extends ExceptionHandler implements FacesWrapper<ExceptionHandler> {
 
-    @Override
-    public String getDebugViewId() {
-        return getWrapped().getDebugViewId();
-    }
 
-    @Override
+    // ----------------------------------------------- Methods from FacesWrapper
+
+
+    /**
+     * @return the wrapped {@link ExceptionHandler} instance
+     * @see javax.faces.FacesWrapper#getWrapped() 
+     */
+    public abstract ExceptionHandler getWrapped();
+
+
+    // ------------------------------------------- Methods from ExceptionHandler
+
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ExceptionHandler#getHandledExceptionEvent()}
+     * on the wrapped {@link ExceptionHandler} object.</p>
+     *
+     * @see ExceptionHandler#getHandledExceptionEvent()
+     */
     public ExceptionEvent getHandledExceptionEvent() {
         return getWrapped().getHandledExceptionEvent();
     }
 
-    @Override
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link javax.faces.context.ExceptionHandler#handle()}
+     * on the wrapped {@link ExceptionHandler} object.</p>
+     *
+     * @see javax.faces.context.ExceptionHandler#handle()
+     */
     public void handle() throws FacesException {
         getWrapped().handle();
     }
 
-    @Override
-    public boolean isListenerForSource(Object arg0) {
-        return getWrapped().isListenerForSource(arg0);
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link javax.faces.context.ExceptionHandler#isListenerForSource(Object)}
+     * on the wrapped {@link ExceptionHandler} object.</p>
+     *
+     * @see javax.faces.context.ExceptionHandler#isListenerForSource(Object) ()
+     */
+    public boolean isListenerForSource(Object source) {
+        return getWrapped().isListenerForSource(source);
     }
 
-    public void processEvent(SystemEvent arg0) throws AbortProcessingException {
-        getWrapped().processEvent(arg0);
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link javax.faces.context.ExceptionHandler#processEvent(javax.faces.event.SystemEvent)}
+     * on the wrapped {@link ExceptionHandler} object.</p>
+     *
+     * @see javax.faces.context.ExceptionHandler#processEvent(javax.faces.event.SystemEvent)
+     */
+    public void processEvent(SystemEvent event) throws AbortProcessingException {
+        getWrapped().processEvent(event);
     }
 
 
-    public abstract ExceptionHandler getWrapped();
-    
-    
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link javax.faces.context.ExceptionHandler#getRootCause(Throwable)}
+     * on the wrapped {@link ExceptionHandler} object.</p>
+     *
+     * @see javax.faces.context.ExceptionHandler#getRootCause(Throwable)
+     */
+    public Throwable getRootCause(Throwable t) {
+        return getWrapped().getRootCause(t);
+    }
+
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ExceptionHandler#getUnhandledExceptionEvents()}
+     * on the wrapped {@link ExceptionHandler} object.</p>
+     *
+     * @see ExceptionHandler#getUnhandledExceptionEvents()
+     */
+    public Iterable<ExceptionEvent> getUnhandledExceptionEvents() {
+        return getWrapped().getUnhandledExceptionEvents();
+    }
 
 }

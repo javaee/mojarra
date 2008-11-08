@@ -62,6 +62,15 @@ import javax.faces.lifecycle.Lifecycle;
  *   FacesContextFactory factory = (FacesContextFactory)
  *    FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
  * </pre>
+ *
+ * <div class="changed_added_2_0">
+
+ * <p>Before returning the newly created <code>FacesContext</code>, the
+ * implementation must call {@link FacesContext#setExceptionHandler},
+ * passing the {@link ExceptionHandler} returned from {@link
+ * ExceptionHandlerFactory#getExceptionHandler}.</p>
+
+ * </div>
  */
 
 public abstract class FacesContextFactory implements FacesWrapper<FacesContextFactory> {

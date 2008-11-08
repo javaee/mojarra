@@ -60,6 +60,18 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
 
     private ExceptionHandlerFactory exceptionHandlerFactory;
 
+
+    // ------------------------------------------------------------ Constructors
+
+
+    public FacesContextFactoryImpl() {
+
+        exceptionHandlerFactory = (ExceptionHandlerFactory)
+              FactoryFinder.getFactory(FactoryFinder.EXCEPTION_HANDLER_FACTORY);
+
+    }
+
+
     // ---------------------------------------- Methods from FacesContextFactory
 
 
@@ -79,19 +91,16 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
                 MessageUtils.getExceptionMessageString(
                     MessageUtils.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
         }
-        FacesContext result = new FacesContextImpl(
-              new ExternalContextImpl((ServletContext) sc,
-                                      (ServletRequest) request,
-                                      (ServletResponse) response),
-              lifecycle);
-        
-        if (null == exceptionHandlerFactory) {
-            exceptionHandlerFactory = (ExceptionHandlerFactory)
-                    FactoryFinder.getFactory(FactoryFinder.EXCEPTION_HANDLER_FACTORY);
-        }
-        result.setExceptionHandler(exceptionHandlerFactory.getExceptionHandler());
-        
-        return result;
+        FacesContext ctx =
+              new FacesContextImpl(
+                  new ExternalContextImpl((ServletContext) sc,
+                                          (ServletRequest) request,
+                                          (ServletResponse) response),
+                  lifecycle);
+
+        ctx.setExceptionHandler(exceptionHandlerFactory.getExceptionHandler(ctx));
+
+        return ctx;
         
     }
 

@@ -54,6 +54,8 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.util.Util;
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.application.resource.ResourceManager;
 import org.apache.cactus.WebRequest;
 import org.apache.cactus.WebResponse;
 
@@ -503,6 +505,8 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 
         WebConfiguration config = WebConfiguration.getInstance();
         config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.CompressableMimeTypes, "image/gif");
+        ApplicationAssociate associate = ApplicationAssociate.getInstance(getFacesContext().getExternalContext());
+        associate.setResourceManager(new ResourceManager(associate.getResourceCache()));
         ResourceHandler handler = new ResourceHandlerImpl();
         HttpServletResponse response = (HttpServletResponse) getFacesContext().getExternalContext().getResponse();
         TestResponseWrapper wrapper = new TestResponseWrapper(response);
@@ -534,6 +538,8 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 
         WebConfiguration config = WebConfiguration.getInstance();
         config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.CompressableMimeTypes, "image/gif");
+        ApplicationAssociate associate = ApplicationAssociate.getInstance(getFacesContext().getExternalContext());
+        associate.setResourceManager(new ResourceManager(associate.getResourceCache()));
         ResourceHandler handler = new ResourceHandlerImpl();
         HttpServletResponse response = (HttpServletResponse) getFacesContext()
               .getExternalContext().getResponse();
@@ -565,6 +571,8 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 
         WebConfiguration config = WebConfiguration.getInstance();
         config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.CompressableMimeTypes, "image/gif");
+        ApplicationAssociate associate = ApplicationAssociate.getInstance(getFacesContext().getExternalContext());
+        associate.setResourceManager(new ResourceManager(associate.getResourceCache()));
         ResourceHandler handler = new ResourceHandlerImpl();
         HttpServletResponse response = (HttpServletResponse) getFacesContext().getExternalContext().getResponse();
         TestResponseWrapper wrapper = new TestResponseWrapper(response);
@@ -596,6 +604,8 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 
         WebConfiguration config = WebConfiguration.getInstance();
         config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.CompressableMimeTypes, "image/gif");
+        ApplicationAssociate associate = ApplicationAssociate.getInstance(getFacesContext().getExternalContext());
+        associate.setResourceManager(new ResourceManager(associate.getResourceCache()));
         ResourceHandler handler = new ResourceHandlerImpl();
         HttpServletResponse response = (HttpServletResponse) getFacesContext()
               .getExternalContext().getResponse();
@@ -629,6 +639,8 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 
         WebConfiguration config = WebConfiguration.getInstance();
         config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.CompressableMimeTypes, "image/gif");
+        ApplicationAssociate associate = ApplicationAssociate.getInstance(getFacesContext().getExternalContext());
+        associate.setResourceManager(new ResourceManager(associate.getResourceCache()));
         ResourceHandler handler = new ResourceHandlerImpl();
         HttpServletResponse response = (HttpServletResponse) getFacesContext().getExternalContext().getResponse();
         TestResponseWrapper wrapper = new TestResponseWrapper(response);
@@ -662,6 +674,8 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 
         WebConfiguration config = WebConfiguration.getInstance();
         config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.CompressableMimeTypes, "image/gif");
+        ApplicationAssociate associate = ApplicationAssociate.getInstance(getFacesContext().getExternalContext());
+        associate.setResourceManager(new ResourceManager(associate.getResourceCache()));
         ResourceHandler handler = new ResourceHandlerImpl();
         HttpServletResponse response = (HttpServletResponse) getFacesContext().getExternalContext().getResponse();
         TestResponseWrapper wrapper = new TestResponseWrapper(response);
@@ -695,6 +709,8 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 
         WebConfiguration config = WebConfiguration.getInstance();
         config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.CompressableMimeTypes, "image/gif");
+        ApplicationAssociate associate = ApplicationAssociate.getInstance(getFacesContext().getExternalContext());
+        associate.setResourceManager(new ResourceManager(associate.getResourceCache()));
         ResourceHandler handler = new ResourceHandlerImpl();
         HttpServletResponse response = (HttpServletResponse) getFacesContext().getExternalContext().getResponse();
         TestResponseWrapper wrapper = new TestResponseWrapper(response);
@@ -726,6 +742,8 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
 
         WebConfiguration config = WebConfiguration.getInstance();
         config.overrideContextInitParameter(WebConfiguration.WebContextInitParameter.CompressableMimeTypes, "image/gif");
+        ApplicationAssociate associate = ApplicationAssociate.getInstance(getFacesContext().getExternalContext());
+        associate.setResourceManager(new ResourceManager(associate.getResourceCache()));
         ResourceHandler handler = new ResourceHandlerImpl();
         HttpServletResponse response = (HttpServletResponse) getFacesContext().getExternalContext().getResponse();
         TestResponseWrapper wrapper = new TestResponseWrapper(response);

@@ -115,13 +115,13 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         if (value != null) {
             label = value.toString();
         }
-        
+
         /*
          * If we have any parameters, and the button type is submit, then
          * render Javascript to use later.
          */
         Param params[] = getParamList(component);
-        if (!Arrays.equals(params,EMPTY_PARAMS) 
+        if (!Arrays.equals(params,EMPTY_PARAMS)
                 && type.equals("submit")) {
             if (!RenderKitUtils.hasScriptBeenRendered(context)) {
                 RenderKitUtils
@@ -131,9 +131,9 @@ public class ButtonRenderer extends HtmlBasicRenderer {
                 RenderKitUtils.setScriptAsRendered(context);
             }
         }
-        
 
-        
+
+
         String imageSrc = (String) component.getAttributes().get("image");
         writer.startElement("input", component);
         writeIdAttributeIfNecessary(context, writer, component);
@@ -162,14 +162,11 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         /*
          * If we have any parameters, and the button type is submit, then
          * use Javascript to add these parameters in onclick,
-         * just like CommandLink.
+         * just like CommandLink.  Otherwise, render the onclick unchanged, if present.
          */
-        if (!Arrays.equals(params,EMPTY_PARAMS) 
-                && type.equals("submit")) {
-            renderOnClick(context, component);
-        }
-        
-        writer.endElement("input");        
+        renderOnClick(context, component, (!Arrays.equals(params,EMPTY_PARAMS) && type.equals("submit")));
+
+        writer.endElement("input");
 
     }
 
@@ -212,7 +209,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
      */
     private static boolean wasClicked(FacesContext context,
                                       UIComponent component) {
-        
+
         // Was our command the one that caused this submission?
         // we don' have to worry about getting the value from request parameter
         // because we just need to know if this command caused the submission. We
@@ -268,7 +265,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
      * Note that much of this code is shared with CommandLinkRenderer.renderAsActive
      * RELEASE_PENDING: Consolidate this code into a utility method, if possible.
      */
-    private void renderOnClick(FacesContext context, UIComponent command)
+    private void renderOnClick(FacesContext context, UIComponent command, boolean usejs)
           throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
@@ -283,35 +280,40 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         boolean userSpecifiedOnclick =
               (userOnclick != null && !"".equals(userOnclick));
 
-        // if user specified their own onclick value, we are going to
-        // wrap their js and the injected js each in a function and
-        // execute them in a choose statement, if the user didn't specify
-        // an onclick, the original logic executes unaffected
-        if (userSpecifiedOnclick) {
-            sb.append("var a=function(){");
-            userOnclick = userOnclick.trim();
-            sb.append(userOnclick);
-            if (userOnclick.charAt(userOnclick.length() - 1) != ';') {
-                sb.append(';');
+        if (usejs) {
+            // if user specified their own onclick value, we are going to
+            // wrap their js and the injected js each in a function and
+            // execute them in a choose statement, if the user didn't specify
+            // an onclick, the original logic executes unaffected
+            if (userSpecifiedOnclick) {
+                sb.append("var a=function(){");
+                userOnclick = userOnclick.trim();
+                sb.append(userOnclick);
+                if (userOnclick.charAt(userOnclick.length() - 1) != ';') {
+                    sb.append(';');
+                }
+                sb.append("};var b=function(){");
             }
-            sb.append("};var b=function(){");
+
+            Param[] params = getParamList(command);
+            String commandClientId = command.getClientId(context);
+
+            sb.append(RenderKitUtils.getCommandOnClickScript(formClientId,
+                                                             commandClientId,
+                                                             "",
+                                                             params));
+
+            // we need to finish wrapping the injected js then
+            if (userSpecifiedOnclick) {
+                sb.append("};return (a()==false) ? false : b();");
+            }
+          } else if (userSpecifiedOnclick) { // user onclick w/o wrap
+            sb.append(userOnclick);
         }
-
-        Param[] params = getParamList(command);
-        String commandClientId = command.getClientId(context);
-
-        sb.append(RenderKitUtils.getCommandOnClickScript(formClientId,
-                                                          commandClientId,
-                                                          "",
-                                                          params));
-
-        // we need to finish wrapping the injected js then
-        if (userSpecifiedOnclick) {
-            sb.append("};return (a()==false) ? false : b();");
-        }
-        
-        writer.writeAttribute("onclick", sb.toString(), "onclick");
-        writer.flush();
+            // Only write the attribute if there's something to write
+            if (usejs || userSpecifiedOnclick) {
+                writer.writeAttribute("onclick", sb.toString(), "onclick");
+            }
     }
-      
+
 } // end of class ButtonRenderer

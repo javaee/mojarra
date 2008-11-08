@@ -43,35 +43,56 @@ import javax.faces.event.ExceptionEvent;
 import javax.faces.event.SystemEvent;
 
 /**
- *
- * @author edburns
+ * The default implementation of {@link ExceptionHandler}.
  */
 public class ExceptionHandlerImpl extends ExceptionHandler {
 
-    @Override
-    public String getDebugViewId() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 
-    @Override
+    /**
+     * @see ExceptionHandler@getHandledExceptionEvent()
+     */
     public ExceptionEvent getHandledExceptionEvent() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
+
+    /**
+     * @see javax.faces.context.ExceptionHandler#handle()
+     */
     public void handle() throws FacesException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
-    public boolean isListenerForSource(Object arg0) {
+
+    /**
+     * @see javax.faces.context.ExceptionHandler#isListenerForSource(Object)
+     */
+    public boolean isListenerForSource(Object source) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
-    public void processEvent(SystemEvent arg0) throws AbortProcessingException {
+
+    /**
+     * @see javax.faces.context.ExceptionHandler#processEvent(javax.faces.event.SystemEvent)
+     */
+    public void processEvent(SystemEvent event) throws AbortProcessingException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-    
+
+
+    /**
+     * @see ExceptionHandler#getRootCause(Throwable)
+     */
+    public Throwable getRootCause(Throwable t) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+    /**
+     * @see javax.faces.context.ExceptionHandler#getUnhandledExceptionEvents()
+     */
+    public Iterable<ExceptionEvent> getUnhandledExceptionEvents() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
 }
