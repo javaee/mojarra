@@ -74,9 +74,9 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.facelets.Facelet;
-import com.sun.faces.facelets.FaceletContext;
-import com.sun.faces.facelets.FaceletException;
-import com.sun.faces.facelets.FaceletHandler;
+import javax.faces.webapp.pdl.facelets.FaceletContext;
+import javax.faces.webapp.pdl.facelets.FaceletException;
+import javax.faces.webapp.pdl.facelets.FaceletHandler;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 
 /**
