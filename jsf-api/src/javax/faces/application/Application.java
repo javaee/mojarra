@@ -912,7 +912,7 @@ public abstract class Application {
 
 	  <li><p>Obtain a reference to the {@link
 	  PageDeclarationLanguage} for this <code>Application</code>
-	  instance by calling {@link #getPageDeclarationLanguage}.
+	  instance by calling {@link ViewHandler#getPageDeclarationLanguage}.
 	  </p></li>
 
 
