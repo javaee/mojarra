@@ -314,57 +314,6 @@ public abstract class Application {
         
     }
     
-    /**
-     * <p class="changed_added_2_0">Set the implementation of 
-     * {@link PageDeclarationLanguage} to be used in this application instance.
-     * </p>
-
-     * <p class="changed_added_2_0">A default implementation is provided
-     * that throws <code>UnsupportedOperationException</code> so that
-     * users that decorate <code>Application</code> can continue to
-     * function</p>.
-
-     *
-     * RELEASE_PENDING (edburns,rogerK)
-     *   - NPE if pdl is null, correct?
-     *   - can this be changed during runtime or should it have similar
-     *     restrictions as state manager or ViewHandler?
-     * 
-     * @since 2.0
-     * 
-     */
-    public void setPageDeclarationLanguage(PageDeclarationLanguage pdl) {
-        
-        if (defaultApplication != null) {
-            defaultApplication.setPageDeclarationLanguage(pdl);
-        } else {
-            throw new UnsupportedOperationException();
-        }
-        
-    }
-    
-    /**
-     * <p class="changed_added_2_0">Return the {@link
-     * PageDeclarationLanguage} instance used for the application
-     * instance.</p>
-
-     * <p class="changed_added_2_0">A default implementation is provided
-     * that throws <code>UnsupportedOperationException</code> so that
-     * users that decorate <code>Application</code> can continue to
-     * function</p>.
-     * 
-     * @since 2.0
-     */
-    public PageDeclarationLanguage getPageDeclarationLanguage() {
-
-        if (defaultApplication != null) {
-            return defaultApplication.getPageDeclarationLanguage();
-        }
-
-        throw new UnsupportedOperationException();
-        
-    }
-
 
     /**
      * <p>Return a {@link PropertyResolver} instance that wraps the
@@ -963,7 +912,7 @@ public abstract class Application {
 
 	  <li><p>Obtain a reference to the {@link
 	  PageDeclarationLanguage} for this <code>Application</code>
-	  instance by calling {@link #getPageDeclarationLanguage}.
+	  instance by calling {@link ViewHandler#getPageDeclarationLanguage}.
 	  </p></li>
 
 

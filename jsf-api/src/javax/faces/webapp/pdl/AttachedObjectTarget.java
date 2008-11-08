@@ -82,8 +82,8 @@ public interface AttachedObjectTarget {
      * object</em> exposed by the <em>composite component author</em>
      * may point at multiple <code>UIComponent</code> instances within
      * the composite component.  This method is used by the {@link
-     * PDLUtils#retargetAttachedObjects} method to take the appropriate
-     * action on the attached object.</p>
+     * javax.faces.application.ViewHandler#retargetAttachedObjects}
+     * method to take the appropriate action on the attached object.</p>
      */
     public List<UIComponent> getTargets();
 

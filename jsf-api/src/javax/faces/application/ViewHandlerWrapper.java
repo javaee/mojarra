@@ -40,6 +40,8 @@
 
 package javax.faces.application;
 
+import java.util.List;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIViewRoot;
 import javax.faces.FacesException;
@@ -47,6 +49,8 @@ import javax.faces.FacesException;
 import java.util.Locale;
 import java.io.IOException;
 import javax.faces.FacesWrapper;
+import javax.faces.webapp.pdl.AttachedObjectHandler;
+import javax.faces.webapp.pdl.PageDeclarationLanguage;
 
 /**
  * <p>Provides a simple implementation of {@link ViewHandler} that can
@@ -162,6 +166,20 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
 
         return getWrapped().getResourceURL(context, path);
     }
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ViewHandler#getPageDeclarationLanguage}
+     * on the wrapped {@link ViewHandler} object.</p>
+     *
+     * @since 2.0
+     */
+    @Override
+    public PageDeclarationLanguage getPageDeclarationLanguage() {
+        return getWrapped().getPageDeclarationLanguage();
+    }
+    
+    
     
     /**
      * <p>The default behavior of this method is to
@@ -205,6 +223,35 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
         return getWrapped().restoreView(context, viewId);
 
     }
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ViewHandler#retargetAttachedObjects}
+     * on the wrapped {@link ViewHandler} object.</p>
+     *
+     * @since 2.0
+     */
+
+    @Override
+    public void retargetAttachedObjects(FacesContext context, UIComponent topLevelComponent, List<AttachedObjectHandler> handlers) {
+        getWrapped().retargetAttachedObjects(context, topLevelComponent, handlers);
+    }
+
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ViewHandler#retargetMethodExpressions}
+     * on the wrapped {@link ViewHandler} object.</p>
+     *
+     * @since 2.0
+     */
+
+    @Override
+    public void retargetMethodExpressions(FacesContext context, UIComponent topLevelComponent) {
+        getWrapped().retargetMethodExpressions(context, topLevelComponent);
+    }
+    
+    
+    
 
     /**
      * <p>The default behavior of this method is to
