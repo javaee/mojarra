@@ -64,8 +64,8 @@ import javax.el.ExpressionFactory;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 
-import com.sun.faces.facelets.FaceletException;
-import com.sun.faces.facelets.FaceletHandler;
+import javax.faces.webapp.pdl.facelets.FaceletException;
+import javax.faces.webapp.pdl.facelets.FaceletHandler;
 import com.sun.faces.facelets.tag.CompositeTagDecorator;
 import com.sun.faces.facelets.tag.CompositeTagLibrary;
 import com.sun.faces.facelets.tag.TagDecorator;

@@ -57,7 +57,7 @@ import java.util.Stack;
 
 import javax.el.ELException;
 
-import com.sun.faces.facelets.FaceletHandler;
+import javax.faces.webapp.pdl.facelets.FaceletHandler;
 import com.sun.faces.facelets.el.ELText;
 import com.sun.faces.facelets.tag.CompositeFaceletHandler;
 import com.sun.faces.facelets.tag.Tag;

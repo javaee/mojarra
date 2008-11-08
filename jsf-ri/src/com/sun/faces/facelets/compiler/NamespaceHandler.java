@@ -60,9 +60,9 @@ import javax.el.FunctionMapper;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 
-import com.sun.faces.facelets.FaceletContext;
-import com.sun.faces.facelets.FaceletException;
-import com.sun.faces.facelets.FaceletHandler;
+import javax.faces.webapp.pdl.facelets.FaceletContext;
+import javax.faces.webapp.pdl.facelets.FaceletException;
+import javax.faces.webapp.pdl.facelets.FaceletHandler;
 import com.sun.faces.facelets.el.CompositeFunctionMapper;
 import com.sun.faces.facelets.tag.TagLibrary;
 
