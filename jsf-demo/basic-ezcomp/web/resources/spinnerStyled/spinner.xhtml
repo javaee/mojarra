@@ -62,8 +62,8 @@
     </script>
     <h:inputText id="number" value="#{compositeComponent.attrs.value}" styleClass="spinnerText"/>
     <h:panelGroup id="spinnerButtonPanel" styleClass="spinnerButtons">
-        <h:commandButton id="forward"  value="&gt;"  onclick="return changeNumber(1);" styleClass="spinnerButton"/>
-        <h:commandButton id="back" value="&lt;" onclick="return changeNumber(-1);" styleClass="spinnerButton" />
+        <h:commandButton id="forward"  value="^"  onclick="return changeNumber(1);" styleClass="spinnerButton"/>
+        <h:commandButton id="back" value="v" onclick="return changeNumber(-1);" styleClass="spinnerButton" />
     </h:panelGroup>
 </composite:implementation>
 </body>
