@@ -18,11 +18,11 @@ function buttonpush(buttonName, element, event) {
 
 function msg(eventName, data) {
     var txt = null;
-    if (typeof data.enqueue !== 'undefined' && data.enqueue !== null) {
-        txt = document.createTextNode(data.enqueue.parameters["javax.faces.partial.execute"]);
+    if (data.name === 'enqueue') {
+        txt = document.createTextNode(data.parameters["javax.faces.partial.execute"]);
         addCell(txt);
-    } else if (typeof data.dequeue !== 'undefined' && data.dequeue !== null) {
-        txt = document.createTextNode(data.dequeue.parameters["javax.faces.partial.execute"]);
+    } else if (data.name === 'dequeue') {
+        txt = document.createTextNode(data.parameters["javax.faces.partial.execute"]);
         removeCell(txt);
     }
 }
@@ -52,10 +52,10 @@ function removeCell(cellData) {
 }
 
 function errorMsg(eventName, data) {
-    alert("Name: "+eventName+" Error Status: "+data['error_status']);
+    alert("Name: "+eventName+" Error Status: "+data['message']);
 }
 
 // Listen for all queue events
-OpenAjax.hub.subscribe("javax.faces.AjaxEngine.Queue.**",msg);
+OpenAjax.hub.subscribe("javax.faces.Event.**",msg);
 // Listen for all error events
-OpenAjax.hub.subscribe("javax.faces.AjaxEngine.sendError.**",errorMsg);
+OpenAjax.hub.subscribe("javax.faces.Error.**",errorMsg);

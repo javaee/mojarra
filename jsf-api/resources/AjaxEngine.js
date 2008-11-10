@@ -57,7 +57,6 @@
  */
 javax.faces.Ajax.AjaxEngine = function() {
 
-
     var req = {};                  // Request Object
     req.url = null;                // Request URL
     req.xmlReq = null;             // XMLHttpRequest Object
@@ -100,7 +99,7 @@ javax.faces.Ajax.AjaxEngine = function() {
         if ((status !== null && typeof status !== 'undefined' && status !== 0) && (status >= 200 && status < 300)) {
             javax.faces.Ajax.ajaxResponse(req.xmlReq);
         } else {
-            javax.faces.Ajax.AjaxEngine.sendError("Web Return Status: "+status,req);
+            javax.faces.Ajax.AjaxEngine.sendError(req);
         }
 
         // Regardless of whether the request completed successfully (or not),
@@ -304,22 +303,11 @@ if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
          * @param element - the element to enqueue
          */
         this.enqueue = function enqueue(element) {
-
-            // Convert the parameters to an array of dot-separated strings
-            var execParam = element.parameters["javax.faces.partial.execute"];
-            var execArray = execParam.replace(' ','').replace(':','.').split(',');
-
             // Queue the request
             queue.push(element);
 
             // Send the message that the request is enqueued
-            var args = {};
-            args["enqueue"] = utils.deepObjCopy(element);
-            // loop through all exec values (converted to dot-notation),
-            //  trimming spaces first
-            for (var exec in execArray) {
-                OpenAjax.hub.publish("javax.faces.AjaxEngine.Queue."+execArray[exec], args);
-            }
+            javax.faces.Ajax.AjaxEngine.sendMessage("Event","enqueue","request enqueued", element);
         };
 
 
@@ -347,17 +335,7 @@ if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
                 }
             }
             if (element != "undefined") {
-                // Convert the parameters to an array of dot-separated strings
-                var execArray = utils.execConvert(element.parameters["javax.faces.partial.execute"]);
-
-                var args = {};
-                args["dequeue"] = utils.deepObjCopy(element);
-
-                // loop through all exec values (converted to dot-notation),
-                //  trimming spaces first
-                for (var exec in execArray) {
-                    OpenAjax.hub.publish("javax.faces.AjaxEngine.Queue."+execArray[exec], args);
-                }
+                javax.faces.Ajax.AjaxEngine.sendMessage("Event","dequeue","request dequeued", element);
             }
 
             // return the removed element
@@ -384,27 +362,60 @@ if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
 
 /**
  * Send an error to the user via an OpenAjax message.
- * @param status Status code of the error
  * @param element object which caused the error
+ * @private
  */
-javax.faces.Ajax.AjaxEngine.sendError = function(status, element) {
+javax.faces.Ajax.AjaxEngine.sendError = function(request) {
 
-    if (status === 'undefined' || element === 'undefined') {
-        throw new Error("AjaxEngine.sendError:  undefined value passed as argument");
+    if (!element) {
+        throw new Error("AjaxEngine.sendError:  invalid value passed as argument");
+    }
+
+    if (request.status === 0) {
+        javax.faces.Ajax.AjaxEngine.sendMessage("Error", "SERVERDOWN",
+                "Cannot communicate with server", request );
+    } else if (request.status == 404) {
+        javax.faces.Ajax.AjaxEngine.sendMessage("Error", "NOTFOUND",
+                "URL not found on server", request);
+    } else if (request.status == 500) {
+        javax.faces.Ajax.AjaxEngine.sendMessage("Error", "SERVERERROR",
+                "Server Error prevents completing request", request);
+    } else { //
+        javax.faces.Ajax.AjaxEngine.sendMessage("Error", "MISCSERVER",
+                "There was an error on the server", request);
+    }
+};
+
+/**
+ * Publish an event message to the user via OpenAjax, to every client listed in target
+ * @param type of message - either "Event" or "Error"
+ * @param name Name of the message to pass
+ * @param message Message string
+ * @param request XMLHttpRequest object associated with this message
+ * @throws Error if params are not set, or
+ * @private
+ */
+
+javax.faces.Ajax.AjaxEngine.sendMessage = function(type, name, message, request){
+
+    if (!type || !name || !message || !request || (type !== "Event" && type !== "Error")) {
+        throw new Error("AjaxEngine.sendMessage: invalid value passed as argument");
     }
 
     var utils = new javax.faces.Ajax.Utils();
 
-    var execArray = utils.execConvert(element.parameters["javax.faces.partial.execute"]);
-
     var args = {};
-    args.error = utils.deepObjCopy(element);
-    args.error_status = status;
+    args.type = type;
+    args.name = name;
+    args.statusMessage = message;
+    args.parameters = utils.deepObjCopy(request.parameters);
+    args.request = {};
+    args.request.statusCode = request.xmlReq.status;
+    args.request.readyState = request.xmlReq.readyState;
 
-    // loop through all exec values (converted to dot-notation),
-    //  trimming spaces first
+    var execArray = utils.execConvert(request.parameters["javax.faces.partial.execute"]);
+
     for (var exec in execArray) {
-        OpenAjax.hub.publish("javax.faces.AjaxEngine.sendError."+execArray[exec], args);
+        OpenAjax.hub.publish("javax.faces."+type+"."+execArray[exec], args);
     }
-
 };
