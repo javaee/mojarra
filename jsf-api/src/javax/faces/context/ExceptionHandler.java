@@ -68,10 +68,6 @@ import javax.faces.event.SystemEventListener;
  * javax.faces.convert.ConverterException} is specified to be
  * thrown or caught</p></li>
  *
- * <li><p>All cases where an {@link
- * javax.faces.event.AbortProcessingException} is specified to be
- * thrown or caught </p></li>
- *
  * <li><p>The case when an <code>Exception</code> occurs during
  * processing of the {@link
  * javax.faces.component.UIInput#updateModel} method</p></li>
@@ -147,6 +143,12 @@ import javax.faces.event.SystemEventListener;
 public abstract class ExceptionHandler implements SystemEventListener {
 
    /**
+    * RELEASE_PENDING (edburns,roger) This needs further clarification.
+    *  the handle method will, when called, process *all* unhandled
+    *  ExceptionEvents in the order they were queued.  The docs should
+    *  probably state thus instead of "must take the first ExceptionEvent
+    *  queued"
+    * 
     * <p class="changed_added_2_0">The default implementation must take
     * the first {@link ExceptionEvent} queued from a call to {@link
     * #processEvent}, unwrap it with a call to {@link #getRootCause},
@@ -192,6 +194,13 @@ public abstract class ExceptionHandler implements SystemEventListener {
      * not yet been handled by the {@link #handle} method.</p>
      */
     public abstract Iterable<ExceptionEvent> getUnhandledExceptionEvents();
+
+
+    /**
+     * RELEASE_PENDING (edburns, roger) docs
+     * @return
+     */
+    public abstract Iterable<ExceptionEvent> getHandledExceptionEvents();
 
 
     /**

@@ -98,7 +98,7 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
                                           (ServletResponse) response),
                   lifecycle);
 
-        ctx.setExceptionHandler(exceptionHandlerFactory.getExceptionHandler(ctx));
+        ctx.setExceptionHandler(exceptionHandlerFactory.getExceptionHandler());
 
         return ctx;
         

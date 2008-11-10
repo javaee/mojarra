@@ -36,23 +36,38 @@
 
 package com.sun.faces.context;
 
+import java.util.LinkedList;
+import java.util.Collection;
+
 import javax.faces.FacesException;
 import javax.faces.context.ExceptionHandler;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ExceptionEvent;
 import javax.faces.event.SystemEvent;
+import javax.faces.event.ExceptionEventContext;
+import javax.el.ELException;
+
 
 /**
  * The default implementation of {@link ExceptionHandler}.
  */
 public class ExceptionHandlerImpl extends ExceptionHandler {
 
+    
+    private LinkedList<ExceptionEvent> unhandledExceptions;
+    private LinkedList<ExceptionEvent> handledExceptions;
+
+
+    // ------------------------------------------- Methods from ExceptionHandler
+
 
     /**
      * @see ExceptionHandler@getHandledExceptionEvent()
      */
     public ExceptionEvent getHandledExceptionEvent() {
-        throw new UnsupportedOperationException("Not supported yet.");
+
+        return (isNullOrEmpty(unhandledExceptions) ? null : handledExceptions.getLast());
+
     }
 
 
@@ -60,7 +75,21 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
      * @see javax.faces.context.ExceptionHandler#handle()
      */
     public void handle() throws FacesException {
-        throw new UnsupportedOperationException("Not supported yet.");
+
+        if (!isNullOrEmpty(unhandledExceptions)) {
+            for (ExceptionEvent event : getUnhandledExceptionEvents()) {
+                try {
+                    ExceptionEventContext context = (ExceptionEventContext) event.getSource();
+                    // do something
+                } finally {
+                    if (handledExceptions == null) {
+                        handledExceptions = new LinkedList<ExceptionEvent>();
+                    }
+                    handledExceptions.add(event);
+                }
+            }
+        }
+
     }
 
 
@@ -68,7 +97,9 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
      * @see javax.faces.context.ExceptionHandler#isListenerForSource(Object)
      */
     public boolean isListenerForSource(Object source) {
-        throw new UnsupportedOperationException("Not supported yet.");
+
+        return (source instanceof ExceptionEvent);
+
     }
 
 
@@ -76,7 +107,12 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
      * @see javax.faces.context.ExceptionHandler#processEvent(javax.faces.event.SystemEvent)
      */
     public void processEvent(SystemEvent event) throws AbortProcessingException {
-        throw new UnsupportedOperationException("Not supported yet.");
+
+        if (unhandledExceptions == null) {
+            unhandledExceptions = new LinkedList<ExceptionEvent>();
+        }
+        unhandledExceptions.add((ExceptionEvent) event);
+
     }
 
 
@@ -84,7 +120,22 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
      * @see ExceptionHandler#getRootCause(Throwable)
      */
     public Throwable getRootCause(Throwable t) {
-        throw new UnsupportedOperationException("Not supported yet.");
+
+        Class<? extends Throwable> tClass = t.getClass();
+        Throwable ret = t;
+        if (shouldUnwrap(tClass)) {
+            ret = t.getCause();
+            while (ret != null) {
+                if (shouldUnwrap(tClass)) {
+                    ret = ret.getCause();
+                    continue;
+                }
+                break;
+            }
+        }
+
+        return ret;
+        
     }
 
 
@@ -92,7 +143,44 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
      * @see javax.faces.context.ExceptionHandler#getUnhandledExceptionEvents()
      */
     public Iterable<ExceptionEvent> getUnhandledExceptionEvents() {
-        throw new UnsupportedOperationException("Not supported yet.");
+
+        // should we clone?
+        return unhandledExceptions;
+
+    }
+
+
+    /**
+     * @see javax.faces.context.ExceptionHandler#getHandledExceptionEvents()
+     * @return
+     */
+    public Iterable<ExceptionEvent> getHandledExceptionEvents() {
+
+        // should we clone?
+        return handledExceptions;
+
+    }
+
+
+    // --------------------------------------------------------- Private Methods
+
+
+    /**
+     * @param c <code>Throwable</code> implementation class
+     * @return <code>true</code> if <code>c</code> is FacesException.class or
+     *  ELException.class
+     */
+    private boolean shouldUnwrap(Class<? extends Throwable> c) {
+
+        return (FacesException.class.equals(c) || ELException.class.equals(c));
+
+    }
+
+
+    private boolean isNullOrEmpty(Collection c) {
+
+        return (c == null || c.isEmpty());
+
     }
 
 }

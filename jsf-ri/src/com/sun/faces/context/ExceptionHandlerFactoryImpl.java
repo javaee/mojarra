@@ -42,24 +42,21 @@ import javax.faces.context.ExceptionHandlerFactory;
 import javax.faces.context.FacesContext;
 
 /**
- *
- * @author edburns
+ * Default ExceptionHandlerFactory implementation.
  */
 public class ExceptionHandlerFactoryImpl extends ExceptionHandlerFactory {
 
-    private static final String FACES_CONTEXT_ATTR_NAME = "com.sun.faces.context.ExceptionHandlerImpl";
 
-    @Override
-    public ExceptionHandler getExceptionHandler(FacesContext context) {
-        ExceptionHandler exceptionHandler = null;
-        Map<Object, Object> attrs = context.getAttributes();
-        if (null == (exceptionHandler = 
-                     (ExceptionHandler)attrs.get(FACES_CONTEXT_ATTR_NAME))) {
-            exceptionHandler = new ExceptionHandlerImpl();
-            attrs.put(FACES_CONTEXT_ATTR_NAME, exceptionHandler);
-        }
-        return exceptionHandler;
-    }
+    // ------------------------------------ Methods from ExceptionHandlerFactory
 
     
+    /**
+     * @see javax.faces.context.ExceptionHandlerFactory#getExceptionHandler()
+     */
+    public ExceptionHandler getExceptionHandler() {
+
+        return new ExceptionHandlerImpl();
+
+    }
+
 }
