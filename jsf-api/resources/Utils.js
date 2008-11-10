@@ -241,4 +241,13 @@ this.elementReplace = function(d, tempTagName, src) {
         }
         return retObj;
     };
+
+    /**
+     * Convert a String with a list of exec ids into a OpenAjax friendly array.
+     * @return an array of dot-separated strings which represent the exec'd id's
+     * @private
+     */
+    this.execConvert = function execConvert(execParam) {
+        return execParam.replace(' ','').replace(javax.faces.separator,'.').split(',');
+    };
 };

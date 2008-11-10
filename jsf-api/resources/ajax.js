@@ -449,7 +449,7 @@ javax.faces.Ajax.getProjectStage = function() {
 };
 
 /**
- * A String value which represents the current separator String.
+ * A String value which represents the current clientID separator string.
  */
 
 // RELEASE_PENDING : Still needs to be wired to the back end

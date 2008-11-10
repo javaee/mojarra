@@ -348,9 +348,7 @@ if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
             }
             if (element != "undefined") {
                 // Convert the parameters to an array of dot-separated strings
-                var execParam = element.parameters["javax.faces.partial.execute"];
-                var execArray = execParam.replace(' ','').replace(':','.').split(',');
-
+                var execArray = utils.execConvert(element.parameters["javax.faces.partial.execute"]);
 
                 var args = {};
                 args["dequeue"] = utils.deepObjCopy(element);
@@ -397,9 +395,7 @@ javax.faces.Ajax.AjaxEngine.sendError = function(status, element) {
 
     var utils = new javax.faces.Ajax.Utils();
 
-    var execParam = element.parameters["javax.faces.partial.execute"];
-    var execArray = execParam.replace(' ','').replace(':','.').split(',');
-
+    var execArray = utils.execConvert(element.parameters["javax.faces.partial.execute"]);
 
     var args = {};
     args.error = utils.deepObjCopy(element);
