@@ -446,5 +446,13 @@ javax.faces.Ajax.ajaxResponse = function(request) {
 
 javax.faces.Ajax.getProjectStage = function() {
     return "#{facesContext.application.projectStage}";
-}
+};
 
+/**
+ * A String value which represents the current separator String.
+ */
+
+// RELEASE_PENDING : Still needs to be wired to the back end
+javax.faces.separator = function() {
+    return ":";
+}();
