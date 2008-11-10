@@ -409,9 +409,8 @@ javax.faces.Ajax.AjaxEngine.sendMessage = function(type, name, message, request)
     args.name = name;
     args.statusMessage = message;
     args.parameters = utils.deepObjCopy(request.parameters);
-    args.request = {};
-    args.request.statusCode = request.xmlReq.status;
-    args.request.readyState = request.xmlReq.readyState;
+    args.statusCode = request.xmlReq.status;
+    args.readyState = request.xmlReq.readyState;
 
     var execArray = utils.execConvert(request.parameters["javax.faces.partial.execute"]);
 
