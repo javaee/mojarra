@@ -182,6 +182,7 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer,
                                                          component);
 
+        RenderKitUtils.renderAjaxCommand(writer, component);
 
         writer.endElement("input");
         writer.startElement("label", component);

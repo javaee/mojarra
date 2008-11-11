@@ -166,6 +166,9 @@ public class ButtonRenderer extends HtmlBasicRenderer {
          */
         renderOnClick(context, component, (!Arrays.equals(params,EMPTY_PARAMS) && type.equals("submit")));
 
+        // PENDING - This needs to be moved into "renderOnClick"
+        RenderKitUtils.renderAjaxCommand(writer, component);
+
         writer.endElement("input");
 
     }

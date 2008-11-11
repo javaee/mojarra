@@ -306,6 +306,8 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                                                 ATTRIBUTES);
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
+        RenderKitUtils.renderAjaxCommand(writer, component);
+
         writer.endElement("input");
         writer.startElement("label", component);
         writer.writeAttribute("for", idString, "for");

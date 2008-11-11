@@ -146,6 +146,8 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
                                                 ATTRIBUTES);
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
+        RenderKitUtils.renderAjaxCommand(writer, component);
+
         writer.endElement("input");
 
     }
