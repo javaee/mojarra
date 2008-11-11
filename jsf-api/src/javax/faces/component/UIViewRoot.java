@@ -871,9 +871,8 @@ public class UIViewRoot extends UIComponentBase {
      * call {@link javax.faces.context.PartialViewContext#getExecutePhaseClientIds}.
      * This returns a list of client ids that must be processed during the
      * <code>execute</code> portion of the request processing lifecycle.
-     * If there were no client ids specified, refer to the <code>List</code> of 
-     * client ids by calling
-     * {@link javax.faces.context.PartialViewContext#getRenderPhaseClientIds}.
+     * If there were no client ids specified, perform <code>processDecodes</code>
+     * on all components in the view.
      * For each client id in the list, using <code>invokeOnComponent</code>,
      * call the respective <code>processDecodes</code> method on the component
      * with that client id.  Obtain an instance of a response writer that uses 
@@ -936,11 +935,12 @@ public class UIViewRoot extends UIComponentBase {
      */
     private boolean processPartialDecodes(FacesContext context, 
         PartialViewContext partialViewContext) {
-        // RELEASE_PENDING :
-        //  Process "immediate" Ajax requests..
-        //  mark components in view as "immediate"
-        //  keep track of marked components so they can be cleared later.
         
+        if (partialViewContext.getExecutePhaseClientIds() == null ||
+            partialViewContext.getExecutePhaseClientIds().isEmpty()) {
+            return false;
+        }
+
         boolean invokedCallback = 
               invokeContextCallbackOnSubtrees(context, partialViewContext,
                                               PhaseId.APPLY_REQUEST_VALUES);
@@ -948,8 +948,6 @@ public class UIViewRoot extends UIComponentBase {
         // Install the PartialResponseWriter
         ResponseWriter writer = partialViewContext.getPartialResponseWriter();
         context.setResponseWriter(writer);
-
-        // RELEASE_PENDING: Queue Events that were specified in the Ajax Request..
 
         if (!invokedCallback) {
             return false;
