@@ -117,6 +117,15 @@ javax.faces.Ajax.Utils = function() {
         return sarray;
     };
 
+    this.isInArray = function(array,value) {
+        for (var i=0; i<array.length; i++) {
+            if (array[i] === value) {
+                return true;
+            }
+        }
+        return false;
+    };
+
     this.trim = function(toTrim) {
         var result = null;
         if (null != toTrim) {
