@@ -49,6 +49,11 @@
 </composite:interface>
 <composite:implementation>
     <h:outputStylesheet name="spinnerStyled/spinner.css" />
+    <h:inputText id="number" value="#{compositeComponent.attrs.value}" styleClass="spinnerText"/>
+    <h:panelGroup id="spinnerButtonPanel" styleClass="spinnerButtons">
+        <h:commandButton id="forward"  value="&#652;"  onclick="return changeNumber(1);" styleClass="spinnerButton"/>
+        <h:commandButton id="back" value="v" onclick="return changeNumber(-1);" styleClass="spinnerButton" />
+    </h:panelGroup>
     <script type="text/javascript">
         function changeNumber(amount) {
             var increment = Number("#{compositeComponent.attrs.increment}");
@@ -60,11 +65,6 @@
             return false;
         }
     </script>
-    <h:inputText id="number" value="#{compositeComponent.attrs.value}" styleClass="spinnerText"/>
-    <h:panelGroup id="spinnerButtonPanel" styleClass="spinnerButtons">
-        <h:commandButton id="forward"  value="&#652;"  onclick="return changeNumber(1);" styleClass="spinnerButton"/>
-        <h:commandButton id="back" value="v" onclick="return changeNumber(-1);" styleClass="spinnerButton" />
-    </h:panelGroup>
 </composite:implementation>
 </body>
 </html>
