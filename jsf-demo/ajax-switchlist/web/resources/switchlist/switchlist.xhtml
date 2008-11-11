@@ -57,14 +57,8 @@
     <composite:attribute name="selected2" required="true"/>
     <composite:attribute name="items1" required="true"/>
     <composite:attribute name="items2" required="true"/>
-    <composite:attribute name="move1to2" required="true">
-      <composite:deferred-method>
-        <composite:method-signature>
-                    java.lang.Object action()
-        </composite:method-signature>
-      </composite:deferred-method>
-    </composite:attribute>
-    <composite:attribute name="move2to1" required="true"/>
+    <composite:attribute name="move1to2" required="true" method-signature="void f1(javax.faces.event.ActionEvent)" />
+    <composite:attribute name="move2to1" required="true" method-signature="void f2(javax.faces.event.ActionEvent)" />
 
 </composite:interface>
 
@@ -73,8 +67,8 @@
     <h:selectManyListbox value="#{compositeComponent.attrs.selected1}">
         <f:selectItems value="#{compositeComponent.attrs.items1}"/>
     </h:selectManyListbox>
-    <h:commandButton id="move1to2" value="&gt;&gt;" actionListener="#{compositeComponent.attrs.model.move1to2}" />
-    <h:commandButton id="move2to1" value="&lt;&lt;" actionListener="#{compositeComponent.attrs.model.move2to1}" />
+    <h:commandButton id="move1to2" value="&gt;&gt;" actionListener="#{compositeComponent.attrs.move1to2}" />
+    <h:commandButton id="move2to1" value="&lt;&lt;" actionListener="#{compositeComponent.attrs.move2to1}" />
     <h:selectManyListbox value="#{compositeComponent.attrs.selected2}">
         <f:selectItems value="#{compositeComponent.attrs.items2}"/>
     </h:selectManyListbox>
