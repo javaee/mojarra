@@ -371,13 +371,13 @@ javax.faces.Ajax.AjaxEngine.sendError = function(request) {
         throw new Error("AjaxEngine.sendError:  invalid value passed as argument");
     }
 
-    if (request.status === 0) {
+    if (request.xmlReq.status === 0) {
         javax.faces.Ajax.AjaxEngine.sendMessage("Error", "SERVERDOWN",
                 "Cannot communicate with server", request );
-    } else if (request.status == 404) {
+    } else if (request.xmlReq.status == 404) {
         javax.faces.Ajax.AjaxEngine.sendMessage("Error", "NOTFOUND",
                 "URL not found on server", request);
-    } else if (request.status == 500) {
+    } else if (request.xmlReq.status == 500) {
         javax.faces.Ajax.AjaxEngine.sendMessage("Error", "SERVERERROR",
                 "Server Error prevents completing request", request);
     } else { //

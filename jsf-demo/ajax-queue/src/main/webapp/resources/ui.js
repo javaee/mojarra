@@ -52,7 +52,7 @@ function removeCell(cellData) {
 }
 
 function errorMsg(eventName, data) {
-    alert("Name: "+eventName+" Error Status: "+data.message);
+    alert("Name: "+eventName+" Error Status: "+data.statusMessage);
 }
 
 // Listen for all queue events
