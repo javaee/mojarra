@@ -118,6 +118,7 @@ javax.faces.Ajax.viewState = function(form) {
  * <li>Capture the element that triggered this Ajax request
  * (from the <code>element</code> argument, also known as the
  * <code>source</code> element.</li>
+ * <li>Add the name of the source element in 
  * <li>Determine the <code>source</code> element's <code>form</code>
  * element.</li>
  * <li>Get the <code>form</code> view state by calling
@@ -231,20 +232,35 @@ javax.faces.Ajax.ajaxRequest = function(element, event, options) {
     var viewState = javax.faces.Ajax.viewState(form);
 
     // Set up additional arguments to be used in the request..
+    // If there were "execute" ids specified, make sure we 
+    // include the identifier of the source element in the 
+    // "execute" list.  If there were no "execute" ids
+    // specified, determine the default.
+
     var args = new Object();
+ 
     if (typeof(options) != 'undefined' && options != null) {
         if (options.execute) {
-            args["javax.faces.partial.execute"] = utils.toArray(options.execute, ',').join(',');
-            options.execute = null;
-            delete options.execute;
+            var temp = utils.toArray(options.execute, ',');
+            if (!utils.isInArray(temp, source.name)) {
+                options.execute = source.name + "," + options.execute;
+            }
+        } else {
+            determineDefaultExecute(source, options);
         }
-        if (options.render) {
-            args["javax.faces.partial.render"] = utils.toArray(options.render, ',').join(',');
-            options.render = null;
-            delete options.render;
-        }
-        utils.extend(args, options);
+    } else {
+        options = new Object();
+        determineDefaultExecute(source, options);
     }
+    args["javax.faces.partial.execute"] = utils.toArray(options.execute, ',').join(',');
+    options.execute = null;
+    delete options.execute;
+    if (options.render) {
+        args["javax.faces.partial.render"] = utils.toArray(options.render, ',').join(',');
+        options.render = null;
+        delete options.render;
+    }
+    utils.extend(args, options);
 
     args["javax.faces.partial.ajax"] = "true";
     args["method"] = "POST";
@@ -261,6 +277,22 @@ javax.faces.Ajax.ajaxRequest = function(element, event, options) {
     ajaxEngine.setupArguments(args);
     ajaxEngine.queryString = viewState;
     ajaxEngine.sendRequest();
+
+    // Helper function to determine the default execute list.
+    // For buttons (submit types), we return an empty list
+    // which means all will get processed on the server.
+    // For input types (text, etc..) the list is just the
+    // source element name.
+    //
+    function determineDefaultExecute(source, options) {
+        switch (source.type) {
+            case 'text': case 'password': case 'hidden': case 'textarea':
+            case 'select-one': case 'select-multiple':
+            case 'checkbox': case 'radio':
+                options.execute = source.name;
+                break;
+        }
+    }
 }
 
 /**
@@ -456,3 +488,4 @@ javax.faces.Ajax.getProjectStage = function() {
 javax.faces.separator = function() {
     return ":";
 }();
+
