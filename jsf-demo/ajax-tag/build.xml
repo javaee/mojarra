@@ -34,7 +34,7 @@
  holder.
 -->
 
-<project name="ajax-request" default="build" basedir=".">
+<project name="ajax-tag" default="build" basedir=".">
 
 
     <property file="${user.home}/build.properties"/>
@@ -42,8 +42,8 @@
     <import file="${jsf.build.home}/common/ant/common.xml"/>
 
     <!-- Configure the context path for this application -->
-    <property name="context.path" value="/ajax-request"/>
-    <property name="example" value="ajax-request"/>
+    <property name="context.path" value="/ajax-tag"/>
+    <property name="example" value="ajax-tag"/>
     <property name="build" value="${basedir}/build"/>
 
     <path id="classpath">       
@@ -103,8 +103,8 @@
                 <include name="*.xml"/>
             </fileset>
         </copy>
-        <copy todir="${build}/${example}/WEB-INF/classes/ajaxrequest">
-            <fileset dir="src/main/java/ajaxrequest">
+        <copy todir="${build}/${example}/WEB-INF/classes">
+            <fileset dir="src/main/java">
                 <include name="*properties"/>
             </fileset>
         </copy>

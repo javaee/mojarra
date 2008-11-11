@@ -48,6 +48,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
+import javax.faces.model.ManagedBean;
+import javax.faces.model.SessionScoped;
 
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -67,6 +69,8 @@ import java.util.logging.Logger;
  *
  */
 
+@ManagedBean(name="bean")
+@SessionScoped
 public class Bean {
     
     private static final Logger LOGGER = Logger.getLogger("declarativeajax");
