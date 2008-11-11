@@ -56,30 +56,31 @@ import javax.faces.FacesWrapper;
  *
 
  * </div>
+ *
+ * @since 2.0
  */
 
 public abstract class ExceptionHandlerFactory implements FacesWrapper<ExceptionHandlerFactory> {
+
 
     /**
      * <p class="changed_added_2_0">If this factory has been decorated, the 
      * implementation doing the decorating may override this method to provide
      * access to the implementation being wrapped.  A default implementation
      * is provided that returns <code>null</code>.</p>
-     * 
-     * @since 2.0
      */
-
     public ExceptionHandlerFactory getWrapped() {
         return null;
     }
 
-    /**
-     * <p class="changed_added_2_0">Create (if needed) and return an
-     * {@link ExceptionHandler} instance for this {@link FacesContext}.
-     * A new <code>ExceptionHandler</code> instance must be created for
-     * each <code>FacesContext</code> instance.</p>
-     */
-    public abstract ExceptionHandler getExceptionHandler(FacesContext context);
     
-
+    /**
+     * RELEASE_PENDING (edburns,rogerk) please review these changes - FacesContext
+     *  argument was uncessary.
+     * 
+     * <p class="changed_added_2_0">Create and return a A new
+     * <code>ExceptionHandler</code> instance.</p>
+     */
+    public abstract ExceptionHandler getExceptionHandler();
+    
 }

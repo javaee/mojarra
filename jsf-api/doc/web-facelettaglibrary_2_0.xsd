@@ -114,9 +114,30 @@
                 <xsd:element name="validator"
                              type="javaee:facelet-taglib-tag-validatorType"/>
                 <xsd:element name="source" type="javaee:string"/>
+                <xsd:element name="tag-extension"
+                             type="javaee:facelet-taglib-tag-extensionType"
+                             minOccurs="0"
+                             maxOccurs="unbounded"/>
             </xsd:choice>
         </xsd:sequence>
     </xsd:complexType>
+    <xsd:complexType name="facelet-taglib-tag-extensionType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Extension element for tag  It may contain 
+                implementation specific content.
+            </xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:sequence>
+            <xsd:any namespace="##any"
+                     processContents="lax"
+                     minOccurs="0"
+                     maxOccurs="unbounded" />
+         </xsd:sequence>
+         <xsd:attribute name="id" type="xsd:ID"/>
+    </xsd:complexType>
+    
     <xsd:complexType name="facelet-taglib-functionType">
         <xsd:sequence>
             <xsd:element name="function-name" type="javaee:string"/>
@@ -133,23 +154,86 @@
             <xsd:element minOccurs="0" maxOccurs="1"
                          name="handler-class"
                          type="javaee:fully-qualified-classType"/>
+            <xsd:element name="component-extension"
+                         type="javaee:facelet-taglib-tag-component-extensionType"
+                         minOccurs="0"
+                         maxOccurs="unbounded"/>
+                         
         </xsd:sequence>
     </xsd:complexType>
+    <xsd:complexType name="facelet-taglib-tag-component-extensionType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Extension element for component  It may contain 
+                implementation specific content.
+            </xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:sequence>
+            <xsd:any namespace="##any"
+                     processContents="lax"
+                     minOccurs="0"
+                     maxOccurs="unbounded" />
+         </xsd:sequence>
+         <xsd:attribute name="id" type="xsd:ID"/>
+    </xsd:complexType>
+    
     <xsd:complexType name="facelet-taglib-tag-converterType">
         <xsd:sequence>
             <xsd:element minOccurs="1" maxOccurs="1"
                          name="converter-id" type="javaee:string"/>
             <xsd:element minOccurs="0" maxOccurs="1" 
                          name="handler-class" type="javaee:fully-qualified-classType"/>
+            <xsd:element name="converter-extension"
+                         type="javaee:facelet-taglib-tag-converter-extensionType"
+                         minOccurs="0"
+                         maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>
+    <xsd:complexType name="facelet-taglib-tag-converter-extensionType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Extension element for converter  It may contain 
+                implementation specific content.
+            </xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:sequence>
+            <xsd:any namespace="##any"
+                     processContents="lax"
+                     minOccurs="0"
+                     maxOccurs="unbounded" />
+         </xsd:sequence>
+         <xsd:attribute name="id" type="xsd:ID"/>
+    </xsd:complexType>
+    
     <xsd:complexType name="facelet-taglib-tag-validatorType">
         <xsd:sequence>
             <xsd:element minOccurs="1" maxOccurs="1"
                          name="validator-id" type="javaee:string"/>
             <xsd:element minOccurs="0" maxOccurs="1" 
                          name="handler-class" type="javaee:fully-qualified-classType"/>
+            <xsd:element name="validator-extension"
+                         type="javaee:facelet-taglib-tag-validator-extensionType"
+                         minOccurs="0"
+                         maxOccurs="unbounded"/>
         </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="facelet-taglib-tag-validator-extensionType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Extension element for validator  It may contain 
+                implementation specific content.
+            </xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:sequence>
+            <xsd:any namespace="##any"
+                     processContents="lax"
+                     minOccurs="0"
+                     maxOccurs="unbounded" />
+         </xsd:sequence>
+         <xsd:attribute name="id" type="xsd:ID"/>
     </xsd:complexType>
     
     <!-- **************************************************** -->
