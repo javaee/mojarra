@@ -59,6 +59,9 @@ import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
+import javax.faces.component.ActionSource;
+import javax.faces.component.AjaxBehavior;
+import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentBase;
 import javax.faces.component.UISelectItems;
@@ -328,6 +331,53 @@ public class RenderKitUtils {
         }
     }
 
+    public static String buildAjaxCommand(AjaxBehavior ajaxBehavior) {
+        final String AJAX_REQUEST = "javax.faces.Ajax.ajaxRequest";
+        String ajaxCommand = AJAX_REQUEST + "(this, event";
+        if (ajaxBehavior.getExecute() != null ||
+            ajaxBehavior.getRender() != null) {
+            ajaxCommand += ", {";
+            if (ajaxBehavior.getExecute() != null) {
+                String executeValues = ajaxBehavior.getExecute().replace(' ', ',');
+                ajaxCommand += "execute:'" + executeValues + "'";
+                if (ajaxBehavior.getRender() != null) {
+                    String renderValues = ajaxBehavior.getRender().replace(' ', ',');
+                    ajaxCommand += ",render:'" + renderValues + "'";
+                }
+            } else if (ajaxBehavior.getRender() != null) {
+                String renderValues = ajaxBehavior.getRender().replace(' ', ',');
+                ajaxCommand += "render:'" + renderValues + "'";
+            }
+            ajaxCommand += "}";
+        }
+        ajaxCommand += "); return false;";
+        return ajaxCommand;
+    }
+
+    public static void renderAjaxCommand(ResponseWriter writer, UIComponent component)
+        throws IOException {
+
+// PENDING - IMPL TEAM - Need to take into account user specified events
+
+        AjaxBehavior ajaxBehavior = (AjaxBehavior)component.getAttributes().get(AjaxBehavior.AJAX_BEHAVIOR);
+        if (null == ajaxBehavior) {
+            return;
+        }
+        String event = null;
+        if (component instanceof EditableValueHolder) {
+            event = "onchange";
+        } else if (component instanceof ActionSource) {
+            event = "onclick";
+        }
+
+        String ajaxCommand = buildAjaxCommand(ajaxBehavior);
+
+        StringBuffer sb = new StringBuffer(128);
+
+        sb.append(ajaxCommand);
+
+        writer.writeAttribute(event, sb.toString(), event);
+    }
 
     public static String prefixAttribute(final String attrName,
                                          final ResponseWriter writer) {
