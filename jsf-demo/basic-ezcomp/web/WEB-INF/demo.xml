@@ -75,4 +75,49 @@
         </sources>
     </demo>
 
+        <!-- =================================================================== -->
+
+    <demo>
+        <name>Spinner Component</name>
+        <page>spinner.jsf</page>
+        <sources>
+            <source>
+                <label>Consuming Page</label>
+                <path>/spinner.xhtml</path>
+            </source>
+            <source>
+                <label>Composite Component</label>
+                <path>/resources/spinner/spinner.xhtml</path>
+            </source>
+            <source>
+                <label>Managed Bean</label>
+                <path>/WEB-INF/classes/ezcomp/NumberHolder.java</path>
+            </source>
+        </sources>
+    </demo>
+    <!-- =================================================================== -->
+
+<demo>
+    <name>Styled Spinner Component</name>
+    <page>spinnerStyled.jsf</page>
+    <sources>
+        <source>
+            <label>Consuming Page</label>
+            <path>/spinnerStyled.xhtml</path>
+        </source>
+        <source>
+            <label>Composite Component</label>
+            <path>/resources/spinnerStyled/spinner.xhtml</path>
+        </source>
+        <source>
+            <label>Composite Component CSS</label>
+            <path>/resources/spinnerStyled/spinner.css</path>
+        </source>
+        <source>
+            <label>Managed Bean</label>
+            <path>/WEB-INF/classes/ezcomp/NumberHolder.java</path>
+        </source>
+    </sources>
+</demo>
+
 </demo-info>
