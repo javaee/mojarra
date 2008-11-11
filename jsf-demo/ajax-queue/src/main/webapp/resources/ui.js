@@ -19,10 +19,10 @@ function buttonpush(buttonName, element, event) {
 function msg(eventName, data) {
     var txt = null;
     if (data.name === 'enqueue') {
-        txt = document.createTextNode(data.parameters["javax.faces.partial.execute"]);
+        txt = document.createTextNode(data.execute);
         addCell(txt);
     } else if (data.name === 'dequeue') {
-        txt = document.createTextNode(data.parameters["javax.faces.partial.execute"]);
+        txt = document.createTextNode(data.execute);
         removeCell(txt);
     }
 }
@@ -52,7 +52,7 @@ function removeCell(cellData) {
 }
 
 function errorMsg(eventName, data) {
-    alert("Name: "+eventName+" Error Status: "+data['message']);
+    alert("Name: "+eventName+" Error Status: "+data.message);
 }
 
 // Listen for all queue events

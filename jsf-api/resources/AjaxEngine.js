@@ -367,7 +367,7 @@ if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
  */
 javax.faces.Ajax.AjaxEngine.sendError = function(request) {
 
-    if (!element) {
+    if (!request) {
         throw new Error("AjaxEngine.sendError:  invalid value passed as argument");
     }
 
@@ -408,9 +408,10 @@ javax.faces.Ajax.AjaxEngine.sendMessage = function(type, name, message, request)
     args.type = type;
     args.name = name;
     args.statusMessage = message;
-    args.parameters = utils.deepObjCopy(request.parameters);
+    args.execute = request.parameters["javax.faces.partial.execute"];
+    args.render = request.parameters["javax.faces.partial.render"];
     args.statusCode = request.xmlReq.status;
-    args.readyState = request.xmlReq.readyState;
+    //args.readyState = request.xmlReq.readyState;
 
     var execArray = utils.execConvert(request.parameters["javax.faces.partial.execute"]);
 
