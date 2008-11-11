@@ -34,29 +34,62 @@
  * holder.
  */
 
-package com.sun.faces.context;
+package com.sun.faces.component;
 
-import java.util.Map;
-import javax.faces.context.ExceptionHandler;
-import javax.faces.context.ExceptionHandlerFactory;
-import javax.faces.context.FacesContext;
+import com.sun.faces.htmlunit.AbstractTestCase;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
-/**
- * Default ExceptionHandlerFactory implementation.
- */
-public class ExceptionHandlerFactoryImpl extends ExceptionHandlerFactory {
+public class GetClientIdELTestCase extends AbstractTestCase {
+
+    public GetClientIdELTestCase(String name) {
+        super(name);
+    }
 
 
-    // ------------------------------------ Methods from ExceptionHandlerFactory
-
-    
     /**
-     * @see javax.faces.context.ExceptionHandlerFactory#getExceptionHandler()
+     * Set up instance variables required by this test case.
      */
-    public ExceptionHandler getExceptionHandler() {
+    public void setUp() throws Exception {
+        super.setUp();
+    }
 
-        return new ExceptionHandlerImpl();
+
+    /** Return the tests included in this test suite. */
+    public static Test suite() {
+        return (new TestSuite(GetClientIdELTestCase.class));
+    }
+
+
+    /** Tear down instance variables required by this test case. */
+    public void tearDown() {
+        super.tearDown();
+    }
+
+
+    /**
+     * Added for issue 501
+     * Verify #{component.clientId} and #{compositeComponent.clientId} work
+     * properly
+     *
+     * @throws Exception
+     */
+    public void testELClientId() throws Exception {
+
+        HtmlPage page = getPage("/faces/composite/clientId01.xhtml");
+	String text = page.asText();
+        assertTrue(-1 != text.indexOf("j_id6:j_id9"));
+        assertTrue(-1 != text.indexOf("j_id6:componentId"));
+        assertTrue(-1 != text.indexOf("j_id18"));
+        assertTrue(-1 != text.indexOf("componentId01"));
+        assertTrue(-1 != text.indexOf("form2:j_id26"));
+        assertTrue(-1 != text.indexOf("form2:componentId"));
+        assertTrue(-1 != text.indexOf("j_id34"));
+        assertTrue(-1 != text.indexOf("componentId02"));
 
     }
 
-}
+
+} // end of class PathTestCase
