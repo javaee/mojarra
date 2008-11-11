@@ -45,49 +45,35 @@
 </h:head>
 <h:body bgcolor="white">
     <h:form id="helloForm">
-        <h2>
-            #{UserNumberBean.greeting}
-        </h2>
-        <img src="#{resource['images/wave.med.gif']}" alt="Hello!"/>
-        <h:inputText id="userNo" label="User Number" required="true"
-                     value="#{UserNumberBean.userNumber}">
-            <gn:validator minimum="#{UserNumberBean.minimum}"
-                          maximum="#{UserNumberBean.maximum}"/>
-            <f:convertNumber type="number" integerOnly="true"/>
+        <h:inputText id="userNo">
+           <f:ajax />
         </h:inputText>
-        <h:commandButton id="submit" action="success" value="Guess!"/>
-        <p/>
-        <h:outputStylesheet name="css/styles.css"/>
-        <h:message showSummary="true" showDetail="false"
-                   errorClass="error"
-                   id="errors1" for="userNo"/>
-
+        <h:commandButton id="submit" action="success" value="Guess!">
+           <f:ajax />
+        </h:commandButton>
+        <h:outputText id="out"/>
     </h:form>
 
-    <hr/>
-    <p>
-        Take a quick look at the Facelet page.  Notice that there is no script
-        or link references as children of &lt;h:head&gt;.  These resources
-        leverage the new event system introduced in JSF 2.0.
-    </p>
-    <p>
-        The script resource is generated when the Validator is added to the
-        UIInput.  The external stylesheet reference is referenced by Facelet tag
-        within the form, but is utimately rendered in the head.
-    </p>
-    <p>
-        Now, enter a non-digit character into the input field and change focus.
-        Notice a JS Alert is present stating the input is not correct.
-        The inputText definition in the Facelet page has no onmouseout definiton,
-        but the generated source does.  This is accomplished by the custom Validator
-        listening for a BeforeRenderEvent being triggered by the inputText component.
-        When the Validator listener method is invoked, it adds the necessary javascript
-        information to the input component.
-    </p>
-    <p>
-        The resource system is put to work in other ways as well.  Notice that in
-        the Facelet pages, the image URLs are generated via expressions instead of
-        graphicImage components. 
-    </p>
+    <h:form id="helloForm1">
+        <f:ajax execute="submit" render="out"/>
+        <h:inputText id="userNo1"/>
+        <h:commandButton id="submit1" action="success" value="Guess!"/>
+        <h:outputText id="out1"/>
+    </h:form>
+
+    <h:form id="helloForm2">
+        <f:ajax execute="submit" render="out" />
+        <h:inputText id="userNo2">
+           <f:ajax />
+        </h:inputText>
+        <h:inputText />
+        <h:commandButton id="submit2" action="success" value="Guess!">
+           <f:ajax execute="submit1" render="out1"/>
+        </h:commandButton>
+        <h:outputText id="out"/>
+    </h:form>
+   
+<h:outputScript library="javax.faces" name="ajax.js" target="head"/>
+
 </h:body>
 </html>  
