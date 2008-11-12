@@ -723,22 +723,6 @@ public class UIViewRoot extends UIComponentBase {
                         this.pushComponentToEL(context, source);
                         source.broadcast(event);
                     } catch (AbortProcessingException e) {
-//                        if (LOGGER.isLoggable(Level.SEVERE)) {
-//                            UIComponent component = event.getComponent();
-//                            String id = "";
-//                            if (component != null) {
-//                                id = component.getId();
-//                                if (id == null) {
-//                                    id = component.getClientId(context);
-//                                }
-//                            }
-//                            LOGGER.log(Level.SEVERE,
-//                                       "error.component.abortprocessing_thrown",
-//                                       new Object[]{event.getClass().getName(),
-//                                                    phaseId.toString(),
-//                                                    id});
-//                            LOGGER.log(Level.SEVERE, e.toString(), e);
-//                        }
                         context.getApplication().publishEvent(ExceptionEvent.class, e);
                     }
                     finally {
@@ -847,9 +831,6 @@ public class UIViewRoot extends UIComponentBase {
                     }
                 });
             } catch (AbortProcessingException e) {
-                //if (LOGGER.isLoggable(Level.SEVERE)) {
-                //    LOGGER.log(Level.SEVERE, e.toString(), e);
-                //}
                 context.getApplication().publishEvent(ExceptionEvent.class, e);
             }
         }
