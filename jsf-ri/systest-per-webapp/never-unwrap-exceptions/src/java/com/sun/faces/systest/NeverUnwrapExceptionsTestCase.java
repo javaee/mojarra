@@ -122,7 +122,10 @@ public class NeverUnwrapExceptionsTestCase extends AbstractTestCase {
         client.setThrowExceptionOnFailingStatusCode(false);
         
 	HtmlPage page = getPage("/faces/test.jsp");
-        assertTrue(page.asText().matches(".*java.lang.IllegalStateException: java.lang.IllegalArgumentException: java.lang.UnsupportedOperationException.*"));
+        String text = page.asText();
+        assertTrue(text.contains("Exception class: javax.servlet.ServletException"));
+        assertTrue(text.contains("Root cause: java.lang.IllegalStateException"));
+        assertTrue(text.contains("Exception message: java.lang.IllegalArgumentException: java.lang.UnsupportedOperationException"));
     }
 
     

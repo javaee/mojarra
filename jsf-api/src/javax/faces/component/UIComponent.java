@@ -1717,15 +1717,15 @@ private void doFind(FacesContext context, String clientId) {
      *
      * @param eventClass the <code>Class</code> of event for which the
      * listeners must be returned.
+
+     * @throws NullPointerException if argument <code>eventClass</code> is <code>null</code>.
      *
      * @since 2.0
      */
     public List<SystemEventListener> getListenersForEventClass(Class<? extends SystemEvent> eventClass) {
 
-        // RELEASE_PENDING (edburns,rogerk) NPE for a null event class or just
-        //   return null?
         if (eventClass == null) {
-            return null;
+            throw new NullPointerException();
         }
         List<SystemEventListener> result = null;
         if (listenersByEventClass != null) {

@@ -75,9 +75,6 @@ public abstract class ExceptionHandlerFactory implements FacesWrapper<ExceptionH
 
     
     /**
-     * RELEASE_PENDING (edburns,rogerk) please review these changes - FacesContext
-     *  argument was uncessary.
-     * 
      * <p class="changed_added_2_0">Create and return a A new
      * <code>ExceptionHandler</code> instance.</p>
      */

@@ -76,6 +76,7 @@ import javax.faces.event.AfterRestoreStateEvent;
 import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.ViewMapCreatedEvent;
 import javax.faces.event.ViewMapDestroyedEvent;
+import javax.faces.event.ExceptionEvent;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -86,15 +87,6 @@ import javax.servlet.http.HttpServletResponse;
  * serves as the root of the component tree, and as a place to hang 
  * per-view {@link PhaseListener}s.</p>
  *
- * RELEASE_PENDING (edburns,rogerk) the following block is no longer true.
- * <p class="changed_modified_2_0">To enable <code>UIViewRoot</code>
- * <code>PhaseListener</code>s to be invoked on restore view, this class
- * implements {@link ComponentSystemEventListener}.  The restore view
- * phase implementation must guarantee that an {@link
- * AfterAddToParentEvent} is passed to this instance at the appropriate
- * time to indicate that the view has been completely populated.  See
- * {@link #processEvent} for more information.</p>
-
  * <p>For each of the following lifecycle phase methods:</p>
 
  * <ul>
@@ -532,10 +524,11 @@ public class UIViewRoot extends UIComponentBase {
     }
 
     /**
-     * <p class="changed_added_2_0">Return a <code>List</code> of 
-     * {@link UIComponent}s for the provided <code>target</code> agrument.
-     * Each <code>component</code> in the <code>List</code> is assumed to 
-     * represent a resource instance.</p>
+     * <p class="changed_added_2_0">Return an unmodifiable
+     * <code>List</code> of {@link UIComponent}s for the provided
+     * <code>target</code> agrument.  Each <code>component</code> in the
+     * <code>List</code> is assumed to represent a resource
+     * instance.</p>
      *
      * <div class="changed_added_2_0">
      * <p>The default implementation must use an algorithm equivalent to the
@@ -556,16 +549,12 @@ public class UIViewRoot extends UIComponentBase {
      *
      * @param target The name of the facet for which the components will be returned. 
      *
-     * @return A <code>List</code> of {@link UIComponent} children of the facet with the 
-     * name <code>target</code>.  If no children are found for the facet, return
-     * <code>Collections.emptyList()</code>.
+     * @return A <code>List</code> of {@link UIComponent} children of
+     * the facet with the name <code>target</code>.  If no children are
+     * found for the facet, return <code>Collections.emptyList()</code>.
      *
-     * RELEASE_PENDING (edburns,rogerk) why an NPE for target and not context?
-     *   Also, should the List returned by unmodifiable>?
-     *   Exception thrown should be reviewed for related add/remove methods
-     *
-     * @throws NullPointerException  if <code>target</code>
-     *                               is <code>null</code>
+     * @throws NullPointerException if <code>target</code> or
+     * <code>context</code> is <code>null</code>
      *
      * @since 2.0
      */
@@ -734,22 +723,7 @@ public class UIViewRoot extends UIComponentBase {
                         this.pushComponentToEL(context, source);
                         source.broadcast(event);
                     } catch (AbortProcessingException e) {
-                        if (LOGGER.isLoggable(Level.SEVERE)) {
-                            UIComponent component = event.getComponent();
-                            String id = "";
-                            if (component != null) {
-                                id = component.getId();
-                                if (id == null) {
-                                    id = component.getClientId(context);
-                                }
-                            }
-                            LOGGER.log(Level.SEVERE,
-                                       "error.component.abortprocessing_thrown",
-                                       new Object[]{event.getClass().getName(),
-                                                    phaseId.toString(),
-                                                    id});
-                            LOGGER.log(Level.SEVERE, e.toString(), e);
-                        }
+                        context.getApplication().publishEvent(ExceptionEvent.class, e);
                     }
                     finally {
                         popComponentFromEL(context);
@@ -768,8 +742,9 @@ public class UIViewRoot extends UIComponentBase {
                     try {
                         this.pushComponentToEL(context, source);
                         source.broadcast(event);
-                    } catch (AbortProcessingException ignored) {
+                    } catch (AbortProcessingException ape) {
                         // A "return" here would abort remaining events too
+                        context.getApplication().publishEvent(ExceptionEvent.class, ape);
                     }
                     finally {
                         popComponentFromEL(context);
@@ -856,9 +831,7 @@ public class UIViewRoot extends UIComponentBase {
                     }
                 });
             } catch (AbortProcessingException e) {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE, e.toString(), e);
-                }
+                context.getApplication().publishEvent(ExceptionEvent.class, e);
             }
         }
 
@@ -871,8 +844,9 @@ public class UIViewRoot extends UIComponentBase {
      * call {@link javax.faces.context.PartialViewContext#getExecutePhaseClientIds}.
      * This returns a list of client ids that must be processed during the
      * <code>execute</code> portion of the request processing lifecycle.
-     * If there were no client ids specified, perform <code>processDecodes</code>
-     * on all components in the view.
+     * If there were no client ids specified, refer to the <code>List</code> of 
+     * client ids by calling
+     * {@link javax.faces.context.PartialViewContext#getRenderPhaseClientIds}.
      * For each client id in the list, using <code>invokeOnComponent</code>,
      * call the respective <code>processDecodes</code> method on the component
      * with that client id.  Obtain an instance of a response writer that uses 
@@ -935,13 +909,13 @@ public class UIViewRoot extends UIComponentBase {
      */
     private boolean processPartialDecodes(FacesContext context, 
         PartialViewContext partialViewContext) {
-        
+
         if (partialViewContext.getExecutePhaseClientIds() == null ||
             partialViewContext.getExecutePhaseClientIds().isEmpty()) {
             return false;
         }
 
-        boolean invokedCallback = 
+        boolean invokedCallback =
               invokeContextCallbackOnSubtrees(context, partialViewContext,
                                               PhaseId.APPLY_REQUEST_VALUES);
 

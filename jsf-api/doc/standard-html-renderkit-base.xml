@@ -1108,46 +1108,6 @@
       <code>encodeEnd()</code> methods called, in order, passing the
       temporary component as the second argument.</p>
 
-      <div class="changed_added_2_0">
-      <p>The rules for the rendering of JavaScript
-      by renderers include the following exception.  If the component being 
-      rendered by this renderer contains an instance of
-      <code>javax.faces.component.AjaxBehavior</code> in its attribute 
-      <code>Map</code> as identified by the key <code>AjaxBehavior.AJAX_BEHAVIOR</code>:
-      <ul>
-      <li>Obtain the <code>javax.faces.component.AjaxBehavior</code> instance
-      from the component attribute <code>Map</code>.</li>
-      <li>Render JavaScript that is functionally equivalent to
-      the following as the value of the "onclick" attribute:
-      <p><code>javax.faces.Ajax.ajaxRequest(this,event,{execute:'&lt;execute values&gt;',render:'&lt;render values&gt;'}); return false;</code>
-      where <code>execute values</code> is the value returned from 
-      <code>AjaxBehavior.getExecute()</code> and <code>render values</code> is 
-      the values returned from <code>AjaxBehavior.getRender()</code>.</p>
-      Only render the <code>execute:'&lt;execute values&gt;'</code> if the value returned
-      from <code>AjaxBehavior.getExecute()</code> is not <code>null</code>.
-      Only render the <code>render:'&lt;render values&gt;'</code> if the value returned
-      from <code>AjaxBehavior.getRender()</code> is not <code>null</code>.
-      </li>
-      </ul>
-      <p>If an "onclick" attribute was specified by the user, render this 
-      JavaScript in a function, and render the user's JavaScript in a function.  
-      Render both functions in a choice function as follows:</p>
-
-      <p><code>var a=function(){#USER_FUNCTION#};
-      var b=function(){#JSF_FUNCTION#};
-      return (a()==false) ? false : b();</code></p>
-
-      <p>where #USER_FUNCTION# is the user's JavaScript and
-      #JSF_FUNCTION# is the JavaScript rendered by JSF.  The choice
-      function should operate such that if the user's JavaScript returns
-      true, then the rendered JavaScript will also execute.</p>
-      
-      </div>
-       
-      
-
-      <code>
-
       </ul>
             ]]>
             </description>
@@ -1260,32 +1220,6 @@
       #JSF_FUNCTION# is the JavaScript rendered by JSF.  The choice
       function should operate such that if the user's JavaScript returns
       true, then the rendered JavaScript will also execute.</p>
-
-      <div class="changed_added_2_0">
-      <p>The rules for the rendering of JavaScript
-      by renderers include the following exception.  If the component being
-      rendered by this renderer contains an instance of
-      <code>javax.faces.component.AjaxBehavior</code> in its attribute
-      <code>Map</code> as identified by the key <code>AjaxBehavior.AJAX_BEHAVIOR</code>:
-      <ul>
-      <li>Obtain the <code>javax.faces.component.AjaxBehavior</code> instance
-      from the component attribute <code>Map</code>.</li>
-      <li>Render JavaScript that is functionally equivalent to
-      the following as the value of the "onclick" attribute:
-      <p><code>javax.faces.Ajax.ajaxRequest(this,event,{execute:'&lt;execute values&gt;',render:'&lt;render values&gt;'}); return false;</code>
-      where <code>execute values</code> is the value returned from
-      <code>AjaxBehavior.getExecute()</code> and <code>render values</code> is
-      the values returned from <code>AjaxBehavior.getRender()</code>.</p>
-      Only render the <code>execute:'&lt;execute values&gt;'</code> if the value returned
-      from <code>AjaxBehavior.getExecute()</code> is not <code>null</code>.
-      Only render the <code>render:'&lt;render values&gt;'</code> if the value returned
-      from <code>AjaxBehavior.getRender()</code> is not <code>null</code>.
-      </li>
-      </ul>
-      <p>If an "onclick" attribute was specified by the user, render this
-      JavaScript in a function as specified by the rules above.</p>
-      </div>
-
  
       <p>If the "styleClass" attribute is specified, render its value as
       the value of the "class" attribute.  Render any non-UIParameter
@@ -1729,43 +1663,6 @@
       of the "class" attribute.
       </p>
 
-      <div class="changed_added_2_0">
-      <p>The rules for the rendering of JavaScript
-      by renderers include the following exception.  If the component being
-      rendered by this renderer contains an instance of
-      <code>javax.faces.component.AjaxBehavior</code> in its attribute
-      <code>Map</code> as identified by the key <code>AjaxBehavior.AJAX_BEHAVIOR</code>:
-      <ul>
-      <li>Obtain the <code>javax.faces.component.AjaxBehavior</code> instance
-      from the component attribute <code>Map</code>.</li>
-      <li>Render JavaScript that is functionally equivalent to
-      the following as the value of the "onchange" attribute:
-      <p><code>javax.faces.Ajax.ajaxRequest(this,event,{execute:'&lt;execute values&gt;',render:'&lt;render values&gt;'}); return false;</code>
-      where <code>execute values</code> is the value returned from
-      <code>AjaxBehavior.getExecute()</code> and <code>render values</code> is
-      the values returned from <code>AjaxBehavior.getRender()</code>.</p>
-      Only render the <code>execute:'&lt;execute values&gt;'</code> if the value returned
-      from <code>AjaxBehavior.getExecute()</code> is not <code>null</code>.
-      Only render the <code>render:'&lt;render values&gt;'</code> if the value returned
-      from <code>AjaxBehavior.getRender()</code> is not <code>null</code>.
-      </li>
-      </ul>
-      <p>If an "onchange" attribute was specified by the user, render this
-      JavaScript in a function, and render the user's JavaScript in a function.
-      Render both functions in a choice function as follows:</p>
-
-      <p><code>var a=function(){#USER_FUNCTION#};
-      var b=function(){#JSF_FUNCTION#};
-      return (a()==false) ? false : b();</code></p>
-
-      <p>where #USER_FUNCTION# is the user's JavaScript and
-      #JSF_FUNCTION# is the JavaScript rendered by JSF.  The choice
-      function should operate such that if the user's JavaScript returns
-      true, then the rendered JavaScript will also execute.</p>
-
-      </div>
-
-
       </ul>]]>
 
             </description>
@@ -1795,7 +1692,7 @@
 
       <ul>
 
-      <p>See the decode description for the <a
+      <p>See the encode description for the <a
       href="javax.faces.Inputjavax.faces.Text.html#encode">Input
       Text</a> renderer.</p>
 
@@ -1807,46 +1704,8 @@
 
       <p>  Render the
       clientId as the value of the "name" attribute.  Render the current
-      value of the component inside the "textarea"
-      element.</p> 
-
-      <div class="changed_added_2_0">
-      <p>The rules for the rendering of JavaScript
-      by renderers include the following exception.  If the component being
-      rendered by this renderer contains an instance of
-      <code>javax.faces.component.AjaxBehavior</code> in its attribute
-      <code>Map</code> as identified by the key <code>AjaxBehavior.AJAX_BEHAVIOR</code>:
-      <ul>
-      <li>Obtain the <code>javax.faces.component.AjaxBehavior</code> instance
-      from the component attribute <code>Map</code>.</li>
-      <li>Render JavaScript that is functionally equivalent to
-      the following as the value of the "onchange" attribute:
-      <p><code>javax.faces.Ajax.ajaxRequest(this,event,{execute:'&lt;execute values&gt;',render:'&lt;render values&gt;'}); return false;</code>
-      where <code>execute values</code> is the value returned from
-      <code>AjaxBehavior.getExecute()</code> and <code>render values</code> is
-      the values returned from <code>AjaxBehavior.getRender()</code>.</p>
-      Only render the <code>execute:'&lt;execute values&gt;'</code> if the value returned
-      from <code>AjaxBehavior.getExecute()</code> is not <code>null</code>.
-      Only render the <code>render:'&lt;render values&gt;'</code> if the value returned
-      from <code>AjaxBehavior.getRender()</code> is not <code>null</code>.
-      </li>
-      </ul>
-      <p>If an "onchange" attribute was specified by the user, render this
-      JavaScript in a function, and render the user's JavaScript in a function.
-      Render both functions in a choice function as follows:</p>
-
-      <p><code>var a=function(){#USER_FUNCTION#};
-      var b=function(){#JSF_FUNCTION#};
-      return (a()==false) ? false : b();</code></p>
-
-      <p>where #USER_FUNCTION# is the user's JavaScript and
-      #JSF_FUNCTION# is the JavaScript rendered by JSF.  The choice
-      function should operate such that if the user's JavaScript returns
-      true, then the rendered JavaScript will also execute.</p>
-
-      </div>
-
-      </ul>]]> </description>
+      valu eof the component inside the "textarea"
+      element.</p> </ul>]]> </description>
             <component-family>javax.faces.Input</component-family>
             <renderer-type>javax.faces.Textarea</renderer-type>
             <renderer-class>
@@ -2224,45 +2083,7 @@
       attribute.  If the current value of the component is "true",
       output the "checked" attribute (must be rendered as checked="checked").  
       If the "styleClass" attribute is specified, render its value as the value 
-      of the "class" attribute.</p> 
-
-      <div class="changed_added_2_0">
-      <p>The rules for the rendering of JavaScript
-      by renderers include the following exception.  If the component being
-      rendered by this renderer contains an instance of
-      <code>javax.faces.component.AjaxBehavior</code> in its attribute
-      <code>Map</code> as identified by the key <code>AjaxBehavior.AJAX_BEHAVIOR</code>:
-      <ul>
-      <li>Obtain the <code>javax.faces.component.AjaxBehavior</code> instance
-      from the component attribute <code>Map</code>.</li>
-      <li>Render JavaScript that is functionally equivalent to
-      the following as the value of the "onchange" attribute:
-      <p><code>javax.faces.Ajax.ajaxRequest(this,event,{execute:'&lt;execute values&gt;',render:'&lt;render values&gt;'}); return false;</code>
-      where <code>execute values</code> is the value returned from
-      <code>AjaxBehavior.getExecute()</code> and <code>render values</code> is
-      the values returned from <code>AjaxBehavior.getRender()</code>.</p>
-      Only render the <code>execute:'&lt;execute values&gt;'</code> if the value returned
-      from <code>AjaxBehavior.getExecute()</code> is not <code>null</code>.
-      Only render the <code>render:'&lt;render values&gt;'</code> if the value returned
-      from <code>AjaxBehavior.getRender()</code> is not <code>null</code>.
-      </li>
-      </ul>
-      <p>If an "onchange" attribute was specified by the user, render this
-      JavaScript in a function, and render the user's JavaScript in a function.
-      Render both functions in a choice function as follows:</p>
-
-      <p><code>var a=function(){#USER_FUNCTION#};
-      var b=function(){#JSF_FUNCTION#};
-      return (a()==false) ? false : b();</code></p>
-
-      <p>where #USER_FUNCTION# is the user's JavaScript and
-      #JSF_FUNCTION# is the JavaScript rendered by JSF.  The choice
-      function should operate such that if the user's JavaScript returns
-      true, then the rendered JavaScript will also execute.</p>
-
-      </div>
-
-      </ul>]]></description>
+      of the "class" attribute.</p> </ul>]]></description>
             <component-family>javax.faces.SelectBoolean</component-family>
             <renderer-type>javax.faces.Checkbox</renderer-type>
             <renderer-class>
@@ -2349,42 +2170,6 @@
       the option elements" </a> specification for
       <code>ListboxRenderer</code> for more detail on how to render the
       "option" elements in this renderer.</p>
-
-      <div class="changed_added_2_0">
-      <p>The rules for the rendering of JavaScript
-      by renderers include the following exception.  If the component being
-      rendered by this renderer contains an instance of
-      <code>javax.faces.component.AjaxBehavior</code> in its attribute
-      <code>Map</code> as identified by the key <code>AjaxBehavior.AJAX_BEHAVIOR</code>:
-      <ul>
-      <li>Obtain the <code>javax.faces.component.AjaxBehavior</code> instance
-      from the component attribute <code>Map</code>.</li>
-      <li>Render JavaScript that is functionally equivalent to
-      the following as the value of the "onchange" attribute:
-      <p><code>javax.faces.Ajax.ajaxRequest(this,event,{execute:'&lt;execute values&gt;',render:'&lt;render values&gt;'}); return false;</code>
-      where <code>execute values</code> is the value returned from
-      <code>AjaxBehavior.getExecute()</code> and <code>render values</code> is
-      the values returned from <code>AjaxBehavior.getRender()</code>.</p>
-      Only render the <code>execute:'&lt;execute values&gt;'</code> if the value returned
-      from <code>AjaxBehavior.getExecute()</code> is not <code>null</code>.
-      Only render the <code>render:'&lt;render values&gt;'</code> if the value returned
-      from <code>AjaxBehavior.getRender()</code> is not <code>null</code>.
-      </li>
-      </ul>
-      <p>If an "onchange" attribute was specified by the user, render this
-      JavaScript in a function, and render the user's JavaScript in a function.
-      Render both functions in a choice function as follows:</p>
-
-      <p><code>var a=function(){#USER_FUNCTION#};
-      var b=function(){#JSF_FUNCTION#};
-      return (a()==false) ? false : b();</code></p>
-
-      <p>where #USER_FUNCTION# is the user's JavaScript and
-      #JSF_FUNCTION# is the JavaScript rendered by JSF.  The choice
-      function should operate such that if the user's JavaScript returns
-      true, then the rendered JavaScript will also execute.</p>
-
-      </div>
 
       </ul>]]>
 
@@ -2537,42 +2322,6 @@
 
       </ul>
 
-      <div class="changed_added_2_0">
-      <p>The rules for the rendering of JavaScript
-      by renderers include the following exception.  If the component being
-      rendered by this renderer contains an instance of
-      <code>javax.faces.component.AjaxBehavior</code> in its attribute
-      <code>Map</code> as identified by the key <code>AjaxBehavior.AJAX_BEHAVIOR</code>:
-      <ul>
-      <li>Obtain the <code>javax.faces.component.AjaxBehavior</code> instance
-      from the component attribute <code>Map</code>.</li>
-      <li>Render JavaScript that is functionally equivalent to
-      the following as the value of the "onchange" attribute:
-      <p><code>javax.faces.Ajax.ajaxRequest(this,event,{execute:'&lt;execute values&gt;',render:'&lt;render values&gt;'}); return false;</code>
-      where <code>execute values</code> is the value returned from
-      <code>AjaxBehavior.getExecute()</code> and <code>render values</code> is
-      the values returned from <code>AjaxBehavior.getRender()</code>.</p>
-      Only render the <code>execute:'&lt;execute values&gt;'</code> if the value returned
-      from <code>AjaxBehavior.getExecute()</code> is not <code>null</code>.
-      Only render the <code>render:'&lt;render values&gt;'</code> if the value returned
-      from <code>AjaxBehavior.getRender()</code> is not <code>null</code>.
-      </li>
-      </ul>
-      <p>If an "onchange" attribute was specified by the user, render this
-      JavaScript in a function, and render the user's JavaScript in a function.
-      Render both functions in a choice function as follows:</p>
-
-      <p><code>var a=function(){#USER_FUNCTION#};
-      var b=function(){#JSF_FUNCTION#};
-      return (a()==false) ? false : b();</code></p>
-
-      <p>where #USER_FUNCTION# is the user's JavaScript and
-      #JSF_FUNCTION# is the JavaScript rendered by JSF.  The choice
-      function should operate such that if the user's JavaScript returns
-      true, then the rendered JavaScript will also execute.</p>
-
-      </div>
-
       </ul>]]>
 
             </description>
@@ -2627,42 +2376,6 @@
       more detail on how to render the "option" elements in this
       renderer.</p>
 
-      <div class="changed_added_2_0">
-      <p>The rules for the rendering of JavaScript
-      by renderers include the following exception.  If the component being
-      rendered by this renderer contains an instance of
-      <code>javax.faces.component.AjaxBehavior</code> in its attribute
-      <code>Map</code> as identified by the key <code>AjaxBehavior.AJAX_BEHAVIOR</code>:
-      <ul>
-      <li>Obtain the <code>javax.faces.component.AjaxBehavior</code> instance
-      from the component attribute <code>Map</code>.</li>
-      <li>Render JavaScript that is functionally equivalent to
-      the following as the value of the "onchange" attribute:
-      <p><code>javax.faces.Ajax.ajaxRequest(this,event,{execute:'&lt;execute values&gt;',render:'&lt;render values&gt;'}); return false;</code>
-      where <code>execute values</code> is the value returned from
-      <code>AjaxBehavior.getExecute()</code> and <code>render values</code> is
-      the values returned from <code>AjaxBehavior.getRender()</code>.</p>
-      Only render the <code>execute:'&lt;execute values&gt;'</code> if the value returned
-      from <code>AjaxBehavior.getExecute()</code> is not <code>null</code>.
-      Only render the <code>render:'&lt;render values&gt;'</code> if the value returned
-      from <code>AjaxBehavior.getRender()</code> is not <code>null</code>.
-      </li>
-      </ul>
-      <p>If an "onchange" attribute was specified by the user, render this
-      JavaScript in a function, and render the user's JavaScript in a function.
-      Render both functions in a choice function as follows:</p>
-
-      <p><code>var a=function(){#USER_FUNCTION#};
-      var b=function(){#JSF_FUNCTION#};
-      return (a()==false) ? false : b();</code></p>
-
-      <p>where #USER_FUNCTION# is the user's JavaScript and
-      #JSF_FUNCTION# is the JavaScript rendered by JSF.  The choice
-      function should operate such that if the user's JavaScript returns
-      true, then the rendered JavaScript will also execute.</p>
-
-      </div>
-
       </ul>]]>
 
             </description>
@@ -2715,42 +2428,6 @@
       more detail on how to render the "option" elements in this
       renderer.</p>
 
-      <div class="changed_added_2_0">
-      <p>The rules for the rendering of JavaScript
-      by renderers include the following exception.  If the component being
-      rendered by this renderer contains an instance of
-      <code>javax.faces.component.AjaxBehavior</code> in its attribute
-      <code>Map</code> as identified by the key <code>AjaxBehavior.AJAX_BEHAVIOR</code>:
-      <ul>  
-      <li>Obtain the <code>javax.faces.component.AjaxBehavior</code> instance
-      from the component attribute <code>Map</code>.</li>
-      <li>Render JavaScript that is functionally equivalent to
-      the following as the value of the "onchange" attribute:
-      <p><code>javax.faces.Ajax.ajaxRequest(this,event,{execute:'&lt;execute values&gt;',render:'&lt;render values&gt;'}); return false;</code>
-      where <code>execute values</code> is the value returned from
-      <code>AjaxBehavior.getExecute()</code> and <code>render values</code> is
-      the values returned from <code>AjaxBehavior.getRender()</code>.</p>
-      Only render the <code>execute:'&lt;execute values&gt;'</code> if the value returned
-      from <code>AjaxBehavior.getExecute()</code> is not <code>null</code>.
-      Only render the <code>render:'&lt;render values&gt;'</code> if the value returned
-      from <code>AjaxBehavior.getRender()</code> is not <code>null</code>.
-      </li>
-      </ul>
-      <p>If an "onchange" attribute was specified by the user, render this
-      JavaScript in a function, and render the user's JavaScript in a function.
-      Render both functions in a choice function as follows:</p>
-
-      <p><code>var a=function(){#USER_FUNCTION#};
-      var b=function(){#JSF_FUNCTION#};
-      return (a()==false) ? false : b();</code></p>
-
-      <p>where #USER_FUNCTION# is the user's JavaScript and
-      #JSF_FUNCTION# is the JavaScript rendered by JSF.  The choice
-      function should operate such that if the user's JavaScript returns
-      true, then the rendered JavaScript will also execute.</p>
-
-      </div>
-
       </ul>]]>
             </description>
             <component-family>javax.faces.SelectOne</component-family>
@@ -2800,42 +2477,6 @@
       the option elements" </a> specification for
       <code>ListboxRenderer</code> for more detail on how to render the
       "option" elements in this renderer.</p>
-
-      <div class="changed_added_2_0">
-      <p>The rules for the rendering of JavaScript
-      by renderers include the following exception.  If the component being
-      rendered by this renderer contains an instance of
-      <code>javax.faces.component.AjaxBehavior</code> in its attribute
-      <code>Map</code> as identified by the key <code>AjaxBehavior.AJAX_BEHAVIOR</code>:
-      <ul>  
-      <li>Obtain the <code>javax.faces.component.AjaxBehavior</code> instance
-      from the component attribute <code>Map</code>.</li>
-      <li>Render JavaScript that is functionally equivalent to
-      the following as the value of the "onchange" attribute:
-      <p><code>javax.faces.Ajax.ajaxRequest(this,event,{execute:'&lt;execute values&gt;',render:'&lt;render values&gt;'}); return false;</code>
-      where <code>execute values</code> is the value returned from
-      <code>AjaxBehavior.getExecute()</code> and <code>render values</code> is
-      the values returned from <code>AjaxBehavior.getRender()</code>.</p>
-      Only render the <code>execute:'&lt;execute values&gt;'</code> if the value returned
-      from <code>AjaxBehavior.getExecute()</code> is not <code>null</code>.
-      Only render the <code>render:'&lt;render values&gt;'</code> if the value returned
-      from <code>AjaxBehavior.getRender()</code> is not <code>null</code>.
-      </li>
-      </ul>
-      <p>If an "onchange" attribute was specified by the user, render this
-      JavaScript in a function, and render the user's JavaScript in a function.
-      Render both functions in a choice function as follows:</p>
-
-      <p><code>var a=function(){#USER_FUNCTION#};
-      var b=function(){#JSF_FUNCTION#};
-      return (a()==false) ? false : b();</code></p>
-
-      <p>where #USER_FUNCTION# is the user's JavaScript and
-      #JSF_FUNCTION# is the JavaScript rendered by JSF.  The choice
-      function should operate such that if the user's JavaScript returns
-      true, then the rendered JavaScript will also execute.</p>
-
-      </div>
 
       </ul>]]>
 
@@ -2915,42 +2556,6 @@
       the option elements" </a> specification for
       <code>ListboxRenderer</code> for more detail on how to render the
       "option" elements in this renderer.</p>
-
-      <div class="changed_added_2_0">
-      <p>The rules for the rendering of JavaScript
-      by renderers include the following exception.  If the component being
-      rendered by this renderer contains an instance of
-      <code>javax.faces.component.AjaxBehavior</code> in its attribute
-      <code>Map</code> as identified by the key <code>AjaxBehavior.AJAX_BEHAVIOR</code>:
-      <ul>  
-      <li>Obtain the <code>javax.faces.component.AjaxBehavior</code> instance
-      from the component attribute <code>Map</code>.</li>
-      <li>Render JavaScript that is functionally equivalent to
-      the following as the value of the "onchange" attribute:
-      <p><code>javax.faces.Ajax.ajaxRequest(this,event,{execute:'&lt;execute values&gt;',render:'&lt;render values&gt;'}); return false;</code>
-      where <code>execute values</code> is the value returned from
-      <code>AjaxBehavior.getExecute()</code> and <code>render values</code> is
-      the values returned from <code>AjaxBehavior.getRender()</code>.</p>
-      Only render the <code>execute:'&lt;execute values&gt;'</code> if the value returned
-      from <code>AjaxBehavior.getExecute()</code> is not <code>null</code>.
-      Only render the <code>render:'&lt;render values&gt;'</code> if the value returned
-      from <code>AjaxBehavior.getRender()</code> is not <code>null</code>.
-      </li>
-      </ul>
-      <p>If an "onchange" attribute was specified by the user, render this
-      JavaScript in a function, and render the user's JavaScript in a function.
-      Render both functions in a choice function as follows:</p>
-
-      <p><code>var a=function(){#USER_FUNCTION#};
-      var b=function(){#JSF_FUNCTION#};
-      return (a()==false) ? false : b();</code></p>
-
-      <p>where #USER_FUNCTION# is the user's JavaScript and
-      #JSF_FUNCTION# is the JavaScript rendered by JSF.  The choice
-      function should operate such that if the user's JavaScript returns
-      true, then the rendered JavaScript will also execute.</p>
-
-      </div>
 
       </ul>]]>
 

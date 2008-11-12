@@ -106,6 +106,10 @@ javax.faces.Ajax.Utils = function() {
         return toReduce.length > 1 ? toReduce : toReduce[0];
     };
 
+
+    // Split a delimited string into an array
+    // @param s String
+    // @param e delimiter character - cannot be a space
     this.toArray = function(s,e) {
         var sarray;
         if (typeof s == 'string') {

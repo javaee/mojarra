@@ -304,7 +304,7 @@ apply.</p>
             zero or one of these elements in a composite component PDL
             file.  If a <code>&lt;composite:interface&gt;</code> element
             does appear, there must be an accompanying
-            <code>&lt;composite-implementation&gt;</code> element in the
+            <code>&lt;composite:implementation&gt;</code> element in the
             same PDL file.  </p>
 
 </div>
