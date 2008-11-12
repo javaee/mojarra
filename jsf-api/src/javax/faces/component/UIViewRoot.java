@@ -86,15 +86,6 @@ import javax.servlet.http.HttpServletResponse;
  * serves as the root of the component tree, and as a place to hang 
  * per-view {@link PhaseListener}s.</p>
  *
- * RELEASE_PENDING (edburns,rogerk) the following block is no longer true.
- * <p class="changed_modified_2_0">To enable <code>UIViewRoot</code>
- * <code>PhaseListener</code>s to be invoked on restore view, this class
- * implements {@link ComponentSystemEventListener}.  The restore view
- * phase implementation must guarantee that an {@link
- * AfterAddToParentEvent} is passed to this instance at the appropriate
- * time to indicate that the view has been completely populated.  See
- * {@link #processEvent} for more information.</p>
-
  * <p>For each of the following lifecycle phase methods:</p>
 
  * <ul>
@@ -532,10 +523,11 @@ public class UIViewRoot extends UIComponentBase {
     }
 
     /**
-     * <p class="changed_added_2_0">Return a <code>List</code> of 
-     * {@link UIComponent}s for the provided <code>target</code> agrument.
-     * Each <code>component</code> in the <code>List</code> is assumed to 
-     * represent a resource instance.</p>
+     * <p class="changed_added_2_0">Return an unmodifiable
+     * <code>List</code> of {@link UIComponent}s for the provided
+     * <code>target</code> agrument.  Each <code>component</code> in the
+     * <code>List</code> is assumed to represent a resource
+     * instance.</p>
      *
      * <div class="changed_added_2_0">
      * <p>The default implementation must use an algorithm equivalent to the
@@ -556,16 +548,12 @@ public class UIViewRoot extends UIComponentBase {
      *
      * @param target The name of the facet for which the components will be returned. 
      *
-     * @return A <code>List</code> of {@link UIComponent} children of the facet with the 
-     * name <code>target</code>.  If no children are found for the facet, return
-     * <code>Collections.emptyList()</code>.
+     * @return A <code>List</code> of {@link UIComponent} children of
+     * the facet with the name <code>target</code>.  If no children are
+     * found for the facet, return <code>Collections.emptyList()</code>.
      *
-     * RELEASE_PENDING (edburns,rogerk) why an NPE for target and not context?
-     *   Also, should the List returned by unmodifiable>?
-     *   Exception thrown should be reviewed for related add/remove methods
-     *
-     * @throws NullPointerException  if <code>target</code>
-     *                               is <code>null</code>
+     * @throws NullPointerException if <code>target</code> or
+     * <code>context</code> is <code>null</code>
      *
      * @since 2.0
      */

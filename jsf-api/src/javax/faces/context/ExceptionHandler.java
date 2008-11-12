@@ -143,13 +143,6 @@ import javax.faces.event.SystemEventListener;
 public abstract class ExceptionHandler implements SystemEventListener {
 
    /**
-    * RELEASE_PENDING (edburns,roger) This needs further clarification.
-    *  the handle method will, when called, process *all* unhandled
-    *  ExceptionEvents in the order they were queued.  The docs should
-    *  probably state thus instead of "must take the first ExceptionEvent
-    *  queued"  The "handled" exception will be the first exception that isn't
-    *  swalloed.
-    * 
     * <p class="changed_added_2_0">The default implementation must take
     * the first {@link ExceptionEvent} queued from a call to {@link
     * #processEvent}, unwrap it with a call to {@link #getRootCause},
@@ -182,9 +175,6 @@ public abstract class ExceptionHandler implements SystemEventListener {
 
     
     /**
-     * RELEASE_PENDING (edburns,rogerk) this should return the
-     * first "handled" Event
-     *
      * <p class="changed_added_2_0">The default implementation must
      * return the first <code>ExceptionEvent</code> queued to {@link
      * #processEvent}.</p>
@@ -201,9 +191,12 @@ public abstract class ExceptionHandler implements SystemEventListener {
 
 
     /**
-     * RELEASE_PENDING (edburns, roger) docs
-     * @return
+     * <p class="changed_added_2_0">The default implementation must
+     * return an <code>Iterable</code> over all
+     * <code>ExceptionEvent</code>s that have been handled by the {@link
+     * #handle} method.</p>
      */
+
     public abstract Iterable<ExceptionEvent> getHandledExceptionEvents();
 
 

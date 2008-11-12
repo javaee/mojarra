@@ -43,8 +43,6 @@ import javax.faces.event.ExceptionEvent;
 import javax.faces.event.SystemEvent;
 
 /**
- * RELEASE_PENDING (edburns,rogerk) Review all docs
- * /**
  * <p>Provides a simple implementation of {@link ExceptionHandler} that can
  * be subclassed by developers wishing to provide specialized behavior
  * to an existing {@link ExceptionHandler} instance.  The default
