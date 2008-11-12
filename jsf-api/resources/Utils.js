@@ -225,11 +225,11 @@ this.elementReplace = function(d, tempTagName, src) {
         var retObj = {};
         if (dupeObj === null) {
             return null;
-        }
+    }
         if (typeof dupeObj === 'object') {
             if (typeof dupeObj.length !== 'undefined') {
                 retObj = [];
-            }
+}
             for (var objInd in dupeObj) {
                 if (dupeObj.hasOwnProperty(objInd)) {
                     if (typeof dupeObj[objInd] === 'object') {
@@ -239,7 +239,7 @@ this.elementReplace = function(d, tempTagName, src) {
                     } else if (typeof dupeObj[objInd] === 'number') {
                         retObj[objInd] = dupeObj[objInd];
                     } else if (typeof dupeObj[objInd] === 'boolean') {
-                        if (dupeObj[objInd] === true) {
+                        if (dupeObj[objInd]) {
                             retObj[objInd] = true;
                         } else {
                             retObj[objInd] = false;
