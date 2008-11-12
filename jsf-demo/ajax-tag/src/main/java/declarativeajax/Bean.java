@@ -171,7 +171,7 @@ public class Bean {
             output.setValue("Great lower level OO language..");
         } else if (text.equals("C")) {
             output = (UIOutput)form.findComponent("softwareLang");
-            output.setValue("When speed and device programming matter..");
+            output.setValue("When you need a nice device driver...");
         }
     }
 

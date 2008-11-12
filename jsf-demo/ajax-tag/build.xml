@@ -51,25 +51,12 @@
         <pathelement location="${jsf-impl.jar}"/>
         <path refid="compile.classpath"/>
     </path>
-    
-    <target name="init" depends="check.changes">
-        <tstamp/>
-    </target>
-
-    <target name="check.changes">
-        <uptodate property="skip.build"
-                  targetfile="${build}/last-build">
-            <srcfiles dir="${basedir}">
-                <include name="src/**/*.*"/>
-            </srcfiles>
-        </uptodate>
-    </target>
 
     <target name="clean">
         <delete dir="${build}"/>
     </target>    
 
-   <target name="prepare" depends="init"
+   <target name="prepare"
             description="Create build directories.">
         <mkdir dir="${build}/${example}"/>
         <mkdir dir="${build}/${example}/WEB-INF"/>
