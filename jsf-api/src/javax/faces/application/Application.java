@@ -262,8 +262,6 @@ public abstract class Application {
      *    the fully qualified class name as the value of the
      *    <code>&lt;resource-handler&gt;</code> element within the
      *    <code>&lt;application&gt;</code> element.  </p></li>
-     *    <li><p>RELEASE_PENDING(edburns) It can also be declared via an
-     *    annotation as specified in [287-ConfigAnnotations].</p></li>
      * </ul>
      * <p>In all of the above cases, the runtime must employ the
      * decorator pattern as for every other pluggable artifact in
