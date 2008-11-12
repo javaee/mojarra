@@ -202,6 +202,30 @@ public class ExceptionEventContext implements SystemEventListenerHolder {
 
 
     /**
+     * @return <code>true</code> if the exception occurred during the
+     *  <code>before phase</code> processing for a particular lifecycle
+     *  phase
+     */
+    public boolean inBeforePhase() {
+
+        return isAttributeDefined(IN_BEFORE_PHASE_KEY);
+
+    }
+
+
+    /**
+     * @return <code>true</code> if the exception occurred during the
+     *  <code>after phase</code> processing for a particular lifecycle
+     *  phase
+     */
+    public boolean inAfterPhase() {
+
+        return isAttributeDefined(IN_AFTER_PHASE_KEY);
+
+    }
+
+
+    /**
      * <p class="changed_added_2_0">A <code>Map</code> of attributes
      * relevant to the context of this <code>ExceptionEvent</code>.</p>
      */
@@ -232,6 +256,15 @@ public class ExceptionEventContext implements SystemEventListenerHolder {
 
     }
 
+
+    // --------------------------------------------------------- Private Methods
+
+
+    private boolean isAttributeDefined(String key) {
+
+        return ((attributes != null) && attributes.containsKey(key));
+
+    }
 
 
 }

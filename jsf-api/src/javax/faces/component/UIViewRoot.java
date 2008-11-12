@@ -76,6 +76,7 @@ import javax.faces.event.AfterRestoreStateEvent;
 import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.ViewMapCreatedEvent;
 import javax.faces.event.ViewMapDestroyedEvent;
+import javax.faces.event.ExceptionEvent;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -722,22 +723,23 @@ public class UIViewRoot extends UIComponentBase {
                         this.pushComponentToEL(context, source);
                         source.broadcast(event);
                     } catch (AbortProcessingException e) {
-                        if (LOGGER.isLoggable(Level.SEVERE)) {
-                            UIComponent component = event.getComponent();
-                            String id = "";
-                            if (component != null) {
-                                id = component.getId();
-                                if (id == null) {
-                                    id = component.getClientId(context);
-                                }
-                            }
-                            LOGGER.log(Level.SEVERE,
-                                       "error.component.abortprocessing_thrown",
-                                       new Object[]{event.getClass().getName(),
-                                                    phaseId.toString(),
-                                                    id});
-                            LOGGER.log(Level.SEVERE, e.toString(), e);
-                        }
+//                        if (LOGGER.isLoggable(Level.SEVERE)) {
+//                            UIComponent component = event.getComponent();
+//                            String id = "";
+//                            if (component != null) {
+//                                id = component.getId();
+//                                if (id == null) {
+//                                    id = component.getClientId(context);
+//                                }
+//                            }
+//                            LOGGER.log(Level.SEVERE,
+//                                       "error.component.abortprocessing_thrown",
+//                                       new Object[]{event.getClass().getName(),
+//                                                    phaseId.toString(),
+//                                                    id});
+//                            LOGGER.log(Level.SEVERE, e.toString(), e);
+//                        }
+                        context.getApplication().publishEvent(ExceptionEvent.class, e);
                     }
                     finally {
                         popComponentFromEL(context);
@@ -756,8 +758,9 @@ public class UIViewRoot extends UIComponentBase {
                     try {
                         this.pushComponentToEL(context, source);
                         source.broadcast(event);
-                    } catch (AbortProcessingException ignored) {
+                    } catch (AbortProcessingException ape) {
                         // A "return" here would abort remaining events too
+                        context.getApplication().publishEvent(ExceptionEvent.class, ape);
                     }
                     finally {
                         popComponentFromEL(context);
@@ -844,9 +847,10 @@ public class UIViewRoot extends UIComponentBase {
                     }
                 });
             } catch (AbortProcessingException e) {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE, e.toString(), e);
-                }
+                //if (LOGGER.isLoggable(Level.SEVERE)) {
+                //    LOGGER.log(Level.SEVERE, e.toString(), e);
+                //}
+                context.getApplication().publishEvent(ExceptionEvent.class, e);
             }
         }
 

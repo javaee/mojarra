@@ -42,7 +42,6 @@
 
 package com.sun.faces.lifecycle;
 
-import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.logging.Level;
@@ -68,6 +67,7 @@ import javax.faces.component.ContextCallback;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.AfterAddToParentEvent;
 import javax.faces.event.AfterRestoreStateEvent;
+import javax.faces.event.ExceptionEvent;
 
 /**
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
@@ -144,7 +144,7 @@ public class RestoreViewPhase extends Phase {
                     }
                 });
             } catch (AbortProcessingException e) {
-                
+                facesContext.getApplication().publishEvent(ExceptionEvent.class, e);    
             }
             
             

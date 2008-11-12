@@ -283,11 +283,12 @@ public class ApplicationImpl extends Application {
             // look for and invoke any listeners not specific to the source class
             invokeListenersFor(systemEventClass, event, source, null, false);
         } catch (AbortProcessingException ape) {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE,
-                           ape.getMessage(),
-                           ape);
-            }
+            FacesContext.getCurrentInstance().getApplication().publishEvent(SystemEvent.class, ape);
+            //if (LOGGER.isLoggable(Level.SEVERE)) {
+            //    LOGGER.log(Level.SEVERE,
+            //               ape.getMessage(),
+            //               ape);
+            //}
         }
 
     }

@@ -37,25 +37,51 @@
 package com.sun.faces.context;
 
 import java.util.LinkedList;
-import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
 import javax.faces.context.ExceptionHandler;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ExceptionEvent;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.ExceptionEventContext;
+import javax.faces.event.PhaseId;
 import javax.el.ELException;
+
+import com.sun.faces.util.FacesLogger;
 
 
 /**
- * The default implementation of {@link ExceptionHandler}.
+ * <p>
+ * The default implementation of {@link ExceptionHandler} for JSF 2.0.
+ * </p>
+ *
+ * <p>
+ * As an implementation note, if changes going forward are required here,
+ * review the <code>ExceptionHandler</code> implementation within
+ * <code>javax.faces.webapp.PreJsf2ExceptionHandlerFactory</code>.  The code
+ * is, in most cases, quite similar.
+ * </p>
+ *
  */
 public class ExceptionHandlerImpl extends ExceptionHandler {
+
+    private static final Logger LOGGER = FacesLogger.CONTEXT.getLogger();
+    private static final String LOG_BEFORE_KEY =
+          "jsf.context.exception.handler.log_before";
+    private static final String LOG_AFTER_KEY =
+          "jsf.context.exception.handler.log_after";
+    private static final String LOG_KEY =
+          "jsf.context.exception.handler.log";
 
     
     private LinkedList<ExceptionEvent> unhandledExceptions;
     private LinkedList<ExceptionEvent> handledExceptions;
+    private ExceptionEvent handled;
 
 
     // ------------------------------------------- Methods from ExceptionHandler
@@ -66,7 +92,7 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
      */
     public ExceptionEvent getHandledExceptionEvent() {
 
-        return (isNullOrEmpty(unhandledExceptions) ? null : handledExceptions.getLast());
+        return handled;
 
     }
 
@@ -76,17 +102,33 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
      */
     public void handle() throws FacesException {
 
-        if (!isNullOrEmpty(unhandledExceptions)) {
-            for (ExceptionEvent event : getUnhandledExceptionEvents()) {
-                try {
-                    ExceptionEventContext context = (ExceptionEventContext) event.getSource();
-                    // do something
-                } finally {
-                    if (handledExceptions == null) {
-                        handledExceptions = new LinkedList<ExceptionEvent>();
+        for (Iterator<ExceptionEvent> i = getUnhandledExceptionEvents().iterator(); i.hasNext(); ) {
+            ExceptionEvent event = i.next();
+            ExceptionEventContext context = (ExceptionEventContext) event.getSource();
+            try {
+                Throwable t = context.getException();
+                if (isRethrown(t)) {
+                    handled = event;
+                    Throwable unwrapped = getRootCause(t);
+                    if (unwrapped != null) {
+                        throw new FacesException(unwrapped.getMessage(), unwrapped);
+                    } else {
+                        if (t instanceof FacesException) {
+                            throw (FacesException) t;
+                        } else {
+                            throw new FacesException(t.getMessage(), t);
+                        }
                     }
-                    handledExceptions.add(event);
+                } else {
+                    log(context);
                 }
+
+            } finally {
+                if (handledExceptions == null) {
+                    handledExceptions = new LinkedList<ExceptionEvent>();
+                }
+                handledExceptions.add(event);
+                i.remove();               
             }
         }
 
@@ -98,7 +140,7 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
      */
     public boolean isListenerForSource(Object source) {
 
-        return (source instanceof ExceptionEvent);
+        return (source instanceof ExceptionEventContext);
 
     }
 
@@ -108,10 +150,12 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
      */
     public void processEvent(SystemEvent event) throws AbortProcessingException {
 
-        if (unhandledExceptions == null) {
-            unhandledExceptions = new LinkedList<ExceptionEvent>();
+        if (event != null) {
+            if (unhandledExceptions == null) {
+                unhandledExceptions = new LinkedList<ExceptionEvent>();
+            }
+            unhandledExceptions.add((ExceptionEvent) event);
         }
-        unhandledExceptions.add((ExceptionEvent) event);
 
     }
 
@@ -121,20 +165,23 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
      */
     public Throwable getRootCause(Throwable t) {
 
-        Class<? extends Throwable> tClass = t.getClass();
-        Throwable ret = t;
-        if (shouldUnwrap(tClass)) {
-            ret = t.getCause();
-            while (ret != null) {
-                if (shouldUnwrap(tClass)) {
-                    ret = ret.getCause();
-                    continue;
+        if (t == null) {
+            return null;
+        }
+        if (shouldUnwrap(t.getClass())) {
+            Throwable root = t.getCause();
+            if (root != null) {
+                Throwable tmp = getRootCause(root);
+                if (tmp == null) {
+                    return root;
+                } else {
+                    return tmp;
                 }
-                break;
+            } else {
+                return t;
             }
         }
-
-        return ret;
+        return t;
         
     }
 
@@ -144,8 +191,9 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
      */
     public Iterable<ExceptionEvent> getUnhandledExceptionEvents() {
 
-        // should we clone?
-        return unhandledExceptions;
+        return ((unhandledExceptions != null)
+                    ? unhandledExceptions
+                    : Collections.<ExceptionEvent>emptyList());
 
     }
 
@@ -156,9 +204,10 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
      */
     public Iterable<ExceptionEvent> getHandledExceptionEvents() {
 
-        // should we clone?
-        return handledExceptions;
-
+        return ((handledExceptions != null)
+                    ? handledExceptions
+                    : Collections.<ExceptionEvent>emptyList());
+        
     }
 
 
@@ -176,11 +225,41 @@ public class ExceptionHandlerImpl extends ExceptionHandler {
 
     }
 
+    
+    private boolean isRethrown(Throwable t) {
 
-    private boolean isNullOrEmpty(Collection c) {
+        return (!(t instanceof AbortProcessingException));
 
-        return (c == null || c.isEmpty());
+    }
 
+    private void log(ExceptionEventContext exceptionContext) {
+
+        UIComponent c = exceptionContext.getComponent();
+        boolean beforePhase = exceptionContext.inBeforePhase();
+        boolean afterPhase = exceptionContext.inAfterPhase();
+        PhaseId phaseId = exceptionContext.getPhaseId();
+        Throwable t = exceptionContext.getException();
+        String key = getLoggingKey(beforePhase, afterPhase);
+        if (LOGGER.isLoggable(Level.SEVERE)) {
+            LOGGER.log(Level.SEVERE,
+                       key,
+                       new Object[] { t.getClass().getName(),
+                                      phaseId.toString(),
+                                      ((c != null) ? c.getClientId(exceptionContext.getContext()) : ""),
+                                      t.getMessage()});
+            LOGGER.log(Level.SEVERE, t.getMessage(), t);
+        }
+
+    }
+
+    private String getLoggingKey(boolean beforePhase, boolean afterPhase) {
+        if (beforePhase) {
+            return LOG_BEFORE_KEY;
+        } else if (afterPhase) {
+            return LOG_AFTER_KEY;
+        } else {
+            return LOG_KEY;
+        }
     }
 
 }

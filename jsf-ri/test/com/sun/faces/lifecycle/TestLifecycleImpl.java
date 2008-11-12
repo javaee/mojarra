@@ -46,12 +46,16 @@ import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ExceptionHandler;
+import javax.faces.context.ExceptionHandlerFactory;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
+import javax.faces.webapp.PreJsf2ExceptionHandlerFactory;
 
 import com.sun.faces.cactus.JspFacesTestCase;
 import com.sun.faces.util.Util;
+import com.sun.faces.context.ExceptionHandlerImpl;
 
 import org.apache.cactus.WebRequest;
 
@@ -329,18 +333,31 @@ public class TestLifecycleImpl extends JspFacesTestCase {
 
     }
 
-    public void beginBeforeListenerException(WebRequest theRequest) {
+    public void beginBeforeListenerExceptionJsf12(WebRequest theRequest) {
         initWebRequest(theRequest);
     }
 
+    public void testBeforeListenerExceptionJsf12() {
+        ExceptionHandlerFactory f = new PreJsf2ExceptionHandlerFactory();
+        testBeforeListenerException(f.getExceptionHandler(), false);
+    }
 
-    public void testBeforeListenerException() {
+    public void beginBeforeListenerExceptionJsf20(WebRequest theRequest) {
+        initWebRequest(theRequest);
+    }
+
+    public void testBeforeListenerExceptionJsf20() {
+        testBeforeListenerException(new ExceptionHandlerImpl(), true);
+    }
+
+
+    public void testBeforeListenerException(ExceptionHandler handler, boolean expectException) {
         assertTrue(null != sharedListener);
-
+        getFacesContext().setExceptionHandler(handler);
         LifecycleImpl life = getSharedLifecycleImpl();
-        int [] phaseCalledA = new int[PhaseId.RENDER_RESPONSE.getOrdinal() + 1];
-	int [] phaseCalledB = new int[PhaseId.RENDER_RESPONSE.getOrdinal() + 1];
-	int [] phaseCalledC = new int[PhaseId.RENDER_RESPONSE.getOrdinal() + 1];
+        int[] phaseCalledA = new int[PhaseId.RENDER_RESPONSE.getOrdinal() + 1];
+        int[] phaseCalledB = new int[PhaseId.RENDER_RESPONSE.getOrdinal() + 1];
+        int[] phaseCalledC = new int[PhaseId.RENDER_RESPONSE.getOrdinal() + 1];
         int i;
         for (i = 1; i < phaseCalledA.length; i++) {
             phaseCalledA[i] = 0;
@@ -351,17 +368,17 @@ public class TestLifecycleImpl extends JspFacesTestCase {
 
         life.removePhaseListener(sharedListener);
 
-	PhaseListenerImpl 
-	    a = new PhaseListenerImpl(phaseCalledA, 
-				      PhaseId.APPLY_REQUEST_VALUES,
-				      PhaseId.PROCESS_VALIDATIONS),
-	    b = new PhaseListenerImpl(phaseCalledB, 
-				      PhaseId.APPLY_REQUEST_VALUES,
-				      PhaseId.PROCESS_VALIDATIONS),
-	    c = new PhaseListenerImpl(phaseCalledC, 
-				      PhaseId.APPLY_REQUEST_VALUES,
-				      PhaseId.PROCESS_VALIDATIONS);
-	b.setThrowExceptionOnBefore(true);
+        PhaseListenerImpl
+              a = new PhaseListenerImpl(phaseCalledA,
+                                        PhaseId.APPLY_REQUEST_VALUES,
+                                        PhaseId.PROCESS_VALIDATIONS),
+              b = new PhaseListenerImpl(phaseCalledB,
+                                        PhaseId.APPLY_REQUEST_VALUES,
+                                        PhaseId.PROCESS_VALIDATIONS),
+              c = new PhaseListenerImpl(phaseCalledC,
+                                        PhaseId.APPLY_REQUEST_VALUES,
+                                        PhaseId.PROCESS_VALIDATIONS);
+        b.setThrowExceptionOnBefore(true);
         life.addPhaseListener(a);
         life.addPhaseListener(b);
         life.addPhaseListener(c);
@@ -369,37 +386,55 @@ public class TestLifecycleImpl extends JspFacesTestCase {
         try {
             life.execute(getFacesContext());
             life.render(getFacesContext());
+            if (expectException) {
+                assertTrue(false);
+            }
         } catch (Throwable e) {
-            e.printStackTrace();
-            assertTrue(e.getMessage(), false);
+            if (!expectException) {
+                assertTrue(false);
+                e.printStackTrace();
+            }
         }
 
-	// verify before and after for "a" were called.
-	assertEquals(2, 
-		     phaseCalledA[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()]);
-	// verify before for "b" was called, but the after was not
-	assertEquals(1, 
-		     phaseCalledB[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()]);
-	// verify that neither before nor after for "c" were called
-	assertEquals(0, 
-		     phaseCalledC[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()]);
+        // verify before and after for "a" were called.
+        assertEquals(2,
+                     phaseCalledA[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()]);
+        // verify before for "b" was called, but the after was not
+        assertEquals(1,
+                     phaseCalledB[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()]);
+        // verify that neither before nor after for "c" were called
+        assertEquals(0,
+                     phaseCalledC[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()]);
 
         life.removePhaseListener(a);
         life.removePhaseListener(b);
         life.removePhaseListener(c);
     }
 
-    public void beginAfterListenerException(WebRequest theRequest) {
+    public void beginAfterListenerExceptionJsf12(WebRequest theRequest) {
         initWebRequest(theRequest);
     }
 
-    public void testAfterListenerException() {
-        assertTrue(null != sharedListener);
+    public void testAfterListenerExceptionJsf12() {
+        ExceptionHandlerFactory f = new PreJsf2ExceptionHandlerFactory();
+        testAfterListenerException(f.getExceptionHandler(), false);
+    }
 
+    public void beginAfterListenerExceptionJsf20(WebRequest theRequest) {
+        initWebRequest(theRequest);
+    }
+
+    public void testAfterListenerExceptionJsf20() {
+        testAfterListenerException(new ExceptionHandlerImpl(), true);
+    }
+
+    public void testAfterListenerException(ExceptionHandler handler, boolean expectException) {
+        assertTrue(null != sharedListener);
+        getFacesContext().setExceptionHandler(handler);
         LifecycleImpl life = getSharedLifecycleImpl();
-        int [] phaseCalledA = new int[PhaseId.RENDER_RESPONSE.getOrdinal() + 1];
-	int [] phaseCalledB = new int[PhaseId.RENDER_RESPONSE.getOrdinal() + 1];
-	int [] phaseCalledC = new int[PhaseId.RENDER_RESPONSE.getOrdinal() + 1];
+        int[] phaseCalledA = new int[PhaseId.RENDER_RESPONSE.getOrdinal() + 1];
+        int[] phaseCalledB = new int[PhaseId.RENDER_RESPONSE.getOrdinal() + 1];
+        int[] phaseCalledC = new int[PhaseId.RENDER_RESPONSE.getOrdinal() + 1];
         int i;
         for (i = 1; i < phaseCalledA.length; i++) {
             phaseCalledA[i] = 0;
@@ -410,17 +445,17 @@ public class TestLifecycleImpl extends JspFacesTestCase {
 
         life.removePhaseListener(sharedListener);
 
-	PhaseListenerImpl 
-	    a = new PhaseListenerImpl(phaseCalledA, 
-				      PhaseId.APPLY_REQUEST_VALUES,
-				      PhaseId.PROCESS_VALIDATIONS),
-	    b = new PhaseListenerImpl(phaseCalledB, 
-				      PhaseId.APPLY_REQUEST_VALUES,
-				      PhaseId.PROCESS_VALIDATIONS),
-	    c = new PhaseListenerImpl(phaseCalledC, 
-				      PhaseId.APPLY_REQUEST_VALUES,
-				      PhaseId.PROCESS_VALIDATIONS);
-	b.setThrowExceptionOnAfter(true);
+        PhaseListenerImpl
+              a = new PhaseListenerImpl(phaseCalledA,
+                                        PhaseId.APPLY_REQUEST_VALUES,
+                                        PhaseId.PROCESS_VALIDATIONS),
+              b = new PhaseListenerImpl(phaseCalledB,
+                                        PhaseId.APPLY_REQUEST_VALUES,
+                                        PhaseId.PROCESS_VALIDATIONS),
+              c = new PhaseListenerImpl(phaseCalledC,
+                                        PhaseId.APPLY_REQUEST_VALUES,
+                                        PhaseId.PROCESS_VALIDATIONS);
+        b.setThrowExceptionOnAfter(true);
         life.addPhaseListener(a);
         life.addPhaseListener(b);
         life.addPhaseListener(c);
@@ -428,20 +463,25 @@ public class TestLifecycleImpl extends JspFacesTestCase {
         try {
             life.execute(getFacesContext());
             life.render(getFacesContext());
+            if (expectException) {
+                assertTrue(false);
+            }
         } catch (Throwable e) {
-            e.printStackTrace();
-            assertTrue(e.getMessage(), false);
+            if (!expectException) {
+                assertTrue(false);
+                e.printStackTrace();
+            }
         }
 
-	// verify before and after for "a" were called.
-	assertEquals(1, 
-		     phaseCalledA[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()]);
-	// verify before for "b" was called, but the after was not
-	assertEquals(2, 
-		     phaseCalledB[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()]);
-	// verify that neither before nor after for "c" were called
-	assertEquals(2, 
-		     phaseCalledC[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()]);
+        // verify before and after for "a" were called.
+        assertEquals(1,
+                     phaseCalledA[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()]);
+        // verify before for "b" was called, but the after was not
+        assertEquals(2,
+                     phaseCalledB[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()]);
+        // verify that neither before nor after for "c" were called
+        assertEquals(2,
+                     phaseCalledC[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()]);
 
         life.removePhaseListener(a);
         life.removePhaseListener(b);

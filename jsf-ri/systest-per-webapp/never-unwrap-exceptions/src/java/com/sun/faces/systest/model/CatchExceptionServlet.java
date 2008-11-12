@@ -71,6 +71,7 @@ public class CatchExceptionServlet implements Servlet {
         catch (ServletException e) {
             HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
             httpRequest.setAttribute("exceptionClass", e.getClass().getName());
+            httpRequest.setAttribute("rootCause", e.getCause().getClass().getName());
             httpRequest.setAttribute("exceptionMessage", e.getMessage());
             throw e;
         }

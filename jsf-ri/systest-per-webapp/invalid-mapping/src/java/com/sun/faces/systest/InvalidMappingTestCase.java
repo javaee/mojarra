@@ -75,7 +75,7 @@ public class InvalidMappingTestCase extends AbstractTestCase {
     
     // ------------------------------------------------------------ Test Methods
     
-    public void testViewExpiredExceptionErrorPage() throws Exception {
+    public void testInvalidMapping() throws Exception {
         WebClient client = new WebClient();
         client.setThrowExceptionOnFailingStatusCode(false);
         client.setTimeout(0);                

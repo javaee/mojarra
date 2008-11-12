@@ -41,6 +41,7 @@
 <body>
 
   <p>Exception class: ${requestScope.exceptionClass}</p>
+  <p>Root cause: ${requestScope.rootCause}</p>
   <p>Exception message: ${requestScope.exceptionMessage}</p>
 </body>
 </html>

@@ -49,6 +49,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
+import javax.faces.event.ExceptionEventContext;
+import javax.faces.event.ExceptionEvent;
 import javax.faces.lifecycle.Lifecycle;
 
 import com.sun.faces.util.FacesLogger;
@@ -100,20 +102,19 @@ public abstract class Phase {
             if (!shouldSkip(context)) {
                 execute(context);
             }
-        } catch (Exception e) {
-             if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.log(Level.SEVERE,
-                     "jsf.lifecycle.phase.exception",
-                     new Object[]{
-                          this.getId().toString(),
-                          ((context.getViewRoot() != null) ? context.getViewRoot().getViewId() : ""),
-                          event});
-            }
-
-            ex = e;
+        } catch (Throwable e) {
+            // if (LOGGER.isLoggable(Level.SEVERE)) {
+            //    LOGGER.log(Level.SEVERE,
+            //         "jsf.lifecycle.phase.exception",
+            //         new Object[]{
+            //              this.getId().toString(),
+            //              ((context.getViewRoot() != null) ? context.getViewRoot().getViewId() : ""),
+            //              event});
+            //}
+            queueException(context, e);
+            //ex = e;
         } finally {
             handleAfterPhase(context, listeners, event);
-            
             // stop timing
             if (timer != null) {
                 timer.stopTiming();
@@ -121,16 +122,18 @@ public abstract class Phase {
                       "Execution time for phase (including any PhaseListeners) -> "
                       + this.getId().toString());
             }
+            
+            context.getExceptionHandler().handle();
         }
 
         // handle any exceptions thrown by Phase.execute()
-        if (ex != null) {
-            if (!(ex instanceof FacesException)) {
-                ex = new FacesException(ex);
-            }
-
-            throw (FacesException) ex;
-        }
+        //if (ex != null) {
+        //    if (!(ex instanceof FacesException)) {
+        //        ex = new FacesException(ex);
+        //    }
+        //
+        //    throw (FacesException) ex;
+        //}
 
     }
 
@@ -157,6 +160,24 @@ public abstract class Phase {
     // ------------------------------------------------------- Protected Methods
 
 
+     protected void queueException(FacesContext ctx, Throwable t) {
+
+        queueException(ctx, t, null);
+
+    }
+
+
+    protected void queueException(FacesContext ctx, Throwable t, String booleanKey) {
+
+        ExceptionEventContext extx = new ExceptionEventContext(ctx, t);
+        if (booleanKey != null) {
+            extx.getAttributes().put(booleanKey, Boolean.TRUE);
+        }
+        ctx.getApplication().publishEvent(ExceptionEvent.class, extx);
+
+    }
+
+
     /**
      * Handle <code>afterPhase</code> <code>PhaseListener</code> events.
      * @param context the FacesContext for the current request
@@ -175,20 +196,24 @@ public abstract class Phase {
                 try {
                     listener.afterPhase(event);
                 } catch (Exception e) {
-                    if (LOGGER.isLoggable(Level.WARNING)) {
-                        LOGGER.log(Level.WARNING,
-                                   "jsf.lifecycle.phaselistener.exception",
-                                   new Object[]{
-                                         listener.getClass().getName()
-                                         + ".afterPhase()",
-                                         this.getId().toString(),
-                                         ((context.getViewRoot() != null)
-                                          ? context.getViewRoot().getViewId()
-                                          : ""),
-                                         e});
-                        LOGGER.warning(Util.getStackTraceString(e));
-                        return;
-                    }
+//                    if (LOGGER.isLoggable(Level.WARNING)) {
+//                        LOGGER.log(Level.WARNING,
+//                                   "jsf.lifecycle.phaselistener.exception",
+//                                   new Object[]{
+//                                         listener.getClass().getName()
+//                                         + ".afterPhase()",
+//                                         this.getId().toString(),
+//                                         ((context.getViewRoot() != null)
+//                                          ? context.getViewRoot().getViewId()
+//                                          : ""),
+//                                         e});
+//                        LOGGER.warning(Util.getStackTraceString(e));
+//
+//                    }
+                    queueException(context,
+                                   e,
+                                   ExceptionEventContext.IN_AFTER_PHASE_KEY);
+                    return;
                 }
             }
         }
@@ -214,19 +239,22 @@ public abstract class Phase {
                  try {
                      listener.beforePhase(event);
                  } catch (Exception e) {
-                     if (LOGGER.isLoggable(Level.WARNING)) {
-                         LOGGER.log(Level.WARNING,
-                                    "jsf.lifecycle.phaselistener.exception",
-                                    new Object[]{
-                                          listener.getClass().getName()
-                                          + ".beforePhase()",
-                                          this.getId().toString(),
-                                          ((context.getViewRoot() != null)
-                                           ? context.getViewRoot().getViewId()
-                                           : ""),
-                                          e});
-                         LOGGER.warning(Util.getStackTraceString(e));
-                     }
+//                     if (LOGGER.isLoggable(Level.WARNING)) {
+//                         LOGGER.log(Level.WARNING,
+//                                    "jsf.lifecycle.phaselistener.exception",
+//                                    new Object[]{
+//                                          listener.getClass().getName()
+//                                          + ".beforePhase()",
+//                                          this.getId().toString(),
+//                                          ((context.getViewRoot() != null)
+//                                           ? context.getViewRoot().getViewId()
+//                                           : ""),
+//                                          e});
+//                         LOGGER.warning(Util.getStackTraceString(e));
+//                     }
+                     queueException(context,
+                                    e,
+                                    ExceptionEventContext.IN_BEFORE_PHASE_KEY);
                      // move the iterator pointer back one
                      if (listenersIterator.hasPrevious()) {
                          listenersIterator.previous();
