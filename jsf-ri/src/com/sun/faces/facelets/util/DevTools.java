@@ -51,6 +51,7 @@
 
 package com.sun.faces.facelets.util;
 
+import com.sun.faces.util.Util;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
@@ -109,9 +110,14 @@ public final class DevTools {
     }
     
     private static String[] splitTemplate(String rsc) throws IOException {
-        InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(rsc);
+        ClassLoader loader = Util.getCurrentLoader(DevTools.class);
+        InputStream is = loader.getResourceAsStream(rsc);
         if (is == null) {
-            throw new FileNotFoundException(rsc);
+            loader = DevTools.class.getClassLoader();
+            is = loader.getResourceAsStream(rsc);
+            if (is == null) {
+                throw new FileNotFoundException(rsc);
+            }
         }
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] buff = new byte[512];
