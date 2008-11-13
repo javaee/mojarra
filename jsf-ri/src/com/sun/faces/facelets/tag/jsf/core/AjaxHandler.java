@@ -281,9 +281,7 @@ public final class AjaxHandler extends TagHandler {
             UIComponent resource = (UIComponent)iter.next();
             String name = (String)resource.getAttributes().get("name");
             String library = (String)resource.getAttributes().get("library");
-
-            if (name != null && library != null &&
-                    name.equals("ajax.js") && library.equals("javax.faces")) {
+            if ("ajax.js".equals(name) && "javax.faces".equals(library)) {
                 return;
             }
         }
@@ -294,11 +292,7 @@ public final class AjaxHandler extends TagHandler {
             UIComponent resource = (UIComponent)iter.next();
             String name = (String)resource.getAttributes().get("name");
             String library = (String)resource.getAttributes().get("library");
-
-            // RELEASE_PENDING driscoll - is this really the best way to determine if
-            // the ajax library is loaded already?
-            if (name != null && library != null &&
-                    name.equals("ajax.js") && library.equals("javax.faces")) {
+           if ("ajax.js".equals(name) && "javax.faces".equals(library)) {
                 return;
             }
         }
@@ -307,8 +301,7 @@ public final class AjaxHandler extends TagHandler {
             UIComponent resource = (UIComponent)iter.next();
             String name = (String)resource.getAttributes().get("name");
             String library = (String)resource.getAttributes().get("library");
-            if (name != null && library != null &&
-                    name.equals("ajax.js") && library.equals("javax.faces")) {
+            if ("ajax.js".equals(name) && "javax.faces".equals(library)) {
                 return;
             }
         }
