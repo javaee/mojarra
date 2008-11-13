@@ -415,6 +415,9 @@ javax.faces.Ajax.AjaxEngine.sendMessage = function(type, name, message, request)
 
     var execArray = utils.execConvert(request.parameters["javax.faces.partial.execute"]);
 
+    if (execArray[0] == "none" || execArray[0] == "all") {
+        OpenAjax.hub.publish("javax.faces."+type, args);        
+    }
     for (var exec in execArray) {
         OpenAjax.hub.publish("javax.faces."+type+"."+execArray[exec], args);
     }

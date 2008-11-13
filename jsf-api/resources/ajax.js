@@ -239,19 +239,18 @@ javax.faces.Ajax.ajaxRequest = function(element, event, options) {
 
     var args = new Object();
  
-    if (typeof(options) != 'undefined' && options != null) {
-        if (options.execute) {
-            var temp = utils.toArray(options.execute, ',');
-            if (!utils.isInArray(temp, source.name)) {
-                options.execute = source.name + "," + options.execute;
-            }
-        } else {
-            determineDefaultExecute(source, options);
+    if (typeof(options) === 'undefined' || options === null) {
+        options = {};
+    }
+    if (options.execute) {
+        var temp = utils.toArray(options.execute, ',');
+        if (!utils.isInArray(temp, source.name)) {
+            options.execute = source.name + "," + options.execute;
         }
     } else {
-        options = new Object();
         determineDefaultExecute(source, options);
     }
+    
     args["javax.faces.partial.execute"] = utils.toArray(options.execute, ',').join(',');
     options.execute = null;
     delete options.execute;
@@ -289,8 +288,10 @@ javax.faces.Ajax.ajaxRequest = function(element, event, options) {
             case 'text': case 'password': case 'hidden': case 'textarea':
             case 'select-one': case 'select-multiple':
             case 'checkbox': case 'radio':
-                options.execute = source.name;
+                options.execute = source.id;
                 break;
+            case 'button': case 'submit': case 'reset':
+                options.execute = "all";
         }
     }
 }
