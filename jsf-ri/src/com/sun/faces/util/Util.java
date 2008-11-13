@@ -280,6 +280,33 @@ public class Util {
         throws FacesException {
         return (context.getApplication().getStateManager());
     }
+    
+    public static Class getTypeFromString(String type) throws ClassNotFoundException {
+        Class result = null;
+        if (type.equals("byte")) {
+            result = Byte.TYPE;
+        } else if (type.equals("short")) {
+            result = Short.TYPE;
+        } else if (type.equals("int")) {
+            result = Integer.TYPE;
+        } else if (type.equals("long")) {
+            result = Long.TYPE;
+        } else if (type.equals("float")) {
+            result = Float.TYPE;
+        } else if (type.equals("double")) {
+            result = Double.TYPE;
+        } else if (type.equals("boolean")) {
+            result = Boolean.TYPE;
+        } else if (type.equals("char")) {
+            result = Character.TYPE;
+        } else if (type.equals("void")) {
+            result = Void.TYPE;
+        } else {
+            result = Util.loadClass(type, Void.TYPE);
+        }
+
+        return result;
+    }
 
 
     public static ViewHandler getViewHandler(FacesContext context)

@@ -59,7 +59,7 @@
   <composite:attribute name="pinLabel" default="PIN" />
   <composite:attribute name="loginLabel" default="Login" />
   <composite:attribute name="model" required="true"/>
-  <composite:attribute name="action" method-signature="java.lang.Object action()" applyTo="loginEvent"/>
+  <composite:attribute name="action" method-signature="java.lang.Object action()" targets="loginEvent"/>
 
 
   <composite:editableValueHolder name="usernameInput" />
