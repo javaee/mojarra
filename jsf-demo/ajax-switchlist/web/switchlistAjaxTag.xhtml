@@ -35,8 +35,34 @@
  holder.
 
 -->
-<html>
-<head>
-    <meta http-equiv="Refresh" content="0;url=switchlistAjaxTag.jsf">
-</head>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <title>Switchlist Example</title>
+</h:head>
+<h:body>
+        <h1>Switchlist Example</h1>
+        <h:form id="form1">
+            <h:selectManyListbox id="list1" value="#{listholder.list1}">
+                <f:selectItems value="#{listholder.items1}"/>
+            </h:selectManyListbox>
+            <h:commandButton id="button1" value="&gt;&gt;" actionListener="#{listholder.move1to2}">
+                <f:ajax render="form1:list1 form1:list2"/>
+                </h:commandButton>
+            <h:commandButton id="button2" value="&lt;&lt;" actionListener="#{listholder.move2to1}">
+                <f:ajax render="form1:list1 form1:list2"/>
+                </h:commandButton>
+            <h:selectManyListbox id="list2" value="#{listholder.list2}">
+                <f:selectItems value="#{listholder.items2}"/>
+            </h:selectManyListbox>
+            <br/>
+            <h:outputText value="List1: #{listholder.list1Cat}   " />&nbsp;&nbsp;&nbsp;&nbsp; <h:outputText value="List 2: #{listholder.list2Cat}"/>
+            <br/>
+                <h:commandButton value="reload" type="submit"/>
+            <h:messages/>
+        </h:form>
+</h:body>
 </html>
