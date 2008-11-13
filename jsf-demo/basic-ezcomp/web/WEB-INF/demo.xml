@@ -120,4 +120,34 @@
     </sources>
 </demo>
 
+    <!-- =================================================================== -->
+
+<demo>
+    <name>Final Spinner Component</name>
+    <page>spinnerFinal.jsf</page>
+    <sources>
+        <source>
+            <label>Consuming Page</label>
+            <path>/spinnerFinal.xhtml</path>
+        </source>
+        <source>
+            <label>Composite Component</label>
+            <path>/resources/spinnerFinal/spinner.xhtml</path>
+        </source>
+        <source>
+            <label>Composite Component CSS</label>
+            <path>/resources/spinnerFinal/spinner.css</path>
+        </source>
+        <source>
+            <label>Composite Component JS</label>
+            <path>/resources/spinnerFinal/spinner.js</path>
+        </source>
+        <source>
+            <label>Managed Bean</label>
+            <path>/WEB-INF/classes/ezcomp/MultiNumberHolder.java</path>
+        </source>
+    </sources>
+</demo>
+
+
 </demo-info>
