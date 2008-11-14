@@ -57,13 +57,17 @@ public class ComponentTestCase extends AbstractTestCase {
     }
 
 
-    /** Return the tests included in this test suite. */
+    /**
+     * Return the tests included in this test suite.
+     */
     public static Test suite() {
         return (new TestSuite(ComponentTestCase.class));
     }
 
 
-    /** Tear down instance variables required by this test case. */
+    /**
+     * Tear down instance variables required by this test case.
+     */
     public void tearDown() {
         super.tearDown();
     }
@@ -80,12 +84,12 @@ public class ComponentTestCase extends AbstractTestCase {
 
         HtmlPage page = getPage("/faces/component02.jsp");
         HtmlSubmitInput submit = (HtmlSubmitInput)
-              getInputContainingGivenId(page, "submit");
+                getInputContainingGivenId(page, "submit");
         try {
             submit.click();
         } catch (Exception ioe) {
             fail("No exception should have been thrown: " +
-                 ioe.getMessage());
+                    ioe.getMessage());
         }
 
     }
