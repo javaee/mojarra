@@ -99,7 +99,7 @@ public class AttachedObjectTargetImpl implements AttachedObjectTarget {
         assert (null != component);
         UIComponent comp = null;
         if (null != targetsList) {
-            String [] targetArray = targetsList.split(",");
+            String [] targetArray = targetsList.split(" ");
             for (int i = 0; i < targetArray.length; i++) {
                 comp = component.findComponent(targetArray[i]);
                 if (null != comp) {

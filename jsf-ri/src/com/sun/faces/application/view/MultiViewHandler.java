@@ -299,7 +299,7 @@ public class MultiViewHandler extends ViewHandler {
                     }
                     
                     
-                    String[] targetIds = targets.split(",");
+                    String[] targetIds = targets.split(" ");
                     
                     for (String curTarget : targetIds) {
                     

@@ -535,7 +535,7 @@ example.</p>
 
 <p>If the this element has a <code>method-signature</code> attribute,
 the value of the <code>targets</code> attribute must be interpreted as a
-comma separated list of component ids of components within the
+space (not tab) separated list of component ids of components within the
 <code>&lt;composite:implementation&gt;</code> section.  Each entry in
 the list must be interpreted as the id of an inner component to which
 the <code>MethodExpression</code> from the <em>composite component
@@ -1089,7 +1089,7 @@ example.</p>
 
                 <![CDATA[
 <div class="changed_added_2_0">
-<p>If present, this must be a comma separated
+<p>If present, this must be a space (not tab) separated
                 list of component ids of components within the
                 <code>&lt;composite:implementation&gt;</code> section.
                 If not present, the "name" attribute must be present.
@@ -1171,7 +1171,7 @@ example.</p>
 
                 <![CDATA[
 <div class="changed_added_2_0">
-<p>If present, this must be a comma separated
+<p>If present, this must be a space (not tab) separated
                 list of component ids of components within the
                 <code>&lt;composite:implementation&gt;</code> section.
                 If not present, the "name" attribute must be present.
@@ -1281,7 +1281,7 @@ example.</p>
 
                 <![CDATA[
 <div class="changed_added_2_0">
-<p>If present, this must be a comma separated
+<p>If present, this must be a space (not tab) separated
                 list of component ids of components within the
                 <code>&lt;composite:implementation&gt;</code> section.
                 If not present, the "name" attribute must be present.
