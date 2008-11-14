@@ -184,7 +184,50 @@
 
         <xsd:attribute name="method-signature"
                        type="xsd:string"
-                       use="optional"/>
+                       use="optional">
+
+	  <xsd:annotation>
+	      <xsd:documentation>
+                <![CDATA[
+
+	    Provides the signature of the Java method.  The syntax of
+	    the method-signature element is as follows (taken from
+	    function-signature in web-jsptaglibrary_2_1.xsd):
+
+		MethodSignature ::= ReturnType S MethodName S?
+				      '(' S? Parameters? S? ')'
+
+                ReturnType        ::= Type
+
+		MethodName        ::= Identifier
+
+		Parameters        ::=   Parameter
+				      | ( Parameter S? ',' S? Parameters )
+
+                Parameter         ::= Type
+
+		Where:
+
+ 		    * Type is a basic type or a fully qualified
+		      Java class name (including package name),
+		      as per the 'Type' production in the Java
+		      Language Specification, Second Edition,
+		      Chapter 18.
+
+                    * Identifier is a Java identifier, as per
+		      the 'Identifier' production in the Java
+		      Language Specification, Second
+		      Edition, Chapter 18.
+
+	    Example:
+
+	    java.lang.String nickName( java.lang.String, int )
+
+                ]]>
+	      </xsd:documentation>
+	  </xsd:annotation>
+
+        </xsd:attribute>
 
         <xsd:attribute name="applyTo"
                        type="xsd:string"

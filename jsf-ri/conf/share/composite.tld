@@ -93,9 +93,9 @@ would make that file accessible like this.</p>
 </code></pre>
 
 
-  <p>Below is an example of a fairly involved composite component
-  declaration.  Such a declaration might appear in
-  <code>foo.xhtml</code>.</p>
+  <p><a name="composite_example">Below is an example of a fairly
+  involved composite component declaration.  Such a declaration might
+  appear in <code>foo.xhtml</code>.</a></p>
 
 <div class="syntax"><div class="html4strict" style="font-family: monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<a href="interface.html">composite:interface</a> <span class="kw3">name</span>=<span class="st0">&quot;foo&quot;</span></div></li>
 <li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;displayName=<span class="st0">&quot;Very Simple Login Panel&quot;</span></div></li>
@@ -103,56 +103,63 @@ would make that file accessible like this.</p>
 <li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;expert=<span class="st0">&quot;false&quot;</span></div></li>
 <li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;shortDescription=<span class="st0">&quot;An illustration of the composite component feature&quot;</span><span class="kw2">&gt;</span></span></div></li>
 <li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;<a href="attribute.html">composite:attribute</a> <span class="kw3">name</span>=<span class="st0">&quot;model&quot;</span> required=<span class="st0">&quot;true&quot;</span><span class="kw2">&gt;</span></span></div></li>
-<li class="li1"><div class="de1">&nbsp; &nbsp; <span class="sc2">&lt;composite:attribute <span class="kw3">name</span>=<span class="st0">&quot;loginAction&quot;</span> required=<span class="st0">&quot;true&quot;</span> method-signature=<span class="st0">&quot;java.lang.Object action()&quot;</span><span class="kw2">/ &gt;</span></span></div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; <span class="sc2">&lt;composite:attribute <span class="kw3">name</span>=<span class="st0">&quot;loginAction&quot;</span> required=<span class="st0">&quot;true&quot;</span> method-signature=<span class="st0">&quot;java.lang.Object action()&quot;</span>/ <span class="kw2">&gt;</span></span></div></li>
 <li class="li2"><div class="de2">&nbsp; <span class="sc2"><span class="kw2">&lt;</span>/composite:attribute&gt;</span></div></li>
-<li class="li1"><div class="de2">&nbsp; <span class="sc2">&lt;<a href="editableValueHolder.html">composite:editableValueHolder</a>  <span class="kw3">name</span>=<span class="st0">&quot;username&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
-<li class="li1"><div class="de2">&nbsp; <span class="sc2">&lt;composite:actionSource <span class="kw3">name</span>=<span class="st0">&quot;loginEvent&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
+<li class="li1"><div class="de1">&nbsp; <span class="sc2">&lt;composite:attribute <span class="kw3">name</span>=<span class="st0">&quot;valueChangeListener&quot;</span> targets=<span class="st0">&quot;username&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
+<li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;composite:attribute <span class="kw3">name</span>=<span class="st0">&quot;specialMethodExpression&quot;</span></div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;method-signature=<span class="st0">&quot;com.foo.User validateCurrentUser()&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
+<li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;composite:attribute <span class="kw3">name</span>=<span class="st0">&quot;loginButtonLabel&quot;</span> default=<span class="st0">&quot;Login&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
+<li class="li1"><div class="de1">&nbsp; <span class="sc2">&lt;<a href="editableValueHolder.html">composite:editableValueHolder</a> <span class="kw3">name</span>=<span class="st0">&quot;username&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
+<li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;composite:actionSource <span class="kw3">name</span>=<span class="st0">&quot;loginEvent&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
 <li class="li1"><div class="de1">&nbsp; <span class="sc2">&lt;composite:actionSource <span class="kw3">name</span>=<span class="st0">&quot;cancelEvent&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
-<li class="li1"><div class="de2">&nbsp; <span class="sc2">&lt;composite:actionSource <span class="kw3">name</span>=<span class="st0">&quot;allEvents&quot;</span> targets=<span class="st0">&quot;loginEvent,cancelEvent&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
-<li class="li2"><div class="de2"><span class="sc2"><span class="kw2">&lt;</span>/composite:interface&gt;</span></div></li>
-<li class="li1"><div class="de1"><span class="sc2">&lt;<a href="implementation.html">composite:implementation</a> &gt;</span></div></li>
-<li class="li2"><div class="de2">&nbsp;</div></li>
-<li class="li1"><div class="de1">&nbsp; <span class="sc2">&lt;ui:decorate template=<span class="st0">&quot;fooTemplate.xhtml&quot;</span><span class="kw2">&gt;</span></span></div></li>
-<li class="li2"><div class="de2">&nbsp;</div></li>
-<li class="li1"><div class="de1">&nbsp; &nbsp; <span class="sc2">&lt;ui:define <span class="kw3">name</span>=<span class="st0">&quot;header&quot;</span><span class="kw2">&gt;</span></span></div></li>
-<li class="li2"><div class="de2">&nbsp;</div></li>
-<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;p&gt;</span></span>This is the login panel header<span class="sc2"><span class="kw2">&lt;/p&gt;</span></span></div></li>
-<li class="li2"><div class="de2">&nbsp;</div></li>
-<li class="li1"><div class="de1">&nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;</span>/ui:define&gt;</span></div></li>
-<li class="li2"><div class="de2">&nbsp;</div></li>
-<li class="li1"><div class="de1">&nbsp; &nbsp; <span class="sc2">&lt;ui:define <span class="kw3">name</span>=<span class="st0">&quot;body&quot;</span><span class="kw2">&gt;</span></span></div></li>
-<li class="li2"><div class="de2">&nbsp;</div></li>
-<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;p&gt;</span></span></div></li>
-<li class="li2"><div class="de2">&nbsp;</div></li>
-<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="sc2">&lt;h:inputText <span class="kw3">id</span>=<span class="st0">&quot;username&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
-<li class="li2"><div class="de2">&nbsp;</div></li>
-<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;/p&gt;</span></span></div></li>
-<li class="li2"><div class="de2">&nbsp;</div></li>
-<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;p&gt;</span></span></div></li>
-<li class="li2"><div class="de2">&nbsp;</div></li>
-<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; <span class="sc2">&lt;h:commandButton <span class="kw3">id</span>=<span class="st0">&quot;loginEvent&quot;</span> <span class="kw3">value</span>=<span class="st0">&quot;Login&quot;</span> <span class="kw3">action</span>=<span class="st0">&quot;#{compositeComponent.elAttrs.model.loginAction}&quot;</span><span class="kw2">&gt;</span></span></div></li>
-<li class="li2"><div class="de2">&nbsp;</div></li>
-<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;</span>/h:commandButton&gt;</span> </div></li>
-<li class="li2"><div class="de2">&nbsp;</div></li>
-<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; <span class="sc2">&lt;h:commandButton <span class="kw3">id</span>=<span class="st0">&quot;cancelEvent&quot;</span> <span class="kw3">value</span>=<span class="st0">&quot;Cancel&quot;</span> <span class="kw3">action</span>=<span class="st0">&quot;cancel&quot;</span><span class="kw2">&gt;</span></span></div></li>
-<li class="li2"><div class="de2">&nbsp;</div></li>
-<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;</span>/h:commandButton&gt;</span> </div></li>
-<li class="li2"><div class="de2">&nbsp;</div></li>
+<li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;composite:actionSource <span class="kw3">name</span>=<span class="st0">&quot;allEvents&quot;</span> targets=<span class="st0">&quot;loginEvent,cancelEvent&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
+<li class="li1"><div class="de1"><span class="sc2"><span class="kw2">&lt;</span>/composite:interface&gt;</span></div></li>
+<li class="li2"><div class="de2"><span class="sc2">&lt;<a href="implementation.html">composite:implementation</a> <span class="kw2">&gt;</span></span></div></li>
+<li class="li1"><div class="de1">&nbsp;</div></li>
+<li class="li2"><div class="de2">&nbsp; <span class="sc2">&lt;ui:decorate template=<span class="st0">&quot;fooTemplate.xhtml&quot;</span><span class="kw2">&gt;</span></span></div></li>
+<li class="li1"><div class="de1">&nbsp;</div></li>
+<li class="li2"><div class="de2">&nbsp; &nbsp; <span class="sc2">&lt;ui:define <span class="kw3">name</span>=<span class="st0">&quot;header&quot;</span><span class="kw2">&gt;</span></span></div></li>
+<li class="li1"><div class="de1">&nbsp;</div></li>
+<li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;p&gt;</span></span>This is the login panel header<span class="sc2"><span class="kw2">&lt;/p&gt;</span></span></div></li>
+<li class="li1"><div class="de1">&nbsp;</div></li>
+<li class="li2"><div class="de2">&nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;</span>/ui:define&gt;</span></div></li>
+<li class="li1"><div class="de1">&nbsp;</div></li>
+<li class="li2"><div class="de2">&nbsp; &nbsp; <span class="sc2">&lt;ui:define <span class="kw3">name</span>=<span class="st0">&quot;body&quot;</span><span class="kw2">&gt;</span></span></div></li>
+<li class="li1"><div class="de1">&nbsp;</div></li>
+<li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;p&gt;</span></span></div></li>
+<li class="li1"><div class="de1">&nbsp;</div></li>
+<li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="sc2">&lt;h:inputText <span class="kw3">id</span>=<span class="st0">&quot;username&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
 <li class="li1"><div class="de1">&nbsp;</div></li>
 <li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;/p&gt;</span></span></div></li>
 <li class="li1"><div class="de1">&nbsp;</div></li>
-<li class="li2"><div class="de2">&nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;</span>/ui:define&gt;</span></div></li>
+<li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;p&gt;</span></span></div></li>
 <li class="li1"><div class="de1">&nbsp;</div></li>
-<li class="li2"><div class="de2">&nbsp; &nbsp; <span class="sc2">&lt;ui:define <span class="kw3">name</span>=<span class="st0">&quot;footer&quot;</span><span class="kw2">&gt;</span></span></div></li>
+<li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; &nbsp; <span class="sc2">&lt;h:commandButton <span class="kw3">id</span>=<span class="st0">&quot;loginEvent&quot;</span> </div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="kw3">value</span>=<span class="st0">&quot;#{compositeComponent.attrs.loginButtonLabel}&quot;</span><span class="kw2">&gt;</span></span></div></li>
+<li class="li2"><div class="de2">&nbsp;</div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;</span>/h:commandButton&gt;</span></div></li>
+<li class="li2"><div class="de2">&nbsp;</div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; <span class="sc2">&lt;h:commandButton <span class="kw3">id</span>=<span class="st0">&quot;cancelEvent&quot;</span> <span class="kw3">value</span>=<span class="st0">&quot;Cancel&quot;</span> <span class="kw3">action</span>=<span class="st0">&quot;cancel&quot;</span><span class="kw2">&gt;</span></span></div></li>
+<li class="li2"><div class="de2">&nbsp;</div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;</span>/h:commandButton&gt;</span></div></li>
+<li class="li2"><div class="de2">&nbsp;</div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; &nbsp; <span class="sc2">&lt;special:validateUserButton </div></li>
+<li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; validateUser=<span class="st0">&quot;#{compositeComponent.attrs.specialMethodExpression}&quot;</span> /<span class="kw2">&gt;</span></span></div></li>
 <li class="li1"><div class="de1">&nbsp;</div></li>
-<li class="li2"><div class="de2">&nbsp; &nbsp; &nbsp;<span class="sc2"><span class="kw2">&lt;p&gt;</span></span>This is the login panel footer<span class="sc2"><span class="kw2">&lt;/p&gt;</span></span></div></li>
-<li class="li1"><div class="de1">&nbsp;</div></li>
-<li class="li2"><div class="de2">&nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;</span>/ui:define&gt;</span></div></li>
-<li class="li1"><div class="de1">&nbsp;</div></li>
-<li class="li2"><div class="de2">&nbsp; <span class="sc2"><span class="kw2">&lt;</span>/ui:decorate&gt;</span></div></li>
-<li class="li1"><div class="de1">&nbsp;</div></li>
-<li class="li2"><div class="de2"><span class="sc2"><span class="kw2">&lt;</span>/composite:implementation&gt;</span> </div></li></ol></div></div>
-
+<li class="li2"><div class="de2">&nbsp;</div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;/p&gt;</span></span></div></li>
+<li class="li2"><div class="de2">&nbsp;</div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;</span>/ui:define&gt;</span></div></li>
+<li class="li2"><div class="de2">&nbsp;</div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; <span class="sc2">&lt;ui:define <span class="kw3">name</span>=<span class="st0">&quot;footer&quot;</span><span class="kw2">&gt;</span></span></div></li>
+<li class="li2"><div class="de2">&nbsp;</div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; &nbsp;<span class="sc2"><span class="kw2">&lt;p&gt;</span></span>This is the login panel footer<span class="sc2"><span class="kw2">&lt;/p&gt;</span></span></div></li>
+<li class="li2"><div class="de2">&nbsp;</div></li>
+<li class="li1"><div class="de1">&nbsp; &nbsp; <span class="sc2"><span class="kw2">&lt;</span>/ui:define&gt;</span></div></li>
+<li class="li2"><div class="de2">&nbsp;</div></li>
+<li class="li1"><div class="de1">&nbsp; <span class="sc2"><span class="kw2">&lt;</span>/ui:decorate&gt;</span></div></li>
+<li class="li2"><div class="de2">&nbsp;</div></li>
+<li class="li1"><div class="de1"><span class="sc2"><span class="kw2">&lt;</span>/composite:implementation&gt;</span> </div></li></ol></div></div>
 
 <p>The values for attributes in a composite component PDL file can be
 fully localized by putting them inside a ResourceBundle in the same
@@ -491,9 +498,8 @@ may be zero or many of these inside of the
 nested within other <code>&lt;composite:attribute&gt;</code> elements to
 convey a usage contract that includes nested properties.</p>
 
-<p>Please see <code>&lt;<a
-href="interface.html">composite:interface</a>&gt;</code> for a usage
-example.</p>
+<p>Please see <a href="tld-summary.html#composite_example">summary
+page</a> for a usage example.</p>
 
             <p></p>
 
@@ -510,9 +516,17 @@ example.</p>
 
                 <![CDATA[
 <div class="changed_added_2_0">
-<p>The name of the attribute as it must appear
-                on the <em>composite component tag</em> in the
-                <em>using page</em>.</p></div>]]>
+<p>The name of the attribute as it must appear on the <em>composite
+component tag</em> in the <em>using page</em>.  If the value of the
+<em>name</em> attribute is equal to (without the quotes)
+&#8220;action&#8221;, &#8221;actionListener&#8221;,
+&#8220;validator&#8221;, or &#8220;valueChangeListener&#8221;, the
+action described in <a target="_"
+href="../../../javadocs/javax/faces/application/ViewHandler.html#retargetMethodExpressions(javax.faces.context.FacesContext,%20javax.faces.component.UIComponent)">ViewHandler.retargetMethodExpressions()</a>
+must be taken to handle the attribute.  In these cases, the
+<code>method-sigature</code> attribute, if present, must be ignored as
+its value is derived as described in
+<code>retargetMethodExpressions()</code>.</div>]]>
 
             </description>
             <name>
@@ -533,16 +547,20 @@ example.</p>
                 <![CDATA[
 <div class="changed_added_2_0">
 
-<p>If the this element has a <code>method-signature</code> attribute,
-the value of the <code>targets</code> attribute must be interpreted as a
+<p>If this element has a <code>method-signature</code> attribute, the
+value of the <code>targets</code> attribute must be interpreted as a
 space (not tab) separated list of component ids of components within the
 <code>&lt;composite:implementation&gt;</code> section.  Each entry in
 the list must be interpreted as the id of an inner component to which
 the <code>MethodExpression</code> from the <em>composite component
-tag</em> in the <em>using page</em> must be applied.  If the this
-element has a <code>method-signature</code> attribute, but no
+tag</em> in the <em>using page</em> must be applied.  If this element
+has a <code>method-signature</code> attribute, but no
 <code>targets</code> attribute, the value of the <code>name</code>
-attribute is used as the single entry in the list.</p>
+attribute is used as the single entry in the list.  If the value of the
+<code>name</code> attribute is <strong>not</strong> one of the special
+values listed in the description of the <code>name attribute</code>,
+<code>targets</code> (or its derived value) need not correspond to the
+id of an inner component.</p>
 
 </div>]]>
 
@@ -704,7 +722,52 @@ whose method signature is described by the value of this attribute.  The
 signature must be described using fully qualified class names wherever a
 type is required.  This attribute is mutually exclusive with the "type"
 attribute.  If both attributes are present, the "method-signature"
-attribute is ignored.</p> </div>]]>
+attribute is ignored.</p> 
+
+<p>PENDING: when this file is generated from the
+web-facesuicomponent_2_0.xsd, we will not need to copy the content here
+manually.</p>
+
+	    <p>Provides the signature of the Java method.  The syntax of
+	    the method-signature element is as follows (taken from
+	    function-signature in web-jsptaglibrary_2_1.xsd):</p>
+
+		<p>MethodSignature ::= ReturnType S MethodName S?
+				      '(' S? Parameters? S? ')'</p>
+
+                <p>ReturnType        ::= Type</p>
+
+		<p>MethodName        ::= Identifier</p>
+
+		<p>Parameters        ::=   Parameter
+				      | ( Parameter S? ',' S? Parameters )</p>
+
+                <p>Parameter         ::= Type</p>
+
+		<p>Where:</p>
+
+<ul>
+
+ 		    <li><p>Type is a basic type or a fully qualified
+		      Java class name (including package name),
+		      as per the 'Type' production in the Java
+		      Language Specification, Second Edition,
+		      Chapter 18.</p></li>
+
+                    <li><p>Identifier is a Java identifier, as per
+		      the 'Identifier' production in the Java
+		      Language Specification, Second
+		      Edition, Chapter 18.</p></li>
+
+</ul>
+
+	    <p>Example:</p>
+
+	    <p><code>java.lang.String nickName( java.lang.String, int )</code></p>
+
+
+
+</div>]]>
 
             </description>
             <name>
@@ -728,7 +791,9 @@ attribute is ignored.</p> </div>]]>
 <p>Declares that this attribute must be a <code>ValueExpression</code>
 whose expected type is given by the value of this attribute.  If not
 specified, and no "method-signature" attribute is present,
-<code>java.lang.Object</code> is assumed.  </p> </div>]]>
+<code>java.lang.Object</code> is assumed.  This attribute is mutually
+exclusive with the "type" attribute. If both attributes are present, the
+"method-signature" attribute is ignored. </p> </div>]]>
 
             </description>
             <name>

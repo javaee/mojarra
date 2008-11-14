@@ -303,17 +303,6 @@ public class MultiViewHandler extends ViewHandler {
                     
                     for (String curTarget : targetIds) {
                     
-                        // This is the inner component to which the attribute should 
-                        // be applied
-                        target = topLevelComponent.findComponent(curTarget);
-                        if (null == targets) {
-                            // PENDING error message in page?
-                            logger.severe("Unable to retarget MethodExpression.  " +
-                                    "Unable to find inner component with id " +
-                                    targets + ".");
-                            continue;
-                        }
-
                         attrName = cur.getName();
 
                         // Find the attribute on the top level component
@@ -335,42 +324,61 @@ public class MultiViewHandler extends ViewHandler {
 
                         // If the attribute is one of the pre-defined 
                         // MethodExpression attributes
-                        if (attrName.equals("action")) {
-                        expectedReturnType = Object.class;
-                        expectedParameters = new Class[]{};
-                        toApply = expressionFactory.createMethodExpression(context.getELContext(),
-                                valueExpression.getExpressionString(),
-                                expectedReturnType, expectedParameters);
-                        ((ActionSource2) target).setActionExpression(toApply);
-                        } else if (attrName.equals("actionListener")) {
-                            expectedReturnType = Void.TYPE;
-                            expectedParameters = new Class[]{
-                                        ActionEvent.class
-                                    };
-                            toApply = expressionFactory.createMethodExpression(context.getELContext(),
-                                    valueExpression.getExpressionString(),
-                                    expectedReturnType, expectedParameters);
-                            ((ActionSource2) target).addActionListener(new MethodExpressionActionListener(toApply));
-                        } else if (attrName.equals("validator")) {
-                            expectedReturnType = Void.TYPE;
-                            expectedParameters = new Class[]{
-                                        FacesContext.class,
-                                        UIComponent.class,
-                                        Object.class
-                                    };
-                            toApply = expressionFactory.createMethodExpression(context.getELContext(),
-                                    valueExpression.getExpressionString(),
-                                    expectedReturnType, expectedParameters);
-                            ((EditableValueHolder) target).addValidator(new MethodExpressionValidator(toApply));
-                        } else if (attrName.equals("valueChangeListener")) {
-                            expectedReturnType = Void.TYPE;
-                            expectedParameters = new Class[]{
-                                        ValueChangeEvent.class
-                                    };
-                            toApply = expressionFactory.createMethodExpression(context.getELContext(),
-                                    valueExpression.getExpressionString(),
-                                    expectedReturnType, expectedParameters);
-                            ((EditableValueHolder) target).addValueChangeListener(new MethodExpressionValueChangeListener(toApply));
+                        boolean
+                                isAction = false, isActionListener = false, 
+                                isValidator = false, isValueChangeListener = false;
+                        if ((isAction = attrName.equals("action")) ||
+                            (isActionListener = attrName.equals("actionListener")) ||
+                            (isValidator = attrName.equals("validator")) ||
+                            (isValueChangeListener = attrName.equals("valueChangeListener"))) {
+                            // This is the inner component to which the attribute should 
+                            // be applied
+                            target = topLevelComponent.findComponent(curTarget);
+                            if (null == targets) {
+                                // PENDING error message in page?
+                                logger.severe("Unable to retarget MethodExpression.  " +
+                                        "Unable to find inner component with id " +
+                                        targets + ".");
+                                continue;
+                            }
+
+                            if (isAction) {
+                                expectedReturnType = Object.class;
+                                expectedParameters = new Class[]{};
+                                toApply = expressionFactory.createMethodExpression(context.getELContext(),
+                                        valueExpression.getExpressionString(),
+                                        expectedReturnType, expectedParameters);
+                                ((ActionSource2) target).setActionExpression(toApply);
+                            } else if (isActionListener) {
+                                expectedReturnType = Void.TYPE;
+                                expectedParameters = new Class[]{
+                                            ActionEvent.class
+                                        };
+                                toApply = expressionFactory.createMethodExpression(context.getELContext(),
+                                        valueExpression.getExpressionString(),
+                                        expectedReturnType, expectedParameters);
+                                ((ActionSource2) target).addActionListener(new MethodExpressionActionListener(toApply));
+                            } else if (isValidator) {
+                                expectedReturnType = Void.TYPE;
+                                expectedParameters = new Class[]{
+                                            FacesContext.class,
+                                            UIComponent.class,
+                                            Object.class
+                                        };
+                                toApply = expressionFactory.createMethodExpression(context.getELContext(),
+                                        valueExpression.getExpressionString(),
+                                        expectedReturnType, expectedParameters);
+                                ((EditableValueHolder) target).addValidator(new MethodExpressionValidator(toApply));
+                            } else if (isValueChangeListener) {
+                                expectedReturnType = Void.TYPE;
+                                expectedParameters = new Class[]{
+                                            ValueChangeEvent.class
+                                        };
+                                toApply = expressionFactory.createMethodExpression(context.getELContext(),
+                                        valueExpression.getExpressionString(),
+                                        expectedReturnType, expectedParameters);
+                                ((EditableValueHolder) target).addValueChangeListener(new MethodExpressionValueChangeListener(toApply));
+                            }
                         } else {
                             // There is no explicit methodExpression property on
                             // an inner component to which this MethodExpression
