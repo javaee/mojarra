@@ -168,10 +168,10 @@ public class PartialViewContextImpl extends PartialViewContext {
     public boolean isRenderNone() {
 
         assertNotReleased();
-        String execute = FacesContext.getCurrentInstance().
+        String render = FacesContext.getCurrentInstance().
             getExternalContext().getRequestParameterMap()
             .get(PARTIAL_RENDER_PARAM_NAME);
-        return (NO_PARTIAL_PHASE_CLIENT_IDS.equals(execute));
+        return (NO_PARTIAL_PHASE_CLIENT_IDS.equals(render));
 
     }
 
