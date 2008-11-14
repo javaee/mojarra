@@ -61,6 +61,7 @@ import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.component.ActionSource;
 import javax.faces.component.AjaxBehavior;
+import javax.faces.component.AjaxBehaviors;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
@@ -107,18 +108,23 @@ import javax.faces.application.Resource;
  * </ul>
  * put the {@link javax.faces.component.AjaxBehavior} instance in the parent 
  * component's attribute <code>Map</code>.  
+ * Throw an <code>exception</code> if the <code>events</code> attribute value 
+ * does not match the component type.
  * <br/><br/>
  * If this tag is nested within a component other than an 
  * {@link javax.faces.component.ActionSource} or 
- * {@link javax.faces.component.EditableValueHolder} type, put the 
- * {@link javax.faces.component.AjaxBehavior} instance on the attribute
- * <code>Map</code> of all {@link javax.faces.component.ActionSource} and/or
- * {@link javax.faces.component.EditableValueHolder} components following
- * the <code>events</code> matching rules above.  Throw an <code>exception</code>
- * if the <code>events</code> attribute value does not match the component type.
- * Once a  {@link javax.faces.component.AjaxBehavior} instance has been added to the
- * component's attribute <code>Map</code>, check for the existence of the Ajax 
- * resource by calling <code>UIViewRoot.getComponentResources()</code>.  If
+ * {@link javax.faces.component.EditableValueHolder} type, 
+ * make this tag's parent component subscribe to {@link javax.faces.event.AfterAddToParent}
+ * events.  Retrieve an {@link javax.faces.component.AjaxBehaviors} instance from 
+ * the current {@link javax.faces.context.FacesContext} attributes <code>Map</code>
+ * using the key {@link AjaxBehaviors.AJAX_BEHAVIORS}.  If an instance does not exist,
+ * create it.  Call {@link javax.faces.component.AjaxBehaviors#pushBehavior} passing the
+ * {@link javax.faces.component.AjaxBehavior} instance and the parent component instance.
+ * Put the {@link javax.faces.component.AjaxBehaviors} instance into the 
+ * {@link javax.faces.context.FacesContext} attributes <code>Map</code>.
+ * <br/><br/>
+ * Check for the existence of the Ajax resource by calling 
+ * <code>UIViewRoot.getComponentResources()</code>.  If
  * the Ajax resource does not exist, create a <code>UIOutput</code> component
  * instance and set the renderer type to <code>javax.faces.resource.Script</code>.
  * Set the the following attributes in the component's attribute <code>Map</code>:
@@ -139,9 +145,10 @@ public final class AjaxHandler extends TagHandler {
 
     //
     // Listens for when components are added to the parent component of this tag.
-    // If the component that is added is an ActionSource or EditableValueHolder,
-    // it is "ajaxified" by adding an instance of Ajaxrequest to the component's
-    // attribute Map.
+    // This listener's processEvents() method will get called when all child
+    // components have been added to the parent component.  When this happens,
+    // pop the AjaxBehavior instance associated with this parent from the
+    // AjaxBehaviors instance.  Unsubscribe the event from the parent component.
     // 
     private final static class AddToParentEventListener 
           implements ComponentSystemEventListener, Serializable {
@@ -157,45 +164,12 @@ public final class AjaxHandler extends TagHandler {
 
         public void processEvent(ComponentSystemEvent event) 
             throws AbortProcessingException {
-            UIComponent source = event.getComponent();
-            ajaxifyComponents(source);     
-        }
-
-        //
-        // Helper method to ajaxify applicable components under 'component' argument.
-        // It does this by adding an instance of AjaxBehavior to the component's
-        // attribute Map.
-        //
-        private void ajaxifyComponents(UIComponent component) {
-            String events = ajaxBehavior.getEvents();
-            if (null == component.getAttributes().get(AjaxBehavior.AJAX_BEHAVIOR)) {
-                if (component instanceof ActionSource) {
-                    if (null == events || events.equals(AjaxBehavior.AJAX_VALUE_CHANGE_ACTION) ||
-                        events.equals(AjaxBehavior.AJAX_ACTION)) {
-                        component.getAttributes().put(AjaxBehavior.AJAX_BEHAVIOR, ajaxBehavior);
-                        ajaxHandler.installAjaxResourceIfNecessary();
-                    } else {
-                        throw new AbortProcessingException("'Events' attribute value must be 'action'" +
-                            "for 'ActionSource' components");
-                    }
-                } else if (component instanceof EditableValueHolder) {
-                    if (null == events || events.equals(AjaxBehavior.AJAX_VALUE_CHANGE_ACTION) ||
-                        events.equals(AjaxBehavior.AJAX_VALUE_CHANGE)) {
-                        component.getAttributes().put(AjaxBehavior.AJAX_BEHAVIOR, ajaxBehavior);
-                        ajaxHandler.installAjaxResourceIfNecessary();
-                    } else {
-                        throw new AbortProcessingException("'Events' attribute value must be 'valueChange' " +
-                            "for 'EditableValueHolder' components");
-                    }
-                }
+            FacesContext context = FacesContext.getCurrentInstance();
+            AjaxBehaviors ajaxBehaviors = (AjaxBehaviors)context.getAttributes().get(AjaxBehaviors.AJAX_BEHAVIORS);
+            if (ajaxBehaviors != null) {
+                ajaxBehaviors.popBehavior();
             }
-
-            Iterator kids = component.getChildren().iterator();
-            UIComponent kid;
-            while (kids.hasNext()) {
-                kid = (UIComponent)kids.next();
-                ajaxifyComponents(kid);
-            }
+//            event.getComponent().unsubscribeFromEvent(AfterAddToParentEvent.class, this);
         }
     }
 
@@ -262,12 +236,20 @@ public final class AjaxHandler extends TagHandler {
             
         //
         // We are nested within some other component.  Attach a listener that will listen for when components
-        // are added to the parent component.  The listener will add the 'AjaxBehavior' instance to the added
-        // component if it is an EditableValueHolder or ActionSource component.
+        // are added to the parent component. When the listener is called, all components have been added
+        // to that parent component. 
         //
         addToParentEventListener = new AddToParentEventListener(ajaxBehavior, this);
-
         parent.subscribeToEvent(AfterAddToParentEvent.class, addToParentEventListener);
+
+        AjaxBehaviors ajaxBehaviors = (AjaxBehaviors)ctx.getFacesContext().getAttributes().
+            get(AjaxBehaviors.AJAX_BEHAVIORS);
+        if (ajaxBehaviors == null) {
+            ajaxBehaviors = new AjaxBehaviors();
+        }
+        ajaxBehaviors.pushBehavior(ajaxBehavior, parent); 
+        ctx.getFacesContext().getAttributes().put(AjaxBehaviors.AJAX_BEHAVIORS, ajaxBehaviors);
+        installAjaxResourceIfNecessary();
     }
 
     // Only install the Ajax resource if it doesn't exist.
@@ -281,7 +263,9 @@ public final class AjaxHandler extends TagHandler {
             UIComponent resource = (UIComponent)iter.next();
             String name = (String)resource.getAttributes().get("name");
             String library = (String)resource.getAttributes().get("library");
-            if ("ajax.js".equals(name) && "javax.faces".equals(library)) {
+
+            if (name != null && library != null &&
+                    name.equals("ajax.js") && library.equals("javax.faces")) {
                 return;
             }
         }
@@ -292,7 +276,11 @@ public final class AjaxHandler extends TagHandler {
             UIComponent resource = (UIComponent)iter.next();
             String name = (String)resource.getAttributes().get("name");
             String library = (String)resource.getAttributes().get("library");
-           if ("ajax.js".equals(name) && "javax.faces".equals(library)) {
+
+            // RELEASE_PENDING driscoll - is this really the best way to determine if
+            // the ajax library is loaded already?
+            if (name != null && library != null &&
+                    name.equals("ajax.js") && library.equals("javax.faces")) {
                 return;
             }
         }
@@ -301,7 +289,8 @@ public final class AjaxHandler extends TagHandler {
             UIComponent resource = (UIComponent)iter.next();
             String name = (String)resource.getAttributes().get("name");
             String library = (String)resource.getAttributes().get("library");
-            if ("ajax.js".equals(name) && "javax.faces".equals(library)) {
+            if (name != null && library != null &&
+                    name.equals("ajax.js") && library.equals("javax.faces")) {
                 return;
             }
         }
