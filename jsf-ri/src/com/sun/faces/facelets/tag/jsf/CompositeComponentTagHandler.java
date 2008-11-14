@@ -118,7 +118,7 @@ public class CompositeComponentTagHandler extends ComponentHandler {
                         expression = expressionFactory.
                                 createValueExpression(value, Object.class);
                     }
-                    // RELEASE_PENDING: I don't think copyTagAttributesIntoComponentAttributes
+                    // PENDING: I don't think copyTagAttributesIntoComponentAttributes
                     // should be getting called 
                     // on postback, yet it is.  In lieu of a real fix, I'll
                     // make sure I'm not overwriting a MethodExpression with a 
