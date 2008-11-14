@@ -60,6 +60,8 @@ import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.component.ActionSource;
+import javax.faces.component.AjaxBehavior;
+import javax.faces.component.AjaxBehaviors;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
@@ -328,7 +330,29 @@ public class ComponentHandler extends MetaTagHandler {
      * @param parent
      */
     protected void onComponentCreated(FaceletContext ctx, UIComponent c, UIComponent parent) {
-        // do nothing
+        // Default Behavior  
+        String facesEventType = getFacesEventType(c);
+        if (facesEventType == null) {
+           return;
+        }
+        AjaxBehaviors ajaxBehaviors = (AjaxBehaviors)ctx.getFacesContext().getAttributes().
+            get(AjaxBehaviors.AJAX_BEHAVIORS);
+        if (ajaxBehaviors != null) {
+            AjaxBehavior ajaxBehavior = ajaxBehaviors.getBehaviorForEvent(facesEventType); 
+            if (ajaxBehavior != null) {
+                c.getAttributes().put(AjaxBehavior.AJAX_BEHAVIOR, ajaxBehavior);
+            }
+        }
+    }
+
+    protected String getFacesEventType(UIComponent c) {
+        String event = null;
+        if (c instanceof EditableValueHolder) {
+            event = AjaxBehavior.AJAX_VALUE_CHANGE;
+        } else if (c instanceof ActionSource) {
+            event = AjaxBehavior.AJAX_ACTION;
+        } 
+        return event;
     }
 
     protected void onComponentPopulated(FaceletContext ctx, UIComponent c, UIComponent parent) {
