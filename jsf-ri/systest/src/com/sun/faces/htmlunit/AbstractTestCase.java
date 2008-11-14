@@ -44,6 +44,7 @@ package com.sun.faces.htmlunit;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebRequestSettings;
 import com.gargoylesoftware.htmlunit.WebResponse;
+import com.gargoylesoftware.htmlunit.CookieManager;
 import com.gargoylesoftware.htmlunit.html.HtmlBody;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
@@ -100,6 +101,9 @@ public abstract class AbstractTestCase extends TestCase {
     // The URL for our test application
     protected URL domainURL = null;
 
+    // The cookie manager
+    protected CookieManager cmanager = null;
+
     // The HttpState for our domain URL
     protected HttpState state = null;
 
@@ -117,11 +121,12 @@ public abstract class AbstractTestCase extends TestCase {
         port = Integer.parseInt(System.getProperty("port"));
 
         client = new WebClient();
+        cmanager = client.getCookieManager();
         domainURL = getURL("/");
         WebRequestSettings settings = new WebRequestSettings(domainURL);
         WebResponse response = client.getWebConnection().getResponse(settings);
         
-        state = client.getWebConnection().getState();
+        //state = client.getWebConnection().getState();
 
     }
 
@@ -141,7 +146,8 @@ public abstract class AbstractTestCase extends TestCase {
 
         client = null;
         domainURL = null;
-        state = null;
+        cmanager = null;
+        //state = null;
 
     }
 
@@ -265,6 +271,9 @@ public abstract class AbstractTestCase extends TestCase {
 
 
     protected boolean clearAllCookies() {
+        cmanager.clearCookies();
+        return true;
+        /*
         if (null == state) {
             state = client.getWebConnection().getState();
             if (null == state) {
@@ -292,10 +301,11 @@ public abstract class AbstractTestCase extends TestCase {
         boolean result =
             state.purgeExpiredCookies(new java.util.Date(latestTime));
         return result;
+        */
     }
 
 
-    /**
+    /*
      * <p>Set up the session identifier cookie if it is not already there.</p>
      *
      * @param sessionId The new session identifier
@@ -367,14 +377,14 @@ public abstract class AbstractTestCase extends TestCase {
      */
     protected List getAllElementsOfGivenClass(HtmlElement root, List list,
                                               Class matchClass) {
-        Iterator iter = null;
         if (null == root) {
             return list;
         }
         if (null == list) {
             list = new ArrayList();
         }
-        iter = root.getAllHtmlChildElements();
+        Iterable<HtmlElement> iterable = root.getAllHtmlChildElements();
+        Iterator<HtmlElement> iter = iterable.iterator();
         while (iter.hasNext()) {
             getAllElementsOfGivenClass((HtmlElement) iter.next(), list,
                                        matchClass);

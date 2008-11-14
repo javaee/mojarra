@@ -139,27 +139,34 @@ public class WcagDataTableTestCase extends AbstractTestCase {
         // the page contains a table tag with a summary attribute whose value is that string.
         assertTrue(pageText.matches("(?s).*<table.*summary..Code page support in different versions of MS Windows.*>.*"));
         // the page contains a table tag followed immediately by the caption element as follows.
-        assertTrue(pageText.matches("(?sm).*<table.*>[ \r\n\t]*<caption>.*CODE-PAGE SUPPORT IN MICROSOFT WINDOWS.*</caption>.*"));
+        assertTrue(pageText.matches("(?sm).*<table.*>\\s*<caption>.*CODE-PAGE SUPPORT IN MICROSOFT WINDOWS.*</caption>.*"));
         // the page contains a close caption tag followed immediately by a three colgroup tags as follows.
-        assertTrue(pageText.matches("(?sm).*</caption>[ \r\n\t]*" +
-                "<colgroup align=.center.[ \t]*/>[ \r\n\t]*" + 
-                "<colgroup align=.left.[ \t]*/>[ \r\n\t]*" +
-                "<colgroup.*span=.2.*/>.*"));
+        assertTrue(pageText.matches("(?sm).*</caption>\\s*" +
+                "<colgroup align=.center.\\s*>\\s*" +
+                "</colgroup>\\s*" +
+                "<colgroup align=.left.\\s*>\\s*" +
+                "</colgroup>\\s*" +
+                "<colgroup.*span=.2.*>\\s*" +
+                "</colgroup>.*"));
         // the page contains a close caption tag followed immediately by a two colgroup tags as follows.
-        assertTrue(pageText.matches("(?sm).*</caption>[ \r\n\t]*" +
-                "<colgroup align=.center.[ \t]*/>[ \r\n\t]*" + 
-                "<colgroup align=.left.[ \t]*/>[ \r\n\t]*" +
-                "<colgroup.*align=.center.*/>.*"));
+        assertTrue(pageText.matches("(?sm).*</caption>\\s*" +
+                "<colgroup align=.center.\\s*>\\s*" +
+                "</colgroup>\\s*" +
+                "<colgroup align=.left.\\s*>\\s*" +
+                "</colgroup>\\s*" +
+                "<colgroup.*align=.center.*>\\s*" +
+                "</colgroup>.*"));
+
         // The last colgroup in the previous two assertions accounts for the align and span attributes occurring out of order.
         
         // A table with a thead, with a tr with a th scope=col
-        assertTrue(pageText.matches("(?sm).*<table.*>.*<thead>[ \r\n\t]*" +
-                "<tr>[ \r\n\t]*" + 
-                "<th[ \t]*scope=.col.*"));
+        assertTrue(pageText.matches("(?sm).*<table.*>.*<thead>\\s*" +
+                "<tr>\\s*" +
+                "<th\\s*scope=.col.*"));
         
         // A table with a tbody, with a tr with a th scope=row
         assertTrue(pageText.matches("(?sm).*<table.*>.*<tbody>.*" +
-                "<th[ \t]*scope=.row.*"));
+                "<th\\s*scope=.row.*"));
 
         // A table with a tbody, with a tr with a th scope=row
         assertTrue(pageText.matches("(?sm).*<table.*>.*<tbody>.*" +

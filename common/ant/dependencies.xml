@@ -51,7 +51,7 @@
     <property name="dependency.jar.dir" value="${dependency.base.dir}/jars"/>
     
     <property name="junit.version" value="3.8.1"/>
-    <property name="htmlunit.version" value="1.10"/>
+    <property name="htmlunit.version" value="2.3"/>
     <property name="cactus.version" value="13-1.7.1"/>
     <property name="taglibdoc.version" value="1.3"/>
     <property name="jsdoc.version" value="2.0.2"/>
@@ -136,7 +136,7 @@
                 <available file="${htmlunit.home}" property="ignored"/>
             </not>
             <then>
-                <get src="http://easynews.dl.sourceforge.net/sourceforge/htmlunit/htmlunit-${htmlunit.version}.zip"
+                <get src="http://downloads.sourceforge.net/htmlunit/htmlunit-${htmlunit.version}.zip"
                      dest="${dependency.base.dir}/downloads/htmlunit-${htmlunit.version}.zip"
                      usetimestamp="true"/>
                 <unzip

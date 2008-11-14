@@ -84,7 +84,7 @@ public class SelectOneManyEnumTestCase extends AbstractTestCase {
         assertTrue(select.getId().contains("selected"));
         List<HtmlOption> selectedOptions = select.getSelectedOptions();
         assertTrue(selectedOptions.size() == 1);
-        assertTrue("Value2".equals(selectedOptions.get(0).getValue()));
+        assertTrue("Value2".equals(selectedOptions.get(0).getValueAttribute()));
         select.setSelectedAttribute(selectedOptions.get(0), false);
         select.setSelectedAttribute("Value1", true);
         
@@ -93,7 +93,7 @@ public class SelectOneManyEnumTestCase extends AbstractTestCase {
         assertTrue(select2.getId().contains("selected2"));
         List<HtmlOption> selectedOptions2 = select2.getSelectedOptions();
         assertTrue(selectedOptions2.size() == 1);
-        assertTrue("Value3".equals(selectedOptions2.get(0).getValue()));
+        assertTrue("Value3".equals(selectedOptions2.get(0).getValueAttribute()));
         select2.setSelectedAttribute(selectedOptions2.get(0), false);
         select2.setSelectedAttribute("Value2", true);
         
@@ -102,7 +102,7 @@ public class SelectOneManyEnumTestCase extends AbstractTestCase {
         assertTrue(select3.getId().contains("selected3"));
         List<HtmlOption> selectedOptions3 = select3.getSelectedOptions();
         assertTrue(selectedOptions3.size() == 1);
-        assertTrue("Value4".equals(selectedOptions3.get(0).getValue()));
+        assertTrue("Value4".equals(selectedOptions3.get(0).getValueAttribute()));
         select3.setSelectedAttribute(selectedOptions3.get(0), false);
         select3.setSelectedAttribute("Value3", true);
         
@@ -111,8 +111,8 @@ public class SelectOneManyEnumTestCase extends AbstractTestCase {
         assertTrue(selectArray.getId().contains("array"));
         List<HtmlOption> selectedOptionsArray = selectArray.getSelectedOptions();
         assertTrue(selectedOptionsArray.size() == 2);
-        assertTrue("Value2".equals(selectedOptionsArray.get(0).getValue()));
-        assertTrue("Value4".equals(selectedOptionsArray.get(1).getValue()));
+        assertTrue("Value2".equals(selectedOptionsArray.get(0).getValueAttribute()));
+        assertTrue("Value4".equals(selectedOptionsArray.get(1).getValueAttribute()));
         selectArray.setSelectedAttribute(selectedOptionsArray.get(0), false);
         selectArray.setSelectedAttribute(selectedOptionsArray.get(1), false);
         selectArray.setSelectedAttribute("Value1", true);
@@ -124,8 +124,8 @@ public class SelectOneManyEnumTestCase extends AbstractTestCase {
         assertTrue(selectListt.getId().contains("list"));
         List<HtmlOption> selectedOptionsList = selectListt.getSelectedOptions();
         assertTrue(selectedOptionsList.size() == 2);
-        assertTrue("Value1".equals(selectedOptionsList.get(0).getValue()));
-        assertTrue("Value2".equals(selectedOptionsList.get(1).getValue()));
+        assertTrue("Value1".equals(selectedOptionsList.get(0).getValueAttribute()));
+        assertTrue("Value2".equals(selectedOptionsList.get(1).getValueAttribute()));
         selectListt.setSelectedAttribute(selectedOptionsList.get(0), false);
         selectListt.setSelectedAttribute(selectedOptionsList.get(1), false);
         selectListt.setSelectedAttribute("Value2", true);
@@ -151,37 +151,37 @@ public class SelectOneManyEnumTestCase extends AbstractTestCase {
         assertTrue(select.getId().contains("selected"));
         selectedOptions = select.getSelectedOptions();
         assertTrue(selectedOptions.size() == 1);
-        assertTrue("Value1".equals(selectedOptions.get(0).getValue()));        
+        assertTrue("Value1".equals(selectedOptions.get(0).getValueAttribute()));
         
         // ID selected2
         select2 = selectList.get(1);
         assertTrue(select2.getId().contains("selected2"));
         selectedOptions2 = select2.getSelectedOptions();
         assertTrue(selectedOptions2.size() == 1);
-        assertTrue("Value2".equals(selectedOptions2.get(0).getValue()));       
+        assertTrue("Value2".equals(selectedOptions2.get(0).getValueAttribute()));
         
         // ID selected3
         select3 = selectList.get(2);
         assertTrue(select3.getId().contains("selected3"));
         selectedOptions3 = select3.getSelectedOptions();
         assertTrue(selectedOptions3.size() == 1);
-        assertTrue("Value3".equals(selectedOptions3.get(0).getValue()));        
+        assertTrue("Value3".equals(selectedOptions3.get(0).getValueAttribute()));
         
         // ID array
         selectArray = selectList.get(3);
         assertTrue(selectArray.getId().contains("array"));
         selectedOptionsArray = selectArray.getSelectedOptions();
         assertTrue(selectedOptionsArray.size() == 2);
-        assertTrue("Value1".equals(selectedOptionsArray.get(0).getValue()));
-        assertTrue("Value2".equals(selectedOptionsArray.get(1).getValue()));                
+        assertTrue("Value1".equals(selectedOptionsArray.get(0).getValueAttribute()));
+        assertTrue("Value2".equals(selectedOptionsArray.get(1).getValueAttribute()));
               
         // ID list
         selectListt = selectList.get(4);
         assertTrue(selectListt.getId().contains("list"));
         selectedOptionsList = selectListt.getSelectedOptions();
         assertTrue(selectedOptionsList.size() == 2);
-        assertTrue("Value2".equals(selectedOptionsList.get(0).getValue()));
-        assertTrue("Value3".equals(selectedOptionsList.get(1).getValue()));
+        assertTrue("Value2".equals(selectedOptionsList.get(0).getValueAttribute()));
+        assertTrue("Value3".equals(selectedOptionsList.get(1).getValueAttribute()));
                 
     }
     
