@@ -115,21 +115,25 @@ public class CommandLinkMultiFormTestCase extends AbstractTestCase {
         // links within the first form
         hidden1 = (HtmlHiddenInput) form1.getInputByName("form01:j_idcl");
         assertNotNull(hidden1);
-        hidden1.setValueAttribute("form01:Link1");
-        page1 = (HtmlPage) form1.submit();
+        //hidden1.setValueAttribute("form01:Link1");
+        //page1 = (HtmlPage) form1.submit();
+        page1 = page.getAnchorByName("form01:Link1").click();
         assertTrue(-1 != page1.asText().indexOf("Thank you"));
-        hidden1.setValueAttribute("form01:Link2");
-        page1 = (HtmlPage) form1.submit();
+        //hidden1.setValueAttribute("form01:Link2");
+        //page1 = (HtmlPage) form1.submit();
+        page1 = page.getAnchorByName("form01:Link2").click();
         assertTrue(-1 != page1.asText().indexOf("Thank you"));
 
         // links within second form
         hidden2 = (HtmlHiddenInput) form2.getInputByName("form02:j_idcl");
         assertNotNull(hidden2);
-        hidden2.setValueAttribute("form02:Link3");
-        page1 = (HtmlPage) form1.submit();
+        //hidden2.setValueAttribute("form02:Link3");
+        //page1 = (HtmlPage) form1.submit();
+        page1 = page.getAnchorByName("form02:Link3").click();
         assertTrue(-1 != page1.asText().indexOf("Thank you"));
-        hidden2.setValueAttribute("form02:Link4");
-        page1 = (HtmlPage) form1.submit();
+        //hidden2.setValueAttribute("form02:Link4");
+        //page1 = (HtmlPage) form1.submit();
+        page1 = page.getAnchorByName("form02:Link4").click();
         assertTrue(-1 != page1.asText().indexOf("Thank you"));
     }
 }

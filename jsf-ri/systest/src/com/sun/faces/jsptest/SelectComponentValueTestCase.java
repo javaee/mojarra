@@ -144,7 +144,9 @@ public class SelectComponentValueTestCase extends AbstractTestCase {
         list = getAllElementsOfGivenClass(page, null, HtmlSelect.class);
         HtmlSelect options = (HtmlSelect) list.get(0);
         String chosen[] = {"one", "three"};
-        options.fakeSelectedAttribute(chosen);
+        options.setSelectedAttribute("one", true);
+        options.setSelectedAttribute("three", true);
+        //options.fakeSelectedAttribute(chosen);
         page = (HtmlPage) button.click();
         assertTrue(-1 != page.asText().indexOf("one three"));
         assertTrue(-1 != page.asText().indexOf("#{test3.selection}"));
@@ -170,7 +172,9 @@ public class SelectComponentValueTestCase extends AbstractTestCase {
                 (new Float(random.nextFloat())).toString(),
                 (new Float(random.nextFloat())).toString()
         };
-        options.fakeSelectedAttribute(chosen);
+        options.setSelectedAttribute((new Float(random.nextFloat())).toString(), true);
+        options.setSelectedAttribute((new Float(random.nextFloat())).toString(), true);
+        //options.fakeSelectedAttribute(chosen);
         page = (HtmlPage) button.click();
         ResourceBundle messages = ResourceBundle.getBundle(
                 "javax.faces.Messages");
@@ -212,7 +216,8 @@ public class SelectComponentValueTestCase extends AbstractTestCase {
         HtmlSelect options = (HtmlSelect) list.get(0);
 
         String chosen = "2";
-        options.fakeSelectedAttribute(chosen);
+        options.setSelectedAttribute(chosen,true);
+        //options.fakeSelectedAttribute(chosen);
         page = (HtmlPage) button.click();
         ResourceBundle messages = ResourceBundle.getBundle(
                 "javax.faces.Messages");
@@ -311,7 +316,9 @@ public class SelectComponentValueTestCase extends AbstractTestCase {
         HtmlSelect options = (HtmlSelect) list.get(0);
 
         String chosen[] = {"2", "3"};
-        options.fakeSelectedAttribute(chosen);
+        options.setSelectedAttribute("2", true);
+        options.setSelectedAttribute("3", true);
+        //options.fakeSelectedAttribute(chosen);
         page = (HtmlPage) button.click();
         ResourceBundle messages = ResourceBundle.getBundle(
                 "javax.faces.Messages");
