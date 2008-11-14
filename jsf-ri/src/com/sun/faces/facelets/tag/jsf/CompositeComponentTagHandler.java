@@ -79,6 +79,7 @@ import com.sun.faces.facelets.el.VariableMapperWrapper;
 import com.sun.faces.facelets.tag.TagAttribute;
 import com.sun.faces.facelets.tag.TagAttributes;
 import com.sun.faces.util.RequestStateManager;
+import javax.el.MethodExpression;
 import javax.faces.application.ViewHandler;
 
 /**
@@ -110,7 +111,6 @@ public class CompositeComponentTagHandler extends ComponentHandler {
                         expressionFactory = ctx.getFacesContext().getApplication().
                                 getExpressionFactory();
                     }
-                    // PENDING(edburns): deal with methodExpressions
                     if (value.startsWith("#{")) {
                         expression = expressionFactory.
                                 createValueExpression(ctx, value, Object.class);
@@ -118,7 +118,22 @@ public class CompositeComponentTagHandler extends ComponentHandler {
                         expression = expressionFactory.
                                 createValueExpression(value, Object.class);
                     }
-                    compositeComponent.getAttributes().put(name, expression);
+                    // RELEASE_PENDING: I don't think copyTagAttributesIntoComponentAttributes
+                    // should be getting called 
+                    // on postback, yet it is.  In lieu of a real fix, I'll
+                    // make sure I'm not overwriting a MethodExpression with a 
+                    // ValueExpression.
+                    Map<String, Object> map = compositeComponent.getAttributes();
+                    boolean doPut = true;
+                    if (map.containsKey(name)) {
+                        Object curVal = map.get(name);
+                        if (curVal instanceof MethodExpression) {
+                            doPut = false;
+                        }
+                    }
+                    if (doPut) {
+                        map.put(name, expression);
+                    }
                 }
             }
         }

@@ -71,9 +71,7 @@ import java.util.Map;
 import java.util.ListIterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.event.AfterAddToParentEvent;
 import javax.faces.event.AfterRestoreStateEvent;
-import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.ViewMapCreatedEvent;
 import javax.faces.event.ViewMapDestroyedEvent;
 import javax.faces.event.ExceptionEvent;
@@ -922,6 +920,8 @@ public class UIViewRoot extends UIComponentBase {
         // Install the PartialResponseWriter
         ResponseWriter writer = partialViewContext.getPartialResponseWriter();
         context.setResponseWriter(writer);
+
+        // RELEASE_PENDING: Queue Events that were specified in the Ajax Request..
 
         if (!invokedCallback) {
             return false;
@@ -1909,7 +1909,7 @@ public class UIViewRoot extends UIComponentBase {
     }
 
 
-    public List<UIComponent> getComponentResources(FacesContext context,
+    private List<UIComponent> getComponentResources(FacesContext context,
                                                    String target,
                                                    boolean create) {
 

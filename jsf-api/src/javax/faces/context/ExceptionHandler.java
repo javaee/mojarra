@@ -50,6 +50,9 @@ import javax.faces.event.SystemEventListener;
  *  this class don't care about the default implementation.  It should define
  *  the general contract that all implementations of ExceptionHandler should
  *  follow in order to work proprely in the runtime.
+ *  Also, note that the spec should state that the implementation, should queue
+ *  AbortProcessingExceptions caught during standard runtime processing, but
+ *  when handle() is called, these Exceptions are logged and not thrown.
  *
  * <p class="changed_added_2_0"><strong>ExceptionHandler</strong> is the
  * central point for handling <em>unexpected</em>

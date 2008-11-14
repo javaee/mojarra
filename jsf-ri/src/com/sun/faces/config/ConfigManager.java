@@ -286,11 +286,7 @@ public class ConfigManager {
                     pushTaskToContext(sc, annotationScan);
                 }
 
-                FACES_CONFIG_PROCESSOR_CHAIN.process(
-                      getConfigDocuments(sc,
-                                         FACES_CONFIG_RESOURCE_PROVIDERS,
-                                         executor,
-                                         validating));
+                FACES_CONFIG_PROCESSOR_CHAIN.process(facesDocuments);
                 if (!isFaceletsDisabled) {
                     FACELET_TAGLIB_CONFIG_PROCESSOR_CHAIN.process(
                           getConfigDocuments(sc,

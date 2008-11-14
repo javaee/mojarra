@@ -260,14 +260,14 @@ public class MultiViewHandler extends ViewHandler {
             return;
         }
         PropertyDescriptor attributes[] = componentBeanInfo.getPropertyDescriptors();
-        String applyTo = null, strValue = null;
+        String targets = null, attrName = null, strValue = null, 
+                methodSignature = null;
         UIComponent target = null;
         ExpressionFactory expressionFactory = null;
         ValueExpression valueExpression = null;
         MethodExpression toApply = null;
         Class expectedReturnType = null;
         Class expectedParameters[] = null;
-        boolean logError = false;
 
         for (PropertyDescriptor cur : attributes) {
             // If the current attribute represents a ValueExpression
@@ -278,105 +278,179 @@ public class MultiViewHandler extends ViewHandler {
             }
             // If the current attribute representes a MethodExpression
             if (null != (valueExpression = (ValueExpression) cur.getValue("method-signature"))) {
-                strValue = (String) valueExpression.getValue(context.getELContext());
-                if (null != strValue) {
+                methodSignature = (String) valueExpression.getValue(context.getELContext());
+                if (null != methodSignature) {
                 
                     // This is the name of the attribute on the top level component,
                     // and on the inner component.
-                    logError = false;
-                    if (null != (valueExpression = (ValueExpression) cur.getValue("applyTo"))) {
-                        applyTo = (String) valueExpression.getValue(context.getELContext());
-                        if (null == applyTo) {
-                            logError = true;
+                    if (null != (valueExpression = (ValueExpression) cur.getValue("targets"))) {
+                        targets = (String) valueExpression.getValue(context.getELContext());
+                    }
+                    
+                    if (null == targets) {
+                        targets = cur.getName();
+                    }
+                    
+                    if (null == targets || 0 == targets.length()) {
+                        // PENDING error message in page?
+                        logger.severe("Unable to retarget MethodExpression: " +
+                                methodSignature);
+                        continue;
+                    }
+                    
+                    
+                    String[] targetIds = targets.split(",");
+                    
+                    for (String curTarget : targetIds) {
+                    
+                        // This is the inner component to which the attribute should 
+                        // be applied
+                        target = topLevelComponent.findComponent(curTarget);
+                        if (null == targets) {
+                            // PENDING error message in page?
+                            logger.severe("Unable to retarget MethodExpression.  " +
+                                    "Unable to find inner component with id " +
+                                    targets + ".");
+                            continue;
                         }
-                    }
-                    
-                    if (logError) {
-                        // PENDING error message in page?
-                        logger.severe("Unable to retarget MethodExpression.  " +
-                                "Please specify \"applyTo\" attribute on <composite:attribute />");
-                        continue;
-                    }
-                    
-                    // This is the inner component to which the attribute should 
-                    // be applied
-                    target = topLevelComponent.findComponent(applyTo);
-                    if (null == applyTo) {
-                        // PENDING error message in page?
-                        logger.severe("Unable to retarget MethodExpression.  " +
-                                "Unable to find inner component with id " + 
-                                applyTo + ".");
-                        continue;
-                    }
 
-                    strValue = cur.getName();
+                        attrName = cur.getName();
 
-                    // Find the attribute on the top level component
-                    valueExpression = (ValueExpression) topLevelComponent.getAttributes().
-                            get(strValue);
-                    if (null == valueExpression) {
-                        // PENDING error message in page?
-                        logger.severe("Unable to find attribute with name \""
-                                      + strValue
-                                      + "\" in top level component in consuming page.  "
-                                      + "Page author error.");
-                        continue;
-                    }
+                        // Find the attribute on the top level component
+                        valueExpression = (ValueExpression) topLevelComponent.getAttributes().
+                                get(attrName);
+                        if (null == valueExpression) {
+                            // PENDING error message in page?
+                            logger.severe("Unable to find attribute with name \""
+                                          + attrName
+                                          + "\" in top level component in consuming page.  "
+                                          + "Page author error.");
+                            continue;
+                        }
 
-                    // lazily initialize this local variable
-                    if (null == expressionFactory) {
-                        expressionFactory = context.getApplication().getExpressionFactory();
-                    }
+                        // lazily initialize this local variable
+                        if (null == expressionFactory) {
+                            expressionFactory = context.getApplication().getExpressionFactory();
+                        }
 
-                    // If the attribute is one of the pre-defined 
-                    // MethodExpression attributes
-                    if (strValue.equals("action")) {
+                        // If the attribute is one of the pre-defined 
+                        // MethodExpression attributes
+                        if (attrName.equals("action")) {
                         expectedReturnType = Object.class;
                         expectedParameters = new Class[]{};
                         toApply = expressionFactory.createMethodExpression(context.getELContext(),
                                 valueExpression.getExpressionString(),
                                 expectedReturnType, expectedParameters);
                         ((ActionSource2) target).setActionExpression(toApply);
-                    } else if (strValue.equals("actionListener")) {
-                        expectedReturnType = Void.TYPE;
-                        expectedParameters = new Class[]{
-                                    ActionEvent.class
-                                };
-                        toApply = expressionFactory.createMethodExpression(context.getELContext(),
-                                valueExpression.getExpressionString(),
-                                expectedReturnType, expectedParameters);
-                        ((ActionSource2) target).addActionListener(new MethodExpressionActionListener(toApply));
-                    } else if (strValue.equals("validator")) {
-                        expectedReturnType = Void.TYPE;
-                        expectedParameters = new Class[]{
-                                    FacesContext.class,
-                                    UIComponent.class,
-                                    Object.class
-                                };
-                        toApply = expressionFactory.createMethodExpression(context.getELContext(),
-                                valueExpression.getExpressionString(),
-                                expectedReturnType, expectedParameters);
-                        ((EditableValueHolder) target).addValidator(new MethodExpressionValidator(toApply));
-                    } else if (strValue.equals("valueChangeListener")) {
-                        expectedReturnType = Void.TYPE;
-                        expectedParameters = new Class[]{
-                                    ValueChangeEvent.class
-                                };
-                        toApply = expressionFactory.createMethodExpression(context.getELContext(),
-                                valueExpression.getExpressionString(),
-                                expectedReturnType, expectedParameters);
-                        ((EditableValueHolder) target).addValueChangeListener(new MethodExpressionValueChangeListener(toApply));
-                    } else {
-                        // If the attribute is not one of the pre-defined 
-                        // MethodExpression attributes, look it up reflectively,
-                        // assuming there is a setter of type MethodExpression
+                        } else if (attrName.equals("actionListener")) {
+                            expectedReturnType = Void.TYPE;
+                            expectedParameters = new Class[]{
+                                        ActionEvent.class
+                                    };
+                            toApply = expressionFactory.createMethodExpression(context.getELContext(),
+                                    valueExpression.getExpressionString(),
+                                    expectedReturnType, expectedParameters);
+                            ((ActionSource2) target).addActionListener(new MethodExpressionActionListener(toApply));
+                        } else if (attrName.equals("validator")) {
+                            expectedReturnType = Void.TYPE;
+                            expectedParameters = new Class[]{
+                                        FacesContext.class,
+                                        UIComponent.class,
+                                        Object.class
+                                    };
+                            toApply = expressionFactory.createMethodExpression(context.getELContext(),
+                                    valueExpression.getExpressionString(),
+                                    expectedReturnType, expectedParameters);
+                            ((EditableValueHolder) target).addValidator(new MethodExpressionValidator(toApply));
+                        } else if (attrName.equals("valueChangeListener")) {
+                            expectedReturnType = Void.TYPE;
+                            expectedParameters = new Class[]{
+                                        ValueChangeEvent.class
+                                    };
+                            toApply = expressionFactory.createMethodExpression(context.getELContext(),
+                                    valueExpression.getExpressionString(),
+                                    expectedReturnType, expectedParameters);
+                            ((EditableValueHolder) target).addValueChangeListener(new MethodExpressionValueChangeListener(toApply));
+                        } else {
+                            // There is no explicit methodExpression property on
+                            // an inner component to which this MethodExpression
+                            // should be retargeted.  In this case, replace the
+                            // ValueExpression with a method expresson.
+                            
+                            // Pull apart the methodSignature to derive the 
+                            // expectedReturnType and expectedParameters
 
+                            // PENDING(rlubke,jimdriscoll) bulletproof this
+                            
+                            assert(null != methodSignature);
+                            methodSignature = methodSignature.trim();
+                            
+                            // Get expectedReturnType
+                            int j, i = methodSignature.indexOf(" ");
+                            if (-1 != i) {
+                                strValue = methodSignature.substring(0, i);
+                                try {
+                                    expectedReturnType = Util.getTypeFromString(strValue);
+                                } catch (ClassNotFoundException cnfe) {
+                                    logger.log(Level.SEVERE,
+                                            "Unable to determine expected return type for " +
+                                            methodSignature, cnfe);
+                                    continue;
+                                }
+                            } else {
+                                logger.severe("Unable to determine expected return type for " +
+                                        methodSignature);
+                                continue;
+                            }
+                            
+                            // derive the arguments
+                            i = methodSignature.indexOf("(");
+                            if (-1 != i) {
+                                j = methodSignature.indexOf(")", i+1);
+                                if (-1 != j) {
+                                    strValue = methodSignature.substring(i + 1, j);
+                                    if (0 < strValue.length()) {
+                                        String [] params = strValue.split(",");
+                                        expectedParameters = new Class[params.length];
+                                        boolean exceptionThrown = false;
+                                        for (i = 0; i < params.length; i++) {
+                                            try {
+                                                expectedParameters[i] = 
+                                                        Util.getTypeFromString(params[i]);
+                                            } catch (ClassNotFoundException cnfe) {
+                                                logger.log(Level.SEVERE,
+                                                        "Unable to determine expected return type for " +
+                                                        methodSignature, cnfe);
+                                                exceptionThrown = true;
+                                                break;
+                                            }
+                                        }
+                                        if (exceptionThrown) {
+                                            continue;
+                                        }
+                                        
+                                    } else {
+                                        expectedParameters = new Class[]{};
+                                    }
+                                }
+                                
+                            }
+                            
+                            assert(null != expectedReturnType);
+                            assert(null != expectedParameters);
+                            
+                            toApply = expressionFactory.createMethodExpression(context.getELContext(),
+                                    valueExpression.getExpressionString(),
+                                    expectedReturnType, expectedParameters);
+                            topLevelComponent.getAttributes().put(attrName, toApply);
+                            
+
+                        }
                     }
                 }
             }
-            
         }
-        
+
     }
     
     

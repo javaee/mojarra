@@ -57,8 +57,8 @@
     <composite:attribute name="selected2" required="true"/>
     <composite:attribute name="items1" required="true"/>
     <composite:attribute name="items2" required="true"/>
-    <composite:attribute name="move1to2" required="true" method-signature="void f1(javax.faces.event.ActionEvent)" />
-    <composite:attribute name="move2to1" required="true" method-signature="void f2(javax.faces.event.ActionEvent)" />
+    <composite:attribute name="move1to2" targets="move1to2" required="true" method-signature="void f1(javax.faces.event.ActionEvent)" />
+    <composite:attribute name="move2to1" targets="move2to1" required="true" method-signature="void f2(javax.faces.event.ActionEvent)" />
 
 </composite:interface>
 

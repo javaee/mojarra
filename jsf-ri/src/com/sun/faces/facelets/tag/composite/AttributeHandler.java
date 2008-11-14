@@ -163,9 +163,9 @@ public class AttributeHandler extends TagHandler {
                 propertyDescriptor.setValue("method-signature", ve);
             }
         }
-        if (null != (attr = this.getAttribute("applyTo"))) {
+        if (null != (attr = this.getAttribute("targets"))) {
             ve = attr.getValueExpression(ctx, String.class);
-            propertyDescriptor.setValue("applyTo", ve);
+            propertyDescriptor.setValue("targets", ve);
         }
         
 
