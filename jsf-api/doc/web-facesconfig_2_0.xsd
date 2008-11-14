@@ -1364,8 +1364,6 @@
             <xsd:annotation>
                 <xsd:documentation>
 
-                    RELEASE_PENDING (edburns,rogerk) Please review...
-
                     This attribute is only considered when associated with
                     an application-scoped managed bean. If the value of the eager
                     attribute is true the runtime must instantiate this class
