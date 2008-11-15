@@ -272,7 +272,7 @@ javax.faces.Ajax.AjaxEngine.getTransport = function() {
 if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
   javax.faces.Ajax.AjaxEngine.Queue = new function() {
 
-        var utils = new javax.faces.Ajax.Utils();
+        var utils = javax.faces.Ajax.Utils;
 
         // Create the internal queue
         var queue = [];
@@ -402,7 +402,7 @@ javax.faces.Ajax.AjaxEngine.sendMessage = function(type, name, message, request)
         throw new Error("AjaxEngine.sendMessage: invalid value passed as argument");
     }
 
-    var utils = new javax.faces.Ajax.Utils();
+    var utils = javax.faces.Ajax.Utils;
 
     var args = {};
     args.type = type;

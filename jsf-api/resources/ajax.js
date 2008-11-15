@@ -227,7 +227,7 @@ javax.faces.Ajax.ajaxRequest = function(element, event, options) {
     // Capture the element that triggered this Ajax request.
     var source = element;
 
-    var utils = new javax.faces.Ajax.Utils();
+    var utils = javax.faces.Ajax.Utils;
     var form = utils.getForm(source);
     var viewState = javax.faces.Ajax.viewState(form);
 
@@ -336,7 +336,7 @@ javax.faces.Ajax.ajaxResponse = function(request) {
         throw new Error("javax.faces.Ajax.ajaxResponse: Request is null");
     }
 
-    var utils = new javax.faces.Ajax.Utils();
+    var utils = javax.faces.Ajax.Utils;
     var xmlReq = request;
 
     var xml = xmlReq.responseXML;
