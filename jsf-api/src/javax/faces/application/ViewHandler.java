@@ -493,7 +493,7 @@ public abstract class ViewHandler {
 
     /**
      * <p class="changed_added_2_0">Leverage the component metadata
-     * specified in section 4.3.2 for the purpose of re-targeting any
+     * specified in section 3.6.2.1 for the purpose of re-targeting any
      * method expressions from the top level component to the
      * appropriate inner component.  For each attribute that is a
      * <code>MethodExpression</code> (as indicated by the presence of a
@@ -505,13 +505,20 @@ public abstract class ViewHandler {
      *
      * <ul>
      *
-     * <li><p>Get the value of the <em>applyTo</em> attribute.  If
-     * not found, log an error and continue to the next
-     * attribute.</p></li>
+     * <li><p>Get the value of the <em>targets</em> attribute.  If the
+     * value is a <code>ValueExpression</code> evaluate it.  If there is
+     * no <em>targets</em> attribute, let the name of the metadata
+     * element be the evaluated value of the <em>targets
+     * attribute.</em></p></li>
+     * 
+     * <li><p>Interpret <em>targets</em> as a space (not tab) separated
+     * list of ids. For each entry in the list:</p>
+     * 
+     * <ul>
      *
      * <li><p>Find the inner component of the
      * <em>topLevelComponent</em> with the id equal to
-     * <em>applyTo</em>.  For discussion, this component is called
+     * the current list entry.  For discussion, this component is called
      * <em>target</em>.  If not found, log and error and continue to
      * the next attribute.</p></li>
      *
@@ -574,14 +581,16 @@ public abstract class ViewHandler {
      * <em>target</em>, passing <em>attributeMethodExpression</em> wrapped in a
      * {@link javax.faces.event.MethodExpressionValueChangeListener}.</p></li>
      *
-     * <li><p>Otherwise, look for a JavaBeans setter that matches
-     * <em>name</em> and assume it takes a
-     * <code>MethodExpression</code>, passing
-     * <em>attributeMethodExpression</em> as that expression.  If
-     * such a setter does not exist, or does not take a
-     * <code>MethodExpression</code>, log an error and continue to
-     * the next attribute.</p></li>
-     *
+     * <li><p>Otherwise, assume that the <code>MethodExpression</code>
+     * should be placed in the components attribute set.  The runtme
+     * must create the <code>MethodExpression</code> instance based on
+     * the value of the "<code>method-signature</code>"
+     * attribute.</p></li>
+
+     * </ul>
+     * 
+     * </li>
+     * 
      * </ul>
      *
      * <p>An implementation is provided that will throw

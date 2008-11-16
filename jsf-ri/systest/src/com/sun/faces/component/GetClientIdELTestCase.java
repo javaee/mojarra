@@ -57,13 +57,17 @@ public class GetClientIdELTestCase extends AbstractTestCase {
     }
 
 
-    /** Return the tests included in this test suite. */
+    /**
+     * Return the tests included in this test suite.
+     */
     public static Test suite() {
         return (new TestSuite(GetClientIdELTestCase.class));
     }
 
 
-    /** Tear down instance variables required by this test case. */
+    /**
+     * Tear down instance variables required by this test case.
+     */
     public void tearDown() {
         super.tearDown();
     }
@@ -79,7 +83,7 @@ public class GetClientIdELTestCase extends AbstractTestCase {
     public void testELClientId() throws Exception {
 
         HtmlPage page = getPage("/faces/composite/clientId01.xhtml");
-	String text = page.asText();
+        String text = page.asText();
         assertTrue(-1 != text.indexOf("j_id6:j_id9"));
         assertTrue(-1 != text.indexOf("j_id6:componentId"));
         assertTrue(-1 != text.indexOf("j_id18"));
