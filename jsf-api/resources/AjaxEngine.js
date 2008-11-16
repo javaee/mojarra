@@ -55,7 +55,7 @@
 /**
  * AjaxEngine contains the JavaScript for performing Ajax functions. 
  */
-javax.faces.Ajax.AjaxEngine = function() {
+jsf.AjaxEngine = function() {
 
     var req = {};                  // Request Object
     req.url = null;                // Request URL
@@ -71,10 +71,10 @@ javax.faces.Ajax.AjaxEngine = function() {
                                    // before being sent.  This prevents the request from
                                    // entering the queue redundantly.
 
-    req.que = javax.faces.Ajax.AjaxEngine.Queue;
+    req.que = jsf.AjaxEngine.Queue;
 
     // Get an XMLHttpRequest Handle
-    req.xmlReq = javax.faces.Ajax.AjaxEngine.getTransport();
+    req.xmlReq = jsf.AjaxEngine.getTransport();
     if (req.xmlReq === null) {
         return null;
     }
@@ -97,9 +97,9 @@ javax.faces.Ajax.AjaxEngine = function() {
     req.onComplete = function onComplete() {
         var status = req.xmlReq.status;
         if ((status !== null && typeof status !== 'undefined' && status !== 0) && (status >= 200 && status < 300)) {
-            javax.faces.Ajax.ajaxResponse(req.xmlReq);
+            jsf.ajaxResponse(req.xmlReq);
         } else {
-            javax.faces.Ajax.AjaxEngine.sendError(req);
+            jsf.AjaxEngine.sendError(req);
         }
 
         // Regardless of whether the request completed successfully (or not),
@@ -196,7 +196,7 @@ javax.faces.Ajax.AjaxEngine = function() {
 /**
  * Utility function to serialize form elements.
  */
-javax.faces.Ajax.AjaxEngine.serializeForm = function(theform) {
+jsf.AjaxEngine.serializeForm = function(theform) {
     var els = theform.elements;
     var len = els.length;
     var qString = "";
@@ -239,7 +239,7 @@ javax.faces.Ajax.AjaxEngine.serializeForm = function(theform) {
 /**
  * Utility function to get an XMLHttpRequest handle.
  */
-javax.faces.Ajax.AjaxEngine.getTransport = function() {
+jsf.AjaxEngine.getTransport = function() {
     var methods = [
         function() {
             return new XMLHttpRequest();
@@ -269,10 +269,10 @@ javax.faces.Ajax.AjaxEngine.getTransport = function() {
  * Simple queue implementaton.
  */
 
-if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
-  javax.faces.Ajax.AjaxEngine.Queue = new function() {
+if (!window["jsf.AjaxEngine.Queue"]) {
+  jsf.AjaxEngine.Queue = new function() {
 
-        var utils = javax.faces.Ajax.Utils;
+        var utils = jsf.Utils;
 
         // Create the internal queue
         var queue = [];
@@ -307,7 +307,7 @@ if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
             queue.push(element);
 
             // Send the message that the request is enqueued
-            javax.faces.Ajax.AjaxEngine.sendMessage("Event","enqueue","request enqueued", element);
+            jsf.AjaxEngine.sendMessage("Event","enqueue","request enqueued", element);
         };
 
 
@@ -335,7 +335,7 @@ if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
                 }
             }
             if (element != "undefined") {
-                javax.faces.Ajax.AjaxEngine.sendMessage("Event","dequeue","request dequeued", element);
+                jsf.AjaxEngine.sendMessage("Event","dequeue","request dequeued", element);
             }
 
             // return the removed element
@@ -365,23 +365,23 @@ if (!window["javax.faces.Ajax.AjaxEngine.Queue"]) {
  * @param element object which caused the error
  * @private
  */
-javax.faces.Ajax.AjaxEngine.sendError = function(request) {
+jsf.AjaxEngine.sendError = function(request) {
 
     if (!request) {
         throw new Error("AjaxEngine.sendError:  invalid value passed as argument");
     }
 
     if (request.xmlReq.status === 0) {
-        javax.faces.Ajax.AjaxEngine.sendMessage("Error", "SERVERDOWN",
+        jsf.AjaxEngine.sendMessage("Error", "SERVERDOWN",
                 "Cannot communicate with server", request );
     } else if (request.xmlReq.status == 404) {
-        javax.faces.Ajax.AjaxEngine.sendMessage("Error", "NOTFOUND",
+        jsf.AjaxEngine.sendMessage("Error", "NOTFOUND",
                 "URL not found on server", request);
     } else if (request.xmlReq.status == 500) {
-        javax.faces.Ajax.AjaxEngine.sendMessage("Error", "SERVERERROR",
+        jsf.AjaxEngine.sendMessage("Error", "SERVERERROR",
                 "Server Error prevents completing request", request);
     } else { //
-        javax.faces.Ajax.AjaxEngine.sendMessage("Error", "MISCSERVER",
+        jsf.AjaxEngine.sendMessage("Error", "MISCSERVER",
                 "There was an error on the server", request);
     }
 };
@@ -396,13 +396,13 @@ javax.faces.Ajax.AjaxEngine.sendError = function(request) {
  * @private
  */
 
-javax.faces.Ajax.AjaxEngine.sendMessage = function(type, name, message, request){
+jsf.AjaxEngine.sendMessage = function(type, name, message, request){
 
     if (!type || !name || !message || !request || (type !== "Event" && type !== "Error")) {
         throw new Error("AjaxEngine.sendMessage: invalid value passed as argument");
     }
 
-    var utils = javax.faces.Ajax.Utils;
+    var utils = jsf.Utils;
 
     var args = {};
     args.type = type;

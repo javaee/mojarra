@@ -8,7 +8,7 @@ function buttonpush(buttonName, element, event) {
         button.disabled = true;
     }
     try {
-        javax.faces.Ajax.ajaxRequest(element, event, {execute: buttonName, render: buttonName});
+        jsf.ajaxRequest(element, event, {execute: buttonName, render: buttonName});
     } catch (ex) {
         // Handle errors here
         alert(ex);

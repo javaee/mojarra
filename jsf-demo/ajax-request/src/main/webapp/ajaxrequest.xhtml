@@ -47,31 +47,31 @@
         <h:outputText value="Command"/>
     </f:facet>
     <h:commandButton id="ajax1" value="ajaxRequest [ajax1]"
-                     onclick="javax.faces.Ajax.ajaxRequest(this, event, {execute:'ajax1,_1'}); return false;"
+                     onclick="jsf.ajaxRequest(this, event, {execute:'ajax1,_1'}); return false;"
                      actionListener="#{bean.getOptions}"/>  
     <h:commandButton id="ajax2" value="ajaxRequest [ajax2]"
-                     onclick="javax.faces.Ajax.ajaxRequest(this, event, {execute:'ajax2,_6,_10'}); return false;"
+                     onclick="jsf.ajaxRequest(this, event, {execute:'ajax2,_6,_10'}); return false;"
                      actionListener="#{bean.getOptions}"/> 
     <h:commandButton id="ajax3" value="ajaxRequest [ajax3]"
-                     onclick="javax.faces.Ajax.ajaxRequest(this, event, {execute:'ajax3,_5'}); return false;"
+                     onclick="jsf.ajaxRequest(this, event, {execute:'ajax3,_5'}); return false;"
                      actionListener="#{bean.getOptions}"/> 
     <h:commandButton id="ajax4" value="ajaxRequest [ajax4]"
-                     onclick="javax.faces.Ajax.ajaxRequest(this, event, {execute:'ajax4,_4,_9'}); return false;"
+                     onclick="jsf.ajaxRequest(this, event, {execute:'ajax4,_4,_9'}); return false;"
                      actionListener="#{bean.getOptions}"/>
     <h:commandButton id="ajax5" value="ajaxRequest [ajax5]"
-                     onclick="javax.faces.Ajax.ajaxRequest(this, event,  
+                     onclick="jsf.ajaxRequest(this, event,
                          {execute:'ajax5',render:'_1,optionsTitle,fireOptions'}); return false;"
                      actionListener="#{bean.getOptions}"/>
     <h:commandButton id="ajax6" value="ajaxRequest [ajax6]"
-                     onclick="javax.faces.Ajax.ajaxRequest(this, event, 
+                     onclick="jsf.ajaxRequest(this, event,
                          {execute:'ajax6',render:'_6,optionsTitle,fireOptions'}); return false;"
                      actionListener="#{bean.getOptions}"/>
     <h:commandButton id="ajax7" value="ajaxRequest [ajax7]"
-                     onclick="javax.faces.Ajax.ajaxRequest(this, event, 
+                     onclick="jsf.ajaxRequest(this, event,
                          {execute:'ajax7,_10',render:'_5,optionsTitle,fireOptions'}); return false;"
                      actionListener="#{bean.getOptions}"/> 
     <h:commandButton id="ajax8" value="ajaxRequest [ajax8]"
-                     onclick="javax.faces.Ajax.ajaxRequest(this, event, 
+                     onclick="jsf.ajaxRequest(this, event,
                          {execute:'ajax8,_1,_2,_3,_4',render:'_1,_2,_3,_4,optionsTitle,fireOptions'}); return false;"
                      actionListener="#{bean.getOptions}"/> 
 </h:panelGrid>

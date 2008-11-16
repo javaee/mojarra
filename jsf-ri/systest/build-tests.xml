@@ -128,6 +128,7 @@
     <target name="test"
             description="Execute all tests against installed application"
             depends="test.init,
+                test.ajax,
                 test.prefix.security,
                 test.config,
                 test.interweaving,
@@ -153,7 +154,6 @@
                 test.validator02,
                 test.validator03,
                 test.valuechange,
-                test.ajax,
                 test.component,
                 test.component01,
                 test.navigation,
@@ -170,7 +170,7 @@
                 test.valueBindingGet,
                 test.misc,
                 test.regressions"
-            /> 
+            />
 
     <target name="test.init">
         <mkdir dir="${impl.test.results.dir}"/>

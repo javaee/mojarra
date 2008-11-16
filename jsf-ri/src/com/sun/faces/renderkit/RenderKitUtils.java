@@ -332,7 +332,7 @@ public class RenderKitUtils {
     }
 
     public static String buildAjaxCommand(AjaxBehavior ajaxBehavior) {
-        final String AJAX_REQUEST = "javax.faces.Ajax.ajaxRequest";
+        final String AJAX_REQUEST = "jsf.ajaxRequest";
         String ajaxCommand = AJAX_REQUEST + "(this, event";
         if (ajaxBehavior.getExecute() != null ||
             ajaxBehavior.getRender() != null) {

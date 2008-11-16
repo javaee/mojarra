@@ -55,9 +55,9 @@
 /**
  * Utility functions
  */
-if (!window["javax.faces.Ajax.Utils"]) {
+if (!window["jsf.Utils"]) {
 
-    javax.faces.Ajax.Utils = {
+    jsf.Utils = {
 
         createClass : function() {
             return function() {
@@ -265,7 +265,7 @@ if (!window["javax.faces.Ajax.Utils"]) {
          * @private
          */
         execConvert : function execConvert(execParam) {
-            return execParam.replace(' ', '').replace(javax.faces.separator, '.').split(',');
+            return execParam.replace(' ', '').replace(jsf.separator, '.').split(',');
         }
     };
 }

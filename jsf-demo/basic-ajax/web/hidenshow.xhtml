@@ -57,7 +57,7 @@
         </h:panelGroup>
         <br/>
         <h:commandButton id="button1" value="Show/Hide"
-                         onclick="javax.faces.Ajax.ajaxRequest(this, event, {execute: 'button1', render: 'pg1'}); return false;"
+                         onclick="jsf.ajaxRequest(this, event, {execute: 'button1', render: 'pg1'}); return false;"
                          actionListener="#{hidenshow.toggle}"/>
         <br/>
         <h:outputText value="Reload entire page: "/>
