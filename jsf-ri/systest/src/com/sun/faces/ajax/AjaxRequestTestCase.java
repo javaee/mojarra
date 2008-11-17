@@ -83,7 +83,7 @@ public class AjaxRequestTestCase extends AbstractTestCase {
 
     public void testAjaxRequestDefaults() throws Exception {
         System.out.println("Starting Request Defaults Test");
-        HtmlPage page = getPage("/faces/ajax/ajaxRequestDefaults.xhtml");
+        HtmlPage page = getPage("/faces/ajax/ajaxRequestDefaultsButton.xhtml");
 
         // First, we'll test to make sure the initial values come out right
         String out1 = ((HtmlElement)page.getHtmlElementById("form1:out1")).asText();
@@ -254,21 +254,5 @@ public class AjaxRequestTestCase extends AbstractTestCase {
 
 
     }
-
-    /*                                          X
-    public void testBasicAjaxRequest() throws Exception {
-        HtmlPage page1 = getPage("/faces/ajax/ajaxCount.xhtml");
-        HtmlElement text1 = page1.getHtmlElementById("text1");
-        String initial = text1.asText();
-        assertTrue("initial".equals(initial));
-        HtmlSubmitInput submit = (HtmlSubmitInput)
-                getInputContainingGivenId(page1, "button1");
-        HtmlPage page2 = (HtmlPage) submit.click();
-        text1 = page2.getHtmlElementById("text1");
-        String result = text1.asText();
-        assertTrue("action1".equals(result));
-    }
-    */
-
 
 }
