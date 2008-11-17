@@ -52,6 +52,9 @@
  * limitations under the License.
  */
 
+// RELEASE_PENDING need to decide on naming for AjaxEngine
+var mojarra = mojarra || {};
+
 /**
  * AjaxEngine contains the JavaScript for performing Ajax functions. 
  */

@@ -55,7 +55,7 @@
 /**
   @project JSF Ajax Library
   @version 2.0
-  @description
+  @description This is the standard implementation of the JSF Ajax Library.
 */
 
 /**
@@ -67,33 +67,17 @@ if (typeof OpenAjax !== "undefined" &&
 }
 
 /**
- * Create our top level namespace - javax.faces.Ajax
+ * Create our top level namespaces - javax.faces.Ajax
  */
 /*  RELEASE_PENDING - need to figure out what to do with the namespacing.
 if (javax === null || typeof javax === "undefined") {
     var javax = {};
 }
 */
-//var javax = {};
-if (!window["jsf"]) {
-    jsf = {};
-}
-if (jsf.Ajax === null || typeof jsf.Ajax === "undefined") {
-    jsf["Ajax"] ={};
-}
+var jsf = jsf || {};
 
 /**
- * @name javax
- * @namespace
- */
-
-/**
- * @name javax.faces
- * @namespace
- */
-
-/**
- * @name javax.faces.Ajax
+ * @name jsf
  * @namespace
  */
 

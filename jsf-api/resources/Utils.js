@@ -52,6 +52,10 @@
  * limitations under the License.
  */
 
+// RELEASE_PENDING need to decide on naming for Utils
+var mojarra = mojarra || {};
+
+
 /**
  * Utility functions
  */
