@@ -39,7 +39,7 @@ public class AjaxRequestTestCase extends AbstractTestCase {
 
 
     public void testAjaxCount() throws Exception {
-        HtmlPage page = getPage("/faces/ajax/ajaxRequest.xhtml");
+        HtmlPage page = getPage("/faces/ajax/ajaxCount.xhtml");
 
         // First we'll check the first page outputted correctly
         HtmlElement out1 = page.getHtmlElementById("countForm:out1");
@@ -83,7 +83,7 @@ public class AjaxRequestTestCase extends AbstractTestCase {
 
     /*
     public void testBasicAjaxRequest() throws Exception {
-        HtmlPage page1 = getPage("/faces/ajax/ajaxRequest.xhtml");
+        HtmlPage page1 = getPage("/faces/ajax/ajaxCount.xhtml");
         HtmlElement text1 = page1.getHtmlElementById("text1");
         String initial = text1.asText();
         assertTrue("initial".equals(initial));
