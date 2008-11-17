@@ -40,10 +40,13 @@
 
 package javax.faces.component;
 
+import javax.faces.context.FacesContext;
+
 
 
 /**
- * <p><strong>UINamingContainer</strong> is a convenience base class for
+ * <p><strong class="changed_modified_2_0">UINamingContainer</strong> is 
+ * a convenience base class for
  * components that wish to implement {@link NamingContainer} functionality.</p>
  */
 
@@ -65,6 +68,14 @@ public class UINamingContainer extends UIComponentBase
      */
     public static final String COMPONENT_FAMILY = "javax.faces.NamingContainer";
 
+    /**
+     * <p class="changed_added_2_0">The context-param that
+     * allows the separator char for clientId strings to be set on a
+     * per-web application basis.</p>
+     *
+     * @since 2.0
+     */
+    public static final String SEPARATOR_CHAR_PARAM_NAME = "javax.faces.SEPARATOR_CHAR";
 
     // ------------------------------------------------------------ Constructors
 
@@ -87,6 +98,37 @@ public class UINamingContainer extends UIComponentBase
 
         return (COMPONENT_FAMILY);
 
+    }
+
+    /**
+     * <p class="changed_added_2_0">Return the character used to
+     * separate segments of a clientId.  The implementation must
+     * determine if there is a &lt;<code>context-param</code>&gt; with
+     * the value given by the value of the symbolic constant {@link
+     * #SEPARATOR_CHAR_PARAM_NAME}.  If there is a value for this param,
+     * the first character of the value must be returned from this
+     * method.  Otherwise, the value of the symbolic constant {@link
+     * NamingContainer#SEPARATOR_CHAR} must be returned.</p>
+     *
+     * @since 2.0
+     */
+    
+    public char getSeparatorChar() {
+
+	// PENDING replace all occurrences of
+	// NamingContainer.SEPARATOR_CHAR, except for the one below, of
+	// course, with calls to UINamingContainer.getSeparatorChar().
+	// Also, naturally, this needs to be made as performant as
+	// possible.  Perhaps we could use the injection trick as we do
+	// with the implementation ivar for Application?
+
+        String initParam = FacesContext.getCurrentInstance().getExternalContext().getInitParameter(SEPARATOR_CHAR_PARAM_NAME);
+
+        char result = NamingContainer.SEPARATOR_CHAR;
+        if (null == initParam && 0 < initParam.length()) {
+            result = initParam.charAt(0);
+        }
+        return result;
     }
 
 
