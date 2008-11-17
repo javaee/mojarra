@@ -82,6 +82,7 @@ public class AjaxRequestTestCase extends AbstractTestCase {
     }
 
     public void testAjaxRequestDefaults() throws Exception {
+        System.out.println("Starting Request Defaults Test");
         HtmlPage page = getPage("/faces/ajax/ajaxRequestDefaults.xhtml");
 
         // First, we'll test to make sure the initial values come out right
@@ -95,47 +96,44 @@ public class AjaxRequestTestCase extends AbstractTestCase {
 
         // Reload the page
         HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("form1:reload");
-        HtmlPage page2 = (HtmlPage) button.click();
+        page = (HtmlPage) button.click();
 
         // Check that the page updated correctly
-        out1 = ((HtmlElement)page2.getHtmlElementById("form1:out1")).asText();
-        out2 = ((HtmlElement)page2.getHtmlElementById("form1:out2")).asText();
-        out3 = ((HtmlElement)page2.getHtmlElementById("out3")).asText();
+        out1 = ((HtmlElement)page.getHtmlElementById("form1:out1")).asText();
+        out2 = ((HtmlElement)page.getHtmlElementById("form1:out2")).asText();
+        out3 = ((HtmlElement)page.getHtmlElementById("out3")).asText();
         System.out.println("Reloaded values: "+out1+" "+out2+" "+out3);
         assertTrue("3".equals(out1));
         assertTrue("4".equals(out2));
         assertTrue("5".equals(out3));
 
         // Now, make the Ajax call to first reset button
-        button = (HtmlSubmitInput) page.getHtmlElementById("form1:reset1");
-        HtmlPage page3 = (HtmlPage) button.click();
-   /*  RELEASE_PENDING - why does this fail
+        HtmlSubmitInput resetbutton = (HtmlSubmitInput) page.getHtmlElementById("form1:reset1");
+        page = (HtmlPage) resetbutton.click();
         // Check that the ajax request succeeds - eventually.  Give it three seconds.
         boolean status = false;
         //try 30 times to wait .1 second each for filling the page.
         for (int i = 0; i < 30; i++) {
-            HtmlElement out1ele = page3.getHtmlElementById("form1:out1");
+            HtmlElement out1ele = page.getHtmlElementById("form1:out1");
             out1 = out1ele.asText();
             System.out.println("iteration "+i+": "+out1);
             if ("0".equals(out1)) {
-                out2 = ((HtmlElement)page3.getHtmlElementById("form1:out2")).asText();
-                out3 = ((HtmlElement)page3.getHtmlElementById("out3")).asText();
+                out2 = ((HtmlElement)page.getHtmlElementById("form1:out2")).asText();
+                out3 = ((HtmlElement)page.getHtmlElementById("out3")).asText();
                 // These should be the same as above, unchanged by the ajax request
-                //System.out.println("After reset1 values: "+out1+" "+out2+" "+out3);
                 assertTrue("4".equals(out2));
                 assertTrue("5".equals(out3));
                 status = true;
                 break;
             }
-            synchronized (page3) {
-                page2.wait(100);
+            synchronized (page) {
+                page.wait(100);
             }
         }
         System.out.println("After reset1 values: "+out1+" "+out2+" "+out3);
 
         assertTrue(status);
 
-        */
 
 
         //RELEASE_PENDING continue adding tests
