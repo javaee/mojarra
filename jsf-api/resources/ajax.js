@@ -463,7 +463,7 @@ jsf.ajaxResponse = function(request) {
  * <code>javax.faces.application.ProjectStage</code>.
  * @function jsf.getProjectStage
  */
-
+// RELEASE_PENDING: change from function to String?
 jsf.getProjectStage = function() {
     return "#{facesContext.application.projectStage}";
 };
