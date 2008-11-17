@@ -53,9 +53,9 @@ import java.lang.annotation.Inherited;
 
  * <pre><code>
 
-    &#0064;ManagedBeans({
-        &#0064;ManagedBean(name="bean1",scope="request"),
-        &#0064;ManagedBean(name="bean2",scope="session")
+    ManagedBeans({
+        ManagedBean(name="bean1",scope="request"),
+        ManagedBean(name="bean2",scope="session")
     })
 
  * </code></pre>
@@ -63,7 +63,7 @@ import java.lang.annotation.Inherited;
  * <div class="changed_added_2_0">
 
  * <p>The action described in {@link ManagedBean} must be taken for each
- * <code>&#0064;ManagedBean</code> present in the container
+ * <code>&#8220;ManagedBean&#8221;</code> present in the container
  * annotation. </p>
 
  * </div>
