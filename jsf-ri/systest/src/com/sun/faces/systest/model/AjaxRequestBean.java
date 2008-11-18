@@ -10,6 +10,7 @@ public class AjaxRequestBean {
     private Integer count = 0;
 
     private String echo = "intial";
+    private String echo2 = "echo";
 
     public String getEcho() {
         return echo;
@@ -19,8 +20,8 @@ public class AjaxRequestBean {
         this.echo = echo;
     }
 
-    public void resetEcho(ActionEvent ae) {
-        echo = "reset";
+    public void echoText(ActionEvent ae) {
+        echo2 = echo;
     }
 
     public Integer getCount() {
@@ -31,5 +32,11 @@ public class AjaxRequestBean {
         count = 0;
     }
 
+    public String getEcho2() {
+        return echo2;
+    }
 
+    public void setEcho2(String echo2) {
+        this.echo2 = echo2;
+    }
 }

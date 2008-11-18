@@ -423,7 +423,11 @@ public class AjaxRequestTestCase extends AbstractTestCase {
     }
     */
 
-    //RELEASE_PENDING continue adding tests
+    public void testAjaxRequestDefaultsEdit() throws Exception {
+        System.out.println("Starting Request Defaults Button Test");
+        HtmlPage page = getPage("/faces/ajax/ajaxRequestDefaultsEdit.xhtml");
+        // RELEASE_PENDING complete test after fixing blocking bugs
+    }
 
 
 }

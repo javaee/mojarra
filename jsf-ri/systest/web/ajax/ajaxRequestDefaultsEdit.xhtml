@@ -12,40 +12,32 @@
     <h:outputScript library="javax.faces" name="ajax.js" target="head"/>
     <h1>Test defaults with Prepended Ids</h1>
     <h:form id="form1">
-        <h:outputText id="out1" value="#{ajaxrequest.count}"/>
+        <h:outputText id="out1" value="#{ajaxrequest.echo}"/>
         <br/>
-        <!-- Increment the counter on the server, and the client -->
-        <h:commandButton id="button1" value="Count"
-                         onclick="jsf.ajaxRequest(this, event, {execute: this.id, render: 'form1:out1'}); return false;"/>
+        <h:outputText id="echoOut" value="#{ajaxrequest.echo2}"/>
         <br/>
-        <!-- Resets the counter, doesn't refresh the page-->
+        Basic Test:
+        <h:inputText id="edit" value="#{ajaxrequest.echo}"
+                            onchange="jsf.ajaxRequest(this,event, {execute:'form1:edit', render: 'form1:out1'})"/>
+        <br/>
         Explicit parameters:
-        <h:commandButton id="reset1" value="reset1"
-                            onclick="jsf.ajaxRequest(this, event, {execute:'form1:reset1', render: 'form1:out1'}); return false;"
-                            actionListener="#{ajaxrequest.resetCount}"/>
+        <h:inputText id="edit1" value="#{ajaxrequest.echo}"
+                            onchange="jsf.ajaxRequest(this,event, {execute:'form1:edit1', render: 'form1:out1 form1:echoOut'})"
+                            valueChangeListener="#{ajaxrequest.echoText}"/>
         <br/>
         Implicit execute:
-        <h:commandButton id="reset2" value="reset2"
-                            onclick="jsf.ajaxRequest(this, event, {render: 'form1:out1'}); return false;"
-                            actionListener="#{ajaxrequest.resetCount}"/>
         <br/>
         Implicit render:
-        <h:commandButton id="reset3" value="reset3"
-                            onclick="jsf.ajaxRequest(this, event, {execute:'form1:reset3'}); return false;"
-                            actionListener="#{ajaxrequest.resetCount}"/>
         <br/>
         Default Options:
-        <h:commandButton id="reset4" value="reset4"
-                            onclick="jsf.ajaxRequest(this, event); return false;"
-                            actionListener="#{ajaxrequest.resetCount}"/>
         <br/>
         <!-- Contained within the form - but still shouldn't update except for full page load -->
-        <h:outputText id="out2" value="#{ajaxrequest.count}"/>
+        <h:outputText id="out2" value="#{ajaxrequest.echo}"/>
         <br/>
         <h:commandButton id="reload" value="reload" />
     </h:form>
     <!-- Contained outside the form - shouldn't update except for full page load -->
-    <h:outputText id="out3" value="#{ajaxrequest.count}"/>
+    <h:outputText id="out3" value="#{ajaxrequest.echo}"/>
 
     <!-- RELEASE_PENDING : add a test for prependid="true"
          RELEASE_PENDING:  add tests for inputText -->
