@@ -46,6 +46,8 @@ public class ViewHandlingStrategyManager {
 
     // The strategies associate with this instance
     private volatile ViewHandlingStrategy[] strategies;
+    
+    private MultiViewHandler multiViewHandler;
 
 
     // ------------------------------------------------------------- Constructor
@@ -57,15 +59,16 @@ public class ViewHandlingStrategyManager {
      * and {@link com.sun.faces.application.view.JspViewHandlingStrategy}.  Otherwise, only the
      * {@link com.sun.faces.application.view.JspViewHandlingStrategy} will be available.
      */
-    public ViewHandlingStrategyManager() {
+    public ViewHandlingStrategyManager(MultiViewHandler multiViewHandler) {
 
+        this.multiViewHandler = multiViewHandler;
         WebConfiguration webConfig = WebConfiguration.getInstance();
         boolean pdlDisabled = webConfig
               .isOptionEnabled(WebConfiguration.BooleanWebContextInitParameter.DisableFaceletJSFViewHandler);
         strategies = ((pdlDisabled)
-                      ? new ViewHandlingStrategy[] { new JspViewHandlingStrategy() }
-                      : new ViewHandlingStrategy[] { new FaceletViewHandlingStrategy(),
-                                                     new JspViewHandlingStrategy() });
+                      ? new ViewHandlingStrategy[] { new JspViewHandlingStrategy(multiViewHandler) }
+                      : new ViewHandlingStrategy[] { new FaceletViewHandlingStrategy(multiViewHandler),
+                                                     new JspViewHandlingStrategy(multiViewHandler) });
 
     }
 

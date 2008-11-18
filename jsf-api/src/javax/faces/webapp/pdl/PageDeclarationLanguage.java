@@ -37,7 +37,9 @@
 package javax.faces.webapp.pdl;
 
 import java.beans.BeanInfo;
+import java.io.IOException;
 import javax.faces.application.Resource;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
 /**
@@ -254,4 +256,17 @@ public abstract class PageDeclarationLanguage {
      */
     public abstract Resource getScriptComponentResource(FacesContext context,
             Resource componentResource);
+    
+    
+    public abstract UIViewRoot createView(FacesContext ctx,
+                                 String viewId);
+    
+    public abstract UIViewRoot restoreView(FacesContext ctx, String viewId);
+    
+    public abstract void renderView(FacesContext ctx,
+                                    UIViewRoot view)
+    throws IOException;
+    
+    
+
 }

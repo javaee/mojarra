@@ -290,8 +290,17 @@ public abstract class ViewHandler {
 
     /**
      * <p class="changed_added_2_0">Return the {@link
-     * PageDeclarationLanguage} instance used for this <code>ViewHandler</code>
-     * instance.</p>
+     * PageDeclarationLanguage} instance used to handle the PDL contained
+     * in the file referenced by the argument <code>viewId</code></p>
+     * 
+     * <div class="changed_added_2_0">
+     * 
+     * <p>The default implementation must use {@link javax.faces.webapp.pdl.PageDeclarationLanguageFactory#getPageDeclarationLanguage}
+     * to obtain the appropriate <code>PageDeclarationLanguage</code> implementation
+     * for the argument <code>viewId</code>.  Any exceptions thrown as a result of
+     * invoking that method must not be swallowed.</p>
+     * 
+     * </div>
      * 
      * <p>An implementation is provided that will throw
      * <code>UnsupportedOperationException</code>.  A Faces implementation
@@ -301,7 +310,7 @@ public abstract class ViewHandler {
 
      * @since 2.0
      */
-    public PageDeclarationLanguage getPageDeclarationLanguage() {
+    public PageDeclarationLanguage getPageDeclarationLanguage(String viewId) {
         throw new UnsupportedOperationException();
     }
 

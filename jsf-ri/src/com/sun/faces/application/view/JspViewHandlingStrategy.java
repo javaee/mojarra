@@ -36,12 +36,14 @@
 
 package com.sun.faces.application.view;
 
+import java.beans.BeanInfo;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
+import javax.faces.application.Resource;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -64,11 +66,28 @@ import com.sun.faces.util.RequestStateManager;
 public class JspViewHandlingStrategy extends ViewHandlingStrategy {
 
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
+    
+    public JspViewHandlingStrategy(MultiViewHandler multiViewHandler) { 
+        super(multiViewHandler);
+    }
+
+    @Override
+    public BeanInfo getComponentMetadata(FacesContext context, Resource componentResource) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Resource getScriptComponentResource(FacesContext context, Resource componentResource) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
 
     // --------------------------------------- Methods from ViewHandlingStrategy
 
 
+    
+    
+    
     /**
      * This {@link ViewHandlingStrategy} <em>should</em> be the last one queried
      * and as such we return <code>true</code>.
@@ -86,7 +105,6 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
      * @see com.sun.faces.application.view.ViewHandlingStrategy#renderView(javax.faces.context.FacesContext, MultiViewHandler, javax.faces.component.UIViewRoot)
      */
     public void renderView(FacesContext ctx,
-                           MultiViewHandler vh,
                            UIViewRoot viewToRender)
     throws IOException {
 

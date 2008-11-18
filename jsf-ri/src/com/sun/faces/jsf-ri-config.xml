@@ -62,6 +62,9 @@
     <render-kit-factory>
       com.sun.faces.renderkit.RenderKitFactoryImpl
     </render-kit-factory>
+    <page-declaration-language-factory>
+      com.sun.faces.application.view.PageDeclarationLanguageFactoryImpl
+    </page-declaration-language-factory>
   </factory>
 
 

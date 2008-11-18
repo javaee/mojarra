@@ -667,6 +667,20 @@
                     </xsd:documentation>
                 </xsd:annotation>
             </xsd:element>
+            <xsd:element name="page-declaration-language-factory"
+                        type="javaee:fully-qualified-classType">
+                <xsd:annotation>
+                    <xsd:documentation>
+                            
+                        The "page-declaration-language-factory" element contains 
+                        the fully qualified class name of the concrete 
+                        PageDeclarationLanguageFactory
+                        implementation class that will be called when
+                        FactoryFinder.getFactory(PAGE_DECLARATION_FACTORY) is called.
+                            
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
             <xsd:element name="render-kit-factory"
                          type="javaee:fully-qualified-classType">
                 <xsd:annotation>

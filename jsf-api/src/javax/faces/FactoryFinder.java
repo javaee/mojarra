@@ -186,6 +186,12 @@ public final class FactoryFinder {
     public final static String LIFECYCLE_FACTORY =
          "javax.faces.lifecycle.LifecycleFactory";
 
+    /**
+     * <p>The property name for the
+     * {@link javax.faces.webapp.pdl.PageDeclarationLanguage} class name.</p>
+     */
+    public final static String PAGE_DECLARATION_LANGUAGE_FACTORY =
+         "javax.faces.webapp.pdl.PageDeclarationLanguageFactory";
 
     /**
      * <p>The property name for the
@@ -210,7 +216,8 @@ public final class FactoryFinder {
          EXCEPTION_HANDLER_FACTORY,
          FACES_CONTEXT_FACTORY,
          LIFECYCLE_FACTORY,
-         RENDER_KIT_FACTORY
+         RENDER_KIT_FACTORY,
+         PAGE_DECLARATION_LANGUAGE_FACTORY
     };
 
     /**
@@ -587,6 +594,10 @@ public final class FactoryFinder {
                  javax.faces.lifecycle.LifecycleFactory.class);
             factoryClasses.put(RENDER_KIT_FACTORY,
                  javax.faces.render.RenderKitFactory.class);
+            factoryClasses.put(DISCOVERY_HANDLER_FACTORY,
+                 javax.faces.application.DiscoveryHandlerFactory.class);
+            factoryClasses.put(PAGE_DECLARATION_LANGUAGE_FACTORY,
+                 javax.faces.webapp.pdl.PageDeclarationLanguageFactory.class);
         }
         return factoryClasses.get(factoryClassName);
 
