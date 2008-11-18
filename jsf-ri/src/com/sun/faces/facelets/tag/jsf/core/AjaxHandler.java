@@ -98,7 +98,8 @@ import javax.faces.application.Resource;
  * <li>{@link javax.faces.component.AjaxBehaviorx#AJAX_ACTION_VALUE_CHANGE}</li>
  * </ul>
  * put the {@link javax.faces.component.AjaxBehavior} instance in the parent 
- * component's attribute <code>Map</code>.  If this tag is nested within
+ * component's attribute <code>Map</code> under the key 
+ * {@link javax.faces.component.AJAX_BEHAVIOR}.  If this tag is nested within
  * a single {@link javax.faces.component.EditableValueHolder} component,
  * and the <code>events</code> attribute value is not specified or is 
  * one of the following:
@@ -107,7 +108,8 @@ import javax.faces.application.Resource;
  * <li>{@link javax.faces.component.AjaxBehaviorx#AJAX_ACTION_VALUE_CHANGE}</li>
  * </ul>
  * put the {@link javax.faces.component.AjaxBehavior} instance in the parent 
- * component's attribute <code>Map</code>.  
+ * component's attribute <code>Map</code> under the key
+ * {@link javax.faces.component.AJAX_BEHAVIOR}.  
  * Throw an <code>exception</code> if the <code>events</code> attribute value 
  * does not match the component type.
  * <br/><br/>
