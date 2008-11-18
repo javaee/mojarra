@@ -47,16 +47,16 @@
         <h:outputText value="Command"/>
     </f:facet>
     <h:commandButton id="ajax1" value="ajaxRequest [ajax1]"
-                     onclick="jsf.ajaxRequest(this, event, {execute:'ajax1,_1'}); return false;"
+                     onclick="jsf.ajaxRequest(this, event, {execute:'ajax1,_1',render:'form'}); return false;"
                      actionListener="#{bean.getOptions}"/>  
     <h:commandButton id="ajax2" value="ajaxRequest [ajax2]"
-                     onclick="jsf.ajaxRequest(this, event, {execute:'ajax2,_6,_10'}); return false;"
+                     onclick="jsf.ajaxRequest(this, event, {execute:'ajax2,_6,_10',render:'form'}); return false;"
                      actionListener="#{bean.getOptions}"/> 
     <h:commandButton id="ajax3" value="ajaxRequest [ajax3]"
-                     onclick="jsf.ajaxRequest(this, event, {execute:'ajax3,_5'}); return false;"
+                     onclick="jsf.ajaxRequest(this, event, {execute:'ajax3,_5',render:'form'}); return false;"
                      actionListener="#{bean.getOptions}"/> 
     <h:commandButton id="ajax4" value="ajaxRequest [ajax4]"
-                     onclick="jsf.ajaxRequest(this, event, {execute:'ajax4,_4,_9'}); return false;"
+                     onclick="jsf.ajaxRequest(this, event, {execute:'ajax4,_4,_9',render:'form'}); return false;"
                      actionListener="#{bean.getOptions}"/>
     <h:commandButton id="ajax5" value="ajaxRequest [ajax5]"
                      onclick="jsf.ajaxRequest(this, event,
