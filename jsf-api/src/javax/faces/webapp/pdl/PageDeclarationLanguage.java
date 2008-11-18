@@ -262,6 +262,19 @@ public abstract class PageDeclarationLanguage {
                                  String viewId);
     
     public abstract UIViewRoot restoreView(FacesContext ctx, String viewId);
+
+    /**
+     * <p class="changed_added_2_0">Cause the view to be traversed for
+     * rendering.  PENDING(edburns): need more specifics.  For JSP, this
+     * means taking the action necessary in section 7.5.2.  For
+     * Facelets, the following assertions apply.</p>
+
+     * <p>The unique id constraint is applied.</p>
+
+     * <p>FaceletFactory and Facelet.apply() are called.</p>
+     *
+     * @since 2.0
+     */
     
     public abstract void renderView(FacesContext ctx,
                                     UIViewRoot view)
