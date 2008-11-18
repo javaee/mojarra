@@ -14,8 +14,12 @@ import javax.faces.component.UIComponent;
  * to {@link SystemEventListener#processEvent} or {@link
  * ComponentSystemEventListener#processEvent}, the listener
  * implementation may assume that the <code>source</code> of this event
- * instance is the {@link UIComponent} instance that was just added to
- * its parent.  </p>
+ * instance is a {@link UIComponent} instance and that either that
+ * instance or an ancestor of that instance was just added to the view.
+ * Therefore, the implementation may assume it is safe to call {@link
+ * UIComponent#getParent}, {@link UIComponent#getClientId}, and other
+ * methods that depend upon the component instance being added into the
+ * view.</p>
  *
  * <div class="changed_added_2_0">
  *
@@ -34,7 +38,7 @@ import javax.faces.component.UIComponent;
  *
  * @since 2.0
  */
-public class AfterAddToParentEvent extends ComponentSystemEvent {
+public class AfterAddToViewEvent extends ComponentSystemEvent {
 
     private static final long serialVersionUID = -5706460518363094948L;
 
@@ -58,7 +62,7 @@ public class AfterAddToParentEvent extends ComponentSystemEvent {
      *
      * @throws <code>NullPointerException</code> if the argument is <code>null</code>.
      */
-    public AfterAddToParentEvent(UIComponent component) {
+    public AfterAddToViewEvent(UIComponent component) {
         super(component);
     }
 
