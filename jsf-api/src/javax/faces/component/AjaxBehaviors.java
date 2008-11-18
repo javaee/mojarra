@@ -62,7 +62,7 @@ public class AjaxBehaviors implements Serializable {
     /**
      * <p>Return the {@link AjaxBehavior} instance containing the event 
      * that matches <code>eventName</code>.  Interrogate the 
-     * <code>List</code> of {@list AjaxBehavior} instances
+     * <code>List</code> of {@link AjaxBehavior} instances
      * starting at the end of the <code>List</code>.  Return <code>null</code>
      * if no matching {@link AjaxBehavior} is available.<p>
      *
