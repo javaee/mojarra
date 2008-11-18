@@ -228,6 +228,20 @@ public abstract class PartialViewContext {
 
     /**
      * <p class="changed_added_2_0">
+     * Return <code>true</code> if the request parameter
+     * <code>javax.faces.partial</code> or 
+     * <code>javax.faces.partial.ajax</code> is present in the current
+     * request.  Otherwise, return <code>false</code>.</p>
+     *
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     *
+     * @since 2.0
+     */
+    public abstract boolean isPartialRequest();
+
+    /**
+     * <p class="changed_added_2_0">
      * Return <code>true</code> if the request parameter {@link #PARTIAL_EXECUTE_PARAM_NAME}
      * is present in the current request and the value of the parameter is
      * {@link #NO_PARTIAL_PHASE_CLIENT_IDS}. Otherwise, return <code>false</code>.</p>
