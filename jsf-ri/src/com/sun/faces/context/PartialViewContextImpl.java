@@ -75,6 +75,7 @@ public class PartialViewContextImpl extends PartialViewContext {
     private List<String> renderPhaseClientIds;
     private OnOffResponseWrapper onOffResponse = null;
     private Boolean ajaxRequest;
+    private Boolean partialRequest;
     private Boolean renderAll;
 
     // ----------------------------------------------------------- Constructors
@@ -114,6 +115,23 @@ public class PartialViewContextImpl extends PartialViewContext {
                   .containsKey("javax.faces.partial.ajax");
         }
         return ajaxRequest;
+
+    }
+
+    /**
+     * @see javax.faces.context.PartialViewContext#isPartialRequest()
+     */
+    @Override
+    public boolean isPartialRequest() {
+
+        assertNotReleased();
+        if (partialRequest == null) {
+            partialRequest = isAjaxRequest() ||
+                FacesContext.getCurrentInstance().
+                getExternalContext().getRequestParameterMap()
+                .containsKey("javax.faces.partial");
+        }
+        return partialRequest;
 
     }
 
@@ -271,7 +289,6 @@ public class PartialViewContextImpl extends PartialViewContext {
         }
          
     }
-
 
     // -------------------------------------------------------- Private Methods
 
