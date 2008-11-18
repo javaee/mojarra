@@ -9,7 +9,6 @@
     <title>Ajax Defaults Request Test Page</title>
 </h:head>
 <h:body>
-    <h:outputScript library="javax.faces" name="ajax.js" target="head"/>
     <h1>Test Ajax tag defaults with Prepended Ids</h1>
     <h:form id="form1">
         <h:outputText id="out1" value="#{ajaxrequest.count}"/>
@@ -48,8 +47,7 @@
     <!-- Contained outside the form - shouldn't update except for full page load -->
     <h:outputText id="out3" value="#{ajaxrequest.count}"/>
 
-    <!-- RELEASE_PENDING : add a test for prependid="true"
-         RELEASE_PENDING:  add tests for inputText -->
+    <!-- RELEASE_PENDING:  add tests for inputText -->
 
 
 </h:body>

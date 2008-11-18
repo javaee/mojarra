@@ -10,6 +10,12 @@ import com.gargoylesoftware.htmlunit.html.HtmlElement;
 
 public class AjaxTagTestCase extends AbstractTestCase {
 
+    // interval for test
+    private static final int interval = 50;
+    // number of times to try to read new value
+    private static final int iterate = 20;
+    // total for each test = interval * iterate
+
     public AjaxTagTestCase(String name) {
         super(name);
     }
@@ -59,8 +65,7 @@ public class AjaxTagTestCase extends AbstractTestCase {
 
         // Check that the ajax request succeeds - eventually.  Give it three seconds.
         boolean status = false;
-        //try 30 times to wait .1 second each for filling the page.
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < iterate; i++) {
             out1 = page2.getHtmlElementById("countForm:out1");
             out1Content = out1.asText();
             System.out.println("iteration: "+i+"  out1Content: "+out1Content);
@@ -69,7 +74,7 @@ public class AjaxTagTestCase extends AbstractTestCase {
                 break;
             }
             synchronized (page2) {
-                page2.wait(100);
+                page2.wait(interval);
             }
         }
         assertTrue(status);
@@ -113,8 +118,7 @@ public class AjaxTagTestCase extends AbstractTestCase {
         page = (HtmlPage) button.click();
         // Check that the ajax request succeeds - eventually.  Give it three seconds.
         boolean status = false;
-        //try 30 times to wait .1 second each for filling the page.
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < iterate; i++) {
             HtmlElement out1ele = page.getHtmlElementById("form1:out1");
             out1 = out1ele.asText();
             System.out.println("iteration "+i+": "+out1);
@@ -128,7 +132,7 @@ public class AjaxTagTestCase extends AbstractTestCase {
                 break;
             }
             synchronized (page) {
-                page.wait(100);
+                page.wait(interval);
             }
         }
         System.out.println("After reset1 values: "+out1+" "+out2+" "+out3);
@@ -152,8 +156,7 @@ public class AjaxTagTestCase extends AbstractTestCase {
         page = (HtmlPage) button.click();
         // Check that the ajax request succeeds - eventually.  Give it three seconds.
         status = false;
-        //try 30 times to wait .1 second each for filling the page.
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < iterate; i++) {
             HtmlElement out1ele = page.getHtmlElementById("form1:out1");
             out1 = out1ele.asText();
             System.out.println("iteration "+i+": "+out1);
@@ -167,7 +170,7 @@ public class AjaxTagTestCase extends AbstractTestCase {
                 break;
             }
             synchronized (page) {
-                page.wait(100);
+                page.wait(interval);
             }
         }
         System.out.println("After reset2 values: "+out1+" "+out2+" "+out3);
@@ -191,8 +194,7 @@ public class AjaxTagTestCase extends AbstractTestCase {
         page = (HtmlPage) button.click();
         // Check that the ajax request succeeds - eventually.  Give it three seconds.
         status = false;
-        //try 30 times to wait .1 second each for filling the page.
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < iterate; i++) {
             HtmlElement out1ele = page.getHtmlElementById("form1:out1");
             out1 = out1ele.asText();
             System.out.println("iteration "+i+": "+out1);
@@ -206,7 +208,7 @@ public class AjaxTagTestCase extends AbstractTestCase {
                 break;
             }
             synchronized (page) {
-                page.wait(100);
+                page.wait(interval);
             }
         }
         System.out.println("After reset3 values: "+out1+" "+out2+" "+out3);
@@ -230,8 +232,7 @@ public class AjaxTagTestCase extends AbstractTestCase {
         page = (HtmlPage) button.click();
         // Check that the ajax request succeeds - eventually.  Give it three seconds.
         status = false;
-        //try 30 times to wait .1 second each for filling the page.
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < iterate; i++) {
             HtmlElement out1ele = page.getHtmlElementById("form1:out1");
             out1 = out1ele.asText();
             System.out.println("iteration "+i+": "+out1);
@@ -245,7 +246,7 @@ public class AjaxTagTestCase extends AbstractTestCase {
                 break;
             }
             synchronized (page) {
-                page.wait(100);
+                page.wait(interval);
             }
         }
         System.out.println("After reset4 values: "+out1+" "+out2+" "+out3);
@@ -286,8 +287,7 @@ public class AjaxTagTestCase extends AbstractTestCase {
         page = (HtmlPage) button.click();
         // Check that the ajax request succeeds - eventually.  Give it three seconds.
         boolean status = false;
-        //try 30 times to wait .1 second each for filling the page.
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < iterate; i++) {
             HtmlElement out1ele = page.getHtmlElementById("out1");
             out1 = out1ele.asText();
             System.out.println("iteration "+i+": "+out1);
@@ -301,7 +301,7 @@ public class AjaxTagTestCase extends AbstractTestCase {
                 break;
             }
             synchronized (page) {
-                page.wait(100);
+                page.wait(interval);
             }
         }
         System.out.println("After reset1 values: "+out1+" "+out2+" "+out3);
@@ -325,8 +325,7 @@ public class AjaxTagTestCase extends AbstractTestCase {
         page = (HtmlPage) button.click();
         // Check that the ajax request succeeds - eventually.  Give it three seconds.
         status = false;
-        //try 30 times to wait .1 second each for filling the page.
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < iterate; i++) {
             HtmlElement out1ele = page.getHtmlElementById("out1");
             out1 = out1ele.asText();
             System.out.println("iteration "+i+": "+out1);
@@ -340,7 +339,7 @@ public class AjaxTagTestCase extends AbstractTestCase {
                 break;
             }
             synchronized (page) {
-                page.wait(100);
+                page.wait(interval);
             }
         }
         System.out.println("After reset2 values: "+out1+" "+out2+" "+out3);
@@ -364,8 +363,7 @@ public class AjaxTagTestCase extends AbstractTestCase {
         page = (HtmlPage) button.click();
         // Check that the ajax request succeeds - eventually.  Give it three seconds.
         status = false;
-        //try 30 times to wait .1 second each for filling the page.
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < iterate; i++) {
             HtmlElement out1ele = page.getHtmlElementById("out1");
             out1 = out1ele.asText();
             System.out.println("iteration "+i+": "+out1);
@@ -379,7 +377,7 @@ public class AjaxTagTestCase extends AbstractTestCase {
                 break;
             }
             synchronized (page) {
-                page.wait(100);
+                page.wait(interval);
             }
         }
         System.out.println("After reset3 values: "+out1+" "+out2+" "+out3);
@@ -403,8 +401,7 @@ public class AjaxTagTestCase extends AbstractTestCase {
         page = (HtmlPage) button.click();
         // Check that the ajax request succeeds - eventually.  Give it three seconds.
         status = false;
-        //try 30 times to wait .1 second each for filling the page.
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < iterate; i++) {
             HtmlElement out1ele = page.getHtmlElementById("out1");
             out1 = out1ele.asText();
             System.out.println("iteration "+i+": "+out1);
@@ -418,7 +415,7 @@ public class AjaxTagTestCase extends AbstractTestCase {
                 break;
             }
             synchronized (page) {
-                page.wait(100);
+                page.wait(interval);
             }
         }
         System.out.println("After reset4 values: "+out1+" "+out2+" "+out3);
