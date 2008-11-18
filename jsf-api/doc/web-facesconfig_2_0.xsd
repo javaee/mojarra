@@ -414,6 +414,20 @@
                     </xsd:documentation>
                 </xsd:annotation>
             </xsd:element>
+            <xsd:element name="partial-traversal"
+                         type="javaee:fully-qualified-classType">
+                <xsd:annotation>
+                    <xsd:documentation>
+
+                            The "partial-traversal" element contains the fully
+                            qualified class name of the concrete
+                            PartialTraversal implementation class that will be
+                            called during the "execute" and "render" phases of the
+                            request processing lifecycle.
+
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
             <xsd:element name="view-handler"
                          type="javaee:fully-qualified-classType">
                 <xsd:annotation>
