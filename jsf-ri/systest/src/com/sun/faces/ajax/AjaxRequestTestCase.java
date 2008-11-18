@@ -253,7 +253,8 @@ public class AjaxRequestTestCase extends AbstractTestCase {
 
     }
 
-    /*
+    /* RELEASE_PENDING - fix before ship,
+       that this test is failing is bug #854
     public void testAjaxRequestDefaultsButtonNoPrepend() throws Exception {
         System.out.println("Starting Request Defaults Button No Prepend Test");
         HtmlPage page = getPage("/faces/ajax/ajaxRequestDefaultsButtonNoPrepend.xhtml");
