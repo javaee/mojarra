@@ -729,7 +729,7 @@ public class UIData extends UIComponentBase
                 clientIdBuilder = new StringBuilder(super.getClientId(context));
                 baseClientId = clientIdBuilder.toString();
                 baseClientIdLength = (baseClientId.length() + 1);
-                clientIdBuilder.append(NamingContainer.SEPARATOR_CHAR);
+                clientIdBuilder.append(UINamingContainer.getSeparatorChar(context));
                 clientIdBuilder.setLength(baseClientIdLength);
             } else {
                 clientIdBuilder = new StringBuilder();
@@ -750,7 +750,7 @@ public class UIData extends UIComponentBase
                 // for each call by resetting the length to 0 after
                 // the ID has been computed.
                 cid = clientIdBuilder.append(super.getClientId(context))
-                      .append(NamingContainer.SEPARATOR_CHAR).append(rowIndex)
+                      .append(UINamingContainer.getSeparatorChar(context)).append(rowIndex)
                       .toString();
                 clientIdBuilder.setLength(0);
             }
@@ -836,10 +836,11 @@ public class UIData extends UIComponentBase
 
         int lastSep, newRow, savedRowIndex = this.getRowIndex();
         try {
+            char sepChar = UINamingContainer.getSeparatorChar(context);
             // If we need to strip out the rowIndex from our id
             // PENDING(edburns): is this safe with respect to I18N?
-            if (myId.endsWith(NamingContainer.SEPARATOR_CHAR + Integer.toString(savedRowIndex, 10))) {
-                lastSep = myId.lastIndexOf(NamingContainer.SEPARATOR_CHAR);
+            if (myId.endsWith(sepChar + Integer.toString(savedRowIndex, 10))) {
+                lastSep = myId.lastIndexOf(sepChar);
                 assert (-1 != lastSep);
                 myId = myId.substring(0, lastSep);
             }
@@ -853,12 +854,12 @@ public class UIData extends UIComponentBase
                 int preRowIndexSep, postRowIndexSep;
 
                 if (-1 != (preRowIndexSep =
-                      clientId.indexOf(NamingContainer.SEPARATOR_CHAR,
+                      clientId.indexOf(sepChar,
                                        myId.length()))) {
                     // Check the length
                     if (++preRowIndexSep < clientId.length()) {
                         if (-1 != (postRowIndexSep =
-                              clientId.indexOf(NamingContainer.SEPARATOR_CHAR,
+                              clientId.indexOf(sepChar,
                                                preRowIndexSep + 1))) {
                             try {
                                 newRow = Integer

@@ -64,6 +64,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import javax.faces.component.NamingContainer;
+import javax.faces.component.UINamingContainer;
 
 /**
  * <B>DeprStateManagerImpl</B> is a test class which implements
@@ -157,7 +158,7 @@ public class DeprStateManagerImpl extends StateManager {
 		    actualMap = new LRUMap(actualMapSize);
                     logicalMap.put(idInLogicalMap, actualMap);
  		}
-                id = idInLogicalMap + NamingContainer.SEPARATOR_CHAR + 
+                id = idInLogicalMap + ':' +
                         idInActualMap;
 		result = new SerializedView(id, null);
                 actualMap.put(idInActualMap, stateArray);
@@ -259,7 +260,7 @@ public class DeprStateManagerImpl extends StateManager {
                        idInLogicalMap = null,
                        idInActualMap = null;
                 
-                int sep = idString.indexOf(NamingContainer.SEPARATOR_CHAR);
+                int sep = idString.indexOf(':');
                 assert(-1 != sep);
                 assert(sep < idString.length());
                 

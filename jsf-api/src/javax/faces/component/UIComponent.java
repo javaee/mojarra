@@ -958,6 +958,9 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * {@link NamingContainer}, whether or not its class actually implements
      * the {@link NamingContainer} interface.</p>
      *
+     * RELEASE_PENDING (edburns) this needs to take UINamingContainer.getSeparatorChar()
+     *  into account
+     *
      * <p>A <em>search expression</em> consists of either an
      * identifier (which is matched exactly against the <code>id</code>
      * property of a {@link UIComponent}, or a series of such identifiers
@@ -1016,7 +1019,8 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
     public abstract UIComponent findComponent(String expr);
 
     /**
-     *
+     * RELEASE_PENDING (edburns) this needs to take UINamingContainer.getSeparatorChar()
+     *  into account
      * <p>Starting at this component in the View hierarchy, search for a
      * component with a <code>clientId</code> equal to the argument
      * <code>clientId</code> and, if found, call the {@link

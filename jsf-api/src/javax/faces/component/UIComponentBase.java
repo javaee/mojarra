@@ -73,11 +73,13 @@ import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
 import javax.faces.event.AfterAddToParentEvent;
 import javax.faces.event.BeforeRenderEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
+import javax.faces.event.AfterAddToViewEvent;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.ResponseStateManager;
@@ -300,7 +302,7 @@ public abstract class UIComponentBase extends UIComponent {
                                         + 1
                                         + this.clientId.length());
                 this.clientId = idBuilder.append(parentId)
-                      .append(NamingContainer.SEPARATOR_CHAR)
+                      .append(UINamingContainer.getSeparatorChar(context))
                       .append(this.clientId).toString();
             }
 
@@ -569,9 +571,6 @@ public abstract class UIComponentBase extends UIComponent {
     }
 
 
-    private static final String SEPARATOR_STRING =
-        String.valueOf(NamingContainer.SEPARATOR_CHAR);
-
     /**
      * @throws NullPointerException {@inheritDoc}
      */
@@ -580,6 +579,10 @@ public abstract class UIComponentBase extends UIComponent {
             throw new NullPointerException();
         }
 
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        final char sepChar = UINamingContainer.getSeparatorChar(ctx);
+        final String SEPARATOR_STRING = String.valueOf(sepChar);
+
         if (expr.length() == 0) {
             // if an empty value is provided, fail fast.
             throw new IllegalArgumentException("\"\"");
@@ -587,7 +590,7 @@ public abstract class UIComponentBase extends UIComponent {
 
         // Identify the base component from which we will perform our search
         UIComponent base = this;
-        if (expr.charAt(0) == NamingContainer.SEPARATOR_CHAR) {
+        if (expr.charAt(0) == sepChar) {
             // Absolute searches start at the root of the tree
             while (base.getParent() != null) {
                 base = base.getParent();
@@ -1592,9 +1595,18 @@ public abstract class UIComponentBase extends UIComponent {
     private static void doPostAddProcessing(FacesContext context,
                                             UIComponent added) {
         if (!isPostbackAndRestoreView(context)) {
-            context.getApplication()
-                  .publishEvent(AfterAddToParentEvent.class, added);
+            Application app = context.getApplication();
+            app.publishEvent(AfterAddToParentEvent.class, added);
+            UIComponent parent = added.getParent();
+            while (parent != null) {
+                if (parent instanceof UIViewRoot) {
+                    app.publishEvent(AfterAddToViewEvent.class, added);
+                    break;
+                }
+                parent = parent.getParent();
+            }
         }
+
     }
 
     private static final String IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME =
@@ -1620,25 +1632,6 @@ public abstract class UIComponentBase extends UIComponent {
                            result ? Boolean.TRUE : Boolean.FALSE);
         }
         return result;
-    }
-
-    private static ResponseStateManager getResponseStateManager(
-          FacesContext context, String renderKitId)
-          throws FacesException {
-
-        assert (null != context);
-
-        RenderKit renderKit = context.getRenderKit();
-        if (renderKit == null) {
-            RenderKitFactory factory = (RenderKitFactory) FactoryFinder
-                  .getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-            if (factory == null) {
-                throw new IllegalStateException();
-            }
-            renderKit = factory.getRenderKit(context, renderKitId);
-        }
-        return renderKit.getResponseStateManager();
-
     }
 
 

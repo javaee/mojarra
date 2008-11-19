@@ -47,6 +47,7 @@ import java.util.logging.Level;
 
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
@@ -191,7 +192,7 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
         }
         String parentClientId = parent.getClientId(context);
         // prepend the clientId of the nearest container to the forValue.
-        result = parentClientId + NamingContainer.SEPARATOR_CHAR + forValue;
+        result = parentClientId + UINamingContainer.getSeparatorChar(context) + forValue;
         return result;
 
     }
