@@ -6,12 +6,12 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
-    <title>Ajax Defaults Request Test Page</title>
+    <title>Ajax Defaults Request Page</title>
 </h:head>
 <h:body>
     <h:outputScript library="javax.faces" name="ajax.js" target="head"/>
-    <h1>Test defaults with Prepended Ids</h1>
-    <h:form id="form1">
+    <h1>Test defaults without Prepended Ids</h1>
+    <h:form id="form1" prependId="false">
         <h:panelGroup layout="block" id="outPanel">
         <h:outputText id="out1" value="#{ajaxrequest.echo}"/>
         <br/>
@@ -24,21 +24,21 @@
         <h:outputText id="echo4Out" value="#{ajaxrequest.echo4}"/>
         <br/>
         <h:commandButton id="refresh"
-                         onclick="jsf.ajaxRequest(this,event, {render: 'form1:outPanel'}); return false;" />
+                         onclick="jsf.ajaxRequest(this,event, {render: 'outPanel'}); return false;" />
         </h:panelGroup>
         Explicit parameters:
         <h:inputText id="edit1" value="#{ajaxrequest.echo1}"
-                            onchange="jsf.ajaxRequest(this,event, {execute:'form1:edit1', render: 'form1:edit1'});"
+                            onchange="jsf.ajaxRequest(this,event, {execute:'edit1', render: 'edit1'});"
                             valueChangeListener="#{ajaxrequest.echoValue}"/>
         <br/>
         Implicit execute:
         <h:inputText id="edit2" value="#{ajaxrequest.echo2}"
-                            onchange="jsf.ajaxRequest(this,event, {render: 'form1:edit2'});"
+                            onchange="jsf.ajaxRequest(this,event, {render: 'edit2'});"
                             valueChangeListener="#{ajaxrequest.echoValue}"/>
         <br/>
         Implicit render:
         <h:inputText id="edit3" value="#{ajaxrequest.echo3}"
-                            onchange="jsf.ajaxRequest(this,event, {execute:'form1:edit3'});"
+                            onchange="jsf.ajaxRequest(this,event, {execute:'edit3'});"
                             valueChangeListener="#{ajaxrequest.echoValue}"/>
         <br/>
         Default Options:
