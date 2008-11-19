@@ -271,6 +271,8 @@ jsf.ajaxRequest = function(element, event, options) {
     // source element name.
     //
     function determineDefaultExecute(source, options) {
+        options.execute = source.id;
+        /*  RELEASE_PENDING - possibly remove
         switch (source.type) {
             case 'text': case 'password': case 'hidden': case 'textarea':
             case 'select-one': case 'select-multiple':
@@ -280,6 +282,7 @@ jsf.ajaxRequest = function(element, event, options) {
             case 'button': case 'submit': case 'reset':
                 options.execute = "all";
         }
+        */
     }
 }
 
