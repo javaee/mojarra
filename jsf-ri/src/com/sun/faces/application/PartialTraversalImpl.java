@@ -98,7 +98,11 @@ public class PartialTraversalImpl implements PartialTraversal {
             phaseId == PhaseId.PROCESS_VALIDATIONS ||
             phaseId == PhaseId.UPDATE_MODEL_VALUES) {
 
-            if (executePhaseClientIds == null || executePhaseClientIds.isEmpty()) {
+            // Skip this processing if "none" is specified in the render list, 
+            // or there were no execute phase client ids. 
+
+            if (executePhaseClientIds == null || executePhaseClientIds.isEmpty() ||
+                partialViewContext.isExecuteNone()) {
                 // PENDING LOG ERROR OR WARNING
                 return;
             }
@@ -122,12 +126,11 @@ public class PartialTraversalImpl implements PartialTraversal {
 
         } else if (phaseId == PhaseId.RENDER_RESPONSE) {
 
-            // Skip this processing if "none" is specified in the render list. 
+            // Skip this processing if "none" is specified in the render list, 
+            // or there were no render phase client ids. 
 
-            if (partialViewContext.isRenderNone()) {
-                return;
-            }
-            if (renderPhaseClientIds == null || renderPhaseClientIds.isEmpty()) {
+            if (renderPhaseClientIds == null || renderPhaseClientIds.isEmpty() ||
+                partialViewContext.isRenderNone()) {
                 // PENDING LOG ERROR OR WARNING
                 return;
             }
@@ -139,6 +142,8 @@ public class PartialTraversalImpl implements PartialTraversal {
                     ResponseWriter orig = context.getResponseWriter();
                     context.getAttributes().put(ORIGINAL_WRITER, orig);
                     context.setResponseWriter(writer);
+
+                    // PENDING PORTLETS???
 
                     if (context.getExternalContext().getResponse() instanceof HttpServletResponse) {
                         HttpServletResponse servletResponse = (HttpServletResponse)
@@ -199,14 +204,25 @@ public class PartialTraversalImpl implements PartialTraversal {
 
     private void processComponents(UIComponent component, PhaseId phaseId, 
         List phaseClientIds, FacesContext context) throws IOException {
-        if (phaseClientIds.contains(component.getClientId())) {
-            if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
+        PartialViewContext partialViewContext = context.getPartialViewContext();
+        if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
+            if (phaseClientIds.contains(component.getClientId()) ||
+                partialViewContext.isExecuteAll()) {
                 component.processDecodes(context);
-            } else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
+            }
+        } else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
+            if (phaseClientIds.contains(component.getClientId()) ||
+                partialViewContext.isExecuteAll()) {
                 component.processValidators(context);
-            } else if (phaseId == PhaseId.UPDATE_MODEL_VALUES) {
+            }
+        } else if (phaseId == PhaseId.UPDATE_MODEL_VALUES) {
+            if (phaseClientIds.contains(component.getClientId()) ||
+                partialViewContext.isExecuteAll()) {
                 component.processUpdates(context);
-            } else if (phaseId == PhaseId.RENDER_RESPONSE) {
+            }
+        } else if (phaseId == PhaseId.RENDER_RESPONSE) {
+            if (phaseClientIds.contains(component.getClientId()) ||
+                partialViewContext.isRenderAll()) {
                 if (component.isRendered()) {
                     ResponseWriter writer = context.getResponseWriter();
                     writer.startElement("render", component);
