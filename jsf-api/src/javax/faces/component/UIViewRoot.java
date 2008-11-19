@@ -75,6 +75,7 @@ import javax.faces.event.AfterRestoreStateEvent;
 import javax.faces.event.ViewMapCreatedEvent;
 import javax.faces.event.ViewMapDestroyedEvent;
 import javax.faces.event.ExceptionEvent;
+import javax.faces.event.ExceptionEventContext;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -721,7 +722,11 @@ public class UIViewRoot extends UIComponentBase {
                         this.pushComponentToEL(context, source);
                         source.broadcast(event);
                     } catch (AbortProcessingException e) {
-                        context.getApplication().publishEvent(ExceptionEvent.class, e);
+                        context.getApplication().publishEvent(ExceptionEvent.class,
+                                                              new ExceptionEventContext(context,
+                                                                                        e,
+                                                                                        source,
+                                                                                        phaseId));
                     }
                     finally {
                         popComponentFromEL(context);
@@ -742,7 +747,11 @@ public class UIViewRoot extends UIComponentBase {
                         source.broadcast(event);
                     } catch (AbortProcessingException ape) {
                         // A "return" here would abort remaining events too
-                        context.getApplication().publishEvent(ExceptionEvent.class, ape);
+                        context.getApplication().publishEvent(ExceptionEvent.class,
+                                                              new ExceptionEventContext(context,
+                                                                                        ape,
+                                                                                        source,
+                                                                                        phaseId));
                     }
                     finally {
                         popComponentFromEL(context);
@@ -829,7 +838,11 @@ public class UIViewRoot extends UIComponentBase {
                     }
                 });
             } catch (AbortProcessingException e) {
-                context.getApplication().publishEvent(ExceptionEvent.class, e);
+                context.getApplication().publishEvent(ExceptionEvent.class,
+                                                      new ExceptionEventContext(context,
+                                                                                e,
+                                                                                null,
+                                                                                PhaseId.RESTORE_VIEW));
             }
         }
 
