@@ -149,6 +149,19 @@ public class PartialViewContextImpl extends PartialViewContext {
 
     }
 
+    /**
+     * @see javax.faces.context.PartialViewContext#isExecuteAll()
+     */
+    @Override
+    public boolean isExecuteAll() {
+
+        assertNotReleased();
+        String execute = FacesContext.getCurrentInstance().
+            getExternalContext().getRequestParameterMap()
+                .get(PARTIAL_EXECUTE_PARAM_NAME);
+        return (ALL_PARTIAL_PHASE_CLIENT_IDS.equals(execute));
+
+    }
 
     /**
      * @see javax.faces.context.PartialViewContext#isRenderAll()
@@ -158,9 +171,10 @@ public class PartialViewContextImpl extends PartialViewContext {
 
         assertNotReleased();
         if (renderAll == null) {
-            renderAll = (isAjaxRequest()
-                           && !isRenderNone()
-                           && getRenderPhaseClientIds().isEmpty());
+            String render = FacesContext.getCurrentInstance().
+                getExternalContext().getRequestParameterMap()
+                    .get(PARTIAL_RENDER_PARAM_NAME);
+            renderAll = (ALL_PARTIAL_PHASE_CLIENT_IDS.equals(render));
         }
 
         return renderAll;
