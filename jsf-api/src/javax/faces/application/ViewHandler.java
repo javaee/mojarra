@@ -105,14 +105,9 @@ public abstract class ViewHandler {
 
     /**
      * <p><span class="changed_modified_2_0">Allow</span> the web
-     * application to define a <span class="changed_modified_2_0">list
-     * of alternate suffixes</span> for pages containing JSF content.
-     * <span class="changed_modified_2_0">This list is a space separated
-     * list of values of the form
-     * <i><code>.&lt;extension&gt;</code></i>.  The first physical
-     * resource whose extension matches one of the configured extensions
-     * will be the suffix used to create the view ID.</span> If this
-     * init parameter is not specified, the default value is taken from
+     * application to define an alternate suffix for
+     * <span class="changed_modified_2_0">JSP</span> pages containing JSF content.
+     * If this init parameter is not specified, the default value is taken from
      * the value of the constant {@link #DEFAULT_SUFFIX}.</p>
      */
     public static final String DEFAULT_SUFFIX_PARAM_NAME = 
@@ -120,10 +115,54 @@ public abstract class ViewHandler {
 
 
     /**
-     * <p>The value to use for the default extension if the webapp is using
+     * <p><span class="changed_modified_2_0">The</span> value to use for the 
+     * default extension <span class="changed_modified_2_0">for JSP pages
+     * containing JSF content</span> if the webapp is using
      * url extension mapping.</p>
      */
-    public static final String DEFAULT_SUFFIX = ".xhtml .jsp";
+    public static final String DEFAULT_SUFFIX = ".jsp";
+    
+    /**
+     * <p class="changed_added_2_0">Allow the web application to define an
+     * alternate suffix for Facelet based XHTML pages containing JSF content.
+     * If this init parameter is not specified, the default value is
+     * taken from the value of the constant {@link #DEFAULT_FACELETS_SUFFIX}</p>
+     * 
+     * @since 2.0
+     */
+    
+    public static final String FACELETS_SUFFIX_PARAM_NAME = 
+            "javax.faces.FACELETS_SUFFIX";
+    
+    /**
+     * <p class="changed_added_2_0">The value to use for the default extension 
+     * for Facelet based XHTML pages if the webapp is using
+     * url extension mapping.</p>
+     * 
+     * @since 2.0
+     */
+    public static final String DEFAULT_FACELETS_SUFFIX = ".xhtml";
+    
+    /**
+     * <p class="changed_added_2_0">Allow the web application to define
+     * a semicolon (;) separated list of strings that is used to forcibly
+     * declare that certain pages in the application must be interpreted
+     * as using Facelets, regardless of their extension.  Each entry in the 
+     * semicolon (;) separated list of strings is either a file extension, as in 
+     * <code>*.xhtml</code>, or a resource prefix (starting with '/' and 
+     * interpreted as relative to the web application root), as in 
+     * <code>/user/*</code>.  The latter class of entry can also take the form
+     * of <code>/&lt;filename&gt;.&lt;extension&gt;*</code> such as
+     * <code>/login.jsp*</code>.  The runtime must also consider the
+     * <code>facelets.VIEW_MAPPINGS</code> param name as an alias to this
+     * param name for backwards compatibility with existing Facelets 
+     * applications.</p>
+     * 
+     * @since 2.0
+     */
+    
+    public static final String FACELETS_VIEW_MAPPINGS_PARAM_NAME = 
+            "javax.faces.FACELETS_VIEW_MAPPINGS";
 
 
     // ---------------------------------------------------------- Public Methods

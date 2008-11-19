@@ -377,6 +377,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
         String viewMappings = webConfig
               .getOptionValue(WebContextInitParameter.FaceletsViewMappings);
+        if (null == viewMappings) {
+            viewMappings = webConfig
+              .getOptionValue(WebContextInitParameter.FaceletsViewMappingsAlias);
+        }
         if ((viewMappings != null) && (viewMappings.length() > 0)) {
             String[] mappingsArray = Util.split(viewMappings, ";");
 

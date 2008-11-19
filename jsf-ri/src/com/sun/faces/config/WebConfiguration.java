@@ -714,6 +714,10 @@ public class WebConfiguration {
               ""
         ),
         FaceletsViewMappings(
+              "javax.faces.FACELETS_VIEW_MAPPINGS",
+              ""
+        ),
+        FaceletsViewMappingsAlias(
               "facelets.VIEW_MAPPINGS",
               ""
         ),
@@ -759,6 +763,8 @@ public class WebConfiguration {
             
             if (current == WebContextInitParameter.FaceletsLibraries) {
                 result = WebContextInitParameter.FaceletsLibrariesAlias;
+            } else if (current == WebContextInitParameter.FaceletsViewMappings) {
+                result = WebContextInitParameter.FaceletsViewMappingsAlias;
             }
             
             return result;
