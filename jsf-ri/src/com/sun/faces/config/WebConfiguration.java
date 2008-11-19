@@ -195,8 +195,16 @@ public class WebConfiguration {
      * @return the value of the specified parameter
      */
     public String getOptionValue(WebContextInitParameter param) {
+        String result = contextParameters.get(param);
+        
+        if (null == result) {
+            WebContextInitParameter alias = param.getAlias(param);
+            if (null != alias) {
+                result = contextParameters.get(alias);
+            }
+        }
 
-        return contextParameters.get(param);
+        return result;
 
     }
 
@@ -710,6 +718,10 @@ public class WebConfiguration {
               ""
         ),
         FaceletsLibraries(
+              "javax.faces.FACELETS_LIBRARIES",
+              ""
+        ),
+        FaceletsLibrariesAlias(
               "facelets.LIBRARIES",
               ""
         ),
@@ -740,6 +752,16 @@ public class WebConfiguration {
 
             return qualifiedName;
 
+        }
+        
+        public WebContextInitParameter getAlias(WebContextInitParameter current) {
+            WebContextInitParameter result = null;
+            
+            if (current == WebContextInitParameter.FaceletsLibraries) {
+                result = WebContextInitParameter.FaceletsLibrariesAlias;
+            }
+            
+            return result;
         }
 
 
