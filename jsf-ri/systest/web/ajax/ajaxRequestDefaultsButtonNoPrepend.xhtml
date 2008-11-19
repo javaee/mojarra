@@ -22,7 +22,7 @@
         <!-- Resets the counter, doesn't refresh the page-->
         Explicit parameters:
         <h:commandButton id="reset1" value="reset1"
-                            onclick="jsf.ajaxRequest(this, event, {execute:'reset1', render: 'form1:out1'}); return false;"
+                            onclick="jsf.ajaxRequest(this, event, {execute:'reset1', render: 'out1'}); return false;"
                             actionListener="#{ajaxrequest.resetCount}"/>
         <br/>
         Implicit execute:
