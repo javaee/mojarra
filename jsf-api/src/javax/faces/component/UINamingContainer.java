@@ -108,15 +108,16 @@ public class UINamingContainer extends UIComponentBase
      * from this method.  Otherwise, the value of the symbolic constant {@link
      * NamingContainer#SEPARATOR_CHAR} must be returned.</p>
      *
+     * @param context the {@link FacesContext} for the current request
      * @since 2.0
      */
-    public static char getSeparatorChar(FacesContext ctx) {
+    public static char getSeparatorChar(FacesContext context) {
 
 
         Character separatorChar =
-              (Character) ctx.getAttributes().get(SEPARATOR_CHAR_PARAM_NAME);
+              (Character) context.getAttributes().get(SEPARATOR_CHAR_PARAM_NAME);
         if (separatorChar == null) {
-            String initParam = ctx.getExternalContext().getInitParameter(SEPARATOR_CHAR_PARAM_NAME);
+            String initParam = context.getExternalContext().getInitParameter(SEPARATOR_CHAR_PARAM_NAME);
             separatorChar = NamingContainer.SEPARATOR_CHAR;
             if (initParam != null) {
                 initParam = initParam.trim();
@@ -124,7 +125,7 @@ public class UINamingContainer extends UIComponentBase
                     separatorChar = initParam.charAt(0);
                 }
             }
-            ctx.getAttributes().put(SEPARATOR_CHAR_PARAM_NAME, separatorChar);
+            context.getAttributes().put(SEPARATOR_CHAR_PARAM_NAME, separatorChar);
         }
         return separatorChar;
 
