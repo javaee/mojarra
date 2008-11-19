@@ -68,6 +68,7 @@ import javax.faces.event.AbortProcessingException;
 import javax.faces.event.AfterAddToParentEvent;
 import javax.faces.event.AfterRestoreStateEvent;
 import javax.faces.event.ExceptionEvent;
+import javax.faces.event.ExceptionEventContext;
 
 /**
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
@@ -144,7 +145,7 @@ public class RestoreViewPhase extends Phase {
                     }
                 });
             } catch (AbortProcessingException e) {
-                facesContext.getApplication().publishEvent(ExceptionEvent.class, e);    
+                facesContext.getApplication().publishEvent(ExceptionEvent.class, new ExceptionEventContext(facesContext, e));    
             }
             
             
