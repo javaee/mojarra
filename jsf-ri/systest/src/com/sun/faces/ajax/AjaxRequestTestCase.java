@@ -420,7 +420,7 @@ public class AjaxRequestTestCase extends AbstractTestCase {
     public void testAjaxRequestDefaultsEdit() throws Exception {
         System.out.println("Starting Request Defaults Edit Test");
         HtmlPage page = getPage("/faces/ajax/ajaxRequestDefaultsEdit.xhtml");
-        // RELEASE_PENDING complete test after fixing blocking bugs
+        // RELEASE_PENDING
     }
 
 
