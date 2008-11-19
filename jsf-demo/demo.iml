@@ -3833,6 +3833,7 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/ajax-queue/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/ajax-request/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ajax-switchlist/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/basic-ajax-edit/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/basic-ajax/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/basic-ezcomp/src" isTestSource="false" />
