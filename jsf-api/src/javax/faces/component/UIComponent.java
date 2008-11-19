@@ -451,9 +451,9 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * <code>context.getViewRoot().createUniqueId()</code> and assign
      * the result to myId.  If <code>parentId</code> is
      * non-<code>null</code>, let <code>myId</code> equal <code>parentId
-     * + NamingContainer.SEPARATOR_CHAR + myId</code>.  Call {@link
-     * Renderer#convertClientId}, passing <code>myId</code>, and return
-     * the result.</p>
+     * + {@link UINamingContainer#getSeparatorChar} + myId</code>.  Call
+     * {@link Renderer#convertClientId}, passing <code>myId</code>, and
+     * return the result.</p>
      *
      * @param context The {@link FacesContext} for the current request
      *
@@ -958,15 +958,13 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * {@link NamingContainer}, whether or not its class actually implements
      * the {@link NamingContainer} interface.</p>
      *
-     * RELEASE_PENDING (edburns) this needs to take UINamingContainer.getSeparatorChar()
-     *  into account
-     *
-     * <p>A <em>search expression</em> consists of either an
-     * identifier (which is matched exactly against the <code>id</code>
-     * property of a {@link UIComponent}, or a series of such identifiers
-     * linked by the {@link NamingContainer#SEPARATOR_CHAR} character value.
+     * <p>A <em>search expression</em> consists of either an identifier
+     * (which is matched exactly against the <code>id</code> property of
+     * a {@link UIComponent}, or a series of such identifiers linked by
+     * the {@link UINamingContainer#getSeparatorChar} character value.
      * The search algorithm should operates as follows, though alternate
      * alogrithms may be used as long as the end result is the same:</p>
+
      * <ul>
      * <li>Identify the {@link UIComponent} that will be the base for searching,
      *     by stopping as soon as one of the following conditions is met:
@@ -1019,16 +1017,14 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
     public abstract UIComponent findComponent(String expr);
 
     /**
-     * RELEASE_PENDING (edburns) this needs to take UINamingContainer.getSeparatorChar()
-     *  into account
      * <p>Starting at this component in the View hierarchy, search for a
      * component with a <code>clientId</code> equal to the argument
      * <code>clientId</code> and, if found, call the {@link
      * ContextCallback#invokeContextCallback} method on the argument
      * <code>callback</code>, passing the current {@link FacesContext}
      * and the found component as arguments. This method is similar to
-     * {@link #findComponent} but it does not support the leading
-     * {@link NamingContainer#SEPARATOR_CHAR} syntax for searching from the
+     * {@link #findComponent} but it does not support the leading {@link
+     * UINamingContainer#getSeparatorChar} syntax for searching from the
      * root of the View.</p>
      *
      * <p>The default implementation will first check if

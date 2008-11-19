@@ -190,8 +190,8 @@ public class UIData extends UIComponentBase
 
 
     /**
-     * <p> Length of the cached <code>baseClientId</code> plus one for the
-     * NamingContainer.SEPARATOR_CHAR. </p>
+     * <p> Length of the cached <code>baseClientId</code> plus one for
+     * the {@link UINamingContainer#getSeparatorChar}. </p>
      *
      * <p>This is not part of the component state.</p>
      */
@@ -720,7 +720,7 @@ public class UIData extends UIComponentBase
         //   our client ID.
         //   - toString() the builder - this result will be our baseClientId
         //     for the duration of the component
-        //   - append SEPARATOR_CHAR to the builder
+        //   - append UINamingContainer.getSeparatorChar() to the builder
         //  If we are nested within another UIData, then:
         //   - create an empty StringBuilder that will be used to build
         //     this instance's ID
@@ -739,9 +739,10 @@ public class UIData extends UIComponentBase
             String cid;
             if (!isNestedWithinUIData()) {
                 // we're not nested, so the clientIdBuilder is already
-                // primed with clientID + SEPARATOR_CHAR.  Append
-                // the current rowIndex, and toString() the builder.
-                // reset the builder to it's primed state.
+                // primed with clientID +
+                // UINamingContainer.getSeparatorChar().  Append the
+                // current rowIndex, and toString() the builder.  reset
+                // the builder to it's primed state.
                 cid = clientIdBuilder.append(rowIndex).toString();
                 clientIdBuilder.setLength(baseClientIdLength);
             } else {
