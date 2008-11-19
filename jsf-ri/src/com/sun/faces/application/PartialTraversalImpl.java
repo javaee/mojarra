@@ -126,15 +126,6 @@ public class PartialTraversalImpl implements PartialTraversal {
 
         } else if (phaseId == PhaseId.RENDER_RESPONSE) {
 
-            // Skip this processing if "none" is specified in the render list, 
-            // or there were no render phase client ids. 
-
-            if (renderPhaseClientIds == null || renderPhaseClientIds.isEmpty() ||
-                partialViewContext.isRenderNone()) {
-                // PENDING LOG ERROR OR WARNING
-                return;
-            }
-
             try {
                 if (!renderedBegin) {
                     partialViewContext.enableResponseWriting(true);
@@ -169,7 +160,13 @@ public class PartialTraversalImpl implements PartialTraversal {
                         renderedBegin = true;
                     }
                 } else if (!renderedChildren) {
-                    processComponents(viewRoot, phaseId, renderPhaseClientIds, context);
+		    // Skip this processing if "none" is specified in the render list, 
+		    // or there were no render phase client ids. 
+                    if (renderPhaseClientIds == null || renderPhaseClientIds.isEmpty() ||
+                        partialViewContext.isRenderNone()) {
+                    } else { 
+                        processComponents(viewRoot, phaseId, renderPhaseClientIds, context);
+                    }
                     renderedChildren = true;
                 } else if (!renderedEnd) {
                     ResponseWriter writer = context.getResponseWriter();
