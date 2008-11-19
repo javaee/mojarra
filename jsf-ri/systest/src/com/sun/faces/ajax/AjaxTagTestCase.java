@@ -44,7 +44,7 @@ public class AjaxTagTestCase extends AbstractTestCase {
     }
 
 
-    public void testAjaxCount() throws Exception {
+    public void testAjaxTagCount() throws Exception {
         HtmlPage page = getPage("/faces/ajax/ajaxTagCount.xhtml");
         System.out.println("Start ajax count test");
 
@@ -87,8 +87,8 @@ public class AjaxTagTestCase extends AbstractTestCase {
 
     }
 
-    public void testAjaxRequestDefaultsButton() throws Exception {
-        System.out.println("Starting Request Defaults Button Test");
+    public void testAjaxTagDefaultsButton() throws Exception {
+        System.out.println("Starting Ajax Tag Defaults Button Test");
         HtmlPage page = getPage("/faces/ajax/ajaxTagDefaultsButton.xhtml");
 
         // First, we'll test to make sure the initial values come out right
@@ -154,7 +154,6 @@ public class AjaxTagTestCase extends AbstractTestCase {
         // Now, make the Ajax call to second reset button
         button = (HtmlSubmitInput) page.getHtmlElementById("form1:reset2");
         page = (HtmlPage) button.click();
-        // Check that the ajax request succeeds - eventually.  Give it three seconds.
         status = false;
         for (int i = 0; i < iterate; i++) {
             HtmlElement out1ele = page.getHtmlElementById("form1:out1");
@@ -192,27 +191,27 @@ public class AjaxTagTestCase extends AbstractTestCase {
         // Now, make the Ajax call to third reset button
         button = (HtmlSubmitInput) page.getHtmlElementById("form1:reset3");
         page = (HtmlPage) button.click();
-        // Check that the ajax request succeeds - eventually.  Give it three seconds.
-        status = false;
-        for (int i = 0; i < iterate; i++) {
-            HtmlElement out1ele = page.getHtmlElementById("form1:out1");
-            out1 = out1ele.asText();
-            System.out.println("iteration "+i+": "+out1);
-            if ("0".equals(out1)) {
-                out2 = ((HtmlElement)page.getHtmlElementById("form1:out2")).asText();
-                out3 = ((HtmlElement)page.getHtmlElementById("out3")).asText();
-                // These should be changed from above, changed by the ajax request
-                assertTrue("1".equals(out2));
-                assertTrue("2".equals(out3));
-                status = true;
-                break;
-            }
-            synchronized (page) {
-                page.wait(interval);
-            }
-        }
+
+        // Check the page did *not* update
+        out1 = ((HtmlElement)page.getHtmlElementById("form1:out1")).asText();
+        out2 = ((HtmlElement)page.getHtmlElementById("form1:out2")).asText();
+        out3 = ((HtmlElement)page.getHtmlElementById("out3")).asText();
         System.out.println("After reset3 values: "+out1+" "+out2+" "+out3);
-        assertTrue(status);
+        assertTrue("1".equals(out1));
+        assertTrue("2".equals(out2));
+        assertTrue("3".equals(out3));
+
+        // Now, Reload the page, to check that reset3 actually executed
+        Thread.sleep(interval);
+        button = (HtmlSubmitInput) page.getHtmlElementById("form1:reload");
+        page = (HtmlPage) button.click();
+        out1 = ((HtmlElement)page.getHtmlElementById("form1:out1")).asText();
+        out2 = ((HtmlElement)page.getHtmlElementById("form1:out2")).asText();
+        out3 = ((HtmlElement)page.getHtmlElementById("out3")).asText();
+        System.out.println("After reset3+reload values: "+out1+" "+out2+" "+out3);
+        assertTrue("0".equals(out1));
+        assertTrue("1".equals(out2));
+        assertTrue("2".equals(out3));
 
         // Reload the page
         button = (HtmlSubmitInput) page.getHtmlElementById("form1:reload");
@@ -230,28 +229,27 @@ public class AjaxTagTestCase extends AbstractTestCase {
         // Now, make the Ajax call to fourth reset button
         button = (HtmlSubmitInput) page.getHtmlElementById("form1:reset4");
         page = (HtmlPage) button.click();
-        // Check that the ajax request succeeds - eventually.  Give it three seconds.
-        status = false;
-        for (int i = 0; i < iterate; i++) {
-            HtmlElement out1ele = page.getHtmlElementById("form1:out1");
-            out1 = out1ele.asText();
-            System.out.println("iteration "+i+": "+out1);
-            if ("0".equals(out1)) {
-                out2 = ((HtmlElement)page.getHtmlElementById("form1:out2")).asText();
-                out3 = ((HtmlElement)page.getHtmlElementById("out3")).asText();
-                // These should be changed from above, changed by the ajax request
-                assertTrue("1".equals(out2));
-                assertTrue("2".equals(out3));
-                status = true;
-                break;
-            }
-            synchronized (page) {
-                page.wait(interval);
-            }
-        }
-        System.out.println("After reset4 values: "+out1+" "+out2+" "+out3);
-        assertTrue(status);
 
+        // Check the page did *not* update
+        out1 = ((HtmlElement)page.getHtmlElementById("form1:out1")).asText();
+        out2 = ((HtmlElement)page.getHtmlElementById("form1:out2")).asText();
+        out3 = ((HtmlElement)page.getHtmlElementById("out3")).asText();
+        System.out.println("After reset4 values: "+out1+" "+out2+" "+out3);
+        assertTrue("3".equals(out1));
+        assertTrue("4".equals(out2));
+        assertTrue("5".equals(out3));
+
+        // Now, Reload the page, to check that reset4 actually executed
+        Thread.sleep(interval);
+        button = (HtmlSubmitInput) page.getHtmlElementById("form1:reload");
+        page = (HtmlPage) button.click();
+        out1 = ((HtmlElement)page.getHtmlElementById("form1:out1")).asText();
+        out2 = ((HtmlElement)page.getHtmlElementById("form1:out2")).asText();
+        out3 = ((HtmlElement)page.getHtmlElementById("out3")).asText();
+        System.out.println("After reset4+reload values: "+out1+" "+out2+" "+out3);
+        assertTrue("0".equals(out1));
+        assertTrue("1".equals(out2));
+        assertTrue("2".equals(out3));
     }
 
     /* RELEASE_PENDING - fix before ship,

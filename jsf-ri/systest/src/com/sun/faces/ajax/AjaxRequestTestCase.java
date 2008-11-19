@@ -202,6 +202,7 @@ public class AjaxRequestTestCase extends AbstractTestCase {
         assertTrue("3".equals(out3));
 
         // Now, Reload the page, to check that reset3 actually executed
+        Thread.sleep(interval);
         button = (HtmlSubmitInput) page.getHtmlElementById("form1:reload");
         page = (HtmlPage) button.click();
         out1 = ((HtmlElement)page.getHtmlElementById("form1:out1")).asText();
@@ -239,6 +240,7 @@ public class AjaxRequestTestCase extends AbstractTestCase {
         assertTrue("5".equals(out3));
 
         // Now, Reload the page, to check that reset4 actually executed
+        Thread.sleep(interval);
         button = (HtmlSubmitInput) page.getHtmlElementById("form1:reload");
         page = (HtmlPage) button.click();
         out1 = ((HtmlElement)page.getHtmlElementById("form1:out1")).asText();
