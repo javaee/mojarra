@@ -61,7 +61,7 @@ public interface NamingContainer {
      * component identifiers to demarcate
      * navigation to a child naming container.</p>
      * 
-     * @deprecated use {@link UINamingContainer#getSeparatorChar()} 
+     * @deprecated use {@link UINamingContainer#getSeparatorChar(javax.faces.context.FacesContext)}
      */
     public static final char SEPARATOR_CHAR = ':';
 
