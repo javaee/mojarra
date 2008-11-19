@@ -33,22 +33,22 @@
         Explicit parameters:
         <h:inputText id="edit1" value="#{ajaxrequest.echo1}"
                             onchange="jsf.ajaxRequest(this,event, {execute:'form1:edit1', render: 'form1:edit1'});"
-                            valueChangeListener="#{ajaxrequest.echo1}"/>
+                            valueChangeListener="#{ajaxrequest.echoValue}"/>
         <br/>
         Implicit execute:
         <h:inputText id="edit2" value="#{ajaxrequest.echo2}"
-                            onchange="jsf.ajaxRequest(this,event, {render: 'form1:edit2'})"
-                            valueChangeListener="#{ajaxrequest.echo2}"/>
+                            onchange="jsf.ajaxRequest(this,event, {render: 'form1:edit2'});"
+                            valueChangeListener="#{ajaxrequest.echoValue}"/>
         <br/>
         Implicit render:
         <h:inputText id="edit3" value="#{ajaxrequest.echo3}"
-                            onchange="jsf.ajaxRequest(this,event, {execute:'form1:edit3'})"
-                            valueChangeListener="#{ajaxrequest.echo3}"/>
+                            onchange="jsf.ajaxRequest(this,event, {execute:'form1:edit3'});"
+                            valueChangeListener="#{ajaxrequest.echoValue}"/>
         <br/>
         Default Options:
         <h:inputText id="edit4" value="#{ajaxrequest.echo4}"
-                            onchange="jsf.ajaxRequest(this,event)"
-                            valueChangeListener="#{ajaxrequest.echo4}"/>
+                            onchange="jsf.ajaxRequest(this,event);"
+                            valueChangeListener="#{ajaxrequest.echoValue}"/>
         <br/>
         <!-- Contained within the form - but still shouldn't update except for full page load -->
         <h:outputText id="out2" value="#{ajaxrequest.echo}"/>

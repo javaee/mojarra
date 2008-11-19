@@ -3,6 +3,7 @@ package com.sun.faces.systest.model;
 import javax.faces.model.ManagedBean;
 import javax.faces.model.SessionScoped;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
 
 @ManagedBean(name="ajaxrequest")
 @SessionScoped
@@ -55,17 +56,9 @@ public class AjaxRequestBean {
         this.echo = echo;
     }
 
-    public void echo1(ActionEvent ae) {
-        echo = echo1;
-    }
-    public void echo2(ActionEvent ae) {
-        echo = echo2;
-    }
-    public void echo3(ActionEvent ae) {
-        echo = echo3;
-    }
-    public void echo4(ActionEvent ae) {
-        echo = echo4;
+    public void echoValue(ValueChangeEvent event) {
+        String str = (String)event.getNewValue();
+        echo = str;
     }
 
     public void resetEcho(ActionEvent ae) {
