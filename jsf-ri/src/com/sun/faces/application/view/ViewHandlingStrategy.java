@@ -84,22 +84,7 @@ public abstract class ViewHandlingStrategy extends PageDeclarationLanguage {
 
     }
 
-    public abstract BeanInfo getComponentMetadata(FacesContext context, Resource componentResource);
-
-    public abstract Resource getScriptComponentResource(FacesContext context, Resource componentResource);
-    
-
-
     // ---------------------------------------------------------- Public Methods
-
-
-    /**
-     *
-     * @param viewId the view ID
-     * @return <code>true</code> if this <code>ViewHandlingStrategy</code>
-     *  handles the the view type represented by <code>viewId</code>
-     */
-    public abstract boolean handlesViewId(String viewId);
 
 
     /**

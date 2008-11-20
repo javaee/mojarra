@@ -280,6 +280,15 @@ public abstract class PageDeclarationLanguage {
                                     UIViewRoot view)
     throws IOException;
     
+
+    /**
+     *
+     * @param viewId the view ID
+     * @return <code>true</code> if this <code>ViewHandlingStrategy</code>
+     *  handles the the view type represented by <code>viewId</code>
+     */
+    
+    public abstract boolean handlesViewId(String viewId);
     
 
 }

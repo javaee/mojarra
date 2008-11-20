@@ -94,6 +94,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
      *
      * @see com.sun.faces.application.view.ViewHandlingStrategy#handlesViewId(String)
      */
+    @Override
     public boolean handlesViewId(String viewId) {
 
         return true;

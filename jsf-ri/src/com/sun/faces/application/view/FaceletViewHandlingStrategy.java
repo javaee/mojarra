@@ -188,6 +188,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      *
      * @see com.sun.faces.config.WebConfiguration.WebContextInitParameter#FaceletsViewMappings
      */
+    @Override
     public boolean handlesViewId(String viewId) {
          if (viewId != null) {
             // If there's no extensions array or prefixes array, then
