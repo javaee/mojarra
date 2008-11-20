@@ -198,9 +198,9 @@ public class WebConfiguration {
         String result = contextParameters.get(param);
         
         if (null == result) {
-            WebContextInitParameter alias = param.getAlias(param);
-            if (null != alias) {
-                result = contextParameters.get(alias);
+            WebContextInitParameter alternate = param.getAlternate();
+            if (null != alternate) {
+                result = contextParameters.get(alternate);
             }
         }
 
@@ -713,21 +713,25 @@ public class WebConfiguration {
               "facelets.RESOURCE_RESOLVER",
               ""
         ),
-        FaceletsViewMappings(
-              "javax.faces.FACELETS_VIEW_MAPPINGS",
-              ""
-        ),
         FaceletsViewMappingsAlias(
               "facelets.VIEW_MAPPINGS",
               ""
         ),
-        FaceletsLibraries(
-              "javax.faces.FACELETS_LIBRARIES",
-              ""
+        FaceletsViewMappings(
+              "javax.faces.FACELETS_VIEW_MAPPINGS",
+              "",
+              false,
+              FaceletsViewMappingsAlias
         ),
         FaceletsLibrariesAlias(
               "facelets.LIBRARIES",
               ""
+        ),
+        FaceletsLibraries(
+              "javax.faces.FACELETS_LIBRARIES",
+              "",
+              false,
+              FaceletsLibrariesAlias
         ),
         FaceletsDecorators(
               "facelets.DECORATORS",
@@ -758,19 +762,6 @@ public class WebConfiguration {
 
         }
         
-        public WebContextInitParameter getAlias(WebContextInitParameter current) {
-            WebContextInitParameter result = null;
-            
-            if (current == WebContextInitParameter.FaceletsLibraries) {
-                result = WebContextInitParameter.FaceletsLibrariesAlias;
-            } else if (current == WebContextInitParameter.FaceletsViewMappings) {
-                result = WebContextInitParameter.FaceletsViewMappingsAlias;
-            }
-            
-            return result;
-        }
-
-
     // ------------------------------------------------- Package Private Methods
 
 
