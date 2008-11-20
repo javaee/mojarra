@@ -8,8 +8,9 @@ import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 
-import javax.faces.component.html.HtmlInputText;
 
+// RELEASE_PENDING - remove thread sleeps
+// RELEASE_PENDING - completely refactor code
 
 public class AjaxRequestTestCase extends AbstractTestCase {
 
@@ -17,6 +18,9 @@ public class AjaxRequestTestCase extends AbstractTestCase {
     private static final int interval = 50;
     // number of times to try to read new value
     private static final int iterate = 20;
+    // wait period for a fixed time
+    private static final int interval2 = interval * 3;
+
     // total for each test = interval * iterate
 
     public AjaxRequestTestCase(String name) {
@@ -205,7 +209,7 @@ public class AjaxRequestTestCase extends AbstractTestCase {
         assertTrue("3".equals(out3));
 
         // Now, Reload the page, to check that reset3 actually executed
-        Thread.sleep(interval);
+        Thread.sleep(interval2);
         button = (HtmlSubmitInput) page.getHtmlElementById("form1:reload");
         page = (HtmlPage) button.click();
         out1 = ((HtmlElement)page.getHtmlElementById("form1:out1")).asText();
@@ -243,7 +247,7 @@ public class AjaxRequestTestCase extends AbstractTestCase {
         assertTrue("5".equals(out3));
 
         // Now, Reload the page, to check that reset4 actually executed
-        Thread.sleep(interval);
+        Thread.sleep(interval2);
         button = (HtmlSubmitInput) page.getHtmlElementById("form1:reload");
         page = (HtmlPage) button.click();
         out1 = ((HtmlElement)page.getHtmlElementById("form1:out1")).asText();
@@ -370,7 +374,7 @@ public class AjaxRequestTestCase extends AbstractTestCase {
         assertTrue("3".equals(out3));
 
         // Now, Reload the page, to check that reset3 actually executed
-        Thread.sleep(interval);
+        Thread.sleep(interval2);
         button = (HtmlSubmitInput) page.getHtmlElementById("reload");
         page = (HtmlPage) button.click();
         out1 = ((HtmlElement)page.getHtmlElementById("out1")).asText();
@@ -408,7 +412,7 @@ public class AjaxRequestTestCase extends AbstractTestCase {
         assertTrue("5".equals(out3));
 
         // Now, Reload the page, to check that reset4 actually executed
-        Thread.sleep(interval);
+        Thread.sleep(interval2);
         button = (HtmlSubmitInput) page.getHtmlElementById("reload");
         page = (HtmlPage) button.click();
         out1 = ((HtmlElement)page.getHtmlElementById("out1")).asText();
@@ -447,7 +451,7 @@ public class AjaxRequestTestCase extends AbstractTestCase {
         echo1.setValueAttribute("");
         echo1.type("test1");
         echo1.blur();
-        Thread.sleep(interval);
+        Thread.sleep(interval2);
 
         // Refresh the panel to check the listener fired
         HtmlSubmitInput refresh = page.getHtmlElementById("form1:refresh");
@@ -480,7 +484,7 @@ public class AjaxRequestTestCase extends AbstractTestCase {
         echo2.setValueAttribute("");
         echo2.type("test2");
         echo2.blur();
-        Thread.sleep(interval);
+        Thread.sleep(interval2);
 
         // Refresh the panel to check the listener fired
         refresh = page.getHtmlElementById("form1:refresh");
@@ -514,7 +518,7 @@ public class AjaxRequestTestCase extends AbstractTestCase {
         echo3.setValueAttribute("");
         echo3.type("test3");
         echo3.blur();
-        Thread.sleep(interval);
+        Thread.sleep(interval2);
 
         // Refresh the panel to check the listener fired
         refresh = page.getHtmlElementById("form1:refresh");
@@ -547,7 +551,7 @@ public class AjaxRequestTestCase extends AbstractTestCase {
         echo4.setValueAttribute("");
         echo4.type("test4");
         echo4.blur();
-        Thread.sleep(interval);
+        Thread.sleep(interval2);
 
         // Refresh the panel to check the listener fired
         refresh = page.getHtmlElementById("form1:refresh");        
@@ -602,7 +606,7 @@ public class AjaxRequestTestCase extends AbstractTestCase {
         echo1.setValueAttribute("");
         echo1.type("test1");
         echo1.blur();
-        Thread.sleep(interval);
+        Thread.sleep(interval2);
 
         // Refresh the panel to check the listener fired
         HtmlSubmitInput refresh = page.getHtmlElementById("refresh");
@@ -635,7 +639,7 @@ public class AjaxRequestTestCase extends AbstractTestCase {
         echo2.setValueAttribute("");
         echo2.type("test2");
         echo2.blur();
-        Thread.sleep(interval);
+        Thread.sleep(interval2);
 
         // Refresh the panel to check the listener fired
         refresh = page.getHtmlElementById("refresh");
@@ -669,7 +673,7 @@ public class AjaxRequestTestCase extends AbstractTestCase {
         echo3.setValueAttribute("");
         echo3.type("test3");
         echo3.blur();
-        Thread.sleep(interval);
+        Thread.sleep(interval2);
 
         // Refresh the panel to check the listener fired
         refresh = page.getHtmlElementById("refresh");
@@ -702,7 +706,7 @@ public class AjaxRequestTestCase extends AbstractTestCase {
         echo4.setValueAttribute("");
         echo4.type("test4");
         echo4.blur();
-        Thread.sleep(interval);
+        Thread.sleep(interval2);
 
         // Refresh the panel to check the listener fired
         refresh = page.getHtmlElementById("refresh");
