@@ -53,10 +53,10 @@ public class AjaxBehaviors implements Serializable {
 
     public static final String AJAX_BEHAVIORS = "javax.faces.component.AjaxBehaviors";
 
-    private LinkedList<AjaxComponentBehavior> ajaxBehaviors = null;
+    private LinkedList<AjaxBehavior> ajaxBehaviors = null;
 
     public AjaxBehaviors() {
-        ajaxBehaviors = new LinkedList<AjaxComponentBehavior>();
+        ajaxBehaviors = new LinkedList<AjaxBehavior>();
     }
 
     /**
@@ -75,33 +75,29 @@ public class AjaxBehaviors implements Serializable {
     public AjaxBehavior getBehaviorForEvent(String eventName) {
         AjaxBehavior ajaxBehavior = null;
         for (int i=ajaxBehaviors.size()-1; i>=0; i--) {
-            AjaxComponentBehavior behavior = ajaxBehaviors.get(i);
-            ajaxBehavior = behavior.getBehavior();
-            if (ajaxBehavior.getEvents() == null || 
-                ajaxBehavior.getEvents().equals(eventName)) {
-                break;
+            AjaxBehavior behavior = ajaxBehaviors.get(i);
+            if (behavior.getEvents() == null || 
+                behavior.getEvents().equals(eventName)) {
+                ajaxBehavior = behavior;
             }
         }
         return ajaxBehavior;
     }
 
     /**
-     * <p>Push the specified association of {@link AjaxBehavior} and its parent
-     * component into scope making it available for subsequent calls to 
-     * {@link #getBehaviorForEvent}.</p>
+     * <p>Push the {@link AjaxBehavior} into scope making it available 
+     * for subsequent calls to {@link #getBehaviorForEvent}.</p>
      *
      * @param ajaxBehavior the {@link AjaxBehavior} instance
-     * @param parent the parent component for the {@link AjaxBehavior}
      *
      * @since 2.0
      */ 
-    public void pushBehavior(AjaxBehavior ajaxBehavior, UIComponent parent) {
-        AjaxComponentBehavior ajaxComponentBehavior = new AjaxBehaviors.AjaxComponentBehavior(ajaxBehavior, parent);
-        ajaxBehaviors.add(ajaxComponentBehavior);
+    public void pushBehavior(AjaxBehavior ajaxBehavior) {
+        ajaxBehaviors.add(ajaxBehavior);
     }
 
     /**
-     * <p>Pop the last {@link AjaxBehavior} parent component association instance 
+     * <p>Pop the last {@link AjaxBehavior} instance 
      * from the <code>List</code>.</p>
      *
      * @since 2.0
@@ -111,22 +107,4 @@ public class AjaxBehaviors implements Serializable {
              ajaxBehaviors.removeLast();
          }
     }   
-
-    private static final class AjaxComponentBehavior {
-        private UIComponent parent = null;
-        private AjaxBehavior ajaxBehavior = null;
-
-        public AjaxComponentBehavior(AjaxBehavior ajaxBehavior, UIComponent parent) {
-            this.parent = parent;
-            this.ajaxBehavior = ajaxBehavior;
-        }
-
-        public AjaxBehavior getBehavior() {
-            return ajaxBehavior;
-        }
-
-        public UIComponent getParent() {
-            return parent;
-        }
-    }
 }
