@@ -143,38 +143,6 @@ public final class AjaxHandler extends TagHandler {
     private final TagAttribute execute;
     private final TagAttribute render;
 
-    private AddToParentEventListener addToParentEventListener = null;
-
-    //
-    // Listens for when components are added to the parent component of this tag.
-    // This listener's processEvents() method will get called when all child
-    // components have been added to the parent component.  When this happens,
-    // pop the AjaxBehavior instance associated with this parent from the
-    // AjaxBehaviors instance.  Unsubscribe the event from the parent component.
-    // 
-    private final static class AddToParentEventListener 
-          implements ComponentSystemEventListener, Serializable {
-
-        private Object previousAjaxBehavior = null;
-        private AjaxBehavior ajaxBehavior = null;
-        private AjaxHandler ajaxHandler = null;
-
-        public AddToParentEventListener(AjaxBehavior ajaxBehavior, AjaxHandler ajaxHandler) {
-            this.ajaxBehavior = ajaxBehavior;
-            this.ajaxHandler = ajaxHandler;
-        }
-
-        public void processEvent(ComponentSystemEvent event) 
-            throws AbortProcessingException {
-            FacesContext context = FacesContext.getCurrentInstance();
-            AjaxBehaviors ajaxBehaviors = (AjaxBehaviors)context.getAttributes().get(AjaxBehaviors.AJAX_BEHAVIORS);
-            if (ajaxBehaviors != null) {
-                ajaxBehaviors.popBehavior();
-            }
-//            event.getComponent().unsubscribeFromEvent(AfterAddToParentEvent.class, this);
-        }
-    }
-
     /**
      * @param config
      */
@@ -236,22 +204,24 @@ public final class AjaxHandler extends TagHandler {
             }
         }
             
-        //
-        // We are nested within some other component.  Attach a listener that will listen for when components
-        // are added to the parent component. When the listener is called, all components have been added
-        // to that parent component. 
-        //
-        addToParentEventListener = new AddToParentEventListener(ajaxBehavior, this);
-        parent.subscribeToEvent(AfterAddToParentEvent.class, addToParentEventListener);
-
         AjaxBehaviors ajaxBehaviors = (AjaxBehaviors)ctx.getFacesContext().getAttributes().
             get(AjaxBehaviors.AJAX_BEHAVIORS);
         if (ajaxBehaviors == null) {
             ajaxBehaviors = new AjaxBehaviors();
         }
-        ajaxBehaviors.pushBehavior(ajaxBehavior, parent); 
+        ajaxBehaviors.pushBehavior(ajaxBehavior); 
         ctx.getFacesContext().getAttributes().put(AjaxBehaviors.AJAX_BEHAVIORS, ajaxBehaviors);
         installAjaxResourceIfNecessary();
+
+        nextHandler.apply(ctx, parent);
+
+        // At this point, we have reached the closing </f:ajax> tag..
+
+        FacesContext context = ctx.getFacesContext();
+        ajaxBehaviors = (AjaxBehaviors)context.getAttributes().get(AjaxBehaviors.AJAX_BEHAVIORS);
+        if (ajaxBehaviors != null) {
+            ajaxBehaviors.popBehavior();
+        }
     }
 
     // Only install the Ajax resource if it doesn't exist.
