@@ -80,9 +80,10 @@ public abstract class PageDeclarationLanguageFactory implements FacesWrapper<Pag
 
     
     /**
-     * <p class="changed_added_2_0">Return the <code>PageDeclarationLanguage</p>
-     * instance suitable for handling the PDL contained in the page referenced
-     * by the argument <code>viewId</code></p>
+     * <p class="changed_added_2_0">Return the
+     * <code>PageDeclarationLanguage</code> instance suitable for
+     * handling the PDL contained in the page referenced by the argument
+     * <code>viewId</code></p>
      * 
      * @param viewId the viewId to be inspected for an appropriate 
      * <code>PageDeclarationLanguage</code> implementation for the PDL used

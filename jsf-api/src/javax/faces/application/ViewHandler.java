@@ -82,6 +82,13 @@ import javax.faces.webapp.pdl.ValueHolderAttachedObjectTarget;
  * implementation
  * of this class must be thread-safe.</span></p>
  *
+ * <p class="changed_added_2_0">The concept of <em>Page Declaration
+ * Language</em> (PDL) was formally introduced into the specification as
+ * of version 2.  A Page Declaration Language is a syntax used to
+ * declare user interfaces comprised of instances of JSF {@link
+ * UIComponent}s.  The features of the Page Declaration Language are
+ * defined on the {@link PageDeclarationLanguage} class.</p>
+ *
  * <p>Please see {@link StateManager} for information on how the
  * <code>ViewHandler</code> interacts the {@link StateManager}. </p>
  */
@@ -268,24 +275,11 @@ public abstract class ViewHandler {
      * proeprties, respectively, of the newly created
      * <code>UIViewRoot</code>.</p>
 
-     * <p class="changed_added_2_0">If the view is written using
-     * Facelets, the markup comprising the view must be executed, with
-     * the UIComponent instances in the view being encountered in the
-     * same depth-first order as in other lifecycle methods defined on
-     * {@link javax.faces.component.UIComponent}, and added to the view
-     * (but not rendered) during the traversal.  The runtime must
-     * guarantee that the view must be fully populated before the
-     * <code>afterPhase()</code> method of any {@link
-     * javax.faces.event.PhaseListener}s attached to the application or
-     * to the <code>UIViewRoot</code> (via {@link
-     * UIViewRoot#setAfterPhaseListener} or {@link
-     * UIViewRoot#addPhaseListener}) are called.  IMPORTANT: the new
-     * <code>UIViewRoot</code> instance must be passed to {@link
-     * javax.faces.context.FacesContext#setViewRoot}
-     * <strong>before</strong> the execution of the Facelets view
-     * resulting in tree creation.  This enables the broadest possible
-     * range of implementations for how tree creation is actually
-     * implemented.</p>
+     * <p class="changed_added_2_0">The default implementation must
+     * obtain a reference to the {@link PageDeclarationLanguage} for
+     * this <code>viewId</code> and call its {@link
+     * PageDeclarationLanguage#createView} method, returning the result
+     * and not swallowing any exceptions thrown by that method.</p>
      *
      * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
@@ -334,18 +328,19 @@ public abstract class ViewHandler {
      * 
      * <div class="changed_added_2_0">
      * 
-     * <p>The default implementation must use {@link javax.faces.webapp.pdl.PageDeclarationLanguageFactory#getPageDeclarationLanguage}
-     * to obtain the appropriate <code>PageDeclarationLanguage</code> implementation
-     * for the argument <code>viewId</code>.  Any exceptions thrown as a result of
-     * invoking that method must not be swallowed.</p>
-     * 
-     * </div>
+     * <p>The default implementation must use {@link
+     * javax.faces.webapp.pdl.PageDeclarationLanguageFactory#getPageDeclarationLanguage}
+     * to obtain the appropriate <code>PageDeclarationLanguage</code>
+     * implementation for the argument <code>viewId</code>.  Any
+     * exceptions thrown as a result of invoking that method must not be
+     * swallowed.</p>
      * 
      * <p>An implementation is provided that will throw
      * <code>UnsupportedOperationException</code>.  A Faces implementation
      * compliant with version 2.0 and beyond of the specification must 
      * override this method.</p>
      * 
+     * </div>
 
      * @since 2.0
      */
@@ -355,23 +350,23 @@ public abstract class ViewHandler {
 
     /**
      *
-     * <p>Initialize the view for the request processing lifecycle.</p>
+     * <p><span class="changed_modified_2_0">Initialize</span> the view
+     * for the request processing lifecycle.</p>
      *
      * <p>This method must be called at the beginning of the <em>Restore
      * View Phase</em> of the Request Processing Lifecycle.  It is responsible 
      * for performing any per-request initialization necessary to the operation
      * of the lifycecle.</p>
      *
-     * <p>The default implementation calls {@link
-     * #calculateCharacterEncoding} and passes the result, if
-     * non-<code>null</code>, into the {@link
-     * ExternalContext#setRequestCharacterEncoding} method.
-     *
-     * RELEASE_PENDING (edburns,rogerk) Should consider calling setRequestCharacterEncoding()
-     *  *if* getRequestCharacterEncoding() returns null.  Otherwise, in certain
-     *  cases you get warnings from the container about trying to reset the
-     *  encoding.
-     *
+     * <p class="changed_modified_2_0">The default implementation must
+     * perform the following actions.  If {@link
+     * ExternalContext#getRequestCharacterEncoding} returns
+     * <code>null</code>, call {@link #calculateCharacterEncoding} and
+     * pass the result, if non-<code>null</code>, into the {@link
+     * ExternalContext#setRequestCharacterEncoding} method.  If {@link
+     * ExternalContext#getRequestCharacterEncoding} returns
+     * non-<code>null</code> take no action.</p>
+
      * @throws FacesException if a problem occurs setting the encoding,
      * such as the <code>UnsupportedEncodingException</code> thrown 
      * by the underlying Servlet or Portlet technology when the encoding is not
@@ -399,9 +394,18 @@ public abstract class ViewHandler {
     
 
     /**
-     * <p>Perform whatever actions are required to render the response
-     * view to the response object associated with the
-     * current {@link FacesContext}.</p>
+     * <p><span class="changed_modified_2_0">Perform</span> whatever
+     * actions are required to render the response view to the response
+     * object associated with the current {@link FacesContext}.</p>
+
+     * <p>The default implementation must return immediately if calling
+     * {@link UIViewRoot#isRendered} return <code>true</code>.</p>
+
+     * <p class="changed_added_2_0">Otherwise, the default implementation
+     * must obtain a reference to the {@link PageDeclarationLanguage}
+     * for this <code>viewId</code> and call its {@link
+     * PageDeclarationLanguage#renderView} method, returning the result
+     * and not swallowing any exceptions thrown by that method.</p>
      *
      * @param context {@link FacesContext} for the current request
      * @param viewToRender the view to render
@@ -416,13 +420,20 @@ public abstract class ViewHandler {
 
 
     /**
-     * <p>Perform whatever actions are required to restore the view
-     * associated with the specified {@link FacesContext} and
-     * <code>viewId</code>.  It may delegate to the <code>restoreView</code>
-     * of the associated {@link StateManager} to do the actual work of
-     * restoring the view.  If there is no available state for the
-     * specified <code>viewId</code>, return <code>null</code>.</p>
-     *
+     * <p><span class="changed_modified_2_0">Perform</span> whatever
+     * actions are required to restore the view associated with the
+     * specified {@link FacesContext} and <code>viewId</code>.  It may
+     * delegate to the <code>restoreView</code> of the associated {@link
+     * StateManager} to do the actual work of restoring the view.  If
+     * there is no available state for the specified
+     * <code>viewId</code>, return <code>null</code>.</p>
+
+     * <p class="changed_added_2_0">Otherwise, the default implementation
+     * must obtain a reference to the {@link PageDeclarationLanguage}
+     * for this <code>viewId</code> and call its {@link
+     * PageDeclarationLanguage#restoreView} method, returning the result
+     * and not swallowing any exceptions thrown by that method.</p>
+
      * @param context {@link FacesContext} for the current request
      * @param viewId the view identifier for the current request
      *
@@ -434,13 +445,17 @@ public abstract class ViewHandler {
 
 
     /**
-     * <p class="changed_added_2_0">Leverage the component metadata
-     * specified in section 4.3.2 for the purpose of re-targeting
-     * attached objects from the top level composite component to the
-     * individual {@link AttachedObjectTarget} inside the composite
-     * component.  This method must be called by the PDL implementation
-     * when creating the <code>UIComponent</code> tree when a composite
-     * component usage is encountered.</p>
+     * <p class="changed_added_2_0">Assuming the component metadata for
+     * argument <code>topLevelComponent</code> has been made available
+     * by an earlier call to {@link
+     * PageDeclarationLanguage#getComponentMetadata}, leverage the
+     * component metadata for the purpose of re-targeting attached
+     * objects from the top level composite component to the individual
+     * {@link AttachedObjectTarget} instances inside the composite
+     * component.  This method must be called by the {@link
+     * PageDeclarationLanguage} implementation when creating the
+     * <code>UIComponent</code> tree when a composite component usage is
+     * encountered.</p>
      *
      * <div class="changed_added_2_0">
      *
@@ -480,7 +495,7 @@ public abstract class ViewHandler {
      *<p style="margin-left: 3em;">For each <code>UIComponent</code> in the
      *list returned from <em>curTarget.getTargets()</em>, call
      *<em>curHandler.<a
-     *href="AttachedObjectHandler.html#applyAttachedObject">applyAttachedObject()</></em>,
+     *href="AttachedObjectHandler.html#applyAttachedObject">applyAttachedObject()</a></em>,
      *passing the <code>FacesContext</code> and the
      *<code>UIComponent</code>.</p>
      *
@@ -528,9 +543,12 @@ public abstract class ViewHandler {
      * a list of implementations of {@link AttachedObjectHandler}, each
      * one of which represents a relationship between an attached object
      * and the UIComponent to which it is attached.
+
+     * @throws NullPointerException if any of the arguments are
+     * <code>null</code>.
+
+     * @since 2.0
      *
-     * RELEASE_PENDING (edburns, rogerk) Exceptions for null arguments?  If so,
-     *  which ones?
      */
     public void retargetAttachedObjects(FacesContext context,
             UIComponent topLevelComponent,
@@ -540,10 +558,13 @@ public abstract class ViewHandler {
 
 
     /**
-     * <p class="changed_added_2_0">Leverage the component metadata
-     * specified in section 3.6.2.1 for the purpose of re-targeting any
-     * method expressions from the top level component to the
-     * appropriate inner component.  For each attribute that is a
+     * <p class="changed_added_2_0">Assuming the component metadata for
+     * argument <code>topLevelComponent</code> has been made available
+     * by an earlier call to {@link
+     * PageDeclarationLanguage#getComponentMetadata}, leverage the
+     * component metadata for the purpose of re-targeting any method
+     * expressions from the top level component to the appropriate inner
+     * component.  For each attribute that is a
      * <code>MethodExpression</code> (as indicated by the presence of a
      * "<code>method-signature</code>" attribute and the absence of a
      * "<code>type</code>" attribute), the following action must be
