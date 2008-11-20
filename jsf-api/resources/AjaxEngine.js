@@ -214,8 +214,8 @@ jsf.AjaxEngine.serializeForm = function(theform) {
         if (!el.disabled) {
             switch (el.type) {
                 case 'text': case 'password': case 'hidden': case 'textarea':
-                this.addField(el.name, el.value);
-                break;
+                    this.addField(el.name, el.value);
+                    break;
                 case 'select-one':
                     if (el.selectedIndex >= 0) {
                         this.addField(el.name, el.options[el.selectedIndex].value);
@@ -229,10 +229,8 @@ jsf.AjaxEngine.serializeForm = function(theform) {
                     }
                     break;
                 case 'checkbox': case 'radio':
-                if (el.checked) {
-                    this.addField(el.name, el.value);
-                }
-                break;
+                    this.addField(el.name, el.checked+"");
+                    break;
             }
         }
     }
