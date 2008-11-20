@@ -72,7 +72,6 @@ import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.event.AfterAddToParentEvent;
 import javax.faces.event.BeforeRenderEvent;
@@ -80,9 +79,6 @@ import javax.faces.event.PhaseId;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.event.AfterAddToViewEvent;
-import javax.faces.render.RenderKit;
-import javax.faces.render.RenderKitFactory;
-import javax.faces.render.ResponseStateManager;
 
 /**
  * <p><strong class="changed_modified_2_0">UIComponentBase</strong> is a
@@ -107,6 +103,8 @@ public abstract class UIComponentBase extends UIComponent {
 
     private static Logger LOGGER = Logger.getLogger("javax.faces.component",
             "javax.faces.LogStrings");
+
+    private static final String ADDED = UIComponentBase.class.getName() + ".ADDED";
 
 
     /**
@@ -380,7 +378,25 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     public void setParent(UIComponent parent) {
+
         this.parent = parent;
+
+        if (this.parent == null) {
+            disconnectFromView(this);
+        } else {
+            if (this.getAttributes().get(ADDED) == null) {
+                // add an attribute to this component here to indiciate that
+                // it's being processed.  If we don't do this, and the component
+                // is re-parented, the events could fire again in certain cases
+                // and cause a stack overflow.
+                this.getAttributes().put(ADDED, Boolean.TRUE);
+                doPostAddProcessing(FacesContext.getCurrentInstance(), this);
+                // remove the attribute once we've returned from the event
+                // processing.
+                this.getAttributes().remove(ADDED);
+            }
+        }
+
     }
 
 
@@ -1592,46 +1608,61 @@ public abstract class UIComponentBase extends UIComponent {
     }
 
 
-    private static void doPostAddProcessing(FacesContext context,
-                                            UIComponent added) {
+    private void doPostAddProcessing(FacesContext context, UIComponent added) {
+
         if (!isPostbackAndRestoreView(context)) {
-            Application app = context.getApplication();
-            app.publishEvent(AfterAddToParentEvent.class, added);
-            UIComponent parent = added.getParent();
-            while (parent != null) {
-                if (parent instanceof UIViewRoot) {
-                    app.publishEvent(AfterAddToViewEvent.class, added);
-                    break;
-                }
-                parent = parent.getParent();
+            context.getApplication().publishEvent(AfterAddToParentEvent.class,
+                                                  added);
+            if (parent.isInView()) {
+                publishAfterViewEvents(context.getApplication(), added);
+            }
+
+        }
+
+    }
+
+    private static void publishAfterViewEvents(Application application,
+                                               UIComponent component) {
+
+        component.setInView(true);
+        application.publishEvent(AfterAddToViewEvent.class, component);
+        if (component.getChildCount() > 0) {
+            for (UIComponent c : component.getChildren()) {
+                publishAfterViewEvents(application, c);
+            }
+        }
+        if (component.getFacetCount() > 0) {
+            for (UIComponent c : component.getFacets().values()) {
+                publishAfterViewEvents(application, c);
+            }
+        }
+        
+    }
+
+
+    private static void disconnectFromView(UIComponent child) {
+
+        child.setInView(false);
+        if (child.getChildCount() > 0) {
+            List<UIComponent> children = child.getChildren();
+            for (UIComponent c : children) {
+                disconnectFromView(c);
+            }
+        }
+        if (child.getFacetCount() > 0) {
+            Map<String,UIComponent> facets = child.getFacets();
+            for (UIComponent c : facets.values()) {
+                disconnectFromView(c);
             }
         }
 
     }
 
-    private static final String IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME =
-          "javax.faces.IS_POSTBACK_AND_RESTORE_VIEW";
-
-    private static void clearPostbackAndRestoreViewCache(FacesContext context) {
-        Map<Object, Object> contextMap = context.getAttributes();
-        contextMap.remove(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME);
-
-    }
 
     private static boolean isPostbackAndRestoreView(FacesContext context) {
-        Boolean result;
-        Map<Object, Object> contextMap = context.getAttributes();
-        result = (Boolean) contextMap
-              .get(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME);
-        if (result != null) {
-            return result;
-        } else {
-            result = context.isPostback()
-                     && context.getCurrentPhaseId().equals(PhaseId.RESTORE_VIEW);
-            contextMap.put(IS_POSTBACK_AND_RESTORE_VIEW_REQUEST_ATTR_NAME,
-                           result ? Boolean.TRUE : Boolean.FALSE);
-        }
-        return result;
+
+        return (context.isPostback() && context.getCurrentPhaseId().equals(PhaseId.RESTORE_VIEW));
+
     }
 
 
@@ -1999,12 +2030,10 @@ public abstract class UIComponentBase extends UIComponent {
     private static class ChildrenList extends ArrayList<UIComponent> {
 
         private UIComponent component;
-        private boolean isViewRoot;
 
         public ChildrenList(UIComponent component) {
             super(6);
             this.component = component;
-            this.isViewRoot = (component instanceof UIViewRoot);
         }
 
         public void add(int index, UIComponent element) {
@@ -2014,16 +2043,9 @@ public abstract class UIComponentBase extends UIComponent {
                 throw new IndexOutOfBoundsException();
             } else {
                 eraseParent(element);
-                element.setParent(component);
-                FacesContext context = FacesContext.getCurrentInstance();
-                // Make sure to clear our cache if the component is a UIViewRoot and
-                // it does not yet have children.  This will be the case when
-                // the UIViewRoot has been freshly instantiated.
-                if (this.size() == 0 && isViewRoot) {
-                    clearPostbackAndRestoreViewCache(context);
-                }
                 super.add(index, element);
-                doPostAddProcessing(context, element);
+                element.setParent(component);
+
             }
         }
 
@@ -2032,16 +2054,8 @@ public abstract class UIComponentBase extends UIComponent {
                 throw new NullPointerException();
             } else {
                 eraseParent(element);
-                element.setParent(component);
-                FacesContext context = FacesContext.getCurrentInstance();
-                // Make sure to clear our cache if the component is a UIViewRoot and
-                // it does not yet have children.  This will be the case when
-                // the UIViewRoot has been freshly instantiated.
-                if (this.size() == 0 && isViewRoot) {
-                    clearPostbackAndRestoreViewCache(context);
-                }
                 boolean result = super.add(element);
-                doPostAddProcessing(context, element);
+                element.setParent(component);
                 return result;
             }
         }
@@ -2153,9 +2167,9 @@ public abstract class UIComponentBase extends UIComponent {
             } else {
                 eraseParent(element);
                 UIComponent previous = get(index);
+                super.set(index, element);
                 previous.setParent(null);
                 element.setParent(component);
-                super.set(index, element);
                 return (previous);
             }
         }
@@ -2307,13 +2321,11 @@ public abstract class UIComponentBase extends UIComponent {
     // required by UIComponent.getFacets()
     private static class FacetsMap extends HashMap<String, UIComponent> {
 
-        UIComponent component;
-        private boolean isViewRoot;
+        private UIComponent component;
 
         public FacetsMap(UIComponent component) {
             super(3, 1.0f);
             this.component = component;
-            isViewRoot = (component instanceof UIViewRoot);
         }
 
         public void clear() {
@@ -2346,16 +2358,9 @@ public abstract class UIComponentBase extends UIComponent {
                 previous.setParent(null);
             }
             eraseParent(value);
-            value.setParent(component);
-            // Make sure to clear our cache if the component is a UIViewRoot and
-            // it does not yet have children.  This will be the case when
-            // the UIViewRoot has been freshly instantiated.
-            FacesContext ctx = FacesContext.getCurrentInstance();
-            if (this.size() == 0 && isViewRoot) {
-                clearPostbackAndRestoreViewCache(ctx);
-            }
             UIComponent result = super.put(key, value);
-            doPostAddProcessing(ctx, value);
+            value.setParent(component);
+
             return (result);
         }
 

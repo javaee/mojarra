@@ -231,6 +231,28 @@ public class UIViewRoot extends UIComponentBase {
 
 
     /**
+     * RELEASE_PENDING (edburns,rogerk) docs
+     * <p class="changed_added_2_0"> </p>
+     * @return <code>true<code> in all cases as any children or facets added
+     *  to the UIViewRoot will automatically be part of the view.  
+     */
+    @Override
+    public boolean isInView() {
+
+        return true;
+
+    }
+
+    /**
+     * RELEASE_PENDING (edburns,rogerk) docs
+     * @param isInView
+     */
+    @Override
+    public void setInView(boolean isInView) {
+        // no-op
+    }
+
+    /**
      * @see UIComponent#getFamily()
      */
     public String getFamily() {

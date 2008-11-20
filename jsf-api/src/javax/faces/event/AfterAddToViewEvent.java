@@ -71,13 +71,8 @@ import javax.faces.component.UIComponent;
  */
 public class AfterAddToViewEvent extends ComponentSystemEvent {
 
-    private static final long serialVersionUID = -5706460518363094948L;
-
-    /**
-     * Namespaced key to mark this component having been added
-     * to its parent.
-     */
-    private static final String ADDED_ATTRIBUTE_KEY = "javax.faces.private.ADDED";
+    
+    private static final long serialVersionUID = -1113592223476173895L;
 
 
     // ------------------------------------------------------------ Constructors
@@ -85,7 +80,7 @@ public class AfterAddToViewEvent extends ComponentSystemEvent {
 
     /**
      * <p class="changed_added_2_0">Instantiate a new
-     * <code>AfterAddToParentEvent</code> that indicates the argument
+     * <code>AfterAddToViewEvent</code> that indicates the argument
      * <code>component</code> was just added to the view.</p>
 
      * @param component the <code>UIComponent</code> that has just been
@@ -94,11 +89,14 @@ public class AfterAddToViewEvent extends ComponentSystemEvent {
      * @throws <code>NullPointerException</code> if the argument is <code>null</code>.
      */
     public AfterAddToViewEvent(UIComponent component) {
+
         super(component);
+
     }
 
 
     // --------------------------------------- Methods from ComponentSystemEvent
+
 
     /**
      * <p class="changed_added_2_0">Returns <code>true</code> if and
@@ -108,13 +106,9 @@ public class AfterAddToViewEvent extends ComponentSystemEvent {
      */
     @Override
     public boolean isAppropriateListener(FacesListener listener) {
-        Map<String,Object> attributes = getComponent().getAttributes();
-        boolean result = false;
-        if (!attributes.containsKey(ADDED_ATTRIBUTE_KEY)) {
-            result = (listener instanceof SystemEventListener);
-            attributes.put(ADDED_ATTRIBUTE_KEY, Boolean.TRUE);
-        }
-        return result;
+        
+        return (listener instanceof SystemEventListener);
+
     }
     
 

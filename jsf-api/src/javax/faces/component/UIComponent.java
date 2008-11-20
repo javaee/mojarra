@@ -408,7 +408,37 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
     }
 
     // -------------------------------------------------------------- Properties
-    
+
+    private boolean isInView;
+
+
+    /**
+     * RELEASE_PENDING (edburns,rogerk) review docs
+     * <p class="changed_added_2_0"> </p>
+     * @return <code>true</code> if this component is within the view hierarchy
+     *  otherwise <code>false</code>
+     */
+    public boolean isInView() {
+        return isInView;
+    }
+
+
+    /**
+     * RELEASE_PENDING (edburns,rogerk) review docs
+     * Updates the status as to whether or not this component is currently within
+     * the view hierarchy.  <strong>This method must
+     * never be called by developers;  a {@link UIComponent}'s internal
+     * implementation will call it as components are added to or
+     * removed from a parent's child <code>List</code> or
+     * facet <code>Map</code></strong>.</p>
+     * @param isInView flag indicating whether or not this component is within
+     *  the view hierachy
+     */
+    public void setInView(boolean isInView) {
+        this.isInView = isInView;
+    }
+
+
     /**
      * <p class="changed_added_2_0">Enable EL to access the <code>clientId</code>
      * of a component.  This is particularly useful in combination with the 
@@ -540,11 +570,15 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
 
 
     /**
-     * <p>Set the parent <code>UIComponent</code> of this
-     * <code>UIComponent</code>.  <strong>This method must
-     * never be called by developers;  a {@link UIComponent}'s internal
-     * implementation will call it as components are added to or
-     * removed from a parent's child <code>List</code> or
+     * RELEASE_PENDING (edburns,rogerk) review docus
+     * <p class="changed_modified_2_0">Set the parent <code>UIComponent</code> of this
+     * <code>UIComponent</code>.  This method, when called will cause
+     * an {@link javax.faces.event.AfterAddToParentEvent} to be published and
+     * if <code>parent.isInView()</code> returns <code>true</code> an
+     * {@link javax.faces.event.AfterAddToViewEvent} will be published as well.
+     *  <strong>This method must never be called by developers;  a
+     * {@link UIComponent}'s internal implementation will call it as components
+     * are added to or removed from a parent's child <code>List</code> or
      * facet <code>Map</code></strong>.</p>
      *
      * @param parent The new parent, or <code>null</code> for the root node

@@ -60,6 +60,7 @@ import javax.faces.event.SystemEvent;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ViewMapCreatedEvent;
 import javax.faces.event.ViewMapDestroyedEvent;
+import javax.faces.event.AfterAddToViewEvent;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -832,6 +833,24 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
         super.testInvokeOnComponentWithPrependId();
     }
 
+
+    @Override
+    public void testChildrenListAfterAddViewPublish() {
+
+        // overridding to do nothing.  UIViewRoot is a special cases
+        // and there should always only be on UIViewRoot in a tree
+        
+    }
+
+    @Override
+    public void testFacetMapAfterAddViewPublish() {
+
+        // overridding to do nothing.  UIViewRoot is a special cases
+        // and there should always only be on UIViewRoot in a tree
+
+    }
+
+    
     // ensure calling clear() on the ViewMap will
     // invoke registered listeners.
     public void testViewMapEventsTest() {
