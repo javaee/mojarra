@@ -53,8 +53,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import org.apache.commons.httpclient.Cookie;
-import org.apache.commons.httpclient.HttpState;
 
 import java.net.URL;
 import java.util.Iterator;
@@ -104,9 +102,6 @@ public abstract class AbstractTestCase extends TestCase {
     // The cookie manager
     protected CookieManager cmanager = null;
 
-    // The HttpState for our domain URL
-    protected HttpState state = null;
-
 
     // ---------------------------------------------------- Overall Test Methods
 
@@ -125,8 +120,6 @@ public abstract class AbstractTestCase extends TestCase {
         domainURL = getURL("/");
         WebRequestSettings settings = new WebRequestSettings(domainURL);
         WebResponse response = client.getWebConnection().getResponse(settings);
-        
-        //state = client.getWebConnection().getState();
 
     }
 
@@ -147,7 +140,6 @@ public abstract class AbstractTestCase extends TestCase {
         client = null;
         domainURL = null;
         cmanager = null;
-        //state = null;
 
     }
 
@@ -167,7 +159,7 @@ public abstract class AbstractTestCase extends TestCase {
     protected String getBodyText(HtmlPage page) {
 
         Object body =
-            page.getDocumentElement().getHtmlElementsByTagName("body").get(0);
+                page.getDocumentElement().getHtmlElementsByTagName("body").get(0);
 
         if (body != null) {
             if (body instanceof HtmlBody) {
@@ -195,7 +187,7 @@ public abstract class AbstractTestCase extends TestCase {
             client.addRequestHeader("Cookie", "JSESSIONID=" + sessionId);
         }
         */
-	Object obj = client.getPage(getURL(path));
+        Object obj = client.getPage(getURL(path));
         HtmlPage page = (HtmlPage) obj;
         if (sessionId == null) {
             parseSession(page);
@@ -208,13 +200,14 @@ public abstract class AbstractTestCase extends TestCase {
     /**
      * The same as {@link #getPage(String)} except this uses the specified
      * WebClient.
-     * @param path context-relative path
+     *
+     * @param path   context-relative path
      * @param client WebClient
      * @return an HtmlPage instance
      * @throws Exception if an error occurs
      */
     protected HtmlPage getPage(String path, WebClient client) throws Exception {
-        HtmlPage page  = (HtmlPage) client.getPage(getURL(path));
+        HtmlPage page = (HtmlPage) client.getPage(getURL(path));
         if (sessionId == null) {
             parseSession(page);
         }
@@ -251,7 +244,7 @@ public abstract class AbstractTestCase extends TestCase {
     protected void parseSession(HtmlPage page) {
 
         String value =
-            page.getWebResponse().getResponseHeaderValue("Set-Cookie");
+                page.getWebResponse().getResponseHeaderValue("Set-Cookie");
         if (value == null) {
             return;
         }
@@ -273,74 +266,7 @@ public abstract class AbstractTestCase extends TestCase {
     protected boolean clearAllCookies() {
         cmanager.clearCookies();
         return true;
-        /*
-        if (null == state) {
-            state = client.getWebConnection().getState();
-            if (null == state) {
-                return false;
-            }
-        }
-
-        Cookie[] cookies = state.getCookies();
-        if (null == cookies) {
-            return false;
-        }
-        java.util.Date exp = null;
-        long
-            curTime = System.currentTimeMillis(),
-            latestTime = curTime;
-        // find the freshest cookie
-        for (int i = 0, len = cookies.length; i < len; i++) {
-            if (null != (exp = cookies[i].getExpiryDate())) {
-                curTime = exp.getTime();
-                if (latestTime < curTime) {
-                    curTime = latestTime;
-                }
-            }
-        }
-        boolean result =
-            state.purgeExpiredCookies(new java.util.Date(latestTime));
-        return result;
-        */
     }
-
-
-    /*
-     * <p>Set up the session identifier cookie if it is not already there.</p>
-     *
-     * @param sessionId The new session identifier
-     */
-    /* Cookies seem to be maintained automatically now
-    protected void setSessionId(String sessionId) {
-
-        Cookie cookie = null;
-
-        // Update the current cookie, if there is one
-        Cookie cookies[] = state.getCookies();
-        for (int i = 0; i < cookies.length; i++) {
-            cookie = cookies[i];
-            if ("JSESSIONID".equals(cookie.getName()) &&
-                host.equals(cookie.getDomain()) &&
-                contextPath.equals(cookie.getPath())) {
-                cookie.setValue(sessionId);
-                return;
-            }
-        }
-
-        // Create a new session identifier cookie
-        cookie = new Cookie();
-        cookie.setDomain(host);
-        cookie.setDomainAttributeSpecified(true);
-        cookie.setName("JSESSIONID");
-        cookie.setPath(contextPath);
-        cookie.setPathAttributeSpecified(true);
-        cookie.setSecure(false);
-        cookie.setValue(sessionId);
-        cookie.setVersion(1);  // Assumes Tomcat knows how to deal with them
-        state.addCookie(cookie);
-
-    }
-    */
 
     // Return the form with the specified "id" from the specified page
     // (HtmlPage.getFormByName() looks at "name" instead)
@@ -360,14 +286,15 @@ public abstract class AbstractTestCase extends TestCase {
 
     /**
      * <p>Added to compensate for changes in the HtmlUnit 1.4 API.</p>
+     *
      * @see #getAllElementsOfGivenClass(com.gargoylesoftware.htmlunit.html.HtmlElement, java.util.List, Class)
      */
     protected List getAllElementsOfGivenClass(HtmlPage root, List list,
                                               Class matchClass) {
 
         return getAllElementsOfGivenClass(root.getDocumentElement(),
-                                          list,
-                                          matchClass);
+                list,
+                matchClass);
 
     }
 
@@ -387,7 +314,7 @@ public abstract class AbstractTestCase extends TestCase {
         Iterator<HtmlElement> iter = iterable.iterator();
         while (iter.hasNext()) {
             getAllElementsOfGivenClass((HtmlElement) iter.next(), list,
-                                       matchClass);
+                    matchClass);
         }
         if (matchClass.isInstance(root)) {
             if (!list.contains(root)) {
@@ -398,61 +325,61 @@ public abstract class AbstractTestCase extends TestCase {
     }
 
     protected HtmlInput getInputContainingGivenId(HtmlPage root,
-						  String id) {
-	List list;
-	int i;
-	HtmlInput result = null;
-	
-	list = getAllElementsOfGivenClass(root, null, HtmlInput.class);
-	for (i = 0; i < list.size(); i++) {
-	    result = (HtmlInput) list.get(i);
-	    if (-1 != result.getIdAttribute().indexOf(id)) {
-		break;
-	    }
-	    result = null;
-	}
-	return result;
-	
+                                                  String id) {
+        List list;
+        int i;
+        HtmlInput result = null;
+
+        list = getAllElementsOfGivenClass(root, null, HtmlInput.class);
+        for (i = 0; i < list.size(); i++) {
+            result = (HtmlInput) list.get(i);
+            if (-1 != result.getIdAttribute().indexOf(id)) {
+                break;
+            }
+            result = null;
+        }
+        return result;
+
     }
 
     protected HtmlInput getNthInputContainingGivenId(HtmlPage root,
-						     String id, 
-						     int whichInput) {
-	List list;
-	int i, hitCount = 0;
-	HtmlInput result = null;
-	
-	list = getAllElementsOfGivenClass(root, null, HtmlInput.class);
-	for (i = 0; i < list.size(); i++) {
-	    result = (HtmlInput) list.get(i);
-	    if (-1 != result.getIdAttribute().indexOf(id) &&
-		hitCount++ == whichInput) {
-		break;
-	    }
-	    result = null;
-	}
-	return result;
-	
+                                                     String id,
+                                                     int whichInput) {
+        List list;
+        int i, hitCount = 0;
+        HtmlInput result = null;
+
+        list = getAllElementsOfGivenClass(root, null, HtmlInput.class);
+        for (i = 0; i < list.size(); i++) {
+            result = (HtmlInput) list.get(i);
+            if (-1 != result.getIdAttribute().indexOf(id) &&
+                    hitCount++ == whichInput) {
+                break;
+            }
+            result = null;
+        }
+        return result;
+
     }
 
     protected HtmlInput getNthFromLastInputContainingGivenId(HtmlPage root,
-							     String id, 
-							     int whichInput) {
-	List list;
-	int i, hitCount = 0;
-	HtmlInput result = null;
-	
-	list = getAllElementsOfGivenClass(root, null, HtmlInput.class); 
-	for (i = list.size() - 1; i >= 0; i--) {
-	    result = (HtmlInput) list.get(i);
-	    if (-1 != result.getIdAttribute().indexOf(id) &&
-		hitCount++ == whichInput) {
-		break;
-	    }
-	    result = null;
-	}
-	return result;
-	
+                                                             String id,
+                                                             int whichInput) {
+        List list;
+        int i, hitCount = 0;
+        HtmlInput result = null;
+
+        list = getAllElementsOfGivenClass(root, null, HtmlInput.class);
+        for (i = list.size() - 1; i >= 0; i--) {
+            result = (HtmlInput) list.get(i);
+            if (-1 != result.getIdAttribute().indexOf(id) &&
+                    hitCount++ == whichInput) {
+                break;
+            }
+            result = null;
+        }
+        return result;
+
     }
 
 
