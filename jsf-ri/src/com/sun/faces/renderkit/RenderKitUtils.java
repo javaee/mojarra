@@ -285,7 +285,7 @@ public class RenderKitUtils {
      * @param writer writer the {@link javax.faces.context.ResponseWriter} to be used when writing
      *  the attributes
      * @param component the component
-     * @param attributes an array off attributes to be processed
+     * @param attributes an array of attributes to be processed
      * @throws IOException if an error occurs writing the attributes
      */
     public static void renderPassThruAttributes(ResponseWriter writer,
@@ -298,9 +298,6 @@ public class RenderKitUtils {
 
         Map<String, Object> attrMap = component.getAttributes();
 
-        // PENDING - think anyone would run the RI using another implementation
-        // of the jsf-api?  If they did, then this would fall apart.  That
-        // scenario seems extremely unlikely.
         if (canBeOptimized(component)) {
             //noinspection unchecked
             List<String> setAttributes = (List<String>)
@@ -357,7 +354,7 @@ public class RenderKitUtils {
     public static void renderAjaxCommand(ResponseWriter writer, UIComponent component)
         throws IOException {
 
-// PENDING - IMPL TEAM - Need to take into account user specified events
+// RELEASE_PENDING - IMPL TEAM - Need to take into account user specified events
 
         AjaxBehavior ajaxBehavior = (AjaxBehavior)component.getAttributes().get(AjaxBehavior.AJAX_BEHAVIOR);
         if (null == ajaxBehavior) {
@@ -482,105 +479,6 @@ public class RenderKitUtils {
 
 
     // --------------------------------------------------------- Private Methods
-
-
-    /**
-     * <p>
-     * Fill <code>destination</code> with the <code>SelectItem</code> instances from
-     * <code>source</code>
-     * </p>
-     * @param destination the destination <code>List</code>
-     * @param source the source array
-     */
-    private static void fill(List<SelectItem> destination, SelectItem[] source) {
-
-        // we manually copy the elements so that the list is
-        // modifiable.  Arrays.asList() returns a non-mutable
-        // list.
-        //noinspection ManualArrayToCollectionCopy
-        for (SelectItem item : source) {
-            destination.add(item);
-        }
-
-    }
-
-
-    /**
-     * <p>
-     * Fill <code>destination</code> by creating <code>SelectItem</code>
-     * instances from the key/value pairs from <code>source</code>
-     * @param destination the destination <code>List</code>
-     * @param source the source <code>Map</code>
-     */
-    private static void fill(List<SelectItem> destination,
-                             Map<Object, Object> source) {
-
-        for (Map.Entry entry : source.entrySet()) {
-            Object key = entry.getKey();
-            Object val = entry.getValue();
-            if (val == null) {
-                val = key.toString();
-            }
-            if (key == null) {
-                continue;
-            }
-            destination.add(new SelectItem(val, key.toString()));
-        }
-
-    }
-
-
-    private static void fill(FacesContext ctx,
-                             List<SelectItem> destination,
-                             Collection<?> source,
-                             UISelectItems selectItems) {
-
-        Map<String,Object> attributes = selectItems.getAttributes();
-        Map<String,Object> requestMap = ctx.getExternalContext().getRequestMap();
-        String var = (String) attributes.get("var");
-        ValueExpression itemValue =
-              selectItems.getValueExpression("itemValue");
-        ValueExpression itemLabel =
-              selectItems.getValueExpression("itemLabel");
-        ValueExpression itemDescription =
-              selectItems.getValueExpression("itemDescription");
-        ValueExpression itemEscaped =
-              selectItems.getValueExpression("itemEscaped");
-        ValueExpression itemDisabled =
-              selectItems.getValueExpression("itemDisabled");
-        for (Object o : source) {
-            if (o instanceof SelectItem) {
-                destination.add((SelectItem) o);
-            } else {
-                Object originalVar = null;
-                if (var != null) {
-                    originalVar = requestMap.put(var, o);
-                }
-                try {
-                    ELContext elContext = ctx.getELContext();
-                    destination
-                          .add(new SelectItem(((itemValue != null) ? itemValue.getValue(elContext) : o),
-                                              ((itemLabel != null)
-                                               ? (String) itemLabel.getValue(elContext)
-                                               : o.toString()),
-                                              ((itemDescription != null)
-                                               ? (String) itemDescription.getValue(elContext)
-                                               : null),
-                                              ((itemDisabled != null)
-                                               ? (Boolean) itemDisabled.getValue(elContext)
-                                               : false),
-                                              ((itemEscaped != null)
-                                               ? (Boolean) itemEscaped.getValue(elContext)
-                                               : false)));
-                } finally {
-                    if (var != null) {
-                        requestMap.put(var, originalVar);
-                    }
-                }
-            }
-        }
-    }
-
 
     /**
      * @param component the UIComponent in question
@@ -1177,7 +1075,5 @@ public class RenderKitUtils {
 
     // ---------------------------------------------------------- Nested Classes
 
-
-    
     
 } // END RenderKitUtils
