@@ -11,10 +11,10 @@ public class AjaxRequestBean {
     private Integer count = 0;
 
     private String echo = "echo";
-    private String echo1 = "initial";
-    private String echo2 = "initial";
-    private String echo3 = "initial";
-    private String echo4 = "initial";
+    private String echo1 = "";
+    private String echo2 = "";
+    private String echo3 = "";
+    private String echo4 = "";
 
     public String getEcho1() {
         return echo1;

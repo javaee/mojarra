@@ -440,15 +440,14 @@ public class AjaxRequestTestCase extends AbstractTestCase {
         assertTrue("echo".equals(out1));
         assertTrue("echo".equals(out2));
         assertTrue("echo".equals(out3));
-        assertTrue("initial".equals(echo1Out));
-        assertTrue("initial".equals(echo2Out));
-        assertTrue("initial".equals(echo3Out));
-        assertTrue("initial".equals(echo4Out));
+        assertTrue("".equals(echo1Out));
+        assertTrue("".equals(echo2Out));
+        assertTrue("".equals(echo3Out));
+        assertTrue("".equals(echo4Out));
 
         // Next, enter data into first field
         HtmlTextInput echo1 = ((HtmlTextInput)page.getHtmlElementById("form1:edit1"));
         echo1.focus();
-        echo1.setValueAttribute("");
         echo1.type("test1");
         echo1.blur();
         Thread.sleep(interval2);
@@ -481,7 +480,6 @@ public class AjaxRequestTestCase extends AbstractTestCase {
         // Next, enter data into second field
         HtmlTextInput echo2 = ((HtmlTextInput)page.getHtmlElementById("form1:edit2"));
         echo2.focus();
-        echo2.setValueAttribute("");
         echo2.type("test2");
         echo2.blur();
         Thread.sleep(interval2);
@@ -515,7 +513,6 @@ public class AjaxRequestTestCase extends AbstractTestCase {
         // Next, enter data into third field
         HtmlTextInput echo3 = ((HtmlTextInput)page.getHtmlElementById("form1:edit3"));
         echo3.focus();
-        echo3.setValueAttribute("");
         echo3.type("test3");
         echo3.blur();
         Thread.sleep(interval2);
@@ -548,7 +545,6 @@ public class AjaxRequestTestCase extends AbstractTestCase {
         // Next, enter data into the fourth field
         HtmlTextInput echo4 = ((HtmlTextInput)page.getHtmlElementById("form1:edit4"));
         echo4.focus();
-        echo4.setValueAttribute("");
         echo4.type("test4");
         echo4.blur();
         Thread.sleep(interval2);
@@ -595,15 +591,14 @@ public class AjaxRequestTestCase extends AbstractTestCase {
         assertTrue("echo".equals(out1));
         assertTrue("echo".equals(out2));
         assertTrue("echo".equals(out3));
-        assertTrue("initial".equals(echo1Out));
-        assertTrue("initial".equals(echo2Out));
-        assertTrue("initial".equals(echo3Out));
-        assertTrue("initial".equals(echo4Out));
+        assertTrue("".equals(echo1Out));
+        assertTrue("".equals(echo2Out));
+        assertTrue("".equals(echo3Out));
+        assertTrue("".equals(echo4Out));
 
         // Next, enter data into first field
         HtmlTextInput echo1 = ((HtmlTextInput)page.getHtmlElementById("edit1"));
         echo1.focus();
-        echo1.setValueAttribute("");
         echo1.type("test1");
         echo1.blur();
         Thread.sleep(interval2);
@@ -636,7 +631,6 @@ public class AjaxRequestTestCase extends AbstractTestCase {
         // Next, enter data into second field
         HtmlTextInput echo2 = ((HtmlTextInput)page.getHtmlElementById("edit2"));
         echo2.focus();
-        echo2.setValueAttribute("");
         echo2.type("test2");
         echo2.blur();
         Thread.sleep(interval2);
@@ -670,7 +664,6 @@ public class AjaxRequestTestCase extends AbstractTestCase {
         // Next, enter data into third field
         HtmlTextInput echo3 = ((HtmlTextInput)page.getHtmlElementById("edit3"));
         echo3.focus();
-        echo3.setValueAttribute("");
         echo3.type("test3");
         echo3.blur();
         Thread.sleep(interval2);
@@ -703,7 +696,6 @@ public class AjaxRequestTestCase extends AbstractTestCase {
         // Next, enter data into the fourth field
         HtmlTextInput echo4 = ((HtmlTextInput)page.getHtmlElementById("edit4"));
         echo4.focus();
-        echo4.setValueAttribute("");
         echo4.type("test4");
         echo4.blur();
         Thread.sleep(interval2);
