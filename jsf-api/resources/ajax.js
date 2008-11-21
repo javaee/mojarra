@@ -205,10 +205,7 @@ jsf.viewState = function(form) {
 jsf.ajaxRequest = function(element, event, options) {
 
     if (typeof element === 'undefined' || element === null) {
-        throw {
-            name: 'ArgNotSet',
-            message: "ajaxRequest: Required first argument has not been set"
-        }
+        throw new Error("jsf.ajaxRequest: Element not set");
     }
 
     // Capture the element that triggered this Ajax request.
