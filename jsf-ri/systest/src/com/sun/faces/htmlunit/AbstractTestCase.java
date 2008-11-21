@@ -41,10 +41,7 @@
 package com.sun.faces.htmlunit;
 
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.WebRequestSettings;
-import com.gargoylesoftware.htmlunit.WebResponse;
-import com.gargoylesoftware.htmlunit.CookieManager;
+import com.gargoylesoftware.htmlunit.*;
 import com.gargoylesoftware.htmlunit.html.HtmlBody;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
@@ -102,6 +99,9 @@ public abstract class AbstractTestCase extends TestCase {
     // The cookie manager
     protected CookieManager cmanager = null;
 
+    // The last requested page
+    protected HtmlPage lastpage = null;
+
 
     // ---------------------------------------------------- Overall Test Methods
 
@@ -117,6 +117,8 @@ public abstract class AbstractTestCase extends TestCase {
 
         client = new WebClient();
         cmanager = client.getCookieManager();
+        // Add an ajax controller to synchronize all ajax calls
+        client.setAjaxController(new NicelyResynchronizingAjaxController());
         domainURL = getURL("/");
         WebRequestSettings settings = new WebRequestSettings(domainURL);
         WebResponse response = client.getWebConnection().getResponse(settings);
@@ -187,12 +189,11 @@ public abstract class AbstractTestCase extends TestCase {
             client.addRequestHeader("Cookie", "JSESSIONID=" + sessionId);
         }
         */
-        Object obj = client.getPage(getURL(path));
-        HtmlPage page = (HtmlPage) obj;
+        lastpage  = (HtmlPage) client.getPage(getURL(path));
         if (sessionId == null) {
-            parseSession(page);
+            parseSession(lastpage);
         }
-        return (page);
+        return lastpage;
 
     }
 
@@ -207,11 +208,11 @@ public abstract class AbstractTestCase extends TestCase {
      * @throws Exception if an error occurs
      */
     protected HtmlPage getPage(String path, WebClient client) throws Exception {
-        HtmlPage page = (HtmlPage) client.getPage(getURL(path));
+        lastpage = (HtmlPage) client.getPage(getURL(path));
         if (sessionId == null) {
-            parseSession(page);
+            parseSession(lastpage);
         }
-        return (page);
+        return lastpage;
     }
 
 
@@ -382,5 +383,12 @@ public abstract class AbstractTestCase extends TestCase {
 
     }
 
+    protected String getText(String element) {
+        return ((HtmlElement)lastpage.getHtmlElementById(element)).asText();
+    }
+
+    protected boolean check(String element, String expected) {
+        return expected.equals(getText(element));
+    }
 
 }
