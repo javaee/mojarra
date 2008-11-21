@@ -417,6 +417,8 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * <p class="changed_added_2_0"> </p>
      * @return <code>true</code> if this component is within the view hierarchy
      *  otherwise <code>false</code>
+     *
+     * @since 2.0
      */
     public boolean isInView() {
         return isInView;
@@ -431,8 +433,11 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * implementation will call it as components are added to or
      * removed from a parent's child <code>List</code> or
      * facet <code>Map</code></strong>.</p>
+     *
      * @param isInView flag indicating whether or not this component is within
      *  the view hierachy
+     *
+     * @since 2.0
      */
     public void setInView(boolean isInView) {
         this.isInView = isInView;
