@@ -81,16 +81,21 @@ import javax.faces.webapp.pdl.ValueHolderAttachedObjectTarget;
  * and restoring the state of each view.  <span class="changed_added_2_0">An
  * implementation
  * of this class must be thread-safe.</span></p>
- *
- * <p class="changed_added_2_0">The concept of <em>Page Declaration
- * Language</em> (PDL) was formally introduced into the specification as
- * of version 2.  A Page Declaration Language is a syntax used to
- * declare user interfaces comprised of instances of JSF {@link
- * UIComponent}s.  The features of the Page Declaration Language are
- * defined on the {@link PageDeclarationLanguage} class.</p>
- *
+
  * <p>Please see {@link StateManager} for information on how the
  * <code>ViewHandler</code> interacts the {@link StateManager}. </p>
+
+ * <p class="changed_added_2_0">Version 2 of the specification formally
+ * introduced the concept of <em>Page Declaration Language</em> (PDL).
+ * A Page Declaration Language is a syntax used to declare user
+ * interfaces comprised of instances of JSF {@link UIComponent}s.  Any
+ * of the responsibilities of the <code>ViewHandler</code> that
+ * specifically deal with the PDL sub-system are now the domain of the
+ * PDL implementation. These responsibilities are defined on the {@link
+ * PageDeclarationLanguage} class.  The <code>ViewHandler</code>
+ * provides {@link #getPageDeclarationLanguage} as a convenience method
+ * to access the PDL implementation given a <code>viewId</code>.</p>
+ *
  */
 
 public abstract class ViewHandler {
