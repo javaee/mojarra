@@ -196,7 +196,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             // the FaceletViewHandler and .jsp will be handled by
             // the JSP view handler
             if ((extensionsArray == null) && (prefixesArray == null)) {
-                return (viewId.endsWith(".xhtml"));
+                return (viewId.endsWith(ViewHandler.DEFAULT_FACELETS_SUFFIX));
             }
 
             if (extensionsArray != null) {
