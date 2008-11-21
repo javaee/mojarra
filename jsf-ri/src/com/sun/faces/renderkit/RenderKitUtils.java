@@ -328,7 +328,7 @@ public class RenderKitUtils {
         }
     }
 
-    public static String buildAjaxCommand(AjaxBehavior ajaxBehavior) {
+    public static String buildAjaxCommand(AjaxBehavior ajaxBehavior, boolean command) {
         final String AJAX_REQUEST = "jsf.ajaxRequest";
         String ajaxCommand = AJAX_REQUEST + "(this, event";
         if (ajaxBehavior.getExecute() != null ||
@@ -347,7 +347,11 @@ public class RenderKitUtils {
             }
             ajaxCommand += "}";
         }
-        ajaxCommand += "); return false;";
+        if (command) {
+            ajaxCommand += "); return false;";
+        } else {
+            ajaxCommand += ");";
+        }
         return ajaxCommand;
     }
 
@@ -356,6 +360,8 @@ public class RenderKitUtils {
 
 // RELEASE_PENDING - IMPL TEAM - Need to take into account user specified events
 
+        boolean command = false;
+
         AjaxBehavior ajaxBehavior = (AjaxBehavior)component.getAttributes().get(AjaxBehavior.AJAX_BEHAVIOR);
         if (null == ajaxBehavior) {
             return;
@@ -363,11 +369,15 @@ public class RenderKitUtils {
         String event = null;
         if (component instanceof EditableValueHolder) {
             event = "onchange";
+            command = false;
         } else if (component instanceof ActionSource) {
             event = "onclick";
+            command = true;
+        } else {
+            throw new IllegalStateException();            
         }
 
-        String ajaxCommand = buildAjaxCommand(ajaxBehavior);
+        String ajaxCommand = buildAjaxCommand(ajaxBehavior, command);
 
         StringBuffer sb = new StringBuffer(128);
 
