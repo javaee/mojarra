@@ -229,6 +229,12 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                            UIViewRoot viewToRender)
     throws IOException {
 
+        // suppress rendering if "rendered" property on the component is
+        // false
+        if (!viewToRender.isRendered()) {
+            return;
+        }
+
         // log request
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Rendering View: " + viewToRender.getViewId());

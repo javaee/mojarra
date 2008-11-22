@@ -86,8 +86,8 @@ import javax.faces.webapp.pdl.ValueHolderAttachedObjectTarget;
  * <code>ViewHandler</code> interacts the {@link StateManager}. </p>
 
  * <p class="changed_added_2_0">Version 2 of the specification formally
- * introduced the concept of <em>Page Declaration Language</em> (PDL).
- * A Page Declaration Language is a syntax used to declare user
+ * introduced the concept of <em>Page Declaration Language</em>.  A Page
+ * Declaration Language (PDL) is a syntax used to declare user
  * interfaces comprised of instances of JSF {@link UIComponent}s.  Any
  * of the responsibilities of the <code>ViewHandler</code> that
  * specifically deal with the PDL sub-system are now the domain of the
@@ -271,15 +271,6 @@ public abstract class ViewHandler {
      * information from the argument <code>FacesContext</code> and
      * <code>viewId</code>.</p>
      *
-     * <p>If there is an existing <code>ViewRoot</code> available on the
-     * {@link FacesContext}, this method must copy its
-     * <code>locale</code> and <code>renderKitId</code> to this new view
-     * root.  If not, this method must call {@link #calculateLocale} and
-     * {@link #calculateRenderKitId}, and store the results as the
-     * values of the  <code>locale</code> and <code>renderKitId</code>,
-     * proeprties, respectively, of the newly created
-     * <code>UIViewRoot</code>.</p>
-
      * <p class="changed_added_2_0">The default implementation must
      * obtain a reference to the {@link PageDeclarationLanguage} for
      * this <code>viewId</code> and call its {@link
@@ -403,12 +394,10 @@ public abstract class ViewHandler {
      * actions are required to render the response view to the response
      * object associated with the current {@link FacesContext}.</p>
 
-     * <p>The default implementation must return immediately if calling
-     * {@link UIViewRoot#isRendered} return <code>true</code>.</p>
-
-     * <p class="changed_added_2_0">Otherwise, the default implementation
-     * must obtain a reference to the {@link PageDeclarationLanguage}
-     * for this <code>viewId</code> and call its {@link
+     * <p class="changed_added_2_0">Otherwise, the default
+     * implementation must obtain a reference to the {@link
+     * PageDeclarationLanguage} for the <code>viewId</code> of the
+     * argument <code>viewToRender</code> and call its {@link
      * PageDeclarationLanguage#renderView} method, returning the result
      * and not swallowing any exceptions thrown by that method.</p>
      *

@@ -151,11 +151,6 @@ public class MultiViewHandler extends ViewHandler {
 
         Util.notNull("context", context);
         Util.notNull("viewToRender", viewToRender);
-        // suppress rendering if "rendered" property on the component is
-        // false
-        if (!viewToRender.isRendered()) {
-            return;
-        }
 
         pdlFactory.getPageDeclarationLanguage(viewToRender.getViewId())
               .renderView(context, viewToRender);

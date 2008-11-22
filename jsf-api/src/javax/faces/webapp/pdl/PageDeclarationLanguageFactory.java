@@ -46,10 +46,6 @@ import javax.faces.FacesWrapper;
  *
  * <div class="changed_added_2_0">
  * 
- * <p>The default implementation must return a valid 
- * <code>PageDeclarationLanguage</code> instance for views written in either
- * JSP or Facelets.</p>
-
  * <p>There must be one <code>PageDeclarationLanguageFactory</code> instance per web
  * application that is utilizing JavaServer Faces.  This instance can be
  * acquired, in a portable manner, by calling:</p>
@@ -83,7 +79,9 @@ public abstract class PageDeclarationLanguageFactory implements FacesWrapper<Pag
      * <p class="changed_added_2_0">Return the
      * <code>PageDeclarationLanguage</code> instance suitable for
      * handling the PDL contained in the page referenced by the argument
-     * <code>viewId</code></p>
+     * <code>viewId</code>.  The default implementation must return a
+     * valid <code>PageDeclarationLanguage</code> instance for views
+     * written in either JSP or Facelets.</p>
      * 
      * @param viewId the viewId to be inspected for an appropriate 
      * <code>PageDeclarationLanguage</code> implementation for the PDL used

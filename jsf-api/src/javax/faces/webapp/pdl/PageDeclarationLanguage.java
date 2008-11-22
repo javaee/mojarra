@@ -63,30 +63,19 @@ public abstract class PageDeclarationLanguage {
     /**
      * <p class="changed_added_2_0">Return a reference to the component
      * metadata for the composite component represented by the argument
-     * <code>componentResource</code>.  The implementation may share and
-     * pool what it ends up returning from this method to improve
-     * performance.  The implementation must ensure that no per
-     * component-instance information is included in the return.  The
-     * default implementation must support <code>Resource</code> being a
-     * Facelet markup file that is to be interpreted as a composite
-     * component as specified in section 3.6 of the spec prose document.
-     * The default implementation is not required to support
-     * <code>Resource</code> being a JSP markup file.  See section
-     * 3.6.2.1 for the complete specification of the component metadata
-     * that must be returned by the default implementation of this
-     * method.</p>
+     * <code>componentResource</code>, or <code>null</code> if the
+     * metadata cannot be found.  See section 7.6.2 for the
+     * specification of the default implementation.</p>
      *
-     * <p class="changed_added_2_0">This method is called from {@link
-     * javax.faces.application.Application#createComponent(FacesContext,
-     * Resource)} as a result of the PDL implementation encountering a
-     * composite component within a view.</p>
-     *
-     *
-     * </div>
-     * 
      * @param context The <code>FacesContext</code> for this request.
      * @param componentResource The <code>Resource</code> that represents the component.
      * @since 2.0
+     *
+     * @throws NullPointerException if any of the arguments are
+     * <code>null</code>.
+
+     * @throws javax.faces.FacesException if there is an error in
+     * obtaining the metadata
      */
     public abstract BeanInfo getComponentMetadata(FacesContext context, Resource componentResource);
 
@@ -94,41 +83,76 @@ public abstract class PageDeclarationLanguage {
     /**
      * <p class="changed_added_2_0">Take implementation specific action
      * to discover a <code>Resource</code> given the argument
-     * <code>componentResource</code>.  The returned
-     * <code>Resource</code> if non-<code>null</code>, must point to a
-     * script file that can be turned into something that extends {@link
-     * javax.faces.component.UIComponent} and implements {@link
-     * javax.faces.component.NamingContainer}.</p>
-     *
-     * <p class="changed_added_2_0">This method is called from {@link javax.faces.application.Application#createComponent(FacesContext, Resource)}.</p>
+     * <code>componentResource</code>.  See section 7.6.2 for the
+     * specification of the default implementation.</p>
      *
      * @param context The <code>FacesContext</code> for this request.
      * @param componentResource The <code>Resource</code> that represents the component.
      * @since 2.0
+
+     * @throws NullPointerException if any of the arguments are
+     * <code>null</code>.
+
+     * @throws javax.faces.FacesException if there is an error in
+     * obtaining the script component resource
+     *
      */
     public abstract Resource getScriptComponentResource(FacesContext context,
             Resource componentResource);
     
     
-    public abstract UIViewRoot createView(FacesContext ctx,
-                                 String viewId);
-    
-    public abstract UIViewRoot restoreView(FacesContext ctx, String viewId);
-
     /**
-     * <p class="changed_added_2_0">Cause the view to be traversed for
-     * rendering.  PENDING(edburns): need more specifics.  For JSP, this
-     * means taking the action necessary in section 7.5.2.  For
-     * Facelets, the following assertions apply.</p>
-
-     * <p>The unique id constraint is applied.</p>
-
-     * <p>FaceletFactory and Facelet.apply() are called.</p>
+     * <p class="changed_added_2_0">Create a <code>UIViewRoot</code>
+     * from the PDL contained in the artifact referenced by the argument
+     * <code>viewId</code>.  See section 7.6.2 for the specification of
+     * the default implementation.</p>
      *
+     * @param context the <code>FacesContext</code> for this request.
+     * @param viewId the identifier of an artifact that contains the PDL
+     * syntax that describes this view.
+     *
+     * @throws NullPointerException if any of the arguments are
+     * <code>null</code>
+
      * @since 2.0
      */
+
+    public abstract UIViewRoot createView(FacesContext context,
+                                 String viewId);
     
-    public abstract void renderView(FacesContext ctx,
+    /**
+     * <p class="changed_added_2_0">Restore a <code>UIViewRoot</code>
+     * from a previously created view.  See section 7.6.2 for the
+     * specification of the default implementation.</p>
+     *
+     * @param context the <code>FacesContext</code> for this request.
+     * @param viewId the identifier for a previously rendered view.
+     *
+     * @throws NullPointerException if any of the arguments are
+     * <code>null</code>
+
+     * @since 2.0
+     */
+
+    public abstract UIViewRoot restoreView(FacesContext context, String viewId);
+
+    
+    /**
+     * <p class="changed_added_2_0">Render a view rooted at
+     * argument<code>view</code>. See section 7.6.2 for the
+     * specification of the default implementation.</p>
+     *
+     * @param context the <code>FacesContext</code> for this request.
+     * @param view the <code>UIViewRoot</code> from an early call to
+     * {@link #createView} or {@link #restoreView}.
+     *
+     * @throws NullPointerException if any of the arguments are
+     * <code>null</code>
+
+     * @since 2.0
+     */
+
+    public abstract void renderView(FacesContext context,
                                     UIViewRoot view)
     throws IOException;
     
