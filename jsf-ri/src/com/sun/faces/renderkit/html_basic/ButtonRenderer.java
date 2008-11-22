@@ -159,15 +159,18 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
 
+        RenderKitUtils.renderOnclick(context, component, params);
+        
+
         /*
          * If we have any parameters, and the button type is submit, then
          * use Javascript to add these parameters in onclick,
          * just like CommandLink.  Otherwise, render the onclick unchanged, if present.
          */
-        renderOnClick(context, component, (!Arrays.equals(params,EMPTY_PARAMS) && type.equals("submit")));
+        //renderOnClick(context, component, (!Arrays.equals(params,EMPTY_PARAMS) && type.equals("submit")));
 
-        // PENDING - This needs to be moved into "renderOnClick"
-        RenderKitUtils.renderAjaxCommand(writer, component);
+        // RELEASE_PENDING - This needs to be moved into "renderOnClick"
+        //RenderKitUtils.renderAjaxCommand(writer, component);
 
         writer.endElement("input");
 
@@ -271,6 +274,8 @@ public class ButtonRenderer extends HtmlBasicRenderer {
     private void renderOnClick(FacesContext context, UIComponent command, boolean usejs)
           throws IOException {
 
+
+        /*
         ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
         String formClientId = RenderKitUtils.getFormClientId(command, context);
@@ -304,7 +309,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             sb.append(RenderKitUtils.getCommandOnClickScript(formClientId,
                                                              commandClientId,
                                                              "",
-                                                             params));
+                                                             params, false));
 
             // we need to finish wrapping the injected js then
             if (userSpecifiedOnclick) {
@@ -317,6 +322,8 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             if (usejs || userSpecifiedOnclick) {
                 writer.writeAttribute("onclick", sb.toString(), "onclick");
             }
+            */
+
     }
 
 } // end of class ButtonRenderer

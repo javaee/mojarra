@@ -263,7 +263,8 @@ public class CommandLinkRenderer extends LinkRenderer {
         return RenderKitUtils.getCommandOnClickScript(formClientId,
                                                           commandClientId,
                                                           target,
-                                                          params);
+                                                          params,
+                                                          false);
 
     }
 

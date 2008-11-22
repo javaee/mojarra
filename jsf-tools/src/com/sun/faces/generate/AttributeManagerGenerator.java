@@ -243,6 +243,11 @@ public class AttributeManagerGenerator extends AbstractGenerator {
                 boolean attributeWritten = false;
                 for (int ii = 0, llen = props.length; ii < llen; ii++) {
                     PropertyBean aBean = props[ii];
+                    //  RELEASE_PENDING - need to change the props.xml instead before ship
+                    // but for now, let's get it working
+                    if (key.contains("Button") && "onchange".equals(aBean.getPropertyName())) {
+                        aBean.setPassThrough(true);
+                    }
                     if (aBean.isPassThrough()) {
                         if ((key.contains("Radio") || "SelectManyCheckbox".equals(key))
                             && ("style".equals(aBean.getPropertyName())

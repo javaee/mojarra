@@ -179,6 +179,9 @@ public class RenderKitUtils {
 
     private static final String SCRIPT_STATE = 
             RIConstants.FACES_PREFIX + "scriptState";
+
+    private static final Param[] EMPTY_PARAMS = new Param[0];
+
     
     // ------------------------------------------------------------ Constructors
 
@@ -328,9 +331,14 @@ public class RenderKitUtils {
         }
     }
 
-    public static String buildAjaxCommand(AjaxBehavior ajaxBehavior, boolean command) {
+    public static String buildAjaxCommand(AjaxBehavior ajaxBehavior, boolean isCommand, boolean isWrapped) {
         final String AJAX_REQUEST = "jsf.ajaxRequest";
-        String ajaxCommand = AJAX_REQUEST + "(this, event";
+        String ajaxCommand = "";
+        if (isWrapped) {
+            ajaxCommand = AJAX_REQUEST + "(ele, evt";
+        } else {
+            ajaxCommand = AJAX_REQUEST + "(this, event";
+        }
         if (ajaxBehavior.getExecute() != null ||
             ajaxBehavior.getRender() != null) {
             ajaxCommand += ", {";
@@ -347,7 +355,7 @@ public class RenderKitUtils {
             }
             ajaxCommand += "}";
         }
-        if (command) {
+        if (isCommand) {
             ajaxCommand += "); return false;";
         } else {
             ajaxCommand += ");";
@@ -355,6 +363,7 @@ public class RenderKitUtils {
         return ajaxCommand;
     }
 
+    /*
     public static void renderAjaxCommand(ResponseWriter writer, UIComponent component)
         throws IOException {
 
@@ -385,6 +394,167 @@ public class RenderKitUtils {
 
         writer.writeAttribute(event, sb.toString(), event);
     }
+    */
+
+    public static void renderOnchange(FacesContext context, UIComponent component)
+        throws IOException {
+
+        boolean isCommand = false;
+        String event = "onchange";
+
+        // is there a user Onchange?
+        boolean userSpecifiedOnchange = false;
+        // do we need to render ajax?
+        boolean renderAjax = false;
+        // String buffer for final output
+        StringBuffer sb;
+        // the ajax command to render
+        String ajaxCommand = "";
+        // the user supplied onchange to render
+        String userOnchange;
+
+        ResponseWriter writer = context.getResponseWriter();
+
+        userOnchange = (String) component.getAttributes().get(event);
+        userSpecifiedOnchange = (userOnchange != null && !"".equals(userOnchange));
+
+        AjaxBehavior ajaxBehavior = (AjaxBehavior)component.getAttributes().get(AjaxBehavior.AJAX_BEHAVIOR);
+        renderAjax = (null != ajaxBehavior);
+        if (!userSpecifiedOnchange && !renderAjax) { // nothing to do
+            return;  // save the effort of creating the StringBuffer
+        }
+
+        if (renderAjax) ajaxCommand = buildAjaxCommand(ajaxBehavior, isCommand, userSpecifiedOnchange);
+
+        sb = new StringBuffer(256);
+
+        if (userSpecifiedOnchange && renderAjax) { // Doing both
+            sb.append("var a=function(){");
+            userOnchange = userOnchange.trim();
+            sb.append(userOnchange);
+            if (userOnchange.charAt(userOnchange.length() - 1) != ';') {
+                sb.append(';');
+            }
+            sb.append("};var b=function(ele,evt){");
+            sb.append(ajaxCommand);
+            sb.append("};return (a()) ? b(this,event) : false;");
+        } else if (userSpecifiedOnchange) { // do one
+            sb.append(userOnchange);
+        } else if (renderAjax) { // do the other
+            sb.append(ajaxCommand);
+        }
+
+        // At last, write out the completed attribute
+        if (userSpecifiedOnchange || renderAjax) {
+            writer.writeAttribute(event, sb.toString(), event);
+        }
+    }
+
+    public static void renderOnclick(FacesContext context, UIComponent component, Param[] params)
+        throws IOException {
+
+        boolean isCommand = true;
+        String event = "onclick";
+
+        // is there a user Onchange?
+        boolean userSpecifiedOnclick = false;
+        // do we need to render ajax?
+        boolean renderAjax = false;
+        // are there parameters to render?
+        boolean renderParams = (!Arrays.equals(params,EMPTY_PARAMS));
+        // String buffer for final output
+        StringBuffer sb;
+        // the ajax command to render
+        String ajaxCommand = "";
+        // the user supplied onchange to render
+        String userOnclick;
+        // Form Id
+        String formClientId = "";
+        // Client Id
+        String componentClientId = "";
+
+
+        if (renderParams) {
+            formClientId = getFormClientId(component, context);
+            componentClientId = component.getClientId(context);
+        }
+        ResponseWriter writer = context.getResponseWriter();
+
+        userOnclick = (String) component.getAttributes().get(event);
+        userSpecifiedOnclick = (userOnclick != null && !"".equals(userOnclick));
+        if (userSpecifiedOnclick) {
+            userOnclick = userOnclick.trim();
+        }
+
+        AjaxBehavior ajaxBehavior = (AjaxBehavior)component.getAttributes().get(AjaxBehavior.AJAX_BEHAVIOR);
+        renderAjax = (null != ajaxBehavior);
+        if (!userSpecifiedOnclick && !renderAjax && !renderParams) { // nothing to do
+            return;  // save the effort of creating the StringBuffer
+        }
+
+        // RELEASE_PENDING How do we handle Params and Ajax together?  Right now, ignore Params
+        //if (renderAjax) ajaxCommand = buildAjaxCommand(ajaxBehavior, isCommand, (userSpecifiedOnclick || renderParams));
+        if (renderAjax) ajaxCommand = buildAjaxCommand(ajaxBehavior, isCommand, userSpecifiedOnclick);
+
+        sb = new StringBuffer(256);
+
+        if (userSpecifiedOnclick && renderAjax) {  // RELEASE_PENDING Ignoring Params here!
+            sb.append("var a=function(){");
+            sb.append(userOnclick);
+            if (userOnclick.charAt(userOnclick.length() - 1) != ';') {
+                sb.append(';');
+            }
+            sb.append("};var b=function(ele,evt){");
+            sb.append(ajaxCommand);
+            sb.append("};return (a()) ? b(this,event) : false;");
+        } else if (userSpecifiedOnclick && renderParams) {
+            sb.append("var a=function(){");
+            sb.append(userOnclick);
+            if (userOnclick.charAt(userOnclick.length() - 1) != ';') {
+                sb.append(';');
+            }
+            sb.append("};var b=function(){");
+            sb.append(getCommandOnClickScript(formClientId,
+                                              componentClientId,
+                                              "",
+                                              params,
+                                              renderAjax));
+            sb.append("};return (a()) ? b() : false;");
+            /*  RELEASE_PENDING Ignoring Params here!
+        } else if (renderAjax && renderParams) {
+            sb.append("var a=function(){");
+            sb.append(getCommandOnClickScript(formClientId,
+                                              componentClientId,
+                                              "",
+                                              params,
+                                              renderAjax));
+            sb.append("};var b=function(){");
+            sb.append(ajaxCommand);
+            sb.append("};return (a()==false) ? false : b();");
+            */
+        } else if (userSpecifiedOnclick) { // do one
+            sb.append(userOnclick);
+            if (userOnclick.charAt(userOnclick.length() - 1) != ';') {
+               sb.append(';');
+            }
+        } else if (renderAjax) { // do one
+            sb.append(ajaxCommand);
+        } else if (renderParams) { // do one
+            sb.append(getCommandOnClickScript(formClientId,
+                                              componentClientId,
+                                              "",
+                                              params,
+                                              renderAjax));
+        }
+
+        // At last, write out the completed attribute
+        if (userSpecifiedOnclick || renderAjax || renderParams) {
+            writer.writeAttribute(event, sb.toString(), event);
+        }
+    }
+
+
+
 
     public static String prefixAttribute(final String attrName,
                                          final ResponseWriter writer) {
@@ -881,7 +1051,8 @@ public class RenderKitUtils {
     public static String getCommandOnClickScript(String formClientId,
                                                      String commandClientId,
                                                      String target,
-                                                     Param[] params) {
+                                                     Param[] params,
+                                                     boolean isAjax) {
 
         StringBuilder sb = new StringBuilder(256);
         sb.append("if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('");
