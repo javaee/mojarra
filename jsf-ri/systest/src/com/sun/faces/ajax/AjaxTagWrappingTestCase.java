@@ -46,7 +46,7 @@ public class AjaxTagWrappingTestCase extends AbstractTestCase {
        Test each component to see that it behaves correctly when used with an Ajax tag
      */
     public void testAjaxTagWrapping() throws Exception {
-        HtmlPage page = getPage("/faces/ajax/ajaxTagWrapping.xhtml");
+        getPage("/faces/ajax/ajaxTagWrapping.xhtml");
         System.out.println("Start ajax tag wrapping test");
 
         // First we'll check the first page was output correctly
@@ -55,15 +55,15 @@ public class AjaxTagWrappingTestCase extends AbstractTestCase {
         assertTrue(check("outtext", ""));
 
         // Submit the ajax request
-        HtmlSubmitInput button1 = (HtmlSubmitInput) page.getHtmlElementById("button1");
-        page = (HtmlPage) button1.click();
+        HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("button1");
+        lastpage = (HtmlPage) button1.click();
 
         // Check that the ajax request succeeds - eventually.
         assertTrue(check("out1","1"));
         System.out.println("Button Checked");
 
         // Check on the text field
-        HtmlTextInput intext = ((HtmlTextInput)page.getHtmlElementById("intext"));
+        HtmlTextInput intext = ((HtmlTextInput)lastpage.getHtmlElementById("intext"));
         intext.focus();
         intext.type("test");
         intext.blur();
@@ -71,7 +71,8 @@ public class AjaxTagWrappingTestCase extends AbstractTestCase {
         assertTrue(check("outtext","test"));
         System.out.println("Text Checked");
 
-        HtmlCheckBoxInput checked = ((HtmlCheckBoxInput)page.getHtmlElementById("checkbox"));
+        // Check on the checkbox
+        HtmlCheckBoxInput checked = ((HtmlCheckBoxInput)lastpage.getHtmlElementById("checkbox"));
         checked.setChecked(true);
 
         assertTrue(check("checkedvalue","true"));
