@@ -73,7 +73,7 @@ public class AjaxTagWrappingTestCase extends AbstractTestCase {
 
         // Check on the checkbox
         HtmlCheckBoxInput checked = ((HtmlCheckBoxInput)lastpage.getHtmlElementById("checkbox"));
-        checked.setChecked(true);
+        lastpage = (HtmlPage)checked.setChecked(true);
 
         assertTrue(check("checkedvalue","true"));
         System.out.println("Boolean Checkbox Checked");
