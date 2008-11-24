@@ -54,51 +54,6 @@ import javax.faces.event.SystemEventListener;
  *  AbortProcessingExceptions caught during standard runtime processing, but
  *  when handle() is called, these Exceptions are logged and not thrown.
  *
- * <p class="changed_added_2_0"><strong>ExceptionHandler</strong> is the
- * central point for handling <em>unexpected</em>
- * <code>Exception</code>s that are thrown during the Faces lifecycle.
- * The <code>ExceptionHandler</code> must not be notified of any
- * <code>Exception</code>s that occur during application startup or
- * shutdown.  <code>ExceptionHandler</code> only deals with
- * <em>unexpected</em> <code>Exception</code>s.  Several places in the
- * Faces specification require an <code>Exception</code> to be thrown as
- * a result of normal lifecycle processing.  The following
- * <em>expected</em> <code>Exception</code>cases <strong>must
- * not</strong> be handled by the <code>ExceptionHandler</code>.</p>
- *
- * <div class="changed_added_2_0">
- *
- * <ul>
- *
- * <li><p>All cases where a {@link
- * javax.faces.validator.ValidatorException} is specified to be
- * thrown or caught</p></li>
- *
- * <li><p>All cases where a {@link
- * javax.faces.convert.ConverterException} is specified to be
- * thrown or caught</p></li>
- *
- * <li><p>The case when an <code>Exception</code> occurs during
- * processing of the {@link
- * javax.faces.component.UIInput#updateModel} method</p></li>
- *
- * <li><p>The case when a <code>MissingResourceException</code>
- * is thrown during the processing of the <code>&lt;f:loadBundle
- * /&gt;</code> tag.</p></li>
- *
- * </ul>
- *
- *
- * <p>All other <code>Exception</code> cases must not be swallowed, and
- * must be allowed to flow up to the {@link
- * javax.faces.lifecycle.Lifecycle#execute} method where the individual
- * lifecycle phases are implemented.  At that point, all
- * <code>Exception</code>s are passed to the
- * <code>ExceptionHandler</code> as described in section 12.3 of the
- * specification prose document.  Any code that is not a part of the
- * core Faces implementation may leverage the
- * <code>ExceptionHandler</code> in one of two ways.</p>
- *
  * <ul>
  *
  * <li><p>Ensuring that <code>Exception</code>s are not caught,
