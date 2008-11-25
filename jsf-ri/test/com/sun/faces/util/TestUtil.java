@@ -111,14 +111,13 @@ public class TestUtil extends ServletFacesTestCase {
             input.setId("testRenderPassthruAttributes");
             input.getAttributes().put("notPresent", "notPresent");
             input.getAttributes().put("onblur", "javascript:f.blur()");
-            input.getAttributes().put("onchange", "javascript:h.change()");
             writer.startElement("input", input);
             RenderKitUtils.renderPassThruAttributes(
                   writer,
                                                     input,
                                                     attrs);
             writer.endElement("input");
-            String expectedResult = " onblur=\"javascript:f.blur()\" onchange=\"javascript:h.change()\"";
+            String expectedResult = " onblur=\"javascript:f.blur()\"";
             assertTrue(sw.toString().contains(expectedResult));
 
             // verify no passthru attributes returns empty string
@@ -127,7 +126,6 @@ public class TestUtil extends ServletFacesTestCase {
                 renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
             getFacesContext().setResponseWriter(writer);
             input.getAttributes().remove("onblur");
-            input.getAttributes().remove("onchange");
             writer.startElement("input", input);
             RenderKitUtils.renderPassThruAttributes(writer, input, attrs);
             writer.endElement("input");
