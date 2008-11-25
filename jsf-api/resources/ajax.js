@@ -221,7 +221,7 @@ jsf.ajaxRequest = function(element, event, options) {
     // "execute" list.  If there were no "execute" ids
     // specified, determine the default.
 
-    var args = new Object();
+    var args = {};
  
     if (typeof(options) === 'undefined' || options === null) {
         options = {};
@@ -281,7 +281,7 @@ jsf.ajaxRequest = function(element, event, options) {
         }
         */
     }
-}
+};
 
 /**
  * <p>Receive an Ajax response from the server.
@@ -412,10 +412,7 @@ jsf.ajaxResponse = function(request) {
         } else {
             var d = utils.$(id);
             if (!d) {
-                throw {
-                    name: 'NotFound',
-                    message: id + 'not found'
-                }
+                throw new Error("jsf.ajaxResponse: "+id+" not found");
             }
             var parent = d.parentNode;
             var temp = document.createElement('div');
@@ -449,7 +446,7 @@ jsf.ajaxResponse = function(request) {
             field.value = state.text || state.data;
         }
     }
-}
+};
 
 /**
  *
