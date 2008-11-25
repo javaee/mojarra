@@ -48,6 +48,7 @@ import javax.el.ELException;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectOne;
+import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
@@ -156,9 +157,9 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
         }
         writer.writeAttribute("name", component.getClientId(context),
                               "clientId");
-        String idString =
-              component.getClientId(context) + NamingContainer.SEPARATOR_CHAR +
-              Integer.toString(itemNumber);
+        String idString = component.getClientId(context)
+                          + UINamingContainer.getSeparatorChar(context)
+                          + Integer.toString(itemNumber);
         writer.writeAttribute("id", idString, "id");
 
 	writer.writeAttribute("value",

@@ -36,13 +36,16 @@
 
 package com.sun.faces.application.view;
 
+import java.beans.BeanInfo;
 import java.io.IOException;
 
+import javax.faces.application.Resource;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.application.ApplicationAssociate;
+import javax.faces.webapp.pdl.PageDeclarationLanguage;
 
 /**
  * <p>
@@ -50,18 +53,20 @@ import com.sun.faces.application.ApplicationAssociate;
  * is to be rendered/restored.
  * <p>
  */
-public abstract class ViewHandlingStrategy {
+public abstract class ViewHandlingStrategy extends PageDeclarationLanguage {
 
     protected boolean responseBufferSizeSet;
     protected int responseBufferSize;
     protected ApplicationAssociate associate;
     protected WebConfiguration webConfig;
+    protected MultiViewHandler multiViewHandler;
 
 
     // ------------------------------------------------------------ Constructors
 
 
-    public ViewHandlingStrategy() {
+    public ViewHandlingStrategy(MultiViewHandler multiViewHandler) {
+        this.multiViewHandler = multiViewHandler;
 
         FacesContext ctx = FacesContext.getCurrentInstance();
         webConfig = WebConfiguration.getInstance(ctx.getExternalContext());
@@ -79,33 +84,7 @@ public abstract class ViewHandlingStrategy {
 
     }
 
-
     // ---------------------------------------------------------- Public Methods
-
-
-    /**
-     *
-     * @param viewId the view ID
-     * @return <code>true</code> if this <code>ViewHandlingStrategy</code>
-     *  handles the the view type represented by <code>viewId</code>
-     */
-    public abstract boolean handlesViewId(String viewId);
-
-
-    /**
-     * <p>
-     * Render the specified view in an implementation dependent manner.
-     * </p>
-     * @param ctx the {@link FacesContext} for the current request
-     * @param vh the {@link MultiViewHandler} that is calling this
-     *  <code>ViewHandlingStrategy</code>
-     * @param view the {@link UIViewRoot} to render
-     * @throws IOException if an error occurs rendering the view
-     */
-    public abstract void renderView(FacesContext ctx,
-                                    MultiViewHandler vh,
-                                    UIViewRoot view)
-    throws IOException;
 
 
     /**
@@ -119,11 +98,12 @@ public abstract class ViewHandlingStrategy {
      * @param viewId the view ID to restore
      * @return thew restored {@link UIViewRoot}
      */
+    
+    @Override
     public UIViewRoot restoreView(FacesContext ctx,
-                                  MultiViewHandler vh,
                                   String viewId) {
 
-        return vh.restoreViewPrivate(ctx, viewId);
+        return multiViewHandler.restoreViewPrivateContract(ctx, viewId);
         
     }
 
@@ -137,12 +117,23 @@ public abstract class ViewHandlingStrategy {
      * @param viewId the view ID to restore
      * @return a new {@link UIViewRoot}
      */
+    @Override
     public UIViewRoot createView(FacesContext ctx,
-                                 MultiViewHandler vh,
                                  String viewId) {
+        UIViewRoot result = null;
+        result = multiViewHandler.createViewPrivateContract(ctx, viewId);
 
-        return vh.createViewPrivate(ctx, viewId);
-
+        return result;
     }
+
+    /**
+     *
+     * @param viewId the view ID
+     * @return <code>true</code> if this <code>ViewHandlingStrategy</code>
+     *  handles the the view type represented by <code>viewId</code>
+     */
+    
+    public abstract boolean handlesViewId(String viewId);
+
 
 }

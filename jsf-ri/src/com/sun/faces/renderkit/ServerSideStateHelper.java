@@ -132,9 +132,7 @@ public class ServerSideStateHelper extends StateHelper {
                 logicalMap.put(idInLogicalMap, actualMap);
             }
 
-            String id = idInLogicalMap
-                        + NamingContainer.SEPARATOR_CHAR
-                        + idInActualMap;
+            String id = idInLogicalMap + ':' + idInActualMap;
             Object[] stateArray = actualMap.get(idInActualMap);
             // reuse the array if possible
             if (stateArray != null) {
@@ -180,7 +178,7 @@ public class ServerSideStateHelper extends StateHelper {
             return null;
         }
 
-        int sep = compoundId.indexOf(NamingContainer.SEPARATOR_CHAR);
+        int sep = compoundId.indexOf(':');
         assert (sep != -1);
         assert (sep < compoundId.length());
 

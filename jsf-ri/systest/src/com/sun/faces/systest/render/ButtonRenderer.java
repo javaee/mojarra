@@ -51,6 +51,7 @@ import javax.faces.component.NamingContainer;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
@@ -212,7 +213,7 @@ public class ButtonRenderer extends Renderer {
         // parameters in the form.
         sb.append(CLEAR_HIDDEN_FIELD_FN_NAME);
         if (formClientId != null) {
-            sb.append("_" + formClientId.replace(NamingContainer.SEPARATOR_CHAR, '_'));
+            sb.append("_").append(formClientId.replace(UINamingContainer.getSeparatorChar(context), '_'));
         }
         sb.append("(this.form.id);");
         // append user specified script for onclick if any.

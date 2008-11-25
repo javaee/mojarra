@@ -90,7 +90,11 @@
         <ant dir="updatecenter" target="updatecenter.clean" />
         <ant dir="updatecenter2" target="updatecenter2.clean" />
     </target>  
-    
+
+    <target name="modules.clean">
+      <call.modules target="clean"/>        
+    </target>
+
     <target name="main" description="Build Mojarra">
         <call.modules target="main"/>
     </target>

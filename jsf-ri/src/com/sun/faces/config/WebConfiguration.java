@@ -195,8 +195,16 @@ public class WebConfiguration {
      * @return the value of the specified parameter
      */
     public String getOptionValue(WebContextInitParameter param) {
+        String result = contextParameters.get(param);
+        
+        if (null == result) {
+            WebContextInitParameter alternate = param.getAlternate();
+            if (null != alternate) {
+                result = contextParameters.get(alternate);
+            }
+        }
 
-        return contextParameters.get(param);
+        return result;
 
     }
 
@@ -705,13 +713,25 @@ public class WebConfiguration {
               "facelets.RESOURCE_RESOLVER",
               ""
         ),
-        FaceletsViewMappings(
+        FaceletsViewMappingsAlias(
               "facelets.VIEW_MAPPINGS",
               ""
         ),
-        FaceletsLibraries(
+        FaceletsViewMappings(
+              "javax.faces.FACELETS_VIEW_MAPPINGS",
+              "",
+              false,
+              FaceletsViewMappingsAlias
+        ),
+        FaceletsLibrariesAlias(
               "facelets.LIBRARIES",
               ""
+        ),
+        FaceletsLibraries(
+              "javax.faces.FACELETS_LIBRARIES",
+              "",
+              false,
+              FaceletsLibrariesAlias
         ),
         FaceletsDecorators(
               "facelets.DECORATORS",
@@ -741,8 +761,7 @@ public class WebConfiguration {
             return qualifiedName;
 
         }
-
-
+        
     // ------------------------------------------------- Package Private Methods
 
 

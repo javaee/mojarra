@@ -53,6 +53,7 @@ import java.util.Iterator;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
+import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
@@ -263,9 +264,9 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         writer.startElement("input", component);
         writer.writeAttribute("name", component.getClientId(context),
                               "clientId");
-        String idString =
-              component.getClientId(context) + NamingContainer.SEPARATOR_CHAR +
-              Integer.toString(itemNumber);
+        String idString = component.getClientId(context)
+                          + UINamingContainer.getSeparatorChar(context)
+                          + Integer.toString(itemNumber);
         writer.writeAttribute("id", idString, "id");
         String valueString = getFormattedValue(context, component,
                                                curItem.getValue(), converter);

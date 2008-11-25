@@ -1,12 +1,10 @@
-package example;
+package switchlist;
 
 import javax.faces.model.ManagedBean;
 import javax.faces.model.SessionScoped;
-import javax.faces.model.SelectItem;
 import javax.faces.event.ActionEvent;
 import java.util.Map;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 
 @ManagedBean(name="listholder")

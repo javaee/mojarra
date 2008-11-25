@@ -51,6 +51,7 @@ import com.sun.faces.util.MessageUtils;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
+import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
@@ -261,8 +262,11 @@ public class FormRenderer extends Renderer {
             requestMap.put(HIDDEN_FIELD_KEY, null);
         }
         String formTarget = (String) component.getAttributes().get("target");
-        renderClearHiddenParamsJavaScript(writer, map, formTarget, 
-            component.getClientId(context));
+        renderClearHiddenParamsJavaScript(context,
+                                          writer,
+                                          map,
+                                          formTarget,
+                                          component.getClientId(context));
     }
 
 
@@ -306,8 +310,12 @@ public class FormRenderer extends Renderer {
      * Generates a JavaScript function to clear all the hidden fields
      * associated with a form and reset the target attribute if necessary.
      */
-    private static void renderClearHiddenParamsJavaScript(ResponseWriter writer,
-        Map formParams, String formTarget, String formName) throws IOException {
+    private static void renderClearHiddenParamsJavaScript(FacesContext ctx,
+                                                          ResponseWriter writer,
+                                                          Map formParams,
+                                                          String formTarget,
+                                                          String formName)
+    throws IOException {
             
          // clear all the hidden field parameters in the form represented by
          // formName.
@@ -316,7 +324,7 @@ public class FormRenderer extends Renderer {
          writer.writeAttribute(SCRIPT_TYPE, "text/javascript", null);
          writer.write("\n<!--");
          writer.write("\nfunction ");
-         String functionName = (CLEAR_HIDDEN_FIELD_FN_NAME + "_" + formName.replace(NamingContainer.SEPARATOR_CHAR, '_')); 
+         String functionName = (CLEAR_HIDDEN_FIELD_FN_NAME + "_" + formName.replace(UINamingContainer.getSeparatorChar(ctx), '_'));
          writer.write(functionName);
          writer.write("(curFormName) {");
          writer.write("\n  var curForm = document.forms[curFormName];"); 

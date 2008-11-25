@@ -36,7 +36,6 @@
 
 package com.sun.faces.renderkit;
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -179,10 +178,10 @@ public class RenderKitUtils {
 
     private static final String SCRIPT_STATE = 
             RIConstants.FACES_PREFIX + "scriptState";
-
+    
     private static final Param[] EMPTY_PARAMS = new Param[0];
 
-    
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -383,7 +382,7 @@ public class RenderKitUtils {
             event = "onclick";
             command = true;
         } else {
-            throw new IllegalStateException();            
+            throw new IllegalStateException();
         }
 
         String ajaxCommand = buildAjaxCommand(ajaxBehavior, command);
@@ -1256,5 +1255,5 @@ public class RenderKitUtils {
 
     // ---------------------------------------------------------- Nested Classes
 
-    
+
 } // END RenderKitUtils

@@ -41,35 +41,19 @@
 package javax.faces.component;
 import java.util.Iterator;
 import java.lang.reflect.InvocationTargetException;
-import javax.faces.FactoryFinder;
-import javax.faces.application.ApplicationFactory;
 import javax.faces.application.FacesMessage;
-import javax.faces.application.ResourceDependency;
-import javax.faces.application.ResourceDependencies;
 import javax.faces.el.ValueBinding;
 import javax.el.ValueExpression;
-import com.sun.faces.mock.MockApplication;
-import com.sun.faces.mock.MockExternalContext;
-import com.sun.faces.mock.MockFacesContext;
-import com.sun.faces.mock.MockHttpServletRequest;
-import com.sun.faces.mock.MockHttpServletResponse;
-import com.sun.faces.mock.MockHttpSession;
-import com.sun.faces.mock.MockLifecycle;
-import com.sun.faces.mock.MockRenderKit;
-import com.sun.faces.mock.MockServletConfig;
-import com.sun.faces.mock.MockServletContext;
 import com.sun.faces.mock.MockValueBinding;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
-import java.util.Collections;
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.faces.FacesException;
-import javax.faces.component.UIComponentTestCase;
 import javax.faces.context.FacesContext;
-import javax.faces.render.RenderKit;
-import javax.faces.render.RenderKitFactory;
 import javax.faces.validator.ValidatorException;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.SystemEventListener;
@@ -79,7 +63,7 @@ import javax.faces.event.BeforeRenderEvent;
 import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.ViewMapCreatedEvent;
-import javax.faces.event.ViewMapDestroyedEvent;
+import javax.faces.event.AfterAddToViewEvent;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -1429,7 +1413,245 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         assertTrue(e.getSource() == c3);
         assertTrue(((UIComponent) e.getSource()).getParent() == c2);
 
+        //ensure events are re-published if the event is added
+        listener.reset();
+        c2.getChildren().remove(c3);
+        c1.getChildren().add(c3);
+        e = listener.getEvent();
+        assertNotNull(e);
+        assertTrue(e.getSource() == c3);
+        assertTrue(((UIComponent) e.getSource()).getParent() == c1);
+
         application.unsubscribeFromEvent(AfterAddToParentEvent.class, listener);
+
+    }
+
+    public void testFacetMapAfterAddViewPublish() {
+
+        QueueingListener listener = new QueueingListener();
+        application.subscribeToEvent(AfterAddToViewEvent.class, listener);
+
+        UIComponent c1 = createComponent();
+        UIComponent c2 = createComponent();
+        UIComponent c3 = createComponent();
+
+        List<SystemEvent> e = listener.getEvents();
+        Map<String,UIComponent> facets = c1.getFacets();
+        facets.put("c2", c2);
+        assertTrue("Expected Event queue size of 0, found: " + e.size(), e.size() == 0);
+
+        UIViewRoot root = new UIViewRoot();
+        root.getChildren().add(c1);
+        assertTrue("Expected Event queue size of 2, found: " + e.size(), e.size() == 2);
+        assertTrue (e.get(0).getSource() == c1);
+        assertTrue (e.get(1).getSource() == c2);
+
+        // remove c1 from the root and add c3 as a facet to c1 - no events should be
+        // published
+        e.clear();
+        root.getChildren().remove(c1);
+        facets = c1.getFacets();
+        facets.put("c3", c3);
+        assertTrue("Expected Event queue size of 0, found: " + e.size(), e.size() == 0);
+
+        // reorganize the facet structure to ensure nested facets work
+        facets.remove("c3");
+        c2.getFacets().put("c3", c3);
+        root.getChildren().add(c1);
+        assertTrue("Expected Event queue size of 3, found: " + e.size(), e.size() == 3);
+        assertTrue (e.get(0).getSource() == c1);
+        assertTrue (e.get(1).getSource() == c2);
+        assertTrue (e.get(2).getSource() == c3);
+
+        e.clear();
+        // ensure clear() method disconnects the facets from the view
+        facets.clear();
+        c2.getFacets().remove("c3");
+        c2.getFacets().put("c3", c3);
+        assertTrue("Expected Event queue size of 0, found: " + e.size(), e.size() == 0);
+
+        application.unsubscribeFromEvent(AfterAddToViewEvent.class, listener);
+
+    }
+
+    public void testChildrenListAfterAddViewPublish() {
+
+        QueueingListener listener = new QueueingListener();
+        application.subscribeToEvent(AfterAddToViewEvent.class, listener);
+
+        UIComponent c1 = createComponent();
+        UIComponent c2 = createComponent();
+        UIComponent c3 = createComponent();
+        UIComponent c4 = createComponent();
+        c1.getChildren().add(c2);
+        List<SystemEvent> e = listener.getEvents();
+        assertTrue(e.isEmpty());
+        c2.getChildren().add(c3);
+        assertTrue(e.isEmpty());
+        UIViewRoot root = new UIViewRoot();
+        root.getChildren().add(c1);
+
+        // sub-tree has been added to the view.  Ensure that subsequent additions
+        // to that sub-tree cause the AfterAddToViewEvent to fire.
+        c2.getChildren().add(c4);
+        assertTrue("Expected Event queue size of 4, found: " + e.size(), e.size() == 4);
+
+        UIComponent[] comps = {
+              c1, c2, c3, c4
+        };
+        for (int i = 0; i < comps.length; i++) {
+            assertTrue("Index " + i + " invalid", e.get(i).getSource() == comps[i]);
+        }
+
+        // remove c1 and it's children from the subview, then remove and
+        // re-add one of the children in the sub-tree.  No event should
+        // be fired
+        e.clear();
+        root.getChildren().remove(c1);
+        c2.getChildren().remove(c4);
+        c2.getChildren().add(c4);
+        assertTrue("AfterAddToView events queued after a sub-tree was removed from the view, and a child added to the sub-view",
+                   e.isEmpty());
+
+        c2.getChildren().remove(c4);
+        c1.getChildren().add(c4);
+        assertTrue("AfterAddToView events queued after a sub-tree was removed from the view, and a child added to the sub-view",
+                   e.isEmpty());
+
+        // re-wire c1 as a child of root and ensure all children get re-notified
+        root.getChildren().add(c1);
+        assertTrue("Expected Event queue size of 4, found: " + e.size(), e.size() == 4);
+
+        for (int i = 0; i < comps.length; i++) {
+            assertTrue("Index " + i + " invalid", e.get(i).getSource() == comps[i]);
+        }
+
+        // validate clearing c1's children (effectively removing them from the view
+        // will result in no events being fired of components are added to any of
+        // the disconnected children.
+        // At this point in the test, c2 and c4 are children of c1, and c3
+        // is a child of c2.
+        c1.getChildren().clear();
+        UIComponent temp = createComponent();
+        e.clear();
+        c2.getChildren().add(temp);
+        assertTrue("AfterAddToView events queued after a sub-tree was removed from the view, and a child added to the sub-view",
+                   e.isEmpty());
+        c2.getChildren().remove(temp);
+        c3.getChildren().add(temp);
+        assertTrue("AfterAddToView events queued after a sub-tree was removed from the view, and a child added to the sub-view",
+                   e.isEmpty());
+        c3.getChildren().remove(temp);
+        c4.getChildren().add(temp);
+        assertTrue("AfterAddToView events queued after a sub-tree was removed from the view, and a child added to the sub-view",
+                   e.isEmpty());
+        c4.getChildren().remove(temp);
+
+        // now add c2 and c4 as children of c1.  This should cause three
+        // events to fire
+        c1.getChildren().add(c2);
+        c1.getChildren().add(c4);
+        assertTrue("Expected Event queue size of 3, found: " + e.size(), e.size() == 3);
+
+        UIComponent[] comps2 = {
+              c2, c3, c4
+        };
+        for (int i = 0; i < comps2.length; i++) {
+            assertTrue("Index " + i + " invalid", e.get(i).getSource() == comps2[i]);
+        }
+
+        // validate add(int, UIComponent) fires events
+        e.clear();
+        c1.getChildren().remove(c4);
+        c1.getChildren().add(0, c4);
+
+        assertTrue(c1.getChildren().get(0) == c4);
+        assertTrue(c1.getChildren().get(1) == c2);
+        assertTrue("Expected Event queue size of 1, found: " + e.size(), e.size() == 1);
+        assertTrue(e.get(0).getSource() == c4);
+
+        // validate addAll(Collection<UIComponent>) fires events
+        e.clear();
+        c1.getChildren().clear();
+        List<UIComponent> children = new ArrayList<UIComponent>(2);
+        Collections.addAll(children, c2, c4);
+        c1.getChildren().addAll(children);
+        assertTrue(c1.getChildren().get(0) == c2);
+        assertTrue(c1.getChildren().get(1) == c4);
+        assertTrue("Expected Event queue size of 3, found: " + e.size(), e.size() == 3);
+        assertTrue(e.get(0).getSource() == c2);
+        assertTrue(e.get(2).getSource() == c4);
+
+        // validate addAll(int, Collection<UIComponent>) fires events
+        e.clear();
+        children = new ArrayList<UIComponent>(2);
+        UIComponent t1 = createComponent();
+        UIComponent t2 = createComponent();
+        Collections.addAll(children, t1, t2);
+        c1.getChildren().addAll(0, children);
+        assertTrue(c1.getChildren().get(0) == t1);
+        assertTrue(c1.getChildren().get(1) == t2);
+        assertTrue(c1.getChildren().get(2) == c2);
+        assertTrue(c1.getChildren().get(3) == c4);
+        assertTrue("Expected Event queue size of 2, found: " + e.size(), e.size() == 2);
+        assertTrue(e.get(0).getSource() == t1);
+        assertTrue(e.get(1).getSource() == t2);
+
+        // validate retainAll(Collection<UIComponent> properly disconnects
+        // the components from the view such that events aren't fired
+        // if children are added to them
+        e.clear();
+        List<UIComponent> retained = new ArrayList<UIComponent>(2);
+        Collections.addAll(retained, c2, c4);
+        c1.getChildren().retainAll(retained);
+        assertTrue(c1.getChildren().size() == 2);
+        assertTrue(c1.getChildren().get(0) == c2);
+        assertTrue(c1.getChildren().get(1) == c4);
+        t1.getChildren().add(t2);
+        assertTrue("Expected Event queue size of 0, found: " + e.size(), e.size() == 0);
+
+        // test set(int, UIComponent) properly fires an event if the parent
+        // the component is being added to is wired to the view
+        e.clear();
+        c1.getChildren().set(0, t1);
+        assertTrue(c1.getChildren().size() == 2);
+        assertTrue(c1.getChildren().get(0) == t1);
+        assertTrue(c1.getChildren().get(1) == c4);
+        assertTrue("Expected Event queue size of 2, found: " + e.size(), e.size() == 2);
+        assertTrue(e.get(0).getSource() == t1);
+        assertTrue(e.get(1).getSource() == t2);
+
+        // c2 was removed by the set operation, so ensure it's marked as
+        // having been removed from the view by ensuring events aren't fired.
+        e.clear();
+        UIComponent t3 = createComponent();
+        c2.getChildren().add(t3);
+        assertTrue("Expected Event queue size of 0, found: " + e.size(), e.size() == 0);        
+
+        application.unsubscribeFromEvent(AfterAddToViewEvent.class, listener);
+
+        // validate Iterator.remove() over c1's children correctly disconnects
+        // the children from the view
+        for(Iterator<UIComponent> i = c1.getChildren().iterator(); i.hasNext(); ) {
+            i.next();
+            i.remove();
+        }
+
+        // at this point, t1 and c4 should be disconnected meaning adding children
+        // to t1, t2, or c4 should result in no events being fired
+        e.clear();
+        t1.getChildren().add(temp);
+        assertTrue("AfterAddToView events queued after a sub-tree was removed from the view, and a child added to the sub-view",
+                   e.isEmpty());
+        t1.getChildren().remove(temp);
+        t2.getChildren().add(temp);
+        assertTrue("AfterAddToView events queued after a sub-tree was removed from the view, and a child added to the sub-view",
+                   e.isEmpty());
+        t2.getChildren().remove(temp);
+        c4.getChildren().add(temp);
+        assertTrue("AfterAddToView events queued after a sub-tree was removed from the view, and a child added to the sub-view",
+                   e.isEmpty());
+        c4.getChildren().remove(temp);
 
     }
 
@@ -1458,7 +1680,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     // --------------------------------------------------------- Private Classes
 
 
-    private static final class Listener implements SystemEventListener {
+    public static final class Listener implements SystemEventListener {
 
         private SystemEvent event;
 
@@ -1477,6 +1699,29 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
         public void reset() {
             event = null;
+        }
+    }
+
+
+    public static final class QueueingListener implements SystemEventListener  {
+
+        private List<SystemEvent> events = new ArrayList<SystemEvent>();
+
+        public void processEvent(SystemEvent event)
+        throws AbortProcessingException {
+            events.add(event);
+        }
+
+        public boolean isListenerForSource(Object source) {
+            return (source instanceof UIComponent);
+        }
+
+        public List<SystemEvent> getEvents() {
+            return events;
+        }
+
+        public void reset() {
+            events.clear();
         }
     }
 

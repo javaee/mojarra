@@ -42,7 +42,8 @@ package javax.faces.component;
 
 
 /**
- * <p><strong>NamingContainer</strong> is an interface that must be
+ * <p><strong class="changed_modified_2_0">NamingContainer</strong> is an 
+ * interface that must be
  * implemented by any {@link UIComponent} that wants to be a naming
  * container.  Naming containers affect the behavior of the
  * {@link UIComponent#findComponent} and {@link UIComponent#getClientId}
@@ -56,8 +57,11 @@ public interface NamingContainer {
 
 
     /**
-     * <p>The separator character used in component identifiers to demarcate
+     * <p class="changed_modified_2_0">The separator character used in 
+     * component identifiers to demarcate
      * navigation to a child naming container.</p>
+     * 
+     * @deprecated use {@link UINamingContainer#getSeparatorChar(javax.faces.context.FacesContext)}
      */
     public static final char SEPARATOR_CHAR = ':';
 

@@ -64,10 +64,9 @@ import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.ContextCallback;
 import javax.faces.component.EditableValueHolder;
-import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIComponentBase;
 import javax.faces.component.UIData;
+import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
@@ -82,7 +81,7 @@ import javax.faces.model.ScalarDataModel;
 import javax.faces.render.Renderer;
 
 
-public class UIRepeat extends UIComponentBase implements NamingContainer {
+public class UIRepeat extends UINamingContainer {
 
     public static final String COMPONENT_TYPE = "facelets.ui.Repeat";
 
@@ -214,7 +213,7 @@ public class UIRepeat extends UIComponentBase implements NamingContainer {
         String id = super.getClientId(faces);
         if (this.index >= 0) {
             id = this.getBuffer().append(id).append(
-                    NamingContainer.SEPARATOR_CHAR).append(this.index)
+                    getSeparatorChar(faces)).append(this.index)
                     .toString();
         }
         return id;
@@ -442,11 +441,11 @@ public class UIRepeat extends UIComponentBase implements NamingContainer {
             return true;
         } else if (clientId.startsWith(id)) {
             int prevIndex = this.index;
-            int idxStart = clientId.indexOf(NamingContainer.SEPARATOR_CHAR, id
+            int idxStart = clientId.indexOf(getSeparatorChar(faces), id
                     .length());
             if (idxStart != -1
                     && Character.isDigit(clientId.charAt(idxStart + 1))) {
-                int idxEnd = clientId.indexOf(NamingContainer.SEPARATOR_CHAR,
+                int idxEnd = clientId.indexOf(getSeparatorChar(faces),
                         idxStart+1);
                 if (idxEnd != -1) {
                     int newIndex = Integer.parseInt(clientId.substring(

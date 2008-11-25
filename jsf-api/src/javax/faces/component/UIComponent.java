@@ -408,7 +408,42 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
     }
 
     // -------------------------------------------------------------- Properties
-    
+
+    private boolean isInView;
+
+
+    /**
+     * RELEASE_PENDING (edburns,rogerk) review docs
+     * <p class="changed_added_2_0"> </p>
+     * @return <code>true</code> if this component is within the view hierarchy
+     *  otherwise <code>false</code>
+     *
+     * @since 2.0
+     */
+    public boolean isInView() {
+        return isInView;
+    }
+
+
+    /**
+     * RELEASE_PENDING (edburns,rogerk) review docs
+     * Updates the status as to whether or not this component is currently within
+     * the view hierarchy.  <strong>This method must
+     * never be called by developers;  a {@link UIComponent}'s internal
+     * implementation will call it as components are added to or
+     * removed from a parent's child <code>List</code> or
+     * facet <code>Map</code></strong>.</p>
+     *
+     * @param isInView flag indicating whether or not this component is within
+     *  the view hierachy
+     *
+     * @since 2.0
+     */
+    public void setInView(boolean isInView) {
+        this.isInView = isInView;
+    }
+
+
     /**
      * <p class="changed_added_2_0">Enable EL to access the <code>clientId</code>
      * of a component.  This is particularly useful in combination with the 
@@ -451,9 +486,9 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * <code>context.getViewRoot().createUniqueId()</code> and assign
      * the result to myId.  If <code>parentId</code> is
      * non-<code>null</code>, let <code>myId</code> equal <code>parentId
-     * + NamingContainer.SEPARATOR_CHAR + myId</code>.  Call {@link
-     * Renderer#convertClientId}, passing <code>myId</code>, and return
-     * the result.</p>
+     * + {@link UINamingContainer#getSeparatorChar} + myId</code>.  Call
+     * {@link Renderer#convertClientId}, passing <code>myId</code>, and
+     * return the result.</p>
      *
      * @param context The {@link FacesContext} for the current request
      *
@@ -540,11 +575,15 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
 
 
     /**
-     * <p>Set the parent <code>UIComponent</code> of this
-     * <code>UIComponent</code>.  <strong>This method must
-     * never be called by developers;  a {@link UIComponent}'s internal
-     * implementation will call it as components are added to or
-     * removed from a parent's child <code>List</code> or
+     * RELEASE_PENDING (edburns,rogerk) review docus
+     * <p class="changed_modified_2_0">Set the parent <code>UIComponent</code> of this
+     * <code>UIComponent</code>.  This method, when called will cause
+     * an {@link javax.faces.event.AfterAddToParentEvent} to be published and
+     * if <code>parent.isInView()</code> returns <code>true</code> an
+     * {@link javax.faces.event.AfterAddToViewEvent} will be published as well.
+     *  <strong>This method must never be called by developers;  a
+     * {@link UIComponent}'s internal implementation will call it as components
+     * are added to or removed from a parent's child <code>List</code> or
      * facet <code>Map</code></strong>.</p>
      *
      * @param parent The new parent, or <code>null</code> for the root node
@@ -958,12 +997,13 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
      * {@link NamingContainer}, whether or not its class actually implements
      * the {@link NamingContainer} interface.</p>
      *
-     * <p>A <em>search expression</em> consists of either an
-     * identifier (which is matched exactly against the <code>id</code>
-     * property of a {@link UIComponent}, or a series of such identifiers
-     * linked by the {@link NamingContainer#SEPARATOR_CHAR} character value.
+     * <p>A <em>search expression</em> consists of either an identifier
+     * (which is matched exactly against the <code>id</code> property of
+     * a {@link UIComponent}, or a series of such identifiers linked by
+     * the {@link UINamingContainer#getSeparatorChar} character value.
      * The search algorithm should operates as follows, though alternate
      * alogrithms may be used as long as the end result is the same:</p>
+
      * <ul>
      * <li>Identify the {@link UIComponent} that will be the base for searching,
      *     by stopping as soon as one of the following conditions is met:
@@ -1016,15 +1056,14 @@ public abstract class UIComponent implements StateHolder, SystemEventListenerHol
     public abstract UIComponent findComponent(String expr);
 
     /**
-     *
      * <p>Starting at this component in the View hierarchy, search for a
      * component with a <code>clientId</code> equal to the argument
      * <code>clientId</code> and, if found, call the {@link
      * ContextCallback#invokeContextCallback} method on the argument
      * <code>callback</code>, passing the current {@link FacesContext}
      * and the found component as arguments. This method is similar to
-     * {@link #findComponent} but it does not support the leading
-     * {@link NamingContainer#SEPARATOR_CHAR} syntax for searching from the
+     * {@link #findComponent} but it does not support the leading {@link
+     * UINamingContainer#getSeparatorChar} syntax for searching from the
      * root of the View.</p>
      *
      * <p>The default implementation will first check if

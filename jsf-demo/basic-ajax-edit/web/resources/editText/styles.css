@@ -35,21 +35,16 @@
 */
 
 .editClass {
-
     font-size: medium;
     font-style: normal;
     font-family: Arial, sans-serif;
 }
-
 .editLink {
-
     font-size: medium;
     font-style: normal;
     font-family: Arial, sans-serif;
 }
-a.editlink:link {text-decoration: none}
-a.editlink:visited {text-decoration: none}
-a.editlink:active {text-decoration: none}
-a.editlink:hover {text-decoration: none; background-color: yellow;}
-    
-}
+a.editLink:link {text-decoration: none}
+a.editLink:visited {text-decoration: none}
+a.editLink:active {text-decoration: none}
+a.editLink:hover {text-decoration: none; background-color: #eeee11;}

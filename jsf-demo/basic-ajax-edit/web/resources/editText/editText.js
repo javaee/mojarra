@@ -64,7 +64,6 @@ function submitButton(componentID, event) {
         jsf.ajaxRequest(document.getElementById(subButton), event, {execute: exec, render: rend});
         edittextdemo[componentID] = document.getElementById(input).value;
     } catch (ex) {
-        // Handle errors here
         alert(ex);
     }
     return false;
@@ -85,9 +84,9 @@ function linkClick(componentID) {
     try {
         var edit1 = componentID + ':edit1';
         var edit2 = componentID + ':edit2';
-        var link = componentID + ':editLink';
+        var editInput = componentID + ':editInput';
         toggle(edit2, edit1);
-        document.getElementById(link).focus();
+        document.getElementById(editInput).focus();
     } catch (ex) {
         alert(ex);
     }

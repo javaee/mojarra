@@ -56,7 +56,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.facelets.impl.PageDeclarationLanguageImpl;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
@@ -68,6 +67,7 @@ import java.util.List;
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
+import javax.faces.FactoryFinder;
 import javax.faces.component.ActionSource2;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
@@ -81,6 +81,7 @@ import javax.faces.webapp.pdl.AttachedObjectHandler;
 import javax.faces.webapp.pdl.AttachedObjectTarget;
 import javax.faces.webapp.pdl.EditableValueHolderAttachedObjectHandler;
 import javax.faces.webapp.pdl.EditableValueHolderAttachedObjectTarget;
+import javax.faces.webapp.pdl.PageDeclarationLanguageFactory;
 import javax.faces.webapp.pdl.ValueHolderAttachedObjectHandler;
 import javax.faces.webapp.pdl.ValueHolderAttachedObjectTarget;
 
@@ -93,13 +94,9 @@ public class MultiViewHandler extends ViewHandler {
     // Log instance for this class
     private static final Logger logger = FacesLogger.APPLICATION.getLogger();
 
-    /**
-     * The {@link ViewHandlingStrategy} instances used by this {@link ViewHandler}.
-     */
-    protected ViewHandlingStrategyManager viewHandlingStrategy;
-    private PageDeclarationLanguage pdl;
-
     private String[] configuredExtensions;
+    
+    private PageDeclarationLanguageFactory pdlFactory;
 
 
     // ------------------------------------------------------------ Constructors
@@ -107,11 +104,15 @@ public class MultiViewHandler extends ViewHandler {
 
     public MultiViewHandler() {
 
-        viewHandlingStrategy = new ViewHandlingStrategyManager();
         WebConfiguration config = WebConfiguration.getInstance();
         String defaultSuffixConfig =
               config.getOptionValue(WebConfiguration.WebContextInitParameter.DefaultSuffix);
         configuredExtensions = Util.split(defaultSuffixConfig, " ");
+        pdlFactory = (PageDeclarationLanguageFactory) 
+                FactoryFinder.getFactory(FactoryFinder.PAGE_DECLARATION_LANGUAGE_FACTORY);
+        if (pdlFactory instanceof PageDeclarationLanguageFactoryImpl) {
+            ((PageDeclarationLanguageFactoryImpl)pdlFactory).setMultiViewHandler(this);
+        }
 
     }
 
@@ -150,14 +151,9 @@ public class MultiViewHandler extends ViewHandler {
 
         Util.notNull("context", context);
         Util.notNull("viewToRender", viewToRender);
-        // suppress rendering if "rendered" property on the component is
-        // false
-        if (!viewToRender.isRendered()) {
-            return;
-        }
 
-        viewHandlingStrategy.getStrategy(viewToRender.getViewId())
-              .renderView(context, this, viewToRender);
+        pdlFactory.getPageDeclarationLanguage(viewToRender.getViewId())
+              .renderView(context, viewToRender);
 
     }
 
@@ -173,8 +169,7 @@ public class MultiViewHandler extends ViewHandler {
 
         Util.notNull("context", context);
 
-        return viewHandlingStrategy.getStrategy(viewId).restoreView(context,
-                                                                    this,
+        return pdlFactory.getPageDeclarationLanguage(viewId).restoreView(context,
                                                                     viewId);
 
     }
@@ -473,8 +468,7 @@ public class MultiViewHandler extends ViewHandler {
 
         Util.notNull("context", context);
 
-        return viewHandlingStrategy.getStrategy(viewId).createView(context,
-                                                                   this,
+        return pdlFactory.getPageDeclarationLanguage(viewId).createView(context,
                                                                    viewId);
     }
 
@@ -647,21 +641,9 @@ public class MultiViewHandler extends ViewHandler {
 
     }
     
-    /*
-     * PENDING(edburns): This is temporary for Public Review Draft.
-     * Really, I think the way to go is to change PageDeclarationLanguage to
-     * to take on all of the mantle of ViewHandlingStrategy, do away with
-     * ViewHandlingStrategy, provide a factory for PageDeclarationLanguage
-     * and specify that the runtime must have a PDL impl for both JSP
-     * and Facelets.
-     */ 
-
     @Override
-    public PageDeclarationLanguage getPageDeclarationLanguage() {
-        if (null == pdl) {
-            pdl = new PageDeclarationLanguageImpl();
-        }
-        return pdl;
+    public PageDeclarationLanguage getPageDeclarationLanguage(String viewId) {
+        return pdlFactory.getPageDeclarationLanguage(viewId);
     }
     
     
@@ -683,7 +665,7 @@ public class MultiViewHandler extends ViewHandler {
      *
      * @see ViewHandler#createView(javax.faces.context.FacesContext, String)
      */
-    public UIViewRoot createViewPrivate(FacesContext ctx, String viewId) {
+    UIViewRoot createViewPrivateContract(FacesContext ctx, String viewId) {
 
         Util.notNull("context", ctx);
 
@@ -783,7 +765,7 @@ public class MultiViewHandler extends ViewHandler {
      *
      * @see ViewHandler#restoreView(javax.faces.context.FacesContext, String)
      */
-    public UIViewRoot restoreViewPrivate(FacesContext ctx, String viewId) {
+    UIViewRoot restoreViewPrivateContract(FacesContext ctx, String viewId) {
 
         ExternalContext extContext = ctx.getExternalContext();
 

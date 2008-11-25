@@ -190,8 +190,8 @@ public class UIData extends UIComponentBase
 
 
     /**
-     * <p> Length of the cached <code>baseClientId</code> plus one for the
-     * NamingContainer.SEPARATOR_CHAR. </p>
+     * <p> Length of the cached <code>baseClientId</code> plus one for
+     * the {@link UINamingContainer#getSeparatorChar}. </p>
      *
      * <p>This is not part of the component state.</p>
      */
@@ -720,7 +720,7 @@ public class UIData extends UIComponentBase
         //   our client ID.
         //   - toString() the builder - this result will be our baseClientId
         //     for the duration of the component
-        //   - append SEPARATOR_CHAR to the builder
+        //   - append UINamingContainer.getSeparatorChar() to the builder
         //  If we are nested within another UIData, then:
         //   - create an empty StringBuilder that will be used to build
         //     this instance's ID
@@ -729,7 +729,7 @@ public class UIData extends UIComponentBase
                 clientIdBuilder = new StringBuilder(super.getClientId(context));
                 baseClientId = clientIdBuilder.toString();
                 baseClientIdLength = (baseClientId.length() + 1);
-                clientIdBuilder.append(NamingContainer.SEPARATOR_CHAR);
+                clientIdBuilder.append(UINamingContainer.getSeparatorChar(context));
                 clientIdBuilder.setLength(baseClientIdLength);
             } else {
                 clientIdBuilder = new StringBuilder();
@@ -739,9 +739,10 @@ public class UIData extends UIComponentBase
             String cid;
             if (!isNestedWithinUIData()) {
                 // we're not nested, so the clientIdBuilder is already
-                // primed with clientID + SEPARATOR_CHAR.  Append
-                // the current rowIndex, and toString() the builder.
-                // reset the builder to it's primed state.
+                // primed with clientID +
+                // UINamingContainer.getSeparatorChar().  Append the
+                // current rowIndex, and toString() the builder.  reset
+                // the builder to it's primed state.
                 cid = clientIdBuilder.append(rowIndex).toString();
                 clientIdBuilder.setLength(baseClientIdLength);
             } else {
@@ -750,7 +751,7 @@ public class UIData extends UIComponentBase
                 // for each call by resetting the length to 0 after
                 // the ID has been computed.
                 cid = clientIdBuilder.append(super.getClientId(context))
-                      .append(NamingContainer.SEPARATOR_CHAR).append(rowIndex)
+                      .append(UINamingContainer.getSeparatorChar(context)).append(rowIndex)
                       .toString();
                 clientIdBuilder.setLength(0);
             }
@@ -836,10 +837,11 @@ public class UIData extends UIComponentBase
 
         int lastSep, newRow, savedRowIndex = this.getRowIndex();
         try {
+            char sepChar = UINamingContainer.getSeparatorChar(context);
             // If we need to strip out the rowIndex from our id
             // PENDING(edburns): is this safe with respect to I18N?
-            if (myId.endsWith(NamingContainer.SEPARATOR_CHAR + Integer.toString(savedRowIndex, 10))) {
-                lastSep = myId.lastIndexOf(NamingContainer.SEPARATOR_CHAR);
+            if (myId.endsWith(sepChar + Integer.toString(savedRowIndex, 10))) {
+                lastSep = myId.lastIndexOf(sepChar);
                 assert (-1 != lastSep);
                 myId = myId.substring(0, lastSep);
             }
@@ -853,12 +855,12 @@ public class UIData extends UIComponentBase
                 int preRowIndexSep, postRowIndexSep;
 
                 if (-1 != (preRowIndexSep =
-                      clientId.indexOf(NamingContainer.SEPARATOR_CHAR,
+                      clientId.indexOf(sepChar,
                                        myId.length()))) {
                     // Check the length
                     if (++preRowIndexSep < clientId.length()) {
                         if (-1 != (postRowIndexSep =
-                              clientId.indexOf(NamingContainer.SEPARATOR_CHAR,
+                              clientId.indexOf(sepChar,
                                                preRowIndexSep + 1))) {
                             try {
                                 newRow = Integer

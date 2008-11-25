@@ -1,8 +1,4 @@
 /*
- * $Id: DataModel.java,v 1.20 2007/04/27 22:00:09 ofung Exp $
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
  * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
@@ -38,44 +34,45 @@
  * holder.
  */
 
-package javax.faces.model;
+package com.sun.faces.application.view;
 
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import java.lang.annotation.Inherited;
+import javax.faces.webapp.pdl.PageDeclarationLanguage;
+import javax.faces.webapp.pdl.PageDeclarationLanguageFactory;
 
 /**
- * <p class="changed_added_2_0">Container annotation to specify multiple
- * {@link ManagedBean} annotations on a single class.  Example:</p>
-
- * <pre><code>
-
-    ManagedBeans({
-        ManagedBean(name="bean1",scope="request"),
-        ManagedBean(name="bean2",scope="session")
-    })
-
- * </code></pre>
-
- * <div class="changed_added_2_0">
-
- * <p>The action described in {@link ManagedBean} must be taken for each
- * <code>&#8220;ManagedBean&#8221;</code> present in the container
- * annotation. </p>
-
- * </div>
-
- * @since 2.0
+ *
  */
+public class PageDeclarationLanguageFactoryImpl extends PageDeclarationLanguageFactory {
 
-@Retention(value= RetentionPolicy.RUNTIME)
-@Target(value= ElementType.TYPE)
-@Inherited
-public @interface ManagedBeans {
+    /**
+     * The {@link ViewHandlingStrategy} instances used by this {@link ViewHandler}.
+     */
+    private ViewHandlingStrategyManager viewHandlingStrategy;
+    private MultiViewHandler multiViewHandler;
 
-    ManagedBean[] value();
+
+    public PageDeclarationLanguageFactoryImpl() {
+    }
     
+    private ViewHandlingStrategyManager getViewHandlingStrategyManager() {
+        if (null == viewHandlingStrategy) {
+            viewHandlingStrategy = new ViewHandlingStrategyManager(multiViewHandler);
+        }
+        return viewHandlingStrategy;
+    }
+    
+    @Override
+    public PageDeclarationLanguage getPageDeclarationLanguage(String viewId) {
+        PageDeclarationLanguage result = null;
+        
+        result = getViewHandlingStrategyManager().getStrategy(viewId);
+        
+        return result;
+    }
+
+    void setMultiViewHandler(MultiViewHandler multiViewHandler) {
+        this.multiViewHandler = multiViewHandler;
+    }
+    
+
 }

@@ -249,15 +249,15 @@ public abstract class Application {
     public abstract void setNavigationHandler(NavigationHandler handler);
 
     /**
-     * <p class="changed_added_2_0">Return the {@link PartialTraversal} 
+     * <p class="changed_added_2_0">Return the {@link PartialTraversal}
      * instance that will define the traversal scheme for partial view
      * processing and partial view rendering.</p>
      */
     public abstract PartialTraversal getPartialTraversal();
 
     /**
-     * <p class="changed_added_2_0">Set the {@link PartialTraversal} 
-     * instance that will define the traversal scheme for partial view 
+     * <p class="changed_added_2_0">Set the {@link PartialTraversal}
+     * instance that will define the traversal scheme for partial view
      * processing and partial view rendering.</p>
      *
      * @param traversal The new {@link PartialTraversal} instance
@@ -927,8 +927,11 @@ public abstract class Application {
 
 	  <li><p>Obtain a reference to the {@link
 	  PageDeclarationLanguage} for this <code>Application</code>
-	  instance by calling {@link ViewHandler#getPageDeclarationLanguage}.
-	  </p></li>
+	  instance by calling {@link ViewHandler#getPageDeclarationLanguage},
+     *    passing the <code>viewId</code> found by calling 
+     *    {@link javax.faces.component.UIViewRoot#getViewId} on the 
+     *    {@link javax.faces.component.UIViewRoot} in the argument 
+     *    {@link FacesContext}.</p></li>
 
 
 	  <li><p>Obtain a reference to the <em>composite component
@@ -1024,8 +1027,12 @@ public abstract class Application {
      *
      * @throws FacesException if a {@link UIComponent} from the {@link
      * Resource} cannot be created
+
      * @throws <code>NullPointerException</code> if any parameter is
      * <code>null</code>
+     * 
+     * @throws NullPointerException if unable, for any reason, to obtain a 
+     * <code>PageDeclarationLanguage</code> instance as described above.
      *
      * @since 2.0
      */

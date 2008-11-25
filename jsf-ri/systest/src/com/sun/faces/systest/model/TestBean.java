@@ -55,6 +55,7 @@ import javax.faces.application.Application;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
+import javax.faces.component.UINamingContainer;
 import javax.faces.component.html.HtmlCommandButton;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.context.ExternalContext;
@@ -354,12 +355,13 @@ public enum Color { Red, Blue, Green, Orange }
     output.setValue("<p>==new output==</p>");
     output.setEscape(false);
 
-    UIComponent group = FacesContext.getCurrentInstance().getViewRoot().findComponent("form" + NamingContainer.SEPARATOR_CHAR +  "addHere");
+    FacesContext ctx = FacesContext.getCurrentInstance();
+    UIComponent group = ctx.getViewRoot().findComponent("form" + UINamingContainer.getSeparatorChar(ctx) +  "addHere");
     group.getChildren().add(output);
 
     }
 
-    /**
+    /*
      * replace the propertyResolver with one that does our bidding for
      * this test.
      */
@@ -423,7 +425,7 @@ public enum Color { Red, Blue, Green, Orange }
 
 
 
-    /**
+    /*
      * restore the original PropertyResolver.
      */
 

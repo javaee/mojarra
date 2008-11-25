@@ -157,7 +157,7 @@ public class CompositeComponentTagLibrary extends TagLibraryImpl {
             Resource componentResource) {
         boolean result = false;
 
-        Resource scriptComponentResource = context.getApplication().getViewHandler().getPageDeclarationLanguage().getScriptComponentResource(context, 
+        Resource scriptComponentResource = context.getApplication().getViewHandler().getPageDeclarationLanguage(context.getViewRoot().getViewId()).getScriptComponentResource(context, 
                 componentResource);
         try {
             result = (null != scriptComponentResource) && (null != scriptComponentResource.getInputStream());

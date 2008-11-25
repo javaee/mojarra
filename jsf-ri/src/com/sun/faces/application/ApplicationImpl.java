@@ -112,6 +112,7 @@ import java.beans.BeanInfo;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEventListenerHolder;
+import javax.faces.event.ExceptionEventContext;
 
 import java.util.List;
 import java.util.TimeZone;
@@ -286,12 +287,9 @@ public class ApplicationImpl extends Application {
             // look for and invoke any listeners not specific to the source class
             invokeListenersFor(systemEventClass, event, source, null, false);
         } catch (AbortProcessingException ape) {
-            FacesContext.getCurrentInstance().getApplication().publishEvent(SystemEvent.class, ape);
-            //if (LOGGER.isLoggable(Level.SEVERE)) {
-            //    LOGGER.log(Level.SEVERE,
-            //               ape.getMessage(),
-            //               ape);
-            //}
+            FacesContext ctx = FacesContext.getCurrentInstance();
+            ctx.getApplication().publishEvent(SystemEvent.class,
+                                              new ExceptionEventContext(ctx, ape));
         }
 
     }
@@ -887,7 +885,7 @@ public class ApplicationImpl extends Application {
         // overriden methods
         Application app = context.getApplication();
 
-        PageDeclarationLanguage pdl = app.getViewHandler().getPageDeclarationLanguage();
+        PageDeclarationLanguage pdl = app.getViewHandler().getPageDeclarationLanguage(context.getViewRoot().getViewId());
         BeanInfo componentMetadata = pdl.getComponentMetadata(context,
                                                               componentResource);
         if (null != componentMetadata){

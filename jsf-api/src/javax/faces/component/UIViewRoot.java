@@ -76,6 +76,7 @@ import javax.faces.event.AfterRestoreStateEvent;
 import javax.faces.event.ViewMapCreatedEvent;
 import javax.faces.event.ViewMapDestroyedEvent;
 import javax.faces.event.ExceptionEvent;
+import javax.faces.event.ExceptionEventContext;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -229,6 +230,28 @@ public class UIViewRoot extends UIComponentBase {
 
     // -------------------------------------------------------------- Properties
 
+
+    /**
+     * RELEASE_PENDING (edburns,rogerk) docs
+     * <p class="changed_added_2_0"> </p>
+     * @return <code>true<code> in all cases as any children or facets added
+     *  to the UIViewRoot will automatically be part of the view.  
+     */
+    @Override
+    public boolean isInView() {
+
+        return true;
+
+    }
+
+    /**
+     * RELEASE_PENDING (edburns,rogerk) docs
+     * @param isInView
+     */
+    @Override
+    public void setInView(boolean isInView) {
+        // no-op
+    }
 
     /**
      * @see UIComponent#getFamily()
@@ -722,7 +745,11 @@ public class UIViewRoot extends UIComponentBase {
                         this.pushComponentToEL(context, source);
                         source.broadcast(event);
                     } catch (AbortProcessingException e) {
-                        context.getApplication().publishEvent(ExceptionEvent.class, e);
+                        context.getApplication().publishEvent(ExceptionEvent.class,
+                                                              new ExceptionEventContext(context,
+                                                                                        e,
+                                                                                        source,
+                                                                                        phaseId));
                     }
                     finally {
                         popComponentFromEL(context);
@@ -743,7 +770,11 @@ public class UIViewRoot extends UIComponentBase {
                         source.broadcast(event);
                     } catch (AbortProcessingException ape) {
                         // A "return" here would abort remaining events too
-                        context.getApplication().publishEvent(ExceptionEvent.class, ape);
+                        context.getApplication().publishEvent(ExceptionEvent.class,
+                                                              new ExceptionEventContext(context,
+                                                                                        ape,
+                                                                                        source,
+                                                                                        phaseId));
                     }
                     finally {
                         popComponentFromEL(context);
@@ -830,7 +861,11 @@ public class UIViewRoot extends UIComponentBase {
                     }
                 });
             } catch (AbortProcessingException e) {
-                context.getApplication().publishEvent(ExceptionEvent.class, e);
+                context.getApplication().publishEvent(ExceptionEvent.class,
+                                                      new ExceptionEventContext(context,
+                                                                                e,
+                                                                                null,
+                                                                                PhaseId.RESTORE_VIEW));
             }
         }
 
@@ -841,11 +876,11 @@ public class UIViewRoot extends UIComponentBase {
      * <p class="changed_added_2_0">If {@link
      * javax.faces.context.PartialViewContext#isPartialRequest} returns <code>true</code>,
      * get the {@link javax.faces.application.PartialTraversal} that is defined for the
-     * application.  The {@link javax.faces.application.PartialTraversal} and 
-     * {@link javax.faces.context.PartialViewContext} define how partial view processing 
+     * application.  The {@link javax.faces.application.PartialTraversal} and
+     * {@link javax.faces.context.PartialViewContext} define how partial view processing
      * will be performed.
      * If {@link javax.faces.context.PartialViewContext#isPartialRequest}
-     * returned <code>false</code>, perform <code>processDecodes</code> on all 
+     * returned <code>false</code>, perform <code>processDecodes</code> on all
      * components in the view.</p> 
      * </p>
      * <p class="changed_modified_2_0">Override the default 
@@ -878,7 +913,7 @@ public class UIViewRoot extends UIComponentBase {
                         }
                     }
                 } else {
-                    super.processDecodes(context);
+                super.processDecodes(context);
                 }
                 broadcastEvents(context, PhaseId.APPLY_REQUEST_VALUES);
             }
@@ -889,7 +924,7 @@ public class UIViewRoot extends UIComponentBase {
     }
 
     /**
-     * <p><span class="changed_added_2_0">Override</span> the default 
+     * <p><span class="changed_added_2_0">Override</span> the default
      * {@link UIComponentBase#encodeBegin} behavior.  If
      * {@link #getBeforePhaseListener} returns non-<code>null</code>,
      * invoke it, passing a {@link PhaseEvent} for the {@link
@@ -903,8 +938,8 @@ public class UIViewRoot extends UIComponentBase {
      * <p class="changed_added_2_0">If {@link
      * javax.faces.context.PartialViewContext#isAjaxRequest} returns <code>true</code>,
      * perform partial view rendering as defined by the installed
-     * {@link javax.faces.application.PartialTraversal} strategy. 
-     * </p> 
+     * {@link javax.faces.application.PartialTraversal} strategy.
+     * </p>
      */
     @Override
     public void encodeBegin(FacesContext context) throws IOException {
@@ -920,13 +955,13 @@ public class UIViewRoot extends UIComponentBase {
                     if (LOGGER.isLoggable(Level.SEVERE)) {
                         LOGGER.log(Level.SEVERE,
                                "severe.encodeBegin.traversal_not_defined", "null");
-                    }
-                }
-            } else {
-                super.encodeBegin(context);
-            }
         }
     }
+            } else {
+                super.encodeBegin(context);
+                }
+            }
+            }
 
     /** 
      * <p class="changed_added_2_0">If {@link
@@ -950,22 +985,22 @@ public class UIViewRoot extends UIComponentBase {
                 if (LOGGER.isLoggable(Level.SEVERE)) {
                     LOGGER.log(Level.SEVERE,
                            "severe.encodeChildren.traversal_not_defined", "null");
-                }
+        }
             }
         } else {
-            super.encodeChildren(context);
-        }
+        super.encodeChildren(context);
+    }
     }
 
     /**
-     * <p class="changed_added_2_0">If {@link
+     * <p class="changed_added_2_0">If {@link 
      * javax.faces.context.PartialViewContext#isAjaxRequest} returns <code>true</code>,
      * perform partial view rendering as defined by the installed
      * {@link javax.faces.application.PartialTraversal} strategy.
      * If {@link
      * javax.faces.context.PartialViewContext#isAjaxRequest} returns
-     * <code>false</code>, override the default 
-     * {@link UIComponentBase#encodeEnd} behavior.  If 
+     * <code>false</code>, override the default
+     * {@link UIComponentBase#encodeEnd} behavior.  If
      * {@link #getAfterPhaseListener} returns
      * non-<code>null</code>, invoke it, passing a {@link PhaseEvent}
      * for the {@link PhaseId#RENDER_RESPONSE} phase.  Any errors that
@@ -979,10 +1014,10 @@ public class UIViewRoot extends UIComponentBase {
             if (traversal != null) {
                 traversal.traverse(context, PhaseId.RENDER_RESPONSE, this);
             } else {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
                     LOGGER.log(Level.SEVERE,
                            "severe.encodeEnd.traversal_not_defined", "null");
-                }
+            }
             }
         } else {
             super.encodeEnd(context);
@@ -1116,7 +1151,7 @@ public class UIViewRoot extends UIComponentBase {
      * will be performed.
      * If {@link javax.faces.context.PartialViewContext#isPartialRequest}
      * returned <code>false</code>, perform <code>processValidators</code> on all
-     * components in the view.</p>
+     * components in the view.</p> 
      * </p>
      * <p class="changed_modified_2_0">Override the default 
      * {@link UIComponentBase#processValidators} behavior to broadcast any 
@@ -1148,7 +1183,7 @@ public class UIViewRoot extends UIComponentBase {
                         }
                     }
                 } else {
-                    super.processValidators(context);
+                super.processValidators(context);
                 }
                 broadcastEvents(context, PhaseId.PROCESS_VALIDATIONS);
             }
@@ -1169,7 +1204,7 @@ public class UIViewRoot extends UIComponentBase {
      * returned <code>false</code>, perform <code>processUpdates</code> on all
      * components in the view.</p>
      * </p>
-     * <p class="changed_modified_2_0">Override the default {@link UIComponentBase} 
+     * <p class="changed_modified_2_0">Override the default {@link UIComponentBase}
      * behavior to broadcast any queued events after the default processing or 
      * partial processing has been completed and to clear out any events for 
      * later phases if the event processing for this phase caused 
@@ -1196,10 +1231,10 @@ public class UIViewRoot extends UIComponentBase {
                         if (LOGGER.isLoggable(Level.SEVERE)) {
                             LOGGER.log(Level.SEVERE,
                                    "severe.processValidators.traversal_not_defined", "null");
-                        }          
-                    }   
+                        }
+                    }
                 } else {
-                    super.processUpdates(context);
+                super.processUpdates(context);
                 }
                 broadcastEvents(context, PhaseId.UPDATE_MODEL_VALUES);
             }

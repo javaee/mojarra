@@ -67,6 +67,16 @@ import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.facelets.el.VariableMapperWrapper;
+import com.sun.faces.facelets.tag.composite.CompositeComponentBeanInfo;
+import java.beans.BeanInfo;
+import javax.el.ValueExpression;
+import javax.el.VariableMapper;
+import javax.faces.application.Resource;
+import javax.faces.application.ResourceHandler;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIPanel;
+import javax.faces.webapp.pdl.facelets.FaceletContext;
 
 /**
  * This {@link ViewHandlingStrategy} handles Facelets/PDL-based views.
@@ -83,17 +93,88 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
     // Array of viewId prefixes that should be handled by Facelets
     private String[] prefixesArray;
-
+    
 
     // ------------------------------------------------------------ Constructors
 
 
-    public FaceletViewHandlingStrategy() {
+    public FaceletViewHandlingStrategy(MultiViewHandler multiViewHandler) {
+        super(multiViewHandler);
 
         FacesContext ctx = FacesContext.getCurrentInstance();
         initialize();
 
     }
+    
+    
+
+    @Override
+    public BeanInfo getComponentMetadata(FacesContext context, 
+            Resource compositeComponentResource) {
+        // PENDING this implementation is terribly wasteful.
+        // Must find a better way.
+        CompositeComponentBeanInfo result = null;
+        FaceletContext ctx = (FaceletContext)
+                context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
+        FaceletFactory factory = (FaceletFactory)
+              RequestStateManager.get(context, RequestStateManager.FACELET_FACTORY);
+        VariableMapper orig = ctx.getVariableMapper();
+        UIComponent tmp = context.getApplication().createComponent("javax.faces.NamingContainer");
+        UIPanel facetComponent = (UIPanel)
+                context.getApplication().createComponent("javax.faces.Panel");
+        facetComponent.setRendererType("javax.faces.Group");
+        tmp.getFacets().put(UIComponent.COMPOSITE_FACET_NAME, facetComponent);
+        // We have to put the resource in here just so the classes that eventually
+        // get called by facelets have access to it.
+        tmp.getAttributes().put(Resource.COMPONENT_RESOURCE_KEY, 
+                compositeComponentResource);
+        
+        Facelet f;
+
+        try {
+            f = factory.getFacelet(compositeComponentResource.getURL());
+            VariableMapper wrapper = new VariableMapperWrapper(orig) {
+
+                @Override
+                public ValueExpression resolveVariable(String variable) {
+                    return super.resolveVariable(variable);
+                }
+                
+            };
+            ctx.setVariableMapper(wrapper);
+            f.apply(context, facetComponent);
+        } catch (Exception e) {
+            if (e instanceof FacesException) {
+                throw (FacesException) e;
+            } else {
+                throw new FacesException(e);
+            }
+        }
+        finally {
+            ctx.setVariableMapper(orig);
+        }
+        result = (CompositeComponentBeanInfo) 
+                tmp.getAttributes().get(UIComponent.BEANINFO_KEY);
+        
+        return result;
+    }
+
+    public Resource getScriptComponentResource(FacesContext context,
+            Resource componentResource) {
+        Resource result = null;
+        
+        String resourceName = componentResource.getResourceName();
+        if (resourceName.endsWith(".xhtml")) {
+            resourceName = resourceName.substring(0, 
+                    resourceName.length() - 6) + ".groovy";
+            ResourceHandler resourceHandler = context.getApplication().getResourceHandler();
+            result = resourceHandler.createResource(resourceName, 
+                    componentResource.getLibraryName());
+        }
+        
+        return result;
+    }
+    
 
 
     // --------------------------------------- Methods from ViewHandlingStrategy
@@ -107,6 +188,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      *
      * @see com.sun.faces.config.WebConfiguration.WebContextInitParameter#FaceletsViewMappings
      */
+    @Override
     public boolean handlesViewId(String viewId) {
          if (viewId != null) {
             // If there's no extensions array or prefixes array, then
@@ -114,7 +196,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             // the FaceletViewHandler and .jsp will be handled by
             // the JSP view handler
             if ((extensionsArray == null) && (prefixesArray == null)) {
-                return (viewId.endsWith(".xhtml"));
+                return (viewId.endsWith(ViewHandler.DEFAULT_FACELETS_SUFFIX));
             }
 
             if (extensionsArray != null) {
@@ -144,9 +226,14 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      * @see {@link com.sun.faces.application.view.ViewHandlingStrategy#renderView(javax.faces.context.FacesContext, MultiViewHandler, javax.faces.component.UIViewRoot)}
      */
     public void renderView(FacesContext ctx,
-                           MultiViewHandler vh,
                            UIViewRoot viewToRender)
     throws IOException {
+
+        // suppress rendering if "rendered" property on the component is
+        // false
+        if (!viewToRender.isRendered()) {
+            return;
+        }
 
         // log request
         if (LOGGER.isLoggable(Level.FINE)) {
@@ -190,7 +277,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
         } catch (FileNotFoundException fnfe) {
             this.handleFaceletNotFound(ctx,
-                                       vh,
+                                       multiViewHandler,
                                        viewToRender.getViewId(),
                                        fnfe.getMessage());
         } catch (Exception e) {
@@ -212,24 +299,22 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      */
     @Override
     public UIViewRoot restoreView(FacesContext ctx,
-                                  MultiViewHandler vh,
                                   String viewId) {
 
         if (UIDebug.debugRequest(ctx)) {
             return new UIViewRoot();
         }
 
-        return super.restoreView(ctx, vh, viewId);
+        return multiViewHandler.restoreViewPrivateContract(ctx, viewId);
 
     }
 
 
     @Override
     public UIViewRoot createView(FacesContext ctx,
-                                 MultiViewHandler vh,
                                  String viewId) {
 
-        UIViewRoot root = super.createView(ctx, vh, viewId);
+        UIViewRoot root = multiViewHandler.createViewPrivateContract(ctx, viewId);
         ctx.setViewRoot(root);
         if (root != null) {
             try {
@@ -299,6 +384,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
         String viewMappings = webConfig
               .getOptionValue(WebContextInitParameter.FaceletsViewMappings);
+        if (null == viewMappings) {
+            viewMappings = webConfig
+              .getOptionValue(WebContextInitParameter.FaceletsViewMappingsAlias);
+        }
         if ((viewMappings != null) && (viewMappings.length() > 0)) {
             String[] mappingsArray = Util.split(viewMappings, ";");
 

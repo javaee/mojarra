@@ -105,7 +105,7 @@ public abstract class PartialViewContext {
      * <p class="changed_added_2_0">
      * The value that when used with {@link #PARTIAL_EXECUTE_PARAM_NAME}
      * or {@link #PARTIAL_RENDER_PARAM_NAME} indicates these phases
-     * must be skipped.</p>  
+     * must be skipped.</p>
      *
      * @since 2.0
      */
@@ -239,7 +239,7 @@ public abstract class PartialViewContext {
     /**
      * <p class="changed_added_2_0">
      * Return <code>true</code> if the request parameter
-     * <code>javax.faces.partial</code> or 
+     * <code>javax.faces.partial</code> or
      * <code>javax.faces.partial.ajax</code> is present in the current
      * request.  Otherwise, return <code>false</code>.</p>
      *
@@ -267,7 +267,7 @@ public abstract class PartialViewContext {
      * <p class="changed_added_2_0">
      * Return <code>true</code> if {@link #isAjaxRequest}
      * returns <code>true</code> and {@link #PARTIAL_EXECUTE_PARAM_NAME}
-     * is present in the current request with the value 
+     * is present in the current request with the value
      * {@link #ALL_PARTIAL_PHASE_CLIENT_IDS}.</p>
      * Otherwise, return <code>false</code>.</p>
      *
@@ -282,9 +282,9 @@ public abstract class PartialViewContext {
      * <p class="changed_added_2_0">
      * Return <code>true</code> if {@link #isAjaxRequest}
      * returns <code>true</code> and {@link #PARTIAL_RENDER_PARAM_NAME}
-     * is present in the current request with the value 
+     * is present in the current request with the value
      * {@link #ALL_PARTIAL_PHASE_CLIENT_IDS}.</p>
-     * Otherwise, return <code>false</code>.</p> 
+     * Otherwise, return <code>false</code>.</p>
      *
      * @throws IllegalStateException if this method is called after
      *  this instance has been released

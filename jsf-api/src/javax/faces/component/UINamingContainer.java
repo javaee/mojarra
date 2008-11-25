@@ -40,15 +40,17 @@
 
 package javax.faces.component;
 
+import javax.faces.context.FacesContext;
 
 
 /**
- * <p><strong>UINamingContainer</strong> is a convenience base class for
- * components that wish to implement {@link NamingContainer} functionality.</p>
+ * <p><strong class="changed_modified_2_0">UINamingContainer</strong> is a
+ * convenience base class for components that wish to implement {@link
+ * NamingContainer} functionality.</p>
  */
 
 public class UINamingContainer extends UIComponentBase
-    implements NamingContainer {
+      implements NamingContainer {
 
 
     // ------------------------------------------------------ Manifest Constants
@@ -65,6 +67,14 @@ public class UINamingContainer extends UIComponentBase
      */
     public static final String COMPONENT_FAMILY = "javax.faces.NamingContainer";
 
+    /**
+     * <p class="changed_added_2_0">The context-param that allows the separator
+     * char for clientId strings to be set on a per-web application basis.</p>
+     *
+     * @since 2.0
+     */
+    public static final String SEPARATOR_CHAR_PARAM_NAME =
+          "javax.faces.SEPARATOR_CHAR";
 
     // ------------------------------------------------------------ Constructors
 
@@ -89,5 +99,36 @@ public class UINamingContainer extends UIComponentBase
 
     }
 
+    /**
+     * <p class="changed_added_2_0">Return the character used to separate
+     * segments of a clientId.  The implementation must determine if there is a
+     * &lt;<code>context-param</code>&gt; with the value given by the value of
+     * the symbolic constant {@link #SEPARATOR_CHAR_PARAM_NAME}.  If there is a
+     * value for this param, the first character of the value must be returned
+     * from this method.  Otherwise, the value of the symbolic constant {@link
+     * NamingContainer#SEPARATOR_CHAR} must be returned.</p>
+     *
+     * @param context the {@link FacesContext} for the current request
+     * @since 2.0
+     */
+    public static char getSeparatorChar(FacesContext context) {
+
+
+        Character separatorChar =
+              (Character) context.getAttributes().get(SEPARATOR_CHAR_PARAM_NAME);
+        if (separatorChar == null) {
+            String initParam = context.getExternalContext().getInitParameter(SEPARATOR_CHAR_PARAM_NAME);
+            separatorChar = NamingContainer.SEPARATOR_CHAR;
+            if (initParam != null) {
+                initParam = initParam.trim();
+                if (initParam.length() != 0) {
+                    separatorChar = initParam.charAt(0);
+                }
+            }
+            context.getAttributes().put(SEPARATOR_CHAR_PARAM_NAME, separatorChar);
+        }
+        return separatorChar;
+
+    }
 
 }
