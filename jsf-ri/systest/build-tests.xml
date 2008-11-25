@@ -128,8 +128,8 @@
     <target name="test"
             description="Execute all tests against installed application"
             depends="test.init,
-                test.html.taglib,
                 test.ajax,
+                test.html.taglib,
                 test.prefix.security,
                 test.config,
                 test.interweaving,

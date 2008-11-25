@@ -100,7 +100,7 @@ jsf.AjaxEngine = function() {
     req.onComplete = function onComplete() {
         var status = req.xmlReq.status;
         if ((status !== null && typeof status !== 'undefined' && status !== 0) && (status >= 200 && status < 300)) {
-            jsf.ajaxResponse(req.xmlReq);
+            jsf.ajax.response(req.xmlReq);
         } else {
             jsf.AjaxEngine.sendError(req);
         }

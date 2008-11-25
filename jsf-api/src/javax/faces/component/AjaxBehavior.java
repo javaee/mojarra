@@ -46,7 +46,7 @@ import java.io.Serializable;
  * <p class="changed_added_2_0">An instance of this class is added
  * to an {@link EditableValueHolder} or {@link ActionSource} component's
  * attribute <code>Map</code> to cause the rendering of the 
- * JavaScript <code>jsf.ajaxRequest</code> function call
+ * JavaScript <code>jsf.ajax.request</code> function call
  * when the component is rendered.</p>
  *
  * @since 2.0

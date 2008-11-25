@@ -331,7 +331,7 @@ public class RenderKitUtils {
     }
 
     public static String buildAjaxCommand(AjaxBehavior ajaxBehavior, boolean isCommand, boolean isWrapped) {
-        final String AJAX_REQUEST = "jsf.ajaxRequest";
+        final String AJAX_REQUEST = "jsf.ajax.request";
         String ajaxCommand = "";
         if (isWrapped) {
             ajaxCommand = AJAX_REQUEST + "(ele, evt";

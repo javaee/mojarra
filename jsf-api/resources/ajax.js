@@ -75,6 +75,7 @@ if (javax === null || typeof javax === "undefined") {
 }
 */
 var jsf = jsf || {};
+jsf.ajax = jsf.ajax || {};
 
 /**
  * @name jsf
@@ -164,7 +165,7 @@ jsf.viewState = function(form) {
  * must examine the queue and determine the next request to be sent.  The behavior of the
  * request callback function must be as follows:
  * <ul>
- * <li>If the request completed successfully invoke {@link jsf.ajaxResponse}
+ * <li>If the request completed successfully invoke {@link jsf.ajax.response}
  * passing the <code>request</code> object.</li>
  * <li>If the request did not complete successfully, notify the client.</li>
  * <li>Regardless of the outcome of the request (success or error) every request in the
@@ -199,13 +200,13 @@ jsf.viewState = function(form) {
  * </table>
  * The <code>options</code> argument is optional.
  *
- * @function jsf.ajaxRequest
+ * @function jsf.ajax.request
  * @throws ArgNotSet Error if first required argument <code>element</code> is not specified
  */
-jsf.ajaxRequest = function(element, event, options) {
+jsf.ajax.request = function(element, event, options) {
 
     if (typeof element === 'undefined' || element === null) {
-        throw new Error("jsf.ajaxRequest: Element not set");
+        throw new Error("jsf.ajax.request: Element not set");
     }
 
     // Capture the element that triggered this Ajax request.
@@ -314,13 +315,13 @@ jsf.ajaxRequest = function(element, event, options) {
  *
  * @throws EmptyResponse error if request contains no data
  *
- * @function jsf.ajaxResponse
+ * @function jsf.ajax.response
  */
-jsf.ajaxResponse = function(request) {
+jsf.ajax.response = function(request) {
 
     //  RELEASE_PENDING: We need to add more robust error handing - this error should probably be caught upstream
     if (request === null || typeof request === 'undefined') {
-        throw new Error("jsf.ajaxResponse: Request is null");
+        throw new Error("jsf.ajax.response: Request is null");
     }
 
     var utils = jsf.Utils;
@@ -329,7 +330,7 @@ jsf.ajaxResponse = function(request) {
     var xml = xmlReq.responseXML;
     //  RELEASE_PENDING: We need to add more robust error handing - this error should probably be caught upstream
     if (xml === null) {
-        throw new Error("jsf.ajaxResponse: Reponse contains no data");
+        throw new Error("jsf.ajax.response: Reponse contains no data");
     }
 
     var id, content, markup, str;
@@ -412,7 +413,7 @@ jsf.ajaxResponse = function(request) {
         } else {
             var d = utils.$(id);
             if (!d) {
-                throw new Error("jsf.ajaxResponse: "+id+" not found");
+                throw new Error("jsf.ajax.response: "+id+" not found");
             }
             var parent = d.parentNode;
             var temp = document.createElement('div');
