@@ -74,7 +74,7 @@
 
     <property name="assertion.classes" value="-ea:javax.faces..."/>
     <property name="name" value="jsf-api"/>
-    <property name="Name" value="JavaServer Faces API"/>
+    <property name="DocName" value="JavaServer Faces API"/>
 
     <path id="test.classpath">
         <pathelement location="${build.classes.dir}"/>
@@ -697,10 +697,10 @@ javax.faces.level=ALL
                  private="${javadoc.private}"
                  link="http://java.sun.com/javase/6/docs/api/"
                  protected="${javadoc.protected}"
-                 windowtitle="${Name} (${spec.version})"
+                 windowtitle="${DocName} (${spec.version})"
                  stylesheetfile="${src.dir}/jsf-api.css"
                  source="1.5"
-                 doctitle="${Name} (${spec.version})"
+                 doctitle="${DocName} (${spec.version})"
                  bottom="Copyright &#169; 2002-2008 Sun Microsystems, Inc. All Rights Reserved.">
             <fileset dir="${src.dir}">
                 <include name="**/*.java"/>
