@@ -23,10 +23,10 @@
         <br/>
         <h:outputText id="echo4Out" value="#{ajaxrequest.echo4}"/>
         <br/>
-    <h:commandButton id="refresh" >
+        </h:panelGroup>
+    <h:commandButton id="refresh" value="refresh">
             <f:ajax render="form1:outPanel"/>
             </h:commandButton>
-        </h:panelGroup>
         Explicit parameters:
             <h:inputText id="edit1" value="#{ajaxrequest.echo1}" valueChangeListener="#{ajaxrequest.echoValue}" >
                 <f:ajax execute="form1:edit1" render="form1:edit1" />
