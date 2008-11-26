@@ -5,8 +5,6 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 import com.gargoylesoftware.htmlunit.html.*;
 
-// RELEASE_PENDING - completely refactor code
-
 public class AjaxTagEventWrappingTestCase extends AbstractTestCase {
 
     public AjaxTagEventWrappingTestCase(String name) {
@@ -37,7 +35,7 @@ public class AjaxTagEventWrappingTestCase extends AbstractTestCase {
     }
 
 
-    public void testAjaxTagCount() throws Exception {
+    public void testAjaxTagEventWrapping() throws Exception {
         getPage("/faces/ajax/ajaxTagEventWrapping.xhtml");
         System.out.println("Start ajax tag event wrapping test");
 
