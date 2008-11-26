@@ -362,39 +362,6 @@ public class RenderKitUtils {
         return ajaxCommand;
     }
 
-    /*
-    public static void renderAjaxCommand(ResponseWriter writer, UIComponent component)
-        throws IOException {
-
-// RELEASE_PENDING - IMPL TEAM - Need to take into account user specified events
-
-        boolean command = false;
-
-        AjaxBehavior ajaxBehavior = (AjaxBehavior)component.getAttributes().get(AjaxBehavior.AJAX_BEHAVIOR);
-        if (null == ajaxBehavior) {
-            return;
-        }
-        String event = null;
-        if (component instanceof EditableValueHolder) {
-            event = "onchange";
-            command = false;
-        } else if (component instanceof ActionSource) {
-            event = "onclick";
-            command = true;
-        } else {
-            throw new IllegalStateException();
-        }
-
-        String ajaxCommand = buildAjaxCommand(ajaxBehavior, command);
-
-        StringBuffer sb = new StringBuffer(128);
-
-        sb.append(ajaxCommand);
-
-        writer.writeAttribute(event, sb.toString(), event);
-    }
-    */
-
     public static void renderOnchange(FacesContext context, UIComponent component)
         throws IOException {
 
