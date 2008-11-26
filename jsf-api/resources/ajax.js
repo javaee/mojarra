@@ -92,12 +92,12 @@ jsf.ajax = jsf.ajax || {};
  * accordance with: <a href="http://www.w3.org/TR/html401/interact/forms.html#h-17.13.2">
  * Section 17.13.2 of the HTML Specification</a>.
  *
- * @returns The encoded state for the specified form's input controls.
+ * @returns String The encoded state for the specified form's input controls.
  * @function jsf.viewState
  */
 jsf.viewState = function(form) {
     return jsf.AjaxEngine.serializeForm(form);
-}
+};
 
 /**
  * <p>Send an asynchronous Ajax request to the server.
