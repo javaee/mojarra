@@ -330,36 +330,41 @@ public class RenderKitUtils {
         }
     }
 
-    public static String buildAjaxCommand(AjaxBehavior ajaxBehavior, boolean isCommand, boolean isWrapped) {
+    public static String buildAjaxCommand(AjaxBehavior ajaxBehavior) {
         final String AJAX_REQUEST = "jsf.ajax.request";
-        String ajaxCommand = "";
-        if (isWrapped) {
-            ajaxCommand = AJAX_REQUEST + "(ele, evt";
-        } else {
-            ajaxCommand = AJAX_REQUEST + "(this, event";
+        // Is there already an option written?
+        boolean already = false;
+        StringBuilder ajaxCommand = new StringBuilder(256);
+        String execute = ajaxBehavior.getExecute();
+        String render = ajaxBehavior.getRender();
+        ajaxCommand.append(AJAX_REQUEST);
+        ajaxCommand.append("(this, event");
+        if (execute != null || render != null) {
+            ajaxCommand.append(", {");
         }
-        if (ajaxBehavior.getExecute() != null ||
-            ajaxBehavior.getRender() != null) {
-            ajaxCommand += ", {";
-            if (ajaxBehavior.getExecute() != null) {
-                String executeValues = ajaxBehavior.getExecute().replace(' ', ',');
-                ajaxCommand += "execute:'" + executeValues + "'";
-                if (ajaxBehavior.getRender() != null) {
-                    String renderValues = ajaxBehavior.getRender().replace(' ', ',');
-                    ajaxCommand += ",render:'" + renderValues + "'";
-                }
-            } else if (ajaxBehavior.getRender() != null) {
-                String renderValues = ajaxBehavior.getRender().replace(' ', ',');
-                ajaxCommand += "render:'" + renderValues + "'";
+        if (execute != null) {
+            already = true;
+            ajaxCommand.append("execute:'");
+            ajaxCommand.append(execute.replace(' ', ','));
+            ajaxCommand.append("'");
+        }
+        if (render != null) {
+            if (already) {
+                ajaxCommand.append(",");
+            } else {
+                already = true;
             }
-            ajaxCommand += "}";
+            ajaxCommand.append("render:'");
+            ajaxCommand.append(render.replace(' ', ','));
+            ajaxCommand.append("'");
         }
-        if (isCommand) {
-            ajaxCommand += "); return false;";
-        } else {
-            ajaxCommand += ");";
+        if (already) {
+            ajaxCommand.append("}");
         }
-        return ajaxCommand;
+
+        ajaxCommand.append(");");
+
+        return ajaxCommand.toString();
     }
 
     public static void renderOnchange(FacesContext context, UIComponent component)
@@ -390,20 +395,23 @@ public class RenderKitUtils {
             return;  // save the effort of creating the StringBuffer
         }
 
-        if (renderAjax) ajaxCommand = buildAjaxCommand(ajaxBehavior, isCommand, userSpecifiedOnchange);
+        if (renderAjax) ajaxCommand = buildAjaxCommand(ajaxBehavior);
 
         sb = new StringBuffer(256);
 
         if (userSpecifiedOnchange && renderAjax) { // Doing both
-            sb.append("var a=function(){");
+            // RELEASE_PENDING driscoll this should use the jsfcbk function, move the detection
+            // into the relevant components, or figure something better out
+            sb.append("function jsfchbk(f, t, e) {t._jsfchbk = f;return t._jsfchbk(e);};");
+            sb.append("var a=function(event){");
             userOnchange = userOnchange.trim();
             sb.append(userOnchange);
             if (userOnchange.charAt(userOnchange.length() - 1) != ';') {
                 sb.append(';');
             }
-            sb.append("};var b=function(ele,evt){");
+            sb.append("};var b=function(event){");
             sb.append(ajaxCommand);
-            sb.append("};return (a()) ? b(this,event) : false;");
+            sb.append("};return jsfchbk(a,this,event) ? jsfchbk(b,this,event) : false;");
         } else if (userSpecifiedOnchange) { // do one
             sb.append(userOnchange);
         } else if (renderAjax) { // do the other
@@ -416,7 +424,7 @@ public class RenderKitUtils {
         }
     }
 
-    public static void renderOnclick(FacesContext context, UIComponent component, Param[] params)
+    public static void renderOnclick(FacesContext context, UIComponent component, Param[] params, AjaxBehavior ajaxBehavior)
         throws IOException {
 
         boolean isCommand = true;
@@ -425,7 +433,7 @@ public class RenderKitUtils {
         // is there a user Onchange?
         boolean userSpecifiedOnclick = false;
         // do we need to render ajax?
-        boolean renderAjax = false;
+        boolean renderAjax = (null != ajaxBehavior);
         // are there parameters to render?
         boolean renderParams = (!Arrays.equals(params,EMPTY_PARAMS));
         // String buffer for final output
@@ -452,52 +460,64 @@ public class RenderKitUtils {
             userOnclick = userOnclick.trim();
         }
 
-        AjaxBehavior ajaxBehavior = (AjaxBehavior)component.getAttributes().get(AjaxBehavior.AJAX_BEHAVIOR);
-        renderAjax = (null != ajaxBehavior);
         if (!userSpecifiedOnclick && !renderAjax && !renderParams) { // nothing to do
             return;  // save the effort of creating the StringBuffer
         }
 
-        // RELEASE_PENDING How do we handle Params and Ajax together?  Right now, ignore Params
-        //if (renderAjax) ajaxCommand = buildAjaxCommand(ajaxBehavior, isCommand, (userSpecifiedOnclick || renderParams));
-        if (renderAjax) ajaxCommand = buildAjaxCommand(ajaxBehavior, isCommand, userSpecifiedOnclick);
+        if (renderAjax) ajaxCommand = buildAjaxCommand(ajaxBehavior);
 
         sb = new StringBuffer(256);
 
-        if (userSpecifiedOnclick && renderAjax) {  // RELEASE_PENDING Ignoring Params here!
-            sb.append("var a=function(){");
+        if (userSpecifiedOnclick && renderAjax && renderParams) {
+            sb.append("var a=function(event){");
             sb.append(userOnclick);
             if (userOnclick.charAt(userOnclick.length() - 1) != ';') {
                 sb.append(';');
             }
-            sb.append("};var b=function(ele,evt){");
+            sb.append("};var b=function(event){");
             sb.append(ajaxCommand);
-            sb.append("};return (a()) ? b(this,event) : false;");
+            sb.append("};if (jsfcbk(a,this,event)===false) { return false;}else{");
+            sb.append("apf(document.getElementById('");
+            sb.append(formClientId);
+            sb.append("'),");
+            sb.append(renderParams(componentClientId,params));
+            sb.append(");jsfcbk(b,this,event); dpf(document.getElementById('");
+            sb.append(formClientId);
+            sb.append("'));return false}");
+
+        } else if (userSpecifiedOnclick && renderAjax) {
+            sb.append("var a=function(event){");
+            sb.append(userOnclick);
+            if (userOnclick.charAt(userOnclick.length() - 1) != ';') {
+                sb.append(';');
+            }
+            sb.append("};var b=function(event){");
+            sb.append(ajaxCommand);
+            sb.append("return false;");
+            sb.append("};return (jsfcbk(a,this,event)===false) ? false : jsfcbk(b,this,event);");
         } else if (userSpecifiedOnclick && renderParams) {
-            sb.append("var a=function(){");
+            sb.append("var a=function(event){");
             sb.append(userOnclick);
             if (userOnclick.charAt(userOnclick.length() - 1) != ';') {
                 sb.append(';');
             }
-            sb.append("};var b=function(){");
+            sb.append("};var b=function(event){");
             sb.append(getCommandOnClickScript(formClientId,
                                               componentClientId,
                                               "",
                                               params,
                                               renderAjax));
-            sb.append("};return (a()) ? b() : false;");
-            /*  RELEASE_PENDING Ignoring Params here!
+            sb.append("};return (jsfcbk(a,this,event)===false) ? false : jsfcbk(b,this,event);");
         } else if (renderAjax && renderParams) {
-            sb.append("var a=function(){");
-            sb.append(getCommandOnClickScript(formClientId,
-                                              componentClientId,
-                                              "",
-                                              params,
-                                              renderAjax));
-            sb.append("};var b=function(){");
+            sb.append("var a=function(event){");
             sb.append(ajaxCommand);
-            sb.append("};return (a()==false) ? false : b();");
-            */
+            sb.append("};apf(document.getElementById('");
+            sb.append(formClientId);
+            sb.append("'),");
+            sb.append(renderParams(componentClientId,params));
+            sb.append(");jsfcbk(a,this,event); dpf(document.getElementById('");
+            sb.append(formClientId);
+            sb.append("')); return false;");
         } else if (userSpecifiedOnclick) { // do one
             sb.append(userOnclick);
             if (userOnclick.charAt(userOnclick.length() - 1) != ';') {
@@ -505,6 +525,7 @@ public class RenderKitUtils {
             }
         } else if (renderAjax) { // do one
             sb.append(ajaxCommand);
+            sb.append("return false;");
         } else if (renderParams) { // do one
             sb.append(getCommandOnClickScript(formClientId,
                                               componentClientId,
@@ -1021,9 +1042,23 @@ public class RenderKitUtils {
                                                      boolean isAjax) {
 
         StringBuilder sb = new StringBuilder(256);
-        sb.append("if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('");
+        sb.append("jsfcljs(document.getElementById('");
         sb.append(formClientId);
-        sb.append("'),{'");
+        sb.append("'),");
+        sb.append(renderParams(commandClientId, params));
+        sb.append(",'");
+        sb.append(target);
+        sb.append("');return false");
+
+        return sb.toString();
+    }
+
+    /*
+     *
+     */
+    private static String renderParams(String commandClientId, Param[] params) {
+        StringBuilder sb = new StringBuilder(128);
+        sb.append("{'");
         sb.append(commandClientId).append("':'").append(commandClientId);
         for (Param param : params) {
             String pn = param.name;
@@ -1037,14 +1072,9 @@ public class RenderKitUtils {
                 }
             }
         }
-        sb.append("'},'");
-        sb.append(target);
-        sb.append("');}return false");
-
+        sb.append("'}");
         return sb.toString();
-
     }
-
 
     /**
      * <p>This is a utility method for compressing multi-lined javascript.

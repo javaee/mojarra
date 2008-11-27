@@ -49,6 +49,7 @@ import java.util.logging.Level;
 
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
+import javax.faces.component.AjaxBehavior;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
@@ -117,12 +118,16 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         }
 
         /*
-         * If we have any parameters, and the button type is submit, then
+         * If we have any parameters, or an ajax command, and the button type is submit or button, then
          * render Javascript to use later.
+         * RELEASE_PENDING this logic is wrong - we should also check if there's a user onclick,
+         * and do the right thing.  Leaving it for when we decide how to do script injection.
          */
         Param params[] = getParamList(component);
-        if (!Arrays.equals(params,EMPTY_PARAMS)
-                && type.equals("submit")) {
+        AjaxBehavior ajaxBehavior = (AjaxBehavior)component.getAttributes().get(AjaxBehavior.AJAX_BEHAVIOR);
+        boolean renderAjax = (null != ajaxBehavior);
+        if ((renderAjax || !Arrays.equals(params,EMPTY_PARAMS))
+                && (type.equals("submit") || type.equals("button"))) {
             if (!RenderKitUtils.hasScriptBeenRendered(context)) {
                 RenderKitUtils
                       .renderFormInitScript(
@@ -159,18 +164,8 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
 
-        RenderKitUtils.renderOnclick(context, component, params);
-        
+        RenderKitUtils.renderOnclick(context, component, params, ajaxBehavior);
 
-        /*
-         * If we have any parameters, and the button type is submit, then
-         * use Javascript to add these parameters in onclick,
-         * just like CommandLink.  Otherwise, render the onclick unchanged, if present.
-         */
-        //renderOnClick(context, component, (!Arrays.equals(params,EMPTY_PARAMS) && type.equals("submit")));
-
-        // RELEASE_PENDING - This needs to be moved into "renderOnClick"
-        //RenderKitUtils.renderAjaxCommand(writer, component);
 
         writer.endElement("input");
 

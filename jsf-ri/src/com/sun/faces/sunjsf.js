@@ -105,3 +105,17 @@ function jsfcljs(f, pvp, t) {
     dpf(f);    
 };
 
+/*
+ * This is called by functions that need access to their calling
+ * context, in the form of <code>this</code> and <code>event</code>
+ * objects.
+ *
+ *  @param f the function to execute
+ *  @param t this of the calling function
+ *  @param e event of the calling function
+ *  @return object that f returns
+ */
+function jsfcbk(f, t, e) {
+    t._jsfcbk = f;
+    return t._jsfcbk(e);
+};

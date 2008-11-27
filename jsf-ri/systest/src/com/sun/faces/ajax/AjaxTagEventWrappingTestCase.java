@@ -89,7 +89,50 @@ public class AjaxTagEventWrappingTestCase extends AbstractTestCase {
         assertTrue(check("paramOut",""));
         assertTrue(check("out2","1"));
 
-        // RELEASE_PENDING leaving out buttons 5,6 and 7, until param issue settled
+        // Press Count and Param
+        button = (HtmlSubmitInput) lastpage.getHtmlElementById("button5");
+        lastpage = (HtmlPage) button.click();
+
+        assertTrue(check("out1","2"));
+        assertTrue(check("say","init"));
+        assertTrue(check("paramOut","testval"));
+        assertTrue(check("out2","1"));
+
+        // Reset Page
+        button = (HtmlSubmitInput) lastpage.getHtmlElementById("reset");
+        lastpage = (HtmlPage) button.click();
+        button = (HtmlSubmitInput) lastpage.getHtmlElementById("reload");
+        lastpage = (HtmlPage) button.click();
+
+        // Check initial values
+        assertTrue(check("out1","0"));
+        assertTrue(check("say","init"));
+        assertTrue(check("paramOut",""));
+        assertTrue(check("out2","1"));
+
+        // Press Count and Say and Param
+        button = (HtmlSubmitInput) lastpage.getHtmlElementById("button6");
+        lastpage = (HtmlPage) button.click();
+
+        assertTrue(check("out1","2"));
+        assertTrue(check("say","1"));
+        assertTrue(check("paramOut","testval"));
+        assertTrue(check("out2","1"));
+
+        // leaving out button 7
+
+        // Reset Page
+        button = (HtmlSubmitInput) lastpage.getHtmlElementById("reset");
+        lastpage = (HtmlPage) button.click();
+        button = (HtmlSubmitInput) lastpage.getHtmlElementById("reload");
+        lastpage = (HtmlPage) button.click();
+
+        // Check initial values
+        assertTrue(check("out1","0"));
+        assertTrue(check("say","init"));
+        assertTrue(check("paramOut",""));
+        assertTrue(check("out2","1"));
+
 
         // Check ajax checkbox
         HtmlCheckBoxInput checked = ((HtmlCheckBoxInput)lastpage.getHtmlElementById("checkbox1"));

@@ -34,7 +34,7 @@
         <br/>
         <h:commandButton id="button3" value="Count and Say"
                 onclick="say();return true;">
-            <f:ajax render="out1"/>
+            <f:ajax render="out1 paramOut"/>
         </h:commandButton>
         <br/>
         <h:commandButton id="button4" value="Param">
@@ -43,13 +43,13 @@
         <br/>
         <h:commandButton id="button5" value="Count and Param">
             <f:param name="testname" value="testval"/>
-            <f:ajax render="out1"/>
+            <f:ajax render="out1 paramOut"/>
         </h:commandButton>
         <br/>
         <h:commandButton id="button6" value="Count and Say and Param"
                 onclick="say();return true;">
             <f:param name="testname" value="testval"/>
-            <f:ajax render="out1"/>
+            <f:ajax render="out1 paramOut"/>
         </h:commandButton>
         <br/>
         <h:commandButton id="button7" value="Say and Param"
