@@ -44,20 +44,23 @@ import javax.faces.event.SystemEventListener;
 
 
 /**
- * RELEASE_PENDING (edburns,rogerk) I wonder if it might make more
- *  sense to have the default behavior language in the spec pdf instead
- *  of cluttering the javadocs of an abstract class.  People who extend
- *  this class don't care about the default implementation.  It should define
- *  the general contract that all implementations of ExceptionHandler should
- *  follow in order to work proprely in the runtime.
- *  Also, note that the spec should state that the implementation, should queue
- *  AbortProcessingExceptions caught during standard runtime processing, but
- *  when handle() is called, these Exceptions are logged and not thrown.
+ * <p class="changed_added_2_0"><strong>ExceptionHandler</strong> is the
+ * central point for handling <em>unexpected</em>
+ * <code>Exception</code>s that are thrown during the Faces
+ * lifecycle. The <code>ExceptionHandler</code> must not be notified of
+ * any <code>Exception</code>s that occur during application startup or
+ * shutdown.</p>
+
+ * <div class="changed_added_2_0">
+ *
+ * <p>See the specification prose document for the requirements for the
+ * default implementation.  <code>Exception</code>s may be passed to the
+ * <code>ExceptionHandler</code> in one of two ways:</p>
  *
  * <ul>
  *
- * <li><p>Ensuring that <code>Exception</code>s are not caught,
- * or are caught and re-thrown.</p>
+ * <li><p>by ensuring that <code>Exception</code>s are not caught, or
+ * are caught and re-thrown.</p>
  *
  *         <p>This approach allows the <code>ExceptionHandler</code>
  *         facility specified in section 12.3 to operate on the
@@ -65,7 +68,7 @@ import javax.faces.event.SystemEventListener;
  *
  *         </li>
  *
- * <li><p>Using the system event facility to publish an {@link
+ * <li><p>By using the system event facility to publish an {@link
  * ExceptionEvent} that wraps the <code>Exception</code>.</p>
  *
  *         <p>This approach requires manually publishing the {@link
@@ -97,9 +100,10 @@ import javax.faces.event.SystemEventListener;
  * that are published in this way are accessible to the {@link #handle}
  * method, which is called at the end of each lifecycle phase, as
  * specified in section 12.3.</p>
- *
- * <p>The behavior of the default <code>ExceptionHandler</code> is
- * specified in the documentation for the methods in this class.</p>
+
+ * <p>Instances of this class are request scoped and are created by
+ * virtue of {@link FacesContextFactory#getFacesContext} calling {@link
+ * ExceptionHandlerFactory#getExceptionHandler}.</p>
  *
  * </div>
  *
@@ -108,61 +112,33 @@ import javax.faces.event.SystemEventListener;
 public abstract class ExceptionHandler implements SystemEventListener {
 
    /**
-    * RELEASE_PENDING (edburns,roger) This needs further clarification.
-    *  the handle method will, when called, process *all* unhandled
-    *  ExceptionEvents in the order they were queued.  The docs should
-    *  probably state thus instead of "must take the first ExceptionEvent
-    *  queued"  The "handled" exception will be the first exception that isn't
-    *  swallowed.  The first queued exception, in the default implementation
-    *  may not be thrown (i.e. AbortProcessingExceptions are queued but not
-    *  thrown giving developers a chance to handle them)
+    * <p class="changed_added_2_0">Take action to handle the
+    * <code>Exception</code> instances residing inside the {@link
+    * ExceptionEvent} instances that have been queued by calls to
+    * <code>Application().publishEvent(ExceptionEvent.class,
+    * <em>eventContext</em>)</code>.  The requirements of the default
+    * implementation are detailed in section 6.2.1.</p>
+
+    * @throws FacesException if and only if a problem occurs while
+    * performing the algorithm to handle the <code>Exception</code>, not
+    * as a means of conveying a handled <code>Exception</code> itself.
     *
-    * <p class="changed_added_2_0">The default implementation must take
-    * the first {@link ExceptionEvent} queued from a call to {@link
-    * #processEvent}, unwrap it with a call to {@link #getRootCause},
-    * re-wrap it in a <code>ServletException</code> and re-throw it,
-    * allowing it to be handled by any <code>&lt;error-page&gt;</code>
-    * declared in the web application deployment descriptor, or by the
-    * default error page, as described in section 6.1.13 ExceptionHandler.
-    * The default implementation must take special action in the following
-    * cases.</p>
-    *
-    * <div class="changed_added_2_0">
-    *
-    *
-    * <ul>
-    *
-    * <li><p>If an unchecked <code>Exception</code> occurs as a
-    * result of calling a method annotated with
-    * <code>PreDestroy</code> on a managed bean, the
-    * <code>Exception</code> must be logged and swallowed.</p></li>
-    *
-    * <li><p>If the <code>Exception</code> originates inside the
-    * <code>ELContextListener.removeElContextListener</code>, the
-    * <code>Exception</code> must be logged and swallowed.</p></li>
-    *
-    * </ul>
-    *
-    * </div>
+    * @since 2.0
     */
     public abstract void handle() throws FacesException;
 
 
     /**
-     * RELEASE_PENDING (edburns,rogerk) this should return the
-     * first "handled" (i.e. thrown) ExceptionEvent.
-     *
-     * <p class="changed_added_2_0">The default implementation must
-     * return the first <code>ExceptionEvent</code> queued to {@link
-     * #processEvent}.</p>
+     * <p class="changed_added_2_0">Return the first
+     * <code>ExceptionEvent</code> handled by this handler.</p>
      */
     public abstract ExceptionEvent getHandledExceptionEvent();
 
 
     /**
-     * <p class="changed_added_2_0">The default implementation must return an
-     * <code>Iterable</code> over all <code>ExceptionEvent</code>s that have
-     * not yet been handled by the {@link #handle} method.</p>
+     * <p class="changed_added_2_0">Return an <code>Iterable</code> over
+     * all <code>ExceptionEvent</code>s that have not yet been handled
+     * by the {@link #handle} method.</p>
      */
     public abstract Iterable<ExceptionEvent> getUnhandledExceptionEvents();
 
@@ -177,19 +153,13 @@ public abstract class ExceptionHandler implements SystemEventListener {
 
 
     /**
-     * <p class="changed_added_2_0">The default implementation must
-     * store the event in a strongly ordered queue for later handling</p>
+     * {@inheritDoc}
      */
     public abstract void processEvent(SystemEvent exceptionEvent) throws AbortProcessingException;
 
 
     /**
-     * RELEASE_PENDING (edburns, rogerk) The source will be ExceptionEventContext,
-     *  so it should only return true in that case.
-     *
-     * <p class="changed_added_2_0">The default implementation must
-     * return <code>true</code> if and only if the source argument is an
-     * instance of <code>ExceptionEvent</code>.</p>
+     * {@inheritDoc}
      */
     public abstract boolean isListenerForSource(Object source);
 
@@ -199,10 +169,12 @@ public abstract class ExceptionHandler implements SystemEventListener {
      * until the unwrapping encounters an Object whose
      * <code>getClass()</code> is not equal to
      * <code>FacesException.class</code> or
-     * <code>javax.el.ELException.class</code>.  </p>
-     *
-     * RELEASE_PENDING (edburns, rogerk) should specify that if there is no root
-     *  cause, null is returned
+     * <code>javax.el.ELException.class</code>.  If there is no root cause, <code>null</code> is returned.</p>
+
+     * @throws NullPointerException if argument <code>t</code> is
+     * <code>null</code>.
+
+     * @since 2.0
      */
     public abstract Throwable getRootCause(Throwable t);
 

@@ -63,14 +63,6 @@ import javax.faces.lifecycle.Lifecycle;
  *    FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
  * </pre>
  *
- * <div class="changed_added_2_0">
-
- * <p>Before returning the newly created <code>FacesContext</code>, the
- * implementation must call {@link FacesContext#setExceptionHandler},
- * passing the {@link ExceptionHandler} returned from {@link
- * ExceptionHandlerFactory#getExceptionHandler}.</p>
-
- * </div>
  */
 
 public abstract class FacesContextFactory implements FacesWrapper<FacesContextFactory> {
@@ -89,16 +81,23 @@ public abstract class FacesContextFactory implements FacesWrapper<FacesContextFa
     }
 
     /**
-     * <p>Create (if needed) and return a {@link FacesContext} instance
-     * that is initialized for the processing of the specified request
-     * and response objects, utilizing the specified {@link Lifecycle}
-     * instance, for this web application.</p>
+     * <p><span class="changed_modified_2_0">Create</span> (if needed)
+     * and return a {@link FacesContext} instance that is initialized
+     * for the processing of the specified request and response objects,
+     * utilizing the specified {@link Lifecycle} instance, for this web
+     * application.</p>
      *
      * <p>The implementation of this method must ensure that calls to the
      * <code>getCurrentInstance()</code> method of {@link FacesContext},
      * from the same thread that called this method, will return the same
      * {@link FacesContext} instance until the <code>release()</code>
      * method is called on that instance.</p>
+
+     * <p class="changed_added_2_0">The default implementation must call
+     * {@link ExceptionHandlerFactory#getExceptionHandler} and make it
+     * so the return from that method is what gets returned from a call
+     * to {@link FacesContext#getExceptionHandler} on the returned
+     * <code>FacesContext</code> instance.</p>
      *
      * @param context In servlet environments, the
      * <code>ServletContext</code> that is associated with this web

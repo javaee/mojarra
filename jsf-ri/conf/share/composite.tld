@@ -550,17 +550,18 @@ its value is derived as described in
 <p>If this element has a <code>method-signature</code> attribute, the
 value of the <code>targets</code> attribute must be interpreted as a
 space (not tab) separated list of component ids of components within the
-<code>&lt;composite:implementation&gt;</code> section.  Each entry in
-the list must be interpreted as the id of an inner component to which
-the <code>MethodExpression</code> from the <em>composite component
-tag</em> in the <em>using page</em> must be applied.  If this element
-has a <code>method-signature</code> attribute, but no
-<code>targets</code> attribute, the value of the <code>name</code>
-attribute is used as the single entry in the list.  If the value of the
-<code>name</code> attribute is <strong>not</strong> one of the special
-values listed in the description of the <code>name attribute</code>,
-<code>targets</code> (or its derived value) need not correspond to the
-id of an inner component.</p>
+<code>&lt;composite:implementation&gt;</code> section.  Space is used as
+the delimiter for compatibility with the IDREFS and NMTOKENS data types
+from the XML Schema.  Each entry in the list must be interpreted as the
+id of an inner component to which the <code>MethodExpression</code> from
+the <em>composite component tag</em> in the <em>using page</em> must be
+applied.  If this element has a <code>method-signature</code> attribute,
+but no <code>targets</code> attribute, the value of the
+<code>name</code> attribute is used as the single entry in the list.  If
+the value of the <code>name</code> attribute is <strong>not</strong> one
+of the special values listed in the description of the <code>name
+attribute</code>, <code>targets</code> (or its derived value) need not
+correspond to the id of an inner component.</p>
 
 </div>]]>
 
@@ -1154,12 +1155,13 @@ example.</p>
 
                 <![CDATA[
 <div class="changed_added_2_0">
-<p>If present, this must be a space (not tab) separated
-                list of component ids of components within the
-                <code>&lt;composite:implementation&gt;</code> section.
-                If not present, the "name" attribute must be present.
-                If both "name" and "targets" are present, "targets"
-                takes precedence.</p></div>]]>
+<p>If present, this must be a space (not tab) separated list of
+component ids of components within the
+<code>&lt;composite:implementation&gt;</code> section.  Space is used as
+the delimiter for compatibility with the IDREFS and NMTOKENS data types
+from the XML Schema.  If not present, the "name" attribute must be
+present.  If both "name" and "targets" are present, "targets" takes
+precedence.</p></div>]]>
 
             </description>
             <name>
@@ -1236,12 +1238,13 @@ example.</p>
 
                 <![CDATA[
 <div class="changed_added_2_0">
-<p>If present, this must be a space (not tab) separated
-                list of component ids of components within the
-                <code>&lt;composite:implementation&gt;</code> section.
-                If not present, the "name" attribute must be present.
-                If both "name" and "targets" are present, "targets"
-                takes precedence.</p></div>]]>
+<p>If present, this must be a space (not tab) separated list of
+component ids of components within the
+<code>&lt;composite:implementation&gt;</code> section.  Space is used as
+the delimiter for compatibility with the IDREFS and NMTOKENS data types
+from the XML Schema.  If not present, the "name" attribute must be
+present.  If both "name" and "targets" are present, "targets" takes
+precedence.</p></div>]]>
 
             </description>
             <name>
@@ -1346,12 +1349,13 @@ example.</p>
 
                 <![CDATA[
 <div class="changed_added_2_0">
-<p>If present, this must be a space (not tab) separated
-                list of component ids of components within the
-                <code>&lt;composite:implementation&gt;</code> section.
-                If not present, the "name" attribute must be present.
-                If both "name" and "targets" are present, "targets"
-                takes precedence.</p></div>]]>
+<p>If present, this must be a space (not tab) separated list of
+component ids of components within the
+<code>&lt;composite:implementation&gt;</code> section.  Space is used as
+the delimiter for compatibility with the IDREFS and NMTOKENS data types
+from the XML Schema.  If not present, the "name" attribute must be
+present.  If both "name" and "targets" are present, "targets" takes
+precedence.</p></div>]]>
 
             </description>
             <name>

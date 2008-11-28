@@ -67,4 +67,15 @@ public class ExceptionEvent extends SystemEvent {
         super(eventContext);
     }
 
+    /**
+     * <p class="changed_added_2_0">Return the
+     * <code>ExceptionEventContext</code> for this event instance.</p>
+     *
+     * @since 2.0
+     */
+
+    public ExceptionEventContext getContext() {
+	return (ExceptionEventContext) getSource();
+    }
+
 }
