@@ -719,6 +719,29 @@ public class ExternalContextImpl extends ExternalContext {
         
     }
 
+    /**
+     * @see ExternalContext#setResponseHeader(String, String)
+     * @param name
+     * @param value 
+     */
+    @Override
+    public void setResponseHeader(String name, String value) {
+
+        ((HttpServletResponse) response).setHeader(name, value);
+        
+    }
+
+    /**
+     * @see ExternalContext#addResponseHeader(String, String)
+     * @param name
+     * @param value 
+     */
+    @Override
+    public void addResponseHeader(String name, String value) {
+
+        ((HttpServletResponse) response).addHeader(name, value);
+        
+    }
 
     // ----------------------------------------------------------- Inner Classes
 
