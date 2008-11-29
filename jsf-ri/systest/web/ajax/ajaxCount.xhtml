@@ -1,0 +1,30 @@
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+    <title>Ajax Request Test Page</title>
+</h:head>
+<h:body>
+    <h:outputScript library="javax.faces" name="ajax.js" target="head"/>
+    <h1>Simple Counter Test</h1>
+    <h:form id="countForm">
+        <h:outputText id="out1" value="#{ajaxrequest.count}"/>
+        <br/>
+        <!-- Increment the counter on the server, and the client -->
+        <h:commandButton id="button1" value="Count"
+                         onclick="jsf.ajax.request(this, event, {execute: this.id, render: 'countForm:out1'}); return false;"/>
+        <br/>
+        <!-- Resets the counter, doesn't refresh the page -->
+        <h:commandButton id="reset" value="reset"
+                            onclick="jsf.ajax.request(this, event, {execute:'countForm:reset', render: 'countForm:out1'}); return false;"
+                            actionListener="#{ajaxrequest.resetCount}"/>
+    </h:form>
+    <!-- Contained outside the form - shouldn't update except for full page load -->
+    <h:outputText id="out2" value="#{ajaxrequest.count}"/>
+
+</h:body>
+</html>

@@ -48,12 +48,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.faces.FacesException;
-import javax.faces.application.Application;
-import javax.faces.application.NavigationHandler;
-import javax.faces.application.ResourceHandler;
-import javax.faces.application.ViewHandler;
-import javax.faces.application.StateManager;
-import javax.faces.application.ProjectStage;
+import javax.faces.application.*;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -203,7 +198,13 @@ public class NewApplication extends Application {
 	oldApp.setViewHandler(handler);
     }
 
+    public PartialTraversal getPartialTraversal() {
+        return oldApp.getPartialTraversal();
+    }
 
+    public void setPartialTraversal(PartialTraversal partialTraversal) {
+        oldApp.setPartialTraversal(partialTraversal);
+    }
 
     public StateManager getStateManager() {
 	return oldApp.getStateManager();

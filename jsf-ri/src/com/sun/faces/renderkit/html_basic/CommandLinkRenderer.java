@@ -263,7 +263,8 @@ public class CommandLinkRenderer extends LinkRenderer {
         return RenderKitUtils.getCommandOnClickScript(formClientId,
                                                           commandClientId,
                                                           target,
-                                                          params);
+                                                          params,
+                                                          false);
 
     }
 
@@ -301,6 +302,9 @@ public class CommandLinkRenderer extends LinkRenderer {
         // wrap their js and the injected js each in a function and
         // execute them in a choose statement, if the user didn't specify
         // an onclick, the original logic executes unaffected
+        // RELEASE_PENDING (driscoll) still need to change to use the jsfcbk function
+        // RELEASE_PENDING (driscoll) still need to determine if there's a way to merge this with
+        // RenderKitUtils.renderOnclick()
         if (userSpecifiedOnclick) {
             sb.append("var a=function(){");
             userOnclick = userOnclick.trim();

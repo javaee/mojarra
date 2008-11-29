@@ -700,7 +700,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
     /**
      * <p>Simple class to encapsulate the name and value of a
-     * <code>UIParameeter</code>.
+     * <code>UIParameter</code>.
      */
     public static class Param {
 

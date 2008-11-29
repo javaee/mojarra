@@ -61,7 +61,7 @@
             <ui:include src="componentMap.xhtml"/>
             <h:panelGrid border="1" columns="2" cellspacing="40">
                 <h:commandButton id="reset" value="reset"
-                    onclick="javax.faces.Ajax.ajaxRequest(this, event, {execute:'reset'}); return false;"
+                    onclick="jsf.ajax.request(this, event, {execute:'reset',render:'form'}); return false;"
                     actionListener="#{bean.reset}"/>
                 <h:panelGrid columns="2">
                     <h:panelGrid id="optionsTitle">

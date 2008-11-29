@@ -58,6 +58,9 @@ import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
+import javax.faces.component.ActionSource;
+import javax.faces.component.AjaxBehavior;
+import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentBase;
 import javax.faces.component.UISelectItems;
@@ -176,6 +179,9 @@ public class RenderKitUtils {
     private static final String SCRIPT_STATE = 
             RIConstants.FACES_PREFIX + "scriptState";
     
+    private static final Param[] EMPTY_PARAMS = new Param[0];
+
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -281,7 +287,7 @@ public class RenderKitUtils {
      * @param writer writer the {@link javax.faces.context.ResponseWriter} to be used when writing
      *  the attributes
      * @param component the component
-     * @param attributes an array off attributes to be processed
+     * @param attributes an array of attributes to be processed
      * @throws IOException if an error occurs writing the attributes
      */
     public static void renderPassThruAttributes(ResponseWriter writer,
@@ -294,9 +300,6 @@ public class RenderKitUtils {
 
         Map<String, Object> attrMap = component.getAttributes();
 
-        // PENDING - think anyone would run the RI using another implementation
-        // of the jsf-api?  If they did, then this would fall apart.  That
-        // scenario seems extremely unlikely.
         if (canBeOptimized(component)) {
             //noinspection unchecked
             List<String> setAttributes = (List<String>)
@@ -326,6 +329,218 @@ public class RenderKitUtils {
 
         }
     }
+
+    public static String buildAjaxCommand(AjaxBehavior ajaxBehavior) {
+        final String AJAX_REQUEST = "jsf.ajax.request";
+        // Is there already an option written?
+        boolean already = false;
+        StringBuilder ajaxCommand = new StringBuilder(256);
+        String execute = ajaxBehavior.getExecute();
+        String render = ajaxBehavior.getRender();
+        ajaxCommand.append(AJAX_REQUEST);
+        ajaxCommand.append("(this, event");
+        if (execute != null || render != null) {
+            ajaxCommand.append(", {");
+        }
+        if (execute != null) {
+            already = true;
+            ajaxCommand.append("execute:'");
+            ajaxCommand.append(execute.replace(' ', ','));
+            ajaxCommand.append("'");
+        }
+        if (render != null) {
+            if (already) {
+                ajaxCommand.append(",");
+            } else {
+                already = true;
+            }
+            ajaxCommand.append("render:'");
+            ajaxCommand.append(render.replace(' ', ','));
+            ajaxCommand.append("'");
+        }
+        if (already) {
+            ajaxCommand.append("}");
+        }
+
+        ajaxCommand.append(");");
+
+        return ajaxCommand.toString();
+    }
+
+    public static void renderOnchange(FacesContext context, UIComponent component)
+        throws IOException {
+
+        boolean isCommand = false;
+        String event = "onchange";
+
+        // is there a user Onchange?
+        boolean userSpecifiedOnchange = false;
+        // do we need to render ajax?
+        boolean renderAjax = false;
+        // String buffer for final output
+        StringBuffer sb;
+        // the ajax command to render
+        String ajaxCommand = "";
+        // the user supplied onchange to render
+        String userOnchange;
+
+        ResponseWriter writer = context.getResponseWriter();
+
+        userOnchange = (String) component.getAttributes().get(event);
+        userSpecifiedOnchange = (userOnchange != null && !"".equals(userOnchange));
+
+        AjaxBehavior ajaxBehavior = (AjaxBehavior)component.getAttributes().get(AjaxBehavior.AJAX_BEHAVIOR);
+        renderAjax = (null != ajaxBehavior);
+        if (!userSpecifiedOnchange && !renderAjax) { // nothing to do
+            return;  // save the effort of creating the StringBuffer
+        }
+
+        if (renderAjax) ajaxCommand = buildAjaxCommand(ajaxBehavior);
+
+        sb = new StringBuffer(256);
+
+        if (userSpecifiedOnchange && renderAjax) { // Doing both
+            // RELEASE_PENDING driscoll this should use the jsfcbk function, move the detection
+            // into the relevant components, or figure something better out
+            sb.append("function jsfchbk(f, t, e) {t._jsfchbk = f;return t._jsfchbk(e);};");
+            sb.append("var a=function(event){");
+            userOnchange = userOnchange.trim();
+            sb.append(userOnchange);
+            if (userOnchange.charAt(userOnchange.length() - 1) != ';') {
+                sb.append(';');
+            }
+            sb.append("};var b=function(event){");
+            sb.append(ajaxCommand);
+            sb.append("};return jsfchbk(a,this,event) ? jsfchbk(b,this,event) : false;");
+        } else if (userSpecifiedOnchange) { // do one
+            sb.append(userOnchange);
+        } else if (renderAjax) { // do the other
+            sb.append(ajaxCommand);
+        }
+
+        // At last, write out the completed attribute
+        if (userSpecifiedOnchange || renderAjax) {
+            writer.writeAttribute(event, sb.toString(), event);
+        }
+    }
+
+    public static void renderOnclick(FacesContext context, UIComponent component, Param[] params, AjaxBehavior ajaxBehavior)
+        throws IOException {
+
+        boolean isCommand = true;
+        String event = "onclick";
+
+        // is there a user Onchange?
+        boolean userSpecifiedOnclick = false;
+        // do we need to render ajax?
+        boolean renderAjax = (null != ajaxBehavior);
+        // are there parameters to render?
+        boolean renderParams = (!Arrays.equals(params,EMPTY_PARAMS));
+        // String buffer for final output
+        StringBuffer sb;
+        // the ajax command to render
+        String ajaxCommand = "";
+        // the user supplied onchange to render
+        String userOnclick;
+        // Form Id
+        String formClientId = "";
+        // Client Id
+        String componentClientId = "";
+
+
+        if (renderParams) {
+            formClientId = getFormClientId(component, context);
+            componentClientId = component.getClientId(context);
+        }
+        ResponseWriter writer = context.getResponseWriter();
+
+        userOnclick = (String) component.getAttributes().get(event);
+        userSpecifiedOnclick = (userOnclick != null && !"".equals(userOnclick));
+        if (userSpecifiedOnclick) {
+            userOnclick = userOnclick.trim();
+        }
+
+        if (!userSpecifiedOnclick && !renderAjax && !renderParams) { // nothing to do
+            return;  // save the effort of creating the StringBuffer
+        }
+
+        if (renderAjax) ajaxCommand = buildAjaxCommand(ajaxBehavior);
+
+        sb = new StringBuffer(256);
+
+        if (userSpecifiedOnclick && renderAjax && renderParams) {
+            sb.append("var a=function(event){");
+            sb.append(userOnclick);
+            if (userOnclick.charAt(userOnclick.length() - 1) != ';') {
+                sb.append(';');
+            }
+            sb.append("};var b=function(event){");
+            sb.append(ajaxCommand);
+            sb.append("};if (jsfcbk(a,this,event)===false) { return false;}else{");
+            sb.append("apf(document.getElementById('");
+            sb.append(formClientId);
+            sb.append("'),");
+            sb.append(renderParams(componentClientId,params));
+            sb.append(");jsfcbk(b,this,event); dpf(document.getElementById('");
+            sb.append(formClientId);
+            sb.append("'));return false}");
+
+        } else if (userSpecifiedOnclick && renderAjax) {
+            sb.append("var a=function(event){");
+            sb.append(userOnclick);
+            if (userOnclick.charAt(userOnclick.length() - 1) != ';') {
+                sb.append(';');
+            }
+            sb.append("};var b=function(event){");
+            sb.append(ajaxCommand);
+            sb.append("return false;");
+            sb.append("};return (jsfcbk(a,this,event)===false) ? false : jsfcbk(b,this,event);");
+        } else if (userSpecifiedOnclick && renderParams) {
+            sb.append("var a=function(event){");
+            sb.append(userOnclick);
+            if (userOnclick.charAt(userOnclick.length() - 1) != ';') {
+                sb.append(';');
+            }
+            sb.append("};var b=function(event){");
+            sb.append(getCommandOnClickScript(formClientId,
+                                              componentClientId,
+                                              "",
+                                              params,
+                                              renderAjax));
+            sb.append("};return (jsfcbk(a,this,event)===false) ? false : jsfcbk(b,this,event);");
+        } else if (renderAjax && renderParams) {
+            sb.append("var a=function(event){");
+            sb.append(ajaxCommand);
+            sb.append("};apf(document.getElementById('");
+            sb.append(formClientId);
+            sb.append("'),");
+            sb.append(renderParams(componentClientId,params));
+            sb.append(");jsfcbk(a,this,event); dpf(document.getElementById('");
+            sb.append(formClientId);
+            sb.append("')); return false;");
+        } else if (userSpecifiedOnclick) { // do one
+            sb.append(userOnclick);
+            if (userOnclick.charAt(userOnclick.length() - 1) != ';') {
+               sb.append(';');
+            }
+        } else if (renderAjax) { // do one
+            sb.append(ajaxCommand);
+            sb.append("return false;");
+        } else if (renderParams) { // do one
+            sb.append(getCommandOnClickScript(formClientId,
+                                              componentClientId,
+                                              "",
+                                              params,
+                                              renderAjax));
+        }
+
+        // At last, write out the completed attribute
+        if (userSpecifiedOnclick || renderAjax || renderParams) {
+            writer.writeAttribute(event, sb.toString(), event);
+        }
+    }
+
+
 
 
     public static String prefixAttribute(final String attrName,
@@ -431,105 +646,6 @@ public class RenderKitUtils {
 
 
     // --------------------------------------------------------- Private Methods
-
-
-    /**
-     * <p>
-     * Fill <code>destination</code> with the <code>SelectItem</code> instances from
-     * <code>source</code>
-     * </p>
-     * @param destination the destination <code>List</code>
-     * @param source the source array
-     */
-    private static void fill(List<SelectItem> destination, SelectItem[] source) {
-
-        // we manually copy the elements so that the list is
-        // modifiable.  Arrays.asList() returns a non-mutable
-        // list.
-        //noinspection ManualArrayToCollectionCopy
-        for (SelectItem item : source) {
-            destination.add(item);
-        }
-
-    }
-
-
-    /**
-     * <p>
-     * Fill <code>destination</code> by creating <code>SelectItem</code>
-     * instances from the key/value pairs from <code>source</code>
-     * @param destination the destination <code>List</code>
-     * @param source the source <code>Map</code>
-     */
-    private static void fill(List<SelectItem> destination,
-                             Map<Object, Object> source) {
-
-        for (Map.Entry entry : source.entrySet()) {
-            Object key = entry.getKey();
-            Object val = entry.getValue();
-            if (val == null) {
-                val = key.toString();
-            }
-            if (key == null) {
-                continue;
-            }
-            destination.add(new SelectItem(val, key.toString()));
-        }
-
-    }
-
-
-    private static void fill(FacesContext ctx,
-                             List<SelectItem> destination,
-                             Collection<?> source,
-                             UISelectItems selectItems) {
-
-        Map<String,Object> attributes = selectItems.getAttributes();
-        Map<String,Object> requestMap = ctx.getExternalContext().getRequestMap();
-        String var = (String) attributes.get("var");
-        ValueExpression itemValue =
-              selectItems.getValueExpression("itemValue");
-        ValueExpression itemLabel =
-              selectItems.getValueExpression("itemLabel");
-        ValueExpression itemDescription =
-              selectItems.getValueExpression("itemDescription");
-        ValueExpression itemEscaped =
-              selectItems.getValueExpression("itemEscaped");
-        ValueExpression itemDisabled =
-              selectItems.getValueExpression("itemDisabled");
-        for (Object o : source) {
-            if (o instanceof SelectItem) {
-                destination.add((SelectItem) o);
-            } else {
-                Object originalVar = null;
-                if (var != null) {
-                    originalVar = requestMap.put(var, o);
-                }
-                try {
-                    ELContext elContext = ctx.getELContext();
-                    destination
-                          .add(new SelectItem(((itemValue != null) ? itemValue.getValue(elContext) : o),
-                                              ((itemLabel != null)
-                                               ? (String) itemLabel.getValue(elContext)
-                                               : o.toString()),
-                                              ((itemDescription != null)
-                                               ? (String) itemDescription.getValue(elContext)
-                                               : null),
-                                              ((itemDisabled != null)
-                                               ? (Boolean) itemDisabled.getValue(elContext)
-                                               : false),
-                                              ((itemEscaped != null)
-                                               ? (Boolean) itemEscaped.getValue(elContext)
-                                               : false)));
-                } finally {
-                    if (var != null) {
-                        requestMap.put(var, originalVar);
-                    }
-                }
-            }
-        }
-    }
-
 
     /**
      * @param component the UIComponent in question
@@ -922,12 +1038,27 @@ public class RenderKitUtils {
     public static String getCommandOnClickScript(String formClientId,
                                                      String commandClientId,
                                                      String target,
-                                                     Param[] params) {
+                                                     Param[] params,
+                                                     boolean isAjax) {
 
         StringBuilder sb = new StringBuilder(256);
-        sb.append("if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('");
+        sb.append("jsfcljs(document.getElementById('");
         sb.append(formClientId);
-        sb.append("'),{'");
+        sb.append("'),");
+        sb.append(renderParams(commandClientId, params));
+        sb.append(",'");
+        sb.append(target);
+        sb.append("');return false");
+
+        return sb.toString();
+    }
+
+    /*
+     *
+     */
+    private static String renderParams(String commandClientId, Param[] params) {
+        StringBuilder sb = new StringBuilder(128);
+        sb.append("{'");
         sb.append(commandClientId).append("':'").append(commandClientId);
         for (Param param : params) {
             String pn = param.name;
@@ -941,14 +1072,9 @@ public class RenderKitUtils {
                 }
             }
         }
-        sb.append("'},'");
-        sb.append(target);
-        sb.append("');}return false");
-
+        sb.append("'}");
         return sb.toString();
-
     }
-
 
     /**
      * <p>This is a utility method for compressing multi-lined javascript.
@@ -1127,6 +1253,4 @@ public class RenderKitUtils {
     // ---------------------------------------------------------- Nested Classes
 
 
-    
-    
 } // END RenderKitUtils

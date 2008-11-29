@@ -355,13 +355,13 @@ public enum Color { Red, Blue, Green, Orange }
     output.setValue("<p>==new output==</p>");
     output.setEscape(false);
 
-        FacesContext ctx = FacesContext.getCurrentInstance();
+    FacesContext ctx = FacesContext.getCurrentInstance();
     UIComponent group = ctx.getViewRoot().findComponent("form" + UINamingContainer.getSeparatorChar(ctx) +  "addHere");
     group.getChildren().add(output);
 
     }
 
-    /**
+    /*
      * replace the propertyResolver with one that does our bidding for
      * this test.
      */
@@ -425,7 +425,7 @@ public enum Color { Red, Blue, Green, Orange }
 
 
 
-    /**
+    /*
      * restore the original PropertyResolver.
      */
 

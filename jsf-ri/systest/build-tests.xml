@@ -128,6 +128,8 @@
     <target name="test"
             description="Execute all tests against installed application"
             depends="test.init,
+                test.ajax,
+                test.html.taglib,
                 test.prefix.security,
                 test.config,
                 test.interweaving,
@@ -159,7 +161,6 @@
                 test.resourceBundleELResolver,
                 test.tlvalidator,
                 test.standard,
-                test.html.taglib,
                 test.verbatim,
                 test.phases,
                 test.subview,
@@ -168,8 +169,8 @@
                 test.path,
                 test.valueBindingGet,
                 test.misc,
-                test.regressions
-               "/>
+                test.regressions"
+            />
 
     <target name="test.init">
         <mkdir dir="${impl.test.results.dir}"/>
@@ -753,6 +754,19 @@
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
               request="${context.path}/faces/validator03.jsp"
               status="200"/>
+    </target>
+
+        <target name="test.ajax"
+            description="Test Ajax Functionality">
+
+            <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/ajax/*TestCase.class"/>
+            </tests>
+        </jsf.junit>
     </target>
 
     <target name="test.component"

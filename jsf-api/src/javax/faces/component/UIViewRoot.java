@@ -46,6 +46,7 @@ import javax.el.MethodExpression;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
+import javax.faces.application.PartialTraversal;
 import javax.faces.application.ProjectStage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -873,22 +874,13 @@ public class UIViewRoot extends UIComponentBase {
 
     /**
      * <p class="changed_added_2_0">If {@link
-     * javax.faces.context.PartialViewContext#isAjaxRequest} returns <code>true</code>,
-     * call {@link javax.faces.context.PartialViewContext#getExecutePhaseClientIds}.
-     * This returns a list of client ids that must be processed during the
-     * <code>execute</code> portion of the request processing lifecycle.
-     * If there were no client ids specified, refer to the <code>List</code> of 
-     * client ids by calling
-     * {@link javax.faces.context.PartialViewContext#getRenderPhaseClientIds}.
-     * For each client id in the list, using <code>invokeOnComponent</code>,
-     * call the respective <code>processDecodes</code> method on the component
-     * with that client id.  Obtain an instance of a response writer that uses 
-     * content type <code>text/xml</code> by calling 
-     * {@link PartialViewContext#getPartialResponseWriter}.  Install the writer
-     * by calling {@link FacesContext#setResponseWriter}.  If
-     * {@link javax.faces.context.PartialViewContext#isAjaxRequest}
-     * returned <code>false</code>, or partial processing was not perfomed on
-     * any components, perform <code>processDecodes</code> on all 
+     * javax.faces.context.PartialViewContext#isPartialRequest} returns <code>true</code>,
+     * get the {@link javax.faces.application.PartialTraversal} that is defined for the
+     * application.  The {@link javax.faces.application.PartialTraversal} and
+     * {@link javax.faces.context.PartialViewContext} define how partial view processing
+     * will be performed.
+     * If {@link javax.faces.context.PartialViewContext#isPartialRequest}
+     * returned <code>false</code>, perform <code>processDecodes</code> on all
      * components in the view.</p> 
      * </p>
      * <p class="changed_modified_2_0">Override the default 
@@ -907,18 +899,22 @@ public class UIViewRoot extends UIComponentBase {
     public void processDecodes(FacesContext context) {
         initState();
         notifyBefore(context, PhaseId.APPLY_REQUEST_VALUES);
-        PartialViewContext partialViewContext = context.getPartialViewContext();
-        if (partialViewContext.isAjaxRequest() && 
-            processPartialDecodes(context, partialViewContext)) {
-            clearFacesEvents(context);
-            notifyAfter(context, PhaseId.APPLY_REQUEST_VALUES);
-            return;
-        }
 
-        // If we have not done partial processing..
         try {
             if (!skipPhase) {
+                if (context.getPartialViewContext().isPartialRequest()) {
+                    PartialTraversal traversal = context.getApplication().getPartialTraversal();
+                    if (traversal != null) {
+                        traversal.traverse(context, PhaseId.APPLY_REQUEST_VALUES, this);
+                    } else {
+                        if (LOGGER.isLoggable(Level.SEVERE)) {
+                            LOGGER.log(Level.SEVERE,
+                                   "severe.processDecodes.traversal_not_defined", "null");
+                        }
+                    }
+                } else {
                 super.processDecodes(context);
+                }
                 broadcastEvents(context, PhaseId.APPLY_REQUEST_VALUES);
             }
         } finally {
@@ -928,56 +924,7 @@ public class UIViewRoot extends UIComponentBase {
     }
 
     /**
-     * <p class="changed_added_2_0">
-     * Helper method to invoke <code>processDecodes</code> on each
-     * individual component as determined by the client ids returned
-     * by {@link javax.faces.context.PartialViewContext#getExecutePhaseClientIds}.
-     * This method returns  <code>true</code> to indicate that partial
-     * decoding was performed.</p>
-     *
-     * @param context {@link FacesContext} for the request we are processing
-     * @param partialViewContext {@link PartialViewContext} for the request we are processing
-     *
-     * @since 2.0
-     */
-    private boolean processPartialDecodes(FacesContext context, 
-        PartialViewContext partialViewContext) {
-        // RELEASE_PENDING :
-        //  Process "immediate" Ajax requests..
-        //  mark components in view as "immediate"
-        //  keep track of marked components so they can be cleared later.
-        
-        boolean invokedCallback = 
-              invokeContextCallbackOnSubtrees(context, partialViewContext,
-                                              PhaseId.APPLY_REQUEST_VALUES);
-
-        // Install the PartialResponseWriter
-        ResponseWriter writer = partialViewContext.getPartialResponseWriter();
-        context.setResponseWriter(writer);
-
-        // RELEASE_PENDING: Queue Events that were specified in the Ajax Request..
-
-        if (!invokedCallback) {
-            return false;
-        }
-        String preViewId = context.getViewRoot().getViewId();
-        broadcastEvents(context, PhaseId.APPLY_REQUEST_VALUES);
-
-        // RELEASE_PENDING: If a MethodExpression name was specified (with a phase)
-        //    as an Ajax request param, attempt to invoke that method here.
-
-        // If the viewId has changed as a result of an event (from broadcastEvents),
-        // indicate that the entire view should be rendered.
-        String postViewId = context.getViewRoot().getViewId();
-        if (!postViewId.equals(preViewId)) {
-            partialViewContext.setRenderAll(true);
-        }
-
-        return true;
-    }
-
-    /**
-     * <p><span class="changed_added_2_0">Override</span> the default 
+     * <p><span class="changed_added_2_0">Override</span> the default
      * {@link UIComponentBase#encodeBegin} behavior.  If
      * {@link #getBeforePhaseListener} returns non-<code>null</code>,
      * invoke it, passing a {@link PhaseEvent} for the {@link
@@ -990,243 +937,71 @@ public class UIViewRoot extends UIComponentBase {
      * call superclass processing.</p>
      * <p class="changed_added_2_0">If {@link
      * javax.faces.context.PartialViewContext#isAjaxRequest} returns <code>true</code>,
-     * replace the <code>ResponseWriter</code> in the
-     * <code>FacesContext</code> with the writer used to render
-     * partial responses.  If {@link 
-     * javax.faces.context.PartialViewContext#isRenderNone} returns 
-     * <code>false</code>,  set the response content-type and headers appropriately 
-     * for XML.  The encodeXXX methods must produce the response content following 
-     * this example:
-     *
-       <pre><code>
-       &lt;partial-response&gt;
-           &lt;components&gt;
-               &lt;render id="form:table"/&gt;
-                   &lt;markup&gt;&lt;![CDATA[
-                      Rendered content from component
-                   ]]&gt;&lt;/markup&gt;
-               &lt;/render&gt;
-               &lt;!-- repeat for the appropriate number of components --&gt;
-           &lt;/components&gt;
-           &lt;state&gt;&lt;![CDATA[state information for this view ]]&gt;&lt;/state&gt;
-       &lt;/partial-response&gt;
-       </code></pre>
-     *
-     * The <encodeBegin</code> method must write the beginning elements for
-     * the partial response:
-     *
-       <pre><code>
-       &lt;partial-response&gt;
-           &lt;components&gt;
-       </code></pre>
-     *
-     * If {@link
-     * javax.faces.context.PartialViewContext#isRenderAll} returns
-     * <code>true</code> write:  
-     *
-       <pre><code>
-              &lt;render id="javax.faces.ViewRoot"/&gt;
-                  &lt;markup&gt;&lt;![CDATA[
-       </code></pre>
-     *
-     * to indicate the client JavaScript must use the entire response.  
-     * If {@link javax.faces.context.PartialViewContext#isAjaxRequest} 
-     * returns <code>false</code>, perform the parent class <code>encodeBegin</code>
-     * processing.</p> 
+     * perform partial view rendering as defined by the installed
+     * {@link javax.faces.application.PartialTraversal} strategy.
+     * </p>
      */
     @Override
     public void encodeBegin(FacesContext context) throws IOException {
-
         initState();
         notifyBefore(context, PhaseId.RENDER_RESPONSE);
 
-        PartialViewContext partialViewContext = context.getPartialViewContext();
-        if (partialViewContext.isAjaxRequest() && 
-            encodePartialResponseBegin(context, partialViewContext)) {
-            return;
-        }
-
         if (!skipPhase) {
-            super.encodeBegin(context);
+            if (context.getPartialViewContext().isAjaxRequest()) {
+                PartialTraversal traversal = context.getApplication().getPartialTraversal();
+                if (traversal != null) {
+                    traversal.traverse(context, PhaseId.RENDER_RESPONSE, this);
+                } else {
+                    if (LOGGER.isLoggable(Level.SEVERE)) {
+                        LOGGER.log(Level.SEVERE,
+                               "severe.encodeBegin.traversal_not_defined", "null");
         }
     }
-
-    /**
-     * <p class="changed_added_2_0">
-     * Helper method to begin writing the partial response.</p>
-     * 
-     * @param context {@link FacesContext} for the request we are processing
-     * @param partialViewContext {@link PartialViewContext} for the request 
-     * we are processing
-     */
-    private boolean encodePartialResponseBegin(FacesContext context,
-        PartialViewContext partialViewContext) {
-
-        try {
-            // Turn on the response that has been embedded in the ViewHandler.
-            partialViewContext.enableResponseWriting(true);
-
-            // This is an Ajax request...
-            // Get the partial response writer
-            ResponseWriter writer = partialViewContext.getPartialResponseWriter();
-            // Get and save the original writer
-            ResponseWriter orig = context.getResponseWriter();
-            context.getAttributes().put(ORIGINAL_WRITER, orig);
-            // Install the partial response writer
-            context.setResponseWriter(writer);
-
-            ExternalContext extContext = context.getExternalContext();
-
-            // If the client has requested that subtrees be rendered,
-            // prepare the partial response
-
-             if (!partialViewContext.isRenderNone()) {
-    
-                // RELEASE_PENDING (edburns,rogerk) it seems we need to specify
-                // a way to set response headers in a portlet/servlet independent
-                // manner
-
-                if (extContext.getResponse() instanceof HttpServletResponse) {
-                    HttpServletResponse servletResponse = (HttpServletResponse)
-                    extContext.getResponse();
-                    // this can be ExternalContext.setResponseContentType
-                    servletResponse.setContentType("text/xml");
-                    servletResponse.setHeader("Cache-Control", "no-cache");
-
-                    // PENDING Handle JSON here (if needed)
-                    //    Check if JSON was requested (in the request)
-                    //    and set response header appropriately if it was.
-
-                    writer.startElement("partial-response", this);
-                    writer.startElement("components", this);
+            } else {
+                super.encodeBegin(context);
                 }
             }
-            if (partialViewContext.isRenderAll()) {
-                // If this is a "render all via ajax" request,
-                // make sure to wrap the entire page in a <render> elemnt
-                // with the special id of VIEW_ROOT_ID.  This is how the client
-                // JavaScript knows how to replace the entire document with
-                // this response.
-                writer.startElement("render", this);
-                writer.writeAttribute("id", COMPONENT_TYPE, "id");
-                writer.startElement("markup", this);
-                writer.write("<![CDATA[");
             }
-        } catch (IOException ex) {
-            this.cleanupAfterView(context);
-        } catch (RuntimeException ex) {
-            this.cleanupAfterView(context);
-            // Throw the exception
-            throw ex;
-        }
-        return true;
-    }
 
     /** 
-     * <p class="changed_added_2_0">
-     * Override the default {@link UIComponentBase#encodeChildren}
-     * behavior to perform partial rendering if {@link
-     * javax.faces.context.PartialViewContext#isAjaxRequest} returns
-     * <code>true</code> and {@link 
-     * javax.faces.context.PartialViewContext#isRenderAll} returns
-     * <code>false</code>. Call 
-     * {@link javax.faces.context.PartialViewContext#getRenderPhaseClientIds}.
-     * This returns a list of client ids that must be processed during the
-     * <code>render</code> portion of the request processing lifecycle.
-     * For each client id in the list, using <code>invokeOnComponent</code>,
-     * all the  <code>encodeAll</code> method on the component with that 
-     * client id.  Each component's rendered markup must be wrapped 
-     * as follows:
-     *
-       <pre><code>
-               &lt;render id="form:table"/&gt;
-                   &lt;markup&gt;&lt;![CDATA[
-                     ** component rendered markup **
-                   ]]&gt;&lt;/markup&gt;
-               &lt;/render&gt;
-       </pre></code>
-     *
+     * <p class="changed_added_2_0">If {@link
+     * javax.faces.context.PartialViewContext#isAjaxRequest} returns <code>true</code>,
+     * perform partial view rendering as defined by the installed
+     * {@link javax.faces.application.PartialTraversal} strategy.
      * If {@link
      * javax.faces.context.PartialViewContext#isAjaxRequest} returns
-     * <code>false</code>, or {@link
-     * javax.faces.context.PartialViewContext#isRenderAll} returns
-     * <code>true</code> or partial rendering was not performed, 
-     * delegate to the parent {@link
-     * javax.faces.component.UIComponentBase#encodeChildren}
-     * method.</p>
+     * <code>false</code>, delegate to the parent {@link
+     * javax.faces.component.UIComponentBase#encodeChildren} method.</p>
      *
      * @since 2.0
      */
     @Override
     public void encodeChildren(FacesContext context) throws IOException {
-        PartialViewContext partialViewContext = context.getPartialViewContext();
-        if (partialViewContext.isAjaxRequest() && !partialViewContext.isRenderAll() &&
-            encodePartialChildren(context, partialViewContext)) {
-            return;
+        if (context.getPartialViewContext().isAjaxRequest()) {
+            PartialTraversal traversal = context.getApplication().getPartialTraversal();
+            if (traversal != null) {
+                traversal.traverse(context, PhaseId.RENDER_RESPONSE, this);
+            } else {
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE,
+                           "severe.encodeChildren.traversal_not_defined", "null");
         }
+            }
+        } else {
         super.encodeChildren(context);
     }
-
-    /** 
-     * <p class="changed_added_2_0">
-     * Helper method to perform encoding for a distinct set of
-     * client identifiers as returned from {@link
-     * javax.faces.context.PartialViewContext#getRenderPhaseClientIds}.
-     * This method returns <code>true</code> to indicate that
-     * partial encoding was performed.</p>
-     *
-     * @param context {@link FacesContext} for the request we are processing
-     * @param partialViewContext {@link PartialViewContext} for the request 
-     * we are processing
-     */
-    private boolean encodePartialChildren(FacesContext context, 
-        PartialViewContext partialViewContext) {
-
-        return !(!partialViewContext.isRenderNone()
-                 && !invokeContextCallbackOnSubtrees(context, partialViewContext,
-                                                     PhaseId.RENDER_RESPONSE));
-
     }
 
     /**
      * <p class="changed_added_2_0">If {@link 
-     * javax.faces.context.PartialViewContext#isAjaxRequest} returns
-     * <code>true</code>, write the ending elements for
-     * the partial response.  If {@link
-     * javax.faces.context.PartialViewContext#isRenderAll} returns
-     * <code>true</code> write: 
-     *
-       <pre><code>
-                   ]]&gt;&lt;/markup&gt;
-               &lt;/render&gt;
-       </code></pre>
-     *
-     * If some component markup was rendered
-     * ({@link javax.faces.context.PartialViewContext#isRenderNone}
-     * returns <code>false</code>), write:
-     *  
-       <pre><code>
-           &lt;/components&gt;
-       </code></pre>
-     *
-     * Call {@link javax.faces.application.StateManager#getViewState}
-     * and write the state wrapped in markup as follows:
-     *
-       <pre><code>
-           &lt;state&gt;&lt;![CDATA[state information for this view ]]&gt;&lt;/state&gt;
-       </code></pre>
-     * 
-     * Write the ending <code>partial-response</code> element:
-     *
-       <pre><code>
-         &lt;/partial-response&gt;
-       </code></pre>
-     * 
+     * javax.faces.context.PartialViewContext#isAjaxRequest} returns <code>true</code>,
+     * perform partial view rendering as defined by the installed
+     * {@link javax.faces.application.PartialTraversal} strategy.
      * If {@link
      * javax.faces.context.PartialViewContext#isAjaxRequest} returns
-     * <code>flase</code>,
-     * override the default {@link UIComponentBase#encodeEnd}
-     * behavior.  If {@link #getAfterPhaseListener} returns
+     * <code>false</code>, override the default
+     * {@link UIComponentBase#encodeEnd} behavior.  If
+     * {@link #getAfterPhaseListener} returns
      * non-<code>null</code>, invoke it, passing a {@link PhaseEvent}
      * for the {@link PhaseId#RENDER_RESPONSE} phase.  Any errors that
      * occur during invocation of the afterPhase listener must be
@@ -1234,60 +1009,20 @@ public class UIViewRoot extends UIComponentBase {
      */
     @Override
     public void encodeEnd(FacesContext context) throws IOException {
-        PartialViewContext partialViewContext = context.getPartialViewContext();
-        if (!partialViewContext.isAjaxRequest()) {
-            super.encodeEnd(context);
-            notifyAfter(context, PhaseId.RENDER_RESPONSE);
-            return;
-        }
-
-        encodePartialResponseEnd(context, partialViewContext);
-    }
-
-    /**
-     * <p class="changed_added_2_0">
-     * Helper method for writing out the ending marker elements
-     * and view state.</p>  
-     * 
-     * @param context {@link FacesContext} for the request we are processing
-     * @param partialViewContext {@link PartialViewContext} for the request 
-     * we are processing
-     */
-    private void encodePartialResponseEnd(FacesContext context, 
-        PartialViewContext partialViewContext) {
-        try {
-            ResponseWriter writer = context.getResponseWriter();
-            if (partialViewContext.isRenderAll()) {
-                writer.write("]]>");
-                writer.endElement("markup");
-                writer.endElement("render");
-            }
-
-            // If the client did not explicitly request that no subtrees be
-            // rendered...
-            if (!partialViewContext.isRenderNone()) {
-                writer.endElement("components");
-            }
-
-            // Get the view state and write it to the response..
-            writer.startElement("state", this);
-            String state = context.getApplication().getStateManager().getViewState(context);
-            writer.write("<![CDATA[" + state + "]]>");
-            writer.endElement("state");
-            writer.endElement("partial-response");
-
-        } catch (IOException ioe) {
+        if (context.getPartialViewContext().isAjaxRequest()) {
+            PartialTraversal traversal = context.getApplication().getPartialTraversal();
+            if (traversal != null) {
+                traversal.traverse(context, PhaseId.RENDER_RESPONSE, this);
+            } else {
             if (LOGGER.isLoggable(Level.SEVERE)) {
-                LOGGER.severe(ioe.toString());
+                    LOGGER.log(Level.SEVERE,
+                           "severe.encodeEnd.traversal_not_defined", "null");
             }
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE,
-                           ioe.toString(),
-                           ioe);
             }
-        } finally {
-            this.cleanupAfterView(context);
+        } else {
+            super.encodeEnd(context);
         }
+        notifyAfter(context, PhaseId.RENDER_RESPONSE);
     }
 
     /**
@@ -1310,14 +1045,6 @@ public class UIViewRoot extends UIComponentBase {
             value = true;
         }
         return value;
-    }
-
-    private void cleanupAfterView(FacesContext context) {
-        ResponseWriter orig = (ResponseWriter) context.getAttributes().
-            get(ORIGINAL_WRITER);
-        assert(null != orig);
-        // move aside the PartialResponseWriter
-        context.setResponseWriter(orig);
     }
 
     /**
@@ -1417,18 +1144,13 @@ public class UIViewRoot extends UIComponentBase {
 
     /**
      * <p class="changed_added_2_0">If {@link
-     * javax.faces.context.PartialViewContext#isAjaxRequest} returns <code>true</code>,
-     * call {@link javax.faces.context.PartialViewContext#getExecutePhaseClientIds}.
-     * This returns a list of client ids that must be processed during the
-     * <code>execute</code> portion of the request processing lifecycle.
-     * If there were no client ids specified, refer to the <code>List</code> of 
-     * client ids by calling 
-     * {@link javax.faces.context.PartialViewContext#getRenderPhaseClientIds}.
-     * For each client id in the list, using <code>invokeOnComponent</code>,
-     * call the respective <code>processValidators</code> method on the component
-     * with that client id.  If {@link javax.faces.context.PartialViewContext#isAjaxRequest}
-     * returned <code>false</code>, or partial processing was not perfomed on
-     * any components, perform <code>processValidators</code> on all
+     * javax.faces.context.PartialViewContext#isPartialRequest} returns <code>true</code>,
+     * get the {@link javax.faces.application.PartialTraversal} that is defined for the
+     * application.  The {@link javax.faces.application.PartialTraversal} and
+     * {@link javax.faces.context.PartialViewContext} define how partial view processing
+     * will be performed.
+     * If {@link javax.faces.context.PartialViewContext#isPartialRequest}
+     * returned <code>false</code>, perform <code>processValidators</code> on all
      * components in the view.</p> 
      * </p>
      * <p class="changed_modified_2_0">Override the default 
@@ -1448,17 +1170,21 @@ public class UIViewRoot extends UIComponentBase {
         initState();
         notifyBefore(context, PhaseId.PROCESS_VALIDATIONS);
 
-        PartialViewContext partialViewContext = context.getPartialViewContext();
-        if (partialViewContext.isAjaxRequest() && 
-            processPartialValidators(context, partialViewContext)) {
-            clearFacesEvents(context);
-            notifyAfter(context, PhaseId.PROCESS_VALIDATIONS);
-            return;
-        }
-
         try {
             if (!skipPhase) {
+                if (context.getPartialViewContext().isPartialRequest()) {
+                    PartialTraversal traversal = context.getApplication().getPartialTraversal();
+                    if (traversal != null) {
+                        traversal.traverse(context, PhaseId.PROCESS_VALIDATIONS, this);
+                    } else {
+                        if (LOGGER.isLoggable(Level.SEVERE)) {
+                            LOGGER.log(Level.SEVERE,
+                                   "severe.processValidators.traversal_not_defined", "null");
+                        }
+                    }
+                } else {
                 super.processValidators(context);
+                }
                 broadcastEvents(context, PhaseId.PROCESS_VALIDATIONS);
             }
         } finally {
@@ -1468,60 +1194,17 @@ public class UIViewRoot extends UIComponentBase {
     }
 
     /**
-     * <p class="changed_added_2_0">
-     * Helper method to invoke <code>processValidators</code> on each
-     * individual component as determined by the client ids returned
-     * by {@link javax.faces.context.PartialViewContext#getExecutePhaseClientIds}.
-     * This method returns a <code>true</code> to indicate that partial
-     * validation was performed.
-     *
-     * @param context {@link FacesContext} for the request we are processing
-     * @param partialViewContext {@link PartialViewContext} for the request we
-     * are processing
-     *</p>
-     */
-    private boolean processPartialValidators(FacesContext context,
-        PartialViewContext partialViewContext) {
-
-        boolean invokedCallback =
-              invokeContextCallbackOnSubtrees(context, partialViewContext,
-                                              PhaseId.PROCESS_VALIDATIONS);
-        if (!invokedCallback) {
-            return false;
-        }
-
-        String preViewId = context.getViewRoot().getViewId();
-        broadcastEvents(context, PhaseId.PROCESS_VALIDATIONS);
-
-        // RELEASE_PENDING: If a MethodExpression name was specified (with a phase)
-        //    as an Ajax request param, attempt to invoke that method here.
-
-        // If the viewId has changed as a result of an event (from broadcastEvents),
-        // indicate that the entire view should be rendered.
-        String postViewId = context.getViewRoot().getViewId();
-        if (!postViewId.equals(preViewId)) {
-            partialViewContext.setRenderAll(true);
-        }
-
-        return true;
-    }
-
-    /**
      * <p class="changed_added_2_0">If {@link
-     * javax.faces.context.PartialViewContext#isAjaxRequest} returns <code>true</code>,
-     * call {@link javax.faces.context.PartialViewContext#getExecutePhaseClientIds}.
-     * This returns a list of client ids that must be processed during the
-     * <code>execute</code> portion of the request processing lifecycle.
-     * If there were no client ids specified, refer to the <code>List</code> of 
-     * client ids by calling 
-     * {@link javax.faces.context.PartialViewContext#getRenderPhaseClientIds}.
-     * For each client id in the list, using <code>invokeOnComponent</code>,
-     * call the respective <code>processUpdates</code> method on the component
-     * with that client id.  If {@link javax.faces.context.PartialViewContext#isAjaxRequest}
-     * returned <code>false</code>, or partial processing was not perfomed on
-     * any components, perform <code>processUpdates</code> on all
+     * javax.faces.context.PartialViewContext#isPartialRequest} returns <code>true</code>,
+     * get the {@link javax.faces.application.PartialTraversal} that is defined for the
+     * application.  The {@link javax.faces.application.PartialTraversal} and
+     * {@link javax.faces.context.PartialViewContext} define how partial view processing
+     * will be performed.
+     * If {@link javax.faces.context.PartialViewContext#isPartialRequest}
+     * returned <code>false</code>, perform <code>processUpdates</code> on all
      * components in the view.</p>
-     * <p class="changed_modified_2_0">Override the default {@link UIComponentBase} 
+     * </p>
+     * <p class="changed_modified_2_0">Override the default {@link UIComponentBase}
      * behavior to broadcast any queued events after the default processing or 
      * partial processing has been completed and to clear out any events for 
      * later phases if the event processing for this phase caused 
@@ -1538,63 +1221,27 @@ public class UIViewRoot extends UIComponentBase {
         initState();
         notifyBefore(context, PhaseId.UPDATE_MODEL_VALUES);
 
-        PartialViewContext partialViewContext = context.getPartialViewContext();
-        if (partialViewContext.isAjaxRequest() && 
-            processPartialUpdates(context, partialViewContext)) {
-            clearFacesEvents(context);
-            notifyAfter(context, PhaseId.UPDATE_MODEL_VALUES);
-            return;
-        }
-
         try {
             if (!skipPhase) {
+                if (context.getPartialViewContext().isPartialRequest()) {
+                    PartialTraversal traversal = context.getApplication().getPartialTraversal();
+                    if (traversal != null) {
+                        traversal.traverse(context, PhaseId.UPDATE_MODEL_VALUES, this);
+                    } else {
+                        if (LOGGER.isLoggable(Level.SEVERE)) {
+                            LOGGER.log(Level.SEVERE,
+                                   "severe.processValidators.traversal_not_defined", "null");
+                        }
+                    }
+                } else {
                 super.processUpdates(context);
+                }
                 broadcastEvents(context, PhaseId.UPDATE_MODEL_VALUES);
             }
         } finally {
             clearFacesEvents(context);
             notifyAfter(context, PhaseId.UPDATE_MODEL_VALUES);
         }
-    }
-
-    /**
-     * <p class="changed_added_2_0">
-     * Helper method to invoke <code>processUpdates</code> on each
-     * individual component as determined by the client ids returned
-     * by {@link javax.faces.context.PartialViewContext#getExecutePhaseClientIds}.
-     * This method returns a <code>true</code> to indicate that partial
-     * updating was performed.
-     *
-     * @param context {@link FacesContext} for the request we are processing
-     * @param partialViewContext {@link PartialViewContext} for the request 
-     * we are processing
-     *</p>
-     */
-    private boolean processPartialUpdates(FacesContext context,
-        PartialViewContext partialViewContext) {
-
-        boolean invokedCallback =
-              invokeContextCallbackOnSubtrees(context, partialViewContext,
-                                              PhaseId.UPDATE_MODEL_VALUES);
-        if (!invokedCallback) {
-            return false;
-        }
-
-        String preViewId = context.getViewRoot().getViewId();
-        broadcastEvents(context, PhaseId.UPDATE_MODEL_VALUES);
-
-        // RELEASE_PENDING: If a MethodExpression name was specified (with a phase)
-        //    as an Ajax request param, attempt to invoke that method here.
-
-        // If the viewId has changed as a result of an event (from broadcastEvents),
-        // indicate that the entire view should be rendered.
-        String postViewId = context.getViewRoot().getViewId();
-        if (!postViewId.equals(preViewId)) {
-            partialViewContext.setRenderAll(true);
-        }
-
-        return true;
-
     }
 
     /**
@@ -1960,105 +1607,7 @@ public class UIViewRoot extends UIComponentBase {
     }
 
 
-    private boolean invokeContextCallbackOnSubtrees(FacesContext context,
-        PartialViewContext partialViewContext, PhaseId phaseId) {
-
-        // If this callback is intended for RENDER_RESPONSE, use
-        // getRenderPhaseClientIds().  Otherwise, use
-        // getExecutePhaseClientIds().  If getExecutePhaseClientIds() is
-        // empty, use getRenderPhaseClientIds().
-        List<String> subtrees;
-        if (phaseId == PhaseId.RENDER_RESPONSE) {
-            subtrees = partialViewContext.getRenderPhaseClientIds();
-        } else {
-            subtrees = partialViewContext.getExecutePhaseClientIds();
-            if (subtrees.isEmpty()) {
-                subtrees = partialViewContext.getRenderPhaseClientIds();
-            }
-        }
-
-        boolean result = false;
-
-        if (subtrees != null && !subtrees.isEmpty()) {
-            PhaseAwareContextCallback cb = new PhaseAwareContextCallback(phaseId);
-            for (String cur : subtrees) {
-                if (invokeOnComponent(context, cur, cb)) {
-                    result = true;
-                }
-            }
-        }
-        return result;
-    }
-
-
     // ----------------------------------------------------------- Inner Classes
-
-
-    private static class PhaseAwareContextCallback implements ContextCallback {
-    
-        private PhaseId curPhase = null;
-        private PhaseAwareContextCallback(PhaseId curPhase) {
-            this.curPhase = curPhase;
-        }   
-        
-
-        public void invokeContextCallback(FacesContext facesContext,
-                                          UIComponent comp) {
-            try {                         
-            
-                if (curPhase == PhaseId.APPLY_REQUEST_VALUES) {
-                
-                    // RELEASE_PENDING handle immediate request(s)
-                    // If the user requested an immediate request
-                    // Make sure to set the immediate flag here.
-                    
-                    comp.processDecodes(facesContext);
-                } else if (curPhase == PhaseId.PROCESS_VALIDATIONS) {
-                    comp.processValidators(facesContext);
-                } else if (curPhase == PhaseId.UPDATE_MODEL_VALUES) {
-                    comp.processUpdates(facesContext);
-                } else if (curPhase == PhaseId.RENDER_RESPONSE) {
-                
-                    if (comp.isRendered()) {
-                        ResponseWriter writer = facesContext.getResponseWriter();
-                        
-                        writer.startElement("render", comp);
-                        writer.writeAttribute("id", comp.getClientId(facesContext), "id");
-                        try {
-                            writer.startElement("markup", comp);
-                            writer.write("<![CDATA[");
-
-                            // do the default behavior...
-                            comp.encodeAll(facesContext);
-
-                            writer.write("]]>");
-                            writer.endElement("markup");
-                        }
-                        catch (Exception ce) {
-                            if (LOGGER.isLoggable(Level.SEVERE)) {
-                                LOGGER.severe(ce.toString());
-                            }
-                            if (LOGGER.isLoggable(Level.FINE)) {
-                                LOGGER.log(Level.FINE,
-                                ce.toString(),
-                                ce);
-                            }
-                        }
-                        writer.endElement("render");
-                    }
-                }
-                else {
-                    throw new IllegalStateException("I18N: Unexpected " +
-                                                    "PhaseId passed to " +
-                                              " PhaseAwareContextCallback: " +
-                                                    curPhase.toString());
-                }
-            }
-            catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
 
     private static final class ViewMap extends HashMap<String,Object> {
 

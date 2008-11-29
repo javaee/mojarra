@@ -99,7 +99,17 @@ public abstract class PartialViewContext {
      *
      * @since 2.0
      */
-    public static final String NO_PARTIAL_PHASE_CLIENT_IDS = "none";
+    public static final String NO_PARTIAL_PHASE_CLIENT_IDS = "@none";
+
+    /**
+     * <p class="changed_added_2_0">
+     * The value that when used with {@link #PARTIAL_EXECUTE_PARAM_NAME}
+     * or {@link #PARTIAL_RENDER_PARAM_NAME} indicates these phases
+     * must be skipped.</p>
+     *
+     * @since 2.0
+     */
+    public static final String ALL_PARTIAL_PHASE_CLIENT_IDS = "@all";
 
 
     // -------------------------------------------------------------- Properties
@@ -228,6 +238,20 @@ public abstract class PartialViewContext {
 
     /**
      * <p class="changed_added_2_0">
+     * Return <code>true</code> if the request parameter
+     * <code>javax.faces.partial</code> or
+     * <code>javax.faces.partial.ajax</code> is present in the current
+     * request.  Otherwise, return <code>false</code>.</p>
+     *
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     *
+     * @since 2.0
+     */
+    public abstract boolean isPartialRequest();
+
+    /**
+     * <p class="changed_added_2_0">
      * Return <code>true</code> if the request parameter {@link #PARTIAL_EXECUTE_PARAM_NAME}
      * is present in the current request and the value of the parameter is
      * {@link #NO_PARTIAL_PHASE_CLIENT_IDS}. Otherwise, return <code>false</code>.</p>
@@ -242,13 +266,25 @@ public abstract class PartialViewContext {
     /**
      * <p class="changed_added_2_0">
      * Return <code>true</code> if {@link #isAjaxRequest}
-     * returns <code>true</code>, {@link #isRenderNone} returns
-     * <code>false</code> and {@link #getRenderPhaseClientIds}
-     * returns an <code>empty</code> list.
-     * Otherwise, return <code>false</code>.  This method effectively
-     * says "render everything" if {@link #PARTIAL_RENDER_PARAM_NAME}
-     * is not present in the current request with the value
-     * {@link #NO_PARTIAL_PHASE_CLIENT_IDS}.</p>
+     * returns <code>true</code> and {@link #PARTIAL_EXECUTE_PARAM_NAME}
+     * is present in the current request with the value
+     * {@link #ALL_PARTIAL_PHASE_CLIENT_IDS}.</p>
+     * Otherwise, return <code>false</code>.</p>
+     *
+     * @throws IllegalStateException if this method is called after
+     *  this instance has been released
+     *
+     * @since 2.0
+     */
+    public abstract boolean isExecuteAll();
+
+    /**
+     * <p class="changed_added_2_0">
+     * Return <code>true</code> if {@link #isAjaxRequest}
+     * returns <code>true</code> and {@link #PARTIAL_RENDER_PARAM_NAME}
+     * is present in the current request with the value
+     * {@link #ALL_PARTIAL_PHASE_CLIENT_IDS}.</p>
+     * Otherwise, return <code>false</code>.</p>
      *
      * @throws IllegalStateException if this method is called after
      *  this instance has been released

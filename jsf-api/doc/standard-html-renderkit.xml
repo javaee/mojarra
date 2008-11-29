@@ -36,7 +36,7 @@
 -->
 <!-- =========== FULL CONFIGURATION FILE ================================== -->
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xi="http://www.w3.org/2001/XInclude" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd" version="2.0">
-<!-- Generic User Interface Components -->
+  <!-- Generic User Interface Components -->
   <component>
     <component-type>javax.faces.Column</component-type>
     <component-class>javax.faces.component.UIColumn</component-class>
@@ -373,7 +373,7 @@
         <method-signature>
                 void actionListener(javax.faces.event.ActionEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -1326,7 +1326,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -2704,7 +2704,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -3424,7 +3424,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -3785,7 +3785,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -4011,7 +4011,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <component-family>javax.faces.ViewRoot</component-family>
     </component-extension>
   </component>
-<!-- Concrete HTML Components -->
+  <!-- Concrete HTML Components -->
   <component>
     <description><![CDATA[<p>Represents a column that will be rendered 
       in an HTML <code>table</code> element.</p>]]></description>
@@ -4382,7 +4382,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void actionListener(javax.faces.event.ActionEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -4567,7 +4567,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-        <pass-through>true</pass-through>
+        <pass-through>false</pass-through>
       </property-extension>
     </property>
     <property>
@@ -4987,7 +4987,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void actionListener(javax.faces.event.ActionEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -7298,7 +7298,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -7653,7 +7653,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -7971,7 +7971,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-        <pass-through>true</pass-through>
+        <pass-through>false</pass-through>
       </property-extension>
     </property>
     <property>
@@ -8399,7 +8399,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -8717,7 +8717,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-        <pass-through>true</pass-through>
+        <pass-through>false</pass-through>
       </property-extension>
     </property>
     <property>
@@ -9129,7 +9129,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -9447,7 +9447,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-        <pass-through>true</pass-through>
+        <pass-through>false</pass-through>
       </property-extension>
     </property>
     <property>
@@ -13050,7 +13050,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -13381,7 +13381,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-        <pass-through>true</pass-through>
+        <pass-through>false</pass-through>
       </property-extension>
     </property>
     <property>
@@ -13740,7 +13740,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -14071,7 +14071,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-        <pass-through>true</pass-through>
+        <pass-through>false</pass-through>
       </property-extension>
     </property>
     <property>
@@ -14498,7 +14498,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -14829,7 +14829,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-        <pass-through>true</pass-through>
+        <pass-through>false</pass-through>
       </property-extension>
     </property>
     <property>
@@ -15220,7 +15220,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -15551,7 +15551,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-        <pass-through>true</pass-through>
+        <pass-through>false</pass-through>
       </property-extension>
     </property>
     <property>
@@ -15932,7 +15932,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -16250,7 +16250,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-        <pass-through>true</pass-through>
+        <pass-through>false</pass-through>
       </property-extension>
     </property>
     <property>
@@ -16641,7 +16641,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -16959,7 +16959,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-        <pass-through>true</pass-through>
+        <pass-through>false</pass-through>
       </property-extension>
     </property>
     <property>
@@ -17340,7 +17340,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-<!-- PENDING modify tlddoc to handle an OR of method signatures 
+        <!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -17658,7 +17658,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-        <pass-through>true</pass-through>
+        <pass-through>false</pass-through>
       </property-extension>
     </property>
     <property>
@@ -17756,7 +17756,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <renderer-type>javax.faces.Radio</renderer-type>
     </component-extension>
   </component>
-<!-- Standard HTML Renderkit -->
+  <!-- Standard HTML Renderkit -->
   <render-kit>
     <description><![CDATA[
      The standard HTML RenderKit.  Please see the spec for additional
@@ -18111,7 +18111,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-name>onchange</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+          <pass-through>false</pass-through>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -20445,7 +20445,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-name>onchange</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+          <pass-through>false</pass-through>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -20878,7 +20878,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-name>onchange</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+          <pass-through>false</pass-through>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -21288,7 +21288,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-name>onchange</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+          <pass-through>false</pass-through>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -23695,7 +23695,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-name>onchange</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+          <pass-through>false</pass-through>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -24099,7 +24099,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-name>onchange</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+          <pass-through>false</pass-through>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -24647,7 +24647,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-name>onchange</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+          <pass-through>false</pass-through>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25062,7 +25062,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-name>onchange</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+          <pass-through>false</pass-through>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25465,7 +25465,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-name>onchange</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+          <pass-through>false</pass-through>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -25861,7 +25861,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-name>onchange</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+          <pass-through>false</pass-through>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -26275,7 +26275,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-name>onchange</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+          <pass-through>false</pass-through>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -26346,7 +26346,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-name>onchange</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+          <pass-through>false</pass-through>
         </attribute-extension>
       </attribute>
       <attribute>

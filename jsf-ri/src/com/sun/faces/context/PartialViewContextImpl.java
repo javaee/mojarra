@@ -75,6 +75,7 @@ public class PartialViewContextImpl extends PartialViewContext {
     private List<String> renderPhaseClientIds;
     private OnOffResponseWrapper onOffResponse = null;
     private Boolean ajaxRequest;
+    private Boolean partialRequest;
     private Boolean renderAll;
 
     // ----------------------------------------------------------- Constructors
@@ -118,6 +119,23 @@ public class PartialViewContextImpl extends PartialViewContext {
     }
 
     /**
+     * @see javax.faces.context.PartialViewContext#isPartialRequest()
+     */
+    @Override
+    public boolean isPartialRequest() {
+
+        assertNotReleased();
+        if (partialRequest == null) {
+            partialRequest = isAjaxRequest() ||
+                FacesContext.getCurrentInstance().
+                getExternalContext().getRequestParameterMap()
+                .containsKey("javax.faces.partial");
+        }
+        return partialRequest;
+
+    }
+
+    /**
      * @see javax.faces.context.PartialViewContext#isExecuteNone()
      */
     @Override
@@ -131,6 +149,19 @@ public class PartialViewContextImpl extends PartialViewContext {
 
     }
 
+    /**
+     * @see javax.faces.context.PartialViewContext#isExecuteAll()
+     */
+    @Override
+    public boolean isExecuteAll() {
+
+        assertNotReleased();
+        String execute = FacesContext.getCurrentInstance().
+            getExternalContext().getRequestParameterMap()
+                .get(PARTIAL_EXECUTE_PARAM_NAME);
+        return (ALL_PARTIAL_PHASE_CLIENT_IDS.equals(execute));
+
+    }
 
     /**
      * @see javax.faces.context.PartialViewContext#isRenderAll()
@@ -140,9 +171,10 @@ public class PartialViewContextImpl extends PartialViewContext {
 
         assertNotReleased();
         if (renderAll == null) {
-            renderAll = (isAjaxRequest()
-                           && !isRenderNone()
-                           && getRenderPhaseClientIds().isEmpty());
+            String render = FacesContext.getCurrentInstance().
+                getExternalContext().getRequestParameterMap()
+                    .get(PARTIAL_RENDER_PARAM_NAME);
+            renderAll = (ALL_PARTIAL_PHASE_CLIENT_IDS.equals(render));
         }
 
         return renderAll;
@@ -168,10 +200,10 @@ public class PartialViewContextImpl extends PartialViewContext {
     public boolean isRenderNone() {
 
         assertNotReleased();
-        String execute = FacesContext.getCurrentInstance().
+        String render = FacesContext.getCurrentInstance().
             getExternalContext().getRequestParameterMap()
             .get(PARTIAL_RENDER_PARAM_NAME);
-        return (NO_PARTIAL_PHASE_CLIENT_IDS.equals(execute));
+        return (NO_PARTIAL_PHASE_CLIENT_IDS.equals(render));
 
     }
 
@@ -271,7 +303,6 @@ public class PartialViewContextImpl extends PartialViewContext {
         }
          
     }
-
 
     // -------------------------------------------------------- Private Methods
 

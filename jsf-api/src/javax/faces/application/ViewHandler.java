@@ -81,7 +81,7 @@ import javax.faces.webapp.pdl.ValueHolderAttachedObjectTarget;
  * and restoring the state of each view.  <span class="changed_added_2_0">An
  * implementation
  * of this class must be thread-safe.</span></p>
-
+ *
  * <p>Please see {@link StateManager} for information on how the
  * <code>ViewHandler</code> interacts the {@link StateManager}. </p>
 
@@ -117,9 +117,14 @@ public abstract class ViewHandler {
 
     /**
      * <p><span class="changed_modified_2_0">Allow</span> the web
-     * application to define an alternate suffix for
-     * <span class="changed_modified_2_0">JSP</span> pages containing JSF content.
-     * If this init parameter is not specified, the default value is taken from
+     * application to define a <span class="changed_modified_2_0">list
+     * of alternate suffixes</span> for pages containing JSF content.
+     * <span class="changed_modified_2_0">This list is a space separated
+     * list of values of the form
+     * <i><code>.&lt;extension&gt;</code></i>.  The first physical
+     * resource whose extension matches one of the configured extensions
+     * will be the suffix used to create the view ID.</span> If this
+     * init parameter is not specified, the default value is taken from
      * the value of the constant {@link #DEFAULT_SUFFIX}.</p>
      */
     public static final String DEFAULT_SUFFIX_PARAM_NAME = 
@@ -127,12 +132,10 @@ public abstract class ViewHandler {
 
 
     /**
-     * <p><span class="changed_modified_2_0">The</span> value to use for the 
-     * default extension <span class="changed_modified_2_0">for JSP pages
-     * containing JSF content</span> if the webapp is using
+     * <p>The value to use for the default extension if the webapp is using
      * url extension mapping.</p>
      */
-    public static final String DEFAULT_SUFFIX = ".jsp";
+    public static final String DEFAULT_SUFFIX = ".xhtml .jsp";
     
     /**
      * <p class="changed_added_2_0">Allow the web application to define an
@@ -271,11 +274,33 @@ public abstract class ViewHandler {
      * information from the argument <code>FacesContext</code> and
      * <code>viewId</code>.</p>
      *
-     * <p class="changed_added_2_0">The default implementation must
-     * obtain a reference to the {@link PageDeclarationLanguage} for
-     * this <code>viewId</code> and call its {@link
-     * PageDeclarationLanguage#createView} method, returning the result
-     * and not swallowing any exceptions thrown by that method.</p>
+     * <p>If there is an existing <code>ViewRoot</code> available on the
+     * {@link FacesContext}, this method must copy its
+     * <code>locale</code> and <code>renderKitId</code> to this new view
+     * root.  If not, this method must call {@link #calculateLocale} and
+     * {@link #calculateRenderKitId}, and store the results as the
+     * values of the  <code>locale</code> and <code>renderKitId</code>,
+     * proeprties, respectively, of the newly created
+     * <code>UIViewRoot</code>.</p>
+
+     * <p class="changed_added_2_0">If the view is written using
+     * Facelets, the markup comprising the view must be executed, with
+     * the UIComponent instances in the view being encountered in the
+     * same depth-first order as in other lifecycle methods defined on
+     * {@link javax.faces.component.UIComponent}, and added to the view
+     * (but not rendered) during the traversal.  The runtime must
+     * guarantee that the view must be fully populated before the
+     * <code>afterPhase()</code> method of any {@link
+     * javax.faces.event.PhaseListener}s attached to the application or
+     * to the <code>UIViewRoot</code> (via {@link
+     * UIViewRoot#setAfterPhaseListener} or {@link
+     * UIViewRoot#addPhaseListener}) are called.  IMPORTANT: the new
+     * <code>UIViewRoot</code> instance must be passed to {@link
+     * javax.faces.context.FacesContext#setViewRoot}
+     * <strong>before</strong> the execution of the Facelets view
+     * resulting in tree creation.  This enables the broadest possible
+     * range of implementations for how tree creation is actually
+     * implemented.</p>
      *
      * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
@@ -319,8 +344,8 @@ public abstract class ViewHandler {
 
     /**
      * <p class="changed_added_2_0">Return the {@link
-     * PageDeclarationLanguage} instance used to handle the PDL contained
-     * in the file referenced by the argument <code>viewId</code></p>
+     * PageDeclarationLanguage} instance used for this <code>ViewHandler</code>
+     * instance.</p>
      * 
      * <div class="changed_added_2_0">
      * 

@@ -64,15 +64,7 @@ import java.util.ResourceBundle;
 
 import javax.faces.FacesException;
 
-import javax.faces.application.Application;
-import javax.faces.application.ApplicationWrapper;
-
-import javax.faces.application.NavigationHandler;
-import javax.faces.application.ResourceHandler;
-import javax.faces.application.ViewHandler;
-
-import javax.faces.application.StateManager;
-import javax.faces.application.ProjectStage;
+import javax.faces.application.*;
 
 import javax.faces.component.UIComponent;
 
@@ -321,8 +313,13 @@ public class NewApplication extends ApplicationWrapper {
 
     }
 
+    public PartialTraversal getPartialTraversal() {
+        return oldApp.getPartialTraversal();
+    }
 
-
+    public void setPartialTraversal(PartialTraversal partialTraversal) {
+        oldApp.setPartialTraversal(partialTraversal);
+    }
 
 
     public void setVariableResolver(VariableResolver resolver) {

@@ -52,158 +52,224 @@
  * limitations under the License.
  */
 
+// RELEASE_PENDING need to decide on naming for Utils
+var mojarra = mojarra || {};
+
+
 /**
  * Utility functions
  */
-javax.faces.Ajax.Utils = function() {
+if (!window["jsf.Utils"]) {
 
-    this.createClass = function() {
-        return function() {
-            this.initialize.apply(this, arguments);
-        }
-    }
+    jsf.Utils = {
 
-    this.extend = function(destination, source) {
-        for (var property in source) {
-            destination[property] = source[property];
-        }
-        return destination;
-    }
+        createClass : function() {
+            return function() {
+                this.initialize.apply(this, arguments);
+            };
+        },
 
-    this.getForm = function(element) {
-        if (element) {
-            var form = this.$(element);
-            while (form && form.tagName && form.tagName.toLowerCase() != 'form') {
-                if (form.form) return form.form;
-                if (form.parentNode) {
+        extend : function(destination, source) {
+            for (var property in source) {
+                destination[property] = source[property];
+            }
+            return destination;
+        },
+
+        getForm : function(element) {
+            if (element) {
+                var form = this.$(element);
+                while (form && form.tagName && form.tagName.toLowerCase() !== 'form') {
+                    if (form.form) {
+                        return form.form;
+                    }
+                    if (form.parentNode) {
                         form = form.parentNode;
-                } else {
-                    form = null;
+                    } else {
+                        form = null;
+                    }
+                    if (form) {
+                        return form;
+                    }
                 }
-                if (form) return form;
+                return document.forms[0];
             }
-            return document.forms[0];
-        }
-        return null;
-    }
+            return null;
+        },
 
-    this.$ = function() {
-        var results = [], element;
-        for (var i = 0; i < arguments.length; i++) {
-            element = arguments[i];
-            if (typeof element == 'string')
-                element = document.getElementById(element);
-            results.push(element);
-        }
-        return this.reduce(results);
-    }
-
-    this.reduce = function(toReduce) {
-        return toReduce.length > 1 ? toReduce : toReduce[0];
-    }
-
-    this.toArray = function(s,e) {
-        var sarray;
-        if (typeof s == 'string') {
-            sarray = s.split((e)?e:' ');
-            for (var i=0; i<sarray.length; i++) {
-                sarray[i] = this.trim(sarray[i]);
+        $ : function() {
+            var results = [], element;
+            for (var i = 0; i < arguments.length; i++) {
+                element = arguments[i];
+                if (typeof element == 'string')
+                    element = document.getElementById(element);
+                results.push(element);
             }
-        }
-        return sarray;
-    }
+            return this.reduce(results);
+        },
 
-    this.trim = function(toTrim) {
-        var result = null;
-        if (null != toTrim) {
-            var s = toTrim.replace( /^\s+/g, "" );
-            result = s.replace( /\s+$/g, "" );
-        }
-        return result;
-    }
+        reduce : function(toReduce) {
+            return toReduce.length > 1 ? toReduce : toReduce[0];
+        },
 
-    this.scriptFrag = '(?:<script.*?>)((\n|\r|.)*?)(?:<\/script>)';
 
-    this.stripScripts = function(src) {
-        return src.replace(new RegExp(this.scriptFrag, 'img'), '');
-    }
-
-    this.evalScripts = function(src) {
-        return this.extractScripts(src).map(function(script) { return eval(script) });
-    }
-
-    this.extractScripts = function(src) {
-        var matchAll = new RegExp(this.scriptFrag, 'img');
-        var matchOne = new RegExp(this.scriptFrag, 'im');
-        return (src.match(matchAll) || []).map(function(scriptTag) {
-            return (scriptTag.match(matchOne) || ['', ''])[1];
-        });
-    }
-
-this.elementReplace = function(d, tempTagName, src) {
-        var parent = d.parentNode;
-        var temp = document.createElement(tempTagName);
-        var result = null;
-        temp.id = d.id;
-
-        // If we are creating a head element...
-        if (-1 != d.tagName.toLowerCase().indexOf("head") && d.tagName.length == 4) {
-
-            // head replacement only appears to work on firefox.
-            if (-1 == BrowserDetect.browser.indexOf("Firefox")) {
-                return result;
-            }
-
-            // Strip link elements from src.
-            if (-1 != src.indexOf("link")) {
-                var
-                    linkStartEx = new RegExp("< *link.*>", "gi");
-                var linkStart;
-                while (null != (linkStart = linkStartEx.exec(src))) {
-                    src = src.substring(0, linkStart.index) +
-                        src.substring(linkStartEx.lastIndex);
-                    linkStartEx.lastIndex = 0;
+        // Split a delimited string into an array
+        // @param s String
+        // @param e delimiter character - cannot be a space
+        toArray : function(s, e) {
+            var sarray;
+            if (typeof s == 'string') {
+                sarray = s.split((e) ? e : ' ');
+                for (var i = 0; i < sarray.length; i++) {
+                    sarray[i] = this.trim(sarray[i]);
                 }
             }
+            return sarray;
+        },
 
-            // Strip style elements from src
-            if (-1 != src.indexOf("style")) {
-                var
-                    styleStartEx = new RegExp("< *style.*>", "gi"),
-                    styleEndEx = new RegExp("< */ *style.*>", "gi");
-                var styleStart, styleEnd;
-                while (null != (styleStart = styleStartEx.exec(src))) {
-                    styleEnd = styleEndEx.exec(src);
-                    src = src.substring(0, styleStart.index) +
-                        src.substring(styleStartEx.lastIndex);
-                    styleStartEx.lastIndex = 0;
+        isInArray : function(array, value) {
+            for (var i = 0; i < array.length; i++) {
+                if (array[i] === value) {
+                    return true;
                 }
             }
+            return false;
+        },
 
-            temp.innerHTML = src;
+        trim : function(toTrim) {
+            var result = null;
+            if (null != toTrim) {
+                var s = toTrim.replace(/^\s+/g, "");
+                result = s.replace(/\s+$/g, "");
+            }
+            return result;
+        },
 
-            // clone all the link elements...
-            var i, links, styles;
-            links = d.getElementsByTagName("link");
-            if (links) {
-                for (i = 0; i < links.length; i++) {
-                    temp.appendChild(links[i].cloneNode(true));
+        scriptFrag : '(?:<script.*?>)((\n|\r|.)*?)(?:<\/script>)',
+
+        stripScripts : function(src) {
+            return src.replace(new RegExp(this.scriptFrag, 'img'), '');
+        },
+
+        evalScripts : function(src) {
+            return this.extractScripts(src).map(function(script) {
+                return eval(script)
+            });
+        },
+
+        extractScripts : function(src) {
+            var matchAll = new RegExp(this.scriptFrag, 'img');
+            var matchOne = new RegExp(this.scriptFrag, 'im');
+            return (src.match(matchAll) || []).map(function(scriptTag) {
+                return (scriptTag.match(matchOne) || ['', ''])[1];
+            });
+        },
+
+        elementReplace : function(d, tempTagName, src) {
+            var parent = d.parentNode;
+            var temp = document.createElement(tempTagName);
+            var result = null;
+            temp.id = d.id;
+
+            // If we are creating a head element...
+            if (-1 != d.tagName.toLowerCase().indexOf("head") && d.tagName.length == 4) {
+
+                // head replacement only appears to work on firefox.
+                if (-1 == BrowserDetect.browser.indexOf("Firefox")) {
+                    return result;
+                }
+
+                // Strip link elements from src.
+                if (-1 != src.indexOf("link")) {
+                    var
+                            linkStartEx = new RegExp("< *link.*>", "gi");
+                    var linkStart;
+                    while (null != (linkStart = linkStartEx.exec(src))) {
+                        src = src.substring(0, linkStart.index) +
+                              src.substring(linkStartEx.lastIndex);
+                        linkStartEx.lastIndex = 0;
+                    }
+                }
+
+                // Strip style elements from src
+                if (-1 != src.indexOf("style")) {
+                    var
+                            styleStartEx = new RegExp("< *style.*>", "gi"),
+                            styleEndEx = new RegExp("< */ *style.*>", "gi");
+                    var styleStart, styleEnd;
+                    while (null != (styleStart = styleStartEx.exec(src))) {
+                        styleEnd = styleEndEx.exec(src);
+                        src = src.substring(0, styleStart.index) +
+                              src.substring(styleStartEx.lastIndex);
+                        styleStartEx.lastIndex = 0;
+                    }
+                }
+
+                temp.innerHTML = src;
+
+                // clone all the link elements...
+                var i, links, styles;
+                links = d.getElementsByTagName("link");
+                if (links) {
+                    for (i = 0; i < links.length; i++) {
+                        temp.appendChild(links[i].cloneNode(true));
+                    }
+                }
+                // then clone all the style elements.
+                styles = d.getElementsByTagName("style");
+                if (styles) {
+                    for (i = 0; i < styles.length; i++) {
+                        temp.appendChild(styles[i].cloneNode(true));
+                    }
+                }
+            } else {
+                temp.innerHTML = src;
+            }
+
+            result = temp;
+            parent.replaceChild(temp, d);
+            return result;
+        },
+
+        // Copy the direct properties of an object to another, new object
+        // Do not copy functions or inherited properties
+        deepObjCopy : function deepObjCopy(dupeObj) {
+            var retObj = {};
+            if (dupeObj === null) {
+                return null;
+            }
+            if (typeof dupeObj === 'object') {
+                if (typeof dupeObj.length !== 'undefined') {
+                    retObj = [];
+                }
+                for (var objInd in dupeObj) {
+                    if (dupeObj.hasOwnProperty(objInd)) {
+                        if (typeof dupeObj[objInd] === 'object') {
+                            retObj[objInd] = deepObjCopy(dupeObj[objInd]);
+                        } else if (typeof dupeObj[objInd] === 'string') {
+                            retObj[objInd] = dupeObj[objInd];
+                        } else if (typeof dupeObj[objInd] === 'number') {
+                            retObj[objInd] = dupeObj[objInd];
+                        } else if (typeof dupeObj[objInd] === 'boolean') {
+                            if (dupeObj[objInd]) {
+                                retObj[objInd] = true;
+                            } else {
+                                retObj[objInd] = false;
+                            }
+                        } // else igore functions
+                    }
                 }
             }
-            // then clone all the style elements.
-            styles = d.getElementsByTagName("style");
-            if (styles) {
-                for (i = 0; i < styles.length; i++) {
-                    temp.appendChild(styles[i].cloneNode(true));
-                }
-            }
-        } else {
-            temp.innerHTML = src;
+            return retObj;
+        },
+
+        /**
+         * Convert a String with a list of exec ids into a OpenAjax friendly array.
+         * @return an array of dot-separated strings which represent the exec'd id's
+         * @private
+         */
+        execConvert : function execConvert(execParam) {
+            return execParam.replace(' ', '').replace(jsf.separator, '.').split(',');
         }
-
-
-        result = temp
-        parent.replaceChild(temp, d);
-        return result;
-    }
+    };
 }

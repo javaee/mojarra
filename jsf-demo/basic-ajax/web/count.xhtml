@@ -51,11 +51,11 @@
         <br/>
         <!-- Increment the counter on the server, and the client -->
         <h:commandButton id="button1" value="Count"
-                         onclick="javax.faces.Ajax.ajaxRequest(this, event, {execute: this.id, render: 'out1'}); return false;"/>
+                         onclick="jsf.ajax.request(this, event, {execute: this.id, render: 'out1'}); return false;"/>
         <br/>
         <!-- Resets the counter, doesn't refresh the page -->
         <h:commandButton id="reset" value="reset"
-                            onclick="javax.faces.Ajax.ajaxRequest(this, event, {execute:'reset', render: 'out1'}); return false;"
+                            onclick="jsf.ajax.request(this, event, {execute:'reset', render: 'out1'}); return false;"
                             actionListener="#{count.reset}"/>
         <h:messages/>
     </h:form>

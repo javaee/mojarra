@@ -54,6 +54,7 @@ import java.util.logging.Logger;
 import javax.el.ELResolver;
 import javax.faces.application.Application;
 import javax.faces.application.NavigationHandler;
+import javax.faces.application.PartialTraversal;
 import javax.faces.application.ResourceHandler;
 import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
@@ -120,6 +121,12 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
      */
     private static final String NAVIGATION_HANDLER
          = "navigation-handler";
+
+    /**
+     * <code>/faces-config/application/partial-traversal</code>
+     */
+    private static final String PARTIAL_TRAVERSAL
+         = "partial-traversal";
 
     /**
      * <code>/faces-config/application/view-handler</code>
@@ -274,6 +281,8 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                                 addActionListener(app, n);
                             } else if (NAVIGATION_HANDLER.equals(n.getLocalName())) {
                                 setNavigationHandler(app, n);
+                            } else if (PARTIAL_TRAVERSAL.equals(n.getLocalName())) {
+                                setPartialTraversal(app, n);
                             } else if (VIEW_HANDLER.equals(n.getLocalName())) {
                                 String viewHandler = getNodeText(n);
                                 if (viewHandler != null) {
@@ -432,6 +441,30 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
                                         manager));
                     }
                     application.setStateManager((StateManager) instance);
+                }
+            }
+        }
+
+    }
+
+    private void setPartialTraversal(Application application,
+                                 Node partialTraversal) {
+
+        if (partialTraversal != null) {
+            String traversal = getNodeText(partialTraversal);
+            if (traversal != null) {
+                Object instance = createInstance(traversal,
+                                                 PartialTraversal.class,
+                                                 application.getPartialTraversal(),
+                                                 partialTraversal);
+                if (instance != null) {
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.log(Level.FINE,
+                                   MessageFormat.format(
+                                        "Calling Application.setPartialTraversal({0})",
+                                        traversal));
+                    }
+                    application.setPartialTraversal((PartialTraversal) instance);
                 }
             }
         }

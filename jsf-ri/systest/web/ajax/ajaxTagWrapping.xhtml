@@ -1,0 +1,45 @@
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+    <title>Ajax Tag Test Page</title>
+</h:head>
+<h:body>
+    <h1>Test Tag with each component</h1>
+    <h:form id="form" prependId="false">
+        <h:outputText id="out1" value="#{ajaxtag.count}"/>
+        <br/>
+        <!-- Increment the counter on the server, and the client -->
+        <h:commandButton id="button1" value="Count">
+            <f:ajax render="out1"/>
+        </h:commandButton>
+        <br/>
+        <h:inputText id="intext" value="#{ajaxtag.text}">
+            <f:ajax render="outtext"/>
+            </h:inputText>
+        <h:outputText id="outtext" value="#{ajaxtag.text}"/>
+        <br/>
+<!--        <h:selectBooleanCheckbox id="checkbox" value="#{ajaxtag.checked}"
+                                 onchange="jsf.ajax.request(this,event,{render:'checkedvalue2'});" />
+        <h:outputText id="checkedvalue" value="#{ajaxtag.checked}"/>
+        <br/>
+        -->
+        <h:selectBooleanCheckbox id="checkbox" value="#{ajaxtag.checked}">
+            <f:ajax render="checkedvalue"/>
+            </h:selectBooleanCheckbox>
+        <h:outputText id="checkedvalue" value="#{ajaxtag.checked}"/>
+        <br/>
+        <!-- Resets the counter, doesn't refresh the page -->
+        <h:commandButton id="reset" value="reset" actionListener="#{ajaxtag.reset}">
+            <f:ajax execute="reset" render="form"/>
+        </h:commandButton>
+        <br/>
+        <h:commandButton id="reload" value="reload" type="submit" />
+    </h:form>
+
+</h:body>
+</html>

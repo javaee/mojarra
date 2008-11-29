@@ -53,44 +53,32 @@
  */
 
 /**
-  @project JSF Ajax Library 
-  @version 2.0 
-  @description  
+  @project JSF Ajax Library
+  @version 2.0
+  @description This is the standard implementation of the JSF Ajax Library.
 */
 
 /**
  * Register with OpenAjax
  */
-if (typeof OpenAjax != "undefined" &&
-    typeof OpenAjax.hub.registerLibrary != "undefined") {
+if (typeof OpenAjax !== "undefined" &&
+    typeof OpenAjax.hub.registerLibrary !== "undefined") {
     OpenAjax.hub.registerLibrary("javax", "www.sun.com", "1.0", null);
 }
 
 /**
- * Create our top level namespace - javax.faces.Ajax
+ * Create our top level namespaces - javax.faces.Ajax
  */
-if (javax == null || typeof javax == "undefined") {
-    var javax = new Object();
+/*  RELEASE_PENDING - need to figure out what to do with the namespacing.
+if (javax === null || typeof javax === "undefined") {
+    var javax = {};
 }
-if (javax.faces == null || typeof javax.faces == "undefined") {
-    javax["faces"] = new Object();
-}
-if (javax.faces.Ajax == null || typeof javax.faces.Ajax == "undefined") {
-    javax.faces["Ajax"] = new Object();
-}
+*/
+var jsf = jsf || {};
+jsf.ajax = jsf.ajax || {};
 
 /**
- * @name javax
- * @namespace
- */
-
-/**
- * @name javax.faces
- * @namespace
- */
-
-/**
- * @name javax.faces.Ajax
+ * @name jsf
  * @namespace
  */
 
@@ -104,14 +92,12 @@ if (javax.faces.Ajax == null || typeof javax.faces.Ajax == "undefined") {
  * accordance with: <a href="http://www.w3.org/TR/html401/interact/forms.html#h-17.13.2">
  * Section 17.13.2 of the HTML Specification</a>.
  *
- * @returns The encoded state for the specified form's input controls.
- * @function javax.faces.Ajax.viewState
+ * @returns String The encoded state for the specified form's input controls.
+ * @function jsf.viewState
  */
-javax.faces.Ajax.viewState = function(form) {
-
-    return javax.faces.Ajax.AjaxEngine.serializeForm(form);
-
-}
+jsf.viewState = function(form) {
+    return jsf.AjaxEngine.serializeForm(form);
+};
 
 /**
  * <p>Send an asynchronous Ajax request to the server.
@@ -120,10 +106,11 @@ javax.faces.Ajax.viewState = function(form) {
  * <li>Capture the element that triggered this Ajax request
  * (from the <code>element</code> argument, also known as the
  * <code>source</code> element.</li>
+ * <li>Add the name of the source element in 
  * <li>Determine the <code>source</code> element's <code>form</code>
  * element.</li>
  * <li>Get the <code>form</code> view state by calling
- * {@link javax.faces.Ajax.viewState} passing the
+ * {@link jsf.viewState} passing the
  * <code>form</code> element as the argument.</li>
  * <li>Collect post data arguments for the Ajax request.
  * <ul>
@@ -173,12 +160,12 @@ javax.faces.Ajax.viewState = function(form) {
  * <code>action</code> property of the <code>form</code> element as the
  * <code>url</code>.</li>
  * </ul>
- * Before the request is sent it must be put into a queue to ensure requests 
+ * Before the request is sent it must be put into a queue to ensure requests
  * are sent in the same order as when they were initiated.  The request callback function
  * must examine the queue and determine the next request to be sent.  The behavior of the
  * request callback function must be as follows:
  * <ul>
- * <li>If the request completed successfully invoke {@link javax.faces.Ajax.ajaxResponse}
+ * <li>If the request completed successfully invoke {@link jsf.ajax.response}
  * passing the <code>request</code> object.</li>
  * <li>If the request did not complete successfully, notify the client.</li>
  * <li>Regardless of the outcome of the request (success or error) every request in the
@@ -213,40 +200,51 @@ javax.faces.Ajax.viewState = function(form) {
  * </table>
  * The <code>options</code> argument is optional.
  *
- * @function javax.faces.Ajax.ajaxRequest
+ * @function jsf.ajax.request
  * @throws ArgNotSet Error if first required argument <code>element</code> is not specified
  */
-javax.faces.Ajax.ajaxRequest = function(element, event, options) {
+jsf.ajax.request = function(element, event, options) {
 
-    if (typeof element == 'undefined' || element == null) {
-        throw {
-                    name: 'ArgNotSet',
-                    message: "ajaxRequest:Required first argument has not been set"
-                }
+    if (typeof element === 'undefined' || element === null) {
+        throw new Error("jsf.ajax.request: Element not set");
     }
 
     // Capture the element that triggered this Ajax request.
     var source = element;
 
-    var utils = new javax.faces.Ajax.Utils();
+    var utils = jsf.Utils;
     var form = utils.getForm(source);
-    var viewState = javax.faces.Ajax.viewState(form);
+    var viewState = jsf.viewState(form);
 
     // Set up additional arguments to be used in the request..
-    var args = new Object();
-    if (typeof(options) != 'undefined' && options != null) {
-        if (options.execute) {
-            args["javax.faces.partial.execute"] = utils.toArray(options.execute,',').join(',');
-            options.execute = null;
-            delete options.execute;
-        }
-        if (options.render) {
-            args["javax.faces.partial.render"] = utils.toArray(options.render,',').join(',');
-            options.render = null;
-            delete options.render;
-        }
-        utils.extend(args, options);
+    // If there were "execute" ids specified, make sure we 
+    // include the identifier of the source element in the 
+    // "execute" list.  If there were no "execute" ids
+    // specified, determine the default.
+
+    var args = {};
+ 
+    if (typeof(options) === 'undefined' || options === null) {
+        options = {};
     }
+    if (options.execute) {
+        var temp = utils.toArray(options.execute, ',');
+        if (!utils.isInArray(temp, source.name)) {
+            options.execute = source.name + "," + options.execute;
+        }
+    } else {
+        determineDefaultExecute(source, options);
+    }
+    
+    args["javax.faces.partial.execute"] = utils.toArray(options.execute, ',').join(',');
+    options.execute = null;
+    delete options.execute;
+    if (options.render) {
+        args["javax.faces.partial.render"] = utils.toArray(options.render, ',').join(',');
+        options.render = null;
+        delete options.render;
+    }
+    utils.extend(args, options);
 
     args["javax.faces.partial.ajax"] = "true";
     args["method"] = "POST";
@@ -259,11 +257,32 @@ javax.faces.Ajax.ajaxRequest = function(element, event, options) {
         args[source] = source;
     }
 
-    var ajaxEngine = new javax.faces.Ajax.AjaxEngine();
+    var ajaxEngine = new jsf.AjaxEngine();
     ajaxEngine.setupArguments(args);
     ajaxEngine.queryString = viewState;
     ajaxEngine.sendRequest();
-}
+
+    // Helper function to determine the default execute list.
+    // For buttons (submit types), we return an empty list
+    // which means all will get processed on the server.
+    // For input types (text, etc..) the list is just the
+    // source element name.
+    //
+    function determineDefaultExecute(source, options) {
+        options.execute = source.id;
+        /*  RELEASE_PENDING - possibly remove
+        switch (source.type) {
+            case 'text': case 'password': case 'hidden': case 'textarea':
+            case 'select-one': case 'select-multiple':
+            case 'checkbox': case 'radio':
+                options.execute = source.id;
+                break;
+            case 'button': case 'submit': case 'reset':
+                options.execute = "all";
+        }
+        */
+    }
+};
 
 /**
  * <p>Receive an Ajax response from the server.
@@ -296,23 +315,22 @@ javax.faces.Ajax.ajaxRequest = function(element, event, options) {
  *
  * @throws EmptyResponse error if request contains no data
  *
- * @function javax.faces.Ajax.ajaxResponse
+ * @function jsf.ajax.response
  */
-javax.faces.Ajax.ajaxResponse = function(request) {
+jsf.ajax.response = function(request) {
 
     //  RELEASE_PENDING: We need to add more robust error handing - this error should probably be caught upstream
-    if (request == null || typeof request == 'undefined' ) {
-        throw new Error("javax.faces.Ajax.ajaxResponse: Request is null");
+    if (request === null || typeof request === 'undefined') {
+        throw new Error("jsf.ajax.response: Request is null");
     }
 
-
-    var utils = new javax.faces.Ajax.Utils();
+    var utils = jsf.Utils;
     var xmlReq = request;
 
     var xml = xmlReq.responseXML;
     //  RELEASE_PENDING: We need to add more robust error handing - this error should probably be caught upstream
     if (xml === null) {
-        throw new Error("javax.faces.Ajax.ajaxResponse: Reponse contains no data");
+        throw new Error("jsf.ajax.response: Reponse contains no data");
     }
 
     var id, content, markup, str;
@@ -395,10 +413,7 @@ javax.faces.Ajax.ajaxResponse = function(request) {
         } else {
             var d = utils.$(id);
             if (!d) {
-                throw {
-                    name: 'NotFound',
-                    message: id + 'not found'
-                }
+                throw new Error("jsf.ajax.response: "+id+" not found");
             }
             var parent = d.parentNode;
             var temp = document.createElement('div');
@@ -432,7 +447,7 @@ javax.faces.Ajax.ajaxResponse = function(request) {
             field.value = state.text || state.data;
         }
     }
-}
+};
 
 /**
  *
@@ -444,12 +459,19 @@ javax.faces.Ajax.ajaxResponse = function(request) {
  * running application in a typical product development lifecycle.  Refer
  * to <code>javax.faces.application.Application.getProjectStage</code> and
  * <code>javax.faces.application.ProjectStage</code>.
- * @function javax.faces.Ajax.getProjectStage
+ * @function jsf.getProjectStage
+ */
+// RELEASE_PENDING: change from function to String?
+jsf.getProjectStage = function() {
+    return "#{facesContext.application.projectStage}";
+};
+
+/**
+ * A String value which represents the current clientID separator string.
  */
 
-javax.faces.Ajax.getProjectStage = function() {
-
-    return "#{facesContext.application.projectStage}";
-
-}
+// RELEASE_PENDING : Still needs to be wired to the back end
+jsf.separator = function() {
+    return ":";
+}();
 

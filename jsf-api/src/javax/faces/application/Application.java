@@ -248,7 +248,24 @@ public abstract class Application {
      */
     public abstract void setNavigationHandler(NavigationHandler handler);
 
+    /**
+     * <p class="changed_added_2_0">Return the {@link PartialTraversal}
+     * instance that will define the traversal scheme for partial view
+     * processing and partial view rendering.</p>
+     */
+    public abstract PartialTraversal getPartialTraversal();
 
+    /**
+     * <p class="changed_added_2_0">Set the {@link PartialTraversal}
+     * instance that will define the traversal scheme for partial view
+     * processing and partial view rendering.</p>
+     *
+     * @param traversal The new {@link PartialTraversal} instance
+     *
+     * @throws NullPointerException if <code>traversal</code>
+     *  is <code>null</code>
+     */
+    public abstract void setPartialTraversal(PartialTraversal traversal);
 
     /**
      * <p class="changed_added_2_0">Return the singleton, stateless, thread-safe {@link
