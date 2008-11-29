@@ -165,6 +165,12 @@ public class StoreServletContext extends Object {
         public void setResponseCharacterEncoding(String responseCharacterEncoding) {
         }
 
+        public void setResponseHeader(String name, String value) {
+        }
+
+        public void addResponseHeader(String name, String value) {
+        }
+
         public String getRequestContextPath() {
             return null;
         }
