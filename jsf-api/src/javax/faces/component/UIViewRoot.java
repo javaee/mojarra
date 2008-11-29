@@ -947,21 +947,11 @@ public class UIViewRoot extends UIComponentBase {
         notifyBefore(context, PhaseId.RENDER_RESPONSE);
 
         if (!skipPhase) {
-            if (context.getPartialViewContext().isAjaxRequest()) {
-                PartialTraversal traversal = context.getApplication().getPartialTraversal();
-                if (traversal != null) {
-                    traversal.traverse(context, PhaseId.RENDER_RESPONSE, this);
-                } else {
-                    if (LOGGER.isLoggable(Level.SEVERE)) {
-                        LOGGER.log(Level.SEVERE,
-                               "severe.encodeBegin.traversal_not_defined", "null");
+            if (!context.getPartialViewContext().isAjaxRequest()) {
+                super.encodeBegin(context);
+            }
         }
     }
-            } else {
-                super.encodeBegin(context);
-                }
-            }
-            }
 
     /** 
      * <p class="changed_added_2_0">If {@link
@@ -985,11 +975,11 @@ public class UIViewRoot extends UIComponentBase {
                 if (LOGGER.isLoggable(Level.SEVERE)) {
                     LOGGER.log(Level.SEVERE,
                            "severe.encodeChildren.traversal_not_defined", "null");
-        }
+                }
             }
         } else {
-        super.encodeChildren(context);
-    }
+            super.encodeChildren(context);
+        }
     }
 
     /**
@@ -1009,17 +999,7 @@ public class UIViewRoot extends UIComponentBase {
      */
     @Override
     public void encodeEnd(FacesContext context) throws IOException {
-        if (context.getPartialViewContext().isAjaxRequest()) {
-            PartialTraversal traversal = context.getApplication().getPartialTraversal();
-            if (traversal != null) {
-                traversal.traverse(context, PhaseId.RENDER_RESPONSE, this);
-            } else {
-            if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE,
-                           "severe.encodeEnd.traversal_not_defined", "null");
-            }
-            }
-        } else {
+        if (!context.getPartialViewContext().isAjaxRequest()) {
             super.encodeEnd(context);
         }
         notifyAfter(context, PhaseId.RENDER_RESPONSE);
@@ -1040,8 +1020,7 @@ public class UIViewRoot extends UIComponentBase {
         FacesContext context = FacesContext.getCurrentInstance();
 
         PartialViewContext partialViewContext = context.getPartialViewContext();
-        if (partialViewContext.isAjaxRequest() && 
-            !partialViewContext.isRenderAll()) {
+        if (partialViewContext.isAjaxRequest()) {
             value = true;
         }
         return value;
