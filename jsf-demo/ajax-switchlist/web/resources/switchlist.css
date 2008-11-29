@@ -34,20 +34,10 @@
  holder.
 */
 
-.editClass {
 
+.switchlist {
     font-size: medium;
-    font-style: normal;
     font-family: Arial, sans-serif;
+    height: 150px;
+    width: 100px;
 }
-
-.editLink {
-
-    font-size: medium;
-    font-style: normal;
-    font-family: Arial, sans-serif;
-}
-a.editlink:link {text-decoration: none}
-a.editlink:visited {text-decoration: none}
-a.editlink:active {text-decoration: none}
-a.editlink:hover {text-decoration: none; background-color: yellow;}

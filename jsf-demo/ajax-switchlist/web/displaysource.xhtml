@@ -1,4 +1,5 @@
-/*
+<!--
+
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
  Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
@@ -32,22 +33,25 @@
  and therefore, elected the GPL Version 2 license, then the option applies
  only if the new code is made subject to such option by the copyright
  holder.
-*/
 
-.editClass {
+-->
+<!DOCTYPE html
+      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:d="https://javaserverfaces.dev.java.net/demo/demotag"
+      xml:lang="en" lang="en">
+<head>
+    <title>Source: #{param.file}</title>
+</head>
+<body>
+    <h3>Source code for:&nbsp; #{param.file}</h3>
 
-    font-size: medium;
-    font-style: normal;
-    font-family: Arial, sans-serif;
-}
+    <hr/>
 
-.editLink {
+    <pre>
+#{d:writeSource(facesContext, param.file)}
+    </pre>
 
-    font-size: medium;
-    font-style: normal;
-    font-family: Arial, sans-serif;
-}
-a.editlink:link {text-decoration: none}
-a.editlink:visited {text-decoration: none}
-a.editlink:active {text-decoration: none}
-a.editlink:hover {text-decoration: none; background-color: yellow;}
+</body>
+</html>

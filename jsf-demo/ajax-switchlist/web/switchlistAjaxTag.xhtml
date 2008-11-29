@@ -1,4 +1,5 @@
-/*
+<!--
+
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
  Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
@@ -32,22 +33,35 @@
  and therefore, elected the GPL Version 2 license, then the option applies
  only if the new code is made subject to such option by the copyright
  holder.
-*/
 
-.editClass {
-
-    font-size: medium;
-    font-style: normal;
-    font-family: Arial, sans-serif;
-}
-
-.editLink {
-
-    font-size: medium;
-    font-style: normal;
-    font-family: Arial, sans-serif;
-}
-a.editlink:link {text-decoration: none}
-a.editlink:visited {text-decoration: none}
-a.editlink:active {text-decoration: none}
-a.editlink:hover {text-decoration: none; background-color: yellow;}
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <title>Switchlist Tag Example</title>
+</h:head>
+<h:body>
+    <h1>Switchlist Tag Example</h1>
+    <h:outputStylesheet name="switchlist.css"/>
+        <h:form id="form1">
+            <h:selectManyListbox id="list1" value="#{listholder.list1}">
+                <f:selectItems value="#{listholder.items1}"/>
+            </h:selectManyListbox>
+            <h:commandButton id="button1" value="&gt;&gt;" actionListener="#{listholder.move1to2}">
+                <f:ajax render="form1:list1 form1:list2"/>
+                </h:commandButton>
+            <h:commandButton id="button2" value="&lt;&lt;" actionListener="#{listholder.move2to1}">
+                <f:ajax render="form1:list1 form1:list2"/>
+                </h:commandButton>
+            <h:selectManyListbox id="list2" value="#{listholder.list2}">
+                <f:selectItems value="#{listholder.items2}"/>
+            </h:selectManyListbox>
+            <br/>
+                <h:commandButton value="reload" type="submit"/>
+            <h:messages/>
+        </h:form>
+</h:body>
+</html>

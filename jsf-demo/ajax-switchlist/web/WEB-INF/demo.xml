@@ -1,4 +1,6 @@
-/*
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
  Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
@@ -32,22 +34,42 @@
  and therefore, elected the GPL Version 2 license, then the option applies
  only if the new code is made subject to such option by the copyright
  holder.
-*/
 
-.editClass {
+-->
 
-    font-size: medium;
-    font-style: normal;
-    font-family: Arial, sans-serif;
-}
+<demo-info>
 
-.editLink {
+    <demo>
+        <name>Switchlist In-Page Example</name>
+        <page>switchlistPage.jsf</page>
+        <sources>
+            <source>
+                <label>JSF Page</label>
+                <path>/switchlistPage.xhtml</path>
+            </source>
+            <source>
+                <label>Backing Bean</label>
+                <path>/WEB-INF/classes/switchlist/ListHolder.java</path>
+            </source>
+        </sources>
+    </demo>
 
-    font-size: medium;
-    font-style: normal;
-    font-family: Arial, sans-serif;
-}
-a.editlink:link {text-decoration: none}
-a.editlink:visited {text-decoration: none}
-a.editlink:active {text-decoration: none}
-a.editlink:hover {text-decoration: none; background-color: yellow;}
+    <!-- =================================================================== -->
+
+    <demo>
+        <name>Switchlist with Ajax Tag</name>
+        <page>switchlistAjaxTag.jsf</page>
+        <sources>
+            <source>
+                <label>JSF Page</label>
+                <path>/switchlistAjaxTag.xhtml</path>
+            </source>
+            <source>
+                <label>Managed Bean</label>
+                <path>/WEB-INF/classes/switchlist/ListHolder.java</path>
+            </source>
+        </sources>
+    </demo>
+
+
+</demo-info>
