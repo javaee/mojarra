@@ -76,7 +76,7 @@ public class PartialViewContextImpl extends PartialViewContext {
     private OnOffResponseWrapper onOffResponse = null;
     private Boolean ajaxRequest;
     private Boolean partialRequest;
-    private Boolean renderAll;
+    private Boolean renderAll = null; 
 
     // ----------------------------------------------------------- Constructors
 
@@ -170,12 +170,10 @@ public class PartialViewContextImpl extends PartialViewContext {
     public boolean isRenderAll() {
 
         assertNotReleased();
-        if (renderAll == null) {
-            String render = FacesContext.getCurrentInstance().
-                getExternalContext().getRequestParameterMap()
-                    .get(PARTIAL_RENDER_PARAM_NAME);
-            renderAll = (ALL_PARTIAL_PHASE_CLIENT_IDS.equals(render));
-        }
+        String render = FacesContext.getCurrentInstance().
+            getExternalContext().getRequestParameterMap()
+                .get(PARTIAL_RENDER_PARAM_NAME);
+        renderAll = (ALL_PARTIAL_PHASE_CLIENT_IDS.equals(render));
 
         return renderAll;
 
