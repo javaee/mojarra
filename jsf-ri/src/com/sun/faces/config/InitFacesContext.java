@@ -410,6 +410,14 @@ class InitFacesContext extends FacesContext {
         public void setResponseCharacterEncoding(String responseCharacterEncoding) {
         }
 
+        @Override
+        public void setResponseHeader(String name, String value) {
+        }
+
+        @Override
+        public void addResponseHeader(String name, String value) {
+        }
+
     } // END ServletContextAdapter
 
 }
