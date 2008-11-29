@@ -1437,5 +1437,28 @@ public abstract class ExternalContext {
     public abstract void redirect(String url)
 	throws IOException;
 
+    /**
+     * <p class="changed_added_2_0">Set the response header with the given name and value.</p>
+     *
+     * <p><em>Servlet:</em>This must be performed by calling the 
+     * <code>javax.servlet.http.HttpServletResponse</code> <code>setHeader</code>
+     * method.</p>
+     *
+     * @param name The name of the response header.
+     * @param value The value of the response header.
+     */
+    public abstract void setResponseHeader(String name, String value);
+
+    /**
+     * <p class="changed_added_2_0">Add the given name and value to the response header.</p>
+     *
+     * <p><em>Servlet:</em>This must be performed by calling the 
+     * <code>javax.servlet.http.HttpServletResponse</code> <code>addHeader</code>
+     * method.</p>
+     *
+     * @param name The name of the response header.
+     * @param value The value of the response header.
+     */
+    public abstract void addResponseHeader(String name, String value);
 
 }
