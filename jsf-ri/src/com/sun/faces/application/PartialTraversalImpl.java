@@ -51,6 +51,7 @@ import javax.faces.FacesException;
 import javax.faces.application.PartialTraversal;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.PartialViewContext;
 import javax.faces.context.ResponseWriter;
@@ -80,9 +81,6 @@ public class PartialTraversalImpl implements PartialTraversal {
 
     // ------------------------------------------------------ Instance Variables
 
-    private boolean renderedBegin = false;
-    private boolean renderedChildren = false;
-    private boolean renderedEnd = false;
 
     private static final String RENDER_ALL_MARKER = "javax.faces.ViewRoot";
     private static final String ORIGINAL_WRITER = "javax.faces.originalWriter";
@@ -127,68 +125,42 @@ public class PartialTraversalImpl implements PartialTraversal {
         } else if (phaseId == PhaseId.RENDER_RESPONSE) {
 
             try {
-                if (!renderedBegin) {
-                    partialViewContext.enableResponseWriting(true);
-                    ResponseWriter writer = partialViewContext.getPartialResponseWriter();
-                    ResponseWriter orig = context.getResponseWriter();
-                    context.getAttributes().put(ORIGINAL_WRITER, orig);
-                    context.setResponseWriter(writer);
+                partialViewContext.enableResponseWriting(true);
+                ResponseWriter writer = partialViewContext.getPartialResponseWriter();
+                ResponseWriter orig = context.getResponseWriter();
+                context.getAttributes().put(ORIGINAL_WRITER, orig);
+                context.setResponseWriter(writer);
 
-                    // PENDING PORTLETS???
-
-                    if (context.getExternalContext().getResponse() instanceof HttpServletResponse) {
-                        HttpServletResponse servletResponse = (HttpServletResponse)
-                        context.getExternalContext().getResponse();
-                        // this can be ExternalContext.setResponseContentType
-                        servletResponse.setContentType("text/xml");
-                        servletResponse.setHeader("Cache-Control", "no-cache");
-                        writer.startElement("partial-response", viewRoot);
-                        writer.startElement("components", viewRoot);
-                        renderedBegin = true;
-                    }
-
-                    if (partialViewContext.isRenderAll()) {
-                        // If this is a "render all via ajax" request,
-                        // make sure to wrap the entire page in a <render> elemnt
-                        // with the special id of VIEW_ROOT_ID.  This is how the client
-                        // JavaScript knows how to replace the entire document with
-                        // this response.
-                        writer.startElement("render", viewRoot);
-                        writer.writeAttribute("id", RENDER_ALL_MARKER, "id");
-                        writer.startElement("markup", viewRoot);
-                        writer.write("<![CDATA[");
-                        renderedBegin = true;
-                    }
-                } else if (!renderedChildren) {
-		    // Skip this processing if "none" is specified in the render list, 
-		    // or there were no render phase client ids. 
-                    if (renderPhaseClientIds == null || renderPhaseClientIds.isEmpty() ||
-                        partialViewContext.isRenderNone()) {
-                    } else { 
-                        processComponents(viewRoot, phaseId, renderPhaseClientIds, context);
-                    }
-                    renderedChildren = true;
-                } else if (!renderedEnd) {
-                    ResponseWriter writer = context.getResponseWriter();
-                    if (partialViewContext.isRenderAll()) {
-                        writer.write("]]>");
-                        writer.endElement("markup");
-                        writer.endElement("render");
-                    }
-
-                    writer.endElement("components");
-
-                    // Get the view state and write it to the response..
-                    writer.startElement("state", viewRoot);
-                    String state = context.getApplication().getStateManager().getViewState(context);
-                    writer.write("<![CDATA[" + state + "]]>");
-                    writer.endElement("state");
-                    writer.endElement("partial-response");
-         
-                    renderedBegin = false;
-                    renderedChildren = false;
-                    renderedEnd = false;
+                ExternalContext exContext = context.getExternalContext();
+                if (exContext.getResponse() instanceof HttpServletResponse) {
+                    exContext.setResponseContentType("text/xml");
+                    exContext.setResponseHeader("Cache-Control", "no-cache");
+                    writer.startElement("partial-response", viewRoot);
+                    writer.startElement("components", viewRoot);
                 }
+
+                if (partialViewContext.isRenderAll()) {
+                    renderAll(context, viewRoot);
+                    writer.endElement("components");
+                    renderState(context, viewRoot);
+                    writer.endElement("partial-response");
+                    return;
+                }
+
+		// Skip this processing if "none" is specified in the render list, 
+		// or there were no render phase client ids. 
+                if (renderPhaseClientIds == null || renderPhaseClientIds.isEmpty() ||
+                    partialViewContext.isRenderNone()) {
+                } else { 
+                    processComponents(viewRoot, phaseId, renderPhaseClientIds, context);
+                }
+
+                writer.endElement("components");
+
+                renderState(context, viewRoot);
+
+                writer.endElement("partial-response");
+         
             } catch (IOException ex) {
                 this.cleanupAfterView(context);
             } catch (RuntimeException ex) {
@@ -254,16 +226,45 @@ public class PartialTraversalImpl implements PartialTraversal {
         }
     }
 
+    private void renderAll(FacesContext context, UIViewRoot viewRoot) throws IOException {
+        // If this is a "render all via ajax" request,
+        // make sure to wrap the entire page in a <render> elemnt
+        // with the special id of VIEW_ROOT_ID.  This is how the client
+        // JavaScript knows how to replace the entire document with
+        // this response.
+        ResponseWriter writer = context.getResponseWriter();
+        writer.startElement("render", viewRoot);
+        writer.writeAttribute("id", RENDER_ALL_MARKER, "id");
+
+        writer.startElement("markup", viewRoot);
+        writer.write("<![CDATA[");
+
+        Iterator<UIComponent> itr = viewRoot.getFacetsAndChildren();
+        while (itr.hasNext()) {
+            UIComponent kid = (UIComponent)itr.next();
+            kid.encodeAll(context);
+        }
+
+        writer.write("]]>");
+        writer.endElement("markup");
+        writer.endElement("render");
+    }
+
+    private void renderState(FacesContext context, UIViewRoot viewRoot) throws IOException {
+        // Get the view state and write it to the response..
+        ResponseWriter writer = context.getResponseWriter();
+        writer.startElement("state", viewRoot);
+        String state = context.getApplication().getStateManager().getViewState(context);
+        writer.write("<![CDATA[" + state + "]]>");
+        writer.endElement("state");
+    }
+
+
     private void cleanupAfterView(FacesContext context) {
-        renderedBegin = false;
-        renderedChildren = false;
-        renderedEnd = false;
         ResponseWriter orig = (ResponseWriter) context.getAttributes().
             get(ORIGINAL_WRITER);
         assert(null != orig);
         // move aside the PartialResponseWriter
         context.setResponseWriter(orig);
     }
-
-        
 }
