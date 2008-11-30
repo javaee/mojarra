@@ -67,13 +67,8 @@ if (typeof OpenAjax !== "undefined" &&
 }
 
 /**
- * Create our top level namespaces - javax.faces.Ajax
+ * Create our top level namespaces - jsf.ajax
  */
-/*  RELEASE_PENDING - need to figure out what to do with the namespacing.
-if (javax === null || typeof javax === "undefined") {
-    var javax = {};
-}
-*/
 var jsf = jsf || {};
 jsf.ajax = jsf.ajax || {};
 
@@ -93,9 +88,9 @@ jsf.ajax = jsf.ajax || {};
  * Section 17.13.2 of the HTML Specification</a>.
  *
  * @returns String The encoded state for the specified form's input controls.
- * @function jsf.viewState
+ * @function jsf.getViewState
  */
-jsf.viewState = function(form) {
+jsf.getViewState = function(form) {
     return jsf.AjaxEngine.serializeForm(form);
 };
 
@@ -214,7 +209,7 @@ jsf.ajax.request = function(element, event, options) {
 
     var utils = jsf.Utils;
     var form = utils.getForm(source);
-    var viewState = jsf.viewState(form);
+    var viewState = jsf.getViewState(form);
 
     // Set up additional arguments to be used in the request..
     // If there were "execute" ids specified, make sure we 
