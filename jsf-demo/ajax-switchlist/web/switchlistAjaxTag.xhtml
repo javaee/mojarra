@@ -47,16 +47,20 @@
     <h1>Switchlist Tag Example</h1>
     <h:outputStylesheet name="switchlist.css"/>
         <h:form id="form1">
-            <h:selectManyListbox id="list1" value="#{listholder.list1}">
+            <h:selectManyListbox id="list1" value="#{listholder.list1}" styleClass="switchlist">
                 <f:selectItems value="#{listholder.items1}"/>
             </h:selectManyListbox>
-            <h:commandButton id="button1" value="&gt;&gt;" actionListener="#{listholder.move1to2}">
-                <f:ajax render="form1:list1 form1:list2"/>
+            <h:panelGroup id="buttonGroup" styleClass="switchlistButtons">
+            <h:commandButton id="button1" value="&gt;&gt;"
+                             actionListener="#{listholder.move1to2}" styleClass="switchlistButton">
+                <f:ajax execute="form1:button1 form1:list1" render="form1:list1 form1:list2"/>
                 </h:commandButton>
-            <h:commandButton id="button2" value="&lt;&lt;" actionListener="#{listholder.move2to1}">
-                <f:ajax render="form1:list1 form1:list2"/>
+            <h:commandButton id="button2" value="&lt;&lt;"
+                             actionListener="#{listholder.move2to1}" styleClass="switchlistButton">
+                <f:ajax execute="form1:button2 form1:list2" render="form1:list1 form1:list2"/>
                 </h:commandButton>
-            <h:selectManyListbox id="list2" value="#{listholder.list2}">
+            </h:panelGroup>
+            <h:selectManyListbox id="list2" value="#{listholder.list2}" styleClass="switchlist">
                 <f:selectItems value="#{listholder.items2}"/>
             </h:selectManyListbox>
             <br/>

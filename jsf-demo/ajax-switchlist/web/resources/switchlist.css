@@ -41,3 +41,13 @@
     height: 150px;
     width: 100px;
 }
+.switchlistButtons {
+    width: 55px;
+    display: inline-block;
+    margin-top: 50px;
+    vertical-align: top;
+}
+.switchlistButton {
+    width: 50px;
+    height: 25px;
+}

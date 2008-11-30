@@ -48,6 +48,10 @@
                 <path>/switchlistPage.xhtml</path>
             </source>
             <source>
+                <label>CSS</label>
+                <path>/resources/switchlist.css</path>
+            </source>
+            <source>
                 <label>Backing Bean</label>
                 <path>/WEB-INF/classes/switchlist/ListHolder.java</path>
             </source>
@@ -63,6 +67,35 @@
             <source>
                 <label>JSF Page</label>
                 <path>/switchlistAjaxTag.xhtml</path>
+            </source>
+            <source>
+                <label>CSS</label>
+                <path>/resources/switchlist.css</path>
+            </source>
+            <source>
+                <label>Managed Bean</label>
+                <path>/WEB-INF/classes/switchlist/ListHolder.java</path>
+            </source>
+        </sources>
+    </demo>
+
+    <!-- =================================================================== -->
+
+    <demo>
+        <name>Switchlist Component</name>
+        <page>switchlistComponent.jsf</page>
+        <sources>
+            <source>
+                <label>JSF Page</label>
+                <path>/switchlistComponent.xhtml</path>
+            </source>
+            <source>
+                <label>Component CSS</label>
+                <path>/resources/switchlist/switchlist.css</path>
+            </source>
+            <source>
+                <label>Component xhtml</label>
+                <path>/resources/switchlist/switchlist.xhtml</path>
             </source>
             <source>
                 <label>Managed Bean</label>
