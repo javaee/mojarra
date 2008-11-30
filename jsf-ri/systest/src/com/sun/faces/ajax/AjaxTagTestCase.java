@@ -58,6 +58,63 @@ public class AjaxTagTestCase extends AbstractTestCase {
         assertTrue(check("out2","1"));
     }
 
+    public void testAjaxTagMulti() throws Exception {
+        getPage("/faces/ajax/ajaxTagMulti.xhtml");
+        System.out.println("Start ajax tag multi test");
+        // First we'll check the first page was output correctly
+        assertTrue(check("countForm:out1","0"));
+        assertTrue(check("countForm:out2","1"));
+        assertTrue(check("countForm:out3","2"));
+        assertTrue(check("outside","3"));
+
+        // Press Count 1
+        HtmlSubmitInput button = (HtmlSubmitInput) lastpage.getHtmlElementById("countForm:button1");
+        lastpage = (HtmlPage) button.click();
+
+        assertTrue(check("countForm:out1","4"));
+
+        // Press Count 2
+        button = (HtmlSubmitInput) lastpage.getHtmlElementById("countForm:button2");
+        lastpage = (HtmlPage) button.click();
+
+        assertTrue(check("countForm:out1","5"));
+        assertTrue(check("countForm:out2","6"));
+
+        // Press Count all 3
+        button = (HtmlSubmitInput) lastpage.getHtmlElementById("countForm:button3");
+        lastpage = (HtmlPage) button.click();
+
+        assertTrue(check("countForm:out1","7"));
+        assertTrue(check("countForm:out2","8"));
+        assertTrue(check("countForm:out3","9"));
+
+        // Check that the request did NOT update the rest of the page.
+        assertTrue(check("outside","3"));
+
+        // Press Count form
+        button = (HtmlSubmitInput) lastpage.getHtmlElementById("countForm:button4");
+        lastpage = (HtmlPage) button.click();
+
+        assertTrue(check("countForm:out1","10"));
+        assertTrue(check("countForm:out2","11"));
+        assertTrue(check("countForm:out3","12"));
+
+        // Check that the request did NOT update the rest of the page.
+        assertTrue(check("outside","3"));
+
+        // Press Refresh form
+        button = (HtmlSubmitInput) lastpage.getHtmlElementById("countForm:reset");
+        lastpage = (HtmlPage) button.click();
+
+        assertTrue(check("countForm:out1","0"));
+        assertTrue(check("countForm:out2","1"));
+        assertTrue(check("countForm:out3","2"));
+
+
+        // Check that the request did NOT update the rest of the page.
+        assertTrue(check("outside","3"));
+    }
+
     public void testAjaxTagDefaultsButton() throws Exception {
         System.out.println("Starting Ajax Tag Defaults Button Test");
         getPage("/faces/ajax/ajaxTagDefaultsButton.xhtml");
