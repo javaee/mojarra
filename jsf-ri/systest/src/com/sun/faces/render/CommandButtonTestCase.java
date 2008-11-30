@@ -64,6 +64,5 @@ public class CommandButtonTestCase extends AbstractTestCase {
         // Check that the request did NOT update the rest of the page.
         assertTrue(check("outside","1"));
 
-        fail();
     }
 }
