@@ -118,15 +118,17 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         }
 
         /*
-         * If we have any parameters, or an ajax command, and the button type is submit or button, then
+         * If we have any parameters, or an ajax command with user onclick, and the button type is submit or button, then
          * render Javascript to use later.
-         * RELEASE_PENDING this logic is wrong - we should also check if there's a user onclick,
-         * and do the right thing.  Leaving it for when we decide how to do script injection.
+         * RELEASE_PENDING this logic is slightly wrong - we should buffer the user onclick, and use it later.
+         * Leaving it for when we decide how to do script injection.
          */
         Param params[] = getParamList(component);
         AjaxBehavior ajaxBehavior = (AjaxBehavior)component.getAttributes().get(AjaxBehavior.AJAX_BEHAVIOR);
         boolean renderAjax = (null != ajaxBehavior);
-        if ((renderAjax || !Arrays.equals(params,EMPTY_PARAMS))
+        boolean userOnclick = (null !=  component.getAttributes().get("onclick"));
+        boolean hasParams = !Arrays.equals(params,EMPTY_PARAMS);
+        if (( hasParams || (renderAjax && userOnclick))
                 && (type.equals("submit") || type.equals("button"))) {
             if (!RenderKitUtils.hasScriptBeenRendered(context)) {
                 RenderKitUtils
