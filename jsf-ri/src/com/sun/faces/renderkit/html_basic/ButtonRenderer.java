@@ -246,80 +246,21 @@ public class ButtonRenderer extends HtmlBasicRenderer {
 
     /**
      * <p>If the component's type attribute is null or not equal
-     * to <code>reset</code> or <code>submit</code>, default to
-     * <code>submit</code>.
+     * to <code>reset</code>, <code>submit</code> or <code>button</code>,
+     * default to <code>submit</code>.
      * @param component the component of interest
      * @return the type for this button
      */
     private static String getButtonType(UIComponent component) {
 
         String type = (String) component.getAttributes().get("type");
-        if (type == null || (!"reset".equals(type) && !"submit".equals(type))) {
+        if (type == null || (!"reset".equals(type) &&
+                !"submit".equals(type) && !"button".equals(type))) {
             type = "submit";
             // This is needed in the decode method
             component.getAttributes().put("type", type);
         }
         return type;
-
-    }
-
-    /*
-     * Render the necessary Javascript for the button.
-     * Note that much of this code is shared with CommandLinkRenderer.renderAsActive
-     * RELEASE_PENDING: Consolidate this code into a utility method, if possible.
-     */
-    private void renderOnClick(FacesContext context, UIComponent command, boolean usejs)
-          throws IOException {
-
-
-        /*
-        ResponseWriter writer = context.getResponseWriter();
-        assert(writer != null);
-        String formClientId = RenderKitUtils.getFormClientId(command, context);
-        if (formClientId == null) {
-            return;
-        }
-
-        String userOnclick = (String) command.getAttributes().get("onclick");
-        StringBuffer sb = new StringBuffer(128);
-        boolean userSpecifiedOnclick =
-              (userOnclick != null && !"".equals(userOnclick));
-
-        if (usejs) {
-            // if user specified their own onclick value, we are going to
-            // wrap their js and the injected js each in a function and
-            // execute them in a choose statement, if the user didn't specify
-            // an onclick, the original logic executes unaffected
-            if (userSpecifiedOnclick) {
-                sb.append("var a=function(){");
-                userOnclick = userOnclick.trim();
-                sb.append(userOnclick);
-                if (userOnclick.charAt(userOnclick.length() - 1) != ';') {
-                    sb.append(';');
-                }
-                sb.append("};var b=function(){");
-            }
-
-            Param[] params = getParamList(command);
-            String commandClientId = command.getClientId(context);
-
-            sb.append(RenderKitUtils.getCommandOnClickScript(formClientId,
-                                                             commandClientId,
-                                                             "",
-                                                             params, false));
-
-            // we need to finish wrapping the injected js then
-            if (userSpecifiedOnclick) {
-                sb.append("};return (a()==false) ? false : b();");
-            }
-          } else if (userSpecifiedOnclick) { // user onclick w/o wrap
-            sb.append(userOnclick);
-        }
-            // Only write the attribute if there's something to write
-            if (usejs || userSpecifiedOnclick) {
-                writer.writeAttribute("onclick", sb.toString(), "onclick");
-            }
-            */
 
     }
 
