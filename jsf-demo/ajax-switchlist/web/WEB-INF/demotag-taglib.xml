@@ -1,4 +1,7 @@
-/*
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
  Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
@@ -32,22 +35,22 @@
  and therefore, elected the GPL Version 2 license, then the option applies
  only if the new code is made subject to such option by the copyright
  holder.
-*/
 
-.editClass {
+-->
 
-    font-size: medium;
-    font-style: normal;
-    font-family: Arial, sans-serif;
-}
+<facelet-taglib xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd"
+              version="2.0">
 
-.editLink {
+    <namespace>
+        https://javaserverfaces.dev.java.net/demo/demotag
+    </namespace>
 
-    font-size: medium;
-    font-style: normal;
-    font-family: Arial, sans-serif;
-}
-a.editlink:link {text-decoration: none}
-a.editlink:visited {text-decoration: none}
-a.editlink:active {text-decoration: none}
-a.editlink:hover {text-decoration: none; background-color: yellow;}
+    <function>
+        <function-name>writeSource</function-name>
+        <function-class>switchlist.Functions</function-class>
+        <function-signature>void writeSource(javax.faces.context.FacesContext,java.lang.String)</function-signature>
+    </function>
+
+</facelet-taglib>

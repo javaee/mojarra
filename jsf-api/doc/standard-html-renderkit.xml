@@ -4782,8 +4782,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
     </property>
     <property>
       <description>
-         Type of button to create.  Valid values are "submit" and
-         "reset".  If not specified, or not a valid value, the default
+         Type of button to create.  Valid values are "submit", "button",
+         and "reset".  If not specified, or not a valid value, the default
          value is "submit".
       </description>
       <display-name>Button Type</display-name>
@@ -18326,8 +18326,8 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       </attribute>
       <attribute>
         <description>
-         Type of button to create.  Valid values are "submit" and
-         "reset".  If not specified, or not a valid value, the default
+         Type of button to create.  Valid values are "submit", "button",
+         and "reset".  If not specified, or not a valid value, the default
          value is "submit".
       </description>
         <display-name>Button Type</display-name>

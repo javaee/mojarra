@@ -54,6 +54,10 @@
         <param-value>Development</param-value>
     </context-param>
 
+    <context-param>
+        <param-name>facelets.LIBRARIES</param-name>
+        <param-value>/WEB-INF/demotag-taglib.xml</param-value>
+    </context-param>
 
     <!-- Faces Servlet -->
     <servlet>

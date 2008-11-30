@@ -36,69 +36,63 @@
 
 package switchlist;
 
-import javax.faces.model.ManagedBean;
-import javax.faces.model.SessionScoped;
-import javax.faces.event.ActionEvent;
-import java.util.Map;
-import java.util.LinkedHashMap;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StringWriter;
+import java.io.BufferedReader;
+import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+
+/**
+ * EL Functions.
+ */
+public class Functions {
+
+    private static final Logger LOGGER = Logger.getLogger(Functions.class.getName());
 
 
-@ManagedBean(name="listholder")
-@SessionScoped
-public class ListHolder {
+    // ---------------------------------------------------------- Public Methods
 
-    private Map<String, String> items1 = new LinkedHashMap<String, String>();
-    private Map<String, String> items2 = new LinkedHashMap<String, String>();
-    private String[] list1 = null;
-    private String[] list2 = null;
 
-    {   items1.put("one", "one");
-        items1.put("two", "two");
-        items1.put("three", "three");
-        items1.put("four", "four");     }
+    /**
+     * <p>
+     * Write the file content to the current ResponseWriter.
+     * </p>
+     *
+     * @param ctx the <code>FacesContext</code> for the current request
+     * @param file the file to display
+     */
+    public static void writeSource(FacesContext ctx, String file) {
 
-    {   items2.put("five", "five");
-        items2.put("six", "six");
-        items2.put("seven", "seven");
-        items2.put("eight", "eight");   }
+        // PENDING - add logic to colorize key words/XML elements?
 
-    public void move1to2(ActionEvent ae) {
-        if (list1 != null && list1.length > 0) {
-            for (String item : list1 ) {
-                items2.put(item, items1.remove(item));
+        ExternalContext extCtx = ctx.getExternalContext();
+        BufferedReader r =
+              new BufferedReader(
+                    new InputStreamReader(extCtx.getResourceAsStream(file)));
+        StringWriter w = new StringWriter();
+        PrintWriter pw = new PrintWriter(w);
+
+        try {
+            int lineNumber = 1;
+            for (String s = r.readLine(); s != null; s = r.readLine()) {
+                pw.format("%3s", Integer.toString(lineNumber++));
+                pw.write(": ");
+                pw.write(s);
+                pw.write('\n');
+            }
+            ctx.getResponseWriter().writeText(w.toString(), null);
+        } catch (IOException ioe) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE,
+                           ioe.toString(),
+                           ioe);
             }
         }
-    }
 
-    public void move2to1(ActionEvent ae) {
-        if (list2 != null && list2.length > 0) {
-            for (String item : list2 ) {
-                items1.put(item, items2.remove(item));
-            }
-        }
-    }
-
-    public String[] getList1() {
-        return list1;
-    }
-
-    public void setList1(String list[]) {
-        this.list1 = list;
-    }
-
-    public String[] getList2() {
-        return list2;
-    }
-
-    public void setList2(String list[]) {
-        this.list2 = list;
-    }
-
-    public Map getItems1() {
-        return items1;    
-    }
-
-    public Map getItems2() {
-        return items2;
     }
 }

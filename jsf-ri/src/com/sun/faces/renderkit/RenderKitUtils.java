@@ -424,7 +424,9 @@ public class RenderKitUtils {
         }
     }
 
-    public static void renderOnclick(FacesContext context, UIComponent component, Param[] params, AjaxBehavior ajaxBehavior)
+    public static void renderOnclick(FacesContext context, 
+                                     UIComponent component, Param[] params,
+                                     AjaxBehavior ajaxBehavior)
         throws IOException {
 
         boolean isCommand = true;

@@ -1,0 +1,33 @@
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+    <title>Test Command Button Type = Button Page</title>
+</h:head>
+<h:body>
+    <h:outputScript library="javax.faces" name="ajax.js" target="head"/>
+    <h1>Test type="button"</h1>
+    <h:form id="countForm" prependId="false">
+        <h:outputText id="out1" value="#{ajaxrequest.count}"/>
+        <br/>
+        <!-- Increment the counter on the server, and the client -->
+        <h:commandButton id="button1" type="button" value="Count">
+            <f:ajax render="out1"/>
+        </h:commandButton>
+        <br/>
+        <h:commandButton id="button2" type="button" value="Count"
+                         onclick="jsf.ajax.request(this,event,{render: 'out1'})"/>
+        <!-- Resets the counter, doesn't refresh the page -->
+        <h:commandButton id="reset" value="reset" actionListener="#{ajaxrequest.resetCount}">
+            <f:ajax execute="reset" render="out1"/>
+        </h:commandButton>
+    </h:form>
+    <!-- Contained outside the form - shouldn't update except for full page load -->
+    <h:outputText id="outside" value="#{ajaxrequest.count}"/>
+
+</h:body>
+</html>
