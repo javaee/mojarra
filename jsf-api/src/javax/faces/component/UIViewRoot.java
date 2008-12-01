@@ -935,11 +935,6 @@ public class UIViewRoot extends UIComponentBase {
      * that occur during invocation of any of the the beforePhase
      * listeners must be logged and swallowed.  After listeners are invoked
      * call superclass processing.</p>
-     * <p class="changed_added_2_0">If {@link
-     * javax.faces.context.PartialViewContext#isAjaxRequest} returns <code>true</code>,
-     * perform partial view rendering as defined by the installed
-     * {@link javax.faces.application.PartialTraversal} strategy.
-     * </p>
      */
     @Override
     public void encodeBegin(FacesContext context) throws IOException {
@@ -947,9 +942,7 @@ public class UIViewRoot extends UIComponentBase {
         notifyBefore(context, PhaseId.RENDER_RESPONSE);
 
         if (!skipPhase) {
-            if (!context.getPartialViewContext().isAjaxRequest()) {
-                super.encodeBegin(context);
-            }
+            super.encodeBegin(context);
         }
     }
 
@@ -983,15 +976,8 @@ public class UIViewRoot extends UIComponentBase {
     }
 
     /**
-     * <p class="changed_added_2_0">If {@link 
-     * javax.faces.context.PartialViewContext#isAjaxRequest} returns <code>true</code>,
-     * perform partial view rendering as defined by the installed
-     * {@link javax.faces.application.PartialTraversal} strategy.
-     * If {@link
-     * javax.faces.context.PartialViewContext#isAjaxRequest} returns
-     * <code>false</code>, override the default
-     * {@link UIComponentBase#encodeEnd} behavior.  If
-     * {@link #getAfterPhaseListener} returns
+     * <p class="changed_added_2_0">
+     * If {@link #getAfterPhaseListener} returns
      * non-<code>null</code>, invoke it, passing a {@link PhaseEvent}
      * for the {@link PhaseId#RENDER_RESPONSE} phase.  Any errors that
      * occur during invocation of the afterPhase listener must be
@@ -999,9 +985,7 @@ public class UIViewRoot extends UIComponentBase {
      */
     @Override
     public void encodeEnd(FacesContext context) throws IOException {
-        if (!context.getPartialViewContext().isAjaxRequest()) {
-            super.encodeEnd(context);
-        }
+        super.encodeEnd(context);
         notifyAfter(context, PhaseId.RENDER_RESPONSE);
     }
 
