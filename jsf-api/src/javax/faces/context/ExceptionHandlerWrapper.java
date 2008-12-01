@@ -131,6 +131,18 @@ public abstract class ExceptionHandlerWrapper extends ExceptionHandler implement
 
 
     /**
+     * <p>The default behavior of this method is to call
+     * {@link ExceptionHandler#getHandledExceptionEvents()} on the wrapped
+     * {@link ExceptionHandler} object.</p>
+     *
+     * @see ExceptionHandler#getHandledExceptionEvents()
+     */
+    public Iterable<ExceptionEvent> getHandledExceptionEvents() {
+        return getWrapped().getHandledExceptionEvents();
+    }
+
+    
+    /**
      * <p>The default behavior of this method is to
      * call {@link ExceptionHandler#getUnhandledExceptionEvents()}
      * on the wrapped {@link ExceptionHandler} object.</p>
