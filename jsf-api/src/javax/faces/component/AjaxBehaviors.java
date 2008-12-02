@@ -76,8 +76,8 @@ public class AjaxBehaviors implements Serializable {
         AjaxBehavior ajaxBehavior = null;
         for (int i=ajaxBehaviors.size()-1; i>=0; i--) {
             AjaxBehavior behavior = ajaxBehaviors.get(i);
-            if (behavior.getEvents() == null || 
-                behavior.getEvents().equals(eventName)) {
+            if (behavior.getFacesEvent() == null ||
+                behavior.getFacesEvent().equals(eventName)) {
                 ajaxBehavior = behavior;
             }
         }

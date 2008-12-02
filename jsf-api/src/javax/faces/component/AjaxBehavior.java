@@ -84,28 +84,58 @@ public class AjaxBehavior implements Serializable {
      */
     public static final String AJAX_VALUE_CHANGE_ACTION = "all";
 
-    private String events = null;
+    private String error = null;
+
+    private String event = null;
+
+    private String facesEvent = null;
 
     private String execute = null;
 
     private String render = null;
 
-    public AjaxBehavior(String events, String execute, String render) {
-        this.events = events;
+    public AjaxBehavior(String facesEvent, String event, String error, String execute, String render) {
+        this.error = error;
+        this.event = event;
+        this.facesEvent = facesEvent;
         this.execute = execute;
         this.render = render;
     }
 
     /**
-     * <p class="changed_added_2_0">Return the Ajax events associated with 
+     * <p class="changed_added_2_0">Return the Faces event associated with
      * this instance.</p>
      *
      * @since 2.0
      */
-    public String getEvents() {
-        return events;
+    public String getFacesEvent() {
+        return facesEvent;
     }
- 
+
+    /**
+     * <p class="changed_added_2_0">Return the <code>String</code> of
+     * JavaScript function name that will be used to identify
+     * the client callback function that should be run in the event of
+     * an error.
+     *
+     * @since 2.0
+     */
+    public String getError() {
+        return error;
+    }
+
+    /**
+     * <p class="changed_added_2_0">Return the <code>String</code> of
+     * JavaScript function name that will be used to identify the
+     * client callback function that should be run on the occurance
+     * of a client-side event.
+     *
+     * @since 2.0
+     */
+    public String getEvent() {
+        return event;
+    }
+
     /**
      * <p class="changed_added_2_0">Return the <code>String</code> of component
      * identifiers that will be used to identify components that should be

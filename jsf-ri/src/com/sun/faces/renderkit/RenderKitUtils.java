@@ -337,6 +337,8 @@ public class RenderKitUtils {
         StringBuilder ajaxCommand = new StringBuilder(256);
         String execute = ajaxBehavior.getExecute();
         String render = ajaxBehavior.getRender();
+        String event = ajaxBehavior.getEvent();
+        String error = ajaxBehavior.getError();
         ajaxCommand.append(AJAX_REQUEST);
         ajaxCommand.append("(this, event");
         if (execute != null || render != null) {
@@ -356,6 +358,26 @@ public class RenderKitUtils {
             }
             ajaxCommand.append("render:'");
             ajaxCommand.append(render.replace(' ', ','));
+            ajaxCommand.append("'");
+        }
+        if (event != null) {
+            if (already) {
+                ajaxCommand.append(",");
+            } else {
+                already = true;
+            }
+            ajaxCommand.append("event:'");
+            ajaxCommand.append(event);
+            ajaxCommand.append("'");
+        }
+        if (error != null) {
+            if (already) {
+                ajaxCommand.append(",");
+            } else {
+                already = true;
+            }
+            ajaxCommand.append("error:'");
+            ajaxCommand.append(error);
             ajaxCommand.append("'");
         }
         if (already) {

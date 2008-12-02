@@ -438,4 +438,31 @@ public class AjaxRequestTestCase extends AbstractTestCase {
         assertTrue(check(out3,"echo"));
     }
 
+    public void testAjaxEvent() throws Exception {
+        getPage("/faces/ajax/ajaxEvent.xhtml");
+        System.out.println("Start ajax event test");
+
+        // First we'll check the first page was output correctly
+        assertTrue(check("countForm:out1","0"));
+        assertTrue(check("out2","1"));
+
+        // Submit the ajax request
+        HtmlSubmitInput button1 = (HtmlSubmitInput) lastpage.getHtmlElementById("countForm:button1");
+        HtmlPage lastpage = (HtmlPage) button1.click();
+
+        // Check that the ajax request succeeds
+        assertTrue(check("countForm:out1","2"));
+
+        // Check that the request did NOT update the rest of the page.
+        assertTrue(check("out2","1"));
+
+        // Check that events were written to the page.
+        String statusArea = "Name: countForm:button1 Event: beforeOpen ";
+        statusArea = statusArea + "Name: countForm:button1 Event: onCompletion " ;
+        statusArea = statusArea + "Name: countForm:button1 Event: afterUpdate " ;
+        //System.out.println(statusArea);
+        //System.out.println(getText("statusArea"));
+        assertTrue(check("statusArea",statusArea));
+    }
+
 }
