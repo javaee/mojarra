@@ -59,12 +59,13 @@ import java.lang.annotation.Inherited;
  * <p>The value of the {@link #name} attribute is taken to be the
  * <em>managed-bean-name</em>.  If the value of the <em>name</em>
  * attribute is unspecified or is the empty <code>String</code>, the
- * "name" portion of the fully qualified class name is taken to be the
- * <em>managed-bean-name</em>.  For example, if the
+ * <em>managed-bean-name</em> is derived from taking the unqualified
+ * class name portion of the fully qualified class name and converting
+ * the first character to lower case.  For example, if the
  * <code>ManagedBean</code> annotation is on a class with the fully
  * qualified class name <code>com.foo.Bean</code>, and there is no
  * <em>name</em> attribute on the annotation, the
- * <em>managed-bean-name</em> is taken to be <code>Bean</code>.  The
+ * <em>managed-bean-name</em> is taken to be <code>bean</code>.  The
  * fully qualified class name of the class to which this annotation is
  * attached is taken to be the <em>managed-bean-class</em>.</p>
 
