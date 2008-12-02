@@ -393,7 +393,7 @@ public class RenderKitUtils {
         throws IOException {
 
         boolean isCommand = false;
-        String event = "onchange";
+        final String event = "onchange";
 
         // is there a user Onchange?
         boolean userSpecifiedOnchange = false;
@@ -452,7 +452,7 @@ public class RenderKitUtils {
         throws IOException {
 
         boolean isCommand = true;
-        String event = "onclick";
+        final String event = "onclick";
 
         // is there a user Onchange?
         boolean userSpecifiedOnclick = false;

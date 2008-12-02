@@ -239,17 +239,17 @@ public final class AjaxHandler extends TagHandler {
     // Only install the Ajax resource if it doesn't exist.
     // The resource component will be installed with the target "head".
     //
-    public void installAjaxResourceIfNecessary() {
+    private void installAjaxResourceIfNecessary() {
+        final String name = "ajax.js";
+        final String library = "javax.faces";
         FacesContext context = FacesContext.getCurrentInstance();
         UIViewRoot viewRoot = context.getViewRoot();
         ListIterator iter = (viewRoot.getComponentResources(context, "head")).listIterator();
         while (iter.hasNext()) {
             UIComponent resource = (UIComponent)iter.next();
-            String name = (String)resource.getAttributes().get("name");
-            String library = (String)resource.getAttributes().get("library");
-
-            if (name != null && library != null &&
-                    name.equals("ajax.js") && library.equals("javax.faces")) {
+            String rname = (String)resource.getAttributes().get("name");
+            String rlibrary = (String)resource.getAttributes().get("library");
+            if (name.equals(rname) && library.equals(rlibrary)) {
                 return;
             }
         }
@@ -258,31 +258,26 @@ public final class AjaxHandler extends TagHandler {
         iter = (viewRoot.getComponentResources(context, "body")).listIterator();
         while (iter.hasNext()) {
             UIComponent resource = (UIComponent)iter.next();
-            String name = (String)resource.getAttributes().get("name");
-            String library = (String)resource.getAttributes().get("library");
-
-            // RELEASE_PENDING driscoll - is this really the best way to determine if
-            // the ajax library is loaded already?
-            if (name != null && library != null &&
-                    name.equals("ajax.js") && library.equals("javax.faces")) {
+            String rname = (String)resource.getAttributes().get("name");
+            String rlibrary = (String)resource.getAttributes().get("library");
+            if (name.equals(rname) && library.equals(rlibrary)) {
                 return;
             }
         }
         iter = (viewRoot.getComponentResources(context, "form")).listIterator();
         while (iter.hasNext()) {
             UIComponent resource = (UIComponent)iter.next();
-            String name = (String)resource.getAttributes().get("name");
-            String library = (String)resource.getAttributes().get("library");
-            if (name != null && library != null &&
-                    name.equals("ajax.js") && library.equals("javax.faces")) {
+            String rname = (String)resource.getAttributes().get("name");
+            String rlibrary = (String)resource.getAttributes().get("library");
+            if (name.equals(rname) && library.equals(rlibrary)) {
                 return;
             }
         }
         
         UIOutput output = new UIOutput();
         output.setRendererType("javax.faces.resource.Script");
-        output.getAttributes().put("name", "ajax.js");
-        output.getAttributes().put("library", "javax.faces");
+        output.getAttributes().put("name", name);
+        output.getAttributes().put("library", library);
         viewRoot.addComponentResource(context, output, "head");
     }
 }
