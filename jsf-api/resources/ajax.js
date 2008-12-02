@@ -67,13 +67,8 @@ if (typeof OpenAjax !== "undefined" &&
 }
 
 /**
- * Create our top level namespaces - javax.faces.Ajax
+ * Create our top level namespaces - jsf.ajax
  */
-/*  RELEASE_PENDING - need to figure out what to do with the namespacing.
-if (javax === null || typeof javax === "undefined") {
-    var javax = {};
-}
-*/
 var jsf = jsf || {};
 jsf.ajax = jsf.ajax || {};
 
@@ -93,9 +88,9 @@ jsf.ajax = jsf.ajax || {};
  * Section 17.13.2 of the HTML Specification</a>.
  *
  * @returns String The encoded state for the specified form's input controls.
- * @function jsf.viewState
+ * @function jsf.getViewState
  */
-jsf.viewState = function(form) {
+jsf.getViewState = function(form) {
     return jsf.AjaxEngine.serializeForm(form);
 };
 
@@ -197,6 +192,14 @@ jsf.viewState = function(form) {
  * <td><code>render</code></td>
  * <td><code>comma seperated list of client identifiers</code></td>
  * </tr>
+ * <tr>
+ * <td><code>event</code></td>
+ * <td><code>name of a function to callback for event</code></td>
+ * </tr>
+ * <tr>
+ * <td><code>error</code></td>
+ * <td><code>name of a function to callback for error</code></td>
+ * </tr>
  * </table>
  * The <code>options</code> argument is optional.
  *
@@ -204,6 +207,26 @@ jsf.viewState = function(form) {
  * @throws ArgNotSet Error if first required argument <code>element</code> is not specified
  */
 jsf.ajax.request = function(element, event, options) {
+
+
+    if (typeof(options) === 'undefined' || options === null) {
+        options = {};
+    }
+
+    // Error handler for this request
+    var error = false;
+
+    if (options.error) {
+        error = options.error;
+    }
+
+    // Event handler for this request
+    var event = false;
+
+    if (options.event) {
+        event = options.event;
+    }
+
 
     if (typeof element === 'undefined' || element === null) {
         throw new Error("jsf.ajax.request: Element not set");
@@ -214,7 +237,7 @@ jsf.ajax.request = function(element, event, options) {
 
     var utils = jsf.Utils;
     var form = utils.getForm(source);
-    var viewState = jsf.viewState(form);
+    var viewState = jsf.getViewState(form);
 
     // Set up additional arguments to be used in the request..
     // If there were "execute" ids specified, make sure we 
@@ -223,10 +246,7 @@ jsf.ajax.request = function(element, event, options) {
     // specified, determine the default.
 
     var args = {};
- 
-    if (typeof(options) === 'undefined' || options === null) {
-        options = {};
-    }
+
     if (options.execute) {
         var temp = utils.toArray(options.execute, ',');
         if (!utils.isInArray(temp, source.name)) {
@@ -260,6 +280,8 @@ jsf.ajax.request = function(element, event, options) {
     var ajaxEngine = new jsf.AjaxEngine();
     ajaxEngine.setupArguments(args);
     ajaxEngine.queryString = viewState;
+    ajaxEngine.event = event;
+    ajaxEngine.error = error;
     ajaxEngine.sendRequest();
 
     // Helper function to determine the default execute list.
@@ -449,6 +471,33 @@ jsf.ajax.response = function(request) {
     }
 };
 
+// RELEASE_PENDING - hide these references
+
+if (typeof jsf.ajax._eventListeners !== "array") {
+    jsf.ajax._eventListeners = [];
+}
+
+if (typeof jsf.ajax._errorListeners !== "array") {
+    jsf.ajax._errorListeners = [];
+}
+
+/**
+ * 
+ * @param callback string representing a function to call on an error
+ */
+jsf.ajax.onError = function(callback) {
+    jsf.ajax._errorListeners[jsf.ajax._errorListeners.length] = callback;
+}
+
+/**
+ *
+ * @param callback string representing a function to call on an event
+ */
+jsf.ajax.onEvent = function(callback) {
+    jsf.ajax._eventListeners[jsf.ajax._eventListeners.length] = callback;
+}
+
+
 /**
  *
  * <p>Return the value of <code>Application.getProjectStage()</code> for
@@ -461,7 +510,6 @@ jsf.ajax.response = function(request) {
  * <code>javax.faces.application.ProjectStage</code>.
  * @function jsf.getProjectStage
  */
-// RELEASE_PENDING: change from function to String?
 jsf.getProjectStage = function() {
     return "#{facesContext.application.projectStage}";
 };
@@ -474,4 +522,3 @@ jsf.getProjectStage = function() {
 jsf.separator = function() {
     return ":";
 }();
-

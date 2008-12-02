@@ -1,6 +1,10 @@
 var disabledImage = 'resources/button3.gif';
 var enabledImage = 'resources/button2.gif';
 
+// Setup the statusUpdate function to hear all events on the page
+jsf.ajax.onEvent("statusUpdate");
+jsf.ajax.onError("statusUpdate");
+
 function buttonpush(buttonName, element, event) {
     var button = document.getElementById(buttonName);
     if (!button.disabled) {
@@ -8,22 +12,20 @@ function buttonpush(buttonName, element, event) {
         button.disabled = true;
     }
     try {
-        jsf.ajax.request(element, event, {execute: buttonName, render: buttonName});
+        addCell(document.createTextNode(buttonName));
+        jsf.ajax.request(element, event, {execute: buttonName, render: buttonName, event: 'msg', error: 'errorMsg'});
     } catch (ex) {
-        // Handle errors here
+        // Handle programming errors here
         alert(ex);
     }
     return false;
 } 
 
-function msg(eventName, data) {
-    var txt = null;
-    if (data.name === 'enqueue') {
-        txt = document.createTextNode(data.execute);
-        addCell(txt);
-    } else if (data.name === 'dequeue') {
-        txt = document.createTextNode(data.execute);
-        removeCell(txt);
+function msg(data) {
+    if (data.name === 'beforeOpen') {
+        activeCell(document.createTextNode(data.execute));
+    } else if (data.name === 'onCompletion') {
+        removeCell(document.createTextNode(data.execute));
     }
 }
 
@@ -33,6 +35,19 @@ function addCell(cellData) {
     cell.setAttribute("width", "50px");
     cell.innerHTML = cellData.nodeValue;
     cell.className = "queueCell";
+}
+
+function activeCell(cellData) {
+    var row = document.getElementById("tr1");
+    var cells = row.getElementsByTagName("td");
+    if (typeof cells != 'undefined' || cells != null) {
+        for (var i=0; i<cells.length; i++) {
+            if (cells[i].firstChild.nodeValue == cellData.nodeValue) {
+                cells[i].className = "currentCell";
+                break;
+            }
+        }
+    }
 }
 
 function removeCell(cellData) {
@@ -51,11 +66,18 @@ function removeCell(cellData) {
     }
 }
 
-function errorMsg(eventName, data) {
-    alert("Name: "+eventName+" Error Status: "+data.statusMessage);
+function errorMsg(data) {
+    alert("Error Name: "+data.name);
 }
 
-// Listen for all queue events
-OpenAjax.hub.subscribe("javax.faces.Event.**",msg);
-// Listen for all error events
-OpenAjax.hub.subscribe("javax.faces.Error.**",errorMsg);
+function statusUpdate(data) {
+    var statusArea = document.getElementById("statusArea");
+    var text = statusArea.value;
+    text = text + "Name: "+data.execute;
+    if (data.type === "event") {
+        text = text +" Event: "+data.name+"\n";
+    } else {  // otherwise, it's an error
+        text = text + " Error: "+data.name+"\n";
+    }
+    statusArea.value = text;
+}
