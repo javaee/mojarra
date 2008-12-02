@@ -67,15 +67,21 @@ if (typeof OpenAjax !== "undefined" &&
 }
 
 /**
+ * @name jsf
+ * @namespace
+ */
+
+/**
+ * @name jsf.ajax
+ * @namespace
+ */
+
+/*
  * Create our top level namespaces - jsf.ajax
  */
 var jsf = jsf || {};
 jsf.ajax = jsf.ajax || {};
 
-/**
- * @name jsf
- * @namespace
- */
 
 /**
  * <p>Collect and encode state for input controls associated
