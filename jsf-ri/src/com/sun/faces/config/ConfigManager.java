@@ -286,6 +286,9 @@ public class ConfigManager {
                     pushTaskToContext(sc, annotationScan);
                 }
 
+                sortDocuments(facesDocuments);
+
+                // process the ordered documents
                 FACES_CONFIG_PROCESSOR_CHAIN.process(facesDocuments);
                 if (!isFaceletsDisabled) {
                     FACELET_TAGLIB_CONFIG_PROCESSOR_CHAIN.process(
@@ -312,6 +315,8 @@ public class ConfigManager {
         }
 
     }
+
+
 
 
     /**
@@ -342,6 +347,46 @@ public class ConfigManager {
 
 
     // --------------------------------------------------------- Private Methods
+
+
+    /**
+     * <p>
+     * Sort the <code>faces-config</code> documents found on the classpath
+     * and those specified by the <code>javax.faces.CONFIG_FILES</code> context
+     * init parameter.
+     * </p>
+     *
+     * @param facesDocuments an array of <em>all</em> <code>faces-config</code>
+     *  documents
+     */
+    private void sortDocuments(Document[] facesDocuments) {
+
+
+        int len = ((isWebinfFacesConfig(facesDocuments[facesDocuments.length - 1]))
+                     ? facesDocuments.length - 2
+                     : facesDocuments.length - 1);
+
+        // if len is 0, then we only had a WEB-INF/faces-config.xml
+        // and the configuration file for the implementation.
+        // if len is 1, then we only had the configuration file for
+        // the implementation.  Don't bother sorting for these cases.
+        if (len > 1) {
+            List<DocumentOrderingWrapper> list =
+                  new ArrayList<DocumentOrderingWrapper>();
+            for (int i = 1; i < len; i++) {
+                list.add(new DocumentOrderingWrapper(facesDocuments[i]));
+            }
+            DocumentOrderingWrapper[] ordering =
+                  list.toArray(new DocumentOrderingWrapper[list.size()]);
+            DocumentOrderingWrapper.sort(ordering);
+            // sorting complete, now update the appropriate locations within
+            // the original array with the sorted documentation.
+            for (int i = 1; i < len; i++) {
+                facesDocuments[i] = ordering[i - 1].getDocument();
+            }
+        }
+
+    }
 
 
     /**

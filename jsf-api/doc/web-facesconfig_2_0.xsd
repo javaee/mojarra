@@ -321,10 +321,12 @@
         </xsd:annotation>
         <xsd:sequence>
             <xsd:element name="after" 
-                         type="javaee:faces-config-ordering-orderingType" 
+                         type="javaee:faces-config-ordering-orderingType"
+                         minOccurs="0"
                          maxOccurs="1"/>
             <xsd:element name="before" 
-                         type="javaee:faces-config-ordering-orderingType" 
+                         type="javaee:faces-config-ordering-orderingType"
+                         minOccurs="0"
                          maxOccurs="1"/>
         </xsd:sequence>
     </xsd:complexType>
