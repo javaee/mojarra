@@ -184,10 +184,7 @@
 
    </target>
 
-   <target name="build.spec.snapshot" depends="prepare.build.java.net">
-
-       <property name="spec.snapshot.dir" 
-                 value="${demo.dir}/dist/spec-snapshot" />
+   <target name="copy.spec.pdf" if="spec-eg-dir-available">
 
        <copy todir="${spec.snapshot.dir}" flatten="true">
 
@@ -198,6 +195,15 @@
          </fileset>
 
        </copy>
+
+   </target>
+
+   <target name="build.spec.snapshot" depends="prepare.build.java.net">
+
+       <available type="dir" file="${javaserverfaces-spec-eg.dir}"
+                  property="spec-eg-dir-available" />
+
+       <antcall target="copy.spec.pdf" />
 
        <filter token="build.number" value="${build.number}" />
        <filter token="spec.version" value="${spec.version}" />
