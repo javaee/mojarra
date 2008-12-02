@@ -52,9 +52,6 @@
  * limitations under the License.
  */
 
-// RELEASE_PENDING need to decide on naming for AjaxEngine
-var mojarra = mojarra || {};
-
 /**
  * AjaxEngine contains the JavaScript for performing Ajax functions. 
  */
@@ -62,6 +59,8 @@ jsf.AjaxEngine = function() {
 
     var req = {};                  // Request Object
     req.url = null;                // Request URL
+    req.error = null;              // Error handler for request
+    req.event = null;              // Event handler for request
     req.xmlReq = null;             // XMLHttpRequest Object
     req.async = true;              // Default - Asynchronous
     req.parameters = {};           // Parameters For GET or POST
@@ -85,24 +84,27 @@ jsf.AjaxEngine = function() {
     // Set up request/response state callbacks
     req.xmlReq.onreadystatechange = function() {
         if (req.xmlReq.readyState === 4) {
-            req.onComplete(req);
+            req.onComplete();
         }
     };
 
     /**
      * This function is called when the request/response interaction
-     * is complete.  'onComplete', 'onSuccess' or 'onError' callbacks
-     * will be called if they have been registered,
-     * If the return status code is successfull, dequeue all requests
-     * from the queue that have completed.  If a request has been found
-     * on the queue that has not been sent, send the request.
+     * is complete.  If the return status code is successfull,
+     * dequeue all requests from the queue that have completed.  If a
+     * request has been found on the queue that has not been sent,
+     * send the request.
      */
     req.onComplete = function onComplete() {
-        var status = req.xmlReq.status;
-        if ((status !== null && typeof status !== 'undefined' && status !== 0) && (status >= 200 && status < 300)) {
+        req.status = req.xmlReq.status;
+        if ((req.status !== null && typeof req.status !== 'undefined' &&
+                req.status !== 0) && (req.status >= 200 && req.status < 300)) {
+            jsf.AjaxEngine.onEvent(req,"onCompletion");
             jsf.ajax.response(req.xmlReq);
+            jsf.AjaxEngine.onEvent(req,"afterUpdate");
         } else {
-            jsf.AjaxEngine.sendError(req);
+            jsf.AjaxEngine.onEvent(req,"onCompletion");
+            jsf.AjaxEngine.onError(req);
         }
 
         // Regardless of whether the request completed successfully (or not),
@@ -189,6 +191,7 @@ jsf.AjaxEngine = function() {
                 }
                 content = req.queryString;
             }
+            jsf.AjaxEngine.onEvent(req,"beforeOpen");
             req.xmlReq.send(content);
         }
     };
@@ -273,8 +276,6 @@ jsf.AjaxEngine.getTransport = function() {
 if (!window["jsf.AjaxEngine.Queue"]) {
   jsf.AjaxEngine.Queue = new function() {
 
-        var utils = jsf.Utils;
-
         // Create the internal queue
         var queue = [];
 
@@ -306,9 +307,6 @@ if (!window["jsf.AjaxEngine.Queue"]) {
         this.enqueue = function enqueue(element) {
             // Queue the request
             queue.push(element);
-
-            // Send the message that the request is enqueued
-            jsf.AjaxEngine.sendMessage("Event","enqueue","request enqueued", element);
         };
 
 
@@ -335,10 +333,6 @@ if (!window["jsf.AjaxEngine.Queue"]) {
                     queueSpace = 0;
                 }
             }
-            if (element != "undefined") {
-                jsf.AjaxEngine.sendMessage("Event","dequeue","request dequeued", element);
-            }
-
             // return the removed element
             return element;
         };
@@ -361,65 +355,78 @@ if (!window["jsf.AjaxEngine.Queue"]) {
   }();
 }
 
-/**
- * Send an error to the user via an OpenAjax message.
- * @param element object which caused the error
- * @private
- */
-jsf.AjaxEngine.sendError = function(request) {
+jsf.AjaxEngine.onEvent = function(request, name) {
 
-    if (!request) {
-        throw new Error("AjaxEngine.sendError:  invalid value passed as argument");
+    var func; // variable to hold function string to execute
+    var data = {};
+    data.type = "event";
+    data.name = name;
+    data.request = request;
+    if (request) {
+        data.execute = request.parameters["javax.faces.partial.execute"];
+        data.render = request.parameters["javax.faces.partial.render"];
+        if (request.status) {
+            data.statusCode = request.status;
+        } else {
+            data.statusCode = -1;  // status incomplete
+        }
     }
 
-    if (request.xmlReq.status === 0) {
-        jsf.AjaxEngine.sendMessage("Error", "SERVERDOWN",
-                "Cannot communicate with server", request );
-    } else if (request.xmlReq.status == 404) {
-        jsf.AjaxEngine.sendMessage("Error", "NOTFOUND",
-                "URL not found on server", request);
-    } else if (request.xmlReq.status == 500) {
-        jsf.AjaxEngine.sendMessage("Error", "SERVERERROR",
-                "Server Error prevents completing request", request);
-    } else { //
-        jsf.AjaxEngine.sendMessage("Error", "MISCSERVER",
-                "There was an error on the server", request);
+    if (request && request.event) {
+        func = request.event + "(data);";
+        eval(func);
+    }
+
+    for (i in jsf.ajax._eventListeners) {
+        if (jsf.ajax._eventListeners.hasOwnProperty(i)) {
+            func = jsf.ajax._eventListeners[i] + "(data);";
+            eval(func);
+        }
     }
 };
 
-/**
- * Publish an event message to the user via OpenAjax, to every client listed in target
- * @param type of message - either "Event" or "Error"
- * @param name Name of the message to pass
- * @param message Message string
- * @param request XMLHttpRequest object associated with this message
- * @throws Error if params are not set, or
- * @private
- */
+jsf.AjaxEngine.onError = function(request, name) {
 
-jsf.AjaxEngine.sendMessage = function(type, name, message, request){
-
-    if (!type || !name || !message || !request || (type !== "Event" && type !== "Error")) {
-        throw new Error("AjaxEngine.sendMessage: invalid value passed as argument");
+    var func; // String to hold function to execute
+    var data = {};  // data payload for function
+    data.type = "error";
+    data.name = name;
+    data.request = request;
+    if (request) {
+        data.execute = request.parameters["javax.faces.partial.execute"];
+        data.render = request.parameters["javax.faces.partial.render"];
+        if (request.status) {
+            data.statusCode = request.status;
+        } else {
+            data.statusCode = -1;  // status incomplete
+        }
     }
 
-    var utils = jsf.Utils;
-
-    var args = {};
-    args.type = type;
-    args.name = name;
-    args.statusMessage = message;
-    args.execute = request.parameters["javax.faces.partial.execute"];
-    args.render = request.parameters["javax.faces.partial.render"];
-    args.statusCode = request.xmlReq.status;
-    //args.readyState = request.xmlReq.readyState;
-
-    var execArray = utils.execConvert(request.parameters["javax.faces.partial.execute"]);
-
-    if (execArray[0] == "none" || execArray[0] == "all") {
-        OpenAjax.hub.publish("javax.faces."+type, args);        
+    // if name isn't set, try to provide an error name
+    // RELEASE_PENDING this doesn't work correctly.
+    if (!name) {
+        if (data.statusCode === 0) {
+            data.name = "SERVERDOWN";
+        } else if (data.statusCode == 404) {
+            data.name = "NOTFOUND";
+        } else if (data.statusCode == 500) {
+            data.name = "SERVERERROR";
+        } else if (data.statusCode == -1) { // unknown client error
+            data.name = "MISCCLIENT";
+        } else {  // no name set, unknown error
+            data.name = "MISCSERVER";
+        }
     }
-    for (var exec in execArray) {
-        OpenAjax.hub.publish("javax.faces."+type+"."+execArray[exec], args);
+
+    // If we have a registered callback, send the error to it.
+    if (request && request.error) {
+        func = request.error + "(data);";
+        eval(func);    }
+
+    for (i in jsf.ajax._errorListeners) {
+        if (jsf.ajax._errorListeners.hasOwnProperty(i)) {
+            func = jsf.ajax._errorListeners[i] + "(data);";
+            eval(func);
+        }
     }
 };

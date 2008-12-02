@@ -192,6 +192,14 @@ jsf.getViewState = function(form) {
  * <td><code>render</code></td>
  * <td><code>comma seperated list of client identifiers</code></td>
  * </tr>
+ * <tr>
+ * <td><code>event</code></td>
+ * <td><code>name of a function to callback for event</code></td>
+ * </tr>
+ * <tr>
+ * <td><code>error</code></td>
+ * <td><code>name of a function to callback for error</code></td>
+ * </tr>
  * </table>
  * The <code>options</code> argument is optional.
  *
@@ -199,6 +207,26 @@ jsf.getViewState = function(form) {
  * @throws ArgNotSet Error if first required argument <code>element</code> is not specified
  */
 jsf.ajax.request = function(element, event, options) {
+
+
+    if (typeof(options) === 'undefined' || options === null) {
+        options = {};
+    }
+
+    // Error handler for this request
+    var error = false;
+
+    if (options.error) {
+        error = options.error;
+    }
+
+    // Event handler for this request
+    var event = false;
+
+    if (options.event) {
+        event = options.event;
+    }
+
 
     if (typeof element === 'undefined' || element === null) {
         throw new Error("jsf.ajax.request: Element not set");
@@ -218,10 +246,7 @@ jsf.ajax.request = function(element, event, options) {
     // specified, determine the default.
 
     var args = {};
- 
-    if (typeof(options) === 'undefined' || options === null) {
-        options = {};
-    }
+
     if (options.execute) {
         var temp = utils.toArray(options.execute, ',');
         if (!utils.isInArray(temp, source.name)) {
@@ -255,6 +280,8 @@ jsf.ajax.request = function(element, event, options) {
     var ajaxEngine = new jsf.AjaxEngine();
     ajaxEngine.setupArguments(args);
     ajaxEngine.queryString = viewState;
+    ajaxEngine.event = event;
+    ajaxEngine.error = error;
     ajaxEngine.sendRequest();
 
     // Helper function to determine the default execute list.
@@ -444,6 +471,33 @@ jsf.ajax.response = function(request) {
     }
 };
 
+// RELEASE_PENDING - hide these references
+
+if (typeof jsf.ajax._eventListeners !== "array") {
+    jsf.ajax._eventListeners = [];
+}
+
+if (typeof jsf.ajax._errorListeners !== "array") {
+    jsf.ajax._errorListeners = [];
+}
+
+/**
+ * 
+ * @param callback string representing a function to call on an error
+ */
+jsf.ajax.onError = function(callback) {
+    jsf.ajax._errorListeners[jsf.ajax._errorListeners.length] = callback;
+}
+
+/**
+ *
+ * @param callback string representing a function to call on an event
+ */
+jsf.ajax.onEvent = function(callback) {
+    jsf.ajax._eventListeners[jsf.ajax._eventListeners.length] = callback;
+}
+
+
 /**
  *
  * <p>Return the value of <code>Application.getProjectStage()</code> for
@@ -456,7 +510,6 @@ jsf.ajax.response = function(request) {
  * <code>javax.faces.application.ProjectStage</code>.
  * @function jsf.getProjectStage
  */
-// RELEASE_PENDING: change from function to String?
 jsf.getProjectStage = function() {
     return "#{facesContext.application.projectStage}";
 };
@@ -469,4 +522,3 @@ jsf.getProjectStage = function() {
 jsf.separator = function() {
     return ":";
 }();
-

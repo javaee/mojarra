@@ -88,3 +88,7 @@ body {
 .queueCell {
     background-color: #00ffff;
 }
+
+.currentCell {
+    background-color: #ffff00;
+}
