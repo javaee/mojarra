@@ -84,6 +84,7 @@ public class PartialTraversalImpl implements PartialTraversal {
 
     private static final String RENDER_ALL_MARKER = "javax.faces.ViewRoot";
     private static final String ORIGINAL_WRITER = "javax.faces.originalWriter";
+    private static final String VIEW_STATE_MARKER = "javax.faces.ViewState";
 
 
     public void traverse(FacesContext context, PhaseId phaseId, UIViewRoot viewRoot) {
@@ -136,12 +137,10 @@ public class PartialTraversalImpl implements PartialTraversal {
                     exContext.setResponseContentType("text/xml");
                     exContext.setResponseHeader("Cache-Control", "no-cache");
                     writer.startElement("partial-response", viewRoot);
-                    writer.startElement("components", viewRoot);
                 }
 
                 if (partialViewContext.isRenderAll()) {
                     renderAll(context, viewRoot);
-                    writer.endElement("components");
                     renderState(context, viewRoot);
                     writer.endElement("partial-response");
                     return;
@@ -154,8 +153,6 @@ public class PartialTraversalImpl implements PartialTraversal {
                 } else { 
                     processComponents(viewRoot, phaseId, renderPhaseClientIds, context);
                 }
-
-                writer.endElement("components");
 
                 renderState(context, viewRoot);
 
@@ -190,21 +187,18 @@ public class PartialTraversalImpl implements PartialTraversal {
                 component.processUpdates(context);
             }
         } else if (phaseId == PhaseId.RENDER_RESPONSE) {
-            if (phaseClientIds.contains(component.getClientId()) ||
-                partialViewContext.isRenderAll()) {
+            if (phaseClientIds.contains(component.getClientId())) {
                 if (component.isRendered()) {
                     ResponseWriter writer = context.getResponseWriter();
-                    writer.startElement("render", component);
+                    writer.startElement("update", component);
                     writer.writeAttribute("id", component.getClientId(context), "id");
                     try {
-                        writer.startElement("markup", component);
                         writer.write("<![CDATA[");
 
                         // do the default behavior...
                         component.encodeAll(context);
 
                         writer.write("]]>");
-                        writer.endElement("markup");
                     } catch (Exception ce) {
                         if (LOGGER.isLoggable(Level.SEVERE)) {
                             LOGGER.severe(ce.toString());
@@ -215,7 +209,7 @@ public class PartialTraversalImpl implements PartialTraversal {
                             ce);
                         }
                     }
-                    writer.endElement("render");
+                    writer.endElement("update");
                 }
             }
         }
@@ -233,10 +227,9 @@ public class PartialTraversalImpl implements PartialTraversal {
         // JavaScript knows how to replace the entire document with
         // this response.
         ResponseWriter writer = context.getResponseWriter();
-        writer.startElement("render", viewRoot);
+        writer.startElement("update", viewRoot);
         writer.writeAttribute("id", RENDER_ALL_MARKER, "id");
 
-        writer.startElement("markup", viewRoot);
         writer.write("<![CDATA[");
 
         Iterator<UIComponent> itr = viewRoot.getFacetsAndChildren();
@@ -246,17 +239,17 @@ public class PartialTraversalImpl implements PartialTraversal {
         }
 
         writer.write("]]>");
-        writer.endElement("markup");
-        writer.endElement("render");
+        writer.endElement("update");
     }
 
     private void renderState(FacesContext context, UIViewRoot viewRoot) throws IOException {
         // Get the view state and write it to the response..
         ResponseWriter writer = context.getResponseWriter();
-        writer.startElement("state", viewRoot);
+        writer.startElement("update", viewRoot);
+        writer.writeAttribute("id", VIEW_STATE_MARKER, "id");
         String state = context.getApplication().getStateManager().getViewState(context);
         writer.write("<![CDATA[" + state + "]]>");
-        writer.endElement("state");
+        writer.endElement("update");
     }
 
 
