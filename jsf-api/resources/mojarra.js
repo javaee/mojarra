@@ -85,7 +85,7 @@ var mojarra = mojarra || {};
  *
  * @param f - the target form
  */
-function dpf(f) {
+mojarra.dpf = function dpf(f) {
     var adp = f.adp;
     if (adp !== null) {
         for (var i = 0;i < adp.length;i++) {
@@ -105,11 +105,11 @@ function dpf(f) {
  *  key/value pairs to be added to the form as hidden input
  *  fields.
  */
-function apf(f, pvp) {
+mojarra.apf = function apf(f, pvp) {
     var adp = new Array();
     f.adp = adp;
     var i = 0;
-    for (k in pvp) {
+    for (var k in pvp) {
         var p = document.createElement("input");
         p.type = "hidden";
         p.name = k;
@@ -132,15 +132,15 @@ function apf(f, pvp) {
  *  fields.
  * @param t - the target of the form submission
  */
-function jsfcljs(f, pvp, t) {
-    apf(f, pvp);
+mojarra.jsfcljs = function jsfcljs(f, pvp, t) {
+    mojarra.apf(f, pvp);
     var ft = f.target;
     if (t) {
         f.target = t;
     }
     f.submit();
     f.target = ft;
-    dpf(f);
+    mojarra.dpf(f);
 };
 
 /*
@@ -153,7 +153,7 @@ function jsfcljs(f, pvp, t) {
  *  @param e event of the calling function
  *  @return object that f returns
  */
-function jsfcbk(f, t, e) {
+mojarra.jsfcbk = function jsfcbk(f, t, e) {
     t._jsfcbk = f;
     return t._jsfcbk(e);
 };

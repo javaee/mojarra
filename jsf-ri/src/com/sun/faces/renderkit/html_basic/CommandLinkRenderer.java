@@ -57,61 +57,6 @@ import com.sun.faces.renderkit.AttributeManager;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.MessageUtils;
 
-/*
- *
- * For the purpose of documentation, the code that's produced by a command link will look
- *  somewhat like this:
- *
- * <script type="text/javascript" language="Javascript">
- * function dpf(f) {
- *  var adp = f.adp;
- *   if (adp != null) {
- *     for (var i = 0;i < adp.length;i++)     {
- *       f.removeChild(adp[i]);
- *     }
- *   }
- * };
- *
- * function apf(f, pvp) {
- *   var adp = new Array();
- *   f.adp = adp;
- *   var i = 0;
- *   for (k in pvp) {
- *     var p = document.createElement("input");
- *     p.type = "hidden";
- *     p.name = k;
- *     p.value = pvp[k];
- *    f.appendChild(p);
- *     adp[i++] = p;
- *   }
- * };
- * function jsfcljs(f, pvp, t) {
- *   apf(f, pvp);
- *   var ft = f.target;
- *   if (t) {
- *     f.target = t;
- *   }
- *   f.submit();
- *   f.target = ft;
- *   dpf(f);
- * };
- * </script>
- *
- * This code can be found in jsf-ri/src/com/sun/faces/sunjsf.js
- *
- *  And an onclick function that looks somewhat like this:
- *  <a href="#" onclick="
- * if (typeof jsfcljs == 'function') {
- *     jsfcljs(document.getElementById('j_id_id20'),
- *       {'j_id_id20:j_id_id22':'j_id_id20:j_id_id22','testname':'testval'},
- *       '');
- * }
- * return false">
- *
- *  This code is *not* the definitive output from this class, but is merely put here
- *  for convience of review (especially including indenting for readability).
- *
- */
 
 /**
  * <B>CommandLinkRenderer</B> is a class that renders the current value of
@@ -300,13 +245,13 @@ public class CommandLinkRenderer extends LinkRenderer {
         // RELEASE_PENDING (driscoll) still need to determine if there's a way to merge this with
         // RenderKitUtils.renderOnclick()
         if (userSpecifiedOnclick) {
-            sb.append("var a=function(){");
+            sb.append("var a=function(event){");
             userOnclick = userOnclick.trim();
             sb.append(userOnclick);
             if (userOnclick.charAt(userOnclick.length() - 1) != ';') {
                 sb.append(';');
             }
-            sb.append("};var b=function(){");
+            sb.append("};var b=function(event){");
         }
 
         Param[] params = getParamList(command);
@@ -326,7 +271,7 @@ public class CommandLinkRenderer extends LinkRenderer {
 
         // we need to finish wrapping the injected js then
         if (userSpecifiedOnclick) {
-            sb.append("};return (a()==false) ? false : b();");
+            sb.append("};return (mojarra.jsfcbk(a,this,event)===false) ? false : mojarra.jsfcbk(b,this,event);");
         }
 
         writer.writeAttribute("onclick", sb.toString(), "onclick");

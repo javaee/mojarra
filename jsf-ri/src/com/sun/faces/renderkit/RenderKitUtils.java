@@ -411,7 +411,6 @@ public class RenderKitUtils {
         if (userSpecifiedOnchange && renderAjax) { // Doing both
             // RELEASE_PENDING driscoll this should use the jsfcbk function, move the detection
             // into the relevant components, or figure something better out
-            sb.append("function jsfchbk(f, t, e) {t._jsfchbk = f;return t._jsfchbk(e);};");
             sb.append("var a=function(event){");
             userOnchange = userOnchange.trim();
             sb.append(userOnchange);
@@ -420,7 +419,7 @@ public class RenderKitUtils {
             }
             sb.append("};var b=function(event){");
             sb.append(ajaxCommand);
-            sb.append("};return jsfchbk(a,this,event) ? jsfchbk(b,this,event) : false;");
+            sb.append("};return mojarra.jsfcbk(a,this,event) ? mojarra.jsfcbk(b,this,event) : false;");
         } else if (userSpecifiedOnchange) { // do one
             sb.append(userOnchange);
         } else if (renderAjax) { // do the other
@@ -487,12 +486,12 @@ public class RenderKitUtils {
             }
             sb.append("};var b=function(event){");
             sb.append(ajaxCommand);
-            sb.append("};if (jsfcbk(a,this,event)===false) { return false;}else{");
-            sb.append("apf(document.getElementById('");
+            sb.append("};if (mojarra.jsfcbk(a,this,event)===false) { return false;}else{");
+            sb.append("mojarra.apf(document.getElementById('");
             sb.append(formClientId);
             sb.append("'),");
             sb.append(renderParams(componentClientId,params));
-            sb.append(");jsfcbk(b,this,event); dpf(document.getElementById('");
+            sb.append(");mojarra.jsfcbk(b,this,event); mojarra.dpf(document.getElementById('");
             sb.append(formClientId);
             sb.append("'));return false}");
 
@@ -505,7 +504,7 @@ public class RenderKitUtils {
             sb.append("};var b=function(event){");
             sb.append(ajaxCommand);
             sb.append("return false;");
-            sb.append("};return (jsfcbk(a,this,event)===false) ? false : jsfcbk(b,this,event);");
+            sb.append("};return (mojarra.jsfcbk(a,this,event)===false) ? false : mojarra.jsfcbk(b,this,event);");
         } else if (userSpecifiedOnclick && renderParams) {
             sb.append("var a=function(event){");
             sb.append(userOnclick);
@@ -518,15 +517,15 @@ public class RenderKitUtils {
                                               "",
                                               params,
                                               renderAjax));
-            sb.append("};return (jsfcbk(a,this,event)===false) ? false : jsfcbk(b,this,event);");
+            sb.append("};return (mojarra.jsfcbk(a,this,event)===false) ? false : mojarra.jsfcbk(b,this,event);");
         } else if (renderAjax && renderParams) {
             sb.append("var a=function(event){");
             sb.append(ajaxCommand);
-            sb.append("};apf(document.getElementById('");
+            sb.append("};mojarra.apf(document.getElementById('");
             sb.append(formClientId);
             sb.append("'),");
             sb.append(renderParams(componentClientId,params));
-            sb.append(");jsfcbk(a,this,event); dpf(document.getElementById('");
+            sb.append(");mojarra.jsfcbk(a,this,event); mojarra.dpf(document.getElementById('");
             sb.append(formClientId);
             sb.append("')); return false;");
         } else if (userSpecifiedOnclick) { // do one
@@ -1067,7 +1066,7 @@ public class RenderKitUtils {
                                                      boolean isAjax) {
 
         StringBuilder sb = new StringBuilder(256);
-        sb.append("jsfcljs(document.getElementById('");
+        sb.append("mojarra.jsfcljs(document.getElementById('");
         sb.append(formClientId);
         sb.append("'),");
         sb.append(renderParams(commandClientId, params));

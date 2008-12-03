@@ -117,7 +117,17 @@
             </finally>
         </trycatch>
     </target>
-        
+
+    <target name="build.and.deploy" depends="clean, main"
+            description="Clean, build, and deploy, without running tests">
+        <trycatch>
+                <try>
+                    <container.stop/>
+                    <antcall target="container.deploy"/>
+                    <container.start/>
+                </try>
+        </trycatch>
+    </target>
 
 
     <!-- Create the source distribution -->

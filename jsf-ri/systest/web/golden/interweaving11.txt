@@ -9,15 +9,15 @@
 <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id31:j_id32" />
 
 <script type="text/javascript" src="/jsf-systest/faces/javax.faces.resource/ajax.js?ln=javax.faces"></script>
-<a href="#" onclick="jsfcljs(document.getElementById('j_id_id18'),{'j_id_id18:j_id_id22':'j_id_id18:j_id_id22','param':'value'},'');return false">one</a>
+<a href="#" onclick="mojarra.jsfcljs(document.getElementById('j_id_id18'),{'j_id_id18:j_id_id22':'j_id_id18:j_id_id22','param':'value'},'');return false">one</a>
 
 
                 </br>
 
-                <a href="#" onclick="jsfcljs(document.getElementById('j_id_id18'),{'j_id_id18:j_id_id22j_id_1':'j_id_id18:j_id_id22j_id_1','param':'value'},'');return false">two</a>
+                <a href="#" onclick="mojarra.jsfcljs(document.getElementById('j_id_id18'),{'j_id_id18:j_id_id22j_id_1':'j_id_id18:j_id_id22j_id_1','param':'value'},'');return false">two</a>
                 </br>
 
-                <a href="#" onclick="jsfcljs(document.getElementById('j_id_id18'),{'j_id_id18:j_id_id22j_id_2':'j_id_id18:j_id_id22j_id_2','param':'value'},'');return false">three</a>
+                <a href="#" onclick="mojarra.jsfcljs(document.getElementById('j_id_id18'),{'j_id_id18:j_id_id22j_id_2':'j_id_id18:j_id_id22j_id_2','param':'value'},'');return false">three</a>
                 </br>
 
 
