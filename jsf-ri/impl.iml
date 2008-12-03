@@ -1080,6 +1080,26 @@
       <excludeFolder url="file://$MODULE_DIR$/build/test-config-1" />
       <excludeFolder url="file://$MODULE_DIR$/build/test-config-2" />
       <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/build" />
+      <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/converter-property-editor/build" />
+      <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/disable-unicode-escaping/build" />
+      <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/document-ordering/build" />
+      <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/empty-string-as-null/build" />
+      <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/invalid-mapping/build" />
+      <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/jar-ordering/build" />
+      <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/late-bindings/build" />
+      <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/nested-datatables/build" />
+      <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/nested-loadbundles/build" />
+      <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/never-unwrap-exceptions/build" />
+      <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/property-resolver-jsp/build" />
+      <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/replace-application/build" />
+      <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/replace-lifecycle/build" />
+      <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/replace-statemanager/build" />
+      <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/replace-variableresolver/build" />
+      <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/resource-locale-prefix/build" />
+      <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/string-converter/build" />
+      <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/wcag-datatable/build" />
+      <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-disabled/build" />
+      <excludeFolder url="file://$MODULE_DIR$/systest-per-webapp/write-attribute-script-enabled/build" />
       <excludeFolder url="file://$MODULE_DIR$/systest/build" />
       <excludeFolder url="file://$MODULE_DIR$/testresults" />
     </content>
@@ -1097,6 +1117,5 @@
     </orderEntry>
     <orderEntry type="module" module-name="api" exported="" />
   </component>
-  <component name="RSpecModuleSettingsStorage" />
 </module>
 
