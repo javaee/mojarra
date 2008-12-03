@@ -51,6 +51,7 @@
 
 package com.sun.faces.facelets.tag.composite;
 
+import com.sun.faces.application.view.FaceletViewHandlingStrategy;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 import com.sun.faces.facelets.tag.TagAttribute;
@@ -66,6 +67,7 @@ import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.faces.webapp.pdl.AttachedObjectTarget;
 
 
@@ -84,8 +86,12 @@ public abstract class AttachedObjectTargetHandler extends TagHandler {
     abstract AttachedObjectTargetImpl newAttachedObjectTargetImpl();
     
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException, FacesException, FaceletException, ELException {
+
+        FacesContext context = ctx.getFacesContext();
         // only process if it's been created
-        if (null == parent || 
+        // Do not process if we're simply building metadata
+        if (context.getAttributes().containsKey(FaceletViewHandlingStrategy.IS_BUILDING_METADATA) ||
+            null == parent || 
             (null == (parent = parent.getParent())) ||
             !(ComponentSupport.isNew(parent))) {
             return;

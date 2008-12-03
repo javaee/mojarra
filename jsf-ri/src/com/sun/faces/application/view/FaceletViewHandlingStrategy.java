@@ -94,6 +94,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     // Array of viewId prefixes that should be handled by Facelets
     private String[] prefixesArray;
     
+    public static final String IS_BUILDING_METADATA = "com.sun.faces.application.view.IS_BUILDING_METADATA";
+    
 
     // ------------------------------------------------------------ Constructors
 
@@ -142,6 +144,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
                 
             };
             ctx.setVariableMapper(wrapper);
+            context.getAttributes().put(IS_BUILDING_METADATA, Boolean.TRUE);
             f.apply(context, facetComponent);
         } catch (Exception e) {
             if (e instanceof FacesException) {
@@ -151,6 +154,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             }
         }
         finally {
+            context.getAttributes().remove(IS_BUILDING_METADATA);
             ctx.setVariableMapper(orig);
         }
         result = (CompositeComponentBeanInfo) 

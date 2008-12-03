@@ -2276,10 +2276,10 @@
       <code>UISelectItems</code> instance, call its
       <code>getValue()</code> method.  If the result is a
       <code>SelectItem</code> bean, add it to the list.  If the result
-      is an array of <code>SelectItem</code> beans, add each one t othe
+      is an array of <code>SelectItem</code> beans, add each one to the
       list.  If the result is a <code>Collection</code> of
       <code>SelectItem</code> beans, add each one to the list.  If the
-      result isa <code>Map</code>, create a <code>SelectItem</code> bean
+      result is a <code>Map</code>, create a <code>SelectItem</code> bean
       for each entry in the <code>Map</code> using the key as the label,
       the value as the value, and <code>null</code> as the description.
       Iterate over the list of <code>SelectItem</code> beans.  If the
@@ -2292,7 +2292,7 @@
       spec to obtain a renderable <code>String</code> from the "value"
       property of the current element, render that as the value of the
       "value" atribute.  Now it is time to see if the current element is
-      the selected value.  call its
+      the selected value.  Call its
       <code>getSubmittedValue()</code> method, casting the result to an
       <code>Object []</code>, otherwise the component must be a
       <code>UISelectOne</code> instance, call its
