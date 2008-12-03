@@ -228,11 +228,6 @@
     </organization>
     <dependencies>
         <dependency>
-            <groupId>org.jvnet.wagon-svn</groupId>
-            <artifactId>wagon-svn</artifactId>
-            <version>1.8</version>
-        </dependency>
-        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
             <version>2.5</version>
