@@ -871,9 +871,11 @@ public class WebConfiguration {
             "com.sun.faces.compressJavaScript",
             true
         ),
-        ExternalizeJavaScript(
+        ExternalizeJavaScriptDeprecated(
             "com.sun.faces.externalizeJavaScript",
-            false
+            true,
+            true,
+            null
         ),
         SendPoweredByHeader(
               "com.sun.faces.sendPoweredByHeader",

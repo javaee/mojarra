@@ -45,11 +45,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Iterator;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.math.BigDecimal;
@@ -58,12 +54,6 @@ import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Resource;
 import javax.faces.application.ResourceHandler;
-import javax.faces.component.ActionSource;
-import javax.faces.component.AjaxBehavior;
-import javax.faces.component.EditableValueHolder;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIComponentBase;
-import javax.faces.component.UISelectItems;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
@@ -79,7 +69,8 @@ import com.sun.faces.renderkit.html_basic.HtmlBasicRenderer.Param;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
-import javax.faces.component.UIForm;
+
+import javax.faces.component.*;
 import javax.el.ValueExpression;
 import javax.el.ELContext;
 
@@ -174,10 +165,6 @@ public class RenderKitUtils {
 
 
     protected static final Logger LOGGER = FacesLogger.RENDERKIT.getLogger();
-
-
-    private static final String SCRIPT_STATE = 
-            RIConstants.FACES_PREFIX + "scriptState";
     
     private static final Param[] EMPTY_PARAMS = new Param[0];
 
@@ -993,55 +980,69 @@ public class RenderKitUtils {
     /**
      * <p>Renders the Javascript necessary to add and remove request
      * parameters to the current form.</p>
-     * @param writer the <code>ResponseWriter</code>
      * @param context the <code>FacesContext</code> for the current request
      * @throws java.io.IOException if an error occurs writing to the response
      */
-    public static void renderFormInitScript(ResponseWriter writer,
-                                            FacesContext context)
-          throws IOException {
-        WebConfiguration webConfig =
-              WebConfiguration.getInstance(context.getExternalContext());
+    public static void renderJsfJs(FacesContext context) throws IOException {
 
-        if (webConfig.isOptionEnabled(BooleanWebContextInitParameter.ExternalizeJavaScript)) {
-            // PENDING
-            // We need to look into how to make this work in a portlet environment.
-            // For the time being, this feature will need to be disabled when running
-            // in a portlet.
-            /*
-            String mapping = Util.getFacesMapping(context);
-            String uri;
-            if ((mapping != null) && (Util.isPrefixMapped(mapping))) {
-                uri = mapping + '/' + RIConstants.SUN_JSF_JS_URI;
-            } else {
-                uri = '/' + RIConstants.SUN_JSF_JS_URI + mapping;
-            }
-            writer.write('\n');
-            writer.startElement("script", null);
-            writer.writeAttribute("type", "text/javascript", null);
-            writer.writeAttribute("src",
-                                  context.getExternalContext()
-                                        .getRequestContextPath() + uri,
-                                  null);
-            writer.endElement("script");
-            writer.write("\n");
-            */
-            ResourceHandler handler = context.getApplication().getResourceHandler();
-            Resource resource = handler.createResource("scripts/sunjsf.js", "jsfri");
-            writer.write('\n');
-            writer.startElement("script", null);
-            writer.writeAttribute("type", "text/javascript", null);
-            writer.writeAttribute("src", ((resource != null) ? resource.getRequestPath() : ""), null);
-            writer.endElement("script");
-        } else {
-            writer.write('\n');
-            writer.startElement("script", null);
-            writer.writeAttribute("type", "text/javascript", null);
-            writer.writeAttribute("language", "Javascript", null);
-            writeSunJS(context, writer);
-            writer.endElement("script");
-            writer.write("\n");
+        final String name = "ajax.js";
+        final String library = "javax.faces";
+
+        if (context.getAttributes().get(RIConstants.SCRIPT_STATE) != null) {
+            // Already included, return
+            return;
         }
+
+        ResponseWriter writer = context.getResponseWriter();
+        UIViewRoot viewRoot = context.getViewRoot();
+        ListIterator iter = (viewRoot.getComponentResources(context, "head")).listIterator();
+        while (iter.hasNext()) {
+            UIComponent resource = (UIComponent)iter.next();
+            String rname = (String)resource.getAttributes().get("name");
+            String rlibrary = (String)resource.getAttributes().get("library");
+            if (name.equals(rname) && library.equals(rlibrary)) {
+                // Set the context to record script as included
+                context.getAttributes().put(RIConstants.SCRIPT_STATE, Boolean.TRUE);
+                return;
+            }
+        }
+        iter = (viewRoot.getComponentResources(context, "body")).listIterator();
+        while (iter.hasNext()) {
+            UIComponent resource = (UIComponent)iter.next();
+            String rname = (String)resource.getAttributes().get("name");
+            String rlibrary = (String)resource.getAttributes().get("library");
+            if (name.equals(rname) && library.equals(rlibrary)) {
+                // Set the context to record script as included
+                context.getAttributes().put(RIConstants.SCRIPT_STATE, Boolean.TRUE);
+                return;
+            }
+        }
+        iter = (viewRoot.getComponentResources(context, "form")).listIterator();
+        while (iter.hasNext()) {
+            UIComponent resource = (UIComponent)iter.next();
+            String rname = (String)resource.getAttributes().get("name");
+            String rlibrary = (String)resource.getAttributes().get("library");
+            if (name.equals(rname) && library.equals(rlibrary)) {
+                // Set the context to record script as included
+                context.getAttributes().put(RIConstants.SCRIPT_STATE, Boolean.TRUE);
+                return;
+            }
+        }
+
+        // Since we've now determined that it's not in the page, we need to add it.
+
+        ResourceHandler handler = context.getApplication().getResourceHandler();
+        Resource resource = handler.createResource(name, library);
+        writer.write('\n');
+        writer.startElement("script", null);
+        writer.writeAttribute("type", "text/javascript", null);
+        writer.writeAttribute("src", ((resource != null) ? resource.getRequestPath() : ""), null);
+        writer.endElement("script");
+        writer.append('\r');
+        writer.append('\n');
+
+        // Set the context to record script as included
+        context.getAttributes().put(RIConstants.SCRIPT_STATE, Boolean.TRUE);
     }
 
     /**
@@ -1252,10 +1253,10 @@ public class RenderKitUtils {
      * @return <code>true</code> If the <code>add/remove</code> javascript
      *         has been rendered, otherwise <code>false</code>
      */
-    public static boolean hasScriptBeenRendered(FacesContext context) {
+    private static boolean hasScriptBeenRendered(FacesContext context) {
 
         return (context.getAttributes()
-              .get(SCRIPT_STATE) != null);
+              .get(RIConstants.SCRIPT_STATE) != null);
 
     }
 
@@ -1266,10 +1267,10 @@ public class RenderKitUtils {
      *
      * @param context the <code>FacesContext</code> of the current request
      */
-    public static void setScriptAsRendered(FacesContext context) {
+    private static void setScriptAsRendered(FacesContext context) {
 
         context.getAttributes()
-              .put(SCRIPT_STATE, Boolean.TRUE);
+              .put(RIConstants.SCRIPT_STATE, Boolean.TRUE);
 
     }
 

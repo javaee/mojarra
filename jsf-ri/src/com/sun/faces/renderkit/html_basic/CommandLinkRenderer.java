@@ -176,13 +176,7 @@ public class CommandLinkRenderer extends LinkRenderer {
         if (componentDisabled || formClientId == null) {
             renderAsDisabled(context, component);
         } else {
-            if (!RenderKitUtils.hasScriptBeenRendered(context)) {
-                RenderKitUtils
-                      .renderFormInitScript(
-                            context.getResponseWriter(),
-                            context);
-                RenderKitUtils.setScriptAsRendered(context);
-            }
+            RenderKitUtils.renderJsfJs(context);
             renderAsActive(context, component);
         }
 

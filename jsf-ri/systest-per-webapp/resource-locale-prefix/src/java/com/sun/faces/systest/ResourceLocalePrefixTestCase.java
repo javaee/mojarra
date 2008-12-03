@@ -129,10 +129,10 @@ public class ResourceLocalePrefixTestCase extends AbstractTestCase {
         getAllElementsOfGivenClass(page, scripts, HtmlScript.class);
         assertTrue(scripts.size() == 1);
         HtmlScript script = scripts.get(0);
-        // The RI external script for command links isn't localized - ensure it gets
+        // The Ajax external script isn't localized - ensure it gets
         // rendered in all cases.
         // This should be true for all non-localized resources
-        assertTrue("/jsf-resource-locale-prefix/faces/javax.faces.resource/scripts/sunjsf.js?ln=jsfri".equals(script.getSrcAttribute()));
+        assertTrue("/jsf-resource-locale-prefix/faces/javax.faces.resource/ajax.js?ln=javax.faces".equals(script.getSrcAttribute()));
             System.out.println("Locale, " + locale + ", PASSED");
         }
 

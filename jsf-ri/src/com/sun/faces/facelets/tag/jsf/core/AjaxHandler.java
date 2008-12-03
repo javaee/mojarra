@@ -52,12 +52,9 @@
 package com.sun.faces.facelets.tag.jsf.core;
 
 import java.io.IOException;
-import java.io.Serializable;
-import java.util.Iterator;
 import java.util.ListIterator;
 
 import javax.el.ELException;
-import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.component.ActionSource;
 import javax.faces.component.AjaxBehavior;
@@ -67,21 +64,15 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.AfterAddToParentEvent;
-import javax.faces.event.ComponentSystemEvent;
-import javax.faces.event.ComponentSystemEventListener;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 
 import com.sun.faces.facelets.tag.TagAttribute;
 import com.sun.faces.facelets.tag.TagAttributeException;
 import com.sun.faces.facelets.tag.TagConfig;
-import com.sun.faces.facelets.tag.TagException;
 import com.sun.faces.facelets.tag.TagHandler;
-import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
-import com.sun.faces.facelets.util.ReflectionUtil;
+import com.sun.faces.RIConstants;
 
 import javax.faces.application.Resource;
 
@@ -138,6 +129,9 @@ import javax.faces.application.Resource;
  * @version $Id: AjaxHandler.java 5369 2008-09-08 19:53:45Z rogerk $
  */
 public final class AjaxHandler extends TagHandler {
+
+        private static final String SCRIPT_STATE =
+            RIConstants.FACES_PREFIX + "jsfjsState";
 
     private final TagAttribute facesEvent;
     private final TagAttribute execute;
@@ -240,9 +234,15 @@ public final class AjaxHandler extends TagHandler {
     // The resource component will be installed with the target "head".
     //
     private void installAjaxResourceIfNecessary() {
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (context.getAttributes().get(RIConstants.SCRIPT_STATE) != null) {
+            // Already included, return
+            return;
+        }
+
         final String name = "ajax.js";
         final String library = "javax.faces";
-        FacesContext context = FacesContext.getCurrentInstance();
         UIViewRoot viewRoot = context.getViewRoot();
         ListIterator iter = (viewRoot.getComponentResources(context, "head")).listIterator();
         while (iter.hasNext()) {
@@ -250,6 +250,8 @@ public final class AjaxHandler extends TagHandler {
             String rname = (String)resource.getAttributes().get("name");
             String rlibrary = (String)resource.getAttributes().get("library");
             if (name.equals(rname) && library.equals(rlibrary)) {
+                // Set the context to record script as included
+                context.getAttributes().put(RIConstants.SCRIPT_STATE, Boolean.TRUE);
                 return;
             }
         }
@@ -261,6 +263,8 @@ public final class AjaxHandler extends TagHandler {
             String rname = (String)resource.getAttributes().get("name");
             String rlibrary = (String)resource.getAttributes().get("library");
             if (name.equals(rname) && library.equals(rlibrary)) {
+                // Set the context to record script as included
+                context.getAttributes().put(RIConstants.SCRIPT_STATE, Boolean.TRUE);
                 return;
             }
         }
@@ -270,6 +274,8 @@ public final class AjaxHandler extends TagHandler {
             String rname = (String)resource.getAttributes().get("name");
             String rlibrary = (String)resource.getAttributes().get("library");
             if (name.equals(rname) && library.equals(rlibrary)) {
+                // Set the context to record script as included
+                context.getAttributes().put(RIConstants.SCRIPT_STATE, Boolean.TRUE);
                 return;
             }
         }
@@ -279,5 +285,9 @@ public final class AjaxHandler extends TagHandler {
         output.getAttributes().put("name", name);
         output.getAttributes().put("library", library);
         viewRoot.addComponentResource(context, output, "head");
+
+        // Set the context to record script as included
+        context.getAttributes().put(RIConstants.SCRIPT_STATE, Boolean.TRUE);
+
     }
 }

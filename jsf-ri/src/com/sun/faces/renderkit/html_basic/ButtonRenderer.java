@@ -125,18 +125,9 @@ public class ButtonRenderer extends HtmlBasicRenderer {
          */
         Param params[] = getParamList(component);
         AjaxBehavior ajaxBehavior = (AjaxBehavior)component.getAttributes().get(AjaxBehavior.AJAX_BEHAVIOR);
-        boolean renderAjax = (null != ajaxBehavior);
-        boolean userOnclick = (null !=  component.getAttributes().get("onclick"));
         boolean hasParams = !Arrays.equals(params,EMPTY_PARAMS);
-        if (( hasParams || (renderAjax && userOnclick))
-                && (type.equals("submit") || type.equals("button"))) {
-            if (!RenderKitUtils.hasScriptBeenRendered(context)) {
-                RenderKitUtils
-                      .renderFormInitScript(
-                            context.getResponseWriter(),
-                            context);
-                RenderKitUtils.setScriptAsRendered(context);
-            }
+        if ( hasParams && (type.equals("submit") || type.equals("button"))) {
+           RenderKitUtils.renderJsfJs(context);
         }
 
 
