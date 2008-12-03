@@ -220,17 +220,17 @@ jsf.ajax.request = function(element, event, options) {
     }
 
     // Error handler for this request
-    var error = false;
+    var onError = false;
 
-    if (options.error) {
-        error = options.error;
+    if (options.onError) {
+        error = options.onError;
     }
 
     // Event handler for this request
-    var event = false;
+    var onEvent = false;
 
-    if (options.event) {
-        event = options.event;
+    if (options.onEvent) {
+        onEvent = options.onEvent;
     }
 
 
@@ -286,8 +286,8 @@ jsf.ajax.request = function(element, event, options) {
     var ajaxEngine = new jsf.AjaxEngine();
     ajaxEngine.setupArguments(args);
     ajaxEngine.queryString = viewState;
-    ajaxEngine.event = event;
-    ajaxEngine.error = error;
+    ajaxEngine.onEvent = onEvent;
+    ajaxEngine.onError = onError;
     ajaxEngine.sendRequest();
 
     // Helper function to determine the default execute list.

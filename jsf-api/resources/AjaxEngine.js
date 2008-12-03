@@ -59,8 +59,8 @@ jsf.AjaxEngine = function() {
 
     var req = {};                  // Request Object
     req.url = null;                // Request URL
-    req.error = null;              // Error handler for request
-    req.event = null;              // Event handler for request
+    req.onError = null;              // Error handler for request
+    req.onEvent = null;              // Event handler for request
     req.xmlReq = null;             // XMLHttpRequest Object
     req.async = true;              // Default - Asynchronous
     req.parameters = {};           // Parameters For GET or POST
@@ -300,7 +300,6 @@ if (!window["jsf.AjaxEngine.Queue"]) {
         };
 
         /* Enqueues the specified element in this Queue.
-         * After the element is put in the queue, an event is fired.
          *
          * @param element - the element to enqueue
          */
@@ -372,8 +371,8 @@ jsf.AjaxEngine.onEvent = function(request, name) {
         }
     }
 
-    if (request && request.event) {
-        func = request.event + "(data);";
+    if (request && request.onEvent) {
+        func = request.onEvent + "(data);";
         eval(func);
     }
 
@@ -419,8 +418,8 @@ jsf.AjaxEngine.onError = function(request, name) {
     }
 
     // If we have a registered callback, send the error to it.
-    if (request && request.error) {
-        func = request.error + "(data);";
+    if (request && request.onError) {
+        func = request.onError + "(data);";
         eval(func);    }
 
     for (i in jsf.ajax._errorListeners) {

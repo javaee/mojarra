@@ -324,8 +324,8 @@ public class RenderKitUtils {
         StringBuilder ajaxCommand = new StringBuilder(256);
         String execute = ajaxBehavior.getExecute();
         String render = ajaxBehavior.getRender();
-        String event = ajaxBehavior.getEvent();
-        String error = ajaxBehavior.getError();
+        String onEvent = ajaxBehavior.getOnEvent();
+        String onError = ajaxBehavior.getOnError();
         ajaxCommand.append(AJAX_REQUEST);
         ajaxCommand.append("(this, event");
         if (execute != null || render != null) {
@@ -347,24 +347,24 @@ public class RenderKitUtils {
             ajaxCommand.append(render.replace(' ', ','));
             ajaxCommand.append("'");
         }
-        if (event != null) {
+        if (onEvent != null) {
             if (already) {
                 ajaxCommand.append(",");
             } else {
                 already = true;
             }
-            ajaxCommand.append("event:'");
-            ajaxCommand.append(event);
+            ajaxCommand.append("onEvent:'");
+            ajaxCommand.append(onEvent);
             ajaxCommand.append("'");
         }
-        if (error != null) {
+        if (onError != null) {
             if (already) {
                 ajaxCommand.append(",");
             } else {
                 already = true;
             }
-            ajaxCommand.append("error:'");
-            ajaxCommand.append(error);
+            ajaxCommand.append("onError:'");
+            ajaxCommand.append(onError);
             ajaxCommand.append("'");
         }
         if (already) {

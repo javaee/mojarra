@@ -13,7 +13,7 @@ function buttonpush(buttonName, element, event) {
     }
     try {
         addCell(document.createTextNode(buttonName));
-        jsf.ajax.request(element, event, {execute: buttonName, render: buttonName, event: 'msg', error: 'errorMsg'});
+        jsf.ajax.request(element, event, {execute: buttonName, render: buttonName, onEvent: 'msg', onError: 'errorMsg'});
     } catch (ex) {
         // Handle programming errors here
         alert(ex);

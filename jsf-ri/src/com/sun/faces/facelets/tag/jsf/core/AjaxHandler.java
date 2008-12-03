@@ -74,8 +74,6 @@ import com.sun.faces.facelets.tag.TagHandler;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.RIConstants;
 
-import javax.faces.application.Resource;
-
 /**
  * <p class="changed_added_2_0">Enable one or more components in the view
  * to perform Ajax operations.  This tag handler must create an instance
@@ -90,7 +88,7 @@ import javax.faces.application.Resource;
  * </ul>
  * put the {@link javax.faces.component.AjaxBehavior} instance in the parent 
  * component's attribute <code>Map</code> under the key 
- * {@link javax.faces.component.AJAX_BEHAVIOR}.  If this tag is nested within
+ * {@link javax.faces.component.AjaxBehavior#AJAX_BEHAVIOR}.  If this tag is nested within
  * a single {@link javax.faces.component.EditableValueHolder} component,
  * and the <code>facesEvent</code> attribute value is not specified or is
  * one of the following:
@@ -100,17 +98,17 @@ import javax.faces.application.Resource;
  * </ul>
  * put the {@link javax.faces.component.AjaxBehavior} instance in the parent 
  * component's attribute <code>Map</code> under the key
- * {@link javax.faces.component.AJAX_BEHAVIOR}.  
+ * {@link javax.faces.component.AjaxBehavior#AJAX_BEHAVIOR}.
  * Throw an <code>exception</code> if the <code>facesEvent</code> attribute value
  * does not match the component type.
  * <br/><br/>
  * If this tag is nested within a component other than an 
  * {@link javax.faces.component.ActionSource} or 
  * {@link javax.faces.component.EditableValueHolder} type, 
- * make this tag's parent component subscribe to {@link javax.faces.event.AfterAddToParent}
+ * make this tag's parent component subscribe to {@link javax.faces.event.AfterAddToParentEvent}
  * events.  Retrieve an {@link javax.faces.component.AjaxBehaviors} instance from 
  * the current {@link javax.faces.context.FacesContext} attributes <code>Map</code>
- * using the key {@link AjaxBehaviors.AJAX_BEHAVIORS}.  If an instance does not exist,
+ * using the key {@link javax.faces.component.AjaxBehaviors#AJAX_BEHAVIORS}.  If an instance does not exist,
  * create it.  Call {@link javax.faces.component.AjaxBehaviors#pushBehavior} passing the
  * {@link javax.faces.component.AjaxBehavior} instance and the parent component instance.
  * Put the {@link javax.faces.component.AjaxBehaviors} instance into the 
@@ -130,14 +128,11 @@ import javax.faces.application.Resource;
  */
 public final class AjaxHandler extends TagHandler {
 
-        private static final String SCRIPT_STATE =
-            RIConstants.FACES_PREFIX + "jsfjsState";
-
     private final TagAttribute facesEvent;
     private final TagAttribute execute;
     private final TagAttribute render;
-    private final TagAttribute event;
-    private final TagAttribute error;
+    private final TagAttribute onEvent;
+    private final TagAttribute onError;
 
     /**
      * @param config
@@ -147,8 +142,8 @@ public final class AjaxHandler extends TagHandler {
         this.facesEvent = this.getAttribute("facesEvent");
         this.execute = this.getAttribute("execute");
         this.render = this.getAttribute("render");
-        this.event = this.getAttribute("event");
-        this.error = this.getAttribute("error");
+        this.onEvent = this.getAttribute("onEvent");
+        this.onError = this.getAttribute("onError");
     }
 
     /*
@@ -166,8 +161,8 @@ public final class AjaxHandler extends TagHandler {
         String facesEvent = null;
         String execute = null;
         String render = null;
-        String event = null;
-        String error = null;
+        String onEvent = null;
+        String onError = null;
 
         if (this.facesEvent != null) {
             facesEvent = this.facesEvent.getValue(ctx);
@@ -178,14 +173,14 @@ public final class AjaxHandler extends TagHandler {
         if (this.render != null) {
             render = this.render.getValue(ctx).replace(' ',',');
         }
-        if (this.event != null) {
-            event = this.event.getValue(ctx);
+        if (this.onEvent != null) {
+            onEvent = this.onEvent.getValue(ctx);
         }
-        if (this.error != null) {
-            error = this.error.getValue(ctx);
+        if (this.onError != null) {
+            onError = this.onError.getValue(ctx);
         }
 
-        AjaxBehavior ajaxBehavior = new AjaxBehavior(facesEvent, event, error, execute, render);
+        AjaxBehavior ajaxBehavior = new AjaxBehavior(facesEvent, onEvent, onError, execute, render);
 
         //
         // If we are nested within an EditableValueHolder or ActionSource component..

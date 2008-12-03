@@ -84,9 +84,9 @@ public class AjaxBehavior implements Serializable {
      */
     public static final String AJAX_VALUE_CHANGE_ACTION = "all";
 
-    private String error = null;
+    private String onError = null;
 
-    private String event = null;
+    private String onEvent = null;
 
     private String facesEvent = null;
 
@@ -94,9 +94,9 @@ public class AjaxBehavior implements Serializable {
 
     private String render = null;
 
-    public AjaxBehavior(String facesEvent, String event, String error, String execute, String render) {
-        this.error = error;
-        this.event = event;
+    public AjaxBehavior(String facesEvent, String onEvent, String onError, String execute, String render) {
+        this.onError = onError;
+        this.onEvent = onEvent;
         this.facesEvent = facesEvent;
         this.execute = execute;
         this.render = render;
@@ -120,8 +120,8 @@ public class AjaxBehavior implements Serializable {
      *
      * @since 2.0
      */
-    public String getError() {
-        return error;
+    public String getOnError() {
+        return onError;
     }
 
     /**
@@ -132,8 +132,8 @@ public class AjaxBehavior implements Serializable {
      *
      * @since 2.0
      */
-    public String getEvent() {
-        return event;
+    public String getOnEvent() {
+        return onEvent;
     }
 
     /**
