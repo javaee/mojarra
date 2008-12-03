@@ -593,27 +593,25 @@ public class NumberConverter implements Converter, StateHolder {
             if (pattern != null) {
                 throw new ConverterException(MessageFactory.getMessage(
                      context, PATTERN_ID, value, "#,##0.0#",
-                     MessageFactory.getLabel(context, component)));
+                     MessageFactory.getLabel(context, component)), e);
             } else if (type.equals("currency")) {
                 throw new ConverterException(MessageFactory.getMessage(
                      context, CURRENCY_ID, value,
                      parser.format(99.99),
-                     MessageFactory.getLabel(context, component)));
+                     MessageFactory.getLabel(context, component)), e);
             } else if (type.equals("number")) {
                 throw new ConverterException(MessageFactory.getMessage(
                      context, NUMBER_ID, value,
                      parser.format(99),
-                     MessageFactory.getLabel(context, component)));
+                     MessageFactory.getLabel(context, component)), e);
             } else if (type.equals("percent")) {
                 throw new ConverterException(MessageFactory.getMessage(
                      context, PERCENT_ID, value,
                      parser.format(.75),
-                     MessageFactory.getLabel(context, component)));
+                     MessageFactory.getLabel(context, component)), e);
             }
-        } catch (ConverterException ce) {
-            throw ce;
         } catch (Exception e) {
-            throw new ConverterException(e.getCause());
+            throw new ConverterException(e);
         }
         return returnValue;
     }

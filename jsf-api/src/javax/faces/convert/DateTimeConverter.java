@@ -401,20 +401,18 @@ public class DateTimeConverter implements Converter, StateHolder {
                 throw new ConverterException(MessageFactory.getMessage(
                      context, DATE_ID, value,
                      parser.format(new Date(System.currentTimeMillis())),
-                     MessageFactory.getLabel(context, component)));
+                     MessageFactory.getLabel(context, component)), e);
             } else if ("time".equals(type)) {
                 throw new ConverterException(MessageFactory.getMessage(
                      context, TIME_ID, value,
                      parser.format(new Date(System.currentTimeMillis())),
-                     MessageFactory.getLabel(context, component)));
+                     MessageFactory.getLabel(context, component)), e);
             } else if ("both".equals(type)) {
                 throw new ConverterException(MessageFactory.getMessage(
                      context, DATETIME_ID, value,
                      parser.format(new Date(System.currentTimeMillis())),
-                     MessageFactory.getLabel(context, component)));
+                     MessageFactory.getLabel(context, component)), e);
             }
-        } catch (ConverterException e) {
-            throw e;
         } catch (Exception e) {
             throw new ConverterException(e);
         }
