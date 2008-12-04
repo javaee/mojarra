@@ -382,7 +382,6 @@ jsf.ajax.request = function(element, event, options) {
  * Find the DOM element with the identifier that matches the 
  * <code>&lt;update&gt;</code> element identifier, and replace its contents with 
  * the <code>&lt;update&gt;</code> element's <code>CDATA</code> contents.</li>
- * </ul>
  * </li>
  * <p><b>Insert Element Processing</b></p>
  * <li>If an <code>&lt;input&gt;</code> element is found in the response with the 
@@ -446,11 +445,18 @@ jsf.ajax.request = function(element, event, options) {
  * <p><b>Error Processing</b></p>
  * <li>If an <code>&lt;error&gt;</code> element is found in the response:
  * <pre><code>&lt;error&gt;
- *    &lt;![CDATA[...]]&gt;
+ *    &lt;error-class&gt;..fully qualified class name string...&lt;error-class&gt;
+ *    &lt;error-message&gt;&lt;![CDATA[...]]&gt;&lt;error-message&gt;
  * &lt;/error&gt;</code></pre>
- * Extract this <code>&lt;error&gt;</code> element's <code>CDATA</code> contents.
+ * Extract this <code>&lt;error&gt;</code> element's <code>error-class</code> contents
+ * and the <code>error-message</code> contents.  These identify the Java class that
+ * caused the error, and the exception message, respectively.
  * This is an error from the server, and implementations can use this information
  * as needed.</li>
+ * <p><b>Extensions</b></p>
+ * <li>The <code>&lt;extensions&gt;</code> element provides a way for framework
+ * implementations to provide their own information.</li>
+ * </ul>
  * 
  * </p>
  *
