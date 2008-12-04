@@ -200,47 +200,6 @@ jsf.AjaxEngine = function() {
 };
 
 /**
- * Utility function to serialize form elements.
- */
-jsf.AjaxEngine.serializeForm = function(theform) {
-    var els = theform.elements;
-    var len = els.length;
-    var qString = "";
-    this.addField = function(name, value) {
-        if (qString.length > 0) {
-            qString += "&";
-        }
-        qString += encodeURIComponent(name) + "=" + encodeURIComponent(value);
-    };
-    for (var i = 0; i < len; i++) {
-        var el = els[i];
-        if (!el.disabled) {
-            switch (el.type) {
-                case 'text': case 'password': case 'hidden': case 'textarea':
-                    this.addField(el.name, el.value);
-                    break;
-                case 'select-one':
-                    if (el.selectedIndex >= 0) {
-                        this.addField(el.name, el.options[el.selectedIndex].value);
-                    }
-                    break;
-                case 'select-multiple':
-                    for (var j = 0; j < el.options.length; j++) {
-                        if (el.options[j].selected) {
-                            this.addField(el.name, el.options[j].value);
-                        }
-                    }
-                    break;
-                case 'checkbox': case 'radio':
-                    this.addField(el.name, el.checked+"");
-                    break;
-            }
-        }
-    }
-    return qString;
-};
-
-/**
  * Utility function to get an XMLHttpRequest handle.
  */
 jsf.AjaxEngine.getTransport = function() {

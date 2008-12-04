@@ -52,10 +52,6 @@
  * limitations under the License.
  */
 
-// RELEASE_PENDING need to decide on naming for Utils
-var mojarra = mojarra || {};
-
-
 /**
  * Utility functions
  */
@@ -229,38 +225,6 @@ if (!window["jsf.Utils"]) {
             result = temp;
             parent.replaceChild(temp, d);
             return result;
-        },
-
-        // Copy the direct properties of an object to another, new object
-        // Do not copy functions or inherited properties
-        deepObjCopy : function deepObjCopy(dupeObj) {
-            var retObj = {};
-            if (dupeObj === null) {
-                return null;
-            }
-            if (typeof dupeObj === 'object') {
-                if (typeof dupeObj.length !== 'undefined') {
-                    retObj = [];
-                }
-                for (var objInd in dupeObj) {
-                    if (dupeObj.hasOwnProperty(objInd)) {
-                        if (typeof dupeObj[objInd] === 'object') {
-                            retObj[objInd] = deepObjCopy(dupeObj[objInd]);
-                        } else if (typeof dupeObj[objInd] === 'string') {
-                            retObj[objInd] = dupeObj[objInd];
-                        } else if (typeof dupeObj[objInd] === 'number') {
-                            retObj[objInd] = dupeObj[objInd];
-                        } else if (typeof dupeObj[objInd] === 'boolean') {
-                            if (dupeObj[objInd]) {
-                                retObj[objInd] = true;
-                            } else {
-                                retObj[objInd] = false;
-                            }
-                        } // else igore functions
-                    }
-                }
-            }
-            return retObj;
         },
 
         /**
