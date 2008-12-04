@@ -134,9 +134,9 @@ jsf.ajax = jsf.ajax || function() {
  * <li>Determine additional arguments (if any) from the <code>options</code>
  * argument. If <code>options.execute</code> exists, create the post data argument
  * with the name <code>javax.faces.partial.execute</code> and the value as a
- * comma delimited <code>string</code> of client identifiers.  If
+ * space delimited <code>string</code> of client identifiers.  If
  * <code>options.render</code> exists, create the post data argument with the name
- * <code>javax.faces.partial.render</code> and the value as a comma delimited
+ * <code>javax.faces.partial.render</code> and the value as a space delimited
  * <code>string</code> of client identifiers.</li>
  * <li>Determine additional arguments (if any) from the <code>event</code>
  * argument.  The following name/value pairs may be used from the
@@ -196,11 +196,11 @@ jsf.ajax = jsf.ajax || function() {
  * </tr>
  * <tr>
  * <td><code>execute</code></td>
- * <td><code>comma seperated list of client identifiers</code></td>
+ * <td><code>space seperated list of client identifiers</code></td>
  * </tr>
  * <tr>
  * <td><code>render</code></td>
- * <td><code>comma seperated list of client identifiers</code></td>
+ * <td><code>space seperated list of client identifiers</code></td>
  * </tr>
  * <tr>
  * <td><code>event</code></td>
