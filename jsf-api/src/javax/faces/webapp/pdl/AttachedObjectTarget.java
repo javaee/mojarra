@@ -49,6 +49,10 @@ import javax.faces.component.UIComponent;
  * component</em>.  See {@link
  * PageDeclarationLanguage#getComponentMetadata} for the context in
  * which implementations of this interface are used.</p>
+ * 
+ * <p class="changed_added_2_0">The implementation must ensure that 
+ * this instance is thread safe and may be shared among different component 
+ * trees.</p>
 
  * <div class="changed_added_2_0">
 
@@ -84,8 +88,9 @@ public interface AttachedObjectTarget {
      * the composite component.  This method is used by the {@link
      * javax.faces.application.ViewHandler#retargetAttachedObjects}
      * method to take the appropriate action on the attached object.</p>
+     *
      */
-    public List<UIComponent> getTargets();
+    public List<UIComponent> getTargets(UIComponent topLevelComponent);
 
 
     /**
@@ -95,6 +100,5 @@ public interface AttachedObjectTarget {
      * 
      */
     public String getName();
-           
 
 }

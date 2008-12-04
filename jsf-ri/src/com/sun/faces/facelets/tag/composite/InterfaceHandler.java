@@ -51,6 +51,7 @@
 
 package com.sun.faces.facelets.tag.composite;
 
+import com.sun.faces.application.view.FaceletViewHandlingStrategy;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 import com.sun.faces.facelets.tag.TagAttribute;
@@ -62,7 +63,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
@@ -70,6 +70,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.webapp.pdl.AttachedObjectTarget;
 import javax.faces.application.Resource;
 import javax.faces.application.ProjectStage;
+import javax.faces.context.FacesContext;
 
 public class InterfaceHandler extends TagHandler {
 
@@ -81,9 +82,13 @@ public class InterfaceHandler extends TagHandler {
     }
     
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException, FacesException, FaceletException, ELException {
-
-        imbueComponentWithMetadata(ctx, parent);
-        this.nextHandler.apply(ctx, parent);
+        FacesContext context = ctx.getFacesContext();
+        // only process if it's been created
+        // Do not process if we're simply building metadata
+        if (context.getAttributes().containsKey(FaceletViewHandlingStrategy.IS_BUILDING_METADATA)) {
+            imbueComponentWithMetadata(ctx, parent);
+            this.nextHandler.apply(ctx, parent);
+        }
     }
     
     private void imbueComponentWithMetadata(FaceletContext ctx, UIComponent parent) {

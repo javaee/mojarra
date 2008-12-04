@@ -212,7 +212,7 @@ public class MultiViewHandler extends ViewHandler {
                 // Get the name given to this attached object target by the
                 // composite component author
                 curTargetName = curTarget.getName();
-                targetComponents = curTarget.getTargets();
+                targetComponents = curTarget.getTargets(topLevelComponent);
 
                 if (curHandler instanceof ActionSource2AttachedObjectHandler &&
                     curTarget instanceof ActionSource2AttachedObjectTarget) {

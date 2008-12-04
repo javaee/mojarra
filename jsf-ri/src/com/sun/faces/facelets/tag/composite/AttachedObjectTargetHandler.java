@@ -87,11 +87,10 @@ public abstract class AttachedObjectTargetHandler extends TagHandler {
     
     public void apply(FaceletContext ctx, UIComponent parent) throws IOException, FacesException, FaceletException, ELException {
 
-        FacesContext context = ctx.getFacesContext();
+        assert(ctx.getFacesContext().getAttributes().containsKey(FaceletViewHandlingStrategy.IS_BUILDING_METADATA));
+        
         // only process if it's been created
-        // Do not process if we're simply building metadata
-        if (context.getAttributes().containsKey(FaceletViewHandlingStrategy.IS_BUILDING_METADATA) ||
-            null == parent || 
+        if (null == parent || 
             (null == (parent = parent.getParent())) ||
             !(ComponentSupport.isNew(parent))) {
             return;
@@ -111,7 +110,6 @@ public abstract class AttachedObjectTargetHandler extends TagHandler {
                 componentDescriptor.getValue(AttachedObjectTarget.ATTACHED_OBJECT_TARGETS_KEY);
         AttachedObjectTargetImpl target = newAttachedObjectTargetImpl();
         targetList.add(target);
-        target.setComponent(parent);
         
         ValueExpression ve = name.getValueExpression(ctx, String.class);
         String strValue = (String) ve.getValue(ctx);
@@ -121,10 +119,7 @@ public abstract class AttachedObjectTargetHandler extends TagHandler {
 
         if (null != targets) {
             ve = targets.getValueExpression(ctx, String.class);
-            strValue = (String) ve.getValue(ctx);
-            if (null != strValue) {
-                target.setTargetsList(strValue);
-            }
+            target.setTargetsList(ve);
         }
         
     }
