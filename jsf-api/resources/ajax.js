@@ -66,21 +66,22 @@ if (typeof OpenAjax !== "undefined" &&
     OpenAjax.hub.registerLibrary("javax", "www.sun.com", "1.0", null);
 }
 
+// RELEASE_PENDING - add version detection.
+
 /**
+ * The top level global namespace for JavaServer Faces functionality.
  * @name jsf
  * @namespace
  */
+var jsf = {};
 
 /**
+ * The namespace for Ajax functionality.
  * @name jsf.ajax
  * @namespace
+ * @exec
  */
-
-/*
- * Create our top level namespaces - jsf.ajax
- */
-var jsf = jsf || {};
-jsf.ajax = jsf.ajax || function() {
+jsf.ajax = function() {
 
     var eventListeners = [];
     var errorListeners = [];
@@ -88,14 +89,16 @@ jsf.ajax = jsf.ajax || function() {
     return {
         /**
          * Register a callback for error handling.
-         * @param callback string representing a function to call on an error
+         * @member jsf.ajax
+         * @param {String} callback string representing a function to call on an error
          */
         onError: function(callback) {
                 errorListeners[errorListeners.length] = callback;
                 },
         /**
          * Register a callback for event handling.
-         * @param callback string representing a function to call on an event
+         * @member jsf.ajax
+         * @param {String} callback string representing a function to call on an event
          */
         onEvent: function(callback) {
                 eventListeners[eventListeners.length] = callback;

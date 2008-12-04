@@ -289,6 +289,7 @@
            <fileset dir="${dist.home}" includes="renderkitdocs/**"/>
         </zip>
         <antcall target="api.javadocs"/>
+        <antcall target="api.jsdocs"/>
         <antcall target="ri.pdldocs"/>
         <!--
            rlubke: commented out for now since release notes are 
@@ -313,6 +314,21 @@
         </copy>
         <zip zipfile="${dist.home}/docs/javadocs-${impl.version}.zip">
            <fileset dir="${dist.home}" includes="javadocs/**"/>
+        </zip>
+
+    </target>
+
+    <target name="api.jsdocs">
+            <!-- Create the jsdocs distribution -->
+        <java fork="true" jar="${jsdoc.home}/jsdoc-toolkit/jsrun.jar">
+                    <arg line="${jsdoc.home}/jsdoc-toolkit/app/run.js"/>
+                    <arg line="-a"/>
+                    <arg line="-d=${dist.home}/jsdocs"/>
+                    <arg line="-t=${jsdoc.home}/jsdoc-toolkit/templates/jsdoc"/>
+                    <arg value="${basedir}/../jsf-api/resources/ajax.js"/>
+        </java>
+        <zip zipfile="${dist.home}/docs/jsdocs-${impl.version}.zip">
+                   <fileset dir="${dist.home}" includes="jsdocs/**"/>
         </zip>
 
     </target>
