@@ -711,6 +711,20 @@
             </deferred-value>
         </attribute>
 
+        <attribute>
+            <description>
+                Flag indicating whether the option created by this
+                component represents the special "no selection"
+                option.  Expressions must evaluate to a boolean.
+                Default value is false.
+            </description>
+            <name>noSelectionOption</name>
+            <deferred-value>
+                <type>java.lang.Boolean</type>
+            </deferred-value>
+        </attribute>
+
+
     </tag>
 
 

@@ -75,11 +75,11 @@ class SelectUtils {
     static boolean matchValue(FacesContext ctx,
                               UIComponent component,
                               Object value,
-                              Iterator items,
+                              Iterator<SelectItem> items,
                               Converter converter) {
 
         while (items.hasNext()) {
-            SelectItem item = (SelectItem) items.next();
+            SelectItem item = items.next();
             if (item instanceof SelectItemGroup) {
                 SelectItem subitems[] =
                       ((SelectItemGroup) item).getSelectItems();
@@ -89,27 +89,17 @@ class SelectUtils {
                     }
                 }
             } else {
-                Object itemValue = item.getValue();
-                if (itemValue == null && value == null) {
-                    return (true);
-                }
-                if ((value == null) ^ (itemValue == null)) {
+                Object compareValue = null;
+                
+                try {
+                    compareValue = doConversion(ctx, component, item, value,
+                        converter);
+                } catch (IllegalStateException ise) {
                     continue;
                 }
-                Object compareValue;
-                if (converter == null) {
-                    compareValue =
-                          coerceToModelType(ctx, itemValue, value.getClass());
-                } else {
-                    compareValue = itemValue;
-                    if (compareValue instanceof String
-                        && !(value instanceof String)) {
-                        // type mismatch between the time and the value we're
-                        // comparing.  Invoke the Converter.
-                        compareValue = converter.getAsObject(ctx,
-                                                             component,
-                                                             (String) compareValue);
-                    }
+                
+                if (null == compareValue && null == value) {
+                    return true;
                 }
 
                 if (value.equals(compareValue)) {
@@ -119,6 +109,88 @@ class SelectUtils {
         }
         return (false);
 
+    }
+    
+    /**
+     * Returns true iff component has a {@link UISelectItem} child
+     * whose itemValue exactly matches the argument value
+     * @param ctx
+     * @param component
+     * @param value
+     * @param items
+     * @return
+     */
+    
+    static boolean valueIsNoSelectionOption(FacesContext ctx,
+            UIComponent component,
+            Object value,
+            Iterator<SelectItem> items,
+            Converter converter) {
+        boolean result = false;
+        
+        while (items.hasNext()) {
+            SelectItem item = items.next();
+            if (item instanceof SelectItemGroup) {
+                SelectItem subitems[] =
+                      ((SelectItemGroup) item).getSelectItems();
+                if ((subitems != null) && (subitems.length > 0)) {
+                    if (valueIsNoSelectionOption(ctx, component, value, new ArrayIterator(subitems), converter)) {
+                        result = true;
+                        break;
+                    }
+                }
+            } else {
+                Object compareValue = null;
+                
+                try {
+                    compareValue = doConversion(ctx, component, item, value,
+                        converter);
+                } catch (IllegalStateException ise) {
+                    continue;
+                }
+                
+                if (null == compareValue && null == value &&
+                    item.isNoSelectionOption()) {
+                    result = true;
+                    break;
+                } else if (value.equals(compareValue) && item.isNoSelectionOption()) {
+                    result = true;
+                    break;
+                }
+            }
+            
+        }
+        
+        return result;
+    }
+    
+    private static Object doConversion(FacesContext ctx, 
+            UIComponent component, SelectItem item, 
+            Object value, Converter converter) throws IllegalStateException {
+        Object itemValue = item.getValue();
+        if (itemValue == null && value == null) {
+            return (null);
+        }
+        if ((value == null) ^ (itemValue == null)) {
+            throw new IllegalStateException("Either value was null, or itemValue was null, but not both.");
+        }
+        Object compareValue;
+        if (converter == null) {
+            compareValue =
+                    coerceToModelType(ctx, itemValue, value.getClass());
+        } else {
+            compareValue = itemValue;
+            if (compareValue instanceof String
+                 && !(value instanceof String)) {
+                // type mismatch between the time and the value we're
+                // comparing.  Invoke the Converter.
+                compareValue = converter.getAsObject(ctx,
+                        component,
+                        (String) compareValue);
+            }
+        }
+
+        return compareValue;
     }
 
 

@@ -47,9 +47,10 @@ import javax.faces.component.UISelectOne;
 
 
 /**
- * <p><strong>SelectItem</strong> represents a single <em>item</em> in the
- * list of supported <em>items</em> associated with a {@link UISelectMany}
- * or {@link UISelectOne} component.</p>
+ * <p><strong class="changed_added_2_0">SelectItem</strong> represents a
+ * single <em>item</em> in the list of supported <em>items</em>
+ * associated with a {@link UISelectMany} or {@link UISelectOne}
+ * component.</p>
  */
 
 public class SelectItem implements Serializable {
@@ -84,7 +85,7 @@ public class SelectItem implements Serializable {
      */
     public SelectItem(Object value) {
 
-        this(value, value == null ? null : value.toString(), null, false, true);
+        this(value, value == null ? null : value.toString(), null, false, true, false);
 
     }
 
@@ -102,7 +103,7 @@ public class SelectItem implements Serializable {
      */
     public SelectItem(Object value, String label) {
 
-        this(value, label, null, false, true);
+        this(value, label, null, false, true, false);
 
     }
 
@@ -120,7 +121,7 @@ public class SelectItem implements Serializable {
      */
     public SelectItem(Object value, String label, String description) {
 
-        this(value, label, description, false, true);
+        this(value, label, description, false, true, false);
 
     }
 
@@ -139,7 +140,7 @@ public class SelectItem implements Serializable {
     public SelectItem(Object value, String label, String description,
                       boolean disabled) {
 
-        this(value, label, description, disabled, true);
+        this(value, label, description, disabled, true, false);
 
     }
     
@@ -159,12 +160,35 @@ public class SelectItem implements Serializable {
     public SelectItem(Object value, String label, String description,
                       boolean disabled, boolean escape) {
 
+        this(value, label, description, disabled, escape, false);
+
+    }
+    
+    
+    /**
+     * <p>Construct a <code>SelectItem</code> instance with the specified
+     * property values.</p>
+     *
+     * @param value Value to be delivered to the model if this
+     *  item is selected by the user
+     * @param label Label to be rendered for this item in the response
+     * @param description Description of this item, for use in tools
+     * @param disabled Flag indicating that this option is disabled
+     * @param escape Flag indicating that the text of this option should be
+     * escaped when rendered.
+     * @param noSelectionOption Flag indicating that the current option is a "no selection" option
+     * @since 1.2
+     */
+    public SelectItem(Object value, String label, String description,
+                      boolean disabled, boolean escape, boolean noSelectionOption) {
+
         super();
         setValue(value);
         setLabel(label);
         setDescription(description);
         setDisabled(disabled);
         setEscape(escape);
+        setNoSelectionOption(noSelectionOption);
 
     }
 
@@ -298,6 +322,35 @@ public class SelectItem implements Serializable {
     public void setEscape(boolean escape) {
         this.escape = escape;
     }
+    
+    private boolean noSelectionOption = false;
+
+    /** <p class="changed_added_2_0">Return the value of the
+     * <code>noSelectionOption</code> property.  If the value of this
+     * property is <code>true</code>, the system interprets the option
+     * represented by this <code>SelectItem</code> instance as
+     * representing a "no selection" option.  See {@link
+     * UISelectOne#validateValue} and {@link UISelectMany#validateValue}
+     * for usage.</p>
+     *
+     * @since 2.0
+     */
+
+    public boolean isNoSelectionOption() {
+        return noSelectionOption;
+    }
+
+    /**
+     * <p class="changed_added_2_0">Set the value of the
+     * <code>noSelectionOption</code> property.</p>
+     *
+     * @since 2.0
+     */
+
+    public void setNoSelectionOption(boolean noSelectionOption) {
+        this.noSelectionOption = noSelectionOption;
+    }
+
 
 
 }

@@ -50,19 +50,18 @@ import javax.faces.model.SelectItem;
 
 
 /**
- * <p><strong>UISelectItem</strong> is a component that may be nested
- * inside a {@link UISelectMany} or {@link UISelectOne} component, and
- * causes the addition of a {@link SelectItem} instance to the list of
- * available options for the parent component.  The contents of the
- * {@link SelectItem} can be specified in one of the following ways:</p>
- * <ul>
- * <li>The <code>value</code> attribute's value is an instance of
- *     {@link SelectItem}.</li>
- * <li>The associated {@link javax.el.ValueExpression} points at a model data
- *     item of type {@link SelectItem}.</li>
- * <li>A new {@link SelectItem} instance is synthesized from the values
- *     of the <code>itemDescription</code>, <code>itemDisabled</code>,
- *     <code>itemLabel</code>, and <code>itemValue</code> attributes.</li>
+ * <p><strong class="changed_modified_2_0">UISelectItem</strong> is a
+ * component that may be nested inside a {@link UISelectMany} or {@link
+ * UISelectOne} component, and causes the addition of a {@link
+ * SelectItem} instance to the list of available options for the parent
+ * component.  The contents of the {@link SelectItem} can be specified
+ * in one of the following ways:</p> <ul> <li>The <code>value</code>
+ * attribute's value is an instance of {@link SelectItem}.</li> <li>The
+ * associated {@link javax.el.ValueExpression} points at a model data
+ * item of type {@link SelectItem}.</li> <li>A new {@link SelectItem}
+ * instance is synthesized from the values of the
+ * <code>itemDescription</code>, <code>itemDisabled</code>,
+ * <code>itemLabel</code>, and <code>itemValue</code> attributes.</li>
  * </ul>
  */
 
@@ -105,6 +104,7 @@ public class UISelectItem extends UIComponentBase {
     private String itemDescription = null;
     private Boolean itemDisabled;
     private Boolean itemEscaped;
+    private Boolean noSelectionOption = false;
     private String itemLabel = null;
     private Object itemValue = null;
     private Object value = null;
@@ -327,6 +327,30 @@ public class UISelectItem extends UIComponentBase {
         this.value = value;
 
     }
+    
+    /** <p class="changed_added_2_0">Return the value of the
+     * <code>noSelectionOption</code> property.  If the value of this
+     * property is <code>true</code>, the system interprets the option
+     * represented by this <code>UISelectItem</code> instance as
+     * representing a "no selection" option.  See {@link
+     * UISelectOne#validateValue} and {@link UISelectMany#validateValue}
+     * for usage.</p>
+     *
+     * @since 2.0
+     */
+    public boolean isNoSelectionOption() {
+        return noSelectionOption;
+    }
+
+    /**
+     * <p class="changed_added_2_0">Set the value of the
+     * <code>noSelectionOption</code> property.</p>
+     *
+     * @since 2.0
+     */
+    public void setNoSelectionOption(boolean noSelectionOption) {
+        this.noSelectionOption = noSelectionOption;
+    }
 
 
     // ----------------------------------------------------- StateHolder Methods
@@ -337,7 +361,7 @@ public class UISelectItem extends UIComponentBase {
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-             values = new Object[7];
+             values = new Object[8];
         }
        
         values[0] = super.saveState(context);
@@ -347,6 +371,7 @@ public class UISelectItem extends UIComponentBase {
         values[4] = itemLabel;
         values[5] = itemValue;
         values[6] = value;
+        values[7] = noSelectionOption;
         return (values);
 
     }
@@ -362,6 +387,7 @@ public class UISelectItem extends UIComponentBase {
         itemLabel = (String) values[4];
         itemValue = values[5];
         value = values[6];
+        noSelectionOption = (Boolean) values[7];
 
     }
 

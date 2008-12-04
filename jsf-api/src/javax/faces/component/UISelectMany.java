@@ -548,19 +548,27 @@ public class UISelectMany extends UIInput {
     
 
     /**
-     * <p>In addition to the standard validation behavior inherited from
-     * {@link UIInput}, ensure that any specified values are equal to one of
-     * the available options.  Before comparing each option, coerce the
-     * option value type to the type of this component's value following
-     * the Expression Language coercion rules.  If the specified value is not 
-     * equal to any of the options,  enqueue an error message
-     * and set the <code>valid</code> property to <code>false</code>.</p>
+     * <p><span class="changed_modified_2_0">In</span> addition to the standard
+     * validation behavior inherited from {@link UIInput}, ensure that
+     * any specified values are equal to one of the available options.
+     * Before comparing each option, coerce the option value type to the
+     * type of this component's value following the Expression Language
+     * coercion rules.  If the specified value is not equal to any of
+     * the options, enqueue an error message and set the
+     * <code>valid</code> property to <code>false</code>.</p>
      *
      * <p class="changed_modified_2_0">This method must explicitly
      * support a value argument that is a single value or a value
      * argument that is a <code>Collection</code> or Array of
      * values.</p>
-     *
+
+     * <p class="changed_added_2_0">If {@link #isRequired} returns
+     * <code>true</code>, and the current value is equal to the value of
+     * an inner {@link UISelectItem} whose {@link
+     * UISelectItem#isNoSelectionOption} method returns
+     * <code>true</code>, enqueue an error message and set the
+     * <code>valid</code> property to <code>false</code>.</p>
+
      * @param context The {@link FacesContext} for the current request
      *
      * @param value The converted value to test for membership.
@@ -576,6 +584,8 @@ public class UISelectMany extends UIInput {
         if (!isValid() || (value == null)) {
             return;
         }
+        
+        boolean doAddMessage = false;
 
         // Ensure that the values match one of the available options
         // Don't arrays cast to "Object[]", as we may now be using an array
@@ -589,15 +599,36 @@ public class UISelectMany extends UIInput {
                                         currentValue,
                                         items,
                                         converter)) {
-                // Enqueue an error message if an invalid value was specified
-                FacesMessage message =
-                      MessageFactory.getMessage(context,
-                                                INVALID_MESSAGE_ID,
-                                                MessageFactory.getLabel(context, this));
-                context.addMessage(getClientId(context), message);
-                setValid(false);
-                return;
+                doAddMessage = true;
+                break;
             }
+        }
+        
+        // Ensure that if the value is noSelection and a
+        // value is required, a message is queued
+        if (isRequired()) {
+            for (Iterator i = getValuesIterator(value); i.hasNext();) {
+                Iterator items = new SelectItemsIterator(context, this);
+                Object currentValue = i.next();
+                if (SelectUtils.valueIsNoSelectionOption(context,
+                        this,
+                        currentValue,
+                        items,
+                        converter)) {
+                    doAddMessage = true;
+                    break;
+                }
+            }
+        }
+        
+        if (doAddMessage) {
+            // Enqueue an error message if an invalid value was specified
+            FacesMessage message =
+                    MessageFactory.getMessage(context,
+                    INVALID_MESSAGE_ID,
+                    MessageFactory.getLabel(context, this));
+            context.addMessage(getClientId(context), message);
+            setValid(false);
         }
 
     }

@@ -71,6 +71,8 @@ public class SelectItemTag extends UIComponentELTag {
     protected ValueExpression itemLabel;
     protected ValueExpression itemDescription;
     protected ValueExpression itemDisabled;
+    protected ValueExpression noSelectionOption = null;
+
     protected ValueExpression value;
 
     // Relationship Instance Variables
@@ -112,6 +114,10 @@ public class SelectItemTag extends UIComponentELTag {
 
     public void setValue(ValueExpression value) {
         this.value = value;
+    }
+
+    public void setNoSelectionOption(ValueExpression noSelectionOption) {
+        this.noSelectionOption = noSelectionOption;
     }
 
 
@@ -172,6 +178,15 @@ public class SelectItemTag extends UIComponentELTag {
             } else {
                 selectItem.setItemDisabled(
                     Boolean.valueOf(itemDisabled.getExpressionString()).
+                        booleanValue());
+            }
+        }
+        if (null != noSelectionOption) {
+            if (!noSelectionOption.isLiteralText()) {
+                selectItem.setValueExpression("noSelectionOption", noSelectionOption);
+            } else {
+                selectItem.setNoSelectionOption(
+                    Boolean.valueOf(noSelectionOption.getExpressionString()).
                         booleanValue());
             }
         }

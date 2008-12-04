@@ -1,7 +1,11 @@
 /*
+ * $Id$
+ */
+
+/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
- * Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
  * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,9 +41,9 @@
 package com.sun.faces.renderkit;
 
 import java.util.Iterator;
-import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.Map;
+import java.util.ListIterator;
 import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.io.NotSerializableException;
@@ -48,25 +52,22 @@ import java.lang.reflect.Array;
 
 import javax.faces.model.SelectItem;
 import javax.faces.context.FacesContext;
+import javax.el.ValueExpression;
+import javax.el.ELContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
 import javax.faces.component.UISelectItems;
-import javax.el.ValueExpression;
-import javax.el.ELContext;
+import javax.faces.component.UISelectMany;
+import javax.faces.component.UISelectOne;
 
 
 /**
- * <p>
- * This class is responsible for iterating over the set of {@link javax.faces.model.SelectItem}s
- * for a parent {@link javax.faces.component.UISelectMany} or {@link javax.faces.component.UISelectOne}.
- * </p>
+ * <p>Package private class for iterating over the set of {@link SelectItem}s
+ * for a parent {@link UISelectMany} or {@link UISelectOne}.</p>
  *
- * <p>
- * <em>NOTE:</em> this code is duplicated by javax.faces.component.SelectItemsIterator.  Any changes
- * here should be made there.
- * </p>
+ * // RELEASE_PENDING (rlubke,driscoll) performanc review
  */
-public class SelectItemsIterator implements Iterator<SelectItem> {
+final class SelectItemsIterator implements Iterator<SelectItem> {
 
 
     // ------------------------------------------------------------ Constructors
@@ -75,7 +76,7 @@ public class SelectItemsIterator implements Iterator<SelectItem> {
     /**
      * <p>Construct an iterator instance for the specified parent component.</p>
      *
-     * @param parent The parent {@link javax.faces.component.UIComponent} whose children will be
+     * @param parent The parent {@link UIComponent} whose children will be
      *  processed
      */
     public SelectItemsIterator(FacesContext ctx, UIComponent parent) {
@@ -144,7 +145,7 @@ public class SelectItemsIterator implements Iterator<SelectItem> {
     /**
      * <p>Return the next element in the iteration.</p>
      *
-     * @throws java.util.NoSuchElementException if there are no more elements
+     * @throws NoSuchElementException if there are no more elements
      */
     @SuppressWarnings({"unchecked"})
     public SelectItem next() {
@@ -191,7 +192,8 @@ public class SelectItemsIterator implements Iterator<SelectItem> {
                                       ui.getItemLabel(),
                                       ui.getItemDescription(),
                                       ui.isItemDisabled(),
-                                      ui.isItemEscaped());
+                                      ui.isItemEscaped(),
+                                      ui.isNoSelectionOption());
             }
             updateSingeItemIterator(item);
             items = singleItemIterator;
@@ -212,7 +214,7 @@ public class SelectItemsIterator implements Iterator<SelectItem> {
             } else {
                 throw new IllegalArgumentException();
             }
-        }
+        } 
 
     }
 
@@ -343,7 +345,7 @@ public class SelectItemsIterator implements Iterator<SelectItem> {
             item.setLabel(((key != null) ? key.toString() : value.toString()));
             item.setValue(((value != null) ? value : ""));
             return item;
-
+            
         }
 
 
@@ -397,7 +399,7 @@ public class SelectItemsIterator implements Iterator<SelectItem> {
 
             genericObjectSI.updateItem(ctx, value);
             return genericObjectSI;
-
+            
         }
 
 
@@ -419,6 +421,7 @@ public class SelectItemsIterator implements Iterator<SelectItem> {
             private static final String ITEM_DESCRIPTION = "itemDescription";
             private static final String ITEM_ESCAPED = "itemEscaped";
             private static final String ITEM_DISABLED = "itemDisabled";
+            private static final String NO_SELECTION_OPTION = "noSelectionOption";
 
             /**
              * Resolves to the value of the <code>SelectItem</code>.
@@ -446,6 +449,11 @@ public class SelectItemsIterator implements Iterator<SelectItem> {
             private ValueExpression itemDisabled;
 
             /**
+             * Determines the value for the noSelectionOption property of the <code>SelectItem</code>/
+             */
+            private ValueExpression noSelectionOption;
+
+            /**
              * The request-scoped variable under which the current object
              * will be exposed.
              */
@@ -462,6 +470,7 @@ public class SelectItemsIterator implements Iterator<SelectItem> {
                 itemDescription = sourceComponent.getValueExpression(ITEM_DESCRIPTION);
                 itemEscaped = sourceComponent.getValueExpression(ITEM_ESCAPED);
                 itemDisabled = sourceComponent.getValueExpression(ITEM_DISABLED);
+                noSelectionOption = sourceComponent.getValueExpression(NO_SELECTION_OPTION);
 
             }
 
@@ -499,6 +508,9 @@ public class SelectItemsIterator implements Iterator<SelectItem> {
                                    : false));
                     setDisabled(((itemDisabled != null)
                                      ? (Boolean) itemDisabled.getValue(elContext)
+                                     : false));
+                    setNoSelectionOption(((noSelectionOption != null)
+                                     ? (Boolean) noSelectionOption.getValue(elContext)
                                      : false));
                 } finally {
                     if (var != null) {
@@ -650,7 +662,7 @@ public class SelectItemsIterator implements Iterator<SelectItem> {
         public void remove() {
 
             throw new UnsupportedOperationException();
-
+            
         }
 
     } // END CollectionItemIterator

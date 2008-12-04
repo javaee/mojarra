@@ -187,7 +187,8 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
                                       ui.getItemLabel(),
                                       ui.getItemDescription(),
                                       ui.isItemDisabled(),
-                                      ui.isItemEscaped());
+                                      ui.isItemEscaped(),
+                                      ui.isNoSelectionOption());
             }
             updateSingeItemIterator(item);
             items = singleItemIterator;
@@ -415,6 +416,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
             private static final String ITEM_DESCRIPTION = "itemDescription";
             private static final String ITEM_ESCAPED = "itemEscaped";
             private static final String ITEM_DISABLED = "itemDisabled";
+            private static final String NO_SELECTION_OPTION = "noSelectionOption";
 
             /**
              * Resolves to the value of the <code>SelectItem</code>.
@@ -442,6 +444,11 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
             private ValueExpression itemDisabled;
 
             /**
+             * Determines the value for the noSelectionOption property of the <code>SelectItem</code>/
+             */
+            private ValueExpression noSelectionOption;
+
+            /**
              * The request-scoped variable under which the current object
              * will be exposed.
              */
@@ -458,6 +465,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
                 itemDescription = sourceComponent.getValueExpression(ITEM_DESCRIPTION);
                 itemEscaped = sourceComponent.getValueExpression(ITEM_ESCAPED);
                 itemDisabled = sourceComponent.getValueExpression(ITEM_DISABLED);
+                noSelectionOption = sourceComponent.getValueExpression(NO_SELECTION_OPTION);
 
             }
 
@@ -495,6 +503,9 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
                                    : false));
                     setDisabled(((itemDisabled != null)
                                      ? (Boolean) itemDisabled.getValue(elContext)
+                                     : false));
+                    setNoSelectionOption(((noSelectionOption != null)
+                                     ? (Boolean) noSelectionOption.getValue(elContext)
                                      : false));
                 } finally {
                     if (var != null) {

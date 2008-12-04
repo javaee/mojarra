@@ -46,11 +46,12 @@ import javax.faces.context.FacesContext;
 
 
 /**
- * <p><strong>UISelectOne</strong> is a {@link UIComponent} that represents
- * the user's choice of zero or one items from among a discrete set of
- * available options.  The user can modify the selected value.  Optionally,
- * the component can be preconfigured with a currently selected item, by
- * storing it as the <code>value</code> property of the component.</p>
+ * <p><strong class="changed_added_2_0">UISelectOne</strong> is a {@link
+ * UIComponent} that represents the user's choice of zero or one items
+ * from among a discrete set of available options.  The user can modify
+ * the selected value.  Optionally, the component can be preconfigured
+ * with a currently selected item, by storing it as the
+ * <code>value</code> property of the component.</p>
  *
  * <p>This component is generally rendered as a select box or a group of
  * radio buttons.</p>
@@ -116,13 +117,21 @@ public class UISelectOne extends UIInput {
 
 
     /**
-     * <p>In addition to the standard validation behavior inherited from
-     * {@link UIInput}, ensure that any specified value is equal to one of
-     * the available options.  Before comparing each option, coerce the 
-     * option value type to the type of this component's value following
-     * the Expression Language coercion rules.  If the specified value is 
-     * not equal to any of the options,  enqueue an error message
-     * and set the <code>valid</code> property to <code>false</code>.</p>
+     * <p><span class="changed_modified_2_0">In</span> addition to the
+     * standard validation behavior inherited from {@link UIInput},
+     * ensure that any specified value is equal to one of the available
+     * options.  Before comparing each option, coerce the option value
+     * type to the type of this component's value following the
+     * Expression Language coercion rules.  If the specified value is
+     * not equal to any of the options, enqueue an error message and set
+     * the <code>valid</code> property to <code>false</code>.</p>
+     *
+     * <p class="changed_added_2_0">If {@link #isRequired} returns
+     * <code>true</code>, and the current value is equal to the value of
+     * an inner {@link UISelectItem} whose {@link
+     * UISelectItem#isNoSelectionOption} method returns
+     * <code>true</code>, enqueue an error message and set the
+     * <code>valid</code> property to <code>false</code>.</p>
      *
      * @param context The {@link FacesContext} for the current request
      *
@@ -147,14 +156,22 @@ public class UISelectOne extends UIInput {
                                                new SelectItemsIterator(context, this),
                                                getConverter());
 
+        boolean isNoSelection = SelectUtils.valueIsNoSelectionOption(getFacesContext(),
+                                               this,
+                                               value,
+                                               new SelectItemsIterator(context, this),
+                                               getConverter());
+
         // Enqueue an error message if an invalid value was specified
-        if (!found) {
+        if ((!found) || 
+            (isRequired() && isNoSelection)) {
             FacesMessage message =
                 MessageFactory.getMessage(context, INVALID_MESSAGE_ID,
                      MessageFactory.getLabel(context, this));
             context.addMessage(getClientId(context), message);
             setValid(false);
         }
+        
     }
 
 }
