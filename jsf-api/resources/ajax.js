@@ -80,59 +80,29 @@ if (typeof OpenAjax !== "undefined" &&
  * Create our top level namespaces - jsf.ajax
  */
 var jsf = jsf || {};
-jsf.ajax = jsf.ajax || {};
+jsf.ajax = jsf.ajax || function() {
 
+    var eventListeners = [];
+    var errorListeners = [];
 
-/**
- * <p>Collect and encode state for input controls associated
- * with the specified <code>form</code> element.</p>
- *
- * @param form The <code>form</code> element whose contained
- * <code>input</code> controls will be collected and encoded.
- * Only successful controls will be collected and encoded in
- * accordance with: <a href="http://www.w3.org/TR/html401/interact/forms.html#h-17.13.2">
- * Section 17.13.2 of the HTML Specification</a>.
- *
- * @returns String The encoded state for the specified form's input controls.
- * @function jsf.getViewState
- */
-jsf.getViewState = function(form) {
-    var els = form.elements;
-    var len = els.length;
-    var qString = "";
-    var addField = function(name, value) {
-        if (qString.length > 0) {
-            qString += "&";
-        }
-        qString += encodeURIComponent(name) + "=" + encodeURIComponent(value);
-    };
-    for (var i = 0; i < len; i++) {
-        var el = els[i];
-        if (!el.disabled) {
-            switch (el.type) {
-                case 'text': case 'password': case 'hidden': case 'textarea':
-                    addField(el.name, el.value);
-                    break;
-                case 'select-one':
-                    if (el.selectedIndex >= 0) {
-                        addField(el.name, el.options[el.selectedIndex].value);
-                    }
-                    break;
-                case 'select-multiple':
-                    for (var j = 0; j < el.options.length; j++) {
-                        if (el.options[j].selected) {
-                            addField(el.name, el.options[j].value);
-                        }
-                    }
-                    break;
-                case 'checkbox': case 'radio':
-                    addField(el.name, el.checked+"");
-                    break;
-            }
+    return {
+        /**
+         * Register a callback for error handling.
+         * @param callback string representing a function to call on an error
+         */
+        onError: function(callback) {
+                errorListeners[errorListeners.length] = callback;
+                },
+        /**
+         * Register a callback for event handling.
+         * @param callback string representing a function to call on an event
+         */
+        onEvent: function(callback) {
+                eventListeners[eventListeners.length] = callback;
         }
     }
-    return qString;
-};
+
+}();
 
 /**
  * <p>Send an asynchronous Ajax request to the server.
@@ -653,32 +623,6 @@ jsf.ajax.response = function(request) {
     }
 };
 
-// RELEASE_PENDING - hide these references
-
-if (typeof jsf.ajax._eventListeners !== "array") {
-    jsf.ajax._eventListeners = [];
-}
-
-if (typeof jsf.ajax._errorListeners !== "array") {
-    jsf.ajax._errorListeners = [];
-}
-
-/**
- * 
- * @param callback string representing a function to call on an error
- */
-jsf.ajax.onError = function(callback) {
-    jsf.ajax._errorListeners[jsf.ajax._errorListeners.length] = callback;
-}
-
-/**
- *
- * @param callback string representing a function to call on an event
- */
-jsf.ajax.onEvent = function(callback) {
-    jsf.ajax._eventListeners[jsf.ajax._eventListeners.length] = callback;
-}
-
 
 /**
  *
@@ -695,6 +639,60 @@ jsf.ajax.onEvent = function(callback) {
 jsf.getProjectStage = function() {
     return "#{facesContext.application.projectStage}";
 };
+
+
+/**
+ * <p>Collect and encode state for input controls associated
+ * with the specified <code>form</code> element.</p>
+ *
+ * @param form The <code>form</code> element whose contained
+ * <code>input</code> controls will be collected and encoded.
+ * Only successful controls will be collected and encoded in
+ * accordance with: <a href="http://www.w3.org/TR/html401/interact/forms.html#h-17.13.2">
+ * Section 17.13.2 of the HTML Specification</a>.
+ *
+ * @returns String The encoded state for the specified form's input controls.
+ * @function jsf.getViewState
+ */
+jsf.getViewState = function(form) {
+    var els = form.elements;
+    var len = els.length;
+    var qString = "";
+    var addField = function(name, value) {
+        if (qString.length > 0) {
+            qString += "&";
+        }
+        qString += encodeURIComponent(name) + "=" + encodeURIComponent(value);
+    };
+    for (var i = 0; i < len; i++) {
+        var el = els[i];
+        if (!el.disabled) {
+            switch (el.type) {
+                case 'text': case 'password': case 'hidden': case 'textarea':
+                    addField(el.name, el.value);
+                    break;
+                case 'select-one':
+                    if (el.selectedIndex >= 0) {
+                        addField(el.name, el.options[el.selectedIndex].value);
+                    }
+                    break;
+                case 'select-multiple':
+                    for (var j = 0; j < el.options.length; j++) {
+                        if (el.options[j].selected) {
+                            addField(el.name, el.options[j].value);
+                        }
+                    }
+                    break;
+                case 'checkbox': case 'radio':
+                    addField(el.name, el.checked+"");
+                    break;
+            }
+        }
+    }
+    return qString;
+};
+
+
 
 /**
  * A String value which represents the current clientID separator string.
