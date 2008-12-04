@@ -203,11 +203,11 @@ jsf.ajax = jsf.ajax || function() {
  * <td><code>space seperated list of client identifiers</code></td>
  * </tr>
  * <tr>
- * <td><code>event</code></td>
+ * <td><code>onEvent</code></td>
  * <td><code>name of a function to callback for event</code></td>
  * </tr>
  * <tr>
- * <td><code>error</code></td>
+ * <td><code>onError</code></td>
  * <td><code>name of a function to callback for error</code></td>
  * </tr>
  * </table>
