@@ -41,6 +41,7 @@
 package com.sun.faces.config.configprovider;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.config.WebConfiguration;
 
 import javax.faces.FacesException;
 import javax.servlet.ServletContext;
@@ -52,11 +53,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.Collection;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 /**
  *
  */
 public class MetaInfFacesConfigResourceProvider implements ConfigurationResourceProvider {
+
+    /**
+     * <p>This <code>Pattern</code> will pick the the JAR file name if present
+     * within a URL.</p>
+     */
+    private static final Pattern JAR_PATTERN = Pattern.compile(".*/(\\S*\\.jar).*");
 
     /**
      * <p>The resource path for faces-config files included in the
@@ -72,58 +82,55 @@ public class MetaInfFacesConfigResourceProvider implements ConfigurationResource
     /**
      * @see ConfigurationResourceProvider#getResources(javax.servlet.ServletContext)
      */
-    public List<URL> getResources(ServletContext context) {
+    public Collection<URL> getResources(ServletContext context) {
 
-            SortedMap<String, URL> sortedJarMap = new TreeMap<String, URL>();
-            //noinspection CollectionWithoutInitialCapacity
-            List<URL> unsortedResourceList = new ArrayList<URL>();
+        WebConfiguration webConfig = WebConfiguration.getInstance(context);
+        String duplicateJarPattern = webConfig.getOptionValue(WebConfiguration.WebContextInitParameter.DuplicateJARPattern);
+        Pattern duplicatePattern = null;
+        if (duplicateJarPattern != null) {
+            duplicatePattern = Pattern.compile(duplicateJarPattern);
+        }
+        SortedMap<String, URL> sortedJarMap = new TreeMap<String, URL>();
+        //noinspection CollectionWithoutInitialCapacity
+        List<URL> unsortedResourceList = new ArrayList<URL>();
 
-            try {
-                for (Enumeration<URL> items = Util.getCurrentLoader(this)
-                      .getResources(META_INF_RESOURCES);
-                     items.hasMoreElements();) {
+        try {
+            for (Enumeration<URL> items = Util.getCurrentLoader(this)
+                  .getResources(META_INF_RESOURCES);
+                 items.hasMoreElements();) {
 
-                    URL nextElement = items.nextElement();
-                    String jarUrl = nextElement.toString();
-                    String jarName = null;
-                    int resourceIndex = jarUrl.indexOf(META_INF_RESOURCES);
-                    // If this resource has a faces-config file inside of it
-                    // and is within a JAR.  Classpath resources not included
-                    // within a JAR will not be sorted.
-                    if (resourceIndex != -1 && "jar".equals(nextElement.getProtocol())) {
-                        // Search backwards for the previous occurrence of File.SEPARATOR
-                        int sepIndex = resourceIndex - 2;
-                        char sep = ' ';
-                        while (0 < sepIndex) {
-                            sep = jarUrl.charAt(sepIndex);
-                            if ('/' == sep) {
-                                break;
-                            }
-                            sepIndex--;
-                        }
-                        if ('/' == sep) {
-                            jarName =
-                                  jarUrl.substring(sepIndex + 1, resourceIndex - 2);
-                        }
-                    }
-                    if (null != jarName) {
-                        sortedJarMap.put(jarName, nextElement);
-                    } else {
-                        unsortedResourceList.add(0, nextElement);
-                    }
+                URL nextElement = items.nextElement();
+                String jarUrl = nextElement.toString();
+                String jarName = null;
+                Matcher m = JAR_PATTERN.matcher(jarUrl);
+                if (m.matches()) {
+                    jarName = m.group(1);
                 }
-            } catch (IOException e) {
-                throw new FacesException(e);
+                if (jarName != null) {
+                    if (duplicatePattern != null) {
+                        m = duplicatePattern.matcher(jarName);
+                        if (m.matches()) {
+                            jarName = m.group(1);
+                        }
+                    }
+                    sortedJarMap.put(jarName, nextElement);
+                } else {
+                    unsortedResourceList.add(0, nextElement);
+                }
             }
-            // Load the sorted resources first:
-            List<URL> result =
-                 new ArrayList<URL>(sortedJarMap.size() + unsortedResourceList.size());
-            for (Map.Entry<String, URL> entry : sortedJarMap.entrySet()) {
-                result.add(entry.getValue());
-            }
-            // Then load the unsorted resources
-            result.addAll(unsortedResourceList);
-            return result;
+        } catch (IOException e) {
+            throw new FacesException(e);
+        }
+        // Load the sorted resources first:
+        List<URL> result =
+              new ArrayList<URL>(sortedJarMap.size() + unsortedResourceList
+                    .size());
+        for (Map.Entry<String, URL> entry : sortedJarMap.entrySet()) {
+            result.add(entry.getValue());
+        }
+        // Then load the unsorted resources
+        result.addAll(unsortedResourceList);
+        return result;
     }
     
 

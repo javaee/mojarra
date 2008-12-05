@@ -736,6 +736,10 @@ public class WebConfiguration {
         FaceletsDecorators(
               "facelets.DECORATORS",
               ""
+        ),
+        DuplicateJARPattern(
+            "com.sun.faces.duplicateJARPattern",
+            ""
         );
 
 
