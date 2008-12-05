@@ -100,6 +100,6 @@ public enum ProjectStage {
      * </p>
      */
     public static final String PROJECT_STAGE_JNDI_NAME =
-          "java:comp/env/jsf/ProjectStage";
+          "java:comp/jsf/ProjectStage";
     
 }
