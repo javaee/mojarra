@@ -91,21 +91,13 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
             // expected
         }
 
-        // this test segment should fail as the document ID uses the reserved
-        // 'others' keyword
-        try {
-            new DocumentOrderingWrapper(createDocument("others", null, null));
-            fail("Expected DocumentOrderingWrapper to throw an exception when the wrapped document used the reserved word 'others' as the document ID");
-        } catch (ConfigurationException ce) {
-            // expected
-        }
 
         // this test segment ensures that 'empty defaults will be used if the
         // document has no document ID.
         DocumentOrderingWrapper w = new DocumentOrderingWrapper(createDocument(null, docBeforeIds, null));
         assertEquals("Expected DocumentOrderingWrapper.getDocumentId() to return an empty string when no ID was specified.  Received: " + w.getDocumentId(), "", w.getDocumentId());
-        assertEquals("Expected DocumentOrderingWrapper.getBeforeIds() to return a zero-length array when no ID was specified.  Actual length: " + w.getBeforeIds().length, 0, w.getBeforeIds().length);
-        assertEquals("Expected DocumentOrderingWrapper.getAfterIds() to return a zero-length array when no ID was specified.  Actual length: " + w.getAfterIds().length, 0, w.getAfterIds().length);
+        assertTrue(Arrays.equals(new String[] { "A" }, w.getBeforeIds()));
+        assertTrue(Arrays.equals(new String[] {  }, w.getAfterIds()));
 
         docAfterIds.clear();
         Collections.addAll(docAfterIds, "others");
@@ -120,13 +112,13 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
     public void testAfterAfterOthersBeforeBeforeOthers() throws Exception {
 
         List<String> docAAfterIds = new ArrayList<String>();
-        Collections.addAll(docAAfterIds, "others", "C");
+        Collections.addAll(docAAfterIds, "@others", "C");
         List<String> docCAfterIds = new ArrayList<String>();
-        Collections.addAll(docCAfterIds, "others");
+        Collections.addAll(docCAfterIds, "@others");
         List<String> docBBeforeIds = new ArrayList<String>();
-        Collections.addAll(docBBeforeIds, "others");
+        Collections.addAll(docBBeforeIds, "@others");
         List<String> docFBeforeIds = new ArrayList<String>();
-        Collections.addAll(docFBeforeIds, "B", "others");
+        Collections.addAll(docFBeforeIds, "B", "@others");
         Document docA = createDocument("A", null, docAAfterIds);
         Document docB = createDocument("B", docBBeforeIds, null);
         Document docC = createDocument("C", null, docCAfterIds);
@@ -156,21 +148,21 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
     public void testBeforeAfterOthersSorting() throws Exception {
 
         List<String> docAAfterIds = new ArrayList<String>();
-        Collections.addAll(docAAfterIds, "others");
+        Collections.addAll(docAAfterIds, "@others");
 
         List<String> docABeforeIds = new ArrayList<String>();
         Collections.addAll(docABeforeIds, "C");
 
         List<String> docBBeforeIds = new ArrayList<String>();
-        Collections.addAll(docBBeforeIds, "others");
+        Collections.addAll(docBBeforeIds, "@others");
 
         List<String> docDAfterIds = new ArrayList<String>();
-        Collections.addAll(docDAfterIds, "others");
+        Collections.addAll(docDAfterIds, "@others");
 
         List<String> docEBeforeIds = new ArrayList<String>();
-        Collections.addAll(docEBeforeIds, "others");
+        Collections.addAll(docEBeforeIds, "@others");
 
-        Document docA = createDocument("A", docABeforeIds, docAAfterIds);
+        Document docA = createDocument(null, docABeforeIds, docAAfterIds); // no ID here to ensure this works
         Document docB = createDocument("B", docBBeforeIds, null);
         Document docC = createDocument("C", null, null);
         Document docD = createDocument("D", null, docDAfterIds);
@@ -189,7 +181,7 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
         DocumentOrderingWrapper[] wrappers =
               documents.toArray(new DocumentOrderingWrapper[documents.size()]);
         DocumentOrderingWrapper.sort(wrappers);
-        String[] ids = { "B", "E", "F", "A", "C", "D" };
+        String[] ids = { "B", "E", "F", "", "C", "D" };
         validate(ids, wrappers);
 
     }
@@ -198,16 +190,16 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
     public void testAfterBeforeOthersSorting() throws Exception {
 
         List<String> docAAfterIds = new ArrayList<String>();
-        Collections.addAll(docAAfterIds, "others");
+        Collections.addAll(docAAfterIds, "@others");
 
         List<String> docBBeforeIds = new ArrayList<String>();
-        Collections.addAll(docBBeforeIds, "others");
+        Collections.addAll(docBBeforeIds, "@others");
 
         List<String> docDAfterIds = new ArrayList<String>();
-        Collections.addAll(docDAfterIds, "others");
+        Collections.addAll(docDAfterIds, "@others");
 
         List<String> docEBeforeIds = new ArrayList<String>();
-        Collections.addAll(docEBeforeIds, "others");
+        Collections.addAll(docEBeforeIds, "@others");
         List<String> docEAfterIds = new ArrayList<String>();
         Collections.addAll(docEAfterIds, "C");
 
@@ -243,7 +235,7 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
         List<String> docAAfterIds = new ArrayList<String>();
         Collections.addAll(docAAfterIds, "B");
         List<String> docCBeforeIds = new ArrayList<String>();
-        Collections.addAll(docCBeforeIds, "others");
+        Collections.addAll(docCBeforeIds, "@others");
         Document docA = createDocument("A", null, docAAfterIds);
         Document docB = createDocument("B", null, null);
         Document docC = createDocument("C", docCBeforeIds, null);
@@ -270,7 +262,7 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
         List<String> docCBeforeIds = new ArrayList<String>();
         Collections.addAll(docCBeforeIds, "B");
         List<String> docCAfterIds = new ArrayList<String>();
-        Collections.addAll(docCAfterIds, "others");
+        Collections.addAll(docCAfterIds, "@others");
         Document docA = createDocument("A", null, null);
         Document docB = createDocument("B", null, null);
         Document docC = createDocument("C", docCBeforeIds, docCAfterIds);
@@ -297,7 +289,7 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
         List<String> docCAfterIds = new ArrayList<String>();
         Collections.addAll(docCAfterIds, "D");
         List<String> docCBeforeIds = new ArrayList<String>();
-        Collections.addAll(docCBeforeIds, "others");
+        Collections.addAll(docCBeforeIds, "@others");
         Document docA = createDocument("A", null, null);
         Document docB = createDocument("B", null, null);
         Document docC = createDocument("C", docCBeforeIds, docCAfterIds);

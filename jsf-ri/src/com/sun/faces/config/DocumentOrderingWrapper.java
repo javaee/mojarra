@@ -101,7 +101,7 @@ public class DocumentOrderingWrapper {
     /**
      * Constant for the <code>others</code> element.
      */
-    private static final String OTHERS = "others";
+    private static final String OTHERS = "@others";
 
     /**
      * Return code indicating that element <code>n</code> is to be swapped
@@ -247,7 +247,7 @@ public class DocumentOrderingWrapper {
      */
     public boolean isAfterOthers() {
 
-        return (search(afterIds, "others"));
+        return (search(afterIds, OTHERS));
 
     }
 
@@ -258,7 +258,7 @@ public class DocumentOrderingWrapper {
      */
     public boolean isBeforeOthers() {
 
-         return (search(beforeIds, "others"));
+         return (search(beforeIds, OTHERS));
 
     }
 
@@ -304,6 +304,13 @@ public class DocumentOrderingWrapper {
         while (doMore) {
             numberOfPasses++;
             if (numberOfPasses == MAX_SORT_PASSED) {
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    String msg = "Exceeded maximum number of attempts to sort the application's faces-config documents.\nDocument Info\n==================";
+                    for (DocumentOrderingWrapper w : documents) {
+                        msg += ("  " + w.toString() + '\n');
+                    }
+                    LOGGER.severe(msg);                    
+                }
                 throw new ConfigurationException("Exceeded maximum number of attempts to sort the faces-config documents.");
             }
             if (LOGGER.isLoggable(Level.FINE)) {
@@ -452,7 +459,6 @@ public class DocumentOrderingWrapper {
                         }
                         String[] otherAfterIds = other.getAfterIds();
                         if (otherAfterIds.length > 0) {
-
                             String[] currentAfterIds = w.getAfterIds();
                             Set<String> newAfterIds = new HashSet<String>();
                             newAfterIds.addAll(Arrays.asList(currentAfterIds));
@@ -499,56 +505,43 @@ public class DocumentOrderingWrapper {
 
         Element documentElement = document.getDocumentElement();
         Attr idAttr = getAttribute(documentElement, ID);
-        if (idAttr != null) {
-            id = idAttr.getValue().trim();
-            if (OTHERS.equals(id)) {
-                String msg = MessageFormat.format("Document {0} has an illegal document ID of 'others'.",
-                                                  document.getDocumentURI());
-                throw new ConfigurationException(msg);
-            }
-            String namespace = documentElement.getNamespaceURI();
-            NodeList orderingElements =
-                  documentElement.getElementsByTagNameNS(namespace, ORDERING);
+        id = ((idAttr != null) ? idAttr.getValue().trim() : "");
+        String namespace = documentElement.getNamespaceURI();
+        NodeList orderingElements =
+              documentElement.getElementsByTagNameNS(namespace, ORDERING);
 
-            Set<String> beforeIds = null;
-            Set<String> afterIds = null;
+        Set<String> beforeIds = null;
+        Set<String> afterIds = null;
 
-            if (orderingElements.getLength() > 0) {
-                for (int i = 0, len = orderingElements.getLength(); i < len; i++) {
-                    Node orderingNode = orderingElements.item(i);
-                    NodeList children = orderingNode.getChildNodes();
-                    for (int j = 0, jlen = children.getLength(); j < jlen; j++) {
-                        Node n = children.item(j);
-                        if (beforeIds == null) {
-                            beforeIds = extractIds(n, BEFORE);
-                        }
-                        if (afterIds == null) {
-                            afterIds = extractIds(n, AFTER);
-                        }
+        if (orderingElements.getLength() > 0) {
+            for (int i = 0, len = orderingElements.getLength(); i < len; i++) {
+                Node orderingNode = orderingElements.item(i);
+                NodeList children = orderingNode.getChildNodes();
+                for (int j = 0, jlen = children.getLength(); j < jlen; j++) {
+                    Node n = children.item(j);
+                    if (beforeIds == null) {
+                        beforeIds = extractIds(n, BEFORE);
+                    }
+                    if (afterIds == null) {
+                        afterIds = extractIds(n, AFTER);
                     }
                 }
             }
-            this.beforeIds = ((beforeIds != null)
-                              ? beforeIds.toArray(new String[beforeIds.size()])
-                              : new String[0]);
-            this.afterIds = ((afterIds != null)
-                             ? afterIds.toArray(new String[afterIds.size()])
-                             : new String[0]);
-            Arrays.sort(this.beforeIds);
-            Arrays.sort(this.afterIds);
-
-            // ensure any ID defined in the 'before' array isn't present in the
-            // 'after' array and vice versa as a documents can't come before
-            // *and* after another.
-            checkDuplicates(this.beforeIds, this.afterIds);
-            checkDuplicates(this.afterIds, this.beforeIds);
-        } else {
-            // no id, so initialize the relevant members to empty
-            // values.
-            id = "";
-            beforeIds = new String[0];
-            afterIds = new String[0];
         }
+        this.beforeIds = ((beforeIds != null)
+                          ? beforeIds.toArray(new String[beforeIds.size()])
+                          : new String[0]);
+        this.afterIds = ((afterIds != null)
+                         ? afterIds.toArray(new String[afterIds.size()])
+                         : new String[0]);
+        Arrays.sort(this.beforeIds);
+        Arrays.sort(this.afterIds);
+
+        // ensure any ID defined in the 'before' array isn't present in the
+        // 'after' array and vice versa as a documents can't come before
+        // *and* after another.
+        checkDuplicates(this.beforeIds, this.afterIds);
+        checkDuplicates(this.afterIds, this.beforeIds);
 
     }
 
