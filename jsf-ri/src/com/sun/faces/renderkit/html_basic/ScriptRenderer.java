@@ -42,63 +42,25 @@ import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.render.Renderer;
 import javax.faces.application.Resource;
-import javax.faces.component.UIOutput;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.AfterAddToParentEvent;
-import javax.faces.event.ComponentSystemEvent;
-import javax.faces.event.ComponentSystemEventListener;
-import javax.faces.event.ListenerFor;
 
 /**
  * <p>This <code>Renderer</code> handles the rendering of external <code>script</code>
  * references.</p>
  */
-@ListenerFor(systemEventClass=AfterAddToParentEvent.class)
-public class ScriptRenderer extends Renderer implements ComponentSystemEventListener {
+public class ScriptRenderer extends ScriptStyleBaseRenderer {
     
     public static final String RENDERER_TYPE = "javax.faces.resource.Script";
-
-    /*
-     * Indicates that the component associated with this Renderer has already
-     * been added to the facet in the view.
-     */ 
-
-    /* When this method is called, we know that there is a component
-     * with a script renderer somewhere in the view.  We need to make it
-     * so that when an element with a name given by the value of the optional
-     * "target" component attribute is encountered, this component 
-     * can be called upon to render itself.
-     * This method will add the component (associated with this Renderer)
-     * to a facet in the view only if a "target" component attribute is set.
-     * 
-     */
-    public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
-        UIComponent component = event.getComponent();
-        FacesContext context = FacesContext.getCurrentInstance();
-
-        String target = (String) component.getAttributes().get("target");
-        if (target != null) {
-            context.getViewRoot().addComponentResource(context, component, target);
-        }
+    
+    @Override
+    protected void startElement(ResponseWriter writer, UIComponent component) throws IOException {
+        writer.startElement("script", component);
+        writer.writeAttribute("type", "text/javascript", "type");
     }
     
     @Override
-    public void decode(FacesContext context, UIComponent component) {
-        // no-op
-    }
-
-    @Override
-    public void encodeBegin(FacesContext context, UIComponent component)
-          throws IOException {
-        // no-op
-    }
-
-    @Override
-    public void encodeChildren(FacesContext context, UIComponent component)
-          throws IOException {
-        // no-op
+    protected void endElement(ResponseWriter writer) throws IOException {
+        writer.endElement("script");
     }
 
     @Override
@@ -113,6 +75,10 @@ public class ScriptRenderer extends Renderer implements ComponentSystemEventList
         
         String key = name + library;
         
+        if (null == name) {
+            return;
+        }
+        
         // Ensure this script is not rendered more than once per request
         if (contextMap.containsKey(key)) {
             return;
@@ -123,15 +89,13 @@ public class ScriptRenderer extends Renderer implements ComponentSystemEventList
               .createResource(name, library);
 
         ResponseWriter writer = context.getResponseWriter();
-        writer.startElement("script", component);
-        writer.writeAttribute("type", "text/javascript", "type");
+        this.startElement(writer, component);
         writer.writeAttribute("src",
                               ((resource != null)
                                   ? resource.getRequestPath()
                                   : "RES_NOT_FOUND"),
                               "src");
-        writer.endElement("script");
-
+        this.endElement(writer);
     }
     
 }

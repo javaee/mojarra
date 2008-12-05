@@ -36,7 +36,7 @@
 -->
 <!-- =========== FULL CONFIGURATION FILE ================================== -->
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xi="http://www.w3.org/2001/XInclude" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd" version="2.0">
-  <!-- Generic User Interface Components -->
+<!-- Generic User Interface Components -->
   <component>
     <component-type>javax.faces.Column</component-type>
     <component-class>javax.faces.component.UIColumn</component-class>
@@ -373,7 +373,7 @@
         <method-signature>
                 void actionListener(javax.faces.event.ActionEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -1326,7 +1326,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -2704,7 +2704,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -3424,7 +3424,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -3785,7 +3785,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -4011,7 +4011,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <component-family>javax.faces.ViewRoot</component-family>
     </component-extension>
   </component>
-  <!-- Concrete HTML Components -->
+<!-- Concrete HTML Components -->
   <component>
     <description><![CDATA[<p>Represents a column that will be rendered 
       in an HTML <code>table</code> element.</p>]]></description>
@@ -4382,7 +4382,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void actionListener(javax.faces.event.ActionEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -4987,7 +4987,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void actionListener(javax.faces.event.ActionEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -7298,7 +7298,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -7653,7 +7653,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -8399,7 +8399,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -9129,7 +9129,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -13050,7 +13050,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -13740,7 +13740,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -14498,7 +14498,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -15220,7 +15220,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -15932,7 +15932,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -16641,7 +16641,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -17340,7 +17340,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <method-signature>
                 void valueChange(javax.faces.event.ValueChangeEvent)
             </method-signature>
-        <!-- PENDING modify tlddoc to handle an OR of method signatures 
+<!-- PENDING modify tlddoc to handle an OR of method signatures 
 as required by 
 https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447 
             <method-signature>
@@ -17756,7 +17756,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <renderer-type>javax.faces.Radio</renderer-type>
     </component-extension>
   </component>
-  <!-- Standard HTML Renderkit -->
+<!-- Standard HTML Renderkit -->
   <render-kit>
     <description><![CDATA[
      The standard HTML RenderKit.  Please see the spec for additional
@@ -19753,8 +19753,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
   <ul>
 
     <p>If the "name" attribute is present, execute algorithm <a
-    href="javax.faces.Outputjavax.faces.resource.Script.html#ResourceCommonEncode">Common
-    Encode</a> to obtain a <code>Resource</code> instance.  Call
+    href="javax.faces.Outputjavax.faces.resource.Script.html#ResourceCommonGetResource">Common Algorithm for Obtaining A Resource to Render</a> to obtain a <code>Resource</code> instance.  Call
     <code>Resource.getRequestPath()</code> and output the result as the
     value of the "src" attribute on the rendered markup.</p>
 
@@ -20071,7 +20070,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
         <attribute-name>name</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <required>true</required>
+          <required>false</required>
           <tag-attribute>false</tag-attribute>
         </attribute-extension>
       </attribute>
@@ -24315,10 +24314,10 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       <code>UISelectItems</code> instance, call its
       <code>getValue()</code> method.  If the result is a
       <code>SelectItem</code> bean, add it to the list.  If the result
-      is an array of <code>SelectItem</code> beans, add each one t othe
+      is an array of <code>SelectItem</code> beans, add each one to the
       list.  If the result is a <code>Collection</code> of
       <code>SelectItem</code> beans, add each one to the list.  If the
-      result isa <code>Map</code>, create a <code>SelectItem</code> bean
+      result is a <code>Map</code>, create a <code>SelectItem</code> bean
       for each entry in the <code>Map</code> using the key as the label,
       the value as the value, and <code>null</code> as the description.
       Iterate over the list of <code>SelectItem</code> beans.  If the
@@ -24331,7 +24330,7 @@ https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447
       spec to obtain a renderable <code>String</code> from the "value"
       property of the current element, render that as the value of the
       "value" atribute.  Now it is time to see if the current element is
-      the selected value.  call its
+      the selected value.  Call its
       <code>getSubmittedValue()</code> method, casting the result to an
       <code>Object []</code>, otherwise the component must be a
       <code>UISelectOne</code> instance, call its
@@ -26567,9 +26566,8 @@ Otherwise, get the facet whose name is "facetName".  If found call
       <description><![CDATA[<div class="changed_added_2_0">
 
 <p>Render the markup for a <code>&lt;script&gt;</code> element that
-renders the script <code>Resource</code> specified by the required
-<code>name</code> attribute and optional <code>library</code>
-attribute.</p>
+renders the script <code>Resource</code> specified by the optional
+<code>name</code> attribute and <code>library</code> attributes.</p>
 
 <p>The implementation of this renderer must have a <a target="_"
 href="../../javadocs/javax/faces/event/ListenerFor.html"><code>@ListenerFor</code></a>
@@ -26599,18 +26597,19 @@ href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(
 
       <ul>
 
-        <p><a name="ResourceCommonEncode">Common Encode Behavior</a></p>
+        <p><a name="ResourceCommonGetResource">Common Algorithm for Obtaining A Resource to Render</a></p>
 
-          <ul>
+        <ul>
 
           <p>This algorithm is used by all resource renderers to obtain
           a <code>Resource</code> instance which is then rendered in a
           specific way depending on what kind of renderer is doing the
           encoding.</p>
 
+          <ul>
+
 	  <li><p>Look in the component attribute <code>Map</code> for a
-	  value under the key <em>name</em>.  A value is required for
-	  this attribute.</p></li>
+	  value under the key <em>name</em>.</p></li>
 
 	  <li><p>Look in the component attribute <code>Map</code> for a
 	  value under the key <em>library</em>.  This attribute is
@@ -26623,14 +26622,66 @@ href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(
 
 	  </p></li>
 
-	  <li><p>Otherwise throw an <code>IOException</code> with a
-	  descriptive localized message stating that the <em>name</em>
-	  attribute is required to render a resource.</p></li>
-
           </ul>
 
-        <p>Use the algorithm <em>Common Encode</em> above to obtain a
-        reference to the <code>Resource</code> to be encoded.</p>
+        </ul>
+
+        <p><a name="ResourceCommonEncode">Common Encode Behavior</a></p>
+
+      <ul>
+
+       <p>This algorithm is used by all resource renderers to render the
+       resource.</p>
+
+        <p><code>encodeBegin()</code> must take no action.</p>
+
+        <p>Because this renderer returns <code>true</code> from
+        <code>getRendersChildren()</code>, the <code>encodeChildren()
+        method must take the following action.</code></p>
+
+        	<ul>
+
+	  <li><p>If there is no <em>name</em> attribute, and the
+	  argument <code>component</code> has no children, and
+	  <code>ProjectStage</code> is not
+	  <code>ProjectStage.Production</code>, add a
+	  <code>FacesMessage</code> for this component's clientId to the
+	  <code>FacesContext</code> stating that if no name attribute is
+	  present, and no body content is present either, then the user
+	  should take action to correct this problem.  In this case,
+	  <code>encodeChildren()</code> must take no further
+	  action.</p></li>
+
+	  <li><p>If there is no <em>name</em> attribute and the argument
+	  <code>component</code> <b>does</b> have children, the renderer
+	  must ensure that those children are encoded as usual.</p></li>
+
+	  <li><p>If there <b>is</b> a <em>name</em> attribute and the
+	  argument <code>component</code> <b>does</b> have children, the
+	  renderer must log a descriptive localized message stating that
+	  the child content will be ignored.  The resource referenced by
+	  the <em>name</em> attribute will be rendered in
+	  <code>encodeEnd()</code>.</p></li>
+
+	  <li><p>If there <b>is</b> a <em>name attribute</em> and the
+	  argument <code>component</code> <b>does not</b> have children,
+	  <code>encodeChildren()</code> must take no action.</p></li>
+
+	</ul>
+
+       <p><code>encodeEnd()</code> must take specific action based on
+       the specific kind of resource being rendered.</p>
+
+      </ul>
+
+       <p>Use the algorithm <em>Common Encode Behavior</em> for
+       <code>encodeBegin()</code>, <code>encodeChildren()</code> and
+       <code>getRendersChildren()</code>.</p>
+
+        <p>For <code>encodeEnd()</code>, use the algorithm <em>Common
+        Algorithm for Obtaining A Resource to Render</em> above to
+        obtain a reference to the <code>Resource</code> to be
+        encoded.</p>
 
         <p>If this is NOT the first time this <code>Resource</code> has
         been referenced on this request take no action and return.</p>
@@ -26640,10 +26691,6 @@ href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(
         attribue and the result from calling
         <code>resource.getContentType()</code> as the value of the "type"
         attribute.</p>
-
-        <p></p>
-
-
 
 </p>
 
@@ -26667,7 +26714,7 @@ href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(
         <attribute-name>name</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <required>true</required>
+          <required>false</required>
           <tag-attribute>false</tag-attribute>
         </attribute-extension>
       </attribute>
@@ -26696,15 +26743,15 @@ href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(
 
       <renderer-extension>
         <jsp-ignore>true</jsp-ignore>
+        <renders-children>true</renders-children>
       </renderer-extension>
     </renderer>
     <renderer>
       <description><![CDATA[<div class="changed_added_2_0">
 
 <p>Render the markup for a <code>&lt;link&gt;</code> element that
-renders the style <code>Resource</code> specified by the required
-<code>name</code> attribute and optional <code>library</code>
-attribute.</p>
+renders the style <code>Resource</code> specified by the optional
+<code>name</code> and <code>library</code> attributes.</p>
 
       <p>Decode Behavior</p>
 
@@ -26718,11 +26765,18 @@ attribute.</p>
 
       <ul>
 
-<p>Execute algorithm <a href="javax.faces.Outputjavax.faces.resource.Script.html#ResourceCommonEncode">Common Encode</a>
-to obtain a <code>Resource</code> instance and output a
-<code>&lt;link&gt;</code> element.  Use the result from calling
-<code>resource.getRequestPath()</code> as the value of the "href"
-attribute, the result from calling
+       <p>Use the algorithm <em>Common Encode Behavior</em> for
+       <code>encodeBegin()</code>, <code>encodeChildren()</code> and
+       <code>getRendersChildren()</code>.</p>
+
+        <p>For <code>encodeEnd()</code>, use the algorithm <a
+        href="javax.faces.Outputjavax.faces.resource.Script.html#ResourceCommonGetResource">Common
+        Algorithm for Obtaining A Resource to Render</a> to obtain a
+        reference to the <code>Resource</code> to be encoded.</p>
+
+<p>Output a <code>&lt;link&gt;</code> element.  Use the result from
+calling <code>resource.getRequestPath()</code> as the value of the
+"href" attribute, the result from calling
 <code>resource.getContentType()</code> as the value of the "type"
 attribute, the literal string "stylesheet" as the value of the "rel"
 attribute, and the literal string "screen" as the value of the "media"
@@ -26741,7 +26795,7 @@ from the argument event pass it to <a target="_"
 href="../../javadocs/javax/faces/component/UIViewRoot.html#addComponentResource(javax.faces.context.FacesContext,%20javax.faces.component.UIComponent,%20java.lang.String)"><code>UIViewRoot.addComponentResource()</code></a>, specifying
 the literal string "<code>head</code>" as the last argument.</p>
 
-<p>The stylsheet renderer must ensure that any stylesheets are included in the &lt;head&gt; of the document.  This is difficult for portals.
+<p>The stylsheet renderer must ensure that any stylesheets are included in the &lt;head&gt; of the document. 
 </p>
 
 </div>]]></description>
@@ -26758,7 +26812,7 @@ the literal string "<code>head</code>" as the last argument.</p>
         <attribute-name>name</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <required>true</required>
+          <required>false</required>
           <tag-attribute>false</tag-attribute>
         </attribute-extension>
       </attribute>
@@ -26787,6 +26841,7 @@ the literal string "<code>head</code>" as the last argument.</p>
 
       <renderer-extension>
         <jsp-ignore>true</jsp-ignore>
+        <renders-children>true</renders-children>
       </renderer-extension>
     </renderer>
     <renderer>

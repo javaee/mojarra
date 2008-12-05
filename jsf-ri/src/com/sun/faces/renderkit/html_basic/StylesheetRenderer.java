@@ -41,52 +41,31 @@ import java.util.Map;
 
 import javax.faces.application.Resource;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.AfterAddToParentEvent;
-import javax.faces.event.ComponentSystemEvent;
-import javax.faces.event.ComponentSystemEventListener;
-import javax.faces.event.ListenerFor;
-import javax.faces.render.Renderer;
 
 /**
  * <p>This <code>Renderer</code> handles the rendering of external <code>stylesheet</code>
  * references.</p>
  */
-@ListenerFor(systemEventClass=AfterAddToParentEvent.class)
-public class StylesheetRenderer extends Renderer implements ComponentSystemEventListener {
+public class StylesheetRenderer extends ScriptStyleBaseRenderer {
 
     public static final String RENDERER_TYPE = "javax.faces.resource.Stylesheet";
 
-    /* When this method is called, we know that there is a component
-     * with a stylesheet renderer somewhere in the view.  we need to make it
-     * so that when the <head> element is encountered, this component 
-     * can be called upon to render itself.
-     * 
-     */
-    public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
-        UIComponent component = event.getComponent();
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.getViewRoot().addComponentResource(context, component, "head");
+    @Override
+    protected void startElement(ResponseWriter writer, UIComponent component) throws IOException {
+        writer.startElement("style", component);
+        writer.writeAttribute("type", "text/css", "type");
+    }
+    
+    @Override
+    protected void endElement(ResponseWriter writer) throws IOException {
+        writer.endElement("style");
     }
 
     @Override
-    public void decode(FacesContext context, UIComponent component) {
-        // no-op
-    }
-
-    @Override
-    public void encodeBegin(FacesContext context, UIComponent component)
-          throws IOException {
-        // no-op
-    }
-
-    @Override
-    public void encodeChildren(FacesContext context, UIComponent component)
-          throws IOException {
-        // no-op
+    protected String verifyTarget(String toVerify) {
+        return "head";
     }
 
     @Override
@@ -99,6 +78,10 @@ public class StylesheetRenderer extends Renderer implements ComponentSystemEvent
         String name = (String) attributes.get("name");
         String library = (String) attributes.get("library");
         String key = name + library;
+        
+        if (null == name) {
+            return;
+        }
         
         // Ensure this stylesheet is not rendered more than once per request
         if (contextMap.containsKey(key)) {
