@@ -63,7 +63,7 @@
  */
 if (typeof OpenAjax !== "undefined" &&
     typeof OpenAjax.hub.registerLibrary !== "undefined") {
-    OpenAjax.hub.registerLibrary("javax", "www.sun.com", "1.0", null);
+    OpenAjax.hub.registerLibrary("jsf", "www.sun.com", "2.0", null);
 }
 
 // RELEASE_PENDING - add version detection.
