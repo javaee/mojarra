@@ -300,7 +300,6 @@
             <filelist dir="${api.dir}/resources">
                 <file name="ajax.js"/>
                 <file name="Utils.js"/>
-                <file name="AjaxEngine.js"/>
                 <file name="mojarra.js"/>
             </filelist>
         </concat>
