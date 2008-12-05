@@ -53,10 +53,10 @@
  */
 
 /**
-  @project JSF Ajax Library
-  @version 2.0
-  @description This is the standard implementation of the JSF Ajax Library.
-*/
+ @project JSF Ajax Library
+ @version 2.0
+ @description This is the standard implementation of the JSF Ajax Library.
+ */
 
 /**
  * Register with OpenAjax
@@ -86,6 +86,31 @@ jsf.ajax = function() {
     var eventListeners = [];
     var errorListeners = [];
 
+    var getTransport = function() {
+        var methods = [
+            function() {
+                return new XMLHttpRequest();
+            },
+            function() {
+                return new ActiveXObject('Msxml2.XMLHTTP');
+            },
+            function() {
+                return new ActiveXObject('Microsoft.XMLHTTP');
+            }
+        ];
+
+        var returnVal;
+        for (var i = 0, len = methods.length; i < len; i++) {
+            try {
+                returnVal = methods[i]();
+            } catch(e) {
+                continue;
+            }
+            return returnVal;
+        }
+        throw new Error('Could not create an XHR object.');
+    };
+
     return {
         /**
          * Register a callback for error handling.
@@ -93,231 +118,205 @@ jsf.ajax = function() {
          * @param {String} callback string representing a function to call on an error
          */
         onError: function(callback) {
-                errorListeners[errorListeners.length] = callback;
-                },
+            errorListeners[errorListeners.length] = callback;
+        },
         /**
          * Register a callback for event handling.
          * @member jsf.ajax
          * @param {String} callback string representing a function to call on an event
          */
         onEvent: function(callback) {
-                eventListeners[eventListeners.length] = callback;
-        }
-    }
+            eventListeners[eventListeners.length] = callback;
+        },
+        /**
+         * <p>Send an asynchronous Ajax request to the server.
+         * This function must:
+         * <ul>
+         * <li>Capture the element that triggered this Ajax request
+         * (from the <code>element</code> argument, also known as the
+         * <code>source</code> element.</li>
+         * <li>Add the name of the source element in
+         * <li>Determine the <code>source</code> element's <code>form</code>
+         * element.</li>
+         * <li>Get the <code>form</code> view state by calling
+         * {@link jsf.viewState} passing the
+         * <code>form</code> element as the argument.</li>
+         * <li>Collect post data arguments for the Ajax request.
+         * <ul>
+         * <li>The following name/value pairs are required post data arguments:
+         * <ul>
+         * <li>The name and value of the <code>source</code> element that
+         * triggered this request;</li>
+         * <li><code>javax.faces.partial.ajax</code> with the value
+         * <code>true</code></li>
+         * </ul>
+         * </li>
+         * </ul>
+         * </li>
+         * <li>Collect optional post data arguments for the Ajax request.
+         * <ul>
+         * <li>Determine additional arguments (if any) from the <code>options</code>
+         * argument. If <code>options.execute</code> exists, create the post data argument
+         * with the name <code>javax.faces.partial.execute</code> and the value as a
+         * space delimited <code>string</code> of client identifiers.  If
+         * <code>options.render</code> exists, create the post data argument with the name
+         * <code>javax.faces.partial.render</code> and the value as a space delimited
+         * <code>string</code> of client identifiers.</li>
+         * <li>Determine additional arguments (if any) from the <code>event</code>
+         * argument.  The following name/value pairs may be used from the
+         * <code>event</code> object:
+         * <ul>
+         * <li><code>target</code> - the ID of the element that triggered the event.</li>
+         * <li><code>captured</code> - the ID of the element that captured the event.</li>
+         * <li><code>type</code> - the type of event (ex: onkeypress)</li>
+         * <li><code>alt</code> - <code>true</code> if ALT key was pressed.</li>
+         * <li><code>ctrl</code> - <code>true</code> if CTRL key was pressed.</li>
+         * <li><code>shift</code> - <code>true</code> if SHIFT key was pressed. </li>
+         * <li><code>meta</code> - <code>true</code> if META key was pressed. </li>
+         * <li><code>right</code> - <code>true</code> if right mouse button
+         * was pressed. </li>
+         * <li><code>left</code> - <code>true</code> if left mouse button
+         * was pressed. </li>
+         * <li><code>keycode</code> - the key code.
+         * </ul>
+         * </li>
+         * </ul>
+         * </li>
+         * <li>Encode the set of post data arguments.</li>
+         * <li>Join the encoded view state with the encoded set of post data arguments
+         * to form the <code>query string</code> that will be sent to the server.</li>
+         * <li>Send the request as an <code>asynchronous POST</code> using the
+         * <code>action</code> property of the <code>form</code> element as the
+         * <code>url</code>.</li>
+         * </ul>
+         * Before the request is sent it must be put into a queue to ensure requests
+         * are sent in the same order as when they were initiated.  The request callback function
+         * must examine the queue and determine the next request to be sent.  The behavior of the
+         * request callback function must be as follows:
+         * <ul>
+         * <li>If the request completed successfully invoke {@link jsf.ajax.response}
+         * passing the <code>request</code> object.</li>
+         * <li>If the request did not complete successfully, notify the client.</li>
+         * <li>Regardless of the outcome of the request (success or error) every request in the
+         * queue must be handled.  Examine the status of each request in the queue starting from
+         * the request that has been in the queue the longest.  If the status of the request is
+         * <code>complete</code> (readyState 4), dequeue the request (remove it from the queue).
+         * If the request has not been sent (readyState 0), send the request.  Requests that are
+         * taken off the queue and sent should not be put back on the queue.</li>
+         * </ul>
+         *
+         * </p>
+         *
+         * @param element The DOM element that triggered this Ajax request.
+         * @param event The DOM event that triggered this Ajax request.  The
+         * <code>event</code> argument is optional.
+         * @param options The set of available options that can be sent as
+         * request parameters to control client and/or server side
+         * request processing. Acceptable name/value pair options are:
+         * <table border="1">
+         * <tr>
+         * <th>name</th>
+         * <th>value</th>
+         * </tr>
+         * <tr>
+         * <td><code>execute</code></td>
+         * <td><code>space seperated list of client identifiers</code></td>
+         * </tr>
+         * <tr>
+         * <td><code>render</code></td>
+         * <td><code>space seperated list of client identifiers</code></td>
+         * </tr>
+         * <tr>
+         * <td><code>onEvent</code></td>
+         * <td><code>name of a function to callback for event</code></td>
+         * </tr>
+         * <tr>
+         * <td><code>onError</code></td>
+         * <td><code>name of a function to callback for error</code></td>
+         * </tr>
+         * </table>
+         * The <code>options</code> argument is optional.
+         * @member jsf.ajax
+         * @function jsf.ajax.request
+         * @throws ArgNotSet Error if first required argument <code>element</code> is not specified
+         */
+        request: function(element, event, options) {
 
-}();
+            if (typeof(options) === 'undefined' || options === null) {
+                options = {};
+            }
 
-/**
- * <p>Send an asynchronous Ajax request to the server.
- * This function must:
- * <ul>
- * <li>Capture the element that triggered this Ajax request
- * (from the <code>element</code> argument, also known as the
- * <code>source</code> element.</li>
- * <li>Add the name of the source element in 
- * <li>Determine the <code>source</code> element's <code>form</code>
- * element.</li>
- * <li>Get the <code>form</code> view state by calling
- * {@link jsf.viewState} passing the
- * <code>form</code> element as the argument.</li>
- * <li>Collect post data arguments for the Ajax request.
- * <ul>
- * <li>The following name/value pairs are required post data arguments:
- * <ul>
- * <li>The name and value of the <code>source</code> element that
- * triggered this request;</li>
- * <li><code>javax.faces.partial.ajax</code> with the value
- * <code>true</code></li>
- * </ul>
- * </li>
- * </ul>
- * </li>
- * <li>Collect optional post data arguments for the Ajax request.
- * <ul>
- * <li>Determine additional arguments (if any) from the <code>options</code>
- * argument. If <code>options.execute</code> exists, create the post data argument
- * with the name <code>javax.faces.partial.execute</code> and the value as a
- * space delimited <code>string</code> of client identifiers.  If
- * <code>options.render</code> exists, create the post data argument with the name
- * <code>javax.faces.partial.render</code> and the value as a space delimited
- * <code>string</code> of client identifiers.</li>
- * <li>Determine additional arguments (if any) from the <code>event</code>
- * argument.  The following name/value pairs may be used from the
- * <code>event</code> object:
- * <ul>
- * <li><code>target</code> - the ID of the element that triggered the event.</li>
- * <li><code>captured</code> - the ID of the element that captured the event.</li>
- * <li><code>type</code> - the type of event (ex: onkeypress)</li>
- * <li><code>alt</code> - <code>true</code> if ALT key was pressed.</li>
- * <li><code>ctrl</code> - <code>true</code> if CTRL key was pressed.</li>
- * <li><code>shift</code> - <code>true</code> if SHIFT key was pressed. </li>
- * <li><code>meta</code> - <code>true</code> if META key was pressed. </li>
- * <li><code>right</code> - <code>true</code> if right mouse button
- * was pressed. </li>
- * <li><code>left</code> - <code>true</code> if left mouse button
- * was pressed. </li>
- * <li><code>keycode</code> - the key code.
- * </ul>
- * </li>
- * </ul>
- * </li>
- * <li>Encode the set of post data arguments.</li>
- * <li>Join the encoded view state with the encoded set of post data arguments
- * to form the <code>query string</code> that will be sent to the server.</li>
- * <li>Send the request as an <code>asynchronous POST</code> using the
- * <code>action</code> property of the <code>form</code> element as the
- * <code>url</code>.</li>
- * </ul>
- * Before the request is sent it must be put into a queue to ensure requests
- * are sent in the same order as when they were initiated.  The request callback function
- * must examine the queue and determine the next request to be sent.  The behavior of the
- * request callback function must be as follows:
- * <ul>
- * <li>If the request completed successfully invoke {@link jsf.ajax.response}
- * passing the <code>request</code> object.</li>
- * <li>If the request did not complete successfully, notify the client.</li>
- * <li>Regardless of the outcome of the request (success or error) every request in the
- * queue must be handled.  Examine the status of each request in the queue starting from
- * the request that has been in the queue the longest.  If the status of the request is
- * <code>complete</code> (readyState 4), dequeue the request (remove it from the queue).
- * If the request has not been sent (readyState 0), send the request.  Requests that are
- * taken off the queue and sent should not be put back on the queue.</li>
- * </ul>
- *
- * </p>
- *
- * @param element The DOM element that triggered this Ajax request.
- * @param event The DOM event that triggered this Ajax request.  The
- * <code>event</code> argument is optional.
- * @param options The set of available options that can be sent as
- * request parameters to control client and/or server side
- * request processing. Acceptable name/value pair options are:
- * <table border="1">
- * <tr>
- * <th>name</th>
- * <th>value</th>
- * </tr>
- * <tr>
- * <td><code>execute</code></td>
- * <td><code>space seperated list of client identifiers</code></td>
- * </tr>
- * <tr>
- * <td><code>render</code></td>
- * <td><code>space seperated list of client identifiers</code></td>
- * </tr>
- * <tr>
- * <td><code>onEvent</code></td>
- * <td><code>name of a function to callback for event</code></td>
- * </tr>
- * <tr>
- * <td><code>onError</code></td>
- * <td><code>name of a function to callback for error</code></td>
- * </tr>
- * </table>
- * The <code>options</code> argument is optional.
- *
- * @function jsf.ajax.request
- * @throws ArgNotSet Error if first required argument <code>element</code> is not specified
- */
-jsf.ajax.request = function(element, event, options) {
+            // Error handler for this request
+            var onError = false;
 
+            if (options.onError) {
+                error = options.onError;
+            }
 
-    if (typeof(options) === 'undefined' || options === null) {
-        options = {};
-    }
+            // Event handler for this request
+            var onEvent = false;
 
-    // Error handler for this request
-    var onError = false;
-
-    if (options.onError) {
-        error = options.onError;
-    }
-
-    // Event handler for this request
-    var onEvent = false;
-
-    if (options.onEvent) {
-        onEvent = options.onEvent;
-    }
+            if (options.onEvent) {
+                onEvent = options.onEvent;
+            }
 
 
-    if (typeof element === 'undefined' || element === null) {
-        throw new Error("jsf.ajax.request: Element not set");
-    }
+            if (typeof element === 'undefined' || element === null) {
+                throw new Error("jsf.ajax.request: Element not set");
+            }
 
-    // Capture the element that triggered this Ajax request.
-    var source = element;
+            // Capture the element that triggered this Ajax request.
+            var source = element;
 
-    var utils = jsf.Utils;
-    var form = utils.getForm(source);
-    var viewState = jsf.getViewState(form);
+            var utils = jsf.Utils;
+            var form = utils.getForm(source);
+            var viewState = jsf.getViewState(form);
 
-    // Set up additional arguments to be used in the request..
-    // If there were "execute" ids specified, make sure we 
-    // include the identifier of the source element in the 
-    // "execute" list.  If there were no "execute" ids
-    // specified, determine the default.
+            // Set up additional arguments to be used in the request..
+            // If there were "execute" ids specified, make sure we
+            // include the identifier of the source element in the
+            // "execute" list.  If there were no "execute" ids
+            // specified, determine the default.
 
-    var args = {};
+            var args = {};
 
-    if (options.execute) {
-        var temp = utils.toArray(options.execute, ',');
-        if (!utils.isInArray(temp, source.name)) {
-            options.execute = source.name + "," + options.execute;
-        }
-    } else {
-        determineDefaultExecute(source, options);
-    }
-    
-    args["javax.faces.partial.execute"] = utils.toArray(options.execute, ',').join(',');
-    options.execute = null;
-    delete options.execute;
-    if (options.render) {
-        args["javax.faces.partial.render"] = utils.toArray(options.render, ',').join(',');
-        options.render = null;
-        delete options.render;
-    }
-    utils.extend(args, options);
-
-    args["javax.faces.partial.ajax"] = "true";
-    args["method"] = "POST";
-    args["url"] = form.action;
-    // add source
-    var action = utils.$(source);
-    if (action && action.form) {
-        args[action.name] = action.value || 'x';
-    } else {
-        args[source] = source;
-    }
-
-    var ajaxEngine = new jsf.AjaxEngine();
-    ajaxEngine.setupArguments(args);
-    ajaxEngine.queryString = viewState;
-    ajaxEngine.onEvent = onEvent;
-    ajaxEngine.onError = onError;
-    ajaxEngine.sendRequest();
-
-    // Helper function to determine the default execute list.
-    // For buttons (submit types), we return an empty list
-    // which means all will get processed on the server.
-    // For input types (text, etc..) the list is just the
-    // source element name.
-    //
-    function determineDefaultExecute(source, options) {
-        options.execute = source.id;
-        /*  RELEASE_PENDING - possibly remove
-        switch (source.type) {
-            case 'text': case 'password': case 'hidden': case 'textarea':
-            case 'select-one': case 'select-multiple':
-            case 'checkbox': case 'radio':
+            if (options.execute) {
+                var temp = utils.toArray(options.execute, ',');
+                if (!utils.isInArray(temp, source.name)) {
+                    options.execute = source.name + "," + options.execute;
+                }
+            } else {
                 options.execute = source.id;
-                break;
-            case 'button': case 'submit': case 'reset':
-                options.execute = "all";
+            }
+
+            args["javax.faces.partial.execute"] = utils.toArray(options.execute, ',').join(',');
+            options.execute = null;
+            if (options.render) {
+                args["javax.faces.partial.render"] = utils.toArray(options.render, ',').join(',');
+                options.render = null;
+            }
+            utils.extend(args, options);
+
+            args["javax.faces.partial.ajax"] = "true";
+            args["method"] = "POST";
+            args["url"] = form.action;
+            // add source
+            var action = utils.$(source);
+            if (action && action.form) {
+                args[action.name] = action.value || 'x';
+            } else {
+                args[source] = source;
+            }
+
+            var ajaxEngine = new jsf.AjaxEngine();
+            ajaxEngine.setupArguments(args);
+            ajaxEngine.queryString = viewState;
+            ajaxEngine.onEvent = onEvent;
+            ajaxEngine.onError = onError;
+            ajaxEngine.sendRequest();
         }
-        */
     }
-};
+}();
 
 /**
  * <p>Receive an Ajax response from the server.
@@ -326,27 +325,27 @@ jsf.ajax.request = function(element, event, options) {
  * as follows:
  * <ul>
  * <p><b>Update Element Processing</b></p>
- * <li>If an <code>update</code> element is found in the response 
+ * <li>If an <code>update</code> element is found in the response
  * with the identifier <code>javax.faces.ViewRoot</code>:
  * <pre><code>&lt;update id="javax.faces.ViewRoot"&gt;
  *    &lt;![CDATA[...]]&gt;
  * &lt;/update&gt;</code></pre>
  * Update the entire DOM as follows:
  * <ul>
- * <li>Extract the <code>CDATA</code> content and trim the &lt;html&gt; 
+ * <li>Extract the <code>CDATA</code> content and trim the &lt;html&gt;
  * and &lt;/html&gt; from the <code>CDATA</code> content if it is present.</li>
  * <li>If the <code>CDATA</code> content contains a &lt;head&gt; element,
- * and the document has a <code>&lt;head&gt;</code> section, extract the 
+ * and the document has a <code>&lt;head&gt;</code> section, extract the
  * contents of the &lt;head&gt; element from the <code>&lt;update&gt;</code>
- * element's <code>CDATA</code> content and replace the document's &lt;head&gt; 
+ * element's <code>CDATA</code> content and replace the document's &lt;head&gt;
  * section with this contents.</li>
  * <li>If the <code>CDATA</code> content contains a &lt;body&gt; element,
- * and the document has a <code>&lt;body&gt;</code> section, extract the contents 
- * of the &lt;body&gt; element from the <code>&lt;update&gt;</code> 
- * element's <code>CDATA</code> content and replace the document's &lt;body&gt; 
- * section with this contents.</li> 
+ * and the document has a <code>&lt;body&gt;</code> section, extract the contents
+ * of the &lt;body&gt; element from the <code>&lt;update&gt;</code>
+ * element's <code>CDATA</code> content and replace the document's &lt;body&gt;
+ * section with this contents.</li>
  * <li>If the <code>CDATA</code> content does not contain a &lt;body&gt; element,
- * replace the document's &lt;body&gt; section with the <code>CDATA</code> 
+ * replace the document's &lt;body&gt; section with the <code>CDATA</code>
  * contents.</li>
  * </ul>
  * <li>If an <code>update</code> element is found in the response with the identifier
@@ -356,23 +355,23 @@ jsf.ajax.request = function(element, event, options) {
  * &lt;/update&gt;</code></pre>
  * Include this <code>state</code> in the document as follows:
  * <ul>
- * <li>Extract this <code>&lt;update&gt;</code> element's <code>CDATA</code> contents 
+ * <li>Extract this <code>&lt;update&gt;</code> element's <code>CDATA</code> contents
  * from the response.</li>
  * <li>If the document contains an element with the identifier
- * <code>javax.faces.ViewState</code> replace its contents with the 
+ * <code>javax.faces.ViewState</code> replace its contents with the
  * <code>CDATA</code> contents.</li>
  * <li>For each <code>&lt;form&gt;</code> element in the document:
  * <ul>
  * <li>If the <code>&lt;form&gt;</code> element contains an <code>&lt;input&gt;</code>
- * element with the identifier <code>javax.faces.ViewState</code>, replace the 
+ * element with the identifier <code>javax.faces.ViewState</code>, replace the
  * <code>&lt;input&gt;</code> element contents with the <code>&lt;update&gt;</code>
  * element's <code>CDATA</code> contents.</li>
  * <li>If the <code>&lt;form&gt;</code> element does not contain an element with
- * the identifier <code>javax.faces.ViewState</code>, create an 
+ * the identifier <code>javax.faces.ViewState</code>, create an
  * <code>&lt;input&gt;</code> element of the type <code>hidden</code>,
  * with the identifier <code>javax.faces.ViewState</code>, set its contents
  * to the <code>&lt;update&gt;</code> element's <code>CDATA</code> contents, and
- * add the <code>&lt;input&gt;</code> element as a child to the 
+ * add the <code>&lt;input&gt;</code> element as a child to the
  * <code>&lt;form&gt;</code> element.</li>
  * </ul>
  * </li>
@@ -382,12 +381,12 @@ jsf.ajax.request = function(element, event, options) {
  * <pre><code>&lt;update id="update id"&gt;
  *    &lt;![CDATA[...]]&gt;
  * &lt;/update&gt;</code></pre>
- * Find the DOM element with the identifier that matches the 
- * <code>&lt;update&gt;</code> element identifier, and replace its contents with 
+ * Find the DOM element with the identifier that matches the
+ * <code>&lt;update&gt;</code> element identifier, and replace its contents with
  * the <code>&lt;update&gt;</code> element's <code>CDATA</code> contents.</li>
  * </li>
  * <p><b>Insert Element Processing</b></p>
- * <li>If an <code>&lt;input&gt;</code> element is found in the response with the 
+ * <li>If an <code>&lt;input&gt;</code> element is found in the response with the
  * attribute <code>before</code>:
  * <pre><code>&lt;insert id="insert id" before="before id"&gt;
  *    &lt;![CDATA[...]]&gt;
@@ -396,11 +395,11 @@ jsf.ajax.request = function(element, event, options) {
  * <li>Extract this <code>&lt;input&gt;</code> element's <code>CDATA</code> contents
  * from the response.</li>
  * <li>Find the DOM element whose identifier matches <code>before id</code> and insert
- * the <code>&lt;input&gt;</code> element's <code>CDATA</code> content before 
+ * the <code>&lt;input&gt;</code> element's <code>CDATA</code> content before
  * the DOM element in the document.</li>
  * </ul>
  * </li>
- * <li>If an <code>&lt;input&gt;</code> element is found in the response with the 
+ * <li>If an <code>&lt;input&gt;</code> element is found in the response with the
  * attribute <code>after</code>:
  * <pre><code>&lt;insert id="insert id" after="after id"&gt;
  *    &lt;![CDATA[...]]&gt;
@@ -409,7 +408,7 @@ jsf.ajax.request = function(element, event, options) {
  * <li>Extract this <code>&lt;input&gt;</code> element's <code>CDATA</code> contents
  * from the response.</li>
  * <li>Find the DOM element whose identifier matches <code>after id</code> and insert
- * the <code>&lt;input&gt;</code> element's <code>CDATA</code> content after 
+ * the <code>&lt;input&gt;</code> element's <code>CDATA</code> content after
  * the DOM element in the document.</li>
  * </ul>
  * </li>
@@ -460,7 +459,7 @@ jsf.ajax.request = function(element, event, options) {
  * <li>The <code>&lt;extensions&gt;</code> element provides a way for framework
  * implementations to provide their own information.</li>
  * </ul>
- * 
+ *
  * </p>
  *
  * @param request The <code>XMLHttpRequest</code> instance that
@@ -521,13 +520,13 @@ jsf.ajax.response = function(request) {
             //   if src does not contain <body>
             //      replace the current document's <body> with the contents.
             var
-                htmlStartEx = new RegExp("< *html.*>", "gi"),
-                htmlEndEx = new RegExp("< */ *html.*>", "gi"),
-                headStartEx = new RegExp("< *head.*>", "gi"),
-                headEndEx = new RegExp("< */ *head.*>", "gi"),
-                bodyStartEx = new RegExp("< *body.*>", "gi"),
-                bodyEndEx = new RegExp("< */ *body.*>", "gi"),
-                htmlStart, htmlEnd, headStart, headEnd, bodyStart, bodyEnd;
+                    htmlStartEx = new RegExp("< *html.*>", "gi"),
+                    htmlEndEx = new RegExp("< */ *html.*>", "gi"),
+                    headStartEx = new RegExp("< *head.*>", "gi"),
+                    headEndEx = new RegExp("< */ *head.*>", "gi"),
+                    bodyStartEx = new RegExp("< *body.*>", "gi"),
+                    bodyEndEx = new RegExp("< */ *body.*>", "gi"),
+                    htmlStart, htmlEnd, headStart, headEnd, bodyStart, bodyEnd;
             var srcHead = null, srcBody = null;
             // find the current document's "body" element
             var docBody = document.getElementsByTagName("body")[0];
@@ -545,7 +544,7 @@ jsf.ajax.response = function(request) {
                 // if src contains </head>
                 if (null != (headEnd = headEndEx.exec(src))) {
                     srcHead = src.substring(headStartEx.lastIndex,
-                        headEnd.index);
+                            headEnd.index);
                 } else {
                     srcHead = src.substring(headStartEx.lastIndex);
                 }
@@ -560,7 +559,7 @@ jsf.ajax.response = function(request) {
                 // if src contains </body>
                 if (null != (bodyEnd = bodyEndEx.exec(src))) {
                     srcBody = src.substring(bodyStartEx.lastIndex,
-                        bodyEnd.index);
+                            bodyEnd.index);
                 } else {
                     srcBody = src.substring(bodyStartEx.lastIndex);
                 }
@@ -573,14 +572,14 @@ jsf.ajax.response = function(request) {
         } else {
             var d = utils.$(id);
             if (!d) {
-                throw new Error("jsf.ajax.response: "+id+" not found");
+                throw new Error("jsf.ajax.response: " + id + " not found");
             }
             var parent = d.parentNode;
             var temp = document.createElement('div');
             temp.id = d.id;
             temp.innerHTML = utils.trim(str);
 
-            parent.replaceChild(temp.firstChild,d);
+            parent.replaceChild(temp.firstChild, d);
         }
     }
 
@@ -677,7 +676,10 @@ jsf.getViewState = function(form) {
         var el = els[i];
         if (!el.disabled) {
             switch (el.type) {
-                case 'text': case 'password': case 'hidden': case 'textarea':
+                case 'text':
+                case 'password':
+                case 'hidden':
+                case 'textarea':
                     addField(el.name, el.value);
                     break;
                 case 'select-one':
@@ -692,8 +694,9 @@ jsf.getViewState = function(form) {
                         }
                     }
                     break;
-                case 'checkbox': case 'radio':
-                    addField(el.name, el.checked+"");
+                case 'checkbox':
+                case 'radio':
+                    addField(el.name, el.checked + "");
                     break;
             }
         }
@@ -702,12 +705,10 @@ jsf.getViewState = function(form) {
 };
 
 
-
 /**
- * A String value which represents the current clientID separator string.
+ * A String value which represents the current clientID separator character.
  */
-
-// RELEASE_PENDING : Still needs to be wired to the back end
 jsf.separator = function() {
+    // RELEASE_PENDING : Still needs to be wired to the back end
     return ":";
 }();
