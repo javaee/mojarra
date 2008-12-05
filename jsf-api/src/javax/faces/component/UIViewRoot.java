@@ -992,9 +992,7 @@ public class UIViewRoot extends UIComponentBase {
     /**
      * <p class="changed_added_2_0">Call {@link UIComponentBase#getRendersChildren}
      * If {@link javax.faces.context.PartialViewContext#isAjaxRequest}
-     * returns <code>true</code> and it is a partial render request
-     * ({@link javax.faces.context.PartialViewContext#isRenderAll} returns
-     * <code>false</code>), return <code>true</code>.</p>
+     * returns <code>true</code> this method must return <code>true</code>.</p>
      *
      * @since 2.0
      */
