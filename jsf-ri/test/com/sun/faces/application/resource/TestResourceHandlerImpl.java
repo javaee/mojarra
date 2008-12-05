@@ -95,7 +95,7 @@ public class TestResourceHandlerImpl extends ServletFacesTestCase {
         assertTrue(handler != null);
         assertTrue(handler instanceof ResourceHandlerImpl);
 
-        assertNotNull(handler.createResource("ajax.js", "javax.faces"));        
+        assertNotNull(handler.createResource("jsf.js", "javax.faces"));
     }
 
 

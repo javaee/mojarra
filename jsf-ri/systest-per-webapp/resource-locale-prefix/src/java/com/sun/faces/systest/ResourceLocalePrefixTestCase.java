@@ -132,7 +132,7 @@ public class ResourceLocalePrefixTestCase extends AbstractTestCase {
         // The Ajax external script isn't localized - ensure it gets
         // rendered in all cases.
         // This should be true for all non-localized resources
-        assertTrue("/jsf-resource-locale-prefix/faces/javax.faces.resource/ajax.js?ln=javax.faces".equals(script.getSrcAttribute()));
+        assertTrue("/jsf-resource-locale-prefix/faces/javax.faces.resource/jsf.js?ln=javax.faces".equals(script.getSrcAttribute()));
             System.out.println("Locale, " + locale + ", PASSED");
         }
 

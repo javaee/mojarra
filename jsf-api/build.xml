@@ -175,9 +175,9 @@
             </fileset>
         </copy>
 
-        <concat destfile="${build.resources.dir}/ajax.js" append="yes" fixlastline="yes">
+        <concat destfile="${build.resources.dir}/jsf.js" append="yes" fixlastline="yes">
             <filelist dir="${resources.dir}">
-                <file name="ajax.js"/>
+                <file name="jsf.js"/>
                 <file name="mojarra.js"/>
             </filelist>
         </concat>

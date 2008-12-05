@@ -49,7 +49,7 @@
 </composite:interface>
 <composite:implementation>
     <h:outputStylesheet name="spinnerFinal/spinner.css" />
-    <h:outputScript name="ajax.js" library="javax.faces" target="head"/>
+    <h:outputScript name="jsf.js" library="javax.faces" target="head"/>
     <h:outputScript name="spinnerFinal/spinner.js" target="head" />
     <script type="text/javascript">
         init("#{compositeComponent.clientId}","#{compositeComponent.attrs.increment}");

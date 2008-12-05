@@ -325,7 +325,7 @@
                     <arg line="-a"/>
                     <arg line="-d=${dist.home}/jsdocs"/>
                     <arg line="-t=${jsdoc.home}/jsdoc-toolkit/templates/jsdoc"/>
-                    <arg value="${basedir}/../jsf-api/resources/ajax.js"/>
+                    <arg value="${basedir}/../jsf-api/resources/jsf.js"/>
         </java>
         <zip zipfile="${dist.home}/docs/jsdocs-${impl.version}.zip">
                    <fileset dir="${dist.home}" includes="jsdocs/**"/>

@@ -296,9 +296,9 @@
         </copy>
 
         <!-- OSGi/V3 HACK ! TEMPORARY -->
-        <concat destfile="${build.classes.dir}/META-INF/resources/javax.faces/ajax.js" append="yes" fixlastline="yes">
+        <concat destfile="${build.classes.dir}/META-INF/resources/javax.faces/jsf.js" append="yes" fixlastline="yes">
             <filelist dir="${api.dir}/resources">
-                <file name="ajax.js"/>
+                <file name="jsf.js"/>
                 <file name="mojarra.js"/>
             </filelist>
         </concat>

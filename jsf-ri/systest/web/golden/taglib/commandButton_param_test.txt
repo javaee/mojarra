@@ -11,7 +11,7 @@
 <input type="hidden" name="form01" value="form01" />
 <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id3:j_id4" />
 
-<script type="text/javascript" src="/jsf-systest/faces/javax.faces.resource/ajax.js?ln=javax.faces"></script>
+<script type="text/javascript" src="/jsf-systest/faces/javax.faces.resource/jsf.js?ln=javax.faces"></script>
 <input id="form01:button01" type="submit" name="form01:button01" value="Label" onclick="mojarra.jsfcljs(document.getElementById('form01'),{'form01:button01':'form01:button01','testname':'testval'},'');return false" />Test Link
 
         <p/>

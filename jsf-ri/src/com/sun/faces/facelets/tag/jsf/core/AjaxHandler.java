@@ -120,7 +120,7 @@ import com.sun.faces.RIConstants;
  * instance and set the renderer type to <code>javax.faces.resource.Script</code>.
  * Set the the following attributes in the component's attribute <code>Map</code>:
  * <code>library</code> with the value <code>javax.faces</code> and 
- * <code>name</code> with the value <code>ajax.js</code>.  Install the component
+ * <code>name</code> with the value <code>jsf.js</code>.  Install the component
  * resource using <code>UIViewRoot.addComponentResource()</code> and specifying
  * <code>head</code> as the <code>target</code> argument.</p> 
  *
@@ -236,7 +236,7 @@ public final class AjaxHandler extends TagHandler {
             return;
         }
 
-        final String name = "ajax.js";
+        final String name = "jsf.js";
         final String library = "javax.faces";
         UIViewRoot viewRoot = context.getViewRoot();
         ListIterator iter = (viewRoot.getComponentResources(context, "head")).listIterator();

@@ -6,8 +6,8 @@ import javax.faces.component.UIPanel;
 
 @ResourceDependencies( {
     @ResourceDependency (name="prototype.js", library="javax.faces", target="head"),
-    @ResourceDependency (name="com_sun_faces_ajax.js", library="javax.faces", target="head"),
-    @ResourceDependency (name="ajax.js", library="javax.faces", target="head"),
+    @ResourceDependency (name="com_sun_faces_jsf.js", library="javax.faces", target="head"),
+    @ResourceDependency (name="jsf.js", library="javax.faces", target="head"),
     @ResourceDependency (name="stock-query.js", target="head") } )
 
 public class StockTable extends UIPanel{

@@ -71,8 +71,6 @@ import com.sun.faces.util.Util;
 import com.sun.faces.util.RequestStateManager;
 
 import javax.faces.component.*;
-import javax.el.ValueExpression;
-import javax.el.ELContext;
 
 /**
  * <p>A set of utilities for use in {@link RenderKit}s.</p>
@@ -984,7 +982,7 @@ public class RenderKitUtils {
      */
     public static void renderJsfJs(FacesContext context) throws IOException {
 
-        final String name = "ajax.js";
+        final String name = "jsf.js";
         final String library = "javax.faces";
 
         if (context.getAttributes().get(RIConstants.SCRIPT_STATE) != null) {

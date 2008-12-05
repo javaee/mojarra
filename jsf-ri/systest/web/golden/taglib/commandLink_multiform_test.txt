@@ -11,7 +11,7 @@
 <input type="hidden" name="form01" value="form01" />
 <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id7:j_id8" />
 
-<script type="text/javascript" src="/jsf-systest/faces/javax.faces.resource/ajax.js?ln=javax.faces"></script>
+<script type="text/javascript" src="/jsf-systest/faces/javax.faces.resource/jsf.js?ln=javax.faces"></script>
 <a id="form01:Link1" href="#" onclick="mojarra.jsfcljs(document.getElementById('form01'),{'form01:Link1':'form01:Link1','param1':'value1','param2':'value2'},'');return false">Link1</a><a id="form01:Link2" href="#" onclick="mojarra.jsfcljs(document.getElementById('form01'),{'form01:Link2':'form01:Link2','param1':'value1','param2':'value2'},'');return false">Link2</a>
 </form>
 <form id="form02" name="form02" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp" enctype="application/x-www-form-urlencoded">
