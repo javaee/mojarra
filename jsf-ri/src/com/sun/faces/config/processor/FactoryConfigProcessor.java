@@ -76,11 +76,6 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
     private static final String APPLICATION_FACTORY = "application-factory";
 
     /**
-     * <code>/faces-config/factory/discovery-handler-factory</code>
-     */
-    private static final String DISCOVERY_HANDLER_FACTORY = "discovery-handler-factory";
-
-    /**
      * <code>/faces-config/factory/exception-handler-factory</code>
      */
     private static final String EXCEPTION_HANDLER_FACTORY = "exception-handler-factory";
@@ -111,7 +106,6 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
      */
     private static final String[] FACTORY_NAMES = {
           FactoryFinder.APPLICATION_FACTORY,
-          FactoryFinder.DISCOVERY_HANDLER_FACTORY,
           FactoryFinder.EXCEPTION_HANDLER_FACTORY,
           FactoryFinder.FACES_CONTEXT_FACTORY,
           FactoryFinder.LIFECYCLE_FACTORY,
@@ -195,9 +189,6 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
                 if (APPLICATION_FACTORY.equals(n.getLocalName())) {
                     appCount.incrementAndGet();
                     setFactory(FactoryFinder.APPLICATION_FACTORY,
-                               getNodeText(n));
-                } else if (DISCOVERY_HANDLER_FACTORY.equals(n.getLocalName())) {
-                    setFactory(FactoryFinder.DISCOVERY_HANDLER_FACTORY,
                                getNodeText(n));
                 } else if (EXCEPTION_HANDLER_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.EXCEPTION_HANDLER_FACTORY,

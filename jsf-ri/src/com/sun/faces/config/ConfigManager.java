@@ -61,7 +61,6 @@ import com.sun.faces.config.processor.ValidatorConfigProcessor;
 import com.sun.faces.config.processor.FaceletTaglibConfigProcessor;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Timer;
-import com.sun.faces.application.annotation.AnnotationHandler;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -90,6 +89,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Collection;
 import java.util.Set;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
@@ -146,6 +146,15 @@ public class ConfigManager {
      * <p>
      */
     private static final ConfigManager CONFIG_MANAGER = new ConfigManager();
+
+
+    /**
+     * The application-scoped key under which the Future responsible for annotation
+     * scanning is associated with.
+     */
+    private static final String ANNOTATIONS_SCAN_TASK_KEY =
+          ConfigManager.class.getName() + "_ANNOTATION_SCAN_TASK";
+
 
     /**
      * <p>
@@ -346,6 +355,27 @@ public class ConfigManager {
     }
 
 
+    /**
+     * @return the results of the annotation scan task
+     */
+    public static Collection<String> getAnnotatedClasses(FacesContext ctx) {
+
+        Map<String, Object> appMap =
+              ctx.getExternalContext().getApplicationMap();
+        //noinspection unchecked
+        Future<Set<String>> scanTask = (Future<Set<String>>) appMap
+              .remove(ANNOTATIONS_SCAN_TASK_KEY);
+        try {
+            return ((scanTask != null)
+                    ? scanTask.get()
+                    : Collections.<String>emptySet());
+        } catch (Exception e) {
+            throw new FacesException(e);
+        }
+
+    }
+
+
     // --------------------------------------------------------- Private Methods
 
 
@@ -456,7 +486,7 @@ public class ConfigManager {
     private void pushTaskToContext(ServletContext sc,
                                    Future<Set<String>> scanTask) {
 
-        sc.setAttribute(AnnotationHandler.ANNOTATIONS_SCAN_TASK_KEY, scanTask);
+        sc.setAttribute(ANNOTATIONS_SCAN_TASK_KEY, scanTask);
 
     }
 

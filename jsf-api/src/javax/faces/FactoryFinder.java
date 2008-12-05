@@ -159,13 +159,6 @@ public final class FactoryFinder {
 
     /**
      * <p>The property name for the {@link
-     * javax.faces.application.DiscoveryHandlerFactory} class name.</p>
-     */
-    public final static String DISCOVERY_HANDLER_FACTORY =
-         "javax.faces.application.DiscoveryHandlerFactory";
-
-    /**
-     * <p>The property name for the {@link
      * javax.faces.context.ExceptionHandlerFactory} class name.</p>
      */
     public final static String EXCEPTION_HANDLER_FACTORY =
@@ -177,7 +170,6 @@ public final class FactoryFinder {
      */
     public final static String FACES_CONTEXT_FACTORY =
          "javax.faces.context.FacesContextFactory";
-
 
     /**
      * <p>The property name for the
@@ -212,7 +204,6 @@ public final class FactoryFinder {
      */
     private static final String[] FACTORY_NAMES = {
          APPLICATION_FACTORY,
-         DISCOVERY_HANDLER_FACTORY,
          EXCEPTION_HANDLER_FACTORY,
          FACES_CONTEXT_FACTORY,
          LIFECYCLE_FACTORY,
@@ -594,8 +585,6 @@ public final class FactoryFinder {
                  javax.faces.lifecycle.LifecycleFactory.class);
             factoryClasses.put(RENDER_KIT_FACTORY,
                  javax.faces.render.RenderKitFactory.class);
-            factoryClasses.put(DISCOVERY_HANDLER_FACTORY,
-                 javax.faces.application.DiscoveryHandlerFactory.class);
             factoryClasses.put(PAGE_DECLARATION_LANGUAGE_FACTORY,
                  javax.faces.webapp.pdl.PageDeclarationLanguageFactory.class);
         }

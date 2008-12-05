@@ -58,7 +58,6 @@ import javax.faces.application.PartialTraversal;
 import javax.faces.application.ResourceHandler;
 import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
-import javax.faces.application.DiscoveryHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
@@ -74,9 +73,9 @@ import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Util;
 import com.sun.faces.config.ConfigurationException;
 import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.ConfigManager;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
-import javax.faces.FactoryFinder;
-import javax.faces.application.DiscoveryHandlerFactory;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -145,12 +144,6 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
      */
     private static final String RESOURCE_HANDLER
          = "resource-handler";
-
-    /**
-     * <code>/faces-config/application/discovery-handler</code>
-     */
-    private static final String DISCOVERY_HANDLER =
-          "discovery-handler";
 
     /**
      * <code>/faces-config/application/el-resolver</code>
@@ -315,13 +308,9 @@ public class ApplicationConfigProcessor extends AbstractConfigProcessor {
 
         processViewHandlers(app, viewHandlers);
 
-        // all application level artifacts are in place, process any annotated
-        // components that have been found
-        DiscoveryHandler handler = ((DiscoveryHandlerFactory)
-                FactoryFinder.getFactory(FactoryFinder.DISCOVERY_HANDLER_FACTORY)).getDiscoveryHandler();
+        // process annotated artifacts
         FacesContext ctx = FacesContext.getCurrentInstance();
-        handler.processAnnotatedClasses(ctx, handler.getClassNamesWithFacesAnnotations(ctx));
-
+        associate.getAnnotationManager().applyConfigAnntations(ctx, ConfigManager.getAnnotatedClasses(ctx));
         // continue processing...
         invokeNext(documents);
 

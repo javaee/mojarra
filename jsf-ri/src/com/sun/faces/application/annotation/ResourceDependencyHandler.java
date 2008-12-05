@@ -10,7 +10,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.el.ELUtils;
-import javax.faces.application.Resource;
 
 /**
  * {@link RuntimeAnnotationHandler} responsible for processing {@link ResourceDependency} annotations.
@@ -54,7 +53,7 @@ class ResourceDependencyHandler implements RuntimeAnnotationHandler {
     }
 
 
-    // ------------------------------------------ Methods from AnnotationHandler
+    // ----------------------------------- Methods from RuntimeAnnotationHandler
     
 
     @SuppressWarnings({"UnusedDeclaration"})

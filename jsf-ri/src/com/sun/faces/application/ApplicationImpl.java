@@ -118,7 +118,6 @@ import java.util.List;
 import java.util.TimeZone;
 
 import javax.el.ValueExpression;
-import javax.faces.application.DiscoveryHandler;
 import javax.faces.application.Resource;
 import javax.faces.webapp.pdl.PageDeclarationLanguage;
 
@@ -166,7 +165,6 @@ public class ApplicationImpl extends Application {
     private ProjectStage projectStage;
 
     private volatile ActionListener actionListener = null;
-    private volatile DiscoveryHandler annotationHandler = null;
     private volatile NavigationHandler navigationHandler = null;
     private volatile PartialTraversal partialTraversal = null;
     private volatile PropertyResolverImpl propertyResolver = null;

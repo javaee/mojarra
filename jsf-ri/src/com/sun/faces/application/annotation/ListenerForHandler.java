@@ -25,7 +25,7 @@ class ListenerForHandler implements RuntimeAnnotationHandler {
     }
 
 
-    // ------------------------------------------ Methods from AnnotationHandler
+    // ----------------------------------- Methods from RuntimeAnnotationHandler
 
 
     @SuppressWarnings({"UnusedDeclaration"})
