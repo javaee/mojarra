@@ -314,323 +314,320 @@ jsf.ajax = function() {
             ajaxEngine.onEvent = onEvent;
             ajaxEngine.onError = onError;
             ajaxEngine.sendRequest();
+        },
+        /**
+         * <p>Receive an Ajax response from the server.
+         * This function must evaluate the markup returned in the
+         * <code>responseXML</code> object and update the <code>DOM</code>
+         * as follows:
+         * <ul>
+         * <p><b>Update Element Processing</b></p>
+         * <li>If an <code>update</code> element is found in the response
+         * with the identifier <code>javax.faces.ViewRoot</code>:
+         * <pre><code>&lt;update id="javax.faces.ViewRoot"&gt;
+         *    &lt;![CDATA[...]]&gt;
+         * &lt;/update&gt;</code></pre>
+         * Update the entire DOM as follows:
+         * <ul>
+         * <li>Extract the <code>CDATA</code> content and trim the &lt;html&gt;
+         * and &lt;/html&gt; from the <code>CDATA</code> content if it is present.</li>
+         * <li>If the <code>CDATA</code> content contains a &lt;head&gt; element,
+         * and the document has a <code>&lt;head&gt;</code> section, extract the
+         * contents of the &lt;head&gt; element from the <code>&lt;update&gt;</code>
+         * element's <code>CDATA</code> content and replace the document's &lt;head&gt;
+         * section with this contents.</li>
+         * <li>If the <code>CDATA</code> content contains a &lt;body&gt; element,
+         * and the document has a <code>&lt;body&gt;</code> section, extract the contents
+         * of the &lt;body&gt; element from the <code>&lt;update&gt;</code>
+         * element's <code>CDATA</code> content and replace the document's &lt;body&gt;
+         * section with this contents.</li>
+         * <li>If the <code>CDATA</code> content does not contain a &lt;body&gt; element,
+         * replace the document's &lt;body&gt; section with the <code>CDATA</code>
+         * contents.</li>
+         * </ul>
+         * <li>If an <code>update</code> element is found in the response with the identifier
+         * <code>javax.faces.ViewState</code>:
+         * <pre><code>&lt;update id="javax.faces.ViewState"&gt;
+         *    &lt;![CDATA[...]]&gt;
+         * &lt;/update&gt;</code></pre>
+         * Include this <code>state</code> in the document as follows:
+         * <ul>
+         * <li>Extract this <code>&lt;update&gt;</code> element's <code>CDATA</code> contents
+         * from the response.</li>
+         * <li>If the document contains an element with the identifier
+         * <code>javax.faces.ViewState</code> replace its contents with the
+         * <code>CDATA</code> contents.</li>
+         * <li>For each <code>&lt;form&gt;</code> element in the document:
+         * <ul>
+         * <li>If the <code>&lt;form&gt;</code> element contains an <code>&lt;input&gt;</code>
+         * element with the identifier <code>javax.faces.ViewState</code>, replace the
+         * <code>&lt;input&gt;</code> element contents with the <code>&lt;update&gt;</code>
+         * element's <code>CDATA</code> contents.</li>
+         * <li>If the <code>&lt;form&gt;</code> element does not contain an element with
+         * the identifier <code>javax.faces.ViewState</code>, create an
+         * <code>&lt;input&gt;</code> element of the type <code>hidden</code>,
+         * with the identifier <code>javax.faces.ViewState</code>, set its contents
+         * to the <code>&lt;update&gt;</code> element's <code>CDATA</code> contents, and
+         * add the <code>&lt;input&gt;</code> element as a child to the
+         * <code>&lt;form&gt;</code> element.</li>
+         * </ul>
+         * </li>
+         * </ul>
+         * </li>
+         * <li>For any other <code>&lt;update&gt;</code> element:
+         * <pre><code>&lt;update id="update id"&gt;
+         *    &lt;![CDATA[...]]&gt;
+         * &lt;/update&gt;</code></pre>
+         * Find the DOM element with the identifier that matches the
+         * <code>&lt;update&gt;</code> element identifier, and replace its contents with
+         * the <code>&lt;update&gt;</code> element's <code>CDATA</code> contents.</li>
+         * </li>
+         * <p><b>Insert Element Processing</b></p>
+         * <li>If an <code>&lt;input&gt;</code> element is found in the response with the
+         * attribute <code>before</code>:
+         * <pre><code>&lt;insert id="insert id" before="before id"&gt;
+         *    &lt;![CDATA[...]]&gt;
+         * &lt;/insert&gt;</code></pre>
+         * <ul>
+         * <li>Extract this <code>&lt;input&gt;</code> element's <code>CDATA</code> contents
+         * from the response.</li>
+         * <li>Find the DOM element whose identifier matches <code>before id</code> and insert
+         * the <code>&lt;input&gt;</code> element's <code>CDATA</code> content before
+         * the DOM element in the document.</li>
+         * </ul>
+         * </li>
+         * <li>If an <code>&lt;input&gt;</code> element is found in the response with the
+         * attribute <code>after</code>:
+         * <pre><code>&lt;insert id="insert id" after="after id"&gt;
+         *    &lt;![CDATA[...]]&gt;
+         * &lt;/insert&gt;</code></pre>
+         * <ul>
+         * <li>Extract this <code>&lt;input&gt;</code> element's <code>CDATA</code> contents
+         * from the response.</li>
+         * <li>Find the DOM element whose identifier matches <code>after id</code> and insert
+         * the <code>&lt;input&gt;</code> element's <code>CDATA</code> content after
+         * the DOM element in the document.</li>
+         * </ul>
+         * </li>
+         * <p><b>Delete Element Processing</b></p>
+         * <li>If a <code>&lt;delete&gt;</code> element is found in the response:
+         * <pre><code>&lt;delete id="delete id"/&gt;</code></pre>
+         * Find the DOM element whose identifier matches <code>delete id</code> and remove it
+         * from the DOM.</li>
+         * <p><b>Element Attribute Update Processing</b></p>
+         * <li>If an <code>&lt;attributes&gt;</code> element is found in the response:
+         * <pre><code>&lt;attributes id="id of element with attribute"&gt;
+         *    &lt;attribute name="attribute name" value="attribute value"&gt;
+         *    ...
+         * &lt/attributes&gt;</code></pre>
+         * <ul>
+         * <li>Find the DOM element that matches the <code>&lt;attributes&gt;</code> identifier.</li>
+         * <li>For each nested <code>&lt;attribute&gt;</code> element in <code>&lt;attribute&gt;</code>,
+         * update the DOM element attribute value (whose name matches <code>attribute name</code>),
+         * with <code>attribute value</code>.</li>
+         * </ul>
+         * </li>
+         * <p><b>JavaScript Processing</b></p>
+         * <li>If an <code>&lt;eval&gt;</code> element is found in the response:
+         * <pre><code>&lt;eval&gt;
+         *    &lt;![CDATA[...JavaScript...]]&gt;
+         * &lt;/eval&gt;</code></pre>
+         * <ul>
+         * <li>Extract this <code>&lt;eval&gt;</code> element's <code>CDATA</code> contents
+         * from the response and execute it as if it were JavaScript code.</li>
+         * </ul>
+         * </li>
+         * <p><b>Redirect Processing</b></p>
+         * <li>If a <code>&lt;redirect&gt;</code> element is found in the response:
+         * <pre><code>&lt;redirect url="redirect url"/&gt;</code></pre>
+         * Cause a redirect to the url <code>redirect url</code>.</li>
+         * <p><b>Error Processing</b></p>
+         * <li>If an <code>&lt;error&gt;</code> element is found in the response:
+         * <pre><code>&lt;error&gt;
+         *    &lt;error-class&gt;..fully qualified class name string...&lt;error-class&gt;
+         *    &lt;error-message&gt;&lt;![CDATA[...]]&gt;&lt;error-message&gt;
+         * &lt;/error&gt;</code></pre>
+         * Extract this <code>&lt;error&gt;</code> element's <code>error-class</code> contents
+         * and the <code>error-message</code> contents.  These identify the Java class that
+         * caused the error, and the exception message, respectively.
+         * This is an error from the server, and implementations can use this information
+         * as needed.</li>
+         * <p><b>Extensions</b></p>
+         * <li>The <code>&lt;extensions&gt;</code> element provides a way for framework
+         * implementations to provide their own information.</li>
+         * </ul>
+         *
+         * </p>
+         *
+         * @param request The <code>XMLHttpRequest</code> instance that
+         * contains the status code and response message from the server.
+         *
+         * @throws EmptyResponse error if request contains no data
+         *
+         * @function jsf.ajax.response
+         */
+        response: function(request) {
+            //  RELEASE_PENDING: We need to add more robust error handing - this error should probably be caught upstream
+            if (request === null || typeof request === 'undefined') {
+                throw new Error("jsf.ajax.response: Request is null");
+            }
+
+            var utils = jsf.Utils;
+            var xmlReq = request;
+
+            var xml = xmlReq.responseXML;
+            //  RELEASE_PENDING: We need to add more robust error handing - this error should probably be caught upstream
+            if (xml === null) {
+                throw new Error("jsf.ajax.response: Reponse contains no data");
+            }
+
+            var id, content, markup, str, state;
+
+            //////////////////////
+            // Check for updates..
+            //////////////////////
+
+            var update = xml.getElementsByTagName('update');
+
+            for (var i = 0; i < update.length; i++) {
+                id = update[i].getAttribute('id');
+                if (id === "javax.faces.ViewState") {
+                    state = state || update[i].firstChild;
+                    continue;
+                }
+                // join the CDATA sections in the markup
+                markup = '';
+                for (var j = 0; j < update[i].childNodes.length; j++) {
+                    content = update[i].childNodes[j];
+                    markup += content.text || content.data;
+                }
+                str = utils.stripScripts(markup);
+                var src = str;
+
+                // If our special render all markup is present..
+                if (-1 != id.indexOf("javax.faces.ViewRoot")) {
+                    // if src contains <html>, trim the <html> and </html>, if present.
+                    //   if src contains <head>
+                    //      extract the contents of <head> and replace current document's
+                    //      <head> with the contents.
+                    //   if src contains <body>
+                    //      extract the contents of <body> and replace the current
+                    //      document's <body> with the contents.
+                    //   if src does not contain <body>
+                    //      replace the current document's <body> with the contents.
+                    var
+                            htmlStartEx = new RegExp("< *html.*>", "gi"),
+                            htmlEndEx = new RegExp("< */ *html.*>", "gi"),
+                            headStartEx = new RegExp("< *head.*>", "gi"),
+                            headEndEx = new RegExp("< */ *head.*>", "gi"),
+                            bodyStartEx = new RegExp("< *body.*>", "gi"),
+                            bodyEndEx = new RegExp("< */ *body.*>", "gi"),
+                            htmlStart, htmlEnd, headStart, headEnd, bodyStart, bodyEnd;
+                    var srcHead = null, srcBody = null;
+                    // find the current document's "body" element
+                    var docBody = document.getElementsByTagName("body")[0];
+                    // if src contains <html>
+                    if (null != (htmlStart = htmlStartEx.exec(src))) {
+                        // if src contains </html>
+                        if (null != (htmlEnd = htmlEndEx.exec(src))) {
+                            src = src.substring(htmlStartEx.lastIndex, htmlEnd.index);
+                        } else {
+                            src = src.substring(htmlStartEx.lastIndex);
+                        }
+                    }
+                    // if src contains <head>
+                    if (null != (headStart = headStartEx.exec(src))) {
+                        // if src contains </head>
+                        if (null != (headEnd = headEndEx.exec(src))) {
+                            srcHead = src.substring(headStartEx.lastIndex,
+                                    headEnd.index);
+                        } else {
+                            srcHead = src.substring(headStartEx.lastIndex);
+                        }
+                        // find the "head" element
+                        var docHead = document.getElementsByTagName("head")[0];
+                        if (docHead) {
+                            utils.elementReplace(docHead, "head", srcHead);
+                        }
+                    }
+                    // if src contains <body>
+                    if (null != (bodyStart = bodyStartEx.exec(src))) {
+                        // if src contains </body>
+                        if (null != (bodyEnd = bodyEndEx.exec(src))) {
+                            srcBody = src.substring(bodyStartEx.lastIndex,
+                                    bodyEnd.index);
+                        } else {
+                            srcBody = src.substring(bodyStartEx.lastIndex);
+                        }
+                        utils.elementReplace(docBody, "body", srcBody);
+                    }
+                    if (!srcBody) {
+                        utils.elementReplace(docBody, "body", src);
+                    }
+
+                } else {
+                    var d = utils.$(id);
+                    if (!d) {
+                        throw new Error("jsf.ajax.response: " + id + " not found");
+                    }
+                    var parent = d.parentNode;
+                    var temp = document.createElement('div');
+                    temp.id = d.id;
+                    temp.innerHTML = utils.trim(str);
+
+                    parent.replaceChild(temp.firstChild, d);
+                }
+            }
+
+            //////////////////////
+            // Check For Inserts.
+            //////////////////////
+
+            //////////////////////
+            // Check For Deletes.
+            //////////////////////
+
+            //////////////////////
+            // Update Attributes.
+            //////////////////////
+
+            //////////////////////
+            // JavaScript Eval.
+            //////////////////////
+
+            //////////////////////
+            // Redirect.
+            //////////////////////
+
+            //////////////////////
+            // Error.
+            //////////////////////
+
+            // Now set the view state from the server into the DOM
+            // If there are multiple forms, make sure they all have a
+            // viewState hidden field.
+
+            if (state) {
+                var stateElem = utils.$("javax.faces.ViewState");
+                if (stateElem) {
+                    stateElem.value = state.text || state.data;
+                }
+                var numForms = document.forms.length;
+                var field;
+                for (var k = 0; k < numForms; k++) {
+                    field = document.forms[k].elements["javax.faces.ViewState"];
+                    if (typeof field == 'undefined') {
+                        field = document.createElement("input");
+                        field.type = "hidden";
+                        field.name = "javax.faces.ViewState";
+                        document.forms[k].appendChild(field);
+                    }
+                    field.value = state.text || state.data;
+                }
+            }
         }
     }
 }();
-
-/**
- * <p>Receive an Ajax response from the server.
- * This function must evaluate the markup returned in the
- * <code>responseXML</code> object and update the <code>DOM</code>
- * as follows:
- * <ul>
- * <p><b>Update Element Processing</b></p>
- * <li>If an <code>update</code> element is found in the response
- * with the identifier <code>javax.faces.ViewRoot</code>:
- * <pre><code>&lt;update id="javax.faces.ViewRoot"&gt;
- *    &lt;![CDATA[...]]&gt;
- * &lt;/update&gt;</code></pre>
- * Update the entire DOM as follows:
- * <ul>
- * <li>Extract the <code>CDATA</code> content and trim the &lt;html&gt;
- * and &lt;/html&gt; from the <code>CDATA</code> content if it is present.</li>
- * <li>If the <code>CDATA</code> content contains a &lt;head&gt; element,
- * and the document has a <code>&lt;head&gt;</code> section, extract the
- * contents of the &lt;head&gt; element from the <code>&lt;update&gt;</code>
- * element's <code>CDATA</code> content and replace the document's &lt;head&gt;
- * section with this contents.</li>
- * <li>If the <code>CDATA</code> content contains a &lt;body&gt; element,
- * and the document has a <code>&lt;body&gt;</code> section, extract the contents
- * of the &lt;body&gt; element from the <code>&lt;update&gt;</code>
- * element's <code>CDATA</code> content and replace the document's &lt;body&gt;
- * section with this contents.</li>
- * <li>If the <code>CDATA</code> content does not contain a &lt;body&gt; element,
- * replace the document's &lt;body&gt; section with the <code>CDATA</code>
- * contents.</li>
- * </ul>
- * <li>If an <code>update</code> element is found in the response with the identifier
- * <code>javax.faces.ViewState</code>:
- * <pre><code>&lt;update id="javax.faces.ViewState"&gt;
- *    &lt;![CDATA[...]]&gt;
- * &lt;/update&gt;</code></pre>
- * Include this <code>state</code> in the document as follows:
- * <ul>
- * <li>Extract this <code>&lt;update&gt;</code> element's <code>CDATA</code> contents
- * from the response.</li>
- * <li>If the document contains an element with the identifier
- * <code>javax.faces.ViewState</code> replace its contents with the
- * <code>CDATA</code> contents.</li>
- * <li>For each <code>&lt;form&gt;</code> element in the document:
- * <ul>
- * <li>If the <code>&lt;form&gt;</code> element contains an <code>&lt;input&gt;</code>
- * element with the identifier <code>javax.faces.ViewState</code>, replace the
- * <code>&lt;input&gt;</code> element contents with the <code>&lt;update&gt;</code>
- * element's <code>CDATA</code> contents.</li>
- * <li>If the <code>&lt;form&gt;</code> element does not contain an element with
- * the identifier <code>javax.faces.ViewState</code>, create an
- * <code>&lt;input&gt;</code> element of the type <code>hidden</code>,
- * with the identifier <code>javax.faces.ViewState</code>, set its contents
- * to the <code>&lt;update&gt;</code> element's <code>CDATA</code> contents, and
- * add the <code>&lt;input&gt;</code> element as a child to the
- * <code>&lt;form&gt;</code> element.</li>
- * </ul>
- * </li>
- * </ul>
- * </li>
- * <li>For any other <code>&lt;update&gt;</code> element:
- * <pre><code>&lt;update id="update id"&gt;
- *    &lt;![CDATA[...]]&gt;
- * &lt;/update&gt;</code></pre>
- * Find the DOM element with the identifier that matches the
- * <code>&lt;update&gt;</code> element identifier, and replace its contents with
- * the <code>&lt;update&gt;</code> element's <code>CDATA</code> contents.</li>
- * </li>
- * <p><b>Insert Element Processing</b></p>
- * <li>If an <code>&lt;input&gt;</code> element is found in the response with the
- * attribute <code>before</code>:
- * <pre><code>&lt;insert id="insert id" before="before id"&gt;
- *    &lt;![CDATA[...]]&gt;
- * &lt;/insert&gt;</code></pre>
- * <ul>
- * <li>Extract this <code>&lt;input&gt;</code> element's <code>CDATA</code> contents
- * from the response.</li>
- * <li>Find the DOM element whose identifier matches <code>before id</code> and insert
- * the <code>&lt;input&gt;</code> element's <code>CDATA</code> content before
- * the DOM element in the document.</li>
- * </ul>
- * </li>
- * <li>If an <code>&lt;input&gt;</code> element is found in the response with the
- * attribute <code>after</code>:
- * <pre><code>&lt;insert id="insert id" after="after id"&gt;
- *    &lt;![CDATA[...]]&gt;
- * &lt;/insert&gt;</code></pre>
- * <ul>
- * <li>Extract this <code>&lt;input&gt;</code> element's <code>CDATA</code> contents
- * from the response.</li>
- * <li>Find the DOM element whose identifier matches <code>after id</code> and insert
- * the <code>&lt;input&gt;</code> element's <code>CDATA</code> content after
- * the DOM element in the document.</li>
- * </ul>
- * </li>
- * <p><b>Delete Element Processing</b></p>
- * <li>If a <code>&lt;delete&gt;</code> element is found in the response:
- * <pre><code>&lt;delete id="delete id"/&gt;</code></pre>
- * Find the DOM element whose identifier matches <code>delete id</code> and remove it
- * from the DOM.</li>
- * <p><b>Element Attribute Update Processing</b></p>
- * <li>If an <code>&lt;attributes&gt;</code> element is found in the response:
- * <pre><code>&lt;attributes id="id of element with attribute"&gt;
- *    &lt;attribute name="attribute name" value="attribute value"&gt;
- *    ...
- * &lt/attributes&gt;</code></pre>
- * <ul>
- * <li>Find the DOM element that matches the <code>&lt;attributes&gt;</code> identifier.</li>
- * <li>For each nested <code>&lt;attribute&gt;</code> element in <code>&lt;attribute&gt;</code>,
- * update the DOM element attribute value (whose name matches <code>attribute name</code>),
- * with <code>attribute value</code>.</li>
- * </ul>
- * </li>
- * <p><b>JavaScript Processing</b></p>
- * <li>If an <code>&lt;eval&gt;</code> element is found in the response:
- * <pre><code>&lt;eval&gt;
- *    &lt;![CDATA[...JavaScript...]]&gt;
- * &lt;/eval&gt;</code></pre>
- * <ul>
- * <li>Extract this <code>&lt;eval&gt;</code> element's <code>CDATA</code> contents
- * from the response and execute it as if it were JavaScript code.</li>
- * </ul>
- * </li>
- * <p><b>Redirect Processing</b></p>
- * <li>If a <code>&lt;redirect&gt;</code> element is found in the response:
- * <pre><code>&lt;redirect url="redirect url"/&gt;</code></pre>
- * Cause a redirect to the url <code>redirect url</code>.</li>
- * <p><b>Error Processing</b></p>
- * <li>If an <code>&lt;error&gt;</code> element is found in the response:
- * <pre><code>&lt;error&gt;
- *    &lt;error-class&gt;..fully qualified class name string...&lt;error-class&gt;
- *    &lt;error-message&gt;&lt;![CDATA[...]]&gt;&lt;error-message&gt;
- * &lt;/error&gt;</code></pre>
- * Extract this <code>&lt;error&gt;</code> element's <code>error-class</code> contents
- * and the <code>error-message</code> contents.  These identify the Java class that
- * caused the error, and the exception message, respectively.
- * This is an error from the server, and implementations can use this information
- * as needed.</li>
- * <p><b>Extensions</b></p>
- * <li>The <code>&lt;extensions&gt;</code> element provides a way for framework
- * implementations to provide their own information.</li>
- * </ul>
- *
- * </p>
- *
- * @param request The <code>XMLHttpRequest</code> instance that
- * contains the status code and response message from the server.
- *
- * @throws EmptyResponse error if request contains no data
- *
- * @function jsf.ajax.response
- */
-jsf.ajax.response = function(request) {
-
-    //  RELEASE_PENDING: We need to add more robust error handing - this error should probably be caught upstream
-    if (request === null || typeof request === 'undefined') {
-        throw new Error("jsf.ajax.response: Request is null");
-    }
-
-    var utils = jsf.Utils;
-    var xmlReq = request;
-
-    var xml = xmlReq.responseXML;
-    //  RELEASE_PENDING: We need to add more robust error handing - this error should probably be caught upstream
-    if (xml === null) {
-        throw new Error("jsf.ajax.response: Reponse contains no data");
-    }
-
-    var id, content, markup, str, state;
-
-    //////////////////////
-    // Check for updates..
-    //////////////////////
-
-    var update = xml.getElementsByTagName('update');
-
-    for (var i = 0; i < update.length; i++) {
-        id = update[i].getAttribute('id');
-        if (id === "javax.faces.ViewState") {
-            state = state || update[i].firstChild;
-            continue;
-        }
-        // join the CDATA sections in the markup
-        markup = '';
-        for (var j = 0; j < update[i].childNodes.length; j++) {
-            content = update[i].childNodes[j];
-            markup += content.text || content.data;
-        }
-        str = utils.stripScripts(markup);
-        var src = str;
-
-        // If our special render all markup is present..
-        if (-1 != id.indexOf("javax.faces.ViewRoot")) {
-            // if src contains <html>, trim the <html> and </html>, if present.
-            //   if src contains <head>
-            //      extract the contents of <head> and replace current document's
-            //      <head> with the contents.
-            //   if src contains <body>
-            //      extract the contents of <body> and replace the current
-            //      document's <body> with the contents.
-            //   if src does not contain <body>
-            //      replace the current document's <body> with the contents.
-            var
-                    htmlStartEx = new RegExp("< *html.*>", "gi"),
-                    htmlEndEx = new RegExp("< */ *html.*>", "gi"),
-                    headStartEx = new RegExp("< *head.*>", "gi"),
-                    headEndEx = new RegExp("< */ *head.*>", "gi"),
-                    bodyStartEx = new RegExp("< *body.*>", "gi"),
-                    bodyEndEx = new RegExp("< */ *body.*>", "gi"),
-                    htmlStart, htmlEnd, headStart, headEnd, bodyStart, bodyEnd;
-            var srcHead = null, srcBody = null;
-            // find the current document's "body" element
-            var docBody = document.getElementsByTagName("body")[0];
-            // if src contains <html>
-            if (null != (htmlStart = htmlStartEx.exec(src))) {
-                // if src contains </html>
-                if (null != (htmlEnd = htmlEndEx.exec(src))) {
-                    src = src.substring(htmlStartEx.lastIndex, htmlEnd.index);
-                } else {
-                    src = src.substring(htmlStartEx.lastIndex);
-                }
-            }
-            // if src contains <head>
-            if (null != (headStart = headStartEx.exec(src))) {
-                // if src contains </head>
-                if (null != (headEnd = headEndEx.exec(src))) {
-                    srcHead = src.substring(headStartEx.lastIndex,
-                            headEnd.index);
-                } else {
-                    srcHead = src.substring(headStartEx.lastIndex);
-                }
-                // find the "head" element
-                var docHead = document.getElementsByTagName("head")[0];
-                if (docHead) {
-                    utils.elementReplace(docHead, "head", srcHead);
-                }
-            }
-            // if src contains <body>
-            if (null != (bodyStart = bodyStartEx.exec(src))) {
-                // if src contains </body>
-                if (null != (bodyEnd = bodyEndEx.exec(src))) {
-                    srcBody = src.substring(bodyStartEx.lastIndex,
-                            bodyEnd.index);
-                } else {
-                    srcBody = src.substring(bodyStartEx.lastIndex);
-                }
-                utils.elementReplace(docBody, "body", srcBody);
-            }
-            if (!srcBody) {
-                utils.elementReplace(docBody, "body", src);
-            }
-
-        } else {
-            var d = utils.$(id);
-            if (!d) {
-                throw new Error("jsf.ajax.response: " + id + " not found");
-            }
-            var parent = d.parentNode;
-            var temp = document.createElement('div');
-            temp.id = d.id;
-            temp.innerHTML = utils.trim(str);
-
-            parent.replaceChild(temp.firstChild, d);
-        }
-    }
-
-    //////////////////////
-    // Check For Inserts.
-    //////////////////////
-
-    //////////////////////
-    // Check For Deletes.
-    //////////////////////
-
-    //////////////////////
-    // Update Attributes.
-    //////////////////////
-
-    //////////////////////
-    // JavaScript Eval.
-    //////////////////////
-
-    //////////////////////
-    // Redirect.
-    //////////////////////
-
-    //////////////////////
-    // Error.
-    //////////////////////
-
-    // Now set the view state from the server into the DOM
-    // If there are multiple forms, make sure they all have a
-    // viewState hidden field.
-
-    if (state) {
-        var stateElem = utils.$("javax.faces.ViewState");
-        if (stateElem) {
-            stateElem.value = state.text || state.data;
-        }
-        var numForms = document.forms.length;
-        var field;
-        for (var k = 0; k < numForms; k++) {
-            field = document.forms[k].elements["javax.faces.ViewState"];
-            if (typeof field == 'undefined') {
-                field = document.createElement("input");
-                field.type = "hidden";
-                field.name = "javax.faces.ViewState";
-                document.forms[k].appendChild(field);
-            }
-            field.value = state.text || state.data;
-        }
-    }
-};
-
 
 /**
  *
