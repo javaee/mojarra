@@ -2265,45 +2265,54 @@
       <ul>
 
       <p>The only valid children of this component are
-      <code>UISelectItem</code> or <code>UISelectItems</code> instances.
-      Iterate over the children of this component, and accrue a list of
-      <code>javax.faces.model.SelectItem</code> instances.  If the
-      current child is a <code>UISelectItem</code> create a
-      <code>SelectItem</code>instance from its <code>itemValue,
-      itemLabel</code> and <code>itemDescription</code> properties, add
-      it to the list.  If the current child is a
-      <code>UISelectItems</code> instance, call its
-      <code>getValue()</code> method.  If the result is a
+      <code>UISelectItem</code> or <code>UISelectItems</code>
+      instances. Iterate over the children of this component, and accrue
+      a list of <code>javax.faces.model.SelectItem</code> instances.
+      <span class="changed_added_2_0">If the current child is a
+      <code>SelectItem</code> whose <code>noSelctionProperty</code> is
+      <code>true</code>, <b>and</b> the <code>UISelectOne</code> or
+      <code>UISelectMany</code> parent of this option has one or more
+      selected values that <b>are not</b> the "no selection"
+      <code>SelectItem</code>, <b>and</b> the component has a
+      "hideNoSelectionLabel" attribute whose value is <code>true</code>,
+      then the current option, which is the "no selection" option, must
+      not be rendered.</span> If the current child is a
+      <code>UISelectItem</code> create a <code>SelectItem</code>instance
+      from its <code>itemValue, itemLabel</code> and
+      <code>itemDescription</code> properties, add it to the list.  If
+      the current child is a <code>UISelectItems</code> instance, call
+      its <code>getValue()</code> method.  If the result is a
       <code>SelectItem</code> bean, add it to the list.  If the result
       is an array of <code>SelectItem</code> beans, add each one to the
       list.  If the result is a <code>Collection</code> of
       <code>SelectItem</code> beans, add each one to the list.  If the
-      result is a <code>Map</code>, create a <code>SelectItem</code> bean
-      for each entry in the <code>Map</code> using the key as the label,
-      the value as the value, and <code>null</code> as the description.
-      Iterate over the list of <code>SelectItem</code> beans.  If the
-      current element is a <code>SelectItemGroup</code>, render an
-      "optgroup" element with a "label" attribute, the value of which is
-      the "label" property from the current element, then call
-      <code>getSelectItems()</code> and render each element as below.
-      If the current element is not a <code>SelectItemGroup</code>,
-      render an "option" element.  Follow the conversion rules in the
-      spec to obtain a renderable <code>String</code> from the "value"
-      property of the current element, render that as the value of the
-      "value" atribute.  Now it is time to see if the current element is
-      the selected value.  Call its
-      <code>getSubmittedValue()</code> method, casting the result to an
-      <code>Object []</code>, otherwise the component must be a
+      result is a <code>Map</code>, create a <code>SelectItem</code>
+      bean for each entry in the <code>Map</code> using the key as the
+      label, the value as the value, and <code>null</code> as the
+      description.  Iterate over the list of <code>SelectItem</code>
+      beans.  If the current element is a <code>SelectItemGroup</code>,
+      render an "optgroup" element with a "label" attribute, the value
+      of which is the "label" property from the current element, then
+      call <code>getSelectItems()</code> and render each element as
+      below.  If the current element is not a
+      <code>SelectItemGroup</code>, render an "option" element.  Follow
+      the conversion rules in the spec to obtain a renderable
+      <code>String</code> from the "value" property of the current
+      element, render that as the value of the "value" atribute.  Now it
+      is time to see if the current element is the selected value.  Call
+      its <code>getSubmittedValue()</code> method, casting the result to
+      an <code>Object []</code>, otherwise the component must be a
       <code>UISelectOne</code> instance, call its
       <code>getSubmittedValue()</code> method and create an <code>Object
-      []</code> around the result.  Determine the type of the resultant array
-      if the resultant array is non-null, otherwise the type is <code>String</code>.
-      Coerce the current item value to this type following the Expression
-      Language coercion rules.  If the resultant array is non-null,
-      we look in the array for a value that, when we pass the renderable
-      value to its <code>equals()</code> method, it returns
-      <code>true</code>, meaning the current element is selected.  If
-      the resultant array is <code>null</code>, if the component is a
+      []</code> around the result.  Determine the type of the resultant
+      array if the resultant array is non-null, otherwise the type is
+      <code>String</code>.  Coerce the current item value to this type
+      following the Expression Language coercion rules.  If the
+      resultant array is non-null, we look in the array for a value
+      that, when we pass the renderable value to its
+      <code>equals()</code> method, it returns <code>true</code>,
+      meaning the current element is selected.  If the resultant array
+      is <code>null</code>, if the component is a
       <code>UISelectMany</code>, call its <code>getValue()</code>
       method.  If the result is a <code>List</code> obtain the values in
       the list as an array.  Otherwise, the component must be a
@@ -2441,6 +2450,20 @@
             <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="listbox-attrs.xml" xpointer="xpointer(/root/*)"/>
+	    <attribute>
+		<description>
+		  Flag indicating that, if this component is activated by the user,
+		  The "no selection option", if any, must be hidden.
+		</description>
+		<display-name>Hide "No Selection" Option</display-name>
+		<icon></icon>
+		<attribute-name>hideNoSelectionOption</attribute-name>
+		<attribute-class>boolean</attribute-class>
+		<attribute-extension>
+		    <value-expression-enabled>true</value-expression-enabled>
+		    <jsp-ignore>true</jsp-ignore>
+		</attribute-extension>
+	    </attribute>
 
             <renderer-extension>
                 <renders-children>true</renders-children>
@@ -2492,6 +2515,20 @@
             <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="menu-attrs.xml" xpointer="xpointer(/root/*)"/>
+	    <attribute>
+		<description>
+		  Flag indicating that, if this component is activated by the user,
+		  The "no selection option", if any, must be hidden.
+		</description>
+		<display-name>Hide "No Selection" Option</display-name>
+		<icon></icon>
+		<attribute-name>hideNoSelectionOption</attribute-name>
+		<attribute-class>boolean</attribute-class>
+		<attribute-extension>
+		    <value-expression-enabled>true</value-expression-enabled>
+		    <jsp-ignore>true</jsp-ignore>
+		</attribute-extension>
+	    </attribute>
 
             <renderer-extension>
                 <renders-children>true</renders-children>
