@@ -1094,15 +1094,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         return qString;
     };
 
-
-    /**
-     * A String value which represents the current clientID separator character.
-     */
-    jsf.separator = function() {
-        // RELEASE_PENDING : Still needs to be wired to the back end
-        return ":";
-    }();
-
     /**
      * An integer specifying the specification version that this file implements.
      * It's format is: rightmost two digits, bug release number, next two digits,
