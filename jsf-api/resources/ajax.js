@@ -86,7 +86,7 @@ jsf.ajax = function() {
     var eventListeners = [];
     var errorListeners = [];
 
-    var getTransport = function() {
+    var getTransport = function getTransport() {
         var methods = [
             function() {
                 return new XMLHttpRequest();
@@ -111,8 +111,135 @@ jsf.ajax = function() {
         throw new Error('Could not create an XHR object.');
     };
 
+    var $ = function $() {
+        var results = [], element;
+        for (var i = 0; i < arguments.length; i++) {
+            element = arguments[i];
+            if (typeof element == 'string')
+                element = document.getElementById(element);
+            results.push(element);
+        }
+        return results.length > 1 ? results : results[0];
+        ;
+    };
 
-    var Queue = new function() {
+    var getForm = function getForm(element) {
+        if (element) {
+            var form = $(element);
+            while (form && form.tagName && form.tagName.toLowerCase() !== 'form') {
+                if (form.form) {
+                    return form.form;
+                }
+                if (form.parentNode) {
+                    form = form.parentNode;
+                } else {
+                    form = null;
+                }
+                if (form) {
+                    return form;
+                }
+            }
+            return document.forms[0];
+        }
+        return null;
+    };
+
+    // Remove trailing and leading whitespace
+    var trim = function trim(str) {
+        return str.replace(/^\s+/g, "").replace(/\s+$/g, "");
+    };
+
+    // Split a delimited string into an array, trimming whitespace
+    // @param s String to split
+    // @param e delimiter character - cannot be a space
+    var toArray = function toArray(s, e) {
+        var sarray;
+        if (typeof s === 'string') {
+            sarray = s.split((e) ? e : ' ');
+            for (var i = 0; i < sarray.length; i++) {
+                sarray[i] = trim(sarray[i]);
+            }
+        }
+        return sarray;
+    };
+
+    var isInArray = function isInArray(array, value) {
+        for (var i = 0; i < array.length; i++) {
+            if (array[i] === value) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+
+    var elementReplace = function elementReplace(d, tempTagName, src) {
+        var parent = d.parentNode;
+        var temp = document.createElement(tempTagName);
+        var result = null;
+        temp.id = d.id;
+
+        // If we are creating a head element...
+        if (-1 != d.tagName.toLowerCase().indexOf("head") && d.tagName.length == 4) {
+
+            // head replacement only appears to work on firefox.
+            if (-1 == BrowserDetect.browser.indexOf("Firefox")) {
+                return result;
+            }
+
+            // Strip link elements from src.
+            if (-1 != src.indexOf("link")) {
+                var
+                        linkStartEx = new RegExp("< *link.*>", "gi");
+                var linkStart;
+                while (null != (linkStart = linkStartEx.exec(src))) {
+                    src = src.substring(0, linkStart.index) +
+                          src.substring(linkStartEx.lastIndex);
+                    linkStartEx.lastIndex = 0;
+                }
+            }
+
+            // Strip style elements from src
+            if (-1 != src.indexOf("style")) {
+                var
+                        styleStartEx = new RegExp("< *style.*>", "gi"),
+                        styleEndEx = new RegExp("< */ *style.*>", "gi");
+                var styleStart, styleEnd;
+                while (null != (styleStart = styleStartEx.exec(src))) {
+                    styleEnd = styleEndEx.exec(src);
+                    src = src.substring(0, styleStart.index) +
+                          src.substring(styleStartEx.lastIndex);
+                    styleStartEx.lastIndex = 0;
+                }
+            }
+
+            temp.innerHTML = src;
+
+            // clone all the link elements...
+            var i, links, styles;
+            links = d.getElementsByTagName("link");
+            if (links) {
+                for (i = 0; i < links.length; i++) {
+                    temp.appendChild(links[i].cloneNode(true));
+                }
+            }
+            // then clone all the style elements.
+            styles = d.getElementsByTagName("style");
+            if (styles) {
+                for (i = 0; i < styles.length; i++) {
+                    temp.appendChild(styles[i].cloneNode(true));
+                }
+            }
+        } else {
+            temp.innerHTML = src;
+        }
+
+        result = temp;
+        parent.replaceChild(temp, d);
+        return result;
+    };
+
+    var Queue = new function Queue() {
 
         // Create the internal queue
         var queue = [];
@@ -191,7 +318,7 @@ jsf.ajax = function() {
     }();
 
 
-    var AjaxEngine = function() {
+    var AjaxEngine = function AjaxEngine() {
 
         var req = {};                  // Request Object
         req.url = null;                // Request URL
@@ -335,7 +462,7 @@ jsf.ajax = function() {
         return req;
     };
 
-    var onError = function(request, name) {
+    var onError = function onError(request, name) {
 
         var func; // String to hold function to execute
         var data = {};  // data payload for function
@@ -382,7 +509,7 @@ jsf.ajax = function() {
         }
     };
 
-    var onEvent = function(request, name) {
+    var onEvent = function onEvent(request, name) {
 
         var func; // variable to hold function string to execute
         var data = {};
@@ -419,7 +546,7 @@ jsf.ajax = function() {
          * @member jsf.ajax
          * @param {String} callback string representing a function to call on an error
          */
-        onError: function(callback) {
+        onError: function onError(callback) {
             errorListeners[errorListeners.length] = callback;
         },
         /**
@@ -427,7 +554,7 @@ jsf.ajax = function() {
          * @member jsf.ajax
          * @param {String} callback string representing a function to call on an event
          */
-        onEvent: function(callback) {
+        onEvent: function onEvent(callback) {
             eventListeners[eventListeners.length] = callback;
         },
         /**
@@ -542,7 +669,7 @@ jsf.ajax = function() {
          * @function jsf.ajax.request
          * @throws ArgNotSet Error if first required argument <code>element</code> is not specified
          */
-        request: function(element, event, options) {
+        request: function request(element, event, options) {
 
             if (typeof(options) === 'undefined' || options === null) {
                 options = {};
@@ -570,8 +697,7 @@ jsf.ajax = function() {
             // Capture the element that triggered this Ajax request.
             var source = element;
 
-            var utils = jsf.Utils;
-            var form = utils.getForm(source);
+            var form = getForm(source);
             var viewState = jsf.getViewState(form);
 
             // Set up additional arguments to be used in the request..
@@ -582,28 +708,37 @@ jsf.ajax = function() {
 
             var args = {};
 
+            // RELEASE_PENDING Get rid of commas.  It's supposed to be spaces.
             if (options.execute) {
-                var temp = utils.toArray(options.execute, ',');
-                if (!utils.isInArray(temp, source.name)) {
+                var temp = toArray(options.execute, ',');
+                // RELEASE_PENDING remove isInArray function
+                if (!isInArray(temp, source.name)) {
                     options.execute = source.name + "," + options.execute;
                 }
             } else {
                 options.execute = source.id;
             }
 
-            args["javax.faces.partial.execute"] = utils.toArray(options.execute, ',').join(',');
-            options.execute = null;
+            args["javax.faces.partial.execute"] = toArray(options.execute, ',').join(',');
             if (options.render) {
-                args["javax.faces.partial.render"] = utils.toArray(options.render, ',').join(',');
-                options.render = null;
+                args["javax.faces.partial.render"] = toArray(options.render, ',').join(',');
             }
-            utils.extend(args, options);
+
+            // remove non-passthrough options
+            delete options.execute;
+            delete options.render;
+            delete options.onError;
+            delete options.onEvent;
+            // copy all other options to args
+            for (var property in options) {
+                args[property] = options[property];
+            }
 
             args["javax.faces.partial.ajax"] = "true";
             args["method"] = "POST";
             args["url"] = form.action;
             // add source
-            var action = utils.$(source);
+            var action = $(source);
             if (action && action.form) {
                 args[action.name] = action.value || 'x';
             } else {
@@ -768,13 +903,12 @@ jsf.ajax = function() {
          *
          * @function jsf.ajax.response
          */
-        response: function(request) {
+        response: function response(request) {
             //  RELEASE_PENDING: We need to add more robust error handing - this error should probably be caught upstream
             if (request === null || typeof request === 'undefined') {
                 throw new Error("jsf.ajax.response: Request is null");
             }
 
-            var utils = jsf.Utils;
             var xmlReq = request;
 
             var xml = xmlReq.responseXML;
@@ -803,7 +937,10 @@ jsf.ajax = function() {
                     content = update[i].childNodes[j];
                     markup += content.text || content.data;
                 }
-                str = utils.stripScripts(markup);
+
+                // RELEASE_PENDING - doc what this does
+                str = markup.replace(new RegExp('(?:<script.*?>)((\n|\r|.)*?)(?:<\/script>)', 'img'), '');
+
                 var src = str;
 
                 // If our special render all markup is present..
@@ -849,7 +986,7 @@ jsf.ajax = function() {
                         // find the "head" element
                         var docHead = document.getElementsByTagName("head")[0];
                         if (docHead) {
-                            utils.elementReplace(docHead, "head", srcHead);
+                            elementReplace(docHead, "head", srcHead);
                         }
                     }
                     // if src contains <body>
@@ -861,21 +998,21 @@ jsf.ajax = function() {
                         } else {
                             srcBody = src.substring(bodyStartEx.lastIndex);
                         }
-                        utils.elementReplace(docBody, "body", srcBody);
+                        elementReplace(docBody, "body", srcBody);
                     }
                     if (!srcBody) {
-                        utils.elementReplace(docBody, "body", src);
+                        elementReplace(docBody, "body", src);
                     }
 
                 } else {
-                    var d = utils.$(id);
+                    var d = $(id);
                     if (!d) {
                         throw new Error("jsf.ajax.response: " + id + " not found");
                     }
                     var parent = d.parentNode;
                     var temp = document.createElement('div');
                     temp.id = d.id;
-                    temp.innerHTML = utils.trim(str);
+                    temp.innerHTML = trim(str);
 
                     parent.replaceChild(temp.firstChild, d);
                 }
@@ -910,7 +1047,7 @@ jsf.ajax = function() {
             // viewState hidden field.
 
             if (state) {
-                var stateElem = utils.$("javax.faces.ViewState");
+                var stateElem = $("javax.faces.ViewState");
                 if (stateElem) {
                     stateElem.value = state.text || state.data;
                 }
