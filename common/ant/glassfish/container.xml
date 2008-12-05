@@ -189,8 +189,8 @@ grant {
     </target>
     <target name="container.restart"
             description="Stop the GlassFish container">
-        <container.start/>
         <container.stop/>
+        <container.start/>
     </target>
     <macrodef name="container.start"
             description="Start the GlassFish container">
