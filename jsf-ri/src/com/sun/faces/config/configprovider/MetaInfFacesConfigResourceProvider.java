@@ -42,6 +42,7 @@ package com.sun.faces.config.configprovider;
 
 import com.sun.faces.util.Util;
 import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.facelets.util.Classpath;
 
 import javax.faces.FacesException;
 import javax.servlet.ServletContext;
@@ -54,6 +55,9 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.Collection;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Arrays;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -95,12 +99,9 @@ public class MetaInfFacesConfigResourceProvider implements ConfigurationResource
         List<URL> unsortedResourceList = new ArrayList<URL>();
 
         try {
-            for (Enumeration<URL> items = Util.getCurrentLoader(this)
-                  .getResources(META_INF_RESOURCES);
-                 items.hasMoreElements();) {
+            for (URL url : loadURLs()) {
 
-                URL nextElement = items.nextElement();
-                String jarUrl = nextElement.toString();
+                String jarUrl = url.toString();
                 String jarName = null;
                 Matcher m = JAR_PATTERN.matcher(jarUrl);
                 if (m.matches()) {
@@ -113,9 +114,9 @@ public class MetaInfFacesConfigResourceProvider implements ConfigurationResource
                             jarName = m.group(1);
                         }
                     }
-                    sortedJarMap.put(jarName, nextElement);
+                    sortedJarMap.put(jarName, url);
                 } else {
-                    unsortedResourceList.add(0, nextElement);
+                    unsortedResourceList.add(0, url);
                 }
             }
         } catch (IOException e) {
@@ -131,6 +132,22 @@ public class MetaInfFacesConfigResourceProvider implements ConfigurationResource
         // Then load the unsorted resources
         result.addAll(unsortedResourceList);
         return result;
+        
+    }
+
+
+    // --------------------------------------------------------- Private Methods
+
+
+    private Collection<URL> loadURLs() throws IOException {
+
+        Set<URL> urls = new HashSet<URL>();
+        for (Enumeration<URL> e = Util.getCurrentLoader(this).getResources(META_INF_RESOURCES); e.hasMoreElements();) {
+            urls.add(e.nextElement());            
+        }
+        urls.addAll(Arrays.asList(Classpath.search("META-INF/", ".faces-config.xml")));
+        return urls;
+        
     }
     
 

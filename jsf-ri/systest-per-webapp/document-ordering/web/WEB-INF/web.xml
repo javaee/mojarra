@@ -45,7 +45,7 @@
 
     <context-param>
         <param-name>javax.faces.CONFIG_FILES</param-name>
-        <param-value>/WEB-INF/faces-configA.xml /WEB-INF/faces-configB.xml /WEB-INF/faces-configC.xml
+        <param-value>/WEB-INF/faces-configB.xml
         </param-value>
     </context-param>
 
