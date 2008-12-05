@@ -120,7 +120,6 @@ jsf.ajax = function() {
             results.push(element);
         }
         return results.length > 1 ? results : results[0];
-        ;
     };
 
     var getForm = function getForm(element) {
@@ -179,57 +178,9 @@ jsf.ajax = function() {
         var result = null;
         temp.id = d.id;
 
-        // If we are creating a head element...
-        if (-1 != d.tagName.toLowerCase().indexOf("head") && d.tagName.length == 4) {
-
-            // head replacement only appears to work on firefox.
-            if (-1 == BrowserDetect.browser.indexOf("Firefox")) {
-                return result;
-            }
-
-            // Strip link elements from src.
-            if (-1 != src.indexOf("link")) {
-                var
-                        linkStartEx = new RegExp("< *link.*>", "gi");
-                var linkStart;
-                while (null != (linkStart = linkStartEx.exec(src))) {
-                    src = src.substring(0, linkStart.index) +
-                          src.substring(linkStartEx.lastIndex);
-                    linkStartEx.lastIndex = 0;
-                }
-            }
-
-            // Strip style elements from src
-            if (-1 != src.indexOf("style")) {
-                var
-                        styleStartEx = new RegExp("< *style.*>", "gi"),
-                        styleEndEx = new RegExp("< */ *style.*>", "gi");
-                var styleStart, styleEnd;
-                while (null != (styleStart = styleStartEx.exec(src))) {
-                    styleEnd = styleEndEx.exec(src);
-                    src = src.substring(0, styleStart.index) +
-                          src.substring(styleStartEx.lastIndex);
-                    styleStartEx.lastIndex = 0;
-                }
-            }
-
-            temp.innerHTML = src;
-
-            // clone all the link elements...
-            var i, links, styles;
-            links = d.getElementsByTagName("link");
-            if (links) {
-                for (i = 0; i < links.length; i++) {
-                    temp.appendChild(links[i].cloneNode(true));
-                }
-            }
-            // then clone all the style elements.
-            styles = d.getElementsByTagName("style");
-            if (styles) {
-                for (i = 0; i < styles.length; i++) {
-                    temp.appendChild(styles[i].cloneNode(true));
-                }
-            }
+        // Creating a head element isn't allowed in IE, so we'll disallow it
+        if (d.tagName.toLowerCase() === "head") {
+            throw new Error("Attempted to replace a head element");
         } else {
             temp.innerHTML = src;
         }
