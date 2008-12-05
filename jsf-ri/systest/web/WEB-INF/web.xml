@@ -88,6 +88,12 @@
         <param-value>.jsp</param-value>
     </context-param>
 
+    <jsp-config>
+        <jsp-property-group>
+            <url-pattern>*.jspx</url-pattern>
+            <is-xml>true</is-xml>
+        </jsp-property-group>
+    </jsp-config>
 
     <!-- Faces Servlet -->
     <servlet>
