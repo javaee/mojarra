@@ -80,7 +80,7 @@ import com.sun.faces.RIConstants;
  * of {@link javax.faces.component.AjaxBehavior} using the tag attribute 
  * values.  If this tag is nested within a single 
  * {@link javax.faces.component.ActionSource} component, and the
- * <code>facesEvent</code> attribute value is not specified or is
+ * <code>events</code> attribute value is not specified or is
  * one of the following: 
  * <ul>
  * <li>{@link javax.faces.component.AjaxBehavior#AJAX_ACTION}</li>
@@ -90,7 +90,7 @@ import com.sun.faces.RIConstants;
  * component's attribute <code>Map</code> under the key 
  * {@link javax.faces.component.AjaxBehavior#AJAX_BEHAVIOR}.  If this tag is nested within
  * a single {@link javax.faces.component.EditableValueHolder} component,
- * and the <code>facesEvent</code> attribute value is not specified or is
+ * and the <code>events</code> attribute value is not specified or is
  * one of the following:
  * <ul>
  * <li>{@link javax.faces.component.AjaxBehavior#AJAX_VALUE_CHANGE}</li>
@@ -99,7 +99,7 @@ import com.sun.faces.RIConstants;
  * put the {@link javax.faces.component.AjaxBehavior} instance in the parent 
  * component's attribute <code>Map</code> under the key
  * {@link javax.faces.component.AjaxBehavior#AJAX_BEHAVIOR}.
- * Throw an <code>exception</code> if the <code>facesEvent</code> attribute value
+ * Throw an <code>exception</code> if the <code>events</code> attribute value
  * does not match the component type.
  * <br/><br/>
  * If this tag is nested within a component other than an 
@@ -128,22 +128,22 @@ import com.sun.faces.RIConstants;
  */
 public final class AjaxHandler extends TagHandler {
 
-    private final TagAttribute facesEvent;
+    private final TagAttribute events;
     private final TagAttribute execute;
     private final TagAttribute render;
-    private final TagAttribute onEvent;
-    private final TagAttribute onError;
+    private final TagAttribute onevent;
+    private final TagAttribute onerror;
 
     /**
      * @param config
      */
     public AjaxHandler(TagConfig config) {
         super(config);
-        this.facesEvent = this.getAttribute("facesEvent");
+        this.events = this.getAttribute("events");
         this.execute = this.getAttribute("execute");
         this.render = this.getAttribute("render");
-        this.onEvent = this.getAttribute("onEvent");
-        this.onError = this.getAttribute("onError");
+        this.onevent = this.getAttribute("onevent");
+        this.onerror = this.getAttribute("onerror");
     }
 
     /*
@@ -158,14 +158,14 @@ public final class AjaxHandler extends TagHandler {
             return;
         }
 
-        String facesEvent = null;
+        String events = null;
         String execute = null;
         String render = null;
-        String onEvent = null;
-        String onError = null;
+        String onevent = null;
+        String onerror = null;
 
-        if (this.facesEvent != null) {
-            facesEvent = this.facesEvent.getValue(ctx);
+        if (this.events != null) {
+            events = this.events.getValue(ctx);
         }
         if (this.execute != null) {
             execute = this.execute.getValue(ctx).replace(' ',',');
@@ -173,35 +173,35 @@ public final class AjaxHandler extends TagHandler {
         if (this.render != null) {
             render = this.render.getValue(ctx).replace(' ',',');
         }
-        if (this.onEvent != null) {
-            onEvent = this.onEvent.getValue(ctx);
+        if (this.onevent != null) {
+            onevent = this.onevent.getValue(ctx);
         }
-        if (this.onError != null) {
-            onError = this.onError.getValue(ctx);
+        if (this.onerror != null) {
+            onerror = this.onerror.getValue(ctx);
         }
 
-        AjaxBehavior ajaxBehavior = new AjaxBehavior(facesEvent, onEvent, onError, execute, render);
+        AjaxBehavior ajaxBehavior = new AjaxBehavior(events, onevent, onerror, execute, render);
 
         //
         // If we are nested within an EditableValueHolder or ActionSource component..
         //
         if (parent instanceof ActionSource) {
-            if (null == facesEvent || facesEvent.equals(AjaxBehavior.AJAX_VALUE_CHANGE_ACTION) ||
-                facesEvent.equals(AjaxBehavior.AJAX_ACTION)) {
+            if (null == events || events.equals(AjaxBehavior.AJAX_VALUE_CHANGE_ACTION) ||
+                events.equals(AjaxBehavior.AJAX_ACTION)) {
                 parent.getAttributes().put(AjaxBehavior.AJAX_BEHAVIOR, ajaxBehavior);
                 installAjaxResourceIfNecessary();
                 return;
             } else {
-                throw new TagAttributeException(this.facesEvent, "'facesEvent' attribute value must be 'action' for 'ActionSource' components");
+                throw new TagAttributeException(this.events, "'events' attribute value must be 'action' for 'ActionSource' components");
             }
         } else if (parent instanceof EditableValueHolder) {
-            if (null == facesEvent || facesEvent.equals(AjaxBehavior.AJAX_VALUE_CHANGE_ACTION) ||
-                facesEvent.equals(AjaxBehavior.AJAX_VALUE_CHANGE)) {
+            if (null == events || events.equals(AjaxBehavior.AJAX_VALUE_CHANGE_ACTION) ||
+                events.equals(AjaxBehavior.AJAX_VALUE_CHANGE)) {
                 parent.getAttributes().put(AjaxBehavior.AJAX_BEHAVIOR, ajaxBehavior);
                 installAjaxResourceIfNecessary();
                 return;
             } else {
-                throw new TagAttributeException(this.facesEvent, "'facesEvent' attribute value must be 'valueChange' for 'EditableValueHolder' components");
+                throw new TagAttributeException(this.events, "'events' attribute value must be 'valueChange' for 'EditableValueHolder' components");
             }
         }
             

@@ -29,12 +29,12 @@
         <br/>
         <!-- Increment the counter on the server, and the client -->
         <h:commandButton id="button1" value="Count">
-            <f:ajax render="countForm:out1" onEvent="statusUpdate" onError="statusUpdate"/>
+            <f:ajax render="countForm:out1" onevent="statusUpdate" onerror="statusUpdate"/>
         </h:commandButton>
         <br/>
         <!-- Resets the counter, doesn't refresh the page -->
         <h:commandButton id="reset" value="reset" actionListener="#{ajaxrequest.resetCount}">
-            <f:ajax execute="countForm:reset" render="countForm:out1" onEvent="statusUpdate" onError="statusUpdate"/>
+            <f:ajax execute="countForm:reset" render="countForm:out1" onevent="statusUpdate" onerror="statusUpdate"/>
         </h:commandButton>
     </h:form>
     <!-- Contained outside the form - shouldn't update except for full page load -->

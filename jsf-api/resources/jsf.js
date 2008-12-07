@@ -276,8 +276,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
             var req = {};                  // Request Object
             req.url = null;                // Request URL
-            req.onError = null;              // Error handler for request
-            req.onEvent = null;              // Event handler for request
+            req.onerror = null;              // Error handler for request
+            req.onevent = null;              // Event handler for request
             req.xmlReq = null;             // XMLHttpRequest Object
             req.async = true;              // Default - Asynchronous
             req.parameters = {};           // Parameters For GET or POST
@@ -450,8 +450,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             }
 
             // If we have a registered callback, send the error to it.
-            if (request && request.onError) {
-                func = request.onError + "(data);";
+            if (request && request.onerror) {
+                func = request.onerror + "(data);";
                 eval(func);
             }
 
@@ -480,8 +480,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 }
             }
 
-            if (request && request.onEvent) {
-                func = request.onEvent + "(data);";
+            if (request && request.onevent) {
+                func = request.onevent + "(data);";
                 eval(func);
             }
 
@@ -610,11 +610,11 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * <td><code>space seperated list of client identifiers</code></td>
              * </tr>
              * <tr>
-             * <td><code>onEvent</code></td>
+             * <td><code>onevent</code></td>
              * <td><code>name of a function to callback for event</code></td>
              * </tr>
              * <tr>
-             * <td><code>onError</code></td>
+             * <td><code>onerror</code></td>
              * <td><code>name of a function to callback for error</code></td>
              * </tr>
              * </table>
@@ -630,17 +630,17 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 }
 
                 // Error handler for this request
-                var onError = false;
+                var onerror = false;
 
-                if (options.onError) {
-                    onError = options.onError;
+                if (options.onerror) {
+                    onerror = options.onerror;
                 }
 
                 // Event handler for this request
-                var onEvent = false;
+                var onevent = false;
 
-                if (options.onEvent) {
-                    onEvent = options.onEvent;
+                if (options.onevent) {
+                    onevent = options.onevent;
                 }
 
 
@@ -681,8 +681,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 // remove non-passthrough options
                 delete options.execute;
                 delete options.render;
-                delete options.onError;
-                delete options.onEvent;
+                delete options.onerror;
+                delete options.onevent;
                 // copy all other options to args
                 for (var property in options) {
                     args[property] = options[property];
@@ -702,8 +702,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 var ajaxEngine = new AjaxEngine();
                 ajaxEngine.setupArguments(args);
                 ajaxEngine.queryString = viewState;
-                ajaxEngine.onEvent = onEvent;
-                ajaxEngine.onError = onError;
+                ajaxEngine.onevent = onevent;
+                ajaxEngine.onerror = onerror;
                 ajaxEngine.sendRequest();
             },
             /**
