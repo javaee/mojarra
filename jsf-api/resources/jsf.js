@@ -165,8 +165,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
         /**
          * Split a delimited string into an array, trimming whitespace
-         * @param s String to split
-         * @param e delimiter character - cannot be a space
+         * param s String to split
+         * param e delimiter character - cannot be a space
          * @ignore
          */
         var toArray = function toArray(s, e) {
@@ -305,7 +305,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
 
         /**
-         * AjaxEngine handles Ajax implementation details. 
+         * AjaxEngine handles Ajax implementation details.
          * @ignore
          */
         var AjaxEngine = function AjaxEngine() {
@@ -400,10 +400,12 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              */
             req.setupArguments = function(args) {
                 for (var i in args) {
-                    if (typeof req[i] === 'undefined') {
-                        req.parameters[i] = args[i];
-                    } else {
-                        req[i] = args[i];
+                    if (args.hasOwnProperty(i)) {
+                        if (typeof req[i] === 'undefined') {
+                            req.parameters[i] = args[i];
+                        } else {
+                            req[i] = args[i];
+                        }
                     }
                 }
             };
@@ -433,10 +435,12 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     }
                     var content = null; // For POST requests, to hold query string
                     for (var i in req.parameters) {
-                        if (req.queryString.length > 0) {
-                            req.queryString += "&";
+                        if (req.parameters.hasOwnProperty(i)) {
+                            if (req.queryString.length > 0) {
+                                req.queryString += "&";
+                            }
+                            req.queryString += encodeURIComponent(i) + "=" + encodeURIComponent(req.parameters[i]);
                         }
-                        req.queryString += encodeURIComponent(i) + "=" + encodeURIComponent(req.parameters[i]);
                     }
                     if (req.method === "GET") {
                         if (req.queryString.length > 0) {
@@ -501,7 +505,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 eval(func);
             }
 
-            for (i in errorListeners) {
+            for (var i in errorListeners) {
                 if (errorListeners.hasOwnProperty(i)) {
                     func = errorListeners[i] + "(data);";
                     eval(func);
@@ -535,7 +539,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 eval(func);
             }
 
-            for (i in eventListeners) {
+            for (var i in eventListeners) {
                 if (eventListeners.hasOwnProperty(i)) {
                     func = eventListeners[i] + "(data);";
                     eval(func);
@@ -552,15 +556,15 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * jsf.ajax.onError("handleError");
              * ...
              * function handleError(data) {
-             * ... 
+             * ...
              * }
-             * </pre></code> 
+             * </pre></code>
              * <p><b>Implementation Requirements:</b></p>
              * This function must accept the name of an existing JavaScript function.
              * The JavaScript function name must be added to an array, making it possible
              * to register more than one callback by invoking <code>jsf.ajax.onError</code>
              * more than once.
-             * 
+             *
              * @member jsf.ajax
              * @param {String} callback string representing a function to call on an error
              */
@@ -574,9 +578,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * jsf.ajax.onEvent("statusUpdate");
              * ...
              * function statusUpdate(data) {
-             * ... 
+             * ...
              * }
-             * </pre></code> 
+             * </pre></code>
              * <p><b>Implementation Requirements:</b></p>
              * This function must accept the name of an existing JavaScript function.
              * The JavaScript function name must be added to an array, making it possible
@@ -598,7 +602,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * &lt;commandButton id="button1" value="submit"
              *     onclick="jsf.ajax.request(this,event,
              *       {execute:'button1',render:'status',onevent:'handleEvent',onerror:'handleError'});return false;"/&gt;
-             * &lt;/commandButton/&gt; 
+             * &lt;/commandButton/&gt;
              * </pre></code>
              * <p><b>Implementation Requirements:</b></p>
              * This function must:
@@ -773,7 +777,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 delete options.onevent;
                 // copy all other options to args
                 for (var property in options) {
-                    args[property] = options[property];
+                    if (options.hasOwnProperty(property)) {
+                        args[property] = options[property];
+                    }
                 }
 
                 args["javax.faces.partial.ajax"] = "true";
@@ -1128,7 +1134,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
      * } else if stage === ProjectStage.Production) {
      *  ...
      * }
-     * </code></pre> 
+     * </code></pre>
      *
      * @returns String <code>String</code> representing the current state of the
      * running application in a typical product development lifecycle.  Refer
@@ -1219,4 +1225,4 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
     jsf.implversion = 1;
 
 
-} //end if for version detection
+} //end if version detection block

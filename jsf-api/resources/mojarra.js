@@ -53,10 +53,10 @@
  */
 
 /**
-  @project JSF Ajax Library
-  @version 2.0
-  @description This is the standard implementation of the JSF Ajax Library.
-*/
+ @project JSF Ajax Library
+ @version 2.0
+ @description This is the standard implementation of the JSF Ajax Library.
+ */
 
 /**
  * Register with OpenAjax
@@ -88,7 +88,7 @@ var mojarra = mojarra || {};
 mojarra.dpf = function dpf(f) {
     var adp = f.adp;
     if (adp !== null) {
-        for (var i = 0;i < adp.length;i++) {
+        for (var i = 0; i < adp.length; i++) {
             f.removeChild(adp[i]);
         }
     }
@@ -110,12 +110,14 @@ mojarra.apf = function apf(f, pvp) {
     f.adp = adp;
     var i = 0;
     for (var k in pvp) {
-        var p = document.createElement("input");
-        p.type = "hidden";
-        p.name = k;
-        p.value = pvp[k];
-        f.appendChild(p);
-        adp[i++] = p;
+        if (pvp.hasOwnProperty(k)) {
+            var p = document.createElement("input");
+            p.type = "hidden";
+            p.name = k;
+            p.value = pvp[k];
+            f.appendChild(p);
+            adp[i++] = p;
+        }
     }
 };
 
