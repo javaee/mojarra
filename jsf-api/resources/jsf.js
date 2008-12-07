@@ -53,9 +53,9 @@
  */
 
 /**
- @project JSF Ajax Library
+ @project JSF JavaScript Library
  @version 2.0
- @description This is the standard implementation of the JSF Ajax Library.
+ @description This is the standard implementation of the JSF JavaScript Library.
  */
 
 /**
@@ -89,6 +89,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         var eventListeners = [];
         var errorListeners = [];
 
+        /**
+         * @ignore
+         */
         var getTransport = function getTransport() {
             var methods = [
                 function() {
@@ -114,6 +117,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             throw new Error('Could not create an XHR object.');
         };
 
+        /**
+         * @ignore
+         */
         var $ = function $() {
             var results = [], element;
             for (var i = 0; i < arguments.length; i++) {
@@ -125,6 +131,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             return results.length > 1 ? results : results[0];
         };
 
+        /**
+         * @ignore
+         */
         var getForm = function getForm(element) {
             if (element) {
                 var form = $(element);
@@ -146,14 +155,20 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             return null;
         };
 
-        // Remove trailing and leading whitespace
+        /**
+         * Remove trailing and leading whitespace
+         * @ignore
+         */
         var trim = function trim(str) {
             return str.replace(/^\s+/g, "").replace(/\s+$/g, "");
         };
 
-        // Split a delimited string into an array, trimming whitespace
-        // @param s String to split
-        // @param e delimiter character - cannot be a space
+        /**
+         * Split a delimited string into an array, trimming whitespace
+         * @param s String to split
+         * @param e delimiter character - cannot be a space
+         * @ignore
+         */
         var toArray = function toArray(s, e) {
             var sarray;
             if (typeof s === 'string') {
@@ -165,6 +180,10 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             return sarray;
         };
 
+        /**
+         * Check if a value exists in an array
+         * @ignore
+         */
         var isInArray = function isInArray(array, value) {
             for (var i = 0; i < array.length; i++) {
                 if (array[i] === value) {
@@ -175,6 +194,10 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         };
 
 
+        /**
+         * Replace DOM element
+         * @ignore
+         */
         var elementReplace = function elementReplace(d, tempTagName, src) {
             var parent = d.parentNode;
             var temp = document.createElement(tempTagName);
@@ -193,6 +216,10 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             return result;
         };
 
+        /**
+         * Ajax Request Queue
+         * @ignore
+         */
         var Queue = new function Queue() {
 
             // Create the internal queue
@@ -202,25 +229,28 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             // the amount of space at the front of the queue, initialised to zero
             var queueSpace = 0;
 
-            /* Returns the size of this Queue. The size of a Queue is equal to the number
+            /** Returns the size of this Queue. The size of a Queue is equal to the number
              * of elements that have been enqueued minus the number of elements that have
              * been dequeued.
+             * @ignore
              */
             this.getSize = function getSize() {
                 return queue.length - queueSpace;
             };
 
-            /* Returns true if this Queue is empty, and false otherwise. A Queue is empty
+            /** Returns true if this Queue is empty, and false otherwise. A Queue is empty
              * if the number of elements that have been enqueued equals the number of
              * elements that have been dequeued.
+             * @ignore
              */
             this.isEmpty = function isEmpty() {
                 return (queue.length === 0);
             };
 
-            /* Enqueues the specified element in this Queue.
+            /** Enqueues the specified element in this Queue.
              *
              * @param element - the element to enqueue
+             * @ignore
              */
             this.enqueue = function enqueue(element) {
                 // Queue the request
@@ -228,10 +258,11 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             };
 
 
-            /* Dequeues an element from this Queue. The oldest element in this Queue is
+            /** Dequeues an element from this Queue. The oldest element in this Queue is
              * removed and returned. If this Queue is empty then undefined is returned.
              *
              * @returns The element that was removed rom the queue.
+             * @ignore
              */
             this.dequeue = function dequeue() {
                 // initialise the element to return to be undefined
@@ -254,9 +285,10 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 return element;
             };
 
-            /* Returns the oldest element in this Queue. If this Queue is empty then
+            /** Returns the oldest element in this Queue. If this Queue is empty then
              * undefined is returned. This function returns the same value as the dequeue
              * function, but does not remove the returned element from this Queue.
+             * @ignore
              */
             this.getOldestElement = function getOldestElement() {
                 // initialise the element to return to be undefined
@@ -272,6 +304,10 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         }();
 
 
+        /**
+         * AjaxEngine handles Ajax implementation details. 
+         * @ignore
+         */
         var AjaxEngine = function AjaxEngine() {
 
             var req = {};                  // Request Object
@@ -299,6 +335,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             }
 
             // Set up request/response state callbacks
+            /**
+             * @ignore
+             */
             req.xmlReq.onreadystatechange = function() {
                 if (req.xmlReq.readyState === 4) {
                     req.onComplete();
@@ -311,6 +350,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * dequeue all requests from the queue that have completed.  If a
              * request has been found on the queue that has not been sent,
              * send the request.
+             * @ignore
              */
             req.onComplete = function onComplete() {
                 req.status = req.xmlReq.status;
@@ -356,6 +396,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * argument value becomes the value of the AjaxEngine property.
              * Arguments that don't match AjaxEngine properties are added as
              * request parameters.
+             * @ignore
              */
             req.setupArguments = function(args) {
                 for (var i in args) {
@@ -370,6 +411,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             /**
              * This function does final encoding of parameters, determines the request method
              * (GET or POST) and sends the request using the specified url.
+             * @ignore
              */
             req.sendRequest = function() {
                 if (req.xmlReq !== null) {
@@ -416,6 +458,10 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             return req;
         };
 
+        /**
+         * Error handling callback.
+         * @ignore
+         */
         var onError = function onError(request, name) {
 
             var func; // String to hold function to execute
@@ -463,6 +509,10 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             }
         };
 
+        /**
+         * Event handling callback.
+         * @ignore
+         */
         var onEvent = function onEvent(request, name) {
 
             var func; // variable to hold function string to execute
@@ -497,6 +547,20 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         return {
             /**
              * Register a callback for error handling.
+             * <p><b>Usage:</b></p>
+             * <pre><code>
+             * jsf.ajax.onError("handleError");
+             * ...
+             * function handleError(data) {
+             * ... 
+             * }
+             * </pre></code> 
+             * <p><b>Implementation Requirements:</b></p>
+             * This function must accept the name of an existing JavaScript function.
+             * The JavaScript function name must be added to an array, making it possible
+             * to register more than one callback by invoking <code>jsf.ajax.onError</code>
+             * more than once.
+             * 
              * @member jsf.ajax
              * @param {String} callback string representing a function to call on an error
              */
@@ -505,6 +569,20 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             },
             /**
              * Register a callback for event handling.
+             * <p><b>Usage:</b></p>
+             * <pre><code>
+             * jsf.ajax.onEvent("statusUpdate");
+             * ...
+             * function statusUpdate(data) {
+             * ... 
+             * }
+             * </pre></code> 
+             * <p><b>Implementation Requirements:</b></p>
+             * This function must accept the name of an existing JavaScript function.
+             * The JavaScript function name must be added to an array, making it possible
+             * to register more than one callback by invoking <code>jsf.ajax.onEvent</code>
+             * more than once.
+             *
              * @member jsf.ajax
              * @param {String} callback string representing a function to call on an event
              */
@@ -513,6 +591,16 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             },
             /**
              * <p>Send an asynchronous Ajax request to the server.
+             * <p><b>Usage:</b></p>
+             * <pre><code>
+             * Example showing all optional arguments:
+             *
+             * &lt;commandButton id="button1" value="submit"
+             *     onclick="jsf.ajax.request(this,event,
+             *       {execute:'button1',render:'status',onevent:'handleEvent',onerror:'handleError'});return false;"/&gt;
+             * &lt;/commandButton/&gt; 
+             * </pre></code>
+             * <p><b>Implementation Requirements:</b></p>
              * This function must:
              * <ul>
              * <li>Capture the element that triggered this Ajax request
@@ -708,11 +796,16 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             },
             /**
              * <p>Receive an Ajax response from the server.
+             * <p><b>Usage:</b></p>
+             * <pre><code>
+             * jsf.ajax.response(request);
+             * </pre></code>
+             * <p><b>Implementation Requirements:</b></p>
              * This function must evaluate the markup returned in the
-             * <code>responseXML</code> object and update the <code>DOM</code>
+             * <code>request.responseXML</code> object and update the <code>DOM</code>
              * as follows:
              * <ul>
-             * <p><b>Update Element Processing</b></p>
+             * <p><i>Update Element Processing</i></p>
              * <li>If an <code>update</code> element is found in the response
              * with the identifier <code>javax.faces.ViewRoot</code>:
              * <pre><code>&lt;update id="javax.faces.ViewRoot"&gt;
@@ -773,7 +866,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * <code>&lt;update&gt;</code> element identifier, and replace its contents with
              * the <code>&lt;update&gt;</code> element's <code>CDATA</code> contents.</li>
              * </li>
-             * <p><b>Insert Element Processing</b></p>
+             * <p><i>Insert Element Processing</i></p>
              * <li>If an <code>&lt;input&gt;</code> element is found in the response with the
              * attribute <code>before</code>:
              * <pre><code>&lt;insert id="insert id" before="before id"&gt;
@@ -800,12 +893,12 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * the DOM element in the document.</li>
              * </ul>
              * </li>
-             * <p><b>Delete Element Processing</b></p>
+             * <p><i>Delete Element Processing</i></p>
              * <li>If a <code>&lt;delete&gt;</code> element is found in the response:
              * <pre><code>&lt;delete id="delete id"/&gt;</code></pre>
              * Find the DOM element whose identifier matches <code>delete id</code> and remove it
              * from the DOM.</li>
-             * <p><b>Element Attribute Update Processing</b></p>
+             * <p><i>Element Attribute Update Processing</i></p>
              * <li>If an <code>&lt;attributes&gt;</code> element is found in the response:
              * <pre><code>&lt;attributes id="id of element with attribute"&gt;
              *    &lt;attribute name="attribute name" value="attribute value"&gt;
@@ -818,7 +911,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * with <code>attribute value</code>.</li>
              * </ul>
              * </li>
-             * <p><b>JavaScript Processing</b></p>
+             * <p><i>JavaScript Processing</i></p>
              * <li>If an <code>&lt;eval&gt;</code> element is found in the response:
              * <pre><code>&lt;eval&gt;
              *    &lt;![CDATA[...JavaScript...]]&gt;
@@ -828,11 +921,11 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * from the response and execute it as if it were JavaScript code.</li>
              * </ul>
              * </li>
-             * <p><b>Redirect Processing</b></p>
+             * <p><i>Redirect Processing</i></p>
              * <li>If a <code>&lt;redirect&gt;</code> element is found in the response:
              * <pre><code>&lt;redirect url="redirect url"/&gt;</code></pre>
              * Cause a redirect to the url <code>redirect url</code>.</li>
-             * <p><b>Error Processing</b></p>
+             * <p><i>Error Processing</i></p>
              * <li>If an <code>&lt;error&gt;</code> element is found in the response:
              * <pre><code>&lt;error&gt;
              *    &lt;error-class&gt;..fully qualified class name string...&lt;error-class&gt;
@@ -843,7 +936,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * caused the error, and the exception message, respectively.
              * This is an error from the server, and implementations can use this information
              * as needed.</li>
-             * <p><b>Extensions</b></p>
+             * <p><i>Extensions</i></p>
              * <li>The <code>&lt;extensions&gt;</code> element provides a way for framework
              * implementations to provide their own information.</li>
              * </ul>
@@ -1099,6 +1192,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
      * It's format is: rightmost two digits, bug release number, next two digits,
      * minor release number, leftmost digits, major release number.
      * This number may only be incremented by a new release of the specification.
+     * @ignore
      */
     jsf.specversion = 20000;
 
@@ -1107,6 +1201,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
      * It's a monotonically increasing number, reset with every increment of
      * <code>jsf.specversion</code>
      * This number is implementation dependent.
+     * @ignore
      */
     jsf.implversion = 1;
 
