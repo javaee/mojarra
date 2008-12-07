@@ -1120,6 +1120,15 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
      * <p>Return the value of <code>Application.getProjectStage()</code> for
      * the currently running application instance.  Calling this method must
      * not cause any network transaction to happen to the server.</p>
+     * <p><b>Usage:</b></p>
+     * <pre><code>
+     * var stage = jsf.getProjectStage();
+     * if (stage === ProjectStage.Development) {
+     *  ...
+     * } else if stage === ProjectStage.Production) {
+     *  ...
+     * }
+     * </code></pre> 
      *
      * @returns String <code>String</code> representing the current state of the
      * running application in a typical product development lifecycle.  Refer
@@ -1135,6 +1144,10 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
     /**
      * <p>Collect and encode state for input controls associated
      * with the specified <code>form</code> element.</p>
+     * <p><b>Usage:</b></p>
+     * <pre><code>
+     * var state = jsf.getViewState(form);
+     * </pre></code>
      *
      * @param form The <code>form</code> element whose contained
      * <code>input</code> controls will be collected and encoded.
