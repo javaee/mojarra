@@ -231,7 +231,7 @@
                     <arg line="-a"/>
                     <arg line="-d=${spec.snapshot.dir}/jsdocs"/>
                     <arg line="-t=${jsdoc.home}/jsdoc-toolkit/templates/jsdoc"/>
-                    <arg value="${basedir}/jsf-api/resources/ajax.js"/>
+                    <arg value="${basedir}/jsf-api/resources/jsf.js"/>
         </java>
 
         <!-- Create the javadocs distribution -->
