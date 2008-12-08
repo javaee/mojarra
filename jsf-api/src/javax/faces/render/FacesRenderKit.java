@@ -53,8 +53,7 @@ import java.lang.annotation.Inherited;
  * RenderKit}.  The value of the {@link #value} attribute is taken to be
  * the <em>render-kit-id</em>.  The implementation must guarantee that
  * for each class annotated with <code>FacesRenderer</code>, found with
- * the algorithm "<em><a target="_"
- * href="../application/FacesAnnotationHandler.html#configAnnotationScanningSpecification">configAnnotationScanningSpecification</a></em>",
+ * the algorithm in section 11.5,
  * {@link
  * javax.faces.render.RenderKitFactory#addRenderKit(java.lang.String,RenderKit)}
  * is called, passing the derived <em>render-kit-id</em> as the first

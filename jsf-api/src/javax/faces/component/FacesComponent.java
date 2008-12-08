@@ -55,8 +55,7 @@ import java.lang.annotation.Inherited;
  * the class to which this annotation is attached is taken to be the
  * <em>component-class</em>.  The implementation must guarantee that for
  * each class annotated with <code>FacesComponent</code>, found with the
- * scanning algorithm at "<em><a target="_"
- * href="../application/FacesAnnotationHandler.html#configAnnotationScanningSpecification">configAnnotationScanningSpecification</a></em>", {@link
+ * scanning algorithm in section 11.5, {@link
  * javax.faces.application.Application#addComponent(java.lang.String,java.lang.String)}
  * is called, passing the derived <em>component-type</em> as the first
  * argument and the derived <em>component-class</em> as the second

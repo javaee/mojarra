@@ -55,9 +55,7 @@ import java.lang.annotation.Inherited;
  * class name of the class to which this annotation is attached is taken
  * to be the <em>converter-class</em>.  The implementation must
  * guarantee that for each class annotated with
- * <code>FacesConverter</code>, found with the algorithm "<em><a
- * target="_"
- * href="../application/FacesAnnotationHandler.html#configAnnotationScanningSpecification">configAnnotationScanningSpecification</a></em>",
+ * <code>FacesConverter</code>, found with the algorithm in section 11.5,
  * the proper variant of <code>Application.addConverter()</code> is
  * called.  If <em>converter-id</em> is not the empty string, {@link
  * javax.faces.application.Application#addConverter(java.lang.String,java.lang.String)}
