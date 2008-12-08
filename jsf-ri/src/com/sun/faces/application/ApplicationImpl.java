@@ -98,6 +98,7 @@ import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.DateTimeConverterUsesSystemTimezone;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter.RegisterConverterPropertyEditors;
 import com.sun.faces.el.ELUtils;
 import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.el.PropertyResolverImpl;
@@ -195,6 +196,7 @@ public class ApplicationImpl extends Application {
     private final SystemEventHelper systemEventHelper = new SystemEventHelper();
     private final ComponentSystemEventHelper compSysEventHelper = new ComponentSystemEventHelper();
     private boolean passDefaultTimeZone;
+    private boolean registerPropertyEditors;
     private TimeZone systemTimeZone;
 
     /**
@@ -218,6 +220,7 @@ public class ApplicationImpl extends Application {
                                                          this);
         WebConfiguration webConfig = WebConfiguration.getInstance(ctx.getExternalContext());
         passDefaultTimeZone = webConfig.isOptionEnabled(DateTimeConverterUsesSystemTimezone);
+        registerPropertyEditors = webConfig.isOptionEnabled(RegisterConverterPropertyEditors);
         if (passDefaultTimeZone) {
             systemTimeZone = TimeZone.getDefault();
         }
@@ -1128,9 +1131,8 @@ public class ApplicationImpl extends Application {
      */
     
     private void addPropertyEditorIfNecessary(Class<?> targetClass) {
-        WebConfiguration webConfig = WebConfiguration.getInstance();
-        if (!webConfig
-              .isOptionEnabled(BooleanWebContextInitParameter.RegisterConverterPropertyEditors)) {
+        
+        if (!registerPropertyEditors) {
             return;
         }
 
