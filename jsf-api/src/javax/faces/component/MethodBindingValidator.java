@@ -101,7 +101,7 @@ class MethodBindingValidator extends MethodBindingAdapterBase implements Validat
 	    if (cause instanceof RuntimeException) {
 		throw ((RuntimeException) cause);
 	    }
-	    throw new IllegalStateException(ee.getMessage());
+	    throw new IllegalStateException(ee);
         }
 	
 	
@@ -154,7 +154,7 @@ class MethodBindingValidator extends MethodBindingAdapterBase implements Validat
 		    toRestoreClass = loadClass(className, this);
 		}
 		catch (ClassNotFoundException e) {
-		    throw new IllegalStateException(e.getMessage());
+		    throw new IllegalStateException(e);
 		}
 		
 		if (null != toRestoreClass) {
@@ -163,10 +163,10 @@ class MethodBindingValidator extends MethodBindingAdapterBase implements Validat
 			    (MethodBinding) toRestoreClass.newInstance();
 		    }
 		    catch (InstantiationException e) {
-			throw new IllegalStateException(e.getMessage());
+			throw new IllegalStateException(e);
 		    }
 		    catch (IllegalAccessException a) {
-			throw new IllegalStateException(a.getMessage());
+			throw new IllegalStateException(a);
 		    }
 		}
 		

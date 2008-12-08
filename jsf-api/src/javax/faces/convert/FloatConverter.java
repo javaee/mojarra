@@ -117,7 +117,7 @@ public class FloatConverter implements Converter {
         } catch (NumberFormatException nfe) {
             throw new ConverterException(MessageFactory.getMessage(
                  context, FLOAT_ID, value, "2000000000",
-                 MessageFactory.getLabel(context, component)));
+                 MessageFactory.getLabel(context, component)), nfe);
         } catch (Exception e) {
             throw new ConverterException(e);
         }

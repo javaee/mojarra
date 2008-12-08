@@ -164,7 +164,7 @@ public class EnumConverter implements Converter, StateHolder {
                       value,
                       value,
                       MessageFactory.getLabel(context,
-                           component)));
+                           component)), iae);
         }
 
     }

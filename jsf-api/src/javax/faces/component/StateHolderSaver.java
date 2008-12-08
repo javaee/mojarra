@@ -98,7 +98,7 @@ class StateHolderSaver implements Serializable {
             toRestoreClass = loadClass(className, this);
         }
         catch (ClassNotFoundException e) {
-            throw new IllegalStateException(e.getMessage());
+            throw new IllegalStateException(e);
         }
 
         if (null != toRestoreClass) {
@@ -106,10 +106,10 @@ class StateHolderSaver implements Serializable {
                 result = toRestoreClass.newInstance();
             }
             catch (InstantiationException e) {
-                throw new IllegalStateException(e.getMessage());
+                throw new IllegalStateException(e);
             }
             catch (IllegalAccessException a) {
-                throw new IllegalStateException(a.getMessage());
+                throw new IllegalStateException(a);
             }
         }
 

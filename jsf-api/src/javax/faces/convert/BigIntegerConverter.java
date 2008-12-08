@@ -121,7 +121,7 @@ public class BigIntegerConverter implements Converter {
                                            value,
                                            "9876",
                                            MessageFactory.getLabel(context,
-                                                                   component)));
+                                                                   component)), nfe);
         } catch (Exception e) {
             throw new ConverterException(e);
         }

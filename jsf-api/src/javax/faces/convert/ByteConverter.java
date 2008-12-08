@@ -120,7 +120,7 @@ public class ByteConverter implements Converter {
                                            value,
                                            "254",
                                            MessageFactory.getLabel(context,
-                                                                   component)));
+                                                                   component)), nfe);
         } catch (Exception e) {
             throw new ConverterException(e);
         }

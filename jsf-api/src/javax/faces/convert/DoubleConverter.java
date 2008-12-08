@@ -117,7 +117,7 @@ public class DoubleConverter implements Converter {
         } catch (NumberFormatException nfe) {
             throw new ConverterException(MessageFactory.getMessage(
                  context, DOUBLE_ID, value, "1999999",
-                 MessageFactory.getLabel(context, component)));
+                 MessageFactory.getLabel(context, component)), nfe);
         } catch (Exception e) {
             throw new ConverterException(e);
         }

@@ -297,7 +297,7 @@ public class LongRangeValidator implements Validator, StateHolder {
             } catch (NumberFormatException e) {
                 throw new ValidatorException(MessageFactory.getMessage
                      (context, TYPE_MESSAGE_ID,
-                          MessageFactory.getLabel(context, component)));
+                          MessageFactory.getLabel(context, component)), e);
             }
         }
 

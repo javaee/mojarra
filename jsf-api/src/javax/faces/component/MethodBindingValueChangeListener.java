@@ -104,7 +104,7 @@ class MethodBindingValueChangeListener extends MethodBindingAdapterBase implemen
 	    if (cause instanceof RuntimeException) {
 		throw ((RuntimeException) cause);
 	    }
-	    throw new IllegalStateException(ee.getMessage());
+	    throw new IllegalStateException(ee);
         }
     }
 
@@ -153,7 +153,7 @@ class MethodBindingValueChangeListener extends MethodBindingAdapterBase implemen
 		    toRestoreClass = loadClass(className, this);
 		}
 		catch (ClassNotFoundException e) {
-		    throw new IllegalStateException(e.getMessage());
+		    throw new IllegalStateException(e);
 		}
 		
 		if (null != toRestoreClass) {
@@ -162,10 +162,10 @@ class MethodBindingValueChangeListener extends MethodBindingAdapterBase implemen
 			    (MethodBinding) toRestoreClass.newInstance();
 		    }
 		    catch (InstantiationException e) {
-			throw new IllegalStateException(e.getMessage());
+			throw new IllegalStateException(e);
 		    }
 		    catch (IllegalAccessException a) {
-			throw new IllegalStateException(a.getMessage());
+			throw new IllegalStateException(a);
 		    }
 		}
 		

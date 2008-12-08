@@ -121,7 +121,7 @@ public class BigDecimalConverter implements Converter {
                                            value,
                                            "198.23",
                                            MessageFactory.getLabel(context,
-                                                                   component)));
+                                                                   component)), nfe);
         } catch (Exception e) {
             throw new ConverterException(e);
         }

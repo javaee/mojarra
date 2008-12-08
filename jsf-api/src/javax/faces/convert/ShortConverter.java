@@ -116,7 +116,7 @@ public class ShortConverter implements Converter {
         } catch (NumberFormatException nfe) {
             throw new ConverterException(MessageFactory.getMessage(
                  context, SHORT_ID, value, "32456",
-                 MessageFactory.getLabel(context, component)));
+                 MessageFactory.getLabel(context, component)), nfe);
         } catch (Exception e) {
             throw new ConverterException(e);
         }
