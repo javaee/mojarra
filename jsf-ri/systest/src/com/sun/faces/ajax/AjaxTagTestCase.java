@@ -497,7 +497,7 @@ public class AjaxTagTestCase extends AbstractTestCase {
         assertTrue(check(out3,"echo"));
 
     }
-    public void testAjaxEvent() throws Exception {
+    public void testAjaxTagEvent() throws Exception {
         getPage("/faces/ajax/ajaxTagEvent.xhtml");
         System.out.println("Start ajax tag event test");
 

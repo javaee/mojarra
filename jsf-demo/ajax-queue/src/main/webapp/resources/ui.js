@@ -1,9 +1,19 @@
 var disabledImage = 'resources/button3.gif';
 var enabledImage = 'resources/button2.gif';
 
-// Setup the statusUpdate function to hear all events on the page
-jsf.ajax.onEvent("statusUpdate");
-jsf.ajax.onError("statusUpdate");
+
+var errorMsg = function errorMsg(data) {
+    alert("Error Name: "+data.name);
+};
+
+var msg = function msg(data) {
+    if (data.name === 'beforeOpen') {
+        activeCell(document.createTextNode(data.execute));
+    } else if (data.name === 'onCompletion') {
+        removeCell(document.createTextNode(data.execute));
+    }
+};
+
 
 function buttonpush(buttonName, element, event) {
     var button = document.getElementById(buttonName);
@@ -13,21 +23,13 @@ function buttonpush(buttonName, element, event) {
     }
     try {
         addCell(document.createTextNode(buttonName));
-        jsf.ajax.request(element, event, {execute: buttonName, render: buttonName, onevent: 'msg', onerror: 'errorMsg'});
+        jsf.ajax.request(element, event, {execute: buttonName, render: buttonName, onevent: msg, onerror: errorMsg});
     } catch (ex) {
         // Handle programming errors here
         alert(ex);
     }
     return false;
 } 
-
-function msg(data) {
-    if (data.name === 'beforeOpen') {
-        activeCell(document.createTextNode(data.execute));
-    } else if (data.name === 'onCompletion') {
-        removeCell(document.createTextNode(data.execute));
-    }
-}
 
 function addCell(cellData) {
     var cell = document.getElementById("tr1").insertCell(0);
@@ -66,11 +68,8 @@ function removeCell(cellData) {
     }
 }
 
-function errorMsg(data) {
-    alert("Error Name: "+data.name);
-}
 
-function statusUpdate(data) {
+var statusUpdate = function statusUpdate(data) {
     var statusArea = document.getElementById("statusArea");
     var text = statusArea.value;
     text = text + "Name: "+data.execute;
@@ -80,4 +79,8 @@ function statusUpdate(data) {
         text = text + " Error: "+data.name+"\n";
     }
     statusArea.value = text;
-}
+};
+
+// Setup the statusUpdate function to hear all events on the page
+jsf.ajax.addOnEvent(statusUpdate);
+jsf.ajax.addOnError(statusUpdate);

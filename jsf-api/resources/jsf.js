@@ -312,8 +312,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
             var req = {};                  // Request Object
             req.url = null;                // Request URL
-            req.onerror = null;              // Error handler for request
-            req.onevent = null;              // Event handler for request
+            req.onerror = null;            // Error handler for request
+            req.onevent = null;            // Event handler for request
             req.xmlReq = null;             // XMLHttpRequest Object
             req.async = true;              // Default - Asynchronous
             req.parameters = {};           // Parameters For GET or POST
@@ -323,8 +323,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             req.responseXML = null;        // Response Content (XML)
             req.status = null;             // Response Status Code From Server
             req.fromQueue = false;         // Indicates if the request was taken off the queue
-            // before being sent.  This prevents the request from
-            // entering the queue redundantly.
+                                           // before being sent.  This prevents the request from
+                                           // entering the queue redundantly.
 
             req.que = Queue;
 
@@ -501,14 +501,12 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
             // If we have a registered callback, send the error to it.
             if (request && request.onerror) {
-                func = request.onerror + "(data);";
-                eval(func);
+                request.onerror.call(null, data);
             }
 
             for (var i in errorListeners) {
                 if (errorListeners.hasOwnProperty(i)) {
-                    func = errorListeners[i] + "(data);";
-                    eval(func);
+                    errorListeners[i].call(null, data);
                 }
             }
         };
@@ -534,64 +532,72 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 }
             }
 
-            if (request && request.onevent) {
-                func = request.onevent + "(data);";
-                eval(func);
+            if (request && request.onevent && typeof request.onevent === 'function') {
+                request.onevent.call(null,data);
             }
 
             for (var i in eventListeners) {
                 if (eventListeners.hasOwnProperty(i)) {
-                    func = eventListeners[i] + "(data);";
-                    eval(func);
+                    eventListeners[i].call(null,data);
                 }
             }
         };
 
 
+
+        // Use module pattern to return the functions we actually expose
         return {
             /**
              * Register a callback for error handling.
              * <p><b>Usage:</b></p>
              * <pre><code>
-             * jsf.ajax.onError("handleError");
+             * jsf.ajax.addOnError(handleError);
              * ...
-             * function handleError(data) {
+             * var handleError = function handleError(data) {
              * ...
              * }
              * </pre></code>
              * <p><b>Implementation Requirements:</b></p>
-             * This function must accept the name of an existing JavaScript function.
-             * The JavaScript function name must be added to an array, making it possible
-             * to register more than one callback by invoking <code>jsf.ajax.onError</code>
+             * This function must accept a reference to an existing JavaScript function.
+             * The JavaScript function reference must be added to a list of callbacks, making it possible
+             * to register more than one callback by invoking <code>jsf.ajax.addOnError</code>
              * more than once.
              *
              * @member jsf.ajax
-             * @param {String} callback string representing a function to call on an error
+             * @param callback a reference to a function to call on an error
              */
-            onError: function onError(callback) {
-                errorListeners[errorListeners.length] = callback;
+            addOnError: function addOnError(callback) {
+                if (typeof callback === 'function') {
+                    errorListeners[errorListeners.length] = callback;
+                } else {
+                    throw new Error("jsf.ajax.addOnError:  Added a callback that was not a function.");
+                }
             },
             /**
              * Register a callback for event handling.
              * <p><b>Usage:</b></p>
              * <pre><code>
-             * jsf.ajax.onEvent("statusUpdate");
+             * jsf.ajax.addOnEvent(statusUpdate);
              * ...
-             * function statusUpdate(data) {
+             * var statusUpdate = function statusUpdate(data) {
              * ...
              * }
              * </pre></code>
              * <p><b>Implementation Requirements:</b></p>
-             * This function must accept the name of an existing JavaScript function.
-             * The JavaScript function name must be added to an array, making it possible
-             * to register more than one callback by invoking <code>jsf.ajax.onEvent</code>
+             * This function must accept a reference to an existing JavaScript function.
+             * The JavaScript function reference must be added to a list of callbacks, making it possible
+             * to register more than one callback by invoking <code>jsf.ajax.addOnEvent</code>
              * more than once.
              *
              * @member jsf.ajax
-             * @param {String} callback string representing a function to call on an event
+             * @param callback a reference to a function to call on an event
              */
-            onEvent: function onEvent(callback) {
-                eventListeners[eventListeners.length] = callback;
+            addOnEvent: function addOnEvent(callback) {
+                if (typeof callback === 'function') {
+                    eventListeners[eventListeners.length] = callback;
+                } else {
+                    throw new Error("jsf.ajax.addOnEvent: Added a callback that was not a function");
+                }
             },
             /**
              * <p>Send an asynchronous Ajax request to the server.
@@ -682,7 +688,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              *
              * </p>
              *
-             * @param element The DOM element that triggered this Ajax request.
+             * @param source The DOM element that triggered this Ajax request, or an id string of the element to use as the triggering element.
              * @param event The DOM event that triggered this Ajax request.  The
              * <code>event</code> argument is optional.
              * @param options The set of available options that can be sent as
@@ -715,7 +721,20 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * @function jsf.ajax.request
              * @throws ArgNotSet Error if first required argument <code>element</code> is not specified
              */
-            request: function request(element, event, options) {
+            request: function request(source, event, options) {
+
+                var element;
+
+                if (typeof source === 'undefined' || source === null) {
+                    throw new Error("jsf.ajax.request: source not set");
+                }
+                if (typeof source === 'string') {
+                    element = document.getElementById(source);
+                } else if (typeof source === 'object') {
+                    element = source;
+                } else {
+                    throw new Error("jsf.request: source must be object or string");
+                }
 
                 if (typeof(options) === 'undefined' || options === null) {
                     options = {};
@@ -724,26 +743,22 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 // Error handler for this request
                 var onerror = false;
 
-                if (options.onerror) {
+                if (options.onerror && typeof options.onerror === 'function') {
                     onerror = options.onerror;
+                } else if (options.onerror && typeof options.onerror !== 'function') {
+                    throw new Error("jsf.ajax.request: Added an onerror callback that was not a function");
                 }
 
                 // Event handler for this request
                 var onevent = false;
 
-                if (options.onevent) {
+                if (options.onevent && typeof options.onevent === 'function') {
                     onevent = options.onevent;
+                } else if (options.onevent && typeof options.onevent !== 'function') {
+                    throw new Error("jsf.ajax.request: Added an onevent callback that was not a function");
                 }
 
-
-                if (typeof element === 'undefined' || element === null) {
-                    throw new Error("jsf.ajax.request: Element not set");
-                }
-
-                // Capture the element that triggered this Ajax request.
-                var source = element;
-
-                var form = getForm(source);
+                var form = getForm(element);
                 var viewState = jsf.getViewState(form);
 
                 // Set up additional arguments to be used in the request..
@@ -758,11 +773,11 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 if (options.execute) {
                     var temp = toArray(options.execute, ',');
                     // RELEASE_PENDING remove isInArray function
-                    if (!isInArray(temp, source.name)) {
-                        options.execute = source.name + "," + options.execute;
+                    if (!isInArray(temp, element.name)) {
+                        options.execute = element.name + "," + options.execute;
                     }
                 } else {
-                    options.execute = source.id;
+                    options.execute = element.id;
                 }
 
                 args["javax.faces.partial.execute"] = toArray(options.execute, ',').join(',');
@@ -786,11 +801,11 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 args["method"] = "POST";
                 args["url"] = form.action;
                 // add source
-                var action = $(source);
+                var action = $(element);
                 if (action && action.form) {
                     args[action.name] = action.value || 'x';
                 } else {
-                    args[source] = source;
+                    args[element] = element;
                 }
 
                 var ajaxEngine = new AjaxEngine();

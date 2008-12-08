@@ -351,9 +351,8 @@ public class RenderKitUtils {
             } else {
                 already = true;
             }
-            ajaxCommand.append("onevent:'");
+            ajaxCommand.append("onevent:");
             ajaxCommand.append(onevent);
-            ajaxCommand.append("'");
         }
         if (onerror != null) {
             if (already) {
@@ -361,9 +360,8 @@ public class RenderKitUtils {
             } else {
                 already = true;
             }
-            ajaxCommand.append("onerror:'");
+            ajaxCommand.append("onerror:");
             ajaxCommand.append(onerror);
-            ajaxCommand.append("'");
         }
         if (already) {
             ajaxCommand.append("}");
