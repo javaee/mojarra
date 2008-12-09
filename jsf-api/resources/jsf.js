@@ -356,11 +356,11 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 req.status = req.xmlReq.status;
                 if ((req.status !== null && typeof req.status !== 'undefined' &&
                      req.status !== 0) && (req.status >= 200 && req.status < 300)) {
-                    onEvent(req, "onCompletion");
+                    onEvent(req, "complete");
                     jsf.ajax.response(req.xmlReq);
-                    onEvent(req, "afterUpdate");
+                    onEvent(req, "success");
                 } else {
-                    onEvent(req, "onCompletion");
+                    onEvent(req, "complete");
                     onError(req);
                 }
 
@@ -454,7 +454,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                         }
                         content = req.queryString;
                     }
-                    onEvent(req, "beforeOpen");
+                    onEvent(req, "begin");
                     req.xmlReq.send(content);
                 }
             };

@@ -7,9 +7,9 @@ var errorMsg = function errorMsg(data) {
 };
 
 var msg = function msg(data) {
-    if (data.name === 'beforeOpen') {
+    if (data.name === 'begin') {
         activeCell(document.createTextNode(data.execute));
-    } else if (data.name === 'onCompletion') {
+    } else if (data.name === 'complete') {
         removeCell(document.createTextNode(data.execute));
     }
 };

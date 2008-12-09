@@ -516,9 +516,9 @@ public class AjaxTagTestCase extends AbstractTestCase {
         assertTrue(check("out2","1"));
 
         // Check that events were written to the page.
-        String statusArea = "Name: countForm:button1 Event: beforeOpen ";
-        statusArea = statusArea + "Name: countForm:button1 Event: onCompletion " ;
-        statusArea = statusArea + "Name: countForm:button1 Event: afterUpdate " ;
+        String statusArea = "Name: countForm:button1 Event: begin ";
+        statusArea = statusArea + "Name: countForm:button1 Event: complete " ;
+        statusArea = statusArea + "Name: countForm:button1 Event: success " ;
         //System.out.println(statusArea);
         //System.out.println(getText("statusArea"));
         assertTrue(check("statusArea",statusArea));
