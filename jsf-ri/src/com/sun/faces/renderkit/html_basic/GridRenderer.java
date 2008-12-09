@@ -101,13 +101,13 @@ public class GridRenderer extends BaseTableRenderer {
 
         // Set up the variables we will need
         ResponseWriter writer = context.getResponseWriter();
-        TableMetaInfo info = getMetaInfo(component);
+        TableMetaInfo info = getMetaInfo(context, component);
         int columnCount = info.columns.size();
         boolean open = false;
         int i = 0;
 
         // Render our children, starting a new row as needed
-        renderTableBodyStart(component, writer);
+        renderTableBodyStart(context, component, writer);
         for (Iterator<UIComponent> kids = getChildren(component);
              kids.hasNext();) {
 
@@ -117,10 +117,10 @@ public class GridRenderer extends BaseTableRenderer {
             }
             if ((i % columnCount) == 0) {
                 if (open) {
-                    renderRowEnd(component, writer);
+                    renderRowEnd(context, component, writer);
                     open = false;
                 }
-                renderRowStart(component, writer);
+                renderRowStart(context, component, writer);
                 open = true;
                 info.newRow();
             }
@@ -128,9 +128,9 @@ public class GridRenderer extends BaseTableRenderer {
             i++;
         }
         if (open) {
-           renderRowEnd(component, writer);
+           renderRowEnd(context, component, writer);
         }
-        renderTableBodyEnd(component, writer);
+        renderTableBodyEnd(context, component, writer);
     }
 
 
@@ -145,9 +145,9 @@ public class GridRenderer extends BaseTableRenderer {
         }
 
         // Render the ending of this panel
-        renderTableEnd(component, context.getResponseWriter());
+        renderTableEnd(context, component, context.getResponseWriter());
 
-        clearMetaInfo(component);
+        clearMetaInfo(context, component);
 
     }
 
@@ -169,7 +169,7 @@ public class GridRenderer extends BaseTableRenderer {
                              ResponseWriter writer)
     throws IOException {
 
-        TableMetaInfo info = getMetaInfo(table);
+        TableMetaInfo info = getMetaInfo(context, table);
         writer.startElement("td", table);
         String columnClass = info.getCurrentColumnClass();
         if (columnClass != null) {
@@ -188,7 +188,7 @@ public class GridRenderer extends BaseTableRenderer {
                                 UIComponent table,
                                 ResponseWriter writer) throws IOException {
 
-        TableMetaInfo info = getMetaInfo(table);
+        TableMetaInfo info = getMetaInfo(context, table);
         UIComponent header = getFacet(table, "header");
         String headerClass =
               (String) table.getAttributes().get("headerClass");
@@ -219,7 +219,7 @@ public class GridRenderer extends BaseTableRenderer {
                                 UIComponent table,
                                 ResponseWriter writer) throws IOException {
 
-        TableMetaInfo info = getMetaInfo(table);
+        TableMetaInfo info = getMetaInfo(context, table);
         UIComponent footer = getFacet(table, "footer");
         String footerClass =
               (String) table.getAttributes().get("footerClass");

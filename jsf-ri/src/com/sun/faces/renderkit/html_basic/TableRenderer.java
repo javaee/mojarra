@@ -122,7 +122,7 @@ public class TableRenderer extends BaseTableRenderer {
         boolean hasBodyRows = (bodyRows != null && !bodyRows.isEmpty());
         boolean wroteTableBody = false;
         if (!hasBodyRows) {
-            renderTableBodyStart(component, writer);
+            renderTableBodyStart(context, component, writer);
         }
         while (true) {
 
@@ -146,16 +146,16 @@ public class TableRenderer extends BaseTableRenderer {
             }
 
             // Render the beginning of this row
-            renderRowStart(component, writer);
+            renderRowStart(context, component, writer);
 
             // Render the row content
             renderRow(context, component, null, writer);
 
             // Render the ending of this row
-            renderRowEnd(component, writer);
+            renderRowEnd(context, component, writer);
 
         }
-        renderTableBodyEnd(component, writer);
+        renderTableBodyEnd(context, component, writer);
 
         // Clean up after ourselves
         data.setRowIndex(-1);
@@ -173,12 +173,11 @@ public class TableRenderer extends BaseTableRenderer {
             return;
         }
 
-        UIData data = (UIData) component;
-        clearMetaInfo(data);
-        data.setRowIndex(-1);
+        clearMetaInfo(context, component);
+        ((UIData) component).setRowIndex(-1);
 
         // Render the ending of this table
-        renderTableEnd(component, context.getResponseWriter());
+        renderTableEnd(context, component, context.getResponseWriter());
 
     }
 
@@ -232,7 +231,7 @@ public class TableRenderer extends BaseTableRenderer {
                                 ResponseWriter writer)
           throws IOException {
 
-        TableMetaInfo info = getMetaInfo(table);
+        TableMetaInfo info = getMetaInfo(context, table);
         UIComponent footer = getFacet(table, "footer");
         String footerClass = (String) table.getAttributes().get("footerClass");
         if ((footer != null) || info.hasFooterFacets) {
@@ -259,7 +258,7 @@ public class TableRenderer extends BaseTableRenderer {
                 writer.endElement("td");
                 writer.writeText("\n", table, null);
             }
-            renderRowEnd(table, writer);
+            renderRowEnd(context, table, writer);
         }
         if (footer != null) {
             writer.startElement("tr", footer);
@@ -270,7 +269,7 @@ public class TableRenderer extends BaseTableRenderer {
             writer.writeAttribute("colspan", String.valueOf(info.columns.size()), null);
             encodeRecursive(context, footer);
             writer.endElement("td");
-            renderRowEnd(table, writer);
+            renderRowEnd(context, table, writer);
         }
         if ((footer != null) || (info.hasFooterFacets)) {
             writer.endElement("tfoot");
@@ -284,7 +283,7 @@ public class TableRenderer extends BaseTableRenderer {
                                 ResponseWriter writer)
     throws IOException {
 
-        TableMetaInfo info = getMetaInfo(table);
+        TableMetaInfo info = getMetaInfo(context, table);
         UIComponent header = getFacet(table, "header");
         String headerClass = (String) table.getAttributes().get("headerClass");
         if ((header != null) || (info.hasHeaderFacets)) {
@@ -301,7 +300,7 @@ public class TableRenderer extends BaseTableRenderer {
             writer.writeAttribute("scope", "colgroup", null);
             encodeRecursive(context, header);
             writer.endElement("th");
-            renderRowEnd(table, writer);
+            renderRowEnd(context, table, writer);
         }
         if (info.hasHeaderFacets) {
             writer.startElement("tr", table);
@@ -324,7 +323,7 @@ public class TableRenderer extends BaseTableRenderer {
                 writer.endElement("th");
                 writer.writeText("\n", table, null);
             }
-            renderRowEnd(table, writer);
+            renderRowEnd(context, table, writer);
         }
         if ((header != null) || info.hasHeaderFacets) {
             writer.endElement("thead");
@@ -340,7 +339,7 @@ public class TableRenderer extends BaseTableRenderer {
                              ResponseWriter writer) throws IOException {
 
         // Iterate over the child UIColumn components for each row
-        TableMetaInfo info = getMetaInfo(table);
+        TableMetaInfo info = getMetaInfo(context, table);
         info.newRow();
         for (UIColumn column : info.columns) {
 

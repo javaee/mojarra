@@ -44,6 +44,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Map;
 
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
@@ -139,11 +140,15 @@ public abstract class BaseTableRenderer extends HtmlBasicRenderer {
 
     /**
      * Renders the closing <code>table</code> element.
+     * @param context the <code>FacesContext</code> for the current request
      * @param table the table that's being rendered
      * @param writer the current writer
      * @throws IOException if content cannot be written
      */
-    protected void renderTableEnd(UIComponent table, ResponseWriter writer)
+    @SuppressWarnings({"UnusedDeclaration"})
+    protected void renderTableEnd(FacesContext context,
+                                  UIComponent table,
+                                  ResponseWriter writer)
     throws IOException {
 
         writer.endElement("table");
@@ -187,11 +192,15 @@ public abstract class BaseTableRenderer extends HtmlBasicRenderer {
 
     /**
      * Renders the starting <code>tbody</code> element.
+     * @param context the <code>FacesContext</code> for the current request
      * @param table the table that's being rendered
      * @param writer the current writer
      * @throws IOException if content cannot be written
      */
-    protected void renderTableBodyStart(UIComponent table, ResponseWriter writer)
+    @SuppressWarnings({"UnusedDeclaration"})
+    protected void renderTableBodyStart(FacesContext context,
+                                        UIComponent table,
+                                        ResponseWriter writer)
     throws IOException {
 
             writer.startElement("tbody", table);
@@ -202,11 +211,15 @@ public abstract class BaseTableRenderer extends HtmlBasicRenderer {
 
     /**
      * Renders the closing <code>tbody</code> element.
+     * @param context the <code>FacesContext</code> for the current request
      * @param table the table that's being rendered
      * @param writer the current writer
      * @throws IOException if content cannot be written
      */
-    protected void renderTableBodyEnd(UIComponent table, ResponseWriter writer)
+    @SuppressWarnings({"UnusedDeclaration"})
+    protected void renderTableBodyEnd(FacesContext context,
+                                      UIComponent table,
+                                      ResponseWriter writer)
     throws IOException {
 
         writer.endElement("tbody");
@@ -218,15 +231,17 @@ public abstract class BaseTableRenderer extends HtmlBasicRenderer {
     /**
      * Renders the starting <code>tr</code> element applying any values
      * from the <code>rowClasses</code> attribute.
+     * @param context the <code>FacesContext</code> for the current request
      * @param table the table that's being rendered
      * @param writer the current writer
      * @throws IOException if content cannot be written
      */
-    protected void renderRowStart(UIComponent table,
+    protected void renderRowStart(FacesContext context,
+                                  UIComponent table,
                                   ResponseWriter writer)
           throws IOException {
 
-        TableMetaInfo info = getMetaInfo(table);
+        TableMetaInfo info = getMetaInfo(context, table);
         writer.startElement("tr", table);
         if (info.rowClasses.length > 0) {
             writer.writeAttribute("class", info.getCurrentRowClass(),
@@ -239,11 +254,15 @@ public abstract class BaseTableRenderer extends HtmlBasicRenderer {
 
     /**
      * Renders the closing <code>rt</code> element.
+     * @param context the <code>FacesContext</code> for the current request
      * @param table the table that's being rendered
      * @param writer the current writer
      * @throws IOException if content cannot be written
      */
-    protected void renderRowEnd(UIComponent table, ResponseWriter writer)
+    @SuppressWarnings({"UnusedDeclaration"})
+    protected void renderRowEnd(FacesContext context,
+                                UIComponent table,
+                                ResponseWriter writer)
     throws IOException {
 
         writer.endElement("tr");
@@ -256,16 +275,20 @@ public abstract class BaseTableRenderer extends HtmlBasicRenderer {
      * Returns a <code>TableMetaInfo</code> object containing details such
      * as row and column classes, columns, and a mechanism for scrolling through
      * the row/column classes.
+     * @param context the <code>FacesContext</code> for the current request
      * @param table the table that's being rendered
      * @return the <code>TableMetaInfo</code> for provided table
      */
-    protected TableRenderer.TableMetaInfo getMetaInfo(UIComponent table) {
+    protected TableRenderer.TableMetaInfo getMetaInfo(FacesContext context,
+                                                      UIComponent table) {
 
+        String key = createKey(context, table);
+        Map<Object,Object> attributes = context.getAttributes();
         TableRenderer.TableMetaInfo info = (TableRenderer.TableMetaInfo)
-              table.getAttributes().get(TableRenderer.TableMetaInfo.KEY);
+              attributes.get(key);
         if (info == null) {
             info = new TableRenderer.TableMetaInfo(table);
-            table.getAttributes().put(TableRenderer.TableMetaInfo.KEY, info);
+            attributes.put(key, info);
         }
         return info;
 
@@ -274,13 +297,31 @@ public abstract class BaseTableRenderer extends HtmlBasicRenderer {
 
     /**
      * Removes the cached TableMetaInfo from the specified component.
+     * @param context the <code>FacesContext</code> for the current request
      * @param table the table from which the TableMetaInfo will be removed
      */
-    protected void clearMetaInfo(UIComponent table) {
+    protected void clearMetaInfo(FacesContext context, UIComponent table) {
 
-        table.getAttributes().remove(TableMetaInfo.KEY);
+        context.getAttributes().remove(createKey(context, table));
 
     }
+
+
+    /**
+     * Creates a unique key based on the provided <code>UIComponent</code> with
+     *  which the TableMetaInfo can be looked up.
+     *
+     * @param context the <code>FacesContext</code> for the current request
+     * @param table the table that's being rendered
+     * @return a unique key to store the metadata in the request and still have
+     *  it associated with a specific component.
+     */
+    protected String createKey(FacesContext context, UIComponent table) {
+
+        return TableMetaInfo.KEY + table.getClientId(context);
+
+    }
+
 
     // ----------------------------------------------------------- Inner Classes
 
