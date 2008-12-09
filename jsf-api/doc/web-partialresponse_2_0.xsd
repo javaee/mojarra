@@ -247,7 +247,7 @@
             </xsd:documentation>
         </xsd:annotation>
         <xsd:sequence>
-            <xsd:element name="error-class" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="error-name" type="xsd:string" minOccurs="1" maxOccurs="1"/>
             <xsd:element name="error-message" type="xsd:string" minOccurs="1" maxOccurs="1"/>
         </xsd:sequence>
     </xsd:complexType>
