@@ -561,7 +561,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * This function must accept a reference to an existing JavaScript function.
              * The JavaScript function reference must be added to a list of callbacks, making it possible
              * to register more than one callback by invoking <code>jsf.ajax.addOnError</code>
-             * more than once.
+             * more than once.  This function must throw an error if the <code>callback</code>
+             * argument is not a function.
              *
              * @member jsf.ajax
              * @param callback a reference to a function to call on an error
@@ -587,7 +588,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * This function must accept a reference to an existing JavaScript function.
              * The JavaScript function reference must be added to a list of callbacks, making it possible
              * to register more than one callback by invoking <code>jsf.ajax.addOnEvent</code>
-             * more than once.
+             * more than once.  This function must throw an error if the <code>callback</code>
+             * argument is not a function.
              *
              * @member jsf.ajax
              * @param callback a reference to a function to call on an event
