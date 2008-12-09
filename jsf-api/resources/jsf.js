@@ -585,7 +585,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              *
              * &lt;commandButton id="button1" value="submit"
              *     onclick="jsf.ajax.request(this,event,
-             *       {execute:'button1',render:'status',onevent:'handleEvent',onerror:'handleError'});return false;"/&gt;
+             *       {execute:'button1',render:'status',onevent: handleEvent,onerror: handleError});return false;"/&gt;
              * &lt;/commandButton/&gt;
              * </pre></code>
              * <p><b>Implementation Requirements:</b></p>
