@@ -407,12 +407,20 @@
     <referenced-bean-class>javax.sql.DataSource</referenced-bean-class>
   </referenced-bean>
 
+    <managed-bean>
+        <managed-bean-name>testBean2</managed-bean-name>
+        <managed-bean-class>
+            com.sun.faces.TestBean
+        </managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+
   <managed-bean>
   <managed-bean-name>testBean</managed-bean-name>
   <managed-bean-class>
     com.sun.faces.TestBean
   </managed-bean-class>
-  <managed-bean-scope>none</managed-bean-scope>
+  <managed-bean-scope>request</managed-bean-scope>
   <managed-property>
     <property-name>customerBean</property-name>
     <value>#{customerBean}</value>
@@ -424,7 +432,7 @@
   <managed-bean-class>
     com.sun.faces.CustomerBean
   </managed-bean-class>
-  <managed-bean-scope>none</managed-bean-scope>
+  <managed-bean-scope>request</managed-bean-scope>
   <managed-property>
     <property-name>name</property-name>
     <value>Bobby</value>

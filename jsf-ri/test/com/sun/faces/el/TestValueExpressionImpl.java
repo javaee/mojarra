@@ -43,6 +43,7 @@ package com.sun.faces.el;
 
 import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.TestBean;
+import com.sun.faces.CustomerBean;
 import com.sun.faces.cactus.TestBean.Inner2Bean;
 import com.sun.faces.cactus.TestBean.InnerBean;
 import com.sun.faces.application.ApplicationImpl;
@@ -382,6 +383,18 @@ public class TestValueExpressionImpl extends ServletFacesTestCase
         valueExpression = this.create("mixedBean.prop");
         valueExpression.setValue(getFacesContext().getELContext(), "passed");
         assertTrue("passed".equals(valueExpression.getValue(getFacesContext().getELContext())));
+
+        request.removeAttribute("testBean2");
+        request.removeAttribute("customerBean");
+        valueExpression = this.create("testBean2.customerBean");
+        CustomerBean cb = new CustomerBean();
+        cb.setName("bill");
+        valueExpression.setValue(getFacesContext().getELContext(), cb);
+        testBean = (TestBean) request.getAttribute("testBean2");
+        assertNull(request.getAttribute("customerBean"));
+        assertNotNull(testBean);
+        cb = testBean.getCustomerBean();
+        assertEquals("bill", cb.getName());
     }
     
     public void testNullReference() throws Exception

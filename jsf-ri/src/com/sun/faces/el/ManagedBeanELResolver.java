@@ -114,23 +114,19 @@ public class ManagedBeanELResolver extends ELResolver {
             throw new PropertyNotFoundException(message);
         }
 
-        // The 1.2 and earlier JSF spec states that
-        // ManagedBeanELResolver should do nothing in setValue() so that
-        // the BeanELResolver do the set.  The user should be able to
-        // create a ValueExpression and call setValue() and expect it to
-        // work without having to call getValue() first.  To enable this
-        // the spec for ManagedBeanELResolver.setValue() was modified in
-        // 2.0 to account for the set to lazily create the bean.
-        FacesContext facesContext = (FacesContext)
-            context.getContext(FacesContext.class);
-        BeanManager manager = getBeanManager();
-        if (manager != null) {
-            String beanName = property.toString();
-            if (manager.isManaged(beanName)
-                && !manager.isBeanInScope(beanName, facesContext)) {
+        if (base == null) {
+            FacesContext facesContext = (FacesContext)
+                  context.getContext(FacesContext.class);
+            BeanManager manager = getBeanManager();
+            if (manager != null) {
+                String beanName = property.toString();
+                if (manager.isManaged(beanName)
+                    && !manager.isBeanInScope(beanName, facesContext)) {
 
-                // no bean found in scope.  create a new instance
-                manager.create(beanName, facesContext);
+                    // no bean found in scope.  create a new instance
+                    Object bean = manager.create(beanName, facesContext);
+                    context.setPropertyResolved(bean != null);
+                }
             }
         }
 
