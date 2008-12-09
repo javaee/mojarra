@@ -616,9 +616,17 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * This function must:
              * <ul>
              * <li>Capture the element that triggered this Ajax request
-             * (from the <code>element</code> argument, also known as the
+             * (from the <code>source</code> argument, also known as the
              * <code>source</code> element.</li>
-             * <li>Add the name of the source element in
+             * <li>If the <code>source</code> element is <code>null</code> or
+             * <code>undefined</code> throw an error.</li>
+             * <li>If the <code>source</code> argument is not a <code>string</code> or 
+             * DOM element object, throw an error.</li> 
+             * <li>If the <code>source</code> argument is a <code>string</code>, find the
+             * DOM element for that <code>string</code> identifier.
+             * <li>If the DOM element could not be determined, throw an error.</li>
+             * <li>If the <code>onerror</code> and <code>onevent</code> arguments are set,
+             * they must be functions, or throw an error.  
              * <li>Determine the <code>source</code> element's <code>form</code>
              * element.</li>
              * <li>Get the <code>form</code> view state by calling
@@ -628,6 +636,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * <ul>
              * <li>The following name/value pairs are required post data arguments:
              * <ul>
+             * <li><code>javax.faces.partial.source</code> with the value as the 
+             * source element identifier.</li>
              * <li>The name and value of the <code>source</code> element that
              * triggered this request;</li>
              * <li><code>javax.faces.partial.ajax</code> with the value
@@ -690,7 +700,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              *
              * </p>
              *
-             * @param source The DOM element that triggered this Ajax request, or an id string of the element to use as the triggering element.
+             * @param source The DOM element that triggered this Ajax request, or an id string of the 
+             * element to use as the triggering element.
              * @param event The DOM event that triggered this Ajax request.  The
              * <code>event</code> argument is optional.
              * @param options The set of available options that can be sent as
@@ -711,11 +722,11 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * </tr>
              * <tr>
              * <td><code>onevent</code></td>
-             * <td><code>name of a function to callback for event</code></td>
+             * <td><code>function to callback for event</code></td>
              * </tr>
              * <tr>
              * <td><code>onerror</code></td>
-             * <td><code>name of a function to callback for error</code></td>
+             * <td><code>function to callback for error</code></td>
              * </tr>
              * </table>
              * The <code>options</code> argument is optional.
@@ -764,12 +775,15 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 var viewState = jsf.getViewState(form);
 
                 // Set up additional arguments to be used in the request..
+                // Make sure "javax.faces.partial.source" is set up.
                 // If there were "execute" ids specified, make sure we
                 // include the identifier of the source element in the
                 // "execute" list.  If there were no "execute" ids
                 // specified, determine the default.
 
                 var args = {};
+
+                args["javax.faces.partial.source"] = element.id;
 
                 // RELEASE_PENDING Get rid of commas.  It's supposed to be spaces.
                 if (options.execute) {
