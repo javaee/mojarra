@@ -8,9 +8,9 @@ var errorMsg = function errorMsg(data) {
 
 var msg = function msg(data) {
     if (data.name === 'begin') {
-        activeCell(document.createTextNode(data.execute));
+        activeCell(document.createTextNode(data.source.id));
     } else if (data.name === 'complete') {
-        removeCell(document.createTextNode(data.execute));
+        removeCell(document.createTextNode(data.source.id));
     }
 };
 
@@ -72,7 +72,7 @@ function removeCell(cellData) {
 var statusUpdate = function statusUpdate(data) {
     var statusArea = document.getElementById("statusArea");
     var text = statusArea.value;
-    text = text + "Name: "+data.execute;
+    text = text + "Name: "+data.source.id;
     if (data.type === "event") {
         text = text +" Event: "+data.name+"\n";
     } else {  // otherwise, it's an error

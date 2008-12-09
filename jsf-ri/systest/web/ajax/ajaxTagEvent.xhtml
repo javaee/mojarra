@@ -14,7 +14,7 @@
  var statusUpdate = function statusUpdate(data) {
     var statusArea = document.getElementById("statusArea");
     var text = statusArea.value;
-    text = text + "Name: "+data.execute;
+    text = text + "Name: "+data.source.id;
     if (data.type === "event") {
         text = text +" Event: "+data.name+" ";
     } else {  // otherwise, it's an error

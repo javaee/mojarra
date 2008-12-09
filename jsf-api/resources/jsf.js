@@ -124,8 +124,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             var results = [], element;
             for (var i = 0; i < arguments.length; i++) {
                 element = arguments[i];
-                if (typeof element == 'string')
+                if (typeof element == 'string') {
                     element = document.getElementById(element);
+                }
                 results.push(element);
             }
             return results.length > 1 ? results : results[0];
@@ -261,7 +262,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             /** Dequeues an element from this Queue. The oldest element in this Queue is
              * removed and returned. If this Queue is empty then undefined is returned.
              *
-             * @returns The element that was removed rom the queue.
+             * @returns Object The element that was removed from the queue.
              * @ignore
              */
             this.dequeue = function dequeue() {
@@ -312,6 +313,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
             var req = {};                  // Request Object
             req.url = null;                // Request URL
+            req.source = null;             // Source of this request
             req.onerror = null;            // Error handler for request
             req.onevent = null;            // Event handler for request
             req.xmlReq = null;             // XMLHttpRequest Object
@@ -361,7 +363,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     onEvent(req, "success");
                 } else {
                     onEvent(req, "complete");
-                    onError(req);
+                    onError(req,"httpError");
                 }
 
                 // Regardless of whether the request completed successfully (or not),
@@ -464,75 +466,51 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
         /**
          * Error handling callback.
+         * Assumes that the request has completed.
          * @ignore
          */
         var onError = function onError(request, name) {
 
-            var func; // String to hold function to execute
             var data = {};  // data payload for function
             data.type = "error";
             data.name = name;
-            data.request = request;
-            if (request) {
-                data.execute = request.parameters["javax.faces.partial.execute"];
-                data.render = request.parameters["javax.faces.partial.render"];
-                if (request.status) {
-                    data.statusCode = request.status;
-                } else {
-                    data.statusCode = -1;  // status incomplete
-                }
-            }
-
-            // if name isn't set, try to provide an error name
-            // RELEASE_PENDING this doesn't work correctly.
-            if (!name) {
-                if (data.statusCode === 0) {
-                    data.name = "SERVERDOWN";
-                } else if (data.statusCode == 404) {
-                    data.name = "NOTFOUND";
-                } else if (data.statusCode == 500) {
-                    data.name = "SERVERERROR";
-                } else if (data.statusCode == -1) { // unknown client error
-                    data.name = "MISCCLIENT";
-                } else {  // no name set, unknown error
-                    data.name = "MISCSERVER";
-                }
-            }
+            data.source = request.source;
+            data.responseCode = request.status;
+            // RELEASE_PENDING pass a copy, not a reference
+            data.responseXML = request.responseXML;
+            data.responseTxt = request.responseTxt;
 
             // If we have a registered callback, send the error to it.
-            if (request && request.onerror) {
-                request.onerror.call(null, data);
+            if (request.onerror) {
+                request.onerror.call(data.source, data);
             }
 
             for (var i in errorListeners) {
                 if (errorListeners.hasOwnProperty(i)) {
-                    errorListeners[i].call(null, data);
+                    errorListeners[i].call(data.source, data);
                 }
             }
         };
 
         /**
          * Event handling callback.
+         * Request is assumed to have completed, except in the case of event = 'begin'.
          * @ignore
          */
         var onEvent = function onEvent(request, name) {
 
-            var func; // variable to hold function string to execute
             var data = {};
             data.type = "event";
             data.name = name;
-            data.request = request;
-            if (request) {
-                data.execute = request.parameters["javax.faces.partial.execute"];
-                data.render = request.parameters["javax.faces.partial.render"];
-                if (request.status) {
-                    data.statusCode = request.status;
-                } else {
-                    data.statusCode = -1;  // status incomplete
-                }
+            data.source = request.source;
+            if (name !== 'begin') {
+                data.responseCode = request.status;
+                // RELEASE_PENDING pass a copy, not a reference
+                data.responseXML = request.responseXML;
+                data.responseTxt = request.responseTxt;
             }
 
-            if (request && request.onevent && typeof request.onevent === 'function') {
+            if (request.onevent) {
                 request.onevent.call(null,data);
             }
 
@@ -542,8 +520,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 }
             }
         };
-
-
 
         // Use module pattern to return the functions we actually expose
         return {
@@ -829,6 +805,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 ajaxEngine.queryString = viewState;
                 ajaxEngine.onevent = onevent;
                 ajaxEngine.onerror = onerror;
+                ajaxEngine.source = element;
                 ajaxEngine.sendRequest();
             },
             /**
@@ -988,9 +965,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * @function jsf.ajax.response
              */
             response: function response(request) {
-                //  RELEASE_PENDING: We need to add more robust error handing - this error should probably be caught upstream
-                if (request === null || typeof request === 'undefined') {
-                    throw new Error("jsf.ajax.response: Request is null");
+                if (!request) {
+                    throw new Error("jsf.ajax.response: Request is unset");
                 }
 
                 var xmlReq = request;
@@ -1050,18 +1026,18 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                         // find the current document's "body" element
                         var docBody = document.getElementsByTagName("body")[0];
                         // if src contains <html>
-                        if (null != (htmlStart = htmlStartEx.exec(src))) {
+                        if (null !== (htmlStart = htmlStartEx.exec(src))) {
                             // if src contains </html>
-                            if (null != (htmlEnd = htmlEndEx.exec(src))) {
+                            if (null !== (htmlEnd = htmlEndEx.exec(src))) {
                                 src = src.substring(htmlStartEx.lastIndex, htmlEnd.index);
                             } else {
                                 src = src.substring(htmlStartEx.lastIndex);
                             }
                         }
                         // if src contains <head>
-                        if (null != (headStart = headStartEx.exec(src))) {
+                        if (null !== (headStart = headStartEx.exec(src))) {
                             // if src contains </head>
-                            if (null != (headEnd = headEndEx.exec(src))) {
+                            if (null !== (headEnd = headEndEx.exec(src))) {
                                 srcHead = src.substring(headStartEx.lastIndex,
                                         headEnd.index);
                             } else {
@@ -1074,9 +1050,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                             }
                         }
                         // if src contains <body>
-                        if (null != (bodyStart = bodyStartEx.exec(src))) {
+                        if (null !== (bodyStart = bodyStartEx.exec(src))) {
                             // if src contains </body>
-                            if (null != (bodyEnd = bodyEndEx.exec(src))) {
+                            if (null !== (bodyEnd = bodyEndEx.exec(src))) {
                                 srcBody = src.substring(bodyStartEx.lastIndex,
                                         bodyEnd.index);
                             } else {
