@@ -942,10 +942,10 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * <p><i>Error Processing</i></p>
              * <li>If an <code>&lt;error&gt;</code> element is found in the response:
              * <pre><code>&lt;error&gt;
-             *    &lt;error-class&gt;..fully qualified class name string...&lt;error-class&gt;
+             *    &lt;error-name&gt;..fully qualified class name string...&lt;error-name&gt;
              *    &lt;error-message&gt;&lt;![CDATA[...]]&gt;&lt;error-message&gt;
              * &lt;/error&gt;</code></pre>
-             * Extract this <code>&lt;error&gt;</code> element's <code>error-class</code> contents
+             * Extract this <code>&lt;error&gt;</code> element's <code>error-name</code> contents
              * and the <code>error-message</code> contents.  These identify the Java class that
              * caused the error, and the exception message, respectively.
              * This is an error from the server, and implementations can use this information
