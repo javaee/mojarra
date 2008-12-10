@@ -180,17 +180,17 @@ public final class FactoryFinder {
 
     /**
      * <p>The property name for the
-     * {@link javax.faces.webapp.pdl.PageDeclarationLanguage} class name.</p>
-     */
-    public final static String PAGE_DECLARATION_LANGUAGE_FACTORY =
-         "javax.faces.webapp.pdl.PageDeclarationLanguageFactory";
-
-    /**
-     * <p>The property name for the
      * {@link javax.faces.render.RenderKitFactory} class name.</p>
      */
     public final static String RENDER_KIT_FACTORY =
          "javax.faces.render.RenderKitFactory";
+
+    /**
+     * <p>The property name for the
+     * {@link javax.faces.webapp.pdl.PageDeclarationLanguage} class name.</p>
+     */
+    public final static String PAGE_DECLARATION_LANGUAGE_FACTORY =
+         "javax.faces.webapp.pdl.PageDeclarationLanguageFactory";
 
     // ------------------------------------------------------- Static Variables
 
@@ -200,7 +200,9 @@ public final class FactoryFinder {
 
     /**
      * <p>The set of JavaServer Faces factory classes for which the factory
-     * discovery mechanism is supported.</p>
+     * discovery mechanism is supported.  The entries in this list must be 
+     * alphabetically ordered according to the entire string, not just
+     * the last part!</p>
      */
     private static final String[] FACTORY_NAMES = {
          APPLICATION_FACTORY,
