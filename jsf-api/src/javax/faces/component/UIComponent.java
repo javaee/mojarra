@@ -65,6 +65,8 @@ import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.FacesWrapper;
 import javax.faces.application.Resource;
+import javax.faces.component.visit.VisitCallback;
+import javax.faces.component.visit.VisitContext;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
@@ -1301,16 +1303,21 @@ private void doFind(FacesContext context, String clientId) {
      * for each node encountered.
      * @since 2.0
      */
-    public void doTreeTraversal(FacesContext context, 
-				ContextCallback nodeCallback) {
-	nodeCallback.invokeContextCallback(context, this);
+    public void visitTree(VisitContext context, 
+            VisitCallback nodeCallback) {
+        if (this.isVisitable(context)) {
+            context.invokeVisitCallback(this, nodeCallback);
+        }
 
 	Iterator<UIComponent> it = this.getFacetsAndChildren();
 	
 	while(it.hasNext()) {
-	    it.next().doTreeTraversal(context, nodeCallback);
+	    it.next().visitTree(context, nodeCallback);
 	}
-        
+    }
+    
+    public boolean isVisitable(VisitContext context) {
+        return true;
     }
     
 

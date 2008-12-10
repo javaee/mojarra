@@ -712,6 +712,20 @@
                     </xsd:documentation>
                 </xsd:annotation>
             </xsd:element>
+            <xsd:element name="visit-context-factory"
+                         type="javaee:fully-qualified-classType">
+                <xsd:annotation>
+                    <xsd:documentation>
+
+                        The "visit-context-factory" element contains the fully
+                        qualified class name of the concrete VisitContextFactory
+                        implementation class that will be called when
+                        FactoryFinder.getFactory(VISIT_CONTEXT_FACTORY) is 
+                        called.
+
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
             <xsd:element name="factory-extension"
                          type="javaee:faces-config-factory-extensionType"
                          minOccurs="0"

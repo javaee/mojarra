@@ -66,9 +66,11 @@ import java.util.Iterator;
 
 
 // ------------------------------------------------------------- Private Classes
+import javax.faces.component.visit.VisitCallback;
 
 
 // Private class to represent saved state information
+import javax.faces.component.visit.VisitContext;
 /**
  * <p><strong>UIData</strong> is a {@link UIComponent} that supports data
  * binding to a collection of data objects represented by a {@link DataModel}
@@ -958,7 +960,7 @@ public class UIData extends UIComponentBase
     }
 
     @Override
-    public void doTreeTraversal(FacesContext context, ContextCallback contextCallback) {
+    public void visitTree(VisitContext context, VisitCallback contextCallback) {
         /******* PENDING(edburns) this is disabled until we fix UIData StateSaving
         processFacets(context, contextCallback);
         processColumnFacets(context, contextCallback);
@@ -966,16 +968,16 @@ public class UIData extends UIComponentBase
         ***********/
     }
 
-    private void processFacets(FacesContext context, ContextCallback contextCallback) {
+    private void processFacets(VisitContext context, VisitCallback contextCallback) {
         Iterator<UIComponent> it = getFacets().values().iterator();
 
         while (it.hasNext()) {
-            it.next().doTreeTraversal(context, contextCallback);
+            it.next().visitTree(context, contextCallback);
         }
     }
 
-    private void processColumnFacets(FacesContext context, 
-            ContextCallback contextCallback) {
+    private void processColumnFacets(VisitContext context, 
+            VisitCallback contextCallback) {
         Iterator<UIComponent> childIter = getChildren().iterator();
 
         while (childIter.hasNext()) {
@@ -987,14 +989,14 @@ public class UIData extends UIComponentBase
 
                 Iterator<UIComponent> facetsIter = child.getFacets().values().iterator();
                 while (facetsIter.hasNext()) {
-                    facetsIter.next().doTreeTraversal(context, contextCallback);
+                    facetsIter.next().visitTree(context, contextCallback);
                 }
             }
         }
     }
 
-    private void processColumnChildren(FacesContext context,
-            ContextCallback contextCallback) {
+    private void processColumnChildren(VisitContext context,
+            VisitCallback contextCallback) {
         int first = getFirst();
         int rows = getRows();
         int last;
@@ -1020,7 +1022,7 @@ public class UIData extends UIComponentBase
                     }
                     Iterator<UIComponent> columnChildIter = child.getChildren().iterator();
                     while ( columnChildIter.hasNext()) {
-                        columnChildIter.next().doTreeTraversal(context, contextCallback);
+                        columnChildIter.next().visitTree(context, contextCallback);
                     }
                 }
             }

@@ -52,6 +52,8 @@ import javax.faces.application.ViewExpiredException;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.visit.VisitContext;
+import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
@@ -63,7 +65,7 @@ import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
-import javax.faces.component.ContextCallback;
+import javax.faces.component.visit.VisitCallback;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.AfterAddToParentEvent;
 import javax.faces.event.AfterRestoreStateEvent;
@@ -137,12 +139,15 @@ public class RestoreViewPhase extends Phase {
             UIViewRoot root = facesContext.getViewRoot();
             final AfterRestoreStateEvent event = new AfterRestoreStateEvent(root);
             try {
-                root.doTreeTraversal(facesContext, new ContextCallback() {
+                root.visitTree(VisitContext.createVisitContext(facesContext),
+                        new VisitCallback() {
 
-                    public void invokeContextCallback(FacesContext context, UIComponent target) {
+                    public VisitResult visit(VisitContext context, UIComponent target) {
                         event.setComponent(target);
                         target.processEvent(event);
+                        return VisitResult.ACCEPT;
                     }
+
                 });
             } catch (AbortProcessingException e) {
                 facesContext.getApplication().publishEvent(ExceptionEvent.class, new ExceptionEventContext(facesContext, e));    

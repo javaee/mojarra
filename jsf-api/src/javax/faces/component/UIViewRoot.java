@@ -48,10 +48,9 @@ import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.PartialTraversal;
 import javax.faces.application.ProjectStage;
-import javax.faces.context.ExternalContext;
+import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
 import javax.faces.context.PartialViewContext;
-import javax.faces.context.ResponseWriter;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseEvent;
@@ -72,13 +71,14 @@ import java.util.Map;
 import java.util.ListIterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.component.visit.VisitCallback;
+import javax.faces.component.visit.VisitContext;
 import javax.faces.event.AfterRestoreStateEvent;
 import javax.faces.event.ViewMapCreatedEvent;
 import javax.faces.event.ViewMapDestroyedEvent;
 import javax.faces.event.ExceptionEvent;
 import javax.faces.event.ExceptionEventContext;
 
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * <p><strong class="changed_modified_2_0">UIViewRoot</strong> is the
@@ -831,7 +831,7 @@ public class UIViewRoot extends UIComponentBase {
      * FacesEvent}s remain in the event queue, that any
      * <code>PhaseListener</code>s in {@link #getPhaseListeners} are
      * invoked as appropriate, and that the <code>this.{@link
-     * UIComponent#doTreeTraversal} is called, passing a {@link
+     * UIComponent#visitTree} is called, passing a {@link
      * ContextCallback} that takes the following action: call the {@link
      * UIComponent#processEvent} method of the current component. The
      * argument <code>event</code> must be an instance of {@link
@@ -853,11 +853,13 @@ public class UIViewRoot extends UIComponentBase {
             notifyAfter(context, PhaseId.RESTORE_VIEW);
             final AfterRestoreStateEvent event = new AfterRestoreStateEvent(this);
             try {
-                this.doTreeTraversal(context, new ContextCallback() {
+                this.visitTree(VisitContext.createVisitContext(context), 
+                        new VisitCallback() {
 
-                    public void invokeContextCallback(FacesContext context, UIComponent target) {
+                    public VisitResult visit(VisitContext context, UIComponent target) {
                         event.setComponent(target);
                         target.processEvent(event);
+                        return VisitResult.ACCEPT;
                     }
                 });
             } catch (AbortProcessingException e) {

@@ -81,6 +81,11 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
     private static final String EXCEPTION_HANDLER_FACTORY = "exception-handler-factory";
 
     /**
+     * <code>/faces-config/factory/visit-context-factory</code>
+     */
+    private static final String VISIT_CONTEXT_FACTORY = "visit-context-factory";
+
+    /**
      * <code>/faces-config/factory/page-declaration-language-factory</code>
      */
     private static final String PAGE_DECLARATION_LANGUAGE_FACTORY = "page-declaration-language-factory";
@@ -106,6 +111,7 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
      */
     private static final String[] FACTORY_NAMES = {
           FactoryFinder.APPLICATION_FACTORY,
+          FactoryFinder.VISIT_CONTEXT_FACTORY,
           FactoryFinder.EXCEPTION_HANDLER_FACTORY,
           FactoryFinder.FACES_CONTEXT_FACTORY,
           FactoryFinder.LIFECYCLE_FACTORY,
@@ -192,6 +198,9 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
                                getNodeText(n));
                 } else if (EXCEPTION_HANDLER_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.EXCEPTION_HANDLER_FACTORY,
+                               getNodeText(n));
+                } else if (VISIT_CONTEXT_FACTORY.equals(n.getLocalName())) {
+                    setFactory(FactoryFinder.VISIT_CONTEXT_FACTORY,
                                getNodeText(n));
                 } else if (LIFECYCLE_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.LIFECYCLE_FACTORY,

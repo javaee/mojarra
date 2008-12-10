@@ -173,6 +173,13 @@ public final class FactoryFinder {
 
     /**
      * <p>The property name for the
+     * {@link javax.faces.component.visit.VisitContextFactory} class name.</p>
+     */
+    public final static String VISIT_CONTEXT_FACTORY =
+         "javax.faces.component.visit.VisitContextFactory";
+
+    /**
+     * <p>The property name for the
      * {@link javax.faces.lifecycle.LifecycleFactory} class name.</p>
      */
     public final static String LIFECYCLE_FACTORY =
@@ -206,6 +213,7 @@ public final class FactoryFinder {
      */
     private static final String[] FACTORY_NAMES = {
          APPLICATION_FACTORY,
+         VISIT_CONTEXT_FACTORY,
          EXCEPTION_HANDLER_FACTORY,
          FACES_CONTEXT_FACTORY,
          LIFECYCLE_FACTORY,
@@ -581,8 +589,12 @@ public final class FactoryFinder {
             factoryClasses = new HashMap<String, Class>(FACTORY_NAMES.length);
             factoryClasses.put(APPLICATION_FACTORY,
                  javax.faces.application.ApplicationFactory.class);
+            factoryClasses.put(EXCEPTION_HANDLER_FACTORY,
+                 javax.faces.context.ExceptionHandlerFactory.class);
             factoryClasses.put(FACES_CONTEXT_FACTORY,
                  javax.faces.context.FacesContextFactory.class);
+            factoryClasses.put(VISIT_CONTEXT_FACTORY,
+                 javax.faces.component.visit.VisitContextFactory.class);
             factoryClasses.put(LIFECYCLE_FACTORY,
                  javax.faces.lifecycle.LifecycleFactory.class);
             factoryClasses.put(RENDER_KIT_FACTORY,
