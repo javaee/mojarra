@@ -55,6 +55,9 @@ public class ExceptionHandlerFactoryImpl extends ExceptionHandlerFactory {
      */
     public ExceptionHandler getExceptionHandler() {
 
+        if (FacesContext.getCurrentInstance().getPartialViewContext().isAjaxRequest()) {
+            return new AjaxExceptionHandlerImpl(new ExceptionHandlerImpl());
+        }
         return new ExceptionHandlerImpl();
 
     }

@@ -76,7 +76,12 @@ public abstract class ExceptionHandlerFactory implements FacesWrapper<ExceptionH
     
     /**
      * <p class="changed_added_2_0">Create and return a A new
-     * <code>ExceptionHandler</code> instance.</p>
+     * <code>ExceptionHandler</code> instance.  The implementation must return
+     * an <code>ExceptionHandler</code> instance suitable for the environment.
+     * For example, in some cases it may be desirable for an 
+     * <code>ExceptionHandler</code> to write error information
+     * to the response instead of throwing exceptions as in the case of
+     * Ajax applications.</p> 
      */
     public abstract ExceptionHandler getExceptionHandler();
     
