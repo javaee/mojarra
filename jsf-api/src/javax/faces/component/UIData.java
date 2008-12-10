@@ -71,6 +71,7 @@ import javax.faces.component.visit.VisitCallback;
 
 // Private class to represent saved state information
 import javax.faces.component.visit.VisitContext;
+import javax.faces.component.visit.VisitResult;
 /**
  * <p><strong>UIData</strong> is a {@link UIComponent} that supports data
  * binding to a collection of data objects represented by a {@link DataModel}
@@ -960,12 +961,13 @@ public class UIData extends UIComponentBase
     }
 
     @Override
-    public void visitTree(VisitContext context, VisitCallback contextCallback) {
+    public VisitResult visitTree(VisitContext context, VisitCallback contextCallback) {
         /******* PENDING(edburns) this is disabled until we fix UIData StateSaving
         processFacets(context, contextCallback);
         processColumnFacets(context, contextCallback);
         processColumnChildren(context, contextCallback);
         ***********/
+        return VisitResult.ACCEPT;
     }
 
     private void processFacets(VisitContext context, VisitCallback contextCallback) {

@@ -163,7 +163,7 @@ public class Bean {
         // We collect ids by performing a full tree visit.  So, we
         // need a VisitContext, a VisitCallback, and a component to
         // initiate the visit on.
-        VisitContext visitContext = VisitContext.createVisitContext(facesContext, null, null);
+        VisitContext visitContext = VisitContext.createVisitContext(facesContext);
         CollectIdsVisitCallback visitCallback = new CollectIdsVisitCallback();
         UIComponent viewRoot = facesContext.getViewRoot();
 
