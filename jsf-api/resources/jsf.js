@@ -138,7 +138,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         var getForm = function getForm(element) {
             if (element) {
                 var form = $(element);
-                while (form && form.tagName && form.tagName.toLowerCase() !== 'form') {
+                while (form && form.nodeName && form.nodeName.toLowerCase() !== 'form') {
                     if (form.form) {
                         return form.form;
                     }
@@ -206,7 +206,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             temp.id = d.id;
 
             // Creating a head element isn't allowed in IE, so we'll disallow it
-            if (d.tagName.toLowerCase() === "head") {
+            if (d.nodeName.toLowerCase() === "head") {
                 throw new Error("Attempted to replace a head element");
             } else {
                 temp.innerHTML = src;
@@ -1212,7 +1212,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
                 var responseType = xml.getElementsByTagName("partial-response").item(0).firstChild;
 
-                if (responseType.tagName === "error") { // it's an error
+                if (responseType.nodeName === "error") { // it's an error
                     var errorName = responseType.firstChild.firstChild.nodeValue;
                     var errorMessage = responseType.firstChild.nextSibling.firstChild.nodeValue;
                     sendError(request, context, "serverError", errorName, errorMessage);
@@ -1220,13 +1220,13 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 }
 
 
-                if (responseType.tagName === "redirect") {
+                if (responseType.nodeName === "redirect") {
                     window.location = responseType.getAttribute("url");
                     return;
                 }
 
 
-                if (responseType.tagName !== "changes") {
+                if (responseType.nodeName !== "changes") {
                     sendError(request, context, "malformedXML");
                     return;
                 }
@@ -1236,7 +1236,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
 
                 for (var i = 0; i < changes.length; i++) {
-                    switch (changes[i].tagName) {
+                    switch (changes[i].nodeName) {
                         case "update":
                             doUpdate(changes[i]);
                             break;
