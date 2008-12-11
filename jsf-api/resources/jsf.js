@@ -968,9 +968,16 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * </pre></code>
              * <p><b>Implementation Requirements:</b></p>
              * This function must evaluate the markup returned in the
-             * <code>request.responseXML</code> object and update the <code>DOM</code>
-             * as follows:
+             * <code>request.responseXML</code> object and perform the following action:
              * <ul>
+             * <p>If there is no XML response returned, signal an <code>emptyResponse</code>
+             * error. If the XML response does not follow the format as outlined
+             * in Appendix A of the spec prose document <a
+             *  href="../../javadocs/overview-summary.html#prose_document">linked in the
+             *  overview summary</a> signal a <code>malformedError</code> error.  Refer to
+             * section "Signaling Errors" in Chapter 13 of the spec prose document <a
+             *  href="../../javadocs/overview-summary.html#prose_document">linked in the
+             *  overview summary</a>.</p> 
              * <p><i>Update Element Processing</i></p>
              * <li>If an <code>update</code> element is found in the response
              * with the identifier <code>javax.faces.ViewRoot</code>:
@@ -1033,29 +1040,29 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * the <code>&lt;update&gt;</code> element's <code>CDATA</code> contents.</li>
              * </li>
              * <p><i>Insert Element Processing</i></p>
-             * <li>If an <code>&lt;input&gt;</code> element is found in the response with the
+             * <li>If an <code>&lt;insert&gt;</code> element is found in the response with the
              * attribute <code>before</code>:
              * <pre><code>&lt;insert id="insert id" before="before id"&gt;
              *    &lt;![CDATA[...]]&gt;
              * &lt;/insert&gt;</code></pre>
              * <ul>
-             * <li>Extract this <code>&lt;input&gt;</code> element's <code>CDATA</code> contents
+             * <li>Extract this <code>&lt;insert&gt;</code> element's <code>CDATA</code> contents
              * from the response.</li>
              * <li>Find the DOM element whose identifier matches <code>before id</code> and insert
-             * the <code>&lt;input&gt;</code> element's <code>CDATA</code> content before
+             * the <code>&lt;insert&gt;</code> element's <code>CDATA</code> content before
              * the DOM element in the document.</li>
              * </ul>
              * </li>
-             * <li>If an <code>&lt;input&gt;</code> element is found in the response with the
+             * <li>If an <code>&lt;insert&gt;</code> element is found in the response with the
              * attribute <code>after</code>:
              * <pre><code>&lt;insert id="insert id" after="after id"&gt;
              *    &lt;![CDATA[...]]&gt;
              * &lt;/insert&gt;</code></pre>
              * <ul>
-             * <li>Extract this <code>&lt;input&gt;</code> element's <code>CDATA</code> contents
+             * <li>Extract this <code>&lt;insert&gt;</code> element's <code>CDATA</code> contents
              * from the response.</li>
              * <li>Find the DOM element whose identifier matches <code>after id</code> and insert
-             * the <code>&lt;input&gt;</code> element's <code>CDATA</code> content after
+             * the <code>&lt;insert&gt;</code> element's <code>CDATA</code> content after
              * the DOM element in the document.</li>
              * </ul>
              * </li>
@@ -1098,10 +1105,11 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              *    &lt;error-message&gt;&lt;![CDATA[...]]&gt;&lt;error-message&gt;
              * &lt;/error&gt;</code></pre>
              * Extract this <code>&lt;error&gt;</code> element's <code>error-name</code> contents
-             * and the <code>error-message</code> contents.  These identify the Java class that
-             * caused the error, and the exception message, respectively.
-             * This is an error from the server, and implementations can use this information
-             * as needed.</li>
+             * and the <code>error-message</code> contents. Signal a <code>serverError</code> passing
+             * the <code>errorName</code> and <code>errorMessage</code>.  Refer to
+             * section "Signaling Errors" in Chapter 13 of the spec prose document <a
+             *  href="../../javadocs/overview-summary.html#prose_document">linked in the
+             *  overview summary</a>.</li> 
              * <p><i>Extensions</i></p>
              * <li>The <code>&lt;extensions&gt;</code> element provides a way for framework
              * implementations to provide their own information.</li>
