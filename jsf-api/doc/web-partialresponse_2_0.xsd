@@ -145,26 +145,16 @@
     </xsd:complexType>
 
     <xsd:complexType name="partial-response-changesType">
-        <xsd:sequence>
+        <xsd:choice minOccurs="0" maxOccurs="unbounded">
             <xsd:element name="update"
-                         type="javaee:partial-response-updateType"
-                         minOccurs="0" 
-                         maxOccurs="unbounded"/>
+                         type="javaee:partial-response-updateType"/>
             <xsd:element name="insert"
-                         type="javaee:partial-response-insertType"
-                         minOccurs="0"
-                         maxOccurs="unbounded"/>
+                         type="javaee:partial-response-insertType"/>
             <xsd:element name="delete"
-                         type="javaee:partial-response-deleteType"
-                         minOccurs="0"
-                         maxOccurs="unbounded"/>
+                         type="javaee:partial-response-deleteType"/>
             <xsd:element name="attributes"
-                         type="javaee:partial-response-attributesType"
-                         minOccurs="0"
-                         maxOccurs="unbounded"/>
-            <xsd:element name="eval" type="xsd:string"
-                         minOccurs="0"
-                         maxOccurs="unbounded">
+                         type="javaee:partial-response-attributesType"/>
+            <xsd:element name="eval" type="xsd:string">
                 <xsd:annotation>
                     <xsd:documentation>
 
@@ -174,10 +164,8 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="extension"
-                         type="javaee:partial-response-extensionType"
-                         minOccurs="0"
-                         maxOccurs="unbounded"/>
-        </xsd:sequence>
+                         type="javaee:partial-response-extensionType"/>
+        </xsd:choice>
     </xsd:complexType>
 
 
