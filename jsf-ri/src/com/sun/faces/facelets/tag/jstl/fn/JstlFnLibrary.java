@@ -58,8 +58,8 @@ import java.util.Map;
 
 import javax.faces.FacesException;
 
-import com.sun.faces.facelets.tag.TagConfig;
-import com.sun.faces.facelets.tag.TagHandler;
+import javax.faces.webapp.pdl.facelets.tag.TagConfig;
+import javax.faces.webapp.pdl.facelets.tag.TagHandler;
 import com.sun.faces.facelets.tag.TagLibrary;
 
 /**

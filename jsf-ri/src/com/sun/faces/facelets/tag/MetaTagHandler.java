@@ -51,6 +51,8 @@
 
 package com.sun.faces.facelets.tag;
 
+import javax.faces.webapp.pdl.facelets.tag.TagHandler;
+import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import com.sun.faces.util.Util;
 
@@ -61,7 +63,7 @@ import com.sun.faces.util.Util;
  * @author Jacob Hookom
  * @version $Id$
  */
-public abstract class MetaTagHandler extends TagHandler {
+public abstract class MetaTagHandler extends TagHandlerImpl {
 
     private Class lastType = Object.class;
 

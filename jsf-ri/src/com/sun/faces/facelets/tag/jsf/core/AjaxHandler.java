@@ -69,10 +69,10 @@ import javax.faces.webapp.pdl.facelets.FaceletException;
 
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagAttributeException;
-import com.sun.faces.facelets.tag.TagConfig;
-import com.sun.faces.facelets.tag.TagHandler;
+import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.RIConstants;
+import com.sun.faces.facelets.tag.TagHandlerImpl;
 
 /**
  * <p class="changed_added_2_0">Enable one or more components in the view
@@ -126,7 +126,7 @@ import com.sun.faces.RIConstants;
  *
  * @version $Id: AjaxHandler.java 5369 2008-09-08 19:53:45Z rogerk $
  */
-public final class AjaxHandler extends TagHandler {
+public final class AjaxHandler extends TagHandlerImpl {
 
     private final TagAttribute events;
     private final TagAttribute execute;

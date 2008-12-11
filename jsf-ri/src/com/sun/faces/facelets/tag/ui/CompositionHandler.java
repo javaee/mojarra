@@ -71,15 +71,15 @@ import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 import com.sun.faces.facelets.TemplateClient;
 import com.sun.faces.facelets.el.VariableMapperWrapper;
+import com.sun.faces.facelets.tag.TagHandlerImpl;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import com.sun.faces.facelets.tag.TagConfig;
-import com.sun.faces.facelets.tag.TagHandler;
+import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 
 /**
  * @author Jacob Hookom
  * @version $Id$
  */
-public final class CompositionHandler extends TagHandler implements
+public final class CompositionHandler extends TagHandlerImpl implements
         TemplateClient {
 
     private static final Logger log = Logger.getLogger("facelets.tag.ui.composition");

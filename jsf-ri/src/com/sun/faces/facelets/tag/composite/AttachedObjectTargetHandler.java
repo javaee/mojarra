@@ -52,12 +52,12 @@
 package com.sun.faces.facelets.tag.composite;
 
 import com.sun.faces.application.view.FaceletViewHandlingStrategy;
+import com.sun.faces.facelets.tag.TagHandlerImpl;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import com.sun.faces.facelets.tag.TagConfig;
-import com.sun.faces.facelets.tag.TagException;
-import com.sun.faces.facelets.tag.TagHandler;
+import javax.faces.webapp.pdl.facelets.tag.TagConfig;
+import javax.faces.webapp.pdl.facelets.tag.TagException;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
@@ -67,11 +67,10 @@ import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.webapp.pdl.AttachedObjectTarget;
 
 
-public abstract class AttachedObjectTargetHandler extends TagHandler {
+public abstract class AttachedObjectTargetHandler extends TagHandlerImpl {
     
     private TagAttribute name = null;
     private TagAttribute targets = null;

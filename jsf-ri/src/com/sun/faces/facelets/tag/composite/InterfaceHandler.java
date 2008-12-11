@@ -52,11 +52,11 @@
 package com.sun.faces.facelets.tag.composite;
 
 import com.sun.faces.application.view.FaceletViewHandlingStrategy;
+import com.sun.faces.facelets.tag.TagHandlerImpl;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import com.sun.faces.facelets.tag.TagConfig;
-import com.sun.faces.facelets.tag.TagHandler;
+import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import java.beans.BeanDescriptor;
 import java.io.IOException;
@@ -72,7 +72,7 @@ import javax.faces.application.Resource;
 import javax.faces.application.ProjectStage;
 import javax.faces.context.FacesContext;
 
-public class InterfaceHandler extends TagHandler {
+public class InterfaceHandler extends TagHandlerImpl {
 
     public final static String Name = "interface";
 

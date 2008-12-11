@@ -51,7 +51,7 @@
 
 package com.sun.faces.facelets.tag.jsf;
 
-import com.sun.faces.facelets.tag.TagConfig;
+import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 
 /**
  * Used in creating AbstractComponentHandler's and all implementations.

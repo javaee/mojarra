@@ -51,6 +51,7 @@
 
 package com.sun.faces.facelets.tag.jstl.core;
 
+import com.sun.faces.facelets.tag.TagHandlerImpl;
 import java.io.IOException;
 
 import javax.el.ELException;
@@ -60,14 +61,13 @@ import javax.faces.component.UIComponent;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import com.sun.faces.facelets.tag.TagConfig;
-import com.sun.faces.facelets.tag.TagHandler;
+import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 
 /**
  * @author Jacob Hookom
  * @version $Id$
  */
-public final class CatchHandler extends TagHandler {
+public final class CatchHandler extends TagHandlerImpl {
 
     private final TagAttribute var;
 

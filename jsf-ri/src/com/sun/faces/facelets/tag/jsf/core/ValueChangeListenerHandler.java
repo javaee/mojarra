@@ -51,6 +51,7 @@
 
 package com.sun.faces.facelets.tag.jsf.core;
 
+import com.sun.faces.facelets.tag.TagHandlerImpl;
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -68,9 +69,8 @@ import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagAttributeException;
-import com.sun.faces.facelets.tag.TagConfig;
-import com.sun.faces.facelets.tag.TagException;
-import com.sun.faces.facelets.tag.TagHandler;
+import javax.faces.webapp.pdl.facelets.tag.TagConfig;
+import javax.faces.webapp.pdl.facelets.tag.TagException;
 import com.sun.faces.facelets.tag.jsf.CompositeComponentTagHandler;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.facelets.util.ReflectionUtil;
@@ -87,7 +87,7 @@ import javax.faces.webapp.pdl.EditableValueHolderAttachedObjectHandler;
  * @version $Id: ValueChangeListenerHandler.java,v 1.2 2005/08/24 04:38:50 jhook
  *          Exp $
  */
-public final class ValueChangeListenerHandler extends TagHandler implements EditableValueHolderAttachedObjectHandler {
+public final class ValueChangeListenerHandler extends TagHandlerImpl implements EditableValueHolderAttachedObjectHandler {
 
     private static class LazyValueChangeListener implements
                                                  ValueChangeListener,

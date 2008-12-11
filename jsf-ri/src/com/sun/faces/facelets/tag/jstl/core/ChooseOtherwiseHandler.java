@@ -51,9 +51,10 @@
 
 package com.sun.faces.facelets.tag.jstl.core;
 
+import com.sun.faces.facelets.tag.TagHandlerImpl;
 import javax.faces.component.UIComponent;
 
-import com.sun.faces.facelets.tag.TagConfig;
+import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import java.io.IOException;
 
 import javax.el.ELException;
@@ -61,13 +62,12 @@ import javax.faces.FacesException;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
-import com.sun.faces.facelets.tag.TagHandler;
 
 /**
  * @author Jacob Hookom
  * @version $Id$
  */
-public final class ChooseOtherwiseHandler extends TagHandler {
+public final class ChooseOtherwiseHandler extends TagHandlerImpl {
 
     public ChooseOtherwiseHandler(TagConfig config) {
         super(config);

@@ -71,7 +71,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import com.sun.faces.facelets.tag.MetaTagHandler;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import com.sun.faces.facelets.tag.TagException;
+import javax.faces.webapp.pdl.facelets.tag.TagException;
 import com.sun.faces.facelets.tag.MetaRuleset;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
 import java.util.Map;

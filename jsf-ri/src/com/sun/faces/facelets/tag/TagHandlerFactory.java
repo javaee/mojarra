@@ -51,6 +51,8 @@
 
 package com.sun.faces.facelets.tag;
 
+import javax.faces.webapp.pdl.facelets.tag.TagHandler;
+import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import javax.el.ELException;
 import javax.faces.FacesException;
 

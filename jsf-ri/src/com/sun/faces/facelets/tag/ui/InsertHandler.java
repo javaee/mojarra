@@ -61,16 +61,16 @@ import javax.faces.component.UIComponent;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 import com.sun.faces.facelets.TemplateClient;
+import com.sun.faces.facelets.tag.TagHandlerImpl;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagAttributeException;
-import com.sun.faces.facelets.tag.TagConfig;
-import com.sun.faces.facelets.tag.TagHandler;
+import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 
 /**
  * @author Jacob Hookom
  * @version $Id$
  */
-public final class InsertHandler extends TagHandler implements TemplateClient {
+public final class InsertHandler extends TagHandlerImpl implements TemplateClient {
 
     private final String name;
 

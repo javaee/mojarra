@@ -51,6 +51,8 @@
 
 package com.sun.faces.facelets.tag;
 
+import javax.faces.webapp.pdl.facelets.tag.TagException;
+import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import com.sun.faces.facelets.FaceletContextImplBase;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -78,7 +80,7 @@ import com.sun.faces.facelets.tag.ui.DefineHandler;
  * @author Jacob Hookom
  * @version $Id$
  */
-final class UserTagHandler extends TagHandler implements TemplateClient {
+final class UserTagHandler extends TagHandlerImpl implements TemplateClient {
 
     protected final TagAttribute[] vars;
 

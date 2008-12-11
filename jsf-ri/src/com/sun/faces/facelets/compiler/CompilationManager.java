@@ -63,7 +63,7 @@ import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagAttributeException;
 import javax.faces.webapp.pdl.facelets.tag.TagAttributes;
 import com.sun.faces.facelets.tag.TagDecorator;
-import com.sun.faces.facelets.tag.TagException;
+import javax.faces.webapp.pdl.facelets.tag.TagException;
 import com.sun.faces.facelets.tag.TagLibrary;
 import com.sun.faces.facelets.tag.composite.CompositeLibrary;
 import com.sun.faces.facelets.tag.composite.ImplementationHandler;

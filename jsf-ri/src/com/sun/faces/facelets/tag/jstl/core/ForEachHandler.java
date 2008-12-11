@@ -51,12 +51,12 @@
 
 package com.sun.faces.facelets.tag.jstl.core;
 
+import com.sun.faces.facelets.tag.TagHandlerImpl;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagAttributeException;
-import com.sun.faces.facelets.tag.TagConfig;
-import com.sun.faces.facelets.tag.TagHandler;
+import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 
 import javax.el.ELException;
 import javax.el.ValueExpression;
@@ -77,7 +77,7 @@ import java.util.NoSuchElementException;
  * @author Andrew Robinson
  * @version $Id$
  */
-public final class ForEachHandler extends TagHandler {
+public final class ForEachHandler extends TagHandlerImpl {
 
     private static class ArrayIterator implements Iterator {
 

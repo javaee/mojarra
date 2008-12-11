@@ -51,17 +51,17 @@
 
 package com.sun.faces.facelets.tag.composite;
 
+import com.sun.faces.facelets.tag.TagHandlerImpl;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
-import com.sun.faces.facelets.tag.TagConfig;
-import com.sun.faces.facelets.tag.TagHandler;
+import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import java.io.IOException;
 import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 
 
-public class DeferredMethodHandler extends TagHandler {
+public class DeferredMethodHandler extends TagHandlerImpl {
 
     public DeferredMethodHandler(TagConfig config) {
         super(config);

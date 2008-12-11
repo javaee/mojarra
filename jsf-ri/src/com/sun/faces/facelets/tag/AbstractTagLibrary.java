@@ -51,6 +51,8 @@
 
 package com.sun.faces.facelets.tag;
 
+import javax.faces.webapp.pdl.facelets.tag.TagHandler;
+import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import javax.faces.webapp.pdl.facelets.tag.Tag;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

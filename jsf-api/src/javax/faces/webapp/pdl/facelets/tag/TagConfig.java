@@ -49,7 +49,7 @@
  * limitations under the License.
  */
 
-package com.sun.faces.facelets.tag;
+package javax.faces.webapp.pdl.facelets.tag;
 
 import javax.faces.webapp.pdl.facelets.tag.Tag;
 import javax.faces.webapp.pdl.facelets.FaceletHandler;
@@ -58,7 +58,6 @@ import javax.faces.webapp.pdl.facelets.FaceletHandler;
  * Passed to the constructor of TagHandler, it defines the document definition
  * of the handler we are instantiating
  * 
- * @see com.sun.faces.facelets.tag.TagHandler
  * @author Jacob Hookom
  * @version $Id$
  */

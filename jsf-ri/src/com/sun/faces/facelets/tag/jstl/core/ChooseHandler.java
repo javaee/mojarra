@@ -51,8 +51,9 @@
 
 package com.sun.faces.facelets.tag.jstl.core;
 
-import com.sun.faces.facelets.tag.TagConfig;
-import com.sun.faces.facelets.tag.TagException;
+import com.sun.faces.facelets.tag.TagHandlerImpl;
+import javax.faces.webapp.pdl.facelets.tag.TagConfig;
+import javax.faces.webapp.pdl.facelets.tag.TagException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -66,13 +67,12 @@ import javax.faces.component.UIComponent;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
-import com.sun.faces.facelets.tag.TagHandler;
 
 /**
  * @author Jacob Hookom
  * @version $Id$
  */
-public final class ChooseHandler extends TagHandler {
+public final class ChooseHandler extends TagHandlerImpl {
     
     private final ChooseOtherwiseHandler otherwise;
     private final ChooseWhenHandler[] when;

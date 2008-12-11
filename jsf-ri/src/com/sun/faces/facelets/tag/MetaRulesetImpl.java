@@ -51,6 +51,7 @@
 
 package com.sun.faces.facelets.tag;
 
+import javax.faces.webapp.pdl.facelets.tag.TagException;
 import javax.faces.webapp.pdl.facelets.tag.Tag;
 import java.beans.IntrospectionException;
 import java.util.ArrayList;

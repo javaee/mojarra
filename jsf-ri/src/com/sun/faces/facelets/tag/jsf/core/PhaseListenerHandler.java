@@ -51,6 +51,7 @@
 
 package com.sun.faces.facelets.tag.jsf.core;
 
+import com.sun.faces.facelets.tag.TagHandlerImpl;
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -69,13 +70,12 @@ import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import javax.faces.webapp.pdl.facelets.tag.TagAttributeException;
-import com.sun.faces.facelets.tag.TagConfig;
-import com.sun.faces.facelets.tag.TagException;
-import com.sun.faces.facelets.tag.TagHandler;
+import javax.faces.webapp.pdl.facelets.tag.TagConfig;
+import javax.faces.webapp.pdl.facelets.tag.TagException;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.facelets.util.ReflectionUtil;
 
-public class PhaseListenerHandler extends TagHandler {
+public class PhaseListenerHandler extends TagHandlerImpl {
 
     private final static class LazyPhaseListener implements PhaseListener,
                                                             Serializable {

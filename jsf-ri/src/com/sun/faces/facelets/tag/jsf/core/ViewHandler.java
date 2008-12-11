@@ -51,6 +51,7 @@
 
 package com.sun.faces.facelets.tag.jsf.core;
 
+import com.sun.faces.facelets.tag.TagHandlerImpl;
 import java.io.IOException;
 
 import javax.el.ELException;
@@ -63,8 +64,7 @@ import javax.faces.event.PhaseEvent;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import com.sun.faces.facelets.tag.TagConfig;
-import com.sun.faces.facelets.tag.TagHandler;
+import javax.faces.webapp.pdl.facelets.tag.TagConfig;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 
 /**
@@ -76,7 +76,7 @@ import com.sun.faces.facelets.tag.jsf.ComponentSupport;
  * @author Jacob Hookom
  * @version $Id$
  */
-public final class ViewHandler extends TagHandler {
+public final class ViewHandler extends TagHandlerImpl {
 
     private final static Class[] LISTENER_SIG = new Class[] { PhaseEvent.class };
 

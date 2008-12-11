@@ -51,12 +51,12 @@
 
 package com.sun.faces.facelets.tag.composite;
 
+import com.sun.faces.facelets.tag.TagHandlerImpl;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import com.sun.faces.facelets.tag.TagConfig;
-import com.sun.faces.facelets.tag.TagException;
-import com.sun.faces.facelets.tag.TagHandler;
+import javax.faces.webapp.pdl.facelets.tag.TagConfig;
+import javax.faces.webapp.pdl.facelets.tag.TagException;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
@@ -69,7 +69,7 @@ import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 
 
-public class AttributeHandler extends TagHandler {
+public class AttributeHandler extends TagHandlerImpl {
     
     private TagAttribute name = null;
     private TagAttribute required = null;

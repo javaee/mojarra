@@ -62,7 +62,7 @@ import com.sun.faces.facelets.el.ELText;
 import com.sun.faces.facelets.tag.CompositeFaceletHandler;
 import javax.faces.webapp.pdl.facelets.tag.Tag;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import com.sun.faces.facelets.tag.TagException;
+import javax.faces.webapp.pdl.facelets.tag.TagException;
 
 /**
  * 
