@@ -387,6 +387,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          */
         var doAttributes = function doAttributes(element) {
 
+            // RELEASE_PENDING IE 5-7 does not allow setting styles with setAttribute
+            // RELEASE_PENDING IE 5-7 will clear event attributes if you try to set them
+
             // Get id of element we'll act against
             var id = element.getAttribute('id');
 
@@ -1210,7 +1213,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 }
 
 
-                var responseType = xml.getElementsByTagName("partial-response").item(0).firstChild;
+                var responseType = xml.getElementsByTagName("partial-response")[0].firstChild;
 
                 if (responseType.nodeName === "error") { // it's an error
                     var errorName = responseType.firstChild.firstChild.nodeValue;
