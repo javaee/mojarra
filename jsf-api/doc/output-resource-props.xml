@@ -76,7 +76,7 @@
         <attribute-name>library</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-            <required>true</required>
+            <required>false</required>
             <tag-attribute>true</tag-attribute>
         </attribute-extension>
 
@@ -90,7 +90,7 @@
         <attribute-name>target</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-            <required>true</required>
+            <required>false</required>
             <tag-attribute>true</tag-attribute>
         </attribute-extension>
 
