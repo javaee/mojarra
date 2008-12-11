@@ -41,6 +41,7 @@
 package com.sun.faces.application;
 
 import java.io.IOException;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -51,6 +52,10 @@ import javax.faces.FacesException;
 import javax.faces.application.PartialTraversal;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.visit.VisitCallback;
+import javax.faces.component.visit.VisitContext;
+import javax.faces.component.visit.VisitHint;
+import javax.faces.component.visit.VisitResult;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.PartialViewContext;
@@ -59,6 +64,7 @@ import javax.faces.event.PhaseId;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.sun.faces.component.visit.PartialVisitContext;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 
@@ -171,56 +177,23 @@ public class PartialTraversalImpl implements PartialTraversal {
         }
     }
 
+    // Process the components specified in the phaseClientIds list
     private void processComponents(UIComponent component, PhaseId phaseId, 
-        List phaseClientIds, FacesContext context) throws IOException {
+        List<String> phaseClientIds, FacesContext context) throws IOException {
         PartialViewContext partialViewContext = context.getPartialViewContext();
-        if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
-            if (phaseClientIds.contains(component.getClientId()) ||
-                partialViewContext.isExecuteAll()) {
-                component.processDecodes(context);
-            }
-        } else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
-            if (phaseClientIds.contains(component.getClientId()) ||
-                partialViewContext.isExecuteAll()) {
-                component.processValidators(context);
-            }
-        } else if (phaseId == PhaseId.UPDATE_MODEL_VALUES) {
-            if (phaseClientIds.contains(component.getClientId()) ||
-                partialViewContext.isExecuteAll()) {
-                component.processUpdates(context);
-            }
-        } else if (phaseId == PhaseId.RENDER_RESPONSE) {
-            if (phaseClientIds.contains(component.getClientId())) {
-                if (component.isRendered()) {
-                    ResponseWriter writer = context.getResponseWriter();
-                    writer.startElement("update", component);
-                    writer.writeAttribute("id", component.getClientId(context), "id");
-                    try {
-                        writer.write("<![CDATA[");
 
-                        // do the default behavior...
-                        component.encodeAll(context);
-
-                        writer.write("]]>");
-                    } catch (Exception ce) {
-                        if (LOGGER.isLoggable(Level.SEVERE)) {
-                            LOGGER.severe(ce.toString());
-                        }
-                        if (LOGGER.isLoggable(Level.FINE)) {
-                            LOGGER.log(Level.FINE,
-                            ce.toString(),
-                            ce);
-                        }
-                    }
-                    writer.endElement("update");
-                }
-            }
-        }
-        Iterator<UIComponent> itr = component.getFacetsAndChildren();
-        while (itr.hasNext()) {
-            UIComponent kid = (UIComponent)itr.next();
-            processComponents(kid, phaseId, phaseClientIds, context);
-        }
+        // We use the tree visitor mechanism to locate the components to
+        // process.  Create our (partial) VisitContext and the
+        // VisitCallback that will be invoked for each component that
+        // is visited.  Note that we use the VISIT_RENDERED hint as we
+        // only want to visit the rendered subtree.
+        EnumSet hints = EnumSet.of(VisitHint.VISIT_RENDERED,
+                                   VisitHint.VISIT_TRANSIENT);
+        PartialVisitContext visitContext =
+            new PartialVisitContext(context, phaseClientIds, hints);
+        PhaseAwareVisitCallback visitCallback =
+            new PhaseAwareVisitCallback(phaseId);
+        component.visitTree(visitContext, visitCallback);
     }
 
     private void renderAll(FacesContext context, UIViewRoot viewRoot) throws IOException {
@@ -263,4 +236,76 @@ public class PartialTraversalImpl implements PartialTraversal {
         // move aside the PartialResponseWriter
         context.setResponseWriter(orig);
     }
+
+    // ----------------------------------------------------------- Inner Classes
+
+    private static class PhaseAwareVisitCallback implements VisitCallback {
+    
+        private PhaseId curPhase = null;
+        private PhaseAwareVisitCallback(PhaseId curPhase) {
+            this.curPhase = curPhase;
+        }   
+        
+
+        public VisitResult visit(VisitContext context,
+                                 UIComponent comp) {
+            try {                         
+                FacesContext facesContext = context.getFacesContext();
+
+                if (curPhase == PhaseId.APPLY_REQUEST_VALUES) {
+                
+                    // RELEASE_PENDING handle immediate request(s)
+                    // If the user requested an immediate request
+                    // Make sure to set the immediate flag here.
+                    
+                    comp.processDecodes(facesContext);
+                } else if (curPhase == PhaseId.PROCESS_VALIDATIONS) {
+                    comp.processValidators(facesContext);
+                } else if (curPhase == PhaseId.UPDATE_MODEL_VALUES) {
+                    comp.processUpdates(facesContext);
+                } else if (curPhase == PhaseId.RENDER_RESPONSE) {
+                
+                    ResponseWriter writer = facesContext.getResponseWriter();
+                        
+                    writer.startElement("update", comp);
+                    writer.writeAttribute("id", comp.getClientId(facesContext), "id");
+                    try {
+                        writer.write("<![CDATA[");
+
+                        // do the default behavior...
+                        comp.encodeAll(facesContext);
+
+                        writer.write("]]>");
+                    }
+                    catch (Exception ce) {
+                        if (LOGGER.isLoggable(Level.SEVERE)) {
+                            LOGGER.severe(ce.toString());
+                        }
+                        if (LOGGER.isLoggable(Level.FINE)) {
+                            LOGGER.log(Level.FINE,
+                            ce.toString(),
+                            ce);
+                        }
+                    }
+                    writer.endElement("update");
+                }
+                else {
+                    throw new IllegalStateException("I18N: Unexpected " +
+                                                    "PhaseId passed to " +
+                                              " PhaseAwareContextCallback: " +
+                                                    curPhase.toString());
+                }
+            }
+            catch (IOException ex) {
+                ex.printStackTrace();
+            }
+
+            // Once we visit a component, there is no need to visit
+            // its children, since processDecodes/Validators/Updates and
+            // encodeAll() already traverse the subtree.  We return 
+            // VisitResult.REJECT to supress the subtree visit.
+            return VisitResult.REJECT;
+        }
+    }
+
 }
