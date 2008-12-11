@@ -358,12 +358,12 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 req.status = req.xmlReq.status;
                 if ((req.status !== null && typeof req.status !== 'undefined' &&
                      req.status !== 0) && (req.status >= 200 && req.status < 300)) {
-                    onEvent(req, "complete");
+                    sendEvent(req, "complete");
                     jsf.ajax.response(req.xmlReq);
-                    onEvent(req, "success");
+                    sendEvent(req, "success");  //RELEASE_PENDING move this to response
                 } else {
-                    onEvent(req, "complete");
-                    onError(req,"httpError");
+                    sendEvent(req, "complete");
+                    sendError(req,"httpError");
                 }
 
                 // Regardless of whether the request completed successfully (or not),
@@ -456,7 +456,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                         }
                         content = req.queryString;
                     }
-                    onEvent(req, "begin");
+                    sendEvent(req, "begin");
                     req.xmlReq.send(content);
                 }
             };
@@ -469,7 +469,12 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * Assumes that the request has completed.
          * @ignore
          */
-        var onError = function onError(request, name) {
+        var sendError = function sendError(request, name, serverErrorName, serverErrorMessage) {
+
+            // Possible errornames:
+            // httpError
+            // emptyResponse
+            // serverError  RELEASE_PENDING or facesError?
 
             var data = {};  // data payload for function
             data.type = "error";
@@ -479,6 +484,11 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             // RELEASE_PENDING pass a copy, not a reference
             data.responseXML = request.responseXML;
             data.responseTxt = request.responseTxt;
+
+            if (name == "serverError") {
+                data.errorName = serverErrorName;
+                data.errorMessage = serverErrorMessage;
+            }
 
             // If we have a registered callback, send the error to it.
             if (request.onerror) {
@@ -497,7 +507,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * Request is assumed to have completed, except in the case of event = 'begin'.
          * @ignore
          */
-        var onEvent = function onEvent(request, name) {
+        var sendEvent = function sendEvent(request, name) {
 
             var data = {};
             data.type = "event";
@@ -972,16 +982,31 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 var xmlReq = request;
 
                 var xml = xmlReq.responseXML;
-                //  RELEASE_PENDING: We need to add more robust error handing - this error should probably be caught upstream
                 if (xml === null) {
-                    throw new Error("jsf.ajax.response: Reponse contains no data");
+                    sendError(request,"emptyResponse");
                 }
 
-                var id, content, markup, str, state;
 
+                var responseType = xml.getElementsByTagName("partial-response").item(0).firstChild;
+
+                if (responseType.tagName === "error") { // it's an error
+                    var errorName = responseType.firstChild.firstChild.nodeValue;
+                    var errorMessage = responseType.firstChild.nextSibling.firstChild.nodeValue;
+                    sendError(request, "serverError", errorName, errorMessage);
+                    return;
+                }
+
+
+                if (responseType.tagName === "redirect") {
+                    window.location = responseType.getAttribute("url");
+                    return;
+                }
+
+                
                 //////////////////////
                 // Check for updates..
                 //////////////////////
+                var id, content, markup, str, state;
 
                 var update = xml.getElementsByTagName('update');
 
@@ -1092,14 +1117,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
                 //////////////////////
                 // JavaScript Eval.
-                //////////////////////
-
-                //////////////////////
-                // Redirect.
-                //////////////////////
-
-                //////////////////////
-                // Error.
                 //////////////////////
 
                 // Now set the view state from the server into the DOM
