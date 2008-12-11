@@ -63,7 +63,7 @@
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
             <required>false</required>
-            <tag-attribute>false</tag-attribute>
+            <tag-attribute>true</tag-attribute>
         </attribute-extension>
 
     </attribute>
@@ -77,7 +77,7 @@
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
             <required>true</required>
-            <tag-attribute>false</tag-attribute>
+            <tag-attribute>true</tag-attribute>
         </attribute-extension>
 
     </attribute>
@@ -91,7 +91,7 @@
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
             <required>true</required>
-            <tag-attribute>false</tag-attribute>
+            <tag-attribute>true</tag-attribute>
         </attribute-extension>
 
     </attribute>
