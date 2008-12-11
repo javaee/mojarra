@@ -59,6 +59,7 @@ import com.sun.faces.application.ViewHandlerResponseWrapper;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.RequestStateManager;
+import javax.faces.webapp.pdl.StateManagementStrategy;
 
 /**
  * This {@link ViewHandlingStrategy} handles JSP-based views.
@@ -81,6 +82,10 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    public StateManagementStrategy getStateManagementStrategy(FacesContext context, String viewId) {
+        return null;
+    }
 
     // --------------------------------------- Methods from ViewHandlingStrategy
 

@@ -52,6 +52,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
+import javax.faces.webapp.pdl.StateManagementStrategy;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
@@ -97,6 +98,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     public static final String IS_BUILDING_METADATA = "com.sun.faces.application.view.IS_BUILDING_METADATA";
     
 
+    private StateManagementStrategy stateManagementStrategy;
+    
     // ------------------------------------------------------------ Constructors
 
 
@@ -107,8 +110,11 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         initialize();
 
     }
-    
-    
+
+    @Override
+    public StateManagementStrategy getStateManagementStrategy(FacesContext context, String viewId) {
+        return stateManagementStrategy;
+    }
 
     @Override
     public BeanInfo getComponentMetadata(FacesContext context, 
@@ -320,6 +326,8 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
 
         UIViewRoot root = multiViewHandler.createViewPrivateContract(ctx, viewId);
         ctx.setViewRoot(root);
+        root.getClientId(ctx);
+
         if (root != null) {
             try {
                 buildView(ctx, root);
@@ -373,6 +381,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         }
 
         this.initializeMappings();
+        this.stateManagementStrategy = new StateManagementStrategyImpl();
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Initialization Successful");

@@ -39,6 +39,7 @@ package javax.faces.webapp.pdl;
 import java.beans.BeanInfo;
 import java.io.IOException;
 import javax.faces.application.Resource;
+import javax.faces.application.StateManager;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
@@ -155,6 +156,9 @@ public abstract class PageDeclarationLanguage {
     public abstract void renderView(FacesContext context,
                                     UIViewRoot view)
     throws IOException;
+    
+    public abstract StateManagementStrategy getStateManagementStrategy(FacesContext context,
+            String viewId);
     
 
 }

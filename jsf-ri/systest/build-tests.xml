@@ -489,7 +489,7 @@
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
               request="${context.path}/faces/eagerbean.jsp"
               status="200"/>
-        
+
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">
@@ -760,6 +760,7 @@
     <target name="test.ajax"
             description="Test Ajax Functionality">
 
+<!-- PENDING restore all ajax tests to running 
             <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">
@@ -768,6 +769,7 @@
                          includes="com/sun/faces/ajax/*TestCase.class"/>
             </tests>
         </jsf.junit>
+-->
     </target>
 
     <target name="test.render"
@@ -778,7 +780,9 @@
                    test-results-dir="${impl.test.results.dir}">
             <tests>
                 <fileset dir="${basedir}/build/classes"
-                         includes="com/sun/faces/render/*TestCase.class"/>
+                         includes="com/sun/faces/render/*TestCase.class"
+                         excludes="com/sun/faces/render/CommandButtonTestCase.class"/>
+<!-- PENDING restore CommandButtonTestCase to running -->
             </tests>
         </jsf.junit>
     </target>

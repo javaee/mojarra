@@ -162,6 +162,7 @@ public class ComponentHandler extends MetaTagHandler {
             ComponentSupport.markForDeletion(c);
         } else {
             c = this.createComponent(ctx);
+            c.getClientId(ctx.getFacesContext());
             if (log.isLoggable(Level.FINE)) {
                 log.fine(this.tag + " Component["+id+"] Created: "
                         + c.getClass().getName());
