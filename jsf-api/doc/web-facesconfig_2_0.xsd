@@ -360,7 +360,7 @@
         </xsd:annotation>
         <xsd:sequence>
             <xsd:element name="id" type="xsd:ID" minOccurs="1" maxOccurs="unbounded"/>
-            <xsd:element name="others" type="javaee:faces-config-ordering-othersType " minOccurs="0" maxOccurs="1" />
+            <xsd:element name="others" type="javaee:faces-config-ordering-othersType" minOccurs="0" maxOccurs="1" />
         </xsd:sequence>
     </xsd:complexType>
     
@@ -1496,7 +1496,7 @@
 
     <!-- **************************************************** -->
     
-    <xsd:simpleType name="faces-config-managed-bean-scopeOrNoneType">
+    <xsd:complexType name="faces-config-managed-bean-scopeOrNoneType">
         <xsd:annotation>
             <xsd:documentation>
 
@@ -1506,15 +1506,18 @@
                 normally used in a web application, plus the "none" value
                 indicating that a created bean should not be stored into
                 any scope.  Alternatively, an EL expression may be used
-                as the value of this element.
+                as the value of this element.  The result of evaluating this
+                expression must by of type java.util.Map.
                 ]]>
 
             </xsd:documentation>
         </xsd:annotation>
-        <xsd:restriction base="xsd:string">
-            <xsd:pattern value="\s*view\s*|\s*request\s*|\s*session\s*|\s*application\s*|\s*none\s*|\s*#\{.*\}\s*"/>
-        </xsd:restriction>
-    </xsd:simpleType>
+        <xsd:simpleContent>
+            <xsd:restriction base="javaee:string">
+            <xsd:pattern value="view|request|session|application|none|#\{.*\}"/>
+            </xsd:restriction>
+        </xsd:simpleContent>
+    </xsd:complexType>
 
     <!-- **************************************************** -->
 
