@@ -445,7 +445,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             req.parameters = {};           // Parameters For GET or POST
             req.queryString = null;        // Encoded Data For GET or POST
             req.method = null;             // GET or POST
-            req.responseTxt = null;        // Response Content (Text)
+            req.responseText = null;       // Response Content (Text)
             req.responseXML = null;        // Response Content (XML)
             req.status = null;             // Response Status Code From Server
             req.fromQueue = false;         // Indicates if the request was taken off the queue
@@ -605,11 +605,13 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             var data = {};  // data payload for function
             data.type = "error";
             data.name = name;
+            // RELEASE_PENDING won't work in response
             data.source = request.source;
             data.responseCode = request.status;
             // RELEASE_PENDING pass a copy, not a reference
             data.responseXML = request.responseXML;
-            data.responseTxt = request.responseTxt;
+            // RELEASE_PENDING won't work in response
+            data.responseText = request.responseText;
 
             if (name == "serverError") {
                 data.errorName = serverErrorName;
@@ -659,7 +661,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 data.responseCode = request.status;
                 // RELEASE_PENDING pass a copy, not a reference
                 data.responseXML = request.responseXML;
-                data.responseTxt = request.responseTxt;
+                data.responseText = request.responseText;
             }
 
             if (request.onevent) {
@@ -1126,7 +1128,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              */
             response: function response(request) {
                 if (!request) {
-                    throw new Error("jsf.ajax.response: Request is unset");
+                    throw new Error("jsf.ajax.response: Request parameter is unset");
                 }
 
                 var xmlReq = request;
@@ -1152,15 +1154,9 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     return;
                 }
 
-                var updates = xml.getElementsByTagName("update");
-                for (var i = 0; i < updates.length; i++) {
-                    doUpdate(updates[i]);
-                }
 
-
-                /*  Need to wire server up
-                if (responseType.tagName !== "change") {
-                    sendError(request, "malformedXML")
+                if (responseType.tagName !== "changes") {
+                    sendError(request, "malformedXML");
                     return;
                 }
 
@@ -1188,8 +1184,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                             return;
                     }
                 }
-                */
-                sendEvent(request, "success");
+                // RELEASE_PENDING
+                //sendEvent(request, "success");
 
                 //////////////////////
                 // Check for updates..
