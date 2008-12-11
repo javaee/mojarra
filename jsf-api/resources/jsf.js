@@ -337,20 +337,53 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 temp.innerHTML = trim(str);
 
                 parent.replaceChild(temp.firstChild, d);
+                document.removeChild(temp);
             }
         };
 
+        /**
+         * Delete a node specified by the element.
+         * @param element
+         * @ignore
+         */
         var doDelete = function doDelete(element) {
-
+            var id = element.getAttribute('id');
+            var target = $(id);
+            var parent = target.parentNode;
+            parent.removeChild(target);
         };
 
+        /**
+         * Insert a node specified by the element.
+         * @param element
+         * @ignore
+         */
         var doInsert = function doInsert(element) {
-
+            var parent;
+            var beforeNode;
+            var afterNode;
+            var id = element.getAttribute('id');
+            var before = element.getAttribute('before');
+            var after = element.getAttribute('after');
+            var tempElement = document.createElement('span');
+            tempElement.innerHTML = element.firstChild.nodeValue;
+            if (before) {
+                beforeNode = $(before);
+                parent = beforeNode.parentNode;
+                parent.insertBefore(tempElement.firstChild, beforeNode);
+            } else if (after) {
+                afterNode = $(after);
+                parent = afterNode.parentNode;
+                beforeNode = afterNode.nextSibling;
+                parent.insertBefore(tempElement.firstChild, beforeNode);
+            }
+            document.removeChild(tempElement);
         };
 
         /**
          * Modify attributes of given element id.
          * @param element
+         * @ignore
          */
         var doAttributes = function doAttributes(element) {
 
