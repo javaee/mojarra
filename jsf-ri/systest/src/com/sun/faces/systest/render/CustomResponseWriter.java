@@ -350,7 +350,7 @@ public class CustomResponseWriter extends ResponseWriter {
         if (stringValue.startsWith("javascript:")) {
             HtmlUtils.writeAttribute(writer, true, true, buffer, stringValue, textBuffer, true);
         } else {
-            HtmlUtils.writeURL(writer, stringValue, textBuffer, encoding, getContentType());
+            HtmlUtils.writeURL(writer, stringValue, textBuffer, encoding);
         }
         
         //PENDING (horwat) using String as a result of Tomcat char writer

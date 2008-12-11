@@ -942,8 +942,7 @@ public class HtmlResponseWriter extends ResponseWriter {
             HtmlUtils.writeURL(attributesBuffer,
                                stringValue,
                                textBuffer,
-                               encoding,
-                               getContentType());
+                               encoding);
         }
 
         attributesBuffer.write('"');
