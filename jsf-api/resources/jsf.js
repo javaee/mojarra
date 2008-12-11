@@ -475,6 +475,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             // httpError
             // emptyResponse
             // serverError  RELEASE_PENDING or facesError?
+            // malformedXML
 
             var data = {};  // data payload for function
             data.type = "error";
@@ -492,12 +493,12 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
             // If we have a registered callback, send the error to it.
             if (request.onerror) {
-                request.onerror.call(data.source, data);
+                request.onerror.call(null, data);
             }
 
             for (var i in errorListeners) {
                 if (errorListeners.hasOwnProperty(i)) {
-                    errorListeners[i].call(data.source, data);
+                    errorListeners[i].call(null, data);
                 }
             }
         };
@@ -1002,7 +1003,10 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     return;
                 }
 
-                
+                if (responseType.tagName !== "change") {
+                    sendError(request, "malformedXML")
+                }
+
                 //////////////////////
                 // Check for updates..
                 //////////////////////
