@@ -217,6 +217,130 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             return result;
         };
 
+
+        /**
+         * Do update.
+         * @ignore
+         */
+        var doUpdate = function doUpdate(element) {
+            var id, content, markup, str, state;
+
+            id = element.getAttribute('id');
+            if (id === "javax.faces.ViewState") {
+                state = element.firstChild;
+
+                // Now set the view state from the server into the DOM
+                // If there are multiple forms, make sure they all have a
+                // viewState hidden field.
+
+                var stateElem = $("javax.faces.ViewState");
+                if (stateElem) {
+                    stateElem.value = state.text || state.data;
+                }
+                var numForms = document.forms.length;
+                var field;
+                for (var k = 0; k < numForms; k++) {
+                    field = document.forms[k].elements["javax.faces.ViewState"];
+                    if (typeof field == 'undefined') {
+                        field = document.createElement("input");
+                        field.type = "hidden";
+                        field.name = "javax.faces.ViewState";
+                        document.forms[k].appendChild(field);
+                    }
+                    field.value = state.text || state.data;
+                }
+                return;
+            }
+
+            // join the CDATA sections in the markup
+            // RELEASE_PENDING are there allowed to be more than one CDATA?
+            markup = '';
+            for (var j = 0; j < element.childNodes.length; j++) {
+                content = element.childNodes[j];
+                markup += content.text || content.data;
+            }
+
+            // RELEASE_PENDING - doc what this does
+            str = markup.replace(new RegExp('(?:<script.*?>)((\n|\r|.)*?)(?:<\/script>)', 'img'), '');
+
+            var src = str;
+
+            // If our special render all markup is present..
+            if (id === "javax.faces.ViewRoot") {
+                // if src contains <html>, trim the <html> and </html>, if present.
+                //   if src contains <head>
+                //      extract the contents of <head> and replace current document's
+                //      <head> with the contents.
+                //   if src contains <body>
+                //      extract the contents of <body> and replace the current
+                //      document's <body> with the contents.
+                //   if src does not contain <body>
+                //      replace the current document's <body> with the contents.
+                var
+                        htmlStartEx = new RegExp("< *html.*>", "gi"),
+                        htmlEndEx = new RegExp("< */ *html.*>", "gi"),
+                        headStartEx = new RegExp("< *head.*>", "gi"),
+                        headEndEx = new RegExp("< */ *head.*>", "gi"),
+                        bodyStartEx = new RegExp("< *body.*>", "gi"),
+                        bodyEndEx = new RegExp("< */ *body.*>", "gi"),
+                        htmlStart, htmlEnd, headStart, headEnd, bodyStart, bodyEnd;
+                var srcHead = null, srcBody = null;
+                // find the current document's "body" element
+                var docBody = document.getElementsByTagName("body")[0];
+                // if src contains <html>
+                if (null !== (htmlStart = htmlStartEx.exec(src))) {
+                    // if src contains </html>
+                    if (null !== (htmlEnd = htmlEndEx.exec(src))) {
+                        src = src.substring(htmlStartEx.lastIndex, htmlEnd.index);
+                    } else {
+                        src = src.substring(htmlStartEx.lastIndex);
+                    }
+                }
+                // if src contains <head>
+                if (null !== (headStart = headStartEx.exec(src))) {
+                    // if src contains </head>
+                    if (null !== (headEnd = headEndEx.exec(src))) {
+                        srcHead = src.substring(headStartEx.lastIndex,
+                                headEnd.index);
+                    } else {
+                        srcHead = src.substring(headStartEx.lastIndex);
+                    }
+                    // find the "head" element
+                    var docHead = document.getElementsByTagName("head")[0];
+                    if (docHead) {
+                        elementReplace(docHead, "head", srcHead);
+                    }
+                }
+                // if src contains <body>
+                if (null !== (bodyStart = bodyStartEx.exec(src))) {
+                    // if src contains </body>
+                    if (null !== (bodyEnd = bodyEndEx.exec(src))) {
+                        srcBody = src.substring(bodyStartEx.lastIndex,
+                                bodyEnd.index);
+                    } else {
+                        srcBody = src.substring(bodyStartEx.lastIndex);
+                    }
+                    elementReplace(docBody, "body", srcBody);
+                }
+                if (!srcBody) {
+                    elementReplace(docBody, "body", src);
+                }
+
+            } else {
+                var d = $(id);
+                if (!d) {
+                    throw new Error("jsf.ajax.response: " + id + " not found");
+                }
+                var parent = d.parentNode;
+                var temp = document.createElement('div');
+                temp.id = d.id;
+                temp.innerHTML = trim(str);
+
+                parent.replaceChild(temp.firstChild, d);
+            }
+
+        }
+
         /**
          * Ajax Request Queue
          * @ignore
@@ -325,8 +449,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             req.responseXML = null;        // Response Content (XML)
             req.status = null;             // Response Status Code From Server
             req.fromQueue = false;         // Indicates if the request was taken off the queue
-                                           // before being sent.  This prevents the request from
-                                           // entering the queue redundantly.
+            // before being sent.  This prevents the request from
+            // entering the queue redundantly.
 
             req.que = Queue;
 
@@ -363,7 +487,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     sendEvent(req, "success");  //RELEASE_PENDING move this to response
                 } else {
                     sendEvent(req, "complete");
-                    sendError(req,"httpError");
+                    sendError(req, "httpError");
                 }
 
                 // Regardless of whether the request completed successfully (or not),
@@ -477,6 +601,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             // serverError  RELEASE_PENDING or facesError?
             // malformedXML
 
+            var sent = false;
             var data = {};  // data payload for function
             data.type = "error";
             data.name = name;
@@ -494,11 +619,27 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             // If we have a registered callback, send the error to it.
             if (request.onerror) {
                 request.onerror.call(null, data);
+                sent = true;
             }
 
             for (var i in errorListeners) {
                 if (errorListeners.hasOwnProperty(i)) {
                     errorListeners[i].call(null, data);
+                    sent = true;
+                }
+            }
+
+            if (!sent  && jsf.getProjectStage() === "Development" ) {
+                switch (name) {
+                    case "httpError":
+                        alert("httpError "+request.status);
+                        break;
+                    case "serverError":
+                        alert("serverError: "+serverErrorName+" "+serverErrorMessage);
+                        break;
+                    default:
+                        alert("Error " + name);
+                        break;
                 }
             }
         };
@@ -522,12 +663,12 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             }
 
             if (request.onevent) {
-                request.onevent.call(null,data);
+                request.onevent.call(null, data);
             }
 
             for (var i in eventListeners) {
                 if (eventListeners.hasOwnProperty(i)) {
-                    eventListeners[i].call(null,data);
+                    eventListeners[i].call(null, data);
                 }
             }
         };
@@ -607,13 +748,13 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * <code>source</code> element.</li>
              * <li>If the <code>source</code> element is <code>null</code> or
              * <code>undefined</code> throw an error.</li>
-             * <li>If the <code>source</code> argument is not a <code>string</code> or 
-             * DOM element object, throw an error.</li> 
+             * <li>If the <code>source</code> argument is not a <code>string</code> or
+             * DOM element object, throw an error.</li>
              * <li>If the <code>source</code> argument is a <code>string</code>, find the
              * DOM element for that <code>string</code> identifier.
              * <li>If the DOM element could not be determined, throw an error.</li>
              * <li>If the <code>onerror</code> and <code>onevent</code> arguments are set,
-             * they must be functions, or throw an error.  
+             * they must be functions, or throw an error.
              * <li>Determine the <code>source</code> element's <code>form</code>
              * element.</li>
              * <li>Get the <code>form</code> view state by calling
@@ -623,7 +764,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * <ul>
              * <li>The following name/value pairs are required post data arguments:
              * <ul>
-             * <li><code>javax.faces.partial.source</code> with the value as the 
+             * <li><code>javax.faces.partial.source</code> with the value as the
              * source element identifier.</li>
              * <li>The name and value of the <code>source</code> element that
              * triggered this request;</li>
@@ -687,7 +828,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              *
              * </p>
              *
-             * @param source The DOM element that triggered this Ajax request, or an id string of the 
+             * @param source The DOM element that triggered this Ajax request, or an id string of the
              * element to use as the triggering element.
              * @param event The DOM event that triggered this Ajax request.  The
              * <code>event</code> argument is optional.
@@ -984,7 +1125,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
                 var xml = xmlReq.responseXML;
                 if (xml === null) {
-                    sendError(request,"emptyResponse");
+                    sendError(request, "emptyResponse");
                 }
 
 
@@ -1003,109 +1144,48 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                     return;
                 }
 
+                var updates = xml.getElementsByTagName("update");
+                for (var i = 0; i < updates.length; i++) {
+                    doUpdate(updates[i]);
+                }
+
+
+                /*  Need to wire server up
                 if (responseType.tagName !== "change") {
                     sendError(request, "malformedXML")
+                    return;
                 }
+
+
+                var changes = responseType.childNodes;
+
+
+                for (var i = 0; i < changes.length; i++) {
+                    switch (changes[i].tagName) {
+                        case "update":
+                            doUpdate(changes[i]);
+                            break;
+                        case "delete":
+                            break;
+                        case "insert":
+                            break;
+                        case "attributes":
+                            break;
+                        case "eval":
+                            break;
+                        case "extension":
+                            break;
+                        default:
+                            sendError(request, "malformedXML");
+                            return;
+                    }
+                }
+                */
+                sendEvent(request, "success");
 
                 //////////////////////
                 // Check for updates..
                 //////////////////////
-                var id, content, markup, str, state;
-
-                var update = xml.getElementsByTagName('update');
-
-                for (var i = 0; i < update.length; i++) {
-                    id = update[i].getAttribute('id');
-                    if (id === "javax.faces.ViewState") {
-                        state = state || update[i].firstChild;
-                        continue;
-                    }
-                    // join the CDATA sections in the markup
-                    markup = '';
-                    for (var j = 0; j < update[i].childNodes.length; j++) {
-                        content = update[i].childNodes[j];
-                        markup += content.text || content.data;
-                    }
-
-                    // RELEASE_PENDING - doc what this does
-                    str = markup.replace(new RegExp('(?:<script.*?>)((\n|\r|.)*?)(?:<\/script>)', 'img'), '');
-
-                    var src = str;
-
-                    // If our special render all markup is present..
-                    if (-1 != id.indexOf("javax.faces.ViewRoot")) {
-                        // if src contains <html>, trim the <html> and </html>, if present.
-                        //   if src contains <head>
-                        //      extract the contents of <head> and replace current document's
-                        //      <head> with the contents.
-                        //   if src contains <body>
-                        //      extract the contents of <body> and replace the current
-                        //      document's <body> with the contents.
-                        //   if src does not contain <body>
-                        //      replace the current document's <body> with the contents.
-                        var
-                                htmlStartEx = new RegExp("< *html.*>", "gi"),
-                                htmlEndEx = new RegExp("< */ *html.*>", "gi"),
-                                headStartEx = new RegExp("< *head.*>", "gi"),
-                                headEndEx = new RegExp("< */ *head.*>", "gi"),
-                                bodyStartEx = new RegExp("< *body.*>", "gi"),
-                                bodyEndEx = new RegExp("< */ *body.*>", "gi"),
-                                htmlStart, htmlEnd, headStart, headEnd, bodyStart, bodyEnd;
-                        var srcHead = null, srcBody = null;
-                        // find the current document's "body" element
-                        var docBody = document.getElementsByTagName("body")[0];
-                        // if src contains <html>
-                        if (null !== (htmlStart = htmlStartEx.exec(src))) {
-                            // if src contains </html>
-                            if (null !== (htmlEnd = htmlEndEx.exec(src))) {
-                                src = src.substring(htmlStartEx.lastIndex, htmlEnd.index);
-                            } else {
-                                src = src.substring(htmlStartEx.lastIndex);
-                            }
-                        }
-                        // if src contains <head>
-                        if (null !== (headStart = headStartEx.exec(src))) {
-                            // if src contains </head>
-                            if (null !== (headEnd = headEndEx.exec(src))) {
-                                srcHead = src.substring(headStartEx.lastIndex,
-                                        headEnd.index);
-                            } else {
-                                srcHead = src.substring(headStartEx.lastIndex);
-                            }
-                            // find the "head" element
-                            var docHead = document.getElementsByTagName("head")[0];
-                            if (docHead) {
-                                elementReplace(docHead, "head", srcHead);
-                            }
-                        }
-                        // if src contains <body>
-                        if (null !== (bodyStart = bodyStartEx.exec(src))) {
-                            // if src contains </body>
-                            if (null !== (bodyEnd = bodyEndEx.exec(src))) {
-                                srcBody = src.substring(bodyStartEx.lastIndex,
-                                        bodyEnd.index);
-                            } else {
-                                srcBody = src.substring(bodyStartEx.lastIndex);
-                            }
-                            elementReplace(docBody, "body", srcBody);
-                        }
-                        if (!srcBody) {
-                            elementReplace(docBody, "body", src);
-                        }
-
-                    } else {
-                        var d = $(id);
-                        if (!d) {
-                            throw new Error("jsf.ajax.response: " + id + " not found");
-                        }
-                        var parent = d.parentNode;
-                        var temp = document.createElement('div');
-                        temp.id = d.id;
-                        temp.innerHTML = trim(str);
-
-                        parent.replaceChild(temp.firstChild, d);
-                    }
-                }
 
                 //////////////////////
                 // Check For Inserts.
@@ -1123,28 +1203,6 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 // JavaScript Eval.
                 //////////////////////
 
-                // Now set the view state from the server into the DOM
-                // If there are multiple forms, make sure they all have a
-                // viewState hidden field.
-
-                if (state) {
-                    var stateElem = $("javax.faces.ViewState");
-                    if (stateElem) {
-                        stateElem.value = state.text || state.data;
-                    }
-                    var numForms = document.forms.length;
-                    var field;
-                    for (var k = 0; k < numForms; k++) {
-                        field = document.forms[k].elements["javax.faces.ViewState"];
-                        if (typeof field == 'undefined') {
-                            field = document.createElement("input");
-                            field.type = "hidden";
-                            field.name = "javax.faces.ViewState";
-                            document.forms[k].appendChild(field);
-                        }
-                        field.value = state.text || state.data;
-                    }
-                }
             }
         };
     }();
