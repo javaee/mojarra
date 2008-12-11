@@ -137,17 +137,19 @@ public class PartialTraversalImpl implements PartialTraversal {
                     exContext.setResponseContentType("text/xml");
                     exContext.setResponseHeader("Cache-Control", "no-cache");
                     writer.startElement("partial-response", viewRoot);
+                    writer.startElement("changes", viewRoot);
                 }
 
                 if (partialViewContext.isRenderAll()) {
                     renderAll(context, viewRoot);
                     renderState(context, viewRoot);
+                    writer.endElement("changes");
                     writer.endElement("partial-response");
                     return;
                 }
 
-		// Skip this processing if "none" is specified in the render list, 
-		// or there were no render phase client ids. 
+                // Skip this processing if "none" is specified in the render list,
+                // or there were no render phase client ids.
                 if (renderPhaseClientIds == null || renderPhaseClientIds.isEmpty() ||
                     partialViewContext.isRenderNone()) {
                 } else { 
@@ -156,6 +158,7 @@ public class PartialTraversalImpl implements PartialTraversal {
 
                 renderState(context, viewRoot);
 
+                writer.endElement("changes");
                 writer.endElement("partial-response");
          
             } catch (IOException ex) {
