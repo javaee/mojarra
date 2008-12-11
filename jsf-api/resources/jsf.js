@@ -879,6 +879,15 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * <li>Encode the set of post data arguments.</li>
              * <li>Join the encoded view state with the encoded set of post data arguments
              * to form the <code>query string</code> that will be sent to the server.</li>
+             * <li>Create a request <code>context</code> object and set the properties:
+             * <ul><li><code>source</code> (the source DOM element for this request)</li>
+             * <li><code>onerror</code> (the error handler for this request)</li>
+             * <li><code>onevent</code> (the event handler for this request)</li></ul>
+             * The request context will be used during error/event handling.</li>
+             * <li>Send a <code>begin</code> event following the procedure as outlined
+             * in the Chapter 13 "Sending Events" section of the spec prose document <a
+             *  href="../../javadocs/overview-summary.html#prose_document">linked in the
+             *  overview summary</a></li>
              * <li>Send the request as an <code>asynchronous POST</code> using the
              * <code>action</code> property of the <code>form</code> element as the
              * <code>url</code>.</li>
@@ -1037,7 +1046,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * <p>Receive an Ajax response from the server.
              * <p><b>Usage:</b></p>
              * <pre><code>
-             * jsf.ajax.response(request);
+             * jsf.ajax.response(request, context);
              * </pre></code>
              * <p><b>Implementation Requirements:</b></p>
              * This function must evaluate the markup returned in the
@@ -1051,6 +1060,11 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * section "Signaling Errors" in Chapter 13 of the spec prose document <a
              *  href="../../javadocs/overview-summary.html#prose_document">linked in the
              *  overview summary</a>.</p>
+             * <p>If the response was successfully processed, send a <code>success</code>
+             * event as outlined in Chapter 13 "Sending Events" section of the spec prose
+             * document <a
+             * href="../../javadocs/overview-summary.html#prose_document">linked in the
+             * overview summary</a>.</p>
              * <p><i>Update Element Processing</i></p>
              * <li>If an <code>update</code> element is found in the response
              * with the identifier <code>javax.faces.ViewRoot</code>:
