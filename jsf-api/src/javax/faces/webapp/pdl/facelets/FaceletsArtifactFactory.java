@@ -1,8 +1,8 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
- * Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
- *
+ * 
+ * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+ * 
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
@@ -10,7 +10,7 @@
  * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
  * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
- *
+ * 
  * When distributing the software, include this License Header Notice in each
  * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
  * Sun designates this particular file as subject to the "Classpath" exception
@@ -19,9 +19,9 @@
  * Header, with the fields enclosed by brackets [] replaced by your own
  * identifying information: "Portions Copyrighted [year]
  * [name of copyright owner]"
- *
+ * 
  * Contributor(s):
- *
+ * 
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
  * elects to include this software in this distribution under the [CDDL or GPL
@@ -32,62 +32,33 @@
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
- *
- * This file incorporates work covered by the following copyright and
- * permission notice:
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 
-package com.sun.faces.facelets.tag.jstl.core;
+package javax.faces.webapp.pdl.facelets;
 
-import java.io.IOException;
-
-import javax.el.ELException;
-import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
-
-import javax.faces.webapp.pdl.facelets.FaceletContext;
-import javax.faces.webapp.pdl.facelets.FaceletException;
+import javax.faces.FacesWrapper;
+import javax.faces.webapp.pdl.facelets.tag.Location;
 import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
-import com.sun.faces.facelets.tag.TagConfig;
-import com.sun.faces.facelets.tag.TagHandler;
+import javax.faces.webapp.pdl.facelets.tag.TagAttributes;
 
 /**
- * @author Jacob Hookom
- * @version $Id$
+ * <p class="changed_added_2_0">Allow separation of interface from
+ * implementation for the Facelets implementation for JSF 2.0</p>
  */
-public final class CatchHandler extends TagHandler {
-
-    private final TagAttribute var;
+public abstract class FaceletsArtifactFactory implements FacesWrapper<FaceletsArtifactFactory> {
 
     /**
-     * @param config
+     * <p class="changed_added_2_0">If this factory has been decorated, the 
+     * implementation doing the decorating may override this method to provide
+     * access to the implementation being wrapped.  A default implementation
+     * is provided that returns <code>null</code>.</p>
      */
-    public CatchHandler(TagConfig config) {
-        super(config);
-        this.var = this.getAttribute("var");
+    public FaceletsArtifactFactory getWrapped() {
+        return null;
     }
+    
+    public abstract TagAttribute createTagAttribute(Location location, String ns, String localName,
+            String qName, String value);
 
-    public void apply(FaceletContext ctx, UIComponent parent)
-            throws IOException, FacesException, FaceletException, ELException {
-        try {
-            this.nextHandler.apply(ctx, parent);
-        } catch (Exception e) {
-            if (this.var != null) {
-                ctx.setAttribute(this.var.getValue(ctx), e);
-            }
-        }
-    }
-
+    public abstract TagAttributes createTagAttributes(TagAttribute[] attrs);
 }

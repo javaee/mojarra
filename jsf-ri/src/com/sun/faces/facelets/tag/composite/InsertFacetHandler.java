@@ -52,7 +52,7 @@
 package com.sun.faces.facelets.tag.composite;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
-import com.sun.faces.facelets.tag.TagAttribute;
+import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import com.sun.faces.facelets.tag.jsf.ComponentConfig;
 import com.sun.faces.facelets.tag.jsf.ComponentHandler;
 import javax.el.ValueExpression;

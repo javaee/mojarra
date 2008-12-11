@@ -62,7 +62,7 @@ import javax.el.PropertyNotFoundException;
 import javax.el.PropertyNotWritableException;
 import javax.el.ValueExpression;
 
-import com.sun.faces.facelets.tag.TagAttribute;
+import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 
 /**
  * 

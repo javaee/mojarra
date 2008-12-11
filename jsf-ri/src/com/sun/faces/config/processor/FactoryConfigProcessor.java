@@ -105,6 +105,11 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
      */
     private static final String RENDER_KIT_FACTORY = "render-kit-factory";
 
+    /**
+     * <code>/faces-config/factory/facelets-artifact-factory</code>
+     */
+    private static final String FACELETS_ARTIFACT_FACTORY = "facelets-artifact-factory";
+
 
     /**
      * <code>Array of Factory names for post-configuration validation.</code>
@@ -116,7 +121,8 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
           FactoryFinder.FACES_CONTEXT_FACTORY,
           FactoryFinder.LIFECYCLE_FACTORY,
           FactoryFinder.RENDER_KIT_FACTORY,
-          FactoryFinder.PAGE_DECLARATION_LANGUAGE_FACTORY
+          FactoryFinder.PAGE_DECLARATION_LANGUAGE_FACTORY,
+          FactoryFinder.FACELETS_ARTIFACT_FACTORY
     };
 
 
@@ -211,6 +217,9 @@ public class FactoryConfigProcessor extends AbstractConfigProcessor {
                                getNodeText(n));
                 } else if (RENDER_KIT_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.RENDER_KIT_FACTORY,
+                               getNodeText(n));
+                } else if (FACELETS_ARTIFACT_FACTORY.equals(n.getLocalName())) {
+                    setFactory(FactoryFinder.FACELETS_ARTIFACT_FACTORY,
                                getNodeText(n));
                 } else if (PAGE_DECLARATION_LANGUAGE_FACTORY.equals(n.getLocalName())) {
                     setFactory(FactoryFinder.PAGE_DECLARATION_LANGUAGE_FACTORY,

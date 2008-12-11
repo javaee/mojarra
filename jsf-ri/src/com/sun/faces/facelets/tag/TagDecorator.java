@@ -51,6 +51,8 @@
 
 package com.sun.faces.facelets.tag;
 
+import javax.faces.webapp.pdl.facelets.tag.Tag;
+
 /**
  * Provides the ability to completely change the Tag before it's processed for
  * compiling with the associated TagHandler.

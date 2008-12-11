@@ -51,6 +51,7 @@
 
 package com.sun.faces.facelets.tag;
 
+import javax.faces.webapp.pdl.facelets.tag.Tag;
 import com.sun.faces.util.Util;
 
 /**

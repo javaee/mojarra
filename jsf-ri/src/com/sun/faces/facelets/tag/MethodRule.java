@@ -50,6 +50,7 @@
  */
 package com.sun.faces.facelets.tag;
 
+import javax.faces.webapp.pdl.facelets.tag.TagAttributeException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -58,6 +59,7 @@ import javax.faces.el.MethodBinding;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import com.sun.faces.facelets.el.LegacyMethodBinding;
+import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 
 /**
  * Optional Rule for binding Method[Binding|Expression] properties

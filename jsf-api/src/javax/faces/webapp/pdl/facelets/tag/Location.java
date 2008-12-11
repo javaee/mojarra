@@ -49,91 +49,64 @@
  * limitations under the License.
  */
 
-package com.sun.faces.facelets.tag;
-
-import javax.faces.webapp.pdl.facelets.tag.Tag;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.faces.webapp.pdl.facelets.FaceletHandler;
-import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
+package javax.faces.webapp.pdl.facelets.tag;
 
 /**
- * Foundation class for FaceletHandlers associated with markup in a Facelet
- * document.
+ * An object that represents the Location of a Tag or TagAttribute in a Facelet
+ * file.
  * 
+ * @see com.sun.faces.facelets.tag.Tag
+ * @see com.sun.faces.facelets.tag.TagAttribute
  * @author Jacob Hookom
  * @version $Id$
  */
-public abstract class TagHandler implements FaceletHandler {
+public final class Location {
 
-    protected final String tagId;
+    private final String path;
 
-    protected final Tag tag;
+    private final int line;
 
-    protected final FaceletHandler nextHandler;
+    private final int column;
 
-    public TagHandler(TagConfig config) {
-        this.tagId = config.getTagId();
-        this.tag = config.getTag();
-        this.nextHandler = config.getNextHandler();
+    public Location(String path, int line, int column) {
+        this.path = path;
+        this.line = line;
+        this.column = column;
     }
 
     /**
-     * Utility method for fetching the appropriate TagAttribute
+     * Estimated character column
      * 
-     * @param localName
-     *            name of attribute
-     * @return TagAttribute if found, otherwise null
+     * @return character column
      */
-    protected final TagAttribute getAttribute(String localName) {
-        return this.tag.getAttributes().get(localName);
+    public int getColumn() {
+        return column;
     }
 
     /**
-     * Utility method for fetching a required TagAttribute
+     * Line this is located at
      * 
-     * @param localName
-     *            name of the attribute
-     * @return TagAttribute if found, otherwise error
-     * @throws TagException
-     *             if the attribute was not found
+     * @return link this is located at
      */
-    protected final TagAttribute getRequiredAttribute(String localName)
-            throws TagException {
-        TagAttribute attr = this.getAttribute(localName);
-        if (attr == null) {
-            throw new TagException(this.tag, "Attribute '" + localName
-                    + "' is required");
-        }
-        return attr;
-    }
-    
-    /**
-     * Searches child handlers, starting at the 'nextHandler' for all
-     * instances of the passed type.  This process will stop searching
-     * a branch if an instance is found.
-     * 
-     * @param type Class type to search for
-     * @return iterator over instances of FaceletHandlers of the matching type
-     */
-    protected final Iterator findNextByType(Class type) {
-        List found = new ArrayList();
-        if (type.isAssignableFrom(this.nextHandler.getClass())) {
-            found.add(this.nextHandler);
-        } else if (this.nextHandler instanceof CompositeFaceletHandler) {
-            FaceletHandler[] h = ((CompositeFaceletHandler) this.nextHandler).getHandlers();
-            for (int i = 0; i < h.length; i++) {
-                if (type.isAssignableFrom(h[i].getClass())) {
-                    found.add(h[i]);
-                }
-            }
-        }
-        return found.iterator();
+    public int getLine() {
+        return line;
     }
 
+    /**
+     * File path to this location
+     * 
+     * @return file path
+     */
+    public String getPath() {
+        return path;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
     public String toString() {
-        return this.tag.toString();
+        return path + " @" + this.line + "," + this.column;
     }
 }

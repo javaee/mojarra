@@ -58,7 +58,7 @@ import javax.faces.event.MethodExpressionActionListener;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import com.sun.faces.facelets.el.LegacyMethodBinding;
-import com.sun.faces.facelets.tag.TagAttribute;
+import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import com.sun.faces.facelets.tag.Metadata;
 import com.sun.faces.facelets.tag.MetaRule;
 import com.sun.faces.facelets.tag.MetadataTarget;

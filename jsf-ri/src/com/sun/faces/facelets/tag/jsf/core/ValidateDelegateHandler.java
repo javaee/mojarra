@@ -54,7 +54,7 @@ package com.sun.faces.facelets.tag.jsf.core;
 import javax.faces.validator.Validator;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
-import com.sun.faces.facelets.tag.TagAttribute;
+import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import com.sun.faces.facelets.tag.MetaRuleset;
 import com.sun.faces.facelets.tag.jsf.ValidateHandler;
 import com.sun.faces.facelets.tag.jsf.ValidatorConfig;

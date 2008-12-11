@@ -51,6 +51,8 @@
 
 package com.sun.faces.facelets.tag;
 
+import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
+
 /**
  * A potential rule for Metadata on the passed MetadataTarget
  * 

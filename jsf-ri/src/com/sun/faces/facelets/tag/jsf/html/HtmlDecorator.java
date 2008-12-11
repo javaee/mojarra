@@ -51,10 +51,12 @@
 
 package com.sun.faces.facelets.tag.jsf.html;
 
-import com.sun.faces.facelets.tag.Tag;
-import com.sun.faces.facelets.tag.TagAttribute;
-import com.sun.faces.facelets.tag.TagAttributes;
+import javax.faces.webapp.pdl.facelets.tag.Tag;
+import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
+import javax.faces.webapp.pdl.facelets.tag.TagAttributes;
 import com.sun.faces.facelets.tag.TagDecorator;
+import javax.faces.FactoryFinder;
+import javax.faces.webapp.pdl.facelets.FaceletsArtifactFactory;
 
 /**
  * @author Jacob Hookom
@@ -65,12 +67,17 @@ public final class HtmlDecorator implements TagDecorator {
     public final static String XhtmlNamespace = "http://www.w3.org/1999/xhtml";
 
     public final static HtmlDecorator Instance = new HtmlDecorator();
+    
+    private final FaceletsArtifactFactory factory;
 
     /**
      * 
      */
     public HtmlDecorator() {
         super();
+        this.factory = (FaceletsArtifactFactory) 
+                    FactoryFinder.getFactory(FactoryFinder.FACELETS_ARTIFACT_FACTORY);
+
     }
 
     /*
@@ -120,7 +127,7 @@ public final class HtmlDecorator implements TagDecorator {
         return null;
     }
 
-    private static TagAttributes removeType(TagAttributes attrs) {
+    private TagAttributes removeType(TagAttributes attrs) {
         TagAttribute[] o = attrs.getAll();
         TagAttribute[] a = new TagAttribute[o.length - 1];
         int p = 0;
@@ -129,7 +136,7 @@ public final class HtmlDecorator implements TagDecorator {
                 a[p++] = o[i];
             }
         }
-        return new TagAttributes(a);
+        return factory.createTagAttributes(a);
     }
 
 }

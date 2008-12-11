@@ -62,7 +62,7 @@ import javax.faces.event.PhaseEvent;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
-import com.sun.faces.facelets.tag.TagAttribute;
+import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import com.sun.faces.facelets.tag.TagConfig;
 import com.sun.faces.facelets.tag.TagHandler;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;

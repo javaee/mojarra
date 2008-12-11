@@ -51,6 +51,7 @@
 
 package com.sun.faces.facelets.tag;
 
+import javax.faces.webapp.pdl.facelets.tag.Tag;
 import java.beans.IntrospectionException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,6 +64,7 @@ import java.util.logging.Logger;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import com.sun.faces.util.Util;
+import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 
 /**
  * 

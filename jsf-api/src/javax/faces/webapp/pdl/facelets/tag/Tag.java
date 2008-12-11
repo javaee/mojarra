@@ -49,7 +49,7 @@
  * limitations under the License.
  */
 
-package com.sun.faces.facelets.tag;
+package javax.faces.webapp.pdl.facelets.tag;
 
 /**
  * Representation of a Tag in the Facelet definition

@@ -51,6 +51,8 @@
 
 package com.sun.faces.facelets.tag;
 
+import javax.faces.webapp.pdl.facelets.tag.TagAttributeException;
+import javax.faces.webapp.pdl.facelets.tag.Location;
 import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.ExpressionFactory;
@@ -65,6 +67,7 @@ import com.sun.faces.facelets.el.TagValueExpression;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 
 /**
  * Representation of a Tag's attribute in a Facelet File
@@ -72,7 +75,7 @@ import javax.faces.context.FacesContext;
  * @author Jacob Hookom
  * @version $Id$
  */
-public final class TagAttribute {
+public final class TagAttributeImpl extends TagAttribute {
 
     private final boolean literal;
 
@@ -88,7 +91,7 @@ public final class TagAttribute {
 
     private String string;
 
-    public TagAttribute(Location location, String ns, String localName,
+    public TagAttributeImpl(Location location, String ns, String localName,
             String qName, String value) {
         this.location = location;
         this.namespace = ns;
@@ -114,6 +117,7 @@ public final class TagAttribute {
      *            FaceletContext to use
      * @return boolean value
      */
+    @Override
     public boolean getBoolean(FaceletContext ctx) {
         if (this.literal) {
             return Boolean.valueOf(this.value).booleanValue();
@@ -135,6 +139,7 @@ public final class TagAttribute {
      *            FaceletContext to use
      * @return int value
      */
+    @Override
     public int getInt(FaceletContext ctx) {
         if (this.literal) {
             return Integer.parseInt(this.value);
@@ -148,6 +153,7 @@ public final class TagAttribute {
      * 
      * @return local name of this attribute
      */
+    @Override
     public String getLocalName() {
         return this.localName;
     }
@@ -155,8 +161,9 @@ public final class TagAttribute {
     /**
      * The location of this attribute in the FaceletContext
      * 
-     * @return the TagAttribute's location
+     * @return the TagAttributeImpl's location
      */
+    @Override
     public Location getLocation() {
         return this.location;
     }
@@ -176,6 +183,7 @@ public final class TagAttribute {
      *            parameter type
      * @return a MethodExpression instance
      */
+    @Override
     public MethodExpression getMethodExpression(FaceletContext ctx, Class type,
             Class[] paramTypes) {
         MethodExpression result = null;
@@ -296,6 +304,7 @@ public final class TagAttribute {
      * 
      * @return resolved Namespace
      */
+    @Override
     public String getNamespace() {
         return this.namespace;
     }
@@ -308,6 +317,7 @@ public final class TagAttribute {
      *            FaceletContext to use
      * @return Object representation of this attribute's value
      */
+    @Override
     public Object getObject(FaceletContext ctx) {
         return this.getObject(ctx, Object.class);
     }
@@ -317,6 +327,7 @@ public final class TagAttribute {
      * 
      * @return the qualified name for this attribute
      */
+    @Override
     public String getQName() {
         return this.qName;
     }
@@ -326,6 +337,7 @@ public final class TagAttribute {
      * 
      * @return literal value
      */
+    @Override
     public String getValue() {
         return this.value;
     }
@@ -339,6 +351,7 @@ public final class TagAttribute {
      *            FaceletContext to use
      * @return String value of this attribute
      */
+    @Override
     public String getValue(FaceletContext ctx) {
         if (this.literal) {
             return this.value;
@@ -361,6 +374,7 @@ public final class TagAttribute {
      *            expected return type
      * @return Object value of this attribute
      */
+    @Override
     public Object getObject(FaceletContext ctx, Class type) {
         if (this.literal) {
             if (String.class.equals(type)) {
@@ -396,6 +410,7 @@ public final class TagAttribute {
      *            expected return type
      * @return ValueExpression instance
      */
+    @Override
     public ValueExpression getValueExpression(FaceletContext ctx, Class type) {
         try {
             ExpressionFactory f = ctx.getExpressionFactory();
@@ -407,10 +422,11 @@ public final class TagAttribute {
     }
 
     /**
-     * If this TagAttribute is literal (not #{..} or ${..})
+     * If this TagAttributeImpl is literal (not #{..} or ${..})
      * 
      * @return true if this attribute is literal
      */
+    @Override
     public boolean isLiteral() {
         return this.literal;
     }
@@ -420,6 +436,7 @@ public final class TagAttribute {
      * 
      * @see java.lang.Object#toString()
      */
+    @Override
     public String toString() {
         if (this.string == null) {
             this.string = this.location + " " + this.qName + "=\"" + this.value

@@ -53,7 +53,7 @@ package com.sun.faces.facelets.tag.jstl.core;
 
 import javax.faces.component.UIComponent;
 
-import com.sun.faces.facelets.tag.TagAttribute;
+import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import com.sun.faces.facelets.tag.TagConfig;
 import java.io.IOException;
 

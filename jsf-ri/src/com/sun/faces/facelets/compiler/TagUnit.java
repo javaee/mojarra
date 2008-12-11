@@ -52,7 +52,7 @@
 package com.sun.faces.facelets.compiler;
 
 import javax.faces.webapp.pdl.facelets.FaceletHandler;
-import com.sun.faces.facelets.tag.Tag;
+import javax.faces.webapp.pdl.facelets.tag.Tag;
 import com.sun.faces.facelets.tag.TagConfig;
 import com.sun.faces.facelets.tag.TagLibrary;
 

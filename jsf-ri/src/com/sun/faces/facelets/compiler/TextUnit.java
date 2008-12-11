@@ -60,8 +60,8 @@ import javax.el.ELException;
 import javax.faces.webapp.pdl.facelets.FaceletHandler;
 import com.sun.faces.facelets.el.ELText;
 import com.sun.faces.facelets.tag.CompositeFaceletHandler;
-import com.sun.faces.facelets.tag.Tag;
-import com.sun.faces.facelets.tag.TagAttribute;
+import javax.faces.webapp.pdl.facelets.tag.Tag;
+import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
 import com.sun.faces.facelets.tag.TagException;
 
 /**

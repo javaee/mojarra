@@ -66,8 +66,8 @@ import javax.faces.event.ActionListener;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
-import com.sun.faces.facelets.tag.TagAttribute;
-import com.sun.faces.facelets.tag.TagAttributeException;
+import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
+import javax.faces.webapp.pdl.facelets.tag.TagAttributeException;
 import com.sun.faces.facelets.tag.TagConfig;
 import com.sun.faces.facelets.tag.TagException;
 import com.sun.faces.facelets.tag.TagHandler;

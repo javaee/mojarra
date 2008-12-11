@@ -63,8 +63,8 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
 import javax.faces.webapp.pdl.facelets.FaceletContext;
-import com.sun.faces.facelets.tag.TagAttribute;
-import com.sun.faces.facelets.tag.TagAttributeException;
+import javax.faces.webapp.pdl.facelets.tag.TagAttribute;
+import javax.faces.webapp.pdl.facelets.tag.TagAttributeException;
 
 /**
  * 

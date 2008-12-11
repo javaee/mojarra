@@ -53,6 +53,9 @@
     <exception-handler-factory>
       com.sun.faces.context.ExceptionHandlerFactoryImpl
     </exception-handler-factory>
+    <facelets-artifact-factory>
+      com.sun.faces.facelets.FaceletsArtifactFactoryImpl
+    </facelets-artifact-factory>
     <visit-context-factory>
       com.sun.faces.component.visit.VisitContextFactoryImpl
     </visit-context-factory>
