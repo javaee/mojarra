@@ -47,7 +47,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import com.sun.faces.cactus.ServletFacesTestCase;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Attr;
 
 /**
  * Test cases to validate faces-config ordering.
@@ -483,9 +482,9 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
         Document document = newDocument();
         Element root = document.createElementNS(ns, "faces-config");
         if (documentId != null) {
-            Attr idAttr = document.createAttribute("id");
-            idAttr.setValue(documentId);
-            root.setAttributeNode(idAttr);
+            Element nameElement = document.createElementNS(ns, "name");
+            nameElement.setTextContent(documentId);
+            root.appendChild(nameElement);
         }
         document.appendChild(root);
         boolean hasBefore = (beforeIds != null && !beforeIds.isEmpty());
@@ -516,9 +515,14 @@ public class TestFacesConfigOrdering extends ServletFacesTestCase {
         Element element = document.createElementNS(ns, elementName);
         ordering.appendChild(element);
         for (String id : ids) {
-            Element idElement = document.createElementNS(ns, "id");
-            idElement.setTextContent(id);
-            element.appendChild(idElement);
+            Element append;
+            if ("@others".equals(id)) {
+                append = document.createElementNS(ns, "others");
+            } else {
+                append = document.createElementNS(ns, "id");
+                append.setTextContent(id);
+            }
+            element.appendChild(append);
         }
 
     }
