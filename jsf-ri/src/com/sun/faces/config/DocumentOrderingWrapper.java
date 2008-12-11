@@ -407,7 +407,7 @@ public class DocumentOrderingWrapper {
 
             // process before IDs other than 'others'
             for (String id : w.getBeforeIds()) {
-                if (OTHERS.equals(id)) {
+                if (OTHERS_KEY.equals(id)) {
                     continue;
                 }
                 for (int ii = 0; ii < wrappers.length; ii++) {
@@ -430,7 +430,7 @@ public class DocumentOrderingWrapper {
                             Set<String> newBeforeIds = new HashSet<String>();
                             newBeforeIds.addAll(Arrays.asList(currentBeforeIds));
                             for (String bid : otherBeforeIds) {
-                                if (OTHERS.equals(bid)) {
+                                if (OTHERS_KEY.equals(bid)) {
                                     continue;
                                 }
                                 newBeforeIds.add(bid);
@@ -449,7 +449,7 @@ public class DocumentOrderingWrapper {
 
             // process after IDs other than 'others'
             for (String id : w.getAfterIds()) {
-                if (OTHERS.equals(id)) {
+                if (OTHERS_KEY.equals(id)) {
                     continue;
                 }
                 for (int ii = 0; ii < wrappers.length; ii++) {
@@ -471,7 +471,7 @@ public class DocumentOrderingWrapper {
                             Set<String> newAfterIds = new HashSet<String>();
                             newAfterIds.addAll(Arrays.asList(currentAfterIds));
                             for (String bid : otherAfterIds) {
-                                if (OTHERS.equals(bid)) {
+                                if (OTHERS_KEY.equals(bid)) {
                                     continue;
                                 }
                                 newAfterIds.add(bid);

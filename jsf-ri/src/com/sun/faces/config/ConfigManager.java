@@ -393,13 +393,9 @@ public class ConfigManager {
 
 
         int len = ((isWebinfFacesConfig(facesDocuments[facesDocuments.length - 1]))
-                     ? facesDocuments.length - 2
-                     : facesDocuments.length - 1);
+                     ? facesDocuments.length - 1
+                     : facesDocuments.length);
 
-        // if len is 0, then we only had a WEB-INF/faces-config.xml
-        // and the configuration file for the implementation.
-        // if len is 1, then we only had the configuration file for
-        // the implementation.  Don't bother sorting for these cases.
         if (len > 1) {
             List<DocumentOrderingWrapper> list =
                   new ArrayList<DocumentOrderingWrapper>();
