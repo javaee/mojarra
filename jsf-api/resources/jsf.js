@@ -359,10 +359,10 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * @ignore
          */
         var doInsert = function doInsert(element) {
+            // RELEASE_PENDING there may be an insert issue in IE tables.  Needs testing.
             var parent;
             var beforeNode;
             var afterNode;
-            var id = element.getAttribute('id');
             var before = element.getAttribute('before');
             var after = element.getAttribute('after');
             var tempElement = document.createElement('span');
