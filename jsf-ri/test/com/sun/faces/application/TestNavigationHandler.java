@@ -42,6 +42,7 @@
 
 package com.sun.faces.application;
 
+import javax.faces.application.NavigationCase;
 import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.util.Util;
 import com.sun.faces.config.DbfFactory;
@@ -286,7 +287,7 @@ public class TestNavigationHandler extends ServletFacesTestCase {
             if (fromViewId.equals("/login.jsp")) {
                 List caseList = (List) caseListMap.get(fromViewId);
                 for (int i = 0; i < caseList.size(); i++) {
-                    ConfigNavigationCase cnc = (ConfigNavigationCase) caseList.get(
+                    NavigationCase cnc = (NavigationCase) caseList.get(
                         i);
                     if (cnc.getFromViewId().equals("/login.jsp")) {
                         cnt++;

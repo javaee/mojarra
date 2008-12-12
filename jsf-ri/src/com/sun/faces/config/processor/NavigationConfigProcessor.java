@@ -41,7 +41,7 @@
 package com.sun.faces.config.processor;
 
 import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.application.ConfigNavigationCase;
+import javax.faces.application.NavigationCase;
 import com.sun.faces.util.FacesLogger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -53,6 +53,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.text.MessageFormat;
+import javax.faces.application.NavigationCase;
 
 /**
  * <p>
@@ -227,8 +228,8 @@ public class NavigationConfigProcessor extends AbstractConfigProcessor {
                     }
                 }
 
-                ConfigNavigationCase cnc =
-                     new ConfigNavigationCase(fromViewId,
+                NavigationCase cnc =
+                     new NavigationCase(fromViewId,
                                               action,
                                               outcome,
                                               toViewId,
