@@ -359,23 +359,15 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          */
         var doInsert = function doInsert(element) {
             // RELEASE_PENDING there may be an insert issue in IE tables.  Needs testing.
-            var parent;
-            var beforeNode;
-            var afterNode;
-            var before = element.getAttribute('before');
-            var after = element.getAttribute('after');
+            var target = $(element.firstChild.getAttribute('id'));
+            var parent = target.parentNode;
             var tempElement = document.createElement('span');
-            tempElement.innerHTML = element.firstChild.nodeValue;
-            if (before) {
-                beforeNode = $(before);
-                parent = beforeNode.parentNode;
-                parent.insertBefore(tempElement.firstChild, beforeNode);
-            } else if (after) {
-                afterNode = $(after);
-                parent = afterNode.parentNode;
-                beforeNode = afterNode.nextSibling;
-                parent.insertBefore(tempElement.firstChild, beforeNode);
-            }
+            tempElement.innerHTML = element.firstChild.firstChild.nodeValue;
+            if (element.firstChild.nodeName === 'after') {
+                // Get the next in the list, to insert before
+                target = target.nextSibling;
+            }  // otherwise, this is a 'before' element
+            parent.insertBefore(tempElement.firstChild, target);
             document.removeChild(tempElement);
         };
 
