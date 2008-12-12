@@ -63,6 +63,7 @@ import javax.faces.webapp.pdl.facelets.FaceletException;
 import com.sun.faces.facelets.el.ELText;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
 import com.sun.faces.facelets.util.FastWriter;
+import javax.faces.component.UniqueIdVendor;
 
 /**
  * @author Jacob Hookom
@@ -88,7 +89,16 @@ final class UITextHandler extends AbstractUIHandler {
             try {
                 ELText nt = this.txt.apply(ctx.getExpressionFactory(), ctx);
                 UIComponent c = new UIText(this.alias, nt);
-                c.setId(ComponentSupport.getViewRoot(ctx, parent).createUniqueId());
+                String uid;
+                UIComponent ancestorNamingContainer = parent.getNamingContainer();
+                if (null != ancestorNamingContainer &&
+                        ancestorNamingContainer instanceof UniqueIdVendor) {
+                    uid = ((UniqueIdVendor) ancestorNamingContainer).createUniqueId(ctx.getFacesContext());
+                } else {
+                    uid = ComponentSupport.getViewRoot(ctx, parent).createUniqueId();
+                }
+                
+                c.setId(uid);
                 this.addComponent(ctx, parent, c);
             } catch (Exception e) {
                 throw new ELException(this.alias + ": "+ e.getMessage(), e.getCause());

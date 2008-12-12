@@ -1789,6 +1789,23 @@ private void doFind(FacesContext context, String clientId) {
     }
 
 
+    /**
+     * <p class="changed_added_2_0">Starting with "this", return the closest 
+     * component in the ancestry that is a <code>NamingContainer</code>
+     * or <code>null</code> if none can be found.</p>
+     *
+     * @since 2.0
+     */
+    public UIComponent getNamingContainer() {
+        UIComponent namingContainer = this;
+        while (namingContainer != null) {
+            if (namingContainer instanceof NamingContainer) {
+                return namingContainer;
+            }
+            namingContainer = namingContainer.getParent();
+        }
+        return null;
+    }
 
     // ------------------------------------------------ Lifecycle Phase Handlers
 

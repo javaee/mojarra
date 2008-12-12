@@ -61,6 +61,7 @@ import javax.faces.FacesException;
 import javax.faces.webapp.pdl.facelets.FaceletContext;
 import javax.faces.webapp.pdl.facelets.FaceletException;
 import com.sun.faces.facelets.tag.jsf.ComponentSupport;
+import javax.faces.component.UniqueIdVendor;
 
 final class UILiteralTextHandler extends AbstractUIHandler {
     
@@ -74,7 +75,15 @@ final class UILiteralTextHandler extends AbstractUIHandler {
             throws IOException, FacesException, FaceletException, ELException {
         if (parent != null) {
             UIComponent c = new UILiteralText(this.txtString);
-            c.setId(ComponentSupport.getViewRoot(ctx, parent).createUniqueId());
+            String uid;
+            UIComponent ancestorNamingContainer = parent.getNamingContainer();
+            if (null != ancestorNamingContainer &&
+                    ancestorNamingContainer instanceof UniqueIdVendor) {
+                uid = ((UniqueIdVendor) ancestorNamingContainer).createUniqueId(ctx.getFacesContext());
+            } else {
+                uid = ComponentSupport.getViewRoot(ctx, parent).createUniqueId();
+            }
+            c.setId(uid);
             this.addComponent(ctx, parent, c);
         }
     }

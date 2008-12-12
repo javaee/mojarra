@@ -59,7 +59,7 @@ import javax.faces.context.FacesContext;
  * <code>setRendererType()</code> method.</p>
  */
 
-public class UIForm extends UIComponentBase implements NamingContainer {
+public class UIForm extends UIComponentBase implements NamingContainer, UniqueIdVendor {
 
 
     // ------------------------------------------------------ Manifest Constants
@@ -94,6 +94,7 @@ public class UIForm extends UIComponentBase implements NamingContainer {
 
     // ------------------------------------------------------ Instance Variables
 
+    private int lastId = 0;
 
     // -------------------------------------------------------------- Properties
 
@@ -263,6 +264,9 @@ public class UIForm extends UIComponentBase implements NamingContainer {
 
     }
 
+    public String createUniqueId(FacesContext context) {
+        return this.getClientId(context) + lastId++;
+    }
     
     /**
      * <p>Override the {@link UIComponent#getContainerClientId} to allow
@@ -291,10 +295,11 @@ public class UIForm extends UIComponentBase implements NamingContainer {
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-             values = new Object[2];
+             values = new Object[3];
         }
         values[0] = super.saveState(context);
         values[1] = prependId;
+        values[2] = lastId;
 
         return values;
 
@@ -306,6 +311,7 @@ public class UIForm extends UIComponentBase implements NamingContainer {
         values = (Object[]) state;
         super.restoreState(context, values[0]);
         prependId = (Boolean) values[1];
+        lastId = ((Integer) values[2]).intValue();
         
     }
 }

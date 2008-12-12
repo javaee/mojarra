@@ -279,7 +279,9 @@ public abstract class UIComponentBase extends UIComponent {
 
         // if the clientId is not yet set
         if (this.clientId == null) {
-            UIComponent parent = this.getNamingContainer();
+            UIComponent namingContainerAncestor = 
+                    this.getNamingContainerAncestor();
+            UIComponent parent = namingContainerAncestor;
             String parentId = null;
 
             // give the parent the opportunity to first
@@ -291,7 +293,15 @@ public abstract class UIComponentBase extends UIComponent {
             // now resolve our own client id
             this.clientId = getId();
             if (this.clientId == null) {
-                setId(context.getViewRoot().createUniqueId());
+                String generatedId;
+                if (null != namingContainerAncestor &&
+                    namingContainerAncestor instanceof UniqueIdVendor) {
+                    generatedId = ((UniqueIdVendor)namingContainerAncestor).createUniqueId(context);
+                }
+                else {
+                    generatedId = context.getViewRoot().createUniqueId();
+                }
+                setId(generatedId);
                 this.clientId = getId();
             }
             if (parentId != null) {
@@ -321,7 +331,7 @@ public abstract class UIComponentBase extends UIComponent {
      *
      * @return the parent <code>NamingContainer</code>
      */
-    private UIComponent getNamingContainer() {
+    private UIComponent getNamingContainerAncestor() {
         UIComponent namingContainer = this.getParent();
         while (namingContainer != null) {
             if (namingContainer instanceof NamingContainer) {
@@ -331,7 +341,6 @@ public abstract class UIComponentBase extends UIComponent {
         }
         return null;
     }
-
 
 
     /**

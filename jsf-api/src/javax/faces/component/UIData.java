@@ -90,7 +90,7 @@ import javax.faces.component.visit.VisitResult;
  */
 
 public class UIData extends UIComponentBase
-      implements NamingContainer {
+      implements NamingContainer, UniqueIdVendor {
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -217,6 +217,8 @@ public class UIData extends UIComponentBase
      */
     private Boolean isNested = null;
     
+    
+    private int lastId = 0;
 
     // -------------------------------------------------------------- Properties
 
@@ -562,7 +564,7 @@ public class UIData extends UIComponentBase
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-            values = new Object[7];
+            values = new Object[8];
         }
 
         values[0] = super.saveState(context);
@@ -572,6 +574,7 @@ public class UIData extends UIComponentBase
         values[4] = saved;
         values[5] = value;
         values[6] = var;
+        values[7] = lastId;
         return (values);
 
     }
@@ -588,6 +591,7 @@ public class UIData extends UIComponentBase
               .dynamicallyCastMap((Map) values[4], String.class, SavedState.class);
         value = values[5];
         var = (String) values[6];
+        lastId = ((Integer) values[7]).intValue();
 
     }
 
@@ -959,6 +963,11 @@ public class UIData extends UIComponentBase
         setRowIndex(oldRowIndex);
 
     }
+
+    public String createUniqueId(FacesContext context) {
+        return this.getClientId(context) + lastId++;
+    }
+    
 
     @Override
     public VisitResult visitTree(VisitContext context, VisitCallback contextCallback) {

@@ -75,6 +75,7 @@ import javax.faces.webapp.pdl.facelets.tag.TagException;
 import com.sun.faces.facelets.tag.MetaRuleset;
 import com.sun.faces.facelets.tag.jsf.core.FacetHandler;
 import java.util.Map;
+import javax.faces.component.UniqueIdVendor;
 import javax.faces.event.InitialStateEvent;
 
 /**
@@ -148,6 +149,8 @@ public class ComponentHandler extends MetaTagHandler {
 
         // our id
         String id = ctx.generateUniqueId(this.tagId);
+        
+        FacesContext faces = ctx.getFacesContext();
 
         // grab our component
         UIComponent c = ComponentSupport.findChildByTagId(parent, id);
@@ -162,7 +165,7 @@ public class ComponentHandler extends MetaTagHandler {
             ComponentSupport.markForDeletion(c);
         } else {
             c = this.createComponent(ctx);
-            c.getClientId(ctx.getFacesContext());
+            c.getClientId(faces);
             if (log.isLoggable(Level.FINE)) {
                 log.fine(this.tag + " Component["+id+"] Created: "
                         + c.getClass().getName());
@@ -178,7 +181,14 @@ public class ComponentHandler extends MetaTagHandler {
             } else {
                 UIViewRoot root = ComponentSupport.getViewRoot(ctx, parent);
                 if (root != null) {
-                    String uid = root.createUniqueId();
+                    String uid;
+                    UIComponent ancestorNamingContainer = parent.getNamingContainer();
+                    if (null != ancestorNamingContainer &&
+                        ancestorNamingContainer instanceof UniqueIdVendor) {
+                        uid = ((UniqueIdVendor)ancestorNamingContainer).createUniqueId(faces);
+                    } else {
+                        uid = root.createUniqueId();
+                    }
                     c.setId(uid);
                 }
             }
@@ -203,7 +213,7 @@ public class ComponentHandler extends MetaTagHandler {
             }
         }
         
-        c.processEvent(getInitialStateEvent(ctx.getFacesContext(), c));
+        c.processEvent(getInitialStateEvent(faces, c));
         this.onComponentPopulated(ctx, c, parent);
 
         // add to the tree afterwards

@@ -149,7 +149,7 @@ import javax.faces.event.ExceptionEventContext;
  * </ul>
  */
 
-public class UIViewRoot extends UIComponentBase {
+public class UIViewRoot extends UIComponentBase implements UniqueIdVendor {
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -1256,6 +1256,10 @@ public class UIViewRoot extends UIComponentBase {
      */
     public String createUniqueId() {
         return UNIQUE_ID_PREFIX + lastId++;
+    }
+
+    public String createUniqueId(FacesContext context) {
+        return createUniqueId();
     }
 
     /*
