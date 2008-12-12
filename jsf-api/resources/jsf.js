@@ -138,7 +138,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
         var getForm = function getForm(element) {
             if (element) {
                 var form = $(element);
-                while (form && form.tagName && form.tagName.toLowerCase() !== 'form') {
+                while (form && form.nodeName && form.nodeName.toLowerCase() !== 'form') {
                     if (form.form) {
                         return form.form;
                     }
@@ -206,7 +206,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             temp.id = d.id;
 
             // Creating a head element isn't allowed in IE, so we'll disallow it
-            if (d.tagName.toLowerCase() === "head") {
+            if (d.nodeName.toLowerCase() === "head") {
                 throw new Error("Attempted to replace a head element");
             } else {
                 temp.innerHTML = src;
@@ -224,6 +224,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          */
         var doUpdate = function doUpdate(element) {
             var id, content, markup, str, state;
+            var stateElem;
 
             id = element.getAttribute('id');
             if (id === "javax.faces.ViewState") {
@@ -233,13 +234,12 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 // If there are multiple forms, make sure they all have a
                 // viewState hidden field.
 
-                var stateElem = $("javax.faces.ViewState");
+                stateElem = $("javax.faces.ViewState");
                 if (stateElem) {
                     stateElem.value = state.text || state.data;
                 }
-                var numForms = document.forms.length;
                 var field;
-                for (var k = 0; k < numForms; k++) {
+                for (var k = 0; k < document.forms.length; k++) {
                     field = document.forms[k].elements["javax.faces.ViewState"];
                     if (typeof field == 'undefined') {
                         field = document.createElement("input");
@@ -338,7 +338,79 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
                 parent.replaceChild(temp.firstChild, d);
             }
+        };
 
+        /**
+         * Delete a node specified by the element.
+         * @param element
+         * @ignore
+         */
+        var doDelete = function doDelete(element) {
+            var id = element.getAttribute('id');
+            var target = $(id);
+            var parent = target.parentNode;
+            parent.removeChild(target);
+        };
+
+        /**
+         * Insert a node specified by the element.
+         * @param element
+         * @ignore
+         */
+        var doInsert = function doInsert(element) {
+            // RELEASE_PENDING there may be an insert issue in IE tables.  Needs testing.
+            var parent;
+            var beforeNode;
+            var afterNode;
+            var before = element.getAttribute('before');
+            var after = element.getAttribute('after');
+            var tempElement = document.createElement('span');
+            tempElement.innerHTML = element.firstChild.nodeValue;
+            if (before) {
+                beforeNode = $(before);
+                parent = beforeNode.parentNode;
+                parent.insertBefore(tempElement.firstChild, beforeNode);
+            } else if (after) {
+                afterNode = $(after);
+                parent = afterNode.parentNode;
+                beforeNode = afterNode.nextSibling;
+                parent.insertBefore(tempElement.firstChild, beforeNode);
+            }
+            document.removeChild(tempElement);
+        };
+
+        /**
+         * Modify attributes of given element id.
+         * @param element
+         * @ignore
+         */
+        var doAttributes = function doAttributes(element) {
+
+            // RELEASE_PENDING IE 5-7 does not allow setting styles with setAttribute
+            // RELEASE_PENDING IE 5-7 will clear event attributes if you try to set them
+
+            // Get id of element we'll act against
+            var id = element.getAttribute('id');
+
+            var target = $(id);
+
+            // There can be multiple attributes modified.  Loop through the list.
+            var nodes = element.childNodes;
+            for (var i = 0; i < nodes.length; i++) {
+                var name = nodes[i].firstChild.firstChild.nodeValue;
+                var value = nodes[i].firstChild.nextSibling.firstChild.nodeValue;
+                target.setAttribute(name,value);
+            }
+        };
+
+        /**
+         * Eval the CDATA of the element.
+         * @param element to eval
+         * @ignore
+         */
+        var doEval = function doEval(element) {
+            var evalText = element.firstChild.nodeValue;
+            eval(evalText);
         }
 
         /**
@@ -437,16 +509,15 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
             var req = {};                  // Request Object
             req.url = null;                // Request URL
-            req.source = null;             // Source of this request
-            req.onerror = null;            // Error handler for request
-            req.onevent = null;            // Event handler for request
+            req.context = {};              // Context of request and response
+            req.context.source = null;             // Source of this request
+            req.context.onerror = null;            // Error handler for request
+            req.context.onevent = null;            // Event handler for request
             req.xmlReq = null;             // XMLHttpRequest Object
             req.async = true;              // Default - Asynchronous
             req.parameters = {};           // Parameters For GET or POST
             req.queryString = null;        // Encoded Data For GET or POST
             req.method = null;             // GET or POST
-            req.responseText = null;       // Response Content (Text)
-            req.responseXML = null;        // Response Content (XML)
             req.status = null;             // Response Status Code From Server
             req.fromQueue = false;         // Indicates if the request was taken off the queue
             // before being sent.  This prevents the request from
@@ -482,12 +553,11 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 req.status = req.xmlReq.status;
                 if ((req.status !== null && typeof req.status !== 'undefined' &&
                      req.status !== 0) && (req.status >= 200 && req.status < 300)) {
-                    sendEvent(req, "complete");
-                    jsf.ajax.response(req.xmlReq);
-                    sendEvent(req, "success");  //RELEASE_PENDING move this to response
+                    sendEvent(req.xmlReq, req.context, "complete");
+                    jsf.ajax.response(req.xmlReq, req.context);
                 } else {
-                    sendEvent(req, "complete");
-                    sendError(req, "httpError");
+                    sendEvent(req.xmlReq, req.context, "complete");
+                    sendError(req.xmlReq, req.context, "httpError");
                 }
 
                 // Regardless of whether the request completed successfully (or not),
@@ -580,7 +650,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                         }
                         content = req.queryString;
                     }
-                    sendEvent(req, "begin");
+                    sendEvent(req.xmlReq, req.context, "begin");
                     req.xmlReq.send(content);
                 }
             };
@@ -593,7 +663,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * Assumes that the request has completed.
          * @ignore
          */
-        var sendError = function sendError(request, name, serverErrorName, serverErrorMessage) {
+        var sendError = function sendError(request, context, name, serverErrorName, serverErrorMessage) {
 
             // Possible errornames:
             // httpError
@@ -606,7 +676,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             data.type = "error";
             data.name = name;
             // RELEASE_PENDING won't work in response
-            data.source = request.source;
+            data.source = context.source;
             data.responseCode = request.status;
             // RELEASE_PENDING pass a copy, not a reference
             data.responseXML = request.responseXML;
@@ -619,8 +689,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
             }
 
             // If we have a registered callback, send the error to it.
-            if (request.onerror) {
-                request.onerror.call(null, data);
+            if (context.onerror) {
+                context.onerror.call(null, data);
                 sent = true;
             }
 
@@ -631,13 +701,13 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 }
             }
 
-            if (!sent  && jsf.getProjectStage() === "Development" ) {
+            if (!sent && jsf.getProjectStage() === "Development") {
                 switch (name) {
                     case "httpError":
-                        alert("httpError "+request.status);
+                        alert("httpError " + request.status);
                         break;
                     case "serverError":
-                        alert("serverError: "+serverErrorName+" "+serverErrorMessage);
+                        alert("serverError: " + serverErrorName + " " + serverErrorMessage);
                         break;
                     default:
                         alert("Error " + name);
@@ -651,12 +721,12 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
          * Request is assumed to have completed, except in the case of event = 'begin'.
          * @ignore
          */
-        var sendEvent = function sendEvent(request, name) {
+        var sendEvent = function sendEvent(request, context, name) {
 
             var data = {};
             data.type = "event";
             data.name = name;
-            data.source = request.source;
+            data.source = context.source;
             if (name !== 'begin') {
                 data.responseCode = request.status;
                 // RELEASE_PENDING pass a copy, not a reference
@@ -664,8 +734,8 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 data.responseText = request.responseText;
             }
 
-            if (request.onevent) {
-                request.onevent.call(null, data);
+            if (context.onevent) {
+                context.onevent.call(null, data);
             }
 
             for (var i in eventListeners) {
@@ -808,6 +878,15 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * <li>Encode the set of post data arguments.</li>
              * <li>Join the encoded view state with the encoded set of post data arguments
              * to form the <code>query string</code> that will be sent to the server.</li>
+             * <li>Create a request <code>context</code> object and set the properties:
+             * <ul><li><code>source</code> (the source DOM element for this request)</li>
+             * <li><code>onerror</code> (the error handler for this request)</li>
+             * <li><code>onevent</code> (the event handler for this request)</li></ul>
+             * The request context will be used during error/event handling.</li>
+             * <li>Send a <code>begin</code> event following the procedure as outlined
+             * in the Chapter 13 "Sending Events" section of the spec prose document <a
+             *  href="../../javadocs/overview-summary.html#prose_document">linked in the
+             *  overview summary</a></li>
              * <li>Send the request as an <code>asynchronous POST</code> using the
              * <code>action</code> property of the <code>form</code> element as the
              * <code>url</code>.</li>
@@ -957,16 +1036,16 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
                 var ajaxEngine = new AjaxEngine();
                 ajaxEngine.setupArguments(args);
                 ajaxEngine.queryString = viewState;
-                ajaxEngine.onevent = onevent;
-                ajaxEngine.onerror = onerror;
-                ajaxEngine.source = element;
+                ajaxEngine.context.onevent = onevent;
+                ajaxEngine.context.onerror = onerror;
+                ajaxEngine.context.source = element;
                 ajaxEngine.sendRequest();
             },
             /**
              * <p>Receive an Ajax response from the server.
              * <p><b>Usage:</b></p>
              * <pre><code>
-             * jsf.ajax.response(request);
+             * jsf.ajax.response(request, context);
              * </pre></code>
              * <p><b>Implementation Requirements:</b></p>
              * This function must evaluate the markup returned in the
@@ -979,7 +1058,12 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              *  overview summary</a> signal a <code>malformedError</code> error.  Refer to
              * section "Signaling Errors" in Chapter 13 of the spec prose document <a
              *  href="../../javadocs/overview-summary.html#prose_document">linked in the
-             *  overview summary</a>.</p> 
+             *  overview summary</a>.</p>
+             * <p>If the response was successfully processed, send a <code>success</code>
+             * event as outlined in Chapter 13 "Sending Events" section of the spec prose
+             * document <a
+             * href="../../javadocs/overview-summary.html#prose_document">linked in the
+             * overview summary</a>.</p>
              * <p><i>Update Element Processing</i></p>
              * <li>If an <code>update</code> element is found in the response
              * with the identifier <code>javax.faces.ViewRoot</code>:
@@ -1111,7 +1195,7 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * the <code>errorName</code> and <code>errorMessage</code>.  Refer to
              * section "Signaling Errors" in Chapter 13 of the spec prose document <a
              *  href="../../javadocs/overview-summary.html#prose_document">linked in the
-             *  overview summary</a>.</li> 
+             *  overview summary</a>.</li>
              * <p><i>Extensions</i></p>
              * <li>The <code>&lt;extensions&gt;</code> element provides a way for framework
              * implementations to provide their own information.</li>
@@ -1122,11 +1206,14 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
              * @param request The <code>XMLHttpRequest</code> instance that
              * contains the status code and response message from the server.
              *
+             * @param context An object containing the request context, including the following properties:
+             * the source element, per call onerror callback function, and per call onevent callback function.
+             *
              * @throws EmptyResponse error if request contains no data
              *
              * @function jsf.ajax.response
              */
-            response: function response(request) {
+            response: function response(request, context) {
                 if (!request) {
                     throw new Error("jsf.ajax.response: Request parameter is unset");
                 }
@@ -1135,28 +1222,28 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
                 var xml = xmlReq.responseXML;
                 if (xml === null) {
-                    sendError(request, "emptyResponse");
+                    sendError(request, context, "emptyResponse");
                 }
 
 
-                var responseType = xml.getElementsByTagName("partial-response").item(0).firstChild;
+                var responseType = xml.getElementsByTagName("partial-response")[0].firstChild;
 
-                if (responseType.tagName === "error") { // it's an error
+                if (responseType.nodeName === "error") { // it's an error
                     var errorName = responseType.firstChild.firstChild.nodeValue;
                     var errorMessage = responseType.firstChild.nextSibling.firstChild.nodeValue;
-                    sendError(request, "serverError", errorName, errorMessage);
+                    sendError(request, context, "serverError", errorName, errorMessage);
                     return;
                 }
 
 
-                if (responseType.tagName === "redirect") {
+                if (responseType.nodeName === "redirect") {
                     window.location = responseType.getAttribute("url");
                     return;
                 }
 
 
-                if (responseType.tagName !== "changes") {
-                    sendError(request, "malformedXML");
+                if (responseType.nodeName !== "changes") {
+                    sendError(request, context, "malformedXML");
                     return;
                 }
 
@@ -1165,27 +1252,31 @@ if (!((jsf && jsf.specversion && jsf.specversion > 20000 ) &&
 
 
                 for (var i = 0; i < changes.length; i++) {
-                    switch (changes[i].tagName) {
+                    switch (changes[i].nodeName) {
                         case "update":
                             doUpdate(changes[i]);
                             break;
                         case "delete":
+                            doDelete(changes[i]);
                             break;
                         case "insert":
+                            doInsert(changes[i]);
                             break;
                         case "attributes":
+                            doAttributes(changes[i]);
                             break;
                         case "eval":
+                            doEval(changes[i]);
                             break;
                         case "extension":
+                        // RELEASE_PENDING no action?
                             break;
                         default:
-                            sendError(request, "malformedXML");
+                            sendError(request, context, "malformedXML");
                             return;
                     }
                 }
-                // RELEASE_PENDING
-                //sendEvent(request, "success");
+                sendEvent(request, context, "success");
 
                 //////////////////////
                 // Check for updates..

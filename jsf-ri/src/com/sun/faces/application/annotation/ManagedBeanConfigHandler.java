@@ -234,6 +234,9 @@ public class ManagedBeanConfigHandler implements ConfigAnnotationHandler {
         if (name.length() == 0) {
             String t = annotatedClass.getName();
             name = t.substring(t.lastIndexOf('.') + 1);
+            char[] nameChars = name.toCharArray();
+            nameChars[0] = Character.toLowerCase(nameChars[0]);
+            name = new String(nameChars);
         }
 
         return name;

@@ -46,10 +46,8 @@ import java.text.MessageFormat;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Attr;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
-import org.w3c.dom.NamedNodeMap;
 import com.sun.faces.util.FacesLogger;
 import com.sun.faces.util.Timer;
 
@@ -94,14 +92,24 @@ public class DocumentOrderingWrapper {
     private static final String AFTER = "after";
 
     /**
-     * Constant for the <code>id</code> attribute and element.
+     * Constant for the <code>id</code> element.
      */
     private static final String ID = "id";
 
     /**
+     * Constant for the <code>name</code> element.
+     */
+    private static final String NAME = "name";
+
+    /**
      * Constant for the <code>others</code> element.
      */
-    private static final String OTHERS = "@others";
+    private static final String OTHERS = "others";
+
+    /**
+     * Others keyword for sorting.
+     */
+    private static final String OTHERS_KEY = DocumentOrderingWrapper.class.getName() + ".OTHERS_KEY";
 
     /**
      * Return code indicating that element <code>n</code> is to be swapped
@@ -247,7 +255,7 @@ public class DocumentOrderingWrapper {
      */
     public boolean isAfterOthers() {
 
-        return (search(afterIds, OTHERS));
+        return (search(afterIds, OTHERS_KEY));
 
     }
 
@@ -258,7 +266,7 @@ public class DocumentOrderingWrapper {
      */
     public boolean isBeforeOthers() {
 
-         return (search(beforeIds, OTHERS));
+         return (search(beforeIds, OTHERS_KEY));
 
     }
 
@@ -399,7 +407,7 @@ public class DocumentOrderingWrapper {
 
             // process before IDs other than 'others'
             for (String id : w.getBeforeIds()) {
-                if (OTHERS.equals(id)) {
+                if (OTHERS_KEY.equals(id)) {
                     continue;
                 }
                 for (int ii = 0; ii < wrappers.length; ii++) {
@@ -422,7 +430,7 @@ public class DocumentOrderingWrapper {
                             Set<String> newBeforeIds = new HashSet<String>();
                             newBeforeIds.addAll(Arrays.asList(currentBeforeIds));
                             for (String bid : otherBeforeIds) {
-                                if (OTHERS.equals(bid)) {
+                                if (OTHERS_KEY.equals(bid)) {
                                     continue;
                                 }
                                 newBeforeIds.add(bid);
@@ -441,7 +449,7 @@ public class DocumentOrderingWrapper {
 
             // process after IDs other than 'others'
             for (String id : w.getAfterIds()) {
-                if (OTHERS.equals(id)) {
+                if (OTHERS_KEY.equals(id)) {
                     continue;
                 }
                 for (int ii = 0; ii < wrappers.length; ii++) {
@@ -463,7 +471,7 @@ public class DocumentOrderingWrapper {
                             Set<String> newAfterIds = new HashSet<String>();
                             newAfterIds.addAll(Arrays.asList(currentAfterIds));
                             for (String bid : otherAfterIds) {
-                                if (OTHERS.equals(bid)) {
+                                if (OTHERS_KEY.equals(bid)) {
                                     continue;
                                 }
                                 newAfterIds.add(bid);
@@ -504,9 +512,11 @@ public class DocumentOrderingWrapper {
     private void init() {
 
         Element documentElement = document.getDocumentElement();
-        Attr idAttr = getAttribute(documentElement, ID);
-        id = ((idAttr != null) ? idAttr.getValue().trim() : "");
         String namespace = documentElement.getNamespaceURI();
+        NodeList nameNodes = documentElement.getElementsByTagNameNS(namespace, NAME);
+        id = ((nameNodes != null && nameNodes.getLength() > 0)
+              ? getNodeText(nameNodes.item(0))
+              : "");
         NodeList orderingElements =
               documentElement.getElementsByTagNameNS(namespace, ORDERING);
 
@@ -580,6 +590,10 @@ public class DocumentOrderingWrapper {
                     if (id != null) {
                         idsList.add(id);
                     }
+                } if (OTHERS.equals(idNode.getLocalName())) {
+                    if (id != null) {
+                        idsList.add(OTHERS_KEY);
+                    }
                 }
             }
         }
@@ -602,21 +616,6 @@ public class DocumentOrderingWrapper {
         }
 
         return ((res != null && res.length() != 0) ? res : null);
-
-    }
-
-
-    /**
-     * Return the <code>Attr</code> associated with <code>attrName</code> on the
-     * specified <code>Node</code>.
-     */
-    private Attr getAttribute(Node node, String attrName) {
-
-        NamedNodeMap attrs = node.getAttributes();
-        if (attrs != null) {
-            return (Attr) attrs.getNamedItem(attrName);
-        }
-        return null;
 
     }
 

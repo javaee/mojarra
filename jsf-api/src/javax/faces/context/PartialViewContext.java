@@ -40,7 +40,7 @@
 
 package javax.faces.context;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -65,7 +65,7 @@ public abstract class PartialViewContext {
     /**
      * <p class="changed_added_2_0">
      * The request parameter name whose request parameter value 
-     * is a <code>List</code> of client identifiers identifying the
+     * is a <code>Collection</code> of client identifiers identifying the
      * components that must be processed during the 
      * <em>Render Response</em> phase of the request processing 
      * lifecycle.</p>
@@ -79,7 +79,7 @@ public abstract class PartialViewContext {
     /**
      * <p class="changed_added_2_0">
      * The request parameter name whose request parameter value 
-     * is a <code>List</code> of client identifiers identifying the
+     * is a <code>Collection</code> of client identifiers identifying the
      * components that must be processed during the 
      * <em>Apply Request Values</em>, <em>Process Validations</em>,
      * and <em>Update Model Values</em> phases of the request 
@@ -115,43 +115,14 @@ public abstract class PartialViewContext {
     // -------------------------------------------------------------- Properties
     
     /**
-     * <p class="changed_added_2_0">Return a mutable <code>Map</code> 
-     * representing the attributes associated wth this
-     * <code>PartialViewContext</code> instance.  This <code>Map</code> is 
-     * useful to store attributes that you want to go out of scope when the
-     * Faces lifecycle for the current request ends, which is not always the same 
-     * as the request ending, especially in the case of Servlet filters
-     * that are invoked <strong>after</strong> the Faces lifecycle for this
-     * request completes.  Accessing this <code>Map</code> does not cause any 
-     * events to fire, as is the case with the other maps: for request, session, and 
-     * application scope.  When {@link #release()} is invoked, the attributes
-     * must be cleared.</p>
-     * 
-     * <div class="changed_added_2_0">
-     * 
-     * <p>The <code>Map</code> returned by this method is not associated with
-     * the request.  If you would like to get or set request attributes,
-     * see {@link ExternalContext#getRequestMap}.  
-     * 
-     * </div>
-     * 
-     * @throws IllegalStateException if this method is called after
-     *  this instance has been released
-     *
-     * @since 2.0
-     */
-
-    public abstract Map<Object, Object> getAttributes();
-
-    /**
      * <p class="changed_added_2_0">Return a
-     * <code>List</code> of client identifiers from the current request
+     * <code>Collection</code> of client identifiers from the current request
      * with the request parameter name {@link #PARTIAL_EXECUTE_PARAM_NAME}.
      * If the value of the request parameter is {@link #NO_PARTIAL_PHASE_CLIENT_IDS},
-     * or there is no such request parameter, return an empty <code>List</code>.
+     * or there is no such request parameter, return an empty <code>Collection</code>.
      * These client identifiers are used to identify components that
      * will be processed during the <code>execute</code> phase of the
-     * request processing lifecycle.  The returned <code>List</code> is
+     * request processing lifecycle.  The returned <code>Collection</code> is
      * mutable.</p>
      *
      * @throws IllegalStateException if this method is called after
@@ -159,32 +130,17 @@ public abstract class PartialViewContext {
      *
      * @since 2.0
      */
-    public abstract List<String> getExecutePhaseClientIds();
+    public abstract Collection<String> getExecuteIds();
     
     /**
-     * <p class="changed_added_2_0">Set the <code>List</code>
-     * of client identifiers that will be used to identify components that
-     * will be processed during the <code>execute</code> phase of the
-     * request processing lifecycle.</p>
-     *
-     * @param executePhaseClientIds The <code>List</code> of client identifiers.
-     *
-     * @throws IllegalStateException if this method is called after
-     *  this instance has been released
-     *
-     * @since 2.0
-     */
-    public abstract void setExecutePhaseClientIds(List<String>executePhaseClientIds);
-
-    /**
      * <p class="changed_added_2_0">Return a
-     * <code>List</code> of client identifiers from the current request
+     * <code>Collection</code> of client identifiers from the current request
      * with the request parameter name {@link #PARTIAL_RENDER_PARAM_NAME}.
      * If the value of the request parameter is {@link #NO_PARTIAL_PHASE_CLIENT_IDS},
-     * or there is no such request parameter, return an empty <code>List</code>.
+     * or there is no such request parameter, return an empty <code>Collection</code>.
      * These client identifiers are used to identify components that
      * will be processed during the <code>render</code> phase of the
-     * request processing lifecycle.  The returned <code>List</code> is 
+     * request processing lifecycle.  The returned <code>Collection</code> is 
      * mutable.</p>
      *
      * @throws IllegalStateException if this method is called after
@@ -192,22 +148,7 @@ public abstract class PartialViewContext {
      *
      * @since 2.0
      */
-    public abstract List<String> getRenderPhaseClientIds();
-
-    /**
-     * <p class="changed_added_2_0">Set the <code>List</code>
-     * of client identifiers that will be used to identify components that
-     * will be processed during the <code>render</code> phase of the
-     * request processing lifecycle.</p>
-     *
-     * @param renderPhaseClientIds The <code>List</code> of client identifiers.
-     *
-     * @throws IllegalStateException if this method is called after
-     *  this instance has been released
-     *
-     * @since 2.0
-     */
-    public abstract void setRenderPhaseClientIds(List<String>renderPhaseClientIds);
+    public abstract Collection<String> getRenderIds();
 
     /**
      * <p class="changed_added_2_0">Return the {@link ResponseWriter} 
@@ -249,19 +190,6 @@ public abstract class PartialViewContext {
      * @since 2.0
      */
     public abstract boolean isPartialRequest();
-
-    /**
-     * <p class="changed_added_2_0">
-     * Return <code>true</code> if the request parameter {@link #PARTIAL_EXECUTE_PARAM_NAME}
-     * is present in the current request and the value of the parameter is
-     * {@link #NO_PARTIAL_PHASE_CLIENT_IDS}. Otherwise, return <code>false</code>.</p>
-     *
-     * @throws IllegalStateException if this method is called after
-     *  this instance has been released
-     *
-     * @since 2.0
-     */
-    public abstract boolean isExecuteNone();
 
     /**
      * <p class="changed_added_2_0">
@@ -307,35 +235,6 @@ public abstract class PartialViewContext {
      * @since 2.0
      */
     public abstract void setRenderAll(boolean renderAll);
-
-    /**
-     * <p class="changed_added_2_0">
-     * Return <code>true</code> if the request parameter
-     * {@link #PARTIAL_RENDER_PARAM_NAME} is present in the current
-     * request and the value of the parameter is {@link #NO_PARTIAL_PHASE_CLIENT_IDS}.
-     * Otherwise, return <code>false</code>.</p>
-     *
-     * @throws IllegalStateException if this method is called after
-     *  this instance has been released
-     *
-     * @since 2.0
-     */
-    public abstract boolean isRenderNone();
-
-    /**
-     * <p class="changed_added_2_0">
-     * Allow or prevent content from being written to the underlying response.</p>
-     *
-     * @param enable The value <code>true</code> will allow content to be
-     * written to the response.  The value <code>false</code> will prevent
-     * content from being written to the response.
-     *
-     * @throws IllegalStateException if this method is called after
-     *  this instance has been released
-     *
-     * @since 2.0
-     */
-    public abstract void enableResponseWriting(boolean enable);
 
     /**
      * <p><span class="changed_added_2.0">Release</span> any

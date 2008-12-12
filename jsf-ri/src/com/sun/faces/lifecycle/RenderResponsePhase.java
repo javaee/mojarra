@@ -58,6 +58,7 @@ import java.util.logging.Logger;
 
 import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.FacesLogger;
+import com.sun.faces.util.OnOffResponseWrapper;
 import com.sun.faces.util.RequestStateManager;
 import com.sun.faces.util.DebugUtil;
 
@@ -92,7 +93,8 @@ public class RenderResponsePhase extends Phase {
         // writing any content outside of the view itself (f:view).
         PartialViewContext partialViewContext = facesContext.getPartialViewContext();
         if (partialViewContext.isAjaxRequest()) {
-            partialViewContext.enableResponseWriting(false);
+            OnOffResponseWrapper onOffResponse = new OnOffResponseWrapper(facesContext);
+            onOffResponse.setEnabled(false); 
         }
         
         try {

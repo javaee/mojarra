@@ -191,18 +191,23 @@
                     
                 The "insert" element enables content to be inserted into the DOM
                 before or after an existing DOM element as specified by the
-                "before" or "after" attributes.  The attributes "before" and
+                nested "before" or "after" elements.  The elements "before" and
                 "after" are mutually exclusive - one of them must be specified. 
                     
             </xsd:documentation>
         </xsd:annotation>
-        <xsd:simpleContent>
-            <xsd:extension base="xsd:string">
-                <xsd:attribute name="id" type="xsd:string" use="required"/>
-                <xsd:attribute name="before" type="xsd:string"/>
-                <xsd:attribute name="after" type="xsd:string"/>
-            </xsd:extension>
-        </xsd:simpleContent>
+        <xsd:choice minOccurs="1" maxOccurs="1">
+            <xsd:element name="before">
+                <xsd:complexType>
+                    <xsd:attribute name="id" type="xsd:string" use="required"/>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="after">
+                <xsd:complexType>
+                    <xsd:attribute name="id" type="xsd:string" use="required"/>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:choice>
     </xsd:complexType>
 
     <xsd:complexType name="partial-response-deleteType">

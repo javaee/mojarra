@@ -220,7 +220,7 @@
             <xsd:element name="name"
                          type="javaee:java-identifierType"
                          minOccurs="0"
-                         maxOccurs="unbounded">
+                         maxOccurs="1">
               <xsd:annotation>
                   <xsd:documentation>
                       
@@ -287,19 +287,7 @@
                 </xsd:documentation>
             </xsd:annotation>
         </xsd:attribute>
-        <xsd:attribute name="id" type="xsd:ID">
-            <xsd:annotation>
-                <xsd:documentation>
-
-                    Each application resource file may have an "id" attribute 
-                    that is used to establish a total ordering for the processing
-                    order of all the application resources for the application.
-                    An application configuration resource may indicate dependencies
-                    on other application resources using nested "after" or 
-                    "before" elements, as documented in those elements.
-                </xsd:documentation>
-            </xsd:annotation>
-        </xsd:attribute>
+        <xsd:attribute name="id" type="xsd:ID" />
         <xsd:attribute name="version"
                        type="javaee:faces-config-versionType"
                        use="required"/>
@@ -351,15 +339,18 @@
     <xsd:complexType name="faces-config-ordering-orderingType">
         <xsd:annotation>
             <xsd:documentation>
-                
+
+                RELEASE_PENDING (edburns,rogerk) review docs
                 This element contains a sequence of "id" elements, each of which
                 refers to an application configuration resource by the "id"
-                declared on its faces-config element.
+                declared on its faces-config element.  This element can also contain
+                a single "others" element which specifies that this document comes
+                before or after other documents within the application.
 
             </xsd:documentation>
         </xsd:annotation>
         <xsd:sequence>
-            <xsd:element name="id" type="xsd:ID" minOccurs="1" maxOccurs="unbounded"/>
+            <xsd:element name="id" type="javaee:string" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="others" type="javaee:faces-config-ordering-othersType" minOccurs="0" maxOccurs="1" />
         </xsd:sequence>
     </xsd:complexType>
@@ -376,6 +367,7 @@
 
             </xsd:documentation>
         </xsd:annotation>
+        <xsd:attribute name="id" type="xsd:ID"/>
     </xsd:complexType>
 
     <xsd:complexType name="faces-config-applicationType">

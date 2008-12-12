@@ -58,6 +58,8 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Arrays;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -94,7 +96,7 @@ public class MetaInfFacesConfigResourceProvider implements ConfigurationResource
         if (duplicateJarPattern != null) {
             duplicatePattern = Pattern.compile(duplicateJarPattern);
         }
-        SortedMap<String, URL> sortedJarMap = new TreeMap<String, URL>();
+        SortedMap<String, Set<URL>> sortedJarMap = new TreeMap<String, Set<URL>>();
         //noinspection CollectionWithoutInitialCapacity
         List<URL> unsortedResourceList = new ArrayList<URL>();
 
@@ -114,7 +116,13 @@ public class MetaInfFacesConfigResourceProvider implements ConfigurationResource
                             jarName = m.group(1);
                         }
                     }
-                    sortedJarMap.put(jarName, url);
+
+                    Set<URL> urls = sortedJarMap.get(jarName);
+                    if (urls == null) {
+                        urls = new HashSet<URL>();
+                        sortedJarMap.put(jarName, urls);
+                    }
+                    urls.add(url);
                 } else {
                     unsortedResourceList.add(0, url);
                 }
@@ -126,8 +134,8 @@ public class MetaInfFacesConfigResourceProvider implements ConfigurationResource
         List<URL> result =
               new ArrayList<URL>(sortedJarMap.size() + unsortedResourceList
                     .size());
-        for (Map.Entry<String, URL> entry : sortedJarMap.entrySet()) {
-            result.add(entry.getValue());
+        for (Map.Entry<String, Set<URL>> entry : sortedJarMap.entrySet()) {
+            result.addAll(entry.getValue());
         }
         // Then load the unsorted resources
         result.addAll(unsortedResourceList);

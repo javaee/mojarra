@@ -37,7 +37,6 @@
 package com.sun.faces.util;
 
 import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.renderkit.RenderKitUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -620,14 +619,13 @@ public class HtmlUtils {
     static public void writeURL(Writer out,
                                 String text,
                                 char[] textBuff,
-                                String queryEncoding,
-                                String contentType)
+                                String queryEncoding)
           throws IOException, UnsupportedEncodingException {
 
         int length = text.length();
         if (length >= 16) {
             text.getChars(0, length, textBuff, 0);
-            writeURL(out, textBuff, 0, length, queryEncoding, contentType);
+            writeURL(out, textBuff, 0, length, queryEncoding);
         } else {
             for (int i = 0; i < length; i++) {
                 char ch = text.charAt(i);
@@ -662,7 +660,6 @@ public class HtmlUtils {
                     encodeURIString(out,
                                     text,
                                     queryEncoding,
-                                    RenderKitUtils.isXml(contentType),
                                     i + 1);
                     return;
                 } else {
@@ -710,8 +707,7 @@ public class HtmlUtils {
                                 char[] textBuff,
                                 int start,
                                 int len,
-                                String queryEncoding,
-                                String contentType)
+                                String queryEncoding)
         throws IOException, UnsupportedEncodingException {
 
         int end = start + len;
@@ -748,7 +744,6 @@ public class HtmlUtils {
                 encodeURIString(out,
                                 textBuff,
                                 queryEncoding,
-                                RenderKitUtils.isXml(contentType),
                                 i + 1,
                                 end);
                 return;
@@ -766,7 +761,6 @@ public class HtmlUtils {
      static private void encodeURIString(Writer out,
                                         String text,
                                         String encoding,
-                                        boolean isXml,
                                         int start)
      throws IOException {   
         MyByteArrayOutputStream buf = null;
@@ -777,7 +771,7 @@ public class HtmlUtils {
         for (int i = start; i < length; i++) {
             char ch = text.charAt(i);
             if (DONT_ENCODE_SET.get(ch)) {
-                if (isXml && ch == '&') {                  
+                if (ch == '&') {
                     if (((i + 1) < length) && isAmpEscaped(text, i + 1)) {
                         out.write(ch);
                         continue;
@@ -827,7 +821,6 @@ public class HtmlUtils {
      static private void encodeURIString(Writer out,
                                         char[] textBuff,
                                         String encoding,
-                                        boolean isXml,
                                         int start,
                                         int end)
      throws IOException {
@@ -839,7 +832,7 @@ public class HtmlUtils {
         for (int i = start; i < end; i++) {
             char ch = textBuff[i];
             if (DONT_ENCODE_SET.get(ch)) {
-                if (isXml && ch == '&') {
+                if (ch == '&') {
                     if (((i + 1) < end) && isAmpEscaped(textBuff, i + 1)) {
                         out.write(ch);
                         continue;

@@ -156,6 +156,5 @@ mojarra.jsfcljs = function jsfcljs(f, pvp, t) {
  *  @return object that f returns
  */
 mojarra.jsfcbk = function jsfcbk(f, t, e) {
-    t._jsfcbk = f;
-    return t._jsfcbk(e);
+    return f.call(t,e);
 };
