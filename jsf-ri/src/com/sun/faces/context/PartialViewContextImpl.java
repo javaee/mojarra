@@ -49,8 +49,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.Writer;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Arrays;
@@ -71,8 +71,8 @@ public class PartialViewContextImpl extends PartialViewContext {
     // BE SURE TO ADD NEW IVARS TO THE RELEASE METHOD
     private ResponseWriter partialResponseWriter = null;
     private Map<Object,Object> attributes;
-    private List<String> executePhaseClientIds;
-    private List<String> renderPhaseClientIds;
+    private Collection<String> executeIds;
+    private Collection<String> renderIds;
     private OnOffResponseWrapper onOffResponse = null;
     private Boolean ajaxRequest;
     private Boolean partialRequest;
@@ -135,10 +135,6 @@ public class PartialViewContextImpl extends PartialViewContext {
 
     }
 
-    /**
-     * @see javax.faces.context.PartialViewContext#isExecuteNone()
-     */
-    @Override
     public boolean isExecuteNone() {
 
         assertNotReleased();
@@ -191,10 +187,6 @@ public class PartialViewContextImpl extends PartialViewContext {
     }
 
 
-    /**
-     * @see javax.faces.context.PartialViewContext#isRenderNone()
-     */
-    @Override
     public boolean isRenderNone() {
 
         assertNotReleased();
@@ -205,69 +197,33 @@ public class PartialViewContextImpl extends PartialViewContext {
 
     }
 
-
+    /**
+     * @see javax.faces.context.PartialViewContext#getExecuteIds()
+     */
     @Override
-    public Map<Object,Object> getAttributes() {
-        
+    public Collection<String> getExecuteIds() {
+
         assertNotReleased();
-        if (attributes == null) {
-            attributes = new HashMap<Object,Object>();
+        if (executeIds != null) {
+            return executeIds;
         }
-        return attributes;
+        executeIds = populatePhaseClientIds(PARTIAL_EXECUTE_PARAM_NAME);
+        return executeIds;
 
     }
 
     /**
-     * @see javax.faces.context.PartialViewContext#getExecutePhaseClientIds()
+     * @see javax.faces.context.PartialViewContext#getRenderIds()
      */
     @Override
-    public List<String> getExecutePhaseClientIds() {
+    public Collection<String> getRenderIds() {
 
         assertNotReleased();
-        if (executePhaseClientIds != null) {
-            return executePhaseClientIds;
+        if (renderIds != null) {
+            return renderIds;
         }
-        executePhaseClientIds = populatePhaseClientIds(PARTIAL_EXECUTE_PARAM_NAME);
-        return executePhaseClientIds;
-
-    }
-
-
-    /**
-     * @see javax.faces.context.PartialViewContext#setExecutePhaseClientIds(java.util.List)
-     */
-    @Override
-    public void setExecutePhaseClientIds(List<String>executePhaseClientIds) {
-
-        assertNotReleased();
-        this.executePhaseClientIds = executePhaseClientIds;
-
-    }
-
-    /**
-     * @see javax.faces.context.PartialViewContext#getRenderPhaseClientIds()
-     */
-    @Override
-    public List<String> getRenderPhaseClientIds() {
-
-        assertNotReleased();
-        if (renderPhaseClientIds != null) {
-            return renderPhaseClientIds;
-        }
-        renderPhaseClientIds = populatePhaseClientIds(PARTIAL_RENDER_PARAM_NAME);
-        return renderPhaseClientIds;
-
-    }
-
-
-    /**
-     * @see javax.faces.context.PartialViewContext#setRenderPhaseClientIds(java.util.List)
-     */
-    @Override
-    public void setRenderPhaseClientIds(List<String>renderPhaseClientIds) {
-
-        assertNotReleased();
-        this.renderPhaseClientIds = renderPhaseClientIds;
+        renderIds = populatePhaseClientIds(PARTIAL_RENDER_PARAM_NAME);
+        return renderIds;
 
     }
 
@@ -292,21 +248,16 @@ public class PartialViewContextImpl extends PartialViewContext {
         ajaxRequest = null;
         renderAll = null;
         partialResponseWriter = null;
-        executePhaseClientIds = null;
-        renderPhaseClientIds = null;
+        executeIds = null;
+        renderIds = null;
         onOffResponse = null;
-        if (attributes != null) {
-            attributes.clear();
-            attributes = null;
-        }
-         
     }
 
     // -------------------------------------------------------- Private Methods
 
 
 
-    private List<String> populatePhaseClientIds(String parameterName) {
+    private Collection<String> populatePhaseClientIds(String parameterName) {
 
         Map<String,String> requestParamMap =
               FacesContext.getCurrentInstance().
