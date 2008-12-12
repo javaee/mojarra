@@ -41,6 +41,7 @@
 package com.sun.faces.application;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
@@ -96,8 +97,8 @@ public class PartialTraversalImpl implements PartialTraversal {
     public void traverse(FacesContext context, PhaseId phaseId, UIViewRoot viewRoot) {
 
         PartialViewContext partialViewContext = context.getPartialViewContext();
-        List <String> executePhaseClientIds = partialViewContext.getExecutePhaseClientIds(); 
-        List <String> renderPhaseClientIds = partialViewContext.getRenderPhaseClientIds(); 
+        Collection <String> executeIds = partialViewContext.getExecuteIds(); 
+        Collection <String> renderIds = partialViewContext.getRenderIds(); 
 
         if (phaseId == PhaseId.APPLY_REQUEST_VALUES || 
             phaseId == PhaseId.PROCESS_VALIDATIONS ||
@@ -106,14 +107,13 @@ public class PartialTraversalImpl implements PartialTraversal {
             // Skip this processing if "none" is specified in the render list, 
             // or there were no execute phase client ids. 
 
-            if (executePhaseClientIds == null || executePhaseClientIds.isEmpty() ||
-                partialViewContext.isExecuteNone()) {
+            if (executeIds == null || executeIds.isEmpty()) {
                 // PENDING LOG ERROR OR WARNING
                 return;
             }
 
             try {
-                processComponents(viewRoot, phaseId, executePhaseClientIds, context);
+                processComponents(viewRoot, phaseId, executeIds, context);
             } catch (Exception e) {
                 // PENDING LOG EXCEPTION
             }
@@ -156,10 +156,9 @@ public class PartialTraversalImpl implements PartialTraversal {
 
                 // Skip this processing if "none" is specified in the render list,
                 // or there were no render phase client ids.
-                if (renderPhaseClientIds == null || renderPhaseClientIds.isEmpty() ||
-                    partialViewContext.isRenderNone()) {
+                if (renderIds == null || renderIds.isEmpty()) {
                 } else { 
-                    processComponents(viewRoot, phaseId, renderPhaseClientIds, context);
+                    processComponents(viewRoot, phaseId, renderIds, context);
                 }
 
                 renderState(context, viewRoot);
@@ -179,7 +178,7 @@ public class PartialTraversalImpl implements PartialTraversal {
 
     // Process the components specified in the phaseClientIds list
     private void processComponents(UIComponent component, PhaseId phaseId, 
-        List<String> phaseClientIds, FacesContext context) throws IOException {
+        Collection<String> phaseClientIds, FacesContext context) throws IOException {
         PartialViewContext partialViewContext = context.getPartialViewContext();
 
         // We use the tree visitor mechanism to locate the components to
