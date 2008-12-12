@@ -85,8 +85,9 @@ public class PartialVisitContext extends VisitContext {
     public PartialVisitContext(FacesContext facesContext,
                                Collection<String> clientIds,
                                Set<VisitHint> hints) {
-        if (facesContext == null)
+        if (facesContext == null) {
             throw new NullPointerException();
+        }
 
         this.facesContext = facesContext;
 
@@ -107,9 +108,9 @@ public class PartialVisitContext extends VisitContext {
         this.nestedClientIds = populateNestedClientIds(this.clientIds);
 
         // Copy and store hints - ensure unmodifiable and non-empty
-        EnumSet hintsEnumSet = ((hints == null) || (hints.isEmpty())) ? 
-                                   EnumSet.noneOf(VisitHint.class) :
-                                   EnumSet.copyOf(hints);
+        EnumSet<VisitHint> hintsEnumSet = ((hints == null) || (hints.isEmpty()))
+                                          ? EnumSet.noneOf(VisitHint.class)
+                                          : EnumSet.copyOf(hints);
 
         this.hints = Collections.unmodifiableSet(hintsEnumSet);
     }

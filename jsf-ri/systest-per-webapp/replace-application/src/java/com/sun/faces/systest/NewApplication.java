@@ -198,14 +198,6 @@ public class NewApplication extends Application {
 	oldApp.setViewHandler(handler);
     }
 
-    public PartialTraversal getPartialTraversal() {
-        return oldApp.getPartialTraversal();
-    }
-
-    public void setPartialTraversal(PartialTraversal partialTraversal) {
-        oldApp.setPartialTraversal(partialTraversal);
-    }
-
     public StateManager getStateManager() {
 	return oldApp.getStateManager();
     }

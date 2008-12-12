@@ -44,7 +44,9 @@ import javax.faces.component.visit.VisitHint;
 import javax.faces.context.FacesContext;
 
 /**
- *
+ * <p>
+ * Default implementation of {@link VisitContextFactory}.
+ * </p>
  */
 public class VisitContextFactoryImpl extends VisitContextFactory {
 

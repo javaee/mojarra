@@ -313,14 +313,6 @@ public class NewApplication extends ApplicationWrapper {
 
     }
 
-    public PartialTraversal getPartialTraversal() {
-        return oldApp.getPartialTraversal();
-    }
-
-    public void setPartialTraversal(PartialTraversal partialTraversal) {
-        oldApp.setPartialTraversal(partialTraversal);
-    }
-
 
     public void setVariableResolver(VariableResolver resolver) {
 

@@ -79,15 +79,16 @@ public class FullVisitContext extends VisitContext {
     public FullVisitContext(FacesContext facesContext,
                             Set<VisitHint> hints) {
 
-        if (facesContext == null)
+        if (facesContext == null) {
             throw new NullPointerException();
+        }
 
         this.facesContext = facesContext;
 
         // Copy and store hints - ensure unmodifiable and non-empty
-        EnumSet hintsEnumSet = ((hints == null) || (hints.isEmpty())) ? 
-                                   EnumSet.noneOf(VisitHint.class) :
-                                   EnumSet.copyOf(hints);
+        EnumSet<VisitHint> hintsEnumSet = ((hints == null) || (hints.isEmpty()))
+                                          ? EnumSet.noneOf(VisitHint.class)
+                                          : EnumSet.copyOf(hints);
 
         this.hints = Collections.unmodifiableSet(hintsEnumSet);
     }
