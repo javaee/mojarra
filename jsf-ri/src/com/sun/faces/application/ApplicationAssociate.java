@@ -90,6 +90,8 @@ import java.util.ResourceBundle;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.concurrent.ConcurrentHashMap;
+import javax.faces.application.NavigationCase;
 
 /**
  * <p>Break out the things that are associated with the Application, but
@@ -110,13 +112,13 @@ public class ApplicationAssociate {
 
     /**
      * Overall Map containing <code>from-view-id</code> key and
-     * <code>ArrayList</code> of <code>ConfigNavigationCase</code>
+     * <code>ArrayList</code> of <code>NavigationCase</code>
      * objects for that key; The <code>from-view-id</code> strings in
      * this map will be stored as specified in the configuration file -
      * some of them will have a trailing asterisk "*" signifying wild
      * card, and some may be specified as an asterisk "*".
      */
-    private Map<String, List<ConfigNavigationCase>> caseListMap = null;
+    private Map<String, List<NavigationCase>> caseListMap = null;
 
     /**
      * The List that contains all view identifier strings ending in an
@@ -189,7 +191,7 @@ public class ApplicationAssociate {
         }
         externalContext.getApplicationMap().put(ASSOCIATE_KEY, this);
         //noinspection CollectionWithoutInitialCapacity
-        caseListMap = new HashMap<String, List<ConfigNavigationCase>>();
+        caseListMap = new ConcurrentHashMap<String, List<NavigationCase>>();
         wildcardMatchList = new TreeSet<String>(new SortIt());
         injectionProvider = InjectionProviderFactory.createInstance(externalContext);
         WebConfiguration webConfig = WebConfiguration.getInstance(externalContext);
@@ -447,6 +449,21 @@ public class ApplicationAssociate {
         return requestServiced;
     }
 
+    /**
+     * The "key" is defined as the combination of
+     * <code>from-view-id</code><code>from-action</code>
+     * <code>from-outcome</code>.
+     * @return the derived key
+     */
+     private String getNavigationKey(NavigationCase navCase) {
+         String key = null;
+         key = navCase.getFromViewId()
+                   + ((navCase.getFromAction() == null) ? "-" : navCase.getFromAction())
+                   + ((navCase.getFromOutcome() == null) ? "-" : navCase.getFromOutcome());
+         
+         return key;
+     }
+
 
     /**
      * Add a navigation case to the internal case list.  If a case list
@@ -461,25 +478,25 @@ public class ApplicationAssociate {
      * @param navigationCase the navigation case containing navigation
      *                       mapping information from the configuration file.
      */
-    public void addNavigationCase(ConfigNavigationCase navigationCase) {
+    public void addNavigationCase(NavigationCase navigationCase) {
 
         String fromViewId = navigationCase.getFromViewId();
-        List<ConfigNavigationCase> caseList = caseListMap.get(fromViewId);
+        List<NavigationCase> caseList = caseListMap.get(fromViewId);
         if (caseList == null) {
             //noinspection CollectionWithoutInitialCapacity
-            caseList = new ArrayList<ConfigNavigationCase>();
+            caseList = new ArrayList<NavigationCase>();
             caseList.add(navigationCase);
             caseListMap.put(fromViewId, caseList);
         } else {
-            String key = navigationCase.getKey();
+            String key = getNavigationKey(navigationCase);
             boolean foundIt = false;
             for (int i = 0; i < caseList.size(); i++) {
-                ConfigNavigationCase navCase = caseList.get(i);
+                NavigationCase navCase = caseList.get(i);
                 // if there already is a case existing for the
                 // fromviewid/fromaction.fromoutcome combination,
                 // replace it ...  (last one wins).
                 //
-                if (key.equals(navCase.getKey())) {
+                if (key.equals(getNavigationKey(navCase))) {
                     caseList.set(i, navigationCase);
                     foundIt = true;
                     break;
@@ -496,7 +513,8 @@ public class ApplicationAssociate {
         }
 
     }
-
+    
+    
 
     /**
      * Return a <code>Map</code> of navigation mappings loaded from
@@ -506,7 +524,7 @@ public class ApplicationAssociate {
      *
      * @return Map the map of navigation mappings.
      */
-    public Map<String, List<ConfigNavigationCase>> getNavigationCaseListMappings() {
+    public Map<String, List<NavigationCase>> getNavigationCaseListMappings() {
         if (caseListMap == null) {
             return Collections.emptyMap();
         }
@@ -655,7 +673,7 @@ public class ApplicationAssociate {
 
 
     /**
-     * This Comparator class will help sort the <code>ConfigNavigationCase</code> objects
+     * This Comparator class will help sort the <code>NavigationCaseImpl</code> objects
      * based on their <code>fromViewId</code> properties in descending order -
      * largest string to smallest string.
      */

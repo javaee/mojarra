@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigNavigationCase.java,v 1.13 2007/07/17 21:18:12 rlubke Exp $
+ * $Id: NavigationCase.java,v 1.13 2007/07/17 21:18:12 rlubke Exp $
  */
 
 /*
@@ -38,23 +38,28 @@
  * holder.
  */
 
-package com.sun.faces.application;
-
+package javax.faces.application;
 
 /**
- * <p>Config Bean for a Navigation Rule .</p>
+ * <p class="changed_added_2_0"><strong>NavigationCase</strong>
+ * represents a <code>&lt;navigation-case&gt;</code> in the navigation
+ * rule base, as well as the <code>&lt;from-view-id&gt;</code> inside
+ * which this <code>&lt;navigation-case&gt;</code> is nested.</p>
+
+ * @since 2.0
+ *
  */
-public class ConfigNavigationCase {
+
+public class NavigationCase implements Cloneable {
 
     private String fromViewId = null;
     private String fromAction = null;
     private String fromOutcome = null;
     private String toViewId = null;
-    private String key = null;
     private boolean redirect;
 
 
-    public ConfigNavigationCase(String fromViewId,
+    public NavigationCase(String fromViewId,
                                 String fromAction,
                                 String fromOutcome,
                                 String toViewId,
@@ -63,78 +68,80 @@ public class ConfigNavigationCase {
         this.fromAction = fromAction;
         this.fromOutcome = fromOutcome;
         this.toViewId = toViewId;
-        this.key = fromViewId
-                   + ((fromAction == null) ? "-" : fromAction)
-                   + ((fromOutcome == null) ? "-" : fromOutcome);
         this.redirect = redirect;
     }
+    
+    public NavigationCase(NavigationCase other) {
+        this.fromViewId = other.fromViewId;
+        this.fromAction = other.fromAction;
+        this.fromOutcome = other.fromOutcome;
+        this.toViewId = other.toViewId;
+        this.redirect = other.redirect;
+        
+    }
 
-
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        NavigationCase other = new NavigationCase(fromViewId, fromAction, fromOutcome, toViewId, redirect);
+        return other;
+    }
+    
+    /**
+     * <p class="changed_added_2_0">Return the
+     * <code>&lt;from-view-id&gt;</code> of the
+     * <code>&lt;navigation-rule&gt;</code> inside which this
+     * <code>&lt;navigation-case&gt;</code> is nested.</p>
+     *
+     * @since 2.0
+     */
     public String getFromViewId() {
         return (this.fromViewId);
     }
 
 
-    public void setFromViewId(String fromViewId) {
-        this.fromViewId = fromViewId;
-    }
-
-
+    /**
+     * <p class="changed_added_2_0">Return the <code>&lt;from-action&gt;
+     * for this <code>&lt;navigation-case&gt;</code></code></p>
+     *
+     * @since 2.0
+     */
     public String getFromAction() {
         return (this.fromAction);
     }
 
 
-    public void setFromAction(String fromAction) {
-        this.fromAction = fromAction;
-    }
-
-
+    /**
+     * <p class="changed_added_2_0">Return the <code>&lt;from-outcome&gt;
+     * for this <code>&lt;navigation-case&gt;</code></code></p>
+     *
+     * @since 2.0
+     */
     public String getFromOutcome() {
         return (this.fromOutcome);
     }
 
 
-    public void setFromOutcome(String fromOutcome) {
-        this.fromOutcome = fromOutcome;
-    }
-
-
+    /**
+     * <p class="changed_added_2_0">Return the <code>&lt;to-view-id&gt;
+     * for this <code>&lt;navigation-case&gt;</code></code></p>
+     *
+     * @since 2.0
+     */
     public String getToViewId() {
         return (this.toViewId);
     }
 
 
-    public void setToViewId(String toViewId) {
-        this.toViewId = toViewId;
-    }
+    /**
+     * <p class="changed_added_2_0">Return the <code>&lt;redirect&gt;
+     * value for this <code>&lt;navigation-case&gt;</code></code></p>
+     *
+     * @since 2.0
+     */
 
-
-    public boolean hasRedirect() {
+    public boolean isRedirect() {
         return redirect;
     }
-
-
-    public void setRedirect(boolean redirect) {
-        this.redirect = redirect;
-    }
-
-
-    /**
-     * The "key" is defined as the combination of
-     * <code>from-view-id</code><code>from-action</code>
-     * <code>from-outcome</code>.
-     * @return the derived key
-     */
-    public String getKey() {
-        return key;
-    }
-
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
 
     public String toString() {
         StringBuilder sb = new StringBuilder(64);
@@ -142,7 +149,7 @@ public class ConfigNavigationCase {
         sb.append(" from-action=").append(getFromAction());
         sb.append(" from-outcome=").append(getFromOutcome());
         sb.append(" to-view-id=").append(getToViewId());
-        sb.append(" redirect=").append(hasRedirect());
+        sb.append(" redirect=").append(isRedirect());
         return sb.toString();
     }
 }

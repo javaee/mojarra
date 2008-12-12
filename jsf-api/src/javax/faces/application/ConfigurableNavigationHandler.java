@@ -1,8 +1,4 @@
 /*
- * $Id: NavigationHandler.java,v 1.15 2007/04/27 22:00:02 ofung Exp $
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
  * Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
@@ -40,45 +36,29 @@
 
 package javax.faces.application;
 
-
+import java.util.List;
+import java.util.Map;
 import javax.faces.context.FacesContext;
 
-
 /**
- * <p><span class="changed_modified_2_0">A</a> 
- * <strong>NavigationHandler</strong> is passed the outcome string
- * returned by an application action invoked for this application, and will
- * use this (along with related state information) to choose the view to
- * be displayed next.</p>
+ * <p
+ * class="changed_added_2_0"><strong>ConfigurableNavigationHandler</strong>
+ * extends the contract of {@link NavigationHandler} to allow runtime
+ * inspection of the {@link NavigationCase}s that make up the rule-base
+ * for navigation.  An implementation compliant with the version of the
+ * specification in which this class was introduced (or a later version)
+ * must make it so that its <code>NavigationHandler</code> is an
+ * extension of this class.</p>
  *
- * <p>A default implementation of <code>NavigationHandler</code> must be
- * provided by the JSF implementation, which will be utilized unless
- * <code>setNavigationHandler()</code> is called to establish a different one.
- * <span class="changed_added_2_0">An implementation
- * of this class must be thread-safe.</span>
- * This default instance will compare the view identifier of the current
- * view, the specified action binding, and the specified outcome against
- * any navigation rules provided in <code>faces-config.xml</code> file(s).
- * If a navigation case matches, the current view will be changed by a call
- * to <code>FacesContext.setViewRoot()</code>.  Note that a <code>null</code>
- * outcome value will never match any navigation rule, so it can be used as an
- * indicator that the current view should be redisplayed.</p>
+ * @since 2.0
  */
-
-public abstract class NavigationHandler {
-
-
+public abstract class ConfigurableNavigationHandler extends NavigationHandler {
+    
     /**
-     * <p><span class="changed_modified_2_0">Perform</span> navigation
-     * processing based on the state information in the specified {@link
-     * FacesContext}, plus the outcome string returned by an executed
-     * application action.</p>
-     *
-     * <p class="changed_added_2_0">If the implementation class also
-     * extends {@link ConfigurableNavigationHandler}, the implementation
-     * must guarantee that the logic used in a call to {@link
-     * ConfigurableNavigationHandler#getNavigationCase} is used in this
-     * method to determine the correct navigation.</p>
+     * <p class="changed_added_2_0">Return the {@link NavigationCase}
+     * representing the navigation that would be taken had {@link
+     * NavigationHandler#handleNavigation} been called with the same
+     * arguments.</p>
      *
      * @param context The {@link FacesContext} for the current request
      * @param fromAction The action binding expression that was evaluated
@@ -89,10 +69,27 @@ public abstract class NavigationHandler {
      *
      * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
-     */
-    public abstract void handleNavigation(FacesContext context,
-                                          String fromAction,
-                                          String outcome);
+     *
+     * @since 2.0
+     */ 
 
+    public abstract NavigationCase getNavigationCase(FacesContext context,
+            String fromAction, 
+            String outcome);
+    
+
+    /**
+     * <p class="changed_added_2_0">Return a <code>Map&lt;String,
+     * List&lt;NavigationCase&gt;&gt;</code> where the keys are
+     * <code>&lt;from-view-id&gt;</code> values and the values are
+     * <code>List&lt;NavigationCase&gt;</code> where each element in the
+     * list is a <code>NavigationCase</code> that applies to that
+     * <code>&lt;from-view-id&gt;</code>.  The implementation must
+     * support live modifications to this <code>Map</code>.</p>
+     *
+     * @since 2.0
+     */
+    public abstract Map<String, List<NavigationCase>> getNavigationCases();
+    
 
 }

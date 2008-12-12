@@ -43,7 +43,7 @@ package com.sun.faces.application;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
-import javax.faces.application.NavigationHandler;
+import javax.faces.application.NavigationCase;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
@@ -58,6 +58,7 @@ import java.util.logging.Logger;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.FacesLogger;
+import javax.faces.application.ConfigurableNavigationHandler;
 
 /**
  * <p><strong>NavigationHandlerImpl</strong> is the class that implements
@@ -66,7 +67,7 @@ import com.sun.faces.util.FacesLogger;
  * PENDING: Make independent of ApplicationAssociate. 
  */
 
-public class NavigationHandlerImpl extends NavigationHandler {
+public class NavigationHandlerImpl extends ConfigurableNavigationHandler {
 
     //
     // Protected Constants
@@ -84,7 +85,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
     /**
      * <code>Map</code> containing configured navigation cases.
      */
-    private Map<String, List<ConfigNavigationCase>> caseListMap;
+    private Map<String, List<NavigationCase>> caseListMap;
 
     /**
      * <code>Set</code> containing wildcard navigation cases.
@@ -134,6 +135,22 @@ public class NavigationHandlerImpl extends NavigationHandler {
         }
     }
 
+    @Override
+    public NavigationCase getNavigationCase(FacesContext context, String fromAction, String outcome) {
+        NavigationCase result = null;
+        CaseStruct caseStruct = getViewId(context, fromAction, outcome);
+        if (null != caseStruct) {
+            result = caseStruct.navCase;
+        }
+        
+        return result;
+    }
+
+    @Override
+    public Map<String, List<NavigationCase>> getNavigationCases() {
+        return caseListMap;
+    }
+    
 
     /**
      * Determine the next view based on the current view
@@ -166,7 +183,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
             ViewHandler viewHandler = Util.getViewHandler(context);
             assert (null != viewHandler);
 
-            if (caseStruct.navCase.hasRedirect()) {
+            if (caseStruct.navCase.isRedirect()) {
                 // perform a 302 redirect.
                 String newPath =
                     viewHandler.getActionURL(context, caseStruct.viewId);
@@ -271,7 +288,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
             return null;
         }
 
-        List<ConfigNavigationCase> caseList = caseListMap.get(viewId);
+        List<NavigationCase> caseList = caseListMap.get(viewId);
 
         if (caseList == null) {
             return null;
@@ -325,7 +342,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
             // Append the trailing "*" so we can do our map lookup;
 
             String wcFromViewId = new StringBuilder(32).append(fromViewId).append('*').toString();
-            List<ConfigNavigationCase> caseList = caseListMap.get(wcFromViewId);
+            List<NavigationCase> caseList = caseListMap.get(wcFromViewId);
 
             if (caseList == null) {
                 return null;
@@ -366,7 +383,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
             return null;
         }
 
-        List<ConfigNavigationCase> caseList = caseListMap.get("*");
+        List<NavigationCase> caseList = caseListMap.get("*");
 
         if (caseList == null) {
             return null;
@@ -393,12 +410,12 @@ public class NavigationHandlerImpl extends NavigationHandler {
      */
 
 
-    private CaseStruct determineViewFromActionOutcome(List<ConfigNavigationCase> caseList,
+    private CaseStruct determineViewFromActionOutcome(List<NavigationCase> caseList,
                                                       String fromAction,
                                                       String outcome) {
 
         CaseStruct result = new CaseStruct();
-        for (ConfigNavigationCase cnc : caseList) {
+        for (NavigationCase cnc : caseList) {
             String cncFromAction = cnc.getFromAction();
             String fromOutcome = cnc.getFromOutcome();
             String toViewId = cnc.getToViewId();
@@ -440,7 +457,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
 
     private static class CaseStruct {
         String viewId;
-        ConfigNavigationCase navCase;
+        NavigationCase navCase;
     }
 
 }
