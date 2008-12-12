@@ -50,21 +50,16 @@ import javax.faces.context.FacesContext;
  * <p class="changed_added_2_0">A context object that is used to hold 
  * state relating to a component tree visit.</p>
  *
- * RELEASE_PENDING
+ * RELEASE_PENDING (edburns, rogerk) documentation
  *
  * <p>Component tree visits are initiated by calling
  * {@link UIComponent#visitTree UIComponent.visitTree()}, 
  * at which point both a {@link VisitContext} and a {@link VisitCallback} 
- * must be provided.  <p>The {@link FullVisitContext} should be used when 
- * performing a visit over the entire component tree.  The 
- * {@link PartialVisitContext} is used when visiting a subset of the 
- * component tree</p>
+ * must be provided.
  *
  * @see UIComponent#visitTree UIComponent.visitTree()
  * @see VisitCallback
- * @see FullVisitContext
- * @see PartialVisitContext
- * 
+ *
  * @since 2.0
  */
 abstract public class VisitContext {
@@ -155,23 +150,34 @@ abstract public class VisitContext {
      * @return a non-empty, unmodifiable collection of VisitHints
      */
     abstract public Set<VisitHint> getHints();
-    
+
+
+    /**
+     * RELEASE_PENDING (edburns,rogerk) docs
+     * @param context
+     * @param ids
+     * @param hints
+     * @return
+     */
     public static VisitContext createVisitContext(FacesContext context,
-            Collection<String> ids, Set<VisitHint> hints) {
-        VisitContext result = null;
+                                                  Collection<String> ids,
+                                                  Set<VisitHint> hints) {
+
         VisitContextFactory factory = (VisitContextFactory)
                 FactoryFinder.getFactory(FactoryFinder.VISIT_CONTEXT_FACTORY);
-        result = factory.getVisitContext(context, ids, hints);
-        return result;
+        return factory.getVisitContext(context, ids, hints);
+
+    }
+
+    /**
+     * RELEASE_PENDING (edburns,rogerk) docs
+     * @param context
+     * @return
+     */
+    public static VisitContext createVisitContext(FacesContext context) {
+
+        return createVisitContext(context, null, null);
+        
     }
     
-    public static VisitContext createVisitContext(FacesContext context) {
-        VisitContext result = null;
-        
-        VisitContextFactory factory = (VisitContextFactory)
-                FactoryFinder.getFactory(FactoryFinder.VISIT_CONTEXT_FACTORY);
-        result = factory.getVisitContext(context, null, null);
-        
-        return result;
-    }
 }

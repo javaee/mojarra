@@ -43,11 +43,11 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 /**
- * <p>Provides a simple implementation of {@link ExceptionHandler} that can
+ * <p>Provides a simple implementation of {@link VisitContext} that can
  * be subclassed by developers wishing to provide specialized behavior
- * to an existing {@link ExceptionHandler} instance.  The default
+ * to an existing {@link VisitContext} instance.  The default
  * implementation of all methods is to call through to the wrapped
- * {@link ExceptionHandler} instance.</p>
+ * {@link VisitContext} instance.</p>
  *
  * <p>Usage: extend this class and override {@link #getWrapped} to
  * return the instance we are wrapping.</p>

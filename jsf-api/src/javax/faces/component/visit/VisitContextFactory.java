@@ -42,7 +42,7 @@ import javax.faces.FacesWrapper;
 import javax.faces.context.FacesContext;
 
 /**
- *
+ * RELEASE_PENDING (docs)
  * @since 2.0
  */
 public abstract class VisitContextFactory implements FacesWrapper<VisitContextFactory> {
@@ -58,6 +58,13 @@ public abstract class VisitContextFactory implements FacesWrapper<VisitContextFa
     }
 
 
+    /**
+     * RELEASE_PENDING (docs)
+     * @param context
+     * @param ids
+     * @param hints
+     * @return
+     */
     public abstract VisitContext getVisitContext(FacesContext context, 
             Collection<String> ids, Set<VisitHint> hints);
     
