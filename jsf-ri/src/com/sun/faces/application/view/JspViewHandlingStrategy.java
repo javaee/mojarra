@@ -66,44 +66,39 @@ import com.sun.faces.util.RequestStateManager;
 public class JspViewHandlingStrategy extends ViewHandlingStrategy {
 
     private static final Logger LOGGER = FacesLogger.APPLICATION.getLogger();
+
+
+    // ------------------------------------ Methods from PageDeclarationLanguage
     
-    public JspViewHandlingStrategy(MultiViewHandler multiViewHandler) { 
-        super(multiViewHandler);
-    }
 
-    @Override
-    public BeanInfo getComponentMetadata(FacesContext context, Resource componentResource) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Resource getScriptComponentResource(FacesContext context, Resource componentResource) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-
-    // --------------------------------------- Methods from ViewHandlingStrategy
-
-
-    
-    
-    
     /**
-     * This {@link ViewHandlingStrategy} <em>should</em> be the last one queried
-     * and as such we return <code>true</code>.
+     * <p>
+     * Not supported in JSP-based views.
+     * </p>
      *
-     * @see com.sun.faces.application.view.ViewHandlingStrategy#handlesViewId(String)
+     * @see javax.faces.webapp.pdl.PageDeclarationLanguage#getComponentMetadata(javax.faces.context.FacesContext, javax.faces.application.Resource)
      */
     @Override
-    public boolean handlesViewId(String viewId) {
-
-        return true;
-
+    public BeanInfo getComponentMetadata(FacesContext context, Resource componentResource) {
+        throw new UnsupportedOperationException();
     }
 
 
     /**
-     * @see com.sun.faces.application.view.ViewHandlingStrategy#renderView(javax.faces.context.FacesContext, MultiViewHandler, javax.faces.component.UIViewRoot)
+     * <p>
+     * Not supported in JSP-based views.
+     * </p>
+     *
+     * @see javax.faces.webapp.pdl.PageDeclarationLanguage#getScriptComponentResource(javax.faces.context.FacesContext, javax.faces.application.Resource)
+     */
+    @Override
+    public Resource getScriptComponentResource(FacesContext context, Resource componentResource) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    /**
+     * @see javax.faces.webapp.pdl.PageDeclarationLanguage#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)
      */
     public void renderView(FacesContext ctx,
                            UIViewRoot viewToRender)
@@ -118,7 +113,7 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
         ExternalContext extContext = ctx.getExternalContext();
         ServletRequest request = (ServletRequest) extContext.getRequest();
         ServletResponse response = (ServletResponse) extContext.getResponse();
-       
+
         try {
             if (executePageToBuildView(ctx, viewToRender)) {
                 response.flushBuffer();
@@ -192,6 +187,26 @@ public class JspViewHandlingStrategy extends ViewHandlingStrategy {
         response.flushBuffer();
 
     }
+
+
+    // --------------------------------------- Methods from ViewHandlingStrategy
+
+    
+    /**
+     * This {@link ViewHandlingStrategy} <em>should</em> be the last one queried
+     * and as such we return <code>true</code>.
+     *
+     * @see com.sun.faces.application.view.ViewHandlingStrategy#handlesViewId(String)
+     */
+    @Override
+    public boolean handlesViewId(String viewId) {
+
+        return true;
+
+    }
+
+
+
 
 
     // --------------------------------------------------------- Private Methods

@@ -365,10 +365,14 @@ public abstract class ViewHandler {
 
      * @since 2.0
      */
-    public PageDeclarationLanguage getPageDeclarationLanguage(String viewId) {
+    public PageDeclarationLanguage getPageDeclarationLanguage(FacesContext context,
+                                                              String viewId) {
+
         throw new UnsupportedOperationException();
+
     }
 
+    
     /**
      *
      * <p><span class="changed_modified_2_0">Initialize</span> the view

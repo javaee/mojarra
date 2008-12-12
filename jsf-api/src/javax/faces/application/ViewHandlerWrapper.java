@@ -175,8 +175,11 @@ public abstract class ViewHandlerWrapper extends ViewHandler implements FacesWra
      * @since 2.0
      */
     @Override
-    public PageDeclarationLanguage getPageDeclarationLanguage(String viewId) {
-        return getWrapped().getPageDeclarationLanguage(viewId);
+    public PageDeclarationLanguage getPageDeclarationLanguage(FacesContext context,
+                                                              String viewId) {
+
+        return getWrapped().getPageDeclarationLanguage(context, viewId);
+        
     }
     
     

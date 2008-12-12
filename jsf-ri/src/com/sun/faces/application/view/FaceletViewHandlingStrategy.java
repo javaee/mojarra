@@ -94,20 +94,21 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     // Array of viewId prefixes that should be handled by Facelets
     private String[] prefixesArray;
     
-    public static final String IS_BUILDING_METADATA = "com.sun.faces.application.view.IS_BUILDING_METADATA";
+    public static final String IS_BUILDING_METADATA =
+          FaceletViewHandlingStrategy.class.getName() + ".IS_BUILDING_METADATA";
     
 
     // ------------------------------------------------------------ Constructors
 
 
-    public FaceletViewHandlingStrategy(MultiViewHandler multiViewHandler) {
-        super(multiViewHandler);
+    public FaceletViewHandlingStrategy() {
 
-        FacesContext ctx = FacesContext.getCurrentInstance();
         initialize();
 
     }
-    
+
+
+    // ------------------------------------ Methods from PageDeclarationLanguage
     
 
     @Override
@@ -115,7 +116,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             Resource compositeComponentResource) {
         // PENDING this implementation is terribly wasteful.
         // Must find a better way.
-        CompositeComponentBeanInfo result = null;
+        CompositeComponentBeanInfo result;
         FaceletContext ctx = (FaceletContext)
                 context.getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
         FaceletFactory factory = (FaceletFactory)
@@ -163,6 +164,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         return result;
     }
 
+
+    /**
+     * @see javax.faces.webapp.pdl.PageDeclarationLanguage#getScriptComponentResource(javax.faces.context.FacesContext, javax.faces.application.Resource)
+     */
     public Resource getScriptComponentResource(FacesContext context,
             Resource componentResource) {
         Resource result = null;
@@ -178,56 +183,10 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         
         return result;
     }
-    
-
-
-    // --------------------------------------- Methods from ViewHandlingStrategy
 
 
     /**
-     * @param viewId the view ID to check
-     * @return <code>true</code> if assuming a default configuration and the
-     *  view ID's extension is <code>.xhtml</code>  Otherwise try to match
-     *  the view ID based on the configured extendsion and prefixes.
-     *
-     * @see com.sun.faces.config.WebConfiguration.WebContextInitParameter#FaceletsViewMappings
-     */
-    @Override
-    public boolean handlesViewId(String viewId) {
-         if (viewId != null) {
-            // If there's no extensions array or prefixes array, then
-            // assume defaults.  .xhtml extension is handled by
-            // the FaceletViewHandler and .jsp will be handled by
-            // the JSP view handler
-            if ((extensionsArray == null) && (prefixesArray == null)) {
-                return (viewId.endsWith(ViewHandler.DEFAULT_FACELETS_SUFFIX));
-            }
-
-            if (extensionsArray != null) {
-                for (int i = 0; i < extensionsArray.length; i++) {
-                    String extension = extensionsArray[i];
-                    if (viewId.endsWith(extension)) {
-                        return true;
-                    }
-                }
-            }
-
-            if (prefixesArray != null) {
-                for (int i = 0; i < prefixesArray.length; i++) {
-                    String prefix = prefixesArray[i];
-                    if (viewId.startsWith(prefix)) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return false;
-    }
-
-
-    /**
-     * @see {@link com.sun.faces.application.view.ViewHandlingStrategy#renderView(javax.faces.context.FacesContext, MultiViewHandler, javax.faces.component.UIViewRoot)}
+     * @see javax.faces.webapp.pdl.PageDeclarationLanguage#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)
      */
     public void renderView(FacesContext ctx,
                            UIViewRoot viewToRender)
@@ -299,7 +258,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
      * If {@link UIDebug#debugRequest(javax.faces.context.FacesContext)}} is <code>true</code>,
      * simply return a new UIViewRoot(), otherwise, call the default logic.
      * </p>
-     * @see {@link com.sun.faces.application.view.ViewHandlingStrategy#restoreView(javax.faces.context.FacesContext, MultiViewHandler, String)}
+     * @see {@link javax.faces.webapp.pdl.PageDeclarationLanguage#restoreView(javax.faces.context.FacesContext, String)}
      */
     @Override
     public UIViewRoot restoreView(FacesContext ctx,
@@ -309,16 +268,20 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
             return new UIViewRoot();
         }
 
-        return multiViewHandler.restoreViewPrivateContract(ctx, viewId);
+        return super.restoreView(ctx, viewId);
 
     }
 
 
+    /**
+     * @see javax.faces.webapp.pdl.PageDeclarationLanguage#createView(javax.faces.context.FacesContext, String)
+     * @return
+     */
     @Override
     public UIViewRoot createView(FacesContext ctx,
                                  String viewId) {
 
-        UIViewRoot root = multiViewHandler.createViewPrivateContract(ctx, viewId);
+        UIViewRoot root = super.createView(ctx, viewId);
         ctx.setViewRoot(root);
         if (root != null) {
             try {
@@ -329,8 +292,54 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
         }
 
         return root;
-        
+
     }
+    
+
+    // --------------------------------------- Methods from ViewHandlingStrategy
+
+
+    /**
+     * @param viewId the view ID to check
+     * @return <code>true</code> if assuming a default configuration and the
+     *  view ID's extension is <code>.xhtml</code>  Otherwise try to match
+     *  the view ID based on the configured extendsion and prefixes.
+     *
+     * @see com.sun.faces.config.WebConfiguration.WebContextInitParameter#FaceletsViewMappings
+     */
+    @Override
+    public boolean handlesViewId(String viewId) {
+         if (viewId != null) {
+            // If there's no extensions array or prefixes array, then
+            // assume defaults.  .xhtml extension is handled by
+            // the FaceletViewHandler and .jsp will be handled by
+            // the JSP view handler
+            if ((extensionsArray == null) && (prefixesArray == null)) {
+                return (viewId.endsWith(ViewHandler.DEFAULT_FACELETS_SUFFIX));
+            }
+
+            if (extensionsArray != null) {
+                for (int i = 0; i < extensionsArray.length; i++) {
+                    String extension = extensionsArray[i];
+                    if (viewId.endsWith(extension)) {
+                        return true;
+                    }
+                }
+            }
+
+            if (prefixesArray != null) {
+                for (int i = 0; i < prefixesArray.length; i++) {
+                    String prefix = prefixesArray[i];
+                    if (viewId.startsWith(prefix)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
 
     // ------------------------------------------------------- Protected Methods
 
@@ -384,7 +393,7 @@ public class FaceletViewHandlingStrategy extends ViewHandlingStrategy {
     /**
      * Initialize mappings, during the first request.
      */
-    private void initializeMappings() {
+    protected void initializeMappings() {
 
         String viewMappings = webConfig
               .getOptionValue(WebContextInitParameter.FaceletsViewMappings);
